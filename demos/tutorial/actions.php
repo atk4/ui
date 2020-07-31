@@ -11,7 +11,7 @@ $wizard = \atk4\ui\Wizard::addTo($app);
 $app->stickyGet($wizard->name);
 
 $wizard->addStep('Define User Action', function ($page) {
-    \atk4\ui\Header::addTo($page, ['What are Actions?']);
+    \atk4\ui\Header::addTo($page, ['What are User Actions?']);
 
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
@@ -79,8 +79,8 @@ $wizard->addStep('UI Integration', function ($page) {
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
-            Agile UI introduces a new set of views called "Action Executors". Their job is to recognise all that meta-information
-            that you have specified for the action and requesting it from the user. "edit" action is defined for models by default
+            Agile UI introduces a new set of views called "User Action Executors". Their job is to recognise all that meta-information
+            that you have specified for the user action and requesting it from the user. "edit" user action is defined for models by default
             and you can trigger it on button-click with a very simple code:
             EOF
     );
@@ -98,7 +98,7 @@ $wizard->addStep('UI Integration', function ($page) {
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
-            It is not only the button, but any view can have "Action" passed as a second step of the on() call. Here the action
+            It is not only the button, but any view can have "User Action" passed as a second step of the on() call. Here the user action
             is executed when you click on "World" menu item:
             EOF
     );
@@ -119,8 +119,8 @@ $wizard->addStep('Arguments', function ($page) {
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
-            Next demo defines an action that requires arguments. You can specify action when the action is invoked, but if not
-            defined - user will be asked to supply an argument. Action will automatically validate argument types and it uses
+            Next demo defines an user action that requires arguments. You can specify arguments when the user action is invoked, but if not
+            defined - user will be asked to supply an argument. User action will automatically validate argument types and it uses
             same type system as fields.
             EOF
     );
@@ -133,11 +133,11 @@ $wizard->addStep('Arguments', function ($page) {
                 'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
                 'args'=> [
                     'age'=>[
-                        'type'=>'string'
+                        'type' => 'string'
                     ]
                 ],
                 'callback'=>function ($model, $name) {
-                    return 'Hi '.$name;
+                    return 'Hi ' . $name;
                 },
                 'ui' => ['executor' => [\atk4\ui\UserAction\JsCallbackExecutor::class]],
             ]);
@@ -146,12 +146,12 @@ $wizard->addStep('Arguments', function ($page) {
                 'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
                 'args'=> [
                     'age'=>[
-                        'type'=>'integer',
+                        'type' => 'integer',
                         'required' => true
                     ]
                 ],
                 'callback'=>function ($model, $age) {
-                    return 'Age is '.$age;
+                    return 'Age is ' . $age;
                 }
             ]);
 
@@ -193,7 +193,7 @@ $wizard->addStep('Crud integration', function ($page) {
     $t->addParagraph(
         <<< 'EOF'
             Compared to 1.x versions Crud implementation has became much more lightweight, however you retain all the same
-            functionality and more. Next example shows how you can disable action (add) entirely, or on per-row basis (delete)
+            functionality and more. Next example shows how you can disable user action (add) entirely, or on per-row basis (delete)
             and how you could add your own action with a custom trigger button and even a preview.
             EOF
     );

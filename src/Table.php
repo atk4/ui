@@ -612,7 +612,7 @@ class Table extends Lister
     public function updateTotals()
     {
         foreach ($this->totals_plan as $key => $val) {
-            // if value is array, then we treat it as built-in or callable aggregate method
+            // if value is array, then we treat it as built-in or closure aggregate method
             if (is_array($val)) {
                 $f = $val[0]; // shortcut
 
@@ -625,9 +625,7 @@ class Table extends Lister
                 // arguments - current value, key, \atk4\ui\Table object
                 if ($f instanceof \Closure) {
                     $this->totals[$key] += ($f($this->model->get($key), $key, $this) ?: 0);
-                }
-                // built-in methods
-                elseif (is_string($f)) {
+                } elseif (is_string($f)) { // built-in methods
                     switch ($f) {
                         case 'sum':
                             $this->totals[$key] += $this->model->get($key);

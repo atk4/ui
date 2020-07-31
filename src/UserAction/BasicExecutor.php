@@ -59,7 +59,7 @@ class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
     protected $validArguments = [];
 
     /**
-     * @var JsExpressionable array|callable JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
+     * @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
      */
     protected $jsSuccess;
 

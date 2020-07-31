@@ -169,26 +169,39 @@ class Upload extends Input
     public function onUpload(\Closure $fx)
     {
         $this->hasUploadCb = true;
-        $action = $_POST['action'] ?? null;
-        $files = $_FILES ?? null;
-        if ($files) {
-            //set fileId to file name as default.
-            $this->fileId = $files['file']['name'];
-            // display file name to user as default.
-            $this->setInput($this->fileId);
-        }
-        if ($action === self::UPLOAD_ACTION && !$files['file']['error']) {
-            $this->cb->set(function () use ($fx, $files) {
-                $this->addJsAction($fx($files['file']));
-                $this->addJsAction([
-                    $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
-                ]);
+        if (($_POST['action'] ?? null) === self::UPLOAD_ACTION) {
+            $this->cb->set(function () use ($fx) {
+                $postFiles = [];
+                for ($i = 0;; ++$i) {
+                    $k = 'file' . ($i > 0 ? '-' . $i : '');
+                    if (!isset($_FILES[$k])) {
+                        break;
+                    }
+
+                    $postFile = $_FILES[$k];
+                    if ($postFile['error'] !== 0) {
+                        // unset all details on upload error
+                        $postFile = array_intersect_key($postFile, array_flip('error', 'name'));
+                    }
+                    $postFiles[] = $postFile;
+                }
+
+                if (count($postFiles) > 0) {
+                    //set fileId to file name as default.
+                    $this->fileId = reset($postFiles)['name'];
+                    // display file name to user as default.
+                    $this->setInput($this->fileId);
+                }
+
+                $this->addJsAction($fx(...$postFiles));
+
+                if (count($postFiles) > 0 && reset($postFiles)['error'] === 0) {
+                    $this->addJsAction([
+                        $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
+                    ]);
+                }
 
                 return $this->jsActions;
-            });
-        } elseif ($action === null || isset($files['file']['error'])) {
-            $this->cb->set(function () use ($fx) {
-                return $fx('error');
             });
         }
     }
@@ -199,10 +212,9 @@ class Upload extends Input
     public function onDelete(\Closure $fx)
     {
         $this->hasDeleteCb = true;
-        $action = $_POST['action'] ?? null;
-        if ($action === self::DELETE_ACTION) {
-            $fileName = $_POST['f_name'] ?? null;
-            $this->cb->set(function () use ($fx, $fileName) {
+        if (($_POST['action'] ?? null) === self::DELETE_ACTION) {
+            $this->cb->set(function () use ($fx) {
+                $fileName = $_POST['f_name'] ?? null;
                 $this->addJsAction($fx($fileName));
 
                 return $this->jsActions;
@@ -222,8 +234,7 @@ class Upload extends Input
             $action = $_POST['action'] ?? null;
             if (!$this->hasUploadCb && ($action === self::UPLOAD_ACTION)) {
                 throw new Exception('Missing onUpload callback.');
-            }
-            if (!$this->hasDeleteCb && ($action === self::DELETE_ACTION)) {
+            } elseif (!$this->hasDeleteCb && ($action === self::DELETE_ACTION)) {
                 throw new Exception('Missing onDelete callback.');
             }
         }
@@ -232,7 +243,7 @@ class Upload extends Input
             $this->template->trySet('accept', implode(',', $this->accept));
         }
         if ($this->multiple) {
-            //$this->template->trySet('multiple', 'multiple');
+            $this->template->trySet('multiple', 'multiple');
         }
 
         if ($this->placeholder) {

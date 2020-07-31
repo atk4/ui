@@ -6,15 +6,19 @@ import itemSearch from '../components/item-search.component';
 import multiLine from '../components/multiline.component'
 import treeItemSelector from '../components/tree-item-selector/tree-item-selector.component';
 import atkClickOutside from '../directives/click-outside.directive';
+import VueQueryBuilder from '../components/query-builder/query-builder.component.vue';
+import DatePicker from "v-calendar/lib/components/date-picker.umd";
 import {focus} from '../directives/commons.directive';
 
 Vue.use(SuiVue);
+Vue.component('v-date-picker', DatePicker);
 
 let atkComponents = {
   'atk-inline-edit' : atkInlineEdit,
   'atk-item-search' : itemSearch,
   'atk-multiline'   : multiLine,
   'atk-tree-item-selector' : treeItemSelector,
+  'atk-query-builder' : VueQueryBuilder,
 };
 
 // setup atk custom directives.

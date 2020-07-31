@@ -30,13 +30,13 @@ $img->onDelete(function ($fileId) use ($img) {
     ]);
 });
 
-$img->onUpload(function ($files) use ($form, $img) {
-    if ($files === 'error') {
+$img->onUpload(function ($postFile) use ($form, $img) {
+    if ($postFile['error'] !== 0) {
         return $form->error('img', 'Error uploading image.');
     }
 
     $img->setThumbnailSrc('./images/logo.png');
-    $img->set('123456', $files['name'] . ' (token: 123456)');
+    $img->set('123456', $postFile['name'] . ' (token: 123456)');
 
     //Do file processing here...
 
