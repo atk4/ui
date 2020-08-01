@@ -24,9 +24,7 @@ if (typeof FormSerializer != "undefined") {
 
 let atkSemantic = {
   uploadService: uploadService,
-  apiService: apiService,
-  modalService: modalService,
-  formService: formService
+  apiService: apiService
 };
 
 export default atkSemantic;
