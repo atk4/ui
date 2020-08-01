@@ -80,6 +80,9 @@ class Upload extends Input
 
     public $jsActions = [];
 
+    public const UPLOAD_ACTION = 'upload';
+    public const DELETE_ACTION = 'delete';
+
     /** @var bool check if callback is trigger by one of the action. */
     private $_isCbRunning = false;
 
@@ -166,10 +169,8 @@ class Upload extends Input
     public function onUpload(\Closure $fx)
     {
         $this->hasUploadCb = true;
-        if (($_POST['action'] ?? null) === 'upload') {
+        if (($_POST['action'] ?? null) === self::UPLOAD_ACTION) {
             $this->cb->set(function () use ($fx) {
-                $this->_isCbRunning = true;
-
                 $postFiles = [];
                 for ($i = 0;; ++$i) {
                     $k = 'file' . ($i > 0 ? '-' . $i : '');
@@ -211,10 +212,8 @@ class Upload extends Input
     public function onDelete(\Closure $fx)
     {
         $this->hasDeleteCb = true;
-        if (($_POST['action'] ?? null) === 'delete') {
+        if (($_POST['action'] ?? null) === self::DELETE_ACTION) {
             $this->cb->set(function () use ($fx) {
-                $this->_isCbRunning = true;
-
                 $fileName = $_POST['f_name'] ?? null;
                 $this->addJsAction($fx($fileName));
 
@@ -231,8 +230,13 @@ class Upload extends Input
         }
         parent::renderView();
 
-        if (!$this->_isCbRunning && (!$this->hasUploadCb || !$this->hasDeleteCb)) {
-            throw new Exception('onUpload and onDelete callback must be called to use file upload. Missing one or both of them.');
+        if ($this->cb->canTerminate()) {
+            $action = $_POST['action'] ?? null;
+            if (!$this->hasUploadCb && ($action === self::UPLOAD_ACTION)) {
+                throw new Exception('Missing onUpload callback.');
+            } elseif (!$this->hasDeleteCb && ($action === self::DELETE_ACTION)) {
+                throw new Exception('Missing onDelete callback.');
+            }
         }
 
         if (!empty($this->accept)) {

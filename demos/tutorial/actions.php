@@ -203,16 +203,15 @@ $wizard->addStep('Crud integration', function ($page) {
             $country = new \atk4\ui\demo\CountryLock($app->db);
             $country->getUserAction('add')->enabled = false;
             $country->getUserAction('delete')->enabled = function() { return rand(1,2)>1; };
-            $country->getUserAction('mail', [
-                'appliesTo'       => \atk4\data\Model\UserAction:APPLIES_TO_SINGLE_RECORD,
-                'preview'    => function($model) { return 'here is email preview for '.$model->get('name'); },
+            $country->addUserAction('mail', [
+                'appliesTo'   => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
+                'preview'     => function($model) { return 'here is email preview for '.$model->get('name'); },
                 'callback'    => function($model) { return 'email sent to '.$model->get('name'); },
                 'description' => 'Email testing',
                 'ui'       => ['icon'=>'mail', 'button'=>[null, 'icon'=>'green mail']],
             ]);
 
-            \atk4\ui\Crud::addTo($app, ['ipp' => 5])
-                ->setModel($country, ['name','iso']);
+            \atk4\ui\Crud::addTo($app, ['ipp' => 5])->setModel($country, ['name','iso']);
             CODE
     );
 });

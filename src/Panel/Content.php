@@ -19,7 +19,7 @@ class Content extends View implements LoadableContent
     {
         parent::init();
         $this->addClass('atk-panel-content');
-        $this->setCb(new Callback(['appSticky' => true]));
+        $this->setCb(new Callback());
     }
 
     /**
@@ -46,10 +46,8 @@ class Content extends View implements LoadableContent
     public function onLoad(\Closure $fx)
     {
         $this->cb->set(function () use ($fx) {
-            if ($this->cb->triggered()) {
-                $fx($this);
-                $this->cb->terminate();
-            }
+            $fx($this);
+            $this->cb->terminateJson();
         });
     }
 

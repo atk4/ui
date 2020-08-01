@@ -29,7 +29,7 @@ class Dropdown extends Lister
         parent::init();
 
         if (!$this->cb) {
-            $this->cb = JsCallback::addTo($this, ['postTrigger' => 'item']);
+            $this->cb = JsCallback::addTo($this, ['urlTrigger' => 'item']);
         }
     }
 

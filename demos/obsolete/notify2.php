@@ -30,7 +30,7 @@ $head = \atk4\ui\Header::addTo($app, ['Notification Types']);
 
 $form = \atk4\ui\Form::addTo($app, ['segment']);
 // Unit test only.
-$form->name = 'notify';
+$form->cb->setUrlTrigger('test_notify');
 
 \atk4\ui\Label::addTo($form, ['Some of notification options that can be set.', 'top attached'], ['AboveControls']);
 $form->buttonSave->set('Show');

@@ -28,6 +28,9 @@ class Form extends View
     public $ui = 'form';
     public $defaultTemplate = 'form.html';
 
+    /** @var Callback Callback handling form submission. */
+    public $cb;
+
     /**
      * Set this to false in order to
      * prevent from leaving
@@ -194,6 +197,8 @@ class Form extends View
 
         // set css loader for this form
         $this->setApiConfig(['stateContext' => '#' . $this->name]);
+
+        $this->cb = $this->add(new JsCallback(), ['desired_name' => 'submit']);
     }
 
     /**
@@ -305,6 +310,32 @@ class Form extends View
     public function onSubmit(\Closure $callback)
     {
         $this->onHook(self::HOOK_SUBMIT, $callback);
+
+        $this->cb->set(function () {
+            try {
+                $this->loadPost();
+                $response = $this->hook(self::HOOK_SUBMIT);
+
+                if (!$response) {
+                    if (!$this->model instanceof \atk4\ui\Misc\ProxyModel) {
+                        $this->model->save();
+
+                        return $this->success('Form data has been saved');
+                    }
+
+                    return new JsExpression('console.log([])', ['Form submission is not handled']);
+                }
+
+                return $response;
+            } catch (\atk4\data\ValidationException $val) {
+                $response = [];
+                foreach ($val->errors as $field => $error) {
+                    $response[] = $this->error($field, $error);
+                }
+
+                return $response;
+            }
+        });
 
         return $this;
     }
@@ -681,43 +712,10 @@ class Form extends View
      */
     public function ajaxSubmit()
     {
-        $this->_add($cb = new JsCallback(), ['desired_name' => 'submit', 'postTrigger' => true]);
-
-        View::addTo($this, ['element' => 'input'])
-            ->setAttr('name', $cb->postTrigger)
-            ->setAttr('value', 'submit')
-            ->setStyle(['display' => 'none']);
-
-        $cb->set(function () {
-            try {
-                $this->loadPost();
-                $response = $this->hook(self::HOOK_SUBMIT);
-
-                if (!$response) {
-                    if (!$this->model instanceof \atk4\ui\Misc\ProxyModel) {
-                        $this->model->save();
-
-                        return $this->success('Form data has been saved');
-                    }
-
-                    return new JsExpression('console.log([])', ['Form submission is not handled']);
-                }
-
-                return $response;
-            } catch (\atk4\data\ValidationException $val) {
-                $response = [];
-                foreach ($val->errors as $field => $error) {
-                    $response[] = $this->error($field, $error);
-                }
-
-                return $response;
-            }
-        });
-
         $this->js(true)->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
 
         $this->js(true, null, $this->formElement)
-            ->api(array_merge(['url' => $cb->getJSURL(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig));
+            ->api(array_merge(['url' => $this->cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig));
 
         $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new JsExpression('$(this).attr("name")')));
 

@@ -34,9 +34,6 @@ class Loader extends View
     /** @var string defautl css class */
     public $ui = 'ui segment';
 
-    /** @var bool Make callback url argument stick to application or view. */
-    public $appStickyCb = false;
-
     /** @var Callback for triggering */
     protected $cb;
 
@@ -49,7 +46,7 @@ class Loader extends View
         }
 
         if (!$this->cb) {
-            $this->cb = Callback::addTo($this, ['appSticky' => $this->appStickyCb]);
+            $this->cb = Callback::addTo($this);
         }
     }
 
@@ -84,7 +81,7 @@ class Loader extends View
 
         $this->cb->set(function () use ($fx) {
             $fx($this);
-            $this->app->terminateJson($this);
+            $this->cb->terminateJson();
         });
 
         return $this;
@@ -96,7 +93,7 @@ class Loader extends View
      */
     protected function renderView(): void
     {
-        if (!$this->cb->triggered()) {
+        if (!$this->cb->isTriggered()) {
             if ($this->loadEvent) {
                 $this->js($this->loadEvent, $this->jsLoad());
             }
@@ -116,7 +113,7 @@ class Loader extends View
     public function jsLoad($args = [], $apiConfig = [], $storeName = null)
     {
         return $this->js()->atkReloadView([
-            'uri' => $this->cb->getJsUrl(),
+            'uri' => $this->cb->getUrl(),
             'uri_options' => $args,
             'apiConfig' => !empty($apiConfig) ? $apiConfig : null,
             'storeName' => $storeName ? $storeName : null,

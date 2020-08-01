@@ -46,7 +46,9 @@ class FormTest extends AtkPhpunit\TestCase
     {
         $submit_called = false;
         $_POST = $post_data;
-        $_POST['atk_submit'] = 'ajax';
+        // trigger callback
+        $_GET['atk_submit'] = 'ajax';
+        $_GET['__atk_callback'] = 'atk_submit';
 
         $this->f->onSubmit(function (Form $form) use (&$submit_called, $submit) {
             $submit_called = true;

@@ -108,23 +108,21 @@ class InlineEdit extends View
         parent::setModel($model);
         $this->field = $this->field ? $this->field : $this->model->title_field;
         if ($this->autoSave && $this->model->loaded()) {
-            if ($this->cb->triggered()) {
-                $value = $_POST['value'] ? $_POST['value'] : null;
-                $this->cb->set(function () use ($value) {
-                    try {
-                        $this->model->set($this->field, $this->app->ui_persistence->typecastLoadField($this->model->getField($this->field), $value));
-                        $this->model->save();
+            $value = $_POST['value'] ?? null;
+            $this->cb->set(function () use ($value) {
+                try {
+                    $this->model->set($this->field, $this->app->ui_persistence->typecastLoadField($this->model->getField($this->field), $value));
+                    $this->model->save();
 
-                        return $this->jsSuccess('Update successfully');
-                    } catch (ValidationException $e) {
-                        $this->app->terminateJson([
-                            'success' => true,
-                            'hasValidationError' => true,
-                            'atkjs' => $this->jsError(($this->formatErrorMsg)($e, $value))->jsRender(),
-                        ]);
-                    }
-                });
-            }
+                    return $this->jsSuccess('Update successfully');
+                } catch (ValidationException $e) {
+                    $this->app->terminateJson([
+                        'success' => true,
+                        'hasValidationError' => true,
+                        'atkjs' => $this->jsError(($this->formatErrorMsg)($e, $value))->jsRender(),
+                    ]);
+                }
+            });
         }
 
         return $this->model;
@@ -211,15 +209,5 @@ class InlineEdit extends View
             'url' => $this->cb->getJsUrl(),
             'saveOnBlur' => $this->saveOnBlur,
         ]);
-
-//        $this->js(true, (new JsVueService())->createAtkVue(
-//            '#'.$this->name,
-//            'atk-inline-edit',
-//            [
-//                'initValue'     => $initValue,
-//                'url'           => $this->cb->getJsUrl(),
-//                'saveOnBlur'    => $this->saveOnBlur,
-//            ]
-//        ));
     }
 }

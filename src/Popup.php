@@ -153,7 +153,7 @@ class Popup extends View
 
     /**
      * Set callback for loading content dynamically.
-     * Callback will reveive a view attach to this popup
+     * Callback will receive a view attach to this popup
      * for adding content to it.
      *
      * @param \Closure $fx
@@ -176,14 +176,12 @@ class Popup extends View
             $this->minHeight = '60px';
         }
 
-        if ($this->cb->triggered()) {
-            //create content view to pass to callback.
-            $content = $this->add($this->dynamicContent);
-            $this->cb->set($fx, [$content]);
-            //only render our content view.
-            //PopupService will replace content with this one.
-            $this->app->terminateJson($content);
-        }
+        //create content view to pass to callback.
+        $content = $this->add($this->dynamicContent);
+        $this->cb->set($fx, [$content]);
+        //only render our content view.
+        //PopupService will replace content with this one.
+        $this->cb->terminateJson($content);
     }
 
     /**

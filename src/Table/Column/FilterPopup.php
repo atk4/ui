@@ -71,9 +71,8 @@ class FilterPopup extends Popup
 
         $this->form->onSubmit(function (Form $form) {
             $form->model->save();
-            //trigger click action in order to close popup.
-            //otherwise calling ->popup('hide') is not working as expected.
-            return (new Jquery($this->triggerBy))->trigger('click');
+
+            return new jsReload($this->reload);
         });
 
         \atk4\ui\Button::addTo($this->form, ['Clear', 'clear '])->on('click', function ($f) use ($model) {
