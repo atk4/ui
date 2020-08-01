@@ -1,0 +1,76 @@
+name: Behat
+
+on:
+  pull_request:
+    branches: '**'
+  push:
+    branches: '**'
+  schedule:
+    - cron: '0 * * * *'
+
+jobs:
+  unit-test:
+    name: Unit
+    runs-on: ubuntu-latest
+    container:
+      image: atk4/image:${{ matrix.php }} # https://github.com/atk4/image
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['latest']
+        type: ['Behat']
+    env:
+      LOG_COVERAGE: ''
+    services:
+      selenium:
+        image: selenium/standalone-chrome:3
+        options: --health-cmd "/opt/bin/check-grid.sh"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure PHP
+        run: |
+          if [ -z "$LOG_COVERAGE" ]; then rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; fi
+          php --version
+
+      - name: Setup cache 1/2
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Setup cache 2/2
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install PHP dependencies
+        run: |
+          composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev
+          composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev
+          composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
+
+      - name: Install JS dependencies
+        run: |
+          apk add npm
+          npm install --loglevel=error -g less less-plugin-clean-css uglify-js
+          (cd js && npm install --loglevel=error)
+
+      - name: Build JS files
+        run: |
+          (cd js && npm run build)
+          lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
+
+      - name: Init
+        run: |
+          mkdir -p build/logs
+          php demos/_demo-data/create-sqlite-db.php
+
+      - name: "Run tests: Behat"
+        run: |
+          php -S 172.18.0.2:8888 > /dev/null 2>&1 &
+          sleep 0.2
+          vendor/bin/behat --config behat.yml.dist

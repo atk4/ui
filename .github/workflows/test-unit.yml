@@ -1,4 +1,4 @@
-name: Unit Testing
+name: Unit
 
 on:
   pull_request:
@@ -20,8 +20,6 @@ jobs:
         php: ['7.3', 'latest', '8.0']
         type: ['Phpunit']
         include:
-          - php: 'latest'
-            type: 'Behat'
           - php: 'latest'
             type: 'CodingStyle'
     env:
@@ -51,23 +49,10 @@ jobs:
       - name: Install PHP dependencies
         run: |
           if [ "${{ matrix.type }}" != "Phpunit" ]; then composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev ; fi
-          if [ "${{ matrix.type }}" != "Behat" ]; then composer remove --no-interaction --no-update 'behat/*' --dev ; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
+          composer remove --no-interaction --no-update 'behat/*' --dev
           if [ "${{ matrix.php }}" == "8.0" ]; then composer config platform.php 7.4.5 ; fi
           composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
-
-      - name: Install JS dependencies (only for Behat)
-        if: matrix.type == 'Behat'
-        run: |
-          apk add npm
-          npm install --loglevel=error -g less less-plugin-clean-css uglify-js
-          (cd js && npm install --loglevel=error)
-
-      - name: Build JS files (only for Behat)
-        if: matrix.type == 'Behat'
-        run: |
-          (cd js && npm run build)
-          lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
 
       - name: Init
         run: |
@@ -85,10 +70,6 @@ jobs:
           else
             vendor/bin/phpunit --exclude-group none --no-coverage -v
           fi
-
-#      - name: "Run tests: Behat (only for Behat)"
-#        if: matrix.type == 'Behat'
-#        run: TODO migrate from Travis CI
 
       - name: Lint / check syntax (only for CodingStyle)
         if: matrix.type == 'CodingStyle'
