@@ -19,6 +19,9 @@ atk.registerPlugin = plugin;
 
 atk.phpDate = date;
 atk.vueService = vueService;
+atk.dataService = dataService;
+atk.panelService = panelService;
+atk.tableDropdown = tableDropdown;
 
 
 /**
