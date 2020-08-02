@@ -73,4 +73,5 @@ jobs:
         run: |
           php -S 172.18.0.2:8888 > /dev/null 2>&1 &
           sleep 0.2
+          sed -i "s|'https://ui.agiletoolkit.org/public.*|'/demos',|" src/App.php
           vendor/bin/behat --config behat.yml.dist
