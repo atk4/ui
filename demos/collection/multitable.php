@@ -79,7 +79,7 @@ $model->setOrder('is_folder desc, name');
 
 $vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($vp) use ($model) {
     $model->action('delete')->execute();
-    $model->importFromFilesystem(dirname(__DIR__));
+    $model->importFromFilesystem('.');
     \atk4\ui\Button::addTo($vp, ['Import Complete', 'big green fluid'])->link('multitable.php');
     $vp->js(true)->closest('.modal')->find('.header')->remove();
 });

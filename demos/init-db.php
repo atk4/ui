@@ -180,7 +180,7 @@ class File extends \atk4\data\Model
      */
     public function importFromFilesystem($path, $isSub = false)
     {
-        if (!$isSub && strpos(@realpath($path) . \DIRECTORY_SEPARATOR, dirname(__DIR__)) !== 0) {
+        if (!$isSub) {
             $path = __DIR__ . '/' . $path;
         }
 
