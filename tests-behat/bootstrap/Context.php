@@ -304,9 +304,8 @@ class Context extends MinkContext
         $script = '$(".modal.active.front").modal("hide")';
         $this->getSession()->executeScript($script);
 
-        // quick fix for "element not interactable" - see https://github.com/atk4/ui/pull/1392
-        // should be solved better for every browser interaction
-        $this->getSession()->wait(1);
+        // quick fix for "element not interactable"
+        $this->jqueryWait();
     }
 
     /**
@@ -435,9 +434,24 @@ class Context extends MinkContext
      */
     protected function jqueryWait($duration = 1000)
     {
-        for ($i = 0; $i < 2; ++$i) {
-            $this->getSession()->wait($duration, '(document.readyState === \'complete\' && jQuery.active === 0 && jQuery(\':animated\').length === 0)');
+        $finishedScript = '(document.readyState === \'complete\' && jQuery.active === 0 && jQuery(\':animated\').length === 0)';
+
+        $s = microtime(true);
+        $c = 0;
+        while (microtime(true) - $s <= $duration * 1000) {
+            $this->getSession()->wait($duration, $finishedScript);
+            usleep(10000);
+            if ($this->getSession()->evaluateScript($finishedScript)) {
+                if (++$c >= 2) {
+                    return;
+                }
+            } else {
+                $c = 0;
+                usleep(50000);
+            }
         }
+
+        throw new \Exception('JQuery did not finished within a given time limit');
     }
 
     /**

@@ -7,7 +7,6 @@ Feature: Crud
   Scenario: add
     Then I press menu button "Add" using class "atk-grid-menu"
     And wait for callback
-    And I sleep 50 ms
     Then I fill in "name" with "Test"
     Then I fill in "iso" with "TT"
     Then I fill in "iso3" with "TTT"
@@ -37,7 +36,6 @@ Feature: Crud
 
   Scenario: delete
     Then I press button "Delete"
-    And I sleep 50 ms
     Then I press button "Ok"
     And wait for callback
     Then I should not see "United Kingdom"

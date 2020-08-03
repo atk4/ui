@@ -5,12 +5,11 @@ Feature: Callback
     Given I am on "_unit-test/callback.php"
     Then I press button "First"
     And wait for callback
-    Then I sleep 50 ms
     Then I should see "TestName"
     And I press button "Save"
     And wait for callback
     Then Toast display should contains text "Save"
-    Then I sleep 50 ms
+    And wait for callback
     Then I should not see "TestName"
 
   Scenario:
