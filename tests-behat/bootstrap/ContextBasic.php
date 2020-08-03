@@ -4,25 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\behat;
 
-use Behat\Behat\Context\Context;
-use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\MinkExtension\Context\MinkContext;
 
 /**
  * Defines application features from the specific context.
  */
-class FeatureContextBasic extends RawMinkContext implements Context
+class ContextBasic extends MinkContext
 {
-    /**
-     * Initializes context.
-     *
-     * Every scenario gets its own context instance.
-     * You can also pass arbitrary arguments to the
-     * context constructor through behat.yml.
-     */
-    public function __construct()
-    {
-    }
-
     /** @var null Temporary store button id when press. Use in js callback test. */
     protected $buttonId;
 

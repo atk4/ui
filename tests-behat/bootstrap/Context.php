@@ -10,7 +10,7 @@ use Behat\Testwork\Tester\Result\TestResult;
 /**
  * Dump page data when failed.
  */
-class FeatureContext extends FeatureContextBasic
+class Context extends ContextBasic
 {
     /**
      * Dump current page data when step failed to allow easy debug on TravisCI.
