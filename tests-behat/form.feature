@@ -30,6 +30,7 @@ Scenario: test form response
   Then I should see "some header"
   And I should see "some text"
   Then I hide js modal
+  Then I sleep 50 ms
 
   When I fill in "email5" with "foo@bar"
   And I press button "Save5"

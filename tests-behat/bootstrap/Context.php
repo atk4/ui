@@ -16,6 +16,37 @@ class Context extends MinkContext
         return $this->getMink()->getSession($name);
     }
 
+    public function visitPath($path, $sessionName = null)
+    {
+        parent::visitPath($path, $sessionName);
+
+        // disable all CSS/jQuery animations/transitions
+        $toCssFx = function ($selector, $cssPairs) {
+            $css = [];
+            foreach ($cssPairs as $k => $v) {
+                foreach ([$k, '-moz-' . $k, '-webkit-' . $k] as $k2) {
+                    $css[] = $k2 . ': ' . $v . ' !important;';
+                }
+            }
+
+            return $selector . ' { ' . implode(' ', $css) . ' }';
+        };
+
+        $this->jqueryWait(20000);
+
+        $css = $toCssFx('*', [
+            'animation-delay' => '0.02s',
+            'animation-duration' => '0.02s',
+            'transition-delay' => '0.02s',
+            'transition-duration' => '0.02s',
+        ]) . $toCssFx('.ui.toast-container .toast-box .progressing.wait', [
+            'animation-duration' => '0.5s',
+            'transition-duration' => '0.5s',
+        ]);
+        $script = '$(\'<style>' . $css . '</style>\').appendTo(\'head\'); $.fx.off = true;';
+        $this->getSession()->executeScript($script);
+    }
+
     /**
      * Sleep for a certain time in ms.
      *
@@ -404,8 +435,9 @@ class Context extends MinkContext
      */
     protected function jqueryWait($duration = 1000)
     {
-        $this->getSession()->wait($duration, '(0 === jQuery.active && 0 === jQuery(\':animated\').length)');
-        $this->getSession()->wait(500);
+        for ($i = 0; $i < 2; ++$i) {
+            $this->getSession()->wait($duration, '(document.readyState === \'complete\' && jQuery.active === 0 && jQuery(\':animated\').length === 0)');
+        }
     }
 
     /**
