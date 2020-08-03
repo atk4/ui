@@ -1,6 +1,8 @@
 default:
   suites:
-    my_suite:
+    atk4_ui:
+      paths:
+        features: '%paths.base%/tests-behat'
       contexts:
         - atk4\ui\behat\FeatureContext
         - Behat\MinkExtension\Context\MinkContext

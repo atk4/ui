@@ -10,7 +10,7 @@ on:
 
 jobs:
   unit-test:
-    name: Unit
+    name: Behat
     runs-on: ubuntu-latest
     container:
       image: atk4/image:${{ matrix.php }} # https://github.com/atk4/image

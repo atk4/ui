@@ -285,6 +285,10 @@ class FeatureContextBasic extends RawMinkContext implements Context
     {
         $script = '$(".modal.active.front").modal("hide")';
         $this->getSession()->executeScript($script);
+
+        // quick fix for "element not interactable" - see https://github.com/atk4/ui/pull/1392
+        // should be solved better for every browser interaction
+        $this->getSession()->wait(1);
     }
 
     /**
