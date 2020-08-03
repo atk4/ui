@@ -9,16 +9,15 @@ default:
   extensions:
     Behat\MinkExtension:
       show_cmd: 'open %s'
-      base_url:  'http://172.18.0.2:8888/demos/'
+      base_url:  'http://172.18.0.2:8888/demos'
       sessions:
         default:
           selenium2:
-             browser: chrome
-             wd_host: http://selenium:4444/wd/hub
-             capabilities:
-               chrome:
-                 switches:
-                   - "--headless"
-                   - "--disable-gpu"
-                   - "--window-size=1280,720"
-                   - "--no-sandbox"
+            browser: chrome
+            wd_host: 'http://selenium-chrome:4444/wd/hub'
+            capabilities:
+              extra_capabilities:
+                chrome:
+                  args:
+                    - '--headless'
+                    - '--window-size=1280,720'

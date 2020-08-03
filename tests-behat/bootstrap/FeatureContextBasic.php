@@ -67,6 +67,8 @@ class FeatureContextBasic extends RawMinkContext implements Context
         $button = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         // store button id.
         $this->buttonId = $button->getAttribute('id');
+        // fix "is out of bounds of viewport width and height" for Firefox
+        $button->focus();
         $button->click();
     }
 
