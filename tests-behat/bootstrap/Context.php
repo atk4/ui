@@ -407,9 +407,9 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I test javascript
+     * @Then I test javascript example
      */
-    public function iTestJavascript()
+    public function iTestJavascriptExample()
     {
         $title = $this->getSession()->evaluateScript('return window.document.title;');
         echo 'I\'m correctly on the webpage entitled "' . $title . '"';
@@ -422,7 +422,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     protected function jqueryWait($duration = 1000)
     {
-        $finishedScript = '(document.readyState === \'complete\' && jQuery.active === 0 && jQuery(\':animated\').length === 0)';
+        $finishedScript = 'document.readyState === \'complete\' && jQuery.active === 0';
 
         $s = microtime(true);
         $c = 0;
