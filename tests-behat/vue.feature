@@ -8,4 +8,5 @@ Feature: Vue
     Then I hide js modal
 
     When I fill in "atk-vue-search" with "united kingdom"
+    Then I sleep 250 ms
     Then I should see "United Kingdom"
