@@ -87,7 +87,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "atk4\\ui\\tests\\": "tests/"
+      "atk4\\ui\\tests\\": "tests/",
+      "atk4\\ui\\behat\\": "tests-behat/bootstrap/"
     }
   }
 }

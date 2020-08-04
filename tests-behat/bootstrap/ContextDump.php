@@ -10,19 +10,8 @@ use Behat\Testwork\Tester\Result\TestResult;
 /**
  * Dump page data when failed.
  */
-class FeatureContext extends FeatureContextBasic
+class ContextDump extends Context
 {
-    /**
-     * Initializes context.
-     *
-     * Every scenario gets its own context instance.
-     * You can also pass arbitrary arguments to the
-     * context constructor through behat.yml.
-     */
-    public function __construct()
-    {
-    }
-
     /**
      * Dump current page data when step failed to allow easy debug on TravisCI.
      *

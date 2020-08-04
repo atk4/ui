@@ -10,7 +10,7 @@ on:
 
 jobs:
   unit-test:
-    name: Unit
+    name: Behat
     runs-on: ubuntu-latest
     container:
       image: atk4/image:${{ matrix.php }} # https://github.com/atk4/image
@@ -18,12 +18,15 @@ jobs:
       fail-fast: false
       matrix:
         php: ['latest']
-        type: ['Behat']
+        type: ['Chrome', 'Firefox']
     env:
       LOG_COVERAGE: ''
     services:
-      selenium:
-        image: selenium/standalone-chrome:3
+      selenium-chrome:
+        image: selenium/standalone-chrome:latest
+        options: --health-cmd "/opt/bin/check-grid.sh"
+      selenium-firefox:
+        image: selenium/standalone-firefox:latest
         options: --health-cmd "/opt/bin/check-grid.sh"
     steps:
       - name: Checkout
@@ -73,5 +76,6 @@ jobs:
         run: |
           php -S 172.18.0.2:8888 > /dev/null 2>&1 &
           sleep 0.2
-          sed -i "s|'https://ui.agiletoolkit.org/public.*|'/demos',|" src/App.php
+          sed -i "s~'https://ui.agiletoolkit.org/public.*~'/demos',~" src/App.php
+          if [ "${{ matrix.type }}" == "Firefox" ]; then sed -i "s~chrome~firefox~" behat.yml.dist ; fi
           vendor/bin/behat --config behat.yml.dist

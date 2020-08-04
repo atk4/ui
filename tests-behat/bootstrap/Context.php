@@ -4,26 +4,11 @@ declare(strict_types=1);
 
 namespace atk4\ui\behat;
 
-use Behat\Behat\Context\Context;
-use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\MinkExtension\Context\MinkContext;
 
-/**
- * Defines application features from the specific context.
- */
-class FeatureContextBasic extends RawMinkContext implements Context
+class Context extends MinkContext
 {
-    /**
-     * Initializes context.
-     *
-     * Every scenario gets its own context instance.
-     * You can also pass arbitrary arguments to the
-     * context constructor through behat.yml.
-     */
-    public function __construct()
-    {
-    }
-
-    /** @var null Temporary store button id when press. Use in js callback test. */
+    /** @var null Temporary store button id when press. Used in js callback test. */
     protected $buttonId;
 
     public function getSession($name = null): \Behat\Mink\Session
@@ -67,6 +52,8 @@ class FeatureContextBasic extends RawMinkContext implements Context
         $button = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         // store button id.
         $this->buttonId = $button->getAttribute('id');
+        // fix "is out of bounds of viewport width and height" for Firefox
+        $button->focus();
         $button->click();
     }
 
@@ -285,6 +272,10 @@ class FeatureContextBasic extends RawMinkContext implements Context
     {
         $script = '$(".modal.active.front").modal("hide")';
         $this->getSession()->executeScript($script);
+
+        // quick fix for "element not interactable" - see https://github.com/atk4/ui/pull/1392
+        // should be solved better for every browser interaction
+        $this->getSession()->wait(1);
     }
 
     /**

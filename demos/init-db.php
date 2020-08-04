@@ -180,14 +180,15 @@ class File extends \atk4\data\Model
      */
     public function importFromFilesystem($path, $isSub = false)
     {
+        if (!$isSub) {
+            $path = __DIR__ . '/' . $path;
+        }
+
         $dir = new \DirectoryIterator($path);
         foreach ($dir as $fileinfo) {
             $name = $fileinfo->getFilename();
 
-            if ($name === '.') {
-                continue;
-            }
-            if ($name[0] === '.') {
+            if ($name === '.' || $name[0] === '.') {
                 continue;
             }
 
@@ -202,7 +203,7 @@ class File extends \atk4\data\Model
                 */
 
                 if ($fileinfo->isDir()) {
-                    $this->ref('SubFolder')->importFromFilesystem($path . '/' . $name, true);
+                    $this->ref('SubFolder')->importFromFilesystem($dir->getPath() . '/' . $name, true);
                 }
             }
         }
