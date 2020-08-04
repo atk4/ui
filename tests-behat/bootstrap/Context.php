@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\behat;
 
+use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\MinkExtension\Context\MinkContext;
 
 class Context extends MinkContext
@@ -16,10 +17,17 @@ class Context extends MinkContext
         return $this->getMink()->getSession($name);
     }
 
-    public function visitPath($path, $sessionName = null)
+    /**
+     * @AfterStep
+     */
+    public function waitUntilLoadingAndAnimationFinished(AfterStepScope $event)
     {
-        parent::visitPath($path, $sessionName);
+        $this->jqueryWait(20000);
+        $this->disableAnimations();
+    }
 
+    private function disableAnimations(): void
+    {
         // disable all CSS/jQuery animations/transitions
         $toCssFx = function ($selector, $cssPairs) {
             $css = [];
@@ -31,8 +39,6 @@ class Context extends MinkContext
 
             return $selector . ' { ' . implode(' ', $css) . ' }';
         };
-
-        $this->jqueryWait(20000);
 
         $css = $toCssFx('*', [
             'animation-delay' => '0.02s',
@@ -63,14 +69,6 @@ class Context extends MinkContext
      * @When form submits
      */
     public function formSubmits()
-    {
-        $this->jqueryWait(20000);
-    }
-
-    /**
-     * @When wait for callback
-     */
-    public function waitForCallback()
     {
         $this->jqueryWait(20000);
     }
@@ -303,9 +301,6 @@ class Context extends MinkContext
     {
         $script = '$(".modal.active.front").modal("hide")';
         $this->getSession()->executeScript($script);
-
-        // quick fix for "element not interactable"
-        $this->jqueryWait();
     }
 
     /**
