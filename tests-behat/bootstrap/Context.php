@@ -66,14 +66,6 @@ class Context extends MinkContext
     }
 
     /**
-     * @When form submits
-     */
-    public function formSubmits()
-    {
-        $this->jqueryWait(20000);
-    }
-
-    /**
      * @When I press button :arg1
      */
     public function iPressButton($arg1)
