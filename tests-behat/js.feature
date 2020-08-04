@@ -20,13 +20,8 @@ Feature: JS
   Then I don't see button "C"
   And I don't see button "Hide button C"
 
-#  wait for DOM to complete button hiding
-  And I sleep "500" ms
-
   When I press button "Callback Test"
-  And  wait for callback
   Then Label changes to a number
 
   When I press button "failure"
-  And  wait for callback
   Then Modal is open with text "Everything is bad"

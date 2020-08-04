@@ -232,6 +232,6 @@ JsSearch.DEFAULTS = {
   uri_options: {},
   q: null,
   autoQuery: false,
-  timeOut: 500,
+  timeOut: 100,
   useAjax: true
 };

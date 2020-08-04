@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace atk4\ui\behat;
 
-use Behat\MinkExtension\Context\MinkContext;
+use Behat\Behat\Context\Context as BehatContext;
+use Behat\Behat\Hook\Scope\AfterStepScope;
+use Behat\Behat\Hook\Scope\BeforeStepScope;
+use Behat\MinkExtension\Context\RawMinkContext;
 
-class Context extends MinkContext
+class Context extends RawMinkContext implements BehatContext
 {
     /** @var null Temporary store button id when press. Used in js callback test. */
     protected $buttonId;
@@ -14,6 +17,56 @@ class Context extends MinkContext
     public function getSession($name = null): \Behat\Mink\Session
     {
         return $this->getMink()->getSession($name);
+    }
+
+    /**
+     * @BeforeStep
+     */
+    public function closeAllToasts(BeforeStepScope $event): void
+    {
+        if (!$this->getSession()->getDriver()->isStarted()) {
+            return;
+        }
+
+        if (strpos($event->getStep()->getText(), 'Toast display should contains text ') !== 0) {
+            $this->getSession()->executeScript('$(\'.toast-box > .ui.toast\').toast(\'close\');');
+        }
+    }
+
+    /**
+     * @AfterStep
+     */
+    public function waitUntilLoadingAndAnimationFinished(AfterStepScope $event): void
+    {
+        $this->jqueryWait();
+        $this->disableAnimations();
+    }
+
+    private function disableAnimations(): void
+    {
+        // disable all CSS/jQuery animations/transitions
+        $toCssFx = function ($selector, $cssPairs) {
+            $css = [];
+            foreach ($cssPairs as $k => $v) {
+                foreach ([$k, '-moz-' . $k, '-webkit-' . $k] as $k2) {
+                    $css[] = $k2 . ': ' . $v . ' !important;';
+                }
+            }
+
+            return $selector . ' { ' . implode(' ', $css) . ' }';
+        };
+
+        $css = $toCssFx('*', [
+            'animation-delay' => '0.02s',
+            'animation-duration' => '0.02s',
+            'transition-delay' => '0.02s',
+            'transition-duration' => '0.02s',
+        ]) . $toCssFx('.ui.toast-container .toast-box .progressing.wait', [
+            'animation-duration' => '5s',
+            'transition-duration' => '5s',
+        ]);
+        $script = '$(\'<style>' . $css . '</style>\').appendTo(\'head\'); $.fx.off = true;';
+        $this->getSession()->executeScript($script);
     }
 
     /**
@@ -26,22 +79,6 @@ class Context extends MinkContext
     public function iSleep($arg1)
     {
         $this->getSession()->wait($arg1);
-    }
-
-    /**
-     * @When form submits
-     */
-    public function formSubmits()
-    {
-        $this->jqueryWait(20000);
-    }
-
-    /**
-     * @When wait for callback
-     */
-    public function waitForCallback()
-    {
-        $this->jqueryWait(20000);
     }
 
     /**
@@ -272,10 +309,6 @@ class Context extends MinkContext
     {
         $script = '$(".modal.active.front").modal("hide")';
         $this->getSession()->executeScript($script);
-
-        // quick fix for "element not interactable" - see https://github.com/atk4/ui/pull/1392
-        // should be solved better for every browser interaction
-        $this->getSession()->wait(1);
     }
 
     /**
@@ -311,14 +344,6 @@ class Context extends MinkContext
     }
 
     /**
-     * @Then I wait for toast to hide
-     */
-    public function iWaitForToastToHide()
-    {
-        $this->getSession()->wait(20000, '$(".ui.toast-container").children().length === 0');
-    }
-
-    /**
      * @Then I select value :arg1 in lookup :arg2
      *
      * Select a value in a lookup field.
@@ -337,7 +362,7 @@ class Context extends MinkContext
         $this->getSession()->executeScript($script);
         //Wait till dropdown is visible
         //Cannot call jqueryWait because calling it will return prior from dropdown to fire ajax request.
-        $this->getSession()->wait(20000, '$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
+        $this->getSession()->wait(5000, '$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
         //value should be available.
         $value = $lookup->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (!$value || $value->getText() !== $arg1) {
@@ -389,12 +414,17 @@ class Context extends MinkContext
     }
 
     /**
-     * @Then I test javascript
+     * @Then I test javascript example
      */
-    public function iTestJavascript()
+    public function iTestJavascriptExample()
     {
         $title = $this->getSession()->evaluateScript('return window.document.title;');
         echo 'I\'m correctly on the webpage entitled "' . $title . '"';
+    }
+
+    protected function getFinishedScript(): string
+    {
+        return 'document.readyState === \'complete\' && typeof $ !== \'undefined\' && jQuery.active === 0';
     }
 
     /**
@@ -402,10 +432,26 @@ class Context extends MinkContext
      *
      * @param int $duration the maximum time to wait for the function
      */
-    protected function jqueryWait($duration = 1000)
+    protected function jqueryWait($duration = 5000)
     {
-        $this->getSession()->wait($duration, '(0 === jQuery.active && 0 === jQuery(\':animated\').length)');
-        $this->getSession()->wait(500);
+        $finishedScript = $this->getFinishedScript();
+
+        $s = microtime(true);
+        $c = 0;
+        while (microtime(true) - $s <= $duration * 1000) {
+            $this->getSession()->wait($duration, $finishedScript);
+            usleep(10000);
+            if ($this->getSession()->evaluateScript($finishedScript)) {
+                if (++$c >= 2) {
+                    return;
+                }
+            } else {
+                $c = 0;
+                usleep(50000);
+            }
+        }
+
+        throw new \Exception('JQuery did not finished within a given time limit');
     }
 
     /**

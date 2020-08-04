@@ -17,7 +17,7 @@ class ContextDump extends Context
      *
      * @AfterStep
      */
-    public function dumpPageAfterFailedStep(AfterStepScope $event)
+    public function dumpPageAfterFailedStep(AfterStepScope $event): void
     {
         if ($event->getTestResult()->getResultCode() === TestResult::FAILED) {
             if ($this->getSession()->getDriver() instanceof \Behat\Mink\Driver\Selenium2Driver) {

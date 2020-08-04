@@ -5,6 +5,7 @@ default:
         features: '%paths.base%/tests-behat'
       contexts:
         - atk4\ui\behat\ContextDump
+        - Behat\MinkExtension\Context\MinkContext
   extensions:
     Behat\MinkExtension:
       show_cmd: 'open %s'
