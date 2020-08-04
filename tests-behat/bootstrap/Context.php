@@ -6,6 +6,7 @@ namespace atk4\ui\behat;
 
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
+use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\MinkExtension\Context\RawMinkContext;
 
 class Context extends RawMinkContext implements BehatContext
@@ -19,11 +20,25 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
+     * @BeforeStep
+     */
+    public function closeAllToasts(BeforeStepScope $event): void
+    {
+        if (!$this->getSession()->getDriver()->isStarted()) {
+            return;
+        }
+
+        if (strpos($event->getStep()->getText(), 'Toast display should contains text ') !== 0) {
+            $this->getSession()->executeScript('$(\'.toast-box > .ui.toast\').toast(\'close\');');
+        }
+    }
+
+    /**
      * @AfterStep
      */
-    public function waitUntilLoadingAndAnimationFinished(AfterStepScope $event)
+    public function waitUntilLoadingAndAnimationFinished(AfterStepScope $event): void
     {
-        $this->jqueryWait(20000);
+        $this->jqueryWait();
         $this->disableAnimations();
     }
 
@@ -47,8 +62,8 @@ class Context extends RawMinkContext implements BehatContext
             'transition-delay' => '0.02s',
             'transition-duration' => '0.02s',
         ]) . $toCssFx('.ui.toast-container .toast-box .progressing.wait', [
-            'animation-duration' => '0.5s',
-            'transition-duration' => '0.5s',
+            'animation-duration' => '5s',
+            'transition-duration' => '5s',
         ]);
         $script = '$(\'<style>' . $css . '</style>\').appendTo(\'head\'); $.fx.off = true;';
         $this->getSession()->executeScript($script);
@@ -329,14 +344,6 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I wait for toast to hide
-     */
-    public function iWaitForToastToHide()
-    {
-        $this->getSession()->wait(20000, '$(".ui.toast-container").children().length === 0');
-    }
-
-    /**
      * @Then I select value :arg1 in lookup :arg2
      *
      * Select a value in a lookup field.
@@ -355,7 +362,7 @@ class Context extends RawMinkContext implements BehatContext
         $this->getSession()->executeScript($script);
         //Wait till dropdown is visible
         //Cannot call jqueryWait because calling it will return prior from dropdown to fire ajax request.
-        $this->getSession()->wait(20000, '$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
+        $this->getSession()->wait(5000, '$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
         //value should be available.
         $value = $lookup->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (!$value || $value->getText() !== $arg1) {
@@ -415,14 +422,19 @@ class Context extends RawMinkContext implements BehatContext
         echo 'I\'m correctly on the webpage entitled "' . $title . '"';
     }
 
+    protected function getFinishedScript(): string
+    {
+        return 'document.readyState === \'complete\' && typeof $ !== \'undefined\' && jQuery.active === 0';
+    }
+
     /**
      * Wait till jquery ajax request finished and no animation is perform.
      *
      * @param int $duration the maximum time to wait for the function
      */
-    protected function jqueryWait($duration = 1000)
+    protected function jqueryWait($duration = 5000)
     {
-        $finishedScript = 'document.readyState === \'complete\' && jQuery.active === 0';
+        $finishedScript = $this->getFinishedScript();
 
         $s = microtime(true);
         $c = 0;

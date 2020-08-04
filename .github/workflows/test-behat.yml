@@ -79,10 +79,6 @@ jobs:
         run: |
           php -S 172.18.0.2:8888 > /dev/null 2>&1 &
           sleep 0.2
-          if [ "${{ matrix.type }}" == "Chrome Slow" ]; then
-            echo 'sleep(2);' >> demos/init-app.php
-            # todo, this should be not needed, we should close toasts manually
-            sed -i "s~'0.5s'~'2.5s'~" tests-behat/bootstrap/Context.php
-          fi
           if [ "${{ matrix.type }}" == "Firefox" ]; then sed -i "s~chrome~firefox~" behat.yml.dist ; fi
+          if [ "${{ matrix.type }}" == "Chrome Slow" ]; then echo 'sleep(1);' >> demos/init-app.php ; fi
           vendor/bin/behat --config behat.yml.dist
