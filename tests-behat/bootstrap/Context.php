@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace atk4\ui\behat;
 
+use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
-use Behat\MinkExtension\Context\MinkContext;
+use Behat\MinkExtension\Context\RawMinkContext;
 
-class Context extends MinkContext
+class Context extends RawMinkContext implements BehatContext
 {
     /** @var null Temporary store button id when press. Used in js callback test. */
     protected $buttonId;
