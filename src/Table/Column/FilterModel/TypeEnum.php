@@ -30,15 +30,16 @@ class TypeEnum extends Column\FilterModel
 
     public function setConditionForModel($model)
     {
-        $filter = $this->recallData();
-        $values = [];
-        foreach ($filter as $key => $isSet) {
-            if ($isSet === true) {
-                $values[] = $key;
+        if ($filter = $this->recallData()) {
+            $values = [];
+            foreach ($filter as $key => $isSet) {
+                if ($isSet === true) {
+                    $values[] = $key;
+                }
             }
-        }
-        if (!empty($values)) {
-            $model->addCondition($filter['name'], 'in', $values);
+            if (!empty($values)) {
+                $model->addCondition($filter['name'], 'in', $values);
+            }
         }
 
         return $model;
