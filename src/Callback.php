@@ -147,4 +147,12 @@ class Callback extends View
     {
         return ['__atk_callback' => $this->urlTrigger, $this->urlTrigger => $value];
     }
+
+    protected function _getStickyArgs($triggerBy): array
+    {
+        // DEV NOTE:
+        // - getUrlArguments $value used only in https://github.com/atk4/ui/blob/08644a685a9ee07b4e94d1e35e3bd3c95b7a013d/src/VirtualPage.php#L134
+        // - $_GET['__atk_callback'] from getUrlArguments seems to control terminating behaviour!
+        return array_merge(parent::_getStickyArgs($triggerBy), $this->getUrlArguments('TODO/unknown'));
+    }
 }
