@@ -80,13 +80,12 @@ class Callback extends View
     }
 
     /**
-     * Terminate this callback
-     * by rendering the owner view by default.
+     * Terminate this callback by rendering the given view.
      */
-    public function terminateJson(View $view = null): void
+    public function terminateJson(View $view): void
     {
         if ($this->canTerminate()) {
-            $this->app->terminateJson($view ?? $this->owner);
+            $this->app->terminateJson($view);
         }
     }
 
@@ -129,7 +128,7 @@ class Callback extends View
      */
     public function getJsUrl(string $value = 'ajax'): string
     {
-        return $this->owner->jsUrl($this->getUrlArguments($value));
+        return $this->jsUrl($this->getUrlArguments($value));
     }
 
     /**
@@ -138,7 +137,7 @@ class Callback extends View
      */
     public function getUrl(string $value = 'callback'): string
     {
-        return $this->owner->url($this->getUrlArguments($value));
+        return $this->url($this->getUrlArguments($value));
     }
 
     /**
