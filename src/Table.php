@@ -216,7 +216,7 @@ class Table extends Lister
 
         if ($field === null) {
             // column is not associated with any model field
-            $columnDecorator = $this->_add($this->factory($columnDecorator, ['table' => $this]));
+            $columnDecorator = $this->add($this->factory($columnDecorator, ['table' => $this]));
         } elseif (is_array($columnDecorator) || is_string($columnDecorator)) {
             $columnDecorator = $this->decoratorFactory($field, array_merge(['columnData' => $name], is_string($columnDecorator) ? [$columnDecorator] : $columnDecorator));
         } elseif (!$columnDecorator) {
@@ -230,7 +230,7 @@ class Table extends Lister
             if (!$columnDecorator->columnData) {
                 $columnDecorator->columnData = $name;
             }
-            $this->_add($columnDecorator);
+            $this->add($columnDecorator);
         } else {
             throw (new Exception('Value of $columnDecorator argument is incorrect'))
                 ->addMoreInfo('columnDecorator', $columnDecorator);
@@ -297,7 +297,7 @@ class Table extends Lister
             throw (new Exception('No such column, cannot decorate'))
                 ->addMoreInfo('name', $name);
         }
-        $decorator = $this->_add($this->factory($seed, ['table' => $this]));
+        $decorator = $this->add($this->factory($seed, ['table' => $this]));
 
         if (!is_array($this->columns[$name])) {
             $this->columns[$name] = [$this->columns[$name]];
@@ -350,7 +350,7 @@ class Table extends Lister
             [$this->default_column ? $this->default_column : Table\Column::class]
         );
 
-        return $this->_add($this->factory($seed, ['table' => $this]));
+        return $this->add($this->factory($seed, ['table' => $this]));
     }
 
     protected $typeToDecorator = [

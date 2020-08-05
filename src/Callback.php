@@ -20,7 +20,7 @@ namespace atk4\ui;
  *          ->getUrl()
  *  );
  */
-class Callback extends View
+class Callback extends AbstractView
 {
     /** @var string Specify a custom GET trigger. */
     protected $urlTrigger;
