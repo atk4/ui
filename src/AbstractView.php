@@ -159,20 +159,12 @@ abstract class AbstractView
     }
 
     /**
-     * Needed for tracking which view in a render tree called url().
-     *
-     * @internal
-     */
-    protected $_triggerBy;
-
-    /**
      * Get sticky arguments defined by the view and parents (including API).
      *
      * @param string $triggerBy If exception occurs, will know which view called url()
      */
     protected function _getStickyArgs($triggerBy): array
     {
-        $this->_triggerBy = $triggerBy;
         if ($this->owner && $this->owner instanceof self) {
             $stickyArgs = array_merge($this->owner->_getStickyArgs($triggerBy), $this->stickyArgs);
         } else {
