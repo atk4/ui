@@ -103,7 +103,7 @@ abstract class AbstractView
      */
     public function add($object, $args = null): self
     {
-        (AbstractView::class)::assertInstanceOf($object);
+        (self::class)::assertInstanceOf($object);
 
         if (func_num_args() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');

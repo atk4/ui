@@ -216,7 +216,7 @@ class Table extends Lister
 
         if ($field === null) {
             // column is not associated with any model field
-            $columnDecorator = $this->add($this->factory($columnDecorator, ['table' => $this]));
+            $columnDecorator = $this->_addUnchecked($this->factory($columnDecorator, ['table' => $this]));
         } elseif (is_array($columnDecorator) || is_string($columnDecorator)) {
             $columnDecorator = $this->decoratorFactory($field, array_merge(['columnData' => $name], is_string($columnDecorator) ? [$columnDecorator] : $columnDecorator));
         } elseif (!$columnDecorator) {
@@ -230,7 +230,7 @@ class Table extends Lister
             if (!$columnDecorator->columnData) {
                 $columnDecorator->columnData = $name;
             }
-            $this->add($columnDecorator);
+            $this->_addUnchecked($columnDecorator);
         } else {
             throw (new Exception('Value of $columnDecorator argument is incorrect'))
                 ->addMoreInfo('columnDecorator', $columnDecorator);
@@ -249,6 +249,14 @@ class Table extends Lister
         }
 
         return $columnDecorator;
+    }
+
+    // TODO do not use elements/add(), elements are only for View based objects
+    private function _addUnchecked(Table\Column $column): Table\Column
+    {
+        return \Closure::bind(function () use ($column) {
+            return $this->_add($column);
+        }, $this, AbstractView::class)();
     }
 
     /**
@@ -297,7 +305,7 @@ class Table extends Lister
             throw (new Exception('No such column, cannot decorate'))
                 ->addMoreInfo('name', $name);
         }
-        $decorator = $this->add($this->factory($seed, ['table' => $this]));
+        $decorator = $this->_addUnchecked($this->factory($seed, ['table' => $this]));
 
         if (!is_array($this->columns[$name])) {
             $this->columns[$name] = [$this->columns[$name]];
@@ -350,7 +358,7 @@ class Table extends Lister
             [$this->default_column ? $this->default_column : Table\Column::class]
         );
 
-        return $this->add($this->factory($seed, ['table' => $this]));
+        return $this->_addUnchecked($this->factory($seed, ['table' => $this]));
     }
 
     protected $typeToDecorator = [
