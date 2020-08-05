@@ -696,7 +696,7 @@ class View implements JsExpressionable
     protected function recursiveRender(): void
     {
         foreach ($this->elements as $view) {
-            if (!$view instanceof self) {
+            if (!$view instanceof self || $view instanceof Callback /* TODO quick fix for templating (missing Content tag) issue, later, we should support empty getHtml() return */) {
                 continue;
             }
 
@@ -1275,9 +1275,6 @@ class View implements JsExpressionable
     /** @var string[] stickyGet arguments */
     public $stickyArgs = [];
 
-    /** @var string[] Cached stickyGet arguments */
-    public $_stickyArgsCached;
-
     /**
      * Build an URL which this view can use for js call-backs. It should
      * be guaranteed that requesting returned URL would at some point call
@@ -1324,12 +1321,12 @@ class View implements JsExpressionable
     {
         $this->_triggerBy = $triggerBy;
         if ($this->owner && $this->owner instanceof self) {
-            $this->_stickyArgsCached = array_merge($this->owner->_getStickyArgs($triggerBy), $this->stickyArgs);
+            $stickyArgs = array_merge($this->owner->_getStickyArgs($triggerBy), $this->stickyArgs);
         } else {
-            $this->_stickyArgsCached = [];
+            $stickyArgs = [];
         }
 
-        return $this->_stickyArgsCached;
+        return $stickyArgs;
     }
 
     /**

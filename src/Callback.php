@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
-use atk4\core\AppScopeTrait;
-use atk4\core\DiContainerTrait;
-use atk4\core\InitializerTrait;
-use atk4\core\StaticAddToTrait;
-use atk4\core\TrackableTrait;
-
 /**
  * Add this object to your render tree and it will expose a unique URL which, when
  * executed directly will perform a PHP callback that you set().
@@ -25,19 +19,9 @@ use atk4\core\TrackableTrait;
  *          })
  *          ->getUrl()
  *  );
- *
- * @property View $owner
  */
-class Callback
+class Callback extends View
 {
-    use TrackableTrait;
-    use AppScopeTrait;
-    use DiContainerTrait;
-    use InitializerTrait {
-        init as _init;
-    }
-    use StaticAddToTrait;
-
     /** @var string Specify a custom GET trigger. */
     protected $urlTrigger;
 
@@ -48,25 +32,15 @@ class Callback
     public $triggerOnReload = true;
 
     /**
-     * Initialize object and set default properties.
-     *
-     * @param array|string $defaults
-     */
-    public function __construct($defaults = [])
-    {
-        $this->setDefaults($defaults);
-    }
-
-    /**
      * Initialization.
      */
     public function init(): void
     {
-        $this->_init();
-
         if (!$this->app) {
             throw new Exception('Callback must be part of a render tree');
         }
+
+        parent::init();
 
         $this->setUrlTrigger($this->urlTrigger);
     }
@@ -87,18 +61,18 @@ class Callback
     /**
      * Executes user-specified action when call-back is triggered.
      *
-     * @param \Closure $callback
+     * @param \Closure $fx
      * @param array    $args
      *
      * @return mixed|null
      */
-    public function set($callback, $args = [])
+    public function set($fx = null, $args = null)
     {
         if ($this->isTriggered() && $this->canTrigger()) {
             $this->app->catch_runaway_callbacks = false;
             $t = $this->app->run_called;
             $this->app->run_called = true;
-            $ret = $callback(...$args);
+            $ret = $fx(...($args ?? []));
             $this->app->run_called = $t;
 
             return $ret;

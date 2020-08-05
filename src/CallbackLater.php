@@ -21,7 +21,7 @@ class CallbackLater extends Callback
      *
      * @return mixed|null
      */
-    public function set($callback, $args = [])
+    public function set($callback = null, $args = null)
     {
         if (!$this->app) {
             throw new Exception('Call-back must be part of a RenderTree');
@@ -31,10 +31,8 @@ class CallbackLater extends Callback
             return parent::set($callback, $args);
         }
 
-        $this->app->onHook(App::HOOK_BEFORE_RENDER, function (...$args) use ($callback) {
-            array_shift($args); // Hook will have first argument pointing to the app. We don't need that.
-
+        $this->app->onHook(App::HOOK_BEFORE_RENDER, function () use ($callback, $args) {
             return parent::set($callback, $args);
-        }, $args);
+        });
     }
 }
