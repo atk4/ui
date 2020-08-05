@@ -153,10 +153,8 @@ class Menu extends View
      *
      * @param View|string|array $seed   New object to add
      * @param string|array|null $region
-     *
-     * @return View
      */
-    public function add($seed, $region = null)
+    public function add($seed, $region = null): AbstractView
     {
         return parent::add($seed, $region)->addClass('item');
     }

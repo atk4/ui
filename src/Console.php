@@ -67,15 +67,15 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * While inside a callback you may execute runCommand or setModel multiple times.
      *
-     * @param \Closure    $callback callback which will be executed while displaying output inside console
-     * @param bool|string $event    "true" would mean to execute on page load, string would indicate
-     *                              js event. See first argument for View::js()
+     * @param \Closure    $fx    callback which will be executed while displaying output inside console
+     * @param bool|string $event "true" would mean to execute on page load, string would indicate
+     *                           js event. See first argument for View::js()
      *
      * @return $this
      */
-    public function set($callback = null, $event = null)
+    public function set($fx = null, $event = null)
     {
-        if (!($callback instanceof \Closure)) {
+        if (!($fx instanceof \Closure)) {
             throw new Exception('Please specify the $callback argument');
         }
 
@@ -87,7 +87,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             $this->sse = JsSse::addTo($this);
         }
 
-        $this->sse->set(function () use ($callback) {
+        $this->sse->set(function () use ($fx) {
             $this->sseInProgress = true;
 
             if (isset($this->app)) {

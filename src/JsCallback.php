@@ -93,17 +93,17 @@ class JsCallback extends Callback implements JsExpressionable
         $this->confirm = $text;
     }
 
-    public function set($callback, $args = [])
+    public function set($fx = null, $args = null)
     {
         $this->args = [];
-        foreach ($args as $key => $val) {
+        foreach ($args ?? [] as $key => $val) {
             if (is_numeric($key)) {
                 $key = 'c' . $key;
             }
             $this->args[$key] = $val;
         }
 
-        parent::set(function () use ($callback) {
+        parent::set(function () use ($fx) {
             try {
                 $chain = new Jquery(new JsExpression('this'));
 
@@ -112,7 +112,7 @@ class JsCallback extends Callback implements JsExpressionable
                     $values[] = $_POST[$key] ?? null;
                 }
 
-                $response = $callback(...array_merge([$chain], $values));
+                $response = $fx(...array_merge([$chain], $values));
 
                 $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
 

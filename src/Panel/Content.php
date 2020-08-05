@@ -47,7 +47,7 @@ class Content extends View implements LoadableContent
     {
         $this->cb->set(function () use ($fx) {
             $fx($this);
-            $this->cb->terminateJson();
+            $this->cb->terminateJson($this);
         });
     }
 

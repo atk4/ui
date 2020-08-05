@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
-use atk4\core\AppScopeTrait;
-use atk4\core\DiContainerTrait;
-use atk4\core\InitializerTrait;
-use atk4\core\StaticAddToTrait;
-use atk4\core\TrackableTrait;
-
 /**
  * Add this object to your render tree and it will expose a unique URL which, when
  * executed directly will perform a PHP callback that you set().
@@ -25,19 +19,9 @@ use atk4\core\TrackableTrait;
  *          })
  *          ->getUrl()
  *  );
- *
- * @property View $owner
  */
-class Callback
+class Callback extends AbstractView
 {
-    use TrackableTrait;
-    use AppScopeTrait;
-    use DiContainerTrait;
-    use InitializerTrait {
-        init as _init;
-    }
-    use StaticAddToTrait;
-
     /** @var string Specify a custom GET trigger. */
     protected $urlTrigger;
 
@@ -48,25 +32,15 @@ class Callback
     public $triggerOnReload = true;
 
     /**
-     * Initialize object and set default properties.
-     *
-     * @param array|string $defaults
-     */
-    public function __construct($defaults = [])
-    {
-        $this->setDefaults($defaults);
-    }
-
-    /**
      * Initialization.
      */
     public function init(): void
     {
-        $this->_init();
-
         if (!$this->app) {
             throw new Exception('Callback must be part of a render tree');
         }
+
+        parent::init();
 
         $this->setUrlTrigger($this->urlTrigger);
     }
@@ -87,18 +61,18 @@ class Callback
     /**
      * Executes user-specified action when call-back is triggered.
      *
-     * @param \Closure $callback
+     * @param \Closure $fx
      * @param array    $args
      *
      * @return mixed|null
      */
-    public function set($callback, $args = [])
+    public function set($fx = null, $args = null)
     {
         if ($this->isTriggered() && $this->canTrigger()) {
             $this->app->catch_runaway_callbacks = false;
             $t = $this->app->run_called;
             $this->app->run_called = true;
-            $ret = $callback(...$args);
+            $ret = $fx(...($args ?? []));
             $this->app->run_called = $t;
 
             return $ret;
@@ -106,13 +80,12 @@ class Callback
     }
 
     /**
-     * Terminate this callback
-     * by rendering the owner view by default.
+     * Terminate this callback by rendering the given view.
      */
-    public function terminateJson(View $view = null): void
+    public function terminateJson(View $view): void
     {
         if ($this->canTerminate()) {
-            $this->app->terminateJson($view ?? $this->owner);
+            $this->app->terminateJson($view);
         }
     }
 
@@ -155,7 +128,7 @@ class Callback
      */
     public function getJsUrl(string $value = 'ajax'): string
     {
-        return $this->owner->jsUrl($this->getUrlArguments($value));
+        return $this->jsUrl($this->getUrlArguments($value));
     }
 
     /**
@@ -164,7 +137,7 @@ class Callback
      */
     public function getUrl(string $value = 'callback'): string
     {
-        return $this->owner->url($this->getUrlArguments($value));
+        return $this->url($this->getUrlArguments($value));
     }
 
     /**
@@ -173,5 +146,13 @@ class Callback
     private function getUrlArguments(string $value): array
     {
         return ['__atk_callback' => $this->urlTrigger, $this->urlTrigger => $value];
+    }
+
+    protected function _getStickyArgs($triggerBy): array
+    {
+        // DEV NOTE:
+        // - getUrlArguments $value used only in https://github.com/atk4/ui/blob/08644a685a9ee07b4e94d1e35e3bd3c95b7a013d/src/VirtualPage.php#L134
+        // - $_GET['__atk_callback'] from getUrlArguments seems to control terminating behaviour!
+        return array_merge(parent::_getStickyArgs($triggerBy), $this->getUrlArguments('TODO/unknown'));
     }
 }

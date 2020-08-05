@@ -49,7 +49,7 @@ class Layout extends AbstractLayout
 
     protected function _addControl($decorator, $field)
     {
-        return $this->_add($decorator, ['desired_name' => $field->short_name]);
+        return $this->add($decorator, ['desired_name' => $field->short_name]);
     }
 
     public function init(): void

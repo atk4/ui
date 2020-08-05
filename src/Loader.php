@@ -81,7 +81,7 @@ class Loader extends View
 
         $this->cb->set(function () use ($fx) {
             $fx($this);
-            $this->cb->terminateJson();
+            $this->cb->terminateJson($this);
         });
 
         return $this;

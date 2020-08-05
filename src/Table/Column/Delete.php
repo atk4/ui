@@ -15,7 +15,7 @@ class Delete extends Table\Column
     {
         parent::init();
 
-        $this->vp = $this->table->_add(new \atk4\ui\CallbackLater());
+        $this->vp = $this->table->add(new \atk4\ui\CallbackLater());
         $this->vp->set(function () {
             $this->table->model->load($_POST[$this->name])->delete();
 
