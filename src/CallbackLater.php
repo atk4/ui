@@ -16,23 +16,23 @@ class CallbackLater extends Callback
      * Executes user-specified action before rendering or if App is
      * already in rendering state, then before output.
      *
-     * @param \Closure $callback
+     * @param \Closure $fx
      * @param array    $args
      *
      * @return mixed|null
      */
-    public function set($callback = null, $args = null)
+    public function set($fx = null, $args = null)
     {
         if (!$this->app) {
             throw new Exception('Call-back must be part of a RenderTree');
         }
 
         if ($this->app->is_rendering) {
-            return parent::set($callback, $args);
+            return parent::set($fx, $args);
         }
 
-        $this->app->onHook(App::HOOK_BEFORE_RENDER, function () use ($callback, $args) {
-            return parent::set($callback, $args);
+        $this->app->onHook(App::HOOK_BEFORE_RENDER, function () use ($fx, $args) {
+            return parent::set($fx, $args);
         });
     }
 }
