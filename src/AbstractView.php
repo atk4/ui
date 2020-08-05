@@ -16,6 +16,7 @@ use atk4\core\TrackableTrait;
  * Abstract view tree item (used only for View and Callback, you want probably to extend one of these).
  *
  * @property View $owner
+ * @property View[] $elements
  */
 abstract class AbstractView
 {
@@ -98,16 +99,14 @@ abstract class AbstractView
     }
 
     /**
-     * @param View $object
-     *
-     * @return View
+     * @param AbstractView $object
      */
-    public function add($object, $args = null)
+    public function add($object, $args = null): self
     {
+        AbstractView::assertInstanceOf($object);
+
         if (func_num_args() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');
-        } elseif (!is_object($object)) {
-            throw new Exception('Only object can be added');
         } elseif ($this->_rendered) {
             throw new Exception('You cannot add anything into the view after it was rendered');
         }

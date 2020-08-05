@@ -145,7 +145,7 @@ class Wizard extends View
         }
     }
 
-    public function add($seed, $region = null)
+    public function add($seed, $region = null): AbstractView
     {
         $result = parent::add($seed, $region);
 

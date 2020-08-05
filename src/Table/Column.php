@@ -16,7 +16,7 @@ use atk4\ui\Popup;
  *
  * @property \atk4\ui\Table $owner
  */
-class Column
+class Column extends \atk4\ui\AbstractView // extends because of Table::add(...): AbstractView
 {
     use \atk4\core\AppScopeTrait;
     use \atk4\core\InitializerTrait;

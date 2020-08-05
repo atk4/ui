@@ -472,10 +472,8 @@ class App
      *
      * @param View|string|array $seed   New object to add
      * @param string|array|null $region
-     *
-     * @return View
      */
-    public function add($seed, $region = null)
+    public function add($seed, $region = null): AbstractView
     {
         if (!$this->layout) {
             throw (new Exception('App layout is missing'))

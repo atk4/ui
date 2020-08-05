@@ -297,10 +297,8 @@ class View extends AbstractView implements JsExpressionable
      *
      * @param View              $object
      * @param string|array|null $region
-     *
-     * @return View
      */
-    public function add($object, $region = null)
+    public function add($object, $region = null): AbstractView
     {
         if (func_num_args() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');
@@ -309,7 +307,7 @@ class View extends AbstractView implements JsExpressionable
         if (!is_object($object)) {
             // for BC do not throw
             // later consider to accept strictly objects only
-            $object = self::addToWithClUnsafe($this, $object, [], true);
+            $object = AbstractView::addToWithCl($this, $object, [], true);
         }
 
         if (!$this->app) {
