@@ -63,7 +63,7 @@ $crud->setModel($model);
 
 // Because Crud inherits Grid, you can also define custom actions
 $crud->addModalAction(['icon' => [\atk4\ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($crud) {
-    \atk4\ui\Message::addTo($p, ['Details for: ' . $crud->model->load($id)['name'] . ' (id: ' . $id . ')']);
+    \atk4\ui\Message::addTo($p, ['Details for: ' . $crud->model->load($id)->get('name') . ' (id: ' . $id . ')']);
 });
 
 $column = $columns->addColumn();
