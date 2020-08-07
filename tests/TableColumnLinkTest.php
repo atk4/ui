@@ -253,7 +253,7 @@ class TableColumnLinkTest extends TestCase
 
     public function testLink9(): void
     {
-        $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'useLabel' => false]);
+        $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'label' => false]);
 
         self::assertSame(
             '<tr data-id="1"><td><a href="example.php?test=1"></a></td><td>ref123</td></tr>',
