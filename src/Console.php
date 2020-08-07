@@ -111,7 +111,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }, 1);
 
             try {
-                $callback($this);
+                $fx($this);
             } catch (\Throwable $e) {
                 $this->output('');
                 $this->outputHtml('<div class="ui segment" style="white-space: normal; font-family: Lato,\'Helvetica Neue\',Arial,Helvetica,sans-serif;">{0}</div>', [$this->app->renderExceptionHtml($e)]);
