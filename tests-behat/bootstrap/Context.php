@@ -40,9 +40,10 @@ class Context extends RawMinkContext implements BehatContext
     {
         $this->jqueryWait();
         $this->disableAnimations();
+        $this->assertNoException();
     }
 
-    private function disableAnimations(): void
+    protected function disableAnimations(): void
     {
         // disable all CSS/jQuery animations/transitions
         $toCssFx = function ($selector, $cssPairs) {
@@ -67,6 +68,15 @@ class Context extends RawMinkContext implements BehatContext
         ]);
         $script = '$(\'<style>' . $css . '</style>\').appendTo(\'head\'); $.fx.off = true;';
         $this->getSession()->executeScript($script);
+    }
+
+    protected function assertNoException(): void
+    {
+        foreach ($this->getSession()->getPage()->findAll('css', 'div.ui.negative.icon.message > div.content > div.header') as $elem) {
+            if ($elem->getText() === 'Critical Error') {
+                throw new \Exception('Page contains uncaught exception');
+            }
+        }
     }
 
     /**
