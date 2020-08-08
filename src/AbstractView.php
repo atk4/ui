@@ -141,7 +141,7 @@ abstract class AbstractView
      */
     public function jsUrl($page = [])
     {
-        return $this->app->jsUrl($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
+        return $this->app->jsUrl($page, false, $this->_getStickyArgs());
     }
 
     /**
@@ -155,20 +155,18 @@ abstract class AbstractView
      */
     public function url($page = [])
     {
-        return $this->app->url($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
+        return $this->app->url($page, false, $this->_getStickyArgs());
     }
 
     /**
      * Get sticky arguments defined by the view and parents (including API).
-     *
-     * @param string $triggerBy If exception occurs, will know which view called url()
      */
-    protected function _getStickyArgs($triggerBy): array
+    protected function _getStickyArgs(): array
     {
         if ($this->owner && $this->owner instanceof self) {
-            $stickyArgs = array_merge($this->owner->_getStickyArgs($triggerBy), $this->stickyArgs);
+            $stickyArgs = array_merge($this->owner->_getStickyArgs(), $this->stickyArgs);
         } else {
-            $stickyArgs = [];
+            $stickyArgs = $this->stickyArgs;
         }
 
         return $stickyArgs;

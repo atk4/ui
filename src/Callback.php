@@ -82,7 +82,7 @@ class Callback extends AbstractView
     /**
      * Terminate this callback by rendering the given view.
      */
-    public function terminateJson(View $view): void
+    public function terminateJson(AbstractView $view): void
     {
         if ($this->canTerminate()) {
             $this->app->terminateJson($view);
@@ -143,16 +143,16 @@ class Callback extends AbstractView
     /**
      * Return proper url argument for this callback.
      */
-    private function getUrlArguments(string $value): array
+    private function getUrlArguments(string $value = null): array
     {
-        return ['__atk_callback' => $this->urlTrigger, $this->urlTrigger => $value];
+        return ['__atk_callback' => $this->urlTrigger, $this->urlTrigger => $value ?? $this->getTriggeredValue()];
     }
 
-    protected function _getStickyArgs($triggerBy): array
+    protected function _getStickyArgs(): array
     {
         // DEV NOTE:
         // - getUrlArguments $value used only in https://github.com/atk4/ui/blob/08644a685a9ee07b4e94d1e35e3bd3c95b7a013d/src/VirtualPage.php#L134
         // - $_GET['__atk_callback'] from getUrlArguments seems to control terminating behaviour!
-        return array_merge(parent::_getStickyArgs($triggerBy), $this->getUrlArguments('TODO/unknown'));
+        return array_merge(parent::_getStickyArgs(), $this->getUrlArguments() /* TODO we do not want/need all Callback args probably */);
     }
 }
