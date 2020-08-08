@@ -169,7 +169,28 @@ abstract class AbstractView
             $stickyArgs = $this->stickyArgs;
         }
 
+        /** @var self $overrideArgsView */
+        $overrideArgsView = $this->mergeStickyArgsFromChildView();
+        if ($overrideArgsView !== null) {
+            $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT | DEBUG_BACKTRACE_IGNORE_ARGS);
+            $alreadyCalled = false;
+            foreach ($trace as $frame) {
+                if ($overrideArgsView === ($frame['object'] ?? null) && $frame['function'] === '_getStickyArgs') {
+                    $alreadyCalled = true;
+                }
+            }
+
+            if (!$alreadyCalled) {
+                $stickyArgs = array_merge($stickyArgs, $overrideArgsView->_getStickyArgs());
+            }
+        }
+
         return $stickyArgs;
+    }
+
+    protected function mergeStickyArgsFromChildView(): ?self
+    {
+        return null;
     }
 
     /**

@@ -1061,6 +1061,7 @@ class View extends AbstractView implements JsExpressionable
             if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
                 //Executor may already had been add to layout. Like in CardDeck.
                 if (!isset($this->app->html->elements[$ex->short_name])) {
+                    $ex->viewForUrl = $this; // very dirty hack
                     $ex = $this->app->html->add($ex, 'Modals')->setAction($action);
                 }
                 if (isset($arguments[0])) {

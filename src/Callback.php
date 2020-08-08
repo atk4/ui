@@ -25,9 +25,6 @@ class Callback extends AbstractView
     /** @var string Specify a custom GET trigger. */
     protected $urlTrigger;
 
-    /** @var bool Create app sticky trigger. */
-    public $isSticky = true;
-
     /** @var bool Allow this callback to trigger during a reload. */
     public $triggerOnReload = true;
 
@@ -48,9 +45,6 @@ class Callback extends AbstractView
     public function setUrlTrigger(string $trigger = null)
     {
         $this->urlTrigger = $trigger ?: $this->name;
-        if ($this->isSticky) {
-            $this->app->stickyGet($this->urlTrigger);
-        }
     }
 
     public function getUrlTrigger(): string

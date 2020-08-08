@@ -211,4 +211,9 @@ class Right extends View implements Loadable
 
         $this->js(true, $this->service()->addPanel($this->getPanelOptions()));
     }
+
+    protected function mergeStickyArgsFromChildView(): ?\atk4\ui\AbstractView
+    {
+        return $this->dynamicContent;
+    }
 }
