@@ -22,13 +22,40 @@ class Demo extends \atk4\ui\Columns
         $this->right = $this->addColumn($this->right_width);
     }
 
-    public function setCode($code, $lang = 'php')
+    protected function extractCodeFromClosure(\Closure $fx): string
     {
+        $funcRefl = new \ReflectionFunction($fx);
+        if ($funcRefl->getEndLine() === $funcRefl->getStartLine()) {
+            throw new \atk4\ui\Exception('Closure body to extract must be on separate lines');
+        }
+
+        $codeArr = array_slice(
+            explode("\n", file_get_contents($funcRefl->getFileName())),
+            $funcRefl->getStartLine(),
+            $funcRefl->getEndLine() - $funcRefl->getStartLine() - 1
+        );
+
+        $minIndent = min(array_map(function (string $l): int {
+            return strlen($l) - strlen(ltrim($l, ' '));
+        }, array_filter($codeArr)));
+
+        return implode("\n", array_map(function (string $l) use ($minIndent) {
+            return substr($l, $minIndent);
+        }, $codeArr));
+    }
+
+    public function setCode(\Closure $fx, $lang = 'php')
+    {
+        $code = $this->extractCodeFromClosure($fx);
+
         $this->highLightCode();
         \atk4\ui\View::addTo(\atk4\ui\View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])->addClass($lang)->set($code);
+
+        // @TODO - must be finished before merge - this faked $this->right to be $app for the demo codes...
         $app = $this->right;
         $app->db = $this->app->db;
-        eval($code);
+
+        $fx();
     }
 
     public function highLightCode()

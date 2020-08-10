@@ -9,7 +9,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $wizard = \atk4\ui\Wizard::addTo($app);
 
-$wizard->addStep('User Interface', function ($page) {
+$wizard->addStep('User Interface', function ($page) use ($app) {
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -25,7 +25,6 @@ $wizard->addStep('User Interface', function ($page) {
                 <li>No need to manually create APIs</li>
                 <li>No need to worry about CSS</li>
             </ul>
-
             HTML
     );
 
@@ -40,7 +39,6 @@ $wizard->addStep('User Interface', function ($page) {
                 <li>Pages and Widgets</li>
                 <li>jsActions and Events</li>
             </ul>
-
             HTML
     );
 
@@ -53,10 +51,12 @@ $wizard->addStep('User Interface', function ($page) {
 
     $t->addParagraph('It all has started with a "Button" though:');
 
-    Demo::addTo($page)->setCode('\atk4\ui\Button::addTo($app, [\'Hello from the button!\']);');
+    Demo::addTo($page)->setCode(function () use ($app) {
+        \atk4\ui\Button::addTo($app, ['Hello from the button!']);
+    });
 });
 
-$wizard->addStep('Interactivity', function ($page) {
+$wizard->addStep('Interactivity', function ($page) use ($app) {
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -65,15 +65,12 @@ $wizard->addStep('Interactivity', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(
-        <<<'CODE'
-            $button = \atk4\ui\Button::addTo($app, ["Click for the greeting!"]);
-            $button->on('click', function() {
-                return 'Hello World!';
-            });
-
-            CODE
-    );
+    Demo::addTo($page)->setCode(function () use ($app) {
+        $button = \atk4\ui\Button::addTo($app, ["Click for the greeting!"]);
+        $button->on('click', function() {
+            return 'Hello World!';
+        });
+    });
 
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
@@ -83,27 +80,23 @@ $wizard->addStep('Interactivity', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(
-        <<<'CODE'
+    Demo::addTo($page)->setCode(function () use ($app) {
+        $seg = \atk4\ui\View::addTo($app, ['ui'=>'segment']);
 
-            $seg = \atk4\ui\View::addTo($app, ['ui'=>'segment']);
+        \atk4\ui\Text::addTo($seg)->set('Number of buttons: ');
 
-            \atk4\ui\Text::addTo($seg)->set('Number of buttons: ');
+        $paginator = \atk4\ui\Paginator::addTo($seg, [
+            'total'=>5,
+            'reload'=>$seg,
+            'urlTrigger'=>'count'
+        ]);
 
-            $paginator = \atk4\ui\Paginator::addTo($seg, [
-                'total'=>5,
-                'reload'=>$seg,
-                'urlTrigger'=>'count'
-            ]);
+        \atk4\ui\View::addTo($seg, ['ui'=>'divider']);
 
-            \atk4\ui\View::addTo($seg, ['ui'=>'divider']);
-
-            for($i=1; $i <= ($_GET['count'] ?? 1); $i++) {
-                \atk4\ui\Button::addTo($seg, [$i]);
-            }
-
-            CODE
-    );
+        for($i=1; $i <= ($_GET['count'] ?? 1); $i++) {
+            \atk4\ui\Button::addTo($seg, [$i]);
+        }
+    });
 
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
@@ -123,36 +116,33 @@ $wizard->addStep('Business Model', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(
-        <<<'CODE'
-            /* Showing Class definition.
-            class DemoInvoice extends \atk4\data\Model {
-                public $title_field = 'reference';
-                function init(): void {
-                    parent::init();
+    Demo::addTo($page)->setCode(function () use ($app) {
+        /* Showing Class definition.
+        class DemoInvoice extends \atk4\data\Model {
+            public $title_field = 'reference';
+            function init(): void {
+                parent::init();
 
-                    $this->addField('reference');
-                    $this->addField('date', ['type'=>'date']);
-                }
+                $this->addField('reference');
+                $this->addField('date', ['type'=>'date']);
             }
-            */
+        }
+        */
 
-            session_start();
+        session_start();
 
-            $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
-            $model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
-                $_SESSION['x'][$model->id] = $model->get();
-            });
+        $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
+        $model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
+            $_SESSION['x'][$model->id] = $model->get();
+        });
 
-            \atk4\ui\Form::addTo($app)
-                ->setModel($model)->tryLoad(1);
+        \atk4\ui\Form::addTo($app)
+            ->setModel($model)->tryLoad(1);
 
-            \atk4\ui\View::addTo($app, ['ui'=>'divider']);
-            \atk4\ui\Button::addTo($app, ['Refresh', 'icon'=>'refresh'])
-                ->on('click', $app->jsReload());
-
-            CODE
-    );
+        \atk4\ui\View::addTo($app, ['ui'=>'divider']);
+        \atk4\ui\Button::addTo($app, ['Refresh', 'icon'=>'refresh'])
+            ->on('click', $app->jsReload());
+    });
 
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
@@ -167,7 +157,6 @@ $wizard->addStep('Business Model', function ($page) {
             <li>Model - defines fields for a business object</li>
             <li>Persistence - creates a persistent storage location for the data</li>
             </ul>
-
             HTML
     );
     $t->addParagraph(
@@ -185,20 +174,17 @@ $wizard->addStep('Persistence', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(
-        <<<'CODE'
-            session_start();
+    Demo::addTo($page)->setCode(function () use ($app) {
+        session_start();
 
-            $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
-            $model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
-                $_SESSION['x'][$model->id] = $model->get();
-            });
+        $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
+        $model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
+            $_SESSION['x'][$model->id] = $model->get();
+        });
 
-            $model->tryLoad(1);
-            \atk4\ui\Card::addTo($app)->setModel($model, ['date']);
-
-            CODE
-    );
+        $model->tryLoad(1);
+        \atk4\ui\Card::addTo($app)->setModel($model, ['date']);
+    });
 
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
