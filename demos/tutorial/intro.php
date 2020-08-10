@@ -147,6 +147,8 @@ $wizard->addStep('Business Model', function ($page) {
             \atk4\ui\Form::addTo($app)
                 ->setModel($model)->tryLoad(1);
 
+            // there is no form handling, what this demo should do?
+
             \atk4\ui\View::addTo($app, ['ui'=>'divider']);
             \atk4\ui\Button::addTo($app, ['Refresh', 'icon'=>'refresh'])
                 ->on('click', $app->jsReload());
