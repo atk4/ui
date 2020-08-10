@@ -53,7 +53,7 @@ $wizard->addStep('User Interface', function ($page) {
 
     $t->addParagraph('It all has started with a "Button" though:');
 
-    Demo::addTo($page)->setCode(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         \atk4\ui\Button::addTo($owner, ['Hello from the button!']);
     });
 });
@@ -67,7 +67,7 @@ $wizard->addStep('Interactivity', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $button = \atk4\ui\Button::addTo($owner, ['Click for the greeting!']);
         $button->on('click', function () {
             return 'Hello World!';
@@ -82,7 +82,7 @@ $wizard->addStep('Interactivity', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $seg = \atk4\ui\View::addTo($owner, ['ui' => 'segment']);
 
         \atk4\ui\Text::addTo($seg)->set('Number of buttons: ');
@@ -118,7 +118,7 @@ $wizard->addStep('Business Model', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         /* Showing Class definition.
         class DemoInvoice extends \atk4\data\Model
         {
@@ -179,7 +179,7 @@ $wizard->addStep('Persistence', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         session_start();
 
         $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));

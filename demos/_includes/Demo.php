@@ -44,7 +44,7 @@ class Demo extends \atk4\ui\Columns
         }, $codeArr));
     }
 
-    public function setCode(\Closure $fx, $lang = 'php')
+    public function setCodeAndCall(\Closure $fx, $lang = 'php')
     {
         $code = $this->extractCodeFromClosure($fx);
 
