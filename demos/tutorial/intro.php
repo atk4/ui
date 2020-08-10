@@ -9,7 +9,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $wizard = \atk4\ui\Wizard::addTo($app);
 
-$wizard->addStep('User Interface', function ($page) use ($app) {
+$wizard->addStep('User Interface', function ($page) {
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -51,12 +51,12 @@ $wizard->addStep('User Interface', function ($page) use ($app) {
 
     $t->addParagraph('It all has started with a "Button" though:');
 
-    Demo::addTo($page)->setCode(function () use ($app) {
+    Demo::addTo($page)->setCode(function ($app) {
         \atk4\ui\Button::addTo($app, ['Hello from the button!']);
     });
 });
 
-$wizard->addStep('Interactivity', function ($page) use ($app) {
+$wizard->addStep('Interactivity', function ($page) {
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -65,7 +65,7 @@ $wizard->addStep('Interactivity', function ($page) use ($app) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(function () use ($app) {
+    Demo::addTo($page)->setCode(function ($app) {
         $button = \atk4\ui\Button::addTo($app, ['Click for the greeting!']);
         $button->on('click', function () {
             return 'Hello World!';
@@ -80,7 +80,7 @@ $wizard->addStep('Interactivity', function ($page) use ($app) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(function () use ($app) {
+    Demo::addTo($page)->setCode(function ($app) {
         $seg = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
 
         \atk4\ui\Text::addTo($seg)->set('Number of buttons: ');
@@ -116,7 +116,7 @@ $wizard->addStep('Business Model', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(function () use ($app) {
+    Demo::addTo($page)->setCode(function ($app) {
         /* Showing Class definition.
         class DemoInvoice extends \atk4\data\Model
         {
@@ -177,7 +177,7 @@ $wizard->addStep('Persistence', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(function () use ($app) {
+    Demo::addTo($page)->setCode(function ($app) {
         session_start();
 
         $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));

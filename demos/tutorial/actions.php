@@ -10,7 +10,7 @@ require_once __DIR__ . '/../init-app.php';
 $wizard = \atk4\ui\Wizard::addTo($app);
 $app->stickyGet($wizard->name);
 
-$wizard->addStep('Define User Action', function ($page) use ($app) {
+$wizard->addStep('Define User Action', function ($page) {
     \atk4\ui\Header::addTo($page, ['What are User Actions?']);
 
     $t = \atk4\ui\Text::addTo($page);
@@ -32,7 +32,7 @@ $wizard->addStep('Define User Action', function ($page) use ($app) {
             EOF
     );
 
-    $page->add(new Demo())->setCode(function () use ($app) {
+    $page->add(new Demo())->setCode(function ($app) {
         $country = new \atk4\ui\demo\CountryLock($app->db);
 
         $country->addUserAction('send_message');
@@ -55,7 +55,7 @@ $wizard->addStep('Define User Action', function ($page) use ($app) {
             EOF
     );
 
-    $page->add(new Demo())->setCode(function () use ($app) {
+    $page->add(new Demo())->setCode(function ($app) {
         $country = new \atk4\ui\demo\CountryLock($app->db);
 
         $country->addUserAction('send_message', function () {
@@ -69,7 +69,7 @@ $wizard->addStep('Define User Action', function ($page) use ($app) {
     });
 });
 
-$wizard->addStep('UI Integration', function ($page) use ($app) {
+$wizard->addStep('UI Integration', function ($page) {
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -79,7 +79,7 @@ $wizard->addStep('UI Integration', function ($page) use ($app) {
             EOF
     );
 
-    $page->add(new Demo())->setCode(function () use ($app) {
+    $page->add(new Demo())->setCode(function ($app) {
         $country = new \atk4\ui\demo\CountryLock($app->db);
         $country->loadAny();
 
@@ -95,7 +95,7 @@ $wizard->addStep('UI Integration', function ($page) use ($app) {
             EOF
     );
 
-    $page->add(new Demo())->setCode(function () use ($app) {
+    $page->add(new Demo())->setCode(function ($app) {
         $country = new \atk4\ui\demo\CountryLock($app->db);
         $country->loadAny();
 
@@ -105,7 +105,7 @@ $wizard->addStep('UI Integration', function ($page) use ($app) {
     });
 });
 
-$wizard->addStep('Arguments', function ($page) use ($app) {
+$wizard->addStep('Arguments', function ($page) {
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -115,7 +115,7 @@ $wizard->addStep('Arguments', function ($page) use ($app) {
             EOF
     );
 
-    $page->add(new Demo())->setCode(function () use ($app) {
+    $page->add(new Demo())->setCode(function ($app) {
         $model = new \atk4\data\Model($app->db, 'test');
 
         $model->addUserAction('greet', [
@@ -156,13 +156,13 @@ $wizard->addStep('Arguments', function ($page) use ($app) {
 });
 
 /*
-$wizard->addStep('More Ways', function ($page) use ($app) {
-    $page->add(new Demo(['left_width'=>5, 'right_width'=>11]))->setCode(function () use ($app) {
+$wizard->addStep('More Ways', function ($page) {
+    $page->add(new Demo(['left_width' => 5, 'right_width' => 11]))->setCode(function ($app) {
         $model = new Stat($app->db);
         $model->addUserAction('mail', [
-            'fields'      => ['currency_field'],
-            'appliesTo'       => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'callback'    => function() { return 'testing'; },
+            'fields' => ['currency_field'],
+            'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
+            'callback' => function() { return 'testing'; },
             'description' => 'Email testing',
         ]);
         $app->add('CardDeck')
@@ -184,7 +184,7 @@ $wizard->addStep('Crud integration', function ($page) {
             EOF
     );
 
-    $page->add(new Demo())->setCode(function () use ($app) {
+    $page->add(new Demo())->setCode(function ($app) {
         $country = new \atk4\ui\demo\CountryLock($app->db);
         $country->getUserAction('add')->enabled = false;
         $country->getUserAction('delete')->enabled = function () { return random_int(1, 2) > 1; };
@@ -200,7 +200,7 @@ $wizard->addStep('Crud integration', function ($page) {
     });
 });
 
-$wizard->addFinish(function ($page) use ($wizard, $app) {
+$wizard->addFinish(function ($page) use ($wizard) {
     PromotionText::addTo($page);
     \atk4\ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon' => 'left arrow'], ['Left'])
         ->link('/demos/index.php');

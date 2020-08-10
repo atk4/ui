@@ -51,11 +51,9 @@ class Demo extends \atk4\ui\Columns
         $this->highLightCode();
         \atk4\ui\View::addTo(\atk4\ui\View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])->addClass($lang)->set($code);
 
-        // @TODO - must be finished before merge - this faked $this->right to be $app for the demo codes...
-        $app = $this->right;
-        $app->db = $this->app->db;
-
-        $fx();
+        $viewAsApp = $this->right;
+        $viewAsApp->db = $this->app->db;
+        $fx($viewAsApp);
     }
 
     public function highLightCode()
