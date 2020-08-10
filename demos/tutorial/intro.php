@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\View;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -51,8 +53,8 @@ $wizard->addStep('User Interface', function ($page) {
 
     $t->addParagraph('It all has started with a "Button" though:');
 
-    Demo::addTo($page)->setCode(function ($app) {
-        \atk4\ui\Button::addTo($app, ['Hello from the button!']);
+    Demo::addTo($page)->setCode(function (View $owner) {
+        \atk4\ui\Button::addTo($owner, ['Hello from the button!']);
     });
 });
 
@@ -65,8 +67,8 @@ $wizard->addStep('Interactivity', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(function ($app) {
-        $button = \atk4\ui\Button::addTo($app, ['Click for the greeting!']);
+    Demo::addTo($page)->setCode(function (View $owner) {
+        $button = \atk4\ui\Button::addTo($owner, ['Click for the greeting!']);
         $button->on('click', function () {
             return 'Hello World!';
         });
@@ -80,8 +82,8 @@ $wizard->addStep('Interactivity', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(function ($app) {
-        $seg = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
+    Demo::addTo($page)->setCode(function (View $owner) {
+        $seg = \atk4\ui\View::addTo($owner, ['ui' => 'segment']);
 
         \atk4\ui\Text::addTo($seg)->set('Number of buttons: ');
 
@@ -116,7 +118,7 @@ $wizard->addStep('Business Model', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(function ($app) {
+    Demo::addTo($page)->setCode(function (View $owner) {
         /* Showing Class definition.
         class DemoInvoice extends \atk4\data\Model
         {
@@ -139,12 +141,12 @@ $wizard->addStep('Business Model', function ($page) {
             $_SESSION['x'][$model->id] = $model->get();
         });
 
-        \atk4\ui\Form::addTo($app)
+        \atk4\ui\Form::addTo($owner)
             ->setModel($model)->tryLoad(1);
 
-        \atk4\ui\View::addTo($app, ['ui' => 'divider']);
-        \atk4\ui\Button::addTo($app, ['Refresh', 'icon' => 'refresh'])
-            ->on('click', $app->jsReload());
+        \atk4\ui\View::addTo($owner, ['ui' => 'divider']);
+        \atk4\ui\Button::addTo($owner, ['Refresh', 'icon' => 'refresh'])
+            ->on('click', $owner->jsReload());
     });
 
     $t = \atk4\ui\Text::addTo($page);
@@ -177,7 +179,7 @@ $wizard->addStep('Persistence', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCode(function ($app) {
+    Demo::addTo($page)->setCode(function (View $owner) {
         session_start();
 
         $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
@@ -186,7 +188,7 @@ $wizard->addStep('Persistence', function ($page) {
         });
 
         $model->tryLoad(1);
-        \atk4\ui\Card::addTo($app)->setModel($model, ['date']);
+        \atk4\ui\Card::addTo($owner)->setModel($model, ['date']);
     });
 
     $t = \atk4\ui\Text::addTo($page);

@@ -51,9 +51,7 @@ class Demo extends \atk4\ui\Columns
         $this->highLightCode();
         \atk4\ui\View::addTo(\atk4\ui\View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])->addClass($lang)->set($code);
 
-        $viewAsApp = $this->right;
-        $viewAsApp->db = $this->app->db;
-        $fx($viewAsApp);
+        $fx($this->right);
     }
 
     public function highLightCode()
