@@ -66,8 +66,8 @@ $wizard->addStep('Interactivity', function ($page) use ($app) {
     );
 
     Demo::addTo($page)->setCode(function () use ($app) {
-        $button = \atk4\ui\Button::addTo($app, ["Click for the greeting!"]);
-        $button->on('click', function() {
+        $button = \atk4\ui\Button::addTo($app, ['Click for the greeting!']);
+        $button->on('click', function () {
             return 'Hello World!';
         });
     });
@@ -81,19 +81,19 @@ $wizard->addStep('Interactivity', function ($page) use ($app) {
     );
 
     Demo::addTo($page)->setCode(function () use ($app) {
-        $seg = \atk4\ui\View::addTo($app, ['ui'=>'segment']);
+        $seg = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
 
         \atk4\ui\Text::addTo($seg)->set('Number of buttons: ');
 
         $paginator = \atk4\ui\Paginator::addTo($seg, [
-            'total'=>5,
-            'reload'=>$seg,
-            'urlTrigger'=>'count'
+            'total' => 5,
+            'reload' => $seg,
+            'urlTrigger' => 'count',
         ]);
 
-        \atk4\ui\View::addTo($seg, ['ui'=>'divider']);
+        \atk4\ui\View::addTo($seg, ['ui' => 'divider']);
 
-        for($i=1; $i <= ($_GET['count'] ?? 1); $i++) {
+        for ($i = 1; $i <= ($_GET['count'] ?? 1); ++$i) {
             \atk4\ui\Button::addTo($seg, [$i]);
         }
     });
@@ -118,13 +118,16 @@ $wizard->addStep('Business Model', function ($page) {
 
     Demo::addTo($page)->setCode(function () use ($app) {
         /* Showing Class definition.
-        class DemoInvoice extends \atk4\data\Model {
+        class DemoInvoice extends \atk4\data\Model
+        {
             public $title_field = 'reference';
-            function init(): void {
+
+            public function init(): void
+            {
                 parent::init();
 
                 $this->addField('reference');
-                $this->addField('date', ['type'=>'date']);
+                $this->addField('date', ['type' => 'date']);
             }
         }
         */
@@ -139,8 +142,8 @@ $wizard->addStep('Business Model', function ($page) {
         \atk4\ui\Form::addTo($app)
             ->setModel($model)->tryLoad(1);
 
-        \atk4\ui\View::addTo($app, ['ui'=>'divider']);
-        \atk4\ui\Button::addTo($app, ['Refresh', 'icon'=>'refresh'])
+        \atk4\ui\View::addTo($app, ['ui' => 'divider']);
+        \atk4\ui\Button::addTo($app, ['Refresh', 'icon' => 'refresh'])
             ->on('click', $app->jsReload());
     });
 
