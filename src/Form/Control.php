@@ -127,6 +127,16 @@ class Control extends View
         parent::renderView();
     }
 
+    protected function renderTemplateToHtml(string $region = null): string
+    {
+        $output = parent::renderTemplateToHtml($region);
+
+        /** @var Form|null $form */
+        $form = $this->getClosestOwner($this, Form::class);
+
+        return $form !== null ? $form->fixFormInRenderedHtml($output) : $output;
+    }
+
     /**
      * Shorthand method for on('change') event.
      * Some input fields, like Calendar, could call this differently.

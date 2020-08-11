@@ -668,13 +668,17 @@ class Form extends View
 
     protected function renderTemplateToHtml(string $region = null): string
     {
-        $output = parent::renderTemplateToHtml();
+        $output = parent::renderTemplateToHtml($region);
 
+        return $this->fixFormInRenderedHtml($output);
+    }
+
+    public function fixFormInRenderedHtml(string $html): string
+    {
         $innerFormTags = ['button', 'datalist', 'fieldset', 'input', 'keygen', 'label', 'legend',
             'meter', 'optgroup', 'option', 'output', 'progress', 'select', 'textarea', ];
-        $output = preg_replace('~<(' . implode('|', $innerFormTags) . ')(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $output);
 
-        return $output;
+        return preg_replace('~<(' . implode('|', $innerFormTags) . ')(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $html);
     }
 
     /**
