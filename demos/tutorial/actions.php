@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\View;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -32,13 +34,11 @@ $wizard->addStep('Define User Action', function ($page) {
             EOF
     );
 
-    $page->add(new Demo())->setCode(
-        <<<'CODE'
-            $country = new \atk4\ui\demo\CountryLock($app->db);
+    $page->add(new Demo())->setCodeAndCall(function (View $owner) {
+        $country = new \atk4\ui\demo\CountryLock($owner->app->db);
 
-            $country->addUserAction('send_message');
-            CODE
-    );
+        $country->addUserAction('send_message');
+    });
 
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
@@ -57,22 +57,18 @@ $wizard->addStep('Define User Action', function ($page) {
             EOF
     );
 
-    $page->add(new Demo())->setCode(
-        <<<'CODE'
+    $page->add(new Demo())->setCodeAndCall(function (View $owner) {
+        $country = new \atk4\ui\demo\CountryLock($owner->app->db);
 
-            $country = new \atk4\ui\demo\CountryLock($app->db);
+        $country->addUserAction('send_message', function () {
+            return 'sent';
+        });
+        $country->tryLoadAny();
 
-            $country->addUserAction('send_message', function() {
-                return 'sent';
-            });
-            $country->tryLoadAny();
-
-            $card = \atk4\ui\Card::addTo($app);
-            $card->setModel($country, ['iso']);
-            $card->addClickAction($country->getUserAction('send_message'));
-
-            CODE
-    );
+        $card = \atk4\ui\Card::addTo($owner);
+        $card->setModel($country, ['iso']);
+        $card->addClickAction($country->getUserAction('send_message'));
+    });
 });
 
 $wizard->addStep('UI Integration', function ($page) {
@@ -85,15 +81,13 @@ $wizard->addStep('UI Integration', function ($page) {
             EOF
     );
 
-    $page->add(new Demo())->setCode(
-        <<<'CODE'
-            $country = new \atk4\ui\demo\CountryLock($app->db);
-            $country->loadAny();
+    $page->add(new Demo())->setCodeAndCall(function (View $owner) {
+        $country = new \atk4\ui\demo\CountryLock($owner->app->db);
+        $country->loadAny();
 
-            \atk4\ui\Button::addTo($app, ['Edit some country'])
-                ->on('click', $country->getUserAction('edit'));
-            CODE
-    );
+        \atk4\ui\Button::addTo($owner, ['Edit some country'])
+            ->on('click', $country->getUserAction('edit'));
+    });
 
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
@@ -103,16 +97,14 @@ $wizard->addStep('UI Integration', function ($page) {
             EOF
     );
 
-    $page->add(new Demo())->setCode(
-        <<<'CODE'
-            $country = new \atk4\ui\demo\CountryLock($app->db);
-            $country->loadAny();
+    $page->add(new Demo())->setCodeAndCall(function (View $owner) {
+        $country = new \atk4\ui\demo\CountryLock($owner->app->db);
+        $country->loadAny();
 
-            $menu = \atk4\ui\Menu::addTo($app);
-            $menu->addItem('Hello');
-            $menu->addItem('World', $country->getUserAction('edit'));
-            CODE
-    );
+        $menu = \atk4\ui\Menu::addTo($owner);
+        $menu->addItem('Hello');
+        $menu->addItem('World', $country->getUserAction('edit'));
+    });
 });
 
 $wizard->addStep('Arguments', function ($page) {
@@ -125,66 +117,62 @@ $wizard->addStep('Arguments', function ($page) {
             EOF
     );
 
-    $page->add(new Demo())->setCode(
-        <<<'CODE'
-            $model = new \atk4\data\Model($app->db, 'test');
+    $page->add(new Demo())->setCodeAndCall(function (View $owner) {
+        $model = new \atk4\data\Model($owner->app->db, 'test');
 
-            $model->addUserAction('greet', [
-                'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
-                'args'=> [
-                    'age'=>[
-                        'type' => 'string'
-                    ]
+        $model->addUserAction('greet', [
+            'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+            'args' => [
+                'age' => [
+                    'type' => 'string',
                 ],
-                'callback'=>function ($model, $name) {
-                    return 'Hi ' . $name;
-                },
-                'ui' => ['executor' => [\atk4\ui\UserAction\JsCallbackExecutor::class]],
-            ]);
+            ],
+            'callback' => function ($model, $name) {
+                return 'Hi ' . $name;
+            },
+            'ui' => ['executor' => [\atk4\ui\UserAction\JsCallbackExecutor::class]],
+        ]);
 
-            $model->addUserAction('ask_age', [
-                'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
-                'args'=> [
-                    'age'=>[
-                        'type' => 'integer',
-                        'required' => true
-                    ]
+        $model->addUserAction('ask_age', [
+            'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+            'args' => [
+                'age' => [
+                    'type' => 'integer',
+                    'required' => true,
                 ],
-                'callback'=>function ($model, $age) {
-                    return 'Age is ' . $age;
-                }
-            ]);
+            ],
+            'callback' => function ($model, $age) {
+                return 'Age is ' . $age;
+            },
+        ]);
 
-            $app->add(new \atk4\ui\Form\Control\Line([
-                'action' => $model->getUserAction('greet'),
-            ]));
+        $owner->add(new \atk4\ui\Form\Control\Line([
+            'action' => $model->getUserAction('greet'),
+        ]));
 
-            \atk4\ui\View::addTo($app, ['ui'=>'divider']);
+        \atk4\ui\View::addTo($owner, ['ui' => 'divider']);
 
-            \atk4\ui\Button::addTo($app, ['Ask Age'])
-                ->on('click', $model->getUserAction('ask_age'));
-            CODE
-    );
+        \atk4\ui\Button::addTo($owner, ['Ask Age'])
+            ->on('click', $model->getUserAction('ask_age'));
+    });
 });
 
 /*
 $wizard->addStep('More Ways', function ($page) {
-    $page->add(new Demo(['left_width'=>5, 'right_width'=>11]))->setCode(
-        <<<'CODE'
-$model = new Stat($app->db);
-$model->addUserAction('mail', [
-    'fields'      => ['currency_field'],
-    'appliesTo'       => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-    'callback'    => function() { return 'testing'; },
-    'description' => 'Email testing',
-]);
-$app->add('CardDeck')
-    ->setModel(
-        $model,
-        ['description']
-    );
-CODE
-    );
+    $page->add(new Demo(['left_width' => 5, 'right_width' => 11]))->setCodeAndCall(function (View $owner) {
+        $model = new Stat($owner->app->db);
+        $model->addUserAction('mail', [
+            'fields' => ['currency_field'],
+            'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
+            'callback' => function() { return 'testing'; },
+            'description' => 'Email testing',
+        ]);
+        $owner->add('CardDeck')
+            ->setModel(
+                $model,
+                ['description']
+            );
+    });
 });
 */
 
@@ -198,25 +186,23 @@ $wizard->addStep('Crud integration', function ($page) {
             EOF
     );
 
-    $page->add(new Demo())->setCode(
-        <<<'CODE'
-            $country = new \atk4\ui\demo\CountryLock($app->db);
-            $country->getUserAction('add')->enabled = false;
-            $country->getUserAction('delete')->enabled = function() { return rand(1,2)>1; };
-            $country->addUserAction('mail', [
-                'appliesTo'   => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-                'preview'     => function($model) { return 'here is email preview for '.$model->get('name'); },
-                'callback'    => function($model) { return 'email sent to '.$model->get('name'); },
-                'description' => 'Email testing',
-                'ui'       => ['icon'=>'mail', 'button'=>[null, 'icon'=>'green mail']],
-            ]);
+    $page->add(new Demo())->setCodeAndCall(function (View $owner) {
+        $country = new \atk4\ui\demo\CountryLock($owner->app->db);
+        $country->getUserAction('add')->enabled = false;
+        $country->getUserAction('delete')->enabled = function () { return random_int(1, 2) > 1; };
+        $country->addUserAction('mail', [
+            'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
+            'preview' => function ($model) { return 'here is email preview for ' . $model->get('name'); },
+            'callback' => function ($model) { return 'email sent to ' . $model->get('name'); },
+            'description' => 'Email testing',
+            'ui' => ['icon' => 'mail', 'button' => [null, 'icon' => 'green mail']],
+        ]);
 
-            \atk4\ui\Crud::addTo($app, ['ipp' => 5])->setModel($country, ['name','iso']);
-            CODE
-    );
+        \atk4\ui\Crud::addTo($owner, ['ipp' => 5])->setModel($country, ['name', 'iso']);
+    });
 });
 
-$wizard->addFinish(function ($page) use ($wizard, $app) {
+$wizard->addFinish(function ($page) use ($wizard) {
     PromotionText::addTo($page);
     \atk4\ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon' => 'left arrow'], ['Left'])
         ->link('/demos/index.php');
