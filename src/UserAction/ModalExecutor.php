@@ -713,13 +713,10 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         }
     }
 
-    /**
-     * Handle exception.
-     */
-    private function _handleException($e, $view, $step)
+    private function _handleException(\Throwable $exception, $view, $step)
     {
         $msg = Message::addTo($view, ['Error:', 'type' => 'error']);
-        $msg->text->addParagraph($e->getMessage());
+        $msg->text->addHtml($this->app->renderExceptionHtml($exception));
         $view->js(true, $this->nextStepBtn->js()->addClass('disabled'));
         if (!$this->isFirstStep($step)) {
             $this->jsSetPrevHandler($view, $step);
