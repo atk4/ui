@@ -51,8 +51,13 @@ try {
     throw new \atk4\ui\Exception('Database error: ' . $e->getMessage());
 }
 
-[$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
-$demosUrl = $rootUrl . 'demos/';
+// Current sub directory of webserver - makes it independent where to run the demo from
+// basically we want to run it just from within the ui repo, but this adds a layer of
+// better user experience, when a user tries to copy it elsewhere and it works
+$currDir = substr(str_replace($_SERVER['DOCUMENT_ROOT'], "", dirname(__FILE__)), 1);
+
+[$rootUrl, $relUrl] = preg_split('~(?<=/)(?=' . $currDir . '(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
+$demosUrl = $rootUrl . $currDir . '/';
 
 if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
     $app->cdn['atk'] = $rootUrl . 'public';
