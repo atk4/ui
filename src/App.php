@@ -653,7 +653,6 @@ class App
         $args = $extraRequestUriArgs;
 
         // add sticky arguments
-        $args = $extraRequestUriArgs;
         foreach ($this->sticky_get_arguments as $k => $v) {
             if ($v && isset($_GET[$k])) {
                 $args[$k] = $_GET[$k];
