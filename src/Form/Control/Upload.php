@@ -142,9 +142,6 @@ class Upload extends Input
         return $this->field ? $this->field->get() : $this->content;
     }
 
-    /**
-     * Set file id.
-     */
     public function setFileId($id)
     {
         $this->fileId = $id;
@@ -186,10 +183,9 @@ class Upload extends Input
                 }
 
                 if (count($postFiles) > 0) {
-                    //set fileId to file name as default.
-                    $this->fileId = reset($postFiles)['name'];
-                    // display file name to user as default.
-                    $this->setInput($this->fileId);
+                    $fileId = reset($postFiles)['name'];
+                    $this->setFileId($fileId);
+                    $this->setInput($fileId);
                 }
 
                 $this->addJsAction($fx(...$postFiles));
