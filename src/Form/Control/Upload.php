@@ -214,8 +214,8 @@ class Upload extends Input
         $this->hasDeleteCb = true;
         if (($_POST['action'] ?? null) === self::DELETE_ACTION) {
             $this->cb->set(function () use ($fx) {
-                $fileName = $_POST['f_name'] ?? null;
-                $this->addJsAction($fx($fileName));
+                $fileId = $_POST['f_upload_id'] ?? null;
+                $this->addJsAction($fx($fileId));
 
                 return $this->jsActions;
             });
