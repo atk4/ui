@@ -106,19 +106,18 @@ class Upload extends Input
      *
      * @param string      $fileId   // Field id for onDelete Callback
      * @param string|null $fileName // Field name display to user
-     * @param mixed       $junk
      *
-     * @return $this|void
+     * @return $this
      */
-    public function set($fileId = null, $fileName = null, $junk = null)
+    public function set($fileId = null, $fileName = null)
     {
         $this->setFileId($fileId);
 
-        if (!$fileName) {
+        if ($fileName === null) {
             $fileName = $fileId;
         }
 
-        return $this->setInput($fileName, $junk);
+        return $this->setInput($fileName);
     }
 
     /**
@@ -143,9 +142,6 @@ class Upload extends Input
         return $this->field ? $this->field->get() : $this->content;
     }
 
-    /**
-     * Set file id.
-     */
     public function setFileId($id)
     {
         $this->fileId = $id;
@@ -169,7 +165,7 @@ class Upload extends Input
     public function onUpload(\Closure $fx)
     {
         $this->hasUploadCb = true;
-        if (($_POST['action'] ?? null) === self::UPLOAD_ACTION) {
+        if (($_POST['f_upload_action'] ?? null) === self::UPLOAD_ACTION) {
             $this->cb->set(function () use ($fx) {
                 $postFiles = [];
                 for ($i = 0;; ++$i) {
@@ -187,10 +183,9 @@ class Upload extends Input
                 }
 
                 if (count($postFiles) > 0) {
-                    //set fileId to file name as default.
-                    $this->fileId = reset($postFiles)['name'];
-                    // display file name to user as default.
-                    $this->setInput($this->fileId);
+                    $fileId = reset($postFiles)['name'];
+                    $this->setFileId($fileId);
+                    $this->setInput($fileId);
                 }
 
                 $this->addJsAction($fx(...$postFiles));
@@ -212,10 +207,10 @@ class Upload extends Input
     public function onDelete(\Closure $fx)
     {
         $this->hasDeleteCb = true;
-        if (($_POST['action'] ?? null) === self::DELETE_ACTION) {
+        if (($_POST['f_upload_action'] ?? null) === self::DELETE_ACTION) {
             $this->cb->set(function () use ($fx) {
-                $fileName = $_POST['f_name'] ?? null;
-                $this->addJsAction($fx($fileName));
+                $fileId = $_POST['f_upload_id'] ?? null;
+                $this->addJsAction($fx($fileId));
 
                 return $this->jsActions;
             });
@@ -231,10 +226,10 @@ class Upload extends Input
         parent::renderView();
 
         if ($this->cb->canTerminate()) {
-            $action = $_POST['action'] ?? null;
-            if (!$this->hasUploadCb && ($action === self::UPLOAD_ACTION)) {
+            $uploadAction = $_POST['f_upload_action'] ?? null;
+            if (!$this->hasUploadCb && ($uploadAction === self::UPLOAD_ACTION)) {
                 throw new Exception('Missing onUpload callback.');
-            } elseif (!$this->hasDeleteCb && ($action === self::DELETE_ACTION)) {
+            } elseif (!$this->hasDeleteCb && ($uploadAction === self::DELETE_ACTION)) {
                 throw new Exception('Missing onDelete callback.');
             }
         }
@@ -250,7 +245,6 @@ class Upload extends Input
             $this->template->trySet('PlaceHolder', $this->placeholder);
         }
 
-        //$value = $this->field ? $this->field->get() : $this->content;
         $this->js(true)->atkFileUpload([
             'uri' => $this->cb->getJsUrl(),
             'action' => $this->action->name,

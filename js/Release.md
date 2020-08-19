@@ -1,4 +1,9 @@
 ## Release note
+
+### version 1.15.1 (2020-08-19)
+ - URL query parameter for Upload plugin/control was renamed from "action" to "f_upload_action"
+ - URL query parameter for Upload plugin/control was renamed from "f_name" to "f_upload_id"
+
 ### version 1.15.0 (2020-07-16)
  - update package dependency
  - configure webpack in order to load and bundle .vue file.
