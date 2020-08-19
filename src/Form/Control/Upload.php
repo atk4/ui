@@ -106,19 +106,18 @@ class Upload extends Input
      *
      * @param string      $fileId   // Field id for onDelete Callback
      * @param string|null $fileName // Field name display to user
-     * @param mixed       $junk
      *
-     * @return $this|void
+     * @return $this
      */
-    public function set($fileId = null, $fileName = null, $junk = null)
+    public function set($fileId = null, $fileName = null)
     {
         $this->setFileId($fileId);
 
-        if (!$fileName) {
+        if ($fileName === null) {
             $fileName = $fileId;
         }
 
-        return $this->setInput($fileName, $junk);
+        return $this->setInput($fileName);
     }
 
     /**
