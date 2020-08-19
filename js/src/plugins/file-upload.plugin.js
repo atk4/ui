@@ -162,7 +162,7 @@ export default class fileUpload extends atkPlugin {
     uploadService.uploadFiles(
       file,
       this.$el,
-      {action: 'upload'},
+      {f_upload_action: 'upload'},
       this.settings.uri,
       completeCb,
       xhrCb
@@ -181,7 +181,7 @@ export default class fileUpload extends atkPlugin {
     this.$el.api({
       on: 'now',
       url: this.settings.uri,
-      data: {'action': 'delete', 'f_upload_id': fileId},
+      data: {'f_upload_action': 'delete', 'f_upload_id': fileId},
       method: 'POST',
       obj: this.$el,
       onComplete: function(response, content) {
