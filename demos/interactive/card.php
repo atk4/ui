@@ -13,7 +13,7 @@ require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Header::addTo($app, ['Card.', 'size' => 1, 'subHeader' => 'Component based on Fomantic-Ui Card view.']);
 
-//*** Simple Card **/
+// *** Simple Card **/
 
 \atk4\ui\Header::addTo($app, ['Card can be defined manually.', 'size' => 3]);
 
@@ -29,7 +29,7 @@ $card->addButton(new \atk4\ui\Button(['Email']));
 
 $card->addExtraContent(new \atk4\ui\View(['Copyright notice: Image from Semantic-UI (Fomantic-UI)', 'element' => 'span']));
 
-//*** Simple Card **/
+// *** Simple Card **/
 
 $card = \atk4\ui\Card::addTo($app);
 $content = new \atk4\ui\View(['class' => ['content']]);
@@ -40,7 +40,7 @@ $content->add($header = new \atk4\ui\Header(['Kristy']));
 $card->addContent($content);
 $card->addDescription('Friend of Bob');
 
-//**** Card with Table and Label***/
+// **** Card with Table and Label***/
 
 \atk4\ui\Header::addTo($app, ['Card can display model label in a table or in line.', 'size' => 3]);
 
@@ -62,7 +62,7 @@ $cardStat->setModel($stats, ['project_name', 'project_code', 'client_name', 'sta
 
 $cardStat->addButton(new \atk4\ui\Button(['Email Client']));
 
-//**** Card display horizontally ***/
+// **** Card display horizontally ***/
 
 \atk4\ui\Header::addTo($app, ['Card can be display horizontally and/or centered.', 'size' => 3]);
 

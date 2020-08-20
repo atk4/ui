@@ -11,8 +11,8 @@ class TypeEnum extends Column\FilterModel
 {
     public function init(): void
     {
-        //bypass parent init since we are not using op and value field but create them from
-        //the lookup field value.
+        // bypass parent init since we are not using op and value field but create them from
+        // the lookup field value.
         Model::init();
         $this->afterInit();
 

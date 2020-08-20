@@ -88,7 +88,7 @@ class Crud extends Grid
 
         if ($this->getSortBy() && !empty($this->menuItems)) {
             foreach ($this->menuItems as $item) {
-                //Remove previous click handler and attach new one using sort argument.
+                // Remove previous click handler and attach new one using sort argument.
                 $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
                 $ex = $item['action']->ui['executor'];
                 if ($ex instanceof UserAction\JsExecutorInterface) {

@@ -285,7 +285,7 @@ class Table extends Lister
             if ($col) {
                 $pop = $col->addPopup(new Table\Column\FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('table-filter-on') : null;
-                //apply condition according to popup form.
+                // apply condition according to popup form.
                 $this->model = $pop->setFilterCondition($this->model);
             }
         }
@@ -375,7 +375,7 @@ class Table extends Lister
      * name and size. To retrieve columns width, simply json decode the $widths param in your callback function.
      * ex:
      *  $table->resizableColumn(function($j, $w){
-     *       //do somethings with columns width
+     *       // do somethings with columns width
      *       $columns = json_decode($w);
      *   });
      *

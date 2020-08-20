@@ -133,7 +133,7 @@ export default {
       }
     },
     deleteRow: function(id){
-      //find proper row index using id.
+      // find proper row index using id.
       const idx = this.findRowIndex(id);
       if (idx > -1) {
         this.rowData.splice(idx,1);
@@ -260,7 +260,7 @@ export default {
       // check if input containing data is set and initialized.
       let field = document.getElementsByName(this.linesField)[0];
       if (field) {
-        //Map value to our rowData.
+        // Map value to our rowData.
         let values = JSON.parse(field.value);
         values = Array.isArray(values) ? values : [];
 

@@ -10,7 +10,7 @@ export default class ajaxec extends atkPlugin {
             return;
         }
 
-        //Allow user to confirm if available.
+        // Allow user to confirm if available.
         if(this.settings.confirm){
             if(confirm(this.settings.confirm)) {
                 this.doExecute();

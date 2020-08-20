@@ -71,7 +71,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         }
 
         $this->set(function ($j) {
-            //may be id is pass within $post args.
+            // may be id is pass within $post args.
             $id = $_POST['c0'] ?? $_POST[$this->action->owner->id_field] ?? null;
             if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
                 $this->action->owner->tryLoad($id);

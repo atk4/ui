@@ -26,11 +26,11 @@ export default class JsSortable extends atkPlugin {
 
   main() {
     this.ids = [];
-    //the data label attribute value of the source element being drag. ex: data-id
+    // the data label attribute value of the source element being drag. ex: data-id
     this.sourceId = null;
-    //the new index value of the dragged element after sorting.
+    // the new index value of the dragged element after sorting.
     this.newIdx = null;
-    //the original index value of the dragged element.
+    // the original index value of the dragged element.
     this.orgIdx = null;
 
     this.injectStyles(this.settings.mirrorCss + this.settings.overCss);

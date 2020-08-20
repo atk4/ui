@@ -10,7 +10,7 @@ require_once __DIR__ . '/../init-app.php';
 \atk4\ui\Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
-//****** Inline Edit *****************************
+// ****** Inline Edit *****************************
 
 $model = new Country($app->db);
 $model->loadAny();
@@ -31,7 +31,7 @@ $inline_edit->onChange(function ($value) {
 
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
-//****** ITEM SEARCH *****************************
+// ****** ITEM SEARCH *****************************
 
 $subHeader = 'Searching will reload the list of countries below with matching result.';
 \atk4\ui\Header::addTo($app, ['Search using a Vue component', 'subHeader' => $subHeader]);
@@ -58,7 +58,7 @@ $lister->setModel($search->setModelCondition($model))->setLimit(50);
 
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
-//****** CREATING CUSTOM VUE USING EXTERNAL COMPONENT *****************************
+// ****** CREATING CUSTOM VUE USING EXTERNAL COMPONENT *****************************
 \atk4\ui\Header::addTo($app, ['External Component', 'subHeader' => 'Creating component using an external component definition.']);
 
 $app->requireJs('https://unpkg.com/vue-clock2@1.1.5/dist/vue-clock.min');
@@ -78,7 +78,7 @@ $clock_template = new \atk4\ui\Template('
 // This is the vue component definition. It is also using another external vue component 'vue-clock2'
 $clock_script = "
     <script>
-        //Register clock component from vue-clock2 to use with myClock.
+        // Register clock component from vue-clock2 to use with myClock.
         atk.vueService.getVue().component('clock', Clock.default);
 
         var myClock = {

@@ -252,7 +252,7 @@ class Context extends RawMinkContext implements BehatContext
         if ($modal === null) {
             throw new \Exception('No modal found');
         }
-        //find button in modal
+        // find button in modal
         $btn = $modal->find('xpath', '//div[text()="' . $arg . '"]');
         if (!$btn) {
             throw new \Exception('Cannot find button in modal');
@@ -267,12 +267,12 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function modalIsOpenWithText($arg1)
     {
-        //get modal
+        // get modal
         $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
         if ($modal === null) {
             throw new \Exception('No modal found');
         }
-        //find text in modal
+        // find text in modal
         $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (!$text || $text->getText() !== $arg1) {
             throw new \Exception('No such text in modal');
@@ -298,12 +298,12 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function modalIsShowingText($arg1, $arg2)
     {
-        //get modal
+        // get modal
         $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
         if ($modal === null) {
             throw new \Exception('No modal found');
         }
-        //find text in modal
+        // find text in modal
         $text = $modal->find('xpath', '//' . $arg2 . '[text()="' . $arg1 . '"]');
         if (!$text || $text->getText() !== $arg1) {
             throw new \Exception('No such text in modal');
@@ -337,7 +337,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function toastDisplayShouldContainText($arg1)
     {
-        //get toast
+        // get toast
         $toast = $this->getSession()->getPage()->find('css', '.ui.toast-container');
         if ($toast === null) {
             throw new \Exception('No toast found');
@@ -346,7 +346,7 @@ class Context extends RawMinkContext implements BehatContext
         if ($content === null) {
             throw new \Exception('No Content in Toast');
         }
-        //find text in toast
+        // find text in toast
         $text = $content->find('xpath', '//div');
         if (!$text || mb_strpos($text->getText(), $arg1) === false) {
             throw new \Exception('No such text in toast');
@@ -364,21 +364,21 @@ class Context extends RawMinkContext implements BehatContext
         if ($field === null) {
             throw new \Exception('Field not found: ' . $arg2);
         }
-        //get dropdown item from semantic ui which is direct parent of input name field.
+        // get dropdown item from semantic ui which is direct parent of input name field.
         $lookup = $field->getParent();
 
-        //open dropdown from semantic-ui command. (just a click is not triggering it)
+        // open dropdown from semantic-ui command. (just a click is not triggering it)
         $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("show")';
         $this->getSession()->executeScript($script);
-        //Wait till dropdown is visible
-        //Cannot call jqueryWait because calling it will return prior from dropdown to fire ajax request.
+        // Wait till dropdown is visible
+        // Cannot call jqueryWait because calling it will return prior from dropdown to fire ajax request.
         $this->getSession()->wait(5000, '$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
-        //value should be available.
+        // value should be available.
         $value = $lookup->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (!$value || $value->getText() !== $arg1) {
             throw new \Exception('Value not found: ' . $arg1);
         }
-        //When value are loaded, hide dropdown and select value from javascript.
+        // When value are loaded, hide dropdown and select value from javascript.
         $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("hide");';
         $script .= '$("#' . $lookup->getAttribute('id') . '").dropdown("set selected", ' . $value->getAttribute('data-value') . ');';
         $this->getSession()->executeScript($script);

@@ -149,7 +149,7 @@ class TreeItemSelector extends Form\Control
             'atk-tree-item-selector',
             [
                 'item' => ['id' => 'atk-root', 'nodes' => $this->treeItems],
-                'values' => [], //need empty for Vue reactivity.
+                'values' => [], // need empty for Vue reactivity.
                 'field' => $this->short_name,
                 'options' => [
                     'mode' => $this->allowMultiple ? 'multiple' : 'single',

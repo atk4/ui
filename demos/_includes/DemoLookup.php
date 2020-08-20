@@ -45,7 +45,7 @@ class DemoLookup extends \atk4\ui\Form\Control\Lookup
             $form->setModel($model->onlyFields($this->plus['fields'] ?? []));
 
             $form->onSubmit(function (\atk4\ui\Form $form) {
-                //Prevent from saving
+                // Prevent from saving
                 // $form->model->save();
 
                 $ret = [

@@ -18,7 +18,7 @@ export default class JsSearch extends atkPlugin {
     this.setSearchAction();
     this.onEscapeKeyAction();
 
-    //Set input initial value.
+    // Set input initial value.
     if (this.settings.q) {
       this.setFilter(this.settings.q);
     }
@@ -203,7 +203,7 @@ export default class JsSearch extends atkPlugin {
     if (query) {
       options = $.extend(options, {'_q' : query});
     }
-    //if we are not using ajax simply reload page.
+    // if we are not using ajax simply reload page.
     if (!this.settings.useAjax) {
       uri = $.atkRemoveParam(uri, '_q');
       delete options.__atk_reload;

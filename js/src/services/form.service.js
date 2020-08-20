@@ -133,7 +133,7 @@ class FormService {
   getContainer($field, selector){
     const $container = $field.closest(selector);
     if ($container.length > 1) {
-      //radio button.
+      // radio button.
       return this.getContainer($container.parent(), selector);
     } else if ($container.length === 0) {
       return null;
@@ -170,7 +170,7 @@ class FormService {
   }
 
   getAncillaryValue(rule) {
-    //must have a rule.value property and must be a bracketed rule.
+    // must have a rule.value property and must be a bracketed rule.
     if(!rule.value && !this.isBracketedRule(rule)) {
       return false;
     }

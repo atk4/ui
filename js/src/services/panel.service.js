@@ -151,13 +151,13 @@ class PanelService {
     const params = this.service.currentParams;
     // do we need to load anything in this panel.
     if (this.getPropertyValue(id, 'url')) {
-      //Convert our array of args to object.
-      //Args must be defined as data-attributeName in the triggered element.
+      // Convert our array of args to object.
+      // Args must be defined as data-attributeName in the triggered element.
       const args = params.reloadArgs.reduce( (obj, item) => {
         obj[item] = params.triggered.data(item);
         return obj;
       }, {});
-      //add url argument if pass to panel
+      // add url argument if pass to panel
       if (params.urlArgs !== 'undefined') {
         $.extend(args, params.urlArgs);
       }
@@ -219,11 +219,11 @@ class PanelService {
    * @returns {PanelService|*}
    */
   doClosePanel(id) {
-    //remove document event.
+    // remove document event.
     this.removeClickAwayEvent();
     this.removeWarning(id);
 
-    //do the actual closing.
+    // do the actual closing.
     this.getPropertyValue(id, '$panel').removeClass(this.getPropertyValue(id, 'visible'));
     this.service.currentVisibleId = null;
 
@@ -278,7 +278,7 @@ class PanelService {
   setTriggerElement(id, trigger, params) {
     this.setPropertyValue(id, 'triggerElement', trigger);
 
-    //Do we need to setup css class on triggering element.
+    // Do we need to setup css class on triggering element.
     if (params.activeCSS) {
       let element, css;
 

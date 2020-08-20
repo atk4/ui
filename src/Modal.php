@@ -312,7 +312,7 @@ class Modal extends View
             $this->js(true)->modal();
         }
 
-        //add setting if available.
+        // add setting if available.
         if (isset($this->options['setting'])) {
             foreach ($this->options['setting'] as $key => $value) {
                 $this->js(true)->modal('setting', $key, $value);
