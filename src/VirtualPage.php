@@ -163,4 +163,9 @@ class VirtualPage extends View
             $this->app->terminateHtml($this->app->html->template);
         });
     }
+
+    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    {
+        return $this->cb;
+    }
 }

@@ -330,4 +330,12 @@ class Modal extends View
 
         parent::renderView();
     }
+
+    /** @var AbstractView */
+    public $viewForUrl;
+
+    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    {
+        return $this->viewForUrl ?? $this->cb;
+    }
 }
