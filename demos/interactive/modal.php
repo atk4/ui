@@ -51,10 +51,10 @@ $button->on('click', $simpleModal->show());
 
 \atk4\ui\Header::addTo($app, ['Three levels of Modal loading dynamic content via callback']);
 
-//vp1Modal will be render into page but hide until $vp1Modal->show() is activate.
+// vp1Modal will be render into page but hide until $vp1Modal->show() is activate.
 $vp1Modal = \atk4\ui\Modal::addTo($app, ['title' => 'Lorem Ipsum load dynamically']);
 
-//vp2Modal will be render into page but hide until $vp1Modal->show() is activate.
+// vp2Modal will be render into page but hide until $vp1Modal->show() is activate.
 $vp2Modal = \atk4\ui\Modal::addTo($app, ['title' => 'Text message load dynamically'])->addClass('small');
 
 $vp3Modal = \atk4\ui\Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
@@ -63,10 +63,10 @@ $vp3Modal->set(function ($modal) {
     \atk4\ui\LoremIpsum::addTo($modal, ['size' => 2]);
 });
 
-//When $vp1Modal->show() is activate, it will dynamically add this content to it.
+// When $vp1Modal->show() is activate, it will dynamically add this content to it.
 $vp1Modal->set(function ($modal) use ($vp2Modal) {
     ViewTester::addTo($modal);
-    \atk4\ui\View::addTo($modal, ['Showing lorem ipsum']); //need in behat test.
+    \atk4\ui\View::addTo($modal, ['Showing lorem ipsum']); // need in behat test.
     \atk4\ui\LoremIpsum::addTo($modal, ['size' => 2]);
     $form = \atk4\ui\Form::addTo($modal);
     $form->addControl('color', null, ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
@@ -75,9 +75,9 @@ $vp1Modal->set(function ($modal) use ($vp2Modal) {
     });
 });
 
-//When $vp2Modal->show() is activate, it will dynamically add this content to it.
+// When $vp2Modal->show() is activate, it will dynamically add this content to it.
 $vp2Modal->set(function ($modal) use ($vp3Modal) {
-    //ViewTester::addTo($modal);
+    // ViewTester::addTo($modal);
     \atk4\ui\Message::addTo($modal, ['Message', @$_GET['color']])->text->addParagraph('This text is loaded using a second modal.');
     \atk4\ui\Button::addTo($modal)->set('Third modal')->on('click', $vp3Modal->show());
 });
@@ -141,11 +141,11 @@ $button->on('click', $denyApproveModal->show());
 
 \atk4\ui\Header::addTo($app, ['Multiple page modal']);
 
-//Add modal to layout.
+// Add modal to layout.
 $stepModal = \atk4\ui\Modal::addTo($app, ['title' => 'Multi step actions']);
 $stepModal->setOption('observeChanges', true);
 
-//Add buttons to modal for next and previous actions.
+// Add buttons to modal for next and previous actions.
 $action = new \atk4\ui\View(['ui' => 'buttons']);
 $prevAction = new \atk4\ui\Button(['Prev', 'labeled', 'icon' => 'left arrow']);
 $nextAction = new \atk4\ui\Button(['Next', 'iconRight' => 'right arrow']);
@@ -155,7 +155,7 @@ $action->add($nextAction);
 
 $stepModal->addButtonAction($action);
 
-//Set modal functionality. Will changes content according to page being displayed.
+// Set modal functionality. Will changes content according to page being displayed.
 $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextAction) {
     $page = $session->recall('page', 1);
     $success = $session->recall('success', false);
@@ -210,17 +210,17 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
     $stepModal->js(true)->modal('refresh');
 });
 
-//Bind next action to modal next button.
+// Bind next action to modal next button.
 $nextAction->on('click', $stepModal->js()->atkReloadView(
     ['uri' => $stepModal->cb->getJsUrl(), 'uri_options' => ['move' => 'next']]
 ));
 
-//Bin prev action to modal previous button.
+// Bin prev action to modal previous button.
 $prevAction->on('click', $stepModal->js()->atkReloadView(
     ['uri' => $stepModal->cb->getJsUrl(), 'uri_options' => ['move' => 'prev']]
 ));
 
-//Bind display modal to page display button.
+// Bind display modal to page display button.
 $menuBar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
 $button = \atk4\ui\Button::addTo($menuBar)->set('Multi Step Modal');
 $button->on('click', $stepModal->show());

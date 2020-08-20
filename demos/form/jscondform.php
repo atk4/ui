@@ -89,7 +89,7 @@ $groupOther = $formGroup->addGroup(['Others']);
 $groupOther->addControl('language', ['width' => 'eight']);
 $groupOther->addControl('favorite_pet', ['width' => 'four']);
 
-//To hide-show group simply select a field in that group.
+// To hide-show group simply select a field in that group.
 // Show group where 'php' belong when dev is checked.
 // Show group where 'language' belong when dev is checked.
 $formGroup->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language' => ['dev' => 'checked']]);
@@ -133,7 +133,7 @@ $gr->addControl('postal2', ['width' => 'four']);
 // activate #1 section
 $accordion_layout->activate($adr_section);
 
-//To hide-show group or section simply select a field in that group.
+// To hide-show group or section simply select a field in that group.
 // Show group where 'php' belong when dev is checked.
 // Show group where 'language' belong when dev is checked.
 $f_acc->setGroupDisplayRules(

@@ -130,7 +130,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->id = mb_strtolower($this->name . '_' . $table_name . '_' . $action->short_name);
         $this->name = $this->id;
 
-        //Add buttons to modal for next and previous.
+        // Add buttons to modal for next and previous.
         $this->btns = (new View())->addStyle(['min-height' => '24px']);
         $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
         $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);

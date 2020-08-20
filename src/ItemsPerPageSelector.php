@@ -49,7 +49,7 @@ class ItemsPerPageSelector extends View
         Icon::addTo($this)->set('dropdown');
         $this->template->tryset('Label', $this->label);
 
-        //Callback later will give us time to properly render menu item before final output.
+        // Callback later will give us time to properly render menu item before final output.
         $this->cb = CallbackLater::addTo($this);
 
         if (!$this->currentIpp) {
@@ -92,7 +92,7 @@ class ItemsPerPageSelector extends View
         foreach ($this->pageLengthItems as $key => $item) {
             $menuItems[] = ['name' => $item, 'value' => $item];
         }
-        //set semantic-ui dropdown onChange function.
+        // set semantic-ui dropdown onChange function.
         $function = "function(value, text, item){
                             if (value === undefined || value === '' || value === null) return;
                             $(this)

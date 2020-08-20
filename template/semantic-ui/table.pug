@@ -1,7 +1,7 @@
 <table id="{$_id}" class="{_ui}ui{/} {$class} {$_class}" style="{$style}" {$attributes}>
 thead
 
-    //- Defines how header is rendered
+    // - Defines how header is rendered
     | {Head}
     tr {$cells}
     | {/}
@@ -10,14 +10,14 @@ thead
 tbody
     | {Body}
 
-    //- Indicates a regular row in the table. Re-define this if you wish multiple "tr" per line.
+    // - Indicates a regular row in the table. Re-define this if you wish multiple "tr" per line.
     | {Row}
     tr('data-id'='{$_id}')
         | {$cells}
 
     | {/}
 
-    //- This will be used if no rows are present in a table
+    // - This will be used if no rows are present in a table
     | {Empty}
     tr
         td(colspan="{$columns}") No records.
@@ -29,12 +29,12 @@ tbody
 tfoot
     | {Foot}
 
-    //- Totals will be optionally included at the bottom, if you call addTotals()
+    // - Totals will be optionally included at the bottom, if you call addTotals()
     | {Totals}
     tr {$cells}
     | {/}
 
-    //- Paginator is used by a separate class
+    // - Paginator is used by a separate class
     | {$Paginator}
 
     | {/}

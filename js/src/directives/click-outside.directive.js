@@ -11,7 +11,7 @@
  * <div
  * v-show="showPopup"
  * v-closable="{
- *   exclude: ['button'], //using button ref name.
+ *   exclude: ['button'], // using button ref name.
  *   handler: 'onClose'   // an onClose method on the component using the directive.
  * }"
  * </div>

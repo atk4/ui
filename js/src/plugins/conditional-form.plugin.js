@@ -58,7 +58,7 @@ export default class conditionalForm extends atkPlugin {
     if (!this.selector) {
       this.selector = formService.getDefaultSelector();
     }
-    //add change listener to inputs according to selector
+    // add change listener to inputs according to selector
     this.$el.find(':checkbox').on('change', this, debounce(this.onInputChange, 100, true));
     this.$el.find(':radio').on('change', this, debounce(this.onInputChange, 100, true));
     this.$el.find('input[type="hidden"]').on('change', this, debounce(this.onInputChange, 100, true));
@@ -76,7 +76,7 @@ export default class conditionalForm extends atkPlugin {
     const that = this;
 
     const ruleKeys = Object.keys(this.settings.fieldRules);
-    //map inputs according to ruleKeys.
+    // map inputs according to ruleKeys.
     this.inputs = ruleKeys.map((ruleKey, idx, org)=> {
       let tempRule =  that.settings.fieldRules[ruleKey];
       let temp = [];
@@ -98,7 +98,7 @@ export default class conditionalForm extends atkPlugin {
    * @param e
    */
   onInputChange(e) {
-    //check rule when inputs has changed.
+    // check rule when inputs has changed.
    const that = e.data;
    that.resetInputStatus();
    that.applyRules();

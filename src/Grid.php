@@ -251,13 +251,13 @@ class Grid extends View
         $pageLength->onPageLengthSelect(function ($ipp) use ($pageLength) {
             $this->ipp = $ipp;
             $this->setModelLimitFromPaginator();
-            //add ipp to quicksearch
+            // add ipp to quicksearch
             if ($this->quickSearch instanceof JsSearch) {
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', ['ipp', $this->ipp]));
             }
             $this->applySort();
 
-            //return the view to reload.
+            // return the view to reload.
             return $this->container;
         });
 
@@ -278,7 +278,7 @@ class Grid extends View
     {
         if ($this->paginator) {
             $this->paginator->destroy();
-            //prevent action(count) to be output twice.
+            // prevent action(count) to be output twice.
             $this->paginator = null;
         }
 
@@ -311,7 +311,7 @@ class Grid extends View
             'hasFixTableHeader' => true,
             'tableContainerHeight' => $containerHeight,
         ]);
-        //adding a state context to js scroll plugin.
+        // adding a state context to js scroll plugin.
         $options = array_merge(['stateContext' => '#' . $this->container->name], $options);
 
         return $this->addJsPaginator($ipp, $options, $container, $scrollRegion);

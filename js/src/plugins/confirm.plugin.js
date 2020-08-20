@@ -29,7 +29,7 @@ export default class confirm extends atkPlugin {
       context = this.settings.context;
     }
 
-    //Create wrapper function for using proper "this" context.
+    // Create wrapper function for using proper "this" context.
     if (this.settings.onApprove) {
       options.onApprove = function(){that.settings.onApprove.call(context)};
     }

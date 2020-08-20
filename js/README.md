@@ -35,8 +35,8 @@ Another example would be the upload service for file uploading using one of your
       theElement,
       {data: 'value'},
       url,             
-      onComplete(){}, //the callback function when upload is complete.
-      onXhr(){}       //the callback function when uploading files is in progress.
+      onComplete(){}, // the callback function when upload is complete.
+      onXhr(){}       // the callback function when uploading files is in progress.
     );
 ```
 
@@ -55,7 +55,7 @@ Let's create a new jQuery plugin that will change every selected dom element tex
 The plugin can now by invoke using:
 
 ```
-    //Change all link color text to green.
+    // Change all link color text to green.
     $('a').atkGreenify();
 ```
 

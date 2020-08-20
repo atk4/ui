@@ -28,7 +28,7 @@ class ApiService {
    * By passig the jQuery reference, $ var use by code that need to be eval
    * will work just fine, even if $ is not assign globally.
    *
-   * @param code //javascript to be eval.
+   * @param code // javascript to be eval.
    * @param $  // reference to jQuery.
    */
   evalResponse(code, $) {
@@ -84,9 +84,9 @@ class ApiService {
           }
           result = $('#'+response.id).replaceWith(response.html);
           if (!result.length) {
-            //TODO Find a better solution for long term.
-            //Need a way to gracefully abort server request.
-            //when user cancel a request by selecting another request.
+            // TODO Find a better solution for long term.
+            // Need a way to gracefully abort server request.
+            // when user cancel a request by selecting another request.
             console.log('Unable to replace element with id: '+ response.id);
             //throw({message:'Unable to replace element with id: '+ response.id});
           }
@@ -221,7 +221,7 @@ class ApiService {
         apiService.showErrorModal(response.message);
       }
     } else {
-      //check if we have html returned by server with <body> content.
+      // check if we have html returned by server with <body> content.
       var body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
       if (body) {
         apiService.showErrorModal(body);
@@ -236,7 +236,7 @@ class ApiService {
    * @param errorMsg
    */
   showErrorModal(errorMsg) {
-    //catch application error and display them in a new modal window.
+    // catch application error and display them in a new modal window.
     var m = $("<div>")
       .appendTo('body')
       .addClass('ui scrolling modal')

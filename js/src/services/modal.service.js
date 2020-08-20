@@ -75,7 +75,7 @@ class ModalService {
                             modalService.doAutoFocus($modal);
                         }
                         $modal.modal('refresh');
-                        //content is replace no need to do it in api
+                        // content is replace no need to do it in api
                         response.id = null;
                     }
                 }
@@ -120,7 +120,7 @@ class ModalService {
 
     removeModal(modal) {
         if (modal.data().needRemove) {
-            //This modal was add by createModal and need to be remove.
+            // This modal was add by createModal and need to be remove.
             modal.remove();
         }
         this.modals.pop();

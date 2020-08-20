@@ -17,7 +17,7 @@ ViewTester::addTo($app);
 
 // Example 1 - Basic usage of a Loader.
 \atk4\ui\Loader::addTo($app)->set(function ($p) {
-    //set your time expensive function here.
+    // set your time expensive function here.
     sleep(1);
     \atk4\ui\Header::addTo($p, ['Loader #1']);
     \atk4\ui\LoremIpsum::addTo($p, ['size' => 1]);

@@ -116,7 +116,6 @@ class Input extends Form\Control
             'readonly' => $this->readonly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
         ], $this->inputAttr));
-        //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }
 
     /**
