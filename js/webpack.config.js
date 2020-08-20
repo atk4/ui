@@ -57,7 +57,16 @@ module.exports = env => {
       umdNamedDefine: true,
     },
     optimization: {
-      minimizer: [new TerserPlugin()]
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            output: {
+              comments: false,
+            },
+          },
+          extractComments: false,
+        }),
+      ]
     },
     module: {
       rules: [
