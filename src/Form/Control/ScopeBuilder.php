@@ -397,9 +397,11 @@ class ScopeBuilder extends Control
             }
         }
 
-        $ret = [['label' => '[empty]', 'value' => null]];
+        $ret = [
+            ['label' => '[empty]', 'value' => null],
+        ];
         foreach ($choices as $value => $label) {
-            $ret[] = compact('label', 'value');
+            $ret[] = ['label' => $label, 'value' => $value];
         }
 
         return $ret;
@@ -589,7 +591,11 @@ class ScopeBuilder extends Control
             $operator = array_search(strtoupper($operator), $operatorsMap, true) ?: self::OPERATOR_EQUALS;
         }
 
-        return compact('rule', 'operator', 'value');
+        return [
+            'rule' => $rule,
+            'operator' => $operator,
+            'value' => $value,
+        ];
     }
 
     /**
