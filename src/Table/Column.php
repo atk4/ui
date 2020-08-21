@@ -347,7 +347,7 @@ class Column
             }
         }
 
-        return $this->getTag('head', [['div', compact('class'), $caption]], $attr);
+        return $this->getTag('head', [['div', ['class' => $class], $caption]], $attr);
     }
 
     /**
