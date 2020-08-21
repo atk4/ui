@@ -575,18 +575,18 @@ class Grid extends View
             $this->paginator->addReloadArgs([$this->sortTrigger => $sortBy]);
         }
 
-        $desc = false;
+        $isDesc = false;
         if ($sortBy && $sortBy[0] === '-') {
-            $desc = true;
+            $isDesc = true;
             $sortBy = substr($sortBy, 1);
         }
 
         $this->table->sortable = true;
 
         if ($sortBy && isset($this->table->columns[$sortBy]) && $this->model->hasField($sortBy)) {
-            $this->model->setOrder($sortBy, $desc);
+            $this->model->setOrder($sortBy, $isDesc ? 'desc' : 'asc');
             $this->table->sort_by = $sortBy;
-            $this->table->sort_order = $desc ? 'descending' : 'ascending';
+            $this->table->sort_order = $isDesc ? 'descending' : 'ascending';
         }
 
         $this->table->on(
