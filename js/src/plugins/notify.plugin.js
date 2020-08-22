@@ -8,14 +8,13 @@ import atkPlugin from './atk.plugin';
  * or to the body using $.atkNotify($option)
  */
 export default class notify extends atkPlugin {
-
     main() {
         let cssStyle;
         this.timer = null;
         let domElement = 'body';
 
         if (!$.isEmptyObject(this.$el[0])) {
-          domElement = this.$el;
+            domElement = this.$el;
         }
 
         cssStyle = this.getClasses(domElement);
@@ -25,16 +24,16 @@ export default class notify extends atkPlugin {
         this.notify = $(this.getNotifier(this.settings)).hide();
         this.notify.css($.extend(cssStyle.base, this.getPosition(this.settings.position)));
 
-        this.notify.on('click', '.icon.close', {self:this}, this.removeNotifier);
+        this.notify.on('click', '.icon.close', { self: this }, this.removeNotifier);
 
         this.notify.appendTo(domElement);
 
         this.notify.transition(this.settings.openTransition);
 
         if (this.settings.duration) {
-          this.timer = setTimeout(() => {
-            this.removeNotifier({data:{self:this}});
-          }, this.settings.duration);
+            this.timer = setTimeout(() => {
+                this.removeNotifier({ data: { self: this } });
+            }, this.settings.duration);
         }
     }
 
@@ -44,7 +43,7 @@ export default class notify extends atkPlugin {
      * @returns {string}
      */
     getNotifier(options) {
-      return `<div class="atk-notify transition hidden"> 
+        return `<div class="atk-notify transition hidden"> 
                 <div class="ui ${options.color} ${options.size} inverted segment" style="overflow: auto; display: block !important">
                     <i class="close icon" style="float:right"></i>
                     <div class="content">
@@ -61,7 +60,7 @@ export default class notify extends atkPlugin {
      * @param e
      */
     removeNotifier(e) {
-        let self = e.data.self;
+        const { self } = e.data;
         clearTimeout(self.timer);
         self.notify.transition(self.settings.closeTransition);
         self.notify.remove();
@@ -77,9 +76,9 @@ export default class notify extends atkPlugin {
         return {
             base: {
                 position: (el === 'body') ? 'fixed' : 'absolute',
-                'z-index': 9999
-            }
-        }
+                'z-index': 9999,
+            },
+        };
     }
 
     /**
@@ -91,31 +90,31 @@ export default class notify extends atkPlugin {
         const positions = {
             topLeft: {
                 top: '0px',
-                left: '0px'
+                left: '0px',
             },
             topCenter: {
                 margin: 'auto',
                 top: '0px',
                 left: '0px',
-                right: '0px'
+                right: '0px',
             },
             topRight: {
                 top: '0px',
-                right: '0px'
+                right: '0px',
             },
             bottomLeft: {
                 bottom: '0px',
-                left: '0px'
+                left: '0px',
             },
             bottomCenter: {
                 margin: 'auto',
                 bottom: '0px',
                 left: '0px',
-                right: '0px'
+                right: '0px',
             },
             bottomRight: {
                 bottom: '0px',
-                right: '0px'
+                right: '0px',
             },
             center: {
                 margin: 'auto',
@@ -123,13 +122,12 @@ export default class notify extends atkPlugin {
                 left: '0px',
                 bottom: '0px',
                 right: '0px',
-                'max-height': '1%'
-            }
-        }
+                'max-height': '1%',
+            },
+        };
         return positions[position];
     }
 }
-
 
 notify.DEFAULTS = {
     color: 'green',
@@ -141,6 +139,5 @@ notify.DEFAULTS = {
     openTransition: 'scale',
     duration: 3000,
     opacity: '1',
-    position: 'topLeft'
+    position: 'topLeft',
 };
-
