@@ -76,81 +76,79 @@
 </template>
 
 <script>
-  import QueryBuilderRule from "vue-query-builder/dist/rule/QueryBuilderRule.umd.js";
+import QueryBuilderRule from 'vue-query-builder/dist/rule/QueryBuilderRule.umd.js';
 
-  export default {
+export default {
     extends: QueryBuilderRule,
     component: {
     },
-    data: function() {
-      return {
-        dateMask: {input:  this.rule.format ? this.rule.format : 'YYYY-MM-DD'},
-        dateString: null,
-        dateLocale: this.rule.locale ? this.rule.locale : 'en-En',
-      }
+    data: function () {
+        return {
+            dateMask: { input: this.rule.format ? this.rule.format : 'YYYY-MM-DD' },
+            dateString: null,
+            dateLocale: this.rule.locale ? this.rule.locale : 'en-En',
+        };
     },
-    mounted() {
-      if (this.isDatePicker) {
-        this.dateString = this.query.value;
-      }
+    mounted: function () {
+        if (this.isDatePicker) {
+            this.dateString = this.query.value;
+        }
     },
     computed: {
-      isInput: function() {
-        return this.rule.type === 'text' || this.rule.type === 'numeric';
-      },
-      isDatePicker: function() {
-        return this.rule.type === 'custom-component' && this.rule.component === 'DatePicker';
-      },
-      isRadio: function() {
-        return this.rule.type === 'radio';
-      },
-      isCheckbox: function() {
-        return this.rule.type === 'checkbox' || this.isRadio;
-      },
-      isSelect: function() {
-        return this.rule.type === 'select';
-      },
-      dateValue: {
-        get: function() {
-          if (this.dateString) {
-            // fix date parsing for different time zone if time is not supply.
-            if(this.dateString.match(/^[0-9]{4}[\/\-\.][0-9]{2}[\/\-\.][0-9]{2}$/)){
-              this.dateString += ' 00:00:00';
-            }
-            return new Date(this.dateString);
-          } else {
-            return new Date();
-          }
+        isInput: function () {
+            return this.rule.type === 'text' || this.rule.type === 'numeric';
         },
-        set: function(date){
-          this.query.value =  date ? atk.phpDate("Y-m-d", date) : '';
-        }
-      }
+        isDatePicker: function () {
+            return this.rule.type === 'custom-component' && this.rule.component === 'DatePicker';
+        },
+        isRadio: function () {
+            return this.rule.type === 'radio';
+        },
+        isCheckbox: function () {
+            return this.rule.type === 'checkbox' || this.isRadio;
+        },
+        isSelect: function () {
+            return this.rule.type === 'select';
+        },
+        dateValue: {
+            get: function () {
+                if (this.dateString) {
+                    // fix date parsing for different time zone if time is not supply.
+                    if (this.dateString.match(/^[0-9]{4}[\/\-\.][0-9]{2}[\/\-\.][0-9]{2}$/)) {
+                        this.dateString += ' 00:00:00';
+                    }
+                    return new Date(this.dateString);
+                }
+                return new Date();
+            },
+            set: function (date) {
+                this.query.value = date ? atk.phpDate('Y-m-d', date) : '';
+            },
+        },
     },
     methods: {
-      /**
+        /**
        * Check if an input can be display in regards to:
        * it's operator and then it's type.
        *
        * @param type
        * @returns {boolean|*}
        */
-      canDisplay: function(type) {
+        canDisplay: function (type) {
+            if (this.labels.hiddenOperator.includes(this.query.operator)) {
+                return false;
+            }
 
-        if (this.labels.hiddenOperator.includes(this.query.operator)) {
-          return false;
-        }
-
-        switch (type) {
-          case 'input': return this.isInput;
-          case 'date' : return this.isDatePicker;
-          case 'checkbox' : return this.isCheckbox;
-          case 'select' : return this.isSelect;
-          default: return false;
-        }
-      },
-    }
-  };
+            switch (type) {
+            case 'input': return this.isInput;
+            case 'date': return this.isDatePicker;
+            case 'checkbox': return this.isCheckbox;
+            case 'select': return this.isSelect;
+            default: return false;
+            }
+        },
+    },
+};
 </script>
 
 <style>
