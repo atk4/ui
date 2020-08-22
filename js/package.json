@@ -8,7 +8,8 @@
     "dev": "webpack --progress --colors --watch --env.development",
     "profile": "webpack  --env.production --profile --json > ./profile/atkjs-bundle-profile.json",
     "analyze-profile": "webpack-bundle-analyzer ./profile/atkjs-bundle-profile.json",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint -c .eslintrc.js --ext .js,.vue .",
+    "lint-fix": "eslint -c .eslintrc.js --ext .js,.vue . --fix"
   },
   "repository": {
     "type": "git",
