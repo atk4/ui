@@ -60,8 +60,19 @@ jobs:
         if: matrix.type == 'Chrome Slow'
         run: |
           apk add npm
-          npm install --loglevel=error -g less less-plugin-clean-css uglify-js
+          npm install --loglevel=error -g pug-cli less less-plugin-clean-css uglify-js
           (cd js && npm install --loglevel=error)
+
+      - name: Build/diff HTML files (only for Slow)
+        if: matrix.type == 'Chrome Slow'
+        run: |
+          for f in $(find template -name '*.pug' -o -name '*.html'); do
+            fpug=${f/.[a-z]*/.pug}
+            fhtml=${fpug/.pug/.html}
+            mv "$fhtml" "$fhtml.orig"
+            pug "$fpug"
+            diff "$fhtml" "$fhtml.orig"
+          done
 
       - name: Build/diff CSS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
