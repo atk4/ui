@@ -237,7 +237,7 @@ class App
             $this->template_dir = [$this->template_dir];
         }
 
-        $this->template_dir[] = dirname(__DIR__) .  DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR . $this->skin;
+        $this->template_dir[] = dirname(__DIR__) . '/template/' . $this->skin;
     }
 
     /**

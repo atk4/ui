@@ -14,9 +14,6 @@ use atk4\ui\Template;
  */
 class AppUsesTemplateClassPropertyTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test if default setting works correctly
-     */
     public function testDefaultTemplateClassSetting()
     {
         $app = new App(['always_run' => false]);
@@ -27,12 +24,10 @@ class AppUsesTemplateClassPropertyTest extends AtkPhpunit\TestCase
         );
     }
 
-    /**
-     * Test if default setting works correctly
-     */
     public function testOverwriteTemplateClassSetting()
     {
-        $anotherTemplateClass = new class extends Template {};
+        $anotherTemplateClass = new class extends Template {
+        };
         $app = new App(['always_run' => false]);
         $app->templateClass = get_class($anotherTemplateClass);
         $template = $app->loadTemplate('html.html');
