@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 class Paginator extends View
@@ -9,7 +11,7 @@ class Paginator extends View
      *
      * @var int
      */
-    public $total = null;
+    public $total;
 
     /**
      * Override what is the current page. If not set, Paginator will look inside
@@ -17,7 +19,7 @@ class Paginator extends View
      *
      * @var int
      */
-    public $page = null;
+    public $page;
 
     /**
      * When there are more than $range*2+1 items, then current page will be surrounded by $range pages
@@ -32,9 +34,9 @@ class Paginator extends View
     /**
      * Set this if you want GET argument name to look beautifully.
      *
-     * @var null|string
+     * @var string|null
      */
-    public $urlTrigger = null;
+    public $urlTrigger;
 
     /**
      * If specified, must be instance of a view which will be reloaded on click.
@@ -42,11 +44,11 @@ class Paginator extends View
      *
      * @var View
      */
-    public $reload = null;
+    public $reload;
 
     /**
      * Add extra parameter to the reload view
-     * as jsReload uri_options.
+     * as JsReload uri_options.
      *
      * @var array
      */
@@ -58,7 +60,7 @@ class Paginator extends View
     /**
      * Initializing.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -73,16 +75,10 @@ class Paginator extends View
 
     /**
      * Set total number of pages.
-     *
-     * @param int $total
      */
-    public function setTotal($total)
+    public function setTotal(int $total)
     {
-        $this->total = (int) $total;
-
-        if ($this->total < 1) {
-            $this->total = 1;
-        }
+        $this->total = $total < 1 ? 1 : $total;
 
         if ($this->page < 1) {
             $this->page = 1;
@@ -94,12 +90,10 @@ class Paginator extends View
     /**
      * Determine and return the current page. You can extend this method for
      * the advanced logic.
-     *
-     * @return int
      */
-    public function getCurrentPage()
+    public function getCurrentPage(): int
     {
-        return isset($_GET[$this->urlTrigger]) ? (int) $_GET[$this->urlTrigger] : 1;
+        return (int) ($_GET[$this->urlTrigger] ?? 1);
     }
 
     /**
@@ -149,7 +143,7 @@ class Paginator extends View
             $p[] = '...';
         }
 
-        for ($i = $start; $i <= $end; $i++) {
+        for ($i = $start; $i <= $end; ++$i) {
             $p[] = $i;
         }
 
@@ -171,14 +165,14 @@ class Paginator extends View
      *
      * @return string
      */
-    public function getPageURL($page)
+    protected function getPageUrl($page)
     {
         return $this->url([$this->urlTrigger => $page]);
     }
 
     /**
      * Add extra argument to the reload view.
-     * These arguments will be set as uri_options to jsReload.
+     * These arguments will be set as uri_options to JsReload.
      *
      * @param array $args
      */
@@ -197,15 +191,15 @@ class Paginator extends View
     {
         if ($page) {
             $t->trySet('page', (string) $page);
-            $t->trySet('link', $this->getPageURL($page));
+            $t->trySet('link', $this->getPageUrl($page));
 
             $t->trySet('active', $page === $this->page ? 'active' : '');
         }
 
-        $this->template->appendHTML('rows', $t->render());
+        $this->template->appendHtml('rows', $t->render());
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $t_item = $this->template->cloneRegion('Item');
         $t_first = $this->template->hasTag('FirstItem') ? $this->template->cloneRegion('FirstItem') : $t_item;
@@ -227,7 +221,7 @@ class Paginator extends View
         }
 
         if ($this->reload) {
-            $this->on('click', '.item', new jsReload($this->reload, array_merge([$this->urlTrigger => new jsExpression('$(this).data("page")')], $this->reloadArgs)));
+            $this->on('click', '.item', new JsReload($this->reload, array_merge([$this->urlTrigger => new JsExpression('$(this).data("page")')], $this->reloadArgs)));
         }
 
         parent::renderView();

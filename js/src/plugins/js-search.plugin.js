@@ -1,8 +1,8 @@
+import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 import debounce from 'debounce';
-import $ from 'jquery';
 
-export default class jsSearch extends atkPlugin {
+export default class JsSearch extends atkPlugin {
 
   main() {
     this.urlArgs = {};
@@ -16,8 +16,9 @@ export default class jsSearch extends atkPlugin {
 
     this.setInputAction();
     this.setSearchAction();
+    this.onEscapeKeyAction();
 
-    //Set input initial value.
+    // Set input initial value.
     if (this.settings.q) {
       this.setFilter(this.settings.q);
     }
@@ -79,6 +80,22 @@ export default class jsSearch extends atkPlugin {
         that.textInput.val('');
       } else if (that.$el.data('preValue') !== e.target.value) {
         that.setButtonState(false);
+      }
+    });
+  }
+
+  /**
+   * When Search has the focus and the Escape key is pressed, clear Search text.
+   * When Search text is already empty the event will bubble up normally.
+   */
+  onEscapeKeyAction() {
+    const that = this;
+    this.textInput.keydown(function(e) {
+      if (that.textInput.val() != '' && e.key === 'Escape') {
+        that.setButtonState(false);
+        that.setFilterState(false);
+        that.textInput.val('');
+        return false;
       }
     });
   }
@@ -186,7 +203,7 @@ export default class jsSearch extends atkPlugin {
     if (query) {
       options = $.extend(options, {'_q' : query});
     }
-    //if we are not using ajax simply reload page.
+    // if we are not using ajax simply reload page.
     if (!this.settings.useAjax) {
       uri = $.atkRemoveParam(uri, '_q');
       delete options.__atk_reload;
@@ -210,11 +227,11 @@ export default class jsSearch extends atkPlugin {
   }
 }
 
-jsSearch.DEFAULTS = {
+JsSearch.DEFAULTS = {
   uri: null,
   uri_options: {},
   q: null,
   autoQuery: false,
-  timeOut: 500,
+  timeOut: 100,
   useAjax: true
 };

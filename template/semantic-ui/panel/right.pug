@@ -1,0 +1,9 @@
+.atk-right-panel(id="{$_id}", class="{$_class} {$class}")
+    .ui.right.aligned.basic.segment
+        i.atk-panel-warning(class="{$WarningIcon}")
+        a.atk-panel-close(href='javascript:void(0)')
+            i(class="{$CloseIcon}")
+    .ui.centered.inline.loader(style="position:absolute; top: 25%; left:50%")
+    .ui.basic.segment
+        | {$Content}
+    | {$LoadContent}

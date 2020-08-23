@@ -6,12 +6,13 @@ import ajaxec from "./plugins/ajaxec.plugin";
 import createModal from "./plugins/create-modal.plugin";
 import notify from "./plugins/notify.plugin";
 import fileUpload from "./plugins/file-upload.plugin";
-import jsSearch from "./plugins/js-search.plugin";
-import jsSortable from "./plugins/js-sortable.plugin";
+import JsSearch from "./plugins/js-search.plugin";
+import JsSortable from "./plugins/js-sortable.plugin";
 import conditionalForm from "./plugins/conditional-form.plugin";
 import columnResizer from "./plugins/column-resizer.plugin";
 import scroll from "./plugins/scroll.plugin";
 import confirm from "./plugins/confirm.plugin";
+import sidenav from "./plugins/sidenav.plugin"
 
 /**
  * Generate a jQuery plugin
@@ -58,7 +59,7 @@ function plugin(name, className, shortHand = false) {
                 if (this.data(dataName) && typeof this.data(dataName)[option] === 'function') {
                     return this.data(dataName)['call'](option, args);
                 }
-                //return if trying to call a plugin method prior to instantiate it.
+                // return if trying to call a plugin method prior to instantiate it.
                 return;
             }
 
@@ -90,12 +91,13 @@ function createAtkplugins() {
     {name: 'Notify', plugin: notify,sh: true},
     {name: 'ServerEvent', plugin: serverEvent, sh: true},
     {name: 'FileUpload', plugin: fileUpload, sh: false},
-    {name: 'JsSearch', plugin: jsSearch, sh: false},
-    {name: 'JsSortable', plugin: jsSortable, sh: false},
+    {name: 'JsSearch', plugin: JsSearch, sh: false},
+    {name: 'JsSortable', plugin: JsSortable, sh: false},
     {name: 'ConditionalForm', plugin: conditionalForm, sh: true},
     {name: 'ColumnResizer', plugin: columnResizer, sh: false},
     {name: 'Scroll', plugin: scroll, sh: false},
     {name: 'Confirm', plugin: confirm, sh: true},
+    {name: 'Sidenav', plugin: sidenav, sh: false},
   ];
 
   atkJqPlugins.forEach((atkJqPlugin) => {

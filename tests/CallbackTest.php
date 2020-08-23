@@ -1,18 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\tests;
+
+use atk4\core\AtkPhpunit;
 
 class AppMock extends \atk4\ui\App
 {
     public $terminated = false;
 
-    public function terminate($output = null)
+    public function terminate($output = '', array $headers = []): void
     {
         $this->terminate = true;
     }
+
+    /**
+     * Overrided to allow multiple App::run() calls, prevent sending headers when headers are already sent.
+     */
+    protected function outputResponse(string $data, array $headers): void
+    {
+        echo $data;
+    }
 }
 
-class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
+class CallbackTest extends AtkPhpunit\TestCase
 {
     /**
      * Test constructor.
@@ -21,10 +33,14 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public $app;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->app = new AppMock(['always_run' => false]);
-        $this->app->initLayout('Centered');
+        $this->app = new AppMock(['always_run' => false, 'catch_exceptions' => false]);
+        $this->app->initLayout([\atk4\ui\Layout\Centered::class]);
+
+        // reset var, between tests
+        $_GET = [];
+        $_POST = [];
     }
 
     public function testCallback()
@@ -33,16 +49,16 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $cb = $app->add('Callback');
+        $cb = \atk4\ui\Callback::addTo($app);
 
         // simulate triggering
-        $_GET[$cb->name] = true;
+        $_GET[$cb->name] = '1';
 
         $cb->set(function ($x) use (&$var) {
             $var = $x;
         }, [34]);
 
-        $this->assertEquals(34, $var);
+        $this->assertSame(34, $var);
     }
 
     public function testCallbackNotFiring()
@@ -51,32 +67,14 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $cb = $app->add('Callback');
+        $cb = \atk4\ui\Callback::addTo($app);
 
         // don't simulate triggering
         $cb->set(function ($x) use (&$var) {
             $var = $x;
         }, [34]);
 
-        $this->assertEquals(null, $var);
-    }
-
-    public function testCallbackPOST()
-    {
-        $var = null;
-
-        $app = $this->app;
-
-        $cb = $app->add(['Callback', 'postTrigger' => 'go']);
-
-        // simulate triggering
-        $_POST['go'] = true;
-
-        $cb->set(function ($x) use (&$var) {
-            $var = $x;
-        }, [34]);
-
-        $this->assertEquals(34, $var);
+        $this->assertNull($var);
     }
 
     public function testCallbackLater()
@@ -85,21 +83,21 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $cb = $app->add('CallbackLater');
+        $cb = \atk4\ui\CallbackLater::addTo($app);
 
         // simulate triggering
-        $_GET[$cb->name] = true;
+        $_GET[$cb->name] = '1';
 
         $cb->set(function ($x) use (&$var) {
             $var = $x;
         }, [34]);
 
-        $this->assertEquals(null, $var);
+        $this->assertNull($var);
 
         $this->expectOutputRegex($this->regex);
         $app->run();
 
-        $this->assertEquals(34, $var);
+        $this->assertSame(34, $var);
     }
 
     public function testCallbackLaterNested()
@@ -108,26 +106,26 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $cb = $app->add('CallbackLater');
+        $cb = \atk4\ui\CallbackLater::addTo($app);
 
         // simulate triggering
-        $_GET[$cb->name] = true;
-        $_GET[$cb->name.'_2'] = true;
+        $_GET[$cb->name] = '1';
+        $_GET[$cb->name . '_2'] = '1';
 
         $cb->set(function ($x) use (&$var, $app, &$cbname) {
-            $cb2 = $app->add('CallbackLater');
+            $cb2 = \atk4\ui\CallbackLater::addTo($app);
             $cbname = $cb2->name;
             $cb2->set(function ($y) use (&$var) {
                 $var = $y;
             }, [$x]);
         }, [34]);
 
-        $this->assertEquals(null, $var);
+        $this->assertNull($var);
 
         $this->expectOutputRegex($this->regex);
         $app->run();
 
-        $this->assertEquals(34, $var);
+        $this->assertSame(34, $var);
     }
 
     public function testCallbackLaterNotFiring()
@@ -136,19 +134,19 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $cb = $app->add('CallbackLater');
+        $cb = \atk4\ui\CallbackLater::addTo($app);
 
         // don't simulate triggering
         $cb->set(function ($x) use (&$var) {
             $var = $x;
         }, [34]);
 
-        $this->assertEquals(null, $var);
+        $this->assertNull($var);
 
         $this->expectOutputRegex($this->regex);
         $app->run();
 
-        $this->assertEquals(null, $var);
+        $this->assertNull($var);
     }
 
     public function testVirtualPage()
@@ -157,17 +155,18 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $vp = $app->add('VirtualPage');
+        $vp = \atk4\ui\VirtualPage::addTo($app);
+        // simulate triggering
+
         $vp->set(function ($p) use (&$var) {
             $var = 25;
         });
 
-        // simulate triggering
-        $_GET[$vp->name] = true;
+        $_GET[$vp->name] = '1';
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $app->run();
-        $this->assertEquals(25, $var);
+        $this->assertSame(25, $var);
     }
 
     public function testVirtualPageCustomTrigger()
@@ -176,20 +175,20 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $vp = $app->add(['VirtualPage', 'urlTrigger'=>'bah']);
+        $vp = \atk4\ui\VirtualPage::addTo($app, ['urlTrigger' => 'bah']);
         $vp->set(function ($p) use (&$var) {
             $var = 25;
         });
 
         // simulate triggering
-        $_GET['bah'] = true;
+        $_GET['bah'] = '1';
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $app->run();
-        $this->assertEquals(25, $var);
+        $this->assertSame(25, $var);
     }
 
-    public $var = null;
+    public $var;
 
     public function callPull230()
     {
@@ -202,14 +201,14 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $vp = $app->add('VirtualPage');
+        $vp = \atk4\ui\VirtualPage::addTo($app);
         $vp->set([$this, 'callPull230']);
 
         // simulate triggering
-        $_GET[$vp->name] = true;
+        $_GET[$vp->name] = '1';
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $app->run();
-        $this->assertEquals(26, $this->var);
+        $this->assertSame(26, $this->var);
     }
 }

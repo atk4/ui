@@ -1,5 +1,5 @@
-import atkPlugin from './atk.plugin';
 import $ from 'jquery';
+import atkPlugin from './atk.plugin';
 
 /**
  * Add dynamic scrolling to a View that can accept page argument in URL.
@@ -16,8 +16,8 @@ import $ from 'jquery';
 export default class scroll extends atkPlugin {
 
   main() {
-    //check if we are initialized already because loading content
-    //can recall this plugin and screw up page number.
+    // check if we are initialized already because loading content
+    // can recall this plugin and screw up page number.
     if (this.$el.data('__atkScroll')) {
       return false;
     }
@@ -32,7 +32,7 @@ export default class scroll extends atkPlugin {
       tableHeaderColor: '#ffffff',
       stateContext: null,
     };
-    //set default option if not set.
+    // set default option if not set.
     this.settings.options = Object.assign({}, defaultSettings, this.settings.options);
 
     this.isWaiting = false;
@@ -44,14 +44,14 @@ export default class scroll extends atkPlugin {
       this.$inner = this.$el;
       this.setTableHeader();
     } else {
-      //check if scroll apply vs Window or inside our element.
+      // check if scroll apply vs Window or inside our element.
       this.isWindow = (this.$el.css('overflow-y') === 'visible');
       this.$scroll = this.isWindow ? $(window): this.$el;
-      //is Inner the element itself or it's children.
+      // is Inner the element itself or it's children.
       this.$inner = this.isWindow ? this.$el : this.$el.children();
     }
 
-    //the target element within container where new content is appendTo.
+    // the target element within container where new content is appendTo.
     this.$target = this.settings.options.appendTo ? this.$inner.find(this.settings.options.appendTo) : this.$inner;
 
     this.bindScrollEvent(this.$scroll);
@@ -98,18 +98,18 @@ export default class scroll extends atkPlugin {
   /**
    * Check if scrolling require adding content.
    *
-   * @param e //event
+   * @param e // event
    */
   observe(e) {
     let borderTopWidth = parseInt(this.$el.css('borderTopWidth'), 10),
         borderTopWidthInt = isNaN(borderTopWidth) ? 0 : borderTopWidth,
-        //this.$el padding top value.
+        // this.$el padding top value.
         paddingTop = parseInt(this.$el.css('paddingTop'), 10) + borderTopWidthInt,
-        //Either the scroll bar position using window or the container element top position otherwise.
+        // Either the scroll bar position using window or the container element top position otherwise.
         topHeight = this.isWindow ? $(window).scrollTop() : this.$scroll.offset().top,
-        //Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
+        // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
         innerTop = this.$inner.length ? this.$inner.offset().top : 0,
-        //The total height.
+        // The total height.
         totalHeight = Math.ceil(topHeight - innerTop + this.$scroll.height() + paddingTop);
 
 

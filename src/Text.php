@@ -1,6 +1,6 @@
 <?php
 
-// vim:ts=4:sw=4:et:fdm=marker:fdl=0
+declare(strict_types=1);
 
 namespace atk4\ui;
 
@@ -11,12 +11,12 @@ class Text extends View
 {
     public $defaultTemplate = false;
 
-    public function render($force_echo = true)
+    public function render($forceReturn = true): string
     {
         return $this->content;
     }
 
-    public function getHTML()
+    public function getHtml()
     {
         return $this->content;
     }
@@ -32,7 +32,19 @@ class Text extends View
     {
         $this->content .= isset($this->app)
             ? $this->app->getTag('p', $text)
-            : '<p>'.htmlspecialchars($text).'</p>';
+            : '<p>' . htmlspecialchars($text) . '</p>';
+
+        return $this;
+    }
+
+    /**
+     * Adds some HTML code.
+     *
+     * @return $this
+     */
+    public function addHtml(string $html)
+    {
+        $this->content .= $html;
 
         return $this;
     }

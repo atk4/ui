@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\tests;
 
-class TableTest extends \atk4\core\PHPUnit_AgileTestCase
+use atk4\core\AtkPhpunit;
+
+class TableTest extends AtkPhpunit\TestCase
 {
     /**
-     * Test constructor.
+     * @doesNotPerformAssertions
      */
     public function testAddColumnWithoutModel()
     {
@@ -17,13 +21,12 @@ class TableTest extends \atk4\core\PHPUnit_AgileTestCase
         ]);
 
         // 4 ways to add column
-        $t->addColumn(null, new \atk4\ui\TableColumn\Link('test.php?id=1'));
+        $t->addColumn(null, new \atk4\ui\Table\Column\Link('test.php?id=1'));
 
         // multiple ways to add column which doesn't exist in model
-        $t->addColumn('five', new \atk4\ui\TableColumn\Link('test.php?id=1'));
-        $t->addColumn('six', [new \atk4\ui\TableColumn\Link('test.php?id=2')]);
-        $t->addColumn('seven', ['Link', ['id' => 3]]);
-        $t->addColumn('eight', 'Link');
+        $t->addColumn('five', new \atk4\ui\Table\Column\Link('test.php?id=1'));
+        $t->addColumn('seven', [\atk4\ui\Table\Column\Link::class, ['id' => 3]]);
+        $t->addColumn('eight', \atk4\ui\Table\Column\Link::class);
         $t->addColumn('nine');
 
         $t->render();

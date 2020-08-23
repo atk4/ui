@@ -1,25 +1,32 @@
-<phpunit colors="true" bootstrap="vendor/autoload.php" printerClass="atk4\core\PHPUnit_AgileResultPrinter">
+<phpunit colors="true" bootstrap="vendor/autoload.php" printerClass="atk4\core\AtkPhpunit\ResultPrinter">
     <php>
         <var name="DB_DSN" value="sqlite::memory:" />
-        <var name="DB_USER" value="travis" />
+        <var name="DB_USER" value="" />
         <var name="DB_PASSWD" value="" />
-        <var name="DB_DBNAME" value="dsql_test" />
+        <var name="DB_DBNAME" value="" />
     </php>
     <filter>
-        <blacklist>
-            <directory suffix=".php">./vendor</directory>
-        </blacklist>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
+            <directory suffix=".php">src</directory>
         </whitelist>
     </filter>
     <testsuites>
         <testsuite name="tests">
             <directory>tests</directory>
-            <exclude>tests/smbo/lib</exclude>
+            <file>tests/DemosTest.php</file>
+            <file>tests/DemosHttpTest.php</file>
+            <file>tests/DemosHttpNoExitTest.php</file>
+            <exclude>tests/DemosTest.php</exclude>
+            <exclude>tests/DemosHttpTest.php</exclude>
+            <exclude>tests/DemosHttpNoExitTest.php</exclude>
         </testsuite>
     </testsuites>
+    <groups>
+        <exclude>
+            <group>demos_http</group>
+        </exclude>
+    </groups>
     <logging>
-        <log type="coverage-php" target="phpunit.cov"/>
+        <log type="coverage-php" target="build/logs/clover.cov"/>
     </logging>
 </phpunit>

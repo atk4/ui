@@ -15,24 +15,24 @@ LoremIpsum will generate a dynamic filler text which should help you test :ref:`
 Basic Usage
 ===========
 
-    $app->add('LoremIpsum');
+    LoremIpsum::addTo($app);
 
 Resizing
 ========
 
 You can define the length of the LoremIpsum text::
 
-    $text = $app->add('Text')
+    $text = Text::addTo($app)
         ->addParagraph('First Paragraph')
         ->addParagraph('Second Paragraph');
 
 
 You may specify amount of text to be generated with lorem::
 
-    $app->add(['LoremIpsum', 1]); // just add a little one
+    LoremIpsum::addTo($app, [1]); // just add a little one
 
     // or
 
-    $app->add(new LoremIpsum(5)); // adds a lot of text
+    LoremIpsum::addTo($app, [5]); // adds a lot of text
 
 

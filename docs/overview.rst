@@ -96,14 +96,14 @@ clarifications::
 
 
     <?php
-    require 'vendor/autoload.php';
+    require_once __DIR__ . '/vendor/autoload.php';
 
     // Define your data structure
     class Offer extends \atk4\data\Model {
 
         public $table = 'offer';
 
-        function init() {
+        function init(): void {
             parent::init();
 
             // Persistence may not have structure, so we define here
@@ -117,11 +117,11 @@ clarifications::
 
     // Create Application object and initialize Admin Layout
     $app = new \atk4\ui\App('Offer tracking system');
-    $app->initLayout('Admin');
+    $app->initLayout([\atk4\ui\Layout\Admin::class]);
 
-    // Connect to database and place a fully-interactive CRUD
+    // Connect to database and place a fully-interactive Crud
     $db = new \atk4\data\Persistence_SQL($dsn);
-    $app->add(new \atk4\ui\CRUD())
+    \atk4\ui\Crud::addTo($app)
         ->setModel(new Offer($db));
 
 Through the course of this example, We are performing several core actions:
@@ -154,17 +154,17 @@ Through the course of this example, We are performing several core actions:
     Model object represents a data-set for specific persistence and conditions.
 
     In our example, the object is created representing all our offer records that is then
-    passed into the CRUD :ref:`component`.
+    passed into the Crud :ref:`component`.
 
     For a :ref:`component`, the Model represents information about the structure
     and offers a mechanism to retrieve, store, and delete date from `$db` persistence.
 
 
-  - `CRUD` is a :ref:`component` class. Particularly CRUD is bundled with Agile UI
+  - `Crud` is a :ref:`component` class. Particularly Crud is bundled with Agile UI
     and implements out-of-the-box interface for displaying data in a table format
     with operations to add, delete, or edit the record.
 
-    Although it's not obvious from the code, CRUD relies on multiple other components
+    Although it's not obvious from the code, Crud relies on multiple other components
     such as :php:class:`Grid`, :php:class:`Form`, :php:class:`Menu`, :php:class:`Paginator`,
     and :php:class:`Button`.
 
@@ -204,13 +204,13 @@ That means that components may rely on each other and even though some may appea
 very basic to you, they are relied on by some other components for maximum
 flexibility. The next example adds a "Cancel" button to a form::
 
-    $button = $form->add(new \atk4\ui\Button([
+    $button = \atk4\ui\Button::addTo($form, [
         'Cancel',
         'icon'=>new \atk4\ui\Icon('pencil')
-    ]))->link('dashboard.php');
+    ])->link('dashboard.php');
 
 :php:class:`Button` and :php:class:`Icon` are some of the most basic components in
-Agile UI. You will find CRUD / Form / Grid components much more useful:
+Agile UI. You will find Crud / Form / Grid components much more useful:
 
 .. figure:: images/all-atk-classes.png
 
@@ -220,7 +220,7 @@ Using Components
 Look above at the :ref:`overview_example`, component `GRID` was made part
 of application layout with a line::
 
-    $app->add(new \atk4\ui\CRUD());
+    \atk4\ui\Crud::addTo($app);
 
 
 To render a component individually and get the HTML and JavaScript use this format::
@@ -252,7 +252,7 @@ Factory is a mechanism which allow you to use shorter syntax for creating object
 The goal of Agile UI is to be simple to read and use; so taking advantage of loose types
 in PHP language allows us to use an alternative shorter syntax::
 
-    $form->add(['Button', 'Cancel', 'icon'=>'pencil'])
+    \atk4\ui\Button::addTo($form, ['Cancel', 'icon'=>'pencil'])
         ->link('dashboard.php');
 
 By default, class names specified as the first array elements passed to the add() method are
@@ -282,7 +282,7 @@ Using App class will utilize a minimum of 2 templates:
 
 As you add more components, they will appear inside your layout.
 
-You'll also find that a layout class such as :php:class:`Layout\Admin` will initialize
+You'll also find that a layout class such as :php:class:`Layout\\Admin` will initialize
 some components on its own - sidebar menu, top menu.
 
 .. image:: images/admin-layout.png
@@ -305,7 +305,7 @@ Non-PHP dependencies
 --------------------
 Your component may depend on additional JavaScript libraries, CSS, or other files.
 At the present time you have to make them available through a CDN and HTTPS.
-See: :php:meth:`App::requireJS`
+See: :php:meth:`App::requireJs`
 
 
 Events and Actions
@@ -388,9 +388,9 @@ have a basic understanding of "code" and some familiarity with the PHP language.
  - Components - Reference for UI component classes
 
    - Button, Label, Header, Message, Menu, Column
-   - Table and TableColumn
+   - Table and Table\Column
    - Form and Field
-   - Grid and CRUD
+   - Grid and Crud
    - Paginator
 
  - Advanced Topics

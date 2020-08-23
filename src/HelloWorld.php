@@ -1,6 +1,6 @@
 <?php
 
-// vim:ts=4:sw=4:et:fdm=marker:fdl=0
+declare(strict_types=1);
 
 namespace atk4\ui;
 
@@ -9,7 +9,7 @@ namespace atk4\ui;
  */
 class HelloWorld extends View
 {
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->set('Content', 'Hello World');

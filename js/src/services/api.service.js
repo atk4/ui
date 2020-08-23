@@ -28,7 +28,7 @@ class ApiService {
    * By passig the jQuery reference, $ var use by code that need to be eval
    * will work just fine, even if $ is not assign globally.
    *
-   * @param code //javascript to be eval.
+   * @param code // javascript to be eval.
    * @param $  // reference to jQuery.
    */
   evalResponse(code, $) {
@@ -73,6 +73,7 @@ class ApiService {
       if (response.success) {
         if (response && response.html && response.id) {
           // prevent modal duplication.
+          // apiService.removeModalDuplicate(response.html);
           let modalIDs = [];
           $(response.html).find(".ui.modal[id]").each((i, e) => {
             modalIDs.push('#' + $(e).attr('id'));
@@ -83,12 +84,23 @@ class ApiService {
           }
           result = $('#'+response.id).replaceWith(response.html);
           if (!result.length) {
-            //TODO Find a better solution for long term.
-            //Need a way to gracefully abort server request.
-            //when user cancel a request by selecting another request.
+            // TODO Find a better solution for long term.
+            // Need a way to gracefully abort server request.
+            // when user cancel a request by selecting another request.
             console.log('Unable to replace element with id: '+ response.id);
             //throw({message:'Unable to replace element with id: '+ response.id});
           }
+        }
+        if (response && response.modals) {
+          // Create app modal from json response.
+          const modals = Object.keys(response.modals);
+          modals.forEach(function(modal) {
+            const m = $('.ui.dimmer.modals.page').find('#'+modal);
+            if (m.length === 0) {
+              $(document.body).append(response.modals[modal].html);
+              apiService.evalResponse(response.modals[modal].js, jQuery);
+            }
+          });
         }
         if (response && response.atkjs) {
           // Call evalResponse with proper context, js code and jQuery as $ var.
@@ -121,7 +133,7 @@ class ApiService {
    * this function. It must at least return {success: true} in order for
    * the Promise to resolve properly, will reject otherwise.
    *
-   * ex: $app->terminate(json_encode(['success' => true, 'data' => $data]));
+   * ex: $app->terminateJson(['success' => true, 'data' => $data]);
    *
    * @param url        // the url to fetch data
    * @param settings   // the Semantic api settings object.
@@ -165,15 +177,15 @@ class ApiService {
   }
 
   /**
-   * Check server response
+   * Check server response and clear api.data object.
    *  - return true will call onSuccess
    *  - return false will call onFailure
    * @param response
    * @returns {boolean}
    */
   successTest(response) {
+    this.data = {};
     if (response.success) {
-      this.data = {};
       return true;
     } else {
       return false;
@@ -209,7 +221,7 @@ class ApiService {
         apiService.showErrorModal(response.message);
       }
     } else {
-      //check if we have html returned by server with <body> content.
+      // check if we have html returned by server with <body> content.
       var body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
       if (body) {
         apiService.showErrorModal(body);
@@ -224,7 +236,7 @@ class ApiService {
    * @param errorMsg
    */
   showErrorModal(errorMsg) {
-    //catch application error and display them in a new modal window.
+    // catch application error and display them in a new modal window.
     var m = $("<div>")
       .appendTo('body')
       .addClass('ui scrolling modal')

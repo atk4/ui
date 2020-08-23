@@ -1,31 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\FormField;
 
-use atk4\ui\Form;
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Class atk4\ui\FormField\Money is deprecated. Use atk4\ui\Form\Control\Money instead', E_USER_DEPRECATED);
+}
 
 /**
- * Input element for a form field.
+ * @deprecated will be removed dec-2020
  */
-class Money extends Input
+class Money extends \atk4\ui\Form\Control\Money
 {
-    public function getValue()
-    {
-        $v = $this->field ? $this->field->get() : ($this->content ?: null);
-
-        if (is_null($v)) {
-            return;
-        }
-
-        return number_format($v, 2);
-    }
-
-    public function renderView()
-    {
-        if ($this->label === null) {
-            $this->label = $this->app->ui_persistence->currency;
-        }
-
-        parent::renderView();
-    }
 }

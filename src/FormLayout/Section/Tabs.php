@@ -1,26 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\FormLayout\Section;
 
-class Tabs extends \atk4\ui\Tabs
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Class atk4\ui\FormLayout\Section\Tabs is deprecated. Use atk4\ui\Form\Layout\Section\Tabs instead', E_USER_DEPRECATED);
+}
+
+/**
+ * @deprecated will be removed dec-2020
+ */
+class Tabs extends \atk4\ui\Form\Layout\Section\Tabs
 {
-    public $formLayout = 'FormLayout/Generic';
-    public $form = null;
-
-    /**
-     * Adds tab in tabs widget.
-     *
-     * @param string|Tab $name     Name of tab or Tab object
-     * @param callable   $callback Callback action or URL (or array with url + parameters)
-     *
-     * @throws Exception
-     *
-     * @return \atk4\ui\FormLayout\Generic
-     */
-    public function addTab($name, $callback = null)
-    {
-        $c = parent::addTab($name, $callback);
-
-        return $c->add([$this->formLayout, 'form' => $this->form]);
-    }
 }

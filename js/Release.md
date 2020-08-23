@@ -1,5 +1,113 @@
 ## Release note
 
+### version 1.15.1 (2020-08-19)
+ - URL query parameter for Upload plugin/control was renamed from "action" to "f_upload_action"
+ - URL query parameter for Upload plugin/control was renamed from "f_name" to "f_upload_id"
+
+### version 1.15.0 (2020-07-16)
+ - update package dependency
+ - configure webpack in order to load and bundle .vue file.
+    - now use terser plugin instead of uglify js for minimizing js.
+ - add query builder component for ScopeBuilder form field
+   - extends Vue Query Builder default to work with Fomantic ui.
+
+### version 1.14.3 (2020-07-13)
+ - Update dependencies.
+ 
+### version 1.14.2 (2020-05-04)
+ - Build releases automatically on ui.agiletoolkit.org deploy
+
+### version 1.14.1 (2020-04-25)
+
+- add stop function to server-event.plugin;
+    You can now explicitly stop event.
+    Add option to close event on window beforeUnload
+
+### version 1.14.0 (2020-04-21)
+    
+- Add a jQuery plugin for layout that support side navigation.
+  - sidenav.plugin.js
+
+### version 1.13.0 (2020-04-14)
+    
+- New PanelService.
+
+### version 1.12.8 (2020-04-14)
+
+- Import corejs into package for polyfill requirement on older browser.
+
+### version 1.12.7 (2020-04-08)
+
+- URL query parameter to enable SSE response was renamed from "event=sse" to "__atk_sse".
+
+### version 1.12.6 (2020-04-03)
+
+- URL query parameter to force JSON response was renamed from "json" to "__atk_json".
+
+### version 1.12.5 (2020-03-24)
+
+- make sure $ var is assign to jQuery ($ = jQuery) in all module by adding missing import statement.
+  
+### version 1.12.4 (2020-03-18)
+
+- Update dependencie package
+    - @babel/cli from 7.8.3 to 7.8.7
+    - @bable/core from 7.8.3 to 7.8.7
+    - @babel/preset-env from 7.8.3 to 7.8.7
+    - @babel/polyfill from 7.8.3 to 7.8.7
+    - webpack from 4.35.3 to 4.42.0
+- Update Babel config in order to use corejs v3
+
+### version 1.12.3 (2020-02-11)
+
+- Fix duplicate url encoding for reload-view and ajaxec plugins.
+   see https://github.com/atk4/ui/issues/924
+
+### version 1.12.2 (2020-02-04)
+
+- Fix https://github.com/atk4/ui/issues/902 
+   Throwing error on server was not clearing api.data object, thus keeping
+   old value with new server request. This fix make sure api.data gets clear
+   on all server response, successful or not.
+
+### version 1.12.1 (2020-01-14)
+
+- update api service to generate modals in json request.
+- update npm dependencies.
+
+### version 1.12.0 (2019-11-06)
+
+- add table-dropdown-helper.js 
+    Utlity to dipslay Fomantic ui drodown as a table column.
+
+### version 1.11.0 (2019-10-24)
+
+- Add DataService. 
+    Enable usage of web storage: local or session.
+- Update atk.reloadView jQuery plugin.
+    Can include web storage in api request,
+    Possible to set specific Fomantic api settings
+- Update atk.ajaxExec jQuery plugin.
+    Can include web storage in api request,
+    Possible to set specific Fomantic api settings    
+    
+- Update url.helpers 
+
+Fix
+- issue #487 - Avoid Multi modal
+  Update modal service in order to refresh current modal when top modal is close.
+
+### version 1.10.0 (2019-10-07)
+- Add new component TreeItemSelector.
+
+
+### version 1.9.1 (2019-10-06)
+
+- fix issue where new row is added pressing Enter key in form.
+- Add new option in order to add row automatically when tabbing out of 
+the last column and last row.
+- Add ability to execute javascript when adding or deleting a row.
+
 ### version 1.9.0 (2019-08-16)
 
 - Add textarea support in Multiline Vue Component
@@ -52,7 +160,7 @@
 
 ### version 1.6.5
 
- - Add multiline component for MultiLine form field.
+ - Add multiline component for MultiLine form control.
 
 ### version 1.6.4
 
@@ -139,8 +247,8 @@ Maintenance release.
 
 ### version 1.3.4
 
-  - Allow jsSearch to load using already set input value.
-  - Allow to set input filter in jsSearch using setFilter(text) function.
+  - Allow JsSearch to load using already set input value.
+  - Allow to set input filter in JsSearch using setFilter(text) function.
 
 ### version 1.3.3
 
@@ -152,7 +260,7 @@ Maintenance release.
 
 ### version 1.3.1
 
-  - Add more generic method jsSearch::setUrlArgs(arg, value) in favor of deprecared setSortArgs method.
+  - Add more generic method JsSearch::setUrlArgs(arg, value) in favor of deprecared setSortArgs method.
   
 ### version 1.3.0
 
@@ -166,7 +274,7 @@ Maintenance release.
 
 ### version 1.2.0
 
-  - add plugin, jsSortable, to allow reordering of list element via drap n drop.
+  - add plugin, JsSortable, to allow reordering of list element via drap n drop.
 
 ### version 1.1.0
 

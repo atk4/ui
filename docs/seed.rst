@@ -41,7 +41,7 @@ ATK UI classes::
 In most cases you don't need to call factory yourself, methods which accept object/seed combinations
 will do it for you::
 
-    $app->add('Button');
+    Button::addTo($app);
     // app will create instance of class \atk4\ui\Button
 
 Seed, Object and Render Tree
@@ -51,13 +51,13 @@ When calling :php:meth:`View::add()` not only your seed becomes an object, but i
 the :ref:`render tree`.
 
 Seed Components
-================
+===============
 
 For more information about seeds, merging seeds, factories and namespaces, see https://agile-core.readthedocs.io/.
 
 The most important points of a seed such as this one::
 
-    $seed = ['Button', 'hello', 'big red', 'icon'=>['book', 'red']];
+    $seed = [Button::class, 'hello', 'big red', 'icon'=>['book', 'red']];
 
 are:
 
@@ -83,25 +83,25 @@ Additional cases
 ----------------
 
 An individual object may add more ways to deal with seed. For example, when adding columns
-to your Table you can specify seed for the decorator: :php:class:`atk4\\ui\\TableColumn\\Generic`::
+to your Table you can specify seed for the decorator: :php:class:`atk4\\ui\\\Table\\Column`::
 
-    $table->addColumn('salary', 'Money');
-
-    // or
-
-    $table->addColumn('salary', ['Money']);
+    $table->addColumn('salary', [\atk4\ui\Table\Column\Money::class]);
 
     // or
 
-    $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
+    $table->addColumn('salary', [\atk4\ui\Table\Column\Money::class]);
 
     // or
 
-    $table->addColumn('salary', [new \atk4\ui\TableColumn\Money()]);
+    $table->addColumn('salary', new \atk4\ui\Table\Column\Money());
 
-Note that addColumn uses default namespace of \atk4\ui\TableColumn when seeding objects. Some
+    // or
+
+    $table->addColumn('salary', [new \atk4\ui\Table\Column\Money()]);
+
+Note that addColumn uses default namespace of `\\atk4\\ui\\Table\\Column` when seeding objects. Some
 other methods that use seeds are:
 
  - :php:meth:`Table::addColumn()`
- - :php:meth:`Form::addField()`
+ - :php:meth:`Form::addControl()`
 

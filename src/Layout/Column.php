@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\Layout;
 
 /**
@@ -11,13 +13,12 @@ namespace atk4\ui\Layout;
  *
  * Sticky top-bar for simple navigation and three flexible areas for flexible use.
  */
-class Column extends Generic
+class Column extends \atk4\ui\Layout
 {
-    // @inheritdoc
     public $defaultTemplate = 'layout/column.html';
 
-    public $menu = null;
+    public $menu;
 
-    public $leftColumn = null;
-    public $rightColumn = null;
+    public $leftColumn;
+    public $rightColumn;
 }

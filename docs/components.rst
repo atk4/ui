@@ -78,6 +78,7 @@ other code. Here is how interractive components will typically communicate:
     progressbar
     popup
     wizard
+    rightpanel
 
 
 Composite components

@@ -1,6 +1,6 @@
 <?php
 
-// vim:ts=4:sw=4:et:fdm=marker:fdl=0
+declare(strict_types=1);
 
 namespace atk4\ui;
 
@@ -13,27 +13,26 @@ class Tabs extends View
     public $ui = 'tabular menu';
 
     /** @var string name of active tab */
-    public $activeTabName = null;
+    public $activeTabName;
 
     /**
      * Adds tab in tabs widget.
      *
      * @param string|Tab $name     Name of tab or Tab object
-     * @param callable   $callback Callback action or URL (or array with url + parameters)
-     *
-     * @throws Exception
+     * @param \Closure   $callback Callback action or URL (or array with url + parameters)
+     * @param array      $settings Tab setting
      *
      * @return View
      */
-    public function addTab($name, $callback = null)
+    public function addTab($name, \Closure $callback = null, $settings = [])
     {
-        $item = $this->addTabMenuItem($name);
+        $item = $this->addTabMenuItem($name, $settings);
         $sub = $this->addSubView($item->name);
 
         // if there is callback action, then use VirtualPage
         if ($callback) {
-            $vp = $sub->add(['VirtualPage', 'ui' => '']);
-            $item->setPath($vp->getJSURL('cut'));
+            $vp = VirtualPage::addTo($sub, ['ui' => '']);
+            $item->setPath($vp->getJsUrl('cut'));
 
             $vp->set($callback);
         }
@@ -45,14 +44,13 @@ class Tabs extends View
      * Adds dynamic tab in tabs widget which will load a separate
      * page/url when activated.
      *
-     * @param string|Tab   $name Name of tab or Tab object
-     * @param string|array $url  URL to open inside a tab
-     *
-     * @throws Exception
+     * @param string|Tab   $name     Name of tab or Tab object
+     * @param string|array $url      URL to open inside a tab
+     * @param array        $settings Tab setting
      */
-    public function addTabURL($name, $url)
+    public function addTabUrl($name, $url, $settings = [])
     {
-        $item = $this->addTabMenuItem($name);
+        $item = $this->addTabMenuItem($name, $settings);
         $this->addSubView($item->name);
 
         $item->setPath($url);
@@ -61,13 +59,12 @@ class Tabs extends View
     /**
      * Add a tab menu item.
      *
-     * @param string|Tab $name Name of tab or Tab object.
+     * @param string|Tab $name     name of tab or Tab object
+     * @param array      $settings Tab settings
      *
-     * @throws Exception
-     *
-     * @return Tab|View Tab menu item view.
+     * @return Tab|View tab menu item view
      */
-    protected function addTabMenuItem($name)
+    protected function addTabMenuItem($name, $settings)
     {
         if (is_object($name)) {
             $tab = $name;
@@ -75,7 +72,7 @@ class Tabs extends View
             $tab = new Tab($name);
         }
 
-        $tab = $this->add([$tab, 'class' => ['item']], 'Menu')
+        $tab = $this->add($this->mergeSeeds(['class' => ['item'], 'settings' => $settings], $tab), 'Menu')
             ->setElement('a')
             ->setAttr('data-tab', $tab->name);
 
@@ -89,21 +86,16 @@ class Tabs extends View
     /**
      * Add sub view to tab.
      *
-     * @param string $name name of view.
+     * @param string $name name of view
      *
-     * @throws Exception
-     *
-     * @return TabsSubView
+     * @return TabsSubview
      */
     protected function addSubView($name)
     {
-        return $this->add(['TabsSubView', 'dataTabName' => $name], 'Tabs');
+        return TabsSubview::addTo($this, ['dataTabName' => $name], ['Tabs']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         // use content as class name
         if ($this->content) {

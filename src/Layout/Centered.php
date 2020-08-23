@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\Layout;
 
 /**
@@ -9,7 +11,7 @@ namespace atk4\ui\Layout;
  * Bevel will use some padding and will contain your Content.
  * This layout is handy for a simple and single-purpose applications.
  */
-class Centered extends Generic
+class Centered extends \atk4\ui\Layout
 {
     use \atk4\core\DebugTrait;
 
@@ -18,12 +20,12 @@ class Centered extends Generic
     /**
      * @see \atk4\ui\App::$cdn
      *
-     * @var null|string
+     * @var string|null
      */
-    public $image = null;
+    public $image;
     public $image_alt = 'Logo';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -32,7 +34,7 @@ class Centered extends Generic
             if (isset($this->app->cdn['layout-logo'])) {
                 $this->image = $this->app->cdn['layout-logo'];
             } else {
-                $this->image = $this->app->cdn['atk'].'/logo.png';
+                $this->image = $this->app->cdn['atk'] . '/logo.png';
             }
         }
 
@@ -41,10 +43,10 @@ class Centered extends Generic
         $this->template->trySet('title', $this->app->title);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->image) {
-            $this->template->trySetHTML('HeaderImage', '<img class="ui image" src="'.$this->image.'" alt="'.$this->image_alt.'" />');
+            $this->template->trySetHtml('HeaderImage', '<img class="ui image" src="' . $this->image . '" alt="' . $this->image_alt . '" />');
         }
         parent::renderView();
     }

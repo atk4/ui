@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 /**
@@ -21,16 +23,16 @@ class Popup extends View
      * Usually the view where popup is attached to,
      * unless target is supply.
      *
-     * @var View|string|null Object view or a string id.
+     * @var View|string|null object view or a string id
      */
-    public $triggerBy = null;
+    public $triggerBy;
 
     /**
      * Js event that trigger the popup.
      *
      * @var string
      */
-    public $triggerOn = null;
+    public $triggerOn;
 
     /**
      * Default position of the popup in relation to target element.
@@ -57,19 +59,17 @@ class Popup extends View
     /**
      * The callback use to generate dynamic content.
      *
-     * @var callable|null
+     * @var Callback|null
      */
-    public $cb = null;
+    public $cb;
 
     /**
      * The dynamic View to load inside the popup
      * when dynamic content is use.
      *
-     * Default to 'View'.
-     *
-     * @var View|string
+     * @var View|array
      */
-    public $dynamicContent = 'View';
+    public $dynamicContent = [View::class];
 
     /**
      * Whether or not dynamic content is cache.
@@ -85,14 +85,14 @@ class Popup extends View
      *
      * @var string
      */
-    public $minWidth = null; //'120px';
+    public $minWidth; //'120px';
 
     /**
      * Min height for a dynamic popup.
      *
      * @var string
      */
-    public $minHeight = null; //'60px';
+    public $minHeight; //'60px';
 
     /**
      * Whether or not the click event triggering popup
@@ -115,64 +115,58 @@ class Popup extends View
         }
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
         if (
             $this->owner instanceof Item ||
             $this->owner instanceof Menu ||
-            $this->owner instanceof DropDown ||
+            $this->owner instanceof Dropdown ||
             $this->owner instanceof Button
         ) {
-            throw new Exception([
-                'Although it may be tempting to add pop-up into Button/Menu/Item, this may cause some random issues. Add elsewhere and use "triggerBy"',
-                'owner'=> $this->owner,
-            ]);
+            throw (new Exception('Although it may be tempting to add pop-up into Button/Menu/Item, this may cause some random issues. Add elsewhere and use "triggerBy"'))
+                ->addMoreInfo('owner', $this->owner);
         }
 
         if (
             ($this->triggerBy instanceof Item ||
             $this->triggerBy instanceof Menu ||
-            $this->triggerBy instanceof DropDown) && $this->triggerOn == null
+            $this->triggerBy instanceof Dropdown) && $this->triggerOn === null
         ) {
             $this->triggerOn = 'hover';
         }
 
         if (
-            $this->triggerBy instanceof Button && $this->triggerOn == null
+            $this->triggerBy instanceof Button && $this->triggerOn === null
         ) {
             $this->triggerOn = 'click';
         }
 
         $this->popOptions = array_merge($this->popOptions, [
-            'popup'    => '#'.$this->name,
-            'on'       => $this->triggerOn,
+            'popup' => '#' . $this->name,
+            'on' => $this->triggerOn,
             'position' => $this->position,
-            'target'   => ($this->target) ? '#'.$this->target->name : false,
+            'target' => ($this->target) ? '#' . $this->target->name : false,
         ]);
     }
 
     /**
      * Set callback for loading content dynamically.
-     * Callback will reveive a view attach to this popup
+     * Callback will receive a view attach to this popup
      * for adding content to it.
      *
-     * @param $fx
-     *
-     * @throws Exception
+     * @param \Closure $fx
      */
-    public function set($fx = null, $arg2 = null)
+    public function set($fx = null, $ignore = null)
     {
-        if (!is_object($fx) && !($fx instanceof Closure)) {
-            throw new Exception('Error: Need to pass a function to Popup::set()');
-        }
-
-        if ($arg2) {
+        if (!($fx instanceof \Closure)) {
+            throw new Exception('Need to pass a function to Popup::set()');
+        } elseif (func_num_args() > 1) {
             throw new Exception('Only one argument is needed by Popup::set()');
         }
 
-        $this->cb = $this->add('Callback');
+        $this->cb = Callback::addTo($this);
 
         if (!$this->minWidth) {
             $this->minWidth = '120px';
@@ -182,20 +176,16 @@ class Popup extends View
             $this->minHeight = '60px';
         }
 
-        if ($this->cb->triggered()) {
-            //create content view to pass to callback.
-            $content = $this->add($this->dynamicContent);
-            $this->cb->set($fx, [$content]);
-            //only render our content view.
-            //PopupService will replace content with this one.
-            $this->app->terminate($content->renderJSON());
-        }
+        // create content view to pass to callback.
+        $content = $this->add($this->dynamicContent);
+        $this->cb->set($fx, [$content]);
+        // only render our content view.
+        // PopupService will replace content with this one.
+        $this->cb->terminateJson($content);
     }
 
     /**
      * Set triggerBy.
-     *
-     * @param $trigger
      *
      * @return $this
      */
@@ -223,11 +213,9 @@ class Popup extends View
     /**
      * Whether popup stay open when user hover on it or not.
      *
-     * @param bool $isOverable
-     *
      * @return $this
      */
-    public function setHoverable($isOverable = true)
+    public function setHoverable(bool $isOverable = true)
     {
         $this->popOptions['hoverable'] = $isOverable;
 
@@ -236,9 +224,6 @@ class Popup extends View
 
     /**
      * Set a popup options as defined in semantic-ui popup module.
-     *
-     * @param $name
-     * @param $option
      *
      * @return $this
      */
@@ -251,8 +236,6 @@ class Popup extends View
 
     /**
      * Setting options using using an array.
-     *
-     * @param $options
      *
      * @return $this
      */
@@ -268,34 +251,34 @@ class Popup extends View
      * When a grid is reloading, this method can be call
      * in order to display the popup once again.
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsPopup()
     {
         $name = $this->triggerBy;
         if (!is_string($this->triggerBy)) {
-            $name = '#'.$this->triggerBy->name;
-            if ($this->triggerBy instanceof FormField\Generic) {
-                $name = '#'.$this->triggerBy->name.'_input';
+            $name = '#' . $this->triggerBy->name;
+            if ($this->triggerBy instanceof Form\Control) {
+                $name = '#' . $this->triggerBy->name . '_input';
             }
         }
-        $chain = new jQuery($name);
+        $chain = new Jquery($name);
         $chain->popup($this->popOptions);
         if ($this->stopClickEvent) {
-            $chain->on('click', new jsExpression('function(e){e.stopPropagation();}'));
+            $chain->on('click', new JsExpression('function(e){e.stopPropagation();}'));
         }
 
         return $chain;
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->triggerBy) {
             $this->js(true, $this->jsPopup());
         }
 
         if ($this->cb) {
-            $this->setAttr('data-uri', $this->cb->getJSURL());
+            $this->setAttr('data-uri', $this->cb->getJsUrl());
             $this->setAttr('data-cache', $this->useCache ? 'true' : 'false');
         }
 
@@ -309,5 +292,10 @@ class Popup extends View
         //$this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
 
         parent::renderView();
+    }
+
+    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    {
+        return $this->cb;
     }
 }

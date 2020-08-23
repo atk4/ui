@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 /**
@@ -15,7 +17,7 @@ class Columns extends View
      *
      * @var int
      */
-    public $width = null;
+    public $width;
 
     /**
      * Sum of all column widths added so far.
@@ -30,7 +32,7 @@ class Columns extends View
      * @var array
      */
     public $sizes = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
-    'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', ];
+        'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', ];
 
     /**
      * Add new vertical column.
@@ -46,14 +48,14 @@ class Columns extends View
         $size = $defaults[0];
         unset($defaults[0]);
 
-        $column = $this->factory(['View'], $defaults, 'atk4\ui');
+        $column = $this->factory([\atk4\ui\View::class], $defaults);
         $this->add($column);
 
         if ($size && isset($this->sizes[$size])) {
-            $column->addClass($this->sizes[$size].' wide');
+            $column->addClass($this->sizes[$size] . ' wide');
             $this->calculated_width = false;
         } elseif ($this->calculated_width !== false) {
-            $this->calculated_width++;
+            ++$this->calculated_width;
         }
         $column->addClass('column');
 
@@ -68,10 +70,10 @@ class Columns extends View
      */
     public function addRow($width = null)
     {
-        return $this->add(new static([$width, 'ui' => false]))->addClass('row');
+        return static::addTo($this, [$width, 'ui' => false])->addClass('row');
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $width = $this->width ?: $this->calculated_width;
         if ($this->content) {
@@ -80,7 +82,7 @@ class Columns extends View
         }
 
         if (isset($this->sizes[$width])) {
-            $this->addClass($this->sizes[$width].' column');
+            $this->addClass($this->sizes[$width] . ' column');
         }
 
         parent::renderView();

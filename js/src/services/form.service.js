@@ -19,8 +19,8 @@ class FormService {
       // A collection of jQuery form object where preventLeave is set.
       this.prevents = [];
       window.onbeforeunload = function (event) {
-        $('form').each(function(){
-          if ($(this).data('__atkCheckDirty') && $(this).data('isDirty')) {
+        atk.formService.prevents.forEach(function(el){
+          if (el.data('__atkCheckDirty') && el.data('isDirty')) {
             let message = "unsaved";
             if (event) {
               event.returnValue = message;
@@ -133,7 +133,7 @@ class FormService {
   getContainer($field, selector){
     const $container = $field.closest(selector);
     if ($container.length > 1) {
-      //radio button.
+      // radio button.
       return this.getContainer($container.parent(), selector);
     } else if ($container.length === 0) {
       return null;
@@ -170,7 +170,7 @@ class FormService {
   }
 
   getAncillaryValue(rule) {
-    //must have a rule.value property and must be a bracketed rule.
+    // must have a rule.value property and must be a bracketed rule.
     if(!rule.value && !this.isBracketedRule(rule)) {
       return false;
     }

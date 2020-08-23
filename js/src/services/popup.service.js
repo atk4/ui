@@ -35,9 +35,9 @@ class PopupService {
     const $popup = this;
     const data = $popup.data();
     if ((data.uri !== '') && (data.uri != undefined)) {
-      //Only load if we are not using data.cache or content has not been loaded yet.
+      // Only load if we are not using data.cache or content has not been loaded yet.
       if (!data.cache || !data.hascontent) {
-        //display default loader while waiting for content.
+        // display default loader while waiting for content.
         $popup.html(popupService.getLoader());
         $popup.api({
           on: 'now',

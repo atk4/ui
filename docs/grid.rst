@@ -17,15 +17,15 @@ Using Grid
 
 Here is a simple usage::
 
-    $app->add('Grid')->setModel(new Country($db));
+    Grid::addTo($app)->setModel(new Country($db));
 
 To make your grid look nicer, you might want to add some buttons and enable quicksearch::
 
-    $grid = $app->add('Grid');
+    $grid = Grid::addTo($app);
     $grid->setModel(new Country($db));
 
     $grid->addQuickSearch();
-    $grid->menu->addItem('Reload Grid', new \atk4\ui\jsReload($grid));
+    $grid->menu->addItem('Reload Grid', new \atk4\ui\JsReload($grid));
 
 Adding Menu Items
 =================
@@ -47,7 +47,7 @@ Fomantic UI limitations that wouldn't allow to format buttons nicely::
 
 If you don't need menu, you can disable menu bar entirely::
 
-    $grid = $app->add(['Grid', 'menu' => false]);
+    $grid = Grid::addTo($app, ['menu' => false]);
 
 Adding Quick Search
 ===================
@@ -79,18 +79,18 @@ Paginator
 Grid comes with a paginator already. You can disable it by setting $paginator property to false. Alternatively you
 can provide seed for the paginator or even entire object::
 
-    $grid = $app->add(['Grid', 'paginator'=>['range'=>2]]);
+    $grid = Grid::addTo($app, ['paginator'=>['range'=>2]]);
 
 You can use $ipp property to specify different number of items per page::
 
     $grid->ipp = 10;
 
-jsPaginator
+JsPaginator
 -----------
 
 .. php:method:: addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
 
-jsPaginator will load table content dynamically when user scroll down the table window on screen.
+JsPaginator will load table content dynamically when user scroll down the table window on screen.
 
     $table->addJsPaginator(30);
 
@@ -108,7 +108,7 @@ Actions
 
 .. php:method:: addAction($button, $action, $confirm = false)
 
-:php:class:`Table` supports use of :php:class:`TableColumn\Actions`, which allows to display button for each row.
+:php:class:`Table` supports use of :php:class:`Table\\Column\\\Actions`, which allows to display button for each row.
 Calling addAction() provides a useful short-cut for creating column-based actions.
 
 $button can be either a string (for a button label) or something like `['icon'=>'book']`.
@@ -117,7 +117,7 @@ If $confirm is set to true, then user will see a confirmation when he clicks on 
 
 Calling this method multiple times will add button into same action column.
 
-See :php:meth:`TableColumn\Actions::addAction`
+See :php:meth:`Table\\Column\\\Actions::addAction`
 
 .. php:method:: addModalAction($button, $title, $callback)
 
@@ -129,12 +129,12 @@ to populate a content::
         // $id of the record which was clicked
         // $grid->model->load($id);
 
-        $p->add('LoremIpsum');
+        LoremIpsum::addTo($p);
     });
 
 Calling this method multiple times will add button into same action column.
 
-See :php:meth:`atk4\\ui\\TableColumn\\Actions::addModal`
+See :php:meth:`atk4\\ui\\Table\\Column\\Actions::addModal`
 
 
 Column Menus
@@ -144,18 +144,18 @@ Column Menus
 
 .. php:method:: addPopup($columnName, $popup = null, $icon = 'caret square down')
 
-Methods addDropdown and addPopup provide a wrapper for :php:meth:`atk4\\ui\\TableColumn\\addDropdown` and
-:php:meth:`atk4\\ui\\TableColumn\\addPopup` methods.
+Methods addDropdown and addPopup provide a wrapper for :php:meth:`atk4\\ui\\Table\\Column::addDropdown` and
+:php:meth:`atk4\\ui\\\Table\\Column::addPopup` methods.
 
 Selection
 =========
 
-Grid can have a checkbox column for you to select elements. It relies on :php:class:`TableColumn\CheckBox`, but will
-additionally place this column before any other column inside a grid. You can use :php:meth:`TableColumn\CheckBox::jsChecked()`
+Grid can have a checkbox column for you to select elements. It relies on :php:class:`Table\\Column\\Checkbox`, but will
+additionally place this column before any other column inside a grid. You can use :php:meth:`Table\\Column\\Checkbox::jsChecked()`
 method to reference value of selected checkboxes inside any :ref:`js_action`::
 
     $sel = $grid->addSelection();
-    $grid->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(
+    $grid->menu->addItem('show selection')->on('click', new \atk4\ui\JsExpression(
         'alert("Selected: "+[])', [$sel->jsChecked()]
     ));
 
@@ -167,8 +167,8 @@ Sorting
 When grid is associated with a model that supports order, it will automatically make itself sortable. You can
 override this behaviour by setting $sortable property to `true` or `false`.
 
-Additionally you may set list of sortable fields to a sortable property if you wish that your grid would be
-sortable only for those columns.
+You can also set $sortable property for each table column decorator. That way you can enable/disable sorting
+of particular columns.
 
 See also :php:attr:`Table::$sortable`.
 

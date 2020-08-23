@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 /**
@@ -31,24 +33,24 @@ class ItemsPerPageSelector extends View
      *
      * @var int
      */
-    public $currentIpp = null;
+    public $currentIpp;
 
     /**
      * The callback function.
      *
-     * @var callable|null
+     * @var Callback|null
      */
-    public $cb = null;
+    public $cb;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
-        $this->add('Icon')->set('dropdown');
+        Icon::addTo($this)->set('dropdown');
         $this->template->tryset('Label', $this->label);
 
-        //Callback later will give us time to properly render menu item before final output.
-        $this->cb = $this->add(new CallbackLater());
+        // Callback later will give us time to properly render menu item before final output.
+        $this->cb = CallbackLater::addTo($this);
 
         if (!$this->currentIpp) {
             $this->currentIpp = $this->pageLengthItems[0];
@@ -59,9 +61,7 @@ class ItemsPerPageSelector extends View
     /**
      * Set label using js action.
      *
-     * @param $ipp
-     *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsSetLabel($ipp)
     {
@@ -72,48 +72,42 @@ class ItemsPerPageSelector extends View
      * Run callback when an item is select via dropdown menu.
      * The callback should return a View to be reload after an item
      * has been select.
-     *
-     * @param null $fx
      */
-    public function onPageLengthSelect($fx = null)
+    public function onPageLengthSelect(\Closure $fx)
     {
-        if (is_callable($fx)) {
-            if ($this->cb->triggered()) {
-                $this->cb->set(function () use ($fx) {
-                    $ipp = $_GET['ipp'] ?? null;
-                    //$this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
-                    $this->set($ipp);
-                    $reload = call_user_func($fx, $ipp);
-                    if ($reload) {
-                        $this->app->terminate($reload->renderJSON());
-                    }
-                });
+        $this->cb->set(function () use ($fx) {
+            $ipp = $_GET['ipp'] ?? null;
+            //$this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
+            $this->set($ipp);
+            $reload = $fx($ipp);
+            if ($reload) {
+                $this->app->terminateJson($reload);
             }
-        }
+        });
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $menuItems = [];
         foreach ($this->pageLengthItems as $key => $item) {
             $menuItems[] = ['name' => $item, 'value' => $item];
         }
-        //set semantic-ui dropdown onChange function.
+        // set semantic-ui dropdown onChange function.
         $function = "function(value, text, item){
                             if (value === undefined || value === '' || value === null) return;
                             $(this)
                             .api({
                                 on:'now',
-                                url:'{$this->cb->getURL()}',
+                                url:'{$this->cb->getUrl()}',
                                 data:{ipp:value}
                                 }
                             );
                      }";
 
         $this->js(true)->dropdown([
-                                      'values'   => $menuItems,
-                                      'onChange' => new jsExpression($function),
-                                  ]);
+            'values' => $menuItems,
+            'onChange' => new JsExpression($function),
+        ]);
         parent::renderView();
     }
 }

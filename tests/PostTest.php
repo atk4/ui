@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\data\Model;
 
-class PostTest extends \atk4\core\PHPUnit_AgileTestCase
+class PostTest extends AtkPhpunit\TestCase
 {
     public $model;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $_POST = ['name' => 'John', 'is_married' => 'Y'];
         $this->model = new Model();
@@ -22,14 +25,14 @@ class PostTest extends \atk4\core\PHPUnit_AgileTestCase
      */
     public function testPost()
     {
-        $p = new \atk4\ui\Persistence\POST();
+        $p = new \atk4\ui\Persistence\Post();
 
-        $this->model['surname'] = 'DefSurname';
+        $this->model->set('surname', 'DefSurname');
 
         $this->model->load(0, $p);
 
-        $this->assertEquals('John', $this->model['name']);
-        $this->assertEquals(true, $this->model['is_married']);
-        $this->assertEquals('DefSurname', $this->model['surname']);
+        $this->assertSame('John', $this->model->get('name'));
+        $this->assertTrue($this->model->get('is_married'));
+        $this->assertSame('DefSurname', $this->model->get('surname'));
     }
 }

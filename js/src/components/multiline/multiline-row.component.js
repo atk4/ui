@@ -14,7 +14,7 @@ export default {
   template: `
     <sui-table-row :verticalAlign="'middle'">
         <sui-table-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDelete" v-model="toDelete"></input></sui-table-cell>
-        <sui-table-cell  v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" :width="getColumnWidth(column)" :style="{overflow: 'visible'}" v-if="column.isVisible" :textAlign="getTextAlign(column)">
+        <sui-table-cell  @keydown.tab="onTab(idx)" v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" :width="getColumnWidth(column)" :style="{overflow: 'visible'}" v-if="column.isVisible" :textAlign="getTextAlign(column)">
          <atk-multiline-cell 
            :componentName="getMapComponent(column)" 
            :cellData="column" 
@@ -49,6 +49,11 @@ export default {
     }
   },
   methods: {
+    onTab: function(idx) {
+      if (idx === this.columns.filter(column => column.isEditable).length) {
+        this.$emit("onTabLastColumn");
+      }
+    },
     getErrorState: function(column){
       //console.log(column);
       if (this.error) {

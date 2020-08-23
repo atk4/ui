@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 /**
@@ -29,20 +31,23 @@ class Loader extends View
      */
     public $loadEvent = true;
 
+    /** @var string defautl css class */
     public $ui = 'ui segment';
 
-    /** @var callable for triggering */
+    /** @var Callback for triggering */
     protected $cb;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
         if (!$this->shim) {
-            $this->shim = ['View', 'class' => ['padded segment'], 'style' => ['min-height' => '7em']];
+            $this->shim = [View::class, 'class' => ['padded segment'], 'style' => ['min-height' => '7em']];
         }
 
-        $this->cb = $this->add('Callback');
+        if (!$this->cb) {
+            $this->cb = Callback::addTo($this);
+        }
     }
 
     /**
@@ -50,7 +55,7 @@ class Loader extends View
      *
      * The loader view is pass as an argument to the loader callback function.
      * This allow to easily update the loader view content within the callback.
-     *  $l1 = $layout->add('Loader');
+     *  $l1 = Loader::addTo($layout);
      *  $l1->set(function ($loader_view) {
      *    do_long_processing_action();
      *    $loader_view->set('new content');
@@ -60,24 +65,23 @@ class Loader extends View
      *  $l1->set([$my_object, 'run_long_process']);
      *
      * NOTE: default values are like that due ot PHP 7.0 warning:
-     * Declaration of atk4\ui\Loader::set($fx, $args = Array) should be compatible with atk4\ui\View::set($arg1 = Array, $arg2 = NULL)
+     * Declaration of \atk4\ui\Loader::set($fx, $args = Array) should be compatible with \atk4\ui\View::set($arg1 = Array, $arg2 = NULL)
      *
-     * @param callable $fx
-     * @param array    $args
-     *
-     * @throws Exception
+     * @param \Closure $fx
      *
      * @return $this
      */
-    public function set($fx = [], $args = null)
+    public function set($fx = [], $ignore = null)
     {
-        if (!is_callable($fx)) {
-            throw new Exception('Error: Need to pass a callable function to Loader::set()');
+        if (!($fx instanceof \Closure)) {
+            throw new Exception('Need to pass a function to Loader::set()');
+        } elseif (func_num_args() > 1) {
+            throw new Exception('Only one argument is needed by Loader::set()');
         }
 
         $this->cb->set(function () use ($fx) {
-            call_user_func($fx, $this);
-            $this->app->terminate($this->renderJSON());
+            $fx($this);
+            $this->cb->terminateJson($this);
         });
 
         return $this;
@@ -87,16 +91,16 @@ class Loader extends View
      * Automatically call the jsLoad on a supplied event unless it was already triggered
      * or if user have invoked jsLoad manually.
      */
-    public function renderView()
+    protected function renderView(): void
     {
-        if (!$this->cb->triggered()) {
+        if (!$this->cb->isTriggered()) {
             if ($this->loadEvent) {
                 $this->js($this->loadEvent, $this->jsLoad());
             }
             $this->add($this->shim);
         }
 
-        return parent::renderView();
+        parent::renderView();
     }
 
     /**
@@ -106,11 +110,18 @@ class Loader extends View
      *
      * @return mixed
      */
-    public function jsLoad($args = [])
+    public function jsLoad($args = [], $apiConfig = [], $storeName = null)
     {
         return $this->js()->atkReloadView([
-            'uri'         => $this->cb->getJSURL(),
+            'uri' => $this->cb->getUrl(),
             'uri_options' => $args,
+            'apiConfig' => !empty($apiConfig) ? $apiConfig : null,
+            'storeName' => $storeName ? $storeName : null,
         ]);
+    }
+
+    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    {
+        return $this->cb;
     }
 }

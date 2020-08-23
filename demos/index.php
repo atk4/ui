@@ -1,13 +1,24 @@
 <?php
 
-include 'init.php';
+declare(strict_types=1);
 
-$app->add('Header')->set('Getting Started with Agile UI Demo Suite');
+namespace atk4\ui\demo;
 
-$t = $app->add(['View', false, 'red',  'ui' => 'segment'])->add('Text');
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/init-app.php';
 
-$t->addParagraph('This is just collection of tests. You are welcome to explore the sources, but you will not find many comments. Use our main documentation if you are new to Agile UI.');
+\atk4\ui\Header::addTo($app)->set('Welcome to Agile Toolkit Demo!!');
 
-$app->add(['Button', 'See the sources', 'right labeled', 'icon' => 'right arrow'])->link('https://github.com/atk4/ui/tree/develop/demos');
-$app->add(['Button', 'Visit AgileToolkit.org Website', 'right labeled', 'icon' => 'right arrow'])->link('http://agiletoolkit.org/');
-$app->add(['Button', 'Open Documentation', 'right labeled', 'icon' => 'right arrow'])->link('http://agile-ui.readthedocs.io/');
+$t = \atk4\ui\Text::addTo(\atk4\ui\View::addTo($app, [false, 'green', 'ui' => 'segment']));
+$t->addParagraph('Take a quick stroll through some of the amazing features of Agile Toolkit.');
+
+\atk4\ui\Button::addTo($app, ['Begin the demo..', 'huge primary fluid', 'iconRight' => 'right arrow'])
+    ->link('tutorial/intro.php');
+
+\atk4\ui\Header::addTo($app)->set('What is new in Agile Toolkit 2.0');
+
+$t = \atk4\ui\Text::addTo(\atk4\ui\View::addTo($app, [false, 'green', 'ui' => 'segment']));
+$t->addParagraph('In this version of Agile Toolkit we introduce "User Actions"!');
+
+\atk4\ui\Button::addTo($app, ['Learn about User Actions', 'huge basic primary fluid', 'iconRight' => 'right arrow'])
+    ->link('tutorial/actions.php');

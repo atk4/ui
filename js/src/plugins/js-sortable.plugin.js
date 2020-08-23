@@ -1,12 +1,12 @@
-import atkPlugin from './atk.plugin';
 import $ from 'jquery';
+import atkPlugin from './atk.plugin';
 import 'draggable';
 
 /**
  * Make elements inside a container draggable and sortable.
  *  Use shopify/Draggable library: https://github.com/Shopify/draggable.
  *  draggable.js is external to this bundle, so it need to be load from cdn.
- *    $app->requireJS('https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.5/lib/draggable.bundle.js');
+ *    $app->requireJs('https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.5/lib/draggable.bundle.js');
  *
  *  After reordering, callback is sent to server with post information:
  *    order => contains the order of data-{label} as a comma delimited string;
@@ -15,22 +15,22 @@ import 'draggable';
  *
  *  Defaut container is set to table boddy (tbody), using table row(tr) as reoderable element.
  *     To use other container, simply set container and draggable accordingly.
- *      $sortable = $lister->add(['jsSortable', 'container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
+ *      $sortable = \atk4\ui\JsSortable::addTo($lister, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
  *
  *  Element containing specific css class can be used as the handle for dragging element, if null
  *  is pass, than the entire element is used.
  *
  *    For a complete example check /demos/jssortable.php
  */
-export default class jsSortable extends atkPlugin {
+export default class JsSortable extends atkPlugin {
 
   main() {
     this.ids = [];
-    //the data label attribute value of the source element being drag. ex: data-id
+    // the data label attribute value of the source element being drag. ex: data-id
     this.sourceId = null;
-    //the new index value of the dragged element after sorting.
+    // the new index value of the dragged element after sorting.
     this.newIdx = null;
-    //the original index value of the dragged element.
+    // the original index value of the dragged element.
     this.orgIdx = null;
 
     this.injectStyles(this.settings.mirrorCss + this.settings.overCss);
@@ -77,7 +77,7 @@ export default class jsSortable extends atkPlugin {
   }
 
   /**
-   * Send orders to server via jsCallback.
+   * Send orders to server via JsCallback.
    */
   sendSortOrders(params) {
     const url = this.buildUrl(params);
@@ -109,7 +109,7 @@ export default class jsSortable extends atkPlugin {
   }
 }
 
-jsSortable.DEFAULTS = {
+JsSortable.DEFAULTS = {
   uri: null,
   uri_options: null,
   container: 'tbody',

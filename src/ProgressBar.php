@@ -1,24 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 /**
  * Class implements ProgressBar.
  *
- * $bar = $app->add([
- *  'ProgressBar',
- *  10,
- *  'label' => 'Processing files',
- *  ]);
+ * $bar = ProgressBar::addTo($app, [10, 'label' => 'Processing files']);
  */
 class ProgressBar extends View
 {
     /**
      * Contains a text label to display under the bar. Null/false will disable the label.
      *
-     * @var string|null|false
+     * @var string|false|null
      */
-    public $label = null;
+    public $label;
 
     public $ui = 'progress';
 
@@ -26,7 +24,7 @@ class ProgressBar extends View
 
     /**
      * Value that appears on a progress bar. Set it through constructor, e.g.
-     * $app->add(['ProgressBar', 20]);.
+     * ProgressBar::addTo($app, [20]);.
      *
      * @var int
      */
@@ -46,17 +44,17 @@ class ProgressBar extends View
         parent::__construct($label, $class);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
-        $this->js(true)->progress(['percent'=>$this->value]);
+        $this->js(true)->progress(['percent' => $this->value]);
 
-        return parent::renderView();
+        parent::renderView();
     }
 
     /**
      * Return js action for incrementing progress by one.
      *
-     * @return jsExpressionable
+     * @return JsExpressionable
      */
     public function jsIncrement()
     {
@@ -68,10 +66,10 @@ class ProgressBar extends View
      *
      * @param int $value new value
      *
-     * @return jsExpressionable
+     * @return JsExpressionable
      */
     public function jsValue($value)
     {
-        return $this->js()->progress(['percent'=>(int) $value]);
+        return $this->js()->progress(['percent' => (int) $value]);
     }
 }

@@ -1,10 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 class Lister extends View
 {
     use \atk4\core\HookTrait;
+
+    /** @const string */
+    public const HOOK_BEFORE_ROW = self::class . '@beforeRow';
+    /** @const string */
+    public const HOOK_AFTER_ROW = self::class . '@afterRow';
 
     /**
      * Lister repeats part of it's template. This property will contain
@@ -13,35 +20,38 @@ class Lister extends View
      *
      * @var Template
      */
-    public $t_row = null;
+    public $t_row;
 
     /**
      * Lister use this part of template in case there are no elements in it.
      *
-     * @var null|Template
+     * @var Template|null
      */
     public $t_empty;
 
-    public $defaultTemplate = null;
+    public $defaultTemplate;
 
     /**
      * A dynamic paginator attach to window scroll event.
      *
-     * @var null|jsPaginator
+     * @var JsPaginator|null
      */
-    public $jsPaginator = null;
+    public $jsPaginator;
 
     /**
-     * The number of item per page for jsPaginator.
+     * The number of item per page for JsPaginator.
      *
-     * @var null|int
+     * @var int|null
      */
-    public $ipp = null;
+    public $ipp;
+
+    /** @var Model */
+    public $current_row;
 
     /**
      * Initialization.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -54,7 +64,7 @@ class Lister extends View
     public function initChunks()
     {
         if (!$this->template) {
-            throw new Exception(['Lister does not have default template. Either supply your own HTML or use "defaultTemplate"=>"lister.html"']);
+            throw new Exception('Lister does not have default template. Either supply your own HTML or use "defaultTemplate"=>"lister.html"');
         }
 
         // empty row template
@@ -79,18 +89,16 @@ class Lister extends View
      * When this happen, content will be reload x number of items.
      *
      * @param int    $ipp          Number of item per page
-     * @param array  $options      An array with js Scroll plugin options.
+     * @param array  $options      an array with js Scroll plugin options
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
-     *
-     * @throws Exception
      *
      * @return $this|void
      */
     public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = null)
     {
         $this->ipp = $ipp;
-        $this->jsPaginator = $this->add(['jsPaginator', 'view' => $container, 'options' => $options]);
+        $this->jsPaginator = JsPaginator::addTo($this, ['view' => $container, 'options' => $options]);
 
         // set initial model limit. can be overwritten by onScroll
         $this->model->setLimit($ipp);
@@ -101,34 +109,34 @@ class Lister extends View
             $this->model->setLimit($ipp, ($p - 1) * $ipp);
 
             // render this View (it will count rendered records !)
-            $json = $this->renderJSON(true, $scrollRegion);
+            $jsonArr = $this->renderToJsonArr(true, $scrollRegion);
 
             // if there will be no more pages, then replace message=Success to let JS know that there are no more records
             if ($this->_rendered_rows_count < $ipp) {
-                $json = json_decode($json, true);
-                $json['message'] = 'Done'; // Done status means - no more requests from JS side
-                $json = json_encode($json);
+                $jsonArr['message'] = 'Done'; // Done status means - no more requests from JS side
             }
 
             // return json response
-            $this->app->terminate($json);
+            $this->app->terminateJson($jsonArr);
         });
 
         return $this;
     }
 
-    /** @var int This will count how many rows are rendered. Needed for jsPaginator for example. */
+    /** @var int This will count how many rows are rendered. Needed for JsPaginator for example. */
     protected $_rendered_rows_count = 0;
 
-    public function renderView()
+    protected function renderView(): void
     {
         if (!$this->template) {
-            throw new Exception(['Lister requires you to specify template explicitly']);
+            throw new Exception('Lister requires you to specify template explicitly');
         }
 
         // if no model is set, don't show anything (even warning)
         if (!$this->model) {
-            return parent::renderView();
+            parent::renderView();
+
+            return;
         }
 
         // Generate template for data row
@@ -136,14 +144,15 @@ class Lister extends View
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
-        foreach ($this->model as $this->current_id => $this->current_row) {
-            if ($this->hook('beforeRow') === false) {
+        foreach ($this->model as $ignore) {
+            $this->current_row = $this->model;
+            if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                 continue;
             }
 
             $this->renderRow();
 
-            $this->_rendered_rows_count++;
+            ++$this->_rendered_rows_count;
         }
 
         // empty message
@@ -151,19 +160,19 @@ class Lister extends View
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
                 $empty = isset($this->t_empty) ? $this->t_empty->render() : '';
                 if ($this->template->hasTag('rows')) {
-                    $this->template->appendHTML('rows', $empty);
+                    $this->template->appendHtml('rows', $empty);
                 } else {
-                    $this->template->appendHTML('_top', $empty);
+                    $this->template->appendHtml('_top', $empty);
                 }
             }
         }
 
-        // stop jsPaginator if there are no more records to fetch
+        // stop JsPaginator if there are no more records to fetch
         if ($this->jsPaginator && ($this->_rendered_rows_count < $this->ipp)) {
             $this->jsPaginator->jsIdle();
         }
 
-        return parent::renderView(); //$this->template->render();
+        parent::renderView();
     }
 
     /**
@@ -175,14 +184,14 @@ class Lister extends View
         $this->t_row->trySet($this->current_row);
 
         $this->t_row->trySet('_title', $this->model->getTitle());
-        $this->t_row->trySet('_href', $this->url(['id'=>$this->current_id]));
-        $this->t_row->trySet('_id', $this->current_id);
+        $this->t_row->trySet('_href', $this->url(['id' => $this->current_row->id]));
+        $this->t_row->trySet('_id', $this->current_row->id);
 
         $html = $this->t_row->render();
         if ($this->template->hasTag('rows')) {
-            $this->template->appendHTML('rows', $html);
+            $this->template->appendHtml('rows', $html);
         } else {
-            $this->template->appendHTML('_top', $html);
+            $this->template->appendHtml('_top', $html);
         }
     }
 }

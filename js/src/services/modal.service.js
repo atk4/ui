@@ -52,7 +52,7 @@ class ModalService {
 
         // check for data type, usually json or html
         if (data && data.type === 'json') {
-            args = $.extend(true, args, {json:true});
+            args = $.extend(true, args, {__atk_json:1});
         }
 
         // does modal content need to be loaded dynamically
@@ -75,7 +75,7 @@ class ModalService {
                             modalService.doAutoFocus($modal);
                         }
                         $modal.modal('refresh');
-                        //content is replace no need to do it in api
+                        // content is replace no need to do it in api
                         response.id = null;
                     }
                 }
@@ -120,7 +120,7 @@ class ModalService {
 
     removeModal(modal) {
         if (modal.data().needRemove) {
-            //This modal was add by createModal and need to be remove.
+            // This modal was add by createModal and need to be remove.
             modal.remove();
         }
         this.modals.pop();
@@ -132,6 +132,7 @@ class ModalService {
         if (this.modals.length > 0 ) {
            modal.css('position', '');
            this.modals[this.modals.length - 1].css('opacity', '');
+           this.modals[this.modals.length - 1].modal('refresh');
         }
 
         if (this.modals.length === 0 ) {

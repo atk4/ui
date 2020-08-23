@@ -20,7 +20,7 @@ Agile UI is a component framework, which follows a software patterns known as
 View object is recursive. You can take one view and add another View inside of it::
 
     $v = new \atk4\ui\View(['ui'=>'segment', 'inverted']);
-    $v->add(new \atk4\ui\Button(['Orange', 'inverted orange']));
+    Button::addTo($v, ['Orange', 'inverted orange']);
 
 The above code will produce the following HTML block:
 
@@ -85,7 +85,7 @@ is executed it will be impossible to determine each view's position inside rende
     // Still not sure if finished adding
 
     $app = new \atk4\ui\App('My App');
-    $app->setLayout($top);
+    $app->initLayout($top);
 
     // Calls init() for all elements recursively.
 
@@ -94,20 +94,20 @@ child elements. To make your execution more straightforward we recommend you to 
 App class first and then continue with Layout initialization::
 
     $app = new \atk4\ui\App('My App');
-    $top = $app->setLayout(new \atk4\ui\View(['ui'=>'segments']));
+    $top = $app->initLayout(new \atk4\ui\View(['ui'=>'segments']));
 
-    $middle = $top->add(new \atk4\ui\View(['ui'=>'segment', 'red']);
+    $middle = View::addTo($top, ['ui'=>'segment', 'red']);
 
-    $bottom = $middle->add(new \atk4\ui\Button(['Hello World', 'orange']);
+    $bottom = Button::addTo($middle, ['Hello World', 'orange']);
 
 Finally, if you prefer a more consise code, you can also use the following format::
 
     $app = new \atk4\ui\App('My App');
-    $top = $app->setLayout('View', ['ui'=>'segments']);
+    $top = $app->initLayout([\atk4\ui\View::class, 'ui'=>'segments']);
 
-    $middle = $top->add('View', ['ui'=>'segment', 'red']);
+    $middle = View::addTo($top, ['ui'=>'segment', 'red']);
 
-    $bottom = $middle->add('Button', ['Hello World', 'orange']);
+    $bottom = Button::addTo($middle, ['Hello World', 'orange']);
 
 The rest of documentaiton will use thi sconsise code to keep things readable, however if
 you value type-hinting of your IDE, you can keep using "new" keyword. I must also
@@ -137,7 +137,7 @@ Agile UI will automatically pass your $app class to all the views.
 Integration with Agile Data
 ===========================
 
-.. php:method:: setModel($m)
+.. php:method:: setModel($model)
 
     Associate current view with a domain model.
 
@@ -197,17 +197,17 @@ wide varietty of roles. In some cases, a dedicated object will exist, for
 example a Button. In other cases, you can use a View and specify a UI role
 explicitly::
 
-    $view = $app->add('View', ['ui'=>'segment']);
+    $view = View::addTo($app, ['ui'=>'segment']);
 
 If you happen to pass more key/values to the constructor or as second argument
 to add() they will be treated as default values for the properties of that
 specific view::
 
-    $view = $app->add('View', ['ui'=>'segment', 'id'=>'test-id']);
+    $view = View::addTo($app, ['ui'=>'segment', 'id'=>'test-id']);
 
 For a more IDE-friendly format, however, I recommend to use the following syntax::
 
-    $view = $app->add('View', ['ui'=>'segment']);
+    $view = View::addTo($app, ['ui'=>'segment']);
     $view->id = 'test-id';
 
 You must be aware of a difference here - passing array to constructor will
@@ -221,7 +221,7 @@ which syntax you are using.
 If you are don't specify key for the properties, they will be considered an
 extra class for a view::
 
-    $view = $app->add('View', ['inverted', 'orange', 'ui'=>'segment']);
+    $view = View::addTo($app, ['inverted', 'orange', 'ui'=>'segment']);
     $view->id = 'test-id';
 
 You can either specify multiple classes one-by-one or as a single string
@@ -262,21 +262,21 @@ by creating instance of \atk4\ui\Icon() inside the button.
 
 The same pattern can be used for other scenarios::
 
-    $button = $app->add('Button', ['icon'=>'book']);
+    $button = Button::addTo($app, ['icon'=>'book']);
 
 This code will have same effect as::
 
-    $button = $app->add('Button');
+    $button = Button::addTo($app);
     $button->icon = 'book';
 
 During the Render of a button, the following code will be executed::
 
-    $button->add('Icon', ['book']);
+    Icon::addTo($button, ['book']);
 
 If you wish to use a different icon-set, you can change Factory's route for 'Icon'
 to your own implementation OR you can pass icon as a view::
 
-    $button = $app->add('Button', ['icon'=>new MyAwesomeIcon('book'));
+    $button = Button::addTo($app, ['icon'=>new MyAwesomeIcon('book')]);
 
 
 Rendering of a Tree
@@ -293,13 +293,13 @@ Any view has the ability to render itself. Once executed, render will perform th
  - returns ``<script>`` with on-dom-ready instructions along with rendering of a current view.
 
 You must not override render() in your objects. If you are integrating Agile UI into your
-framework you shouldn't even use ``render()``, but instead use ``getHTML`` and ``getJS``.
+framework you shouldn't even use ``render()``, but instead use ``getHtml`` and ``getJs``.
 
-.. php:method:: getHTML()
+.. php:method:: getHtml()
 
     Returns HTML for this View as well as all the child views.
 
-.. php:method:: getJS()
+.. php:method:: getJs()
 
     Return array of JS chains that was assigned to current element or it's children.
 
@@ -317,7 +317,8 @@ of this view.
 
 You should override this method when necessary and don't forget to execute parent::renderView()::
 
-    function renderView() {
+    protected function renderView(): void
+    {
         if (str_len($this->info) > 100) {
              $this->addClass('tiny');
         }
@@ -336,20 +337,20 @@ to do something before child render, override method :php:meth:`View::recursiveR
 Template of a current view. This attribute contains an object of a class :php:class:`Template`.
 You may secify this value explicitly::
 
-    $app->add(['template'=>new \atk4\ui\Template('<b>hello</b>')]);
+    View::addTo($app, ['template'=>new \atk4\ui\Template('<b>hello</b>')]);
 
 .. php:attr:: defaultTemplate
 
 By default, if value of :php:attr:`View::$template` is not set, then it is loaded from class
 specified in `defaultTemplate`::
 
-    $app->add(['defaultTemplate'=>'./mytpl.html']);
+    View::addTo($app, ['defaultTemplate'=>'./mytpl.html']);
 
 You should specify defaultTemplate using relative path to your project root or, for add-ons,
 relative to a current file::
 
     // in Add-on
-    $app->add(['defaultTemplate'=>__DIR__.'/../templates/mytpl.httml']);
+    View::addTo($app, ['defaultTemplate'=>__DIR__.'/../templates/mytpl.httml']);
 
 Agile UI does not currently provide advanced search path for templates, by default the
 template is loaded from folder `vendor/atk4/ui/template/semantic-ui/`. To change this
@@ -368,7 +369,8 @@ Here is a best practice for using custom template::
 
         public $title = 'Default Title';
 
-        function renderView() {
+        protected function renderView(): void
+        {
             parent::renderView();
             $this->template['title'] = $this->title;
         }
@@ -378,7 +380,7 @@ Here is a best practice for using custom template::
 As soon as the view becomes part of a render-tree, the Template object will also be allocated.
 At this point it's also possible to override default template::
 
-    $app->add(new MyView(), ['template'=>$template->cloneRegion('MyRegion')]);
+    MyView::addTo($app, ['template'=>$template->cloneRegion('MyRegion')]);
 
 Or you can set $template into object inside your constructor, in which case it will be left as-is.
 
@@ -387,9 +389,9 @@ will automatically clone region of a parent.
 
 ``Lister`` is a class that has no default template, and therefore you can add it like this::
 
-    $profile = $app->add('View', ['template'=>'myview.html']);
+    $profile = View::addTo($app, ['template'=>'myview.html']);
     $profile->setModel($user);
-    $profile->add('Lister', 'Tags')->setModel($user->ref('Tags'));
+    Lister::addTo($profile, [], ['Tags'])->setModel($user->ref('Tags'));
 
 In this set-up a template ``myview.html`` will be populated with fields from ``$user`` model. Next,
 a Lister is added inside Tags region which will use the contents of a given tag as a default
@@ -433,7 +435,7 @@ If role is unspecified then 'view' will be used. The main benefit here is to hav
 allocation of all the IDs througout the render-tree ensuring that those ID's are consistent
 between page requests.
 
-It is also possible to set the "last" bit of the ID postfix. When Form fields are populated,
+It is also possible to set the "last" bit of the ID postfix. When Form controls are populated,
 the name of the field will be used instead of the role. This is done by setting 'name' propoerty.
 
 
@@ -442,33 +444,22 @@ the name of the field will be used instead of the role. This is done by setting 
     Specify a name for the element. If container already has object with specified name, exception
     will be thrown.
 
-.. php:method:: getJSID
-
-    Return a unique ID for a given element based on owner's ID and our name.
-
-Example::
-
-    $layout = new \atk4\ui\Layout(['id'=>'foo'])
-    $butt = $layout->add('Button', ['name'=>'bar']);o
-
-    echo $butt->getJSID();  // foo_bar
-
 
 Reloading a View
 ================
 
-.. php:method:: jsReload($get_arguments)
+.. php:method:: JsReload($get_arguments)
 
-Agile UI makes it easy to reload any View on the page. Starting with v1.4 you can now use View::jsReload(),
+Agile UI makes it easy to reload any View on the page. Starting with v1.4 you can now use View::JsReload(),
 which will respond with JavaScript Action for reloading the view::
 
-    $b1 = $app->add(['Button', 'Click me']);
-    $b2 = $app->add(['Button', 'Rand: '.rand(1,100)]);
+    $b1 = Button::addTo($app, ['Click me']);
+    $b2 = Button::addTo($app, ['Rand: '.rand(1,100)]);
 
     $b1->on('click', $b2->jsReload());
 
     // Previously:
-    // $b1->on('click', new \atk4\ui\jsReload($b2));
+    // $b1->on('click', new \atk4\ui\JsReload($b2));
 
 
 

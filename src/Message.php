@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 /**
@@ -7,8 +9,7 @@ namespace atk4\ui;
  *
  * Specify type = info | warning | error | success
  *
- * $page->add([
- *  'Message',
+ * Message::addTo($page, [
  *  'type' => 'error',
  *  'text' => 'Unable to save your document',
  *  ])
@@ -21,40 +22,40 @@ class Message extends View
      *
      * @var string
      */
-    public $type = null;
+    public $type;
 
     /**
      * Contains a text to be included below.
      *
      * @var Text|false
      */
-    public $text = null;
+    public $text;
 
     /**
      * Specify icon to be displayed.
      *
      * @var string
      */
-    public $icon = null;
+    public $icon;
 
     public $ui = 'message';
 
     public $defaultTemplate = 'message.html';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
         if ($this->text !== false) {
             if ($this->text) {
-                $this->text = $this->add(new Text($this->text));
+                $this->text = Text::addTo($this, [$this->text]);
             } else {
-                $this->text = $this->add(new Text());
+                $this->text = Text::addTo($this);
             }
         }
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->type) {
             $this->addClass($this->type);
@@ -73,6 +74,6 @@ class Message extends View
             $this->content = null;
         }
 
-        return parent::renderView();
+        parent::renderView();
     }
 }

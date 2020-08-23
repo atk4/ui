@@ -1,33 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\FormLayout;
 
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Class atk4\ui\FormLayout\Custom is deprecated. Use atk4\ui\Form\Layout\Custom instead', E_USER_DEPRECATED);
+}
+
 /**
- * Custom Layout for a form (user-defined HTML).
+ * @deprecated will be removed dec-2020
  */
-class Custom extends _Abstract
+class Custom extends \atk4\ui\Form\Layout\Custom
 {
-    // @var inheritdoc
-    public $defaultTemplate = null;
-
-    public function init()
-    {
-        parent::init();
-
-        if (!$this->template) {
-            throw new \atk4\ui\Exception(['You must specify template for FormLayout/Custom. Try [\'Custom\', \'defaultTemplate\'=>\'./yourform.html\']']);
-        }
-    }
-
-    /**
-     * Adds Button into {$Buttons}.
-     *
-     * @param Button|array|string $seed
-     *
-     * @return \atk4\ui\Button
-     */
-    public function addButton($seed)
-    {
-        return $this->add($this->mergeSeeds(['Button'], $seed), 'Buttons');
-    }
 }

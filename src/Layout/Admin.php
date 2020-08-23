@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\Layout;
 
-use atk4\ui\jQuery;
+use atk4\ui\Header;
+use atk4\ui\Icon;
+use atk4\ui\Item;
+use atk4\ui\Jquery;
 use atk4\ui\Menu;
-use atk4\ui\Template;
 
 /**
  * Implements a classic 100% width admin layout.
@@ -28,75 +32,85 @@ use atk4\ui\Template;
  *
  *  - Content
  */
-class Admin extends Generic
+class Admin extends \atk4\ui\Layout implements NavigableInterface
 {
-    public $menuLeft = null;    // vertical menu
-    public $menu = null;        // horizontal menu
-    public $menuRight = null;   // vertical pull-down
+    public $menuLeft;    // vertical menu
+    public $menu;        // horizontal menu
+    public $menuRight;   // vertical pull-down
 
     public $burger = true;      // burger menu item
 
-    /*
-     * Whether or not left Menu is visible on Page load.
-     */
+    /** @var bool Whether or not left Menu is visible on Page load. */
     public $isMenuLeftVisible = true;
-
-    /**
-     * Obsolete, use menuLeft.
-     *
-     * @obsolete
-     */
-    public $leftMenu = null;
 
     public $defaultTemplate = 'layout/admin.html';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
         if ($this->menu === null) {
-            $this->menu = $this->add(['Menu', 'atk-topMenu inverted fixed horizontal', 'element' => 'header'], 'TopMenu');
-            $this->burger = $this->menu->addItem(['class' => ['icon atk-leftMenuTrigger']]);
+            $this->menu = Menu::addTo(
+                $this,
+                ['inverted fixed horizontal atk-admin-top-menu', 'element' => 'header'],
+                ['TopMenu']
+            );
+            $this->burger = $this->menu->addItem(['class' => ['icon']]);
             $this->burger->on('click', [
-                (new jQuery('.ui.left.sidebar'))->toggleClass('visible'),
-                (new jQuery('body'))->toggleClass('atk-leftMenu-visible'),
+                (new Jquery('.atk-sidenav'))->toggleClass('visible'),
+                (new Jquery('body'))->toggleClass('atk-sidenav-visible'),
             ]);
-            $this->burger->add(['Icon', 'content']);
+            Icon::addTo($this->burger, ['content']);
+
+            Header::addTo($this->menu, [$this->app->title, 'size' => 4]);
         }
 
         if ($this->menuRight === null) {
-            $this->menuRight = $this->menu->add(new Menu(['ui' => false]), 'RightMenu')
+            $this->menuRight = Menu::addTo($this->menu, ['ui' => false], ['RightMenu'])
                 ->addClass('right menu')->removeClass('item');
         }
 
         if ($this->menuLeft === null) {
-            $this->menuLeft = $this->add(new Menu('left vertical inverted labeled sidebar'), 'LeftMenu');
-            $this->leftMenu = $this->menuLeft;
-
-            $closeIcon = $this->menuLeft->add(['View', 'template' => new Template('<a id="{$_id}" href="#" onclick="return false;" class="{$class} item atk-leftMenuClose"><i class="close icon"></i></a>')]);
-            $closeIcon->on('click', (new jQuery('body'))->removeClass('atk-leftMenu-visible'));
-
-            $this->menuLeft->addHeader($this->app->title);
+            $this->menuLeft = Menu::addTo($this, ['ui' => 'atk-sidenav-content'], ['LeftMenu']);
         }
 
         $this->template->trySet('version', $this->app->version);
     }
 
     /**
-     * {@inheritdoc}
+     * Add a group to left menu.
+     *
+     * @param $seed
      */
-    public function renderView()
+    public function addMenuGroup($seed): Menu
+    {
+        return $this->menuLeft->addGroup($seed);
+    }
+
+    /**
+     * Add items to left menu.
+     */
+    public function addMenuItem($name, $action = null, $group = null): Item
+    {
+        if ($group) {
+            return $group->addItem($name, $action);
+        }
+
+        return $this->menuLeft->addItem($name, $action);
+    }
+
+    protected function renderView(): void
     {
         if ($this->menuLeft) {
-            if (count($this->menuLeft->elements) == 1) {
+            if (count($this->menuLeft->elements) === 0) {
                 // no items were added, so lets add dashboard
-                $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], 'index');
+                $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], ['index']);
             }
-            if ($this->isMenuLeftVisible) {
-                $this->menuLeft->addClass('visible');
+            if (!$this->isMenuLeftVisible) {
+                $this->template->tryDel('CssVisibility');
             }
-            //$this->leftMenu->addItem(['Logout', 'icon'=>'sign out'], ['logout']);
         }
+
         parent::renderView();
     }
 }

@@ -1,31 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\TableColumn;
 
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Class atk4\ui\TableColumn\Labels is deprecated. Use atk4\ui\Table\Column\Labels instead', E_USER_DEPRECATED);
+}
+
 /**
- * Class Labels.
- *
- * take the fieldValue separated by commas and transforms into SemanticUI labels
- *
- * from => label1,label2 | to => div.ui.label[label1] div.ui.label[label2]
+ * @deprecated will be removed dec-2020
  */
-class Labels extends Generic
+class Labels extends \atk4\ui\Table\Column\Labels
 {
-    public function getHTMLTags($row, $field)
-    {
-        $values = explode(',', $field->get());
-
-        $processed = [];
-        foreach ($values as $value) {
-            $value = trim($value);
-
-            if (!empty($value)) {
-                $processed[] = $this->app->getTag('div', ['class' => 'ui label'], $value);
-            }
-        }
-
-        $processed = implode('', $processed);
-
-        return [$field->short_name => $processed];
-    }
 }

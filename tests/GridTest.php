@@ -1,21 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\tests;
 
 use atk4\ui\Table;
-use atk4\ui\TableColumn\Template;
 
-class GridTest extends \atk4\core\PHPUnit_AgileTestCase
+class GridTest extends \atk4\core\AtkPhpunit\TestCase
 {
+    use Concerns\HandlesTable;
+
     public $m;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $a = [];
-        $a[1] = ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'];
-        $a[2] = ['id' => 2, 'email' => 'test@yahoo.com', 'password' => 'secret'];
-
-        $this->m = new MyModel(new \atk4\data\Persistence_Array($a));
+        $a = [
+            1 => ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'],
+            2 => ['id' => 2, 'email' => 'test@yahoo.com', 'password' => 'secret'],
+        ];
+        $this->m = new MyModel(new \atk4\data\Persistence\Array_($a));
     }
 
     public function test1()
@@ -25,12 +28,12 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
         $t->setModel($this->m, false);
 
         $t->addColumn('email');
-        $t->addColumn(null, new Template('password={$password}'));
+        $t->addColumn(null, new Table\Column\Template('password={$password}'));
 
-        $this->assertEquals('<td>{$email}</td><td>password={$password}</td>', $t->getDataRowHTML());
-        $this->assertEquals(
+        $this->assertSame('<td>{$email}</td><td>password={$password}</td>', $t->getDataRowHtml());
+        $this->assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>password=abc123</td></tr>',
-            $this->extract($t)
+            $this->extractTableRow($t)
         );
     }
 
@@ -43,10 +46,10 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
         $t->addColumn('email');
         $t->addColumn('password');
 
-        $this->assertEquals('<td>{$email}</td><td>***</td>', $t->getDataRowHTML());
-        $this->assertEquals(
+        $this->assertSame('<td>{$email}</td><td>***</td>', $t->getDataRowHtml());
+        $this->assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>***</td></tr>',
-            $this->extract($t)
+            $this->extractTableRow($t)
         );
     }
 
@@ -55,12 +58,12 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
         $t = new Table();
         $t->init();
         $t->setModel($this->m, ['email']);
-        $t->addColumn(null, 'Delete');
+        $del = $t->addColumn(null, [Table\Column\Delete::class]);
 
-        $this->assertEquals('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="delete"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHTML());
-        $this->assertEquals(
-            '<tr data-id="1"><td>test@test.com</td><td><a href="#" title="Delete test@test.com?" class="delete"><i class="ui red trash icon"></i>Delete</a></td></tr>',
-            $this->extract($t)
+        $this->assertSame('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="' . $del->short_name . '"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHtml());
+        $this->assertSame(
+            '<tr data-id="1"><td>test@test.com</td><td><a href="#" title="Delete test@test.com?" class="' . $del->short_name . '"><i class="ui red trash icon"></i>Delete</a></td></tr>',
+            $this->extractTableRow($t)
         );
     }
 
@@ -71,20 +74,11 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
         $t->setModel($this->m, ['email']);
         $t->addColumn('xtra', null, ['type' => 'password']);
 
-        $this->assertEquals('<td>{$email}</td><td>***</td>', $t->getDataRowHTML());
-        $this->assertEquals(
+        $this->assertSame('<td>{$email}</td><td>***</td>', $t->getDataRowHtml());
+        $this->assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>***</td></tr>',
-            $this->extract($t)
+            $this->extractTableRow($t)
         );
-    }
-
-    public function extract($t)
-    {
-        // extract only <tr> out
-        $val = $t->render();
-        preg_match('/<.*data-id="1".*/m', $val, $matches);
-
-        return $matches[0];
     }
 }
 
@@ -92,7 +86,7 @@ class MyModel extends \atk4\data\Model
 {
     public $title_field = 'email';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

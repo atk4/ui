@@ -1,6 +1,6 @@
 <?php
 
-// vim:ts=4:sw=4:et:fdm=marker:fdl=0
+declare(strict_types=1);
 
 namespace atk4\ui;
 
@@ -10,7 +10,10 @@ namespace atk4\ui;
 class Tab extends Item
 {
     /** @var string */
-    public $path = null;
+    public $path;
+
+    /** @var array Tab settings */
+    public $settings = [];
 
     /**
      * Sets path for tab.
@@ -21,10 +24,7 @@ class Tab extends Item
      */
     public function setPath($path)
     {
-        if (!is_string($path)) {
-            $path = $this->app->url($path);
-        }
-        $this->path = $path.'#';
+        $this->path = $this->app->url($path) . '#';
 
         return $this;
     }
@@ -32,17 +32,23 @@ class Tab extends Item
     /**
      * Rendering one tab view.
      */
-    public function renderView()
+    protected function renderView(): void
     {
+        // Must setting for Fomantic-Ui tab since 2.8.5
+        $this->settings = array_merge($this->settings, ['autoTabActivation' => false]);
+
         if ($this->path) {
-            $this->js(true)->tab(
-                ['cache' => false, 'auto' => true, 'path' => $this->path, 'apiSettings' => ['data' => ['__atk_tab' => 1]]]
-            );
-        } else {
-            $this->js(true)->tab();
+            $this->settings = array_merge_recursive($this->settings, [
+                'cache' => false,
+                'auto' => true,
+                'path' => $this->path,
+                'apiSettings' => ['data' => ['__atk_tab' => 1]],
+            ]);
         }
 
-        if ($this->owner->activeTabName == $this->name) {
+        $this->js(true)->tab($this->settings);
+
+        if ($this->owner->activeTabName === $this->name) {
             $this->js(true)->click();
         }
 

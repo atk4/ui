@@ -1,59 +1,64 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 use atk4\core\AppScopeTrait;
-use atk4\core\DIContainerTrait;
+use atk4\core\DiContainerTrait;
 use atk4\core\DynamicMethodTrait;
 use atk4\core\FactoryTrait;
 use atk4\core\HookTrait;
 use atk4\core\InitializerTrait;
 use atk4\data\Persistence;
 use atk4\ui\Exception\ExitApplicationException;
-use atk4\ui\Layout\Centered;
-use atk4\ui\Layout\Generic;
-use atk4\ui\Persistence\UI;
-use Closure;
-use Error;
-use ErrorException;
+use atk4\ui\Persistence\Ui as UiPersistence;
 use Psr\Log\LoggerInterface;
-use Throwable;
 
 class App
 {
     use InitializerTrait {
         init as _init;
     }
-
     use HookTrait;
     use DynamicMethodTrait;
     use FactoryTrait;
     use AppScopeTrait;
-    use DIContainerTrait;
+    use DiContainerTrait;
 
-    // @var array|false Location where to load JS/CSS files
+    /** @const string */
+    public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
+    /** @const string */
+    public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
+    /** @const string not used, make it public if needed or drop it */
+    private const HOOK_BEFORE_OUTPUT = self::class . '@beforeOutput';
+
+    /** @const string */
+    protected const HEADER_STATUS_CODE = 'atk4-status-code';
+
+    /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
-        'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@1.7.1/public',
-        'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
+        'atk' => 'https://ui.agiletoolkit.org/public', // develop branch
+        'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui'      => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.2/dist',
+        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.6',
     ];
 
-    // @var string Version of Agile UI
-    public $version = '2.0.0';
+    /** @var string Version of Agile UI */
+    public $version = '2.2.0';
 
-    // @var string Name of application
+    /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
 
-    /** @var Generic */
-    public $layout = null; // the top-most view object
+    /** @var Layout */
+    public $layout; // the top-most view object
 
     /**
      * Set one or more directories where templates should reside.
      *
      * @var string|array
      */
-    public $template_dir = null;
+    public $template_dir;
 
     /** @var string Name of skin */
     public $skin = 'semantic-ui';
@@ -93,28 +98,30 @@ class App
      *
      * @var bool
      */
-    public $exit_called = false;
-
-    /** @var bool */
-    public $_cwd_restore = true;
+    private $exit_called = false;
 
     /** @var bool */
     public $is_rendering = false;
 
-    /** @var UI */
-    public $ui_persistence = null;
+    /** @var UiPersistence */
+    public $ui_persistence;
 
     /** @var View For internal use */
-    public $html = null;
+    public $html;
 
-    /** @var LoggerInterface, target for objects with DebugTrait */
-    public $logger = null;
+    /** @var LoggerInterface Target for objects with DebugTrait */
+    public $logger;
 
     /** @var Persistence */
-    public $db = null;
+    public $db;
+
+    /** @var string[] Extra HTTP headers to send on exit. */
+    protected $response_headers = [
+        'cache-control' => 'no-store', // disable caching by default
+    ];
 
     /**
-     * @var bool Whether or not semantic-ui vue has been initialised.
+     * @var bool whether or not semantic-ui vue has been initialised
      */
     private $is_sui_init = false;
 
@@ -138,7 +145,7 @@ class App
      *
      * @var int
      */
-    protected $catch_error_types = E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED;
+    protected $catch_error_types = E_ALL & ~E_NOTICE;
 
     /**
      * Constructor.
@@ -161,16 +168,17 @@ class App
 
         /*
         if (is_array($defaults)) {
-            throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
+            throw (new Exception('Constructor requires array argument'))
+                ->addMoreInfo('arg', $defaults);
         }*/
         $this->setDefaults($defaults);
         /*
 
         foreach ($defaults as $key => $val) {
             if (is_array($val)) {
-                $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
-            } elseif (!is_null($val)) {
-                $this->$key = $val;
+                $this->{$key} = array_merge(is_array($this->{$key} ?? null) ? $this->{$key} : [], $val);
+            } elseif ($val !== null) {
+                $this->{$key} = $val;
             }
         }
          */
@@ -182,14 +190,14 @@ class App
             $this->template_dir = [$this->template_dir];
         }
 
-        $this->template_dir[] = __DIR__.'/../template/'.$this->skin;
+        $this->template_dir[] = __DIR__ . '/../template/' . $this->skin;
 
         // Set our exception handler
         if ($this->catch_exceptions) {
-            set_exception_handler(Closure::fromCallable([$this, 'caughtException']));
+            set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
             set_error_handler(
-                function ($err_severity, $err_msg, $err_file, $err_line, array $err_context) {
-                    throw new ErrorException($err_msg, 0, $err_severity, $err_file, $err_line);
+                static function ($severity, $msg, $file, $line) {
+                    throw new \ErrorException($msg, 0, $severity, $file, $line);
                 },
                 $this->catch_error_types
             );
@@ -202,21 +210,18 @@ class App
 
         // Set up UI persistence
         if (!isset($this->ui_persistence)) {
-            $this->ui_persistence = new UI();
+            $this->ui_persistence = new UiPersistence();
         }
     }
 
     /**
-     * @param bool $for_shutdown if true will not pass in caughtException method.
-     *
-     * @throws ExitApplicationException
-     * @throws \atk4\core\Exception
+     * @param bool $for_shutdown if true will not pass in caughtException method
      */
-    public function callExit($for_shutdown = false)
+    public function callExit($for_shutdown = false): void
     {
         if (!$this->exit_called) {
             $this->exit_called = true;
-            $this->hook('beforeExit');
+            $this->hook(self::HOOK_BEFORE_EXIT);
         }
 
         if ($for_shutdown) {
@@ -228,9 +233,7 @@ class App
             // App as already done everything
             // App need to stop output
             // set_handler to catch/trap any exception
-            set_exception_handler(function (Throwable $t) {
-                return true;
-            });
+            set_exception_handler(function (\Throwable $t) {});
             // raise exception to be trapped and stop execution
             throw new ExitApplicationException();
         }
@@ -240,132 +243,181 @@ class App
 
     /**
      * Catch exception.
-     *
-     * @param Throwable $exception
-     *
-     * @throws \atk4\core\Exception
-     * @throws ExitApplicationException
-     *
-     * @return bool
      */
-    protected function caughtException(Throwable $exception)
+    public function caughtException(\Throwable $exception): void
     {
         $this->catch_runaway_callbacks = false;
 
         // just replace layout to avoid any extended App->_construct problems
         // it will maintain everything as in the original app StickyGet, logger, Events
         $this->html = null;
-        $this->initLayout(Centered::class);
-        // change title to added an error
-        //$this->layout->add('Header', 'Header')->set('L'.$exception->getLine().': '.$exception->getMessage());
+        $this->initLayout([Layout\Centered::class]);
 
-        // -- CHECK ERROR BY TYPE
-        switch (true) {
-
-            case $exception instanceof \atk4\core\Exception:
-                $this->layout->template->setHTML('Content', $exception->getHTML());
-                break;
-
-            case $exception instanceof Error:
-                $this->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
-                $this->layout->add(['Text', nl2br($exception->getTraceAsString())]);
-                break;
-
-            default:
-                $this->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
-                break;
-        }
+        $this->layout->template->setHtml('Content', $this->renderExceptionHtml($exception));
 
         // remove header
         $this->layout->template->tryDel('Header');
 
-        if ($this->isJsonRequest()) {
-            $this->outputResponseJSON([
-                'success'   => false,
-                'message'   => $this->layout->getHtml(),
+        if (($this->isJsUrlRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
+                && !isset($_GET['__atk_tab'])) {
+            $this->outputResponseJson([
+                'success' => false,
+                'message' => $this->layout->getHtml(),
             ]);
         } else {
+            $this->setResponseStatusCode(500);
             $this->run();
         }
 
         // Process is already in shutdown/stop
         // no need of call exit function
         $this->callExit(true);
-
-        return true;
     }
 
     /**
-     * Most of the ajax request will require sending exception in json
-     * instead of html, except for tab.
+     * Normalize HTTP headers to associative array with LC keys.
      *
-     * @return bool
+     * @param string[] $headers
+     *
+     * @return string[]
      */
-    protected function isJsonRequest()
+    protected function normalizeHeaders(array $headers): array
     {
-        if (isset($_GET['__atk_tab'])) {
-            return false;
+        $res = [];
+        foreach ($headers as $k => $v) {
+            if (is_numeric($k) && ($p = strpos($v, ':')) !== false) {
+                $k = substr($v, 0, $p);
+                $v = substr($v, $p + 1);
+            }
+
+            $res[strtolower(trim($k))] = trim($v);
         }
 
-        if (isset($_GET['json'])) {
-            return true;
-        }
-
-        $ajax = false;
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
-           && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-            $ajax = true;
-        }
-
-        return $ajax;
+        return $res;
     }
 
     /**
-     * Outputs debug info.
-     *
-     * @param string $str
+     * @return $this
      */
-    public function outputDebug($str)
+    public function setResponseStatusCode(int $statusCode): self
     {
-        echo 'DEBUG:'.$str.'<br/>';
+        $this->setResponseHeader(self::HEADER_STATUS_CODE, (string) $statusCode);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setResponseHeader(string $name, string $value): self
+    {
+        $arr = $this->normalizeHeaders([$name => $value]);
+        $value = reset($arr);
+        $name = key($arr);
+
+        if ($value !== '') {
+            $this->response_headers[$name] = $value;
+        } else {
+            unset($this->response_headers[$name]);
+        }
+
+        return $this;
     }
 
     /**
      * Will perform a preemptive output and terminate. Do not use this
-     * directly, instead call it form Callback, jsCallback or similar
+     * directly, instead call it form Callback, JsCallback or similar
      * other classes.
      *
-     * @param string $output
-     *
-     * @throws \atk4\core\Exception
-     * @throws ExitApplicationException
+     * @param string|array $output  Array type is supported only for JSON response
+     * @param string[]     $headers content-type header must be always set or consider using App::terminateHtml() or App::terminateJson() methods
      */
-    public function terminate($output = null)
+    public function terminate($output = '', array $headers = []): void
     {
-        if ($output !== null) {
-            if ($this->isJsonRequest()) {
-                $this->outputResponseJSON($output);
-            } else {
-                $this->outputResponseHTML($output);
+        $headers = $this->normalizeHeaders($headers);
+        if (empty($headers['content-type'])) {
+            $this->response_headers = $this->normalizeHeaders($this->response_headers);
+            if (empty($this->response_headers['content-type'])) {
+                throw new Exception('Content type must be always set');
             }
+
+            $headers['content-type'] = $this->response_headers['content-type'];
+        }
+
+        $type = preg_replace('~;.*~', '', strtolower($headers['content-type'])); // in LC without charset
+
+        if ($type === 'application/json') {
+            if (is_string($output)) {
+                $output = $this->decodeJson($output);
+            }
+            $output['modals'] = $this->getRenderedModals();
+
+            $this->outputResponseJson($output, $headers);
+        } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
+            // ugly hack for TABS
+            // because fomantic ui tab only deal with html and not JSON
+            // we need to hack output to include app modal.
+            $keys = null;
+            $remove_function = '';
+            foreach ($this->getRenderedModals() as $key => $modal) {
+                // add modal rendering to output
+                $keys[] = '#' . $key;
+                $output['atkjs'] = $output['atkjs'] . ';' . $modal['js'];
+                $output['html'] = $output['html'] . $modal['html'];
+            }
+            if ($keys) {
+                $ids = implode(',', $keys);
+                $remove_function = '$(\'.ui.dimmer.modals.page\').find(\'' . $ids . '\').remove();';
+            }
+            $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
+
+            $this->outputResponseHtml($output, $headers);
+        } elseif ($type === 'text/html') {
+            $this->outputResponseHtml($output, $headers);
+        } else {
+            $this->outputResponse($output, $headers);
         }
 
         $this->run_called = true; // prevent shutdown function from triggering.
         $this->callExit();
     }
 
+    public function terminateHtml($output, array $headers = []): void
+    {
+        if ($output instanceof View) {
+            $output = $output->render();
+        } elseif ($output instanceof Template) {
+            $output = $output->render();
+        }
+
+        $this->terminate(
+            $output,
+            array_merge($this->normalizeHeaders($headers), ['content-type' => 'text/html'])
+        );
+    }
+
+    public function terminateJson($output, array $headers = []): void
+    {
+        if ($output instanceof View) {
+            $output = $output->renderToJsonArr();
+        }
+
+        $this->terminate(
+            $output,
+            array_merge($this->normalizeHeaders($headers), ['content-type' => 'application/json'])
+        );
+    }
+
     /**
      * Initializes layout.
      *
-     * @param string|Layout\Generic|array $seed
-     *
-     * @throws \atk4\core\Exception
+     * @param string|Layout|array $seed
      *
      * @return $this
      */
     public function initLayout($seed)
     {
-        $layout = $this->factory($seed, null, 'atk4\ui\Layout');
+        $layout = $this->factory($seed);
         $layout->app = $this;
 
         if (!$this->html) {
@@ -387,22 +439,18 @@ class App
     public function initIncludes()
     {
         // jQuery
-        $url = isset($this->cdn['jquery']) ? $this->cdn['jquery'] : '../public';
-        $this->requireJS($url.'/jquery.min.js');
+        $this->requireJs($this->cdn['jquery'] . '/jquery.min.js');
 
         // Semantic UI
-        $url = isset($this->cdn['semantic-ui']) ? $this->cdn['semantic-ui'] : '../public';
-        $this->requireJS($url.'/semantic.min.js');
-        $this->requireCSS($url.'/semantic.min.css');
+        $this->requireJs($this->cdn['semantic-ui'] . '/semantic.min.js');
+        $this->requireCss($this->cdn['semantic-ui'] . '/semantic.min.css');
 
         // Serialize Object
-        $url = isset($this->cdn['serialize-object']) ? $this->cdn['serialize-object'] : '../public';
-        $this->requireJS($url.'/jquery.serialize-object.min.js');
+        $this->requireJs($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
 
         // Agile UI
-        $url = isset($this->cdn['atk']) ? $this->cdn['atk'] : '../public';
-        $this->requireJS($url.'/atkjs-ui.min.js');
-        $this->requireCSS($url.'/agileui.css');
+        $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
+        $this->requireCss($this->cdn['atk'] . '/agileui.css');
     }
 
     /**
@@ -410,45 +458,26 @@ class App
      * and use file include instead.
      *
      * @param string $style CSS rules, like ".foo { background: red }".
-     *
-     * @throws Exception
      */
     public function addStyle($style)
     {
         if (!$this->html) {
-            throw new Exception(['App does not know how to add style']);
+            throw new Exception('App does not know how to add style');
         }
-        $this->html->template->appendHTML('HEAD', $this->getTag('style', $style));
-    }
-
-    /**
-     * Normalizes class name.
-     *
-     * @param string $name
-     *
-     * @return string|null
-     */
-    public function normalizeClassNameApp($name, $prefix = '') : ?string
-    {
-        //return '\\'.__NAMESPACE__.'\\'.$name;
-        return null;
+        $this->html->template->appendHtml('HEAD', $this->getTag('style', $style));
     }
 
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
-     * @param mixed  $seed   New object to add
-     * @param string $region
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
-     *
-     * @return object
+     * @param View|string|array $seed   New object to add
+     * @param string|array|null $region
      */
-    public function add($seed, $region = null)
+    public function add($seed, $region = null): AbstractView
     {
         if (!$this->layout) {
-            throw new Exception(['If you use $app->add() you should first call $app->setLayout()']);
+            throw (new Exception('App layout is missing'))
+                ->addSolution('If you use $app->add() you should first call $app->initLayout()');
         }
 
         return $this->layout->add($seed, $region);
@@ -456,49 +485,46 @@ class App
 
     /**
      * Runs app and echo rendered template.
-     *
-     * @throws \atk4\core\Exception
-     * @throws ExitApplicationException
      */
     public function run()
     {
-        $is_exit_exception = false;
+        $isExitException = false;
 
         try {
-            ob_start();
             $this->run_called = true;
-            $this->hook('beforeRender');
+            $this->hook(self::HOOK_BEFORE_RENDER);
             $this->is_rendering = true;
 
             // if no App layout set
             if (!isset($this->html)) {
-                throw new Exception(['App layout should be set.']);
+                throw new Exception('App layout should be set.');
             }
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->appendHTML('HEAD', $this->html->getJS());
+            $this->html->template->appendHtml('HEAD', $this->html->getJs());
             $this->is_rendering = false;
-            $this->hook('beforeOutput');
+            $this->hook(self::HOOK_BEFORE_OUTPUT);
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
-                $this->terminate(
-                    '!! Callback requested, but never reached. You may be missing some arguments in '.$_SERVER['REQUEST_URI']
-                );
+                throw new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.');
             }
-            echo $this->html->template->render();
+
+            $output = $this->html->template->render();
         } catch (ExitApplicationException $e) {
-            $is_exit_exception = true;
+            $output = '';
+            $isExitException = true;
         }
 
-        $output = ob_get_clean();
-        if ($this->isJsonRequest()) {
-            $this->outputResponseJSON($output);
-        } else {
-            $this->outputResponseHTML($output);
+        if (!$this->exit_called) { // output already send by terminate()
+            if ($this->isJsUrlRequest()) {
+                $this->outputResponseJson($output);
+            } else {
+                $this->outputResponseHtml($output);
+            }
         }
 
-        if ($is_exit_exception) {
+        if ($isExitException) {
             $this->callExit();
         }
     }
@@ -506,7 +532,7 @@ class App
     /**
      * Initialize app.
      */
-    public function init()
+    public function init(): void
     {
         $this->_init();
     }
@@ -516,8 +542,6 @@ class App
      *
      * @param string $name
      *
-     * @throws Exception
-     *
      * @return Template
      */
     public function loadTemplate($name)
@@ -525,42 +549,23 @@ class App
         $template = new Template();
         $template->app = $this;
 
-        if (in_array($name[0], ['.', '/', '\\']) || strpos($name, ':\\') !== false) {
+        if (in_array($name[0], ['.', '/', '\\'], true) || strpos($name, ':\\') !== false) {
             return $template->load($name);
-        } else {
-            $dir = is_array($this->template_dir) ? $this->template_dir : [$this->template_dir];
-            foreach ($dir as $td) {
-                if ($t = $template->tryLoad($td.'/'.$name)) {
-                    return $t;
-                }
+        }
+
+        $dir = is_array($this->template_dir) ? $this->template_dir : [$this->template_dir];
+        foreach ($dir as $td) {
+            if ($t = $template->tryLoad($td . '/' . $name)) {
+                return $t;
             }
         }
 
-        throw new Exception(['Can not find template file', 'name'=>$name, 'template_dir'=>$this->template_dir]);
+        throw (new Exception('Can not find template file'))
+            ->addMoreInfo('name', $name)
+            ->addMoreInfo('template_dir', $this->template_dir);
     }
 
-    /**
-     * Connects database.
-     *
-     * @param string $dsn      Format as PDO DSN or use "mysql://user:pass@host/db;option=blah", leaving user and password arguments = null
-     * @param string $user
-     * @param string $password
-     * @param array  $args
-     *
-     * @throws \atk4\data\Exception
-     * @throws \atk4\dsql\Exception
-     *
-     * @return Persistence
-     */
-    public function dbConnect($dsn, $user = null, $password = null, $args = [])
-    {
-        $this->db = Persistence::connect($dsn, $user, $password, $args);
-        $this->db->app = $this;
-
-        return $this->db;
-    }
-
-    protected function getRequestURI()
+    protected function getRequestUrl()
     {
         if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
             $request_uri = $_SERVER['HTTP_X_REWRITE_URL'];
@@ -578,158 +583,152 @@ class App
     }
 
     /**
-     * @var null
+     * @var string|null
      */
-    public $page = null;
-
-    /**
-     * Build a URL that application can use for js call-backs. Some framework integration will use a different routing
-     * mechanism for NON-HTML response.
-     *
-     * @param array|string $page           URL as string or array with page name as first element and other GET arguments
-     * @param bool         $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extra_args     Additional URL arguments
-     *
-     * @return string
-     */
-    public function jsURL($page = [], $needRequestUri = false, $extra_args = [])
-    {
-        return $this->url($page, $needRequestUri, $extra_args);
-    }
-
-    /**
-     * Build a URL that application can use for loading HTML data.
-     *
-     * @param array|string $page           URL as string or array with page name as first element and other GET arguments
-     * @param bool         $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extra_args     Additional URL arguments
-     *
-     * @return string
-     */
-    public function url($page = [], $needRequestUri = false, $extra_args = [])
-    {
-        if ($needRequestUri) {
-            return $_SERVER['REQUEST_URI'];
-        }
-
-        $sticky = $this->sticky_get_arguments;
-        $result = $extra_args;
-
-        if ($this->page === null) {
-            $uri = $this->getRequestURI();
-
-            if (substr($uri, -1, 1) == '/') {
-                $this->page = 'index';
-            } else {
-                $this->page = basename($uri, $this->url_building_ext);
-            }
-        }
-
-        // if page passed as string, then simply use it
-        if (is_string($page)) {
-            return $page;
-        }
-
-        // use current page by default
-        if (!isset($page[0])) {
-            $page[0] = $this->page;
-        }
-
-        //add sticky arguments
-        if (is_array($sticky) && !empty($sticky)) {
-            foreach ($sticky as $key => $val) {
-                if ($val === true) {
-                    if (isset($_GET[$key])) {
-                        $val = $_GET[$key];
-                    } else {
-                        continue;
-                    }
-                }
-                if (!isset($result[$key])) {
-                    $result[$key] = $val;
-                }
-            }
-        }
-
-        // add arguments
-        foreach ($page as $arg => $val) {
-            if ($arg === 0) {
-                continue;
-            }
-
-            if ($val === null || $val === false) {
-                unset($result[$arg]);
-            } else {
-                $result[$arg] = $val;
-            }
-        }
-
-        // put URL together
-        $args = http_build_query($result);
-        $url = ($page[0] ? $page[0].$this->url_building_ext : '').($args ? '?'.$args : '');
-
-        return $url;
-    }
-
-    /**
-     * Make current get argument with specified name automatically appended to all generated URLs.
-     *
-     * @param string $name
-     *
-     * @return string|null
-     */
-    public function stickyGet($name) :?string
-    {
-        if (isset($_GET[$name])) {
-            $this->sticky_get_arguments[$name] = $_GET[$name];
-
-            return $_GET[$name];
-        }
-
-        return null;
-    }
+    public $page;
 
     /**
      * @var array global sticky arguments
      */
-    protected $sticky_get_arguments = [];
+    protected $sticky_get_arguments = [
+        '__atk_json' => false,
+        '__atk_tab' => false,
+    ];
 
     /**
-     * Remove sticky GET which was set by stickyGET.
-     *
-     * @param string $name
+     * Make current get argument with specified name automatically appended to all generated URLs.
      */
-    public function stickyForget($name)
+    public function stickyGet(string $name, bool $isDeleting = false): ?string
+    {
+        $this->sticky_get_arguments[$name] = !$isDeleting;
+
+        return $_GET[$name] ?? null;
+    }
+
+    /**
+     * Remove sticky GET which was set by stickyGet.
+     */
+    public function stickyForget(string $name)
     {
         unset($this->sticky_get_arguments[$name]);
     }
 
     /**
-     * Adds additional JS script include in aplication template.
+     * Build a URL that application can use for loading HTML data.
+     *
+     * @param array|string $page                URL as string or array with page name as first element and other GET arguments
+     * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
+     *
+     * @return string
+     */
+    public function url($page = [], $needRequestUri = false, $extraRequestUriArgs = [])
+    {
+        if ($needRequestUri) {
+            $page = $_SERVER['REQUEST_URI'];
+        }
+
+        if ($this->page === null) {
+            $requestUrl = $this->getRequestUrl();
+            if (substr($requestUrl, -1, 1) === '/') {
+                $this->page = 'index';
+            } else {
+                $this->page = basename($requestUrl, $this->url_building_ext);
+            }
+        }
+
+        $pagePath = '';
+        if (is_string($page)) {
+            $page_arr = explode('?', $page, 2);
+            $pagePath = $page_arr[0];
+            parse_str($page_arr[1] ?? '', $page);
+        } else {
+            $pagePath = $page[0] ?? $this->page; // use current page by default
+            unset($page[0]);
+            if ($pagePath) {
+                $pagePath .= $this->url_building_ext;
+            }
+        }
+
+        $args = $extraRequestUriArgs;
+
+        // add sticky arguments
+        foreach ($this->sticky_get_arguments as $k => $v) {
+            if ($v && isset($_GET[$k])) {
+                $args[$k] = $_GET[$k];
+            } else {
+                unset($args[$k]);
+            }
+        }
+
+        // add arguments
+        foreach ($page as $k => $v) {
+            if ($v === null || $v === false) {
+                unset($args[$k]);
+            } else {
+                $args[$k] = $v;
+            }
+        }
+
+        // put URL together
+        $pageQuery = http_build_query($args, '', '&', PHP_QUERY_RFC3986);
+        $url = $pagePath . ($pageQuery ? '?' . $pageQuery : '');
+
+        return $url;
+    }
+
+    /**
+     * Build a URL that application can use for js call-backs. Some framework integration will use a different routing
+     * mechanism for NON-HTML response.
+     *
+     * @param array|string $page                URL as string or array with page name as first element and other GET arguments
+     * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
+     *
+     * @return string
+     */
+    public function jsUrl($page = [], $needRequestUri = false, $extraRequestUriArgs = [])
+    {
+        // append to the end but allow override
+        $extraRequestUriArgs = array_merge($extraRequestUriArgs, ['__atk_json' => 1], $extraRequestUriArgs);
+
+        return $this->url($page, $needRequestUri, $extraRequestUriArgs);
+    }
+
+    /**
+     * Request was made using App::jsUrl().
+     */
+    public function isJsUrlRequest(): bool
+    {
+        return isset($_GET['__atk_json']) && $_GET['__atk_json'] !== '0';
+    }
+
+    /**
+     * Adds additional JS script include in application template.
      *
      * @param string $url
-     * @param bool   $isAsync Whether or not you want Async loading.
-     * @param bool   $isDefer Whether or not you want Defer loading.
+     * @param bool   $isAsync whether or not you want Async loading
+     * @param bool   $isDefer whether or not you want Defer loading
      *
      * @return $this
      */
-    public function requireJS($url, $isAsync = false, $isDefer = false)
+    public function requireJs($url, $isAsync = false, $isDefer = false)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '')."\n");
+        $this->html->template->appendHtml('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '') . "\n");
 
         return $this;
     }
 
     /**
-     * Adds additional CSS stylesheet include in aplication template.
+     * Adds additional CSS stylesheet include in application template.
      *
      * @param string $url
      *
      * @return $this
      */
-    public function requireCSS($url)
+    public function requireCss($url)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url])."\n");
+        $this->html->template->appendHtml('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]) . "\n");
 
         return $this;
     }
@@ -738,28 +737,20 @@ class App
      * A convenient wrapper for sending user to another page.
      *
      * @param array|string $page Destination page
-     *
-     * @throws \atk4\core\Exception
-     * @throws ExitApplicationException
      */
-    public function redirect($page)
+    public function redirect($page, bool $permanent = false): void
     {
-        header('Location: '.$this->url($page));
-
-        $this->run_called = true; // prevent shutdown function from triggering.
-        $this->callExit();
+        $this->terminateHtml('', ['location' => $this->url($page), self::HEADER_STATUS_CODE => $permanent ? '301' : '302']);
     }
 
     /**
      * Generate action for redirecting user to another page.
      *
      * @param string|array $page Destination URL or page/arguments
-     *
-     * @return jsExpression
      */
-    public function jsRedirect($page)
+    public function jsRedirect($page, bool $newWindow = false): JsExpression
     {
-        return new jsExpression('document.location = []', [$this->url($page)]);
+        return new JsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
     }
 
     /**
@@ -864,6 +855,9 @@ class App
 
             $attr = $tmp;
         }
+
+        $tag = strtolower($tag);
+
         if ($tag[0] === '<') {
             return $tag;
         }
@@ -872,25 +866,32 @@ class App
             $attr = null;
         }
 
-        if (is_string($value)) {
-            $value = $this->encodeHTML($value);
-        } elseif (is_array($value)) {
+        if ($value !== null) {
             $result = [];
-            foreach ($value as $v) {
-                $result[] = is_array($v) ? $this->getTag(...$v) : $v;
+            foreach ((array) $value as $v) {
+                if (is_array($v)) {
+                    $result[] = $this->getTag(...$v);
+                } elseif (in_array($tag, ['script', 'style'], true)) {
+                    // see https://mathiasbynens.be/notes/etago
+                    $result[] = preg_replace('~(?<=<)(?=/\s*' . preg_quote($tag, '~') . '|!--)~', '\\\\', $v);
+                } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behaviour, only directly passed strings were escaped
+                    $result[] = $v;
+                } else {
+                    $result[] = $this->encodeHtml($v);
+                }
             }
             $value = implode('', $result);
         }
 
         if (!$attr) {
-            return "<$tag>".($value !== null ? $value."</$tag>" : '');
+            return "<{$tag}>" . ($value !== null ? $value . "</{$tag}>" : '');
         }
         $tmp = [];
-        if (substr($tag, -1) == '/') {
+        if (substr($tag, -1) === '/') {
             $tag = substr($tag, 0, -1);
             $postfix = '/';
-        } elseif (substr($tag, 0, 1) == '/') {
-            return isset($attr[0]) ? '</'.$attr[0].'>' : '<'.$tag.'>';
+        } elseif (substr($tag, 0, 1) === '/') {
+            return '</' . ($attr[0] ?? substr($tag, 1)) . '>';
         } else {
             $postfix = '';
         }
@@ -899,15 +900,15 @@ class App
                 continue;
             }
             if ($val === true) {
-                $tmp[] = "$key";
+                $tmp[] = "{$key}";
             } elseif ($key === 0) {
                 $tag = $val;
             } else {
-                $tmp[] = "$key=\"".$this->encodeAttribute($val).'"';
+                $tmp[] = "{$key}=\"" . $this->encodeAttribute($val) . '"';
             }
         }
 
-        return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value !== null ? $value."</$tag>" : '');
+        return "<{$tag}" . ($tmp ? (' ' . implode(' ', $tmp)) : '') . $postfix . '>' . ($value !== null ? $value . "</{$tag}>" : '');
     }
 
     /**
@@ -919,33 +920,72 @@ class App
      */
     public function encodeAttribute($val)
     {
-        return htmlspecialchars($val);
+        return htmlspecialchars((string) $val);
     }
 
     /**
      * Encodes string - removes HTML entities.
-     *
-     * @param string $val
-     *
-     * @return string
      */
-    public function encodeHTML($val)
+    public function encodeHtml(string $val): string
     {
         return htmlentities($val);
     }
 
-    protected function setupAlwaysRun(): void
+    public function decodeJson(string $json)
     {
-        if ($this->_cwd_restore) {
-            $this->_cwd_restore = getcwd();
+        $data = json_decode($json, true, 512, JSON_BIGINT_AS_STRING);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new Exception('JSON decode error: ' . json_last_error_msg());
         }
 
-        register_shutdown_function(
-            function () {
-                if (is_string($this->_cwd_restore)) {
-                    chdir($this->_cwd_restore);
+        return $data;
+    }
+
+    public function encodeJson($data, bool $forceObject = false): string
+    {
+        $options = JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT;
+        if ($forceObject) {
+            $options |= JSON_FORCE_OBJECT;
+        }
+
+        $json = json_encode($data, $options, 512);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new Exception('JSON encode error: ' . json_last_error_msg());
+        }
+
+        // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
+        // replace large JSON integers only, do not replace anything in JSON/JS strings
+        $json = preg_replace_callback('~(?:"(?:[^"\\\\]+|\\\\.)*")?+\K|(?:\'(?:[^\'\\\\]+|\\\\.)*\')?+\K|(?:^|[{\[,:])'
+            . '[ \n\r\t]*\K-?[1-9]\d{15,}(?=[ \n\r\t]*(?:$|[}\],:]))~s', function ($matches) {
+                if ($matches[0] === '' || abs((int) $matches[0]) < (2 ** 53)) {
+                    return $matches[0];
                 }
 
+                return '"' . $matches[0] . '"';
+            }, $json);
+
+        return $json;
+    }
+
+    /**
+     * Return exception message using HTML block and Semantic UI formatting. It's your job
+     * to put it inside boilerplate HTML and output, e.g:.
+     *
+     *   $app = new \atk4\ui\App();
+     *   $app->initLayout([\atk4\ui\Layout\Centered::class]);
+     *   $app->layout->template->setHtml('Content', $e->getHtml());
+     *   $app->run();
+     *   $app->callExit(true);
+     */
+    public function renderExceptionHtml(\Throwable $exception): string
+    {
+        return (string) new \atk4\core\ExceptionRenderer\Html($exception);
+    }
+
+    protected function setupAlwaysRun(): void
+    {
+        register_shutdown_function(
+            function () {
                 if (!$this->run_called) {
                     try {
                         $this->run();
@@ -964,51 +1004,114 @@ class App
         );
     }
 
-    /* RESPONSES */
+    // RESPONSES
+
+    /** @var string[] */
+    private static $_sentHeaders = [];
 
     /**
-     * Output Response to the client with custom headers.
+     * Output Response to the client.
      *
      * This can be overridden for future PSR-7 implementation
-     *
-     * @TODO SSE is a "Header in Header" case, it works, but must be checked
-     *
-     * @param array $headers
-     * @param       $content
      */
-    protected function outputResponse(array $headers, $content)
+    protected function outputResponse(string $data, array $headers): void
     {
-        // if header already sent don't send header
-        // @TODO check this, because in theory multiple header sent
-        // can be a symptom of wrong usage
-        if (!headers_sent()) {
-            foreach ($headers as $header => $replace) {
-                header($header, $replace);
+        $this->response_headers = $this->normalizeHeaders($this->response_headers);
+        $headersAll = array_merge($this->response_headers, $this->normalizeHeaders($headers));
+        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
+
+        $isCli = \PHP_SAPI === 'cli'; // for phpunit
+
+        $lateError = null;
+        foreach (ob_get_status(true) as $status) {
+            if ($status['buffer_used'] !== 0 && !$isCli) {
+                $lateError = 'Unexpected output detected.';
+
+                break;
             }
         }
 
-        echo $content;
+        if ($lateError === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
+            $lateError = 'Headers already sent, more headers can not be set at this stage.';
+        }
+
+        if (!headers_sent() || $isCli) {
+            if ($lateError !== null) {
+                $headersNew = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500'];
+            }
+
+            foreach ($headersNew as $k => $v) {
+                if (!$isCli) {
+                    if ($k === self::HEADER_STATUS_CODE) {
+                        http_response_code($v === (string) (int) $v ? (int) $v : 500);
+                    } else {
+                        $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                            return strtoupper($matches[0]);
+                        }, $k);
+
+                        header($kCamelCase . ': ' . $v);
+                    }
+                }
+
+                self::$_sentHeaders[$k] = $v;
+            }
+        }
+
+        if ($lateError !== null) {
+            echo "\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n";
+            exit(1);
+        }
+
+        echo $data;
+    }
+
+    /**
+     * Output HTML response to the client.
+     *
+     * @param string[] $headers
+     */
+    private function outputResponseHtml(string $data, array $headers = []): void
+    {
+        $this->outputResponse(
+            $data,
+            array_merge($this->normalizeHeaders($headers), ['content-type' => 'text/html'])
+        );
     }
 
     /**
      * Output JSON response to the client.
      *
      * @param string|array $data
+     * @param string[]     $headers
      */
-    public function outputResponseJSON($data)
+    private function outputResponseJson($data, array $headers = []): void
     {
-        $data = is_array($data) ? json_encode($data) : $data;
+        if (!is_string($data)) {
+            $data = $this->encodeJson($data);
+        }
 
-        $this->outputResponse(['Content-Type:application/json' => true], $data);
+        $this->outputResponse(
+            $data,
+            array_merge($this->normalizeHeaders($headers), ['content-type' => 'application/json'])
+        );
     }
 
     /**
-     * Output HTML response to the client.
-     *
-     * @param string $data
+     * Generated html and js for modals attached to $html view.
      */
-    public function outputResponseHTML(string $data)
+    public function getRenderedModals(): array
     {
-        $this->outputResponse(['Content-Type:text/html' => true], $data);
+        // prevent looping (calling App::terminateJson() recursively) if JsReload is used in Modal
+        unset($_GET['__atk_reload']);
+
+        $modals = [];
+        foreach ($this->html !== null ? $this->html->elements : [] as $view) {
+            if ($view instanceof Modal) {
+                $modals[$view->name]['html'] = $view->getHtml();
+                $modals[$view->name]['js'] = $view->getJsRenderActions();
+            }
+        }
+
+        return $modals;
     }
 }

@@ -1,15 +1,18 @@
 <?php
 
-include 'vendor/autoload.php';
+declare(strict_types=1);
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
 class GetAssets extends \atk4\ui\App
 {
     public $always_run = false;
     public $catch_exceptions = false;
 
-    public function requireJS($path)
+    public function requireJs($path)
     {
-        $file = 'public/'.basename($path);
-        echo "Downloading $path into $file..\n";
+        $file = 'public/' . basename($path);
+        echo "Downloading {$path} into {$file}..\n";
         if (@copy($path, $file)) {
             echo "  ok\n";
         } else {
@@ -17,9 +20,9 @@ class GetAssets extends \atk4\ui\App
         }
     }
 
-    public function requireCSS($path)
+    public function requireCss($path)
     {
-        return $this->requireJS($path);
+        return $this->requireJs($path);
     }
 }
 

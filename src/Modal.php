@@ -1,25 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
-/**h
+/**
  * This class add modal dialog to a page.
  *
  * Modal are added to the layout but their content is hidden by default.
  * $modal->show() is the triggered needed to actually display the modal.
  *
  * Modal can be use as a regular view, simply by adding other view to it.
- *  $modal->add(['Message', 'title'=>'Welcome to Agile Toolkit')->text('Your text here').
+ *  Message::addTo($modal, ['title'=>'Welcome to Agile Toolkit'])->text('Your text here');
  *
  * Modal can add content dynamically via CallbackLater.
  *  $modal->set(function ($modal) {
- *     $modal->add('Form');
- * });
+ *     Form::addTo($modal);
+ *  });
  *
  * Modal can use semantic-ui predefine method onApprove or onDeny by passing
  * a jsAction to Modal::addDenyAction or Modal::addApproveAction method. It will not close until the jsAction return true.
- *  $modal->addDenyAction('No', new \atk4\ui\jsExpression('function(){window.alert("Can\'t do that."); return false;}'));
- *  $modal->addApproveAction('Yes', new \atk4\ui\jsExpression('function(){window.alert("You\'re good to go!");}'));
+ *  $modal->addDenyAction('No', new \atk4\ui\JsExpression('function(){window.alert("Can\'t do that."); return false;}'));
+ *  $modal->addApproveAction('Yes', new \atk4\ui\JsExpression('function(){window.alert("You\'re good to go!");}'));
  *
  * You may also prevent modal from closing via the esc or dimmed area click using $modal->notClosable().
  *
@@ -29,21 +31,17 @@ class Modal extends View
 {
     public $defaultTemplate = 'modal.html';
 
-    /**
-     * Set to empty or false for no header.
-     *
-     * @var string
-     */
-    public $title = 'Modal title';
+    /** @var string|null Set null for no title */
+    public $title;
     public $loading_label = 'Loading...';
     public $headerCSS = 'header';
     public $ui = 'modal';
     public $fx = [];
-    public $cb = null;
-    public $cb_view = null;
+    public $cb;
+    public $cb_view;
     public $args = [];
 
-    //now only supported json type response.
+    /** @var string Currently only "json" response type is supported. */
     public $type = 'json';
 
     /**
@@ -53,9 +51,9 @@ class Modal extends View
      */
     public $contentCSS = ['img', 'content', 'atk-dialog-content'];
 
-    /*
+    /**
      * if true, the <div class="actions"> at the bottom of the modal is
-     * shown. Automatically set to true if any actions are added
+     * shown. Automatically set to true if any actions are added.
      *
      * @var bool
      */
@@ -63,19 +61,21 @@ class Modal extends View
 
     /**
      * Set callback function for this modal.
+     * $fx is set as an array in order to comply with View::set().
+     * TODO Rename this function and break BC?
      *
-     * @param array|string $fx
-     * @param array|string $arg2
-     *
-     * @throws Exception
+     * @param \Closure $fx
      *
      * @return $this
      */
-    public function set($fx = [], $arg2 = null)
+    public function set($fx = [], $ignore = null)
     {
-        if (!is_object($fx) && !($fx instanceof Closure)) {
-            throw new Exception('Error: Need to pass a function to Modal::set()');
+        if (!($fx instanceof \Closure)) {
+            throw new Exception('Need to pass a function to Modal::set()');
+        } elseif (func_num_args() > 1) {
+            throw new Exception('Only one argument is needed by Modal::set()');
         }
+
         $this->fx = [$fx];
         $this->enableCallback();
 
@@ -90,31 +90,24 @@ class Modal extends View
      */
     public function enableCallback()
     {
-        $this->cb_view = $this->add('View');
+        $this->cb_view = View::addTo($this);
         $this->cb_view->stickyGet('__atk_m', $this->name);
-        $this->cb = $this->cb_view->add('CallbackLater');
+        if (!$this->cb) {
+            $this->cb = CallbackLater::addTo($this->cb_view);
+        }
 
         $this->cb->set(function () {
-            if ($this->cb->triggered() && $this->fx) {
-                $this->fx[0]($this->cb_view);
-            }
-            $modalName = isset($_GET['__atk_m']) ? $_GET['__atk_m'] : null;
-            if ($modalName === $this->name) {
-                $this->app->terminate($this->cb_view->renderJSON());
-            }
+            $this->fx[0]($this->cb_view);
+            $this->cb->terminateJson($this->cb_view);
         });
     }
 
     /**
      * Add CSS classes to "content" div.
      */
-    public function addContentCSS($class)
+    public function addContentCss($class)
     {
-        if (is_string($class)) {
-            $this->contentCSS = array_merge($this->contentCSS, [$class]);
-        } elseif (is_array($class)) {
-            $this->contentCSS = array_merge($this->contentCSS, $class);
-        }
+        $this->contentCSS = array_merge($this->contentCSS, is_string($class) ? [$class] : $class);
     }
 
     /**
@@ -149,9 +142,6 @@ class Modal extends View
     /**
      * Set modal option.
      *
-     * @param $option
-     * @param $value
-     *
      * @return $this
      */
     public function setOption($option, $value)
@@ -163,8 +153,6 @@ class Modal extends View
 
     /**
      * Set modal options passing an array.
-     *
-     * @param $options
      *
      * @return $this
      */
@@ -199,15 +187,13 @@ class Modal extends View
      */
     public function addScrolling()
     {
-        $this->addContentCSS('scrolling');
+        $this->addContentCss('scrolling');
 
         return $this;
     }
 
     /**
      * Set modal transition.
-     *
-     * @param $transition_type
      *
      * @return $this
      */
@@ -221,8 +207,6 @@ class Modal extends View
     /**
      * Set modal transition duration.
      *
-     * @param $time
-     *
      * @return $this
      */
     public function duration($time)
@@ -234,9 +218,6 @@ class Modal extends View
 
     /**
      * Add modal settings.
-     *
-     * @param $setting_option
-     * @param $value
      */
     public function settings($setting_option, $value)
     {
@@ -246,16 +227,15 @@ class Modal extends View
     /**
      * Add a deny action to modal.
      *
-     * @param $label.
-     * @param $jsAction : Javascript action that will run when deny is click.
+     * @param JsExpressionable $jsAction javascript action that will run when deny is click
      *
      * @return $this
      */
     public function addDenyAction($label, $jsAction)
     {
-        $b = new Button();
-        $b->set($label)->addClass('red cancel');
-        $this->addButtonAction($b);
+        $button = new Button();
+        $button->set($label)->addClass('red cancel');
+        $this->addButtonAction($button);
         $this->options['modal_option']['onDeny'] = $jsAction;
 
         return $this;
@@ -264,8 +244,7 @@ class Modal extends View
     /**
      * Add an approve action button to modal.
      *
-     * @param $label.
-     * @param $jsAction : Javascript action that will run when approve is click.
+     * @param JsExpressionable $jsAction javascript action that will run when deny is click
      *
      * @return $this
      */
@@ -281,8 +260,6 @@ class Modal extends View
 
     /**
      * Add an action button to modal.
-     *
-     * @param $button
      *
      * @return $this
      */
@@ -306,7 +283,7 @@ class Modal extends View
         return $this;
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $data['type'] = $this->type;
         $data['label'] = $this->loading_label;
@@ -321,7 +298,7 @@ class Modal extends View
         }
 
         if (!empty($this->fx)) {
-            $data['uri'] = $this->cb->getJSURL();
+            $data['uri'] = $this->cb->getJsUrl();
         }
 
         if (!$this->showActions) {
@@ -335,7 +312,7 @@ class Modal extends View
             $this->js(true)->modal();
         }
 
-        //add setting if available.
+        // add setting if available.
         if (isset($this->options['setting'])) {
             foreach ($this->options['setting'] as $key => $value) {
                 $this->js(true)->modal('setting', $key, $value);
@@ -352,5 +329,13 @@ class Modal extends View
         $this->js(true)->data($data);
 
         parent::renderView();
+    }
+
+    /** @var AbstractView */
+    public $viewForUrl;
+
+    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    {
+        return $this->viewForUrl ?? $this->cb;
     }
 }

@@ -1,8 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\tests;
 
-class ViewTest extends \atk4\core\PHPUnit_AgileTestCase
+use atk4\core\AtkPhpunit;
+use atk4\core\Exception;
+
+class ViewTest extends AtkPhpunit\TestCase
 {
     /**
      * Test redering multiple times.
@@ -14,20 +19,19 @@ class ViewTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $a = $v->render();
         $b = $v->render();
-        $this->assertEquals($a, $b);
+        $this->assertSame($a, $b);
     }
 
-    /**
-     * @expectedException Exception
-     */
     public function testAddAfterRender()
     {
+        $this->expectException(Exception::class);
+
         $v = new \atk4\ui\View();
         $v->set('foo');
 
         $a = $v->render();
-        $v->add('View');  // this should fail. No adding after rendering.
+        \atk4\ui\View::addTo($v);  // this should fail. No adding after rendering.
         $b = $v->render();
-        $this->assertEquals($a, $b);
+        $this->assertSame($a, $b);
     }
 }

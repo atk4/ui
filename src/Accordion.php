@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 /**
@@ -19,7 +21,7 @@ class Accordion extends View
      *
      * @var array|string|null
      */
-    public $type = null;
+    public $type;
 
     /**
      * Settings as per Fomantic-ui accordion settings.
@@ -47,21 +49,18 @@ class Accordion extends View
      * You can add static View within your section or pass
      * a callback for dynamic content.
      *
-     * @param string        $title
-     * @param null|callable $callback
-     * @param string        $icon
-     *
-     * @throws Exception
+     * @param string $title
+     * @param string $icon
      *
      * @return AccordionSection
      */
-    public function addSection($title, $callback = null, $icon = 'dropdown')
+    public function addSection($title, \Closure $callback = null, $icon = 'dropdown')
     {
-        $section = $this->add(['AccordionSection', 'title' => $title, 'icon' => $icon]);
+        $section = AccordionSection::addTo($this, ['title' => $title, 'icon' => $icon]);
 
         // if there is callback action, then use VirtualPage
         if ($callback) {
-            $section->virtualPage = $section->add(['VirtualPage', 'ui' => '']);
+            $section->virtualPage = VirtualPage::addTo($section, ['ui' => '']);
             $section->virtualPage->stickyGet('__atk-dyn-section', '1');
             $section->virtualPage->set($callback);
         }
@@ -74,16 +73,14 @@ class Accordion extends View
     /**
      * Activate or open an accordion section.
      *
-     * @param AccordionSection $section The section to activate.
+     * @param AccordionSection $section the section to activate
      */
     public function activate($section)
     {
         $this->activeSection = $this->getSectionIdx($section);
     }
 
-    /*
-     * JS Behavior wrapper functions.
-     */
+    // JS Behavior wrapper functions.
     public function jsRefresh($when = null)
     {
         return $this->jsBehavior('refresh', [], $when);
@@ -115,9 +112,9 @@ class Accordion extends View
      * Ex: toggle an accordion from it's index value.
      * $accordion->jsBehavior('toggle', 1).
      *
-     * @param string $behavior The name of the behavior for the module.
-     * @param array  $args     The behaviors argument as an array.
-     * @param bool   $when     When this js action is render.
+     * @param string $behavior the name of the behavior for the module
+     * @param array  $args     the behaviors argument as an array
+     * @param bool   $when     when this js action is render
      *
      * @return mixed
      */
@@ -139,6 +136,7 @@ class Accordion extends View
         foreach ($this->sections as $key => $accordion_section) {
             if ($accordion_section->name === $section->name) {
                 $idx = $key;
+
                 break;
             }
         }
@@ -148,10 +146,8 @@ class Accordion extends View
 
     /**
      * Check if accordion section is dynamic.
-     *
-     * @return bool
      */
-    public function isDynamicSection()
+    public function isDynamicSection(): bool
     {
         return isset($_GET['__atk-dyn-section']);
     }
@@ -159,14 +155,14 @@ class Accordion extends View
     /**
      * {@inheritdoc}
      */
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->type) {
             $this->addClass($this->type);
         }
 
-        //Only set Accordion in Top container. Otherwise Nested accordion won't work.
-        if (!$this->getClosestOwner($this, '\atk4\ui\AccordionSection') && !$this->isDynamicSection()) {
+        // Only set Accordion in Top container. Otherwise Nested accordion won't work.
+        if (!$this->getClosestOwner($this, AccordionSection::class) && !$this->isDynamicSection()) {
             $this->js(true)->accordion($this->settings);
         }
 

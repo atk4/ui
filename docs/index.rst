@@ -10,6 +10,7 @@ Contents:
     overview
     quickstart
     core
+    filestructure
     components
     js
     advanced

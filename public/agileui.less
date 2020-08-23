@@ -1,11 +1,153 @@
-// Variables
 
+/*-------------------
+      Site Colors
+--------------------*/
+
+/*---  Colors  ---*/
+@red              : #DB2828;
+@orange           : #F2711C;
+@yellow           : #FBBD08;
+@olive            : #B5CC18;
+@green            : #21BA45;
+@teal             : #00B5AD;
+@blue             : #2185D0;
+@violet           : #6435C9;
+@purple           : #A333C8;
+@pink             : #E03997;
+@brown            : #A5673F;
+@grey             : #767676;
+@black            : #1B1C1D;
+
+/*---  Light Colors  ---*/
+@lightRed         : #FF695E;
+@lightOrange      : #FF851B;
+@lightYellow      : #FFE21F;
+@lightOlive       : #D9E778;
+@lightGreen       : #2ECC40;
+@lightTeal        : #6DFFFF;
+@lightBlue        : #54C8FF;
+@lightViolet      : #A291FB;
+@lightPurple      : #DC73FF;
+@lightPink        : #FF8EDF;
+@lightBrown       : #D67C1C;
+@lightGrey        : #DCDDDE;
+@lightBlack       : #545454;
+
+/*---   Neutrals  ---*/
+@fullBlack        : #000000;
+@offWhite         : #F9FAFB;
+@darkWhite        : #F3F4F5;
+@midWhite         : #DCDDDE;
+@white            : #FFFFFF;
+
+// Variables
 @leftMenuWidth: 260px;
+@maestroSpace: 8px;
+@maestroItemsLeftMargin: 10px;
 @desktopWidth: 992px;
 @tabletWidth: 768px;
+@adminMenuHeight: 48px;
+@atkFooterHeight : 50px;
+@menuBorder: 1px solid rgba(255,255,255,0.10);
 
+@atkSlidePanelColor: @offWhite;
+
+// z-index
+@topMenuIndex: 201;
+@rightPanelIndex: 301;
+@pushableIndex: 101;
+@sideNavIndex: 200;
+
+/******* ADMIN TOP MENU *******/
+
+.ui.inverted.fixed.atk-admin-top-menu {
+  border: @menuBorder;
+  z-index: @topMenuIndex;
+}
+
+/******* ADMIN SIDENAV MENU *******/
+
+.atk-maestro-sidenav > .ui.grid {
+  width: @leftMenuWidth;
+}
+
+.atk-sidenav-content {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* A selected item in admin menu */
+.ui.sidebar.atk-sidenav {
+  .menu > .item.active {
+    background: none;
+  }
+}
+
+/******* MAESTRO SIDENAV MENU *******/
+
+.atk-maestro-sidenav {
+  cursor: pointer;
+  color: white;
+}
+
+.atk-maestro-sidenav > .ui.grid > .atk-maestro-menu-items {
+  display: none;
+  &.atk-visible {
+    display: flex;
+  }
+}
+
+/* Item without a group in menu */
+.ui.inverted.menu a.atk-maestro-sidenav.item {
+  padding-left: 34px;
+  i {
+    margin-right: 2px;
+  }
+  &.active {
+    background-color: @blue;
+  }
+}
+
+.atk-maestro-sidenav {
+  .atk-submenu-toggle {
+    div {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  &:not(active) {
+    .atk-submenu-toggle:hover {
+      background-color: rgba(255,255,255,0.15);
+    }
+  }
+  .ui.grid {
+    .row {
+      padding: 0px;
+    }
+    .column {
+      padding-top: @maestroSpace;
+      padding-bottom: @maestroSpace;
+    }
+    .atk-maestro-menu-title header {
+      margin-left: -@maestroItemsLeftMargin;
+    }
+    .atk-maestro-menu-items .menu {
+      margin-left: @maestroItemsLeftMargin;
+    }
+  }
+}
+
+.atk-maestro-sidenav.active .atk-maestro-menu-title {
+  background-color: @blue;
+}
 
 // Layout
+header.ui.fixed.horizontal.menu {
+  min-height: 48px;
+}
 
 .ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
   width: ~'calc(100% - '@leftMenuWidth~')';
@@ -17,6 +159,10 @@
 
 .atk-dialog-content {
   min-height: 100px;
+}
+
+.atk-hide-loading-content.loading:before {
+      background: rgba(255,255,255,.98) !important;
 }
 
 .atk-layout {
@@ -36,10 +182,14 @@ header.atk-topMenu.ui.fixed.menu ~ .atk-topMenuGhost {
 header.atk-topMenu.ui.menu .item > .label {
   margin-left: 0;
 }
+
 .atk-mainContainer {
   flex: 1;
   .atk-mainContainerWrapper {
     padding: 3em;
+  }
+  &.atk-admin-layout {
+    margin-top: @adminMenuHeight;
   }
 }
 footer.atk-footer {
@@ -50,36 +200,119 @@ footer.atk-footer {
 
   }
 }
+
 .ui.left.sidebar {
-  z-index: 103;
-  .item.atk-leftMenuClose {
-    display: none;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: 999;
-    i.icon {
-      margin-left: 0 !important;
-    }
+  z-index: @sideNavIndex;
+}
+
+.atk-right-panel {
+  -webkit-transition: box-shadow 0.2s, right 0.2s;
+  -moz-transition: box-shadow 0.2s, right 0.2s;
+  -ms-transition: box-shadow 0.2s, right 0.2s;
+  -o-transition: box-shadow 0.2s, right 0.2s;
+  transition: box-shadow 0.2s, right 0.2s;
+  bottom: 0;
+  background-color: @atkSlidePanelColor;
+  box-shadow: 0 0 0 fade(@black, 0%);
+  height: 99%;
+  right: -100%;
+  overflow-y: auto;
+  position: fixed;
+  width: 40%;
+  z-index: @rightPanelIndex;
+  &.atk-visible {
+    box-shadow: 0px 0 5px fade(@black, 20%);
+    right: 0%;
   }
-  &.visible {
-    // display: none;
+}
+
+.atk-panel-close {
+  color: @black;
+}
+
+i.atk-panel-warning {
+  color: @atkSlidePanelColor;
+  &.atk-visible {
+    color: @orange;
   }
+}
+
+.ui.left.sidebar.atk-sidenav {
+  top: @adminMenuHeight;
+}
+
+.atk-sidenav-content {
+  height: ~'calc(100% - '@atkFooterHeight + @adminMenuHeight~')';
+}
+
+.ui.left.sidebar.atk-sidenav {
+  width: @leftMenuWidth;
 }
 
 // table dropdown menu
 .atk-table-dropdown {
-  display: inline;
-  float: right;
+  margin-top: -8px;
+  float: left;
+  i {
+    opacity: 0.3;
+    vertical-align: bottom;
+  }
+  i.table-filter-on {
+    &:after {
+      content: '\f150';
+      color: dodgerblue;
+    }
+  }
+  i.table-filter-off {
+    &:after {
+      content: '\f150';
+    }
+  }
+  .dropdown {
+    .menu {
+      margin: 1em -10px 0 !important;
+    }
+  }
 }
 
-.atk-table-dropdown i {
-  opacity: 0.3;
-  vertical-align: bottom;
+.atk-table-column-header {
+    white-space: pre-wrap;
+    &:after {
+      //display: none;
+      font-style: normal;
+      font-weight: normal;
+      text-decoration: inherit;
+      content: '';
+      height: 1em;
+      width: auto;
+      opacity: 0.8;
+      margin: 0em 0em 0em 0.5em;
+      font-family: 'Icons';
+      float: right;
+  }
+}
+.atk-table-column-header.ascending {
+  &:after {
+    content: '\f0d8';
+  }
+}
+
+.atk-table-column-header.descending {
+  &:after {
+    content: '\f0d7';
+  }
+}
+
+.ui.sortable.table thead th:not(.sortable) {
+    cursor: default;
 }
 
 
 // Components
+
+.ui.step, .ui.steps .step {
+    user-select: none;
+}
 
 .atk-overflow-auto {
   overflow: auto;
@@ -101,9 +334,9 @@ footer.atk-footer {
   opacity: 0;
   pointer-events: none;
   position: fixed;
-  top: 0;
+  top: @adminMenuHeight;
   width: 100%;
-  z-index: 102;
+  z-index: @pushableIndex;
   .pusher {
     &:after {
       height: 100%;
@@ -133,7 +366,7 @@ footer.atk-footer {
     transform: translate3d(0, 0, 0);
     visibility: visible;
   }
-  body.atk-leftMenu-visible {
+  body.atk-sidenav-visible {
     &:after {
       left: 0;
       position: fixed;
@@ -148,20 +381,22 @@ footer.atk-footer {
     }
   }
 }
-@media (min-width: @tabletWidth) and (max-width: (@desktopWidth - 1px)) {
-  body.atk-leftMenu-visible .atk-overlay.pushable {
+@media (max-width: @desktopWidth - 1px) {
+  body.atk-sidenav-visible .atk-overlay.pushable {
     opacity: 1;
   }
 }
-@media (max-width: (@tabletWidth - 1px)) {
-  body.atk-leftMenu-visible {
-    overflow: hidden;
-  }
-  .ui.left.sidebar {
-    width: 100%;
+
+@media (min-width: @tabletWidth) and (max-width: (@desktopWidth - 1px)) {
+  .atk-right-panel {
+    width: 65%;
   }
 }
-
+@media (max-width: (@tabletWidth - 1px)) {
+  .atk-right-panel {
+    width: 95%;
+  }
+}
 
 // Print
 

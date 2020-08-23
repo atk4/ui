@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\tests;
 
-class TagTest extends \atk4\core\PHPUnit_AgileTestCase
+use atk4\core\AtkPhpunit;
+
+class TagTest extends AtkPhpunit\TestCase
 {
     public function getApp()
     {
@@ -12,7 +16,7 @@ class TagTest extends \atk4\core\PHPUnit_AgileTestCase
     public function assertTagRender($html, $args)
     {
         $app = $this->getApp();
-        $this->assertEquals($html, $app->getTag(...$args));
+        $this->assertSame($html, $app->getTag(...$args));
     }
 
     public function testBasic()
@@ -64,11 +68,13 @@ class TagTest extends \atk4\core\PHPUnit_AgileTestCase
                 ['b', ['class' => 'red'], [
                     ['i', ['class' => 'blue'], 'welcome'],
                 ]],
-            ]]);
+            ]]
+        );
 
         // this way it doesn't work, because $value of getTag is always encoded if it is a string
         $app = $this->getApp();
-        $this->assertEquals('<a href="hello">click <i>italic</i> text</a>',
+        $this->assertSame(
+            '<a href="hello">click <i>italic</i> text</a>',
             $app->getTag('a', ['href' => 'hello'], ['click ', ['i', 'italic'], ' text'])
         );
     }

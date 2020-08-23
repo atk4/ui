@@ -1,2 +1,13 @@
 ignore:
   - demos
+  - docs
+  - tools
+comment: false
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 0.025
+    patch: false
+    changes: false

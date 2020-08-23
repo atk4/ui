@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 /**
@@ -21,64 +23,64 @@ class Header extends View
      *
      * @var int|string
      */
-    public $size = null;
+    public $size;
 
     /**
      * Specify icon that will be included in a header.
      *
      * @var string
      */
-    public $icon = null;
+    public $icon;
 
     /**
      * Include image with a specified source.
      *
      * @var string
      */
-    public $image = null;
+    public $image;
 
     /**
      * Will include sub-header.
      *
      * @var string
      */
-    public $subHeader = null;
+    public $subHeader;
 
     /**
      * Specify alignment of the header.
      *
      * @var string
      */
-    public $aligned = null;
+    public $aligned;
 
     public $ui = 'header';
 
     public $defaultTemplate = 'header.html';
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->size) {
             if (is_numeric($this->size)) {
-                $this->setElement('h'.$this->size);
+                $this->setElement('h' . $this->size);
             } else {
                 $this->addClass($this->size);
             }
         }
 
         if ($this->icon) {
-            $this->icon = $this->add(new Icon($this->icon), 'Icon');
+            $this->icon = Icon::addTo($this, [$this->icon], ['Icon']);
         }
 
         if ($this->image) {
-            $this->image = $this->add(new Image($this->image), 'Icon');
+            $this->image = Image::addTo($this, [$this->image], ['Icon']);
         }
 
         if ($this->subHeader) {
-            $this->subHeader = $this->add(new View($this->subHeader), 'SubHeader')->addClass('sub header');
+            $this->subHeader = View::addTo($this, [$this->subHeader], ['SubHeader'])->addClass('sub header');
         }
 
         if ($this->aligned) {
-            $this->addClass($this->aligned.' aligned');
+            $this->addClass($this->aligned . ' aligned');
         }
 
         if ($this->aligned && ($this->icon || $this->image)) {
@@ -88,8 +90,9 @@ class Header extends View
         if (!$this->icon && !$this->elements) {
             $this->template->del('has_content');
             $this->template->set('title', $this->content);
+            $this->content = false;
         }
 
-        return parent::renderView();
+        parent::renderView();
     }
 }

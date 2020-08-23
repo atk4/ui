@@ -1,6 +1,6 @@
 <?php
 
-// vim:ts=4:sw=4:et:fdm=marker:fdl=0
+declare(strict_types=1);
 
 namespace atk4\ui;
 
@@ -23,14 +23,14 @@ class Item extends View
      */
     public $icon;
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->label) {
-            $this->add(new Label($this->label));
+            Label::addTo($this, [$this->label]);
         }
 
         if ($this->icon) {
-            $this->add(new Icon($this->icon));
+            Icon::addTo($this, [$this->icon]);
         }
 
         parent::renderView();

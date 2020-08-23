@@ -1,23 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\FormLayout\Section;
 
-class Columns extends \atk4\ui\Columns
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Class atk4\ui\FormLayout\Section\Columns is deprecated. Use atk4\ui\Form\Layout\Section\Columns instead', E_USER_DEPRECATED);
+}
+
+/**
+ * @deprecated will be removed dec-2020
+ */
+class Columns extends \atk4\ui\Form\Layout\Section\Columns
 {
-    public $formLayout = 'FormLayout/Generic';
-    public $form = null;
-
-    /**
-     * Add new vertical column.
-     *
-     * @param int|array $defaults specify width (1..16) or relative to $width
-     *
-     * @return \atk4\ui\FormLayout\Generic
-     */
-    public function addColumn($defaults = null)
-    {
-        $c = parent::addColumn($defaults);
-
-        return $c->add([$this->formLayout, 'form' => $this->form]);
-    }
 }

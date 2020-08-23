@@ -1,19 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\data\Model;
 use atk4\data\Persistence;
 
 class MyTestModel extends Model
 {
-    public function init()
+    public function init(): void
     {
         parent::init();
 
         $this->addField('regular_field');
-        $this->addField('just_for_data', ['never_persist'=>true]);
-        $this->addField('no_persist_but_show_in_ui', ['never_persist'=>true, 'ui'=>['editable'=>true]]);
+        $this->addField('just_for_data', ['never_persist' => true]);
+        $this->addField('no_persist_but_show_in_ui', ['never_persist' => true, 'ui' => ['editable' => true]]);
     }
 }
 
@@ -21,15 +24,14 @@ class MyTestModel extends Model
  * Test is designed to verify that field which is explicitly editable should appear and be editable
  * even if 'never_persist' is set to true.
  */
-class ForFieldUITest extends \atk4\core\PHPUnit_AgileTestCase
+class ForFieldUiTest extends AtkPhpunit\TestCase
 {
     /** @var Model */
     public $m;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $a = [];
-        $p = new Persistence\Array_($a);
+        $p = new Persistence\Array_();
         $this->m = new MyTestModel($p);
     }
 
@@ -43,7 +45,7 @@ class ForFieldUITest extends \atk4\core\PHPUnit_AgileTestCase
         $f = new \atk4\ui\Form();
         $f->init();
         $f->setModel($this->m);
-        $this->assertFalse($f->getField('regular_field')->readonly);
+        $this->assertFalse($f->getControl('regular_field')->readonly);
     }
 
     public function testJustDataField()
@@ -51,7 +53,7 @@ class ForFieldUITest extends \atk4\core\PHPUnit_AgileTestCase
         $f = new \atk4\ui\Form();
         $f->init();
         $f->setModel($this->m, ['just_for_data']);
-        $this->assertTrue($f->getField('just_for_data')->readonly);
+        $this->assertTrue($f->getControl('just_for_data')->readonly);
     }
 
     public function testShowInUi()
@@ -59,6 +61,6 @@ class ForFieldUITest extends \atk4\core\PHPUnit_AgileTestCase
         $f = new \atk4\ui\Form();
         $f->init();
         $f->setModel($this->m);
-        $this->assertFalse($f->getField('no_persist_but_show_in_ui')->readonly);
+        $this->assertFalse($f->getControl('no_persist_but_show_in_ui')->readonly);
     }
 }

@@ -1,29 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\ui\Button;
 use atk4\ui\View;
 
-class jsIntegrationTest extends \atk4\core\PHPUnit_AgileTestCase
+class jsIntegrationTest extends AtkPhpunit\TestCase
 {
-    public function testIDIntegrity1()
+    public function testIdIntegrity1()
     {
         $v = new Button(['icon' => 'pencil']);
         $html = $v->render();
         $this->assertNotNull($v->icon->id);
 
-        $this->assertNotEquals($v->id, $v->icon->id);
+        $this->assertNotSame($v->id, $v->icon->id);
     }
 
-    public function testIDIntegrity2()
+    public function testIdIntegrity2()
     {
         $v = new View(['ui' => 'buttons']);
-        $b1 = $v->add(new Button());
-        $b2 = $v->add(new Button());
+        $b1 = Button::addTo($v);
+        $b2 = Button::addTo($v);
         $html = $v->render();
 
-        $this->assertNotEquals($b1->id, $b2->id);
+        $this->assertNotSame($b1->id, $b2->id);
     }
 
     /**
@@ -35,7 +38,7 @@ class jsIntegrationTest extends \atk4\core\PHPUnit_AgileTestCase
         $j = $v->js()->hide();
         $v->render();
 
-        $this->assertEquals('$("#b").hide()', $j->jsRender());
+        $this->assertSame('$("#b").hide()', $j->jsRender());
     }
 
     /**
@@ -45,12 +48,12 @@ class jsIntegrationTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $v = new Button(['id' => 'b']);
         $j = $v->js(true)->hide();
-        $v->getHTML();
+        $v->getHtml();
 
-        $this->assertEquals('<script>
+        $this->assertSame('<script>
 $(function() {
   $("#b").hide();
-})</script>', $v->getJS());
+})</script>', $v->getJs());
     }
 
     /**
@@ -60,14 +63,14 @@ $(function() {
     {
         $v = new Button(['id' => 'b']);
         $v->js('click')->hide();
-        $v->getHTML();
+        $v->getHtml();
 
-        $this->assertEquals('<script>
+        $this->assertSame('<script>
 $(function() {
   $("#b").bind("click",function() {
     $("#b").hide();
   });
-})</script>', $v->getJS());
+})</script>', $v->getJs());
     }
 
     /**
@@ -76,19 +79,19 @@ $(function() {
     public function testBasicChain4()
     {
         $bb = new View(['ui' => 'buttons']);
-        $b1 = $bb->add(new Button(['id' => 'b1']));
-        $b2 = $bb->add(new Button(['id' => 'b2']));
+        $b1 = Button::addTo($bb, ['id' => 'b1']);
+        $b2 = Button::addTo($bb, ['id' => 'b2']);
 
         $b1->on('click', $b2->js()->hide());
-        $bb->getHTML();
+        $bb->getHtml();
 
-        $this->assertEquals('<script>
+        $this->assertSame('<script>
 $(function() {
   $("#b1").on("click",function(event) {
     event.preventDefault();
     event.stopPropagation();
     $("#b2").hide();
   });
-})</script>', $bb->getJS());
+})</script>', $bb->getJs());
     }
 }

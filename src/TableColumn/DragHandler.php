@@ -1,38 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\TableColumn;
 
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Class atk4\ui\TableColumn\DragHandler is deprecated. Use atk4\ui\Table\Column\DragHandler instead', E_USER_DEPRECATED);
+}
+
 /**
- * Implement drag handler column for sorting table.
+ * @deprecated will be removed dec-2020
  */
-class DragHandler extends Generic
+class DragHandler extends \atk4\ui\Table\Column\DragHandler
 {
-    public $class = null;
-    public $tag = 'i';
-    public $cb = null;
-
-    public function init()
-    {
-        parent::init();
-
-        if (!$this->class) {
-            $this->class = 'content icon';
-        }
-        $this->cb = $this->table->add(['jsSortable', 'handleClass' => 'atk-handle']);
-    }
-
-    /**
-     * Callback when table has been reorder using handle.
-     *
-     * @param null $fx
-     */
-    public function onReorder($fx = null)
-    {
-        $this->cb->onReorder($fx);
-    }
-
-    public function getDataCellTemplate(\atk4\data\Field $f = null)
-    {
-        return $this->app->getTag($this->tag, ['class' => $this->class.' atk-handle', 'style'=>'cursor:pointer; color: #bcbdbd']);
-    }
 }
