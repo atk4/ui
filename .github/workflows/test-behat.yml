@@ -63,11 +63,18 @@ jobs:
           npm install --loglevel=error -g less less-plugin-clean-css uglify-js
           (cd js && npm install --loglevel=error)
 
+      - name: Build/diff CSS files (only for Slow)
+        if: matrix.type == 'Chrome Slow'
+        run: |
+          mv public/agileui.css public/agileui.css.orig
+          # prod: lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
+          lessc public/agileui.less public/agileui.css
+          diff public/agileui.css.orig public/agileui.css
+
       - name: Build JS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
           (cd js && npm run build)
-          lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
           sed -i "s~'https://ui.agiletoolkit.org/public.*~'/demos',~" src/App.php
 
       - name: Init
