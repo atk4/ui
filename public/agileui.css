@@ -4,7 +4,24 @@
 /*---  Colors  ---*/
 /*---  Light Colors  ---*/
 /*---   Neutrals  ---*/
-/******* MAESTRO MENU *******/
+/******* ADMIN TOP MENU *******/
+.ui.inverted.fixed.atk-admin-top-menu {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 201;
+}
+/******* ADMIN SIDENAV MENU *******/
+.atk-maestro-sidenav > .ui.grid {
+  width: 260px;
+}
+.atk-sidenav-content {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+/* A selected item in admin menu */
+.ui.sidebar.atk-sidenav .menu > .item.active {
+  background: none;
+}
+/******* MAESTRO SIDENAV MENU *******/
 .atk-maestro-sidenav {
   cursor: pointer;
   color: white;
@@ -17,7 +34,10 @@
 }
 /* Item without a group in menu */
 .ui.inverted.menu a.atk-maestro-sidenav.item {
-  margin-right: 8px;
+  padding-left: 34px;
+}
+.ui.inverted.menu a.atk-maestro-sidenav.item i {
+  margin-right: 2px;
 }
 .ui.inverted.menu a.atk-maestro-sidenav.item.active {
   background-color: #2185D0;
@@ -39,22 +59,14 @@
   padding-top: 8px;
   padding-bottom: 8px;
 }
+.atk-maestro-sidenav .ui.grid .atk-maestro-menu-title header {
+  margin-left: -10px;
+}
+.atk-maestro-sidenav .ui.grid .atk-maestro-menu-items .menu {
+  margin-left: 10px;
+}
 .atk-maestro-sidenav.active .atk-maestro-menu-title {
   background-color: #2185D0;
-}
-.atk-maestro-sidenav > .ui.grid {
-  width: 260px;
-}
-.atk-sidenav-content {
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-.ui.vertical.menu > .atk-sidenav-content > .item:first-child::before {
-  display: initial !important;
-}
-/* A selected item in admin menu */
-.ui.sidebar.atk-sidenav .menu > .item.active {
-  background: none;
 }
 header.ui.fixed.horizontal.menu {
   min-height: 48px;
@@ -103,7 +115,7 @@ footer.atk-footer .ui.segment {
   margin: 0;
 }
 .ui.left.sidebar {
-  z-index: 201;
+  z-index: 200;
 }
 .atk-right-panel {
   -webkit-transition: box-shadow 0.2s, right 0.2s;
@@ -119,7 +131,7 @@ footer.atk-footer .ui.segment {
   overflow-y: auto;
   position: fixed;
   width: 40%;
-  z-index: 201;
+  z-index: 301;
 }
 .atk-right-panel.atk-visible {
   box-shadow: 0px 0 5px rgba(27, 28, 29, 0.2);
