@@ -50,12 +50,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - name: Install PHP dependencies
-        run: |
-          composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev
-          composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev
-          composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
-
       - name: Install JS dependencies (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
@@ -70,7 +64,8 @@ jobs:
             fpug=${f/.[a-z]*/.pug}
             fhtml=${fpug/.pug/.html}
             mv "$fhtml" "$fhtml.orig"
-            pug "$fpug"
+            pug "$fpug" --pretty
+            sed -i '1{/^$/d}' "$fhtml" # remove generated leading blank lines, see https://github.com/pugjs/pug/issues/3291
             diff "$fhtml" "$fhtml.orig"
           done
 
@@ -87,6 +82,12 @@ jobs:
         run: |
           (cd js && npm run build)
           sed -i "s~'https://ui.agiletoolkit.org/public.*~'/demos',~" src/App.php
+
+      - name: Install PHP dependencies
+        run: |
+          composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev
+          composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev
+          composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
       - name: Init
         run: |
