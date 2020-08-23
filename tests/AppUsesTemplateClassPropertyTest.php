@@ -8,7 +8,6 @@ use atk4\core\AtkPhpunit;
 use atk4\ui\App;
 use atk4\ui\Template;
 
-
 /**
  * Test if property templateClass is used correctly in loadTemplate().
  */
