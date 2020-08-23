@@ -227,6 +227,20 @@ class App
     }
 
     /**
+     *
+     */
+    protected function setupTemplateDirs() {
+        // Set up template folder
+        if ($this->template_dir === null) {
+            $this->template_dir = [];
+        } elseif (!is_array($this->template_dir)) {
+            $this->template_dir = [$this->template_dir];
+        }
+
+        $this->template_dir[] = dirname(__DIR__) .  DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR . $this->skin;
+    }
+
+    /**
      * @param bool $for_shutdown if true will not pass in caughtException method
      */
     public function callExit($for_shutdown = false): void
