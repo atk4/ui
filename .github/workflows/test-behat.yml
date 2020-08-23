@@ -60,12 +60,11 @@ jobs:
       - name: Build/diff HTML files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
-          for f in $(find template -name '*.pug' -o -name '*.html'); do
+          for f in $(find template demos -name '*.pug' -o -name '*.html'); do
             fpug=${f/.[a-z]*/.pug}
             fhtml=${fpug/.pug/.html}
             mv "$fhtml" "$fhtml.orig"
-            pug "$fpug" --pretty
-            sed -i '1{/^$/d}' "$fhtml" # remove generated leading blank lines, see https://github.com/pugjs/pug/issues/3291
+            pug --silent --pretty "$fpug"
             diff "$fhtml" "$fhtml.orig"
           done
 
