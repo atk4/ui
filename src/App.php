@@ -148,6 +148,25 @@ class App
     protected $catch_error_types = E_ALL & ~E_NOTICE;
 
     /**
+     * @var string|null
+     */
+    public $page;
+
+    /**
+     * @var array global sticky arguments
+     */
+    protected $sticky_get_arguments = [
+        '__atk_json' => false,
+        '__atk_tab' => false,
+    ];
+
+    /**
+     * @var string The template class to use in loadTemplate
+     */
+    public $templateClass = Template::class;
+
+
+    /**
      * Constructor.
      *
      * @param array $defaults
@@ -183,14 +202,7 @@ class App
         }
          */
 
-        // Set up template folder
-        if ($this->template_dir === null) {
-            $this->template_dir = [];
-        } elseif (!is_array($this->template_dir)) {
-            $this->template_dir = [$this->template_dir];
-        }
-
-        $this->template_dir[] = __DIR__ . '/../template/' . $this->skin;
+        $this->setupTemplateDirs();
 
         // Set our exception handler
         if ($this->catch_exceptions) {
@@ -212,6 +224,20 @@ class App
         if (!isset($this->ui_persistence)) {
             $this->ui_persistence = new UiPersistence();
         }
+    }
+
+    /**
+     *
+     */
+    protected function setupTemplateDirs() {
+        // Set up template folder
+        if ($this->template_dir === null) {
+            $this->template_dir = [];
+        } elseif (!is_array($this->template_dir)) {
+            $this->template_dir = [$this->template_dir];
+        }
+
+        $this->template_dir[] = dirname(__DIR__) .  DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR . $this->skin;
     }
 
     /**
@@ -546,7 +572,7 @@ class App
      */
     public function loadTemplate($name)
     {
-        $template = new Template();
+        $template = new $this->templateClass();
         $template->app = $this;
 
         if (in_array($name[0], ['.', '/', '\\'], true) || strpos($name, ':\\') !== false) {
@@ -581,19 +607,6 @@ class App
 
         return $request_uri[0];
     }
-
-    /**
-     * @var string|null
-     */
-    public $page;
-
-    /**
-     * @var array global sticky arguments
-     */
-    protected $sticky_get_arguments = [
-        '__atk_json' => false,
-        '__atk_tab' => false,
-    ];
 
     /**
      * Make current get argument with specified name automatically appended to all generated URLs.
