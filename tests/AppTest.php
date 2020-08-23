@@ -14,7 +14,7 @@ class AppTest extends AtkPhpunit\TestCase
     {
         return new App([
             'catch_exceptions' => false,
-            'always_run' => false
+            'always_run' => false,
         ]);
     }
 
