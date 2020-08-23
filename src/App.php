@@ -224,7 +224,6 @@ class App
 
     protected function setupTemplateDirs()
     {
-        // Set up template folder
         if ($this->template_dir === null) {
             $this->template_dir = [];
         } elseif (!is_array($this->template_dir)) {
