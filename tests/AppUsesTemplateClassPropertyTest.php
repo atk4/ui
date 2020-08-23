@@ -10,7 +10,7 @@ use atk4\ui\Template;
 
 
 /**
- * Test if property templateClass is used correctly in loadTemplate()
+ * Test if property templateClass is used correctly in loadTemplate().
  */
 class AppUsesTemplateClassPropertyTest extends AtkPhpunit\TestCase
 {
@@ -26,7 +26,7 @@ class AppUsesTemplateClassPropertyTest extends AtkPhpunit\TestCase
 
     public function testOverwriteTemplateClassSetting()
     {
-        $anotherTemplateClass = new class extends Template {
+        $anotherTemplateClass = new class() extends Template {
         };
         $app = new App(['always_run' => false]);
         $app->templateClass = get_class($anotherTemplateClass);
