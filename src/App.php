@@ -160,11 +160,7 @@ class App
         '__atk_tab' => false,
     ];
 
-    /**
-     * @var string The template class to use in loadTemplate
-     */
     public $templateClass = Template::class;
-
 
     /**
      * Constructor.
@@ -226,10 +222,8 @@ class App
         }
     }
 
-    /**
-     *
-     */
-    protected function setupTemplateDirs() {
+    protected function setupTemplateDirs()
+    {
         // Set up template folder
         if ($this->template_dir === null) {
             $this->template_dir = [];
@@ -237,7 +231,7 @@ class App
             $this->template_dir = [$this->template_dir];
         }
 
-        $this->template_dir[] = dirname(__DIR__) .  DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR . $this->skin;
+        $this->template_dir[] = dirname(__DIR__) . '/template/' . $this->skin;
     }
 
     /**
