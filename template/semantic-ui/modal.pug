@@ -1,9 +1,12 @@
 <{_element}div{/} id="{$_id}" class="{_ui}ui {/} {$class} {_class}{/}" style="{$style}" {$attributes}><i class="{$close}"></i>
     div(class="{$headerCss}") {$title}
-    div(class="img content atk-dialog-content") {$Content}
-    <debug<<{ActionContainer}>>>
-    .actions
-        div {$actions}
-    <debug<<{/ActionContainer}>>>
+    div(class="{$contentCss}") {$Content}
+|
+|{ActionContainer}
+|<div class="actions">
+|   <div>{$actions}</div>
+|</div>
+|{/ActionContainer}
+|
 </{_element}div{/}>
 = "\n"
