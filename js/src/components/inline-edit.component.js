@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 /**
  * Vue component
  * Allow user to edit a db record inline and send

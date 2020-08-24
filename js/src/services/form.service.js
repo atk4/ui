@@ -1,3 +1,5 @@
+/* global atk */
+
 import $ from 'jquery';
 
 /**

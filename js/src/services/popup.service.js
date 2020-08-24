@@ -1,4 +1,3 @@
-import $ from 'jquery';
 
 /**
  * Singleton class

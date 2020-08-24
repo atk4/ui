@@ -98,10 +98,10 @@ export default class sidenav extends atkPlugin {
    */
     addClickHandler() {
         const that = this;
-        this.$el.on('click', (e) => {
-            // simulate click event on first menu item in group.
-            that.menu.find(that.settings.firstItemSelector).first()[0].click();
-            that.menu.toggleClass(that.settings.visibleCssClass);
+        this.$el.find(that.settings.menuGroupTitleSelector).on('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            window.open(that.menu.find(that.settings.firstItemSelector).first().attr('href'), e.metaKey ? '_blank' : '_self');
         });
         this.toggler.on('click', (e) => {
             e.stopPropagation();
@@ -115,6 +115,7 @@ export default class sidenav extends atkPlugin {
 sidenav.DEFAULTS = {
     base: 'index.php',
     menuItemsSelector: '.atk-maestro-menu-items', // The css selector where menu items are contain.
+    menuGroupTitleSelector: '.atk-menu-group-title', // The css selector for menu group title.
     toggleSelector: '.atk-submenu-toggle', // the css selector that will show or hide sub menu.
     visibleCssClass: 'atk-visible', // Display an item when this css class is set.
     menuGroupActiveClass: 'active', // the css class to set when a menu group is active.

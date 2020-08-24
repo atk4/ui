@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import debounce from 'debounce';
 import atkPlugin from './atk.plugin';
 import formService from '../services/form.service';

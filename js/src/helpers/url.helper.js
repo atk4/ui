@@ -1,3 +1,5 @@
+/* global jQuery */
+
 /**
  *  Url helper jQuery functions.
  *
@@ -63,8 +65,6 @@
      * @returns {string|*|string}
      */
     $.atk.removeParam = function (url, param) {
-        let newUrl;
-
         const splitUrl = url.split('?');
         if (splitUrl.length === 0) {
             return url;

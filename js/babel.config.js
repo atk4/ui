@@ -18,4 +18,5 @@ const presets = [
     },
 ];
 
+/*global module*/
 module.exports = { presets: presets };

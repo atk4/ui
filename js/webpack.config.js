@@ -1,4 +1,4 @@
-/* global __dirname:true, require:true */
+/* global __dirname:true, require:true, module */
 /**
  * Webpack v4 configuration file.
  *

@@ -13,7 +13,8 @@ import panelService from './services/panel.service';
 // Create atk plugins.
 createAtkplugins();
 // add version function to atk.
-atk.version = function () { return _ATKVERSION_; };
+atk.version = () => _ATKVERSION_;
+
 // Allow to register a plugin with jQuery;
 atk.registerPlugin = plugin;
 

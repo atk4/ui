@@ -1,5 +1,14 @@
 ## Release note
 
+### version 1.15.2 (2020-08-19)
+
+ - sidenav.plugin.js
+    - fix issue (1406) when using Control or Command click on a link (https://github.com/atk4/ui/issues/1406 )
+
+ - Package 
+    - update package depedencies to latest release;
+    - fix eslint;
+
 ### version 1.15.1 (2020-08-19)
  - URL query parameter for Upload plugin/control was renamed from "action" to "f_upload_action"
  - URL query parameter for Upload plugin/control was renamed from "f_name" to "f_upload_id"

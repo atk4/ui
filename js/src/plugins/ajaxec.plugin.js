@@ -1,3 +1,5 @@
+/* global atk */
+
 import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 
@@ -20,7 +22,6 @@ export default class ajaxec extends atkPlugin {
 
     doExecute() {
         // userConfig callback can use that in order to refer to this plugin.
-        const that = this;
         const url = $.atk.getUrl(this.settings.uri);
         const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
 

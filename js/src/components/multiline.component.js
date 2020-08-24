@@ -1,3 +1,4 @@
+/* global atk, jQuery */
 import multilineBody from './multiline/multiline-body.component';
 import multilineHeader from './multiline/multiline-header.component';
 
@@ -41,7 +42,6 @@ export default {
             hasChangeCb: this.data.hasChangeCb,
             errors: {},
             caption: this.data.caption ? this.data.caption : null,
-            tableProp: { ...this.tableDefault, ...this.data.options },
             tableDefault: {
                 basic: false,
                 celled: false,
@@ -53,6 +53,7 @@ export default {
                 color: null,
                 columns: null,
             },
+            tableProp: { ...this.tableDefault, ...this.data.options },
         };
     },
     components: {
@@ -251,8 +252,7 @@ export default {
      * @returns {Array}
      */
         getInitData: function () {
-            const rows = []; const
-                value = '';
+            const rows = [];
             // Get field name.
             const fields = this.data.fields.map((item) => item.field);
 

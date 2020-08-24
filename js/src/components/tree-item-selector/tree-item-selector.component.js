@@ -1,3 +1,5 @@
+/* global jQuery */
+
 const template = `<div class="item" :style="itemMargin">
         <i :class="toggleIcon" @click="onToggleShow" v-show="!isRoot"></i>
         <i :class="getIcon"  @click="onToggleSelect" v-show="!isRoot"></i>
@@ -202,7 +204,6 @@ export default {
      * Handle a selection when in single mode.
      */
         handleSingleSelect: function () {
-            let values;
             if (this.state === 'off' && !this.isParent) {
                 this.getRootData().values = [this.item.id];
                 this.setInput(this.item.id);

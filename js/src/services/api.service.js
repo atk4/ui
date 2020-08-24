@@ -1,3 +1,5 @@
+/* global jQuery */
+
 import $ from 'jquery';
 
 /**
@@ -211,8 +213,8 @@ class ApiService {
    */
     onFailure(response) {
     // if json is returned, it should contains the error within message property
-        if (response.hasOwnProperty('success') && !response.success) {
-            if (response.hasOwnProperty('useWindow') && response.useWindow) {
+        if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
+            if (Object.prototype.hasOwnProperty.call(response, 'useWindow') && response.useWindow) {
                 apiService.showErrorWindow(response.message);
             } else {
                 apiService.showErrorModal(response.message);

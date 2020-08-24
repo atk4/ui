@@ -76,6 +76,7 @@
 </template>
 
 <script>
+/* global atk */
 import QueryBuilderRule from 'vue-query-builder/dist/rule/QueryBuilderRule.umd.js';
 
 export default {
@@ -112,12 +113,13 @@ export default {
         },
         dateValue: {
             get: function () {
-                if (this.dateString) {
+              let tempDate = this.dateString;
+                if (tempDate) {
                     // fix date parsing for different time zone if time is not supply.
-                    if (this.dateString.match(/^[0-9]{4}[\/\-\.][0-9]{2}[\/\-\.][0-9]{2}$/)) {
-                        this.dateString += ' 00:00:00';
+                    if (tempDate.match(/^[0-9]{4}[/\-.][0-9]{2}[/\-.][0-9]{2}$/)) {
+                        tempDate = tempDate + ' 00:00:00';
                     }
-                    return new Date(this.dateString);
+                    return new Date(tempDate);
                 }
                 return new Date();
             },

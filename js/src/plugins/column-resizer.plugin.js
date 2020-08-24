@@ -38,8 +38,6 @@ export default class columnResizer extends atkPlugin {
    * @param e  the event.
    */
     onResize(e) {
-        const table = this.$el;
-
         const columns = this.$el.find('th');
 
         const widths = [];
