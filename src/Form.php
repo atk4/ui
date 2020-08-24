@@ -28,6 +28,9 @@ class Form extends View
     public $ui = 'form';
     public $defaultTemplate = 'form.html';
 
+    /** @var Callback Callback handling form submission. */
+    public $cb;
+
     /**
      * Set this to false in order to
      * prevent from leaving
@@ -47,6 +50,14 @@ class Form extends View
      * @var bool
      */
     public $canLeave = true;
+
+    /**
+     * Html <form> element, all inner form controls are linked to it on render
+     * with html form="form_id" attribute.
+     *
+     * @var View
+     */
+    public $formElement;
 
     /**
      * A current layout of a form, needed if you call $form->addControl().
@@ -178,9 +189,16 @@ class Form extends View
             throw new Exception('AboveFields region has be deprecated. Use AboveControls instead');
         }
 
+        $this->formElement = View::addTo($this, ['element' => 'form', 'short_name' => 'form'], ['FormElementOnly']);
+
         // Initialize layout, so when you call addControl / setModel next time, form will know
         // where to add your fields.
         $this->initLayout();
+
+        // set css loader for this form
+        $this->setApiConfig(['stateContext' => '#' . $this->name]);
+
+        $this->cb = $this->add(new JsCallback(), ['desired_name' => 'submit']);
     }
 
     /**
@@ -204,12 +222,15 @@ class Form extends View
                 ->addMoreInfo('layout', $this->layout);
         }
 
+        // allow to submit by pressing an enter key when child control is focused
+        $this->on('submit', new JsExpression('if (event.target === this) { $([name]).form("submit"); }', ['name' => '#' . $this->formElement->name]));
+
         // Add save button in layout
         if ($this->buttonSave) {
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
-            $this->buttonSave->on('click', $this->js()->form('submit'));
-            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#' . $this->name]));
+            $this->buttonSave->on('click', $this->js(null, null, $this->formElement)->form('submit'));
+            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13){ $([name]).form("submit"); }', ['name' => '#' . $this->formElement->name]));
         }
     }
 
@@ -289,6 +310,32 @@ class Form extends View
     public function onSubmit(\Closure $callback)
     {
         $this->onHook(self::HOOK_SUBMIT, $callback);
+
+        $this->cb->set(function () {
+            try {
+                $this->loadPost();
+                $response = $this->hook(self::HOOK_SUBMIT);
+
+                if (!$response) {
+                    if (!$this->model instanceof \atk4\ui\Misc\ProxyModel) {
+                        $this->model->save();
+
+                        return $this->success('Form data has been saved');
+                    }
+
+                    return new JsExpression('console.log([])', ['Form submission is not handled']);
+                }
+
+                return $response;
+            } catch (\atk4\data\ValidationException $val) {
+                $response = [];
+                foreach ($val->errors as $field => $error) {
+                    $response[] = $this->error($field, $error);
+                }
+
+                return $response;
+            }
+        });
 
         return $this;
     }
@@ -608,10 +655,7 @@ class Form extends View
         }
     }
 
-    /**
-     * Renders view.
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         $this->ajaxSubmit();
         if (!empty($this->controlDisplayRules)) {
@@ -619,7 +663,22 @@ class Form extends View
             $this->js(true, new JsConditionalForm($this, $this->fieldsDisplayRules ?: $this->controlDisplayRules, $this->fieldDisplaySelector ?: $this->controlDisplaySelector));
         }
 
-        return parent::renderView();
+        parent::renderView();
+    }
+
+    protected function renderTemplateToHtml(string $region = null): string
+    {
+        $output = parent::renderTemplateToHtml($region);
+
+        return $this->fixFormInRenderedHtml($output);
+    }
+
+    public function fixFormInRenderedHtml(string $html): string
+    {
+        $innerFormTags = ['button', 'datalist', 'fieldset', 'input', 'keygen', 'label', 'legend',
+            'meter', 'optgroup', 'option', 'output', 'progress', 'select', 'textarea', ];
+
+        return preg_replace('~<(' . implode('|', $innerFormTags) . ')(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $html);
     }
 
     /**
@@ -657,43 +716,10 @@ class Form extends View
      */
     public function ajaxSubmit()
     {
-        $this->_add($cb = new JsCallback(), ['desired_name' => 'submit', 'postTrigger' => true]);
+        $this->js(true)->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
 
-        View::addTo($this, ['element' => 'input'])
-            ->setAttr('name', $cb->postTrigger)
-            ->setAttr('value', 'submit')
-            ->setStyle(['display' => 'none']);
-
-        $cb->set(function () {
-            try {
-                $this->loadPost();
-                $response = $this->hook(self::HOOK_SUBMIT);
-
-                if (!$response) {
-                    if (!$this->model instanceof \atk4\ui\Misc\ProxyModel) {
-                        $this->model->save();
-
-                        return $this->success('Form data has been saved');
-                    }
-
-                    return new JsExpression('console.log([])', ['Form submission is not handled']);
-                }
-
-                return $response;
-            } catch (\atk4\data\ValidationException $val) {
-                $response = [];
-                foreach ($val->errors as $field => $error) {
-                    $response[] = $this->error($field, $error);
-                }
-
-                return $response;
-            }
-        });
-
-        //var_dump($cb->getUrl());
-        $this->js(true)
-            ->api(array_merge(['url' => $cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig))
-            ->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
+        $this->js(true, null, $this->formElement)
+            ->api(array_merge(['url' => $this->cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig));
 
         $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new JsExpression('$(this).attr("name")')));
 

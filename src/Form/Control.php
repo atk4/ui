@@ -118,13 +118,23 @@ class Control extends View
      * It only makes sense to have "name" property inside a field if
      * it was used inside a form.
      */
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->form) {
             $this->template->trySet('name', $this->short_name);
         }
 
         parent::renderView();
+    }
+
+    protected function renderTemplateToHtml(string $region = null): string
+    {
+        $output = parent::renderTemplateToHtml($region);
+
+        /** @var Form|null $form */
+        $form = $this->getClosestOwner($this, Form::class);
+
+        return $form !== null ? $form->fixFormInRenderedHtml($output) : $output;
     }
 
     /**
@@ -143,7 +153,7 @@ class Control extends View
      * $control->onChange(new \atk4\ui\JsExpression('console.log("changed")'));
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
-     * @param string|\atk4\ui\JsExpression|array|callable $expr
+     * @param string|\atk4\ui\JsExpression|array|\Closure $expr
      * @param array|bool                                  $default
      */
     public function onChange($expr, $default = [])

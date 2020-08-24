@@ -35,6 +35,16 @@ class JsCallback extends Callback implements JsExpressionable
     public $storeName;
 
     /**
+     * Usually JsCallback should not allow to trigger during a reload.
+     * Consider reloading a form, if triggering is allowed during the reload process
+     * then $form->model could be saved during that reload which can lead to unexpected result
+     * if model id is not properly handled.
+     *
+     * @var bool
+     */
+    public $triggerOnReload = false;
+
+    /**
      * When multiple JsExpressionable's are collected inside an array and may
      * have some degree of nesting, convert it into a one-dimensional array,
      * so that it's easier for us to wrap it into a function body.
@@ -83,18 +93,17 @@ class JsCallback extends Callback implements JsExpressionable
         $this->confirm = $text;
     }
 
-    public function set($callback, $args = [])
+    public function set($fx = null, $args = null)
     {
         $this->args = [];
-
-        foreach ($args as $key => $val) {
+        foreach ($args ?? [] as $key => $val) {
             if (is_numeric($key)) {
                 $key = 'c' . $key;
             }
             $this->args[$key] = $val;
         }
 
-        parent::set(function () use ($callback) {
+        parent::set(function () use ($fx) {
             try {
                 $chain = new Jquery(new JsExpression('this'));
 
@@ -103,7 +112,7 @@ class JsCallback extends Callback implements JsExpressionable
                     $values[] = $_POST[$key] ?? null;
                 }
 
-                $response = call_user_func_array($callback, array_merge([$chain], $values));
+                $response = $fx(...array_merge([$chain], $values));
 
                 $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
 
@@ -168,7 +177,7 @@ class JsCallback extends Callback implements JsExpressionable
         return $ajaxec;
     }
 
-    public function getUrl($mode = 'callback')
+    public function getUrl(string $mode = 'callback'): string
     {
         throw new Exception('Do not use getUrl on JsCallback, use getJsUrl()');
     }

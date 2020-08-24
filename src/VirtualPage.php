@@ -18,7 +18,7 @@ class VirtualPage extends View
     /** @var Callback */
     public $cb;
 
-    /** @var callable Optional callback function of virtual page */
+    /** @var \Closure Optional callback function of virtual page */
     public $fx;
 
     /** @var string specify custom callback trigger for the URL (see Callback::$urlTrigger) */
@@ -34,8 +34,7 @@ class VirtualPage extends View
     {
         parent::init();
 
-        $this->cb = $this->_add([Callback::class, 'urlTrigger' => $this->urlTrigger ?: $this->name]);
-        $this->app->stickyGet($this->cb->urlTrigger);
+        $this->cb = $this->add([Callback::class, 'urlTrigger' => $this->urlTrigger ?: $this->name]);
     }
 
     /**
@@ -68,9 +67,9 @@ class VirtualPage extends View
     /**
      * Is virtual page active?
      */
-    public function triggered()
+    public function isTriggered(): bool
     {
-        return $this->cb->triggered();
+        return $this->cb->isTriggered();
     }
 
     /**
@@ -107,14 +106,14 @@ class VirtualPage extends View
     {
         $this->cb->set(function () {
             // if virtual page callback is triggered
-            if ($type = $this->cb->triggered()) {
+            if ($mode = $this->cb->getTriggeredValue()) {
                 // process callback
                 if ($this->fx) {
-                    call_user_func($this->fx, $this);
+                    ($this->fx)($this);
                 }
 
                 // special treatment for popup
-                if ($type === 'popup') {
+                if ($mode === 'popup') {
                     $this->app->html->template->set('title', $this->app->title);
                     $this->app->html->template->setHtml('Content', parent::getHtml());
                     $this->app->html->template->appendHtml('HEAD', $this->getJs());
@@ -128,11 +127,11 @@ class VirtualPage extends View
                 }
 
                 if (isset($_GET['__atk_tab'])) {
-                    $this->app->terminateHtml($this->renderTab());
+                    $this->app->terminateHtml($this->renderToTab());
                 }
 
                 // do not terminate if callback supplied (no cutting)
-                if ($type !== 'callback') {
+                if ($mode !== 'callback') {
                     $this->app->terminateHtml($this);
                 }
             }
@@ -156,12 +155,17 @@ class VirtualPage extends View
             $this->app->layout->template->setHtml('Content', parent::getHtml());
             $this->app->layout->_js_actions = array_merge($this->app->layout->_js_actions, $this->_js_actions);
 
-            $this->app->html->template->setHtml('Content', $this->app->layout->getHtml());
+            $this->app->html->template->setHtml('Content', $this->app->layout->template->render());
             $this->app->html->template->setHtml('Modals', $modalHtml);
 
             $this->app->html->template->appendHtml('HEAD', $this->app->layout->getJs());
 
             $this->app->terminateHtml($this->app->html->template);
         });
+    }
+
+    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    {
+        return $this->cb;
     }
 }

@@ -45,7 +45,7 @@ class Upload extends Input
      *
      * @var string
      */
-    public $defaultTemplate = 'formfield/upload.html';
+    public $defaultTemplate = 'form/control/upload.html';
 
     /**
      * Callback is use for onUpload or onDelete.
@@ -80,6 +80,9 @@ class Upload extends Input
 
     public $jsActions = [];
 
+    public const UPLOAD_ACTION = 'upload';
+    public const DELETE_ACTION = 'delete';
+
     /** @var bool check if callback is trigger by one of the action. */
     private $_isCbRunning = false;
 
@@ -103,19 +106,18 @@ class Upload extends Input
      *
      * @param string      $fileId   // Field id for onDelete Callback
      * @param string|null $fileName // Field name display to user
-     * @param mixed       $junk
      *
-     * @return $this|void
+     * @return $this
      */
-    public function set($fileId = null, $fileName = null, $junk = null)
+    public function set($fileId = null, $fileName = null)
     {
         $this->setFileId($fileId);
 
-        if (!$fileName) {
+        if ($fileName === null) {
             $fileName = $fileId;
         }
 
-        return $this->setInput($fileName, $junk);
+        return $this->setInput($fileName);
     }
 
     /**
@@ -140,9 +142,6 @@ class Upload extends Input
         return $this->field ? $this->field->get() : $this->content;
     }
 
-    /**
-     * Set file id.
-     */
     public function setFileId($id)
     {
         $this->fileId = $id;
@@ -161,93 +160,91 @@ class Upload extends Input
     }
 
     /**
-     * onDelete callback.
-     * Call when user is removing an already upload file.
-     *
-     * @param callable $fx
-     */
-    public function onDelete($fx = null)
-    {
-        if (is_callable($fx)) {
-            $this->hasDeleteCb = true;
-            $action = $_POST['action'] ?? null;
-            if ($this->cb->triggered() && $action === 'delete') {
-                $this->_isCbRunning = true;
-                $fileName = $_POST['f_name'] ?? null;
-                $this->cb->set(function () use ($fx, $fileName) {
-                    $this->addJsAction(call_user_func_array($fx, [$fileName]));
-
-                    return $this->jsActions;
-                });
-            }
-        }
-    }
-
-    /**
-     * onUpload callback.
      * Call when user is uploading a file.
-     *
-     * @param callable $fx
      */
-    public function onUpload($fx = null)
+    public function onUpload(\Closure $fx)
     {
-        if (is_callable($fx)) {
-            $this->hasUploadCb = true;
-            if ($this->cb->triggered()) {
-                $this->_isCbRunning = true;
-                $action = $_POST['action'] ?? null;
-                $files = $_FILES ?? null;
-                if ($files) {
-                    //set fileId to file name as default.
-                    $this->fileId = $files['file']['name'];
-                    // display file name to user as default.
-                    $this->setInput($this->fileId);
-                }
-                if ($action === 'upload' && !$files['file']['error']) {
-                    $this->cb->set(function () use ($fx, $files) {
-                        $this->addJsAction(call_user_func_array($fx, $files));
-                        //$value = $this->field ? $this->field->get() : $this->content;
-                        $this->addJsAction([
-                            $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
-                        ]);
+        $this->hasUploadCb = true;
+        if (($_POST['f_upload_action'] ?? null) === self::UPLOAD_ACTION) {
+            $this->cb->set(function () use ($fx) {
+                $postFiles = [];
+                for ($i = 0;; ++$i) {
+                    $k = 'file' . ($i > 0 ? '-' . $i : '');
+                    if (!isset($_FILES[$k])) {
+                        break;
+                    }
 
-                        return $this->jsActions;
-                    });
-                } elseif ($action === null || isset($files['file']['error'])) {
-                    $this->cb->set(function () use ($fx, $files) {
-                        return call_user_func($fx, 'error');
-                    });
+                    $postFile = $_FILES[$k];
+                    if ($postFile['error'] !== 0) {
+                        // unset all details on upload error
+                        $postFile = array_intersect_key($postFile, array_flip('error', 'name'));
+                    }
+                    $postFiles[] = $postFile;
                 }
-            }
+
+                if (count($postFiles) > 0) {
+                    $fileId = reset($postFiles)['name'];
+                    $this->setFileId($fileId);
+                    $this->setInput($fileId);
+                }
+
+                $this->addJsAction($fx(...$postFiles));
+
+                if (count($postFiles) > 0 && reset($postFiles)['error'] === 0) {
+                    $this->addJsAction([
+                        $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
+                    ]);
+                }
+
+                return $this->jsActions;
+            });
         }
     }
 
     /**
-     * Rendering view.
+     * Call when user is removing an already upload file.
      */
-    public function renderView()
+    public function onDelete(\Closure $fx)
     {
-        //need before parent rendering.
+        $this->hasDeleteCb = true;
+        if (($_POST['f_upload_action'] ?? null) === self::DELETE_ACTION) {
+            $this->cb->set(function () use ($fx) {
+                $fileId = $_POST['f_upload_id'] ?? null;
+                $this->addJsAction($fx($fileId));
+
+                return $this->jsActions;
+            });
+        }
+    }
+
+    protected function renderView(): void
+    {
+        // need before parent rendering.
         if ($this->disabled) {
             $this->addClass('disabled');
         }
         parent::renderView();
 
-        if (!$this->_isCbRunning && (!$this->hasUploadCb || !$this->hasDeleteCb)) {
-            throw new Exception('onUpload and onDelete callback must be called to use file upload. Missing one or both of them.');
+        if ($this->cb->canTerminate()) {
+            $uploadAction = $_POST['f_upload_action'] ?? null;
+            if (!$this->hasUploadCb && ($uploadAction === self::UPLOAD_ACTION)) {
+                throw new Exception('Missing onUpload callback.');
+            } elseif (!$this->hasDeleteCb && ($uploadAction === self::DELETE_ACTION)) {
+                throw new Exception('Missing onDelete callback.');
+            }
         }
+
         if (!empty($this->accept)) {
             $this->template->trySet('accept', implode(',', $this->accept));
         }
         if ($this->multiple) {
-            //$this->template->trySet('multiple', 'multiple');
+            $this->template->trySet('multiple', 'multiple');
         }
 
         if ($this->placeholder) {
             $this->template->trySet('PlaceHolder', $this->placeholder);
         }
 
-        //$value = $this->field ? $this->field->get() : $this->content;
         $this->js(true)->atkFileUpload([
             'uri' => $this->cb->getJsUrl(),
             'action' => $this->action->name,

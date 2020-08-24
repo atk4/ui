@@ -19,7 +19,7 @@ class Content extends View implements LoadableContent
     {
         parent::init();
         $this->addClass('atk-panel-content');
-        $this->setCb(new Callback(['appSticky' => true]));
+        $this->setCb(new Callback());
     }
 
     /**
@@ -42,17 +42,12 @@ class Content extends View implements LoadableContent
 
     /**
      * Will load content into callback.
-     * Callable will receive this view as first parameter.
-     *
-     * @param $callback
      */
-    public function onLoad($callback)
+    public function onLoad(\Closure $fx)
     {
-        $this->cb->set(function () use ($callback) {
-            if ($this->cb->triggered()) {
-                call_user_func($callback, $this);
-                $this->cb->terminate();
-            }
+        $this->cb->set(function () use ($fx) {
+            $fx($this);
+            $this->cb->terminateJson($this);
         });
     }
 
@@ -63,5 +58,10 @@ class Content extends View implements LoadableContent
     public function getClearSelector(): array
     {
         return ['.atk-panel-content'];
+    }
+
+    protected function mergeStickyArgsFromChildView(): ?\atk4\ui\AbstractView
+    {
+        return $this->cb;
     }
 }

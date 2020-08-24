@@ -11,7 +11,7 @@ use atk4\ui\JsToast;
 require_once __DIR__ . '/../init-app.php';
 
 $form = Form::addTo($app);
-$form->name = 'test_form';
+$form->cb->setUrlTrigger('test_submit');
 
 $form->addControl('f1')->set('v1');
 

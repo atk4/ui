@@ -63,24 +63,23 @@ class FilterPopup extends Popup
 
         $this->form->setControlsDisplayRules($model->getFormDisplayRules());
 
-        //load data associated with this popup.
+        // load data associated with this popup.
         if ($data = $model->recallData()) {
-            $model->set($data);
+            $model->setMulti($data);
         }
         $this->form->setModel($model);
 
         $this->form->onSubmit(function (Form $form) {
             $form->model->save();
-            //trigger click action in order to close popup.
-            //otherwise calling ->popup('hide') is not working as expected.
-            return (new Jquery($this->triggerBy))->trigger('click');
+
+            return new jsReload($this->reload);
         });
 
         \atk4\ui\Button::addTo($this->form, ['Clear', 'clear '])->on('click', function ($f) use ($model) {
             $model->clearData();
 
             return [
-                $this->form->js()->form('reset'),
+                $this->form->js(null, null, $this->form->formElement)->form('reset'),
                 new JsReload($this->reload),
                 (new Jquery($this->colTrigger))->trigger('click'),
             ];

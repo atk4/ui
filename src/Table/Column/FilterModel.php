@@ -112,12 +112,10 @@ class FilterModel extends \atk4\data\Model
 
     /**
      * Recall filter model data.
-     *
-     * @return array
      */
-    public function recallData()
+    public function recallData(): array
     {
-        return $this->recall('data');
+        return $this->recall('data', []);
     }
 
     /**

@@ -26,5 +26,5 @@ interface LoadableContent
     /**
      * The callback for loading content.
      */
-    public function onLoad(callable $callable);
+    public function onLoad(\Closure $fx);
 }

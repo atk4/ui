@@ -14,10 +14,10 @@ use atk4\ui\Template;
 class Layout extends AbstractLayout
 {
     /** {@inheritdoc} */
-    public $defaultTemplate = 'formlayout/generic.html';
+    public $defaultTemplate = 'form/layout/generic.html';
 
     /** @var string Default input template file. */
-    public $defaultInputTemplate = 'formlayout/generic-input.html';
+    public $defaultInputTemplate = 'form/layout/generic-input.html';
 
     /**
      * If specified will appear on top of the group. Can be string or Label object.
@@ -49,7 +49,7 @@ class Layout extends AbstractLayout
 
     protected function _addControl($decorator, $field)
     {
-        return $this->_add($decorator, ['desired_name' => $field->short_name]);
+        return $this->add($decorator, ['desired_name' => $field->short_name]);
     }
 
     public function init(): void
@@ -135,7 +135,7 @@ class Layout extends AbstractLayout
     /**
      * Recursively renders this view.
      */
-    public function recursiveRender()
+    protected function recursiveRender(): void
     {
         $labeledControl = $this->inputTemplate->cloneRegion('LabeledControl');
         $noLabelControl = $this->inputTemplate->cloneRegion('NoLabelControl');
@@ -188,11 +188,6 @@ class Layout extends AbstractLayout
             if ($element instanceof \atk4\ui\Form\Control\Checkbox) {
                 $template = $noLabelControl;
                 $element->template->set('Content', $label);
-                /*
-                $element->addClass('field');
-                $this->template->appendHtml('Fields', '<div class="field">'.$element->getHtml().'</div>');
-                continue;
-                 */
             }
 
             if ($this->label && $this->inline) {
@@ -204,7 +199,7 @@ class Layout extends AbstractLayout
                 $element->placeholder = $label;
             }
 
-            // Fields get extra pampering
+            // Controls get extra pampering
             $template->setHtml('Input', $element->getHtml());
             $template->trySet('label', $label);
             $template->trySet('label_for', $element->id . '_input');

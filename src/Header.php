@@ -57,7 +57,7 @@ class Header extends View
 
     public $defaultTemplate = 'header.html';
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->size) {
             if (is_numeric($this->size)) {
@@ -90,8 +90,9 @@ class Header extends View
         if (!$this->icon && !$this->elements) {
             $this->template->del('has_content');
             $this->template->set('title', $this->content);
+            $this->content = false;
         }
 
-        return parent::renderView();
+        parent::renderView();
     }
 }

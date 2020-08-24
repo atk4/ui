@@ -18,10 +18,7 @@ class TabsSubview extends View
         $this->owner->activeTabName = $this->dataTabName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         $this->setAttr('data-tab', $this->dataTabName);
 

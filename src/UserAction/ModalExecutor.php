@@ -42,7 +42,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     public const HOOK_STEP = self::class . '@onStep';
 
     /**
-     * @var JsExpressionable array|callable JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
+     * @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
      */
     public $jsSuccess;
 
@@ -130,7 +130,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->id = mb_strtolower($this->name . '_' . $table_name . '_' . $action->short_name);
         $this->name = $this->id;
 
-        //Add buttons to modal for next and previous.
+        // Add buttons to modal for next and previous.
         $this->btns = (new View())->addStyle(['min-height' => '24px']);
         $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
         $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);
@@ -338,7 +338,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->_addStepTitle($modal, $this->step);
 
         if ($fields = $this->actionData['fields'] ?? null) {
-            $this->action->getModel()->set($fields);
+            $this->action->getModel()->setMulti($fields);
         }
 
         if ($prev = $this->getPreviousStep($this->step)) {
@@ -412,7 +412,9 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      */
     protected function jsGetExecute($obj, $id)
     {
-        $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id, $obj]) : $this->jsSuccess;
+        $success = $this->jsSuccess instanceof \Closure
+            ? ($this->jsSuccess)($this, $this->action->owner, $id, $obj)
+            : $this->jsSuccess;
 
         return [
             $this->hide(),
@@ -514,7 +516,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     protected function setFormField(Form $form, array $fields, string $step): Form
     {
         foreach ($fields as $k => $val) {
-            $form->getField($k)->set($val);
+            $form->getControl($k)->set($val);
         }
         $this->hook(self::HOOK_STEP, [$step, $form]);
 
@@ -620,10 +622,10 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     protected function jsSetSubmitBtn(View $view, Form $form, string $step)
     {
         if ($this->isLastStep($step)) {
-            $view->js(true, $this->execActionBtn->js()->on('click', new JsFunction([$form->js()->form('submit')])));
+            $view->js(true, $this->execActionBtn->js()->on('click', new JsFunction([$form->js(null, null, $form->formElement)->form('submit')])));
         } else {
             // submit on next
-            $view->js(true, $this->nextStepBtn->js()->on('click', new JsFunction([$form->js()->form('submit')])));
+            $view->js(true, $this->nextStepBtn->js()->on('click', new JsFunction([$form->js(null, null, $form->formElement)->form('submit')])));
         }
     }
 
@@ -711,13 +713,10 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         }
     }
 
-    /**
-     * Handle exception.
-     */
-    private function _handleException($e, $view, $step)
+    private function _handleException(\Throwable $exception, $view, $step)
     {
         $msg = Message::addTo($view, ['Error:', 'type' => 'error']);
-        $msg->text->addParagraph($e->getMessage());
+        $msg->text->addHtml($this->app->renderExceptionHtml($exception));
         $view->js(true, $this->nextStepBtn->js()->addClass('disabled'));
         if (!$this->isFirstStep($step)) {
             $this->jsSetPrevHandler($view, $step);

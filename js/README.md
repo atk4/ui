@@ -35,8 +35,8 @@ Another example would be the upload service for file uploading using one of your
       theElement,
       {data: 'value'},
       url,             
-      onComplete(){}, //the callback function when upload is complete.
-      onXhr(){}       //the callback function when uploading files is in progress.
+      onComplete(){}, // the callback function when upload is complete.
+      onXhr(){}       // the callback function when uploading files is in progress.
     );
 ```
 
@@ -55,7 +55,7 @@ Let's create a new jQuery plugin that will change every selected dom element tex
 The plugin can now by invoke using:
 
 ```
-    //Change all link color text to green.
+    // Change all link color text to green.
     $('a').atkGreenify();
 ```
 
@@ -85,6 +85,31 @@ the package. Once load in your page, code can be debugged in browser from the we
 
 Any change made to the source, will also be re-compile automatically when using the "dev" script.
 
+#### Analyzing bundle profile
+
+Bundle profile may be analyze using various tools. npm script are availabe for producing 
+the json file for this. 
+
+```
+    npm run profile
+```
+
+This command will create a profile json file `atkjs-bundle-profile.json` with bundle information inside the profile folder. You can use this file with your 
+favorite bundle analyzer. 
+
+Another npm script is available for analyzing the bundle using the webpack-bundle-analyzer tool.
+
+```
+    npm run analyze-profile
+```
+
+Note: In order to use this script, make sure that the webpack-bundle-analyzer package is intall
+globally.
+
+```
+    npm install -g webpack-bundle-analyzer
+```
+
 ### Production
 
 For production, simply use the "build" script supply in package.json.
@@ -93,4 +118,4 @@ For production, simply use the "build" script supply in package.json.
     npm run build
 ```
 
-This command will output the atkjs-ui.min.js file, also in /public folder. 
+This command will output the atkjs-ui.min.js file, also in /public folder.

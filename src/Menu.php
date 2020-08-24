@@ -153,10 +153,8 @@ class Menu extends View
      *
      * @param View|string|array $seed   New object to add
      * @param string|array|null $region
-     *
-     * @return View
      */
-    public function add($seed, $region = null)
+    public function add($seed, $region = null): AbstractView
     {
         return parent::add($seed, $region)->addClass('item');
     }
@@ -186,10 +184,7 @@ class Menu extends View
         return parent::getHtml();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->activate_on_click && $this->ui === 'menu') {
             // Semantic UI need some JS magic

@@ -38,7 +38,7 @@ class Calendar extends Input
         $this->options[$name] = $value;
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if (!$this->icon) {
             switch ($this->type) {

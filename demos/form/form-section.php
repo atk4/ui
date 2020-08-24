@@ -16,7 +16,7 @@ require_once __DIR__ . '/../init-app.php';
 $model = new CountryLock($app->db);
 $model->loadAny();
 
-//Prevent form from saving
+// Prevent form from saving
 $noSave = function (Form $form) {
     return new \atk4\ui\JsToast([
         'title' => 'POSTed field values',

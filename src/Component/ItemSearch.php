@@ -82,7 +82,7 @@ class ItemSearch extends View
         return $model;
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $this->class = [];
         $this->template->set('inputCss', $this->inputCss);

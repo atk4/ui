@@ -10,7 +10,7 @@ use atk4\ui\JsFunction;
 
 class Lookup extends Input
 {
-    public $defaultTemplate = 'formfield/lookup.html';
+    public $defaultTemplate = 'form/control/lookup.html';
     public $ui = 'input';
 
     /**
@@ -52,7 +52,7 @@ class Lookup extends Input
      * with dependency
      * Then model of the 'state' field can be limited to states of the currently selected 'country'.
      *
-     * @var callable
+     * @var \Closure
      */
     public $dependency;
 
@@ -122,7 +122,7 @@ class Lookup extends Input
      * Define callback for generating the row data
      * If left empty default callback Lookup::defaultRenderRow is used.
      *
-     * @var callable|null
+     * @var \Closure|null
      */
     public $renderRowFunction;
 
@@ -202,9 +202,9 @@ class Lookup extends Input
      */
     public function renderRow(\atk4\data\Model $row): array
     {
-        $renderRowFunction = is_callable($this->renderRowFunction) ? $this->renderRowFunction : [__CLASS__, 'defaultRenderRow'];
+        $renderRowFunction = $this->renderRowFunction ?? \Closure::fromCallable([static::class, 'defaultRenderRow']);
 
-        return call_user_func($renderRowFunction, $this, $row);
+        return $renderRowFunction($this, $row);
     }
 
     /**
@@ -306,7 +306,7 @@ class Lookup extends Input
 
         if ($this->search instanceof \Closure) {
             $this->search($this->model, $_GET['q']);
-        } elseif ($this->search && is_array($this->search)) {
+        } elseif (is_array($this->search)) {
             $this->model->addCondition(array_map(function ($field) {
                 return [$field, 'like', '%' . $_GET['q'] . '%'];
             }, $this->search));
@@ -322,7 +322,7 @@ class Lookup extends Input
      */
     protected function applyDependencyConditions()
     {
-        if (!is_callable($this->dependency)) {
+        if (!($this->dependency instanceof \Closure)) {
             return;
         }
 
@@ -335,7 +335,7 @@ class Lookup extends Input
             return;
         }
 
-        call_user_func($this->dependency, $this->model, $data);
+        ($this->dependency)($this->model, $data);
     }
 
     /**
@@ -382,7 +382,7 @@ class Lookup extends Input
         $chain->dropdown($settings);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $this->callback = \atk4\ui\Callback::addTo($this);
         $this->callback->set([$this, 'outputApiResponse']);
@@ -408,7 +408,7 @@ class Lookup extends Input
 
         if ($this->dependency) {
             $this->apiConfig['data'] = array_merge([
-                'form' => new JsFunction([new JsExpression('return []', [$this->js()->closest('form')->serialize()])]),
+                'form' => new JsFunction([new JsExpression('return []', [$this->form->formElement->js()->serialize()])]),
             ], $this->apiConfig['data'] ?? []);
         }
 

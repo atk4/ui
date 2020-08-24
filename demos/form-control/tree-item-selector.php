@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Form;
+use atk4\ui\JsToast;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -38,24 +39,28 @@ $items = [
 
 $form = Form::addTo($app);
 $control = $form->addControl('tree', [Form\Control\TreeItemSelector::class, 'treeItems' => $items, 'caption' => 'Multiple selection:'], ['type' => 'array', 'serialize' => 'json']);
-$control->set(json_encode([201, 301, 503]));
+$control->set($app->encodeJson([201, 301, 503]));
 
 //$control->onItem(function($value) {
 //    return new \atk4\ui\JsToast(json_encode($value));
 //});
 
-$control = $form->addControl('tree1', [Form\Control\TreeItemSelector::class, 'treeItems' => $items, 'allowMultiple' => false, 'caption' => 'Single selection:'], ['type' => 'array']);
-$control->set([502]);
+$control = $form->addControl('tree1', [Form\Control\TreeItemSelector::class, 'treeItems' => $items, 'allowMultiple' => false, 'caption' => 'Single selection:']);
+$control->set(502);
 
 //$control->onItem(function($tree) {
 //    return new JsToast('Received 1');
 //});
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(function (Form $form) use ($app) {
     $response = [
         'multiple' => $form->model->get('tree'),
         'single' => $form->model->get('tree1'),
     ];
 
-    return print_r(json_encode($response, JSON_PRETTY_PRINT));
+    $view = new \atk4\ui\Message('Items: ');
+    $view->init();
+    $view->text->addParagraph($app->encodeJson($response));
+
+    return $view;
 });

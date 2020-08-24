@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Form;
+use atk4\ui\JsToast;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -13,6 +14,10 @@ require_once __DIR__ . '/../init-app.php';
     'Forms below focus on Data integration and automated layouts',
     'ui' => 'ignored warning message',
 ]);
+
+$formSubmit = function ($f) use ($app) {
+    return new JsToast($app->encodeJson($f->model->get()));
+};
 
 $cc = \atk4\ui\Columns::addTo($app);
 $form = Form::addTo($cc->addColumn());
@@ -34,6 +39,8 @@ $form->addControl('five', new Form\Control\Checkbox())->set(true);
 
 // Objects still accept seed
 $form->addControl('six', new Form\Control\Checkbox(['caption' => 'Caption3']));
+
+$form->onSubmit($formSubmit);
 
 $model = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
 
@@ -57,6 +64,7 @@ $model->addField('six', ['caption' => 'badcaption', 'ui' => ['form' => new Form\
 
 $form = Form::addTo($cc->addColumn());
 $form->setModel($model);
+$form->onSubmit($formSubmit);
 
 // Next form won't initalize default fields, but we'll add them individually
 $form = Form::addTo($cc->addColumn());
@@ -79,3 +87,4 @@ $form->addControl('five', new Form\Control\Checkbox());
 
 // can add field that does not exist in a model
 $form->addControl('nine', new Form\Control\Checkbox(['caption' => 'Caption3']));
+$form->onSubmit($formSubmit);

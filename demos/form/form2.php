@@ -88,7 +88,7 @@ $personClass = get_class(new class() extends \atk4\data\Model {
         $this->hasOne('country_dropdown_id', [new Country(), 'ui' => ['form' => new Form\Control\Dropdown()]]); // this works slow
     }
 
-    public function validate($intent = null)
+    public function validate($intent = null): array
     {
         $errors = parent::validate();
 

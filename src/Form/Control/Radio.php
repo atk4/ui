@@ -13,7 +13,7 @@ class Radio extends Form\Control
 {
     public $ui = false;
 
-    public $defaultTemplate = 'formfield/radio.html';
+    public $defaultTemplate = 'form/control/radio.html';
 
     /**
      * Contains a lister that will render individual radio buttons.
@@ -40,10 +40,7 @@ class Radio extends Form\Control
         $this->lister->t_row['_name'] = $this->short_name;
     }
 
-    /**
-     * Renders view.
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         if (!$this->model) {
             $p = new \atk4\data\Persistence\Static_($this->values);
@@ -69,7 +66,7 @@ class Radio extends Form\Control
             $lister->t_row->set('checked', $value === (string) $lister->model->id ? 'checked' : '');
         });
 
-        return parent::renderView();
+        parent::renderView();
     }
 
     /**
@@ -84,7 +81,7 @@ class Radio extends Form\Control
      * $control->onChange(new \atk4\ui\JsExpression('console.log("changed")'));
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
-     * @param string|\atk4\ui\JsExpression|array|callable $expr
+     * @param string|\atk4\ui\JsExpression|array|\Closure $expr
      * @param array|bool                                  $default
      */
     public function onChange($expr, $default = [])

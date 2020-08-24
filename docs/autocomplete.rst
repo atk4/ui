@@ -75,7 +75,7 @@ use of Filters::
     $l->addFilter('country', 'Country');
     $l->addFilter('language', 'Lang');
 
-    //make sure country and language belong to your model.
+    // make sure country and language belong to your model.
     $l->setModel(new City($db));
 
 Possibly this feature will be introduced into "AutoComplete" class.

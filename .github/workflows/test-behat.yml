@@ -1,0 +1,89 @@
+name: Behat
+
+on:
+  pull_request:
+    branches: '**'
+  push:
+    branches: '**'
+  schedule:
+    - cron: '0 * * * *'
+
+jobs:
+  unit-test:
+    name: Behat
+    runs-on: ubuntu-latest
+    container:
+      image: atk4/image:${{ matrix.php }} # https://github.com/atk4/image
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['latest']
+        type: ['Chrome', 'Firefox', 'Chrome Slow']
+    env:
+      LOG_COVERAGE: ''
+    services:
+      selenium-chrome:
+        image: selenium/standalone-chrome:latest
+        options: --health-cmd "/opt/bin/check-grid.sh"
+      selenium-firefox:
+        image: selenium/standalone-firefox:latest
+        options: --health-cmd "/opt/bin/check-grid.sh"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure PHP
+        run: |
+          if [ -z "$LOG_COVERAGE" ]; then rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; fi
+          php --version
+
+      - name: Setup cache 1/2
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Setup cache 2/2
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install PHP dependencies
+        run: |
+          composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev
+          composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev
+          composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
+
+      - name: Install JS dependencies (only for Slow)
+        if: matrix.type == 'Chrome Slow'
+        run: |
+          apk add npm
+          npm install --loglevel=error -g less less-plugin-clean-css uglify-js
+          (cd js && npm install --loglevel=error)
+
+      - name: Lint JS files (only for Slow)
+        if: matrix.type == 'Chrome Slow'
+        run: |
+          (cd js && npm run lint)
+
+      - name: Build JS files (only for Slow)
+        if: matrix.type == 'Chrome Slow'
+        run: |
+          (cd js && npm run build)
+          lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
+          sed -i "s~'https://ui.agiletoolkit.org/public.*~'/demos',~" src/App.php
+
+      - name: Init
+        run: |
+          mkdir -p build/logs
+          php demos/_demo-data/create-sqlite-db.php
+
+      - name: "Run tests: Behat"
+        run: |
+          php -S 172.18.0.2:8888 > /dev/null 2>&1 &
+          sleep 0.2
+          if [ "${{ matrix.type }}" == "Firefox" ]; then sed -i "s~chrome~firefox~" behat.yml.dist ; fi
+          if [ "${{ matrix.type }}" == "Chrome Slow" ]; then echo 'sleep(1);' >> demos/init-app.php ; fi
+          vendor/bin/behat --config behat.yml.dist

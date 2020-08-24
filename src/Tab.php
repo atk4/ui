@@ -32,7 +32,7 @@ class Tab extends Item
     /**
      * Rendering one tab view.
      */
-    public function renderView()
+    protected function renderView(): void
     {
         // Must setting for Fomantic-Ui tab since 2.8.5
         $this->settings = array_merge($this->settings, ['autoTabActivation' => false]);

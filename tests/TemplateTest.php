@@ -21,121 +21,25 @@ class TemplateTest extends AtkPhpunit\TestCase
     }
 
     /**
-     * Test isTopTag().
-     */
-    public function testIsTopTag()
-    {
-        $t = new \atk4\ui\Template('a{$foo}b');
-        $this->assertTrue($t->isTopTag('_top'));
-        $this->assertFalse($t->isTopTag('foo'));
-    }
-
-    /**
      * Test getTagRef().
      */
     public function testGetTagRef()
     {
         // top tag
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        $t1 = &$t->getTagRef('_top');
-        $this->assertSame(['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['hello']], $t1);
+        $t1 = &$this->callProtected($t, 'getTagRef', '_top');
+        $this->assertSame(['foo#0' => ['hello'], ', cruel ', 'bar#0' => ['world'], '. ', 'foo#1' => ['hello']], $t1);
 
         $t1 = ['good bye']; // will change $t->template because it's by reference
-        $this->assertSame(['good bye'], $t->template);
+        $this->assertSame(['good bye'], $this->getProtected($t, 'template'));
 
         // any tag
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        $t2 = &$t->getTagRef('foo');
+        $t2 = &$this->callProtected($t, 'getTagRef', 'foo');
         $this->assertSame(['hello'], $t2);
 
         $t2 = ['good bye']; // will change $t->template because it's by reference
-        $this->assertSame(['', 'foo#1' => ['good bye'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['hello']], $t->template);
-    }
-
-    /**
-     * Test conditional tag.
-     */
-    public function testConditionalTags()
-    {
-        $s = 'My {email?}e-mail {$email}{/email?} {phone?}phone {$phone}{/?}. Contact me!';
-        $t = new \atk4\ui\Template($s);
-
-        $t1 = &$t->getTagRef('_top');
-        $this->assertSame([
-            0 => 'My ',
-            'email?#1' => [
-                0 => 'e-mail ',
-                'email#1' => [''],
-            ],
-            1 => ' ',
-            'phone?#1' => [
-                0 => 'phone ',
-                'phone#1' => [''],
-            ],
-            2 => '. Contact me!',
-        ], $t1);
-
-        // test filled values
-        $t = new \atk4\ui\Template($s);
-        $t->set('email', 'test@example.com');
-        $t->set('phone', 123);
-        $this->assertSame('My e-mail test@example.com phone 123. Contact me!', $t->render());
-
-        $t = new \atk4\ui\Template($s);
-        $t->set('email', null);
-        $t->set('phone', 123);
-        $this->assertSame('My  phone 123. Contact me!', $t->render());
-
-        $t = new \atk4\ui\Template($s);
-        $t->set('email', '');
-        $t->set('phone', 123);
-        $this->assertSame('My  phone 123. Contact me!', $t->render());
-
-        $t = new \atk4\ui\Template($s);
-        $t->set('email', false);
-        $t->set('phone', 0);
-        $this->assertSame('My  phone 0. Contact me!', $t->render());
-
-        // nested conditional tags (renders comma only when both values are provided)
-        $s = 'My {email?}e-mail {$email}{/email?}{email?}{phone?}, {/?}{/?}{phone?}phone {$phone}{/?}. Contact me!';
-
-        $t = new \atk4\ui\Template($s);
-        $t->set('email', 'test@example.com');
-        $t->set('phone', 123);
-        $this->assertSame('My e-mail test@example.com, phone 123. Contact me!', $t->render());
-
-        $t = new \atk4\ui\Template($s);
-        $t->set('email', null);
-        $t->set('phone', 123);
-        $this->assertSame('My phone 123. Contact me!', $t->render());
-
-        $t = new \atk4\ui\Template($s);
-        $t->set('email', false);
-        $t->set('phone', 0);
-        $this->assertSame('My phone 0. Contact me!', $t->render());
-    }
-
-    /**
-     * Conditional tag usage example - VAT usage.
-     */
-    public function testConditionalTagsVat()
-    {
-        $s = '{vat_applied?}VAT is {$vat}%{/?}' .
-             '{vat_zero?}VAT is zero{/?}' .
-             '{vat_not_applied?}VAT is not applied{/?}';
-
-        $f = function ($vat) use ($s) {
-            return (new \atk4\ui\Template($s))->set([
-                'vat_applied' => !empty($vat),
-                'vat_zero' => ($vat === 0),
-                'vat_not_applied' => ($vat === null),
-                'vat' => $vat,
-            ])->render();
-        };
-
-        $this->assertSame('VAT is 21%', $f(21));
-        $this->assertSame('VAT is zero', $f(0));
-        $this->assertSame('VAT is not applied', $f(null));
+        $this->assertSame(['foo#0' => ['good bye'], ', cruel ', 'bar#0' => ['world'], '. ', 'foo#1' => ['hello']], $this->getProtected($t, 'template'));
     }
 
     /**
@@ -143,54 +47,50 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testGetTagRefException()
     {
-        $this->expectException(Exception::class);
         $t = new \atk4\ui\Template('{foo}hello{/}');
-        $t->getTagRef('bar'); // not existent tag
+        $this->expectException(Exception::class);
+        $this->callProtected($t, 'getTagRef', 'bar'); // not existent tag
     }
 
     /**
-     * Test getTagRefList().
+     * Test getTagRefs().
      */
-    public function testGetTagRefList()
+    public function testGetTagRefs()
     {
         // top tag
-        $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        $t1 = $t->getTagRefList('_top');
-        $this->assertSame([['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['hello']]], $t1);
+        $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello2{/}');
+        $t1 = $this->callProtected($t, 'getTagRefs', '_top');
+        $this->assertSame([['foo#0' => ['hello'], ', cruel ', 'bar#0' => ['world'], '. ', 'foo#1' => ['hello2']]], $t1);
 
         $t1[0] = ['good bye']; // will change $t->template because it's by reference
-        $this->assertSame(['good bye'], $t->template);
+        $this->assertSame(['good bye'], $this->getProtected($t, 'template'));
 
         // any tag
-        $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        $t2 = $t->getTagRefList('foo');
-        $this->assertSame([['hello'], ['hello']], $t2);
-
+        $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello2{/}');
+        $t2 = $this->callProtected($t, 'getTagRefs', 'foo');
+        $this->assertSame([['hello'], ['hello2']], $t2);
         $t2[1] = ['good bye']; // will change $t->template last "foo" tag because it's by reference
-        $this->assertSame(['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['good bye']], $t->template);
+        $this->assertSame(['foo#0' => ['hello'], ', cruel ', 'bar#0' => ['world'], '. ', 'foo#1' => ['good bye']], $this->getProtected($t, 'template'));
 
-        // array of tags
-        $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        $t2 = $t->getTagRefList(['foo', 'bar']);
-        $this->assertSame([['hello'], ['hello'], ['world']], $t2);
-
-        $t2[1] = ['good bye']; // will change $t->template last "foo" tag because it's by reference
-        $t2[2] = ['planet'];   // will change $t->template "bar" tag because it's by reference too
-        $this->assertSame(['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['planet'], '. ', 'foo#2' => ['good bye']], $t->template);
+        $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello2{/}');
+        $t2 = $this->callProtected($t, 'getTagRefs', 'bar');
+        $this->assertSame([['world']], $t2);
+        $t2[0] = ['planet']; // will change $t->template last "foo" tag because it's by reference
+        $this->assertSame(['foo#0' => ['hello'], ', cruel ', 'bar#0' => ['planet'], '. ', 'foo#1' => ['hello2']], $this->getProtected($t, 'template'));
     }
 
     /**
-     * Non existant template - throw exception.
+     * Non existent template - throw exception.
      */
     public function testBadTemplate1()
     {
-        $this->expectException(Exception::class);
         $t = new \atk4\ui\Template();
+        $this->expectException(Exception::class);
         $t->load('bad_template_file');
     }
 
     /**
-     * Non existant template - no exception.
+     * Non existent template - no exception.
      */
     public function testBadTemplate2()
     {
@@ -199,13 +99,13 @@ class TemplateTest extends AtkPhpunit\TestCase
     }
 
     /**
-     * Exception in getTagRefList().
+     * Exception in getTagRefs().
      */
-    public function testGetTagRefListException()
+    public function testGetTagRefsException()
     {
-        $this->expectException(Exception::class);
         $t = new \atk4\ui\Template('{foo}hello{/}');
-        $t->getTagRefList('bar'); // not existent tag
+        $this->expectException(Exception::class);
+        $this->callProtected($t, 'getTagRefs', 'bar'); // not existent tag
     }
 
     /**
@@ -223,8 +123,8 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testSetException1()
     {
-        $this->expectException(Exception::class);
         $t = new \atk4\ui\Template('{foo}hello{/} guys');
+        $this->expectException(Exception::class);
         $t->set('qwe', 'Hello'); // not existent tag
     }
 
@@ -233,8 +133,8 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testSetException2()
     {
-        $this->expectException(Exception::class);
         $t = new \atk4\ui\Template('{foo}hello{/} guys');
+        $this->expectException(Exception::class);
         $t->set('foo', new \StdClass()); // bad value
     }
 
@@ -280,7 +180,7 @@ class TemplateTest extends AtkPhpunit\TestCase
         $this->assertTrue(isset($t['foo']));
 
         $t['foo'] = 'Hi';
-        $this->assertSame(['Hi'], $t['foo']);
+        $this->assertSame([1 => 'Hi'], $t['foo']); // 1 index instead of 0 because of https://bugs.php.net/bug.php?id=79844
 
         unset($t['foo']);
         $this->assertSame([], $t['foo']);
@@ -295,14 +195,12 @@ class TemplateTest extends AtkPhpunit\TestCase
     {
         $t = new \atk4\ui\Template('{foo}hello{/}, {how}cruel{/how} {bar}world{/}. {foo}welcome{/}');
 
-        // don't throw exception if tag does not exist
-        $t->eachTag('ignore', function () {
-        });
-
         // replace values in these tags
-        $t->eachTag(['foo', 'bar'], function ($value, $tag) {
-            return strtoupper($value);
-        });
+        foreach (['foo', 'bar'] as $tag) {
+            $t->eachTag($tag, function ($value, $fullTag) {
+                return strtoupper($value);
+            });
+        }
         $this->assertSame('HELLO, cruel WORLD. WELCOME', $t->render());
 
         // tag contains all template (for example in Lister)
@@ -334,8 +232,8 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testLoadException()
     {
-        $this->expectException(Exception::class);
         $t = new \atk4\ui\Template();
+        $this->expectException(Exception::class);
         $t->load('such-file-does-not-exist.txt');
     }
 

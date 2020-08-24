@@ -14,7 +14,7 @@ class Checkbox extends Form\Control
 {
     public $ui = 'checkbox';
 
-    public $defaultTemplate = 'formfield/checkbox.html';
+    public $defaultTemplate = 'form/control/checkbox.html';
 
     /**
      * Label appears to the right of the checkbox. If label is not set specifically
@@ -74,9 +74,11 @@ class Checkbox extends Form\Control
     /**
      * Render view.
      */
-    public function renderView()
+    protected function renderView(): void
     {
-        $this->template['label'] = $this->label ?: $this->caption;
+        if ($this->label) {
+            $this->template->set('Content', $this->label);
+        }
 
         if ($this->field ? $this->field->get() : $this->content) {
             $this->template->set('checked', 'checked');
@@ -100,7 +102,7 @@ class Checkbox extends Form\Control
 
         $this->content = null; // no content again
 
-        return parent::renderView();
+        parent::renderView();
     }
 
     /**

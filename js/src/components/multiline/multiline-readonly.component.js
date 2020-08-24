@@ -3,7 +3,7 @@
  */
 
 export default {
-  template: `<div>{{readOnlyValue}}</div>`,
-  name: 'atk-multiline-readonly',
-  props: ['readOnlyValue']
-}
+    template: '<div>{{readOnlyValue}}</div>',
+    name: 'atk-multiline-readonly',
+    props: ['readOnlyValue'],
+};

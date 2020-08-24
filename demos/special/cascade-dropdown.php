@@ -60,6 +60,12 @@ $form->addControl('category_id', [Form\Control\Dropdown::class, 'model' => new C
 $form->addControl('sub_category_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
 $form->addControl('product_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
 
-$form->onSubmit(function (Form $form) {
-    echo print_r($form->model->get(), true);
+$form->onSubmit(function (Form $form) use ($app) {
+    $message = $app->encodeJson($form->model->get());
+
+    $view = new \atk4\ui\Message('Values: ');
+    $view->init();
+    $view->text->addParagraph($message);
+
+    return $view;
 });

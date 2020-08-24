@@ -41,11 +41,11 @@ class App
         'atk' => 'https://ui.agiletoolkit.org/public', // develop branch
         'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.5',
+        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.6',
     ];
 
     /** @var string Version of Agile UI */
-    public $version = '2.1.0';
+    public $version = '2.2.0';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -176,9 +176,9 @@ class App
 
         foreach ($defaults as $key => $val) {
             if (is_array($val)) {
-                $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
-            } elseif (!is_null($val)) {
-                $this->$key = $val;
+                $this->{$key} = array_merge(is_array($this->{$key} ?? null) ? $this->{$key} : [], $val);
+            } elseif ($val !== null) {
+                $this->{$key} = $val;
             }
         }
          */
@@ -399,7 +399,7 @@ class App
     public function terminateJson($output, array $headers = []): void
     {
         if ($output instanceof View) {
-            $output = $output->renderJson();
+            $output = $output->renderToJsonArr();
         }
 
         $this->terminate(
@@ -472,10 +472,8 @@ class App
      *
      * @param View|string|array $seed   New object to add
      * @param string|array|null $region
-     *
-     * @return View
      */
-    public function add($seed, $region = null)
+    public function add($seed, $region = null): AbstractView
     {
         if (!$this->layout) {
             throw (new Exception('App layout is missing'))
@@ -567,24 +565,6 @@ class App
             ->addMoreInfo('template_dir', $this->template_dir);
     }
 
-    /**
-     * Connects database.
-     *
-     * @param string $dsn      Format as PDO DSN or use "mysql://user:pass@host/db;option=blah", leaving user and password arguments = null
-     * @param string $user
-     * @param string $password
-     * @param array  $args
-     *
-     * @return Persistence
-     */
-    public function dbConnect($dsn, $user = null, $password = null, $args = [])
-    {
-        $this->db = Persistence::connect($dsn, $user, $password, $args);
-        $this->db->app = $this;
-
-        return $this->db;
-    }
-
     protected function getRequestUrl()
     {
         if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
@@ -673,7 +653,6 @@ class App
         $args = $extraRequestUriArgs;
 
         // add sticky arguments
-        $args = $extraRequestUriArgs;
         foreach ($this->sticky_get_arguments as $k => $v) {
             if ($v && isset($_GET[$k])) {
                 $args[$k] = $_GET[$k];
@@ -692,7 +671,7 @@ class App
         }
 
         // put URL together
-        $pageQuery = http_build_query($args);
+        $pageQuery = http_build_query($args, '', '&', PHP_QUERY_RFC3986);
         $url = $pagePath . ($pageQuery ? '?' . $pageQuery : '');
 
         return $url;
@@ -1122,6 +1101,9 @@ class App
      */
     public function getRenderedModals(): array
     {
+        // prevent looping (calling App::terminateJson() recursively) if JsReload is used in Modal
+        unset($_GET['__atk_reload']);
+
         $modals = [];
         foreach ($this->html !== null ? $this->html->elements : [] as $view) {
             if ($view instanceof Modal) {

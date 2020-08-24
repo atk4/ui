@@ -7,10 +7,7 @@ namespace atk4\ui;
 /**
  * Class implements ProgressBar.
  *
- * $bar = ProgressBar::addTo($app, [
- *  10,
- *  'label' => 'Processing files',
- *  ]);
+ * $bar = ProgressBar::addTo($app, [10, 'label' => 'Processing files']);
  */
 class ProgressBar extends View
 {
@@ -47,11 +44,11 @@ class ProgressBar extends View
         parent::__construct($label, $class);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $this->js(true)->progress(['percent' => $this->value]);
 
-        return parent::renderView();
+        parent::renderView();
     }
 
     /**

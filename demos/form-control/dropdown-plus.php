@@ -23,7 +23,7 @@ $btn = \atk4\ui\Button::addTo($v, ['DropdownCascade Class'])
 
 $form = Form::addTo($demo->left);
 
-//standard with model: use id_field as Value, title_field as Title for each Dropdown option
+// standard with model: use id_field as Value, title_field as Title for each Dropdown option
 $form->addControl(
     'withModel',
     [Form\Control\Dropdown::class,
@@ -32,7 +32,7 @@ $form->addControl(
     ]
 );
 
-//custom callback: alter title
+// custom callback: alter title
 $form->addControl(
     'withModel2',
     [Form\Control\Dropdown::class,
@@ -47,7 +47,7 @@ $form->addControl(
     ]
 );
 
-//custom callback: add icon
+// custom callback: add icon
 $form->addControl(
     'withModel3',
     [Form\Control\Dropdown::class,
@@ -99,11 +99,12 @@ $form->addControl(
     ]
 );
 
-$form->onSubmit(function (Form $form) {
-    $echo = print_r($form->model->get('enum'), true) . ' / ';
-    $echo .= print_r($form->model->get('values'), true) . ' / ';
-    $echo .= print_r($form->model->get('icon'), true) . ' / ';
-    $echo .= print_r($form->model->get('multi'), true);
+$form->onSubmit(function (Form $form) use ($app) {
+    $message = $app->encodeJson($form->model->get());
 
-    echo $echo;
+    $view = new \atk4\ui\Message('Values: ');
+    $view->init();
+    $view->text->addParagraph($message);
+
+    return $view;
 });

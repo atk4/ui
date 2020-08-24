@@ -77,7 +77,7 @@ class JsSearch extends View
         //$this->input = Form\Control\Line::addTo($this, ['iconLeft' => 'filter',  'action' => new Button(['icon' => 'search', 'ui' => 'button atk-action'])]);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->placeHolder) {
             $this->template->trySet('Placeholder', $this->placeHolder);

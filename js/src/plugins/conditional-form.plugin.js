@@ -1,8 +1,7 @@
 import $ from 'jquery';
 import debounce from 'debounce';
 import atkPlugin from './atk.plugin';
-import formService from "../services/form.service";
-
+import formService from '../services/form.service';
 
 /**
  * Show or hide input field base on other input field condition.
@@ -51,129 +50,127 @@ import formService from "../services/form.service";
  *   See semantic-ui validation rule for more details: https://semantic-ui.com/behaviors/form.html#validation-rules
  */
 export default class conditionalForm extends atkPlugin {
+    main() {
+        this.inputs = [];
+        this.selector = this.settings.selector;
+        if (!this.selector) {
+            this.selector = formService.getDefaultSelector();
+        }
+        // add change listener to inputs according to selector
+        this.$el.find(':checkbox').on('change', this, debounce(this.onInputChange, 100, true));
+        this.$el.find(':radio').on('change', this, debounce(this.onInputChange, 100, true));
+        this.$el.find('input[type="hidden"]').on('change', this, debounce(this.onInputChange, 100, true));
+        this.$el.find('input').on(this.settings.validateEvent, this, debounce(this.onInputChange, 200));
+        this.$el.find('select').on('change', this, debounce(this.onInputChange, 100));
 
-  main() {
-    this.inputs = [];
-    this.selector = this.settings.selector;
-    if (!this.selector) {
-      this.selector = formService.getDefaultSelector();
+        this.initialize();
     }
-    //add change listener to inputs according to selector
-    this.$el.find(':checkbox').on('change', this, debounce(this.onInputChange, 100, true));
-    this.$el.find(':radio').on('change', this, debounce(this.onInputChange, 100, true));
-    this.$el.find('input[type="hidden"]').on('change', this, debounce(this.onInputChange, 100, true));
-    this.$el.find('input').on(this.settings.validateEvent, this, debounce(this.onInputChange, 500));
-    this.$el.find('select').on('change', this, debounce(this.onInputChange, 100));
 
-    this.initialize();
-  }
+    getRule(ruleToSearch) {
+        return this.settings.fieldRules[ruleToSearch];
+    }
 
-  getRule(ruleToSearch) {
-    return this.settings.fieldRules[ruleToSearch];
-  }
+    initialize() {
+        const that = this;
 
-  initialize() {
-    const that = this;
+        const ruleKeys = Object.keys(this.settings.fieldRules);
+        // map inputs according to ruleKeys.
+        this.inputs = ruleKeys.map((ruleKey, idx, org) => {
+            const tempRule = that.settings.fieldRules[ruleKey];
+            const temp = [];
+            if (Array.isArray(tempRule)) {
+                tempRule.forEach((rule) => temp.push(rule));
+            } else {
+                temp.push(tempRule);
+            }
+            return { inputName: ruleKey, rules: temp, state: false };
+        });
 
-    const ruleKeys = Object.keys(this.settings.fieldRules);
-    //map inputs according to ruleKeys.
-    this.inputs = ruleKeys.map((ruleKey, idx, org)=> {
-      let tempRule =  that.settings.fieldRules[ruleKey];
-      let temp = [];
-      if (Array.isArray(tempRule)) {
-        tempRule.forEach(rule => temp.push(rule));
-      } else {
-        temp.push(tempRule);
-      }
-      return {inputName : ruleKey, rules: temp, state: false}
-    });
+        this.applyRules();
+        this.setInputsState();
+    }
 
-    this.applyRules();
-    this.setInputsState();
-  }
-
-  /**
+    /**
    * Field change handler.
    *
    * @param e
    */
-  onInputChange(e) {
-    //check rule when inputs has changed.
-   const that = e.data;
-   that.resetInputStatus();
-   that.applyRules();
-   that.setInputsState();
-  }
+    onInputChange(e) {
+    // check rule when inputs has changed.
+        const that = e.data;
+        that.resetInputStatus();
+        that.applyRules();
+        that.setInputsState();
+    }
 
-  /**
+    /**
    * Check each validation rule and apply proper visibility state to the
    * input where rules apply.
    *
    */
-  applyRules() {
-    const that = this;
-    this.inputs.forEach((input, idx) => {
-      input.rules.forEach((rules) => {
-        let isAndValid = true;
-        let validateInputNames = Object.keys(rules);
-        validateInputNames.forEach( (inputName) => {
-          const validationRule = rules[inputName];
-          if (Array.isArray(validationRule)){
-            validationRule.forEach((rule) => {
-              isAndValid &= formService.validateField(that.$el, inputName, rule);
+    applyRules() {
+        const that = this;
+        this.inputs.forEach((input, idx) => {
+            input.rules.forEach((rules) => {
+                let isAndValid = true;
+                const validateInputNames = Object.keys(rules);
+                validateInputNames.forEach((inputName) => {
+                    const validationRule = rules[inputName];
+                    if (Array.isArray(validationRule)) {
+                        validationRule.forEach((rule) => {
+                            isAndValid &= formService.validateField(that.$el, inputName, rule);
+                        });
+                    } else {
+                        isAndValid &= formService.validateField(that.$el, inputName, validationRule);
+                    }
+                });
+                // Apply OR condition between rules.
+                input.state |= isAndValid;
             });
-          } else {
-            isAndValid &= formService.validateField(that.$el, inputName, validationRule);
-          }
         });
-        // Apply OR condition between rules.
-        input.state |= isAndValid;
-      });
-    });
-  }
-
-  /**
-   * Set all input state visibility to false.
-   */
-  resetInputStatus(){
-    this.inputs.forEach((input) => {
-      input.state = false;
-    });
-  }
-
-  /**
-   * Set fields visibility according to their state.
-   */
-  setInputsState() {
-    const that = this;
-    this.inputs.forEach((input) => {
-      const $input = formService.getField(that.$el, input.inputName);
-      if ($input) {
-        const $container = formService.getContainer($input, that.selector);
-        if ($container) {
-          $container.hide();
-          that.setInputState(input.state, $input, $container );
-        }
-      }
-    });
-  }
-
-  setInputState(passed, field, fieldGroup) {
-    if (passed) {
-      fieldGroup.show();
-    } else if (!passed && this.settings.autoReset) {
-      fieldGroup.hide();
-      //field.val(field.data('original'));
-    } else if (!passed && !this.settings.autoReset) {
-      fieldGroup.hide();
     }
 
-  }
+    /**
+   * Set all input state visibility to false.
+   */
+    resetInputStatus() {
+        this.inputs.forEach((input) => {
+            input.state = false;
+        });
+    }
+
+    /**
+   * Set fields visibility according to their state.
+   */
+    setInputsState() {
+        const that = this;
+        this.inputs.forEach((input) => {
+            const $input = formService.getField(that.$el, input.inputName);
+            if ($input) {
+                const $container = formService.getContainer($input, that.selector);
+                if ($container) {
+                    $container.hide();
+                    that.setInputState(input.state, $input, $container);
+                }
+            }
+        });
+    }
+
+    setInputState(passed, field, fieldGroup) {
+        if (passed) {
+            fieldGroup.show();
+        } else if (!passed && this.settings.autoReset) {
+            fieldGroup.hide();
+            // field.val(field.data('original'));
+        } else if (!passed && !this.settings.autoReset) {
+            fieldGroup.hide();
+        }
+    }
 }
 
 conditionalForm.DEFAULTS = {
-  autoReset: true,
-  validateEvent: 'keydown',
-  selector: null,
-  fieldRules:[],
+    autoReset: true,
+    validateEvent: 'keydown',
+    selector: null,
+    fieldRules: [],
 };

@@ -30,7 +30,7 @@ class AccordionSection extends View
     /**
      * {@inheritdoc}
      */
-    public function renderView()
+    protected function renderView(): void
     {
         parent::renderView();
 

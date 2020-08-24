@@ -59,7 +59,7 @@ class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
     protected $validArguments = [];
 
     /**
-     * @var JsExpressionable array|callable JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
+     * @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
      */
     protected $jsSuccess;
 
@@ -81,7 +81,7 @@ class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
         $this->arguments = array_merge($this->arguments, $arguments);
     }
 
-    public function recursiveRender()
+    protected function recursiveRender(): void
     {
         if (!$this->action) {
             throw new Exception('Action is not set. Use setAction()');
@@ -145,7 +145,9 @@ class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
 
         $return = $this->action->execute(...$args);
 
-        $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner]) : $this->jsSuccess;
+        $success = $this->jsSuccess instanceof \Closure
+            ? ($this->jsSuccess)($this, $this->action->owner)
+            : $this->jsSuccess;
 
         return ($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) ?: $success) ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
     }

@@ -17,18 +17,43 @@
   ],
   "homepage": "https://github.com/atk4/ui",
   "license": "MIT",
+  "authors": [
+    {
+        "name": "Romans Malinovskis",
+        "email": "romans@agiletoolkit.org",
+        "homepage": "https://nearly.guru/"
+    },
+    {
+        "name": "Alain Belair",
+        "homepage": "https://agiletoolkit.org/"
+    },
+    {
+        "name": "Imants Horsts",
+        "homepage": "https://darkside.lv/"
+    },
+    {
+        "name": "Francesco Danti",
+        "homepage": "https://oracoltech.com/"
+    },
+    {
+        "name": "Michael Voříšek",
+        "homepage": "https://mvorisek.cz/"
+    },
+    {
+        "name": "Philipp Grashoff"
+    },
+    {
+        "name": "Alex Cicovic",
+        "homepage": "https://alexcicovic.com/"
+    },
+    {
+        "name": "Georgi Hristov",
+        "homepage": "https://xsystems.io/"
+    }
+  ],
+  "version": "dev-develop",
   "minimum-stability": "dev",
   "prefer-stable": true,
-  "authors": [
-    {"name": "Romans Malinovskis", "email": "romans@agiletoolkit.org", "homepage": "https://nearly.guru/" },
-    {"name": "Alain Belair", "homepage": "https://agiletoolkit.org/"},
-    {"name": "Imants Horsts", "homepage": "https://darkside.lv/"},
-    {"name": "Francesco Danti", "homepage": "https://oracoltech.com/"},
-    {"name": "Michael Voříšek", "homepage": "https://mvorisek.cz/"},
-    {"name": "Philipp Grashoff"},
-    {"name": "Alex Cicovic", "homepage": "https://alexcicovic.com/"},
-    {"name": "Georgi Hristov", "homepage": "https://xsystems.io/"}
-  ],
   "config": {
     "sort-packages": true
   },
@@ -41,8 +66,8 @@
   "require-release": {
     "php": ">=7.3.0",
     "ext-json": "*",
-    "atk4/core": "^2.0",
-    "atk4/data": "^2.0"
+    "atk4/core": "^2.2.0",
+    "atk4/data": "^2.2.0"
   },
   "require-dev": {
     "behat/behat": "^3.4",
@@ -52,7 +77,7 @@
     "fzaninotto/faker": "*",
     "guzzlehttp/guzzle": "^6.3",
     "phpunit/phpcov": "*",
-    "phpunit/phpunit": ">=9.0",
+    "phpunit/phpunit": ">=9.3",
     "symfony/process": "^4.3 || ^5.0"
   },
   "autoload": {
@@ -62,7 +87,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "atk4\\ui\\tests\\": "tests/"
+      "atk4\\ui\\tests\\": "tests/",
+      "atk4\\ui\\behat\\": "tests-behat/bootstrap/"
     }
   }
 }

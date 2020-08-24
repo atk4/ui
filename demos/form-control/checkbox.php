@@ -34,6 +34,10 @@ $form->addControl('test', [Form\Control\Checkbox::class]);
 $form->addControl('test_checked', [Form\Control\Checkbox::class])->set(true);
 $form->addControl('also_checked', 'Hello World', 'boolean')->set(true);
 
+$form->onSubmit(function ($f) use ($app) {
+    return new \atk4\ui\JsToast($app->encodeJson($f->model->get()));
+});
+
 View::addTo($app, ['ui' => 'divider']);
 $c = new Form\Control\Checkbox('Selected checkbox by default');
 $c->set(true);

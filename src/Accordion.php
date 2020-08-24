@@ -49,13 +49,12 @@ class Accordion extends View
      * You can add static View within your section or pass
      * a callback for dynamic content.
      *
-     * @param string        $title
-     * @param callable|null $callback
-     * @param string        $icon
+     * @param string $title
+     * @param string $icon
      *
      * @return AccordionSection
      */
-    public function addSection($title, $callback = null, $icon = 'dropdown')
+    public function addSection($title, \Closure $callback = null, $icon = 'dropdown')
     {
         $section = AccordionSection::addTo($this, ['title' => $title, 'icon' => $icon]);
 
@@ -156,13 +155,13 @@ class Accordion extends View
     /**
      * {@inheritdoc}
      */
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->type) {
             $this->addClass($this->type);
         }
 
-        //Only set Accordion in Top container. Otherwise Nested accordion won't work.
+        // Only set Accordion in Top container. Otherwise Nested accordion won't work.
         if (!$this->getClosestOwner($this, AccordionSection::class) && !$this->isDynamicSection()) {
             $this->js(true)->accordion($this->settings);
         }

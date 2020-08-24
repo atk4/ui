@@ -39,7 +39,7 @@ class Dropdown extends Input
      *
      * @var string
      */
-    public $defaultTemplate = 'formfield/dropdown.html';
+    public $defaultTemplate = 'form/control/dropdown.html';
 
     /**
      * The css class associate with this dropdown.
@@ -116,7 +116,7 @@ class Dropdown extends Input
      *     ];
      * }
      *
-     * @var callable
+     * @var \Closure|null
      */
     public $renderRowFunction;
 
@@ -240,31 +240,31 @@ class Dropdown extends Input
      */
     protected function htmlRenderValue()
     {
-        //add selection only if no value is required and Dropdown has no multiple selections enabled
+        // add selection only if no value is required and Dropdown has no multiple selections enabled
         if ($this->field !== null && !$this->field->required && !$this->isMultiple) {
             $this->_tItem->set('value', '');
             $this->_tItem->set('title', $this->empty || is_numeric($this->empty) ? (string) $this->empty : '');
             $this->template->appendHtml('Item', $this->_tItem->render());
         }
 
-        //model set? use this, else values property
+        // model set? use this, else values property
         if (isset($this->model)) {
-            if (!is_callable($this->renderRowFunction)) {
-                //for standard model rendering, only load id and title field
-                $this->model->only_fields = [$this->model->title_field, $this->model->id_field];
-                $this->_renderItemsForModel();
-            } else {
+            if ($this->renderRowFunction) {
                 foreach ($this->model as $row) {
                     $this->_addCallBackRow($row);
                 }
+            } else {
+                // for standard model rendering, only load id and title field
+                $this->model->only_fields = [$this->model->title_field, $this->model->id_field];
+                $this->_renderItemsForModel();
             }
         } else {
-            if (!is_callable($this->renderRowFunction)) {
-                $this->_renderItemsForValues();
-            } else {
+            if ($this->renderRowFunction) {
                 foreach ($this->values as $key => $value) {
                     $this->_addCallBackRow($value, $key);
                 }
+            } else {
+                $this->_renderItemsForValues();
             }
         }
     }
@@ -272,7 +272,7 @@ class Dropdown extends Input
     /**
      * Renders view.
      */
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->isMultiple) {
             $this->defaultClass = $this->defaultClass . ' multiple';
@@ -314,7 +314,7 @@ class Dropdown extends Input
             $title = $row->getTitle();
             $this->_tItem->set('value', (string) $key);
             $this->_tItem->set('title', $title || is_numeric($title) ? (string) $title : '');
-            //add item to template
+            // add item to template
             $this->template->appendHtml('Item', $this->_tItem->render());
         }
     }
@@ -336,7 +336,7 @@ class Dropdown extends Input
                 $this->_tItem->set('title', $val || is_numeric($val) ? (string) $val : '');
             }
 
-            //add item to template
+            // add item to template
             $this->template->appendHtml('Item', $this->_tItem->render());
         }
     }
@@ -347,21 +347,21 @@ class Dropdown extends Input
      */
     protected function _addCallBackRow($row, $key = null)
     {
-        $res = call_user_func($this->renderRowFunction, $row, $key);
+        $res = ($this->renderRowFunction)($row, $key);
         $this->_tItem->set('value', (string) $res['value']);
         $this->_tItem->set('title', $res['title']);
 
-        //Icon
+        // Icon
         $this->_tItem->del('Icon');
         if (isset($res['icon'])
         && $res['icon']) {
-            //compatibility with how $values property works on icons: 'icon'
-            //is defined in there
+            // compatibility with how $values property works on icons: 'icon'
+            // is defined in there
             $this->_tIcon->set('icon', 'icon ' . $res['icon']);
             $this->_tItem->appendHtml('Icon', $this->_tIcon->render());
         }
 
-        //add item to template
+        // add item to template
         $this->template->appendHtml('Item', $this->_tItem->render());
     }
 }

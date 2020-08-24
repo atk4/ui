@@ -94,20 +94,14 @@ class TreeItemSelector extends Form\Control
      * The executing function will receive an array with item state in it
      * when allowMultiple is true or a single value when false.
      *
-     * @param callable $fx the function to execute when callback is fired
-     *
      * @return $this
      */
-    public function onItem($fx)
+    public function onItem(\Closure $fx)
     {
-        if (!is_callable($fx)) {
-            throw new \atk4\ui\Exception('Function is required for onTreeChange event.');
-        }
-
         $this->cb = JsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
             $value = $this->allowMultiple ? json_decode($data, true) : json_decode($data, true)[0];
 
-            return call_user_func($fx, $value);
+            return $fx($value);
         }, ['data' => 'value']);
 
         return $this;
@@ -145,7 +139,7 @@ class TreeItemSelector extends Form\Control
         return $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get());
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         parent::renderView();
 
@@ -155,7 +149,7 @@ class TreeItemSelector extends Form\Control
             'atk-tree-item-selector',
             [
                 'item' => ['id' => 'atk-root', 'nodes' => $this->treeItems],
-                'values' => [], //need empty for Vue reactivity.
+                'values' => [], // need empty for Vue reactivity.
                 'field' => $this->short_name,
                 'options' => [
                     'mode' => $this->allowMultiple ? 'multiple' : 'single',

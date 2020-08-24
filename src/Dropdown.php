@@ -29,7 +29,7 @@ class Dropdown extends Lister
         parent::init();
 
         if (!$this->cb) {
-            $this->cb = JsCallback::addTo($this, ['postTrigger' => 'item']);
+            $this->cb = JsCallback::addTo($this, ['urlTrigger' => 'item']);
         }
     }
 
@@ -43,13 +43,10 @@ class Dropdown extends Lister
      *          return 'New seleced item: '.$item;
      *      });.
      *
-     * @param callable $fx the Handler function where new selected Item value is passed too
+     * @param \Closure $fx handler where new selected Item value is passed too
      */
-    public function onChange($fx)
+    public function onChange(\Closure $fx)
     {
-        if (!is_callable($fx)) {
-            throw new Exception('Error: onChange require a callable function.');
-        }
         // setting dropdown option for using callback url.
         $this->js['onChange'] = new JsFunction(['name', 'value', 't'], [
             new JsExpression(
@@ -58,11 +55,11 @@ class Dropdown extends Lister
             ), ]);
 
         $this->cb->set(function ($j, $item) use ($fx) {
-            return call_user_func($fx, $item);
+            return $fx($item);
         }, ['item' => 'value']);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if (isset($this->js)) {
             $this->js(true)->dropdown($this->js);
@@ -70,6 +67,6 @@ class Dropdown extends Lister
             $this->js(true)->dropdown();
         }
 
-        return parent::renderView();
+        parent::renderView();
     }
 }

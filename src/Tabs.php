@@ -19,12 +19,12 @@ class Tabs extends View
      * Adds tab in tabs widget.
      *
      * @param string|Tab $name     Name of tab or Tab object
-     * @param callable   $callback Callback action or URL (or array with url + parameters)
+     * @param \Closure   $callback Callback action or URL (or array with url + parameters)
      * @param array      $settings Tab setting
      *
      * @return View
      */
-    public function addTab($name, $callback = null, $settings = [])
+    public function addTab($name, \Closure $callback = null, $settings = [])
     {
         $item = $this->addTabMenuItem($name, $settings);
         $sub = $this->addSubView($item->name);
@@ -95,10 +95,7 @@ class Tabs extends View
         return TabsSubview::addTo($this, ['dataTabName' => $name], ['Tabs']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         // use content as class name
         if ($this->content) {

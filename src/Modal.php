@@ -41,9 +41,6 @@ class Modal extends View
     public $cb_view;
     public $args = [];
 
-    /** @var bool Make callback url argument stick to application or view. */
-    public $appStickyCb = false;
-
     /** @var string Currently only "json" response type is supported. */
     public $type = 'json';
 
@@ -54,9 +51,9 @@ class Modal extends View
      */
     public $contentCSS = ['img', 'content', 'atk-dialog-content'];
 
-    /*
+    /**
      * if true, the <div class="actions"> at the bottom of the modal is
-     * shown. Automatically set to true if any actions are added
+     * shown. Automatically set to true if any actions are added.
      *
      * @var bool
      */
@@ -64,17 +61,21 @@ class Modal extends View
 
     /**
      * Set callback function for this modal.
+     * $fx is set as an array in order to comply with View::set().
+     * TODO Rename this function and break BC?
      *
-     * @param array|string $fx
-     * @param array|string $arg2
+     * @param \Closure $fx
      *
      * @return $this
      */
-    public function set($fx = [], $arg2 = null)
+    public function set($fx = [], $ignore = null)
     {
-        if (!is_object($fx) && !($fx instanceof \Closure)) {
-            throw new Exception('Error: Need to pass a function to Modal::set()');
+        if (!($fx instanceof \Closure)) {
+            throw new Exception('Need to pass a function to Modal::set()');
+        } elseif (func_num_args() > 1) {
+            throw new Exception('Only one argument is needed by Modal::set()');
         }
+
         $this->fx = [$fx];
         $this->enableCallback();
 
@@ -92,17 +93,12 @@ class Modal extends View
         $this->cb_view = View::addTo($this);
         $this->cb_view->stickyGet('__atk_m', $this->name);
         if (!$this->cb) {
-            $this->cb = CallbackLater::addTo($this->cb_view, ['appSticky' => $this->appStickyCb]);
+            $this->cb = CallbackLater::addTo($this->cb_view);
         }
 
         $this->cb->set(function () {
-            if ($this->cb->triggered() && $this->fx) {
-                $this->fx[0]($this->cb_view);
-            }
-            $modalName = $_GET['__atk_m'] ?? null;
-            if ($modalName === $this->name) {
-                $this->app->terminateJson($this->cb_view);
-            }
+            $this->fx[0]($this->cb_view);
+            $this->cb->terminateJson($this->cb_view);
         });
     }
 
@@ -237,9 +233,9 @@ class Modal extends View
      */
     public function addDenyAction($label, $jsAction)
     {
-        $b = new Button();
-        $b->set($label)->addClass('red cancel');
-        $this->addButtonAction($b);
+        $button = new Button();
+        $button->set($label)->addClass('red cancel');
+        $this->addButtonAction($button);
         $this->options['modal_option']['onDeny'] = $jsAction;
 
         return $this;
@@ -287,7 +283,7 @@ class Modal extends View
         return $this;
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $data['type'] = $this->type;
         $data['label'] = $this->loading_label;
@@ -316,7 +312,7 @@ class Modal extends View
             $this->js(true)->modal();
         }
 
-        //add setting if available.
+        // add setting if available.
         if (isset($this->options['setting'])) {
             foreach ($this->options['setting'] as $key => $value) {
                 $this->js(true)->modal('setting', $key, $value);
@@ -333,5 +329,13 @@ class Modal extends View
         $this->js(true)->data($data);
 
         parent::renderView();
+    }
+
+    /** @var AbstractView */
+    public $viewForUrl;
+
+    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    {
+        return $this->viewForUrl ?? $this->cb;
     }
 }

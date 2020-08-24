@@ -1,29 +1,24 @@
 import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 
-
 export default class ajaxec extends atkPlugin {
-
     main() {
         if (!this.settings.uri) {
             console.error('Trying to execute callback without url.');
             return;
         }
 
-        //Allow user to confirm if available.
-        if(this.settings.confirm){
-            if(confirm(this.settings.confirm)) {
+        // Allow user to confirm if available.
+        if (this.settings.confirm) {
+            if (confirm(this.settings.confirm)) {
                 this.doExecute();
             }
-        } else {
-            if (!this.$el.hasClass('loading')){
-                this.doExecute();
-            }
+        } else if (!this.$el.hasClass('loading')) {
+            this.doExecute();
         }
     }
 
     doExecute() {
-
         // userConfig callback can use that in order to refer to this plugin.
         const that = this;
         const url = $.atk.getUrl(this.settings.uri);
@@ -36,14 +31,15 @@ export default class ajaxec extends atkPlugin {
         let urlParam = $.atkGetQueryParam(this.settings.uri);
 
         // get store object.
-        let store = atk.dataService.getStoreData(this.settings.storeName);
+        const store = atk.dataService.getStoreData(this.settings.storeName);
 
-        let settings = Object.assign({
+        const settings = {
             on: 'now',
             url: '',
             data: {},
             method: 'POST',
-        }, userConfig);
+            ...userConfig,
+        };
 
         if (settings.method.toLowerCase() === 'get') {
             // set data, store and add it to url param.
@@ -56,7 +52,6 @@ export default class ajaxec extends atkPlugin {
         this.$el.api(settings);
     }
 }
-
 
 ajaxec.DEFAULTS = {
     uri: null,

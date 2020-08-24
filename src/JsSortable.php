@@ -75,22 +75,17 @@ class JsSortable extends JsCallback
 
     /**
      * Callback when container has been reorder.
-     *
-     * @param callable|null $fx
      */
-    public function onReorder($fx = null)
+    public function onReorder(\Closure $fx)
     {
-        if (is_callable($fx)) {
-            if ($this->triggered()) {
-                $sortOrders = explode(',', $_POST['order'] ?? '');
-                $source = $_POST['source'] ?? null;
-                $newIdx = $_POST['new_idx'] ?? null;
-                $orgIdx = $_POST['org_idx'] ?? null;
-                $this->set(function () use ($fx, $sortOrders, $source, $newIdx, $orgIdx) {
-                    return call_user_func_array($fx, [$sortOrders, $source, $newIdx, $orgIdx]);
-                });
-            }
-        }
+        $this->set(function () use ($fx) {
+            $sortOrders = explode(',', $_POST['order'] ?? '');
+            $source = $_POST['source'] ?? null;
+            $newIdx = $_POST['new_idx'] ?? null;
+            $orgIdx = $_POST['org_idx'] ?? null;
+
+            return $fx($sortOrders, $source, $newIdx, $orgIdx);
+        });
     }
 
     /**

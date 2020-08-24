@@ -1,0 +1,97 @@
+name: Unit
+
+on:
+  pull_request:
+    branches: '**'
+  push:
+    branches: '**'
+  schedule:
+    - cron: '0 * * * *'
+
+jobs:
+  unit-test:
+    name: Unit
+    runs-on: ubuntu-latest
+    container:
+      image: atk4/image:${{ matrix.php }} # https://github.com/atk4/image
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.3', 'latest', '8.0']
+        type: ['Phpunit']
+        include:
+          - php: 'latest'
+            type: 'CodingStyle'
+    env:
+      LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == 'latest' && matrix.type == 'Phpunit' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure PHP
+        run: |
+          if [ -z "$LOG_COVERAGE" ]; then rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; fi
+          php --version
+
+      - name: Setup cache 1/2
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Setup cache 2/2
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install PHP dependencies
+        run: |
+          if [ "${{ matrix.type }}" != "Phpunit" ]; then composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev ; fi
+          if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
+          composer remove --no-interaction --no-update 'behat/*' --dev
+          if [ "${{ matrix.php }}" == "8.0" ]; then composer config platform.php 7.4.5 ; fi
+          composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
+
+      - name: Init
+        run: |
+          mkdir -p build/logs
+          php demos/_demo-data/create-sqlite-db.php
+
+      - name: "Run tests: Phpunit (only for Phpunit)"
+        if: matrix.type == 'Phpunit'
+        run: |
+          if [ -n "$LOG_COVERAGE" ]; then
+            cp tools/coverage.php demos
+            mkdir coverage
+            vendor/bin/phpunit --exclude-group none --coverage-text -v
+            ls -l coverage | wc -l && mv coverage/* build/logs
+          else
+            vendor/bin/phpunit --exclude-group none --no-coverage -v
+          fi
+
+      - name: Lint / check syntax (only for CodingStyle)
+        if: matrix.type == 'CodingStyle'
+        run: find . \( -type d \( -path './vendor/*' \) \) -prune -o ! -type d -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Check Coding Style - PHP (only for CodingStyle)
+        if: matrix.type == 'CodingStyle'
+        run: |
+          if [ "$(find demos/ -name '*.php' -print0 | xargs -0 grep -L "namespace atk4\\\\ui\\\\demo;" | tee /dev/fd/2)" ]; then echo 'All demos/ files must have namespace declared' && (exit 1); fi
+          vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --diff-format=udiff --verbose --show-progress=dots
+
+      - name: Check Coding Style - JS (only for CodingStyle)
+        if: matrix.type == 'CodingStyle'
+        run: TODO
+
+      - name: Upload coverage logs 1/2 (only for "latest" Phpunit)
+        if: env.LOG_COVERAGE
+        run: vendor/bin/phpcov merge build/logs/ --clover build/logs/cc.xml
+
+      - name: Upload coverage logs 2/2 (only for "latest" Phpunit)
+        if: env.LOG_COVERAGE
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: build/logs/cc.xml

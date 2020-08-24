@@ -49,7 +49,7 @@ class ItemsPerPageSelector extends View
         Icon::addTo($this)->set('dropdown');
         $this->template->tryset('Label', $this->label);
 
-        //Callback later will give us time to properly render menu item before final output.
+        // Callback later will give us time to properly render menu item before final output.
         $this->cb = CallbackLater::addTo($this);
 
         if (!$this->currentIpp) {
@@ -72,33 +72,27 @@ class ItemsPerPageSelector extends View
      * Run callback when an item is select via dropdown menu.
      * The callback should return a View to be reload after an item
      * has been select.
-     *
-     * @param callable $fx
      */
-    public function onPageLengthSelect($fx = null)
+    public function onPageLengthSelect(\Closure $fx)
     {
-        if (is_callable($fx)) {
-            if ($this->cb->triggered()) {
-                $this->cb->set(function () use ($fx) {
-                    $ipp = $_GET['ipp'] ?? null;
-                    //$this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
-                    $this->set($ipp);
-                    $reload = call_user_func($fx, $ipp);
-                    if ($reload) {
-                        $this->app->terminateJson($reload);
-                    }
-                });
+        $this->cb->set(function () use ($fx) {
+            $ipp = $_GET['ipp'] ?? null;
+            //$this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
+            $this->set($ipp);
+            $reload = $fx($ipp);
+            if ($reload) {
+                $this->app->terminateJson($reload);
             }
-        }
+        });
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $menuItems = [];
         foreach ($this->pageLengthItems as $key => $item) {
             $menuItems[] = ['name' => $item, 'value' => $item];
         }
-        //set semantic-ui dropdown onChange function.
+        // set semantic-ui dropdown onChange function.
         $function = "function(value, text, item){
                             if (value === undefined || value === '' || value === null) return;
                             $(this)

@@ -29,5 +29,5 @@ $lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lis
 });
 $lister->setModel(new Country($app->db));
 
-//add dynamic scrolling.
+// add dynamic scrolling.
 $lister->addJsPaginator(20, ['stateContext' => '.atk-scroller'], $scrollContainer);

@@ -356,12 +356,12 @@ If you'd like to even further adjust How each item is displayed (e.g. complex HT
          * values to item template and appends it to main template
          */
         protected function _addCallBackRow($row, $key = null) {
-            $res = call_user_func($this->renderRowFunction, $row, $key);
+            $res = ($this->renderRowFunction)($row, $key);
             $this->_tItem->set('value', (string) $res['value']);
             $this->_tItem->set('title', $res['title']);
             $this->_tItem->set('someOtherField', $res['someOtherField]);
             $this->_tItem->set('someOtherField2', $res['someOtherField2]);
-            //add item to template
+            // add item to template
             $this->template->appendHtml('Item', $this->_tItem->render());
        }
    }

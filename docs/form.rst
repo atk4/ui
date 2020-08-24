@@ -493,7 +493,7 @@ Example use of Model's validate() method::
             $this->addField('gender', ['enum' => ['M', 'F']]);
         }
 
-        public function validate()
+        public function validate(): array
         {
             $errors = parent::validate();
 
@@ -830,7 +830,7 @@ Instead of defining rules for form controls individually you can hide/show entir
     $g_other->addControl('language', ['width' => 'eight']);
     $g_other->addControl('favorite_pet', ['width' => 'four']);
 
-    //To hide-show group simply select a field in that group.
+    // To hide-show group simply select a field in that group.
     // Show group where 'php' belong when dev is checked.
     // Show group where 'language' belong when dev is checked.
 

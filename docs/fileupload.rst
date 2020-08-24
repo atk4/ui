@@ -53,12 +53,12 @@ When adding an Upload or UploadImage field to a form, onUpload and onDelete call
 
     $img = $form->addControl('img', [\atk4\ui\Form\Control\UploadImage::class, ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
 
-    $img->onUpload(function ($files) {
-        //callback action here...
+    $img->onUpload(function ($postFile) {
+        // callback action here...
     });
 
     $img->onDelete(function ($fileId) {
-        //callback action here...
+        // callback action here...
     });
 
 
@@ -66,8 +66,7 @@ onUpload
 --------
 
 The onUpload callback get called as soon as the upload process is finished. This callback
-function will receive the `$_FILES['upfile']` array as function parameter (see https://php.net/manual/en/features.file-upload.php),
-or '$error' string if there was problem during upload.
+function will receive the `$_FILES['upfile']` array as function parameter (see https://php.net/manual/en/features.file-upload.php).
 
 The onUpload callback function is a good place to:
 
@@ -80,12 +79,12 @@ The onUpload callback function is a good place to:
 
 Example showing the onUpload callback on the UploadImage field::
 
-    $img->onUpload(function ($files) use ($form, $img) {
-        if ($files === 'error') {
+    $img->onUpload(function ($postFile) use ($form, $img) {
+        if ($postFile['error'] !== 0) {
             return $form->error('img', 'Error uploading image.');
         }
 
-        //Do file processing here...
+        // Do file processing here...
 
         $img->setThumbnailSrc('./images/'.$file_name);
         $img->setFileId('123456');
@@ -119,7 +118,7 @@ The onDelete callback function is a good place to:
 Example showing the onDelete callback on the UploadImage field::
 
     $img->onDelete(function ($fileId) use ($img) {
-        //reset thumbanil
+        // reset thumbanil
         $img->clearThumbnail('./images/default.png');
 
         return new \atk4\ui\JsNotify(['content' => $fileId.' has been removed!', 'color' => 'green']);
