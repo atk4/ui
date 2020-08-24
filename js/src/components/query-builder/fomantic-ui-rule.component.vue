@@ -113,7 +113,7 @@ export default {
         },
         dateValue: {
             get: function () {
-              let tempDate = this.dateString;
+                let tempDate = this.dateString;
                 if (tempDate) {
                     // fix date parsing for different time zone if time is not supply.
                     if (tempDate.match(/^[0-9]{4}[/\-.][0-9]{2}[/\-.][0-9]{2}$/)) {
