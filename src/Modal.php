@@ -34,7 +34,7 @@ class Modal extends View
     /** @var string|null Set null for no title */
     public $title;
     public $loading_label = 'Loading...';
-    public $headerCSS = 'header';
+    public $headerCss = 'header';
     public $ui = 'modal';
     public $fx = [];
     public $cb;
@@ -49,7 +49,7 @@ class Modal extends View
      *
      * @var array
      */
-    public $contentCSS = ['img', 'content', 'atk-dialog-content'];
+    public $contentCss = ['img', 'content', 'atk-dialog-content'];
 
     /**
      * if true, the <div class="actions"> at the bottom of the modal is
@@ -107,7 +107,7 @@ class Modal extends View
      */
     public function addContentCss($class)
     {
-        $this->contentCSS = array_merge($this->contentCSS, is_string($class) ? [$class] : $class);
+        $this->contentCss = array_merge($this->contentCss, is_string($class) ? [$class] : $class);
     }
 
     /**
@@ -290,11 +290,11 @@ class Modal extends View
 
         if (!empty($this->title)) {
             $this->template->trySet('title', $this->title);
-            $this->template->trySet('headerCSS', $this->headerCSS);
+            $this->template->trySet('headerCss', $this->headerCss);
         }
 
-        if ($this->contentCSS) {
-            $this->template->trySet('contentCSS', implode(' ', $this->contentCSS));
+        if ($this->contentCss) {
+            $this->template->trySet('contentCss', implode(' ', $this->contentCss));
         }
 
         if (!empty($this->fx)) {
