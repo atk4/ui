@@ -28,7 +28,6 @@ module.exports = {
         'class-methods-use-this': 'off',
         'import/no-unresolved': 'off',
         'no-eval': ['error', { allowIndirect: true }],
-        'no-bitwise': 'off',
         'no-plusplus': 'off',
         'no-loop-func': 'off',
         'prefer-destructuring': 'off',
