@@ -29,7 +29,10 @@ class UploadService {
    * @param completeCb    the callback for semantic-ui api.onComplete.
    * @param xhrCb         the xhr function to pass to server.
    */
-    uploadFiles(files, el, data = [], uploadUrl, completeCb = function (r, c) {}, xhrCb = function () { return new window.XMLHttpRequest(); }) {
+    uploadFiles(files, element,
+        data = [],
+        uploadUrl,
+        completeCb = function (r, c) {}, xhrCb = function () { return new window.XMLHttpRequest(); }) {
         const formData = new FormData();
 
         for (let i = 0; i < files.length; i++) {
@@ -43,7 +46,7 @@ class UploadService {
             });
         }
 
-        el.api({
+        element.api({
             on: 'now',
             url: uploadUrl,
             cache: false,

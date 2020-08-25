@@ -331,7 +331,7 @@ class PanelService {
         const triggerElement = this.getPropertyValue(id, 'triggerElement');
         let isSame = false;
         if (el && triggerElement) {
-            isSame = (el.length == triggerElement.length && el.length == el.filter(triggerElement).length);
+            isSame = (el.length === triggerElement.length && el.length === el.filter(triggerElement).length);
         }
         return isSame;
     }

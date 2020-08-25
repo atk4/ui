@@ -30,7 +30,7 @@ class ApiService {
    * @param jQueryRef // reference to jQuery.
    */
     evalResponse(code, jQueryRef) {
-        const $ = jQueryRef;
+        const $ = jQueryRef; //eslint-disable-line
         window.eval(code);
     }
 
@@ -115,7 +115,7 @@ class ApiService {
                 }
             } else if (response.isServiceError) {
                 // service can still throw an error
-                throw ({ message: response.message });
+                throw ({ message: response.message }); // eslint-disable-line
             }
         } catch (e) {
             apiService.showErrorModal(apiService.getErrorHtml(e.message));
