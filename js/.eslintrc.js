@@ -24,7 +24,6 @@ module.exports = {
         'object-shorthand': ['error', 'never'],
         'func-names': ['error', 'never'],
         'no-param-reassign': 'off',
-        'no-use-before-define': 'off',
         'class-methods-use-this': 'off',
         'import/no-unresolved': 'off',
         'no-eval': ['error', { allowIndirect: true }],

@@ -35,7 +35,7 @@ class PopupService {
             // Only load if we are not using data.cache or content has not been loaded yet.
             if (!data.cache || !data.hascontent) {
                 // display default loader while waiting for content.
-                $popup.html(popupService.getLoader());
+                $popup.html(atk.popupService.getLoader());
                 $popup.api({
                     on: 'now',
                     url: data.uri,

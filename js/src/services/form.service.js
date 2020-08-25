@@ -46,7 +46,7 @@ class FormService {
    * Form onSuccess handler when submit.
    */
     onSuccess() {
-        formService.clearDirtyForm($(this).attr('id'));
+        atk.formService.clearDirtyForm($(this).attr('id'));
         return true;
     }
 
