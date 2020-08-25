@@ -436,7 +436,7 @@ class App
      */
     public function initLayout($seed)
     {
-        $layout = $this->factory($seed);
+        $layout = Layout::fromSeed($seed);
         $layout->app = $this;
 
         if (!$this->html) {
