@@ -1,4 +1,4 @@
-@crud
+@crud-tag
 Feature: Crud
   Testing crud add, edit, delete using search
 

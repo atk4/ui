@@ -1,4 +1,4 @@
-@filter
+@filter-tag
 Feature: Filter
     Testing table filter
 

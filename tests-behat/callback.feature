@@ -1,4 +1,4 @@
-@callback
+@callback-tag
 Feature: Callback
   Testing callbacks
 

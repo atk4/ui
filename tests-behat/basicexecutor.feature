@@ -1,4 +1,4 @@
-@basic-executor
+@basic-executor-tag
 Feature: Executor
   Testing basic action executor
 
