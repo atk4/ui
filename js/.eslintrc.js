@@ -27,7 +27,7 @@ module.exports = {
         'class-methods-use-this': 'off',
         'import/no-unresolved': 'off',
         'no-plusplus': 'off',
-        'prefer-destructuring': 'off',
+        // 'prefer-destructuring': 'off',
         'consistent-return': 'off',
         'no-nested-ternary': 'off',
         'import/prefer-default-export': 'off',

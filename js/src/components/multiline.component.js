@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise, no-loop-func */
 import multilineBody from './multiline/multiline-body.component';
 import multilineHeader from './multiline/multiline-header.component';
 
@@ -112,7 +111,9 @@ export default {
      */
         getUUID: function () {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+                // eslint-disable-next-line no-bitwise
                 const r = Math.random() * 16 | 0;
+                // eslint-disable-next-line no-bitwise
                 const v = c === 'x' ? r : (r & (0x3 | 0x8));
                 return v.toString(16);
             });
@@ -165,6 +166,7 @@ export default {
             // find proper row index using id.
             let idx = -1;
             for (let i = 0; i < this.rowData.length; i++) {
+                // eslint-disable-next-line no-loop-func
                 this.rowData[i].forEach((cell) => {
                     if (cell.__atkml === rowId) {
                         idx = i;
@@ -191,6 +193,7 @@ export default {
             // find proper row index using id.
             let idx = -1;
             for (let i = 0; i < this.rowData.length; i++) {
+                // eslint-disable-next-line no-loop-func
                 this.rowData[i].forEach((cell) => {
                     if (cell.__atkml === rowId) {
                         idx = i;
@@ -235,6 +238,7 @@ export default {
                 const newItem = {};
                 for (let i = 0; i < item.length; i++) {
                     const key = Object.keys(item[i])[0];
+                    // eslint-disable-next-line prefer-destructuring
                     newItem[key] = Object.values(item[i])[0];
                 }
                 return { ...newItem };

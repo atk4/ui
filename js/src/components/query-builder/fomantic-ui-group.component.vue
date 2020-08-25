@@ -75,6 +75,7 @@ export default {
        * Add a new rule via Dropdown item.
        */
         addNewRule: function (ruleId) {
+            // eslint-disable-next-line prefer-destructuring
             this.selectedRule = this.rules.filter((rule) => rule.id === ruleId)[0];
             if (this.selectedRule) {
                 this.addRule();
