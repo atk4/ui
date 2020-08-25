@@ -13,59 +13,60 @@
 </template>
 
 <script>
-  import VueQueryBuilder from "vue-query-builder";
-  import QueryBuilderGroup from "./fomantic-ui-group.component.vue";
+import VueQueryBuilder from 'vue-query-builder';
+import QueryBuilderGroup from './fomantic-ui-group.component.vue';
 
-  export default {
-    name: "query-builder",
+export default {
+    name: 'query-builder',
     components: {
-      VueQueryBuilder,
-      QueryBuilderGroup
+        VueQueryBuilder: VueQueryBuilder,
+        QueryBuilderGroup: QueryBuilderGroup,
     },
-    props : {
-      data: Object,
+    props: {
+        data: Object,
     },
-    data() {
-      return {
-        query: this.data.query ? this.data.query : {},
-        rules: this.data.rules ? this.data.rules : [],
-        name: this.data.name ? this.data.name : '',
-        maxDepth: this.data.maxDepth ? ((this.data.maxDepth <= 10) ? this.data.maxDepth : 10 ): 1,
-        labels: this.getLabels(this.data.labels),
-        form: this.data.form,
-        debug: this.data.debug ? this.data.debug : false,
-      }
+    data: function () {
+        return {
+            query: this.data.query ? this.data.query : {},
+            rules: this.data.rules ? this.data.rules : [],
+            name: this.data.name ? this.data.name : '',
+            maxDepth: this.data.maxDepth ? ((this.data.maxDepth <= 10) ? this.data.maxDepth : 10) : 1,
+            labels: this.getLabels(this.data.labels),
+            form: this.data.form,
+            debug: this.data.debug ? this.data.debug : false,
+        };
     },
     computed: {
-      value: function() {
-        return JSON.stringify(this.query, null);
-      }
+        value: function () {
+            return JSON.stringify(this.query, null);
+        },
     },
     methods: {
-      /**
+        /**
        * Return default label and option.
        *
        * @param labels
        * @returns {any}
        */
-      getLabels: function(labels) {
-        labels = labels ? labels : {};
+        getLabels: function (labels) {
+            labels = labels || {};
 
-        return Object.assign({
-          matchType: "Match Type",
-          matchTypes: [
-            {id: "AND", label: "And"},
-            {id: "OR", label: "Or"}
-          ],
-          addRule: "Add Rule",
-          removeRule: "small icon times",
-          addGroup: "Add Group",
-          removeGroup: "small icon times",
-          textInputPlaceholder: "value",
-          spaceRule: "fitted", // can be fitted, compact or padded.
-          hiddenOperator: ['is empty', 'is not empty'], // a list of operators that when select, will hide user input.
-        }, labels);
-      },
-    }
-  };
+            return {
+                matchType: 'Match Type',
+                matchTypes: [
+                    { id: 'AND', label: 'And' },
+                    { id: 'OR', label: 'Or' },
+                ],
+                addRule: 'Add Rule',
+                removeRule: 'small icon times',
+                addGroup: 'Add Group',
+                removeGroup: 'small icon times',
+                textInputPlaceholder: 'value',
+                spaceRule: 'fitted', // can be fitted, compact or padded.
+                hiddenOperator: ['is empty', 'is not empty'], // a list of operators that when select, will hide user input.
+                ...labels,
+            };
+        },
+    },
+};
 </script>

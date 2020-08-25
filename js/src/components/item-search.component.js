@@ -1,5 +1,5 @@
 import debounce from 'debounce';
-import $ from "jquery";
+import $ from 'jquery';
 
 /**
  * Vue component
@@ -19,69 +19,71 @@ import $ from "jquery";
  *
  */
 export default {
-  name: 'atk-item-search',
-  props: {
-    context: String,
-    url: String,
-    q: String,
-    reload: String,
-    queryArg: String,
-  },
-  data: function () {
-    return { query: this.q, temp: this.q, isActive: false, extraQuery: null};
-  },
-  computed: {
-    classIcon: function() {
-      return {
-        'search icon': (this.query === null || this.query === ''),
-        'remove icon': this.query !== null
-      }
-    }
-  },
-  methods: {
-    onChange: debounce(function(e){
-      if (this.query != this.temp) {
-        if (this.query === '') this.query = null;
-        this.sendQuery();
-        this.temp = this.query;
-      }
-    }, 100),
-    onEscape: function() {
-      if (this.query !== null) {
-        this.query = null;
-        this.temp = null;
-        this.sendQuery();
-      }
+    name: 'atk-item-search',
+    props: {
+        context: String,
+        url: String,
+        q: String,
+        reload: String,
+        queryArg: String,
     },
-    onEnter: function() {
-      if (this.query !== null) {
-        this.query = null;
-        this.temp = null;
-        this.sendQuery();
-      }
+    data: function () {
+        return {
+            query: this.q, temp: this.q, isActive: false, extraQuery: null,
+        };
     },
-    onClear: function() {
-      if (this.query) {
-        this.query = null;
-        this.temp = null;
-        this.sendQuery();
-      }
+    computed: {
+        classIcon: function () {
+            return {
+                'search icon': (this.query === null || this.query === ''),
+                'remove icon': this.query !== null,
+            };
+        },
     },
-    sendQuery: function() {
-      const that = this;
-      const options = $.extend({}, this.extraQuery, {__atk_reload: this.reload, [this.queryArg] : this.query});
-      const $reload = $('#'+this.reload);
-      this.isActive = true;
-      $reload.api({
-        on: 'now',
-        url: this.url,
-        data: options,
-        method: 'GET',
-        stateContext: (this.context) ? $(this.context) : $(this.$el),
-        onComplete: function(e,r) {
-          that.isActive = false;
-        }
-      });
-    }
-  }
-}
+    methods: {
+        onChange: debounce(function (e) {
+            if (this.query != this.temp) {
+                if (this.query === '') this.query = null;
+                this.sendQuery();
+                this.temp = this.query;
+            }
+        }, 100),
+        onEscape: function () {
+            if (this.query !== null) {
+                this.query = null;
+                this.temp = null;
+                this.sendQuery();
+            }
+        },
+        onEnter: function () {
+            if (this.query !== null) {
+                this.query = null;
+                this.temp = null;
+                this.sendQuery();
+            }
+        },
+        onClear: function () {
+            if (this.query) {
+                this.query = null;
+                this.temp = null;
+                this.sendQuery();
+            }
+        },
+        sendQuery: function () {
+            const that = this;
+            const options = $.extend({}, this.extraQuery, { __atk_reload: this.reload, [this.queryArg]: this.query });
+            const $reload = $('#' + this.reload);
+            this.isActive = true;
+            $reload.api({
+                on: 'now',
+                url: this.url,
+                data: options,
+                method: 'GET',
+                stateContext: (this.context) ? $(this.context) : $(this.$el),
+                onComplete: function (e, r) {
+                    that.isActive = false;
+                },
+            });
+        },
+    },
+};

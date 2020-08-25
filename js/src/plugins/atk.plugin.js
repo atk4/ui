@@ -6,7 +6,6 @@ import $ from 'jquery';
  */
 
 export default class atkPlugin {
-
     /**
      * Default plugin constructor
      * @param element

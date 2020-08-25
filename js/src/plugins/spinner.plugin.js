@@ -2,7 +2,6 @@ import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 
 export default class spinner extends atkPlugin {
-
     main() {
         this.timer;
         const options = this.settings;
@@ -10,8 +9,8 @@ export default class spinner extends atkPlugin {
         this.$el.remove('.dimmer');
         this.$el.remove('.spinner');
 
-        let $baseDimmer = $(options.baseDimmerMarkup);
-        let $baseLoader = $(options.baseLoaderMarkup);
+        const $baseDimmer = $(options.baseDimmerMarkup);
+        const $baseLoader = $(options.baseLoaderMarkup);
 
         let $finalSpinner = null;
 
@@ -20,13 +19,13 @@ export default class spinner extends atkPlugin {
         $baseLoader.toggleClass('centered', options.centered);
         $baseLoader.toggleClass('inline', options.inline);
 
-        let isText = !!(options.loaderText);
-        if(isText) {
+        const isText = !!(options.loaderText);
+        if (isText) {
             $baseLoader.toggleClass('text', true);
             $baseLoader.text(options.loaderText);
         }
 
-        if(options.dimmed) {
+        if (options.dimmed) {
             $baseDimmer.toggleClass('active', options.active);
             $finalSpinner = $baseDimmer.append($baseLoader);
         } else {
@@ -35,12 +34,11 @@ export default class spinner extends atkPlugin {
 
         // If replace is true we remove the existing content in the $element.
         this.showSpinner(this.$el, $finalSpinner, options.replace);
-
     }
 
     showSpinner($element, $spinner, replace = false) {
         this.timer = setTimeout(() => {
-            if(replace) $element.empty();
+            if (replace) $element.empty();
             $element.append($spinner);
         }, 500);
     }
@@ -60,5 +58,5 @@ spinner.DEFAULTS = {
     loaderText: 'Loading',
     centered: false,
     baseDimmerMarkup: '<div class="ui dimmer"></div>',
-    baseLoaderMarkup: '<div class="ui loader"></div>'
+    baseLoaderMarkup: '<div class="ui loader"></div>',
 };

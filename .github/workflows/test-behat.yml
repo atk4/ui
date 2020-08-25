@@ -57,6 +57,11 @@ jobs:
           npm install --loglevel=error -g pug-cli less less-plugin-clean-css uglify-js
           (cd js && npm install --loglevel=error)
 
+      - name: Lint JS files (only for Slow)
+        if: matrix.type == 'Chrome Slow'
+        run: |
+          (cd js && npm run lint)
+
       - name: Build/diff HTML files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |

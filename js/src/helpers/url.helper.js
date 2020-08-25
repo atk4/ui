@@ -1,3 +1,5 @@
+/* global jQuery */
+
 /**
  *  Url helper jQuery functions.
  *
@@ -12,10 +14,10 @@
  *
  */
 
-(function($) {
-    if(!$.atk){
+(function ($) {
+    if (!$.atk) {
         $.atk = new Object();
-    };
+    }
 
     /**
      * Get the base url from string.
@@ -23,8 +25,8 @@
      * @param url
      * @returns {*|string}
      */
-    $.atk['getUrl'] = function(url) {
-      return url.split('?')[0];
+    $.atk.getUrl = function (url) {
+        return url.split('?')[0];
     };
 
     /**
@@ -33,12 +35,11 @@
      * @param str
      * @returns {{}|unknown}
      */
-    $.atk['getQueryParams'] = function(str) {
+    $.atk.getQueryParams = function (str) {
         if (str.split('?')[1]) {
-            return decodeURIComponent(str.split('?')[1]).split("&").map(function(n){return n = n.split("="),this[n[0]] = n[1],this}.bind({}))[0];
-        } else {
-            return {};
+            return decodeURIComponent(str.split('?')[1]).split('&').map(function (n) { return n = n.split('='), this[n[0]] = n[1], this; }.bind({}))[0];
         }
+        return {};
     };
 
     /**
@@ -48,9 +49,9 @@
      * @param data
      * @returns {*}
      */
-    $.atk['addParams'] = function (url, data) {
+    $.atk.addParams = function (url, data) {
         if (!$.isEmptyObject(data)) {
-            url += ( url.indexOf('?') >= 0 ? '&' : '?' ) + $.param(data);
+            url += (url.indexOf('?') >= 0 ? '&' : '?') + $.param(data);
         }
 
         return url;
@@ -63,9 +64,7 @@
      * @param param
      * @returns {string|*|string}
      */
-    $.atk['removeParam'] = function (url, param) {
-        let newUrl;
-
+    $.atk.removeParam = function (url, param) {
         const splitUrl = url.split('?');
         if (splitUrl.length === 0) {
             return url;
@@ -76,21 +75,17 @@
             return urlBase;
         }
 
-        const newParams = splitUrl[1].split('&').filter(item => item.split('=')[0] != param);
+        const newParams = splitUrl[1].split('&').filter((item) => item.split('=')[0] != param);
         if (newParams.length > 0) {
-            return urlBase+'?'+newParams.join('&');
-        } else {
-            return urlBase;
+            return urlBase + '?' + newParams.join('&');
         }
+        return urlBase;
     };
+}(jQuery));
 
-})(jQuery);
-
-
-export default (function($){
+export default (function ($) {
     $.atkGetUrl = $.atk.getUrl;
     $.atkAddParams = $.atk.addParams;
     $.atkRemoveParam = $.atk.removeParam;
     $.atkGetQueryParam = $.atk.getQueryParams;
-})(jQuery);
-
+}(jQuery));

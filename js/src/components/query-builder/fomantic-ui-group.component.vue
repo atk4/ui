@@ -53,48 +53,46 @@
 </template>
 
 <script>
-  import QueryBuilderGroup from "vue-query-builder/dist/group/QueryBuilderGroup.umd.js";
-  import QueryBuilderRule from "./fomantic-ui-rule.component.vue";
+import QueryBuilderGroup from 'vue-query-builder/dist/group/QueryBuilderGroup.umd.js';
+import QueryBuilderRule from './fomantic-ui-rule.component.vue';
 
-  export default {
-    name: "QueryBuilderGroup",
+export default {
+    name: 'QueryBuilderGroup',
     components: {
-      QueryBuilderRule: QueryBuilderRule
+        QueryBuilderRule: QueryBuilderRule,
     },
-    data: function() {
-      return {
-        selectedSuiRule: null,
-      };
+    data: function () {
+        return {
+            selectedSuiRule: null,
+        };
     },
     methods: {
-      /**
+        /**
        * Add a new rule via Dropdown item.
        */
-      addNewRule: function(ruleId) {
-        this.selectedRule = this.rules.filter(rule => rule.id === ruleId)[0];
-        if (this.selectedRule) {
-          this.addRule();
-        }
-      },
+        addNewRule: function (ruleId) {
+            this.selectedRule = this.rules.filter((rule) => rule.id === ruleId)[0];
+            if (this.selectedRule) {
+                this.addRule();
+            }
+        },
     },
     computed: {
-      /**
+        /**
        * Map rules to SUI Dropdown.
        *
        * @returns {*}
        */
-      dropdownRules: function() {
-        return this.rules.map( rule => {
-           return {
-             key: rule.id,
-             text: rule.label,
-             value: rule.id
-           };
-        });
-      }
+        dropdownRules: function () {
+            return this.rules.map((rule) => ({
+                key: rule.id,
+                text: rule.label,
+                value: rule.id,
+            }));
+        },
     },
-    extends: QueryBuilderGroup
-  };
+    extends: QueryBuilderGroup,
+};
 </script>
 
 <style>
