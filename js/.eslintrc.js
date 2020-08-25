@@ -26,7 +26,6 @@ module.exports = {
         'no-param-reassign': 'off',
         'class-methods-use-this': 'off',
         'import/no-unresolved': 'off',
-        'no-eval': ['error', { allowIndirect: true }],
         'no-plusplus': 'off',
         'prefer-destructuring': 'off',
         'consistent-return': 'off',
