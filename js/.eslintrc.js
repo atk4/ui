@@ -29,7 +29,6 @@ module.exports = {
         'import/no-unresolved': 'off',
         'no-eval': ['error', { allowIndirect: true }],
         'no-plusplus': 'off',
-        'no-loop-func': 'off',
         'prefer-destructuring': 'off',
         'consistent-return': 'off',
         'no-nested-ternary': 'off',
