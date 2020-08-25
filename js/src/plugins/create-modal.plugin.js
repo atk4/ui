@@ -15,7 +15,12 @@ export default class createModal extends atkPlugin {
 
         // add setting to our modal for modalService
         $m.data({
-            uri: options.uri, type: options.data_type, args: options.uri_options, needRemove: true, needCloseTrigger: true, label: options.label,
+            uri: options.uri,
+            type: options.data_type,
+            args: options.uri_options,
+            needRemove: true,
+            needCloseTrigger: true,
+            label: options.label,
         });
 
         // call semantic-ui modal

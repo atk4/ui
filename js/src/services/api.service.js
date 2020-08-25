@@ -1,5 +1,3 @@
-/* global jQuery */
-
 import $ from 'jquery';
 
 /**
@@ -29,10 +27,10 @@ class ApiService {
    * will work just fine, even if $ is not assign globally.
    *
    * @param code // javascript to be eval.
-   * @param $  // reference to jQuery.
+   * @param $ // reference to jQuery.
    */
-    evalResponse(code, $) {
-        eval(code);
+    evalResponse(code, $) { // eslint-disable-line
+        eval(code); // eslint-disable-line
     }
 
     /**
@@ -48,7 +46,7 @@ class ApiService {
     }
 
     onAbort(message) {
-        console.log(message);
+        console.warn(message);
     }
 
     /**
@@ -87,7 +85,7 @@ class ApiService {
                         // TODO Find a better solution for long term.
                         // Need a way to gracefully abort server request.
                         // when user cancel a request by selecting another request.
-                        console.log('Unable to replace element with id: ' + response.id);
+                        console.error('Unable to replace element with id: ' + response.id);
                         // throw({message:'Unable to replace element with id: '+ response.id});
                     }
                 }
@@ -98,28 +96,28 @@ class ApiService {
                         const m = $('.ui.dimmer.modals.page').find('#' + modal);
                         if (m.length === 0) {
                             $(document.body).append(response.modals[modal].html);
-                            apiService.evalResponse(response.modals[modal].js, jQuery);
+                            atk.apiService.evalResponse(response.modals[modal].js, jQuery);
                         }
                     });
                 }
                 if (response && response.atkjs) {
                     // Call evalResponse with proper context, js code and jQuery as $ var.
-                    apiService.evalResponse.call(this, response.atkjs.replace(/<\/?script>/g, ''), jQuery);
+                    atk.apiService.evalResponse.call(this, response.atkjs.replace(/<\/?script>/g, ''), jQuery);
                 }
-                if (apiService.afterSuccessCallbacks.length > 0) {
+                if (atk.apiService.afterSuccessCallbacks.length > 0) {
                     const self = this;
-                    const callbacks = apiService.afterSuccessCallbacks;
+                    const callbacks = atk.apiService.afterSuccessCallbacks;
                     callbacks.forEach((callback) => {
-                        apiService.evalResponse.call(self, callback, jQuery);
+                        atk.apiService.evalResponse.call(self, callback, jQuery);
                     });
-                    apiService.afterSuccessCallbacks.splice(0);
+                    atk.apiService.afterSuccessCallbacks.splice(0);
                 }
             } else if (response.isServiceError) {
                 // service can still throw an error
-                throw ({ message: response.message });
+                throw ({ message: response.message }); // eslint-disable-line
             }
         } catch (e) {
-            apiService.showErrorModal(apiService.getErrorHtml(e.message));
+            atk.apiService.showErrorModal(atk.apiService.getErrorHtml(e.message));
         }
     }
 
@@ -215,17 +213,17 @@ class ApiService {
     // if json is returned, it should contains the error within message property
         if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
             if (Object.prototype.hasOwnProperty.call(response, 'useWindow') && response.useWindow) {
-                apiService.showErrorWindow(response.message);
+                atk.apiService.showErrorWindow(response.message);
             } else {
-                apiService.showErrorModal(response.message);
+                atk.apiService.showErrorModal(response.message);
             }
         } else {
             // check if we have html returned by server with <body> content.
             const body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
             if (body) {
-                apiService.showErrorModal(body);
+                atk.apiService.showErrorModal(body);
             } else {
-                apiService.showErrorModal(response);
+                atk.apiService.showErrorModal(response);
             }
         }
     }

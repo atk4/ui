@@ -1,5 +1,3 @@
-/* global atk */
-
 import $ from 'jquery';
 
 /**
@@ -48,7 +46,7 @@ class FormService {
    * Form onSuccess handler when submit.
    */
     onSuccess() {
-        formService.clearDirtyForm($(this).attr('id'));
+        atk.formService.clearDirtyForm($(this).attr('id'));
         return true;
     }
 
@@ -90,7 +88,7 @@ class FormService {
     }
 
     isEqual(value, compare) {
-        return parseInt(value) === parseInt(compare);
+        return parseInt(value, 10) === parseInt(compare, 10);
     }
 
     /**
@@ -107,14 +105,14 @@ class FormService {
         if (ruleFunction) {
             const $field = this.getField(form, fieldName);
             if (!$field) {
-                console.log('You are validating a field that does not exist: ', fieldName);
+                console.error('You are validating a field that does not exist: ', fieldName);
                 return false;
             }
             const value = this.getFieldValue($field);
             const ancillary = this.getAncillaryValue(rule);
             return ruleFunction.call($field, value, ancillary);
         }
-        console.log('this rule does not exist: ' + this.getRuleName(rule));
+        console.error('this rule does not exist: ' + this.getRuleName(rule));
         return false;
     }
 

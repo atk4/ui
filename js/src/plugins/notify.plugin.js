@@ -9,7 +9,7 @@ import atkPlugin from './atk.plugin';
  */
 export default class notify extends atkPlugin {
     main() {
-        let cssStyle;
+        let cssStyle = {};
         this.timer = null;
         let domElement = 'body';
 

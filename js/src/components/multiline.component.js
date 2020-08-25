@@ -1,4 +1,3 @@
-/* global atk, jQuery */
 import multilineBody from './multiline/multiline-body.component';
 import multilineHeader from './multiline/multiline-header.component';
 
@@ -112,8 +111,10 @@ export default {
      */
         getUUID: function () {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-                const r = Math.random() * 16 | 0; const
-                    v = c == 'x' ? r : (r & 0x3 | 0x8);
+                // eslint-disable-next-line no-bitwise
+                const r = Math.random() * 16 | 0;
+                // eslint-disable-next-line no-bitwise
+                const v = c === 'x' ? r : (r & (0x3 | 0x8));
                 return v.toString(16);
             });
         },
@@ -161,10 +162,11 @@ export default {
      * @param rowId
      * @returns {Promise<void>}
      */
-        postRow: async function (rowId, field) {
+        postRow: async function (rowId) {
             // find proper row index using id.
             let idx = -1;
             for (let i = 0; i < this.rowData.length; i++) {
+                // eslint-disable-next-line no-loop-func
                 this.rowData[i].forEach((cell) => {
                     if (cell.__atkml === rowId) {
                         idx = i;
@@ -191,6 +193,7 @@ export default {
             // find proper row index using id.
             let idx = -1;
             for (let i = 0; i < this.rowData.length; i++) {
+                // eslint-disable-next-line no-loop-func
                 this.rowData[i].forEach((cell) => {
                     if (cell.__atkml === rowId) {
                         idx = i;
@@ -203,7 +206,7 @@ export default {
         },
         clearError: function (rowId, field) {
             if (rowId in this.errors) {
-                const errors = this.errors[rowId].filter((error) => error.field != field);
+                const errors = this.errors[rowId].filter((error) => error.field !== field);
                 this.errors[rowId] = [...errors];
                 if (errors.length === 0) {
                     delete this.errors[rowId];
@@ -235,6 +238,7 @@ export default {
                 const newItem = {};
                 for (let i = 0; i < item.length; i++) {
                     const key = Object.keys(item[i])[0];
+                    // eslint-disable-next-line prefer-destructuring
                     newItem[key] = Object.values(item[i])[0];
                 }
                 return { ...newItem };
@@ -264,7 +268,9 @@ export default {
                 values = Array.isArray(values) ? values : [];
 
                 values.forEach((value) => {
-                    const data = fields.map((field) => ({ [field]: value[field] ? value[field] : null }));
+                    const data = fields.map((fieldName) => (
+                        { [fieldName]: value[fieldName] ? value[fieldName] : null }
+                    ));
                     data.push({ __atkml: this.getUUID() });
                     rows.push(data);
                 });

@@ -1,3 +1,4 @@
+@lookup-tag
 Feature: Lookup
   Testing Lookup fields
 

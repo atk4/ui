@@ -30,7 +30,7 @@ class ModalService {
     }
 
     onHidden() {
-        modalService.removeModal($(this));
+        atk.modalService.removeModal($(this));
     }
 
     onVisible() {
@@ -57,7 +57,7 @@ class ModalService {
 
         // does modal content need to be loaded dynamically
         if (data && data.uri) {
-            $content.html(modalService.getLoader(data.label ? data.label : ''));
+            $content.html(atk.modalService.getLoader(data.label ? data.label : ''));
             $content.api({
                 on: 'now',
                 url: data.uri,
@@ -72,7 +72,7 @@ class ModalService {
                         response.message = 'Modal service error: Unable to replace atk-dialog content in modal from server response. Empty Content.';
                     } else {
                         if ($modal.modal.settings.autofocus) {
-                            modalService.doAutoFocus($modal);
+                            atk.modalService.doAutoFocus($modal);
                         }
                         $modal.modal('refresh');
                         // content is replace no need to do it in api
@@ -85,7 +85,7 @@ class ModalService {
 
     onShow() {
         const $modal = $(this);
-        modalService.addModal($modal);
+        atk.modalService.addModal($modal);
     }
 
     onHide() {

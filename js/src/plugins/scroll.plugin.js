@@ -66,7 +66,7 @@ export default class scroll extends atkPlugin {
    */
     setTableHeader() {
         if (this.$el.parent().length > 0) {
-            let $tableCopy;
+            let $tableCopy = null;
             this.$el.parent().height(this.settings.options.tableContainerHeight);
             this.$el.addClass('fixed');
             $tableCopy = this.$el.clone(true, true);
@@ -100,7 +100,7 @@ export default class scroll extends atkPlugin {
    */
     observe(e) {
         const borderTopWidth = parseInt(this.$el.css('borderTopWidth'), 10);
-        const borderTopWidthInt = isNaN(borderTopWidth) ? 0 : borderTopWidth;
+        const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth;
         // this.$el padding top value.
         const paddingTop = parseInt(this.$el.css('paddingTop'), 10) + borderTopWidthInt;
         // Either the scroll bar position using window or the container element top position otherwise.
@@ -202,7 +202,9 @@ export default class scroll extends atkPlugin {
    */
     addLoader() {
         const $parent = this.$inner.parent().hasClass('atk-overflow-auto') ? this.$inner.parent().parent() : this.$inner.parent();
+        /* eslint-disable */
         $parent.append($('<div id="atkScrollLoader"><div class="ui section hidden divider"></div><div class="ui active centered inline loader basic segment"></div></div>'));
+        /* eslint-enable */
     }
 
     /**

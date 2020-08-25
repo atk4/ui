@@ -41,12 +41,11 @@ import sidenav from './plugins/sidenav.plugin';
 function plugin(name, className, shortHand = false) {
     // Add atk namespace to jQuery global space.
     if (!$.atk) {
-        $.atk = new Object();
+        $.atk = {};
     }
 
     const pluginName = 'atk' + name;
     const dataName = `__${pluginName}`;
-    const old = $.fn[pluginName];
 
     // add plugin to atk namespace.
     $.atk[name] = className;
@@ -74,8 +73,6 @@ function plugin(name, className, shortHand = false) {
     if (shortHand) {
         $[pluginName] = (options) => $({})[pluginName](options);
     }
-    // - No conflict
-    $.fn[pluginName].noConflict = () => $.fn[pluginName] = old;
 }
 
 /**

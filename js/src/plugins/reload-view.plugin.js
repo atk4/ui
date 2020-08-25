@@ -1,5 +1,3 @@
-/* global atk */
-
 import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 import apiService from '../services/api.service';
@@ -26,7 +24,10 @@ export default class reloadView extends atkPlugin {
         const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
 
         // add new param and remove duplicate, prioritizing the latest one.
-        let urlParam = Object.assign($.atkGetQueryParam(this.settings.uri), this.settings.uri_options ? this.settings.uri_options : {});
+        let urlParam = Object.assign(
+            $.atkGetQueryParam(this.settings.uri),
+            this.settings.uri_options ? this.settings.uri_options : {},
+        );
 
         // get store object.
         const store = atk.dataService.getStoreData(this.settings.storeName);

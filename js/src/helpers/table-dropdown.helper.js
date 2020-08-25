@@ -30,8 +30,8 @@ function showTableDropdown() {
    */
     function setCssPosition() {
     // console.log(position.top, $that.scrollTop());
-        let top; let
-            left;
+        let top = 0;
+        let left = 0;
         // check if we need to place menu above or down button.
         if (canFitBelow()) {
             top = position.top + $that.outerHeight();

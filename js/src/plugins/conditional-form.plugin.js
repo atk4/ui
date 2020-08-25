@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 import debounce from 'debounce';
 import atkPlugin from './atk.plugin';
 import formService from '../services/form.service';

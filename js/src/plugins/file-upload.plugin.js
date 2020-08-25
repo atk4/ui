@@ -115,6 +115,7 @@ export default class fileUpload extends atkPlugin {
             this.hiddenInput.val('');
             this.$el.data().fileId = null;
             break;
+        default:
         }
     }
 
@@ -149,7 +150,7 @@ export default class fileUpload extends atkPlugin {
             xhr.upload.addEventListener('progress', (evt) => {
                 if (evt.lengthComputable) {
                     const percentComplete = evt.loaded / evt.total;
-                    that.bar.progress('set percent', parseInt(percentComplete * 100));
+                    that.bar.progress('set percent', parseInt(percentComplete * 100, 10));
                 }
             }, false);
             return xhr;
@@ -194,7 +195,7 @@ export default class fileUpload extends atkPlugin {
    * @returns {string}
    */
     getEraseContent() {
-        return `<i class="red remove icon" style=""></i>`;
+        return '<i class="red remove icon" style=""></i>';
     }
 }
 

@@ -1,5 +1,3 @@
-/* global jQuery */
-
 /**
  *  Url helper jQuery functions.
  *
@@ -16,7 +14,7 @@
 
 (function ($) {
     if (!$.atk) {
-        $.atk = new Object();
+        $.atk = {};
     }
 
     /**
@@ -37,7 +35,14 @@
      */
     $.atk.getQueryParams = function (str) {
         if (str.split('?')[1]) {
-            return decodeURIComponent(str.split('?')[1]).split('&').map(function (n) { return n = n.split('='), this[n[0]] = n[1], this; }.bind({}))[0];
+            return decodeURIComponent(str.split('?')[1])
+                .split('&')
+                .reduce((obj, unsplitArg) => {
+                    const arg = unsplitArg.split('=');
+                    // eslint-disable-next-line prefer-destructuring
+                    obj[arg[0]] = arg[1];
+                    return obj;
+                }, {});
         }
         return {};
     };
@@ -75,7 +80,7 @@
             return urlBase;
         }
 
-        const newParams = splitUrl[1].split('&').filter((item) => item.split('=')[0] != param);
+        const newParams = splitUrl[1].split('&').filter((item) => item.split('=')[0] !== param);
         if (newParams.length > 0) {
             return urlBase + '?' + newParams.join('&');
         }

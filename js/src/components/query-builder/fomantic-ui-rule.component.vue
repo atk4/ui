@@ -15,7 +15,7 @@
                                     <option v-for="operand in rule.operands" :key="operand">{{ operand }}</option>
                                 </select>
                             </div>
-                            <div class="item"  v-if="typeof rule.operators !== 'undefined' && rule.operators.length > 1">
+                            <div class="item" v-if="typeof rule.operators !== 'undefined' && rule.operators.length > 1">
                                 <!-- List of operators (e.g. =, !=, >, <) -->
                                 <select v-model="query.operator" class="atk-qb-select">
                                     <option v-for="operator in rule.operators" :key="operator" :value="operator">
@@ -50,14 +50,22 @@
                                 <template v-if="canDisplay('checkbox')">
                                     <sui-form-fields inline class="atk-qb">
                                         <div class="field" v-for="choice in rule.choices" :key="choice.value">
-                                            <sui-checkbox :label="choice.label" :radio="isRadio" :value="choice.value" v-model="query.value"></sui-checkbox>
+                                            <sui-checkbox
+                                                :label="choice.label"
+                                                :radio="isRadio"
+                                                :value="choice.value"
+                                                v-model="query.value">
+                                            </sui-checkbox>
                                         </div>
                                     </sui-form-fields>
                                 </template>
                                 <!-- Select input -->
                                 <template v-if="canDisplay('select')">
                                     <select v-model="query.value" class="atk-qb-select">
-                                        <option v-for="choice in rule.choices" :key="choice.value" :value="choice.label">
+                                        <option
+                                            v-for="choice in rule.choices"
+                                            :key="choice.value"
+                                            :value="choice.label">
                                             {{choice.label}}
                                         </option>
                                     </select>
@@ -76,8 +84,7 @@
 </template>
 
 <script>
-/* global atk */
-import QueryBuilderRule from 'vue-query-builder/dist/rule/QueryBuilderRule.umd.js';
+import QueryBuilderRule from 'vue-query-builder/dist/rule/QueryBuilderRule.umd';
 
 export default {
     extends: QueryBuilderRule,
@@ -117,7 +124,7 @@ export default {
                 if (tempDate) {
                     // fix date parsing for different time zone if time is not supply.
                     if (tempDate.match(/^[0-9]{4}[/\-.][0-9]{2}[/\-.][0-9]{2}$/)) {
-                        tempDate = tempDate + ' 00:00:00';
+                        tempDate += ' 00:00:00';
                     }
                     return new Date(tempDate);
                 }
