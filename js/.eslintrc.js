@@ -41,5 +41,16 @@ module.exports = {
         'prefer-template': ['off'],
         'no-unused-vars': ['error', { vars: 'all', args: 'none' }],
         'vue/no-unused-components': 'off',
+        'spaced-comment': ['error', 'always', {
+            line: {
+                markers: ['/'],
+                exceptions: ['-', '+'],
+            },
+            block: {
+                markers: ['!'],
+                exceptions: ['*'],
+                balanced: true,
+            },
+        }],
     },
 };
