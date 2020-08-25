@@ -1,5 +1,3 @@
-/* global jQuery */
-
 import $ from 'jquery';
 
 /**
@@ -29,10 +27,11 @@ class ApiService {
    * will work just fine, even if $ is not assign globally.
    *
    * @param code // javascript to be eval.
-   * @param $  // reference to jQuery.
+   * @param jQueryRef // reference to jQuery.
    */
-    evalResponse(code, $) {
-        eval(code);
+    evalResponse(code, jQueryRef) {
+        const $ = jQueryRef;
+        window.eval(code);
     }
 
     /**
@@ -48,7 +47,7 @@ class ApiService {
     }
 
     onAbort(message) {
-        console.log(message);
+        console.warn(message);
     }
 
     /**
@@ -87,7 +86,7 @@ class ApiService {
                         // TODO Find a better solution for long term.
                         // Need a way to gracefully abort server request.
                         // when user cancel a request by selecting another request.
-                        console.log('Unable to replace element with id: ' + response.id);
+                        console.error('Unable to replace element with id: ' + response.id);
                         // throw({message:'Unable to replace element with id: '+ response.id});
                     }
                 }

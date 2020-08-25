@@ -42,7 +42,7 @@ export default {
     },
     methods: {
         onChange: debounce(function (e) {
-            if (this.query != this.temp) {
+            if (this.query !== this.temp) {
                 if (this.query === '') this.query = null;
                 this.sendQuery();
                 this.temp = this.query;

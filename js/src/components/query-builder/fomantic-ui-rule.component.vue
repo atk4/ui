@@ -50,7 +50,12 @@
                                 <template v-if="canDisplay('checkbox')">
                                     <sui-form-fields inline class="atk-qb">
                                         <div class="field" v-for="choice in rule.choices" :key="choice.value">
-                                            <sui-checkbox :label="choice.label" :radio="isRadio" :value="choice.value" v-model="query.value"></sui-checkbox>
+                                            <sui-checkbox
+                                                :label="choice.label"
+                                                :radio="isRadio"
+                                                :value="choice.value"
+                                                v-model="query.value">
+                                            </sui-checkbox>
                                         </div>
                                     </sui-form-fields>
                                 </template>
@@ -76,8 +81,7 @@
 </template>
 
 <script>
-/* global atk */
-import QueryBuilderRule from 'vue-query-builder/dist/rule/QueryBuilderRule.umd.js';
+import QueryBuilderRule from 'vue-query-builder/dist/rule/QueryBuilderRule.umd';
 
 export default {
     extends: QueryBuilderRule,
@@ -117,7 +121,7 @@ export default {
                 if (tempDate) {
                     // fix date parsing for different time zone if time is not supply.
                     if (tempDate.match(/^[0-9]{4}[/\-.][0-9]{2}[/\-.][0-9]{2}$/)) {
-                        tempDate = tempDate + ' 00:00:00';
+                        tempDate += ' 00:00:00';
                     }
                     return new Date(tempDate);
                 }

@@ -1,4 +1,3 @@
-
 /**
  * Singleton class
  * This is default setup for semantic-ui Popup.

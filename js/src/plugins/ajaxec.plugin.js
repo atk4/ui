@@ -1,4 +1,4 @@
-/* global atk */
+/* eslint no-alert: "off" */
 
 import $ from 'jquery';
 import atkPlugin from './atk.plugin';
@@ -12,7 +12,7 @@ export default class ajaxec extends atkPlugin {
 
         // Allow user to confirm if available.
         if (this.settings.confirm) {
-            if (confirm(this.settings.confirm)) {
+            if (window.confirm(this.settings.confirm)) {
                 this.doExecute();
             }
         } else if (!this.$el.hasClass('loading')) {

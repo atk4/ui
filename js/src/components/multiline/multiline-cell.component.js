@@ -31,7 +31,7 @@ export default {
     },
     computed: {
         isDirty: function () {
-            return this.dirtyValue != this.inputValue;
+            return this.dirtyValue !== this.inputValue;
         },
     },
     methods: {

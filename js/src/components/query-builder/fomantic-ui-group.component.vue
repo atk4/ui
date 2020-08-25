@@ -28,7 +28,11 @@
                                             selection
                                     >
                                         <sui-dropdown-menu class="atk-qb-rule-select-menu">
-                                            <sui-dropdown-item @click="addNewRule(rule.id)" v-for="rule in rules" :key="rule.id" :value="rule">{{ rule.label }}</sui-dropdown-item>
+                                            <sui-dropdown-item
+                                                @click="addNewRule(rule.id)"
+                                                v-for="rule in rules"
+                                                :key="rule.id" :value="rule"
+                                            >{{ rule.label }}</sui-dropdown-item>
                                         </sui-dropdown-menu>
                                     </sui-dropdown>
                                     <button v-if="depth < maxDepth"
@@ -53,7 +57,7 @@
 </template>
 
 <script>
-import QueryBuilderGroup from 'vue-query-builder/dist/group/QueryBuilderGroup.umd.js';
+import QueryBuilderGroup from 'vue-query-builder/dist/group/QueryBuilderGroup.umd';
 import QueryBuilderRule from './fomantic-ui-rule.component.vue';
 
 export default {

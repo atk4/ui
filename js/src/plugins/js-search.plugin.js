@@ -42,14 +42,15 @@ export default class JsSearch extends atkPlugin {
     onAutoQueryAction() {
         const that = this;
         this.textInput.on('keyup', debounce((e) => {
+            const options = $.extend({}, that.urlArgs, that.settings.uri_options);
             if (e.target.value === '' || e.keyCode === 27) {
-                that.doSearch(that.settings.uri, null, $.extend({}, that.urlArgs, that.settings.uri_options), () => {
+                that.doSearch(that.settings.uri, null, options, () => {
                     that.setButtonState(false);
                     that.setFilterState(false);
                     that.textInput.val('');
                 });
-            } else if (e.target.value != that.$el.data('preValue')) {
-                that.doSearch(that.settings.uri, e.target.value, $.extend({}, that.urlArgs, that.settings.uri_options/* , {'_q' : e.target.value} */), () => {
+            } else if (e.target.value !== that.$el.data('preValue')) {
+                that.doSearch(that.settings.uri, e.target.value, options, () => {
                     that.setButtonState(true);
                     that.setFilterState(true);
                 });
@@ -90,7 +91,7 @@ export default class JsSearch extends atkPlugin {
     onEscapeKeyAction() {
         const that = this;
         this.textInput.keydown((e) => {
-            if (that.textInput.val() != '' && e.key === 'Escape') {
+            if (that.textInput.val() !== '' && e.key === 'Escape') {
                 that.setButtonState(false);
                 that.setFilterState(false);
                 that.textInput.val('');
@@ -204,7 +205,9 @@ export default class JsSearch extends atkPlugin {
         // if we are not using ajax simply reload page.
         if (!this.settings.useAjax) {
             uri = $.atkRemoveParam(uri, '_q');
-            delete options.__atk_reload;
+            // prevent lint-fix from creating error when using options['__atk-reload']
+            const reloadArg = '__atk-reload';
+            delete options[reloadArg];
 
             // if (query) {
             //   uri = $.atkAddParams(uri, {'_q': query});
@@ -230,6 +233,6 @@ JsSearch.DEFAULTS = {
     uri_options: {},
     q: null,
     autoQuery: false,
-    timeOut: 100,
+    timeOut: 300,
     useAjax: true,
 };

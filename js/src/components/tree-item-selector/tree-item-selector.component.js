@@ -1,5 +1,3 @@
-/* global jQuery */
-
 const template = `<div class="item" :style="itemMargin">
         <i :class="toggleIcon" @click="onToggleShow" v-show="!isRoot"></i>
         <i :class="getIcon"  @click="onToggleSelect" v-show="!isRoot"></i>
@@ -163,6 +161,7 @@ export default {
             case 'multiple':
                 this.handleMultipleSelect();
                 break;
+            default:
             }
         },
         /**
@@ -198,7 +197,7 @@ export default {
             return ids;
         },
         remove: function (values, value) {
-            return values.filter((val) => val != value);
+            return values.filter((val) => val !== value);
         },
         /**
      * Handle a selection when in single mode.

@@ -37,6 +37,7 @@ export default {
                 case 'number':
                     align = 'right';
                     break;
+                default:
                 }
             }
 
