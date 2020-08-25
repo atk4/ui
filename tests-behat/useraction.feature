@@ -1,3 +1,4 @@
+@user-action
 Feature: UserAction
   Testing UI executor UserAction and UserConfirmation modal.
 

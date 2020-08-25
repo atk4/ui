@@ -1,3 +1,4 @@
+@tab
 Feature: Tab
   Testing Tab
 

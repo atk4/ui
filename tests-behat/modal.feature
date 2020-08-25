@@ -1,3 +1,4 @@
+@modal
 Feature: Modal
   Testing modal view
 

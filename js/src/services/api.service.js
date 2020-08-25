@@ -27,11 +27,10 @@ class ApiService {
    * will work just fine, even if $ is not assign globally.
    *
    * @param code // javascript to be eval.
-   * @param jQueryRef // reference to jQuery.
+   * @param $ // reference to jQuery.
    */
-    evalResponse(code, jQueryRef) {
-        const $ = jQueryRef; //eslint-disable-line
-        window.eval(code);
+    evalResponse(code, $) { //eslint-disable-line
+        eval(code); //eslint-disable-line
     }
 
     /**

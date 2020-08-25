@@ -1,3 +1,4 @@
+@filter
 Feature: Filter
     Testing table filter
 

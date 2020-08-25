@@ -1,4 +1,4 @@
-
+@panel
 Feature: RightPanel
   Testing RightPanel
 

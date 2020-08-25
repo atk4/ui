@@ -1,3 +1,4 @@
+@js
 Feature: JS
  Test javascript
 

@@ -1,3 +1,4 @@
+@form
 Feature: Form
     Testing forms
 

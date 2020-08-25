@@ -1,3 +1,4 @@
+@callback
 Feature: Callback
   Testing callbacks
 

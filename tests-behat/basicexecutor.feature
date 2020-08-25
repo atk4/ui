@@ -1,3 +1,4 @@
+@basic-executor
 Feature: Executor
   Testing basic action executor
 
