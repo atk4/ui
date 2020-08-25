@@ -33,7 +33,7 @@ module.exports = {
         'no-console': ['error', { allow: ['warn', 'error'] }],
         'no-underscore-dangle': ['error', { allow: ['__atkml', '__atkml_action', '__atk-reload'] }],
         'max-len': ['error', {
-            code: 140,
+            code: 120,
             ignoreTemplateLiterals: true,
             ignoreComments: true,
             ignoreStrings: true,

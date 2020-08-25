@@ -268,7 +268,9 @@ export default {
                 values = Array.isArray(values) ? values : [];
 
                 values.forEach((value) => {
-                    const data = fields.map((fieldName) => ({ [fieldName]: value[fieldName] ? value[fieldName] : null }));
+                    const data = fields.map((fieldName) => (
+                        { [fieldName]: value[fieldName] ? value[fieldName] : null }
+                    ));
                     data.push({ __atkml: this.getUUID() });
                     rows.push(data);
                 });

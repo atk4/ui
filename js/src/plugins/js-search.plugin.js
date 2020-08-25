@@ -65,14 +65,15 @@ export default class JsSearch extends atkPlugin {
     onEnterAction() {
         const that = this;
         this.textInput.on('keyup', (e) => {
+            const options = $.extend({}, that.urlArgs, that.settings.uri_options);
             if (e.keyCode === 13 && e.target.value) {
-                that.doSearch(that.settings.uri, e.target.value, $.extend({}, that.urlArgs, that.settings.uri_options), () => {
+                that.doSearch(that.settings.uri, e.target.value, options, () => {
                     that.setButtonState(true);
                     that.setFilterState(true);
                 });
                 that.$el.data('preValue', e.target.value);
             } else if ((e.keyCode === 27 && e.target.value) || (e.keyCode === 13 && e.target.value === '')) {
-                that.doSearch(that.settings.uri, null, $.extend({}, that.urlArgs, that.settings.uri_options), () => {
+                that.doSearch(that.settings.uri, null, options, () => {
                     that.setButtonState(false);
                     that.setFilterState(false);
                 });
@@ -108,8 +109,9 @@ export default class JsSearch extends atkPlugin {
     setSearchAction() {
         const that = this;
         this.searchAction.on('click', (e) => {
+            const options = $.extend({}, that.urlArgs, that.settings.uri_options);
             if (that.state.button) {
-                that.doSearch(that.settings.uri, null, $.extend({}, that.urlArgs, that.settings.uri_options), () => {
+                that.doSearch(that.settings.uri, null, options, () => {
                     that.setButtonState(false);
                     that.setFilterState(false);
                 });
@@ -118,7 +120,7 @@ export default class JsSearch extends atkPlugin {
             }
 
             if (!that.state.button && that.textInput.val()) {
-                that.doSearch(that.settings.uri, that.textInput.val(), $.extend({}, that.urlArgs, that.settings.uri_options), () => {
+                that.doSearch(that.settings.uri, that.textInput.val(), options, () => {
                     that.setButtonState(true);
                     that.setFilterState(true);
                 });

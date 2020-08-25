@@ -15,7 +15,7 @@
                                     <option v-for="operand in rule.operands" :key="operand">{{ operand }}</option>
                                 </select>
                             </div>
-                            <div class="item"  v-if="typeof rule.operators !== 'undefined' && rule.operators.length > 1">
+                            <div class="item" v-if="typeof rule.operators !== 'undefined' && rule.operators.length > 1">
                                 <!-- List of operators (e.g. =, !=, >, <) -->
                                 <select v-model="query.operator" class="atk-qb-select">
                                     <option v-for="operator in rule.operators" :key="operator" :value="operator">
@@ -62,7 +62,10 @@
                                 <!-- Select input -->
                                 <template v-if="canDisplay('select')">
                                     <select v-model="query.value" class="atk-qb-select">
-                                        <option v-for="choice in rule.choices" :key="choice.value" :value="choice.label">
+                                        <option
+                                            v-for="choice in rule.choices"
+                                            :key="choice.value"
+                                            :value="choice.label">
                                             {{choice.label}}
                                         </option>
                                     </select>
