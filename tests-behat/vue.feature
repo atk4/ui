@@ -1,4 +1,3 @@
-@vue-tag
 Feature: Vue
   Testing Vue component
 

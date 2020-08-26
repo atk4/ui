@@ -1,4 +1,3 @@
-@tab-tag
 Feature: Tab
   Testing Tab
 

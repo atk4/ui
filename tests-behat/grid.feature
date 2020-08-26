@@ -1,4 +1,3 @@
-@grid-tag
 Feature: Grid
   Testing grid search
 
