@@ -42,7 +42,7 @@ class ItemsPerPageSelector extends View
      */
     public $cb;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

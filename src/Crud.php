@@ -70,7 +70,7 @@ class Crud extends Grid
      */
     public $removeRowActions = [];
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

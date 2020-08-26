@@ -44,7 +44,7 @@ class Country extends \atk4\data\Model
 {
     public $table = 'country';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->addField('name', ['actual' => 'nicename', 'required' => true, 'type' => 'string']);
@@ -91,7 +91,7 @@ class CountryLock extends Country
     use ModelLockTrait;
     public $caption = 'Country';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->lock();
@@ -103,7 +103,7 @@ class Stat extends \atk4\data\Model
     public $table = 'stats';
     public $title = 'Project Stat';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -160,7 +160,7 @@ class File extends \atk4\data\Model
 {
     public $table = 'file';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->addField('name');
@@ -215,7 +215,7 @@ class FileLock extends File
     use ModelLockTrait;
     public $caption = 'File';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->lock();

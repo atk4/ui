@@ -27,7 +27,7 @@ class FormTest extends AtkPhpunit\TestCase
             'always_run' => false,
             'catch_runaway_callbacks' => false,
         ]);
-        $this->f->init();
+        $this->f->invokeInit();
     }
 
     /**

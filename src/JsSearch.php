@@ -70,7 +70,7 @@ class JsSearch extends View
     public $btnRemoveIcon = 'red remove';
     public $btnStyle;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

@@ -62,7 +62,7 @@ class ActionMenu extends Table\Column
      */
     public $icon = 'dropdown icon';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
     }

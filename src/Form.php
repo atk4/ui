@@ -180,7 +180,7 @@ class Form extends View
     /**
      * Initialization.
      */
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -413,7 +413,7 @@ class Form extends View
         } else {
             $response = new Message([$success, 'type' => 'success', 'icon' => 'check']);
             $response->app = $this->app;
-            $response->init();
+            $response->invokeInit();
             $response->text->addParagraph($sub_header);
         }
 

@@ -16,7 +16,7 @@ class FlyersForm extends Form
         ['name' => 'Around the world', 'id' => 3, 'nodes' => []],
     ];
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

@@ -31,7 +31,7 @@ class Tooltip extends Table\Column
      */
     public $tooltip_field;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

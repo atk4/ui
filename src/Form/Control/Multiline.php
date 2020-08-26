@@ -218,7 +218,7 @@ class Multiline extends Form\Control
      */
     public $jsAfterDelete;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

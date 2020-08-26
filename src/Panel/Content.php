@@ -15,7 +15,7 @@ class Content extends View implements LoadableContent
     public $defaultTemplate = 'panel/content.html';
     public $cb;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->addClass('atk-panel-content');

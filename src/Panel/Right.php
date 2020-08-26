@@ -51,7 +51,7 @@ class Right extends View implements Loadable
     /** @var string the close icon class */
     public $closeIcon = 'icon times';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         if ($this->dynamic) {

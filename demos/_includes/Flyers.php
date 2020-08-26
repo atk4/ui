@@ -6,7 +6,7 @@ namespace atk4\ui\demo;
 
 class Flyers extends \atk4\data\Model
 {
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

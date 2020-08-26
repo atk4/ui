@@ -226,7 +226,7 @@ of application layout with a line::
 To render a component individually and get the HTML and JavaScript use this format::
 
     $form = new Form();
-    $form->init();
+    $form->invokeInit();
     $form->setModel(new User($db));
 
     $html = $form->render();

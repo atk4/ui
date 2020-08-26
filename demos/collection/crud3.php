@@ -15,7 +15,7 @@ $modelClass = get_class(new class() extends \atk4\data\Model {
 
     public $caption = 'Country';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

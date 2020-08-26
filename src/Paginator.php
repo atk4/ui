@@ -60,7 +60,7 @@ class Paginator extends View
     /**
      * Initializing.
      */
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

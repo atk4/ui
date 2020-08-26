@@ -48,7 +48,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /** @var Button Cancel button */
     private $cancel;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->observeChanges();

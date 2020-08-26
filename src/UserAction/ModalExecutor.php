@@ -105,7 +105,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     public $loaderUi = 'ui basic segment';
     public $loaderShim = [];
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->observeChanges();
@@ -551,7 +551,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             throw $e;
         } catch (\Throwable $e) {
             $msg = new Message('Error executing ' . $this->action->caption, 'red');
-            $msg->init();
+            $msg->invokeInit();
             $msg->text->content = $this->app->renderExceptionHtml($e);
 
             return $msg;
