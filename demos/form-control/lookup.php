@@ -41,7 +41,7 @@ $form->addControl('country3', [
 $form->onSubmit(function (Form $form) {
     $str = $form->model->ref('country1')->get('name') . ' ' . $form->model->ref('country2')->get('name') . ' ' . (new Country($form->app->db))->tryLoad($form->model->get('country3'))->get('name');
     $view = new \atk4\ui\Message('Select:'); // need in behat test.
-    $view->init();
+    $view->invokeInit();
     $view->text->addParagraph($str);
 
     return $view;

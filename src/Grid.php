@@ -122,7 +122,7 @@ class Grid extends View
      */
     protected $actionMenuDecorator = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->container = View::addTo($this, ['template' => $this->template->cloneRegion('Container')]);

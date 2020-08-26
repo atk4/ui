@@ -16,7 +16,7 @@ class DragHandler extends Table\Column
     /** @var \atk4\ui\JsCallback */
     public $cb;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

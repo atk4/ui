@@ -15,7 +15,7 @@ class Custom extends AbstractLayout
     /** @var {@inheritdoc} */
     public $defaultTemplate;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

@@ -11,7 +11,7 @@ require_once __DIR__ . '/../init-app.php';
 
 /** @var \atk4\data\Model $modelColorClass */
 $modelColorClass = get_class(new class() extends \atk4\data\Model {
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

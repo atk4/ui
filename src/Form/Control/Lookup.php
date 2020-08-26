@@ -135,7 +135,7 @@ class Lookup extends Input
      */
     public $multiple = false;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

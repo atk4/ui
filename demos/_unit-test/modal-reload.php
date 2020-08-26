@@ -13,7 +13,7 @@ require_once __DIR__ . '/../init-app.php';
 
 class ReloadTest extends \atk4\ui\View
 {
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

@@ -103,7 +103,7 @@ $form->onSubmit(function (Form $form) use ($app) {
     $message = $app->encodeJson($form->model->get());
 
     $view = new \atk4\ui\Message('Values: ');
-    $view->init();
+    $view->invokeInit();
     $view->text->addParagraph($message);
 
     return $view;

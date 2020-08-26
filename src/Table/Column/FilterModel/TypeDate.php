@@ -10,7 +10,7 @@ use DateTime;
 
 class TypeDate extends Column\FilterModel
 {
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

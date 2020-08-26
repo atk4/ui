@@ -76,7 +76,7 @@ class TreeItemSelector extends Form\Control
      */
     private $cb;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

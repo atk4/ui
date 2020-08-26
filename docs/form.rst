@@ -485,7 +485,7 @@ Example use of Model's validate() method::
     {
         public $table = 'person';
 
-        public function init(): void
+        protected function init(): void
         {
             parent::init();
             $this->addField('name', ['required'=>true]);

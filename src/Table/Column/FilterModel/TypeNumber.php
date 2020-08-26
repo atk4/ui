@@ -8,7 +8,7 @@ use atk4\ui\Table\Column;
 
 class TypeNumber extends Column\FilterModel
 {
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

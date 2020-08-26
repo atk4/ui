@@ -24,7 +24,7 @@ namespace atk4\ui\UserAction;
 interface ExecutorInterface
 {
     /** Generate UI which is presented to the user before action is executed */
-    public function init(): void;
+    protected function init(): void;
 
     /**
      * Will associate executor with the action.

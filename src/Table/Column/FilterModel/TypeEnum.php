@@ -9,7 +9,7 @@ use atk4\ui\Table\Column;
 
 class TypeEnum extends Column\FilterModel
 {
-    public function init(): void
+    protected function init(): void
     {
         // bypass parent init since we are not using op and value field but create them from
         // the lookup field value.

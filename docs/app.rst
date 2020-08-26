@@ -10,7 +10,7 @@ Purpose of App class
 .. php:class:: App
 
 App is a mandatory object that's essential for Agile UI to operate. If you don't create App object explicitly, it
-will be automatically created if you execute `$component->init()` or `$component->render()`.
+will be automatically created if you execute `$component->invokeInit()` or `$component->render()`.
 
 In most use-scenarios, however, you would create instance of an App class yourself before other components::
 

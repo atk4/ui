@@ -11,7 +11,7 @@ use atk4\ui\Table;
  */
 class Delete extends Table\Column
 {
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

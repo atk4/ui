@@ -78,7 +78,7 @@ $form->onSubmit(function (Form $form) {
 $personClass = get_class(new class() extends \atk4\data\Model {
     public $table = 'person';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->addField('name', ['required' => true]);
