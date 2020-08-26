@@ -27,7 +27,7 @@ class Checkbox extends Table\Column
             "return $(this).data('id');}).get().join(',')");
     }
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         if (!$this->class) {

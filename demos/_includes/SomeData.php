@@ -13,7 +13,7 @@ class SomeData extends \atk4\data\Model
         parent::__construct($fakerPersistence);
     }
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $model = $this;

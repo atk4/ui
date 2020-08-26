@@ -251,7 +251,7 @@ class ScopeBuilder extends Control
         'checkbox' => 'boolean',
     ];
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

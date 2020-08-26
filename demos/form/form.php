@@ -69,7 +69,7 @@ $form->buttonSave->set('Compare Date');
 $form->onSubmit(function (Form $form) use ($app) {
     $message = 'field = ' . print_r($form->model->get('field'), true) . '; <br> control = ' . print_r($form->model->get('control'), true);
     $view = new \atk4\ui\Message('Date field vs control:');
-    $view->init();
+    $view->invokeInit();
     $view->text->addHTML($message);
 
     return $view;
@@ -100,7 +100,7 @@ $form->addControl('email3');
 $form->buttonSave->set('Save3');
 $form->onSubmit(function (Form $form) {
     $view = new \atk4\ui\Message('some header');
-    $view->init();
+    $view->invokeInit();
     $view->text->addParagraph('some text ' . random_int(1, 100));
 
     return $view;
@@ -112,7 +112,7 @@ $form->addControl('email4');
 $form->buttonSave->set('Save4');
 $form->onSubmit(function (Form $form) {
     $view = new \atk4\ui\Message('some header');
-    $view->init();
+    $view->invokeInit();
     $view->text->addParagraph('some text ' . random_int(1, 100));
 
     $modal = new \atk4\ui\Modal(['title' => 'Something happen', 'ui' => 'ui modal tiny']);

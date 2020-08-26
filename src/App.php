@@ -442,7 +442,7 @@ class App
         if (!$this->html) {
             $this->html = new View(['defaultTemplate' => 'html.html']);
             $this->html->app = $this;
-            $this->html->init();
+            $this->html->invokeInit();
         }
 
         $this->layout = $this->html->add($layout);
@@ -551,7 +551,7 @@ class App
     /**
      * Initialize app.
      */
-    public function init(): void
+    protected function init(): void
     {
         $this->_init();
     }

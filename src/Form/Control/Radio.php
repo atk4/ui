@@ -32,7 +32,7 @@ class Radio extends Form\Control
     /**
      * Initialization.
      */
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

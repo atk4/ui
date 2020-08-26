@@ -24,7 +24,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         $m->addField('ref');
         $m->addField('salary');
         $this->table = new \atk4\ui\Table();
-        $this->table->init();
+        $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref']);
     }
 
@@ -265,7 +265,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         $m->addField('ref');
         $m->addField('salary');
         $this->table = new \atk4\ui\Table();
-        $this->table->init();
+        $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref']);
 
         $this->table->addDecorator('name', [Table\Column\NoValue::class, ['no_value' => ' --- ']]);

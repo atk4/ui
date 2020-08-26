@@ -19,7 +19,7 @@ class Accordion extends \atk4\ui\Accordion
      *
      * Adds hook which in case of field error expands respective accordion sections.
      */
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

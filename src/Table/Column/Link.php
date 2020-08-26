@@ -111,7 +111,7 @@ class Link extends Table\Column
         parent::setDefaults($properties);
     }
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

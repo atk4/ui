@@ -11,7 +11,7 @@ class Counter extends \atk4\ui\Form\Control\Line
 {
     public $content = 20; // default
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

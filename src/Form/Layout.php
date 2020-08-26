@@ -52,7 +52,7 @@ class Layout extends AbstractLayout
         return $this->add($decorator, ['desired_name' => $field->short_name]);
     }
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

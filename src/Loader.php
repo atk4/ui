@@ -37,7 +37,7 @@ class Loader extends View
     /** @var Callback for triggering */
     protected $cb;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

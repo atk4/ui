@@ -251,7 +251,7 @@ class View extends AbstractView implements JsExpressionable
      * Called when view becomes part of render tree. You can override it but avoid
      * placing any "heavy processing" here.
      */
-    public function init(): void
+    protected function init(): void
     {
         $addLater = $this->_add_later;
         $this->_add_later = [];
@@ -641,7 +641,7 @@ class View extends AbstractView implements JsExpressionable
     public function renderAll(): void
     {
         if (!$this->_initialized) {
-            $this->init();
+            $this->invokeInit();
         }
 
         if (!$this->_rendered) {

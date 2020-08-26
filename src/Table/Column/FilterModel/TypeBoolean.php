@@ -10,7 +10,7 @@ class TypeBoolean extends Column\FilterModel
 {
     public $noValueField = true;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

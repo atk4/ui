@@ -31,7 +31,7 @@ class Callback extends AbstractView
     /**
      * Initialization.
      */
-    public function init(): void
+    protected function init(): void
     {
         if (!$this->app) {
             throw new Exception('Callback must be part of a render tree');

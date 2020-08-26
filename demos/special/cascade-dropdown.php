@@ -16,7 +16,7 @@ class Category extends \atk4\data\Model
 {
     public $table = 'category';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->addField('name');
@@ -30,7 +30,7 @@ class SubCategory extends \atk4\data\Model
 {
     public $table = 'sub_category';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->addField('name');
@@ -44,7 +44,7 @@ class Product extends \atk4\data\Model
 {
     public $table = 'product';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->addField('name');
@@ -64,7 +64,7 @@ $form->onSubmit(function (Form $form) use ($app) {
     $message = $app->encodeJson($form->model->get());
 
     $view = new \atk4\ui\Message('Values: ');
-    $view->init();
+    $view->invokeInit();
     $view->text->addParagraph($message);
 
     return $view;

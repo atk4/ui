@@ -11,7 +11,7 @@ class DemoInvoice extends \atk4\data\Model
 {
     public $title_field = 'reference';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

@@ -25,7 +25,7 @@ class Centered extends \atk4\ui\Layout
     public $image;
     public $image_alt = 'Logo';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

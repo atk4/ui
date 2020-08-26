@@ -11,7 +11,7 @@ require_once __DIR__ . '/../init-app.php';
 $notifierClass = get_class(new class() extends \atk4\data\Model {
     public $table = 'notifier';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

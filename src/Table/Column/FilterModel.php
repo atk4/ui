@@ -78,7 +78,7 @@ class FilterModel extends \atk4\data\Model
         return new $class($persistence, ['lookupField' => $field]);
     }
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->op = $this->addField('op', ['ui' => ['caption' => '']]);
