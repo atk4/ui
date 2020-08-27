@@ -144,7 +144,9 @@ class Lister extends View
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
-        foreach ($this->model as $ignore) {
+        $modelBackup = $this->model;
+        try {
+        foreach ($this->model as $this->model) {
             $this->current_row = $this->model;
             if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                 continue;
@@ -153,6 +155,9 @@ class Lister extends View
             $this->renderRow();
 
             ++$this->_rendered_rows_count;
+        }
+        } finally {
+            $this->model = $modelBackup;
         }
 
         // empty message
