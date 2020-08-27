@@ -9,6 +9,5 @@ Feature: Vue
     Then I hide js modal
 
     When I fill in "atk-vue-search" with "united kingdom"
-# needed because debouce is used
-    Then I sleep 250 ms
+    Then I sleep 350 ms
     Then I should see "United Kingdom"

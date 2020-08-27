@@ -303,7 +303,7 @@ class PanelService {
         // clicking anywhere in main tag will close panel.
         $('main').on('click.atkPanel', debounce((evt) => {
             that.closePanel(id);
-        }, 100));
+        }, 250));
 
         // pressing esc key will close panel.
         $(document).on('keyup.atkPanel', debounce((evt) => {

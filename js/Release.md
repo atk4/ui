@@ -1,5 +1,12 @@
 ## Release note
 
+### version 1.15.3 (2020-08-27)
+
+ - set proper debounce value in:
+    - item-search vue component
+    - condition-form plugin
+    - panel service
+
 ### version 1.15.2 (2020-08-19)
 
  - sidenav.plugin.js

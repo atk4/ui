@@ -47,7 +47,7 @@ export default {
                 this.sendQuery();
                 this.temp = this.query;
             }
-        }, 100),
+        }, 350),
         onEscape: function () {
             if (this.query !== null) {
                 this.query = null;
