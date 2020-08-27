@@ -494,26 +494,30 @@ class Table extends Lister
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
+        // TODO we should not iterate using $this->model variable,
+        // then also backup/tryfinally would be not needed
+        // the same in Lister class
         $modelBackup = $this->model;
+
         try {
-        foreach ($this->model as $this->model) {
-            $this->current_row = $this->model;
-            if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
-                continue;
+            foreach ($this->model as $this->model) {
+                $this->current_row = $this->model;
+                if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
+                    continue;
+                }
+
+                if ($this->totals_plan) {
+                    $this->updateTotals();
+                }
+
+                $this->renderRow();
+
+                ++$this->_rendered_rows_count;
+
+                if ($this->hook(self::HOOK_AFTER_ROW) === false) {
+                    continue;
+                }
             }
-
-            if ($this->totals_plan) {
-                $this->updateTotals();
-            }
-
-            $this->renderRow();
-
-            ++$this->_rendered_rows_count;
-
-            if ($this->hook(self::HOOK_AFTER_ROW) === false) {
-                continue;
-            }
-        }
         } finally {
             $this->model = $modelBackup;
         }

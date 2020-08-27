@@ -144,18 +144,22 @@ class Lister extends View
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
+        // TODO we should not iterate using $this->model variable,
+        // then also backup/tryfinally would be not needed
+        // the same in Table class
         $modelBackup = $this->model;
+
         try {
-        foreach ($this->model as $this->model) {
-            $this->current_row = $this->model;
-            if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
-                continue;
+            foreach ($this->model as $this->model) {
+                $this->current_row = $this->model;
+                if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
+                    continue;
+                }
+
+                $this->renderRow();
+
+                ++$this->_rendered_rows_count;
             }
-
-            $this->renderRow();
-
-            ++$this->_rendered_rows_count;
-        }
         } finally {
             $this->model = $modelBackup;
         }
