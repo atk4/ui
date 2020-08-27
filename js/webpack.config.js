@@ -80,6 +80,8 @@ module.exports = (env) => {
                 },
                 // this will apply to both plain `.css` files
                 // AND `<style>` blocks in `.vue` files
+                // NOTE: css-loader version 4.2.1 fail to load query builder style.
+                //      Revert to v. 3.6.0 until issue is found.
                 {
                     test: /\.css$/,
                     use: [

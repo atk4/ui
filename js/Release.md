@@ -6,6 +6,7 @@
     - item-search vue component
     - condition-form plugin
     - panel service
+ - revert css-loader to version 3. 
 
 ### version 1.15.2 (2020-08-19)
 
