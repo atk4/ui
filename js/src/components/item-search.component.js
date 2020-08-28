@@ -26,10 +26,17 @@ export default {
         q: String,
         reload: String,
         queryArg: String,
+        options: {
+            type: Object,
+            default: () => ({ inputTimeOut: 350 }),
+        },
     },
     data: function () {
         return {
-            query: this.q, temp: this.q, isActive: false, extraQuery: null,
+            query: this.q,
+            temp: this.q,
+            isActive: false,
+            extraQuery: null,
         };
     },
     computed: {
@@ -41,13 +48,19 @@ export default {
         },
     },
     methods: {
-        onChange: debounce(function (e) {
-            if (this.query !== this.temp) {
-                if (this.query === '') this.query = null;
-                this.sendQuery();
-                this.temp = this.query;
-            }
-        }, 350),
+        onChange: function () {
+            const that = this;
+            const fn = debounce((e) => {
+                if (that.query !== that.temp) {
+                    if (that.query === '') {
+                        that.query = null;
+                    }
+                    that.sendQuery();
+                    that.temp = that.query;
+                }
+            }, this.options.inputTimeOut);
+            (fn)();
+        },
         onEscape: function () {
             if (this.query !== null) {
                 this.query = null;
