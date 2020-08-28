@@ -284,6 +284,9 @@ class Dropdown extends Input
             $this->setDropdownOption('showOnFocus', false);
             $this->setDropdownOption('allowTab', false);
             $this->removeClass('search');
+            if ($this->isMultiple) {
+                $this->js(true)->find('a i.delete.icon')->attr('class', 'disabled');
+            }
         }
 
         if ($this->disabled) {
