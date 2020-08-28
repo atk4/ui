@@ -113,7 +113,7 @@ class ItemSearch extends View
                 'url' => $this->reload->jsUrl(),
                 'q' => $this->q,
                 'context' => $this->context,
-                'options' => ['inputTimeOut' => $this->inputTimeOut]
+                'options' => ['inputTimeOut' => $this->inputTimeOut],
             ]
         ));
     }
