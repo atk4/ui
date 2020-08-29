@@ -6,6 +6,8 @@
     - item-search vue component
     - condition-form plugin
     - panel service
+ - Fix issue with Querybuilder date.
+   - https://github.com/atk4/ui/issues/1420
  - revert css-loader to version 3. 
 
 ### version 1.15.2 (2020-08-19)
