@@ -1,4 +1,4 @@
-@form-tag
+@exec-form
 Feature: Form
     Testing forms
 

@@ -1,4 +1,4 @@
-/* global _ATKVERSION_:true */
+/* global _ATKVERSION_:true, _ATKENVIRONMENT_:true */
 
 import 'core-js/stable';
 import atk from 'atk-semantic-ui';
@@ -14,6 +14,9 @@ import panelService from './services/panel.service';
 createAtkplugins();
 // add version function to atk.
 atk.version = () => _ATKVERSION_;
+
+// return debounce value based on build environment.
+atk.getDebounceValue = (value) => (_ATKENVIRONMENT_ === 'production' ? value : 0);
 
 // Allow to register a plugin with jQuery;
 atk.registerPlugin = plugin;

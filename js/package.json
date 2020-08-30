@@ -5,6 +5,7 @@
   "main": "lib/atkjs-ui.js",
   "scripts": {
     "build": "webpack --env.production",
+    "build-behat": "webpack --env.production --env.behat",
     "dev": "webpack --progress --colors --watch --env.development",
     "profile": "webpack  --env.production --profile --json > ./profile/atkjs-bundle-profile.json",
     "analyze-profile": "webpack-bundle-analyzer ./profile/atkjs-bundle-profile.json",

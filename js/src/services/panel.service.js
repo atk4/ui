@@ -303,14 +303,14 @@ class PanelService {
         // clicking anywhere in main tag will close panel.
         $('main').on('click.atkPanel', debounce((evt) => {
             that.closePanel(id);
-        }, 250));
+        }, atk.getDebounceValue(250)));
 
         // pressing esc key will close panel.
         $(document).on('keyup.atkPanel', debounce((evt) => {
             if (evt.keyCode === 27) {
                 that.closePanel(id);
             }
-        }, 100));
+        }, atk.getDebounceValue(100)));
     }
 
     /**

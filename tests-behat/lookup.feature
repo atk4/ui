@@ -1,4 +1,4 @@
-@lookup-tag
+@exec-lookup
 Feature: Lookup
   Testing Lookup fields
 

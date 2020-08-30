@@ -1,4 +1,4 @@
-@user-action-tag
+@exec-user-action
 Feature: UserAction
   Testing UI executor UserAction and UserConfirmation modal.
 

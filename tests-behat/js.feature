@@ -1,4 +1,4 @@
-@js-tag
+@exec-js
 Feature: JS
  Test javascript
 

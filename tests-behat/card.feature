@@ -1,4 +1,4 @@
-@card-tag
+@exec-card
 Feature: Card
   Testing card with model action
 

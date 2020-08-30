@@ -56,7 +56,7 @@ export default class JsSearch extends atkPlugin {
                 });
             }
             that.$el.data('preValue', e.target.value);
-        }, this.settings.timeOut));
+        }, atk.getDebounceValue(this.settings.timeOut)));
     }
 
     /**

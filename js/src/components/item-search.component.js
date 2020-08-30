@@ -58,7 +58,7 @@ export default {
                     that.sendQuery();
                     that.temp = that.query;
                 }
-            }, this.options.inputTimeOut);
+            }, atk.getDebounceValue(this.options.inputTimeOut));
             (fn)();
         },
         onEscape: function () {

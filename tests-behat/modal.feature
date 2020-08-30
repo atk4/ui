@@ -1,4 +1,4 @@
-@modal-tag
+@exec-modal
 Feature: Modal
   Testing modal view
 
