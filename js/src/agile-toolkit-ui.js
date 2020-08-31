@@ -1,5 +1,6 @@
-/* global _ATKVERSION_:true, _ATKENVIRONMENT_:true */
+/* global _ATKVERSION_:true */
 
+import debounce from 'debounce';
 import 'core-js/stable';
 import atk from 'atk-semantic-ui';
 import 'helpers/url.helper';
@@ -15,8 +16,20 @@ createAtkplugins();
 // add version function to atk.
 atk.version = () => _ATKVERSION_;
 
-// return debounce value based on build environment.
-atk.getDebounceValue = (value) => (_ATKENVIRONMENT_ === 'production' ? value : 0);
+// Use closure for atk options property in order to keep them private.
+atk.options = (function () {
+    // Value for debounce time out (in ms) that will be apply globally when set.
+    let debounceValue = null;
+    return {
+        setDebounceValue: (value) => { debounceValue = parseInt(value, 10); },
+        getDebounceValue: () => debounceValue,
+    };
+}());
+
+atk.debounce = (fn, value) => {
+    const timeOut = atk.options.getDebounceValue();
+    return debounce(fn, timeOut !== null ? timeOut : value);
+};
 
 // Allow to register a plugin with jQuery;
 atk.registerPlugin = plugin;

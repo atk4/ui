@@ -8,7 +8,8 @@
     - panel service
  - Fix issue with Querybuilder date.
    - https://github.com/atk4/ui/issues/1420
- - revert css-loader to version 3. 
+ - revert css-loader from version 4 to version 3.
+    - need to test further using v4 has vue style is not load in QueryBuilder
 
 ### version 1.15.2 (2020-08-19)
 

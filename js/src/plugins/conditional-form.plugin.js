@@ -1,5 +1,5 @@
 /* eslint-disable no-bitwise */
-import debounce from 'debounce';
+
 import atkPlugin from './atk.plugin';
 import formService from '../services/form.service';
 
@@ -58,15 +58,15 @@ export default class conditionalForm extends atkPlugin {
         }
         // add change listener to inputs according to selector
         this.$el.find(':checkbox')
-            .on('change', this, debounce(this.onInputChange, atk.getDebounceValue(100), true));
+            .on('change', this, atk.debounce(this.onInputChange, 100, true));
         this.$el.find(':radio')
-            .on('change', this, debounce(this.onInputChange, atk.getDebounceValue(100), true));
+            .on('change', this, atk.debounce(this.onInputChange, 100, true));
         this.$el.find('input[type="hidden"]')
-            .on('change', this, debounce(this.onInputChange, atk.getDebounceValue(100), true));
+            .on('change', this, atk.debounce(this.onInputChange, 100, true));
         this.$el.find('input')
-            .on(this.settings.validateEvent, this, debounce(this.onInputChange, atk.getDebounceValue(350)));
+            .on(this.settings.validateEvent, this, atk.debounce(this.onInputChange, 350));
         this.$el.find('select')
-            .on('change', this, debounce(this.onInputChange, atk.getDebounceValue(100)));
+            .on('change', this, atk.debounce(this.onInputChange, 100));
 
         this.initialize();
     }

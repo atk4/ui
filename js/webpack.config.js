@@ -30,7 +30,6 @@ const packageVersion = require('./package.json').version;
 module.exports = (env) => {
     // determine which mode
     const isProduction = env.production;
-    const isBehatTest = env.behat;
     const srcDir = path.resolve(__dirname, './src');
     const publicDir = path.resolve(__dirname, '../public');
     const libraryName = 'atk';
@@ -107,7 +106,6 @@ module.exports = (env) => {
         plugins: [
             new webpack.DefinePlugin({
                 _ATKVERSION_: JSON.stringify(packageVersion),
-                _ATKENVIRONMENT_: JSON.stringify(isBehatTest ? 'test' : 'production'),
             }),
             new VueLoaderPlugin(),
         ],

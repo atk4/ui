@@ -1,4 +1,3 @@
-import debounce from 'debounce';
 import $ from 'jquery';
 
 /**
@@ -49,7 +48,7 @@ export default {
     },
     methods: {
         onChange: function () {
-            debounce((e) => {
+            atk.debounce((e) => {
                 if (this.query !== this.temp) {
                     if (this.query === '') {
                         this.query = null;
@@ -57,7 +56,7 @@ export default {
                     this.sendQuery();
                     this.temp = this.query;
                 }
-            }, atk.getDebounceValue(this.options.inputTimeOut)).call(this);
+            }, this.options.inputTimeOut).call(this);
         },
         onEscape: function () {
             if (this.query !== null) {
