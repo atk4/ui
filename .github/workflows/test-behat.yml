@@ -84,7 +84,7 @@ jobs:
       - name: Build JS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
-          (cd js && npm run build-behat)
+          (cd js && npm run build)
           sed -i "s~'https://ui.agiletoolkit.org/public.*~'/demos',~" src/App.php
 
       - name: Install PHP dependencies
