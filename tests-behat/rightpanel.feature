@@ -1,4 +1,4 @@
-@exec-panel
+@exec-rightpanel
 Feature: RightPanel
   Testing RightPanel
 
