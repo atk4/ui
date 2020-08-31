@@ -3,7 +3,7 @@ import $ from 'jquery';
 
 /**
  * Vue component
- * Will allow user to send data queyr request to server.
+ * Will allow user to send data query request to server.
  * Request should filter the data and reload the data view.
  * The request is send using semantic-ui api.
  *
@@ -47,19 +47,16 @@ export default {
             };
         },
     },
-    methods: {
-        onChange: function () {
-            const that = this;
-            const fn = debounce((e) => {
-                if (that.query !== that.temp) {
-                    if (that.query === '') {
-                        that.query = null;
+    methods: { onChange: function () {
+            debounce((e) => {
+                if (this.query !== this.temp) {
+                    if (this.query === '') {
+                        this.query = null;
                     }
-                    that.sendQuery();
-                    that.temp = that.query;
+                    this.sendQuery();
+                    this.temp = this.query;
                 }
-            }, atk.getDebounceValue(this.options.inputTimeOut));
-            (fn)();
+            }, atk.getDebounceValue(this.options.inputTimeOut)).call(this);
         },
         onEscape: function () {
             if (this.query !== null) {
