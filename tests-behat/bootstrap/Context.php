@@ -82,7 +82,7 @@ class Context extends RawMinkContext implements BehatContext
 
     protected function disableDebounce(): void
     {
-        $this->getSession()->executeScript('atk.options.setDebounceValue(0)');
+        $this->getSession()->executeScript('atk.options.setDebounceValue(20)');
     }
 
     /**
