@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace atk4\ui\behat;
 
 use Behat\Behat\Context\Context as BehatContext;
-use Behat\Behat\Hook\Call\BeforeFeature;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\MinkExtension\Context\RawMinkContext;
-use Behat\Testwork\Hook\Call\BeforeSuite;
 
 class Context extends RawMinkContext implements BehatContext
 {
