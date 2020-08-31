@@ -47,7 +47,8 @@ export default {
             };
         },
     },
-    methods: { onChange: function () {
+    methods: {
+        onChange: function () {
             debounce((e) => {
                 if (this.query !== this.temp) {
                     if (this.query === '') {
