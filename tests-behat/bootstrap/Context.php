@@ -22,18 +22,6 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @BeforeStep
      */
-    public function setDebounceValue(BeforeStepScope $event): void
-    {
-        if (!$this->getSession()->getDriver()->isStarted()) {
-            return;
-        }
-
-        $this->getSession()->executeScript('atk.options.setDebounceValue(0)');
-    }
-
-    /**
-     * @BeforeStep
-     */
     public function closeAllToasts(BeforeStepScope $event): void
     {
         if (!$this->getSession()->getDriver()->isStarted()) {
@@ -53,6 +41,7 @@ class Context extends RawMinkContext implements BehatContext
         $this->jqueryWait();
         $this->disableAnimations();
         $this->assertNoException();
+        $this->disableDebounce();
     }
 
     protected function disableAnimations(): void
@@ -89,6 +78,11 @@ class Context extends RawMinkContext implements BehatContext
                 throw new \Exception('Page contains uncaught exception');
             }
         }
+    }
+
+    protected function disableDebounce(): void
+    {
+        $this->getSession()->executeScript('atk.options.setDebounceValue(0)');
     }
 
     /**
