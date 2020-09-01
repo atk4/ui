@@ -8,8 +8,11 @@
     - panel service
  - Fix issue with Querybuilder date.
    - https://github.com/atk4/ui/issues/1420
- - revert css-loader from version 4 to version 3.
-    - need to test further using v4 has vue style is not load in QueryBuilder
+ - Package 
+    - update package dependencies to latest release;
+        - note: css-loader v4 now require style-loader
+  
+  PR: https://github.com/atk4/ui/pull/1430
 
 ### version 1.15.2 (2020-08-19)
 
@@ -17,7 +20,7 @@
     - fix issue (1406) when using Control or Command click on a link (https://github.com/atk4/ui/issues/1406 )
 
  - Package 
-    - update package depedencies to latest release;
+    - update package dependencies to latest release;
     - fix eslint;
 
 ### version 1.15.1 (2020-08-19)
