@@ -1,5 +1,6 @@
 /* global _ATKVERSION_:true */
 
+import debounce from 'debounce';
 import 'core-js/stable';
 import atk from 'atk-semantic-ui';
 import 'helpers/url.helper';
@@ -14,6 +15,23 @@ import panelService from './services/panel.service';
 createAtkplugins();
 // add version function to atk.
 atk.version = () => _ATKVERSION_;
+
+// Use closure for atk options property in order to keep them private.
+atk.options = (function () {
+    const options = {
+        // Value for debounce time out (in ms) that will be apply globally when set using atk.debounce.
+        debounceTimeout: null,
+    };
+    return {
+        set: (name, value) => { options[name] = value; },
+        get: (name) => options[name],
+    };
+}());
+
+atk.debounce = (fn, value) => {
+    const timeOut = atk.options.get('debounceTimeout');
+    return debounce(fn, timeOut !== null ? timeOut : value);
+};
 
 // Allow to register a plugin with jQuery;
 atk.registerPlugin = plugin;

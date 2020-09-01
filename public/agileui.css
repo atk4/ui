@@ -197,6 +197,9 @@ i.atk-panel-warning.atk-visible {
 .ui.sortable.table thead th:not(.sortable) {
   cursor: default;
 }
+.ui.input .ui.popup.calendar {
+  padding: 0px;
+}
 .ui.step,
 .ui.steps .step {
   user-select: none;

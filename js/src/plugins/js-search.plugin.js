@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import debounce from 'debounce';
 import atkPlugin from './atk.plugin';
 
 export default class JsSearch extends atkPlugin {
@@ -41,7 +40,7 @@ export default class JsSearch extends atkPlugin {
    */
     onAutoQueryAction() {
         const that = this;
-        this.textInput.on('keyup', debounce((e) => {
+        this.textInput.on('keyup', atk.debounce((e) => {
             const options = $.extend({}, that.urlArgs, that.settings.uri_options);
             if (e.target.value === '' || e.keyCode === 27) {
                 that.doSearch(that.settings.uri, null, options, () => {

@@ -1,9 +1,8 @@
-import debounce from 'debounce';
 import $ from 'jquery';
 
 /**
  * Vue component
- * Will allow user to send data queyr request to server.
+ * Will allow user to send data query request to server.
  * Request should filter the data and reload the data view.
  * The request is send using semantic-ui api.
  *
@@ -26,10 +25,17 @@ export default {
         q: String,
         reload: String,
         queryArg: String,
+        options: {
+            type: Object,
+            default: () => ({ inputTimeOut: 350 }),
+        },
     },
     data: function () {
         return {
-            query: this.q, temp: this.q, isActive: false, extraQuery: null,
+            query: this.q,
+            temp: this.q,
+            isActive: false,
+            extraQuery: null,
         };
     },
     computed: {
@@ -41,13 +47,17 @@ export default {
         },
     },
     methods: {
-        onChange: debounce(function (e) {
-            if (this.query !== this.temp) {
-                if (this.query === '') this.query = null;
-                this.sendQuery();
-                this.temp = this.query;
-            }
-        }, 100),
+        onChange: function () {
+            atk.debounce((e) => {
+                if (this.query !== this.temp) {
+                    if (this.query === '') {
+                        this.query = null;
+                    }
+                    this.sendQuery();
+                    this.temp = this.query;
+                }
+            }, this.options.inputTimeOut).call(this);
+        },
         onEscape: function () {
             if (this.query !== null) {
                 this.query = null;

@@ -41,6 +41,7 @@ class Context extends RawMinkContext implements BehatContext
         $this->jqueryWait();
         $this->disableAnimations();
         $this->assertNoException();
+        $this->disableDebounce();
     }
 
     protected function disableAnimations(): void
@@ -77,6 +78,11 @@ class Context extends RawMinkContext implements BehatContext
                 throw new \Exception('Page contains uncaught exception');
             }
         }
+    }
+
+    protected function disableDebounce(): void
+    {
+        $this->getSession()->executeScript('atk.options.set("debounceTimeout", 20)');
     }
 
     /**

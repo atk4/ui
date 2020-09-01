@@ -93,13 +93,14 @@ export default {
     data: function () {
         return {
             dateMask: { input: this.rule.format ? this.rule.format : 'YYYY-MM-DD' },
-            dateString: null,
             dateLocale: this.rule.locale ? this.rule.locale : 'en-En',
         };
     },
     mounted: function () {
         if (this.isDatePicker) {
-            this.dateString = this.query.value;
+            this.$nextTick(() => {
+                this.dateValue = this.getDateFromString(this.query.value);
+            });
         }
     },
     computed: {
@@ -120,15 +121,7 @@ export default {
         },
         dateValue: {
             get: function () {
-                let tempDate = this.dateString;
-                if (tempDate) {
-                    // fix date parsing for different time zone if time is not supply.
-                    if (tempDate.match(/^[0-9]{4}[/\-.][0-9]{2}[/\-.][0-9]{2}$/)) {
-                        tempDate += ' 00:00:00';
-                    }
-                    return new Date(tempDate);
-                }
-                return new Date();
+                return this.getDateFromString(this.query.value);
             },
             set: function (date) {
                 this.query.value = date ? atk.phpDate('Y-m-d', date) : '';
@@ -155,6 +148,16 @@ export default {
             case 'select': return this.isSelect;
             default: return false;
             }
+        },
+        getDateFromString: function (dateString) {
+            if (dateString) {
+                // fix date parsing for different time zone if time is not supply.
+                if (dateString.match(/^[0-9]{4}[/\-.][0-9]{2}[/\-.][0-9]{2}$/)) {
+                    dateString += ' 00:00:00';
+                }
+                return new Date(dateString);
+            }
+            return new Date();
         },
     },
 };
