@@ -216,7 +216,7 @@ class Table extends Lister
 
         if ($field === null) {
             // column is not associated with any model field
-            $columnDecorator = $this->_addUnchecked($this->factory($columnDecorator, ['table' => $this]));
+            $columnDecorator = $this->_addUnchecked(Table\Column::fromSeed($columnDecorator, ['table' => $this]));
         } elseif (is_array($columnDecorator) || is_string($columnDecorator)) {
             $columnDecorator = $this->decoratorFactory($field, array_merge(['columnData' => $name], is_string($columnDecorator) ? [$columnDecorator] : $columnDecorator));
         } elseif (!$columnDecorator) {
@@ -305,7 +305,7 @@ class Table extends Lister
             throw (new Exception('No such column, cannot decorate'))
                 ->addMoreInfo('name', $name);
         }
-        $decorator = $this->_addUnchecked($this->factory($seed, ['table' => $this]));
+        $decorator = $this->_addUnchecked(Table\Column::fromSeed($seed, ['table' => $this]));
 
         if (!is_array($this->columns[$name])) {
             $this->columns[$name] = [$this->columns[$name]];
@@ -358,7 +358,7 @@ class Table extends Lister
             [$this->default_column ? $this->default_column : Table\Column::class]
         );
 
-        return $this->_addUnchecked($this->factory($seed, ['table' => $this]));
+        return $this->_addUnchecked(Table\Column::fromSeed($seed, ['table' => $this]));
     }
 
     protected $typeToDecorator = [
