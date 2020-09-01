@@ -1,4 +1,3 @@
-@panel-tag
 Feature: RightPanel
   Testing RightPanel
 

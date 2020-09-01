@@ -1,4 +1,3 @@
-@form-tag
 Feature: Form
     Testing forms
 

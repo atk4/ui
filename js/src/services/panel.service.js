@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import debounce from 'debounce';
 
 /**
  * Singleton class.
@@ -301,12 +300,12 @@ class PanelService {
     addClickAwayEvent(id) {
         const that = this;
         // clicking anywhere in main tag will close panel.
-        $('main').on('click.atkPanel', debounce((evt) => {
+        $('main').on('click.atkPanel', atk.debounce((evt) => {
             that.closePanel(id);
-        }, 100));
+        }, 250));
 
         // pressing esc key will close panel.
-        $(document).on('keyup.atkPanel', debounce((evt) => {
+        $(document).on('keyup.atkPanel', atk.debounce((evt) => {
             if (evt.keyCode === 27) {
                 that.closePanel(id);
             }
