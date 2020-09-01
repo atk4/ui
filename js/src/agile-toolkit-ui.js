@@ -23,13 +23,13 @@ atk.options = (function () {
         debounceTimeout: null,
     };
     return {
-        setOption: (name, value) => { options[name] = value; },
-        getOption: (name) => options[name],
+        set: (name, value) => { options[name] = value; },
+        get: (name) => options[name],
     };
 }());
 
 atk.debounce = (fn, value) => {
-    const timeOut = atk.options.getOption('debounceTimeout');
+    const timeOut = atk.options.get('debounceTimeout');
     return debounce(fn, timeOut !== null ? timeOut : value);
 };
 
