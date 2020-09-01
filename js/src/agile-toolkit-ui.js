@@ -18,16 +18,18 @@ atk.version = () => _ATKVERSION_;
 
 // Use closure for atk options property in order to keep them private.
 atk.options = (function () {
-    // Value for debounce time out (in ms) that will be apply globally when set.
-    let debounceTimeout = null;
+    const options = {
+        // Value for debounce time out (in ms) that will be apply globally when set.
+        debounceTimeout: null,
+    };
     return {
-        setDebounceTimeout: (value) => { debounceTimeout = parseInt(value, 10); },
-        getDebounceTimeout: () => debounceTimeout,
+        setOption: (name, value) => { options[name] = value; },
+        getOption: (name) => options[name],
     };
 }());
 
 atk.debounce = (fn, value) => {
-    const timeOut = atk.options.getDebounceTimeout();
+    const timeOut = atk.options.getOption('debounceTimeout');
     return debounce(fn, timeOut !== null ? timeOut : value);
 };
 
