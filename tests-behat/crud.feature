@@ -1,4 +1,3 @@
-@exec-crud
 Feature: Crud
   Testing crud add, edit, delete using search
 

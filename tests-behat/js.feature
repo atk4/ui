@@ -1,4 +1,3 @@
-@exec-js
 Feature: JS
  Test javascript
 

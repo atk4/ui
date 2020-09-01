@@ -1,4 +1,3 @@
-@exec-grid
 Feature: Grid
   Testing grid search
 

@@ -1,4 +1,3 @@
-@exec-form
 Feature: Form
     Testing forms
 

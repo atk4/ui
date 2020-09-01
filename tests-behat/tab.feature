@@ -1,4 +1,3 @@
-@exec-tab
 Feature: Tab
   Testing Tab
 

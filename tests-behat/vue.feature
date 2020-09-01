@@ -1,4 +1,3 @@
-@exec-vue
 Feature: Vue
   Testing Vue component
 

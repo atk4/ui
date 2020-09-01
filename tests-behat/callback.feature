@@ -1,4 +1,3 @@
-@exec-callback
 Feature: Callback
   Testing callbacks
 

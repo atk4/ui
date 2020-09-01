@@ -1,4 +1,3 @@
-@exec-basicexecutor
 Feature: Executor
   Testing basic action executor
 
