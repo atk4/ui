@@ -75,7 +75,6 @@ use atk4\data\Reference\HasOne;
 use atk4\data\ValidationException;
 use atk4\ui\Exception;
 use atk4\ui\Form;
-use atk4\ui\JsVueService;
 use atk4\ui\Template;
 
 class Multiline extends Form\Control
@@ -252,7 +251,8 @@ class Multiline extends Form\Control
             // When errors are coming from this Multiline field, then notify Multiline component about them.
             // Otherwise use normal field error.
             if ($fieldName === $this->short_name) {
-                $jsError = [(new JsVueService())->emitEvent('atkml-row-error', ['id' => $this->multiLine->name, 'errors' => $this->rowErrors])];
+                // multiline.js component listen to 'multiline-rows-error' event.
+                $jsError = [$this->jsEmitEvent('multiline-rows-error', ['id' => $this->multiLine->name, 'errors' => $this->rowErrors])];
             } else {
                 $jsError = [$form->js()->form('add prompt', $fieldName, $str)];
             }

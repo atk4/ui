@@ -39,7 +39,6 @@ class VueService {
     constructor() {
         if (!VueService.instance) {
             this.vues = [];
-            this.eventBus = new Vue();
             this.vueMixins = {
                 methods: {
                     getData: function () {
@@ -97,17 +96,6 @@ class VueService {
                 mixins: [this.vueMixins],
             }),
         });
-    }
-
-    /**
-   * Emit an event to the eventBus.
-   * Listener to eventBus can respond to emitted event.
-   *
-   * @param event
-   * @param data
-   */
-    emitEvent(event, data = {}) {
-        this.eventBus.$emit(event, data);
     }
 
     /**

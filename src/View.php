@@ -845,23 +845,12 @@ class View extends AbstractView implements JsExpressionable
     }
 
     /**
-     * Emit an event on the Vue event bus.
-     * vueService has a dedicated Vue instance for registering
-     * event that allow communication between external view like button,
-     * or even separate vue component, in order to communicate to each other.
+     * Emit an event on atkEvent bus.
      *
-     * Once a component is set for listening to a particular event,
-     * you can emit the event using this function.
+     * example of adding a listener on for an emit event.
      *
-     * Adding a listener is generally done via the created component method.
-     *
-     * example of adding a listener inside the created method.
-     *
-     *      atk.vueService.eventBus.$on('eventName', (data) => {
-     *          // make sure we are talking to the right component.
-     *          if (this.$parent.$el.id === data.id) {
-     *              this.doSomething();
-     *          }
+     *      atk.eventBus.on('eventName', (data) => {
+     *          console.log(data)
      *      });
      *
      * @param string $eventName the event name the will be emit
@@ -869,7 +858,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * @return mixed
      */
-    public function jsVueEmit($eventName, $eventData = [])
+    public function jsEmitEvent($eventName, $eventData = [])
     {
         // adding this view id to data.
         // Usually, you would check if the event is emit for the right component.
@@ -877,7 +866,7 @@ class View extends AbstractView implements JsExpressionable
             $eventData['id'] = $this->name;
         }
 
-        return (new JsVueService())->emitEvent($eventName, $eventData);
+        return (new JsChain('atk.eventBus'))->emit($eventName, $eventData);
     }
 
     /**

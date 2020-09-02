@@ -97,7 +97,7 @@ export default {
             }
         });
 
-        atk.vueService.eventBus.$on('atkml-row-error', (data) => {
+        atk.eventBus.on('multiline-rows-error', (data) => {
             if (this.$root.$el.id === data.id) {
                 this.errors = { ...data.errors };
             }

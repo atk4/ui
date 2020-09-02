@@ -1,5 +1,11 @@
 ## Release note
 
+### version 1.15.4 (2020-09-02)
+
+- add atk eventBus for listening and publishing event.
+    - replace deprecated Vue eventBus;
+- create atk-utils file for options and eventBus.
+
 ### version 1.15.3 (2020-08-27)
 
  - set proper debounce value in:
