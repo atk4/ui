@@ -508,7 +508,6 @@ class App
     public function run()
     {
         $isExitException = false;
-
         try {
             $this->run_called = true;
             $this->hook(self::HOOK_BEFORE_RENDER);
