@@ -71,13 +71,13 @@ export default {
             this.isEditing = true;
         },
         onToggleDelete: function (e) {
-            this.$root.$emit('toggle-delete', this.rowId);
+            atk.eventBus.emit(this.$root.$el.id + '-toggle-delete', { rowId: this.rowId });
         },
         onUpdateValue: function (field, value) {
-            this.$root.$emit('update-row', this.rowId, field, value);
+            atk.eventBus.emit(this.$root.$el.id + '-update-row', { rowId: this.rowId, field: field, value: value });
         },
         onPostRow: function (field) {
-            this.$root.$emit('post-row', this.rowId, field);
+            atk.eventBus.emit(this.$root.$el.id + '-post-row', { rowId: this.rowId, field: field });
         },
         getReadOnlyValue: function (column) {
             if (!column.isEditable) {

@@ -4,7 +4,7 @@ import SuiVue from 'semantic-ui-vue';
 import DatePicker from 'v-calendar/lib/components/date-picker.umd';
 import atkInlineEdit from '../components/inline-edit.component';
 import itemSearch from '../components/item-search.component';
-import multiLine from '../components/multiline.component';
+import multiLine from '../components/multiline/multiline.component';
 import treeItemSelector from '../components/tree-item-selector/tree-item-selector.component';
 import atkClickOutside from '../directives/click-outside.directive';
 import VueQueryBuilder from '../components/query-builder/query-builder.component.vue';

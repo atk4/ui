@@ -853,19 +853,12 @@ class View extends AbstractView implements JsExpressionable
      *          console.log(data)
      *      });
      *
-     * @param string $eventName the event name the will be emit
-     * @param array  $eventData $eventData   The data passed with the event
-     *
-     * @return mixed
+     * Note: In order to make sure your event is unique within atk, you can
+     * use the view name in it.
+     *    $this->jsEmitEvent($this->name . '-my-event', $data)
      */
-    public function jsEmitEvent($eventName, $eventData = [])
+    public function jsEmitEvent(string $eventName, array $eventData = []): JsChain
     {
-        // adding this view id to data.
-        // Usually, you would check if the event is emit for the right component.
-        if (!isset($eventData['id'])) {
-            $eventData['id'] = $this->name;
-        }
-
         return (new JsChain('atk.eventBus'))->emit($eventName, $eventData);
     }
 

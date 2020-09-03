@@ -29,7 +29,7 @@ const atkOptions = (function () {
 const atkEventBus = (function () {
     const eventBus = mitt();
     return {
-        emit: (event, data) => eventBus.emit(event, data),
+        emit: (event, payload) => eventBus.emit(event, payload),
         on: (event, ref) => eventBus.on(event, ref),
         off: (event, ref) => eventBus.off(event, ref),
         clearAll: () => eventBus.all.clear(),

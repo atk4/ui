@@ -25,7 +25,7 @@ export default {
     methods: {
         onToggleDeleteAll: function () {
             this.$nextTick(() => {
-                this.$root.$emit('toggle-delete-all', this.$refs.check.checked);
+                atk.eventBus.emit(this.$root.$el.id + '-toggle-delete-all', { isOn: this.$refs.check.checked });
             });
         },
         getTextAlign: function (column) {

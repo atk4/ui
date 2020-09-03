@@ -86,14 +86,11 @@ $clock_script = "
           data: function() {
             return {style : this.clock, currentIdx : 0}
           },
-          created: function() {
+          mounted: function() {
             // add a listener for changing clock style.
-            // this will listen to event 'update-style' emit on the eventBus.
-            atk.eventBus.on('clock-change-style', (data) => {
-              // make sure we are talking to the right component.
-              if (this.\$parent.\$el.id === data.id) {
+            // this will listen to event '-clock-change-style' emit on the eventBus.
+            atk.eventBus.on(this.\$root.\$el.id + '-clock-change-style', (payload) => {
                 this.onChangeStyle();
-              }
             });
           },
           computed: {
@@ -134,5 +131,5 @@ $clock_style = [
 $clock->vue('my-clock', ['clock' => $clock_style], 'myClock');
 
 $btn = \atk4\ui\Button::addTo($app, ['Change Style']);
-$btn->on('click', $clock->jsEmitEvent('clock-change-style'));
+$btn->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));
 \atk4\ui\View::addTo($app, ['element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);
