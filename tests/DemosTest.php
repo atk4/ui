@@ -139,7 +139,6 @@ class DemosTest extends AtkPhpunit\TestCase
             $localPath = static::ROOT_DIR . $request->getUri()->getPath();
 
             ob_start();
-
             try {
                 $app = $this->createTestingApp();
                 require $localPath;
