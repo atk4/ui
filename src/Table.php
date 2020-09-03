@@ -494,11 +494,11 @@ class Table extends Lister
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
+
         // TODO we should not iterate using $this->model variable,
         // then also backup/tryfinally would be not needed
         // the same in Lister class
         $modelBackup = $this->model;
-
         try {
             foreach ($this->model as $this->model) {
                 $this->current_row = $this->model;

@@ -508,7 +508,6 @@ class App
     public function run()
     {
         $isExitException = false;
-
         try {
             $this->run_called = true;
             $this->hook(self::HOOK_BEFORE_RENDER);
@@ -1065,6 +1064,7 @@ class App
 
         if ($lateError !== null) {
             echo "\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n";
+
             exit(1);
         }
 
