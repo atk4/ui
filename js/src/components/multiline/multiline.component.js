@@ -52,7 +52,6 @@ export default {
                 color: null,
                 columns: null,
             },
-            elementId: null,
             tableProp: { ...this.tableDefault, ...this.data.options },
         };
     },
@@ -61,13 +60,11 @@ export default {
         'atk-multiline-header': multilineHeader,
     },
     mounted: function () {
-        this.elementId = this.$root.$el.id;
-
-        atk.eventBus.on(this.elementId + '-update-row', (payload) => {
+        atk.eventBus.on(this.$root.$el.id + '-update-row', (payload) => {
             this.updateRow(payload.rowId, payload.field, payload.value);
         });
 
-        atk.eventBus.on(this.elementId + '-post-row', (payload) => {
+        atk.eventBus.on(this.$root.$el.id + '-post-row', (payload) => {
             if (this.hasExpression()) {
                 this.postRow(payload.rowId, payload.field);
             }
@@ -77,7 +74,7 @@ export default {
             }
         });
 
-        atk.eventBus.on(this.elementId + '-toggle-delete', (payload) => {
+        atk.eventBus.on(this.$root.$el.id + '-toggle-delete', (payload) => {
             const idx = this.deletables.indexOf(payload.rowId);
             if (idx > -1) {
                 this.deletables.splice(idx, 1);
@@ -86,7 +83,7 @@ export default {
             }
         });
 
-        atk.eventBus.on(this.elementId + '-toggle-delete-all', (payload) => {
+        atk.eventBus.on(this.$root.$el.id + '-toggle-delete-all', (payload) => {
             this.deletables = [];
             if (payload.isOn) {
                 this.rowData.forEach((row) => {
@@ -95,7 +92,7 @@ export default {
             }
         });
 
-        atk.eventBus.on(this.elementId + '-multiline-rows-error', (payload) => {
+        atk.eventBus.on(this.$root.$el.id + '-multiline-rows-error', (payload) => {
             this.errors = { ...payload.errors };
         });
     },
