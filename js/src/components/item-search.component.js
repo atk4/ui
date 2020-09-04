@@ -6,8 +6,6 @@ import $ from 'jquery';
  * Request should filter the data and reload the data view.
  * The request is send using semantic-ui api.
  *
- * Template is done inline: item-search.html
- *
  * Properties need for this component are:
  *
  * context: string, a jQuery selector where the 'loading' class will be apply by semantic-ui;
@@ -17,8 +15,21 @@ import $ from 'jquery';
  * reload:  string, an Id selector for jQuery, '#' is append automatically.
  *
  */
+
+const template = `<div class="atk-item-search" :class="inputCss">
+      <input class="ui" 
+        v-model="query" 
+        type="text" placeholder="Search..." 
+        @keyup="onKeyup" 
+        @keyup.esc="onEscape" 
+        name="atk-vue-search"/>
+        <i class="atk-search-icon" :class="classIcon"></i><span style="width:12px;cursor:pointer" @click="onClear"></span>
+    </div>
+`;
+
 export default {
     name: 'atk-item-search',
+    template: template,
     props: {
         context: String,
         url: String,
@@ -27,7 +38,7 @@ export default {
         queryArg: String,
         options: {
             type: Object,
-            default: () => ({ inputTimeOut: 350 }),
+            default: () => ({ inputTimeOut: 350, inputCss: '' }),
         },
     },
     data: function () {
@@ -36,6 +47,7 @@ export default {
             temp: this.q,
             isActive: false,
             extraQuery: null,
+            inputCss: this.options.inputCss,
         };
     },
     computed: {
@@ -47,7 +59,7 @@ export default {
         },
     },
     methods: {
-        onChange: function () {
+        onKeyup: function () {
             atk.debounce((e) => {
                 if (this.query !== this.temp) {
                     if (this.query === '') {

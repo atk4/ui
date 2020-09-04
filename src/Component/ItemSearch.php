@@ -93,7 +93,6 @@ class ItemSearch extends View
     protected function renderView(): void
     {
         $this->class = [];
-        $this->template->set('inputCss', $this->inputCss);
         parent::renderView();
 
         // reloadId is the view id selector name that need to be reload.
@@ -113,7 +112,10 @@ class ItemSearch extends View
                 'url' => $this->reload->jsUrl(),
                 'q' => $this->q,
                 'context' => $this->context,
-                'options' => ['inputTimeOut' => $this->inputTimeOut],
+                'options' => [
+                    'inputTimeOut' => $this->inputTimeOut,
+                    'inputCss' => $this->inputCss,
+                ],
             ]
         ));
     }

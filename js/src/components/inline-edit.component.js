@@ -5,8 +5,6 @@ import $ from 'jquery';
  * Allow user to edit a db record inline and send
  * changes to server.
  *
- * Use an inline template.
- *
  * Properties need for this component are:
  *
  * context: string, a jQuery selector where the 'loading' class will be apply by semantic-ui;
@@ -16,16 +14,40 @@ import $ from 'jquery';
  *
  */
 
+const template = `
+<div class="inline field">
+      <div :class="options.inputCss" :style="{error: hasError, loading : isLoading}">
+            <input 
+            :class="options.inlineCss" 
+            :name="options.fieldName" 
+            :type="options.fieldType" 
+            v-model="value" 
+            @keyup="onKeyup" 
+            @focus="onFocus" 
+            @blur="onBlur"/><i class="icon"></i>
+      </div>
+</div>`;
+
 export default {
     name: 'atk-inline-edit',
+    template: template,
     props: {
         url: String,
         initValue: String,
         saveOnBlur: { type: Boolean, default: true },
+        options: {
+            type: Object,
+            default: () => ({
+                inputCss: '', inlineCss: '', fieldName: null, fieldType: 'text',
+            }),
+        },
     },
     data: function () {
         return {
-            value: this.initValue, temp: this.initValue, hasError: null, isLoading: false,
+            value: this.initValue,
+            temp: this.initValue,
+            hasError: null,
+            isLoading: false,
         };
     },
     computed: {
@@ -41,7 +63,7 @@ export default {
                 this.temp = this.value;
             }
         },
-        onKeyUp: function (e) {
+        onKeyup: function (e) {
             const key = e.keyCode;
             this.clearError();
             if (key === 13) {

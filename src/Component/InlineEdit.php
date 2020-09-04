@@ -200,14 +200,11 @@ class InlineEdit extends View
 
         $fieldName = $this->field ? $this->field : 'name';
 
-        $this->template->set('inputCss', $this->inputCss);
-        $this->template->trySet('fieldName', $fieldName);
-        $this->template->trySet('fieldType', $type);
-
         $this->vue('atk-inline-edit', [
             'initValue' => $initValue,
             'url' => $this->cb->getJsUrl(),
             'saveOnBlur' => $this->saveOnBlur,
+            'options' => ['fieldName' => $fieldName, 'fieldType' => $type, 'inputCss' => $this->inputCss],
         ]);
     }
 }
