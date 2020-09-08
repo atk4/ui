@@ -5,7 +5,9 @@
 Form Controls
 =============
 
-.. php:namespace:: atk4\ui\Form\Control
+.. php:namespace:: atk4\ui\Form
+
+.. php:class:: Control
 
 Agile UI dedicates a separate namespace for the Form Controls. Those are
 quite simple components that present themselves as input controls: line, select, checkbox.
@@ -195,12 +197,12 @@ by all components::
 Link to Model Field
 -------------------
 
-.. php:attr:: $field
+.. php:attr:: field
 
 Form decorator defines $field property which will be pointing to a field object of a model, so technically
 the value of the field would be read from `$decorator->field->get()`.
 
-
+.. php:namespace:: atk4\ui\Form\Control
 
 Line Input Form control
 =======================
@@ -306,11 +308,11 @@ $expression argument can be string, JsExpression, array of JsExpressions or even
     $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
 
 
-
-
-
 Dropdown
 ========
+
+.. php:class:: Dropdown
+
 Dropdown uses Fomantic UI Dropdown (https://fomantic-ui.com/modules/dropdown.html). A Dropdown can be used in two ways:
 1) Set a Model to $model property. The Dropdown will render all records of the model that matchs the model's conditions.
 2) You can define $values property to create custom Dropdown items.
@@ -410,7 +412,7 @@ If you use it, use the second parameter as well, its the array key::
 
 Dropdown Settings
 -----------------
-There's a bunch of settings to influence Dropdown behaviour:
+There's a bunch of settings to influence Dropdown behaviour.
 
 .. php:attr:: empty
 Define a string for the empty option (no selection). Standard is non-breaking space symbol.
@@ -418,13 +420,13 @@ Define a string for the empty option (no selection). Standard is non-breaking sp
 .. php:attr:: isValueRequired 
 Whether or not this dropdown requires a value. When set to true, $empty is shown on page load but is not selectable once a value has been choosen.
 
-..php:attr:: dropdownOptions
+.. php:attr:: dropdownOptions
 Here you can pass an array of Fomantic UI dropdown options (https://fomantic-ui.com/modules/dropdown.html#/settings) e.g. ::
     $dropdown = new Dropdown(['dropdownOptions' => [
         'selectOnKeydown' => false,
     ]]);
     
- ..php:attr:: isMultiple
+.. php:attr:: isMultiple
  If set to true, multiple items can be selected in Dropdown. They will be sent comma seperated (value1,value2,value3) on form submit.
 
 By default Dropdown will save values as comma-separated string value in data model, but it also supports model fields with array type.
@@ -446,9 +448,12 @@ See this example from Model class init method::
             ],
         ],
     ]);
-
+    
+    
 DropdownCascade
 ===============
+
+.. php:class:: DropdownCascade
 
 DropdownCascade input are extend from Dropdown input. They rely on `cascadeFrom` and `reference` property.
 For example, it could be useful when you need to narrow a product selection base on a category and a sub category.
