@@ -415,19 +415,23 @@ Dropdown Settings
 There's a bunch of settings to influence Dropdown behaviour.
 
 .. php:attr:: empty
+
 Define a string for the empty option (no selection). Standard is non-breaking space symbol.
 
 .. php:attr:: isValueRequired 
+
 Whether or not this dropdown requires a value. When set to true, $empty is shown on page load but is not selectable once a value has been choosen.
 
 .. php:attr:: dropdownOptions
+
 Here you can pass an array of Fomantic UI dropdown options (https://fomantic-ui.com/modules/dropdown.html#/settings) e.g. ::
     $dropdown = new Dropdown(['dropdownOptions' => [
         'selectOnKeydown' => false,
     ]]);
     
 .. php:attr:: isMultiple
- If set to true, multiple items can be selected in Dropdown. They will be sent comma seperated (value1,value2,value3) on form submit.
+
+If set to true, multiple items can be selected in Dropdown. They will be sent comma seperated (value1,value2,value3) on form submit.
 
 By default Dropdown will save values as comma-separated string value in data model, but it also supports model fields with array type.
 See this example from Model class init method::
