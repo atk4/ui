@@ -57,12 +57,12 @@ Model action using system property set to true, will not be display in Crud. Not
 Specifying Fields
 =================
 
-.. php:attr:: $displayFields
+.. php:attr:: displayFields
 
 Only fields name set in this property will be display in Grid. Leave empty for all fields.
 
-.. php:attr:: $editFields
-.. php:attr:: $addFields
+.. php:attr:: editFields
+.. php:attr:: addFields
 
 Through those properties you can specify which fields to use when form is display for add and edit action.
 Field name add here will have priorities over the action fields properties. When set to null, the action fields propery

@@ -38,7 +38,7 @@ for developers.
 (For situations when Component does not natively support VirtualPage, you can still use :php:class:`Loader`, documented
 below).
 
-.. php:attr:: $cb
+.. php:attr:: cb
 
 VirtuaPage relies on :php:class:`CallbackLater` object, which is stored in a property $cb. If the Calllback is triggered
 through a GET argument, then VirtualPage will change it's rendering technique. Lets examine it in more detail::
@@ -54,7 +54,7 @@ through a GET argument, then VirtualPage will change it's rendering technique. L
 This code will only show the link containing a URL, but will not show LoremIpsum text.  If you do follow the link, you'll
 see only the 'LoremIpsum' text.
 
-.. php:attr:: $urlTrigger
+.. php:attr:: urlTrigger
 
 See :php:attr:`Callback::urlTrigger`.
 
@@ -107,7 +107,7 @@ To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the foll
 
     You can use this shortcut method instead of $vp->cb->getUrl().
 
-.. php:attr:: $ui
+.. php:attr:: ui
 
 When using 'popup' mode, the output appears inside a `<div class="ui container">`. If you want to change this
 class, you can set $ui property to something else. Try::
@@ -154,7 +154,7 @@ while a spinner is shown to a user::
 A good use-case example would be a dashboard graph. Unlike VirtualPage which is not visible to a regular render,
 Loader needs to occupy some space.
 
-.. php:attr:: $shim
+.. php:attr:: shim
 
 By default it will display a white segment with 7em height, but you can specify any other view thorugh $shim
 property::
@@ -184,7 +184,7 @@ Returns JS action which will trigger loading. The action will be carried out in 
 - Content will be placed inside Loader's DIV replacing shiv (or previously loaded content)
 - loading indicator will is hidden
 
-.. php:attr:: $loadEvent = null
+.. php:attr:: loadEvent = null
 
 If you have NOT invoked jsLoad in your code, Loader will automatically assign it do DOM Ready(). If the automatic
 behaviour does not work, you should set value for $loadEvent:
@@ -240,7 +240,7 @@ Next example will display DataTable, but will allow you to repalce data with a f
 Progress Bar
 ^^^^^^^^^^^^
 
-.. php:attr:: $progressBar = null
+.. php:attr:: progressBar = null
 
 Loader can have a progress bar. Imagine that your Loader has to run slow process 4 times::
 
