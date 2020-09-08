@@ -91,11 +91,11 @@ of addColumn() is very similar to :php:meth:`Form::addControl`.
 Calculations
 ============
 
-Apart from adding columns that reflect currrent values of your database, there are several ways
+Apart from adding columns that reflect current values of your database, there are several ways
 how you can calculate additional values. You must know the capabilities of your database server
 if you want to execute some calculation there. (See https://agile-data.readthedocs.io/en/develop/expressions.html)
 
-It's always a good idea to calculate column inside datababase. Lets create "total" column  which will
+It's always a good idea to calculate column inside database. Lets create "total" column  which will
 multiply "price" and "amount" values. Use ``addExpression`` to provide in-line definition for this
 field if it's not alrady defined in ``Order::init()``::
 
@@ -320,7 +320,7 @@ Table Rendering Steps
 ---------------------
 
 Once model is specified to the Table it will keep the object until render process will begin. Table
-columns can be defined anytime and will be stored in the :php:attr:`Table::columns` property. Columns
+columns can be defined any time and will be stored in the :php:attr:`Table::columns` property. Columns
 without defined name will have a numeric index. It's also possible to define multiple columns per key
 in which case we call them "decorators".
 
@@ -403,12 +403,12 @@ template::
 
     <td class="{$f_name_money}"><a href="{$c_name_link}">£ {$salary}</a></td>
 
-Which is concatinated with other table columns just before rendering starts. The
+Which is concatenated with other table columns just before rendering starts. The
 actual template is formed by calling. This may be too much detail, so if you need
 to make a note on how template caching works then,
 
  - values are encapsulated for named fields.
- - values are concatinated by anonymous fields.
+ - values are concatenated by anonymous fields.
  - <td> properties are stacked
  - last decorator will convert array with td properties into an actual tag.
 
@@ -422,7 +422,7 @@ Redefining
 ----------
 
 If you are defining your own column, you may want to re-define getDataCellTemplate. The
-getDataCellHtml can be left as-is and will be handled correctly. If you have overriden
+getDataCellHtml can be left as-is and will be handled correctly. If you have overridden
 getDataCellHtml only, then your column will still work OK provided that it's used as a
 last decorator.
 
@@ -493,7 +493,7 @@ Static Attributes and classes
 .. php:method:: setAttr($attribute, $value, $scope = 'body');
 
 
-The following code will make sure that contens of the column appear on a single line by
+The following code will make sure that contents of the column appear on a single line by
 adding class "single line" to all body cells::
 
     $table->addColumn('name', (new \atk4\ui\Table\Column()->addClass('single line')));

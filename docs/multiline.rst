@@ -100,7 +100,7 @@ If you want to edit them along with the user, Multiline is set up in a few lines
 
     // Create some sample record of user Model
     $user = new User(new \atk4\data\Persistence\Array_());
-    $user->id = 1;
+    $user->setId(1);
     $user->set('firstname', 'Hans');
     $user->set('lastname', 'Test');
     $user->save();

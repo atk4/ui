@@ -170,7 +170,7 @@ Here is the code with comments::
     // Usage Examples. Start with the most basic usage
     SocialAdd::addTo($app, ['instagram']);
 
-    // Next specify label and separatly name of social network
+    // Next specify label and separately name of social network
     SocialAdd::addTo($app, ['Follow on Twitter', 'social'=>'twitter']);
 
     // Finally provide custom icon and make the button clickable.

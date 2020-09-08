@@ -5,7 +5,7 @@
 Introduction
 ============
 
-Agile UI relies on a lightweigt built-in template engine to manipulate templates.
+Agile UI relies on a lightweight built-in template engine to manipulate templates.
 The design goals of a template engine are:
 
 - Avoid any logic inside template
@@ -66,7 +66,7 @@ We call region a tag, that may contain other tags. Example::
 When this template is parsed, region 'Content' will contain tags
 $user and $amount. Although technically you can still use `set()`
 to change value of a tag even if it's inside a region, we often
-use Region to deligate rendering to another View (more about this
+use Region to delegate rendering to another View (more about this
 in section for Views). 
 
 There are some operations you can do with a region, such as::
@@ -434,7 +434,7 @@ Same thing using Agile Toolkit Views::
     $recipient ->tempalte->set($recipient_data);
 
 We do not need to manually render anything in this scenario. Also the
-template of $sender and $recipient objects will be appropriatelly cloned
+template of $sender and $recipient objects will be appropriately cloned
 from regions of $envelope and then substituted back after render.
 
 In this example I've usd a basic :php:class:`View` class, however I could
@@ -508,7 +508,7 @@ See also: :ref:`templates and views`
 Conditional tags
 ----------------
 
-Agile Toolkit template engine allows you to use socalled conditional tags
+Agile Toolkit template engine allows you to use so called conditional tags
 which will automatically remove template regions if tag value is empty.
 Conditional tags notation is trailing question mark symbol.
 
@@ -640,7 +640,7 @@ working with HTML or the output will not be rendered in a regular way
 Organize templates into directories
 -----------------------------------
 
-Typically templates directory will have subdirectories: "page", "view",
+Typically templates directory will have sub-directories: "page", "view",
 "form" etc. Your custom template for one of the pages should be inside
 "page" directory, such as page/contact.html. If you are willing to have
 a generic layout which you will use by multiple pages, then instead of

@@ -123,7 +123,7 @@ You can even use label inside a table, but because table renders itself by repea
 the following code is needed::
 
     $table->onHook(\atk4\ui\Table\Column::HOOK_GET_HTML_TAGS, function ($table, Model $row) {
-        if ($row->id == 1) {
+        if ($row->getId() == 1) {
             return [
                 'name'=> $table->app->getTag('div', ['class'=>'ui ribbon label'], $row->get('name')),
             ];

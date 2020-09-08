@@ -138,7 +138,7 @@ $wizard->addStep('Business Model', function ($page) {
 
         $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
         $model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
-            $_SESSION['x'][$model->id] = $model->get();
+            $_SESSION['x'][$model->getId()] = $model->get();
         });
 
         \atk4\ui\Form::addTo($owner)
@@ -184,7 +184,7 @@ $wizard->addStep('Persistence', function ($page) {
 
         $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
         $model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
-            $_SESSION['x'][$model->id] = $model->get();
+            $_SESSION['x'][$model->getId()] = $model->get();
         });
 
         $model->tryLoad(1);

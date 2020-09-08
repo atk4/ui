@@ -303,13 +303,13 @@ class CardDeck extends View
         $deck = [];
         foreach ($this->cardHolder->elements as $v => $element) {
             if ($element instanceof $this->card) {
-                $deck[$element->model->id] = $element;
+                $deck[$element->model->getId()] = $element;
             }
         }
 
-        if (in_array($model->id, array_map($mapResults, $model->export([$model->id_field])), true)) {
+        if (in_array($model->getId(), array_map($mapResults, $model->export([$model->id_field])), true)) {
             // might be in result set but not in deck, for example when adding a card.
-            return $deck[$model->id] ?? null;
+            return $deck[$model->getId()] ?? null;
         }
     }
 

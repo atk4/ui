@@ -201,7 +201,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     {
         $return = $this->action->execute([]);
 
-        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->owner->id));
+        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->owner->getId()));
     }
 
     /**

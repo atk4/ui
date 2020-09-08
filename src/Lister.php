@@ -193,8 +193,8 @@ class Lister extends View
         $this->t_row->trySet($this->current_row);
 
         $this->t_row->trySet('_title', $this->model->getTitle());
-        $this->t_row->trySet('_href', $this->url(['id' => $this->current_row->id]));
-        $this->t_row->trySet('_id', $this->current_row->id);
+        $this->t_row->trySet('_href', $this->url(['id' => $this->current_row->getId()]));
+        $this->t_row->trySet('_id', $this->current_row->getId());
 
         $html = $this->t_row->render();
         if ($this->template->hasTag('rows')) {

@@ -90,10 +90,10 @@ Your composer.json could look like this::
 What does that mean?
 --------------------
 As soon as you start a "composer update" or "composer dump-autoload" in the public_html directory, all needed atk4 files
-and all your projectfiles from the subdirectory "projectfolder" are processed by Composer and the autoload.php file is generated.
+and all your project files from the subdirectory "projectfolder" are processed by Composer and the autoload.php file is generated.
 Read below how to load the autoload.php into your project.
 
-The "require" section within composer.json loads plublically available composer packages from the server.
+The "require" section within composer.json loads publicly available composer packages from the server.
 
 The "autoload" section within composer.json loads your individual project files (that are saved locally on your computer).
 "MyProject" defines the namespace you are using in your classes later on.
@@ -161,7 +161,7 @@ Initialize the app class in init.php
 
 ::
 
-  $app = new \atk4\ui\App('Welcome to my first app'); // initialisation of our app
+  $app = new \atk4\ui\App('Welcome to my first app'); // initialization of our app
   $app->db = $db;   // defines our database for reuse in other classes
 
 Create index.php and admin.php
@@ -186,7 +186,7 @@ Create your own classes
 =======================
 
 Now as your basic app is set up and running, we start implementing our own classes that build the core of our app.
-Following the PSR-4 specifiations all class names and file names have to correspond to each other.
+Following the PSR-4 specifications all class names and file names have to correspond to each other.
 
 If we want to create a class called "myFirstClass" we have to save it to a file called "myFirstClass.php".
 

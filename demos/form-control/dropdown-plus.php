@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\data\Model;
 use atk4\ui\Form;
 
 /** @var \atk4\ui\App $app */
@@ -38,9 +39,9 @@ $form->addControl(
     [Form\Control\Dropdown::class,
         'caption' => 'Dropdown with data from Model',
         'model' => (new Country($app->db))->setLimit(25),
-        'renderRowFunction' => function ($row) {
+        'renderRowFunction' => function (Model $row) {
             return [
-                'value' => $row->id,
+                'value' => $row->getId(),
                 'title' => $row->getTitle() . ' (' . $row->get('iso3') . ')',
             ];
         },
@@ -53,9 +54,9 @@ $form->addControl(
     [Form\Control\Dropdown::class,
         'caption' => 'Dropdown with data from Model',
         'model' => (new File($app->db))->setLimit(25),
-        'renderRowFunction' => function ($row) {
+        'renderRowFunction' => function (Model $row) {
             return [
-                'value' => $row->id,
+                'value' => $row->getId(),
                 'title' => $row->getTitle(),
                 'icon' => $row->get('is_folder') ? 'folder' : 'file',
             ];
