@@ -159,4 +159,4 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     \atk4\ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'teal', 'icon' => 'github'])
         ->on('click', $app->jsRedirect('https://github.com/atk4/ui/blob/develop/' . $relUrl, true));
 }
-unset($layout, $rootUrl, $relUrl, $demosUrl, $path, $menu);
+unset($layout, $rootUrl, $relUrl, $demosUrl, $path, $menu, $currDir);
