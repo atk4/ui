@@ -54,14 +54,27 @@ action. It is possible to disable these default actions by setting their system 
 Model action using system property set to true, will not be display in Crud. Note that action must be setup prior to use
 `$crud->setModel($eu_countries)`
 
-Specifying Fields
-=================
+Specifying Fields (for different views)
+=======================================
 
 .. php:attr:: $displayFields
 
 Only fields name set in this property will be display in Grid. Leave empty for all fields.
 
 .. php:attr:: $editFields
+
+If you'd like to have different fields in the grid of the CRUD, but you need more/different fields in the editting modal (which opens when clicking on an entry),
+you can choose here the fields that are available in the editting modal window.
+
+.. important:: Both views (overview and editting view) refer to the same model, just the fields shown in either of them differ
+
+Example::
+
+    $crud = \atk4\ui\Crud::addTo($app);
+    $model = new \atk4\data\Model($app->db);
+    $crud->displayFields(['field1, field2']);
+    $crud->editFields(['field1, field2, field3, field4']);
+
 .. php:attr:: $addFields
 
 Through those properties you can specify which fields to use when form is display for add and edit action.
@@ -93,6 +106,24 @@ specify your own form behavior using a callback for action::
     });
 
 Callback function will receive the Form and ActionExecutor as arguments.
+
+
+Changing titles
+===============
+
+.. important:: Changing the title of the CRUD's grid view must be done before setting the model.
+  Changing the title of the modal of a CRUD's modal window must be done after loading the model.
+  Otherwise the changes will have no effect.
+
+Here's an example::
+
+    $crud = \atk4\ui\Crud::addTo($app);
+    $model = new \atk4\data\Model($app->db);
+    $model->getUserAction('add')->description = 'New title for adding a record'; // the button of the overview - must be loaded before setting model
+    $crud->setModel($model);
+    $model->getUserAction('add')->ui['executor']->title = 'New title for modal'; // the button of the modal - must be rendered after setting model
+
+
 
 Notification
 ============

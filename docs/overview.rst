@@ -474,28 +474,48 @@ That means the demo may not work properly, if you copy the "demos" directory out
 webserver.
 But if you change some files (e.g. the database setup file) and you do a composer update, your
 changes would be overwritten.
-Therefoire it makes sense to clone the repo into a separate directory.
+
+.. important:: We strictly advise you to clone the whole atk4/ui repo into a separate directory.
+
+Here's how that works:
 
 Pre-requirements
 ----------------
 
  - You have setup a (local) webserver or Docker instance (accessible e.g. by "https://localhost")
- - The atk4 "demos" directory is within the publicly accesible root directory of the webserver (means: it could be opened e.g. with https://localhost/vendors/atk4/ui/demos)
+ - The forked atk4/ui directory is within the publicly accesible root directory of the webserver (that means it could for example be opened through: "https://localhost/atk4/ui/demos")
 
 Setup the demo
 --------------
 
 To run the demo, we recommend to...
  - Create a directory called "atk4" and create a separate folder for each repo (ui, data, etc.), in this case "ui"
+ - Fork the original repo into this directory
  - Copy the file "db.default.php" from the "atk4/ui/demos" subdirectory
  - Rename the copied file to "db.php"
  - Open the renamed file and edit your database details accordingly to fit to your database
- - Setup the database using the file "dump.sql" from the subdirectory "atk4/ui/demos/_demo-data" of the "demos" directory
+ - Setup the database using the file "dump.sql" from the subdirectory "atk4/ui/demos/_demo-data" of the "demos" directory. You can also setup an SQLITE database using a provided script (see below)
  - Open the demos from your browser (e.g. with https://localhost/vendors/atk4/ui/demos or if you choose to clone it, with e.g. https://localhost/atk4/ui/demos)
+
+Setup SQLITE database
+---------------------
+The demo also includes a script that let's you setup a SQLITE database. You will find this script in the subdirectory
+"atk4/ui/demos/_demo-data/".
+Call it as follows (you may have to adapt the paths to fit your webserver structure)::
+
+    php atk4/ui/demos/_demo-data/create-sqlite-db.php;  // when using the CLI approach
+
+or::
+
+    https://localhost/atk4/ui/demos/_demo-data/create-sqlite-db.php;  // when calling in the browser
+
 
 Additional tips
 ---------------
 
  - If you are using Eclipse, import the previously cloned "atk4" directory into Eclipse (then it finds all sub-projects)
  - In your web server you can create an alias pointing to the cloned "atk4" folder and then you will have access via http://localhost/atk4/ui/demos (if you alias atk4->atk4)
- - If you want to modify your UI copy and use that in your project you can make composer install it from local machine
+ - If you'd like to keep your forked version up-to-date with the original ui-repository, you can sync your fork regularly with the upstream version.
+ Here are some links with tutorials explaining how this works:
+ English: https://levelup.gitconnected.com/how-to-sync-forked-repositories-using-git-or-github-2933e497fa16
+ German: https://www.openhsr.ch/tipps/sync-fork/
