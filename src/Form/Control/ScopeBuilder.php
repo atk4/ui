@@ -251,7 +251,7 @@ class ScopeBuilder extends Control
         'checkbox' => 'boolean',
     ];
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -397,9 +397,11 @@ class ScopeBuilder extends Control
             }
         }
 
-        $ret = [['label' => '[empty]', 'value' => null]];
+        $ret = [
+            ['label' => '[empty]', 'value' => null],
+        ];
         foreach ($choices as $value => $label) {
-            $ret[] = compact('label', 'value');
+            $ret[] = ['label' => $label, 'value' => $value];
         }
 
         return $ret;
@@ -436,7 +438,7 @@ class ScopeBuilder extends Control
         switch ($type) {
             case 'query-builder-group':
                 $components = array_map([static::class, 'queryToScope'], (array) $query['children']);
-                $scope = $query['logicalOperator'] === 'all' ? Scope::createAnd(...$components) : Scope::createOr(...$components);
+                $scope = new Scope($components, $query['logicalOperator']);
 
                 break;
             case 'query-builder-rule':
@@ -521,7 +523,7 @@ class ScopeBuilder extends Control
             $query = [
                 'type' => 'query-builder-group',
                 'query' => [
-                    'logicalOperator' => $scope->isAnd() ? 'all' : 'any',
+                    'logicalOperator' => $scope->getJunction(),
                     'children' => $children,
                 ],
             ];
@@ -589,7 +591,11 @@ class ScopeBuilder extends Control
             $operator = array_search(strtoupper($operator), $operatorsMap, true) ?: self::OPERATOR_EQUALS;
         }
 
-        return compact('rule', 'operator', 'value');
+        return [
+            'rule' => $rule,
+            'operator' => $operator,
+            'value' => $value,
+        ];
     }
 
     /**

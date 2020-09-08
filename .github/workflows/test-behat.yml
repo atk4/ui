@@ -50,25 +50,48 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - name: Install PHP dependencies
-        run: |
-          composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev
-          composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev
-          composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
-
       - name: Install JS dependencies (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
           apk add npm
-          npm install --loglevel=error -g less less-plugin-clean-css uglify-js
+          npm install --loglevel=error -g pug-cli less less-plugin-clean-css uglify-js
           (cd js && npm install --loglevel=error)
+
+      - name: Lint JS files (only for Slow)
+        if: matrix.type == 'Chrome Slow'
+        run: |
+          (cd js && npm run lint)
+
+      - name: Build/diff HTML files (only for Slow)
+        if: matrix.type == 'Chrome Slow'
+        run: |
+          for f in $(find template demos -name '*.pug' -o -name '*.html'); do
+            fpug=${f/.[a-z]*/.pug}
+            fhtml=${fpug/.pug/.html}
+            mv "$fhtml" "$fhtml.orig"
+            pug --silent --pretty "$fpug"
+            diff "$fhtml" "$fhtml.orig"
+          done
+
+      - name: Build/diff CSS files (only for Slow)
+        if: matrix.type == 'Chrome Slow'
+        run: |
+          mv public/agileui.css public/agileui.css.orig
+          # prod: lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
+          lessc public/agileui.less public/agileui.css
+          diff public/agileui.css.orig public/agileui.css
 
       - name: Build JS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
           (cd js && npm run build)
-          lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
           sed -i "s~'https://ui.agiletoolkit.org/public.*~'/demos',~" src/App.php
+
+      - name: Install PHP dependencies
+        run: |
+          composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev
+          composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev
+          composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
       - name: Init
         run: |

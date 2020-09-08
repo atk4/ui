@@ -59,7 +59,7 @@ $form->onSubmit(function (Form $form) use ($app) {
     ];
 
     $view = new \atk4\ui\Message('Items: ');
-    $view->init();
+    $view->invokeInit();
     $view->text->addParagraph($app->encodeJson($response));
 
     return $view;

@@ -1,4 +1,3 @@
-
 Feature: RightPanel
   Testing RightPanel
 

@@ -122,7 +122,7 @@ class Grid extends View
      */
     protected $actionMenuDecorator = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->container = View::addTo($this, ['template' => $this->template->cloneRegion('Container')]);
@@ -251,13 +251,13 @@ class Grid extends View
         $pageLength->onPageLengthSelect(function ($ipp) use ($pageLength) {
             $this->ipp = $ipp;
             $this->setModelLimitFromPaginator();
-            //add ipp to quicksearch
+            // add ipp to quicksearch
             if ($this->quickSearch instanceof JsSearch) {
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', ['ipp', $this->ipp]));
             }
             $this->applySort();
 
-            //return the view to reload.
+            // return the view to reload.
             return $this->container;
         });
 
@@ -278,7 +278,7 @@ class Grid extends View
     {
         if ($this->paginator) {
             $this->paginator->destroy();
-            //prevent action(count) to be output twice.
+            // prevent action(count) to be output twice.
             $this->paginator = null;
         }
 
@@ -311,7 +311,7 @@ class Grid extends View
             'hasFixTableHeader' => true,
             'tableContainerHeight' => $containerHeight,
         ]);
-        //adding a state context to js scroll plugin.
+        // adding a state context to js scroll plugin.
         $options = array_merge(['stateContext' => '#' . $this->container->name], $options);
 
         return $this->addJsPaginator($ipp, $options, $container, $scrollRegion);
@@ -575,18 +575,18 @@ class Grid extends View
             $this->paginator->addReloadArgs([$this->sortTrigger => $sortBy]);
         }
 
-        $desc = false;
+        $isDesc = false;
         if ($sortBy && $sortBy[0] === '-') {
-            $desc = true;
+            $isDesc = true;
             $sortBy = substr($sortBy, 1);
         }
 
         $this->table->sortable = true;
 
         if ($sortBy && isset($this->table->columns[$sortBy]) && $this->model->hasField($sortBy)) {
-            $this->model->setOrder($sortBy, $desc);
+            $this->model->setOrder($sortBy, $isDesc ? 'desc' : 'asc');
             $this->table->sort_by = $sortBy;
-            $this->table->sort_order = $desc ? 'descending' : 'ascending';
+            $this->table->sort_order = $isDesc ? 'descending' : 'ascending';
         }
 
         $this->table->on(

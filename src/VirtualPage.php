@@ -30,7 +30,7 @@ class VirtualPage extends View
     /**
      * Initialization.
      */
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -162,5 +162,10 @@ class VirtualPage extends View
 
             $this->app->terminateHtml($this->app->html->template);
         });
+    }
+
+    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    {
+        return $this->cb;
     }
 }

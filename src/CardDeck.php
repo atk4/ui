@@ -94,7 +94,7 @@ class CardDeck extends View
     /** @var string|null The current search query string. */
     private $query;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->container = $this->add($this->container);

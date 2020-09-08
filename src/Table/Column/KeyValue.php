@@ -46,7 +46,7 @@ class KeyValue extends Table\Column
 {
     public $values = [];
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
     }

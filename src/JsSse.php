@@ -31,7 +31,7 @@ class JsSse extends JsCallback
     /** @var \Closure custom function for outputting (instead of echo) */
     public $echoFunction;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

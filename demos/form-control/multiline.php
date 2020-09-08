@@ -15,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 
 /** @var \atk4\data\Model $inventoryItemClass */
 $inventoryItemClass = get_class(new class() extends \atk4\data\Model {
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -33,12 +33,13 @@ $inventory = new $inventoryItemClass(new \atk4\data\Persistence\Array_());
 // Populate some data.
 $total = 0;
 for ($i = 1; $i < 3; ++$i) {
-    $inventory->set('id', $i);
-    $inventory->set('item', 'item_' . $i);
-    $inventory->set('qty', random_int(10, 100));
-    $inventory->set('box', random_int(1, 10));
-    $total = $total + ($inventory->get('qty') * $inventory->get('box'));
-    $inventory->saveAndUnload();
+    $inventory2 = clone $inventory;
+    $inventory2->set('id', $i);
+    $inventory2->set('item', 'item_' . $i);
+    $inventory2->set('qty', random_int(10, 100));
+    $inventory2->set('box', random_int(1, 10));
+    $total = $total + ($inventory2->get('qty') * $inventory2->get('box'));
+    $inventory2->saveAndUnload();
 }
 
 $form = Form::addTo($app);

@@ -105,7 +105,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     public $loaderUi = 'ui basic segment';
     public $loaderShim = [];
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->observeChanges();
@@ -130,7 +130,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->id = mb_strtolower($this->name . '_' . $table_name . '_' . $action->short_name);
         $this->name = $this->id;
 
-        //Add buttons to modal for next and previous.
+        // Add buttons to modal for next and previous.
         $this->btns = (new View())->addStyle(['min-height' => '24px']);
         $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
         $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);
@@ -551,7 +551,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             throw $e;
         } catch (\Throwable $e) {
             $msg = new Message('Error executing ' . $this->action->caption, 'red');
-            $msg->init();
+            $msg->invokeInit();
             $msg->text->content = $this->app->renderExceptionHtml($e);
 
             return $msg;

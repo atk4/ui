@@ -47,7 +47,7 @@ class FilterPopup extends Popup
      */
     public $colTrigger;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->setOption('delay', ['hide' => 1500]);
@@ -63,7 +63,7 @@ class FilterPopup extends Popup
 
         $this->form->setControlsDisplayRules($model->getFormDisplayRules());
 
-        //load data associated with this popup.
+        // load data associated with this popup.
         if ($data = $model->recallData()) {
             $model->setMulti($data);
         }

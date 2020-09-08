@@ -7,7 +7,6 @@ Feature: Vue
     Then I should see "new value: test"
     Then I hide js modal
 
+  Scenario: testing ItemSearch
     When I fill in "atk-vue-search" with "united kingdom"
-# needed because debouce is used
-    Then I sleep 250 ms
     Then I should see "United Kingdom"

@@ -33,7 +33,7 @@ class DropdownCascade extends Dropdown
     /** @var string The casacade input value. */
     protected $cascadeControlValue;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

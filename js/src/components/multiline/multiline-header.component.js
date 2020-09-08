@@ -1,7 +1,6 @@
-
 export default {
-  name: 'atk-multiline-header',
-  template: `
+    name: 'atk-multiline-header',
+    template: `
      <sui-table-header>
        <sui-table-row v-if="hasError()">
         <sui-table-cell :style="{background:'none'}"></sui-table-cell>
@@ -19,62 +18,63 @@ export default {
       </sui-table-row>
     </sui-table-header>
   `,
-  props: ['fields', 'state', 'errors', 'caption'],
-  data() {
-    return {columns: this.fields, isDeleteAll: false}
-  },
-  methods: {
-    onToggleDeleteAll: function() {
-      this.$nextTick(() => {
-        this.$root.$emit('toggle-delete-all', this.$refs['check'].checked);
-      });
+    props: ['fields', 'state', 'errors', 'caption'],
+    data: function () {
+        return { columns: this.fields, isDeleteAll: false };
     },
-    getTextAlign: function(column) {
-      let align = 'left';
-      if (!column.isEditable) {
-        switch(column.type) {
-          case 'money':
-          case 'integer':
-          case 'number':
-            align = 'right';
-            break;
-        }
-      }
+    methods: {
+        onToggleDeleteAll: function () {
+            this.$nextTick(() => {
+                this.$root.$emit('toggle-delete-all', this.$refs.check.checked);
+            });
+        },
+        getTextAlign: function (column) {
+            let align = 'left';
+            if (!column.isEditable) {
+                switch (column.type) {
+                case 'money':
+                case 'integer':
+                case 'number':
+                    align = 'right';
+                    break;
+                default:
+                }
+            }
 
-      return align;
+            return align;
+        },
+        getVisibleColumns: function () {
+            let count = 1; // add deletable column;
+            this.columns.forEach((field) => {
+                count = field.isVisible ? count + 1 : count;
+            });
+            return count;
+        },
+        hasError: function () {
+            return Object.keys(this.errors).length > 0;
+        },
+        hasCaption: function () {
+            return this.caption;
+        },
+        getErrorMsg: function (column) {
+            if (this.hasError()) {
+                const rows = Object.keys(this.errors);
+                for (let i = 0; i < rows.length; i++) {
+                    const error = this.errors[rows[i]].filter((col) => col.field === column.field);
+                    if (error.length > 0) {
+                        return error[0].msg;
+                    }
+                }
+            }
+            return null;
+        },
     },
-    getVisibleColumns: function() {
-      let count = 1; // add deletable column;
-      this.columns.forEach(field => {
-        count = field.isVisible ? count + 1 : count;
-      });
-      return count;
+    computed: {
+        isIndeterminate: function () {
+            return this.state === 'indeterminate';
+        },
+        isChecked: function () {
+            return this.state === 'on';
+        },
     },
-    hasError: function() {
-      return Object.keys(this.errors).length > 0;
-    },
-    hasCaption: function() {
-      return this.caption;
-    },
-    getErrorMsg: function(column) {
-      if (this.hasError()) {
-        let rows = Object.keys(this.errors);
-        for( let i = 0; i < rows.length; i++) {
-          let error = this.errors[rows[i]].filter(col => col.field === column.field);
-          if (error.length > 0) {
-            return error[0].msg;
-          }
-        }
-      }
-      return null;
-    }
-  },
-  computed: {
-    isIndeterminate() {
-      return this.state === 'indeterminate';
-    },
-    isChecked() {
-      return this.state === 'on';
-    }
-  }
-}
+};

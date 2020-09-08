@@ -35,6 +35,14 @@ class ItemSearch extends View
     public $inputCss = 'ui input right icon transparent';
 
     /**
+     * Keyboard debounce time in ms for the input.
+     * Will limit network request while user is typing search criteria.
+     *
+     * @var int
+     */
+    public $inputTimeOut = 350;
+
+    /**
      * The jquery selector where you need to add the semantic-ui 'loading' class.
      * Default to reload selector.
      *
@@ -47,7 +55,7 @@ class ItemSearch extends View
 
     public $defaultTemplate = 'item-search.html';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -105,6 +113,7 @@ class ItemSearch extends View
                 'url' => $this->reload->jsUrl(),
                 'q' => $this->q,
                 'context' => $this->context,
+                'options' => ['inputTimeOut' => $this->inputTimeOut],
             ]
         ));
     }

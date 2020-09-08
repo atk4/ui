@@ -1,4 +1,32 @@
 ## Release note
+
+### version 1.15.3 (2020-08-27)
+
+ - set proper debounce value in:
+    - item-search vue component
+    - condition-form plugin
+    - panel service
+ - Fix issue with Querybuilder date.
+   - https://github.com/atk4/ui/issues/1420
+ - Package 
+    - update package dependencies to latest release;
+        - note: css-loader v4 now require style-loader
+  
+  PR: https://github.com/atk4/ui/pull/1430
+
+### version 1.15.2 (2020-08-19)
+
+ - sidenav.plugin.js
+    - fix issue (1406) when using Control or Command click on a link (https://github.com/atk4/ui/issues/1406 )
+
+ - Package 
+    - update package dependencies to latest release;
+    - fix eslint;
+
+### version 1.15.1 (2020-08-19)
+ - URL query parameter for Upload plugin/control was renamed from "action" to "f_upload_action"
+ - URL query parameter for Upload plugin/control was renamed from "f_name" to "f_upload_id"
+
 ### version 1.15.0 (2020-07-16)
  - update package dependency
  - configure webpack in order to load and bundle .vue file.

@@ -24,7 +24,7 @@ $cartClass = get_class(new class() extends \atk4\ui\Lister {
 
     public $defaultTemplate = 'lister.html';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -88,7 +88,7 @@ $cartClass = get_class(new class() extends \atk4\ui\Lister {
 $itemShelfClass = get_class(new class() extends \atk4\ui\View {
     public $ui = 'green segment';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

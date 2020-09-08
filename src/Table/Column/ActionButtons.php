@@ -29,7 +29,7 @@ class ActionButtons extends Table\Column
      */
     protected $callbacks = [];
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->addClass('right aligned');

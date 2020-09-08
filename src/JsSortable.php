@@ -54,7 +54,7 @@ class JsSortable extends JsCallback
      */
     public $view;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         if (!$this->view) {

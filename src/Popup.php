@@ -115,7 +115,7 @@ class Popup extends View
         }
     }
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -176,11 +176,11 @@ class Popup extends View
             $this->minHeight = '60px';
         }
 
-        //create content view to pass to callback.
+        // create content view to pass to callback.
         $content = $this->add($this->dynamicContent);
         $this->cb->set($fx, [$content]);
-        //only render our content view.
-        //PopupService will replace content with this one.
+        // only render our content view.
+        // PopupService will replace content with this one.
         $this->cb->terminateJson($content);
     }
 
@@ -292,5 +292,10 @@ class Popup extends View
         //$this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
 
         parent::renderView();
+    }
+
+    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    {
+        return $this->cb;
     }
 }

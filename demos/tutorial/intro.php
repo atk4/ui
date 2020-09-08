@@ -124,7 +124,7 @@ $wizard->addStep('Business Model', function ($page) {
         {
             public $title_field = 'reference';
 
-            public function init(): void
+            protected function init(): void
             {
                 parent::init();
 

@@ -14,7 +14,7 @@ class TableTest extends AtkPhpunit\TestCase
     public function testAddColumnWithoutModel()
     {
         $t = new \atk4\ui\Table();
-        $t->init();
+        $t->invokeInit();
         $t->setSource([
             ['one' => 1, 'two' => 2, 'three' => 3, 'four' => 4],
             ['one' => 11, 'two' => 12, 'three' => 13, 'four' => 14],

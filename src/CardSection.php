@@ -19,7 +19,7 @@ class CardSection extends View
 
     public $tableClass = 'ui fixed small';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->addClass('content');
@@ -83,7 +83,7 @@ class CardSection extends View
     private function addTableSection(Model $model, array $fields)
     {
         $cardTable = new CardTable(['class' => $this->tableClass]);
-        $cardTable->init();
+        $cardTable->invokeInit();
         $model = $cardTable->setModel($model, $fields);
         $this->add($cardTable);
     }

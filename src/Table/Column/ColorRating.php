@@ -90,7 +90,7 @@ class ColorRating extends Table\Column
      */
     public $less_than_min_no_color = false;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

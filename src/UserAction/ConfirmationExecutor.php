@@ -48,7 +48,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /** @var Button Cancel button */
     private $cancel;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->observeChanges();
@@ -71,7 +71,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->id = mb_strtolower($this->name . '_' . $table_name . '_' . $action->short_name);
         $this->name = $this->id;
 
-        //Add buttons to modal for next and previous.
+        // Add buttons to modal for next and previous.
         $btns = (new View())->addStyle(['min-height' => '24px']);
         $this->ok = Button::addTo($btns, ['Ok', 'blue']);
         $this->cancel = Button::addTo($btns, ['Cancel']);

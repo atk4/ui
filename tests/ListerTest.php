@@ -15,7 +15,7 @@ class ListerTest extends AtkPhpunit\TestCase
     public function testListerRender()
     {
         $v = new \atk4\ui\View();
-        $v->init();
+        $v->invokeInit();
         $l = \atk4\ui\Lister::addTo($v, ['defaultTemplate' => 'lister.html']);
         $l->setSource(['foo', 'bar']);
     }
@@ -26,7 +26,7 @@ class ListerTest extends AtkPhpunit\TestCase
     public function testListerRender2()
     {
         $v = new \atk4\ui\View(['template' => new \atk4\ui\Template('hello{list}, world{/list}')]);
-        $v->init();
+        $v->invokeInit();
         $l = \atk4\ui\Lister::addTo($v, [], ['list']);
         $l->setSource(['foo', 'bar']);
         $this->assertSame('hello, world, world', $v->render());
@@ -36,7 +36,7 @@ class ListerTest extends AtkPhpunit\TestCase
     {
         $this->expectException(Exception::class);
         $v = new \atk4\ui\View();
-        $v->init();
+        $v->invokeInit();
         $l = \atk4\ui\Lister::addTo($v);
         $l->setSource(['foo', 'bar']);
     }

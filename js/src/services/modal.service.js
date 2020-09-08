@@ -8,13 +8,12 @@ import $ from 'jquery';
  * Also keep track of how many modal are use by the app.
  */
 class ModalService {
-
     static getInstance() {
         return this.instance;
     }
 
     constructor() {
-        if(!ModalService.instance){
+        if (!ModalService.instance) {
             this.modals = [];
             ModalService.instance = this;
         }
@@ -31,18 +30,19 @@ class ModalService {
     }
 
     onHidden() {
-      modalService.removeModal($(this));
+        atk.modalService.removeModal($(this));
     }
 
     onVisible() {
-      let args = {}, data;
+        let args = {}; let
+            data;
         // const service = apiService;
         const $modal = $(this);
         const $content = $(this).find('.atk-dialog-content');
 
         // check data associated with this modal.
         if (!$.isEmptyObject($modal.data())) {
-          data = $modal.data();
+            data = $modal.data();
         }
 
         // add data argument
@@ -52,19 +52,19 @@ class ModalService {
 
         // check for data type, usually json or html
         if (data && data.type === 'json') {
-            args = $.extend(true, args, {__atk_json:1});
+            args = $.extend(true, args, { __atk_json: 1 });
         }
 
         // does modal content need to be loaded dynamically
         if (data && data.uri) {
-            $content.html(modalService.getLoader(data.label ? data.label : ''));
+            $content.html(atk.modalService.getLoader(data.label ? data.label : ''));
             $content.api({
                 on: 'now',
                 url: data.uri,
                 data: args,
                 method: 'GET',
                 obj: $content,
-                onComplete: function(response, content) {
+                onComplete: function (response, content) {
                     const result = content.html(response.html);
                     if (!result.length) {
                         response.success = false;
@@ -72,20 +72,20 @@ class ModalService {
                         response.message = 'Modal service error: Unable to replace atk-dialog content in modal from server response. Empty Content.';
                     } else {
                         if ($modal.modal.settings.autofocus) {
-                            modalService.doAutoFocus($modal);
+                            atk.modalService.doAutoFocus($modal);
                         }
                         $modal.modal('refresh');
-                        //content is replace no need to do it in api
+                        // content is replace no need to do it in api
                         response.id = null;
                     }
-                }
+                },
             });
         }
     }
 
     onShow() {
         const $modal = $(this);
-        modalService.addModal($modal);
+        atk.modalService.addModal($modal);
     }
 
     onHide() {
@@ -101,26 +101,26 @@ class ModalService {
 
         // temp fix while semantic modal positioning is not fixed.
         // hide other modals.
-        if (this.modals.length > 1 ) {
-           modal.css('position', 'absolute');
-           this.modals[this.modals.length - 2].css('opacity', 0);
+        if (this.modals.length > 1) {
+            modal.css('position', 'absolute');
+            this.modals[this.modals.length - 2].css('opacity', 0);
         }
 
         // add modal esc handler.
         if (this.modals.length === 1) {
-            $(document).on('keyup.atk.modalService', function (e) {
-              if (e.keyCode === 27) {
-                  if (that.modals.length > 0) {
-                      that.modals[that.modals.length -1].modal('hide');
-                  }
-              }
+            $(document).on('keyup.atk.modalService', (e) => {
+                if (e.keyCode === 27) {
+                    if (that.modals.length > 0) {
+                        that.modals[that.modals.length - 1].modal('hide');
+                    }
+                }
             });
         }
     }
 
     removeModal(modal) {
         if (modal.data().needRemove) {
-            //This modal was add by createModal and need to be remove.
+            // This modal was add by createModal and need to be remove.
             modal.remove();
         }
         this.modals.pop();
@@ -129,25 +129,25 @@ class ModalService {
 
         // temp fix while semantic modal positioning is not fixed.
         // show last modals.
-        if (this.modals.length > 0 ) {
-           modal.css('position', '');
-           this.modals[this.modals.length - 1].css('opacity', '');
-           this.modals[this.modals.length - 1].modal('refresh');
+        if (this.modals.length > 0) {
+            modal.css('position', '');
+            this.modals[this.modals.length - 1].css('opacity', '');
+            this.modals[this.modals.length - 1].modal('refresh');
         }
 
-        if (this.modals.length === 0 ) {
+        if (this.modals.length === 0) {
             $(document).off('atk.modalService');
         }
     }
 
     doAutoFocus(modal) {
-      let inputs = modal.find('[tabindex], :input').filter(':visible');
-      let autofocus = inputs.filter('[autofocus]');
-      let input = (autofocus.length > 0)? autofocus.first() : inputs.first();
+        const inputs = modal.find('[tabindex], :input').filter(':visible');
+        const autofocus = inputs.filter('[autofocus]');
+        const input = (autofocus.length > 0) ? autofocus.first() : inputs.first();
 
-      if(input.length > 0) {
-        input.focus().select();
-      }
+        if (input.length > 0) {
+            input.focus().select();
+        }
     }
 
     /**
@@ -158,7 +158,7 @@ class ModalService {
         for (let i = this.modals.length - 1; i >= 0; --i) {
             const modal = this.modals[i];
             if (modal.data().needCloseTrigger) {
-                modal.on('close', '.atk-dialog-content', function(){
+                modal.on('close', '.atk-dialog-content', () => {
                     modal.modal('hide');
                 });
             } else {
@@ -185,7 +185,7 @@ class ModalService {
 
     getLoader(loaderText) {
         return `<div class="ui active inverted dimmer">
-              <div class="ui text loader">${loaderText}</div>`
+              <div class="ui text loader">${loaderText}</div>`;
     }
 }
 

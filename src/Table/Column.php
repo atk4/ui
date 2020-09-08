@@ -208,7 +208,7 @@ class Column
             'onChange' => new JsExpression($function),
         ]);
 
-        //will stop grid column from being sorted.
+        // will stop grid column from being sorted.
         $chain->on('click', new JsExpression('function(e){e.stopPropagation();}'));
 
         $this->table->js(true, $chain);
@@ -324,7 +324,7 @@ class Column
         if ($this->hasHeaderAction) {
             $attr['id'] = $this->name . '_th';
 
-            //add the action tag to the caption
+            // add the action tag to the caption
             $caption = [$this->headerActionTag, $caption];
         }
 
@@ -347,7 +347,7 @@ class Column
             }
         }
 
-        return $this->getTag('head', [['div', compact('class'), $caption]], $attr);
+        return $this->getTag('head', [['div', ['class' => $class], $caption]], $attr);
     }
 
     /**

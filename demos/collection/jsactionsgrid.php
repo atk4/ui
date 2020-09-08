@@ -10,7 +10,6 @@ require_once __DIR__ . '/../init-app.php';
 // Demo for Model action in Grid
 
 $country = new CountryLock($app->db);
-$country->tryLoadAny();
 DemoActionsUtil::setupDemoActions($country);
 
 \atk4\ui\Button::addTo($app, ['Actions from jsEvent', 'small left floated basic blue', 'icon' => 'left arrow'])

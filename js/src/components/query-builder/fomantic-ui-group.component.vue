@@ -28,7 +28,11 @@
                                             selection
                                     >
                                         <sui-dropdown-menu class="atk-qb-rule-select-menu">
-                                            <sui-dropdown-item @click="addNewRule(rule.id)" v-for="rule in rules" :key="rule.id" :value="rule">{{ rule.label }}</sui-dropdown-item>
+                                            <sui-dropdown-item
+                                                @click="addNewRule(rule.id)"
+                                                v-for="rule in rules"
+                                                :key="rule.id" :value="rule"
+                                            >{{ rule.label }}</sui-dropdown-item>
                                         </sui-dropdown-menu>
                                     </sui-dropdown>
                                     <button v-if="depth < maxDepth"
@@ -53,48 +57,47 @@
 </template>
 
 <script>
-  import QueryBuilderGroup from "vue-query-builder/dist/group/QueryBuilderGroup.umd.js";
-  import QueryBuilderRule from "./fomantic-ui-rule.component.vue";
+import QueryBuilderGroup from 'vue-query-builder/dist/group/QueryBuilderGroup.umd';
+import QueryBuilderRule from './fomantic-ui-rule.component.vue';
 
-  export default {
-    name: "QueryBuilderGroup",
+export default {
+    name: 'QueryBuilderGroup',
     components: {
-      QueryBuilderRule: QueryBuilderRule
+        QueryBuilderRule: QueryBuilderRule,
     },
-    data: function() {
-      return {
-        selectedSuiRule: null,
-      };
+    data: function () {
+        return {
+            selectedSuiRule: null,
+        };
     },
     methods: {
-      /**
+        /**
        * Add a new rule via Dropdown item.
        */
-      addNewRule: function(ruleId) {
-        this.selectedRule = this.rules.filter(rule => rule.id === ruleId)[0];
-        if (this.selectedRule) {
-          this.addRule();
-        }
-      },
+        addNewRule: function (ruleId) {
+            // eslint-disable-next-line prefer-destructuring
+            this.selectedRule = this.rules.filter((rule) => rule.id === ruleId)[0];
+            if (this.selectedRule) {
+                this.addRule();
+            }
+        },
     },
     computed: {
-      /**
+        /**
        * Map rules to SUI Dropdown.
        *
        * @returns {*}
        */
-      dropdownRules: function() {
-        return this.rules.map( rule => {
-           return {
-             key: rule.id,
-             text: rule.label,
-             value: rule.id
-           };
-        });
-      }
+        dropdownRules: function () {
+            return this.rules.map((rule) => ({
+                key: rule.id,
+                text: rule.label,
+                value: rule.id,
+            }));
+        },
     },
-    extends: QueryBuilderGroup
-  };
+    extends: QueryBuilderGroup,
+};
 </script>
 
 <style>

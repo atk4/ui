@@ -37,7 +37,7 @@ class Loader extends View
     /** @var Callback for triggering */
     protected $cb;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -118,5 +118,10 @@ class Loader extends View
             'apiConfig' => !empty($apiConfig) ? $apiConfig : null,
             'storeName' => $storeName ? $storeName : null,
         ]);
+    }
+
+    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    {
+        return $this->cb;
     }
 }

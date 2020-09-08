@@ -216,7 +216,7 @@ class Table extends Lister
 
         if ($field === null) {
             // column is not associated with any model field
-            $columnDecorator = $this->_addUnchecked($this->factory($columnDecorator, ['table' => $this]));
+            $columnDecorator = $this->_addUnchecked(Table\Column::fromSeed($columnDecorator, ['table' => $this]));
         } elseif (is_array($columnDecorator) || is_string($columnDecorator)) {
             $columnDecorator = $this->decoratorFactory($field, array_merge(['columnData' => $name], is_string($columnDecorator) ? [$columnDecorator] : $columnDecorator));
         } elseif (!$columnDecorator) {
@@ -285,7 +285,7 @@ class Table extends Lister
             if ($col) {
                 $pop = $col->addPopup(new Table\Column\FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('table-filter-on') : null;
-                //apply condition according to popup form.
+                // apply condition according to popup form.
                 $this->model = $pop->setFilterCondition($this->model);
             }
         }
@@ -305,7 +305,7 @@ class Table extends Lister
             throw (new Exception('No such column, cannot decorate'))
                 ->addMoreInfo('name', $name);
         }
-        $decorator = $this->_addUnchecked($this->factory($seed, ['table' => $this]));
+        $decorator = $this->_addUnchecked(Table\Column::fromSeed($seed, ['table' => $this]));
 
         if (!is_array($this->columns[$name])) {
             $this->columns[$name] = [$this->columns[$name]];
@@ -358,7 +358,7 @@ class Table extends Lister
             [$this->default_column ? $this->default_column : Table\Column::class]
         );
 
-        return $this->_addUnchecked($this->factory($seed, ['table' => $this]));
+        return $this->_addUnchecked(Table\Column::fromSeed($seed, ['table' => $this]));
     }
 
     protected $typeToDecorator = [
@@ -375,7 +375,7 @@ class Table extends Lister
      * name and size. To retrieve columns width, simply json decode the $widths param in your callback function.
      * ex:
      *  $table->resizableColumn(function($j, $w){
-     *       //do somethings with columns width
+     *       // do somethings with columns width
      *       $columns = json_decode($w);
      *   });
      *
@@ -494,23 +494,32 @@ class Table extends Lister
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
-        foreach ($this->model as $ignore) {
-            $this->current_row = $this->model;
-            if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
-                continue;
+
+        // TODO we should not iterate using $this->model variable,
+        // then also backup/tryfinally would be not needed
+        // the same in Lister class
+        $modelBackup = $this->model;
+        try {
+            foreach ($this->model as $this->model) {
+                $this->current_row = $this->model;
+                if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
+                    continue;
+                }
+
+                if ($this->totals_plan) {
+                    $this->updateTotals();
+                }
+
+                $this->renderRow();
+
+                ++$this->_rendered_rows_count;
+
+                if ($this->hook(self::HOOK_AFTER_ROW) === false) {
+                    continue;
+                }
             }
-
-            if ($this->totals_plan) {
-                $this->updateTotals();
-            }
-
-            $this->renderRow();
-
-            ++$this->_rendered_rows_count;
-
-            if ($this->hook(self::HOOK_AFTER_ROW) === false) {
-                continue;
-            }
+        } finally {
+            $this->model = $modelBackup;
         }
 
         // Add totals rows or empty message

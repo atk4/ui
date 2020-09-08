@@ -251,7 +251,7 @@ class View extends AbstractView implements JsExpressionable
      * Called when view becomes part of render tree. You can override it but avoid
      * placing any "heavy processing" here.
      */
-    public function init(): void
+    protected function init(): void
     {
         $addLater = $this->_add_later;
         $this->_add_later = [];
@@ -641,7 +641,7 @@ class View extends AbstractView implements JsExpressionable
     public function renderAll(): void
     {
         if (!$this->_initialized) {
-            $this->init();
+            $this->invokeInit();
         }
 
         if (!$this->_rendered) {
@@ -1059,8 +1059,11 @@ class View extends AbstractView implements JsExpressionable
             }
             $ex = $this->factory($class);
             if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
-                //Executor may already had been add to layout. Like in CardDeck.
+                // Executor may already had been add to layout. Like in CardDeck.
                 if (!isset($this->app->html->elements[$ex->short_name])) {
+                    // very dirty hack, @TODO, attach modals in the standard render tree
+                    // but only render the result to a different place/html DOM
+                    $ex->viewForUrl = $this;
                     $ex = $this->app->html->add($ex, 'Modals')->setAction($action);
                 }
                 if (isset($arguments[0])) {

@@ -59,7 +59,7 @@ class Wizard extends View
      */
     public $defaultIcon = 'empty'; // 'square outline'
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -211,5 +211,10 @@ class Wizard extends View
         }
 
         parent::renderView();
+    }
+
+    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    {
+        return $this->stepCallback;
     }
 }

@@ -5,7 +5,9 @@
 Form Controls
 =============
 
-.. php:namespace:: atk4\ui\Form\Control
+.. php:namespace:: atk4\ui\Form
+
+.. php:class:: Control
 
 Agile UI dedicates a separate namespace for the Form Controls. Those are
 quite simple components that present themselves as input controls: line, select, checkbox.
@@ -94,7 +96,7 @@ properly:
 Hints
 -----
 
-.. php:attr: hint
+.. php:attr:: hint
 
 When Form Control appears in a Form, then you can specify a Hint also. It appears below the form control and
 although it intends to be "extra info" or "extra help" due to current limitation of Fomantic UI
@@ -123,12 +125,12 @@ or you can inject a view with a custom template::
 Read only and disabled form controls
 ------------------------------------
 
-.. php:attr: readonly
+.. php:attr:: readonly
 
 Read only form controls can be seen in form, can be focused and will be submitted, but we don't allow to
 change their value.
 
-.. php:attr: disabled
+.. php:attr:: disabled
 
 Disabled form controls can be  seend in form, can not be focused and will not be submitted. And of course we
 don't allow to change their value. Disabled form controls are used for read only model fields for example.
@@ -146,7 +148,7 @@ The most common use-case in large application is the use with Models. You would 
     {
         public $table = 'country';
 
-        public function init(): void
+        protected function init(): void
         {
             parent::init();
             $this->addField('name', ['actual' => 'nicename', 'required' => true, 'type' => 'string']);
@@ -195,12 +197,12 @@ by all components::
 Link to Model Field
 -------------------
 
-.. php:attr:: $field
+.. php:attr:: field
 
 Form decorator defines $field property which will be pointing to a field object of a model, so technically
 the value of the field would be read from `$decorator->field->get()`.
 
-
+.. php:namespace:: atk4\ui\Form\Control
 
 Line Input Form control
 =======================
@@ -213,8 +215,8 @@ Similar to other views, Input has various properties that you can specify direct
 or inject through constructor. Those properties will affect the look of the input
 element. For example, `icon` property:
 
-.. php:attr: icon
-.. php:attr: iconLeft
+.. php:attr:: icon
+.. php:attr:: iconLeft
 
     Adds icon into the input form control. Default - `icon` will appear on the right, while `leftIcon`
     will display icon on the left.
@@ -306,11 +308,11 @@ $expression argument can be string, JsExpression, array of JsExpressions or even
     $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
 
 
-
-
-
 Dropdown
 ========
+
+.. php:class:: Dropdown
+
 Dropdown uses Fomantic UI Dropdown (https://fomantic-ui.com/modules/dropdown.html). A Dropdown can be used in two ways:
 1) Set a Model to $model property. The Dropdown will render all records of the model that matchs the model's conditions.
 2) You can define $values property to create custom Dropdown items.
@@ -361,7 +363,7 @@ If you'd like to even further adjust How each item is displayed (e.g. complex HT
             $this->_tItem->set('title', $res['title']);
             $this->_tItem->set('someOtherField', $res['someOtherField]);
             $this->_tItem->set('someOtherField2', $res['someOtherField2]);
-            //add item to template
+            // add item to template
             $this->template->appendHtml('Item', $this->_tItem->render());
        }
    }
@@ -410,22 +412,26 @@ If you use it, use the second parameter as well, its the array key::
 
 Dropdown Settings
 -----------------
-There's a bunch of settings to influence Dropdown behaviour:
+There's a bunch of settings to influence Dropdown behaviour.
 
 .. php:attr:: empty
+
 Define a string for the empty option (no selection). Standard is non-breaking space symbol.
 
 .. php:attr:: isValueRequired 
+
 Whether or not this dropdown requires a value. When set to true, $empty is shown on page load but is not selectable once a value has been choosen.
 
-..php:attr:: dropdownOptions
+.. php:attr:: dropdownOptions
+
 Here you can pass an array of Fomantic UI dropdown options (https://fomantic-ui.com/modules/dropdown.html#/settings) e.g. ::
     $dropdown = new Dropdown(['dropdownOptions' => [
         'selectOnKeydown' => false,
     ]]);
     
- ..php:attr:: isMultiple
- If set to true, multiple items can be selected in Dropdown. They will be sent comma seperated (value1,value2,value3) on form submit.
+.. php:attr:: isMultiple
+
+If set to true, multiple items can be selected in Dropdown. They will be sent comma seperated (value1,value2,value3) on form submit.
 
 By default Dropdown will save values as comma-separated string value in data model, but it also supports model fields with array type.
 See this example from Model class init method::
@@ -446,9 +452,12 @@ See this example from Model class init method::
             ],
         ],
     ]);
-
+    
+    
 DropdownCascade
 ===============
+
+.. php:class:: DropdownCascade
 
 DropdownCascade input are extend from Dropdown input. They rely on `cascadeFrom` and `reference` property.
 For example, it could be useful when you need to narrow a product selection base on a category and a sub category.
