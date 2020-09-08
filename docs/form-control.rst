@@ -325,12 +325,14 @@ of records to display. Dropdown renders all records when the paged is rendered, 
 :php:class:`Lookup` on the other hand is the better choice if there is lots of records (like more than 50).
 
 To render a model field as Dropdown, use the ui property of the field::
+
     $model->addField('someField', ['ui' => ['form' =>[\atk4\ui\Form\Control\Dropdown::class]]]);
 
 ..  Customizing how a Model's records are displayed in Dropdown
 As default, Dropdown will use the `$model->id_field` as value, and `$model->title_field` as title for each menu item.
 If you want to customize how a record is displayed and/or add an icon, Dropdown has the :php:meth:`Form::renderRowFunction()` to do this.
 This function is called with each model record and needs to return an array::
+
     $dropdown->renderRowFunction = function($record) {
         return [
             'value' => $record->id_field,
@@ -339,6 +341,7 @@ This function is called with each model record and needs to return an array::
     }
     
 You can also use this function to add an Icon to a record::
+
     $dropdown->renderRowFunction = function($record) {
         return [
             'value' => $record->id_field,
@@ -370,6 +373,7 @@ If you'd like to even further adjust How each item is displayed (e.g. complex HT
 
 
 With the according renderRowFunction::
+
     function($record) {
         return [
             'value' => $record->id,
@@ -386,6 +390,7 @@ Of course, the tags `value`, `title`, `icon`, `someOtherField` and `SomeOtherFie
 Usage with $values property
 ---------------------------
 If not used with a model, you can define the Dropdown values in $values array. The pattern is value => title::
+
     $dropdown->values = [
         'decline'   => 'No thanks',
         'postprone' => 'Maybe later',
@@ -393,6 +398,7 @@ If not used with a model, you can define the Dropdown values in $values array. T
     ];
     
 You can also define an Icon right away::
+
      $dropdown->values = [
          'tag'        => ['Tag', 'icon' => 'tag icon'],
          'globe'      => ['Globe', 'icon' => 'globe icon'],
@@ -402,6 +408,7 @@ You can also define an Icon right away::
 
 If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.
 If you use it, use the second parameter as well, its the array key::
+
     function($row, $key) {
         return [
             'value' => $key,
@@ -420,11 +427,12 @@ Define a string for the empty option (no selection). Standard is non-breaking sp
 
 .. php:attr:: isValueRequired 
 
-Whether or not this dropdown requires a value. When set to true, $empty is shown on page load but is not selectable once a value has been choosen.
+Whether or not this dropdown requires a value. When set to true, $empty is shown on page load but is not selectable once a value has been chosen.
 
 .. php:attr:: dropdownOptions
 
 Here you can pass an array of Fomantic UI dropdown options (https://fomantic-ui.com/modules/dropdown.html#/settings) e.g. ::
+
     $dropdown = new Dropdown(['dropdownOptions' => [
         'selectOnKeydown' => false,
     ]]);
