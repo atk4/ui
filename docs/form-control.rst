@@ -94,7 +94,7 @@ properly:
 Hints
 -----
 
-.. php:attr: hint
+.. php:attr:: hint
 
 When Form Control appears in a Form, then you can specify a Hint also. It appears below the form control and
 although it intends to be "extra info" or "extra help" due to current limitation of Fomantic UI
@@ -123,12 +123,12 @@ or you can inject a view with a custom template::
 Read only and disabled form controls
 ------------------------------------
 
-.. php:attr: readonly
+.. php:attr:: readonly
 
 Read only form controls can be seen in form, can be focused and will be submitted, but we don't allow to
 change their value.
 
-.. php:attr: disabled
+.. php:attr:: disabled
 
 Disabled form controls can be  seend in form, can not be focused and will not be submitted. And of course we
 don't allow to change their value. Disabled form controls are used for read only model fields for example.
@@ -213,8 +213,8 @@ Similar to other views, Input has various properties that you can specify direct
 or inject through constructor. Those properties will affect the look of the input
 element. For example, `icon` property:
 
-.. php:attr: icon
-.. php:attr: iconLeft
+.. php:attr:: icon
+.. php:attr:: iconLeft
 
     Adds icon into the input form control. Default - `icon` will appear on the right, while `leftIcon`
     will display icon on the left.
