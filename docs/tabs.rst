@@ -7,7 +7,7 @@
 Tabs
 ====
 
-Tabs implement a yet another way to organise your data. The implementation is based on: https://fomantic-ui.com/elements/icon.html.
+Tabs implement a yet another way to organize your data. The implementation is based on: https://fomantic-ui.com/elements/icon.html.
 
 
 Demo: https://ui.agiletoolkit.org/demos/tabs.php
@@ -21,7 +21,7 @@ Once you create Tabs container you can then mix and match static and dynamic tab
     $tabs = Tabs::addTo($app);
 
 
-Adding a static conten is pretty simple::
+Adding a static content is pretty simple::
 
     LoremIpsum::addTo($tabs->addTab('Static Tab'));
 

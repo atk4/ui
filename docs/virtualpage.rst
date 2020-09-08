@@ -8,7 +8,7 @@ understand :ref:`callback`.
 
 .. php:class:: VirtualPage
 
-Unlike any of the Callback classes, VirtualPage is a legit :php:class:`View`, but it's behaviour is a little
+Unlike any of the Callback classes, VirtualPage is a legitimate :php:class:`View`, but it's behavior is a little
 "different". In normal circumstances, rendering VirtualPage will result in empty string. Adding VirtualPage
 anywhere inside your :ref:`render_tree` simply won't have any visible effect::
 
@@ -40,7 +40,7 @@ below).
 
 .. php:attr:: cb
 
-VirtuaPage relies on :php:class:`CallbackLater` object, which is stored in a property $cb. If the Calllback is triggered
+VirtuaPage relies on :php:class:`CallbackLater` object, which is stored in a property $cb. If the Callback is triggered
 through a GET argument, then VirtualPage will change it's rendering technique. Lets examine it in more detail::
 
     $vp = \atk4\ui\VirtualPage::addTo($layout);
@@ -216,7 +216,7 @@ If you execute :php:class:`JsReload` action on the Loader, it will return to ori
 Inline Editing Example
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Next example will display DataTable, but will allow you to repalce data with a form temporarily::
+Next example will display DataTable, but will allow you to replace data with a form temporarily::
 
 
     $box = \atk4\ui\View::addTo($app, ['ui'=>'segment']);

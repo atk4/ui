@@ -60,7 +60,7 @@ This method may take up to three arguments.
     as a data property name id (data-id) then if specify, the data id value will be sent as a get argument
     with the callback url.
 
-    $activeCss: a string representing the active state of the triggering element. This css class will be appied
+    $activeCss: a string representing the active state of the triggering element. This css class will be applied
     to the trigger element as long as the panel remains open. This help visualize, which element has trigger the
     panel opening.
 

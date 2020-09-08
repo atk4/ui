@@ -26,7 +26,7 @@ The basic usage of Crud is::
 
     Crud::addTo($app)->setModel(new Country($app->db));
 
-Users are now able to fully interract with the table. There are ways to restrict which "rows" and which "columns" user
+Users are now able to fully interact with the table. There are ways to restrict which "rows" and which "columns" user
 can access. First we can only allow user to read, manage and delete only countries that are part of European Union::
 
     $eu_countries = new Country($app->db);
@@ -65,7 +65,7 @@ Only fields name set in this property will be display in Grid. Leave empty for a
 .. php:attr:: addFields
 
 Through those properties you can specify which fields to use when form is display for add and edit action.
-Field name add here will have priorities over the action fields properties. When set to null, the action fields propery
+Field name add here will have priorities over the action fields properties. When set to null, the action fields property
 will be used.
 
 

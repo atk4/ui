@@ -9,7 +9,7 @@ Paginator
 .. php:class:: Paginator
 
 Paginator displays a horizontal UI menu providing links to pages when all of the content does not fit
-on a page. Paginator is a stand-alone component but you can use it in conjunction with other compononents.
+on a page. Paginator is a stand-alone component but you can use it in conjunction with other components.
 
 Adding and Using
 ================
