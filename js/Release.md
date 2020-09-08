@@ -1,10 +1,11 @@
 ## Release note
 
-### version 1.15.4 (2020-09-02)
+### version 1.15.4 (2020-09-08)
 
 - add atk eventBus for listening and publishing event.
     - replace deprecated Vue eventBus;
 - create atk-utils file for options and eventBus.
+- remove Vue component deprecated inline-template in v3.
 
 ### version 1.15.3 (2020-08-27)
 
