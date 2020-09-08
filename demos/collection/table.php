@@ -35,7 +35,7 @@ $table->addColumn('salary', new Table\Column\Money());
 $table->addColumn('logo_url', [Table\Column\Image::class, 'caption' => 'Our Logo']);
 
 $table->onHook(Table\Column::HOOK_GET_HTML_TAGS, function ($table, \atk4\data\Model $row) {
-    switch ($row->id) {
+    switch ($row->getId()) {
         case 1: $color = 'yellow';
 
 break;
