@@ -43,8 +43,7 @@ class Radio extends Form\Control
     protected function renderView(): void
     {
         if (!$this->model) {
-            $p = new \atk4\data\Persistence\Static_($this->values);
-            $this->setModel(new \atk4\data\Model($p));
+            $this->setSource($this->values);
         }
 
         $value = $this->field ? $this->field->get() : $this->content;

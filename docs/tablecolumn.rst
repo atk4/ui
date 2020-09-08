@@ -204,7 +204,7 @@ Current list of states supported:
  - negative (icon close)
  - and the default/unspecified state (icon question)
 
-(list of states may be expanded furteher)
+(list of states may be expanded further)
 
 Template
 --------

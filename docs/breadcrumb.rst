@@ -30,7 +30,7 @@ be passed to url() (:php:meth:`View::url`).
 Changing Divider
 ================
 
-.. php:attr:: $dividerClass
+.. php:attr:: dividerClass
 
 By default value `right angle icon` is used, but you can change it to `right chevron icon` or simply set to empty string `""`
 to use slash.
@@ -39,7 +39,7 @@ to use slash.
 Working with Path
 =================
 
-.. php:attr:: $path
+.. php:attr:: path
 .. php:method: popTitle()
 
 Calling addCrumb adds more elements into the $path property. Each element there would contain 3 hash values:

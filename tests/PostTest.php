@@ -9,6 +9,7 @@ use atk4\data\Model;
 
 class PostTest extends AtkPhpunit\TestCase
 {
+    /** @var Model */
     public $model;
 
     protected function setUp(): void
@@ -29,7 +30,9 @@ class PostTest extends AtkPhpunit\TestCase
 
         $this->model->set('surname', 'DefSurname');
 
-        $this->model->load(0, $p);
+        $this->model->addField('id');
+        $this->model->persistence = $p;
+        $this->model->load(0);
 
         $this->assertSame('John', $this->model->get('name'));
         $this->assertTrue($this->model->get('is_married'));

@@ -8,7 +8,7 @@ Advanced Topics
 Agile Data
 ==========
 
-Agile Data is a business logic and data persistance framework. It's a
+Agile Data is a business logic and data persistence framework. It's a
 separate library that has been specifically designed and developed
 for use in Agile UI.
 
@@ -35,7 +35,7 @@ for UI framework design:
 
 Agile Data is distributed under same open-source license as Agile UI
 and the rest of this documentation will assume you are using Agile
-Data for the purpose of overal clarity. 
+Data for the purpose of overall clarity. 
 
 Interface Stability
 ===================
@@ -58,9 +58,9 @@ Agile UI is designed with corporate use in mind. The main aim of
 the framework is to make your application consistent, modern and
 fast.
 
-We understand the importante of testing and all of the Agile UI
+We understand the importance of testing and all of the Agile UI
 components come fully tested across multiple browsers. In most cases
-browser compatibilty is defined by the underlying CSS framework.
+browser compatibility is defined by the underlying CSS framework.
 
 With Agile UI we will provide you with a guide how to test your
 own components. 
@@ -77,12 +77,12 @@ Business Logic Unit Tests
 -------------------------
 
 Those tests are most suitable for testing your business logic,
-that is included in Agile Data. Use "array" persistences to
+that is included in Agile Data. Use "array" persistence to
 pre-set model with the necessary data, execute your business
 logic with mock objects.
 
 1. set up mock database arrays
-2. instatiate model(s)
+2. instantiate model(s)
 3. execute business operation
 4. assert new content of array.
 
@@ -98,7 +98,7 @@ business logic changes.
 
 1. load "safe" database schema
 2. each test starts transaction and is finished with a roll-back.
-3. perform changes such as adding new invocie
+3. perform changes such as adding new invoice
 4. assert through other models e.g. by running client report model.
 
 Component Tests

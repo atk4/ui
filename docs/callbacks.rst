@@ -2,14 +2,14 @@
 Callback Introduction
 ---------------------
 
-Agile UI pursues a goal of creating a full-featured, interractive, user interface. Part of that relies
+Agile UI pursues a goal of creating a full-featured, interactive, user interface. Part of that relies
 on abstraction of Browser/Server communication.
 
 Callback mechanism allow any :ref:`component` of Agile Toolkit to send HTTP requests back to itself
 through a unique route and not worry about accidentally affecting or triggering action of any other
 component.
 
-One example of this behaviour is the format of :php:meth:`View::on` where you pass 2nd argument as a
+One example of this behavior is the format of :php:meth:`View::on` where you pass 2nd argument as a
 PHP callback::
 
     $button = new Button();
@@ -135,7 +135,7 @@ CallbackLater
 
 .. php:class:: CallbackLater
 
-This class is very similar to Callback, but it will not execute immediatelly. Instead it will be executed
+This class is very similar to Callback, but it will not execute immediately. Instead it will be executed
 either at the end at beforeRender or beforeOutput hook from inside App, whichever comes first.
 
 In other words this won't break the flow of your code logic, it simply won't render it. In the next example
