@@ -374,9 +374,9 @@ If you'd like to even further adjust How each item is displayed (e.g. complex HT
 
 With the according renderRowFunction::
 
-    function($record) {
+    function(Model $record) {
         return [
-            'value' => $record->id,
+            'value' => $record->getId(),
             'title' => $record->getTitle,
             'icon'  => $record->value > 100 ? 'money' : 'coins',
             'someOtherField' => $record->get('SomeOtherField'),

@@ -402,7 +402,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
         $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
 
-        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->owner->id));
+        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->owner->getId()));
     }
 
     /**
@@ -534,7 +534,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             if ($this->isLastStep($step)) {
                 // collect argument and execute action.
                 $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
-                $js = $this->jsGetExecute($return, $this->action->owner->id);
+                $js = $this->jsGetExecute($return, $this->action->owner->getId());
             } else {
                 // store data and setup reload.
                 $js = [
