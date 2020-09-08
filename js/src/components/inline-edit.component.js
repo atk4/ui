@@ -15,8 +15,7 @@ import $ from 'jquery';
  */
 
 const template = `
-<div class="inline field">
-      <div :class="options.inputCss" :style="{error: hasError, loading : isLoading}">
+      <div :class="[options.inputCss, hasError ? 'error' : '' ]">
             <input 
             :class="options.inlineCss" 
             :name="options.fieldName" 
@@ -25,8 +24,7 @@ const template = `
             @keyup="onKeyup" 
             @focus="onFocus" 
             @blur="onBlur"/><i class="icon"></i>
-      </div>
-</div>`;
+      </div>`;
 
 export default {
     name: 'atk-inline-edit',
@@ -46,8 +44,7 @@ export default {
         return {
             value: this.initValue,
             temp: this.initValue,
-            hasError: null,
-            isLoading: false,
+            hasError: false,
         };
     },
     computed: {
@@ -103,9 +100,7 @@ export default {
         },
         update: function () {
             const that = this;
-            const $obj = $(this.$el);
-            this.isLoading = true;
-            $obj.api({
+            $(this.$el).api({
                 on: 'now',
                 url: this.url,
                 data: { value: this.value },
@@ -116,7 +111,6 @@ export default {
                     } else {
                         that.temp = that.value;
                     }
-                    that.isLoading = false;
                 },
             });
         },
