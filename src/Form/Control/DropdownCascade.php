@@ -50,6 +50,24 @@ class DropdownCascade extends Dropdown
         $this->cascadeControlValue = $_POST[$this->cascadeControl->name] ?? $this->cascadeControl->field->get('value');
 
         $this->model = $this->cascadeControl->model ? $this->cascadeControl->model->ref($this->reference) : null;
+
+        // setup initial values and add it via dropdownOptions.
+        $values = $this->getJsValues($this->getNewValues((string) $this->cascadeControlValue), (string) $this->field->get());
+        $this->dropdownOptions = array_merge($this->dropdownOptions, ['values' => $values]);
+
+        // js to execute for the onChange handler of the parent dropdown.
+        $expr = [
+            function ($t) {
+                return [
+                    $this->js()->dropdown('change values', $this->getNewValues((string) $this->cascadeControlValue)),
+                    $this->js()->removeClass('loading'),
+                ];
+            },
+            $this->js()->dropdown('clear'),
+            $this->js()->addClass('loading'),
+        ];
+
+        $this->cascadeControl->onChange($expr, ['args' => [$this->cascadeControl->name => $this->cascadeControl->jsInput()->val()]]);
     }
 
     /**
@@ -94,33 +112,6 @@ class DropdownCascade extends Dropdown
         }
 
         return $values;
-    }
-
-    /**
-     * Call during parent::renderView().
-     */
-    protected function jsRenderDropdown(): array
-    {
-        // setup initial values.
-        $values = $this->getJsValues($this->getNewValues((string) $this->cascadeControlValue), (string) $this->field->get());
-        $options = array_merge($this->dropdownOptions, ['values' => $values]);
-
-        // setup on change handler
-        $expr = [
-            function ($t) {
-                return [
-                    $this->js()->dropdown('change values', $this->getNewValues((string) $this->cascadeControlValue)),
-                    $this->js()->removeClass('loading'),
-                ];
-            },
-            $this->js()->dropdown('clear'),
-            $this->js()->addClass('loading'),
-        ];
-
-        return [
-            $this->js(true)->dropdown($options),
-            $this->cascadeControl->onChange($expr, ['args' => [$this->cascadeControl->name => $this->cascadeControl->jsInput()->val()]]),
-        ];
     }
 
     /**
