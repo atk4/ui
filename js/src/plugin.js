@@ -78,7 +78,7 @@ function plugin(name, className, shortHand = false) {
 /**
  * Create all jQuery plugins need for atk.
  */
-function createAtkplugins() {
+(function () {
     const atkJqPlugins = [
         { name: 'Spinner', plugin: spinner, sh: false },
         { name: 'ReloadView', plugin: reloadView, sh: false },
@@ -99,6 +99,6 @@ function createAtkplugins() {
     atkJqPlugins.forEach((atkJqPlugin) => {
         plugin(atkJqPlugin.name, atkJqPlugin.plugin, atkJqPlugin.sh);
     });
-}
+}());
 
-export { plugin, createAtkplugins };
+export { plugin };

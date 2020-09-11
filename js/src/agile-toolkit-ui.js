@@ -6,14 +6,12 @@ import atk from 'atk-semantic-ui';
 import 'helpers/url.helper';
 import date from 'locutus/php/datetime/date';
 import { tableDropdown } from './helpers/table-dropdown.helper';
-import { plugin, createAtkplugins } from './plugin';
+import { plugin } from './plugin';
 import { atkOptions, atkEventBus } from './atk-utils';
 import vueService from './services/vue.service';
 import dataService from './services/data.service';
 import panelService from './services/panel.service';
 
-// Create atk plugins.
-createAtkplugins();
 // add version function to atk.
 atk.version = () => _ATKVERSION_;
 atk.options = atkOptions;
