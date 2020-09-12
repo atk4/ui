@@ -307,9 +307,11 @@ class Lookup extends Input
         if ($this->search instanceof \Closure) {
             $this->search($this->model, $_GET['q']);
         } elseif (is_array($this->search)) {
-            $this->model->addCondition(array_map(function ($field) {
-                return [$field, 'like', '%' . $_GET['q'] . '%'];
-            }, $this->search));
+            $scope = Model\Scope::createOr();
+            foreach ($this->search as $field) {
+                $scope->addCondition($field, 'like', '%' . $_GET['q'] . '%');
+            }
+            $this->model->addCondition($scope);
         } else {
             $title_field = $this->title_field ?: $this->model->title_field;
 

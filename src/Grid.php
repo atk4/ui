@@ -346,11 +346,11 @@ class Grid extends View
 
         $q = trim($this->stickyGet('_q') ?? '');
         if ($q !== '') {
-            $cond = [];
+            $scope = Model\Scope::createOr();
             foreach ($fields as $field) {
-                $cond[] = [$field, 'like', '%' . $q . '%'];
+                $scope->addCondition($field, 'like', '%' . $q . '%');
             }
-            $this->model->addCondition($cond);
+            $this->model->addCondition($scope);
         }
     }
 
