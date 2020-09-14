@@ -112,7 +112,7 @@ class App
     /** @var LoggerInterface Target for objects with DebugTrait */
     public $logger;
 
-    /** @var Persistence */
+    /** @var Persistence|Persistence\Sql */
     public $db;
 
     /** @var string[] Extra HTTP headers to send on exit. */
