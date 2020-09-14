@@ -1,6 +1,6 @@
 {
   "name": "atkjs-ui",
-  "version": "1.15.3",
+  "version": "1.15.4",
   "description": "Agile Toolkit Javascript library.",
   "main": "lib/atkjs-ui.js",
   "scripts": {
@@ -47,6 +47,7 @@
     "debounce": "^1.1.0",
     "locutus": "^2.0.11",
     "lodash.throttle": "^4.1.1",
+    "mitt": "^2.1.0",
     "semantic-ui-vue": "^0.11.0",
     "v-calendar": "^1.0.8",
     "vue": "^2.6.12",

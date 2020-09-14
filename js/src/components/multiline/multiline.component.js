@@ -1,5 +1,5 @@
-import multilineBody from './multiline/multiline-body.component';
-import multilineHeader from './multiline/multiline-header.component';
+import multilineBody from './multiline-body.component';
+import multilineHeader from './multiline-header.component';
 
 /**
  * MultiLine component.
@@ -59,48 +59,47 @@ export default {
         'atk-multiline-body': multilineBody,
         'atk-multiline-header': multilineHeader,
     },
-    created: function () {
-        this.rowData = this.getInitData();
-        this.$nextTick(() => {
-            this.updateLinesField();
+    mounted: function () {
+        atk.eventBus.on(this.$root.$el.id + '-update-row', (payload) => {
+            this.updateRow(payload.rowId, payload.field, payload.value);
         });
 
-        this.$root.$on('update-row', (rowId, field, value) => {
-            this.updateRow(rowId, field, value);
-        });
-
-        this.$root.$on('post-row', (rowId, field) => {
+        atk.eventBus.on(this.$root.$el.id + '-post-row', (payload) => {
             if (this.hasExpression()) {
-                this.postRow(rowId, field);
+                this.postRow(payload.rowId, payload.field);
             }
             // fire change callback if set and field is part of it.
-            if (this.hasChangeCb && (this.eventFields.indexOf(field) > -1)) {
+            if (this.hasChangeCb && (this.eventFields.indexOf(payload.field) > -1)) {
                 this.postRaw();
             }
         });
 
-        this.$root.$on('toggle-delete', (id) => {
-            const idx = this.deletables.indexOf(id);
+        atk.eventBus.on(this.$root.$el.id + '-toggle-delete', (payload) => {
+            const idx = this.deletables.indexOf(payload.rowId);
             if (idx > -1) {
                 this.deletables.splice(idx, 1);
             } else {
-                this.deletables.push(id);
+                this.deletables.push(payload.rowId);
             }
         });
 
-        this.$root.$on('toggle-delete-all', (isOn) => {
+        atk.eventBus.on(this.$root.$el.id + '-toggle-delete-all', (payload) => {
             this.deletables = [];
-            if (isOn) {
+            if (payload.isOn) {
                 this.rowData.forEach((row) => {
                     this.deletables.push(this.getId(row));
                 });
             }
         });
 
-        atk.vueService.eventBus.$on('atkml-row-error', (data) => {
-            if (this.$root.$el.id === data.id) {
-                this.errors = { ...data.errors };
-            }
+        atk.eventBus.on(this.$root.$el.id + '-multiline-rows-error', (payload) => {
+            this.errors = { ...payload.errors };
+        });
+    },
+    created: function () {
+        this.rowData = this.getInitData();
+        this.$nextTick(() => {
+            this.updateLinesField();
         });
     },
     methods: {

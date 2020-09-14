@@ -6,27 +6,16 @@ import atk from 'atk-semantic-ui';
 import 'helpers/url.helper';
 import date from 'locutus/php/datetime/date';
 import { tableDropdown } from './helpers/table-dropdown.helper';
-import { plugin, createAtkplugins } from './plugin';
+import { plugin } from './plugin';
+import { atkOptions, atkEventBus } from './atk-utils';
 import vueService from './services/vue.service';
 import dataService from './services/data.service';
 import panelService from './services/panel.service';
 
-// Create atk plugins.
-createAtkplugins();
 // add version function to atk.
 atk.version = () => _ATKVERSION_;
-
-// Use closure for atk options property in order to keep them private.
-atk.options = (function () {
-    const options = {
-        // Value for debounce time out (in ms) that will be apply globally when set using atk.debounce.
-        debounceTimeout: null,
-    };
-    return {
-        set: (name, value) => { options[name] = value; },
-        get: (name) => options[name],
-    };
-}());
+atk.options = atkOptions;
+atk.eventBus = atkEventBus;
 
 atk.debounce = (fn, value) => {
     const timeOut = atk.options.get('debounceTimeout');
