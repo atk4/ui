@@ -302,7 +302,13 @@ class ScopeBuilder extends Control
         // this is used when selecting proper operator for the inputType (see self::$operatorsMap)
         $inputsMap = array_column($this->rules, 'inputType', 'id');
 
-        $this->query = $this->scopeToQuery($model->scope(), $inputsMap)['query'];
+        if ($this->field && $this->field->get() !== null) {
+            $scope = $this->field->get();
+        } else {
+            $scope = $model->scope();
+        }
+
+        $this->query = $this->scopeToQuery($scope, $inputsMap)['query'];
     }
 
     /**
@@ -410,11 +416,6 @@ class ScopeBuilder extends Control
     protected function renderView(): void
     {
         parent::renderView();
-
-        // if model field set, then use its value instead for a query
-        if ($this->field && $this->field->get() !== null) {
-            $this->query = $this->scopeToQuery($this->field->get())['query'];
-        }
 
         $this->scopeBuilderView->vue(
             'atk-query-builder',
