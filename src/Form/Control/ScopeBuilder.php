@@ -255,6 +255,9 @@ class ScopeBuilder extends Control
     {
         parent::init();
 
+        // ScopeBuilder use Vue components.
+        $this->app->useVueJs = true;
+
         if (!$this->scopeBuilderTemplate) {
             $this->scopeBuilderTemplate = new Template('<div id="{$_id}" class="ui"><atk-query-builder v-bind="initData"></atk-query-builder></div>');
         }

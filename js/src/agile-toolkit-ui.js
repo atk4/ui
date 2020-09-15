@@ -8,7 +8,6 @@ import date from 'locutus/php/datetime/date';
 import { tableDropdown } from './helpers/table-dropdown.helper';
 import { plugin } from './plugin';
 import { atkOptions, atkEventBus } from './atk-utils';
-import vueService from './services/vue.service';
 import dataService from './services/data.service';
 import panelService from './services/panel.service';
 
@@ -26,7 +25,6 @@ atk.debounce = (fn, value) => {
 atk.registerPlugin = plugin;
 
 atk.phpDate = date;
-atk.vueService = vueService;
 atk.dataService = dataService;
 atk.panelService = panelService;
 atk.tableDropdown = tableDropdown;

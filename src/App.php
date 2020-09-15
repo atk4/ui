@@ -115,6 +115,9 @@ class App
     /** @var Persistence|Persistence\Sql */
     public $db;
 
+    /** @var bool Use Vue js bundle */
+    public $useVueJs = false;
+
     /** @var string[] Extra HTTP headers to send on exit. */
     protected $response_headers = [
         'cache-control' => 'no-store', // disable caching by default
@@ -447,8 +450,6 @@ class App
 
         $this->layout = $this->html->add($layout);
 
-        $this->initIncludes();
-
         return $this;
     }
 
@@ -468,7 +469,7 @@ class App
         $this->requireJs($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
 
         // Agile UI
-        $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
+        $this->useVueJs ? $this->requireJs($this->cdn['atk'] . '/atkjs-vue.min.js') : $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
         $this->requireCss($this->cdn['atk'] . '/agileui.css');
     }
 
@@ -507,6 +508,8 @@ class App
      */
     public function run()
     {
+        $this->initIncludes();
+
         $isExitException = false;
         try {
             $this->run_called = true;

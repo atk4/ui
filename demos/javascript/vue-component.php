@@ -7,6 +7,8 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
+$app->useVueJs = true;
+
 \atk4\ui\Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
