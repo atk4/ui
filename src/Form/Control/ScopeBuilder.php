@@ -412,7 +412,7 @@ class ScopeBuilder extends Control
         parent::renderView();
 
         // if model field set, then use its value instead for a query
-        if ($this->field) {
+        if ($this->field && $this->field->get() !== null) {
             $this->query = $this->scopeToQuery($this->field->get())['query'];
         }
 
