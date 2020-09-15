@@ -411,6 +411,11 @@ class ScopeBuilder extends Control
     {
         parent::renderView();
 
+        // if model field set, then use its value instead for a query
+        if ($this->field) {
+            $this->query = $this->scopeToQuery($this->field->get())['query'];
+        }
+
         $this->scopeBuilderView->vue(
             'atk-query-builder',
             [
