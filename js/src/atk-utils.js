@@ -1,4 +1,5 @@
 import mitt from 'mitt';
+import 'helpers/url.helper';
 
 /**
  * Define atk global options.

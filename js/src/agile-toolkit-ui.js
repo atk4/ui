@@ -2,15 +2,16 @@
 
 import debounce from 'debounce';
 import 'core-js/stable';
-import atk from 'atk-semantic-ui';
-import 'helpers/url.helper';
+import atkSemantic from 'atk-semantic-ui';
 import date from 'locutus/php/datetime/date';
 import { tableDropdown } from './helpers/table-dropdown.helper';
 import { plugin } from './plugin';
 import { atkOptions, atkEventBus } from './atk-utils';
-import vueService from './services/vue.service';
 import dataService from './services/data.service';
 import panelService from './services/panel.service';
+import vueService from './services/vue.service';
+
+const atk = { ...atkSemantic };
 
 // add version function to atk.
 atk.version = () => _ATKVERSION_;
@@ -26,10 +27,10 @@ atk.debounce = (fn, value) => {
 atk.registerPlugin = plugin;
 
 atk.phpDate = date;
-atk.vueService = vueService;
 atk.dataService = dataService;
 atk.panelService = panelService;
 atk.tableDropdown = tableDropdown;
+atk.vueService = vueService;
 
 /**
  * Exporting services in order to be available globally
