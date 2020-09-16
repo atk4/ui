@@ -1,5 +1,10 @@
 ## Release note
 
+### version 1.16.0 (2020-09-16)
+
+- Split Vue component into chunk files.
+    - each vue component is now load dynamically as needed.
+
 ### version 1.15.4 (2020-09-08)
 
 - add atk eventBus for listening and publishing event.
