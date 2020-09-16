@@ -33,8 +33,7 @@ module.exports = (env) => {
     const srcDir = path.resolve(__dirname, './src');
     const publicDir = path.resolve(__dirname, '../public');
     const libraryName = 'atk';
-    const filename = isProduction ? libraryName + 'js-ui.min' : libraryName + 'js-ui';
-    const vueFilename = isProduction ? libraryName + 'js-vue.min' : libraryName + 'js-vue';
+    const filename = libraryName + 'js-ui';
 
     const prodPerformance = {
         hints: false,
@@ -43,13 +42,14 @@ module.exports = (env) => {
     };
 
     return {
-        entry: { [filename]: srcDir + '/agile-toolkit-ui.js', [vueFilename]: srcDir + '/atk-vue.js' },
+        entry: { [filename]: srcDir + '/agile-toolkit-ui.js' },
         mode: isProduction ? 'production' : 'development',
         devtool: isProduction ? false : 'source-map',
         performance: isProduction ? prodPerformance : {},
         output: {
             path: publicDir,
-            filename: '[name].js',
+            publicPath: '/public/',
+            filename: isProduction ? '[name].min.js' : '[name].js',
             library: libraryName,
             libraryTarget: 'umd',
             libraryExport: 'default',

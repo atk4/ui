@@ -221,8 +221,6 @@ class Multiline extends Form\Control
     {
         parent::init();
 
-        $this->app->useVueJs = true;
-
         if (!$this->multiLineTemplate) {
             $this->multiLineTemplate = new Template('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline><div class="ui hidden divider"></div>{$Input}</div>');
         }

@@ -59,7 +59,6 @@ class ItemSearch extends View
     {
         parent::init();
 
-        $this->app->useVueJs = true;
         if (!$this->queryArg) {
             $this->queryArg = $this->name;
         }

@@ -1,24 +1,17 @@
 import Vue from 'vue';
 import SuiVue from 'semantic-ui-vue';
 
-import DatePicker from 'v-calendar/lib/components/date-picker.umd';
-import atkInlineEdit from '../components/inline-edit.component';
-import itemSearch from '../components/item-search.component';
-import multiLine from '../components/multiline/multiline.component';
-import treeItemSelector from '../components/tree-item-selector/tree-item-selector.component';
 import atkClickOutside from '../directives/click-outside.directive';
-import VueQueryBuilder from '../components/query-builder/query-builder.component.vue';
 import { focus } from '../directives/commons.directive';
 
 Vue.use(SuiVue);
-Vue.component('v-date-picker', DatePicker);
 
 const atkComponents = {
-    'atk-inline-edit': atkInlineEdit,
-    'atk-item-search': itemSearch,
-    'atk-multiline': multiLine,
-    'atk-tree-item-selector': treeItemSelector,
-    'atk-query-builder': VueQueryBuilder,
+    'atk-inline-edit': () => import(/* webpackChunkName: "atk-vue-inline-edit" */'../components/inline-edit.component'),
+    'atk-item-search': () => import(/* webpackChunkName: "atk-vue-item-search" */'../components/item-search.component'),
+    'atk-multiline': () => import(/* webpackChunkName: "atk-vue-multiline" */'../components/multiline/multiline.component'),
+    'atk-tree-item-selector': () => import(/* webpackChunkName: "atk-vue-tree-item-selector" */'../components/tree-item-selector/tree-item-selector.component'),
+    'atk-query-builder': () => import(/* webpackChunkName: "atk-vue-query-builder" */'../components/query-builder/query-builder.component.vue'),
 };
 
 // setup atk custom directives.

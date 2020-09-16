@@ -115,9 +115,6 @@ class App
     /** @var Persistence|Persistence\Sql */
     public $db;
 
-    /** @var bool Use Vue js bundle */
-    public $useVueJs = false;
-
     /** @var string[] Extra HTTP headers to send on exit. */
     protected $response_headers = [
         'cache-control' => 'no-store', // disable caching by default
@@ -470,9 +467,6 @@ class App
 
         // Agile UI
         $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
-        if ($this->useVueJs) {
-            $this->requireJs($this->cdn['atk'] . '/atkjs-vue.min.js');
-        }
         $this->requireCss($this->cdn['atk'] . '/agileui.css');
     }
 

@@ -9,6 +9,7 @@ import { plugin } from './plugin';
 import { atkOptions, atkEventBus } from './atk-utils';
 import dataService from './services/data.service';
 import panelService from './services/panel.service';
+import vueService from './services/vue.service';
 
 const atk = { ...atkSemantic };
 
@@ -29,6 +30,7 @@ atk.phpDate = date;
 atk.dataService = dataService;
 atk.panelService = panelService;
 atk.tableDropdown = tableDropdown;
+atk.vueService = vueService;
 
 /**
  * Exporting services in order to be available globally
