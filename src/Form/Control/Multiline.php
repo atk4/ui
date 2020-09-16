@@ -221,7 +221,6 @@ class Multiline extends Form\Control
     {
         parent::init();
 
-        // Multiline use Vue components.
         $this->app->useVueJs = true;
 
         if (!$this->multiLineTemplate) {

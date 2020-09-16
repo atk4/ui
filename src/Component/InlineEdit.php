@@ -86,6 +86,7 @@ class InlineEdit extends View
     protected function init(): void
     {
         parent::init();
+        $this->app->useVueJs = true;
         $this->cb = \atk4\ui\JsCallback::addTo($this);
 
         // Set default validation error handler.

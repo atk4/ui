@@ -80,7 +80,6 @@ class TreeItemSelector extends Form\Control
     {
         parent::init();
 
-        // TreeItemSelector use Vue components.
         $this->app->useVueJs = true;
 
         $this->addClass(['ui', 'vertical', 'segment', 'basic', $this->loaderCssName])->addStyle(['padding' => '0px!important']);

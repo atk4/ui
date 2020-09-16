@@ -24,11 +24,9 @@ if (typeof FormSerializer !== 'undefined') {
     });
 }
 
-const atkSemantic = {
+export default {
     uploadService: uploadService,
     apiService: apiService,
     modalService: modalService,
     formService: formService,
 };
-
-export default atkSemantic;

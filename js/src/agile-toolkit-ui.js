@@ -2,14 +2,15 @@
 
 import debounce from 'debounce';
 import 'core-js/stable';
-import atk from 'atk-semantic-ui';
-import 'helpers/url.helper';
+import atkSemantic from 'atk-semantic-ui';
 import date from 'locutus/php/datetime/date';
 import { tableDropdown } from './helpers/table-dropdown.helper';
 import { plugin } from './plugin';
 import { atkOptions, atkEventBus } from './atk-utils';
 import dataService from './services/data.service';
 import panelService from './services/panel.service';
+
+const atk = { ...atkSemantic };
 
 // add version function to atk.
 atk.version = () => _ATKVERSION_;

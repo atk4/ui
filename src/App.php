@@ -469,7 +469,10 @@ class App
         $this->requireJs($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
 
         // Agile UI
-        $this->requireJs($this->cdn['atk'] . ($this->useVueJs ? '/atkjs-vue.min.js' : '/atkjs-ui.min.js'));
+        $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
+        if ($this->useVueJs) {
+            $this->requireJs($this->cdn['atk'] . '/atkjs-vue.min.js');
+        }
         $this->requireCss($this->cdn['atk'] . '/agileui.css');
     }
 

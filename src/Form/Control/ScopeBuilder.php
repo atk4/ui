@@ -255,7 +255,6 @@ class ScopeBuilder extends Control
     {
         parent::init();
 
-        // ScopeBuilder use Vue components.
         $this->app->useVueJs = true;
 
         if (!$this->scopeBuilderTemplate) {
