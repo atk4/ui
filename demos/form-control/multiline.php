@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\data\Model;
+use atk4\data\Persistence;
 use atk4\ui\Form;
+use atk4\ui\Header;
 use atk4\ui\JsExpression;
 use atk4\ui\JsFunction;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
+Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
 
-/** @var \atk4\data\Model $inventoryItemClass */
-$inventoryItemClass = get_class(new class() extends \atk4\data\Model {
+/** @var Model $inventoryItemClass */
+$inventoryItemClass = get_class(new class() extends Model {
     protected function init(): void
     {
         parent::init();
@@ -22,13 +25,13 @@ $inventoryItemClass = get_class(new class() extends \atk4\data\Model {
         $this->addField('item', ['required' => true, 'default' => 'item']);
         $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
         $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
-        $this->addExpression('total', ['expr' => function (\atk4\data\Model $row) {
+        $this->addExpression('total', ['expr' => function (Model $row) {
             return $row->get('qty') * $row->get('box');
         }, 'type' => 'integer']);
     }
 });
 
-$inventory = new $inventoryItemClass(new \atk4\data\Persistence\Array_());
+$inventory = new $inventoryItemClass(new Persistence\Array_());
 
 // Populate some data.
 $total = 0;
