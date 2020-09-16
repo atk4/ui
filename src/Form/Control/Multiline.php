@@ -68,8 +68,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Control;
 
-use atk4\data\Field\Callback;
 use atk4\data\Field;
+use atk4\data\Field\Callback;
 use atk4\data\FieldSqlExpression;
 use atk4\data\Model;
 use atk4\data\Reference\HasOne;
@@ -204,7 +204,7 @@ class Multiline extends Form\Control
      * A JsFunction to execute when Multiline add(+) button is clicked.
      * The function is execute after multiline component finish adding a row of fields.
      * The function also receive the row value as an array.
-     * ex: $jsAfterAdd = new JsFunction(['value'],[new JsExpression('console.log(value)')]);
+     * ex: $jsAfterAdd = new JsFunction(['value'],[new JsExpression('console.log(value)')]);.
      *
      * @var JsFunction|null
      */
@@ -214,7 +214,7 @@ class Multiline extends Form\Control
      * A JsFunction to execute when Multiline delete button is clicked.
      * The function is execute after multiline component finish deleting rows.
      * The function also receive the row value as an array.
-     * ex: $jsAfterDelete = new JsFunction(['value'],[new JsExpression('console.log(value)')]);
+     * ex: $jsAfterDelete = new JsFunction(['value'],[new JsExpression('console.log(value)')]);.
      *
      * @var JsFunction|null
      */
