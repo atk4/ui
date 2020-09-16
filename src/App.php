@@ -447,6 +447,8 @@ class App
 
         $this->layout = $this->html->add($layout);
 
+        $this->initIncludes();
+
         return $this;
     }
 
@@ -505,8 +507,6 @@ class App
      */
     public function run()
     {
-        $this->initIncludes();
-
         $isExitException = false;
         try {
             $this->run_called = true;
