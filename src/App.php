@@ -141,13 +141,6 @@ class App
     public $call_exit = true;
 
     /**
-     * Error types to be in set_error_handler.
-     *
-     * @var int
-     */
-    protected $catch_error_types = E_ALL & ~E_NOTICE;
-
-    /**
      * @var string|null
      */
     public $page;
@@ -207,7 +200,7 @@ class App
                 static function ($severity, $msg, $file, $line) {
                     throw new \ErrorException($msg, 0, $severity, $file, $line);
                 },
-                $this->catch_error_types
+                E_ALL
             );
         }
 
