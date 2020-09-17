@@ -40,6 +40,6 @@ steps:
     stage: deploy
     commands:
       - echo $CF_KUBECONFIG_PATH
-      - kubectl config use-context atk
+      - kubectl config use-context digitalOcean@atk
       - kubectl -n atk-demo set image deployment/atk-demo atk-demo="atk4/ui-demo:${{CF_REVISION}}"
 
