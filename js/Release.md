@@ -1,5 +1,8 @@
 ## Release note
 
+### version 1.16.1 (2020-09-17)
+- set js bundle path dynamically for loading ressource.
+
 ### version 1.16.0 (2020-09-16)
 
 - Split Vue component into chunk files.
