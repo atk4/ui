@@ -48,7 +48,6 @@ module.exports = (env) => {
         performance: isProduction ? prodPerformance : {},
         output: {
             path: publicDir,
-            publicPath: '/public/',
             filename: isProduction ? '[name].min.js' : '[name].js',
             library: libraryName,
             libraryTarget: 'umd',
