@@ -113,9 +113,9 @@ class Crud extends Grid
         parent::setModel($model, $this->displayFields);
 
         // Grab model id when using delete. Must be set before delete action execute.
-        $this->model->onHook(Model::HOOK_AFTER_DELETE, function ($model) {
-            $this->deletedId = $model->get($model->id_field);
-        });
+//        $this->model->onHook(Model::HOOK_AFTER_DELETE, function ($model) {
+//            $this->deletedId = $model->get($model->id_field);
+//        });
 
         $this->model->unload();
 
