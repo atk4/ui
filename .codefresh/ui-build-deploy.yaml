@@ -39,7 +39,7 @@ steps:
     image: codefresh/kubectl:1.13.3
     stage: deploy
     commands:
-      - echo $CF_KUBECONFIG_PATH
+      - echo ${{CF_REVISION}}
       - kubectl config use-context digitalOcean@atk
       - kubectl -n atk-demo set image deployment/atk-demo atk-demo="atk4/ui-demo:${{CF_REVISION}}"
 
