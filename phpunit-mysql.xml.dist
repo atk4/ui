@@ -1,0 +1,35 @@
+<phpunit bootstrap="vendor/autoload.php" printerClass="atk4\core\AtkPhpunit\ResultPrinter" colors="true">
+    <php>
+        <var name="DB_DSN" value="mysql:dbname=atk4_test__data;host=mysql" />
+        <var name="DB_USER" value="atk4_test" />
+        <var name="DB_PASSWD" value="atk4_pass" />
+        <var name="DB_DBNAME" value="atk4_test__data" />
+    </php>
+    <testsuites>
+        <testsuite name="tests">
+            <directory>tests</directory>
+            <file>tests/DemosTest.php</file>
+            <file>tests/DemosHttpTest.php</file>
+            <file>tests/DemosHttpNoExitTest.php</file>
+            <exclude>tests/DemosTest.php</exclude>
+            <exclude>tests/DemosHttpTest.php</exclude>
+            <exclude>tests/DemosHttpNoExitTest.php</exclude>
+        </testsuite>
+    </testsuites>
+    <groups>
+        <exclude>
+            <group>demos_http</group>
+        </exclude>
+    </groups>
+    <listeners>
+        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener" />
+    </listeners>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <report>
+            <php outputFile="build/logs/clover-mysql.cov" />
+        </report>
+    </coverage>
+</phpunit>

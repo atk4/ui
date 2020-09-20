@@ -59,7 +59,7 @@ jobs:
           mkdir -p build/logs
           php demos/_demo-data/create-sqlite-db.php
 
-      - name: "Run tests: Phpunit (only for Phpunit)"
+      - name: "Run tests: SQLite (only for Phpunit)"
         if: matrix.type == 'Phpunit'
         run: |
           if [ -n "$LOG_COVERAGE" ]; then
@@ -96,6 +96,10 @@ jobs:
             type: 'Phpunit Burn'
     env:
       LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == 'latest' && matrix.type == 'Phpunit' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
+    services:
+      mysql:
+        image: mysql:8
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass -e MYSQL_USER=atk4_test -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test__data --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -132,7 +136,7 @@ jobs:
           mkdir -p build/logs
           php demos/_demo-data/create-sqlite-db.php
 
-      - name: "Run tests: Phpunit (only for Phpunit)"
+      - name: "Run tests: SQLite (only for Phpunit)"
         if: matrix.type == 'Phpunit' || matrix.type == 'Phpunit Burn'
         run: |
           if [ -n "$LOG_COVERAGE" ]; then
@@ -143,6 +147,10 @@ jobs:
           else
             vendor/bin/phpunit --exclude-group none --no-coverage -v
           fi
+
+      - name: "Run tests: MySQL (only for Phpunit)"
+        if: matrix.type == 'Phpunit' || matrix.type == 'Phpunit Burn'
+        run: "vendor/bin/phpunit --configuration phpunit-mysql.xml.dist --exclude-group none --no-coverage -v"
 
       - name: Upload coverage logs 1/2 (only for "latest" Phpunit)
         if: env.LOG_COVERAGE
