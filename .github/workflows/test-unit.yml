@@ -9,21 +9,21 @@ on:
     - cron: '0 * * * *'
 
 jobs:
-  unit-test:
-    name: Unit
+  smoke-test:
+    name: Smoke
     runs-on: ubuntu-latest
     container:
-      image: atk4/image:${{ matrix.php }} # https://github.com/atk4/image
+      image: atk4/image:${{ matrix.php }}
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.3', 'latest', '8.0']
+        php: ['latest']
         type: ['Phpunit']
         include:
           - php: 'latest'
             type: 'CodingStyle'
     env:
-      LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == 'latest' && matrix.type == 'Phpunit' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
+      LOG_COVERAGE: ""
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -42,13 +42,13 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
+          key: ${{ runner.os }}-composer-smoke-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
         run: |
-          if [ "${{ matrix.type }}" != "Phpunit" ]; then composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev ; fi
+          if [ "${{ matrix.type }}" != "Phpunit" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev ; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
           composer remove --no-interaction --no-update 'behat/*' --dev
           if [ "${{ matrix.php }}" == "8.0" ]; then composer config platform.php 7.4.5 ; fi
@@ -80,6 +80,69 @@ jobs:
         run: |
           if [ "$(find demos/ -name '*.php' -print0 | xargs -0 grep -L "namespace atk4\\\\ui\\\\demo;" | tee /dev/fd/2)" ]; then echo 'All demos/ files must have namespace declared' && (exit 1); fi
           vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --diff-format=udiff --verbose --show-progress=dots
+
+  unit-test:
+    name: Unit
+    runs-on: ubuntu-latest
+    container:
+      image: atk4/image:${{ matrix.php }} # https://github.com/atk4/image
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.3', 'latest', '8.0']
+        type: ['Phpunit']
+        include:
+          - php: 'latest'
+            type: 'Phpunit Burn'
+    env:
+      LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == 'latest' && matrix.type == 'Phpunit' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure PHP
+        run: |
+          if [ -z "$LOG_COVERAGE" ]; then rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; fi
+          php --version
+
+      - name: Setup cache 1/2
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Setup cache 2/2
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install PHP dependencies
+        run: |
+          if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "Phpunit Burn" ]; then composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev ; fi
+          if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
+          composer remove --no-interaction --no-update 'behat/*' --dev
+          if [ "${{ matrix.php }}" == "8.0" ]; then composer config platform.php 7.4.5 ; fi
+          composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
+          if [ "${{ matrix.type }}" == "Phpunit Burn" ]; then sed -i 's/ *public function runBare(): void/public function runBare(): void { gc_collect_cycles(); $mem0 = memory_get_usage(); for ($i = 0; $i < '"$(if [ \"$GITHUB_EVENT_NAME\" == \"schedule\" ]; then echo 500; else echo 10; fi)"'; ++$i) { $this->_runBare(); if ($i === 0) { gc_collect_cycles(); $mem1 = memory_get_usage(); } } gc_collect_cycles(); $mem2 = memory_get_usage(); if ($mem2 - 1536 * 1024 > $mem0 || $mem2 - 128 * 1024 > $mem1) { $this->onNotSuccessfulTest(new AssertionFailedError("Memory leak detected! (" . round($mem0 \/ (1024 * 1024), 3) . " + " . round(($mem1 - $mem0) \/ (1024 * 1024), 3) . " + " . round(($mem2 - $mem1) \/ (1024 * 1024), 3) . " MB, " . $i . " iterations)")); } } private function _runBare(): void/' vendor/phpunit/phpunit/src/Framework/TestCase.php && cat vendor/phpunit/phpunit/src/Framework/TestCase.php | grep '_runBare(' ; fi
+
+      - name: Init
+        run: |
+          mkdir -p build/logs
+          php demos/_demo-data/create-sqlite-db.php
+
+      - name: "Run tests: Phpunit (only for Phpunit)"
+        if: matrix.type == 'Phpunit' || matrix.type == 'Phpunit Burn'
+        run: |
+          if [ -n "$LOG_COVERAGE" ]; then
+            cp tools/coverage.php demos
+            mkdir coverage
+            vendor/bin/phpunit --exclude-group none --coverage-text -v
+            ls -l coverage | wc -l && mv coverage/* build/logs
+          else
+            vendor/bin/phpunit --exclude-group none --no-coverage -v
+          fi
 
       - name: Upload coverage logs 1/2 (only for "latest" Phpunit)
         if: env.LOG_COVERAGE
