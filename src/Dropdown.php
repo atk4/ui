@@ -45,18 +45,18 @@ class Dropdown extends Lister
      *
      * @param \Closure $fx handler where new selected Item value is passed too
      */
-    public function onChange(\Closure $fx, string $argumentName = 'item')
+    public function onChange(\Closure $fx)
     {
         // setting dropdown option for using callback url.
         $this->dropdownOptions['onChange'] = new JsFunction(['value', 'name', 't'], [
             new JsExpression(
-                "if($(this).data('currentValue') != value){\$(this).atkAjaxec({uri:[uri], uri_options:{[arg_name]:value}});$(this).data('currentValue', value)}",
-                ['uri' => $this->cb->getJsUrl(), 'arg_name' => $argumentName]
+                "if($(this).data('currentValue') != value){\$(this).atkAjaxec({uri:[uri], uri_options:{item:value}});$(this).data('currentValue', value)}",
+                ['uri' => $this->cb->getJsUrl()]
             ), ]);
 
         $this->cb->set(function ($j, $value) use ($fx) {
             return $fx($value);
-        }, [$argumentName => 'value']);
+        }, ['item' => 'value']);
     }
 
     protected function renderView(): void
