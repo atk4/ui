@@ -76,6 +76,7 @@
     "friendsofphp/php-cs-fixer": "^2.16",
     "fzaninotto/faker": "*",
     "guzzlehttp/guzzle": "^6.3",
+    "johnkary/phpunit-speedtrap": "^3.2",
     "phpunit/phpcov": "*",
     "phpunit/phpunit": ">=9.3",
     "symfony/process": "^4.3 || ^5.0"
