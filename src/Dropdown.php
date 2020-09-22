@@ -18,18 +18,18 @@ class Dropdown extends Lister
     public $cb;
 
     /**
-     * Supply an optional parameter to the drop-down.
+     * As per Fomantic-ui dropdown options.
      *
-     * @var array will be converted to json passed into dropdown()
+     * @var array
      */
-    public $js;
+    public $dropdownOptions = [];
 
     protected function init(): void
     {
         parent::init();
 
         if (!$this->cb) {
-            $this->cb = JsCallback::addTo($this, ['urlTrigger' => 'item']);
+            $this->cb = JsCallback::addTo($this);
         }
     }
 
@@ -37,35 +37,31 @@ class Dropdown extends Lister
      * Handle callback when user select a new item value in dropdown.
      * Callback is fire only when selecting a different item value then the current item value.
      * ex:
-     *      $dropdown = Dropdown::addTo($menu, ['menu', 'js' => ['on' => 'hover']]);
+     *      $dropdown = Dropdown::addTo($menu, ['menu', 'dropdownOptions' => ['on' => 'hover']]);
      *      $dropdown->setModel($menuItems);
      *      $dropdown->onChange(function($item) {
-     *          return 'New seleced item: '.$item;
+     *          return 'New selected item: '.$item;
      *      });.
      *
      * @param \Closure $fx handler where new selected Item value is passed too
      */
-    public function onChange(\Closure $fx)
+    public function onChange(\Closure $fx, string $argumentName = 'item')
     {
         // setting dropdown option for using callback url.
-        $this->js['onChange'] = new JsFunction(['name', 'value', 't'], [
+        $this->dropdownOptions['onChange'] = new JsFunction(['value', 'name', 't'], [
             new JsExpression(
-                "if($(this).data('currentValue') != value){\$(this).atkAjaxec({uri:[uri], uri_options:{item:value}});$(this).data('currentValue', value)}",
-                ['uri' => $this->cb->getJsUrl()]
+                "if($(this).data('currentValue') != value){\$(this).atkAjaxec({uri:[uri], uri_options:{[arg_name]:value}});$(this).data('currentValue', value)}",
+                ['uri' => $this->cb->getJsUrl(), 'arg_name' => $argumentName]
             ), ]);
 
-        $this->cb->set(function ($j, $item) use ($fx) {
-            return $fx($item);
-        }, ['item' => 'value']);
+        $this->cb->set(function ($j, $value) use ($fx) {
+            return $fx($value);
+        }, [$argumentName => 'value']);
     }
 
     protected function renderView(): void
     {
-        if (isset($this->js)) {
-            $this->js(true)->dropdown($this->js);
-        } else {
-            $this->js(true)->dropdown();
-        }
+        $this->js(true)->dropdown($this->dropdownOptions);
 
         parent::renderView();
     }

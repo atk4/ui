@@ -14,7 +14,7 @@ $menu = \atk4\ui\Menu::addTo($app);
 $menu->addItem('foo', 'foo.php');
 $menu->addItem('bar');
 $menu->addItem('baz');
-$dropdown = \atk4\ui\Dropdown::addTo($menu, ['With Callback', 'js' => ['on' => 'hover']]);
+$dropdown = \atk4\ui\Dropdown::addTo($menu, ['With Callback', 'dropdownOptions' => ['on' => 'hover']]);
 $dropdown->setSource(['a', 'b', 'c']);
 $dropdown->onChange(function ($item) {
     return 'New seleced item: ' . $item;
