@@ -19,7 +19,7 @@ $txt->addParagraph('Dropdown may also be used in a cascade manner.');
 $txt->addParagraph('You may find more information in DropdownCascade class.');
 $v = \atk4\ui\View::addTo($demo->right, ['ui' => 'column padded centered grid']);
 $btn = \atk4\ui\Button::addTo($v, ['DropdownCascade Class'])
-    ->link('https://github.com/atk4/ui/blob/develop/src/Form/Field/DropdownCascade.php', '_blank')
+    ->link('https://github.com/atk4/ui/blob/develop/src/Form/Control/DropdownCascade.php', '_blank')
     ->addClass('centered aligned');
 
 $form = Form::addTo($demo->left);
