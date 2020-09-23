@@ -1,8 +1,11 @@
 Feature: Vue
   Testing Vue component
 
-  Scenario: testing InlineEdit
+  Scenario: loading components
     Given I am on "javascript/vue-component.php"
+    Then I check for vue components to be load
+
+  Scenario: testing InlineEdit
     When I fill in "name" with "test"
     Then I should see "new value: test"
     Then I hide js modal

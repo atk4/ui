@@ -417,6 +417,17 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
+     * @Then I check for vue components to be load
+     */
+    public function iCheckForVueComponentsToBeLoad()
+    {
+        $loaded = $this->getSession()->wait(2000, 'atk.vueService.areComponentsReady()');
+        if (!$loaded) {
+            throw new \Exception('Unable to load Vue components');
+        }
+    }
+
+    /**
      * Wait for an element, usually an auto trigger element, to show that loading has start"
      * Example, when entering value in JsSearch for grid. We need to auto trigger to fire before
      * doing waiting for callback.

@@ -1,5 +1,10 @@
 ## Release note
 
+### version 1.16.2 (2020-09-23)
+- VueService
+    - Add possibility to check if all components on page are load.
+- Rename window var bundlePublicPath to __atkBundlePublicPath
+
 ### version 1.16.1 (2020-09-17)
 - set js bundle path dynamically for loading ressource.
 

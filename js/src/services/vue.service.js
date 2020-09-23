@@ -65,9 +65,12 @@ class VueService {
             name: name,
             instance: new Vue({
                 el: name,
-                data: { initData: data },
+                data: { initData: data, isReady: false },
                 components: { [component]: atkComponents[component] },
                 mixins: [this.vueMixins],
+                mounted: function () {
+                    this.isReady = true;
+                },
             }),
         });
     }
@@ -84,9 +87,12 @@ class VueService {
             name: name,
             instance: new Vue({
                 el: name,
-                data: { initData: data },
+                data: { initData: data, isReady: false },
                 components: { [componentName]: window[component] },
                 mixins: [this.vueMixins],
+                mounted: function () {
+                    this.isReady = true;
+                },
             }),
         });
     }
@@ -97,8 +103,6 @@ class VueService {
     useComponent(component) {
         if (window[component]) {
             Vue.use(window[component]);
-            // let vcomponent = Vue.component('SuiInput').extend({props:{isFluid: true}});
-            // console.log(vcomponent);
         } else {
             console.error('Unable to register component: ' + component + '. Make sure it is load correctly.');
         }
@@ -111,6 +115,13 @@ class VueService {
    */
     getVue() {
         return Vue;
+    }
+
+    /**
+     * Check if all components on page are ready or fully loaded.
+     */
+    areComponentsReady() {
+        return this.vues.filter((component) => component.instance.$root.isReady === false).length === 0;
     }
 }
 
