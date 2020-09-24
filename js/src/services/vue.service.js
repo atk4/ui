@@ -18,19 +18,19 @@ const atkVueError = {
 };
 
 // Return async component that will load on demand.
-const componentFactory = (component) => () => ({
-    component: component(),
+const componentFactory = (name, component) => () => ({
+    component: component().then((r) => { atk.vueService.componentIsLoaded(name); return r; }),
     loading: atkVueLoader,
     error: atkVueError,
     delay: 200,
 });
 
 const atkComponents = {
-    'atk-inline-edit': componentFactory(() => import(/* webpackChunkName: "atk-vue-inline-edit" */'../components/inline-edit.component')),
-    'atk-item-search': componentFactory(() => import(/* webpackChunkName: "atk-vue-item-search" */'../components/item-search.component')),
-    'atk-multiline': componentFactory(() => import(/* webpackChunkName: "atk-vue-multiline" */'../components/multiline/multiline.component')),
-    'atk-tree-item-selector': componentFactory(() => import(/* webpackChunkName: "atk-vue-tree-item-selector" */'../components/tree-item-selector/tree-item-selector.component')),
-    'atk-query-builder': componentFactory(() => import(/* webpackChunkName: "atk-vue-query-builder" */'../components/query-builder/query-builder.component.vue')),
+    'atk-inline-edit': componentFactory('atk-inline-edit', () => import(/* webpackChunkName: "atk-vue-inline-edit" */'../components/inline-edit.component')),
+    'atk-item-search': componentFactory('atk-item-search', () => import(/* webpackChunkName: "atk-vue-item-search" */'../components/item-search.component')),
+    'atk-multiline': componentFactory('atk-multiline', () => import(/* webpackChunkName: "atk-vue-multiline" */'../components/multiline/multiline.component')),
+    'atk-tree-item-selector': componentFactory('atk-tree-item-selector', () => import(/* webpackChunkName: "atk-vue-tree-item-selector" */'../components/tree-item-selector/tree-item-selector.component')),
+    'atk-query-builder': componentFactory('atk-query-builder', () => import(/* webpackChunkName: "atk-vue-query-builder" */'../components/query-builder/query-builder.component.vue')),
 };
 
 // setup atk custom directives.
@@ -56,9 +56,6 @@ class VueService {
                     getData: function () {
                         return this.initData;
                     },
-                    setReady: function () {
-                        this.isReady = true;
-                    },
                 },
                 // provide method to our child component.
                 // child component would need to inject a method to have access using the inject property,
@@ -83,15 +80,17 @@ class VueService {
    * @param component
    * @param data
    */
-    createAtkVue(name, component, data) {
+    createAtkVue(id, component, data) {
         this.vues.push({
-            name: name,
+            id: id,
+            name: component,
             instance: new Vue({
-                el: name,
-                data: { initData: data, isReady: false },
+                el: id,
+                data: { initData: data },
                 components: { [component]: atkComponents[component] },
                 mixins: [this.vueMixins],
             }),
+            isLoaded: false,
         });
     }
 
@@ -102,15 +101,17 @@ class VueService {
    * @param component
    * @param data
    */
-    createVue(name, componentName, component, data) {
+    createVue(id, componentName, component, data) {
         this.vues.push({
-            name: name,
+            id: id,
+            name: componentName,
             instance: new Vue({
-                el: name,
+                el: id,
                 data: { initData: data, isReady: true },
                 components: { [componentName]: window[component] },
                 mixins: [this.vueMixins],
             }),
+            isLoaded: true,
         });
     }
 
@@ -134,11 +135,22 @@ class VueService {
         return Vue;
     }
 
+    /*
+    * Mark a component as loaded.
+    */
+    componentIsLoaded(name) {
+        this.vues.forEach((component) => {
+            if (component.name === name) {
+                component.isLoaded = true;
+            }
+        });
+    }
+
     /**
      * Check if all components on page are ready or fully loaded.
      */
-    areComponentsReady() {
-        return this.vues.filter((component) => component.instance.$root.isReady === false).length === 0;
+    areComponentsLoaded() {
+        return this.vues.filter((component) => component.isLoaded === false).length === 0;
     }
 }
 

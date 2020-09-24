@@ -421,7 +421,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iCheckForVueComponentsToBeLoad()
     {
-        $loaded = $this->getSession()->wait(2000, 'atk.vueService.areComponentsReady()');
+        $loaded = $this->getSession()->wait(2000, 'atk.vueService.areComponentsLoaded()');
         if (!$loaded) {
             throw new \Exception('Unable to load Vue components');
         }
