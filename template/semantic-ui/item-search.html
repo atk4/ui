@@ -1,4 +1,4 @@
 
 <div class="{$_class} {$class}" id="{$_id}">
-  <atk-item-search v-bind="initData"></atk-item-search>
+  <atk-item-search v-bind="initData" @hook:mounted="setReady"></atk-item-search>
 </div>

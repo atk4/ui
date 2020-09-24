@@ -256,7 +256,7 @@ class ScopeBuilder extends Control
         parent::init();
 
         if (!$this->scopeBuilderTemplate) {
-            $this->scopeBuilderTemplate = new Template('<div id="{$_id}" class="ui"><atk-query-builder v-bind="initData"></atk-query-builder></div>');
+            $this->scopeBuilderTemplate = new Template('<div id="{$_id}" class="ui"><atk-query-builder v-bind="initData" @hook:mounted="setReady"></atk-query-builder></div>');
         }
 
         $this->scopeBuilderView = \atk4\ui\View::addTo($this, ['template' => $this->scopeBuilderTemplate]);

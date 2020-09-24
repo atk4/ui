@@ -1,17 +1,36 @@
 import Vue from 'vue';
 import SuiVue from 'semantic-ui-vue';
-
 import atkClickOutside from '../directives/click-outside.directive';
 import { focus } from '../directives/commons.directive';
 
 Vue.use(SuiVue);
 
+// Vue loader component to display while dynamic component is loading.
+const atkVueLoader = {
+    name: 'atk-vue-loader',
+    template: '<div><div class="ui active centered inline loader"></div></div>',
+};
+
+// Vue error component to display when dynamic component loading fail.
+const atkVueError = {
+    name: 'atk-vue-error',
+    template: '<div class="ui negative message"><p>Error: Unable to load Vue component</p></div>',
+};
+
+// Return async component that will load on demand.
+const componentFactory = (component) => () => ({
+    component: component(),
+    loading: atkVueLoader,
+    error: atkVueError,
+    delay: 200,
+});
+
 const atkComponents = {
-    'atk-inline-edit': () => import(/* webpackChunkName: "atk-vue-inline-edit" */'../components/inline-edit.component'),
-    'atk-item-search': () => import(/* webpackChunkName: "atk-vue-item-search" */'../components/item-search.component'),
-    'atk-multiline': () => import(/* webpackChunkName: "atk-vue-multiline" */'../components/multiline/multiline.component'),
-    'atk-tree-item-selector': () => import(/* webpackChunkName: "atk-vue-tree-item-selector" */'../components/tree-item-selector/tree-item-selector.component'),
-    'atk-query-builder': () => import(/* webpackChunkName: "atk-vue-query-builder" */'../components/query-builder/query-builder.component.vue'),
+    'atk-inline-edit': componentFactory(() => import(/* webpackChunkName: "atk-vue-inline-edit" */'../components/inline-edit.component')),
+    'atk-item-search': componentFactory(() => import(/* webpackChunkName: "atk-vue-item-search" */'../components/item-search.component')),
+    'atk-multiline': componentFactory(() => import(/* webpackChunkName: "atk-vue-multiline" */'../components/multiline/multiline.component')),
+    'atk-tree-item-selector': componentFactory(() => import(/* webpackChunkName: "atk-vue-tree-item-selector" */'../components/tree-item-selector/tree-item-selector.component')),
+    'atk-query-builder': componentFactory(() => import(/* webpackChunkName: "atk-vue-query-builder" */'../components/query-builder/query-builder.component.vue')),
 };
 
 // setup atk custom directives.
@@ -37,6 +56,9 @@ class VueService {
                     getData: function () {
                         return this.initData;
                     },
+                    setReady: function () {
+                        this.isReady = true;
+                    },
                 },
                 // provide method to our child component.
                 // child component would need to inject a method to have access using the inject property,
@@ -55,7 +77,8 @@ class VueService {
 
     /**
    * Created a Vue component and add it to the vues array.
-   *
+   * For Root component (App) to be aware that it's children component is
+   * mounted, you need to use @hook:mounted="setReady"
    * @param name
    * @param component
    * @param data
@@ -68,9 +91,6 @@ class VueService {
                 data: { initData: data, isReady: false },
                 components: { [component]: atkComponents[component] },
                 mixins: [this.vueMixins],
-                mounted: function () {
-                    this.isReady = true;
-                },
             }),
         });
     }
@@ -87,12 +107,9 @@ class VueService {
             name: name,
             instance: new Vue({
                 el: name,
-                data: { initData: data, isReady: false },
+                data: { initData: data, isReady: true },
                 components: { [componentName]: window[component] },
                 mixins: [this.vueMixins],
-                mounted: function () {
-                    this.isReady = true;
-                },
             }),
         });
     }
