@@ -163,7 +163,7 @@ class VueService {
     }
 
     /**
-     * Check if all components on page are ready or fully loaded.
+     * Check if all components on page are ready and fully loaded.
      */
     areComponentsLoaded() {
         return this.vues.filter((component) => component.isLoaded === false).length === 0;
