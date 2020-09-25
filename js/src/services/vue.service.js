@@ -81,8 +81,8 @@ class VueService {
    * @param data
    */
     createAtkVue(id, component, data) {
-        this.vues.push({
-            id: id,
+        this.registerComponent({
+            ids: [id],
             name: component,
             instance: new Vue({
                 el: id,
@@ -102,8 +102,8 @@ class VueService {
    * @param data
    */
     createVue(id, componentName, component, data) {
-        this.vues.push({
-            id: id,
+        this.registerComponent({
+            ids: [id],
             name: componentName,
             instance: new Vue({
                 el: id,
@@ -113,6 +113,20 @@ class VueService {
             }),
             isLoaded: true,
         });
+    }
+
+    /*
+    *  Add component to vues container.
+    *  Group ids that are using the same component.
+     */
+    registerComponent(component) {
+        // check if that component is already registered
+        const registered = this.vues.filter((comp) => comp.name === component.name);
+        if (registered.length > 0) {
+            registered[0].ids.push(component.ids[0]);
+        } else {
+            this.vues.push(component);
+        }
     }
 
     /**
