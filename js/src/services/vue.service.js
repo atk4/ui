@@ -21,7 +21,7 @@ const atkVueError = {
 
 // Return async component that will load on demand.
 const componentFactory = (name, component) => () => ({
-    component: component().then((r) => { atk.vueService.componentIsLoaded(name); return r; }),
+    component: component().then((r) => { atk.vueService.markComponentLoaded(name); return r; }),
     loading: atkVueLoader,
     error: atkVueError,
     delay: 200,
@@ -154,7 +154,7 @@ class VueService {
     /*
     * Mark a component as loaded.
     */
-    componentIsLoaded(name) {
+    markComponentLoaded(name) {
         this.vues.forEach((component) => {
             if (component.name === name) {
                 component.isLoaded = true;
