@@ -13,12 +13,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import VueQueryBuilder from 'vue-query-builder';
-import DatePicker from 'v-calendar/lib/components/date-picker.umd';
 import QueryBuilderGroup from './fomantic-ui-group.component.vue';
-
-Vue.component('v-date-picker', DatePicker);
 
 export default {
     name: 'query-builder',
