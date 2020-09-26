@@ -55,6 +55,14 @@ module.exports = (env) => {
             umdNamedDefine: true,
         },
         optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    vendor: {
+                        test: /[\\/]node_modules[\\/]/,
+                        name: 'vendors',
+                    },
+                },
+            },
             minimizer: [
                 new TerserPlugin({
                     terserOptions: {

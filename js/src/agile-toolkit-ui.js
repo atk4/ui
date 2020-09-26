@@ -1,6 +1,6 @@
 /* eslint-disable */
 /* global _ATKVERSION_:true, __webpack_public_path__:true */
-__webpack_public_path__ = window.bundlePublicPath === undefined ? '/public/' :  window.bundlePublicPath + '/';
+__webpack_public_path__ = window.__atkBundlePublicPath === undefined ? '/public/' :  window.__atkBundlePublicPath + '/';
 
 import debounce from 'debounce';
 import 'core-js/stable';
