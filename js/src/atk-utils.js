@@ -37,4 +37,24 @@ const atkEventBus = (function () {
     };
 }());
 
-export { atkOptions, atkEventBus };
+/*
+* Utilities function that you can execute
+* from atk context. Usage: atk.exec().date().parse('string');
+*/
+const atkUtilites = (function () {
+    return {
+        date: function() {
+            return {
+                // fix date parsing for different time zone if time is not supply.
+                parse: function (dateString) {
+                    if (dateString.match(/^[0-9]{4}[/\-.][0-9]{2}[/\-.][0-9]{2}$/)) {
+                        dateString += ' 00:00:00';
+                    }
+                    return dateString;
+                }
+            }
+        }
+    }
+})();
+
+export { atkOptions, atkEventBus, atkUtilites };

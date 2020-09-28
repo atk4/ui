@@ -171,6 +171,14 @@ class ScopeBuilder extends Control
     /**
      * Definition of rule types.
      *
+     * Note: date field used v-date-picker for date selection
+     * v-date-picker options (props) can be set via it's rule
+     * datePickerOptions property.
+     *  'datePickerOptions' => [
+     *     'first-day-of-week' => 2 // calendar start on Monday
+     *     'popover'=> [ 'placement' => 'right', 'visibility' => 'hover' ] // display at right when hovering.
+     *   ]
+     *
      * @var array
      */
     protected static $ruleTypes = [
@@ -244,6 +252,8 @@ class ScopeBuilder extends Control
                 self::OPERATOR_EMPTY,
                 self::OPERATOR_NOT_EMPTY,
             ],
+            // v-date-picker options. Leave empty for default options.
+            'datePickerOptions' => []
         ],
         'datetime' => 'date',
         'integer' => 'numeric',

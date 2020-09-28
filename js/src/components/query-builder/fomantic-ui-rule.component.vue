@@ -38,12 +38,8 @@
                                 <template v-if="canDisplay('date')">
                                     <div class="ui small input atk-qb">
                                         <v-date-picker
-                                                :locale='dateLocale'
-                                                :input-props="{class: 'atk-qb-date-picker'}"
                                                 v-model="dateValue"
-                                                :masks="dateMask"
-                                                :popover="{ placement: 'bottom', visibility: 'click' }"
-                                                ref="dateRef"></v-date-picker>
+                                                v-bind="getDateProps()"></v-date-picker>
                                     </div>
                                 </template>
                                 <!-- Checkbox or Radio input -->
@@ -150,15 +146,16 @@ export default {
             }
         },
         getDateFromString: function (dateString) {
-            if (dateString) {
-                // fix date parsing for different time zone if time is not supply.
-                if (dateString.match(/^[0-9]{4}[/\-.][0-9]{2}[/\-.][0-9]{2}$/)) {
-                    dateString += ' 00:00:00';
-                }
-                return new Date(dateString);
-            }
-            return new Date();
+            return dateString ? new Date(atk.utils.date().parse(dateString)) : new Date();
         },
+        getDateProps : function () {
+          return {
+            'locale': this.dateLocale,
+            'input-props' : {class: 'atk-qb-date-picker'},
+            'masks': this.dateMask,
+            'popover': { placement: 'bottom', visibility: 'click' },
+            ...this.rule.datePickerOptions}
+        }
     },
 };
 </script>
