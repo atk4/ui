@@ -68,7 +68,7 @@ class ScopeBuilder extends Control
      * The atk-date-picker props options:
      *    'phpDateFormat' The date format value. Default: 'Y-m-d'
      *    'useTodayDefault' Will set date value to today when date value is set to null.
-     * 
+     *
      * @var array
      */
     public $atkdDateOptions = [];
@@ -185,14 +185,6 @@ class ScopeBuilder extends Control
 
     /**
      * Definition of rule types.
-     *
-     * Note: date field used v-date-picker for date selection
-     * v-date-picker options (props) can be set via it's rule
-     * datePickerOptions property.
-     *  'datePickerOptions' => [
-     *     'first-day-of-week' => 2 // calendar start on Monday
-     *     'popover'=> [ 'placement' => 'right', 'visibility' => 'hover' ] // display at right when hovering.
-     *   ]
      *
      * @var array
      */
