@@ -58,6 +58,21 @@ class ScopeBuilder extends Control
      */
     public static $listDelimiters = [';', ','];
 
+    /** @var array The Vue v-date-picker component props. Leave empty for default. */
+    public $datePickerProps = [
+        'locale' => 'en-En',
+        'masks'  => ['input' => 'YYYY-MM-DD']
+    ];
+
+    /**
+     * The atk-date-picker props options:
+     *    'phpDateFormat' The date format value. Default: 'Y-m-d'
+     *    'useTodayDefault' Will set date value to today when date value is set to null.
+     * 
+     * @var array
+     */
+    public $atkdDateOptions = [];
+
     /**
      * The scopebuilder View. Assigned in init().
      *
@@ -252,8 +267,6 @@ class ScopeBuilder extends Control
                 self::OPERATOR_EMPTY,
                 self::OPERATOR_NOT_EMPTY,
             ],
-            // v-date-picker options. Leave empty for default options.
-            'datePickerOptions' => []
         ],
         'datetime' => 'date',
         'integer' => 'numeric',
@@ -438,6 +451,10 @@ class ScopeBuilder extends Control
                     'labels' => $this->labels ?? null,
                     'form' => $this->form->formElement->name,
                     'debug' => $this->options['debug'] ?? false,
+                    'componentsProps' => [
+                        'datePicker' => $this->datePickerProps,
+                        'atkDateOptions' => $this->atkdDateOptions,
+                    ]
                 ],
             ]
         );
