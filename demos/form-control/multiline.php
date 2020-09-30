@@ -23,6 +23,7 @@ $inventoryItemClass = get_class(new class() extends Model {
         parent::init();
 
         $this->addField('item', ['required' => true, 'default' => 'item']);
+        $this->addField('inv_date', ['type' => 'date']);
         $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
         $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
         $this->addExpression('total', ['expr' => function (Model $row) {
@@ -38,6 +39,7 @@ $total = 0;
 for ($i = 1; $i < 3; ++$i) {
     $inventory2 = clone $inventory;
     $inventory2->set('id', $i);
+//    $inventory2->set('inv_date', date($app->ui_persistence->date_format));
     $inventory2->set('item', 'item_' . $i);
     $inventory2->set('qty', random_int(10, 100));
     $inventory2->set('box', random_int(1, 10));
