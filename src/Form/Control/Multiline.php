@@ -642,22 +642,6 @@ class Multiline extends Form\Control
                 }
 
                 break;
-//            // date need to be properly format and display.
-//            case 'date':
-//                // Set how input handle php date format.
-//                if (!isset($options['atkDateOptions'])) {
-//                    $options['atkDateOptions'] = [
-//                        'phpDateFormat' => $this->app->ui_persistence->date_format
-//                    ];
-//                }
-//                // Set v-date-picker options (props).
-//                if (!isset($options['datePickerProps'])) {
-//                    $options['datePickerProps'] = [
-//                        'locale' => 'en-En',
-//                        'masks'   => ['input' => 'YYYY-MM-DD'],
-//                    ];
-//                }
-//                break;
         }
 
         return $options;

@@ -10,6 +10,7 @@ use atk4\ui\Form;
 use atk4\ui\Header;
 use atk4\ui\JsExpression;
 use atk4\ui\JsFunction;
+use Cassandra\Date;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -18,12 +19,23 @@ Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader'
 
 /** @var Model $inventoryItemClass */
 $inventoryItemClass = get_class(new class() extends Model {
+    public $dateFormat;
+
     protected function init(): void
     {
         parent::init();
 
         $this->addField('item', ['required' => true, 'default' => 'item']);
-        $this->addField('inv_date', ['type' => 'date']);
+        $this->addField('inv_date', [
+            'default' => date($this->dateFormat),
+            'type' => 'date',
+            'typecast' => [
+                function ($v) {
+                    return ($v instanceof \DateTime) ? date_format($v, $this->dateFormat) : $v;
+                },
+            ],
+            'ui' => ['multiline' => ['width' => 3]],
+        ]);
         $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
         $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
         $this->addExpression('total', ['expr' => function (Model $row) {
@@ -32,14 +44,14 @@ $inventoryItemClass = get_class(new class() extends Model {
     }
 });
 
-$inventory = new $inventoryItemClass(new Persistence\Array_());
+$inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => $app->ui_persistence->date_format]);
 
 // Populate some data.
 $total = 0;
 for ($i = 1; $i < 3; ++$i) {
     $inventory2 = clone $inventory;
     $inventory2->set('id', $i);
-//    $inventory2->set('inv_date', date($app->ui_persistence->date_format));
+    $inventory2->set('inv_date', date($app->ui_persistence->date_format));
     $inventory2->set('item', 'item_' . $i);
     $inventory2->set('qty', random_int(10, 100));
     $inventory2->set('box', random_int(1, 10));

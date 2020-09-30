@@ -107,13 +107,12 @@ export default {
             switch (column.component) {
             case 'dropdown':
                 props = {
-                    dropOptions: {
-                        floating: true,
-                        closeOnBlur: true,
-                        openOnFocus: false,
-                        selection: true,
-                    },
+                    floating: true,
+                    closeOnBlur: true,
+                    openOnFocus: false,
+                    selection: true,
                     ...this.getRootData().data.options.suiDropdown || {},
+                    ...userOptions,
                 };
                 props.options = this.getEnumValues(userOptions.values || null);
                 break;
