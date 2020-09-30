@@ -106,19 +106,14 @@ class Multiline extends Form\Control
         // sui-table props. Example: ['celled' => true] will render column lines in table.
         'suiTable' => [],
         // sui-dropdown props.
-        'suiDropdown' => [
-            'floating' =>  true,
-            'closeOnBlur'=> true,
-            'openOnFocus'=> false,
-            'selection'=> true,
-        ],
+        'suiDropdown' => [],
         // Set how input handle php date format.
         'atkDateOptions' => [],
         // Set how v-date-picker options (props).
         'datePickerProps' => [
             'locale' => 'en-En',
-            'masks'   => ['input' => 'YYYY-MM-DD'],
-        ]
+            'masks' => ['input' => 'YYYY-MM-DD'],
+        ],
     ];
 
     /**
@@ -307,7 +302,7 @@ class Multiline extends Form\Control
     {
         return $this->app->getTag('input', [
             'name' => $this->short_name,
-            'type' => 'text',
+            'type' => 'hidden',
             'value' => $this->getValue(),
             'readonly' => true,
         ]);
@@ -339,7 +334,7 @@ class Multiline extends Form\Control
                     $d_row = [];
                     foreach ($this->rowFields as $fieldName) {
                         $field = $model->getField($fieldName);
-                            $value = $this->app->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
+                        $value = $this->app->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
                         $d_row[$fieldName] = $value;
                     }
                     $data[] = $d_row;

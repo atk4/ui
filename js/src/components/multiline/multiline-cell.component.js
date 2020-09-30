@@ -42,9 +42,9 @@ export default {
             this.inputValue = this.getTypeValue(value);
             this.$emit('update-value', this.field, this.inputValue);
         },
-      onDateChange: function (value) {
-       this.onInput(value);
-      },
+        onDateChange: function (value) {
+            this.onInput(value);
+        },
         /**
      * Tell parent row that input value has changed.
      *

@@ -105,32 +105,34 @@ export default {
             const userOptions = column.fieldOptions || {};
 
             switch (column.component) {
-                case 'dropdown':
-                    const dropOptions = {
+            case 'dropdown':
+                props = {
+                    dropOptions: {
                         floating: true,
                         closeOnBlur: true,
                         openOnFocus: false,
                         selection: true,
-                    };
-                    props = { dropOptions, ...this.getRootData().data.options.suiDropdown || {}};
-                    props.options = this.getEnumValues(userOptions.values || null);
-                    break;
-                case 'date':
-                    props = {
-                        datePickerProps: {
-                            locale: 'en-En',
-                            masks : {'input' : 'YYYY-MM-DD' },
-                            popover: { placement: 'bottom', visibility: 'click' },
-                            ...this.getRootData().data.options.datePickerProps || {}
-                        },
-                        atkDateOptions: {
-                            'phpDateFormat': 'Y-m-d',
-                            ...this.getRootData().data.options.atkDateOptions || {}
-                        }
-                    };
-                    break;
-                default:
-                    props = Object.assign(props, userOptions);
+                    },
+                    ...this.getRootData().data.options.suiDropdown || {},
+                };
+                props.options = this.getEnumValues(userOptions.values || null);
+                break;
+            case 'date':
+                props = {
+                    datePickerProps: {
+                        locale: 'en-En',
+                        masks: { input: 'YYYY-MM-DD' },
+                        popover: { placement: 'bottom', visibility: 'click' },
+                        ...this.getRootData().data.options.datePickerProps || {},
+                    },
+                    atkDateOptions: {
+                        phpDateFormat: 'Y-m-d',
+                        ...this.getRootData().data.options.atkDateOptions || {},
+                    },
+                };
+                break;
+            default:
+                props = Object.assign(props, userOptions);
             }
 
             return props;
