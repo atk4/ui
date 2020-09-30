@@ -61,7 +61,7 @@ class ScopeBuilder extends Control
     /** @var array The Vue v-date-picker component props. Leave empty for default. */
     public $datePickerProps = [
         'locale' => 'en-En',
-        'masks'  => ['input' => 'YYYY-MM-DD']
+        'masks' => ['input' => 'YYYY-MM-DD'],
     ];
 
     /**
@@ -71,7 +71,9 @@ class ScopeBuilder extends Control
      *
      * @var array
      */
-    public $atkdDateOptions = [];
+    public $atkdDateOptions = [
+        'useTodayDefault' => true,
+    ];
 
     /**
      * The scopebuilder View. Assigned in init().
@@ -446,7 +448,7 @@ class ScopeBuilder extends Control
                     'componentsProps' => [
                         'datePicker' => $this->datePickerProps,
                         'atkDateOptions' => $this->atkdDateOptions,
-                    ]
+                    ],
                 ],
             ]
         );

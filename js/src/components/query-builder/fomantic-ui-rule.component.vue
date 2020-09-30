@@ -83,13 +83,11 @@
 
 <script>
 import QueryBuilderRule from 'vue-query-builder/dist/rule/QueryBuilderRule.umd';
-import AtkDatePicker from "../share/atk-date-picker";
+import AtkDatePicker from '../share/atk-date-picker';
 
 export default {
-  components: {AtkDatePicker},
-  extends: QueryBuilderRule,
-    component: {
-    },
+    extends: QueryBuilderRule,
+    components: { 'atk-date-picker': AtkDatePicker },
     data: function () {
         return {};
     },
@@ -133,18 +131,18 @@ export default {
             }
         },
         onDateChange: function (date) {
-          this.query.value = date;
+            this.query.value = date;
         },
         getDatePickerProps: function () {
-          return {
-            'input-props' : {class: 'atk-qb-date-picker'},
-            'popover': { placement: 'bottom', visibility: 'click' },
-            ...this.getRootData().data.componentsProps.datePicker || {},
-          }
+            return {
+                'input-props': { class: 'atk-qb-date-picker' },
+                popover: { placement: 'bottom', visibility: 'click' },
+                ...this.getRootData().data.componentsProps.datePicker || {},
+            };
         },
-      getAtkDatePickerProps: function () {
-          return this.getRootData().data.componentsProps.atkDateOptions || {};
-      }
+        getAtkDatePickerProps: function () {
+            return this.getRootData().data.componentsProps.atkDateOptions || {};
+        },
     },
 };
 </script>
