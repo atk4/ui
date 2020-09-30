@@ -43,7 +43,7 @@ const atkEventBus = (function () {
 */
 const atkUtilites = (function () {
     return {
-        date: function() {
+        date: function () {
             return {
                 // fix date parsing for different time zone if time is not supply.
                 parse: function (dateString) {
@@ -51,10 +51,10 @@ const atkUtilites = (function () {
                         dateString += ' 00:00:00';
                     }
                     return dateString;
-                }
-            }
-        }
-    }
-})();
+                },
+            };
+        },
+    };
+}());
 
 export { atkOptions, atkEventBus, atkUtilites };
