@@ -26,11 +26,10 @@ class AppMock extends \atk4\ui\App
 
 class CallbackTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test constructor.
-     */
-    private $regex = '/^..DOCTYPE/';
+    /** @var string */
+    private $htmlDoctypeRegex = '~^<!DOCTYPE~';
 
+    /** @var \atk4\ui\App */
     public $app;
 
     protected function setUp(): void
@@ -94,7 +93,7 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $this->assertNull($var);
 
-        $this->expectOutputRegex($this->regex);
+        $this->expectOutputRegex($this->htmlDoctypeRegex);
         $app->run();
 
         $this->assertSame(34, $var);
@@ -122,7 +121,7 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $this->assertNull($var);
 
-        $this->expectOutputRegex($this->regex);
+        $this->expectOutputRegex($this->htmlDoctypeRegex);
         $app->run();
 
         $this->assertSame(34, $var);
@@ -143,7 +142,7 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $this->assertNull($var);
 
-        $this->expectOutputRegex($this->regex);
+        $this->expectOutputRegex($this->htmlDoctypeRegex);
         $app->run();
 
         $this->assertNull($var);
