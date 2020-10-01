@@ -934,11 +934,7 @@ class App
 
     public function decodeJson(string $json)
     {
-        try {
-            $data = json_decode($json, true, 512, JSON_BIGINT_AS_STRING | JSON_THROW_ON_ERROR);
-        } catch (\Exception $e) {
-            throw new Exception('JSON decode error', 0, $e);
-        }
+        $data = json_decode($json, true, 512, JSON_BIGINT_AS_STRING | JSON_THROW_ON_ERROR);
 
         return $data;
     }
@@ -950,11 +946,7 @@ class App
             $options |= JSON_FORCE_OBJECT;
         }
 
-        try {
-            $json = json_encode($data, $options | JSON_THROW_ON_ERROR, 512);
-        } catch (\Exception $e) {
-            throw new Exception('JSON encode error', 0, $e);
-        }
+        $json = json_encode($data, $options | JSON_THROW_ON_ERROR, 512);
 
         // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
         // replace large JSON integers only, do not replace anything in JSON/JS strings
