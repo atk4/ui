@@ -8,7 +8,7 @@ import atkSemantic from 'atk-semantic-ui';
 import date from 'locutus/php/datetime/date';
 import { tableDropdown } from './helpers/table-dropdown.helper';
 import { plugin } from './plugin';
-import { atkOptions, atkEventBus, atkUtilites } from './atk-utils';
+import { atkOptions, atkEventBus, atkUtils } from './atk-utils';
 import dataService from './services/data.service';
 import panelService from './services/panel.service';
 import vueService from './services/vue.service';
@@ -19,7 +19,7 @@ const atk = { ...atkSemantic };
 atk.version = () => _ATKVERSION_;
 atk.options = atkOptions;
 atk.eventBus = atkEventBus;
-atk.utils = atkUtilites;
+atk.utils = atkUtils;
 
 atk.debounce = (fn, value) => {
     const timeOut = atk.options.get('debounceTimeout');

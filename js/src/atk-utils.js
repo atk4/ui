@@ -41,7 +41,7 @@ const atkEventBus = (function () {
 * Utilities function that you can execute
 * from atk context. Usage: atk.utils.date().parse('string');
 */
-const atkUtilites = (function () {
+const atkUtils = (function () {
     return {
         date: function () {
             return {
@@ -57,4 +57,4 @@ const atkUtilites = (function () {
     };
 }());
 
-export { atkOptions, atkEventBus, atkUtilites };
+export { atkOptions, atkEventBus, atkUtils };
