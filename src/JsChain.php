@@ -156,12 +156,7 @@ class JsChain extends JsExpression
             ')';
     }
 
-    /**
-     * Produce String representing this JavaScript extension.
-     *
-     * @return string
-     */
-    public function jsRender()
+    public function jsRender(): string
     {
         $ret = '';
 

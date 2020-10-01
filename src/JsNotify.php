@@ -170,12 +170,7 @@ class JsNotify implements JsExpressionable
         return $this;
     }
 
-    /**
-     * Render the notifier.
-     *
-     * @return string
-     */
-    public function jsRender()
+    public function jsRender(): string
     {
         if ($this->attachTo) {
             $final = $this->attachTo->js();

@@ -40,8 +40,8 @@ $t->setSource(['Red', 'Green', 'Blue']);
 $t->addDecorator('name', [\atk4\ui\Table\Column\Link::class, [], ['name']]);
 
 $frame = \atk4\ui\View::addTo($app, ['ui' => 'green segment']);
-\atk4\ui\Button::addTo($frame, ['does not inherit sticky get'])->on('click', function () {
-    return new \atk4\ui\JsNotify('$_GET = ' . json_encode($_GET));
+\atk4\ui\Button::addTo($frame, ['does not inherit sticky get'])->on('click', function () use ($app) {
+    return new \atk4\ui\JsNotify('$_GET = ' . $app->encodeJson($_GET));
 });
 
 \atk4\ui\Header::addTo($app, ['Use of View::url()']);

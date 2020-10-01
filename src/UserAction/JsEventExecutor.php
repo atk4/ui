@@ -123,7 +123,7 @@ class JsEventExecutor implements JsExpressionable
         return $errors;
     }
 
-    public function jsRender()
+    public function jsRender(): string
     {
         $this->cb->set(function () {
             $id = $_POST['atk_event_id'] ?? null;
