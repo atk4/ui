@@ -120,7 +120,7 @@ class JsExpression implements JsExpressionable
                 $string = '[' . implode(',', $array) . ']';
             }
         } elseif (is_string($arg)) {
-            $string = json_encode($arg, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            $string = json_encode($arg, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
         } elseif (is_bool($arg)) {
             $string = json_encode($arg);
         } elseif (is_int($arg)) {

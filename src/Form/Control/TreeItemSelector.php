@@ -99,7 +99,10 @@ class TreeItemSelector extends Form\Control
     public function onItem(\Closure $fx)
     {
         $this->cb = JsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
-            $value = $this->allowMultiple ? json_decode($data, true) : json_decode($data, true)[0];
+            $value = $this->app->decodeJson($data);
+            if (!$this->allowMultiple) {
+                $value = $value[0];
+            }
 
             return $fx($value);
         }, ['data' => 'value']);

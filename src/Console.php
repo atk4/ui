@@ -372,7 +372,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             throw (new Exception('Incorrect value for an object'))
                 ->addMoreInfo('object', $object);
         }
-        $this->output('--[ Result: ' . json_encode($result) . ' ]------------');
+        $this->output('--[ Result: ' . $this->app->encodeJson($result) . ' ]------------');
 
         return $this;
     }

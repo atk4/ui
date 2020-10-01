@@ -873,8 +873,8 @@ class View extends AbstractView implements JsExpressionable
      */
     public function jsGetStoreData()
     {
-        $data['local'] = json_decode($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null', true);
-        $data['session'] = json_decode($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null', true);
+        $data['local'] = json_decode($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null', true, 512, JSON_THROW_ON_ERROR);
+        $data['session'] = json_decode($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null', true, 512, JSON_THROW_ON_ERROR);
 
         return $data;
     }
@@ -916,7 +916,7 @@ class View extends AbstractView implements JsExpressionable
             throw new Exception('View property name needs to be set.');
         }
 
-        return (new JsChain('atk.dataService'))->addJsonData($name, json_encode($data), $type);
+        return (new JsChain('atk.dataService'))->addJsonData($name, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR), $type);
     }
 
     /**
@@ -1118,7 +1118,7 @@ class View extends AbstractView implements JsExpressionable
             throw new Exception('Render tree must be initialized before materializing JsChains.');
         }
 
-        return json_encode('#' . $this->id);
+        return json_encode('#' . $this->id, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
     }
 
     /**

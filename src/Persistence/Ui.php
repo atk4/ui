@@ -98,7 +98,7 @@ class Ui extends \atk4\data\Persistence
         case 'array':
         case 'object':
             // don't encode if we already use some kind of serialization
-            $value = $f->serialize ? $value : json_encode($value);
+            $value = $f->serialize ? $value : json_encode($value, JSON_THROW_ON_ERROR);
 
             break;
         }
