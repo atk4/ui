@@ -212,7 +212,9 @@ class DemosTest extends AtkPhpunit\TestCase
         return 'demos/' . $path;
     }
 
-    protected $regexHtml = '~^..DOCTYPE~';
+    /** @var string */
+    protected $regexHtml = '~^<!DOCTYPE~';
+    /** @var string */
     protected $regexJson = '~
         (?(DEFINE)
            (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
@@ -225,6 +227,7 @@ class DemosTest extends AtkPhpunit\TestCase
         )
         \A (?&json) \Z
         ~six';
+    /** @var string */
     protected $regexSse = '~^(id|event|data).*$~m';
 
     public function demoFilesProvider(): array

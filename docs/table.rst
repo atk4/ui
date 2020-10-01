@@ -462,7 +462,7 @@ column name in table with their new width in pixel.::
 
     $table->resizableColumn(function($j, $w){
         // do something with new column width
-        $columnWidths = json_decode($w);
+        $columnWidths = $this->app->decodeJson($w);
         return;
     }, [200,300,100,100,100]);
 
