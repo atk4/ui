@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\Form\Control;
 
 use atk4\ui\JsExpression;
+use atk4\ui\JsExpressionable;
 use atk4\ui\JsFunction;
 
 /**
@@ -227,10 +228,8 @@ class Dropdown extends Input
 
     /**
      * Render js for dropdown.
-     *
-     * @return mixed
      */
-    protected function jsRenderDropdown()
+    protected function jsRenderDropdown(): JsExpressionable
     {
         return $this->js(true)->dropdown($this->dropdownOptions);
     }

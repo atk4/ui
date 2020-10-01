@@ -89,5 +89,5 @@ $multiline->jsAfterDelete = new JsFunction(['value'], [new JsExpression('console
 $form->onSubmit(function (Form $form) use ($multiline) {
     $rows = $multiline->saveRows()->getModel()->export();
 
-    return new \atk4\ui\JsToast(json_encode(array_values($rows)));
+    return new \atk4\ui\JsToast($form->app->encodeJson(array_values($rows)));
 });

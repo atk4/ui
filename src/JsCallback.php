@@ -68,7 +68,7 @@ class JsCallback extends Callback implements JsExpressionable
         return $out;
     }
 
-    public function jsRender()
+    public function jsRender(): string
     {
         if (!$this->app) {
             throw new Exception('Call-back must be part of a RenderTree');
