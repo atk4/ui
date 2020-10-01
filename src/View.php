@@ -1111,10 +1111,8 @@ class View extends AbstractView implements JsExpressionable
 
     /**
      * Convert View into a value in case it happens to be inside our json_encode (as argument to JsChain).
-     *
-     * @return string
      */
-    public function jsRender()
+    public function jsRender(): string
     {
         if (!$this->_initialized) {
             throw new Exception('Render tree must be initialized before materializing JsChains.');

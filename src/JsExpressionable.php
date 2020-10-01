@@ -9,8 +9,5 @@ namespace atk4\ui;
  */
 interface JsExpressionable
 {
-    /**
-     * Convert JsExpression into string.
-     */
-    public function jsRender();
+    public function jsRender(): string;
 }
