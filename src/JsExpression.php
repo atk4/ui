@@ -21,13 +21,7 @@ class JsExpression implements JsExpressionable
      */
     public $args = [];
 
-    /**
-     * Constructor.
-     *
-     * @param string $template
-     * @param array  $args
-     */
-    public function __construct($template = '', $args = [])
+    public function __construct(string $template = '', array $args = [])
     {
         $this->template = $template;
         $this->args = $args;
