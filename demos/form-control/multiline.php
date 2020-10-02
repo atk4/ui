@@ -10,7 +10,6 @@ use atk4\ui\Form;
 use atk4\ui\Header;
 use atk4\ui\JsExpression;
 use atk4\ui\JsFunction;
-use Cassandra\Date;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
