@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Button;
 use atk4\ui\Form;
 
 /**
@@ -92,11 +93,26 @@ $group->addControl('Lookup_disb', [
     'disabled' => true,
 ])->set($model->loadAny()->getId());
 
-$group = $form->addGroup('Calendar');
+$group = $form->addGroup('Date');
 
-$group->addControl('calendar_norm', [Form\Control\Calendar::class, 'type' => 'date'])->set(date($app->ui_persistence->date_format));
-$group->addControl('calendar_read', [Form\Control\Calendar::class, 'type' => 'date', 'readonly' => true])->set(date($app->ui_persistence->date_format));
-$group->addControl('calendar_disb', [Form\Control\Calendar::class, 'type' => 'date', 'disabled' => true])->set(date($app->ui_persistence->date_format));
+$group->addControl('date_norm', [Form\Control\Calendar::class, 'type' => 'date'])->set(date($app->ui_persistence->date_format));
+$group->addControl('date_read', [Form\Control\Calendar::class, 'type' => 'date', 'readonly' => true])->set(date($app->ui_persistence->date_format));
+$group->addControl('date_disb', [Form\Control\Calendar::class, 'type' => 'date', 'disabled' => true])->set(date($app->ui_persistence->date_format));
+
+$group = $form->addGroup('Time');
+
+$group->addControl('time_norm', [Form\Control\Calendar::class, 'type' => 'time'])->set(date($app->ui_persistence->time_format));
+$group->addControl('time_read', [Form\Control\Calendar::class, 'type' => 'time', 'readonly' => true])->set(date($app->ui_persistence->time_format));
+$group->addControl('time_disb', [Form\Control\Calendar::class, 'type' => 'time', 'disabled' => true])->set(date($app->ui_persistence->time_format));
+
+$group = $form->addGroup('DateTime');
+
+$group->addControl('datetime_norm', [Form\Control\Calendar::class, 'type' => 'datetime'])->set(date($app->ui_persistence->datetime_format));
+$group->addControl('datetime_read', [Form\Control\Calendar::class, 'type' => 'datetime', 'readonly' => true])->set(date($app->ui_persistence->datetime_format));
+$group->addControl('datetime_disb', [Form\Control\Calendar::class, 'type' => 'datetime', 'disabled' => true])->set(date($app->ui_persistence->datetime_format));
+
+$form->onSubmit(function (Form $form) {
+});
 
 \atk4\ui\Header::addTo($app, ['Stand Alone Line']);
 // you can pass values to button

@@ -4,34 +4,27 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Control;
 
+use atk4\ui\Jquery;
 use atk4\ui\JsExpression;
-use atk4\ui\JsFunction;
 
 /**
- * Input element for a form control.
- *
- * 2018-06-25 : Add Locutus js library for formatting date as per php format.
- * http://locutus.io/php/datetime/
- *
- * Locutus date function are available under atk.phpDate function.
- * ex: atk.phpDate('m.d.Y', new Date());
+ * Date/Time picker attached to a form control.
  */
 class Calendar extends Input
 {
     /**
-     * Set this to 'date', 'time', 'month' or 'year'. Leaving this blank
-     * will show both date and time.
+     * Set this to 'date', 'time', 'datetime'.
      */
-    public $type;
+    public $type = 'date';
 
     /**
-     * Any other options you'd like to pass to calendar JS.
-     * See https://fomantic-ui.com/modules/calendar.html#/settings for all possible options.
+     * Any other options you'd like to pass to flatpickr JS.
+     * See https://flatpickr.js.org/options/ for all possible options.
      */
     public $options = [];
 
     /**
-     * Allow to set Calendar.js function.
+     * Set flatpickr option.
      */
     public function setOption($name, $value)
     {
@@ -40,42 +33,37 @@ class Calendar extends Input
 
     protected function renderView(): void
     {
-        if (!$this->icon) {
-            switch ($this->type) {
-            //case 'date': $this->icon = '
-            }
+        // set default according to type.
+        switch ($this->type) {
+            case 'date':
+                $this->options['dateFormat'] = $this->app->ui_persistence->date_format;
+
+                break;
+            case 'time':
+                $this->options['dateFormat'] = $this->app->ui_persistence->time_format;
+                $this->options['enableTime'] = true;
+                $this->options['noCalendar'] = true;
+                $this->options['time_24hr'] = true;
+
+                break;
+            case 'datetime':
+                $this->options['dateFormat'] = $this->app->ui_persistence->datetime_format;
+                $this->options['enableTime'] = true;
+                $this->options['time_24hr'] = true;
+
+                break;
         }
 
-        if (!$this->type) {
-            $this->type = 'datetime';
+        // override from ui persistence
+        if ($options = $this->app->ui_persistence->calendar_options) {
+            array_merge($this->options, $options);
         }
 
         if ($this->readonly) {
-            $this->options['onShow'] = new JsFunction([new JsExpression('return false')]);
+            $this->options['clickOpens'] = false;
         }
 
-        $typeFormat = $this->type . '_format';
-        if ($format = $this->app->ui_persistence->{$typeFormat}) {
-            $formatter = 'function(date, settings){
-                            if (!date) return;
-                            return atk.phpDate([format], date);
-                        }';
-            $this->options['formatter'][$this->type] = new JsExpression($formatter, ['format' => $format]);
-        }
-
-        $this->options['type'] = $this->type;
-
-        if ($dayOfWeek = $this->app->ui_persistence->firstDayOfWeek) {
-            $this->options['firstDayOfWeek'] = $dayOfWeek;
-        }
-
-        if ($options = $this->app->ui_persistence->calendar_options) {
-            foreach ($options as $k => $v) {
-                $this->options[$k] = $v;
-            }
-        }
-
-        $this->js(true)->calendar($this->options);
+        $this->jsInput(true)->flatpickr($this->options);
 
         parent::renderView();
     }
@@ -108,7 +96,18 @@ class Calendar extends Input
             $default['stopPropagation'] = $default;
         }
 
-        // Semantic-UI Calendar have different approach for on change event
+        // flatpickr on change event
         $this->options['onChange'] = new \atk4\ui\JsFunction(['date', 'text', 'mode'], $expr, $default);
+    }
+
+    /**
+     * Get the flatPickr instance of this input in order to
+     * get it's properties like selectedDates or run it's methods.
+     * Ex: clearing date via js
+     *     $btn->on('click', $f->getControl('date')->jsGetFlatPickr()->clear());.
+     */
+    public function jsGetFlatPickr(): JsExpression
+    {
+        return (new Jquery('#' . $this->id . '_input'))->get(0)->_flatpickr;
     }
 }
