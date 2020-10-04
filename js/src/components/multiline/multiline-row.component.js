@@ -18,7 +18,7 @@ export default {
          <atk-multiline-cell 
            :componentName="getMapComponent(column)" 
            :cellData="column" 
-           @update-value="onUpdateValue" 
+           @update-value="onUpdateValue"
            @post-value="onPostRow"
            :fieldValue="getValue(column)"
            :componentProps="getComponentProps(column)"></atk-multiline-cell>
@@ -102,20 +102,38 @@ export default {
      */
         getComponentProps: function (column) {
             let props = {};
-            if (column.component === 'dropdown') {
-                const values = column.fieldOptions ? column.fieldOptions.values : null;
-                const userOptions = column.fieldOptions ? column.fieldOptions : {};
-                const defaultOptions = {
+            const userOptions = column.fieldOptions || {};
+
+            switch (column.component) {
+            case 'dropdown':
+                props = {
                     floating: true,
                     closeOnBlur: true,
                     openOnFocus: false,
                     selection: true,
+                    ...this.getRootData().data.options.suiDropdown || {},
+                    ...userOptions,
                 };
-                props = Object.assign(defaultOptions, userOptions);
-                props.options = this.getEnumValues(values);
-            } else {
-                props = Object.assign(props, column.fieldOptions);
+                props.options = this.getEnumValues(userOptions.values || null);
+                break;
+            case 'date':
+                props = {
+                    datePickerProps: {
+                        locale: 'en-En',
+                        masks: { input: 'YYYY-MM-DD' },
+                        popover: { placement: 'bottom', visibility: 'click' },
+                        ...this.getRootData().data.options.datePickerProps || {},
+                    },
+                    atkDateOptions: {
+                        phpDateFormat: 'Y-m-d',
+                        ...this.getRootData().data.options.atkDateOptions || {},
+                    },
+                };
+                break;
+            default:
+                props = Object.assign(props, userOptions);
             }
+
             return props;
         },
         /**
@@ -150,6 +168,9 @@ export default {
                 case 'textarea':
                     component = 'atk-multiline-textarea';
                     break;
+                case 'date':
+                    component = 'atk-date-picker';
+                    break;
                 default:
                     component = 'sui-input';
                 }
@@ -177,5 +198,8 @@ export default {
             }
             return align;
         },
+    },
+    getDateFromString: function (dateString) {
+        return dateString ? new Date(atk.exec().dateParse(dateString)) : new Date();
     },
 };

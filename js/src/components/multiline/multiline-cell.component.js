@@ -1,5 +1,6 @@
 import multilineReadOnly from './multiline-readonly.component';
 import multilineTextarea from './multiline-textarea.component';
+import atkDatePicker from '../share/atk-date-picker';
 
 export default {
     name: 'atk-multiline-cell',
@@ -9,6 +10,7 @@ export default {
         class="fluid" 
         @blur="onBlur"
         @input="onInput"
+        @dateChange="onDateChange"
         v-model="inputValue"
         :readOnlyValue="fieldValue"
         :name="fieldName"
@@ -18,6 +20,7 @@ export default {
     components: {
         'atk-multiline-readonly': multilineReadOnly,
         'atk-multiline-textarea': multilineTextarea,
+        'atk-date-picker': atkDatePicker,
     },
     props: ['cellData', 'componentName', 'fieldValue', 'options', 'componentProps'],
     data: function () {
@@ -38,6 +41,9 @@ export default {
         onInput: function (value) {
             this.inputValue = this.getTypeValue(value);
             this.$emit('update-value', this.field, this.inputValue);
+        },
+        onDateChange: function (value) {
+            this.onInput(value);
         },
         /**
      * Tell parent row that input value has changed.

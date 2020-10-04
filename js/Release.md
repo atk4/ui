@@ -1,5 +1,14 @@
 ## Release note
 
+### version 1.16.3 (2020-09-30)
+
+- create atk-date-picker vue component.
+- Update query-builder
+    - allow date picker customization;
+    
+- add atk-date-picker to multiline component.
+
+
 ### version 1.16.2 (2020-09-23)
 - VueService
     - Add possibility to check if all components on page are load.
