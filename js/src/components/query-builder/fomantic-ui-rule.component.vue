@@ -37,13 +37,11 @@
                                 <!-- Date input -->
                                 <template v-if="canDisplay('date')">
                                     <div class="ui small input atk-qb">
-                                        <v-date-picker
-                                                :locale='dateLocale'
-                                                :input-props="{class: 'atk-qb-date-picker'}"
-                                                v-model="dateValue"
-                                                :masks="dateMask"
-                                                :popover="{ placement: 'bottom', visibility: 'click' }"
-                                                ref="dateRef"></v-date-picker>
+                                      <atk-date-picker
+                                          :datePickerProps="getDatePickerProps()"
+                                          :atkDateOptions="getAtkDatePickerProps()"
+                                          :value="query.value"
+                                          @dateChange="onDateChange"></atk-date-picker>
                                     </div>
                                 </template>
                                 <!-- Checkbox or Radio input -->
@@ -85,24 +83,15 @@
 
 <script>
 import QueryBuilderRule from 'vue-query-builder/dist/rule/QueryBuilderRule.umd';
+import AtkDatePicker from '../share/atk-date-picker';
 
 export default {
     extends: QueryBuilderRule,
-    component: {
-    },
+    components: { 'atk-date-picker': AtkDatePicker },
     data: function () {
-        return {
-            dateMask: { input: this.rule.format ? this.rule.format : 'YYYY-MM-DD' },
-            dateLocale: this.rule.locale ? this.rule.locale : 'en-En',
-        };
+        return {};
     },
-    mounted: function () {
-        if (this.isDatePicker) {
-            this.$nextTick(() => {
-                this.dateValue = this.getDateFromString(this.query.value);
-            });
-        }
-    },
+    inject: ['getRootData'],
     computed: {
         isInput: function () {
             return this.rule.type === 'text' || this.rule.type === 'numeric';
@@ -118,14 +107,6 @@ export default {
         },
         isSelect: function () {
             return this.rule.type === 'select';
-        },
-        dateValue: {
-            get: function () {
-                return this.getDateFromString(this.query.value);
-            },
-            set: function (date) {
-                this.query.value = date ? atk.phpDate('Y-m-d', date) : '';
-            },
         },
     },
     methods: {
@@ -149,22 +130,25 @@ export default {
             default: return false;
             }
         },
-        getDateFromString: function (dateString) {
-            if (dateString) {
-                // fix date parsing for different time zone if time is not supply.
-                if (dateString.match(/^[0-9]{4}[/\-.][0-9]{2}[/\-.][0-9]{2}$/)) {
-                    dateString += ' 00:00:00';
-                }
-                return new Date(dateString);
-            }
-            return new Date();
+        onDateChange: function (date) {
+            this.query.value = date;
+        },
+        getDatePickerProps: function () {
+            return {
+                'input-props': { class: 'atk-qb-date-picker' },
+                popover: { placement: 'bottom', visibility: 'click' },
+                ...this.getRootData().data.componentsProps.datePicker || {},
+            };
+        },
+        getAtkDatePickerProps: function () {
+            return this.getRootData().data.componentsProps.atkDateOptions || {};
         },
     },
 };
 </script>
 
 <style>
-    .ui.input.atk-qb > input, .ui.input.atk-qb > span > input, .ui.form .input.atk-qb {
+    .ui.input.atk-qb > input, .ui.input.atk-qb span > input, .ui.form .input.atk-qb {
         padding: 6px;
     }
     .ui.grid > .row.atk-qb {
