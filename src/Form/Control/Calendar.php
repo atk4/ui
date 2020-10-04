@@ -74,21 +74,18 @@ class Calendar extends Input
             array_merge($options, $this->options);
         }
 
+        // get format from ui persistence if not set.
+        $this->options['dateFormat'] = $this->options['dateFormat'] ?? $this->app->ui_persistence->{$this->type . '_format'};
+
         // set default according to type.
         switch ($this->type) {
-            case 'date':
-                $this->options['dateFormat'] = $this->options['dateFormat'] ?? $this->app->ui_persistence->date_format;
-
-                break;
             case 'time':
-                $this->options['dateFormat'] = $this->options['dateFormat'] ?? $this->app->ui_persistence->time_format;
                 $this->options['enableTime'] = true;
                 $this->options['noCalendar'] = true;
                 $this->options['time_24hr'] = $this->use24HrTime;
 
                 break;
             case 'datetime':
-                $this->options['dateFormat'] = $this->options['dateFormat'] ?? $this->app->ui_persistence->datetime_format;
                 $this->options['enableTime'] = true;
                 $this->options['time_24hr'] = $this->use24HrTime;
 
