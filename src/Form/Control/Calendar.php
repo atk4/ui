@@ -19,6 +19,9 @@ class Calendar extends Input
      */
     public $type = 'date';
 
+    /** @var bool */
+    public $use24HrTime = true;
+
     /**
      * Any other options you'd like to pass to flatpickr JS.
      * See https://flatpickr.js.org/options/ for all possible options.
@@ -35,7 +38,7 @@ class Calendar extends Input
 
     /**
      * Load flatpickr locale file.
-     * Pass it has an option when adding Calenday input.
+     * Pass it has an option when adding Calendar input.
      *  Form\Control\Calendar::requireLocale($app, 'fr');
      *  $form->getControl('date')->options['locale'] = 'fr';.
      */
@@ -62,34 +65,39 @@ class Calendar extends Input
         $app->html->js(true, (new JsExpression('flatpickr.l10ns.default.firstDayOfWeek = [day]', ['day' => $day])));
     }
 
-    protected function renderView(): void
+    protected function init(): void
     {
+        parent::init();
+
+        // Get ui persitense default.
+        if ($options = $this->app->ui_persistence->calendar_options) {
+            array_merge($options, $this->options);
+        }
+
         // set default according to type.
         switch ($this->type) {
             case 'date':
-                $this->options['dateFormat'] = $this->app->ui_persistence->date_format;
+                $this->options['dateFormat'] = $this->options['dateFormat'] ?? $this->app->ui_persistence->date_format;
 
                 break;
             case 'time':
-                $this->options['dateFormat'] = $this->app->ui_persistence->time_format;
+                $this->options['dateFormat'] = $this->options['dateFormat'] ?? $this->app->ui_persistence->time_format;
                 $this->options['enableTime'] = true;
                 $this->options['noCalendar'] = true;
-                $this->options['time_24hr'] = true;
+                $this->options['time_24hr'] = $this->use24HrTime;
 
                 break;
             case 'datetime':
-                $this->options['dateFormat'] = $this->app->ui_persistence->datetime_format;
+                $this->options['dateFormat'] = $this->options['dateFormat'] ?? $this->app->ui_persistence->datetime_format;
                 $this->options['enableTime'] = true;
-                $this->options['time_24hr'] = true;
+                $this->options['time_24hr'] = $this->use24HrTime;
 
                 break;
         }
+    }
 
-        // override from ui persistence
-        if ($options = $this->app->ui_persistence->calendar_options) {
-            array_merge($this->options, $options);
-        }
-
+    protected function renderView(): void
+    {
         if ($this->readonly) {
             $this->options['clickOpens'] = false;
         }
