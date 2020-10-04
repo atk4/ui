@@ -97,12 +97,24 @@ class Multiline extends Form\Control
     private $multiLine;
 
     /**
-     * An array of options for sui-table property.
-     * Example: ['celled' => true] will render column lines in table.
+     * An array of options for certain Vue component use in Multiline.
+     * These options are applied globally to each components within Multiline.
      *
      * @var array
      */
-    public $options = [];
+    public $options = [
+        // sui-table props. Example: ['celled' => true] will render column lines in table.
+        'suiTable' => [],
+        // sui-dropdown props.
+        'suiDropdown' => [],
+        // Set how input handle php date format.
+        'atkDateOptions' => [],
+        // Set how v-date-picker options (props).
+        'datePickerProps' => [
+            'locale' => 'en-En',
+            'masks' => ['input' => 'YYYY-MM-DD'],
+        ],
+    ];
 
     /**
      * When true, tabbing out of the last column in last row of data
@@ -228,6 +240,10 @@ class Multiline extends Form\Control
             $this->multiLineTemplate = new Template('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
+        if (!isset($this->options['atkDateOptions']['phpDateFormat'])) {
+            $this->options['atkDateOptions']['phpDateFormat'] = $this->app->ui_persistence->date_format;
+        }
+
         /* No need for this anymore. See: https://github.com/atk4/ui/commit/8ec4d22cf9dcbd4969d9c88d8f09b705ca8798a6
         if ($this->model) {
             $this->setModel($this->model);
@@ -318,11 +334,7 @@ class Multiline extends Form\Control
                     $d_row = [];
                     foreach ($this->rowFields as $fieldName) {
                         $field = $model->getField($fieldName);
-                        if ($field->isEditable()) {
-                            $value = $row->get($field->short_name);
-                        } else {
-                            $value = $this->app->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
-                        }
+                        $value = $this->app->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
                         $d_row[$fieldName] = $value;
                     }
                     $data[] = $d_row;
@@ -375,12 +387,10 @@ class Multiline extends Form\Control
             throw new Exception('Parent model need to be loaded');
         }
 
-        $model = $this->model;
-        if ($this->modelRef) {
-            $model = $model->ref($this->modelRef);
-        }
+        $model = $this->getModel();
 
-        $currentIds = array_keys($this->getModel()->export());
+        // collects existing ids.
+        $currentIds = array_column($model->export(), $model->id_field);
 
         foreach ($this->rowData as $row) {
             // should clone model to be able to save it multiple times
@@ -407,7 +417,7 @@ class Multiline extends Form\Control
             $id = $row_model->save()->getId();
 
             $k = array_search($id, $currentIds, true);
-            if ($k > -1) {
+            if ($k !== false) {
                 unset($currentIds[$k]);
             }
         }
@@ -577,6 +587,8 @@ class Multiline extends Form\Control
                 case 'text':
                 case 'textarea':
                     return 'textarea';
+                case 'date':
+                    return 'date';
                 default: return 'input';
             }
         }
@@ -644,8 +656,6 @@ class Multiline extends Form\Control
         switch ($field->type) {
             case 'integer':
                 return 'number';
-            //case 'date':
-                //return 'date';
             default:
                 return 'text';
         }
