@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Control;
 
+use atk4\ui\App;
 use atk4\ui\Jquery;
+use atk4\ui\JsChain;
 use atk4\ui\JsExpression;
 
 /**
@@ -29,6 +31,35 @@ class Calendar extends Input
     public function setOption($name, $value)
     {
         $this->options[$name] = $value;
+    }
+
+    /**
+     * Load flatpickr locale file.
+     * Pass it has an option when adding Calenday input.
+     *  Form\Control\Calendar::requireLocale($app, 'fr');
+     *  $form->getControl('date')->options['locale'] = 'fr';.
+     */
+    public static function requireLocale(App $app, string $locale)
+    {
+        $app->requireJs($app->cdn['flatpickr'] . '/l10n/' . $locale . '.js');
+    }
+
+    /**
+     * Apply locale globally to all flatpickr instance.
+     */
+    public static function setLocale(App $app, string $locale)
+    {
+        self::requireLocale($app, $locale);
+        $app->html->js(true, (new JsChain('flatpickr'))->localize((new JsChain('flatpickr'))->l10ns->{$locale}));
+    }
+
+    /**
+     * Set first day of week for calendar display.
+     * Applied globally to all flatpickr instance.
+     */
+    public static function setDayOfWeek(App $app, int $day)
+    {
+        $app->html->js(true, (new JsExpression('flatpickr.l10ns.default.firstDayOfWeek = [day]', ['day' => $day])));
     }
 
     protected function renderView(): void
