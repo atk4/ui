@@ -61,9 +61,6 @@ jobs:
           git config --global user.name "Release Bundler"
           git commit -am "Setting current dependencies and compiled JS"
 
-      - uses: teaminkling/autocommit@master
-        with:
-          commit-message: Setting current dependencies and complied JS
       - uses: ad-m/github-push-action@master
         with:
           branch: ${{ github.ref }}
