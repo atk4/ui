@@ -21,7 +21,7 @@ jobs:
           #sed -i "s|'https://cdn.jsdelivr.net/gh/atk4/ui@develop/public.*|'https://cdn.jsdelivr.net/gh/atk4/ui@$v/public',|" src/App.php
           # it was develop, it can stay develop for DEVELOP branch, so we see changes to JS right away.
 
-          # Set next version for develop branch 2.3 -> 2.4.0-BETA
+          # Set next version for develop branch
           a=( ${v//./ } )
           nv=${a[0]}"."$(( ${a[1]} +1 ))".0-BETA"
           sed -i "s|public \$version.*|public \$version = '$nv';|" src/App.php
