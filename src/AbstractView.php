@@ -164,7 +164,7 @@ abstract class AbstractView
     protected function _getStickyArgs(): array
     {
         if ($this->owner && $this->owner instanceof self) {
-            $stickyArgs = array_merge($this->owner->_getStickyArgs(), $this->stickyArgs);
+            $stickyArgs = array_merge($this->getOwner()->_getStickyArgs(), $this->stickyArgs);
         } else {
             $stickyArgs = $this->stickyArgs;
         }

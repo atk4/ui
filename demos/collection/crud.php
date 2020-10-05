@@ -81,7 +81,7 @@ $myExecutorClass = get_class(new class() extends \atk4\ui\UserAction\ModalExecut
 
         if ($this->action->owner['is_folder']) {
             \atk4\ui\Grid::addTo($right, ['menu' => false, 'ipp' => 5])
-                ->setModel($this->action->owner->ref('SubFolder'));
+                ->setModel($this->action->getOwner()->ref('SubFolder'));
         } else {
             \atk4\ui\Message::addTo($right, ['Not a folder', 'warning']);
         }

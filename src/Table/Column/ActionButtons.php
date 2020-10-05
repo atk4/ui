@@ -107,7 +107,7 @@ class ActionButtons extends Table\Column
      */
     public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [])
     {
-        $owner = $owner ?: $this->owner->owner;
+        $owner = $owner ?: $this->getOwner()->owner;
 
         if (is_string($defaults)) {
             $defaults = ['title' => $defaults];
@@ -123,7 +123,7 @@ class ActionButtons extends Table\Column
             $callback($t, $this->app->stickyGet($this->name));
         });
 
-        return $this->addButton($button, $modal->show(array_merge([$this->name => $this->owner->jsRow()->data('id')], $args)));
+        return $this->addButton($button, $modal->show(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)));
     }
 
     /**

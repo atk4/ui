@@ -67,14 +67,14 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 
         $this->action = $action;
         if (!$this->action->enabled && $this->owner instanceof View) {
-            $this->owner->addClass('disabled');
+            $this->getOwner()->addClass('disabled');
         }
 
         $this->set(function ($j) {
             // may be id is pass within $post args.
-            $id = $_POST['c0'] ?? $_POST[$this->action->owner->id_field] ?? null;
+            $id = $_POST['c0'] ?? $_POST[$this->action->getOwner()->id_field] ?? null;
             if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-                $this->action->owner->tryLoad($id);
+                $this->action->getOwner()->tryLoad($id);
             }
 
             if ($errors = $this->_hasAllArguments()) {

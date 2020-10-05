@@ -53,7 +53,7 @@ class Multiformat extends Table\Column
         $html_tags = [];
         foreach ($decorators as $c) {
             if (!is_object($c)) {
-                $c = $this->owner->decoratorFactory($field, $c);
+                $c = $this->getOwner()->decoratorFactory($field, $c);
             }
 
             if (--$cnt) {

@@ -48,7 +48,7 @@ class Tab extends Item
 
         $this->js(true)->tab($this->settings);
 
-        if ($this->owner->activeTabName === $this->name) {
+        if ($this->getOwner()->activeTabName === $this->name) {
             $this->js(true)->click();
         }
 

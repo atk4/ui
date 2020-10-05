@@ -46,7 +46,7 @@ class JsArgumentFormExecutor extends JsModal
             $id = $p->stickyGet('atk_event_id');
 
             if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-                $this->action->owner->tryLoad($id);
+                $this->action->getOwner()->tryLoad($id);
             }
 
             // TODO How do we know if argument is need over model field in action?

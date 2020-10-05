@@ -264,10 +264,10 @@ class View extends AbstractView implements JsExpressionable
             $this->id = $this->name;
         }
 
-        if ($this->region && !$this->template && !$this->defaultTemplate && $this->owner && $this->owner->template) {
-            $this->template = $this->owner->template->cloneRegion($this->region);
+        if ($this->region && !$this->template && !$this->defaultTemplate && $this->owner && $this->getOwner()->template) {
+            $this->template = $this->getOwner()->template->cloneRegion($this->region);
 
-            $this->owner->template->del($this->region);
+            $this->getOwner()->template->del($this->region);
         } else {
             // set up template
             if (is_string($this->defaultTemplate) && $this->template === null) {

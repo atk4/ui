@@ -129,7 +129,7 @@ class JsEventExecutor implements JsExpressionable
             $id = $_POST['atk_event_id'] ?? null;
 
             if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-                $this->action->owner->tryLoad($id);
+                $this->action->getOwner()->tryLoad($id);
             }
 
             if ($errors = $this->hasAllArguments()) {

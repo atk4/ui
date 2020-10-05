@@ -544,7 +544,7 @@ class Grid extends View
 
             $this->hook(self::HOOK_ON_USER_ACTION, [$page, $executor]);
 
-            $action->owner->load($id);
+            $action->getOwner()->load($id);
 
             $executor->setAction($action);
         }, $args);
