@@ -552,7 +552,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         } catch (\Throwable $e) {
             $msg = new Message('Error executing ' . $this->action->caption, 'red');
             $msg->invokeInit();
-            $msg->text->content = $this->app->renderExceptionHtml($e);
+            $msg->text->content = $this->getApp()->renderExceptionHtml($e);
 
             return $msg;
         }
@@ -716,7 +716,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     private function _handleException(\Throwable $exception, $view, $step)
     {
         $msg = Message::addTo($view, ['Error:', 'type' => 'error']);
-        $msg->text->addHtml($this->app->renderExceptionHtml($exception));
+        $msg->text->addHtml($this->getApp()->renderExceptionHtml($exception));
         $view->js(true, $this->nextStepBtn->js()->addClass('disabled'));
         if (!$this->isFirstStep($step)) {
             $this->jsSetPrevHandler($view, $step);

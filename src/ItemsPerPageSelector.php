@@ -81,7 +81,7 @@ class ItemsPerPageSelector extends View
             $this->set($ipp);
             $reload = $fx($ipp);
             if ($reload) {
-                $this->app->terminateJson($reload);
+                $this->getApp()->terminateJson($reload);
             }
         });
     }

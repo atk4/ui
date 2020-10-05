@@ -45,10 +45,10 @@ class Status extends Table\Column
             $extra_tags['class'] = implode(' ', $extra_tags['class']);
         }
 
-        return $this->app->getTag(
+        return $this->getApp()->getTag(
             'td',
             $extra_tags,
-            [$this->app->getTag('i', ['class' => 'icon {$_' . $field->short_name . '_icon}'], '') .
+            [$this->getApp()->getTag('i', ['class' => 'icon {$_' . $field->short_name . '_icon}'], '') .
             ' {$' . $field->short_name . '}', ]
         );
     }

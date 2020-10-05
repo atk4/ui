@@ -400,7 +400,7 @@ class Form extends View
         if ($success instanceof View) {
             $response = $success;
         } elseif ($useTemplate) {
-            $response = $this->app->loadTemplate($this->successTemplate);
+            $response = $this->getApp()->loadTemplate($this->successTemplate);
             $response['header'] = $success;
 
             if ($sub_header) {

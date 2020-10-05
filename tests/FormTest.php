@@ -58,7 +58,7 @@ class FormTest extends AtkPhpunit\TestCase
         });
 
         $this->f->render();
-        $res = $this->f->app->output;
+        $res = $this->f->getApp()->output;
 
         if ($check_expected_error) {
             $this->assertFalse($submit_called, 'Expected submission to fail, but it was successful!');

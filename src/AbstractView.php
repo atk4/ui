@@ -72,7 +72,7 @@ abstract class AbstractView
             'always_run' => false,
             'catch_runaway_callbacks' => false,
         ]);
-        $this->app->invokeInit();
+        $this->getApp()->invokeInit();
     }
 
     /**
@@ -141,7 +141,7 @@ abstract class AbstractView
      */
     public function jsUrl($page = [])
     {
-        return $this->app->jsUrl($page, false, $this->_getStickyArgs());
+        return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
     }
 
     /**
@@ -155,7 +155,7 @@ abstract class AbstractView
      */
     public function url($page = [])
     {
-        return $this->app->url($page, false, $this->_getStickyArgs());
+        return $this->getApp()->url($page, false, $this->_getStickyArgs());
     }
 
     /**

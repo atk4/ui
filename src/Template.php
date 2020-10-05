@@ -224,7 +224,7 @@ class Template implements \ArrayAccess
     {
         // check tag
         if ($tag instanceof Model) {
-            $tag = $this->app->ui_persistence->typecastSaveRow($tag, $tag->get());
+            $tag = $this->getApp()->ui_persistence->typecastSaveRow($tag, $tag->get());
         }
 
         // $tag passed as associative array [tag=>value]

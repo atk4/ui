@@ -31,7 +31,7 @@ class Text extends View
     public function addParagraph($text)
     {
         $this->content .= isset($this->app)
-            ? $this->app->getTag('p', $text)
+            ? $this->getApp()->getTag('p', $text)
             : '<p>' . htmlspecialchars($text) . '</p>';
 
         return $this;

@@ -65,7 +65,7 @@ class JsSse extends JsCallback
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
-            $this->sendEvent('js', $this->app->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'atk_sse_action');
+            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'atk_sse_action');
         }
     }
 
@@ -75,16 +75,16 @@ class JsSse extends JsCallback
             if ($ajaxec) {
                 $this->sendEvent(
                     'js',
-                    $this->app->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
+                    $this->getApp()->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
                     'atk_sse_action'
                 );
             }
 
             // no further output please
-            $this->app->terminate();
+            $this->getApp()->terminate();
         }
 
-        $this->app->terminateJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]);
+        $this->getApp()->terminateJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]);
     }
 
     /**
@@ -131,7 +131,7 @@ class JsSse extends JsCallback
 
             // stop execution when aborted if not keepAlive.
             if (!$this->keepAlive) {
-                $this->app->callExit();
+                $this->getApp()->callExit();
             }
         }
 
@@ -162,10 +162,10 @@ class JsSse extends JsCallback
         @set_time_limit(0); // disable time limit
         ignore_user_abort(true);
 
-        $this->app->setResponseHeader('content-type', 'text/event-stream');
+        $this->getApp()->setResponseHeader('content-type', 'text/event-stream');
 
         // disable buffering for nginx, see http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
-        $this->app->setResponseHeader('x-accel-buffering', 'no');
+        $this->getApp()->setResponseHeader('x-accel-buffering', 'no');
 
         // disable compression
         @ini_set('zlib.output_compression', '0');

@@ -31,16 +31,16 @@ class Centered extends \atk4\ui\Layout
 
         // If image is still unset load it when layout is initialized from the App
         if ($this->image === null && $this->app) {
-            if (isset($this->app->cdn['layout-logo'])) {
-                $this->image = $this->app->cdn['layout-logo'];
+            if (isset($this->getApp()->cdn['layout-logo'])) {
+                $this->image = $this->getApp()->cdn['layout-logo'];
             } else {
-                $this->image = $this->app->cdn['atk'] . '/logo.png';
+                $this->image = $this->getApp()->cdn['atk'] . '/logo.png';
             }
         }
 
         // set application's title
 
-        $this->template->trySet('title', $this->app->title);
+        $this->template->trySet('title', $this->getApp()->title);
     }
 
     protected function renderView(): void

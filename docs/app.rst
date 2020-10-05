@@ -39,7 +39,7 @@ properties into the App class::
 
     // later anywhere in the code:
 
-    $m = new MyModel($this->app->db);
+    $m = new MyModel($this->getApp()->db);
 
 .. IMPORTANT:: $app->db is NOT a standard property. If you use this property, that's your own convention.
 
@@ -281,7 +281,7 @@ You can also use this method to output debug data. Here is comparison to var_dum
 
     // var_dump($my_var);  // does not stop execution, draws UI anyway
 
-    $this->app->terminate(var_export($my_var)); // stops execution.
+    $this->getApp()->terminate(var_export($my_var)); // stops execution.
 
 
 Execution state

@@ -120,7 +120,7 @@ class ActionButtons extends Table\Column
         $modal->observeChanges(); // adds scrollbar if needed
 
         $modal->set(function ($t) use ($callback) {
-            $callback($t, $this->app->stickyGet($this->name));
+            $callback($t, $this->getApp()->stickyGet($this->name));
         });
 
         return $this->addButton($button, $modal->show(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)));

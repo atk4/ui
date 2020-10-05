@@ -68,7 +68,7 @@ class CardSection extends View
     {
         foreach ($fields as $field) {
             $label = $model->getField($field)->getCaption();
-            $value = $this->app ? $this->app->ui_persistence->typecastSaveField($model->getField($field), $model->get($field)) : $model->get($field);
+            $value = $this->app ? $this->getApp()->ui_persistence->typecastSaveField($model->getField($field), $model->get($field)) : $model->get($field);
             if ($useLabel) {
                 $value = $label . $this->glue . $value;
             }

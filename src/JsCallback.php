@@ -140,7 +140,7 @@ class JsCallback extends Callback implements JsExpressionable
     public function terminateAjax($ajaxec, $msg = null, $success = true)
     {
         if ($this->canTerminate()) {
-            $this->app->terminateJson(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
+            $this->getApp()->terminateJson(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
         }
     }
 

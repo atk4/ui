@@ -63,11 +63,11 @@ class Callback extends AbstractView
     public function set($fx = null, $args = null)
     {
         if ($this->isTriggered() && $this->canTrigger()) {
-            $this->app->catch_runaway_callbacks = false;
-            $t = $this->app->run_called;
-            $this->app->run_called = true;
+            $this->getApp()->catch_runaway_callbacks = false;
+            $t = $this->getApp()->run_called;
+            $this->getApp()->run_called = true;
             $ret = $fx(...($args ?? []));
-            $this->app->run_called = $t;
+            $this->getApp()->run_called = $t;
 
             return $ret;
         }
@@ -79,7 +79,7 @@ class Callback extends AbstractView
     public function terminateJson(AbstractView $view): void
     {
         if ($this->canTerminate()) {
-            $this->app->terminateJson($view);
+            $this->getApp()->terminateJson($view);
         }
     }
 

@@ -138,7 +138,7 @@ class Wizard extends View
             $this->buttonNext->addClass('disabled')->set('Completed');
             $this->buttonFinish->destroy();
 
-            $this->app->catch_runaway_callbacks = false;
+            $this->getApp()->catch_runaway_callbacks = false;
             $callback($this);
         } else {
             $this->buttonFinish->destroy();

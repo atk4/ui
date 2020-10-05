@@ -62,7 +62,7 @@ class Admin extends \atk4\ui\Layout implements NavigableInterface
             ]);
             Icon::addTo($this->burger, ['content']);
 
-            Header::addTo($this->menu, [$this->app->title, 'size' => 4]);
+            Header::addTo($this->menu, [$this->getApp()->title, 'size' => 4]);
         }
 
         if ($this->menuRight === null) {
@@ -74,7 +74,7 @@ class Admin extends \atk4\ui\Layout implements NavigableInterface
             $this->menuLeft = Menu::addTo($this, ['ui' => 'atk-sidenav-content'], ['LeftMenu']);
         }
 
-        $this->template->trySet('version', $this->app->version);
+        $this->template->trySet('version', $this->getApp()->version);
     }
 
     /**

@@ -142,10 +142,10 @@ class Grid extends View
         if ($this->paginator !== false) {
             $seg = View::addTo($this->container, [], ['Paginator'])->addStyle('text-align', 'center');
             $this->paginator = $seg->add($this->factory([Paginator::class, 'reload' => $this->container], $this->paginator));
-            $this->app ? $this->app->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
+            $this->app ? $this->getApp()->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
         }
 
-        $this->app ? $this->app->stickyGet('_q') : $this->stickyGet('_q');
+        $this->app ? $this->getApp()->stickyGet('_q') : $this->stickyGet('_q');
     }
 
     /**

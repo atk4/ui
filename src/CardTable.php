@@ -29,7 +29,7 @@ class CardTable extends Table
 
         $data = [];
 
-        $ui_values = $this->app ? $this->app->ui_persistence->typecastSaveRow($model, $model->get()) : $model->get();
+        $ui_values = $this->app ? $this->getApp()->ui_persistence->typecastSaveRow($model, $model->get()) : $model->get();
 
         foreach ($model->get() as $key => $value) {
             if (!$columndef || ($columndef && in_array($key, $columndef, true))) {

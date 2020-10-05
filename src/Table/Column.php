@@ -284,7 +284,7 @@ class Column
             $attr['class'] = implode(' ', $attr['class']);
         }
 
-        return $this->app->getTag($position === 'body' ? 'td' : 'th', $attr, $value);
+        return $this->getApp()->getTag($position === 'body' ? 'td' : 'th', $attr, $value);
     }
 
     /**
@@ -359,7 +359,7 @@ class Column
      */
     public function getTotalsCellHtml(Field $field, $value)
     {
-        return $this->getTag('foot', $this->app->ui_persistence->typecastSaveField($field, $value));
+        return $this->getTag('foot', $this->getApp()->ui_persistence->typecastSaveField($field, $value));
     }
 
     /**
