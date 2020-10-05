@@ -1,50 +1,39 @@
 /**
- * Wrapper for v-date-picker component from V-Calendar
- * https://vcalendar.io/
+ * Wrapper for vue-flatpickr-component component from V-Calendar
+ * https://github.com/ankurk91/vue-flatpickr-component
  *
  * Props
- *  value: The initial date vale as a string.
- *  datePickerProps: Any of v-date-picker components props
- *  atkDateOptions:
- *    useTodayDefault: Will set picker to today when value is null, false by default.
- *    phpDateFormat: The string format for representing the date value.
- *
+ *  config: Any of flatpickr options
  *   Will emit a dateChange event when date is set.
  */
 
-const template = '<v-date-picker v-model="date" v-bind="datePickerProps" @input="onChange"></v-date-picker>';
+const template = '<flat-picker v-model="date" :config="flatPickrConfig" @on-change="onChange"></flat-picker>';
 
 export default {
     name: 'atk-date-picker',
     template: template,
-    props: ['value', 'datePickerProps', 'atkDateOptions'],
+    props: ['config'],
     data: function () {
-        const { useTodayDefault = false, phpDateFormat = 'Y-m-d' } = this.atkDateOptions || {};
+        if (!this.config.locale) {
+            this.config.locale = flatpickr.l10ns.default;
+        }
         return {
-            useTodayDefault: useTodayDefault,
-            phpDateFormat: phpDateFormat,
+            flatPickrConfig: this.config,
             date: null,
         };
     },
     mounted: function () {
-        if (this.useTodayDefault && this.value === null) {
-            this.date = new Date();
-        } else if (this.value) {
-            this.date = this.getDateFromString(this.value);
+        if (this.config.defaultDate) {
+            if (this.config.defaultDate instanceof Date) {
+                this.$emit('setDefault', flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat));
+            } else {
+                this.$emit('setDefault', this.config.defaultDate);
+            }
         }
-
-        if (this.date) {
-            this.$emit('dateChange', atk.phpDate(this.phpDateFormat, this.date));
-        }
-    },
-    computed: {
     },
     methods: {
         onChange: function (date) {
-            this.$emit('dateChange', atk.phpDate(this.phpDateFormat, date));
-        },
-        getDateFromString: function (dateString) {
-            return new Date(atk.utils.date().parse(dateString));
+            this.$emit('dateChange', flatpickr.formatDate(date[0], this.config.dateFormat));
         },
     },
 };

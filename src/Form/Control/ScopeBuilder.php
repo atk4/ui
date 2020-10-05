@@ -58,22 +58,23 @@ class ScopeBuilder extends Control
      */
     public static $listDelimiters = [';', ','];
 
-    /** @var array The Vue v-date-picker component props. Leave empty for default. */
-    public $datePickerProps = [
-        'locale' => 'en-En',
-        'masks' => ['input' => 'YYYY-MM-DD'],
-    ];
-
     /**
-     * The atk-date-picker props options:
-     *    'phpDateFormat' The date format value. Default: 'Y-m-d'
-     *    'useTodayDefault' Will set date value to today when date value is set to null.
+     * The date options:
+     *     Any of flatpickr options. Will be applied globally within scopeBuilder;
+     *    'flatpickr' => [].
+     *
+     *    Note on locale: ScopeBuilder will use default flatpickr locale.
+     *    In order to change default locale simply use Calendar::setLocale($app, 'fr');
+     *
+     *    Set input value to today when date initial value is null.
+     *    'useTodayDefault' => true
+     *
+     *    Display date, datetime or time to user in a different format.
+     *    'altDisplayFormat' => ['date' => 'M d, Y', 'datetime' => 'M d, Y H:i', 'time' => 'H:i']
      *
      * @var array
      */
-    public $atkdDateOptions = [
-        'useTodayDefault' => true,
-    ];
+    public $atkdDateOptions = [];
 
     /**
      * The scopebuilder View. Assigned in init().
@@ -261,8 +262,51 @@ class ScopeBuilder extends Control
                 self::OPERATOR_EMPTY,
                 self::OPERATOR_NOT_EMPTY,
             ],
+            'props' => [
+                'dateFormat' => 'Y-m-d',
+            ],
         ],
-        'datetime' => 'date',
+        'datetime' => [
+            'type' => 'custom-component',
+            'component' => 'DatePicker',
+            'inputType' => 'datetime',
+            'operators' => [
+                self::OPERATOR_TIME_EQUALS,
+                self::OPERATOR_TIME_DOESNOT_EQUAL,
+                self::OPERATOR_TIME_GREATER,
+                self::OPERATOR_TIME_GREATER_EQUAL,
+                self::OPERATOR_TIME_LESS,
+                self::OPERATOR_TIME_LESS_EQUAL,
+                self::OPERATOR_EMPTY,
+                self::OPERATOR_NOT_EMPTY,
+            ],
+            'props' => [
+                'dateFormat' => 'Y-m-d H:i',
+                'enableTime' => true,
+                'time_24hr' => true,
+            ],
+        ],
+        'time' => [
+            'type' => 'custom-component',
+            'component' => 'DatePicker',
+            'inputType' => 'time',
+            'operators' => [
+                self::OPERATOR_TIME_EQUALS,
+                self::OPERATOR_TIME_DOESNOT_EQUAL,
+                self::OPERATOR_TIME_GREATER,
+                self::OPERATOR_TIME_GREATER_EQUAL,
+                self::OPERATOR_TIME_LESS,
+                self::OPERATOR_TIME_LESS_EQUAL,
+                self::OPERATOR_EMPTY,
+                self::OPERATOR_NOT_EMPTY,
+            ],
+            'props' => [
+                'dateFormat' => 'H:i',
+                'enableTime' => true,
+                'noCalendar' => true,
+                'time_24hr' => true,
+            ],
+        ],
         'integer' => 'numeric',
         'float' => 'numeric',
         'checkbox' => 'boolean',
@@ -445,10 +489,7 @@ class ScopeBuilder extends Control
                     'labels' => $this->labels ?? null,
                     'form' => $this->form->formElement->name,
                     'debug' => $this->options['debug'] ?? false,
-                    'componentsProps' => [
-                        'datePicker' => $this->datePickerProps,
-                        'atkDateOptions' => $this->atkdDateOptions,
-                    ],
+                    'dateOptions' => $this->atkdDateOptions,
                 ],
             ]
         );

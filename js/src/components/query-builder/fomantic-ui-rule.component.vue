@@ -38,10 +38,9 @@
                                 <template v-if="canDisplay('date')">
                                     <div class="ui small input atk-qb">
                                       <atk-date-picker
-                                          :datePickerProps="getDatePickerProps()"
-                                          :atkDateOptions="getAtkDatePickerProps()"
-                                          :value="query.value"
-                                          @dateChange="onDateChange"></atk-date-picker>
+                                          :config="getDateConfig()"
+                                          @dateChange="onDateChange"
+                                          @setDefault="onDateChange"></atk-date-picker>
                                     </div>
                                 </template>
                                 <!-- Checkbox or Radio input -->
@@ -133,15 +132,22 @@ export default {
         onDateChange: function (date) {
             this.query.value = date;
         },
-        getDatePickerProps: function () {
-            return {
-                'input-props': { class: 'atk-qb-date-picker' },
-                popover: { placement: 'bottom', visibility: 'click' },
-                ...this.getRootData().data.componentsProps.datePicker || {},
-            };
-        },
-        getAtkDatePickerProps: function () {
-            return this.getRootData().data.componentsProps.atkDateOptions || {};
+        getDateConfig: function () {
+            const config = this.getRootData().data.dateOptions.flatpickr || {};
+            const altFormat = this.getRootData().data.dateOptions.altDisplayFormat;
+            if (altFormat && altFormat[this.rule.inputType]) {
+                config.altFormat = altFormat[this.rule.inputType];
+                config.altInput = true;
+            } else {
+                config.altFormat = null;
+                config.altInput = false;
+            }
+
+            if (this.getRootData().data.dateOptions.useTodayDefault) {
+                config.defaultDate = new Date();
+            }
+
+            return { ...config, ...this.rule.props };
         },
     },
 };
