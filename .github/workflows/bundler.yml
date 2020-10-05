@@ -71,7 +71,7 @@ jobs:
           git add public
           git config --global user.email "bundler@agiletoolkit.org"
           git config --global user.name "Release Bundler"
-          git commit -am "Setting current dependencies and compiled JS"
+          git commit -am "Releasing $v.0"
           echo "If everything is good and CI/CD pass - please manually create tag $v.0 on this commit ^^"
 
       - uses: ad-m/github-push-action@master
