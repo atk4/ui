@@ -14,7 +14,6 @@ jobs:
       - name: Update CDN destination
         shell: bash
         run: |
-          $SHELL --version
           v=$(echo ${{ github.ref }} | cut -d / -f 4)
           echo "::set-env name=version::$v"
 
