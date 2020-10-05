@@ -17,8 +17,13 @@ jobs:
           echo "::set-env name=version::$v"
 
           git branch
-          sed -i "s|'https://cdn.jsdelivr.net/gh/atk4/ui@develop/public.*|'https://cdn.jsdelivr.net/gh/atk4/ui@$v/public',|" src/App.php
-          sed -i "s|public \$version.*|public \$version = '$v';|" src/App.php
+          #sed -i "s|'https://cdn.jsdelivr.net/gh/atk4/ui@develop/public.*|'https://cdn.jsdelivr.net/gh/atk4/ui@$v/public',|" src/App.php
+          # it was develop, it can stay develop for DEVELOP branch, so we see changes to JS right away.
+
+          # Set next version for develop branch 2.3 -> 2.4.0-BETA
+          a=( ${v//./ } )
+          nv=${a[0]}"."$(( ${a[1]} +1 ))".0-BETA"
+          sed -i "s|public \$version.*|public \$version = '$nv';|" src/App.php
           git config --global user.email "bundler@agiletoolkit.org"
           git config --global user.name "Release Bundler"
           git commit -am "Update versions for develop"
@@ -52,6 +57,10 @@ jobs:
 
       - name: Compile JS files for CDN
         run: |
+
+          # Update version for the release branch
+          v=$(echo ${{ github.ref }} | cut -d / -f 4)
+          sed -i "s|public \$version.*|public \$version = '$v.0';|" src/App.php
           npm install -g less-plugin-clean-css
           (cd js; npm ci; npm run build; cd ..)
           lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
@@ -60,23 +69,9 @@ jobs:
           git config --global user.email "bundler@agiletoolkit.org"
           git config --global user.name "Release Bundler"
           git commit -am "Setting current dependencies and compiled JS"
+          echo "If everything is good and CI/CD pass - please manually create tag $v.0 on this commit ^^"
 
       - uses: ad-m/github-push-action@master
         with:
           branch: ${{ github.ref }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: pull-request
-        uses: romaninsh/pull-request@master
-        with:
-          source_branch: "release/${{ env.version }}"
-          destination_branch: "master"          # If blank, default: master
-          pr_title: "Releasing ${{ github.ref }} into master"
-          pr_body: |
-            - [ ] Review changes (must include stable dependencies)
-            - [ ] Merge this PR into master (will delete ${{ github.ref }})
-            - [ ] Go to Releases and create TAG from master
-            Do not merge master into develop
-          pr_reviewer: "romaninsh"
-          pr_assignee: "romaninsh"
           github_token: ${{ secrets.GITHUB_TOKEN }}
