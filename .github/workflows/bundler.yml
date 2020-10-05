@@ -32,16 +32,16 @@ jobs:
 
       - uses: ad-m/github-push-action@master
         with:
-          branch: feature/${{ env.version }}-cdn-update
+          branch: feature/${{ env.version }}-version-update
           force: true # in case of repeat run
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: pull-request
         uses: romaninsh/pull-request@master
         with:
-          source_branch: feature/${{ env.version }}-cdn-update
+          source_branch: feature/${{ env.version }}-version-update
           destination_branch: develop
-          pr_title: "Updating CDN link to use @${{ env.version }}"
+          pr_title: "Update to next version after release of @${{ env.version }}"
           pr_body: |
             Compiled JS files from last release are here:
 
