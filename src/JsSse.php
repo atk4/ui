@@ -43,9 +43,7 @@ class JsSse extends JsCallback
 
     public function jsRender(): string
     {
-        if (!$this->app) {
-            throw new Exception('Call-back must be part of a RenderTree');
-        }
+        $this->getApp(); // assert has App
 
         $options = ['uri' => $this->getJsUrl()];
         if ($this->showLoader) {
@@ -115,7 +113,7 @@ class JsSse extends JsCallback
         }
 
         // output headers and content
-        $app = $this->app;
+        $app = $this->getApp();
         \Closure::bind(static function () use ($app, $content): void {
             $app->outputResponse($content, []);
         }, null, $app)();

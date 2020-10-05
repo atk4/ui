@@ -81,7 +81,7 @@ class Multiformat extends Table\Column
         }
 
         $template = new \atk4\ui\Template($cell);
-        $template->app = $this->app;
+        $template->setApp($this->getApp());
         $template->set($row);
         $template->setHtml($html_tags);
 

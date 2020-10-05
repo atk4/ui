@@ -534,7 +534,9 @@ class Template implements \ArrayAccess
     public function cloneRegion(string $tag)
     {
         $template = new static();
-        $template->app = $this->app;
+        if ($this->issetApp()) {
+            $template->setApp($this->getApp());
+        }
         if ($tag === self::TOP_TAG) {
             $template->template = $this->template;
             $template->source = $this->source;

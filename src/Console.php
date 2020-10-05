@@ -90,7 +90,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
         $this->sse->set(function () use ($fx) {
             $this->sseInProgress = true;
 
-            if (isset($this->app)) {
+            if ($this->issetApp()) {
                 $old_logger = $this->getApp()->logger;
                 $this->getApp()->logger = $this;
             }
@@ -117,7 +117,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 $this->outputHtml('<div class="ui segment" style="white-space: normal; font-family: Lato,\'Helvetica Neue\',Arial,Helvetica,sans-serif;">{0}</div>', [$this->getApp()->renderExceptionHtml($e)]);
             }
 
-            if (isset($this->app)) {
+            if ($this->issetApp()) {
                 $this->getApp()->logger = $old_logger;
             }
 
@@ -343,7 +343,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
         if (is_object($object)) {
             // temporarily override app logging
-            if (isset($object->app)) {
+            if (isset($object->_appScopeTrait) && $object->issetApp()) {
                 $loggerBak = $object->getApp()->logger;
                 $object->getApp()->logger = $this;
             }
@@ -357,7 +357,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             try {
                 $result = $object->{$method}(...$args);
             } finally {
-                if (isset($object->app)) {
+                if (isset($object->_appScopeTrait) && $object->issetApp()) {
                     $object->getApp()->logger = $loggerBak;
                 }
                 if (isset($object->_debugTrait)) {

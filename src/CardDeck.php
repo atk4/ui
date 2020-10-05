@@ -273,7 +273,7 @@ class CardDeck extends View
     protected function jsModelReturn(Model\UserAction $action = null, string $msg = 'Done!'): array
     {
         $js[] = $this->getNotifier($msg, $action);
-        if ($action->getOwner()->loaded() && $card = $this->findCard($action->owner)) {
+        if ($action->getOwner()->loaded() && $card = $this->findCard($action->getOwner())) {
             $js[] = $card->jsReload($this->_getReloadArgs());
         } else {
             $js[] = $this->container->jsReload($this->_getReloadArgs());

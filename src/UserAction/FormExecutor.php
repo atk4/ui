@@ -32,9 +32,9 @@ class FormExecutor extends BasicExecutor
         // Setup form model using action fields.
         if (!$this->form->model) {
             if (!$this->action->fields) {
-                $this->action->fields = $this->getModelFields($this->action->owner);
+                $this->action->fields = $this->getModelFields($this->action->getOwner());
             }
-            $this->form->setModel($this->action->owner, $this->action->fields);
+            $this->form->setModel($this->action->getOwner(), $this->action->fields);
         }
 
         $this->form->onSubmit(function (Form $form) {

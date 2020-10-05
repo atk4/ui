@@ -35,7 +35,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     protected function setUp(): void
     {
         $this->app = new AppMock(['always_run' => false, 'catch_exceptions' => false]);
-        $this->getApp()->initLayout([\atk4\ui\Layout\Centered::class]);
+        $this->app->initLayout([\atk4\ui\Layout\Centered::class]);
 
         // reset var, between tests
         $_GET = [];
@@ -46,9 +46,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $app = $this->app;
-
-        $cb = \atk4\ui\Callback::addTo($app);
+        $cb = \atk4\ui\Callback::addTo($this->app);
 
         // simulate triggering
         $_GET[$cb->name] = '1';
@@ -64,9 +62,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $app = $this->app;
-
-        $cb = \atk4\ui\Callback::addTo($app);
+        $cb = \atk4\ui\Callback::addTo($this->app);
 
         // don't simulate triggering
         $cb->set(function ($x) use (&$var) {
@@ -80,9 +76,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $app = $this->app;
-
-        $cb = \atk4\ui\CallbackLater::addTo($app);
+        $cb = \atk4\ui\CallbackLater::addTo($this->app);
 
         // simulate triggering
         $_GET[$cb->name] = '1';
@@ -94,7 +88,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertNull($var);
 
         $this->expectOutputRegex($this->htmlDoctypeRegex);
-        $app->run();
+        $this->app->run();
 
         $this->assertSame(34, $var);
     }
@@ -103,14 +97,13 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $app = $this->app;
-
-        $cb = \atk4\ui\CallbackLater::addTo($app);
+        $cb = \atk4\ui\CallbackLater::addTo($this->app);
 
         // simulate triggering
         $_GET[$cb->name] = '1';
         $_GET[$cb->name . '_2'] = '1';
 
+        $app = $this->app;
         $cb->set(function ($x) use (&$var, $app, &$cbname) {
             $cb2 = \atk4\ui\CallbackLater::addTo($app);
             $cbname = $cb2->name;
@@ -122,7 +115,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertNull($var);
 
         $this->expectOutputRegex($this->htmlDoctypeRegex);
-        $app->run();
+        $this->app->run();
 
         $this->assertSame(34, $var);
     }
@@ -131,9 +124,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $app = $this->app;
-
-        $cb = \atk4\ui\CallbackLater::addTo($app);
+        $cb = \atk4\ui\CallbackLater::addTo($this->app);
 
         // don't simulate triggering
         $cb->set(function ($x) use (&$var) {
@@ -143,7 +134,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertNull($var);
 
         $this->expectOutputRegex($this->htmlDoctypeRegex);
-        $app->run();
+        $this->app->run();
 
         $this->assertNull($var);
     }
@@ -152,9 +143,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $app = $this->app;
-
-        $vp = \atk4\ui\VirtualPage::addTo($app);
+        $vp = \atk4\ui\VirtualPage::addTo($this->app);
         // simulate triggering
 
         $vp->set(function ($p) use (&$var) {
@@ -164,7 +153,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $_GET[$vp->name] = '1';
 
         $this->expectOutputRegex('/^..DOCTYPE/');
-        $app->run();
+        $this->app->run();
         $this->assertSame(25, $var);
     }
 
@@ -172,9 +161,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $app = $this->app;
-
-        $vp = \atk4\ui\VirtualPage::addTo($app, ['urlTrigger' => 'bah']);
+        $vp = \atk4\ui\VirtualPage::addTo($this->app, ['urlTrigger' => 'bah']);
         $vp->set(function ($p) use (&$var) {
             $var = 25;
         });
@@ -183,7 +170,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $_GET['bah'] = '1';
 
         $this->expectOutputRegex('/^..DOCTYPE/');
-        $app->run();
+        $this->app->run();
         $this->assertSame(25, $var);
     }
 
@@ -198,16 +185,14 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $app = $this->app;
-
-        $vp = \atk4\ui\VirtualPage::addTo($app);
+        $vp = \atk4\ui\VirtualPage::addTo($this->app);
         $vp->set([$this, 'callPull230']);
 
         // simulate triggering
         $_GET[$vp->name] = '1';
 
         $this->expectOutputRegex('/^..DOCTYPE/');
-        $app->run();
+        $this->app->run();
         $this->assertSame(26, $this->var);
     }
 }

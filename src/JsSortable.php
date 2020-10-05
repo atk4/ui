@@ -58,7 +58,7 @@ class JsSortable extends JsCallback
     {
         parent::init();
         if (!$this->view) {
-            $this->view = $this->owner;
+            $this->view = $this->getOwner();
         }
         $this->getApp()->requireJs('https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.5/lib/draggable.bundle.js');
 

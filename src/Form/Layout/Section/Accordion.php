@@ -65,6 +65,6 @@ class Accordion extends \atk4\ui\Accordion
             return parent::getSectionIdx($section);
         }
 
-        return parent::getSectionIdx($section->owner);
+        return parent::getSectionIdx($section->getOwner());
     }
 }

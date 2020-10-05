@@ -71,7 +71,7 @@ active. (See :ref:`system_pattern`)::
 
             // My App class will establish database connection
             $this->db = new \atk4\data\Persistence_SQL($_CLEARDB_DATABASE_URL['DSN']);
-            $this->db->app = $this;
+            $this->db->setApp($this);
 
             // My App class provides access to a currently logged user and currently selected system.
             $this->user = new User($this->db);

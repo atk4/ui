@@ -82,7 +82,7 @@ class ActionButtons extends Table\Column
             $button = $this->factory([\atk4\ui\Button::class], $this->mergeSeeds($button, ['id' => false]));
         }
 
-        $button->app = $this->table->app;
+        $button->setApp($this->table->getApp());
 
         $this->buttons[$name] = $button->addClass('{$_' . $name . '_disabled} compact b_' . $name);
 
@@ -107,7 +107,7 @@ class ActionButtons extends Table\Column
      */
     public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [])
     {
-        $owner = $owner ?: $this->getOwner()->owner;
+        $owner = $owner ?: $this->getOwner()->getOwner();
 
         if (is_string($defaults)) {
             $defaults = ['title' => $defaults];

@@ -264,7 +264,7 @@ class View extends AbstractView implements JsExpressionable
             $this->id = $this->name;
         }
 
-        if ($this->region && !$this->template && !$this->defaultTemplate && $this->owner && $this->getOwner()->template) {
+        if ($this->region && !$this->template && !$this->defaultTemplate && $this->issetOwner() && $this->getOwner()->template) {
             $this->template = $this->getOwner()->template->cloneRegion($this->region);
 
             $this->getOwner()->template->del($this->region);
@@ -279,8 +279,8 @@ class View extends AbstractView implements JsExpressionable
             }
         }
 
-        if ($this->template && !isset($this->template->app) && isset($this->app)) {
-            $this->template->app = $this->app;
+        if ($this->template && !$this->template->issetApp() && $this->issetApp()) {
+            $this->template->setApp($this->getApp());
         }
 
         // add default objects
@@ -313,7 +313,7 @@ class View extends AbstractView implements JsExpressionable
             $object = AbstractView::addToWithCl($this, $object, [], true);
         }
 
-        if (!$this->app) {
+        if (!$this->issetApp()) {
             $this->_add_later[] = [$object, $region];
 
             return $object;
@@ -358,15 +358,15 @@ class View extends AbstractView implements JsExpressionable
      */
     public function getClosestOwner(self $object, $class)
     {
-        if (!isset($object->owner)) {
+        if ($object->issetOwner()) {
             return;
         }
 
-        if ($object->owner instanceof $class) {
-            return $object->owner;
+        if ($object->getOwner() instanceof $class) {
+            return $object->getOwner();
         }
 
-        return $this->getClosestOwner($object->owner, $class);
+        return $this->getClosestOwner($object->getOwner(), $class);
     }
 
     // }}}
@@ -1158,14 +1158,14 @@ class View extends AbstractView implements JsExpressionable
 
         $actions['indent'] = '';
 
-        if (!$forceReturn && $this->app && $this->getApp()->hasMethod('jsReady')) {
+        if (!$forceReturn && $this->issetApp() && $this->getApp()->hasMethod('jsReady')) {
             $this->getApp()->jsReady($actions);
 
             return '';
         }
 
         // delegate $action rendering in hosting app if exist.
-        if ($this->app && $this->getApp()->hasMethod('getViewJS')) {
+        if ($this->issetApp() && $this->getApp()->hasMethod('getViewJS')) {
             return $this->getApp()->getViewJS($actions);
         }
 

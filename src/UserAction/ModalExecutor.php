@@ -309,7 +309,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->_addStepTitle($modal, $this->step);
         $form = $this->addFormTo($modal);
 
-        $form->setModel($this->action->owner, $this->action->fields);
+        $form->setModel($this->action->getOwner(), $this->action->fields);
         // set Fields value if set from another step.
         $this->setFormField($form, $this->actionData['fields'] ?? [], $this->step);
 
@@ -413,7 +413,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     protected function jsGetExecute($obj, $id)
     {
         $success = $this->jsSuccess instanceof \Closure
-            ? ($this->jsSuccess)($this, $this->action->owner, $id, $obj)
+            ? ($this->jsSuccess)($this, $this->action->getOwner(), $id, $obj)
             : $this->jsSuccess;
 
         return [

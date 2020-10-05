@@ -250,7 +250,7 @@ class Lookup extends Input
         if ($this->form) {
             $vp = \atk4\ui\VirtualPage::addTo($this->form);
         } else {
-            $vp = \atk4\ui\VirtualPage::addTo($this->owner);
+            $vp = \atk4\ui\VirtualPage::addTo($this->getOwner());
         }
 
         $vp->set(function ($page) {

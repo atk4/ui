@@ -53,7 +53,7 @@ in any way you wish, before they will actuallized.
     In addition to adding a child object, sets up it's template
     and associate it's output with the region in our template.
 
-    Will copy $this->app into $object->app.
+    Will copy $this->getApp() into $object->getApp().
 
     If this object is initialized, will also initialize $object
 

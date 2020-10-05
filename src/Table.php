@@ -490,7 +490,7 @@ class Table extends Lister
         $this->t_row_master->setHtml('cells', $this->getDataRowHtml());
         $this->t_row_master['_id'] = '{$_id}';
         $this->t_row = new Template($this->t_row_master->render());
-        $this->t_row->app = $this->app;
+        $this->t_row->setApp($this->getApp());
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;

@@ -50,7 +50,7 @@ class JsArgumentFormExecutor extends JsModal
             }
 
             // TODO How do we know if argument is need over model field in action?
-            $form->setModel($this->action->owner);
+            $form->setModel($this->action->getOwner());
 
             $form->hook(self::HOOK_FORM_INIT);
 

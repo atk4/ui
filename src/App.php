@@ -162,7 +162,7 @@ class App
      */
     public function __construct($defaults = [])
     {
-        $this->app = $this;
+        $this->setApp($this);
 
         // Process defaults
         if (is_string($defaults)) {
@@ -430,11 +430,11 @@ class App
     public function initLayout($seed)
     {
         $layout = Layout::fromSeed($seed);
-        $layout->app = $this;
+        $layout->setApp($this);
 
         if (!$this->html) {
             $this->html = new View(['defaultTemplate' => 'html.html']);
-            $this->html->app = $this;
+            $this->html->setApp($this);
             $this->html->invokeInit();
         }
 
@@ -561,7 +561,7 @@ class App
     public function loadTemplate($name)
     {
         $template = new $this->templateClass();
-        $template->app = $this;
+        $template->setApp($this);
 
         if (in_array($name[0], ['.', '/', '\\'], true) || strpos($name, ':\\') !== false) {
             return $template->load($name);

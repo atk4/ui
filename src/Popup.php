@@ -120,13 +120,13 @@ class Popup extends View
         parent::init();
 
         if (
-            $this->owner instanceof Item ||
-            $this->owner instanceof Menu ||
-            $this->owner instanceof Dropdown ||
-            $this->owner instanceof Button
+            $this->getOwner() instanceof Item ||
+            $this->getOwner() instanceof Menu ||
+            $this->getOwner() instanceof Dropdown ||
+            $this->getOwner() instanceof Button
         ) {
             throw (new Exception('Although it may be tempting to add pop-up into Button/Menu/Item, this may cause some random issues. Add elsewhere and use "triggerBy"'))
-                ->addMoreInfo('owner', $this->owner);
+                ->addMoreInfo('owner', $this->getOwner());
         }
 
         if (

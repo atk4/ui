@@ -23,9 +23,7 @@ class CallbackLater extends Callback
      */
     public function set($fx = null, $args = null)
     {
-        if (!$this->app) {
-            throw new Exception('Call-back must be part of a RenderTree');
-        }
+        $this->getApp(); // assert has App
 
         if ($this->getApp()->is_rendering) {
             return parent::set($fx, $args);

@@ -30,7 +30,7 @@ class Centered extends \atk4\ui\Layout
         parent::init();
 
         // If image is still unset load it when layout is initialized from the App
-        if ($this->image === null && $this->app) {
+        if ($this->image === null && $this->issetApp()) {
             if (isset($this->getApp()->cdn['layout-logo'])) {
                 $this->image = $this->getApp()->cdn['layout-logo'];
             } else {
