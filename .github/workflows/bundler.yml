@@ -12,6 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Update CDN destination
+        shell: bash
         run: |
           $SHELL --version
           v=$(echo ${{ github.ref }} | cut -d / -f 4)
@@ -57,6 +58,7 @@ jobs:
           composer config version --unset
 
       - name: Compile JS files for CDN
+        shell: bash
         run: |
 
           # Update version for the release branch
