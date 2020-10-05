@@ -21,11 +21,12 @@ cache
 /phpunit-*.xml
 /behat.yml
 
+package-lock.json
+!/js/package-lock.json
+
 /config.codekit
 *.bak
 *.codekit3
 yarn.lock
-run_local.sh
 /coverage
 /demos/test/
-package-lock.json

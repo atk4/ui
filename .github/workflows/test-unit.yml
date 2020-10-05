@@ -209,7 +209,7 @@ jobs:
         run: |
           apk add npm
           npm install --loglevel=error -g pug-cli less less-plugin-clean-css uglify-js
-          (cd js && npm install --loglevel=error)
+          (cd js && npm ci --loglevel=error)
 
       - name: Lint JS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
