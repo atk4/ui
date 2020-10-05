@@ -19,39 +19,38 @@
   "license": "MIT",
   "authors": [
     {
-        "name": "Romans Malinovskis",
-        "email": "romans@agiletoolkit.org",
-        "homepage": "https://nearly.guru/"
+      "name": "Romans Malinovskis",
+      "email": "romans@agiletoolkit.org",
+      "homepage": "https://nearly.guru/"
     },
     {
-        "name": "Alain Belair",
-        "homepage": "https://agiletoolkit.org/"
+      "name": "Alain Belair",
+      "homepage": "https://agiletoolkit.org/"
     },
     {
-        "name": "Imants Horsts",
-        "homepage": "https://darkside.lv/"
+      "name": "Imants Horsts",
+      "homepage": "https://darkside.lv/"
     },
     {
-        "name": "Francesco Danti",
-        "homepage": "https://oracoltech.com/"
+      "name": "Francesco Danti",
+      "homepage": "https://oracoltech.com/"
     },
     {
-        "name": "Michael Voříšek",
-        "homepage": "https://mvorisek.cz/"
+      "name": "Michael Voříšek",
+      "homepage": "https://mvorisek.cz/"
     },
     {
-        "name": "Philipp Grashoff"
+      "name": "Philipp Grashoff"
     },
     {
-        "name": "Alex Cicovic",
-        "homepage": "https://alexcicovic.com/"
+      "name": "Alex Cicovic",
+      "homepage": "https://alexcicovic.com/"
     },
     {
-        "name": "Georgi Hristov",
-        "homepage": "https://xsystems.io/"
+      "name": "Georgi Hristov",
+      "homepage": "https://xsystems.io/"
     }
   ],
-  "version": "dev-develop",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {
