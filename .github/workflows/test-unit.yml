@@ -225,6 +225,7 @@ jobs:
             mv "$fhtml" "$fhtml.orig"
             pug --silent --pretty "$fpug"
             diff "$fhtml" "$fhtml.orig"
+            rm "$fhtml.orig"
           done
 
       - name: Build/diff CSS files (only for Slow)
@@ -234,12 +235,16 @@ jobs:
           # prod: lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
           lessc public/agileui.less public/agileui.css
           diff public/agileui.css.orig public/agileui.css
+          rm public/agileui.css.orig
 
-      - name: Build JS files (only for Slow)
+      - name: Build/diff JS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
+          cp -r public public.orig && rm public/*.js
           (cd js && npm run build)
           sed -i "s~'https://ui.agiletoolkit.org/public.*~'/demos',~" src/App.php
+          diff -qr public public.orig
+          rm -r public.orig
 
       - name: Install PHP dependencies
         run: |
