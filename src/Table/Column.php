@@ -151,12 +151,10 @@ class Column
     /**
      * Add a dropdown header menu.
      *
-     * @param array       $items
-     * @param callable    $fx
      * @param string      $icon
      * @param string|null $menuId the menu name
      */
-    public function addDropdown($items, $fx, $icon = 'caret square down', $menuId = null)
+    public function addDropdown(array $items, \Closure $fx, $icon = 'caret square down', $menuId = null)
     {
         $menuItems = [];
         foreach ($items as $key => $item) {
@@ -166,7 +164,7 @@ class Column
         $cb = $this->setHeaderDropdown($menuItems, $icon, $menuId);
 
         $cb->onSelectItem(function ($menu, $item) use ($fx) {
-            return call_user_func($fx, $item, $menu);
+            return $fx($item, $menu);
         });
     }
 
@@ -210,7 +208,7 @@ class Column
             'onChange' => new JsExpression($function),
         ]);
 
-        //will stop grid column from being sorted.
+        // will stop grid column from being sorted.
         $chain->on('click', new JsExpression('function(e){e.stopPropagation();}'));
 
         $this->table->js(true, $chain);
@@ -326,7 +324,7 @@ class Column
         if ($this->hasHeaderAction) {
             $attr['id'] = $this->name . '_th';
 
-            //add the action tag to the caption
+            // add the action tag to the caption
             $caption = [$this->headerActionTag, $caption];
         }
 
@@ -349,7 +347,7 @@ class Column
             }
         }
 
-        return $this->getTag('head', [['div', compact('class'), $caption]], $attr);
+        return $this->getTag('head', [['div', ['class' => $class], $caption]], $attr);
     }
 
     /**

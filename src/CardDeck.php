@@ -94,7 +94,7 @@ class CardDeck extends View
     /** @var string|null The current search query string. */
     private $query;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->container = $this->add($this->container);
@@ -303,13 +303,13 @@ class CardDeck extends View
         $deck = [];
         foreach ($this->cardHolder->elements as $v => $element) {
             if ($element instanceof $this->card) {
-                $deck[$element->model->id] = $element;
+                $deck[$element->model->getId()] = $element;
             }
         }
 
-        if (in_array($model->id, array_map($mapResults, $model->export([$model->id_field])), true)) {
+        if (in_array($model->getId(), array_map($mapResults, $model->export([$model->id_field])), true)) {
             // might be in result set but not in deck, for example when adding a card.
-            return $deck[$model->id] ?? null;
+            return $deck[$model->getId()] ?? null;
         }
     }
 
@@ -335,7 +335,7 @@ class CardDeck extends View
      * Add button to menu bar on top of deck card.
      *
      * @param Button|string|Model\UserAction                  $button   a button object, a model action or a string representing a model action
-     * @param Model\UserAction|JsExpressionable|callable|null $callback an model action, js expression or callback function
+     * @param Model\UserAction|JsExpressionable|\Closure|null $callback an model action, js expression or callback function
      * @param string|array                                    $confirm  A confirmation string or View::on method defaults when passed has an array,
      *
      * @return mixed

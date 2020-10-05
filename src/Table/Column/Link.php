@@ -111,14 +111,14 @@ class Link extends Table\Column
         parent::setDefaults($properties);
     }
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
-        if ($this->url && is_string($this->url)) {
+        if (is_string($this->url)) {
             $this->url = new \atk4\ui\Template($this->url);
         }
-        if ($this->page && is_string($this->page)) {
+        if (is_string($this->page)) {
             $this->page = [$this->page];
         }
     }

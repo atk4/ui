@@ -9,7 +9,7 @@ declare(strict_types=1);
  * model is a reference to your form's model, the form model should be saved prior
  * to calling saveRows().
  *
- * $form = \atk4\ui\Form::addTo($app);
+ * $form = Form::addTo($app);
  * $form->setModel($invoice, false);
  * // Add form controls
  *
@@ -56,18 +56,19 @@ declare(strict_types=1);
  * model. Be aware that in the example below all User records will be displayed.
  * If your model contains a lot of records, you should handle their limit somehow.
  *
- * $form = \atk4\ui\Form::addTo($app);
- * $ml = $form->addControl('ml', [\atk4\ui\Form\Control\Multiline::class]);
+ * $form = Form::addTo($app);
+ * $ml = $form->addControl('ml', [Form\Control\Multiline::class]);
  * $ml->setModel($user, ['name','is_vip']);
  *
  * $form->onSubmit(function($form) use ($ml) {
  *     $ml->saveRows();
- *     return new \atk4\ui\JsToast('Saved!');
+ *     return new JsToast('Saved!');
  * });
  */
 
 namespace atk4\ui\Form\Control;
 
+use atk4\data\Field;
 use atk4\data\Field\Callback;
 use atk4\data\FieldSqlExpression;
 use atk4\data\Model;
@@ -75,8 +76,9 @@ use atk4\data\Reference\HasOne;
 use atk4\data\ValidationException;
 use atk4\ui\Exception;
 use atk4\ui\Form;
-use atk4\ui\JsVueService;
+use atk4\ui\JsCallback;
 use atk4\ui\Template;
+use atk4\ui\View;
 
 class Multiline extends Form\Control
 {
@@ -90,17 +92,29 @@ class Multiline extends Form\Control
     /**
      * The multiline View. Assigned in init().
      *
-     * @var \atk4\ui\View
+     * @var View
      */
     private $multiLine;
 
     /**
-     * An array of options for sui-table property.
-     * Example: ['celled' => true] will render column lines in table.
+     * An array of options for certain Vue component use in Multiline.
+     * These options are applied globally to each components within Multiline.
      *
      * @var array
      */
-    public $options = [];
+    public $options = [
+        // sui-table props. Example: ['celled' => true] will render column lines in table.
+        'suiTable' => [],
+        // sui-dropdown props.
+        'suiDropdown' => [],
+        // Set how input handle php date format.
+        'atkDateOptions' => [],
+        // Set how v-date-picker options (props).
+        'datePickerProps' => [
+            'locale' => 'en-En',
+            'masks' => ['input' => 'YYYY-MM-DD'],
+        ],
+    ];
 
     /**
      * When true, tabbing out of the last column in last row of data
@@ -120,7 +134,7 @@ class Multiline extends Form\Control
     /**
      * The JS callback.
      *
-     * @var \atk4\ui\JsCallback
+     * @var JsCallback
      */
     private $cb;
 
@@ -128,7 +142,7 @@ class Multiline extends Form\Control
      * The function that gets execute when fields are changed or
      * rows get deleted.
      *
-     * @var callable
+     * @var \Closure
      */
     protected $onChangeFunction;
 
@@ -199,31 +213,35 @@ class Multiline extends Form\Control
     public $caption;
 
     /**
-     * @var JsFunction|null
-     *
      * A JsFunction to execute when Multiline add(+) button is clicked.
-     * The function is execute after mulitline component finish adding a row of fields.
-     * The function also receive the row vaue as an array.
-     * ex: $jsAfterAdd = new JsFunction(['value'],[new JsExpression('console.log(value)')]);
+     * The function is execute after multiline component finish adding a row of fields.
+     * The function also receive the row value as an array.
+     * ex: $jsAfterAdd = new JsFunction(['value'],[new JsExpression('console.log(value)')]);.
+     *
+     * @var JsFunction|null
      */
     public $jsAfterAdd;
 
     /**
-     * @var JsFunction|null
-     *
      * A JsFunction to execute when Multiline delete button is clicked.
-     * The function is execute after mulitline component finish deleting rows.
-     * The function also receive the row vaue as an array.
-     * ex: $jsAfterDelete = new JsFunction(['value'],[new JsExpression('console.log(value)')]);
+     * The function is execute after multiline component finish deleting rows.
+     * The function also receive the row value as an array.
+     * ex: $jsAfterDelete = new JsFunction(['value'],[new JsExpression('console.log(value)')]);.
+     *
+     * @var JsFunction|null
      */
     public $jsAfterDelete;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
         if (!$this->multiLineTemplate) {
             $this->multiLineTemplate = new Template('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline><div class="ui hidden divider"></div>{$Input}</div>');
+        }
+
+        if (!isset($this->options['atkDateOptions']['phpDateFormat'])) {
+            $this->options['atkDateOptions']['phpDateFormat'] = $this->app->ui_persistence->date_format;
         }
 
         /* No need for this anymore. See: https://github.com/atk4/ui/commit/8ec4d22cf9dcbd4969d9c88d8f09b705ca8798a6
@@ -232,13 +250,13 @@ class Multiline extends Form\Control
         }
         */
 
-        $this->multiLine = \atk4\ui\View::addTo($this, ['template' => $this->multiLineTemplate]);
+        $this->multiLine = View::addTo($this, ['template' => $this->multiLineTemplate]);
 
-        $this->cb = \atk4\ui\JsCallback::addTo($this);
+        $this->cb = JsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
-        $this->form->onHook(\atk4\ui\Form::HOOK_LOAD_POST, function ($form) {
-            $this->rowData = json_decode($_POST[$this->short_name], true);
+        $this->form->onHook(Form::HOOK_LOAD_POST, function ($form) {
+            $this->rowData = $this->app->decodeJson($_POST[$this->short_name]);
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
                 if ($this->rowErrors) {
@@ -248,11 +266,12 @@ class Multiline extends Form\Control
         });
 
         // Change form error handling.
-        $this->form->onHook(\atk4\ui\Form::HOOK_DISPLAY_ERROR, function ($form, $fieldName, $str) {
+        $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function ($form, $fieldName, $str) {
             // When errors are coming from this Multiline field, then notify Multiline component about them.
             // Otherwise use normal field error.
             if ($fieldName === $this->short_name) {
-                $jsError = [(new JsVueService())->emitEvent('atkml-row-error', ['id' => $this->multiLine->name, 'errors' => $this->rowErrors])];
+                // multiline.js component listen to 'multiline-rows-error' event.
+                $jsError = [$this->jsEmitEvent($this->multiLine->name . '-multiline-rows-error', ['errors' => $this->rowErrors])];
             } else {
                 $jsError = [$form->js()->form('add prompt', $fieldName, $str)];
             }
@@ -265,14 +284,10 @@ class Multiline extends Form\Control
      * Add a callback when fields are changed. You must supply array of fields
      * that will trigger the callback when changed.
      *
-     * @param callable $fx
-     * @param array    $fields
+     * @param array $fields
      */
-    public function onLineChange($fx, $fields)
+    public function onLineChange(\Closure $fx, $fields)
     {
-        if (!is_callable($fx)) {
-            throw new Exception('Function is required for onLineChange event.');
-        }
         $this->eventFields = $fields;
 
         $this->onChangeFunction = $fx;
@@ -319,17 +334,13 @@ class Multiline extends Form\Control
                     $d_row = [];
                     foreach ($this->rowFields as $fieldName) {
                         $field = $model->getField($fieldName);
-                        if ($field->isEditable()) {
-                            $value = $row->get($field->short_name);
-                        } else {
-                            $value = $this->app->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
-                        }
+                        $value = $this->app->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
                         $d_row[$fieldName] = $value;
                     }
                     $data[] = $d_row;
                 }
             }
-            $data = json_encode($data, JSON_UNESCAPED_UNICODE);
+            $data = $this->app->encodeJson($data);
         }
 
         return $data;
@@ -376,19 +387,17 @@ class Multiline extends Form\Control
             throw new Exception('Parent model need to be loaded');
         }
 
-        $model = $this->model;
-        if ($this->modelRef) {
-            $model = $model->ref($this->modelRef);
-        }
+        $model = $this->getModel();
 
-        $currentIds = [];
-        foreach ($this->getModel() as $id => $data) {
-            $currentIds[] = $id;
-        }
+        // collects existing ids.
+        $currentIds = array_column($model->export(), $model->id_field);
 
         foreach ($this->rowData as $row) {
+            // should clone model to be able to save it multiple times
+            $row_model = clone $model;
+
             if ($this->modelRef && $this->linkField) {
-                $model->set($this->linkField, $this->model->get('id'));
+                $row_model->set($this->linkField, $this->model->getId());
             }
 
             foreach ($row as $fieldName => $value) {
@@ -396,22 +405,21 @@ class Multiline extends Form\Control
                     continue;
                 }
 
-                if ($fieldName === $model->id_field && $value) {
-                    $model->load($value);
+                if ($fieldName === $row_model->id_field && $value) {
+                    $row_model->load($value);
                 }
 
-                $field = $model->getField($fieldName);
+                $field = $row_model->getField($fieldName);
                 if ($field->isEditable()) {
                     $field->set($value);
                 }
             }
-            $id = $model->save()->get($model->id_field);
+            $id = $row_model->save()->getId();
+
             $k = array_search($id, $currentIds, true);
-            if ($k > -1) {
+            if ($k !== false) {
                 unset($currentIds[$k]);
             }
-
-            $model->unload();
         }
 
         // Delete remaining currentIds
@@ -524,7 +532,7 @@ class Multiline extends Form\Control
      * Depending on the component, additional data is set to fieldOptions
      * (dropdown needs values, input needs type)
      */
-    public function getFieldDef(\atk4\data\Field $field): array
+    public function getFieldDef(Field $field): array
     {
         // Default is input
         $component = 'input';
@@ -579,6 +587,8 @@ class Multiline extends Form\Control
                 case 'text':
                 case 'textarea':
                     return 'textarea';
+                case 'date':
+                    return 'date';
                 default: return 'input';
             }
         }
@@ -591,24 +601,24 @@ class Multiline extends Form\Control
         return 'input';
     }
 
-    protected function _getFieldOptions(\atk4\data\Field $field, string $component): array
+    protected function _getFieldOptions(Field $field, string $component): array
     {
         $options = [];
 
         // If additional options are defined for field, add them.
-        if (isset($field->ui['multiline']) && is_array($field->ui['multiline'])) {
+        if (is_array($field->ui['multiline'] ?? null)) {
             $add_options = $field->ui['multiline'];
             if (isset($add_options[0])) {
                 if (is_array($add_options[0])) {
                     $options = array_merge($options, $add_options[0]);
                 }
-                if (isset($add_options[1]) && is_array($add_options[1])) {
+                if (is_array($add_options[1] ?? null)) {
                     $options = array_merge($options, $add_options[1]);
                 }
             } else {
                 $options = array_merge($options, $add_options);
             }
-        } elseif (isset($field->ui['form']) && is_array($field->ui['form'])) {
+        } elseif (is_array($field->ui['form'] ?? null)) {
             $add_options = $field->ui['form'];
             if (isset($add_options[0])) {
                 unset($add_options[0]);
@@ -641,13 +651,11 @@ class Multiline extends Form\Control
      * HTML input field needs type property set. If it wasnt found in $field->ui,
      * determine from rest.
      */
-    protected function _addTypeOption(\atk4\data\Field $field): string
+    protected function _addTypeOption(Field $field): string
     {
         switch ($field->type) {
             case 'integer':
                 return 'number';
-            //case 'date':
-                //return 'date';
             default:
                 return 'text';
         }
@@ -657,12 +665,12 @@ class Multiline extends Form\Control
      * Dropdown field needs values set. If it wasnt found in $field->ui, determine
      * from rest.
      */
-    protected function _addValuesOption(\atk4\data\Field $field): array
+    protected function _addValuesOption(Field $field): array
     {
         if ($field->enum) {
             return array_combine($field->enum, $field->enum);
         }
-        if ($field->values && is_array($field->values)) {
+        if (is_array($field->values)) {
             return $field->values;
         } elseif ($field->reference) {
             $model = $field->reference->refModel()->setLimit($this->enumLimit);
@@ -679,17 +687,13 @@ class Multiline extends Form\Control
             throw new Exception('Multiline field needs to have it\'s model setup.');
         }
 
-        if ($this->cb->triggered()) {
-            $this->cb->set(function () {
-                try {
-                    return $this->renderCallback();
-                } catch (\atk4\Core\Exception $e) {
-                    $this->app->terminateJson(['success' => false, 'error' => $e->getMessage()]);
-                } catch (\Error $e) {
-                    $this->app->terminateJson(['success' => false, 'error' => $e->getMessage()]);
-                }
-            });
-        }
+        $this->cb->set(function () {
+            try {
+                return $this->renderCallback();
+            } catch (\atk4\Core\Exception | \Error $e) {
+                $this->app->terminateJson(['success' => false, 'error' => $e->getMessage()]);
+            }
+        });
 
         $this->multiLine->template->trySetHtml('Input', $this->getInput());
         parent::renderView();
@@ -737,7 +741,7 @@ class Multiline extends Form\Control
                 break;
             case 'on-change':
                 // Let regular callback render output.
-                return call_user_func_array($this->onChangeFunction, [json_decode($_POST['rows'], true), $this->form]);
+                return ($this->onChangeFunction)($this->app->decodeJson($_POST['rows']), $this->form);
 
                 break;
         }
@@ -760,7 +764,7 @@ class Multiline extends Form\Control
             }
             $field = $model->getField($fieldName);
             if ($field instanceof Callback) {
-                $value = call_user_func($field->expr, $model);
+                $value = ($field->expr)($model);
                 $values[$fieldName] = $this->app->ui_persistence->_typecastSaveField($field, $value);
             }
         }

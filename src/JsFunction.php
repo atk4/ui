@@ -53,12 +53,7 @@ class JsFunction implements JsExpressionable
         }
     }
 
-    /**
-     * Render function/expression.
-     *
-     * @return string
-     */
-    public function jsRender()
+    public function jsRender(): string
     {
         $pre = '';
 

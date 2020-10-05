@@ -30,7 +30,7 @@ To make your grid look nicer, you might want to add some buttons and enable quic
 Adding Menu Items
 =================
 
-.. php:attr: $menu
+.. php:attr:: menu
 
 .. php:method: addButton($label)
 
@@ -52,7 +52,7 @@ If you don't need menu, you can disable menu bar entirely::
 Adding Quick Search
 ===================
 
-.. php:attr: $quickSearch
+.. php:attr:: quickSearch
 
 .. php:method: addQuickSearch($fields = [], $hasAutoQuery = false)
 
@@ -72,9 +72,9 @@ querying the server automatically, i.e. after the user has finished typing, by s
 Paginator
 =========
 
-.. php:attr: $paginator
+.. php:attr:: paginator
 
-.. php:attr: $ipp
+.. php:attr:: ipp
 
 Grid comes with a paginator already. You can disable it by setting $paginator property to false. Alternatively you
 can provide seed for the paginator or even entire object::
@@ -162,7 +162,7 @@ method to reference value of selected checkboxes inside any :ref:`js_action`::
 Sorting
 =======
 
-.. php:attr: $sortable
+.. php:attr:: sortable
 
 When grid is associated with a model that supports order, it will automatically make itself sortable. You can
 override this behaviour by setting $sortable property to `true` or `false`.
@@ -176,6 +176,6 @@ See also :php:attr:`Table::$sortable`.
 Advanced Usage
 ==============
 
-.. php:attr: $table
+.. php:attr:: table
 
 You can use a different component instead of default :php:class:`Table` by injecting $table property.

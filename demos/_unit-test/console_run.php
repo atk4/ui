@@ -30,7 +30,7 @@ $testRunClass = get_class(new class() extends \atk4\ui\View {
 });
 
 $sse = JsSse::addTo($app);
-$sse->urlTrigger = 'console_test';
+$sse->setUrlTrigger('console_test');
 
 $console = \atk4\ui\Console::addTo($app, ['sse' => $sse]);
 $console->runMethod($testRunClass::addTo($app), 'test');

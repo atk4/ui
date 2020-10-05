@@ -73,13 +73,13 @@ $finderClass = get_class(new class() extends \atk4\ui\Columns {
 
 $model = new File($app->db);
 $model->addCondition('parent_folder_id', null);
-$model->setOrder('is_folder desc, name');
+$model->setOrder(['is_folder' => 'desc', 'name']);
 
 \atk4\ui\Header::addTo($app, ['MacOS File Finder', 'subHeader' => 'Component built around Table, Columns and JsReload']);
 
 $vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($vp) use ($model) {
     $model->action('delete')->execute();
-    $model->importFromFilesystem(dirname(__DIR__));
+    $model->importFromFilesystem('.');
     \atk4\ui\Button::addTo($vp, ['Import Complete', 'big green fluid'])->link('multitable.php');
     $vp->js(true)->closest('.modal')->find('.header')->remove();
 });

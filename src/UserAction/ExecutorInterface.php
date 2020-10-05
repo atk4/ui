@@ -23,8 +23,10 @@ namespace atk4\ui\UserAction;
  */
 interface ExecutorInterface
 {
-    /** Generate UI which is presented to the user before action is executed */
-    public function init(): void;
+    // Generate UI which is presented to the user before action is executed
+    // protected method can not be defined in interface, see:
+    // https://github.com/php/php-src/pull/5708
+    // protected function init(): void;
 
     /**
      * Will associate executor with the action.

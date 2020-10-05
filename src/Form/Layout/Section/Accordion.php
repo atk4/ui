@@ -19,7 +19,7 @@ class Accordion extends \atk4\ui\Accordion
      *
      * Adds hook which in case of field error expands respective accordion sections.
      */
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -40,13 +40,12 @@ class Accordion extends \atk4\ui\Accordion
     /**
      * Return an accordion section with a form layout associate with a form.
      *
-     * @param string        $title
-     * @param callable|null $callback
-     * @param string        $icon
+     * @param string $title
+     * @param string $icon
      *
      * @return \atk4\ui\Form\Layout
      */
-    public function addSection($title, $callback = null, $icon = 'dropdown')
+    public function addSection($title, \Closure $callback = null, $icon = 'dropdown')
     {
         $section = parent::addSection($title, $callback, $icon);
 

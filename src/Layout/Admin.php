@@ -45,7 +45,7 @@ class Admin extends \atk4\ui\Layout implements NavigableInterface
 
     public $defaultTemplate = 'layout/admin.html';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

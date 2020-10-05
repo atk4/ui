@@ -78,7 +78,7 @@ class Control extends View
     /**
      * Initialization.
      */
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -127,6 +127,16 @@ class Control extends View
         parent::renderView();
     }
 
+    protected function renderTemplateToHtml(string $region = null): string
+    {
+        $output = parent::renderTemplateToHtml($region);
+
+        /** @var Form|null $form */
+        $form = $this->getClosestOwner($this, Form::class);
+
+        return $form !== null ? $form->fixFormInRenderedHtml($output) : $output;
+    }
+
     /**
      * Shorthand method for on('change') event.
      * Some input fields, like Calendar, could call this differently.
@@ -143,7 +153,7 @@ class Control extends View
      * $control->onChange(new \atk4\ui\JsExpression('console.log("changed")'));
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
-     * @param string|\atk4\ui\JsExpression|array|callable $expr
+     * @param string|\atk4\ui\JsExpression|array|\Closure $expr
      * @param array|bool                                  $default
      */
     public function onChange($expr, $default = [])

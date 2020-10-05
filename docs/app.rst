@@ -10,7 +10,7 @@ Purpose of App class
 .. php:class:: App
 
 App is a mandatory object that's essential for Agile UI to operate. If you don't create App object explicitly, it
-will be automatically created if you execute `$component->init()` or `$component->render()`.
+will be automatically created if you execute `$component->invokeInit()` or `$component->render()`.
 
 In most use-scenarios, however, you would create instance of an App class yourself before other components::
 
@@ -31,7 +31,7 @@ exception, it will catch it and create a new App instance to display error messa
 error is not repeated.
 
 Using App for Injecting Dependencies
------------------------------------
+------------------------------------
 Since App class becomes available for all objects and components of Agile Toolkit, you may add
 properties into the App class::
 
@@ -44,7 +44,7 @@ properties into the App class::
 .. IMPORTANT:: $app->db is NOT a standard property. If you use this property, that's your own convention.
 
 Using App for Injecting Behavior
----------------------------------
+--------------------------------
 You may use App class hook to impact behavior of your application:
 
  - using hooks to globally impact object initialization
@@ -179,7 +179,7 @@ Most of the time CDN servers are faster (cached) and more reliable.
 
 .. php:method:: requireCss($url)
 
-Method to include additional CSS stylesheet in page::
+Method to include additional CSS style sheet in page::
 
     $app->requireCss('//fomantic-ui.com/dist/semantic.css');
 

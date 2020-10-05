@@ -1,5 +1,69 @@
 ## Release note
 
+### version 1.16.3 (2020-09-30)
+
+- create atk-date-picker vue component.
+- Update query-builder
+    - allow date picker customization;
+    
+- add atk-date-picker to multiline component.
+
+
+### version 1.16.2 (2020-09-23)
+- VueService
+    - Add possibility to check if all components on page are load.
+    - Add Loading and Error component for dynamic component.
+- Rename window var bundlePublicPath to __atkBundlePublicPath
+
+### version 1.16.1 (2020-09-17)
+- set js bundle path dynamically for loading ressource.
+
+### version 1.16.0 (2020-09-16)
+
+- Split Vue component into chunk files.
+    - each vue component is now load dynamically as needed.
+
+### version 1.15.4 (2020-09-08)
+
+- add atk eventBus for listening and publishing event.
+    - replace deprecated Vue eventBus;
+- create atk-utils file for options and eventBus.
+- remove Vue component deprecated inline-template in v3.
+
+### version 1.15.3 (2020-08-27)
+
+ - set proper debounce value in:
+    - item-search vue component
+    - condition-form plugin
+    - panel service
+ - Fix issue with Querybuilder date.
+   - https://github.com/atk4/ui/issues/1420
+ - Package 
+    - update package dependencies to latest release;
+        - note: css-loader v4 now require style-loader
+  
+  PR: https://github.com/atk4/ui/pull/1430
+
+### version 1.15.2 (2020-08-19)
+
+ - sidenav.plugin.js
+    - fix issue (1406) when using Control or Command click on a link (https://github.com/atk4/ui/issues/1406 )
+
+ - Package 
+    - update package dependencies to latest release;
+    - fix eslint;
+
+### version 1.15.1 (2020-08-19)
+ - URL query parameter for Upload plugin/control was renamed from "action" to "f_upload_action"
+ - URL query parameter for Upload plugin/control was renamed from "f_name" to "f_upload_id"
+
+### version 1.15.0 (2020-07-16)
+ - update package dependency
+ - configure webpack in order to load and bundle .vue file.
+    - now use terser plugin instead of uglify js for minimizing js.
+ - add query builder component for ScopeBuilder form field
+   - extends Vue Query Builder default to work with Fomantic ui.
+
 ### version 1.14.3 (2020-07-13)
  - Update dependencies.
  

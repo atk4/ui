@@ -30,7 +30,7 @@ class UploadImage extends Upload
      */
     public $defaultSrc;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

@@ -4,41 +4,58 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\data\Model;
+use atk4\data\Persistence;
 use atk4\ui\Form;
+use atk4\ui\Header;
 use atk4\ui\JsExpression;
 use atk4\ui\JsFunction;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
+Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
 
-/** @var \atk4\data\Model $inventoryItemClass */
-$inventoryItemClass = get_class(new class() extends \atk4\data\Model {
-    public function init(): void
+/** @var Model $inventoryItemClass */
+$inventoryItemClass = get_class(new class() extends Model {
+    public $dateFormat;
+
+    protected function init(): void
     {
         parent::init();
 
         $this->addField('item', ['required' => true, 'default' => 'item']);
+        $this->addField('inv_date', [
+            'default' => date($this->dateFormat),
+            'type' => 'date',
+            'typecast' => [
+                function ($v) {
+                    return ($v instanceof \DateTime) ? date_format($v, $this->dateFormat) : $v;
+                },
+            ],
+            'ui' => ['multiline' => ['width' => 3]],
+        ]);
         $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
         $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
-        $this->addExpression('total', ['expr' => function (\atk4\data\Model $row) {
+        $this->addExpression('total', ['expr' => function (Model $row) {
             return $row->get('qty') * $row->get('box');
         }, 'type' => 'integer']);
     }
 });
 
-$inventory = new $inventoryItemClass(new \atk4\data\Persistence\Array_());
+$inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => $app->ui_persistence->date_format]);
 
 // Populate some data.
 $total = 0;
 for ($i = 1; $i < 3; ++$i) {
-    $inventory->set('id', $i);
-    $inventory->set('item', 'item_' . $i);
-    $inventory->set('qty', random_int(10, 100));
-    $inventory->set('box', random_int(1, 10));
-    $total = $total + ($inventory->get('qty') * $inventory->get('box'));
-    $inventory->saveAndUnload();
+    $inventory2 = clone $inventory;
+    $inventory2->set('id', $i);
+    $inventory2->set('inv_date', date($app->ui_persistence->date_format));
+    $inventory2->set('item', 'item_' . $i);
+    $inventory2->set('qty', random_int(10, 100));
+    $inventory2->set('box', random_int(1, 10));
+    $total = $total + ($inventory2->get('qty') * $inventory2->get('box'));
+    $inventory2->saveAndUnload();
 }
 
 $form = Form::addTo($app);
@@ -71,5 +88,5 @@ $multiline->jsAfterDelete = new JsFunction(['value'], [new JsExpression('console
 $form->onSubmit(function (Form $form) use ($multiline) {
     $rows = $multiline->saveRows()->getModel()->export();
 
-    return new \atk4\ui\JsToast(json_encode(array_values($rows)));
+    return new \atk4\ui\JsToast($form->app->encodeJson(array_values($rows)));
 });

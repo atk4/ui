@@ -76,21 +76,21 @@ $group->addControl('Lookup_norm', [
     DemoLookup::class,
     'model' => new CountryLock($app->db),
     'plus' => true,
-])->set($model->loadAny()->id);
+])->set($model->loadAny()->getId());
 
 $group->addControl('Lookup_read', [
     Form\Control\Lookup::class,
     'model' => new CountryLock($app->db),
     'plus' => true,
     'readonly' => true,
-])->set($model->loadAny()->id);
+])->set($model->loadAny()->getId());
 
 $group->addControl('Lookup_disb', [
     Form\Control\Lookup::class,
     'model' => new CountryLock($app->db),
     'plus' => true,
     'disabled' => true,
-])->set($model->loadAny()->id);
+])->set($model->loadAny()->getId());
 
 $group = $form->addGroup('Calendar');
 

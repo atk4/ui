@@ -123,7 +123,7 @@ class JsEventExecutor implements JsExpressionable
         return $errors;
     }
 
-    public function jsRender()
+    public function jsRender(): string
     {
         $this->cb->set(function () {
             $id = $_POST['atk_event_id'] ?? null;
@@ -141,7 +141,9 @@ class JsEventExecutor implements JsExpressionable
                 }
 
                 $return = $this->action->execute(...$args);
-                $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
+                $success = $this->jsSuccess instanceof \Closure
+                    ? ($this->jsSuccess)($this, $this->action->owner, $id)
+                    : $this->jsSuccess;
 
                 $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) ?: $success ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
             }

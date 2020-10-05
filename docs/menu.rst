@@ -74,7 +74,7 @@ Item
 
 .. php:class:: Item
 
-.. php:attr:: $label
+.. php:attr:: label
 
 .. php::attr:: $icon
 

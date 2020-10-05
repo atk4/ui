@@ -74,7 +74,7 @@ class ArgumentFormExecutor extends BasicExecutor
                     $key = 'Argument'.$key;
                 }
 
-                if (is_callable($val)) {
+                if ($val instanceof \Closure) {
                     $val = $val($this->model, $this->method, $data);
                 } elseif ($val instanceof Model) {
                     $val->load($data[$key]);

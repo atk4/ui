@@ -55,7 +55,7 @@ class JsConditionalForm implements JsExpressionable
         $this->fieldRules = $rules;
     }
 
-    public function jsRender()
+    public function jsRender(): string
     {
         $chain = (new Jquery($this->form))
             ->atkConditionalForm([

@@ -216,7 +216,7 @@ class Table extends Lister
 
         if ($field === null) {
             // column is not associated with any model field
-            $columnDecorator = $this->_add($this->factory($columnDecorator, ['table' => $this]));
+            $columnDecorator = $this->_addUnchecked(Table\Column::fromSeed($columnDecorator, ['table' => $this]));
         } elseif (is_array($columnDecorator) || is_string($columnDecorator)) {
             $columnDecorator = $this->decoratorFactory($field, array_merge(['columnData' => $name], is_string($columnDecorator) ? [$columnDecorator] : $columnDecorator));
         } elseif (!$columnDecorator) {
@@ -230,7 +230,7 @@ class Table extends Lister
             if (!$columnDecorator->columnData) {
                 $columnDecorator->columnData = $name;
             }
-            $this->_add($columnDecorator);
+            $this->_addUnchecked($columnDecorator);
         } else {
             throw (new Exception('Value of $columnDecorator argument is incorrect'))
                 ->addMoreInfo('columnDecorator', $columnDecorator);
@@ -249,6 +249,14 @@ class Table extends Lister
         }
 
         return $columnDecorator;
+    }
+
+    // TODO do not use elements/add(), elements are only for View based objects
+    private function _addUnchecked(Table\Column $column): Table\Column
+    {
+        return \Closure::bind(function () use ($column) {
+            return $this->_add($column);
+        }, $this, AbstractView::class)();
     }
 
     /**
@@ -277,10 +285,7 @@ class Table extends Lister
             if ($col) {
                 $pop = $col->addPopup(new Table\Column\FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('table-filter-on') : null;
-                $pop->form->onSubmit(function (Form $form) use ($pop) {
-                    return new JsReload($this->reload);
-                });
-                //apply condition according to popup form.
+                // apply condition according to popup form.
                 $this->model = $pop->setFilterCondition($this->model);
             }
         }
@@ -300,7 +305,7 @@ class Table extends Lister
             throw (new Exception('No such column, cannot decorate'))
                 ->addMoreInfo('name', $name);
         }
-        $decorator = $this->_add($this->factory($seed, ['table' => $this]));
+        $decorator = $this->_addUnchecked(Table\Column::fromSeed($seed, ['table' => $this]));
 
         if (!is_array($this->columns[$name])) {
             $this->columns[$name] = [$this->columns[$name]];
@@ -353,7 +358,7 @@ class Table extends Lister
             [$this->default_column ? $this->default_column : Table\Column::class]
         );
 
-        return $this->_add($this->factory($seed, ['table' => $this]));
+        return $this->_addUnchecked(Table\Column::fromSeed($seed, ['table' => $this]));
     }
 
     protected $typeToDecorator = [
@@ -370,11 +375,11 @@ class Table extends Lister
      * name and size. To retrieve columns width, simply json decode the $widths param in your callback function.
      * ex:
      *  $table->resizableColumn(function($j, $w){
-     *       //do somethings with columns width
-     *       $columns = json_decode($w);
+     *       // do somethings with columns width
+     *       $columns = $this->app->decodeJson($w);
      *   });
      *
-     * @param callable $fx             a callback function with columns widths as parameter
+     * @param \Closure $fx             a callback function with columns widths as parameter
      * @param int[]    $widths         An array of widths value, integer only. ex: [100,200,300,100]
      * @param array    $resizerOptions An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
      *
@@ -383,11 +388,11 @@ class Table extends Lister
     public function resizableColumn($fx = null, $widths = null, $resizerOptions = null)
     {
         $options = [];
-        if ($fx && is_callable($fx)) {
+        if ($fx instanceof \Closure) {
             $cb = JsCallback::addTo($this);
             $cb->set($fx, ['widths' => 'widths']);
             $options['uri'] = $cb->getJsUrl();
-        } elseif ($fx && is_array($fx)) {
+        } elseif (is_array($fx)) {
             $widths = $fx;
         }
 
@@ -489,23 +494,32 @@ class Table extends Lister
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
-        foreach ($this->model as $ignore) {
-            $this->current_row = $this->model;
-            if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
-                continue;
+
+        // TODO we should not iterate using $this->model variable,
+        // then also backup/tryfinally would be not needed
+        // the same in Lister class
+        $modelBackup = $this->model;
+        try {
+            foreach ($this->model as $this->model) {
+                $this->current_row = $this->model;
+                if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
+                    continue;
+                }
+
+                if ($this->totals_plan) {
+                    $this->updateTotals();
+                }
+
+                $this->renderRow();
+
+                ++$this->_rendered_rows_count;
+
+                if ($this->hook(self::HOOK_AFTER_ROW) === false) {
+                    continue;
+                }
             }
-
-            if ($this->totals_plan) {
-                $this->updateTotals();
-            }
-
-            $this->renderRow();
-
-            ++$this->_rendered_rows_count;
-
-            if ($this->hook(self::HOOK_AFTER_ROW) === false) {
-                continue;
-            }
+        } finally {
+            $this->model = $modelBackup;
         }
 
         // Add totals rows or empty message
@@ -559,7 +573,7 @@ class Table extends Lister
 
             // Render row and add to body
             $this->t_row->setHtml($html_tags);
-            $this->t_row->set('_id', $this->model->id);
+            $this->t_row->set('_id', $this->model->getId());
             $this->template->appendHtml('Body', $this->t_row->render());
             $this->t_row->del(array_keys($html_tags));
         } else {
@@ -572,7 +586,7 @@ class Table extends Lister
      * click outside of the body. Additionally when you move cursor over the
      * rows, pointer will be used and rows will be highlighted as you hover.
      *
-     * @param JsChain|callable|JsExpressionable $action Code to execute
+     * @param JsChain|\Closure|JsExpressionable $action Code to execute
      *
      * @return Jquery
      */
@@ -615,7 +629,7 @@ class Table extends Lister
     public function updateTotals()
     {
         foreach ($this->totals_plan as $key => $val) {
-            // if value is array, then we treat it as built-in or callable aggregate method
+            // if value is array, then we treat it as built-in or closure aggregate method
             if (is_array($val)) {
                 $f = $val[0]; // shortcut
 
@@ -628,9 +642,7 @@ class Table extends Lister
                 // arguments - current value, key, \atk4\ui\Table object
                 if ($f instanceof \Closure) {
                     $this->totals[$key] += ($f($this->model->get($key), $key, $this) ?: 0);
-                }
-                // built-in methods
-                elseif (is_string($f)) {
+                } elseif (is_string($f)) { // built-in methods
                     switch ($f) {
                         case 'sum':
                             $this->totals[$key] += $this->model->get($key);

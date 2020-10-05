@@ -16,7 +16,7 @@ class DragHandler extends Table\Column
     /** @var \atk4\ui\JsCallback */
     public $cb;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -28,10 +28,8 @@ class DragHandler extends Table\Column
 
     /**
      * Callback when table has been reorder using handle.
-     *
-     * @param callable $fx
      */
-    public function onReorder($fx = null)
+    public function onReorder(\Closure $fx)
     {
         $this->cb->onReorder($fx);
     }

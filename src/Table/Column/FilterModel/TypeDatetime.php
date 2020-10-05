@@ -9,7 +9,7 @@ use DateTime;
 
 class TypeDatetime extends Column\FilterModel
 {
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

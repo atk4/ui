@@ -52,7 +52,7 @@ class Lookup extends Input
      * with dependency
      * Then model of the 'state' field can be limited to states of the currently selected 'country'.
      *
-     * @var callable
+     * @var \Closure
      */
     public $dependency;
 
@@ -122,7 +122,7 @@ class Lookup extends Input
      * Define callback for generating the row data
      * If left empty default callback Lookup::defaultRenderRow is used.
      *
-     * @var callable|null
+     * @var \Closure|null
      */
     public $renderRowFunction;
 
@@ -135,7 +135,7 @@ class Lookup extends Input
      */
     public $multiple = false;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -202,9 +202,9 @@ class Lookup extends Input
      */
     public function renderRow(\atk4\data\Model $row): array
     {
-        $renderRowFunction = is_callable($this->renderRowFunction) ? $this->renderRowFunction : [__CLASS__, 'defaultRenderRow'];
+        $renderRowFunction = $this->renderRowFunction ?? \Closure::fromCallable([static::class, 'defaultRenderRow']);
 
-        return call_user_func($renderRowFunction, $this, $row);
+        return $renderRowFunction($this, $row);
     }
 
     /**
@@ -306,10 +306,12 @@ class Lookup extends Input
 
         if ($this->search instanceof \Closure) {
             $this->search($this->model, $_GET['q']);
-        } elseif ($this->search && is_array($this->search)) {
-            $this->model->addCondition(array_map(function ($field) {
-                return [$field, 'like', '%' . $_GET['q'] . '%'];
-            }, $this->search));
+        } elseif (is_array($this->search)) {
+            $scope = Model\Scope::createOr();
+            foreach ($this->search as $field) {
+                $scope->addCondition($field, 'like', '%' . $_GET['q'] . '%');
+            }
+            $this->model->addCondition($scope);
         } else {
             $title_field = $this->title_field ?: $this->model->title_field;
 
@@ -322,7 +324,7 @@ class Lookup extends Input
      */
     protected function applyDependencyConditions()
     {
-        if (!is_callable($this->dependency)) {
+        if (!($this->dependency instanceof \Closure)) {
             return;
         }
 
@@ -335,7 +337,7 @@ class Lookup extends Input
             return;
         }
 
-        call_user_func($this->dependency, $this->model, $data);
+        ($this->dependency)($this->model, $data);
     }
 
     /**
@@ -408,7 +410,7 @@ class Lookup extends Input
 
         if ($this->dependency) {
             $this->apiConfig['data'] = array_merge([
-                'form' => new JsFunction([new JsExpression('return []', [$this->js()->closest('form')->serialize()])]),
+                'form' => new JsFunction([new JsExpression('return []', [$this->form->formElement->js()->serialize()])]),
             ], $this->apiConfig['data'] ?? []);
         }
 

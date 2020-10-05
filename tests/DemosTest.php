@@ -27,7 +27,7 @@ class DemosTest extends AtkPhpunit\TestCase
     /** @var array */
     private static $_serverSuperglobalBackup;
 
-    /** @var Persistence Initialized DB connection */
+    /** @var Persistence\Sql Initialized DB connection */
     private static $_db;
 
     /** @var array */
@@ -139,7 +139,6 @@ class DemosTest extends AtkPhpunit\TestCase
             $localPath = static::ROOT_DIR . $request->getUri()->getPath();
 
             ob_start();
-
             try {
                 $app = $this->createTestingApp();
                 require $localPath;
@@ -213,7 +212,9 @@ class DemosTest extends AtkPhpunit\TestCase
         return 'demos/' . $path;
     }
 
-    protected $regexHtml = '~^..DOCTYPE~';
+    /** @var string */
+    protected $regexHtml = '~^<!DOCTYPE~';
+    /** @var string */
     protected $regexJson = '~
         (?(DEFINE)
            (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
@@ -226,6 +227,7 @@ class DemosTest extends AtkPhpunit\TestCase
         )
         \A (?&json) \Z
         ~six';
+    /** @var string */
     protected $regexSse = '~^(id|event|data).*$~m';
 
     public function demoFilesProvider(): array
@@ -311,10 +313,9 @@ class DemosTest extends AtkPhpunit\TestCase
         }
 
         $response = $this->getResponseFromRequest(
-            'interactive/wizard.php?demo_wizard=1&w_form_submit=ajax&__atk_callback=1',
+            'interactive/wizard.php?demo_wizard=1&w_form_submit=ajax&__atk_callback=w_form_submit',
             ['form_params' => [
                 'dsn' => 'mysql://root:root@db-host.example.com/atk4',
-                'w_form_submit' => 'submit',
             ]]
         );
 
@@ -335,10 +336,10 @@ class DemosTest extends AtkPhpunit\TestCase
         // simple reload
         $files[] = ['_unit-test/reload.php?__atk_reload=reload'];
         // loader callback reload
-        $files[] = ['_unit-test/reload.php?c_reload=ajax&__atk_callback=1'];
+        $files[] = ['_unit-test/reload.php?c_reload=ajax&__atk_callback=c_reload'];
         // test catch exceptions
-        $files[] = ['_unit-test/exception.php?m_cb=ajax&__atk_callback=1&__atk_json=1'];
-        $files[] = ['_unit-test/exception.php?m2_cb=ajax&__atk_callback=1&__atk_json=1'];
+        $files[] = ['_unit-test/exception.php?m_cb=ajax&__atk_callback=m_cb&__atk_json=1'];
+        $files[] = ['_unit-test/exception.php?m2_cb=ajax&__atk_callback=m2_cb&__atk_json=1'];
 
         return $files;
     }
@@ -418,16 +419,15 @@ class DemosTest extends AtkPhpunit\TestCase
     {
         $files = [];
         $files[] = [
-            '_unit-test/post.php?test_form_submit=ajax&__atk_callback=1',
+            '_unit-test/post.php?test_submit=ajax&__atk_callback=test_submit',
             [
                 'f1' => 'v1',
-                'test_form_submit' => 'submit',
             ],
         ];
 
         // for JsNotify coverage
         $files[] = [
-            'obsolete/notify2.php?notify_submit=ajax&__atk_callback=1',
+            'obsolete/notify2.php?test_notify=ajax&__atk_callback=test_notify',
             [
                 'text' => 'This text will appear in notification',
                 'icon' => 'warning sign',
@@ -436,7 +436,6 @@ class DemosTest extends AtkPhpunit\TestCase
                 'width' => '25%',
                 'position' => 'topRight',
                 'attach' => 'Body',
-                'notify_submit' => 'submit',
             ],
         ];
 

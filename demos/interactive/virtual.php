@@ -10,8 +10,7 @@ require_once __DIR__ . '/../init-app.php';
 // Demonstrate the use of Virtual Page.
 
 // define virtual page.
-$virtualPage = \atk4\ui\VirtualPage::addTo($app->layout);
-$virtualPage->cb->urlTrigger = 'in';
+$virtualPage = \atk4\ui\VirtualPage::addTo($app->layout, ['urlTrigger' => 'in']);
 
 // Add content to virtual page.
 if (isset($_GET['p_id'])) {

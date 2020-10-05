@@ -32,7 +32,7 @@ class Radio extends Form\Control
     /**
      * Initialization.
      */
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -43,8 +43,7 @@ class Radio extends Form\Control
     protected function renderView(): void
     {
         if (!$this->model) {
-            $p = new \atk4\data\Persistence\Static_($this->values);
-            $this->setModel(new \atk4\data\Model($p));
+            $this->setSource($this->values);
         }
 
         $value = $this->field ? $this->field->get() : $this->content;
@@ -58,12 +57,12 @@ class Radio extends Form\Control
 
         $this->lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) use ($value) {
             if ($this->readonly) {
-                $lister->t_row->set('disabled', $value !== (string) $lister->model->id ? 'disabled="disabled"' : '');
+                $lister->t_row->set('disabled', $value !== (string) $lister->model->getId() ? 'disabled="disabled"' : '');
             } elseif ($this->disabled) {
                 $lister->t_row->set('disabled', 'disabled="disabled"');
             }
 
-            $lister->t_row->set('checked', $value === (string) $lister->model->id ? 'checked' : '');
+            $lister->t_row->set('checked', $value === (string) $lister->model->getId() ? 'checked' : '');
         });
 
         parent::renderView();
@@ -81,7 +80,7 @@ class Radio extends Form\Control
      * $control->onChange(new \atk4\ui\JsExpression('console.log("changed")'));
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
-     * @param string|\atk4\ui\JsExpression|array|callable $expr
+     * @param string|\atk4\ui\JsExpression|array|\Closure $expr
      * @param array|bool                                  $default
      */
     public function onChange($expr, $default = [])

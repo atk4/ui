@@ -109,7 +109,7 @@ Finally, if you prefer a more consise code, you can also use the following forma
 
     $bottom = Button::addTo($middle, ['Hello World', 'orange']);
 
-The rest of documentaiton will use thi sconsise code to keep things readable, however if
+The rest of documentation will use this concise code to keep things readable, however if
 you value type-hinting of your IDE, you can keep using "new" keyword. I must also
 mention that if you specify first argument to add() as a string it will be passed
 to `$app->factory()`, which will be responsible of instantiating the actual object.

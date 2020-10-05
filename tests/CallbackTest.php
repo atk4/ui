@@ -26,11 +26,10 @@ class AppMock extends \atk4\ui\App
 
 class CallbackTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test constructor.
-     */
-    private $regex = '/^..DOCTYPE/';
+    /** @var string */
+    private $htmlDoctypeRegex = '~^<!DOCTYPE~';
 
+    /** @var \atk4\ui\App */
     public $app;
 
     protected function setUp(): void
@@ -77,24 +76,6 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertNull($var);
     }
 
-    public function testCallbackPost()
-    {
-        $var = null;
-
-        $app = $this->app;
-
-        $cb = \atk4\ui\Callback::addTo($app, ['postTrigger' => 'go']);
-
-        // simulate triggering
-        $_POST['go'] = true;
-
-        $cb->set(function ($x) use (&$var) {
-            $var = $x;
-        }, [34]);
-
-        $this->assertSame(34, $var);
-    }
-
     public function testCallbackLater()
     {
         $var = null;
@@ -112,7 +93,7 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $this->assertNull($var);
 
-        $this->expectOutputRegex($this->regex);
+        $this->expectOutputRegex($this->htmlDoctypeRegex);
         $app->run();
 
         $this->assertSame(34, $var);
@@ -140,7 +121,7 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $this->assertNull($var);
 
-        $this->expectOutputRegex($this->regex);
+        $this->expectOutputRegex($this->htmlDoctypeRegex);
         $app->run();
 
         $this->assertSame(34, $var);
@@ -161,7 +142,7 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $this->assertNull($var);
 
-        $this->expectOutputRegex($this->regex);
+        $this->expectOutputRegex($this->htmlDoctypeRegex);
         $app->run();
 
         $this->assertNull($var);
@@ -174,11 +155,12 @@ class CallbackTest extends AtkPhpunit\TestCase
         $app = $this->app;
 
         $vp = \atk4\ui\VirtualPage::addTo($app);
+        // simulate triggering
+
         $vp->set(function ($p) use (&$var) {
             $var = 25;
         });
 
-        // simulate triggering
         $_GET[$vp->name] = '1';
 
         $this->expectOutputRegex('/^..DOCTYPE/');

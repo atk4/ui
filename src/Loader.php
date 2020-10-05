@@ -34,13 +34,10 @@ class Loader extends View
     /** @var string defautl css class */
     public $ui = 'ui segment';
 
-    /** @var bool Make callback url argument stick to application or view. */
-    public $appStickyCb = false;
-
-    /** @var callable for triggering */
+    /** @var Callback for triggering */
     protected $cb;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -49,7 +46,7 @@ class Loader extends View
         }
 
         if (!$this->cb) {
-            $this->cb = Callback::addTo($this, ['appSticky' => $this->appStickyCb]);
+            $this->cb = Callback::addTo($this);
         }
     }
 
@@ -70,20 +67,21 @@ class Loader extends View
      * NOTE: default values are like that due ot PHP 7.0 warning:
      * Declaration of \atk4\ui\Loader::set($fx, $args = Array) should be compatible with \atk4\ui\View::set($arg1 = Array, $arg2 = NULL)
      *
-     * @param callable $fx
-     * @param array    $args
+     * @param \Closure $fx
      *
      * @return $this
      */
-    public function set($fx = [], $args = null)
+    public function set($fx = [], $ignore = null)
     {
-        if (!is_callable($fx)) {
-            throw new Exception('Error: Need to pass a callable function to Loader::set()');
+        if (!($fx instanceof \Closure)) {
+            throw new Exception('Need to pass a function to Loader::set()');
+        } elseif (func_num_args() > 1) {
+            throw new Exception('Only one argument is needed by Loader::set()');
         }
 
         $this->cb->set(function () use ($fx) {
-            call_user_func($fx, $this);
-            $this->app->terminateJson($this);
+            $fx($this);
+            $this->cb->terminateJson($this);
         });
 
         return $this;
@@ -95,7 +93,7 @@ class Loader extends View
      */
     protected function renderView(): void
     {
-        if (!$this->cb->triggered()) {
+        if (!$this->cb->isTriggered()) {
             if ($this->loadEvent) {
                 $this->js($this->loadEvent, $this->jsLoad());
             }
@@ -115,10 +113,15 @@ class Loader extends View
     public function jsLoad($args = [], $apiConfig = [], $storeName = null)
     {
         return $this->js()->atkReloadView([
-            'uri' => $this->cb->getJsUrl(),
+            'uri' => $this->cb->getUrl(),
             'uri_options' => $args,
             'apiConfig' => !empty($apiConfig) ? $apiConfig : null,
             'storeName' => $storeName ? $storeName : null,
         ]);
+    }
+
+    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    {
+        return $this->cb;
     }
 }

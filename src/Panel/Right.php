@@ -51,7 +51,7 @@ class Right extends View implements Loadable
     /** @var string the close icon class */
     public $closeIcon = 'icon times';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         if ($this->dynamic) {
@@ -150,7 +150,7 @@ class Right extends View implements Loadable
      * Callback to execute when panel open if dynamic content is set.
      * Differ the callback execution to the FlyoutContent.
      */
-    public function onOpen(callable $callback)
+    public function onOpen(\Closure $callback)
     {
         $this->getDynamicContent()->onLoad($callback);
     }
@@ -210,5 +210,10 @@ class Right extends View implements Loadable
         parent::renderView();
 
         $this->js(true, $this->service()->addPanel($this->getPanelOptions()));
+    }
+
+    protected function mergeStickyArgsFromChildView(): ?\atk4\ui\AbstractView
+    {
+        return $this->dynamicContent;
     }
 }

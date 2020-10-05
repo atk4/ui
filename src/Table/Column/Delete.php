@@ -11,11 +11,11 @@ use atk4\ui\Table;
  */
 class Delete extends Table\Column
 {
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
-        $this->vp = $this->table->_add(new \atk4\ui\CallbackLater());
+        $this->vp = $this->table->add(new \atk4\ui\CallbackLater());
         $this->vp->set(function () {
             $this->table->model->load($_POST[$this->name])->delete();
 

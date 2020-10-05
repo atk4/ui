@@ -59,7 +59,7 @@ class Wizard extends View
      */
     public $defaultIcon = 'empty'; // 'square outline'
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -67,7 +67,7 @@ class Wizard extends View
             $this->stepCallback = Callback::addTo($this, ['urlTrigger' => $this->name]);
         }
 
-        $this->currentStep = (int) $this->stepCallback->triggered() ?: 0;
+        $this->currentStep = (int) ($this->stepCallback->getTriggeredValue() ?: 0);
 
         $this->stepTemplate = $this->template->cloneRegion('Step');
         $this->template->del('Step');
@@ -75,13 +75,13 @@ class Wizard extends View
         // add buttons
         if ($this->currentStep) {
             $this->buttonPrev = Button::addTo($this, ['Back', 'basic'], ['Left']);
-            $this->buttonPrev->link($this->stepCallback->getUrl($this->currentStep - 1));
+            $this->buttonPrev->link($this->stepCallback->getUrl((string) ($this->currentStep - 1)));
         }
 
         $this->buttonNext = Button::addTo($this, ['Next', 'primary'], ['Right']);
         $this->buttonFinish = Button::addTo($this, ['Finish', 'primary'], ['Right']);
 
-        $this->buttonNext->link($this->stepCallback->getUrl($this->currentStep + 1));
+        $this->buttonNext->link($this->stepCallback->getUrl((string) ($this->currentStep + 1)));
     }
 
     /**
@@ -104,8 +104,8 @@ class Wizard extends View
         // add tabs menu item
         $this->steps[] = $this->add($step, 'Step');
 
-        if (!$this->stepCallback->triggered()) {
-            $_GET[$this->stepCallback->urlTrigger] = '0';
+        if (!$this->stepCallback->isTriggered()) {
+            $_GET[$this->stepCallback->getUrlTrigger()] = '0';
         }
 
         if ($step->sequence === $this->currentStep) {
@@ -127,25 +127,25 @@ class Wizard extends View
      * Adds an extra screen to show user when he goes beyond last step.
      * There won't be "back" button on this step anymore.
      *
-     * @param callable $callback Virtual page
+     * @param \Closure $callback Virtual page
      */
-    public function addFinish($callback)
+    public function addFinish(\Closure $callback)
     {
         if (count($this->steps) === $this->currentStep + 1) {
-            $this->buttonFinish->link($this->stepCallback->getUrl(count($this->steps)));
+            $this->buttonFinish->link($this->stepCallback->getUrl((string) (count($this->steps))));
         } elseif ($this->currentStep === count($this->steps)) {
             $this->buttonPrev->destroy();
             $this->buttonNext->addClass('disabled')->set('Completed');
             $this->buttonFinish->destroy();
 
             $this->app->catch_runaway_callbacks = false;
-            call_user_func($callback, $this);
+            $callback($this);
         } else {
             $this->buttonFinish->destroy();
         }
     }
 
-    public function add($seed, $region = null)
+    public function add($seed, $region = null): AbstractView
     {
         $result = parent::add($seed, $region);
 
@@ -167,7 +167,7 @@ class Wizard extends View
      */
     public function urlNext()
     {
-        return $this->stepCallback->getUrl($this->currentStep + 1);
+        return $this->stepCallback->getUrl((string) ($this->currentStep + 1));
     }
 
     /**
@@ -211,5 +211,10 @@ class Wizard extends View
         }
 
         parent::renderView();
+    }
+
+    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    {
+        return $this->stepCallback;
     }
 }

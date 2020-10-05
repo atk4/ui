@@ -15,8 +15,6 @@ use atk4\data\Model;
 class Template implements \ArrayAccess
 {
     use \atk4\core\AppScopeTrait;
-    use \atk4\core\DiContainerTrait; // needed for StaticAddToTrait, removed once php7.2 support is dropped
-    use \atk4\core\StaticAddToTrait;
 
     /** @const string */
     public const TOP_TAG = '_top';
@@ -510,19 +508,19 @@ class Template implements \ArrayAccess
      *
      * @return $this
      */
-    public function eachTag($tag, \Closure $callable)
+    public function eachTag($tag, \Closure $fx)
     {
         // array support
         if (is_array($tag)) {
             foreach ($tag as $t) {
-                $this->eachTag($t, $callable);
+                $this->eachTag($t, $fx);
             }
 
             return $this;
         }
 
         foreach ($this->getTagRefs($tag) as $ref => &$vRef) {
-            $vRef = [(string) call_user_func($callable, $this->renderRegion($vRef), $tag . '#' . $ref)];
+            $vRef = [(string) $fx($this->renderRegion($vRef), $tag . '#' . $ref)];
         }
 
         return $this;

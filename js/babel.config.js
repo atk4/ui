@@ -5,17 +5,17 @@
  * @type {*[][]}
  */
 const presets = [
-  [
-    "@babel/env",
+    [
+        '@babel/env',
+        {
+            targets: '> 1% , not dead',
+            corejs: { version: '3.6', proposals: true },
+            useBuiltIns: 'usage',
+        },
+    ],
     {
-      targets: "> 1% , not dead",
-      "corejs": { version: '3.6', proposals: true },
-      "useBuiltIns": "usage",
+        plugins: ['@babel/plugin-transform-runtime'],
     },
-  ],
-  {
-    "plugins" : ["@babel/plugin-transform-runtime"]
-  }
 ];
 
-module.exports = { presets };
+module.exports = { presets: presets };

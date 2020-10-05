@@ -10,7 +10,7 @@ require_once __DIR__ . '/../init-app.php';
 \atk4\ui\Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
-//****** Inline Edit *****************************
+// ****** Inline Edit *****************************
 
 $model = new Country($app->db);
 $model->loadAny();
@@ -23,7 +23,7 @@ $inline_edit->setModel($model);
 
 $inline_edit->onChange(function ($value) {
     $view = new \atk4\ui\Message();
-    $view->init();
+    $view->invokeInit();
     $view->text->addParagraph('new value: ' . $value);
 
     return $view;
@@ -31,7 +31,7 @@ $inline_edit->onChange(function ($value) {
 
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
-//****** ITEM SEARCH *****************************
+// ****** ITEM SEARCH *****************************
 
 $subHeader = 'Searching will reload the list of countries below with matching result.';
 \atk4\ui\Header::addTo($app, ['Search using a Vue component', 'subHeader' => $subHeader]);
@@ -58,10 +58,10 @@ $lister->setModel($search->setModelCondition($model))->setLimit(50);
 
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
-//****** CREATING CUSTOM VUE USING EXTERNAL COMPONENT *****************************
+// ****** CREATING CUSTOM VUE USING EXTERNAL COMPONENT *****************************
 \atk4\ui\Header::addTo($app, ['External Component', 'subHeader' => 'Creating component using an external component definition.']);
 
-$app->requireJs('https://unpkg.com/vue-clock2@1.1.5/dist/vue-clock.min');
+$app->requireJs('https://unpkg.com/vue-clock2@1.1.5/dist/vue-clock.min.js');
 
 // Injecting template but normally you would create a template file.
 $clock_template = new \atk4\ui\Template('
@@ -78,7 +78,7 @@ $clock_template = new \atk4\ui\Template('
 // This is the vue component definition. It is also using another external vue component 'vue-clock2'
 $clock_script = "
     <script>
-        //Register clock component from vue-clock2 to use with myClock.
+        // Register clock component from vue-clock2 to use with myClock.
         atk.vueService.getVue().component('clock', Clock.default);
 
         var myClock = {
@@ -86,14 +86,11 @@ $clock_script = "
           data: function() {
             return {style : this.clock, currentIdx : 0}
           },
-          created: function() {
+          mounted: function() {
             // add a listener for changing clock style.
-            // this will listen to event 'update-style' emit on the eventBus.
-            atk.vueService.eventBus.\$on('change-style', (data) => {
-              // make sure we are talking to the right component.
-              if (this.\$parent.\$el.id === data.id) {
+            // this will listen to event '-clock-change-style' emit on the eventBus.
+            atk.eventBus.on(this.\$root.\$el.id + '-clock-change-style', (payload) => {
                 this.onChangeStyle();
-              }
             });
           },
           computed: {
@@ -134,5 +131,5 @@ $clock_style = [
 $clock->vue('my-clock', ['clock' => $clock_style], 'myClock');
 
 $btn = \atk4\ui\Button::addTo($app, ['Change Style']);
-$btn->on('click', $clock->jsVueEmit('change-style'));
+$btn->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));
 \atk4\ui\View::addTo($app, ['element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);

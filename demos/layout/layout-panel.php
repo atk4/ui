@@ -8,7 +8,6 @@ namespace atk4\ui\demo;
 require_once __DIR__ . '/../init-app.php';
 
 $country = new CountryLock($app->db);
-$country->tryLoadAny();
 DemoActionsUtil::setupDemoActions($country);
 
 \atk4\ui\Header::addTo($app, ['Right Panel', 'subHeader' => 'Content on the fly!']);

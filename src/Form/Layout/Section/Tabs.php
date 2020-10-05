@@ -16,12 +16,12 @@ class Tabs extends \atk4\ui\Tabs
      * Adds tab in tabs widget.
      *
      * @param string|\atk4\ui\Tab $name     Name of tab or Tab object
-     * @param callable            $callback Callback action or URL (or array with url + parameters)
-     * @param callable            $settings tab settings
+     * @param \Closure            $callback Callback action or URL (or array with url + parameters)
+     * @param array               $settings tab settings
      *
      * @return \atk4\ui\Form\Layout
      */
-    public function addTab($name, $callback = null, $settings = [])
+    public function addTab($name, \Closure $callback = null, $settings = [])
     {
         $tab = parent::addTab($name, $callback, $settings);
 

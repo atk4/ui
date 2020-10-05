@@ -45,7 +45,7 @@ $files->addUserAction('download', function (\atk4\data\Model $model) {
 
 $app->add($grid = new \atk4\ui\GridLayout(['columns' => 3]));
 
-$grid->add($executor = new UserAction\BasicExecutor(['executorButton' => [Button::class, 'Import', 'primary']]), 'r1c1');
+$executor = $grid->add(new UserAction\BasicExecutor(['executorButton' => [Button::class, 'Import', 'primary']]), 'r1c1');
 $executor->setAction($action);
 $executor->ui = 'segment';
 $executor->description = 'Execute action using "BasicExecutor" and path="." argument';
@@ -54,7 +54,7 @@ $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x) {
     return new \atk4\ui\JsToast('Done!');
 });
 
-$grid->add($executor = new UserAction\ArgumentFormExecutor(), 'r1c2');
+$executor = $grid->add(new UserAction\ArgumentFormExecutor(), 'r1c2');
 $executor->setAction($action);
 $executor->description = 'ArgumentFormExecutor will ask user about arguments';
 $executor->ui = 'segment';
@@ -62,7 +62,7 @@ $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $r
     return new \atk4\ui\JsToast('Imported!');
 });
 
-$grid->add($executor = new \atk4\ui\UserAction\PreviewExecutor(), 'r1c3');
+$executor = $grid->add(new \atk4\ui\UserAction\PreviewExecutor(), 'r1c3');
 $executor->setAction($action);
 $executor->ui = 'segment';
 $executor->previewType = 'console';

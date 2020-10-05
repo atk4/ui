@@ -26,7 +26,7 @@ RUN npm install -g less clean-css
 COPY js js
 COPY public public
 
-RUN (cd js && npm install && npm run build)
+RUN (cd js && npm ci && npm run build)
 RUN (cd public && lessc agileui.less agileui.css)
 
 ADD composer.json .

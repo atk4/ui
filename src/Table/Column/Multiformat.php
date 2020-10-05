@@ -8,7 +8,6 @@ use atk4\data\Field;
 use atk4\data\Model;
 use atk4\ui\Exception;
 use atk4\ui\Table;
-use atk4\ui\Template;
 
 /**
  * Swaps out column decorators based on logic.
@@ -16,7 +15,7 @@ use atk4\ui\Template;
 class Multiformat extends Table\Column
 {
     /**
-     * @var callable Method to execute which will return array of seeds for decorators
+     * @var \Closure Method to execute which will return array of seeds for decorators
      */
     public $callback;
 
@@ -37,7 +36,7 @@ class Multiformat extends Table\Column
                 ->addMoreInfo('column', $this);
         }
 
-        $decorators = call_user_func($this->callback, $row, $field);
+        $decorators = ($this->callback)($row, $field);
         if (is_string($decorators)) {
             $decorators = [[$decorators]];
         }
@@ -81,7 +80,8 @@ class Multiformat extends Table\Column
             $html_tags = array_merge($c->getHtmlTags($row, $field), $html_tags);
         }
 
-        $template = Template::addTo($this->owner, [$cell]);
+        $template = new \atk4\ui\Template($cell);
+        $template->app = $this->app;
         $template->set($row);
         $template->setHtml($html_tags);
 

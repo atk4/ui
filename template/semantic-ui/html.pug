@@ -5,6 +5,9 @@ html(lang="{lang}en{/}")
     | {$meta}
     meta(charset='utf-8')
     meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0")
+    script(type="application/javascript")
+      | {$InitJsBundle}
+    |
     | {$HEAD}
     style(type='text/css')
       | {$style}
@@ -14,3 +17,4 @@ html(lang="{lang}en{/}")
       | {$RightPanel}
     .ui.dimmer.modals.page
       | {$Modals}
+= "\n"

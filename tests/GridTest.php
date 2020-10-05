@@ -24,7 +24,7 @@ class GridTest extends \atk4\core\AtkPhpunit\TestCase
     public function test1()
     {
         $t = new Table();
-        $t->init();
+        $t->invokeInit();
         $t->setModel($this->m, false);
 
         $t->addColumn('email');
@@ -40,7 +40,7 @@ class GridTest extends \atk4\core\AtkPhpunit\TestCase
     public function test1a()
     {
         $t = new Table();
-        $t->init();
+        $t->invokeInit();
         $t->setModel($this->m, false);
 
         $t->addColumn('email');
@@ -56,7 +56,7 @@ class GridTest extends \atk4\core\AtkPhpunit\TestCase
     public function test2()
     {
         $t = new Table();
-        $t->init();
+        $t->invokeInit();
         $t->setModel($this->m, ['email']);
         $del = $t->addColumn(null, [Table\Column\Delete::class]);
 
@@ -70,7 +70,7 @@ class GridTest extends \atk4\core\AtkPhpunit\TestCase
     public function test3()
     {
         $t = new Table();
-        $t->init();
+        $t->invokeInit();
         $t->setModel($this->m, ['email']);
         $t->addColumn('xtra', null, ['type' => 'password']);
 
@@ -86,7 +86,7 @@ class MyModel extends \atk4\data\Model
 {
     public $title_field = 'email';
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 

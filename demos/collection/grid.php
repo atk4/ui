@@ -25,7 +25,7 @@ $model->getUserAction('delete')->ui['executor'] = $ex;
 
 $grid->setModel($model);
 
-//Adding Quicksearch on Name field using auto query.
+// Adding Quicksearch on Name field using auto query.
 $grid->addQuickSearch(['name'], true);
 
 $grid->menu->addItem(['Add Country', 'icon' => 'add square'], new \atk4\ui\JsExpression('alert(123)'));
@@ -52,5 +52,5 @@ $grid->menu->addItem('show selection')->on('click', new \atk4\ui\JsExpression(
     [$sel->jsChecked()]
 ));
 
-//Setting ipp with an array will add an ItemPerPageSelector to paginator.
+// Setting ipp with an array will add an ItemPerPageSelector to paginator.
 $grid->setIpp([10, 25, 50, 100]);

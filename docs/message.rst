@@ -55,6 +55,6 @@ You can specify icon also::
         'Battery low',
         'red',
         'icon'=>'battery low'
-    ])->text->addParagraph('Your battery is getting low. Recharge your Web App');
+    ])->text->addParagraph('Your battery is getting low. Re-charge your Web App');
 
 

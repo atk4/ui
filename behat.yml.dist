@@ -1,0 +1,23 @@
+default:
+  suites:
+    atk4_ui:
+      paths:
+        features: '%paths.base%/tests-behat'
+      contexts:
+        - atk4\ui\behat\ContextDump
+        - Behat\MinkExtension\Context\MinkContext
+  extensions:
+    Behat\MinkExtension:
+      show_cmd: 'open %s'
+      base_url:  'http://172.18.0.2:8888/demos'
+      sessions:
+        default:
+          selenium2:
+            browser: chrome
+            wd_host: 'http://selenium-chrome:4444/wd/hub'
+            capabilities:
+              extra_capabilities:
+                chrome:
+                  args:
+                    - '--headless'
+                    - '--window-size=1280,720'

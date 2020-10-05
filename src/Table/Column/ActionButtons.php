@@ -29,7 +29,7 @@ class ActionButtons extends Table\Column
      */
     protected $callbacks = [];
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->addClass('right aligned');
@@ -41,7 +41,7 @@ class ActionButtons extends Table\Column
      * Returns button object
      *
      * @param \atk4\ui\View|string           $button
-     * @param callable|Model\UserAction|null $action
+     * @param \Closure|Model\UserAction|null $action
      *
      * @return \atk4\ui\View
      */
@@ -69,7 +69,7 @@ class ActionButtons extends Table\Column
 
             $isDisabled = !$action->enabled;
 
-            if (is_callable($action->enabled)) {
+            if ($action->enabled instanceof \Closure) {
                 $this->callbacks[$name] = $action->enabled;
             }
         }
@@ -100,13 +100,12 @@ class ActionButtons extends Table\Column
      *
      * @param \atk4\ui\View|string $button
      * @param string|array         $defaults modal title or modal defaults array
-     * @param callable             $callback
      * @param \atk4\ui\View        $owner
      * @param array                $args
      *
      * @return \atk4\ui\View
      */
-    public function addModal($button, $defaults, $callback, $owner = null, $args = [])
+    public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [])
     {
         $owner = $owner ?: $this->owner->owner;
 
@@ -121,7 +120,7 @@ class ActionButtons extends Table\Column
         $modal->observeChanges(); // adds scrollbar if needed
 
         $modal->set(function ($t) use ($callback) {
-            call_user_func($callback, $t, $this->app->stickyGet($this->name));
+            $callback($t, $this->app->stickyGet($this->name));
         });
 
         return $this->addButton($button, $modal->show(array_merge([$this->name => $this->owner->jsRow()->data('id')], $args)));
@@ -159,7 +158,7 @@ class ActionButtons extends Table\Column
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {
             // if action is enabled then do not set disabled class
-            if (call_user_func($callback, $row)) {
+            if ($callback($row)) {
                 continue;
             }
 

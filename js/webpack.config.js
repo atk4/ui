@@ -1,4 +1,3 @@
-/*global __dirname:true, require:true*/
 /**
  * Webpack v4 configuration file.
  *
@@ -26,79 +25,96 @@ const path = require('path');
 // VUe file loader.
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const packageVersion = require("./package.json").version;
+const packageVersion = require('./package.json').version;
 
-module.exports = env => {
-  // determine which mode
-  const isProduction = env.production;
-  const srcDir = path.resolve(__dirname, './src');
-  const publicDir = path.resolve(__dirname, '../public');
-  const libraryName = 'atk';
-  const filename = isProduction ? libraryName + 'js-ui.min.js' : libraryName + 'js-ui.js';
+module.exports = (env) => {
+    // determine which mode
+    const isProduction = env.production;
+    const srcDir = path.resolve(__dirname, './src');
+    const publicDir = path.resolve(__dirname, '../public');
+    const libraryName = 'atk';
+    const filename = libraryName + 'js-ui';
 
-  const prodPerformance = {
-    hints: false,
-    maxEntrypointSize: 640000,
-    maxAssetSize: 640000
-  };
+    const prodPerformance = {
+        hints: false,
+        maxEntrypointSize: 640000,
+        maxAssetSize: 640000,
+    };
 
-
-  return {
-    entry: srcDir + '/agile-toolkit-ui.js',
-    mode: isProduction ? 'production' : 'development',
-    devtool: isProduction ? false : 'source-map',
-    performance: isProduction ? prodPerformance : {},
-    output: {
-      path: publicDir,
-      filename: filename,
-      library: libraryName,
-      libraryTarget: 'umd',
-      libraryExport: 'default',
-      umdNamedDefine: true,
-    },
-    optimization: {
-      minimizer: [new TerserPlugin()]
-    },
-    module: {
-      rules: [
-        {
-          test: /(\.jsx|\.js)$/,
-          loader: 'babel-loader',
-          exclude: /(node_modules|bower_components)/
+    return {
+        entry: { [filename]: srcDir + '/agile-toolkit-ui.js' },
+        mode: isProduction ? 'production' : 'development',
+        devtool: isProduction ? false : 'source-map',
+        performance: isProduction ? prodPerformance : {},
+        output: {
+            path: publicDir,
+            filename: isProduction ? '[name].min.js' : '[name].js',
+            library: libraryName,
+            libraryTarget: 'umd',
+            libraryExport: 'default',
+            umdNamedDefine: true,
         },
-        // load .vue file
-        {
-          test: /\.vue$/,
-          loader: 'vue-loader'
+        optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    vendor: {
+                        test: /[\\/]node_modules[\\/]/,
+                        name: 'vendors',
+                    },
+                },
+            },
+            minimizer: [
+                new TerserPlugin({
+                    terserOptions: {
+                        output: {
+                            comments: false,
+                        },
+                    },
+                    extractComments: false,
+                }),
+            ],
         },
-        // this will apply to both plain `.css` files
-        // AND `<style>` blocks in `.vue` files
-        {
-          test: /\.css$/,
-          use: [
-            'vue-style-loader',
-            'css-loader'
-          ]
-        }
-      ]
-    },
-    externals: {jquery: 'jQuery', draggable: 'Draggable'},
-    resolve: {
-      alias: {'vue$' : 'vue/dist/vue.esm.js'},
-      modules: [
-        path.resolve(__dirname, 'src/'),
-        'node_modules'
-      ],
-      extensions: [
-        '.json',
-        '.js'
-      ],
-    },
-    plugins: [
-      new webpack.DefinePlugin({
-        _ATKVERSION_ : JSON.stringify(packageVersion)
-      }),
-      new VueLoaderPlugin(),
-    ]
-  };
+        module: {
+            rules: [
+                {
+                    test: /(\.jsx|\.js)$/,
+                    loader: 'babel-loader',
+                    exclude: /(node_modules|bower_components)/,
+                },
+                // load .vue file
+                {
+                    test: /\.vue$/,
+                    loader: 'vue-loader',
+                },
+                // this will apply to both plain `.css` files
+                // AND `<style>` blocks in `.vue` files
+                {
+                    test: /\.css$/,
+                    use: [
+                        'vue-style-loader',
+                        'style-loader',
+                        'css-loader',
+                    ],
+                },
+            ],
+        },
+        externals: { jquery: 'jQuery', draggable: 'Draggable' },
+        resolve: {
+            alias: { vue$: 'vue/dist/vue.esm.js' },
+            modules: [
+                path.resolve(__dirname, 'src/'),
+                'node_modules',
+            ],
+            extensions: [
+                '.json',
+                '.js',
+            ],
+        },
+        plugins: [
+            new webpack.DefinePlugin({
+                _ATKVERSION_: JSON.stringify(packageVersion),
+            }),
+            new VueLoaderPlugin(),
+        ],
+    };
 };

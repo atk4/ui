@@ -20,7 +20,7 @@ $b = Button::addTo($app)->set('Reload');
 $b->on('click', new JsReload($v));
 
 $cb = Callback::addTo($app);
-$cb->urlTrigger = 'c_reload';
+$cb->setUrlTrigger('c_reload');
 
 \atk4\ui\Loader::addTo($app, ['cb' => $cb])->set(function ($page) {
     $v = View::addTo($page, ['ui' => 'segment'])->set('loaded');

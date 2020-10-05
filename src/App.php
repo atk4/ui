@@ -38,14 +38,14 @@ class App
 
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
-        'atk' => 'https://ui.agiletoolkit.org/public', // develop branch
+        'atk' => 'https://cdn.jsdelivr.net/gh/atk4/ui@develop/public',
         'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.6',
     ];
 
     /** @var string Version of Agile UI */
-    public $version = '2.1.0';
+    public $version = '2.2.0';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -112,7 +112,7 @@ class App
     /** @var LoggerInterface Target for objects with DebugTrait */
     public $logger;
 
-    /** @var Persistence */
+    /** @var Persistence|Persistence\Sql */
     public $db;
 
     /** @var string[] Extra HTTP headers to send on exit. */
@@ -141,11 +141,19 @@ class App
     public $call_exit = true;
 
     /**
-     * Error types to be in set_error_handler.
-     *
-     * @var int
+     * @var string|null
      */
-    protected $catch_error_types = E_ALL & ~E_NOTICE;
+    public $page;
+
+    /**
+     * @var array global sticky arguments
+     */
+    protected $sticky_get_arguments = [
+        '__atk_json' => false,
+        '__atk_tab' => false,
+    ];
+
+    public $templateClass = Template::class;
 
     /**
      * Constructor.
@@ -176,21 +184,14 @@ class App
 
         foreach ($defaults as $key => $val) {
             if (is_array($val)) {
-                $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
-            } elseif (!is_null($val)) {
-                $this->$key = $val;
+                $this->{$key} = array_merge(is_array($this->{$key} ?? null) ? $this->{$key} : [], $val);
+            } elseif ($val !== null) {
+                $this->{$key} = $val;
             }
         }
          */
 
-        // Set up template folder
-        if ($this->template_dir === null) {
-            $this->template_dir = [];
-        } elseif (!is_array($this->template_dir)) {
-            $this->template_dir = [$this->template_dir];
-        }
-
-        $this->template_dir[] = __DIR__ . '/../template/' . $this->skin;
+        $this->setupTemplateDirs();
 
         // Set our exception handler
         if ($this->catch_exceptions) {
@@ -199,7 +200,7 @@ class App
                 static function ($severity, $msg, $file, $line) {
                     throw new \ErrorException($msg, 0, $severity, $file, $line);
                 },
-                $this->catch_error_types
+                \E_ALL
             );
         }
 
@@ -212,6 +213,17 @@ class App
         if (!isset($this->ui_persistence)) {
             $this->ui_persistence = new UiPersistence();
         }
+    }
+
+    protected function setupTemplateDirs()
+    {
+        if ($this->template_dir === null) {
+            $this->template_dir = [];
+        } elseif (!is_array($this->template_dir)) {
+            $this->template_dir = [$this->template_dir];
+        }
+
+        $this->template_dir[] = dirname(__DIR__) . '/template/' . $this->skin;
     }
 
     /**
@@ -417,13 +429,13 @@ class App
      */
     public function initLayout($seed)
     {
-        $layout = $this->factory($seed);
+        $layout = Layout::fromSeed($seed);
         $layout->app = $this;
 
         if (!$this->html) {
             $this->html = new View(['defaultTemplate' => 'html.html']);
             $this->html->app = $this;
-            $this->html->init();
+            $this->html->invokeInit();
         }
 
         $this->layout = $this->html->add($layout);
@@ -451,6 +463,9 @@ class App
         // Agile UI
         $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
         $this->requireCss($this->cdn['atk'] . '/agileui.css');
+
+        // Set js bundle dynamic loading path.
+        $this->html->template->trySet('InitJsBundle', (new JsExpression('window.__atkBundlePublicPath = [];', [$this->cdn['atk']]))->jsRender(), false);
     }
 
     /**
@@ -472,10 +487,8 @@ class App
      *
      * @param View|string|array $seed   New object to add
      * @param string|array|null $region
-     *
-     * @return View
      */
-    public function add($seed, $region = null)
+    public function add($seed, $region = null): AbstractView
     {
         if (!$this->layout) {
             throw (new Exception('App layout is missing'))
@@ -491,7 +504,6 @@ class App
     public function run()
     {
         $isExitException = false;
-
         try {
             $this->run_called = true;
             $this->hook(self::HOOK_BEFORE_RENDER);
@@ -534,7 +546,7 @@ class App
     /**
      * Initialize app.
      */
-    public function init(): void
+    protected function init(): void
     {
         $this->_init();
     }
@@ -548,7 +560,7 @@ class App
      */
     public function loadTemplate($name)
     {
-        $template = new Template();
+        $template = new $this->templateClass();
         $template->app = $this;
 
         if (in_array($name[0], ['.', '/', '\\'], true) || strpos($name, ':\\') !== false) {
@@ -583,19 +595,6 @@ class App
 
         return $request_uri[0];
     }
-
-    /**
-     * @var string|null
-     */
-    public $page;
-
-    /**
-     * @var array global sticky arguments
-     */
-    protected $sticky_get_arguments = [
-        '__atk_json' => false,
-        '__atk_tab' => false,
-    ];
 
     /**
      * Make current get argument with specified name automatically appended to all generated URLs.
@@ -655,7 +654,6 @@ class App
         $args = $extraRequestUriArgs;
 
         // add sticky arguments
-        $args = $extraRequestUriArgs;
         foreach ($this->sticky_get_arguments as $k => $v) {
             if ($v && isset($_GET[$k])) {
                 $args[$k] = $_GET[$k];
@@ -674,7 +672,7 @@ class App
         }
 
         // put URL together
-        $pageQuery = http_build_query($args);
+        $pageQuery = http_build_query($args, '', '&', PHP_QUERY_RFC3986);
         $url = $pagePath . ($pageQuery ? '?' . $pageQuery : '');
 
         return $url;
@@ -936,10 +934,7 @@ class App
 
     public function decodeJson(string $json)
     {
-        $data = json_decode($json, true, 512, JSON_BIGINT_AS_STRING);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new Exception('JSON decode error: ' . json_last_error_msg());
-        }
+        $data = json_decode($json, true, 512, JSON_BIGINT_AS_STRING | JSON_THROW_ON_ERROR);
 
         return $data;
     }
@@ -951,10 +946,7 @@ class App
             $options |= JSON_FORCE_OBJECT;
         }
 
-        $json = json_encode($data, $options, 512);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new Exception('JSON encode error: ' . json_last_error_msg());
-        }
+        $json = json_encode($data, $options | JSON_THROW_ON_ERROR, 512);
 
         // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
         // replace large JSON integers only, do not replace anything in JSON/JS strings
@@ -1062,6 +1054,7 @@ class App
 
         if ($lateError !== null) {
             echo "\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n";
+
             exit(1);
         }
 
@@ -1104,6 +1097,9 @@ class App
      */
     public function getRenderedModals(): array
     {
+        // prevent looping (calling App::terminateJson() recursively) if JsReload is used in Modal
+        unset($_GET['__atk_reload']);
+
         $modals = [];
         foreach ($this->html !== null ? $this->html->elements : [] as $view) {
             if ($view instanceof Modal) {

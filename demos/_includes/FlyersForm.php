@@ -16,7 +16,7 @@ class FlyersForm extends Form
         ['name' => 'Around the world', 'id' => 3, 'nodes' => []],
     ];
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -48,7 +48,7 @@ class FlyersForm extends Form
         $ml->setModel(new Flyers(new \atk4\data\Persistence\Array_($this->flyers)));
 
         $cards = $this->addControl('cards', [Form\Control\TreeItemSelector::class, 'treeItems' => $this->cards, 'caption' => 'Flyers program:'], ['type' => 'array', 'serialize' => 'json']);
-        $cards->set(json_encode([]));
+        $cards->set($this->app->encodeJson([]));
 
         $this->onSubmit(function ($form) {
             return new \atk4\ui\JsToast('Thank you!');

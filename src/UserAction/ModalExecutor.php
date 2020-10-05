@@ -42,7 +42,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     public const HOOK_STEP = self::class . '@onStep';
 
     /**
-     * @var JsExpressionable array|callable JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
+     * @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
      */
     public $jsSuccess;
 
@@ -105,7 +105,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     public $loaderUi = 'ui basic segment';
     public $loaderShim = [];
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->observeChanges();
@@ -130,7 +130,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->id = mb_strtolower($this->name . '_' . $table_name . '_' . $action->short_name);
         $this->name = $this->id;
 
-        //Add buttons to modal for next and previous.
+        // Add buttons to modal for next and previous.
         $this->btns = (new View())->addStyle(['min-height' => '24px']);
         $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
         $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);
@@ -402,7 +402,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
         $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
 
-        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->owner->id));
+        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->owner->getId()));
     }
 
     /**
@@ -412,7 +412,9 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      */
     protected function jsGetExecute($obj, $id)
     {
-        $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id, $obj]) : $this->jsSuccess;
+        $success = $this->jsSuccess instanceof \Closure
+            ? ($this->jsSuccess)($this, $this->action->owner, $id, $obj)
+            : $this->jsSuccess;
 
         return [
             $this->hide(),
@@ -514,7 +516,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     protected function setFormField(Form $form, array $fields, string $step): Form
     {
         foreach ($fields as $k => $val) {
-            $form->getField($k)->set($val);
+            $form->getControl($k)->set($val);
         }
         $this->hook(self::HOOK_STEP, [$step, $form]);
 
@@ -532,7 +534,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             if ($this->isLastStep($step)) {
                 // collect argument and execute action.
                 $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
-                $js = $this->jsGetExecute($return, $this->action->owner->id);
+                $js = $this->jsGetExecute($return, $this->action->owner->getId());
             } else {
                 // store data and setup reload.
                 $js = [
@@ -549,7 +551,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             throw $e;
         } catch (\Throwable $e) {
             $msg = new Message('Error executing ' . $this->action->caption, 'red');
-            $msg->init();
+            $msg->invokeInit();
             $msg->text->content = $this->app->renderExceptionHtml($e);
 
             return $msg;
@@ -711,13 +713,10 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         }
     }
 
-    /**
-     * Handle exception.
-     */
-    private function _handleException($e, $view, $step)
+    private function _handleException(\Throwable $exception, $view, $step)
     {
         $msg = Message::addTo($view, ['Error:', 'type' => 'error']);
-        $msg->text->addParagraph($e->getMessage());
+        $msg->text->addHtml($this->app->renderExceptionHtml($exception));
         $view->js(true, $this->nextStepBtn->js()->addClass('disabled'));
         if (!$this->isFirstStep($step)) {
             $this->jsSetPrevHandler($view, $step);

@@ -78,7 +78,7 @@ class FilterModel extends \atk4\data\Model
         return new $class($persistence, ['lookupField' => $field]);
     }
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
         $this->op = $this->addField('op', ['ui' => ['caption' => '']]);
@@ -112,12 +112,10 @@ class FilterModel extends \atk4\data\Model
 
     /**
      * Recall filter model data.
-     *
-     * @return array
      */
-    public function recallData()
+    public function recallData(): array
     {
-        return $this->recall('data');
+        return $this->recall('data', []);
     }
 
     /**

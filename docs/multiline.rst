@@ -20,7 +20,7 @@ This means that the addresses are not stored into a separate database table but 
     {
         public $table = 'user';
 
-        public function init(): void
+        protected function init(): void
         {
             parent:: init();
 
@@ -39,7 +39,7 @@ This means that the addresses are not stored into a separate database table but 
     {
         public $table = 'addresses';
 
-        public function init(): void
+        protected function init(): void
         {
             parent::init();
 
@@ -50,14 +50,14 @@ This means that the addresses are not stored into a separate database table but 
         }
     }
 
-    //Create some sample record of user Model
+    // Create some sample record of user Model
     $user = new User(new \atk4\data\Persistence\Array_());
     $user->set('firstname', 'Hans');
     $user->set('lastname', 'Test');
     $user->save();
 
 
-    //Add a Form to the UI and set User as Model
+    // Add a Form to the UI and set User as Model
     $user_form = \atk4\ui\Form::addTo($app);
     $user_form->setModel($user);
 
@@ -85,7 +85,7 @@ but you want to store them in a separate table. Uncomment the line `//$this->has
     {
         public $table = 'email';
 
-        public function init(): void
+        protected function init(): void
         {
             parent::init();
 
@@ -98,24 +98,24 @@ but you want to store them in a separate table. Uncomment the line `//$this->has
 Now when we use a Form for User records, it won't automatically add a Multiline to edit the email addresses.
 If you want to edit them along with the user, Multiline is set up in a few lines::
 
-    //Create some sample record of user Model
+    // Create some sample record of user Model
     $user = new User(new \atk4\data\Persistence\Array_());
-    $user->id = 1;
+    $user->setId(1);
     $user->set('firstname', 'Hans');
     $user->set('lastname', 'Test');
     $user->save();
 
-    //Add a form to UI to edit User record
+    // Add a form to UI to edit User record
     $user_form = \atk4\ui\Form::addTo($app);
     $user_form->setModel($user);
     $ml = $user_form->addField('email_addresses', [\atk4\ui\Form\Control\Multiline::class]);
     $ml->setModel($user->ref('Email'));
 
-    //set up saving of Email on Form submit
+    // set up saving of Email on Form submit
     $user_form->onSubmit(function($form) use ($ml) {
         $form->model->save();
         $ml->saveRows();
-        //show saved data for testing purposes
+        // show saved data for testing purposes
         return new JsToast(var_export($ml->model->export(), true));
     });
 
@@ -132,7 +132,7 @@ Lets use the example of demos/multiline.php::
 
     class InventoryItem extends \atk4\data\Model
     {
-        public function init(): void
+        protected function init(): void
         {
             parent::init();
             $this->addField('item', ['required' => true, 'default' => 'item']);

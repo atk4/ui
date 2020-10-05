@@ -51,19 +51,6 @@ class JsVueService
     }
 
     /**
-     * Emit an event that other component can listen too.
-     * Allow Vue instances to talk to each other.
-     *
-     * This output js: atk.vueService.emitEvent("eventName", {});
-     *
-     * @return mixed
-     */
-    public function emitEvent($eventName, array $data = [])
-    {
-        return $this->service->emitEvent($eventName, $data);
-    }
-
-    /**
      * Make Vue aware of externally loaded components.
      * The component name must be accessible in javascript using the window namespace.
      * ex: window['SemanticUIVue'].

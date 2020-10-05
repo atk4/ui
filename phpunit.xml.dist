@@ -1,15 +1,10 @@
-<phpunit colors="true" bootstrap="vendor/autoload.php" printerClass="atk4\core\AtkPhpunit\ResultPrinter">
+<phpunit bootstrap="vendor/autoload.php" printerClass="atk4\core\AtkPhpunit\ResultPrinter" colors="true">
     <php>
         <var name="DB_DSN" value="sqlite::memory:" />
         <var name="DB_USER" value="" />
         <var name="DB_PASSWD" value="" />
         <var name="DB_DBNAME" value="" />
     </php>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
     <testsuites>
         <testsuite name="tests">
             <directory>tests</directory>
@@ -26,7 +21,15 @@
             <group>demos_http</group>
         </exclude>
     </groups>
-    <logging>
-        <log type="coverage-php" target="build/logs/clover.cov"/>
-    </logging>
+    <listeners>
+        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener" />
+    </listeners>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <report>
+            <php outputFile="build/logs/clover.cov" />
+        </report>
+    </coverage>
 </phpunit>

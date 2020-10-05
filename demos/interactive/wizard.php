@@ -30,7 +30,7 @@ $wizard->addStep('Welcome', function (Wizard $wizard) {
 $wizard->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database Connection String'], function (Wizard $wizard) {
     $form = \atk4\ui\Form::addTo($wizard);
     // IMPORTANT - needed for php_unit Wizard test.
-    $form->name = 'w_form';
+    $form->cb->setUrlTrigger('w_form_submit');
 
     $form->addControl('dsn', 'Connect DSN', ['required' => true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
     $form->onSubmit(function (\atk4\ui\Form $form) use ($wizard) {

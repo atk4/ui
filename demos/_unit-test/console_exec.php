@@ -10,7 +10,7 @@ use atk4\ui\JsSse;
 require_once __DIR__ . '/../init-app.php';
 
 $sse = JsSse::addTo($app);
-$sse->urlTrigger = 'console_test';
+$sse->setUrlTrigger('console_test');
 
 $console = \atk4\ui\Console::addTo($app, ['sse' => $sse]);
 $console->exec('/bin/pwd');

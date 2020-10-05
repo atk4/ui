@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\Form\Control;
 
 use atk4\ui\JsExpression;
+use atk4\ui\JsExpressionable;
 use atk4\ui\JsFunction;
 
 /**
@@ -83,26 +84,26 @@ class Dropdown extends Input
      * Use additional 'icon' element to add an icon to this row.
      *
      * Example 1 with Model: Title in Uppercase
-     * function($row) {
+     * function(Model $row) {
      *     return [
-     *         'value' => $row->id,
+     *         'value' => $row->getId(),
      *         'title' => mb_strtoupper($row->getTitle()),
      *     ];
      *  }
      *
      * Example 2 with Model: Add an icon
-     * function($row) {
+     * function(Model $row) {
      *     return [
-     *         'value'   => $row->id,
+     *         'value'   => $row->getId(),
      *         'title'   => $row->getTitle(),
      *         'icon'    => $row->get('amount') > 1000 ? 'money' : '',
      *     ];
      * }
      *
      * Example 3 with Model: Combine Title from model fields
-     * function($row) {
+     * function(Model $row) {
      *     return [
-     *         'value'   => $row->id,
+     *         'value'   => $row->getId(),
      *         'title'   => $row->getTitle().' ('.$row->get('title2').')',
      *     ];
      * }
@@ -116,7 +117,7 @@ class Dropdown extends Input
      *     ];
      * }
      *
-     * @var callable
+     * @var \Closure|null
      */
     public $renderRowFunction;
 
@@ -137,7 +138,7 @@ class Dropdown extends Input
     /**
      * Initialization.
      */
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -227,10 +228,8 @@ class Dropdown extends Input
 
     /**
      * Render js for dropdown.
-     *
-     * @return mixed
      */
-    protected function jsRenderDropdown()
+    protected function jsRenderDropdown(): JsExpressionable
     {
         return $this->js(true)->dropdown($this->dropdownOptions);
     }
@@ -240,31 +239,31 @@ class Dropdown extends Input
      */
     protected function htmlRenderValue()
     {
-        //add selection only if no value is required and Dropdown has no multiple selections enabled
+        // add selection only if no value is required and Dropdown has no multiple selections enabled
         if ($this->field !== null && !$this->field->required && !$this->isMultiple) {
             $this->_tItem->set('value', '');
             $this->_tItem->set('title', $this->empty || is_numeric($this->empty) ? (string) $this->empty : '');
             $this->template->appendHtml('Item', $this->_tItem->render());
         }
 
-        //model set? use this, else values property
+        // model set? use this, else values property
         if (isset($this->model)) {
-            if (!is_callable($this->renderRowFunction)) {
-                //for standard model rendering, only load id and title field
-                $this->model->only_fields = [$this->model->title_field, $this->model->id_field];
-                $this->_renderItemsForModel();
-            } else {
+            if ($this->renderRowFunction) {
                 foreach ($this->model as $row) {
                     $this->_addCallBackRow($row);
                 }
+            } else {
+                // for standard model rendering, only load id and title field
+                $this->model->only_fields = [$this->model->title_field, $this->model->id_field];
+                $this->_renderItemsForModel();
             }
         } else {
-            if (!is_callable($this->renderRowFunction)) {
-                $this->_renderItemsForValues();
-            } else {
+            if ($this->renderRowFunction) {
                 foreach ($this->values as $key => $value) {
                     $this->_addCallBackRow($value, $key);
                 }
+            } else {
+                $this->_renderItemsForValues();
             }
         }
     }
@@ -284,6 +283,9 @@ class Dropdown extends Input
             $this->setDropdownOption('showOnFocus', false);
             $this->setDropdownOption('allowTab', false);
             $this->removeClass('search');
+            if ($this->isMultiple) {
+                $this->js(true)->find('a i.delete.icon')->attr('class', 'disabled');
+            }
         }
 
         if ($this->disabled) {
@@ -314,7 +316,7 @@ class Dropdown extends Input
             $title = $row->getTitle();
             $this->_tItem->set('value', (string) $key);
             $this->_tItem->set('title', $title || is_numeric($title) ? (string) $title : '');
-            //add item to template
+            // add item to template
             $this->template->appendHtml('Item', $this->_tItem->render());
         }
     }
@@ -336,7 +338,7 @@ class Dropdown extends Input
                 $this->_tItem->set('title', $val || is_numeric($val) ? (string) $val : '');
             }
 
-            //add item to template
+            // add item to template
             $this->template->appendHtml('Item', $this->_tItem->render());
         }
     }
@@ -347,21 +349,21 @@ class Dropdown extends Input
      */
     protected function _addCallBackRow($row, $key = null)
     {
-        $res = call_user_func($this->renderRowFunction, $row, $key);
+        $res = ($this->renderRowFunction)($row, $key);
         $this->_tItem->set('value', (string) $res['value']);
         $this->_tItem->set('title', $res['title']);
 
-        //Icon
+        // Icon
         $this->_tItem->del('Icon');
         if (isset($res['icon'])
         && $res['icon']) {
-            //compatibility with how $values property works on icons: 'icon'
-            //is defined in there
+            // compatibility with how $values property works on icons: 'icon'
+            // is defined in there
             $this->_tIcon->set('icon', 'icon ' . $res['icon']);
             $this->_tItem->appendHtml('Icon', $this->_tIcon->render());
         }
 
-        //add item to template
+        // add item to template
         $this->template->appendHtml('Item', $this->_tItem->render());
     }
 }

@@ -1,9 +1,7 @@
-
-
-let focus = {
-  inserted: function(el) {
-    el.focus()
-  }
+const focus = {
+    inserted: function (el) {
+        el.focus();
+    },
 };
 
-export {focus}
+export { focus };

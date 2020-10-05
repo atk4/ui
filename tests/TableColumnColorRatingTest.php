@@ -34,7 +34,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $m->addField('ref');
         $m->addField('rating');
         $this->table = new \atk4\ui\Table();
-        $this->table->init();
+        $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref', 'rating']);
     }
 

@@ -6,7 +6,7 @@ namespace atk4\ui\demo;
 
 class PromotionText extends \atk4\ui\View
 {
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -25,7 +25,6 @@ class PromotionText extends \atk4\ui\View
                 <li>Over 10 configurable field types, relations, aggregation and much more</li>
                 <li>Over 5 SQL and some NoSQL vendors fully supported</li>
                 </ul>
-
                 HTML
         );
 

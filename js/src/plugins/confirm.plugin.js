@@ -9,56 +9,54 @@ import atkPlugin from './atk.plugin';
  *
  * Fomantic UI modal option can be pass using modalOptions object.
  * Setting onApprove and onDeny function within modalOptions object will override
- * onApprove and onDeny current setting. 
+ * onApprove and onDeny current setting.
  */
 export default class confirm extends atkPlugin {
+    main() {
+        let context = this;
+        const that = this;
+        const $m = $('<div class="ui modal"/>')
+            .appendTo('body')
+            .html(this.getDialogHtml(this.settings.message));
 
-  main() {
+        $m.addClass(this.settings.size);
 
-    let context = this;
-    const that = this;
-    let $m = $('<div class="ui modal"/>')
-      .appendTo('body')
-      .html(this.getDialogHtml(this.settings.message));
+        let options = {};
 
-    $m.addClass(this.settings.size);
+        if (this.settings.context) {
+            context = this.settings.context;
+        }
 
-    let options = {};
+        // Create wrapper function for using proper "this" context.
+        if (this.settings.onApprove) {
+            options.onApprove = function () { that.settings.onApprove.call(context); };
+        }
+        if (this.settings.onDeny) {
+            options.onDeny = function () { that.settings.onDeny.call(context); };
+        }
 
-    if (this.settings.context) {
-      context = this.settings.context;
+        options = Object.assign(options, this.settings.modalOptions);
+
+        $m.data('needRemove', true).modal(options).modal('show');
     }
 
-    //Create wrapper function for using proper "this" context.
-    if (this.settings.onApprove) {
-      options.onApprove = function(){that.settings.onApprove.call(context)};
-    }
-    if (this.settings.onDeny) {
-      options.onDeny = function(){that.settings.onDeny.call(context)};
-    }
-
-    options = Object.assign(options, this.settings.modalOptions);
-
-    $m.data('needRemove', true).modal(options).modal('show');
-  }
-
-  getDialogHtml(message) {
-    return `
+    getDialogHtml(message) {
+        return `
           <div class=" content">${message}</div>
           <div class="actions">
             <div class="ui approve primary button">${this.settings.options.button.ok}</div>
             <div class="ui cancel button">${this.settings.options.button.cancel}</div>
            </div>
           `;
-  }
+    }
 }
 
 confirm.DEFAULTS = {
-  message: null,
-  size: 'tiny',
-  onApprove: null,
-  onDeny: null,
-  options: {button: {ok : 'Ok', cancel: 'Cancel'}},
-  modalOptions: {closable: false},
-  context: null
+    message: null,
+    size: 'tiny',
+    onApprove: null,
+    onDeny: null,
+    options: { button: { ok: 'Ok', cancel: 'Cancel' } },
+    modalOptions: { closable: false },
+    context: null,
 };

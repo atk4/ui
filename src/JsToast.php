@@ -27,7 +27,7 @@ class JsToast implements JsExpressionable
 
     public function __construct($settings = null)
     {
-        if ($settings && is_array($settings)) {
+        if (is_array($settings)) {
             $this->settings = $settings;
         } elseif (is_string($settings)) {
             $this->settings['message'] = $settings;
@@ -49,7 +49,7 @@ class JsToast implements JsExpressionable
         return $this;
     }
 
-    public function jsRender()
+    public function jsRender(): string
     {
         return (new Jquery('body'))->toast($this->settings)->jsRender();
     }

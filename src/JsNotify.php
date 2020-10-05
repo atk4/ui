@@ -16,7 +16,7 @@ class JsNotify implements JsExpressionable
 
     public function __construct($options = null, $attachTo = null)
     {
-        if ($options && is_array($options)) {
+        if (is_array($options)) {
             $this->setDefaults($options);
         } elseif (is_string($options)) {
             $this->setDefaults(['content' => $options]);
@@ -170,12 +170,7 @@ class JsNotify implements JsExpressionable
         return $this;
     }
 
-    /**
-     * Render the notifier.
-     *
-     * @return string
-     */
-    public function jsRender()
+    public function jsRender(): string
     {
         if ($this->attachTo) {
             $final = $this->attachTo->js();

@@ -4,8 +4,10 @@
     .menu
         | {rows}
         | {row}
-        .item
+        .item(data-value='{$id}')
             | {$name}
+        |
         | {/}
         | {/}
 </div>
+= "\n"
