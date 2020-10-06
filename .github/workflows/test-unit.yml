@@ -242,7 +242,7 @@ jobs:
         run: |
           cp -r public public.orig && rm public/*.js
           (cd js && npm run build)
-          sed -i "s~'https://cdn.jsdelivr.net/gh/atk4/ui@develop/public.*~'/public',~" src/App.php
+          sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
           diff -qr public public.orig
           rm -r public.orig
 
