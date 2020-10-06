@@ -141,9 +141,9 @@ $f_acc->setGroupDisplayRules(
     ['addr2' => ['custom_shipping' => 'checked']]
 
     // JS selector of container
-    //,'.atk-form-group'     // this will hide group
-    //,'.content'            // this will hide content of 2nd accordion section
-    , $ship_section->owner    // this way we set selector to accordion section title block - so what? we still can't do anything about it
-    //                       // BUT there is no way how to show/hide all accordion section including title and content
+    //,'.atk-form-group'        // this will hide group
+    //,'.content'               // this will hide content of 2nd accordion section
+    , $ship_section->getOwner() // this way we set selector to accordion section title block - so what? we still can't do anything about it
+    //                          // BUT there is no way how to show/hide all accordion section including title and content
 );
 */

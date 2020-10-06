@@ -99,7 +99,7 @@ class TreeItemSelector extends Form\Control
     public function onItem(\Closure $fx)
     {
         $this->cb = JsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
-            $value = $this->app->decodeJson($data);
+            $value = $this->getApp()->decodeJson($data);
             if (!$this->allowMultiple) {
                 $value = $value[0];
             }
@@ -129,7 +129,7 @@ class TreeItemSelector extends Form\Control
      */
     public function getInput()
     {
-        return $this->app->getTag('input', [
+        return $this->getApp()->getTag('input', [
             'name' => $this->short_name,
             'type' => 'hidden',
             'value' => $this->getValue(),
@@ -139,7 +139,7 @@ class TreeItemSelector extends Form\Control
 
     public function getValue()
     {
-        return $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get());
+        return $this->getApp()->ui_persistence->typecastSaveField($this->field, $this->field->get());
     }
 
     protected function renderView(): void

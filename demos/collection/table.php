@@ -49,7 +49,7 @@ break;
     }
     if ($color) {
         return [
-            'name' => $table->app->getTag('div', ['class' => 'ui ribbon ' . $color . ' label'], $row->get('name')),
+            'name' => $table->getApp()->getTag('div', ['class' => 'ui ribbon ' . $color . ' label'], $row->get('name')),
         ];
     }
 });

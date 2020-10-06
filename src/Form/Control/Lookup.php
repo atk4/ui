@@ -162,7 +162,7 @@ class Lookup extends Input
      */
     public function outputApiResponse()
     {
-        $this->app->terminateJson([
+        $this->getApp()->terminateJson([
             'success' => true,
             'results' => $this->getData(),
         ]);
@@ -250,7 +250,7 @@ class Lookup extends Input
         if ($this->form) {
             $vp = \atk4\ui\VirtualPage::addTo($this->form);
         } else {
-            $vp = \atk4\ui\VirtualPage::addTo($this->owner);
+            $vp = \atk4\ui\VirtualPage::addTo($this->getOwner());
         }
 
         $vp->set(function ($page) {
@@ -345,7 +345,7 @@ class Lookup extends Input
      */
     public function getInput()
     {
-        return $this->app->getTag('input', array_merge([
+        return $this->getApp()->getTag('input', array_merge([
             'name' => $this->short_name,
             'type' => 'hidden',
             'id' => $this->id . '_input',

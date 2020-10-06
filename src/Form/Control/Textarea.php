@@ -19,7 +19,7 @@ class Textarea extends Input
      */
     public function getInput()
     {
-        return $this->app->getTag(
+        return $this->getApp()->getTag(
             'textarea',
             array_merge([
                 'name' => $this->short_name,

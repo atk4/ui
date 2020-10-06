@@ -51,7 +51,7 @@ $panel1->onOpen(function ($p) use ($view) {
     \atk4\ui\View::addTo($panel, ['ui' => 'divider']);
     $panelButton = \atk4\ui\Button::addTo($panel, ['Complete']);
     $panelButton->on('click', [
-        $p->owner->jsClose(),
+        $p->getOwner()->jsClose(),
         new \atk4\ui\JsReload($view, ['txt' => 'Complete using button #' . $buttonNumber]),
     ]);
 });
@@ -78,13 +78,13 @@ $panel2->onOpen(function ($p) {
     $form->addHeader('Settings');
     $form->addControl('name', [\atk4\ui\Form\Control\Dropdown::class, 'values' => ['1' => 'Option 1', '2' => 'Option 2']])
         ->set('1')
-        ->onChange($p->owner->jsDisplayWarning(true));
+        ->onChange($p->getOwner()->jsDisplayWarning(true));
 
     $form->onSubmit(function (\atk4\ui\Form $form) use ($p) {
         return [
             new \atk4\ui\JsToast('Saved, closing panel.'),
-            $p->owner->jsDisplayWarning(false),
-            $p->owner->jsClose(),
+            $p->getOwner()->jsDisplayWarning(false),
+            $p->getOwner()->jsClose(),
         ];
     });
 });

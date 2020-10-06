@@ -114,53 +114,53 @@ class VirtualPage extends View
 
                 // special treatment for popup
                 if ($mode === 'popup') {
-                    $this->app->html->template->set('title', $this->app->title);
-                    $this->app->html->template->setHtml('Content', parent::getHtml());
-                    $this->app->html->template->appendHtml('HEAD', $this->getJs());
+                    $this->getApp()->html->template->set('title', $this->getApp()->title);
+                    $this->getApp()->html->template->setHtml('Content', parent::getHtml());
+                    $this->getApp()->html->template->appendHtml('HEAD', $this->getJs());
 
-                    $this->app->terminateHtml($this->app->html->template);
+                    $this->getApp()->terminateHtml($this->getApp()->html->template);
                 }
 
                 // render and terminate
                 if (isset($_GET['__atk_json'])) {
-                    $this->app->terminateJson($this);
+                    $this->getApp()->terminateJson($this);
                 }
 
                 if (isset($_GET['__atk_tab'])) {
-                    $this->app->terminateHtml($this->renderToTab());
+                    $this->getApp()->terminateHtml($this->renderToTab());
                 }
 
                 // do not terminate if callback supplied (no cutting)
                 if ($mode !== 'callback') {
-                    $this->app->terminateHtml($this);
+                    $this->getApp()->terminateHtml($this);
                 }
             }
 
             // Remove all elements from inside the Content
-            foreach ($this->app->layout->elements as $key => $view) {
+            foreach ($this->getApp()->layout->elements as $key => $view) {
                 if ($view instanceof View && $view->region === 'Content') {
-                    unset($this->app->layout->elements[$key]);
+                    unset($this->getApp()->layout->elements[$key]);
                 }
             }
 
             // Prepare modals in order to include them in VirtualPage.
             $modalHtml = '';
-            foreach ($this->app->html !== null ? $this->app->html->elements : [] as $view) {
+            foreach ($this->getApp()->html !== null ? $this->getApp()->html->elements : [] as $view) {
                 if ($view instanceof Modal) {
                     $modalHtml .= $view->getHtml();
-                    $this->app->layout->_js_actions = array_merge($this->app->layout->_js_actions, $view->_js_actions);
+                    $this->getApp()->layout->_js_actions = array_merge($this->getApp()->layout->_js_actions, $view->_js_actions);
                 }
             }
 
-            $this->app->layout->template->setHtml('Content', parent::getHtml());
-            $this->app->layout->_js_actions = array_merge($this->app->layout->_js_actions, $this->_js_actions);
+            $this->getApp()->layout->template->setHtml('Content', parent::getHtml());
+            $this->getApp()->layout->_js_actions = array_merge($this->getApp()->layout->_js_actions, $this->_js_actions);
 
-            $this->app->html->template->setHtml('Content', $this->app->layout->template->render());
-            $this->app->html->template->setHtml('Modals', $modalHtml);
+            $this->getApp()->html->template->setHtml('Content', $this->getApp()->layout->template->render());
+            $this->getApp()->html->template->setHtml('Modals', $modalHtml);
 
-            $this->app->html->template->appendHtml('HEAD', $this->app->layout->getJs());
+            $this->getApp()->html->template->appendHtml('HEAD', $this->getApp()->layout->getJs());
 
-            $this->app->terminateHtml($this->app->html->template);
+            $this->getApp()->terminateHtml($this->getApp()->html->template);
         });
     }
 

@@ -90,9 +90,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
         $this->sse->set(function () use ($fx) {
             $this->sseInProgress = true;
 
-            if (isset($this->app)) {
-                $old_logger = $this->app->logger;
-                $this->app->logger = $this;
+            if ($this->issetApp()) {
+                $old_logger = $this->getApp()->logger;
+                $this->getApp()->logger = $this;
             }
 
             ob_start(function ($content) {
@@ -114,11 +114,11 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 $fx($this);
             } catch (\Throwable $e) {
                 $this->output('');
-                $this->outputHtml('<div class="ui segment" style="white-space: normal; font-family: Lato,\'Helvetica Neue\',Arial,Helvetica,sans-serif;">{0}</div>', [$this->app->renderExceptionHtml($e)]);
+                $this->outputHtml('<div class="ui segment" style="white-space: normal; font-family: Lato,\'Helvetica Neue\',Arial,Helvetica,sans-serif;">{0}</div>', [$this->getApp()->renderExceptionHtml($e)]);
             }
 
-            if (isset($this->app)) {
-                $this->app->logger = $old_logger;
+            if ($this->issetApp()) {
+                $this->getApp()->logger = $old_logger;
             }
 
             $this->sseInProgress = false;
@@ -343,9 +343,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
         if (is_object($object)) {
             // temporarily override app logging
-            if (isset($object->app)) {
-                $loggerBak = $object->app->logger;
-                $object->app->logger = $this;
+            if (isset($object->_appScopeTrait) && $object->issetApp()) {
+                $loggerBak = $object->getApp()->logger;
+                $object->getApp()->logger = $this;
             }
             if (isset($object->_debugTrait)) {
                 $debugBak = $object->debug;
@@ -357,8 +357,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
             try {
                 $result = $object->{$method}(...$args);
             } finally {
-                if (isset($object->app)) {
-                    $object->app->logger = $loggerBak;
+                if (isset($object->_appScopeTrait) && $object->issetApp()) {
+                    $object->getApp()->logger = $loggerBak;
                 }
                 if (isset($object->_debugTrait)) {
                     $object->debug = $debugBak;
@@ -372,7 +372,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             throw (new Exception('Incorrect value for an object'))
                 ->addMoreInfo('object', $object);
         }
-        $this->output('--[ Result: ' . $this->app->encodeJson($result) . ' ]------------');
+        $this->output('--[ Result: ' . $this->getApp()->encodeJson($result) . ' ]------------');
 
         return $this;
     }

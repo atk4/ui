@@ -66,13 +66,13 @@ abstract class AbstractView
      */
     protected function initDefaultApp()
     {
-        $this->app = new App([
+        $this->setApp(new App([
             'skin' => $this->skin,
             'catch_exceptions' => false,
             'always_run' => false,
             'catch_runaway_callbacks' => false,
-        ]);
-        $this->app->invokeInit();
+        ]));
+        $this->getApp()->invokeInit();
     }
 
     /**
@@ -81,7 +81,7 @@ abstract class AbstractView
      */
     protected function init(): void
     {
-        if (!$this->app) {
+        if (!$this->issetApp()) {
             $this->initDefaultApp();
         }
 
@@ -111,7 +111,7 @@ abstract class AbstractView
             throw new Exception('You cannot add anything into the view after it was rendered');
         }
 
-        if (!$this->app) {
+        if (!$this->issetApp()) {
             $this->_add_later[] = [$object, $args];
 
             return $object;
@@ -141,7 +141,7 @@ abstract class AbstractView
      */
     public function jsUrl($page = [])
     {
-        return $this->app->jsUrl($page, false, $this->_getStickyArgs());
+        return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
     }
 
     /**
@@ -155,7 +155,7 @@ abstract class AbstractView
      */
     public function url($page = [])
     {
-        return $this->app->url($page, false, $this->_getStickyArgs());
+        return $this->getApp()->url($page, false, $this->_getStickyArgs());
     }
 
     /**
@@ -163,8 +163,8 @@ abstract class AbstractView
      */
     protected function _getStickyArgs(): array
     {
-        if ($this->owner && $this->owner instanceof self) {
-            $stickyArgs = array_merge($this->owner->_getStickyArgs(), $this->stickyArgs);
+        if ($this->issetOwner() && $this->getOwner() instanceof self) {
+            $stickyArgs = array_merge($this->getOwner()->_getStickyArgs(), $this->stickyArgs);
         } else {
             $stickyArgs = $this->stickyArgs;
         }

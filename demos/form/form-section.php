@@ -20,7 +20,7 @@ $model->loadAny();
 $noSave = function (Form $form) {
     return new \atk4\ui\JsToast([
         'title' => 'POSTed field values',
-        'message' => '<pre>' . $form->app->encodeJson($form->model->get()) . '</pre>',
+        'message' => '<pre>' . $form->getApp()->encodeJson($form->model->get()) . '</pre>',
         'class' => 'success',
         'displayTime' => 5000,
     ]);

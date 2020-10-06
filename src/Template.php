@@ -224,7 +224,7 @@ class Template implements \ArrayAccess
     {
         // check tag
         if ($tag instanceof Model) {
-            $tag = $this->app->ui_persistence->typecastSaveRow($tag, $tag->get());
+            $tag = $this->getApp()->ui_persistence->typecastSaveRow($tag, $tag->get());
         }
 
         // $tag passed as associative array [tag=>value]
@@ -534,7 +534,9 @@ class Template implements \ArrayAccess
     public function cloneRegion(string $tag)
     {
         $template = new static();
-        $template->app = $this->app;
+        if ($this->issetApp()) {
+            $template->setApp($this->getApp());
+        }
         if ($tag === self::TOP_TAG) {
             $template->template = $this->template;
             $template->source = $this->source;

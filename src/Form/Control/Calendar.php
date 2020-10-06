@@ -55,7 +55,7 @@ class Calendar extends Input
         }
 
         $typeFormat = $this->type . '_format';
-        if ($format = $this->app->ui_persistence->{$typeFormat}) {
+        if ($format = $this->getApp()->ui_persistence->{$typeFormat}) {
             $formatter = 'function(date, settings){
                             if (!date) return;
                             return atk.phpDate([format], date);
@@ -65,11 +65,11 @@ class Calendar extends Input
 
         $this->options['type'] = $this->type;
 
-        if ($dayOfWeek = $this->app->ui_persistence->firstDayOfWeek) {
+        if ($dayOfWeek = $this->getApp()->ui_persistence->firstDayOfWeek) {
             $this->options['firstDayOfWeek'] = $dayOfWeek;
         }
 
-        if ($options = $this->app->ui_persistence->calendar_options) {
+        if ($options = $this->getApp()->ui_persistence->calendar_options) {
             foreach ($options as $k => $v) {
                 $this->options[$k] = $v;
             }

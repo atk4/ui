@@ -15,7 +15,7 @@ class TabsSubview extends View
 
     public function setActive()
     {
-        $this->owner->activeTabName = $this->dataTabName;
+        $this->getOwner()->activeTabName = $this->dataTabName;
     }
 
     protected function renderView(): void
