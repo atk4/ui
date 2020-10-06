@@ -20,6 +20,8 @@ require_once __DIR__ . '/../init-app.php';
 
 $files = new FileLock($app->db);
 
+var_dump($files->export());
+
 // This action must appear on top of the Crud
 $action = $files->addUserAction(
     'import_from_filesystem',
@@ -34,6 +36,18 @@ $action = $files->addUserAction(
         'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     ]
 );
+
+/* Disabled for security
+$action_delete = $files->addUserAction(
+    'cleanup_list',
+    [
+        'callback' => function($model){
+            $model->action('delete')->execute();
+        },
+        'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+    ]
+);
+*/
 
 $files->addUserAction('download', function (\atk4\data\Model $model) {
     $len = strlen(file_get_contents($model->get('name')));

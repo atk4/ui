@@ -159,6 +159,7 @@ class Percent extends \atk4\data\Field
 class File extends \atk4\data\Model
 {
     public $table = 'file';
+    public $title_field = 'name';
 
     protected function init(): void
     {
@@ -170,8 +171,9 @@ class File extends \atk4\data\Model
 
         $this->hasMany('SubFolder', [new self(), 'their_field' => 'parent_folder_id'])
             ->addField('count', ['aggregate' => 'count', 'field' => $this->expr('*')]);
-
-        $this->hasOne('parent_folder_id', new self())
+        $this->hasOne('parent_folder_id', function() {
+                return (new self($this->persistence))->addCondition('is_folder', true);
+            })
             ->addTitle();
     }
 
@@ -181,7 +183,7 @@ class File extends \atk4\data\Model
     public function importFromFilesystem($path, $isSub = false)
     {
         if (!$isSub) {
-            $path = __DIR__ . '/' . $path;
+            $path = __DIR__ . '/../' . $path;
         }
 
         $dir = new \DirectoryIterator($path);
@@ -193,17 +195,17 @@ class File extends \atk4\data\Model
             }
 
             if ($name === 'src' || $name === 'demos' || $isSub) {
-                /* Disabling saving file in db
-                $this->unload();
-                $this->save([
+                /* Disabling saving file in db*/
+                $m = clone ($this);
+                $m->save([
                     'name' => $fileinfo->getFilename(),
                     'is_folder' => $fileinfo->isDir(),
                     'type' => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
                 ]);
-                */
+                /**/
 
                 if ($fileinfo->isDir()) {
-                    $this->ref('SubFolder')->importFromFilesystem($dir->getPath() . '/' . $name, true);
+                    $m->ref('SubFolder')->importFromFilesystem($dir->getPath() . '/' . $name, true);
                 }
             }
         }
