@@ -14,7 +14,7 @@ class Date extends Basic implements Castable
         'format' => [
             'date' => 'M d, Y',
             'time' => 'H:i',
-            'datetime' => 'Y-m-d (H:i:s)',
+            'datetime' => 'Y-m-d H:i',
         ]
     ];
 
