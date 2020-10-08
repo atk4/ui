@@ -11,10 +11,22 @@ class Date extends Basic implements Castable
 {
     /** @var string[] Format use by form controls. */
     public static $props = [
-        'date' => 'M d, Y',
-        'time' => 'H:i:s',
-        'datetime' => 'Y-m-d H:i:s',
+        'format' => [
+            'date' => 'M d, Y',
+            'time' => 'H:i',
+            'datetime' => 'Y-m-d (H:i:s)',
+        ]
     ];
+
+    public static function setDateFormat(string $format, string $value)
+    {
+        static::$props['format'][$format] = $value;
+    }
+
+    public static function getDateFormat(string $format)
+    {
+        return static::$props['format'][$format];
+    }
 
     public static function castLoadValue(Field $field, $value)
     {
@@ -22,7 +34,7 @@ class Date extends Basic implements Castable
         $tz_class = $field->dateTimeZoneClass ?? \DateTimeZone::class;
 
         // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
-        $format = $field->persist_format ?: '!+' . static::getProps($field->type);
+        $format = $field->persist_format ?: '!+' . static::getProps('format')[$field->type];
 
         // datetime only - set from persisting timezone
         $valueStr = $value;
@@ -54,7 +66,7 @@ class Date extends Basic implements Castable
         $tz_class = $f->dateTimeZoneClass ?? \DateTimeZone::class;
 
         if ($value instanceof $dt_class || $value instanceof \DateTimeInterface) {
-            $format = $field->persist_format ?: static::getProps($field->type);
+            $format = $field->persist_format ?: static::getProps('format')[$field->type];
 
             // datetime only - set to persisting timezone
             if ($field->type === 'datetime' && isset($field->persist_timezone)) {
