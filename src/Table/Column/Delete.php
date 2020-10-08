@@ -21,7 +21,7 @@ class Delete extends Table\Column
 
             $reload = $this->table->reload ?: $this->table;
 
-            $this->table->app->terminateJson($reload);
+            $this->table->getApp()->terminateJson($reload);
         });
     }
 
@@ -32,7 +32,7 @@ class Delete extends Table\Column
             'uri_options' => [$this->name => $this->table->jsRow()->data('id')],
         ]);
 
-        return $this->app->getTag(
+        return $this->getApp()->getTag(
             'a',
             ['href' => '#', 'title' => 'Delete {$' . $this->table->model->title_field . '}?', 'class' => $this->short_name],
             [

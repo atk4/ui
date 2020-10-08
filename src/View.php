@@ -264,14 +264,14 @@ class View extends AbstractView implements JsExpressionable
             $this->id = $this->name;
         }
 
-        if ($this->region && !$this->template && !$this->defaultTemplate && $this->owner && $this->owner->template) {
-            $this->template = $this->owner->template->cloneRegion($this->region);
+        if ($this->region && !$this->template && !$this->defaultTemplate && $this->issetOwner() && $this->getOwner()->template) {
+            $this->template = $this->getOwner()->template->cloneRegion($this->region);
 
-            $this->owner->template->del($this->region);
+            $this->getOwner()->template->del($this->region);
         } else {
             // set up template
             if (is_string($this->defaultTemplate) && $this->template === null) {
-                $this->template = $this->app->loadTemplate($this->defaultTemplate);
+                $this->template = $this->getApp()->loadTemplate($this->defaultTemplate);
             }
 
             if (!$this->region) {
@@ -279,8 +279,8 @@ class View extends AbstractView implements JsExpressionable
             }
         }
 
-        if ($this->template && !isset($this->template->app) && isset($this->app)) {
-            $this->template->app = $this->app;
+        if ($this->template && !$this->template->issetApp() && $this->issetApp()) {
+            $this->template->setApp($this->getApp());
         }
 
         // add default objects
@@ -313,7 +313,7 @@ class View extends AbstractView implements JsExpressionable
             $object = AbstractView::addToWithCl($this, $object, [], true);
         }
 
-        if (!$this->app) {
+        if (!$this->issetApp()) {
             $this->_add_later[] = [$object, $region];
 
             return $object;
@@ -358,15 +358,15 @@ class View extends AbstractView implements JsExpressionable
      */
     public function getClosestOwner(self $object, $class)
     {
-        if (!isset($object->owner)) {
+        if ($object->issetOwner()) {
             return;
         }
 
-        if ($object->owner instanceof $class) {
-            return $object->owner;
+        if ($object->getOwner() instanceof $class) {
+            return $object->getOwner();
         }
 
-        return $this->getClosestOwner($object->owner, $class);
+        return $this->getClosestOwner($object->getOwner(), $class);
     }
 
     // }}}
@@ -608,7 +608,7 @@ class View extends AbstractView implements JsExpressionable
         if ($this->attr) {
             $tmp = [];
             foreach ($this->attr as $attr => $val) {
-                $tmp[] = $attr . '="' . $this->app->encodeAttribute($val) . '"';
+                $tmp[] = $attr . '="' . $this->getApp()->encodeAttribute($val) . '"';
             }
             $this->template->setHtml('attributes', implode(' ', $tmp));
         }
@@ -715,7 +715,7 @@ class View extends AbstractView implements JsExpressionable
     public function getHtml()
     {
         if (isset($_GET['__atk_reload']) && $_GET['__atk_reload'] === $this->name) {
-            $this->app->terminateJson($this);
+            $this->getApp()->terminateJson($this);
         }
 
         $this->renderAll();
@@ -1045,11 +1045,11 @@ class View extends AbstractView implements JsExpressionable
             $ex = $this->factory($class);
             if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
                 // Executor may already had been add to layout. Like in CardDeck.
-                if (!isset($this->app->html->elements[$ex->short_name])) {
+                if (!isset($this->getApp()->html->elements[$ex->short_name])) {
                     // very dirty hack, @TODO, attach modals in the standard render tree
                     // but only render the result to a different place/html DOM
                     $ex->viewForUrl = $this;
-                    $ex = $this->app->html->add($ex, 'Modals')->setAction($action);
+                    $ex = $this->getApp()->html->add($ex, 'Modals')->setAction($action);
                 }
                 if (isset($arguments[0])) {
                     $arguments[$ex->name] = $arguments[0];
@@ -1158,15 +1158,15 @@ class View extends AbstractView implements JsExpressionable
 
         $actions['indent'] = '';
 
-        if (!$forceReturn && $this->app && $this->app->hasMethod('jsReady')) {
-            $this->app->jsReady($actions);
+        if (!$forceReturn && $this->issetApp() && $this->getApp()->hasMethod('jsReady')) {
+            $this->getApp()->jsReady($actions);
 
             return '';
         }
 
         // delegate $action rendering in hosting app if exist.
-        if ($this->app && $this->app->hasMethod('getViewJS')) {
-            return $this->app->getViewJS($actions);
+        if ($this->issetApp() && $this->getApp()->hasMethod('getViewJS')) {
+            return $this->getApp()->getViewJS($actions);
         }
 
         $ready = new JsFunction($actions);

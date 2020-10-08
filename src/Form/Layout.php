@@ -57,7 +57,7 @@ class Layout extends AbstractLayout
         parent::init();
 
         if (!$this->inputTemplate) {
-            $this->inputTemplate = $this->app->loadTemplate($this->defaultInputTemplate);
+            $this->inputTemplate = $this->getApp()->loadTemplate($this->defaultInputTemplate);
         }
     }
 

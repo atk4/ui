@@ -53,7 +53,7 @@ class Multiformat extends Table\Column
         $html_tags = [];
         foreach ($decorators as $c) {
             if (!is_object($c)) {
-                $c = $this->owner->decoratorFactory($field, $c);
+                $c = $this->getOwner()->decoratorFactory($field, $c);
             }
 
             if (--$cnt) {
@@ -81,7 +81,7 @@ class Multiformat extends Table\Column
         }
 
         $template = new \atk4\ui\Template($cell);
-        $template->app = $this->app;
+        $template->setApp($this->getApp());
         $template->set($row);
         $template->setHtml($html_tags);
 

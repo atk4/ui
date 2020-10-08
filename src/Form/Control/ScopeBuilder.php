@@ -325,7 +325,7 @@ class ScopeBuilder extends Control
         if ($this->form) {
             $this->form->onHook(\atk4\ui\Form::HOOK_LOAD_POST, function ($form, &$post) {
                 $key = $this->field->short_name;
-                $post[$key] = $this->queryToScope($this->app->decodeJson($post[$key] ?? '{}'));
+                $post[$key] = $this->queryToScope($this->getApp()->decodeJson($post[$key] ?? '{}'));
             });
         }
     }

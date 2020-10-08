@@ -35,7 +35,7 @@ class FlyersForm extends Form
 
         $this->addControl('country', [
             Form\Control\Lookup::class,
-            'model' => new \atk4\ui\demo\Country($this->app->db),
+            'model' => new \atk4\ui\demo\Country($this->getApp()->db),
             'dependency' => function ($model, $data) {
                 isset($data['contains']) ? $model->addCondition('name', 'like', '%' . $data['contains'] . '%') : null;
             },
@@ -48,7 +48,7 @@ class FlyersForm extends Form
         $ml->setModel(new Flyers(new \atk4\data\Persistence\Array_($this->flyers)));
 
         $cards = $this->addControl('cards', [Form\Control\TreeItemSelector::class, 'treeItems' => $this->cards, 'caption' => 'Flyers program:'], ['type' => 'array', 'serialize' => 'json']);
-        $cards->set($this->app->encodeJson([]));
+        $cards->set($this->getApp()->encodeJson([]));
 
         $this->onSubmit(function ($form) {
             return new \atk4\ui\JsToast('Thank you!');

@@ -58,8 +58,8 @@ class Tooltip extends Table\Column
             $extra_tags['class'] = implode(' ', $extra_tags['class']);
         }
 
-        return $this->app->getTag('td', $extra_tags, [
-            ' {$' . $field->short_name . '}' . $this->app->getTag('span', [
+        return $this->getApp()->getTag('td', $extra_tags, [
+            ' {$' . $field->short_name . '}' . $this->getApp()->getTag('span', [
                 'class' => 'ui icon link {$_' . $field->short_name . '_data_visible_class}',
                 'data-tooltip' => '{$_' . $field->short_name . '_data_tooltip}',
             ], [

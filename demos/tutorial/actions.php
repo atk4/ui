@@ -35,7 +35,7 @@ $wizard->addStep('Define User Action', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \atk4\ui\demo\CountryLock($owner->app->db);
+        $country = new \atk4\ui\demo\CountryLock($owner->getApp()->db);
 
         $country->addUserAction('send_message');
     });
@@ -58,7 +58,7 @@ $wizard->addStep('Define User Action', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \atk4\ui\demo\CountryLock($owner->app->db);
+        $country = new \atk4\ui\demo\CountryLock($owner->getApp()->db);
 
         $country->addUserAction('send_message', function () {
             return 'sent';
@@ -82,7 +82,7 @@ $wizard->addStep('UI Integration', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \atk4\ui\demo\CountryLock($owner->app->db);
+        $country = new \atk4\ui\demo\CountryLock($owner->getApp()->db);
         $country->loadAny();
 
         \atk4\ui\Button::addTo($owner, ['Edit some country'])
@@ -98,7 +98,7 @@ $wizard->addStep('UI Integration', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \atk4\ui\demo\CountryLock($owner->app->db);
+        $country = new \atk4\ui\demo\CountryLock($owner->getApp()->db);
         $country->loadAny();
 
         $menu = \atk4\ui\Menu::addTo($owner);
@@ -118,7 +118,7 @@ $wizard->addStep('Arguments', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $model = new \atk4\data\Model($owner->app->db, 'test');
+        $model = new \atk4\data\Model($owner->getApp()->db, 'test');
 
         $model->addUserAction('greet', [
             'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
@@ -160,7 +160,7 @@ $wizard->addStep('Arguments', function ($page) {
 /*
 $wizard->addStep('More Ways', function ($page) {
     $page->add(new Demo(['left_width' => 5, 'right_width' => 11]))->setCodeAndCall(function (View $owner) {
-        $model = new Stat($owner->app->db);
+        $model = new Stat($owner->getApp()->db);
         $model->addUserAction('mail', [
             'fields' => ['currency_field'],
             'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
@@ -187,7 +187,7 @@ $wizard->addStep('Crud integration', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \atk4\ui\demo\CountryLock($owner->app->db);
+        $country = new \atk4\ui\demo\CountryLock($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
         $country->getUserAction('delete')->enabled = function () { return random_int(1, 2) > 1; };
         $country->addUserAction('mail', [

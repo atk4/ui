@@ -53,7 +53,7 @@ in any way you wish, before they will actuallized.
     In addition to adding a child object, sets up it's template
     and associate it's output with the region in our template.
 
-    Will copy $this->app into $object->app.
+    Will copy $this->getApp() into $object->getApp().
 
     If this object is initialized, will also initialize $object
 
@@ -130,7 +130,7 @@ Consider the following example::
     $app->debug = new Logger('log');  // Monolog
 
     // next, somewhere in a render tree
-    $view->app->debug->log('Foo Bar');
+    $view->getApp()->debug->log('Foo Bar');
 
 Agile UI will automatically pass your $app class to all the views.
 
@@ -164,7 +164,7 @@ can be set through your $app class::
     $app->db = new \atk4\data\Persistence_SQL::connect($dsn);
 
     // next, anywhere in a view
-    $client = new Client($this->app->db);
+    $client = new Client($this->getApp()->db);
     $form->setModel($client);
 
 Or if you prefer a more consise code::

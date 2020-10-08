@@ -76,7 +76,7 @@ class JsEventExecutor implements JsExpressionable
     {
         $this->context = $context;
         if ($this->context) {
-            if (!$context->app) {
+            if (!$context->issetApp()) {
                 throw new Exception('Context must be part of a render tree. Missing app property.');
             }
 
@@ -129,7 +129,7 @@ class JsEventExecutor implements JsExpressionable
             $id = $_POST['atk_event_id'] ?? null;
 
             if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-                $this->action->owner->tryLoad($id);
+                $this->action->getOwner()->tryLoad($id);
             }
 
             if ($errors = $this->hasAllArguments()) {
@@ -142,7 +142,7 @@ class JsEventExecutor implements JsExpressionable
 
                 $return = $this->action->execute(...$args);
                 $success = $this->jsSuccess instanceof \Closure
-                    ? ($this->jsSuccess)($this, $this->action->owner, $id)
+                    ? ($this->jsSuccess)($this, $this->action->getOwner(), $id)
                     : $this->jsSuccess;
 
                 $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) ?: $success ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));

@@ -259,7 +259,7 @@ class Multiline extends Form\Control
 
         // load the data associated with this input and validate it.
         $this->form->onHook(Form::HOOK_LOAD_POST, function ($form) {
-            $this->rowData = $this->app->decodeJson($_POST[$this->short_name]);
+            $this->rowData = $this->getApp()->decodeJson($_POST[$this->short_name]);
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
                 if ($this->rowErrors) {
@@ -303,7 +303,7 @@ class Multiline extends Form\Control
      */
     public function getInput()
     {
-        return $this->app->getTag('input', [
+        return $this->getApp()->getTag('input', [
             'name' => $this->short_name,
             'type' => 'hidden',
             'value' => $this->getValue(),
@@ -321,7 +321,7 @@ class Multiline extends Form\Control
     {
         $model = null;
         // Will load data when using containsMany.
-        $data = $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get());
+        $data = $this->getApp()->ui_persistence->typecastSaveField($this->field, $this->field->get());
 
         // If data is empty try to load model data directly. - For hasMany model
         // or array model already populated with data.
@@ -337,13 +337,13 @@ class Multiline extends Form\Control
                     $d_row = [];
                     foreach ($this->rowFields as $fieldName) {
                         $field = $model->getField($fieldName);
-                        $value = $this->app->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
+                        $value = $this->getApp()->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
                         $d_row[$fieldName] = $value;
                     }
                     $data[] = $d_row;
                 }
             }
-            $data = $this->app->encodeJson($data);
+            $data = $this->getApp()->encodeJson($data);
         }
 
         return $data;
@@ -368,7 +368,7 @@ class Multiline extends Form\Control
                     $field = $model->getField($fieldName);
                     // Save field value only if the field was editable
                     if (!$field->read_only) {
-                        $model->set($fieldName, $this->app->ui_persistence->typecastLoadField($field, $value));
+                        $model->set($fieldName, $this->getApp()->ui_persistence->typecastLoadField($field, $value));
                     }
                 } catch (\atk4\core\Exception $e) {
                     $rowErrors[$rowId][] = ['field' => $fieldName, 'msg' => $e->getMessage()];
@@ -704,7 +704,7 @@ class Multiline extends Form\Control
             try {
                 return $this->renderCallback();
             } catch (\atk4\Core\Exception | \Error $e) {
-                $this->app->terminateJson(['success' => false, 'error' => $e->getMessage()]);
+                $this->getApp()->terminateJson(['success' => false, 'error' => $e->getMessage()]);
             }
         });
 
@@ -750,12 +750,12 @@ class Multiline extends Form\Control
             case 'update-row':
                 $model = $this->setDummyModelValue(clone $this->getModel());
                 $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
-                $this->app->terminateJson(array_merge($response, ['expressions' => $expressionValues]));
+                $this->getApp()->terminateJson(array_merge($response, ['expressions' => $expressionValues]));
 
                 break;
             case 'on-change':
                 // Let regular callback render output.
-                return ($this->onChangeFunction)($this->app->decodeJson($_POST['rows']), $this->form);
+                return ($this->onChangeFunction)($this->getApp()->decodeJson($_POST['rows']), $this->form);
 
                 break;
         }
@@ -779,7 +779,7 @@ class Multiline extends Form\Control
             $field = $model->getField($fieldName);
             if ($field instanceof Callback) {
                 $value = ($field->expr)($model);
-                $values[$fieldName] = $this->app->ui_persistence->_typecastSaveField($field, $value);
+                $values[$fieldName] = $this->getApp()->ui_persistence->_typecastSaveField($field, $value);
             }
         }
 
@@ -842,7 +842,7 @@ class Multiline extends Form\Control
 
             foreach ($values as $f => $value) {
                 $field = $model->getField($f);
-                $formatValues[$f] = $this->app->ui_persistence->_typecastSaveField($field, $value);
+                $formatValues[$f] = $this->getApp()->ui_persistence->_typecastSaveField($field, $value);
             }
         }
 

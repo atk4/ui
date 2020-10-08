@@ -36,6 +36,6 @@ class DragHandler extends Table\Column
 
     public function getDataCellTemplate(\atk4\data\Field $field = null)
     {
-        return $this->app->getTag($this->tag, ['class' => $this->class . ' atk-handle', 'style' => 'cursor:pointer; color: #bcbdbd']);
+        return $this->getApp()->getTag($this->tag, ['class' => $this->class . ' atk-handle', 'style' => 'cursor:pointer; color: #bcbdbd']);
     }
 }

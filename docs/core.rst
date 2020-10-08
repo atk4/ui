@@ -82,7 +82,7 @@ we use :php:class:`Console` instead, which must display an interactive data stre
 
 In Agile UI you can request that some $_GET arguments are preserved and included into callback urls::
 
-    if($this->app->stickyGet('message')) {
+    if($this->getApp()->stickyGet('message')) {
         Message::addTo($app)->set($_GET['message']);
     }
 

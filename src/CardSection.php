@@ -17,7 +17,7 @@ class CardSection extends View
 
     public $glue = ': ';
 
-    public $tableClass = 'ui fixed small';
+    public $tableClass = ['ui', 'fixed', 'small'];
 
     protected function init(): void
     {
@@ -68,7 +68,7 @@ class CardSection extends View
     {
         foreach ($fields as $field) {
             $label = $model->getField($field)->getCaption();
-            $value = $this->app ? $this->app->ui_persistence->typecastSaveField($model->getField($field), $model->get($field)) : $model->get($field);
+            $value = $this->issetApp() ? $this->getApp()->ui_persistence->typecastSaveField($model->getField($field), $model->get($field)) : $model->get($field);
             if ($useLabel) {
                 $value = $label . $this->glue . $value;
             }
@@ -82,9 +82,7 @@ class CardSection extends View
      */
     private function addTableSection(Model $model, array $fields)
     {
-        $cardTable = new CardTable(['class' => $this->tableClass]);
-        $cardTable->invokeInit();
-        $model = $cardTable->setModel($model, $fields);
-        $this->add($cardTable);
+        $cardTable = CardTable::addTo($this, ['class' => $this->tableClass]);
+        $cardTable->setModel($model, $fields);
     }
 }

@@ -245,7 +245,7 @@ JavaScript Sorting
 You can make your table sortable through JavaScript inside your browser. This won't work well if
 your data is paginated, because only the current page will be sorted::
 
-    $table->app->includeJS('https://fomantic-ui.com/javascript/library/tablesort.js');
+    $table->getApp()->includeJS('https://fomantic-ui.com/javascript/library/tablesort.js');
     $table->js(true)->tablesort();
 
 For more information see https://github.com/kylefox/jquery-tablesort
@@ -462,7 +462,7 @@ column name in table with their new width in pixel.::
 
     $table->resizableColumn(function($j, $w){
         // do something with new column width
-        $columnWidths = $this->app->decodeJson($w);
+        $columnWidths = $this->getApp()->decodeJson($w);
         return;
     }, [200,300,100,100,100]);
 

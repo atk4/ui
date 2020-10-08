@@ -124,7 +124,7 @@ class CardDeck extends View
             $right = View::addTo($this->menu, ['ui' => 'four wide column']);
             $this->search = $right->add($this->factory($this->search, ['context' => '#' . $this->container->name]));
             $this->search->reload = $this->container;
-            $this->query = $this->app->stickyGet($this->search->queryArg);
+            $this->query = $this->getApp()->stickyGet($this->search->queryArg);
         }
     }
 
@@ -273,7 +273,7 @@ class CardDeck extends View
     protected function jsModelReturn(Model\UserAction $action = null, string $msg = 'Done!'): array
     {
         $js[] = $this->getNotifier($msg, $action);
-        if ($action->owner->loaded() && $card = $this->findCard($action->owner)) {
+        if ($action->getOwner()->loaded() && $card = $this->findCard($action->getOwner())) {
             $js[] = $card->jsReload($this->_getReloadArgs());
         } else {
             $js[] = $this->container->jsReload($this->_getReloadArgs());

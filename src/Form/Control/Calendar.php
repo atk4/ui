@@ -79,6 +79,7 @@ class Calendar extends Input
         $format = $this->translateFormat(Date::getProps($this->type));
         $this->options['dateFormat'] = $format;
 
+
         if ($this->type === 'datetime' || $this->type === 'time') {
             $this->options['enableTime'] = true;
             $this->options['time_24hr'] = $this->options['time_24hr'] ?? $this->use24hrTimeFormat();
