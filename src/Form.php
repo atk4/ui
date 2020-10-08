@@ -623,7 +623,7 @@ class Form extends View
         'text' => [Form\Control\Textarea::class],
         'string' => [Form\Control\Line::class],
         'password' => [Form\Control\Password::class],
-        'datetime' => [Form\Control\Calendar::class],
+        'datetime' => [Form\Control\Calendar::class, 'type' => 'datetime'],
         'date' => [Form\Control\Calendar::class, 'type' => 'date'],
         'time' => [Form\Control\Calendar::class, 'type' => 'time', 'ampm' => false],
         'money' => [Form\Control\Money::class],

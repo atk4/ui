@@ -8,6 +8,7 @@ use atk4\ui\App;
 use atk4\ui\Jquery;
 use atk4\ui\JsChain;
 use atk4\ui\JsExpression;
+use atk4\ui\Persistence\Type\Date;
 
 /**
  * Date/Time picker attached to a form control.
@@ -18,9 +19,6 @@ class Calendar extends Input
      * Set this to 'date', 'time', 'datetime'.
      */
     public $type = 'date';
-
-    /** @var bool */
-    public $use24HrTime = true;
 
     /**
      * Any other options you'd like to pass to flatpickr JS.
@@ -34,6 +32,14 @@ class Calendar extends Input
     public function setOption($name, $value)
     {
         $this->options[$name] = $value;
+    }
+
+    /**
+     * Set first day of week globally.
+     */
+    public static function setFirstDayOfWeek(App $app, int $day)
+    {
+        $app->html->js(true, (new JsExpression('flatpickr.l10ns.default.firstDayOfWeek = [day]', ['day' => $day])));
     }
 
     /**
@@ -69,27 +75,20 @@ class Calendar extends Input
     {
         parent::init();
 
-        // Get ui persitense default.
-        if ($options = $this->app->ui_persistence->calendar_options) {
-            array_merge($options, $this->options);
-        }
+        // get format from Persistence\Date.
+        $format = $this->translateFormat(Date::getProps($this->type));
+        $this->options['dateFormat'] = $format;
 
-        // get format from ui persistence if not set.
-        $this->options['dateFormat'] = $this->options['dateFormat'] ?? $this->app->ui_persistence->{$this->type . '_format'};
+        if ($this->type === 'datetime' || $this->type === 'time') {
+            $this->options['enableTime'] = true;
+            $this->options['time_24hr'] = $this->options['time_24hr'] ?? $this->use24hrTimeFormat();
+            $this->options['noCalendar'] = $this->type === 'time' ? true : false;
 
-        // set default according to type.
-        switch ($this->type) {
-            case 'time':
-                $this->options['enableTime'] = true;
-                $this->options['noCalendar'] = true;
-                $this->options['time_24hr'] = $this->use24HrTime;
+            // Add seconds picker if set
+            $this->options['enableSeconds'] = $this->options['enableSeconds'] ?? $this->useSeconds();
 
-                break;
-            case 'datetime':
-                $this->options['enableTime'] = true;
-                $this->options['time_24hr'] = $this->use24HrTime;
-
-                break;
+            // Allow edit if microseconds or second is set.
+            $this->options['allowInput'] = $this->options['allowInput'] ?? $this->allowMicroSecondsInput();
         }
     }
 
@@ -145,5 +144,28 @@ class Calendar extends Input
     public function jsGetFlatPickr(): JsExpression
     {
         return (new Jquery('#' . $this->id . '_input'))->get(0)->_flatpickr;
+    }
+
+    private function translateFormat(string $format): string
+    {
+        // translate from php to flatpickr.
+        $format = preg_replace(['~[aA]~', '~[s]~', '~[g]~'], ['K', 'S', 'G'], $format);
+
+        return $format;
+    }
+
+    private function use24hrTimeFormat(): bool
+    {
+        return !(bool) preg_match('~[gGh]~', $this->options['altFormat'] ?? $this->options['dateFormat']);
+    }
+
+    private function useSeconds(): bool
+    {
+        return (bool) preg_match('~[S]~', $this->options['altFormat'] ?? $this->options['dateFormat']);
+    }
+
+    private function allowMicroSecondsInput(): bool
+    {
+        return (bool) preg_match('~[u]~', $this->options['altFormat'] ?? $this->options['dateFormat']);
     }
 }

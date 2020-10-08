@@ -77,6 +77,7 @@ use atk4\data\ValidationException;
 use atk4\ui\Exception;
 use atk4\ui\Form;
 use atk4\ui\JsCallback;
+use atk4\ui\Persistence\Type\Date;
 use atk4\ui\Template;
 use atk4\ui\View;
 
@@ -114,7 +115,7 @@ class Multiline extends Form\Control
      *     Any of flatpickr options. Will be applied globally within scopeBuilder;
      *    'flatpickr' => [].
      *    Note on locale: ScopeBuilder will use default flatpickr locale.
-     *    In order to change default locale simply use Calendar::setLocale($app, 'fr');
+     *    In order to change default locale simply use Calendar::setLocale($app, 'fr');.
      *
      *    'dateFormat' is set according to ui_persistence for date, time or datetime.
      *
@@ -651,7 +652,7 @@ class Multiline extends Form\Control
             case 'date':
             case 'datetime':
             case 'time':
-              $options['dateFormat'] = $options['dateFormat'] ?? $this->app->ui_persistence->{$component . '_format'};
+              $options['dateFormat'] = $options['dateFormat'] ?? $this->app->ui_persistence->getTypeClass($component)::getProps($component);
 
                break;
         }

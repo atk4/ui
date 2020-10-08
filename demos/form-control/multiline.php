@@ -10,11 +10,15 @@ use atk4\ui\Form;
 use atk4\ui\Header;
 use atk4\ui\JsExpression;
 use atk4\ui\JsFunction;
+use atk4\ui\Persistence\Type\Date;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
+
+$dateFormat = Date::getProps('date');
+$timeFormat = Date::getProps('time');
 
 /** @var Model $inventoryItemClass */
 $inventoryItemClass = get_class(new class() extends Model {
@@ -54,15 +58,15 @@ $inventoryItemClass = get_class(new class() extends Model {
     }
 });
 
-$inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => $app->ui_persistence->date_format, 'timeFormat' => $app->ui_persistence->time_format]);
+$inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => $dateFormat, 'timeFormat' => $timeFormat]);
 
 // Populate some data.
 $total = 0;
 for ($i = 1; $i < 3; ++$i) {
     $inventory2 = clone $inventory;
     $inventory2->set('id', $i);
-    $inventory2->set('inv_date', date($app->ui_persistence->date_format));
-    $inventory2->set('inv_time', date($app->ui_persistence->time_format));
+    $inventory2->set('inv_date', date($dateFormat));
+    $inventory2->set('inv_time', date($timeFormat));
     $inventory2->set('item', 'item_' . $i);
     $inventory2->set('qty', random_int(10, 100));
     $inventory2->set('box', random_int(1, 10));
