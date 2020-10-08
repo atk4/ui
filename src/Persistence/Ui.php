@@ -23,17 +23,25 @@ use atk4\ui\Persistence\Type\Serial;
  */
 class Ui extends \atk4\data\Persistence
 {
-    public $boolean = Boolean::class;
-    public $date = Date::class;
-    public $time = Date::class;
-    public $datetime = Date::class;
-    public $money = Money::class;
-    public $array = Serial::class;
-    public $object = Serial::class;
+
+    public $typeClass = [
+        'boolean' => Boolean::class,
+        'date' => Date::class,
+        'time' => Date::class,
+        'datetime' => Date::class,
+        'money' => Money::class,
+        'array' => Serial::class,
+        'object' => Serial::class,
+    ];
 
     public function getTypeClass(string $type): ?string
     {
-        return $this->{$type} ?? null;
+        return $this->typeClass[$type] ?? null;
+    }
+
+    public function setTypeClass(string $type, string $class)
+    {
+        $this->typeClass[$type] = $class;
     }
 
     /**
