@@ -11,10 +11,10 @@ interface Castable
     /**
      * Cast value when loaded from POST request.
      */
-    public static function castLoadValue(Field $field, $value);
+    public function castLoadValue(Field $field, $value);
 
     /**
      * Cast value from database in order to be display in UI.
      */
-    public static function castSaveValue(Field $field, $value);
+    public function castSaveValue(Field $field, $value);
 }

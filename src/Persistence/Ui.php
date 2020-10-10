@@ -7,6 +7,7 @@ namespace atk4\ui\Persistence;
 use atk4\data\Model;
 use atk4\ui\Exception;
 use atk4\ui\Persistence\Type\Boolean;
+use atk4\ui\Persistence\Type\Castable;
 use atk4\ui\Persistence\Type\Date;
 use atk4\ui\Persistence\Type\Money;
 use atk4\ui\Persistence\Type\Serial;
@@ -34,12 +35,12 @@ class Ui extends \atk4\data\Persistence
         'object' => Serial::class,
     ];
 
-    public function getTypeClass(string $type): ?string
+    public function getType(string $type) :Castable
     {
-        return $this->typeClass[$type] ?? null;
+        return new $this->typeClass[$type]();
     }
 
-    public function setTypeClass(string $type, string $class)
+    public function registerTypeClass(string $type, string $class)
     {
         $this->typeClass[$type] = $class;
     }
@@ -63,8 +64,8 @@ class Ui extends \atk4\data\Persistence
         $value = is_object($value) ? clone $value : $value;
 
         // delegate value casting to proper class if set.
-        if ($f->type && $this->getTypeClass($f->type)) {
-            $value = $this->getTypeClass($f->type)::castSaveValue($f, $value);
+        if ($f->type && isset($this->typeClass[$f->type])) {
+            $value = $this->getType($f->type)->castSaveValue($f, $value);
         }
 
         return $value;
@@ -94,8 +95,8 @@ class Ui extends \atk4\data\Persistence
         }
 
         // delegate value casting to proper class if set.
-        if ($f->type && $this->getTypeClass($f->type)) {
-            $value = $this->getTypeClass($f->type)::castLoadValue($f, $value);
+        if ($f->type && isset($this->typeClass[$f->type])) {
+            $value = $this->getType($f->type)->castLoadValue($f, $value);
         }
 
         if (isset($f->reference)) {

@@ -28,7 +28,7 @@ class Date extends Basic implements Castable
         return static::$props['format'][$format];
     }
 
-    public static function castLoadValue(Field $field, $value)
+    public function castLoadValue(Field $field, $value)
     {
         $dt_class = $field->dateTimeClass ?? \DateTime::class;
         $tz_class = $field->dateTimeZoneClass ?? \DateTimeZone::class;
@@ -60,7 +60,7 @@ class Date extends Basic implements Castable
         return $value;
     }
 
-    public static function castSaveValue(Field $field, $value)
+    public function castSaveValue(Field $field, $value)
     {
         $dt_class = $f->dateTimeClass ?? \DateTime::class;
         $tz_class = $f->dateTimeZoneClass ?? \DateTimeZone::class;

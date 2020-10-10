@@ -88,7 +88,7 @@ class Calendar extends Input
             // Add seconds picker if set
             $this->options['enableSeconds'] = $this->options['enableSeconds'] ?? $this->useSeconds();
 
-            // Allow edit if microseconds or second is set.
+            // Allow edit if microseconds is set.
             $this->options['allowInput'] = $this->options['allowInput'] ?? $this->allowMicroSecondsInput();
         }
     }
@@ -157,7 +157,7 @@ class Calendar extends Input
 
     private function use24hrTimeFormat(): bool
     {
-        return !(bool) preg_match('~[gGh]~', $this->options['altFormat'] ?? $this->options['dateFormat']);
+        return !preg_match('~[gGh]~', $this->options['altFormat'] ?? $this->options['dateFormat']);
     }
 
     private function useSeconds(): bool

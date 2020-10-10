@@ -11,12 +11,12 @@ use atk4\data\Field;
  */
 class Serial extends Basic implements Castable
 {
-    public static function castLoadValue(Field $field, $value)
+    public function castLoadValue(Field $field, $value)
     {
         return $value;
     }
 
-    public static function castSaveValue(Field $field, $value)
+    public function castSaveValue(Field $field, $value)
     {
         return $field->serialize ? $value : json_encode($value, JSON_THROW_ON_ERROR);
     }

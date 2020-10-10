@@ -13,12 +13,12 @@ class Money extends Basic implements Castable
         'decimal' => 2,
     ];
 
-    public static function castLoadValue(Field $field, $value)
+    public function castLoadValue(Field $field, $value)
     {
         return str_replace(',', '', $value);
     }
 
-    public static function castSaveValue(Field $field, $value)
+    public function castSaveValue(Field $field, $value)
     {
         return (static::getProps('currency') ? static::getProps('currency') . ' ' : '') . number_format($value, static::getProps('decimal'));
     }
