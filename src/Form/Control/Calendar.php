@@ -76,7 +76,7 @@ class Calendar extends Input
         parent::init();
 
         // get format from Persistence\Date.
-        $format = $this->translateFormat($this->getApp()->ui_persistence->getTypeClass($this->type)::getProps('format')[$this->type]);
+        $format = $this->translateFormat($this->getApp()->ui_persistence->typeClass[$this->type]::getProps('format')[$this->type]);
         $this->options['dateFormat'] = $format;
 
         if ($this->type === 'datetime' || $this->type === 'time') {

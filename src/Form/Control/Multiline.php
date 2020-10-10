@@ -652,7 +652,7 @@ class Multiline extends Form\Control
             case 'date':
             case 'datetime':
             case 'time':
-              $options['dateFormat'] = $options['dateFormat'] ?? $this->getApp()->ui_persistence->getTypeClass($component)::getProps('format')[$component];
+              $options['dateFormat'] = $options['dateFormat'] ?? $this->getApp()->ui_persistence->typeClass[$component]::getProps('format')[$component];
 
                break;
         }

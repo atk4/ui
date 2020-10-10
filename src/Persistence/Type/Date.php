@@ -18,14 +18,14 @@ class Date extends Basic implements Castable
         ],
     ];
 
-    public static function setDateFormat(string $format, string $value)
+    public static function setFormat(string $type, string $value)
     {
-        static::$props['format'][$format] = $value;
+        static::$props['format'][$type] = $value;
     }
 
-    public static function getDateFormat(string $format)
+    public static function getFormat(string $type)
     {
-        return static::$props['format'][$format];
+        return static::$props['format'][$type];
     }
 
     public function castLoadValue(Field $field, $value)
