@@ -17,14 +17,12 @@ use atk4\ui\Persistence\Type\Serial;
  * always initialize this persistence in $app->ui_persistence and this object will be used by various
  * UI elements to output data to the user.
  *
- * Overriding and extending this class is a great place where you can tweak how various data-types are displayed
- * to the user in the way so it would affect UI globally.
- *
- * You may want to localize some of the output.
+ * Value casting is perform via a Castable class associate to a field type using $typeClass property.
+ * $typeClass property provide default class name for certain field type.
+ * Changing value casting for each field type, or adding new one, can be done by registering new class.
  */
 class Ui extends \atk4\data\Persistence
 {
-
     public $typeClass = [
         'boolean' => Boolean::class,
         'date' => Date::class,
@@ -35,11 +33,22 @@ class Ui extends \atk4\data\Persistence
         'object' => Serial::class,
     ];
 
-    public function getType(string $type) :Castable
+    /**
+     * Get Castable object instance associate to a field type.
+     */
+    public function getType(string $type): Castable
     {
+        if (!isset($this->typeClass[$type])) {
+            throw (new Exception('There is no class register with this field type.'))
+                ->addMoreInfo('type', $type);
+        }
+
         return new $this->typeClass[$type]();
     }
 
+    /**
+     * Associate a Castable class to a field type.
+     */
     public function registerTypeClass(string $type, string $class)
     {
         $this->typeClass[$type] = $class;

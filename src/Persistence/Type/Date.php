@@ -15,7 +15,7 @@ class Date extends Basic implements Castable
             'date' => 'M d, Y',
             'time' => 'H:i',
             'datetime' => 'Y-m-d H:i',
-        ]
+        ],
     ];
 
     public static function setDateFormat(string $format, string $value)
