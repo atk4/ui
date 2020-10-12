@@ -15,7 +15,7 @@ use atk4\core\TrackableTrait;
 /**
  * Abstract view tree item (used only for View and Callback, you want probably to extend one of these).
  *
- * @property View   $owner
+ * @method View getOwner()
  * @property View[] $elements
  */
 abstract class AbstractView
