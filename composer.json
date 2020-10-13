@@ -65,8 +65,8 @@
   "require-release": {
     "php": ">=7.3.0",
     "ext-json": "*",
-    "atk4/core": "^2.2.0",
-    "atk4/data": "^2.2.0"
+    "atk4/core": "~2.3.0",
+    "atk4/data": "~2.3.0"
   },
   "require-dev": {
     "behat/behat": "^3.4",
