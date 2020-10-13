@@ -5,6 +5,8 @@ declare(strict_types=1);
 // log coverage for test-suite
 
 use SebastianBergmann\CodeCoverage\CodeCoverage;
+use SebastianBergmann\CodeCoverage\Driver\Driver;
+use SebastianBergmann\CodeCoverage\Filter;
 use SebastianBergmann\CodeCoverage\Report;
 
 final class CoverageUtil
@@ -23,8 +25,9 @@ final class CoverageUtil
             throw new \Error('Coverage already started');
         }
 
-        self::$coverage = new CodeCoverage();
-        self::$coverage->filter()->addDirectoryToWhitelist(__DIR__ . '/../src');
+        $filter = new Filter();
+        $filter->includeDirectory(__DIR__ . '/../src');
+        self::$coverage = new CodeCoverage(Driver::forLineCoverage($filter), $filter);
         self::$coverage->start($_SERVER['SCRIPT_NAME']);
     }
 
