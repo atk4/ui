@@ -71,7 +71,7 @@
     "fzaninotto/faker": "*",
     "guzzlehttp/guzzle": "^6.3",
     "phpunit/phpcov": "*",
-    "phpunit/phpunit": ">=9.0",
+    "phpunit/phpunit": ">=9.0 && <9.2",
     "symfony/process": "^4.3 || ^5.0"
   },
   "autoload": {
