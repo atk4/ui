@@ -70,7 +70,7 @@ $control = $form->addControl('date_action', [
     'options' => ['clickOpens' => false],
 ])->set(date(Date::getFormat('date')));
 $control->addAction(['Today', 'icon' => 'calendar day'])->on('click', $control->getJsInstance()->setDate(date(Date::getFormat('date'))));
-$control->addAction(['Choose', 'icon' => 'calendar'])->on('click', $control->getJsInstance()->open());
+$control->addAction(['Select...', 'icon' => 'calendar'])->on('click', $control->getJsInstance()->open());
 $control->addAction(['Clear', 'icon' => 'times red'])->on('click', $control->getJsInstance()->clear());
 
 $form->onSubmit(function ($f) use ($app) {
