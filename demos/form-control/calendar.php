@@ -53,14 +53,14 @@ $form->addControl('date_range', [
     'type' => 'date',
     'caption' => 'Range mode',
     'options' => ['mode' => 'range'], ])
-    ->set(date(Date::getFormat('date')));
+    ->set(date(Date::getFormat('date')) . ' to ' . date(Date::getFormat('date'), strtotime('+1 Week')));
 
 $form->addControl('date_multi', [
     Form\Control\Calendar::class,
     'type' => 'date',
     'caption' => 'Multiple mode',
     'options' => ['mode' => 'multiple'], ])
-    ->set(date(Date::getFormat('date')));
+    ->set(date(Date::getFormat('date')) . ', ' . date(Date::getFormat('date'), strtotime('+1 Day')) . ', ' . date(Date::getFormat('date'), strtotime('+2 Day')));
 
 $form->onSubmit(function ($f) use ($app) {
     return new JsToast($app->encodeJson($f->model->get()));
