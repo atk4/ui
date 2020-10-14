@@ -96,6 +96,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $menu = $layout->addMenuGroup(['Form Controls', 'icon' => 'keyboard outline']);
     $layout->addMenuItem(['Input'], [$path . 'input2'], $menu);
     $layout->addMenuItem('Input Decoration', [$path . 'input'], $menu);
+    $layout->addMenuItem('Calendar', [$path . 'calendar'], $menu);
     $layout->addMenuItem(['Checkboxes'], [$path . 'checkbox'], $menu);
     $layout->addMenuItem(['Value Selectors'], [$path . 'form6'], $menu);
     $layout->addMenuItem(['Lookup'], [$path . 'lookup'], $menu);
