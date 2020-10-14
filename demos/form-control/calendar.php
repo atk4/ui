@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-use atk4\ui\Button;
 use atk4\ui\Form;
 use atk4\ui\JsExpression;
 use atk4\ui\JsFunction;
