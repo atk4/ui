@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace atk4\ui\behat;
 
-use atk4\ui\Persistence\Type\Date;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;

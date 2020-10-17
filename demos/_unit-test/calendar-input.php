@@ -25,7 +25,7 @@ $c = $form->addControl('field', null, ['type' => 'date']);
 $form->buttonSave->set($c->short_name);
 
 $form->onSubmit(function ($form) use ($output, $c) {
-   return $output($form->model->get($c->short_name)->format(Date::getFormat('date')));
+    return $output($form->model->get($c->short_name)->format(Date::getFormat('date')));
 });
 
 View::addTo($app, ['ui' => 'hidden divider']);
