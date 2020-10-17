@@ -465,11 +465,6 @@ class App
         $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
         $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');
 
-        // flatpickr firstDayOfWeek is applied globally or base on locale when set.
-        if ($this->ui_persistence->firstDayOfWeek !== 0) {
-            $this->html->js(true, (new JsExpression('flatpickr.l10ns.default.firstDayOfWeek = [day]', ['day' => $this->ui_persistence->firstDayOfWeek])));
-        }
-
         // Agile UI
         $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
         $this->requireCss($this->cdn['atk'] . '/agileui.css');

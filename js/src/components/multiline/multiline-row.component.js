@@ -103,6 +103,7 @@ export default {
         getComponentProps: function (column) {
             let props = {};
             const userOptions = column.fieldOptions || {};
+            const flatpickrConfig = { ...this.getRootData().data.flatpickrOptions || {} };
 
             switch (column.component) {
             case 'dropdown':
@@ -119,15 +120,14 @@ export default {
             case 'date':
             case 'datetime':
             case 'time':
-                const config = {...this.getRootData().data.flatpickrOptions || {}};
                 if (column.component === 'datetime' || column.component === 'time') {
-                    config.enableTime = true;
-                    config.time_24hr = true;
+                    flatpickrConfig.enableTime = true;
+                    flatpickrConfig.time_24hr = true;
                 }
                 if (column.component === 'time') {
-                    config.noCalendar = true;
+                    flatpickrConfig.noCalendar = true;
                 }
-                props = {config: {...config, ...userOptions}};
+                props = { config: { ...flatpickrConfig, ...userOptions } };
                 break;
             default:
                 props = Object.assign(props, userOptions);
