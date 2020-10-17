@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\behat;
 
+use atk4\ui\Persistence\Type\Date;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
@@ -126,6 +127,15 @@ class Context extends RawMinkContext implements BehatContext
         }
 
         $script = '$("#' . $link->getAttribute('id') . '").click()';
+        $this->getSession()->executeScript($script);
+    }
+
+    /**
+     * @Then I set calendar input name :arg1 with value :arg2
+     */
+    public function iSetCalendarInputNameWithValue($arg1, $arg2)
+    {
+        $script = '$(\'input[name="' . $arg1 . '"]\').get(0)._flatpickr.setDate("' . $arg2 . '")';
         $this->getSession()->executeScript($script);
     }
 
