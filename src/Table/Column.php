@@ -14,7 +14,7 @@ use atk4\ui\Popup;
 /**
  * Implements Column helper for table.
  *
- * @property \atk4\ui\Table $owner
+ * @method \atk4\ui\Table getOwner()
  */
 class Column
 {
