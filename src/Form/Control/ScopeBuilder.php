@@ -400,7 +400,7 @@ class ScopeBuilder extends Control
                 'label' => $field->getCaption() . ' number of records ',
             ]);
 
-            $theirModel = $reference->getTheirModel();
+            $theirModel = $reference->createTheirModel();
 
             // add rules on all fields of the referenced model
             foreach ($theirModel->getFields() as $theirField) {
