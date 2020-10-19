@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Form;
+use atk4\ui\GridLayout;
 use atk4\ui\JsExpression;
 use atk4\ui\JsFunction;
 use atk4\ui\JsToast;
@@ -13,7 +14,9 @@ use atk4\ui\Persistence\Type\Date;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$form = Form::addTo($app);
+$layout = GridLayout::addTo($app, ['rows' => 1, 'columns' => 2]);
+
+$form = Form::addTo($layout, [], ['r1c1']);
 
 Date::setFormat('date', 'Y-m-d');
 $form->addControl('date_y_m_d', [Form\Control\Calendar::class, 'type' => 'date', 'caption' => 'Date (Y-m-d)'])
