@@ -6,16 +6,19 @@ namespace atk4\ui\tests;
 
 use atk4\core\AtkPhpunit;
 use atk4\ui\App;
+use atk4\ui\Layout\Admin;
 use atk4\ui\Template;
 
 class AppTest extends AtkPhpunit\TestCase
 {
     protected function getApp()
     {
-        return new App([
-            'catch_exceptions' => false,
-            'always_run' => false,
-        ]);
+        return new App(
+            [
+                'catch_exceptions' => false,
+                'always_run' => false,
+            ]
+        );
     }
 
     public function testTemplateClassDefault()
@@ -40,5 +43,13 @@ class AppTest extends AtkPhpunit\TestCase
             get_class($anotherTemplateClass),
             $app->loadTemplate('html.html')
         );
+    }
+
+    public function testInitLayoutWithStringArgument()
+    {
+        $app = $this->getApp();
+        $app->initLayout(Admin::class);
+
+        self::assertInstanceOf(Admin::class, $app->layout);
     }
 }
