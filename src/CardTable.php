@@ -45,7 +45,13 @@ class CardTable extends Table
         $mm = parent::setSource($data);
         $this->addDecorator('value', [Table\Column\Multiformat::class, function ($row, $field) use ($model) {
             $field = $model->getField($row->data['id']);
-            $ret = $this->decoratorFactory($field);
+            if ($field->type === 'boolean') {
+                $ret = $this->decoratorFactory($field,[
+                    Table\Column\Status::class, ['positive' => [true, 'Yes'], 'negative' => [false, 'No']]
+                ]);
+            } else {
+                $ret = $this->decoratorFactory($field);
+            }
             if ($ret instanceof Table\Column\Money) {
                 $ret->attr['all']['class'] = ['single line'];
             }
