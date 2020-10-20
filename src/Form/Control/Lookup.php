@@ -304,7 +304,7 @@ class Lookup extends Input
      */
     protected function applySearchConditions()
     {
-        if (!isset($_GET['q'])) {
+        if (!isset($_GET['q']) || empty($_GET['q'])) {
             return;
         }
 
