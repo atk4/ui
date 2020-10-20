@@ -6,7 +6,6 @@ namespace atk4\ui\tests;
 
 use atk4\core\AtkPhpunit;
 use atk4\ui\App;
-use atk4\ui\Layout\Admin;
 use atk4\ui\Template;
 
 class AppTest extends AtkPhpunit\TestCase
