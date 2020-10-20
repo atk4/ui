@@ -44,12 +44,4 @@ class AppTest extends AtkPhpunit\TestCase
             $app->loadTemplate('html.html')
         );
     }
-
-    public function testInitLayoutWithStringArgument()
-    {
-        $app = $this->getApp();
-        $app->initLayout(Admin::class);
-
-        self::assertInstanceOf(Admin::class, $app->layout);
-    }
 }

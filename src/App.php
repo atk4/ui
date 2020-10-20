@@ -423,7 +423,7 @@ class App
     /**
      * Initializes layout.
      *
-     * @param string|Layout|array $seed
+     * @param Layout|array $seed
      *
      * @return $this
      */
