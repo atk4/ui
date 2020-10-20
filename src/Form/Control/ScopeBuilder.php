@@ -218,7 +218,7 @@ class ScopeBuilder extends Control
         'enum' => [
             'type' => 'select',
             'operators' => [
-                self::OPERATOR_EQUALS,
+                self::OPERATOR_TEXT_EQUALS,
                 self::OPERATOR_DOESNOT_EQUAL,
                 self::OPERATOR_EMPTY,
                 self::OPERATOR_NOT_EMPTY,
