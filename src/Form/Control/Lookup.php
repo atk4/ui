@@ -390,7 +390,6 @@ class Lookup extends Input
 
     protected function renderView(): void
     {
-
         if ($this->multiple) {
             $this->template->set('multiple', 'multiple');
         }
