@@ -261,7 +261,7 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev
+          composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev
           composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev
           composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
           if [ "${{ matrix.type }}" == "Chrome Lowest" ]; then composer update  --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader ; fi
