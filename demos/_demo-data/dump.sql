@@ -129,3 +129,40 @@ VALUES
     (2,'Agile Core','at02','Collection of PHP Traits for designing object-oriented frameworks.','Agile Toolkit','Some Street,\nGarden City\nUK','GB',0,'GBP',1,3000.00,0.00,0.00,0.00,70,56,50.00,0.00,0.1,0.2,'2016-04-27','2016-05-21','18:41:00','2017-04-06 10:21:50','2017-04-06 10:35:04'),
     (3,'Agile Data','at03','Agile Data implements an entirely new pattern for data abstraction, that is specifically designed for remote databases such as RDS, Cloud SQL, BigQuery and other distributed data storage architectures. It focuses on reducing number of requests your App have to send to the Database by using more sophisticated queries while also offering full Domain Model mapping and Database vendor abstraction.','Agile Toolkit','Some Street,\nGarden City\nUK','GB',0,'GBP',1,12000.00,0.00,0.00,0.00,300,394,600.00,430.00,0.2,0.3,'2016-04-17','2016-06-20','03:04:00','2017-04-06 10:30:15','2017-04-06 10:35:04'),
     (4,'Agile UI','at04','Web UI Component library.','Agile Toolkit','Some Street,\nGarden City\nUK','GB',0,'GBP',0,20000.00,0.00,0.00,0.00,600,368,1200.00,0.00,0.3,0.4,'2016-09-17',NULL,NULL,'2017-04-06 10:30:15','2017-04-06 10:35:04');
+
+DROP TABLE IF EXISTS `product_category`;
+CREATE TABLE `product_category` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `name` varchar(45) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+INSERT INTO `product_category` (`id`, `name`)
+VALUES
+    (1,'Condiments and Gravies'),(2,'Beverages'),(3,'Dairy');
+
+DROP TABLE IF EXISTS `product_sub_category`;
+CREATE TABLE `product_sub_category` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `name` varchar(45) DEFAULT NULL,
+    `product_category_id` int(11) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+INSERT INTO `product_sub_category` (`id`, `name`, `product_category_id`)
+VALUES
+    (1,'Gravie',1),(2,'Spread',1),(3,'Salad Dressing',1),(4,'Alcoholic',2),(5,'Coffee and Tea',2),(6,'Lowfat Milk',3),(7,'Yogourt',3),(8,'HighFat',3),(9,'Sugar/Sweetened',2);
+
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE `product` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `name` varchar(45) DEFAULT NULL,
+    `brand` varchar(45) DEFAULT NULL,
+    `product_category_id` int(11) NULL,
+    `product_sub_category_id` int(11) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+INSERT INTO `product` (`id`, `name`, `brand`, `product_category_id`, `product_sub_category_id`)
+VALUES
+    (1,'Mustard','Condiment Corp.',1,2),(2,'Ketchup','Condiment Corp.',1,2),(3,'Cola','Beverage Corp.',2,9),(4,'Soda','Beverage Corp.',2,9),(5,'Milk 2%','Milk Corp.',3,8),(6,'Milk 1%','Milk Corp.',3,6),(7,'Ice Cream','Milk Corp.',3,8);
