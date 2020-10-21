@@ -183,6 +183,7 @@ jobs:
       matrix:
         php: ['latest']
         type: ['Chrome', 'Firefox', 'Chrome Slow']
+        x: ['1', '2', '3', '4']
     env:
       LOG_COVERAGE: ''
     services:
@@ -273,4 +274,17 @@ jobs:
           sleep 0.2
           if [ "${{ matrix.type }}" == "Firefox" ]; then sed -i "s~chrome~firefox~" behat.yml.dist ; fi
           if [ "${{ matrix.type }}" == "Chrome Slow" ]; then echo 'sleep(1);' >> demos/init-app.php ; fi
+          vendor/bin/behat --config behat.yml.dist
+          vendor/bin/behat --config behat.yml.dist
+
+          vendor/bin/behat --config behat.yml.dist
+          vendor/bin/behat --config behat.yml.dist
+
+          vendor/bin/behat --config behat.yml.dist
+          vendor/bin/behat --config behat.yml.dist
+
+          vendor/bin/behat --config behat.yml.dist
+          vendor/bin/behat --config behat.yml.dist
+
+          vendor/bin/behat --config behat.yml.dist
           vendor/bin/behat --config behat.yml.dist
