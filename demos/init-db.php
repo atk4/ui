@@ -221,3 +221,57 @@ class FileLock extends File
         $this->lock();
     }
 }
+
+class Category extends \atk4\data\Model
+{
+    public $table = 'product_category';
+
+    protected function init(): void
+    {
+        parent::init();
+        $this->addField('name');
+
+        $this->hasMany('SubCategories', new SubCategory());
+        $this->hasMany('Products', new Product());
+    }
+}
+
+class SubCategory extends \atk4\data\Model
+{
+    public $table = 'product_sub_category';
+
+    protected function init(): void
+    {
+        parent::init();
+        $this->addField('name');
+
+        $this->hasOne('product_category_id', new Category());
+        $this->hasMany('Products', new Product());
+    }
+}
+
+class Product extends \atk4\data\Model
+{
+    public $table = 'product';
+
+    protected function init(): void
+    {
+        parent::init();
+        $this->addField('name');
+        $this->addField('brand');
+        $this->hasOne('product_category_id', [new Category()])->addTitle();
+        $this->hasOne('product_sub_category_id', [new SubCategory()])->addTitle();
+    }
+}
+
+class ProductLock extends Product
+{
+    use ModelLockTrait;
+    public $caption = 'Product';
+
+    protected function init(): void
+    {
+        parent::init();
+        $this->lock();
+    }
+}

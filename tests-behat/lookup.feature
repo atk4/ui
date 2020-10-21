@@ -1,12 +1,12 @@
 Feature: Lookup
-  Testing Lookup fields
+  Testing Lookup control
 
   Scenario:
-    Given I am on "form-control/lookup.php"
-#    Need db value to work
-#    Then I select value "Albania" in lookup "country1"
-#    Then I select value "Albania" in lookup "country2"
-#    Then I select value "Albania" in lookup "country3"
-    And I press button "Save"
-    Then I should see "Select:"
-#    And I should see "Albania Albania Albania"
+    Given I am on "_unit-test/lookup.php"
+
+  Scenario: Testing lookup in modal
+    Then I press button "Edit"
+    Then I select value "Dairy" in lookup "product_category_id"
+    Then I select value "Yogourt" in lookup "product_sub_category_id"
+    Then I press button "EditMe"
+    Then Toast display should contains text 'Dairy - Yogourt'
