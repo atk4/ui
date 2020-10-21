@@ -378,16 +378,22 @@ class Context extends RawMinkContext implements BehatContext
         $this->getSession()->executeScript($script);
         // Wait till dropdown is visible
         // Cannot call jqueryWait because calling it will return prior from dropdown to fire ajax request.
-        $this->getSession()->wait(5000, '$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
+        $this->getSession()->wait(2000, '$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
         // value should be available.
         $value = $lookup->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (!$value || $value->getText() !== $arg1) {
             throw new \Exception('Value not found: ' . $arg1);
         }
-        // When value are loaded, hide dropdown and select value from javascript.
-        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("hide");';
-        $script .= '$("#' . $lookup->getAttribute('id') . '").dropdown("set selected", ' . $value->getAttribute('data-value') . ');';
+        // When value are loaded, select value from javascript.
+        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("set selected", ' . $value->getAttribute('data-value') . ');';
         $this->getSession()->executeScript($script);
+
+        // Then hide dropdown.
+        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("hide");';
+        $this->getSession()->executeScript($script);
+
+        // wait till dropdown is fully close
+        $this->getSession()->wait(2000, '!$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
     }
 
     /**
