@@ -17,7 +17,7 @@ steps:
     image: alpine
     commands:
       - apk add bash jq git openssh
-      - sed -E "s/(public \$version = ')(.*)(')/\\1\\2 - $(git rev-parse --short HEAD)\\3/" -i src/App.php
+      - sed -E "s/(public \\\$version = ')(.*)(')/\\1\\2 - $(git rev-parse --short HEAD)\\3/" -i src/App.php
       - >
         cat composer.json |
           jq '.require["atk4/core"]=.require["atk4/core"]+"#'`git ls-remote https://github.com/atk4/core/ develop | cut -f1`'"' |
