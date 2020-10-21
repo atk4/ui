@@ -11,9 +11,9 @@ steps:
     repo: atk4/ui
     revision: "${{CF_BRANCH}}"
 
-  prevent_packagist_cache:
+  inject_hashes:
     stage: clone
-    title: Inject dependency SHA to bypass Packagist cache
+    title: Inject dependency SHA to bypass Packagist cache and add HEAD to footer
     image: alpine
     commands:
       - apk add bash jq git openssh
@@ -21,12 +21,6 @@ steps:
         cat composer.json |
           jq '.require["atk4/core"]=.require["atk4/core"]+"#'`git ls-remote https://github.com/atk4/core/ develop | cut -f1`'"' |
           jq '.require["atk4/data"]=.require["atk4/data"]+"#'`git ls-remote https://github.com/atk4/data/ develop | cut -f1`'"' > composer.tmp.json && mv composer.tmp.json composer.json
-
-  add_head_hash_to_footer:
-    stage: clone
-    title: Add HEAD hash to footer
-    image: alpine
-    commands:
       - sed -E "s/(public \$version = ')(.*)(')/\\1\\2 - $(git rev-parse --short HEAD)\\3/" -i src/App.php
 
   build:
