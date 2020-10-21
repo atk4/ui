@@ -12,12 +12,10 @@ class AppTest extends AtkPhpunit\TestCase
 {
     protected function getApp()
     {
-        return new App(
-            [
-                'catch_exceptions' => false,
-                'always_run' => false,
-            ]
-        );
+        return new App([
+            'catch_exceptions' => false,
+            'always_run' => false,
+        ]);
     }
 
     public function testTemplateClassDefault()
