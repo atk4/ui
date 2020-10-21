@@ -304,7 +304,7 @@ class Lookup extends Input
      */
     protected function applySearchConditions()
     {
-        if (!isset($_GET['q']) || empty($_GET['q'])) {
+        if (empty($_GET['q'])) {
             return;
         }
 
@@ -390,7 +390,6 @@ class Lookup extends Input
 
     protected function renderView(): void
     {
-
         if ($this->multiple) {
             $this->template->set('multiple', 'multiple');
         }
