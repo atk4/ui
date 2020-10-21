@@ -29,7 +29,7 @@ steps:
     title: Add HEAD hash to footer
     image: alpine
     commands:
-      - sed -E "s/(public \$version = ')(.*)(')/\\1\\2$(git rev-parse --short HEAD)\\3/" -i src/App.php
+      - sed -E "s/(public \$version = ')(.*)(')/\\1\\2 - $(git rev-parse --short HEAD)\\3/" -i src/App.php
 
   build:
     type: build
