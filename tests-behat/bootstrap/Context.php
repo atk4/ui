@@ -384,16 +384,8 @@ class Context extends RawMinkContext implements BehatContext
         if (!$value || $value->getText() !== $arg1) {
             throw new \Exception('Value not found: ' . $arg1);
         }
-        // When value are loaded, select value from javascript.
-        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("set selected", ' . $value->getAttribute('data-value') . ');';
-        $this->getSession()->executeScript($script);
 
-        // Then hide dropdown.
-        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("hide");';
-        $this->getSession()->executeScript($script);
-
-        // wait till dropdown is fully close
-        $this->getSession()->wait(2000, '!$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
+        $value->click();
     }
 
     /**
