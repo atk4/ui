@@ -1,6 +1,10 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * Behat testing.
+ * Test for hasOne Lookup as dropdown control.
+ */
 
 namespace atk4\ui\demo;
 
@@ -21,6 +25,7 @@ $edit->callback = function ($model) use ($app) {
 
 $crud = Crud::addTo($app);
 
+// Properly set control for Behat test.
 $crud->onFormEdit(function ($f) {
     $f->getControl('product_category_id')->settings['duration'] = 0;
     $f->getControl('product_category_id')->settings['delay'] = ['hide' => 0, 'search' => 0];
