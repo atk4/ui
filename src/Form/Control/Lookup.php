@@ -451,9 +451,4 @@ class Lookup extends Input
 
         return parent::set($value, $junk);
     }
-
-    protected function mergeStickyArgsFromChildView(): ?AbstractView
-    {
-        return $this->callback;
-    }
 }
