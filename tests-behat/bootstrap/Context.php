@@ -67,7 +67,10 @@ class Context extends RawMinkContext implements BehatContext
             'animation-duration' => '5s',
             'transition-duration' => '5s',
         ]);
-        $script = 'jQuery.fx.off = true; if (Array.prototype.filter.call(document.getElementsByTagName("style"), e => e.getAttribute("about") === "atk-test-behat").length === 0) {$(\'<style about="atk-test-behat">' . $css . '</style>\').appendTo(\'head\');}';
+        $script = 'if (Array.prototype.filter.call(document.getElementsByTagName("style"), e => e.getAttribute("about") === "atk-test-behat").length === 0) {'
+            . ' $(\'<style about="atk-test-behat">' . $css . '</style>\').appendTo(\'head\');'
+            . ' }'
+            . 'jQuery.fx.off = true;';
         $this->getSession()->executeScript($script);
     }
 
@@ -448,9 +451,9 @@ class Context extends RawMinkContext implements BehatContext
     protected function getFinishedScript(): string
     {
         return 'document.readyState === \'complete\''
-            . ' && typeof $ !== \'undefined\' && jQuery.active === 0'
+            . ' && typeof jQuery !== \'undefined\' && jQuery.active === 0'
             . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()'
-            . ' && 0 === jQuery(\':animated\').length';
+            . ' && jQuery(\':animated\').length === 0';
     }
 
     /**
