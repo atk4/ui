@@ -67,7 +67,7 @@ class Context extends RawMinkContext implements BehatContext
             'animation-duration' => '5s',
             'transition-duration' => '5s',
         ]);
-        $script = 'if (Array.prototype.filter.call(document.getElementsByTagName("style"), e => e.getAttribute("about") === "atk-test-behat").length === 0) {$(\'<style about="atk-test-behat">' . $css . '</style>\').appendTo(\'head\'); $.fx.off = true;}';
+        $script = 'jQuery.fx.off = true; if (Array.prototype.filter.call(document.getElementsByTagName("style"), e => e.getAttribute("about") === "atk-test-behat").length === 0) {$(\'<style about="atk-test-behat">' . $css . '</style>\').appendTo(\'head\');}';
         $this->getSession()->executeScript($script);
     }
 
