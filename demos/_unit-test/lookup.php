@@ -21,13 +21,12 @@ $edit->callback = function ($model) use ($app) {
 
 $crud = Crud::addTo($app);
 
-$crud->onFormEdit(function($f){
+$crud->onFormEdit(function ($f) {
     $f->getControl('product_category_id')->settings['duration'] = 0;
     $f->getControl('product_category_id')->settings['delay'] = ['hide' => 0, 'search' => 0];
 
     $f->getControl('product_sub_category_id')->settings['duration'] = 0;
     $f->getControl('product_sub_category_id')->settings['delay'] = ['hide' => 0, 'search' => 0];
-
 });
 
 $crud->setModel($model, ['name']);
