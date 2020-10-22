@@ -73,7 +73,7 @@
     "behat/mink-extension": "^2.3.1",
     "behat/mink-selenium2-driver": "^1.4",
     "friendsofphp/php-cs-fixer": "^2.16",
-    "fzaninotto/faker": "^1.9",
+    "fzaninotto/faker": "^1.6",
     "instaclick/php-webdriver": "^1.4.7",
     "guzzlehttp/guzzle": "^6.3",
     "johnkary/phpunit-speedtrap": "^3.2",
