@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Control;
 
-use atk4\ui\AbstractView;
 use atk4\ui\Jquery;
 use atk4\ui\JsExpression;
 use atk4\ui\JsFunction;
@@ -450,10 +449,5 @@ class Lookup extends Input
         $value = implode(',', (array) $value);
 
         return parent::set($value, $junk);
-    }
-
-    protected function mergeStickyArgsFromChildView(): ?AbstractView
-    {
-        return $this->callback;
     }
 }
