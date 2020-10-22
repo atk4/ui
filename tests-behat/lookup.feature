@@ -6,7 +6,6 @@ Feature: Lookup
 
   Scenario: Testing lookup in modal
     Then I press button "Edit"
-    Then I sleep 200 ms
     Then I select value "Dairy" in lookup "product_category_id"
     Then I select value "Yogourt" in lookup "product_sub_category_id"
     Then I press button "EditMe"
