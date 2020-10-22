@@ -450,7 +450,7 @@ class Context extends RawMinkContext implements BehatContext
         return 'document.readyState === \'complete\''
             . ' && typeof $ !== \'undefined\' && jQuery.active === 0'
             . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()'
-            . '&& 0 === jQuery(\':animated\').length)';
+            . ' && 0 === jQuery(\':animated\').length)';
     }
 
     /**
@@ -461,25 +461,24 @@ class Context extends RawMinkContext implements BehatContext
     protected function jqueryWait($duration = 5000)
     {
         $finishedScript = $this->getFinishedScript();
+        $this->getSession()->wait($duration, $finishedScript);
 
-//        $this->getSession()->wait($duration, '(0 === jQuery.active && 0 === jQuery(\':animated\').length)');
-
-        $s = microtime(true);
-        $c = 0;
-        while (microtime(true) - $s <= $duration * 1000) {
-            $this->getSession()->wait($duration, $finishedScript);
-            usleep(10000);
-            if ($this->getSession()->evaluateScript($finishedScript)) {
-                if (++$c >= 2) {
-                    return;
-                }
-            } else {
-                $c = 0;
-                usleep(50000);
-            }
-        }
-
-        throw new \Exception('JQuery did not finished within a given time limit');
+//        $s = microtime(true);
+//        $c = 0;
+//        while (microtime(true) - $s <= $duration * 1000) {
+//            $this->getSession()->wait($duration, $finishedScript);
+//            usleep(10000);
+//            if ($this->getSession()->evaluateScript($finishedScript)) {
+//                if (++$c >= 2) {
+//                    return;
+//                }
+//            } else {
+//                $c = 0;
+//                usleep(50000);
+//            }
+//        }
+//
+//        throw new \Exception('JQuery did not finished within a given time limit');
     }
 
     /**
