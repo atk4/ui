@@ -45,7 +45,7 @@ class App
     ];
 
     /** @var string Version of Agile UI */
-    public $version = '2.4-x';
+    public $version = 'js-build-with-copy-plugin.1.0-BETA';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
