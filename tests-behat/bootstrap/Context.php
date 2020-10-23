@@ -380,7 +380,7 @@ class Context extends RawMinkContext implements BehatContext
         $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("show")';
         $this->getSession()->executeScript($script);
         // Wait till dropdown is visible
-        // Cannot call jqueryWait because calling it will return prior from dropdown to fire ajax request.
+        $this->jqueryWait();
         $this->getSession()->wait(2000, '$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
         // value should be available.
         $value = $lookup->find('xpath', '//div[text()="' . $arg1 . '"]');
