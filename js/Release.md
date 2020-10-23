@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.17.0 (2020-10-23)
+
+- Add Webpack CopyPlugin to build process.
+
 ### version 1.16.3 (2020-09-30)
 
 - create atk-date-picker vue component.

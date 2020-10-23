@@ -25,6 +25,7 @@ const path = require('path');
 // VUe file loader.
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const packageVersion = require('./package.json').version;
 
 module.exports = (env) => {
@@ -115,6 +116,12 @@ module.exports = (env) => {
                 _ATKVERSION_: JSON.stringify(packageVersion),
             }),
             new VueLoaderPlugin(),
+            new CopyPlugin({
+                patterns: [
+                    // copy all files from resources dir to public.
+                    { from: 'resources', to: publicDir },
+                ],
+            }),
         ],
     };
 };
