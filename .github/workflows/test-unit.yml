@@ -2,9 +2,7 @@ name: Unit
 
 on:
   pull_request:
-    branches: '**'
   push:
-    branches: '**'
   schedule:
     - cron: '0 0/2 * * *'
 
@@ -85,7 +83,7 @@ jobs:
     name: Unit
     runs-on: ubuntu-latest
     container:
-      image: atk4/image:${{ matrix.php }} # https://github.com/atk4/image
+      image: atk4/image:${{ matrix.php }}
     strategy:
       fail-fast: false
       matrix:
