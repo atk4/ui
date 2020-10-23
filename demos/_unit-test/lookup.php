@@ -26,8 +26,6 @@ $crud = Crud::addTo($app);
 // Important for Behat testing
 $crud->onFormEdit(function ($f) {
     foreach (['product_category_id', 'product_sub_category_id'] as $controlName) {
-        $f->getControl($controlName)->settings['duration'] = 0;
-        $f->getControl($controlName)->settings['delay'] = ['hide' => 0, 'search' => 0];
         // reduce control width because it could cause Behat test to fail if over EditMe button
         $f->getControl($controlName)->setStyle(['width' => '50%']);
     }
