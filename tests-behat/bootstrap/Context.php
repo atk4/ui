@@ -59,10 +59,10 @@ class Context extends RawMinkContext implements BehatContext
         };
 
         $css = $toCssFx('*', [
-            'animation-delay' => '0.02s',
-            'animation-duration' => '0.02s',
-            'transition-delay' => '0.02s',
-            'transition-duration' => '0.02s',
+            'animation-delay' => '0.005s',
+            'animation-duration' => '0.005s',
+            'transition-delay' => '0.005s',
+            'transition-duration' => '0.005s',
         ]) . $toCssFx('.ui.toast-container .toast-box .progressing.wait', [
             'animation-duration' => '5s',
             'transition-duration' => '5s',

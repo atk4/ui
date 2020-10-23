@@ -275,4 +275,10 @@ jobs:
           sleep 0.2
           if [ "${{ matrix.type }}" == "Firefox" ]; then sed -i "s~chrome~firefox~" behat.yml.dist ; fi
           if [ "${{ matrix.type }}" == "Chrome Slow" ]; then echo 'sleep(1);' >> demos/init-app.php ; fi
+
+          # remove once https://github.com/minkphp/Mink/pull/801
+          # and https://github.com/minkphp/MinkSelenium2Driver/pull/322 are released
+          sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink/src/Element/Element.php
+          sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php
+
           vendor/bin/behat --config behat.yml.dist
