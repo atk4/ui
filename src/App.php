@@ -42,6 +42,7 @@ class App
         'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7',
+        'flatpickr' => 'https://npmcdn.com/flatpickr@4.6.6/dist',
     ];
 
     /** @var string Version of Agile UI */
@@ -459,6 +460,10 @@ class App
 
         // Serialize Object
         $this->requireJs($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
+
+        // flatpickr
+        $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
+        $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');
 
         // Agile UI
         $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
