@@ -11,7 +11,7 @@ jobs:
     if: startsWith(github.ref, 'refs/heads/release/')
     runs-on: ubuntu-latest
     container:
-      image: atk4/image:latest # https://github.com/atk4/image
+      image: atk4/image:latest
     steps:
       - uses: actions/checkout@master
       - name: Hack around git branches

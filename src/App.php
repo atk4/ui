@@ -41,12 +41,11 @@ class App
         'atk' => 'https://raw.githack.com/atk4/ui/develop/public',
         'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.6',
-        'flatpickr' => 'https://npmcdn.com/flatpickr@4.6.6/dist',
+        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7',
     ];
 
     /** @var string Version of Agile UI */
-    public $version = '2.2.0';
+    public $version = '2.4-x';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -424,7 +423,7 @@ class App
     /**
      * Initializes layout.
      *
-     * @param string|Layout|array $seed
+     * @param Layout|array $seed
      *
      * @return $this
      */
@@ -460,10 +459,6 @@ class App
 
         // Serialize Object
         $this->requireJs($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
-
-        // flatpickr
-        $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
-        $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');
 
         // Agile UI
         $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');

@@ -2,9 +2,7 @@ name: Unit
 
 on:
   pull_request:
-    branches: '**'
   push:
-    branches: '**'
   schedule:
     - cron: '0 0/2 * * *'
 
@@ -85,13 +83,15 @@ jobs:
     name: Unit
     runs-on: ubuntu-latest
     container:
-      image: atk4/image:${{ matrix.php }} # https://github.com/atk4/image
+      image: atk4/image:${{ matrix.php }}
     strategy:
       fail-fast: false
       matrix:
         php: ['7.3', 'latest', '8.0']
         type: ['Phpunit']
         include:
+          - php: 'latest'
+            type: 'Phpunit Lowest'
           - php: 'latest'
             type: 'Phpunit Burn'
     env:
@@ -130,11 +130,12 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "Phpunit Burn" ]; then composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev ; fi
+          if [[ "${{ matrix.type }}" != Phpunit* ]; then composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev ; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
           composer remove --no-interaction --no-update 'behat/*' --dev
           if [ "${{ matrix.php }}" == "8.0" ]; then composer config platform.php 7.4.5 ; fi
           composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
+          if [ "${{ matrix.type }}" == "Phpunit Lowest" ]; then composer update  --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader ; fi
           if [ "${{ matrix.type }}" == "Phpunit Burn" ]; then sed -i 's/ *public function runBare(): void/public function runBare(): void { gc_collect_cycles(); $mem0 = memory_get_usage(); for ($i = 0; $i < '"$(if [ \"$GITHUB_EVENT_NAME\" == \"schedule\" ]; then echo 5; else echo 5; fi)"'; ++$i) { $this->_runBare(); if ($i === 0) { gc_collect_cycles(); $mem1 = memory_get_usage(); } } gc_collect_cycles(); $mem2 = memory_get_usage(); if ($mem2 - 3072 * 1024 > $mem0 || $mem2 - 256 * 1024 > $mem1) { $this->onNotSuccessfulTest(new AssertionFailedError("Memory leak detected! (" . round($mem0 \/ (1024 * 1024), 3) . " + " . round(($mem1 - $mem0) \/ (1024 * 1024), 3) . " + " . round(($mem2 - $mem1) \/ (1024 * 1024), 3) . " MB, " . $i . " iterations)")); } } private function _runBare(): void/' vendor/phpunit/phpunit/src/Framework/TestCase.php && cat vendor/phpunit/phpunit/src/Framework/TestCase.php | grep '_runBare(' ; fi
 
       - name: Init
@@ -143,7 +144,7 @@ jobs:
           php demos/_demo-data/create-sqlite-db.php
 
       - name: "Run tests: SQLite (only for Phpunit)"
-        if: matrix.type == 'Phpunit' || matrix.type == 'Phpunit Burn'
+        if: startsWith(matrix.type, 'Phpunit')
         run: |
           if [ -n "$LOG_COVERAGE" ]; then
             cp tools/coverage.php demos
@@ -155,11 +156,11 @@ jobs:
           fi
 
       - name: "Run tests: MySQL (only for Phpunit)"
-        if: matrix.type == 'Phpunit' || matrix.type == 'Phpunit Burn'
+        if: startsWith(matrix.type, 'Phpunit')
         run: "vendor/bin/phpunit --configuration phpunit-mysql.xml.dist --exclude-group none --no-coverage -v"
 
       - name: "Run tests: MSSQL (only for Phpunit)"
-        if: matrix.type == 'Phpunit' || matrix.type == 'Phpunit Burn'
+        if: startsWith(matrix.type, 'Phpunit')
         run: "vendor/bin/phpunit --configuration phpunit-mssql.xml.dist --exclude-group none --no-coverage -v"
 
       - name: Upload coverage logs 1/2 (only for "latest" Phpunit)
@@ -182,7 +183,7 @@ jobs:
       fail-fast: false
       matrix:
         php: ['latest']
-        type: ['Chrome', 'Firefox', 'Chrome Slow']
+        type: ['Chrome', 'Firefox', 'Chrome Lowest', 'Chrome Slow']
     env:
       LOG_COVERAGE: ''
     services:
@@ -258,9 +259,10 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev
+          composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev
           composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev
           composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
+          if [ "${{ matrix.type }}" == "Chrome Lowest" ]; then composer update  --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader ; fi
 
       - name: Init
         run: |
@@ -273,4 +275,10 @@ jobs:
           sleep 0.2
           if [ "${{ matrix.type }}" == "Firefox" ]; then sed -i "s~chrome~firefox~" behat.yml.dist ; fi
           if [ "${{ matrix.type }}" == "Chrome Slow" ]; then echo 'sleep(1);' >> demos/init-app.php ; fi
+
+          # remove once https://github.com/minkphp/Mink/pull/801
+          # and https://github.com/minkphp/MinkSelenium2Driver/pull/322 are released
+          sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink/src/Element/Element.php
+          sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php
+
           vendor/bin/behat --config behat.yml.dist

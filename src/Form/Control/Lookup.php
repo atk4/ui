@@ -147,6 +147,9 @@ class Lookup extends Input
         $this->initQuickNewRecord();
 
         $this->settings['forceSelection'] = false;
+
+        $this->callback = \atk4\ui\Callback::addTo($this);
+        $this->callback->set([$this, 'outputApiResponse']);
     }
 
     /**
@@ -300,7 +303,7 @@ class Lookup extends Input
      */
     protected function applySearchConditions()
     {
-        if (!isset($_GET['q'])) {
+        if (empty($_GET['q'])) {
             return;
         }
 
@@ -386,9 +389,6 @@ class Lookup extends Input
 
     protected function renderView(): void
     {
-        $this->callback = \atk4\ui\Callback::addTo($this);
-        $this->callback->set([$this, 'outputApiResponse']);
-
         if ($this->multiple) {
             $this->template->set('multiple', 'multiple');
         }
