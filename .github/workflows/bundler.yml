@@ -1,12 +1,11 @@
 name: Bundler
 
-on:
-  create:
-    branches: 'release/*'
+on: create
 
 jobs:
   autocommit:
     name: Update to stable dependencies
+    if: startsWith(github.ref, 'refs/heads/release/')
     runs-on: ubuntu-latest
     container:
       image: atk4/image:latest
