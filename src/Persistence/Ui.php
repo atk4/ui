@@ -6,53 +6,48 @@ namespace atk4\ui\Persistence;
 
 use atk4\data\Model;
 use atk4\ui\Exception;
-use atk4\ui\Persistence\Type\Boolean;
-use atk4\ui\Persistence\Type\Castable;
-use atk4\ui\Persistence\Type\Date;
-use atk4\ui\Persistence\Type\Money;
-use atk4\ui\Persistence\Type\Serial;
 
 /**
  * This class is used for typecasting model types to the values that will be presented to the user. App will
  * always initialize this persistence in $app->ui_persistence and this object will be used by various
  * UI elements to output data to the user.
  *
- * Value casting is perform via a Castable class associate to a field type using $typeClass property.
- * $typeClass property provide default class name for certain field type.
- * Changing value casting for each field type, or adding new one, can be done by registering new class.
+ * Overriding and extending this class is a great place where you can tweak how various data-types are displayed
+ * to the user in the way so it would affect UI globally.
+ *
+ * You may want to localize some of the output.
  */
 class Ui extends \atk4\data\Persistence
 {
-    public $typeClass = [
-        'boolean' => Boolean::class,
-        'date' => Date::class,
-        'time' => Date::class,
-        'datetime' => Date::class,
-        'money' => Money::class,
-        'array' => Serial::class,
-        'object' => Serial::class,
-    ];
+    public $date_format = 'M d, Y';
+
+    public $time_format = 'H:i';
+
+    public $datetime_format = 'M d, Y H:i:s';
+    // 'D, d M Y H:i:s O';
 
     /**
-     * Get Castable object instance associate to a field type.
+     * Calendar input first day of week.
+     *  0 = sunday;.
+     *
+     * @var int
      */
-    public function getType(string $type): Castable
-    {
-        if (!isset($this->typeClass[$type])) {
-            throw (new Exception('There is no class register with this field type.'))
-                ->addMoreInfo('type', $type);
-        }
+    public $firstDayOfWeek = 0;
 
-        return new $this->typeClass[$type]();
-    }
+    public $currency = '€';
 
     /**
-     * Associate a Castable class to a field type.
+     * Default decimal count for type 'money'
+     *  Used directly in number_format() second parameter.
+     *
+     * @var int
      */
-    public function registerTypeClass(string $type, string $class)
-    {
-        $this->typeClass[$type] = $class;
-    }
+    public $currency_decimals = 2;
+
+    public $yes = 'Yes';
+    public $no = 'No';
+
+    public $calendar_options = [];
 
     /**
      * This method contains the logic of casting generic values into user-friendly format.
@@ -72,9 +67,40 @@ class Ui extends \atk4\data\Persistence
         // work only on copied value not real one !!!
         $value = is_object($value) ? clone $value : $value;
 
-        // delegate value casting to proper class if set.
-        if ($f->type && isset($this->typeClass[$f->type])) {
-            $value = $this->getType($f->type)->castSaveValue($f, $value);
+        switch ($f->type) {
+            case 'boolean':
+                $value = $value ? $this->yes : $this->no;
+
+                break;
+            case 'money':
+                $value = ($this->currency ? $this->currency . ' ' : '') . number_format($value, $this->currency_decimals);
+
+                break;
+            case 'date':
+            case 'datetime':
+            case 'time':
+                $dt_class = $f->dateTimeClass ?? \DateTime::class;
+                $tz_class = $f->dateTimeZoneClass ?? \DateTimeZone::class;
+
+                if ($value instanceof $dt_class || $value instanceof \DateTimeInterface) {
+                    $formats = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
+                    $format = $f->persist_format ?: $formats[$f->type];
+
+                    // datetime only - set to persisting timezone
+                    if ($f->type === 'datetime' && isset($f->persist_timezone)) {
+                        $value = new $dt_class($value->format('Y-m-d H:i:s.u'), $value->getTimezone());
+                        $value->setTimezone(new $tz_class($f->persist_timezone));
+                    }
+                    $value = $value->format($format);
+                }
+
+                break;
+            case 'array':
+            case 'object':
+                // don't encode if we already use some kind of serialization
+                $value = $f->serialize ? $value : json_encode($value, JSON_THROW_ON_ERROR);
+
+                break;
         }
 
         return $value;
@@ -103,9 +129,50 @@ class Ui extends \atk4\data\Persistence
             $value = preg_replace('~\r?\n|\r~', "\n", $value);
         }
 
-        // delegate value casting to proper class if set.
-        if ($f->type && isset($this->typeClass[$f->type])) {
-            $value = $this->getType($f->type)->castLoadValue($f, $value);
+        switch ($f->type) {
+            case 'string':
+            case 'text':
+                break;
+            case 'boolean':
+                $value = (bool) $value;
+
+                break;
+            case 'money':
+                $value = str_replace(',', '', $value);
+
+                break;
+            case 'date':
+            case 'datetime':
+            case 'time':
+                $dt_class = $f->dateTimeClass ?? \DateTime::class;
+                $tz_class = $f->dateTimeZoneClass ?? \DateTimeZone::class;
+
+                // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
+                $formats = ['date' => '!+' . $this->date_format, 'datetime' => '!+' . $this->datetime_format, 'time' => '!+' . $this->time_format];
+                $format = $f->persist_format ?: $formats[$f->type];
+
+                // datetime only - set from persisting timezone
+                $valueStr = $value;
+                if ($f->type === 'datetime' && isset($f->persist_timezone)) {
+                    $value = $dt_class::createFromFormat($format, $value, new $tz_class($f->persist_timezone));
+                    if ($value === false) {
+                        throw (new Exception('Incorrectly formatted datetime'))
+                            ->addMoreInfo('format', $format)
+                            ->addMoreInfo('value', $valueStr)
+                            ->addMoreInfo('field', $f);
+                    }
+                    $value->setTimeZone(new $tz_class(date_default_timezone_get()));
+                } else {
+                    $value = $dt_class::createFromFormat($format, $value);
+                    if ($value === false) {
+                        throw (new Exception('Incorrectly formatted date/time'))
+                            ->addMoreInfo('format', $format)
+                            ->addMoreInfo('value', $valueStr)
+                            ->addMoreInfo('field', $f);
+                    }
+                }
+
+                break;
         }
 
         if (isset($f->reference)) {

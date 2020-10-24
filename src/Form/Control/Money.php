@@ -17,13 +17,13 @@ class Money extends Input
             return;
         }
 
-        return number_format($v, \atk4\ui\Persistence\Type\Money::getProps('decimal'));
+        return number_format($v, $this->getApp()->ui_persistence->currency_decimals);
     }
 
     protected function renderView(): void
     {
         if ($this->label === null) {
-            $this->label = \atk4\ui\Persistence\Type\Money::getProps('currency');
+            $this->label = $this->getApp()->ui_persistence->currency;
         }
 
         parent::renderView();

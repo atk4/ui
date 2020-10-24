@@ -78,8 +78,6 @@ use atk4\ui\Exception;
 use atk4\ui\Form;
 use atk4\ui\HtmlTemplate;
 use atk4\ui\JsCallback;
-use atk4\ui\Persistence\Type\Date;
-use atk4\ui\HtmlTemplate;
 use atk4\ui\View;
 
 class Multiline extends Form\Control
@@ -653,7 +651,7 @@ class Multiline extends Form\Control
             case 'date':
             case 'datetime':
             case 'time':
-              $options['dateFormat'] = $options['dateFormat'] ?? $this->getApp()->ui_persistence->typeClass[$component]::getProps('format')[$component];
+              $options['dateFormat'] = $options['dateFormat'] ?? $this->getApp()->ui_persistence->{$component . '_format'};
 
                break;
         }

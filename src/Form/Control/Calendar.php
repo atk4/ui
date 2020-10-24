@@ -8,7 +8,6 @@ use atk4\ui\App;
 use atk4\ui\Jquery;
 use atk4\ui\JsChain;
 use atk4\ui\JsExpression;
-use atk4\ui\Persistence\Type\Date;
 
 /**
  * Date/Time picker attached to a form control.
@@ -76,7 +75,7 @@ class Calendar extends Input
         parent::init();
 
         // get format from Persistence\Date.
-        $format = $this->translateFormat($this->getApp()->ui_persistence->typeClass[$this->type]::getProps('format')[$this->type]);
+        $format = $this->translateFormat($this->getApp()->ui_persistence->{$this->type . '_format'});
         $this->options['dateFormat'] = $format;
 
         if ($this->type === 'datetime' || $this->type === 'time') {

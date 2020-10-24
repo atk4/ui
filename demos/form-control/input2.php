@@ -7,7 +7,6 @@ namespace atk4\ui\demo;
 use atk4\ui\Button;
 use atk4\ui\Form;
 use atk4\ui\HtmlTemplate;
-use atk4\ui\Persistence\Type\Date;
 
 /**
  * Demonstrates how to use fields with form.

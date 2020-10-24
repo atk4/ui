@@ -10,15 +10,14 @@ use atk4\ui\Form;
 use atk4\ui\Header;
 use atk4\ui\JsExpression;
 use atk4\ui\JsFunction;
-use atk4\ui\Persistence\Type\Date;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
 
-$dateFormat = Date::getProps('format')['date'];
-$timeFormat = Date::getProps('format')['time'];
+$dateFormat = $app->ui_persistence->date_format;
+$timeFormat = $app->ui_persistence->time_format;
 
 /** @var Model $inventoryItemClass */
 $inventoryItemClass = get_class(new class() extends Model {
