@@ -584,8 +584,7 @@ class Form extends View
     {
         $this->ajaxSubmit();
         if (!empty($this->controlDisplayRules)) {
-            // backward compatibility for fieldsDisplayRules and fieldDisplaySelector
-            $this->js(true, new JsConditionalForm($this, $this->fieldsDisplayRules ?: $this->controlDisplayRules, $this->fieldDisplaySelector ?: $this->controlDisplaySelector));
+            $this->js(true, new JsConditionalForm($this, $this->controlDisplayRules, $this->controlDisplaySelector));
         }
 
         parent::renderView();
