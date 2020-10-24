@@ -2,7 +2,6 @@ name: Test Release Drafter
 
 on:
   push:
-    # branches to consider in the event; optional, defaults to all
     branches:
       - test-release-drafter
 
@@ -10,7 +9,7 @@ jobs:
   update_release_draft:
     runs-on: ubuntu-latest
     container:
-      image: atk4/image:latest # https://github.com/atk4/image
+      image: atk4/image:latest
     steps:
       # Drafts your next Release notes as Pull Requests are merged into "master"
       - uses: toolmantim/release-drafter@v5.6.1

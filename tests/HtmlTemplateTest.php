@@ -6,15 +6,16 @@ namespace atk4\ui\tests;
 
 use atk4\core\AtkPhpunit;
 use atk4\ui\Exception;
+use atk4\ui\HtmlTemplate;
 
-class TemplateTest extends AtkPhpunit\TestCase
+class HtmlTemplateTest extends AtkPhpunit\TestCase
 {
     /**
      * Test constructor.
      */
     public function testBasicInit()
     {
-        $t = new \atk4\ui\Template('hello, {foo}world{/}');
+        $t = new HtmlTemplate('hello, {foo}world{/}');
         $t['foo'] = 'bar';
 
         $this->assertSame('hello, bar', $t->render());
@@ -26,7 +27,7 @@ class TemplateTest extends AtkPhpunit\TestCase
     public function testGetTagRef()
     {
         // top tag
-        $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
+        $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $t1 = &$this->callProtected($t, 'getTagRef', '_top');
         $this->assertSame(['foo#0' => ['hello'], ', cruel ', 'bar#0' => ['world'], '. ', 'foo#1' => ['hello']], $t1);
 
@@ -34,7 +35,7 @@ class TemplateTest extends AtkPhpunit\TestCase
         $this->assertSame(['good bye'], $this->getProtected($t, 'template'));
 
         // any tag
-        $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
+        $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $t2 = &$this->callProtected($t, 'getTagRef', 'foo');
         $this->assertSame(['hello'], $t2);
 
@@ -47,7 +48,7 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testGetTagRefException()
     {
-        $t = new \atk4\ui\Template('{foo}hello{/}');
+        $t = new HtmlTemplate('{foo}hello{/}');
         $this->expectException(Exception::class);
         $this->callProtected($t, 'getTagRef', 'bar'); // not existent tag
     }
@@ -58,7 +59,7 @@ class TemplateTest extends AtkPhpunit\TestCase
     public function testGetTagRefs()
     {
         // top tag
-        $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello2{/}');
+        $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello2{/}');
         $t1 = $this->callProtected($t, 'getTagRefs', '_top');
         $this->assertSame([['foo#0' => ['hello'], ', cruel ', 'bar#0' => ['world'], '. ', 'foo#1' => ['hello2']]], $t1);
 
@@ -66,13 +67,13 @@ class TemplateTest extends AtkPhpunit\TestCase
         $this->assertSame(['good bye'], $this->getProtected($t, 'template'));
 
         // any tag
-        $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello2{/}');
+        $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello2{/}');
         $t2 = $this->callProtected($t, 'getTagRefs', 'foo');
         $this->assertSame([['hello'], ['hello2']], $t2);
         $t2[1] = ['good bye']; // will change $t->template last "foo" tag because it's by reference
         $this->assertSame(['foo#0' => ['hello'], ', cruel ', 'bar#0' => ['world'], '. ', 'foo#1' => ['good bye']], $this->getProtected($t, 'template'));
 
-        $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello2{/}');
+        $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello2{/}');
         $t2 = $this->callProtected($t, 'getTagRefs', 'bar');
         $this->assertSame([['world']], $t2);
         $t2[0] = ['planet']; // will change $t->template last "foo" tag because it's by reference
@@ -84,7 +85,7 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testBadTemplate1()
     {
-        $t = new \atk4\ui\Template();
+        $t = new HtmlTemplate();
         $this->expectException(Exception::class);
         $t->load('bad_template_file');
     }
@@ -94,7 +95,7 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testBadTemplate2()
     {
-        $t = new \atk4\ui\Template();
+        $t = new HtmlTemplate();
         $this->assertFalse($t->tryLoad('bad_template_file'));
     }
 
@@ -103,7 +104,7 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testGetTagRefsException()
     {
-        $t = new \atk4\ui\Template('{foo}hello{/}');
+        $t = new HtmlTemplate('{foo}hello{/}');
         $this->expectException(Exception::class);
         $this->callProtected($t, 'getTagRefs', 'bar'); // not existent tag
     }
@@ -113,7 +114,7 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testHasTag()
     {
-        $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
+        $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $this->assertTrue($t->hasTag(['foo', 'bar'])); // all tags exist
         $this->assertFalse($t->hasTag(['foo', 'bar', 'qwe'])); // qwe tag does not exist
     }
@@ -123,7 +124,7 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testSetException1()
     {
-        $t = new \atk4\ui\Template('{foo}hello{/} guys');
+        $t = new HtmlTemplate('{foo}hello{/} guys');
         $this->expectException(Exception::class);
         $t->set('qwe', 'Hello'); // not existent tag
     }
@@ -133,7 +134,7 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testSetException2()
     {
-        $t = new \atk4\ui\Template('{foo}hello{/} guys');
+        $t = new HtmlTemplate('{foo}hello{/} guys');
         $this->expectException(Exception::class);
         $t->set('foo', new \StdClass()); // bad value
     }
@@ -143,7 +144,7 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testSetAppendDel()
     {
-        $t = new \atk4\ui\Template('{foo}hello{/} guys');
+        $t = new HtmlTemplate('{foo}hello{/} guys');
 
         // del tests
         $t->set('foo', 'Hello');
@@ -175,7 +176,7 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testArrayAccess()
     {
-        $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}welcome{/}');
+        $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}welcome{/}');
 
         $this->assertTrue(isset($t['foo']));
 
@@ -193,7 +194,7 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testEachTag()
     {
-        $t = new \atk4\ui\Template('{foo}hello{/}, {how}cruel{/how} {bar}world{/}. {foo}welcome{/}');
+        $t = new HtmlTemplate('{foo}hello{/}, {how}cruel{/how} {bar}world{/}. {foo}welcome{/}');
 
         // replace values in these tags
         foreach (['foo', 'bar'] as $tag) {
@@ -204,7 +205,7 @@ class TemplateTest extends AtkPhpunit\TestCase
         $this->assertSame('HELLO, cruel WORLD. WELCOME', $t->render());
 
         // tag contains all template (for example in Lister)
-        $t = new \atk4\ui\Template('{foo}hello{/}');
+        $t = new HtmlTemplate('{foo}hello{/}');
         $t->eachTag('foo', function ($value, $tag) {
             return strtoupper($value);
         });
@@ -216,7 +217,7 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testClone()
     {
-        $t = new \atk4\ui\Template('{foo}hello{/} guys');
+        $t = new HtmlTemplate('{foo}hello{/} guys');
 
         // clone only {foo} region
         $t1 = $t->cloneRegion('foo');
@@ -232,7 +233,7 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testLoadException()
     {
-        $t = new \atk4\ui\Template();
+        $t = new HtmlTemplate();
         $this->expectException(Exception::class);
         $t->load('such-file-does-not-exist.txt');
     }
@@ -242,13 +243,13 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testRenderRegion()
     {
-        $t = new \atk4\ui\Template('{foo}hello{/} guys');
+        $t = new HtmlTemplate('{foo}hello{/} guys');
         $this->assertSame('hello', $t->render('foo'));
     }
 
     public function testDollarTags()
     {
-        $t = new \atk4\ui\Template('{$foo} guys and {$bar} here');
+        $t = new HtmlTemplate('{$foo} guys and {$bar} here');
         $t->set([
             'foo' => 'Hello',
             'bar' => 'welcome',

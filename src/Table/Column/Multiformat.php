@@ -7,6 +7,7 @@ namespace atk4\ui\Table\Column;
 use atk4\data\Field;
 use atk4\data\Model;
 use atk4\ui\Exception;
+use atk4\ui\HtmlTemplate;
 use atk4\ui\Table;
 
 /**
@@ -80,7 +81,7 @@ class Multiformat extends Table\Column
             $html_tags = array_merge($c->getHtmlTags($row, $field), $html_tags);
         }
 
-        $template = new \atk4\ui\Template($cell);
+        $template = new HtmlTemplate($cell);
         $template->setApp($this->getApp());
         $template->set($row);
         $template->setHtml($html_tags);

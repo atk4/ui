@@ -76,8 +76,8 @@ use atk4\data\Reference\HasOne;
 use atk4\data\ValidationException;
 use atk4\ui\Exception;
 use atk4\ui\Form;
+use atk4\ui\HtmlTemplate;
 use atk4\ui\JsCallback;
-use atk4\ui\Template;
 use atk4\ui\View;
 
 class Multiline extends Form\Control
@@ -85,7 +85,7 @@ class Multiline extends Form\Control
     /**
      * The template needed for the multiline view.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $multiLineTemplate;
 
@@ -237,7 +237,7 @@ class Multiline extends Form\Control
         parent::init();
 
         if (!$this->multiLineTemplate) {
-            $this->multiLineTemplate = new Template('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline><div class="ui hidden divider"></div>{$Input}</div>');
+            $this->multiLineTemplate = new HtmlTemplate('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
         if (!isset($this->options['atkDateOptions']['phpDateFormat'])) {

@@ -421,7 +421,7 @@ Outputs:
 If ID is not specified it will be set automatically. The top-most element of a Render Tree will
 use ``id=atk`` and all of the child elements will create a derrived ID based on it's UI role.
 
-.. code-block:: yaml
+.. code-block:: yml
 
     atk:
         atk-button:

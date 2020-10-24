@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Form;
+use atk4\ui\HtmlTemplate;
 
 /**
  * Demonstrates how to use fields with form.
@@ -116,7 +117,7 @@ $control = $form->addControl('name', [Form\Control\Line::class, 'hint' => 'this 
 $control->set('value in a form');
 
 $control = $form->addControl('surname', new Form\Control\Line([
-    'hint' => [\atk4\ui\View::class, 'template' => new \atk4\ui\Template(
+    'hint' => [\atk4\ui\View::class, 'template' => new HtmlTemplate(
         'Click <a href="http://example.com/" target="_blank">here</a>'
     )],
 ]));

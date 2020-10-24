@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\HtmlTemplate;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php'; // default lister
 
@@ -16,7 +18,7 @@ require_once __DIR__ . '/../init-app.php'; // default lister
 \atk4\ui\View::addTo($app, ['ui' => 'clearing divider']);
 
 // lister with custom template
-$view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('<div>
+$view = \atk4\ui\View::addTo($app, ['template' => new HtmlTemplate('<div>
 <div class="ui header">Top 20 countries (alphabetically)</div>
 {List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{/}
 </div>')]);
@@ -36,7 +38,7 @@ $lister->setModel(new Country($app->db))
 \atk4\ui\View::addTo($app, ['ui' => 'clearing divider']);
 
 // empty lister with custom template
-$view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('<div>
+$view = \atk4\ui\View::addTo($app, ['template' => new HtmlTemplate('<div>
 <div class="ui header">Empty lister with custom template</div>
 {List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{empty}no flags to show here{/}{/}
 </div>')]);
@@ -53,7 +55,7 @@ $lister->setModel(new Country($app->db))
 
 $container = \atk4\ui\View::addTo($app);
 
-$view = \atk4\ui\View::addTo($container, ['template' => new \atk4\ui\Template('<div>
+$view = \atk4\ui\View::addTo($container, ['template' => new HtmlTemplate('<div>
 <ul>
 {List}<li class="ui icon label"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</li>{/}
 </ul>{$Content}</div>')]);

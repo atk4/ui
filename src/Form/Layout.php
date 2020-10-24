@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form;
 
-use atk4\ui\Exception;
+use atk4\ui\HtmlTemplate;
 use atk4\ui\Label;
-use atk4\ui\Template;
 
 /**
  * Provides generic layout for a form.
@@ -41,7 +40,7 @@ class Layout extends AbstractLayout
      */
     public $inline = false;
 
-    /** @var Template Template holding input html. */
+    /** @var HtmlTemplate Template holding input html. */
     public $inputTemplate;
 
     /** @var array Seed for creating input hint View used in this layout. */
@@ -204,11 +203,6 @@ class Layout extends AbstractLayout
             $template->trySet('label', $label);
             $template->trySet('label_for', $element->id . '_input');
             $template->set('control_class', $element->getControlClass());
-
-            // BC-break exception - will be removed dec-2020
-            if ($template->hasTag('field_class')) {
-                throw new Exception('field_class region has be deprecated. Use control_class instead');
-            }
 
             if ($element->field->required) {
                 $template->append('control_class', 'required ');

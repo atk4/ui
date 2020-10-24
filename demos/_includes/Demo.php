@@ -57,8 +57,8 @@ class Demo extends \atk4\ui\Columns
     public function highLightCode()
     {
         if (!self::$isInitialized) {
-            $this->getApp()->requireCss('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/' . $this->highlightDefaultStyle . '.min.css');
-            $this->getApp()->requireJs('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js');
+            $this->getApp()->requireCss('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.16.2/styles/' . $this->highlightDefaultStyle . '.min.css');
+            $this->getApp()->requireJs('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.16.2/highlight.min.js');
             $this->js(true, (new \atk4\ui\JsChain('hljs'))->initHighlighting());
             self::$isInitialized = true;
         }

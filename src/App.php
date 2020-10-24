@@ -41,11 +41,11 @@ class App
         'atk' => 'https://raw.githack.com/atk4/ui/develop/public',
         'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.6',
+        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7',
     ];
 
     /** @var string Version of Agile UI */
-    public $version = '2.2.0';
+    public $version = '2.4-x';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -153,7 +153,7 @@ class App
         '__atk_tab' => false,
     ];
 
-    public $templateClass = Template::class;
+    public $templateClass = HtmlTemplate::class;
 
     /**
      * Constructor.
@@ -398,7 +398,7 @@ class App
     {
         if ($output instanceof View) {
             $output = $output->render();
-        } elseif ($output instanceof Template) {
+        } elseif ($output instanceof HtmlTemplate) {
             $output = $output->render();
         }
 
@@ -423,7 +423,7 @@ class App
     /**
      * Initializes layout.
      *
-     * @param string|Layout|array $seed
+     * @param Layout|array $seed
      *
      * @return $this
      */
@@ -556,7 +556,7 @@ class App
      *
      * @param string $name
      *
-     * @return Template
+     * @return HtmlTemplate
      */
     public function loadTemplate($name)
     {
