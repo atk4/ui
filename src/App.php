@@ -153,7 +153,7 @@ class App
         '__atk_tab' => false,
     ];
 
-    public $templateClass = Template::class;
+    public $templateClass = HtmlTemplate::class;
 
     /**
      * Constructor.
@@ -398,7 +398,7 @@ class App
     {
         if ($output instanceof View) {
             $output = $output->render();
-        } elseif ($output instanceof Template) {
+        } elseif ($output instanceof HtmlTemplate) {
             $output = $output->render();
         }
 
@@ -556,7 +556,7 @@ class App
      *
      * @param string $name
      *
-     * @return Template
+     * @return HtmlTemplate
      */
     public function loadTemplate($name)
     {

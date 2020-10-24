@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\HtmlTemplate;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -21,7 +23,7 @@ $scrollContainer = \atk4\ui\View::addTo($view)->addClass('ui segment')->addStyle
 
 $listerTemplate = '<div id="{$_id}">{List}<div id="{$_id}" class="ui segment" style="height: 60px"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</div>{/}{$Content}</div>';
 
-$listerContainer = \atk4\ui\View::addTo($scrollContainer, ['template' => new \atk4\ui\Template($listerTemplate)]);
+$listerContainer = \atk4\ui\View::addTo($scrollContainer, ['template' => new HtmlTemplate($listerTemplate)]);
 
 $lister = \atk4\ui\Lister::addTo($listerContainer, [], ['List']);
 $lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {

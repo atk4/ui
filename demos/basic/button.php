@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Button;
+use atk4\ui\HtmlTemplate;
 use atk4\ui\Icon;
 use atk4\ui\Label;
-use atk4\ui\Template;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -70,7 +70,7 @@ $app->add($forkButton);
 
 \atk4\ui\Header::addTo($app, ['Custom Template', 'size' => 2]);
 
-$view = \atk4\ui\View::addTo($app, ['template' => new Template('Hello, {$tag1}, my name is {$tag2}')]);
+$view = \atk4\ui\View::addTo($app, ['template' => new HtmlTemplate('Hello, {$tag1}, my name is {$tag2}')]);
 
 Button::addTo($view, ['World'], ['tag1']);
 Button::addTo($view, ['Agile UI', 'blue'], ['tag2']);

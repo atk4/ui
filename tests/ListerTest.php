@@ -6,6 +6,7 @@ namespace atk4\ui\tests;
 
 use atk4\core\AtkPhpunit;
 use atk4\ui\Exception;
+use atk4\ui\HtmlTemplate;
 
 class ListerTest extends AtkPhpunit\TestCase
 {
@@ -25,7 +26,7 @@ class ListerTest extends AtkPhpunit\TestCase
      */
     public function testListerRender2()
     {
-        $v = new \atk4\ui\View(['template' => new \atk4\ui\Template('hello{list}, world{/list}')]);
+        $v = new \atk4\ui\View(['template' => new HtmlTemplate('hello{list}, world{/list}')]);
         $v->invokeInit();
         $l = \atk4\ui\Lister::addTo($v, [], ['list']);
         $l->setSource(['foo', 'bar']);

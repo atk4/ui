@@ -184,8 +184,8 @@ class Paginator extends View
     /**
      * Render page item using template $t for the page number $page.
      *
-     * @param Template   $t
-     * @param int|string $page
+     * @param HtmlTemplate $t
+     * @param int|string   $page
      */
     public function renderItem($t, $page = null)
     {

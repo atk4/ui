@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\Table\Column;
 
 use atk4\data\Model;
+use atk4\ui\HtmlTemplate;
 use atk4\ui\Table;
 
 /**
@@ -116,7 +117,7 @@ class Link extends Table\Column
         parent::init();
 
         if (is_string($this->url)) {
-            $this->url = new \atk4\ui\Template($this->url);
+            $this->url = new HtmlTemplate($this->url);
         }
         if (is_string($this->page)) {
             $this->page = [$this->page];
