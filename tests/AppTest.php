@@ -6,7 +6,7 @@ namespace atk4\ui\tests;
 
 use atk4\core\AtkPhpunit;
 use atk4\ui\App;
-use atk4\ui\Template;
+use atk4\ui\HtmlTemplate;
 
 class AppTest extends AtkPhpunit\TestCase
 {
@@ -23,14 +23,14 @@ class AppTest extends AtkPhpunit\TestCase
         $app = $this->getApp();
 
         $this->assertInstanceOf(
-            Template::class,
+            HtmlTemplate::class,
             $app->loadTemplate('html.html')
         );
     }
 
     public function testTemplateClassCustom()
     {
-        $anotherTemplateClass = new class() extends Template {
+        $anotherTemplateClass = new class() extends HtmlTemplate {
         };
 
         $app = $this->getApp();

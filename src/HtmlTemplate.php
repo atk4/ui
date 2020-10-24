@@ -12,7 +12,7 @@ use atk4\data\Model;
  *  - completely remove any logic from templates
  *  - speed up template parsing and manipulation speed.
  */
-class Template implements \ArrayAccess
+class HtmlTemplate implements \ArrayAccess
 {
     use \atk4\core\AppScopeTrait;
 

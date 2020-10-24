@@ -67,28 +67,28 @@ class Table extends Lister
     /**
      * Contain the template for the "Head" type row.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $t_head;
 
     /**
      * Contain the template for the "Body" type row.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $t_row;
 
     /**
      * Contain the template for the "Foot" type row.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $t_totals;
 
     /**
      * Contains the output to show if table contains no rows.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $t_empty;
 
@@ -489,7 +489,7 @@ class Table extends Lister
         // Generate template for data row
         $this->t_row_master->setHtml('cells', $this->getDataRowHtml());
         $this->t_row_master['_id'] = '{$_id}';
-        $this->t_row = new Template($this->t_row_master->render());
+        $this->t_row = new HtmlTemplate($this->t_row_master->render());
         $this->t_row->setApp($this->getApp());
 
         // Iterate data rows
