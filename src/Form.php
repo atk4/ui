@@ -94,11 +94,6 @@ class Form extends View
     public $successTemplate = 'form-success.html';
 
     /**
-     * @deprecated use controlDisplayRules - will be removed in dec-2020
-     */
-    public $fieldsDisplayRules = [];
-
-    /**
      * Collection of field's conditions for displaying a target field on the form.
      *
      * Specifying a condition for showing a target field required the name of the target field
@@ -122,11 +117,6 @@ class Form extends View
      * @var array
      */
     public $controlDisplayRules = [];
-
-    /**
-     * @deprecated use controlDisplaySelector - will be removed in dec-2020
-     */
-    public $fieldDisplaySelector = '';
 
     /**
      * Default css selector for JsConditionalForm.
@@ -184,11 +174,6 @@ class Form extends View
     {
         parent::init();
 
-        // BC-break warning - will be removed dec-2020
-        if ($this->template->hasTag('AboveFields')) {
-            throw new Exception('AboveFields region has be deprecated. Use AboveControls instead');
-        }
-
         $this->formElement = View::addTo($this, ['element' => 'form', 'short_name' => 'form'], ['FormElementOnly']);
 
         // Initialize layout, so when you call addControl / setModel next time, form will know
@@ -232,16 +217,6 @@ class Form extends View
             $this->buttonSave->on('click', $this->js(null, null, $this->formElement)->form('submit'));
             $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13){ $([name]).form("submit"); }', ['name' => '#' . $this->formElement->name]));
         }
-    }
-
-    /**
-     * @deprecated use Form::setControlsDisplayRules - will be removed in dec-2020
-     */
-    public function setFieldsDisplayRules($rules = [])
-    {
-        'trigger_error'('Method is deprecated. Use Form::setControlsDisplayRules instead', E_USER_DEPRECATED);
-
-        return $this->setControlsDisplayRules(...func_get_args());
     }
 
     /**
@@ -341,16 +316,6 @@ class Form extends View
     }
 
     /**
-     * @deprecated use Form::getControl - will be removed in dec-2020
-     */
-    public function getField($name): Form\Control
-    {
-        'trigger_error'('Method is deprecated. Use Form::getControl instead', E_USER_DEPRECATED);
-
-        return $this->getControl($name);
-    }
-
-    /**
      * Return form control associated with the field.
      *
      * @param string $name Name of the control
@@ -425,16 +390,6 @@ class Form extends View
     // {{{ Layout Manipulation
 
     /**
-     * @deprecated - use Form::addControl instead - will be removed in dec-2020
-     */
-    public function addField(?string $name, $decorator = null, $field = null)
-    {
-        'trigger_error'('Method is deprecated. Use Form::addControl instead', E_USER_DEPRECATED);
-
-        return $this->addControl(...func_get_args());
-    }
-
-    /**
      * Add form control into current layout. If no layout, create one. If no model, create blank one.
      *
      * @param array|string|object|null $control
@@ -449,16 +404,6 @@ class Form extends View
         }
 
         return $this->layout->addControl($name, $control, $field);
-    }
-
-    /**
-     * @deprecated - use Form::addControls instead - will be removed in dec-2020
-     */
-    public function addFields($fields)
-    {
-        'trigger_error'('Method is deprecated. Use Form::addControls instead', E_USER_DEPRECATED);
-
-        return $this->addControls(...func_get_args());
     }
 
     /**
@@ -515,16 +460,6 @@ class Form extends View
     }
 
     /**
-     * @deprecated - use Form::jsControl instead - will be removed in dec-2020
-     */
-    public function jsField($name)
-    {
-        'trigger_error'('Method is deprecated. Use Form::jsControl instead', E_USER_DEPRECATED);
-
-        return $this->jsControl(...func_get_args());
-    }
-
-    /**
      * Returns JS Chain that targets INPUT of a specified element. This method is handy
      * if you wish to set a value to a certain field.
      *
@@ -540,16 +475,6 @@ class Form extends View
     // }}}
 
     // {{{ Internals
-
-    /**
-     * @deprecated use Form::controlFactory - will be removed in dec-2020
-     */
-    public function decoratorFactory(\atk4\data\Field $field, $seed = [])
-    {
-        'trigger_error'('Method is deprecated. Use Form::controlFactory instead', E_USER_DEPRECATED);
-
-        return $this->controlFactory(...func_get_args());
-    }
 
     /**
      * Provided with a Agile Data Model Field, this method have to decide
@@ -659,8 +584,7 @@ class Form extends View
     {
         $this->ajaxSubmit();
         if (!empty($this->controlDisplayRules)) {
-            // backward compatibility for fieldsDisplayRules and fieldDisplaySelector
-            $this->js(true, new JsConditionalForm($this, $this->fieldsDisplayRules ?: $this->controlDisplayRules, $this->fieldDisplaySelector ?: $this->controlDisplaySelector));
+            $this->js(true, new JsConditionalForm($this, $this->controlDisplayRules, $this->controlDisplaySelector));
         }
 
         parent::renderView();

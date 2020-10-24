@@ -19,16 +19,6 @@ abstract class AbstractLayout extends \atk4\ui\View
     public $form;
 
     /**
-     * @deprecated use AbstractLayout::addControl instead - will be removed in dec-2020
-     */
-    public function addField(string $name, $decorator = null, $field = null)
-    {
-        'trigger_error'('Method is deprecated. Use AbstractLayout::addControl instead', E_USER_DEPRECATED);
-
-        return $this->addControl(...func_get_args());
-    }
-
-    /**
      * Places element inside a layout somewhere. Should be called
      * through $form->addControl().
      *
@@ -87,29 +77,12 @@ abstract class AbstractLayout extends \atk4\ui\View
                 ->addMoreInfo('field', $field);
         }
 
-        if (method_exists($this, '_addField')) {
-            // backward compatibility - will be removed in dec-2020
-            'trigger_error'('Method _addField is deprecated. Override _addControl method instead', E_USER_DEPRECATED);
-
-            return $this->_addField($control, $field);
-        }
-
         return $this->_addControl($control, $field);
     }
 
     protected function _addControl($decorator, $field)
     {
         return $this->add($decorator, $this->template->hasTag($field->short_name) ? $field->short_name : null);
-    }
-
-    /**
-     * @deprecated use AbstractLayout::addControls instead - will be removed in dec-2020
-     */
-    public function addFields($fields)
-    {
-        'trigger_error'('Method is deprecated. Use AbstractLayout::addControls instead', E_USER_DEPRECATED);
-
-        return $this->addControls(...func_get_args());
     }
 
     /**
@@ -178,16 +151,6 @@ abstract class AbstractLayout extends \atk4\ui\View
         }
 
         return $model;
-    }
-
-    /**
-     * @deprecated use AbstractLayout::getControl instead - will be removed in dec-2020
-     */
-    public function getField($name)
-    {
-        'trigger_error'('Method is deprecated. Use AbstractLayout::getControl instead', E_USER_DEPRECATED);
-
-        return $this->getControl(...func_get_args());
     }
 
     /**

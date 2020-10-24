@@ -18,14 +18,14 @@ class Lister extends View
      * the repeating part. Clones from {row}. If your template does not
      * have {row} tag, then entire template will be repeated.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $t_row;
 
     /**
      * Lister use this part of template in case there are no elements in it.
      *
-     * @var Template|null
+     * @var HtmlTemplate|null
      */
     public $t_empty;
 

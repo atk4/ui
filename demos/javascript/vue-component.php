@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\HtmlTemplate;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -38,7 +40,7 @@ $subHeader = 'Searching will reload the list of countries below with matching re
 
 $model = new Country($app->db);
 
-$lister_template = new \atk4\ui\Template('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{$end}{/}</div>');
+$lister_template = new HtmlTemplate('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{$end}{/}</div>');
 
 $view = \atk4\ui\View::addTo($app);
 
@@ -64,7 +66,7 @@ $lister->setModel($search->setModelCondition($model))->setLimit(50);
 $app->requireJs('https://unpkg.com/vue-clock2@1.1.5/dist/vue-clock.min.js');
 
 // Injecting template but normally you would create a template file.
-$clock_template = new \atk4\ui\Template('
+$clock_template = new HtmlTemplate('
     <div id="{$_id}" class="ui center aligned segment">
     <my-clock inline-template v-bind="initData">
         <div>

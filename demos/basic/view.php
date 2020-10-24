@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\HtmlTemplate;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -32,7 +34,7 @@ foreach (str_split('Click me!!') as $letter) {
 }
 
 \atk4\ui\Header::addTo($app, ['View load HTML from string or file']);
-$plane = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('<div id="{$_id}" class="ui statistic">
+$plane = \atk4\ui\View::addTo($app, ['template' => new HtmlTemplate('<div id="{$_id}" class="ui statistic">
     <div class="value">
       <i class="plane icon"></i> {$num}
     </div>

@@ -10,7 +10,7 @@ use atk4\data\Model\Scope;
 use atk4\data\Model\Scope\Condition;
 use atk4\ui\Exception;
 use atk4\ui\Form\Control;
-use atk4\ui\Template;
+use atk4\ui\HtmlTemplate;
 
 class ScopeBuilder extends Control
 {
@@ -47,7 +47,7 @@ class ScopeBuilder extends Control
     /**
      * The template needed for the scopebuilder view.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $scopeBuilderTemplate;
 
@@ -317,7 +317,7 @@ class ScopeBuilder extends Control
         parent::init();
 
         if (!$this->scopeBuilderTemplate) {
-            $this->scopeBuilderTemplate = new Template('<div id="{$_id}" class="ui"><atk-query-builder v-bind="initData"></atk-query-builder></div>');
+            $this->scopeBuilderTemplate = new HtmlTemplate('<div id="{$_id}" class="ui"><atk-query-builder v-bind="initData"></atk-query-builder></div>');
         }
 
         $this->scopeBuilderView = \atk4\ui\View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
