@@ -335,7 +335,6 @@ class ScopeBuilder extends Control
      */
     protected function addFieldRule(Field $field): self
     {
-
         $type = ($field->enum || $field->values || $field->reference) ? 'enum' : $field->type;
         $typeOptions = $type ? $this->getTypeOptions($type) : [];
 
@@ -353,12 +352,12 @@ class ScopeBuilder extends Control
         $options = [];
         // setup proper options for Vue atkDatePicker
         if ($type === 'date' || $type === 'datetime' || $type === 'time') {
-            $format  = $this->getApp()->ui_persistence->{$type . '_format'};
+            $format = $this->getApp()->ui_persistence->{$type . '_format'};
             $options['dateComponent'] = [
                 'dateFormat' => $format,
             ];
 
-            if ( $type === 'datetime' || $type === 'time') {
+            if ($type === 'datetime' || $type === 'time') {
                 $options['dateComponent']['enableTime'] = true;
                 $options['dateComponent']['time_24hr'] = Calendar::use24hrTimeFormat($format);
                 $options['dateComponent']['noCalendar'] = ($type === 'time');
@@ -369,7 +368,6 @@ class ScopeBuilder extends Control
         }
 
         return $options;
-
     }
 
     /**
