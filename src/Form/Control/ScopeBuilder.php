@@ -362,14 +362,15 @@ class ScopeBuilder extends Control
         $component = $rule['component'] ?? null;
         // setup proper options for Vue atkDatePicker
         if ($component === 'DatePicker') {
-            $format = Calendar::translateFormat($this->getApp()->ui_persistence->{$type . '_format'});
+            $calendar = new Calendar();
+            $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$type . '_format'});
             $props['dateFormat'] = $format;
 
             if ($type === 'datetime' || $type === 'time') {
                 $props['enableTime'] = true;
-                $props['time_24hr'] = Calendar::use24hrTimeFormat($format);
+                $props['time_24hr'] = $calendar->use24hrTimeFormat($format);
                 $props['noCalendar'] = ($type === 'time');
-                $props['enableSeconds'] = Calendar::useSeconds($format);
+                $props['enableSeconds'] = $calendar->useSeconds($format);
             }
 
             $props['defaultDate'] = $this->atkdDateOptions['defaultDate'] ?? null;
