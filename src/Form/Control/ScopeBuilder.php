@@ -352,7 +352,7 @@ class ScopeBuilder extends Control
         $options = [];
         // setup proper options for Vue atkDatePicker
         if ($type === 'date' || $type === 'datetime' || $type === 'time') {
-            $format = $this->getApp()->ui_persistence->{$type . '_format'};
+            $format = Calendar::translateFormat($this->getApp()->ui_persistence->{$type . '_format'});
             $options['dateComponent'] = [
                 'dateFormat' => $format,
             ];
