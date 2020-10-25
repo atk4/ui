@@ -38,7 +38,7 @@
                                 <template v-if="canDisplay('date')">
                                     <div class="ui small input atk-qb">
                                       <atk-date-picker
-                                          :config="rule.dateComponent"
+                                          :config="rule.componentProps"
                                           @dateChange="onDateChange"
                                           @setDefault="onDateChange"></atk-date-picker>
                                     </div>

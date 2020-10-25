@@ -26,6 +26,12 @@ class ScopeBuilder extends Control
         'enum' => [
             'limit' => 250,
         ],
+        'time' => [
+            'inputType' => 'time',
+        ],
+        'datetime' => [
+            'inputType' => 'datetime',
+        ],
         'debug' => false, // displays query output live on the page if set to true
     ];
     /**
@@ -336,38 +342,40 @@ class ScopeBuilder extends Control
     protected function addFieldRule(Field $field): self
     {
         $type = ($field->enum || $field->values || $field->reference) ? 'enum' : $field->type;
-        $typeOptions = $type ? $this->getTypeOptions($type) : [];
 
-        $this->rules[] = self::getRule($type, array_merge([
+        $rule = self::getRule($type, array_merge([
             'id' => $field->short_name,
             'label' => $field->getCaption(),
             'options' => $this->options[strtolower((string) $type)] ?? [],
-        ], $field->ui['scopebuilder'] ?? [], $typeOptions), $field);
+        ], $field->ui['scopebuilder'] ?? []), $field);
+
+        $rule['componentProps'] = $this->getRuleComponentProps($rule, $type ?? '');
+
+        $this->rules[] = $rule;
 
         return $this;
     }
 
-    protected function getTypeOptions(string $type)
+    protected function getRuleComponentProps(array $rule, string $type): array
     {
-        $options = [];
+        $props = [];
+        $component = $rule['component'] ?? null;
         // setup proper options for Vue atkDatePicker
-        if ($type === 'date' || $type === 'datetime' || $type === 'time') {
+        if ($component === 'DatePicker') {
             $format = Calendar::translateFormat($this->getApp()->ui_persistence->{$type . '_format'});
-            $options['dateComponent'] = [
-                'dateFormat' => $format,
-            ];
+            $props['dateFormat'] = $format;
 
             if ($type === 'datetime' || $type === 'time') {
-                $options['dateComponent']['enableTime'] = true;
-                $options['dateComponent']['time_24hr'] = Calendar::use24hrTimeFormat($format);
-                $options['dateComponent']['noCalendar'] = ($type === 'time');
-                $options['dateComponent']['enableSeconds'] = Calendar::useSeconds($format);
+                $props['enableTime'] = true;
+                $props['time_24hr'] = Calendar::use24hrTimeFormat($format);
+                $props['noCalendar'] = ($type === 'time');
+                $props['enableSeconds'] = Calendar::useSeconds($format);
             }
 
-            $options['dateComponent']['defaultDate'] = $this->atkdDateOptions['defaultDate'] ?? null;
+            $props['defaultDate'] = $this->atkdDateOptions['defaultDate'] ?? null;
         }
 
-        return $options;
+        return $props;
     }
 
     /**
