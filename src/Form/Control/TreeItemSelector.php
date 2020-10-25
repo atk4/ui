@@ -146,7 +146,7 @@ class TreeItemSelector extends Form\Control
     {
         parent::renderView();
 
-        $this->itemSelector->template->trySetHtml('Input', $this->getInput());
+        $this->itemSelector->template->tryDangerouslySetHtml('Input', $this->getInput());
 
         $this->itemSelector->vue(
             'atk-tree-item-selector',

@@ -317,7 +317,7 @@ Changing template contents
     Escapes and inserts value inside a tag. If passed a hash, then each
     key is used as a tag, and corresponding value is inserted.
 
-.. php:method:: setHtml(tag, value)
+.. php:method:: dangerouslySetHtml(tag, value)
 
     Identical but will not escape. Will also accept hash similar to set()
 
@@ -329,11 +329,11 @@ Changing template contents
 
     Attempts to append value to existing but will do nothing if tag does not exist.
 
-.. php:method:: appendHtml(tag, value)
+.. php:method:: dangerouslyAppendHtml(tag, value)
 
     Similar to append, but will not escape.
 
-.. php:method:: tryAppendHtml(tag, value)
+.. php:method:: tryDangerouslyAppendHtml(tag, value)
 
     Attempts to append non-escaped value, but will do nothing if tag does not exist.
 
@@ -344,7 +344,7 @@ Example::
     $template->loadTemplateFromString('Hello, {name}world{/}');
 
     $template->set('name', 'John');
-    $template->appendHtml('name', '&nbsp;<i class="icon-heart"></i>');
+    $template->dangerouslyAppendHtml('name', '&nbsp;<i class="icon-heart"></i>');
 
     echo $template->render();
 
@@ -575,7 +575,7 @@ access it from inside the object or from outside through "template"
 property::
 
     $grid=\atk4\ui\Grid::addTo($this, [], [null],null,array('grid_with_hint'));
-    $grid->template->trySet('my_hint','Changing value of a grid hint here!');
+    $grid->template->trySet('my_hint', 'Changing value of a grid hint here!');
 
 In this example we have instructed to use a different template for grid,
 which would contain a new tag "my\_hint" somewhere. If you try to change

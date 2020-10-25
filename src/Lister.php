@@ -169,9 +169,9 @@ class Lister extends View
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
                 $empty = isset($this->t_empty) ? $this->t_empty->render() : '';
                 if ($this->template->hasTag('rows')) {
-                    $this->template->appendHtml('rows', $empty);
+                    $this->template->dangerouslyAppendHtml('rows', $empty);
                 } else {
-                    $this->template->appendHtml('_top', $empty);
+                    $this->template->dangerouslyAppendHtml('_top', $empty);
                 }
             }
         }
@@ -198,9 +198,9 @@ class Lister extends View
 
         $html = $this->t_row->render();
         if ($this->template->hasTag('rows')) {
-            $this->template->appendHtml('rows', $html);
+            $this->template->dangerouslyAppendHtml('rows', $html);
         } else {
-            $this->template->appendHtml('_top', $html);
+            $this->template->dangerouslyAppendHtml('_top', $html);
         }
     }
 }

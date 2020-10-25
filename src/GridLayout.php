@@ -75,7 +75,7 @@ class GridLayout extends View
     protected function buildTemplate()
     {
         $this->t_wrap->del('rows');
-        $this->t_wrap->appendHtml('rows', '{rows}');
+        $this->t_wrap->dangerouslyAppendHtml('rows', '{rows}');
 
         for ($row = 1; $row <= $this->rows; ++$row) {
             $this->t_row->del('column');
@@ -83,12 +83,12 @@ class GridLayout extends View
             for ($col = 1; $col <= $this->columns; ++$col) {
                 $this->t_col->set('Content', '{$r' . $row . 'c' . $col . '}');
 
-                $this->t_row->appendHtml('column', $this->t_col->render());
+                $this->t_row->dangerouslyAppendHtml('column', $this->t_col->render());
             }
 
-            $this->t_wrap->appendHtml('rows', $this->t_row->render());
+            $this->t_wrap->dangerouslyAppendHtml('rows', $this->t_row->render());
         }
-        $this->t_wrap->appendHtml('rows', '{/rows}');
+        $this->t_wrap->dangerouslyAppendHtml('rows', '{/rows}');
         $tmp = new HtmlTemplate($this->t_wrap->render());
 
         // TODO replace later, the only use of direct template property access

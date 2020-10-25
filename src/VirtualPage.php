@@ -115,8 +115,8 @@ class VirtualPage extends View
                 // special treatment for popup
                 if ($mode === 'popup') {
                     $this->getApp()->html->template->set('title', $this->getApp()->title);
-                    $this->getApp()->html->template->setHtml('Content', parent::getHtml());
-                    $this->getApp()->html->template->appendHtml('HEAD', $this->getJs());
+                    $this->getApp()->html->template->dangerouslySetHtml('Content', parent::getHtml());
+                    $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getJs());
 
                     $this->getApp()->terminateHtml($this->getApp()->html->template);
                 }
@@ -152,13 +152,13 @@ class VirtualPage extends View
                 }
             }
 
-            $this->getApp()->layout->template->setHtml('Content', parent::getHtml());
+            $this->getApp()->layout->template->dangerouslySetHtml('Content', parent::getHtml());
             $this->getApp()->layout->_js_actions = array_merge($this->getApp()->layout->_js_actions, $this->_js_actions);
 
-            $this->getApp()->html->template->setHtml('Content', $this->getApp()->layout->template->render());
-            $this->getApp()->html->template->setHtml('Modals', $modalHtml);
+            $this->getApp()->html->template->dangerouslySetHtml('Content', $this->getApp()->layout->template->render());
+            $this->getApp()->html->template->dangerouslySetHtml('Modals', $modalHtml);
 
-            $this->getApp()->html->template->appendHtml('HEAD', $this->getApp()->layout->getJs());
+            $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getApp()->layout->getJs());
 
             $this->getApp()->terminateHtml($this->getApp()->html->template);
         });

@@ -288,13 +288,16 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @param string|array|Model $tag
      * @param string             $value
-     * @param bool               $encode Should we HTML encode content
      *
      * @return $this
      */
-    public function set($tag, $value = null, $encode = true)
+    public function set($tag, $value = null)
     {
-        $this->_setOrAppend($tag, $value, $encode, false, true);
+        if (func_num_args() > 2) { // remove in v2.6
+            throw new \Error('3rd param $encode is no longer supported, use dangerouslySetHtml method instead');
+        }
+
+        $this->_setOrAppend($tag, $value, true, false, true);
 
         return $this;
     }
@@ -308,9 +311,13 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function trySet($tag, $value = null, bool $encode = true)
+    public function trySet($tag, $value = null)
     {
-        $this->_setOrAppend($tag, $value, $encode, false, false);
+        if (func_num_args() > 2) { // remove in v2.6
+            throw new \Error('3rd param $encode is no longer supported, use tryDangerouslySetHtml method instead');
+        }
+
+        $this->_setOrAppend($tag, $value, true, false, false);
 
         return $this;
     }
@@ -324,7 +331,7 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function setHtml($tag, $value = null)
+    public function dangerouslySetHtml($tag, $value = null)
     {
         $this->_setOrAppend($tag, $value, false, false, true);
 
@@ -332,7 +339,7 @@ class HtmlTemplate implements \ArrayAccess
     }
 
     /**
-     * See setHtml() but won't generate exception for non-existing
+     * See dangerouslySetHtml() but won't generate exception for non-existing
      * $tag.
      *
      * @param string|array|Model $tag
@@ -340,7 +347,7 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function trySetHtml($tag, $value = null)
+    public function tryDangerouslySetHtml($tag, $value = null)
     {
         $this->_setOrAppend($tag, $value, false, false, false);
 
@@ -355,9 +362,13 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function append($tag, $value, bool $encode = true)
+    public function append($tag, $value)
     {
-        $this->_setOrAppend($tag, $value, $encode, true, true);
+        if (func_num_args() > 2) { // remove in v2.6
+            throw new \Error('3rd param $encode is no longer supported, use dangerouslyAppendHtml method instead');
+        }
+
+        $this->_setOrAppend($tag, $value, true, true, true);
 
         return $this;
     }
@@ -371,9 +382,13 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function tryAppend($tag, $value, bool $encode = true)
+    public function tryAppend($tag, $value)
     {
-        $this->_setOrAppend($tag, $value, $encode, true, false);
+        if (func_num_args() > 2) { // remove in v2.6
+            throw new \Error('3rd param $encode is no longer supported, use tryDangerouslyAppendHtml method instead');
+        }
+
+        $this->_setOrAppend($tag, $value, true, true, false);
 
         return $this;
     }
@@ -387,7 +402,7 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function appendHtml($tag, $value)
+    public function dangerouslyAppendHtml($tag, $value)
     {
         $this->_setOrAppend($tag, $value, false, true, true);
 
@@ -395,7 +410,7 @@ class HtmlTemplate implements \ArrayAccess
     }
 
     /**
-     * Same as append(), but won't generate exception for non-existing
+     * Same as dangerouslyAppendHtml(), but won't generate exception for non-existing
      * $tag.
      *
      * @param string|array|Model $tag
@@ -403,11 +418,51 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function tryAppendHtml($tag, $value)
+    public function tryDangerouslyAppendHtml($tag, $value)
     {
         $this->_setOrAppend($tag, $value, false, true, false);
 
         return $this;
+    }
+
+    /**
+     * @deprecated use "dangerouslySetHtml" method instead - will be removed in v2.6
+     */
+    public function setHtml($tag, $value = null)
+    {
+        'trigger_error'('Method is deprecated. Use dangerouslySetHtml instead', E_USER_DEPRECATED);
+
+        return $this->dangerouslySetHtml($tag, $value);
+    }
+
+    /**
+     * @deprecated use "tryDangerouslySetHtml" method instead - will be removed in v2.6
+     */
+    public function trySetHtml($tag, $value = null)
+    {
+        'trigger_error'('Method is deprecated. Use tryDangerouslySetHtml instead', E_USER_DEPRECATED);
+
+        return $this->tryDangerouslySetHtml($tag, $value);
+    }
+
+    /**
+     * @deprecated use "dangerouslyAppendHtml" method instead - will be removed in v2.6
+     */
+    public function appendHtml($tag, $value)
+    {
+        'trigger_error'('Method is deprecated. Use dangerouslyAppendHtml instead', E_USER_DEPRECATED);
+
+        return $this->dangerouslyAppendHtml($tag, $value);
+    }
+
+    /**
+     * @deprecated use "tryDangerouslyAppendHtml" method instead - will be removed in v2.6
+     */
+    public function tryAppendHtml($tag, $value)
+    {
+        'trigger_error'('Method is deprecated. Use tryDangerouslyAppendHtml instead', E_USER_DEPRECATED);
+
+        return $this->tryDangerouslyAppendHtml($tag, $value);
     }
 
     /**

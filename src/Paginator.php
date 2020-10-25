@@ -196,7 +196,7 @@ class Paginator extends View
             $t->trySet('active', $page === $this->page ? 'active' : '');
         }
 
-        $this->template->appendHtml('rows', $t->render());
+        $this->template->dangerouslyAppendHtml('rows', $t->render());
     }
 
     protected function renderView(): void
