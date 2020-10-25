@@ -29,7 +29,7 @@ $app->ui_persistence->time_format = 'H:i:s';
 $form->addControl('time_h_i_s', [Form\Control\Calendar::class, 'type' => 'time', 'caption' => 'Time using 24 hrs with seconds picker'])
     ->set(date('H:i:s'));
 
-$form->addControl('datetime', [Form\Control\Calendar::class, 'type' => 'datetime', 'caption' => 'Datetime (M d, Y H:i)'])
+$form->addControl('datetime', [Form\Control\Calendar::class, 'type' => 'datetime', 'caption' => 'Datetime (M d, Y H:i:s)'])
     ->set(date($app->ui_persistence->datetime_format));
 
 $app->ui_persistence->date_format = 'F d, Y';

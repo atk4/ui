@@ -75,19 +75,19 @@ class Calendar extends Input
         parent::init();
 
         // get format from Persistence\Date.
-        $format = $this->translateFormat($this->getApp()->ui_persistence->{$this->type . '_format'});
+        $format = self::translateFormat($this->getApp()->ui_persistence->{$this->type . '_format'});
         $this->options['dateFormat'] = $format;
 
         if ($this->type === 'datetime' || $this->type === 'time') {
             $this->options['enableTime'] = true;
-            $this->options['time_24hr'] = $this->options['time_24hr'] ?? $this->use24hrTimeFormat();
-            $this->options['noCalendar'] = $this->type === 'time' ? true : false;
+            $this->options['time_24hr'] = $this->options['time_24hr'] ?? self::use24hrTimeFormat($this->options['altFormat'] ?? $this->options['dateFormat']);
+            $this->options['noCalendar'] = ($this->type === 'time');
 
             // Add seconds picker if set
-            $this->options['enableSeconds'] = $this->options['enableSeconds'] ?? $this->useSeconds();
+            $this->options['enableSeconds'] = $this->options['enableSeconds'] ?? self::useSeconds($this->options['altFormat'] ?? $this->options['dateFormat']);
 
             // Allow edit if microseconds is set.
-            $this->options['allowInput'] = $this->options['allowInput'] ?? $this->allowMicroSecondsInput();
+            $this->options['allowInput'] = $this->options['allowInput'] ?? self::allowMicroSecondsInput($this->options['altFormat'] ?? $this->options['dateFormat']);
         }
     }
 
@@ -145,7 +145,7 @@ class Calendar extends Input
         return (new Jquery('#' . $this->id . '_input'))->get(0)->_flatpickr;
     }
 
-    private function translateFormat(string $format): string
+    public static function translateFormat(string $format): string
     {
         // translate from php to flatpickr.
         $format = preg_replace(['~[aA]~', '~[s]~', '~[g]~'], ['K', 'S', 'G'], $format);
@@ -153,18 +153,18 @@ class Calendar extends Input
         return $format;
     }
 
-    private function use24hrTimeFormat(): bool
+    public static function use24hrTimeFormat(string $format): bool
     {
-        return !preg_match('~[gGh]~', $this->options['altFormat'] ?? $this->options['dateFormat']);
+        return !preg_match('~[gGh]~', $format);
     }
 
-    private function useSeconds(): bool
+    public static function useSeconds(string $format): bool
     {
-        return (bool) preg_match('~[S]~', $this->options['altFormat'] ?? $this->options['dateFormat']);
+        return (bool) preg_match('~[S]~', $format);
     }
 
-    private function allowMicroSecondsInput(): bool
+    public static function allowMicroSecondsInput(string $format): bool
     {
-        return (bool) preg_match('~[u]~', $this->options['altFormat'] ?? $this->options['dateFormat']);
+        return (bool) preg_match('~[u]~', $format);
     }
 }

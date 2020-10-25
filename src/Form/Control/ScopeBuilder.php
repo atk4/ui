@@ -66,8 +66,8 @@ class ScopeBuilder extends Control
      *    Note on locale: ScopeBuilder will use default flatpickr locale.
      *    In order to change default locale simply use Calendar::setLocale($app, 'fr');
      *
-     *    Set input value to today when date initial value is null.
-     *    'useTodayDefault' => true
+     *    Set input value to a default date.
+     *    'defaultDate' => ''
      *
      *    Display date, datetime or time to user in a different format.
      *    'altDisplayFormat' => ['date' => 'M d, Y', 'datetime' => 'M d, Y H:i', 'time' => 'H:i']
@@ -262,51 +262,9 @@ class ScopeBuilder extends Control
                 self::OPERATOR_EMPTY,
                 self::OPERATOR_NOT_EMPTY,
             ],
-            'props' => [
-                'dateFormat' => 'Y-m-d',
-            ],
         ],
-        'datetime' => [
-            'type' => 'custom-component',
-            'component' => 'DatePicker',
-            'inputType' => 'datetime',
-            'operators' => [
-                self::OPERATOR_TIME_EQUALS,
-                self::OPERATOR_TIME_DOESNOT_EQUAL,
-                self::OPERATOR_TIME_GREATER,
-                self::OPERATOR_TIME_GREATER_EQUAL,
-                self::OPERATOR_TIME_LESS,
-                self::OPERATOR_TIME_LESS_EQUAL,
-                self::OPERATOR_EMPTY,
-                self::OPERATOR_NOT_EMPTY,
-            ],
-            'props' => [
-                'dateFormat' => 'Y-m-d H:i',
-                'enableTime' => true,
-                'time_24hr' => true,
-            ],
-        ],
-        'time' => [
-            'type' => 'custom-component',
-            'component' => 'DatePicker',
-            'inputType' => 'time',
-            'operators' => [
-                self::OPERATOR_TIME_EQUALS,
-                self::OPERATOR_TIME_DOESNOT_EQUAL,
-                self::OPERATOR_TIME_GREATER,
-                self::OPERATOR_TIME_GREATER_EQUAL,
-                self::OPERATOR_TIME_LESS,
-                self::OPERATOR_TIME_LESS_EQUAL,
-                self::OPERATOR_EMPTY,
-                self::OPERATOR_NOT_EMPTY,
-            ],
-            'props' => [
-                'dateFormat' => 'H:i',
-                'enableTime' => true,
-                'noCalendar' => true,
-                'time_24hr' => true,
-            ],
-        ],
+        'datetime' => 'date',
+        'time' => 'date',
         'integer' => 'numeric',
         'float' => 'numeric',
         'checkbox' => 'boolean',
@@ -377,15 +335,41 @@ class ScopeBuilder extends Control
      */
     protected function addFieldRule(Field $field): self
     {
+
         $type = ($field->enum || $field->values || $field->reference) ? 'enum' : $field->type;
+        $typeOptions = $type ? $this->getTypeOptions($type) : [];
 
         $this->rules[] = self::getRule($type, array_merge([
             'id' => $field->short_name,
             'label' => $field->getCaption(),
             'options' => $this->options[strtolower((string) $type)] ?? [],
-        ], $field->ui['scopebuilder'] ?? []), $field);
+        ], $field->ui['scopebuilder'] ?? [], $typeOptions), $field);
 
         return $this;
+    }
+
+    protected function getTypeOptions(string $type)
+    {
+        $options = [];
+        // setup proper options for Vue atkDatePicker
+        if ($type === 'date' || $type === 'datetime' || $type === 'time') {
+            $format  = $this->getApp()->ui_persistence->{$type . '_format'};
+            $options['dateComponent'] = [
+                'dateFormat' => $format,
+            ];
+
+            if ( $type === 'datetime' || $type === 'time') {
+                $options['dateComponent']['enableTime'] = true;
+                $options['dateComponent']['time_24hr'] = Calendar::use24hrTimeFormat($format);
+                $options['dateComponent']['noCalendar'] = ($type === 'time');
+                $options['dateComponent']['enableSeconds'] = Calendar::useSeconds($format);
+            }
+
+            $options['dateComponent']['defaultDate'] = $this->atkdDateOptions['defaultDate'] ?? null;
+        }
+
+        return $options;
+
     }
 
     /**
@@ -489,7 +473,6 @@ class ScopeBuilder extends Control
                     'labels' => $this->labels ?? null,
                     'form' => $this->form->formElement->name,
                     'debug' => $this->options['debug'] ?? false,
-                    'dateOptions' => $this->atkdDateOptions,
                 ],
             ]
         );

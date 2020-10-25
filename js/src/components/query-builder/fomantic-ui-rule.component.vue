@@ -38,7 +38,7 @@
                                 <template v-if="canDisplay('date')">
                                     <div class="ui small input atk-qb">
                                       <atk-date-picker
-                                          :config="getDateConfig()"
+                                          :config="rule.dateComponent"
                                           @dateChange="onDateChange"
                                           @setDefault="onDateChange"></atk-date-picker>
                                     </div>
@@ -131,23 +131,6 @@ export default {
         },
         onDateChange: function (date) {
             this.query.value = date;
-        },
-        getDateConfig: function () {
-            const config = this.getRootData().data.dateOptions.flatpickr || {};
-            const altFormat = this.getRootData().data.dateOptions.altDisplayFormat;
-            if (altFormat && altFormat[this.rule.inputType]) {
-                config.altFormat = altFormat[this.rule.inputType];
-                config.altInput = true;
-            } else {
-                config.altFormat = null;
-                config.altInput = false;
-            }
-
-            if (this.getRootData().data.dateOptions.useTodayDefault) {
-                config.defaultDate = new Date();
-            }
-
-            return { ...config, ...this.rule.props };
         },
     },
 };
