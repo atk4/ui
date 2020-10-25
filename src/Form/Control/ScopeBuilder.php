@@ -26,12 +26,6 @@ class ScopeBuilder extends Control
         'enum' => [
             'limit' => 250,
         ],
-        'time' => [
-            'inputType' => 'time',
-        ],
-        'datetime' => [
-            'inputType' => 'datetime',
-        ],
         'debug' => false, // displays query output live on the page if set to true
     ];
     /**
