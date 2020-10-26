@@ -70,7 +70,7 @@ class ScopeBuilder extends Control
      */
     public $atkdDateOptions = [
         'useDefault' => false,
-        'flatpickr' => []
+        'flatpickr' => [],
     ];
 
     /**
