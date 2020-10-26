@@ -134,16 +134,16 @@ constructor:
 
 Alternatively, if you wish to load template from a file:
 
-.. php:method:: load($file)
+.. php:method:: loadFromFile($filename)
 
     Read file and load contents as a template.
 
-.. php:method:: tryLoad($file)
+.. php:method:: tryLoadFromFile($filename)
 
     Try loading the template. Returns false if template couldn't be loaded. This can be used
     if you attempt to load template from various locations.
 
-.. php:method:: loadTemplateFromString($string)
+.. php:method:: loadFromString($string)
 
     Same as using constructor.
 
@@ -196,7 +196,7 @@ Template engine in Agile Toolkit can be used independently, without views
 if you require so. A typical workflow would be:
 
 1. Load template using :php:meth:`GiTemplate::loadTemplate` or
-   :php:meth:`GiTemplate::loadTemplateFromString`.
+   :php:meth:`GiTemplate::loadFromString`.
 
 2. Set tag and region values with :php:meth:`GiTemplate::set`.
 3. Render template with :php:meth:`GiTemplate::render`.
@@ -256,17 +256,13 @@ how it's done is important to completely grasp Agile Toolkit underpinnings.
 Loading template
 ----------------
 
-.. php:method:: loadTemplateFromString(string)
+.. php:method:: loadFromString(string)
 
     Initialize current template from the supplied string
 
-.. php:method:: loadTemplate(filename)
+.. php:method:: loadFromFile(filename)
 
     Locate (using :php:class:`PathFinder`) and read template from file
-
-.. php:method:: reload()
-
-    Will attempt to re-load template from it's original source.
 
 .. php:method:: __clone()
 
@@ -296,11 +292,11 @@ following commands::
 
     $template = GiTemplate::addTo($this);
 
-    $template->loadTemplateFromString('Hello, {name}world{/}');
+    $template->loadFromString('Hello, {name}world{/}');
 
 To load template from file::
 
-    $template->loadTemplate('mytemplate');
+    $template->loadFromFile('mytemplate');
 
 And place the following inside ``template/mytemplate.html``::
 
@@ -341,7 +337,7 @@ Example::
 
     $template = GiTemplate::addTo($this);
 
-    $template->loadTemplateFromString('Hello, {name}world{/}');
+    $template->loadFromString('Hello, {name}world{/}');
 
     $template->set('name', 'John');
     $template->dangerouslyAppendHtml('name', '&nbsp;<i class="icon-heart"></i>');
@@ -406,7 +402,7 @@ Let's assume you have the following template in ``template/envelope.html``::
 You can use the following code to manipulate the template above::
 
     $template = GiTemplate::addTo($this);
-    $template->loadTemplate('envelope');        // templates/envelope.html
+    $template->loadFromFile('envelope');        // templates/envelope.html
 
     // Split into multiple objects for processing
     $sender    = $template->cloneRegion('Sender');
@@ -497,7 +493,7 @@ your template::
 
     $template->eachTag('include', function($content, $tag) use($template) {
         $t = $template->newInstance();
-        $t->loadTemplate($content);
+        $t->loadFromFile($content);
         $template->set($tag, $t->render());
     });
 
@@ -540,7 +536,7 @@ Default template for a view
 By default view object will execute :php:meth:`defaultTemplate()` method which
 returns name of the template. This function must return array with
 one or two elements. First element is the name of the template which
-will be passed to ``loadTemplate()``. Second argument is optional and is
+will be passed to ``loadFromFile()``. Second argument is optional and is
 name of the region, which will be cloned. This allows you to have
 multiple views load data from same template but use different region.
 

@@ -87,7 +87,7 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
     {
         $t = new HtmlTemplate();
         $this->expectException(Exception::class);
-        $t->load('bad_template_file');
+        $t->loadFromFile('bad_template_file');
     }
 
     /**
@@ -96,7 +96,7 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
     public function testBadTemplate2()
     {
         $t = new HtmlTemplate();
-        $this->assertFalse($t->tryLoad('bad_template_file'));
+        $this->assertFalse($t->tryLoadFromFile('bad_template_file'));
     }
 
     /**
@@ -235,7 +235,7 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
     {
         $t = new HtmlTemplate();
         $this->expectException(Exception::class);
-        $t->load('such-file-does-not-exist.txt');
+        $t->loadFromFile('such-file-does-not-exist.txt');
     }
 
     /**

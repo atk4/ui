@@ -56,7 +56,7 @@ class HtmlTemplate implements \ArrayAccess
 
     public function __construct(string $template = '')
     {
-        $this->loadTemplateFromString($template);
+        $this->loadFromString($template);
     }
 
     private function exceptionAddMoreInfo(Exception $e): Exception
@@ -497,7 +497,7 @@ class HtmlTemplate implements \ArrayAccess
         }
 
         if ($tag === self::TOP_TAG) {
-            $this->loadTemplateFromString('');
+            $this->loadFromString('');
         } else {
             $template = $this->getTagRefs($tag);
             foreach ($template as &$ref) {
@@ -613,14 +613,14 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function load(string $filename)
+    public function loadFromFile(string $filename)
     {
-        if ($this->tryLoad($filename) !== false) {
+        if ($this->tryLoadFromFile($filename) !== false) {
             return $this;
         }
 
         throw (new Exception('Unable to read template from file'))
-            ->addMoreInfo('file', $filename);
+            ->addMoreInfo('filename', $filename);
     }
 
     /**
@@ -628,7 +628,7 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this|false
      */
-    public function tryLoad(string $filename)
+    public function tryLoadFromFile(string $filename)
     {
         $filename = realpath($filename);
         if (!isset(self::$_filesCache[$filename])) {
@@ -640,7 +640,7 @@ class HtmlTemplate implements \ArrayAccess
         }
 
         $str = preg_replace('~(?:\r\n?|\n)$~s', '', self::$_filesCache[$filename]); // always trim end NL
-        $this->loadTemplateFromString($str);
+        $this->loadFromString($str);
         $this->source = 'loaded from file: ' . $filename;
 
         return $this;
@@ -651,7 +651,7 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function loadTemplateFromString(string $str)
+    public function loadFromString(string $str)
     {
         $this->source = 'string: ' . $str;
         $this->template = [];

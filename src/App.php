@@ -557,28 +557,28 @@ class App
     /**
      * Load template by template file name.
      *
-     * @param string $name
+     * @param string $filename
      *
      * @return HtmlTemplate
      */
-    public function loadTemplate($name)
+    public function loadTemplate($filename)
     {
         $template = new $this->templateClass();
         $template->setApp($this);
 
-        if (in_array($name[0], ['.', '/', '\\'], true) || strpos($name, ':\\') !== false) {
-            return $template->load($name);
+        if (in_array($filename[0], ['.', '/', '\\'], true) || strpos($filename, ':\\') !== false) {
+            return $template->loadFromFile($filename);
         }
 
         $dir = is_array($this->template_dir) ? $this->template_dir : [$this->template_dir];
         foreach ($dir as $td) {
-            if ($t = $template->tryLoad($td . '/' . $name)) {
+            if ($t = $template->tryLoadFromFile($td . '/' . $filename)) {
                 return $t;
             }
         }
 
         throw (new Exception('Can not find template file'))
-            ->addMoreInfo('name', $name)
+            ->addMoreInfo('filename', $filename)
             ->addMoreInfo('template_dir', $this->template_dir);
     }
 
