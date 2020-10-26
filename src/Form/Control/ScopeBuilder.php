@@ -59,22 +59,19 @@ class ScopeBuilder extends Control
     public static $listDelimiters = [';', ','];
 
     /**
-     * The date options:
-     *     Any of flatpickr options. Will be applied globally within scopeBuilder;
+     * The date, time or datetime options:
+     *     Any of flatpickr options;
      *    'flatpickr' => [].
      *
-     *    Note on locale: ScopeBuilder will use default flatpickr locale.
-     *    In order to change default locale simply use Calendar::setLocale($app, 'fr');
-     *
-     *    Set input value to a default date.
-     *    'defaultDate' => ''
-     *
-     *    Display date, datetime or time to user in a different format.
-     *    'altDisplayFormat' => ['date' => 'M d, Y', 'datetime' => 'M d, Y H:i', 'time' => 'H:i']
+     *     When true, will init date, time or datetime to current.
+     *    'useDefault'
      *
      * @var array
      */
-    public $atkdDateOptions = [];
+    public $atkdDateOptions = [
+        'useDefault' => false,
+        'flatpickr' => []
+    ];
 
     /**
      * The scopebuilder View. Assigned in init().
@@ -357,6 +354,7 @@ class ScopeBuilder extends Control
         // setup proper options for Vue atkDatePicker
         if ($component === 'DatePicker') {
             $calendar = new Calendar();
+            $props = $this->atkdDateOptions['flatpickr'] ?? [];
             $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$type . '_format'});
             $props['dateFormat'] = $format;
 
@@ -367,7 +365,7 @@ class ScopeBuilder extends Control
                 $props['enableSeconds'] = $calendar->useSeconds($format);
             }
 
-            $props['defaultDate'] = $this->atkdDateOptions['defaultDate'] ?? null;
+            $props['defaultDate'] = $this->atkdDateOptions['useDefault'] ? (new \DateTime())->format($format) : null;
         }
 
         return $props;
