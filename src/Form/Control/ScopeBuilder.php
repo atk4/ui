@@ -340,14 +340,18 @@ class ScopeBuilder extends Control
             'options' => $this->options[strtolower((string) $type)] ?? [],
         ], $field->ui['scopebuilder'] ?? []), $field);
 
-        $rule['componentProps'] = $this->getRuleComponentProps($rule, $type ?? '');
+        $rule['componentProps'] = $this->getComponentProps($rule, $type ?? '');
 
         $this->rules[] = $rule;
 
         return $this;
     }
 
-    protected function getRuleComponentProps(array $rule, string $type): array
+    /**
+     * Some field type use specific Vue component for ui display.
+     * This will return component property (props) accordingly.
+     */
+    protected function getComponentProps(array $rule, string $type): array
     {
         $props = [];
         $component = $rule['component'] ?? null;
