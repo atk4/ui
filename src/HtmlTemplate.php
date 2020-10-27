@@ -575,7 +575,7 @@ class HtmlTemplate implements \ArrayAccess
         }
 
         foreach ($this->getTagRefs($tag) as $ref => &$vRef) {
-            $vRef = [(string) $fx($this->renderRegion($vRef), $tag . '#' . $ref)];
+            $vRef = [(string) $fx($this->renderRegionToHtml($vRef), $tag . '#' . $ref)];
         }
 
         return $this;
@@ -760,20 +760,20 @@ class HtmlTemplate implements \ArrayAccess
      * Render either a whole template or a specified region. Returns
      * current contents of a template.
      */
-    public function render(string $region = null): string
+    public function renderToHtml(string $region = null): string
     {
-        return $this->renderRegion($region !== null ? $this->get($region) : $this->template);
+        return $this->renderRegionToHtml($region !== null ? $this->get($region) : $this->template);
     }
 
     /**
      * Walk through the template array collecting the values
      * and returning them as a string.
      */
-    protected function renderRegion(array $template): string
+    protected function renderRegionToHtml(array $template): string
     {
         $res = [];
         foreach ($template as $val) {
-            $res[] = is_array($val) ? $this->renderRegion($val) : $val;
+            $res[] = is_array($val) ? $this->renderRegionToHtml($val) : $val;
         }
 
         return implode('', $res);

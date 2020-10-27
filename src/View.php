@@ -660,7 +660,7 @@ class View extends AbstractView implements JsExpressionable
      */
     protected function renderTemplateToHtml(string $region = null): string
     {
-        return $this->template->render($region);
+        return $this->template->renderToHtml($region);
     }
 
     /**

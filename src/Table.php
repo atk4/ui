@@ -483,13 +483,13 @@ class Table extends Lister
         // Generate Header Row
         if ($this->header) {
             $this->t_head->dangerouslySetHtml('cells', $this->getHeaderRowHtml());
-            $this->template->dangerouslySetHtml('Head', $this->t_head->render());
+            $this->template->dangerouslySetHtml('Head', $this->t_head->renderToHtml());
         }
 
         // Generate template for data row
         $this->t_row_master->dangerouslySetHtml('cells', $this->getDataRowHtml());
         $this->t_row_master['_id'] = '{$_id}';
-        $this->t_row = new HtmlTemplate($this->t_row_master->render());
+        $this->t_row = new HtmlTemplate($this->t_row_master->renderToHtml());
         $this->t_row->setApp($this->getApp());
 
         // Iterate data rows
@@ -525,11 +525,11 @@ class Table extends Lister
         // Add totals rows or empty message
         if (!$this->_rendered_rows_count) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
-                $this->template->dangerouslyAppendHtml('Body', $this->t_empty->render());
+                $this->template->dangerouslyAppendHtml('Body', $this->t_empty->renderToHtml());
             }
         } elseif ($this->totals_plan) {
             $this->t_totals->dangerouslySetHtml('cells', $this->getTotalsRowHtml());
-            $this->template->dangerouslyAppendHtml('Foot', $this->t_totals->render());
+            $this->template->dangerouslyAppendHtml('Foot', $this->t_totals->renderToHtml());
         }
 
         // stop JsPaginator if there are no more records to fetch
@@ -574,10 +574,10 @@ class Table extends Lister
             // Render row and add to body
             $this->t_row->dangerouslySetHtml($html_tags);
             $this->t_row->set('_id', $this->model->getId());
-            $this->template->dangerouslyAppendHtml('Body', $this->t_row->render());
+            $this->template->dangerouslyAppendHtml('Body', $this->t_row->renderToHtml());
             $this->t_row->del(array_keys($html_tags));
         } else {
-            $this->template->dangerouslyAppendHtml('Body', $this->t_row->render());
+            $this->template->dangerouslyAppendHtml('Body', $this->t_row->renderToHtml());
         }
     }
 

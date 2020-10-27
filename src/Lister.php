@@ -167,7 +167,7 @@ class Lister extends View
         // empty message
         if (!$this->_rendered_rows_count) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
-                $empty = isset($this->t_empty) ? $this->t_empty->render() : '';
+                $empty = isset($this->t_empty) ? $this->t_empty->renderToHtml() : '';
                 if ($this->template->hasTag('rows')) {
                     $this->template->dangerouslyAppendHtml('rows', $empty);
                 } else {
@@ -196,7 +196,7 @@ class Lister extends View
         $this->t_row->trySet('_href', $this->url(['id' => $this->current_row->getId()]));
         $this->t_row->trySet('_id', $this->current_row->getId());
 
-        $html = $this->t_row->render();
+        $html = $this->t_row->renderToHtml();
         if ($this->template->hasTag('rows')) {
             $this->template->dangerouslyAppendHtml('rows', $html);
         } else {

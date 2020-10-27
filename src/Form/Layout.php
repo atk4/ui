@@ -168,7 +168,7 @@ class Layout extends AbstractLayout
                 }
                 $template->dangerouslySetHtml('Content', $element->getHtml());
 
-                $this->template->dangerouslyAppendHtml('Content', $template->render());
+                $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
 
                 continue;
             }
@@ -226,9 +226,9 @@ class Layout extends AbstractLayout
             }
 
             if ($this->template->hasTag($element->short_name)) {
-                $this->template->tryDangerouslySetHtml($element->short_name, $template->render());
+                $this->template->tryDangerouslySetHtml($element->short_name, $template->renderToHtml());
             } else {
-                $this->template->dangerouslyAppendHtml('Content', $template->render());
+                $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
             }
         }
 

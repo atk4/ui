@@ -18,7 +18,7 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
         $t = new HtmlTemplate('hello, {foo}world{/}');
         $t['foo'] = 'bar';
 
-        $this->assertSame('hello, bar', $t->render());
+        $this->assertSame('hello, bar', $t->renderToHtml());
     }
 
     /**
@@ -149,10 +149,10 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
         // del tests
         $t->set('foo', 'Hello');
         $t->del('foo');
-        $this->assertSame(' guys', $t->render());
+        $this->assertSame(' guys', $t->renderToHtml());
         $t->set('foo', 'Hello');
         $t->tryDel('qwe'); // non existent tag, ignores
-        $this->assertSame('Hello guys', $t->render());
+        $this->assertSame('Hello guys', $t->renderToHtml());
 
         // set and append tests
         $t->set('foo', 'Hello');
@@ -168,7 +168,7 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
         $t->tryDangerouslyAppendHtml('foo', ' and <b>smart</b>'); // appends html
         $t->tryDangerouslyAppendHtml('qwe', '<b>ignore</b> this'); // ignores
 
-        $this->assertSame('<b>Hi</b> and <b>welcome</b> my dear and <b>smart</b> guys', $t->render());
+        $this->assertSame('<b>Hi</b> and <b>welcome</b> my dear and <b>smart</b> guys', $t->renderToHtml());
     }
 
     /**
@@ -202,14 +202,14 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
                 return strtoupper($value);
             });
         }
-        $this->assertSame('HELLO, cruel WORLD. WELCOME', $t->render());
+        $this->assertSame('HELLO, cruel WORLD. WELCOME', $t->renderToHtml());
 
         // tag contains all template (for example in Lister)
         $t = new HtmlTemplate('{foo}hello{/}');
         $t->eachTag('foo', function ($value, $tag) {
             return strtoupper($value);
         });
-        $this->assertSame('HELLO', $t->render());
+        $this->assertSame('HELLO', $t->renderToHtml());
     }
 
     /**
@@ -221,11 +221,11 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
 
         // clone only {foo} region
         $t1 = $t->cloneRegion('foo');
-        $this->assertSame('hello', $t1->render());
+        $this->assertSame('hello', $t1->renderToHtml());
 
         // clone all template
         $t1 = $t->cloneRegion('_top');
-        $this->assertSame('hello guys', $t1->render());
+        $this->assertSame('hello guys', $t1->renderToHtml());
     }
 
     /**
@@ -244,7 +244,7 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
     public function testRenderRegion()
     {
         $t = new HtmlTemplate('{foo}hello{/} guys');
-        $this->assertSame('hello', $t->render('foo'));
+        $this->assertSame('hello', $t->renderToHtml('foo'));
     }
 
     public function testDollarTags()
@@ -254,6 +254,6 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
             'foo' => 'Hello',
             'bar' => 'welcome',
         ]);
-        $this->assertSame('Hello guys and welcome here', $t->render());
+        $this->assertSame('Hello guys and welcome here', $t->renderToHtml());
     }
 }

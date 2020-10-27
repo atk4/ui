@@ -399,7 +399,7 @@ class App
         if ($output instanceof View) {
             $output = $output->render();
         } elseif ($output instanceof HtmlTemplate) {
-            $output = $output->render();
+            $output = $output->renderToHtml();
         }
 
         $this->terminate(
@@ -527,7 +527,7 @@ class App
                 throw new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.');
             }
 
-            $output = $this->html->template->render();
+            $output = $this->html->template->renderToHtml();
         } catch (ExitApplicationException $e) {
             $output = '';
             $isExitException = true;

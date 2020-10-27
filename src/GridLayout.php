@@ -83,13 +83,13 @@ class GridLayout extends View
             for ($col = 1; $col <= $this->columns; ++$col) {
                 $this->t_col->set('Content', '{$r' . $row . 'c' . $col . '}');
 
-                $this->t_row->dangerouslyAppendHtml('column', $this->t_col->render());
+                $this->t_row->dangerouslyAppendHtml('column', $this->t_col->renderToHtml());
             }
 
-            $this->t_wrap->dangerouslyAppendHtml('rows', $this->t_row->render());
+            $this->t_wrap->dangerouslyAppendHtml('rows', $this->t_row->renderToHtml());
         }
         $this->t_wrap->dangerouslyAppendHtml('rows', '{/rows}');
-        $tmp = new HtmlTemplate($this->t_wrap->render());
+        $tmp = new HtmlTemplate($this->t_wrap->renderToHtml());
 
         // TODO replace later, the only use of direct template property access
         $t = $this;

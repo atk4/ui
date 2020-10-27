@@ -32,7 +32,7 @@ The following code will initialize template inside a PHP code::
 
     $t = new Template('Hello, {mytag}world{/}');
 
-Once template is initialized you can `render()` it any-time to get string
+Once template is initialized you can `renderToHtml()` it any-time to get string
 "Hello, world". You can also change tag value::
 
     $t->set('mytag', 'Agile UI');
@@ -41,7 +41,7 @@ Once template is initialized you can `render()` it any-time to get string
 
     $t['mytag'] = 'Agile UI';
 
-    echo $t->render();  // "Hello, Agile UI".
+    echo $t->renderToHtml();  // "Hello, Agile UI".
 
 Tags may also be self-closing::
 
@@ -76,10 +76,10 @@ There are some operations you can do with a region, such as::
     $main_template->del('Content');
 
     $content->set(['user'=>'Joe', 'amount'=>100]);
-    $main_template->append('Content', $content->render());
+    $main_template->append('Content', $content->renderToHtml());
 
     $content->set(['user'=>'Billy', 'amount'=>50]);
-    $main_template->append('Content', $content->render());
+    $main_template->append('Content', $content->renderToHtml());
 
 Usage in Agile UI
 -----------------
@@ -94,7 +94,7 @@ engine directly, but you would be able to use it through views::
     $lister = new Lister($v, 'Content');
     $lister->setModel($userlist);
 
-    echo $v->render();
+    echo $v->renderToHtml();
 
 The code above will work like this:
 
@@ -199,7 +199,7 @@ if you require so. A typical workflow would be:
    :php:meth:`GiTemplate::loadFromString`.
 
 2. Set tag and region values with :php:meth:`GiTemplate::set`.
-3. Render template with :php:meth:`GiTemplate::render`.
+3. Render template with :php:meth:`GiTemplate::renderToHtml`.
 
 
 Template use together with Views
@@ -342,7 +342,7 @@ Example::
     $template->set('name', 'John');
     $template->dangerouslyAppendHtml('name', '&nbsp;<i class="icon-heart"></i>');
 
-    echo $template->render();
+    echo $template->renderToHtml();
 
 
 Using ArrayAccess with Templates
@@ -360,14 +360,14 @@ You may use template object as array for simplified syntax::
 Rendering template
 ------------------
 
-.. php:method:: render
+.. php:method:: renderToHtml
 
     Converts template into one string by removing tag markers.
 
 Ultimately we want to convert template into something useful. Rendering
 will return contents of the template without tags::
 
-    $result=$template->render();
+    $result=$template->renderToHtml();
 
     \atk4\ui\Text::addTo($this)->set($result);
     // Will output "Hello, World"
@@ -413,11 +413,11 @@ You can use the following code to manipulate the template above::
     $recipient ->set($recipient_data);
 
     // render sub-templates, insert into master template
-    $template->set('Sender',    $sender   ->render());
-    $template->set('Recipient', $recipient->render());
+    $template->set('Sender',    $sender   ->renderToHtml());
+    $template->set('Recipient', $recipient->renderToHtml());
 
     // get final result
-    $result=$template->render();
+    $result=$template->renderToHtml();
 
 Same thing using Agile Toolkit Views::
 
@@ -436,7 +436,7 @@ from regions of $envelope and then substituted back after render.
 In this example I've usd a basic :php:class:`View` class, however I could
 have used my own View object with some more sophisticated presentation logic.
 The only affect on the example would be name of the class, the rest of
-presentation logic would be abstracted inside view's ``render()`` method.
+presentation logic would be abstracted inside view's ``renderToHtml()`` method.
 
 Other operations with tags
 --------------------------
@@ -494,7 +494,7 @@ your template::
     $template->eachTag('include', function($content, $tag) use($template) {
         $t = $template->newInstance();
         $t->loadFromFile($content);
-        $template->set($tag, $t->render());
+        $template->set($tag, $t->renderToHtml());
     });
 
 See also: :ref:`templates and views`
@@ -582,7 +582,7 @@ How views render themselves
 ---------------------------
 
 Agile Toolkit perform object initialization first. When all the objects
-are initialized global rendering takes place. Each object's ``render()``
+are initialized global rendering takes place. Each object's ``renderToHtml()``
 method is executed in order. The job of each view is to create output
 based on it's template and then insert it into the region of owner's
 template. It's actually quite similar to our Sender/Recipient example
@@ -720,7 +720,7 @@ Property tags would contain::
 As a result each tag will be stored under it's actual name and the name with
 unique "#1" appended (in case there are multiple instances of same tag).
 This allow ``$smlite->get()`` to quickly retrieve contents of
-appropriate tag and it will also allow ``render()`` to reconstruct the
+appropriate tag and it will also allow ``renderToHtml()`` to reconstruct the
 output efficiently.
 
 

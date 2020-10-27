@@ -155,7 +155,7 @@ class VirtualPage extends View
             $this->getApp()->layout->template->dangerouslySetHtml('Content', parent::getHtml());
             $this->getApp()->layout->_js_actions = array_merge($this->getApp()->layout->_js_actions, $this->_js_actions);
 
-            $this->getApp()->html->template->dangerouslySetHtml('Content', $this->getApp()->layout->template->render());
+            $this->getApp()->html->template->dangerouslySetHtml('Content', $this->getApp()->layout->template->renderToHtml());
             $this->getApp()->html->template->dangerouslySetHtml('Modals', $modalHtml);
 
             $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getApp()->layout->getJs());
