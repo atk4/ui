@@ -75,11 +75,11 @@ There are some operations you can do with a region, such as::
 
     $main_template->del('Content');
 
-    $content->set(['user'=>'Joe', 'amount'=>100]);
-    $main_template->append('Content', $content->renderToHtml());
+    $content->set(['user' => 'Joe', 'amount' => 100]);
+    $main_template->dangerouslyAppendHtml('Content', $content->renderToHtml());
 
-    $content->set(['user'=>'Billy', 'amount'=>50]);
-    $main_template->append('Content', $content->renderToHtml());
+    $content->set(['user' => 'Billy', 'amount' => 50]);
+    $main_template->dangerouslyAppendHtml('Content', $content->renderToHtml());
 
 Usage in Agile UI
 -----------------
@@ -367,7 +367,7 @@ Rendering template
 Ultimately we want to convert template into something useful. Rendering
 will return contents of the template without tags::
 
-    $result=$template->renderToHtml();
+    $result = $template->renderToHtml();
 
     \atk4\ui\Text::addTo($this)->set($result);
     // Will output "Hello, World"
@@ -413,15 +413,15 @@ You can use the following code to manipulate the template above::
     $recipient ->set($recipient_data);
 
     // render sub-templates, insert into master template
-    $template->set('Sender',    $sender   ->renderToHtml());
-    $template->set('Recipient', $recipient->renderToHtml());
+    $template->dangerouslySetHtml('Sender',    $sender   ->renderToHtml());
+    $template->dangerouslySetHtml('Recipient', $recipient->renderToHtml());
 
     // get final result
-    $result=$template->renderToHtml();
+    $result = $template->renderToHtml();
 
 Same thing using Agile Toolkit Views::
 
-    $envelope = \atk4\ui\View::addTo($this, [], [null],null, ['envelope']);
+    $envelope = \atk4\ui\View::addTo($this, [], [null], null, ['envelope']);
 
     $sender    = \atk4\ui\View::addTo($envelope, [], [null], 'Sender',    'Sender');
     $recipient = \atk4\ui\View::addTo($envelope, [], [null], 'Recipient', 'Recipient');
@@ -465,8 +465,8 @@ Agile Toolkit template engine allows you to use same tag several times::
     Roses are {color}red{/}
     Violets are {color}blue{/}
 
-If you execute ``set('color','green')`` then contents of both tags will
-be affected. Similarly if you call ``append('color','-ish')`` then the
+If you execute ``set('color', 'green')`` then contents of both tags will
+be affected. Similarly if you call ``append('color', '-ish')`` then the
 text will be appended to both tags.
 
 You can also use ``eachTag()`` to iterate through those tags.
@@ -494,7 +494,7 @@ your template::
     $template->eachTag('include', function($content, $tag) use($template) {
         $t = $template->newInstance();
         $t->loadFromFile($content);
-        $template->set($tag, $t->renderToHtml());
+        $template->dangerouslySetHtml($tag, $t->renderToHtml());
     });
 
 See also: :ref:`templates and views`
@@ -514,7 +514,7 @@ Consider this example::
 
 This will only show text "e-mail" and email address if email tag value is
 set to not empty value. Same for "phone" tag.
-So if you execute ``set('email',null)`` and ``set('phone',123)`` then this
+So if you execute ``set('email', null)`` and ``set('phone', 123)`` then this
 template will automatically render as::
 
     My  phone 123.
@@ -570,7 +570,7 @@ Template is available by the time ``init()`` is called and you can
 access it from inside the object or from outside through "template"
 property::
 
-    $grid=\atk4\ui\Grid::addTo($this, [], [null],null,array('grid_with_hint'));
+    $grid = \atk4\ui\Grid::addTo($this, [], [null], null, array('grid_with_hint'));
     $grid->template->trySet('my_hint', 'Changing value of a grid hint here!');
 
 In this example we have instructed to use a different template for grid,
@@ -596,11 +596,11 @@ implemented using generic views.
 
 ::
 
-    $envelope=\atk4\ui\View::addTo($this, [], [null],null,array('envelope'));
+    $envelope = \atk4\ui\View::addTo($this, [], [null], null, array('envelope'));
 
     // 3rd argument is output region, 4th is template location
-    $sender=\atk4\ui\View::addTo($envelope, [], [null],'Sender','Sender');
-    $receiver=\atk4\ui\View::addTo($envelope, [], [null],'Receiver','Receiver');
+    $sender = \atk4\ui\View::addTo($envelope, [], [null], 'Sender', 'Sender');
+    $receiver = \atk4\ui\View::addTo($envelope, [], [null], 'Receiver', 'Receiver');
 
     $sender->template->trySet($sender_data);
     $receiver->template->trySet($receiver_data);
@@ -713,8 +713,8 @@ under ``$template->template`::
 Property tags would contain::
 
     array (
-      'subject'=> array( &array ),
-      'subject#0'=> array( &array )
+      'subject#0' => array( &array ),
+      'subject#1' => array( &array )
     )
 
 As a result each tag will be stored under it's actual name and the name with

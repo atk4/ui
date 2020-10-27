@@ -293,7 +293,7 @@ class HtmlTemplate implements \ArrayAccess
      */
     public function set($tag, $value = null)
     {
-        if (func_num_args() > 2) { // remove in v2.6
+        if (func_num_args() > 2) { // remove in v2.5
             throw new \Error('3rd param $encode is no longer supported, use dangerouslySetHtml method instead');
         }
 
@@ -313,7 +313,7 @@ class HtmlTemplate implements \ArrayAccess
      */
     public function trySet($tag, $value = null)
     {
-        if (func_num_args() > 2) { // remove in v2.6
+        if (func_num_args() > 2) { // remove in v2.5
             throw new \Error('3rd param $encode is no longer supported, use tryDangerouslySetHtml method instead');
         }
 
@@ -364,7 +364,7 @@ class HtmlTemplate implements \ArrayAccess
      */
     public function append($tag, $value)
     {
-        if (func_num_args() > 2) { // remove in v2.6
+        if (func_num_args() > 2) { // remove in v2.5
             throw new \Error('3rd param $encode is no longer supported, use dangerouslyAppendHtml method instead');
         }
 
@@ -384,7 +384,7 @@ class HtmlTemplate implements \ArrayAccess
      */
     public function tryAppend($tag, $value)
     {
-        if (func_num_args() > 2) { // remove in v2.6
+        if (func_num_args() > 2) { // remove in v2.5
             throw new \Error('3rd param $encode is no longer supported, use tryDangerouslyAppendHtml method instead');
         }
 
@@ -426,7 +426,7 @@ class HtmlTemplate implements \ArrayAccess
     }
 
     /**
-     * @deprecated use "dangerouslySetHtml" method instead - will be removed in v2.6
+     * @deprecated use "dangerouslySetHtml" method instead - will be removed in v2.5
      */
     public function setHtml($tag, $value = null)
     {
@@ -436,7 +436,7 @@ class HtmlTemplate implements \ArrayAccess
     }
 
     /**
-     * @deprecated use "tryDangerouslySetHtml" method instead - will be removed in v2.6
+     * @deprecated use "tryDangerouslySetHtml" method instead - will be removed in v2.5
      */
     public function trySetHtml($tag, $value = null)
     {
@@ -446,7 +446,7 @@ class HtmlTemplate implements \ArrayAccess
     }
 
     /**
-     * @deprecated use "dangerouslyAppendHtml" method instead - will be removed in v2.6
+     * @deprecated use "dangerouslyAppendHtml" method instead - will be removed in v2.5
      */
     public function appendHtml($tag, $value)
     {
@@ -456,7 +456,7 @@ class HtmlTemplate implements \ArrayAccess
     }
 
     /**
-     * @deprecated use "tryDangerouslyAppendHtml" method instead - will be removed in v2.6
+     * @deprecated use "tryDangerouslyAppendHtml" method instead - will be removed in v2.5
      */
     public function tryAppendHtml($tag, $value)
     {
