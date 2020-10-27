@@ -466,6 +466,46 @@ class HtmlTemplate implements \ArrayAccess
     }
 
     /**
+     * @deprecated use "loadFromFile" method instead - will be removed in v2.5
+     */
+    public function load(string $filename)
+    {
+        'trigger_error'('Method is deprecated. Use loadFromFile instead', E_USER_DEPRECATED);
+
+        return $this->loadFromFile($filename);
+    }
+
+    /**
+     * @deprecated use "tryLoadFromFile" method instead - will be removed in v2.5
+     */
+    public function tryLoad(string $filename)
+    {
+        'trigger_error'('Method is deprecated. Use tryLoadFromFile instead', E_USER_DEPRECATED);
+
+        return $this->tryLoadFromFile($filename);
+    }
+
+    /**
+     * @deprecated use "loadFromString" method instead - will be removed in v2.5
+     */
+    public function loadTemplateFromString(string $template = '')
+    {
+        'trigger_error'('Method is deprecated. Use loadFromString instead', E_USER_DEPRECATED);
+
+        return $this->loadFromString($template);
+    }
+
+    /**
+     * @deprecated use "renderToHtml" method instead - will be removed in v2.5
+     */
+    public function render(string $region = null)
+    {
+        'trigger_error'('Method is deprecated. Use renderToHtml instead', E_USER_DEPRECATED);
+
+        return $this->renderToHtml($region);
+    }
+
+    /**
      * Get value of the tag. Note that this may contain an array
      * if tag contains a structure.
      */
