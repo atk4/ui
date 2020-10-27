@@ -265,7 +265,7 @@ class App
         $this->html = null;
         $this->initLayout([Layout\Centered::class]);
 
-        $this->layout->template->setHtml('Content', $this->renderExceptionHtml($exception));
+        $this->layout->template->dangerouslySetHtml('Content', $this->renderExceptionHtml($exception));
 
         // remove header
         $this->layout->template->tryDel('Header');
@@ -399,7 +399,7 @@ class App
         if ($output instanceof View) {
             $output = $output->render();
         } elseif ($output instanceof HtmlTemplate) {
-            $output = $output->render();
+            $output = $output->renderToHtml();
         }
 
         $this->terminate(
@@ -465,7 +465,10 @@ class App
         $this->requireCss($this->cdn['atk'] . '/agileui.css');
 
         // Set js bundle dynamic loading path.
-        $this->html->template->trySet('InitJsBundle', (new JsExpression('window.__atkBundlePublicPath = [];', [$this->cdn['atk']]))->jsRender(), false);
+        $this->html->template->tryDangerouslySetHtml(
+            'InitJsBundle',
+            (new JsExpression('window.__atkBundlePublicPath = [];', [$this->cdn['atk']]))->jsRender()
+        );
     }
 
     /**
@@ -479,7 +482,7 @@ class App
         if (!$this->html) {
             throw new Exception('App does not know how to add style');
         }
-        $this->html->template->appendHtml('HEAD', $this->getTag('style', $style));
+        $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('style', $style));
     }
 
     /**
@@ -516,7 +519,7 @@ class App
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->appendHtml('HEAD', $this->html->getJs());
+            $this->html->template->dangerouslyAppendHtml('HEAD', $this->html->getJs());
             $this->is_rendering = false;
             $this->hook(self::HOOK_BEFORE_OUTPUT);
 
@@ -524,7 +527,7 @@ class App
                 throw new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.');
             }
 
-            $output = $this->html->template->render();
+            $output = $this->html->template->renderToHtml();
         } catch (ExitApplicationException $e) {
             $output = '';
             $isExitException = true;
@@ -554,28 +557,28 @@ class App
     /**
      * Load template by template file name.
      *
-     * @param string $name
+     * @param string $filename
      *
      * @return HtmlTemplate
      */
-    public function loadTemplate($name)
+    public function loadTemplate($filename)
     {
         $template = new $this->templateClass();
         $template->setApp($this);
 
-        if (in_array($name[0], ['.', '/', '\\'], true) || strpos($name, ':\\') !== false) {
-            return $template->load($name);
+        if (in_array($filename[0], ['.', '/', '\\'], true) || strpos($filename, ':\\') !== false) {
+            return $template->loadFromFile($filename);
         }
 
         $dir = is_array($this->template_dir) ? $this->template_dir : [$this->template_dir];
         foreach ($dir as $td) {
-            if ($t = $template->tryLoad($td . '/' . $name)) {
+            if ($t = $template->tryLoadFromFile($td . '/' . $filename)) {
                 return $t;
             }
         }
 
         throw (new Exception('Can not find template file'))
-            ->addMoreInfo('name', $name)
+            ->addMoreInfo('filename', $filename)
             ->addMoreInfo('template_dir', $this->template_dir);
     }
 
@@ -715,7 +718,7 @@ class App
      */
     public function requireJs($url, $isAsync = false, $isDefer = false)
     {
-        $this->html->template->appendHtml('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '') . "\n");
+        $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '') . "\n");
 
         return $this;
     }
@@ -729,7 +732,7 @@ class App
      */
     public function requireCss($url)
     {
-        $this->html->template->appendHtml('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]) . "\n");
+        $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]) . "\n");
 
         return $this;
     }
@@ -968,7 +971,7 @@ class App
      *
      *   $app = new \atk4\ui\App();
      *   $app->initLayout([\atk4\ui\Layout\Centered::class]);
-     *   $app->layout->template->setHtml('Content', $e->getHtml());
+     *   $app->layout->template->dangerouslySetHtml('Content', $e->getHtml());
      *   $app->run();
      *   $app->callExit(true);
      */

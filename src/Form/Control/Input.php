@@ -231,7 +231,7 @@ class Input extends Form\Control
         }
 
         // set template
-        $this->template->setHtml('Input', $this->getInput());
+        $this->template->dangerouslySetHtml('Input', $this->getInput());
         $this->content = null;
 
         parent::renderView();

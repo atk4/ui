@@ -56,7 +56,7 @@ class HtmlTemplate implements \ArrayAccess
 
     public function __construct(string $template = '')
     {
-        $this->loadTemplateFromString($template);
+        $this->loadFromString($template);
     }
 
     private function exceptionAddMoreInfo(Exception $e): Exception
@@ -288,13 +288,16 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @param string|array|Model $tag
      * @param string             $value
-     * @param bool               $encode Should we HTML encode content
      *
      * @return $this
      */
-    public function set($tag, $value = null, $encode = true)
+    public function set($tag, $value = null)
     {
-        $this->_setOrAppend($tag, $value, $encode, false, true);
+        if (func_num_args() > 2) { // remove in v2.5
+            throw new \Error('3rd param $encode is no longer supported, use dangerouslySetHtml method instead');
+        }
+
+        $this->_setOrAppend($tag, $value, true, false, true);
 
         return $this;
     }
@@ -308,9 +311,13 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function trySet($tag, $value = null, bool $encode = true)
+    public function trySet($tag, $value = null)
     {
-        $this->_setOrAppend($tag, $value, $encode, false, false);
+        if (func_num_args() > 2) { // remove in v2.5
+            throw new \Error('3rd param $encode is no longer supported, use tryDangerouslySetHtml method instead');
+        }
+
+        $this->_setOrAppend($tag, $value, true, false, false);
 
         return $this;
     }
@@ -324,7 +331,7 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function setHtml($tag, $value = null)
+    public function dangerouslySetHtml($tag, $value = null)
     {
         $this->_setOrAppend($tag, $value, false, false, true);
 
@@ -332,7 +339,7 @@ class HtmlTemplate implements \ArrayAccess
     }
 
     /**
-     * See setHtml() but won't generate exception for non-existing
+     * See dangerouslySetHtml() but won't generate exception for non-existing
      * $tag.
      *
      * @param string|array|Model $tag
@@ -340,7 +347,7 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function trySetHtml($tag, $value = null)
+    public function tryDangerouslySetHtml($tag, $value = null)
     {
         $this->_setOrAppend($tag, $value, false, false, false);
 
@@ -355,9 +362,13 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function append($tag, $value, bool $encode = true)
+    public function append($tag, $value)
     {
-        $this->_setOrAppend($tag, $value, $encode, true, true);
+        if (func_num_args() > 2) { // remove in v2.5
+            throw new \Error('3rd param $encode is no longer supported, use dangerouslyAppendHtml method instead');
+        }
+
+        $this->_setOrAppend($tag, $value, true, true, true);
 
         return $this;
     }
@@ -371,9 +382,13 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function tryAppend($tag, $value, bool $encode = true)
+    public function tryAppend($tag, $value)
     {
-        $this->_setOrAppend($tag, $value, $encode, true, false);
+        if (func_num_args() > 2) { // remove in v2.5
+            throw new \Error('3rd param $encode is no longer supported, use tryDangerouslyAppendHtml method instead');
+        }
+
+        $this->_setOrAppend($tag, $value, true, true, false);
 
         return $this;
     }
@@ -387,7 +402,7 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function appendHtml($tag, $value)
+    public function dangerouslyAppendHtml($tag, $value)
     {
         $this->_setOrAppend($tag, $value, false, true, true);
 
@@ -395,7 +410,7 @@ class HtmlTemplate implements \ArrayAccess
     }
 
     /**
-     * Same as append(), but won't generate exception for non-existing
+     * Same as dangerouslyAppendHtml(), but won't generate exception for non-existing
      * $tag.
      *
      * @param string|array|Model $tag
@@ -403,11 +418,91 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function tryAppendHtml($tag, $value)
+    public function tryDangerouslyAppendHtml($tag, $value)
     {
         $this->_setOrAppend($tag, $value, false, true, false);
 
         return $this;
+    }
+
+    /**
+     * @deprecated use "dangerouslySetHtml" method instead - will be removed in v2.5
+     */
+    public function setHtml($tag, $value = null)
+    {
+        'trigger_error'('Method is deprecated. Use dangerouslySetHtml instead', E_USER_DEPRECATED);
+
+        return $this->dangerouslySetHtml($tag, $value);
+    }
+
+    /**
+     * @deprecated use "tryDangerouslySetHtml" method instead - will be removed in v2.5
+     */
+    public function trySetHtml($tag, $value = null)
+    {
+        'trigger_error'('Method is deprecated. Use tryDangerouslySetHtml instead', E_USER_DEPRECATED);
+
+        return $this->tryDangerouslySetHtml($tag, $value);
+    }
+
+    /**
+     * @deprecated use "dangerouslyAppendHtml" method instead - will be removed in v2.5
+     */
+    public function appendHtml($tag, $value)
+    {
+        'trigger_error'('Method is deprecated. Use dangerouslyAppendHtml instead', E_USER_DEPRECATED);
+
+        return $this->dangerouslyAppendHtml($tag, $value);
+    }
+
+    /**
+     * @deprecated use "tryDangerouslyAppendHtml" method instead - will be removed in v2.5
+     */
+    public function tryAppendHtml($tag, $value)
+    {
+        'trigger_error'('Method is deprecated. Use tryDangerouslyAppendHtml instead', E_USER_DEPRECATED);
+
+        return $this->tryDangerouslyAppendHtml($tag, $value);
+    }
+
+    /**
+     * @deprecated use "loadFromFile" method instead - will be removed in v2.5
+     */
+    public function load(string $filename)
+    {
+        'trigger_error'('Method is deprecated. Use loadFromFile instead', E_USER_DEPRECATED);
+
+        return $this->loadFromFile($filename);
+    }
+
+    /**
+     * @deprecated use "tryLoadFromFile" method instead - will be removed in v2.5
+     */
+    public function tryLoad(string $filename)
+    {
+        'trigger_error'('Method is deprecated. Use tryLoadFromFile instead', E_USER_DEPRECATED);
+
+        return $this->tryLoadFromFile($filename);
+    }
+
+    /**
+     * @deprecated use "loadFromString" method instead - will be removed in v2.5
+     */
+    public function loadTemplateFromString(string $template = '')
+    {
+        'trigger_error'('Method is deprecated. Use loadFromString instead', E_USER_DEPRECATED);
+
+        return $this->loadFromString($template);
+    }
+
+    /**
+     * @deprecated use "renderToHtml" method instead - will be removed in v2.5
+     */
+    public function render(string $region = null)
+    {
+        'trigger_error'('Method is deprecated. Use renderToHtml instead', E_USER_DEPRECATED);
+
+        return $this->renderToHtml($region);
     }
 
     /**
@@ -442,7 +537,7 @@ class HtmlTemplate implements \ArrayAccess
         }
 
         if ($tag === self::TOP_TAG) {
-            $this->loadTemplateFromString('');
+            $this->loadFromString('');
         } else {
             $template = $this->getTagRefs($tag);
             foreach ($template as &$ref) {
@@ -520,7 +615,7 @@ class HtmlTemplate implements \ArrayAccess
         }
 
         foreach ($this->getTagRefs($tag) as $ref => &$vRef) {
-            $vRef = [(string) $fx($this->renderRegion($vRef), $tag . '#' . $ref)];
+            $vRef = [(string) $fx($this->renderRegionToHtml($vRef), $tag . '#' . $ref)];
         }
 
         return $this;
@@ -558,14 +653,14 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function load(string $filename)
+    public function loadFromFile(string $filename)
     {
-        if ($this->tryLoad($filename) !== false) {
+        if ($this->tryLoadFromFile($filename) !== false) {
             return $this;
         }
 
         throw (new Exception('Unable to read template from file'))
-            ->addMoreInfo('file', $filename);
+            ->addMoreInfo('filename', $filename);
     }
 
     /**
@@ -573,7 +668,7 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this|false
      */
-    public function tryLoad(string $filename)
+    public function tryLoadFromFile(string $filename)
     {
         $filename = realpath($filename);
         if (!isset(self::$_filesCache[$filename])) {
@@ -585,7 +680,7 @@ class HtmlTemplate implements \ArrayAccess
         }
 
         $str = preg_replace('~(?:\r\n?|\n)$~s', '', self::$_filesCache[$filename]); // always trim end NL
-        $this->loadTemplateFromString($str);
+        $this->loadFromString($str);
         $this->source = 'loaded from file: ' . $filename;
 
         return $this;
@@ -596,7 +691,7 @@ class HtmlTemplate implements \ArrayAccess
      *
      * @return $this
      */
-    public function loadTemplateFromString(string $str)
+    public function loadFromString(string $str)
     {
         $this->source = 'string: ' . $str;
         $this->template = [];
@@ -705,20 +800,20 @@ class HtmlTemplate implements \ArrayAccess
      * Render either a whole template or a specified region. Returns
      * current contents of a template.
      */
-    public function render(string $region = null): string
+    public function renderToHtml(string $region = null): string
     {
-        return $this->renderRegion($region !== null ? $this->get($region) : $this->template);
+        return $this->renderRegionToHtml($region !== null ? $this->get($region) : $this->template);
     }
 
     /**
      * Walk through the template array collecting the values
      * and returning them as a string.
      */
-    protected function renderRegion(array $template): string
+    protected function renderRegionToHtml(array $template): string
     {
         $res = [];
         foreach ($template as $val) {
-            $res[] = is_array($val) ? $this->renderRegion($val) : $val;
+            $res[] = is_array($val) ? $this->renderRegionToHtml($val) : $val;
         }
 
         return implode('', $res);

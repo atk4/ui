@@ -610,7 +610,7 @@ class View extends AbstractView implements JsExpressionable
             foreach ($this->attr as $attr => $val) {
                 $tmp[] = $attr . '="' . $this->getApp()->encodeAttribute($val) . '"';
             }
-            $this->template->setHtml('attributes', implode(' ', $tmp));
+            $this->template->dangerouslySetHtml('attributes', implode(' ', $tmp));
         }
     }
 
@@ -625,7 +625,7 @@ class View extends AbstractView implements JsExpressionable
                 continue;
             }
 
-            $this->template->appendHtml($view->region, $view->getHtml());
+            $this->template->dangerouslyAppendHtml($view->region, $view->getHtml());
 
             if ($view->_js_actions) {
                 $this->_js_actions = array_merge_recursive($this->_js_actions, $view->_js_actions);
@@ -660,7 +660,7 @@ class View extends AbstractView implements JsExpressionable
      */
     protected function renderTemplateToHtml(string $region = null): string
     {
-        return $this->template->render($region);
+        return $this->template->renderToHtml($region);
     }
 
     /**

@@ -84,9 +84,9 @@ class Multiformat extends Table\Column
         $template = new HtmlTemplate($cell);
         $template->setApp($this->getApp());
         $template->set($row);
-        $template->setHtml($html_tags);
+        $template->dangerouslySetHtml($html_tags);
 
-        $val = $template->render();
+        $val = $template->renderToHtml();
 
         return ['c_' . $this->short_name => $val];
     }
