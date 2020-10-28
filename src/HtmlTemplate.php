@@ -571,24 +571,32 @@ class HtmlTemplate implements \ArrayAccess
 
     // }}}
 
-    // {{{ ArrayAccess support
+    // {{{ ArrayAccess support - will be removed in v2.5
     public function offsetExists($name)
     {
+        'trigger_error'('Array access is deprecated. Use hasTag method instead', E_USER_DEPRECATED);
+
         return $this->hasTag($name);
     }
 
     public function offsetGet($name)
     {
+        'trigger_error'('Array access is deprecated. Use get method instead', E_USER_DEPRECATED);
+
         return $this->get($name);
     }
 
     public function offsetSet($name, $val)
     {
+        'trigger_error'('Array access is deprecated. Use set method instead', E_USER_DEPRECATED);
+
         $this->set($name, $val);
     }
 
     public function offsetUnset($name)
     {
+        'trigger_error'('Array access is deprecated. Use del method instead', E_USER_DEPRECATED);
+
         $this->del($name, null);
     }
 

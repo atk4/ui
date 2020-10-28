@@ -156,28 +156,28 @@ class ColorRating extends Table\Column
         $hexFrom = trim($hexFrom, '#');
         $hexTo = trim($hexTo, '#');
 
-        $FromRGB['r'] = hexdec(substr($hexFrom, 0, 2));
-        $FromRGB['g'] = hexdec(substr($hexFrom, 2, 2));
-        $FromRGB['b'] = hexdec(substr($hexFrom, 4, 2));
+        $FromRgb['r'] = hexdec(substr($hexFrom, 0, 2));
+        $FromRgb['g'] = hexdec(substr($hexFrom, 2, 2));
+        $FromRgb['b'] = hexdec(substr($hexFrom, 4, 2));
 
-        $ToRGB['r'] = hexdec(substr($hexTo, 0, 2));
-        $ToRGB['g'] = hexdec(substr($hexTo, 2, 2));
-        $ToRGB['b'] = hexdec(substr($hexTo, 4, 2));
+        $ToRgb['r'] = hexdec(substr($hexTo, 0, 2));
+        $ToRgb['g'] = hexdec(substr($hexTo, 2, 2));
+        $ToRgb['b'] = hexdec(substr($hexTo, 4, 2));
 
-        $StepRGB['r'] = ($FromRGB['r'] - $ToRGB['r']) / ($steps);
-        $StepRGB['g'] = ($FromRGB['g'] - $ToRGB['g']) / ($steps);
-        $StepRGB['b'] = ($FromRGB['b'] - $ToRGB['b']) / ($steps);
+        $StepRgb['r'] = ($FromRgb['r'] - $ToRgb['r']) / ($steps);
+        $StepRgb['g'] = ($FromRgb['g'] - $ToRgb['g']) / ($steps);
+        $StepRgb['b'] = ($FromRgb['b'] - $ToRgb['b']) / ($steps);
 
         for ($i = 0; $i <= $steps; ++$i) {
-            $RGB['r'] = floor($FromRGB['r'] - ($StepRGB['r'] * $i));
-            $RGB['g'] = floor($FromRGB['g'] - ($StepRGB['g'] * $i));
-            $RGB['b'] = floor($FromRGB['b'] - ($StepRGB['b'] * $i));
+            $Rgb['r'] = floor($FromRgb['r'] - ($StepRgb['r'] * $i));
+            $Rgb['g'] = floor($FromRgb['g'] - ($StepRgb['g'] * $i));
+            $Rgb['b'] = floor($FromRgb['b'] - ($StepRgb['b'] * $i));
 
-            $HexRGB['r'] = sprintf('%02x', ($RGB['r']));
-            $HexRGB['g'] = sprintf('%02x', ($RGB['g']));
-            $HexRGB['b'] = sprintf('%02x', ($RGB['b']));
+            $HexRgb['r'] = sprintf('%02x', ($Rgb['r']));
+            $HexRgb['g'] = sprintf('%02x', ($Rgb['g']));
+            $HexRgb['b'] = sprintf('%02x', ($Rgb['b']));
 
-            $gradients[] = '#' . implode('', $HexRGB);
+            $gradients[] = '#' . implode('', $HexRgb);
         }
     }
 

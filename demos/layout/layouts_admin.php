@@ -32,7 +32,7 @@ $layout->menuLeft->addItem(['Friends', 'icon' => 'smile']);
 $layout->menuLeft->addItem(['History', 'icon' => 'calendar']);
 $layout->menuLeft->addItem(['Settings', 'icon' => 'cogs']);
 
-$layout->template['Footer'] = 'ATK is awesome';
+$layout->template->set('Footer', 'ATK is awesome');
 
 \atk4\ui\Header::addTo($layout, ['Basic Form Example']);
 

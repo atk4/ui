@@ -488,7 +488,7 @@ class Table extends Lister
 
         // Generate template for data row
         $this->t_row_master->dangerouslySetHtml('cells', $this->getDataRowHtml());
-        $this->t_row_master['_id'] = '{$_id}';
+        $this->t_row_master->set('_id', '{$_id}');
         $this->t_row = new HtmlTemplate($this->t_row_master->renderToHtml());
         $this->t_row->setApp($this->getApp());
 

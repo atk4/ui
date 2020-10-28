@@ -37,10 +37,6 @@ Once template is initialized you can `renderToHtml()` it any-time to get string
 
     $t->set('mytag', 'Agile UI');
 
-    // or 
-
-    $t['mytag'] = 'Agile UI';
-
     echo $t->renderToHtml();  // "Hello, Agile UI".
 
 Tags may also be self-closing::
@@ -75,10 +71,10 @@ There are some operations you can do with a region, such as::
 
     $main_template->del('Content');
 
-    $content->set(['user' => 'Joe', 'amount' => 100]);
+    $content->set('user', 'Joe')->set('amount', 100);
     $main_template->dangerouslyAppendHtml('Content', $content->renderToHtml());
 
-    $content->set(['user' => 'Billy', 'amount' => 50]);
+    $content->set('user', 'Billy')->set('amount', 50);
     $main_template->dangerouslyAppendHtml('Content', $content->renderToHtml());
 
 Usage in Agile UI
@@ -89,7 +85,7 @@ engine directly, but you would be able to use it through views::
 
 
     $v = new View('my_template.html');
-    $v['name'] = 'Mr. Boss';
+    $v->set('name', 'Mr. Boss');
 
     $lister = new Lister($v, 'Content');
     $lister->setModel($userlist);
@@ -100,7 +96,7 @@ The code above will work like this:
 
 1. View will load and parse template.
 
-2. Using $v['name'] will set value of the tag inside template directly.
+2. Using $v->get('name') will set value of the tag inside template directly.
 
 3. Lister will clone region 'Content' from my_template.
 
@@ -350,10 +346,10 @@ Using ArrayAccess with Templates
 
 You may use template object as array for simplified syntax::
 
-    $template['name'] = 'John';
+    $template->set('name', 'John');
 
-    if(isset($template['has_title'])) {
-        unset($template['has_title']);
+    if ($template->hasTag('has_title')) {
+        $template->del('has_title');
     }
 
 
@@ -546,7 +542,7 @@ by your "menu" implementation, which will clone parent's template's tag
 instead to hook into some specific template::
 
     function defaultTemplate(){
-        return [ 'greeting' ];   // uses templates/greeting.html
+        return ['greeting']; // uses templates/greeting.html
     }
 
 Redefining template for view during adding

@@ -37,7 +37,7 @@ class Radio extends Form\Control
         parent::init();
 
         $this->lister = \atk4\ui\Lister::addTo($this, [], ['Radio']);
-        $this->lister->t_row['_name'] = $this->short_name;
+        $this->lister->t_row->set('_name', $this->short_name);
     }
 
     protected function renderView(): void
