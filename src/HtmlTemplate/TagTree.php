@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace atk4\ui\HtmlTemplate;
 
 use atk4\ui\Exception;
-use atk4\ui\HtmlTemplateNew;
+use atk4\ui\HtmlTemplate;
 
 class TagTree
 {
-    /** @var HtmlTemplateNew */
+    /** @var HtmlTemplate */
     private $parentTemplate;
 
     /** @var string */
     private $tag;
 
-    /** @var Value[]|string[]|HtmlTemplateNew[] */
+    /** @var Value[]|string[]|HtmlTemplate[] */
     private $children = [];
 
-    public function __construct(HtmlTemplateNew $parentTemplate, string $tag)
+    public function __construct(HtmlTemplate $parentTemplate, string $tag)
     {
         $this->parentTemplate = $parentTemplate;
         $this->tag = $tag;
@@ -31,7 +31,7 @@ class TagTree
     /**
      * @return static
      */
-    public function clone(HtmlTemplateNew $newParentTemplate): self
+    public function clone(HtmlTemplate $newParentTemplate): self
     {
         $res = new static($newParentTemplate, $this->tag);
         $res->children = [];
@@ -42,7 +42,7 @@ class TagTree
         return $res;
     }
 
-    public function getParentTemplate(): HtmlTemplateNew
+    public function getParentTemplate(): HtmlTemplate
     {
         return $this->parentTemplate;
     }
@@ -53,7 +53,7 @@ class TagTree
     }
 
     /**
-     * @return Value[]|self[]|HtmlTemplateNew[]
+     * @return Value[]|self[]|HtmlTemplate[]
      */
     public function getChildren(): array
     {
@@ -67,7 +67,7 @@ class TagTree
     }
 
     /**
-     * @param Value|HtmlTemplateNew $value
+     * @param Value|HtmlTemplate $value
      *
      * @return $this
      */
@@ -79,7 +79,7 @@ class TagTree
         }
 
         // not strictly needed, but catch issues sooner
-        if (!$value instanceof Value && !$value instanceof HtmlTemplateNew) {
+        if (!$value instanceof Value && !$value instanceof HtmlTemplate) {
             throw new Exception('Value must be of type HtmlTemplate\Value or HtmlTemplate');
         }
 
