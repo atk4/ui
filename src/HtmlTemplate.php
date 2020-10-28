@@ -636,7 +636,7 @@ class HtmlTemplate implements \ArrayAccess
             $template->template = $this->template;
             $template->source = $this->source;
         } else {
-            $template->template = [$tag . '#0' => $this->get($tag)];
+            $template->template = $this->get($tag);
             $template->source = 'clone of tag "' . $tag . '" from template "' . $this->source . '"';
         }
         $template->rebuildTagsIndex();
