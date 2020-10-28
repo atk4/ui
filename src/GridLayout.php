@@ -94,21 +94,36 @@ class GridLayout extends View
         // TODO replace later, the only use of direct template property access
         $t = $this->template;
         \Closure::bind(function () use ($t, $tmp) {
-            $cloneTagTreeFx = function (HtmlTemplate\TagTree $src) use (&$cloneTagTreeFx, $t) {
-                $tagTree = $src->clone($t);
-                $t->tagTrees[$src->getTag()] = $tagTree;
-                \Closure::bind(function () use ($tagTree, $cloneTagTreeFx, $src) {
-                    foreach ($tagTree->children as $v) {
-                        if (is_string($v)) {
-                            $cloneTagTreeFx($src->getParentTemplate()->getTagTree($v));
-                        }
-                    }
-                }, null, HtmlTemplate\TagTree::class)();
-            };
-            $cloneTagTreeFx($tmp->getTagTree('rows'));
+            // $t->template['rows#0'] = $tmp->template['rows#0'];
 
-        // TODO prune unreachable nodes
-        // $template->rebuildTagsIndex();
+            // because of limitation of references in parallel rendering we have to set
+            // that also in old template
+            $tmpOld = $tmp->told;
+            $tmpNew = $tmp->tnew;
+            $tOld = $t->told;
+            $tNew = $t->tnew;
+            \Closure::bind(function () use ($tmpOld, $tOld) {
+                $tOld->template['rows#0'] = $tmpOld->template['rows#0'];
+                $tOld->rebuildTagsIndex();
+            }, null, HtmlTemplateOld::class)();
+            \Closure::bind(function () use ($tmpNew, $tNew) {
+                $cloneTagTreeFx = function (HtmlTemplate\TagTree $src) use (&$cloneTagTreeFx, $tNew) {
+                    $tagTree = $src->clone($tNew);
+                    $tNew->tagTrees[$src->getTag()] = $tagTree;
+                    \Closure::bind(function () use ($tagTree, $cloneTagTreeFx, $src) {
+                        foreach ($tagTree->children as $v) {
+                            if (is_string($v)) {
+                                $cloneTagTreeFx($src->getParentTemplate()->getTagTree($v));
+                            }
+                        }
+                    }, null, HtmlTemplate\TagTree::class)();
+                };
+                $cloneTagTreeFx($tmpNew->getTagTree('rows'));
+            // TODO prune unreachable nodes
+            // $template->rebuildTagsIndex();
+            }, null, HtmlTemplateNew::class)();
+
+            $t->diffAfter();
         }, null, HtmlTemplate::class)();
 
         $this->addClass($this->words[$this->columns] . ' column');

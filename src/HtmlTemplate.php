@@ -10,6 +10,14 @@ use atk4\ui\HtmlTemplate\Value as HtmlValue;
 
 class HtmlTemplate implements \ArrayAccess
 {
+    /** @const string */
+    public const TOP_TAG = HtmlTemplateNew::TOP_TAG;
+
+    use HtmlTemplateDualRenderTrait;
+}
+
+class HtmlTemplateNew implements \ArrayAccess
+{
     use \atk4\core\AppScopeTrait;
 
     /** @const string */

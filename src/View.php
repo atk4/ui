@@ -91,7 +91,7 @@ class View extends AbstractView implements JsExpressionable
      * a new Template will be generated during init() based on the
      * value of $defaultTemplate.
      *
-     * @var HtmlTemplate
+     * @var HtmlTemplateNew
      */
     public $template;
 
