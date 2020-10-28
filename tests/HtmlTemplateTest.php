@@ -11,7 +11,7 @@ use atk4\ui\HtmlTemplate\TagTree;
 
 class HtmlTemplateTest extends AtkPhpunit\TestCase
 {
-    protected function assertSameTemplate(string $expectedTemplateStr, /*HtmlTemplate */$template): void
+    protected function assertSameTemplate(string $expectedTemplateStr, HtmlTemplate $template): void
     {
         $expectedTemplate = new HtmlTemplate($expectedTemplateStr);
         $this->assertSame($expectedTemplate->toLoadableString(), $template->toLoadableString());
