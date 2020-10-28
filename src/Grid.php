@@ -219,7 +219,7 @@ class Grid extends View
         if (is_array($ipp)) {
             $this->addItemsPerPageSelector($ipp, $label);
 
-            $this->ipp = $_GET['ipp'] ?? $ipp[0];
+            $this->ipp = isset($_GET['ipp']) ? (int) $_GET['ipp'] : $ipp[0];
         } else {
             $this->ipp = $ipp;
         }
@@ -235,7 +235,7 @@ class Grid extends View
      */
     public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Items per page:')
     {
-        if ($ipp = $this->container->stickyGet('ipp')) {
+        if ($ipp = (int) $this->container->stickyGet('ipp')) {
             $this->ipp = $ipp;
         } else {
             $this->ipp = $items[0];
