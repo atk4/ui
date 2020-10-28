@@ -497,7 +497,7 @@ Example use of Model's validate() method::
         {
             $errors = parent::validate();
 
-            if ($this['name'] == $this['surname']) {
+            if ($this->get('name') === $this->get('surname')) {
                 $errors['surname'] = 'Your surname cannot be same as the name';
             }
 
