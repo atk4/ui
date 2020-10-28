@@ -453,7 +453,7 @@ class Context extends RawMinkContext implements BehatContext
         return 'document.readyState === \'complete\''
             . ' && typeof jQuery !== \'undefined\' && jQuery.active === 0'
             . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()'
-            . ' && jQuery(\':animated\').length === 0';
+            . ' && jQuery(\':animated\').length === 0'; // needed for SUI dropdown
     }
 
     /**
