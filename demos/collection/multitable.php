@@ -38,8 +38,9 @@ $finderClass = get_class(new class() extends \atk4\ui\Columns {
 
         while ($selections && $id = array_shift($selections)) {
             $path[] = $id;
-            $model->tryLoad($id);
-            if (!$model->loaded()) {
+            $pushModel = clone $model;
+            $pushModel->tryLoad($id);
+            if (!$pushModel->loaded()) {
                 break;
             }
             $ref = array_shift($route);
@@ -47,14 +48,14 @@ $finderClass = get_class(new class() extends \atk4\ui\Columns {
                 $route[] = $ref; // repeat last route
             }
 
-            if (!$model->hasRef($ref)) {
+            if (!$pushModel->hasRef($ref)) {
                 break; // no such route
             }
 
-            $model = $model->ref($ref);
+            $pushModel = $pushModel->ref($ref);
 
             $table = \atk4\ui\Table::addTo($this->addColumn(), ['header' => false, 'very basic selectable'])->addStyle('cursor', 'pointer');
-            $table->setModel($model->setLimit(25), [$model->title_field]);
+            $table->setModel($pushModel->setLimit(10), [$pushModel->title_field]);
 
             if ($selections) {
                 $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
