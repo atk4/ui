@@ -372,7 +372,7 @@ Here is a best practice for using custom template::
         protected function renderView(): void
         {
             parent::renderView();
-            $this->template['title'] = $this->title;
+            $this->template->set('title', $this->title);
         }
 
     }

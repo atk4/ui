@@ -35,7 +35,7 @@ $cartClass = get_class(new class() extends \atk4\ui\Lister {
 
         // Set default description for our row template. Normally this is replaced by the 'descr' field
         // of a model, but we don't have it, so it will stay like this.
-        $this->t_row['descr'] = 'click on link to remove item';
+        $this->t_row->set('descr', 'click on link to remove item');
 
         // We link to ourselves with this special GET argument to indicate that item must be removed.
         if (isset($_GET[$this->name . '_remove'])) {

@@ -16,7 +16,7 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
     public function testBasicInit()
     {
         $t = new HtmlTemplate('hello, {foo}world{/}');
-        $t['foo'] = 'bar';
+        $t->set('foo', 'bar');
 
         $this->assertSame('hello, bar', $t->renderToHtml());
     }
@@ -74,9 +74,9 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
         $this->assertSame(['foo#0' => ['hello'], ', cruel ', 'bar#0' => ['world'], '. ', 'foo#1' => ['good bye']], $this->getProtected($t, 'template'));
 
         $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello2{/}');
-        $t2 = $this->callProtected($t, 'getTagRefs', 'bar');
-        $this->assertSame([['world']], $t2);
-        $t2[0] = ['planet']; // will change $t->template last "foo" tag because it's by reference
+        $t3 = $this->callProtected($t, 'getTagRefs', 'bar');
+        $this->assertSame([['world']], $t3);
+        $t3[0] = ['planet']; // will change $t->template last "foo" tag because it's by reference
         $this->assertSame(['foo#0' => ['hello'], ', cruel ', 'bar#0' => ['planet'], '. ', 'foo#1' => ['hello2']], $this->getProtected($t, 'template'));
     }
 
@@ -169,24 +169,6 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
         $t->tryDangerouslyAppendHtml('qwe', '<b>ignore</b> this'); // ignores
 
         $this->assertSame('<b>Hi</b> and <b>welcome</b> my dear and <b>smart</b> guys', $t->renderToHtml());
-    }
-
-    /**
-     * ArrayAccess test.
-     */
-    public function testArrayAccess()
-    {
-        $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}welcome{/}');
-
-        $this->assertTrue(isset($t['foo']));
-
-        $t['foo'] = 'Hi';
-        $this->assertSame([1 => 'Hi'], $t['foo']); // 1 index instead of 0 because of https://bugs.php.net/bug.php?id=79844
-
-        unset($t['foo']);
-        $this->assertSame([], $t['foo']);
-
-        $this->assertTrue(isset($t['foo'])); // it's still set even after unset - that's specific for Template
     }
 
     /**
