@@ -5,7 +5,6 @@ Feature: Grid
     Given I am on "collection/grid.php"
     Then I search grid for "kingdom"
 #    make sure auto query trigger
-    And I wait for loading to start in "button.atk-search-button"
     Then I should see "United Kingdom"
     Then I press button "Test"
     Then Toast display should contains text "United Kingdom"

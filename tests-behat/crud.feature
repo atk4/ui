@@ -17,7 +17,6 @@ Feature: Crud
   Scenario: search
     Then I search grid for "united kingdom"
 #    make sure auto query trigger
-    And I wait for loading to start in "button.atk-search-button"
     Then I should see "United Kingdom"
 
   Scenario: edit

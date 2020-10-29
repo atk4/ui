@@ -427,19 +427,6 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * Wait for an element, usually an auto trigger element, to show that loading has start"
-     * Example, when entering value in JsSearch for grid. We need to auto trigger to fire before
-     * doing waiting for callback.
-     * $arg1 should represent the element selector for jQuery.
-     *
-     * @Then I wait for loading to start in :arg1
-     */
-    public function iWaitForLoadingToStartIn($arg1)
-    {
-        $this->jqueryWait('$("' . $arg1 . '").hasClass("loading")');
-    }
-
-    /**
      * @Then I test javascript example
      */
     public function iTestJavascriptExample()
