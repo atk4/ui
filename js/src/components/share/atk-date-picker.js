@@ -14,7 +14,7 @@ export default {
     template: template,
     props: ['config'],
     data: function () {
-        const {useDefault, phpFormat, ...fpickr} = this.config;
+        const { useDefault, phpFormat, ...fpickr } = this.config;
 
         if (useDefault && !fpickr.defaultDate) {
             fpickr.defaultDate = new Date();
@@ -32,7 +32,9 @@ export default {
     mounted: function () {
         if (this.flatPickr.defaultDate) {
             if (this.flatPickr.defaultDate instanceof Date) {
-                const output = this.phpFormat ? atk.phpDate(this.phpFormat, this.config.defaultDate) : flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat);
+                const output = this.phpFormat
+                    ? atk.phpDate(this.phpFormat, this.config.defaultDate)
+                    : flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat);
                 this.$emit('setDefault', output);
             } else {
                 this.$emit('setDefault', this.flatPickr.defaultDate);
@@ -41,7 +43,9 @@ export default {
     },
     methods: {
         onChange: function (date) {
-            const output = this.phpFormat ? atk.phpDate(this.phpFormat, date[0]) : flatpickr.formatDate(date[0], this.flatPickr.dateFormat);
+            const output = this.phpFormat
+                ? atk.phpDate(this.phpFormat, date[0])
+                : flatpickr.formatDate(date[0], this.flatPickr.dateFormat);
             this.$emit('dateChange', output);
         },
     },
