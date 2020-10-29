@@ -22,13 +22,4 @@ $edit->callback = function ($model) use ($app) {
 };
 
 $crud = Crud::addTo($app);
-
-// Important for Behat testing
-$crud->onFormEdit(function ($f) {
-    foreach (['product_category_id', 'product_sub_category_id'] as $controlName) {
-        // reduce control width because it could cause Behat test to fail if over EditMe button
-        $f->getControl($controlName)->setStyle(['width' => '50%']);
-    }
-});
-
 $crud->setModel($model, ['name']);
