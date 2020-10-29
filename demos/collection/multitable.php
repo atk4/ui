@@ -87,6 +87,6 @@ $vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($vp) use ($model) {
 
 \atk4\ui\Button::addTo($app, ['Re-Import From Filesystem', 'top attached'])->on('click', new \atk4\ui\JsModal('Now importing ... ', $vp));
 
-$finderClass::addTo($app, 'bottom attached')
+$finderClass::addTo($app, ['bottom attached'])
     ->addClass('top attached segment')
     ->setModel($model->setLimit(5), ['SubFolder']);
