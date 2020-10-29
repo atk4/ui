@@ -242,7 +242,6 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function labelChangesToNumber()
     {
-        $this->jqueryWait('!$("#' . $this->buttonId . '").hasClass("loading")');
         $element = $this->getSession()->getPage()->findById($this->buttonId);
         $value = trim($element->getHtml());
         if (!is_numeric($value)) {
