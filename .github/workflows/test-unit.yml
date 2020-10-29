@@ -281,4 +281,4 @@ jobs:
           sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink/src/Element/Element.php
           sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php
 
-          vendor/bin/behat --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
