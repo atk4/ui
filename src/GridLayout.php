@@ -91,7 +91,7 @@ class GridLayout extends View
         $this->t_wrap->dangerouslyAppendHtml('rows', '{/rows}');
         $tmp = new HtmlTemplate($this->t_wrap->renderToHtml());
 
-        // TODO replace later, the only use of direct template property access
+        // TODO replace later, the only use of direct template tree manipulation
         $t = $this->template;
         \Closure::bind(function () use ($t, $tmp) {
             $cloneTagTreeFx = function (HtmlTemplate\TagTree $src) use (&$cloneTagTreeFx, $t) {
