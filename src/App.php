@@ -130,7 +130,7 @@ class App
     ];
 
     /** @var class-string */
-    public $templateClass = HtmlTemplate::class;
+    public $templateClass = HtmlTemplate /* \DomNode */ ::class;
 
     public function __construct(array $defaults = [])
     {
