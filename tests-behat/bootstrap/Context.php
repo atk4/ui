@@ -366,37 +366,32 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I select value :arg1 in lookup :arg2
      *
-     * Select a value in a lookup field.
+     * Select a value in a lookup control.
      */
     public function iSelectValueInLookup($arg1, $arg2)
     {
-        $field = $this->getSession()->getPage()->find('css', 'input[name=' . $arg2 . ']');
-        if ($field === null) {
-            throw new \Exception('Field not found: ' . $arg2);
+        // get dropdown item from semantic ui which is direct parent of input html element
+        $inputElem = $this->getSession()->getPage()->find('css', 'input[name=' . $arg2 . ']');
+        if ($inputElem === null) {
+            throw new \Exception('Lookup element not found: ' . $arg2);
         }
-        // get dropdown item from semantic ui which is direct parent of input name field.
-        $lookup = $field->getParent();
+        $lookupElem = $inputElem->getParent();
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
-        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("show")';
-        $this->getSession()->executeScript($script);
-        $this->jqueryWait('$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
+        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("show")');
+        $this->jqueryWait('$("#' . $lookupElem->getAttribute('id') . '").hasClass("visible")');
 
-        // value should be available
-        $value = $lookup->find('xpath', '//div[text()="' . $arg1 . '"]');
-        if (!$value || $value->getText() !== $arg1) {
+        // select value
+        $value = $lookupElem->find('xpath', '//div[text()="' . $arg1 . '"]');
+        if ($value === null || $value->getText() !== $arg1) {
             throw new \Exception('Value not found: ' . $arg1);
         }
-
-        // When value are loaded, select value from javascript.
-        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("set selected", ' . $value->getAttribute('data-value') . ');';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("set selected", ' . $value->getAttribute('data-value') . ');');
         $this->jqueryWait();
 
         // hide dropdown and wait till fully closed
-        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("hide");';
-        $this->getSession()->executeScript($script);
-        $this->jqueryWait('!$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
+        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("hide");');
+        $this->jqueryWait('!$("#' . $lookupElem->getAttribute('id') . '").hasClass("visible")');
     }
 
     /**
