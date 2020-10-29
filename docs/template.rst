@@ -234,12 +234,8 @@ of a Form.
 +---------------------------------------------------+-------------------------------------------------------+
 | Various cases within templates based on condition | cloneRegion or get, then use set()                    |
 +---------------------------------------------------+-------------------------------------------------------+
-| Custom handling certain tags or regions           | :php:meth:`GiTemplate::eachTag` with a callback       |
-+---------------------------------------------------+-------------------------------------------------------+
 | Filters (to-upper, escape)                        | all tags are escaped automatically, but               |
 |                                                   | other filters are not supported (yet)                 |
-+---------------------------------------------------+-------------------------------------------------------+
-| Template inclusion                                | Generally discouraged, but can be done with eachTag() |
 +---------------------------------------------------+-------------------------------------------------------+
 
 Using Template Engine directly
@@ -465,38 +461,6 @@ If you execute ``set('color', 'green')`` then contents of both tags will
 be affected. Similarly if you call ``append('color', '-ish')`` then the
 text will be appended to both tags.
 
-You can also use ``eachTag()`` to iterate through those tags.
-
-.. php:method:: eachTag
-
-    Executues a call-back for each tag
-
-The format of the callback is::
-
-    function processTag($contents, $tag) {
-        return ucwords($contents);
-    }
-
-
-If your callback function defines second argument, then it will receive
-"unique" tag name which can be used to access template directly. This
-makes sense if you want to add object into that region. You can't insert
-object into SMlite template, however every view in the system will have
-it's template pre-initialized for you
-
-The following template will implement the ``include`` functionality for
-your template::
-
-    $template->eachTag('include', function($content, $tag) use($template) {
-        $t = $template->newInstance();
-        $t->loadFromFile($content);
-        $template->dangerouslySetHtml($tag, $t->renderToHtml());
-    });
-
-See also: :ref:`templates and views`
-
-.. todo:: fix this reference
-
 Conditional tags
 ----------------
 
@@ -602,18 +566,6 @@ implemented using generic views.
     $receiver->template->trySet($receiver_data);
 
 ..  templates and views
-
-Using Views with Templates efficiently
---------------------------------------
-
-For maximum efficiency you should consider using Views and Templates
-in combination to achieve the result. The example which was previously
-mentioned under :php:meth:`GiTemplate::eachTag`::
-
-    $view->template->eachTag('include', function($content, $tag) use($view) {
-        \atk4\ui\View::addTo($view, [], [null], $tag, [$content]);
-    });
-
 
 
 Best Practices

@@ -91,11 +91,24 @@ class GridLayout extends View
         $this->t_wrap->dangerouslyAppendHtml('rows', '{/rows}');
         $tmp = new HtmlTemplate($this->t_wrap->renderToHtml());
 
-        // TODO replace later, the only use of direct template property access
-        $t = $this;
+        // TODO replace later, the only use of direct template tree manipulation
+        $t = $this->template;
         \Closure::bind(function () use ($t, $tmp) {
-            $t->template->template['rows#0'] = $tmp->template['rows#0'];
-            $t->template->rebuildTagsIndex();
+            $cloneTagTreeFx = function (HtmlTemplate\TagTree $src) use (&$cloneTagTreeFx, $t) {
+                $tagTree = $src->clone($t);
+                $t->tagTrees[$src->getTag()] = $tagTree;
+                \Closure::bind(function () use ($tagTree, $cloneTagTreeFx, $src) {
+                    foreach ($tagTree->children as $v) {
+                        if (is_string($v)) {
+                            $cloneTagTreeFx($src->getParentTemplate()->getTagTree($v));
+                        }
+                    }
+                }, null, HtmlTemplate\TagTree::class)();
+            };
+            $cloneTagTreeFx($tmp->getTagTree('rows'));
+
+        // TODO prune unreachable nodes
+        // $template->rebuildTagsIndex();
         }, null, HtmlTemplate::class)();
 
         $this->addClass($this->words[$this->columns] . ' column');
