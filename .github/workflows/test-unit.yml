@@ -130,7 +130,7 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          if [[ "${{ matrix.type }}" != Phpunit* ]; then composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev ; fi
+          if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "Phpunit Lowest" ] && [ "${{ matrix.type }}" != "Phpunit Burn" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev ; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
           composer remove --no-interaction --no-update 'behat/*' --dev
           if [ "${{ matrix.php }}" == "8.0" ]; then composer config platform.php 7.4.5 ; fi
@@ -281,4 +281,4 @@ jobs:
           sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink/src/Element/Element.php
           sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php
 
-          vendor/bin/behat --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
