@@ -366,15 +366,18 @@ class ScopeBuilder extends Control
             $props = $this->atkdDateOptions['flatpickr'] ?? [];
             $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$type . '_format'});
             $props['dateFormat'] = $format;
+            $phpFormat = 'Y-m-d';
 
             if ($type === 'datetime' || $type === 'time') {
                 $props['enableTime'] = true;
                 $props['time_24hr'] = $calendar->use24hrTimeFormat($format);
                 $props['noCalendar'] = ($type === 'time');
                 $props['enableSeconds'] = $calendar->useSeconds($format);
+                $phpFormat = ($type === 'datetime') ? 'Y-m-d H:i:s' : 'H:i:s';
             }
 
-            $props['defaultDate'] = $this->atkdDateOptions['useDefault'] ? (new \DateTime())->format($format) : null;
+            $props['useDefault'] = $this->atkdDateOptions['useDefault'];
+            $props['phpFormat'] = $phpFormat;
         }
 
         return $props;
