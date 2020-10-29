@@ -242,7 +242,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function labelChangesToNumber()
     {
-        $this->getSession()->wait(5000, '!$("#' . $this->buttonId . '").hasClass("loading")');
+        $this->jqueryWait('!$("#' . $this->buttonId . '").hasClass("loading")');
         $element = $this->getSession()->getPage()->findById($this->buttonId);
         $value = trim($element->getHtml());
         if (!is_numeric($value)) {
@@ -379,10 +379,10 @@ class Context extends RawMinkContext implements BehatContext
         // open dropdown from semantic-ui command. (just a click is not triggering it)
         $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("show")';
         $this->getSession()->executeScript($script);
-        // Wait till dropdown is visible
-        $this->jqueryWait();
-        $this->getSession()->wait(2000, '$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
-        // value should be available.
+        // wait till dropdown is visible
+        $this->jqueryWait('$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
+
+        // value should be available
         $value = $lookup->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (!$value || $value->getText() !== $arg1) {
             throw new \Exception('Value not found: ' . $arg1);
@@ -397,7 +397,7 @@ class Context extends RawMinkContext implements BehatContext
         $this->getSession()->executeScript($script);
 
         // wait till dropdown is fully close
-        $this->getSession()->wait(2000, '!$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
+        $this->jqueryWait('!$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
     }
 
     /**
@@ -436,7 +436,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iWaitForLoadingToStartIn($arg1)
     {
-        $this->getSession()->wait(2000, '$("' . $arg1 . '").hasClass("loading")');
+        $this->jqueryWait('$("' . $arg1 . '").hasClass("loading")');
     }
 
     /**
@@ -458,11 +458,11 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Wait till jquery ajax request finished and no animation is perform.
      *
-     * @param int $duration the maximum time to wait for the function
+     * @param int $duration maximum time to wait
      */
-    protected function jqueryWait($duration = 5000)
+    protected function jqueryWait(string $extraWaitCondition = 'true', $duration = 5000)
     {
-        $finishedScript = $this->getFinishedScript();
+        $finishedScript = '(' . $this->getFinishedScript() . ') && (' . $extraWaitCondition . ')';
 
         $s = microtime(true);
         $c = 0;
