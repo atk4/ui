@@ -31,8 +31,8 @@ $seg = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
 
 // add 3 counters
 Counter::addTo($seg);
-Counter::addTo($seg, '40');
-Counter::addTo($seg, '-20');
+Counter::addTo($seg, ['40']);
+Counter::addTo($seg, ['-20']);
 
 // Add button to reload all counters
 $bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);

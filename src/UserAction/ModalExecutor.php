@@ -385,7 +385,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
                 break;
             case 'html':
                 $preview = View::addTo($modal, ['ui' => 'basic segment']);
-                $preview->template->setHtml('Content', $text);
+                $preview->template->dangerouslySetHtml('Content', $text);
 
                 break;
         }

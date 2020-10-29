@@ -146,7 +146,7 @@ class Layout extends AbstractLayout
         foreach ($this->elements as $element) {
             // Buttons go under Button section
             if ($element instanceof \atk4\ui\Button) {
-                $this->template->appendHtml('Buttons', $element->getHtml());
+                $this->template->dangerouslyAppendHtml('Buttons', $element->getHtml());
 
                 continue;
             }
@@ -166,16 +166,16 @@ class Layout extends AbstractLayout
                 if ($element->inline) {
                     $template->set('class', 'inline');
                 }
-                $template->setHtml('Content', $element->getHtml());
+                $template->dangerouslySetHtml('Content', $element->getHtml());
 
-                $this->template->appendHtml('Content', $template->render());
+                $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
 
                 continue;
             }
 
             // Anything but controls or explicitly defined controls get inserted directly
             if (!$element instanceof Control || !$element->layoutWrap) {
-                $this->template->appendHtml('Content', $element->getHtml());
+                $this->template->dangerouslyAppendHtml('Content', $element->getHtml());
 
                 continue;
             }
@@ -199,7 +199,7 @@ class Layout extends AbstractLayout
             }
 
             // Controls get extra pampering
-            $template->setHtml('Input', $element->getHtml());
+            $template->dangerouslySetHtml('Input', $element->getHtml());
             $template->trySet('label', $label);
             $template->trySet('label_for', $element->id . '_input');
             $template->set('control_class', $element->getControlClass());
@@ -220,15 +220,15 @@ class Layout extends AbstractLayout
                 } else {
                     $hint->set($element->hint);
                 }
-                $template->setHtml('Hint', $hint->getHtml());
+                $template->dangerouslySetHtml('Hint', $hint->getHtml());
             } elseif ($template->hasTag('Hint')) {
                 $template->del('Hint');
             }
 
             if ($this->template->hasTag($element->short_name)) {
-                $this->template->trySetHtml($element->short_name, $template->render());
+                $this->template->tryDangerouslySetHtml($element->short_name, $template->renderToHtml());
             } else {
-                $this->template->appendHtml('Content', $template->render());
+                $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
             }
         }
 

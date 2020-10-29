@@ -707,7 +707,7 @@ class Multiline extends Form\Control
             }
         });
 
-        $this->multiLine->template->trySetHtml('Input', $this->getInput());
+        $this->multiLine->template->tryDangerouslySetHtml('Input', $this->getInput());
         parent::renderView();
 
         $this->multiLine->vue(

@@ -7,253 +7,148 @@ namespace atk4\ui\tests;
 use atk4\core\AtkPhpunit;
 use atk4\ui\Exception;
 use atk4\ui\HtmlTemplate;
+use atk4\ui\HtmlTemplate\TagTree;
 
 class HtmlTemplateTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test constructor.
-     */
-    public function testBasicInit()
+    protected function assertSameTemplate(string $expectedTemplateStr, HtmlTemplate $template): void
+    {
+        $expectedTemplate = new HtmlTemplate($expectedTemplateStr);
+        $this->assertSame($expectedTemplate->toLoadableString(), $template->toLoadableString());
+        $this->assertSame($expectedTemplate->renderToHtml(), $template->renderToHtml());
+
+        // TODO test if all tag trees are reachable
+    }
+
+    protected function assertSameTagTree(string $expectedTemplateStr, TagTree $tagTree): void
+    {
+        $this->assertSameTemplate(
+            $expectedTemplateStr,
+            $tagTree->getParentTemplate()->cloneRegion($tagTree->getTag())
+        );
+    }
+
+    public function testBasicInit(): void
     {
         $t = new HtmlTemplate('hello, {foo}world{/}');
-        $t['foo'] = 'bar';
+        $t->set('foo', 'bar');
 
-        $this->assertSame('hello, bar', $t->render());
+        $this->assertSameTemplate('hello, {foo}bar{/}', $t);
     }
 
-    /**
-     * Test getTagRef().
-     */
-    public function testGetTagRef()
+    public function testGetTagTree()
     {
-        // top tag
         $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        $t1 = &$this->callProtected($t, 'getTagRef', '_top');
-        $this->assertSame(['foo#0' => ['hello'], ', cruel ', 'bar#0' => ['world'], '. ', 'foo#1' => ['hello']], $t1);
+        $this->assertSameTagTree('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}', $t->getTagTree('_top'));
 
-        $t1 = ['good bye']; // will change $t->template because it's by reference
-        $this->assertSame(['good bye'], $this->getProtected($t, 'template'));
-
-        // any tag
         $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        $t2 = &$this->callProtected($t, 'getTagRef', 'foo');
-        $this->assertSame(['hello'], $t2);
+        $tagTreeFoo = $t->getTagTree('foo');
+        $this->assertSameTagTree('hello', $tagTreeFoo);
 
-        $t2 = ['good bye']; // will change $t->template because it's by reference
-        $this->assertSame(['foo#0' => ['good bye'], ', cruel ', 'bar#0' => ['world'], '. ', 'foo#1' => ['hello']], $this->getProtected($t, 'template'));
+        $tagTreeFoo->getChildren()[0]->set('good bye');
+        $this->assertSameTemplate('{foo}good bye{/}, cruel {bar}world{/}. {foo}good bye{/}', /* not possible with dual renderer $t*/$tagTreeFoo->getParentTemplate());
     }
 
-    /**
-     * Exception in getTagRef().
-     */
-    public function testGetTagRefException()
+    public function testGetTagRefNotFoundException()
     {
         $t = new HtmlTemplate('{foo}hello{/}');
         $this->expectException(Exception::class);
-        $this->callProtected($t, 'getTagRef', 'bar'); // not existent tag
+        $t->getTagTree('bar');
     }
 
-    /**
-     * Test getTagRefs().
-     */
-    public function testGetTagRefs()
-    {
-        // top tag
-        $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello2{/}');
-        $t1 = $this->callProtected($t, 'getTagRefs', '_top');
-        $this->assertSame([['foo#0' => ['hello'], ', cruel ', 'bar#0' => ['world'], '. ', 'foo#1' => ['hello2']]], $t1);
-
-        $t1[0] = ['good bye']; // will change $t->template because it's by reference
-        $this->assertSame(['good bye'], $this->getProtected($t, 'template'));
-
-        // any tag
-        $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello2{/}');
-        $t2 = $this->callProtected($t, 'getTagRefs', 'foo');
-        $this->assertSame([['hello'], ['hello2']], $t2);
-        $t2[1] = ['good bye']; // will change $t->template last "foo" tag because it's by reference
-        $this->assertSame(['foo#0' => ['hello'], ', cruel ', 'bar#0' => ['world'], '. ', 'foo#1' => ['good bye']], $this->getProtected($t, 'template'));
-
-        $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello2{/}');
-        $t2 = $this->callProtected($t, 'getTagRefs', 'bar');
-        $this->assertSame([['world']], $t2);
-        $t2[0] = ['planet']; // will change $t->template last "foo" tag because it's by reference
-        $this->assertSame(['foo#0' => ['hello'], ', cruel ', 'bar#0' => ['planet'], '. ', 'foo#1' => ['hello2']], $this->getProtected($t, 'template'));
-    }
-
-    /**
-     * Non existent template - throw exception.
-     */
-    public function testBadTemplate1()
+    public function testLoadFromFileNonExistentFileException()
     {
         $t = new HtmlTemplate();
         $this->expectException(Exception::class);
-        $t->load('bad_template_file');
+        $t->loadFromFile(__DIR__ . '/bad_template_file');
     }
 
-    /**
-     * Non existent template - no exception.
-     */
-    public function testBadTemplate2()
+    public function testTryLoadFromFileNonExistentFileException()
     {
         $t = new HtmlTemplate();
-        $this->assertFalse($t->tryLoad('bad_template_file'));
+        $this->assertFalse($t->tryLoadFromFile(__DIR__ . 'bad_template_file'));
     }
 
-    /**
-     * Exception in getTagRefs().
-     */
-    public function testGetTagRefsException()
-    {
-        $t = new HtmlTemplate('{foo}hello{/}');
-        $this->expectException(Exception::class);
-        $this->callProtected($t, 'getTagRefs', 'bar'); // not existent tag
-    }
-
-    /**
-     * Test hasTag().
-     */
     public function testHasTag()
     {
         $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        $this->assertTrue($t->hasTag(['foo', 'bar'])); // all tags exist
-        $this->assertFalse($t->hasTag(['foo', 'bar', 'qwe'])); // qwe tag does not exist
+        $this->assertTrue($t->hasTag('foo'));
+        $this->assertTrue($t->hasTag(['foo', 'bar']));
+        $this->assertFalse($t->hasTag(['foo', 'bar', 'non_existent_tag']));
     }
 
-    /**
-     * Test set() exception.
-     */
-    public function testSetException1()
+    public function testSetBadTypeException()
     {
         $t = new HtmlTemplate('{foo}hello{/} guys');
         $this->expectException(Exception::class);
-        $t->set('qwe', 'Hello'); // not existent tag
+        $t->set('foo', new \stdClass());
     }
 
-    /**
-     * Test set() exception.
-     */
-    public function testSetException2()
-    {
-        $t = new HtmlTemplate('{foo}hello{/} guys');
-        $this->expectException(Exception::class);
-        $t->set('foo', new \StdClass()); // bad value
-    }
-
-    /**
-     * Test set, append, tryAppend, tryAppendHtml, del, tryDel.
-     */
     public function testSetAppendDel()
     {
         $t = new HtmlTemplate('{foo}hello{/} guys');
 
         // del tests
-        $t->set('foo', 'Hello');
         $t->del('foo');
-        $this->assertSame(' guys', $t->render());
+        $this->assertSameTemplate('{$foo} guys', $t);
+        $t->tryDel('non_existent_tag');
+        $this->assertSameTemplate('{$foo} guys', $t);
+
+        // set tests
         $t->set('foo', 'Hello');
-        $t->tryDel('qwe'); // non existent tag, ignores
-        $this->assertSame('Hello guys', $t->render());
+        $this->assertSameTemplate('{foo}Hello{/} guys', $t);
+        $t->set('foo', 'Hi');
+        $this->assertSameTemplate('{foo}Hi{/} guys', $t);
+        $t->dangerouslySetHtml('foo', '<b>Hi</b>');
+        $this->assertSameTemplate('{foo}<b>Hi</b>{/} guys', $t);
+        $t->trySet('non_existent_tag', 'ignore this');
+        $this->assertSameTemplate('{foo}<b>Hi</b>{/} guys', $t);
+        $t->tryDangerouslySetHtml('non_existent_tag', '<b>ignore</b> this');
+        $this->assertSameTemplate('{foo}<b>Hi</b>{/} guys', $t);
 
-        // set and append tests
-        $t->set('foo', 'Hello');
-        $t->set('foo', 'Hi'); // overwrites
-        $t->setHtml('foo', '<b>Hi</b>'); // overwrites
-        $t->trySet('qwe', 'ignore this'); // ignores
-        $t->trySetHtml('qwe', '<b>ignore</b> this'); // ignores
-
-        $t->append('foo', ' and'); // appends
-        $t->appendHtml('foo', ' <b>welcome</b> my'); // appends
-        $t->tryAppend('foo', ' dear'); // appends
-        $t->tryAppend('qwe', 'ignore this'); // ignores
-        $t->tryAppendHtml('foo', ' and <b>smart</b>'); // appends html
-        $t->tryAppendHtml('qwe', '<b>ignore</b> this'); // ignores
-
-        $this->assertSame('<b>Hi</b> and <b>welcome</b> my dear and <b>smart</b> guys', $t->render());
+        // append tests
+        $t->set('foo', 'Hi');
+        $this->assertSameTemplate('{foo}Hi{/} guys', $t);
+        $t->append('foo', ' and');
+        $this->assertSameTemplate('{foo}Hi and{/} guys', $t);
+        $t->dangerouslyAppendHtml('foo', ' <b>welcome</b> my');
+        $this->assertSameTemplate('{foo}Hi and <b>welcome</b> my{/} guys', $t);
+        $t->tryAppend('foo', ' dear');
+        $this->assertSameTemplate('{foo}Hi and <b>welcome</b> my dear{/} guys', $t);
+        $t->tryAppend('non_existent_tag', 'ignore this');
+        $this->assertSameTemplate('{foo}Hi and <b>welcome</b> my dear{/} guys', $t);
+        $t->tryDangerouslyAppendHtml('foo', ' and <b>smart</b>');
+        $this->assertSameTemplate('{foo}Hi and <b>welcome</b> my dear and <b>smart</b>{/} guys', $t);
+        $t->tryDangerouslyAppendHtml('non_existent_tag', '<b>ignore</b> this');
+        $this->assertSameTemplate('{foo}Hi and <b>welcome</b> my dear and <b>smart</b>{/} guys', $t);
     }
 
-    /**
-     * ArrayAccess test.
-     */
-    public function testArrayAccess()
-    {
-        $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}welcome{/}');
-
-        $this->assertTrue(isset($t['foo']));
-
-        $t['foo'] = 'Hi';
-        $this->assertSame([1 => 'Hi'], $t['foo']); // 1 index instead of 0 because of https://bugs.php.net/bug.php?id=79844
-
-        unset($t['foo']);
-        $this->assertSame([], $t['foo']);
-
-        $this->assertTrue(isset($t['foo'])); // it's still set even after unset - that's specific for Template
-    }
-
-    /**
-     * Test eachTag.
-     */
-    public function testEachTag()
-    {
-        $t = new HtmlTemplate('{foo}hello{/}, {how}cruel{/how} {bar}world{/}. {foo}welcome{/}');
-
-        // replace values in these tags
-        foreach (['foo', 'bar'] as $tag) {
-            $t->eachTag($tag, function ($value, $fullTag) {
-                return strtoupper($value);
-            });
-        }
-        $this->assertSame('HELLO, cruel WORLD. WELCOME', $t->render());
-
-        // tag contains all template (for example in Lister)
-        $t = new HtmlTemplate('{foo}hello{/}');
-        $t->eachTag('foo', function ($value, $tag) {
-            return strtoupper($value);
-        });
-        $this->assertSame('HELLO', $t->render());
-    }
-
-    /**
-     * Clone region.
-     */
     public function testClone()
     {
-        $t = new HtmlTemplate('{foo}hello{/} guys');
+        $t = new HtmlTemplate('{foo}{inner}hello{/}{/} guys');
 
-        // clone only {foo} region
-        $t1 = $t->cloneRegion('foo');
-        $this->assertSame('hello', $t1->render());
-
-        // clone all template
-        $t1 = $t->cloneRegion('_top');
-        $this->assertSame('hello guys', $t1->render());
+        $topClone1 = clone $t;
+        $this->assertSameTemplate('{foo}{inner}hello{/}{/} guys', $topClone1);
+        $topClone2 = $t->cloneRegion('_top');
+        $this->assertSameTemplate('{foo}{inner}hello{/}{/} guys', $topClone2);
+        $this->assertSameTemplate('{inner}hello{/}', $t->cloneRegion('foo'));
+        $this->assertSameTemplate('{inner}hello{/}', $topClone1->cloneRegion('foo'));
+        $this->assertSameTemplate('{inner}hello{/}', $topClone2->cloneRegion('foo'));
     }
 
-    /**
-     * Try to load template from non existent file - exception.
-     */
-    public function testLoadException()
-    {
-        $t = new HtmlTemplate();
-        $this->expectException(Exception::class);
-        $t->load('such-file-does-not-exist.txt');
-    }
-
-    /**
-     * Test renderRegion.
-     */
     public function testRenderRegion()
     {
         $t = new HtmlTemplate('{foo}hello{/} guys');
-        $this->assertSame('hello', $t->render('foo'));
+        $this->assertSame('hello', $t->renderToHtml('foo'));
     }
 
-    public function testDollarTags()
+    public function testParseDollarTags()
     {
         $t = new HtmlTemplate('{$foo} guys and {$bar} here');
         $t->set([
             'foo' => 'Hello',
             'bar' => 'welcome',
         ]);
-        $this->assertSame('Hello guys and welcome here', $t->render());
+        $this->assertSameTemplate('{foo}Hello{/} guys and {bar}welcome{/} here', $t);
     }
 }

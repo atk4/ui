@@ -26,10 +26,10 @@ $myButtonClass = get_class(new class() extends \atk4\ui\Button {
 });
 
 // Buttons
-$myButtonClass::addTo($app, $app->url());
-$myButtonClass::addTo($app, $app->url(['xx' => 'YEY']));
-$myButtonClass::addTo($app, $app->url(['c' => 'OHO']));
-$myButtonClass::addTo($app, $app->url(['xx' => 'YEY', 'c' => 'OHO']));
+$myButtonClass::addTo($app, [$app->url()]);
+$myButtonClass::addTo($app, [$app->url(['xx' => 'YEY'])]);
+$myButtonClass::addTo($app, [$app->url(['c' => 'OHO'])]);
+$myButtonClass::addTo($app, [$app->url(['xx' => 'YEY', 'c' => 'OHO'])]);
 
 // URLs presented by a blank app
 \atk4\ui\Header::addTo($app, ['URLs presented by a blank app']);

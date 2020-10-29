@@ -366,15 +366,15 @@ class Form extends View
             $response = $success;
         } elseif ($useTemplate) {
             $response = $this->getApp()->loadTemplate($this->successTemplate);
-            $response['header'] = $success;
+            $response->set('header', $success);
 
             if ($sub_header) {
-                $response['message'] = $sub_header;
+                $response->set('message', $sub_header);
             } else {
                 $response->del('p');
             }
 
-            $response = $this->js()->html($response->render());
+            $response = $this->js()->html($response->renderToHtml());
         } else {
             $response = new Message([$success, 'type' => 'success', 'icon' => 'check']);
             $response->setApp($this->getApp);

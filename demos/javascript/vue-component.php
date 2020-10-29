@@ -51,7 +51,7 @@ $lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lis
     ++$lister->ipp;
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
     if ($lister->ipp === $lister->model->limit[0]) {
-        $lister->t_row->setHtml('end', '<div class="ui circular basic label"> ...</div>');
+        $lister->t_row->dangerouslySetHtml('end', '<div class="ui circular basic label"> ...</div>');
     }
 });
 
@@ -120,7 +120,7 @@ $clock_script = "
 
 // Creating the clock view and injecting js.
 $clock = \atk4\ui\View::addTo($app, ['template' => $clock_template]);
-$clock->template->trySetHtml('script', $clock_script);
+$clock->template->tryDangerouslySetHtml('script', $clock_script);
 
 // passing some style to my-clock component.
 $clock_style = [

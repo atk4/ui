@@ -181,6 +181,10 @@ class ScopeBuilder extends Control
             self::OPERATOR_EMPTY => Condition::OPERATOR_EQUALS,
             self::OPERATOR_NOT_EMPTY => Condition::OPERATOR_DOESNOT_EQUAL,
         ],
+        'select' => [
+            self::OPERATOR_EQUALS => Condition::OPERATOR_EQUALS,
+            self::OPERATOR_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
+        ],
     ];
 
     /**
@@ -215,6 +219,7 @@ class ScopeBuilder extends Control
         ],
         'enum' => [
             'type' => 'select',
+            'inputType' => 'select',
             'operators' => [
                 self::OPERATOR_EQUALS,
                 self::OPERATOR_DOESNOT_EQUAL,
