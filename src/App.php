@@ -138,7 +138,7 @@ class App
     ];
 
     /** @var class-string */
-    public $templateClass = HtmlTemplate::class;
+    public $templateClass = HtmlTemplate /* \DomNode */ ::class;
 
     /**
      * @param array<string, mixed> $defaults
