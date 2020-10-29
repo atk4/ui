@@ -457,16 +457,16 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Wait till jquery ajax request finished and no animation is perform.
      *
-     * @param int $duration maximum time to wait
+     * @param int $durationMs maximum time to wait
      */
-    protected function jqueryWait(string $extraWaitCondition = 'true', $duration = 5000)
+    protected function jqueryWait(string $extraWaitCondition = 'true', $durationMs = 5000)
     {
         $finishedScript = '(' . $this->getFinishedScript() . ') && (' . $extraWaitCondition . ')';
 
         $s = microtime(true);
         $c = 0;
-        while (microtime(true) - $s <= $duration * 1000) {
-            $this->getSession()->wait($duration, $finishedScript);
+        while (microtime(true) - $s <= $durationMs / 1000) {
+            $this->getSession()->wait($durationMs, $finishedScript);
             usleep(10000);
             if ($this->getSession()->evaluateScript($finishedScript)) {
                 if (++$c >= 2) {
