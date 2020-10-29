@@ -69,11 +69,12 @@ class Context extends RawMinkContext implements BehatContext
             'animation-duration' => $durationToast . 's',
             'transition-duration' => $durationToast . 's',
         ]);
-        $script = 'if (Array.prototype.filter.call(document.getElementsByTagName("style"), e => e.getAttribute("about") === "atk-test-behat").length === 0) {'
+        $this->getSession()->executeScript(
+            'if (Array.prototype.filter.call(document.getElementsByTagName("style"), e => e.getAttribute("about") === "atk-test-behat").length === 0) {'
             . ' $(\'<style about="atk-test-behat">' . $css . '</style>\').appendTo(\'head\');'
             . ' }'
-            . 'jQuery.fx.off = true;';
-        $this->getSession()->executeScript($script);
+            . 'jQuery.fx.off = true;'
+        );
     }
 
     protected function assertNoException(): void
@@ -130,8 +131,7 @@ class Context extends RawMinkContext implements BehatContext
             throw new \Exception('Unable to find menu with title ' . $arg1);
         }
 
-        $script = '$("#' . $link->getAttribute('id') . '").click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
     }
 
     /**
@@ -152,12 +152,13 @@ class Context extends RawMinkContext implements BehatContext
         if (!$column) {
             throw new \Exception('Unable to find a column ' . $arg1);
         }
+
         $icon = $column->find('css', 'i');
         if (!$icon) {
             throw new \Exception('Column does not contain clickable icon.');
         }
-        $script = '$("#' . $icon->getAttribute('id') . '").click()';
-        $this->getSession()->executeScript($script);
+
+        $this->getSession()->executeScript('$("#' . $icon->getAttribute('id') . '").click()');
     }
 
     /**
@@ -177,8 +178,7 @@ class Context extends RawMinkContext implements BehatContext
             throw new \Exception('Unable to find tab with title ' . $arg1);
         }
 
-        $script = '$("#' . $link->getAttribute('id') . '").click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
     }
 
     /**
@@ -186,8 +186,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickFirstCardOnPage()
     {
-        $script = '$(".atk-card")[0].click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$(".atk-card")[0].click()');
     }
 
     /**
@@ -195,8 +194,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickFirstElementUsingClass($arg1)
     {
-        $script = '$("' . $arg1 . '")[0].click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("' . $arg1 . '")[0].click()');
     }
 
     /**
@@ -204,8 +202,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickPaginatorPage($arg1)
     {
-        $script = '$("a.item[data-page=' . $arg1 . ']").click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("a.item[data-page=' . $arg1 . ']").click()');
     }
 
     /**
@@ -327,8 +324,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iHideJsModal()
     {
-        $script = '$(".modal.active.front").modal("hide")';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$(".modal.active.front").modal("hide")');
     }
 
     /**
@@ -336,8 +332,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iScrollToTop()
     {
-        $script = 'window.scrollTo(0,0)';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('window.scrollTo(0,0)');
     }
 
     /**
