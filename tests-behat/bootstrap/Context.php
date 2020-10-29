@@ -377,10 +377,9 @@ class Context extends RawMinkContext implements BehatContext
         // get dropdown item from semantic ui which is direct parent of input name field.
         $lookup = $field->getParent();
 
-        // open dropdown from semantic-ui command. (just a click is not triggering it)
+        // open dropdown and wait till fully opened (just a click is not triggering it)
         $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("show")';
         $this->getSession()->executeScript($script);
-        // wait till dropdown is visible
         $this->jqueryWait('$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
 
         // value should be available
@@ -392,12 +391,11 @@ class Context extends RawMinkContext implements BehatContext
         // When value are loaded, select value from javascript.
         $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("set selected", ' . $value->getAttribute('data-value') . ');';
         $this->getSession()->executeScript($script);
+        $this->jqueryWait();
 
-        // Then hide dropdown.
+        // hide dropdown and wait till fully closed
         $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("hide");';
         $this->getSession()->executeScript($script);
-
-        // wait till dropdown is fully close
         $this->jqueryWait('!$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
     }
 
