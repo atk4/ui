@@ -135,7 +135,6 @@ class ScopeBuilder extends Control
     protected const OPERATOR_EMPTY = 'is empty';
     protected const OPERATOR_NOT_EMPTY = 'is not empty';
 
-
     protected const DATE_OPERATORS = [
         self::OPERATOR_TIME_EQUALS,
         self::OPERATOR_TIME_DOESNOT_EQUAL,
@@ -382,20 +381,19 @@ class ScopeBuilder extends Control
             $calendar = new Calendar();
             $props = $this->atkdDateOptions['flatpickr'] ?? [];
             $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$rule['inputType'] . '_format'});
-            $props['dateFormat'] = $format;
-            $phpFormat = 'Y-m-d';
+            $props['altFormat'] = $format;
+            $props['dateFormat'] = 'Y-m-d';
+            $props['altInput'] = true;
 
             if ($rule['inputType'] === 'datetime' || $rule['inputType'] === 'time') {
                 $props['enableTime'] = true;
                 $props['time_24hr'] = $calendar->use24hrTimeFormat($format);
                 $props['noCalendar'] = ($rule['inputType'] === 'time');
                 $props['enableSeconds'] = $calendar->useSeconds($format);
-                $phpFormat = ($rule['inputType'] === 'datetime') ? 'Y-m-d H:i:s' : 'H:i:s';
+                $props['dateFormat'] = ($rule['inputType'] === 'datetime') ? 'Y-m-d H:i:S' : 'H:i:S';
             }
 
             $props['useDefault'] = $this->atkdDateOptions['useDefault'];
-            // date query value will be converted using this format.
-            $props['phpFormat'] = $phpFormat;
         }
 
         return $props;

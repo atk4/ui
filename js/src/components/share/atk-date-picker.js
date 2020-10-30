@@ -14,13 +14,10 @@ export default {
     template: template,
     props: ['config', 'value'],
     data: function () {
-        const { useDefault, phpFormat, ...fpickr } = this.config;
+        const { useDefault, ...fpickr } = this.config;
 
         if (useDefault && !fpickr.defaultDate && !this.value) {
             fpickr.defaultDate = new Date();
-        } else if (this.value && phpFormat) {
-            // make sure phpFormat is also supported by flatpickr.
-            fpickr.defaultDate = flatpickr.parseDate(this.value, phpFormat);
         } else if (this.value) {
             fpickr.defaultDate = this.value;
         }
@@ -30,7 +27,6 @@ export default {
         }
 
         return {
-            phpFormat: phpFormat,
             flatPickr: fpickr,
             date: null,
         };
@@ -39,10 +35,7 @@ export default {
         // if value is not set but default date is, then emit proper string value to parent.
         if (!this.value && this.flatPickr.defaultDate) {
             if (this.flatPickr.defaultDate instanceof Date) {
-                const output = this.phpFormat
-                    ? atk.phpDate(this.phpFormat, this.config.defaultDate)
-                    : flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat);
-                this.$emit('setDefault', output);
+                this.$emit('setDefault', flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat));
             } else {
                 this.$emit('setDefault', this.flatPickr.defaultDate);
             }
@@ -50,10 +43,7 @@ export default {
     },
     methods: {
         onChange: function (date) {
-            const output = this.phpFormat
-                ? atk.phpDate(this.phpFormat, date[0])
-                : flatpickr.formatDate(date[0], this.flatPickr.dateFormat);
-            this.$emit('dateChange', output);
+            this.$emit('dateChange', flatpickr.formatDate(date[0], this.flatPickr.dateFormat));
         },
     },
 };
