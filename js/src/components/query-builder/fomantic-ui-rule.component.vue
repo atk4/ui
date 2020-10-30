@@ -15,7 +15,7 @@
                                     <option v-for="operand in rule.operands" :key="operand">{{ operand }}</option>
                                 </select>
                             </div>
-                            <div class="item vqb-rule-oerator"
+                            <div class="item vqb-rule-operator"
                                  v-if="typeof rule.operators !== 'undefined'
                                  && rule.operators.length > 1">
                                 <!-- List of operators (e.g. =, !=, >, <) -->

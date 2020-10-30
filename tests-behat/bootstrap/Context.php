@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\behat;
 
+use atk4\ui\Exception;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
@@ -426,6 +427,86 @@ class Context extends RawMinkContext implements BehatContext
         }
 
         $icon->click();
+    }
+
+    //// ScopeBuilder rule /////////
+
+    /**
+     * @Then /^text rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     */
+    public function textRuleOperatorAndValue($arg1, $arg2, $arg3)
+    {
+        $rule = $this->assertRuleExist($arg1);
+        $this->assertRuleOperatorSelectedValue($rule, $arg2);
+        $this->assertRuleInputValue($rule, $arg3);
+    }
+
+    /**
+     * @Then /^hasRef rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     */
+    public function hasrefRuleOperatorIsAndValueIs($arg1, $arg2, $arg3)
+    {
+        $rule = $this->assertRuleExist($arg1);
+        $this->assertRuleOperatorSelectedValue($rule, $arg2);
+        $this->asserRuleInputSelectedValue($rule, $arg3);
+    }
+
+    /**
+     * @Then /^date rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     */
+    public function dateRuleOperatorIsAndValueIs($arg1, $arg2, $arg3)
+    {
+        $rule = $this->assertRuleExist($arg1);
+        $this->assertRuleOperatorSelectedValue($rule, $arg2);
+        // todo try to get input using alt format but always return empty.
+        $this->assertRuleInputValue($rule, $arg3);
+//        $this->assertRuleAltInputValue($arg1, $arg3);
+    }
+
+    private function assertRuleOperatorSelectedValue($rule, $value)
+    {
+        $opValue = $rule->find('css', '.vqb-rule-operator select')->getValue();
+        if ($opValue !== $value) {
+            throw new \Exception('Wrong operator value: ' . $value);
+        }
+    }
+
+    private function asserRuleInputSelectedValue($rule, $value)
+    {
+        $inputValue = $rule->find('css', '.vqb-rule-input select')->getValue();
+        if ($inputValue !== $value) {
+            throw new \Exception('Wrong input value: ' . $value);
+        }
+    }
+
+    private function assertRuleInputValue($rule, $value, $selector = 'input')
+    {
+        $input = $rule->find('css', $selector);
+        if (!$input) {
+            throw new Exception('input no found');
+        }
+        $inputValue = $input->getValue();
+        if ($inputValue !== $value) {
+            throw new \Exception('Input value not is not: ' . $value);
+        }
+    }
+
+    private function assertRuleAltInputValue($ruleName, $value)
+    {
+        $inputValue = $this->getSession()->evaluateScript('$(\'[data-name="' . $ruleName . '"]\').find(\'.item.vqb-rule-input input.active\').val()');
+        if ($inputValue !== $value) {
+            throw new \Exception('Wrong input value: ' . $inputValue);
+        }
+    }
+
+    private function assertRuleExist($ruleName)
+    {
+        $rule = $this->getSession()->getPage()->find('css', '[data-name=' . $ruleName . ']');
+        if (!$rule) {
+            throw new \Exception('Rule not found: ' . $ruleName);
+        }
+
+        return $rule;
     }
 
     /**
