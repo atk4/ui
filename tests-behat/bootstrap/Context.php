@@ -69,6 +69,7 @@ class Context extends RawMinkContext implements BehatContext
             'animation-duration' => $durationToast . 's',
             'transition-duration' => $durationToast . 's',
         ]);
+
         $this->getSession()->executeScript(
             'if (Array.prototype.filter.call(document.getElementsByTagName("style"), e => e.getAttribute("about") === "atk-test-behat").length === 0) {'
             . ' $(\'<style about="atk-test-behat">' . $css . '</style>\').appendTo(\'head\');'
@@ -377,11 +378,11 @@ class Context extends RawMinkContext implements BehatContext
         $this->jqueryWait('$("#' . $lookupElem->getAttribute('id') . '").hasClass("visible")');
 
         // select value
-        $value = $lookupElem->find('xpath', '//div[text()="' . $arg1 . '"]');
-        if ($value === null || $value->getText() !== $arg1) {
+        $valueElem = $lookupElem->find('xpath', '//div[text()="' . $arg1 . '"]');
+        if ($valueElem === null || $valueElem->getText() !== $arg1) {
             throw new \Exception('Value not found: ' . $arg1);
         }
-        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("set selected", ' . $value->getAttribute('data-value') . ');');
+        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("set selected", ' . $valueElem->getAttribute('data-value') . ');');
         $this->jqueryWait();
 
         // hide dropdown and wait till fully closed
@@ -429,15 +430,6 @@ class Context extends RawMinkContext implements BehatContext
     public function iWaitForLoadingToStartIn($arg1)
     {
         $this->getSession()->wait(2000, '$("' . $arg1 . '").hasClass("loading")');
-    }
-
-    /**
-     * @Then I test javascript example
-     */
-    public function iTestJavascriptExample()
-    {
-        $title = $this->getSession()->evaluateScript('return window.document.title;');
-        echo 'I\'m correctly on the webpage entitled "' . $title . '"';
     }
 
     protected function getFinishedScript(): string
