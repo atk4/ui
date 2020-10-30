@@ -285,6 +285,7 @@ class ScopeBuilder extends Control
         ],
         'integer' => 'numeric',
         'float' => 'numeric',
+        'money' => 'numeric',
         'checkbox' => 'boolean',
     ];
 

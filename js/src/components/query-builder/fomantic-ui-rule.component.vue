@@ -1,21 +1,23 @@
 <template>
     <!-- eslint-disable vue/no-v-html -->
-    <div class="vqb-rule ui fluid card" :class="labels.spaceRule">
+    <div class="vqb-rule ui fluid card" :class="labels.spaceRule" :data-name="rule.id">
         <div class="content">
             <div class="ui grid">
                 <div class="middle aligned row atk-qb">
                     <div class="thirteen wide column">
                         <div class="ui horizontal list">
-                            <div class="item">
+                            <div class="item vqb-rule-label">
                                 <h5 class>{{ rule.label }}</h5>
                             </div>
-                            <div class="item" v-if="typeof rule.operands !== 'undefined'">
+                            <div class="item vqb-rule-operand" v-if="typeof rule.operands !== 'undefined'">
                                 <!-- List of operands (optional) -->
                                 <select v-model="query.operand" class="atk-qb-select">
                                     <option v-for="operand in rule.operands" :key="operand">{{ operand }}</option>
                                 </select>
                             </div>
-                            <div class="item" v-if="typeof rule.operators !== 'undefined' && rule.operators.length > 1">
+                            <div class="item vqb-rule-oerator"
+                                 v-if="typeof rule.operators !== 'undefined'
+                                 && rule.operators.length > 1">
                                 <!-- List of operators (e.g. =, !=, >, <) -->
                                 <select v-model="query.operator" class="atk-qb-select">
                                     <option v-for="operator in rule.operators" :key="operator" :value="operator">
@@ -23,7 +25,7 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="item">
+                            <div class="item vqb-rule-input">
                                 <!-- text input -->
                                 <template v-if="canDisplay('input')">
                                     <div class="ui small input atk-qb" >
