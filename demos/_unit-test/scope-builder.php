@@ -31,8 +31,14 @@ $model->scope()->add($orScope);
 
 $form = \atk4\ui\Form::addTo($app);
 
-$form->addControl('qb', [\atk4\ui\Form\Control\ScopeBuilder::class, 'model' => $model, 'options' => ['debug' => true]]);
+$form->addControl('qb', [\atk4\ui\Form\Control\ScopeBuilder::class, 'model' => $model]);
 
 $form->onSubmit(function ($form) use ($model) {
-    return "Scope selected:\n\n" . $form->model->get('qb')->toWords($model);
+    $message = $form->model->get('qb')->toWords($model);
+    $view = new \atk4\ui\Message('');
+    $view->invokeInit();
+
+    $view->text->addHTML($message);
+
+    return $view;
 });

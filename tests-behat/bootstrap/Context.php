@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace atk4\ui\behat;
 
 use atk4\ui\Exception;
+use atk4\ui\Form\Control\ScopeBuilder;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\MinkExtension\Context\RawMinkContext;
 
 class Context extends RawMinkContext implements BehatContext
@@ -470,10 +470,20 @@ class Context extends RawMinkContext implements BehatContext
     {
         $rule = $this->assertRuleExist($arg1);
         $idx = ($arg2 === 'Yes') ? 0 : 1;
-        $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="'. $arg1 . '"]\').find(\'input\')[' . $idx . '].checked');
+        $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="' . $arg1 . '"]\').find(\'input\')[' . $idx . '].checked');
         if (!$isChecked) {
             throw new \Exception('Radio value selected is not: ' . $arg2);
         }
+    }
+
+    /**
+     * @Then /^I check if word match$/
+     */
+    public function iCheckIfWordMatch()
+    {
+        $word = '(Project Name is regular expression \'[a-zA-Z]\' and Client Country Iso is equal to \'Brazil\' and Start Date is equal to \'2020-10-22\') and (Finish Time is not equal to \'22:22\' or Is Commercial is equal to \'0\')';
+
+        $this->assertSession()->pageTextContains($word);
     }
 
     private function assertRuleOperatorSelectedValue($rule, $value)

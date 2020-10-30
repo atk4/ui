@@ -8,3 +8,5 @@ Feature: ScopeBuilder
     Then date rule "start_date" operator is "is on" and value is "Oct 22, 2020"
     Then date rule "finish_time" operator is "is not on" and value is "22:22"
     Then bool rule "is_commercial" has value "No"
+    And I press button "Save"
+    Then I check if word match
