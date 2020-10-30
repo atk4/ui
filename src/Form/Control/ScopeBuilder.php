@@ -135,6 +135,27 @@ class ScopeBuilder extends Control
     protected const OPERATOR_EMPTY = 'is empty';
     protected const OPERATOR_NOT_EMPTY = 'is not empty';
 
+
+    protected const DATE_OPERATORS = [
+        self::OPERATOR_TIME_EQUALS,
+        self::OPERATOR_TIME_DOESNOT_EQUAL,
+        self::OPERATOR_TIME_GREATER,
+        self::OPERATOR_TIME_GREATER_EQUAL,
+        self::OPERATOR_TIME_LESS,
+        self::OPERATOR_TIME_LESS_EQUAL,
+        self::OPERATOR_EMPTY,
+        self::OPERATOR_NOT_EMPTY,
+    ];
+
+    protected const DATE_OPERATORS_MAP = [
+        self::OPERATOR_TIME_EQUALS => Condition::OPERATOR_EQUALS,
+        self::OPERATOR_TIME_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
+        self::OPERATOR_TIME_GREATER => Condition::OPERATOR_GREATER,
+        self::OPERATOR_TIME_GREATER_EQUAL => Condition::OPERATOR_GREATER_EQUAL,
+        self::OPERATOR_TIME_LESS => Condition::OPERATOR_LESS,
+        self::OPERATOR_TIME_LESS_EQUAL => Condition::OPERATOR_LESS_EQUAL,
+    ];
+
     /**
      * VueQueryBulder => Condition map of operators.
      *
@@ -151,14 +172,9 @@ class ScopeBuilder extends Control
             self::OPERATOR_SIGN_LESS => Condition::OPERATOR_LESS,
             self::OPERATOR_SIGN_LESS_EQUAL => Condition::OPERATOR_LESS_EQUAL,
         ],
-        'date' => [
-            self::OPERATOR_TIME_EQUALS => Condition::OPERATOR_EQUALS,
-            self::OPERATOR_TIME_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
-            self::OPERATOR_TIME_GREATER => Condition::OPERATOR_GREATER,
-            self::OPERATOR_TIME_GREATER_EQUAL => Condition::OPERATOR_GREATER_EQUAL,
-            self::OPERATOR_TIME_LESS => Condition::OPERATOR_LESS,
-            self::OPERATOR_TIME_LESS_EQUAL => Condition::OPERATOR_LESS_EQUAL,
-        ],
+        'date' => self::DATE_OPERATORS_MAP,
+        'time' => self::DATE_OPERATORS_MAP,
+        'datetime' => self::DATE_OPERATORS_MAP,
         'text' => [
             self::OPERATOR_TEXT_EQUALS => Condition::OPERATOR_EQUALS,
             self::OPERATOR_TEXT_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
@@ -254,19 +270,20 @@ class ScopeBuilder extends Control
             'type' => 'custom-component',
             'component' => 'DatePicker',
             'inputType' => 'date',
-            'operators' => [
-                self::OPERATOR_TIME_EQUALS,
-                self::OPERATOR_TIME_DOESNOT_EQUAL,
-                self::OPERATOR_TIME_GREATER,
-                self::OPERATOR_TIME_GREATER_EQUAL,
-                self::OPERATOR_TIME_LESS,
-                self::OPERATOR_TIME_LESS_EQUAL,
-                self::OPERATOR_EMPTY,
-                self::OPERATOR_NOT_EMPTY,
-            ],
+            'operators' => self::DATE_OPERATORS,
         ],
-        'datetime' => 'date',
-        'time' => 'date',
+        'datetime' => [
+            'type' => 'custom-component',
+            'component' => 'DatePicker',
+            'inputType' => 'datetime',
+            'operators' => self::DATE_OPERATORS,
+        ],
+        'time' => [
+            'type' => 'custom-component',
+            'component' => 'DatePicker',
+            'inputType' => 'time',
+            'operators' => self::DATE_OPERATORS,
+        ],
         'integer' => 'numeric',
         'float' => 'numeric',
         'checkbox' => 'boolean',
@@ -345,7 +362,7 @@ class ScopeBuilder extends Control
             'options' => $this->options[strtolower((string) $type)] ?? [],
         ], $field->ui['scopebuilder'] ?? []), $field);
 
-        $rule['componentProps'] = $this->getComponentProps($rule, $type ?? '');
+        $rule['componentProps'] = $this->getComponentProps($rule);
 
         $this->rules[] = $rule;
 
@@ -356,7 +373,7 @@ class ScopeBuilder extends Control
      * Some field type use specific Vue component for ui display.
      * This will return component property (props) accordingly.
      */
-    protected function getComponentProps(array $rule, string $type): array
+    protected function getComponentProps(array $rule): array
     {
         $props = [];
         $component = $rule['component'] ?? null;
@@ -364,19 +381,20 @@ class ScopeBuilder extends Control
         if ($component === 'DatePicker') {
             $calendar = new Calendar();
             $props = $this->atkdDateOptions['flatpickr'] ?? [];
-            $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$type . '_format'});
+            $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$rule['inputType'] . '_format'});
             $props['dateFormat'] = $format;
             $phpFormat = 'Y-m-d';
 
-            if ($type === 'datetime' || $type === 'time') {
+            if ($rule['inputType'] === 'datetime' || $rule['inputType'] === 'time') {
                 $props['enableTime'] = true;
                 $props['time_24hr'] = $calendar->use24hrTimeFormat($format);
-                $props['noCalendar'] = ($type === 'time');
+                $props['noCalendar'] = ($rule['inputType'] === 'time');
                 $props['enableSeconds'] = $calendar->useSeconds($format);
-                $phpFormat = ($type === 'datetime') ? 'Y-m-d H:i:s' : 'H:i:s';
+                $phpFormat = ($rule['inputType'] === 'datetime') ? 'Y-m-d H:i:s' : 'H:i:s';
             }
 
             $props['useDefault'] = $this->atkdDateOptions['useDefault'];
+            // date query value will be converted using this format.
             $props['phpFormat'] = $phpFormat;
         }
 

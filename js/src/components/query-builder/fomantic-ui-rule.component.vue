@@ -39,6 +39,7 @@
                                     <div class="ui small input atk-qb">
                                       <atk-date-picker
                                           :config="rule.componentProps"
+                                          :value="query.value"
                                           @dateChange="onDateChange"
                                           @setDefault="onDateChange"></atk-date-picker>
                                     </div>

@@ -12,17 +12,23 @@ const template = '<flat-picker v-model="date" :config="flatPickr" @on-change="on
 export default {
     name: 'atk-date-picker',
     template: template,
-    props: ['config'],
+    props: ['config', 'value'],
     data: function () {
         const { useDefault, phpFormat, ...fpickr } = this.config;
 
-        if (useDefault && !fpickr.defaultDate) {
+        if (useDefault && !fpickr.defaultDate && !this.value) {
             fpickr.defaultDate = new Date();
+        } else if (this.value && phpFormat) {
+            // make sure phpFormat is also supported by flatpickr.
+            fpickr.defaultDate = flatpickr.parseDate(this.value, phpFormat);
+        } else if (this.value) {
+            fpickr.defaultDate = this.value;
         }
 
         if (!fpickr.locale) {
             fpickr.locale = flatpickr.l10ns.default;
         }
+
         return {
             phpFormat: phpFormat,
             flatPickr: fpickr,
@@ -30,7 +36,8 @@ export default {
         };
     },
     mounted: function () {
-        if (this.flatPickr.defaultDate) {
+        // if value is not set but default date is, then emit proper string value to parent.
+        if (!this.value && this.flatPickr.defaultDate) {
             if (this.flatPickr.defaultDate instanceof Date) {
                 const output = this.phpFormat
                     ? atk.phpDate(this.phpFormat, this.config.defaultDate)
