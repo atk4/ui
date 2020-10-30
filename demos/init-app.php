@@ -98,7 +98,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['File Upload'], [$path . 'upload'], $menu);
     $layout->addMenuItem(['Multi Line'], [$path . 'multiline'], $menu);
     $layout->addMenuItem(['Tree Selector'], [$path . 'tree-item-selector'], $menu);
-    $layout->addMenuItem(['Query Builder'], [$path . 'query-builder'], $menu);
+    $layout->addMenuItem(['Scope Builder'], [$path . 'scope-builder'], $menu);
 
     $path = $demosUrl . 'collection/';
     $menu = $layout->addMenuGroup(['Data Collection', 'icon' => 'table']);

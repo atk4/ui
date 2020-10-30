@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace atk4\ui\behat;
 
 use atk4\ui\Exception;
-use atk4\ui\Form\Control\ScopeBuilder;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
