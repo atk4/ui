@@ -8,6 +8,7 @@ use atk4\ui\Exception;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\MinkExtension\Context\RawMinkContext;
 
 class Context extends RawMinkContext implements BehatContext
@@ -460,6 +461,19 @@ class Context extends RawMinkContext implements BehatContext
         $this->assertRuleOperatorSelectedValue($rule, $arg2);
         // scope builder is using alternate input.
         $this->assertRuleInputValue($rule, $arg3, 'input.form-control');
+    }
+
+    /**
+     * @Then /^bool rule "([^"]*)" has value "([^"]*)"$/
+     */
+    public function boolRuleHasValue($arg1, $arg2)
+    {
+        $rule = $this->assertRuleExist($arg1);
+        $idx = ($arg2 === 'Yes') ? 0 : 1;
+        $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="'. $arg1 . '"]\').find(\'input\')[' . $idx . '].checked');
+        if (!$isChecked) {
+            throw new \Exception('Radio value selected is not: ' . $arg2);
+        }
     }
 
     private function assertRuleOperatorSelectedValue($rule, $value)
