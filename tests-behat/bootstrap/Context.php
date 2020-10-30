@@ -67,11 +67,12 @@ class Context extends RawMinkContext implements BehatContext
             'animation-duration' => '5s',
             'transition-duration' => '5s',
         ]);
-        $script = 'if (Array.prototype.filter.call(document.getElementsByTagName("style"), e => e.getAttribute("about") === "atk-test-behat").length === 0) {'
+        $this->getSession()->executeScript(
+            'if (Array.prototype.filter.call(document.getElementsByTagName("style"), e => e.getAttribute("about") === "atk-test-behat").length === 0) {'
             . ' $(\'<style about="atk-test-behat">' . $css . '</style>\').appendTo(\'head\');'
             . ' }'
-            . 'jQuery.fx.off = true;';
-        $this->getSession()->executeScript($script);
+            . 'jQuery.fx.off = true;'
+        );
     }
 
     protected function assertNoException(): void
@@ -128,8 +129,7 @@ class Context extends RawMinkContext implements BehatContext
             throw new \Exception('Unable to find menu with title ' . $arg1);
         }
 
-        $script = '$("#' . $link->getAttribute('id') . '").click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
     }
 
     /**
@@ -154,8 +154,7 @@ class Context extends RawMinkContext implements BehatContext
         if (!$icon) {
             throw new \Exception('Column does not contain clickable icon.');
         }
-        $script = '$("#' . $icon->getAttribute('id') . '").click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("#' . $icon->getAttribute('id') . '").click()');
     }
 
     /**
@@ -175,8 +174,7 @@ class Context extends RawMinkContext implements BehatContext
             throw new \Exception('Unable to find tab with title ' . $arg1);
         }
 
-        $script = '$("#' . $link->getAttribute('id') . '").click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
     }
 
     /**
@@ -184,8 +182,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickFirstCardOnPage()
     {
-        $script = '$(".atk-card")[0].click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$(".atk-card")[0].click()');
     }
 
     /**
@@ -193,8 +190,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickFirstElementUsingClass($arg1)
     {
-        $script = '$("' . $arg1 . '")[0].click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("' . $arg1 . '")[0].click()');
     }
 
     /**
@@ -202,8 +198,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickPaginatorPage($arg1)
     {
-        $script = '$("a.item[data-page=' . $arg1 . ']").click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("a.item[data-page=' . $arg1 . ']").click()');
     }
 
     /**
@@ -326,8 +321,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iHideJsModal()
     {
-        $script = '$(".modal.active.front").modal("hide")';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$(".modal.active.front").modal("hide")');
     }
 
     /**
@@ -335,8 +329,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iScrollToTop()
     {
-        $script = 'window.scrollTo(0,0)';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('window.scrollTo(0,0)');
     }
 
     /**
@@ -377,8 +370,7 @@ class Context extends RawMinkContext implements BehatContext
         $lookup = $field->getParent();
 
         // open dropdown from semantic-ui command. (just a click is not triggering it)
-        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("show")';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("#' . $lookup->getAttribute('id') . '").dropdown("show")');
         // Wait till dropdown is visible
         // Cannot call jqueryWait because calling it will return prior from dropdown to fire ajax request.
         $this->getSession()->wait(2000, '$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
@@ -389,12 +381,10 @@ class Context extends RawMinkContext implements BehatContext
         }
 
         // When value are loaded, select value from javascript.
-        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("set selected", ' . $value->getAttribute('data-value') . ');';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("#' . $lookup->getAttribute('id') . '").dropdown("set selected", ' . $value->getAttribute('data-value') . ');');
 
         // Then hide dropdown.
-        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("hide");';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("#' . $lookup->getAttribute('id') . '").dropdown("hide");');
 
         // wait till dropdown is fully close
         $this->getSession()->wait(2000, '!$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
