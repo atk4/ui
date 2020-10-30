@@ -458,9 +458,8 @@ class Context extends RawMinkContext implements BehatContext
     {
         $rule = $this->assertRuleExist($arg1);
         $this->assertRuleOperatorSelectedValue($rule, $arg2);
-        // todo try to get input using alt format but always return empty.
-        $this->assertRuleInputValue($rule, $arg3);
-//        $this->assertRuleAltInputValue($arg1, $arg3);
+        // scope builder is using alternate input.
+        $this->assertRuleInputValue($rule, $arg3, 'input.form-control');
     }
 
     private function assertRuleOperatorSelectedValue($rule, $value)
@@ -483,19 +482,11 @@ class Context extends RawMinkContext implements BehatContext
     {
         $input = $rule->find('css', $selector);
         if (!$input) {
-            throw new Exception('input no found');
+            throw new Exception('input not found');
         }
         $inputValue = $input->getValue();
         if ($inputValue !== $value) {
             throw new \Exception('Input value not is not: ' . $value);
-        }
-    }
-
-    private function assertRuleAltInputValue($ruleName, $value)
-    {
-        $inputValue = $this->getSession()->evaluateScript('$(\'[data-name="' . $ruleName . '"]\').find(\'.item.vqb-rule-input input.active\').val()');
-        if ($inputValue !== $value) {
-            throw new \Exception('Wrong input value: ' . $inputValue);
         }
     }
 
