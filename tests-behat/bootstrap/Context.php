@@ -444,7 +444,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then /^hasRef rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
-    public function hasrefRuleOperatorIsAndValueIs($arg1, $arg2, $arg3)
+    public function hasRefRuleOperatorAndValue($arg1, $arg2, $arg3)
     {
         $rule = $this->assertRuleExist($arg1);
         $this->assertRuleOperatorSelectedValue($rule, $arg2);
@@ -454,7 +454,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then /^date rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
-    public function dateRuleOperatorIsAndValueIs($arg1, $arg2, $arg3)
+    public function dateRuleOperatorAndValue($arg1, $arg2, $arg3)
     {
         $rule = $this->assertRuleExist($arg1);
         $this->assertRuleOperatorSelectedValue($rule, $arg2);
