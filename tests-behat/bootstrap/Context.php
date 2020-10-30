@@ -58,20 +58,24 @@ class Context extends RawMinkContext implements BehatContext
             return $selector . ' { ' . implode(' ', $css) . ' }';
         };
 
+        $durationAnimation = 0.005;
+        $durationToast = 5;
         $css = $toCssFx('*', [
-            'animation-delay' => '0.005s',
-            'animation-duration' => '0.005s',
-            'transition-delay' => '0.005s',
-            'transition-duration' => '0.005s',
+            'animation-delay' => $durationAnimation . 's',
+            'animation-duration' => $durationAnimation . 's',
+            'transition-delay' => $durationAnimation . 's',
+            'transition-duration' => $durationAnimation . 's',
         ]) . $toCssFx('.ui.toast-container .toast-box .progressing.wait', [
-            'animation-duration' => '5s',
-            'transition-duration' => '5s',
+            'animation-duration' => $durationToast . 's',
+            'transition-duration' => $durationToast . 's',
         ]);
-        $script = 'if (Array.prototype.filter.call(document.getElementsByTagName("style"), e => e.getAttribute("about") === "atk-test-behat").length === 0) {'
+
+        $this->getSession()->executeScript(
+            'if (Array.prototype.filter.call(document.getElementsByTagName("style"), e => e.getAttribute("about") === "atk-test-behat").length === 0) {'
             . ' $(\'<style about="atk-test-behat">' . $css . '</style>\').appendTo(\'head\');'
             . ' }'
-            . 'jQuery.fx.off = true;';
-        $this->getSession()->executeScript($script);
+            . 'jQuery.fx.off = true;'
+        );
     }
 
     protected function assertNoException(): void
@@ -128,8 +132,7 @@ class Context extends RawMinkContext implements BehatContext
             throw new \Exception('Unable to find menu with title ' . $arg1);
         }
 
-        $script = '$("#' . $link->getAttribute('id') . '").click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
     }
 
     /**
@@ -159,12 +162,13 @@ class Context extends RawMinkContext implements BehatContext
         if (!$column) {
             throw new \Exception('Unable to find a column ' . $arg1);
         }
+
         $icon = $column->find('css', 'i');
         if (!$icon) {
             throw new \Exception('Column does not contain clickable icon.');
         }
-        $script = '$("#' . $icon->getAttribute('id') . '").click()';
-        $this->getSession()->executeScript($script);
+
+        $this->getSession()->executeScript('$("#' . $icon->getAttribute('id') . '").click()');
     }
 
     /**
@@ -184,8 +188,7 @@ class Context extends RawMinkContext implements BehatContext
             throw new \Exception('Unable to find tab with title ' . $arg1);
         }
 
-        $script = '$("#' . $link->getAttribute('id') . '").click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
     }
 
     /**
@@ -193,8 +196,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickFirstCardOnPage()
     {
-        $script = '$(".atk-card")[0].click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$(".atk-card")[0].click()');
     }
 
     /**
@@ -202,8 +204,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickFirstElementUsingClass($arg1)
     {
-        $script = '$("' . $arg1 . '")[0].click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("' . $arg1 . '")[0].click()');
     }
 
     /**
@@ -211,8 +212,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickPaginatorPage($arg1)
     {
-        $script = '$("a.item[data-page=' . $arg1 . ']").click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("a.item[data-page=' . $arg1 . ']").click()');
     }
 
     /**
@@ -251,7 +251,6 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function labelChangesToNumber()
     {
-        $this->getSession()->wait(5000, '!$("#' . $this->buttonId . '").hasClass("loading")');
         $element = $this->getSession()->getPage()->findById($this->buttonId);
         $value = trim($element->getHtml());
         if (!is_numeric($value)) {
@@ -335,8 +334,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iHideJsModal()
     {
-        $script = '$(".modal.active.front").modal("hide")';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$(".modal.active.front").modal("hide")');
     }
 
     /**
@@ -344,8 +342,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iScrollToTop()
     {
-        $script = 'window.scrollTo(0,0)';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('window.scrollTo(0,0)');
     }
 
     /**
@@ -374,39 +371,35 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I select value :arg1 in lookup :arg2
      *
-     * Select a value in a lookup field.
+     * Select a value in a lookup control.
      */
     public function iSelectValueInLookup($arg1, $arg2)
     {
-        $field = $this->getSession()->getPage()->find('css', 'input[name=' . $arg2 . ']');
-        if ($field === null) {
-            throw new \Exception('Field not found: ' . $arg2);
+        // get dropdown item from semantic ui which is direct parent of input html element
+        $inputElem = $this->getSession()->getPage()->find('css', 'input[name=' . $arg2 . ']');
+        if ($inputElem === null) {
+            throw new \Exception('Lookup element not found: ' . $arg2);
         }
-        // get dropdown item from semantic ui which is direct parent of input name field.
-        $lookup = $field->getParent();
+        $lookupElem = $inputElem->getParent();
 
-        // open dropdown from semantic-ui command. (just a click is not triggering it)
-        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("show")';
-        $this->getSession()->executeScript($script);
-        // Wait till dropdown is visible
-        // Cannot call jqueryWait because calling it will return prior from dropdown to fire ajax request.
-        $this->getSession()->wait(2000, '$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
-        // value should be available.
-        $value = $lookup->find('xpath', '//div[text()="' . $arg1 . '"]');
-        if (!$value || $value->getText() !== $arg1) {
+        // open dropdown and wait till fully opened (just a click is not triggering it)
+        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("show")');
+        $this->jqueryWait('$("#' . $lookupElem->getAttribute('id') . '").hasClass("visible")');
+
+        // select value
+        $valueElem = $lookupElem->find('xpath', '//div[text()="' . $arg1 . '"]');
+        if ($valueElem === null || $valueElem->getText() !== $arg1) {
             throw new \Exception('Value not found: ' . $arg1);
         }
+        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("set selected", ' . $valueElem->getAttribute('data-value') . ');');
+        $this->jqueryWait();
 
-        // When value are loaded, select value from javascript.
-        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("set selected", ' . $value->getAttribute('data-value') . ');';
-        $this->getSession()->executeScript($script);
-
-        // Then hide dropdown.
-        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("hide");';
-        $this->getSession()->executeScript($script);
-
-        // wait till dropdown is fully close
-        $this->getSession()->wait(2000, '!$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
+        // hide dropdown and wait till fully closed
+        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("hide");');
+        $this->jqueryWait();
+        // for unknown reasons, dropdown very often remains visible in CI, so hide twice
+        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("hide");');
+        $this->jqueryWait('!$("#' . $lookupElem->getAttribute('id') . '").hasClass("visible")');
     }
 
     /**
@@ -448,36 +441,24 @@ class Context extends RawMinkContext implements BehatContext
         $this->getSession()->wait(2000, '$("' . $arg1 . '").hasClass("loading")');
     }
 
-    /**
-     * @Then I test javascript example
-     */
-    public function iTestJavascriptExample()
-    {
-        $title = $this->getSession()->evaluateScript('return window.document.title;');
-        echo 'I\'m correctly on the webpage entitled "' . $title . '"';
-    }
-
     protected function getFinishedScript(): string
     {
         return 'document.readyState === \'complete\''
             . ' && typeof jQuery !== \'undefined\' && jQuery.active === 0'
-            . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()'
-            . ' && jQuery(\':animated\').length === 0'; // needed for SUI dropdown
+            . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()';
     }
 
     /**
-     * Wait till jquery ajax request finished and no animation is perform.
-     *
-     * @param int $duration the maximum time to wait for the function
+     * Wait till jQuery AJAX request finished and no animation is perform.
      */
-    protected function jqueryWait($duration = 5000)
+    protected function jqueryWait(string $extraWaitCondition = 'true', $maxWaitdurationMs = 5000)
     {
-        $finishedScript = $this->getFinishedScript();
+        $finishedScript = '(' . $this->getFinishedScript() . ') && (' . $extraWaitCondition . ')';
 
         $s = microtime(true);
         $c = 0;
-        while (microtime(true) - $s <= $duration * 1000) {
-            $this->getSession()->wait($duration, $finishedScript);
+        while (microtime(true) - $s <= $maxWaitdurationMs / 1000) {
+            $this->getSession()->wait($maxWaitdurationMs, $finishedScript);
             usleep(10000);
             if ($this->getSession()->evaluateScript($finishedScript)) {
                 if (++$c >= 2) {
@@ -489,7 +470,7 @@ class Context extends RawMinkContext implements BehatContext
             }
         }
 
-        throw new \Exception('JQuery did not finished within a given time limit');
+        throw new \Exception('jQuery did not finished within a time limit');
     }
 
     /**

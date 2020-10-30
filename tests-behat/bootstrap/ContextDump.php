@@ -13,7 +13,7 @@ use Behat\Testwork\Tester\Result\TestResult;
 class ContextDump extends Context
 {
     /**
-     * Dump current page data when step failed to allow easy debug on TravisCI.
+     * Dump current page data when step failed for CI.
      *
      * @AfterStep
      */
