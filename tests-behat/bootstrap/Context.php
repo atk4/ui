@@ -448,7 +448,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $rule = $this->assertRuleExist($arg1);
         $this->assertRuleOperatorSelectedValue($rule, $arg2);
-        $this->asserRuleInputSelectedValue($rule, $arg3);
+        $this->assertRuleInputSelectedValue($rule, $arg3);
     }
 
     /**
@@ -470,7 +470,7 @@ class Context extends RawMinkContext implements BehatContext
         }
     }
 
-    private function asserRuleInputSelectedValue($rule, $value)
+    private function assertRuleInputSelectedValue($rule, $value)
     {
         $inputValue = $rule->find('css', '.vqb-rule-input select')->getValue();
         if ($inputValue !== $value) {
