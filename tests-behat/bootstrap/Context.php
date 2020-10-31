@@ -8,6 +8,7 @@ use atk4\ui\Exception;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
+use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\RawMinkContext;
 
 class Context extends RawMinkContext implements BehatContext
@@ -429,45 +430,51 @@ class Context extends RawMinkContext implements BehatContext
         $icon->click();
     }
 
-    //// ScopeBuilder rule /////////
-
     /**
-     * @Then /^text rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     * Generic ScopeBuilder rule with select operator and input value.
+     *
+     * @Then /^rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
-    public function textRuleOperatorAndValue($arg1, $arg2, $arg3)
+    public function scopeBuilderTextRule($arg1, $arg2, $arg3)
     {
-        $rule = $this->assertRuleExist($arg1);
-        $this->assertRuleOperatorSelectedValue($rule, $arg2);
-        $this->assertRuleInputValue($rule, $arg3);
+        $rule = $this->assertScopeBuilderRuleExist($arg1);
+        $this->assertSelectedValue($rule, $arg2, '.vqb-rule-operator select');
+        $this->assertInputValue($rule, $arg3);
     }
 
     /**
-     * @Then /^hasRef rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     * hasOne reference rule for ScopeBuilder
+     *
+     * @Then /^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
-    public function hasRefRuleOperatorAndValue($arg1, $arg2, $arg3)
+    public function scopeBuilderReferenceRule($arg1, $arg2, $arg3)
     {
-        $rule = $this->assertRuleExist($arg1);
-        $this->assertRuleOperatorSelectedValue($rule, $arg2);
-        $this->assertRuleInputSelectedValue($rule, $arg3);
+        $rule = $this->assertScopeBuilderRuleExist($arg1);
+        $this->assertSelectedValue($rule, $arg2, '.vqb-rule-operator select');
+        $this->assertSelectedValue($rule, $arg3, '.vqb-rule-input select');
+
     }
 
     /**
+     * Date, Time or Datetime rule for ScopeBuilder
+     *
      * @Then /^date rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
-    public function dateRuleOperatorAndValue($arg1, $arg2, $arg3)
+    public function scopeBuilderDateRule($arg1, $arg2, $arg3)
     {
-        $rule = $this->assertRuleExist($arg1);
-        $this->assertRuleOperatorSelectedValue($rule, $arg2);
-        // scope builder is using alternate input.
-        $this->assertRuleInputValue($rule, $arg3, 'input.form-control');
+        $rule = $this->assertScopeBuilderRuleExist($arg1);
+        $this->assertSelectedValue($rule, $arg2, '.vqb-rule-operator select');
+        $this->assertInputValue($rule, $arg3, 'input.form-control');
     }
 
     /**
+     * Boolean type rule for scope builder.
+     *
      * @Then /^bool rule "([^"]*)" has value "([^"]*)"$/
      */
-    public function boolRuleHasValue($arg1, $arg2)
+    public function scopeBuilderBoolRule($arg1, $arg2)
     {
-        $rule = $this->assertRuleExist($arg1);
+        $this->assertScopeBuilderRuleExist($arg1);
         $idx = ($arg2 === 'Yes') ? 0 : 1;
         $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="' . $arg1 . '"]\').find(\'input\')[' . $idx . '].checked');
         if (!$isChecked) {
@@ -476,36 +483,44 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^I check if word match$/
+     * @Then /^I check if word from data scope match$/
      */
     public function iCheckIfWordMatch()
     {
-        $word = '(Project Name is regular expression \'[a-zA-Z]\' and Client Country Iso is equal to \'Brazil\' and Start Date is equal to \'2020-10-22\') and (Finish Time is not equal to \'22:22\' or Is Commercial is equal to \'0\')';
+        $expected =  $this->getSession()->getPage()->find('css', '.atk-expected-result .content')->getText();
 
-        $this->assertSession()->pageTextContains($word);
-    }
+        $resp = $this->getSession()->getPage()->find('css', '.atk-callback-response .content')->getText();
 
-    private function assertRuleOperatorSelectedValue($rule, $value)
-    {
-        $opValue = $rule->find('css', '.vqb-rule-operator select')->getValue();
-        if ($opValue !== $value) {
-            throw new \Exception('Wrong operator value: ' . $value);
+        if (preg_replace('/[^A-Za-z0-9\-]/', '', $expected) !== preg_replace('/[^A-Za-z0-9\-]/', '', $resp)) {
+            throw new \Exception('Data word does not match');
         }
     }
 
-    private function assertRuleInputSelectedValue($rule, $value)
+    /**
+     * Find a select input type within an html element
+     * and check if value is selected.
+     */
+    private function assertSelectedValue(NodeElement $element, string $value, string $selector)
     {
-        $inputValue = $rule->find('css', '.vqb-rule-input select')->getValue();
-        if ($inputValue !== $value) {
-            throw new \Exception('Wrong input value: ' . $value);
+        $select = $element->find('css', $selector);
+        if (!$select) {
+            throw new \Exception('Select input not found using selector: ' . $selector);
+        }
+        $selectValue = $select->getValue();
+        if ($selectValue !== $value) {
+            throw new \Exception('Value: "' .  $value . '" not set using selector: ' . $selector);
         }
     }
 
-    private function assertRuleInputValue($rule, $value, $selector = 'input')
+    /**
+     * Find an input within an html element and check
+     * if value is set.
+     */
+    private function assertInputValue(NodeElement $element, string $value, string $selector = 'input')
     {
-        $input = $rule->find('css', $selector);
+        $input = $element->find('css', $selector);
         if (!$input) {
-            throw new Exception('input not found');
+            throw new Exception('Input not found in selector: ' . $selector);
         }
         $inputValue = $input->getValue();
         if ($inputValue !== $value) {
@@ -513,9 +528,9 @@ class Context extends RawMinkContext implements BehatContext
         }
     }
 
-    private function assertRuleExist($ruleName)
+    private function assertScopeBuilderRuleExist(string $ruleName): NodeElement
     {
-        $rule = $this->getSession()->getPage()->find('css', '[data-name=' . $ruleName . ']');
+        $rule = $this->getSession()->getPage()->find('css', '.vqb-rule[data-name=' . $ruleName . ']');
         if (!$rule) {
             throw new \Exception('Rule not found: ' . $ruleName);
         }
