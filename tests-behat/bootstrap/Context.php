@@ -443,7 +443,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * hasOne reference rule for ScopeBuilder
+     * hasOne reference rule for ScopeBuilder.
      *
      * @Then /^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
@@ -452,11 +452,10 @@ class Context extends RawMinkContext implements BehatContext
         $rule = $this->assertScopeBuilderRuleExist($arg1);
         $this->assertSelectedValue($rule, $arg2, '.vqb-rule-operator select');
         $this->assertSelectedValue($rule, $arg3, '.vqb-rule-input select');
-
     }
 
     /**
-     * Date, Time or Datetime rule for ScopeBuilder
+     * Date, Time or Datetime rule for ScopeBuilder.
      *
      * @Then /^date rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
@@ -487,7 +486,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iCheckIfWordMatch()
     {
-        $expected =  $this->getSession()->getPage()->find('css', '.atk-expected-result .content')->getText();
+        $expected = $this->getSession()->getPage()->find('css', '.atk-expected-result .content')->getText();
 
         $resp = $this->getSession()->getPage()->find('css', '.atk-callback-response .content')->getText();
 
@@ -508,7 +507,7 @@ class Context extends RawMinkContext implements BehatContext
         }
         $selectValue = $select->getValue();
         if ($selectValue !== $value) {
-            throw new \Exception('Value: "' .  $value . '" not set using selector: ' . $selector);
+            throw new \Exception('Value: "' . $value . '" not set using selector: ' . $selector);
         }
     }
 
