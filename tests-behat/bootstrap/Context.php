@@ -435,7 +435,7 @@ class Context extends RawMinkContext implements BehatContext
      *
      * @Then /^rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
-    public function scopeBuilderTextRule($arg1, $arg2, $arg3)
+    public function scopeBuilderRule($arg1, $arg2, $arg3)
     {
         $rule = $this->assertScopeBuilderRuleExist($arg1);
         $this->assertSelectedValue($rule, $arg2, '.vqb-rule-operator select');
@@ -443,7 +443,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * hasOne reference rule for ScopeBuilder.
+     * hasOne reference or enum type rule for ScopeBuilder.
      *
      * @Then /^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
@@ -467,7 +467,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * Boolean type rule for scope builder.
+     * Boolean type rule for ScopeBuilder.
      *
      * @Then /^bool rule "([^"]*)" has value "([^"]*)"$/
      */
