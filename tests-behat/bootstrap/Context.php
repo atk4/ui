@@ -435,11 +435,11 @@ class Context extends RawMinkContext implements BehatContext
      *
      * @Then /^rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
-    public function scopeBuilderRule($arg1, $arg2, $arg3)
+    public function scopeBuilderRule($name, $operator, $value)
     {
-        $rule = $this->assertScopeBuilderRuleExist($arg1);
-        $this->assertSelectedValue($rule, $arg2, '.vqb-rule-operator select');
-        $this->assertInputValue($rule, $arg3);
+        $rule = $this->assertScopeBuilderRuleExist($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertInputValue($rule, $value);
     }
 
     /**
@@ -447,11 +447,11 @@ class Context extends RawMinkContext implements BehatContext
      *
      * @Then /^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
-    public function scopeBuilderReferenceRule($arg1, $arg2, $arg3)
+    public function scopeBuilderReferenceRule($name, $operator, $value)
     {
-        $rule = $this->assertScopeBuilderRuleExist($arg1);
-        $this->assertSelectedValue($rule, $arg2, '.vqb-rule-operator select');
-        $this->assertSelectedValue($rule, $arg3, '.vqb-rule-input select');
+        $rule = $this->assertScopeBuilderRuleExist($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertSelectedValue($rule, $value, '.vqb-rule-input select');
     }
 
     /**
@@ -459,11 +459,11 @@ class Context extends RawMinkContext implements BehatContext
      *
      * @Then /^date rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
-    public function scopeBuilderDateRule($arg1, $arg2, $arg3)
+    public function scopeBuilderDateRule($name, $operator, $value)
     {
-        $rule = $this->assertScopeBuilderRuleExist($arg1);
-        $this->assertSelectedValue($rule, $arg2, '.vqb-rule-operator select');
-        $this->assertInputValue($rule, $arg3, 'input.form-control');
+        $rule = $this->assertScopeBuilderRuleExist($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertInputValue($rule, $value, 'input.form-control');
     }
 
     /**
@@ -471,13 +471,13 @@ class Context extends RawMinkContext implements BehatContext
      *
      * @Then /^bool rule "([^"]*)" has value "([^"]*)"$/
      */
-    public function scopeBuilderBoolRule($arg1, $arg2)
+    public function scopeBuilderBoolRule($name, $value)
     {
-        $this->assertScopeBuilderRuleExist($arg1);
-        $idx = ($arg2 === 'Yes') ? 0 : 1;
-        $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="' . $arg1 . '"]\').find(\'input\')[' . $idx . '].checked');
+        $this->assertScopeBuilderRuleExist($name);
+        $idx = ($value === 'Yes') ? 0 : 1;
+        $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="' . $name . '"]\').find(\'input\')[' . $idx . '].checked');
         if (!$isChecked) {
-            throw new \Exception('Radio value selected is not: ' . $arg2);
+            throw new \Exception('Radio value selected is not: ' . $value);
         }
     }
 
