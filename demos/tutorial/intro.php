@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Header;
 use atk4\ui\JsToast;
 use atk4\ui\Message;
 use atk4\ui\View;
@@ -142,20 +143,23 @@ $wizard->addStep('Business Model', function ($page) use ($app) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
 
+        Header::addTo($owner, ['Set invoice data:']);
         $form = \atk4\ui\Form::addTo($owner);
         $form->setModel($model)->tryLoad(1);
 
         if (!$model->loaded()) {
+            // set default data
             $model->setMulti([
                 'id' => 1,
-                'reference' => 'Inv-' . rand(1000, 9999),
+                'reference' => 'Inv-' . random_int(1000, 9999),
                 'date' => date($app->ui_persistence->date_format),
-             ]);
+            ]);
             $model->save();
         }
 
-        $form->onSubmit(function($f) use ($owner, $page) {
+        $form->onSubmit(function ($f) {
             $f->model->save();
+
             return new JsToast('Saved!');
         });
 
@@ -184,7 +188,7 @@ $wizard->addStep('Business Model', function ($page) use ($app) {
     );
 });
 
-$wizard->addStep('Persistence', function ($page) use($app) {
+$wizard->addStep('Persistence', function ($page) use ($app) {
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -192,7 +196,7 @@ $wizard->addStep('Persistence', function ($page) use($app) {
             EOF
     );
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) use($app) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) use ($app) {
         session_start();
 
         $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $app->ui_persistence->date_format]);
@@ -200,11 +204,11 @@ $wizard->addStep('Persistence', function ($page) use($app) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
 
+        Header::addTo($owner, ['Record display in Card View using model data.']);
         $model->tryLoad(1);
         $model->loaded()
             ? \atk4\ui\Card::addTo($owner, ['useLabel' => true])->setModel($model)
             : Message::addTo($owner, ['Empty record.']);
-
     });
 
     $t = \atk4\ui\Text::addTo($page);

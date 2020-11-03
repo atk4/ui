@@ -24,7 +24,7 @@ class DemoInvoice extends \atk4\data\Model
             'typecast' => [
                 function ($v) {
                     return ($v instanceof \DateTime) ? date_format($v, $this->dateFormat) : $v;
-                }
+                },
             ],
         ]);
     }
