@@ -44,7 +44,7 @@ $form->onSubmit(function ($form) use ($model) {
 
 $expectedWord = <<<'EOF'
      Project Budget is greater or equal to '1000' 
-     and ( Project Name is regular expression '[a-zA-Z]' 
+     and (Project Name is regular expression '[a-zA-Z]' 
             and Client Country Iso is equal to 'Brazil' 
             and Start Date is equal to '2020-10-22') 
     and (Finish Time is not equal to '22:22' or Is Commercial is equal to '0')
@@ -122,10 +122,10 @@ $expectedInput = <<< 'EOF'
     }
     EOF;
 
-Header::addTo($app, ['Expected Word result:']);
+Header::addTo($app, ['Word:']);
 $result = Message::addTo($app)->addClass('atk-expected-word-result');
 $result->text->addHTML($expectedWord);
 
-Header::addTo($app, ['Expected Input result:']);
+Header::addTo($app, ['Input:']);
 $result = Message::addTo($app)->addClass('atk-expected-input-result');
 $result->text->addHTML($expectedInput);
