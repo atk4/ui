@@ -491,7 +491,7 @@ class Context extends RawMinkContext implements BehatContext
         $resp = $this->getSession()->getPage()->find('css', '.atk-callback-response .content')->getText();
 
         if (preg_replace('/[^A-Za-z0-9\-]/', '', $expected) !== preg_replace('/[^A-Za-z0-9\-]/', '', $resp)) {
-            throw new \Exception('Data word does not match:' . $resp);
+            throw new \Exception('Data word does not match: ' . $resp . ' expected: ' . $expected);
         }
     }
 
