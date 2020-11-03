@@ -28,17 +28,6 @@ $model->addCondition($budget);
 $model->scope()->add($scope);
 $model->scope()->add($orScope);
 
-$expected = 'Project Budget is greater or equal to \'1000\' and '
-        . '(Project Name is regular expression \'[a-zA-Z]\' '
-        . 'and Client Country Iso is equal to \'Brazil\' '
-        . 'and Start Date is equal to \'2020-10-22\') '
-        . 'and (Finish Time is not equal to \'22:22\' '
-        . 'or Is Commercial is equal to \'0\')';
-
-Header::addTo($app, ['Expected result:']);
-$result = Message::addTo($app)->addClass('atk-expected-result');
-$result->text->addHTML($expected);
-
 $form = \atk4\ui\Form::addTo($app);
 
 $form->addControl('qb', [\atk4\ui\Form\Control\ScopeBuilder::class, 'model' => $model]);
@@ -52,3 +41,91 @@ $form->onSubmit(function ($form) use ($model) {
 
     return $view;
 });
+
+$expectedWord = <<<'EOF'
+     Project Budget is greater or equal to '1000' 
+     and ( Project Name is regular expression '[a-zA-Z]' 
+            and Client Country Iso is equal to 'Brazil' 
+            and Start Date is equal to '2020-10-22') 
+    and (Finish Time is not equal to '22:22' or Is Commercial is equal to '0')
+    EOF;
+
+$expectedInput = <<< 'EOF'
+    {
+      "logicalOperator": "AND",
+      "children": [
+        {
+          "type": "query-builder-rule",
+          "query": {
+            "rule": "project_budget",
+            "operator": ">=",
+            "value": "1000"
+          }
+        },
+        {
+          "type": "query-builder-group",
+          "query": {
+            "logicalOperator": "AND",
+            "children": [
+              {
+                "type": "query-builder-rule",
+                "query": {
+                  "rule": "project_name",
+                  "operator": "matches regular expression",
+                  "value": "[a-zA-Z]"
+                }
+              },
+              {
+                "type": "query-builder-rule",
+                "query": {
+                  "rule": "client_country_iso",
+                  "operator": "equals",
+                  "value": "Brazil"
+                }
+              },
+              {
+                "type": "query-builder-rule",
+                "query": {
+                  "rule": "start_date",
+                  "operator": "is on",
+                  "value": "2020-10-22"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "query-builder-group",
+          "query": {
+            "logicalOperator": "OR",
+            "children": [
+              {
+                "type": "query-builder-rule",
+                "query": {
+                  "rule": "finish_time",
+                  "operator": "is not on",
+                  "value": "22:22"
+                }
+              },
+              {
+                "type": "query-builder-rule",
+                "query": {
+                  "rule": "is_commercial",
+                  "operator": "is exactly",
+                  "value": "0"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+    EOF;
+
+Header::addTo($app, ['Expected Word result:']);
+$result = Message::addTo($app)->addClass('atk-expected-word-result');
+$result->text->addHTML($expectedWord);
+
+Header::addTo($app, ['Expected Input result:']);
+$result = Message::addTo($app)->addClass('atk-expected-input-result');
+$result->text->addHTML($expectedInput);

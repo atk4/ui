@@ -486,12 +486,28 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iCheckIfWordMatch()
     {
-        $expected = $this->getSession()->getPage()->find('css', '.atk-expected-result .content')->getText();
+        $expected = $this->getSession()->getPage()->find('css', '.atk-expected-word-result .content')->getText();
 
         $resp = $this->getSession()->getPage()->find('css', '.atk-callback-response .content')->getText();
 
-        if (preg_replace('/[^A-Za-z0-9\-]/', '', $expected) !== preg_replace('/[^A-Za-z0-9\-]/', '', $resp)) {
+        if (preg_replace('/\s*/m', '', $expected) !== preg_replace('/\s*/m', '', $resp)) {
             throw new \Exception('Data word does not match');
+        }
+    }
+
+    /**
+     * @Then /^I check if input "([^"]*)" match$/
+     */
+    public function iCheckIfInputMatch($name)
+    {
+        $expected = $this->getSession()->getPage()->find('css', '.atk-expected-input-result .content')->getText();
+        $input = $this->getSession()->getPage()->find('css', 'input[name="' . $name . '"]');
+        if (!$input) {
+            throw new \Exception('Unable to find input name: ' . $name);
+        }
+
+        if (preg_replace('/\s*/m', '', $expected) !== preg_replace('/\s*/m', '', $input->getValue())) {
+            throw new \Exception('Input value does not match');
         }
     }
 
