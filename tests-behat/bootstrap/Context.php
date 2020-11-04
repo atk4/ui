@@ -486,12 +486,22 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iCheckIfWordMatch()
     {
-        $expected = $this->getSession()->getPage()->find('css', '.atk-expected-word-result .content')->getText();
+        $pageWordContainer = $this->getSession()->getPage()->find('css', '.atk-expected-word-result .content');
+        if (!$pageWordContainer) {
+            throw new \Exception('Unable to find expected word in page.');
+        }
 
-        $resp = $this->getSession()->getPage()->find('css', '.atk-callback-response .content')->getText();
+        $expectedWord = $pageWordContainer->getText();
 
-        if (preg_replace('/[^A-Za-z0-9\-]/', '', $expected) !== preg_replace('/[^A-Za-z0-9\-]/', '', $resp)) {
-            throw new \Exception('Data word does not match: ' . $resp . ' expected: ' . $expected);
+        $wordResponseContainer = $this->getSession()->getPage()->find('css', '.atk-callback-response .content');
+        if (!$wordResponseContainer) {
+            throw new \Exception('Unable to find response word in page.');
+        }
+
+        $responseWord = $wordResponseContainer->getText();
+
+        if (preg_replace('/[^A-Za-z0-9\-]/', '', $expectedWord) !== preg_replace('/[^A-Za-z0-9\-]/', '', $responseWord)) {
+            throw new \Exception('Data word does not match: ' . $responseWord . ' expected: ' . $expectedWord);
         }
     }
 
