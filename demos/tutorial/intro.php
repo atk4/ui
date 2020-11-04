@@ -112,7 +112,7 @@ $wizard->addStep('Interactivity', function ($page) {
     );
 });
 
-$wizard->addStep('Business Model', function ($page) use ($app) {
+$wizard->addStep('Business Model', function ($page) {
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -121,7 +121,7 @@ $wizard->addStep('Business Model', function ($page) use ($app) {
             EOF
     );
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) use ($app, $page) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) use ($page) {
         /* Showing Class definition.
         class DemoInvoice extends \atk4\data\Model
         {
@@ -138,7 +138,7 @@ $wizard->addStep('Business Model', function ($page) use ($app) {
         */
         session_start();
 
-        $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $app->ui_persistence->date_format]);
+        $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
         $model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
@@ -152,7 +152,7 @@ $wizard->addStep('Business Model', function ($page) use ($app) {
             $model->setMulti([
                 'id' => 1,
                 'reference' => 'Inv-' . random_int(1000, 9999),
-                'date' => date($app->ui_persistence->date_format),
+                'date' => date($owner->getApp()->ui_persistence->date_format),
             ]);
             $model->save();
         }
@@ -188,7 +188,7 @@ $wizard->addStep('Business Model', function ($page) use ($app) {
     );
 });
 
-$wizard->addStep('Persistence', function ($page) use ($app) {
+$wizard->addStep('Persistence', function ($page) {
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -196,19 +196,21 @@ $wizard->addStep('Persistence', function ($page) use ($app) {
             EOF
     );
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) use ($app) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         session_start();
 
-        $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $app->ui_persistence->date_format]);
+        $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
         $model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
 
         Header::addTo($owner, ['Record display in Card View using model data.']);
         $model->tryLoad(1);
-        $model->loaded()
-            ? \atk4\ui\Card::addTo($owner, ['useLabel' => true])->setModel($model)
-            : Message::addTo($owner, ['Empty record.']);
+        if ($model->loaded()) {
+            \atk4\ui\Card::addTo($owner, ['useLabel' => true])->setModel($model);
+        } else {
+            Message::addTo($owner, ['Empty record.']);
+        }
     });
 
     $t = \atk4\ui\Text::addTo($page);
