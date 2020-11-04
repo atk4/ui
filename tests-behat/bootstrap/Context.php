@@ -517,7 +517,7 @@ class Context extends RawMinkContext implements BehatContext
         }
 
         if (preg_replace('/\s*/m', '', $expected) !== preg_replace('/\s*/m', '', $input->getValue())) {
-            throw new \Exception('Input value does not match');
+            throw new \Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expected);
         }
     }
 
