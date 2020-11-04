@@ -7,7 +7,6 @@ namespace atk4\ui;
 use atk4\core\AppScopeTrait;
 use atk4\core\DiContainerTrait;
 use atk4\core\DynamicMethodTrait;
-use atk4\core\FactoryTrait;
 use atk4\core\HookTrait;
 use atk4\core\InitializerTrait;
 use atk4\data\Persistence;
@@ -22,7 +21,6 @@ class App
     }
     use HookTrait;
     use DynamicMethodTrait;
-    use FactoryTrait;
     use AppScopeTrait;
     use DiContainerTrait;
 

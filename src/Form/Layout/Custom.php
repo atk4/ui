@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Layout;
 
+use atk4\core\Factory;
 use atk4\ui\Exception;
 use atk4\ui\Form\AbstractLayout;
 
@@ -33,6 +34,6 @@ class Custom extends AbstractLayout
      */
     public function addButton($seed)
     {
-        return $this->add($this->mergeSeeds([\atk4\ui\Button::class], $seed), 'Buttons');
+        return $this->add(Factory::mergeSeeds([\atk4\ui\Button::class], $seed), 'Buttons');
     }
 }

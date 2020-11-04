@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
+use atk4\core\Factory;
 use atk4\data\Model;
 use atk4\data\Reference\ContainsMany;
 
@@ -197,7 +198,7 @@ class Form extends View
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
-            $this->layout = $this->factory($this->layout, ['form' => $this]);
+            $this->layout = Factory::factory($this->layout, ['form' => $this]);
             $this->layout = $this->add($this->layout);
         } elseif (is_object($this->layout)) {
             $this->layout->form = $this;
@@ -487,7 +488,7 @@ class Form extends View
      * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
      *
      * @param \atk4\data\Field $field Data model field
-     * @param array            $seed  Defaults to pass to factory() when control object is initialized
+     * @param array            $seed  Defaults to pass to Factory::factory() when control object is initialized
      *
      * @return Form\Control
      */
@@ -522,7 +523,7 @@ class Form extends View
             $fallbackSeed['placeholder'] = $field->ui['placeholder'];
         }
 
-        $seed = $this->mergeSeeds(
+        $seed = Factory::mergeSeeds(
             $seed,
             $field->ui['form'] ?? null,
             $this->typeToControl[$field->type] ?? null,
@@ -535,7 +536,7 @@ class Form extends View
             'short_name' => $field->short_name,
         ];
 
-        return $this->factory($seed, $defaults);
+        return Factory::factory($seed, $defaults);
     }
 
     /**

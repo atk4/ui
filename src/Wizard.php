@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
+use atk4\core\Factory;
+
 /**
  * Wizard widget.
  */
@@ -94,7 +96,7 @@ class Wizard extends View
      */
     public function addStep($name, $callback)
     {
-        $step = $this->factory([
+        $step = Factory::factory([
             Step::class,
             'wizard' => $this,
             'template' => clone $this->stepTemplate,

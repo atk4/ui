@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\core\Factory;
+
 /**
  * Setup file - do not test.
  * Lookup that can not saved data.
@@ -29,7 +31,7 @@ class DemoLookup extends \atk4\ui\Form\Control\Lookup
 
         $defaultSeed = [\atk4\ui\Button::class, 'disabled' => ($this->disabled || $this->readonly)];
 
-        $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed));
+        $this->action = Factory::factory(array_merge($defaultSeed, (array) $buttonSeed));
 
         if ($this->form) {
             $vp = \atk4\ui\VirtualPage::addTo($this->form);

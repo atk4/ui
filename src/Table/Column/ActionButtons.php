@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Table\Column;
 
-use atk4\core\FactoryTrait;
+use atk4\core\Factory;
 use atk4\data\Model;
 use atk4\ui\Table;
 
@@ -13,8 +13,6 @@ use atk4\ui\Table;
  */
 class ActionButtons extends Table\Column
 {
-    use FactoryTrait;
-
     /**
      * Stores all the buttons that have been added.
      *
@@ -79,7 +77,7 @@ class ActionButtons extends Table\Column
                 $button = [1 => $button];
             }
 
-            $button = $this->factory([\atk4\ui\Button::class], $this->mergeSeeds($button, ['id' => false]));
+            $button = Factory::factory([\atk4\ui\Button::class], Factory::mergeSeeds($button, ['id' => false]));
         }
 
         $button->setApp($this->table->getApp());
