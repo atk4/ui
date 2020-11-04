@@ -36,7 +36,7 @@ Growing Seed
 To grow a seed you need a factory. Factory is a trait implemented in atk4/core and used by all
 ATK UI classes::
 
-    $object = $app->factory($seed);
+    $object = Factory::factory($seed);
 
 In most cases you don't need to call factory yourself, methods which accept object/seed combinations
 will do it for you::

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
+use atk4\core\Factory;
 use atk4\data\Model;
 
 /**
@@ -241,7 +242,7 @@ class Crud extends Grid
      */
     protected function getNotifier(string $msg = null)
     {
-        $notifier = $this->factory($this->notifyDefault);
+        $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {
             $notifier->setMessage($msg);
         }
@@ -267,7 +268,7 @@ class Crud extends Grid
     protected function getExecutor(Model\UserAction $action)
     {
         if (isset($action->ui['executor'])) {
-            return $this->factory($action->ui['executor']);
+            return Factory::factory($action->ui['executor']);
         }
 
         // prioritize Crud addFields over action->fields for Model add action.
@@ -283,7 +284,7 @@ class Crud extends Grid
         // setting right action fields is based on action fields.
         $executor = (!$action->args && !$action->fields && !$action->preview) ? $this->jsExecutor : $this->executor;
 
-        return $this->factory($executor);
+        return Factory::factory($executor);
     }
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\UserAction;
 
+use atk4\core\Factory;
 use atk4\data\Model;
 use atk4\ui\Exception;
 use atk4\ui\Form;
@@ -47,7 +48,7 @@ class ArgumentFormExecutor extends BasicExecutor
             }
 
             if (isset($val['model'])) {
-                $val['model'] = $this->factory($val['model']);
+                $val['model'] = Factory::factory($val['model']);
                 $this->form->addControl($key, [Form\Control\Lookup::class])->setModel($val['model']);
             } else {
                 $this->form->addControl($key, null, $val);

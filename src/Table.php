@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
+use atk4\core\Factory;
+
 class Table extends Lister
 {
     // Overrides
@@ -295,7 +297,7 @@ class Table extends Lister
      * Add column Decorator.
      *
      * @param string $name Column name
-     * @param mixed  $seed Defaults to pass to factory() when decorator is initialized
+     * @param mixed  $seed Defaults to pass to Factory::factory() when decorator is initialized
      *
      * @return Table\Column
      */
@@ -345,13 +347,13 @@ class Table extends Lister
      * By default will use default column.
      *
      * @param \atk4\data\Field $field Data model field
-     * @param mixed            $seed  Defaults to pass to factory() when decorator is initialized
+     * @param mixed            $seed  Defaults to pass to Factory::factory() when decorator is initialized
      *
      * @return Table\Column
      */
     public function decoratorFactory(\atk4\data\Field $field, $seed = [])
     {
-        $seed = $this->mergeSeeds(
+        $seed = Factory::mergeSeeds(
             $seed,
             $field->ui['table'] ?? null,
             $this->typeToDecorator[$field->type] ?? null,

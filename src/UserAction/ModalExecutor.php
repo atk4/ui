@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\UserAction;
 
+use atk4\core\Factory;
 use atk4\core\HookTrait;
 use atk4\data\Model;
 use atk4\data\ValidationException;
@@ -156,7 +157,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         if ($this->steps = $this->getSteps($action)) {
             $this->title = $this->title ?? trim($action->caption . ' ' . $this->action->getOwner()->getModelCaption());
 
-            $this->btns->add($this->execActionBtn = $this->factory($this->action->ui['execButton'] ?? [Button::class, $this->action->caption, 'blue'], []));
+            $this->btns->add($this->execActionBtn = Factory::factory($this->action->ui['execButton'] ?? [Button::class, $this->action->caption, 'blue'], []));
 
             // get current step.
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
@@ -279,7 +280,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             }
 
             if (isset($val['model'])) {
-                $val['model'] = $this->factory($val['model']);
+                $val['model'] = Factory::factory($val['model']);
                 $form->addControl($key, [Form\Control\Lookup::class])->setModel($val['model']);
             } else {
                 $form->addControl($key, null, $val);
