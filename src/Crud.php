@@ -59,14 +59,14 @@ class Crud extends Grid
     /**
      * @var array Action name container that will reload Table after executing
      *
-     * @deprecated use action modifier instead
+     * @deprecated use action modifier instead, will be removed in v2.5
      */
     public $reloadTableActions = [];
 
     /**
      * @var array Action name container that will remove the corresponding table row after executing
      *
-     * @deprecated use action modifier instead
+     * @deprecated use action modifier instead, will be removed in v2.5
      */
     public $removeRowActions = [];
 
