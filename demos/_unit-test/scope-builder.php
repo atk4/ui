@@ -15,11 +15,11 @@ require_once __DIR__ . '/../init-app.php';
 $model = new Stat($app->db, ['caption' => 'Demo Stat']);
 
 $project = new Condition('project_name', Condition::OPERATOR_REGEXP, '[a-zA-Z]');
-$brazil = new Condition('client_country_iso', Condition::OPERATOR_EQUALS, 'Brazil');
-$start = new Condition('start_date', Condition::OPERATOR_EQUALS, '2020-10-22');
-$finish = new Condition('finish_time', Condition::OPERATOR_DOESNOT_EQUAL, '22:22');
+$brazil = new Condition('client_country_iso', '=', 'Brazil');
+$start = new Condition('start_date', '=', '2020-10-22');
+$finish = new Condition('finish_time', '!=', '22:22');
 $isCommercial = new Condition('is_commercial', '0');
-$budget = new Condition('project_budget', Condition::OPERATOR_GREATER_EQUAL, '1000');
+$budget = new Condition('project_budget', '>=', '1000');
 
 $scope = Scope::createAnd($project, $brazil, $start);
 $orScope = Scope::createOr($finish, $isCommercial);
