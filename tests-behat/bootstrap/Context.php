@@ -500,7 +500,7 @@ class Context extends RawMinkContext implements BehatContext
 
         $responseWord = $wordResponseContainer->getText();
 
-        if (preg_replace('/[^A-Za-z0-9\-]/', '', $expectedWord) !== preg_replace('/[^A-Za-z0-9\-]/', '', $responseWord)) {
+        if (preg_replace('/\s*/m', '', $expectedWord) !== preg_replace('/\s*/m', '', $responseWord)) {
             throw new \Exception('Data word does not match: ' . $responseWord . ' expected: ' . $expectedWord);
         }
     }
