@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Table\Column;
 
-use atk4\core\FactoryTrait;
+use atk4\core\Factory;
 use atk4\data\Model;
 use atk4\ui\Jquery;
 use atk4\ui\JsChain;
@@ -17,8 +17,6 @@ use atk4\ui\View;
 
 class ActionMenu extends Table\Column
 {
-    use FactoryTrait;
-
     /**
      * Menu items collections.
      *
@@ -112,7 +110,7 @@ class ActionMenu extends Table\Column
         }
 
         if (!is_object($item)) {
-            $item = $this->factory([\atk4\ui\View::class], ['id' => false, 'ui' => 'item', 'content' => $item]);
+            $item = Factory::factory([\atk4\ui\View::class], ['id' => false, 'ui' => 'item', 'content' => $item]);
         }
 
         $this->items[] = $item;

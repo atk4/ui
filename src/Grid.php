@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
+use atk4\core\Factory;
 use atk4\core\HookTrait;
 use atk4\data\Model;
 
@@ -134,14 +135,14 @@ class Grid extends View
 
         // if menu not disabled ot not already assigned as existing object
         if ($this->menu !== false && !is_object($this->menu)) {
-            $this->menu = $this->add($this->factory([Menu::class, 'activate_on_click' => false], $this->menu), 'Menu');
+            $this->menu = $this->add(Factory::factory([Menu::class, 'activate_on_click' => false], $this->menu), 'Menu');
         }
 
-        $this->table = $this->container->add($this->factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
+        $this->table = $this->container->add(Factory::factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
 
         if ($this->paginator !== false) {
             $seg = View::addTo($this->container, [], ['Paginator'])->addStyle('text-align', 'center');
-            $this->paginator = $seg->add($this->factory([Paginator::class, 'reload' => $this->container], $this->paginator));
+            $this->paginator = $seg->add(Factory::factory([Paginator::class, 'reload' => $this->container], $this->paginator));
             $this->issetApp() ? $this->getApp()->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
         }
 
