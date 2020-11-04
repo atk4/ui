@@ -107,20 +107,9 @@ class Multiline extends Form\Control
         'suiTable' => [],
         // sui-dropdown props.
         'suiDropdown' => [],
+        // flatpickr props - Will be applied globally.
+        'flatpickr' => [],
     ];
-
-    /**
-     * The date options:
-     *     Any of flatpickr options. Will be applied globally within scopeBuilder;
-     *    'flatpickr' => [].
-     *    Note on locale: ScopeBuilder will use default flatpickr locale.
-     *    In order to change default locale simply use Calendar::setLocale($app, 'fr');.
-     *
-     *    'dateFormat' is set according to ui_persistence for date, time or datetime.
-     *
-     * @var array
-     */
-    public $flatpickrOptions = [];
 
     /**
      * When true, tabbing out of the last column in last row of data
@@ -721,7 +710,6 @@ class Multiline extends Form\Control
                     'eventFields' => $this->eventFields,
                     'hasChangeCb' => $this->onChangeFunction ? true : false,
                     'options' => $this->options,
-                    'flatpickrOptions' => $this->flatpickrOptions,
                     'rowLimit' => $this->rowLimit,
                     'caption' => $this->caption,
                     'afterAdd' => $this->jsAfterAdd,

@@ -103,7 +103,7 @@ export default {
         getComponentProps: function (column) {
             let props = {};
             const userOptions = column.fieldOptions || {};
-            const flatpickrConfig = { ...this.getRootData().data.flatpickrOptions || {} };
+            const flatpickrConfig = { ...this.getRootData().data.options.flatpickr || {} };
 
             switch (column.component) {
             case 'dropdown':
