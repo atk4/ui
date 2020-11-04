@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Control;
 
+use atk4\core\Factory;
 use atk4\ui\Jquery;
 use atk4\ui\JsExpression;
 use atk4\ui\JsFunction;
@@ -248,7 +249,7 @@ class Lookup extends Input
 
         $defaultSeed = [\atk4\ui\Button::class, 'disabled' => ($this->disabled || $this->readonly)];
 
-        $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed));
+        $this->action = Factory::factory(array_merge($defaultSeed, (array) $buttonSeed));
 
         if ($this->form) {
             $vp = \atk4\ui\VirtualPage::addTo($this->form);

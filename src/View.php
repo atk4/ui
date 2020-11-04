@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
+use atk4\core\Factory;
 use atk4\data\Model;
 use atk4\data\Persistence\Static_;
 
@@ -1042,7 +1043,7 @@ class View extends AbstractView implements JsExpressionable
             } else {
                 $class = [UserAction\ModalExecutor::class];
             }
-            $ex = $this->factory($class);
+            $ex = Factory::factory($class);
             if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
                 // Executor may already had been add to layout. Like in CardDeck.
                 if (!isset($this->getApp()->html->elements[$ex->short_name])) {

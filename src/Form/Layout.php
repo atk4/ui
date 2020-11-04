@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form;
 
+use atk4\core\Factory;
 use atk4\ui\HtmlTemplate;
 use atk4\ui\Label;
 
@@ -69,7 +70,7 @@ class Layout extends AbstractLayout
      */
     public function addButton($seed)
     {
-        return $this->add($this->mergeSeeds([\atk4\ui\Button::class], $seed), 'Buttons');
+        return $this->add(Factory::mergeSeeds([\atk4\ui\Button::class], $seed), 'Buttons');
     }
 
     /**
@@ -119,7 +120,7 @@ class Layout extends AbstractLayout
      */
     public function addSubLayout($seed = [self::class], $addDivider = true)
     {
-        $v = $this->add($this->factory($seed, ['form' => $this->form]));
+        $v = $this->add(Factory::factory($seed, ['form' => $this->form]));
         if ($v instanceof \atk4\ui\Form\Layout\Section) {
             $v = $v->addSection();
         }
@@ -213,7 +214,7 @@ class Layout extends AbstractLayout
             }
 
             if ($element->hint && $template->hasTag('Hint')) {
-                $hint = $this->factory($this->defaultHint);
+                $hint = Factory::factory($this->defaultHint);
                 $hint->id = $element->id . '_hint';
                 if (is_object($element->hint) || is_array($element->hint)) {
                     $hint->add($element->hint);
