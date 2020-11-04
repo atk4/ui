@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace atk4\ui\Table\Column;
 
 use atk4\core\Factory;
-use atk4\core\FactoryTrait;
 use atk4\data\Model;
 use atk4\ui\Table;
 
@@ -14,8 +13,6 @@ use atk4\ui\Table;
  */
 class ActionButtons extends Table\Column
 {
-    use FactoryTrait;
-
     /**
      * Stores all the buttons that have been added.
      *
