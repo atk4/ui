@@ -121,7 +121,7 @@ $wizard->addStep('Business Model', function ($page) {
             EOF
     );
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) use ($page) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         /* Showing Class definition.
         class DemoInvoice extends \atk4\data\Model
         {
