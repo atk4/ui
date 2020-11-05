@@ -500,7 +500,7 @@ class Context extends RawMinkContext implements BehatContext
 
         $compareToText = $compareToContainer->getText();
 
-        if (preg_replace('~\s*~', '', $expectedText) !== preg_replace('~\s*~', '', $compareToText)) {
+        if ($expectedText !== $compareToText) {
             throw new \Exception('Data word does not match: ' . $compareToText . ' expected: ' . $expectedText);
         }
     }
