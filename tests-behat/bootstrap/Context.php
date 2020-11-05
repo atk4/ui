@@ -482,41 +482,41 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^I check if word from data scope match$/
+     * @Then /^I check if text in "([^"]*)" match text in "([^"]*)"/
      */
-    public function iCheckIfWordMatch()
+    public function compareElementText($compareSelector, $compareToSelector)
     {
-        $pageWordContainer = $this->getSession()->getPage()->find('css', '.atk-expected-word-result .content');
-        if (!$pageWordContainer) {
-            throw new \Exception('Unable to find expected word in page.');
+        $compareContainer = $this->getSession()->getPage()->find('css', $compareSelector);
+        if (!$compareContainer) {
+            throw new \Exception('Unable to find compare container: ' . $compareSelector);
         }
 
-        $expectedWord = $pageWordContainer->getText();
+        $expectedText = $compareContainer->getText();
 
-        $wordResponseContainer = $this->getSession()->getPage()->find('css', '.atk-callback-response .content');
-        if (!$wordResponseContainer) {
-            throw new \Exception('Unable to find response word in page.');
+        $compareToContainer = $this->getSession()->getPage()->find('css', $compareToSelector);
+        if (!$compareToContainer) {
+            throw new \Exception('Unable to find compare to container: ' . $compareToSelector);
         }
 
-        $responseWord = $wordResponseContainer->getText();
+        $compareToText = $compareToContainer->getText();
 
-        if (preg_replace('/\s*/m', '', $expectedWord) !== preg_replace('/\s*/m', '', $responseWord)) {
-            throw new \Exception('Data word does not match: ' . $responseWord . ' expected: ' . $expectedWord);
+        if (preg_replace('~\s*~', '', $expectedText) !== preg_replace('~\s*~', '', $compareToText)) {
+            throw new \Exception('Data word does not match: ' . $compareToText . ' expected: ' . $expectedText);
         }
     }
 
     /**
-     * @Then /^I check if input "([^"]*)" match$/
+     * @Then /^I check if input value for "([^"]*)" match text in "([^"]*)"$/
      */
-    public function iCheckIfInputMatch($name)
+    public function compareInputValueToElementText($inputName, $selector)
     {
-        $expected = $this->getSession()->getPage()->find('css', '.atk-expected-input-result .content')->getText();
-        $input = $this->getSession()->getPage()->find('css', 'input[name="' . $name . '"]');
+        $expected = $this->getSession()->getPage()->find('css', $selector)->getText();
+        $input = $this->getSession()->getPage()->find('css', 'input[name="' . $inputName . '"]');
         if (!$input) {
-            throw new \Exception('Unable to find input name: ' . $name);
+            throw new \Exception('Unable to find input name: ' . $inputName);
         }
 
-        if (preg_replace('/\s*/m', '', $expected) !== preg_replace('/\s*/m', '', $input->getValue())) {
+        if (preg_replace('~\s*~', '', $expected) !== preg_replace('~\s*~', '', $input->getValue())) {
             throw new \Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expected);
         }
     }
