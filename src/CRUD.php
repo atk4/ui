@@ -207,7 +207,7 @@ class CRUD extends Grid
         $this->addAction(['icon' => 'edit'], new jsModal('Edit', $this->pageUpdate, [$this->name => $this->jsRow()->data('id'), $this->name.'_sort' => $this->getSortBy()]));
 
         $this->pageUpdate->set(function () {
-            $this->model->load($this->app->stickyGet($this->name));
+            $this->model->load($this->stickyGet($this->name));
 
             // Maybe developer has already created form
             if (!is_object($this->formUpdate) || !$this->formUpdate->_initialized) {
