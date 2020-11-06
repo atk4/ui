@@ -16,6 +16,9 @@ class Context extends RawMinkContext implements BehatContext
     /** @var null Temporary store button id when press. Used in js callback test. */
     protected $buttonId;
 
+    /** @var null Temporary store text. */
+    protected $text;
+
     public function getSession($name = null): \Behat\Mink\Session
     {
         return $this->getMink()->getSession($name);
@@ -478,6 +481,39 @@ class Context extends RawMinkContext implements BehatContext
         $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="' . $name . '"]\').find(\'input\')[' . $idx . '].checked');
         if (!$isChecked) {
             throw new \Exception('Radio value selected is not: ' . $value);
+        }
+    }
+
+    /**
+     * @Then /^I save text in "([^"]*)"$/
+     */
+    public function iSaveTextIn($selector)
+    {
+        $textContainer = $this->getSession()->getPage()->find('css', $selector);
+        if (!$textContainer) {
+            throw new \Exception('Unable to find text container: ' . $selector);
+        }
+
+        $this->text = $textContainer->getText();
+        if (empty($this->text)) {
+            throw new \Exception('No text found in ' . $selector);
+        }
+    }
+
+    /**
+     * @Then /^I compare if saved text match text in "([^"]*)"/
+     */
+    public function compareSavedText($compareToSelector)
+    {
+        $compareToContainer = $this->getSession()->getPage()->find('css', $compareToSelector);
+        if (!$compareToContainer) {
+            throw new \Exception('Unable to find compare to container: ' . $compareToSelector);
+        }
+
+        $compareToText = $compareToContainer->getText();
+
+        if ($this->text !== $compareToText) {
+            throw new \Exception('Data word does not match: ' . $compareToText . ' expected: ' . $this->text);
         }
     }
 

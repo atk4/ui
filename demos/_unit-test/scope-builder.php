@@ -7,7 +7,7 @@ namespace atk4\ui\demo;
 use atk4\data\Model\Scope;
 use atk4\data\Model\Scope\Condition;
 use atk4\ui\Header;
-use atk4\ui\Message;
+use atk4\ui\View;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -123,9 +123,7 @@ $expectedInput = <<< 'EOF'
     EOF;
 
 Header::addTo($app, ['Word:']);
-$result = Message::addTo($app)->addClass('atk-expected-word-result');
-$result->text->addHTML($expectedWord);
+View::addTo($app, ['element' => 'p', 'content' => $expectedWord])->addClass('atk-expected-word-result');
 
 Header::addTo($app, ['Input:']);
-$result = Message::addTo($app)->addClass('atk-expected-input-result');
-$result->text->addHTML($expectedInput);
+View::addTo($app, ['element' => 'p', 'content' => $expectedInput])->addClass('atk-expected-input-result');
