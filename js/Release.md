@@ -1,5 +1,10 @@
 ## Release note
 
+### version 1.16.4 (2020-11-09)
+
+- adding textarea form control to be detect by form leave when set.
+  see https://github.com/atk4/ui/issues/1527
+
 ### version 1.16.3 (2020-09-30)
 
 - create atk-date-picker vue component.
