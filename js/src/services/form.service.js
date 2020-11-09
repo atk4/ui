@@ -59,7 +59,7 @@ class FormService {
     preventFormLeave(id) {
         const $form = $('#' + id);
         $form.data('__atkCheckDirty', true);
-        $form.on('change.__atkCanLeave', 'input', () => {
+        $form.on('change.__atkCanLeave', 'input, textarea', () => {
             $form.data('isDirty', true);
         });
         this.prevents.push($form);
