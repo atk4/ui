@@ -58,37 +58,34 @@ export default class fileUpload extends atkPlugin {
    * Add event handler to input element.
    */
     setEventHandler() {
-        const that = this;
-
         this.textInput.on('click', (e) => {
             if (!e.target.value) {
-                that.fileInput.click();
+                this.fileInput.click();
             }
         });
 
         // add event handler to action button.
         this.action.on('click', (e) => {
-            if (!that.textInput.val()) {
-                that.fileInput.click();
+            if (!this.textInput.val()) {
+                this.fileInput.click();
             } else {
                 // When upload is complete a js action can be send to set an id
                 // to the uploaded file via the jQuery data property.
                 // Check if that id exist and send it with
                 // delete callback, If not, default to file name.
-                let id = that.$el.data().fileId;
+                let id = this.$el.data().fileId;
                 if (id === '' || typeof id === 'undefined' || id === null) {
-                    id = that.textInput.val();
+                    id = this.textInput.val();
                 }
-                that.doFileDelete(id);
+                this.doFileDelete(id);
             }
         });
 
         // add event handler to file input.
         this.fileInput.on('change', (e) => {
             if (e.target.files.length > 0) {
-                that.textInput.val(e.target.files[0].name);
-                // that.doFileUpload(e.target.files[0]);
-                that.doFileUpload(e.target.files);
+                this.textInput.val(e.target.files[0].name);
+                this.doFileUpload(e.target.files);
             }
         });
     }
@@ -98,14 +95,12 @@ export default class fileUpload extends atkPlugin {
    * Set the input text content.
    */
     setState(mode) {
-        const that = this;
-
         switch (mode) {
         case 'delete':
             this.action.html(this.getEraseContent);
             setTimeout(() => {
-                that.bar.progress('reset');
-                that.bar.hide('fade');
+                this.bar.progress('reset');
+                this.bar.hide('fade');
             }, 1000);
             break;
         case 'upload':
@@ -125,7 +120,6 @@ export default class fileUpload extends atkPlugin {
    * @param file the FileList object.
    */
     doFileUpload(file) {
-        const that = this;
         // if submit button id is set, then disable submit
         // during upload.
         if (this.settings.submit) {
@@ -133,30 +127,30 @@ export default class fileUpload extends atkPlugin {
         }
 
         // setup task on upload completion.
-        const completeCb = function (response, content) {
+        const completeCb = (response, content) => {
             if (response.success) {
-                that.bar.progress('set label', that.settings.completeLabel);
-                that.setState('delete');
+                this.bar.progress('set label', this.settings.completeLabel);
+                this.setState('delete');
             }
 
-            if (that.settings.submit) {
-                $('#' + that.settings.submit).removeClass('disabled');
+            if (this.settings.submit) {
+                $('#' + this.settings.submit).removeClass('disabled');
             }
         };
 
         // setup progress bar update via xhr.
-        const xhrCb = function () {
+        const xhrCb = () => {
             const xhr = new window.XMLHttpRequest();
             xhr.upload.addEventListener('progress', (evt) => {
                 if (evt.lengthComputable) {
                     const percentComplete = evt.loaded / evt.total;
-                    that.bar.progress('set percent', parseInt(percentComplete * 100, 10));
+                    this.bar.progress('set percent', parseInt(percentComplete * 100, 10));
                 }
             }, false);
             return xhr;
         };
 
-        that.bar.show();
+        this.bar.show();
         uploadService.uploadFiles(
             file,
             this.$el,
@@ -173,17 +167,15 @@ export default class fileUpload extends atkPlugin {
    * @param fileId
    */
     doFileDelete(fileId) {
-        const that = this;
-
         this.$el.api({
             on: 'now',
             url: this.settings.uri,
             data: { f_upload_action: 'delete', f_upload_id: fileId },
             method: 'POST',
             obj: this.$el,
-            onComplete: function (response, content) {
+            onComplete: (response, content) => {
                 if (response.success) {
-                    that.setState('upload');
+                    this.setState('upload');
                 }
             },
         });

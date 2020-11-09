@@ -19,7 +19,6 @@ export default class reloadView extends atkPlugin {
             return;
         }
 
-        const that = this;
         const url = $.atk.getUrl(this.settings.uri);
         const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
 
@@ -38,9 +37,9 @@ export default class reloadView extends atkPlugin {
             url: '',
             data: {},
             method: 'GET',
-            onComplete: function (response, content) {
-                if (that.settings.afterSuccess) {
-                    apiService.onAfterSuccess(that.settings.afterSuccess);
+            onComplete: (response, content) => {
+                if (this.settings.afterSuccess) {
+                    apiService.onAfterSuccess(this.settings.afterSuccess);
                 }
             },
             ...userConfig,
