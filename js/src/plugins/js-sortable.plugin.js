@@ -46,27 +46,24 @@ export default class JsSortable extends atkPlugin {
         this.initialize();
 
         sortable.on('sortable:stop', (e) => {
-            const that = this;
-            const ids = [];
-            that.newIdx = e.data.newIndex;
-            that.orgIdx = e.data.oldIndex;
-            that.sourceId = $(e.data.dragEvent.data.originalSource).data(that.settings.dataLabel);
-            that.dragContainer.children().each(function (idx) {
-                if (!$(this).hasClass('draggable--original') && !$(this).hasClass('draggable-mirror')) {
-                    ids.push($(this).data(that.settings.dataLabel));
+            this.ids = [];
+            this.newIdx = e.data.newIndex;
+            this.orgIdx = e.data.oldIndex;
+            this.sourceId = $(e.data.dragEvent.data.originalSource).data(this.settings.dataLabel);
+            this.dragContainer.children().each((idx, el) => {
+                if (!$(el).hasClass('draggable--original') && !$(el).hasClass('draggable-mirror')) {
+                    this.ids.push($(el).data(this.settings.dataLabel));
                 }
             });
-            that.ids = ids;
-            if (that.settings.autoFireCb) {
-                that.sendSortOrders();
+            if (this.settings.autoFireCb) {
+                this.sendSortOrders();
             }
         });
     }
 
     initialize() {
-        const that = this;
-        this.dragContainer.children().each(function (idx) {
-            that.ids.push($(this).data(that.settings.dataLabel));
+        this.dragContainer.children().each((idx, el) => {
+            this.ids.push($(el).data(this.settings.dataLabel));
         });
     }
 

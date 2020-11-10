@@ -14,7 +14,6 @@ import atkPlugin from './atk.plugin';
 export default class confirm extends atkPlugin {
     main() {
         let context = this;
-        const that = this;
         const $m = $('<div class="ui modal"/>')
             .appendTo('body')
             .html(this.getDialogHtml(this.settings.message));
@@ -29,10 +28,10 @@ export default class confirm extends atkPlugin {
 
         // Create wrapper function for using proper "this" context.
         if (this.settings.onApprove) {
-            options.onApprove = function () { that.settings.onApprove.call(context); };
+            options.onApprove = () => { this.settings.onApprove.call(context); };
         }
         if (this.settings.onDeny) {
-            options.onDeny = function () { that.settings.onDeny.call(context); };
+            options.onDeny = () => { this.settings.onDeny.call(context); };
         }
 
         options = Object.assign(options, this.settings.modalOptions);

@@ -28,7 +28,7 @@ $lister->setModel(new Country($app->db))
 $sortable = \atk4\ui\JsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
 $sortable->onReorder(function ($order, $src, $pos, $oldPos) {
-    if (@$_GET['btn']) {
+    if ($_GET['btn'] ?? null) {
         return new \atk4\ui\JsToast(implode(' - ', $order));
     }
 
