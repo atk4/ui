@@ -10,6 +10,7 @@
 
 - adding textarea form control to be detect by form leave when set.
   see https://github.com/atk4/ui/issues/1527
+- Refactor arrow function.  
 
 ### version 1.16.3 (2020-09-30)
 
