@@ -34,7 +34,7 @@ class ArgumentFormExecutor extends BasicExecutor
 
         */
 
-        \atk4\ui\Header::addTo($this, [$this->action->caption, 'subHeader' => $this->action->getDescription()]);
+        \atk4\ui\Header::addTo($this, [$this->action->caption, 'subHeader' => $this->description ?: $this->action->getDescription()]);
         $this->form = Form::addTo($this);
 
         foreach ($this->action->args as $key => $val) {
@@ -55,7 +55,7 @@ class ArgumentFormExecutor extends BasicExecutor
             }
         }
 
-        $this->form->buttonSave->set('Run');
+        $this->form->buttonSave->set($this->action->description ?: 'Run');
 
         $this->form->onSubmit(function (Form $form) {
             // set arguments from the model
