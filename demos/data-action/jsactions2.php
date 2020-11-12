@@ -37,7 +37,7 @@ $country->unload();
 $countryId = $country->tryLoadAny()->get('id');
 // Create a button for every action in Country model.
 foreach ($country->getUserActions() as $action) {
-    $b = \atk4\ui\Button::addTo($buttons, [$action->getDescription()]);
+    $b = \atk4\ui\Button::addTo($buttons, [$action->getCaption()]);
     // Assign action to button using current model id as url arguments.
     $b->on('click', $action, ['args' => ['id' => $countryId]]);
 }

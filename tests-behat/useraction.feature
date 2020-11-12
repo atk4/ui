@@ -12,7 +12,7 @@ Feature: UserAction
     And I press button "Argument"
     Then Modal is showing text "Age" inside tag "label"
     When I fill in "age" with "22"
-    Then I press button "Edit Argument"
+    Then I press Modal button "Argument"
     Then Toast display should contains text "22 is old enough to visit"
 
     #    Need to reload page for this step
@@ -25,7 +25,7 @@ Feature: UserAction
 #    Need to reload page for this step
   Scenario:
     Given I am on "data-action/jsactions2.php"
-    And I press button "Argument/Field/Preview"
+    And I press button "Multi Step"
     Then Modal is showing text "Age" inside tag "label"
     When I fill in "age" with "22"
     Then I press Modal button "Next"

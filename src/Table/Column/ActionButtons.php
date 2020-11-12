@@ -54,7 +54,7 @@ class ActionButtons extends Table\Column
             }
 
             if ($action) {
-                $button = $action->caption;
+                $button = $action->getCaption();
             }
         }
 

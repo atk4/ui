@@ -19,8 +19,9 @@ $files = new FileLock($app->db);
 $action = $files->addUserAction(
     'import_from_filesystem',
     [
+        'caption' => 'Import',
         'callback' => 'importFromFilesystem',
-        'description' => 'Import',
+        'description' => 'Import file using path:',
         'preview' => function ($model, $path) {
             return 'Execute Import using path: "' . $path . '"';
         },
@@ -32,9 +33,7 @@ $action = $files->addUserAction(
 );
 
 $files->addUserAction('download', function (\atk4\data\Model $model) {
-    $len = strlen(file_get_contents($model->get('name')));
-
-    return "{$len} bytes downloaded..";
+    return 'File has been download!';
 });
 
 \atk4\ui\Crud::addTo($app, ['ipp' => 5])->setModel($files);

@@ -158,7 +158,7 @@ class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
     public function addHeader()
     {
         if ($this->hasHeader) {
-            \atk4\ui\Header::addTo($this, [$this->action->caption, 'subHeader' => $this->description ?: $this->action->getDescription()]);
+            \atk4\ui\Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?: $this->action->getDescription()]);
         }
     }
 }

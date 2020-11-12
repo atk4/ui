@@ -48,12 +48,11 @@ $grid->addActionMenuItems(
         'edit_iso',
         'Ouch',
         'confirm',
+        'multi_step',
     ]
 );
 
 $specialItem = Factory::factory([\atk4\ui\View::class], ['id' => false, 'class' => ['item'], 'content' => 'Multi Step']);
 \atk4\ui\Icon::addTo($specialItem, ['content' => 'window maximize outline']);
-
-$grid->addActionMenuItem($specialItem, $country->getUserAction('multi_step'));
 
 $grid->ipp = 10;
