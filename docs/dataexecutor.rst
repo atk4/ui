@@ -79,7 +79,7 @@ Modal Executor
 
 The modal executor is a one size fits all for model UserAction. When setting the UserAction via the
 ModelExecutor::setAction($action) method, it will automatically determine what step is require and will display each step
-base on the action definition:
+base on the action definition within a modal view:
 
     Step 1: Argument definition. If the action required arguments, then the modal will display a form and ask user
     to fill argument values required by the model UserAction;
@@ -88,6 +88,9 @@ base on the action definition:
     field values required by the model UserAction;
 
     Step 3: Preview. If the action preview is set, then the modal will display it prior to execute the action.
+
+The modal executor title default is set from the UserAction::getDescription() method but can be override using the
+Modal::$title property.
 
 Executor HOOK_AFTER_EXECUTE
 ============================

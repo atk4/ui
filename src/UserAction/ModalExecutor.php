@@ -155,7 +155,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
         // get necessary step need prior to execute action.
         if ($this->steps = $this->getSteps($action)) {
-            $this->title = $this->title ?? trim($action->getDescription() ?? $this->action->getOwner()->getModelCaption());
+            $this->title = $this->title ?? $action->getDescription();
 
             $this->btns->add($this->execActionBtn = Factory::factory($this->action->ui['execButton'] ?? [Button::class, $this->action->getCaption(), 'blue'], []));
 
