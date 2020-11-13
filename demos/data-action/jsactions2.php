@@ -13,6 +13,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $country = new CountryLock($app->db);
 $country->tryLoadAny();
+$countryId = $country->get('id');
 
 // Model actions for this file are setup in DemoActionUtil.
 DemoActionsUtil::setupDemoActions($country);
@@ -33,8 +34,6 @@ $c->setModel($country, ['iso', 'iso3', 'phonecode']);
 $buttons = \atk4\ui\View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
 
 $country->unload();
-
-$countryId = $country->tryLoadAny()->get('id');
 // Create a button for every action in Country model.
 foreach ($country->getUserActions() as $action) {
     $b = \atk4\ui\Button::addTo($buttons, [$action->getCaption()]);
