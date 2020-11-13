@@ -79,6 +79,7 @@ other code. Here is how interractive components will typically communicate:
     popup
     wizard
     rightpanel
+    dataexecutor
 
 
 Composite components
