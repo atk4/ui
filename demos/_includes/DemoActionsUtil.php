@@ -20,7 +20,7 @@ class DemoActionsUtil
         $country->addUserAction(
             'preview',
             [
-                'description' => 'Preview',
+                'description' => 'Display Preview prior to run the action',
                 'preview' => function ($model) {
                     return 'Previewing country ' . $model->getTitle();
                 },
@@ -33,7 +33,8 @@ class DemoActionsUtil
         $country->addUserAction(
             'disabled_action',
             [
-                'description' => 'Disabled',
+                'description' => 'This action is disabled.',
+                'caption' => 'Disabled',
                 'enabled' => false,
                 'callback' => function () {
                     return 'ok';
@@ -44,7 +45,8 @@ class DemoActionsUtil
         $country->addUserAction(
             'edit_argument',
             [
-                'description' => 'Argument',
+                'caption' => 'Argument',
+                'description' => 'Ask for argument "Age" prior to execute the action.',
                 'args' => [
                     'age' => ['type' => 'integer', 'required' => true],
                 ],
@@ -63,7 +65,8 @@ class DemoActionsUtil
         $country->addUserAction(
             'edit_argument_prev',
             [
-                'description' => 'Argument/Preview',
+                'caption' => 'Argument/Preview',
+                'description' => 'Ask for argument "Age" and display preview prior to execute',
                 'args' => ['age' => ['type' => 'integer', 'required' => true]],
                 'preview' => function ($model, $age) {
                     return 'You age is: ' . $age;
@@ -77,7 +80,10 @@ class DemoActionsUtil
         $country->addUserAction(
             'edit_iso',
             [
-                'description' => 'Edit ISO3 only',
+                'caption' => 'Edit ISO3',
+                'description' => function ($action) {
+                    return 'Edit ISO3 for country: ' . $action->getModel()->getTitle();
+                },
                 'fields' => ['iso3'],
                 'callback' => function () {
                     return 'ok';
@@ -88,7 +94,8 @@ class DemoActionsUtil
         $country->addUserAction(
             'Ouch',
             [
-                'description' => 'Exception',
+                'caption' => 'Exception',
+                'description' => 'Throw an exception when executing an action',
                 'args' => ['age' => ['type' => 'integer']],
                 'preview' => function () {
                     return 'Be careful with this action.';
@@ -102,8 +109,8 @@ class DemoActionsUtil
         $country->addUserAction(
             'confirm',
             [
-                'caption' => 'Confirm action ',
-                'description' => 'User Confirmation',
+                'caption' => 'User Confirmation',
+                'description' => 'Confirm the action using a ConfirmationExecutor',
                 'ui' => ['executor' => [\atk4\ui\UserAction\ConfirmationExecutor::class]],
                 'confirmation' => function ($a) {
                     return 'Are you sure you want to perform this action on: <b>' . $a->getModel()->getTitle() . ' (' . $a->getModel()->get('iso3') . ')</b>';
@@ -117,7 +124,8 @@ class DemoActionsUtil
         $country->addUserAction(
             'multi_step',
             [
-                'description' => 'Argument/Field/Preview',
+                'caption' => 'Multi Step',
+                'description' => 'Ask for Arguments and field and display preview prior to run the action',
                 'args' => [
                     'age' => ['type' => 'integer', 'required' => true],
                     'city' => [],
