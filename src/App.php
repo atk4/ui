@@ -1067,7 +1067,7 @@ class App
      *
      * @param string[] $headers
      */
-    private function outputResponseHtml(string $data, array $headers = []): void
+    protected function outputResponseHtml(string $data, array $headers = []): void
     {
         $this->outputResponse(
             $data,
@@ -1081,7 +1081,7 @@ class App
      * @param string|array $data
      * @param string[]     $headers
      */
-    private function outputResponseJson($data, array $headers = []): void
+    protected function outputResponseJson($data, array $headers = []): void
     {
         if (!is_string($data)) {
             $data = $this->encodeJson($data);
