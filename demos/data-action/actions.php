@@ -73,7 +73,7 @@ Header::addTo($rightColumn, ['BasicExecutor']);
 $executor = UserAction\BasicExecutor::addTo($rightColumn, ['executorButton' => [Button::class, 'Import', 'primary']]);
 $executor->setAction($action);
 $executor->ui = 'segment';
-$executor->description = 'Execute Import action using "BasicExecutor" and argument argument "path" is equal to "."';
+$executor->description = 'Execute Import action using "BasicExecutor" with argument "path" equal to "."';
 $executor->setArguments(['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x) {
     return new \atk4\ui\JsToast('Done!');
