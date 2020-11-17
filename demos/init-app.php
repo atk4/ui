@@ -102,7 +102,6 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
 
     $path = $demosUrl . 'collection/';
     $menu = $layout->addMenuGroup(['Data Collection', 'icon' => 'table']);
-    $layout->addMenuItem(['Actions - Integration Examples'], [$path . 'actions'], $menu);
     $layout->addMenuItem('Data table with formatted columns', [$path . 'table'], $menu);
     $layout->addMenuItem(['Advanced table examples'], [$path . 'table2'], $menu);
     $layout->addMenuItem('Table interractions', [$path . 'multitable'], $menu);
@@ -114,6 +113,14 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['Lister'], [$path . 'lister-ipp'], $menu);
     $layout->addMenuItem(['Table column decorator from model'], [$path . 'tablecolumns'], $menu);
     $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $menu);
+
+    $path = $demosUrl . 'data-action/';
+    $menu = $layout->addMenuGroup(['Data Action Executor', 'icon' => 'wrench']);
+    $layout->addMenuItem(['Executor Examples'], [$path . 'actions'], $menu);
+    $layout->addMenuItem(['Assign action to event'], [$path . 'jsactions'], $menu);
+    $layout->addMenuItem(['Assign action to button event'], [$path . 'jsactions2'], $menu);
+    $layout->addMenuItem(['Execute from Grid'], [$path . 'jsactionsgrid'], $menu);
+    $layout->addMenuItem(['Execute from Crud'], [$path . 'jsactionscrud'], $menu);
 
     $path = $demosUrl . 'interactive/';
     $menu = $layout->addMenuGroup(['Interactive', 'icon' => 'talk']);

@@ -19,7 +19,7 @@ class PreviewExecutor extends BasicExecutor
     public function initPreview()
     {
         if (!$this->hasAllArguments()) {
-            \atk4\ui\Message::addTo($this, ['type' => 'error', 'Insufficient arguments']);
+            \atk4\ui\Message::addTo($this, ['type' => 'error', $this->missingArgsMsg]);
 
             return;
         }
