@@ -7,6 +7,7 @@ namespace atk4\ui\behat;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\MinkExtension\Context\RawMinkContext;
 
 class Context extends RawMinkContext implements BehatContext
@@ -326,6 +327,19 @@ class Context extends RawMinkContext implements BehatContext
     public function iHideJsModal()
     {
         $this->getSession()->executeScript('$(".modal.active.front").modal("hide")');
+    }
+
+
+    /**
+     * Loading modal content will resize window when complete.
+     * Looking for Modal title can be problematic if window did not
+     * add time to fully resize.
+     *
+     * @Then /^I wait for modal window to resize$/
+     */
+    public function iWaitForWindowToResize()
+    {
+        $this->getSession()->wait(50);
     }
 
     /**
