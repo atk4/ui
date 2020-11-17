@@ -18,6 +18,8 @@ Feature: Callback
     Then I should see "Loader-3"
     Then I click paginator page "2"
     Then I click first element using class ".ui.atk-test.button"
+    # Wait for window to resize
+    Then I sleep "200" ms
     Then Modal is open with text "Edit Country"
     Then I press button "Save"
     Then Toast display should contains text "Form Submit"
