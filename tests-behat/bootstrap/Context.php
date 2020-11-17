@@ -7,6 +7,7 @@ namespace atk4\ui\behat;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
+use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\RawMinkContext;
 
 class Context extends RawMinkContext implements BehatContext
@@ -273,8 +274,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function modalIsOpenWithText($arg1)
     {
-        // get modal
-        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
+        $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
         if ($modal === null) {
             throw new \Exception('No modal found');
         }
@@ -282,17 +282,6 @@ class Context extends RawMinkContext implements BehatContext
         $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (!$text || $text->getText() !== $arg1) {
             throw new \Exception('No such text in modal');
-        }
-    }
-
-    /**
-     * @Then Active tab should be :arg1
-     */
-    public function activeTabShouldBe($arg1)
-    {
-        $tab = $this->getSession()->getPage()->find('css', '.ui.tabular.menu > .item.active');
-        if ($tab->getText() !== $arg1) {
-            throw new \Exception('Active tab is not ' . $arg1);
         }
     }
 
@@ -305,7 +294,7 @@ class Context extends RawMinkContext implements BehatContext
     public function modalIsShowingText($arg1, $arg2)
     {
         // get modal
-        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
+        $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
         if ($modal === null) {
             throw new \Exception('No modal found');
         }
@@ -313,6 +302,40 @@ class Context extends RawMinkContext implements BehatContext
         $text = $modal->find('xpath', '//' . $arg2 . '[text()="' . $arg1 . '"]');
         if (!$text || $text->getText() !== $arg1) {
             throw new \Exception('No such text in modal');
+        }
+    }
+
+    /**
+     * Get a node element by it's selector.
+     * Will try to get element for 20ms.
+     * Exemple: Use with a modal window where reloaded content
+     * will resize it's window thus making it not accessible at first.
+     */
+    private function waitForNodeElement(string $selector): ?NodeElement
+    {
+        $counter = 0;
+        $element = null;
+        while ($counter < 20) {
+            $element = $this->getSession()->getPage()->find('css', $selector);
+            if ($element === null) {
+                usleep(1000);
+                ++$counter;
+            } else {
+                break;
+            }
+        }
+
+        return $element;
+    }
+
+    /**
+     * @Then Active tab should be :arg1
+     */
+    public function activeTabShouldBe($arg1)
+    {
+        $tab = $this->getSession()->getPage()->find('css', '.ui.tabular.menu > .item.active');
+        if ($tab->getText() !== $arg1) {
+            throw new \Exception('Active tab is not ' . $arg1);
         }
     }
 

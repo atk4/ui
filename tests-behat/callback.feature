@@ -18,8 +18,6 @@ Feature: Callback
     Then I should see "Loader-3"
     Then I click paginator page "2"
     Then I click first element using class ".ui.atk-test.button"
-    # Need to wait for resizing modal window. Otherwise throw: text is not found error.
-#    Then I wait "20" ms
     Then Modal is open with text "Edit Country"
     Then I press button "Save"
     Then Toast display should contains text "Form Submit"
