@@ -10,6 +10,5 @@ Feature: ScopeBuilder
     Then date rule "finish_time" operator is "is not on" and value is "22:22"
     Then bool rule "is_commercial" has value "No"
     Then I check if input value for "qb" match text in "p.atk-expected-input-result"
-    Then I save text in "p.atk-expected-word-result"
     And I press button "Save"
-    Then I compare if saved text match text in ".atk-callback-response .content"
+    Then I check if text in "p.atk-expected-word-result" match text in ".atk-callback-response .content"
