@@ -295,7 +295,8 @@ class Context extends RawMinkContext implements BehatContext
     public function modalIsShowingText($arg1, $arg2)
     {
         // get modal
-        $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
+        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
+//        $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
         if ($modal === null) {
             throw new \Exception('No modal found');
         }
