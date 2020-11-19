@@ -18,4 +18,5 @@ default:
               extra_capabilities:
                 chrome:
                   args:
-                    - '--window-size=1280,720'
+                    - '--headless'
+                    - '--window-size=1930,1200'
