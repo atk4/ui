@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Button;
 use atk4\ui\Form;
 use atk4\ui\HtmlTemplate;
 
@@ -95,9 +96,12 @@ $group->addControl('Lookup_disb', [
 
 $group = $form->addGroup('Calendar');
 
-$group->addControl('calendar_norm', [Form\Control\Calendar::class, 'type' => 'date'])->set(date($app->ui_persistence->date_format));
-$group->addControl('calendar_read', [Form\Control\Calendar::class, 'type' => 'date', 'readonly' => true])->set(date($app->ui_persistence->date_format));
-$group->addControl('calendar_disb', [Form\Control\Calendar::class, 'type' => 'date', 'disabled' => true])->set(date($app->ui_persistence->date_format));
+$group->addControl('date_norm', [Form\Control\Calendar::class, 'type' => 'date'])->set(date($app->ui_persistence->date_format));
+$group->addControl('date_read', [Form\Control\Calendar::class, 'type' => 'date', 'readonly' => true])->set(date($app->ui_persistence->date_format));
+$group->addControl('date_disb', [Form\Control\Calendar::class, 'type' => 'date', 'disabled' => true])->set(date($app->ui_persistence->date_format));
+
+$form->onSubmit(function (Form $form) {
+});
 
 \atk4\ui\Header::addTo($app, ['Stand Alone Line']);
 // you can pass values to button

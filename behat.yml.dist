@@ -4,11 +4,10 @@ default:
       paths:
         features: '%paths.base%/tests-behat'
       contexts:
-        - atk4\ui\behat\ContextDump
+        - atk4\ui\behat\Context
         - Behat\MinkExtension\Context\MinkContext
   extensions:
     Behat\MinkExtension:
-      show_cmd: 'open %s'
       base_url:  'http://172.18.0.2:8888/demos'
       sessions:
         default:
@@ -20,4 +19,4 @@ default:
                 chrome:
                   args:
                     - '--headless'
-                    - '--window-size=1280,720'
+                    - '--window-size=1930,1200'

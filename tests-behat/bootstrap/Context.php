@@ -7,6 +7,7 @@ namespace atk4\ui\behat;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
+use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\RawMinkContext;
 
 class Context extends RawMinkContext implements BehatContext
@@ -95,11 +96,11 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Sleep for a certain time in ms.
      *
-     * @Then I sleep :arg1 ms
+     * @Then I wait :arg1 ms
      *
      * @param $arg1
      */
-    public function iSleep($arg1)
+    public function iWait($arg1)
     {
         $this->getSession()->wait($arg1);
     }
@@ -133,6 +134,15 @@ class Context extends RawMinkContext implements BehatContext
         }
 
         $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
+    }
+
+    /**
+     * @Then I set calendar input name :arg1 with value :arg2
+     */
+    public function iSetCalendarInputNameWithValue($arg1, $arg2)
+    {
+        $script = '$(\'input[name="' . $arg1 . '"]\').get(0)._flatpickr.setDate("' . $arg2 . '")';
+        $this->getSession()->executeScript($script);
     }
 
     /**
@@ -275,8 +285,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function modalIsOpenWithText($arg1)
     {
-        // get modal
-        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
+        $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
         if ($modal === null) {
             throw new \Exception('No modal found');
         }
@@ -284,17 +293,6 @@ class Context extends RawMinkContext implements BehatContext
         $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (!$text || $text->getText() !== $arg1) {
             throw new \Exception('No such text in modal');
-        }
-    }
-
-    /**
-     * @Then Active tab should be :arg1
-     */
-    public function activeTabShouldBe($arg1)
-    {
-        $tab = $this->getSession()->getPage()->find('css', '.ui.tabular.menu > .item.active');
-        if ($tab->getText() !== $arg1) {
-            throw new \Exception('Active tab is not ' . $arg1);
         }
     }
 
@@ -307,7 +305,7 @@ class Context extends RawMinkContext implements BehatContext
     public function modalIsShowingText($arg1, $arg2)
     {
         // get modal
-        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
+        $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
         if ($modal === null) {
             throw new \Exception('No modal found');
         }
@@ -315,6 +313,40 @@ class Context extends RawMinkContext implements BehatContext
         $text = $modal->find('xpath', '//' . $arg2 . '[text()="' . $arg1 . '"]');
         if (!$text || $text->getText() !== $arg1) {
             throw new \Exception('No such text in modal');
+        }
+    }
+
+    /**
+     * Get a node element by it's selector.
+     * Will try to get element for 20ms.
+     * Exemple: Use with a modal window where reloaded content
+     * will resize it's window thus making it not accessible at first.
+     */
+    private function waitForNodeElement(string $selector): ?NodeElement
+    {
+        $counter = 0;
+        $element = null;
+        while ($counter < 20) {
+            $element = $this->getSession()->getPage()->find('css', $selector);
+            if ($element === null) {
+                usleep(1000);
+                ++$counter;
+            } else {
+                break;
+            }
+        }
+
+        return $element;
+    }
+
+    /**
+     * @Then Active tab should be :arg1
+     */
+    public function activeTabShouldBe($arg1)
+    {
+        $tab = $this->getSession()->getPage()->find('css', '.ui.tabular.menu > .item.active');
+        if ($tab->getText() !== $arg1) {
+            throw new \Exception('Active tab is not ' . $arg1);
         }
     }
 
@@ -417,6 +449,139 @@ class Context extends RawMinkContext implements BehatContext
         }
 
         $icon->click();
+    }
+
+    /**
+     * Generic ScopeBuilder rule with select operator and input value.
+     *
+     * @Then /^rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     */
+    public function scopeBuilderRule($name, $operator, $value)
+    {
+        $rule = $this->assertScopeBuilderRuleExist($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertInputValue($rule, $value);
+    }
+
+    /**
+     * hasOne reference or enum type rule for ScopeBuilder.
+     *
+     * @Then /^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     */
+    public function scopeBuilderReferenceRule($name, $operator, $value)
+    {
+        $rule = $this->assertScopeBuilderRuleExist($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertSelectedValue($rule, $value, '.vqb-rule-input select');
+    }
+
+    /**
+     * Date, Time or Datetime rule for ScopeBuilder.
+     *
+     * @Then /^date rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     */
+    public function scopeBuilderDateRule($name, $operator, $value)
+    {
+        $rule = $this->assertScopeBuilderRuleExist($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertInputValue($rule, $value, 'input.form-control');
+    }
+
+    /**
+     * Boolean type rule for ScopeBuilder.
+     *
+     * @Then /^bool rule "([^"]*)" has value "([^"]*)"$/
+     */
+    public function scopeBuilderBoolRule($name, $value)
+    {
+        $this->assertScopeBuilderRuleExist($name);
+        $idx = ($value === 'Yes') ? 0 : 1;
+        $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="' . $name . '"]\').find(\'input\')[' . $idx . '].checked');
+        if (!$isChecked) {
+            throw new \Exception('Radio value selected is not: ' . $value);
+        }
+    }
+
+    /**
+     * @Then /^I check if text in "([^"]*)" match text in "([^"]*)"/
+     */
+    public function compareElementText($compareSelector, $compareToSelector)
+    {
+        $compareContainer = $this->getSession()->getPage()->find('css', $compareSelector);
+        if (!$compareContainer) {
+            throw new \Exception('Unable to find compare container: ' . $compareSelector);
+        }
+
+        $expectedText = $compareContainer->getText();
+
+        $compareToContainer = $this->getSession()->getPage()->find('css', $compareToSelector);
+        if (!$compareToContainer) {
+            throw new \Exception('Unable to find compare to container: ' . $compareToSelector);
+        }
+
+        $compareToText = $compareToContainer->getText();
+
+        if ($expectedText !== $compareToText) {
+            throw new \Exception('Data word does not match: ' . $compareToText . ' expected: ' . $expectedText);
+        }
+    }
+
+    /**
+     * @Then /^I check if input value for "([^"]*)" match text in "([^"]*)"$/
+     */
+    public function compareInputValueToElementText($inputName, $selector)
+    {
+        $expected = $this->getSession()->getPage()->find('css', $selector)->getText();
+        $input = $this->getSession()->getPage()->find('css', 'input[name="' . $inputName . '"]');
+        if (!$input) {
+            throw new \Exception('Unable to find input name: ' . $inputName);
+        }
+
+        if (preg_replace('~\s*~', '', $expected) !== preg_replace('~\s*~', '', $input->getValue())) {
+            throw new \Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expected);
+        }
+    }
+
+    /**
+     * Find a select input type within an html element
+     * and check if value is selected.
+     */
+    private function assertSelectedValue(NodeElement $element, string $value, string $selector)
+    {
+        $select = $element->find('css', $selector);
+        if (!$select) {
+            throw new \Exception('Select input not found using selector: ' . $selector);
+        }
+        $selectValue = $select->getValue();
+        if ($selectValue !== $value) {
+            throw new \Exception('Value: "' . $value . '" not set using selector: ' . $selector);
+        }
+    }
+
+    /**
+     * Find an input within an html element and check
+     * if value is set.
+     */
+    private function assertInputValue(NodeElement $element, string $value, string $selector = 'input')
+    {
+        $input = $element->find('css', $selector);
+        if (!$input) {
+            throw new \Exception('Input not found in selector: ' . $selector);
+        }
+        $inputValue = $input->getValue();
+        if ($inputValue !== $value) {
+            throw new \Exception('Input value not is not: ' . $value);
+        }
+    }
+
+    private function assertScopeBuilderRuleExist(string $ruleName): NodeElement
+    {
+        $rule = $this->getSession()->getPage()->find('css', '.vqb-rule[data-name=' . $ruleName . ']');
+        if (!$rule) {
+            throw new \Exception('Rule not found: ' . $ruleName);
+        }
+
+        return $rule;
     }
 
     /**
