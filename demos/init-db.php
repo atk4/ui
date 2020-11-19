@@ -147,7 +147,7 @@ class Stat extends \atk4\data\Model
         $this->addFields(['start_date', 'finish_date'], ['type' => 'date']);
         $this->addField('finish_time', ['type' => 'time']);
 
-        $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => [Form\Control\Line::class, 'disabled' => true]]]);
+        $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => ['disabled' => true]]]);
     }
 }
 

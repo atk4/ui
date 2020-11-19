@@ -5,7 +5,7 @@ import { focus } from '../directives/commons.directive';
 
 Vue.use(SuiVue);
 
-Vue.component('v-date-picker', () => import('v-calendar/lib/components/date-picker.umd'));
+Vue.component('flat-picker', () => import('vue-flatpickr-component'));
 
 // Vue loader component to display while dynamic component is loading.
 const atkVueLoader = {

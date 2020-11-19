@@ -8,6 +8,8 @@ namespace atk4\ui\demo;
 require_once __DIR__ . '/../init-app.php';
 
 $model = new Stat($app->db, ['caption' => 'Demo Stat']);
+$model->addCondition('finish_time', '=', '22:12:00');
+$model->addCondition('start_date', '=', '2020-10-22');
 
 $form = \atk4\ui\Form::addTo($app);
 

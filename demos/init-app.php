@@ -89,6 +89,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $menu = $layout->addMenuGroup(['Form Controls', 'icon' => 'keyboard outline']);
     $layout->addMenuItem(['Input'], [$path . 'input2'], $menu);
     $layout->addMenuItem('Input Decoration', [$path . 'input'], $menu);
+    $layout->addMenuItem('Calendar', [$path . 'calendar'], $menu);
     $layout->addMenuItem(['Checkboxes'], [$path . 'checkbox'], $menu);
     $layout->addMenuItem(['Value Selectors'], [$path . 'form6'], $menu);
     $layout->addMenuItem(['Lookup'], [$path . 'lookup'], $menu);
@@ -97,7 +98,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['File Upload'], [$path . 'upload'], $menu);
     $layout->addMenuItem(['Multi Line'], [$path . 'multiline'], $menu);
     $layout->addMenuItem(['Tree Selector'], [$path . 'tree-item-selector'], $menu);
-    $layout->addMenuItem(['Query Builder'], [$path . 'query-builder'], $menu);
+    $layout->addMenuItem(['Scope Builder'], [$path . 'scope-builder'], $menu);
 
     $path = $demosUrl . 'collection/';
     $menu = $layout->addMenuGroup(['Data Collection', 'icon' => 'table']);

@@ -16,9 +16,13 @@ require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
 
+$dateFormat = $app->ui_persistence->date_format;
+$timeFormat = $app->ui_persistence->time_format;
+
 /** @var Model $inventoryItemClass */
 $inventoryItemClass = get_class(new class() extends Model {
     public $dateFormat;
+    public $timeFormat;
 
     protected function init(): void
     {
@@ -35,6 +39,16 @@ $inventoryItemClass = get_class(new class() extends Model {
             ],
             'ui' => ['multiline' => ['width' => 3]],
         ]);
+        $this->addField('inv_time', [
+            'default' => date($this->timeFormat),
+            'type' => 'time',
+            'typecast' => [
+                function ($v) {
+                    return ($v instanceof \DateTime) ? date_format($v, $this->timeFormat) : $v;
+                },
+            ],
+            'ui' => ['multiline' => ['width' => 3]],
+        ]);
         $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
         $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
         $this->addExpression('total', ['expr' => function (Model $row) {
@@ -43,14 +57,15 @@ $inventoryItemClass = get_class(new class() extends Model {
     }
 });
 
-$inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => $app->ui_persistence->date_format]);
+$inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => $dateFormat, 'timeFormat' => $timeFormat]);
 
 // Populate some data.
 $total = 0;
 for ($i = 1; $i < 3; ++$i) {
     $inventory2 = clone $inventory;
     $inventory2->set('id', $i);
-    $inventory2->set('inv_date', date($app->ui_persistence->date_format));
+    $inventory2->set('inv_date', date($dateFormat));
+    $inventory2->set('inv_time', date($timeFormat));
     $inventory2->set('item', 'item_' . $i);
     $inventory2->set('qty', random_int(10, 100));
     $inventory2->set('box', random_int(1, 10));
