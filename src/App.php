@@ -884,7 +884,7 @@ class App
                 } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behaviour, only directly passed strings were escaped
                     $result[] = $v;
                 } else {
-                    $result[] = $this->encodeHtml($v);
+                    $result[] = $this->encodeHtml((string)$v);
                 }
             }
             $value = implode('', $result);
