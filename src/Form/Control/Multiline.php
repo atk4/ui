@@ -309,7 +309,7 @@ class Multiline extends Form\Control
     {
         $model = null;
         // Will load data when using containsMany.
-        $data = $this->getApp()->ui_persistence->typecastSaveField($this->field, $this->field->get());
+        $data = $this->getApp()->ui_persistence->_typecastSaveField($this->field, $this->field->get());
 
         // If data is empty try to load model data directly. - For hasMany model
         // or array model already populated with data.
