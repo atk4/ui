@@ -70,6 +70,13 @@
                                         </option>
                                     </select>
                                 </template>
+                              <!-- Lookup input -->
+                              <template v-if="canDisplay('lookup')">
+                                <atk-lookup
+                                    :config="rule.componentProps"
+                                    :value="query.value">
+                                </atk-lookup>
+                              </template>
                             </div>
                         </div>
                     </div>
@@ -86,10 +93,11 @@
 <script>
 import QueryBuilderRule from 'vue-query-builder/dist/rule/QueryBuilderRule.umd';
 import AtkDatePicker from '../share/atk-date-picker';
+import AtkLookup from '../share/atk-lookup';
 
 export default {
     extends: QueryBuilderRule,
-    components: { 'atk-date-picker': AtkDatePicker },
+    components: { 'atk-date-picker': AtkDatePicker, 'atk-lookup': AtkLookup},
     data: function () {
         return {};
     },
@@ -110,6 +118,9 @@ export default {
         isSelect: function () {
             return this.rule.type === 'select';
         },
+        isLookup: function () {
+          return this.rule.type === 'custom-component' && this.rule.component === 'AtkLookup';
+        }
     },
     methods: {
         /**
@@ -129,6 +140,7 @@ export default {
             case 'date': return this.isDatePicker;
             case 'checkbox': return this.isCheckbox;
             case 'select': return this.isSelect;
+            case 'lookup': return this.isLookup;
             default: return false;
             }
         },

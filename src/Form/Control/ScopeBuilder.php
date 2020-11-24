@@ -8,6 +8,7 @@ use atk4\data\Field;
 use atk4\data\Model;
 use atk4\data\Model\Scope;
 use atk4\data\Model\Scope\Condition;
+use atk4\ui\Callback;
 use atk4\ui\Exception;
 use atk4\ui\Form\Control;
 use atk4\ui\HtmlTemplate;
@@ -23,9 +24,9 @@ class ScopeBuilder extends Control
      * @var array
      */
     public $options = [
-        'enum' => [
-            'limit' => 250,
-        ],
+        //        'enum' => [
+        //            'limit' => 10,
+        //        ],
         'debug' => false, // displays query output live on the page if set to true
     ];
     /**
@@ -94,6 +95,10 @@ class ScopeBuilder extends Control
      * @var array
      */
     public $labels = [];
+
+    /** @var Callback */
+    public $dataCb;
+//    public $lookupLimit = 25;
 
     /**
      * Default VueQueryBuilder query.
@@ -233,15 +238,16 @@ class ScopeBuilder extends Control
             ],
         ],
         'enum' => [
-            'type' => 'select',
-            'inputType' => 'select',
+            'type' => 'custom-component',
+            'inputType' => 'lookup',
+            'component' => 'AtkLookup',
             'operators' => [
                 self::OPERATOR_EQUALS,
                 self::OPERATOR_DOESNOT_EQUAL,
                 self::OPERATOR_EMPTY,
                 self::OPERATOR_NOT_EMPTY,
             ],
-            'choices' => [__CLASS__, 'getChoices'],
+            'componentProps' => [__CLASS__, 'getLookupProps'],
         ],
         'numeric' => [
             'type' => 'text',
@@ -270,18 +276,21 @@ class ScopeBuilder extends Control
             'component' => 'DatePicker',
             'inputType' => 'date',
             'operators' => self::DATE_OPERATORS,
+            'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
         'datetime' => [
             'type' => 'custom-component',
             'component' => 'DatePicker',
             'inputType' => 'datetime',
             'operators' => self::DATE_OPERATORS,
+            'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
         'time' => [
             'type' => 'custom-component',
             'component' => 'DatePicker',
             'inputType' => 'time',
             'operators' => self::DATE_OPERATORS,
+            'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
         'integer' => 'numeric',
         'float' => 'numeric',
@@ -307,6 +316,26 @@ class ScopeBuilder extends Control
         }
     }
 
+    protected function getLookupProps(Field $field, $options)
+    {
+        // set any of sui-dropdown props via $field->ui['scopebuilder']['dropdown'] property.
+        $props = $field->ui['scopebuilder']['dropdown'] ?? [];
+        $items = $this->getFieldItems($field, 10);
+        foreach ($items as $value => $text) {
+            $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
+        }
+
+        if ($field->reference) {
+            $props['url'] = $this->dataCb->getUrl();
+            $props['reference'] = $field->short_name;
+            $props['search'] = true;
+        }
+
+        $props['placeholder'] = $props['placeholder'] ?? 'Select ' . $field->getCaption();
+
+        return $props;
+    }
+
     /**
      * Set the model to build scope for.
      *
@@ -316,9 +345,23 @@ class ScopeBuilder extends Control
     {
         $model = parent::setModel($model);
 
+        if (!$this->dataCb) {
+            $this->dataCb = Callback::addTo($this);
+        }
+        $this->dataCb->set([$this, 'outputApiResponse']);
+
         $this->buildQuery($model);
 
         return $model;
+    }
+
+    public function outputApiResponse()
+    {
+        $this->getApp()->terminateJson([
+            'success' => true,
+            'results' => ['key' => 'a', 'text' => 'A', 'value' => 'a'],
+        ]);
+//        return $this->getApp()->encodeJson(['key' => 'a', 'text' => 'A', 'value' => 'a']);
     }
 
     /**
@@ -356,46 +399,68 @@ class ScopeBuilder extends Control
     {
         $type = ($field->enum || $field->values || $field->reference) ? 'enum' : $field->type;
 
-        $rule = self::getRule($type, array_merge([
+        $rule = $this->getRule($type, array_merge([
             'id' => $field->short_name,
             'label' => $field->getCaption(),
             'options' => $this->options[strtolower((string) $type)] ?? [],
         ], $field->ui['scopebuilder'] ?? []), $field);
 
-        $rule['componentProps'] = $this->getComponentProps($rule);
+//        $rule['componentProps'] = $this->getComponentProps($rule);
 
         $this->rules[] = $rule;
 
         return $this;
     }
 
+//
+//    private function getTypeOptions(string $type, Field $field): array
+//    {
+//        $options = $this->options[$type] ?? [];
+//        if ($type === 'enum' && $field->reference) {
+//            $options['limit'] = $this->lookupLimit;
+//        }
+//
+//        return $options;
+//    }
+
     /**
      * Some field type use specific Vue component for ui display.
      * This will return component property (props) accordingly.
      */
-    protected function getComponentProps(array $rule): array
+//    protected function getComponentProps(array $rule): array
+//    {
+//        $props = [];
+//        $component = $rule['component'] ?? null;
+//        // setup proper options for Vue atkDatePicker
+//        if ($component === 'DatePicker') {
+//            $props = $this->getDateComponentProps($rule);
+//        } elseif ($component === 'AtkLookup') {
+//            if (count($rule['choices']) === (10)) {
+    ////                $url = $this->dataCb->getUrl();
+//            }
+//        }
+//
+//        return $props;
+//    }
+
+    protected function getDatePickerProps(Field $field, array $options = [])
     {
-        $props = [];
-        $component = $rule['component'] ?? null;
-        // setup proper options for Vue atkDatePicker
-        if ($component === 'DatePicker') {
-            $calendar = new Calendar();
-            $props = $this->atkdDateOptions['flatpickr'] ?? [];
-            $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$rule['inputType'] . '_format'});
-            $props['altFormat'] = $format;
-            $props['dateFormat'] = 'Y-m-d';
-            $props['altInput'] = true;
+        $calendar = new Calendar();
+        $props = $this->atkdDateOptions['flatpickr'] ?? [];
+        $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$field->type . '_format'});
+        $props['altFormat'] = $format;
+        $props['dateFormat'] = 'Y-m-d';
+        $props['altInput'] = true;
 
-            if ($rule['inputType'] === 'datetime' || $rule['inputType'] === 'time') {
-                $props['enableTime'] = true;
-                $props['time_24hr'] = $calendar->use24hrTimeFormat($format);
-                $props['noCalendar'] = ($rule['inputType'] === 'time');
-                $props['enableSeconds'] = $calendar->useSeconds($format);
-                $props['dateFormat'] = ($rule['inputType'] === 'datetime') ? 'Y-m-d H:i:S' : 'H:i:S';
-            }
-
-            $props['useDefault'] = $this->atkdDateOptions['useDefault'];
+        if ($field->type === 'datetime' || $field->type === 'time') {
+            $props['enableTime'] = true;
+            $props['time_24hr'] = $calendar->use24hrTimeFormat($format);
+            $props['noCalendar'] = ($field->type === 'time');
+            $props['enableSeconds'] = $calendar->useSeconds($format);
+            $props['dateFormat'] = ($field->type === 'datetime') ? 'Y-m-d H:i:S' : 'H:i:S';
         }
+
+        $props['useDefault'] = $this->atkdDateOptions['useDefault'];
 
         return $props;
     }
@@ -407,7 +472,7 @@ class ScopeBuilder extends Control
     {
         if ($reference = $field->reference) {
             // add the number of records rule
-            $this->rules[] = self::getRule('numeric', [
+            $this->rules[] = $this->getRule('numeric', [
                 'id' => $reference->link . '/#',
                 'label' => $field->getCaption() . ' number of records ',
             ]);
@@ -428,13 +493,13 @@ class ScopeBuilder extends Control
         return $this;
     }
 
-    protected static function getRule($type, array $defaults = [], Field $field = null): array
+    protected function getRule($type, array $defaults = [], Field $field = null): array
     {
         $rule = self::$ruleTypes[strtolower((string) $type)] ?? self::$ruleTypes['default'];
 
         // when $rule is an alias
         if (is_string($rule)) {
-            return self::getRule($rule, $defaults, $field);
+            return $this->getRule($rule, $defaults, $field);
         }
 
         $options = $defaults['options'] ?? [];
@@ -453,28 +518,35 @@ class ScopeBuilder extends Control
         }, $rule), $defaults);
     }
 
-    /**
-     * Returns the choises array for the field rule.
-     */
-    protected static function getChoices(Field $field, $options = []): array
+    protected function getFieldItems(Field $field, int $limit = 250): array
     {
-        $choices = [];
+        $items = [];
         if ($field->enum) {
-            $choices = array_combine($field->enum, $field->enum);
+            $items = array_combine($field->enum, $field->enum);
         }
         if ($field->values && is_array($field->values)) {
-            $choices = $field->values;
+            $items = $field->values;
         } elseif ($field->reference) {
             $model = $field->reference->refModel();
 
-            if ($limit = $options['limit'] ?? false) {
+            if ($limit) {
                 $model->setLimit($limit);
             }
 
             foreach ($model as $item) {
-                $choices[$item->get($model->id_field)] = $item->get($model->title_field);
+                $items[$item->get($model->id_field)] = $item->get($model->title_field);
             }
         }
+
+        return $items;
+    }
+
+    /**
+     * Returns the choices array for Select field rule.
+     */
+    protected function getChoices(Field $field, $options = []): array
+    {
+        $choices = $this->getFieldItems($field, $options['limit'] ?? 250);
 
         $ret = [
             ['label' => '[empty]', 'value' => null],

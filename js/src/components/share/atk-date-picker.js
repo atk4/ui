@@ -1,5 +1,5 @@
 /**
- * Wrapper for vue-flatpickr-component component from V-Calendar
+ * Wrapper for vue-flatpickr-component component.
  * https://github.com/ankurk91/vue-flatpickr-component
  *
  * Props
