@@ -7,10 +7,6 @@ Vue.use(SuiVue);
 
 Vue.component('flat-picker', () => import('vue-flatpickr-component'));
 
-// for testing only
-// import atkLookup from '../components/share/atk-lookup';
-// Vue.component('atk-lookup', () => import('../components/share/atk-lookup'));
-
 // Vue loader component to display while dynamic component is loading.
 const atkVueLoader = {
     name: 'atk-vue-loader',
@@ -32,7 +28,6 @@ const componentFactory = (name, component) => () => ({
 });
 
 const atkComponents = {
-    // 'atk-lookup': atkLookup,
     'atk-inline-edit': componentFactory('atk-inline-edit', () => import(/* webpackChunkName: "atk-vue-inline-edit" */'../components/inline-edit.component')),
     'atk-item-search': componentFactory('atk-item-search', () => import(/* webpackChunkName: "atk-vue-item-search" */'../components/item-search.component')),
     'atk-multiline': componentFactory('atk-multiline', () => import(/* webpackChunkName: "atk-vue-multiline" */'../components/multiline/multiline.component')),
