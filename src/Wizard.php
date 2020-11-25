@@ -151,8 +151,10 @@ class Wizard extends View
 
         if ($result instanceof Form) {
             // mingle with the button icon
-            $result->buttonSave->destroy();
-            $result->buttonSave = null;
+            if ($result->buttonSave !== null) {
+                $result->buttonSave->destroy();
+                $result->buttonSave = null;
+            }
 
             $this->buttonNext->on('click', $result->js()->submit());
         }
