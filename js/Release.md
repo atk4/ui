@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.18.0 (2020-11-25)
+
+- Add atk-lookup share component for query-builder.
+
 ### version 1.17.0 (2020-11-10)
 
 - atk-date-picker use vue-flatpickr-component instead of v-date-picker;

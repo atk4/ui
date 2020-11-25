@@ -36,16 +36,6 @@
                                         >
                                     </div>
                                 </template>
-                                <!-- Date input -->
-                                <template v-if="canDisplay('date')">
-                                    <div class="ui small input atk-qb">
-                                      <atk-date-picker
-                                          :config="rule.componentProps"
-                                          :value="query.value"
-                                          @dateChange="onDateChange"
-                                          @setDefault="onDateChange"></atk-date-picker>
-                                    </div>
-                                </template>
                                 <!-- Checkbox or Radio input -->
                                 <template v-if="canDisplay('checkbox')">
                                     <sui-form-fields inline class="atk-qb">
@@ -70,12 +60,17 @@
                                         </option>
                                     </select>
                                 </template>
-                              <!-- Lookup input -->
-                              <template v-if="canDisplay('lookup')">
-                                <atk-lookup
-                                    :config="rule.componentProps"
-                                    :value="query.value">
-                                </atk-lookup>
+                              <!-- Custom component -->
+                              <template v-if="canDisplay('custom-component')">
+                                <div class="ui small input atk-qb">
+                                  <component :is="rule.component"
+                                      :config="rule.componentProps"
+                                      :value="query.value"
+                                      :optionalValue="query.option"
+                                      @onChange="onChange"
+                                      @setDefault="onChange">
+                                  </component>
+                                </div>
                               </template>
                             </div>
                         </div>
@@ -97,7 +92,7 @@ import AtkLookup from '../share/atk-lookup';
 
 export default {
     extends: QueryBuilderRule,
-    components: { 'atk-date-picker': AtkDatePicker, 'atk-lookup': AtkLookup},
+    components: { 'atk-date-picker': AtkDatePicker, 'atk-lookup': AtkLookup },
     data: function () {
         return {};
     },
@@ -106,8 +101,8 @@ export default {
         isInput: function () {
             return this.rule.type === 'text' || this.rule.type === 'numeric';
         },
-        isDatePicker: function () {
-            return this.rule.type === 'custom-component' && this.rule.component === 'DatePicker';
+        isComponent: function () {
+            return this.rule.type === 'custom-component';
         },
         isRadio: function () {
             return this.rule.type === 'radio';
@@ -118,9 +113,6 @@ export default {
         isSelect: function () {
             return this.rule.type === 'select';
         },
-        isLookup: function () {
-          return this.rule.type === 'custom-component' && this.rule.component === 'AtkLookup';
-        }
     },
     methods: {
         /**
@@ -137,15 +129,14 @@ export default {
 
             switch (type) {
             case 'input': return this.isInput;
-            case 'date': return this.isDatePicker;
             case 'checkbox': return this.isCheckbox;
             case 'select': return this.isSelect;
-            case 'lookup': return this.isLookup;
+            case 'custom-component': return this.isComponent;
             default: return false;
             }
         },
-        onDateChange: function (date) {
-            this.query.value = date;
+        onChange: function (value) {
+            this.query.value = value;
         },
     },
 };

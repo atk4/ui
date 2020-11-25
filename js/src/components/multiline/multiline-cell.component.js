@@ -10,7 +10,7 @@ export default {
         class="fluid" 
         @blur="onBlur"
         @input="onInput"
-        @dateChange="onDateChange"
+        @onChange="onChange"
         v-model="inputValue"
         :readOnlyValue="fieldValue"
         :name="fieldName"
@@ -42,7 +42,7 @@ export default {
             this.inputValue = this.getTypeValue(value);
             this.$emit('update-value', this.field, this.inputValue);
         },
-        onDateChange: function (value) {
+        onChange: function (value) {
             this.onInput(value);
         },
         /**

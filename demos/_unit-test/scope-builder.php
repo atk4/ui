@@ -15,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 $model = new Stat($app->db, ['caption' => 'Demo Stat']);
 
 $project = new Condition('project_name', Condition::OPERATOR_REGEXP, '[a-zA-Z]');
-$brazil = new Condition('client_country_iso', '=', 'Brazil');
+$brazil = new Condition('client_country_iso', '=', '30');
 $start = new Condition('start_date', '=', '2020-10-22');
 $finish = new Condition('finish_time', '!=', '22:22');
 $isCommercial = new Condition('is_commercial', '0');
@@ -45,7 +45,7 @@ $form->onSubmit(function ($form) use ($model) {
 $expectedWord = <<<'EOF'
      Project Budget is greater or equal to '1000' 
      and (Project Name is regular expression '[a-zA-Z]' 
-            and Client Country Iso is equal to 'Brazil' 
+            and Client Country Iso is equal to '30' 
             and Start Date is equal to '2020-10-22') 
     and (Finish Time is not equal to '22:22' or Is Commercial is equal to '0')
     EOF;
@@ -59,7 +59,8 @@ $expectedInput = <<< 'EOF'
           "query": {
             "rule": "project_budget",
             "operator": ">=",
-            "value": "1000"
+            "value": "1000",
+            "option": null
           }
         },
         {
@@ -72,7 +73,8 @@ $expectedInput = <<< 'EOF'
                 "query": {
                   "rule": "project_name",
                   "operator": "matches regular expression",
-                  "value": "[a-zA-Z]"
+                  "value": "[a-zA-Z]",
+                  "option": null
                 }
               },
               {
@@ -80,7 +82,12 @@ $expectedInput = <<< 'EOF'
                 "query": {
                   "rule": "client_country_iso",
                   "operator": "equals",
-                  "value": "Brazil"
+                  "value": "30",
+                  "option": {
+                    "key": "30",
+                    "text": "Brazil",
+                    "value": "30"
+                  }
                 }
               },
               {
@@ -88,7 +95,8 @@ $expectedInput = <<< 'EOF'
                 "query": {
                   "rule": "start_date",
                   "operator": "is on",
-                  "value": "2020-10-22"
+                  "value": "2020-10-22",
+                  "option": null
                 }
               }
             ]
@@ -104,7 +112,8 @@ $expectedInput = <<< 'EOF'
                 "query": {
                   "rule": "finish_time",
                   "operator": "is not on",
-                  "value": "22:22"
+                  "value": "22:22",
+                  "option": null
                 }
               },
               {
@@ -112,7 +121,8 @@ $expectedInput = <<< 'EOF'
                 "query": {
                   "rule": "is_commercial",
                   "operator": "is exactly",
-                  "value": "0"
+                  "value": "0",
+                  "option": null
                 }
               }
             ]

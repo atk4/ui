@@ -24,9 +24,9 @@ class ScopeBuilder extends Control
      * @var array
      */
     public $options = [
-        //        'enum' => [
-        //            'limit' => 10,
-        //        ],
+        'enum' => [
+            'limit' => 250,
+        ],
         'debug' => false, // displays query output live on the page if set to true
     ];
     /**
@@ -72,6 +72,13 @@ class ScopeBuilder extends Control
     public $atkdDateOptions = [
         'useDefault' => false,
         'flatpickr' => [],
+    ];
+
+    /**
+     * atk-lookup and semantic-ui dropdown options.
+     */
+    public $atkLookupOptions = [
+        'ui' => 'small basic button',
     ];
 
     /**
@@ -151,6 +158,13 @@ class ScopeBuilder extends Control
         self::OPERATOR_NOT_EMPTY,
     ];
 
+    protected const ENUM_OPERATORS = [
+        self::OPERATOR_EQUALS,
+        self::OPERATOR_DOESNOT_EQUAL,
+        self::OPERATOR_EMPTY,
+        self::OPERATOR_NOT_EMPTY,
+    ];
+
     protected const DATE_OPERATORS_MAP = [
         self::OPERATOR_TIME_EQUALS => Condition::OPERATOR_EQUALS,
         self::OPERATOR_TIME_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
@@ -205,6 +219,10 @@ class ScopeBuilder extends Control
             self::OPERATOR_EQUALS => Condition::OPERATOR_EQUALS,
             self::OPERATOR_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
         ],
+        'lookup' => [
+            self::OPERATOR_EQUALS => Condition::OPERATOR_EQUALS,
+            self::OPERATOR_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
+        ],
     ];
 
     /**
@@ -237,17 +255,18 @@ class ScopeBuilder extends Control
                 self::OPERATOR_NOT_EMPTY,
             ],
         ],
-        'enum' => [
+        'lookup' => [
             'type' => 'custom-component',
             'inputType' => 'lookup',
-            'component' => 'AtkLookup',
-            'operators' => [
-                self::OPERATOR_EQUALS,
-                self::OPERATOR_DOESNOT_EQUAL,
-                self::OPERATOR_EMPTY,
-                self::OPERATOR_NOT_EMPTY,
-            ],
+            'component' => 'atk-lookup',
+            'operators' => self::ENUM_OPERATORS,
             'componentProps' => [__CLASS__, 'getLookupProps'],
+        ],
+        'enum' => [
+            'type' => 'select',
+            'inputType' => 'select',
+            'operators' => self::ENUM_OPERATORS,
+            'choices' => [__CLASS__, 'getChoices'],
         ],
         'numeric' => [
             'type' => 'text',
@@ -273,21 +292,21 @@ class ScopeBuilder extends Control
         ],
         'date' => [
             'type' => 'custom-component',
-            'component' => 'DatePicker',
+            'component' => 'atk-date-picker',
             'inputType' => 'date',
             'operators' => self::DATE_OPERATORS,
             'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
         'datetime' => [
             'type' => 'custom-component',
-            'component' => 'DatePicker',
+            'component' => 'atk-date-picker',
             'inputType' => 'datetime',
             'operators' => self::DATE_OPERATORS,
             'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
         'time' => [
             'type' => 'custom-component',
-            'component' => 'DatePicker',
+            'component' => 'atk-date-picker',
             'inputType' => 'time',
             'operators' => self::DATE_OPERATORS,
             'componentProps' => [__CLASS__, 'getDatePickerProps'],
@@ -316,26 +335,6 @@ class ScopeBuilder extends Control
         }
     }
 
-    protected function getLookupProps(Field $field, $options)
-    {
-        // set any of sui-dropdown props via $field->ui['scopebuilder']['dropdown'] property.
-        $props = $field->ui['scopebuilder']['dropdown'] ?? [];
-        $items = $this->getFieldItems($field, 10);
-        foreach ($items as $value => $text) {
-            $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
-        }
-
-        if ($field->reference) {
-            $props['url'] = $this->dataCb->getUrl();
-            $props['reference'] = $field->short_name;
-            $props['search'] = true;
-        }
-
-        $props['placeholder'] = $props['placeholder'] ?? 'Select ' . $field->getCaption();
-
-        return $props;
-    }
-
     /**
      * Set the model to build scope for.
      *
@@ -355,13 +354,28 @@ class ScopeBuilder extends Control
         return $model;
     }
 
+    /**
+     * Output lookup search query data.
+     */
     public function outputApiResponse()
     {
+        $fieldName = $_GET['field'] ?? null;
+        $query = $_GET['q'] ?? null;
+        $data = [];
+        if ($fieldName) {
+            $model = $this->model->getField($fieldName)->reference->refModel();
+            if (!empty($query)) {
+                $model->addCondition($model->title_field, 'like', '%' . $query . '%');
+            }
+            foreach ($model as $row) {
+                $data[] = ['key' => $row->getId(), 'text' => $row->getTitle(), 'value' => $row->getId()];
+            }
+        }
+
         $this->getApp()->terminateJson([
             'success' => true,
-            'results' => ['key' => 'a', 'text' => 'A', 'value' => 'a'],
+            'results' => $data,
         ]);
-//        return $this->getApp()->encodeJson(['key' => 'a', 'text' => 'A', 'value' => 'a']);
     }
 
     /**
@@ -397,7 +411,13 @@ class ScopeBuilder extends Control
      */
     protected function addFieldRule(Field $field): self
     {
-        $type = ($field->enum || $field->values || $field->reference) ? 'enum' : $field->type;
+        if ($field->enum || $field->values) {
+            $type = 'enum';
+        } elseif ($field->reference) {
+            $type = 'lookup';
+        } else {
+            $type = $field->type;
+        }
 
         $rule = $this->getRule($type, array_merge([
             'id' => $field->short_name,
@@ -405,45 +425,38 @@ class ScopeBuilder extends Control
             'options' => $this->options[strtolower((string) $type)] ?? [],
         ], $field->ui['scopebuilder'] ?? []), $field);
 
-//        $rule['componentProps'] = $this->getComponentProps($rule);
-
         $this->rules[] = $rule;
 
         return $this;
     }
 
-//
-//    private function getTypeOptions(string $type, Field $field): array
-//    {
-//        $options = $this->options[$type] ?? [];
-//        if ($type === 'enum' && $field->reference) {
-//            $options['limit'] = $this->lookupLimit;
-//        }
-//
-//        return $options;
-//    }
+    /**
+     * Set property for atk-lookup component.
+     */
+    protected function getLookupProps(Field $field): array
+    {
+        // set any of sui-dropdown props via $field->ui['scopebuilder']['lookup'] property.
+        $props = $this->atkLookupOptions;
+        $items = $this->getFieldItems($field, 10);
+        foreach ($items as $value => $text) {
+            $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
+        }
+
+        if ($field->reference) {
+            $props['url'] = $this->dataCb->getUrl();
+            $props['reference'] = $field->short_name;
+            $props['search'] = true;
+        }
+
+        $props['placeholder'] = $props['placeholder'] ?? 'Select ' . $field->getCaption();
+
+        return $props;
+    }
 
     /**
-     * Some field type use specific Vue component for ui display.
-     * This will return component property (props) accordingly.
+     * Set property for atk-date-picker component.
      */
-//    protected function getComponentProps(array $rule): array
-//    {
-//        $props = [];
-//        $component = $rule['component'] ?? null;
-//        // setup proper options for Vue atkDatePicker
-//        if ($component === 'DatePicker') {
-//            $props = $this->getDateComponentProps($rule);
-//        } elseif ($component === 'AtkLookup') {
-//            if (count($rule['choices']) === (10)) {
-    ////                $url = $this->dataCb->getUrl();
-//            }
-//        }
-//
-//        return $props;
-//    }
-
-    protected function getDatePickerProps(Field $field, array $options = [])
+    protected function getDatePickerProps(Field $field): array
     {
         $calendar = new Calendar();
         $props = $this->atkdDateOptions['flatpickr'] ?? [];
@@ -518,6 +531,10 @@ class ScopeBuilder extends Control
         }, $rule), $defaults);
     }
 
+    /**
+     * Return an array of items id and name for a field.
+     * Return field enum, values or reference values.
+     */
     protected function getFieldItems(Field $field, int $limit = 250): array
     {
         $items = [];
@@ -746,7 +763,32 @@ class ScopeBuilder extends Control
             'rule' => $rule,
             'operator' => $operator,
             'value' => $value,
+            'option' => self::getOption($inputType, $value, $condition),
         ];
+    }
+
+    /**
+     * return extra value option associate with certain inputType or null otherwise.
+     */
+    protected static function getOption(string $type, string $value, Condition $condition): ?array
+    {
+        $option = null;
+        switch ($type) {
+            case 'lookup':
+                $model = $condition->getModel()->getField($condition->key)->reference->refModel();
+                $rec = $model->tryLoad($value);
+                if ($rec->loaded()) {
+                    $option = [
+                        'key' => $value,
+                        'text' => $rec->get($model->title_field),
+                        'value' => $value,
+                    ];
+                }
+
+                break;
+        }
+
+        return $option;
     }
 
     /**

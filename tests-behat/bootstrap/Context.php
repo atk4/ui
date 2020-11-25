@@ -472,6 +472,18 @@ class Context extends RawMinkContext implements BehatContext
     {
         $rule = $this->assertScopeBuilderRuleExist($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertDropdownValue($rule, $value, '.vqb-rule-input .active.item');
+    }
+
+    /**
+     * hasOne select or enum type rule for ScopeBuilder.
+     *
+     * @Then /^select rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     */
+    public function scopeBuilderSelectRule($name, $operator, $value)
+    {
+        $rule = $this->assertScopeBuilderRuleExist($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
         $this->assertSelectedValue($rule, $value, '.vqb-rule-input select');
     }
 
@@ -539,6 +551,23 @@ class Context extends RawMinkContext implements BehatContext
 
         if (preg_replace('~\s*~', '', $expected) !== preg_replace('~\s*~', '', $input->getValue())) {
             throw new \Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expected);
+        }
+    }
+
+    /**
+     * Find a dropdown component within an html element
+     * and check if value is set in dropdown.
+     */
+    private function assertDropdownValue(NodeElement $element, string $value, string $selector)
+    {
+        $dropdown = $element->find('css', $selector);
+        if (!$dropdown) {
+            throw new \Exception('Dropdown input not found using selector: ' . $selector);
+        }
+
+        $dropdownValue = $dropdown->getHtml();
+        if ($dropdownValue !== $value) {
+            throw new \Exception('Value: "' . $value . '" not set using selector: ' . $selector);
         }
     }
 
