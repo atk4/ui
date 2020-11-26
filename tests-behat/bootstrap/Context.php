@@ -260,6 +260,21 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
+     * @Then /^container "([^"]*)" should display "([^"]*)" item\(s\)$/
+     */
+    public function containerShouldHaveNumberOfItem($selector, int $numberOfitems)
+    {
+        $items = $this->getSession()->getPage()->findAll('css', $selector);
+        $count = 0;
+        foreach ($items as $el => $item) {
+            ++$count;
+        }
+        if ($count !== $numberOfitems) {
+            throw new \Exception('Items does not match. There were ' . $count . ' item in container');
+        }
+    }
+
+    /**
      * @Then I press Modal button :arg
      *
      * @param $arg
