@@ -13,8 +13,17 @@ namespace atk4\ui\demo;
 require_once __DIR__ . '/../init-app.php';
 
 $model = new CountryLock($app->db);
-$model->getUserAction('edit')->ui = [];
-$model->getUserAction('delete')->ui = [];
+$edit = $model->getUserAction('edit');
+$edit->ui = ['execButton' => [\atk4\ui\Button::class, 'EditMe', 'blue']];
+$edit->description = 'edit';
+
+$delete = $model->getUserAction('delete');
+$delete->ui = [];
+$delete->description = 'delete';
+
+$add = $model->getUserAction('add');
+$add->ui = ['execButton' => [\atk4\ui\Button::class, 'AddMe', 'blue']];
+$add->description = 'Add';
 
 $crud = \atk4\ui\Crud::addTo($app, ['ipp' => 10, 'menu' => ['class' => ['atk-grid-menu']]]);
 $crud->setModel($model);

@@ -19,12 +19,9 @@ require_once __DIR__ . '/../init-app.php';
 // Model action setup.
 $country = new Country($app->db);
 
-$sendEmailAction = $country->addUserAction('Email', [
-    'confirmation' => 'Are you sure you wish to send an email?',
-    'callback' => function ($model) {
-        return 'Email to Kristy in ' . $model->get('name') . ' has been sent!';
-    },
-]);
+$sendEmailAction = $country->addUserAction('Email', function ($model) {
+    return 'Email to Kristy in ' . $model->get('name') . ' has been sent!';
+});
 
 ///////////////////////////////////////////
 

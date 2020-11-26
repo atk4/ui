@@ -8,7 +8,6 @@ use atk4\core\Factory;
 use atk4\data\Model;
 use atk4\ui\Exception;
 use atk4\ui\Form;
-use atk4\ui\Header;
 
 /**
  * BasicExecutor executor will typically fail if supplied arguments are not sufficient.
@@ -27,8 +26,16 @@ class ArgumentFormExecutor extends BasicExecutor
      */
     public function initPreview()
     {
-        Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?: $this->action->getDescription()]);
-        $this->form = Form::addTo($this, ['buttonSave' => $this->executorButton]);
+        /*
+         * We might want console later!
+         *
+        $this->console = \atk4\ui\Console::addTo($this, ['event'=>false]);//->addStyle('display', 'none');
+        $this->console->addStyle('max-height', '50em')->addStyle('overflow', 'scroll');
+
+        */
+
+        \atk4\ui\Header::addTo($this, [$this->action->caption, 'subHeader' => $this->description ?: $this->action->getDescription()]);
+        $this->form = Form::addTo($this);
 
         foreach ($this->action->args as $key => $val) {
             if (is_numeric($key)) {
@@ -48,11 +55,39 @@ class ArgumentFormExecutor extends BasicExecutor
             }
         }
 
+        $this->form->buttonSave->set($this->action->description ?: 'Run');
+
         $this->form->onSubmit(function (Form $form) {
             // set arguments from the model
             $this->setArguments($form->model->get());
 
             return $this->jsExecute();
+            //return [$this->console->js()->show(), $this->console->sse];
         });
+
+        /*
+        $this->console->set(function($c) {
+            $data = $this->recall('data');
+            $args = [];
+
+            foreach($this->defs as $key=>$val) {
+                if (is_numeric($key)) {
+                    $key = 'Argument'.$key;
+                }
+
+                if ($val instanceof \Closure) {
+                    $val = $val($this->model, $this->method, $data);
+                } elseif ($val instanceof Model) {
+                    $val->load($data[$key]);
+                } else {
+                    $val = $data[$key];
+                }
+
+                $args[] = $val;
+            }
+
+            $c->setModel($this->model, $this->method, $args);
+        });
+        */
     }
 }

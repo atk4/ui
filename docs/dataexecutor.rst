@@ -77,7 +77,7 @@ Modal Executor
 
 .. php:class:: ModalExecutor
 
-The ModalExecutor is base on Modal view. This is a one size fits all for model UserAction. When setting the UserAction via the
+The modal executor is a one size fits all for model UserAction. When setting the UserAction via the
 ModelExecutor::setAction($action) method, it will automatically determine what step is require and will display each step
 base on the action definition within a modal view:
 
@@ -89,34 +89,7 @@ base on the action definition within a modal view:
 
     Step 3: Preview. If the action preview is set, then the modal will display it prior to execute the action.
 
-The modal title default is set from the UserAction::getDescription() method but can be override using the
-Modal::$title property.
-
-Confirmation Executor
-=====================
-
-.. php:class:: ConfirmationExecutor
-
-Like ModalExecutor, Confirmation executor is also based on a Modal view. It allow to display UserAction::confirmation property prior to
-execute the action. Since UserAction::confirmation property may be set with a Closure function, this give a chance to
-return specific record information to be display to user prior to execute the action.
-
-Here is an example of an user action returning specific record information in the confirmation message::
-
-        $country->addUserAction(
-            'delete_country',
-            [
-                'caption' => 'Delete',
-                'description' => 'Delete Country',
-                'ui' => ['executor' => [\atk4\ui\UserAction\ConfirmationExecutor::class]],
-                'confirmation' => function ($action) {
-                    return 'Are you sure you want to delete this country: $action->getModel()->getTitle();
-                },
-                'callback' => 'delete',
-            ]
-        );
-
-The modal title default is set from the UserAction::getDescription() method but can be override using the
+The modal executor title default is set from the UserAction::getDescription() method but can be override using the
 Modal::$title property.
 
 Executor HOOK_AFTER_EXECUTE
@@ -151,10 +124,3 @@ Example of overriding executor assign to a button.::
 
     $btn->on('click', $myAction);
 
-Demo
-----
-
-For more information on how Model UserAction are assign to button and interact with user according to their definition,
-please visit: `Assign action to button event <https://ui.agiletoolkit.org/demos/data-action/jsactions2.php>`_
-
-You will find the UserAction definition for the demo `here <https://github.com/atk4/ui/blob/develop/demos/_includes/DemoActionsUtil.php>`_

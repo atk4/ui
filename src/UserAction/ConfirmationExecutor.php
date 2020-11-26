@@ -107,7 +107,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->action = $action;
         $this->afterActionInit($action);
 
-        $this->title = $this->title ?? $action->getDescription();
+        $this->title = $this->title ?? trim($action->caption . ' ' . $this->action->getOwner()->getModelCaption());
         $this->step = $this->stickyGet('step');
 
         $this->actionInitialized = true;

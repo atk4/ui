@@ -111,7 +111,7 @@ $panel3->onOpen(function ($p) use ($country, $countryId) {
     \atk4\ui\Header::addTo($seg, [$country->load($countryId)->getTitle()]);
     $buttons = \atk4\ui\View::addTo($seg, ['ui' => 'vertical basic buttons']);
     foreach ($country->getUserActions() as $action) {
-        $button = \atk4\ui\Button::addTo($buttons, [$action->getCaption()]);
+        $button = \atk4\ui\Button::addTo($buttons, [$action->getDescription()]);
         $button->on('click', $action, ['args' => ['id' => $countryId]]);
     }
 });

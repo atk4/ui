@@ -13,28 +13,19 @@ use atk4\ui\View;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
+// Actions can be added easily to the model
+
 $files = new FileLock($app->db);
 
-// Actions can be added easily to the model via the Model::addUserAction($name, $properties) method.
+// This action must appear on top of the Crud
 $action = $files->addUserAction(
     'import_from_filesystem',
     [
-        // Which fields may be edited for the action. Default to all fields.
-        // ModalExecutor for example, will only display fields set in this array.
-        'fields' => ['name'],
-        // callback function to call in model when action execute.
-        // Can use a closure function or model method.
         'callback' => 'importFromFilesystem',
-        // Some Ui action executor will use this property for displaying text in button.
-        // Can be override by some Ui executor description property.
-        'description' => 'Import file in a specify path.',
-        // Display information prior to execute the action.
-        // ModalExecutor or PreviewExecutor will display preview.
+        'description' => 'Import',
         'preview' => function ($model, $path) {
             return 'Execute Import using path: "' . $path . '"';
         },
-        // Argument needed to run the callback action method.
-        // Some ui executor will ask for arguments prior to run the action, like the ModalExecutor.
         'args' => [
             'path' => ['type' => 'string', 'required' => true],
         ],
@@ -44,21 +35,14 @@ $action = $files->addUserAction(
 
 Header::addTo($app, [
     'Extensions to ATK Data Actions',
-    'subHeader' => 'Showing different UserAction executors that can execute atk4\data model action.',
+    'subHeader' => 'Showing Ui UserAction executor that can execute atk4\data model action.',
 ]);
 
 View::addTo($app, ['ui' => 'hidden divider']);
 
-$columns = Columns::addTo($app, ['width' => 2]);
-$rightColumn = $columns->addColumn();
-$leftColumn = $columns->addColumn();
-
-Header::addTo($rightColumn, [
-    'JsCallbackExecutor',
-    'subHeader' => 'Path argument is set via POST url when setting actions in executor.',
-]);
+Header::addTo($app, ['Executing an action with a JsCallbackExecutor', 'subHeader' => 'Button is set in order to ask for a confirmation.']);
 // Explicitly adding an Action executor.
-$executor = UserAction\JsCallbackExecutor::addTo($rightColumn);
+$executor = UserAction\JsCallbackExecutor::addTo($app);
 // Passing Model action to executor and action argument via url.
 $executor->setAction($action, ['path' => '.']);
 // Setting user response after model action get execute.
@@ -66,14 +50,19 @@ $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($t, $m
     return new \atk4\ui\JsToast('Files imported');
 });
 
-$btn = \atk4\ui\Button::addTo($rightColumn, ['Import File']);
+$btn = \atk4\ui\Button::addTo($app, ['Import File']);
 $btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);
 
-Header::addTo($rightColumn, ['BasicExecutor']);
+View::addTo($app, ['ui' => 'hidden divider']);
+
+$columns = Columns::addTo($app, ['width' => 2]);
+$rightColumn = $columns->addColumn();
+
+Header::addTo($rightColumn, ['Executing an action with a BasicExecutor']);
 $executor = UserAction\BasicExecutor::addTo($rightColumn, ['executorButton' => [Button::class, 'Import', 'primary']]);
 $executor->setAction($action);
 $executor->ui = 'segment';
-$executor->description = 'Execute Import action using "BasicExecutor" with argument "path" equal to "."';
+$executor->description = 'Execute Import action using "BasicExecutor" and argument path equal to "."';
 $executor->setArguments(['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x) {
     return new \atk4\ui\JsToast('Done!');
@@ -81,7 +70,19 @@ $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x) {
 
 View::addTo($rightColumn, ['ui' => 'hidden divider']);
 
-Header::addTo($rightColumn, ['PreviewExecutor']);
+Header::addTo($rightColumn, ['Executing an action with a FormExecutor']);
+$executor = UserAction\ArgumentFormExecutor::addTo($rightColumn);
+$executor->setAction($action);
+$action->description = 'Run Import';
+$executor->description = 'ArgumentFormExecutor will ask user about arguments set in actions.';
+$executor->ui = 'segment';
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
+    return new \atk4\ui\JsToast('Imported!');
+});
+
+View::addTo($rightColumn, ['ui' => 'hidden divider']);
+
+Header::addTo($rightColumn, ['Executing an action with a PreviewExecutor']);
 $executor = UserAction\PreviewExecutor::addTo($rightColumn);
 $executor->setAction($action);
 $executor->ui = 'segment';
@@ -90,25 +91,4 @@ $executor->description = 'Displays preview in console prior to executing';
 $executor->setArguments(['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
     return new \atk4\ui\JsToast('Confirm!');
-});
-
-Header::addTo($leftColumn, ['FormExecutor']);
-$executor = UserAction\FormExecutor::addTo($leftColumn, ['executorButton' => [Button::class, 'Save Name Only', 'primary']]);
-$executor->setAction($action);
-$executor->ui = 'segment';
-$executor->description = 'Only fields set in $action[field] array will be added in form.';
-$executor->setArguments(['path' => '.']);
-$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \atk4\ui\JsToast('Confirm! ' . $x->action->getModel()->get('name'));
-});
-
-View::addTo($leftColumn, ['ui' => 'hidden divider']);
-
-Header::addTo($leftColumn, ['ArgumentFormExecutor']);
-$executor = UserAction\ArgumentFormExecutor::addTo($leftColumn, ['executorButton' => [Button::class, 'Run Import', 'primary']]);
-$executor->setAction($action);
-$executor->description = 'ArgumentFormExecutor will ask user about arguments set in actions.';
-$executor->ui = 'segment';
-$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \atk4\ui\JsToast('Imported!');
 });

@@ -36,7 +36,7 @@ $buttons = \atk4\ui\View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2'
 $country->unload();
 // Create a button for every action in Country model.
 foreach ($country->getUserActions() as $action) {
-    $b = \atk4\ui\Button::addTo($buttons, [$action->getCaption()]);
+    $b = \atk4\ui\Button::addTo($buttons, [$action->getDescription()]);
     // Assign action to button using current model id as url arguments.
     $b->on('click', $action, ['args' => ['id' => $countryId]]);
 }

@@ -12,7 +12,7 @@ Right Panel
 Right panel are view attached to the app layout. They are display on demand via javascript event
 and can display content statically or dynamically using Loadable Content.
 
-Demo: https://ui.agiletoolkit.org/demos/layout/layout-panel.php
+Demo: https://ui.agiletoolkit.org/demos/layout-panel.php
 
 Basic Usage
 ===========
