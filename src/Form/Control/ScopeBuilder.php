@@ -105,7 +105,6 @@ class ScopeBuilder extends Control
 
     /** @var Callback */
     public $dataCb;
-//    public $lookupLimit = 25;
 
     /**
      * Default VueQueryBuilder query.
@@ -359,8 +358,8 @@ class ScopeBuilder extends Control
      */
     public function outputApiResponse()
     {
-        $fieldName = $_GET['field'] ?? null;
-        $query = $_GET['q'] ?? null;
+        $fieldName = $_GET['atk_vlookup_field'] ?? null;
+        $query = $_GET['atk_vlookup_q'] ?? null;
         $data = [];
         if ($fieldName) {
             $model = $this->model->getField($fieldName)->reference->refModel();

@@ -75,7 +75,7 @@ export default {
      */
         fetchItems: async function (q) {
             try {
-                const data = { q: q, field: this.field };
+                const data = { atk_vlookup_q: q, atk_vlookup_field: this.field };
                 const response = await atk.apiService.suiFetch(this.url, { method: 'get', data: data });
                 if (response.success) {
                     this.dropdownProps.options = response.results;
