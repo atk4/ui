@@ -5,6 +5,7 @@ Feature: ScopeBuilder
     Given I am on "_unit-test/scope-builder.php"
     Then rule "project_budget" operator is ">=" and value is "1000"
     Then rule "project_name" operator is "matches regular expression" and value is "[a-zA-Z]"
+    Then select rule "currency" operator is "equals" and value is "USD"
     Then reference rule "client_country_iso" operator is "equals" and value is "Brazil"
     Then date rule "start_date" operator is "is on" and value is "Oct 22, 2020"
     Then date rule "finish_time" operator is "is not on" and value is "22:22"

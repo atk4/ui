@@ -20,9 +20,10 @@ $start = new Condition('start_date', '=', '2020-10-22');
 $finish = new Condition('finish_time', '!=', '22:22');
 $isCommercial = new Condition('is_commercial', '0');
 $budget = new Condition('project_budget', '>=', '1000');
+$currency = new Condition('currency', 'USD');
 
 $scope = Scope::createAnd($project, $brazil, $start);
-$orScope = Scope::createOr($finish, $isCommercial);
+$orScope = Scope::createOr($finish, $isCommercial, $currency);
 
 $model->addCondition($budget);
 $model->scope()->add($scope);
@@ -44,10 +45,9 @@ $form->onSubmit(function ($form) use ($model) {
 
 $expectedWord = <<<'EOF'
      Project Budget is greater or equal to '1000' 
-     and (Project Name is regular expression '[a-zA-Z]' 
-            and Client Country Iso is equal to '30' 
-            and Start Date is equal to '2020-10-22') 
-    and (Finish Time is not equal to '22:22' or Is Commercial is equal to '0')
+     and (Project Name is regular expression '[a-zA-Z]' and Client Country Iso is equal to '30' 
+     and Start Date is equal to '2020-10-22') and (Finish Time is not equal to '22:22' 
+     or Is Commercial is equal to '0' or Currency is equal to 'USD')
     EOF;
 
 $expectedInput = <<< 'EOF'
@@ -122,6 +122,15 @@ $expectedInput = <<< 'EOF'
                   "rule": "is_commercial",
                   "operator": "is exactly",
                   "value": "0",
+                  "option": null
+                }
+              },
+              {
+                "type": "query-builder-rule",
+                "query": {
+                  "rule": "currency",
+                  "operator": "equals",
+                  "value": "USD",
                   "option": null
                 }
               }
