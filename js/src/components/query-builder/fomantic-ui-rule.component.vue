@@ -55,7 +55,7 @@
                                         <option
                                             v-for="choice in rule.choices"
                                             :key="choice.value"
-                                            :value="choice.label">
+                                            :value="choice.value">
                                             {{choice.label}}
                                         </option>
                                     </select>
