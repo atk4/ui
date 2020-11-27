@@ -19,7 +19,7 @@ require_once __DIR__ . '/../init-app.php';
 $model = new Stat($app->db, ['caption' => 'Demo Stat']);
 
 $project = new Condition('project_name', Condition::OPERATOR_REGEXP, '[a-zA-Z]');
-$brazil = new Condition('client_country_iso', '=', '30');
+$brazil = new Condition('client_country_iso', '=', 'BR');
 $start = new Condition('start_date', '=', '2020-10-22');
 $finish = new Condition('finish_time', '!=', '22:22');
 $isCommercial = new Condition('is_commercial', '0');
@@ -48,10 +48,10 @@ $form->onSubmit(function ($form) use ($model) {
 });
 
 $expectedWord = <<<'EOF'
-     Project Budget is greater or equal to '1000' 
-     and (Project Name is regular expression '[a-zA-Z]' and Client Country Iso is equal to '30' 
-     and Start Date is equal to '2020-10-22') and (Finish Time is not equal to '22:22' 
-     or Is Commercial is equal to '0' or Currency is equal to 'USD')
+    Project Budget is greater or equal to '1000' 
+    and (Project Name is regular expression '[a-zA-Z]' 
+    and Client Country Iso is equal to 'Brazil' and Start Date is equal to '2020-10-22') 
+    and (Finish Time is not equal to '22:22' or Is Commercial is equal to '0' or Currency is equal to 'USD')
     EOF;
 
 $expectedInput = <<< 'EOF'
@@ -86,11 +86,11 @@ $expectedInput = <<< 'EOF'
                 "query": {
                   "rule": "client_country_iso",
                   "operator": "equals",
-                  "value": "30",
+                  "value": "BR",
                   "option": {
-                    "key": "30",
+                    "key": "BR",
                     "text": "Brazil",
-                    "value": "30"
+                    "value": "BR"
                   }
                 }
               },
