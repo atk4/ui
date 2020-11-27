@@ -123,7 +123,7 @@ class Stat extends \atk4\data\Model
             ->addField('client_country', 'name');
 
         $this->addField('is_commercial', ['type' => 'boolean']);
-        $this->addField('currency', ['enum' => ['EUR', 'USD', 'GBP']]);
+        $this->addField('currency', ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
         $this->addField('currency_symbol', ['never_persist' => true]);
         $this->onHook(\atk4\data\Model::HOOK_AFTER_LOAD, function (\atk4\data\Model $model) {
             /* implementation for "intl"

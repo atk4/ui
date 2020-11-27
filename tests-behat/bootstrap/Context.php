@@ -9,6 +9,7 @@ use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\RawMinkContext;
+use Exception;
 
 class Context extends RawMinkContext implements BehatContext
 {
@@ -83,7 +84,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         foreach ($this->getSession()->getPage()->findAll('css', 'div.ui.negative.icon.message > div.content > div.header') as $elem) {
             if ($elem->getText() === 'Critical Error') {
-                throw new \Exception('Page contains uncaught exception');
+                throw new Exception('Page contains uncaught exception');
             }
         }
     }
@@ -125,12 +126,12 @@ class Context extends RawMinkContext implements BehatContext
     {
         $menu = $this->getSession()->getPage()->find('css', '.ui.menu.' . $arg2);
         if (!$menu) {
-            throw new \Exception('Unable to find a menu with class ' . $arg2);
+            throw new Exception('Unable to find a menu with class ' . $arg2);
         }
 
         $link = $menu->find('xpath', '//a[text()="' . $arg1 . '"]');
         if (!$link) {
-            throw new \Exception('Unable to find menu with title ' . $arg1);
+            throw new Exception('Unable to find menu with title ' . $arg1);
         }
 
         $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
@@ -161,12 +162,12 @@ class Context extends RawMinkContext implements BehatContext
     {
         $column = $this->getSession()->getPage()->find('css', "th[data-column='" . $arg1 . "']");
         if (!$column) {
-            throw new \Exception('Unable to find a column ' . $arg1);
+            throw new Exception('Unable to find a column ' . $arg1);
         }
 
         $icon = $column->find('css', 'i');
         if (!$icon) {
-            throw new \Exception('Column does not contain clickable icon.');
+            throw new Exception('Column does not contain clickable icon.');
         }
 
         $this->getSession()->executeScript('$("#' . $icon->getAttribute('id') . '").click()');
@@ -181,12 +182,12 @@ class Context extends RawMinkContext implements BehatContext
     {
         $tabMenu = $this->getSession()->getPage()->find('css', '.ui.tabular.menu');
         if (!$tabMenu) {
-            throw new \Exception('Unable to find a tab menu.');
+            throw new Exception('Unable to find a tab menu.');
         }
 
         $link = $tabMenu->find('xpath', '//a[text()="' . $arg1 . '"]');
         if (!$link) {
-            throw new \Exception('Unable to find tab with title ' . $arg1);
+            throw new Exception('Unable to find tab with title ' . $arg1);
         }
 
         $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
@@ -223,7 +224,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         if ($element->getAttribute('style')) {
-            throw new \Exception("Element with text \"{$arg1}\" must be invisible");
+            throw new Exception("Element with text \"{$arg1}\" must be invisible");
         }
     }
 
@@ -243,7 +244,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (mb_strpos('display: none', $element->getAttribute('style')) !== false) {
-            throw new \Exception("Element with text \"{$arg1}\" must be invisible");
+            throw new Exception("Element with text \"{$arg1}\" must be invisible");
         }
     }
 
@@ -255,7 +256,22 @@ class Context extends RawMinkContext implements BehatContext
         $element = $this->getSession()->getPage()->findById($this->buttonId);
         $value = trim($element->getHtml());
         if (!is_numeric($value)) {
-            throw new \Exception('Label must be numeric on button: ' . $this->buttonId . ' : ' . $value);
+            throw new Exception('Label must be numeric on button: ' . $this->buttonId . ' : ' . $value);
+        }
+    }
+
+    /**
+     * @Then /^container "([^"]*)" should display "([^"]*)" item\(s\)$/
+     */
+    public function containerShouldHaveNumberOfItem($selector, int $numberOfitems)
+    {
+        $items = $this->getSession()->getPage()->findAll('css', $selector);
+        $count = 0;
+        foreach ($items as $el => $item) {
+            ++$count;
+        }
+        if ($count !== $numberOfitems) {
+            throw new Exception('Items does not match. There were ' . $count . ' item in container');
         }
     }
 
@@ -268,12 +284,12 @@ class Context extends RawMinkContext implements BehatContext
     {
         $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
         if ($modal === null) {
-            throw new \Exception('No modal found');
+            throw new Exception('No modal found');
         }
         // find button in modal
         $btn = $modal->find('xpath', '//div[text()="' . $arg . '"]');
         if (!$btn) {
-            throw new \Exception('Cannot find button in modal');
+            throw new Exception('Cannot find button in modal');
         }
         $btn->click();
     }
@@ -287,12 +303,12 @@ class Context extends RawMinkContext implements BehatContext
     {
         $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
         if ($modal === null) {
-            throw new \Exception('No modal found');
+            throw new Exception('No modal found');
         }
         // find text in modal
         $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (!$text || $text->getText() !== $arg1) {
-            throw new \Exception('No such text in modal');
+            throw new Exception('No such text in modal');
         }
     }
 
@@ -307,12 +323,12 @@ class Context extends RawMinkContext implements BehatContext
         // get modal
         $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
         if ($modal === null) {
-            throw new \Exception('No modal found');
+            throw new Exception('No modal found');
         }
         // find text in modal
         $text = $modal->find('xpath', '//' . $arg2 . '[text()="' . $arg1 . '"]');
         if (!$text || $text->getText() !== $arg1) {
-            throw new \Exception('No such text in modal');
+            throw new Exception('No such text in modal');
         }
     }
 
@@ -346,7 +362,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $tab = $this->getSession()->getPage()->find('css', '.ui.tabular.menu > .item.active');
         if ($tab->getText() !== $arg1) {
-            throw new \Exception('Active tab is not ' . $arg1);
+            throw new Exception('Active tab is not ' . $arg1);
         }
     }
 
@@ -378,16 +394,16 @@ class Context extends RawMinkContext implements BehatContext
         // get toast
         $toast = $this->getSession()->getPage()->find('css', '.ui.toast-container');
         if ($toast === null) {
-            throw new \Exception('No toast found');
+            throw new Exception('No toast found');
         }
         $content = $toast->find('css', '.content');
         if ($content === null) {
-            throw new \Exception('No Content in Toast');
+            throw new Exception('No Content in Toast');
         }
         // find text in toast
         $text = $content->find('xpath', '//div');
         if (!$text || mb_strpos($text->getText(), $arg1) === false) {
-            throw new \Exception('No such text in toast');
+            throw new Exception('No such text in toast');
         }
     }
 
@@ -401,7 +417,7 @@ class Context extends RawMinkContext implements BehatContext
         // get dropdown item from semantic ui which is direct parent of input html element
         $inputElem = $this->getSession()->getPage()->find('css', 'input[name=' . $arg2 . ']');
         if ($inputElem === null) {
-            throw new \Exception('Lookup element not found: ' . $arg2);
+            throw new Exception('Lookup element not found: ' . $arg2);
         }
         $lookupElem = $inputElem->getParent();
 
@@ -412,7 +428,7 @@ class Context extends RawMinkContext implements BehatContext
         // select value
         $valueElem = $lookupElem->find('xpath', '//div[text()="' . $arg1 . '"]');
         if ($valueElem === null || $valueElem->getText() !== $arg1) {
-            throw new \Exception('Value not found: ' . $arg1);
+            throw new Exception('Value not found: ' . $arg1);
         }
         $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("set selected", ' . $valueElem->getAttribute('data-value') . ');');
         $this->jqueryWait();
@@ -432,7 +448,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $search = $this->getSession()->getPage()->find('css', 'input.atk-grid-search');
         if (!$search) {
-            throw new \Exception('Unable to find search input.');
+            throw new Exception('Unable to find search input.');
         }
 
         $search->setValue($arg1);
@@ -445,7 +461,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $icon = $this->getSession()->getPage()->find('css', $arg1);
         if (!$icon) {
-            throw new \Exception('Unable to find search remove icon.');
+            throw new Exception('Unable to find search remove icon.');
         }
 
         $icon->click();
@@ -469,6 +485,18 @@ class Context extends RawMinkContext implements BehatContext
      * @Then /^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
     public function scopeBuilderReferenceRule($name, $operator, $value)
+    {
+        $rule = $this->assertScopeBuilderRuleExist($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertDropdownValue($rule, $value, '.vqb-rule-input .active.item');
+    }
+
+    /**
+     * hasOne select or enum type rule for ScopeBuilder.
+     *
+     * @Then /^select rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     */
+    public function scopeBuilderSelectRule($name, $operator, $value)
     {
         $rule = $this->assertScopeBuilderRuleExist($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
@@ -498,7 +526,7 @@ class Context extends RawMinkContext implements BehatContext
         $idx = ($value === 'Yes') ? 0 : 1;
         $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="' . $name . '"]\').find(\'input\')[' . $idx . '].checked');
         if (!$isChecked) {
-            throw new \Exception('Radio value selected is not: ' . $value);
+            throw new Exception('Radio value selected is not: ' . $value);
         }
     }
 
@@ -509,20 +537,20 @@ class Context extends RawMinkContext implements BehatContext
     {
         $compareContainer = $this->getSession()->getPage()->find('css', $compareSelector);
         if (!$compareContainer) {
-            throw new \Exception('Unable to find compare container: ' . $compareSelector);
+            throw new Exception('Unable to find compare container: ' . $compareSelector);
         }
 
         $expectedText = $compareContainer->getText();
 
         $compareToContainer = $this->getSession()->getPage()->find('css', $compareToSelector);
         if (!$compareToContainer) {
-            throw new \Exception('Unable to find compare to container: ' . $compareToSelector);
+            throw new Exception('Unable to find compare to container: ' . $compareToSelector);
         }
 
         $compareToText = $compareToContainer->getText();
 
         if ($expectedText !== $compareToText) {
-            throw new \Exception('Data word does not match: ' . $compareToText . ' expected: ' . $expectedText);
+            throw new Exception('Data word does not match: ' . $compareToText . ' expected: ' . $expectedText);
         }
     }
 
@@ -534,11 +562,28 @@ class Context extends RawMinkContext implements BehatContext
         $expected = $this->getSession()->getPage()->find('css', $selector)->getText();
         $input = $this->getSession()->getPage()->find('css', 'input[name="' . $inputName . '"]');
         if (!$input) {
-            throw new \Exception('Unable to find input name: ' . $inputName);
+            throw new Exception('Unable to find input name: ' . $inputName);
         }
 
         if (preg_replace('~\s*~', '', $expected) !== preg_replace('~\s*~', '', $input->getValue())) {
-            throw new \Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expected);
+            throw new Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expected);
+        }
+    }
+
+    /**
+     * Find a dropdown component within an html element
+     * and check if value is set in dropdown.
+     */
+    private function assertDropdownValue(NodeElement $element, string $value, string $selector)
+    {
+        $dropdown = $element->find('css', $selector);
+        if (!$dropdown) {
+            throw new Exception('Dropdown input not found using selector: ' . $selector);
+        }
+
+        $dropdownValue = $dropdown->getHtml();
+        if ($dropdownValue !== $value) {
+            throw new Exception('Value: "' . $value . '" not set using selector: ' . $selector);
         }
     }
 
@@ -550,11 +595,11 @@ class Context extends RawMinkContext implements BehatContext
     {
         $select = $element->find('css', $selector);
         if (!$select) {
-            throw new \Exception('Select input not found using selector: ' . $selector);
+            throw new Exception('Select input not found using selector: ' . $selector);
         }
         $selectValue = $select->getValue();
         if ($selectValue !== $value) {
-            throw new \Exception('Value: "' . $value . '" not set using selector: ' . $selector);
+            throw new Exception('Value: "' . $value . '" not set using selector: ' . $selector);
         }
     }
 
@@ -566,11 +611,11 @@ class Context extends RawMinkContext implements BehatContext
     {
         $input = $element->find('css', $selector);
         if (!$input) {
-            throw new \Exception('Input not found in selector: ' . $selector);
+            throw new Exception('Input not found in selector: ' . $selector);
         }
         $inputValue = $input->getValue();
         if ($inputValue !== $value) {
-            throw new \Exception('Input value not is not: ' . $value);
+            throw new Exception('Input value not is not: ' . $value);
         }
     }
 
@@ -578,7 +623,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $rule = $this->getSession()->getPage()->find('css', '.vqb-rule[data-name=' . $ruleName . ']');
         if (!$rule) {
-            throw new \Exception('Rule not found: ' . $ruleName);
+            throw new Exception('Rule not found: ' . $ruleName);
         }
 
         return $rule;
@@ -626,7 +671,7 @@ class Context extends RawMinkContext implements BehatContext
             }
         }
 
-        throw new \Exception('jQuery did not finished within a time limit');
+        throw new Exception('jQuery did not finished within a time limit');
     }
 
     /**
@@ -637,11 +682,11 @@ class Context extends RawMinkContext implements BehatContext
         $field = $this->assertSession()->fieldExists($arg1);
 
         if (!$field) {
-            throw new \Exception('Field' . $arg1 . ' does not exist');
+            throw new Exception('Field' . $arg1 . ' does not exist');
         }
 
         if (mb_strpos($field->getValue(), $arg2) === false) {
-            throw new \Exception('Field value ' . $field->getValue() . ' does not start with ' . $arg2);
+            throw new Exception('Field value ' . $field->getValue() . ' does not start with ' . $arg2);
         }
     }
 }

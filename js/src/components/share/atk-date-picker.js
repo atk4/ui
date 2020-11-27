@@ -1,5 +1,5 @@
 /**
- * Wrapper for vue-flatpickr-component component from V-Calendar
+ * Wrapper for vue-flatpickr-component component.
  * https://github.com/ankurk91/vue-flatpickr-component
  *
  * Props
@@ -43,7 +43,7 @@ export default {
     },
     methods: {
         onChange: function (date) {
-            this.$emit('dateChange', flatpickr.formatDate(date[0], this.flatPickr.dateFormat));
+            this.$emit('onChange', flatpickr.formatDate(date[0], this.flatPickr.dateFormat));
         },
     },
 };

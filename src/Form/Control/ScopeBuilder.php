@@ -8,6 +8,7 @@ use atk4\data\Field;
 use atk4\data\Model;
 use atk4\data\Model\Scope;
 use atk4\data\Model\Scope\Condition;
+use atk4\ui\Callback;
 use atk4\ui\Exception;
 use atk4\ui\Form\Control;
 use atk4\ui\HtmlTemplate;
@@ -74,6 +75,13 @@ class ScopeBuilder extends Control
     ];
 
     /**
+     * atk-lookup and semantic-ui dropdown options.
+     */
+    public $atkLookupOptions = [
+        'ui' => 'small basic button',
+    ];
+
+    /**
      * The scopebuilder View. Assigned in init().
      *
      * @var \atk4\ui\View
@@ -94,6 +102,9 @@ class ScopeBuilder extends Control
      * @var array
      */
     public $labels = [];
+
+    /** @var Callback */
+    public $dataCb;
 
     /**
      * Default VueQueryBuilder query.
@@ -142,6 +153,13 @@ class ScopeBuilder extends Control
         self::OPERATOR_TIME_GREATER_EQUAL,
         self::OPERATOR_TIME_LESS,
         self::OPERATOR_TIME_LESS_EQUAL,
+        self::OPERATOR_EMPTY,
+        self::OPERATOR_NOT_EMPTY,
+    ];
+
+    protected const ENUM_OPERATORS = [
+        self::OPERATOR_EQUALS,
+        self::OPERATOR_DOESNOT_EQUAL,
         self::OPERATOR_EMPTY,
         self::OPERATOR_NOT_EMPTY,
     ];
@@ -200,6 +218,10 @@ class ScopeBuilder extends Control
             self::OPERATOR_EQUALS => Condition::OPERATOR_EQUALS,
             self::OPERATOR_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
         ],
+        'lookup' => [
+            self::OPERATOR_EQUALS => Condition::OPERATOR_EQUALS,
+            self::OPERATOR_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
+        ],
     ];
 
     /**
@@ -232,15 +254,17 @@ class ScopeBuilder extends Control
                 self::OPERATOR_NOT_EMPTY,
             ],
         ],
+        'lookup' => [
+            'type' => 'custom-component',
+            'inputType' => 'lookup',
+            'component' => 'atk-lookup',
+            'operators' => self::ENUM_OPERATORS,
+            'componentProps' => [__CLASS__, 'getLookupProps'],
+        ],
         'enum' => [
             'type' => 'select',
             'inputType' => 'select',
-            'operators' => [
-                self::OPERATOR_EQUALS,
-                self::OPERATOR_DOESNOT_EQUAL,
-                self::OPERATOR_EMPTY,
-                self::OPERATOR_NOT_EMPTY,
-            ],
+            'operators' => self::ENUM_OPERATORS,
             'choices' => [__CLASS__, 'getChoices'],
         ],
         'numeric' => [
@@ -267,21 +291,24 @@ class ScopeBuilder extends Control
         ],
         'date' => [
             'type' => 'custom-component',
-            'component' => 'DatePicker',
+            'component' => 'atk-date-picker',
             'inputType' => 'date',
             'operators' => self::DATE_OPERATORS,
+            'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
         'datetime' => [
             'type' => 'custom-component',
-            'component' => 'DatePicker',
+            'component' => 'atk-date-picker',
             'inputType' => 'datetime',
             'operators' => self::DATE_OPERATORS,
+            'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
         'time' => [
             'type' => 'custom-component',
-            'component' => 'DatePicker',
+            'component' => 'atk-date-picker',
             'inputType' => 'time',
             'operators' => self::DATE_OPERATORS,
+            'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
         'integer' => 'numeric',
         'float' => 'numeric',
@@ -316,9 +343,39 @@ class ScopeBuilder extends Control
     {
         $model = parent::setModel($model);
 
+        if (!$this->dataCb) {
+            $this->dataCb = Callback::addTo($this);
+        }
+        $this->dataCb->set([$this, 'outputApiResponse']);
+
         $this->buildQuery($model);
 
         return $model;
+    }
+
+    /**
+     * Output lookup search query data.
+     */
+    public function outputApiResponse()
+    {
+        $fieldName = $_GET['atk_vlookup_field'] ?? null;
+        $query = $_GET['atk_vlookup_q'] ?? null;
+        $data = [];
+        if ($fieldName) {
+            $model = $this->model->getField($fieldName)->reference->refModel();
+            $refFieldName = $this->model->getField($fieldName)->reference->getTheirFieldName();
+            if (!empty($query)) {
+                $model->addCondition($model->title_field, 'like', '%' . $query . '%');
+            }
+            foreach ($model as $row) {
+                $data[] = ['key' => $row->get($refFieldName), 'text' => $row->getTitle(), 'value' => $row->get($refFieldName)];
+            }
+        }
+
+        $this->getApp()->terminateJson([
+            'success' => true,
+            'results' => $data,
+        ]);
     }
 
     /**
@@ -354,15 +411,19 @@ class ScopeBuilder extends Control
      */
     protected function addFieldRule(Field $field): self
     {
-        $type = ($field->enum || $field->values || $field->reference) ? 'enum' : $field->type;
+        if ($field->enum || $field->values) {
+            $type = 'enum';
+        } elseif ($field->reference) {
+            $type = 'lookup';
+        } else {
+            $type = $field->type;
+        }
 
-        $rule = self::getRule($type, array_merge([
+        $rule = $this->getRule($type, array_merge([
             'id' => $field->short_name,
             'label' => $field->getCaption(),
             'options' => $this->options[strtolower((string) $type)] ?? [],
         ], $field->ui['scopebuilder'] ?? []), $field);
-
-        $rule['componentProps'] = $this->getComponentProps($rule);
 
         $this->rules[] = $rule;
 
@@ -370,32 +431,49 @@ class ScopeBuilder extends Control
     }
 
     /**
-     * Some field type use specific Vue component for ui display.
-     * This will return component property (props) accordingly.
+     * Set property for atk-lookup component.
      */
-    protected function getComponentProps(array $rule): array
+    protected function getLookupProps(Field $field): array
     {
-        $props = [];
-        $component = $rule['component'] ?? null;
-        // setup proper options for Vue atkDatePicker
-        if ($component === 'DatePicker') {
-            $calendar = new Calendar();
-            $props = $this->atkdDateOptions['flatpickr'] ?? [];
-            $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$rule['inputType'] . '_format'});
-            $props['altFormat'] = $format;
-            $props['dateFormat'] = 'Y-m-d';
-            $props['altInput'] = true;
-
-            if ($rule['inputType'] === 'datetime' || $rule['inputType'] === 'time') {
-                $props['enableTime'] = true;
-                $props['time_24hr'] = $calendar->use24hrTimeFormat($format);
-                $props['noCalendar'] = ($rule['inputType'] === 'time');
-                $props['enableSeconds'] = $calendar->useSeconds($format);
-                $props['dateFormat'] = ($rule['inputType'] === 'datetime') ? 'Y-m-d H:i:S' : 'H:i:S';
-            }
-
-            $props['useDefault'] = $this->atkdDateOptions['useDefault'];
+        // set any of sui-dropdown props via this property. Will be applied globally.
+        $props = $this->atkLookupOptions;
+        $items = $this->getFieldItems($field, 10);
+        foreach ($items as $value => $text) {
+            $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
         }
+
+        if ($field->reference) {
+            $props['url'] = $this->dataCb->getUrl();
+            $props['reference'] = $field->short_name;
+            $props['search'] = true;
+        }
+
+        $props['placeholder'] = $props['placeholder'] ?? 'Select ' . $field->getCaption();
+
+        return $props;
+    }
+
+    /**
+     * Set property for atk-date-picker component.
+     */
+    protected function getDatePickerProps(Field $field): array
+    {
+        $calendar = new Calendar();
+        $props = $this->atkdDateOptions['flatpickr'] ?? [];
+        $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$field->type . '_format'});
+        $props['altFormat'] = $format;
+        $props['dateFormat'] = 'Y-m-d';
+        $props['altInput'] = true;
+
+        if ($field->type === 'datetime' || $field->type === 'time') {
+            $props['enableTime'] = true;
+            $props['time_24hr'] = $calendar->use24hrTimeFormat($format);
+            $props['noCalendar'] = ($field->type === 'time');
+            $props['enableSeconds'] = $calendar->useSeconds($format);
+            $props['dateFormat'] = ($field->type === 'datetime') ? 'Y-m-d H:i:S' : 'H:i:S';
+        }
+
+        $props['useDefault'] = $this->atkdDateOptions['useDefault'];
 
         return $props;
     }
@@ -407,7 +485,7 @@ class ScopeBuilder extends Control
     {
         if ($reference = $field->reference) {
             // add the number of records rule
-            $this->rules[] = self::getRule('numeric', [
+            $this->rules[] = $this->getRule('numeric', [
                 'id' => $reference->link . '/#',
                 'label' => $field->getCaption() . ' number of records ',
             ]);
@@ -428,13 +506,13 @@ class ScopeBuilder extends Control
         return $this;
     }
 
-    protected static function getRule($type, array $defaults = [], Field $field = null): array
+    protected function getRule($type, array $defaults = [], Field $field = null): array
     {
         $rule = self::$ruleTypes[strtolower((string) $type)] ?? self::$ruleTypes['default'];
 
         // when $rule is an alias
         if (is_string($rule)) {
-            return self::getRule($rule, $defaults, $field);
+            return $this->getRule($rule, $defaults, $field);
         }
 
         $options = $defaults['options'] ?? [];
@@ -454,27 +532,35 @@ class ScopeBuilder extends Control
     }
 
     /**
-     * Returns the choises array for the field rule.
+     * Return an array of items id and name for a field.
+     * Return field enum, values or reference values.
      */
-    protected static function getChoices(Field $field, $options = []): array
+    protected function getFieldItems(Field $field, int $limit = 250): array
     {
-        $choices = [];
+        $items = [];
         if ($field->enum) {
-            $choices = array_combine($field->enum, $field->enum);
+            $items = array_chunk(array_combine($field->enum, $field->enum), $limit, true)[0];
         }
         if ($field->values && is_array($field->values)) {
-            $choices = $field->values;
+            $items = array_chunk($field->values, $limit, true)[0];
         } elseif ($field->reference) {
             $model = $field->reference->refModel();
-
-            if ($limit = $options['limit'] ?? false) {
-                $model->setLimit($limit);
-            }
+            $model->setLimit($limit);
 
             foreach ($model as $item) {
-                $choices[$item->get($model->id_field)] = $item->get($model->title_field);
+                $items[$item->get($field->reference->getTheirFieldName())] = $item->get($model->title_field);
             }
         }
+
+        return $items;
+    }
+
+    /**
+     * Returns the choices array for Select field rule.
+     */
+    protected function getChoices(Field $field, $options = []): array
+    {
+        $choices = $this->getFieldItems($field, $options['limit'] ?? 250);
 
         $ret = [
             ['label' => '[empty]', 'value' => null],
@@ -674,7 +760,33 @@ class ScopeBuilder extends Control
             'rule' => $rule,
             'operator' => $operator,
             'value' => $value,
+            'option' => self::getOption($inputType, $value, $condition),
         ];
+    }
+
+    /**
+     * return extra value option associate with certain inputType or null otherwise.
+     */
+    protected static function getOption(string $type, string $value, Condition $condition): ?array
+    {
+        $option = null;
+        switch ($type) {
+            case 'lookup':
+                $model = $condition->getModel()->getField($condition->key)->reference->refModel();
+                $fieldName = $condition->getModel()->getField($condition->key)->reference->getTheirFieldName();
+                $rec = $model->tryLoadBy($fieldName, $value);
+                if ($rec->loaded()) {
+                    $option = [
+                        'key' => $value,
+                        'text' => $rec->get($model->title_field),
+                        'value' => $value,
+                    ];
+                }
+
+                break;
+        }
+
+        return $option;
     }
 
     /**
