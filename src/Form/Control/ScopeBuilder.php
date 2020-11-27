@@ -535,7 +535,7 @@ class ScopeBuilder extends Control
      * Return an array of items id and name for a field.
      * Return field enum, values or reference values.
      */
-    protected function getFieldItems(Field $field, int $limit = 2): array
+    protected function getFieldItems(Field $field, int $limit = 250): array
     {
         $items = [];
         if ($field->enum) {
