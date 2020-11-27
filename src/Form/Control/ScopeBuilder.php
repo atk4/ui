@@ -363,7 +363,7 @@ class ScopeBuilder extends Control
         $data = [];
         if ($fieldName) {
             $model = $this->model->getField($fieldName)->reference->refModel();
-            $refFieldName = $this->model->getField($fieldName)->reference->getTheirField();
+            $refFieldName = $this->model->getField($fieldName)->reference->getTheirFieldName();
             if (!empty($query)) {
                 $model->addCondition($model->title_field, 'like', '%' . $query . '%');
             }
@@ -548,7 +548,7 @@ class ScopeBuilder extends Control
             $model->setLimit($limit);
 
             foreach ($model as $item) {
-                $items[$item->get($field->reference->getTheirField())] = $item->get($model->title_field);
+                $items[$item->get($field->reference->getTheirFieldName())] = $item->get($model->title_field);
             }
         }
 
@@ -773,7 +773,7 @@ class ScopeBuilder extends Control
         switch ($type) {
             case 'lookup':
                 $model = $condition->getModel()->getField($condition->key)->reference->refModel();
-                $fieldName = $condition->getModel()->getField($condition->key)->reference->getTheirField();
+                $fieldName = $condition->getModel()->getField($condition->key)->reference->getTheirFieldName();
                 $rec = $model->tryLoadBy($fieldName, $value);
                 if ($rec->loaded()) {
                     $option = [
