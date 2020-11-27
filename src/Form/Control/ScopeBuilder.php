@@ -435,7 +435,7 @@ class ScopeBuilder extends Control
      */
     protected function getLookupProps(Field $field): array
     {
-        // set any of sui-dropdown props via $field->ui['scopebuilder']['lookup'] property.
+        // set any of sui-dropdown props via this property. Will be applied globally.
         $props = $this->atkLookupOptions;
         $items = $this->getFieldItems($field, 10);
         foreach ($items as $value => $text) {
