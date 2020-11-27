@@ -545,10 +545,7 @@ class ScopeBuilder extends Control
             $items = array_chunk($field->values, $limit, true)[0];
         } elseif ($field->reference) {
             $model = $field->reference->refModel();
-
-            if ($limit) {
-                $model->setLimit($limit);
-            }
+            $model->setLimit($limit);
 
             foreach ($model as $item) {
                 $items[$item->get($field->reference->getTheirField())] = $item->get($model->title_field);
