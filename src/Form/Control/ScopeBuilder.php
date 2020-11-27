@@ -535,14 +535,14 @@ class ScopeBuilder extends Control
      * Return an array of items id and name for a field.
      * Return field enum, values or reference values.
      */
-    protected function getFieldItems(Field $field, int $limit = 250): array
+    protected function getFieldItems(Field $field, int $limit = 2): array
     {
         $items = [];
         if ($field->enum) {
-            $items = array_combine($field->enum, $field->enum);
+            $items = array_chunk(array_combine($field->enum, $field->enum), $limit, true)[0];
         }
         if ($field->values && is_array($field->values)) {
-            $items = $field->values;
+            $items = array_chunk($field->values, $limit, true)[0];
         } elseif ($field->reference) {
             $model = $field->reference->refModel();
 
