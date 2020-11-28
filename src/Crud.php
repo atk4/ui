@@ -137,7 +137,12 @@ class Crud extends Grid
             foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
                 if ($action->enabled) {
                     $action->ui['executor'] = $this->initActionExecutor($action);
-                    $this->menuItems[$k]['item'] = $this->menu->addItem([$action->getCaption(), 'icon' => 'plus']);
+                    $this->menuItems[$k]['item'] = $this->menu->addItem(
+                        array_merge(
+                            [$action->getCaption()],
+                            $action->modifier === Model\UserAction::MODIFIER_CREATE ? ['icon' => 'plus'] : []
+                        )
+                    );
                     $this->menuItems[$k]['action'] = $action;
                 }
             }
