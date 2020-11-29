@@ -64,6 +64,11 @@ class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
      */
     protected $jsSuccess;
 
+    public function getAction(): Model\UserAction
+    {
+        return $this->action;
+    }
+
     /**
      * Associate executor with action.
      */
@@ -128,6 +133,11 @@ class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
         \atk4\ui\Button::addToWithCl($this, $this->executorButton)->on('click', function () {
             return $this->jsExecute();
         });
+    }
+
+    public function executeModelAction()
+    {
+        //TODO keep empty for now.
     }
 
     /**

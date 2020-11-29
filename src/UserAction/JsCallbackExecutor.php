@@ -33,10 +33,23 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /** @var Model\UserAction The model user action */
     public $action;
 
+    /** @var array Argument to attached to callback url. */
+    public $urlArgs = [];
+
     /**
      * @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
      */
     public $jsSuccess;
+
+    public function getAction(): Model\UserAction
+    {
+        return $this->action;
+    }
+
+    public function setUrlArgs(array $args)
+    {
+        $this->urlArgs = array_merge($this->urlArgs, $args);
+    }
 
     /**
      * Set action to be execute.
@@ -59,10 +72,11 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
      *
      * @return $this
      */
-    public function setAction(Model\UserAction $action, $urlArgs = [])
+    public function setAction(Model\UserAction $action, array $urlArgs = null)
     {
-        if (!$this->_initialized) {
-            throw new Exception('JsCallbackExecutor must be initialized prior to call setAction()');
+
+        if ($urlArgs) {
+            $this->setUrlArgs($urlArgs);
         }
 
         $this->action = $action;
@@ -70,6 +84,11 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
             $this->getOwner()->addClass('disabled');
         }
 
+        return $this;
+    }
+
+    public function executeModelAction()
+    {
         $this->set(function ($j) {
             // may be id is pass within $post args.
             $id = $_POST['c0'] ?? $_POST[$this->action->getOwner()->id_field] ?? null;
@@ -94,7 +113,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
             }
 
             return $js;
-        }, $urlArgs);
+        }, $this->urlArgs);
 
         return $this;
     }

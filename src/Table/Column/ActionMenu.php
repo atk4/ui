@@ -84,30 +84,7 @@ class ActionMenu extends Table\Column
      */
     public function addActionMenuItem($item, $action = null, string $confirmMsg = '', bool $isDisabled = false)
     {
-        // If action is not specified, perhaps it is defined in the model
-        if (!$action) {
-            if (is_string($item)) {
-                $action = $this->table->model->getUserAction($item);
-            } elseif ($item instanceof Model\UserAction) {
-                $action = $item;
-            }
-
-            if ($action) {
-                $item = $action->caption;
-            }
-        }
-
         $name = $this->name . '_action_' . (count($this->items) + 1);
-
-        if ($action instanceof Model\UserAction) {
-            $confirmMsg = $action->ui['confirm'] ?? $confirmMsg;
-
-            $isDisabled = !$action->enabled;
-
-            if ($action->enabled instanceof \Closure) {
-                $this->callbacks[$name] = $action->enabled;
-            }
-        }
 
         if (!is_object($item)) {
             $item = Factory::factory([\atk4\ui\View::class], ['id' => false, 'ui' => 'item', 'content' => $item]);
@@ -117,8 +94,12 @@ class ActionMenu extends Table\Column
 
         $item->addClass('{$_' . $name . '_disabled} i_' . $name);
 
-        if ($isDisabled) {
+        if ($isDisabled === true) {
             $item->addClass('disabled');
+        }
+
+        if (is_callable($isDisabled)) {
+            $this->callbacks[$name] = $isDisabled;
         }
 
         // set executor context.

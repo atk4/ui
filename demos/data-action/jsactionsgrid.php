@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\core\Factory;
+use atk4\data\Model\UserAction;
+use atk4\ui\UserAction\ExecutorFactory;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -37,22 +39,11 @@ $grid->addActionMenuItem('Js Callback', function () {
 $grid->addActionMenuItem($divider);
 
 $grid->addActionMenuItem($modelHeader);
-// Adding Model actions.
-$grid->addActionMenuItems(
-    [
-        'callback',
-        'preview',
-        'disabled_action',
-        'edit_argument',
-        'edit_argument_prev',
-        'edit_iso',
-        'Ouch',
-        'confirm',
-        'multi_step',
-    ]
-);
 
-$specialItem = Factory::factory([\atk4\ui\View::class], ['id' => false, 'class' => ['item'], 'content' => 'Multi Step']);
-\atk4\ui\Icon::addTo($specialItem, ['content' => 'window maximize outline']);
+// Adding Model actions.
+foreach ($country->getUserActions(UserAction::APPLIES_TO_SINGLE_RECORD) as $action) {
+    $grid->addExecutorMenuItem($executor = ExecutorFactory::create($action, $grid));
+    $executor->executeModelAction();
+}
 
 $grid->ipp = 10;

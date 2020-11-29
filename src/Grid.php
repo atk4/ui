@@ -7,6 +7,9 @@ namespace atk4\ui;
 use atk4\core\Factory;
 use atk4\core\HookTrait;
 use atk4\data\Model;
+use atk4\ui\Table\Column\ActionButtons;
+use atk4\ui\UserAction\ExecutorFactory;
+use atk4\ui\UserAction\ExecutorInterface;
 
 /**
  * Implements a more sophisticated and interactive Data-Table component.
@@ -99,6 +102,9 @@ class Grid extends View
     public $table;
 
     public $executor_class = UserAction\BasicExecutor::class;
+
+    /** @var string|ExecutorFactory Default Executor factory */
+    public $executorFactory = ExecutorFactory::class;
 
     /**
      * The container for table and paginator.
@@ -380,11 +386,28 @@ class Grid extends View
      */
     public function addActionButton($button, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
+        return $this->getActionButtons()->addButton($button, $action, $confirmMsg, $isDisabled);
+    }
+
+    /**
+     * Add a button for executing a model action via an action executor.
+     */
+    public function addExecutorButton(UserAction\ExecutorInterface $executor)
+    {
+        $button = $this->executorFactory::createActionButton($executor->getAction(), $this->executorFactory::TABLE_BUTTON);
+        $confirmation = $executor->getAction()->getConfirmation() ?: '';
+        $enabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+
+        return $this->getActionButtons()->addButton($button, $executor, $confirmation, $enabled);
+    }
+
+    private function getActionButtons(): ActionButtons
+    {
         if (!$this->actionButtons) {
             $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
         }
 
-        return $this->actionButtons->addButton($button, $action, $confirmMsg, $isDisabled);
+        return $this->actionButtons;
     }
 
     /**
@@ -397,11 +420,25 @@ class Grid extends View
      */
     public function addActionMenuItem($view, $action = null, string $confirmMsg = '', bool $isDisabled = false)
     {
+        return $this->getActionMenu()->addActionMenuItem($view, $action, $confirmMsg, $isDisabled);
+    }
+
+    public function addExecutorMenuItem(ExecutorInterface $executor)
+    {
+        $item = $this->executorFactory::getActionCaption($executor->getAction());
+        $confirmation = $executor->getAction()->getConfirmation() ?: '';
+        $enabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+
+        return $this->getActionMenu()->addActionMenuItem($item, $executor, $confirmation, $enabled);
+    }
+
+    private function getActionMenu()
+    {
         if (!$this->actionMenu) {
             $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
         }
 
-        return $this->actionMenu->addActionMenuItem($view, $action, $confirmMsg, $isDisabled);
+        return $this->actionMenu;
     }
 
     /**

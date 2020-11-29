@@ -6,6 +6,7 @@ namespace atk4\ui\UserAction;
 
 use atk4\core\HookTrait;
 use atk4\data\Model;
+use atk4\data\Model\UserAction;
 use atk4\ui\Button;
 use atk4\ui\Exception;
 use atk4\ui\JsExpressionable;
@@ -95,6 +96,11 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         }
 
         return [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])];
+    }
+
+    public function getAction(): UserAction
+    {
+        return $this->action;
     }
 
     /**

@@ -65,6 +65,7 @@ $executor->setAction($action, ['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($t, $m) {
     return new \atk4\ui\JsToast('Files imported');
 });
+$executor->executeModelAction();
 
 $btn = \atk4\ui\Button::addTo($rightColumn, ['Import File']);
 $btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);

@@ -6,7 +6,9 @@ namespace atk4\ui\Table\Column;
 
 use atk4\core\Factory;
 use atk4\data\Model;
+use atk4\ui\Button;
 use atk4\ui\Table;
+use atk4\ui\UserAction\ExecutorInterface;
 
 /**
  * Formatting action buttons column.
@@ -38,39 +40,14 @@ class ActionButtons extends Table\Column
      *
      * Returns button object
      *
-     * @param \atk4\ui\View|string           $button
-     * @param \Closure|Model\UserAction|null $action
+     * @param \atk4\ui\View|string                $button
+     * @param  JsChain|\Closure|ExecutorInterface $action
      *
      * @return \atk4\ui\View
      */
     public function addButton($button, $action = null, string $confirmMsg = '', bool $isDisabled = false)
     {
-        // If action is not specified, perhaps it is defined in the model
-        if (!$action) {
-            if (is_string($button)) {
-                $action = $this->table->model->getUserAction($button);
-            } elseif ($button instanceof Model\UserAction) {
-                $action = $button;
-            }
-
-            if ($action) {
-                $button = $action->getCaption();
-            }
-        }
-
         $name = $this->name . '_button_' . (count($this->buttons) + 1);
-
-        if ($action instanceof Model\UserAction) {
-            $button = $action->ui['button'] ?? $button;
-
-            $confirmMsg = $action->ui['confirm'] ?? $confirmMsg;
-
-            $isDisabled = !$action->enabled;
-
-            if ($action->enabled instanceof \Closure) {
-                $this->callbacks[$name] = $action->enabled;
-            }
-        }
 
         if (!is_object($button)) {
             if (is_string($button)) {
@@ -80,13 +57,18 @@ class ActionButtons extends Table\Column
             $button = Factory::factory([\atk4\ui\Button::class], Factory::mergeSeeds($button, ['id' => false]));
         }
 
+        if ($isDisabled === true) {
+            $button->addClass('disabled');
+        }
+
+        if (is_callable($isDisabled)) {
+            $this->callbacks[$name] = $isDisabled;
+        }
+
         $button->setApp($this->table->getApp());
 
         $this->buttons[$name] = $button->addClass('{$_' . $name . '_disabled} compact b_' . $name);
 
-        if ($isDisabled) {
-            $button->addClass('disabled');
-        }
         $this->table->on('click', '.b_' . $name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirmMsg]);
 
         return $button;

@@ -90,6 +90,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      */
     public $previewType = 'html';
 
+    public $executorFactory = ExecutorFactory::class;
     /**
      * View seed for displaying title for each step.
      *
@@ -110,6 +111,11 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     {
         parent::init();
         $this->observeChanges();
+    }
+
+    public function getAction(): Model\UserAction
+    {
+        return $this->action;
     }
 
     /**
@@ -157,13 +163,12 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         if ($this->steps = $this->getSteps($action)) {
             $this->title = $this->title ?? $action->getDescription();
 
-            $this->btns->add($this->execActionBtn = Factory::factory($this->action->ui['execButton'] ?? [Button::class, $this->action->getCaption(), 'blue'], []));
+            $this->btns->add($this->execActionBtn = $this->executorFactory::createActionButton($action, ExecutorFactory::MODAL_BUTTON));
 
             // get current step.
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
             // set initial button state
             $this->jsSetBtnState($this, $this->step);
-            $this->doSteps();
         }
 
         $this->actionInitialized = true;
@@ -172,9 +177,9 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     }
 
     /**
-     * Perform action steps.
+     * Perform model action by stepping through args - fields - preview.
      */
-    public function doSteps()
+    public function executeModelAction()
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {

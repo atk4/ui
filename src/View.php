@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
-use atk4\core\Factory;
 use atk4\data\Model;
 use atk4\data\Persistence\Static_;
+use atk4\ui\UserAction\ExecutorInterface;
 
 /**
  * Implements a most core view, which all of the other components descend
@@ -966,10 +966,10 @@ class View extends AbstractView implements JsExpressionable
      *
      * @see http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string                            $event    JavaScript event
-     * @param string                            $selector Optional jQuery-style selector
-     * @param JsChain|\Closure|Model\UserAction $action   code to execute or \atk4\Data\UserAction
-     * @param array                             $defaults Options
+     * @param string                             $event    JavaScript event
+     * @param string                             $selector Optional jQuery-style selector
+     * @param JsChain|\Closure|ExecutorInterface $action   code to execute
+     * @param array                              $defaults Options
      *
      * @return Jquery
      */
@@ -1032,26 +1032,10 @@ class View extends AbstractView implements JsExpressionable
             }, $arguments);
 
             $actions[] = $cb;
-        } elseif ($action instanceof Model\UserAction) {
+        } elseif ($action instanceof UserAction\ExecutorInterface) {
             // Setup UserAction executor.
-            if (isset($action->ui['executor'])) {
-                $class = $action->ui['executor'];
-            } elseif (isset($defaults['executor'])) {
-                $class = $defaults['executor'];
-            } elseif (!$action->args && !$action->fields && !$action->preview) {
-                $class = [UserAction\JsCallbackExecutor::class];
-            } else {
-                $class = [UserAction\ModalExecutor::class];
-            }
-            $ex = Factory::factory($class);
+            $ex = $action;
             if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
-                // Executor may already had been add to layout. Like in CardDeck.
-                if (!isset($this->getApp()->html->elements[$ex->short_name])) {
-                    // very dirty hack, @TODO, attach modals in the standard render tree
-                    // but only render the result to a different place/html DOM
-                    $ex->viewForUrl = $this;
-                    $ex = $this->getApp()->html->add($ex, 'Modals')->setAction($action);
-                }
                 if (isset($arguments[0])) {
                     $arguments[$ex->name] = $arguments[0];
                 }
@@ -1070,8 +1054,8 @@ class View extends AbstractView implements JsExpressionable
                     $actions[] = $ex_actions;
                 }
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
-                $ex = $this->add($ex)->setAction($action, $arguments);
-                if ($conf = $action->getConfirmation()) {
+                $ex->setUrlArgs($arguments);
+                if ($conf = $ex->getAction()->getConfirmation()) {
                     $defaults['confirm'] = $conf;
                 }
                 if ($defaults['apiConfig'] ?? null) {
