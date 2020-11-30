@@ -1,0 +1,8 @@
+parameters:
+    level: 2
+    paths:
+        - ./
+    excludes_analyse:
+        - cache/
+        - build/
+        - vendor/
