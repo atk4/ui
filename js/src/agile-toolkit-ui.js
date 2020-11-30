@@ -21,9 +21,9 @@ atk.options = atkOptions;
 atk.eventBus = atkEventBus;
 atk.utils = atkUtils;
 
-atk.debounce = (fn, value) => {
+atk.debounce = (fn, value, immediate = false) => {
     const timeOut = atk.options.get('debounceTimeout');
-    return debounce(fn, timeOut !== null ? timeOut : value);
+    return debounce(fn, timeOut !== null ? timeOut : value, immediate);
 };
 
 // Allow to register a plugin with jQuery;

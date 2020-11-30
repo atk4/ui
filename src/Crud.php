@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
+use atk4\core\Factory;
 use atk4\data\Model;
 
 /**
@@ -59,14 +60,14 @@ class Crud extends Grid
     /**
      * @var array Action name container that will reload Table after executing
      *
-     * @deprecated use action modifier instead
+     * @deprecated use action modifier instead, will be removed in v2.5
      */
     public $reloadTableActions = [];
 
     /**
      * @var array Action name container that will remove the corresponding table row after executing
      *
-     * @deprecated use action modifier instead
+     * @deprecated use action modifier instead, will be removed in v2.5
      */
     public $removeRowActions = [];
 
@@ -75,7 +76,7 @@ class Crud extends Grid
         parent::init();
 
         if ($sortBy = $this->getSortBy()) {
-            $this->app ? $this->app->stickyGet($this->name . '_sort') : $this->stickyGet($this->name . '_sort', $sortBy);
+            $this->issetApp() ? $this->getApp()->stickyGet($this->name . '_sort') : $this->stickyGet($this->name . '_sort', $sortBy);
         }
     }
 
@@ -136,7 +137,12 @@ class Crud extends Grid
             foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
                 if ($action->enabled) {
                     $action->ui['executor'] = $this->initActionExecutor($action);
-                    $this->menuItems[$k]['item'] = $this->menu->addItem([$action->getDescription(), 'icon' => 'plus']);
+                    $this->menuItems[$k]['item'] = $this->menu->addItem(
+                        array_merge(
+                            [$action->getCaption()],
+                            $action->modifier === Model\UserAction::MODIFIER_CREATE ? ['icon' => 'plus'] : []
+                        )
+                    );
                     $this->menuItems[$k]['action'] = $action;
                 }
             }
@@ -241,7 +247,7 @@ class Crud extends Grid
      */
     protected function getNotifier(string $msg = null)
     {
-        $notifier = $this->factory($this->notifyDefault);
+        $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {
             $notifier->setMessage($msg);
         }
@@ -267,7 +273,7 @@ class Crud extends Grid
     protected function getExecutor(Model\UserAction $action)
     {
         if (isset($action->ui['executor'])) {
-            return $this->factory($action->ui['executor']);
+            return Factory::factory($action->ui['executor']);
         }
 
         // prioritize Crud addFields over action->fields for Model add action.
@@ -283,7 +289,7 @@ class Crud extends Grid
         // setting right action fields is based on action fields.
         $executor = (!$action->args && !$action->fields && !$action->preview) ? $this->jsExecutor : $this->executor;
 
-        return $this->factory($executor);
+        return Factory::factory($executor);
     }
 
     /**

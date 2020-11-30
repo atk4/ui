@@ -23,9 +23,6 @@ class Control extends View
      */
     public $field;
 
-    /** @deprecated use controlClass instead - will be removed in dec-2020 */
-    public $fieldClass = '';
-
     /** @var string control class */
     public $controlClass = '';
 
@@ -103,7 +100,7 @@ class Control extends View
     public function set($value = null, $junk = null)
     {
         if ($this->field) {
-            $value = $this->app->ui_persistence->typecastLoadField($this->field, $value);
+            $value = $this->getApp()->ui_persistence->typecastLoadField($this->field, $value);
             $this->field->set($value);
 
             return $this;
@@ -184,23 +181,10 @@ class Control extends View
     }
 
     /**
-     * @deprecated use Control::getControlClass instead - will be removed in dec-2020
-     */
-    public function getFieldClass()
-    {
-        'trigger_error'('Method is deprecated. Use Control::getControlClass instead', E_USER_DEPRECATED);
-
-        return $this->getControlClass();
-    }
-
-    /**
-     * Return control class.
-     *
      * @return string
      */
     public function getControlClass()
     {
-        // use of fieldClass for backward compatibility - will be removed in dec-2020
-        return $this->controlClass ?: $this->fieldClass;
+        return $this->controlClass;
     }
 }

@@ -66,9 +66,4 @@ class Jquery extends JsChain
 
         $this->_constructorArgs = $constructorArgs;
     }
-
-    public function univ()
-    {
-        return new Juniv($this);
-    }
 }

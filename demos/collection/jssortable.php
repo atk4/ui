@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\HtmlTemplate;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template(
+$view = \atk4\ui\View::addTo($app, ['template' => new HtmlTemplate(
     '<div class="ui header">Click and drag country to reorder</div>
     <div id="{$_id}" style="cursor: pointer">
         <ul>
-            {List}<li class="ui icon label" data-name="{$name}"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</li>{/}
+            {List}<li class="ui icon label" data-name="{$name}"><i class="{iso}ae{/} flag"></i> {$name}</li>{/}
         </ul>
     </div>'
 )]);
@@ -26,7 +28,7 @@ $lister->setModel(new Country($app->db))
 $sortable = \atk4\ui\JsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
 $sortable->onReorder(function ($order, $src, $pos, $oldPos) {
-    if (@$_GET['btn']) {
+    if ($_GET['btn'] ?? null) {
         return new \atk4\ui\JsToast(implode(' - ', $order));
     }
 

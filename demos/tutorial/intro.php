@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Header;
+use atk4\ui\JsToast;
+use atk4\ui\Message;
 use atk4\ui\View;
 
 /** @var \atk4\ui\App $app */
@@ -133,20 +136,34 @@ $wizard->addStep('Business Model', function ($page) {
             }
         }
         */
-
         session_start();
 
-        $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
+        $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
         $model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
 
-        \atk4\ui\Form::addTo($owner)
-            ->setModel($model)->tryLoad(1);
+        Header::addTo($owner, ['Set invoice data:']);
+        $form = \atk4\ui\Form::addTo($owner);
+        $form->setModel($model)->tryLoad(1);
+
+        if (!$model->loaded()) {
+            // set default data
+            $model->setMulti([
+                'id' => 1,
+                'reference' => 'Inv-' . random_int(1000, 9999),
+                'date' => date($owner->getApp()->ui_persistence->date_format),
+            ]);
+            $model->save();
+        }
+
+        $form->onSubmit(function ($f) {
+            $f->model->save();
+
+            return new JsToast('Saved!');
+        });
 
         \atk4\ui\View::addTo($owner, ['ui' => 'divider']);
-        \atk4\ui\Button::addTo($owner, ['Refresh', 'icon' => 'refresh'])
-            ->on('click', $owner->jsReload());
     });
 
     $t = \atk4\ui\Text::addTo($page);
@@ -182,13 +199,18 @@ $wizard->addStep('Persistence', function ($page) {
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         session_start();
 
-        $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
+        $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
         $model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
 
+        Header::addTo($owner, ['Record display in Card View using model data.']);
         $model->tryLoad(1);
-        \atk4\ui\Card::addTo($owner)->setModel($model, ['date']);
+        if ($model->loaded()) {
+            \atk4\ui\Card::addTo($owner, ['useLabel' => true])->setModel($model);
+        } else {
+            Message::addTo($owner, ['Empty record.']);
+        }
     });
 
     $t = \atk4\ui\Text::addTo($page);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\Table\Column;
 
 use atk4\data\Model;
+use atk4\ui\HtmlTemplate;
 use atk4\ui\Table;
 
 /**
@@ -116,7 +117,7 @@ class Link extends Table\Column
         parent::init();
 
         if (is_string($this->url)) {
-            $this->url = new \atk4\ui\Template($this->url);
+            $this->url = new HtmlTemplate($this->url);
         }
         if (is_string($this->page)) {
             $this->page = [$this->page];
@@ -151,9 +152,9 @@ class Link extends Table\Column
     {
         // Decide on the content
         if ($this->url) {
-            $rowValues = $this->app->ui_persistence ? $this->app->ui_persistence->typecastSaveRow($row, $row->get()) : $row->get();
+            $rowValues = $this->getApp()->ui_persistence ? $this->getApp()->ui_persistence->typecastSaveRow($row, $row->get()) : $row->get();
 
-            return ['c_' . $this->short_name => $this->url->set($rowValues)->render()];
+            return ['c_' . $this->short_name => $this->url->set($rowValues)->renderToHtml()];
         }
 
         $p = $this->page ?: [];

@@ -42,13 +42,12 @@ export default class sidenav extends atkPlugin {
    * @returns {boolean}
    */
     hasBase() {
-        const that = this;
         let hasBase = false;
         this.menu.find('a').each((idx, el) => {
-            if (that.urlMatchLocation(el.href)) {
+            if (this.urlMatchLocation(el.href)) {
                 hasBase = true;
                 // set active class for this specific menu item.
-                $(el).addClass(that.settings.menuItemActiveClass);
+                $(el).addClass(this.settings.menuItemActiveClass);
             }
         });
         return hasBase;
@@ -97,17 +96,16 @@ export default class sidenav extends atkPlugin {
    * and toggler element.
    */
     addClickHandler() {
-        const that = this;
-        this.$el.find(that.settings.menuGroupTitleSelector).on('click', (e) => {
+        this.$el.find(this.settings.menuGroupTitleSelector).on('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
-            window.open(that.menu.find(that.settings.firstItemSelector).first().attr('href'), e.metaKey ? '_blank' : '_self');
+            window.open(this.menu.find(this.settings.firstItemSelector).first().attr('href'), e.metaKey ? '_blank' : '_self');
         });
         this.toggler.on('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
-            that.menu.toggleClass(that.settings.visibleCssClass);
-            that.setTogglerIcon(that.settings.icon.selector);
+            this.menu.toggleClass(this.settings.visibleCssClass);
+            this.setTogglerIcon(this.settings.icon.selector);
         });
     }
 }

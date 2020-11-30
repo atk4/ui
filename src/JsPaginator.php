@@ -38,7 +38,7 @@ class JsPaginator extends JsCallback
         parent::init();
 
         if (!$this->view) {
-            $this->view = $this->owner;
+            $this->view = $this->getOwner();
         }
 
         $this->view->js(true)->atkScroll([

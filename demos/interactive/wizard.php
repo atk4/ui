@@ -46,7 +46,7 @@ $wizard->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database C
 $wizard->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon' => 'table'], function (Wizard $wizard) {
     if (isset($_GET['name'])) {
         $wizard->memorize('model', $_GET['name']);
-        $wizard->app->redirect($wizard->urlNext());
+        $wizard->getApp()->redirect($wizard->urlNext());
     }
 
     $columns = \atk4\ui\Columns::addTo($wizard);

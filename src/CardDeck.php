@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
+use atk4\core\Factory;
 use atk4\data\Model;
 use atk4\ui\Component\ItemSearch;
 
@@ -115,16 +116,16 @@ class CardDeck extends View
      */
     protected function addMenuBar()
     {
-        $this->menu = $this->add($this->factory($this->menu), 'Menu');
+        $this->menu = $this->add(Factory::factory($this->menu), 'Menu');
 
         $left = View::addTo($this->menu, ['ui' => $this->search !== false ? 'twelve wide column' : 'sixteen wide column']);
         $this->btns = View::addTo($left, ['ui' => 'buttons']);
 
         if ($this->search !== false) {
             $right = View::addTo($this->menu, ['ui' => 'four wide column']);
-            $this->search = $right->add($this->factory($this->search, ['context' => '#' . $this->container->name]));
+            $this->search = $right->add(Factory::factory($this->search, ['context' => '#' . $this->container->name]));
             $this->search->reload = $this->container;
-            $this->query = $this->app->stickyGet($this->search->queryArg);
+            $this->query = $this->getApp()->stickyGet($this->search->queryArg);
         }
     }
 
@@ -134,7 +135,7 @@ class CardDeck extends View
     protected function addPaginator()
     {
         $seg = View::addTo($this->container, ['ui' => 'basic segment'])->addStyle('text-align', 'center');
-        $this->paginator = $seg->add($this->factory($this->paginator, ['reload' => $this->container]));
+        $this->paginator = $seg->add(Factory::factory($this->paginator, ['reload' => $this->container]));
     }
 
     public function setModel(Model $model, array $fields = null, array $extra = null): Model
@@ -149,7 +150,7 @@ class CardDeck extends View
             $this->model->each(function ($m) use ($fields, $extra) {
                 // need model clone in order to keep it's loaded values
                 $m = clone $m;
-                $c = $this->cardHolder->add($this->factory($this->card, ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]))->addClass('segment');
+                $c = $this->cardHolder->add(Factory::factory($this->card, ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]))->addClass('segment');
                 $c->setModel($m, $fields);
                 if ($extra) {
                     $c->addExtraFields($m, $extra, $this->extraGlue);
@@ -169,7 +170,7 @@ class CardDeck extends View
                 }
             });
         } else {
-            $this->cardHolder->addClass('centered')->add($this->factory($this->noRecordDisplay));
+            $this->cardHolder->addClass('centered')->add(Factory::factory($this->noRecordDisplay));
         }
 
         // add no record scope action to menu
@@ -259,7 +260,7 @@ class CardDeck extends View
      */
     protected function getNotifier($msg = null, $action = null)
     {
-        $notifier = $this->factory($this->notifyDefault);
+        $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {
             $notifier->setMessage($msg);
         }
@@ -273,7 +274,7 @@ class CardDeck extends View
     protected function jsModelReturn(Model\UserAction $action = null, string $msg = 'Done!'): array
     {
         $js[] = $this->getNotifier($msg, $action);
-        if ($action->owner->loaded() && $card = $this->findCard($action->owner)) {
+        if ($action->getOwner()->loaded() && $card = $this->findCard($action->getOwner())) {
             $js[] = $card->jsReload($this->_getReloadArgs());
         } else {
             $js[] = $this->container->jsReload($this->_getReloadArgs());
@@ -386,11 +387,11 @@ class CardDeck extends View
             if (is_string($button)) {
                 $button = [$button, 'ui' => 'button ' . $this->menuBtnStyle];
             }
-            $button = $this->factory([Button::class], $button);
+            $button = Factory::factory([Button::class], $button);
         }
 
         if ($button->icon && !is_object($button->icon)) {
-            $button->icon = $this->factory([Icon::class], $button->icon);
+            $button->icon = Factory::factory([Icon::class], $button->icon);
         }
 
         if ($isDisabled) {
@@ -411,12 +412,12 @@ class CardDeck extends View
     protected function getExecutor(Model\UserAction $action)
     {
         if (isset($action->ui['executor'])) {
-            return $this->factory($action->ui['executor']);
+            return Factory::factory($action->ui['executor']);
         }
 
         $executor = (!$action->args && !$action->fields && !$action->preview) ? $this->jsExecutor : $this->executor;
 
-        return $this->factory($executor);
+        return Factory::factory($executor);
     }
 
     protected function renderView(): void

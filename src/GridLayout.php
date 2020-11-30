@@ -19,22 +19,22 @@ class GridLayout extends View
     ];
 
     /**
-     * @var Template
+     * @var HtmlTemplate
      */
     protected $t_wrap;
 
     /**
-     * @var Template
+     * @var HtmlTemplate
      */
     protected $t_row;
 
     /**
-     * @var Template
+     * @var HtmlTemplate
      */
     protected $t_col;
 
     /**
-     * @var Template
+     * @var HtmlTemplate
      */
     public $template;
 
@@ -75,7 +75,7 @@ class GridLayout extends View
     protected function buildTemplate()
     {
         $this->t_wrap->del('rows');
-        $this->t_wrap->appendHtml('rows', '{rows}');
+        $this->t_wrap->dangerouslyAppendHtml('rows', '{rows}');
 
         for ($row = 1; $row <= $this->rows; ++$row) {
             $this->t_row->del('column');
@@ -83,20 +83,33 @@ class GridLayout extends View
             for ($col = 1; $col <= $this->columns; ++$col) {
                 $this->t_col->set('Content', '{$r' . $row . 'c' . $col . '}');
 
-                $this->t_row->appendHtml('column', $this->t_col->render());
+                $this->t_row->dangerouslyAppendHtml('column', $this->t_col->renderToHtml());
             }
 
-            $this->t_wrap->appendHtml('rows', $this->t_row->render());
+            $this->t_wrap->dangerouslyAppendHtml('rows', $this->t_row->renderToHtml());
         }
-        $this->t_wrap->appendHtml('rows', '{/rows}');
-        $tmp = new Template($this->t_wrap->render());
+        $this->t_wrap->dangerouslyAppendHtml('rows', '{/rows}');
+        $tmp = new HtmlTemplate($this->t_wrap->renderToHtml());
 
-        // TODO replace later, the only use of direct template property access
-        $t = $this;
+        // TODO replace later, the only use of direct template tree manipulation
+        $t = $this->template;
         \Closure::bind(function () use ($t, $tmp) {
-            $t->template->template['rows#0'] = $tmp->template['rows#0'];
-            $t->template->rebuildTagsIndex();
-        }, null, Template::class)();
+            $cloneTagTreeFx = function (HtmlTemplate\TagTree $src) use (&$cloneTagTreeFx, $t) {
+                $tagTree = $src->clone($t);
+                $t->tagTrees[$src->getTag()] = $tagTree;
+                \Closure::bind(function () use ($tagTree, $cloneTagTreeFx, $src) {
+                    foreach ($tagTree->children as $v) {
+                        if (is_string($v)) {
+                            $cloneTagTreeFx($src->getParentTemplate()->getTagTree($v));
+                        }
+                    }
+                }, null, HtmlTemplate\TagTree::class)();
+            };
+            $cloneTagTreeFx($tmp->getTagTree('rows'));
+
+        // TODO prune unreachable nodes
+        // $template->rebuildTagsIndex();
+        }, null, HtmlTemplate::class)();
 
         $this->addClass($this->words[$this->columns] . ' column');
     }

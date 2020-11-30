@@ -41,7 +41,7 @@ class Labels extends Table\Column
             $id = $values[$id] ?? $id;
 
             if (!empty($id)) {
-                $labels[] = $this->app->getTag('div', ['class' => 'ui label'], $id);
+                $labels[] = $this->getApp()->getTag('div', ['class' => 'ui label'], $id);
             }
         }
 

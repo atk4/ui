@@ -14,13 +14,24 @@ $demo = Demo::addTo($app);
 
 \atk4\ui\Header::addTo($demo->left, ['Dropdown sample:']);
 \atk4\ui\Header::addTo($demo->right, ['Cascading Dropdown']);
+
 $txt = \atk4\ui\Text::addTo($demo->right);
 $txt->addParagraph('Dropdown may also be used in a cascade manner.');
-$txt->addParagraph('You may find more information in DropdownCascade class.');
-$v = \atk4\ui\View::addTo($demo->right, ['ui' => 'column padded centered grid']);
-$btn = \atk4\ui\Button::addTo($v, ['DropdownCascade Class'])
-    ->link('https://github.com/atk4/ui/blob/develop/src/Form/Control/DropdownCascade.php', '_blank')
-    ->addClass('centered aligned');
+$form = Form::addTo($demo->right);
+
+$form->addControl('category_id', [Form\Control\Dropdown::class, 'model' => new Category($app->db)]);
+$form->addControl('sub_category_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
+$form->addControl('product_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
+
+$form->onSubmit(function (Form $form) use ($app) {
+    $message = $app->encodeJson($form->model->get());
+
+    $view = new \atk4\ui\Message('Values: ');
+    $view->invokeInit();
+    $view->text->addParagraph($message);
+
+    return $view;
+});
 
 $form = Form::addTo($demo->left);
 

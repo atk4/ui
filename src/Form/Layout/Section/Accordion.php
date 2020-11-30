@@ -30,7 +30,7 @@ class Accordion extends \atk4\ui\Accordion
             // if a form control is part of an accordion section, it will open that section.
             $section = $form->getClosestOwner($form->getControl($fieldName), AccordionSection::class);
             if ($section) {
-                $jsError[] = $section->owner->jsOpen($section);
+                $jsError[] = $section->getOwner()->jsOpen($section);
             }
 
             return $jsError;
@@ -65,6 +65,6 @@ class Accordion extends \atk4\ui\Accordion
             return parent::getSectionIdx($section);
         }
 
-        return parent::getSectionIdx($section->owner);
+        return parent::getSectionIdx($section->getOwner());
     }
 }

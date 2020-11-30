@@ -53,7 +53,7 @@ in any way you wish, before they will actuallized.
     In addition to adding a child object, sets up it's template
     and associate it's output with the region in our template.
 
-    Will copy $this->app into $object->app.
+    Will copy $this->getApp() into $object->getApp().
 
     If this object is initialized, will also initialize $object
 
@@ -112,7 +112,7 @@ Finally, if you prefer a more consise code, you can also use the following forma
 The rest of documentation will use this concise code to keep things readable, however if
 you value type-hinting of your IDE, you can keep using "new" keyword. I must also
 mention that if you specify first argument to add() as a string it will be passed
-to `$app->factory()`, which will be responsible of instantiating the actual object.
+to `Factory::factory()`, which will be responsible of instantiating the actual object.
 
 (TODO: link to App:Factory)
 
@@ -130,7 +130,7 @@ Consider the following example::
     $app->debug = new Logger('log');  // Monolog
 
     // next, somewhere in a render tree
-    $view->app->debug->log('Foo Bar');
+    $view->getApp()->debug->log('Foo Bar');
 
 Agile UI will automatically pass your $app class to all the views.
 
@@ -164,7 +164,7 @@ can be set through your $app class::
     $app->db = new \atk4\data\Persistence_SQL::connect($dsn);
 
     // next, anywhere in a view
-    $client = new Client($this->app->db);
+    $client = new Client($this->getApp()->db);
     $form->setModel($client);
 
 Or if you prefer a more consise code::
@@ -372,7 +372,7 @@ Here is a best practice for using custom template::
         protected function renderView(): void
         {
             parent::renderView();
-            $this->template['title'] = $this->title;
+            $this->template->set('title', $this->title);
         }
 
     }
@@ -421,7 +421,7 @@ Outputs:
 If ID is not specified it will be set automatically. The top-most element of a Render Tree will
 use ``id=atk`` and all of the child elements will create a derrived ID based on it's UI role.
 
-.. code-block:: yaml
+.. code-block:: yml
 
     atk:
         atk-button:

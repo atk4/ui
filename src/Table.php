@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
+use atk4\core\Factory;
+
 class Table extends Lister
 {
     // Overrides
@@ -67,28 +69,28 @@ class Table extends Lister
     /**
      * Contain the template for the "Head" type row.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $t_head;
 
     /**
      * Contain the template for the "Body" type row.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $t_row;
 
     /**
      * Contain the template for the "Foot" type row.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $t_totals;
 
     /**
      * Contains the output to show if table contains no rows.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $t_empty;
 
@@ -295,7 +297,7 @@ class Table extends Lister
      * Add column Decorator.
      *
      * @param string $name Column name
-     * @param mixed  $seed Defaults to pass to factory() when decorator is initialized
+     * @param mixed  $seed Defaults to pass to Factory::factory() when decorator is initialized
      *
      * @return Table\Column
      */
@@ -345,13 +347,13 @@ class Table extends Lister
      * By default will use default column.
      *
      * @param \atk4\data\Field $field Data model field
-     * @param mixed            $seed  Defaults to pass to factory() when decorator is initialized
+     * @param mixed            $seed  Defaults to pass to Factory::factory() when decorator is initialized
      *
      * @return Table\Column
      */
     public function decoratorFactory(\atk4\data\Field $field, $seed = [])
     {
-        $seed = $this->mergeSeeds(
+        $seed = Factory::mergeSeeds(
             $seed,
             $field->ui['table'] ?? null,
             $this->typeToDecorator[$field->type] ?? null,
@@ -376,7 +378,7 @@ class Table extends Lister
      * ex:
      *  $table->resizableColumn(function($j, $w){
      *       // do somethings with columns width
-     *       $columns = $this->app->decodeJson($w);
+     *       $columns = $this->getApp()->decodeJson($w);
      *   });
      *
      * @param \Closure $fx             a callback function with columns widths as parameter
@@ -482,15 +484,15 @@ class Table extends Lister
 
         // Generate Header Row
         if ($this->header) {
-            $this->t_head->setHtml('cells', $this->getHeaderRowHtml());
-            $this->template->setHtml('Head', $this->t_head->render());
+            $this->t_head->dangerouslySetHtml('cells', $this->getHeaderRowHtml());
+            $this->template->dangerouslySetHtml('Head', $this->t_head->renderToHtml());
         }
 
         // Generate template for data row
-        $this->t_row_master->setHtml('cells', $this->getDataRowHtml());
-        $this->t_row_master['_id'] = '{$_id}';
-        $this->t_row = new Template($this->t_row_master->render());
-        $this->t_row->app = $this->app;
+        $this->t_row_master->dangerouslySetHtml('cells', $this->getDataRowHtml());
+        $this->t_row_master->set('_id', '{$_id}');
+        $this->t_row = new HtmlTemplate($this->t_row_master->renderToHtml());
+        $this->t_row->setApp($this->getApp());
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
@@ -525,11 +527,11 @@ class Table extends Lister
         // Add totals rows or empty message
         if (!$this->_rendered_rows_count) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
-                $this->template->appendHtml('Body', $this->t_empty->render());
+                $this->template->dangerouslyAppendHtml('Body', $this->t_empty->renderToHtml());
             }
         } elseif ($this->totals_plan) {
-            $this->t_totals->setHtml('cells', $this->getTotalsRowHtml());
-            $this->template->appendHtml('Foot', $this->t_totals->render());
+            $this->t_totals->dangerouslySetHtml('cells', $this->getTotalsRowHtml());
+            $this->template->dangerouslyAppendHtml('Foot', $this->t_totals->renderToHtml());
         }
 
         // stop JsPaginator if there are no more records to fetch
@@ -572,12 +574,12 @@ class Table extends Lister
             }
 
             // Render row and add to body
-            $this->t_row->setHtml($html_tags);
+            $this->t_row->dangerouslySetHtml($html_tags);
             $this->t_row->set('_id', $this->model->getId());
-            $this->template->appendHtml('Body', $this->t_row->render());
+            $this->template->dangerouslyAppendHtml('Body', $this->t_row->renderToHtml());
             $this->t_row->del(array_keys($html_tags));
         } else {
-            $this->template->appendHtml('Body', $this->t_row->render());
+            $this->template->dangerouslyAppendHtml('Body', $this->t_row->renderToHtml());
         }
     }
 

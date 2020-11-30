@@ -6,14 +6,7 @@ namespace atk4\ui\demo;
 
 date_default_timezone_set('UTC');
 
-$isRootProject = file_exists(__DIR__ . '/../vendor/autoload.php');
-/** @var \Composer\Autoload\ClassLoader $loader */
-$loader = require dirname(__DIR__, $isRootProject ? 1 : 4) . '/vendor/autoload.php';
-if (!$isRootProject && !class_exists(\atk4\ui\tests\ViewTest::class)) {
-    throw new \Error('Demos can be run only if atk4/ui is a root composer project or if dev files are autoloaded');
-}
-$loader->setPsr4('atk4\ui\demo\\', __DIR__ . '/_includes');
-unset($isRootProject, $loader);
+require_once __DIR__ . '/init-autoloader.php';
 
 // collect coverage for HTTP tests 1/2
 if (file_exists(__DIR__ . '/coverage.php') && !class_exists(\PHPUnit\Framework\TestCase::class, false)) {
@@ -96,6 +89,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $menu = $layout->addMenuGroup(['Form Controls', 'icon' => 'keyboard outline']);
     $layout->addMenuItem(['Input'], [$path . 'input2'], $menu);
     $layout->addMenuItem('Input Decoration', [$path . 'input'], $menu);
+    $layout->addMenuItem('Calendar', [$path . 'calendar'], $menu);
     $layout->addMenuItem(['Checkboxes'], [$path . 'checkbox'], $menu);
     $layout->addMenuItem(['Value Selectors'], [$path . 'form6'], $menu);
     $layout->addMenuItem(['Lookup'], [$path . 'lookup'], $menu);
@@ -104,11 +98,10 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['File Upload'], [$path . 'upload'], $menu);
     $layout->addMenuItem(['Multi Line'], [$path . 'multiline'], $menu);
     $layout->addMenuItem(['Tree Selector'], [$path . 'tree-item-selector'], $menu);
-    $layout->addMenuItem(['Query Builder'], [$path . 'query-builder'], $menu);
+    $layout->addMenuItem(['Scope Builder'], [$path . 'scope-builder'], $menu);
 
     $path = $demosUrl . 'collection/';
     $menu = $layout->addMenuGroup(['Data Collection', 'icon' => 'table']);
-    $layout->addMenuItem(['Actions - Integration Examples'], [$path . 'actions'], $menu);
     $layout->addMenuItem('Data table with formatted columns', [$path . 'table'], $menu);
     $layout->addMenuItem(['Advanced table examples'], [$path . 'table2'], $menu);
     $layout->addMenuItem('Table interractions', [$path . 'multitable'], $menu);
@@ -120,6 +113,14 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['Lister'], [$path . 'lister-ipp'], $menu);
     $layout->addMenuItem(['Table column decorator from model'], [$path . 'tablecolumns'], $menu);
     $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $menu);
+
+    $path = $demosUrl . 'data-action/';
+    $menu = $layout->addMenuGroup(['Data Action Executor', 'icon' => 'wrench']);
+    $layout->addMenuItem(['Executor Examples'], [$path . 'actions'], $menu);
+    $layout->addMenuItem(['Assign action to event'], [$path . 'jsactions'], $menu);
+    $layout->addMenuItem(['Assign action to button event'], [$path . 'jsactions2'], $menu);
+    $layout->addMenuItem(['Execute from Grid'], [$path . 'jsactionsgrid'], $menu);
+    $layout->addMenuItem(['Execute from Crud'], [$path . 'jsactionscrud'], $menu);
 
     $path = $demosUrl . 'interactive/';
     $menu = $layout->addMenuGroup(['Interactive', 'icon' => 'talk']);

@@ -19,7 +19,7 @@ class PreviewExecutor extends BasicExecutor
     public function initPreview()
     {
         if (!$this->hasAllArguments()) {
-            \atk4\ui\Message::addTo($this, ['type' => 'error', 'Insufficient arguments']);
+            \atk4\ui\Message::addTo($this, ['type' => 'error', $this->missingArgsMsg]);
 
             return;
         }
@@ -39,7 +39,7 @@ class PreviewExecutor extends BasicExecutor
                 break;
             case 'html':
                 $this->preview = View::addTo($this, ['ui' => 'segment']);
-                $this->preview->template->setHtml('Content', $text);
+                $this->preview->template->dangerouslySetHtml('Content', $text);
 
                 break;
         }

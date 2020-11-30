@@ -123,7 +123,7 @@ class Stat extends \atk4\data\Model
             ->addField('client_country', 'name');
 
         $this->addField('is_commercial', ['type' => 'boolean']);
-        $this->addField('currency', ['enum' => ['EUR', 'USD', 'GBP']]);
+        $this->addField('currency', ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
         $this->addField('currency_symbol', ['never_persist' => true]);
         $this->onHook(\atk4\data\Model::HOOK_AFTER_LOAD, function (\atk4\data\Model $model) {
             /* implementation for "intl"
@@ -147,7 +147,7 @@ class Stat extends \atk4\data\Model
         $this->addFields(['start_date', 'finish_date'], ['type' => 'date']);
         $this->addField('finish_time', ['type' => 'time']);
 
-        $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => [Form\Control\Line::class, 'disabled' => true]]]);
+        $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => ['disabled' => true]]]);
     }
 }
 
@@ -216,6 +216,60 @@ class FileLock extends File
 {
     use ModelLockTrait;
     public $caption = 'File';
+
+    protected function init(): void
+    {
+        parent::init();
+        $this->lock();
+    }
+}
+
+class Category extends \atk4\data\Model
+{
+    public $table = 'product_category';
+
+    protected function init(): void
+    {
+        parent::init();
+        $this->addField('name');
+
+        $this->hasMany('SubCategories', new SubCategory());
+        $this->hasMany('Products', new Product());
+    }
+}
+
+class SubCategory extends \atk4\data\Model
+{
+    public $table = 'product_sub_category';
+
+    protected function init(): void
+    {
+        parent::init();
+        $this->addField('name');
+
+        $this->hasOne('product_category_id', new Category());
+        $this->hasMany('Products', new Product());
+    }
+}
+
+class Product extends \atk4\data\Model
+{
+    public $table = 'product';
+
+    protected function init(): void
+    {
+        parent::init();
+        $this->addField('name');
+        $this->addField('brand');
+        $this->hasOne('product_category_id', [new Category()])->addTitle();
+        $this->hasOne('product_sub_category_id', [new SubCategory()])->addTitle();
+    }
+}
+
+class ProductLock extends Product
+{
+    use ModelLockTrait;
+    public $caption = 'Product';
 
     protected function init(): void
     {

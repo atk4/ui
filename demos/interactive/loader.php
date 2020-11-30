@@ -37,7 +37,7 @@ ViewTester::addTo($app);
         \atk4\ui\LoremIpsum::addTo(\atk4\ui\View::addTo($p, ['ui' => $_GET['color'] . ' segment']), ['size' => 1]);
 
         // don't forget to make your own argument sticky so that Components can communicate with themselves:
-        $p->app->stickyGet('color');
+        $p->getApp()->stickyGet('color');
         ViewTester::addTo($p);
 
         // This loader takes 2s to load because it needs to go through 2 sleep statements.

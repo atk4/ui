@@ -36,13 +36,8 @@ $lookup = $form->addControl('country', [
     Form\Control\Lookup::class,
     'model' => new Country($app->db),
     'dependency' => function ($model, $data) {
-        $conditions = [];
         foreach (explode(',', $data['starts_with'] ?? '') as $letter) {
-            $conditions[] = ['name', 'like', $letter . '%'];
-        }
-
-        if ($conditions) {
-            $model->addCondition($conditions);
+            $model->addCondition('name', 'like', $letter . '%');
         }
 
         isset($data['contains']) ? $model->addCondition('name', 'like', '%' . $data['contains'] . '%') : null;

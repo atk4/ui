@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Table\Column;
 
-use atk4\core\FactoryTrait;
+use atk4\core\Factory;
 use atk4\data\Model;
 use atk4\ui\Table;
 
@@ -13,8 +13,6 @@ use atk4\ui\Table;
  */
 class ActionButtons extends Table\Column
 {
-    use FactoryTrait;
-
     /**
      * Stores all the buttons that have been added.
      *
@@ -56,7 +54,7 @@ class ActionButtons extends Table\Column
             }
 
             if ($action) {
-                $button = $action->caption;
+                $button = $action->getCaption();
             }
         }
 
@@ -79,10 +77,10 @@ class ActionButtons extends Table\Column
                 $button = [1 => $button];
             }
 
-            $button = $this->factory([\atk4\ui\Button::class], $this->mergeSeeds($button, ['id' => false]));
+            $button = Factory::factory([\atk4\ui\Button::class], Factory::mergeSeeds($button, ['id' => false]));
         }
 
-        $button->app = $this->table->app;
+        $button->setApp($this->table->getApp());
 
         $this->buttons[$name] = $button->addClass('{$_' . $name . '_disabled} compact b_' . $name);
 
@@ -107,7 +105,7 @@ class ActionButtons extends Table\Column
      */
     public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [])
     {
-        $owner = $owner ?: $this->owner->owner;
+        $owner = $owner ?: $this->getOwner()->getOwner();
 
         if (is_string($defaults)) {
             $defaults = ['title' => $defaults];
@@ -120,10 +118,10 @@ class ActionButtons extends Table\Column
         $modal->observeChanges(); // adds scrollbar if needed
 
         $modal->set(function ($t) use ($callback) {
-            $callback($t, $this->app->stickyGet($this->name));
+            $callback($t, $this->getApp()->stickyGet($this->name));
         });
 
-        return $this->addButton($button, $modal->show(array_merge([$this->name => $this->owner->jsRow()->data('id')], $args)));
+        return $this->addButton($button, $modal->show(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)));
     }
 
     /**

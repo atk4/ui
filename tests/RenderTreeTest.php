@@ -21,7 +21,7 @@ class RenderTreeTest extends AtkPhpunit\TestCase
         $b = new View();
         $b->render();
 
-        $this->assertNotNull($b->app);
+        $this->assertNotNull($b->getApp());
         $this->assertNotNull($b->template);
     }
 
@@ -33,9 +33,9 @@ class RenderTreeTest extends AtkPhpunit\TestCase
 
         $b->render();
 
-        $this->assertNotNull($b2->app);
+        $this->assertNotNull($b2->getApp());
         $this->assertNotNull($b2->template);
 
-        $this->assertSame($b2->app, $b->app);
+        $this->assertSame($b2->getApp(), $b->getApp());
     }
 }

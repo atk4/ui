@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
+use atk4\core\Factory;
 use atk4\data\Model;
 
 class Card extends View
@@ -280,7 +281,7 @@ class Card extends View
 
             $page->add($executor = new $executor());
 
-            $action->owner->load($id);
+            $action->getOwner()->load($id);
 
             $executor->setAction($action);
         });
@@ -407,7 +408,7 @@ class Card extends View
         }
 
         if (!is_object($button)) {
-            $button = $this->factory([Button::class], $button);
+            $button = Factory::factory([Button::class], $button);
         }
 
         $btn = $this->getButtonContainer()->add($button);

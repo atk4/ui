@@ -39,7 +39,7 @@ $form->addControl('country3', [
 ]);
 
 $form->onSubmit(function (Form $form) {
-    $str = $form->model->ref('country1')->get('name') . ' ' . $form->model->ref('country2')->get('name') . ' ' . (new Country($form->app->db))->tryLoad($form->model->get('country3'))->get('name');
+    $str = $form->model->ref('country1')->get('name') . ' ' . $form->model->ref('country2')->get('name') . ' ' . (new Country($form->getApp()->db))->tryLoad($form->model->get('country3'))->get('name');
     $view = new \atk4\ui\Message('Select:'); // need in behat test.
     $view->invokeInit();
     $view->text->addParagraph($str);
@@ -74,6 +74,6 @@ Form\Control\Lookup::addTo($app, [
 
 $modal = \atk4\ui\Modal::addTo($app)->set(function ($p) {
     $a = Form\Control\Lookup::addTo($p, ['placeholder' => 'Search country', 'label' => 'Country: ']);
-    $a->setModel(new Country($p->app->db));
+    $a->setModel(new Country($p->getApp()->db));
 });
 \atk4\ui\Button::addTo($app, ['Open Lookup on a Modal window'])->on('click', $modal->show());

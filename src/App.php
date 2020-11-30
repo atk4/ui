@@ -7,7 +7,6 @@ namespace atk4\ui;
 use atk4\core\AppScopeTrait;
 use atk4\core\DiContainerTrait;
 use atk4\core\DynamicMethodTrait;
-use atk4\core\FactoryTrait;
 use atk4\core\HookTrait;
 use atk4\core\InitializerTrait;
 use atk4\data\Persistence;
@@ -22,7 +21,6 @@ class App
     }
     use HookTrait;
     use DynamicMethodTrait;
-    use FactoryTrait;
     use AppScopeTrait;
     use DiContainerTrait;
 
@@ -41,11 +39,12 @@ class App
         'atk' => 'https://raw.githack.com/atk4/ui/develop/public',
         'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.6',
+        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7',
+        'flatpickr' => 'https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.6',
     ];
 
     /** @var string Version of Agile UI */
-    public $version = '2.2.0';
+    public $version = '2.4-x';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -153,7 +152,7 @@ class App
         '__atk_tab' => false,
     ];
 
-    public $templateClass = Template::class;
+    public $templateClass = HtmlTemplate::class;
 
     /**
      * Constructor.
@@ -162,7 +161,7 @@ class App
      */
     public function __construct($defaults = [])
     {
-        $this->app = $this;
+        $this->setApp($this);
 
         // Process defaults
         if (is_string($defaults)) {
@@ -265,7 +264,7 @@ class App
         $this->html = null;
         $this->initLayout([Layout\Centered::class]);
 
-        $this->layout->template->setHtml('Content', $this->renderExceptionHtml($exception));
+        $this->layout->template->dangerouslySetHtml('Content', $this->renderExceptionHtml($exception));
 
         // remove header
         $this->layout->template->tryDel('Header');
@@ -398,8 +397,8 @@ class App
     {
         if ($output instanceof View) {
             $output = $output->render();
-        } elseif ($output instanceof Template) {
-            $output = $output->render();
+        } elseif ($output instanceof HtmlTemplate) {
+            $output = $output->renderToHtml();
         }
 
         $this->terminate(
@@ -423,18 +422,18 @@ class App
     /**
      * Initializes layout.
      *
-     * @param string|Layout|array $seed
+     * @param Layout|array $seed
      *
      * @return $this
      */
     public function initLayout($seed)
     {
         $layout = Layout::fromSeed($seed);
-        $layout->app = $this;
+        $layout->setApp($this);
 
         if (!$this->html) {
             $this->html = new View(['defaultTemplate' => 'html.html']);
-            $this->html->app = $this;
+            $this->html->setApp($this);
             $this->html->invokeInit();
         }
 
@@ -460,12 +459,19 @@ class App
         // Serialize Object
         $this->requireJs($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
 
+        // flatpickr
+        $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
+        $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');
+
         // Agile UI
         $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
         $this->requireCss($this->cdn['atk'] . '/agileui.css');
 
         // Set js bundle dynamic loading path.
-        $this->html->template->trySet('InitJsBundle', (new JsExpression('window.__atkBundlePublicPath = [];', [$this->cdn['atk']]))->jsRender(), false);
+        $this->html->template->tryDangerouslySetHtml(
+            'InitJsBundle',
+            (new JsExpression('window.__atkBundlePublicPath = [];', [$this->cdn['atk']]))->jsRender()
+        );
     }
 
     /**
@@ -479,7 +485,7 @@ class App
         if (!$this->html) {
             throw new Exception('App does not know how to add style');
         }
-        $this->html->template->appendHtml('HEAD', $this->getTag('style', $style));
+        $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('style', $style));
     }
 
     /**
@@ -516,7 +522,7 @@ class App
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->appendHtml('HEAD', $this->html->getJs());
+            $this->html->template->dangerouslyAppendHtml('HEAD', $this->html->getJs());
             $this->is_rendering = false;
             $this->hook(self::HOOK_BEFORE_OUTPUT);
 
@@ -524,7 +530,7 @@ class App
                 throw new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.');
             }
 
-            $output = $this->html->template->render();
+            $output = $this->html->template->renderToHtml();
         } catch (ExitApplicationException $e) {
             $output = '';
             $isExitException = true;
@@ -554,28 +560,28 @@ class App
     /**
      * Load template by template file name.
      *
-     * @param string $name
+     * @param string $filename
      *
-     * @return Template
+     * @return HtmlTemplate
      */
-    public function loadTemplate($name)
+    public function loadTemplate($filename)
     {
         $template = new $this->templateClass();
-        $template->app = $this;
+        $template->setApp($this);
 
-        if (in_array($name[0], ['.', '/', '\\'], true) || strpos($name, ':\\') !== false) {
-            return $template->load($name);
+        if (in_array($filename[0], ['.', '/', '\\'], true) || strpos($filename, ':\\') !== false) {
+            return $template->loadFromFile($filename);
         }
 
         $dir = is_array($this->template_dir) ? $this->template_dir : [$this->template_dir];
         foreach ($dir as $td) {
-            if ($t = $template->tryLoad($td . '/' . $name)) {
+            if ($t = $template->tryLoadFromFile($td . '/' . $filename)) {
                 return $t;
             }
         }
 
         throw (new Exception('Can not find template file'))
-            ->addMoreInfo('name', $name)
+            ->addMoreInfo('filename', $filename)
             ->addMoreInfo('template_dir', $this->template_dir);
     }
 
@@ -715,7 +721,7 @@ class App
      */
     public function requireJs($url, $isAsync = false, $isDefer = false)
     {
-        $this->html->template->appendHtml('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '') . "\n");
+        $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '') . "\n");
 
         return $this;
     }
@@ -729,7 +735,7 @@ class App
      */
     public function requireCss($url)
     {
-        $this->html->template->appendHtml('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]) . "\n");
+        $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]) . "\n");
 
         return $this;
     }
@@ -968,7 +974,7 @@ class App
      *
      *   $app = new \atk4\ui\App();
      *   $app->initLayout([\atk4\ui\Layout\Centered::class]);
-     *   $app->layout->template->setHtml('Content', $e->getHtml());
+     *   $app->layout->template->dangerouslySetHtml('Content', $e->getHtml());
      *   $app->run();
      *   $app->callExit(true);
      */

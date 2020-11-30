@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\HtmlTemplate;
+use atk4\ui\View;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -32,15 +35,17 @@ foreach (str_split('Click me!!') as $letter) {
 }
 
 \atk4\ui\Header::addTo($app, ['View load HTML from string or file']);
-$plane = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('<div id="{$_id}" class="ui statistic">
+$planeTemplate = new HtmlTemplate('<div id="{$_id}" class="ui statistic">
     <div class="value">
       <i class="plane icon"></i> {$num}
     </div>
     <div class="label">
       Flights
     </div>
-  </div>')]);
-$plane->template->set('num', random_int(5, 20));
+  </div>');
+$planeTemplate->set('num', random_int(100, 999));
+
+$plane = \atk4\ui\View::addTo($app, ['template' => $planeTemplate]);
 
 \atk4\ui\Header::addTo($app, ['Can be rendered into HTML']);
 \atk4\ui\View::addTo($app, ['ui' => 'segment', 'raised', 'element' => 'pre'])->set($plane->render());
@@ -55,8 +60,8 @@ $plane->template->set('num', random_int(5, 20));
 \atk4\ui\Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])->on('click', new \atk4\ui\JsReload($plane));
 
 \atk4\ui\Header::addTo($app, ['Can be on a Virtual Page']);
-$vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($page) use ($plane) {
-    $page->add($plane);
+$vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($page) use ($planeTemplate) {
+    $plane = View::addTo($page, ['template' => $planeTemplate]);
     \atk4\ui\Label::addTo($page, ['Plane ID: ', 'bottom attached', 'detail' => $plane->name]);
 });
 

@@ -25,13 +25,13 @@ $table->setModel($model, ['action']);
 $table->addColumn('amount', [Table\Column\Money::class]);
 
 // Table template can be tweaked directly
-$table->template->appendHtml('SubHead', '<tr class="center aligned"><th colspan=2>This is sub-header, goes inside "thead" tag</th></tr>');
-$table->template->appendHtml('Body', '<tr class="center aligned"><td colspan=2>This is part of body, goes before other rows</td></tr>');
+$table->template->dangerouslyAppendHtml('SubHead', '<tr class="center aligned"><th colspan=2>This is sub-header, goes inside "thead" tag</th></tr>');
+$table->template->dangerouslyAppendHtml('Body', '<tr class="center aligned"><td colspan=2>This is part of body, goes before other rows</td></tr>');
 
 // Hook can be used to display data before row. You can also inject and format extra rows.
 $table->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (Table $table) {
     if ($table->current_row->getId() === 2) {
-        $table->template->appendHtml('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->current_row->get('action') . ')</th></tr>');
+        $table->template->dangerouslyAppendHtml('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->current_row->get('action') . ')</th></tr>');
     } elseif ($table->current_row->get('action') === 'Tax') {
         // renders current row
         $table->renderRow();
@@ -43,7 +43,7 @@ $table->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (Table $table) {
     }
 });
 
-$table->template->appendHtml('Foot', '<tr class="center aligned"><td colspan=2>This will appear above totals</th></tr>');
+$table->template->dangerouslyAppendHtml('Foot', '<tr class="center aligned"><td colspan=2>This will appear above totals</th></tr>');
 $table->addTotals(['action' => 'Totals:', 'amount' => ['sum']]);
 
 \atk4\ui\Header::addTo($app, ['Columns with multiple formats', 'subHeader' => 'Single column can use logic to swap out formatters', 'icon' => 'table']);

@@ -1,0 +1,48 @@
+version: "1.0"
+stages:
+  - clone
+  - build
+  - push
+  - deploy
+steps:
+  main_clone:
+    type: git-clone
+    stage: clone
+    repo: atk4/ui
+    revision: "${{CF_BRANCH}}"
+
+  inject_hashes:
+    stage: clone
+    title: Inject dependency SHA to bypass Packagist cache and add HEAD to footer
+    image: alpine
+    commands:
+      - apk add bash jq git openssh
+      - sed -E "s/(public \\\$version = ')(.*)(')/\\1\\2 - $(git rev-parse --short HEAD)\\3/" -i src/App.php
+      - >
+        cat composer.json |
+          jq '.require["atk4/core"]=.require["atk4/core"]+"#'`git ls-remote https://github.com/atk4/core/ develop | cut -f1`'"' |
+          jq '.require["atk4/data"]=.require["atk4/data"]+"#'`git ls-remote https://github.com/atk4/data/ develop | cut -f1`'"' > composer.tmp.json && mv composer.tmp.json composer.json
+
+  build:
+    type: build
+    stage: build
+    image_name: atk4/ui-demo
+    registry: atk4
+    dockerfile: demos/Dockerfile
+
+  push:
+    type: push
+    stage: push
+    image_name: atk4/ui-demo
+    registry: atk4
+    candidate: "${{build}}"
+    tags:
+      - "${{CF_BRANCH_TAG_NORMALIZED}}"
+      - "${{CF_REVISION}}"
+  deploy:
+    image: codefresh/kubectl:1.13.3
+    stage: deploy
+    commands:
+      - echo ${{CF_REVISION}}
+      - kubectl config use-context digitalOcean@atk
+      - kubectl -n atk-demo set image deployment/atk-demo atk-demo="atk4/ui-demo:${{CF_REVISION}}"

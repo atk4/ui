@@ -14,7 +14,7 @@ use atk4\ui\Popup;
 /**
  * Implements Column helper for table.
  *
- * @property \atk4\ui\Table $owner
+ * @method \atk4\ui\Table getOwner()
  */
 class Column
 {
@@ -99,7 +99,7 @@ class Column
     {
         $id = $this->name . '_ac';
 
-        $popup = $this->table->owner->add($popup ?: [Popup::class])->setHoverable();
+        $popup = $this->table->getOwner()->add($popup ?: [Popup::class])->setHoverable();
 
         $this->setHeaderPopup($icon, $id);
 
@@ -284,7 +284,7 @@ class Column
             $attr['class'] = implode(' ', $attr['class']);
         }
 
-        return $this->app->getTag($position === 'body' ? 'td' : 'th', $attr, $value);
+        return $this->getApp()->getTag($position === 'body' ? 'td' : 'th', $attr, $value);
     }
 
     /**
@@ -359,7 +359,7 @@ class Column
      */
     public function getTotalsCellHtml(Field $field, $value)
     {
-        return $this->getTag('foot', $this->app->ui_persistence->typecastSaveField($field, $value));
+        return $this->getTag('foot', $this->getApp()->ui_persistence->typecastSaveField($field, $value));
     }
 
     /**

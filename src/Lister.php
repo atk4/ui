@@ -18,14 +18,14 @@ class Lister extends View
      * the repeating part. Clones from {row}. If your template does not
      * have {row} tag, then entire template will be repeated.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $t_row;
 
     /**
      * Lister use this part of template in case there are no elements in it.
      *
-     * @var Template|null
+     * @var HtmlTemplate|null
      */
     public $t_empty;
 
@@ -117,7 +117,7 @@ class Lister extends View
             }
 
             // return json response
-            $this->app->terminateJson($jsonArr);
+            $this->getApp()->terminateJson($jsonArr);
         });
 
         return $this;
@@ -167,11 +167,11 @@ class Lister extends View
         // empty message
         if (!$this->_rendered_rows_count) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
-                $empty = isset($this->t_empty) ? $this->t_empty->render() : '';
+                $empty = isset($this->t_empty) ? $this->t_empty->renderToHtml() : '';
                 if ($this->template->hasTag('rows')) {
-                    $this->template->appendHtml('rows', $empty);
+                    $this->template->dangerouslyAppendHtml('rows', $empty);
                 } else {
-                    $this->template->appendHtml('_top', $empty);
+                    $this->template->dangerouslyAppendHtml('_top', $empty);
                 }
             }
         }
@@ -196,11 +196,11 @@ class Lister extends View
         $this->t_row->trySet('_href', $this->url(['id' => $this->current_row->getId()]));
         $this->t_row->trySet('_id', $this->current_row->getId());
 
-        $html = $this->t_row->render();
+        $html = $this->t_row->renderToHtml();
         if ($this->template->hasTag('rows')) {
-            $this->template->appendHtml('rows', $html);
+            $this->template->dangerouslyAppendHtml('rows', $html);
         } else {
-            $this->template->appendHtml('_top', $html);
+            $this->template->dangerouslyAppendHtml('_top', $html);
         }
     }
 }

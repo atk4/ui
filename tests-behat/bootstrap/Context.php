@@ -7,7 +7,9 @@ namespace atk4\ui\behat;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
+use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\RawMinkContext;
+use Exception;
 
 class Context extends RawMinkContext implements BehatContext
 {
@@ -58,24 +60,31 @@ class Context extends RawMinkContext implements BehatContext
             return $selector . ' { ' . implode(' ', $css) . ' }';
         };
 
+        $durationAnimation = 0.005;
+        $durationToast = 5;
         $css = $toCssFx('*', [
-            'animation-delay' => '0.02s',
-            'animation-duration' => '0.02s',
-            'transition-delay' => '0.02s',
-            'transition-duration' => '0.02s',
+            'animation-delay' => $durationAnimation . 's',
+            'animation-duration' => $durationAnimation . 's',
+            'transition-delay' => $durationAnimation . 's',
+            'transition-duration' => $durationAnimation . 's',
         ]) . $toCssFx('.ui.toast-container .toast-box .progressing.wait', [
-            'animation-duration' => '5s',
-            'transition-duration' => '5s',
+            'animation-duration' => $durationToast . 's',
+            'transition-duration' => $durationToast . 's',
         ]);
-        $script = '$(\'<style>' . $css . '</style>\').appendTo(\'head\'); $.fx.off = true;';
-        $this->getSession()->executeScript($script);
+
+        $this->getSession()->executeScript(
+            'if (Array.prototype.filter.call(document.getElementsByTagName("style"), e => e.getAttribute("about") === "atk-test-behat").length === 0) {'
+            . ' $(\'<style about="atk-test-behat">' . $css . '</style>\').appendTo(\'head\');'
+            . ' }'
+            . 'jQuery.fx.off = true;'
+        );
     }
 
     protected function assertNoException(): void
     {
         foreach ($this->getSession()->getPage()->findAll('css', 'div.ui.negative.icon.message > div.content > div.header') as $elem) {
             if ($elem->getText() === 'Critical Error') {
-                throw new \Exception('Page contains uncaught exception');
+                throw new Exception('Page contains uncaught exception');
             }
         }
     }
@@ -88,11 +97,11 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Sleep for a certain time in ms.
      *
-     * @Then I sleep :arg1 ms
+     * @Then I wait :arg1 ms
      *
      * @param $arg1
      */
-    public function iSleep($arg1)
+    public function iWait($arg1)
     {
         $this->getSession()->wait($arg1);
     }
@@ -117,15 +126,23 @@ class Context extends RawMinkContext implements BehatContext
     {
         $menu = $this->getSession()->getPage()->find('css', '.ui.menu.' . $arg2);
         if (!$menu) {
-            throw new \Exception('Unable to find a menu with class ' . $arg2);
+            throw new Exception('Unable to find a menu with class ' . $arg2);
         }
 
         $link = $menu->find('xpath', '//a[text()="' . $arg1 . '"]');
         if (!$link) {
-            throw new \Exception('Unable to find menu with title ' . $arg1);
+            throw new Exception('Unable to find menu with title ' . $arg1);
         }
 
-        $script = '$("#' . $link->getAttribute('id') . '").click()';
+        $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
+    }
+
+    /**
+     * @Then I set calendar input name :arg1 with value :arg2
+     */
+    public function iSetCalendarInputNameWithValue($arg1, $arg2)
+    {
+        $script = '$(\'input[name="' . $arg1 . '"]\').get(0)._flatpickr.setDate("' . $arg2 . '")';
         $this->getSession()->executeScript($script);
     }
 
@@ -145,14 +162,15 @@ class Context extends RawMinkContext implements BehatContext
     {
         $column = $this->getSession()->getPage()->find('css', "th[data-column='" . $arg1 . "']");
         if (!$column) {
-            throw new \Exception('Unable to find a column ' . $arg1);
+            throw new Exception('Unable to find a column ' . $arg1);
         }
+
         $icon = $column->find('css', 'i');
         if (!$icon) {
-            throw new \Exception('Column does not contain clickable icon.');
+            throw new Exception('Column does not contain clickable icon.');
         }
-        $script = '$("#' . $icon->getAttribute('id') . '").click()';
-        $this->getSession()->executeScript($script);
+
+        $this->getSession()->executeScript('$("#' . $icon->getAttribute('id') . '").click()');
     }
 
     /**
@@ -164,16 +182,15 @@ class Context extends RawMinkContext implements BehatContext
     {
         $tabMenu = $this->getSession()->getPage()->find('css', '.ui.tabular.menu');
         if (!$tabMenu) {
-            throw new \Exception('Unable to find a tab menu.');
+            throw new Exception('Unable to find a tab menu.');
         }
 
         $link = $tabMenu->find('xpath', '//a[text()="' . $arg1 . '"]');
         if (!$link) {
-            throw new \Exception('Unable to find tab with title ' . $arg1);
+            throw new Exception('Unable to find tab with title ' . $arg1);
         }
 
-        $script = '$("#' . $link->getAttribute('id') . '").click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
     }
 
     /**
@@ -181,8 +198,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickFirstCardOnPage()
     {
-        $script = '$(".atk-card")[0].click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$(".atk-card")[0].click()');
     }
 
     /**
@@ -190,8 +206,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickFirstElementUsingClass($arg1)
     {
-        $script = '$("' . $arg1 . '")[0].click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("' . $arg1 . '")[0].click()');
     }
 
     /**
@@ -199,8 +214,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickPaginatorPage($arg1)
     {
-        $script = '$("a.item[data-page=' . $arg1 . ']").click()';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("a.item[data-page=' . $arg1 . ']").click()');
     }
 
     /**
@@ -210,7 +224,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         if ($element->getAttribute('style')) {
-            throw new \Exception("Element with text \"{$arg1}\" must be invisible");
+            throw new Exception("Element with text \"{$arg1}\" must be invisible");
         }
     }
 
@@ -230,7 +244,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (mb_strpos('display: none', $element->getAttribute('style')) !== false) {
-            throw new \Exception("Element with text \"{$arg1}\" must be invisible");
+            throw new Exception("Element with text \"{$arg1}\" must be invisible");
         }
     }
 
@@ -239,11 +253,25 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function labelChangesToNumber()
     {
-        $this->getSession()->wait(5000, '!$("#' . $this->buttonId . '").hasClass("loading")');
         $element = $this->getSession()->getPage()->findById($this->buttonId);
         $value = trim($element->getHtml());
         if (!is_numeric($value)) {
-            throw new \Exception('Label must be numeric on button: ' . $this->buttonId . ' : ' . $value);
+            throw new Exception('Label must be numeric on button: ' . $this->buttonId . ' : ' . $value);
+        }
+    }
+
+    /**
+     * @Then /^container "([^"]*)" should display "([^"]*)" item\(s\)$/
+     */
+    public function containerShouldHaveNumberOfItem($selector, int $numberOfitems)
+    {
+        $items = $this->getSession()->getPage()->findAll('css', $selector);
+        $count = 0;
+        foreach ($items as $el => $item) {
+            ++$count;
+        }
+        if ($count !== $numberOfitems) {
+            throw new Exception('Items does not match. There were ' . $count . ' item in container');
         }
     }
 
@@ -256,12 +284,12 @@ class Context extends RawMinkContext implements BehatContext
     {
         $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
         if ($modal === null) {
-            throw new \Exception('No modal found');
+            throw new Exception('No modal found');
         }
         // find button in modal
         $btn = $modal->find('xpath', '//div[text()="' . $arg . '"]');
         if (!$btn) {
-            throw new \Exception('Cannot find button in modal');
+            throw new Exception('Cannot find button in modal');
         }
         $btn->click();
     }
@@ -273,26 +301,14 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function modalIsOpenWithText($arg1)
     {
-        // get modal
-        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
+        $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
         if ($modal === null) {
-            throw new \Exception('No modal found');
+            throw new Exception('No modal found');
         }
         // find text in modal
         $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (!$text || $text->getText() !== $arg1) {
-            throw new \Exception('No such text in modal');
-        }
-    }
-
-    /**
-     * @Then Active tab should be :arg1
-     */
-    public function activeTabShouldBe($arg1)
-    {
-        $tab = $this->getSession()->getPage()->find('css', '.ui.tabular.menu > .item.active');
-        if ($tab->getText() !== $arg1) {
-            throw new \Exception('Active tab is not ' . $arg1);
+            throw new Exception('No such text in modal');
         }
     }
 
@@ -305,14 +321,48 @@ class Context extends RawMinkContext implements BehatContext
     public function modalIsShowingText($arg1, $arg2)
     {
         // get modal
-        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
+        $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
         if ($modal === null) {
-            throw new \Exception('No modal found');
+            throw new Exception('No modal found');
         }
         // find text in modal
         $text = $modal->find('xpath', '//' . $arg2 . '[text()="' . $arg1 . '"]');
         if (!$text || $text->getText() !== $arg1) {
-            throw new \Exception('No such text in modal');
+            throw new Exception('No such text in modal');
+        }
+    }
+
+    /**
+     * Get a node element by it's selector.
+     * Will try to get element for 20ms.
+     * Exemple: Use with a modal window where reloaded content
+     * will resize it's window thus making it not accessible at first.
+     */
+    private function waitForNodeElement(string $selector): ?NodeElement
+    {
+        $counter = 0;
+        $element = null;
+        while ($counter < 20) {
+            $element = $this->getSession()->getPage()->find('css', $selector);
+            if ($element === null) {
+                usleep(1000);
+                ++$counter;
+            } else {
+                break;
+            }
+        }
+
+        return $element;
+    }
+
+    /**
+     * @Then Active tab should be :arg1
+     */
+    public function activeTabShouldBe($arg1)
+    {
+        $tab = $this->getSession()->getPage()->find('css', '.ui.tabular.menu > .item.active');
+        if ($tab->getText() !== $arg1) {
+            throw new Exception('Active tab is not ' . $arg1);
         }
     }
 
@@ -323,8 +373,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iHideJsModal()
     {
-        $script = '$(".modal.active.front").modal("hide")';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$(".modal.active.front").modal("hide")');
     }
 
     /**
@@ -332,8 +381,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iScrollToTop()
     {
-        $script = 'window.scrollTo(0,0)';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('window.scrollTo(0,0)');
     }
 
     /**
@@ -346,48 +394,51 @@ class Context extends RawMinkContext implements BehatContext
         // get toast
         $toast = $this->getSession()->getPage()->find('css', '.ui.toast-container');
         if ($toast === null) {
-            throw new \Exception('No toast found');
+            throw new Exception('No toast found');
         }
         $content = $toast->find('css', '.content');
         if ($content === null) {
-            throw new \Exception('No Content in Toast');
+            throw new Exception('No Content in Toast');
         }
         // find text in toast
         $text = $content->find('xpath', '//div');
         if (!$text || mb_strpos($text->getText(), $arg1) === false) {
-            throw new \Exception('No such text in toast');
+            throw new Exception('No such text in toast');
         }
     }
 
     /**
      * @Then I select value :arg1 in lookup :arg2
      *
-     * Select a value in a lookup field.
+     * Select a value in a lookup control.
      */
     public function iSelectValueInLookup($arg1, $arg2)
     {
-        $field = $this->getSession()->getPage()->find('css', 'input[name=' . $arg2 . ']');
-        if ($field === null) {
-            throw new \Exception('Field not found: ' . $arg2);
+        // get dropdown item from semantic ui which is direct parent of input html element
+        $inputElem = $this->getSession()->getPage()->find('css', 'input[name=' . $arg2 . ']');
+        if ($inputElem === null) {
+            throw new Exception('Lookup element not found: ' . $arg2);
         }
-        // get dropdown item from semantic ui which is direct parent of input name field.
-        $lookup = $field->getParent();
+        $lookupElem = $inputElem->getParent();
 
-        // open dropdown from semantic-ui command. (just a click is not triggering it)
-        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("show")';
-        $this->getSession()->executeScript($script);
-        // Wait till dropdown is visible
-        // Cannot call jqueryWait because calling it will return prior from dropdown to fire ajax request.
-        $this->getSession()->wait(5000, '$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
-        // value should be available.
-        $value = $lookup->find('xpath', '//div[text()="' . $arg1 . '"]');
-        if (!$value || $value->getText() !== $arg1) {
-            throw new \Exception('Value not found: ' . $arg1);
+        // open dropdown and wait till fully opened (just a click is not triggering it)
+        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("show")');
+        $this->jqueryWait('$("#' . $lookupElem->getAttribute('id') . '").hasClass("visible")');
+
+        // select value
+        $valueElem = $lookupElem->find('xpath', '//div[text()="' . $arg1 . '"]');
+        if ($valueElem === null || $valueElem->getText() !== $arg1) {
+            throw new Exception('Value not found: ' . $arg1);
         }
-        // When value are loaded, hide dropdown and select value from javascript.
-        $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("hide");';
-        $script .= '$("#' . $lookup->getAttribute('id') . '").dropdown("set selected", ' . $value->getAttribute('data-value') . ');';
-        $this->getSession()->executeScript($script);
+        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("set selected", ' . $valueElem->getAttribute('data-value') . ');');
+        $this->jqueryWait();
+
+        // hide dropdown and wait till fully closed
+        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("hide");');
+        $this->jqueryWait();
+        // for unknown reasons, dropdown very often remains visible in CI, so hide twice
+        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("hide");');
+        $this->jqueryWait('!$("#' . $lookupElem->getAttribute('id') . '").hasClass("visible")');
     }
 
     /**
@@ -397,7 +448,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $search = $this->getSession()->getPage()->find('css', 'input.atk-grid-search');
         if (!$search) {
-            throw new \Exception('Unable to find search input.');
+            throw new Exception('Unable to find search input.');
         }
 
         $search->setValue($arg1);
@@ -410,10 +461,172 @@ class Context extends RawMinkContext implements BehatContext
     {
         $icon = $this->getSession()->getPage()->find('css', $arg1);
         if (!$icon) {
-            throw new \Exception('Unable to find search remove icon.');
+            throw new Exception('Unable to find search remove icon.');
         }
 
         $icon->click();
+    }
+
+    /**
+     * Generic ScopeBuilder rule with select operator and input value.
+     *
+     * @Then /^rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     */
+    public function scopeBuilderRule($name, $operator, $value)
+    {
+        $rule = $this->assertScopeBuilderRuleExist($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertInputValue($rule, $value);
+    }
+
+    /**
+     * hasOne reference or enum type rule for ScopeBuilder.
+     *
+     * @Then /^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     */
+    public function scopeBuilderReferenceRule($name, $operator, $value)
+    {
+        $rule = $this->assertScopeBuilderRuleExist($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertDropdownValue($rule, $value, '.vqb-rule-input .active.item');
+    }
+
+    /**
+     * hasOne select or enum type rule for ScopeBuilder.
+     *
+     * @Then /^select rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     */
+    public function scopeBuilderSelectRule($name, $operator, $value)
+    {
+        $rule = $this->assertScopeBuilderRuleExist($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertSelectedValue($rule, $value, '.vqb-rule-input select');
+    }
+
+    /**
+     * Date, Time or Datetime rule for ScopeBuilder.
+     *
+     * @Then /^date rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     */
+    public function scopeBuilderDateRule($name, $operator, $value)
+    {
+        $rule = $this->assertScopeBuilderRuleExist($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertInputValue($rule, $value, 'input.form-control');
+    }
+
+    /**
+     * Boolean type rule for ScopeBuilder.
+     *
+     * @Then /^bool rule "([^"]*)" has value "([^"]*)"$/
+     */
+    public function scopeBuilderBoolRule($name, $value)
+    {
+        $this->assertScopeBuilderRuleExist($name);
+        $idx = ($value === 'Yes') ? 0 : 1;
+        $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="' . $name . '"]\').find(\'input\')[' . $idx . '].checked');
+        if (!$isChecked) {
+            throw new Exception('Radio value selected is not: ' . $value);
+        }
+    }
+
+    /**
+     * @Then /^I check if text in "([^"]*)" match text in "([^"]*)"/
+     */
+    public function compareElementText($compareSelector, $compareToSelector)
+    {
+        $compareContainer = $this->getSession()->getPage()->find('css', $compareSelector);
+        if (!$compareContainer) {
+            throw new Exception('Unable to find compare container: ' . $compareSelector);
+        }
+
+        $expectedText = $compareContainer->getText();
+
+        $compareToContainer = $this->getSession()->getPage()->find('css', $compareToSelector);
+        if (!$compareToContainer) {
+            throw new Exception('Unable to find compare to container: ' . $compareToSelector);
+        }
+
+        $compareToText = $compareToContainer->getText();
+
+        if ($expectedText !== $compareToText) {
+            throw new Exception('Data word does not match: ' . $compareToText . ' expected: ' . $expectedText);
+        }
+    }
+
+    /**
+     * @Then /^I check if input value for "([^"]*)" match text in "([^"]*)"$/
+     */
+    public function compareInputValueToElementText($inputName, $selector)
+    {
+        $expected = $this->getSession()->getPage()->find('css', $selector)->getText();
+        $input = $this->getSession()->getPage()->find('css', 'input[name="' . $inputName . '"]');
+        if (!$input) {
+            throw new Exception('Unable to find input name: ' . $inputName);
+        }
+
+        if (preg_replace('~\s*~', '', $expected) !== preg_replace('~\s*~', '', $input->getValue())) {
+            throw new Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expected);
+        }
+    }
+
+    /**
+     * Find a dropdown component within an html element
+     * and check if value is set in dropdown.
+     */
+    private function assertDropdownValue(NodeElement $element, string $value, string $selector)
+    {
+        $dropdown = $element->find('css', $selector);
+        if (!$dropdown) {
+            throw new Exception('Dropdown input not found using selector: ' . $selector);
+        }
+
+        $dropdownValue = $dropdown->getHtml();
+        if ($dropdownValue !== $value) {
+            throw new Exception('Value: "' . $value . '" not set using selector: ' . $selector);
+        }
+    }
+
+    /**
+     * Find a select input type within an html element
+     * and check if value is selected.
+     */
+    private function assertSelectedValue(NodeElement $element, string $value, string $selector)
+    {
+        $select = $element->find('css', $selector);
+        if (!$select) {
+            throw new Exception('Select input not found using selector: ' . $selector);
+        }
+        $selectValue = $select->getValue();
+        if ($selectValue !== $value) {
+            throw new Exception('Value: "' . $value . '" not set using selector: ' . $selector);
+        }
+    }
+
+    /**
+     * Find an input within an html element and check
+     * if value is set.
+     */
+    private function assertInputValue(NodeElement $element, string $value, string $selector = 'input')
+    {
+        $input = $element->find('css', $selector);
+        if (!$input) {
+            throw new Exception('Input not found in selector: ' . $selector);
+        }
+        $inputValue = $input->getValue();
+        if ($inputValue !== $value) {
+            throw new Exception('Input value not is not: ' . $value);
+        }
+    }
+
+    private function assertScopeBuilderRuleExist(string $ruleName): NodeElement
+    {
+        $rule = $this->getSession()->getPage()->find('css', '.vqb-rule[data-name=' . $ruleName . ']');
+        if (!$rule) {
+            throw new Exception('Rule not found: ' . $ruleName);
+        }
+
+        return $rule;
     }
 
     /**
@@ -429,35 +642,24 @@ class Context extends RawMinkContext implements BehatContext
         $this->getSession()->wait(2000, '$("' . $arg1 . '").hasClass("loading")');
     }
 
-    /**
-     * @Then I test javascript example
-     */
-    public function iTestJavascriptExample()
-    {
-        $title = $this->getSession()->evaluateScript('return window.document.title;');
-        echo 'I\'m correctly on the webpage entitled "' . $title . '"';
-    }
-
     protected function getFinishedScript(): string
     {
         return 'document.readyState === \'complete\''
-            . ' && typeof $ !== \'undefined\' && jQuery.active === 0'
+            . ' && typeof jQuery !== \'undefined\' && jQuery.active === 0'
             . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()';
     }
 
     /**
-     * Wait till jquery ajax request finished and no animation is perform.
-     *
-     * @param int $duration the maximum time to wait for the function
+     * Wait till jQuery AJAX request finished and no animation is perform.
      */
-    protected function jqueryWait($duration = 5000)
+    protected function jqueryWait(string $extraWaitCondition = 'true', $maxWaitdurationMs = 5000)
     {
-        $finishedScript = $this->getFinishedScript();
+        $finishedScript = '(' . $this->getFinishedScript() . ') && (' . $extraWaitCondition . ')';
 
         $s = microtime(true);
         $c = 0;
-        while (microtime(true) - $s <= $duration * 1000) {
-            $this->getSession()->wait($duration, $finishedScript);
+        while (microtime(true) - $s <= $maxWaitdurationMs / 1000) {
+            $this->getSession()->wait($maxWaitdurationMs, $finishedScript);
             usleep(10000);
             if ($this->getSession()->evaluateScript($finishedScript)) {
                 if (++$c >= 2) {
@@ -469,7 +671,7 @@ class Context extends RawMinkContext implements BehatContext
             }
         }
 
-        throw new \Exception('JQuery did not finished within a given time limit');
+        throw new Exception('jQuery did not finished within a time limit');
     }
 
     /**
@@ -480,11 +682,11 @@ class Context extends RawMinkContext implements BehatContext
         $field = $this->assertSession()->fieldExists($arg1);
 
         if (!$field) {
-            throw new \Exception('Field' . $arg1 . ' does not exist');
+            throw new Exception('Field' . $arg1 . ' does not exist');
         }
 
         if (mb_strpos($field->getValue(), $arg2) === false) {
-            throw new \Exception('Field value ' . $field->getValue() . ' does not start with ' . $arg2);
+            throw new Exception('Field value ' . $field->getValue() . ' does not start with ' . $arg2);
         }
     }
 }

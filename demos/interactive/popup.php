@@ -35,14 +35,14 @@ $cartClass = get_class(new class() extends \atk4\ui\Lister {
 
         // Set default description for our row template. Normally this is replaced by the 'descr' field
         // of a model, but we don't have it, so it will stay like this.
-        $this->t_row['descr'] = 'click on link to remove item';
+        $this->t_row->set('descr', 'click on link to remove item');
 
         // We link to ourselves with this special GET argument to indicate that item must be removed.
         if (isset($_GET[$this->name . '_remove'])) {
             $this->removeItem($_GET['id']);
 
             // redirect again, since we don't want this to stay in the URL
-            $this->app->redirect([$this->name . '_remove' => false]);
+            $this->getApp()->redirect([$this->name . '_remove' => false]);
         }
     }
 
@@ -230,7 +230,7 @@ $signup->set(function ($pop) {
     if (isset($_GET['logged'])) {
         \atk4\ui\Message::addTo($pop, ['You are already logged in as ' . $_GET['logged']]);
         \atk4\ui\Button::addTo($pop, ['Logout', 'primary', 'icon' => 'sign out'])
-            ->link($pop->app->url());
+            ->link($pop->getApp()->url());
     } else {
         $form = Form::addTo($pop);
         $form->addControl('email', null, ['required' => true]);
@@ -245,7 +245,7 @@ $signup->set(function ($pop) {
             }
 
             // refreshes entire page
-            return $form->app->jsRedirect(['logged' => $form->model->get('email')]);
+            return $form->getApp()->jsRedirect(['logged' => $form->model->get('email')]);
             //return new \atk4\ui\JsExpression('alert([])', ['Thank you ' . $form->model->get('email')]);
         });
     }

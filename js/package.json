@@ -1,6 +1,6 @@
 {
   "name": "atkjs-ui",
-  "version": "1.16.3",
+  "version": "1.18.0",
   "description": "Agile Toolkit Javascript library.",
   "main": "lib/atkjs-ui.js",
   "scripts": {
@@ -51,6 +51,7 @@
     "semantic-ui-vue": "^0.11.0",
     "v-calendar": "^1.0.8",
     "vue": "^2.6.12",
+    "vue-flatpickr-component": "^8.1.6",
     "vue-query-builder": "^0.8.2"
   }
 }

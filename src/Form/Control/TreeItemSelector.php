@@ -17,15 +17,15 @@ declare(strict_types=1);
 namespace atk4\ui\Form\Control;
 
 use atk4\ui\Form;
+use atk4\ui\HtmlTemplate;
 use atk4\ui\JsCallback;
-use atk4\ui\Template;
 
 class TreeItemSelector extends Form\Control
 {
     /**
      * Template for the item selector view.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $itemSelectorTemplate;
 
@@ -83,7 +83,7 @@ class TreeItemSelector extends Form\Control
         $this->addClass(['ui', 'vertical', 'segment', 'basic', $this->loaderCssName])->addStyle(['padding' => '0px!important']);
 
         if (!$this->itemSelectorTemplate) {
-            $this->itemSelectorTemplate = new Template('<div id="{$_id}" class="ui list" style="margin-left: 16px"><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
+            $this->itemSelectorTemplate = new HtmlTemplate('<div id="{$_id}" class="ui list" style="margin-left: 16px"><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
         $this->itemSelector = \atk4\ui\View::addTo($this, ['template' => $this->itemSelectorTemplate]);
@@ -99,7 +99,7 @@ class TreeItemSelector extends Form\Control
     public function onItem(\Closure $fx)
     {
         $this->cb = JsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
-            $value = $this->app->decodeJson($data);
+            $value = $this->getApp()->decodeJson($data);
             if (!$this->allowMultiple) {
                 $value = $value[0];
             }
@@ -129,7 +129,7 @@ class TreeItemSelector extends Form\Control
      */
     public function getInput()
     {
-        return $this->app->getTag('input', [
+        return $this->getApp()->getTag('input', [
             'name' => $this->short_name,
             'type' => 'hidden',
             'value' => $this->getValue(),
@@ -139,14 +139,14 @@ class TreeItemSelector extends Form\Control
 
     public function getValue()
     {
-        return $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get());
+        return $this->getApp()->ui_persistence->typecastSaveField($this->field, $this->field->get());
     }
 
     protected function renderView(): void
     {
         parent::renderView();
 
-        $this->itemSelector->template->trySetHtml('Input', $this->getInput());
+        $this->itemSelector->template->tryDangerouslySetHtml('Input', $this->getInput());
 
         $this->itemSelector->vue(
             'atk-tree-item-selector',

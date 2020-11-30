@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
+use atk4\core\Factory;
 use atk4\core\HookTrait;
 use atk4\data\Model;
 
@@ -134,18 +135,18 @@ class Grid extends View
 
         // if menu not disabled ot not already assigned as existing object
         if ($this->menu !== false && !is_object($this->menu)) {
-            $this->menu = $this->add($this->factory([Menu::class, 'activate_on_click' => false], $this->menu), 'Menu');
+            $this->menu = $this->add(Factory::factory([Menu::class, 'activate_on_click' => false], $this->menu), 'Menu');
         }
 
-        $this->table = $this->container->add($this->factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
+        $this->table = $this->container->add(Factory::factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
 
         if ($this->paginator !== false) {
             $seg = View::addTo($this->container, [], ['Paginator'])->addStyle('text-align', 'center');
-            $this->paginator = $seg->add($this->factory([Paginator::class, 'reload' => $this->container], $this->paginator));
-            $this->app ? $this->app->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
+            $this->paginator = $seg->add(Factory::factory([Paginator::class, 'reload' => $this->container], $this->paginator));
+            $this->issetApp() ? $this->getApp()->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
         }
 
-        $this->app ? $this->app->stickyGet('_q') : $this->stickyGet('_q');
+        $this->issetApp() ? $this->getApp()->stickyGet('_q') : $this->stickyGet('_q');
     }
 
     /**
@@ -219,7 +220,7 @@ class Grid extends View
         if (is_array($ipp)) {
             $this->addItemsPerPageSelector($ipp, $label);
 
-            $this->ipp = $_GET['ipp'] ?? $ipp[0];
+            $this->ipp = isset($_GET['ipp']) ? (int) $_GET['ipp'] : $ipp[0];
         } else {
             $this->ipp = $ipp;
         }
@@ -235,7 +236,7 @@ class Grid extends View
      */
     public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Items per page:')
     {
-        if ($ipp = $this->container->stickyGet('ipp')) {
+        if ($ipp = (int) $this->container->stickyGet('ipp')) {
             $this->ipp = $ipp;
         } else {
             $this->ipp = $items[0];
@@ -544,7 +545,7 @@ class Grid extends View
 
             $this->hook(self::HOOK_ON_USER_ACTION, [$page, $executor]);
 
-            $action->owner->load($id);
+            $action->getOwner()->load($id);
 
             $executor->setAction($action);
         }, $args);

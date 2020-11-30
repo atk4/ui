@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Control;
 
+use atk4\core\Factory;
 use atk4\ui\Jquery;
 use atk4\ui\JsExpression;
 use atk4\ui\JsFunction;
@@ -147,6 +148,9 @@ class Lookup extends Input
         $this->initQuickNewRecord();
 
         $this->settings['forceSelection'] = false;
+
+        $this->callback = \atk4\ui\Callback::addTo($this);
+        $this->callback->set([$this, 'outputApiResponse']);
     }
 
     /**
@@ -162,7 +166,7 @@ class Lookup extends Input
      */
     public function outputApiResponse()
     {
-        $this->app->terminateJson([
+        $this->getApp()->terminateJson([
             'success' => true,
             'results' => $this->getData(),
         ]);
@@ -245,12 +249,12 @@ class Lookup extends Input
 
         $defaultSeed = [\atk4\ui\Button::class, 'disabled' => ($this->disabled || $this->readonly)];
 
-        $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed));
+        $this->action = Factory::factory(array_merge($defaultSeed, (array) $buttonSeed));
 
         if ($this->form) {
             $vp = \atk4\ui\VirtualPage::addTo($this->form);
         } else {
-            $vp = \atk4\ui\VirtualPage::addTo($this->owner);
+            $vp = \atk4\ui\VirtualPage::addTo($this->getOwner());
         }
 
         $vp->set(function ($page) {
@@ -300,7 +304,7 @@ class Lookup extends Input
      */
     protected function applySearchConditions()
     {
-        if (!isset($_GET['q'])) {
+        if (empty($_GET['q'])) {
             return;
         }
 
@@ -345,7 +349,7 @@ class Lookup extends Input
      */
     public function getInput()
     {
-        return $this->app->getTag('input', array_merge([
+        return $this->getApp()->getTag('input', array_merge([
             'name' => $this->short_name,
             'type' => 'hidden',
             'id' => $this->id . '_input',
@@ -386,9 +390,6 @@ class Lookup extends Input
 
     protected function renderView(): void
     {
-        $this->callback = \atk4\ui\Callback::addTo($this);
-        $this->callback->set([$this, 'outputApiResponse']);
-
         if ($this->multiple) {
             $this->template->set('multiple', 'multiple');
         }

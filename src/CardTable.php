@@ -29,7 +29,7 @@ class CardTable extends Table
 
         $data = [];
 
-        $ui_values = $this->app ? $this->app->ui_persistence->typecastSaveRow($model, $model->get()) : $model->get();
+        $ui_values = $this->issetApp() ? $this->getApp()->ui_persistence->typecastSaveRow($model, $model->get()) : $model->get();
 
         foreach ($model->get() as $key => $value) {
             if (!$columndef || ($columndef && in_array($key, $columndef, true))) {
@@ -45,7 +45,10 @@ class CardTable extends Table
         $mm = parent::setSource($data);
         $this->addDecorator('value', [Table\Column\Multiformat::class, function ($row, $field) use ($model) {
             $field = $model->getField($row->data['id']);
-            $ret = $this->decoratorFactory($field);
+            $ret = $this->decoratorFactory(
+                $field,
+                $field->type === 'boolean' ? [Table\Column\Status::class,  ['positive' => [true, 'Yes'], 'negative' => [false, 'No']]] : []
+            );
             if ($ret instanceof Table\Column\Money) {
                 $ret->attr['all']['class'] = ['single line'];
             }

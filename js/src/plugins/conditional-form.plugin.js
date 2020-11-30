@@ -76,12 +76,10 @@ export default class conditionalForm extends atkPlugin {
     }
 
     initialize() {
-        const that = this;
-
         const ruleKeys = Object.keys(this.settings.fieldRules);
         // map inputs according to ruleKeys.
         this.inputs = ruleKeys.map((ruleKey, idx, org) => {
-            const tempRule = that.settings.fieldRules[ruleKey];
+            const tempRule = this.settings.fieldRules[ruleKey];
             const temp = [];
             if (Array.isArray(tempRule)) {
                 tempRule.forEach((rule) => temp.push(rule));
@@ -102,10 +100,9 @@ export default class conditionalForm extends atkPlugin {
    */
     onInputChange(e) {
     // check rule when inputs has changed.
-        const that = e.data;
-        that.resetInputStatus();
-        that.applyRules();
-        that.setInputsState();
+        e.data.resetInputStatus();
+        e.data.applyRules();
+        e.data.setInputsState();
     }
 
     /**
@@ -114,7 +111,6 @@ export default class conditionalForm extends atkPlugin {
    *
    */
     applyRules() {
-        const that = this;
         this.inputs.forEach((input, idx) => {
             input.rules.forEach((rules) => {
                 let isAndValid = true;
@@ -123,10 +119,10 @@ export default class conditionalForm extends atkPlugin {
                     const validationRule = rules[inputName];
                     if (Array.isArray(validationRule)) {
                         validationRule.forEach((rule) => {
-                            isAndValid &= formService.validateField(that.$el, inputName, rule);
+                            isAndValid &= formService.validateField(this.$el, inputName, rule);
                         });
                     } else {
-                        isAndValid &= formService.validateField(that.$el, inputName, validationRule);
+                        isAndValid &= formService.validateField(this.$el, inputName, validationRule);
                     }
                 });
                 // Apply OR condition between rules.
@@ -148,14 +144,13 @@ export default class conditionalForm extends atkPlugin {
    * Set fields visibility according to their state.
    */
     setInputsState() {
-        const that = this;
         this.inputs.forEach((input) => {
-            const $input = formService.getField(that.$el, input.inputName);
+            const $input = formService.getField(this.$el, input.inputName);
             if ($input) {
-                const $container = formService.getContainer($input, that.selector);
+                const $container = formService.getContainer($input, this.selector);
                 if ($container) {
                     $container.hide();
-                    that.setInputState(input.state, $input, $container);
+                    this.setInputState(input.state, $input, $container);
                 }
             }
         });

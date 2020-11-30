@@ -70,9 +70,7 @@ class JsCallback extends Callback implements JsExpressionable
 
     public function jsRender(): string
     {
-        if (!$this->app) {
-            throw new Exception('Call-back must be part of a RenderTree');
-        }
+        $this->getApp(); // assert has App
 
         return (new Jquery())->atkAjaxec([
             'uri' => $this->getJsUrl(),
@@ -140,7 +138,7 @@ class JsCallback extends Callback implements JsExpressionable
     public function terminateAjax($ajaxec, $msg = null, $success = true)
     {
         if ($this->canTerminate()) {
-            $this->app->terminateJson(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
+            $this->getApp()->terminateJson(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
         }
     }
 

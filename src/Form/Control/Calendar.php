@@ -4,78 +4,100 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Control;
 
+use atk4\ui\App;
+use atk4\ui\Jquery;
+use atk4\ui\JsChain;
 use atk4\ui\JsExpression;
-use atk4\ui\JsFunction;
 
 /**
- * Input element for a form control.
- *
- * 2018-06-25 : Add Locutus js library for formatting date as per php format.
- * http://locutus.io/php/datetime/
- *
- * Locutus date function are available under atk.phpDate function.
- * ex: atk.phpDate('m.d.Y', new Date());
+ * Date/Time picker attached to a form control.
  */
 class Calendar extends Input
 {
     /**
-     * Set this to 'date', 'time', 'month' or 'year'. Leaving this blank
-     * will show both date and time.
+     * Set this to 'date', 'time', 'datetime'.
      */
-    public $type;
+    public $type = 'date';
 
     /**
-     * Any other options you'd like to pass to calendar JS.
-     * See https://fomantic-ui.com/modules/calendar.html#/settings for all possible options.
+     * Any other options you'd like to pass to flatpickr JS.
+     * See https://flatpickr.js.org/options/ for all possible options.
      */
     public $options = [];
 
     /**
-     * Allow to set Calendar.js function.
+     * Set flatpickr option.
      */
     public function setOption($name, $value)
     {
         $this->options[$name] = $value;
     }
 
+    /**
+     * Set first day of week globally.
+     */
+    public static function setFirstDayOfWeek(App $app, int $day)
+    {
+        $app->html->js(true, (new JsExpression('flatpickr.l10ns.default.firstDayOfWeek = [day]', ['day' => $day])));
+    }
+
+    /**
+     * Load flatpickr locale file.
+     * Pass it has an option when adding Calendar input.
+     *  Form\Control\Calendar::requireLocale($app, 'fr');
+     *  $form->getControl('date')->options['locale'] = 'fr';.
+     */
+    public static function requireLocale(App $app, string $locale)
+    {
+        $app->requireJs($app->cdn['flatpickr'] . '/l10n/' . $locale . '.js');
+    }
+
+    /**
+     * Apply locale globally to all flatpickr instance.
+     */
+    public static function setLocale(App $app, string $locale)
+    {
+        self::requireLocale($app, $locale);
+        $app->html->js(true, (new JsChain('flatpickr'))->localize((new JsChain('flatpickr'))->l10ns->{$locale}));
+    }
+
+    /**
+     * Set first day of week for calendar display.
+     * Applied globally to all flatpickr instance.
+     */
+    public static function setDayOfWeek(App $app, int $day)
+    {
+        $app->html->js(true, (new JsExpression('flatpickr.l10ns.default.firstDayOfWeek = [day]', ['day' => $day])));
+    }
+
+    protected function init(): void
+    {
+        parent::init();
+
+        // get format from Persistence\Date.
+        $format = $this->translateFormat($this->getApp()->ui_persistence->{$this->type . '_format'});
+        $this->options['dateFormat'] = $format;
+
+        if ($this->type === 'datetime' || $this->type === 'time') {
+            $this->options['enableTime'] = true;
+            $this->options['time_24hr'] = $this->options['time_24hr'] ?? $this->use24hrTimeFormat($this->options['altFormat'] ?? $this->options['dateFormat']);
+            $this->options['noCalendar'] = ($this->type === 'time');
+
+            // Add seconds picker if set
+            $this->options['enableSeconds'] = $this->options['enableSeconds'] ?? $this->useSeconds($this->options['altFormat'] ?? $this->options['dateFormat']);
+
+            // Allow edit if microseconds is set.
+            $this->options['allowInput'] = $this->options['allowInput'] ?? $this->allowMicroSecondsInput($this->options['altFormat'] ?? $this->options['dateFormat']);
+        }
+    }
+
     protected function renderView(): void
     {
-        if (!$this->icon) {
-            switch ($this->type) {
-            //case 'date': $this->icon = '
-            }
-        }
-
-        if (!$this->type) {
-            $this->type = 'datetime';
-        }
-
         if ($this->readonly) {
-            $this->options['onShow'] = new JsFunction([new JsExpression('return false')]);
+            $this->options['clickOpens'] = false;
         }
 
-        $typeFormat = $this->type . '_format';
-        if ($format = $this->app->ui_persistence->{$typeFormat}) {
-            $formatter = 'function(date, settings){
-                            if (!date) return;
-                            return atk.phpDate([format], date);
-                        }';
-            $this->options['formatter'][$this->type] = new JsExpression($formatter, ['format' => $format]);
-        }
-
-        $this->options['type'] = $this->type;
-
-        if ($dayOfWeek = $this->app->ui_persistence->firstDayOfWeek) {
-            $this->options['firstDayOfWeek'] = $dayOfWeek;
-        }
-
-        if ($options = $this->app->ui_persistence->calendar_options) {
-            foreach ($options as $k => $v) {
-                $this->options[$k] = $v;
-            }
-        }
-
-        $this->js(true)->calendar($this->options);
+        $this->jsInput(true)->flatpickr($this->options);
 
         parent::renderView();
     }
@@ -108,7 +130,41 @@ class Calendar extends Input
             $default['stopPropagation'] = $default;
         }
 
-        // Semantic-UI Calendar have different approach for on change event
+        // flatpickr on change event
         $this->options['onChange'] = new \atk4\ui\JsFunction(['date', 'text', 'mode'], $expr, $default);
+    }
+
+    /**
+     * Get the flatPickr instance of this input in order to
+     * get it's properties like selectedDates or run it's methods.
+     * Ex: clearing date via js
+     *     $btn->on('click', $f->getControl('date')->getJsInstance()->clear());.
+     */
+    public function getJsInstance(): JsExpression
+    {
+        return (new Jquery('#' . $this->id . '_input'))->get(0)->_flatpickr;
+    }
+
+    public function translateFormat(string $format): string
+    {
+        // translate from php to flatpickr.
+        $format = preg_replace(['~[aA]~', '~[s]~', '~[g]~'], ['K', 'S', 'G'], $format);
+
+        return $format;
+    }
+
+    public function use24hrTimeFormat(string $format): bool
+    {
+        return !preg_match('~[gGh]~', $format);
+    }
+
+    public function useSeconds(string $format): bool
+    {
+        return (bool) preg_match('~[S]~', $format);
+    }
+
+    public function allowMicroSecondsInput(string $format): bool
+    {
+        return (bool) preg_match('~[u]~', $format);
     }
 }

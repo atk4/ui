@@ -76,12 +76,12 @@ class ItemsPerPageSelector extends View
     public function onPageLengthSelect(\Closure $fx)
     {
         $this->cb->set(function () use ($fx) {
-            $ipp = $_GET['ipp'] ?? null;
+            $ipp = isset($_GET['ipp']) ? (int) $_GET['ipp'] : null;
             //$this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
             $this->set($ipp);
             $reload = $fx($ipp);
             if ($reload) {
-                $this->app->terminateJson($reload);
+                $this->getApp()->terminateJson($reload);
             }
         });
     }

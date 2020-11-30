@@ -1,5 +1,21 @@
 ## Release note
 
+### version 1.18.0 (2020-11-25)
+
+- Add atk-lookup share component for query-builder.
+
+### version 1.17.0 (2020-11-10)
+
+- atk-date-picker use vue-flatpickr-component instead of v-date-picker;
+- enable time and datetime in query builder;
+- enable time and datetime in multiline;
+
+### version 1.16.4 (2020-11-09)
+
+- adding textarea form control to be detect by form leave when set.
+  see https://github.com/atk4/ui/issues/1527
+- Refactor arrow function.  
+
 ### version 1.16.3 (2020-09-30)
 
 - create atk-date-picker vue component.

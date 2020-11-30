@@ -96,7 +96,7 @@ class Input extends Form\Control
     public function getValue()
     {
         return isset($this->field)
-                    ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get())
+                    ? $this->getApp()->ui_persistence->typecastSaveField($this->field, $this->field->get())
                     : ($this->content ?? '');
     }
 
@@ -107,7 +107,7 @@ class Input extends Form\Control
      */
     public function getInput()
     {
-        return $this->app->getTag('input', array_merge([
+        return $this->getApp()->getTag('input', array_merge([
             'name' => $this->short_name,
             'type' => $this->inputType,
             'placeholder' => $this->placeholder,
@@ -231,7 +231,7 @@ class Input extends Form\Control
         }
 
         // set template
-        $this->template->setHtml('Input', $this->getInput());
+        $this->template->dangerouslySetHtml('Input', $this->getInput());
         $this->content = null;
 
         parent::renderView();

@@ -1,21 +1,23 @@
 <template>
     <!-- eslint-disable vue/no-v-html -->
-    <div class="vqb-rule ui fluid card" :class="labels.spaceRule">
+    <div class="vqb-rule ui fluid card" :class="labels.spaceRule" :data-name="rule.id">
         <div class="content">
             <div class="ui grid">
                 <div class="middle aligned row atk-qb">
                     <div class="thirteen wide column">
                         <div class="ui horizontal list">
-                            <div class="item">
+                            <div class="item vqb-rule-label">
                                 <h5 class>{{ rule.label }}</h5>
                             </div>
-                            <div class="item" v-if="typeof rule.operands !== 'undefined'">
+                            <div class="item vqb-rule-operand" v-if="typeof rule.operands !== 'undefined'">
                                 <!-- List of operands (optional) -->
                                 <select v-model="query.operand" class="atk-qb-select">
                                     <option v-for="operand in rule.operands" :key="operand">{{ operand }}</option>
                                 </select>
                             </div>
-                            <div class="item" v-if="typeof rule.operators !== 'undefined' && rule.operators.length > 1">
+                            <div class="item vqb-rule-operator"
+                                 v-if="typeof rule.operators !== 'undefined'
+                                 && rule.operators.length > 1">
                                 <!-- List of operators (e.g. =, !=, >, <) -->
                                 <select v-model="query.operator" class="atk-qb-select">
                                     <option v-for="operator in rule.operators" :key="operator" :value="operator">
@@ -23,7 +25,7 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="item">
+                            <div class="item vqb-rule-input">
                                 <!-- text input -->
                                 <template v-if="canDisplay('input')">
                                     <div class="ui small input atk-qb" >
@@ -32,16 +34,6 @@
                                                 :type="rule.inputType"
                                                 :placeholder="labels.textInputPlaceholder"
                                         >
-                                    </div>
-                                </template>
-                                <!-- Date input -->
-                                <template v-if="canDisplay('date')">
-                                    <div class="ui small input atk-qb">
-                                      <atk-date-picker
-                                          :datePickerProps="getDatePickerProps()"
-                                          :atkDateOptions="getAtkDatePickerProps()"
-                                          :value="query.value"
-                                          @dateChange="onDateChange"></atk-date-picker>
                                     </div>
                                 </template>
                                 <!-- Checkbox or Radio input -->
@@ -63,11 +55,23 @@
                                         <option
                                             v-for="choice in rule.choices"
                                             :key="choice.value"
-                                            :value="choice.label">
+                                            :value="choice.value">
                                             {{choice.label}}
                                         </option>
                                     </select>
                                 </template>
+                              <!-- Custom component -->
+                              <template v-if="canDisplay('custom-component')">
+                                <div class="ui small input atk-qb">
+                                  <component :is="rule.component"
+                                      :config="rule.componentProps"
+                                      :value="query.value"
+                                      :optionalValue="query.option"
+                                      @onChange="onChange"
+                                      @setDefault="onChange">
+                                  </component>
+                                </div>
+                              </template>
                             </div>
                         </div>
                     </div>
@@ -84,10 +88,11 @@
 <script>
 import QueryBuilderRule from 'vue-query-builder/dist/rule/QueryBuilderRule.umd';
 import AtkDatePicker from '../share/atk-date-picker';
+import AtkLookup from '../share/atk-lookup';
 
 export default {
     extends: QueryBuilderRule,
-    components: { 'atk-date-picker': AtkDatePicker },
+    components: { 'atk-date-picker': AtkDatePicker, 'atk-lookup': AtkLookup },
     data: function () {
         return {};
     },
@@ -96,8 +101,8 @@ export default {
         isInput: function () {
             return this.rule.type === 'text' || this.rule.type === 'numeric';
         },
-        isDatePicker: function () {
-            return this.rule.type === 'custom-component' && this.rule.component === 'DatePicker';
+        isComponent: function () {
+            return this.rule.type === 'custom-component';
         },
         isRadio: function () {
             return this.rule.type === 'radio';
@@ -124,24 +129,14 @@ export default {
 
             switch (type) {
             case 'input': return this.isInput;
-            case 'date': return this.isDatePicker;
             case 'checkbox': return this.isCheckbox;
             case 'select': return this.isSelect;
+            case 'custom-component': return this.isComponent;
             default: return false;
             }
         },
-        onDateChange: function (date) {
-            this.query.value = date;
-        },
-        getDatePickerProps: function () {
-            return {
-                'input-props': { class: 'atk-qb-date-picker' },
-                popover: { placement: 'bottom', visibility: 'click' },
-                ...this.getRootData().data.componentsProps.datePicker || {},
-            };
-        },
-        getAtkDatePickerProps: function () {
-            return this.getRootData().data.componentsProps.atkDateOptions || {};
+        onChange: function (value) {
+            this.query.value = value;
         },
     },
 };

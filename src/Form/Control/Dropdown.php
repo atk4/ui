@@ -158,7 +158,7 @@ class Dropdown extends Input
      */
     public function getInput()
     {
-        return $this->app->getTag('input', array_merge([
+        return $this->getApp()->getTag('input', array_merge([
             'name' => $this->short_name,
             'type' => $this->inputType,
             'id' => $this->id . '_input',
@@ -243,7 +243,7 @@ class Dropdown extends Input
         if ($this->field !== null && !$this->field->required && !$this->isMultiple) {
             $this->_tItem->set('value', '');
             $this->_tItem->set('title', $this->empty || is_numeric($this->empty) ? (string) $this->empty : '');
-            $this->template->appendHtml('Item', $this->_tItem->render());
+            $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
         }
 
         // model set? use this, else values property
@@ -317,7 +317,7 @@ class Dropdown extends Input
             $this->_tItem->set('value', (string) $key);
             $this->_tItem->set('title', $title || is_numeric($title) ? (string) $title : '');
             // add item to template
-            $this->template->appendHtml('Item', $this->_tItem->render());
+            $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
         }
     }
 
@@ -329,7 +329,7 @@ class Dropdown extends Input
             if (is_array($val)) {
                 if (array_key_exists('icon', $val)) {
                     $this->_tIcon->set('icon', $val['icon']);
-                    $this->_tItem->setHtml('Icon', $this->_tIcon->render());
+                    $this->_tItem->dangerouslySetHtml('Icon', $this->_tIcon->renderToHtml());
                 } else {
                     $this->_tItem->del('Icon');
                 }
@@ -339,7 +339,7 @@ class Dropdown extends Input
             }
 
             // add item to template
-            $this->template->appendHtml('Item', $this->_tItem->render());
+            $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
         }
     }
 
@@ -360,10 +360,10 @@ class Dropdown extends Input
             // compatibility with how $values property works on icons: 'icon'
             // is defined in there
             $this->_tIcon->set('icon', 'icon ' . $res['icon']);
-            $this->_tItem->appendHtml('Icon', $this->_tIcon->render());
+            $this->_tItem->dangerouslyAppendHtml('Icon', $this->_tIcon->renderToHtml());
         }
 
         // add item to template
-        $this->template->appendHtml('Item', $this->_tItem->render());
+        $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
     }
 }
