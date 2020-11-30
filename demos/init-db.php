@@ -171,7 +171,7 @@ class File extends \atk4\data\Model
         $this->hasMany('SubFolder', [new self(), 'their_field' => 'parent_folder_id'])
             ->addField('count', ['aggregate' => 'count', 'field' => $this->expr('*')]);
 
-        $this->hasOne('parent_folder_id', new self())
+        $this->hasOne('parent_folder_id', Folder::class)
             ->addTitle();
     }
 
@@ -181,7 +181,7 @@ class File extends \atk4\data\Model
     public function importFromFilesystem($path, $isSub = false)
     {
         if (!$isSub) {
-            $path = __DIR__ . '/' . $path;
+            $path = __DIR__ . '/../' . $path;
         }
 
         $dir = new \DirectoryIterator($path);
@@ -193,9 +193,11 @@ class File extends \atk4\data\Model
             }
 
             if ($name === 'src' || $name === 'demos' || $isSub) {
-                /* Disabling saving file in db
-                $this->unload();
-                $this->save([
+                $m = clone $this;
+
+                /*
+                // Disabling saving file in db
+                $m->save([
                     'name' => $fileinfo->getFilename(),
                     'is_folder' => $fileinfo->isDir(),
                     'type' => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
@@ -203,10 +205,20 @@ class File extends \atk4\data\Model
                 */
 
                 if ($fileinfo->isDir()) {
-                    $this->ref('SubFolder')->importFromFilesystem($dir->getPath() . '/' . $name, true);
+                    $m->ref('SubFolder')->importFromFilesystem($dir->getPath() . '/' . $name, true);
                 }
             }
         }
+    }
+}
+
+class Folder extends File
+{
+    protected function init(): void
+    {
+        parent::init();
+
+        $this->addCondition('is_folder', true);
     }
 }
 

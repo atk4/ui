@@ -36,4 +36,4 @@ $files->addUserAction('download', function (\atk4\data\Model $model) {
     return 'File has been download!';
 });
 
-\atk4\ui\Crud::addTo($app, ['ipp' => 5])->setModel($files);
+\atk4\ui\Crud::addTo($app, ['ipp' => 10])->setModel($files);
