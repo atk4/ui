@@ -84,7 +84,9 @@ jobs:
 
       - name: Run Static Analysis (only for StaticAnalysis)
         if: matrix.type == 'StaticAnalysis'
-        run: vendor/bin/phpstan analyse
+        run: |
+          echo "memory_limit = 1G" > /usr/local/etc/php/conf.d/custom-memory-limit.ini
+          vendor/bin/phpstan analyse
 
   unit-test:
     name: Unit
