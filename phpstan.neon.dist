@@ -9,3 +9,6 @@ parameters:
 
     # TODO review once we drop PHP 7.x support
     treatPhpDocTypesAsCertain: false
+
+    ignoreErrors:
+        - '~^Unsafe usage of new static\(\).$~'
