@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-use atk4\data\Model\UserAction;
 use atk4\ui\Form;
 
 try {
@@ -61,15 +60,6 @@ class Country extends \atk4\data\Model
                 $model->set('sys_name', mb_strtoupper($model->get('name')));
             }
         });
-
-        $this->addUserAction('test', [
-            'fields' => true,
-            'modifier' => UserAction::MODIFIER_DELETE,
-            'appliesTo' => UserAction::APPLIES_TO_NO_RECORDS,
-            'callback' => 'save',
-            'description' => 'Add ' . $this->getModelCaption(),
-            //            'ui' => ['icon' => 'plus'],
-        ]);
     }
 
     public function validate($intent = null): array

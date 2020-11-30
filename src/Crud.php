@@ -125,7 +125,6 @@ class Crud extends Grid
             } else {
                 $this->addExecutorButton($executor);
             }
-            $executor->executeModelAction();
         }
 
         if ($this->menu) {
@@ -139,7 +138,6 @@ class Crud extends Grid
                         )
                     );
                     $this->menuItems[$k]['action'] = $executor;
-                    $executor->executeModelAction();
                 }
             }
             $this->setItemsAction();
@@ -283,10 +281,6 @@ class Crud extends Grid
         }
 
         return $this->executorFactory::create($action, $this);
-//        // setting right action fields is based on action fields.
-//        $executor = (!$action->args && !$action->fields && !$action->preview) ? $this->jsExecutor : $this->executor;
-//
-//        return Factory::factory($executor);
     }
 
     /**

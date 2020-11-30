@@ -163,7 +163,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         if ($this->steps = $this->getSteps($action)) {
             $this->title = $this->title ?? $action->getDescription();
 
-            $this->btns->add($this->execActionBtn = $this->executorFactory::createActionButton($action, ExecutorFactory::MODAL_BUTTON));
+            $this->btns->add($this->execActionBtn = $this->executorFactory::createActionTrigger($action, $this->executorFactory::MODAL_BUTTON));
 
             // get current step.
             $this->step = $this->stickyGet('step') ?? $this->steps[0];

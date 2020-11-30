@@ -60,12 +60,12 @@ Header::addTo($rightColumn, [
 // Explicitly adding an Action executor.
 $executor = UserAction\JsCallbackExecutor::addTo($rightColumn);
 // Passing Model action to executor and action argument via url.
-$executor->setAction($action, ['path' => '.']);
+$executor->setAction($action);
 // Setting user response after model action get execute.
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($t, $m) {
     return new \atk4\ui\JsToast('Files imported');
 });
-$executor->executeModelAction();
+$executor->executeModelAction(['path' => '.']);
 
 $btn = \atk4\ui\Button::addTo($rightColumn, ['Import File']);
 $btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);

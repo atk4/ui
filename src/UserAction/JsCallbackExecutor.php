@@ -6,7 +6,6 @@ namespace atk4\ui\UserAction;
 
 use atk4\core\HookTrait;
 use atk4\data\Model;
-use atk4\ui\Exception;
 use atk4\ui\JsCallback;
 use atk4\ui\JsExpressionable;
 use atk4\ui\JsToast;
@@ -33,9 +32,6 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /** @var Model\UserAction The model user action */
     public $action;
 
-    /** @var array Argument to attached to callback url. */
-    public $urlArgs = [];
-
     /**
      * @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
      */
@@ -44,11 +40,6 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     public function getAction(): Model\UserAction
     {
         return $this->action;
-    }
-
-    public function setUrlArgs(array $args)
-    {
-        $this->urlArgs = array_merge($this->urlArgs, $args);
     }
 
     /**
@@ -74,7 +65,6 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
      */
     public function setAction(Model\UserAction $action, array $urlArgs = null)
     {
-
         if ($urlArgs) {
             $this->setUrlArgs($urlArgs);
         }
@@ -87,7 +77,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         return $this;
     }
 
-    public function executeModelAction()
+    public function executeModelAction(array $args = [])
     {
         $this->set(function ($j) {
             // may be id is pass within $post args.
@@ -113,7 +103,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
             }
 
             return $js;
-        }, $this->urlArgs);
+        }, $args);
 
         return $this;
     }

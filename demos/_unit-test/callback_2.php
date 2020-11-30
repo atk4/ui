@@ -12,12 +12,17 @@ use atk4\ui\Button;
 use atk4\ui\Crud;
 use atk4\ui\Header;
 use atk4\ui\Loader;
+use atk4\ui\UserAction\ExecutorFactory;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $m = (new CountryLock($app->db))->setLimit(5);
-$m->getUserAction('edit')->ui['button'] = new Button(['Edit', ['ui' => 'atk-test button']]);
+ExecutorFactory::registerActionTrigger(
+    ExecutorFactory::TABLE_BUTTON,
+    [Button::class, 'ui' => 'atk-test button', 'icon' => 'pencil'],
+    $m->getUserAction('edit')
+);
 
 $loader = Loader::addTo($app);
 $loader->loadEvent = false;

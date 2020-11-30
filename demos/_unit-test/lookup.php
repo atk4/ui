@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Crud;
+use atk4\ui\UserAction\ExecutorFactory;
 
 // Test for hasOne Lookup as dropdown control.
 
@@ -14,9 +15,11 @@ require_once __DIR__ . '/../init-app.php';
 $model = new ProductLock($app->db);
 $model->addCondition('name', '=', 'Mustard');
 
+// use default.
+ExecutorFactory::registerActionTrigger(ExecutorFactory::TABLE_BUTTON, []);
+
 $edit = $model->getUserAction('edit');
 $edit->ui = ['execButton' => [\atk4\ui\Button::class, 'EditMe', 'blue']];
-$edit->description = 'edit';
 $edit->callback = function ($model) use ($app) {
     return $model->ref('product_category_id')->getTitle() . ' - ' . $model->ref('product_sub_category_id')->getTitle();
 };

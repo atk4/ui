@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Button;
+use atk4\ui\UserAction\ExecutorFactory;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -12,16 +15,6 @@ $model = new CountryLock($app->db);
 $model->addUserAction('test', function ($model) {
     return 'test from ' . $model->getTitle() . ' was successful!';
 });
-
-// Delete is already prevent by our lock Model, just simulating it.
-$ex = new \atk4\ui\UserAction\JsCallbackExecutor();
-$ex->onHook(\atk4\ui\UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
-    return [
-        (new \atk4\ui\Jquery())->closest('tr')->transition('fade left'),
-        new \atk4\ui\JsToast('Simulating delete in demo mode.'),
-    ];
-});
-$model->getUserAction('delete')->ui['executor'] = $ex;
 
 $grid->setModel($model);
 
@@ -34,7 +27,8 @@ $grid->menu->addItem(['Delete All', 'icon' => 'trash', 'red active']);
 
 $grid->addColumn(null, [\atk4\ui\Table\Column\Template::class, 'hello<b>world</b>']);
 
-$grid->addActionButton('test');
+// Creating a button for executing model test user action.
+$grid->addExecutorButton($grid->executorFactory::create($model->getUserAction('test'), $grid));
 
 $grid->addActionButton('Say HI', function ($j, $id) use ($grid) {
     return 'Loaded "' . $grid->model->load($id)->get('name') . '" from ID=' . $id;
@@ -44,7 +38,15 @@ $grid->addModalAction(['icon' => [\atk4\ui\Icon::class, 'external']], 'Modal Tes
     \atk4\ui\Message::addTo($p, ['Clicked on ID=' . $id]);
 });
 
-    $grid->addActionButton(['icon' => 'delete'], $model->getUserAction('delete'));
+// Creating an executor for delete action.
+$deleteExecutor = ExecutorFactory::create($model->getUserAction('delete'), $grid);
+$deleteExecutor->onHook(\atk4\ui\UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
+    return [
+        (new \atk4\ui\Jquery())->closest('tr')->transition('fade left'),
+        new \atk4\ui\JsToast('Simulating delete in demo mode.'),
+    ];
+});
+$grid->addExecutorButton($deleteExecutor, new Button(['icon' => 'times circle outline']));
 
 $sel = $grid->addSelection();
 $grid->menu->addItem('show selection')->on('click', new \atk4\ui\JsExpression(

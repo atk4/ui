@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Button;
+use atk4\ui\UserAction\ExecutorFactory;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -22,8 +25,10 @@ $action = $countries->addUserAction('book', [
     'callback' => function ($model, $email, $city) {
         return 'Your request to visit ' . ucwords($city) . ' in ' . $model->get('name') . ' was sent to: ' . $email;
     },
-    'ui' => ['button' => [null, 'icon' => 'plane']],
 ]);
+
+// Create custom button for this action in card.
+ExecutorFactory::registerActionTrigger(ExecutorFactory::CARD_BUTTON, [Button::class, null, 'blue', 'icon' => 'plane'], $action);
 
 $action->args = [
     'email' => ['type' => 'email', 'required' => true, 'caption' => 'Please let us know your email address:'],
@@ -35,7 +40,6 @@ $infoAction = $countries->addUserAction('request_info', [
         return 'Your request for information was sent to email: ' . $email;
     },
     'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
-    'ui' => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => [\atk4\ui\Icon::class, 'mail']]],
 ]);
 
 $infoAction->args = [

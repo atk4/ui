@@ -290,21 +290,13 @@ class Card extends View
     }
 
     /**
-     * Add an Event action executor of type 'click' using a button
-     * as target.
-     *
-     * @param []     $args    The action argument
-     * @param string $confirm the confirmation message
-     *
-     * @return Card
+     * Execute Model user action via button in Card.
      */
-    public function addClickAction(Model\UserAction $action, $button = null, $args = [], $confirm = null)
+    public function addClickAction(Model\UserAction $action, Button $button = null, array $args = [], string $confirm = null): self
     {
         $defaults = [];
-        if (!$button) {
-            $button = $action->ui['button'] ?? new Button([$action->caption]);
-        }
-        $btn = $this->addButton($button);
+
+        $btn = $this->addButton($button ?? $this->executorFactory::createActionTrigger($action, $this->executorFactory::CARD_BUTTON));
 
         // Setting arg for model id. $args[0] is consider to hold a model id, i.e. as a js expression.
         if ($this->model && $this->model->loaded() && !isset($args[0])) {
@@ -317,8 +309,6 @@ class Card extends View
 
         if ($confirm) {
             $defaults['confirm'] = $confirm;
-        } elseif (isset($action->ui['confirm'])) {
-            $defaults['confirm'] = $action->ui['confirm'];
         }
 
         $btn->on('click', $action, $defaults);
@@ -328,12 +318,8 @@ class Card extends View
 
     /**
      * Set extra content using model field.
-     *
-     * @param Model  $model  The model
-     * @param array  $fields an array of fields name
-     * @param string $glue   a separator string between each field
      */
-    public function addExtraFields(Model $model, $fields, $glue = null)
+    public function addExtraFields(Model $model, array $fields, string $glue = null)
     {
         $this->setModel($model, false);
 

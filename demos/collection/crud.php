@@ -93,7 +93,7 @@ $myExecutorClass = get_class(new class() extends \atk4\ui\UserAction\ModalExecut
 });
 
 $file = new FileLock($app->db);
-ExecutorFactory::registerExecutor($file->getUserAction('edit'), new $myExecutorClass());
+ExecutorFactory::registerActionExecutor($file->getUserAction('edit'), [$myExecutorClass]);
 
 $crud = \atk4\ui\Crud::addTo($column, [
     'ipp' => 5,

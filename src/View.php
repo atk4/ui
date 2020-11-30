@@ -6,6 +6,7 @@ namespace atk4\ui;
 
 use atk4\data\Model;
 use atk4\data\Persistence\Static_;
+use atk4\ui\UserAction\ExecutorFactory;
 use atk4\ui\UserAction\ExecutorInterface;
 
 /**
@@ -119,6 +120,9 @@ class View extends AbstractView implements JsExpressionable
      * @var string
      */
     public $element;
+
+    /** @var string|ExecutorFactory Default Executor factory. */
+    public $executorFactory = ExecutorFactory::class;
 
     // }}}
 
@@ -1032,9 +1036,9 @@ class View extends AbstractView implements JsExpressionable
             }, $arguments);
 
             $actions[] = $cb;
-        } elseif ($action instanceof UserAction\ExecutorInterface) {
+        } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof Model\UserAction) {
             // Setup UserAction executor.
-            $ex = $action;
+            $ex = $action instanceof Model\UserAction ? $this->executorFactory::create($action, $this) : $action;
             if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
                 if (isset($arguments[0])) {
                     $arguments[$ex->name] = $arguments[0];
@@ -1053,8 +1057,8 @@ class View extends AbstractView implements JsExpressionable
                 } else {
                     $actions[] = $ex_actions;
                 }
+                $ex->executeModelAction();
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
-                $ex->setUrlArgs($arguments);
                 if ($conf = $ex->getAction()->getConfirmation()) {
                     $defaults['confirm'] = $conf;
                 }
@@ -1062,6 +1066,7 @@ class View extends AbstractView implements JsExpressionable
                     $ex->apiConfig = $defaults['apiConfig'];
                 }
                 $actions[] = $ex;
+                $ex->executeModelAction($arguments);
             } else {
                 throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or extend View and implement UserAction\JsExecutorInterface');
             }

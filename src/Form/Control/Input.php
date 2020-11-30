@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Control;
 
+use atk4\data\Model\UserAction;
 use atk4\ui\Button;
 use atk4\ui\Form;
 use atk4\ui\Icon;
 use atk4\ui\Label;
+use atk4\ui\UserAction\ExecutorFactory;
+use atk4\ui\UserAction\JsCallbackExecutor;
 
 /**
  * Input element for a form control.
@@ -155,16 +158,18 @@ class Input extends Form\Control
         if (!is_object($button)) {
             $button = new Button($button);
         }
-        if ($button instanceof \atk4\data\Model\UserAction) {
-            $action = $button;
-            $button = Button::addTo($this, [$action->caption], [$spot]);
+        if ($button instanceof UserAction || $button instanceof JsCallbackExecutor) {
+            $executor = ($button instanceof UserAction)
+                ? $this->executorFactory::create($button, $this, ExecutorFactory::JS_EXECUTOR)
+                : $button;
+            $button = $this->add($this->executorFactory::createActionTrigger($executor->getAction()), $spot);
             $this->addClass('action');
-            if ($action->args) {
-                $val_as_arg = array_keys($action->args)[0];
+            if ($executor->getAction()->args) {
+                $val_as_arg = array_keys($executor->getAction()->args)[0];
 
-                $button->on('click', $action, ['args' => [$val_as_arg => $this->jsInput()->val()]]);
+                $button->on('click', $executor, ['args' => [$val_as_arg => $this->jsInput()->val()]]);
             } else {
-                $button->on('click', $action);
+                $button->on('click', $executor);
             }
         }
         if (!$button->_initialized) {

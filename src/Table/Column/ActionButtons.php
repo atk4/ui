@@ -40,8 +40,8 @@ class ActionButtons extends Table\Column
      *
      * Returns button object
      *
-     * @param \atk4\ui\View|string                $button
-     * @param  JsChain|\Closure|ExecutorInterface $action
+     * @param \atk4\ui\View|string               $button
+     * @param JsChain|\Closure|ExecutorInterface $action
      *
      * @return \atk4\ui\View
      */

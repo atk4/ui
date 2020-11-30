@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Form\Control\Line;
-use atk4\ui\UserAction;
 use atk4\ui\UserAction\JsCallbackExecutor;
 
 /** @var \atk4\ui\App $app */
@@ -44,7 +43,6 @@ $country->addUserAction('greet', [
             'required' => true,
         ],
     ],
-    'ui' => ['executor' => [UserAction\JsCallbackExecutor::class]],
     'callback' => function ($model, $name) {
         return 'Hello ' . $name;
     },

@@ -118,7 +118,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
         $this->actionInitialized = true;
         $this->jsSetBtnState($this);
-        $this->doSteps();
 
         return $this;
     }
@@ -126,7 +125,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Perform this action steps.
      */
-    public function doSteps()
+    public function executeModelAction()
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {

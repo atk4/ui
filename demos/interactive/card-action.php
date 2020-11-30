@@ -35,5 +35,5 @@ $notify = $client->addUserAction('Notify', [
     },
 ]);
 $c->addSection('Client Country:', $client, ['iso', 'numcode', 'phonecode'], true);
-
+// set custom button for action.
 $c->addClickAction($notify, new Button(['Send Note']), [$client->get('id')]);

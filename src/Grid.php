@@ -8,7 +8,6 @@ use atk4\core\Factory;
 use atk4\core\HookTrait;
 use atk4\data\Model;
 use atk4\ui\Table\Column\ActionButtons;
-use atk4\ui\UserAction\ExecutorFactory;
 use atk4\ui\UserAction\ExecutorInterface;
 
 /**
@@ -102,9 +101,6 @@ class Grid extends View
     public $table;
 
     public $executor_class = UserAction\BasicExecutor::class;
-
-    /** @var string|ExecutorFactory Default Executor factory */
-    public $executorFactory = ExecutorFactory::class;
 
     /**
      * The container for table and paginator.
@@ -392,13 +388,13 @@ class Grid extends View
     /**
      * Add a button for executing a model action via an action executor.
      */
-    public function addExecutorButton(UserAction\ExecutorInterface $executor)
+    public function addExecutorButton(UserAction\ExecutorInterface $executor, Button $button = null)
     {
-        $button = $this->executorFactory::createActionButton($executor->getAction(), $this->executorFactory::TABLE_BUTTON);
+        $btn = $button ? $this->add($button) : $this->executorFactory::createActionTrigger($executor->getAction(), $this->executorFactory::TABLE_BUTTON);
         $confirmation = $executor->getAction()->getConfirmation() ?: '';
-        $enabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+        $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
 
-        return $this->getActionButtons()->addButton($button, $executor, $confirmation, $enabled);
+        return $this->getActionButtons()->addButton($btn, $executor, $confirmation, $disabled);
     }
 
     private function getActionButtons(): ActionButtons
@@ -427,9 +423,9 @@ class Grid extends View
     {
         $item = $this->executorFactory::getActionCaption($executor->getAction());
         $confirmation = $executor->getAction()->getConfirmation() ?: '';
-        $enabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+        $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
 
-        return $this->getActionMenu()->addActionMenuItem($item, $executor, $confirmation, $enabled);
+        return $this->getActionMenu()->addActionMenuItem($item, $executor, $confirmation, $disabled);
     }
 
     private function getActionMenu()
