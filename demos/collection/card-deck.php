@@ -7,10 +7,6 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Button::addTo($app, ['Card Model', 'small left floated basic blue', 'icon' => 'left arrow'])
-    ->link(['card-action']);
-\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
-
 \atk4\ui\Header::addTo($app, ['Card Deck', 'size' => 1, 'subHeader' => 'Card can be display in a deck, also using model action.']);
 
 $countries = new Country($app->db);
@@ -43,6 +39,6 @@ $infoAction->args = [
     'country' => ['required' => true, 'ui' => ['form' => [\atk4\ui\Form\Control\Lookup::class, 'model' => new Country($app->db), 'placeholder' => 'Please select a country.']]],
 ];
 
-$deck = \atk4\ui\CardDeck::addTo($app, ['noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book']]);
+$deck = \atk4\ui\CardDeck::addTo($app, ['noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book'], 'useLabel' => true]);
 
-$deck->setModel($countries, ['Cost'], ['iso', 'iso3']);
+$deck->setModel($countries, ['iso', 'iso3', ], ['Cost']);

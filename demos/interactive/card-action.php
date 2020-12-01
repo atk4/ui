@@ -9,8 +9,6 @@ use atk4\ui\Button;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Button::addTo($app, ['Card Deck', 'small right floated basic blue', 'iconRight' => 'right arrow'])
-    ->link(['card-deck']);
 \atk4\ui\Button::addTo($app, ['Card', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['card']);
 \atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
