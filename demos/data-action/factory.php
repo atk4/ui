@@ -6,7 +6,9 @@ namespace atk4\ui\demo;
 
 use atk4\data\Model\UserAction;
 use atk4\ui\Button;
+use atk4\ui\CardDeck;
 use atk4\ui\UserAction\ExecutorFactory;
+use atk4\ui\View;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -32,6 +34,10 @@ $myFactory = get_class(new class() extends ExecutorFactory {
             'edit' => [Button::class, null, 'icon' => 'pencil'],
             'delete' => [Button::class, null, 'icon' => 'times red'],
         ],
+        self::CARD_BUTTON => [
+            'edit' => [Button::class, 'Edit', 'icon' => 'pencil', 'ui' => 'tiny button'],
+            'delete' => [Button::class, 'Remove', 'icon' => 'times', 'ui' => 'tiny button'],
+        ],
     ];
 
     protected static $actionCaption = [
@@ -54,3 +60,8 @@ $model = new CountryLock($app->db);
 
 $crud = \atk4\ui\Crud::addTo($app, ['ipp' => 5]);
 $crud->setModel($model);
+
+View::addTo($app, ['class' => ['ui divider']]);
+
+$deck = CardDeck::addTo($app, ['menu' => false, 'search' => false, 'paginator' => false, 'useTable' => true]);
+$deck->setModel($model->setLimit(3), ['iso', 'iso3']);
