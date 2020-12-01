@@ -299,7 +299,7 @@ class View extends AbstractView implements JsExpressionable
         }
     }
 
-    public function getExecutorFactory(): string
+    protected function getExecutorFactory(): string
     {
         return $this->executorFactory ?? $this->getApp()->getExecutorFactory();
     }
