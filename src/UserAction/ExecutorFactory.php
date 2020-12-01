@@ -21,11 +21,11 @@ use atk4\ui\View;
  */
 class ExecutorFactory
 {
-    public const JS_EXECUTOR = 'jsExecutor';
-    public const MODAL_EXECUTOR = 'modalExecutor';
-    public const MODAL_BUTTON = 'modalExecutor';
-    public const TABLE_BUTTON = 'table';
-    public const CARD_BUTTON = 'card';
+    public const JS_EXECUTOR =  self::class . '@jsExecutorSeed';
+    public const MODAL_EXECUTOR =  self::class . '@modalExecutorSeed';
+    public const MODAL_BUTTON = self::class . '@modalExecutorButton';
+    public const TABLE_BUTTON =  self::class . '@tableButton';
+    public const CARD_BUTTON =  self::class . '@cardButton';
 
     /** @var array default executor seed. */
     protected static $executorSeed = [
