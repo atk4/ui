@@ -41,4 +41,4 @@ $infoAction->args = [
 
 $deck = \atk4\ui\CardDeck::addTo($app, ['noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book'], 'useLabel' => true]);
 
-$deck->setModel($countries, ['iso', 'iso3', ], ['Cost']);
+$deck->setModel($countries, ['iso', 'iso3'], ['Cost']);
