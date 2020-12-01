@@ -53,7 +53,7 @@ $myFactory = get_class(new class() extends ExecutorFactory {
     }
 });
 
-// Set new executor globally.
+// Set new executor factory globally.
 $app->defaultExecutorFactory = $myFactory;
 
 $model = new CountryLock($app->db);
