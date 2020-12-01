@@ -296,7 +296,7 @@ class Card extends View
     {
         $defaults = [];
 
-        $btn = $this->addButton($button ?? $this->executorFactory::createActionTrigger($action, $this->executorFactory::CARD_BUTTON));
+        $btn = $this->addButton($button ?? $this->getExecutorFactory()::createActionTrigger($action, $this->getExecutorFactory()::CARD_BUTTON));
 
         // Setting arg for model id. $args[0] is consider to hold a model id, i.e. as a js expression.
         if ($this->model && $this->model->loaded() && !isset($args[0])) {

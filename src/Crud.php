@@ -133,7 +133,7 @@ class Crud extends Grid
                     $executor = $this->initActionExecutor($action);
                     $this->menuItems[$k]['item'] = $this->menu->addItem(
                         array_merge(
-                            [$this->executorFactory::getActionCaption($action)],
+                            [$this->getExecutorFactory()::getActionCaption($action)],
                             $action->modifier === Model\UserAction::MODIFIER_CREATE ? ['icon' => 'plus'] : []
                         )
                     );
@@ -280,7 +280,7 @@ class Crud extends Grid
             $action->fields = $this->editFields;
         }
 
-        return $this->executorFactory::create($action, $this);
+        return $this->getExecutorFactory()::create($action, $this);
     }
 
     /**

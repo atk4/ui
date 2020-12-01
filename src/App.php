@@ -44,7 +44,7 @@ class App
         'flatpickr' => 'https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.6',
     ];
 
-    /** @var string App wide factory object for View */
+    /** @var ExecutorFactory App wide factory object for View */
     public $defaultExecutorFactory = ExecutorFactory::class;
 
     /** @var string Version of Agile UI */

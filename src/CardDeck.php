@@ -203,7 +203,7 @@ class CardDeck extends View
     protected function initActionExecutor(Model\UserAction $action): ExecutorInterface
     {
         $action->fields = $this->editFields ?? $action->fields;
-        $executor = $this->executorFactory::create($action, $this);
+        $executor = $this->getExecutorFactory()::create($action, $this);
         if ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
             $executor->jsSuccess = function ($x, $m, $id, $return) use ($action) {
                 return $this->jsExecute($return, $action);
@@ -327,7 +327,7 @@ class CardDeck extends View
             $defaults['args'] = $args;
         }
 
-        $btn = $this->btns->add($this->executorFactory::createActionTrigger($executor->getAction(), $this->executorFactory::CARD_BUTTON));
+        $btn = $this->btns->add($this->getExecutorFactory()::createActionTrigger($executor->getAction(), $this->getExecutorFactory()::CARD_BUTTON));
         if ($executor->getAction()->enabled === false) {
             $btn->addClass('disabled');
         }

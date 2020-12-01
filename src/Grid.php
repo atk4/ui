@@ -390,7 +390,7 @@ class Grid extends View
      */
     public function addExecutorButton(UserAction\ExecutorInterface $executor, Button $button = null)
     {
-        $btn = $button ? $this->add($button) : $this->executorFactory::createActionTrigger($executor->getAction(), $this->executorFactory::TABLE_BUTTON);
+        $btn = $button ? $this->add($button) : $this->getExecutorFactory()::createActionTrigger($executor->getAction(), $this->getExecutorFactory()::TABLE_BUTTON);
         $confirmation = $executor->getAction()->getConfirmation() ?: '';
         $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
 
@@ -421,7 +421,7 @@ class Grid extends View
 
     public function addExecutorMenuItem(ExecutorInterface $executor)
     {
-        $item = $this->executorFactory::getActionCaption($executor->getAction());
+        $item = $this->getExecutorFactory()::getActionCaption($executor->getAction());
         $confirmation = $executor->getAction()->getConfirmation() ?: '';
         $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
 

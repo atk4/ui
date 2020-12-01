@@ -265,9 +265,9 @@ class View extends AbstractView implements JsExpressionable
         $this->_add_later = [];
         parent::init();
 
-        if (!$this->executorFactory) {
-            $this->executorFactory = $this->getApp()->defaultExecutorFactory;
-        }
+//        if (!$this->executorFactory) {
+//            $this->executorFactory = $this->getApp()->defaultExecutorFactory;
+//        }
 
         if ($this->id === null) {
             $this->id = $this->name;
@@ -301,6 +301,11 @@ class View extends AbstractView implements JsExpressionable
         if ($this->model) {
             $this->setModel($this->model);
         }
+    }
+
+    public function getExecutorFactory()
+    {
+        return $this->executorFactory ?? $this->getApp()->defaultExecutorFactory;
     }
 
     /**
@@ -1042,7 +1047,7 @@ class View extends AbstractView implements JsExpressionable
             $actions[] = $cb;
         } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof Model\UserAction) {
             // Setup UserAction executor.
-            $ex = $action instanceof Model\UserAction ? $this->executorFactory::create($action, $this) : $action;
+            $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()::create($action, $this) : $action;
             if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
                 if (isset($arguments[0])) {
                     $arguments[$ex->name] = $arguments[0];
