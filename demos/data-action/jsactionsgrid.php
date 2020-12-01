@@ -42,8 +42,10 @@ $grid->addActionMenuItem($modelHeader);
 
 // Adding Model actions.
 foreach ($country->getUserActions(UserAction::APPLIES_TO_SINGLE_RECORD) as $action) {
-    $grid->addExecutorMenuItem($executor = ExecutorFactory::create($action, $grid));
-    $executor->executeModelAction();
+    if (in_array($action->short_name, ['add', 'edit', 'delete'])) {
+        continue;
+    }
+    $grid->addExecutorMenuItem($executor = $grid->getExecutorFactory()::create($action, $grid));
 }
 
 $grid->ipp = 10;

@@ -8,6 +8,7 @@ use atk4\core\Factory;
 use atk4\core\HookTrait;
 use atk4\data\Model;
 use atk4\ui\Table\Column\ActionButtons;
+use atk4\ui\UserAction\ConfirmationExecutor;
 use atk4\ui\UserAction\ExecutorInterface;
 
 /**
@@ -422,7 +423,8 @@ class Grid extends View
     public function addExecutorMenuItem(ExecutorInterface $executor)
     {
         $item = $this->getExecutorFactory()::getActionCaption($executor->getAction());
-        $confirmation = $executor->getAction()->getConfirmation() ?: '';
+        // ConfirmationExecutor take care of showing the user confirmation, thus make it empty.
+        $confirmation = !$executor instanceof ConfirmationExecutor ? ($executor->getAction()->getConfirmation() ?: '') : '';
         $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
 
         return $this->getActionMenu()->addActionMenuItem($item, $executor, $confirmation, $disabled);
