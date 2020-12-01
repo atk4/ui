@@ -121,7 +121,7 @@ class View extends AbstractView implements JsExpressionable
      */
     public $element;
 
-    /** @var ExecutorFactory Executor factory. */
+    /** @var ExecutorFactory */
     public $executorFactory;
 
     // }}}
