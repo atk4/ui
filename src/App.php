@@ -256,6 +256,11 @@ class App
         exit;
     }
 
+    public function getExecutorFactory(): string
+    {
+        return $this->defaultExecutorFactory;
+    }
+
     /**
      * Catch exception.
      */

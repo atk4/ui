@@ -121,7 +121,7 @@ class View extends AbstractView implements JsExpressionable
      */
     public $element;
 
-    /** @var ExecutorFactory Executor factory. */
+    /** @var string|ExecutorFactory Executor factory. */
     public $executorFactory;
 
     // }}}
@@ -299,9 +299,9 @@ class View extends AbstractView implements JsExpressionable
         }
     }
 
-    public function getExecutorFactory()
+    protected function getExecutorFactory(): string
     {
-        return $this->executorFactory ?? $this->getApp()->defaultExecutorFactory;
+        return $this->executorFactory ?? $this->getApp()->getExecutorFactory();
     }
 
     /**
