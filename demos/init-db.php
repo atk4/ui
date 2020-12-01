@@ -169,7 +169,7 @@ class File extends \atk4\data\Model
         $this->addField('is_folder', ['type' => 'boolean']);
 
         $this->hasMany('SubFolder', [new self(), 'their_field' => 'parent_folder_id'])
-            ->addField('count', ['aggregate' => 'count', 'field' => $this->expr('*')]);
+            ->addField('count', ['aggregate' => 'count', 'field' => $this->expr('*')]); // TODO $this->persistence->expr($this, '*') or $this->addExpression?
 
         $this->hasOne('parent_folder_id', Folder::class)
             ->addTitle();

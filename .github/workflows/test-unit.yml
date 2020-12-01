@@ -50,8 +50,7 @@ jobs:
         run: |
           if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev ; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
-          if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/phpstan --dev ; fi
-          composer remove --no-interaction --no-update 'behat/*' --dev
+          if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/phpstan 'behat/*' --dev ; fi
           if [ "${{ matrix.php }}" == "8.0" ]; then composer config platform.php 7.4.5 ; fi
           composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
@@ -141,8 +140,7 @@ jobs:
         run: |
           if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "Phpunit Lowest" ] && [ "${{ matrix.type }}" != "Phpunit Burn" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev ; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
-          if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/phpstan --dev ; fi
-          composer remove --no-interaction --no-update 'behat/*' --dev
+          if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/phpstan 'behat/*' --dev ; fi
           if [ "${{ matrix.php }}" == "8.0" ]; then composer config platform.php 7.4.5 ; fi
           composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
           if [ "${{ matrix.type }}" == "Phpunit Lowest" ]; then composer update  --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader ; fi

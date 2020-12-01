@@ -131,7 +131,7 @@ class FormTest extends AtkPhpunit\TestCase
 
     public function assertFromControlNoErrors(string $field)
     {
-        preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function ($matches) use ($field, &$matched) {
+        preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function ($matches) use ($field) {
             if ($matches[1] === $field) {
                 $this->fail('Form control ' . $field . ' unexpected error: ' . $matches[2]);
             }

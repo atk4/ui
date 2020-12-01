@@ -184,7 +184,7 @@ if (!$cart->items) {
     $cartOutterLabel->addStyle('display', 'none');
 }
 
-$cartPopup->set(function ($popup) use ($shelf, $cartOutterLabel, $cart) {
+$cartPopup->set(function ($popup) use ($cart) {
     $cartInnerLabel = \atk4\ui\Label::addTo($popup, ['Number of items:']);
 
     // cart is already initialized, so init() is not called again. However, cart will be rendered
