@@ -121,6 +121,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['Assign action to button event'], [$path . 'jsactions2'], $menu);
     $layout->addMenuItem(['Execute from Grid'], [$path . 'jsactionsgrid'], $menu);
     $layout->addMenuItem(['Execute from Crud'], [$path . 'jsactionscrud'], $menu);
+    $layout->addMenuItem(['Executor Action Trigger'], [$path . 'factory'], $menu);
 
     $path = $demosUrl . 'interactive/';
     $menu = $layout->addMenuGroup(['Interactive', 'icon' => 'talk']);

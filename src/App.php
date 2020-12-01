@@ -12,6 +12,7 @@ use atk4\core\InitializerTrait;
 use atk4\data\Persistence;
 use atk4\ui\Exception\ExitApplicationException;
 use atk4\ui\Persistence\Ui as UiPersistence;
+use atk4\ui\UserAction\ExecutorFactory;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -42,6 +43,9 @@ class App
         'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7',
         'flatpickr' => 'https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.6',
     ];
+
+    /** @var string App wide factory object for View */
+    public $defaultExecutorFactory = ExecutorFactory::class;
 
     /** @var string Version of Agile UI */
     public $version = '2.4-x';

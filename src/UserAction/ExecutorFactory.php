@@ -67,15 +67,15 @@ class ExecutorFactory
      */
     public static function registerActionExecutor(UserAction $action, array $seed)
     {
-        self::$actionExecutorSeed[self::getModelId($action)][$action->short_name] = $seed;
+        static::$actionExecutorSeed[static::getModelId($action)][$action->short_name] = $seed;
     }
 
     public static function registerActionTrigger(string $type, array $seed, UserAction $action = null)
     {
         if ($action) {
-            self::$actionTriggerSeed[$type][self::getModelId($action)][$action->short_name] = $seed;
+            static::$actionTriggerSeed[$type][static::getModelId($action)][$action->short_name] = $seed;
         } else {
-            self::$actionTriggerSeed[$type] = $seed;
+            static::$actionTriggerSeed[$type] = $seed;
         }
     }
 
@@ -87,9 +87,9 @@ class ExecutorFactory
     public static function registerActionCaption(UserAction $action, $caption, $isSpecific = false)
     {
         if ($isSpecific) {
-            self::$actionCaption[self::getModelId($action)][$action->short_name] = $caption;
+            static::$actionCaption[static::getModelId($action)][$action->short_name] = $caption;
         } else {
-            self::$actionCaption[$action->short_name] = $caption;
+            static::$actionCaption[$action->short_name] = $caption;
         }
     }
 
@@ -99,16 +99,16 @@ class ExecutorFactory
     public static function create(UserAction $action, View $owner, string $required = null)
     {
         if ($required) {
-            if (!(self::$executorSeed[$required] ?? null)) {
+            if (!(static::$executorSeed[$required] ?? null)) {
                 throw (new Exception('Required executor type is not set.'))
                     ->addMoreInfo('type', $required);
             }
-            $seed = self::$executorSeed[$required];
-        } elseif ($seed = self::$actionExecutorSeed[self::getModelId($action)][$action->short_name] ?? null) {
+            $seed = static::$executorSeed[$required];
+        } elseif ($seed = static::$actionExecutorSeed[static::getModelId($action)][$action->short_name] ?? null) {
         } else {
             $seed = (!$action->args && !$action->fields && !$action->preview)
-                ? self::$executorSeed[self::JS_EXECUTOR]
-                : self::$executorSeed[self::MODAL_EXECUTOR];
+                ? static::$executorSeed[static::JS_EXECUTOR]
+                : static::$executorSeed[static::MODAL_EXECUTOR];
         }
 
         $executor = Factory::factory($seed);
@@ -133,8 +133,8 @@ class ExecutorFactory
      */
     public static function createActionTrigger(UserAction $action, string $type = null): View
     {
-        $viewType = array_merge(['default' => [__CLASS__, 'self::getDefaultTrigger']], self::$actionTriggerSeed[$type] ?? []);
-        if ($seed = $viewType[self::getModelId($action)][$action->short_name] ?? null) {
+        $viewType = array_merge(['default' => [__CLASS__, 'self::getDefaultTrigger']], static::$actionTriggerSeed[$type] ?? []);
+        if ($seed = $viewType[static::getModelId($action)][$action->short_name] ?? null) {
         } elseif ($seed = $viewType[$action->short_name] ?? null) {
         } else {
             $seed = $viewType['default'];
@@ -150,8 +150,8 @@ class ExecutorFactory
      */
     protected static function getDefaultTrigger(UserAction $action, string $type = null): array
     {
-        $seed = [Button::class, self::getActionCaption($action)];
-        if ($type === self::MODAL_BUTTON || $type === self::CARD_BUTTON) {
+        $seed = [Button::class, static::getActionCaption($action)];
+        if ($type === static::MODAL_BUTTON || $type === static::CARD_BUTTON) {
             $seed[] = 'blue';
         }
 
@@ -163,8 +163,8 @@ class ExecutorFactory
      */
     public static function getActionCaption(UserAction $action): string
     {
-        if ($caption = self::$actionCaption[self::getModelId($action)][$action->short_name] ?? null) {
-        } elseif ($caption = self::$actionCaption[$action->short_name] ?? null) {
+        if ($caption = static::$actionCaption[static::getModelId($action)][$action->short_name] ?? null) {
+        } elseif ($caption = static::$actionCaption[$action->short_name] ?? null) {
         } else {
             $caption = $action->getCaption();
         }
@@ -180,7 +180,7 @@ class ExecutorFactory
         return 'Add ' . $action->getModel()->caption ?? '';
     }
 
-    private static function getModelId(UserAction $action)
+    protected static function getModelId(UserAction $action)
     {
         return strtolower(str_replace(' ', '_', $action->getModel()->getModelCaption()));
     }

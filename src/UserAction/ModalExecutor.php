@@ -90,7 +90,6 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      */
     public $previewType = 'html';
 
-    public $executorFactory = ExecutorFactory::class;
     /**
      * View seed for displaying title for each step.
      *

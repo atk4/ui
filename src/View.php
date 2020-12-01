@@ -121,8 +121,8 @@ class View extends AbstractView implements JsExpressionable
      */
     public $element;
 
-    /** @var string|ExecutorFactory Default Executor factory. */
-    public $executorFactory = ExecutorFactory::class;
+    /** @var string|ExecutorFactory Executor factory. */
+    public $executorFactory;
 
     // }}}
 
@@ -264,6 +264,10 @@ class View extends AbstractView implements JsExpressionable
         $addLater = $this->_add_later;
         $this->_add_later = [];
         parent::init();
+
+        if (!$this->executorFactory) {
+            $this->executorFactory = $this->getApp()->defaultExecutorFactory;
+        }
 
         if ($this->id === null) {
             $this->id = $this->name;
