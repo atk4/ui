@@ -265,10 +265,6 @@ class View extends AbstractView implements JsExpressionable
         $this->_add_later = [];
         parent::init();
 
-//        if (!$this->executorFactory) {
-//            $this->executorFactory = $this->getApp()->defaultExecutorFactory;
-//        }
-
         if ($this->id === null) {
             $this->id = $this->name;
         }
