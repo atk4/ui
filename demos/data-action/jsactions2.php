@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Message;
-use atk4\ui\UserAction\ConfirmationExecutor;
-use atk4\ui\UserAction\ExecutorFactory;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -19,8 +17,6 @@ $countryId = $country->get('id');
 
 // Model actions for this file are setup in DemoActionUtil.
 DemoActionsUtil::setupDemoActions($country);
-// Confirm action user a Confirmation executor.
-ExecutorFactory::registerActionExecutor($country->getUserAction('confirm'), [ConfirmationExecutor::class]);
 
 \atk4\ui\Header::addTo($app, ['Assign Model action to button event', 'subHeader' => 'Execute model action on this country record by clicking on the appropriate button on the right.']);
 

@@ -21,16 +21,18 @@ use atk4\ui\View;
  */
 class ExecutorFactory
 {
-    public const JS_EXECUTOR =  self::class . '@jsExecutorSeed';
-    public const MODAL_EXECUTOR =  self::class . '@modalExecutorSeed';
+    public const JS_EXECUTOR = self::class . '@jsExecutorSeed';
+    public const MODAL_EXECUTOR = self::class . '@modalExecutorSeed';
+    public const CONFIRMATION_EXECUTOR = self::class . '@confirmationExecutorClass';
     public const MODAL_BUTTON = self::class . '@modalExecutorButton';
-    public const TABLE_BUTTON =  self::class . '@tableButton';
-    public const CARD_BUTTON =  self::class . '@cardButton';
+    public const TABLE_BUTTON = self::class . '@tableButton';
+    public const CARD_BUTTON = self::class . '@cardButton';
 
     /** @var array default executor seed. */
     protected static $executorSeed = [
         self::JS_EXECUTOR => [JsCallbackExecutor::class],
         self::MODAL_EXECUTOR => [ModalExecutor::class],
+        self::CONFIRMATION_EXECUTOR => [ConfirmationExecutor::class],
     ];
 
     /** @var array Executor seed for specific Model user action. */
@@ -94,7 +96,7 @@ class ExecutorFactory
     }
 
     /**
-     * Create proper executor  based on action properties.
+     * Create proper executor based on action properties.
      */
     public static function create(UserAction $action, View $owner, string $required = null)
     {
@@ -106,13 +108,18 @@ class ExecutorFactory
             $seed = static::$executorSeed[$required];
         } elseif ($seed = static::$actionExecutorSeed[static::getModelId($action)][$action->short_name] ?? null) {
         } else {
-            $seed = (!$action->args && !$action->fields && !$action->preview)
-                ? static::$executorSeed[static::JS_EXECUTOR]
-                : static::$executorSeed[static::MODAL_EXECUTOR];
+            if (is_callable($action->confirmation)) {
+                $seed = static::$executorSeed[static::CONFIRMATION_EXECUTOR];
+            } else {
+                $seed = (!$action->args && !$action->fields && !$action->preview)
+                        ? static::$executorSeed[static::JS_EXECUTOR]
+                        : static::$executorSeed[static::MODAL_EXECUTOR];
+            }
         }
 
         $executor = Factory::factory($seed);
         if ($executor instanceof Modal) {
+            // add modal to app->html for proper rendering on callback.
             if (!isset($owner->getApp()->html->elements[$executor->short_name])) {
                 // very dirty hack, @TODO, attach modals in the standard render tree
                 // but only render the result to a different place/html DOM
