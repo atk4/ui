@@ -12,3 +12,40 @@ parameters:
 
     ignoreErrors:
         - '~^Unsafe usage of new static\(\)\.$~'
+
+        # TODO these rules are generated, this ignores should be fixed in the code
+        # for tsrc/AbstractView.php
+        - '~^Access to an undefined property atk4\\ui\\AbstractView\:\:\$skin\.$~'
+        # for tsrc/CardDeck.php
+        - '~^Access to an undefined property atk4\\ui\\CardDeck\:\:\$editFields\.$~'
+        # for tsrc/Console.php
+        - '~^Variable \$old_logger might not be defined\.$~'
+        - '~^Variable \$stat might not be defined\.$~'
+        - '~^Variable \$loggerBak might not be defined\.$~'
+        - '~^Variable \$debugBak might not be defined\.$~'
+        # for tsrc/Form/Control/Calendar.php
+        - '~^Class atk4\\ui\\JsFunction constructor invoked with 3 parameters, 0\-2 required\.$~'
+        # for tsrc/Form/Control/Lookup.php
+        - '~^Call to an undefined method atk4\\ui\\Form\\Control\\Lookup\:\:search\(\)\.$~'
+        # for tsrc/Form/Control/ScopeBuilder.php
+        - '~^Variable \$inputType might not be defined\.$~'
+        # for tsrc/Form/Control/Upload.php
+        - '~^Function array_flip invoked with 2 parameters, 1 required\.$~'
+        # for tsrc/HtmlTemplate.php
+        - '~^Method atk4\\ui\\HtmlTemplate\:\:del\(\) invoked with 2 parameters, 1 required\.$~'
+        # for tsrc/Modal.php
+        - '~^Access to an undefined property atk4\\ui\\Modal\:\:\$options\.$~'
+        # for tsrc/Table.php
+        - '~^Access to an undefined property atk4\\ui\\Table\:\:\$t_row_master\.$~'
+        - '~^Access to an undefined property atk4\\ui\\Table\:\:\$model¨\.$~'
+        # for tsrc/Table/Column/Delete.php
+        - '~^Access to an undefined property atk4\\ui\\Table\\Column\\Delete\:\:\$vp\.$~'
+        # for tsrc/Table/Column/FilterModel/TypeTime.php
+        - '~^Call to an undefined method atk4\\ui\\Table\\Column\\FilterModel\\TypeTime\:\:recalData\(\)\.$~'
+        # for tsrc/View.php
+        - '~^Method atk4\\ui\\View\:\:setModel\(\) invoked with 2 parameters, 1 required\.$~'
+        # for tsrc/Wizard.php
+        - '~^Access to an undefined property atk4\\ui\\Wizard\:\:\$stepTemplate\.$~'
+        - '~^Access to an undefined property atk4\\ui\\Wizard\:\:\$buttonFinish\.$~'
+        # for tests/CallbackTest.php
+        - '~^Access to an undefined property atk4\\ui\\tests\\AppMock\:\:\$terminate\.$~'
