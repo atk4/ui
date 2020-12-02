@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\Form\Control;
 
 use atk4\core\Factory;
+use atk4\data\Model;
 use atk4\ui\Jquery;
 use atk4\ui\JsExpression;
 use atk4\ui\JsFunction;
@@ -204,7 +205,7 @@ class Lookup extends Input
     /**
      * Renders the Lookup row depending on properties set.
      */
-    public function renderRow(\atk4\data\Model $row): array
+    public function renderRow(Model $row): array
     {
         $renderRowFunction = $this->renderRowFunction ?? \Closure::fromCallable([static::class, 'defaultRenderRow']);
 
@@ -219,7 +220,7 @@ class Lookup extends Input
      *
      * @return string[]
      */
-    public static function defaultRenderRow($field, \atk4\data\Model $row, $key = null)
+    public static function defaultRenderRow($field, Model $row, $key = null)
     {
         $id_field = $field->id_field ?: $row->id_field;
         $title_field = $field->title_field ?: $row->title_field;
@@ -376,7 +377,7 @@ class Lookup extends Input
     /**
      * Override this method if you want to add more logic to the initialization of the auto-complete field.
      *
-     * @param Jquery
+     * @param Jquery $chain
      */
     protected function initDropdown($chain)
     {

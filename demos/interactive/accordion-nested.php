@@ -27,7 +27,7 @@ $addAccordionFunc = function ($view, $maxDepth = 2, $level = 0) use (&$addAccord
     }
 
     // dynamic section - simple view
-    $i2 = $accordion->addSection('Dynamic Text', function ($v) use ($maxDepth, $level) {
+    $i2 = $accordion->addSection('Dynamic Text', function ($v) use ($addAccordionFunc, $maxDepth, $level) {
         \atk4\ui\Message::addTo($v, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
         \atk4\ui\LoremIpsum::addTo($v, ['size' => 2]);
         if ($level < $maxDepth) {
@@ -36,7 +36,7 @@ $addAccordionFunc = function ($view, $maxDepth = 2, $level = 0) use (&$addAccord
     });
 
     // dynamic section - form view
-    $i3 = $accordion->addSection('Dynamic Form', function ($v) use ($maxDepth, $level) {
+    $i3 = $accordion->addSection('Dynamic Form', function ($v) use ($addAccordionFunc, $maxDepth, $level) {
         \atk4\ui\Message::addTo($v, ['Loading a form dynamically.', 'ui' => 'tiny message']);
         $form = \atk4\ui\Form::addTo($v);
         $form->addControl('Email');

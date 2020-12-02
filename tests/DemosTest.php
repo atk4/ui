@@ -58,9 +58,11 @@ class DemosTest extends AtkPhpunit\TestCase
                 throw new \atk4\ui\Exception('Demos init must setup only $app variable');
             }
 
+            // @phpstan-ignore-next-line remove once https://github.com/phpstan/phpstan/issues/4155 is resolved
             self::$_db = $app->db;
 
             // prevent $app to run on shutdown
+            // @phpstan-ignore-next-line remove once https://github.com/phpstan/phpstan/issues/4155 is resolved
             $app->run_called = true;
         }
     }

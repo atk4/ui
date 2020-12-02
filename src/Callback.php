@@ -56,7 +56,7 @@ class Callback extends AbstractView
      * @param \Closure $fx
      * @param array    $args
      *
-     * @return mixed|null
+     * @return mixed
      */
     public function set($fx = null, $args = null)
     {
