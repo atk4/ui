@@ -294,7 +294,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->jsSetSubmitBtn($modal, $form, $this->step);
         $this->jsSetPrevHandler($modal, $this->step);
 
-        $form->onSubmit(function (Form $form) use ($modal) {
+        $form->onSubmit(function (Form $form) {
             // collect arguments.
             $this->actionData['args'] = $form->model->get();
 

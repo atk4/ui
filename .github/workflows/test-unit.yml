@@ -20,6 +20,8 @@ jobs:
         include:
           - php: 'latest'
             type: 'CodingStyle'
+          - php: 'latest'
+            type: 'StaticAnalysis'
     env:
       LOG_COVERAGE: ""
     steps:
@@ -28,7 +30,7 @@ jobs:
 
       - name: Configure PHP
         run: |
-          if [ -z "$LOG_COVERAGE" ]; then rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; fi
+          if [ -n "$LOG_COVERAGE" ]; then echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; else rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; fi
           php --version
 
       - name: Setup cache 1/2
@@ -46,9 +48,9 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          if [ "${{ matrix.type }}" != "Phpunit" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev ; fi
+          if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev ; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
-          composer remove --no-interaction --no-update 'behat/*' --dev
+          if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/phpstan 'behat/*' --dev ; fi
           if [ "${{ matrix.php }}" == "8.0" ]; then composer config platform.php 7.4.5 ; fi
           composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
@@ -78,6 +80,12 @@ jobs:
         run: |
           if [ "$(find demos/ -name '*.php' -print0 | xargs -0 grep -L "namespace atk4\\\\ui\\\\demo;" | tee /dev/fd/2)" ]; then echo 'All demos/ files must have namespace declared' && (exit 1); fi
           vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --diff-format=udiff --verbose --show-progress=dots
+
+      - name: Run Static Analysis (only for StaticAnalysis)
+        if: matrix.type == 'StaticAnalysis'
+        run: |
+          echo "memory_limit = 1G" > /usr/local/etc/php/conf.d/custom-memory-limit.ini
+          vendor/bin/phpstan analyse
 
   unit-test:
     name: Unit
@@ -112,7 +120,7 @@ jobs:
 
       - name: Configure PHP
         run: |
-          if [ -z "$LOG_COVERAGE" ]; then rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; fi
+          if [ -n "$LOG_COVERAGE" ]; then echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; else rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; fi
           php --version
 
       - name: Setup cache 1/2
@@ -132,7 +140,7 @@ jobs:
         run: |
           if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "Phpunit Lowest" ] && [ "${{ matrix.type }}" != "Phpunit Burn" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev ; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
-          composer remove --no-interaction --no-update 'behat/*' --dev
+          if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/phpstan 'behat/*' --dev ; fi
           if [ "${{ matrix.php }}" == "8.0" ]; then composer config platform.php 7.4.5 ; fi
           composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
           if [ "${{ matrix.type }}" == "Phpunit Lowest" ]; then composer update  --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader ; fi
@@ -199,7 +207,7 @@ jobs:
 
       - name: Configure PHP
         run: |
-          if [ -z "$LOG_COVERAGE" ]; then rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; fi
+          if [ -n "$LOG_COVERAGE" ]; then echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; else rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; fi
           php --version
 
       - name: Setup cache 1/2
@@ -261,6 +269,7 @@ jobs:
         run: |
           composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev
           composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev
+          composer remove --no-interaction --no-update phpstan/phpstan --dev
           composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
           if [ "${{ matrix.type }}" == "Chrome Lowest" ]; then composer update  --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader ; fi
 
