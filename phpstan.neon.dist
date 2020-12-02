@@ -158,7 +158,6 @@ parameters:
         # for src/Card.php
         - '~^Call to an undefined method atk4\\ui\\AbstractView\:\:addFields\(\)\.$~'
         - '~^Call to an undefined method atk4\\ui\\Jquery\:\:parents\(\)\.$~'
-        - '~^PHPDoc tag @param has invalid value \(\[\]     \$args    The action argument\)\: Unexpected token "\[", expected type at offset 110$~'
         - '~^Call to an undefined method atk4\\ui\\View\:\:addDescription\(\)\.$~'
         - '~^PHPDoc tag @param references unknown parameter\: \$isFluid$~'
         # for src/CardDeck.php
@@ -213,8 +212,6 @@ parameters:
         # for src/Form/Layout.php
         # for src/Form/Layout/Custom.php
         - '~^PHPDoc tag @var has invalid value \(\{@inheritdoc\}\)\: Unexpected token "\{", expected type at offset 9$~'
-        # for src/Grid.php
-        - '~^Call to an undefined method atk4\\ui\\Table\\Column\:\:addActionMenuItem\(\)\.$~'
         # for src/ItemsPerPageSelector.php
         # for src/JsCallback.php
         - '~^Call to an undefined method atk4\\ui\\Jquery\:\:atkAjaxec\(\)\.$~'
