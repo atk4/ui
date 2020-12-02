@@ -113,7 +113,7 @@ class ScopeBuilder extends Control
      */
     protected $query = [];
 
-    protected const OPERATOR_TEXT_EQUALS = 'is exactly';
+    protected const OPERATOR_TEXT_EQUALS = 'equals';
     protected const OPERATOR_TEXT_DOESNOT_EQUAL = 'does not equal';
     protected const OPERATOR_TEXT_GREATER = 'is alphabetically after';
     protected const OPERATOR_TEXT_GREATER_EQUAL = 'is alphabetically equal or after';

@@ -780,8 +780,8 @@ Here is a more advanced example::
 
     // Show email and gender when subscribe is checked.
 
-    // Show m_gift when gender is exactly equal to 'male' and subscribe is checked.
-    // Show f_gift when gender is exactly equal to 'female' and subscribe is checked.
+    // Show m_gift when gender = 'male' and subscribe is checked.
+    // Show f_gift when gender = 'female' and subscribe is checked.
 
     $f_sub->setControlsDisplayRules([
        'email' => ['subscribe' => 'checked'],

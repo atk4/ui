@@ -41,8 +41,8 @@ $formSubscribe->addControl('m_gift', [Form\Control\Dropdown::class, 'caption' =>
 $formSubscribe->addControl('f_gift', [Form\Control\Dropdown::class, 'caption' => 'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
 
 // Show email and gender when subscribe is checked.
-// Show m_gift when gender is exactly equal to 'male' and subscribe is checked.
-// Show f_gift when gender is exactly equal to 'female' and subscribe is checked.
+// Show m_gift when gender = 'male' and subscribe is checked.
+// Show f_gift when gender = 'female' and subscribe is checked.
 $formSubscribe->setControlsDisplayRules([
     'email' => ['subscribe' => 'checked'],
     'gender' => ['subscribe' => 'checked'],
@@ -54,7 +54,7 @@ $formSubscribe->setControlsDisplayRules([
 \atk4\ui\Header::addTo($app, ['Dog registration', 'size' => 2]);
 
 $formDog = Form::addTo($app, ['segment']);
-\atk4\ui\Label::addTo($formDog, ['You can select type of hair cut only with race that contains "poodle" AND age no more than 5 year OR your dog race is exactly "bichon".', 'top attached'], ['AboveControls']);
+\atk4\ui\Label::addTo($formDog, ['You can select type of hair cut only with race that contains "poodle" AND age no more than 5 year OR your dog race equals "bichon".', 'top attached'], ['AboveControls']);
 $formDog->addControl('race', [Form\Control\Line::class]);
 $formDog->addControl('age');
 $formDog->addControl('hair_cut', [Form\Control\Dropdown::class, 'values' => ['Short', 'Long']]);
