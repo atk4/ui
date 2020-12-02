@@ -294,7 +294,7 @@ class CardDeck extends View
      * Therefore if card, that was just save, is not present in db result set or deck then return null
      * otherwise return Card view.
      *
-     * @return mixed|null
+     * @return mixed
      */
     protected function findCard(Model $model)
     {
