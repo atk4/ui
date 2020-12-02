@@ -28,7 +28,7 @@ $grid->menu->addItem(['Delete All', 'icon' => 'trash', 'red active']);
 $grid->addColumn(null, [\atk4\ui\Table\Column\Template::class, 'hello<b>world</b>']);
 
 // Creating a button for executing model test user action.
-$grid->addExecutorButton($grid->executorFactory::create($model->getUserAction('test'), $grid));
+$grid->addExecutorButton($grid->getExecutorFactory()::create($model->getUserAction('test'), $grid));
 
 $grid->addActionButton('Say HI', function ($j, $id) use ($grid) {
     return 'Loaded "' . $grid->model->load($id)->get('name') . '" from ID=' . $id;
