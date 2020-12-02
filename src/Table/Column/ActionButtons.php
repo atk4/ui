@@ -45,7 +45,7 @@ class ActionButtons extends Table\Column
      *
      * @return \atk4\ui\View
      */
-    public function addButton($button, $action = null, string $confirmMsg = '',  $isDisabled = false)
+    public function addButton($button, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
         $name = $this->name . '_button_' . (count($this->buttons) + 1);
 

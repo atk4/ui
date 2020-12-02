@@ -190,7 +190,7 @@ $wizard->addStep('Crud integration', function ($page) {
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
         $country = new \atk4\ui\demo\CountryLock($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
-        $country->getUserAction('delete')->enabled = function ($m) { return ($m->getId() % 2 === 0); };
+        $country->getUserAction('delete')->enabled = function ($m) { return $m->getId() % 2 === 0; };
         $country->addUserAction('mail', [
             'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
             'preview' => function ($model) { return 'here is email preview for ' . $model->get('name'); },
