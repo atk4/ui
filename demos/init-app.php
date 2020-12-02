@@ -39,7 +39,7 @@ if (file_exists(__DIR__ . '/coverage.php') && !class_exists(\PHPUnit\Framework\T
 try {
     /** @var \atk4\data\Persistence\Sql $db */
     require_once __DIR__ . '/init-db.php';
-    // @ TODO for level=2 phpstan-ignore-next-line remove once https://github.com/phpstan/phpstan/issues/4155 is resolved
+    // @phpstan-ignore-next-line remove once https://github.com/phpstan/phpstan/issues/4155 is resolved
     $app->db = $db;
     unset($db);
 } catch (\Throwable $e) {
