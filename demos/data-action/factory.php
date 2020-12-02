@@ -41,16 +41,8 @@ $myFactory = get_class(new class() extends ExecutorFactory {
     ];
 
     protected static $actionCaption = [
-        'add' => [__CLASS__, 'self::getAddActionCaption'],
+        'add' => 'Add New Record',
     ];
-
-    /**
-     * Return add action caption.
-     */
-    protected static function getAddActionCaption(UserAction $action): string
-    {
-        return 'Add New Record';
-    }
 });
 
 // Set new executor factory globally.

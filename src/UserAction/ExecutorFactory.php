@@ -33,15 +33,16 @@ class ExecutorFactory
 
     public const BUTTON_PRIMARY_COLOR = 'blue';
 
-    /** @var array default executor seed. */
+    /**
+     * Contains basic type of executor to use for create method.
+     * Basic type can be changed or added globally via the registerTypeExecutor method.
+     * A specific model/action executor may be set via the registerActionExecutor method.
+     */
     protected static $executorSeed = [
         self::JS_EXECUTOR => [JsCallbackExecutor::class],
         self::MODAL_EXECUTOR => [ModalExecutor::class],
         self::CONFIRMATION_EXECUTOR => [ConfirmationExecutor::class],
     ];
-
-    /** @var array Executor seed for specific Model user action. */
-    protected static $actionExecutorSeed = [];
 
     /**
      * action caption May be set per action generally or specifically per model/action.
@@ -73,11 +74,19 @@ class ExecutorFactory
     ];
 
     /**
+     * Register an executor for basic type.
+     */
+    public static function registerTypeExecutor(string $type, $seed)
+    {
+        static::$executorSeed[$type] = $seed;
+    }
+
+    /**
      * Register an executor for a specific model User action.
      */
     public static function registerActionExecutor(UserAction $action, array $seed)
     {
-        static::$actionExecutorSeed[static::getModelId($action)][$action->short_name] = $seed;
+        static::$executorSeed[static::getModelId($action)][$action->short_name] = $seed;
     }
 
     /**
@@ -120,16 +129,19 @@ class ExecutorFactory
     /**
      * Create proper executor based on action properties.
      */
-    public static function create(UserAction $action, View $owner, string $required = null)
+    public static function create(UserAction $action, View $owner, string $requiredType = null)
     {
-        if ($required) {
-            if (!(static::$executorSeed[$required] ?? null)) {
-                throw (new Exception('Required executor type is not set.'))
-                    ->addMoreInfo('type', $required);
+        // required a specific executor type.
+        if ($requiredType) {
+            if (!(static::$executorSeed[$requiredType] ?? null)) {
+                throw (new Exception('Required executor type is not set. Register it via the registerTypeExecutor method.'))
+                    ->addMoreInfo('type', $requiredType);
             }
-            $seed = static::$executorSeed[$required];
-        } elseif ($seed = static::$actionExecutorSeed[static::getModelId($action)][$action->short_name] ?? null) {
+            $seed = static::$executorSeed[$requiredType];
+        // check if executor is register for this model/action.
+        } elseif ($seed = static::$executorSeed[static::getModelId($action)][$action->short_name] ?? null) {
         } else {
+            // if no type is register, determine executor to use base on action properties.
             if (is_callable($action->confirmation)) {
                 $seed = static::$executorSeed[static::CONFIRMATION_EXECUTOR];
             } else {
