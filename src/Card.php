@@ -178,8 +178,7 @@ class Card extends View
      * If Fields are past with $model that field will be add
      * to the main section of this card.
      *
-     * @param \atk4\data\Model $model  the model
-     * @param array|false      $fields an array of fields name to display in content
+     * @param array|false $fields an array of fields name to display in content
      *
      * @return \atk4\data\Model|void
      */
