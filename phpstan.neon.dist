@@ -304,7 +304,6 @@ parameters:
         - '~^Call to an undefined method atk4\\ui\\JsChain\:\:emit\(\)\.$~'
         - '~^Call to an undefined method atk4\\ui\\JsChain\:\:clearData\(\)\.$~'
         - '~^Call to an undefined method atk4\\ui\\JsChain\:\:addJsonData\(\)\.$~'
-        # - '~^Access to an undefined property atk4\\ui\\UserAction\\JsExecutorInterface&atk4\\ui\\View\:\:\$viewForUrl\.$~'
         - '~^Call to an undefined method atk4\\ui\\AbstractView\:\:setAction\(\)\.$~'
         - '~^Call to an undefined method atk4\\ui\\App\:\:jsReady\(\)\.$~'
         - '~^Call to an undefined method atk4\\ui\\App\:\:getViewJS\(\)\.$~'
