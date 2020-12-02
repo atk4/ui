@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Button;
+use atk4\ui\UserAction\ExecutorFactory;
 use atk4\ui\View;
 
 /** @var \atk4\ui\App $app */
@@ -130,7 +132,6 @@ $wizard->addStep('Arguments', function ($page) {
             'callback' => function ($model, $name) {
                 return 'Hi ' . $name;
             },
-            'ui' => ['executor' => [\atk4\ui\UserAction\JsCallbackExecutor::class]],
         ]);
 
         $model->addUserAction('ask_age', [
@@ -189,15 +190,20 @@ $wizard->addStep('Crud integration', function ($page) {
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
         $country = new \atk4\ui\demo\CountryLock($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
-        $country->getUserAction('delete')->enabled = function () { return random_int(1, 2) > 1; };
+        $country->getUserAction('delete')->enabled = function ($m) { return ($m->getId() % 2 === 0); };
         $country->addUserAction('mail', [
             'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
             'preview' => function ($model) { return 'here is email preview for ' . $model->get('name'); },
             'callback' => function ($model) { return 'email sent to ' . $model->get('name'); },
             'description' => 'Email testing',
-            'ui' => ['icon' => 'mail', 'button' => [null, 'icon' => 'green mail']],
         ]);
 
+        // Register a trigger for mail action in Crud
+        ExecutorFactory::registerActionTrigger(
+            ExecutorFactory::TABLE_BUTTON,
+            [Button::class, null, 'icon' => 'blue mail'],
+            $country->getUserAction('mail')
+        );
         \atk4\ui\Crud::addTo($owner, ['ipp' => 5])->setModel($country, ['name', 'iso']);
     });
 });
