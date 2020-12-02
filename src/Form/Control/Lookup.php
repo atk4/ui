@@ -377,7 +377,7 @@ class Lookup extends Input
     /**
      * Override this method if you want to add more logic to the initialization of the auto-complete field.
      *
-     * @param Jquery
+     * @param Jquery $chain
      */
     protected function initDropdown($chain)
     {

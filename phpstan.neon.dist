@@ -194,7 +194,6 @@ parameters:
         - '~^PHPDoc tag @param has invalid value \(\$value     the current field value\)\: Unexpected token "\$value", expected type at offset 162$~'
         - '~^PHPDoc tag @param has invalid value \(\$values    an array of possible values\)\: Unexpected token "\$values", expected type at offset 109$~'
         # for src/Form/Control/Lookup.php
-        - '~^PHPDoc tag @param has invalid value \(Jquery\)\: Unexpected token "\\n  ", expected variable at offset 139$~'
         - '~^Call to an undefined method atk4\\ui\\Jquery\:\:serialize\(\)\.$~'
         # for src/Form/Control/Multiline.php
         - '~^Property atk4\\ui\\Form\\Control\\Multiline\:\:\$jsAfterAdd has unknown class atk4\\ui\\Form\\Control\\JsFunction as its type\.$~'
