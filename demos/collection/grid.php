@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Button;
-use atk4\ui\UserAction\ExecutorFactory;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -39,7 +38,7 @@ $grid->addModalAction(['icon' => [\atk4\ui\Icon::class, 'external']], 'Modal Tes
 });
 
 // Creating an executor for delete action.
-$deleteExecutor = ExecutorFactory::create($model->getUserAction('delete'), $grid);
+$deleteExecutor = $grid->getExecutorFactory()::create($model->getUserAction('delete'), $grid);
 $deleteExecutor->onHook(\atk4\ui\UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
     return [
         (new \atk4\ui\Jquery())->closest('tr')->transition('fade left'),

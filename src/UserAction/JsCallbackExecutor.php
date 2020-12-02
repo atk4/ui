@@ -44,31 +44,9 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 
     /**
      * Set action to be execute.
-     *
-     * The first single value provide in $urlArgs array will be
-     * consider as the model Id to be loaded with the action owner model.
-     *
-     * Ex.
-     *      $btn = \atk4\ui\Button::addTo($app, ['Import File']);
-     *      $ex = JsCallbackExecutor::addTo($app);
-     *      $ex->setAction($f_action, [8, 'path' => '.']);
-     *
-     *      $btn->on('click', $ex, ['confirm'=> 'This will import a lot of file. Are you sure?']);
-     *
-     *
-     * Note: Id can be set using a single value or a JsExpression, like:
-     *      $ex->setAction($f_action, [$field->jsInput()->val(), 'path' => '.']);
-     *
-     * @param array $urlArgs url Argument to pass when callback is trigger
-     *
-     * @return $this
      */
-    public function setAction(Model\UserAction $action, array $urlArgs = null)
+    public function setAction(Model\UserAction $action)
     {
-        if ($urlArgs) {
-            $this->setUrlArgs($urlArgs);
-        }
-
         $this->action = $action;
         if (!$this->action->enabled && $this->getOwner() instanceof View) {
             $this->getOwner()->addClass('disabled');
@@ -77,6 +55,9 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         return $this;
     }
 
+    /**
+     * Execute model user action.
+     */
     public function executeModelAction(array $args = [])
     {
         $this->set(function ($j) {

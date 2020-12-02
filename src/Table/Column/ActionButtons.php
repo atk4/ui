@@ -7,6 +7,7 @@ namespace atk4\ui\Table\Column;
 use atk4\core\Factory;
 use atk4\data\Model;
 use atk4\ui\Button;
+use atk4\ui\JsChain;
 use atk4\ui\Table;
 use atk4\ui\UserAction\ExecutorInterface;
 
