@@ -48,9 +48,9 @@ $form->onSubmit(function ($form) use ($model) {
 });
 
 $expectedWord = <<<'EOF'
-    Project Budget is greater or equal to '1000' 
-    and (Project Name is regular expression '[a-zA-Z]' 
-    and Client Country Iso is equal to 'Brazil' and Start Date is equal to '2020-10-22') 
+    Project Budget is greater or equal to '1000'
+    and (Project Name is regular expression '[a-zA-Z]'
+    and Client Country Iso is equal to 'Brazil' and Start Date is equal to '2020-10-22')
     and (Finish Time is not equal to '22:22' or Is Commercial is equal to '0' or Currency is equal to 'USD')
     EOF;
 
@@ -124,7 +124,7 @@ $expectedInput = <<< 'EOF'
                 "type": "query-builder-rule",
                 "query": {
                   "rule": "is_commercial",
-                  "operator": "is exactly",
+                  "operator": "equals",
                   "value": "0",
                   "option": null
                 }

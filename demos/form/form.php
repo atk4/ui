@@ -66,7 +66,7 @@ $form->addControl('field', null, ['type' => 'date', 'caption' => 'Date using mod
 $form->addControl('control', [Form\Control\Calendar::class, 'type' => 'date', 'caption' => 'Date using form control: ']);
 $form->buttonSave->set('Compare Date');
 
-$form->onSubmit(function (Form $form) use ($app) {
+$form->onSubmit(function (Form $form) {
     $message = 'field = ' . print_r($form->model->get('field'), true) . '; <br> control = ' . print_r($form->model->get('control'), true);
     $view = new \atk4\ui\Message('Date field vs control:');
     $view->invokeInit();

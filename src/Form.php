@@ -378,7 +378,7 @@ class Form extends View
             $response = $this->js()->html($response->renderToHtml());
         } else {
             $response = new Message([$success, 'type' => 'success', 'icon' => 'check']);
-            $response->setApp($this->getApp);
+            $response->setApp($this->getApp());
             $response->invokeInit();
             $response->text->addParagraph($sub_header);
         }

@@ -252,7 +252,7 @@ class Grid extends View
             $pageLength->stickyGet($this->sortTrigger, $sortBy);
         }
 
-        $pageLength->onPageLengthSelect(function ($ipp) use ($pageLength) {
+        $pageLength->onPageLengthSelect(function ($ipp) {
             $this->ipp = $ipp;
             $this->setModelLimitFromPaginator();
             // add ipp to quicksearch
