@@ -6,7 +6,6 @@ namespace atk4\ui;
 
 use atk4\data\Model;
 use atk4\data\Persistence\Static_;
-use atk4\ui\UserAction\ExecutorFactory;
 use atk4\ui\UserAction\ExecutorInterface;
 
 /**

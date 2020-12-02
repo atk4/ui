@@ -422,7 +422,7 @@ class Grid extends View
 
     public function addExecutorMenuItem(ExecutorInterface $executor)
     {
-        $item = $this->getExecutorFactory()::getActionCaption($executor->getAction());
+        $item = $this->getExecutorFactory()::createActionTrigger($executor->getAction(), $this->getExecutorFactory()::TABLE_MENU_ITEM);
         // ConfirmationExecutor take care of showing the user confirmation, thus make it empty.
         $confirmation = !$executor instanceof ConfirmationExecutor ? ($executor->getAction()->getConfirmation() ?: '') : '';
         $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;

@@ -16,7 +16,7 @@ $model = new ProductLock($app->db);
 $model->addCondition('name', '=', 'Mustard');
 
 // use default.
-ExecutorFactory::registerActionTrigger(ExecutorFactory::TABLE_BUTTON, []);
+ExecutorFactory::useActionTriggerDefault(ExecutorFactory::TABLE_BUTTON);
 
 $edit = $model->getUserAction('edit');
 $edit->ui = ['execButton' => [\atk4\ui\Button::class, 'EditMe', 'blue']];

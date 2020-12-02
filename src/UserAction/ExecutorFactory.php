@@ -12,6 +12,7 @@ use atk4\data\Model;
 use atk4\data\Model\UserAction;
 use atk4\ui\Button;
 use atk4\ui\Exception;
+use atk4\ui\Item;
 use atk4\ui\Modal;
 use atk4\ui\View;
 
@@ -27,6 +28,10 @@ class ExecutorFactory
     public const MODAL_BUTTON = self::class . '@modalExecutorButton';
     public const TABLE_BUTTON = self::class . '@tableButton';
     public const CARD_BUTTON = self::class . '@cardButton';
+    public const MENU_ITEM = self::class . '@menuItem';
+    public const TABLE_MENU_ITEM = self::class . '@tableMenuItem';
+
+    public const BUTTON_PRIMARY_COLOR = 'blue';
 
     /** @var array default executor seed. */
     protected static $executorSeed = [
@@ -62,6 +67,9 @@ class ExecutorFactory
             'edit' => [Button::class, null, 'icon' => 'edit'],
             'delete' => [Button::class, null, 'icon' => 'red trash'],
         ],
+        self::MENU_ITEM => [
+            'add' => [__CLASS__, 'self::getAddMenuItem'],
+        ],
     ];
 
     /**
@@ -72,13 +80,27 @@ class ExecutorFactory
         static::$actionExecutorSeed[static::getModelId($action)][$action->short_name] = $seed;
     }
 
-    public static function registerActionTrigger(string $type, array $seed, UserAction $action = null)
+    /**
+     * Register an action trigger for a specific type.
+     * Trigger can be specify per action or per model/action.
+     *
+     * @param string|View $seed
+     */
+    public static function registerActionTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false)
     {
-        if ($action) {
+        if ($isSpecific) {
             static::$actionTriggerSeed[$type][static::getModelId($action)][$action->short_name] = $seed;
         } else {
-            static::$actionTriggerSeed[$type] = $seed;
+            static::$actionTriggerSeed[$type][$action->short_name] = $seed;
         }
+    }
+
+    /**
+     * Set an action trigger type to use it's default seed.
+     */
+    public static function useActionTriggerDefault(string $type)
+    {
+        static::$actionTriggerSeed[$type] = [];
     }
 
     /**
@@ -86,7 +108,7 @@ class ExecutorFactory
      * Can be apply globally, i.e. to all action using the same name
      * of specifically, i.e. only for the action name in specific model.
      */
-    public static function registerActionCaption(UserAction $action, $caption, $isSpecific = false)
+    public static function registerActionCaption(UserAction $action, string $caption, bool $isSpecific = false)
     {
         if ($isSpecific) {
             static::$actionCaption[static::getModelId($action)][$action->short_name] = $caption;
@@ -153,13 +175,30 @@ class ExecutorFactory
     }
 
     /**
-     * Return executor default button seed based on action.
+     * Return executor default trigger seed based on type.
      */
     protected static function getDefaultTrigger(UserAction $action, string $type = null): array
     {
-        $seed = [Button::class, static::getActionCaption($action)];
-        if ($type === static::MODAL_BUTTON || $type === static::CARD_BUTTON) {
-            $seed[] = 'blue';
+        switch ($type) {
+            case self::CARD_BUTTON:
+            case self::TABLE_BUTTON:
+            case self::MODAL_BUTTON:
+                $seed = [Button::class, static::getActionCaption($action)];
+                if ($type === static::MODAL_BUTTON || $type === static::CARD_BUTTON) {
+                    $seed[] = static::BUTTON_PRIMARY_COLOR;
+                }
+
+                break;
+            case self::MENU_ITEM:
+                $seed = [Item::class, static::getActionCaption($action), ['class' => 'item']];
+
+                break;
+            case self::TABLE_MENU_ITEM:
+                $seed = [Item::class, static::getActionCaption($action), 'id' => false, ['class' => 'item']];
+
+                break;
+            default:
+                $seed = [Button::class, static::getActionCaption($action)];
         }
 
         return $seed;
@@ -177,6 +216,11 @@ class ExecutorFactory
         }
 
         return is_array($caption) && is_callable($caption) ? call_user_func($caption, $action) : $caption;
+    }
+
+    protected static function getAddMenuItem($action, $type)
+    {
+        return [Item::class, static::getAddActionCaption($action), 'icon' => 'plus'];
     }
 
     /**

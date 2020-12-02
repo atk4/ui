@@ -15,7 +15,7 @@ use atk4\ui\UserAction\ExecutorFactory;
 require_once __DIR__ . '/../init-app.php';
 
 // reset to default button
-ExecutorFactory::registerActionTrigger(ExecutorFactory::TABLE_BUTTON, []);
+ExecutorFactory::useActionTriggerDefault(ExecutorFactory::TABLE_BUTTON);
 
 $model = new CountryLock($app->db);
 $crud = \atk4\ui\Crud::addTo($app, ['ipp' => 10, 'menu' => ['class' => ['atk-grid-menu']]]);

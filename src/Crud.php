@@ -132,10 +132,7 @@ class Crud extends Grid
                 if ($action->enabled) {
                     $executor = $this->initActionExecutor($action);
                     $this->menuItems[$k]['item'] = $this->menu->addItem(
-                        array_merge(
-                            [$this->getExecutorFactory()::getActionCaption($action)],
-                            $action->modifier === Model\UserAction::MODIFIER_CREATE ? ['icon' => 'plus'] : []
-                        )
+                        $this->getExecutorFactory()::createActionTrigger($action, $this->getExecutorFactory()::MENU_ITEM)
                     );
                     $this->menuItems[$k]['action'] = $executor;
                 }
