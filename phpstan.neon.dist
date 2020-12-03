@@ -49,7 +49,7 @@ parameters:
         - '~^Access to an undefined property atk4\\ui\\Wizard\:\:\$stepTemplate\.$~'
         - '~^Access to an undefined property atk4\\ui\\Wizard\:\:\$buttonFinish\.$~'
         # for tests/CallbackTest.php
-        - '~^Access to an undefined property atk4\\ui\\tests\\AppMock\:\:\$terminate\.$~'
+        - '~^Access to an undefined property atk4\\ui\\Tests\\AppMock\:\:\$terminate\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
