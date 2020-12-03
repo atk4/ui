@@ -391,6 +391,9 @@ class Lookup extends Input
 
     protected function renderView(): void
     {
+        $this->callback = \atk4\ui\Callback::addTo($this);
+        $this->callback->set([$this, 'outputApiResponse']);
+        
         if ($this->multiple) {
             $this->template->set('multiple', 'multiple');
         }
