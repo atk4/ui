@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace atk4\ui\Tests;
 
 use GuzzleHttp\Client;
 use Symfony\Component\Process\Process;

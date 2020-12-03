@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests\Concerns;
+namespace atk4\ui\Tests\Concerns;
 
 use atk4\ui\Table;
 
