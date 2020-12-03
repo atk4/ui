@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\core\Factory;
-use atk4\data\Model;
-use atk4\ui\Button;
-use atk4\ui\JsChain;
-use atk4\ui\Table;
-use atk4\ui\UserAction\ExecutorInterface;
+use Atk4\Core\Factory;
+use Atk4\Data\Model;
+use Atk4\Ui\Button;
+use Atk4\Ui\JsChain;
+use Atk4\Ui\Table;
+use Atk4\Ui\UserAction\ExecutorInterface;
 
 /**
  * Formatting action buttons column.
@@ -41,10 +41,10 @@ class ActionButtons extends Table\Column
      *
      * Returns button object
      *
-     * @param \atk4\ui\View|string               $button
+     * @param \Atk4\Ui\View|string               $button
      * @param JsChain|\Closure|ExecutorInterface $action
      *
-     * @return \atk4\ui\View
+     * @return \Atk4\Ui\View
      */
     public function addButton($button, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
@@ -55,7 +55,7 @@ class ActionButtons extends Table\Column
                 $button = [1 => $button];
             }
 
-            $button = Factory::factory([\atk4\ui\Button::class], Factory::mergeSeeds($button, ['id' => false]));
+            $button = Factory::factory([\Atk4\Ui\Button::class], Factory::mergeSeeds($button, ['id' => false]));
         }
 
         if ($isDisabled === true) {
@@ -79,12 +79,12 @@ class ActionButtons extends Table\Column
      * Adds a new button which will open a modal dialog and dynamically
      * load contents through $callback. Will pass a virtual page.
      *
-     * @param \atk4\ui\View|string $button
+     * @param \Atk4\Ui\View|string $button
      * @param string|array         $defaults modal title or modal defaults array
-     * @param \atk4\ui\View        $owner
+     * @param \Atk4\Ui\View        $owner
      * @param array                $args
      *
-     * @return \atk4\ui\View
+     * @return \Atk4\Ui\View
      */
     public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [])
     {
@@ -96,7 +96,7 @@ class ActionButtons extends Table\Column
 
         $defaults['appStickyCb'] = true;
 
-        $modal = \atk4\ui\Modal::addTo($owner, $defaults);
+        $modal = \Atk4\Ui\Modal::addTo($owner, $defaults);
 
         $modal->observeChanges(); // adds scrollbar if needed
 
@@ -119,7 +119,7 @@ class ActionButtons extends Table\Column
         return parent::getTag($position, $value, $attr);
     }
 
-    public function getDataCellTemplate(\atk4\data\Field $field = null)
+    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
     {
         if (!$this->buttons) {
             return '';

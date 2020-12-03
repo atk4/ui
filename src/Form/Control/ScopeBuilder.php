@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
-use atk4\data\Field;
-use atk4\data\Model;
-use atk4\data\Model\Scope;
-use atk4\data\Model\Scope\Condition;
-use atk4\ui\Callback;
-use atk4\ui\Exception;
-use atk4\ui\Form\Control;
-use atk4\ui\HtmlTemplate;
+use Atk4\Data\Field;
+use Atk4\Data\Model;
+use Atk4\Data\Model\Scope;
+use Atk4\Data\Model\Scope\Condition;
+use Atk4\Ui\Callback;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Form\Control;
+use Atk4\Ui\HtmlTemplate;
 
 class ScopeBuilder extends Control
 {
@@ -84,7 +84,7 @@ class ScopeBuilder extends Control
     /**
      * The scopebuilder View. Assigned in init().
      *
-     * @var \atk4\ui\View
+     * @var \Atk4\Ui\View
      */
     protected $scopeBuilderView;
 
@@ -322,10 +322,10 @@ class ScopeBuilder extends Control
             $this->scopeBuilderTemplate = new HtmlTemplate('<div id="{$_id}" class="ui"><atk-query-builder v-bind="initData"></atk-query-builder></div>');
         }
 
-        $this->scopeBuilderView = \atk4\ui\View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
+        $this->scopeBuilderView = \Atk4\Ui\View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
 
         if ($this->form) {
-            $this->form->onHook(\atk4\ui\Form::HOOK_LOAD_POST, function ($form, &$post) {
+            $this->form->onHook(\Atk4\Ui\Form::HOOK_LOAD_POST, function ($form, &$post) {
                 $key = $this->field->short_name;
                 $post[$key] = $this->queryToScope($this->getApp()->decodeJson($post[$key] ?? '{}'));
             });

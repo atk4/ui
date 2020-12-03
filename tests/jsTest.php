@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\ui\Jquery;
-use atk4\ui\JsChain;
-use atk4\ui\JsExpression;
-use atk4\ui\JsFunction;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsChain;
+use Atk4\Ui\JsExpression;
+use Atk4\Ui\JsFunction;
 
 class jsTest extends AtkPhpunit\TestCase
 {
@@ -41,7 +41,7 @@ class jsTest extends AtkPhpunit\TestCase
 
             // test JSON renderer in App too
             // test extensively because of (possibly fragile) custom regex impl
-            $app = (new \ReflectionClass(\atk4\ui\App::class))->newInstanceWithoutConstructor();
+            $app = (new \ReflectionClass(\Atk4\Ui\App::class))->newInstanceWithoutConstructor();
             $expectedRaw = json_decode($expected);
             foreach ([
                 [$expectedRaw, $in], // direct value

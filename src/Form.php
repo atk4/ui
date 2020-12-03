@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\core\Factory;
-use atk4\data\Model;
-use atk4\data\Reference\ContainsMany;
+use Atk4\Core\Factory;
+use Atk4\Data\Model;
+use Atk4\Data\Reference\ContainsMany;
 
 /**
  * Implements a form.
  */
 class Form extends View
 {
-    use \atk4\core\HookTrait;
+    use \Atk4\Core\HookTrait;
 
     /** @const string Executed when form is submitted */
     public const HOOK_SUBMIT = self::class . '@submit';
@@ -63,7 +63,7 @@ class Form extends View
     /**
      * A current layout of a form, needed if you call $form->addControl().
      *
-     * @var \atk4\ui\Form\Layout
+     * @var \Atk4\Ui\Form\Layout
      */
     public $layout;
 
@@ -263,7 +263,7 @@ class Form extends View
      *
      * @param array $fields
      *
-     * @return \atk4\data\Model
+     * @return \Atk4\Data\Model
      */
     public function setModel(Model $model, $fields = null)
     {
@@ -293,7 +293,7 @@ class Form extends View
                 $response = $this->hook(self::HOOK_SUBMIT);
 
                 if (!$response) {
-                    if (!$this->model instanceof \atk4\ui\Misc\ProxyModel) {
+                    if (!$this->model instanceof \Atk4\Ui\Misc\ProxyModel) {
                         $this->model->save();
 
                         return $this->success('Form data has been saved');
@@ -303,7 +303,7 @@ class Form extends View
                 }
 
                 return $response;
-            } catch (\atk4\data\ValidationException $val) {
+            } catch (\Atk4\Data\ValidationException $val) {
                 $response = [];
                 foreach ($val->errors as $field => $error) {
                     $response[] = $this->error($field, $error);
@@ -401,7 +401,7 @@ class Form extends View
     public function addControl(?string $name, $control = null, $field = null)
     {
         if (!$this->model) {
-            $this->model = new \atk4\ui\Misc\ProxyModel();
+            $this->model = new \Atk4\Ui\Misc\ProxyModel();
         }
 
         return $this->layout->addControl($name, $control, $field);
@@ -487,15 +487,15 @@ class Form extends View
      * 3. $f->type is converted into seed and evaluated
      * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
      *
-     * @param \atk4\data\Field $field Data model field
+     * @param \Atk4\Data\Field $field Data model field
      * @param array            $seed  Defaults to pass to Factory::factory() when control object is initialized
      *
      * @return Form\Control
      */
-    public function controlFactory(\atk4\data\Field $field, $seed = [])
+    public function controlFactory(\Atk4\Data\Field $field, $seed = [])
     {
-        if ($field && !$field instanceof \atk4\data\Field) {
-            throw (new Exception('Argument 1 for controlFactory must be \atk4\data\Field or null'))
+        if ($field && !$field instanceof \Atk4\Data\Field) {
+            throw (new Exception('Argument 1 for controlFactory must be \Atk4\Data\Field or null'))
                 ->addMoreInfo('field', $field);
         }
 
@@ -571,13 +571,13 @@ class Form extends View
                 if (!$field->readonly && !$field->disabled) {
                     $field->set($post[$key] ?? null);
                 }
-            } catch (\atk4\core\Exception $e) {
+            } catch (\Atk4\Core\Exception $e) {
                 $errors[$key] = $e->getMessage();
             }
         }
 
         if ($errors) {
-            throw new \atk4\data\ValidationException($errors);
+            throw new \Atk4\Data\ValidationException($errors);
         }
     }
 

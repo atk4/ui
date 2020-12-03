@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Button;
-use atk4\ui\Header;
-use atk4\ui\Modal;
+use Atk4\Ui\Button;
+use Atk4\Ui\Header;
+use Atk4\Ui\Modal;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-class ReloadTest extends \atk4\ui\View
+class ReloadTest extends \Atk4\Ui\View
 {
     protected function init(): void
     {
         parent::init();
 
-        $label = \atk4\ui\Label::addTo($this, ['Testing...', 'detail' => '', 'red']);
-        $reload = new \atk4\ui\JsReload($this, [$this->name => 'ok']);
+        $label = \Atk4\Ui\Label::addTo($this, ['Testing...', 'detail' => '', 'red']);
+        $reload = new \Atk4\Ui\JsReload($this, [$this->name => 'ok']);
 
         if (isset($_GET[$this->name])) {
             $label->class[] = 'green';

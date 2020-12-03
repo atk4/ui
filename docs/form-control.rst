@@ -5,7 +5,7 @@
 Form Controls
 =============
 
-.. php:namespace:: atk4\ui\Form
+.. php:namespace:: Atk4\Ui\Form
 
 .. php:class:: Control
 
@@ -15,7 +15,7 @@ quite simple components that present themselves as input controls: line, select,
 Relationship with Form
 ======================
 
-All Form Control Decorators can be integrated with :php:class:`atk4\\ui\\Form` which will
+All Form Control Decorators can be integrated with :php:class:`Atk4\\Ui\\Form` which will
 facilitate collection and processing of data in a form. Form Control decorators can also
 be used as stand-alone controls.
 
@@ -34,8 +34,8 @@ You can set default value and interact with a form control using JavaScript::
     $control->set('hello world');
 
 
-    $button = \atk4\ui\Button::addTo($app, ['check value']);
-    $button->on('click', new \atk4\ui\JsExpression('alert("control value is: "+[])', [$control->jsInput()->val()]));
+    $button = \Atk4\Ui\Button::addTo($app, ['check value']);
+    $button->on('click', new \Atk4\Ui\JsExpression('alert("control value is: "+[])', [$control->jsInput()->val()]));
 
 
 When used stand-alone, Form\Controls will produce a basic HTML (I have omitted id=)::
@@ -50,8 +50,8 @@ Using in-form
 
 Form Control can also be used inside a form like this::
 
-    $form = \atk4\ui\Form::addTo($app);
-    $control = $form->addControl('name', new \atk4\ui\Form\Control\Line());
+    $form = \Atk4\Ui\Form::addTo($app);
+    $control = $form->addControl('name', new \Atk4\Ui\Form\Control\Line());
 
 If you execute this exmple, you'll notice that Feld now has a label, it uses full width of the
 page and the following HTML is now produced::
@@ -64,7 +64,7 @@ page and the following HTML is now produced::
     </div>
 
 The markup that surronds the button which includes Label and formatting is produced by
-:php:class:`atk4\\ui\\Form\\Layout`, which does draw some of the information from the Form Control
+:php:class:`Atk4\\Ui\\Form\\Layout`, which does draw some of the information from the Form Control
 itself.
 
 Using in Form Layouts
@@ -73,19 +73,19 @@ Using in Form Layouts
 Form may have multiple Form Layouts and that's very useful if you need to split up form
 into multiple Tabs or detach form control groups or even create nested layouts::
 
-    $form = \atk4\ui\Form::addTo($app);
-    $tabs = \atk4\ui\Tabs::addTo($form, [], ['AboveControls']);
-    \atk4\ui\View::addTo($form, ['ui'=>'divider'], ['AboveControls']);
+    $form = \Atk4\Ui\Form::addTo($app);
+    $tabs = \Atk4\Ui\Tabs::addTo($form, [], ['AboveControls']);
+    \Atk4\Ui\View::addTo($form, ['ui'=>'divider'], ['AboveControls']);
 
     $form_page = Form\Layout::addTo($tabs->addTab('Basic Info'), ['form'=>$form]);
-    $form_page->addControl('name', new \atk4\ui\Form\Control\Line());
+    $form_page->addControl('name', new \Atk4\Ui\Form\Control\Line());
 
     $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form'=>$form]);
-    $form_page->addControl('age', new \atk4\ui\Form\Control\Line());
+    $form_page->addControl('age', new \Atk4\Ui\Form\Control\Line());
 
     $form->onSubmit(function($form) { return $form->model->get('name').' has age '.$form->model->get('age'); });
 
-This is further explained in documentation for :php:class:`atk4\\ui\\Form\\Layout` class,
+This is further explained in documentation for :php:class:`Atk4\\Ui\\Form\\Layout` class,
 however if you do plan on adding your own form control types, it's important that you extend it
 properly:
 
@@ -112,13 +112,13 @@ Hint can be specified either inside Form Control decorator seed or inside the Fi
 
 Text will have HTML characters escaped. You may also specify hint value as an object::
 
-    $form->addControl('name', ['hint'=>new \atk4\ui\Text(
+    $form->addControl('name', ['hint'=>new \Atk4\Ui\Text(
         'Click <a href="https://example.com/" target="_blank">here</a>'
     )]);
 
 or you can inject a view with a custom template::
 
-    $form->addControl('name', ['hint'=>['template'=>new \atk4\ui\Template(
+    $form->addControl('name', ['hint'=>['template'=>new \Atk4\Ui\Template(
         'Click <a href="https://example.com/" target="_blank">here</a>'
     )]]);
 
@@ -144,7 +144,7 @@ The most common use-case in large application is the use with Models. You would 
 `Country` model as well as
 `Persistence $db <https://agile-data.readthedocs.io/en/develop/persistence.html>`_::
 
-    class Country extends \atk4\data\Model
+    class Country extends \Atk4\Data\Model
     {
         public $table = 'country';
 
@@ -163,14 +163,14 @@ The most common use-case in large application is the use with Models. You would 
 
 To create a form, the following is sufficient::
 
-    $form = \atk4\ui\Form::addTo($app);
+    $form = \Atk4\Ui\Form::addTo($app);
     $form->setModel(new Country($db);
 
 The above will populate fields from model into the form automatically. You can use second
-argument to :php:meth:`\atk4\ui\Form::setModel()` to indicate which fields to display
+argument to :php:meth:`\Atk4\Ui\Form::setModel()` to indicate which fields to display
 or rely on :ref:`field_visibility`.
 
-When Form controls are populated, then :php:meth:`\atk4\ui\Form::controlFactory` is
+When Form controls are populated, then :php:meth:`\Atk4\Ui\Form::controlFactory` is
 consulted to make a decision on how to translate
 `Model Field <https://agile-data.readthedocs.io/en/develop/fields.html>`_ into
 Form Control Decorator.
@@ -178,12 +178,12 @@ Form Control Decorator.
 The rules are rather straightforward but may change in future versions of Agile UI:
 
  - if `enum <https://agile-data.readthedocs.io/en/develop/fields.html#Field::$enum>`_ is defined, use :php:class:`Dropdown`
- - consult :php:attr:`\atk4\ui\Form::$typeToDecorator` property for type-to-seed association
+ - consult :php:attr:`\Atk4\Ui\Form::$typeToDecorator` property for type-to-seed association
  - type=password will use :php:class:`Password`
 
 You always have an option to explicitly specify which field you would like to use::
 
-    $model->addField('long_text', ['ui'=>['rorm'=>\atk4\ui\Form\Control\TextArea::class]]);
+    $model->addField('long_text', ['ui'=>['rorm'=>\Atk4\Ui\Form\Control\TextArea::class]]);
 
 It is recommended however, that you use type when possible, because types will be universally supported
 by all components::
@@ -202,7 +202,7 @@ Link to Model Field
 Form decorator defines $field property which will be pointing to a field object of a model, so technically
 the value of the field would be read from `$decorator->field->get()`.
 
-.. php:namespace:: atk4\ui\Form\Control
+.. php:namespace:: Atk4\Ui\Form\Control
 
 Line Input Form control
 =======================
@@ -227,7 +227,7 @@ Here are few ways to specify `icon` to an Input::
     Line::addTo($page, ['icon'=>'search']);
 
     // Type-hinting friendly
-    $line = new \atk4\ui\Form\Control\Line();
+    $line = new \Atk4\Ui\Form\Control\Line();
     $line->icon='search';
     $page->add($line);
 
@@ -301,10 +301,10 @@ $expression argument can be string, JsExpression, array of JsExpressions or even
 
     // callback
     $f2 = $form->addControl('f2');
-    $f2->onChange(function(){return new \atk4\ui\JsExpression('console.log("f2 changed")');});
+    $f2->onChange(function(){return new \Atk4\Ui\JsExpression('console.log("f2 changed")');});
 
     // Calendar form control - wraps in function call with arguments date, text and mode
-    $c1 = $form->addControl('c1', new \atk4\ui\Form\Control\Calendar(['type'=>'date']));
+    $c1 = $form->addControl('c1', new \Atk4\Ui\Form\Control\Calendar(['type'=>'date']));
     $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
 
 
@@ -326,7 +326,7 @@ of records to display. Dropdown renders all records when the paged is rendered, 
 
 To render a model field as Dropdown, use the ui property of the field::
 
-    $model->addField('someField', ['ui' => ['form' =>[\atk4\ui\Form\Control\Dropdown::class]]]);
+    $model->addField('someField', ['ui' => ['form' =>[\Atk4\Ui\Form\Control\Dropdown::class]]]);
 
 ..  Customizing how a Model's records are displayed in Dropdown
 As default, Dropdown will use the `$model->id_field` as value, and `$model->title_field` as title for each menu item.
@@ -352,7 +352,7 @@ You can also use this function to add an Icon to a record::
 
 If you'd like to even further adjust How each item is displayed (e.g. complex HTML and more model fields), you can extend the Dropdown class and create your own template with the complex HTML::
 
-    class MyDropdown extends \atk4\ui\Dropdown {
+    class MyDropdown extends \Atk4\Ui\Dropdown {
         
         public $defaultTemplate = 'my_dropdown.html';
         
@@ -450,7 +450,7 @@ See this example from Model class init method::
         'serialize' => 'json',
         'ui' => [
             'form' => [
-                \atk4\ui\Form\Control\Dropdown::class,
+                \Atk4\Ui\Form\Control\Dropdown::class,
                 'isMultiple' => true,
                 'model' => $expr_model,
             ],
@@ -485,7 +485,7 @@ input model.
 
 Assume that each data model are defined and model Category has many Sub-Category and Sub-Category has many Product::
 
-    $form = \atk4\ui\Form::addTo($app);
+    $form = \Atk4\Ui\Form::addTo($app);
     $form->addControl('category_id', [Dropdown::class, 'model' => new Category($db)]);
     $form->addControl('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
     $form->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);

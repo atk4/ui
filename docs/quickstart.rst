@@ -37,10 +37,10 @@ Open a new file `index.php` and enter the following code::
     <?php                                          // 1
     require_once __DIR__ . '/vendor/autoload.php'; // 2
 
-    $app = new \atk4\ui\App('My First App');       // 3
-    $app->initLayout([\atk4\ui\Layout\Centered::class]);                  // 4
+    $app = new \Atk4\Ui\App('My First App');       // 3
+    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);                  // 4
 
-    \atk4\ui\HelloWorld::addTo($app);                       // 5
+    \Atk4\Ui\HelloWorld::addTo($app);                       // 5
 
 .. rubric:: Clarifications
 
@@ -75,12 +75,12 @@ writing clearer code.
 By using namespaces you will make out of this::
 
     <?php
-    $app = new \atk4\ui\App('My First App');
+    $app = new \Atk4\Ui\App('My First App');
 
 this::
 
     <?php
-    use \atk4\ui\App; // just declared once at the top of your file
+    use \Atk4\Ui\App; // just declared once at the top of your file
 
     $app = new App('My First App');
 
@@ -90,7 +90,7 @@ once in your project, but other classes could be used more often in one file)
 If you call it only once in a file, just use::
 
     <?php
-    $app = new \atk4\ui\App('My First App');
+    $app = new \Atk4\Ui\App('My First App');
 
 Data Persistence
 ================
@@ -104,8 +104,8 @@ create the application::
     <?php
     require_once __DIR__ . '/vendor/autoload.php';
 
-    $app = new \atk4\ui\App('ToDo List');
-    $app->initLayout([\atk4\ui\Layout\Centered::class]);
+    $app = new \Atk4\Ui\App('ToDo List');
+    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
 All components of Agile Data are database-agnostic and will not concern themselves with the way how you store data.
 I will start the session and connect `persistence <https://agile-data.readthedocs.io/en/develop/persistence.html>`_
@@ -113,14 +113,14 @@ with it::
 
     <?php
     session_start();
-    $s = new \atk4\data\Persistence_Array($_SESSION);
+    $s = new \Atk4\Data\Persistence_Array($_SESSION);
 
 If you're establishing a database connection that should be used throughout your whole application and in many classes,
 you can define it in the $app->db class::
 
     <?php
-    use atk4\data\Persistence;
-    use atk4\ui\App;
+    use Atk4\Data\Persistence;
+    use Atk4\Ui\App;
 
     $db = Persistence::connect(DB_URI,DB_USR, DB_PWD);
 
@@ -137,7 +137,7 @@ We need a class `Task` which describes `data model <https://agile-data.readthedo
 single ToDo item::
 
 
-    class ToDoItem extends \atk4\data\Model {
+    class ToDoItem extends \Atk4\Data\Model {
         public $table = 'todo_item';               // 6
         function init(): void {
             parent::init();
@@ -176,8 +176,8 @@ Class App use `DiContainerTrait` which allow us to inject dependency directly in
     $logger = new Logger('name');
     $logger->pushHandler(new StreamHandler('path/to/your.log', Logger::WARNING));
 
-    use atk4\data\Persistence;
-    use atk4\ui\App;
+    use Atk4\Data\Persistence;
+    use Atk4\Ui\App;
     $db = Persistence::connect("mysql://localhost:3306/database_name", "user", "password");
 
     $app = new App([
@@ -193,10 +193,10 @@ Form and Crud Components
 
 Next we need to add Components that are capable of manipulating the data::
 
-    $col = \atk4\ui\Columns::addTo($app, ['divided']);               // 10
-    $col_reload = new \atk4\ui\JsReload($col);              // 11
+    $col = \Atk4\Ui\Columns::addTo($app, ['divided']);               // 10
+    $col_reload = new \Atk4\Ui\JsReload($col);              // 11
 
-    $form = \atk4\ui\Form::addTo($col->addColumn());                 // 12
+    $form = \Atk4\Ui\Form::addTo($col->addColumn());                 // 12
     $form->setModel(new ToDoItem($s));                      // 13
     $form->onSubmit(function($form) use($col_reload) {      // 14
         $form->model->save();                               // 15
@@ -204,12 +204,12 @@ Next we need to add Components that are capable of manipulating the data::
         return $col_reload;                                 // 16
     });
 
-    \atk4\ui\Table::addTo($col->addColumn())                // 17
+    \Atk4\Ui\Table::addTo($col->addColumn())                // 17
         ->setModel(new ToDoItem($s));
 
 .. rubric:: Clarifications
 
-.. [#] We wish to position Form and Table side-by-side, so we use `\atk4\ui\Columns` component and
+.. [#] We wish to position Form and Table side-by-side, so we use `\Atk4\Ui\Columns` component and
     inject a Fomantic UI CSS class "divided" that will appear as a vertical separation line.
 
 .. [#] $col_reload is a special object which we call :ref:`js_action`. It represents a Browser-event
@@ -241,13 +241,13 @@ Grid and Crud
 As mentioned before, UI Components in Agile Toolkit are often interchangeable, you can swap one for
 another. In our example replace right column (label 17) with the following code::
 
-    $grid = \atk4\ui\Crud::addTo($col->addColumn(), ['paginator'=>false, // 18
+    $grid = \Atk4\Ui\Crud::addTo($col->addColumn(), ['paginator'=>false, // 18
         'canCreate'=>false, 'canDelete'=>false                  // 19
     ]);
     $grid->setModel(new ToDoItem($s));
 
     $grid->menu->addItem('Complete Selected',                   // 20
-        new \atk4\ui\JsReload($grid->table, [                   // 21
+        new \Atk4\Ui\JsReload($grid->table, [                   // 21
             'delete'=>$grid->addSelection()->jsChecked()        // 22
         ])
     );

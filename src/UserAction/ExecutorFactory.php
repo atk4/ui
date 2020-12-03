@@ -5,16 +5,16 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\UserAction;
+namespace Atk4\Ui\UserAction;
 
-use atk4\core\Factory;
-use atk4\data\Model;
-use atk4\data\Model\UserAction;
-use atk4\ui\Button;
-use atk4\ui\Exception;
-use atk4\ui\Item;
-use atk4\ui\Modal;
-use atk4\ui\View;
+use Atk4\Core\Factory;
+use Atk4\Data\Model;
+use Atk4\Data\Model\UserAction;
+use Atk4\Ui\Button;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Item;
+use Atk4\Ui\Modal;
+use Atk4\Ui\View;
 
 /**
  * Class ExecutorFactory

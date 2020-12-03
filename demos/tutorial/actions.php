@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Button;
-use atk4\ui\UserAction\ExecutorFactory;
-use atk4\ui\View;
+use Atk4\Ui\Button;
+use Atk4\Ui\UserAction\ExecutorFactory;
+use Atk4\Ui\View;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$wizard = \atk4\ui\Wizard::addTo($app);
+$wizard = \Atk4\Ui\Wizard::addTo($app);
 $app->stickyGet($wizard->name);
 
 $wizard->addStep('Define User Action', function ($page) {
-    \atk4\ui\Header::addTo($page, ['What are User Actions?']);
+    \Atk4\Ui\Header::addTo($page, ['What are User Actions?']);
 
-    $t = \atk4\ui\Text::addTo($page);
+    $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Since the early version ATK UI was about building generic UI capable of automatically read information about
@@ -37,12 +37,12 @@ $wizard->addStep('Define User Action', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \atk4\ui\demo\CountryLock($owner->getApp()->db);
+        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
 
         $country->addUserAction('send_message');
     });
 
-    $t = \atk4\ui\Text::addTo($page);
+    $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Once defied - actions will be visualised in the Form, Grid, Crud and CardDeck. Additionally add-ons will recognise
@@ -60,21 +60,21 @@ $wizard->addStep('Define User Action', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \atk4\ui\demo\CountryLock($owner->getApp()->db);
+        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
 
         $country->addUserAction('send_message', function () {
             return 'sent';
         });
         $country->tryLoadAny();
 
-        $card = \atk4\ui\Card::addTo($owner);
+        $card = \Atk4\Ui\Card::addTo($owner);
         $card->setModel($country, ['iso']);
         $card->addClickAction($country->getUserAction('send_message'));
     });
 });
 
 $wizard->addStep('UI Integration', function ($page) {
-    $t = \atk4\ui\Text::addTo($page);
+    $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Agile UI introduces a new set of views called "User Action Executors". Their job is to recognise all that meta-information
@@ -84,14 +84,14 @@ $wizard->addStep('UI Integration', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \atk4\ui\demo\CountryLock($owner->getApp()->db);
+        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
         $country->loadAny();
 
-        \atk4\ui\Button::addTo($owner, ['Edit some country'])
+        \Atk4\Ui\Button::addTo($owner, ['Edit some country'])
             ->on('click', $country->getUserAction('edit'));
     });
 
-    $t = \atk4\ui\Text::addTo($page);
+    $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             It is not only the button, but any view can have "User Action" passed as a second step of the on() call. Here the user action
@@ -100,17 +100,17 @@ $wizard->addStep('UI Integration', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \atk4\ui\demo\CountryLock($owner->getApp()->db);
+        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
         $country->loadAny();
 
-        $menu = \atk4\ui\Menu::addTo($owner);
+        $menu = \Atk4\Ui\Menu::addTo($owner);
         $menu->addItem('Hello');
         $menu->addItem('World', $country->getUserAction('edit'));
     });
 });
 
 $wizard->addStep('Arguments', function ($page) {
-    $t = \atk4\ui\Text::addTo($page);
+    $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Next demo defines an user action that requires arguments. You can specify arguments when the user action is invoked, but if not
@@ -120,10 +120,10 @@ $wizard->addStep('Arguments', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $model = new \atk4\data\Model($owner->getApp()->db, 'test');
+        $model = new \Atk4\Data\Model($owner->getApp()->db, 'test');
 
         $model->addUserAction('greet', [
-            'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+            'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
             'args' => [
                 'age' => [
                     'type' => 'string',
@@ -135,7 +135,7 @@ $wizard->addStep('Arguments', function ($page) {
         ]);
 
         $model->addUserAction('ask_age', [
-            'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+            'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
             'args' => [
                 'age' => [
                     'type' => 'integer',
@@ -147,13 +147,13 @@ $wizard->addStep('Arguments', function ($page) {
             },
         ]);
 
-        $owner->add(new \atk4\ui\Form\Control\Line([
+        $owner->add(new \Atk4\Ui\Form\Control\Line([
             'action' => $model->getUserAction('greet'),
         ]));
 
-        \atk4\ui\View::addTo($owner, ['ui' => 'divider']);
+        \Atk4\Ui\View::addTo($owner, ['ui' => 'divider']);
 
-        \atk4\ui\Button::addTo($owner, ['Ask Age'])
+        \Atk4\Ui\Button::addTo($owner, ['Ask Age'])
             ->on('click', $model->getUserAction('ask_age'));
     });
 });
@@ -164,7 +164,7 @@ $wizard->addStep('More Ways', function ($page) {
         $model = new Stat($owner->getApp()->db);
         $model->addUserAction('mail', [
             'fields' => ['currency_field'],
-            'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
+            'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
             'callback' => function() { return 'testing'; },
             'description' => 'Email testing',
         ]);
@@ -178,7 +178,7 @@ $wizard->addStep('More Ways', function ($page) {
 */
 
 $wizard->addStep('Crud integration', function ($page) {
-    $t = \atk4\ui\Text::addTo($page);
+    $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Compared to 1.x versions Crud implementation has became much more lightweight, however you retain all the same
@@ -188,11 +188,11 @@ $wizard->addStep('Crud integration', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \atk4\ui\demo\CountryLock($owner->getApp()->db);
+        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
         $country->getUserAction('delete')->enabled = function ($m) { return $m->getId() % 2 === 0; };
         $country->addUserAction('mail', [
-            'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
+            'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
             'preview' => function ($model) { return 'here is email preview for ' . $model->get('name'); },
             'callback' => function ($model) { return 'email sent to ' . $model->get('name'); },
             'description' => 'Email testing',
@@ -204,12 +204,12 @@ $wizard->addStep('Crud integration', function ($page) {
             [Button::class, null, 'icon' => 'blue mail'],
             $country->getUserAction('mail')
         );
-        \atk4\ui\Crud::addTo($owner, ['ipp' => 5])->setModel($country, ['name', 'iso']);
+        \Atk4\Ui\Crud::addTo($owner, ['ipp' => 5])->setModel($country, ['name', 'iso']);
     });
 });
 
 $wizard->addFinish(function ($page) use ($wizard) {
     PromotionText::addTo($page);
-    \atk4\ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon' => 'left arrow'], ['Left'])
+    \Atk4\Ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon' => 'left arrow'], ['Left'])
         ->link('/demos/index.php');
 });

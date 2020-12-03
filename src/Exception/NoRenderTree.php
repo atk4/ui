@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Exception;
+namespace Atk4\Ui\Exception;
 
-class NoRenderTree extends \atk4\ui\Exception
+class NoRenderTree extends \Atk4\Ui\Exception
 {
     public function __construct($object, $action = '')
     {

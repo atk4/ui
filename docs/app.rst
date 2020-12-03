@@ -6,7 +6,7 @@
 Purpose of App class
 ====================
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 .. php:class:: App
 
 App is a mandatory object that's essential for Agile UI to operate. If you don't create App object explicitly, it
@@ -14,8 +14,8 @@ will be automatically created if you execute `$component->invokeInit()` or `$com
 
 In most use-scenarios, however, you would create instance of an App class yourself before other components::
 
-    $app = new \atk4\ui\App('My App');
-    $app->initLayout([\atk4\ui\Layout\Centered::class]);
+    $app = new \Atk4\Ui\App('My App');
+    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
     LoremIpsum::addTo($app);
 
 As you add one component into another, they will automatically inherit reference to App class. App
@@ -35,7 +35,7 @@ Using App for Injecting Dependencies
 Since App class becomes available for all objects and components of Agile Toolkit, you may add
 properties into the App class::
 
-    $app->db = new \atk4\ui\Persistence_SQL($dsn);
+    $app->db = new \Atk4\Ui\Persistence_SQL($dsn);
 
     // later anywhere in the code:
 
@@ -61,7 +61,7 @@ App class may initialize some resources for you including user authentication an
 My next example defines property `$user` and `$system` for the app class to indicate a system which is currently
 active. (See :ref:`system_pattern`)::
 
-    class Warehouse extends \atk4\ui\App
+    class Warehouse extends \Atk4\Ui\App
     {
         public $user;
         public $company;
@@ -70,7 +70,7 @@ active. (See :ref:`system_pattern`)::
             parent::__construct('Warehouse App v0.4');
 
             // My App class will establish database connection
-            $this->db = new \atk4\data\Persistence_SQL($_CLEARDB_DATABASE_URL['DSN']);
+            $this->db = new \Atk4\Data\Persistence_SQL($_CLEARDB_DATABASE_URL['DSN']);
             $this->db->setApp($this);
 
             // My App class provides access to a currently logged user and currently selected system.
@@ -80,7 +80,7 @@ active. (See :ref:`system_pattern`)::
 
             // App class may be used for pages that do not require authentication
             if (!$auth) {
-                $this->initLayout([\atk4\ui\Layout\Centered::class]);
+                $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
                 return;
             }
 
@@ -91,7 +91,7 @@ active. (See :ref:`system_pattern`)::
 
             // Make sure user is valid
             if(!$this->user->loaded()) {
-                $this->initLayout([\atk4\ui\Layout\Centered::class]);
+                $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
                 Message::addTo($this, ['Login Required', 'error']);
                 Button::addTo($this, ['Login', 'primary'])->link('index.php');
                 exit;
@@ -100,7 +100,7 @@ active. (See :ref:`system_pattern`)::
             // Load company data (System) for present user
             $this->company = $this->user->ref('company_id');
 
-            $this->initLayout([\atk4\ui\Layout\Admin::class]);
+            $this->initLayout([\Atk4\Ui\Layout\Admin::class]);
 
             // Add more initialization here, such as a populating menu.
         }
@@ -265,7 +265,7 @@ If your `App` needs a DB connection, set this property to an instance of `Persis
 
     Example:
 
-    $app->db = \atk4\data\Persistence::connect('mysql://user:pass@localhost/atk');
+    $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 
 See `Persistence::connect <https://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`
 
@@ -353,7 +353,7 @@ at some point initialize internal 'App' class that will assist with various task
 
 Having composition of multiple components will allow them to share the app object::
 
-    $grid = new \atk4\ui\Grid();
+    $grid = new \Atk4\Ui\Grid();
     $grid->setModel($user);
     $grid->addPaginator();          // initialize and populate paginator
     $grid->addButton('Test');       // initialize and populate toolbar
@@ -386,7 +386,7 @@ Adding the Layout
 
 Layout can be initialized through the app like this::
 
-    $app->initLayout([\atk4\ui\Layout\Centered::class]);
+    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
 This will initialize two new views inside the app::
 
@@ -403,7 +403,7 @@ Each layout, depending on it's content, may come with several views that you can
 
 Admin Layout
 ------------
-.. php:namespace:: atk4\ui\Layout
+.. php:namespace:: Atk4\Ui\Layout
 .. php:class:: Admin
 
 Agile Toolkit comes with a ready to use admin layout for your application. The layout is built
@@ -413,7 +413,7 @@ with top, left and right menu objects.
 
 Populating the left menu object is simply a matter of adding the right menu items to the layout menu::
 
-    $app->initLayout([\atk4\ui\Layout\Admin::class]);
+    $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
     $layout = $app->layout;
 
     // Add item into menu
@@ -428,7 +428,7 @@ Populating the left menu object is simply a matter of adding the right menu item
 This is the top menu of the admin layout. You can add other item to the top menu using::
 
     Button::addTo($layout->menu->addItem(), ['View Source', 'teal', 'icon' => 'github'])
-        ->setAttr('target', '_blank')->on('click', new \atk4\ui\JsExpression('document.location=[];', [$url.$f]));
+        ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\JsExpression('document.location=[];', [$url.$f]));
 
 .. php:attr:: menuRight
 

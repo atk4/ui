@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\core\NameTrait;
-use atk4\core\SessionTrait;
-use atk4\data\Field;
-use atk4\data\Persistence;
+use Atk4\Core\NameTrait;
+use Atk4\Core\SessionTrait;
+use Atk4\Data\Field;
+use Atk4\Data\Persistence;
 
 /**
  * Implement a generic filter model for filtering column data.
  */
-class FilterModel extends \atk4\data\Model
+class FilterModel extends \Atk4\Data\Model
 {
     use SessionTrait;
     use NameTrait; // needed for SessionTrait
@@ -69,7 +69,7 @@ class FilterModel extends \atk4\data\Model
          * Field class and setting your filter model class.
          */
         if (!empty($field->filterModel) && isset($field->filterModel)) {
-            if ($field->filterModel instanceof \atk4\data\Model) {
+            if ($field->filterModel instanceof \Atk4\Data\Model) {
                 return $field->filterModel;
             }
             $class = $field->filterModel;

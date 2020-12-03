@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // Next line produces exception, which Agile UI will catch and display nicely.
-\atk4\ui\View::addTo($app, ['foo' => 'bar']);
+\Atk4\Ui\View::addTo($app, ['foo' => 'bar']);

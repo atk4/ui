@@ -18,7 +18,7 @@ Demo: https://ui.agiletoolkit.org/demos/data-action/actions.php
 Executor Interface
 ==================
 
-.. php:namespace:: atk4\ui\UserAction
+.. php:namespace:: Atk4\Ui\UserAction
 
 All executors must implement the Executor or JsExecutor interface.
 
@@ -107,7 +107,7 @@ Here is an example of an user action returning specific record information in th
             [
                 'caption' => 'Delete',
                 'description' => 'Delete Country',
-                'ui' => ['executor' => [\atk4\ui\UserAction\ConfirmationExecutor::class]],
+                'ui' => ['executor' => [\Atk4\Ui\UserAction\ConfirmationExecutor::class]],
                 'confirmation' => function ($action) {
                     return 'Are you sure you want to delete this country: $action->getModel()->getTitle();
                 },
@@ -177,8 +177,8 @@ Type may also be registered per specific model user action via this method::
 
 For example, you need a custom executor to be create when using a specific model user action::
 
-    class MySpecialFormExecutor extends \atk4\ui\UserAction\ModalExecutor {
-        public function addFormTo(\atk4\ui\View $view): \atk4\ui\Form
+    class MySpecialFormExecutor extends \Atk4\Ui\UserAction\ModalExecutor {
+        public function addFormTo(\Atk4\Ui\View $view): \Atk4\Ui\Form
         {
             $myView = MySpecialView::addTo($view);
 
@@ -229,7 +229,7 @@ within a specific view instance.
 
 Example of changing button for Card, Crud and Modal executor globally within your app::
 
-    class MyFactory extends \atk4\ui\UserAction\ExecutorFactory
+    class MyFactory extends \Atk4\Ui\UserAction\ExecutorFactory
     {
         protected static $actionTriggerSeed = [
             self::MODAL_BUTTON => [

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\core\NameTrait;
-use atk4\core\SessionTrait;
+use Atk4\Core\NameTrait;
+use Atk4\Core\SessionTrait;
 
 class Session
 {

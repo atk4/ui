@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-class GetAssets extends \atk4\ui\App
+class GetAssets extends \Atk4\Ui\App
 {
     public $always_run = false;
     public $catch_exceptions = false;

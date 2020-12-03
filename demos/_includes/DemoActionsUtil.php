@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
 class DemoActionsUtil
 {
@@ -101,7 +101,7 @@ class DemoActionsUtil
                     return 'Be careful with this action.';
                 },
                 'callback' => function () {
-                    throw new \atk4\ui\Exception('Told you, didn\'t I?');
+                    throw new \Atk4\Ui\Exception('Told you, didn\'t I?');
                 },
             ]
         );

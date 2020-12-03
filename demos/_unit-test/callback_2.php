@@ -6,15 +6,15 @@ declare(strict_types=1);
  * Test for callback in callback.
  */
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Button;
-use atk4\ui\Crud;
-use atk4\ui\Header;
-use atk4\ui\Loader;
-use atk4\ui\UserAction\ExecutorFactory;
+use Atk4\Ui\Button;
+use Atk4\Ui\Crud;
+use Atk4\Ui\Header;
+use Atk4\Ui\Loader;
+use Atk4\Ui\UserAction\ExecutorFactory;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $m = (new CountryLock($app->db))->setLimit(5);
@@ -44,7 +44,7 @@ $loader->set(function ($p) use ($m) {
             $c->setModel($m, ['name']);
         });
     });
-    \atk4\ui\Button::addTo($p, ['Load2'])->js('click', $loader_1->jsLoad());
+    \Atk4\Ui\Button::addTo($p, ['Load2'])->js('click', $loader_1->jsLoad());
 });
 
-\atk4\ui\Button::addTo($app, ['Load1'])->js('click', $loader->jsLoad());
+\Atk4\Ui\Button::addTo($app, ['Load1'])->js('click', $loader->jsLoad());

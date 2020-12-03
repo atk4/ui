@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\core\Factory;
+use Atk4\Core\Factory;
 
 class Table extends Lister
 {
@@ -187,7 +187,7 @@ class Table extends Lister
         }
 
         if (!$this->model) {
-            $this->model = new \atk4\ui\Misc\ProxyModel();
+            $this->model = new \Atk4\Ui\Misc\ProxyModel();
         }
 
         // This code should be vaugely consistent with Form\Layout::addControl()
@@ -346,12 +346,12 @@ class Table extends Lister
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
      *
-     * @param \atk4\data\Field $field Data model field
+     * @param \Atk4\Data\Field $field Data model field
      * @param mixed            $seed  Defaults to pass to Factory::factory() when decorator is initialized
      *
      * @return Table\Column
      */
-    public function decoratorFactory(\atk4\data\Field $field, $seed = [])
+    public function decoratorFactory(\Atk4\Data\Field $field, $seed = [])
     {
         $seed = Factory::mergeSeeds(
             $seed,
@@ -452,9 +452,9 @@ class Table extends Lister
      *
      * @param array|bool $columns
      *
-     * @return \atk4\data\Model
+     * @return \Atk4\Data\Model
      */
-    public function setModel(\atk4\data\Model $model, $columns = null)
+    public function setModel(\Atk4\Data\Model $model, $columns = null)
     {
         parent::setModel($model);
 
@@ -641,7 +641,7 @@ class Table extends Lister
                 }
 
                 // closure support
-                // arguments - current value, key, \atk4\ui\Table object
+                // arguments - current value, key, \Atk4\Ui\Table object
                 if ($f instanceof \Closure) {
                     $this->totals[$key] += ($f($this->model->get($key), $key, $this) ?: 0);
                 } elseif (is_string($f)) { // built-in methods

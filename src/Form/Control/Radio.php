@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
-use atk4\ui\Form;
+use Atk4\Ui\Form;
 
 /**
  * Input element for a form control.
@@ -36,7 +36,7 @@ class Radio extends Form\Control
     {
         parent::init();
 
-        $this->lister = \atk4\ui\Lister::addTo($this, [], ['Radio']);
+        $this->lister = \Atk4\Ui\Lister::addTo($this, [], ['Radio']);
         $this->lister->t_row->set('_name', $this->short_name);
     }
 
@@ -55,7 +55,7 @@ class Radio extends Form\Control
             $this->addClass('disabled');
         }
 
-        $this->lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) use ($value) {
+        $this->lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) use ($value) {
             if ($this->readonly) {
                 $lister->t_row->set('disabled', $value !== (string) $lister->model->getId() ? 'disabled="disabled"' : '');
             } elseif ($this->disabled) {
@@ -77,16 +77,16 @@ class Radio extends Form\Control
      *
      * Examples:
      * $control->onChange('console.log("changed")');
-     * $control->onChange(new \atk4\ui\JsExpression('console.log("changed")'));
+     * $control->onChange(new \Atk4\Ui\JsExpression('console.log("changed")'));
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
-     * @param string|\atk4\ui\JsExpression|array|\Closure $expr
+     * @param string|\Atk4\Ui\JsExpression|array|\Closure $expr
      * @param array|bool                                  $default
      */
     public function onChange($expr, $default = [])
     {
         if (is_string($expr)) {
-            $expr = new \atk4\ui\JsExpression($expr);
+            $expr = new \Atk4\Ui\JsExpression($expr);
         }
 
         if (is_bool($default)) {

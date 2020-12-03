@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
-use atk4\data\Model\UserAction;
-use atk4\ui\Button;
-use atk4\ui\Form;
-use atk4\ui\Icon;
-use atk4\ui\Label;
-use atk4\ui\UserAction\JsCallbackExecutor;
+use Atk4\Data\Model\UserAction;
+use Atk4\Ui\Button;
+use Atk4\Ui\Form;
+use Atk4\Ui\Icon;
+use Atk4\Ui\Label;
+use Atk4\Ui\UserAction\JsCallbackExecutor;
 
 /**
  * Input element for a form control.

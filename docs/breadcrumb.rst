@@ -5,7 +5,7 @@
 Breadcrumb
 ==========
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 .. php:class:: Breadcrumb
 
 Implement navigational Breadcrumb, by using https://fomantic-ui.com/collections/breadcrumb.html
@@ -72,7 +72,7 @@ For example the next code will use some logic::
         // display list of users
         $table = Table::addTo($app);
         $table->setModel($model);
-        $table->addDecorator(['name', [\atk4\ui\Table\Column\Link::class, [], ['user_id'=>'id']);
+        $table->addDecorator(['name', [\Atk4\Ui\Table\Column\Link::class, [], ['user_id'=>'id']);
     }
 
     $crumb->popTitle();

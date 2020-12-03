@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
+use Atk4\Core\AtkPhpunit;
 
-class AppMock extends \atk4\ui\App
+class AppMock extends \Atk4\Ui\App
 {
     public $terminated = false;
 
@@ -29,13 +29,13 @@ class CallbackTest extends AtkPhpunit\TestCase
     /** @var string */
     private $htmlDoctypeRegex = '~^<!DOCTYPE~';
 
-    /** @var \atk4\ui\App */
+    /** @var \Atk4\Ui\App */
     public $app;
 
     protected function setUp(): void
     {
         $this->app = new AppMock(['always_run' => false, 'catch_exceptions' => false]);
-        $this->app->initLayout([\atk4\ui\Layout\Centered::class]);
+        $this->app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
         // reset var, between tests
         $_GET = [];
@@ -46,7 +46,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $cb = \atk4\ui\Callback::addTo($this->app);
+        $cb = \Atk4\Ui\Callback::addTo($this->app);
 
         // simulate triggering
         $_GET[$cb->name] = '1';
@@ -62,7 +62,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $cb = \atk4\ui\Callback::addTo($this->app);
+        $cb = \Atk4\Ui\Callback::addTo($this->app);
 
         // don't simulate triggering
         $cb->set(function ($x) use (&$var) {
@@ -76,7 +76,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $cb = \atk4\ui\CallbackLater::addTo($this->app);
+        $cb = \Atk4\Ui\CallbackLater::addTo($this->app);
 
         // simulate triggering
         $_GET[$cb->name] = '1';
@@ -97,7 +97,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $cb = \atk4\ui\CallbackLater::addTo($this->app);
+        $cb = \Atk4\Ui\CallbackLater::addTo($this->app);
 
         // simulate triggering
         $_GET[$cb->name] = '1';
@@ -105,7 +105,7 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $app = $this->app;
         $cb->set(function ($x) use (&$var, $app, &$cbname) {
-            $cb2 = \atk4\ui\CallbackLater::addTo($app);
+            $cb2 = \Atk4\Ui\CallbackLater::addTo($app);
             $cbname = $cb2->name;
             $cb2->set(function ($y) use (&$var) {
                 $var = $y;
@@ -124,7 +124,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $cb = \atk4\ui\CallbackLater::addTo($this->app);
+        $cb = \Atk4\Ui\CallbackLater::addTo($this->app);
 
         // don't simulate triggering
         $cb->set(function ($x) use (&$var) {
@@ -143,7 +143,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $vp = \atk4\ui\VirtualPage::addTo($this->app);
+        $vp = \Atk4\Ui\VirtualPage::addTo($this->app);
         // simulate triggering
 
         $vp->set(function ($p) use (&$var) {
@@ -161,7 +161,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $vp = \atk4\ui\VirtualPage::addTo($this->app, ['urlTrigger' => 'bah']);
+        $vp = \Atk4\Ui\VirtualPage::addTo($this->app, ['urlTrigger' => 'bah']);
         $vp->set(function ($p) use (&$var) {
             $var = 25;
         });
@@ -185,7 +185,7 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $var = null;
 
-        $vp = \atk4\ui\VirtualPage::addTo($this->app);
+        $vp = \Atk4\Ui\VirtualPage::addTo($this->app);
         $vp->set([$this, 'callPull230']);
 
         // simulate triggering

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\core\Factory;
-use atk4\data\Model\UserAction;
-use atk4\ui\Icon;
-use atk4\ui\UserAction\ExecutorFactory;
-use atk4\ui\View;
+use Atk4\Core\Factory;
+use Atk4\Data\Model\UserAction;
+use Atk4\Ui\Icon;
+use Atk4\Ui\UserAction\ExecutorFactory;
+use Atk4\Ui\View;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // Demo for Model action in Grid
@@ -26,9 +26,9 @@ Icon::addTo($specialItem, ['content' => 'window maximize outline']);
 // register this menu item in factory.
 ExecutorFactory::registerActionTrigger(ExecutorFactory::TABLE_MENU_ITEM, $specialItem, $multiAction);
 
-\atk4\ui\Header::addTo($app, ['Execute model action from Grid menu items', 'subHeader' => 'Setting grid menu items in order to execute model actions or javascript.']);
+\Atk4\Ui\Header::addTo($app, ['Execute model action from Grid menu items', 'subHeader' => 'Setting grid menu items in order to execute model actions or javascript.']);
 
-$grid = \atk4\ui\Grid::addTo($app, ['menu' => false]);
+$grid = \Atk4\Ui\Grid::addTo($app, ['menu' => false]);
 $grid->setModel($country);
 
 $divider = Factory::factory([View::class], ['id' => false, 'class' => ['divider'], 'content' => '']);

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Message;
+use Atk4\Ui\Message;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // Demo for Model action
@@ -18,25 +18,25 @@ $countryId = $country->get('id');
 // Model actions for this file are setup in DemoActionUtil.
 DemoActionsUtil::setupDemoActions($country);
 
-\atk4\ui\Header::addTo($app, ['Assign Model action to button event', 'subHeader' => 'Execute model action on this country record by clicking on the appropriate button on the right.']);
+\Atk4\Ui\Header::addTo($app, ['Assign Model action to button event', 'subHeader' => 'Execute model action on this country record by clicking on the appropriate button on the right.']);
 
 $msg = Message::addTo($app, ['Notes', 'type' => 'info']);
 $msg->text->addParagraph('When passing an action to a button event, Ui will determine what executor is required base on the action properties.');
 $msg->text->addParagraph('If action require arguments, fields and/or preview, then a ModalExecutor will be use.');
 
-\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$gl = \atk4\ui\GridLayout::addTo($app, ['rows' => 1, 'columns' => 2]);
-$c = \atk4\ui\Card::addTo($gl, ['useLabel' => true], ['r1c1']);
-$c->addContent(new \atk4\ui\Header(['Using country: ']));
+$gl = \Atk4\Ui\GridLayout::addTo($app, ['rows' => 1, 'columns' => 2]);
+$c = \Atk4\Ui\Card::addTo($gl, ['useLabel' => true], ['r1c1']);
+$c->addContent(new \Atk4\Ui\Header(['Using country: ']));
 $c->setModel($country, ['iso', 'iso3', 'phonecode']);
 
-$buttons = \atk4\ui\View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
+$buttons = \Atk4\Ui\View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
 
 $country->unload();
 // Create a button for every action in Country model.
 foreach ($country->getUserActions() as $action) {
-    $b = \atk4\ui\Button::addTo($buttons, [$action->getCaption()]);
+    $b = \Atk4\Ui\Button::addTo($buttons, [$action->getCaption()]);
     // Assign action to button using current model id as url arguments.
     $b->on('click', $action, ['args' => ['id' => $countryId]]);
 }

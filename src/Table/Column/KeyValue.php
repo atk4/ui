@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\data\Field;
-use atk4\data\Model;
-use atk4\ui\Exception;
-use atk4\ui\Table;
+use Atk4\Data\Field;
+use Atk4\Data\Model;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Table;
 
 /**
  * Class KeyValue.
@@ -37,7 +37,7 @@ use atk4\ui\Table;
  *      3 => __('paid'),
  *  ],
  *  'ui'      => [
- *      'form' => [\atk4\ui\Form\Control\Dropdown::class],
+ *      'form' => [\Atk4\Ui\Form\Control\Dropdown::class],
  *      'table' => ['KeyValue'],
  *  ],
  * ]);

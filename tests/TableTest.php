@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
+use Atk4\Core\AtkPhpunit;
 
 class TableTest extends AtkPhpunit\TestCase
 {
@@ -13,7 +13,7 @@ class TableTest extends AtkPhpunit\TestCase
      */
     public function testAddColumnWithoutModel()
     {
-        $t = new \atk4\ui\Table();
+        $t = new \Atk4\Ui\Table();
         $t->invokeInit();
         $t->setSource([
             ['one' => 1, 'two' => 2, 'three' => 3, 'four' => 4],
@@ -21,12 +21,12 @@ class TableTest extends AtkPhpunit\TestCase
         ]);
 
         // 4 ways to add column
-        $t->addColumn(null, new \atk4\ui\Table\Column\Link('test.php?id=1'));
+        $t->addColumn(null, new \Atk4\Ui\Table\Column\Link('test.php?id=1'));
 
         // multiple ways to add column which doesn't exist in model
-        $t->addColumn('five', new \atk4\ui\Table\Column\Link('test.php?id=1'));
-        $t->addColumn('seven', [\atk4\ui\Table\Column\Link::class, ['id' => 3]]);
-        $t->addColumn('eight', \atk4\ui\Table\Column\Link::class);
+        $t->addColumn('five', new \Atk4\Ui\Table\Column\Link('test.php?id=1'));
+        $t->addColumn('seven', [\Atk4\Ui\Table\Column\Link::class, ['id' => 3]]);
+        $t->addColumn('eight', \Atk4\Ui\Table\Column\Link::class);
         $t->addColumn('nine');
 
         $t->render();

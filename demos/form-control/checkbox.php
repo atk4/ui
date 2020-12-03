@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Form;
-use atk4\ui\View;
+use Atk4\Ui\Form;
+use Atk4\Ui\View;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // Testing fields.
 
-\atk4\ui\Header::addTo($app, ['CheckBoxes', 'size' => 2]);
+\Atk4\Ui\Header::addTo($app, ['CheckBoxes', 'size' => 2]);
 
 Form\Control\Checkbox::addTo($app, ['Make my profile visible']);
 Form\Control\Checkbox::addTo($app, ['Make my profile visible ticked'])->set(true);
@@ -28,14 +28,14 @@ Form\Control\Checkbox::addTo($app, ['Look for the clues', 'disabled toggle'])->s
 View::addTo($app, ['ui' => 'divider']);
 Form\Control\Checkbox::addTo($app, ['Custom setting?'])->js(true)->checkbox('set indeterminate');
 
-\atk4\ui\Header::addTo($app, ['CheckBoxes in a form', 'size' => 2]);
+\Atk4\Ui\Header::addTo($app, ['CheckBoxes in a form', 'size' => 2]);
 $form = Form::addTo($app);
 $form->addControl('test', [Form\Control\Checkbox::class]);
 $form->addControl('test_checked', [Form\Control\Checkbox::class])->set(true);
 $form->addControl('also_checked', 'Hello World', 'boolean')->set(true);
 
 $form->onSubmit(function ($f) use ($app) {
-    return new \atk4\ui\JsToast($app->encodeJson($f->model->get()));
+    return new \Atk4\Ui\JsToast($app->encodeJson($f->model->get()));
 });
 
 View::addTo($app, ['ui' => 'divider']);

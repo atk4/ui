@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Button;
-use atk4\ui\CardDeck;
-use atk4\ui\UserAction\ExecutorFactory;
-use atk4\ui\View;
+use Atk4\Ui\Button;
+use Atk4\Ui\CardDeck;
+use Atk4\Ui\UserAction\ExecutorFactory;
+use Atk4\Ui\View;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$msg = \atk4\ui\Message::addTo($app, [
+$msg = \Atk4\Ui\Message::addTo($app, [
     'Overriding Executor Factory',
 ]);
 $msg->text->addParagraph('You may easily 
@@ -49,7 +49,7 @@ $app->defaultExecutorFactory = $myFactory;
 
 $model = new CountryLock($app->db);
 
-$crud = \atk4\ui\Crud::addTo($app, ['ipp' => 5]);
+$crud = \Atk4\Ui\Crud::addTo($app, ['ipp' => 5]);
 $crud->setModel($model);
 
 View::addTo($app, ['class' => ['ui divider']]);

@@ -5,7 +5,7 @@
 LoremIpsum
 ==========
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: LoremIpsum
 

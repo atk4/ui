@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Component;
+namespace Atk4\Ui\Component;
 
-use atk4\data\Model;
-use atk4\ui\JsVueService;
-use atk4\ui\View;
+use Atk4\Data\Model;
+use Atk4\Ui\JsVueService;
+use Atk4\Ui\View;
 
 /**
  * Will send query with define callback and reload a specific view.

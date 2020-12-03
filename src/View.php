@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\data\Model;
-use atk4\data\Persistence\Static_;
-use atk4\ui\UserAction\ExecutorInterface;
+use Atk4\Data\Model;
+use Atk4\Data\Persistence\Static_;
+use Atk4\Ui\UserAction\ExecutorInterface;
 
 /**
  * Implements a most core view, which all of the other components descend
@@ -815,7 +815,7 @@ class View extends AbstractView implements JsExpressionable
 
     /**
      * Create Vue.js instance.
-     * Vue.js instance can be create from atk4\ui\View.
+     * Vue.js instance can be create from Atk4\Ui\View.
      *
      * Component managed and defined by atk does not need componentDefinition variable name
      * because these are already loaded within the atk js namespace.

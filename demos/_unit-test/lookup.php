@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Crud;
-use atk4\ui\UserAction\ExecutorFactory;
+use Atk4\Ui\Crud;
+use Atk4\Ui\UserAction\ExecutorFactory;
 
 // Test for hasOne Lookup as dropdown control.
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $model = new ProductLock($app->db);

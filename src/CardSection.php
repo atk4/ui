@@ -5,9 +5,9 @@ declare(strict_types=1);
  * Display a card section within a Card View.
  */
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\data\Model;
+use Atk4\Data\Model;
 
 class CardSection extends View
 {

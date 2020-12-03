@@ -6,12 +6,12 @@ declare(strict_types=1);
  * Test query output by ScopeBuilder into model scope definition.
  */
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Form\Control\ScopeBuilder;
-use atk4\ui\Grid;
+use Atk4\Ui\Form\Control\ScopeBuilder;
+use Atk4\Ui\Grid;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $query = <<<'EOF'

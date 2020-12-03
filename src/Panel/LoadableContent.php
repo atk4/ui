@@ -5,9 +5,9 @@ declare(strict_types=1);
  * LoadableContent interface.
  */
 
-namespace atk4\ui\Panel;
+namespace Atk4\Ui\Panel;
 
-use atk4\ui\Callback;
+use Atk4\Ui\Callback;
 
 interface LoadableContent
 {

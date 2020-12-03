@@ -5,7 +5,7 @@ declare(strict_types=1);
  * Loadable Interface.
  */
 
-namespace atk4\ui\Panel;
+namespace Atk4\Ui\Panel;
 
 interface Loadable
 {
