@@ -86,7 +86,6 @@ $form = Form::addTo($app, ['segment']);
 \Atk4\Ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveControls']);
 
 $lookup1 = $form->addControl('sub_category', [
-	
     Form\Control\Lookup::class,
     'model' => new SubCategory($app->db),
     'dependency' => function ($model, $data) {
@@ -96,7 +95,6 @@ $lookup1 = $form->addControl('sub_category', [
 ]);
 
 $lookup2 = $form->addControl('sub_category2', [
-	
     Form\Control\Lookup::class,
     'model' => new SubCategory($app->db),
 	'hint' => 'Aftertough addCondition shows no effects.',
