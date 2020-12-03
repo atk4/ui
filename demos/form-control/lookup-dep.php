@@ -79,3 +79,30 @@ $lookup = $form->addControl('country', [
 $form->onSubmit(function (Form $form) {
     return 'Submitted: ' . print_r($form->model->get(), true);
 });
+
+\Atk4\Ui\Header::addTo($app, ['Lookup with condition']);
+
+$form = Form::addTo($app, ['segment']);
+\Atk4\Ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveControls']);
+
+$lookup1 = $form->addControl('sub_category', [
+	
+    Form\Control\Lookup::class,
+    'model' => new SubCategory($app->db),
+    'dependency' => function ($model, $data) {
+        $model->addCondition('product_category_id', 2);
+    },
+	'hint' => 'Adding dependency at initialization is working.',
+]);
+
+$lookup2 = $form->addControl('sub_category2', [
+	
+    Form\Control\Lookup::class,
+    'model' => new SubCategory($app->db),
+	'hint' => 'Aftertough addCondition shows no effects.',
+]);
+$lookup2->model->addCondition('product_category_id', 2);
+
+$form->onSubmit(function (Form $form) {
+    return 'Submitted: ' . print_r($form->model->get(), true);
+});
