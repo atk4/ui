@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Layout;
+namespace Atk4\Ui\Layout;
 
 /**
  * Implements a fixed-width single-column bevel in the middle of the page, centered
@@ -11,14 +11,14 @@ namespace atk4\ui\Layout;
  * Bevel will use some padding and will contain your Content.
  * This layout is handy for a simple and single-purpose applications.
  */
-class Centered extends \atk4\ui\Layout
+class Centered extends \Atk4\Ui\Layout
 {
-    use \atk4\core\DebugTrait;
+    use \Atk4\Core\DebugTrait;
 
     public $defaultTemplate = 'layout/centered.html';
 
     /**
-     * @see \atk4\ui\App::$cdn
+     * @see \Atk4\Ui\App::$cdn
      *
      * @var string|null
      */

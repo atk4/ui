@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // This demo shows a local impact of a sticky parameters.
@@ -12,49 +12,49 @@ require_once __DIR__ . '/../init-app.php';
 if (isset($_GET['name'])) {
     // IMPORTANT: because this is an optional frame, I have to specify it's unique short_name explicitly, othrewise
     // the name for a second frame will be affected by presence of GET['name'] parameter
-    $frame = \atk4\ui\View::addTo($app, ['ui' => 'red segment', 'short_name' => 'fr1']);
+    $frame = \Atk4\Ui\View::addTo($app, ['ui' => 'red segment', 'short_name' => 'fr1']);
     $frame->stickyGet('name');
 
     // frame will generate URL with sticky parameter
-    \atk4\ui\Label::addTo($frame, ['Name:', 'detail' => $_GET['name'], 'black'])->link($frame->url());
+    \Atk4\Ui\Label::addTo($frame, ['Name:', 'detail' => $_GET['name'], 'black'])->link($frame->url());
 
     // app still generates URL without localized sticky
-    \atk4\ui\Label::addTo($frame, ['Reset', 'iconRight' => 'close', 'black'])->link($app->url());
-    \atk4\ui\View::addTo($frame, ['ui' => 'hidden divider']);
+    \Atk4\Ui\Label::addTo($frame, ['Reset', 'iconRight' => 'close', 'black'])->link($app->url());
+    \Atk4\Ui\View::addTo($frame, ['ui' => 'hidden divider']);
 
     // nested interractive elemetns will respect lockal sticky get
-    \atk4\ui\Button::addTo($frame, ['Triggering callback here will inherit color'])->on('click', function () {
-        return new \atk4\ui\JsNotify('Color was = ' . $_GET['name']);
+    \Atk4\Ui\Button::addTo($frame, ['Triggering callback here will inherit color'])->on('click', function () {
+        return new \Atk4\Ui\JsNotify('Color was = ' . $_GET['name']);
     });
 
     // Next we have loader, which will dynamically load console which will dynamically output "success" message.
-    \atk4\ui\Loader::addTo($frame)->set(function ($page) {
-        \atk4\ui\Console::addTo($page)->set(function ($console) {
+    \Atk4\Ui\Loader::addTo($frame)->set(function ($page) {
+        \Atk4\Ui\Console::addTo($page)->set(function ($console) {
             $console->output('success!, color is still ' . $_GET['name']);
         });
     });
 }
 
-$t = \atk4\ui\Table::addTo($app);
+$t = \Atk4\Ui\Table::addTo($app);
 $t->setSource(['Red', 'Green', 'Blue']);
-$t->addDecorator('name', [\atk4\ui\Table\Column\Link::class, [], ['name']]);
+$t->addDecorator('name', [\Atk4\Ui\Table\Column\Link::class, [], ['name']]);
 
-$frame = \atk4\ui\View::addTo($app, ['ui' => 'green segment']);
-\atk4\ui\Button::addTo($frame, ['does not inherit sticky get'])->on('click', function () use ($app) {
-    return new \atk4\ui\JsNotify('$_GET = ' . $app->encodeJson($_GET));
+$frame = \Atk4\Ui\View::addTo($app, ['ui' => 'green segment']);
+\Atk4\Ui\Button::addTo($frame, ['does not inherit sticky get'])->on('click', function () use ($app) {
+    return new \Atk4\Ui\JsNotify('$_GET = ' . $app->encodeJson($_GET));
 });
 
-\atk4\ui\Header::addTo($app, ['Use of View::url()']);
+\Atk4\Ui\Header::addTo($app, ['Use of View::url()']);
 
-$b1 = \atk4\ui\Button::addTo($app);
+$b1 = \Atk4\Ui\Button::addTo($app);
 $b1->set($b1->url());
 
-\atk4\ui\Loader::addTo($app)->set(function ($page) use ($b1) {
-    $b2 = \atk4\ui\Button::addTo($page);
+\Atk4\Ui\Loader::addTo($app)->set(function ($page) use ($b1) {
+    $b2 = \Atk4\Ui\Button::addTo($page);
     $b2->set($b2->url());
 
-    $b2->on('click', new \atk4\ui\JsReload($b1));
+    $b2->on('click', new \Atk4\Ui\JsReload($b1));
 });
 
-$b3 = \atk4\ui\Button::addTo($app);
+$b3 = \Atk4\Ui\Button::addTo($app);
 $b3->set($b3->url());

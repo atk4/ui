@@ -5,7 +5,7 @@
 Table
 =====
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Table
 
@@ -55,7 +55,7 @@ You can also use Table with Array data source like this::
     $table->setSource($my_array);
 
     $table->addColumn('name');
-    $table->addColumn('surname', [\atk4\ui\Table\Column\Link::class, 'url'=>'details.php?surname={$surname}']);
+    $table->addColumn('surname', [\Atk4\Ui\Table\Column\Link::class, 'url'=>'details.php?surname={$surname}']);
     $table->addColumn('birthdate', null, ['type'=>'date']);
 
 .. warning:: I encourage you to seek appropriate Agile Data persistence instead of
@@ -65,7 +65,7 @@ You can also use Table with Array data source like this::
 Adding Columns
 --------------
 
-.. php:method:: setModel(\atk4\data\Model $model, $fields = null)
+.. php:method:: setModel(\Atk4\Data\Model $model, $fields = null)
 
 .. php:method:: addColumn($name, $columnDecorator = null, $field = null)
 
@@ -138,7 +138,7 @@ Advanced Column Denifitions
 Table defines a method `columnFactory`, which returns Column object which is to be used to
 display values of specific model Field.
 
-.. php:method:: columnFactory(\atk4\data\Field $field)
+.. php:method:: columnFactory(\Atk4\Data\Field $field)
 
 If the value of the field can be displayed by :php:class:`Table\\Column` then :php:class:`Table` will
 respord with object of this class. Since the default column does not contain any customization,
@@ -183,7 +183,7 @@ the "total" column value (as above) but using PHP math instead of doing it insid
     $order = new Order($db);
 
     $table->setModel($order, ['name', 'price', 'amount', 'status']);
-    $table->addColumn('total', new \atk4\data\Field\Calculated(
+    $table->addColumn('total', new \Atk4\Data\Field\Calculated(
         function(Model $row) {
             return $row->get('price') * $row->get('amount');
         }));
@@ -195,7 +195,7 @@ wish to position it before status, you can use the final format of addColumn()::
     $order = new Order($db);
 
     $table->setModel($order, ['name', 'price', 'amount']);
-    $table->addColumn('total', new \atk4\data\Field\Calculated(
+    $table->addColumn('total', new \Atk4\Data\Field\Calculated(
         function(Model $row) {
             return $row->get('price') * $row->get('amount');
         }));
@@ -212,7 +212,7 @@ your convenience there is a way to add multiple columns efficiently.
 
 As a final note in this section - you can re-use column objects multiple times::
 
-    $c_gap = new \atk4\ui\Table\Column\Template('<td> ... <td>');
+    $c_gap = new \Atk4\Ui\Table\Column\Template('<td> ... <td>');
 
     $table->addColumn($c_gap);
     $table->setModel(new Order($db), ['name', 'price', 'amount']);
@@ -260,13 +260,13 @@ Injecting HTML
 The tag will override model value. Here is example usage of :php:meth:`Table\\Column::getHtmlTags`::
 
 
-    class ExpiredColumn extends \atk4\ui\Table\Column
+    class ExpiredColumn extends \Atk4\Ui\Table\Column
         public function getDataCellHtml()
         {
             return '{$_expired}';
         }
 
-        function getHtmlTags(\atk4\data\Model $row)
+        function getHtmlTags(\Atk4\Data\Model $row)
         {
             return ['_expired'=>
                 $row->get('date') < new \DateTime() ?
@@ -291,15 +291,15 @@ examples will show you how to display list of "files" inside your Dropbox folder
 of issues from your Github repository::
 
     // Show contents of dropbox
-    $dropbox = \atk4\dropbox\Persistence($db_config);
-    $files = new \atk4\dropbox\Model\File($dropbox);
+    $dropbox = \Atk4\Dropbox\Persistence($db_config);
+    $files = new \Atk4\Dropbox\Model\File($dropbox);
 
     Table::addTo($app)->setModel($files);
 
 
     // Show contents of dropbox
-    $github = \atk4\github\Persistence_Issues($github_api_config);
-    $issues = new \atk4\github\Model\Issue($github);
+    $github = \Atk4\Github\Persistence_Issues($github_api_config);
+    $issues = new \Atk4\Github\Model\Issue($github);
 
     Table::addTo($app)->setModel($issues);
 
@@ -359,8 +359,8 @@ nicer especially inside a table.
 
 One column may have several decorators::
 
-    $table->addColumn('salary', new \atk4\ui\Table\Column\Money());
-    $table->addDecorator('salary', new \atk4\ui\Table\Column\Link(['page2']));
+    $table->addColumn('salary', new \Atk4\Ui\Table\Column\Money());
+    $table->addDecorator('salary', new \Atk4\Ui\Table\Column\Link(['page2']));
 
 In this case the first decorator will take care of tr/td tags but second decorator will compliment
 it. Result is that table will output 'salary' as a currency (align and red ink) and also decorate
@@ -376,7 +376,7 @@ There are a few things to note:
 
 2. formatting is always applied in same order as defined - in example above Money first, Link after.
 
-3. output of the \atk4\ui\\Table\\Column\Money decorator is used into Link decorator as if it would be value of cell, however
+3. output of the \Atk4\Ui\\Table\\Column\Money decorator is used into Link decorator as if it would be value of cell, however
    decorators have access to original value also. Decorator implementation is usually aware of combinations.
 
 :php:meth:`Table\\Column\\\Money::getDataCellTemplate` is called, which returns ONLY the HTML value,
@@ -496,25 +496,25 @@ Static Attributes and classes
 The following code will make sure that contents of the column appear on a single line by
 adding class "single line" to all body cells::
 
-    $table->addColumn('name', (new \atk4\ui\Table\Column()->addClass('single line')));
+    $table->addColumn('name', (new \Atk4\Ui\Table\Column()->addClass('single line')));
 
 If you wish to add a class to 'head' or 'foot' or 'all' cells, you can pass 2nd argument to addClass::
 
-    $table->addColumn('name', (new \atk4\ui\Table\Column()->addClass('right aligned', 'all')));
+    $table->addColumn('name', (new \Atk4\Ui\Table\Column()->addClass('right aligned', 'all')));
 
 There are several ways to make your code more readable::
 
-    $table->addColumn('name', new \atk4\ui\Table\Column())
+    $table->addColumn('name', new \Atk4\Ui\Table\Column())
         ->addClass('right aligned', 'all');
 
 Or if you wish to use factory, the syntax is::
 
-    $table->addColumn('name', [\atk4\ui\Table\Column::class])
+    $table->addColumn('name', [\Atk4\Ui\Table\Column::class])
         ->addClass('right aligned', 'all');
 
 For setting an attribute you can use setAttr() method::
 
-    $table->addColumn('name', [\atk4\ui\Table\Column::class])
+    $table->addColumn('name', [\Atk4\Ui\Table\Column::class])
         ->setAttr('colspan', 2, 'all');
 
 Setting a new value to the attribute will override previous value.

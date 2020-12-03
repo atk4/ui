@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\UserAction;
+namespace Atk4\Ui\UserAction;
 
-use atk4\core\Factory;
-use atk4\core\HookTrait;
-use atk4\data\Model;
-use atk4\data\ValidationException;
-use atk4\ui\Button;
-use atk4\ui\Exception;
-use atk4\ui\Form;
-use atk4\ui\JsExpressionable;
-use atk4\ui\JsFunction;
-use atk4\ui\JsToast;
-use atk4\ui\Message;
-use atk4\ui\Modal;
-use atk4\ui\View;
+use Atk4\Core\Factory;
+use Atk4\Core\HookTrait;
+use Atk4\Data\Model;
+use Atk4\Data\ValidationException;
+use Atk4\Ui\Button;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Form;
+use Atk4\Ui\JsExpressionable;
+use Atk4\Ui\JsFunction;
+use Atk4\Ui\JsToast;
+use Atk4\Ui\Message;
+use Atk4\Ui\Modal;
+use Atk4\Ui\View;
 
 /**
  * Modal executor for action.
@@ -100,7 +100,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * The Loader that will execute all action step.
      *
-     * @var \atk4\ui\Loader
+     * @var \Atk4\Ui\Loader
      */
     public $loader;
     public $loaderUi = 'ui basic segment';
@@ -137,7 +137,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);
         $this->addButtonAction($this->btns);
 
-        $this->loader = \atk4\ui\Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader = \Atk4\Ui\Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
         $this->loader->addClass('atk-hide-loading-content');
         $this->actionData = $this->loader->jsGetStoreData()['session'];

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form;
+namespace Atk4\Ui\Form;
 
-use atk4\core\Factory;
-use atk4\ui\HtmlTemplate;
-use atk4\ui\Label;
+use Atk4\Core\Factory;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Label;
 
 /**
  * Provides generic layout for a form.
@@ -64,13 +64,13 @@ class Layout extends AbstractLayout
     /**
      * Adds Button.
      *
-     * @param \atk4\ui\Button|array|string $seed
+     * @param \Atk4\Ui\Button|array|string $seed
      *
-     * @return \atk4\ui\Button
+     * @return \Atk4\Ui\Button
      */
     public function addButton($seed)
     {
-        return $this->add(Factory::mergeSeeds([\atk4\ui\Button::class], $seed), 'Buttons');
+        return $this->add(Factory::mergeSeeds([\Atk4\Ui\Button::class], $seed), 'Buttons');
     }
 
     /**
@@ -82,7 +82,7 @@ class Layout extends AbstractLayout
      */
     public function addHeader($label)
     {
-        \atk4\ui\Header::addTo($this, [$label, 'dividing', 'element' => 'h4']);
+        \Atk4\Ui\Header::addTo($this, [$label, 'dividing', 'element' => 'h4']);
 
         return $this;
     }
@@ -121,12 +121,12 @@ class Layout extends AbstractLayout
     public function addSubLayout($seed = [self::class], $addDivider = true)
     {
         $v = $this->add(Factory::factory($seed, ['form' => $this->form]));
-        if ($v instanceof \atk4\ui\Form\Layout\Section) {
+        if ($v instanceof \Atk4\Ui\Form\Layout\Section) {
             $v = $v->addSection();
         }
 
         if ($addDivider) {
-            \atk4\ui\View::addTo($this, ['ui' => 'hidden divider']);
+            \Atk4\Ui\View::addTo($this, ['ui' => 'hidden divider']);
         }
 
         return $v;
@@ -146,7 +146,7 @@ class Layout extends AbstractLayout
 
         foreach ($this->elements as $element) {
             // Buttons go under Button section
-            if ($element instanceof \atk4\ui\Button) {
+            if ($element instanceof \Atk4\Ui\Button) {
                 $this->template->dangerouslyAppendHtml('Buttons', $element->getHtml());
 
                 continue;
@@ -185,7 +185,7 @@ class Layout extends AbstractLayout
             $label = $element->caption ?: $element->field->getCaption();
 
             // Anything but form controls gets inserted directly
-            if ($element instanceof \atk4\ui\Form\Control\Checkbox) {
+            if ($element instanceof \Atk4\Ui\Form\Control\Checkbox) {
                 $template = $noLabelControl;
                 $element->template->set('Content', $label);
             }

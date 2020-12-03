@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\HtmlTemplate;
+namespace Atk4\Ui\HtmlTemplate;
 
-use atk4\ui\Exception;
-use atk4\ui\HtmlTemplate;
+use Atk4\Ui\Exception;
+use Atk4\Ui\HtmlTemplate;
 
 class TagTree
 {

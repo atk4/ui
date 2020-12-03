@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\ui\Exception;
-use atk4\ui\HtmlTemplate;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Ui\Exception;
+use Atk4\Ui\HtmlTemplate;
 
 class ListerTest extends AtkPhpunit\TestCase
 {
@@ -15,9 +15,9 @@ class ListerTest extends AtkPhpunit\TestCase
      */
     public function testListerRender()
     {
-        $v = new \atk4\ui\View();
+        $v = new \Atk4\Ui\View();
         $v->invokeInit();
-        $l = \atk4\ui\Lister::addTo($v, ['defaultTemplate' => 'lister.html']);
+        $l = \Atk4\Ui\Lister::addTo($v, ['defaultTemplate' => 'lister.html']);
         $l->setSource(['foo', 'bar']);
     }
 
@@ -26,9 +26,9 @@ class ListerTest extends AtkPhpunit\TestCase
      */
     public function testListerRender2()
     {
-        $v = new \atk4\ui\View(['template' => new HtmlTemplate('hello{list}, world{/list}')]);
+        $v = new \Atk4\Ui\View(['template' => new HtmlTemplate('hello{list}, world{/list}')]);
         $v->invokeInit();
-        $l = \atk4\ui\Lister::addTo($v, [], ['list']);
+        $l = \Atk4\Ui\Lister::addTo($v, [], ['list']);
         $l->setSource(['foo', 'bar']);
         $this->assertSame('hello, world, world', $v->render());
     }
@@ -36,9 +36,9 @@ class ListerTest extends AtkPhpunit\TestCase
     public function testAddAfterRender()
     {
         $this->expectException(Exception::class);
-        $v = new \atk4\ui\View();
+        $v = new \Atk4\Ui\View();
         $v->invokeInit();
-        $l = \atk4\ui\Lister::addTo($v);
+        $l = \Atk4\Ui\Lister::addTo($v);
         $l->setSource(['foo', 'bar']);
     }
 }

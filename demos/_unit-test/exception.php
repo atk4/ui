@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\CallbackLater;
+use Atk4\Ui\CallbackLater;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // JUST TO TEST Exceptions and Error throws
@@ -14,22 +14,22 @@ require_once __DIR__ . '/../init-app.php';
 $cb = CallbackLater::addTo($app);
 $cb->setUrlTrigger('m_cb');
 
-$modal = \atk4\ui\Modal::addTo($app, ['cb' => $cb]);
+$modal = \Atk4\Ui\Modal::addTo($app, ['cb' => $cb]);
 $modal->name = 'm_test';
 
 $modal->set(function ($m) {
     throw new \Exception('TEST!');
 });
 
-$button = \atk4\ui\Button::addTo($app, ['Test modal exception']);
+$button = \Atk4\Ui\Button::addTo($app, ['Test modal exception']);
 $button->on('click', $modal->show());
 
 $cb1 = CallbackLater::addTo($app, ['urlTrigger' => 'm2_cb']);
-$modal2 = \atk4\ui\Modal::addTo($app, ['cb' => $cb1]);
+$modal2 = \Atk4\Ui\Modal::addTo($app, ['cb' => $cb1]);
 
 $modal2->set(function ($m) {
     trigger_error('error triggered');
 });
 
-$button2 = \atk4\ui\Button::addTo($app, ['Test modal error']);
+$button2 = \Atk4\Ui\Button::addTo($app, ['Test modal error']);
 $button2->on('click', $modal2->show());

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\ui\Table;
+use Atk4\Ui\Table;
 
 /**
  * Column for formatting image.
@@ -23,7 +23,7 @@ class Image extends Table\Column
      *
      * @return string
      */
-    public function getDataCellTemplate(\atk4\data\Field $field = null)
+    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
     {
         $caption = $field ? $field->getCaption() : $this->short_name;
 

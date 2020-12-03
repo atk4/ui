@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Form;
+use Atk4\Ui\Form;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Button::addTo($app, ['Accordion in Form', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\Atk4\Ui\Button::addTo($app, ['Accordion in Form', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['form-section-accordion']);
-\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
 $model = new CountryLock($app->db);
 $model->loadAny();
 
 // Prevent form from saving
 $noSave = function (Form $form) {
-    return new \atk4\ui\JsToast([
+    return new \Atk4\Ui\JsToast([
         'title' => 'POSTed field values',
         'message' => '<pre>' . $form->getApp()->encodeJson($form->model->get()) . '</pre>',
         'class' => 'success',
@@ -33,7 +33,7 @@ $form->setModel($model, false);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
-\atk4\ui\Header::addTo($sublayout, ['Column Section in Form']);
+\Atk4\Ui\Header::addTo($sublayout, ['Column Section in Form']);
 $sublayout->setModel($model, ['name']);
 
 $colsLayout = $form->layout->addSubLayout([Form\Layout\Section\Columns::class]);
@@ -48,7 +48,7 @@ $form->addControl('phonecode');
 
 $form->onSubmit($noSave);
 
-\atk4\ui\View::addTo($app, ['ui' => 'divider']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
 ////////////////////////////////
 
@@ -57,7 +57,7 @@ $form->setModel($model, false);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
-\atk4\ui\Header::addTo($sublayout, ['Accordion Section in Form']);
+\Atk4\Ui\Header::addTo($sublayout, ['Accordion Section in Form']);
 $sublayout->setModel($model, ['name']);
 
 $accordionLayout = $form->layout->addSubLayout([Form\Layout\Section\Accordion::class]);
@@ -70,7 +70,7 @@ $a2->setModel($model, ['numcode', 'phonecode']);
 
 $form->onSubmit($noSave);
 
-\atk4\ui\View::addTo($app, ['ui' => 'divider']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
 ////////////////////////////////
 
@@ -79,7 +79,7 @@ $form->setModel($model, false);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
-\atk4\ui\Header::addTo($sublayout, ['Tabs in Form']);
+\Atk4\Ui\Header::addTo($sublayout, ['Tabs in Form']);
 $sublayout->setModel($model, ['name']);
 
 $tabsLayout = $form->layout->addSubLayout([Form\Layout\Section\Tabs::class]);
@@ -92,18 +92,18 @@ $tab2->setModel($model, ['numcode', 'phonecode']);
 
 $form->onSubmit($noSave);
 
-\atk4\ui\View::addTo($app, ['ui' => 'divider']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
 /////////////////////////////////////////
 
-\atk4\ui\Header::addTo($app, ['Color in form']);
+\Atk4\Ui\Header::addTo($app, ['Color in form']);
 
 $form = Form::addTo($app);
 $form->setModel($model, false);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment red inverted'], false);
 
-\atk4\ui\Header::addTo($sublayout, ['This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
+\Atk4\Ui\Header::addTo($sublayout, ['This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
 $sublayout->setModel($model, ['name']);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment teal inverted']);
@@ -117,4 +117,4 @@ $c2->setModel($model, ['numcode', 'phonecode']);
 
 $form->onSubmit($noSave);
 
-\atk4\ui\View::addTo($app, ['ui' => 'divider']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);

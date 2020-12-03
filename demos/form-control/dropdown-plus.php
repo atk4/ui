@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\data\Model;
-use atk4\ui\Form;
+use Atk4\Data\Model;
+use Atk4\Ui\Form;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $demo = Demo::addTo($app);
 
-\atk4\ui\Header::addTo($demo->left, ['Dropdown sample:']);
-\atk4\ui\Header::addTo($demo->right, ['Cascading Dropdown']);
+\Atk4\Ui\Header::addTo($demo->left, ['Dropdown sample:']);
+\Atk4\Ui\Header::addTo($demo->right, ['Cascading Dropdown']);
 
-$txt = \atk4\ui\Text::addTo($demo->right);
+$txt = \Atk4\Ui\Text::addTo($demo->right);
 $txt->addParagraph('Dropdown may also be used in a cascade manner.');
 $form = Form::addTo($demo->right);
 
@@ -26,7 +26,7 @@ $form->addControl('product_id', [Form\Control\DropdownCascade::class, 'cascadeFr
 $form->onSubmit(function (Form $form) use ($app) {
     $message = $app->encodeJson($form->model->get());
 
-    $view = new \atk4\ui\Message('Values: ');
+    $view = new \Atk4\Ui\Message('Values: ');
     $view->invokeInit();
     $view->text->addParagraph($message);
 
@@ -114,7 +114,7 @@ $form->addControl(
 $form->onSubmit(function (Form $form) use ($app) {
     $message = $app->encodeJson($form->model->get());
 
-    $view = new \atk4\ui\Message('Values: ');
+    $view = new \Atk4\Ui\Message('Values: ');
     $view->invokeInit();
     $view->text->addParagraph($message);
 

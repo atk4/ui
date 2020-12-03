@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\UserAction;
+namespace Atk4\Ui\UserAction;
 
-use atk4\core\Factory;
-use atk4\data\Model;
-use atk4\ui\Exception;
-use atk4\ui\Form;
-use atk4\ui\Header;
+use Atk4\Core\Factory;
+use Atk4\Data\Model;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Form;
+use Atk4\Ui\Header;
 
 /**
  * BasicExecutor executor will typically fail if supplied arguments are not sufficient.

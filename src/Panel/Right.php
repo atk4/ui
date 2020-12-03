@@ -10,14 +10,14 @@ declare(strict_types=1);
  * This view must implement a callback for content to be add via the callback function.
  */
 
-namespace atk4\ui\Panel;
+namespace Atk4\Ui\Panel;
 
-use atk4\core\Factory;
-use atk4\ui\Button;
-use atk4\ui\Jquery;
-use atk4\ui\JsExpression;
-use atk4\ui\Modal;
-use atk4\ui\View;
+use Atk4\Core\Factory;
+use Atk4\Ui\Button;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsExpression;
+use Atk4\Ui\Modal;
+use Atk4\Ui\View;
 
 class Right extends View implements Loadable
 {
@@ -83,7 +83,7 @@ class Right extends View implements Loadable
      */
     public function service(): JsExpression
     {
-        return new \atk4\ui\JsChain('atk.panelService');
+        return new \Atk4\Ui\JsChain('atk.panelService');
     }
 
     /**
@@ -213,7 +213,7 @@ class Right extends View implements Loadable
         $this->js(true, $this->service()->addPanel($this->getPanelOptions()));
     }
 
-    protected function mergeStickyArgsFromChildView(): ?\atk4\ui\AbstractView
+    protected function mergeStickyArgsFromChildView(): ?\Atk4\Ui\AbstractView
     {
         return $this->dynamicContent;
     }

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Button::addTo($app, ['Card Model', 'small left floated basic blue', 'icon' => 'left arrow'])
+\Atk4\Ui\Button::addTo($app, ['Card Model', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['card-action']);
-\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-\atk4\ui\Header::addTo($app, ['Card Deck', 'size' => 1, 'subHeader' => 'Card can be display in a deck, also using model action.']);
+\Atk4\Ui\Header::addTo($app, ['Card Deck', 'size' => 1, 'subHeader' => 'Card can be display in a deck, also using model action.']);
 
 $countries = new Country($app->db);
 $countries->addCalculatedField('Cost', function ($model) {
@@ -34,15 +34,15 @@ $infoAction = $countries->addUserAction('request_info', [
     'callback' => function ($model, $email) {
         return 'Your request for information was sent to email: ' . $email;
     },
-    'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
-    'ui' => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => [\atk4\ui\Icon::class, 'mail']]],
+    'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+    'ui' => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => [\Atk4\Ui\Icon::class, 'mail']]],
 ]);
 
 $infoAction->args = [
     'email' => ['type' => 'email', 'required' => true, 'caption' => 'Please let us know your email address:'],
-    'country' => ['required' => true, 'ui' => ['form' => [\atk4\ui\Form\Control\Lookup::class, 'model' => new Country($app->db), 'placeholder' => 'Please select a country.']]],
+    'country' => ['required' => true, 'ui' => ['form' => [\Atk4\Ui\Form\Control\Lookup::class, 'model' => new Country($app->db), 'placeholder' => 'Please select a country.']]],
 ];
 
-$deck = \atk4\ui\CardDeck::addTo($app, ['noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book']]);
+$deck = \Atk4\Ui\CardDeck::addTo($app, ['noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book']]);
 
 $deck->setModel($countries, ['Cost'], ['iso', 'iso3']);

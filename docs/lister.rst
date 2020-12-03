@@ -5,7 +5,7 @@
 Lister
 ======
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Lister
 
@@ -96,7 +96,7 @@ Tweaking the output
 Output is formatted using the standard :ref:`ui_persistence` routine, but you can also fine-tune the content
 of your tags like this::
 
-    $lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function(\atk4\ui\Lister $lister){
+    $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function(\Atk4\Ui\Lister $lister){
         $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
     })
 

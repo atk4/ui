@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\UserAction;
+namespace Atk4\Ui\UserAction;
 
-use atk4\core\HookTrait;
-use atk4\data\Model;
-use atk4\ui\Button;
-use atk4\ui\Exception;
-use atk4\ui\JsExpressionable;
-use atk4\ui\JsToast;
-use atk4\ui\Message;
+use Atk4\Core\HookTrait;
+use Atk4\Data\Model;
+use Atk4\Ui\Button;
+use Atk4\Ui\Exception;
+use Atk4\Ui\JsExpressionable;
+use Atk4\Ui\JsToast;
+use Atk4\Ui\Message;
 
-class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
+class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
 {
     use HookTrait;
 
@@ -125,7 +125,7 @@ class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
 
         $this->addHeader();
 
-        \atk4\ui\Button::addToWithCl($this, $this->executorButton)->on('click', function () {
+        \Atk4\Ui\Button::addToWithCl($this, $this->executorButton)->on('click', function () {
             return $this->jsExecute();
         });
     }
@@ -158,7 +158,7 @@ class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
     public function addHeader()
     {
         if ($this->hasHeader) {
-            \atk4\ui\Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?: $this->action->getDescription()]);
+            \Atk4\Ui\Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?: $this->action->getDescription()]);
         }
     }
 }

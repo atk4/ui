@@ -6,7 +6,7 @@
 Label
 =====
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Label
 
@@ -27,7 +27,7 @@ appear on the label::
 
     // or
 
-    $label = new \atk4\ui\Label('hello world');
+    $label = new \Atk4\Ui\Label('hello world');
     $app->add($label);
 
 
@@ -55,7 +55,7 @@ There are two properties (icon, iconRight) but you can set only one at a time::
 
 You can also specify icon as an object::
 
-    Label::addTo($app, ['new', 'iconRight'=>new \atk4\ui\Icon('delete')]);
+    Label::addTo($app, ['new', 'iconRight'=>new \Atk4\Ui\Icon('delete')]);
 
 For more information, see: :php:class:`Icon`
 
@@ -122,7 +122,7 @@ Added labels into Table
 You can even use label inside a table, but because table renders itself by repeating periodically, then
 the following code is needed::
 
-    $table->onHook(\atk4\ui\Table\Column::HOOK_GET_HTML_TAGS, function ($table, Model $row) {
+    $table->onHook(\Atk4\Ui\Table\Column::HOOK_GET_HTML_TAGS, function ($table, Model $row) {
         if ($row->getId() == 1) {
             return [
                 'name'=> $table->getApp()->getTag('div', ['class'=>'ui ribbon label'], $row->get('name')),

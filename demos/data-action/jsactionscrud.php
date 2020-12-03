@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Header;
+use Atk4\Ui\Header;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Actions in Crud', 'subHeader' => 'Crud will automatically setup Menu items based on actions defined in model.']);
@@ -28,12 +28,12 @@ $action = $files->addUserAction(
         'args' => [
             'path' => ['type' => 'string', 'required' => true],
         ],
-        'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+        'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     ]
 );
 
-$files->addUserAction('download', function (\atk4\data\Model $model) {
+$files->addUserAction('download', function (\Atk4\Data\Model $model) {
     return 'File has been download!';
 });
 
-\atk4\ui\Crud::addTo($app, ['ipp' => 10])->setModel($files);
+\Atk4\Ui\Crud::addTo($app, ['ipp' => 10])->setModel($files);

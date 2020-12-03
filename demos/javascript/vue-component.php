@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\HtmlTemplate;
+use Atk4\Ui\HtmlTemplate;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
-\atk4\ui\View::addTo($app, ['ui' => 'divider']);
+\Atk4\Ui\Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
 // ****** Inline Edit *****************************
 
@@ -18,36 +18,36 @@ $model = new Country($app->db);
 $model->loadAny();
 
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
-\atk4\ui\Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
+\Atk4\Ui\Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
 
-$inline_edit = \atk4\ui\Component\InlineEdit::addTo($app);
+$inline_edit = \Atk4\Ui\Component\InlineEdit::addTo($app);
 $inline_edit->setModel($model);
 
 $inline_edit->onChange(function ($value) {
-    $view = new \atk4\ui\Message();
+    $view = new \Atk4\Ui\Message();
     $view->invokeInit();
     $view->text->addParagraph('new value: ' . $value);
 
     return $view;
 });
 
-\atk4\ui\View::addTo($app, ['ui' => 'divider']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
 // ****** ITEM SEARCH *****************************
 
 $subHeader = 'Searching will reload the list of countries below with matching result.';
-\atk4\ui\Header::addTo($app, ['Search using a Vue component', 'subHeader' => $subHeader]);
+\Atk4\Ui\Header::addTo($app, ['Search using a Vue component', 'subHeader' => $subHeader]);
 
 $model = new Country($app->db);
 
 $lister_template = new HtmlTemplate('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{$end}{/}</div>');
 
-$view = \atk4\ui\View::addTo($app);
+$view = \Atk4\Ui\View::addTo($app);
 
-$search = \atk4\ui\Component\ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
-$lister_container = \atk4\ui\View::addTo($view, ['template' => $lister_template]);
-$lister = \atk4\ui\Lister::addTo($lister_container, [], ['List']);
-$lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
+$search = \Atk4\Ui\Component\ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
+$lister_container = \Atk4\Ui\View::addTo($view, ['template' => $lister_template]);
+$lister = \Atk4\Ui\Lister::addTo($lister_container, [], ['List']);
+$lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
     ++$lister->ipp;
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
     if ($lister->ipp === $lister->model->limit[0]) {
@@ -58,10 +58,10 @@ $lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lis
 $search->reload = $lister_container;
 $lister->setModel($search->setModelCondition($model))->setLimit(50);
 
-\atk4\ui\View::addTo($app, ['ui' => 'divider']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
 // ****** CREATING CUSTOM VUE USING EXTERNAL COMPONENT *****************************
-\atk4\ui\Header::addTo($app, ['External Component', 'subHeader' => 'Creating component using an external component definition.']);
+\Atk4\Ui\Header::addTo($app, ['External Component', 'subHeader' => 'Creating component using an external component definition.']);
 
 $app->requireJs('https://unpkg.com/vue-clock2@1.1.5/dist/vue-clock.min.js');
 
@@ -119,7 +119,7 @@ $clock_script = "
     </script>";
 
 // Creating the clock view and injecting js.
-$clock = \atk4\ui\View::addTo($app, ['template' => $clock_template]);
+$clock = \Atk4\Ui\View::addTo($app, ['template' => $clock_template]);
 $clock->template->tryDangerouslySetHtml('script', $clock_script);
 
 // passing some style to my-clock component.
@@ -132,6 +132,6 @@ $clock_style = [
 // creating vue using an external definition.
 $clock->vue('my-clock', ['clock' => $clock_style], 'myClock');
 
-$btn = \atk4\ui\Button::addTo($app, ['Change Style']);
+$btn = \Atk4\Ui\Button::addTo($app, ['Change Style']);
 $btn->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));
-\atk4\ui\View::addTo($app, ['element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);
+\Atk4\Ui\View::addTo($app, ['element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);

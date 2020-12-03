@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Form;
-use atk4\ui\JsToast;
+use Atk4\Ui\Form;
+use Atk4\Ui\JsToast;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $items = [
@@ -35,14 +35,14 @@ $items = [
     ['name' => 'Appliances', 'id' => 301, 'nodes' => []],
 ];
 
-\atk4\ui\Header::addTo($app, ['Tree item selector']);
+\Atk4\Ui\Header::addTo($app, ['Tree item selector']);
 
 $form = Form::addTo($app);
 $control = $form->addControl('tree', [Form\Control\TreeItemSelector::class, 'treeItems' => $items, 'caption' => 'Multiple selection:'], ['type' => 'array', 'serialize' => 'json']);
 $control->set($app->encodeJson([201, 301, 503]));
 
 //$control->onItem(function($value) use ($app) {
-//    return new \atk4\ui\JsToast($app->encodeJson($value));
+//    return new \Atk4\Ui\JsToast($app->encodeJson($value));
 //});
 
 $control = $form->addControl('tree1', [Form\Control\TreeItemSelector::class, 'treeItems' => $items, 'allowMultiple' => false, 'caption' => 'Single selection:']);
@@ -58,7 +58,7 @@ $form->onSubmit(function (Form $form) use ($app) {
         'single' => $form->model->get('tree1'),
     ];
 
-    $view = new \atk4\ui\Message('Items: ');
+    $view = new \Atk4\Ui\Message('Items: ');
     $view->invokeInit();
     $view->text->addParagraph($app->encodeJson($response));
 

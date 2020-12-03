@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Button;
+use Atk4\Ui\Button;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Button::addTo($app, ['Card Deck', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\Atk4\Ui\Button::addTo($app, ['Card Deck', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['card-deck']);
-\atk4\ui\Button::addTo($app, ['Card', 'small left floated basic blue', 'icon' => 'left arrow'])
+\Atk4\Ui\Button::addTo($app, ['Card', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['card']);
-\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-\atk4\ui\Header::addTo($app, ['Models', 'size' => 1, 'subHeader' => 'Card may display information from many models.']);
+\Atk4\Ui\Header::addTo($app, ['Models', 'size' => 1, 'subHeader' => 'Card may display information from many models.']);
 
 $stats = new Stat($app->db);
 $stats->loadAny();
 
-$c = \atk4\ui\Card::addTo($app);
+$c = \Atk4\Ui\Card::addTo($app);
 $c->setModel($stats, ['client_name', 'description']);
 
 $c->addSection('Project: ', $stats, ['start_date', 'finish_date'], true);

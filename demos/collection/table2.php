@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Table;
+use Atk4\Ui\Table;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $data = [
@@ -15,12 +15,12 @@ $data = [
     ['id' => 3, 'action' => 'Tax', 'amount' => -40],
 ];
 
-$model = new \atk4\data\Model(new \atk4\data\Persistence\Static_($data));
+$model = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Static_($data));
 $model->getField('amount')->type = 'money';
 
-\atk4\ui\Header::addTo($app, ['Table with various headers', 'subHeader' => 'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon' => 'table']);
+\Atk4\Ui\Header::addTo($app, ['Table with various headers', 'subHeader' => 'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon' => 'table']);
 
-$table = \atk4\ui\Table::addTo($app);
+$table = \Atk4\Ui\Table::addTo($app);
 $table->setModel($model, ['action']);
 $table->addColumn('amount', [Table\Column\Money::class]);
 
@@ -29,7 +29,7 @@ $table->template->dangerouslyAppendHtml('SubHead', '<tr class="center aligned"><
 $table->template->dangerouslyAppendHtml('Body', '<tr class="center aligned"><td colspan=2>This is part of body, goes before other rows</td></tr>');
 
 // Hook can be used to display data before row. You can also inject and format extra rows.
-$table->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (Table $table) {
+$table->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (Table $table) {
     if ($table->current_row->getId() === 2) {
         $table->template->dangerouslyAppendHtml('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->current_row->get('action') . ')</th></tr>');
     } elseif ($table->current_row->get('action') === 'Tax') {
@@ -46,13 +46,13 @@ $table->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (Table $table) {
 $table->template->dangerouslyAppendHtml('Foot', '<tr class="center aligned"><td colspan=2>This will appear above totals</th></tr>');
 $table->addTotals(['action' => 'Totals:', 'amount' => ['sum']]);
 
-\atk4\ui\Header::addTo($app, ['Columns with multiple formats', 'subHeader' => 'Single column can use logic to swap out formatters', 'icon' => 'table']);
+\Atk4\Ui\Header::addTo($app, ['Columns with multiple formats', 'subHeader' => 'Single column can use logic to swap out formatters', 'icon' => 'table']);
 
-$table = \atk4\ui\Table::addTo($app);
+$table = \Atk4\Ui\Table::addTo($app);
 $table->setModel($model, ['action']);
 
 // copy of amount through a PHP callback
-$model->addExpression('amount_copy', [function (\atk4\data\Model $model) {
+$model->addExpression('amount_copy', [function (\Atk4\Data\Model $model) {
     return $model->get('amount');
 }, 'type' => 'money']);
 
@@ -78,8 +78,8 @@ $table->addColumn('amount_copy', [Table\Column\Multiformat::class, function ($a,
     return Table\Column\Money::class;
 }, 'attr' => ['all' => ['class' => ['right aligned singel line']]]]);
 
-\atk4\ui\Header::addTo($app, ['Table with resizable columns', 'subHeader' => 'Just drag column header to resize', 'icon' => 'table']);
+\Atk4\Ui\Header::addTo($app, ['Table with resizable columns', 'subHeader' => 'Just drag column header to resize', 'icon' => 'table']);
 
-$table = \atk4\ui\Table::addTo($app);
+$table = \Atk4\Ui\Table::addTo($app);
 $table->setModel($model);
 $table->addClass('celled')->resizableColumn();

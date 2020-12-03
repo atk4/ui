@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Form;
-use atk4\ui\JsToast;
+use Atk4\Ui\Form;
+use Atk4\Ui\JsToast;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $form = Form::addTo($app);

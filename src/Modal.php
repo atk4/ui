@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * This class add modal dialog to a page.
@@ -20,8 +20,8 @@ namespace atk4\ui;
  *
  * Modal can use semantic-ui predefine method onApprove or onDeny by passing
  * a jsAction to Modal::addDenyAction or Modal::addApproveAction method. It will not close until the jsAction return true.
- *  $modal->addDenyAction('No', new \atk4\ui\JsExpression('function(){window.alert("Can\'t do that."); return false;}'));
- *  $modal->addApproveAction('Yes', new \atk4\ui\JsExpression('function(){window.alert("You\'re good to go!");}'));
+ *  $modal->addDenyAction('No', new \Atk4\Ui\JsExpression('function(){window.alert("Can\'t do that."); return false;}'));
+ *  $modal->addApproveAction('Yes', new \Atk4\Ui\JsExpression('function(){window.alert("You\'re good to go!");}'));
  *
  * You may also prevent modal from closing via the esc or dimmed area click using $modal->notClosable().
  *

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Layout;
+namespace Atk4\Ui\Layout;
 
 /**
  * Implements a single content column application, typically used in your favourite
@@ -13,7 +13,7 @@ namespace atk4\ui\Layout;
  *
  * Sticky top-bar for simple navigation and three flexible areas for flexible use.
  */
-class Column extends \atk4\ui\Layout
+class Column extends \Atk4\Ui\Layout
 {
     public $defaultTemplate = 'layout/column.html';
 
