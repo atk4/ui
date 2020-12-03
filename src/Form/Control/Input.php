@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
-use atk4\ui\Button;
-use atk4\ui\Form;
-use atk4\ui\Icon;
-use atk4\ui\Label;
+use Atk4\Ui\Button;
+use Atk4\Ui\Form;
+use Atk4\Ui\Icon;
+use Atk4\Ui\Label;
 
 /**
  * Input element for a form control.

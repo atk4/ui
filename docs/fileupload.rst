@@ -16,14 +16,14 @@ in steps:
  4. PHP upload callback :php:meth:`Upload::onUpload` is called, returns "file_id"
  5. "file_id" is placed inside form.
  6. User submits the form
- 7. :php:meth:`\atk4\ui\Form::onSubmit()` receives "file_id"
+ 7. :php:meth:`\Atk4\Ui\Form::onSubmit()` receives "file_id"
 
 Currently only one file can be uploaded at a time. If file is uploaded incorrectly,
 it can be removed. Both Upload and UploadImage controls contain an upload button which would
 open a File Selection dialog. UploadImage also implements image preview icon.
 During upload, a progress bar will appear.
 
-.. php:namespace:: atk4\ui\Form\Control
+.. php:namespace:: Atk4\Ui\Form\Control
 
 .. php:class:: Upload
 
@@ -51,7 +51,7 @@ Callbacks
 
 When adding an Upload or UploadImage field to a form, onUpload and onDelete callback must be defined::
 
-    $img = $form->addControl('img', [\atk4\ui\Form\Control\UploadImage::class, ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
+    $img = $form->addControl('img', [\Atk4\Ui\Form\Control\UploadImage::class, ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
 
     $img->onUpload(function ($postFile) {
         // callback action here...
@@ -90,7 +90,7 @@ Example showing the onUpload callback on the UploadImage field::
         $img->setFileId('123456');
 
         // can also return a notifier.
-        return new \atk4\ui\JsNotify(['content' => 'File is uploaded!', 'color' => 'green']);
+        return new \Atk4\Ui\JsNotify(['content' => 'File is uploaded!', 'color' => 'green']);
     });
 
 When user submit the form, the form control data value that will be submitted is the fileId set during the onUpload callback.
@@ -121,7 +121,7 @@ Example showing the onDelete callback on the UploadImage field::
         // reset thumbanil
         $img->clearThumbnail('./images/default.png');
 
-        return new \atk4\ui\JsNotify(['content' => $fileId.' has been removed!', 'color' => 'green']);
+        return new \Atk4\Ui\JsNotify(['content' => $fileId.' has been removed!', 'color' => 'green']);
     });
 
 

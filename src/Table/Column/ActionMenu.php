@@ -6,14 +6,14 @@ declare(strict_types=1);
  * Will create a dropdown menu within table column.
  */
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
-use atk4\ui\Jquery;
-use atk4\ui\JsChain;
-use atk4\ui\Table;
-use atk4\ui\View;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsChain;
+use Atk4\Ui\Table;
+use Atk4\Ui\View;
 
 class ActionMenu extends Table\Column
 {
@@ -110,7 +110,7 @@ class ActionMenu extends Table\Column
         }
 
         if (!is_object($item)) {
-            $item = Factory::factory([\atk4\ui\View::class], ['id' => false, 'ui' => 'item', 'content' => $item]);
+            $item = Factory::factory([\Atk4\Ui\View::class], ['id' => false, 'ui' => 'item', 'content' => $item]);
         }
 
         $this->items[] = $item;

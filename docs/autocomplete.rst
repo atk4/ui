@@ -5,7 +5,7 @@
 AutoComplete Form Control
 =========================
 
-.. php:namespace:: atk4\ui\Form\Control
+.. php:namespace:: Atk4\Ui\Form\Control
 .. php:class:: AutoComplete
 
 Agile UI uses "Form\\Control\\Dropdown" by default on the form, but there is also implementation
@@ -31,14 +31,14 @@ form where you can enter new record details.
 The form save will re-use the model of your auto-complete, so be sure to set() defaults and
 addCondition()s::
 
-    $form->addControl('test', [\atk4\ui\Form\Control\AutoComplete::class, 'plus'=>true])->setModel(new Country($db));
+    $form->addControl('test', [\Atk4\Ui\Form\Control\AutoComplete::class, 'plus'=>true])->setModel(new Country($db));
 
 Specifying in Model
 -------------------
 
 You can also specify that you prefer to use AutoComplete inside your model definition::
 
-    $model->hasOne('country_id', [new Country($db), 'ui'=>['form'=>[\atk4\ui\Form\Control\AutoComplete::class]]]);
+    $model->hasOne('country_id', [new Country($db), 'ui'=>['form'=>[\Atk4\Ui\Form\Control\AutoComplete::class]]]);
 
 Advanced Usage
 --------------
@@ -46,11 +46,11 @@ Advanced Usage
 You can do much more with AutoComplete form control by passing dropdown settings::
 
     $form->addControl('test', [
-        \atk4\ui\Form\Control\AutoComplete::class, 
+        \Atk4\Ui\Form\Control\AutoComplete::class, 
         'settings'=>[
             'allowReselection' => true,
             'selectOnKeydown' => false,
-            'onChange'        => new \atk4\ui\JsExpression('function(value,t,c){
+            'onChange'        => new \Atk4\Ui\JsExpression('function(value,t,c){
                                     if ($(this).data("value") !== value) {
                                     $(this).parents(".form").form("submit");
                                     $(this).data("value", value);
@@ -66,10 +66,10 @@ In 1.6 we have introduced Lookup form control, which is identical to AutoComplet
 use of Filters::
 
 
-    $form = \atk4\ui\Form::addTo($app, ['segment']);
-    \atk4\ui\Label::addTo($form, ['Add city', 'top attached'], ['AboveControls']);
+    $form = \Atk4\Ui\Form::addTo($app, ['segment']);
+    \Atk4\Ui\Label::addTo($form, ['Add city', 'top attached'], ['AboveControls']);
 
-    $l = $form->addControl('city',[\atk4\ui\Form\Control\Lookup::class]);
+    $l = $form->addControl('city',[\Atk4\Ui\Form\Control\Lookup::class]);
 
     // will restraint possible city value in droddown base on country and/or language.
     $l->addFilter('country', 'Country');

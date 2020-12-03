@@ -5,11 +5,11 @@ declare(strict_types=1);
  * A collection of Card set from a model.
  */
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
-use atk4\ui\Component\ItemSearch;
+use Atk4\Ui\Component\ItemSearch;
 
 class CardDeck extends View
 {

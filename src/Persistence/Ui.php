@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Persistence;
+namespace Atk4\Ui\Persistence;
 
 use Atk4\Data\Model;
-use atk4\ui\Exception;
+use Atk4\Ui\Exception;
 
 /**
  * This class is used for typecasting model types to the values that will be presented to the user. App will

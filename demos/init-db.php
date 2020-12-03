@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\demo;
 
-use atk4\ui\Form;
+use Atk4\Ui\Form;
 
 try {
     if (file_exists(__DIR__ . '/db.php')) {
@@ -14,7 +14,7 @@ try {
     }
 } catch (\PDOException $e) {
     // do not pass $e unless you can secure DSN!
-    throw (new \atk4\ui\Exception('This demo requires access to the database. See "demos/init-db.php"'))
+    throw (new \Atk4\Ui\Exception('This demo requires access to the database. See "demos/init-db.php"'))
         ->addMoreInfo('PDO error', $e->getMessage());
 }
 

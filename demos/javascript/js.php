@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\demo;
 
-use atk4\ui\Button;
-use atk4\ui\Header;
+use Atk4\Ui\Button;
+use Atk4\Ui\Header;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // Demonstrates how to use interractive buttons.
@@ -59,8 +59,8 @@ $b->on('click', function ($b) {
 
 Header::addTo($app, ['Callbacks on HTML element', 'subHeader' => 'Click on label below.']);
 
-$label = \atk4\ui\Label::addTo($app->layout, ['Test']);
+$label = \Atk4\Ui\Label::addTo($app->layout, ['Test']);
 
 $label->on('click', function ($j, $arg1) {
     return 'width is ' . $arg1;
-}, [new \atk4\ui\JsExpression('$(window).width()')]);
+}, [new \Atk4\Ui\JsExpression('$(window).width()')]);

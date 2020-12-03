@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Tests;
+namespace Atk4\Ui\Tests;
 
 use Atk4\Core\AtkPhpunit;
 use Atk4\Core\Exception;
@@ -14,7 +14,7 @@ class ViewTest extends AtkPhpunit\TestCase
      */
     public function testMultipleRender()
     {
-        $v = new \atk4\ui\View();
+        $v = new \Atk4\Ui\View();
         $v->set('foo');
 
         $a = $v->render();
@@ -26,11 +26,11 @@ class ViewTest extends AtkPhpunit\TestCase
     {
         $this->expectException(Exception::class);
 
-        $v = new \atk4\ui\View();
+        $v = new \Atk4\Ui\View();
         $v->set('foo');
 
         $a = $v->render();
-        \atk4\ui\View::addTo($v);  // this should fail. No adding after rendering.
+        \Atk4\Ui\View::addTo($v);  // this should fail. No adding after rendering.
         $b = $v->render();
         $this->assertSame($a, $b);
     }

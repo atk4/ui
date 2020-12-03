@@ -5,7 +5,7 @@
 Paginator
 =========
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 .. php:class:: Paginator
 
 Paginator displays a horizontal UI menu providing links to pages when all of the content does not fit

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\demo;
 
 /**
  * Invoice class for tutorial intro.

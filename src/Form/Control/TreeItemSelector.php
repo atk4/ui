@@ -14,11 +14,11 @@ declare(strict_types=1);
  * see demos/tree-item-selector.php to see how tree items are build.
  */
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
-use atk4\ui\Form;
-use atk4\ui\HtmlTemplate;
-use atk4\ui\JsCallback;
+use Atk4\Ui\Form;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\JsCallback;
 
 class TreeItemSelector extends Form\Control
 {
@@ -32,7 +32,7 @@ class TreeItemSelector extends Form\Control
     /**
      * The tree item selector View.
      *
-     * @var \atk4\ui\View|null
+     * @var \Atk4\Ui\View|null
      */
     public $itemSelector;
 
@@ -86,7 +86,7 @@ class TreeItemSelector extends Form\Control
             $this->itemSelectorTemplate = new HtmlTemplate('<div id="{$_id}" class="ui list" style="margin-left: 16px"><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
-        $this->itemSelector = \atk4\ui\View::addTo($this, ['template' => $this->itemSelectorTemplate]);
+        $this->itemSelector = \Atk4\Ui\View::addTo($this, ['template' => $this->itemSelectorTemplate]);
     }
 
     /**

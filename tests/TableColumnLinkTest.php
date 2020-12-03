@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Tests;
+namespace Atk4\Ui\Tests;
 
 use Atk4\Core\AtkPhpunit;
-use atk4\ui\Table;
+use Atk4\Ui\Table;
 
 class TableColumnLinkTest extends AtkPhpunit\TestCase
 {
@@ -23,7 +23,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         $m->addField('name');
         $m->addField('ref');
         $m->addField('salary');
-        $this->table = new \atk4\ui\Table();
+        $this->table = new \Atk4\Ui\Table();
         $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref']);
     }
@@ -264,7 +264,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         $m->addField('name');
         $m->addField('ref');
         $m->addField('salary');
-        $this->table = new \atk4\ui\Table();
+        $this->table = new \Atk4\Ui\Table();
         $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref']);
 

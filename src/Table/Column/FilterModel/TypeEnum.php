@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column\FilterModel;
+namespace Atk4\Ui\Table\Column\FilterModel;
 
 use Atk4\Data\Model;
-use atk4\ui\Table\Column;
+use Atk4\Ui\Table\Column;
 
 class TypeEnum extends Column\FilterModel
 {

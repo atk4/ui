@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\demo;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 /** @var \Atk4\Data\Model $modelClass */
@@ -43,6 +43,6 @@ $p = new \Atk4\Data\Persistence\Array_($data);
 $model = new $modelClass($p);
 
 // add Crud
-\atk4\ui\Header::addTo($app, ['Crud with Array Persistence']);
-$c = \atk4\ui\Crud::addTo($app, ['ipp' => 5]);
+\Atk4\Ui\Header::addTo($app, ['Crud with Array Persistence']);
+$c = \Atk4\Ui\Crud::addTo($app, ['ipp' => 5]);
 $c->setModel($model);

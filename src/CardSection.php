@@ -5,7 +5,7 @@ declare(strict_types=1);
  * Display a card section within a Card View.
  */
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 use Atk4\Data\Model;
 

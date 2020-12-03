@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 
@@ -187,7 +187,7 @@ class Table extends Lister
         }
 
         if (!$this->model) {
-            $this->model = new \atk4\ui\Misc\ProxyModel();
+            $this->model = new \Atk4\Ui\Misc\ProxyModel();
         }
 
         // This code should be vaugely consistent with Form\Layout::addControl()
@@ -641,7 +641,7 @@ class Table extends Lister
                 }
 
                 // closure support
-                // arguments - current value, key, \atk4\ui\Table object
+                // arguments - current value, key, \Atk4\Ui\Table object
                 if ($f instanceof \Closure) {
                     $this->totals[$key] += ($f($this->model->get($key), $key, $this) ?: 0);
                 } elseif (is_string($f)) { // built-in methods

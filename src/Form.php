@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
@@ -63,7 +63,7 @@ class Form extends View
     /**
      * A current layout of a form, needed if you call $form->addControl().
      *
-     * @var \atk4\ui\Form\Layout
+     * @var \Atk4\Ui\Form\Layout
      */
     public $layout;
 
@@ -293,7 +293,7 @@ class Form extends View
                 $response = $this->hook(self::HOOK_SUBMIT);
 
                 if (!$response) {
-                    if (!$this->model instanceof \atk4\ui\Misc\ProxyModel) {
+                    if (!$this->model instanceof \Atk4\Ui\Misc\ProxyModel) {
                         $this->model->save();
 
                         return $this->success('Form data has been saved');
@@ -401,7 +401,7 @@ class Form extends View
     public function addControl(?string $name, $control = null, $field = null)
     {
         if (!$this->model) {
-            $this->model = new \atk4\ui\Misc\ProxyModel();
+            $this->model = new \Atk4\Ui\Misc\ProxyModel();
         }
 
         return $this->layout->addControl($name, $control, $field);

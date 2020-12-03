@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\demo;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // This demo require specific Database setup.
@@ -40,4 +40,4 @@ class Account extends \Atk4\Data\Model
     }
 }
 
-\atk4\ui\Crud::addTo($app)->setModel(new Client($app->db));
+\Atk4\Ui\Crud::addTo($app)->setModel(new Client($app->db));

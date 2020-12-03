@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\UserAction;
+namespace Atk4\Ui\UserAction;
 
 /**
  * ExecutorInterface can be implemented by a View that can be displayed on a page or in a modal window

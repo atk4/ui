@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Tests;
+namespace Atk4\Ui\Tests;
 
 use Atk4\Core\AtkPhpunit;
-use atk4\ui\Exception;
-use atk4\ui\HtmlTemplate;
-use atk4\ui\HtmlTemplate\TagTree;
+use Atk4\Ui\Exception;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\HtmlTemplate\TagTree;
 
 class HtmlTemplateTest extends AtkPhpunit\TestCase
 {

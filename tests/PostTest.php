@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Tests;
+namespace Atk4\Ui\Tests;
 
 use Atk4\Core\AtkPhpunit;
 use Atk4\Data\Model;
@@ -26,7 +26,7 @@ class PostTest extends AtkPhpunit\TestCase
      */
     public function testPost()
     {
-        $p = new \atk4\ui\Persistence\Post();
+        $p = new \Atk4\Ui\Persistence\Post();
 
         $this->model->set('surname', 'DefSurname');
 

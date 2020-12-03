@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Tests;
+namespace Atk4\Ui\Tests;
 
 use Atk4\Core\AtkPhpunit;
 
@@ -43,7 +43,7 @@ class PaginatorTest extends AtkPhpunit\TestCase
      */
     public function testPaginator($page, $range, $total, $expected)
     {
-        $p = new \atk4\ui\Paginator(['page' => $page, 'range' => $range, 'total' => $total]);
+        $p = new \Atk4\Ui\Paginator(['page' => $page, 'range' => $range, 'total' => $total]);
         $this->assertSame($expected, $p->getPaginatorItems());
     }
 }

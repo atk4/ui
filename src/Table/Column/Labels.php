@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use atk4\ui\Table;
+use Atk4\Ui\Table;
 
 /**
  * Class Labels.

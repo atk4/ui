@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\demo;
 
-use atk4\ui\Table;
+use Atk4\Ui\Table;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 /** @var \Atk4\Data\Model $modelColorClass */
@@ -109,7 +109,7 @@ $keyValueString = [
     'four',
 ];
 
-\atk4\ui\Header::addTo($app, ['Table column', 'subHeader' => 'Table column decorator can be set from your model.']);
+\Atk4\Ui\Header::addTo($app, ['Table column', 'subHeader' => 'Table column decorator can be set from your model.']);
 
 $model = new $modelColorClass(new \Atk4\Data\Persistence\Static_([]));
 
@@ -128,5 +128,5 @@ foreach (range(1, 10) as $id) {
     ]);
 }
 
-$table = \atk4\ui\Table::addTo($app);
+$table = \Atk4\Ui\Table::addTo($app);
 $table->setModel($model);

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 use Atk4\Core\AppScopeTrait;
 use Atk4\Core\DiContainerTrait;
@@ -10,8 +10,8 @@ use Atk4\Core\DynamicMethodTrait;
 use Atk4\Core\HookTrait;
 use Atk4\Core\InitializerTrait;
 use Atk4\Data\Persistence;
-use atk4\ui\Exception\ExitApplicationException;
-use atk4\ui\Persistence\Ui as UiPersistence;
+use Atk4\Ui\Exception\ExitApplicationException;
+use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -972,8 +972,8 @@ class App
      * Return exception message using HTML block and Semantic UI formatting. It's your job
      * to put it inside boilerplate HTML and output, e.g:.
      *
-     *   $app = new \atk4\ui\App();
-     *   $app->initLayout([\atk4\ui\Layout\Centered::class]);
+     *   $app = new \Atk4\Ui\App();
+     *   $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
      *   $app->layout->template->dangerouslySetHtml('Content', $e->getHtml());
      *   $app->run();
      *   $app->callExit(true);

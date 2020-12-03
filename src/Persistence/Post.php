@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Persistence;
+namespace Atk4\Ui\Persistence;
 
 use Atk4\Data\Model;
 

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Model;
-use atk4\ui\Table;
+use Atk4\Ui\Table;
 
 /**
  * Column for formatting money.
@@ -28,7 +28,7 @@ class Money extends Table\Column
     public function getDataCellHtml(\Atk4\Data\Field $field = null, $extra_tags = [])
     {
         if (!isset($field)) {
-            throw new \atk4\ui\Exception('Money column requires a field');
+            throw new \Atk4\Ui\Exception('Money column requires a field');
         }
 
         return $this->getTag(

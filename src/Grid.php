@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
@@ -362,7 +362,7 @@ class Grid extends View
      * @param JsExpression|null $afterSuccess
      * @param array             $apiConfig
      *
-     * @return \atk4\ui\JsReload
+     * @return \Atk4\Ui\JsReload
      */
     public function jsReload($args = [], $afterSuccess = null, $apiConfig = [])
     {
@@ -444,7 +444,7 @@ class Grid extends View
         if (!$this->menu) {
             throw new Exception('Unable to add Filter Column without Menu');
         }
-        $this->menu->addItem(['Clear Filters'], new \atk4\ui\JsReload($this->table->reload, ['atk_clear_filter' => 1]));
+        $this->menu->addItem(['Clear Filters'], new \Atk4\Ui\JsReload($this->table->reload, ['atk_clear_filter' => 1]));
         $this->table->setFilterColumn($names);
 
         return $this;

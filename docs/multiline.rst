@@ -1,5 +1,5 @@
 
-.. php:namespace:: atk4\ui\Form\Control
+.. php:namespace:: Atk4\Ui\Form\Control
 
 .. php:class:: Multiline
 
@@ -58,7 +58,7 @@ This means that the addresses are not stored into a separate database table but 
 
 
     // Add a Form to the UI and set User as Model
-    $user_form = \atk4\ui\Form::addTo($app);
+    $user_form = \Atk4\Ui\Form::addTo($app);
     $user_form->setModel($user);
 
 This leads to a Multiline component automatically rendered for adding, editing and deleting Addresses of the user:
@@ -106,9 +106,9 @@ If you want to edit them along with the user, Multiline is set up in a few lines
     $user->save();
 
     // Add a form to UI to edit User record
-    $user_form = \atk4\ui\Form::addTo($app);
+    $user_form = \Atk4\Ui\Form::addTo($app);
     $user_form->setModel($user);
-    $ml = $user_form->addField('email_addresses', [\atk4\ui\Form\Control\Multiline::class]);
+    $ml = $user_form->addField('email_addresses', [\Atk4\Ui\Form\Control\Multiline::class]);
     $ml->setModel($user->ref('Email'));
 
     // set up saving of Email on Form submit
@@ -200,10 +200,10 @@ Footer
 ------
 You can add a footer to Multiline form control by adding a sublayout to it. In this example, we add a footer containing a read-only input which could get the value from ``onLineChange`` callback (see above)::
    
-    $ml = $form->addControl('ml', [\atk4\ui\FormField\Multiline::class, 'options' => ['color' => 'blue']]);
+    $ml = $form->addControl('ml', [\Atk4\Ui\FormField\Multiline::class, 'options' => ['color' => 'blue']]);
     $ml->setModel($inventory);
     // Add sublayout with total form control.
-    $sub_layout = $form->layout->addSublayout([\atk4\ui\Form\Layout\Section\Columns::class]);
+    $sub_layout = $form->layout->addSublayout([\Atk4\Ui\Form\Layout\Section\Columns::class]);
     $sub_layout->addColumn(12);
     $c = $sub_layout->addColumn(4);
     $f_total = $c->addControl('total', ['readonly' => true])->set($total);

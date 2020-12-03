@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Model;
-use atk4\ui\Table;
+use Atk4\Ui\Table;
 
 /**
  * Implements Column helper for grid.
@@ -34,7 +34,7 @@ class Status extends Table\Column
     public function getDataCellHtml(\Atk4\Data\Field $field = null, $extra_tags = [])
     {
         if ($field === null) {
-            throw new \atk4\ui\Exception('Status can be used only with model field');
+            throw new \Atk4\Ui\Exception('Status can be used only with model field');
         }
 
         $attr = $this->getTagAttributes('body');

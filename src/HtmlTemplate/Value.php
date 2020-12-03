@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\HtmlTemplate;
+namespace Atk4\Ui\HtmlTemplate;
 
-use atk4\ui\Exception;
+use Atk4\Ui\Exception;
 
 class Value
 {

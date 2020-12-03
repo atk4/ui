@@ -23,7 +23,7 @@ declare(strict_types=1);
  *     // Save Form model and then Multiline model
  *     $form->model->save();
  *     $ml->saveRows();
- *     return new \atk4\ui\JsToast('Saved!');
+ *     return new \Atk4\Ui\JsToast('Saved!');
  * });
  *
  * If Multiline's model contains expressions, these will be evaluated on the fly
@@ -66,7 +66,7 @@ declare(strict_types=1);
  * });
  */
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
 use Atk4\Data\Field;
 use Atk4\Data\Field\Callback;
@@ -74,11 +74,11 @@ use Atk4\Data\FieldSqlExpression;
 use Atk4\Data\Model;
 use Atk4\Data\Reference\HasOne;
 use Atk4\Data\ValidationException;
-use atk4\ui\Exception;
-use atk4\ui\Form;
-use atk4\ui\HtmlTemplate;
-use atk4\ui\JsCallback;
-use atk4\ui\View;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Form;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\JsCallback;
+use Atk4\Ui\View;
 
 class Multiline extends Form\Control
 {

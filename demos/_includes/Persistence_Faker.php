@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\demo;
 
 class Persistence_Faker extends \Atk4\Data\Persistence
 {

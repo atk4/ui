@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\demo;
 
-use atk4\ui\Table;
+use Atk4\Ui\Table;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 if ($id = $_GET['id'] ?? null) {
-    $app->layout->js(true, new \atk4\ui\JsToast('Details link is in simulation mode.'));
+    $app->layout->js(true, new \Atk4\Ui\JsToast('Details link is in simulation mode.'));
 }
 
-$bb = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
+$bb = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
 
-$table = \atk4\ui\Table::addTo($app, ['celled' => true]);
-\atk4\ui\Button::addTo($bb, ['Refresh Table', 'icon' => 'refresh'])
-    ->on('click', new \atk4\ui\JsReload($table));
+$table = \Atk4\Ui\Table::addTo($app, ['celled' => true]);
+\Atk4\Ui\Button::addTo($bb, ['Refresh Table', 'icon' => 'refresh'])
+    ->on('click', new \Atk4\Ui\JsReload($table));
 
 $bb->on('click', $table->js()->reload());
 
@@ -63,7 +63,7 @@ $myArray = [
     ['name' => 'Brett', 'surname' => 'Bird', 'birthdate' => '1988-12-20', 'cv' => null],
 ];
 
-$table = \atk4\ui\Table::addTo($app);
+$table = \Atk4\Ui\Table::addTo($app);
 $table->setSource($myArray, ['name']);
 
 //$table->addColumn('name');

@@ -9,7 +9,7 @@ Views
 Agile UI is a component framework, which follows a software patterns known as
 `Render Tree` and `Two pass HTML rendering`.
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: View
 
@@ -19,7 +19,7 @@ Agile UI is a component framework, which follows a software patterns known as
 
 View object is recursive. You can take one view and add another View inside of it::
 
-    $v = new \atk4\ui\View(['ui'=>'segment', 'inverted']);
+    $v = new \Atk4\Ui\View(['ui'=>'segment', 'inverted']);
     Button::addTo($v, ['Orange', 'inverted orange']);
 
 The above code will produce the following HTML block:
@@ -72,9 +72,9 @@ in any way you wish, before they will actuallized.
 In the next example I'll be creating 3 views, but it at the time their __constructor
 is executed it will be impossible to determine each view's position inside render tree::
 
-    $middle = new \atk4\ui\View(['ui'=>'segment', 'red']);
-    $top = new \atk4\ui\View(['ui'=>'segments']);
-    $bottom = new \atk4\ui\Button(['Hello World', 'orange']);
+    $middle = new \Atk4\Ui\View(['ui'=>'segment', 'red']);
+    $top = new \Atk4\Ui\View(['ui'=>'segments']);
+    $bottom = new \Atk4\Ui\Button(['Hello World', 'orange']);
 
     // not arranged into render-tree yet
 
@@ -84,7 +84,7 @@ is executed it will be impossible to determine each view's position inside rende
 
     // Still not sure if finished adding
 
-    $app = new \atk4\ui\App('My App');
+    $app = new \Atk4\Ui\App('My App');
     $app->initLayout($top);
 
     // Calls init() for all elements recursively.
@@ -93,8 +93,8 @@ Each View's `init()` method will be executed first before calling the same metho
 child elements. To make your execution more straightforward we recommend you to create
 App class first and then continue with Layout initialization::
 
-    $app = new \atk4\ui\App('My App');
-    $top = $app->initLayout(new \atk4\ui\View(['ui'=>'segments']));
+    $app = new \Atk4\Ui\App('My App');
+    $top = $app->initLayout(new \Atk4\Ui\View(['ui'=>'segments']));
 
     $middle = View::addTo($top, ['ui'=>'segment', 'red']);
 
@@ -102,8 +102,8 @@ App class first and then continue with Layout initialization::
 
 Finally, if you prefer a more consise code, you can also use the following format::
 
-    $app = new \atk4\ui\App('My App');
-    $top = $app->initLayout([\atk4\ui\View::class, 'ui'=>'segments']);
+    $app = new \Atk4\Ui\App('My App');
+    $top = $app->initLayout([\Atk4\Ui\View::class, 'ui'=>'segments']);
 
     $middle = View::addTo($top, ['ui'=>'segment', 'red']);
 
@@ -258,7 +258,7 @@ Special-purpose properties
 
 A view may define a special-purpose properties, that may modify how the
 view is rendered. For example, Button has a property 'icon', that is implemented
-by creating instance of \atk4\ui\Icon() inside the button.
+by creating instance of \Atk4\Ui\Icon() inside the button.
 
 The same pattern can be used for other scenarios::
 
@@ -337,7 +337,7 @@ to do something before child render, override method :php:meth:`View::recursiveR
 Template of a current view. This attribute contains an object of a class :php:class:`Template`.
 You may secify this value explicitly::
 
-    View::addTo($app, ['template'=>new \atk4\ui\Template('<b>hello</b>')]);
+    View::addTo($app, ['template'=>new \Atk4\Ui\Template('<b>hello</b>')]);
 
 .. php:attr:: defaultTemplate
 
@@ -409,7 +409,7 @@ Unique ID tag
 
 Agile UI will maintain unique ID for all the elements. The tag is set through 'id' property::
 
-    $b = new \atk4\ui\Button(['id'=>'my-button3']);
+    $b = new \Atk4\Ui\Button(['id'=>'my-button3']);
     echo $b->render();
 
 Outputs:
@@ -459,7 +459,7 @@ which will respond with JavaScript Action for reloading the view::
     $b1->on('click', $b2->jsReload());
 
     // Previously:
-    // $b1->on('click', new \atk4\ui\JsReload($b2));
+    // $b1->on('click', new \Atk4\Ui\JsReload($b2));
 
 
 

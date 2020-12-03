@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Model;
-use atk4\ui\HtmlTemplate;
-use atk4\ui\Table;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Table;
 
 /**
  * Implements Column helper for grid.

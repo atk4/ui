@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\ui\JsCallback;
+use Atk4\Ui\JsCallback;
 
 /**
  * Implement a callback for a column header dropdown menu.

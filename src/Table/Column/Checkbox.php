@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
-use atk4\ui\Exception;
-use atk4\ui\JsExpression;
-use atk4\ui\Table;
+use Atk4\Ui\Exception;
+use Atk4\Ui\JsExpression;
+use Atk4\Ui\Table;
 
 /**
  * Implements Checkbox column for selecting rows.

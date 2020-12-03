@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table;
+namespace Atk4\Ui\Table;
 
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use atk4\ui\Exception;
-use atk4\ui\Jquery;
-use atk4\ui\JsExpression;
-use atk4\ui\Popup;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsExpression;
+use Atk4\Ui\Popup;
 
 /**
  * Implements Column helper for table.
  *
- * @method \atk4\ui\Table getOwner()
+ * @method \Atk4\Ui\Table getOwner()
  */
 class Column
 {
@@ -31,7 +31,7 @@ class Column
     /**
      * Link back to the table, where column is used.
      *
-     * @var \atk4\ui\Table
+     * @var \Atk4\Ui\Table
      */
     public $table;
 
@@ -173,7 +173,7 @@ class Column
      * This method return a callback where you can detect
      * menu item change via $cb->onMenuItem($item) function.
      *
-     * @return \atk4\ui\JsCallback
+     * @return \Atk4\Ui\JsCallback
      */
     public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null)
     {

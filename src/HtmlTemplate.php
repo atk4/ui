@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 use Atk4\Data\Model;
-use atk4\ui\HtmlTemplate\TagTree;
-use atk4\ui\HtmlTemplate\Value as HtmlValue;
+use Atk4\Ui\HtmlTemplate\TagTree;
+use Atk4\Ui\HtmlTemplate\Value as HtmlValue;
 
 class HtmlTemplate implements \ArrayAccess
 {

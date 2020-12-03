@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\ui\Table;
+use Atk4\Ui\Table;
 
 class GridTest extends \Atk4\Core\AtkPhpunit\TestCase
 {

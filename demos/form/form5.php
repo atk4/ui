@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\demo;
 
-use atk4\ui\Form;
-use atk4\ui\JsToast;
+use Atk4\Ui\Form;
+use Atk4\Ui\JsToast;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\View::addTo($app, [
+\Atk4\Ui\View::addTo($app, [
     'Forms below focus on Data integration and automated layouts',
     'ui' => 'ignored warning message',
 ]);
@@ -19,7 +19,7 @@ $formSubmit = function ($f) use ($app) {
     return new JsToast($app->encodeJson($f->model->get()));
 };
 
-$cc = \atk4\ui\Columns::addTo($app);
+$cc = \Atk4\Ui\Columns::addTo($app);
 $form = Form::addTo($cc->addColumn());
 
 // adding field without model creates a regular line

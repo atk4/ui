@@ -22,7 +22,7 @@ declare(strict_types=1);
  * the id available via javascript (new Jquery())->data('id')
  */
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
