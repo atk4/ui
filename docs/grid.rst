@@ -5,7 +5,7 @@
 Grid
 ====
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 .. php:class:: Grid
 
 If you didn't read documentation on :ref:`table` you should start with that. While table implements the actual
@@ -25,7 +25,7 @@ To make your grid look nicer, you might want to add some buttons and enable quic
     $grid->setModel(new Country($db));
 
     $grid->addQuickSearch();
-    $grid->menu->addItem('Reload Grid', new \atk4\ui\JsReload($grid));
+    $grid->menu->addItem('Reload Grid', new \Atk4\Ui\JsReload($grid));
 
 Adding Menu Items
 =================
@@ -134,7 +134,7 @@ to populate a content::
 
 Calling this method multiple times will add button into same action column.
 
-See :php:meth:`atk4\\ui\\Table\\Column\\Actions::addModal`
+See :php:meth:`Atk4\\Ui\\Table\\Column\\Actions::addModal`
 
 
 Column Menus
@@ -144,8 +144,8 @@ Column Menus
 
 .. php:method:: addPopup($columnName, $popup = null, $icon = 'caret square down')
 
-Methods addDropdown and addPopup provide a wrapper for :php:meth:`atk4\\ui\\Table\\Column::addDropdown` and
-:php:meth:`atk4\\ui\\\Table\\Column::addPopup` methods.
+Methods addDropdown and addPopup provide a wrapper for :php:meth:`Atk4\\Ui\\Table\\Column::addDropdown` and
+:php:meth:`Atk4\\Ui\\\Table\\Column::addPopup` methods.
 
 Selection
 =========
@@ -155,7 +155,7 @@ additionally place this column before any other column inside a grid. You can us
 method to reference value of selected checkboxes inside any :ref:`js_action`::
 
     $sel = $grid->addSelection();
-    $grid->menu->addItem('show selection')->on('click', new \atk4\ui\JsExpression(
+    $grid->menu->addItem('show selection')->on('click', new \Atk4\Ui\JsExpression(
         'alert("Selected: "+[])', [$sel->jsChecked()]
     ));
 

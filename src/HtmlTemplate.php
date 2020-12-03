@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\data\Model;
-use atk4\ui\HtmlTemplate\TagTree;
-use atk4\ui\HtmlTemplate\Value as HtmlValue;
+use Atk4\Data\Model;
+use Atk4\Ui\HtmlTemplate\TagTree;
+use Atk4\Ui\HtmlTemplate\Value as HtmlValue;
 
 class HtmlTemplate implements \ArrayAccess
 {
-    use \atk4\core\AppScopeTrait;
+    use \Atk4\Core\AppScopeTrait;
 
     /** @const string */
     public const TOP_TAG = '_top';

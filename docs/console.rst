@@ -1,4 +1,4 @@
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Console
 
@@ -36,7 +36,7 @@ After adding a console to your :ref:`render_tree`, you just need to set a call-b
 
         sleep(2);
 
-        $console->send(new \atk4\ui\JsExpression('alert([])', ['The wait is over']));
+        $console->send(new \Atk4\Ui\JsExpression('alert([])', ['The wait is over']));
     });
 
 Console uses :ref:`sse` which works pretty much out-of-the-box with the modern browsers and unlike websockets
@@ -64,7 +64,7 @@ your site is slow and is unable to load page quick. Alternative is to run it thr
 This will display console to the user and will even output information from inside the model::
 
 
-    use \atk4\core\DebugTrait();
+    use \Atk4\Core\DebugTrait();
 
     function generateReport($pages) {
         $this->info('converting report to PDF');

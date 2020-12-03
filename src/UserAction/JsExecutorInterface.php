@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\UserAction;
+namespace Atk4\Ui\UserAction;
 
 /**
  * Add js trigger for executing an action.

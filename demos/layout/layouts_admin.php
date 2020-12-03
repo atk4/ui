@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$layout = \atk4\ui\Layout\Admin::addTo($app);
+$layout = \Atk4\Ui\Layout\Admin::addTo($app);
 
 $menu = $layout->menu->addMenu(['Layouts', 'icon' => 'puzzle']);
-$menu->addItem(\atk4\ui\Layout\Centered::class);
-$menu->addItem(\atk4\ui\Layout\Admin::class);
+$menu->addItem(\Atk4\Ui\Layout\Centered::class);
+$menu->addItem(\Atk4\Ui\Layout\Admin::class);
 
 $menuRight = $layout->menuRight;
 $menuRight->addItem(['Warning', 'red', 'icon' => 'red warning']);
@@ -34,10 +34,10 @@ $layout->menuLeft->addItem(['Settings', 'icon' => 'cogs']);
 
 $layout->template->set('Footer', 'ATK is awesome');
 
-\atk4\ui\Header::addTo($layout, ['Basic Form Example']);
+\Atk4\Ui\Header::addTo($layout, ['Basic Form Example']);
 
-$form = \atk4\ui\Form::addTo($layout, ['segment']);
-$form->setModel(new \atk4\data\Model());
+$form = \Atk4\Ui\Form::addTo($layout, ['segment']);
+$form->setModel(new \Atk4\Data\Model());
 
 $formGroup = $form->addGroup('Name');
 $formGroup->addControl('first_name', ['width' => 'eight']);
@@ -48,7 +48,7 @@ $formGroup = $form->addGroup('Address');
 $formGroup->addControl('address', ['width' => 'twelve']);
 $formGroup->addControl('zip', ['width' => 'four']);
 
-$form->onSubmit(function (\atk4\ui\Form $form) {
+$form->onSubmit(function (\Atk4\Ui\Form $form) {
     $errors = [];
 
     foreach (['first_name', 'last_name', 'address'] as $field) {

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-class PromotionText extends \atk4\ui\View
+class PromotionText extends \Atk4\Ui\View
 {
     protected function init(): void
     {
         parent::init();
 
-        $t = \atk4\ui\Text::addTo($this);
+        $t = \Atk4\Ui\Text::addTo($this);
         $t->addParagraph(
             <<< 'EOF'
                 Agile Toolkit base package includes:
@@ -28,19 +28,19 @@ class PromotionText extends \atk4\ui\View
                 HTML
         );
 
-        $gl = \atk4\ui\GridLayout::addTo($this, [null, 'stackable divided', 'columns' => 4]);
-        \atk4\ui\Button::addTo($gl, ['Explore UI components', 'primary basic fluid', 'iconRight' => 'right arrow'], ['r1c1'])
+        $gl = \Atk4\Ui\GridLayout::addTo($this, [null, 'stackable divided', 'columns' => 4]);
+        \Atk4\Ui\Button::addTo($gl, ['Explore UI components', 'primary basic fluid', 'iconRight' => 'right arrow'], ['r1c1'])
             ->link('https://github.com/atk4/ui/#bundled-and-planned-components');
-        \atk4\ui\Button::addTo($gl, ['Try out interactive features', 'primary basic fluid', 'iconRight' => 'right arrow'], ['r1c2'])
+        \Atk4\Ui\Button::addTo($gl, ['Try out interactive features', 'primary basic fluid', 'iconRight' => 'right arrow'], ['r1c2'])
             ->link(['interactive/tabs']);
-        \atk4\ui\Button::addTo($gl, ['Dive into Agile Data', 'primary basic fluid', 'iconRight' => 'right arrow'], ['r1c3'])
+        \Atk4\Ui\Button::addTo($gl, ['Dive into Agile Data', 'primary basic fluid', 'iconRight' => 'right arrow'], ['r1c3'])
             ->link('https://git.io/ad');
-        \atk4\ui\Button::addTo($gl, ['More ATK Add-ons', 'primary basic fluid', 'iconRight' => 'right arrow'], ['r1c4'])
+        \Atk4\Ui\Button::addTo($gl, ['More ATK Add-ons', 'primary basic fluid', 'iconRight' => 'right arrow'], ['r1c4'])
             ->link('https://github.com/atk4/ui/#add-ons-and-integrations');
 
-        \atk4\ui\View::addTo($this, ['ui' => 'divider']);
+        \Atk4\Ui\View::addTo($this, ['ui' => 'divider']);
 
-        \atk4\ui\Message::addTo($this, ['Cool fact!', 'info', 'icon' => 'book'])->text
+        \Atk4\Ui\Message::addTo($this, ['Cool fact!', 'info', 'icon' => 'book'])->text
             ->addParagraph('This entire demo is coded in Agile Toolkit and takes up less than 300 lines of very simple code!');
     }
 }

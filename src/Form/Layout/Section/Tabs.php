@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Layout\Section;
+namespace Atk4\Ui\Form\Layout\Section;
 
 /**
  * Represents form controls in tabs.
  */
-class Tabs extends \atk4\ui\Tabs
+class Tabs extends \Atk4\Ui\Tabs
 {
-    public $formLayout = \atk4\ui\Form\Layout::class;
+    public $formLayout = \Atk4\Ui\Form\Layout::class;
     public $form;
 
     /**
      * Adds tab in tabs widget.
      *
-     * @param string|\atk4\ui\Tab $name     Name of tab or Tab object
+     * @param string|\Atk4\Ui\Tab $name     Name of tab or Tab object
      * @param \Closure            $callback Callback action or URL (or array with url + parameters)
      * @param array               $settings tab settings
      *
-     * @return \atk4\ui\Form\Layout
+     * @return \Atk4\Ui\Form\Layout
      */
     public function addTab($name, \Closure $callback = null, $settings = [])
     {

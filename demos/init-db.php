@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Form;
+use Atk4\Ui\Form;
 
 try {
     if (file_exists(__DIR__ . '/db.php')) {
@@ -14,7 +14,7 @@ try {
     }
 } catch (\PDOException $e) {
     // do not pass $e unless you can secure DSN!
-    throw (new \atk4\ui\Exception('This demo requires access to the database. See "demos/init-db.php"'))
+    throw (new \Atk4\Ui\Exception('This demo requires access to the database. See "demos/init-db.php"'))
         ->addMoreInfo('PDO error', $e->getMessage());
 }
 
@@ -40,7 +40,7 @@ trait ModelLockTrait
     }
 }
 
-class Country extends \atk4\data\Model
+class Country extends \Atk4\Data\Model
 {
     public $table = 'country';
 
@@ -55,7 +55,7 @@ class Country extends \atk4\data\Model
         $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
         $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number', 'required' => true]);
 
-        $this->onHook(\atk4\data\Model::HOOK_BEFORE_SAVE, function (\atk4\data\Model $model) {
+        $this->onHook(\Atk4\Data\Model::HOOK_BEFORE_SAVE, function (\Atk4\Data\Model $model) {
             if (!$model->get('sys_name')) {
                 $model->set('sys_name', mb_strtoupper($model->get('name')));
             }
@@ -98,7 +98,7 @@ class CountryLock extends Country
     }
 }
 
-class Stat extends \atk4\data\Model
+class Stat extends \Atk4\Data\Model
 {
     public $table = 'stats';
     public $title = 'Project Stat';
@@ -125,7 +125,7 @@ class Stat extends \atk4\data\Model
         $this->addField('is_commercial', ['type' => 'boolean']);
         $this->addField('currency', ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
         $this->addField('currency_symbol', ['never_persist' => true]);
-        $this->onHook(\atk4\data\Model::HOOK_AFTER_LOAD, function (\atk4\data\Model $model) {
+        $this->onHook(\Atk4\Data\Model::HOOK_AFTER_LOAD, function (\Atk4\Data\Model $model) {
             /* implementation for "intl"
             $locale='en-UK';
             $fmt = new \NumberFormatter( $locale."@currency=".$model->get('currency'), NumberFormatter::CURRENCY );
@@ -151,12 +151,12 @@ class Stat extends \atk4\data\Model
     }
 }
 
-class Percent extends \atk4\data\Field
+class Percent extends \Atk4\Data\Field
 {
     public $type = 'float'; // will need to be able to affect rendering and storage
 }
 
-class File extends \atk4\data\Model
+class File extends \Atk4\Data\Model
 {
     public $table = 'file';
 
@@ -234,7 +234,7 @@ class FileLock extends File
     }
 }
 
-class Category extends \atk4\data\Model
+class Category extends \Atk4\Data\Model
 {
     public $table = 'product_category';
 
@@ -248,7 +248,7 @@ class Category extends \atk4\data\Model
     }
 }
 
-class SubCategory extends \atk4\data\Model
+class SubCategory extends \Atk4\Data\Model
 {
     public $table = 'product_sub_category';
 
@@ -262,7 +262,7 @@ class SubCategory extends \atk4\data\Model
     }
 }
 
-class Product extends \atk4\data\Model
+class Product extends \Atk4\Data\Model
 {
     public $table = 'product';
 

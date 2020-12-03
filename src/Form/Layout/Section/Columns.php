@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Layout\Section;
+namespace Atk4\Ui\Form\Layout\Section;
 
 /**
  * Represents form controls in columns.
  */
-class Columns extends \atk4\ui\Columns
+class Columns extends \Atk4\Ui\Columns
 {
-    public $formLayout = \atk4\ui\Form\Layout::class;
+    public $formLayout = \Atk4\Ui\Form\Layout::class;
     public $form;
 
     /**
@@ -17,7 +17,7 @@ class Columns extends \atk4\ui\Columns
      *
      * @param int|array $defaults specify width (1..16) or relative to $width
      *
-     * @return \atk4\ui\Form\Layout
+     * @return \Atk4\Ui\Form\Layout
      */
     public function addColumn($defaults = null)
     {

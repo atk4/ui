@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\data\Model;
-use atk4\ui\HtmlTemplate;
-use atk4\ui\Table;
+use Atk4\Data\Model;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Table;
 
 /**
  * Implements Column helper for grid.
@@ -124,7 +124,7 @@ class Link extends Table\Column
         }
     }
 
-    public function getDataCellTemplate(\atk4\data\Field $field = null)
+    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
     {
         $download = $this->force_download ? ' download="true" ' : '';
         $external = $this->target ? ' target="' . $this->target . '" ' : '';

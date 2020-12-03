@@ -19,7 +19,7 @@ Demo: https://ui.agiletoolkit.org/demos/data-action/actions.php
 Executor Interface
 ==================
 
-.. php:namespace:: atk4\ui\UserAction
+.. php:namespace:: Atk4\Ui\UserAction
 
 All executors must implement the Executor or JsExecutor interface.
 
@@ -108,7 +108,7 @@ Here is an example of an user action returning specific record information in th
             [
                 'caption' => 'Delete',
                 'description' => 'Delete Country',
-                'ui' => ['executor' => [\atk4\ui\UserAction\ConfirmationExecutor::class]],
+                'ui' => ['executor' => [\Atk4\Ui\UserAction\ConfirmationExecutor::class]],
                 'confirmation' => function ($action) {
                     return 'Are you sure you want to delete this country: $action->getModel()->getTitle();
                 },

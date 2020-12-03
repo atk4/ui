@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Misc;
+namespace Atk4\Ui\Misc;
 
-class ProxyModel extends \atk4\data\Model
+class ProxyModel extends \Atk4\Data\Model
 {
 }

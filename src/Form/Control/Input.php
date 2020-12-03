@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
-use atk4\ui\Button;
-use atk4\ui\Form;
-use atk4\ui\Icon;
-use atk4\ui\Label;
+use Atk4\Ui\Button;
+use Atk4\Ui\Form;
+use Atk4\Ui\Icon;
+use Atk4\Ui\Label;
 
 /**
  * Input element for a form control.
@@ -155,7 +155,7 @@ class Input extends Form\Control
         if (!is_object($button)) {
             $button = new Button($button);
         }
-        if ($button instanceof \atk4\data\Model\UserAction) {
+        if ($button instanceof \Atk4\Data\Model\UserAction) {
             $action = $button;
             $button = Button::addTo($this, [$action->caption], [$spot]);
             $this->addClass('action');

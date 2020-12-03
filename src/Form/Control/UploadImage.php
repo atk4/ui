@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
-use atk4\ui\View;
+use Atk4\Ui\View;
 
 class UploadImage extends Upload
 {

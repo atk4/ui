@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests\Concerns;
+namespace Atk4\Ui\Tests\Concerns;
 
-use atk4\ui\Table;
+use Atk4\Ui\Table;
 
 trait HandlesTable
 {
     /**
-     * Extract only <tr> out from an \atk4\ui\Table given the <tr> data-id attribute value.
+     * Extract only <tr> out from an \Atk4\Ui\Table given the <tr> data-id attribute value.
      *
      * @param string $rowDataId
      *

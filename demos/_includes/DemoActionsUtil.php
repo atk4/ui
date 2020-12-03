@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
 class DemoActionsUtil
 {
@@ -101,7 +101,7 @@ class DemoActionsUtil
                     return 'Be careful with this action.';
                 },
                 'callback' => function () {
-                    throw new \atk4\ui\Exception('Told you, didn\'t I?');
+                    throw new \Atk4\Ui\Exception('Told you, didn\'t I?');
                 },
             ]
         );
@@ -111,7 +111,7 @@ class DemoActionsUtil
             [
                 'caption' => 'User Confirmation',
                 'description' => 'Confirm the action using a ConfirmationExecutor',
-                'ui' => ['executor' => [\atk4\ui\UserAction\ConfirmationExecutor::class]],
+                'ui' => ['executor' => [\Atk4\Ui\UserAction\ConfirmationExecutor::class]],
                 'confirmation' => function ($a) {
                     return 'Are you sure you want to perform this action on: <b>' . $a->getModel()->getTitle() . ' (' . $a->getModel()->get('iso3') . ')</b>';
                 },

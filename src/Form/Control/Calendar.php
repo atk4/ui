@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
-use atk4\ui\App;
-use atk4\ui\Jquery;
-use atk4\ui\JsChain;
-use atk4\ui\JsExpression;
+use Atk4\Ui\App;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsChain;
+use Atk4\Ui\JsExpression;
 
 /**
  * Date/Time picker attached to a form control.
@@ -110,7 +110,7 @@ class Calendar extends Input
      *
      * Examples:
      * $control->onChange('console.log(date, text, mode)');
-     * $control->onChange(new \atk4\ui\JsExpression('console.log(date, text, mode)'));
+     * $control->onChange(new \Atk4\Ui\JsExpression('console.log(date, text, mode)'));
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
      * @param string|JsExpression|array $expr
@@ -119,7 +119,7 @@ class Calendar extends Input
     public function onChange($expr, $default = [])
     {
         if (is_string($expr)) {
-            $expr = new \atk4\ui\JsExpression($expr);
+            $expr = new \Atk4\Ui\JsExpression($expr);
         }
         if (!is_array($expr)) {
             $expr = [$expr];
@@ -131,7 +131,7 @@ class Calendar extends Input
         }
 
         // flatpickr on change event
-        $this->options['onChange'] = new \atk4\ui\JsFunction(['date', 'text', 'mode'], $expr, $default);
+        $this->options['onChange'] = new \Atk4\Ui\JsFunction(['date', 'text', 'mode'], $expr, $default);
     }
 
     /**

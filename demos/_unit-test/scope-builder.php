@@ -6,14 +6,14 @@ declare(strict_types=1);
  * Test Model condition rendering into ScopeBuilder component.
  */
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\data\Model\Scope;
-use atk4\data\Model\Scope\Condition;
-use atk4\ui\Header;
-use atk4\ui\View;
+use Atk4\Data\Model\Scope;
+use Atk4\Data\Model\Scope\Condition;
+use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $model = new Stat($app->db, ['caption' => 'Demo Stat']);
@@ -33,13 +33,13 @@ $model->addCondition($budget);
 $model->scope()->add($scope);
 $model->scope()->add($orScope);
 
-$form = \atk4\ui\Form::addTo($app);
+$form = \Atk4\Ui\Form::addTo($app);
 
-$form->addControl('qb', [\atk4\ui\Form\Control\ScopeBuilder::class, 'model' => $model]);
+$form->addControl('qb', [\Atk4\Ui\Form\Control\ScopeBuilder::class, 'model' => $model]);
 
 $form->onSubmit(function ($form) use ($model) {
     $message = $form->model->get('qb')->toWords($model);
-    $view = new \atk4\ui\Message('');
+    $view = new \Atk4\Ui\Message('');
     $view->invokeInit();
 
     $view->text->addHTML($message);

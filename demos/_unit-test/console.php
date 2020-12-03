@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\JsSse;
+use Atk4\Ui\JsSse;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $sse = JsSse::addTo($app);
 $sse->setUrlTrigger('console_test');
 
-$console = \atk4\ui\Console::addTo($app, ['sse' => $sse]);
+$console = \Atk4\Ui\Console::addTo($app, ['sse' => $sse]);
 
 $console->set(function ($console) {
     $console->output('Executing test process...');
     $console->output('Now trying something dangerous..');
     echo 'direct output is captured';
 
-    throw new \atk4\core\Exception('BOOM - exceptions are caught');
+    throw new \Atk4\Core\Exception('BOOM - exceptions are caught');
 });

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
+use Atk4\Core\AtkPhpunit;
 
 class TagTest extends AtkPhpunit\TestCase
 {
     public function getApp()
     {
-        return new \atk4\ui\App(['catch_exceptions' => false, 'always_run' => false]);
+        return new \Atk4\Ui\App(['catch_exceptions' => false, 'always_run' => false]);
     }
 
     public function assertTagRender($html, $args)

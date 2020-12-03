@@ -6,7 +6,7 @@
 Forms
 =====
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Form
 
@@ -69,15 +69,15 @@ Even if model not explicitly set (see section below) each form has an underlying
 		'email' => 'some@email.com'
 	]);
 
-Form also relies on a ``\atk4\ui\Form::Layout`` class and displays form controls through
-decorators defined at ``\atk4\ui\Form::Control``. See dedicated documentation for:
+Form also relies on a ``\Atk4\Ui\Form::Layout`` class and displays form controls through
+decorators defined at ``\Atk4\Ui\Form::Control``. See dedicated documentation for:
 
  - :php:class:`Form::Layout`
  - :php:class:`Form::Control`
 
 To tweak the UI properties of an form control input use ``setInputAttr()`` (and not the surrounding <div> as ``setAttr()`` would do). Here is how to set the HTML "maxlength" attribute on the generated input field::
 
-	$form = $this->add(new \atk4\ui\Form);
+	$form = $this->add(new \Atk4\Ui\Form);
 	$form->setModel($model);
 	$form->getControl('name')->setInputAttr('maxlength', 20);
 
@@ -161,7 +161,7 @@ Create a new control on a form::
 
     $form = Form::addTo($app);
     $form->addControl('email');
-    $form->addControl('gender', [\atk4\ui\Form\Control\Dropdown::class, 'values'=>['Female', 'Male']]);
+    $form->addControl('gender', [\Atk4\Ui\Form\Control\Dropdown::class, 'values'=>['Female', 'Male']]);
     $form->addControl('terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']);
 
 Create a new control on a form using Model does not require you to describe each control.
@@ -184,7 +184,7 @@ Similar to :php:meth:`Form::addControl()`, but allows to add multiple form contr
     $form = Form::addTo($app);
     $form->addControls([
         'email',
-        ['gender', [\atk4\ui\Form\Control\Dropdown::class, 'values'=>['Female', 'Male']]],
+        ['gender', [\Atk4\Ui\Form\Control\Dropdown::class, 'values'=>['Female', 'Male']]],
         ['terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']],
     ]);
 
@@ -206,7 +206,7 @@ field.
 Form Control
 ------------
 
-To avoid term miss-use, we use "Field" to refer to ``\atk4\data\Field``. This class
+To avoid term miss-use, we use "Field" to refer to ``\Atk4\Data\Field``. This class
 is documented here: https://agile-data.readthedocs.io/en/develop/fields.html
 
 Form uses a small UI component to visualize HTML input fields associated with
@@ -227,10 +227,10 @@ For some examples see: https://ui.agiletoolkit.org/demos/form3.php
 
 Field Decorator can be passed to ``addControl`` using 'string', :php:ref:`seed` or 'object'::
 
-    $form->addControl('accept_terms', [\atk4\ui\Form\Control\Checkbox::class]);
-    $form->addControl('gender', [\atk4\ui\Form\Control\Dropdown::class, 'values'=>['Female', 'Male']]);
+    $form->addControl('accept_terms', [\Atk4\Ui\Form\Control\Checkbox::class]);
+    $form->addControl('gender', [\Atk4\Ui\Form\Control\Dropdown::class, 'values'=>['Female', 'Male']]);
 
-    $calendar = new \atk4\ui\Form\Control\Calendar();
+    $calendar = new \Atk4\Ui\Form\Control\Calendar();
     $calendar->type = 'tyme';
     $calendar->options['ampm'] = true;
     $form->addControl('time', $calendar);
@@ -238,7 +238,7 @@ Field Decorator can be passed to ``addControl`` using 'string', :php:ref:`seed` 
 For more information on default form controls as well as examples on how to create
 your own see documentation on :php:class:`Form::Control`.
 
-.. php:method:: controlFactory(\\atk4\\data\\Field $field, $defaults = [])
+.. php:method:: controlFactory(\\Atk4\\Data\\Field $field, $defaults = [])
 
 If form control class is not specified (``null``) then it will be determined from
 the type of the Data control with ``controlFactory`` method.
@@ -250,10 +250,10 @@ Data field is the 3rd argument to ``Form::addControl()``.
 
 There are 3 ways to define Data form control using 'string', 'array' or 'object'::
 
-    $form->addControl('accept_terms', [\atk4\ui\Form\Control\Checkbox::class], 'Accept Terms & Conditions');
+    $form->addControl('accept_terms', [\Atk4\Ui\Form\Control\Checkbox::class], 'Accept Terms & Conditions');
     $form->addControl('gender', null, ['enum'=>['Female', 'Male']]);
 
-    class MyBoolean extends \atk4\data\Field {
+    class MyBoolean extends \Atk4\Data\Field {
         public $type = 'boolean';
         public $enum = ['N', 'Y'];
     }
@@ -264,7 +264,7 @@ field a custom label. Without a custom label, Form will clean up the name (1st
 argument) by replacing '_' with spaces and uppercasing words (accept_terms
 becomes "Accept Terms")
 
-Specifying array will use the same syntax as the 2nd argument for ``\atk4\data\Model::addField()``.
+Specifying array will use the same syntax as the 2nd argument for ``\Atk4\Data\Model::addField()``.
 (https://agile-data.readthedocs.io/en/develop/model.html#Model::addField)
 
 If field already exist inside model, then values of $field will be merged into
@@ -284,7 +284,7 @@ be set as "never_persist" (https://agile-data.readthedocs.io/en/develop/fields.h
 This is to make sure that data from custom form controls wouldn't go directly into the database. Next
 example displays a registration form for a User::
 
-    class User extends \atk4\data\Model {
+    class User extends \Atk4\Data\Model {
         public $table = 'user';
         function init(): void {
             parent::init();
@@ -298,7 +298,7 @@ example displays a registration form for a User::
     $form->setModel(new User($db));
 
     // add password verification field
-    $form->addControl('password_verify', [\atk4\ui\Form\Control\Password::class], 'Type password again');
+    $form->addControl('password_verify', [\Atk4\Ui\Form\Control\Password::class], 'Type password again');
     $form->addControl('accept_terms', null, ['type'=>'boolean']);
 
     // submit event
@@ -326,7 +326,7 @@ for you. Here is an example with date::
 
     $form = Form::addTo($app);
     $form->addControl('date1', null, ['type'=>'date']);
-    $form->addControl('date2', [\atk4\ui\Form\Control\Calendar::class, 'type'=>'date']);
+    $form->addControl('date2', [\Atk4\Ui\Form\Control\Calendar::class, 'type'=>'date']);
 
     $form->onSubmit(function($form) {
         echo 'date1 = '.print_r($form->model->get('date1'), true).' and date2 = '.print_r($form->model->get('date2'), true);
@@ -354,7 +354,7 @@ This is where ``$field->ui`` comes in (https://agile-data.readthedocs.io/en/deve
 
 You can specify ``'ui'=>['form' => $decorator_seed]`` when defining your model field inside your Model::
 
-    class User extends \atk4\data\Model {
+    class User extends \Atk4\Data\Model {
         public $table = 'user';
 
         function init(): void {
@@ -371,7 +371,7 @@ The seed for the UI will be combined with the default overriding :php:attr:`Form
 to allow month/year entry by the Calendar extension, which will then be saved and
 stored as a regular date. Obviously you can also specify decorator class::
 
-    $this->addField('birth_year', ['ui'=>[\atk4\ui\Form\Control\Calendar::class, 'type'=>'month']);
+    $this->addField('birth_year', ['ui'=>[\Atk4\Ui\Form\Control\Calendar::class, 'type'=>'month']);
 
 Without the data 'type' property, now the calendar selection will be stored as text.
 
@@ -481,7 +481,7 @@ As far as form is concerned:
 
 Example use of Model's validate() method::
 
-    class Person extends \atk4\data\Model
+    class Person extends \Atk4\Data\Model
     {
         public $table = 'person';
 
@@ -592,10 +592,10 @@ with a message about failure to accept of terms and conditions::
 So far Agile UI / Agile Data does not come with a validation library but
 it supports usage of 3rd party validation libraries.
 
-Callback function may raise exception. If Exception is based on ``\atk4\core\Exception``,
+Callback function may raise exception. If Exception is based on ``\Atk4\Core\Exception``,
 then the parameter "field" can be used to associate error with specific field::
 
-    throw (new \atk4\core\Exception('Sample Exception'))
+    throw (new \Atk4\Core\Exception('Sample Exception'))
         ->addMoreInfo('field', 'surname');
 
 If 'field' parameter is not set or any other exception is generated, then error will not be
@@ -688,12 +688,12 @@ The following example will show how to organize fields using regular sub layout 
     $form = Form::addTo($app);
     $form->setModel($model, false);
 
-    $sub_layout = $form->layout->addSubLayout([\atk4\ui\Form\Layout\Section::class]);
+    $sub_layout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section::class]);
 
     Header::addTo($sub_layout, ['Accordion Section in Form']);
     $sub_layout->setModel($model, ['name']);
 
-    $accordion_layout = $form->layout->addSubLayout([\atk4\ui\Form\Layout\Section\Accordion::class]);
+    $accordion_layout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section\Accordion::class]);
 
     $a1 = $accordion_layout->addSection('Section 1');
     $a1->setModel($model, ['iso', 'iso3']);
@@ -719,7 +719,7 @@ Fomantic UI Modifiers
 There are many other classes Fomantic UI allow you to use on a form. The next code will produce
 form inside a segment (outline) and will make form controls appear smaller::
 
-    $form = new \atk4\ui\Form(['small segment']));
+    $form = new \Atk4\Ui\Form(['small segment']));
 
 For further styling see documentation on :php:class:`View`.
 
@@ -772,11 +772,11 @@ Here is a more advanced example::
 
     $f_sub = Form::addTo($app);
     $f_sub->addControl('name');
-    $f_sub->addControl('subscribe', [\atk4\ui\Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'toggle']);
+    $f_sub->addControl('subscribe', [\Atk4\Ui\Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'toggle']);
     $f_sub->addControl('email');
-    $f_sub->addControl('gender', [\atk4\ui\Form\Control\Radio::class], ['enum'=>['Female', 'Male']])->set('Female');
-    $f_sub->addControl('m_gift', [\atk4\ui\Form\Control\Dropdown::class, 'caption'=>'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
-    $f_sub->addControl('f_gift', [\atk4\ui\Form\Control\Dropdown::class, 'caption'=>'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
+    $f_sub->addControl('gender', [\Atk4\Ui\Form\Control\Radio::class], ['enum'=>['Female', 'Male']])->set('Female');
+    $f_sub->addControl('m_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption'=>'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
+    $f_sub->addControl('f_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption'=>'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
 
     // Show email and gender when subscribe is checked.
 
@@ -794,9 +794,9 @@ You may also define multiple conditions for the form control to be visible if yo
 
 
     $f_sub = Form::addTo($app);
-    $f_dog->addControl('race', [\atk4\ui\Form\Control\Line::class]);
+    $f_dog->addControl('race', [\Atk4\Ui\Form\Control\Line::class]);
     $f_dog->addControl('age');
-    $f_dog->addControl('hair_cut', [\atk4\ui\Form\Control\Dropdown::class, 'values' => ['Short', 'Long']]);
+    $f_dog->addControl('hair_cut', [\Atk4\Ui\Form\Control\Dropdown::class, 'values' => ['Short', 'Long']]);
 
     // Show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
     // OR
@@ -818,13 +818,13 @@ Instead of defining rules for form controls individually you can hide/show entir
     $g_basic->addControl('middle_name', ['width' => 'three']);
     $g_basic->addControl('last_name', ['width' => 'five']);
 
-    $f_group->addControl('dev', [\atk4\ui\Form\Control\Checkbox::class, 'caption' => 'I am a developper']);
+    $f_group->addControl('dev', [\Atk4\Ui\Form\Control\Checkbox::class, 'caption' => 'I am a developper']);
 
     $g_code = $f_group->addGroup(['Check all language that apply']);
-    $g_code->addControl('php', [\atk4\ui\Form\Control\Checkbox::class]);
-    $g_code->addControl('js', [\atk4\ui\Form\Control\Checkbox::class]);
-    $g_code->addControl('html', [\atk4\ui\Form\Control\Checkbox::class]);
-    $g_code->addControl('css', [\atk4\ui\Form\Control\Checkbox::class]);
+    $g_code->addControl('php', [\Atk4\Ui\Form\Control\Checkbox::class]);
+    $g_code->addControl('js', [\Atk4\Ui\Form\Control\Checkbox::class]);
+    $g_code->addControl('html', [\Atk4\Ui\Form\Control\Checkbox::class]);
+    $g_code->addControl('css', [\Atk4\Ui\Form\Control\Checkbox::class]);
 
     $g_other = $f_group->addGroup(['Others']);
     $g_other->addControl('language', ['width' => 'eight']);
