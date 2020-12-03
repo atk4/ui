@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\Tests;
 
 use Atk4\Core\AtkPhpunit;
-use atk4\data\Persistence;
+use Atk4\Data\Persistence;
 use atk4\ui\App;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;

@@ -135,7 +135,7 @@ We initialize a reusable database connection in db.php through a mysql persisten
 Create a file called "db.php" in the directory "config"::
 
   <?php
-  $db = \atk4\data\Persistence::connect("mysql://localhost/#myexampledatabase", "#username", "#password");
+  $db = \Atk4\Data\Persistence::connect("mysql://localhost/#myexampledatabase", "#username", "#password");
 
 Please remember to use a database that still exists.
 
@@ -202,7 +202,7 @@ Open the created file "View1.php" in your editor and add the following lines::
   <?php
   namespace MyProject\Views;
 
-  class View1 extends \atk4\data\View {
+  class View1 extends \Atk4\Data\View {
       function init(): void {
           parent::init();
 

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace atk4\ui\Tests;
 
 use Atk4\Core\AtkPhpunit;
-use atk4\data\Model;
-use atk4\data\Persistence;
+use Atk4\Data\Model;
+use Atk4\Data\Persistence;
 
 class MyTestModel extends Model
 {

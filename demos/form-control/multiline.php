@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-use atk4\data\Model;
-use atk4\data\Persistence;
+use Atk4\Data\Model;
+use Atk4\Data\Persistence;
 use atk4\ui\Form;
 use atk4\ui\Header;
 use atk4\ui\JsExpression;

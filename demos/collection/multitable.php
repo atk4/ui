@@ -13,7 +13,7 @@ require_once __DIR__ . '/../init-app.php';
 $finderClass = get_class(new class() extends \atk4\ui\Columns {
     public $route = [];
 
-    public function setModel(\atk4\data\Model $model, $route = [])
+    public function setModel(\Atk4\Data\Model $model, $route = [])
     {
         parent::setModel($model);
 

@@ -70,7 +70,7 @@ active. (See :ref:`system_pattern`)::
             parent::__construct('Warehouse App v0.4');
 
             // My App class will establish database connection
-            $this->db = new \atk4\data\Persistence_SQL($_CLEARDB_DATABASE_URL['DSN']);
+            $this->db = new \Atk4\Data\Persistence_SQL($_CLEARDB_DATABASE_URL['DSN']);
             $this->db->setApp($this);
 
             // My App class provides access to a currently logged user and currently selected system.
@@ -265,7 +265,7 @@ If your `App` needs a DB connection, set this property to an instance of `Persis
 
     Example:
 
-    $app->db = \atk4\data\Persistence::connect('mysql://user:pass@localhost/atk');
+    $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 
 See `Persistence::connect <https://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`
 

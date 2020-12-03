@@ -16,7 +16,7 @@ This means that the addresses are not stored into a separate database table but 
     /**
      * User model
      */
-    class User extends \atk4\data\Model
+    class User extends \Atk4\Data\Model
     {
         public $table = 'user';
 
@@ -35,7 +35,7 @@ This means that the addresses are not stored into a separate database table but 
     /**
      * Address Model
      */
-    class Address extends \atk4\data\Model
+    class Address extends \Atk4\Data\Model
     {
         public $table = 'addresses';
 
@@ -51,7 +51,7 @@ This means that the addresses are not stored into a separate database table but 
     }
 
     // Create some sample record of user Model
-    $user = new User(new \atk4\data\Persistence\Array_());
+    $user = new User(new \Atk4\Data\Persistence\Array_());
     $user->set('firstname', 'Hans');
     $user->set('lastname', 'Test');
     $user->save();
@@ -81,7 +81,7 @@ but you want to store them in a separate table. Uncomment the line `//$this->has
     /**
      * Email Model
      */
-    class Email extends \atk4\data\Model
+    class Email extends \Atk4\Data\Model
     {
         public $table = 'email';
 
@@ -99,7 +99,7 @@ Now when we use a Form for User records, it won't automatically add a Multiline 
 If you want to edit them along with the user, Multiline is set up in a few lines::
 
     // Create some sample record of user Model
-    $user = new User(new \atk4\data\Persistence\Array_());
+    $user = new User(new \Atk4\Data\Persistence\Array_());
     $user->setId(1);
     $user->set('firstname', 'Hans');
     $user->set('lastname', 'Test');
@@ -130,7 +130,7 @@ Multiline and Expressions
 If a Model has Expressions, they automatically get updated when a form control value is changed. A loading icon on the ``+`` sign indicates that the expression values are updated.
 Lets use the example of demos/multiline.php::
 
-    class InventoryItem extends \atk4\data\Model
+    class InventoryItem extends \Atk4\Data\Model
     {
         protected function init(): void
         {

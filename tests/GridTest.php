@@ -18,7 +18,7 @@ class GridTest extends \Atk4\Core\AtkPhpunit\TestCase
             1 => ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'],
             2 => ['id' => 2, 'email' => 'test@yahoo.com', 'password' => 'secret'],
         ];
-        $this->m = new MyModel(new \atk4\data\Persistence\Array_($a));
+        $this->m = new MyModel(new \Atk4\Data\Persistence\Array_($a));
     }
 
     public function test1()
@@ -82,7 +82,7 @@ class GridTest extends \Atk4\Core\AtkPhpunit\TestCase
     }
 }
 
-class MyModel extends \atk4\data\Model
+class MyModel extends \Atk4\Data\Model
 {
     public $title_field = 'email';
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Table\Column;
 
-use atk4\data\Field;
+use Atk4\Data\Field;
 use atk4\ui\Form;
 use atk4\ui\Jquery;
 use atk4\ui\JsReload;

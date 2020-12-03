@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\Table;
 
-use atk4\data\Field;
-use atk4\data\Model;
+use Atk4\Data\Field;
+use Atk4\Data\Model;
 use atk4\ui\Exception;
 use atk4\ui\Jquery;
 use atk4\ui\JsExpression;

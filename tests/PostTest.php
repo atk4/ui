@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\Tests;
 
 use Atk4\Core\AtkPhpunit;
-use atk4\data\Model;
+use Atk4\Data\Model;
 
 class PostTest extends AtkPhpunit\TestCase
 {

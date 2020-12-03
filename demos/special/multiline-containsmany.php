@@ -9,7 +9,7 @@ require_once __DIR__ . '/../init-app.php';
 
 // This demo require specific Database setup.
 
-class Client extends \atk4\data\Model
+class Client extends \Atk4\Data\Model
 {
     public $table = 'client';
     public $caption = 'Client';
@@ -25,7 +25,7 @@ class Client extends \atk4\data\Model
     }
 }
 
-class Account extends \atk4\data\Model
+class Account extends \Atk4\Data\Model
 {
     public $caption = ' ';
 

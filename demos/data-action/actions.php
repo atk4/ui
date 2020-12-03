@@ -38,13 +38,13 @@ $action = $files->addUserAction(
         'args' => [
             'path' => ['type' => 'string', 'required' => true],
         ],
-        'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+        'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     ]
 );
 
 Header::addTo($app, [
     'Extensions to ATK Data Actions',
-    'subHeader' => 'Showing different UserAction executors that can execute atk4\data model action.',
+    'subHeader' => 'Showing different UserAction executors that can execute Atk4\Data model action.',
 ]);
 
 View::addTo($app, ['ui' => 'hidden divider']);

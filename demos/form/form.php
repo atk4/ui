@@ -170,7 +170,7 @@ $tab = $tabs->addTab('Complex Examples');
 
 \atk4\ui\Header::addTo($tab, ['Conditional response']);
 
-$modelRegister = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
+$modelRegister = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_());
 $modelRegister->addField('name');
 $modelRegister->addField('email');
 $modelRegister->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);
@@ -195,7 +195,7 @@ $tab = $tabs->addTab('Layout Control');
 \atk4\ui\Header::addTo($tab, ['Shows example of grouping and multiple errors']);
 
 $form = Form::addTo($tab, ['segment']);
-$form->setModel(new \atk4\data\Model());
+$form->setModel(new \Atk4\Data\Model());
 
 $form->addHeader('Example fields added one-by-one');
 $form->addControl('name');

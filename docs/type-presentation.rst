@@ -75,7 +75,7 @@ of the field does not seem compatible::
 Selecting the decorator is done in the following order:
 
  - specified in second argument to UI `addColumn()` or `addControl()` (as shown above)
- - specified using `ui` property of :php:class:`\atk4\data\Field`::
+ - specified using `ui` property of :php:class:`\Atk4\Data\Field`::
 
     $field->ui['form'] = new \atk4\ui\Form\Control\Password();
 
@@ -124,12 +124,12 @@ yet make it available when editing, you could create your own :php:class:`Table\
 
     class Masker extends \atk4\ui\Table\Column
     {
-        public function getDataCellTemplate(\atk4\data\Field $field = null)
+        public function getDataCellTemplate(\Atk4\Data\Field $field = null)
         {
             return '**** **** **** {$mask}';
         }
 
-        public function getHtmlTags(\atk4\data\Model $row, $field)
+        public function getHtmlTags(\Atk4\Data\Model $row, $field)
         {
             return [
                 'mask' => substr($field->get(), -4) 
@@ -150,7 +150,7 @@ extending :php:class:`Persistence\\Ui`::
     class MyPersistence extends \atk4\ui\Persistence\Ui
     {
 
-        public function _typecastSaveField(\atk4\data\Field $field, $value)
+        public function _typecastSaveField(\Atk4\Data\Field $field, $value)
         {
             switch ($field->type) {
             case 'card':
@@ -160,7 +160,7 @@ extending :php:class:`Persistence\\Ui`::
             return parent::_typecastSaveField($field, $value);
         }
 
-        public function _typecastLoadField(\atk4\data\Field $field, $value)
+        public function _typecastLoadField(\Atk4\Data\Field $field, $value)
         {
             switch ($field->type) {
             case 'card':

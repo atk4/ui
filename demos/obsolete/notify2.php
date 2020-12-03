@@ -7,8 +7,8 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/** @var \atk4\data\Model $notifierClass */
-$notifierClass = get_class(new class() extends \atk4\data\Model {
+/** @var \Atk4\Data\Model $notifierClass */
+$notifierClass = get_class(new class() extends \Atk4\Data\Model {
     public $table = 'notifier';
 
     protected function init(): void

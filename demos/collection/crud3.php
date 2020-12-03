@@ -7,8 +7,8 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/** @var \atk4\data\Model $modelClass */
-$modelClass = get_class(new class() extends \atk4\data\Model {
+/** @var \Atk4\Data\Model $modelClass */
+$modelClass = get_class(new class() extends \Atk4\Data\Model {
     use ModelLockTrait;
 
     public $table = 'test';
@@ -39,7 +39,7 @@ $data = ['test' => [
     8 => ['id' => 8, 'name' => 'ABC2', 'code' => 18, 'country' => 'Russia'],
     9 => ['id' => 9, 'name' => 'ABC1', 'code' => 19, 'country' => 'Latvia'],
 ]];
-$p = new \atk4\data\Persistence\Array_($data);
+$p = new \Atk4\Data\Persistence\Array_($data);
 $model = new $modelClass($p);
 
 // add Crud

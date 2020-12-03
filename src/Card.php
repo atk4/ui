@@ -25,7 +25,7 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use Atk4\Core\Factory;
-use atk4\data\Model;
+use Atk4\Data\Model;
 
 class Card extends View
 {
@@ -178,10 +178,10 @@ class Card extends View
      * If Fields are past with $model that field will be add
      * to the main section of this card.
      *
-     * @param \atk4\data\Model $model  the model
+     * @param \Atk4\Data\Model $model  the model
      * @param array|false      $fields an array of fields name to display in content
      *
-     * @return \atk4\data\Model|void
+     * @return \Atk4\Data\Model|void
      */
     public function setModel(Model $model, $fields = null)
     {

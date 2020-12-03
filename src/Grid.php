@@ -6,7 +6,7 @@ namespace atk4\ui;
 
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
-use atk4\data\Model;
+use Atk4\Data\Model;
 
 /**
  * Implements a more sophisticated and interactive Data-Table component.
@@ -606,7 +606,7 @@ class Grid extends View
      *
      * @param array|bool $columns
      *
-     * @return \atk4\data\Model
+     * @return \Atk4\Data\Model
      */
     public function setModel(Model $model, $columns = null)
     {

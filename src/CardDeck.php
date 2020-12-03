@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use Atk4\Core\Factory;
-use atk4\data\Model;
+use Atk4\Data\Model;
 use atk4\ui\Component\ItemSearch;
 
 class CardDeck extends View

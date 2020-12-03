@@ -9,7 +9,7 @@ use Atk4\Core\DiContainerTrait;
 use Atk4\Core\DynamicMethodTrait;
 use Atk4\Core\HookTrait;
 use Atk4\Core\InitializerTrait;
-use atk4\data\Persistence;
+use Atk4\Data\Persistence;
 use atk4\ui\Exception\ExitApplicationException;
 use atk4\ui\Persistence\Ui as UiPersistence;
 use Psr\Log\LoggerInterface;

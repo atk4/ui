@@ -23,7 +23,7 @@ class Image extends Table\Column
      *
      * @return string
      */
-    public function getDataCellTemplate(\atk4\data\Field $field = null)
+    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
     {
         $caption = $field ? $field->getCaption() : $this->short_name;
 

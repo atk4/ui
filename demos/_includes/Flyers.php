@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-class Flyers extends \atk4\data\Model
+class Flyers extends \Atk4\Data\Model
 {
     protected function init(): void
     {

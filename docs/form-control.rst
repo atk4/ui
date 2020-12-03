@@ -144,7 +144,7 @@ The most common use-case in large application is the use with Models. You would 
 `Country` model as well as
 `Persistence $db <https://agile-data.readthedocs.io/en/develop/persistence.html>`_::
 
-    class Country extends \atk4\data\Model
+    class Country extends \Atk4\Data\Model
     {
         public $table = 'country';
 

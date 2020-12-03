@@ -31,5 +31,5 @@ interface ExecutorInterface
     /**
      * Will associate executor with the action.
      */
-    public function setAction(\atk4\data\Model\UserAction $action);
+    public function setAction(\Atk4\Data\Model\UserAction $action);
 }

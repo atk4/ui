@@ -299,7 +299,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     /**
      * This method is obsolete. Use Console::runMethod() instead.
      */
-    public function setModel(\atk4\data\Model $model, $method = null, $args = [])
+    public function setModel(\Atk4\Data\Model $model, $method = null, $args = [])
     {
         $this->runMethod($model, $method, $args);
 

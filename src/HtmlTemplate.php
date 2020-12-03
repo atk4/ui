@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
-use atk4\data\Model;
+use Atk4\Data\Model;
 use atk4\ui\HtmlTemplate\TagTree;
 use atk4\ui\HtmlTemplate\Value as HtmlValue;
 

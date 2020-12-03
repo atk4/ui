@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Control;
 
-use atk4\data\Field;
-use atk4\data\Model;
-use atk4\data\Model\Scope;
-use atk4\data\Model\Scope\Condition;
+use Atk4\Data\Field;
+use Atk4\Data\Model;
+use Atk4\Data\Model\Scope;
+use Atk4\Data\Model\Scope\Condition;
 use atk4\ui\Callback;
 use atk4\ui\Exception;
 use atk4\ui\Form\Control;

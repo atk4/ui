@@ -19,7 +19,7 @@ class Control extends View
     public $form;
 
     /**
-     * @var \atk4\data\Field - points to model field
+     * @var \Atk4\Data\Field - points to model field
      */
     public $field;
 

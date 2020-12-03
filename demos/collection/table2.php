@@ -15,7 +15,7 @@ $data = [
     ['id' => 3, 'action' => 'Tax', 'amount' => -40],
 ];
 
-$model = new \atk4\data\Model(new \atk4\data\Persistence\Static_($data));
+$model = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Static_($data));
 $model->getField('amount')->type = 'money';
 
 \atk4\ui\Header::addTo($app, ['Table with various headers', 'subHeader' => 'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon' => 'table']);
@@ -52,7 +52,7 @@ $table = \atk4\ui\Table::addTo($app);
 $table->setModel($model, ['action']);
 
 // copy of amount through a PHP callback
-$model->addExpression('amount_copy', [function (\atk4\data\Model $model) {
+$model->addExpression('amount_copy', [function (\Atk4\Data\Model $model) {
     return $model->get('amount');
 }, 'type' => 'money']);
 

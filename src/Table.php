@@ -346,12 +346,12 @@ class Table extends Lister
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
      *
-     * @param \atk4\data\Field $field Data model field
+     * @param \Atk4\Data\Field $field Data model field
      * @param mixed            $seed  Defaults to pass to Factory::factory() when decorator is initialized
      *
      * @return Table\Column
      */
-    public function decoratorFactory(\atk4\data\Field $field, $seed = [])
+    public function decoratorFactory(\Atk4\Data\Field $field, $seed = [])
     {
         $seed = Factory::mergeSeeds(
             $seed,
@@ -452,9 +452,9 @@ class Table extends Lister
      *
      * @param array|bool $columns
      *
-     * @return \atk4\data\Model
+     * @return \Atk4\Data\Model
      */
-    public function setModel(\atk4\data\Model $model, $columns = null)
+    public function setModel(\Atk4\Data\Model $model, $columns = null)
     {
         parent::setModel($model);
 

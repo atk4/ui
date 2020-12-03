@@ -107,7 +107,7 @@ abstract class AbstractLayout extends \atk4\ui\View
      *
      * @return array
      */
-    protected function getModelFields(\atk4\data\Model $model)
+    protected function getModelFields(\Atk4\Data\Model $model)
     {
         return array_keys($model->getFields('editable'));
     }
@@ -117,9 +117,9 @@ abstract class AbstractLayout extends \atk4\ui\View
      *
      * @param array|null $fields
      *
-     * @return \atk4\data\Model
+     * @return \Atk4\Data\Model
      */
-    public function setModel(\atk4\data\Model $model, $fields = null)
+    public function setModel(\Atk4\Data\Model $model, $fields = null)
     {
         parent::setModel($model);
 

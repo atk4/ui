@@ -125,10 +125,10 @@ parameters:
         # for demos/init-app.php
         - '~^Access to an undefined property atk4\\ui\\Layout&atk4\\ui\\Layout\\NavigableInterface\:\:\$menu\.$~'
         # for demos/init-db.php
-        - '~^Call to an undefined method atk4\\data\\Reference\\HasOne\:\:addField\(\)\.$~'
-        - '~^Call to an undefined method atk4\\data\\Persistence\:\:expr\(\)\.$~'
-        - '~^Call to an undefined method atk4\\data\\Reference\\HasOne\:\:addTitle\(\)\.$~'
-        - '~^Call to an undefined method atk4\\data\\Model\:\:importFromFilesystem\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Data\\Reference\\HasOne\:\:addField\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Data\\Persistence\:\:expr\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Data\\Reference\\HasOne\:\:addTitle\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Data\\Model\:\:importFromFilesystem\(\)\.$~'
         # for demos/interactive/modal.php
         - '~^Method atk4\\ui\\Jquery\:\:removeClass\(\) invoked with 1 parameter, 0 required\.$~'
         - '~^Call to an undefined method atk4\\ui\\Jquery\:\:atkReloadView\(\)\.$~'
@@ -190,7 +190,7 @@ parameters:
         - '~^Return typehint of method atk4\\ui\\Form\\Control\\Checkbox\:\:jsChecked\(\) has invalid type atk4\\ui\\Form\\Control\\Jquery\.$~'
         # for src/Form/Control/Dropdown.php
         # for src/Form/Control/DropdownCascade.php
-        - '~^Method atk4\\data\\Field\:\:get\(\) invoked with 1 parameter, 0 required\.$~'
+        - '~^Method Atk4\\Data\\Field\:\:get\(\) invoked with 1 parameter, 0 required\.$~'
         - '~^PHPDoc tag @param has invalid value \(\$value     the current field value\)\: Unexpected token "\$value", expected type at offset 162$~'
         - '~^PHPDoc tag @param has invalid value \(\$values    an array of possible values\)\: Unexpected token "\$values", expected type at offset 109$~'
         # for src/Form/Control/Lookup.php
@@ -285,8 +285,8 @@ parameters:
         - '~^PHPDoc tag @param references unknown parameter\: \$persistence$~'
         # for src/Table/Column/FilterPopup.php
         - '~^Method atk4\\ui\\Jquery\:\:trigger\(\) invoked with 1 parameter, 0 required\.$~'
-        - '~^Call to an undefined method atk4\\data\\Model\:\:recallData\(\)\.$~'
-        - '~^Call to an undefined method atk4\\data\\Model\:\:setConditionForModel\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Data\\Model\:\:recallData\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Data\\Model\:\:setConditionForModel\(\)\.$~'
         # for src/Table/Column/Link.php
         - '~^Method atk4\\ui\\Table\\Column\\Link\:\:setDefaults\(\) should return \$this\(atk4\\ui\\Table\\Column\\Link\) but return statement is missing\.$~'
         - '~^Cannot call method set\(\) on array\|string\.$~'

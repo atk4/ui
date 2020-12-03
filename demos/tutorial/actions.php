@@ -118,10 +118,10 @@ $wizard->addStep('Arguments', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $model = new \atk4\data\Model($owner->getApp()->db, 'test');
+        $model = new \Atk4\Data\Model($owner->getApp()->db, 'test');
 
         $model->addUserAction('greet', [
-            'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+            'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
             'args' => [
                 'age' => [
                     'type' => 'string',
@@ -134,7 +134,7 @@ $wizard->addStep('Arguments', function ($page) {
         ]);
 
         $model->addUserAction('ask_age', [
-            'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+            'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
             'args' => [
                 'age' => [
                     'type' => 'integer',
@@ -163,7 +163,7 @@ $wizard->addStep('More Ways', function ($page) {
         $model = new Stat($owner->getApp()->db);
         $model->addUserAction('mail', [
             'fields' => ['currency_field'],
-            'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
+            'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
             'callback' => function() { return 'testing'; },
             'description' => 'Email testing',
         ]);
@@ -191,7 +191,7 @@ $wizard->addStep('Crud integration', function ($page) {
         $country->getUserAction('add')->enabled = false;
         $country->getUserAction('delete')->enabled = function () { return random_int(1, 2) > 1; };
         $country->addUserAction('mail', [
-            'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
+            'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
             'preview' => function ($model) { return 'here is email preview for ' . $model->get('name'); },
             'callback' => function ($model) { return 'email sent to ' . $model->get('name'); },
             'description' => 'Email testing',

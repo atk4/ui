@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-use atk4\data\Model\Scope;
-use atk4\data\Model\Scope\Condition;
+use Atk4\Data\Model\Scope;
+use Atk4\Data\Model\Scope\Condition;
 use atk4\ui\Header;
 use atk4\ui\View;
 

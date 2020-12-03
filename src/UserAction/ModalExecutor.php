@@ -6,8 +6,8 @@ namespace atk4\ui\UserAction;
 
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
-use atk4\data\Model;
-use atk4\data\ValidationException;
+use Atk4\Data\Model;
+use Atk4\Data\ValidationException;
 use atk4\ui\Button;
 use atk4\ui\Exception;
 use atk4\ui\Form;

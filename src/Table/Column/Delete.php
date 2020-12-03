@@ -25,7 +25,7 @@ class Delete extends Table\Column
         });
     }
 
-    public function getDataCellTemplate(\atk4\data\Field $field = null)
+    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
     {
         $this->table->on('click', 'a.' . $this->short_name, null, ['confirm' => (new \atk4\ui\Jquery())->attr('title')])->atkAjaxec([
             'uri' => $this->vp->getJsUrl(),

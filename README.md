@@ -90,7 +90,7 @@ To get most of ATK UI, use [ATK Data](https://github.com/atk4/data) to describe 
 ``` php
 $app = new \atk4\ui\App('hello world');
 $app->initLayout([\atk4\ui\Layout\Admin::class]);
-$app->db = \atk4\data\Persistence::connect('mysql://user:pass@localhost/atk');
+$app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 
 \atk4\ui\Crud::addTo($app)->setModel(new User($app->db));
 ```
@@ -192,9 +192,9 @@ It's really easy to put together a complex Admin system. Add this code to a new 
 
 $app = new \atk4\ui\App('My App');
 $app->initLayout([\atk4\ui\Layout\Admin::class]);
-$app->db = \atk4\data\Persistence::connect('mysql://user:pass@localhost/yourdb');
+$app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/yourdb');
 
-class User extends \atk4\data\Model {
+class User extends \Atk4\Data\Model {
     public $table = 'user';
     function init(): void {
         parent::init();

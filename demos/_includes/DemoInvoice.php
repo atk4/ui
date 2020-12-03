@@ -7,7 +7,7 @@ namespace atk4\ui\demo;
 /**
  * Invoice class for tutorial intro.
  */
-class DemoInvoice extends \atk4\data\Model
+class DemoInvoice extends \Atk4\Data\Model
 {
     public $dateFormat;
 

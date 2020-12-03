@@ -206,7 +206,7 @@ field.
 Form Control
 ------------
 
-To avoid term miss-use, we use "Field" to refer to ``\atk4\data\Field``. This class
+To avoid term miss-use, we use "Field" to refer to ``\Atk4\Data\Field``. This class
 is documented here: https://agile-data.readthedocs.io/en/develop/fields.html
 
 Form uses a small UI component to visualize HTML input fields associated with
@@ -238,7 +238,7 @@ Field Decorator can be passed to ``addControl`` using 'string', :php:ref:`seed` 
 For more information on default form controls as well as examples on how to create
 your own see documentation on :php:class:`Form::Control`.
 
-.. php:method:: controlFactory(\\atk4\\data\\Field $field, $defaults = [])
+.. php:method:: controlFactory(\\Atk4\\Data\\Field $field, $defaults = [])
 
 If form control class is not specified (``null``) then it will be determined from
 the type of the Data control with ``controlFactory`` method.
@@ -253,7 +253,7 @@ There are 3 ways to define Data form control using 'string', 'array' or 'object'
     $form->addControl('accept_terms', [\atk4\ui\Form\Control\Checkbox::class], 'Accept Terms & Conditions');
     $form->addControl('gender', null, ['enum'=>['Female', 'Male']]);
 
-    class MyBoolean extends \atk4\data\Field {
+    class MyBoolean extends \Atk4\Data\Field {
         public $type = 'boolean';
         public $enum = ['N', 'Y'];
     }
@@ -264,7 +264,7 @@ field a custom label. Without a custom label, Form will clean up the name (1st
 argument) by replacing '_' with spaces and uppercasing words (accept_terms
 becomes "Accept Terms")
 
-Specifying array will use the same syntax as the 2nd argument for ``\atk4\data\Model::addField()``.
+Specifying array will use the same syntax as the 2nd argument for ``\Atk4\Data\Model::addField()``.
 (https://agile-data.readthedocs.io/en/develop/model.html#Model::addField)
 
 If field already exist inside model, then values of $field will be merged into
@@ -284,7 +284,7 @@ be set as "never_persist" (https://agile-data.readthedocs.io/en/develop/fields.h
 This is to make sure that data from custom form controls wouldn't go directly into the database. Next
 example displays a registration form for a User::
 
-    class User extends \atk4\data\Model {
+    class User extends \Atk4\Data\Model {
         public $table = 'user';
         function init(): void {
             parent::init();
@@ -354,7 +354,7 @@ This is where ``$field->ui`` comes in (https://agile-data.readthedocs.io/en/deve
 
 You can specify ``'ui'=>['form' => $decorator_seed]`` when defining your model field inside your Model::
 
-    class User extends \atk4\data\Model {
+    class User extends \Atk4\Data\Model {
         public $table = 'user';
 
         function init(): void {
@@ -481,7 +481,7 @@ As far as form is concerned:
 
 Example use of Model's validate() method::
 
-    class Person extends \atk4\data\Model
+    class Person extends \Atk4\Data\Model
     {
         public $table = 'person';
 

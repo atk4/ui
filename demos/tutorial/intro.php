@@ -123,7 +123,7 @@ $wizard->addStep('Business Model', function ($page) {
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         /* Showing Class definition.
-        class DemoInvoice extends \atk4\data\Model
+        class DemoInvoice extends \Atk4\Data\Model
         {
             public $title_field = 'reference';
 
@@ -138,8 +138,8 @@ $wizard->addStep('Business Model', function ($page) {
         */
         session_start();
 
-        $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
-        $model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
+        $model = new \atk4\ui\demo\DemoInvoice(new \Atk4\Data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
+        $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function ($model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
 
@@ -199,8 +199,8 @@ $wizard->addStep('Persistence', function ($page) {
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         session_start();
 
-        $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
-        $model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
+        $model = new \atk4\ui\demo\DemoInvoice(new \Atk4\Data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
+        $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function ($model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
 

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use Atk4\Core\Factory;
-use atk4\data\Model;
-use atk4\data\Persistence\Static_;
+use Atk4\Data\Model;
+use Atk4\Data\Persistence\Static_;
 
 /**
  * Implements a most core view, which all of the other components descend
@@ -968,7 +968,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * @param string                            $event    JavaScript event
      * @param string                            $selector Optional jQuery-style selector
-     * @param JsChain|\Closure|Model\UserAction $action   code to execute or \atk4\Data\UserAction
+     * @param JsChain|\Closure|Model\UserAction $action   code to execute or \Atk4\Data\UserAction
      * @param array                             $defaults Options
      *
      * @return Jquery

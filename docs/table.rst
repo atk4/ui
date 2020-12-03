@@ -65,7 +65,7 @@ You can also use Table with Array data source like this::
 Adding Columns
 --------------
 
-.. php:method:: setModel(\atk4\data\Model $model, $fields = null)
+.. php:method:: setModel(\Atk4\Data\Model $model, $fields = null)
 
 .. php:method:: addColumn($name, $columnDecorator = null, $field = null)
 
@@ -138,7 +138,7 @@ Advanced Column Denifitions
 Table defines a method `columnFactory`, which returns Column object which is to be used to
 display values of specific model Field.
 
-.. php:method:: columnFactory(\atk4\data\Field $field)
+.. php:method:: columnFactory(\Atk4\Data\Field $field)
 
 If the value of the field can be displayed by :php:class:`Table\\Column` then :php:class:`Table` will
 respord with object of this class. Since the default column does not contain any customization,
@@ -183,7 +183,7 @@ the "total" column value (as above) but using PHP math instead of doing it insid
     $order = new Order($db);
 
     $table->setModel($order, ['name', 'price', 'amount', 'status']);
-    $table->addColumn('total', new \atk4\data\Field\Calculated(
+    $table->addColumn('total', new \Atk4\Data\Field\Calculated(
         function(Model $row) {
             return $row->get('price') * $row->get('amount');
         }));
@@ -195,7 +195,7 @@ wish to position it before status, you can use the final format of addColumn()::
     $order = new Order($db);
 
     $table->setModel($order, ['name', 'price', 'amount']);
-    $table->addColumn('total', new \atk4\data\Field\Calculated(
+    $table->addColumn('total', new \Atk4\Data\Field\Calculated(
         function(Model $row) {
             return $row->get('price') * $row->get('amount');
         }));
@@ -266,7 +266,7 @@ The tag will override model value. Here is example usage of :php:meth:`Table\\Co
             return '{$_expired}';
         }
 
-        function getHtmlTags(\atk4\data\Model $row)
+        function getHtmlTags(\Atk4\Data\Model $row)
         {
             return ['_expired'=>
                 $row->get('date') < new \DateTime() ?

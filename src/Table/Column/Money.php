@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Table\Column;
 
-use atk4\data\Model;
+use Atk4\Data\Model;
 use atk4\ui\Table;
 
 /**
@@ -25,7 +25,7 @@ class Money extends Table\Column
         return parent::getTagAttributes($position, $attr);
     }
 
-    public function getDataCellHtml(\atk4\data\Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(\Atk4\Data\Field $field = null, $extra_tags = [])
     {
         if (!isset($field)) {
             throw new \atk4\ui\Exception('Money column requires a field');

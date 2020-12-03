@@ -180,7 +180,7 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
         $modal->js(true, $prevAction->js()->addClass('disabled'));
         $modal->js(true, $nextAction->js(true)->removeClass('disabled'));
     } elseif ($page === 2) {
-        $modelRegister = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
+        $modelRegister = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_());
         $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
         $form = \atk4\ui\Form::addTo($modal, ['segment' => true]);

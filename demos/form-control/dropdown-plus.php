@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-use atk4\data\Model;
+use Atk4\Data\Model;
 use atk4\ui\Form;
 
 /** @var \atk4\ui\App $app */

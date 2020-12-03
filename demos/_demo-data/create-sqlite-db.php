@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-use atk4\data\Model;
+use Atk4\Data\Model;
 
 require_once __DIR__ . '/../init-autoloader.php';
 
@@ -13,7 +13,7 @@ if (file_exists($sqliteFile)) {
     unlink($sqliteFile);
 }
 
-$persistence = new \atk4\data\Persistence\Sql('sqlite:' . $sqliteFile);
+$persistence = new \Atk4\Data\Persistence\Sql('sqlite:' . $sqliteFile);
 
 $model = new Model($persistence, 'client');
 $model->addField('name', ['type' => 'string']);

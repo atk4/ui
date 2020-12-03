@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace atk4\ui\Table\Column;
 
 use Atk4\Core\Factory;
-use atk4\data\Model;
+use Atk4\Data\Model;
 use atk4\ui\Jquery;
 use atk4\ui\JsChain;
 use atk4\ui\Table;
@@ -132,7 +132,7 @@ class ActionMenu extends Table\Column
     /**
      * {@inheritdoc}
      */
-    public function getHeaderCellHtml(\atk4\data\Field $field = null, $value = null)
+    public function getHeaderCellHtml(\Atk4\Data\Field $field = null, $value = null)
     {
         $this->table->js(true)->find('.atk-action-menu')->dropdown(
             array_merge(
@@ -152,7 +152,7 @@ class ActionMenu extends Table\Column
     /**
      * {@inheritdoc}
      */
-    public function getDataCellTemplate(\atk4\data\Field $field = null)
+    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
     {
         if (!$this->items) {
             return '';

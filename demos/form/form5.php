@@ -42,7 +42,7 @@ $form->addControl('six', new Form\Control\Checkbox(['caption' => 'Caption3']));
 
 $form->onSubmit($formSubmit);
 
-$model = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
+$model = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_());
 
 // model field uses regular line form control by default
 $model->addField('one');

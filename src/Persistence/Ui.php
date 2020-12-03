@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Persistence;
 
-use atk4\data\Model;
+use Atk4\Data\Model;
 use atk4\ui\Exception;
 
 /**
@@ -17,7 +17,7 @@ use atk4\ui\Exception;
  *
  * You may want to localize some of the output.
  */
-class Ui extends \atk4\data\Persistence
+class Ui extends \Atk4\Data\Persistence
 {
     public $date_format = 'M d, Y';
 
@@ -52,7 +52,7 @@ class Ui extends \atk4\data\Persistence
     /**
      * This method contains the logic of casting generic values into user-friendly format.
      */
-    public function _typecastSaveField(\atk4\data\Field $f, $value)
+    public function _typecastSaveField(\Atk4\Data\Field $f, $value)
     {
         // serialize if we explicitly want that
         if ($f->serialize) {
@@ -109,7 +109,7 @@ class Ui extends \atk4\data\Persistence
     /**
      * Interpret user-defined input for various types.
      */
-    public function _typecastLoadField(\atk4\data\Field $f, $value)
+    public function _typecastLoadField(\Atk4\Data\Field $f, $value)
     {
         // serialize if we explicitly want that
         if ($f->serialize && $value) {

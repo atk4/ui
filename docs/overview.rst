@@ -99,7 +99,7 @@ clarifications::
     require_once __DIR__ . '/vendor/autoload.php';
 
     // Define your data structure
-    class Offer extends \atk4\data\Model {
+    class Offer extends \Atk4\Data\Model {
 
         public $table = 'offer';
 
@@ -120,7 +120,7 @@ clarifications::
     $app->initLayout([\atk4\ui\Layout\Admin::class]);
 
     // Connect to database and place a fully-interactive Crud
-    $db = new \atk4\data\Persistence_SQL($dsn);
+    $db = new \Atk4\Data\Persistence_SQL($dsn);
     \atk4\ui\Crud::addTo($app)
         ->setModel(new Offer($db));
 

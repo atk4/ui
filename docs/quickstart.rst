@@ -113,13 +113,13 @@ with it::
 
     <?php
     session_start();
-    $s = new \atk4\data\Persistence_Array($_SESSION);
+    $s = new \Atk4\Data\Persistence_Array($_SESSION);
 
 If you're establishing a database connection that should be used throughout your whole application and in many classes,
 you can define it in the $app->db class::
 
     <?php
-    use atk4\data\Persistence;
+    use Atk4\Data\Persistence;
     use atk4\ui\App;
 
     $db = Persistence::connect(DB_URI,DB_USR, DB_PWD);
@@ -137,7 +137,7 @@ We need a class `Task` which describes `data model <https://agile-data.readthedo
 single ToDo item::
 
 
-    class ToDoItem extends \atk4\data\Model {
+    class ToDoItem extends \Atk4\Data\Model {
         public $table = 'todo_item';               // 6
         function init(): void {
             parent::init();
@@ -176,7 +176,7 @@ Class App use `DiContainerTrait` which allow us to inject dependency directly in
     $logger = new Logger('name');
     $logger->pushHandler(new StreamHandler('path/to/your.log', Logger::WARNING));
 
-    use atk4\data\Persistence;
+    use Atk4\Data\Persistence;
     use atk4\ui\App;
     $db = Persistence::connect("mysql://localhost:3306/database_name", "user", "password");
 

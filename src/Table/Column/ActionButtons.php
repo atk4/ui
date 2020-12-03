@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\Table\Column;
 
 use Atk4\Core\Factory;
-use atk4\data\Model;
+use Atk4\Data\Model;
 use atk4\ui\Table;
 
 /**
@@ -136,7 +136,7 @@ class ActionButtons extends Table\Column
         return parent::getTag($position, $value, $attr);
     }
 
-    public function getDataCellTemplate(\atk4\data\Field $field = null)
+    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
     {
         if (!$this->buttons) {
             return '';

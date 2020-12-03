@@ -54,7 +54,7 @@ $b->on('click', function ($b) {
 
 $b = Button::addTo($app, ['failure']);
 $b->on('click', function ($b) {
-    throw new \atk4\data\ValidationException(['Everything is bad']);
+    throw new \Atk4\Data\ValidationException(['Everything is bad']);
 });
 
 Header::addTo($app, ['Callbacks on HTML element', 'subHeader' => 'Click on label below.']);
