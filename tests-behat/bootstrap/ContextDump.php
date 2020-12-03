@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\behat;
+namespace atk4\ui\Behat;
 
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Testwork\Tester\Result\TestResult;
