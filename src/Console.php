@@ -307,7 +307,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     }
 
     /**
-     * Execute method of a certain object. If object uses atk4/core/DebugTrait,
+     * Execute method of a certain object. If object uses Atk4\Core\DebugTrait,
      * then debugging will also be used.
      *
      * During the invocation, Console will substitute $app->logger with itself,
