@@ -112,7 +112,7 @@ class User extends Model {
 Conventional Crud works only with a single model, but with add-on you can take advantage this relationship information: https://github.com/atk4/mastercrud
 
 ``` php
-use \atk4\mastercrud\MasterCrud;
+use \Atk4\Mastercrud\MasterCrud;
 
 // set up $app here
 
