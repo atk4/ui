@@ -56,7 +56,7 @@ class Radio extends Form\Control
             $this->addClass('disabled');
         }
 
-        $this->lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) use ($value) {
+        $this->lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (Lister $lister) use ($value) {
             if ($this->readonly) {
                 $lister->t_row->set('disabled', $value !== (string) $lister->model->getId() ? 'disabled="disabled"' : '');
             } elseif ($this->disabled) {

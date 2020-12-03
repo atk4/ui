@@ -138,7 +138,6 @@ parameters:
         # for src/Form/Control/Lookup.php
         - '~^Call to an undefined method atk4\\ui\\Jquery\:\:serialize\(\)\.$~'
         # for src/Form/Control/Upload.php
-        - '~^Property atk4\\ui\\Form\\Control\\Upload\:\:\$action has unknown class atk4\\ui\\Form\\Control\\View as its type\.$~'
         - '~^Call to an undefined method atk4\\ui\\Jquery\:\:atkFileUpload\(\)\.$~'
         # for src/Form/Control/UploadImage.php
         - '~^Call to an undefined method atk4\\ui\\Jquery\:\:removeAttr\(\)\.$~'
