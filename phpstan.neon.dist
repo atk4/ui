@@ -39,32 +39,20 @@ parameters:
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
         # for demos/_includes/Demo.php
-        - '~^Call to an undefined method Atk4\\Ui\\JsChain\:\:initHighlighting\(\)\.$~'
-        # for demos/_includes/DemoLookup.php
-        - '~^Call to an undefined method Atk4\\Ui\\Jquery\:\:modal\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Jquery\:\:dropdown\(\)\.$~'
+        - '~^Call to an undefined method atk4\\ui\\JsChain\:\:initHighlighting\(\)\.$~'
         # for demos/_unit-test/callback.php
         - '~^Access to an undefined property atk4\\ui\\AbstractView\:\:\$cb\.$~'
         - '~^Call to an undefined method atk4\\ui\\AbstractView\:\:setModel\(\)\.$~'
         - '~^Call to an undefined method atk4\\ui\\AbstractView\:\:jsReload\(\)\.$~'
-        # for demos/basic/label.php
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:fadeOut\(\)\.$~'
-        # for demos/basic/view.php
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:rating\(\)\.$~'
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:transition\(\)\.$~'
         # for demos/collection/jssortable.php
         - '~^Call to an undefined method atk4\\ui\\Table\\Column\:\:onReorder\(\)\.$~'
-        # for demos/collection/table.php
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:reload\(\)\.$~'
         # for demos/collection/tablefilter.php
         - '~^Call to an undefined method Atk4\\Ui\\Demos\\CountryLock\:\:expr\(\)\.$~'
         # for demos/data-action/jsactions.php
         - '~^Call to an undefined method Atk4\\Ui\\View\:\:addFields\(\)\.$~'
         # for demos/form-control/calendar.php
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:addAction\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:getJsInstance\(\)\.$~'
-        # for demos/form-control/checkbox.php
-        - '~^Call to an undefined method Atk4\\Ui\\Jquery\:\:checkbox\(\)\.$~'
+        - '~^Call to an undefined method atk4\\ui\\Form\\Control\:\:addAction\(\)\.$~'
+        - '~^Call to an undefined method atk4\\ui\\Form\\Control\:\:getJsInstance\(\)\.$~'
         # for demos/form-control/input2.php
         - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:onDelete\(\)\.$~'
         - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:onUpload\(\)\.$~'
@@ -92,17 +80,13 @@ parameters:
         # for demos/init-app.php
         - '~^Access to an undefined property Atk4\\Ui\\Layout&Atk4\\Ui\\Layout\\NavigableInterface\:\:\$menu\.$~'
         # for demos/init-db.php
-        - '~^Call to an undefined method Atk4\\Data\\Reference\\HasOne\:\:addField\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Data\\Persistence\:\:expr\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Data\\Reference\\HasOne\:\:addTitle\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Data\\Model\:\:importFromFilesystem\(\)\.$~'
-        # for demos/interactive/modal.php
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:atkReloadView\(\)\.$~'
+        - '~^Call to an undefined method atk4\\data\\Reference\\HasOne\:\:addField\(\)\.$~'
+        - '~^Call to an undefined method atk4\\data\\Persistence\:\:expr\(\)\.$~'
+        - '~^Call to an undefined method atk4\\data\\Reference\\HasOne\:\:addTitle\(\)\.$~'
+        - '~^Call to an undefined method atk4\\data\\Model\:\:importFromFilesystem\(\)\.$~'
         # for demos/interactive/popup.php
         - '~^Access to an undefined property atk4\\ui\\Lister\:\:\$items\.$~'
         - '~^Call to an undefined method atk4\\ui\\View\:\:linkCart\(\)\.$~'
-        # for demos/interactive/sse.php
-        - '~^Call to an undefined method Atk4\\Ui\\Jquery\:\:atkServerEvent\(\)\.$~'
         # for demos/interactive/tabs.php
         - '~^Call to an undefined method Atk4\\Ui\\View\:\:setActive\(\)\.$~'
         # for demos/interactive/wizard.php
@@ -111,11 +95,8 @@ parameters:
         - '~^Call to an undefined method atk4\\ui\\Panel\\Loadable\:\:jsOpen\(\)\.$~'
         - '~^Call to an undefined method atk4\\ui\\Panel\\Loadable\:\:onOpen\(\)\.$~'
         - '~^Call to an undefined method atk4\\ui\\Panel\\Loadable\:\:addConfirmation\(\)\.$~'
-        # for src/Accordion.php
-        - '~^Call to an undefined method Atk4\\Ui\\Jquery\:\:accordion\(\)\.$~'
         # for src/Card.php
         - '~^Call to an undefined method atk4\\ui\\AbstractView\:\:addFields\(\)\.$~'
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:parents\(\)\.$~'
         - '~^Call to an undefined method atk4\\ui\\View\:\:addDescription\(\)\.$~'
         # for src/CardDeck.php
         - '~^Access to an undefined property atk4\\ui\\AbstractView\:\:\$reload\.$~'
@@ -133,36 +114,14 @@ parameters:
         # for src/Form/Control/Calendar.php
         - '~^Access to an undefined property atk4\\ui\\JsChain\:\:\$l10ns\.$~'
         - '~^Call to an undefined method atk4\\ui\\JsChain\:\:localize\(\)\.$~'
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:flatpickr\(\)\.$~'
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:get\(\)\.$~'
-        # for src/Form/Control/Lookup.php
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:serialize\(\)\.$~'
-        # for src/Form/Control/Upload.php
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:atkFileUpload\(\)\.$~'
-        # for src/Form/Control/UploadImage.php
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:removeAttr\(\)\.$~'
         # for src/Grid.php
-        - '~^Call to an undefined method Atk4\\Ui\\Table\\Column\:\:addActionMenuItem\(\)\.$~'
-        # for src/ItemsPerPageSelector.php
+        - '~^Call to an undefined method atk4\\ui\\Table\\Column\:\:addActionMenuItem\(\)\.$~'
         # for src/JsCallback.php
-        - '~^Call to an undefined method Atk4\\Ui\\Jquery\:\:atkAjaxec\(\)\.$~'
         - '~^Cannot access property \$_chain on string\.$~'
-        # for src/JsConditionalForm.php
-        - '~^Call to an undefined method Atk4\\Ui\\Jquery\:\:atkConditionalForm\(\)\.$~'
-        # for src/JsPaginator.php
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:atkScroll\(\)\.$~'
-        # for src/JsSearch.php
-        - '~^Call to an undefined method Atk4\\Ui\\Jquery\:\:atkJsSearch\(\)\.$~'
-        # for src/JsSortable.php
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:atkJsSortable\(\)\.$~'
-        # for src/JsToast.php
-        - '~^Call to an undefined method Atk4\\Ui\\Jquery\:\:toast\(\)\.$~'
         # for src/JsVueService.php
         - '~^Call to an undefined method atk4\\ui\\JsChain\:\:createAtkVue\(\)\.$~'
         - '~^Call to an undefined method atk4\\ui\\JsChain\:\:createVue\(\)\.$~'
         - '~^Call to an undefined method atk4\\ui\\JsChain\:\:useComponent\(\)\.$~'
-        # for src/Layout/Maestro.php
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:atkSidenav\(\)\.$~'
         # for src/Menu.php
         - '~^Call to an undefined method atk4\\ui\\AbstractView\:\:setElement\(\)\.$~'
         # for src/Panel/Right.php
@@ -172,17 +131,10 @@ parameters:
         - '~^Call to an undefined method atk4\\ui\\AbstractView\:\:addButtonAction\(\)\.$~'
         - '~^Call to an undefined method atk4\\ui\\AbstractView\:\:notClosable\(\)\.$~'
         - '~^PHPDoc tag @param references unknown parameter\: \$selector$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Panel\\LoadableContent\:\:getClearSelector\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\JsExpression\:\:addPanel\(\)\.$~'
-        # for src/Popup.php
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:popup\(\)\.$~'
-        # for src/ProgressBar.php
-        - '~^Call to an undefined method Atk4\\Ui\\Jquery\:\:progress\(\)\.$~'
+        - '~^Call to an undefined method atk4\\ui\\Panel\\LoadableContent\:\:getClearSelector\(\)\.$~'
+        - '~^Call to an undefined method atk4\\ui\\JsExpression\:\:addPanel\(\)\.$~'
         # for src/Tab.php
-        - '~^Call to an undefined method Atk4\\Ui\\Jquery\:\:tab\(\)\.$~'
-        - '~^Access to an undefined property Atk4\\Ui\\View\:\:\$activeTabName\.$~'
-        # for src/Table.php
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:atkColumnResizer\(\)\.$~'
+        - '~^Access to an undefined property atk4\\ui\\View\:\:\$activeTabName\.$~'
         # for src/Table/Column.php
         - '~^Call to an undefined method atk4\\ui\\AbstractView\:\:setHoverable\(\)\.$~'
         - '~^Call to an undefined method atk4\\ui\\JsCallback\:\:onSelectItem\(\)\.$~'
@@ -195,8 +147,6 @@ parameters:
         - '~^Call to an undefined method atk4\\data\\Model\:\:setConditionForModel\(\)\.$~'
         # for src/Tabs.php
         - '~^Call to an undefined method atk4\\ui\\View\:\:setPath\(\)\.$~'
-        # for src/UserAction/ConfirmationExecutor.php
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:off\(\)\.$~'
         # for src/UserAction/ModalExecutor.php
         - '~^Access to an undefined property atk4\\ui\\AbstractView\:\:\$buttonSave\.$~'
         # for src/View.php
@@ -211,6 +161,3 @@ parameters:
         - '~^Access to an undefined property Atk4\\Ui\\App\:\:\$output\.$~'
         # for tests/jsTest.php
         - '~^Call to an undefined method atk4\\ui\\JsChain\:\:getTextInRange\(\)\.$~'
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:first\(\)\.$~'
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:ready\(\)\.$~'
-        - '~^Call to an undefined method atk4\\ui\\Jquery\:\:height\(\)\.$~'
