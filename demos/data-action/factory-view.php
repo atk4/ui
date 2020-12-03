@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-use Atk4\ui\Button;
+use Atk4\Ui\Button;
 use Atk4\Ui\Card;
 use Atk4\Ui\Header;
-use atk4\Ui\UserAction\ExecutorFactory;
+use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */

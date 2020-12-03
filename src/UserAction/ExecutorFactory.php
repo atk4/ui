@@ -128,7 +128,7 @@ class ExecutorFactory
         }
     }
 
-    public function create(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
+    public function create(UserAction $action, View $owner, string $requiredType = null): Object
     {
         return $this->createExecutor($action, $owner, $requiredType);
     }
