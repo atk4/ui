@@ -50,7 +50,7 @@ class DemosTest extends AtkPhpunit\TestCase
             $initVars = get_defined_vars();
             $this->setSuperglobalsFromRequest(new Request('GET', 'http://localhost/demos/?APP_CALL_EXIT=0&APP_CATCH_EXCEPTIONS=0&APP_ALWAYS_RUN=0'));
 
-            /** @var App $app */ // @phpstan-ignore-line
+            /** @var App $app */ // @phpstan-ignore-next-line
             require_once static::DEMOS_DIR . '/init-app.php';
             $initVars = array_diff_key(get_defined_vars(), $initVars + ['initVars' => true]);
 
