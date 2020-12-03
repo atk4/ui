@@ -64,7 +64,7 @@ your site is slow and is unable to load page quick. Alternative is to run it thr
 This will display console to the user and will even output information from inside the model::
 
 
-    use \atk4\core\DebugTrait();
+    use \Atk4\Core\DebugTrait();
 
     function generateReport($pages) {
         $this->info('converting report to PDF');

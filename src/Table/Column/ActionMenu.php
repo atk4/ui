@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Table\Column;
 
-use atk4\core\Factory;
+use Atk4\Core\Factory;
 use atk4\data\Model;
 use atk4\ui\Jquery;
 use atk4\ui\JsChain;

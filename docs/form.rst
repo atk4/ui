@@ -592,10 +592,10 @@ with a message about failure to accept of terms and conditions::
 So far Agile UI / Agile Data does not come with a validation library but
 it supports usage of 3rd party validation libraries.
 
-Callback function may raise exception. If Exception is based on ``\atk4\core\Exception``,
+Callback function may raise exception. If Exception is based on ``\Atk4\Core\Exception``,
 then the parameter "field" can be used to associate error with specific field::
 
-    throw (new \atk4\core\Exception('Sample Exception'))
+    throw (new \Atk4\Core\Exception('Sample Exception'))
         ->addMoreInfo('field', 'surname');
 
 If 'field' parameter is not set or any other exception is generated, then error will not be

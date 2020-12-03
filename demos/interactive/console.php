@@ -9,7 +9,7 @@ require_once __DIR__ . '/../init-app.php';
 
 /** @var \atk4\ui\View $testRunClass */
 $testRunClass = get_class(new class() extends \atk4\ui\View {
-    use \atk4\core\DebugTrait;
+    use \Atk4\Core\DebugTrait;
 
     public function generateReport()
     {
@@ -42,7 +42,7 @@ $tab = $tabs->addTab('set()');
     sleep(1);
     echo 'direct output is captured';
 
-    throw new \atk4\core\Exception('BOOM - exceptions are caught');
+    throw new \Atk4\Core\Exception('BOOM - exceptions are caught');
 });
 
 $tab = $tabs->addTab('runMethod()', function ($tab) use ($testRunClass) {

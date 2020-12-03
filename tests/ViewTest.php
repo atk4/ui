@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\core\Exception;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Exception;
 
 class ViewTest extends AtkPhpunit\TestCase
 {

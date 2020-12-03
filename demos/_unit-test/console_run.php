@@ -11,7 +11,7 @@ require_once __DIR__ . '/../init-app.php';
 
 /** @var \atk4\ui\View $testRunClass */
 $testRunClass = get_class(new class() extends \atk4\ui\View {
-    use \atk4\core\DebugTrait;
+    use \Atk4\Core\DebugTrait;
 
     public function test()
     {

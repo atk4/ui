@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form;
 
-use atk4\core\Factory;
+use Atk4\Core\Factory;
 use atk4\ui\HtmlTemplate;
 use atk4\ui\Label;
 

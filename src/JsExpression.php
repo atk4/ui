@@ -9,7 +9,7 @@ namespace atk4\ui;
  */
 class JsExpression implements JsExpressionable
 {
-    use \atk4\core\DiContainerTrait;
+    use \Atk4\Core\DiContainerTrait;
 
     /**
      * @var string

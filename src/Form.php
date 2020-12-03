@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
-use atk4\core\Factory;
+use Atk4\Core\Factory;
 use atk4\data\Model;
 use atk4\data\Reference\ContainsMany;
 
@@ -13,7 +13,7 @@ use atk4\data\Reference\ContainsMany;
  */
 class Form extends View
 {
-    use \atk4\core\HookTrait;
+    use \Atk4\Core\HookTrait;
 
     /** @const string Executed when form is submitted */
     public const HOOK_SUBMIT = self::class . '@submit';
@@ -571,7 +571,7 @@ class Form extends View
                 if (!$field->readonly && !$field->disabled) {
                     $field->set($post[$key] ?? null);
                 }
-            } catch (\atk4\core\Exception $e) {
+            } catch (\Atk4\Core\Exception $e) {
                 $errors[$key] = $e->getMessage();
             }
         }

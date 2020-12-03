@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
-use atk4\core\AppScopeTrait;
-use atk4\core\DiContainerTrait;
-use atk4\core\DynamicMethodTrait;
-use atk4\core\HookTrait;
-use atk4\core\InitializerTrait;
+use Atk4\Core\AppScopeTrait;
+use Atk4\Core\DiContainerTrait;
+use Atk4\Core\DynamicMethodTrait;
+use Atk4\Core\HookTrait;
+use Atk4\Core\InitializerTrait;
 use atk4\data\Persistence;
 use atk4\ui\Exception\ExitApplicationException;
 use atk4\ui\Persistence\Ui as UiPersistence;
@@ -980,7 +980,7 @@ class App
      */
     public function renderExceptionHtml(\Throwable $exception): string
     {
-        return (string) new \atk4\core\ExceptionRenderer\Html($exception);
+        return (string) new \Atk4\Core\ExceptionRenderer\Html($exception);
     }
 
     protected function setupAlwaysRun(): void

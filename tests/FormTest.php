@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Tests;
 
-use atk4\core\AtkPhpunit;
+use Atk4\Core\AtkPhpunit;
 use atk4\data\Model;
 use atk4\ui\App;
 use atk4\ui\Form;

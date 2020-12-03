@@ -19,5 +19,5 @@ $console->set(function ($console) {
     $console->output('Now trying something dangerous..');
     echo 'direct output is captured';
 
-    throw new \atk4\core\Exception('BOOM - exceptions are caught');
+    throw new \Atk4\Core\Exception('BOOM - exceptions are caught');
 });

@@ -147,7 +147,7 @@ $form->onSubmit(function (Form $form) {
 $form = Form::addTo($tab);
 $form->addControl('email');
 $form->onSubmit(function (Form $form) {
-    throw (new \atk4\core\Exception('testing'))
+    throw (new \Atk4\Core\Exception('testing'))
         ->addMoreInfo('arg1', 'val1');
 
     return 'somehow it did not crash';
@@ -158,7 +158,7 @@ $form->onSubmit(function (Form $form) {
         $form = Form::addTo($p);
         $form->addControl('email');
         $form->onSubmit(function (Form $form) {
-            throw (new \atk4\core\Exception('testing'))
+            throw (new \Atk4\Core\Exception('testing'))
                 ->addMoreInfo('arg1', 'val1');
 
             return 'somehow it did not crash';

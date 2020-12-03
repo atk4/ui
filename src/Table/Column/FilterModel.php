@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\Table\Column;
 
-use atk4\core\NameTrait;
-use atk4\core\SessionTrait;
+use Atk4\Core\NameTrait;
+use Atk4\Core\SessionTrait;
 use atk4\data\Field;
 use atk4\data\Persistence;
 

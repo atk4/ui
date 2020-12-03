@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-use atk4\core\Factory;
+use Atk4\Core\Factory;
 
 /**
  * Setup file - do not test.

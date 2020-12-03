@@ -121,7 +121,7 @@ Use of $app property and Dependency Injeciton
 
 .. php:attr:: app
 
-    Each View has a property $app that is defined through \atk4\core\AppScopeTrait.
+    Each View has a property $app that is defined through \Atk4\Core\AppScopeTrait.
     View elements rely on persistence of the app class in order to perform Dependency
     Injection.
 

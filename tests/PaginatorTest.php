@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Tests;
 
-use atk4\core\AtkPhpunit;
+use Atk4\Core\AtkPhpunit;
 
 class PaginatorTest extends AtkPhpunit\TestCase
 {

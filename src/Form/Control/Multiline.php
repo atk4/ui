@@ -358,7 +358,7 @@ class Multiline extends Form\Control
                     if (!$field->read_only) {
                         $model->set($fieldName, $this->getApp()->ui_persistence->typecastLoadField($field, $value));
                     }
-                } catch (\atk4\core\Exception $e) {
+                } catch (\Atk4\Core\Exception $e) {
                     $rowErrors[$rowId][] = ['field' => $fieldName, 'msg' => $e->getMessage()];
                 }
             }
@@ -691,7 +691,7 @@ class Multiline extends Form\Control
         $this->cb->set(function () {
             try {
                 return $this->renderCallback();
-            } catch (\atk4\Core\Exception | \Error $e) {
+            } catch (\Atk4\Core\Exception | \Error $e) {
                 $this->getApp()->terminateJson(['success' => false, 'error' => $e->getMessage()]);
             }
         });

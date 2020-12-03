@@ -1,4 +1,4 @@
-<phpunit bootstrap="vendor/autoload.php" printerClass="atk4\core\AtkPhpunit\ResultPrinter" colors="true">
+<phpunit bootstrap="vendor/autoload.php" printerClass="Atk4\Core\AtkPhpunit\ResultPrinter" colors="true">
     <php>
         <var name="DB_DSN" value="mysql:dbname=atk4_test__data;host=mysql" />
         <var name="DB_USER" value="atk4_test" />

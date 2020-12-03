@@ -10,7 +10,7 @@ use atk4\ui\HtmlTemplate\Value as HtmlValue;
 
 class HtmlTemplate implements \ArrayAccess
 {
-    use \atk4\core\AppScopeTrait;
+    use \Atk4\Core\AppScopeTrait;
 
     /** @const string */
     public const TOP_TAG = '_top';

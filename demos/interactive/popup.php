@@ -19,7 +19,7 @@ require_once __DIR__ . '/../init-app.php';
 
 /** @var \atk4\ui\Lister $cartClass */
 $cartClass = get_class(new class() extends \atk4\ui\Lister {
-    use \atk4\core\SessionTrait;
+    use \Atk4\Core\SessionTrait;
     public $items = [];
 
     public $defaultTemplate = 'lister.html';

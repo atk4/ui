@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\UserAction;
 
-use atk4\core\Factory;
+use Atk4\Core\Factory;
 use atk4\data\Model;
 use atk4\ui\Exception;
 use atk4\ui\Form;

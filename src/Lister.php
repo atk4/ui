@@ -6,7 +6,7 @@ namespace atk4\ui;
 
 class Lister extends View
 {
-    use \atk4\core\HookTrait;
+    use \Atk4\Core\HookTrait;
 
     /** @const string */
     public const HOOK_BEFORE_ROW = self::class . '@beforeRow';

@@ -199,7 +199,7 @@ parameters:
         - '~^Property atk4\\ui\\Form\\Control\\Multiline\:\:\$jsAfterAdd has unknown class atk4\\ui\\Form\\Control\\JsFunction as its type\.$~'
         - '~^Property atk4\\ui\\Form\\Control\\Multiline\:\:\$jsAfterDelete has unknown class atk4\\ui\\Form\\Control\\JsFunction as its type\.$~'
         - '~^PHPDoc tag @return has invalid value \(\|null\)\: Unexpected token "\|", expected type at offset 153$~'
-        - '~^Class atk4\\core\\Exception referenced with incorrect case\: atk4\\Core\\Exception\.$~'
+        - '~^Class Atk4\\Core\\Exception referenced with incorrect case\: Atk4\\Core\\Exception\.$~'
         # for src/Form/Control/Radio.php
         - '~^Property atk4\\ui\\Form\\Control\\Radio\:\:\$lister has unknown class atk4\\ui\\Form\\Control\\Lister as its type\.$~'
         - '~^Call to method setModel\(\) on an unknown class atk4\\ui\\Form\\Control\\Lister\.$~'

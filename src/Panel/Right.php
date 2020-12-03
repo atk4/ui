@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Panel;
 
-use atk4\core\Factory;
+use Atk4\Core\Factory;
 use atk4\ui\Button;
 use atk4\ui\Jquery;
 use atk4\ui\JsExpression;
