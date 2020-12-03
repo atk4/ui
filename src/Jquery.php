@@ -58,21 +58,22 @@ namespace Atk4\Ui;
  * @method Jquery trigger(...$args)
  * @method Jquery val(...$args)
  *
- * Extensions by SemanticUI
+ * For SemanticUI:
  * @method Jquery api(...$args)
  * @method Jquery form(...$args)
  * @method Jquery visibility(...$args)
  *
- * @method Jquery atkAjaxec(...$args)
- * @method Jquery atkColumnResizer(...$args)
- * @method Jquery atkConditionalForm(...$args)
- * @method Jquery atkFileUpload(...$args)
- * @method Jquery atkJsSearch(...$args)
- * @method Jquery atkJsSortable(...$args)
- * @method Jquery atkReloadView(...$args)
- * @method Jquery atkScroll(...$args)
- * @method Jquery atkServerEvent(...$args)
- * @method Jquery atkSidenav(...$args)
+ * For Atk4UI:
+ * @method Jquery atkAjaxec()
+ * @method Jquery atkColumnResizer()
+ * @method Jquery atkConditionalForm()
+ * @method Jquery atkFileUpload()
+ * @method Jquery atkJsSearch()
+ * @method Jquery atkJsSortable()
+ * @method Jquery atkReloadView()
+ * @method Jquery atkScroll()
+ * @method Jquery atkServerEvent()
+ * @method Jquery atkSidenav()
  */
 class Jquery extends JsChain
 {
