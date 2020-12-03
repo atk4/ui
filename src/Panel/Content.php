@@ -5,10 +5,10 @@ declare(strict_types=1);
  * Slide Panel Content.
  */
 
-namespace atk4\ui\Panel;
+namespace Atk4\Ui\Panel;
 
-use atk4\ui\Callback;
-use atk4\ui\View;
+use Atk4\Ui\Callback;
+use Atk4\Ui\View;
 
 class Content extends View implements LoadableContent
 {
@@ -60,7 +60,7 @@ class Content extends View implements LoadableContent
         return ['.atk-panel-content'];
     }
 
-    protected function mergeStickyArgsFromChildView(): ?\atk4\ui\AbstractView
+    protected function mergeStickyArgsFromChildView(): ?\Atk4\Ui\AbstractView
     {
         return $this->cb;
     }

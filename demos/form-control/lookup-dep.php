@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Form;
+use Atk4\Ui\Form;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Header::addTo($app, ['Lookup dependency']);
+\Atk4\Ui\Header::addTo($app, ['Lookup dependency']);
 
 $form = Form::addTo($app, ['segment']);
-\atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveControls']);
+\Atk4\Ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveControls']);
 
 $form->addControl('starts_with', [
     Form\Control\Dropdown::class,
@@ -50,10 +50,10 @@ $form->onSubmit(function (Form $form) {
     return 'Submitted: ' . print_r($form->model->get(), true);
 });
 
-\atk4\ui\Header::addTo($app, ['Lookup multiple values']);
+\Atk4\Ui\Header::addTo($app, ['Lookup multiple values']);
 
 $form = Form::addTo($app, ['segment']);
-\atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveControls']);
+\Atk4\Ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveControls']);
 
 $form->addControl('ends_with', [
     Form\Control\Dropdown::class,

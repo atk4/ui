@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\UserAction;
+namespace Atk4\Ui\UserAction;
 
-use atk4\data\Model;
-use atk4\ui\Form;
+use Atk4\Data\Model;
+use Atk4\Ui\Form;
 
 class FormExecutor extends BasicExecutor
 {

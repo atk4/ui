@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\core\AppScopeTrait;
-use atk4\core\ContainerTrait;
-use atk4\core\DiContainerTrait;
-use atk4\core\InitializerTrait;
-use atk4\core\StaticAddToTrait;
-use atk4\core\TrackableTrait;
+use Atk4\Core\AppScopeTrait;
+use Atk4\Core\ContainerTrait;
+use Atk4\Core\DiContainerTrait;
+use Atk4\Core\InitializerTrait;
+use Atk4\Core\StaticAddToTrait;
+use Atk4\Core\TrackableTrait;
 
 /**
  * Abstract view tree item (used only for View and Callback, you want probably to extend one of these).

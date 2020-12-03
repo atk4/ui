@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Button;
-use atk4\ui\Form;
-use atk4\ui\HtmlTemplate;
+use Atk4\Ui\Button;
+use Atk4\Ui\Form;
+use Atk4\Ui\HtmlTemplate;
 
 /**
  * Demonstrates how to use fields with form.
  */
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Header::addTo($app, ['Disabled and read only form controls (normal / readonly / disabled)']);
+\Atk4\Ui\Header::addTo($app, ['Disabled and read only form controls (normal / readonly / disabled)']);
 
 $form = Form::addTo($app);
 
@@ -103,16 +103,16 @@ $group->addControl('date_disb', [Form\Control\Calendar::class, 'type' => 'date',
 $form->onSubmit(function (Form $form) {
 });
 
-\atk4\ui\Header::addTo($app, ['Stand Alone Line']);
+\Atk4\Ui\Header::addTo($app, ['Stand Alone Line']);
 // you can pass values to button
 $control = Form\Control\Line::addTo($app);
 
 $control->set('hello world');
 
 $button = $control->addAction('check value');
-$button->on('click', new \atk4\ui\JsExpression('alert("field value is: "+[])', [$control->jsInput()->val()]));
+$button->on('click', new \Atk4\Ui\JsExpression('alert("field value is: "+[])', [$control->jsInput()->val()]));
 
-\atk4\ui\Header::addTo($app, ['Line in a Form']);
+\Atk4\Ui\Header::addTo($app, ['Line in a Form']);
 $form = Form::addTo($app);
 
 $control = $form->addControl('Title', null, ['values' => ['Mr', 'Mrs', 'Miss'], 'ui' => ['hint' => 'select one']]);
@@ -121,7 +121,7 @@ $control = $form->addControl('name', [Form\Control\Line::class, 'hint' => 'this 
 $control->set('value in a form');
 
 $control = $form->addControl('surname', new Form\Control\Line([
-    'hint' => [\atk4\ui\View::class, 'template' => new HtmlTemplate(
+    'hint' => [\Atk4\Ui\View::class, 'template' => new HtmlTemplate(
         'Click <a href="http://example.com/" target="_blank">here</a>'
     )],
 ]));
@@ -130,11 +130,11 @@ $form->onSubmit(function (Form $form) {
     return $form->model->get('name');
 });
 
-\atk4\ui\Header::addTo($app, ['Multiple Form Layouts']);
+\Atk4\Ui\Header::addTo($app, ['Multiple Form Layouts']);
 
 $form = Form::addTo($app);
-$tabs = \atk4\ui\Tabs::addTo($form, [], ['AboveControls']);
-\atk4\ui\View::addTo($form, ['ui' => 'divider'], ['AboveControls']);
+$tabs = \Atk4\Ui\Tabs::addTo($form, [], ['AboveControls']);
+\Atk4\Ui\View::addTo($form, ['ui' => 'divider'], ['AboveControls']);
 
 $formPage = Form\Layout::addTo($tabs->addTab('Basic Info'), ['form' => $form]);
 $formPage->addControl('name', new Form\Control\Line());
@@ -146,7 +146,7 @@ $form->onSubmit(function (Form $form) {
     return $form->model->get('name') . ' has age ' . $form->model->get('age');
 });
 
-\atk4\ui\Header::addTo($app, ['onChange event', 'subHeader' => 'see in browser console']);
+\Atk4\Ui\Header::addTo($app, ['onChange event', 'subHeader' => 'see in browser console']);
 
 $form = Form::addTo($app);
 
@@ -156,10 +156,10 @@ $c2 = $group->addControl('c2', new Form\Control\Calendar(['type' => 'date']));
 $c3 = $group->addControl('c3', new Form\Control\Calendar(['type' => 'date']));
 
 $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
-$c2->onChange(new \atk4\ui\JsExpression('console.log("c2 changed: "+date+","+text+","+mode)'));
+$c2->onChange(new \Atk4\Ui\JsExpression('console.log("c2 changed: "+date+","+text+","+mode)'));
 $c3->onChange([
-    new \atk4\ui\JsExpression('console.log("c3 changed: "+date+","+text+","+mode)'),
-    new \atk4\ui\JsExpression('console.log("c3 really changed: "+date+","+text+","+mode)'),
+    new \Atk4\Ui\JsExpression('console.log("c3 changed: "+date+","+text+","+mode)'),
+    new \Atk4\Ui\JsExpression('console.log("c3 really changed: "+date+","+text+","+mode)'),
 ]);
 
 $group = $form->addGroup('Line');
@@ -169,13 +169,13 @@ $f3 = $group->addControl('f3');
 $f4 = $group->addControl('f4');
 
 $f1->onChange('console.log("f1 changed")');
-$f2->onChange(new \atk4\ui\JsExpression('console.log("f2 changed")'));
+$f2->onChange(new \Atk4\Ui\JsExpression('console.log("f2 changed")'));
 $f3->onChange([
-    new \atk4\ui\JsExpression('console.log("f3 changed")'),
-    new \atk4\ui\JsExpression('console.log("f3 really changed")'),
+    new \Atk4\Ui\JsExpression('console.log("f3 changed")'),
+    new \Atk4\Ui\JsExpression('console.log("f3 really changed")'),
 ]);
 $f4->onChange(function () {
-    return new \atk4\ui\JsExpression('console.log("f4 changed")');
+    return new \Atk4\Ui\JsExpression('console.log("f4 changed")');
 });
 
 $group = $form->addGroup('CheckBox');
@@ -202,7 +202,7 @@ $r1 = $group->addControl('r1', new Form\Control\Radio(['values' => [
 ]));
 $r1->onChange('console.log("radio changed")');
 
-\atk4\ui\Header::addTo($app, ['Line ends of Textarea']);
+\Atk4\Ui\Header::addTo($app, ['Line ends of Textarea']);
 
 $form = Form::addTo($app);
 $group = $form->addGroup('Without model');

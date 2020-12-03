@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\UserAction;
+namespace Atk4\Ui\UserAction;
 
 /**
  * ExecutorInterface can be implemented by a View that can be displayed on a page or in a modal window
@@ -31,5 +31,5 @@ interface ExecutorInterface
     /**
      * Will associate executor with the action.
      */
-    public function setAction(\atk4\data\Model\UserAction $action);
+    public function setAction(\Atk4\Data\Model\UserAction $action);
 }

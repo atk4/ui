@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\ui\Button;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Ui\Button;
 
 class ButtonTest extends AtkPhpunit\TestCase
 {

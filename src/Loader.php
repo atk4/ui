@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Class implements Loader, which is a View that will dynamically render it's content.
@@ -65,7 +65,7 @@ class Loader extends View
      *  $l1->set([$my_object, 'run_long_process']);
      *
      * NOTE: default values are like that due ot PHP 7.0 warning:
-     * Declaration of \atk4\ui\Loader::set($fx, $args = Array) should be compatible with \atk4\ui\View::set($arg1 = Array, $arg2 = NULL)
+     * Declaration of \Atk4\Ui\Loader::set($fx, $args = Array) should be compatible with \Atk4\Ui\View::set($arg1 = Array, $arg2 = NULL)
      *
      * @param \Closure $fx
      *

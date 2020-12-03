@@ -5,12 +5,12 @@ declare(strict_types=1);
  * A Simple inline editable text Vue component.
  */
 
-namespace atk4\ui\Component;
+namespace Atk4\Ui\Component;
 
-use atk4\data\ValidationException;
-use atk4\ui\Exception;
-use atk4\ui\JsToast;
-use atk4\ui\View;
+use Atk4\Data\ValidationException;
+use Atk4\Ui\Exception;
+use Atk4\Ui\JsToast;
+use Atk4\Ui\View;
 
 class InlineEdit extends View
 {
@@ -19,7 +19,7 @@ class InlineEdit extends View
     /**
      * JsCallback for saving data.
      *
-     * @var \atk4\ui\JsCallback
+     * @var \Atk4\Ui\JsCallback
      */
     public $cb;
 
@@ -86,7 +86,7 @@ class InlineEdit extends View
     protected function init(): void
     {
         parent::init();
-        $this->cb = \atk4\ui\JsCallback::addTo($this);
+        $this->cb = \Atk4\Ui\JsCallback::addTo($this);
 
         // Set default validation error handler.
         if (!$this->formatErrorMsg || !($this->formatErrorMsg instanceof \Closure)) {
@@ -101,9 +101,9 @@ class InlineEdit extends View
     /**
      * Set Model of this View.
      *
-     * @return \atk4\data\Model
+     * @return \Atk4\Data\Model
      */
-    public function setModel(\atk4\data\Model $model)
+    public function setModel(\Atk4\Data\Model $model)
     {
         parent::setModel($model);
         $this->field = $this->field ? $this->field : $this->model->title_field;
@@ -149,7 +149,7 @@ class InlineEdit extends View
      *
      * @param string $message
      *
-     * @return \atk4\ui\JsToast
+     * @return \Atk4\Ui\JsToast
      */
     public function jsSuccess($message)
     {
@@ -165,7 +165,7 @@ class InlineEdit extends View
      *
      * @param string $message
      *
-     * @return \atk4\ui\JsToast
+     * @return \Atk4\Ui\JsToast
      */
     public function jsError($message)
     {

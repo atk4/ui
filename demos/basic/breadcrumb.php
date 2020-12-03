@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 /**
  * Demonstrates how to use Breadcrumb.
  */
-$crumb = \atk4\ui\Breadcrumb::addTo($app);
+$crumb = \Atk4\Ui\Breadcrumb::addTo($app);
 $crumb->addCrumb('UI Demo', ['index']);
 $crumb->addCrumb('Breadcrumb Demo', ['breadcrumb']);
 
-\atk4\ui\View::addTo($app, ['ui' => 'divider']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
 $crumb->addCrumb('Countries', []);
 
@@ -28,16 +28,16 @@ if ($id = $app->stickyGet('country_id')) {
 
     // here we can check for additional criteria and display a deeper level on the crumb
 
-    $form = \atk4\ui\Form::addTo($app);
+    $form = \Atk4\Ui\Form::addTo($app);
     $form->setModel($model);
-    $form->onSubmit(function (\atk4\ui\Form $form) {
-        return new \atk4\ui\JsToast('Form Submitted! Data saving is not possible in demo!');
+    $form->onSubmit(function (\Atk4\Ui\Form $form) {
+        return new \Atk4\Ui\JsToast('Form Submitted! Data saving is not possible in demo!');
     });
 } else {
     // display list of countries
-    $table = \atk4\ui\Table::addTo($app);
+    $table = \Atk4\Ui\Table::addTo($app);
     $table->setModel($model);
-    $table->addDecorator('name', [\atk4\ui\Table\Column\Link::class, [], ['country_id' => 'id']]);
+    $table->addDecorator('name', [\Atk4\Ui\Table\Column\Link::class, [], ['country_id' => 'id']]);
 }
 
 $crumb->popTitle();

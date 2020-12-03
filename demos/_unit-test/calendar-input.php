@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Form;
-use atk4\ui\View;
+use Atk4\Ui\Form;
+use Atk4\Ui\View;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $output = function (string $date) {
-    $view = new \atk4\ui\Message();
+    $view = new \Atk4\Ui\Message();
     $view->invokeInit();
     $view->text->addHTML($date);
 
     return $view;
 };
 
-\atk4\ui\Header::addTo($app, ['Testing flatpickr using Behat']);
+\Atk4\Ui\Header::addTo($app, ['Testing flatpickr using Behat']);
 $form = Form::addTo($app);
 $c = $form->addControl('field', null, ['type' => 'date']);
 $form->buttonSave->set($c->short_name);

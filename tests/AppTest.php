@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\ui\App;
-use atk4\ui\HtmlTemplate;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Ui\App;
+use Atk4\Ui\HtmlTemplate;
 
 class AppTest extends AtkPhpunit\TestCase
 {

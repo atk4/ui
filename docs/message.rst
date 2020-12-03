@@ -5,7 +5,7 @@
 Message
 =======
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Message
 
@@ -18,12 +18,12 @@ Basic Usage
 
 Implements basic image::
 
-    $message = new \atk4\ui\Message('Message Title');
+    $message = new \Atk4\Ui\Message('Message Title');
     $app->add($message);
 
 Although typically you would want to specify what type of message is that::
 
-    $message = new \atk4\ui\Message(['Warning Message Title', 'warning']);
+    $message = new \Atk4\Ui\Message(['Warning Message Title', 'warning']);
     $app->add($message);
 
 Here is the alternative syntax::

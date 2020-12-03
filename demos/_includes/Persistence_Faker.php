@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-class Persistence_Faker extends \atk4\data\Persistence
+class Persistence_Faker extends \Atk4\Data\Persistence
 {
     /** @var \Faker\Generator */
     public $faker;

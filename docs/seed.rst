@@ -2,7 +2,7 @@
 Purpose of the Seed
 ===================
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 Agile UI relies on wide variety of objects. For example :php:class:`Button` relies on
 :php:class:`Icon` object for its rendering. As a developer can create Icon object first,
@@ -42,7 +42,7 @@ In most cases you don't need to call factory yourself, methods which accept obje
 will do it for you::
 
     Button::addTo($app);
-    // app will create instance of class \atk4\ui\Button
+    // app will create instance of class \Atk4\Ui\Button
 
 Seed, Object and Render Tree
 ----------------------------
@@ -61,7 +61,7 @@ The most important points of a seed such as this one::
 
 are:
 
- - Element with index 0 is name of the class mapped into namespace \atk4\ui (by default).
+ - Element with index 0 is name of the class mapped into namespace \Atk4\Ui (by default).
  - Elements with numeric indexes 'hello' and 'big red' are passed to constructor of Button
  - Elements with named arguments are assigned to properties after invocation of constructor
 
@@ -83,23 +83,23 @@ Additional cases
 ----------------
 
 An individual object may add more ways to deal with seed. For example, when adding columns
-to your Table you can specify seed for the decorator: :php:class:`atk4\\ui\\\Table\\Column`::
+to your Table you can specify seed for the decorator: :php:class:`Atk4\\Ui\\\Table\\Column`::
 
-    $table->addColumn('salary', [\atk4\ui\Table\Column\Money::class]);
-
-    // or
-
-    $table->addColumn('salary', [\atk4\ui\Table\Column\Money::class]);
+    $table->addColumn('salary', [\Atk4\Ui\Table\Column\Money::class]);
 
     // or
 
-    $table->addColumn('salary', new \atk4\ui\Table\Column\Money());
+    $table->addColumn('salary', [\Atk4\Ui\Table\Column\Money::class]);
 
     // or
 
-    $table->addColumn('salary', [new \atk4\ui\Table\Column\Money()]);
+    $table->addColumn('salary', new \Atk4\Ui\Table\Column\Money());
 
-Note that addColumn uses default namespace of `\\atk4\\ui\\Table\\Column` when seeding objects. Some
+    // or
+
+    $table->addColumn('salary', [new \Atk4\Ui\Table\Column\Money()]);
+
+Note that addColumn uses default namespace of `\\Atk4\\Ui\\Table\\Column` when seeding objects. Some
 other methods that use seeds are:
 
  - :php:meth:`Table::addColumn()`

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\behat;
+namespace Atk4\Ui\Behat;
 
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;

@@ -13,11 +13,11 @@ declare(strict_types=1);
  *       $form->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);.
  */
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
-use atk4\data\Model;
-use atk4\ui\Exception;
-use atk4\ui\Form;
+use Atk4\Data\Model;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Form;
 
 class DropdownCascade extends Dropdown
 {

@@ -6,7 +6,7 @@ declare(strict_types=1);
  * the atk javascript vue service.
  */
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 class JsVueService
 {

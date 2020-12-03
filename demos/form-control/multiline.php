@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\data\Model;
-use atk4\data\Persistence;
-use atk4\ui\Form;
-use atk4\ui\Header;
-use atk4\ui\JsExpression;
-use atk4\ui\JsFunction;
+use Atk4\Data\Model;
+use Atk4\Data\Persistence;
+use Atk4\Ui\Form;
+use Atk4\Ui\Header;
+use Atk4\Ui\JsExpression;
+use Atk4\Ui\JsFunction;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
@@ -103,5 +103,5 @@ $multiline->jsAfterDelete = new JsFunction(['value'], [new JsExpression('console
 $form->onSubmit(function (Form $form) use ($multiline) {
     $rows = $multiline->saveRows()->getModel()->export();
 
-    return new \atk4\ui\JsToast($form->getApp()->encodeJson(array_values($rows)));
+    return new \Atk4\Ui\JsToast($form->getApp()->encodeJson(array_values($rows)));
 });

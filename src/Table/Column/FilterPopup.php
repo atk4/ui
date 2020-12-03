@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\data\Field;
-use atk4\ui\Form;
-use atk4\ui\Jquery;
-use atk4\ui\JsReload;
-use atk4\ui\Popup;
+use Atk4\Data\Field;
+use Atk4\Ui\Form;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsReload;
+use Atk4\Ui\Popup;
 
 /**
  * Implement a filterPopup in a table column.
@@ -34,7 +34,7 @@ class FilterPopup extends Popup
     /**
      * The view associate with this filter popup that need to be reload.
      *
-     * @var \atk4\ui\View|null
+     * @var \Atk4\Ui\View|null
      */
     public $reload;
 
@@ -75,7 +75,7 @@ class FilterPopup extends Popup
             return new jsReload($this->reload);
         });
 
-        \atk4\ui\Button::addTo($this->form, ['Clear', 'clear '])->on('click', function ($f) use ($model) {
+        \Atk4\Ui\Button::addTo($this->form, ['Clear', 'clear '])->on('click', function ($f) use ($model) {
             $model->clearData();
 
             return [
