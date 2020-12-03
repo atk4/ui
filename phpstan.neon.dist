@@ -116,8 +116,6 @@ parameters:
         - '~^Call to an undefined method atk4\\ui\\JsChain\:\:localize\(\)\.$~'
         # for src/Grid.php
         - '~^Call to an undefined method atk4\\ui\\Table\\Column\:\:addActionMenuItem\(\)\.$~'
-        # for src/JsCallback.php
-        - '~^Cannot access property \$_chain on string\.$~'
         # for src/JsVueService.php
         - '~^Call to an undefined method atk4\\ui\\JsChain\:\:createAtkVue\(\)\.$~'
         - '~^Call to an undefined method atk4\\ui\\JsChain\:\:createVue\(\)\.$~'
