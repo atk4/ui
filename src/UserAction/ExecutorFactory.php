@@ -128,7 +128,7 @@ class ExecutorFactory
         }
     }
 
-    public function create(UserAction $action, View $owner, string $requiredType = null): Object
+    public function create(UserAction $action, View $owner, string $requiredType = null): object
     {
         return $this->createExecutor($action, $owner, $requiredType);
     }
