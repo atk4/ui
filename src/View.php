@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence\Static_;
+use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 
 /**
@@ -120,7 +121,7 @@ class View extends AbstractView implements JsExpressionable
      */
     public $element;
 
-    /** @var string Seed class name */
+    /** @var ExecutorFactory Seed class name */
     public $executorFactory;
 
     // }}}
@@ -298,7 +299,7 @@ class View extends AbstractView implements JsExpressionable
         }
     }
 
-    public function getExecutorFactory(): string
+    public function getExecutorFactory(): ExecutorFactory
     {
         return $this->executorFactory ?? $this->getApp()->getExecutorFactory();
     }
@@ -1042,7 +1043,7 @@ class View extends AbstractView implements JsExpressionable
             $actions[] = $cb;
         } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof Model\UserAction) {
             // Setup UserAction executor.
-            $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()::create($action, $this) : $action;
+            $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->create($action, $this) : $action;
             if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
                 if (isset($arguments[0])) {
                     $arguments[$ex->name] = $arguments[0];

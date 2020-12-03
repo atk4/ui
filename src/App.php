@@ -7,6 +7,7 @@ namespace Atk4\Ui;
 use Atk4\Core\AppScopeTrait;
 use Atk4\Core\DiContainerTrait;
 use Atk4\Core\DynamicMethodTrait;
+use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Core\InitializerTrait;
 use Atk4\Data\Persistence;
@@ -44,8 +45,8 @@ class App
         'flatpickr' => 'https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.6',
     ];
 
-    /** @var ExecutorFactory App wide factory object for View */
-    public $defaultExecutorFactory = ExecutorFactory::class;
+    /** @var ExecutorFactory App wide executor factory object for Model user action. */
+    protected $executorFactory;
 
     /** @var string Version of Agile UI */
     public $version = '2.4-x';
@@ -216,6 +217,19 @@ class App
         if (!isset($this->ui_persistence)) {
             $this->ui_persistence = new UiPersistence();
         }
+
+        // setting up default executor factory.
+        $this->executorFactory = Factory::factory([ExecutorFactory::class]);
+    }
+
+    public function setExecutorFactory(ExecutorFactory $factory)
+    {
+        $this->executorFactory = $factory;
+    }
+
+    public function getExecutorFactory(): ExecutorFactory
+    {
+        return $this->executorFactory;
     }
 
     protected function setupTemplateDirs()
@@ -254,11 +268,6 @@ class App
         }
 
         exit;
-    }
-
-    public function getExecutorFactory(): string
-    {
-        return $this->defaultExecutorFactory;
     }
 
     /**

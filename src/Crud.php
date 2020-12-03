@@ -132,7 +132,7 @@ class Crud extends Grid
                 if ($action->enabled) {
                     $executor = $this->initActionExecutor($action);
                     $this->menuItems[$k]['item'] = $this->menu->addItem(
-                        $this->getExecutorFactory()::createActionTrigger($action, $this->getExecutorFactory()::MENU_ITEM)
+                        $this->getExecutorFactory()->createTrigger($action, $this->getExecutorFactory()::MENU_ITEM)
                     );
                     $this->menuItems[$k]['action'] = $executor;
                 }
@@ -277,7 +277,7 @@ class Crud extends Grid
             $action->fields = $this->editFields;
         }
 
-        return $this->getExecutorFactory()::create($action, $this);
+        return $this->getExecutorFactory()->create($action, $this);
     }
 
     /**

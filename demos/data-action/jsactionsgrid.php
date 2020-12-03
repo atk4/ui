@@ -7,7 +7,6 @@ namespace Atk4\Ui\Demos;
 use Atk4\Core\Factory;
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Icon;
-use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -24,7 +23,7 @@ $multiAction = $country->getUserAction('multi_step');
 $specialItem = Factory::factory([View::class], ['id' => false, 'class' => ['item'], 'content' => 'Multi Step']);
 Icon::addTo($specialItem, ['content' => 'window maximize outline']);
 // register this menu item in factory.
-ExecutorFactory::registerActionTrigger(ExecutorFactory::TABLE_MENU_ITEM, $specialItem, $multiAction);
+$app->getExecutorFactory()->registerTrigger($app->getExecutorFactory()::TABLE_MENU_ITEM, $specialItem, $multiAction);
 
 \Atk4\Ui\Header::addTo($app, ['Execute model action from Grid menu items', 'subHeader' => 'Setting grid menu items in order to execute model actions or javascript.']);
 
@@ -54,7 +53,7 @@ foreach ($country->getUserActions(UserAction::APPLIES_TO_SINGLE_RECORD) as $acti
     if (in_array($action->short_name, ['add', 'edit', 'delete'], true)) {
         continue;
     }
-    $grid->addExecutorMenuItem($executor = ExecutorFactory::create($action, $grid));
+    $grid->addExecutorMenuItem($executor = $app->getExecutorFactory()->create($action, $grid));
 }
 
 $grid->ipp = 10;

@@ -173,7 +173,7 @@ and all model user action that use this type will be execute using this custom e
 
 Type may also be registered per specific model user action via this method::
 
-    ExecutorFactory::registerActionExecutor(UserAction $action, array $seed)
+    ExecutorFactory::registerExecutor(UserAction $action, array $seed)
 
 For example, you need a custom executor to be create when using a specific model user action::
 
@@ -187,7 +187,7 @@ For example, you need a custom executor to be create when using a specific model
     }
 
     //...
-    ExecutorFactory::registerActionExecutor($action, [MySpecialFormExecutor::class]);
+    ExecutorFactory::registerExecutor($action, [MySpecialFormExecutor::class]);
 
 Then, when ExecutorFactory::create method is called for this $action, MySpecialExecutor instance will be create in order
 to run this user model action.
@@ -200,20 +200,20 @@ item that will fire the model user action execution.
 
 The method is::
 
-    ExecutorFactory::createActionTrigger(UserAction $action, string $type = null): View
+    ExecutorFactory::createTrigger(UserAction $action, string $type = null): View
 
 This method return an instance object for the proper type. When no type is supply, a default View Button obeject
 is returned.
 
-As per execucor type, it is also possible to add or change already register type via the registerActionTrigger method::
+As per execucor type, it is also possible to add or change already register type via the registerTrigger method::
 
-    ExecutorFactory::registerActionTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false)
+    ExecutorFactory::registerTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false)
 
 Again, the type can be apply globally to all action using the same name or specifically for a certain model/action.
 
 For example, changing default Table button for a specific model user action when this action is used inside a crud table::
 
-    ExecutorFactory::registerActionTrigger(
+    ExecutorFactory::registerTrigger(
         ExecutorFactory::TABLE_BUTTON,
         [Button::class, null, 'icon' => 'mail'],
         $m->getUserAction('mail')

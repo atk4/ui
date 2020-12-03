@@ -16,7 +16,7 @@ $model = new ProductLock($app->db);
 $model->addCondition('name', '=', 'Mustard');
 
 // use default.
-ExecutorFactory::useActionTriggerDefault(ExecutorFactory::TABLE_BUTTON);
+$app->getExecutorFactory()->useTriggerDefault(ExecutorFactory::TABLE_BUTTON);
 
 $edit = $model->getUserAction('edit');
 $edit->callback = function ($model) {

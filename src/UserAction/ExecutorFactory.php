@@ -1,7 +1,4 @@
 <?php
-/**
- * Executor utility.
- */
 
 declare(strict_types=1);
 
@@ -18,7 +15,7 @@ use Atk4\Ui\View;
 
 /**
  * Class ExecutorFactory
- * Contains static method for generating.
+ * Executor utility.
  */
 class ExecutorFactory
 {
@@ -34,32 +31,39 @@ class ExecutorFactory
     public const BUTTON_PRIMARY_COLOR = 'blue';
 
     /**
-     * Contains basic type of executor to use for create method.
+     * Store basic type of executor to use for create method.
      * Basic type can be changed or added globally via the registerTypeExecutor method.
-     * A specific model/action executor may be set via the registerActionExecutor method.
+     * A specific model/action executor may be set via the registerExecutor method.
      */
-    protected static $executorSeed = [
+    protected $executorSeed = [
         self::JS_EXECUTOR => [JsCallbackExecutor::class],
         self::MODAL_EXECUTOR => [ModalExecutor::class],
         self::CONFIRMATION_EXECUTOR => [ConfirmationExecutor::class],
     ];
 
     /**
-     * action caption May be set per action generally or specifically per model/action.
+     * Store caption to use for action.
+     * Can be apply globally per action name
+     * or specifically per model/action name.
+     *
+     * Can be set to a callable method in order
+     * to customize the return caption further more.
      *
      * @var array[callable]|string
      */
-    protected static $actionCaption = [
-        'add' => [__CLASS__, 'self::getAddActionCaption'],
+    protected $triggerCaption = [
+        'add' => [__CLASS__, 'getAddActionCaption'],
     ];
 
     /**
-     * Seed can be defined by View type using generic action name
-     *  or using specific model/action combination.
+     * Store seed|View|callable method
+     * to use for creating UI View Object
+     * They can be store per either view type or
+     * model/action name.
      *
-     * @var array[]|callable
+     * @var array[]|View|callable
      */
-    protected static $actionTriggerSeed = [
+    protected $triggerSeed = [
         self::MODAL_BUTTON => [
             'edit' => [Button::class, 'Save', 'blue'],
             'add' => [Button::class, 'Save', 'blue'],
@@ -69,85 +73,98 @@ class ExecutorFactory
             'delete' => [Button::class, null, 'icon' => 'red trash'],
         ],
         self::MENU_ITEM => [
-            'add' => [__CLASS__, 'self::getAddMenuItem'],
+            'add' => [__CLASS__, 'getAddMenuItem'],
         ],
     ];
 
     /**
      * Register an executor for basic type.
      */
-    public static function registerTypeExecutor(string $type, $seed)
+    public function registerTypeExecutor(string $type, $seed)
     {
-        static::$executorSeed[$type] = $seed;
+        $this->executorSeed[$type] = $seed;
     }
 
     /**
      * Register an executor for a specific model User action.
      */
-    public static function registerActionExecutor(UserAction $action, array $seed)
+    public function registerExecutor(UserAction $action, array $seed)
     {
-        static::$executorSeed[static::getModelId($action)][$action->short_name] = $seed;
+        $this->executorSeed[$this->getModelId($action)][$action->short_name] = $seed;
     }
 
     /**
-     * Register an action trigger for a specific type.
+     * Register a trigger for a specific View type.
      * Trigger can be specify per action or per model/action.
      *
      * @param string|View $seed
      */
-    public static function registerActionTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false)
+    public function registerTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false)
     {
         if ($isSpecific) {
-            static::$actionTriggerSeed[$type][static::getModelId($action)][$action->short_name] = $seed;
+            $this->triggerSeed[$type][$this->getModelId($action)][$action->short_name] = $seed;
         } else {
-            static::$actionTriggerSeed[$type][$action->short_name] = $seed;
+            $this->triggerSeed[$type][$action->short_name] = $seed;
         }
     }
 
     /**
      * Set an action trigger type to use it's default seed.
      */
-    public static function useActionTriggerDefault(string $type)
+    public function useTriggerDefault(string $type)
     {
-        static::$actionTriggerSeed[$type] = [];
+        $this->triggerSeed[$type] = [];
     }
 
     /**
-     * Register a caption for a model user action.
-     * Can be apply globally, i.e. to all action using the same name
-     * of specifically, i.e. only for the action name in specific model.
+     * Register a trigger caption.
      */
-    public static function registerActionCaption(UserAction $action, string $caption, bool $isSpecific = false)
+    public function registerCaption(UserAction $action, string $caption, bool $isSpecific = false)
     {
         if ($isSpecific) {
-            static::$actionCaption[static::getModelId($action)][$action->short_name] = $caption;
+            $this->triggerCaption[$this->getModelId($action)][$action->short_name] = $caption;
         } else {
-            static::$actionCaption[$action->short_name] = $caption;
+            $this->triggerCaption[$action->short_name] = $caption;
         }
+    }
+
+    public function create(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
+    {
+        return $this->createExecutor($action, $owner, $requiredType);
+    }
+
+    public function createTrigger(UserAction $action, string $type = null): object
+    {
+        return $this->createActionTrigger($action, $type);
+    }
+
+    public function getCaption(UserAction $action): string
+    {
+        return $this->getActionCaption($action);
     }
 
     /**
      * Create proper executor based on action properties.
      */
-    public static function create(UserAction $action, View $owner, string $requiredType = null)
+    protected function createExecutor(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
     {
         // required a specific executor type.
         if ($requiredType) {
-            if (!(static::$executorSeed[$requiredType] ?? null)) {
+            if (!($this->executorSeed[$requiredType] ?? null)) {
                 throw (new Exception('Required executor type is not set. Register it via the registerTypeExecutor method.'))
                     ->addMoreInfo('type', $requiredType);
             }
-            $seed = static::$executorSeed[$requiredType];
+            $seed = $this->executorSeed[$requiredType];
         // check if executor is register for this model/action.
-        } elseif ($seed = static::$executorSeed[static::getModelId($action)][$action->short_name] ?? null) {
+        } elseif ($seed = $this->executorSeed[$this->getModelId($action)][$action->short_name] ?? null) {
         } else {
             // if no type is register, determine executor to use base on action properties.
             if (is_callable($action->confirmation)) {
-                $seed = static::$executorSeed[static::CONFIRMATION_EXECUTOR];
+                $seed = $this->executorSeed[self::CONFIRMATION_EXECUTOR];
             } else {
                 $seed = (!$action->args && !$action->fields && !$action->preview)
-                        ? static::$executorSeed[static::JS_EXECUTOR]
-                        : static::$executorSeed[static::MODAL_EXECUTOR];
+                        ? $this->executorSeed[self::JS_EXECUTOR]
+                        : $this->executorSeed[self::MODAL_EXECUTOR];
             }
         }
 
@@ -172,10 +189,10 @@ class ExecutorFactory
     /**
      * Create executor View for firing model user action.
      */
-    public static function createActionTrigger(UserAction $action, string $type = null): View
+    protected function createActionTrigger(UserAction $action, string $type = null): View
     {
-        $viewType = array_merge(['default' => [__CLASS__, 'self::getDefaultTrigger']], static::$actionTriggerSeed[$type] ?? []);
-        if ($seed = $viewType[static::getModelId($action)][$action->short_name] ?? null) {
+        $viewType = array_merge(['default' => [__CLASS__, 'self::getDefaultTrigger']], $this->triggerSeed[$type] ?? []);
+        if ($seed = $viewType[$this->getModelId($action)][$action->short_name] ?? null) {
         } elseif ($seed = $viewType[$action->short_name] ?? null) {
         } else {
             $seed = $viewType['default'];
@@ -189,28 +206,28 @@ class ExecutorFactory
     /**
      * Return executor default trigger seed based on type.
      */
-    protected static function getDefaultTrigger(UserAction $action, string $type = null): array
+    protected function getDefaultTrigger(UserAction $action, string $type = null): array
     {
         switch ($type) {
             case self::CARD_BUTTON:
             case self::TABLE_BUTTON:
             case self::MODAL_BUTTON:
-                $seed = [Button::class, static::getActionCaption($action)];
-                if ($type === static::MODAL_BUTTON || $type === static::CARD_BUTTON) {
+                $seed = [Button::class, $this->getActionCaption($action)];
+                if ($type === self::MODAL_BUTTON || $type === self::CARD_BUTTON) {
                     $seed[] = static::BUTTON_PRIMARY_COLOR;
                 }
 
                 break;
             case self::MENU_ITEM:
-                $seed = [Item::class, static::getActionCaption($action), ['class' => 'item']];
+                $seed = [Item::class, $this->getActionCaption($action), ['class' => 'item']];
 
                 break;
             case self::TABLE_MENU_ITEM:
-                $seed = [Item::class, static::getActionCaption($action), 'id' => false, ['class' => 'item']];
+                $seed = [Item::class, $this->getActionCaption($action), 'id' => false, ['class' => 'item']];
 
                 break;
             default:
-                $seed = [Button::class, static::getActionCaption($action)];
+                $seed = [Button::class, $this->getActionCaption($action)];
         }
 
         return $seed;
@@ -219,10 +236,10 @@ class ExecutorFactory
     /**
      * Return action caption set in actionLabel or default.
      */
-    public static function getActionCaption(UserAction $action): string
+    protected function getActionCaption(UserAction $action): string
     {
-        if ($caption = static::$actionCaption[static::getModelId($action)][$action->short_name] ?? null) {
-        } elseif ($caption = static::$actionCaption[$action->short_name] ?? null) {
+        if ($caption = $this->triggerCaption[$this->getModelId($action)][$action->short_name] ?? null) {
+        } elseif ($caption = $this->triggerCaption[$action->short_name] ?? null) {
         } else {
             $caption = $action->getCaption();
         }
@@ -230,20 +247,24 @@ class ExecutorFactory
         return is_array($caption) && is_callable($caption) ? call_user_func($caption, $action) : $caption;
     }
 
-    protected static function getAddMenuItem($action, $type)
+    /**
+     * Return Add action seed for menu item.
+     */
+    protected function getAddMenuItem(UserAction $action): array
     {
-        return [Item::class, static::getAddActionCaption($action), 'icon' => 'plus'];
+        return [Item::class, $this->getAddActionCaption($action), 'icon' => 'plus'];
     }
 
     /**
      * Return label for add model UserAction.
      */
-    protected static function getAddActionCaption(UserAction $action): string
+    protected function getAddActionCaption(UserAction $action): string
     {
         return 'Add ' . $action->getModel()->caption ?? '';
     }
 
-    protected static function getModelId(UserAction $action)
+    // Generate id for a model user action.
+    protected function getModelId(UserAction $action): string
     {
         return strtolower(str_replace(' ', '_', $action->getModel()->getModelCaption()));
     }

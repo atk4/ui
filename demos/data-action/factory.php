@@ -12,23 +12,25 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
+Button::addTo($app, ['Executor Factory in View Instance', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+    ->link(['factory-view']);
+View::addTo($app, ['ui' => 'ui clearing divider']);
+
 $msg = \Atk4\Ui\Message::addTo($app, [
-    'Overriding Executor Factory',
+    'Customizing action trigger by Overriding Executor Factory',
 ]);
-$msg->text->addParagraph('You may easily 
-change the look of model user action trigger element by overriding the
-Executor factory class.
-');
-$msg->text->addParagraph('Override Executor class may be applied globally to the application or per View instance.');
+$msg->text->addParagraph('');
+
+$msg->text->addHtml('Override Executor class may be applied globally, via the App instance like below, or per <a href="factory-view.php">View instance</a>.');
+
+$msg->text->addParagraph('In this example, Crud and Card button was changed and set through the App instance.');
 
 // Overriding basic ExecutorFactory in order to change Table and Modal button.
 // and also changing default add action label.
 $myFactory = get_class(new class() extends ExecutorFactory {
-    protected static $actionTriggerSeed = [
-        self::MODAL_BUTTON => [
-            'edit' => [Button::class, 'Save', 'green'],
-            'add' => [Button::class, 'Save', 'green'],
-        ],
+    public const BUTTON_PRIMARY_COLOR = 'green';
+
+    protected $triggerSeed = [
         self::TABLE_BUTTON => [
             'edit' => [Button::class, null, 'icon' => 'pencil'],
             'delete' => [Button::class, null, 'icon' => 'times red'],
@@ -39,13 +41,13 @@ $myFactory = get_class(new class() extends ExecutorFactory {
         ],
     ];
 
-    protected static $actionCaption = [
+    protected $triggerCaption = [
         'add' => 'Add New Record',
     ];
 });
 
 // Set new executor factory globally.
-$app->defaultExecutorFactory = $myFactory;
+$app->setExecutorFactory(new $myFactory());
 
 $model = new CountryLock($app->db);
 

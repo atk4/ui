@@ -393,7 +393,7 @@ class Grid extends View
      */
     public function addExecutorButton(UserAction\ExecutorInterface $executor, Button $button = null)
     {
-        $btn = $button ? $this->add($button) : $this->getExecutorFactory()::createActionTrigger($executor->getAction(), $this->getExecutorFactory()::TABLE_BUTTON);
+        $btn = $button ? $this->add($button) : $this->getExecutorFactory()->createTrigger($executor->getAction(), $this->getExecutorFactory()::TABLE_BUTTON);
         $confirmation = $executor->getAction()->getConfirmation() ?: '';
         $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
 
@@ -424,7 +424,7 @@ class Grid extends View
 
     public function addExecutorMenuItem(ExecutorInterface $executor)
     {
-        $item = $this->getExecutorFactory()::createActionTrigger($executor->getAction(), $this->getExecutorFactory()::TABLE_MENU_ITEM);
+        $item = $this->getExecutorFactory()->createTrigger($executor->getAction(), $this->getExecutorFactory()::TABLE_MENU_ITEM);
         // ConfirmationExecutor take care of showing the user confirmation, thus make it empty.
         $confirmation = !$executor instanceof ConfirmationExecutor ? ($executor->getAction()->getConfirmation() ?: '') : '';
         $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;

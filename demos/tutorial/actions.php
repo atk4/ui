@@ -199,7 +199,7 @@ $wizard->addStep('Crud integration', function ($page) {
         ]);
 
         // Register a trigger for mail action in Crud
-        ExecutorFactory::registerActionTrigger(
+        $owner->getExecutorFactory()->registerTrigger(
             ExecutorFactory::TABLE_BUTTON,
             [Button::class, null, 'icon' => 'blue mail'],
             $country->getUserAction('mail')

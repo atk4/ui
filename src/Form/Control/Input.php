@@ -159,9 +159,9 @@ class Input extends Form\Control
         }
         if ($button instanceof UserAction || $button instanceof JsCallbackExecutor) {
             $executor = ($button instanceof UserAction)
-                ? $this->getExecutorFactory()::create($button, $this, $this->getExecutorFactory()::JS_EXECUTOR)
+                ? $this->getExecutorFactory()->create($button, $this, $this->getExecutorFactory()::JS_EXECUTOR)
                 : $button;
-            $button = $this->add($this->getExecutorFactory()::createActionTrigger($executor->getAction()), $spot);
+            $button = $this->add($this->getExecutorFactory()->createTrigger($executor->getAction()), $spot);
             $this->addClass('action');
             if ($executor->getAction()->args) {
                 $val_as_arg = array_keys($executor->getAction()->args)[0];

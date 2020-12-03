@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-use Atk4\Ui\UserAction\ExecutorFactory;
-
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -93,7 +91,7 @@ $myExecutorClass = get_class(new class() extends \Atk4\Ui\UserAction\ModalExecut
 });
 
 $file = new FileLock($app->db);
-ExecutorFactory::registerActionExecutor($file->getUserAction('edit'), [$myExecutorClass]);
+$app->getExecutorFactory()->registerExecutor($file->getUserAction('edit'), [$myExecutorClass]);
 
 $crud = \Atk4\Ui\Crud::addTo($column, [
     'ipp' => 5,
