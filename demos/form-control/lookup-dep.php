@@ -91,13 +91,13 @@ $lookup1 = $form->addControl('sub_category', [
     'dependency' => function ($model, $data) {
         $model->addCondition('product_category_id', 2);
     },
-	'hint' => 'Adding dependency at initialization is working.',
+    'hint' => 'Adding dependency at initialization is working.',
 ]);
 
 $lookup2 = $form->addControl('sub_category2', [
     Form\Control\Lookup::class,
     'model' => new SubCategory($app->db),
-	'hint' => 'Aftertough addCondition shows no effects.',
+    'hint' => 'Aftertough addCondition shows no effects.',
 ]);
 $lookup2->model->addCondition('product_category_id', 2);
 
