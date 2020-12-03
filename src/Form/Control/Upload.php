@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Exception;
+use Atk4\Ui\View;
 
 /**
  * Class Upload.

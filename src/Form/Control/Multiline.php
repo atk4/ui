@@ -79,6 +79,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
+use Atk4\Ui\JsFunction;
 
 class Multiline extends Form\Control
 {
