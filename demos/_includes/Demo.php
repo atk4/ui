@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui\demo;
+namespace Atk4\Ui\Demos;
 
 class Demo extends \Atk4\Ui\Columns
 {

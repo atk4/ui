@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui\demo;
+namespace Atk4\Ui\Demos;
 
 /**
  * This view is designed to verify various things about it's positioning, e.g.

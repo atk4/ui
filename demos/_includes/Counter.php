@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui\demo;
+namespace Atk4\Ui\Demos;
 
 /**
  * Counter for certain demos file.

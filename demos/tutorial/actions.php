@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui\demo;
+namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\View;
 
@@ -35,7 +35,7 @@ $wizard->addStep('Define User Action', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\demo\CountryLock($owner->getApp()->db);
+        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
 
         $country->addUserAction('send_message');
     });
@@ -58,7 +58,7 @@ $wizard->addStep('Define User Action', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\demo\CountryLock($owner->getApp()->db);
+        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
 
         $country->addUserAction('send_message', function () {
             return 'sent';
@@ -82,7 +82,7 @@ $wizard->addStep('UI Integration', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\demo\CountryLock($owner->getApp()->db);
+        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
         $country->loadAny();
 
         \Atk4\Ui\Button::addTo($owner, ['Edit some country'])
@@ -98,7 +98,7 @@ $wizard->addStep('UI Integration', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\demo\CountryLock($owner->getApp()->db);
+        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
         $country->loadAny();
 
         $menu = \Atk4\Ui\Menu::addTo($owner);
@@ -187,7 +187,7 @@ $wizard->addStep('Crud integration', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\demo\CountryLock($owner->getApp()->db);
+        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
         $country->getUserAction('delete')->enabled = function () { return random_int(1, 2) > 1; };
         $country->addUserAction('mail', [

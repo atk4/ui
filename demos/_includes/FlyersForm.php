@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui\demo;
+namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 
@@ -35,7 +35,7 @@ class FlyersForm extends Form
 
         $this->addControl('country', [
             Form\Control\Lookup::class,
-            'model' => new \Atk4\Ui\demo\Country($this->getApp()->db),
+            'model' => new \Atk4\Ui\Demos\Country($this->getApp()->db),
             'dependency' => function ($model, $data) {
                 isset($data['contains']) ? $model->addCondition('name', 'like', '%' . $data['contains'] . '%') : null;
             },

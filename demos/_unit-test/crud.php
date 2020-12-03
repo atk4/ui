@@ -7,7 +7,7 @@ declare(strict_types=1);
  * see crud.feature.
  */
 
-namespace Atk4\Ui\demo;
+namespace Atk4\Ui\Demos;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';

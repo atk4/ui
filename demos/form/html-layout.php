@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui\demo;
+namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\GridLayout;
@@ -53,7 +53,7 @@ $form->getControl('last_name')->hint = 'Please enter your last name.';
 $tab = $tabs->addTab('Custom layout class');
 
 $form = Form::addTo($tab, ['layout' => [Form\Layout\Custom::class, 'defaultTemplate' => __DIR__ . '/templates/form-custom-layout.html']]);
-$form->setModel(new \Atk4\Ui\demo\CountryLock($app->db))->loadAny();
+$form->setModel(new \Atk4\Ui\Demos\CountryLock($app->db))->loadAny();
 
 $form->onSubmit(function ($form) {
     return new \Atk4\Ui\JsToast('Saving is disabled');

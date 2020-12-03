@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Test for callback in callback.
  */
 
-namespace Atk4\Ui\demo;
+namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Crud;

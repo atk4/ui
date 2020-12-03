@@ -90,7 +90,7 @@ parameters:
         # for demos/collection/table2.php
         - '~^Call to method getId\(\) on an unknown class Atk4\\Ui\\Model\.$~'
         # for demos/collection/tablefilter.php
-        - '~^Call to an undefined method Atk4\\Ui\\demo\\CountryLock\:\:expr\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Demos\\CountryLock\:\:expr\(\)\.$~'
         # for demos/data-action/jsactions.php
         - '~^Call to an undefined method Atk4\\Ui\\View\:\:addFields\(\)\.$~'
         # for demos/form-control/calendar.php

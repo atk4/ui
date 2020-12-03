@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Test for triggerOnReload = false for Callback.
  */
 
-namespace Atk4\Ui\demo;
+namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
