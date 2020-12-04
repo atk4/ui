@@ -320,8 +320,6 @@ class Card extends View
      */
     public function addExtraFields(Model $model, array $fields, string $glue = null)
     {
-        $this->setModel($model, false);
-
         // display extra field in line.
         if ($glue) {
             $extra = '';
