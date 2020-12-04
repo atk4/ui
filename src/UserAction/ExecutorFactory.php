@@ -55,7 +55,7 @@ class ExecutorFactory
         self::MODAL_BUTTON => [
             'add' => 'Save',
             'edit' => 'Save',
-        ]
+        ],
     ];
 
     /**
