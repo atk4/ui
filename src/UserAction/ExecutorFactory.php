@@ -52,7 +52,10 @@ class ExecutorFactory
      * @var array[callable]|string
      */
     protected $triggerCaption = [
-        'add' => [__CLASS__, 'getAddActionCaption'],
+        self::MODAL_BUTTON => [
+            'add' => 'Save',
+            'edit' => 'Save',
+        ]
     ];
 
     /**
@@ -64,10 +67,6 @@ class ExecutorFactory
      * @var array[]|View|callable
      */
     protected $triggerSeed = [
-        self::MODAL_BUTTON => [
-            'edit' => [Button::class, 'Save', 'blue'],
-            'add' => [Button::class, 'Save', 'blue'],
-        ],
         self::TABLE_BUTTON => [
             'edit' => [Button::class, null, 'icon' => 'edit'],
             'delete' => [Button::class, null, 'icon' => 'red trash'],
@@ -119,10 +118,12 @@ class ExecutorFactory
     /**
      * Register a trigger caption.
      */
-    public function registerCaption(UserAction $action, string $caption, bool $isSpecific = false)
+    public function registerCaption(UserAction $action, string $caption, bool $isSpecific = false, string $type = null)
     {
         if ($isSpecific) {
             $this->triggerCaption[$this->getModelId($action)][$action->short_name] = $caption;
+        } elseif ($type) {
+            $this->triggerCaption[$type][$action->short_name] = $caption;
         } else {
             $this->triggerCaption[$action->short_name] = $caption;
         }
@@ -138,9 +139,9 @@ class ExecutorFactory
         return $this->createActionTrigger($action, $type);
     }
 
-    public function getCaption(UserAction $action): string
+    public function getCaption(UserAction $action, string $type = null): string
     {
-        return $this->getActionCaption($action);
+        return $this->getActionCaption($action, $type);
     }
 
     /**
@@ -191,7 +192,7 @@ class ExecutorFactory
      */
     protected function createActionTrigger(UserAction $action, string $type = null): View
     {
-        $viewType = array_merge(['default' => [__CLASS__, 'self::getDefaultTrigger']], $this->triggerSeed[$type] ?? []);
+        $viewType = array_merge(['default' => [$this, 'getDefaultTrigger']], $this->triggerSeed[$type] ?? []);
         if ($seed = $viewType[$this->getModelId($action)][$action->short_name] ?? null) {
         } elseif ($seed = $viewType[$action->short_name] ?? null) {
         } else {
@@ -212,22 +213,22 @@ class ExecutorFactory
             case self::CARD_BUTTON:
             case self::TABLE_BUTTON:
             case self::MODAL_BUTTON:
-                $seed = [Button::class, $this->getActionCaption($action)];
+                $seed = [Button::class, $this->getActionCaption($action, $type)];
                 if ($type === self::MODAL_BUTTON || $type === self::CARD_BUTTON) {
                     $seed[] = static::BUTTON_PRIMARY_COLOR;
                 }
 
                 break;
             case self::MENU_ITEM:
-                $seed = [Item::class, $this->getActionCaption($action), ['class' => 'item']];
+                $seed = [Item::class, $this->getActionCaption($action, $type), ['class' => 'item']];
 
                 break;
             case self::TABLE_MENU_ITEM:
-                $seed = [Item::class, $this->getActionCaption($action), 'id' => false, ['class' => 'item']];
+                $seed = [Item::class, $this->getActionCaption($action, $type), 'id' => false, ['class' => 'item']];
 
                 break;
             default:
-                $seed = [Button::class, $this->getActionCaption($action)];
+                $seed = [Button::class, $this->getActionCaption($action, $type)];
         }
 
         return $seed;
@@ -236,9 +237,10 @@ class ExecutorFactory
     /**
      * Return action caption set in actionLabel or default.
      */
-    protected function getActionCaption(UserAction $action): string
+    protected function getActionCaption(UserAction $action, string $type = null): string
     {
-        if ($caption = $this->triggerCaption[$this->getModelId($action)][$action->short_name] ?? null) {
+        if ($caption = $this->triggerCaption[$type][$action->short_name] ?? null) {
+        } elseif ($caption = $this->triggerCaption[$this->getModelId($action)][$action->short_name] ?? null) {
         } elseif ($caption = $this->triggerCaption[$action->short_name] ?? null) {
         } else {
             $caption = $action->getCaption();
