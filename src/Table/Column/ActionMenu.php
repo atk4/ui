@@ -82,7 +82,7 @@ class ActionMenu extends Table\Column
      *
      * @return object|string
      */
-    public function addActionMenuItem($item, $action = null, string $confirmMsg = '', bool $isDisabled = false)
+    public function addActionMenuItem($item, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
         $name = $this->name . '_action_' . (count($this->items) + 1);
 
