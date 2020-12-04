@@ -39,14 +39,14 @@ class TestModel extends Model
 class ExecutorFactoryTest extends AtkPhpunit\TestCase
 {
     /** @var Model */
-    public $m;
+    public $model;
     /** @var App */
     public $app;
 
     protected function setUp(): void
     {
         $p = new Array_();
-        $this->m = new TestModel($p);
+        $this->model = new TestModel($p);
         $this->app = $this->getApp();
         $this->app->initLayout([\Atk4\Ui\Layout\Admin::class]);
     }
@@ -64,17 +64,15 @@ class ExecutorFactoryTest extends AtkPhpunit\TestCase
         $view = View::addTo($this->app);
 
         $factory = $this->app->getExecutorFactory();
-        $modalExecutor = $factory->create($this->m->getUserAction('edit'), $view);
-        $jsCallbackExecutor = $factory->create($this->m->getUserAction('delete'), $view);
-        $confirmationExecutor = $factory->create($this->m->getUserAction('confirm'), $view);
+        $modalExecutor = $factory->create($this->model->getUserAction('edit'), $view);
+        $jsCallbackExecutor = $factory->create($this->model->getUserAction('delete'), $view);
+        $confirmationExecutor = $factory->create($this->model->getUserAction('confirm'), $view);
 
-        // register an executor for a specific type.
         $factory->registerTypeExecutor('MY_TYPE', [BasicExecutor::class]);
-        $myRequiredExecutor = $factory->create($this->m->getUserAction('confirm'), $view, 'MY_TYPE');
+        $myRequiredExecutor = $factory->create($this->model->getUserAction('confirm'), $view, 'MY_TYPE');
 
-        // register executor for a specific action
-        $factory->registerExecutor($this->m->getUserAction('basic'), [BasicExecutor::class]);
-        $myBasicExecutor = $factory->create($this->m->getUserAction('basic'), $view);
+        $factory->registerExecutor($this->model->getUserAction('basic'), [BasicExecutor::class]);
+        $myBasicExecutor = $factory->create($this->model->getUserAction('basic'), $view);
 
         $this->assertInstanceOf(ModalExecutor::class, $modalExecutor, 'Not ModalExecutor Type');
         $this->assertInstanceOf(JsCallbackExecutor::class, $jsCallbackExecutor, 'Not JsCallbackExecutor Type');
@@ -86,8 +84,8 @@ class ExecutorFactoryTest extends AtkPhpunit\TestCase
     public function testExecutorTrigger()
     {
         $factory = $this->app->getExecutorFactory();
-        $editAction = $this->m->getUserAction('edit');
-        $addAction = $this->m->getUserAction('add');
+        $editAction = $this->model->getUserAction('edit');
+        $addAction = $this->model->getUserAction('add');
 
         $modalButton = $factory->createTrigger($editAction, $factory::MODAL_BUTTON);
         $cardButton = $factory->createTrigger($editAction, $factory::CARD_BUTTON);
