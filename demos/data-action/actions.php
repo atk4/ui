@@ -83,7 +83,7 @@ $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x) {
 View::addTo($rightColumn, ['ui' => 'hidden divider']);
 
 Header::addTo($rightColumn, ['PreviewExecutor']);
-$executor = UserAction\PreviewExecutor::addTo($rightColumn);
+$executor = UserAction\PreviewExecutor::addTo($rightColumn, ['executorButton' => [Button::class, 'Confirm', 'primary']]);
 $executor->setAction($action);
 $executor->ui = 'segment';
 $executor->previewType = 'console';

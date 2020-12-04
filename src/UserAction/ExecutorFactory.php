@@ -21,13 +21,14 @@ class ExecutorFactory
     public const JS_EXECUTOR = self::class . '@jsExecutorSeed';
     public const MODAL_EXECUTOR = self::class . '@modalExecutorSeed';
     public const CONFIRMATION_EXECUTOR = self::class . '@confirmationExecutorClass';
+    public const BASIC_BUTTON = self::class . '@basicButton';
     public const MODAL_BUTTON = self::class . '@modalExecutorButton';
     public const TABLE_BUTTON = self::class . '@tableButton';
     public const CARD_BUTTON = self::class . '@cardButton';
     public const MENU_ITEM = self::class . '@menuItem';
     public const TABLE_MENU_ITEM = self::class . '@tableMenuItem';
 
-    public const BUTTON_PRIMARY_COLOR = 'blue';
+    public const BUTTON_PRIMARY_COLOR = 'primary';
 
     /**
      * Store basic type of executor to use for create method.
