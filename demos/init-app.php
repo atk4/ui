@@ -62,7 +62,7 @@ if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {
     $path = $demosUrl . 'layout/';
     $menu = $layout->addMenuGroup(['Layout', 'icon' => 'object group']);
     $layout->addMenuItem(['Layouts'], [$path . 'layouts'], $menu);
-    $layout->addMenuItem(['Panel'], [$path . 'layout-panel'], $menu);
+    $layout->addMenuItem(['Sliding Panel'], [$path . 'layout-panel'], $menu);
 
     $path = $demosUrl . 'basic/';
     $menu = $layout->addMenuGroup(['Basics', 'icon' => 'cubes']);
@@ -111,9 +111,9 @@ if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {
     $layout->addMenuItem('Grid - Table+Bar+Search+Paginator', [$path . 'grid'], $menu);
     $layout->addMenuItem('Crud - Full editing solution', [$path . 'crud'], $menu);
     $layout->addMenuItem(['Crud with Array Persistence'], [$path . 'crud3'], $menu);
+    $layout->addMenuItem('Card Deck', [$path . 'card-deck'], $menu);
     $layout->addMenuItem(['Lister'], [$path . 'lister-ipp'], $menu);
     $layout->addMenuItem(['Table column decorator from model'], [$path . 'tablecolumns'], $menu);
-    $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $menu);
 
     $path = $demosUrl . 'data-action/';
     $menu = $layout->addMenuGroup(['Data Action Executor', 'icon' => 'wrench']);
@@ -139,6 +139,7 @@ if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['Pop-up'], [$path . 'popup'], $menu);
     $layout->addMenuItem(['Toast'], [$path . 'toast'], $menu);
     $layout->addMenuItem('Paginator', [$path . 'paginator'], $menu);
+    $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $menu);
 
     $path = $demosUrl . 'javascript/';
     $menu = $layout->addMenuGroup(['Javascript', 'icon' => 'code']);
