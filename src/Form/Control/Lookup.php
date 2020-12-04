@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Core\Factory;
+use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
+use Atk4\Ui\App;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsFunction;
 
 class Lookup extends Input
 {
+    use HookTrait;
+
     public $defaultTemplate = 'form/control/lookup.html';
     public $ui = 'input';
 
@@ -151,7 +155,10 @@ class Lookup extends Input
         $this->settings['forceSelection'] = false;
 
         $this->callback = \Atk4\Ui\Callback::addTo($this);
-        $this->callback->set([$this, 'outputApiResponse']);
+
+        $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () {
+            $this->callback->set([$this, 'outputApiResponse']);
+        });
     }
 
     /**
