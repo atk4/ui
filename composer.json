@@ -51,7 +51,7 @@
       "homepage": "https://xsystems.io/"
     }
   ],
-  "version": "2.3.1",
+  "version": "2.3.2",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {
@@ -60,8 +60,8 @@
   "require": {
     "php": ">=7.3.0",
     "ext-json": "*",
-    "atk4/core": "~2.3.0",
-    "atk4/data": "~2.3.0"
+    "atk4/core": "~2.3.2",
+    "atk4/data": "~2.3.2"
   },
   "require-dev": {
     "behat/behat": "^3.4",
@@ -77,7 +77,8 @@
   },
   "autoload": {
     "psr-4": {
-      "atk4\\ui\\": "src/"
+      "atk4\\ui\\": "src/",
+      "Atk4\\Ui\\": "src/"
     }
   },
   "autoload-dev": {
