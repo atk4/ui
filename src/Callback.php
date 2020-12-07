@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Add this object to your render tree and it will expose a unique URL which, when
@@ -56,7 +56,7 @@ class Callback extends AbstractView
      * @param \Closure $fx
      * @param array    $args
      *
-     * @return mixed|null
+     * @return mixed
      */
     public function set($fx = null, $args = null)
     {

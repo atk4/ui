@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\core\DiContainerTrait;
+use Atk4\Core\DiContainerTrait;
 
 /**
  * Class JsToast

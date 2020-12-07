@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\data\Persistence;
-use atk4\ui\App;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Data\Persistence;
+use Atk4\Ui\App;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
@@ -55,12 +55,14 @@ class DemosTest extends AtkPhpunit\TestCase
             $initVars = array_diff_key(get_defined_vars(), $initVars + ['initVars' => true]);
 
             if (array_keys($initVars) !== ['app']) {
-                throw new \atk4\ui\Exception('Demos init must setup only $app variable');
+                throw new \Atk4\Ui\Exception('Demos init must setup only $app variable');
             }
 
+            // @phpstan-ignore-next-line remove once https://github.com/phpstan/phpstan/issues/4155 is resolved
             self::$_db = $app->db;
 
             // prevent $app to run on shutdown
+            // @phpstan-ignore-next-line remove once https://github.com/phpstan/phpstan/issues/4155 is resolved
             $app->run_called = true;
         }
     }
@@ -123,7 +125,7 @@ class DemosTest extends AtkPhpunit\TestCase
                 throw new DemosTestExitException();
             }
         };
-        $app->initLayout([\atk4\ui\Layout\Maestro::class]);
+        $app->initLayout([\Atk4\Ui\Layout\Maestro::class]);
 
         // clone DB (mainly because all Models remains attached now, TODO can be removed once they are GCed)
         $app->db = clone self::$_db;
@@ -453,6 +455,6 @@ class DemosTest extends AtkPhpunit\TestCase
     }
 }
 
-class DemosTestExitException extends \atk4\ui\Exception
+class DemosTestExitException extends \Atk4\Ui\Exception
 {
 }

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-class Exception extends \atk4\core\Exception
+class Exception extends \Atk4\Core\Exception
 {
 }

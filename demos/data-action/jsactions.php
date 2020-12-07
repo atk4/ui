@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Form\Control\Line;
-use atk4\ui\UserAction;
-use atk4\ui\UserAction\JsCallbackExecutor;
+use Atk4\Ui\Form\Control\Line;
+use Atk4\Ui\UserAction;
+use Atk4\Ui\UserAction\JsCallbackExecutor;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Header::addTo($app, [
+\Atk4\Ui\Header::addTo($app, [
     'Extensions to ATK Data Actions',
     'subHeader' => 'Model action can be trigger in various ways.',
 ]);
@@ -28,9 +28,9 @@ $sendEmailAction = $country->addUserAction('Email', [
 
 ///////////////////////////////////////////
 
-\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-\atk4\ui\Header::addTo($app, [
+\Atk4\Ui\Header::addTo($app, [
     'Using Input button',
     'size' => 4,
     'subHeader' => 'Action can be triggered via a button attached to an input. The data action argument value is set to the input value.',
@@ -55,20 +55,20 @@ Line::addTo($app, ['action' => $country->getUserAction('greet')]);
 
 ///////////////////////////////////////////
 
-\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-\atk4\ui\Header::addTo($app, [
+\Atk4\Ui\Header::addTo($app, [
     'Using buttons in a Card component',
     'size' => 4,
     'subHeader' => 'Easily trigger a data action using a Card component.',
 ]);
 
 // Card component.
-$card = \atk4\ui\Card::addTo($app);
-$content = new \atk4\ui\View(['class' => ['content']]);
-$content->add($img = new \atk4\ui\Image(['../images/kristy.png']));
+$card = \Atk4\Ui\Card::addTo($app);
+$content = new \Atk4\Ui\View(['class' => ['content']]);
+$content->add($img = new \Atk4\Ui\Image(['../images/kristy.png']));
 $img->addClass('right floated mini ui image');
-$content->add(new \atk4\ui\Header(['Kristy']));
+$content->add(new \Atk4\Ui\Header(['Kristy']));
 
 $card->addContent($content);
 $card->addDescription('Kristy is a friend of Mully.');

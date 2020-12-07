@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\core\Factory;
+use Atk4\Core\Factory;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // Demo for Model action in Grid
@@ -15,23 +15,23 @@ $country = new CountryLock($app->db);
 // Model actions for this file are setup in DemoActionUtil.
 DemoActionsUtil::setupDemoActions($country);
 
-\atk4\ui\Header::addTo($app, ['Execute model action from Grid menu items', 'subHeader' => 'Setting grid menu items in order to execute model actions or javascript.']);
+\Atk4\Ui\Header::addTo($app, ['Execute model action from Grid menu items', 'subHeader' => 'Setting grid menu items in order to execute model actions or javascript.']);
 
-$grid = \atk4\ui\Grid::addTo($app, ['menu' => false]);
+$grid = \Atk4\Ui\Grid::addTo($app, ['menu' => false]);
 $grid->setModel($country);
 
-$divider = Factory::factory([\atk4\ui\View::class], ['id' => false, 'class' => ['divider'], 'content' => '']);
+$divider = Factory::factory([\Atk4\Ui\View::class], ['id' => false, 'class' => ['divider'], 'content' => '']);
 
-$modelHeader = Factory::factory([\atk4\ui\View::class], ['id' => false, 'class' => ['header'], 'content' => 'Model Actions']);
-\atk4\ui\Icon::addTo($modelHeader, ['content' => 'database']);
+$modelHeader = Factory::factory([\Atk4\Ui\View::class], ['id' => false, 'class' => ['header'], 'content' => 'Model Actions']);
+\Atk4\Ui\Icon::addTo($modelHeader, ['content' => 'database']);
 
-$jsHeader = Factory::factory([\atk4\ui\View::class], ['id' => false, 'class' => ['header'], 'content' => 'Js Actions']);
-\atk4\ui\Icon::addTo($jsHeader, ['content' => 'file code']);
+$jsHeader = Factory::factory([\Atk4\Ui\View::class], ['id' => false, 'class' => ['header'], 'content' => 'Js Actions']);
+\Atk4\Ui\Icon::addTo($jsHeader, ['content' => 'file code']);
 
 $grid->addActionMenuItem($jsHeader);
 // Beside model user action, grid menu items can also execute javascript.
 $grid->addActionMenuItem('Js Callback', function () {
-    return (new \atk4\ui\View())->set('Js Callback done!');
+    return (new \Atk4\Ui\View())->set('Js Callback done!');
 }, 'Are you sure?');
 
 $grid->addActionMenuItem($divider);
@@ -52,7 +52,7 @@ $grid->addActionMenuItems(
     ]
 );
 
-$specialItem = Factory::factory([\atk4\ui\View::class], ['id' => false, 'class' => ['item'], 'content' => 'Multi Step']);
-\atk4\ui\Icon::addTo($specialItem, ['content' => 'window maximize outline']);
+$specialItem = Factory::factory([\Atk4\Ui\View::class], ['id' => false, 'class' => ['item'], 'content' => 'Multi Step']);
+\Atk4\Ui\Icon::addTo($specialItem, ['content' => 'window maximize outline']);
 
 $grid->ipp = 10;

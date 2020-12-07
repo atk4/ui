@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\core\HookTrait;
+use Atk4\Core\HookTrait;
 
 /**
  * Implements a class that can be mapped into arbitrary JavaScript expression.

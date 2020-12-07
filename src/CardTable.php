@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\data\Model;
+use Atk4\Data\Model;
 
 /**
  * Card class displays a single record data.

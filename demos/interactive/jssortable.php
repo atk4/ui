@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\HtmlTemplate;
+use Atk4\Ui\HtmlTemplate;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$view = \atk4\ui\View::addTo($app, ['template' => new HtmlTemplate(
+$view = \Atk4\Ui\View::addTo($app, ['template' => new HtmlTemplate(
     '<div class="ui header">Click and drag country to reorder</div>
     <div id="{$_id}" style="cursor: pointer">
         <ul>
@@ -18,34 +18,34 @@ $view = \atk4\ui\View::addTo($app, ['template' => new HtmlTemplate(
     </div>'
 )]);
 
-$lister = \atk4\ui\Lister::addTo($view, [], ['List']);
-$lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
+$lister = \Atk4\Ui\Lister::addTo($view, [], ['List']);
+$lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
 $lister->setModel(new Country($app->db))
     ->setLimit(20);
 
-$sortable = \atk4\ui\JsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
+$sortable = \Atk4\Ui\JsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
 $sortable->onReorder(function ($order, $src, $pos, $oldPos) {
     if ($_GET['btn'] ?? null) {
-        return new \atk4\ui\JsToast(implode(' - ', $order));
+        return new \Atk4\Ui\JsToast(implode(' - ', $order));
     }
 
-    return new \atk4\ui\JsToast($src . ' moved from position ' . $oldPos . ' to ' . $pos);
+    return new \Atk4\Ui\JsToast($src . ' moved from position ' . $oldPos . ' to ' . $pos);
 });
 
-$button = \atk4\ui\Button::addTo($app)->set('Get countries order');
+$button = \Atk4\Ui\Button::addTo($app)->set('Get countries order');
 $button->js('click', $sortable->jsGetOrders(['btn' => '1']));
 
 //////////////////////////////////////////////////////////////////////////////////////////
-\atk4\ui\View::addTo($app, ['ui' => 'divider']);
-\atk4\ui\Header::addTo($app, ['Add Drag n drop to Grid']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+\Atk4\Ui\Header::addTo($app, ['Add Drag n drop to Grid']);
 
-$grid = \atk4\ui\Grid::addTo($app, ['paginator' => false]);
+$grid = \Atk4\Ui\Grid::addTo($app, ['paginator' => false]);
 $grid->setModel((new Country($app->db))->setLimit(6));
 
 $dragHandler = $grid->addDragHandler();
 $dragHandler->onReorder(function ($order) {
-    return new \atk4\ui\JsToast('New order: ' . implode(' - ', $order));
+    return new \Atk4\Ui\JsToast('New order: ' . implode(' - ', $order));
 });

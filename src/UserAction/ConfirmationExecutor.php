@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\UserAction;
+namespace Atk4\Ui\UserAction;
 
-use atk4\core\HookTrait;
-use atk4\data\Model;
-use atk4\ui\Button;
-use atk4\ui\Exception;
-use atk4\ui\JsExpressionable;
-use atk4\ui\JsFunction;
-use atk4\ui\JsToast;
-use atk4\ui\Loader;
-use atk4\ui\Modal;
-use atk4\ui\Text;
-use atk4\ui\View;
+use Atk4\Core\HookTrait;
+use Atk4\Data\Model;
+use Atk4\Ui\Button;
+use Atk4\Ui\Exception;
+use Atk4\Ui\JsExpressionable;
+use Atk4\Ui\JsFunction;
+use Atk4\Ui\JsToast;
+use Atk4\Ui\Loader;
+use Atk4\Ui\Modal;
+use Atk4\Ui\Text;
+use Atk4\Ui\View;
 
 /**
  * Modal executor for action that required a confirmation.

@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Form;
+use Atk4\Ui\Form;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // Testing form.
 
 // create header
-\atk4\ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);
+\Atk4\Ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);
 
 // create form
 $form = Form::addTo($app, ['segment']);
 //$form = Form::addTo($app, ['segment', 'buttonSave'=>false]);
-//$form = Form::addTo($app, ['segment', 'buttonSave'=>new \atk4\ui\Button(['Import', 'secondary', 'iconRight'=>'list'])]);
+//$form = Form::addTo($app, ['segment', 'buttonSave'=>new \Atk4\Ui\Button(['Import', 'secondary', 'iconRight'=>'list'])]);
 //$form = Form::addTo($app, ['segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]);
-\atk4\ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveControls']);
+\Atk4\Ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveControls']);
 
 $form->setModel(new Country($app->db), false);
 
@@ -74,8 +74,8 @@ $form->onSubmit(function (Form $form) {
 
 // ======
 
-/** @var \atk4\data\Model $personClass */
-$personClass = get_class(new class() extends \atk4\data\Model {
+/** @var \Atk4\Data\Model $personClass */
+$personClass = get_class(new class() extends \Atk4\Data\Model {
     public $table = 'person';
 
     protected function init(): void

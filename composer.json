@@ -58,14 +58,10 @@
   },
   "require": {
     "php": ">=7.3.0",
-    "ext-json": "*",
-    "atk4/core": "dev-develop",
     "atk4/data": "dev-develop"
   },
   "require-release": {
     "php": ">=7.3.0",
-    "ext-json": "*",
-    "atk4/core": "~2.3.0",
     "atk4/data": "~2.3.0"
   },
   "require-dev": {
@@ -78,19 +74,20 @@
     "instaclick/php-webdriver": "^1.4.7",
     "guzzlehttp/guzzle": "^6.3",
     "johnkary/phpunit-speedtrap": "^3.2",
+    "phpstan/phpstan": "^0.12.58",
     "phpunit/phpcov": "*",
     "phpunit/phpunit": ">=9.3",
     "symfony/process": "^4.4 || ^5.0"
   },
   "autoload": {
     "psr-4": {
-      "atk4\\ui\\": "src/"
+      "Atk4\\Ui\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "atk4\\ui\\tests\\": "tests/",
-      "atk4\\ui\\behat\\": "tests-behat/bootstrap/"
+      "Atk4\\Ui\\Tests\\": "tests/",
+      "Atk4\\Ui\\Behat\\": "tests-behat/bootstrap/"
     }
   }
 }

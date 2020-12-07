@@ -99,7 +99,7 @@ clarifications::
     require_once __DIR__ . '/vendor/autoload.php';
 
     // Define your data structure
-    class Offer extends \atk4\data\Model {
+    class Offer extends \Atk4\Data\Model {
 
         public $table = 'offer';
 
@@ -116,12 +116,12 @@ clarifications::
     }
 
     // Create Application object and initialize Admin Layout
-    $app = new \atk4\ui\App('Offer tracking system');
-    $app->initLayout([\atk4\ui\Layout\Admin::class]);
+    $app = new \Atk4\Ui\App('Offer tracking system');
+    $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 
     // Connect to database and place a fully-interactive Crud
-    $db = new \atk4\data\Persistence_SQL($dsn);
-    \atk4\ui\Crud::addTo($app)
+    $db = new \Atk4\Data\Persistence_SQL($dsn);
+    \Atk4\Ui\Crud::addTo($app)
         ->setModel(new Offer($db));
 
 Through the course of this example, We are performing several core actions:
@@ -204,9 +204,9 @@ That means that components may rely on each other and even though some may appea
 very basic to you, they are relied on by some other components for maximum
 flexibility. The next example adds a "Cancel" button to a form::
 
-    $button = \atk4\ui\Button::addTo($form, [
+    $button = \Atk4\Ui\Button::addTo($form, [
         'Cancel',
-        'icon'=>new \atk4\ui\Icon('pencil')
+        'icon'=>new \Atk4\Ui\Icon('pencil')
     ])->link('dashboard.php');
 
 :php:class:`Button` and :php:class:`Icon` are some of the most basic components in
@@ -220,7 +220,7 @@ Using Components
 Look above at the :ref:`overview_example`, component `GRID` was made part
 of application layout with a line::
 
-    \atk4\ui\Crud::addTo($app);
+    \Atk4\Ui\Crud::addTo($app);
 
 
 To render a component individually and get the HTML and JavaScript use this format::
@@ -252,11 +252,11 @@ Factory is a mechanism which allow you to use shorter syntax for creating object
 The goal of Agile UI is to be simple to read and use; so taking advantage of loose types
 in PHP language allows us to use an alternative shorter syntax::
 
-    \atk4\ui\Button::addTo($form, ['Cancel', 'icon'=>'pencil'])
+    \Atk4\Ui\Button::addTo($form, ['Cancel', 'icon'=>'pencil'])
         ->link('dashboard.php');
 
 By default, class names specified as the first array elements passed to the add() method are
-resolved to namespace `atk4\\ui`; however the application class can fine-tune the
+resolved to namespace `Atk4\\Ui`; however the application class can fine-tune the
 search.
 
 Using a factory is optional. For more information see:

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\ui\Table;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Ui\Table;
 
 class TableColumnLinkTest extends AtkPhpunit\TestCase
 {
@@ -18,12 +18,12 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
     protected function setUp(): void
     {
         $arr = ['table' => [1 => ['id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'salary' => -123]]];
-        $db = new \atk4\data\Persistence\Array_($arr);
-        $m = new \atk4\data\Model($db, 'table');
+        $db = new \Atk4\Data\Persistence\Array_($arr);
+        $m = new \Atk4\Data\Model($db, 'table');
         $m->addField('name');
         $m->addField('ref');
         $m->addField('salary');
-        $this->table = new \atk4\ui\Table();
+        $this->table = new \Atk4\Ui\Table();
         $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref']);
     }
@@ -259,12 +259,12 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
     {
         // need to reset all to set a nulled value in field name model
         $arr = ['table' => [1 => ['id' => 1, 'name' => '', 'ref' => 'ref123', 'salary' => -123]]];
-        $db = new \atk4\data\Persistence\Array_($arr);
-        $m = new \atk4\data\Model($db, 'table');
+        $db = new \Atk4\Data\Persistence\Array_($arr);
+        $m = new \Atk4\Data\Model($db, 'table');
         $m->addField('name');
         $m->addField('ref');
         $m->addField('salary');
-        $this->table = new \atk4\ui\Table();
+        $this->table = new \Atk4\Ui\Table();
         $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref']);
 

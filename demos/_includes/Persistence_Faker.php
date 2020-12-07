@@ -2,21 +2,19 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-class Persistence_Faker extends \atk4\data\Persistence
+class Persistence_Faker extends \Atk4\Data\Persistence
 {
+    /** @var \Faker\Generator */
     public $faker;
 
+    /** @var int */
     public $count = 5;
 
-    public function __construct($opts = [])
+    public function __construct()
     {
-        //parent::__construct($opts);
-
-        if (!$this->faker) {
-            $this->faker = \Faker\Factory::create();
-        }
+        $this->faker = \Faker\Factory::create();
     }
 
     public function prepareIterator($model)

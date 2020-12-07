@@ -5,7 +5,7 @@
 Icon
 ====
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Icon
 
@@ -20,12 +20,12 @@ Alternatively::
 Most commonly icon class is used for embedded icons on a :php:class:`Button`
 or inside other components (see :ref:`icon_other_comp`)::
 
-    $b1 = new \atk4\ui\Button(['Click Me', 'icon'=>'book']);
+    $b1 = new \Atk4\Ui\Button(['Click Me', 'icon'=>'book']);
 
 You can, of course, create instance of an Icon yourself::
 
-    $icon = new \atk4\ui\Icon('book');
-    $b1 = new \atk4\ui\Button(['Click Me', 'icon'=>$icon]);
+    $icon = new \Atk4\Ui\Icon('book');
+    $b1 = new \Atk4\Ui\Button(['Click Me', 'icon'=>$icon]);
 
 You do not need to add an icon into the render tree when specifying like that. The icon is selected
 through class. To find out what icons are available, refer to Fomantic-UI icon documentation:
@@ -65,7 +65,7 @@ Groups
 Fomantic UI support icon groups. The best way to implement is to supply :php:class:`Template` to an
 icon::
 
-    Icon::addTo($app, ['template'=>new \atk4\ui\Template('<i class="huge icons">
+    Icon::addTo($app, ['template'=>new \Atk4\Ui\Template('<i class="huge icons">
       <i class="big thin circle icon"></i>
       <i class="user icon"></i>
     </i>'), false]);
@@ -75,7 +75,7 @@ exclusive to Icon, but I'm adding a few examples here, just for your convenience
 
 Let's start with a View that contains your custom HTML loaded from file or embedded like this::
 
-    $view = View::addTo($app, ['template'=>new \atk4\ui\Template('<div>Hello my {Icon}<i class="huge icons">
+    $view = View::addTo($app, ['template'=>new \Atk4\Ui\Template('<div>Hello my {Icon}<i class="huge icons">
       <i class="big thin circle icon"></i>
       <i class="{Content}user{/} icon"></i>
     </i>{/}, It is me</div>')]);
@@ -95,7 +95,7 @@ Composing
 
 Composing offers you another way to deal with Group icons::
 
-    $no_users = new \atk4\ui\View([null, 'huge icons', 'element'=>'i']);
+    $no_users = new \Atk4\Ui\View([null, 'huge icons', 'element'=>'i']);
     Icon::addTo($no_users, ['big red dont']);
     Icon::addTo($no_users, ['black user icon']);
 
@@ -123,7 +123,7 @@ Here is the code with comments::
      * For convenience use this with link(), which will automatically open a new window
      * too.
      */
-    class SocialAdd extends \atk4\ui\View {
+    class SocialAdd extends \Atk4\Ui\View {
         public $social = null;
         public $icon = null;
         public $defaultTemplate = null;
@@ -147,7 +147,7 @@ Here is the code with comments::
 
             if (!$this->template) {
                 // TODO: Place template into file and set defaultTemplate instead
-                $this->template = new \atk4\ui\Template(
+                $this->template = new \Atk4\Ui\Template(
     '<{_element}button{/} class="ui '.$this->social.' button" {$attributes}>
       <i class="large icons">
         {$Icon}
@@ -159,7 +159,7 @@ Here is the code with comments::
 
             // Initialize icon
             if (!is_object($this->icon)) {
-                $this->icon = new \atk4\ui\Icon($this->icon);
+                $this->icon = new \Atk4\Ui\Icon($this->icon);
             }
 
             // Add icon into render tree

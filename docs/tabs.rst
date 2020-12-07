@@ -1,5 +1,5 @@
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Tabs
 
@@ -63,7 +63,7 @@ Note that tab contents are refreshed including any values you put on the form::
 
     // dynamic tab
     $t->addTab('Dynamic Form', function ($tab) {
-        $m_register = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
+        $m_register = new \Atk4\Data\Model(new \Atk4\Data\Persistence_Array($a));
         $m_register->addField('name', ['caption'=>'Please enter your name (John)']);
 
         $form = Form::addTo($tab, ['segment'=>true]);

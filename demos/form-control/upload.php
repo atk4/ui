@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Form;
+use Atk4\Ui\Form;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $form = Form::addTo($app);
@@ -23,7 +23,7 @@ $control = $form->addControl('file', [Form\Control\Upload::class, ['accept' => [
 $img->onDelete(function ($fileId) use ($img) {
     $img->clearThumbnail('./images/default.png');
 
-    return new \atk4\ui\JsToast([
+    return new \Atk4\Ui\JsToast([
         'title' => 'Delete successfully',
         'message' => $fileId . ' has been removed',
         'class' => 'success',
@@ -48,7 +48,7 @@ $img->onUpload(function ($postFile) use ($form, $img) {
     // return $form->error('file', 'Unable to upload file.');
 
     // can also return a notifier.
-    return new \atk4\ui\JsToast([
+    return new \Atk4\Ui\JsToast([
         'title' => 'Upload success',
         'message' => 'Image is uploaded!',
         'class' => 'success',
@@ -56,7 +56,7 @@ $img->onUpload(function ($postFile) use ($form, $img) {
 });
 
 $control->onDelete(function ($fileId) {
-    return new \atk4\ui\JsToast([
+    return new \Atk4\Ui\JsToast([
         'title' => 'Delete successfully',
         'message' => $fileId . ' has been removed',
         'class' => 'success',
@@ -69,7 +69,7 @@ $control->onUpload(function ($files) use ($form, $control) {
     }
     $control->setFileId('a_token');
 
-    return new \atk4\ui\JsToast([
+    return new \Atk4\Ui\JsToast([
         'title' => 'Upload success',
         'message' => 'File is uploaded!',
         'class' => 'success',

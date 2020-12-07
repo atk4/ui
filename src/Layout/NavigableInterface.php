@@ -5,10 +5,10 @@ declare(strict_types=1);
  * Interface for a Layout using a navigable side menu.
  */
 
-namespace atk4\ui\Layout;
+namespace Atk4\Ui\Layout;
 
-use atk4\ui\Item;
-use atk4\ui\Menu;
+use Atk4\Ui\Item;
+use Atk4\Ui\Menu;
 
 interface NavigableInterface
 {

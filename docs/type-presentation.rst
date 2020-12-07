@@ -66,18 +66,18 @@ Manually Specifying Decorators
 When working with components, they allow to specify decorators manually, even if the type
 of the field does not seem compatible::
 
-    $table->addColumn('field_name', new \atk4\ui\Table\Column\Password());
+    $table->addColumn('field_name', new \Atk4\Ui\Table\Column\Password());
 
     // or
 
-    $form->addControl('field_name', new \atk4\ui\Form\Control\Password());
+    $form->addControl('field_name', new \Atk4\Ui\Form\Control\Password());
 
 Selecting the decorator is done in the following order:
 
  - specified in second argument to UI `addColumn()` or `addControl()` (as shown above)
- - specified using `ui` property of :php:class:`\atk4\data\Field`::
+ - specified using `ui` property of :php:class:`\Atk4\Data\Field`::
 
-    $field->ui['form'] = new \atk4\ui\Form\Control\Password();
+    $field->ui['form'] = new \Atk4\Ui\Form\Control\Password();
 
  - fallback to :php:meth:`Form::controlFactory`
 
@@ -114,7 +114,7 @@ hidden when presented. To hide it from Table::
     $model = new User($app->db);
     
     $table->setModel($model);
-    $model->addDecorator('account_number', new \atk4\ui\Table\Column\Password());
+    $model->addDecorator('account_number', new \Atk4\Ui\Table\Column\Password());
 
 Create a decorator for hiding credit card number
 ------------------------------------------------
@@ -122,14 +122,14 @@ Create a decorator for hiding credit card number
 If you happen to store card numbers and you only want to display the last digits in tables,
 yet make it available when editing, you could create your own :php:class:`Table\\Column` decorator::
 
-    class Masker extends \atk4\ui\Table\Column
+    class Masker extends \Atk4\Ui\Table\Column
     {
-        public function getDataCellTemplate(\atk4\data\Field $field = null)
+        public function getDataCellTemplate(\Atk4\Data\Field $field = null)
         {
             return '**** **** **** {$mask}';
         }
 
-        public function getHtmlTags(\atk4\data\Model $row, $field)
+        public function getHtmlTags(\Atk4\Data\Model $row, $field)
         {
             return [
                 'mask' => substr($field->get(), -4) 
@@ -147,10 +147,10 @@ If we always have to display card numbers with spaces, e.g. "1234 1234 1234 1234
 the database store them without spaces, then this is a data formatting task best done by
 extending :php:class:`Persistence\\Ui`::
 
-    class MyPersistence extends \atk4\ui\Persistence\Ui
+    class MyPersistence extends \Atk4\Ui\Persistence\Ui
     {
 
-        public function _typecastSaveField(\atk4\data\Field $field, $value)
+        public function _typecastSaveField(\Atk4\Data\Field $field, $value)
         {
             switch ($field->type) {
             case 'card':
@@ -160,7 +160,7 @@ extending :php:class:`Persistence\\Ui`::
             return parent::_typecastSaveField($field, $value);
         }
 
-        public function _typecastLoadField(\atk4\data\Field $field, $value)
+        public function _typecastLoadField(\Atk4\Data\Field $field, $value)
         {
             switch ($field->type) {
             case 'card':

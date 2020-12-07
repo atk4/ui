@@ -5,11 +5,11 @@ declare(strict_types=1);
  * A collection of Card set from a model.
  */
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\core\Factory;
-use atk4\data\Model;
-use atk4\ui\Component\ItemSearch;
+use Atk4\Core\Factory;
+use Atk4\Data\Model;
+use Atk4\Ui\Component\ItemSearch;
 
 class CardDeck extends View
 {
@@ -294,7 +294,7 @@ class CardDeck extends View
      * Therefore if card, that was just save, is not present in db result set or deck then return null
      * otherwise return Card view.
      *
-     * @return mixed|null
+     * @return mixed
      */
     protected function findCard(Model $model)
     {

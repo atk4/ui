@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form;
+namespace Atk4\Ui\Form;
 
-use atk4\ui\Exception;
+use Atk4\Ui\Exception;
 
 /**
  * Custom Layout for a form (user-defined HTML).
  */
-abstract class AbstractLayout extends \atk4\ui\View
+abstract class AbstractLayout extends \Atk4\Ui\View
 {
     /**
      * Links layout to the form.
      *
-     * @var \atk4\ui\Form
+     * @var \Atk4\Ui\Form
      */
     public $form;
 
@@ -25,12 +25,12 @@ abstract class AbstractLayout extends \atk4\ui\View
      * @param array|string|object|null $control
      * @param array|string|object|null $field
      *
-     * @return \atk4\ui\Form\Control
+     * @return \Atk4\Ui\Form\Control
      */
     public function addControl(string $name, $control = null, $field = null)
     {
         if (!$this->form->model) {
-            $this->form->model = new \atk4\ui\Misc\ProxyModel();
+            $this->form->model = new \Atk4\Ui\Misc\ProxyModel();
         }
 
         if (is_string($field)) {
@@ -60,8 +60,8 @@ abstract class AbstractLayout extends \atk4\ui\View
             } elseif (!$control) {
                 $control = $this->form->controlFactory($field);
             } elseif (is_object($control)) {
-                if (!$control instanceof \atk4\ui\Form\Control) {
-                    throw (new Exception('Form control must descend from ' . \atk4\ui\Form\Control::class))
+                if (!$control instanceof \Atk4\Ui\Form\Control) {
+                    throw (new Exception('Form control must descend from ' . \Atk4\Ui\Form\Control::class))
                         ->addMoreInfo('control', $control);
                 }
                 $control->field = $field;
@@ -107,7 +107,7 @@ abstract class AbstractLayout extends \atk4\ui\View
      *
      * @return array
      */
-    protected function getModelFields(\atk4\data\Model $model)
+    protected function getModelFields(\Atk4\Data\Model $model)
     {
         return array_keys($model->getFields('editable'));
     }
@@ -117,9 +117,9 @@ abstract class AbstractLayout extends \atk4\ui\View
      *
      * @param array|null $fields
      *
-     * @return \atk4\data\Model
+     * @return \Atk4\Data\Model
      */
-    public function setModel(\atk4\data\Model $model, $fields = null)
+    public function setModel(\Atk4\Data\Model $model, $fields = null)
     {
         parent::setModel($model);
 
@@ -157,7 +157,7 @@ abstract class AbstractLayout extends \atk4\ui\View
      * Return Field decorator associated with
      * the form's field.
      *
-     * @return \atk4\ui\Form\Control
+     * @return \Atk4\Ui\Form\Control
      */
     public function getControl(string $name): Control
     {
@@ -172,9 +172,9 @@ abstract class AbstractLayout extends \atk4\ui\View
     /**
      * Adds Button into form layout.
      *
-     * @param \atk4\ui\Button|array|string $seed
+     * @param \Atk4\Ui\Button|array|string $seed
      *
-     * @return \atk4\ui\Button
+     * @return \Atk4\Ui\Button
      */
     abstract public function addButton($seed);
 }

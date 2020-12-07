@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-class SomeData extends \atk4\data\Model
+class SomeData extends \Atk4\Data\Model
 {
     public function __construct()
     {

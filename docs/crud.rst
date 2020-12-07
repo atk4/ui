@@ -5,7 +5,7 @@
 Crud
 ====
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 .. php:class:: Crud
 
 Crud class offers a very usable extension to :php:class:`Grid` class, which automatically adds actions for deleting,
@@ -88,7 +88,7 @@ specify your own form behavior using a callback for action::
     // callback for both model action edit and add.
     $g->onFormAddEdit(function ($form, $ex) {
         $form->onSubmit(function ($form) use ($ex) {
-            return [$ex->hide(), new \atk4\ui\JsToast('Submit all right! This demo does not saved data.')];
+            return [$ex->hide(), new \Atk4\Ui\JsToast('Submit all right! This demo does not saved data.')];
         });
     });
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
 date_default_timezone_set('UTC');
 
@@ -14,7 +14,7 @@ if (file_exists(__DIR__ . '/coverage.php') && !class_exists(\PHPUnit\Framework\T
     \CoverageUtil::start();
 }
 
-$app = new \atk4\ui\App([
+$app = new \Atk4\Ui\App([
     'call_exit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
     'catch_exceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
     'always_run' => (bool) ($_GET['APP_ALWAYS_RUN'] ?? true),
@@ -31,17 +31,18 @@ if ($app->catch_exceptions !== true) {
 
 // collect coverage for HTTP tests 2/2
 if (file_exists(__DIR__ . '/coverage.php') && !class_exists(\PHPUnit\Framework\TestCase::class, false)) {
-    $app->onHook(\atk4\ui\App::HOOK_BEFORE_EXIT, function () {
+    $app->onHook(\Atk4\Ui\App::HOOK_BEFORE_EXIT, function () {
         \CoverageUtil::saveData();
     });
 }
 
 try {
+    /** @var \Atk4\Data\Persistence\Sql $db */
     require_once __DIR__ . '/init-db.php';
     $app->db = $db;
     unset($db);
 } catch (\Throwable $e) {
-    throw new \atk4\ui\Exception('Database error: ' . $e->getMessage());
+    throw new \Atk4\Ui\Exception('Database error: ' . $e->getMessage());
 }
 
 [$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
@@ -52,16 +53,16 @@ if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
 }
 
 // allow custom layout override
-$app->initLayout([$app->stickyGET('layout') ?? \atk4\ui\Layout\Maestro::class]);
+$app->initLayout([$app->stickyGET('layout') ?? \Atk4\Ui\Layout\Maestro::class]);
 
 $layout = $app->layout;
-if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
+if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], [$demosUrl . 'index']);
 
     $path = $demosUrl . 'layout/';
     $menu = $layout->addMenuGroup(['Layout', 'icon' => 'object group']);
     $layout->addMenuItem(['Layouts'], [$path . 'layouts'], $menu);
-    $layout->addMenuItem(['Panel'], [$path . 'layout-panel'], $menu);
+    $layout->addMenuItem(['Sliding Panel'], [$path . 'layout-panel'], $menu);
 
     $path = $demosUrl . 'basic/';
     $menu = $layout->addMenuGroup(['Basics', 'icon' => 'cubes']);
@@ -110,9 +111,9 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem('Grid - Table+Bar+Search+Paginator', [$path . 'grid'], $menu);
     $layout->addMenuItem('Crud - Full editing solution', [$path . 'crud'], $menu);
     $layout->addMenuItem(['Crud with Array Persistence'], [$path . 'crud3'], $menu);
+    $layout->addMenuItem('Card Deck', [$path . 'card-deck'], $menu);
     $layout->addMenuItem(['Lister'], [$path . 'lister-ipp'], $menu);
     $layout->addMenuItem(['Table column decorator from model'], [$path . 'tablecolumns'], $menu);
-    $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $menu);
 
     $path = $demosUrl . 'data-action/';
     $menu = $layout->addMenuGroup(['Data Action Executor', 'icon' => 'wrench']);
@@ -138,6 +139,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['Pop-up'], [$path . 'popup'], $menu);
     $layout->addMenuItem(['Toast'], [$path . 'toast'], $menu);
     $layout->addMenuItem('Paginator', [$path . 'paginator'], $menu);
+    $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $menu);
 
     $path = $demosUrl . 'javascript/';
     $menu = $layout->addMenuGroup(['Javascript', 'icon' => 'code']);
@@ -152,7 +154,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem('Recursive Views', [$path . 'recursive'], $menu);
 
     // view demo source page on Github
-    \atk4\ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'teal', 'icon' => 'github'])
+    \Atk4\Ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'teal', 'icon' => 'github'])
         ->on('click', $app->jsRedirect('https://github.com/atk4/ui/blob/develop/' . $relUrl, true));
 }
 unset($layout, $rootUrl, $relUrl, $demosUrl, $path, $menu);

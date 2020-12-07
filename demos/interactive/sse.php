@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Header::addTo($app, ['SSE with ProgressBar']);
+\Atk4\Ui\Header::addTo($app, ['SSE with ProgressBar']);
 
-$bar = \atk4\ui\ProgressBar::addTo($app);
+$bar = \Atk4\Ui\ProgressBar::addTo($app);
 
-$button = \atk4\ui\Button::addTo($app, ['Turn On']);
-$buttonStop = \atk4\ui\Button::addTo($app, ['Turn Off']);
+$button = \Atk4\Ui\Button::addTo($app, ['Turn On']);
+$buttonStop = \Atk4\Ui\Button::addTo($app, ['Turn Off']);
 // non-SSE way
 //$button->on('click', $bar->js()->progress(['percent'=> 40]));
 
-$sse = \atk4\ui\JsSse::addTo($app, ['showLoader' => true]);
+$sse = \Atk4\Ui\JsSse::addTo($app, ['showLoader' => true]);
 
 $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
     $sse->send($button->js()->addClass('disabled'));
@@ -39,11 +39,11 @@ $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
 
 $buttonStop->on('click', [$button->js()->atkServerEvent('stop'), $button->js()->removeClass('disabled')]);
 
-\atk4\ui\View::addTo($app, ['ui' => 'divider']);
-\atk4\ui\Header::addTo($app, ['SSE operation with user confirmation']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+\Atk4\Ui\Header::addTo($app, ['SSE operation with user confirmation']);
 
-$sse = \atk4\ui\JsSse::addTo($app);
-$button = \atk4\ui\Button::addTo($app, ['Click me to change my text']);
+$sse = \Atk4\Ui\JsSse::addTo($app);
+$button = \Atk4\Ui\Button::addTo($app, ['Click me to change my text']);
 
 $button->on('click', $sse->set(function ($jsChain) use ($sse, $button) {
     $sse->send($button->js()->text('Please wait for 2 seconds...'));

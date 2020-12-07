@@ -6,7 +6,7 @@ declare(strict_types=1);
  * using the view->url with a _q arguments attach to url.
  */
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 class JsSearch extends View
 {

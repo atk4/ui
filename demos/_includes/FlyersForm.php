@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Form;
+use Atk4\Ui\Form;
 
 class FlyersForm extends Form
 {
@@ -35,7 +35,7 @@ class FlyersForm extends Form
 
         $this->addControl('country', [
             Form\Control\Lookup::class,
-            'model' => new \atk4\ui\demo\Country($this->getApp()->db),
+            'model' => new \Atk4\Ui\Demos\Country($this->getApp()->db),
             'dependency' => function ($model, $data) {
                 isset($data['contains']) ? $model->addCondition('name', 'like', '%' . $data['contains'] . '%') : null;
             },
@@ -45,13 +45,13 @@ class FlyersForm extends Form
         ], ['required' => true]);
 
         $ml = $this->addControl('multi', [Form\Control\Multiline::class, 'rowLimit' => 4, 'addOnTab' => true, 'caption' => 'Additional passengers:', 'renderLabel' => false]);
-        $ml->setModel(new Flyers(new \atk4\data\Persistence\Array_($this->flyers)));
+        $ml->setModel(new Flyers(new \Atk4\Data\Persistence\Array_($this->flyers)));
 
         $cards = $this->addControl('cards', [Form\Control\TreeItemSelector::class, 'treeItems' => $this->cards, 'caption' => 'Flyers program:'], ['type' => 'array', 'serialize' => 'json']);
         $cards->set($this->getApp()->encodeJson([]));
 
         $this->onSubmit(function ($form) {
-            return new \atk4\ui\JsToast('Thank you!');
+            return new \Atk4\Ui\JsToast('Thank you!');
         });
     }
 }

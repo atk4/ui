@@ -1,7 +1,7 @@
 # Agile Toolkit js package
 
 The javascript package is necessary to run Agile Toolkit UI. It provide necessary
-jQuery plugin needed for atk4\ui and also provide app wide services for semantic-ui module.
+jQuery plugin needed for Atk4\Ui and also provide app wide services for semantic-ui module.
 
 The package also export some functions via the atk global object.
 
@@ -18,7 +18,7 @@ All services are export via the atk global object. You can access them via atk.s
 Certain functionalities are offered from these services. 
 
 For example, if one of your script need to send an ajax request directly, without using semantic-ui api request, you could use the apiService.atkSuccessTest
-to run and evaluate the server response from atk4\ui.
+to run and evaluate the server response from Atk4\Ui.
 
 ```
     $.getJSON( "myajax.php", function( resp ) {

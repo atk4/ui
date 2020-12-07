@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\core\Factory;
+use Atk4\Core\Factory;
 
 /**
  * Wizard widget.
  */
 class Wizard extends View
 {
-    use \atk4\core\SessionTrait;
+    use \Atk4\Core\SessionTrait;
 
     public $defaultTemplate = 'wizard.html';
     public $ui = 'steps';
@@ -153,8 +153,10 @@ class Wizard extends View
 
         if ($result instanceof Form) {
             // mingle with the button icon
-            $result->buttonSave->destroy();
-            $result->buttonSave = null;
+            if ($result->buttonSave !== null) {
+                $result->buttonSave->destroy();
+                $result->buttonSave = null;
+            }
 
             $this->buttonNext->on('click', $result->js()->submit());
         }

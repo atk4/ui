@@ -1,5 +1,5 @@
 
-.. php:namespace:: atk4\ui\Form\Control
+.. php:namespace:: Atk4\Ui\Form\Control
 
 .. php:class:: TreeItemSelector
 
@@ -75,7 +75,7 @@ Adding a TreeItemSelector form control to a Form::
     ];
 
 
-    $form = \atk4\ui\Form::addTo($app);
+    $form = \Atk4\Ui\Form::addTo($app);
     $control = $form->addControl('tree', [new TreeItemSelector(['treeItems' => $items]), 'caption' => 'Select items:'], ['type' => 'array', 'serialize' => 'json']);
     $control->set([201, 301, 503]);
 
@@ -92,7 +92,7 @@ It is possible to run a callback function every time an item is select on the li
 set by the user.::
 
     $control->onItem(function($value) {
-        return new \atk4\ui\JsToast($this->getApp()->encodeJson($value));
+        return new \Atk4\Ui\JsToast($this->getApp()->encodeJson($value));
     });
 
 Note

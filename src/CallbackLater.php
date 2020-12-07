@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Works same as Callback but will be executed when the current
@@ -19,7 +19,7 @@ class CallbackLater extends Callback
      * @param \Closure $fx
      * @param array    $args
      *
-     * @return mixed|null
+     * @return mixed
      */
     public function set($fx = null, $args = null)
     {

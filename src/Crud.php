@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\core\Factory;
-use atk4\data\Model;
+use Atk4\Core\Factory;
+use Atk4\Data\Model;
 
 /**
  * Implements a more sophisticated and interactive Data-Table component.
@@ -137,7 +137,12 @@ class Crud extends Grid
             foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
                 if ($action->enabled) {
                     $action->ui['executor'] = $this->initActionExecutor($action);
-                    $this->menuItems[$k]['item'] = $this->menu->addItem([$action->getCaption(), 'icon' => 'plus']);
+                    $this->menuItems[$k]['item'] = $this->menu->addItem(
+                        array_merge(
+                            [$action->getCaption()],
+                            $action->modifier === Model\UserAction::MODIFIER_CREATE ? ['icon' => 'plus'] : []
+                        )
+                    );
                     $this->menuItems[$k]['action'] = $action;
                 }
             }
@@ -354,7 +359,7 @@ class Crud extends Grid
     /**
      * Set onActions.
      *
-     * @return mixed|null
+     * @return mixed
      */
     public function setOnActions(string $actionName, \Closure $fx)
     {

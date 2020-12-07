@@ -2,15 +2,20 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
-use atk4\core\Factory;
-use atk4\ui\Jquery;
-use atk4\ui\JsExpression;
-use atk4\ui\JsFunction;
+use Atk4\Core\Factory;
+use Atk4\Core\HookTrait;
+use Atk4\Data\Model;
+use Atk4\Ui\App;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsExpression;
+use Atk4\Ui\JsFunction;
 
 class Lookup extends Input
 {
+    use HookTrait;
+
     public $defaultTemplate = 'form/control/lookup.html';
     public $ui = 'input';
 
@@ -24,7 +29,7 @@ class Lookup extends Input
     /**
      * Object used to capture requests from the browser.
      *
-     * @var \atk4\ui\Callback
+     * @var \Atk4\Ui\Callback
      */
     public $callback;
 
@@ -105,9 +110,9 @@ class Lookup extends Input
      *
      * For example, using this setting will automatically submit
      * form when field value is changes.
-     * $form->addControl('field', [\atk4\ui\Form\Control\Lookup::class, 'settings'=>['allowReselection' => true,
+     * $form->addControl('field', [\Atk4\Ui\Form\Control\Lookup::class, 'settings'=>['allowReselection' => true,
      *                           'selectOnKeydown' => false,
-     *                           'onChange'        => new atk4\ui\JsExpression('function(value,t,c){
+     *                           'onChange'        => new Atk4\Ui\JsExpression('function(value,t,c){
      *                                                          if ($(this).data("value") !== value) {
      *                                                            $(this).parents(".form").form("submit");
      *                                                            $(this).data("value", value);
@@ -149,8 +154,11 @@ class Lookup extends Input
 
         $this->settings['forceSelection'] = false;
 
-        $this->callback = \atk4\ui\Callback::addTo($this);
-        $this->callback->set([$this, 'outputApiResponse']);
+        $this->callback = \Atk4\Ui\Callback::addTo($this);
+
+        $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () {
+            $this->callback->set([$this, 'outputApiResponse']);
+        });
     }
 
     /**
@@ -204,7 +212,7 @@ class Lookup extends Input
     /**
      * Renders the Lookup row depending on properties set.
      */
-    public function renderRow(\atk4\data\Model $row): array
+    public function renderRow(Model $row): array
     {
         $renderRowFunction = $this->renderRowFunction ?? \Closure::fromCallable([static::class, 'defaultRenderRow']);
 
@@ -219,7 +227,7 @@ class Lookup extends Input
      *
      * @return string[]
      */
-    public static function defaultRenderRow($field, \atk4\data\Model $row, $key = null)
+    public static function defaultRenderRow($field, Model $row, $key = null)
     {
         $id_field = $field->id_field ?: $row->id_field;
         $title_field = $field->title_field ?: $row->title_field;
@@ -247,24 +255,24 @@ class Lookup extends Input
 
         $buttonSeed = is_string($buttonSeed) ? ['content' => $buttonSeed] : $buttonSeed;
 
-        $defaultSeed = [\atk4\ui\Button::class, 'disabled' => ($this->disabled || $this->readonly)];
+        $defaultSeed = [\Atk4\Ui\Button::class, 'disabled' => ($this->disabled || $this->readonly)];
 
         $this->action = Factory::factory(array_merge($defaultSeed, (array) $buttonSeed));
 
         if ($this->form) {
-            $vp = \atk4\ui\VirtualPage::addTo($this->form);
+            $vp = \Atk4\Ui\VirtualPage::addTo($this->form);
         } else {
-            $vp = \atk4\ui\VirtualPage::addTo($this->getOwner());
+            $vp = \Atk4\Ui\VirtualPage::addTo($this->getOwner());
         }
 
         $vp->set(function ($page) {
-            $form = \atk4\ui\Form::addTo($page);
+            $form = \Atk4\Ui\Form::addTo($page);
 
             $model = clone $this->model;
 
             $form->setModel($model->onlyFields($this->plus['fields'] ?? []));
 
-            $form->onSubmit(function (\atk4\ui\Form $form) {
+            $form->onSubmit(function (\Atk4\Ui\Form $form) {
                 $form->model->save();
 
                 $ret = [
@@ -284,7 +292,7 @@ class Lookup extends Input
 
         $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
 
-        $this->action->js('click', new \atk4\ui\JsModal($caption, $vp));
+        $this->action->js('click', new \Atk4\Ui\JsModal($caption, $vp));
     }
 
     /**
@@ -376,7 +384,7 @@ class Lookup extends Input
     /**
      * Override this method if you want to add more logic to the initialization of the auto-complete field.
      *
-     * @param Jquery
+     * @param Jquery $chain
      */
     protected function initDropdown($chain)
     {
@@ -443,7 +451,7 @@ class Lookup extends Input
      *
      * {@inheritdoc}
      *
-     * @see \atk4\ui\Form\Control::set()
+     * @see \Atk4\Ui\Form\Control::set()
      */
     public function set($value = null, $junk = null)
     {

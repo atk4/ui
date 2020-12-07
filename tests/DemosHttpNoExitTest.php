@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
 /**
  * Same as DemosHttpTest, only App::call_exit is set to false.

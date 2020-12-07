@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Button::addTo($app, ['Dynamic scroll in Lister', 'small left floated basic blue', 'icon' => 'left arrow'])
+\Atk4\Ui\Button::addTo($app, ['Dynamic scroll in Lister', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['scroll-lister']);
-\atk4\ui\Button::addTo($app, ['Dynamic scroll in Container', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\Atk4\Ui\Button::addTo($app, ['Dynamic scroll in Container', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['scroll-container']);
-\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-\atk4\ui\Header::addTo($app, ['Dynamic scroll in Table']);
+\Atk4\Ui\Header::addTo($app, ['Dynamic scroll in Table']);
 
-$table = \atk4\ui\Table::addTo($app);
+$table = \Atk4\Ui\Table::addTo($app);
 
 $model = $table->setModel(new Country($app->db));
 //$model->addCondition('name','like','A%');

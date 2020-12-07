@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Persistence;
+namespace Atk4\Ui\Persistence;
 
-use atk4\data\Model;
+use Atk4\Data\Model;
 
-class Post extends \atk4\data\Persistence
+class Post extends \Atk4\Data\Persistence
 {
     public function load(Model $model, $id = 0): array
     {

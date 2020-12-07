@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Header;
-use atk4\ui\JsToast;
-use atk4\ui\Message;
-use atk4\ui\View;
+use Atk4\Ui\Header;
+use Atk4\Ui\JsToast;
+use Atk4\Ui\Message;
+use Atk4\Ui\View;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$wizard = \atk4\ui\Wizard::addTo($app);
+$wizard = \Atk4\Ui\Wizard::addTo($app);
 
 $wizard->addStep('User Interface', function ($page) {
-    $t = \atk4\ui\Text::addTo($page);
+    $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Agile Toolkit is a "Low Code Framework" written in PHP. It is designed to simplify all aspects of web application creation:
@@ -57,12 +57,12 @@ $wizard->addStep('User Interface', function ($page) {
     $t->addParagraph('It all has started with a "Button" though:');
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        \atk4\ui\Button::addTo($owner, ['Hello from the button!']);
+        \Atk4\Ui\Button::addTo($owner, ['Hello from the button!']);
     });
 });
 
 $wizard->addStep('Interactivity', function ($page) {
-    $t = \atk4\ui\Text::addTo($page);
+    $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             PHP is a server-side language. That prompted us to implement server-side UI actions. They are very easy to define -
@@ -71,13 +71,13 @@ $wizard->addStep('Interactivity', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $button = \atk4\ui\Button::addTo($owner, ['Click for the greeting!']);
+        $button = \Atk4\Ui\Button::addTo($owner, ['Click for the greeting!']);
         $button->on('click', function () {
             return 'Hello World!';
         });
     });
 
-    $t = \atk4\ui\Text::addTo($page);
+    $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             A component of Agile Toolkit (callback) enables seamless communication between the frontend components (which are often
@@ -86,24 +86,24 @@ $wizard->addStep('Interactivity', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $seg = \atk4\ui\View::addTo($owner, ['ui' => 'segment']);
+        $seg = \Atk4\Ui\View::addTo($owner, ['ui' => 'segment']);
 
-        \atk4\ui\Text::addTo($seg)->set('Number of buttons: ');
+        \Atk4\Ui\Text::addTo($seg)->set('Number of buttons: ');
 
-        $paginator = \atk4\ui\Paginator::addTo($seg, [
+        $paginator = \Atk4\Ui\Paginator::addTo($seg, [
             'total' => 5,
             'reload' => $seg,
             'urlTrigger' => 'count',
         ]);
 
-        \atk4\ui\View::addTo($seg, ['ui' => 'divider']);
+        \Atk4\Ui\View::addTo($seg, ['ui' => 'divider']);
 
         for ($i = 1; $i <= ($_GET['count'] ?? 1); ++$i) {
-            \atk4\ui\Button::addTo($seg, [$i]);
+            \Atk4\Ui\Button::addTo($seg, [$i]);
         }
     });
 
-    $t = \atk4\ui\Text::addTo($page);
+    $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             This demo also shows you how to create composite views. The '$seg' above contains text, paginator, divider and some
@@ -113,7 +113,7 @@ $wizard->addStep('Interactivity', function ($page) {
 });
 
 $wizard->addStep('Business Model', function ($page) {
-    $t = \atk4\ui\Text::addTo($page);
+    $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             One major benefit of Server Side Rendered applications is ability to directly interact with data. In other applications
@@ -123,7 +123,7 @@ $wizard->addStep('Business Model', function ($page) {
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         /* Showing Class definition.
-        class DemoInvoice extends \atk4\data\Model
+        class DemoInvoice extends \Atk4\Data\Model
         {
             public $title_field = 'reference';
 
@@ -138,13 +138,13 @@ $wizard->addStep('Business Model', function ($page) {
         */
         session_start();
 
-        $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
-        $model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
+        $model = new \Atk4\Ui\Demos\DemoInvoice(new \Atk4\Data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
+        $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function ($model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
 
         Header::addTo($owner, ['Set invoice data:']);
-        $form = \atk4\ui\Form::addTo($owner);
+        $form = \Atk4\Ui\Form::addTo($owner);
         $form->setModel($model)->tryLoad(1);
 
         if (!$model->loaded()) {
@@ -163,10 +163,10 @@ $wizard->addStep('Business Model', function ($page) {
             return new JsToast('Saved!');
         });
 
-        \atk4\ui\View::addTo($owner, ['ui' => 'divider']);
+        \Atk4\Ui\View::addTo($owner, ['ui' => 'divider']);
     });
 
-    $t = \atk4\ui\Text::addTo($page);
+    $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             This code shows you a combination of 3 objects:
@@ -189,7 +189,7 @@ $wizard->addStep('Business Model', function ($page) {
 });
 
 $wizard->addStep('Persistence', function ($page) {
-    $t = \atk4\ui\Text::addTo($page);
+    $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Once your model is defined, it can be re-used later with any generic view:
@@ -199,21 +199,21 @@ $wizard->addStep('Persistence', function ($page) {
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         session_start();
 
-        $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
-        $model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
+        $model = new \Atk4\Ui\Demos\DemoInvoice(new \Atk4\Data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
+        $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function ($model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
 
         Header::addTo($owner, ['Record display in Card View using model data.']);
         $model->tryLoad(1);
         if ($model->loaded()) {
-            \atk4\ui\Card::addTo($owner, ['useLabel' => true])->setModel($model);
+            \Atk4\Ui\Card::addTo($owner, ['useLabel' => true])->setModel($model);
         } else {
             Message::addTo($owner, ['Empty record.']);
         }
     });
 
-    $t = \atk4\ui\Text::addTo($page);
+    $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Re-use of your Business Model code, generic and interactive views and principles of composition and a simple PHP
@@ -224,6 +224,6 @@ $wizard->addStep('Persistence', function ($page) {
 
 $wizard->addFinish(function ($page) use ($wizard) {
     PromotionText::addTo($page);
-    \atk4\ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon' => 'left arrow'], ['Left'])
+    \Atk4\Ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon' => 'left arrow'], ['Left'])
         ->link('/demos/index.php');
 });
