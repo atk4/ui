@@ -288,7 +288,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         }
 
         // set args value if available.
-        $this->setFormField($form, $this->actionData['args'] ?? [], $this->step);
+        $this->setFormField($form, $this->getActionData('args'), $this->step);
 
         // setup exec, next and prev button handler for this step.
         $this->jsSetSubmitBtn($modal, $form, $this->step);
@@ -312,7 +312,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
         $form->setModel($this->action->getOwner(), $this->action->fields);
         // set Fields value if set from another step.
-        $this->setFormField($form, $this->actionData['fields'] ?? [], $this->step);
+        $this->setFormField($form, $this->getActionData('fields'), $this->step);
 
         // setup exec, next and prev button handler for this step.
         $this->jsSetSubmitBtn($modal, $form, $this->step);
@@ -338,7 +338,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     {
         $this->_addStepTitle($modal, $this->step);
 
-        if ($fields = $this->actionData['fields'] ?? null) {
+        if ($fields = $this->getActionData('fields')) {
             $this->action->getModel()->setMulti($fields);
         }
 
@@ -397,13 +397,23 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      */
     protected function doFinal(View $modal)
     {
-        foreach ($this->actionData['fields'] ?? [] as $field => $value) {
+        foreach ($this->getActionData('fields') as $field => $value) {
             $this->action->getOwner()->set($field, $value);
         }
 
-        $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
+        $return = $this->action->execute(...$this->_getActionArgs($this->getActionData('args')));
 
         $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->getOwner()->getId()));
+    }
+
+    protected function getActionData(string $step): array
+    {
+        return $this->actionData[$step] ?? [];
+    }
+
+    protected function getStep(): string
+    {
+        return $this->step;
     }
 
     /**
@@ -534,7 +544,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         try {
             if ($this->isLastStep($step)) {
                 // collect argument and execute action.
-                $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
+                $return = $this->action->execute(...$this->_getActionArgs($this->getActionData('args')));
                 $js = $this->jsGetExecute($return, $this->action->getOwner()->getId());
             } else {
                 // store data and setup reload.
@@ -678,7 +688,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $args = [];
 
         foreach ($this->action->args as $key => $val) {
-            $args[] = $this->actionData['args'][$key];
+            $args[] = $this->getActionData('args')[$key];
         }
 
         return $this->action->preview(...$args);
