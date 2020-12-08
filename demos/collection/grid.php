@@ -34,6 +34,51 @@ $grid->menu->addItem(['Delete All', 'icon' => 'trash', 'red active']);
 
 $grid->addColumn(null, [\Atk4\Ui\Table\Column\Template::class, 'hello<b>world</b>']);
 
+$modalviewvp = \Atk4\Ui\VirtualPage::addTo($grid->getApp()); // Virtual Page with customized content for Grid button
+$modalviewvp->set(function ($frame) use ($grid){
+    \Atk4\Ui\Message::addTo($frame, ['Attention - you are doing something dangerous!']);
+    $modalmodel = clone $grid->model;
+    $modalmodel->load($frame->getApp()->stickyGet('mid'));
+
+    $modalform = \Atk4\Ui\Form::addTo($frame);
+    $modalform->setModel($modalmodel);
+
+    $modalform->onSubmit(function($form) use ($grid) {
+        $form->model->save();
+        
+        $modal_chain = new \atk4\ui\jQuery('.atk-modal'); // Close the modal form? Is there a more elegant way?
+        $modal_chain->modal('hide');
+        
+        return [$modal_chain,
+            new \Atk4\Ui\JsToast([
+                'title'   => 'Save form data.',
+                'message' => 'Message is saved.',
+                'class'   => 'success',
+            ]),
+            new \Atk4\Ui\JsReload($grid),
+            
+        ];
+    });
+});
+    
+$modal = new \Atk4\Ui\JsModal('Edit', $modalviewvp->getUrl('cut'), ['mid' => $grid->table->jsRow()->data('id')]);
+$grid->addActionButton('Modal form in VP', $modal);
+
+$grid->addActionButton(['icon'=>'envelope'], function ($v, $id) use ($grid) {
+    
+    $model = (clone $grid->model)->load($id);
+    $countryname =  $model->get('name');
+    $model->set('name', lcfirst($countryname));
+    $model->save();
+    return [ new \Atk4\Ui\JsReload($grid),
+        new \Atk4\Ui\JsToast([
+            'title'    => 'Message',
+            'message'  => 'Lower cased country '.$countryname. ' with id '. $id,
+            'position' => 'bottom right',
+            'class'   => 'success',
+        ])];
+});
+
 $grid->addActionButton('test');
 
 $grid->addActionButton('Say HI', function ($j, $id) use ($grid) {
