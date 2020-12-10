@@ -551,41 +551,14 @@ class Grid extends View
     }
 
     /**
-     * Find out more about the nature of the action from the supplied object, use addAction().
+     * Use addExecutorButton or addExecutorMenuItem
+     * @deprecated.
      */
     public function addUserAction(Model\UserAction $action)
     {
-        $executor = null;
-        $args = [];
-        $title = $action->caption;
-        $button = $action->caption;
+        $executor = $this->getExecutorFactory()->create($action);
 
-        if ($action->ui['Grid']['Button'] ?? null) {
-            $button = $action->ui['Grid']['Button'];
-        }
-
-        if ($action->ui['Grid']['Executor'] ?? null) {
-            $executor = $action->ui['Grid']['Executor'];
-        }
-
-        if (!$executor || is_string($executor)) {
-            $class = $executor ?? $this->executor_class;
-            $executor = new $class();
-        }
-
-        if ($this->paginator) {
-            $args[$this->paginator->name] = $this->paginator->getCurrentPage();
-        }
-
-        $this->addModalAction($button, $title, function ($page, $id) use ($action, $executor) {
-            $page->add($executor);
-
-            $this->hook(self::HOOK_ON_USER_ACTION, [$page, $executor]);
-
-            $action->getOwner()->load($id);
-
-            $executor->setAction($action);
-        }, $args);
+        $this->addExecutorButton($executor);
     }
 
     /**
