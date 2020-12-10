@@ -85,7 +85,7 @@ class Crud extends Grid
             foreach ($this->menuItems as $item) {
                 // Remove previous click handler and attach new one using sort argument.
                 $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
-                $ex = $item['action'];
+                $ex = $item['executor'];
                 if ($ex instanceof UserAction\JsExecutorInterface) {
                     $ex->stickyGet($this->name . '_sort', $this->getSortBy());
                     $this->container->js(true, $item['item']->js()->on('click.atk_crud_item', new JsFunction($ex->jsExecute())));
@@ -134,7 +134,7 @@ class Crud extends Grid
                     $this->menuItems[$k]['item'] = $this->menu->addItem(
                         $this->getExecutorFactory()->createTrigger($action, $this->getExecutorFactory()::MENU_ITEM)
                     );
-                    $this->menuItems[$k]['action'] = $executor;
+                    $this->menuItems[$k]['executor'] = $executor;
                 }
             }
             $this->setItemsAction();
@@ -252,7 +252,7 @@ class Crud extends Grid
     protected function setItemsAction()
     {
         foreach ($this->menuItems as $k => $item) {
-            $this->container->js(true, $item['item']->on('click.atk_crud_item', $item['action']));
+            $this->container->js(true, $item['item']->on('click.atk_crud_item', $item['executor']));
         }
     }
 
@@ -263,10 +263,6 @@ class Crud extends Grid
      */
     protected function getExecutor(Model\UserAction $action)
     {
-        if (isset($action->ui['executor'])) {
-            return Factory::factory($action->ui['executor']);
-        }
-
         // prioritize Crud addFields over action->fields for Model add action.
         if ($action->short_name === 'add' && $this->addFields) {
             $action->fields = $this->addFields;
