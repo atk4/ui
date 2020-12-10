@@ -551,12 +551,13 @@ class Grid extends View
     }
 
     /**
-     * Use addExecutorButton or addExecutorMenuItem
+     * Use addExecutorButton or addExecutorMenuItem.
+     *
      * @deprecated.
      */
     public function addUserAction(Model\UserAction $action)
     {
-        $executor = $this->getExecutorFactory()->create($action);
+        $executor = $this->getExecutorFactory()->create($action, $this);
 
         $this->addExecutorButton($executor);
     }
