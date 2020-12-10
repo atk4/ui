@@ -103,8 +103,6 @@ class Grid extends View
      */
     public $table;
 
-    public $executor_class = UserAction\BasicExecutor::class;
-
     /**
      * The container for table and paginator.
      *
