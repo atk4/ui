@@ -244,7 +244,7 @@ _All components can be view using the [demos](ui.agiletoolkit.org/demos) applica
 | Items and Lists | Flexible and high-performance way to display lists of items. | 1.4 |
 | Wizard | Multi-step, wizard with temporary data storing. | 1.4  |
 | Actions | Vizualization of user-defined actions | 2.0 |
-          |
+
 
 ## Add-ons and integrations
 
