@@ -66,7 +66,7 @@ $crud->addModalAction(['icon' => [\Atk4\Ui\Icon::class, 'cogs']], 'Details', fun
 });
 
 $column = $columns->addColumn();
-\Atk4\Ui\Header::addTo($column, ['Cutomizations']);
+\Atk4\Ui\Header::addTo($column, ['Customizations']);
 
 /** @var \Atk4\Ui\UserAction\ModalExecutor $myExecutorClass */
 $myExecutorClass = get_class(new class() extends \Atk4\Ui\UserAction\ModalExecutor {
@@ -100,3 +100,7 @@ $crud->menu->addItem(['Rescan', 'icon' => 'recycle']);
 
 // Condition on the model can be applied after setting the model
 $crud->setModel($file)->addCondition('parent_folder_id', null);
+
+// Modify default user action menu entry
+$crud->getUserActionMenuItem('add')->icon = 'file outline';
+$crud->getUserActionMenuItem('add')->content = 'Add File';

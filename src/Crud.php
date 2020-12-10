@@ -88,13 +88,13 @@ class Crud extends Grid
         parent::applySort();
 
         if ($this->getSortBy() && !empty($this->menuItems)) {
-            foreach ($this->menuItems as $item) {
+            foreach ($this->menuItems as $actionName => $item) {
                 // Remove previous click handler and attach new one using sort argument.
-                $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
-                $ex = $item['action']->ui['executor'];
+                $this->container->js(true, $item->js()->off('click.atk_crud_item'));
+                $ex = $this->model->getUserAction($actionName)->ui['executor'];
                 if ($ex instanceof UserAction\JsExecutorInterface) {
                     $ex->stickyGet($this->name . '_sort', $this->getSortBy());
-                    $this->container->js(true, $item['item']->js()->on('click.atk_crud_item', new JsFunction($ex->jsExecute())));
+                    $this->container->js(true, $item->js()->on('click.atk_crud_item', new JsFunction($ex->jsExecute())));
                 }
             }
         }
@@ -134,22 +134,26 @@ class Crud extends Grid
         }
 
         if ($this->menu) {
-            foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
+            foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $action) {
                 if ($action->enabled) {
                     $action->ui['executor'] = $this->initActionExecutor($action);
-                    $this->menuItems[$k]['item'] = $this->menu->addItem(
+                    $this->menuItems[$action->short_name] = $this->menu->addItem(
                         array_merge(
                             [$action->getCaption()],
                             $action->modifier === Model\UserAction::MODIFIER_CREATE ? ['icon' => 'plus'] : []
                         )
                     );
-                    $this->menuItems[$k]['action'] = $action;
                 }
             }
             $this->setItemsAction();
         }
 
         return $this->model;
+    }
+
+    public function getUserActionMenuItem(string $actionName): ?Item
+    {
+        return $this->menuItems[$actionName] ?? null;
     }
 
     /**
@@ -260,8 +264,8 @@ class Crud extends Grid
      */
     protected function setItemsAction()
     {
-        foreach ($this->menuItems as $k => $item) {
-            $this->container->js(true, $item['item']->on('click.atk_crud_item', $item['action']));
+        foreach ($this->menuItems as $actionName => $item) {
+            $this->container->js(true, $item->on('click.atk_crud_item', $this->model->getUserAction($actionName)));
         }
     }
 
