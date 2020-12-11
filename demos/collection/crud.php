@@ -40,9 +40,8 @@ $column = $columns->addColumn(0, 'ui blue segment');
 // Crud can operate with various fields
 \Atk4\Ui\Header::addTo($column, ['Configured Crud']);
 $crud = \Atk4\Ui\Crud::addTo($column, [
-    //'fieldsCreate' => ['name', 'iso', 'iso3', 'numcode', 'phonecode'], // when creating then show more fields
-    'displayFields' => ['name'], // when updating then only allow to update name
-    'editFields' => ['name', 'iso', 'iso3'],
+    'displayFields' => ['name'], // field to display in Crud
+    'editFields' => ['name', 'iso', 'iso3'], // field to display on 'edit' action
     'ipp' => 5,
     'paginator' => ['range' => 2, 'class' => ['blue inverted']],  // reduce range on the paginator
     'menu' => ['class' => ['green inverted']],
