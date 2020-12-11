@@ -187,6 +187,7 @@ class View extends AbstractView implements JsExpressionable
     {
         $this->setModel(new Model(new Static_($data)), $fields);
         $this->model->getField($this->model->id_field)->type = null; // TODO probably unwanted
+        $this->model->getField($this->model->id_field)->required = false; // TODO probably unwanted
 
         return $this->model;
     }
