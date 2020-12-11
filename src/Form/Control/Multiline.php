@@ -308,12 +308,14 @@ class Multiline extends Form\Control
     public function getValue()
     {
         $model = null;
+
         // Will load data when using containsMany.
         $data = $this->getApp()->ui_persistence->_typecastSaveField($this->field, $this->field->get());
 
         // If data is empty try to load model data directly. - For hasMany model
         // or array model already populated with data.
         if (empty($data)) {
+            $rows = [];
             // Set model according to model reference if set, or simply the model passed to it.
             if ($this->model->loaded() && $this->modelRef) {
                 $model = $this->model->ref($this->modelRef);
@@ -321,7 +323,6 @@ class Multiline extends Form\Control
                 $model = $this->model;
             }
             if ($model) {
-                $rows = [];
                 foreach ($model as $row) {
                     $cols = [];
                     foreach ($this->rowFields as $fieldName) {
