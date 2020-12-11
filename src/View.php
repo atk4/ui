@@ -185,6 +185,15 @@ class View extends AbstractView implements JsExpressionable
      */
     public function setSource(array $data, $fields = null)
     {
+        // ID with zero value is not supported, fix the data
+        if (isset($data[0])) {
+            $oldData = $data;
+            $data = [];
+            foreach ($oldData as $k => $row) {
+                $data['_setSource_' . $k] = $row;
+            }
+        }
+
         $this->setModel(new Model(new Static_($data)), $fields);
         $this->model->getField($this->model->id_field)->type = null; // TODO probably unwanted
 
