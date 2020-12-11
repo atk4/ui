@@ -321,17 +321,18 @@ class Multiline extends Form\Control
                 $model = $this->model;
             }
             if ($model) {
+                $rows = [];
                 foreach ($model as $row) {
-                    $d_row = [];
+                    $cols = [];
                     foreach ($this->rowFields as $fieldName) {
                         $field = $model->getField($fieldName);
                         $value = $this->getApp()->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
-                        $d_row[$fieldName] = $value;
+                        $cols[$fieldName] = $value;
                     }
-                    $data[] = $d_row;
+                    $rows[] = $cols;
                 }
             }
-            $data = $this->getApp()->encodeJson($data);
+            $data = $this->getApp()->encodeJson($rows);
         }
 
         return $data;
