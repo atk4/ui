@@ -185,12 +185,16 @@ class View extends AbstractView implements JsExpressionable
      */
     public function setSource(array $data, $fields = null)
     {
-        // ID with zero value is not supported, fix the data
+        // ID with zero value is not supported (at least in MySQL replaces it with next AI value)
         if (isset($data[0])) {
-            $oldData = $data;
-            $data = [];
-            foreach ($oldData as $k => $row) {
-                $data['_setSource_' . $k] = $row;
+            if ($data === array_values($data)) {
+                $oldData = $data;
+                $data = [];
+                foreach ($oldData as $k => $row) {
+                    $data[$k + 1000 * 1000 * 1000] = $row; // large offset to prevent accessing wrong data by old key
+                }
+            } else {
+                throw new Exception('Source data contains unsupported zero key');
             }
         }
 
