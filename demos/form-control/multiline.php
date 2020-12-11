@@ -36,6 +36,9 @@ $inventoryItemClass = get_class(new class() extends Model {
                 function ($v) {
                     return ($v instanceof \DateTime) ? date_format($v, $this->dateFormat) : $v;
                 },
+                function ($v) {
+                    return $v;
+                },
             ],
             'ui' => ['multiline' => ['width' => 3]],
         ]);
@@ -45,6 +48,9 @@ $inventoryItemClass = get_class(new class() extends Model {
             'typecast' => [
                 function ($v) {
                     return ($v instanceof \DateTime) ? date_format($v, $this->timeFormat) : $v;
+                },
+                function ($v) {
+                    return $v;
                 },
             ],
             'ui' => ['multiline' => ['width' => 3]],
