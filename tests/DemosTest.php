@@ -237,29 +237,41 @@ class DemosTest extends AtkPhpunit\TestCase
         $excludeDirs = ['_demo-data', '_includes', '_unit-test', 'special'];
         $excludeFiles = ['layout/layouts_error.php'];
 
-        // these tests require SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
-        if (static::class === self::class) {
-            $excludeFiles[] = 'collection/tablefilter.php';
-            $excludeFiles[] = 'interactive/popup.php';
-        }
-
         $files = [];
-        $files[] = ['index.php'];
+        $files[] = 'index.php';
         foreach (array_diff(scandir(static::DEMOS_DIR), ['.', '..'], $excludeDirs) as $dir) {
             if (!is_dir(static::DEMOS_DIR . '/' . $dir)) {
                 continue;
             }
 
             foreach (scandir(static::DEMOS_DIR . '/' . $dir) as $f) {
-                if (substr($f, -4) !== '.php' || in_array($dir . '/' . $f, $excludeFiles, true)) {
+                $path = $dir . '/' . $f;
+                if (substr($path, -4) !== '.php' || in_array($path, $excludeFiles, true)) {
                     continue;
                 }
 
-                $files[] = [$dir . '/' . $f];
+                $files[] = $path;
             }
         }
 
-        return $files;
+        // these tests require SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
+        // always move these tests to the end, so data provider # stays same as much as possible across tests for fast skip
+        $httpOnlyFiles = ['collection/tablefilter.php', 'interactive/popup.php'];
+        foreach ($files as $k => $path) {
+            if (in_array($path, $httpOnlyFiles, true)) {
+                unset($files[$k]);
+                $files[] = $path;
+            }
+        }
+        if (static::class === self::class) {
+            foreach ($files as $k => $path) {
+                if (in_array($path, $httpOnlyFiles, true)) {
+                    unset($files[$k]);
+                }
+            }
+        }
+
+        return array_map(function (string $v) { return [$v]; }, $files);
     }
 
     /**
