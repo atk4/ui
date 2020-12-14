@@ -5,24 +5,23 @@ import atkDatePicker from '../share/atk-date-picker';
 export default {
     name: 'atk-multiline-cell',
     template: ` 
-    <component :is="componentName"
+    <component :is="getComponent()"
         :fluid="true"  
         class="fluid" 
         @blur="onBlur"
         @input="onInput"
         @onChange="onChange"
         v-model="inputValue"
-        :readOnlyValue="fieldValue"
         :name="fieldName"
         ref="cell"
-        v-bind="componentProps"></component>
+        v-bind="mapComponentProps()"></component>
   `,
     components: {
         'atk-multiline-readonly': multilineReadOnly,
         'atk-multiline-textarea': multilineTextarea,
         'atk-date-picker': atkDatePicker,
     },
-    props: ['cellData', 'componentName', 'fieldValue', 'options', 'componentProps'],
+    props: ['cellData', 'fieldValue'],
     data: function () {
         return {
             field: this.cellData.field,
@@ -38,6 +37,30 @@ export default {
         },
     },
     methods: {
+        getComponent: function () {
+          return this.cellData.definition.component;
+        },
+        getComponentProps: function () {
+          return this.cellData.definition.componentProps;
+        },
+      /**
+       * Map component props accordingly.
+       * Some component requires specific Props to be passed in.
+       * This function make sure proper Props are set.
+       */
+        mapComponentProps: function() {
+          if (this.getComponent() === 'atk-date-picker') {
+            return {
+              config: this.getComponentProps(),
+              value: this.fieldValue,
+            }
+          }
+          if (this.getComponent() === 'atk-multiline-readonly') {
+            return {readOnlyValue: this.fieldValue}
+          }
+
+          return this.getComponentProps();
+        },
         onInput: function (value) {
             this.inputValue = this.getTypeValue(value);
             this.$emit('update-value', this.field, this.inputValue);

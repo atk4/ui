@@ -40,7 +40,7 @@ $inventoryItemClass = get_class(new class() extends Model {
                     return $v;
                 },
             ],
-            'ui' => ['multiline' => ['width' => 3]],
+            'ui' => ['multiline' => ['sui-table-cell' => ['width' => 3]]],
         ]);
         $this->addField('inv_time', [
             'default' => date($this->timeFormat),
@@ -53,10 +53,10 @@ $inventoryItemClass = get_class(new class() extends Model {
                     return $v;
                 },
             ],
-            'ui' => ['multiline' => ['width' => 3]],
+            'ui' => ['multiline' => ['sui-table-cell' => ['width' => 3]]],
         ]);
-        $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
-        $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
+        $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
+        $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
         $this->addExpression('total', ['expr' => function (Model $row) {
             return $row->get('qty') * $row->get('box');
         }, 'type' => 'integer']);

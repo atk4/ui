@@ -96,19 +96,47 @@ class Multiline extends Form\Control
      */
     private $multiLine;
 
+    /* Components name */
+    public const INPUT = 'sui-input';
+    public const READ_ONLY = 'atk-multiline-readonly';
+    public const TEXT_AREA = 'atk-multiline-textarea';
+    public const SELECT = 'sui-dropdown';
+    public const DATE = 'atk-date-picker';
+    public const LOOKUP = 'atk-lookup';
+
     /**
      * An array of options for certain Vue component use in Multiline.
      * These options are applied globally to each components within Multiline.
-     *
      * @var array
      */
-    public $options = [
-        // sui-table props. Example: ['celled' => true] will render column lines in table.
-        'suiTable' => [],
-        // sui-dropdown props.
-        'suiDropdown' => [],
-        // flatpickr props - Will be applied globally.
-        'flatpickr' => [],
+    public $options = [];
+
+    /** @var array[]  Set Vue component to use per field type. */
+    protected $fieldMapToComponent = [
+        'default' => [
+            'component' => self::INPUT,
+            'componentProps' => [__CLASS__, 'getSuiInputProps'],
+        ],
+        'readonly' => [
+            'component' => self::READ_ONLY,
+            'componentProps' => [],
+        ],
+        'textarea' => [
+            'component' => self::TEXT_AREA,
+            'componentProps' => [],
+        ],
+        'select' => [
+            'component' => self::SELECT,
+            'componentProps' => [__CLASS__, 'getDropdownProps'],
+        ],
+        'date' => [
+            'component' => self::DATE,
+            'componentProps' => [__CLASS__, 'getDatePickerProps'],
+        ],
+        'lookup' => [
+            'component' => self::LOOKUP,
+            'componentProps' => [__CLASS__, 'getLookupProps'],
+        ]
     ];
 
     /**
@@ -131,7 +159,7 @@ class Multiline extends Form\Control
      *
      * @var JsCallback
      */
-    private $cb;
+    private $renderCallback;
 
     /**
      * The function that gets execute when fields are changed or
@@ -243,7 +271,7 @@ class Multiline extends Form\Control
 
         $this->multiLine = View::addTo($this, ['template' => $this->multiLineTemplate]);
 
-        $this->cb = JsCallback::addTo($this);
+        $this->renderCallback = JsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
         $this->form->onHook(Form::HOOK_LOAD_POST, function ($form) {
@@ -515,173 +543,144 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Return the field definition to use in JS for rendering this field.
-     * $component is one of the following html input types:
-     * - input
-     * - dropdown
-     * - checkbox
-     * - textarea.
+     * Return field definition in order to properly render them in Multiline.
      *
-     * Depending on the component, additional data is set to fieldOptions
-     * (dropdown needs values, input needs type)
+     * Multiline uses Vue components in order to manage input type based on field type.
+     * Component name and props are determine via the getComponentDefinition function.
+     *
      */
     public function getFieldDef(Field $field): array
     {
-        // Default is input
-        $component = 'input';
 
-        // First check in Field->ui['multiline'] if there are settings for Multiline display
-        // $test = $field->ui['multiline'];
-        if (isset($field->ui['multiline'][0])) {
-            $component = $this->_mapComponent($field->ui['multiline'][0]);
-        }
-        // Next, check if there is a 'standard' UI seed set
-        elseif (isset($field->ui['form'][0])) {
-            $component = $this->_mapComponent($field->ui['form'][0]);
-        }
-        // If values or enum property is set, display a Dropdown
-        elseif ($field->enum || $field->values || $field->reference instanceof HasOne) {
-            $component = 'dropdown';
-        }
-        // Figure UI FormField type by field type.
-        // TODO: Form already does this, maybe use that somehow?
-        elseif ($field->type) {
-            $component = $this->_mapComponent($field->type);
-        }
+        $definition = $this->getComponentDefinition($field);
 
         return [
             'field' => $field->short_name,
-            'component' => $component,
+            'definition' => $definition,
+            'suiTableCell' => $this->getSuiTableCellProps($field),
             'caption' => $field->getCaption(),
             'default' => $field->default,
             'isExpr' => isset($field->expr),
-            'isEditable' => $field->isEditable(),
             'isHidden' => $field->isHidden(),
             'isVisible' => $field->isVisible(),
-            'fieldOptions' => $this->_getFieldOptions($field, $component),
         ];
     }
 
     /**
-     * Maps field type to form control (input, checkbox, dropdown or textarea), defaults to input.
+     * Each field input, represent by a Vue component, is place within a table cell.
+     * This table cell is also a Vue component which also can use Props: sui-table-cell.
      *
-     * @param string|object $fieldType
+     * Cell properties can be applied globally via $options['sui-table-cell'] or per field
+     * via  $field->ui['multiline']['sui-table-cell']
      */
-    protected function _mapComponent($fieldType): string
+    protected function getSuiTableCellProps(Field $field): array
     {
-        if (is_string($fieldType)) {
-            switch (strtolower($fieldType)) {
-                case 'dropdown':
-                case 'enum':
-                    return 'dropdown';
-                case 'boolean':
-                case 'checkbox':
-                    return 'checkbox';
-                case 'text':
-                case 'textarea':
-                    return 'textarea';
-                case 'date':
-                    return 'date';
-                case 'time':
-                    return 'time';
-                case 'datetime':
-                    return 'datetime';
-                default: return 'input';
-            }
+        $props = [];
+
+        if ($field->type === 'money' || $field->type === 'number' || $field->type === 'integer') {
+            $props['text-align'] = 'right';
         }
-
-        // If an object was passed, use its classname as string
-        elseif (is_object($fieldType)) {
-            return $this->_mapComponent((new \ReflectionClass($fieldType))->getShortName());
-        }
-
-        return 'input';
-    }
-
-    protected function _getFieldOptions(Field $field, string $component): array
-    {
-        $options = [];
-
-        // If additional options are defined for field, add them.
-        if (is_array($field->ui['multiline'] ?? null)) {
-            $add_options = $field->ui['multiline'];
-            if (isset($add_options[0])) {
-                if (is_array($add_options[0])) {
-                    $options = array_merge($options, $add_options[0]);
-                }
-                if (is_array($add_options[1] ?? null)) {
-                    $options = array_merge($options, $add_options[1]);
-                }
-            } else {
-                $options = array_merge($options, $add_options);
-            }
-        } elseif (is_array($field->ui['form'] ?? null)) {
-            $add_options = $field->ui['form'];
-            if (isset($add_options[0])) {
-                unset($add_options[0]);
-            }
-            $options = array_merge($options, $add_options);
-        }
-
-        // Some input types need additional options set, make sure they are there
-        switch ($component) {
-            // Input needs to have type set (text, number, date etc)
-            case 'input':
-                if (!isset($options['type'])) {
-                    $options['type'] = $this->_addTypeOption($field);
-                }
-
-                break;
-            // Dropdown needs values set
-            case 'dropdown':
-                if (!isset($options['values'])) {
-                    $options['values'] = $this->_addValuesOption($field);
-                }
-
-                break;
-            case 'date':
-            case 'datetime':
-            case 'time':
-              $options['dateFormat'] = $options['dateFormat'] ?? $this->getApp()->ui_persistence->{$component . '_format'};
-
-               break;
-        }
-
-        return $options;
+        return array_merge($props, $this->options['sui-table-cell'] ?? [], $field->ui['multiline']['sui-table-cell'] ?? []);
     }
 
     /**
-     * HTML input field needs type property set. If it wasnt found in $field->ui,
-     * determine from rest.
+     * Return props for input component.
      */
-    protected function _addTypeOption(Field $field): string
+    protected function getSuiInputProps(Field $field)
     {
-        switch ($field->type) {
-            case 'integer':
-                return 'number';
-            default:
-                return 'text';
-        }
+        $props = $this->options[self::INPUT] ?? [];
+
+        $props['type'] = ($field->type === 'integer' || $field->type === 'float' || $field->type === 'money') ? 'number' : 'text';
+
+        return array_merge($props, $field->ui['multiline'][self::INPUT] ?? []);
     }
 
     /**
-     * Dropdown field needs values set. If it wasnt found in $field->ui, determine
-     * from rest.
+     * Return props for atk-date-picker component.
      */
-    protected function _addValuesOption(Field $field): array
+    protected function getDatePickerProps(Field $field): array
     {
-        if ($field->enum) {
-            return array_combine($field->enum, $field->enum);
+        $calendar = new Calendar();
+        $props = $this->options[self::DATE]['flatpickr'] ?? [];
+        $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$field->type . '_format'});
+        $props['dateFormat'] = $format;
+
+        if ($field->type === 'datetime' || $field->type === 'time') {
+            $props['enableTime'] = true;
+            $props['time_24hr'] = $calendar->use24hrTimeFormat($format);
+            $props['noCalendar'] = ($field->type === 'time');
+            $props['enableSeconds'] = $calendar->useSeconds($format);
         }
-        if (is_array($field->values)) {
-            return $field->values;
+
+        return $props;
+    }
+
+    /**
+     * Return props for Dropdown components.
+     */
+    protected function getDropdownProps(Field $field): array
+    {
+        $props = array_merge(
+            ['floating' => true, 'closeOnBlur' => true, 'selection' => true],
+            $this->options[self::SELECT] ?? []
+        );
+
+        $items = $this->getFieldItems($field, $this->options['limit'] ?? 25);
+        foreach ($items as $value => $text) {
+            $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
+        }
+
+        return $props;
+    }
+
+    /**
+     * Return a component definition.
+     * Component definition require at least a name and a props array.
+     */
+    protected function getComponentDefinition(Field $field)
+    {
+        if (!$field->isEditable()) {
+            $component = $this->fieldMapToComponent['readonly'];
+        } elseif ($field->enum || $field->values) {
+            $component = $this->fieldMapToComponent['select'];
+        } elseif ($field->type === 'date' || $field->type === 'time' || $field->type === 'datetime') {
+            $component = $this->fieldMapToComponent['date'];
+        } elseif ($field->type === 'text') {
+            $component = $this->fieldMapToComponent['textarea'];
         } elseif ($field->reference) {
-            $model = $field->reference->refModel()->setLimit($this->enumLimit);
-
-            return $model->getTitles();
+            $component = $this->fieldMapToComponent['lookup'];
+        } else {
+            $component = $this->fieldMapToComponent['default'];
         }
 
-        return [];
+        $definition =  array_map(function ($value) use ($field) {
+            return is_array($value) && is_callable($value) ? call_user_func($value, $field) : $value;
+        }, $component);
+
+        return $definition;
+    }
+
+    /**
+     * Return array of possible items set for a field.
+     */
+    protected function getFieldItems(Field $field, $limit = 250): array
+    {
+        $items = [];
+        if ($field->enum) {
+            $items = array_chunk(array_combine($field->enum, $field->enum), $limit, true)[0];
+        }
+        if ($field->values && is_array($field->values)) {
+            $items = array_chunk($field->values, $limit, true)[0];
+        } elseif ($field->reference) {
+            $model = $field->reference->refModel();
+            $model->setLimit($limit);
+
+            foreach ($model as $item) {
+                $items[$item->get($field->reference->getTheirFieldName())] = $item->get($model->title_field);
+            }
+        }
+
+        return $items;
     }
 
     protected function renderView(): void
@@ -690,9 +689,9 @@ class Multiline extends Form\Control
             throw new Exception('Multiline field needs to have it\'s model setup.');
         }
 
-        $this->cb->set(function () {
+        $this->renderCallback->set(function () {
             try {
-                return $this->renderCallback();
+                return $this->outputJson();
             } catch (\Atk4\Core\Exception | \Error $e) {
                 $this->getApp()->terminateJson(['success' => false, 'error' => $e->getMessage()]);
             }
@@ -708,7 +707,7 @@ class Multiline extends Form\Control
                     'linesField' => $this->short_name,
                     'fields' => $this->fieldDefs,
                     'idField' => $this->getModel()->id_field,
-                    'url' => $this->cb->getJsUrl(),
+                    'url' => $this->renderCallback->getJsUrl(),
                     'eventFields' => $this->eventFields,
                     'hasChangeCb' => $this->onChangeFunction ? true : false,
                     'options' => $this->options,
@@ -727,7 +726,7 @@ class Multiline extends Form\Control
      *
      * Render callback.
      */
-    private function renderCallback()
+    private function outputJson()
     {
         $action = $_POST['__atkml_action'] ?? null;
         $response = [

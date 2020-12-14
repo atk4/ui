@@ -33,8 +33,8 @@ class Account extends \Atk4\Data\Model
     {
         parent::init();
 
-        $this->addField('email', ['required' => true, 'ui' => ['multiline' => ['input', ['icon' => 'envelope', 'type' => 'email']]]]);
-        $this->addField('password', ['required' => true, 'ui' => ['multiline' => ['input', ['icon' => 'key', 'type' => 'password']]]]);
+        $this->addField('email', ['required' => true, 'ui' => ['multiline' => ['sui-input' => ['icon' => 'envelope', 'type' => 'email']]]]);
+        $this->addField('password', ['required' => true, 'ui' => ['multiline' => ['sui-input' => ['icon' => 'key', 'type' => 'password']]]]);
         $this->addField('site', ['required' => true]);
         $this->addField('type', ['default' => 'user', 'values' => ['user' => 'Regular User', 'admin' => 'System Admin'], 'ui' => ['multiline' => ['width' => 'four']]]);
     }
