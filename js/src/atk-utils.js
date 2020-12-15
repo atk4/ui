@@ -43,6 +43,18 @@ const atkEventBus = (function () {
 */
 const atkUtils = (function () {
     return {
+        json: function() {
+            return {
+                // try parsing string as JSON. Return parse if valid, otherwise return null.
+                tryParse:  function(str) {
+                    try {
+                        return JSON.parse(str);
+                    } catch (e) {
+                        return null;
+                    }
+                }
+            };
+        },
         date: function () {
             return {
                 // fix date parsing for different time zone if time is not supply.

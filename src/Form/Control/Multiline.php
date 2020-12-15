@@ -74,10 +74,12 @@ use Atk4\Data\FieldSqlExpression;
 use Atk4\Data\Model;
 use Atk4\Data\Reference\HasOne;
 use Atk4\Data\ValidationException;
+use Atk4\Ui\AbstractView;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\JsCallback;
+use Atk4\Ui\UserAction\ModalExecutor;
 use Atk4\Ui\View;
 
 class Multiline extends Form\Control
@@ -270,31 +272,24 @@ class Multiline extends Form\Control
      */
     public function getValue()
     {
-        $model = null;
-
         // Will load data when using containsMany.
-        $data = $this->getApp()->ui_persistence->_typecastSaveField($this->field, $this->field->get());
-
-        // If data is empty try to load model data directly. - For hasMany model
-        // or array model already populated with data.
-        if (empty($data)) {
-            $rows = [];
-            // Set model according to model reference if set, or simply the model passed to it.
+        if ($this->field->type === 'array') {
+            $data = $this->getApp()->ui_persistence->_typecastSaveField($this->field, $this->field->get() ?? []);
+        } else {
+            // set data according to hasMany ref. or using model.
+            $model = $this->model;
             if ($this->model->loaded() && $this->modelRef) {
                 $model = $this->model->ref($this->modelRef);
-            } elseif (!$this->modelRef) {
-                $model = $this->model;
             }
-            if ($model) {
-                foreach ($model as $row) {
-                    $cols = [];
-                    foreach ($this->rowFields as $fieldName) {
-                        $field = $model->getField($fieldName);
-                        $value = $this->getApp()->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
-                        $cols[$fieldName] = $value;
-                    }
-                    $rows[] = $cols;
+            $rows = [];
+            foreach ($model as $row) {
+                $cols = [];
+                foreach ($this->rowFields as $fieldName) {
+                    $field = $model->getField($fieldName);
+                    $value = $this->getApp()->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
+                    $cols[$fieldName] = $value;
                 }
+                $rows[] = $cols;
             }
             $data = $this->getApp()->encodeJson($rows);
         }
@@ -535,7 +530,7 @@ class Multiline extends Form\Control
     protected function getDatePickerProps(Field $field): array
     {
         $calendar = new Calendar();
-        $props = $this->componentProps[self::DATE]['flatpickr'] ?? [];
+        $props = $this->componentProps[self::DATE] ?? [];
         $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$field->type . '_format'});
         $props['dateFormat'] = $format;
 
@@ -638,7 +633,8 @@ class Multiline extends Form\Control
             'atk-multiline',
             [
                 'data' => [
-                    'linesField' => $this->short_name,
+                    'inputName' => $this->short_name,
+                    'inputOwnerName' => $this->getOwnerName($this, ModalExecutor::class),
                     'fields' => $this->fieldDefs,
                     'idField' => $this->getModel()->id_field,
                     'url' => $this->renderCallback->getJsUrl(),
@@ -653,6 +649,22 @@ class Multiline extends Form\Control
                 ],
             ]
         );
+    }
+
+    /**
+     * Return the name of a view owner of a certain type class or null otherwise.
+     * Will return the name of the first corresponding owner found.
+     * TODO Move this to AbstractView as protected function?
+     */
+    private function getOwnerName(View $view, string $className): ?string
+    {
+        if (!$view->issetOwner()) {
+            return null;
+        } elseif ($view instanceof $className) {
+            return $view->name;
+        } elseif ($view->getOwner()) {
+            return $this->getOwnerName($view->getOwner(), $className);
+        }
     }
 
     /**

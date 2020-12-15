@@ -31,8 +31,16 @@ export default {
         data: Object,
     },
     data: function () {
+        const tableDefault = {
+            basic: false,
+            celled: false,
+            collapsing: false,
+            stackable: false,
+            inverted: false,
+        };
+
         return {
-            linesField: this.data.linesField, // form control where to set multiline content value.
+            inputName: this.data.inputName, // form input name where to set multiline content value.
             rows: [],
             fieldData: this.data.fields,
             idField: this.data.idField,
@@ -40,19 +48,8 @@ export default {
             deletables: [],
             hasChangeCb: this.data.hasChangeCb,
             errors: {},
-            caption: this.data.caption ? this.data.caption : null,
-            tableDefault: {
-                basic: false,
-                celled: false,
-                size: null,
-                compact: null,
-                collapsing: false,
-                stackable: false,
-                inverted: false,
-                color: null,
-                columns: null,
-            },
-            tableProp: { ...this.tableDefault, ...this.data.tableProps || {} },
+            caption: this.data.caption || null,
+            tableProp: { ...tableDefault, ...this.data.tableProps || {} },
         };
     },
     components: {
@@ -99,15 +96,15 @@ export default {
     created: function () {
         this.rowData = this.getInitData();
         this.$nextTick(() => {
-            this.updateLinesField();
+            this.updateInputValue();
         });
     },
     methods: {
-    /**
-     * UUID v4 generator.
-     *
-     * @returns {string}
-     */
+        /**
+         * UUID v4 generator.
+         *
+         * @returns {string}
+         */
         getUUID: function () {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
                 // eslint-disable-next-line no-bitwise
@@ -119,7 +116,7 @@ export default {
         },
         onAdd: function () {
             this.rowData.push(this.newDataRow());
-            this.updateLinesField();
+            this.updateInputValue();
             if (this.data.afterAdd && typeof this.data.afterAdd === 'function') {
                 this.data.afterAdd(JSON.parse(this.getInputElement().value));
             }
@@ -140,7 +137,7 @@ export default {
                 this.rowData.splice(idx, 1);
                 delete this.errors[id];
             }
-            this.updateLinesField();
+            this.updateInputValue();
             // fire change callback if set and field is part of it.
             if (this.hasChangeCb) {
                 this.postRaw();
@@ -155,12 +152,12 @@ export default {
             return -1;
         },
         /**
-     * Send a single row to server
-     * usually to get data expression from server.
-     *
-     * @param rowId
-     * @returns {Promise<void>}
-     */
+         * Send a single row to server
+         * usually to get data expression from server.
+         *
+         * @param rowId
+         * @returns {Promise<void>}
+         */
         postRow: async function (rowId) {
             // find proper row index using id.
             let idx = -1;
@@ -182,12 +179,12 @@ export default {
             }
         },
         /**
-     * Update row with proper data value.
-     *
-     * @param id
-     * @param field
-     * @param value
-     */
+         * Update row with proper data value.
+         *
+         * @param id
+         * @param field
+         * @param value
+         */
         updateRow: function (rowId, field, value) {
             // find proper row index using id.
             let idx = -1;
@@ -201,7 +198,7 @@ export default {
             }
             this.updateFieldInRow(idx, field, value);
             this.clearError(rowId, field);
-            this.updateLinesField();
+            this.updateInputValue();
         },
         clearError: function (rowId, field) {
             if (rowId in this.errors) {
@@ -213,12 +210,12 @@ export default {
             }
         },
         /**
-     * Update the value of the field in rowData.
-     *
-     * @param idx
-     * @param field
-     * @param value
-     */
+         * Update the value of the field in rowData.
+         *
+         * @param idx
+         * @param field
+         * @param value
+         */
         updateFieldInRow: function (idx, field, value) {
             this.rowData[idx].forEach((cell) => {
                 if (field in cell) {
@@ -227,12 +224,10 @@ export default {
             });
         },
         /**
-     * Update Multi-line Form input with all rowData values
-     * as json string.
-     */
-        updateLinesField: function () {
-            const field = document.getElementsByName(this.linesField)[0];
-
+        * Update Multi-line Form input with all rowData values
+        * as json string.
+        */
+        updateInputValue: function () {
             const data = this.rowData.map((item) => {
                 const newItem = {};
                 for (let i = 0; i < item.length; i++) {
@@ -243,46 +238,41 @@ export default {
                 return { ...newItem };
             });
 
-            field.value = JSON.stringify(data);
+            this.getInputElement().value = JSON.stringify(data);
         },
         /**
-     * Get initial rowData value.
-     * We need to compare fields return by model vs what values give us because it could differ.
-     * For example if a field was add or remove from model after a value was saved. Specially for
-     * array type field like containsMany / containsOne.
-     * In other word, rowData must match fields definition.
-     *
-     * @returns {Array}
-     */
+        * Get initial rowData value.
+        * We need to compare fields return by model vs what values give us because it could differ.
+        * For example if a field was add or remove from model after a value was saved. Specially for
+        * array type field like containsMany / containsOne.
+         * In other word, rowData must match fields definition.
+         *
+         * @returns {Array}
+         */
         getInitData: function () {
             const rows = [];
             // Get field name.
             const fields = this.data.fields.map((item) => item.field);
 
-            // check if input containing data is set and initialized.
-            const field = document.getElementsByName(this.linesField)[0];
-            if (field) {
-                // Map value to our rowData.
-                let values = JSON.parse(field.value);
-                values = Array.isArray(values) ? values : [];
+            // Map value to our rowData.
+            const values = atk.utils.json().tryParse(this.getInputElement().value) || [];
 
-                values.forEach((value) => {
-                    const data = fields.map((fieldName) => (
-                        { [fieldName]: value[fieldName] ? value[fieldName] : null }
-                    ));
-                    data.push({ __atkml: this.getUUID() });
-                    rows.push(data);
-                });
-            }
+            values.forEach((value) => {
+                const data = fields.map((fieldName) => (
+                  { [fieldName]: value[fieldName] ? value[fieldName] : null }
+                ));
+                data.push({ __atkml: this.getUUID() });
+                rows.push(data);
+            });
 
             return rows;
         },
         /**
-     * Add a new row of data and
-     * set values to default if available.
-     *
-     * @returns {Array}
-     */
+         * Add a new row of data and
+         * set values to default if available.
+         *
+         * @returns {Array}
+         */
         newDataRow: function () {
             const columns = [];
             // add __atkml property in order to identify each row.
@@ -294,11 +284,11 @@ export default {
             return columns;
         },
         /**
-     * Return the __atkml id of the row.
-     *
-     * @param row
-     * @returns {*}
-     */
+         * Return the __atkml id of the row.
+         *
+         * @param row
+         * @returns {*}
+         */
         getId: function (row) {
             let id;
             row.forEach((input) => {
@@ -309,19 +299,19 @@ export default {
             return id;
         },
         /**
-     * Check if one of the field use expression.
-     *
-     * @returns {boolean}
-     */
+         * Check if one of the field use expression.
+         *
+         * @returns {boolean}
+         */
         hasExpression: function () {
             return this.fieldData.filter((field) => field.isExpr).length > 0;
         },
         /**
-     * Post raw data.
-     *
-     * Use regular api call in order
-     * for return js to be fully evaluate.
-     */
+         * Post raw data.
+         *
+         * Use regular api call in order
+         * for return js to be fully evaluate.
+         */
         postRaw: function () {
             jQuery(this.$refs.addBtn.$el).api({
                 on: 'now',
@@ -346,7 +336,11 @@ export default {
             }
         },
         getInputElement: function () {
-            return document.getElementsByName(this.linesField)[0];
+            if (this.data.inputOwnerName) {
+                return document.querySelector('#' + this.data.inputOwnerName + ' input[name="' + this.inputName + '"]');
+            } else {
+                return document.querySelector('input[name="' + this.inputName + '"]');
+            }
         },
         onTabLastRow: function () {
             if (!this.isLimitReached && this.data.addOnTab) {
@@ -367,18 +361,18 @@ export default {
             return this.fieldData.length - 1;
         },
         /**
-     * Get id's of row set for deletion.
-     * @returns {Array}
-     */
+         * Get id's of row set for deletion.
+         * @returns {Array}
+         */
         getDeletables: function () {
             return this.deletables;
         },
         /**
-     * Return Delete all checkbox state base on
-     * deletables entries.
-     *
-     * @returns {string}
-     */
+         * Return Delete all checkbox state base on
+         * deletables entries.
+         *
+         * @returns {string}
+         */
         getMainToggleState: function () {
             let state = 'off';
             if (this.deletables.length > 0) {
@@ -391,19 +385,19 @@ export default {
             return state;
         },
         /**
-     * Set delete button disabled property.
-     *
-     * @returns {boolean}
-     */
+         * Set delete button disabled property.
+         *
+         * @returns {boolean}
+         */
         isDeleteDisable: function () {
             return !this.deletables.length > 0;
         },
         /**
-     * Check if record limit is reach.
-     * return false if not.
-     *
-     * @returns {boolean}
-     */
+         * Check if record limit is reach.
+         * return false if not.
+         *
+         * @returns {boolean}
+         */
         isLimitReached: function () {
             if (this.data.rowLimit === 0) {
                 return false;
