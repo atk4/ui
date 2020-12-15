@@ -72,7 +72,6 @@ use Atk4\Data\Field;
 use Atk4\Data\Field\Callback;
 use Atk4\Data\FieldSqlExpression;
 use Atk4\Data\Model;
-use Atk4\Data\Reference\HasOne;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\AbstractView;
 use Atk4\Ui\Exception;
@@ -84,13 +83,13 @@ use Atk4\Ui\View;
 
 class Multiline extends Form\Control
 {
-    /** @var HtmlTemplate The template needed for the multiline view.*/
+    /** @var HtmlTemplate The template needed for the multiline view. */
     public $multiLineTemplate;
 
-    /** @var View The multiline View. Assigned in init().*/
+    /** @var View The multiline View. Assigned in init(). */
     private $multiLine;
 
-    /* Components name */
+    // Components name
     public const INPUT = 'sui-input';
     public const READ_ONLY = 'atk-multiline-readonly';
     public const TEXT_AREA = 'atk-multiline-textarea';
@@ -102,7 +101,7 @@ class Multiline extends Form\Control
     /**
      * Props to be apply globally for each component supported by field type.
      * For example setting 'sui-dropdown' property globally.
-     *  $componentProps = [Multiline::SELECT => ['floating' => true]]
+     *  $componentProps = [Multiline::SELECT => ['floating' => true]].
      *
      * @var array
      */
@@ -111,7 +110,7 @@ class Multiline extends Form\Control
     /** @var array sui-table component props */
     public $tableProps = [];
 
-    /** @var array[]  Set Vue component to use per field type. */
+    /** @var array[] Set Vue component to use per field type. */
     protected $fieldMapToComponent = [
         'default' => [
             'component' => self::INPUT,
@@ -136,7 +135,7 @@ class Multiline extends Form\Control
         'lookup' => [
             'component' => self::LOOKUP,
             'componentProps' => [__CLASS__, 'getLookupProps'],
-        ]
+        ],
     ];
 
     /** @var bool Add row when tabbing out of last column in last row. */
@@ -160,7 +159,7 @@ class Multiline extends Form\Control
     /** @var string The model reference name used for Multiline input. */
     public $modelRef;
 
-    /** @var string The link field used for reference.*/
+    /** @var string The link field used for reference. */
     public $linkField;
 
     /** @var array The fields names used in each row. */
@@ -477,11 +476,9 @@ class Multiline extends Form\Control
      *
      * Multiline uses Vue components in order to manage input type based on field type.
      * Component name and props are determine via the getComponentDefinition function.
-     *
      */
     public function getFieldDef(Field $field): array
     {
-
         return [
             'field' => $field->short_name,
             'definition' => $this->getComponentDefinition($field),
@@ -582,7 +579,7 @@ class Multiline extends Form\Control
             $component = $this->fieldMapToComponent['default'];
         }
 
-        $definition =  array_map(function ($value) use ($field) {
+        $definition = array_map(function ($value) use ($field) {
             return is_array($value) && is_callable($value) ? call_user_func($value, $field) : $value;
         }, $component);
 

@@ -259,7 +259,7 @@ export default {
 
             values.forEach((value) => {
                 const data = fields.map((fieldName) => (
-                  { [fieldName]: value[fieldName] ? value[fieldName] : null }
+                    { [fieldName]: value[fieldName] ? value[fieldName] : null }
                 ));
                 data.push({ __atkml: this.getUUID() });
                 rows.push(data);
@@ -338,9 +338,8 @@ export default {
         getInputElement: function () {
             if (this.data.inputOwnerName) {
                 return document.querySelector('#' + this.data.inputOwnerName + ' input[name="' + this.inputName + '"]');
-            } else {
-                return document.querySelector('input[name="' + this.inputName + '"]');
             }
+            return document.querySelector('input[name="' + this.inputName + '"]');
         },
         onTabLastRow: function () {
             if (!this.isLimitReached && this.data.addOnTab) {

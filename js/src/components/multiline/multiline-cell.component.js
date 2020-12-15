@@ -38,28 +38,28 @@ export default {
     },
     methods: {
         getComponent: function () {
-          return this.cellData.definition.component;
+            return this.cellData.definition.component;
         },
         getComponentProps: function () {
-          return this.cellData.definition.componentProps;
+            return this.cellData.definition.componentProps;
         },
-      /**
+        /**
        * Map component props accordingly.
        * Some component requires specific Props to be passed in.
        * This function make sure proper Props are set.
        */
-        mapComponentProps: function() {
-          if (this.getComponent() === 'atk-date-picker') {
-            return {
-              config: this.getComponentProps(),
-              value: this.fieldValue,
+        mapComponentProps: function () {
+            if (this.getComponent() === 'atk-date-picker') {
+                return {
+                    config: this.getComponentProps(),
+                    value: this.fieldValue,
+                };
             }
-          }
-          if (this.getComponent() === 'atk-multiline-readonly') {
-            return {readOnlyValue: this.fieldValue}
-          }
+            if (this.getComponent() === 'atk-multiline-readonly') {
+                return { readOnlyValue: this.fieldValue };
+            }
 
-          return this.getComponentProps();
+            return this.getComponentProps();
         },
         onInput: function (value) {
             this.inputValue = this.getTypeValue(value);
