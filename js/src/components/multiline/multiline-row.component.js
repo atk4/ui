@@ -14,7 +14,7 @@ export default {
     template: `
     <sui-table-row :verticalAlign="'middle'">
         <sui-table-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDelete" v-model="toDelete"></input></sui-table-cell>
-        <sui-table-cell  @keydown.tab="onTab(idx)" v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" v-bind="column.suiTableCell" :style="{overflow: 'visible'}" v-if="column.isVisible">
+        <sui-table-cell  @keydown.tab="onTab(idx)" v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" v-bind="column.cellProps" :style="{overflow: 'visible'}" v-if="column.isVisible">
          <atk-multiline-cell
            :cellData="column" 
            @update-value="onUpdateValue"
@@ -52,7 +52,6 @@ export default {
             }
         },
         getErrorState: function (column) {
-            // console.log(column);
             if (this.error) {
                 const error = this.error.filter((e) => column.field === e.field);
                 if (error.length > 0) {

@@ -82,18 +82,10 @@ use Atk4\Ui\View;
 
 class Multiline extends Form\Control
 {
-    /**
-     * The template needed for the multiline view.
-     *
-     * @var HtmlTemplate
-     */
+    /** @var HtmlTemplate The template needed for the multiline view.*/
     public $multiLineTemplate;
 
-    /**
-     * The multiline View. Assigned in init().
-     *
-     * @var View
-     */
+    /** @var View The multiline View. Assigned in init().*/
     private $multiLine;
 
     /* Components name */
@@ -103,13 +95,19 @@ class Multiline extends Form\Control
     public const SELECT = 'sui-dropdown';
     public const DATE = 'atk-date-picker';
     public const LOOKUP = 'atk-lookup';
+    public const TABLE_CELL = 'sui-table-cell';
 
     /**
-     * An array of options for certain Vue component use in Multiline.
-     * These options are applied globally to each components within Multiline.
+     * Props to be apply globally for each component supported by field type.
+     * For example setting 'sui-dropdown' property globally.
+     *  $componentProps = [Multiline::SELECT => ['floating' => true]]
+     *
      * @var array
      */
-    public $options = [];
+    public $componentProps = [];
+
+    /** @var array sui-table component props */
+    public $tableProps = [];
 
     /** @var array[]  Set Vue component to use per field type. */
     protected $fieldMapToComponent = [
@@ -139,100 +137,43 @@ class Multiline extends Form\Control
         ]
     ];
 
-    /**
-     * When true, tabbing out of the last column in last row of data
-     * will automatically add a new row of record.
-     *
-     * @var bool
-     */
+    /** @var bool Add row when tabbing out of last column in last row. */
     public $addOnTab = false;
 
-    /**
-     * The definition of each field used in every multiline row.
-     *
-     * @var array
-     */
+    /** @var array The definition of each field used in every multiline row. */
     private $fieldDefs;
 
-    /**
-     * The JS callback.
-     *
-     * @var JsCallback
-     */
+    /** @var JsCallback */
     private $renderCallback;
 
-    /**
-     * The function that gets execute when fields are changed or
-     * rows get deleted.
-     *
-     * @var \Closure
-     */
+    /** @var \Closure Function to execute when field change or row is delete. */
     protected $onChangeFunction;
 
-    /**
-     * Array of field names that will trigger the onChange function when those
-     * fields are changed.
-     *
-     * @var array
-     */
+    /** @var array Set fields that will trigger onChange function. */
     protected $eventFields;
 
-    /**
-     * Collection of field errors.
-     *
-     * @var array
-     */
+    /** @var array Collection of field errors. */
     private $rowErrors;
 
-    /**
-     * The model reference name used for Multiline input.
-     *
-     * @var string
-     */
+    /** @var string The model reference name used for Multiline input. */
     public $modelRef;
 
-    /**
-     * The link field used for reference.
-     *
-     * @var string
-     */
+    /** @var string The link field used for reference.*/
     public $linkField;
 
-    /**
-     * The fields names used in each row.
-     *
-     * @var array
-     */
+    /** @var array The fields names used in each row. */
     public $rowFields;
 
-    /**
-     * The data sent for each row.
-     *
-     * @var array
-     */
+    /** @var array The data sent for each row. */
     public $rowData;
 
-    /**
-     * The max number of records that can be added to Multiline. 0 means no limit.
-     *
-     * @var int
-     */
+    /** @var int The max number of records (rows) that can be added to Multiline. 0 means no limit. */
     public $rowLimit = 0;
 
-    /**
-     * Model's max rows limit to be used in enum fields.
-     * Enum fields are display as Dropdown inputs.
-     * This limit is set on model reference used by a field.
-     *
-     * @var int
-     */
-    public $enumLimit = 100;
+    /** @var int The maximum number of items for select type field. */
+    public $itemLimit = 25;
 
-    /**
-     * Multiline's caption.
-     *
-     * @var string
-     */
+    /** @var string Multiline's caption. */
     public $caption;
 
     /**
@@ -262,12 +203,6 @@ class Multiline extends Form\Control
         if (!$this->multiLineTemplate) {
             $this->multiLineTemplate = new HtmlTemplate('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline><div class="ui hidden divider"></div>{$Input}</div>');
         }
-
-        /* No need for this anymore. See: https://github.com/atk4/ui/commit/8ec4d22cf9dcbd4969d9c88d8f09b705ca8798a6
-        if ($this->model) {
-            $this->setModel($this->model);
-        }
-        */
 
         $this->multiLine = View::addTo($this, ['template' => $this->multiLineTemplate]);
 
@@ -552,12 +487,10 @@ class Multiline extends Form\Control
     public function getFieldDef(Field $field): array
     {
 
-        $definition = $this->getComponentDefinition($field);
-
         return [
             'field' => $field->short_name,
-            'definition' => $definition,
-            'suiTableCell' => $this->getSuiTableCellProps($field),
+            'definition' => $this->getComponentDefinition($field),
+            'cellProps' => $this->getSuiTableCellProps($field),
             'caption' => $field->getCaption(),
             'default' => $field->default,
             'isExpr' => isset($field->expr),
@@ -568,7 +501,7 @@ class Multiline extends Form\Control
 
     /**
      * Each field input, represent by a Vue component, is place within a table cell.
-     * This table cell is also a Vue component which also can use Props: sui-table-cell.
+     * This table cell is also a Vue component that can use Props: sui-table-cell.
      *
      * Cell properties can be applied globally via $options['sui-table-cell'] or per field
      * via  $field->ui['multiline']['sui-table-cell']
@@ -580,7 +513,8 @@ class Multiline extends Form\Control
         if ($field->type === 'money' || $field->type === 'number' || $field->type === 'integer') {
             $props['text-align'] = 'right';
         }
-        return array_merge($props, $this->options['sui-table-cell'] ?? [], $field->ui['multiline']['sui-table-cell'] ?? []);
+
+        return array_merge($props, $this->componentProps[self::TABLE_CELL] ?? [], $field->ui['multiline'][self::TABLE_CELL] ?? []);
     }
 
     /**
@@ -588,7 +522,7 @@ class Multiline extends Form\Control
      */
     protected function getSuiInputProps(Field $field)
     {
-        $props = $this->options[self::INPUT] ?? [];
+        $props = $this->componentProps[self::INPUT] ?? [];
 
         $props['type'] = ($field->type === 'integer' || $field->type === 'float' || $field->type === 'money') ? 'number' : 'text';
 
@@ -601,7 +535,7 @@ class Multiline extends Form\Control
     protected function getDatePickerProps(Field $field): array
     {
         $calendar = new Calendar();
-        $props = $this->options[self::DATE]['flatpickr'] ?? [];
+        $props = $this->componentProps[self::DATE]['flatpickr'] ?? [];
         $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$field->type . '_format'});
         $props['dateFormat'] = $format;
 
@@ -621,11 +555,11 @@ class Multiline extends Form\Control
     protected function getDropdownProps(Field $field): array
     {
         $props = array_merge(
-            ['floating' => true, 'closeOnBlur' => true, 'selection' => true],
-            $this->options[self::SELECT] ?? []
+            ['floating' => false, 'closeOnBlur' => true, 'selection' => true],
+            $this->componentProps[self::SELECT] ?? []
         );
 
-        $items = $this->getFieldItems($field, $this->options['limit'] ?? 25);
+        $items = $this->getFieldItems($field, $this->itemLimit);
         foreach ($items as $value => $text) {
             $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
         }
@@ -663,7 +597,7 @@ class Multiline extends Form\Control
     /**
      * Return array of possible items set for a field.
      */
-    protected function getFieldItems(Field $field, $limit = 250): array
+    protected function getFieldItems(Field $field, $limit = 10): array
     {
         $items = [];
         if ($field->enum) {
@@ -710,7 +644,7 @@ class Multiline extends Form\Control
                     'url' => $this->renderCallback->getJsUrl(),
                     'eventFields' => $this->eventFields,
                     'hasChangeCb' => $this->onChangeFunction ? true : false,
-                    'options' => $this->options,
+                    'tableProps' => $this->tableProps,
                     'rowLimit' => $this->rowLimit,
                     'caption' => $this->caption,
                     'afterAdd' => $this->jsAfterAdd,

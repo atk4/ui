@@ -52,7 +52,7 @@ export default {
                 color: null,
                 columns: null,
             },
-            tableProp: { ...this.tableDefault, ...this.data.options.suiTable || {} },
+            tableProp: { ...this.tableDefault, ...this.data.tableProps || {} },
         };
     },
     components: {
