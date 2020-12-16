@@ -202,7 +202,7 @@ class Multiline extends Form\Control
         parent::init();
 
         if (!$this->multiLineTemplate) {
-            $this->multiLineTemplate = new HtmlTemplate('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline><div class="ui hidden divider"></div>{$Input}</div>');
+            $this->multiLineTemplate = new HtmlTemplate('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline>');
         }
 
         $this->multiLine = View::addTo($this, ['template' => $this->multiLineTemplate]);
@@ -246,21 +246,6 @@ class Multiline extends Form\Control
         $this->eventFields = $fields;
 
         $this->onChangeFunction = $fx;
-    }
-
-    /**
-     * Input field collecting multiple rows of data.
-     *
-     * @return string
-     */
-    public function getInput()
-    {
-        return $this->getApp()->getTag('input', [
-            'name' => $this->short_name,
-            'type' => 'hidden',
-            'value' => $this->getValue(),
-            'readonly' => true,
-        ]);
     }
 
     /**
@@ -587,7 +572,7 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Return array of possible items set for a field.
+     * Return array of possible items set for a select or lookup field.
      */
     protected function getFieldItems(Field $field, $limit = 10): array
     {
@@ -623,15 +608,15 @@ class Multiline extends Form\Control
             }
         });
 
-        $this->multiLine->template->tryDangerouslySetHtml('Input', $this->getInput());
         parent::renderView();
 
         $this->multiLine->vue(
             'atk-multiline',
             [
                 'data' => [
+                    'formName' => $this->form->formElement->name,
+                    'inputValue' => $this->getValue(),
                     'inputName' => $this->short_name,
-                    'inputOwnerName' => $this->getOwnerName($this, ModalExecutor::class),
                     'fields' => $this->fieldDefs,
                     'idField' => $this->getModel()->id_field,
                     'url' => $this->renderCallback->getJsUrl(),
@@ -646,22 +631,6 @@ class Multiline extends Form\Control
                 ],
             ]
         );
-    }
-
-    /**
-     * Return the name of a view owner of a certain type class or null otherwise.
-     * Will return the name of the first corresponding owner found.
-     * TODO Move this to AbstractView as protected function?
-     */
-    private function getOwnerName(View $view, string $className): ?string
-    {
-        if (!$view->issetOwner()) {
-            return null;
-        } elseif ($view instanceof $className) {
-            return $view->name;
-        } elseif ($view->getOwner()) {
-            return $this->getOwnerName($view->getOwner(), $className);
-        }
     }
 
     /**

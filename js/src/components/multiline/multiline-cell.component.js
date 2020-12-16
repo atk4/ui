@@ -8,7 +8,6 @@ export default {
     <component :is="getComponent()"
         :fluid="true"  
         class="fluid" 
-        @blur="onBlur"
         @input="onInput"
         @onChange="onChange"
         v-model="inputValue"
@@ -28,13 +27,7 @@ export default {
             type: this.cellData.type,
             fieldName: '-' + this.cellData.field,
             inputValue: this.fieldValue,
-            dirtyValue: this.fieldValue,
         };
-    },
-    computed: {
-        isDirty: function () {
-            return this.dirtyValue !== this.inputValue;
-        },
     },
     methods: {
         getComponent: function () {
@@ -43,7 +36,7 @@ export default {
         getComponentProps: function () {
             return this.cellData.definition.componentProps;
         },
-        /**
+       /**
        * Map component props accordingly.
        * Some component requires specific Props to be passed in.
        * This function make sure proper Props are set.
@@ -69,22 +62,8 @@ export default {
             this.onInput(value);
         },
         /**
-     * Tell parent row that input value has changed.
-     *
-     * @param e
-     */
-        onBlur: function (e) {
-            if (this.isDirty) {
-                this.$emit('post-value', this.field);
-                this.dirtyValue = this.inputValue;
-            }
-        },
-        /**
-     * return input value based on their type.
-     *
-     * @param value
-     * @returns {*}
-     */
+         * return input value based on their type.
+         */
         getTypeValue: function (value) {
             let r = value;
             if (this.type === 'boolean') {

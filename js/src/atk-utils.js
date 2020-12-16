@@ -45,12 +45,12 @@ const atkUtils = (function () {
     return {
         json: function () {
             return {
-                // try parsing string as JSON. Return parse if valid, otherwise return null.
-                tryParse: function (str) {
+                // try parsing string as JSON. Return parse if valid, otherwise return onError value.
+                tryParse: function (str, onError = null) {
                     try {
                         return JSON.parse(str);
                     } catch (e) {
-                        return null;
+                        return onError;
                     }
                 },
             };

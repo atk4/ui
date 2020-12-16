@@ -18,7 +18,6 @@ export default {
          <atk-multiline-cell
            :cellData="column" 
            @update-value="onUpdateValue"
-           @post-value="onPostRow"
            :fieldValue="getValue(column)"></atk-multiline-cell>
         </sui-table-cell>
     </sui-table-row>
@@ -71,9 +70,6 @@ export default {
         },
         onUpdateValue: function (field, value) {
             atk.eventBus.emit(this.$root.$el.id + '-update-row', { rowId: this.rowId, field: field, value: value });
-        },
-        onPostRow: function (field) {
-            atk.eventBus.emit(this.$root.$el.id + '-post-row', { rowId: this.rowId, field: field });
         },
         getValue: function (column) {
             let temp = column.default;

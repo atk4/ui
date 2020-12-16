@@ -4,9 +4,6 @@ import multilineHeader from './multiline-header.component';
 /**
  * MultiLine component.
  *
- * 2019-07-23 - add support for containsMany.
- *  - updateLinesField method now return one level data row, {id:4, field1: 'value1'}
- *  - getInitData method now handle one level data row.
  */
 export default {
     name: 'atk-multiline',
@@ -26,6 +23,7 @@ export default {
                     </sui-table-row>
                   </sui-table-footer>
                 </sui-table>
+                <input :form="form" :name="name" type="text" :value="value" ref="atkmlInput">
              </div>`,
     props: {
         data: Object,
@@ -40,7 +38,9 @@ export default {
         };
 
         return {
-            inputName: this.data.inputName, // form input name where to set multiline content value.
+            form: this.data.formName,
+            value: this.data.inputValue,
+            name: this.data.inputName, // form input name where to set multiline content value.
             rows: [],
             fieldData: this.data.fields,
             idField: this.data.idField,
@@ -57,18 +57,11 @@ export default {
         'atk-multiline-header': multilineHeader,
     },
     mounted: function () {
-        atk.eventBus.on(this.$root.$el.id + '-update-row', (payload) => {
-            this.updateRow(payload.rowId, payload.field, payload.value);
-        });
+        this.rowData = this.buildRowData();
+        this.updateInputValue();
 
-        atk.eventBus.on(this.$root.$el.id + '-post-row', (payload) => {
-            if (this.hasExpression()) {
-                this.postRow(payload.rowId, payload.field);
-            }
-            // fire change callback if set and field is part of it.
-            if (this.hasChangeCb && (this.eventFields.indexOf(payload.field) > -1)) {
-                this.postRaw();
-            }
+        atk.eventBus.on(this.$root.$el.id + '-update-row', (payload) => {
+            this.onUpdate(payload.rowId, payload.field, payload.value);
         });
 
         atk.eventBus.on(this.$root.$el.id + '-toggle-delete', (payload) => {
@@ -84,7 +77,7 @@ export default {
             this.deletables = [];
             if (payload.isOn) {
                 this.rowData.forEach((row) => {
-                    this.deletables.push(this.getId(row));
+                    this.deletables.push(this.getAtkmlId(row));
                 });
             }
         });
@@ -93,128 +86,79 @@ export default {
             this.errors = { ...payload.errors };
         });
     },
-    created: function () {
-        this.rowData = this.getInitData();
-        this.$nextTick(() => {
-            this.updateInputValue();
-        });
-    },
     methods: {
-        /**
-         * UUID v4 generator.
-         *
-         * @returns {string}
-         */
-        getUUID: function () {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-                // eslint-disable-next-line no-bitwise
-                const r = Math.random() * 16 | 0;
-                // eslint-disable-next-line no-bitwise
-                const v = c === 'x' ? r : (r & (0x3 | 0x8));
-                return v.toString(16);
-            });
+        onTabLastRow: function () {
+            if (!this.isLimitReached && this.data.addOnTab) {
+                this.onAdd();
+            }
         },
         onAdd: function () {
-            this.rowData.push(this.newDataRow());
+            const row = this.createRow();
+            this.rowData.push(row);
             this.updateInputValue();
             if (this.data.afterAdd && typeof this.data.afterAdd === 'function') {
-                this.data.afterAdd(JSON.parse(this.getInputElement().value));
+                this.data.afterAdd(JSON.parse(this.value));
             }
+            this.fetchExpression(this.getAtkmlId(row));
+            this.fetchOnChangeAction();
         },
         onDelete: function () {
             this.deletables.forEach((id) => {
                 this.deleteRow(id);
             });
             this.deletables = [];
+            this.updateInputValue();
+            this.fetchOnChangeAction();
             if (this.data.afterDelete && typeof this.data.afterDelete === 'function') {
-                this.data.afterDelete(JSON.parse(this.getInputElement().value));
+                this.data.afterDelete(atk.utils.json().tryParse(this.value));
+            }
+        },
+        onUpdate: function (atkmlId, field, value) {
+            this.updateRow(atkmlId, field, value);
+            this.clearError(atkmlId, field);
+            this.updateInputValue();
+
+            atk.debounce(() => {
+                this.fetchExpression(atkmlId);
+                this.fetchOnChangeAction(field);
+            }, 300).call(this);
+
+        },
+        /**
+         * Creates a new row of data and
+         * set values to default if available.
+         *
+         * @returns {Array}
+         */
+        createRow: function () {
+            const columns = [];
+            // add __atkml property in order to identify each row.
+            columns.push({ __atkml: this.getUUID() });
+            this.data.fields.forEach((item) => {
+                columns.push({ [item.field]: item.default });
+            });
+
+            return columns;
+        },
+        /**
+         * Update row with proper data value.
+         */
+        updateRow: function (rowAtkmlId, field, value) {
+            const idx = this.getRowIndex(rowAtkmlId);
+            if (idx > -1) {
+                this.updateFieldInRow(idx, field, value);
             }
         },
         deleteRow: function (id) {
             // find proper row index using id.
-            const idx = this.findRowIndex(id);
+            const idx = this.getRowIndex(id);
             if (idx > -1) {
                 this.rowData.splice(idx, 1);
                 delete this.errors[id];
             }
-            this.updateInputValue();
-            // fire change callback if set and field is part of it.
-            if (this.hasChangeCb) {
-                this.postRaw();
-            }
-        },
-        findRowIndex: function (id) {
-            for (let i = 0; i < this.rowData.length; i++) {
-                if (this.getId(this.rowData[i]) === id) {
-                    return i;
-                }
-            }
-            return -1;
-        },
-        /**
-         * Send a single row to server
-         * usually to get data expression from server.
-         *
-         * @param rowId
-         * @returns {Promise<void>}
-         */
-        postRow: async function (rowId) {
-            // find proper row index using id.
-            let idx = -1;
-            for (let i = 0; i < this.rowData.length; i++) {
-                // eslint-disable-next-line no-loop-func
-                this.rowData[i].forEach((cell) => {
-                    if (cell.__atkml === rowId) {
-                        idx = i;
-                    }
-                });
-            }
-            // server will return expression field  - value if define.
-            const resp = await this.postData([...this.rowData[idx]]);
-            if (resp.expressions) {
-                const fields = Object.keys(resp.expressions);
-                fields.forEach((field) => {
-                    this.updateFieldInRow(idx, field, resp.expressions[field]);
-                });
-            }
-        },
-        /**
-         * Update row with proper data value.
-         *
-         * @param id
-         * @param field
-         * @param value
-         */
-        updateRow: function (rowId, field, value) {
-            // find proper row index using id.
-            let idx = -1;
-            for (let i = 0; i < this.rowData.length; i++) {
-                // eslint-disable-next-line no-loop-func
-                this.rowData[i].forEach((cell) => {
-                    if (cell.__atkml === rowId) {
-                        idx = i;
-                    }
-                });
-            }
-            this.updateFieldInRow(idx, field, value);
-            this.clearError(rowId, field);
-            this.updateInputValue();
-        },
-        clearError: function (rowId, field) {
-            if (rowId in this.errors) {
-                const errors = this.errors[rowId].filter((error) => error.field !== field);
-                this.errors[rowId] = [...errors];
-                if (errors.length === 0) {
-                    delete this.errors[rowId];
-                }
-            }
         },
         /**
          * Update the value of the field in rowData.
-         *
-         * @param idx
-         * @param field
-         * @param value
          */
         updateFieldInRow: function (idx, field, value) {
             this.rowData[idx].forEach((cell) => {
@@ -222,6 +166,15 @@ export default {
                     cell[field] = value;
                 }
             });
+        },
+        clearError: function (rowAtkmlId, field) {
+            if (rowAtkmlId in this.errors) {
+                const errors = this.errors[rowAtkmlId].filter((error) => error.field !== field);
+                this.errors[rowAtkmlId] = [...errors];
+                if (errors.length === 0) {
+                    delete this.errors[rowAtkmlId];
+                }
+            }
         },
         /**
         * Update Multi-line Form input with all rowData values
@@ -238,10 +191,10 @@ export default {
                 return { ...newItem };
             });
 
-            this.getInputElement().value = JSON.stringify(data);
+            this.value = JSON.stringify(data);
         },
         /**
-        * Get initial rowData value.
+        * Build rowData from input value.
         * We need to compare fields return by model vs what values give us because it could differ.
         * For example if a field was add or remove from model after a value was saved. Specially for
         * array type field like containsMany / containsOne.
@@ -249,17 +202,17 @@ export default {
          *
          * @returns {Array}
          */
-        getInitData: function () {
+        buildRowData: function () {
             const rows = [];
             // Get field name.
             const fields = this.data.fields.map((item) => item.field);
 
             // Map value to our rowData.
-            const values = atk.utils.json().tryParse(this.getInputElement().value) || [];
+            const values = atk.utils.json().tryParse(this.value, []);
 
             values.forEach((value) => {
                 const data = fields.map((fieldName) => (
-                    { [fieldName]: value[fieldName] ? value[fieldName] : null }
+                    { [fieldName]: value[fieldName] || null }
                 ));
                 data.push({ __atkml: this.getUUID() });
                 rows.push(data);
@@ -268,57 +221,25 @@ export default {
             return rows;
         },
         /**
-         * Add a new row of data and
-         * set values to default if available.
-         *
-         * @returns {Array}
-         */
-        newDataRow: function () {
-            const columns = [];
-            // add __atkml property in order to identify each row.
-            columns.push({ __atkml: this.getUUID() });
-            this.data.fields.forEach((item) => {
-                columns.push({ [item.field]: item.default });
-            });
-
-            return columns;
-        },
-        /**
-         * Return the __atkml id of the row.
-         *
-         * @param row
-         * @returns {*}
-         */
-        getId: function (row) {
-            let id;
-            row.forEach((input) => {
-                if ('__atkml' in input) {
-                    id = input.__atkml;
-                }
-            });
-            return id;
-        },
-        /**
          * Check if one of the field use expression.
-         *
-         * @returns {boolean}
          */
         hasExpression: function () {
             return this.fieldData.filter((field) => field.isExpr).length > 0;
         },
         /**
-         * Post raw data.
-         *
+         * Send on change action to server.
          * Use regular api call in order
          * for return js to be fully evaluate.
          */
-        postRaw: function () {
-            jQuery(this.$refs.addBtn.$el).api({
-                on: 'now',
-                url: this.data.url,
-                method: 'post',
-                data: { __atkml_action: 'on-change', rows: JSON.stringify(this.rowData) },
-            });
+        fetchOnChangeAction: function (field = null) {
+            if (this.hasChangeCb && field === null || this.hasChangeCb && (this.eventFields.indexOf(field) > -1)) {
+                jQuery(this.$refs.addBtn.$el).api({
+                    on: 'now',
+                    url: this.data.url,
+                    method: 'post',
+                    data: { __atkml_action: 'on-change', rows: this.value },
+                });
+            }
         },
         postData: async function (row) {
             const data = {};
@@ -335,16 +256,62 @@ export default {
                 console.error(e);
             }
         },
-        getInputElement: function () {
-            if (this.data.inputOwnerName) {
-                return document.querySelector('#' + this.data.inputOwnerName + ' input[name="' + this.inputName + '"]');
+        /**
+         * Get expressions from server.
+         */
+        fetchExpression: async function (rowAtkmlId) {
+            if (this.hasExpression()) {
+                const idx = this.getRowIndex(rowAtkmlId);
+                // server will return expression field - value if define.
+                if (idx > -1) {
+                    const resp = await this.postData([...this.rowData[idx]]);
+                    if (resp.expressions) {
+                        const fields = Object.keys(resp.expressions);
+                        fields.forEach((field) => {
+                            this.updateFieldInRow(idx, field, resp.expressions[field]);
+                        });
+                        this.updateInputValue();
+                    }
+                }
             }
-            return document.querySelector('input[name="' + this.inputName + '"]');
         },
-        onTabLastRow: function () {
-            if (!this.isLimitReached && this.data.addOnTab) {
-                this.onAdd();
+        /**
+         * Return the __atkml id from a row of data.
+         */
+        getAtkmlId: function (row) {
+            let id;
+            row.forEach((input) => {
+                if ('__atkml' in input) {
+                    id = input.__atkml;
+                }
+            });
+            return id;
+        },
+        /**
+         * Return the array index number base on an atkmlId or -1 if not found.
+         */
+        getRowIndex: function (atkmlId) {
+            for (let i = 0; i < this.rowData.length; i++) {
+                if (this.getAtkmlId(this.rowData[i]) === atkmlId) {
+                    return i;
+                }
             }
+            return -1;
+        },
+        getInputElement: function () {
+            return this.$refs.atkmlInput;
+        },
+        /**
+         * UUID v4 generator.
+         */
+        getUUID: function () {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+                // eslint-disable-next-line no-bitwise
+                const r = Math.random() * 16 | 0;
+                // eslint-disable-next-line no-bitwise
+                const v = c === 'x' ? r : (r & (0x3 | 0x8));
+                return v.toString(16);
+            });
         },
     },
     computed: {

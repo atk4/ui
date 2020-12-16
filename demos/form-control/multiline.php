@@ -55,8 +55,8 @@ $inventoryItemClass = get_class(new class() extends Model {
             ],
             'ui' => ['multiline' => ['sui-table-cell' => ['width' => 3]]],
         ]);
-        $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
-        $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
+        $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'default' => 1, 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
+        $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'default' => 1, 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
         $this->addExpression('total', ['expr' => function (Model $row) {
             return $row->get('qty') * $row->get('box');
         }, 'type' => 'integer']);
@@ -95,8 +95,8 @@ $controlTotal = $column->addControl('total', ['readonly' => true])->set($total);
 $multiline->onLineChange(function ($rows, $form) use ($controlTotal) {
     $total = 0;
     foreach ($rows as $row => $cols) {
-        $qty = array_column($cols, 'qty')[0];
-        $box = array_column($cols, 'box')[0];
+        $qty = $cols['qty'] ?? 0;
+        $box = $cols['box'] ?? 0;
         $total = $total + ($qty * $box);
     }
 
