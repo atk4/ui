@@ -68,8 +68,8 @@ export default {
         onToggleDelete: function (e) {
             atk.eventBus.emit(this.$root.$el.id + '-toggle-delete', { rowId: this.rowId });
         },
-        onUpdateValue: function (field, value) {
-            atk.eventBus.emit(this.$root.$el.id + '-update-row', { rowId: this.rowId, field: field, value: value });
+        onUpdateValue: function (fieldName, value) {
+            atk.eventBus.emit(this.$root.$el.id + '-update-row', { rowId: this.rowId, fieldName: fieldName, value: value });
         },
         getValue: function (column) {
             let temp = column.default;

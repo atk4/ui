@@ -11,7 +11,7 @@ export default {
         @input="onInput"
         @onChange="onChange"
         v-model="inputValue"
-        :name="fieldName"
+        :name="inputName"
         ref="cell"
         v-bind="mapComponentProps()"></component>
   `,
@@ -25,7 +25,7 @@ export default {
         return {
             field: this.cellData.field,
             type: this.cellData.type,
-            fieldName: '-' + this.cellData.field,
+            inputName: '-' + this.cellData.field,
             inputValue: this.fieldValue,
         };
     },

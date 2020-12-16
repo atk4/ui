@@ -60,7 +60,7 @@ export default {
         this.rowData = this.buildRowData();
 
         atk.eventBus.on(this.$root.$el.id + '-update-row', (payload) => {
-            this.onUpdate(payload.rowId, payload.field, payload.value);
+            this.onUpdate(payload.rowId, payload.fieldName, payload.value);
         });
 
         atk.eventBus.on(this.$root.$el.id + '-toggle-delete', (payload) => {
@@ -112,14 +112,14 @@ export default {
                 this.data.afterDelete(atk.utils.json().tryParse(this.value));
             }
         },
-        onUpdate: function (atkmlId, field, value) {
-            this.updateRow(atkmlId, field, value);
-            this.clearError(atkmlId, field);
+        onUpdate: function (atkmlId, fieldName, value) {
+            this.updateRow(atkmlId, fieldName, value);
+            this.clearError(atkmlId, fieldName);
             this.updateInputValue();
 
             atk.debounce(() => {
                 this.fetchExpression(atkmlId);
-                this.fetchOnChangeAction(field);
+                this.fetchOnChangeAction(fieldName);
             }, 300).call(this);
         },
         /**
@@ -141,10 +141,10 @@ export default {
         /**
          * Update row with proper data value.
          */
-        updateRow: function (rowAtkmlId, field, value) {
+        updateRow: function (rowAtkmlId, fieldName, value) {
             const idx = this.getRowIndex(rowAtkmlId);
             if (idx > -1) {
-                this.updateFieldInRow(idx, field, value);
+                this.updateFieldInRow(idx, fieldName, value);
             }
         },
         deleteRow: function (id) {
@@ -158,16 +158,16 @@ export default {
         /**
          * Update the value of the field in rowData.
          */
-        updateFieldInRow: function (idx, field, value) {
+        updateFieldInRow: function (idx, fieldName, value) {
             this.rowData[idx].forEach((cell) => {
-                if (field in cell) {
-                    cell[field] = value;
+                if (fieldName in cell) {
+                    cell[fieldName] = value;
                 }
             });
         },
-        clearError: function (rowAtkmlId, field) {
+        clearError: function (rowAtkmlId, fieldName) {
             if (rowAtkmlId in this.errors) {
-                const errors = this.errors[rowAtkmlId].filter((error) => error.field !== field);
+                const errors = this.errors[rowAtkmlId].filter((error) => error.field !== fieldName);
                 this.errors[rowAtkmlId] = [...errors];
                 if (errors.length === 0) {
                     delete this.errors[rowAtkmlId];
@@ -229,8 +229,8 @@ export default {
          * Use regular api call in order
          * for return js to be fully evaluate.
          */
-        fetchOnChangeAction: function (field = null) {
-            if (this.hasChangeCb && (field === null || this.eventFields.indexOf(field) > -1)) {
+        fetchOnChangeAction: function (fieldName = null) {
+            if (this.hasChangeCb && (fieldName === null || this.eventFields.indexOf(fieldName) > -1)) {
                 jQuery(this.$refs.addBtn.$el).api({
                     on: 'now',
                     url: this.data.url,
