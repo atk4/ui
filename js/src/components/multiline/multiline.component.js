@@ -58,7 +58,6 @@ export default {
     },
     mounted: function () {
         this.rowData = this.buildRowData();
-        this.updateInputValue();
 
         atk.eventBus.on(this.$root.$el.id + '-update-row', (payload) => {
             this.onUpdate(payload.rowId, payload.field, payload.value);
