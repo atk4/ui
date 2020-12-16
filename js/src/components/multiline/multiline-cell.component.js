@@ -36,7 +36,7 @@ export default {
         getComponentProps: function () {
             return this.cellData.definition.componentProps;
         },
-       /**
+        /**
        * Map component props accordingly.
        * Some component requires specific Props to be passed in.
        * This function make sure proper Props are set.

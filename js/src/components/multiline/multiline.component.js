@@ -23,7 +23,7 @@ export default {
                     </sui-table-row>
                   </sui-table-footer>
                 </sui-table>
-                <input :form="form" :name="name" type="text" :value="value" ref="atkmlInput">
+                <input :form="form" :name="name" type="hidden" :value="value" ref="atkmlInput">
              </div>`,
     props: {
         data: Object,
@@ -122,7 +122,6 @@ export default {
                 this.fetchExpression(atkmlId);
                 this.fetchOnChangeAction(field);
             }, 300).call(this);
-
         },
         /**
          * Creates a new row of data and
@@ -232,7 +231,7 @@ export default {
          * for return js to be fully evaluate.
          */
         fetchOnChangeAction: function (field = null) {
-            if (this.hasChangeCb && field === null || this.hasChangeCb && (this.eventFields.indexOf(field) > -1)) {
+            if (this.hasChangeCb && (field === null || this.eventFields.indexOf(field) > -1)) {
                 jQuery(this.$refs.addBtn.$el).api({
                     on: 'now',
                     url: this.data.url,

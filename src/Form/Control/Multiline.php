@@ -73,12 +73,10 @@ use Atk4\Data\Field\Callback;
 use Atk4\Data\FieldSqlExpression;
 use Atk4\Data\Model;
 use Atk4\Data\ValidationException;
-use Atk4\Ui\AbstractView;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\JsCallback;
-use Atk4\Ui\UserAction\ModalExecutor;
 use Atk4\Ui\View;
 
 class Multiline extends Form\Control
