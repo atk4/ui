@@ -469,6 +469,7 @@ class Multiline extends Form\Control
             'caption' => $field->getCaption(),
             'default' => $field->default,
             'isExpr' => isset($field->expr),
+            'isEditable' => $field->isEditable(),
             'isHidden' => $field->isHidden(),
             'isVisible' => $field->isVisible(),
         ];

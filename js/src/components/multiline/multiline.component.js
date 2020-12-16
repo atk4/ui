@@ -42,9 +42,9 @@ export default {
             value: this.data.inputValue,
             name: this.data.inputName, // form input name where to set multiline content value.
             rows: [],
-            fieldData: this.data.fields,
+            fieldData: this.data.fields || [],
             idField: this.data.idField,
-            eventFields: this.data.eventFields,
+            eventFields: this.data.eventFields || [],
             deletables: [],
             hasChangeCb: this.data.hasChangeCb,
             errors: {},
