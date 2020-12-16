@@ -132,8 +132,8 @@ export default {
             const columns = [];
             // add __atkml property in order to identify each row.
             columns.push({ __atkml: this.getUUID() });
-            this.data.fields.forEach((item) => {
-                columns.push({ [item.field]: item.default });
+            this.data.fields.forEach((field) => {
+                columns.push({ [field.name]: field.default });
             });
 
             return columns;
@@ -203,7 +203,7 @@ export default {
         buildRowData: function () {
             const rows = [];
             // Get field name.
-            const fields = this.data.fields.map((item) => item.field);
+            const fields = this.data.fields.map((field) => field.name);
 
             // Map value to our rowData.
             const values = atk.utils.json().tryParse(this.value, []);
@@ -242,9 +242,9 @@ export default {
         postData: async function (row) {
             const data = {};
             const context = this.$refs.addBtn.$el;
-            const fields = this.fieldData.map((field) => field.field);
-            fields.forEach((field) => {
-                data[field] = row.filter((item) => field in item)[0][field];
+            const fields = this.fieldData.map((field) => field.name);
+            fields.forEach((fieldName) => {
+                data[fieldName] = row.filter((cols) => fieldName in cols)[0][fieldName];
             });
             data.__atkml_action = 'update-row';
             try {

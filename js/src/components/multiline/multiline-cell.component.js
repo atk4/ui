@@ -23,9 +23,9 @@ export default {
     props: ['cellData', 'fieldValue'],
     data: function () {
         return {
-            field: this.cellData.field,
+            fieldName: this.cellData.name,
             type: this.cellData.type,
-            inputName: '-' + this.cellData.field,
+            inputName: '-' + this.cellData.name,
             inputValue: this.fieldValue,
         };
     },
@@ -56,7 +56,7 @@ export default {
         },
         onInput: function (value) {
             this.inputValue = this.getTypeValue(value);
-            this.$emit('update-value', this.field, this.inputValue);
+            this.$emit('update-value', this.fieldName, this.inputValue);
         },
         onChange: function (value) {
             this.onInput(value);

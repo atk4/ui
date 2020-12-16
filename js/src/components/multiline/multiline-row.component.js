@@ -52,7 +52,7 @@ export default {
         },
         getErrorState: function (column) {
             if (this.error) {
-                const error = this.error.filter((e) => column.field === e.field);
+                const error = this.error.filter((e) => column.name === e.field);
                 if (error.length > 0) {
                     return 'error';
                 }
@@ -74,8 +74,8 @@ export default {
         getValue: function (column) {
             let temp = column.default;
             this.values.forEach((field) => {
-                if (column.field in field) {
-                    temp = field[column.field];
+                if (column.name in field) {
+                    temp = field[column.name];
                 }
             });
             return temp;

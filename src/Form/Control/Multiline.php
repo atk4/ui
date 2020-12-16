@@ -463,7 +463,7 @@ class Multiline extends Form\Control
     public function getFieldDef(Field $field): array
     {
         return [
-            'field' => $field->short_name,
+            'name' => $field->short_name,
             'definition' => $this->getComponentDefinition($field),
             'cellProps' => $this->getSuiTableCellProps($field),
             'caption' => $field->getCaption(),
@@ -671,7 +671,7 @@ class Multiline extends Form\Control
     {
         $values = [];
         foreach ($this->fieldDefs as $def) {
-            $fieldName = $def['field'];
+            $fieldName = $def['name'];
             if ($fieldName === $model->id_field) {
                 continue;
             }
@@ -696,7 +696,7 @@ class Multiline extends Form\Control
         $post = $_POST;
 
         foreach ($this->fieldDefs as $def) {
-            $fieldName = $def['field'];
+            $fieldName = $def['name'];
             if ($fieldName === $model->id_field) {
                 continue;
             }
