@@ -27,7 +27,7 @@ class JsTest extends AtkPhpunit\TestCase
             $this->markTestIncomplete('Test is not supported on 32bit php');
         }
 
-        $longStr = str_repeat('"a":10,"b":9007199254740992,x="\"c\":10,\"d\":9007199254740992,"', 50 * 1000);
+        $longStr = str_repeat('"a":10,"b":9007199254740992,x="\"c\":10,\"d\":9007199254740992,"', 10 * 1000);
         foreach ([
             ['10', '"10"'],
             [10, '10'],
@@ -40,8 +40,8 @@ class JsTest extends AtkPhpunit\TestCase
             [true, 'true'],
             [ // verify if regex accepts big input and does not fail with backtrack limit
                 $longStr,
-                json_encode($longStr)
-            ]
+                json_encode($longStr),
+            ],
         ] as [$in, $expected]) {
             $this->assertSame($expected, (new JsExpression('[]', [$in]))->jsRender());
 
