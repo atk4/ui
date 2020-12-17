@@ -10,7 +10,7 @@ export default {
     template: `<div>
                 <sui-table v-bind="tableProp">
                   <atk-multiline-header :fields="fieldData" :state="getMainToggleState" :errors="errors" :caption="caption"></atk-multiline-header>
-                  <atk-multiline-body @onTabLastRow="onTabLastRow" :fieldDefs="fieldData" :rowData="rowData" :rowIdField="idField" :deletables="getDeletables" :errors="errors"></atk-multiline-body>
+                  <atk-multiline-body @onTabLastRow="onTabLastRow" :fieldDefs="fieldData" :rowData="rowData" :deletables="getDeletables" :errors="errors"></atk-multiline-body>
                   <sui-table-footer>
                     <sui-table-row>
                         <sui-table-header-cell/>
@@ -41,9 +41,8 @@ export default {
             form: this.data.formName,
             value: this.data.inputValue,
             name: this.data.inputName, // form input name where to set multiline content value.
-            rows: [],
+            rowData: [],
             fieldData: this.data.fields || [],
-            idField: this.data.idField,
             eventFields: this.data.eventFields || [],
             deletables: [],
             hasChangeCb: this.data.hasChangeCb,
@@ -247,14 +246,6 @@ export default {
         },
     },
     computed: {
-        rowData: {
-            get: function () {
-                return this.rows;
-            },
-            set: function (rows) {
-                this.rows = [...rows];
-            },
-        },
         getSpan: function () {
             return this.fieldData.length - 1;
         },

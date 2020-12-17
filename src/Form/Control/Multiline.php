@@ -619,7 +619,6 @@ class Multiline extends Form\Control
                     'inputValue' => $this->getValue(),
                     'inputName' => $this->short_name,
                     'fields' => $this->fieldDefs,
-                    'idField' => $this->getModel()->id_field,
                     'url' => $this->renderCallback->getJsUrl(),
                     'eventFields' => $this->eventFields,
                     'hasChangeCb' => $this->onChangeFunction ? true : false,
@@ -729,8 +728,10 @@ class Multiline extends Form\Control
         $formatValues = [];
 
         foreach ($this->getExpressionFields($model) as $k => $field) {
-            $dummyFields[$k]['name'] = $field->short_name;
-            $dummyFields[$k]['expr'] = $this->getDummyExpression($field, $model);
+            if (!is_callable($field->expr)) {
+                $dummyFields[$k]['name'] = $field->short_name;
+                $dummyFields[$k]['expr'] = $this->getDummyExpression($field, $model);
+            }
         }
 
         if (!empty($dummyFields)) {
@@ -781,8 +782,9 @@ class Multiline extends Form\Control
      *
      * @return mixed
      */
-    private function getDummyExpression($exprField, $model)
+    private function getDummyExpression(Field $exprField, $model)
     {
+
         $expr = $exprField->expr;
         $matches = [];
 

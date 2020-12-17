@@ -13,7 +13,7 @@ export default {
       :error="getError(row.__atkml)"></atk-multiline-row>
     </sui-table-body>
   `,
-    props: ['fieldDefs', 'rowData', 'rowIdField', 'deletables', 'errors'],
+    props: ['fieldDefs', 'rowData', 'deletables', 'errors'],
     data: function () {
         return { fields: this.fieldDefs };
     },
