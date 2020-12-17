@@ -22,7 +22,7 @@ export default {
         </sui-table-cell>
     </sui-table-row>
   `,
-    props: ['fields', 'rowId', 'isDeletable', 'values', 'error'],
+    props: ['fields', 'rowId', 'isDeletable', 'rowValues', 'error'],
     data: function () {
         return { columns: this.fields };
     },
@@ -52,7 +52,7 @@ export default {
         },
         getErrorState: function (column) {
             if (this.error) {
-                const error = this.error.filter((e) => column.name === e.field);
+                const error = this.error.filter((e) => column.name === e.name);
                 if (error.length > 0) {
                     return 'error';
                 }
@@ -72,13 +72,7 @@ export default {
             atk.eventBus.emit(this.$root.$el.id + '-update-row', { rowId: this.rowId, fieldName: fieldName, value: value });
         },
         getValue: function (column) {
-            let temp = column.default;
-            this.values.forEach((field) => {
-                if (column.name in field) {
-                    temp = field[column.name];
-                }
-            });
-            return temp;
+            return this.rowValues[column.name] || column.default;
         },
     },
 };

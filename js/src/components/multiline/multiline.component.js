@@ -23,7 +23,7 @@ export default {
                     </sui-table-row>
                   </sui-table-footer>
                 </sui-table>
-                <input :form="form" :name="name" type="hidden" :value="value" ref="atkmlInput">
+                <input :form="form" :name="name" type="text" :value="value" ref="atkmlInput">
              </div>`,
     props: {
         data: Object,
@@ -57,7 +57,7 @@ export default {
         'atk-multiline-header': multilineHeader,
     },
     mounted: function () {
-        this.rowData = this.buildRowData();
+        this.rowData = this.buildRowData(this.value);
 
         atk.eventBus.on(this.$root.$el.id + '-update-row', (payload) => {
             this.onUpdate(payload.rowId, payload.fieldName, payload.value);
@@ -76,7 +76,7 @@ export default {
             this.deletables = [];
             if (payload.isOn) {
                 this.rowData.forEach((row) => {
-                    this.deletables.push(this.getAtkmlId(row));
+                    this.deletables.push(row.__atkml);
                 });
             }
         });
@@ -92,18 +92,18 @@ export default {
             }
         },
         onAdd: function () {
-            const row = this.createRow();
-            this.rowData.push(row);
+            const newRow = this.createRow(this.data.fields);
+            this.rowData.push(newRow);
             this.updateInputValue();
             if (this.data.afterAdd && typeof this.data.afterAdd === 'function') {
                 this.data.afterAdd(JSON.parse(this.value));
             }
-            this.fetchExpression(this.getAtkmlId(row));
+            this.fetchExpression(newRow.__atkml);
             this.fetchOnChangeAction();
         },
         onDelete: function () {
-            this.deletables.forEach((id) => {
-                this.deleteRow(id);
+            this.deletables.forEach((atkmlId) => {
+                this.deleteRow(atkmlId);
             });
             this.deletables = [];
             this.updateInputValue();
@@ -113,7 +113,7 @@ export default {
             }
         },
         onUpdate: function (atkmlId, fieldName, value) {
-            this.updateRow(atkmlId, fieldName, value);
+            this.updateFieldInRow(atkmlId, fieldName, value);
             this.clearError(atkmlId, fieldName);
             this.updateInputValue();
 
@@ -125,49 +125,33 @@ export default {
         /**
          * Creates a new row of data and
          * set values to default if available.
-         *
-         * @returns {Array}
          */
-        createRow: function () {
-            const columns = [];
-            // add __atkml property in order to identify each row.
-            columns.push({ __atkml: this.getUUID() });
-            this.data.fields.forEach((field) => {
-                columns.push({ [field.name]: field.default });
+        createRow: function (fields) {
+            const row = {};
+            fields.forEach((field) => {
+                row[field.name] = field.default;
             });
+            row.__atkml = this.getUUID();
 
-            return columns;
-        },
-        /**
-         * Update row with proper data value.
-         */
-        updateRow: function (atkmlId, fieldName, value) {
-            const idx = this.getRowIndex(atkmlId);
-            if (idx > -1) {
-                this.updateFieldInRow(idx, fieldName, value);
-            }
+            return row;
         },
         deleteRow: function (atkmlId) {
-            // find proper row index using id.
-            const idx = this.getRowIndex(atkmlId);
-            if (idx > -1) {
-                this.rowData.splice(idx, 1);
-                delete this.errors[id];
-            }
+            this.rowData.splice(this.rowData.findIndex((row) => row.__atkml === atkmlId), 1);
+            delete this.errors[atkmlId];
         },
         /**
          * Update the value of the field in rowData.
          */
-        updateFieldInRow: function (idx, fieldName, value) {
-            this.rowData[idx].forEach((cell) => {
-                if (fieldName in cell) {
-                    cell[fieldName] = value;
+        updateFieldInRow: function (atkmlId, fieldName, value) {
+            this.rowData.forEach((row) => {
+                if (row.__atkml === atkmlId) {
+                    row[fieldName] = value;
                 }
             });
         },
         clearError: function (atkmlId, fieldName) {
             if (atkmlId in this.errors) {
-                const errors = this.errors[atkmlId].filter((error) => error.field !== fieldName);
+                const errors = this.errors[atkmlId].filter((error) => error.name !== fieldName);
                 this.errors[atkmlId] = [...errors];
                 if (errors.length === 0) {
                     delete this.errors[atkmlId];
@@ -179,41 +163,15 @@ export default {
         * as json string.
         */
         updateInputValue: function () {
-            const data = this.rowData.map((item) => {
-                const newItem = {};
-                for (let i = 0; i < item.length; i++) {
-                    const key = Object.keys(item[i])[0];
-                    // eslint-disable-next-line prefer-destructuring
-                    newItem[key] = Object.values(item[i])[0];
-                }
-                return { ...newItem };
-            });
-
-            this.value = JSON.stringify(data);
+            this.value = JSON.stringify(this.rowData);
         },
         /**
-        * Build rowData from input value.
-        * We need to compare fields return by model vs what values give us because it could differ.
-        * For example if a field was add or remove from model after a value was saved. Specially for
-        * array type field like containsMany / containsOne.
-         * In other word, rowData must match fields definition.
-         *
-         * @returns {Array}
+        * Build rowData from json string.
          */
-        buildRowData: function () {
-            const rows = [];
-            // Get field name.
-            const fields = this.data.fields.map((field) => field.name);
-
-            // Map value to our rowData.
-            const values = atk.utils.json().tryParse(this.value, []);
-
-            values.forEach((value) => {
-                const data = fields.map((fieldName) => (
-                    { [fieldName]: value[fieldName] || null }
-                ));
-                data.push({ __atkml: this.getUUID() });
-                rows.push(data);
+        buildRowData: function (jsonValue) {
+            const rows = atk.utils.json().tryParse(jsonValue, []);
+            rows.forEach((row) => {
+                row.__atkml = this.getUUID();
             });
 
             return rows;
@@ -240,12 +198,8 @@ export default {
             }
         },
         postData: async function (row) {
-            const data = {};
+            const data = { ...row };
             const context = this.$refs.addBtn.$el;
-            const fields = this.fieldData.map((field) => field.name);
-            fields.forEach((fieldName) => {
-                data[fieldName] = row.filter((cols) => fieldName in cols)[0][fieldName];
-            });
             data.__atkml_action = 'update-row';
             try {
                 const response = await atk.apiService.suiFetch(this.data.url, { data: data, method: 'post', stateContext: context });
@@ -257,44 +211,24 @@ export default {
         /**
          * Get expressions from server.
          */
-        fetchExpression: async function (rowAtkmlId) {
+        fetchExpression: async function (atkmlId) {
             if (this.hasExpression()) {
-                const idx = this.getRowIndex(rowAtkmlId);
+                const row = this.findRow(atkmlId);
                 // server will return expression field - value if define.
-                if (idx > -1) {
-                    const resp = await this.postData([...this.rowData[idx]]);
+                if (row) {
+                    const resp = await this.postData(row);
                     if (resp.expressions) {
                         const fields = Object.keys(resp.expressions);
                         fields.forEach((field) => {
-                            this.updateFieldInRow(idx, field, resp.expressions[field]);
+                            this.updateFieldInRow(atkmlId, field, resp.expressions[field]);
                         });
                         this.updateInputValue();
                     }
                 }
             }
         },
-        /**
-         * Return the __atkml id from a row of data.
-         */
-        getAtkmlId: function (row) {
-            let id;
-            row.forEach((input) => {
-                if ('__atkml' in input) {
-                    id = input.__atkml;
-                }
-            });
-            return id;
-        },
-        /**
-         * Return the array index number base on an atkmlId or -1 if not found.
-         */
-        getRowIndex: function (atkmlId) {
-            for (let i = 0; i < this.rowData.length; i++) {
-                if (this.getAtkmlId(this.rowData[i]) === atkmlId) {
-                    return i;
-                }
-            }
-            return -1;
+        findRow: function (atkmlId) {
+            return this.rowData.find((row) => row.__atkml === atkmlId);
         },
         getInputElement: function () {
             return this.$refs.atkmlInput;
@@ -324,18 +258,12 @@ export default {
         getSpan: function () {
             return this.fieldData.length - 1;
         },
-        /**
-         * Get id's of row set for deletion.
-         * @returns {Array}
-         */
         getDeletables: function () {
             return this.deletables;
         },
         /**
          * Return Delete all checkbox state base on
          * deletables entries.
-         *
-         * @returns {string}
          */
         getMainToggleState: function () {
             let state = 'off';
@@ -348,20 +276,9 @@ export default {
             }
             return state;
         },
-        /**
-         * Set delete button disabled property.
-         *
-         * @returns {boolean}
-         */
         isDeleteDisable: function () {
             return !this.deletables.length > 0;
         },
-        /**
-         * Check if record limit is reach.
-         * return false if not.
-         *
-         * @returns {boolean}
-         */
         isLimitReached: function () {
             if (this.data.rowLimit === 0) {
                 return false;

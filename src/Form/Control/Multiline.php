@@ -301,7 +301,7 @@ class Multiline extends Form\Control
                         $model->set($fieldName, $this->getApp()->ui_persistence->typecastLoadField($field, $value));
                     }
                 } catch (\Atk4\Core\Exception $e) {
-                    $rowErrors[$rowId][] = ['field' => $fieldName, 'msg' => $e->getMessage()];
+                    $rowErrors[$rowId][] = ['name' => $fieldName, 'msg' => $e->getMessage()];
                 }
             }
             $rowErrors = $this->addModelValidateErrors($rowErrors, $rowId, $model);
