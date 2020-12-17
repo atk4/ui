@@ -549,7 +549,9 @@ class Multiline extends Form\Control
      */
     protected function getComponentDefinition(Field $field)
     {
-        if (!$field->isEditable()) {
+        if ( $required = $field->ui['multiline']['component'] ?? null) {
+            $component = $this->fieldMapToComponent[$required];
+        } elseif (!$field->isEditable()) {
             $component = $this->fieldMapToComponent['readonly'];
         } elseif ($field->enum || $field->values) {
             $component = $this->fieldMapToComponent['select'];
