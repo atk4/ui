@@ -141,15 +141,15 @@ export default {
         /**
          * Update row with proper data value.
          */
-        updateRow: function (rowAtkmlId, fieldName, value) {
-            const idx = this.getRowIndex(rowAtkmlId);
+        updateRow: function (atkmlId, fieldName, value) {
+            const idx = this.getRowIndex(atkmlId);
             if (idx > -1) {
                 this.updateFieldInRow(idx, fieldName, value);
             }
         },
-        deleteRow: function (id) {
+        deleteRow: function (atkmlId) {
             // find proper row index using id.
-            const idx = this.getRowIndex(id);
+            const idx = this.getRowIndex(atkmlId);
             if (idx > -1) {
                 this.rowData.splice(idx, 1);
                 delete this.errors[id];
@@ -165,12 +165,12 @@ export default {
                 }
             });
         },
-        clearError: function (rowAtkmlId, fieldName) {
-            if (rowAtkmlId in this.errors) {
-                const errors = this.errors[rowAtkmlId].filter((error) => error.field !== fieldName);
-                this.errors[rowAtkmlId] = [...errors];
+        clearError: function (atkmlId, fieldName) {
+            if (atkmlId in this.errors) {
+                const errors = this.errors[atkmlId].filter((error) => error.field !== fieldName);
+                this.errors[atkmlId] = [...errors];
                 if (errors.length === 0) {
-                    delete this.errors[rowAtkmlId];
+                    delete this.errors[atkmlId];
                 }
             }
         },
