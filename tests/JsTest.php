@@ -10,7 +10,7 @@ use Atk4\Ui\JsChain;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsFunction;
 
-class jsTest extends AtkPhpunit\TestCase
+class JsTest extends AtkPhpunit\TestCase
 {
     /**
      * Test constructor.
