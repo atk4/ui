@@ -23,7 +23,7 @@ export default {
                     </sui-table-row>
                   </sui-table-footer>
                 </sui-table>
-                <input :form="form" :name="name" type="text" :value="value" ref="atkmlInput">
+                <input :form="form" :name="name" type="hidden" :value="value" ref="atkmlInput">
              </div>`,
     props: {
         data: Object,
