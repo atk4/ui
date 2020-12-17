@@ -10,7 +10,7 @@ use Atk4\Ui\JsChain;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsFunction;
 
-class jsTest extends AtkPhpunit\TestCase
+class JsTest extends AtkPhpunit\TestCase
 {
     /**
      * Test constructor.
@@ -27,7 +27,9 @@ class jsTest extends AtkPhpunit\TestCase
             $this->markTestIncomplete('Test is not supported on 32bit php');
         }
 
+        $longStr = str_repeat('"a":10,"b":9007199254740992,x="\"c\":10,\"d\":9007199254740992,"', 10 * 1000);
         foreach ([
+            ['10', '"10"'],
             [10, '10'],
             [9007199254740991, '9007199254740991'],
             [9007199254740992, '"9007199254740992"'],
@@ -36,6 +38,10 @@ class jsTest extends AtkPhpunit\TestCase
             [1.5, '1.5'],
             [false, 'false'],
             [true, 'true'],
+            [ // verify if regex accepts big input and does not fail with backtrack limit
+                $longStr,
+                json_encode($longStr),
+            ],
         ] as [$in, $expected]) {
             $this->assertSame($expected, (new JsExpression('[]', [$in]))->jsRender());
 
