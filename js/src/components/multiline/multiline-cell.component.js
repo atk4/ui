@@ -13,7 +13,7 @@ export default {
         v-model="inputValue"
         :name="inputName"
         ref="cell"
-        v-bind="mapComponentProps()"></component>
+        v-bind="getComponentProps()"></component>
   `,
     components: {
         'atk-multiline-readonly': multilineReadOnly,
@@ -37,23 +37,6 @@ export default {
             return this.cellData.definition.componentProps;
         },
         /**
-       * Map component props accordingly.
-       * Some component requires specific Props to be passed in.
-       * This function make sure proper Props are set.
-       */
-        mapComponentProps: function () {
-            if (this.getComponent() === 'atk-date-picker') {
-                return {
-                    config: this.getComponentProps(),
-                    value: this.fieldValue,
-                };
-            }
-            if (this.getComponent() === 'atk-multiline-readonly') {
-                return { readOnlyValue: this.fieldValue };
-            }
-
-            return this.getComponentProps();
-        },
         onInput: function (value) {
             this.inputValue = this.getTypeValue(value);
             this.$emit('update-value', this.fieldName, this.inputValue);
