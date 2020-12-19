@@ -19,9 +19,9 @@ use Atk4\Ui\Popup;
 class Column
 {
     use \Atk4\Core\AppScopeTrait;
+    use \Atk4\Core\DiContainerTrait;
     use \Atk4\Core\InitializerTrait;
     use \Atk4\Core\TrackableTrait;
-    use \Atk4\Core\DiContainerTrait;
 
     /** @const string */
     public const HOOK_GET_HTML_TAGS = self::class . '@getHtmlTags';
