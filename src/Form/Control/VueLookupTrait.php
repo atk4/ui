@@ -21,6 +21,7 @@ trait VueLookupTrait
         }
         $this->dataCb->set([$this, 'outputApiResponse']);
     }
+
     /**
      * Output lookup search query data.
      */
@@ -41,8 +42,8 @@ trait VueLookupTrait
         }
 
         $this->getApp()->terminateJson([
-                                           'success' => true,
-                                           'results' => $data,
-                                       ]);
+            'success' => true,
+            'results' => $data,
+        ]);
     }
 }

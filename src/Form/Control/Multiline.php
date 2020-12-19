@@ -181,6 +181,7 @@ class Multiline extends Form\Control
      * Container for component that need Props set based on their field value as Lookup component.
      * Set during fieldDefinition and apply during renderView() after getValue().
      * Must contains callable function and function will receive $model field and value as paremeter.
+     *
      * @var array
      */
     private $valuePropsBinding = [];
@@ -287,7 +288,6 @@ class Multiline extends Form\Control
 
         return $jsonValues;
     }
-
 
     /**
      * Validate each row and return errors if found.
@@ -521,7 +521,6 @@ class Multiline extends Form\Control
      */
     protected function getDatePickerProps(Field $field): array
     {
-
         $calendar = new Calendar();
         $props['config'] = $this->componentProps[self::DATE] ?? [];
         $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$field->type . '_format'});
@@ -610,7 +609,7 @@ class Multiline extends Form\Control
      */
     protected function getComponentDefinition(Field $field)
     {
-        if ( $required = $field->ui['multiline']['component'] ?? null) {
+        if ($required = $field->ui['multiline']['component'] ?? null) {
             $component = $this->fieldMapToComponent[$required];
         } elseif (!$field->isEditable()) {
             $component = $this->fieldMapToComponent['readonly'];
@@ -861,7 +860,6 @@ class Multiline extends Form\Control
      */
     private function getDummyExpression(Field $exprField, $model)
     {
-
         $expr = $exprField->expr;
         $matches = [];
 

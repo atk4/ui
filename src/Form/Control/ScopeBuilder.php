@@ -8,7 +8,6 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
-use Atk4\Ui\Callback;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form\Control;
 use Atk4\Ui\HtmlTemplate;

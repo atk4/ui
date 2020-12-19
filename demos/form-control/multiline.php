@@ -29,7 +29,11 @@ $inventoryItemClass = get_class(new class() extends Model {
     {
         parent::init();
 
-        $this->addField('item', ['required' => true, 'default' => 'item']);
+        $this->addField('item', [
+            'required' => true,
+            'default' => 'item',
+            'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]],
+        ]);
         $this->addField('inv_date', [
             'default' => date($this->dateFormat),
             'type' => 'date',
@@ -41,7 +45,7 @@ $inventoryItemClass = get_class(new class() extends Model {
                     return $v;
                 },
             ],
-            'ui' => ['multiline' => ['sui-table-cell' => ['width' => 3]]],
+            'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]],
         ]);
         $this->addField('inv_time', [
             'default' => date($this->timeFormat),
@@ -56,12 +60,31 @@ $inventoryItemClass = get_class(new class() extends Model {
             ],
             'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]],
         ]);
-        $this->hasOne('country', [new Country($this->countryPersistence)]);
-        $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'default' => 1, 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
-        $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'default' => 1, 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
-        $this->addExpression('total', ['expr' => function (Model $row) {
-            return $row->get('qty') * $row->get('box');
-        }, 'type' => 'integer']);
+        $this->hasOne('country', [
+            new Country($this->countryPersistence),
+            'ui' => ['multiline' => ['sui-table-cell' => ['width' => 3]]],
+        ]);
+        $this->addField('qty', [
+            'type' => 'integer',
+            'caption' => 'Qty / Box',
+            'default' => 1,
+            'required' => true,
+            'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]],
+        ]);
+        $this->addField('box', [
+            'type' => 'integer',
+            'caption' => '# of Boxes',
+            'default' => 1,
+            'required' => true,
+            'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]],
+        ]);
+        $this->addExpression('total', [
+            'expr' => function (Model $row) {
+                return $row->get('qty') * $row->get('box');
+            },
+            'type' => 'integer',
+            'ui' => ['multiline' => ['sui-table-cell' => ['width' => 1]]],
+        ]);
     }
 });
 
