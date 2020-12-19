@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Callback;
 

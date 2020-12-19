@@ -260,8 +260,6 @@ class Multiline extends Form\Control
     /**
      * Get Multiline initial field value. Value is based on model set and will
      * output data rows as json string value.
-     *
-     * @return false|string
      */
     public function getValue(): string
     {
@@ -858,7 +856,7 @@ class Multiline extends Form\Control
      *
      * @return mixed
      */
-    private function getDummyExpression(Field $exprField, $model)
+    private function getDummyExpression(FieldSqlExpression $exprField, $model)
     {
         $expr = $exprField->expr;
         $matches = [];
