@@ -14,8 +14,8 @@ use Atk4\Data\Persistence;
  */
 class FilterModel extends \Atk4\Data\Model
 {
-    use SessionTrait;
     use NameTrait; // needed for SessionTrait
+    use SessionTrait;
 
     /**
      * The operator for defining a condition on a field.

@@ -30,7 +30,7 @@ class DemosHttpTest extends DemosTest
     {
         // stop the test server
         usleep(250 * 1000);
-        self::$_process->stop(1); // TODO we may need to add pcntl_async_signals/pcntl_signal to coverage.php
+        self::$_process->stop(1); // TODO we may need to add pcntl_async_signals/pcntl_signal to CoverageUtil.php
         self::$_process = null;
 
         // cleanup session storage

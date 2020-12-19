@@ -63,7 +63,7 @@ jobs:
         if: matrix.type == 'Phpunit'
         run: |
           if [ -n "$LOG_COVERAGE" ]; then
-            cp tools/coverage.php demos
+            cp tools/CoverageUtil.php demos
             mkdir coverage
             vendor/bin/phpunit --exclude-group none --coverage-text -v
             ls -l coverage | wc -l && mv coverage/* build/logs
@@ -155,7 +155,7 @@ jobs:
         if: startsWith(matrix.type, 'Phpunit')
         run: |
           if [ -n "$LOG_COVERAGE" ]; then
-            cp tools/coverage.php demos
+            cp tools/CoverageUtil.php demos
             mkdir coverage
             vendor/bin/phpunit --exclude-group none --coverage-text -v
             ls -l coverage | wc -l && mv coverage/* build/logs

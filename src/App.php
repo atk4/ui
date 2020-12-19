@@ -16,13 +16,13 @@ use Psr\Log\LoggerInterface;
 
 class App
 {
+    use AppScopeTrait;
+    use DiContainerTrait;
+    use DynamicMethodTrait;
+    use HookTrait;
     use InitializerTrait {
         init as _init;
     }
-    use HookTrait;
-    use DynamicMethodTrait;
-    use AppScopeTrait;
-    use DiContainerTrait;
 
     /** @const string */
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
@@ -199,7 +199,7 @@ class App
                 static function ($severity, $msg, $file, $line) {
                     throw new \ErrorException($msg, 0, $severity, $file, $line);
                 },
-                \E_ALL
+                E_ALL
             );
         }
 

@@ -9,7 +9,7 @@ use SebastianBergmann\CodeCoverage\Driver\Driver;
 use SebastianBergmann\CodeCoverage\Filter;
 use SebastianBergmann\CodeCoverage\Report;
 
-final class CoverageUtil
+final class coverage
 {
     /** @var CodeCoverage */
     private static $coverage;

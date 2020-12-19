@@ -23,7 +23,7 @@ class JsTest extends AtkPhpunit\TestCase
 
     public function testNumbers()
     {
-        if (PHP_INT_SIZE === 4) {
+        if (\PHP_INT_SIZE === 4) {
             $this->markTestIncomplete('Test is not supported on 32bit php');
         }
 
