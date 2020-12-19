@@ -81,6 +81,8 @@ use Atk4\Ui\View;
 
 class Multiline extends Form\Control
 {
+    use VueLookupTrait;
+
     /** @var HtmlTemplate The template needed for the multiline view. */
     public $multiLineTemplate;
 
@@ -176,6 +178,14 @@ class Multiline extends Form\Control
     public $caption;
 
     /**
+     * Container for component that need Props set based on their field value as Lookup component.
+     * Set during fieldDefinition and apply during renderView() after getValue().
+     * Must contains callable function and function will receive $model field and value as paremeter.
+     * @var array
+     */
+    private $valuePropsBinding = [];
+
+    /**
      * A JsFunction to execute when Multiline add(+) button is clicked.
      * The function is execute after multiline component finish adding a row of fields.
      * The function also receive the row value as an array.
@@ -252,11 +262,10 @@ class Multiline extends Form\Control
      *
      * @return false|string
      */
-    public function getValue()
+    public function getValue(): string
     {
-        // Will load data when using containsMany.
         if ($this->field->type === 'array') {
-            $data = $this->getApp()->ui_persistence->_typecastSaveField($this->field, $this->field->get() ?? []);
+            $jsonValues = $this->getApp()->ui_persistence->_typecastSaveField($this->field, $this->field->get() ?? []);
         } else {
             // set data according to hasMany ref. or using model.
             $model = $this->model;
@@ -273,11 +282,12 @@ class Multiline extends Form\Control
                 }
                 $rows[] = $cols;
             }
-            $data = $this->getApp()->encodeJson($rows);
+            $jsonValues = json_encode($rows);
         }
 
-        return $data;
+        return $jsonValues;
     }
+
 
     /**
      * Validate each row and return errors if found.
@@ -432,6 +442,7 @@ class Multiline extends Form\Control
             $model->getField($this->short_name)->never_persist = true;
         }
         $model = parent::setModel($model);
+        $this->initVueLookupCallback();
 
         if ($modelRef) {
             if (!$linkField) {
@@ -545,6 +556,55 @@ class Multiline extends Form\Control
     }
 
     /**
+     * Set property for atk-lookup component.
+     */
+    protected function getLookupProps(Field $field): array
+    {
+        // set any of sui-dropdown props via this property. Will be applied globally.
+        $props['config'] = $this->componentProps[self::LOOKUP] ?? [];
+        $items = $this->getFieldItems($field, 10);
+        foreach ($items as $value => $text) {
+            $props['config']['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
+        }
+
+        if ($field->reference) {
+            $props['config']['url'] = $this->dataCb->getUrl();
+            $props['config']['reference'] = $field->short_name;
+            $props['config']['search'] = true;
+        }
+
+        $props['config']['placeholder'] = $props['config']['placeholder'] ?? 'Select ' . $field->getCaption();
+
+        $this->valuePropsBinding[$field->short_name] = [__CLASS__, 'getLookupOptionValue'];
+
+        return $props;
+    }
+
+    /**
+     * Lookup Props set based on field value.
+     */
+    public function getLookupOptionValue(Field $field, string $value)
+    {
+        $model = $field->reference->refModel();
+        $rec = $model->tryLoadBy($field->reference->getTheirFieldName(), $value);
+        if ($rec->loaded()) {
+            $option = [
+                'key' => $value,
+                'text' => $rec->get($model->title_field),
+                'value' => $value,
+            ];
+            foreach ($this->fieldDefs as $key => $component) {
+                if ($component['name'] === $field->short_name) {
+                    $this->fieldDefs[$key]['definition']['componentProps']['optionalValue'] =
+                        isset($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'])
+                        ? array_merge($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'], [$option])
+                        : [$option];
+                }
+            }
+        }
+    }
+
+    /**
      * Return a component definition.
      * Component definition require at least a name and a props array.
      */
@@ -596,6 +656,19 @@ class Multiline extends Form\Control
         return $items;
     }
 
+    protected function valuePropsBinding(string $values)
+    {
+        $fieldValues = $this->getApp()->decodeJson($values);
+
+        foreach ($fieldValues as $rows) {
+            foreach ($rows as $fieldName => $value) {
+                if (array_key_exists($fieldName, $this->valuePropsBinding)) {
+                    call_user_func($this->valuePropsBinding[$fieldName], $this->getModel()->getField($fieldName), $value);
+                }
+            }
+        }
+    }
+
     protected function renderView(): void
     {
         if (!$this->getModel()) {
@@ -612,12 +685,15 @@ class Multiline extends Form\Control
 
         parent::renderView();
 
+        $inputValue = $this->getValue();
+        $this->valuePropsBinding($inputValue);
+
         $this->multiLine->vue(
             'atk-multiline',
             [
                 'data' => [
                     'formName' => $this->form->formElement->name,
-                    'inputValue' => $this->getValue(),
+                    'inputValue' => $inputValue,
                     'inputName' => $this->short_name,
                     'fields' => $this->fieldDefs,
                     'url' => $this->renderCallback->getJsUrl(),

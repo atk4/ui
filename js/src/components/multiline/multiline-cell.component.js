@@ -1,6 +1,7 @@
 import multilineReadOnly from './multiline-readonly.component';
 import multilineTextarea from './multiline-textarea.component';
 import atkDatePicker from '../share/atk-date-picker';
+import atkLookup from '../share/atk-lookup';
 
 export default {
     name: 'atk-multiline-cell',
@@ -19,6 +20,7 @@ export default {
         'atk-multiline-readonly': multilineReadOnly,
         'atk-multiline-textarea': multilineTextarea,
         'atk-date-picker': atkDatePicker,
+        'atk-lookup': atkLookup,
     },
     props: ['cellData', 'fieldValue'],
     data: function () {
@@ -36,7 +38,6 @@ export default {
         getComponentProps: function () {
             return this.cellData.definition.componentProps;
         },
-        /**
         onInput: function (value) {
             this.inputValue = this.getTypeValue(value);
             this.$emit('update-value', this.fieldName, this.inputValue);

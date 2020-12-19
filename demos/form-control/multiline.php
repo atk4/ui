@@ -23,6 +23,7 @@ $timeFormat = $app->ui_persistence->time_format;
 $inventoryItemClass = get_class(new class() extends Model {
     public $dateFormat;
     public $timeFormat;
+    public $countryPersistence;
 
     protected function init(): void
     {
@@ -53,8 +54,9 @@ $inventoryItemClass = get_class(new class() extends Model {
                     return $v;
                 },
             ],
-            'ui' => ['multiline' => ['sui-table-cell' => ['width' => 3]]],
+            'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]],
         ]);
+        $this->hasOne('country', [new Country($this->countryPersistence)]);
         $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'default' => 1, 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
         $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'default' => 1, 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
         $this->addExpression('total', ['expr' => function (Model $row) {
@@ -63,7 +65,7 @@ $inventoryItemClass = get_class(new class() extends Model {
     }
 });
 
-$inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => $dateFormat, 'timeFormat' => $timeFormat]);
+$inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => $dateFormat, 'timeFormat' => $timeFormat, 'countryPersistence' => $app->db]);
 
 // Populate some data.
 $total = 0;
@@ -73,6 +75,7 @@ for ($i = 1; $i < 3; ++$i) {
     $inventory2->set('inv_date', date($dateFormat));
     $inventory2->set('inv_time', date($timeFormat));
     $inventory2->set('item', 'item_' . $i);
+    $inventory2->set('country', random_int(1, 100));
     $inventory2->set('qty', random_int(10, 100));
     $inventory2->set('box', random_int(1, 10));
     $total = $total + ($inventory2->get('qty') * $inventory2->get('box'));
