@@ -71,10 +71,6 @@ jobs:
             vendor/bin/phpunit --exclude-group none --no-coverage -v
           fi
 
-      - name: Lint / check syntax (only for CodingStyle)
-        if: matrix.type == 'CodingStyle'
-        run: find . \( -type d \( -path './vendor/*' \) \) -prune -o ! -type d -name '*.php' -print0 | xargs -0 -n1 php -l
-
       - name: Check Coding Style (only for CodingStyle)
         if: matrix.type == 'CodingStyle'
         run: |
