@@ -47,7 +47,7 @@ class DropdownCascade extends Dropdown
             throw new Exception('cascadeFrom property should be an instance of ' . Form\Control::class);
         }
 
-        $this->cascadeControlValue = $_POST[$this->cascadeControl->name] ?? $this->cascadeControl->field->get('value');
+        $this->cascadeControlValue = $_POST[$this->cascadeControl->name] ?? $this->cascadeControl->field->get();
 
         $this->model = $this->cascadeControl->model ? $this->cascadeControl->model->ref($this->reference) : null;
 

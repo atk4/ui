@@ -18,6 +18,8 @@ class GetAssets extends \Atk4\Ui\App
         } else {
             echo "  failed\n";
         }
+
+        return $this;
     }
 
     public function requireCss($path)
