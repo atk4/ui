@@ -16,7 +16,7 @@ class Value
 
     private function encodeValueToHtml(string $value): string
     {
-        return htmlspecialchars($value, \ENT_NOQUOTES | \ENT_HTML5, 'UTF-8');
+        return htmlspecialchars($value, ENT_NOQUOTES | ENT_HTML5, 'UTF-8');
     }
 
     /**

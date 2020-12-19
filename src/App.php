@@ -16,13 +16,13 @@ use Psr\Log\LoggerInterface;
 
 class App
 {
+    use AppScopeTrait;
+    use DiContainerTrait;
+    use DynamicMethodTrait;
+    use HookTrait;
     use InitializerTrait {
         init as _init;
     }
-    use HookTrait;
-    use DynamicMethodTrait;
-    use AppScopeTrait;
-    use DiContainerTrait;
 
     /** @const string */
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
@@ -199,7 +199,7 @@ class App
                 static function ($severity, $msg, $file, $line) {
                     throw new \ErrorException($msg, 0, $severity, $file, $line);
                 },
-                \E_ALL
+                E_ALL
             );
         }
 
@@ -956,8 +956,8 @@ class App
 
         // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
         // replace large JSON integers only, do not replace anything in JSON/JS strings
-        $json = preg_replace_callback('~(?:"(?:[^"\\\\]+|\\\\.)*")?+\K|(?:\'(?:[^\'\\\\]+|\\\\.)*\')?+\K|(?:^|[{\[,:])'
-            . '[ \n\r\t]*\K-?[1-9]\d{15,}(?=[ \n\r\t]*(?:$|[}\],:]))~s', function ($matches) {
+        $json = preg_replace_callback('~"(?:[^"\\\\]+|\\\\.)*+"\K|\'(?:[^\'\\\\]+|\\\\.)*+\'\K'
+            . '|(?:^|[{\[,:])[ \n\r\t]*\K-?[1-9]\d{15,}(?=[ \n\r\t]*(?:$|[}\],:]))~s', function ($matches) {
                 if ($matches[0] === '' || abs((int) $matches[0]) < (2 ** 53)) {
                     return $matches[0];
                 }

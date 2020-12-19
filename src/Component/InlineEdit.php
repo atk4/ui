@@ -106,7 +106,7 @@ class InlineEdit extends View
     public function setModel(\Atk4\Data\Model $model)
     {
         parent::setModel($model);
-        $this->field = $this->field ? $this->field : $this->model->title_field;
+        $this->field = $this->field ?: $this->model->title_field;
         if ($this->autoSave && $this->model->loaded()) {
             $value = $_POST['value'] ?? null;
             $this->cb->set(function () use ($value) {
@@ -198,7 +198,7 @@ class InlineEdit extends View
             $initValue = $this->initValue;
         }
 
-        $fieldName = $this->field ? $this->field : 'name';
+        $fieldName = $this->field ?: 'name';
 
         $this->vue('atk-inline-edit', [
             'initValue' => $initValue,
