@@ -95,7 +95,7 @@ export default {
             this.rowData.push(newRow);
             this.updateInputValue();
             if (this.data.afterAdd && typeof this.data.afterAdd === 'function') {
-                this.data.afterAdd(JSON.parse(this.value));
+                this.data.afterAdd(atk.utils.json().tryParse(this.value));
             }
             this.fetchExpression(newRow.__atkml);
             this.fetchOnChangeAction();
@@ -204,6 +204,7 @@ export default {
                 const response = await atk.apiService.suiFetch(this.data.url, { data: data, method: 'post', stateContext: context });
                 return response;
             } catch (e) {
+                atk.apiService.atkSuccessTest(e);
                 console.error(e);
             }
         },

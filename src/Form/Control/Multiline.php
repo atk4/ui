@@ -77,6 +77,7 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\JsCallback;
+use Atk4\Ui\JsFunction;
 use Atk4\Ui\View;
 
 class Multiline extends Form\Control
@@ -192,7 +193,7 @@ class Multiline extends Form\Control
      * The function also receive the row value as an array.
      * ex: $jsAfterAdd = new JsFunction(['value'],[new JsExpression('console.log(value)')]);.
      *
-     * @var JsFunction|null
+     * @var JsFunction
      */
     public $jsAfterAdd;
 
@@ -202,7 +203,7 @@ class Multiline extends Form\Control
      * The function also receive the row value as an array.
      * ex: $jsAfterDelete = new JsFunction(['value'],[new JsExpression('console.log(value)')]);.
      *
-     * @var JsFunction|null
+     * @var JsFunction
      */
     public $jsAfterDelete;
 
@@ -247,10 +248,8 @@ class Multiline extends Form\Control
     /**
      * Add a callback when fields are changed. You must supply array of fields
      * that will trigger the callback when changed.
-     *
-     * @param array $fields
      */
-    public function onLineChange(\Closure $fx, $fields)
+    public function onLineChange(\Closure $fx, array $fields): void
     {
         $this->eventFields = $fields;
 
@@ -321,7 +320,7 @@ class Multiline extends Form\Control
     /**
      * Save rows.
      */
-    public function saveRows()
+    public function saveRows(): self
     {
         // If we are using a reference, make sure main model is loaded.
         if ($this->modelRef && !$this->model->loaded()) {
@@ -373,10 +372,8 @@ class Multiline extends Form\Control
 
     /**
      * Check for model validate error.
-     *
-     * @return mixed
      */
-    protected function addModelValidateErrors($errors, $rowId, $model)
+    protected function addModelValidateErrors(array $errors, string $rowId, Model $model): array
     {
         $e = $model->validate();
         if ($e) {
@@ -392,10 +389,8 @@ class Multiline extends Form\Control
      * for javascript use - changing this method may brake JS functionality.
      *
      * Finds and returns Multiline row id.
-     *
-     * @return |null
      */
-    private function getMlRowId(array $row)
+    private function getMlRowId(array $row): ?string
     {
         $rowId = null;
         foreach ($row as $col => $value) {
@@ -412,10 +407,8 @@ class Multiline extends Form\Control
     /**
      * Will return a model reference if reference was set in setModel.
      * Otherwise, will return main model.
-     *
-     * @return Model
      */
-    public function getModel()
+    public function getModel(): Model
     {
         $model = $this->model;
         if ($this->modelRef) {
@@ -428,12 +421,8 @@ class Multiline extends Form\Control
     /**
      * Set view model.
      * If modelRef is used then getModel will return proper model.
-     *
-     * @param array $fields
-     *
-     * @return Model
      */
-    public function setModel(Model $model, $fields = [], $modelRef = null, $linkField = null)
+    public function setModel(Model $model, array $fields = [], string $modelRef = null, string $linkField = null): Model
     {
         // Remove Multiline field name from model
         if ($model->hasField($this->short_name)) {
@@ -505,7 +494,7 @@ class Multiline extends Form\Control
     /**
      * Return props for input component.
      */
-    protected function getSuiInputProps(Field $field)
+    protected function getSuiInputProps(Field $field): array
     {
         $props = $this->componentProps[self::INPUT] ?? [];
 
@@ -572,7 +561,7 @@ class Multiline extends Form\Control
 
         $props['config']['placeholder'] = $props['config']['placeholder'] ?? 'Select ' . $field->getCaption();
 
-        $this->valuePropsBinding[$field->short_name] = [__CLASS__, 'getLookupOptionValue'];
+        $this->valuePropsBinding[$field->short_name] = [__CLASS__, 'setLookupOptionValue'];
 
         return $props;
     }
@@ -580,7 +569,7 @@ class Multiline extends Form\Control
     /**
      * Lookup Props set based on field value.
      */
-    public function getLookupOptionValue(Field $field, string $value)
+    public function setLookupOptionValue(Field $field, string $value)
     {
         $model = $field->reference->refModel();
         $rec = $model->tryLoadBy($field->reference->getTheirFieldName(), $value);
@@ -605,7 +594,7 @@ class Multiline extends Form\Control
      * Return a component definition.
      * Component definition require at least a name and a props array.
      */
-    protected function getComponentDefinition(Field $field)
+    protected function getComponentDefinition(Field $field): array
     {
         if ($required = $field->ui['multiline']['component'] ?? null) {
             $component = $this->fieldMapToComponent[$required];
@@ -653,6 +642,9 @@ class Multiline extends Form\Control
         return $items;
     }
 
+    /**
+     * Apply Props to component that require props based on field value.
+     */
     protected function valuePropsBinding(string $values)
     {
         $fieldValues = $this->getApp()->decodeJson($values);
@@ -673,11 +665,7 @@ class Multiline extends Form\Control
         }
 
         $this->renderCallback->set(function () {
-            try {
-                return $this->outputJson();
-            } catch (\Atk4\Core\Exception | \Error $e) {
-                $this->getApp()->terminateJson(['success' => false, 'error' => $e->getMessage()]);
-            }
+            return $this->outputJson();
         });
 
         parent::renderView();
@@ -710,9 +698,9 @@ class Multiline extends Form\Control
     /**
      * For javascript use - changing these methods may brake JS functionality.
      *
-     * Render callback.
+     * Render callback according to multi line action.
      */
-    private function outputJson()
+    private function outputJson(): void
     {
         $action = $_POST['__atkml_action'] ?? null;
         $response = [
@@ -728,8 +716,8 @@ class Multiline extends Form\Control
 
                 break;
             case 'on-change':
-                // Let regular callback render output.
-                return ($this->onChangeFunction)($this->getApp()->decodeJson($_POST['rows']), $this->form);
+                $return = call_user_func($this->onChangeFunction, $this->getApp()->decodeJson($_POST['rows']), $this->form);
+                $this->getApp()->terminateJson(array_merge($response, ['atkjs' => $this->renderCallback->getAjaxec($return)]));
 
                 break;
         }
@@ -739,10 +727,8 @@ class Multiline extends Form\Control
      * For javascript use - changing this method may brake JS functionality.
      *
      * Return values associated with callback field.
-     *
-     * @return array
      */
-    private function getCallbackValues($model)
+    private function getCallbackValues(Model $model): array
     {
         $values = [];
         foreach ($this->fieldDefs as $def) {
@@ -766,7 +752,7 @@ class Multiline extends Form\Control
      * Looks inside the POST of the request and loads data into model.
      * Allow to Run expression base on rowData value.
      */
-    private function setDummyModelValue($model)
+    private function setDummyModelValue(Model $model): Model
     {
         $post = $_POST;
 
@@ -793,10 +779,8 @@ class Multiline extends Form\Control
      * For javascript use - changing this method may brake JS functionality.
      *
      * Return values associated to field expression.
-     *
-     * @return array
      */
-    private function getExpressionValues($model)
+    private function getExpressionValues(Model $model): array
     {
         $dummyFields = [];
         $formatValues = [];
@@ -830,10 +814,8 @@ class Multiline extends Form\Control
      *
      * Get all field expression in model, but only evaluate expression used in
      * rowFields.
-     *
-     * @return array
      */
-    private function getExpressionFields($model)
+    private function getExpressionFields(Model $model): array
     {
         $fields = [];
         foreach ($model->getFields() as $field) {
@@ -884,7 +866,7 @@ class Multiline extends Form\Control
      *
      * @return int|mixed|string
      */
-    private function getValueForExpression($exprField, $fieldName, Model $model)
+    private function getValueForExpression(Field $exprField, string $fieldName, Model $model)
     {
         switch ($exprField->type) {
             case 'money':
