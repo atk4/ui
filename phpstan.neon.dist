@@ -101,12 +101,6 @@ parameters:
         # for demos/form-control/input2.php
         - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:onDelete\(\)\.$~'
         - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:onUpload\(\)\.$~'
-        # for demos/form-control/multiline.php
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Layout\:\:addColumn\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:onLineChange\(\)\.$~'
-        - '~^Access to an undefined property Atk4\\Ui\\Form\\Control\:\:\$jsAfterAdd\.$~'
-        - '~^Access to an undefined property Atk4\\Ui\\Form\\Control\:\:\$jsAfterDelete\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:saveRows\(\)\.$~'
         # for demos/form-control/upload.php
         - '~^Access to an undefined property Atk4\\Ui\\Form\\Control\:\:\$cb\.$~'
         - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:clearThumbnail\(\)\.$~'

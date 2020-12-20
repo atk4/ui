@@ -10,6 +10,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsFunction;
+use PhpParser\Node\Expr\BinaryOp\Mul;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -106,8 +107,10 @@ for ($i = 1; $i < 3; ++$i) {
 }
 
 $form = Form::addTo($app);
+
 $form->addControl('test');
 // Add multiline field and set model.
+/** @var Form\Control\Multiline $multiline */
 $multiline = $form->addControl('ml', [Form\Control\Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
 $multiline->setModel($inventory);
 
