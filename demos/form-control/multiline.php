@@ -107,7 +107,6 @@ for ($i = 1; $i < 3; ++$i) {
 
 $form = Form::addTo($app);
 
-$form->addControl('test');
 // Add multiline field and set model.
 $multiline = $form->addControl('ml', [Form\Control\Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
 $multiline->setModel($inventory);
