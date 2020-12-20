@@ -201,15 +201,13 @@ export default {
             const context = this.$refs.addBtn.$el;
             data.__atkml_action = 'update-row';
             try {
-                const response = await atk.apiService.suiFetch(this.data.url, { data: data, method: 'post', stateContext: context });
-                return response;
+                return await atk.apiService.suiFetch(this.data.url, { data: data, method: 'post', stateContext: context });
             } catch (e) {
-                atk.apiService.atkSuccessTest(e);
                 console.error(e);
             }
         },
         /**
-         * Get expressions from server.
+         * Get expressions values from server.
          */
         fetchExpression: async function (atkmlId) {
             if (this.hasExpression()) {
