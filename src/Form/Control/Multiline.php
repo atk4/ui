@@ -665,7 +665,7 @@ class Multiline extends Form\Control
         }
 
         $this->renderCallback->set(function () {
-             $this->outputJson();
+            $this->outputJson();
         });
 
         parent::renderView();
