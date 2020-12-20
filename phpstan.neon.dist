@@ -195,10 +195,6 @@ parameters:
         - '~^PHPDoc tag @param has invalid value \(\$values    an array of possible values\)\: Unexpected token "\$values", expected type at offset 109$~'
         # for src/Form/Control/Lookup.php
         - '~^Call to an undefined method Atk4\\Ui\\Jquery\:\:serialize\(\)\.$~'
-        # for src/Form/Control/Multiline.php
-        - '~^Property Atk4\\Ui\\Form\\Control\\Multiline\:\:\$jsAfterAdd has unknown class Atk4\\Ui\\Form\\Control\\JsFunction as its type\.$~'
-        - '~^Property Atk4\\Ui\\Form\\Control\\Multiline\:\:\$jsAfterDelete has unknown class Atk4\\Ui\\Form\\Control\\JsFunction as its type\.$~'
-        - '~^PHPDoc tag @return has invalid value \(\|null\)\: Unexpected token "\|", expected type at offset 153$~'
         # for src/Form/Control/Radio.php
         - '~^Property Atk4\\Ui\\Form\\Control\\Radio\:\:\$lister has unknown class Atk4\\Ui\\Form\\Control\\Lister as its type\.$~'
         - '~^Call to method setModel\(\) on an unknown class Atk4\\Ui\\Form\\Control\\Lister\.$~'

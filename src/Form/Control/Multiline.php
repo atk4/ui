@@ -699,25 +699,22 @@ class Multiline extends Form\Control
      * For javascript use - changing these methods may brake JS functionality.
      *
      * Render callback according to multi line action.
+     * 'update-row' need special formatting.
      */
     private function outputJson(): void
     {
         $action = $_POST['__atkml_action'] ?? null;
-        $response = [
-            'success' => true,
-            'message' => 'Success',
-        ];
 
         switch ($action) {
             case 'update-row':
                 $model = $this->setDummyModelValue(clone $this->getModel());
                 $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
-                $this->getApp()->terminateJson(array_merge($response, ['expressions' => $expressionValues]));
+                $this->getApp()->terminateJson(['success' => true, 'message' => 'Success', 'expressions' => $expressionValues]);
 
                 break;
             case 'on-change':
-                $return = call_user_func($this->onChangeFunction, $this->getApp()->decodeJson($_POST['rows']), $this->form);
-                $this->getApp()->terminateJson(array_merge($response, ['atkjs' => $this->renderCallback->getAjaxec($return)]));
+                $response = call_user_func($this->onChangeFunction, $this->getApp()->decodeJson($_POST['rows']), $this->form);
+                $this->renderCallback->terminateAjax($this->renderCallback->getAjaxec($response));
 
                 break;
         }
