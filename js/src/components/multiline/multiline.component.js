@@ -23,7 +23,7 @@ export default {
                     </sui-table-row>
                   </sui-table-footer>
                 </sui-table>
-                <input :form="form" :name="name" type="hidden" :value="value" ref="atkmlInput">
+                <div><input :form="form" :name="name" type="hidden" :value="value" ref="atkmlInput"></div>
              </div>`,
     props: {
         data: Object,
@@ -57,6 +57,7 @@ export default {
     },
     mounted: function () {
         this.rowData = this.buildRowData(this.value);
+        this.updateInputValue();
 
         atk.eventBus.on(this.$root.$el.id + '-update-row', (payload) => {
             this.onUpdate(payload.rowId, payload.fieldName, payload.value);

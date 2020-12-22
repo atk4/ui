@@ -157,12 +157,6 @@ class Multiline extends Form\Control
     /** @var array Collection of field errors. */
     private $rowErrors;
 
-    /** @var string The model reference name used for Multiline input. */
-    public $modelRef;
-
-    /** @var string The link field used for reference. */
-    public $linkField;
-
     /** @var array The fields names used in each row. */
     public $rowFields;
 
@@ -212,7 +206,7 @@ class Multiline extends Form\Control
         parent::init();
 
         if (!$this->multiLineTemplate) {
-            $this->multiLineTemplate = new HtmlTemplate('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline>');
+            $this->multiLineTemplate = new HtmlTemplate('<div id="{$_id}" class=""><atk-multiline v-bind="initData"></atk-multiline></div>');
         }
 
         $this->multiLine = View::addTo($this, ['template' => $this->multiLineTemplate]);
@@ -266,10 +260,7 @@ class Multiline extends Form\Control
             $jsonValues = $this->getApp()->ui_persistence->_typecastSaveField($this->field, $this->field->get() ?? []);
         } else {
             // set data according to hasMany ref. or using model.
-            $model = $this->model;
-            if ($this->model->loaded() && $this->modelRef) {
-                $model = $this->model->ref($this->modelRef);
-            }
+            $model = $this->getModel();
             $rows = [];
             foreach ($model as $row) {
                 $cols = [];
@@ -322,11 +313,6 @@ class Multiline extends Form\Control
      */
     public function saveRows(): self
     {
-        // If we are using a reference, make sure main model is loaded.
-        if ($this->modelRef && !$this->model->loaded()) {
-            throw new Exception('Parent model need to be loaded');
-        }
-
         $model = $this->getModel();
 
         // collects existing ids.
@@ -335,10 +321,6 @@ class Multiline extends Form\Control
         foreach ($this->rowData as $row) {
             // should clone model to be able to save it multiple times
             $row_model = clone $model;
-
-            if ($this->modelRef && $this->linkField) {
-                $row_model->set($this->linkField, $this->model->getId());
-            }
 
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
@@ -410,46 +392,43 @@ class Multiline extends Form\Control
      */
     public function getModel(): Model
     {
-        $model = $this->model;
-        if ($this->modelRef) {
-            $model = $model->ref($this->modelRef);
-        }
-
-        return $model;
+        return $this->model;
     }
 
-    /**
-     * Set view model.
-     * If modelRef is used then getModel will return proper model.
-     */
-    public function setModel(Model $model, array $fields = [], string $modelRef = null, string $linkField = null): Model
+    public function setModel(Model $model, array $fieldNames = []): Model
     {
-        // Remove Multiline field name from model
-        if ($model->hasField($this->short_name)) {
-            $model->getField($this->short_name)->never_persist = true;
-        }
         $model = parent::setModel($model);
         $this->initVueLookupCallback();
 
-        if ($modelRef) {
-            if (!$linkField) {
-                throw new Exception('Using model ref required to set $linkField');
-            }
-            $this->linkField = $linkField;
-            $this->modelRef = $modelRef;
-            $model = $model->ref($modelRef);
+        if (!$fieldNames) {
+            $fieldNames = array_keys($model->getFields('not system'));
         }
-
-        if (!$fields) {
-            $fields = array_keys($model->getFields('not system'));
-        }
-        $this->rowFields = array_merge([$model->id_field], $fields);
+        $this->rowFields = array_merge([$model->id_field], $fieldNames);
 
         foreach ($this->rowFields as $fieldName) {
             $this->fieldDefs[] = $this->getFieldDef($model->getField($fieldName));
         }
 
         return $model;
+    }
+
+    /**
+     * Set hasMany reference model to use with multiline.
+     * Ex: $multiline->setReferenceModel($category->ref('Products'), 'product_category_id');
+     *   Where Category::hasMany('Products', new Product())
+     *   and Product::hasOne('product_category_id', new Category()).
+     *
+     * Note: When using setReferenceModel you might need to set this corresponding field to never_persist to true.
+     * Otherwise, form will try to save 'ml' content as an array.
+     * $multiline = $form->addControl('ml', [Multiline::class], ['never_persist' => true])
+     */
+    public function setReferenceModel(Model $refModel, string $linkByFieldName, array $fieldNames = []): Model
+    {
+        if (!$refModel->ref($linkByFieldName)->loaded()) {
+            throw new Exception('Parent model must be loaded in order to use reference.');
+        }
+
+        return $this->setModel($refModel, $fieldNames);
     }
 
     /**
@@ -498,7 +477,7 @@ class Multiline extends Form\Control
     {
         $props = $this->componentProps[self::INPUT] ?? [];
 
-        $props['type'] = ($field->type === 'integer' || $field->type === 'float' || $field->type === 'money') ? 'number' : 'text';
+        $props['type'] = ($field->type === 'integer' || $field->type === 'float' || $field->type === 'money' || $field->type === 'number') ? 'number' : 'text';
 
         return array_merge($props, $field->ui['multiline'][self::INPUT] ?? []);
     }
@@ -794,12 +773,14 @@ class Multiline extends Form\Control
             foreach ($dummyFields as $field) {
                 $dummyModel->addExpression($field['name'], ['expr' => $field['expr'], 'type' => $model->getField($field['name'])->type]);
             }
-            $values = $dummyModel->loadAny()->get();
+            $values = $dummyModel->tryLoadAny()->get();
             unset($values[$model->id_field]);
 
             foreach ($values as $f => $value) {
-                $field = $model->getField($f);
-                $formatValues[$f] = $this->getApp()->ui_persistence->_typecastSaveField($field, $value);
+                if ($value) {
+                    $field = $model->getField($f);
+                    $formatValues[$f] = $this->getApp()->ui_persistence->_typecastSaveField($field, $value);
+                }
             }
         }
 
