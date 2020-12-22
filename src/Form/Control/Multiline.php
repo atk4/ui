@@ -5,24 +5,21 @@ declare(strict_types=1);
  * Creates a Multiline field within a table, which allows adding/editing multiple
  * data rows.
  *
- * To save the data, use the Multiline::saveRows() method. If the Multiline's
- * model is a reference to your form's model, the form model should be saved prior
- * to calling saveRows().
+ * Using hasMany reference will required to save reference data using Multiline::saveRows() method.
  *
  * $form = Form::addTo($app);
  * $form->setModel($invoice, false);
- * // Add form controls
  *
  * // Add Multiline form control and set model for it.
- * $ml = $form->addControl('ml', ['Multiline']);
+ * $ml = $form->addControl('ml', ['Multiline::class']);
  *
- * // Set model using hasMany reference of Invoice.
- * $ml->setModel($invoice, ['item','cat','qty','price', 'total'], 'Items', 'invoice_id');
+ * // Set Multiline model using hasMany reference of Invoice.
+ * $ml->setReferenceModel($invoice->ref('Items'), 'invoice_id', ['item','cat','qty','price', 'total']);
  *
  * $form->onSubmit(function($form) use ($ml) {
  *     // Save Form model and then Multiline model
- *     $form->model->save();
- *     $ml->saveRows();
+ *     $form->model->save(); // Saving Invoice record.
+ *     $ml->saveRows(); // Saving invoice items record related to invoice.
  *     return new \Atk4\Ui\JsToast('Saved!');
  * });
  *
@@ -214,13 +211,23 @@ class Multiline extends Form\Control
         $this->renderCallback = JsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
-        $this->form->onHook(Form::HOOK_LOAD_POST, function ($form) {
+        $this->form->onHook(Form::HOOK_LOAD_POST, function ($form, &$post) {
             $this->rowData = $this->getApp()->decodeJson($_POST[$this->short_name]);
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
                 if ($this->rowErrors) {
                     throw new ValidationException([$this->short_name => 'multiline error']);
                 }
+            }
+
+            // remove __atml id from array field.
+            if ($this->form->model->getField($this->short_name)->type === 'array') {
+                $rows = [];
+                foreach ($this->rowData as $key => $cols) {
+                    unset($cols['__atkml']);
+                    $rows[] = $cols;
+                }
+                $post[$this->short_name] = json_encode($rows);
             }
         });
 
@@ -726,11 +733,11 @@ class Multiline extends Form\Control
      * For javascript use - changing this method may brake JS functionality.
      *
      * Looks inside the POST of the request and loads data into model.
-     * Allow to Run expression base on rowData value.
+     * Allow to Run expression base on post row value.
      */
     private function setDummyModelValue(Model $model): Model
     {
-        $post = $_POST;
+        $row = $_POST;
 
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['name'];
@@ -738,7 +745,7 @@ class Multiline extends Form\Control
                 continue;
             }
 
-            $value = $post[$fieldName] ?? null;
+            $value = $row[$fieldName] ?? null;
             if ($model->getField($fieldName)->isEditable()) {
                 try {
                     $model->set($fieldName, $value);
