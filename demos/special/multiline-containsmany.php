@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Form\Control\Multiline;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -31,10 +33,20 @@ class Account extends \Atk4\Data\Model
     {
         parent::init();
 
-        $this->addField('email', ['required' => true, 'ui' => ['multiline' => ['sui-input' => ['icon' => 'envelope', 'type' => 'email']]]]);
-        $this->addField('password', ['required' => true, 'ui' => ['multiline' => ['sui-input' => ['icon' => 'key', 'type' => 'password']]]]);
+        $this->addField('email', [
+            'required' => true,
+            'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'envelope', 'type' => 'email']]]
+        ]);
+        $this->addField('password', [
+            'required' => true,
+            'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'key', 'type' => 'password']]]
+        ]);
         $this->addField('site', ['required' => true]);
-        $this->addField('type', ['default' => 'user', 'values' => ['user' => 'Regular User', 'admin' => 'System Admin'], 'ui' => ['multiline' => ['width' => 'four']]]);
+        $this->addField('type', [
+            'default' => 'user',
+            'values' => ['user' => 'Regular User', 'admin' => 'System Admin'],
+            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 'four']]]
+        ]);
     }
 }
 
