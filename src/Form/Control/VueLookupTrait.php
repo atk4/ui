@@ -1,6 +1,6 @@
 <?php
 /**
- * Trait for Control that use Vue Lookup compoenent.
+ * Trait for Control that use Vue Lookup component.
  */
 
 declare(strict_types=1);
