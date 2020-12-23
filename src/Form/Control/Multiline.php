@@ -393,10 +393,6 @@ class Multiline extends Form\Control
         return $rowId;
     }
 
-    /**
-     * Will return a model reference if reference was set in setModel.
-     * Otherwise, will return main model.
-     */
     public function getModel(): Model
     {
         return $this->model;
@@ -426,8 +422,8 @@ class Multiline extends Form\Control
      *   and Product::hasOne('product_category_id', new Category()).
      *
      * Note: When using setReferenceModel you might need to set this corresponding field to never_persist to true.
-     * Otherwise, form will try to save 'ml' content as an array.
-     * $multiline = $form->addControl('ml', [Multiline::class], ['never_persist' => true])
+     * Otherwise, form will try to save 'multiline' field value as an array when form is save.
+     * $multiline = $form->addControl('multiline', [Multiline::class], ['never_persist' => true])
      */
     public function setReferenceModel(Model $refModel, string $linkByFieldName, array $fieldNames = []): Model
     {
