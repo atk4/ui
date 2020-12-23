@@ -10,10 +10,8 @@ declare(strict_types=1);
  * $form = Form::addTo($app);
  * $form->setModel($invoice, false);
  *
- * // Add Multiline form control and set model for it.
+ * // Add Multiline form control and set model for Invoice items.
  * $ml = $form->addControl('ml', ['Multiline::class']);
- *
- * // Set Multiline model using hasMany reference of Invoice.
  * $ml->setReferenceModel($invoice->ref('Items'), 'invoice_id', ['item','cat','qty','price', 'total']);
  *
  * $form->onSubmit(function($form) use ($ml) {
