@@ -342,7 +342,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $counter = 0;
         $element = null;
-        while ($counter < 20) {
+        while ($counter < 40) {
             $element = $this->getSession()->getPage()->find('css', $selector);
             if ($element === null) {
                 usleep(1000);
