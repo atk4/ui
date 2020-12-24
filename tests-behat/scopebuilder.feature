@@ -12,6 +12,7 @@ Feature: ScopeBuilder
     Then bool rule "is_commercial" has value "No"
     Then I check if input value for "qb" match text in "p.atk-expected-input-result"
     And I press button "Save"
+    Then I wait 200 ms
     Then I check if text in "p.atk-expected-word-result" match text in ".atk-scope-builder-response"
 
   Scenario: test ScopeBuilder query string to model scope
