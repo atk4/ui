@@ -171,7 +171,7 @@ class File extends \Atk4\Data\Model
         $this->hasMany('SubFolder', [new self(), 'their_field' => 'parent_folder_id'])
             ->addField('count', ['aggregate' => 'count', 'field' => $this->persistence->expr($this, '*')]);
 
-        $this->hasOne('parent_folder_id', Folder::class)
+        $this->hasOne('parent_folder_id', ['model' => [Folder::class]])
             ->addTitle();
     }
 
