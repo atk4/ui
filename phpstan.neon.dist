@@ -19,8 +19,12 @@ parameters:
         - '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$skin\.$~'
         # for tsrc/CardDeck.php
         - '~^Access to an undefined property Atk4\\Ui\\CardDeck::\$editFields\.$~'
+        # for tsrc/Form/Control/Calendar.php
+        - '~^Class Atk4\\Ui\\JsFunction constructor invoked with 3 parameters, 0\-2 required\.$~'
         # for tsrc/Form/Control/Lookup.php
         - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\\Lookup::search\(\)\.$~'
+        # for tsrc/Form/Control/ScopeBuilder.php
+        - '~^Variable \$inputType might not be defined\.$~'
         # for tsrc/Modal.php
         - '~^Access to an undefined property Atk4\\Ui\\Modal::\$options\.$~'
         # for tsrc/Table.php
@@ -44,6 +48,8 @@ parameters:
         - '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$cb\.$~'
         - '~^Call to an undefined method Atk4\\Ui\\AbstractView::setModel\(\)\.$~'
         - '~^Call to an undefined method Atk4\\Ui\\AbstractView::jsReload\(\)\.$~'
+        # for demos/collection/crud.php
+        - '~^Method Atk4\\Ui\\Columns::addColumn\(\) invoked with 2 parameters, 0\-1 required\.$~'
         # for demos/collection/jssortable.php
         - '~^Call to an undefined method Atk4\\Ui\\Table\\Column::onReorder\(\)\.$~'
         # for demos/collection/tablefilter.php
@@ -109,13 +115,19 @@ parameters:
         - '~^Access to an undefined property object::\$debug\.$~'
         # for src/Crud.php
         - '~^Call to an undefined method Atk4\\Ui\\UserAction\\JsExecutorInterface::stickyGet\(\)\.$~'
+        - '~^Method Atk4\\Ui\\UserAction\\JsExecutorInterface::jsExecute\(\) invoked with 0 parameters, 1 required\.$~'
         # for src/Form.php
         - '~^Call to an undefined method Atk4\\Ui\\JsChain::preventFormLeave\(\)\.$~'
         # for src/Form/Control/Calendar.php
         - '~^Access to an undefined property Atk4\\Ui\\JsChain::\$l10ns\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Jquery::\$_flatpickr\.$~'
         - '~^Call to an undefined method Atk4\\Ui\\JsChain::localize\(\)\.$~'
+        # for src/Form/Control/Checkbox.php
+        - '~^Access to an undefined property Atk4\\Ui\\Jquery::\$checked\.$~'
         # for src/Grid.php
         - '~^Call to an undefined method Atk4\\Ui\\Table\\Column::addActionMenuItem\(\)\.$~'
+        # for src/JsCallback.php
+        - '~^Access to an undefined property Atk4\\Ui\\JsExpressionable::\$_chain\.$~'
         # for src/JsVueService.php
         - '~^Call to an undefined method Atk4\\Ui\\JsChain::createAtkVue\(\)\.$~'
         - '~^Call to an undefined method Atk4\\Ui\\JsChain::createVue\(\)\.$~'
@@ -143,6 +155,8 @@ parameters:
         # for src/Table/Column/FilterPopup.php
         - '~^Call to an undefined method Atk4\\Data\\Model::recallData\(\)\.$~'
         - '~^Call to an undefined method Atk4\\Data\\Model::setConditionForModel\(\)\.$~'
+        # for src/Table/Column/Link.php
+        - '~^Cannot call method set\(\) on array\|string\.$~'
         # for src/Tabs.php
         - '~^Call to an undefined method Atk4\\Ui\\View::setPath\(\)\.$~'
         # for src/UserAction/ModalExecutor.php
@@ -155,6 +169,8 @@ parameters:
         - '~^Call to an undefined method Atk4\\Ui\\AbstractView::setAction\(\)\.$~'
         - '~^Call to an undefined method Atk4\\Ui\\App::jsReady\(\)\.$~'
         - '~^Call to an undefined method Atk4\\Ui\\App::getViewJS\(\)\.$~'
+        # for src/VirtualPage.php
+        - '~^Method Atk4\\Ui\\VirtualPage::getHtml\(\) should return string but return statement is missing\.$~'
         # for tests/FormTest.php
         - '~^Access to an undefined property Atk4\\Ui\\App::\$output\.$~'
         # for tests/jsTest.php
