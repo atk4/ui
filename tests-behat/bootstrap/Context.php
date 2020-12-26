@@ -531,7 +531,7 @@ class Context extends RawMinkContext implements BehatContext
 
         $expectedText = $compareContainer->getText();
 
-        $compareToContainer = $this->waitForNodeElement($compareToSelector);
+        $compareToContainer = $this->getSession()->getPage()->find('css', $compareToSelector);
         if (!$compareToContainer) {
             throw new Exception('Unable to find compare to container: ' . $compareToSelector);
         }
