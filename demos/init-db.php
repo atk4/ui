@@ -116,6 +116,7 @@ class Stat extends \Atk4\Data\Model
         $this->hasOne('client_country_iso', [
             new Country(),
             'their_field' => 'iso',
+            'type' => 'string',
             'ui' => [
                 'form' => [Form\Control\Line::class],
             ],

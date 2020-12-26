@@ -293,7 +293,6 @@ class Card extends View
      * Add an Event action executor of type 'click' using a button
      * as target.
      *
-     * @param []     $args    The action argument
      * @param string $confirm the confirmation message
      *
      * @return Card
@@ -394,8 +393,7 @@ class Card extends View
     /**
      * Add button to card.
      *
-     * @param Button $button  a Button
-     * @param bool   $isFluid make the buttons spread evenly in Card
+     * @param Button $button a Button
      *
      * @return View|null
      */

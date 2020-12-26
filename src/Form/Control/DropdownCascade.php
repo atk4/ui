@@ -47,7 +47,7 @@ class DropdownCascade extends Dropdown
             throw new Exception('cascadeFrom property should be an instance of ' . Form\Control::class);
         }
 
-        $this->cascadeControlValue = $_POST[$this->cascadeControl->name] ?? $this->cascadeControl->field->get('value');
+        $this->cascadeControlValue = $_POST[$this->cascadeControl->name] ?? $this->cascadeControl->field->get();
 
         $this->model = $this->cascadeControl->model ? $this->cascadeControl->model->ref($this->reference) : null;
 
@@ -98,8 +98,8 @@ class DropdownCascade extends Dropdown
      *  Will mark current value as selected from a list
      *  of possible values.
      *
-     * @param $values    an array of possible values
-     * @param $value     the current field value
+     * @param array  $values an array of possible values
+     * @param string $value  the current field value
      */
     private function getJsValues(array $values, string $value): array
     {

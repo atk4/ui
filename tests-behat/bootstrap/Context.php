@@ -98,8 +98,6 @@ class Context extends RawMinkContext implements BehatContext
      * Sleep for a certain time in ms.
      *
      * @Then I wait :arg1 ms
-     *
-     * @param $arg1
      */
     public function iWait($arg1)
     {
@@ -175,8 +173,6 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * @Given I click tab with title :arg1
-     *
-     * @param $arg1
      */
     public function iClickTabWithTitle($arg1)
     {
@@ -277,8 +273,6 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * @Then I press Modal button :arg
-     *
-     * @param $arg
      */
     public function iPressModalButton($arg)
     {
@@ -314,9 +308,6 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * @Then Modal is showing text :arg1 inside tag :arg2
-     *
-     * @param $arg1
-     * @param $arg2
      */
     public function modalIsShowingText($arg1, $arg2)
     {
@@ -386,8 +377,6 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * @Then Toast display should contains text :arg1
-     *
-     * @param $arg1
      */
     public function toastDisplayShouldContainText($arg1)
     {

@@ -78,6 +78,7 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\JsCallback;
+use Atk4\Ui\JsFunction;
 use Atk4\Ui\View;
 
 class Multiline extends Form\Control
@@ -445,7 +446,7 @@ class Multiline extends Form\Control
      *
      * Finds and returns Multiline row id.
      *
-     * @return |null
+     * @return mixed
      */
     private function getMlRowId(array $row)
     {

@@ -109,7 +109,8 @@ class Link extends Table\Column
         if (isset($properties[0])) {
             $this->args = array_shift($properties);
         }
-        parent::setDefaults($properties);
+
+        return parent::setDefaults($properties);
     }
 
     protected function init(): void

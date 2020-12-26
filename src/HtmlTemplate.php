@@ -474,7 +474,7 @@ class HtmlTemplate implements \ArrayAccess
     {
         'trigger_error'('Array access is deprecated. Use del method instead', E_USER_DEPRECATED);
 
-        $this->del($name, null);
+        $this->del($name);
     }
 
     // }}}

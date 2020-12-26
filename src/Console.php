@@ -91,7 +91,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             $this->sseInProgress = true;
 
             if ($this->issetApp()) {
-                $old_logger = $this->getApp()->logger;
+                $oldLogger = $this->getApp()->logger;
                 $this->getApp()->logger = $this;
             }
 
@@ -118,7 +118,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }
 
             if ($this->issetApp()) {
-                $this->getApp()->logger = $old_logger;
+                $this->getApp()->logger = $oldLogger; // @phpstan-ignore-line
             }
 
             $this->sseInProgress = false;
@@ -267,7 +267,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }
         }
 
-        $this->last_exit_code = $stat['exitcode'];
+        $this->last_exit_code = $stat['exitcode']; // @phpstan-ignore-line
 
         return $this->last_exit_code ? false : $this;
     }
@@ -307,7 +307,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     }
 
     /**
-     * Execute method of a certain object. If object uses atk4/core/DebugTrait,
+     * Execute method of a certain object. If object uses Atk4\Core\DebugTrait,
      * then debugging will also be used.
      *
      * During the invocation, Console will substitute $app->logger with itself,
@@ -358,10 +358,10 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 $result = $object->{$method}(...$args);
             } finally {
                 if (isset($object->_appScopeTrait) && $object->issetApp()) {
-                    $object->getApp()->logger = $loggerBak;
+                    $object->getApp()->logger = $loggerBak; // @phpstan-ignore-line
                 }
                 if (isset($object->_debugTrait)) {
-                    $object->debug = $debugBak;
+                    $object->debug = $debugBak; // @phpstan-ignore-line
                 }
             }
         } elseif (is_string($object)) {
