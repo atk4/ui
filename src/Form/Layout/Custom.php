@@ -13,7 +13,7 @@ use Atk4\Ui\Form\AbstractLayout;
  */
 class Custom extends AbstractLayout
 {
-    /** @var {@inheritdoc} */
+    /** @var string */
     public $defaultTemplate;
 
     protected function init(): void

@@ -87,6 +87,7 @@ $vp = \Atk4\Ui\VirtualPage::addTo($app)->set(function ($vp) use ($model) {
 
 \Atk4\Ui\Button::addTo($app, ['Re-Import From Filesystem', 'top attached'])->on('click', new \Atk4\Ui\JsModal('Now importing ... ', $vp));
 
+// @phpstan-ignore-next-line
 $finderClass::addTo($app, ['bottom attached'])
     ->addClass('top attached segment')
     ->setModel($model->setLimit(5), ['SubFolder']);

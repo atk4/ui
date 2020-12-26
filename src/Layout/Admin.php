@@ -79,8 +79,6 @@ class Admin extends \Atk4\Ui\Layout implements NavigableInterface
 
     /**
      * Add a group to left menu.
-     *
-     * @param $seed
      */
     public function addMenuGroup($seed): Menu
     {

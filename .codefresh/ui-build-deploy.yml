@@ -16,7 +16,7 @@ steps:
     title: Add HEAD hash to version/footer
     image: alpine
     commands:
-      - apk add bash
+      - apk add bash git
       - sed -E "s/(public \\\$version = ')(.*)(')/\\1\\2 - $(git rev-parse --short HEAD)\\3/" -i src/App.php
 
   build:

@@ -657,8 +657,6 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
     /**
      * Utility for setting form in each step.
-     *
-     * @return Form |null
      */
     protected function addFormTo(View $view): Form
     {

@@ -20,14 +20,14 @@ class FilterModel extends \Atk4\Data\Model
     /**
      * The operator for defining a condition on a field.
      *
-     * @var
+     * @var Field
      */
     public $op;
 
     /**
      * The value for defining a condition on a field.
      *
-     * @var
+     * @var Field
      */
     public $value;
 
@@ -48,8 +48,7 @@ class FilterModel extends \Atk4\Data\Model
     /**
      * Factory method that will return a FilterModel Type class.
      *
-     * @param Field       $field
-     * @param Persistence $persistence
+     * @param Field $field
      *
      * @return mixed
      */

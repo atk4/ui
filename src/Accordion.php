@@ -113,12 +113,11 @@ class Accordion extends View
      * $accordion->jsBehavior('toggle', 1).
      *
      * @param string $behavior the name of the behavior for the module
-     * @param array  $args     the behaviors argument as an array
      * @param bool   $when     when this js action is render
      *
      * @return mixed
      */
-    public function jsBehavior($behavior, $args, $when = null)
+    public function jsBehavior($behavior, array $args, $when = null)
     {
         return $this->js($when)->accordion($behavior, ...$args);
     }

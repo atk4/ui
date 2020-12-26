@@ -206,9 +206,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
     /**
      * Return proper js statement when action execute.
-     *
-     * @param $obj
-     * @param $id
      */
     protected function jsGetExecute($obj, $id): array
     {
