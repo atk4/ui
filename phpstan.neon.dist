@@ -16,146 +16,146 @@ parameters:
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 1
         # for tsrc/AbstractView.php
-        - '~^Access to an undefined property Atk4\\Ui\\AbstractView\:\:\$skin\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$skin\.$~'
         # for tsrc/CardDeck.php
-        - '~^Access to an undefined property Atk4\\Ui\\CardDeck\:\:\$editFields\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\CardDeck::\$editFields\.$~'
         # for tsrc/Form/Control/Lookup.php
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\\Lookup\:\:search\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\\Lookup::search\(\)\.$~'
         # for tsrc/Modal.php
-        - '~^Access to an undefined property Atk4\\Ui\\Modal\:\:\$options\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Modal::\$options\.$~'
         # for tsrc/Table.php
-        - '~^Access to an undefined property Atk4\\Ui\\Table\:\:\$t_row_master\.$~'
-        - '~^Access to an undefined property Atk4\\Ui\\Table\:\:\$model¨\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Table::\$t_row_master\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Table::\$model¨\.$~'
         # for tsrc/Table/Column/Delete.php
-        - '~^Access to an undefined property Atk4\\Ui\\Table\\Column\\Delete\:\:\$vp\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Table\\Column\\Delete::\$vp\.$~'
         # for tsrc/Table/Column/FilterModel/TypeTime.php
-        - '~^Call to an undefined method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeTime\:\:recalData\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeTime::recalData\(\)\.$~'
         # for tsrc/Wizard.php
-        - '~^Access to an undefined property Atk4\\Ui\\Wizard\:\:\$stepTemplate\.$~'
-        - '~^Access to an undefined property Atk4\\Ui\\Wizard\:\:\$buttonFinish\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Wizard::\$stepTemplate\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Wizard::\$buttonFinish\.$~'
         # for tests/CallbackTest.php
-        - '~^Access to an undefined property Atk4\\Ui\\Tests\\AppMock\:\:\$terminate\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Tests\\AppMock::\$terminate\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
         # for demos/_includes/Demo.php
-        - '~^Call to an undefined method Atk4\\Ui\\JsChain\:\:initHighlighting\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsChain::initHighlighting\(\)\.$~'
         # for demos/_unit-test/callback.php
-        - '~^Access to an undefined property Atk4\\Ui\\AbstractView\:\:\$cb\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\AbstractView\:\:setModel\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\AbstractView\:\:jsReload\(\)\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$cb\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\AbstractView::setModel\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\AbstractView::jsReload\(\)\.$~'
         # for demos/collection/jssortable.php
-        - '~^Call to an undefined method Atk4\\Ui\\Table\\Column\:\:onReorder\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Table\\Column::onReorder\(\)\.$~'
         # for demos/collection/tablefilter.php
-        - '~^Call to an undefined method Atk4\\Ui\\Demos\\CountryLock\:\:expr\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Demos\\CountryLock::expr\(\)\.$~'
         # for demos/data-action/jsactions.php
-        - '~^Call to an undefined method Atk4\\Ui\\View\:\:addFields\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\View::addFields\(\)\.$~'
         # for demos/form-control/calendar.php
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:addAction\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:getJsInstance\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control::addAction\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control::getJsInstance\(\)\.$~'
         # for demos/form-control/input2.php
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:onDelete\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:onUpload\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onDelete\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onUpload\(\)\.$~'
         # for demos/form-control/multiline.php
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Layout\:\:addColumn\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:onLineChange\(\)\.$~'
-        - '~^Access to an undefined property Atk4\\Ui\\Form\\Control\:\:\$jsAfterAdd\.$~'
-        - '~^Access to an undefined property Atk4\\Ui\\Form\\Control\:\:\$jsAfterDelete\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:saveRows\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::addColumn\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onLineChange\(\)\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$jsAfterAdd\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$jsAfterDelete\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control::saveRows\(\)\.$~'
         # for demos/form-control/upload.php
-        - '~^Access to an undefined property Atk4\\Ui\\Form\\Control\:\:\$cb\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:clearThumbnail\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:setThumbnailSrc\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\:\:setFileId\(\)\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$cb\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control::clearThumbnail\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control::setThumbnailSrc\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Form\\Control::setFileId\(\)\.$~'
         # for demos/form/form-section-accordion.php
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Layout\:\:addSection\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Layout\:\:activate\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::addSection\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::activate\(\)\.$~'
         # for demos/form/form-section.php
-        - '~^Call to an undefined method Atk4\\Ui\\Form\\Layout\:\:addTab\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::addTab\(\)\.$~'
         # for demos/form/form.php
-        - '~^Call to an undefined method Atk4\\Ui\\JsChain\:\:val\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\JsChain\:\:checkbox\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsChain::val\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsChain::checkbox\(\)\.$~'
         # for demos/form/form2.php
-        - '~^Access to an undefined property Atk4\\Ui\\Form\\Control\:\:\$iconLeft\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$iconLeft\.$~'
         # for demos/init-app.php
-        - '~^Access to an undefined property Atk4\\Ui\\Layout&Atk4\\Ui\\Layout\\NavigableInterface\:\:\$menu\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Layout&Atk4\\Ui\\Layout\\NavigableInterface::\$menu\.$~'
         # for demos/init-db.php
-        - '~^Call to an undefined method Atk4\\Data\\Reference\\HasOne\:\:addField\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Data\\Persistence\:\:expr\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Data\\Reference\\HasOne\:\:addTitle\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Data\\Model\:\:importFromFilesystem\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Data\\Reference\\HasOne::addField\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Data\\Persistence::expr\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Data\\Reference\\HasOne::addTitle\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Data\\Model::importFromFilesystem\(\)\.$~'
         # for demos/interactive/popup.php
-        - '~^Access to an undefined property Atk4\\Ui\\Lister\:\:\$items\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\View\:\:linkCart\(\)\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Lister::\$items\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\View::linkCart\(\)\.$~'
         # for demos/interactive/tabs.php
-        - '~^Call to an undefined method Atk4\\Ui\\View\:\:setActive\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\View::setActive\(\)\.$~'
         # for demos/interactive/wizard.php
-        - '~^Access to an undefined property Atk4\\Ui\\Form\\Control\:\:\$placeholder\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$placeholder\.$~'
         # for demos/layout/layout-panel.php
-        - '~^Call to an undefined method Atk4\\Ui\\Panel\\Loadable\:\:jsOpen\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Panel\\Loadable\:\:onOpen\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Panel\\Loadable\:\:addConfirmation\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Panel\\Loadable::jsOpen\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Panel\\Loadable::onOpen\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Panel\\Loadable::addConfirmation\(\)\.$~'
         # for src/Card.php
-        - '~^Call to an undefined method Atk4\\Ui\\AbstractView\:\:addFields\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\View\:\:addDescription\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\AbstractView::addFields\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\View::addDescription\(\)\.$~'
         # for src/CardDeck.php
-        - '~^Access to an undefined property Atk4\\Ui\\AbstractView\:\:\$reload\.$~'
-        - '~^Access to an undefined property Atk4\\Ui\\AbstractView\:\:\$queryArg\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\AbstractView\:\:addClass\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\AbstractView\:\:on\(\)\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$reload\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$queryArg\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\AbstractView::addClass\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\AbstractView::on\(\)\.$~'
         # for src/Console.php
-        - '~^Call to an undefined method object\:\:issetApp\(\)\.$~'
-        - '~^Call to an undefined method object\:\:getApp\(\)\.$~'
-        - '~^Access to an undefined property object\:\:\$debug\.$~'
+        - '~^Call to an undefined method object::issetApp\(\)\.$~'
+        - '~^Call to an undefined method object::getApp\(\)\.$~'
+        - '~^Access to an undefined property object::\$debug\.$~'
         # for src/Crud.php
-        - '~^Call to an undefined method Atk4\\Ui\\UserAction\\JsExecutorInterface\:\:stickyGet\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\UserAction\\JsExecutorInterface::stickyGet\(\)\.$~'
         # for src/Form.php
-        - '~^Call to an undefined method Atk4\\Ui\\JsChain\:\:preventFormLeave\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsChain::preventFormLeave\(\)\.$~'
         # for src/Form/Control/Calendar.php
-        - '~^Access to an undefined property Atk4\\Ui\\JsChain\:\:\$l10ns\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\JsChain\:\:localize\(\)\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\JsChain::\$l10ns\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsChain::localize\(\)\.$~'
         # for src/Grid.php
-        - '~^Call to an undefined method Atk4\\Ui\\Table\\Column\:\:addActionMenuItem\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Table\\Column::addActionMenuItem\(\)\.$~'
         # for src/JsVueService.php
-        - '~^Call to an undefined method Atk4\\Ui\\JsChain\:\:createAtkVue\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\JsChain\:\:createVue\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\JsChain\:\:useComponent\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsChain::createAtkVue\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsChain::createVue\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsChain::useComponent\(\)\.$~'
         # for src/Menu.php
-        - '~^Call to an undefined method Atk4\\Ui\\AbstractView\:\:setElement\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\AbstractView::setElement\(\)\.$~'
         # for src/Panel/Right.php
-        - '~^Call to an undefined method Atk4\\Ui\\JsExpression\:\:openPanel\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\JsExpression\:\:reloadPanel\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\JsExpression\:\:closePanel\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\AbstractView\:\:addButtonAction\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\AbstractView\:\:notClosable\(\)\.$~'
-        - '~^PHPDoc tag @param references unknown parameter\: \$selector$~'
-        - '~^Call to an undefined method Atk4\\Ui\\Panel\\LoadableContent\:\:getClearSelector\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\JsExpression\:\:addPanel\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsExpression::openPanel\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsExpression::reloadPanel\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsExpression::closePanel\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\AbstractView::addButtonAction\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\AbstractView::notClosable\(\)\.$~'
+        - '~^PHPDoc tag @param references unknown parameter: \$selector$~'
+        - '~^Call to an undefined method Atk4\\Ui\\Panel\\LoadableContent::getClearSelector\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsExpression::addPanel\(\)\.$~'
         # for src/Tab.php
-        - '~^Access to an undefined property Atk4\\Ui\\View\:\:\$activeTabName\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\View::\$activeTabName\.$~'
         # for src/Table/Column.php
-        - '~^Call to an undefined method Atk4\\Ui\\AbstractView\:\:setHoverable\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\JsCallback\:\:onSelectItem\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\AbstractView::setHoverable\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsCallback::onSelectItem\(\)\.$~'
         # for src/Table/Column/Delete.php
-        - '~^Call to an undefined method Atk4\\Ui\\AbstractView\:\:set\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\AbstractView::set\(\)\.$~'
         # for src/Table/Column/DragHandler.php
-        - '~^Call to an undefined method Atk4\\Ui\\JsCallback\:\:onReorder\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsCallback::onReorder\(\)\.$~'
         # for src/Table/Column/FilterPopup.php
-        - '~^Call to an undefined method Atk4\\Data\\Model\:\:recallData\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Data\\Model\:\:setConditionForModel\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Data\\Model::recallData\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Data\\Model::setConditionForModel\(\)\.$~'
         # for src/Tabs.php
-        - '~^Call to an undefined method Atk4\\Ui\\View\:\:setPath\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\View::setPath\(\)\.$~'
         # for src/UserAction/ModalExecutor.php
-        - '~^Access to an undefined property Atk4\\Ui\\AbstractView\:\:\$buttonSave\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$buttonSave\.$~'
         # for src/View.php
-        - '~^Call to an undefined method Atk4\\Ui\\JsChain\:\:emit\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\JsChain\:\:clearData\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\JsChain\:\:addJsonData\(\)\.$~'
-        - '~^Access to an undefined property Atk4\\Ui\\UserAction\\JsExecutorInterface&Atk4\\Ui\\View\:\:\$viewForUrl\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\AbstractView\:\:setAction\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\App\:\:jsReady\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Ui\\App\:\:getViewJS\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsChain::emit\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsChain::clearData\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsChain::addJsonData\(\)\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\UserAction\\JsExecutorInterface&Atk4\\Ui\\View::\$viewForUrl\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\AbstractView::setAction\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\App::jsReady\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\App::getViewJS\(\)\.$~'
         # for tests/FormTest.php
-        - '~^Access to an undefined property Atk4\\Ui\\App\:\:\$output\.$~'
+        - '~^Access to an undefined property Atk4\\Ui\\App::\$output\.$~'
         # for tests/jsTest.php
-        - '~^Call to an undefined method Atk4\\Ui\\JsChain\:\:getTextInRange\(\)\.$~'
+        - '~^Call to an undefined method Atk4\\Ui\\JsChain::getTextInRange\(\)\.$~'
