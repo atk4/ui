@@ -132,7 +132,7 @@ $form->onSubmit(function (Form $form) use ($control) {
 /////////////////////////////////////////////////////////////////////
 $tab = $tabs->addTab('Handler Safety');
 
-\Atk4\Ui\Header::addTo($tab, ['Form handles errors (PHP 7.0+)', 'size' => 2]);
+\Atk4\Ui\Header::addTo($tab, ['Form handles errors', 'size' => 2]);
 
 $form = Form::addTo($tab);
 $form->addControl('email');

@@ -1,5 +1,5 @@
 parameters:
-    level: 2
+    level: 5
     paths:
         - ./
     excludes_analyse:
@@ -175,3 +175,840 @@ parameters:
         - '~^Access to an undefined property Atk4\\Ui\\App::\$output\.$~'
         # for tests/jsTest.php
         - '~^Call to an undefined method Atk4\\Ui\\JsChain::getTextInRange\(\)\.$~'
+
+        # TODO these rules are generated, this ignores should be fixed in the code
+        # for level = 3
+        # for demos/_includes/Counter.php
+        - '~^Property Atk4\\Ui\\Demos\\Counter::\$content \(string\|false\) does not accept default value of type 20\.$~'
+        # for demos/_includes/DemoLookup.php
+        - '~^Property Atk4\\Ui\\Form\\Control\\Lookup::\$plus \(bool\|string\|null\) does not accept array\<string, string\>\.$~'
+        # for demos/interactive/popup.php
+        - '~^Property Atk4\\Ui\\Label::\$detail \(string\|false\|null\) does not accept int\<0, max\>\.$~'
+        # for demos/layout/layouts_manual.php
+        - '~^Property Atk4\\Ui\\App::\$html \(Atk4\\Ui\\View\) does not accept null\.$~'
+        # for src/App.php
+        - '~^Property Atk4\\Ui\\App::\$layout \(Atk4\\Ui\\Layout\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        # for src/Card.php
+        - '~^Property Atk4\\Ui\\Card::\$section \(Atk4\\Ui\\CardSection\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        - '~^Method Atk4\\Ui\\Card::getSection\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'
+        - '~^Method Atk4\\Ui\\Card::addContent\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'
+        - '~^Method Atk4\\Ui\\Card::addSection\(\) should return Atk4\\Ui\\View but returns Atk4\\Ui\\AbstractView\.$~'
+        - '~^Method Atk4\\Ui\\Card::addExtraContent\(\) should return Atk4\\Ui\\View but returns Atk4\\Ui\\AbstractView\.$~'
+        - '~^Method Atk4\\Ui\\Card::addImage\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'
+        - '~^Method Atk4\\Ui\\Card::addButton\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'
+        # for src/CardDeck.php
+        - '~^Property Atk4\\Ui\\CardDeck::\$card \(Atk4\\Ui\\View\|string\) does not accept default value of type array\<int, string\>\.$~'
+        - '~^Property Atk4\\Ui\\CardDeck::\$container \(Atk4\\Ui\\View\|null\) does not accept default value of type array\<int\|string, string\>\.$~'
+        - '~^Property Atk4\\Ui\\CardDeck::\$cardHolder \(Atk4\\Ui\\View\) does not accept default value of type array\<int\|string, string\>\.$~'
+        - '~^Property Atk4\\Ui\\CardDeck::\$paginator \(Atk4\\Ui\\Paginator\|null\) does not accept default value of type array\<int, string\>\.$~'
+        - '~^Property Atk4\\Ui\\CardDeck::\$executor \(string\) does not accept default value of type array\<int, string\>\.$~'
+        - '~^Property Atk4\\Ui\\CardDeck::\$jsExecutor \(string\) does not accept default value of type array\<int, string\>\.$~'
+        - '~^Property Atk4\\Ui\\CardDeck::\$container \(Atk4\\Ui\\View\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        - '~^Property Atk4\\Ui\\CardDeck::\$cardHolder \(Atk4\\Ui\\View\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        - '~^Property Atk4\\Ui\\CardDeck::\$menu \(array\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        - '~^Property Atk4\\Ui\\CardDeck::\$search \(array\|Atk4\\Ui\\Component\\ItemSearch\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        - '~^Property Atk4\\Ui\\CardDeck::\$paginator \(Atk4\\Ui\\Paginator\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        # for src/Columns.php
+        - '~^Property Atk4\\Ui\\Columns::\$calculated_width \(int\) does not accept false\.$~'
+        - '~^Property Atk4\\Ui\\View::\$content \(string\|false\) does not accept null\.$~'
+        # for src/Console.php
+        - '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Console::set\(\) should be compatible with parameter \$arg1 \(array\|string\) of method Atk4\\Ui\\View::set\(\)$~'
+        - '~^Property Atk4\\Ui\\JsSse::\$echoFunction \(Closure\) does not accept false\.$~'
+        # for src/Crud.php
+        - '~^Property Atk4\\Ui\\Crud::\$jsExecutor \(string\) does not accept default value of type array\<int, string\>\.$~'
+        - '~^Property Atk4\\Ui\\Crud::\$executor \(string\) does not accept default value of type array\<int, string\>\.$~'
+        # for src/Form.php
+        - '~^Property Atk4\\Ui\\Form::\$cb \(Atk4\\Ui\\Callback\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        - '~^Property Atk4\\Ui\\Form::\$layout \(Atk4\\Ui\\Form\\Layout\) does not accept array\<int, string\>\.$~'
+        - '~^Property Atk4\\Ui\\Form::\$layout \(Atk4\\Ui\\Form\\Layout\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        # for src/Form/Control.php
+        - '~^Cannot access offset ''preventDefault'' on bool\.$~'
+        # for src/Form/Layout.php
+        - '~^Method Atk4\\Ui\\Form\\Layout::addButton\(\) should return Atk4\\Ui\\Button but returns Atk4\\Ui\\AbstractView\.$~'
+        - '~^Method Atk4\\Ui\\Form\\Layout::addSubLayout\(\) should return static\(Atk4\\Ui\\Form\\Layout\) but returns Atk4\\Ui\\AbstractView\.$~'
+        - '~^Property Atk4\\Ui\\Form\\Layout::\$label \(string\) does not accept null\.$~'
+        # for src/Form/Layout/Custom.php
+        - '~^Method Atk4\\Ui\\Form\\Layout\\Custom::addButton\(\) should return Atk4\\Ui\\Button but returns Atk4\\Ui\\AbstractView\.$~'
+        # for src/Form/Layout/Section.php
+        - '~^Method Atk4\\Ui\\Form\\Layout\\Section::addSection\(\) should return Atk4\\Ui\\Form\\Layout but returns Atk4\\Ui\\AbstractView\.$~'
+        # for src/Form/Layout/Section/Accordion.php
+        - '~^Return type \(Atk4\\Ui\\Form\\Layout\) of method Atk4\\Ui\\Form\\Layout\\Section\\Accordion::addSection\(\) should be compatible with return type \(Atk4\\Ui\\AccordionSection\) of method Atk4\\Ui\\Accordion::addSection\(\)$~'
+        - '~^Method Atk4\\Ui\\Form\\Layout\\Section\\Accordion::addSection\(\) should return Atk4\\Ui\\Form\\Layout but returns Atk4\\Ui\\AbstractView\.$~'
+        # for src/Form/Layout/Section/Tabs.php
+        - '~^Method Atk4\\Ui\\Form\\Layout\\Section\\Tabs::addTab\(\) should return Atk4\\Ui\\Form\\Layout but returns Atk4\\Ui\\AbstractView\.$~'
+        # for src/Grid.php
+        - '~^Property Atk4\\Ui\\Grid::\$actionButtonsDecorator \(string\) does not accept default value of type array\<int, string\>\.$~'
+        - '~^Property Atk4\\Ui\\Grid::\$menu \(Atk4\\Ui\\Menu\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        - '~^Property Atk4\\Ui\\Grid::\$table \(Atk4\\Ui\\Table\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        - '~^Property Atk4\\Ui\\Grid::\$paginator \(Atk4\\Ui\\Paginator\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        - '~^Property Atk4\\Ui\\Grid::\$paginator \(Atk4\\Ui\\Paginator\|false\) does not accept null\.$~'
+        - '~^Property Atk4\\Ui\\Grid::\$quickSearch \(array\|Atk4\\Ui\\Form\\Control\) does not accept Atk4\\Ui\\JsSearch\.$~'
+        - '~^Property Atk4\\Ui\\Grid::\$actionButtons \(Atk4\\Ui\\Table\\Column\\ActionButtons\) does not accept Atk4\\Ui\\Table\\Column\.$~'
+        - '~^Property Atk4\\Ui\\Grid::\$selection \(Atk4\\Ui\\Table\\Column\\Checkbox\) does not accept Atk4\\Ui\\Table\\Column\.$~'
+        - '~^Method Atk4\\Ui\\Grid::addSelection\(\) should return Atk4\\Ui\\Table\\Column\\Checkbox but returns Atk4\\Ui\\Table\\Column\.$~'
+        # for src/Header.php
+        - '~^Property Atk4\\Ui\\Header::\$icon \(string\) does not accept Atk4\\Ui\\Icon\.$~'
+        - '~^Property Atk4\\Ui\\Header::\$image \(string\) does not accept Atk4\\Ui\\Image\.$~'
+        - '~^Property Atk4\\Ui\\Header::\$subHeader \(string\) does not accept Atk4\\Ui\\View\.$~'
+        # for src/HtmlTemplate.php
+        - '~^Property Atk4\\Ui\\HtmlTemplate::\$tagTrees \(array\<Atk4\\Ui\\HtmlTemplate\\TagTree\>\) does not accept null\.$~'
+        # for src/JsSearch.php
+        - '~^Property Atk4\\Ui\\JsSearch::\$placeHolder \(Atk4\\Ui\\Form\\Control\\Line\) does not accept default value of type string\.$~'
+        # for src/Label.php
+        - '~^Property Atk4\\Ui\\Label::\$detail \(string\|false\|null\) does not accept Atk4\\Ui\\View\.$~'
+        # for src/Layout.php
+        - '~^Method Atk4\\Ui\\Layout::addRightPanel\(\) should return Atk4\\Ui\\Panel\\Loadable but returns Atk4\\Ui\\AbstractView\.$~'
+        # for src/Loader.php
+        - '~^Property Atk4\\Ui\\Loader::\$shim \(Atk4\\Ui\\View\) does not accept array\<int\|string, array\<int\|string, string\>\|class\-string\>\.$~'
+        - '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Loader::set\(\) should be compatible with parameter \$arg1 \(array\|string\) of method Atk4\\Ui\\View::set\(\)$~'
+        # for src/Menu.php
+        - '~^Method Atk4\\Ui\\Menu::addDivider\(\) should return Atk4\\Ui\\View but returns Atk4\\Ui\\AbstractView\.$~'
+        # for src/Message.php
+        - '~^Property Atk4\\Ui\\Message::\$icon \(string\) does not accept Atk4\\Ui\\Icon\.$~'
+        # for src/Modal.php
+        - '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Modal::set\(\) should be compatible with parameter \$arg1 \(array\|string\) of method Atk4\\Ui\\View::set\(\)$~'
+        # for src/Panel/Right.php
+        - '~^Method Atk4\\Ui\\Panel\\Right::getDynamicContent\(\) should return Atk4\\Ui\\Panel\\LoadableContent but returns Atk4\\Ui\\View\|null\.$~'
+        - '~^Property Atk4\\Ui\\Panel\\Right::\$closeModal \(Atk4\\Ui\\Modal\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        # for src/Popup.php
+        - '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Popup::set\(\) should be compatible with parameter \$arg1 \(array\|string\) of method Atk4\\Ui\\View::set\(\)$~'
+        # for src/Table.php
+        - '~^Property Atk4\\Ui\\Table::\$totals_plan \(bool\) does not accept array\.$~'
+        - '~^Argument of an invalid type bool supplied for foreach, only iterables are supported\.$~'
+        - '~^Cannot access offset \(int\|string\) on bool\.$~'
+        # for src/Table/Column/FilterModel/TypeEnum.php
+        - '~^Property Atk4\\Ui\\Table\\Column\\FilterModel::\$op \(Atk4\\Data\\Field\) does not accept null\.$~'
+        # for src/Table/Column/Link.php
+        - '~^Property Atk4\\Ui\\Table\\Column\\Link::\$url \(array\|string\) does not accept Atk4\\Ui\\HtmlTemplate\.$~'
+        # for src/Text.php
+        - '~^Property Atk4\\Ui\\Text::\$defaultTemplate \(string\) does not accept default value of type false\.$~'
+        # for src/UserAction/JsCallbackExecutor.php
+        - '~^Property Atk4\\Ui\\UserAction\\JsCallbackExecutor::\$jsSuccess \(Atk4\\Ui\\JsExpressionable\) does not accept array\|Closure\.$~'
+        # for src/UserAction/ModalExecutor.php
+        - '~^Property Atk4\\Ui\\UserAction\\ModalExecutor::\$form \(string\) does not accept default value of type array\<int, string\>\.$~'
+        - '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::jsStepSubmit\(\) should return array but returns Atk4\\Ui\\Message\.$~'
+        - '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::addFormTo\(\) should return Atk4\\Ui\\Form but returns Atk4\\Ui\\AbstractView\.$~'
+        # for src/View.php
+        - '~^Property Atk4\\Data\\Field::\$type \(string\) does not accept null\.$~'
+        - '~^Method Atk4\\Ui\\View::getClosestOwner\(\) should return Atk4\\Ui\\View\|null but empty return statement found\.$~'
+        # for src/VirtualPage.php
+        - '~^Property Atk4\\Ui\\VirtualPage::\$cb \(Atk4\\Ui\\Callback\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        # for src/Wizard.php
+        - '~^Property Atk4\\Ui\\Form::\$buttonSave \(array\|Atk4\\Ui\\Button\|false\) does not accept null\.$~'
+        - '~^Method Atk4\\Ui\\Wizard::jsNext\(\) should return string but returns Atk4\\Ui\\JsExpression\.$~'
+        # for tests/FormTest.php
+        - '~^Property Atk4\\Ui\\Tests\\FormTest::\$f \(Atk4\\Ui\\Form\) does not accept null\.$~'
+
+        # TODO these rules are generated, this ignores should be fixed in the code
+        # for level = 4
+        -
+            path: 'demos/_includes/DemoLookup.php'
+            message: '~^Else branch is unreachable because ternary operator condition is always true\.$~'
+        -
+            path: 'demos/_includes/DemoLookup.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'demos/collection/multitable.php'
+            message: '~^Ternary operator condition is always false\.$~'
+        -
+            path: 'demos/collection/multitable.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'demos/collection/multitable.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'demos/collection/multitable.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'demos/form/form.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Else branch is unreachable because ternary operator condition is always true\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Result of \|\| is always true\.$~'
+        -
+            path: 'src/CardTable.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/Component/InlineEdit.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Call to function is_array\(\) with Atk4\\Ui\\Form\\Layout will always evaluate to false\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Call to function is_string\(\) with Atk4\\Ui\\Form\\Layout will always evaluate to false\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Result of \|\| is always false\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Else branch is unreachable because previous condition is always true\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/Form/AbstractLayout.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/AbstractLayout.php'
+            message: '~^Strict comparison using \=\=\= between array\|null and false will always evaluate to false\.$~'
+        -
+            path: 'src/Form/AbstractLayout.php'
+            message: '~^Else branch is unreachable because previous condition is always true\.$~'
+        -
+            path: 'src/Form/Control.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/Form/Control.php'
+            message: '~^Right side of && is always true\.$~'
+        -
+            path: 'src/Form/Control.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/Form/Control.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/Form/Control/Checkbox.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Checkbox.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Dropdown.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Dropdown.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/Form/Control/DropdownCascade.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Else branch is unreachable because ternary operator condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Elseif condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/Form/Control/Money.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Multiline.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/Control/Multiline.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Multiline.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/Form/Control/Radio.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/Control/Radio.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Form/Control/ScopeBuilder.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/Control/ScopeBuilder.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/Form/Control/ScopeBuilder.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/Form/Control/TreeItemSelector.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Form/Layout.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/Layout/Custom.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Instanceof between array\|Atk4\\Ui\\Form\\Control and Atk4\\Ui\\JsSearch will always evaluate to false\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Strict comparison using \!\=\= between null and null will always evaluate to false\.$~'
+        -
+            path: 'src/JsReload.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/JsSearch.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/JsSse.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/JsSse.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/Lister.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Loader.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Message.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/Message.php'
+            message: '~^Call to function is_object\(\) with string will always evaluate to false\.$~'
+        -
+            path: 'src/Paginator.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/Panel/Right.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Step.php'
+            message: '~^Strict comparison using \=\=\= between string and false will always evaluate to false\.$~'
+        -
+            path: 'src/Table.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Table.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Table.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/Table/Column.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Table/Column/KeyValue.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/Table/Column/Link.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Table/Column/Multiformat.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Table/Column/NoValue.php'
+            message: '~^Strict comparison using \=\=\= between mixed and null will always evaluate to false\.$~'
+        -
+            path: 'src/UserAction/BasicExecutor.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/UserAction/BasicExecutor.php'
+            message: '~^Instanceof between Atk4\\Ui\\JsExpressionable and Closure will always evaluate to false\.$~'
+        -
+            path: 'src/UserAction/ConfirmationExecutor.php'
+            message: '~^Instanceof between Atk4\\Ui\\JsExpressionable and Closure will always evaluate to false\.$~'
+        -
+            path: 'src/UserAction/FormExecutor.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/UserAction/JsCallbackExecutor.php'
+            message: '~^Instanceof between Atk4\\Ui\\JsExpressionable and Closure will always evaluate to false\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Instanceof between Atk4\\Ui\\JsExpressionable and Closure will always evaluate to false\.$~'
+        -
+            path: 'src/View.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/View.php'
+            message: '~^Result of && is always false\.$~'
+        -
+            path: 'src/View.php'
+            message: '~^Right side of && is always true\.$~'
+        -
+            path: 'src/View.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/View.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/VirtualPage.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/VirtualPage.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/Wizard.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'tests/DemosTest.php'
+            message: '~^Else branch is unreachable because ternary operator condition is always true\.$~'
+
+        # TODO these rules are generated, this ignores should be fixed in the code
+        # for level = 5
+        -
+            path: 'demos/_includes/DemoLookup.php'
+            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): mixed given\.$~'
+        -
+            path: 'demos/_includes/ViewTester.php'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'demos/_unit-test/callback.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsModal given\.$~'
+        -
+            path: 'demos/_unit-test/modal-reload.php'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'demos/_unit-test/reload.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'demos/basic/button.php'
+            message: '~^Parameter \#1 \$label of class Atk4\\Ui\\Button constructor expects array\|string\|null, int given\.$~'
+        -
+            path: 'demos/basic/label.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'demos/basic/message.php'
+            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'demos/basic/view.php'
+            message: '~^Parameter \#2 \$value of method Atk4\\Ui\\HtmlTemplate::set\(\) expects string\|null, int\<100, 999\> given\.$~'
+        -
+            path: 'demos/basic/view.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\Jquery given\.$~'
+        -
+            path: 'demos/basic/view.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'demos/basic/view.php'
+            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): mixed given\.$~'
+        -
+            path: 'demos/basic/view.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsModal given\.$~'
+        -
+            path: 'demos/collection/grid.php'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsExpression given\.$~'
+        -
+            path: 'demos/collection/grid.php'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'demos/collection/grid.php'
+            message: '~^Parameter \#1 \$name of method Atk4\\Ui\\Grid::addColumn\(\) expects string, null given\.$~'
+        -
+            path: 'demos/collection/grid.php'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\Grid::addActionButton\(\) expects Atk4\\Ui\\JsExpressionable\|Closure\|null, Atk4\\Data\\Model\\UserAction given\.$~'
+        -
+            path: 'demos/collection/grid.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsExpression given\.$~'
+        -
+            path: 'demos/collection/multitable.php'
+            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'demos/collection/multitable.php'
+            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): mixed given\.$~'
+        -
+            path: 'demos/collection/multitable.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsModal given\.$~'
+        -
+            path: 'demos/collection/table.php'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsToast given\.$~'
+        -
+            path: 'demos/collection/table.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'demos/collection/table.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\Jquery given\.$~'
+        -
+            path: 'demos/data-action/actions.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\UserAction\\JsCallbackExecutor given\.$~'
+        -
+            path: 'demos/data-action/actions.php'
+            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(''confirm'' \=\> ''This will import a…''\) given\.$~'
+        -
+            path: 'demos/data-action/jsactions2.php'
+            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(''args'' \=\> array\(''id'' \=\> mixed\)\) given\.$~'
+        -
+            path: 'demos/data-action/jsactionsgrid.php'
+            message: '~^Parameter \#1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View, string given\.$~'
+        -
+            path: 'demos/form-control/input2.php'
+            message: '~^Parameter \#1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
+        -
+            path: 'demos/form-control/input2.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsExpression given\.$~'
+        -
+            path: 'demos/form-control/lookup.php'
+            message: '~^Parameter \#2 \$defaults of method Atk4\\Data\\Model::hasOne\(\) expects array, Atk4\\Ui\\Demos\\Country given\.$~'
+        -
+            path: 'demos/form/form-section.php'
+            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
+        -
+            path: 'demos/form/form2.php'
+            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
+        -
+            path: 'demos/form/form2.php'
+            message: '~^Parameter \#2 \$defaults of method Atk4\\Data\\Model::hasOne\(\) expects array, Atk4\\Ui\\Demos\\Country given\.$~'
+        -
+            path: 'demos/form/form3.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'demos/form/form5.php'
+            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
+        -
+            path: 'demos/init-app.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsExpression given\.$~'
+        -
+            path: 'demos/init-db.php'
+            message: '~^Parameter \#2 \$defaults of method Atk4\\Data\\Model::hasMany\(\) expects array, Atk4\\Ui\\Demos\\SubCategory given\.$~'
+        -
+            path: 'demos/init-db.php'
+            message: '~^Parameter \#2 \$defaults of method Atk4\\Data\\Model::hasMany\(\) expects array, Atk4\\Ui\\Demos\\Product given\.$~'
+        -
+            path: 'demos/init-db.php'
+            message: '~^Parameter \#2 \$defaults of method Atk4\\Data\\Model::hasOne\(\) expects array, Atk4\\Ui\\Demos\\Category given\.$~'
+        -
+            path: 'demos/interactive/console.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsExpressionable given\.$~'
+        -
+            path: 'demos/interactive/modal.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\Jquery given\.$~'
+        -
+            path: 'demos/interactive/popup.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\Jquery given\.$~'
+        -
+            path: 'demos/interactive/progress.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsExpressionable given\.$~'
+        -
+            path: 'demos/interactive/sse.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, array\<int, Atk4\\Ui\\Jquery\> given\.$~'
+        -
+            path: 'demos/interactive/sse.php'
+            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(''confirm'' \=\> ''Please confirm that…''\) given\.$~'
+        -
+            path: 'demos/interactive/toast.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsToast given\.$~'
+        -
+            path: 'demos/interactive/virtual.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsModal given\.$~'
+        -
+            path: 'demos/interactive/virtual.php'
+            message: '~^Parameter \#1 \$title of class Atk4\\Ui\\JsModal constructor expects string, null given\.$~'
+        -
+            path: 'demos/interactive/virtual.php'
+            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): mixed given\.$~'
+        -
+            path: 'demos/javascript/js.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsExpression given\.$~'
+        -
+            path: 'demos/javascript/js.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\Jquery given\.$~'
+        -
+            path: 'demos/javascript/js.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(mixed\): mixed given\.$~'
+        -
+            path: 'demos/javascript/js.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(mixed, mixed\): mixed given\.$~'
+        -
+            path: 'demos/javascript/js.php'
+            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(Atk4\\Ui\\JsExpression\) given\.$~'
+        -
+            path: 'demos/javascript/reloading.php'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'demos/javascript/reloading.php'
+            message: '~^Parameter \#1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
+        -
+            path: 'demos/javascript/vue-component.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsChain given\.$~'
+        -
+            path: 'demos/layout/layout-panel.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'demos/layout/layout-panel.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, array\<int, mixed\> given\.$~'
+        -
+            path: 'demos/layout/layout-panel.php'
+            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(''args'' \=\> array\(''id'' \=\> string\|null\)\) given\.$~'
+        -
+            path: 'demos/obsolete/notify.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsNotify given\.$~'
+        -
+            path: 'demos/obsolete/notify2.php'
+            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
+        -
+            path: 'demos/others/recursive.php'
+            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'demos/others/sticky2.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(\): mixed given\.$~'
+        -
+            path: 'demos/others/sticky2.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'demos/tutorial/actions.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
+        -
+            path: 'demos/tutorial/actions.php'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
+        -
+            path: 'demos/tutorial/intro.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(\): mixed given\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure given\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array\<string, bool\|string\> given\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array\<string, string\> given\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array\<int\|string, \$this\(Atk4\\Ui\\Card\)\|string\> given\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): mixed given\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsModal given\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(\)\|array\(\?0 \=\> mixed, \?''args'' \=\> mixed, \?''confirm'' \=\> mixed\) given\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Parameter \#3 \$confirm of method Atk4\\Ui\\CardDeck::addMenuButton\(\) expects array\|string\|null, false given\.$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsExpressionable given\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\JsCallback given\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsExpression given\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Parameter \#2 \$value of method Atk4\\Ui\\View::setAttr\(\) expects string\|null, int given\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\Jquery given\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Parameter \#3 \$selector of method Atk4\\Ui\\View::js\(\) expects string\|null, Atk4\\Ui\\View given\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsConditionalForm given\.$~'
+        -
+            path: 'src/Form/Control/Dropdown.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array given\.$~'
+        -
+            path: 'src/Form/Control/Input.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array given\.$~'
+        -
+            path: 'src/Form/Control/Input.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
+        -
+            path: 'src/Form/Control/Input.php'
+            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(''args'' \=\> array\<Atk4\\Ui\\Jquery\>\) given\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\Callback::set\(\) expects Closure\|null, array\(\$this\(Atk4\\Ui\\Form\\Control\\Lookup\), ''outputApiResponse''\) given\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): mixed given\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array given\.$~'
+        -
+            path: 'src/Form/Control/Multiline.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array\<string, bool\|string\> given\.$~'
+        -
+            path: 'src/Form/Control/ScopeBuilder.php'
+            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\Callback::set\(\) expects Closure\|null, array\(\$this\(Atk4\\Ui\\Form\\Control\\ScopeBuilder\), ''outputApiResponse''\) given\.$~'
+        -
+            path: 'src/Form/Control/Textarea.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array given\.$~'
+        -
+            path: 'src/Form/Control/TreeItemSelector.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array\<string, mixed\> given\.$~'
+        -
+            path: 'src/Form/Layout/Columns.php'
+            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form\\AbstractLayout::setModel\(\) expects array\|null, false given\.$~'
+        -
+            path: 'src/Form/Layout/Section.php'
+            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array\<int\|string, mixed\> given\.$~'
+        -
+            path: 'src/Form/Layout/Section/Accordion.php'
+            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array\<int\|string, mixed\> given\.$~'
+        -
+            path: 'src/Form/Layout/Section/Tabs.php'
+            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array\<int\|string, mixed\> given\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Parameter \#2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Table\|false given\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Parameter \#2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Paginator given\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'src/ItemsPerPageSelector.php'
+            message: '~^Parameter \#1 \$arg1 of method Atk4\\Ui\\View::set\(\) expects array\|string\|null, int\|null given\.$~'
+        -
+            path: 'src/JsCallback.php'
+            message: '~^Parameter \#1 \$ajaxec of method Atk4\\Ui\\JsCallback::terminateAjax\(\) expects array\|Atk4\\Ui\\JsExpressionable, string\|null given\.$~'
+        -
+            path: 'src/JsCallback.php'
+            message: '~^Parameter \#1 \$ajaxec of method Atk4\\Ui\\JsCallback::terminateAjax\(\) expects array\|Atk4\\Ui\\JsExpressionable, null given\.$~'
+        -
+            path: 'src/JsSearch.php'
+            message: '~^Parameter \#2 \$value of method Atk4\\Ui\\HtmlTemplate::trySet\(\) expects string\|null, Atk4\\Ui\\Form\\Control\\Line given\.$~'
+        -
+            path: 'src/Layout.php'
+            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\Panel\\Loadable given\.$~'
+        -
+            path: 'src/Layout/Admin.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, array\<int, Atk4\\Ui\\Jquery\> given\.$~'
+        -
+            path: 'src/Menu.php'
+            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array\<int\|string, array\<int, string\>\|class\-string\> given\.$~'
+        -
+            path: 'src/Paginator.php'
+            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'src/Panel/Content.php'
+            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\Callback given\.$~'
+        -
+            path: 'src/Panel/Right.php'
+            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\AbstractView::add\(\) expects Atk4\\Ui\\AbstractView, array\<int\|string, string\> given\.$~'
+        -
+            path: 'src/Table/Column.php'
+            message: '~^Parameter \#2 \$value of method Atk4\\Ui\\Table\\Column::getTag\(\) expects string, array\<int, array\<int, array\<int\|string, array\|string\|null\>\|string\>\> given\.$~'
+        -
+            path: 'src/Table/Column.php'
+            message: '~^Parameter \#2 \$value of method Atk4\\Ui\\Table\\Column::getTag\(\) expects string, array\<int, string\> given\.$~'
+        -
+            path: 'src/Table/Column/Checkbox.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array\<string, string\> given\.$~'
+        -
+            path: 'src/Table/Column/Delete.php'
+            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\CallbackLater given\.$~'
+        -
+            path: 'src/Table/Column/Delete.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array\<string, string\> given\.$~'
+        -
+            path: 'src/Table/Column/DragHandler.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array\<string, string\> given\.$~'
+        -
+            path: 'src/Table/Column/FilterPopup.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(mixed\): mixed given\.$~'
+        -
+            path: 'src/Table/Column/FilterPopup.php'
+            message: '~^Parameter \#3 \$selector of method Atk4\\Ui\\View::js\(\) expects string\|null, Atk4\\Ui\\View given\.$~'
+        -
+            path: 'src/Table/Column/Labels.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array\<string, string\> given\.$~'
+        -
+            path: 'src/Table/Column/Status.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array given\.$~'
+        -
+            path: 'src/Table/Column/Status.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array\<string, string\> given\.$~'
+        -
+            path: 'src/Table/Column/Tooltip.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array given\.$~'
+        -
+            path: 'src/Table/Column/Tooltip.php'
+            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array\<string, string\> given\.$~'
+        -
+            path: 'src/Tabs.php'
+            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure given\.$~'
+        -
+            path: 'src/UserAction/BasicExecutor.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(\): mixed given\.$~'
+        -
+            path: 'src/UserAction/ConfirmationExecutor.php'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsExpressionable given\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(mixed, mixed\) given\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, array\<int, mixed\> given\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsExpressionable given\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Parameter \#3 \$selector of method Atk4\\Ui\\View::js\(\) expects string\|null, Atk4\\Ui\\View given\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, string given\.$~'
+        -
+            path: 'src/UserAction/PreviewExecutor.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(\): mixed given\.$~'
+        -
+            path: 'src/View.php'
+            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\JsCallback given\.$~'
+        -
+            path: 'src/View.php'
+            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\UserAction\\JsCallbackExecutor given\.$~'
+        -
+            path: 'src/VirtualPage.php'
+            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array\<int\|string, string\> given\.$~'
+        -
+            path: 'src/Wizard.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\Jquery given\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Parameter \#1 \$id of method Behat\\Mink\\Element\\TraversableElement::findById\(\) expects string, null given\.$~'
+        -
+            path: 'tests/CallbackTest.php'
+            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): mixed given\.$~'
+        -
+            path: 'tests/HtmlTemplateTest.php'
+            message: '~^Parameter \#2 \$value of method Atk4\\Ui\\HtmlTemplate::set\(\) expects string\|null, stdClass given\.$~'
+        -
+            path: 'tests/JsIntegrationTest.php'
+            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\Jquery given\.$~'
+        -
+            path: 'tests/JsTest.php'
+            message: '~^Parameter \#1 \$args of class Atk4\\Ui\\JsFunction constructor expects array, null given\.$~'

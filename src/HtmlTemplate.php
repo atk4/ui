@@ -15,12 +15,12 @@ class HtmlTemplate implements \ArrayAccess
     /** @const string */
     public const TOP_TAG = '_top';
 
-    /** @var array */
+    /** @var array<string, string|false> */
     private static $_filesCache = [];
-    /** @var TagTree[tag][] */
+    /** @var array<string, TagTree[]> */
     private static $_parseCache = [];
 
-    /** @var TagTree[tag] */
+    /** @var TagTree[] */
     private $tagTrees;
 
     public function __construct(string $template = '')
