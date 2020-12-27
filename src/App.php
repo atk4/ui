@@ -244,7 +244,7 @@ class App
             // App as already done everything
             // App need to stop output
             // set_handler to catch/trap any exception
-            set_exception_handler(function (\Throwable $t) {});
+            set_exception_handler(static function (\Throwable $t): void {});
             // raise exception to be trapped and stop execution
             throw new ExitApplicationException();
         }

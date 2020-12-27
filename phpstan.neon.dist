@@ -789,9 +789,6 @@ parameters:
             message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure given\.$~'
         -
             path: 'src/App.php'
-            message: '~^Parameter \#1 \$exception_handler of function set_exception_handler expects \(callable\(Throwable\): void\)\|null, Closure\(Throwable\): mixed given\.$~'
-        -
-            path: 'src/App.php'
             message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array\<string, bool\|string\> given\.$~'
         -
             path: 'src/App.php'
