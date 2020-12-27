@@ -1,5 +1,5 @@
 parameters:
-    level: 3
+    level: 4
     paths:
         - ./
     excludes_analyse:
@@ -298,3 +298,279 @@ parameters:
         - '~^Method Atk4\\Ui\\Wizard::jsNext\(\) should return string but returns Atk4\\Ui\\JsExpression\.$~'
         # for tests/FormTest.php
         - '~^Property Atk4\\Ui\\Tests\\FormTest::\$f \(Atk4\\Ui\\Form\) does not accept null\.$~'
+
+        # TODO these rules are generated, this ignores should be fixed in the code
+        # for level = 4
+        -
+            path: 'demos/_includes/DemoLookup.php'
+            message: '~^Else branch is unreachable because ternary operator condition is always true\.$~'
+        -
+            path: 'demos/_includes/DemoLookup.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'demos/collection/multitable.php'
+            message: '~^Ternary operator condition is always false\.$~'
+        -
+            path: 'demos/collection/multitable.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'demos/collection/multitable.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'demos/collection/multitable.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'demos/form/form.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Else branch is unreachable because ternary operator condition is always true\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Result of \|\| is always true\.$~'
+        -
+            path: 'src/CardTable.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/Component/InlineEdit.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Call to function is_array\(\) with Atk4\\Ui\\Form\\Layout will always evaluate to false\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Call to function is_string\(\) with Atk4\\Ui\\Form\\Layout will always evaluate to false\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Result of \|\| is always false\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Else branch is unreachable because previous condition is always true\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/Form/AbstractLayout.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/AbstractLayout.php'
+            message: '~^Strict comparison using \=\=\= between array\|null and false will always evaluate to false\.$~'
+        -
+            path: 'src/Form/AbstractLayout.php'
+            message: '~^Else branch is unreachable because previous condition is always true\.$~'
+        -
+            path: 'src/Form/Control.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/Form/Control.php'
+            message: '~^Right side of && is always true\.$~'
+        -
+            path: 'src/Form/Control.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/Form/Control.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/Form/Control/Checkbox.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Checkbox.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Dropdown.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Dropdown.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/Form/Control/DropdownCascade.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Else branch is unreachable because ternary operator condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Elseif condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/Form/Control/Money.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Multiline.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/Control/Multiline.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Form/Control/Multiline.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/Form/Control/Radio.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/Control/Radio.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Form/Control/ScopeBuilder.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/Control/ScopeBuilder.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/Form/Control/ScopeBuilder.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/Form/Control/TreeItemSelector.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Form/Layout.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Form/Layout/Custom.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Instanceof between array\|Atk4\\Ui\\Form\\Control and Atk4\\Ui\\JsSearch will always evaluate to false\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Strict comparison using \!\=\= between null and null will always evaluate to false\.$~'
+        -
+            path: 'src/JsReload.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/JsSearch.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/JsSse.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/JsSse.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/Lister.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Loader.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Message.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/Message.php'
+            message: '~^Call to function is_object\(\) with string will always evaluate to false\.$~'
+        -
+            path: 'src/Paginator.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/Panel/Right.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Step.php'
+            message: '~^Strict comparison using \=\=\= between string and false will always evaluate to false\.$~'
+        -
+            path: 'src/Table.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Table.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Table.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/Table/Column.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Table/Column/KeyValue.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/Table/Column/Link.php'
+            message: '~^Ternary operator condition is always true\.$~'
+        -
+            path: 'src/Table/Column/Multiformat.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/Table/Column/NoValue.php'
+            message: '~^Strict comparison using \=\=\= between mixed and null will always evaluate to false\.$~'
+        -
+            path: 'src/UserAction/BasicExecutor.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/UserAction/BasicExecutor.php'
+            message: '~^Instanceof between Atk4\\Ui\\JsExpressionable and Closure will always evaluate to false\.$~'
+        -
+            path: 'src/UserAction/ConfirmationExecutor.php'
+            message: '~^Instanceof between Atk4\\Ui\\JsExpressionable and Closure will always evaluate to false\.$~'
+        -
+            path: 'src/UserAction/FormExecutor.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/UserAction/JsCallbackExecutor.php'
+            message: '~^Instanceof between Atk4\\Ui\\JsExpressionable and Closure will always evaluate to false\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Instanceof between Atk4\\Ui\\JsExpressionable and Closure will always evaluate to false\.$~'
+        -
+            path: 'src/View.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'src/View.php'
+            message: '~^Result of && is always false\.$~'
+        -
+            path: 'src/View.php'
+            message: '~^Right side of && is always true\.$~'
+        -
+            path: 'src/View.php'
+            message: '~^Left side of && is always true\.$~'
+        -
+            path: 'src/View.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/VirtualPage.php'
+            message: '~^If condition is always true\.$~'
+        -
+            path: 'src/VirtualPage.php'
+            message: '~^Unreachable statement \- code above always terminates\.$~'
+        -
+            path: 'src/Wizard.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Negated boolean expression is always false\.$~'
+        -
+            path: 'tests/DemosTest.php'
+            message: '~^Else branch is unreachable because ternary operator condition is always true\.$~'
