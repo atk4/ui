@@ -226,7 +226,7 @@ class CardDeck extends View
     protected function jsExecute($return, $action)
     {
         if (is_string($return)) {
-            return  $this->getNotifier($return, $action);
+            return $this->getNotifier($return, $action);
         } elseif (is_array($return) || $return instanceof JsExpressionable) {
             return $return;
         } elseif ($return instanceof Model) {

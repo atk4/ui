@@ -40,7 +40,7 @@ $query = <<<'EOF'
     }
     EOF;
 
-$q = $app->decodeJson($query, true);
+$q = $app->decodeJson($query);
 $scope = ScopeBuilder::queryToScope($q);
 
 $product = new Product($app->db);

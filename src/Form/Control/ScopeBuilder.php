@@ -653,7 +653,6 @@ class ScopeBuilder extends Control
 
                 break;
             default:
-
                 break;
         }
 

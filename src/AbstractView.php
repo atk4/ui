@@ -20,16 +20,16 @@ use Atk4\Core\TrackableTrait;
  */
 abstract class AbstractView
 {
+    use AppScopeTrait;
     use ContainerTrait {
         add as private _add;
     }
+    use DiContainerTrait;
     use InitializerTrait {
         init as private _init;
     }
-    use TrackableTrait;
-    use AppScopeTrait;
-    use DiContainerTrait;
     use StaticAddToTrait;
+    use TrackableTrait;
 
     /**
      * Default name of the element.

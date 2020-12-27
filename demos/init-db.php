@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Form;
 
 try {
@@ -40,7 +41,7 @@ trait ModelLockTrait
     }
 }
 
-class Country extends \Atk4\Data\Model
+class Country extends Model
 {
     public $table = 'country';
 
@@ -55,7 +56,7 @@ class Country extends \Atk4\Data\Model
         $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
         $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number', 'required' => true]);
 
-        $this->onHook(\Atk4\Data\Model::HOOK_BEFORE_SAVE, function (\Atk4\Data\Model $model) {
+        $this->onHook(Model::HOOK_BEFORE_SAVE, function (Model $model) {
             if (!$model->get('sys_name')) {
                 $model->set('sys_name', mb_strtoupper($model->get('name')));
             }
@@ -98,7 +99,7 @@ class CountryLock extends Country
     }
 }
 
-class Stat extends \Atk4\Data\Model
+class Stat extends Model
 {
     public $table = 'stats';
     public $title = 'Project Stat';
@@ -116,6 +117,7 @@ class Stat extends \Atk4\Data\Model
         $this->hasOne('client_country_iso', [
             new Country(),
             'their_field' => 'iso',
+            'type' => 'string',
             'ui' => [
                 'form' => [Form\Control\Line::class],
             ],
@@ -125,7 +127,7 @@ class Stat extends \Atk4\Data\Model
         $this->addField('is_commercial', ['type' => 'boolean']);
         $this->addField('currency', ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
         $this->addField('currency_symbol', ['never_persist' => true]);
-        $this->onHook(\Atk4\Data\Model::HOOK_AFTER_LOAD, function (\Atk4\Data\Model $model) {
+        $this->onHook(Model::HOOK_AFTER_LOAD, function (Model $model) {
             /* implementation for "intl"
             $locale='en-UK';
             $fmt = new \NumberFormatter( $locale."@currency=".$model->get('currency'), NumberFormatter::CURRENCY );
@@ -156,7 +158,7 @@ class Percent extends \Atk4\Data\Field
     public $type = 'float'; // will need to be able to affect rendering and storage
 }
 
-class File extends \Atk4\Data\Model
+class File extends Model
 {
     public $table = 'file';
 
@@ -171,7 +173,7 @@ class File extends \Atk4\Data\Model
         $this->hasMany('SubFolder', [new self(), 'their_field' => 'parent_folder_id'])
             ->addField('count', ['aggregate' => 'count', 'field' => $this->persistence->expr($this, '*')]);
 
-        $this->hasOne('parent_folder_id', Folder::class)
+        $this->hasOne('parent_folder_id', ['model' => [Folder::class]])
             ->addTitle();
     }
 
@@ -234,7 +236,7 @@ class FileLock extends File
     }
 }
 
-class Category extends \Atk4\Data\Model
+class Category extends Model
 {
     public $table = 'product_category';
 
@@ -248,7 +250,7 @@ class Category extends \Atk4\Data\Model
     }
 }
 
-class SubCategory extends \Atk4\Data\Model
+class SubCategory extends Model
 {
     public $table = 'product_sub_category';
 
@@ -262,7 +264,7 @@ class SubCategory extends \Atk4\Data\Model
     }
 }
 
-class Product extends \Atk4\Data\Model
+class Product extends Model
 {
     public $table = 'product';
 

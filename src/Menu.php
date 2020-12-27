@@ -27,7 +27,7 @@ class Menu extends View
      *
      * @internal
      *
-     * @var [type]
+     * @var bool
      */
     public $in_dropdown = false;
 
