@@ -131,7 +131,7 @@ class JsCallback extends Callback implements JsExpressionable
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
      *
-     * @param array|JsExpressionable $ajaxec  Array of JsExpressionable
+     * @param null|string           $ajaxec  Array of JsExpressionable
      * @param string                 $msg     General message, typically won't be displayed
      * @param bool                   $success Was request successful or not
      */

@@ -428,9 +428,6 @@ parameters:
             path: 'src/Form/Control/Multiline.php'
             message: '~^Ternary operator condition is always true\.$~'
         -
-            path: 'src/Form/Control/Multiline.php'
-            message: '~^Unreachable statement \- code above always terminates\.$~'
-        -
             path: 'src/Form/Control/Radio.php'
             message: '~^Negated boolean expression is always false\.$~'
         -
