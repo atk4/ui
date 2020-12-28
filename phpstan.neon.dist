@@ -843,16 +843,10 @@ parameters:
             message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(''args'' \=\> array\<Atk4\\Ui\\Jquery\>\) given\.$~'
         -
             path: 'src/Form/Control/Lookup.php'
-            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\Callback::set\(\) expects Closure\|null, array\(\$this\(Atk4\\Ui\\Form\\Control\\Lookup\), ''outputApiResponse''\) given\.$~'
-        -
-            path: 'src/Form/Control/Lookup.php'
             message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): mixed given\.$~'
         -
             path: 'src/Form/Control/Lookup.php'
             message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array given\.$~'
-        -
-            path: 'src/Form/Control/ScopeBuilder.php'
-            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\Callback::set\(\) expects Closure\|null, array\(\$this\(Atk4\\Ui\\Form\\Control\\ScopeBuilder\), ''outputApiResponse''\) given\.$~'
         -
             path: 'src/Form/Control/Textarea.php'
             message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array given\.$~'
