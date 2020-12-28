@@ -428,9 +428,6 @@ parameters:
             path: 'src/Form/Control/Multiline.php'
             message: '~^Ternary operator condition is always true\.$~'
         -
-            path: 'src/Form/Control/Multiline.php'
-            message: '~^Unreachable statement \- code above always terminates\.$~'
-        -
             path: 'src/Form/Control/Radio.php'
             message: '~^Negated boolean expression is always false\.$~'
         -
@@ -846,19 +843,10 @@ parameters:
             message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(''args'' \=\> array\<Atk4\\Ui\\Jquery\>\) given\.$~'
         -
             path: 'src/Form/Control/Lookup.php'
-            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\Callback::set\(\) expects Closure\|null, array\(\$this\(Atk4\\Ui\\Form\\Control\\Lookup\), ''outputApiResponse''\) given\.$~'
-        -
-            path: 'src/Form/Control/Lookup.php'
             message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): mixed given\.$~'
         -
             path: 'src/Form/Control/Lookup.php'
             message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array given\.$~'
-        -
-            path: 'src/Form/Control/Multiline.php'
-            message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array\<string, bool\|string\> given\.$~'
-        -
-            path: 'src/Form/Control/ScopeBuilder.php'
-            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\Callback::set\(\) expects Closure\|null, array\(\$this\(Atk4\\Ui\\Form\\Control\\ScopeBuilder\), ''outputApiResponse''\) given\.$~'
         -
             path: 'src/Form/Control/Textarea.php'
             message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array given\.$~'
@@ -892,12 +880,6 @@ parameters:
         -
             path: 'src/ItemsPerPageSelector.php'
             message: '~^Parameter \#1 \$arg1 of method Atk4\\Ui\\View::set\(\) expects array\|string\|null, int\|null given\.$~'
-        -
-            path: 'src/JsCallback.php'
-            message: '~^Parameter \#1 \$ajaxec of method Atk4\\Ui\\JsCallback::terminateAjax\(\) expects array\|Atk4\\Ui\\JsExpressionable, string\|null given\.$~'
-        -
-            path: 'src/JsCallback.php'
-            message: '~^Parameter \#1 \$ajaxec of method Atk4\\Ui\\JsCallback::terminateAjax\(\) expects array\|Atk4\\Ui\\JsExpressionable, null given\.$~'
         -
             path: 'src/JsSearch.php'
             message: '~^Parameter \#2 \$value of method Atk4\\Ui\\HtmlTemplate::trySet\(\) expects string\|null, Atk4\\Ui\\Form\\Control\\Line given\.$~'

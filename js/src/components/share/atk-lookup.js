@@ -13,6 +13,7 @@
  *  value: The selected value.
  *  optionalValue: The initial list of options for the dropdown.
  */
+import { isArray } from 'v-calendar/src/utils/_';
 
 const template = `<sui-dropdown 
                     ref="drop"
@@ -46,7 +47,7 @@ export default {
     },
     mounted: function () {
         if (this.optionalValue) {
-            this.dropdownProps.options = [this.optionalValue];
+            this.dropdownProps.options = isArray(this.optionalValue) ? this.optionalValue : [this.optionalValue];
         }
     },
     methods: {
@@ -83,6 +84,7 @@ export default {
                 this.isLoading = false;
             } catch (e) {
                 console.error(e);
+                this.isLoading = false;
             }
         },
     },
