@@ -887,12 +887,6 @@ parameters:
             path: 'src/ItemsPerPageSelector.php'
             message: '~^Parameter \#1 \$arg1 of method Atk4\\Ui\\View::set\(\) expects array\|string\|null, int\|null given\.$~'
         -
-            path: 'src/JsCallback.php'
-            message: '~^Parameter \#1 \$ajaxec of method Atk4\\Ui\\JsCallback::terminateAjax\(\) expects array\|Atk4\\Ui\\JsExpressionable, string\|null given\.$~'
-        -
-            path: 'src/JsCallback.php'
-            message: '~^Parameter \#1 \$ajaxec of method Atk4\\Ui\\JsCallback::terminateAjax\(\) expects array\|Atk4\\Ui\\JsExpressionable, null given\.$~'
-        -
             path: 'src/JsSearch.php'
             message: '~^Parameter \#2 \$value of method Atk4\\Ui\\HtmlTemplate::trySet\(\) expects string\|null, Atk4\\Ui\\Form\\Control\\Line given\.$~'
         -
