@@ -391,7 +391,7 @@ class Multiline extends Form\Control
         return $rowId;
     }
 
-    public function getModel(): Model
+    public function getModel(): ?Model
     {
         return $this->model;
     }
