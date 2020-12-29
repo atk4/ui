@@ -19,7 +19,7 @@ trait VueLookupTrait
         if (!$this->dataCb) {
             $this->dataCb = Callback::addTo($this);
         }
-        $this->dataCb->set([$this, 'outputApiResponse']);
+        $this->dataCb->set(\Closure::fromCallable([$this, 'outputApiResponse']));
     }
 
     /**
