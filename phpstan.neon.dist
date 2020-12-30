@@ -665,17 +665,11 @@ parameters:
             path: 'demos/form-control/input2.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsExpression given\.$~'
         -
-            path: 'demos/form-control/lookup.php'
-            message: '~^Parameter \#2 \$defaults of method Atk4\\Data\\Model::hasOne\(\) expects array, Atk4\\Ui\\Demos\\Country given\.$~'
-        -
             path: 'demos/form/form-section.php'
             message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
         -
             path: 'demos/form/form2.php'
             message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
-        -
-            path: 'demos/form/form2.php'
-            message: '~^Parameter \#2 \$defaults of method Atk4\\Data\\Model::hasOne\(\) expects array, Atk4\\Ui\\Demos\\Country given\.$~'
         -
             path: 'demos/form/form3.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsReload given\.$~'
@@ -685,15 +679,6 @@ parameters:
         -
             path: 'demos/init-app.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsExpression given\.$~'
-        -
-            path: 'demos/init-db.php'
-            message: '~^Parameter \#2 \$defaults of method Atk4\\Data\\Model::hasMany\(\) expects array, Atk4\\Ui\\Demos\\SubCategory given\.$~'
-        -
-            path: 'demos/init-db.php'
-            message: '~^Parameter \#2 \$defaults of method Atk4\\Data\\Model::hasMany\(\) expects array, Atk4\\Ui\\Demos\\Product given\.$~'
-        -
-            path: 'demos/init-db.php'
-            message: '~^Parameter \#2 \$defaults of method Atk4\\Data\\Model::hasOne\(\) expects array, Atk4\\Ui\\Demos\\Category given\.$~'
         -
             path: 'demos/interactive/console.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsExpressionable given\.$~'

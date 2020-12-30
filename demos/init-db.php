@@ -259,7 +259,7 @@ class SubCategory extends Model
         parent::init();
         $this->addField('name');
 
-        $this->hasOne('product_category_id', ['model' => [ategory::class]]);
+        $this->hasOne('product_category_id', ['model' => [Category::class]]);
         $this->hasMany('Products', ['model' => [Product::class]]);
     }
 }
