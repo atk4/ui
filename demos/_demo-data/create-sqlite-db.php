@@ -15,7 +15,7 @@ if (file_exists($sqliteFile)) {
 
 $persistence = new \Atk4\Data\Persistence\Sql('sqlite:' . $sqliteFile);
 
-$model = new Model($persistence, 'client');
+$model = new Model($persistence, ['table' => 'client']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('addresses', ['type' => 'text']);
 $model->addField('accounts', ['type' => 'text']);
@@ -25,7 +25,7 @@ $model->import([
     ['id' => 2, 'name' => 'Jane', 'addresses' => null, 'accounts' => null],
 ]);
 
-$model = new Model($persistence, 'country');
+$model = new Model($persistence, ['table' => 'country']);
 $model->addField('iso', ['type' => 'string']); // should be CHAR(2) NOT NULL
 $model->addField('name', ['type' => 'string']);
 $model->addField('nicename', ['type' => 'string']);
@@ -288,7 +288,7 @@ $model->import([
     ['id' => 253, 'iso' => 'SS', 'name' => 'SOUTH SUDAN', 'nicename' => 'South Sudan', 'iso3' => 'SSD', 'numcode' => 728, 'phonecode' => 211],
 ]);
 
-$model = new Model($persistence, 'file');
+$model = new Model($persistence, ['table' => 'file']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('type', ['type' => 'string']);
 $model->addField('is_folder', ['type' => 'boolean']);
@@ -359,7 +359,7 @@ $model->import([
     ['id' => 61, 'name' => 'Button.php', 'type' => 'php', 'is_folder' => 0, 'parent_folder_id' => 46],
 ]);
 
-$model = new Model($persistence, 'stats');
+$model = new Model($persistence, ['table' => 'stats']);
 $model->addField('project_name', ['type' => 'string']);
 $model->addField('project_code', ['type' => 'string']);
 $model->addField('description', ['type' => 'text']);
@@ -392,7 +392,7 @@ $model->import([
     ['id' => 4, 'project_name' => 'Agile UI', 'project_code' => 'at04', 'description' => 'Web UI Component library.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,\nGarden City\nUK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 0, 'project_budget' => 20000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 600, 'project_hours_reported' => 368, 'project_expenses_est' => 1200, 'project_expenses' => 0, 'project_mgmt_cost_pct' => 0.3, 'project_qa_cost_pct' => 0.4, 'start_date' => '2016-09-17', 'finish_date' => '', 'finish_time' => '', 'created' => '2017-04-06 10:30:15', 'updated' => '2017-04-06 10:35:04'],
 ]);
 
-$model = new Model($persistence, 'product_category');
+$model = new Model($persistence, ['table' => 'product_category']);
 $model->addField('name', ['type' => 'string']);
 (new \Atk4\Schema\Migration($model))->dropIfExists()->create();
 $model->import([
@@ -401,7 +401,7 @@ $model->import([
     ['id' => 3, 'name' => 'Dairy'],
 ]);
 
-$model = new Model($persistence, 'product_sub_category');
+$model = new Model($persistence, ['table' => 'product_sub_category']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('product_category_id', ['type' => 'bigint']);
 (new \Atk4\Schema\Migration($model))->dropIfExists()->create();
@@ -417,7 +417,7 @@ $model->import([
     ['id' => 9, 'name' => 'Sugar/Sweetened', 'product_category_id' => 2],
 ]);
 
-$model = new Model($persistence, 'product');
+$model = new Model($persistence, ['table' => 'product']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('brand', ['type' => 'string']);
 $model->addField('product_category_id', ['type' => 'bigint']);
