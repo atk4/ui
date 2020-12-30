@@ -104,7 +104,7 @@ class User extends Model {
 
         $this->addField('name');
         $this->addField('gender', ['enum'=>'female','male','other']);
-        $this->hasMany('Purchases', new Purchase());
+        $this->hasMany('Purchases', ['model' => [Purchase::class]]);
     }
 }
 ```
