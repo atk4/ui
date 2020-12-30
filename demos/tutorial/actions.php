@@ -118,7 +118,7 @@ $wizard->addStep('Arguments', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $model = new \Atk4\Data\Model($owner->getApp()->db, 'test');
+        $model = new \Atk4\Data\Model($owner->getApp()->db, ['table' => 'test']);
 
         $model->addUserAction('greet', [
             'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,

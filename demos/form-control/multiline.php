@@ -62,7 +62,7 @@ $inventoryItemClass = get_class(new class() extends Model {
             'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->hasOne('country', [
-            new Country($this->countryPersistence),
+            'model' => new Country($this->countryPersistence),
             'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 3]]],
         ]);
         $this->addField('qty', [

@@ -115,7 +115,7 @@ class Stat extends Model
         $this->addField('client_address', ['type' => 'text', 'ui' => ['form' => [Form\Control\Textarea::class, 'rows' => 4]]]);
 
         $this->hasOne('client_country_iso', [
-            new Country(),
+            'model' => [Country::class],
             'their_field' => 'iso',
             'type' => 'string',
             'ui' => [
@@ -170,7 +170,7 @@ class File extends Model
         $this->addField('type', ['caption' => 'MIME Type']);
         $this->addField('is_folder', ['type' => 'boolean']);
 
-        $this->hasMany('SubFolder', [new self(), 'their_field' => 'parent_folder_id'])
+        $this->hasMany('SubFolder', ['model' => [self::class], 'their_field' => 'parent_folder_id'])
             ->addField('count', ['aggregate' => 'count', 'field' => $this->persistence->expr($this, '*')]);
 
         $this->hasOne('parent_folder_id', ['model' => [Folder::class]])
@@ -245,8 +245,8 @@ class Category extends Model
         parent::init();
         $this->addField('name');
 
-        $this->hasMany('SubCategories', new SubCategory());
-        $this->hasMany('Products', new Product());
+        $this->hasMany('SubCategories', ['model' => [SubCategory::class]]);
+        $this->hasMany('Products', ['model' => [Product::class]]);
     }
 }
 
@@ -259,8 +259,8 @@ class SubCategory extends Model
         parent::init();
         $this->addField('name');
 
-        $this->hasOne('product_category_id', new Category());
-        $this->hasMany('Products', new Product());
+        $this->hasOne('product_category_id', ['model' => [Category::class]]);
+        $this->hasMany('Products', ['model' => [Product::class]]);
     }
 }
 
@@ -273,8 +273,8 @@ class Product extends Model
         parent::init();
         $this->addField('name');
         $this->addField('brand');
-        $this->hasOne('product_category_id', [new Category()])->addTitle();
-        $this->hasOne('product_sub_category_id', [new SubCategory()])->addTitle();
+        $this->hasOne('product_category_id', ['model' => [Category::class]])->addTitle();
+        $this->hasOne('product_sub_category_id', ['model' => [SubCategory::class]])->addTitle();
     }
 }
 

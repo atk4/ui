@@ -416,8 +416,8 @@ class Multiline extends Form\Control
     /**
      * Set hasMany reference model to use with multiline.
      * Ex: $multiline->setReferenceModel($category->ref('Products'), 'product_category_id');
-     *   Where Category::hasMany('Products', new Product())
-     *   and Product::hasOne('product_category_id', new Category()).
+     *   Where Category::hasMany('Products', ['model' => [Product::class]])
+     *   and Product::hasOne('product_category_id', ['model' => [Category::class]]).
      *
      * Note: When using setReferenceModel you might need to set this corresponding field to never_persist to true.
      * Otherwise, form will try to save 'multiline' field value as an array when form is save.
