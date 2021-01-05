@@ -39,10 +39,10 @@ $form->addControl('qb', [\Atk4\Ui\Form\Control\ScopeBuilder::class, 'model' => $
 
 $form->onSubmit(function ($form) use ($model) {
     $message = $form->model->get('qb')->toWords($model);
-    $view = new \Atk4\Ui\Message('');
+    $view = (new \Atk4\Ui\View(['id' => false]))->addClass('atk-scope-builder-response');
     $view->invokeInit();
 
-    $view->text->addHTML($message);
+    $view->set($message);
 
     return $view;
 });

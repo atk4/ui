@@ -38,7 +38,8 @@ $form = Form::addTo($demo->left);
 // standard with model: use id_field as Value, title_field as Title for each Dropdown option
 $form->addControl(
     'withModel',
-    [Form\Control\Dropdown::class,
+    [
+        Form\Control\Dropdown::class,
         'caption' => 'Dropdown with data from Model',
         'model' => (new Country($app->db))->setLimit(25),
     ]
@@ -47,7 +48,8 @@ $form->addControl(
 // custom callback: alter title
 $form->addControl(
     'withModel2',
-    [Form\Control\Dropdown::class,
+    [
+        Form\Control\Dropdown::class,
         'caption' => 'Dropdown with data from Model',
         'model' => (new Country($app->db))->setLimit(25),
         'renderRowFunction' => function (Model $row) {
@@ -62,7 +64,8 @@ $form->addControl(
 // custom callback: add icon
 $form->addControl(
     'withModel3',
-    [Form\Control\Dropdown::class,
+    [
+        Form\Control\Dropdown::class,
         'caption' => 'Dropdown with data from Model',
         'model' => (new File($app->db))->setLimit(25),
         'renderRowFunction' => function (Model $row) {
@@ -77,7 +80,8 @@ $form->addControl(
 
 $form->addControl(
     'enum',
-    [Form\Control\Dropdown::class,
+    [
+        Form\Control\Dropdown::class,
         'caption' => 'Using Single Values',
         'values' => ['default', 'option1', 'option2', 'option3'],
     ]
@@ -85,7 +89,8 @@ $form->addControl(
 
 $form->addControl(
     'values',
-    [Form\Control\Dropdown::class,
+    [
+        Form\Control\Dropdown::class,
         'caption' => 'Using values with default text',
         'empty' => 'Choose an option',
         'values' => ['default' => 'Default', 'option1' => 'Option 1', 'option2' => 'Option 2', 'option3' => 'Option 3'],
@@ -94,7 +99,8 @@ $form->addControl(
 
 $form->addControl(
     'icon',
-    [Form\Control\Dropdown::class,
+    [
+        Form\Control\Dropdown::class,
         'caption' => 'Using icon',
         'empty' => 'Choose an icon',
         'values' => ['tag' => ['Tag', 'icon' => 'tag icon'], 'globe' => ['Globe', 'icon' => 'globe icon'], 'registered' => ['Registered', 'icon' => 'registered icon'], 'file' => ['File', 'icon' => 'file icon']],
@@ -103,7 +109,8 @@ $form->addControl(
 
 $form->addControl(
     'multi',
-    [Form\Control\Dropdown::class,
+    [
+        Form\Control\Dropdown::class,
         'caption' => 'Multiple selection',
         'empty' => 'Choose has many options needed',
         'isMultiple' => true,

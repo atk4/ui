@@ -8,7 +8,7 @@ use Atk4\Core\AtkPhpunit;
 use Atk4\Ui\Button;
 use Atk4\Ui\View;
 
-class jsIntegrationTest extends AtkPhpunit\TestCase
+class JsIntegrationTest extends AtkPhpunit\TestCase
 {
     public function testIdIntegrity1()
     {

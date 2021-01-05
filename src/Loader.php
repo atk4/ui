@@ -64,14 +64,11 @@ class Loader extends View
      * Or
      *  $l1->set([$my_object, 'run_long_process']);
      *
-     * NOTE: default values are like that due ot PHP 7.0 warning:
-     * Declaration of \Atk4\Ui\Loader::set($fx, $args = Array) should be compatible with \Atk4\Ui\View::set($arg1 = Array, $arg2 = NULL)
-     *
      * @param \Closure $fx
      *
      * @return $this
      */
-    public function set($fx = [], $ignore = null)
+    public function set($fx = null, $ignore = null)
     {
         if (!($fx instanceof \Closure)) {
             throw new Exception('Need to pass a function to Loader::set()');

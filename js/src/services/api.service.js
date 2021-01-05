@@ -155,6 +155,7 @@ class ApiService {
 
         return new Promise((resolve, reject) => {
             apiSettings.onFailure = function (r) {
+                atk.apiService.onFailure(r);
                 reject(r);
             };
             apiSettings.onSuccess = function (r, e) {

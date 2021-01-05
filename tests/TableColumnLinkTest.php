@@ -19,7 +19,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
     {
         $arr = ['table' => [1 => ['id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'salary' => -123]]];
         $db = new \Atk4\Data\Persistence\Array_($arr);
-        $m = new \Atk4\Data\Model($db, 'table');
+        $m = new \Atk4\Data\Model($db, ['table' => 'table']);
         $m->addField('name');
         $m->addField('ref');
         $m->addField('salary');
@@ -260,7 +260,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         // need to reset all to set a nulled value in field name model
         $arr = ['table' => [1 => ['id' => 1, 'name' => '', 'ref' => 'ref123', 'salary' => -123]]];
         $db = new \Atk4\Data\Persistence\Array_($arr);
-        $m = new \Atk4\Data\Model($db, 'table');
+        $m = new \Atk4\Data\Model($db, ['table' => 'table']);
         $m->addField('name');
         $m->addField('ref');
         $m->addField('salary');

@@ -78,8 +78,6 @@ class Right extends View implements Loadable
 
     /**
      * Return js expression in order to retrieve panelService.
-     *
-     * @return mixed
      */
     public function service(): JsExpression
     {
@@ -92,8 +90,6 @@ class Right extends View implements Loadable
      * @param array        $args      the data attribute name to include in reload from the triggering element
      * @param string|null  $activeCss the css class name to apply on triggering element when panel is open
      * @param JsExpression $jsTrigger JsExpression that trigger panel to open. Default = $(this).
-     *
-     * @return mixed
      */
     public function jsOpen(array $args = [], string $activeCss = null, JsExpression $jsTrigger = null): JsExpression
     {
@@ -107,8 +103,6 @@ class Right extends View implements Loadable
 
     /**
      * Will reload panel passing args as Get param via js flyoutService.
-     *
-     * @return mixed
      */
     public function jsPanelReload(array $args = []): JsExpression
     {
@@ -117,8 +111,6 @@ class Right extends View implements Loadable
 
     /**
      * Return js expression need to close panel via js panelService.
-     *
-     * @return mixed
      */
     public function jsClose(): JsExpression
     {

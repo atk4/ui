@@ -157,7 +157,7 @@ class Lookup extends Input
         $this->callback = \Atk4\Ui\Callback::addTo($this);
 
         $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () {
-            $this->callback->set([$this, 'outputApiResponse']);
+            $this->callback->set(\Closure::fromCallable([$this, 'outputApiResponse']));
         });
     }
 

@@ -5,24 +5,19 @@ declare(strict_types=1);
  * Creates a Multiline field within a table, which allows adding/editing multiple
  * data rows.
  *
- * To save the data, use the Multiline::saveRows() method. If the Multiline's
- * model is a reference to your form's model, the form model should be saved prior
- * to calling saveRows().
+ * Using hasMany reference will required to save reference data using Multiline::saveRows() method.
  *
  * $form = Form::addTo($app);
  * $form->setModel($invoice, false);
- * // Add form controls
  *
- * // Add Multiline form control and set model for it.
- * $ml = $form->addControl('ml', ['Multiline']);
- *
- * // Set model using hasMany reference of Invoice.
- * $ml->setModel($invoice, ['item','cat','qty','price', 'total'], 'Items', 'invoice_id');
+ * // Add Multiline form control and set model for Invoice items.
+ * $ml = $form->addControl('ml', ['Multiline::class']);
+ * $ml->setReferenceModel($invoice->ref('Items'), 'invoice_id', ['item','cat','qty','price', 'total']);
  *
  * $form->onSubmit(function($form) use ($ml) {
  *     // Save Form model and then Multiline model
- *     $form->model->save();
- *     $ml->saveRows();
+ *     $form->model->save(); // Saving Invoice record.
+ *     $ml->saveRows(); // Saving invoice items record related to invoice.
  *     return new \Atk4\Ui\JsToast('Saved!');
  * });
  *
@@ -72,140 +67,114 @@ use Atk4\Data\Field;
 use Atk4\Data\Field\Callback;
 use Atk4\Data\FieldSqlExpression;
 use Atk4\Data\Model;
-use Atk4\Data\Reference\HasOne;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\JsCallback;
+use Atk4\Ui\JsFunction;
 use Atk4\Ui\View;
 
 class Multiline extends Form\Control
 {
-    /**
-     * The template needed for the multiline view.
-     *
-     * @var HtmlTemplate
-     */
+    use VueLookupTrait;
+
+    /** @var HtmlTemplate The template needed for the multiline view. */
     public $multiLineTemplate;
 
-    /**
-     * The multiline View. Assigned in init().
-     *
-     * @var View
-     */
+    /** @var View The multiline View. Assigned in init(). */
     private $multiLine;
 
+    // Components name
+    public const INPUT = 'sui-input';
+    public const READ_ONLY = 'atk-multiline-readonly';
+    public const TEXT_AREA = 'atk-multiline-textarea';
+    public const SELECT = 'sui-dropdown';
+    public const DATE = 'atk-date-picker';
+    public const LOOKUP = 'atk-lookup';
+    public const TABLE_CELL = 'sui-table-cell';
+
     /**
-     * An array of options for certain Vue component use in Multiline.
-     * These options are applied globally to each components within Multiline.
+     * Props to be apply globally for each component supported by field type.
+     * For example setting 'sui-dropdown' property globally.
+     *  $componentProps = [Multiline::SELECT => ['floating' => true]].
      *
      * @var array
      */
-    public $options = [
-        // sui-table props. Example: ['celled' => true] will render column lines in table.
-        'suiTable' => [],
-        // sui-dropdown props.
-        'suiDropdown' => [],
-        // flatpickr props - Will be applied globally.
-        'flatpickr' => [],
+    public $componentProps = [];
+
+    /** @var array sui-table component props */
+    public $tableProps = [];
+
+    /** @var array[] Set Vue component to use per field type. */
+    protected $fieldMapToComponent = [
+        'default' => [
+            'component' => self::INPUT,
+            'componentProps' => [__CLASS__, 'getSuiInputProps'],
+        ],
+        'readonly' => [
+            'component' => self::READ_ONLY,
+            'componentProps' => [],
+        ],
+        'textarea' => [
+            'component' => self::TEXT_AREA,
+            'componentProps' => [],
+        ],
+        'select' => [
+            'component' => self::SELECT,
+            'componentProps' => [__CLASS__, 'getDropdownProps'],
+        ],
+        'date' => [
+            'component' => self::DATE,
+            'componentProps' => [__CLASS__, 'getDatePickerProps'],
+        ],
+        'lookup' => [
+            'component' => self::LOOKUP,
+            'componentProps' => [__CLASS__, 'getLookupProps'],
+        ],
     ];
 
-    /**
-     * When true, tabbing out of the last column in last row of data
-     * will automatically add a new row of record.
-     *
-     * @var bool
-     */
+    /** @var bool Add row when tabbing out of last column in last row. */
     public $addOnTab = false;
 
-    /**
-     * The definition of each field used in every multiline row.
-     *
-     * @var array
-     */
+    /** @var array The definition of each field used in every multiline row. */
     private $fieldDefs;
 
-    /**
-     * The JS callback.
-     *
-     * @var JsCallback
-     */
-    private $cb;
+    /** @var JsCallback */
+    private $renderCallback;
 
-    /**
-     * The function that gets execute when fields are changed or
-     * rows get deleted.
-     *
-     * @var \Closure
-     */
+    /** @var \Closure Function to execute when field change or row is delete. */
     protected $onChangeFunction;
 
-    /**
-     * Array of field names that will trigger the onChange function when those
-     * fields are changed.
-     *
-     * @var array
-     */
+    /** @var array Set fields that will trigger onChange function. */
     protected $eventFields;
 
-    /**
-     * Collection of field errors.
-     *
-     * @var array
-     */
+    /** @var array Collection of field errors. */
     private $rowErrors;
 
-    /**
-     * The model reference name used for Multiline input.
-     *
-     * @var string
-     */
-    public $modelRef;
-
-    /**
-     * The link field used for reference.
-     *
-     * @var string
-     */
-    public $linkField;
-
-    /**
-     * The fields names used in each row.
-     *
-     * @var array
-     */
+    /** @var array The fields names used in each row. */
     public $rowFields;
 
+    /** @var array The data sent for each row. */
+    public $rowData;
+
+    /** @var int The max number of records (rows) that can be added to Multiline. 0 means no limit. */
+    public $rowLimit = 0;
+
+    /** @var int The maximum number of items for select type field. */
+    public $itemLimit = 25;
+
+    /** @var string Multiline's caption. */
+    public $caption;
+
     /**
-     * The data sent for each row.
+     * Container for component that need Props set based on their field value as Lookup component.
+     * Set during fieldDefinition and apply during renderView() after getValue().
+     * Must contains callable function and function will receive $model field and value as paremeter.
      *
      * @var array
      */
-    public $rowData;
-
-    /**
-     * The max number of records that can be added to Multiline. 0 means no limit.
-     *
-     * @var int
-     */
-    public $rowLimit = 0;
-
-    /**
-     * Model's max rows limit to be used in enum fields.
-     * Enum fields are display as Dropdown inputs.
-     * This limit is set on model reference used by a field.
-     *
-     * @var int
-     */
-    public $enumLimit = 100;
-
-    /**
-     * Multiline's caption.
-     *
-     * @var string
-     */
-    public $caption;
+    private $valuePropsBinding = [];
 
     /**
      * A JsFunction to execute when Multiline add(+) button is clicked.
@@ -213,7 +182,7 @@ class Multiline extends Form\Control
      * The function also receive the row value as an array.
      * ex: $jsAfterAdd = new JsFunction(['value'],[new JsExpression('console.log(value)')]);.
      *
-     * @var JsFunction|null
+     * @var JsFunction
      */
     public $jsAfterAdd;
 
@@ -223,7 +192,7 @@ class Multiline extends Form\Control
      * The function also receive the row value as an array.
      * ex: $jsAfterDelete = new JsFunction(['value'],[new JsExpression('console.log(value)')]);.
      *
-     * @var JsFunction|null
+     * @var JsFunction
      */
     public $jsAfterDelete;
 
@@ -232,27 +201,31 @@ class Multiline extends Form\Control
         parent::init();
 
         if (!$this->multiLineTemplate) {
-            $this->multiLineTemplate = new HtmlTemplate('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline><div class="ui hidden divider"></div>{$Input}</div>');
+            $this->multiLineTemplate = new HtmlTemplate('<div id="{$_id}" class=""><atk-multiline v-bind="initData"></atk-multiline></div>');
         }
-
-        /* No need for this anymore. See: https://github.com/atk4/ui/commit/8ec4d22cf9dcbd4969d9c88d8f09b705ca8798a6
-        if ($this->model) {
-            $this->setModel($this->model);
-        }
-        */
 
         $this->multiLine = View::addTo($this, ['template' => $this->multiLineTemplate]);
 
-        $this->cb = JsCallback::addTo($this);
+        $this->renderCallback = JsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
-        $this->form->onHook(Form::HOOK_LOAD_POST, function ($form) {
+        $this->form->onHook(Form::HOOK_LOAD_POST, function ($form, &$post) {
             $this->rowData = $this->getApp()->decodeJson($_POST[$this->short_name]);
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
                 if ($this->rowErrors) {
                     throw new ValidationException([$this->short_name => 'multiline error']);
                 }
+            }
+
+            // remove __atml id from array field.
+            if ($this->form->model->getField($this->short_name)->type === 'array') {
+                $rows = [];
+                foreach ($this->rowData as $key => $cols) {
+                    unset($cols['__atkml']);
+                    $rows[] = $cols;
+                }
+                $post[$this->short_name] = json_encode($rows);
             }
         });
 
@@ -274,10 +247,8 @@ class Multiline extends Form\Control
     /**
      * Add a callback when fields are changed. You must supply array of fields
      * that will trigger the callback when changed.
-     *
-     * @param array $fields
      */
-    public function onLineChange(\Closure $fx, $fields)
+    public function onLineChange(\Closure $fx, array $fields): void
     {
         $this->eventFields = $fields;
 
@@ -285,58 +256,30 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Input field collecting multiple rows of data.
-     *
-     * @return string
-     */
-    public function getInput()
-    {
-        return $this->getApp()->getTag('input', [
-            'name' => $this->short_name,
-            'type' => 'hidden',
-            'value' => $this->getValue(),
-            'readonly' => true,
-        ]);
-    }
-
-    /**
      * Get Multiline initial field value. Value is based on model set and will
      * output data rows as json string value.
-     *
-     * @return false|string
      */
-    public function getValue()
+    public function getValue(): string
     {
-        $model = null;
-
-        // Will load data when using containsMany.
-        $data = $this->getApp()->ui_persistence->_typecastSaveField($this->field, $this->field->get());
-
-        // If data is empty try to load model data directly. - For hasMany model
-        // or array model already populated with data.
-        if (empty($data)) {
+        if ($this->field->type === 'array') {
+            $jsonValues = $this->getApp()->ui_persistence->_typecastSaveField($this->field, $this->field->get() ?? []);
+        } else {
+            // set data according to hasMany ref. or using model.
+            $model = $this->getModel();
             $rows = [];
-            // Set model according to model reference if set, or simply the model passed to it.
-            if ($this->model->loaded() && $this->modelRef) {
-                $model = $this->model->ref($this->modelRef);
-            } elseif (!$this->modelRef) {
-                $model = $this->model;
-            }
-            if ($model) {
-                foreach ($model as $row) {
-                    $cols = [];
-                    foreach ($this->rowFields as $fieldName) {
-                        $field = $model->getField($fieldName);
-                        $value = $this->getApp()->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
-                        $cols[$fieldName] = $value;
-                    }
-                    $rows[] = $cols;
+            foreach ($model as $row) {
+                $cols = [];
+                foreach ($this->rowFields as $fieldName) {
+                    $field = $model->getField($fieldName);
+                    $value = $this->getApp()->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
+                    $cols[$fieldName] = $value;
                 }
+                $rows[] = $cols;
             }
-            $data = $this->getApp()->encodeJson($rows);
+            $jsonValues = json_encode($rows);
         }
 
-        return $data;
+        return $jsonValues;
     }
 
     /**
@@ -361,7 +304,7 @@ class Multiline extends Form\Control
                         $model->set($fieldName, $this->getApp()->ui_persistence->typecastLoadField($field, $value));
                     }
                 } catch (\Atk4\Core\Exception $e) {
-                    $rowErrors[$rowId][] = ['field' => $fieldName, 'msg' => $e->getMessage()];
+                    $rowErrors[$rowId][] = ['name' => $fieldName, 'msg' => $e->getMessage()];
                 }
             }
             $rowErrors = $this->addModelValidateErrors($rowErrors, $rowId, $model);
@@ -373,13 +316,8 @@ class Multiline extends Form\Control
     /**
      * Save rows.
      */
-    public function saveRows()
+    public function saveRows(): self
     {
-        // If we are using a reference, make sure main model is loaded.
-        if ($this->modelRef && !$this->model->loaded()) {
-            throw new Exception('Parent model need to be loaded');
-        }
-
         $model = $this->getModel();
 
         // collects existing ids.
@@ -388,10 +326,6 @@ class Multiline extends Form\Control
         foreach ($this->rowData as $row) {
             // should clone model to be able to save it multiple times
             $row_model = clone $model;
-
-            if ($this->modelRef && $this->linkField) {
-                $row_model->set($this->linkField, $this->model->getId());
-            }
 
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
@@ -425,10 +359,8 @@ class Multiline extends Form\Control
 
     /**
      * Check for model validate error.
-     *
-     * @return mixed
      */
-    protected function addModelValidateErrors($errors, $rowId, $model)
+    protected function addModelValidateErrors(array $errors, string $rowId, Model $model): array
     {
         $e = $model->validate();
         if ($e) {
@@ -444,10 +376,8 @@ class Multiline extends Form\Control
      * for javascript use - changing this method may brake JS functionality.
      *
      * Finds and returns Multiline row id.
-     *
-     * @return |null
      */
-    private function getMlRowId(array $row)
+    private function getMlRowId(array $row): ?string
     {
         $rowId = null;
         foreach ($row as $col => $value) {
@@ -461,51 +391,20 @@ class Multiline extends Form\Control
         return $rowId;
     }
 
-    /**
-     * Will return a model reference if reference was set in setModel.
-     * Otherwise, will return main model.
-     *
-     * @return Model
-     */
-    public function getModel()
+    public function getModel(): ?Model
     {
-        $model = $this->model;
-        if ($this->modelRef) {
-            $model = $model->ref($this->modelRef);
-        }
-
-        return $model;
+        return $this->model;
     }
 
-    /**
-     * Set view model.
-     * If modelRef is used then getModel will return proper model.
-     *
-     * @param array $fields
-     *
-     * @return Model
-     */
-    public function setModel(Model $model, $fields = [], $modelRef = null, $linkField = null)
+    public function setModel(Model $model, array $fieldNames = []): Model
     {
-        // Remove Multiline field name from model
-        if ($model->hasField($this->short_name)) {
-            $model->getField($this->short_name)->never_persist = true;
-        }
         $model = parent::setModel($model);
+        $this->initVueLookupCallback();
 
-        if ($modelRef) {
-            if (!$linkField) {
-                throw new Exception('Using model ref required to set $linkField');
-            }
-            $this->linkField = $linkField;
-            $this->modelRef = $modelRef;
-            $model = $model->ref($modelRef);
+        if (!$fieldNames) {
+            $fieldNames = array_keys($model->getFields('not system'));
         }
-
-        if (!$fields) {
-            $fields = array_keys($model->getFields('not system'));
-        }
-        $this->rowFields = array_merge([$model->id_field], $fields);
+        $this->rowFields = array_merge([$model->id_field], $fieldNames);
 
         foreach ($this->rowFields as $fieldName) {
             $this->fieldDefs[] = $this->getFieldDef($model->getField($fieldName));
@@ -515,173 +414,228 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Return the field definition to use in JS for rendering this field.
-     * $component is one of the following html input types:
-     * - input
-     * - dropdown
-     * - checkbox
-     * - textarea.
+     * Set hasMany reference model to use with multiline.
+     * Ex: $multiline->setReferenceModel($category->ref('Products'), 'product_category_id');
+     *   Where Category::hasMany('Products', ['model' => [Product::class]])
+     *   and Product::hasOne('product_category_id', ['model' => [Category::class]]).
      *
-     * Depending on the component, additional data is set to fieldOptions
-     * (dropdown needs values, input needs type)
+     * Note: When using setReferenceModel you might need to set this corresponding field to never_persist to true.
+     * Otherwise, form will try to save 'multiline' field value as an array when form is save.
+     * $multiline = $form->addControl('multiline', [Multiline::class], ['never_persist' => true])
+     */
+    public function setReferenceModel(Model $refModel, string $linkByFieldName, array $fieldNames = []): Model
+    {
+        if (!$refModel->ref($linkByFieldName)->loaded()) {
+            throw new Exception('Parent model must be loaded in order to use reference.');
+        }
+
+        return $this->setModel($refModel, $fieldNames);
+    }
+
+    /**
+     * Return field definition in order to properly render them in Multiline.
+     *
+     * Multiline uses Vue components in order to manage input type based on field type.
+     * Component name and props are determine via the getComponentDefinition function.
      */
     public function getFieldDef(Field $field): array
     {
-        // Default is input
-        $component = 'input';
-
-        // First check in Field->ui['multiline'] if there are settings for Multiline display
-        // $test = $field->ui['multiline'];
-        if (isset($field->ui['multiline'][0])) {
-            $component = $this->_mapComponent($field->ui['multiline'][0]);
-        }
-        // Next, check if there is a 'standard' UI seed set
-        elseif (isset($field->ui['form'][0])) {
-            $component = $this->_mapComponent($field->ui['form'][0]);
-        }
-        // If values or enum property is set, display a Dropdown
-        elseif ($field->enum || $field->values || $field->reference instanceof HasOne) {
-            $component = 'dropdown';
-        }
-        // Figure UI FormField type by field type.
-        // TODO: Form already does this, maybe use that somehow?
-        elseif ($field->type) {
-            $component = $this->_mapComponent($field->type);
-        }
-
         return [
-            'field' => $field->short_name,
-            'component' => $component,
+            'name' => $field->short_name,
+            'definition' => $this->getComponentDefinition($field),
+            'cellProps' => $this->getSuiTableCellProps($field),
             'caption' => $field->getCaption(),
             'default' => $field->default,
             'isExpr' => isset($field->expr),
             'isEditable' => $field->isEditable(),
             'isHidden' => $field->isHidden(),
             'isVisible' => $field->isVisible(),
-            'fieldOptions' => $this->_getFieldOptions($field, $component),
         ];
     }
 
     /**
-     * Maps field type to form control (input, checkbox, dropdown or textarea), defaults to input.
+     * Each field input, represent by a Vue component, is place within a table cell.
+     * This table cell is also a Vue component that can use Props: sui-table-cell.
      *
-     * @param string|object $fieldType
+     * Cell properties can be applied globally via $options['sui-table-cell'] or per field
+     * via  $field->ui['multiline']['sui-table-cell']
      */
-    protected function _mapComponent($fieldType): string
+    protected function getSuiTableCellProps(Field $field): array
     {
-        if (is_string($fieldType)) {
-            switch (strtolower($fieldType)) {
-                case 'dropdown':
-                case 'enum':
-                    return 'dropdown';
-                case 'boolean':
-                case 'checkbox':
-                    return 'checkbox';
-                case 'text':
-                case 'textarea':
-                    return 'textarea';
-                case 'date':
-                    return 'date';
-                case 'time':
-                    return 'time';
-                case 'datetime':
-                    return 'datetime';
-                default: return 'input';
-            }
+        $props = [];
+
+        if ($field->type === 'money' || $field->type === 'number' || $field->type === 'integer') {
+            $props['text-align'] = 'right';
         }
 
-        // If an object was passed, use its classname as string
-        elseif (is_object($fieldType)) {
-            return $this->_mapComponent((new \ReflectionClass($fieldType))->getShortName());
-        }
-
-        return 'input';
-    }
-
-    protected function _getFieldOptions(Field $field, string $component): array
-    {
-        $options = [];
-
-        // If additional options are defined for field, add them.
-        if (is_array($field->ui['multiline'] ?? null)) {
-            $add_options = $field->ui['multiline'];
-            if (isset($add_options[0])) {
-                if (is_array($add_options[0])) {
-                    $options = array_merge($options, $add_options[0]);
-                }
-                if (is_array($add_options[1] ?? null)) {
-                    $options = array_merge($options, $add_options[1]);
-                }
-            } else {
-                $options = array_merge($options, $add_options);
-            }
-        } elseif (is_array($field->ui['form'] ?? null)) {
-            $add_options = $field->ui['form'];
-            if (isset($add_options[0])) {
-                unset($add_options[0]);
-            }
-            $options = array_merge($options, $add_options);
-        }
-
-        // Some input types need additional options set, make sure they are there
-        switch ($component) {
-            // Input needs to have type set (text, number, date etc)
-            case 'input':
-                if (!isset($options['type'])) {
-                    $options['type'] = $this->_addTypeOption($field);
-                }
-
-                break;
-            // Dropdown needs values set
-            case 'dropdown':
-                if (!isset($options['values'])) {
-                    $options['values'] = $this->_addValuesOption($field);
-                }
-
-                break;
-            case 'date':
-            case 'datetime':
-            case 'time':
-              $options['dateFormat'] = $options['dateFormat'] ?? $this->getApp()->ui_persistence->{$component . '_format'};
-
-               break;
-        }
-
-        return $options;
+        return array_merge($props, $this->componentProps[self::TABLE_CELL] ?? [], $field->ui['multiline'][self::TABLE_CELL] ?? []);
     }
 
     /**
-     * HTML input field needs type property set. If it wasnt found in $field->ui,
-     * determine from rest.
+     * Return props for input component.
      */
-    protected function _addTypeOption(Field $field): string
+    protected function getSuiInputProps(Field $field): array
     {
-        switch ($field->type) {
-            case 'integer':
-                return 'number';
-            default:
-                return 'text';
+        $props = $this->componentProps[self::INPUT] ?? [];
+
+        $props['type'] = ($field->type === 'integer' || $field->type === 'float' || $field->type === 'money' || $field->type === 'number') ? 'number' : 'text';
+
+        return array_merge($props, $field->ui['multiline'][self::INPUT] ?? []);
+    }
+
+    /**
+     * Return props for atk-date-picker component.
+     */
+    protected function getDatePickerProps(Field $field): array
+    {
+        $calendar = new Calendar();
+        $props['config'] = $this->componentProps[self::DATE] ?? [];
+        $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$field->type . '_format'});
+        $props['config']['dateFormat'] = $format;
+
+        if ($field->type === 'datetime' || $field->type === 'time') {
+            $props['config']['enableTime'] = true;
+            $props['config']['time_24hr'] = $calendar->use24hrTimeFormat($format);
+            $props['config']['noCalendar'] = ($field->type === 'time');
+            $props['config']['enableSeconds'] = $calendar->useSeconds($format);
+        }
+
+        return $props;
+    }
+
+    /**
+     * Return props for Dropdown components.
+     */
+    protected function getDropdownProps(Field $field): array
+    {
+        $props = array_merge(
+            ['floating' => false, 'closeOnBlur' => true, 'selection' => true],
+            $this->componentProps[self::SELECT] ?? []
+        );
+
+        $items = $this->getFieldItems($field, $this->itemLimit);
+        foreach ($items as $value => $text) {
+            $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
+        }
+
+        return $props;
+    }
+
+    /**
+     * Set property for atk-lookup component.
+     */
+    protected function getLookupProps(Field $field): array
+    {
+        // set any of sui-dropdown props via this property. Will be applied globally.
+        $props['config'] = $this->componentProps[self::LOOKUP] ?? [];
+        $items = $this->getFieldItems($field, 10);
+        foreach ($items as $value => $text) {
+            $props['config']['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
+        }
+
+        if ($field->reference) {
+            $props['config']['url'] = $this->dataCb->getUrl();
+            $props['config']['reference'] = $field->short_name;
+            $props['config']['search'] = true;
+        }
+
+        $props['config']['placeholder'] = $props['config']['placeholder'] ?? 'Select ' . $field->getCaption();
+
+        $this->valuePropsBinding[$field->short_name] = [__CLASS__, 'setLookupOptionValue'];
+
+        return $props;
+    }
+
+    /**
+     * Lookup Props set based on field value.
+     */
+    public function setLookupOptionValue(Field $field, string $value)
+    {
+        $model = $field->reference->refModel();
+        $rec = $model->tryLoadBy($field->reference->getTheirFieldName(), $value);
+        if ($rec->loaded()) {
+            $option = [
+                'key' => $value,
+                'text' => $rec->get($model->title_field),
+                'value' => $value,
+            ];
+            foreach ($this->fieldDefs as $key => $component) {
+                if ($component['name'] === $field->short_name) {
+                    $this->fieldDefs[$key]['definition']['componentProps']['optionalValue'] =
+                        isset($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'])
+                        ? array_merge($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'], [$option])
+                        : [$option];
+                }
+            }
         }
     }
 
     /**
-     * Dropdown field needs values set. If it wasnt found in $field->ui, determine
-     * from rest.
+     * Return a component definition.
+     * Component definition require at least a name and a props array.
      */
-    protected function _addValuesOption(Field $field): array
+    protected function getComponentDefinition(Field $field): array
     {
-        if ($field->enum) {
-            return array_combine($field->enum, $field->enum);
-        }
-        if (is_array($field->values)) {
-            return $field->values;
+        if ($required = $field->ui['multiline']['component'] ?? null) {
+            $component = $this->fieldMapToComponent[$required];
+        } elseif (!$field->isEditable()) {
+            $component = $this->fieldMapToComponent['readonly'];
+        } elseif ($field->enum || $field->values) {
+            $component = $this->fieldMapToComponent['select'];
+        } elseif ($field->type === 'date' || $field->type === 'time' || $field->type === 'datetime') {
+            $component = $this->fieldMapToComponent['date'];
+        } elseif ($field->type === 'text') {
+            $component = $this->fieldMapToComponent['textarea'];
         } elseif ($field->reference) {
-            $model = $field->reference->refModel()->setLimit($this->enumLimit);
-
-            return $model->getTitles();
+            $component = $this->fieldMapToComponent['lookup'];
+        } else {
+            $component = $this->fieldMapToComponent['default'];
         }
 
-        return [];
+        $definition = array_map(function ($value) use ($field) {
+            return is_array($value) && is_callable($value) ? call_user_func($value, $field) : $value;
+        }, $component);
+
+        return $definition;
+    }
+
+    /**
+     * Return array of possible items set for a select or lookup field.
+     */
+    protected function getFieldItems(Field $field, $limit = 10): array
+    {
+        $items = [];
+        if ($field->enum) {
+            $items = array_chunk(array_combine($field->enum, $field->enum), $limit, true)[0];
+        }
+        if ($field->values && is_array($field->values)) {
+            $items = array_chunk($field->values, $limit, true)[0];
+        } elseif ($field->reference) {
+            $model = $field->reference->refModel();
+            $model->setLimit($limit);
+
+            foreach ($model as $item) {
+                $items[$item->get($field->reference->getTheirFieldName())] = $item->get($model->title_field);
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * Apply Props to component that require props based on field value.
+     */
+    protected function valuePropsBinding(string $values)
+    {
+        $fieldValues = $this->getApp()->decodeJson($values);
+
+        foreach ($fieldValues as $rows) {
+            foreach ($rows as $fieldName => $value) {
+                if (array_key_exists($fieldName, $this->valuePropsBinding)) {
+                    call_user_func($this->valuePropsBinding[$fieldName], $this->getModel()->getField($fieldName), $value);
+                }
+            }
+        }
     }
 
     protected function renderView(): void
@@ -690,28 +644,27 @@ class Multiline extends Form\Control
             throw new Exception('Multiline field needs to have it\'s model setup.');
         }
 
-        $this->cb->set(function () {
-            try {
-                return $this->renderCallback();
-            } catch (\Atk4\Core\Exception | \Error $e) {
-                $this->getApp()->terminateJson(['success' => false, 'error' => $e->getMessage()]);
-            }
+        $this->renderCallback->set(function () {
+            $this->outputJson();
         });
 
-        $this->multiLine->template->tryDangerouslySetHtml('Input', $this->getInput());
         parent::renderView();
+
+        $inputValue = $this->getValue();
+        $this->valuePropsBinding($inputValue);
 
         $this->multiLine->vue(
             'atk-multiline',
             [
                 'data' => [
-                    'linesField' => $this->short_name,
+                    'formName' => $this->form->formElement->name,
+                    'inputValue' => $inputValue,
+                    'inputName' => $this->short_name,
                     'fields' => $this->fieldDefs,
-                    'idField' => $this->getModel()->id_field,
-                    'url' => $this->cb->getJsUrl(),
+                    'url' => $this->renderCallback->getJsUrl(),
                     'eventFields' => $this->eventFields,
                     'hasChangeCb' => $this->onChangeFunction ? true : false,
-                    'options' => $this->options,
+                    'tableProps' => $this->tableProps,
                     'rowLimit' => $this->rowLimit,
                     'caption' => $this->caption,
                     'afterAdd' => $this->jsAfterAdd,
@@ -725,26 +678,23 @@ class Multiline extends Form\Control
     /**
      * For javascript use - changing these methods may brake JS functionality.
      *
-     * Render callback.
+     * Render callback according to multi line action.
+     * 'update-row' need special formatting.
      */
-    private function renderCallback()
+    private function outputJson(): void
     {
         $action = $_POST['__atkml_action'] ?? null;
-        $response = [
-            'success' => true,
-            'message' => 'Success',
-        ];
 
         switch ($action) {
             case 'update-row':
                 $model = $this->setDummyModelValue(clone $this->getModel());
                 $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
-                $this->getApp()->terminateJson(array_merge($response, ['expressions' => $expressionValues]));
+                $this->getApp()->terminateJson(['success' => true, 'message' => 'Success', 'expressions' => $expressionValues]);
 
                 break;
             case 'on-change':
-                // Let regular callback render output.
-                return ($this->onChangeFunction)($this->getApp()->decodeJson($_POST['rows']), $this->form);
+                $response = call_user_func($this->onChangeFunction, $this->getApp()->decodeJson($_POST['rows']), $this->form);
+                $this->renderCallback->terminateAjax($this->renderCallback->getAjaxec($response));
 
                 break;
         }
@@ -754,14 +704,12 @@ class Multiline extends Form\Control
      * For javascript use - changing this method may brake JS functionality.
      *
      * Return values associated with callback field.
-     *
-     * @return array
      */
-    private function getCallbackValues($model)
+    private function getCallbackValues(Model $model): array
     {
         $values = [];
         foreach ($this->fieldDefs as $def) {
-            $fieldName = $def['field'];
+            $fieldName = $def['name'];
             if ($fieldName === $model->id_field) {
                 continue;
             }
@@ -779,19 +727,19 @@ class Multiline extends Form\Control
      * For javascript use - changing this method may brake JS functionality.
      *
      * Looks inside the POST of the request and loads data into model.
-     * Allow to Run expression base on rowData value.
+     * Allow to Run expression base on post row value.
      */
-    private function setDummyModelValue($model)
+    private function setDummyModelValue(Model $model): Model
     {
-        $post = $_POST;
+        $row = $_POST;
 
         foreach ($this->fieldDefs as $def) {
-            $fieldName = $def['field'];
+            $fieldName = $def['name'];
             if ($fieldName === $model->id_field) {
                 continue;
             }
 
-            $value = $post[$fieldName] ?? null;
+            $value = $row[$fieldName] ?? null;
             if ($model->getField($fieldName)->isEditable()) {
                 try {
                     $model->set($fieldName, $value);
@@ -808,17 +756,17 @@ class Multiline extends Form\Control
      * For javascript use - changing this method may brake JS functionality.
      *
      * Return values associated to field expression.
-     *
-     * @return array
      */
-    private function getExpressionValues($model)
+    private function getExpressionValues(Model $model): array
     {
         $dummyFields = [];
         $formatValues = [];
 
         foreach ($this->getExpressionFields($model) as $k => $field) {
-            $dummyFields[$k]['name'] = $field->short_name;
-            $dummyFields[$k]['expr'] = $this->getDummyExpression($field, $model);
+            if (!is_callable($field->expr)) {
+                $dummyFields[$k]['name'] = $field->short_name;
+                $dummyFields[$k]['expr'] = $this->getDummyExpression($field, $model);
+            }
         }
 
         if (!empty($dummyFields)) {
@@ -826,12 +774,14 @@ class Multiline extends Form\Control
             foreach ($dummyFields as $field) {
                 $dummyModel->addExpression($field['name'], ['expr' => $field['expr'], 'type' => $model->getField($field['name'])->type]);
             }
-            $values = $dummyModel->loadAny()->get();
+            $values = $dummyModel->tryLoadAny()->get();
             unset($values[$model->id_field]);
 
             foreach ($values as $f => $value) {
-                $field = $model->getField($f);
-                $formatValues[$f] = $this->getApp()->ui_persistence->_typecastSaveField($field, $value);
+                if ($value) {
+                    $field = $model->getField($f);
+                    $formatValues[$f] = $this->getApp()->ui_persistence->_typecastSaveField($field, $value);
+                }
             }
         }
 
@@ -843,10 +793,8 @@ class Multiline extends Form\Control
      *
      * Get all field expression in model, but only evaluate expression used in
      * rowFields.
-     *
-     * @return array
      */
-    private function getExpressionFields($model)
+    private function getExpressionFields(Model $model): array
     {
         $fields = [];
         foreach ($model->getFields() as $field) {
@@ -869,7 +817,7 @@ class Multiline extends Form\Control
      *
      * @return mixed
      */
-    private function getDummyExpression($exprField, $model)
+    private function getDummyExpression(FieldSqlExpression $exprField, $model)
     {
         $expr = $exprField->expr;
         $matches = [];
@@ -897,7 +845,7 @@ class Multiline extends Form\Control
      *
      * @return int|mixed|string
      */
-    private function getValueForExpression($exprField, $fieldName, Model $model)
+    private function getValueForExpression(Field $exprField, string $fieldName, Model $model)
     {
         switch ($exprField->type) {
             case 'money':

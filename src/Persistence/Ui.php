@@ -51,6 +51,8 @@ class Ui extends \Atk4\Data\Persistence
 
     /**
      * This method contains the logic of casting generic values into user-friendly format.
+     *
+     * @return string|string[]
      */
     public function _typecastSaveField(\Atk4\Data\Field $f, $value)
     {
@@ -103,7 +105,9 @@ class Ui extends \Atk4\Data\Persistence
                 break;
         }
 
-        return $value;
+        return is_array($value)
+            ? array_map(function ($v) { return (string) $v; }, $value)
+            : (string) $value;
     }
 
     /**
