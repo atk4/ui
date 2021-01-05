@@ -1,12 +1,12 @@
 {
   "name": "atkjs-ui",
-  "version": "1.19.0",
+  "version": "1.19.1",
   "description": "Agile Toolkit Javascript library.",
   "main": "lib/atkjs-ui.js",
   "scripts": {
-    "build": "webpack --env.production",
-    "dev": "webpack --progress --colors --watch --env.development",
-    "profile": "webpack  --env.production --profile --json > ./profile/atkjs-bundle-profile.json",
+    "build": "webpack --env production",
+    "dev": "webpack --progress --watch --env development",
+    "profile": "webpack  --env production --profile --json > ./profile/atkjs-bundle-profile.json",
     "analyze-profile": "webpack-bundle-analyzer ./profile/atkjs-bundle-profile.json",
     "lint": "eslint -c .eslintrc.js --ext .js,.vue .",
     "lint-fix": "eslint -c .eslintrc.js --ext .js,.vue . --fix"
@@ -34,11 +34,11 @@
     "eslint-plugin-vue": "^6.2.2",
     "serialize-javascript": "^4.0.0",
     "style-loader": "^1.2.1",
-    "terser-webpack-plugin": "^4.2.3",
+    "terser-webpack-plugin": "^5.0.3",
     "vue-loader": "^15.9.6",
     "vue-template-compiler": "^2.6.12",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12"
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.1"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
