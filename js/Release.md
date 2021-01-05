@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.19.2 (2021-01-05)
+
+- Update package dependency
+
 ### version 1.19.0 (2020-12-18)
 
 - Multiline component
