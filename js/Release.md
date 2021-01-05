@@ -1,6 +1,6 @@
 ## Release note
 
-### version 1.19.2 (2021-01-05)
+### version 1.19.1 (2021-01-05)
 
 - Update package dependency
 
