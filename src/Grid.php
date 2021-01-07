@@ -429,7 +429,7 @@ class Grid extends View
         return $this->getActionMenu()->addActionMenuItem($item, $executor, $confirmation, $disabled);
     }
 
-    private function getActionMenu(): Column
+    private function getActionMenu()
     {
         if (!$this->actionMenu) {
             $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
