@@ -990,7 +990,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * @param string                             $event    JavaScript event
      * @param string                             $selector Optional jQuery-style selector
-     * @param JsChain|\Closure|ExecutorInterface $action   code to execute
+     * @param mixed                              $action   code to execute. Can be array, Closure, JsExpressionable or ExecutorInterface.
      * @param array                              $defaults Options
      *
      * @return Jquery

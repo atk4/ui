@@ -96,7 +96,7 @@ class ExecutorFactory
      * Register a trigger for a specific View type.
      * Trigger can be specify per action or per model/action.
      *
-     * @param string|View $seed
+     * @param array|View $seed
      */
     public function registerTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false)
     {

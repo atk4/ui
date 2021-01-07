@@ -624,13 +624,7 @@ parameters:
             message: '~^Parameter \#1 \$name of method Atk4\\Ui\\Grid::addColumn\(\) expects string, null given\.$~'
         -
             path: 'demos/collection/grid.php'
-            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\Grid::addActionButton\(\) expects Atk4\\Ui\\JsExpressionable\|Closure\|null, Atk4\\Data\\Model\\UserAction given\.$~'
-        -
-            path: 'demos/collection/grid.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsExpression given\.$~'
-        -
-            path: 'demos/collection/multitable.php'
-            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, Atk4\\Ui\\JsReload given\.$~'
         -
             path: 'demos/collection/multitable.php'
             message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): mixed given\.$~'
