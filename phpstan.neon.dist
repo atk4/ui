@@ -596,9 +596,6 @@ parameters:
             path: 'demos/basic/label.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsReload given\.$~'
         -
-            path: 'demos/basic/message.php'
-            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, Atk4\\Ui\\JsReload given\.$~'
-        -
             path: 'demos/basic/view.php'
             message: '~^Parameter \#2 \$value of method Atk4\\Ui\\HtmlTemplate::set\(\) expects string\|null, int\<100, 999\> given\.$~'
         -
@@ -644,12 +641,6 @@ parameters:
             path: 'demos/data-action/actions.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\UserAction\\JsCallbackExecutor given\.$~'
         -
-            path: 'demos/data-action/actions.php'
-            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(''confirm'' \=\> ''This will import a…''\) given\.$~'
-        -
-            path: 'demos/data-action/jsactions2.php'
-            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(''args'' \=\> array\(''id'' \=\> mixed\)\) given\.$~'
-        -
             path: 'demos/data-action/jsactionsgrid.php'
             message: '~^Parameter \#1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View, string given\.$~'
         -
@@ -689,9 +680,6 @@ parameters:
             path: 'demos/interactive/sse.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, array\<int, Atk4\\Ui\\Jquery\> given\.$~'
         -
-            path: 'demos/interactive/sse.php'
-            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(''confirm'' \=\> ''Please confirm that…''\) given\.$~'
-        -
             path: 'demos/interactive/toast.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsToast given\.$~'
         -
@@ -716,9 +704,6 @@ parameters:
             path: 'demos/javascript/js.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(mixed, mixed\): mixed given\.$~'
         -
-            path: 'demos/javascript/js.php'
-            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(Atk4\\Ui\\JsExpression\) given\.$~'
-        -
             path: 'demos/javascript/reloading.php'
             message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsReload given\.$~'
         -
@@ -734,17 +719,11 @@ parameters:
             path: 'demos/layout/layout-panel.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, array\<int, mixed\> given\.$~'
         -
-            path: 'demos/layout/layout-panel.php'
-            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(''args'' \=\> array\(''id'' \=\> string\|null\)\) given\.$~'
-        -
             path: 'demos/obsolete/notify.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsNotify given\.$~'
         -
             path: 'demos/obsolete/notify2.php'
             message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
-        -
-            path: 'demos/others/recursive.php'
-            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, Atk4\\Ui\\JsReload given\.$~'
         -
             path: 'demos/others/sticky2.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(\): mixed given\.$~'
@@ -782,9 +761,6 @@ parameters:
             path: 'src/Card.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
         -
-            path: 'src/Card.php'
-            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(\)\|array\(\?0 \=\> mixed, \?''args'' \=\> mixed, \?''confirm'' \=\> mixed\) given\.$~'
-        -
             path: 'src/CardDeck.php'
             message: '~^Parameter \#3 \$confirm of method Atk4\\Ui\\CardDeck::addMenuButton\(\) expects array\|string\|null, false given\.$~'
         -
@@ -817,9 +793,6 @@ parameters:
         -
             path: 'src/Form/Control/Input.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
-        -
-            path: 'src/Form/Control/Input.php'
-            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(''args'' \=\> array\<Atk4\\Ui\\Jquery\>\) given\.$~'
         -
             path: 'src/Form/Control/Lookup.php'
             message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): mixed given\.$~'
@@ -854,9 +827,6 @@ parameters:
             path: 'src/Grid.php'
             message: '~^Parameter \#2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsReload given\.$~'
         -
-            path: 'src/Grid.php'
-            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, Atk4\\Ui\\JsReload given\.$~'
-        -
             path: 'src/ItemsPerPageSelector.php'
             message: '~^Parameter \#1 \$arg1 of method Atk4\\Ui\\View::set\(\) expects array\|string\|null, int\|null given\.$~'
         -
@@ -871,9 +841,6 @@ parameters:
         -
             path: 'src/Menu.php'
             message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array\<int\|string, array\<int, string\>\|class\-string\> given\.$~'
-        -
-            path: 'src/Paginator.php'
-            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, Atk4\\Ui\\JsReload given\.$~'
         -
             path: 'src/Panel/Content.php'
             message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\Callback given\.$~'
@@ -928,9 +895,6 @@ parameters:
         -
             path: 'src/UserAction/ConfirmationExecutor.php'
             message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsExpressionable given\.$~'
-        -
-            path: 'src/UserAction/ModalExecutor.php'
-            message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(mixed, mixed\) given\.$~'
         -
             path: 'src/UserAction/ModalExecutor.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, array\<int, mixed\> given\.$~'
