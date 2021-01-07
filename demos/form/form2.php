@@ -84,8 +84,8 @@ $personClass = get_class(new class() extends \Atk4\Data\Model {
         $this->addField('name', ['required' => true]);
         $this->addField('surname', ['ui' => ['placeholder' => 'e.g. Smith']]);
         $this->addField('gender', ['enum' => ['M', 'F']]);
-        $this->hasOne('country_lookup_id', new Country()); // this works fast
-        $this->hasOne('country_dropdown_id', [new Country(), 'ui' => ['form' => new Form\Control\Dropdown()]]); // this works slow
+        $this->hasOne('country_lookup_id', ['model' => [Country::class]]); // this works fast
+        $this->hasOne('country_dropdown_id', ['model' => [Country::class], 'ui' => ['form' => new Form\Control\Dropdown()]]); // this works slow
     }
 
     public function validate($intent = null): array

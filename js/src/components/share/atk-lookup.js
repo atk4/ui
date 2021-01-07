@@ -46,7 +46,7 @@ export default {
     },
     mounted: function () {
         if (this.optionalValue) {
-            this.dropdownProps.options = [this.optionalValue];
+            this.dropdownProps.options = Array.isArray(this.optionalValue) ? this.optionalValue : [this.optionalValue];
         }
     },
     methods: {
@@ -83,6 +83,7 @@ export default {
                 this.isLoading = false;
             } catch (e) {
                 console.error(e);
+                this.isLoading = false;
             }
         },
     },

@@ -1,67 +1,56 @@
 import multilineReadOnly from './multiline-readonly.component';
 import multilineTextarea from './multiline-textarea.component';
 import atkDatePicker from '../share/atk-date-picker';
+import atkLookup from '../share/atk-lookup';
 
 export default {
     name: 'atk-multiline-cell',
     template: ` 
-    <component :is="componentName"
+    <component :is="getComponent()"
         :fluid="true"  
         class="fluid" 
-        @blur="onBlur"
         @input="onInput"
         @onChange="onChange"
         v-model="inputValue"
-        :readOnlyValue="fieldValue"
-        :name="fieldName"
+        :name="inputName"
         ref="cell"
-        v-bind="componentProps"></component>
+        v-bind="getComponentProps()"></component>
   `,
     components: {
         'atk-multiline-readonly': multilineReadOnly,
         'atk-multiline-textarea': multilineTextarea,
         'atk-date-picker': atkDatePicker,
+        'atk-lookup': atkLookup,
     },
-    props: ['cellData', 'componentName', 'fieldValue', 'options', 'componentProps'],
+    props: ['cellData', 'fieldValue'],
     data: function () {
         return {
-            field: this.cellData.field,
+            fieldName: this.cellData.name,
             type: this.cellData.type,
-            fieldName: '-' + this.cellData.field,
+            inputName: '-' + this.cellData.name,
             inputValue: this.fieldValue,
-            dirtyValue: this.fieldValue,
         };
     },
-    computed: {
-        isDirty: function () {
-            return this.dirtyValue !== this.inputValue;
-        },
-    },
     methods: {
+        getComponent: function () {
+            return this.cellData.definition.component;
+        },
+        getComponentProps: function () {
+            if (this.getComponent() === 'atk-multiline-readonly') {
+                return { readOnlyValue: this.fieldValue };
+            }
+            return this.cellData.definition.componentProps;
+        },
         onInput: function (value) {
             this.inputValue = this.getTypeValue(value);
-            this.$emit('update-value', this.field, this.inputValue);
+            this.$emit('update-value', this.fieldName, this.inputValue);
         },
         onChange: function (value) {
             this.onInput(value);
         },
         /**
-     * Tell parent row that input value has changed.
-     *
-     * @param e
-     */
-        onBlur: function (e) {
-            if (this.isDirty) {
-                this.$emit('post-value', this.field);
-                this.dirtyValue = this.inputValue;
-            }
-        },
-        /**
-     * return input value based on their type.
-     *
-     * @param value
-     * @returns {*}
-     */
+         * return input value based on their type.
+         */
         getTypeValue: function (value) {
             let r = value;
             if (this.type === 'boolean') {

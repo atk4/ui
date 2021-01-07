@@ -8,13 +8,14 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
-use Atk4\Ui\Callback;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form\Control;
 use Atk4\Ui\HtmlTemplate;
 
 class ScopeBuilder extends Control
 {
+    use VueLookupTrait;
+
     /** @var bool Do not render label for this input. */
     public $renderLabel = false;
 
@@ -102,9 +103,6 @@ class ScopeBuilder extends Control
      * @var array
      */
     public $labels = [];
-
-    /** @var Callback */
-    public $dataCb;
 
     /**
      * Default VueQueryBuilder query.
@@ -332,6 +330,11 @@ class ScopeBuilder extends Control
         }
     }
 
+    public function getModel()
+    {
+        return $this->model;
+    }
+
     /**
      * Set the model to build scope for.
      *
@@ -341,39 +344,11 @@ class ScopeBuilder extends Control
     {
         $model = parent::setModel($model);
 
-        if (!$this->dataCb) {
-            $this->dataCb = Callback::addTo($this);
-        }
-        $this->dataCb->set([$this, 'outputApiResponse']);
+        $this->initVueLookupCallback();
 
         $this->buildQuery($model);
 
         return $model;
-    }
-
-    /**
-     * Output lookup search query data.
-     */
-    public function outputApiResponse()
-    {
-        $fieldName = $_GET['atk_vlookup_field'] ?? null;
-        $query = $_GET['atk_vlookup_q'] ?? null;
-        $data = [];
-        if ($fieldName) {
-            $model = $this->model->getField($fieldName)->reference->refModel();
-            $refFieldName = $this->model->getField($fieldName)->reference->getTheirFieldName();
-            if (!empty($query)) {
-                $model->addCondition($model->title_field, 'like', '%' . $query . '%');
-            }
-            foreach ($model as $row) {
-                $data[] = ['key' => $row->get($refFieldName), 'text' => $row->getTitle(), 'value' => $row->get($refFieldName)];
-            }
-        }
-
-        $this->getApp()->terminateJson([
-            'success' => true,
-            'results' => $data,
-        ]);
     }
 
     /**
