@@ -319,7 +319,7 @@ class CardDeck extends View
     /**
      * Add button for executong Model user action in deck main menu.
      */
-    protected function addExecutorMenuButton(ExecutorInterface $executor): View
+    protected function addExecutorMenuButton(ExecutorInterface $executor): AbstractView
     {
         $defaults = [];
 

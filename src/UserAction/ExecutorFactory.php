@@ -6,6 +6,7 @@ namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model\UserAction;
+use Atk4\Ui\AbstractView;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Item;
@@ -147,7 +148,7 @@ class ExecutorFactory
     /**
      * Create proper executor based on action properties.
      */
-    protected function createExecutor(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
+    protected function createExecutor(UserAction $action, View $owner, string $requiredType = null): AbstractView
     {
         // required a specific executor type.
         if ($requiredType) {

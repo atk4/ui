@@ -13,6 +13,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsChain;
 use Atk4\Ui\Table;
+use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\View;
 
 class ActionMenu extends Table\Column
@@ -77,8 +78,8 @@ class ActionMenu extends Table\Column
     /**
      * Add a menu item in Dropdown.
      *
-     * @param View|string                    $item
-     * @param \Closure|Model\UserAction|null $action
+     * @param View|string                           $item
+     * @param \Closure|Model|ExecutorInterface|null $action
      *
      * @return object|string
      */

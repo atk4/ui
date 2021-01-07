@@ -9,7 +9,6 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Table\Column;
 use Atk4\Ui\Table\Column\ActionButtons;
-use Atk4\Ui\Table\Column\ActionMenu;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\ExecutorInterface;
 
@@ -430,7 +429,7 @@ class Grid extends View
         return $this->getActionMenu()->addActionMenuItem($item, $executor, $confirmation, $disabled);
     }
 
-    private function getActionMenu(): ActionMenu
+    private function getActionMenu(): Column
     {
         if (!$this->actionMenu) {
             $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
