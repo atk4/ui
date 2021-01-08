@@ -21,7 +21,7 @@ class Client extends \Atk4\Data\Model
         parent::init();
 
         $this->addField('name');
-        $this->containsMany('Accounts', [Account::class]);
+        $this->containsMany('Accounts', ['model' => [Account::class]]);
     }
 }
 
