@@ -8,7 +8,7 @@ default:
         - Behat\MinkExtension\Context\MinkContext
   extensions:
     Behat\MinkExtension:
-      base_url:  'http://172.18.0.2:8888/demos'
+      base_url: 'http://172.18.0.2:8888/demos'
       sessions:
         default:
           selenium2:
