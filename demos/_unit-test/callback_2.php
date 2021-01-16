@@ -36,7 +36,7 @@ $loader->set(function ($p) use ($m) {
             Header::addTo($p, ['Loader-3', 'size' => 4]);
 
             $c = Crud::addTo($p, ['ipp' => 4]);
-            $c->setModel($m, ['name']);
+            $c->setModel($m, [$m->fieldName()->name]);
         });
     });
     \Atk4\Ui\Button::addTo($p, ['Load2'])->js('click', $loader_1->jsLoad());

@@ -50,7 +50,7 @@ $cardStat = \Atk4\Ui\Card::addTo($deck, ['useTable' => true]);
 $cardStat->addContent(new \Atk4\Ui\Header(['Project Info']));
 $stats = (new Stat($app->db))->tryLoadAny();
 
-$cardStat->setModel($stats, ['project_name', 'project_code', 'client_name', 'start_date']);
+$cardStat->setModel($stats, [$stats->fieldName()->project_name, $stats->fieldName()->project_code, $stats->fieldName()->client_name, $stats->fieldName()->start_date]);
 
 $btn = $cardStat->addButton(new \Atk4\Ui\Button(['Email Client']));
 
@@ -58,7 +58,7 @@ $cardStat = \Atk4\Ui\Card::addTo($deck, ['useLabel' => true]);
 $cardStat->addContent(new \Atk4\Ui\Header(['Project Info']));
 $stats = (new Stat($app->db))->tryLoadAny();
 
-$cardStat->setModel($stats, ['project_name', 'project_code', 'client_name', 'start_date']);
+$cardStat->setModel($stats, [$stats->fieldName()->project_name, $stats->fieldName()->project_code, $stats->fieldName()->client_name, $stats->fieldName()->start_date]);
 
 $cardStat->addButton(new \Atk4\Ui\Button(['Email Client']));
 

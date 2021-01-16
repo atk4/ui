@@ -21,7 +21,7 @@ $action = $files->addUserAction(
     [
         // Which fields may be edited for the action. Default to all fields.
         // ModalExecutor for example, will only display fields set in this array.
-        'fields' => ['name'],
+        'fields' => [$files->fieldName()->name],
         // callback function to call in model when action execute.
         // Can use a closure function or model method.
         'callback' => 'importFromFilesystem',
@@ -99,7 +99,7 @@ $executor->ui = 'segment';
 $executor->description = 'Only fields set in $action[field] array will be added in form.';
 $executor->setArguments(['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \Atk4\Ui\JsToast('Confirm! ' . $x->action->getModel()->get('name'));
+    return new \Atk4\Ui\JsToast('Confirm! ' . $x->action->getModel()->name);
 });
 
 View::addTo($leftColumn, ['ui' => 'hidden divider']);

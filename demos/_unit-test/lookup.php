@@ -12,14 +12,14 @@ use Atk4\Ui\Crud;
 require_once __DIR__ . '/../init-app.php';
 
 $model = new ProductLock($app->db);
-$model->addCondition('name', '=', 'Mustard');
+$model->addCondition($model->fieldName()->name, '=', 'Mustard');
 
 $edit = $model->getUserAction('edit');
 $edit->ui = ['execButton' => [\Atk4\Ui\Button::class, 'EditMe', 'blue']];
 $edit->description = 'edit';
 $edit->callback = function ($model) {
-    return $model->ref('product_category_id')->getTitle() . ' - ' . $model->ref('product_sub_category_id')->getTitle();
+    return $model->product_category_id->getTitle() . ' - ' . $model->product_sub_category_id->getTitle();
 };
 
 $crud = Crud::addTo($app);
-$crud->setModel($model, ['name']);
+$crud->setModel($model, [$model->fieldName()->name]);

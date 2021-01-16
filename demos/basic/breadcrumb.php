@@ -24,7 +24,7 @@ $model->setLimit(15);
 if ($id = $app->stickyGet('country_id')) {
     // perhaps we edit individual country?
     $model->load($id);
-    $crumb->addCrumb($model->get('name'), []);
+    $crumb->addCrumb($model->name, []);
 
     // here we can check for additional criteria and display a deeper level on the crumb
 
@@ -37,7 +37,7 @@ if ($id = $app->stickyGet('country_id')) {
     // display list of countries
     $table = \Atk4\Ui\Table::addTo($app);
     $table->setModel($model);
-    $table->addDecorator('name', [\Atk4\Ui\Table\Column\Link::class, [], ['country_id' => 'id']]);
+    $table->addDecorator($model->fieldName()->name, [\Atk4\Ui\Table\Column\Link::class, [], ['country_id' => 'id']]);
 }
 
 $crumb->popTitle();

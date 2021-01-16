@@ -73,8 +73,8 @@ $finderClass = get_class(new class() extends \Atk4\Ui\Columns {
 });
 
 $model = new File($app->db);
-$model->addCondition('parent_folder_id', null);
-$model->setOrder(['is_folder' => 'desc', 'name']);
+$model->addCondition($model->fieldName()->parent_folder_id, null);
+$model->setOrder([$model->fieldName()->is_folder => 'desc', $model->fieldName()->name]);
 
 \Atk4\Ui\Header::addTo($app, ['MacOS File Finder', 'subHeader' => 'Component built around Table, Columns and JsReload']);
 
@@ -90,4 +90,4 @@ $vp = \Atk4\Ui\VirtualPage::addTo($app)->set(function ($vp) use ($model) {
 // @phpstan-ignore-next-line
 $finderClass::addTo($app, ['bottom attached'])
     ->addClass('top attached segment')
-    ->setModel($model->setLimit(5), ['SubFolder']);
+    ->setModel($model->setLimit(5), [$model->fieldName()->SubFolder]);

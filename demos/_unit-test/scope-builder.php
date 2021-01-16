@@ -18,13 +18,13 @@ require_once __DIR__ . '/../init-app.php';
 
 $model = new Stat($app->db, ['caption' => 'Demo Stat']);
 
-$project = new Condition('project_name', Condition::OPERATOR_REGEXP, '[a-zA-Z]');
-$brazil = new Condition('client_country_iso', '=', 'BR');
-$start = new Condition('start_date', '=', '2020-10-22');
-$finish = new Condition('finish_time', '!=', '22:22');
-$isCommercial = new Condition('is_commercial', '0');
-$budget = new Condition('project_budget', '>=', '1000');
-$currency = new Condition('currency', 'USD');
+$project = new Condition($model->fieldName()->project_name, Condition::OPERATOR_REGEXP, '[a-zA-Z]');
+$brazil = new Condition($model->fieldName()->client_country_iso, '=', 'BR');
+$start = new Condition($model->fieldName()->start_date, '=', '2020-10-22');
+$finish = new Condition($model->fieldName()->finish_time, '!=', '22:22');
+$isCommercial = new Condition($model->fieldName()->is_commercial, '0');
+$budget = new Condition($model->fieldName()->project_budget, '>=', '1000');
+$currency = new Condition($model->fieldName()->currency, 'USD');
 
 $scope = Scope::createAnd($project, $brazil, $start);
 $orScope = Scope::createOr($finish, $isCommercial, $currency);
@@ -48,10 +48,10 @@ $form->onSubmit(function ($form) use ($model) {
 });
 
 $expectedWord = <<<'EOF'
-    Project Budget is greater or equal to '1000'
-    and (Project Name is regular expression '[a-zA-Z]'
-    and Client Country Iso is equal to 'Brazil' and Start Date is equal to '2020-10-22')
-    and (Finish Time is not equal to '22:22' or Is Commercial is equal to '0' or Currency is equal to 'USD')
+    Xxx Project Budget is greater or equal to '1000'
+    and (Xxx Project Name is regular expression '[a-zA-Z]'
+    and Xxx Client Country Iso is equal to 'Brazil' and Xxx Start Date is equal to '2020-10-22')
+    and (Xxx Finish Time is not equal to '22:22' or Xxx Is Commercial is equal to '0' or Xxx Currency is equal to 'USD')
     EOF;
 
 $expectedInput = <<< 'EOF'
@@ -61,7 +61,7 @@ $expectedInput = <<< 'EOF'
         {
           "type": "query-builder-rule",
           "query": {
-            "rule": "project_budget",
+            "rule": "xxx_project_budget",
             "operator": ">=",
             "value": "1000",
             "option": null
@@ -75,7 +75,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "project_name",
+                  "rule": "xxx_project_name",
                   "operator": "matches regular expression",
                   "value": "[a-zA-Z]",
                   "option": null
@@ -84,7 +84,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "client_country_iso",
+                  "rule": "xxx_client_country_iso",
                   "operator": "equals",
                   "value": "BR",
                   "option": {
@@ -97,7 +97,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "start_date",
+                  "rule": "xxx_start_date",
                   "operator": "is on",
                   "value": "2020-10-22",
                   "option": null
@@ -114,7 +114,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "finish_time",
+                  "rule": "xxx_finish_time",
                   "operator": "is not on",
                   "value": "22:22",
                   "option": null
@@ -123,7 +123,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "is_commercial",
+                  "rule": "xxx_is_commercial",
                   "operator": "equals",
                   "value": "0",
                   "option": null
@@ -132,7 +132,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "currency",
+                  "rule": "xxx_currency",
                   "operator": "equals",
                   "value": "USD",
                   "option": null

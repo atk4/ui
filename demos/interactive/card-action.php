@@ -21,12 +21,12 @@ $stats = new Stat($app->db);
 $stats->loadAny();
 
 $c = \Atk4\Ui\Card::addTo($app);
-$c->setModel($stats, ['client_name', 'description']);
+$c->setModel($stats, [$stats->fieldName()->client_name, $stats->fieldName()->description]);
 
-$c->addSection('Project: ', $stats, ['start_date', 'finish_date'], true);
+$c->addSection('Project: ', $stats, [$stats->fieldName()->start_date, $stats->fieldName()->finish_date], true);
 
-$client = $stats->ref('client_country_iso')->loadAny();
-$notify = $client->addUserAction('Notify', [
+$country = $stats->client_country_iso->loadAny();
+$notify = $country->addUserAction('Notify', [
     'args' => [
         'note' => ['type' => 'string', 'required' => true],
     ],
@@ -34,6 +34,6 @@ $notify = $client->addUserAction('Notify', [
         return 'Note to client is sent: ' . $note;
     },
 ]);
-$c->addSection('Client Country:', $client, ['iso', 'numcode', 'phonecode'], true);
+$c->addSection('Client Country:', $country, [$country->fieldName()->iso, $country->fieldName()->numcode, $country->fieldName()->phonecode], true);
 
-$c->addClickAction($notify, new Button(['Send Note']), [$client->get('id')]);
+$c->addClickAction($notify, new Button(['Send Note']), [$country->id]);

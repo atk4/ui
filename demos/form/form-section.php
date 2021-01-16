@@ -34,17 +34,17 @@ $form->setModel($model, false);
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
 \Atk4\Ui\Header::addTo($sublayout, ['Column Section in Form']);
-$sublayout->setModel($model, ['name']);
+$sublayout->setModel($model, [$model->fieldName()->name]);
 
 $colsLayout = $form->layout->addSubLayout([Form\Layout\Section\Columns::class]);
 
 $c1 = $colsLayout->addColumn();
-$c1->setModel($model, ['iso', 'iso3']);
+$c1->setModel($model, [$model->fieldName()->iso, $model->fieldName()->iso3]);
 
 $c2 = $colsLayout->addColumn();
-$c2->setModel($model, ['numcode'/*, 'phonecode'*/]);
+$c2->setModel($model, [$model->fieldName()->numcode/*, $model->fieldName()->phonecode*/]);
 
-$form->addControl('phonecode');
+$form->addControl($model->fieldName()->phonecode);
 
 $form->onSubmit($noSave);
 
@@ -58,15 +58,15 @@ $form->setModel($model, false);
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
 \Atk4\Ui\Header::addTo($sublayout, ['Accordion Section in Form']);
-$sublayout->setModel($model, ['name']);
+$sublayout->setModel($model, [$model->fieldName()->name]);
 
 $accordionLayout = $form->layout->addSubLayout([Form\Layout\Section\Accordion::class]);
 
 $a1 = $accordionLayout->addSection('Section 1');
-$a1->setModel($model, ['iso', 'iso3']);
+$a1->setModel($model, [$model->fieldName()->iso, $model->fieldName()->iso3]);
 
 $a2 = $accordionLayout->addSection('Section 2');
-$a2->setModel($model, ['numcode', 'phonecode']);
+$a2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phonecode]);
 
 $form->onSubmit($noSave);
 
@@ -80,15 +80,15 @@ $form->setModel($model, false);
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
 \Atk4\Ui\Header::addTo($sublayout, ['Tabs in Form']);
-$sublayout->setModel($model, ['name']);
+$sublayout->setModel($model, [$model->fieldName()->name]);
 
 $tabsLayout = $form->layout->addSubLayout([Form\Layout\Section\Tabs::class]);
 
 $tab1 = $tabsLayout->addTab('Tab 1');
-$tab1->addGroup('In Group')->setModel($model, ['iso', 'iso3']);
+$tab1->addGroup('In Group')->setModel($model, [$model->fieldName()->iso, $model->fieldName()->iso3]);
 
 $tab2 = $tabsLayout->addTab('Tab 2');
-$tab2->setModel($model, ['numcode', 'phonecode']);
+$tab2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phonecode]);
 
 $form->onSubmit($noSave);
 
@@ -104,16 +104,16 @@ $form->setModel($model, false);
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment red inverted'], false);
 
 \Atk4\Ui\Header::addTo($sublayout, ['This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
-$sublayout->setModel($model, ['name']);
+$sublayout->setModel($model, [$model->fieldName()->name]);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment teal inverted']);
 $colsLayout = $sublayout->addSubLayout([Form\Layout\Section\Columns::class]);
 
 $c1 = $colsLayout->addColumn();
-$c1->setModel($model, ['iso', 'iso3']);
+$c1->setModel($model, [$model->fieldName()->iso, $model->fieldName()->iso3]);
 
 $c2 = $colsLayout->addColumn();
-$c2->setModel($model, ['numcode', 'phonecode']);
+$c2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phonecode]);
 
 $form->onSubmit($noSave);
 

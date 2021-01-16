@@ -213,7 +213,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * This method can be executed from inside callback or
      * without it.
      *
-     * Example: runCommand('ping', ['-c', '5', '8.8.8.8']);
+     * Example: $console->exec('ping', ['-c', '5', '8.8.8.8']);
      *
      * All arguments are escaped.
      */

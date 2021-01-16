@@ -66,7 +66,7 @@ $wizard->addStep('Define User Action', function ($page) {
         $country->tryLoadAny();
 
         $card = \Atk4\Ui\Card::addTo($owner);
-        $card->setModel($country, ['iso']);
+        $card->setModel($country, [$country->fieldName()->iso]);
         $card->addClickAction($country->getUserAction('send_message'));
     });
 });
@@ -192,13 +192,13 @@ $wizard->addStep('Crud integration', function ($page) {
         $country->getUserAction('delete')->enabled = function () { return random_int(1, 2) > 1; };
         $country->addUserAction('mail', [
             'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'preview' => function ($model) { return 'here is email preview for ' . $model->get('name'); },
-            'callback' => function ($model) { return 'email sent to ' . $model->get('name'); },
+            'preview' => function (CountryLock $country) { return 'here is email preview for ' . $country->name; },
+            'callback' => function (CountryLock $country) { return 'email sent to ' . $country->name; },
             'description' => 'Email testing',
             'ui' => ['icon' => 'mail', 'button' => [null, 'icon' => 'green mail']],
         ]);
 
-        \Atk4\Ui\Crud::addTo($owner, ['ipp' => 5])->setModel($country, ['name', 'iso']);
+        \Atk4\Ui\Crud::addTo($owner, ['ipp' => 5])->setModel($country, [$country->fieldName()->name, $country->fieldName()->iso]);
     });
 });
 
