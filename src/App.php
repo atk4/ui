@@ -196,7 +196,7 @@ class App
         if ($this->catch_exceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
             set_error_handler(
-                static function ($severity, $msg, $file, $line) {
+                static function (int $severity, string $msg, string $file, int $line): bool {
                     throw new \ErrorException($msg, 0, $severity, $file, $line);
                 },
                 E_ALL
