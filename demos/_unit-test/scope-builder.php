@@ -48,10 +48,10 @@ $form->onSubmit(function ($form) use ($model) {
 });
 
 $expectedWord = <<<'EOF'
-    Xxx Project Budget is greater or equal to '1000'
-    and (Xxx Project Name is regular expression '[a-zA-Z]'
-    and Xxx Client Country Iso is equal to 'Brazil' and Xxx Start Date is equal to '2020-10-22')
-    and (Xxx Finish Time is not equal to '22:22' or Xxx Is Commercial is equal to '0' or Xxx Currency is equal to 'USD')
+    Atk Fp Project Budget is greater or equal to '1000'
+    and (Atk Fp Project Name is regular expression '[a-zA-Z]'
+    and Atk Fp Client Country Iso is equal to 'Brazil' and Atk Fp Start Date is equal to '2020-10-22')
+    and (Atk Fp Finish Time is not equal to '22:22' or Atk Fp Is Commercial is equal to '0' or Atk Fp Currency is equal to 'USD')
     EOF;
 
 $expectedInput = <<< 'EOF'
