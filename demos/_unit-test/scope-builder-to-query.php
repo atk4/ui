@@ -21,7 +21,7 @@ $query = <<<'EOF'
         {
           "type": "query-builder-rule",
           "query": {
-            "rule": "xxx_product_category_id",
+            "rule": "atk_fp__product_category_id",
             "operator": "equals",
             "operand": "Product Category Id",
             "value": "3"
@@ -30,7 +30,7 @@ $query = <<<'EOF'
         {
           "type": "query-builder-rule",
           "query": {
-            "rule": "xxx_product_sub_category_id",
+            "rule": "atk_fp__product_sub_category_id",
             "operator": "equals",
             "operand": "Product Sub Category Id",
             "value": "6"

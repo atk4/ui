@@ -6,11 +6,11 @@ Feature: Crud
 
   Scenario: add
     Then I press menu button "Add" using class "atk-grid-menu"
-    Then I fill in "xxx_name" with "Test"
-    Then I fill in "xxx_iso" with "TT"
-    Then I fill in "xxx_iso3" with "TTT"
-    Then I fill in "xxx_numcode" with "123"
-    Then I fill in "xxx_phonecode" with "1"
+    Then I fill in "atk_fp__name" with "Test"
+    Then I fill in "atk_fp__iso" with "TT"
+    Then I fill in "atk_fp__iso3" with "TTT"
+    Then I fill in "atk_fp__numcode" with "123"
+    Then I fill in "atk_fp__phonecode" with "1"
     Then I press Modal button "Add"
     Then Toast display should contains text "Form Submit"
 

@@ -4,7 +4,7 @@ Feature: Filter
 Scenario:
  Given I am on "collection/tablefilter.php"
  Then I should see "Clear Filters"
- Then I click filter column name "xxx_name"
+ Then I click filter column name "atk_fp__name"
  When I fill in "value" with "united kingdom"
  Then I press button "Set"
  Then I should see "United Kingdom"
