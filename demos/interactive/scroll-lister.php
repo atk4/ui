@@ -23,11 +23,12 @@ $view = \Atk4\Ui\View::addTo($container, ['template' => new HtmlTemplate('
 
 $lister = \Atk4\Ui\Lister::addTo($view, [], ['List']);
 $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
-    $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
+    $row = Country::assertInstanceOf($lister->current_row);
+    $row->iso = mb_strtolower($row->iso);
 });
 
 $model = $lister->setModel(new Country($app->db));
-//$model->addCondition('name','like','A%');
+//$model->addCondition(Country::hinting()->fieldName()->name, 'like', 'A%');
 
 // add dynamic scrolling.
 $lister->addJsPaginator(30, [], $container);

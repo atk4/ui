@@ -20,7 +20,8 @@ $view = \Atk4\Ui\View::addTo($app, ['template' => new HtmlTemplate(
 
 $lister = \Atk4\Ui\Lister::addTo($view, [], ['List']);
 $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
-    $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
+    $row = Country::assertInstanceOf($lister->current_row);
+    $row->iso = mb_strtolower($row->iso);
 });
 $lister->setModel(new Country($app->db))
     ->setLimit(20);

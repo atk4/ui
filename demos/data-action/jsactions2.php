@@ -29,7 +29,7 @@ $msg->text->addParagraph('If action require arguments, fields and/or preview, th
 $gl = \Atk4\Ui\GridLayout::addTo($app, ['rows' => 1, 'columns' => 2]);
 $c = \Atk4\Ui\Card::addTo($gl, ['useLabel' => true], ['r1c1']);
 $c->addContent(new \Atk4\Ui\Header(['Using country: ']));
-$c->setModel($country, ['iso', 'iso3', 'phonecode']);
+$c->setModel($country, [$country->fieldName()->iso, $country->fieldName()->iso3, $country->fieldName()->phonecode]);
 
 $buttons = \Atk4\Ui\View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
 

@@ -1,3 +1,6 @@
+includes:
+    - vendor/mahalux/atk4-hintable/phpstan-ext.neon
+
 parameters:
     level: 5
     paths:
@@ -89,7 +92,6 @@ parameters:
         - '~^Call to an undefined method Atk4\\Data\\Reference\\HasOne::addField\(\)\.$~'
         - '~^Call to an undefined method Atk4\\Data\\Persistence::expr\(\)\.$~'
         - '~^Call to an undefined method Atk4\\Data\\Reference\\HasOne::addTitle\(\)\.$~'
-        - '~^Call to an undefined method Atk4\\Data\\Model::importFromFilesystem\(\)\.$~'
         # for demos/interactive/popup.php
         - '~^Access to an undefined property Atk4\\Ui\\Lister::\$items\.$~'
         - '~^Call to an undefined method Atk4\\Ui\\View::linkCart\(\)\.$~'
@@ -578,14 +580,14 @@ parameters:
             path: 'demos/_includes/DemoLookup.php'
             message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): void given\.$~'
         -
+            path: 'demos/_includes/ReloadTest.php'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
             path: 'demos/_includes/ViewTester.php'
             message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsReload given\.$~'
         -
             path: 'demos/_unit-test/callback.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsModal given\.$~'
-        -
-            path: 'demos/_unit-test/modal-reload.php'
-            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsReload given\.$~'
         -
             path: 'demos/_unit-test/reload.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsReload given\.$~'

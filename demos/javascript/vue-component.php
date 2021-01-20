@@ -21,6 +21,7 @@ $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or 
 \Atk4\Ui\Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
 
 $inline_edit = \Atk4\Ui\Component\InlineEdit::addTo($app);
+$inline_edit->field = $model->fieldName()->name;
 $inline_edit->setModel($model);
 
 $inline_edit->onChange(function ($value) {
@@ -40,7 +41,7 @@ $subHeader = 'Searching will reload the list of countries below with matching re
 
 $model = new Country($app->db);
 
-$lister_template = new HtmlTemplate('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{$end}{/}</div>');
+$lister_template = new HtmlTemplate('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{$end}{/}</div>');
 
 $view = \Atk4\Ui\View::addTo($app);
 
@@ -48,8 +49,10 @@ $search = \Atk4\Ui\Component\ItemSearch::addTo($view, ['ui' => 'ui compact segme
 $lister_container = \Atk4\Ui\View::addTo($view, ['template' => $lister_template]);
 $lister = \Atk4\Ui\Lister::addTo($lister_container, [], ['List']);
 $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
+    $row = Country::assertInstanceOf($lister->current_row);
+    $row->iso = mb_strtolower($row->iso);
+
     ++$lister->ipp;
-    $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
     if ($lister->ipp === $lister->model->limit[0]) {
         $lister->t_row->dangerouslySetHtml('end', '<div class="ui circular basic label"> ...</div>');
     }

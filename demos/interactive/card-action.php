@@ -17,16 +17,16 @@ require_once __DIR__ . '/../init-app.php';
 
 \Atk4\Ui\Header::addTo($app, ['Models', 'size' => 1, 'subHeader' => 'Card may display information from many models.']);
 
-$stats = new Stat($app->db);
-$stats->loadAny();
+$stat = new Stat($app->db);
+$stat->loadAny();
 
 $c = \Atk4\Ui\Card::addTo($app);
-$c->setModel($stats, ['client_name', 'description']);
+$c->setModel($stat, [$stat->fieldName()->client_name, $stat->fieldName()->description]);
 
-$c->addSection('Project: ', $stats, ['start_date', 'finish_date'], true);
+$c->addSection('Project: ', $stat, [$stat->fieldName()->start_date, $stat->fieldName()->finish_date], true);
 
-$client = $stats->ref('client_country_iso')->loadAny();
-$notify = $client->addUserAction('Notify', [
+$country = $stat->client_country_iso->loadAny();
+$notify = $country->addUserAction('Notify', [
     'args' => [
         'note' => ['type' => 'string', 'required' => true],
     ],
@@ -34,6 +34,6 @@ $notify = $client->addUserAction('Notify', [
         return 'Note to client is sent: ' . $note;
     },
 ]);
-$c->addSection('Client Country:', $client, ['iso', 'numcode', 'phonecode'], true);
+$c->addSection('Client Country:', $country, [$country->fieldName()->iso, $country->fieldName()->numcode, $country->fieldName()->phonecode], true);
 
-$c->addClickAction($notify, new Button(['Send Note']), [$client->get('id')]);
+$c->addClickAction($notify, new Button(['Send Note']), [$country->id]);

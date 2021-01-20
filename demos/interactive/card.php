@@ -48,17 +48,17 @@ $deck = \Atk4\Ui\View::addTo($app, ['ui' => 'cards']);
 
 $cardStat = \Atk4\Ui\Card::addTo($deck, ['useTable' => true]);
 $cardStat->addContent(new \Atk4\Ui\Header(['Project Info']));
-$stats = (new Stat($app->db))->tryLoadAny();
+$stat = (new Stat($app->db))->tryLoadAny();
 
-$cardStat->setModel($stats, ['project_name', 'project_code', 'client_name', 'start_date']);
+$cardStat->setModel($stat, [$stat->fieldName()->project_name, $stat->fieldName()->project_code, $stat->fieldName()->client_name, $stat->fieldName()->start_date]);
 
 $btn = $cardStat->addButton(new \Atk4\Ui\Button(['Email Client']));
 
 $cardStat = \Atk4\Ui\Card::addTo($deck, ['useLabel' => true]);
 $cardStat->addContent(new \Atk4\Ui\Header(['Project Info']));
-$stats = (new Stat($app->db))->tryLoadAny();
+$stat = (new Stat($app->db))->tryLoadAny();
 
-$cardStat->setModel($stats, ['project_name', 'project_code', 'client_name', 'start_date']);
+$cardStat->setModel($stat, [$stat->fieldName()->project_name, $stat->fieldName()->project_code, $stat->fieldName()->client_name, $stat->fieldName()->start_date]);
 
 $cardStat->addButton(new \Atk4\Ui\Button(['Email Client']));
 

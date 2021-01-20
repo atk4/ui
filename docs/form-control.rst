@@ -487,8 +487,8 @@ Assume that each data model are defined and model Category has many Sub-Category
 
     $form = \Atk4\Ui\Form::addTo($app);
     $form->addControl('category_id', [Dropdown::class, 'model' => new Category($db)]);
-    $form->addControl('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
-    $form->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
+    $form->addControl('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => Category::hinting()->fieldName()->SubCategories]);
+    $form->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => SubCategory::hinting()->fieldName()->Products]);
 
 
 Lookup
