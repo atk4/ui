@@ -203,7 +203,7 @@ class Percent extends \Atk4\Data\Field
 }
 
 /**
- * @property string $name             @Atk\Field(field_name="atk_fp_2__name")
+ * @property string $name             @Atk\Field(field_name="atk_fp_product_sub_category__name")
  * @property string $type             @Atk\Field(field_name="atk_fp__type")
  * @property bool   $is_folder        @Atk\Field(field_name="atk_fp__is_folder")
  * @property File   $SubFolder        @Atk\RefOne(field_name="atk_fp__SubFolder")
@@ -213,7 +213,7 @@ class Percent extends \Atk4\Data\Field
 class File extends Model
 {
     public $table = 'file';
-    public $title_field = 'atk_fp_2__name';
+    public $title_field = 'atk_fp_product_sub_category__name';
 
     protected function init(): void
     {
@@ -290,14 +290,14 @@ class FileLock extends File
 }
 
 /**
- * @property string      $name          @Atk\Field(field_name="atk_fp_3__name")
+ * @property string      $name          @Atk\Field(field_name="atk_fp_product_category__name")
  * @property SubCategory $SubCategories @Atk\RefOne(field_name="atk_fp__SubCategories")
  * @property Product     $Products      @Atk\RefOne(field_name="atk_fp__Products")
  */
 class Category extends Model
 {
     public $table = 'product_category';
-    public $title_field = 'atk_fp_3__name';
+    public $title_field = 'atk_fp_product_category__name';
 
     protected function init(): void
     {
@@ -310,14 +310,14 @@ class Category extends Model
 }
 
 /**
- * @property string   $name                @Atk\Field(field_name="atk_fp_4__name")
- * @property Category $product_category_id @Atk\RefOne(field_name="atk_fp_2__product_category_id")
- * @property Product  $Products            @Atk\RefOne(field_name="atk_fp_2__Products")
+ * @property string   $name                @Atk\Field(field_name="atk_fp_product_sub_category__name")
+ * @property Category $product_category_id @Atk\RefOne(field_name="atk_fp_product_sub_category__product_category_id")
+ * @property Product  $Products            @Atk\RefOne(field_name="atk_fp_product_sub_category__Products")
  */
 class SubCategory extends Model
 {
     public $table = 'product_sub_category';
-    public $title_field = 'atk_fp_4__name';
+    public $title_field = 'atk_fp_product_sub_category__name';
 
     protected function init(): void
     {
@@ -330,7 +330,7 @@ class SubCategory extends Model
 }
 
 /**
- * @property string      $name                    @Atk\Field(field_name="atk_fp_5__name")
+ * @property string      $name                    @Atk\Field(field_name="atk_fp_product__name")
  * @property string      $brand                   @Atk\Field(field_name="atk_fp__brand")
  * @property Category    $product_category_id     @Atk\RefOne(field_name="atk_fp__product_category_id")
  * @property SubCategory $product_sub_category_id @Atk\RefOne(field_name="atk_fp__product_sub_category_id")
@@ -338,7 +338,7 @@ class SubCategory extends Model
 class Product extends Model
 {
     public $table = 'product';
-    public $title_field = 'atk_fp_5__name';
+    public $title_field = 'atk_fp_product__name';
 
     protected function init(): void
     {

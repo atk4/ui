@@ -16,13 +16,13 @@ if (file_exists($sqliteFile)) {
 $persistence = new \Atk4\Data\Persistence\Sql('sqlite:' . $sqliteFile);
 
 $model = new Model($persistence, ['table' => 'client']);
-$model->addField('atk_fp_9__name', ['type' => 'string']);
+$model->addField('atk_fp_client__name', ['type' => 'string']);
 $model->addField('atk_fp__addresses', ['type' => 'text']);
 $model->addField('atk_fp__accounts', ['type' => 'text']);
 (new \Atk4\Schema\Migration($model))->dropIfExists()->create();
 $model->import([
-    ['id' => 1, 'atk_fp_9__name' => 'John', 'atk_fp__addresses' => null, 'atk_fp__accounts' => null],
-    ['id' => 2, 'atk_fp_9__name' => 'Jane', 'atk_fp__addresses' => null, 'atk_fp__accounts' => null],
+    ['id' => 1, 'atk_fp_client__name' => 'John', 'atk_fp__addresses' => null, 'atk_fp__accounts' => null],
+    ['id' => 2, 'atk_fp_client__name' => 'Jane', 'atk_fp__addresses' => null, 'atk_fp__accounts' => null],
 ]);
 
 $model = new Model($persistence, ['table' => 'country']);
@@ -289,74 +289,74 @@ $model->import([
 ]);
 
 $model = new Model($persistence, ['table' => 'file']);
-$model->addField('atk_fp_2__name', ['type' => 'string']);
+$model->addField('atk_fp_file__name', ['type' => 'string']);
 $model->addField('atk_fp__type', ['type' => 'string']);
 $model->addField('atk_fp__is_folder', ['type' => 'boolean']);
 $model->addField('atk_fp__parent_folder_id', ['type' => 'bigint']);
 // KEY `fk_file_file_idx` (`atk_fp__parent_folder_id`)
 (new \Atk4\Schema\Migration($model))->dropIfExists()->create();
 $model->import([
-    ['id' => 1, 'atk_fp_2__name' => 'phpunit.xml', 'atk_fp__type' => 'xml', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => null],
-    ['id' => 2, 'atk_fp_2__name' => 'LICENSE', 'atk_fp__type' => '', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => null],
-    ['id' => 3, 'atk_fp_2__name' => 'Makefile', 'atk_fp__type' => '', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => null],
-    ['id' => 4, 'atk_fp_2__name' => 'tests', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => null],
-    ['id' => 5, 'atk_fp_2__name' => 'TemplateTest.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 4],
-    ['id' => 6, 'atk_fp_2__name' => 'template', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => null],
-    ['id' => 7, 'atk_fp_2__name' => 'semantic-ui', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => 6],
-    ['id' => 8, 'atk_fp_2__name' => 'tree.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
-    ['id' => 9, 'atk_fp_2__name' => 'element.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
-    ['id' => 10, 'atk_fp_2__name' => 'button.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
-    ['id' => 11, 'atk_fp_2__name' => 'icon.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
-    ['id' => 12, 'atk_fp_2__name' => 'element.jade', 'atk_fp__type' => 'jade', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
-    ['id' => 13, 'atk_fp_2__name' => 'tree.jade', 'atk_fp__type' => 'jade', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
-    ['id' => 14, 'atk_fp_2__name' => 'icon.jade', 'atk_fp__type' => 'jade', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
-    ['id' => 15, 'atk_fp_2__name' => 'button.jade', 'atk_fp__type' => 'jade', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
-    ['id' => 16, 'atk_fp_2__name' => 'docs', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => null],
-    ['id' => 17, 'atk_fp_2__name' => 'index.rst', 'atk_fp__type' => 'rst', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
-    ['id' => 18, 'atk_fp_2__name' => 'login.png', 'atk_fp__type' => 'png', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
-    ['id' => 19, 'atk_fp_2__name' => 'requirements.txt', 'atk_fp__type' => 'txt', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
-    ['id' => 20, 'atk_fp_2__name' => 'crud2.png', 'atk_fp__type' => 'png', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
-    ['id' => 21, 'atk_fp_2__name' => 'images', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => 16],
-    ['id' => 22, 'atk_fp_2__name' => 'folders.png', 'atk_fp__type' => 'png', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 21],
-    ['id' => 23, 'atk_fp_2__name' => 'layout.png', 'atk_fp__type' => 'png', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 21],
-    ['id' => 24, 'atk_fp_2__name' => 'menu.png', 'atk_fp__type' => 'png', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 21],
-    ['id' => 25, 'atk_fp_2__name' => 'Makefile', 'atk_fp__type' => '', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
-    ['id' => 26, 'atk_fp_2__name' => 'conf.py', 'atk_fp__type' => 'py', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
-    ['id' => 27, 'atk_fp_2__name' => 'README.md', 'atk_fp__type' => 'md', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
-    ['id' => 28, 'atk_fp_2__name' => 'quickstart.rst', 'atk_fp__type' => 'rst', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
-    ['id' => 29, 'atk_fp_2__name' => 'crud.png', 'atk_fp__type' => 'png', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
-    ['id' => 30, 'atk_fp_2__name' => 'layouts.png', 'atk_fp__type' => 'png', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
-    ['id' => 31, 'atk_fp_2__name' => 'template.rst', 'atk_fp__type' => 'rst', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
-    ['id' => 32, 'atk_fp_2__name' => 'README.md', 'atk_fp__type' => 'md', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => null],
-    ['id' => 33, 'atk_fp_2__name' => 'demos', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => null],
-    ['id' => 34, 'atk_fp_2__name' => 'index.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 33],
-    ['id' => 35, 'atk_fp_2__name' => 'layout.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 33],
-    ['id' => 36, 'atk_fp_2__name' => 'templates', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => 33],
-    ['id' => 37, 'atk_fp_2__name' => 'fixed.jade', 'atk_fp__type' => 'jade', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 36],
-    ['id' => 38, 'atk_fp_2__name' => 'layout1.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 36],
-    ['id' => 39, 'atk_fp_2__name' => 'layout2.jade', 'atk_fp__type' => 'jade', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 36],
-    ['id' => 40, 'atk_fp_2__name' => 'layout1.jade', 'atk_fp__type' => 'jade', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 36],
-    ['id' => 41, 'atk_fp_2__name' => 'fixed.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 36],
-    ['id' => 42, 'atk_fp_2__name' => 'index1.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 36],
-    ['id' => 43, 'atk_fp_2__name' => 'layout2.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 36],
-    ['id' => 44, 'atk_fp_2__name' => 'button.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 33],
-    ['id' => 45, 'atk_fp_2__name' => 'composer.json', 'atk_fp__type' => 'json', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => null],
-    ['id' => 46, 'atk_fp_2__name' => 'src', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => null],
-    ['id' => 47, 'atk_fp_2__name' => 'Icon.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
-    ['id' => 48, 'atk_fp_2__name' => 'App.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
-    ['id' => 49, 'atk_fp_2__name' => 'Label.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
-    ['id' => 50, 'atk_fp_2__name' => 'Layout', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => 46],
-    ['id' => 51, 'atk_fp_2__name' => 'App.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 50],
-    ['id' => 52, 'atk_fp_2__name' => 'MiniApp.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
-    ['id' => 53, 'atk_fp_2__name' => 'Lister.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
-    ['id' => 54, 'atk_fp_2__name' => 'Layout.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
-    ['id' => 55, 'atk_fp_2__name' => 'Buttons.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
-    ['id' => 56, 'atk_fp_2__name' => 'View.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
-    ['id' => 57, 'atk_fp_2__name' => 'Tree.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
-    ['id' => 58, 'atk_fp_2__name' => 'Template.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
-    ['id' => 59, 'atk_fp_2__name' => 'Exception.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
-    ['id' => 60, 'atk_fp_2__name' => 'Text.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
-    ['id' => 61, 'atk_fp_2__name' => 'Button.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
+    ['id' => 1, 'atk_fp_file__name' => 'phpunit.xml', 'atk_fp__type' => 'xml', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => null],
+    ['id' => 2, 'atk_fp_file__name' => 'LICENSE', 'atk_fp__type' => '', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => null],
+    ['id' => 3, 'atk_fp_file__name' => 'Makefile', 'atk_fp__type' => '', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => null],
+    ['id' => 4, 'atk_fp_file__name' => 'tests', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => null],
+    ['id' => 5, 'atk_fp_file__name' => 'TemplateTest.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 4],
+    ['id' => 6, 'atk_fp_file__name' => 'template', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => null],
+    ['id' => 7, 'atk_fp_file__name' => 'semantic-ui', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => 6],
+    ['id' => 8, 'atk_fp_file__name' => 'tree.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
+    ['id' => 9, 'atk_fp_file__name' => 'element.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
+    ['id' => 10, 'atk_fp_file__name' => 'button.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
+    ['id' => 11, 'atk_fp_file__name' => 'icon.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
+    ['id' => 12, 'atk_fp_file__name' => 'element.jade', 'atk_fp__type' => 'jade', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
+    ['id' => 13, 'atk_fp_file__name' => 'tree.jade', 'atk_fp__type' => 'jade', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
+    ['id' => 14, 'atk_fp_file__name' => 'icon.jade', 'atk_fp__type' => 'jade', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
+    ['id' => 15, 'atk_fp_file__name' => 'button.jade', 'atk_fp__type' => 'jade', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 7],
+    ['id' => 16, 'atk_fp_file__name' => 'docs', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => null],
+    ['id' => 17, 'atk_fp_file__name' => 'index.rst', 'atk_fp__type' => 'rst', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
+    ['id' => 18, 'atk_fp_file__name' => 'login.png', 'atk_fp__type' => 'png', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
+    ['id' => 19, 'atk_fp_file__name' => 'requirements.txt', 'atk_fp__type' => 'txt', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
+    ['id' => 20, 'atk_fp_file__name' => 'crud2.png', 'atk_fp__type' => 'png', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
+    ['id' => 21, 'atk_fp_file__name' => 'images', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => 16],
+    ['id' => 22, 'atk_fp_file__name' => 'folders.png', 'atk_fp__type' => 'png', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 21],
+    ['id' => 23, 'atk_fp_file__name' => 'layout.png', 'atk_fp__type' => 'png', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 21],
+    ['id' => 24, 'atk_fp_file__name' => 'menu.png', 'atk_fp__type' => 'png', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 21],
+    ['id' => 25, 'atk_fp_file__name' => 'Makefile', 'atk_fp__type' => '', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
+    ['id' => 26, 'atk_fp_file__name' => 'conf.py', 'atk_fp__type' => 'py', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
+    ['id' => 27, 'atk_fp_file__name' => 'README.md', 'atk_fp__type' => 'md', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
+    ['id' => 28, 'atk_fp_file__name' => 'quickstart.rst', 'atk_fp__type' => 'rst', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
+    ['id' => 29, 'atk_fp_file__name' => 'crud.png', 'atk_fp__type' => 'png', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
+    ['id' => 30, 'atk_fp_file__name' => 'layouts.png', 'atk_fp__type' => 'png', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
+    ['id' => 31, 'atk_fp_file__name' => 'template.rst', 'atk_fp__type' => 'rst', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 16],
+    ['id' => 32, 'atk_fp_file__name' => 'README.md', 'atk_fp__type' => 'md', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => null],
+    ['id' => 33, 'atk_fp_file__name' => 'demos', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => null],
+    ['id' => 34, 'atk_fp_file__name' => 'index.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 33],
+    ['id' => 35, 'atk_fp_file__name' => 'layout.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 33],
+    ['id' => 36, 'atk_fp_file__name' => 'templates', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => 33],
+    ['id' => 37, 'atk_fp_file__name' => 'fixed.jade', 'atk_fp__type' => 'jade', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 36],
+    ['id' => 38, 'atk_fp_file__name' => 'layout1.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 36],
+    ['id' => 39, 'atk_fp_file__name' => 'layout2.jade', 'atk_fp__type' => 'jade', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 36],
+    ['id' => 40, 'atk_fp_file__name' => 'layout1.jade', 'atk_fp__type' => 'jade', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 36],
+    ['id' => 41, 'atk_fp_file__name' => 'fixed.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 36],
+    ['id' => 42, 'atk_fp_file__name' => 'index1.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 36],
+    ['id' => 43, 'atk_fp_file__name' => 'layout2.html', 'atk_fp__type' => 'html', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 36],
+    ['id' => 44, 'atk_fp_file__name' => 'button.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 33],
+    ['id' => 45, 'atk_fp_file__name' => 'composer.json', 'atk_fp__type' => 'json', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => null],
+    ['id' => 46, 'atk_fp_file__name' => 'src', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => null],
+    ['id' => 47, 'atk_fp_file__name' => 'Icon.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
+    ['id' => 48, 'atk_fp_file__name' => 'App.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
+    ['id' => 49, 'atk_fp_file__name' => 'Label.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
+    ['id' => 50, 'atk_fp_file__name' => 'Layout', 'atk_fp__type' => '', 'atk_fp__is_folder' => 1, 'atk_fp__parent_folder_id' => 46],
+    ['id' => 51, 'atk_fp_file__name' => 'App.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 50],
+    ['id' => 52, 'atk_fp_file__name' => 'MiniApp.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
+    ['id' => 53, 'atk_fp_file__name' => 'Lister.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
+    ['id' => 54, 'atk_fp_file__name' => 'Layout.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
+    ['id' => 55, 'atk_fp_file__name' => 'Buttons.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
+    ['id' => 56, 'atk_fp_file__name' => 'View.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
+    ['id' => 57, 'atk_fp_file__name' => 'Tree.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
+    ['id' => 58, 'atk_fp_file__name' => 'Template.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
+    ['id' => 59, 'atk_fp_file__name' => 'Exception.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
+    ['id' => 60, 'atk_fp_file__name' => 'Text.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
+    ['id' => 61, 'atk_fp_file__name' => 'Button.php', 'atk_fp__type' => 'php', 'atk_fp__is_folder' => 0, 'atk_fp__parent_folder_id' => 46],
 ]);
 
 $model = new Model($persistence, ['table' => 'stats']);
@@ -393,44 +393,44 @@ $model->import([
 ]);
 
 $model = new Model($persistence, ['table' => 'product_category']);
-$model->addField('atk_fp_3__name', ['type' => 'string']);
+$model->addField('atk_fp_product_category__name', ['type' => 'string']);
 (new \Atk4\Schema\Migration($model))->dropIfExists()->create();
 $model->import([
-    ['id' => 1, 'atk_fp_3__name' => 'Condiments and Gravies'],
-    ['id' => 2, 'atk_fp_3__name' => 'Beverages'],
-    ['id' => 3, 'atk_fp_3__name' => 'Dairy'],
+    ['id' => 1, 'atk_fp_product_category__name' => 'Condiments and Gravies'],
+    ['id' => 2, 'atk_fp_product_category__name' => 'Beverages'],
+    ['id' => 3, 'atk_fp_product_category__name' => 'Dairy'],
 ]);
 
 $model = new Model($persistence, ['table' => 'product_sub_category']);
-$model->addField('atk_fp_4__name', ['type' => 'string']);
-$model->addField('atk_fp_2__product_category_id', ['type' => 'bigint']);
+$model->addField('atk_fp_product_sub_category__name', ['type' => 'string']);
+$model->addField('atk_fp_product_sub_category__product_category_id', ['type' => 'bigint']);
 (new \Atk4\Schema\Migration($model))->dropIfExists()->create();
 $model->import([
-    ['id' => 1, 'atk_fp_4__name' => 'Gravie', 'atk_fp_2__product_category_id' => 1],
-    ['id' => 2, 'atk_fp_4__name' => 'Spread', 'atk_fp_2__product_category_id' => 1],
-    ['id' => 3, 'atk_fp_4__name' => 'Salad Dressing', 'atk_fp_2__product_category_id' => 1],
-    ['id' => 4, 'atk_fp_4__name' => 'Alcoholic', 'atk_fp_2__product_category_id' => 2],
-    ['id' => 5, 'atk_fp_4__name' => 'Coffee and Tea', 'atk_fp_2__product_category_id' => 2],
-    ['id' => 6, 'atk_fp_4__name' => 'Lowfat Milk', 'atk_fp_2__product_category_id' => 3],
-    ['id' => 7, 'atk_fp_4__name' => 'Yogourt', 'atk_fp_2__product_category_id' => 3],
-    ['id' => 8, 'atk_fp_4__name' => 'HighFat', 'atk_fp_2__product_category_id' => 3],
-    ['id' => 9, 'atk_fp_4__name' => 'Sugar/Sweetened', 'atk_fp_2__product_category_id' => 2],
+    ['id' => 1, 'atk_fp_product_sub_category__name' => 'Gravie', 'atk_fp_product_sub_category__product_category_id' => 1],
+    ['id' => 2, 'atk_fp_product_sub_category__name' => 'Spread', 'atk_fp_product_sub_category__product_category_id' => 1],
+    ['id' => 3, 'atk_fp_product_sub_category__name' => 'Salad Dressing', 'atk_fp_product_sub_category__product_category_id' => 1],
+    ['id' => 4, 'atk_fp_product_sub_category__name' => 'Alcoholic', 'atk_fp_product_sub_category__product_category_id' => 2],
+    ['id' => 5, 'atk_fp_product_sub_category__name' => 'Coffee and Tea', 'atk_fp_product_sub_category__product_category_id' => 2],
+    ['id' => 6, 'atk_fp_product_sub_category__name' => 'Lowfat Milk', 'atk_fp_product_sub_category__product_category_id' => 3],
+    ['id' => 7, 'atk_fp_product_sub_category__name' => 'Yogourt', 'atk_fp_product_sub_category__product_category_id' => 3],
+    ['id' => 8, 'atk_fp_product_sub_category__name' => 'HighFat', 'atk_fp_product_sub_category__product_category_id' => 3],
+    ['id' => 9, 'atk_fp_product_sub_category__name' => 'Sugar/Sweetened', 'atk_fp_product_sub_category__product_category_id' => 2],
 ]);
 
 $model = new Model($persistence, ['table' => 'product']);
-$model->addField('atk_fp_5__name', ['type' => 'string']);
+$model->addField('atk_fp_product__name', ['type' => 'string']);
 $model->addField('atk_fp__brand', ['type' => 'string']);
 $model->addField('atk_fp__product_category_id', ['type' => 'bigint']);
 $model->addField('atk_fp__product_sub_category_id', ['type' => 'bigint']);
 (new \Atk4\Schema\Migration($model))->dropIfExists()->create();
 $model->import([
-    ['id' => 1, 'atk_fp_5__name' => 'Mustard', 'atk_fp__brand' => 'Condiment Corp.', 'atk_fp__product_category_id' => 1, 'atk_fp__product_sub_category_id' => 2],
-    ['id' => 2, 'atk_fp_5__name' => 'Ketchup', 'atk_fp__brand' => 'Condiment Corp.', 'atk_fp__product_category_id' => 1, 'atk_fp__product_sub_category_id' => 2],
-    ['id' => 3, 'atk_fp_5__name' => 'Cola', 'atk_fp__brand' => 'Beverage Corp.', 'atk_fp__product_category_id' => 2, 'atk_fp__product_sub_category_id' => 9],
-    ['id' => 4, 'atk_fp_5__name' => 'Soda', 'atk_fp__brand' => 'Beverage Corp.', 'atk_fp__product_category_id' => 2, 'atk_fp__product_sub_category_id' => 9],
-    ['id' => 5, 'atk_fp_5__name' => 'Milk 2%', 'atk_fp__brand' => 'Milk Corp.', 'atk_fp__product_category_id' => 3, 'atk_fp__product_sub_category_id' => 8],
-    ['id' => 6, 'atk_fp_5__name' => 'Milk 1%', 'atk_fp__brand' => 'Milk Corp.', 'atk_fp__product_category_id' => 3, 'atk_fp__product_sub_category_id' => 6],
-    ['id' => 7, 'atk_fp_5__name' => 'Ice Cream', 'atk_fp__brand' => 'Milk Corp.', 'atk_fp__product_category_id' => 3, 'atk_fp__product_sub_category_id' => 8],
+    ['id' => 1, 'atk_fp_product__name' => 'Mustard', 'atk_fp__brand' => 'Condiment Corp.', 'atk_fp__product_category_id' => 1, 'atk_fp__product_sub_category_id' => 2],
+    ['id' => 2, 'atk_fp_product__name' => 'Ketchup', 'atk_fp__brand' => 'Condiment Corp.', 'atk_fp__product_category_id' => 1, 'atk_fp__product_sub_category_id' => 2],
+    ['id' => 3, 'atk_fp_product__name' => 'Cola', 'atk_fp__brand' => 'Beverage Corp.', 'atk_fp__product_category_id' => 2, 'atk_fp__product_sub_category_id' => 9],
+    ['id' => 4, 'atk_fp_product__name' => 'Soda', 'atk_fp__brand' => 'Beverage Corp.', 'atk_fp__product_category_id' => 2, 'atk_fp__product_sub_category_id' => 9],
+    ['id' => 5, 'atk_fp_product__name' => 'Milk 2%', 'atk_fp__brand' => 'Milk Corp.', 'atk_fp__product_category_id' => 3, 'atk_fp__product_sub_category_id' => 8],
+    ['id' => 6, 'atk_fp_product__name' => 'Milk 1%', 'atk_fp__brand' => 'Milk Corp.', 'atk_fp__product_category_id' => 3, 'atk_fp__product_sub_category_id' => 6],
+    ['id' => 7, 'atk_fp_product__name' => 'Ice Cream', 'atk_fp__brand' => 'Milk Corp.', 'atk_fp__product_category_id' => 3, 'atk_fp__product_sub_category_id' => 8],
 ]);
 
 echo 'import complete!' . "\n";
