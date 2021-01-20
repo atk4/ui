@@ -203,7 +203,7 @@ class Percent extends \Atk4\Data\Field
 }
 
 /**
- * @property string $name             @Atk\Field(field_name="atk_fp_product_sub_category__name")
+ * @property string $name             @Atk\Field(field_name="atk_fp_file__name")
  * @property string $type             @Atk\Field(field_name="atk_fp_file__type")
  * @property bool   $is_folder        @Atk\Field(field_name="atk_fp_file__is_folder")
  * @property File   $SubFolder        @Atk\RefOne(field_name="atk_fp_file__SubFolder")
@@ -213,7 +213,7 @@ class Percent extends \Atk4\Data\Field
 class File extends Model
 {
     public $table = 'file';
-    public $title_field = 'atk_fp_product_sub_category__name';
+    public $title_field = 'atk_fp_file__name';
 
     protected function init(): void
     {
