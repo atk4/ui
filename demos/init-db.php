@@ -42,17 +42,17 @@ trait ModelLockTrait
 }
 
 /**
- * @property string $name      @Atk\Field(field_name="atk_fp__name")
- * @property string $sys_name  @Atk\Field(field_name="atk_fp__sys_name")
- * @property string $iso       @Atk\Field(field_name="atk_fp__iso")
- * @property string $iso3      @Atk\Field(field_name="atk_fp__iso3")
- * @property string $numcode   @Atk\Field(field_name="atk_fp__numcode")
- * @property string $phonecode @Atk\Field(field_name="atk_fp__phonecode")
+ * @property string $name      @Atk\Field(field_name="atk_fp_country__name")
+ * @property string $sys_name  @Atk\Field(field_name="atk_fp_country__sys_name")
+ * @property string $iso       @Atk\Field(field_name="atk_fp_country__iso")
+ * @property string $iso3      @Atk\Field(field_name="atk_fp_country__iso3")
+ * @property string $numcode   @Atk\Field(field_name="atk_fp_country__numcode")
+ * @property string $phonecode @Atk\Field(field_name="atk_fp_country__phonecode")
  */
 class Country extends Model
 {
     public $table = 'country';
-    public $title_field = 'atk_fp__name';
+    public $title_field = 'atk_fp_country__name';
 
     protected function init(): void
     {
@@ -109,35 +109,35 @@ class CountryLock extends Country
 }
 
 /**
- * @property string    $project_name           @Atk\Field(field_name="atk_fp__project_name")
- * @property string    $project_code           @Atk\Field(field_name="atk_fp__project_code")
- * @property string    $description            @Atk\Field(field_name="atk_fp__description")
- * @property string    $client_name            @Atk\Field(field_name="atk_fp__client_name")
- * @property string    $client_address         @Atk\Field(field_name="atk_fp__client_address")
- * @property Country   $client_country_iso     @Atk\RefOne(field_name="atk_fp__client_country_iso")
- * @property string    $client_country         @Atk\Field(field_name="atk_fp__client_country")
- * @property bool      $is_commercial          @Atk\Field(field_name="atk_fp__is_commercial")
- * @property string    $currency               @Atk\Field(field_name="atk_fp__currency")
- * @property string    $currency_symbol        @Atk\Field(field_name="atk_fp__currency_symbol")
- * @property float     $project_budget         @Atk\Field(field_name="atk_fp__project_budget")
- * @property float     $project_invoiced       @Atk\Field(field_name="atk_fp__project_invoiced")
- * @property float     $project_paid           @Atk\Field(field_name="atk_fp__project_paid")
- * @property float     $project_hour_cost      @Atk\Field(field_name="atk_fp__project_hour_cost")
- * @property int       $project_hours_est      @Atk\Field(field_name="atk_fp__project_hours_est")
- * @property int       $project_hours_reported @Atk\Field(field_name="atk_fp__project_hours_reported")
- * @property float     $project_expenses_est   @Atk\Field(field_name="atk_fp__project_expenses_est")
- * @property float     $project_expenses       @Atk\Field(field_name="atk_fp__project_expenses")
- * @property float     $project_mgmt_cost_pct  @Atk\Field(field_name="atk_fp__project_mgmt_cost_pct")
- * @property float     $project_qa_cost_pct    @Atk\Field(field_name="atk_fp__project_qa_cost_pct")
- * @property \DateTime $start_date             @Atk\Field(field_name="atk_fp__start_date")
- * @property \DateTime $finish_date            @Atk\Field(field_name="atk_fp__finish_date")
- * @property \DateTime $finish_time            @Atk\Field(field_name="atk_fp__finish_time")
- * @property \DateTime $created                @Atk\Field(field_name="atk_fp__created")
- * @property \DateTime $updated                @Atk\Field(field_name="atk_fp__updated")
+ * @property string    $project_name           @Atk\Field(field_name="atk_fp_stat__project_name")
+ * @property string    $project_code           @Atk\Field(field_name="atk_fp_stat__project_code")
+ * @property string    $description            @Atk\Field(field_name="atk_fp_stat__description")
+ * @property string    $client_name            @Atk\Field(field_name="atk_fp_stat__client_name")
+ * @property string    $client_address         @Atk\Field(field_name="atk_fp_stat__client_address")
+ * @property Country   $client_country_iso     @Atk\RefOne(field_name="atk_fp_stat__client_country_iso")
+ * @property string    $client_country         @Atk\Field(field_name="atk_fp_stat__client_country")
+ * @property bool      $is_commercial          @Atk\Field(field_name="atk_fp_stat__is_commercial")
+ * @property string    $currency               @Atk\Field(field_name="atk_fp_stat__currency")
+ * @property string    $currency_symbol        @Atk\Field(field_name="atk_fp_stat__currency_symbol")
+ * @property float     $project_budget         @Atk\Field(field_name="atk_fp_stat__project_budget")
+ * @property float     $project_invoiced       @Atk\Field(field_name="atk_fp_stat__project_invoiced")
+ * @property float     $project_paid           @Atk\Field(field_name="atk_fp_stat__project_paid")
+ * @property float     $project_hour_cost      @Atk\Field(field_name="atk_fp_stat__project_hour_cost")
+ * @property int       $project_hours_est      @Atk\Field(field_name="atk_fp_stat__project_hours_est")
+ * @property int       $project_hours_reported @Atk\Field(field_name="atk_fp_stat__project_hours_reported")
+ * @property float     $project_expenses_est   @Atk\Field(field_name="atk_fp_stat__project_expenses_est")
+ * @property float     $project_expenses       @Atk\Field(field_name="atk_fp_stat__project_expenses")
+ * @property float     $project_mgmt_cost_pct  @Atk\Field(field_name="atk_fp_stat__project_mgmt_cost_pct")
+ * @property float     $project_qa_cost_pct    @Atk\Field(field_name="atk_fp_stat__project_qa_cost_pct")
+ * @property \DateTime $start_date             @Atk\Field(field_name="atk_fp_stat__start_date")
+ * @property \DateTime $finish_date            @Atk\Field(field_name="atk_fp_stat__finish_date")
+ * @property \DateTime $finish_time            @Atk\Field(field_name="atk_fp_stat__finish_time")
+ * @property \DateTime $created                @Atk\Field(field_name="atk_fp_stat__created")
+ * @property \DateTime $updated                @Atk\Field(field_name="atk_fp_stat__updated")
  */
 class Stat extends Model
 {
-    public $table = 'stats';
+    public $table = 'stat';
     public $title = 'Project Stat';
 
     protected function init(): void
@@ -204,11 +204,11 @@ class Percent extends \Atk4\Data\Field
 
 /**
  * @property string $name             @Atk\Field(field_name="atk_fp_product_sub_category__name")
- * @property string $type             @Atk\Field(field_name="atk_fp__type")
- * @property bool   $is_folder        @Atk\Field(field_name="atk_fp__is_folder")
- * @property File   $SubFolder        @Atk\RefOne(field_name="atk_fp__SubFolder")
- * @property int    $count            @Atk\Field(field_name="atk_fp__count")
- * @property Folder $parent_folder_id @Atk\RefOne(field_name="atk_fp__parent_folder_id")
+ * @property string $type             @Atk\Field(field_name="atk_fp_file__type")
+ * @property bool   $is_folder        @Atk\Field(field_name="atk_fp_file__is_folder")
+ * @property File   $SubFolder        @Atk\RefOne(field_name="atk_fp_file__SubFolder")
+ * @property int    $count            @Atk\Field(field_name="atk_fp_file__count")
+ * @property Folder $parent_folder_id @Atk\RefOne(field_name="atk_fp_file__parent_folder_id")
  */
 class File extends Model
 {
@@ -291,8 +291,8 @@ class FileLock extends File
 
 /**
  * @property string      $name          @Atk\Field(field_name="atk_fp_product_category__name")
- * @property SubCategory $SubCategories @Atk\RefOne(field_name="atk_fp__SubCategories")
- * @property Product     $Products      @Atk\RefOne(field_name="atk_fp__Products")
+ * @property SubCategory $SubCategories @Atk\RefOne(field_name="atk_fp_product_category__SubCategories")
+ * @property Product     $Products      @Atk\RefOne(field_name="atk_fp_product_category__Products")
  */
 class Category extends Model
 {
@@ -331,9 +331,9 @@ class SubCategory extends Model
 
 /**
  * @property string      $name                    @Atk\Field(field_name="atk_fp_product__name")
- * @property string      $brand                   @Atk\Field(field_name="atk_fp__brand")
- * @property Category    $product_category_id     @Atk\RefOne(field_name="atk_fp__product_category_id")
- * @property SubCategory $product_sub_category_id @Atk\RefOne(field_name="atk_fp__product_sub_category_id")
+ * @property string      $brand                   @Atk\Field(field_name="atk_fp_product__brand")
+ * @property Category    $product_category_id     @Atk\RefOne(field_name="atk_fp_product__product_category_id")
+ * @property SubCategory $product_sub_category_id @Atk\RefOne(field_name="atk_fp_product__product_sub_category_id")
  */
 class Product extends Model
 {

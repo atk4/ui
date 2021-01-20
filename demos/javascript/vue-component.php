@@ -41,7 +41,7 @@ $subHeader = 'Searching will reload the list of countries below with matching re
 
 $model = new Country($app->db);
 
-$lister_template = new HtmlTemplate('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$atk_fp__iso} flag"></i> {$atk_fp__name}</div>{$end}{/}</div>');
+$lister_template = new HtmlTemplate('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{$end}{/}</div>');
 
 $view = \Atk4\Ui\View::addTo($app);
 

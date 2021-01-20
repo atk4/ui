@@ -20,7 +20,7 @@ require_once __DIR__ . '/../init-app.php'; // default lister
 // lister with custom template
 $view = \Atk4\Ui\View::addTo($app, ['template' => new HtmlTemplate('<div>
 <div class="ui header">Top 20 countries (alphabetically)</div>
-{List}<div class="ui icon label"><i class="{$atk_fp__iso} flag"></i> {$atk_fp__name}</div>{/}
+{List}<div class="ui icon label"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{/}
 </div>')]);
 
 $lister = \Atk4\Ui\Lister::addTo($view, [], ['List']);
@@ -41,7 +41,7 @@ $lister->setModel(new Country($app->db))
 // empty lister with custom template
 $view = \Atk4\Ui\View::addTo($app, ['template' => new HtmlTemplate('<div>
 <div class="ui header">Empty lister with custom template</div>
-{List}<div class="ui icon label"><i class="{$atk_fp__iso} flag"></i> {$atk_fp__name}</div>{empty}no flags to show here{/}{/}
+{List}<div class="ui icon label"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{empty}no flags to show here{/}{/}
 </div>')]);
 
 $lister = \Atk4\Ui\Lister::addTo($view, [], ['List']);

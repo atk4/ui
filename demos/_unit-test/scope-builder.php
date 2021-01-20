@@ -61,7 +61,7 @@ $expectedInput = <<< 'EOF'
         {
           "type": "query-builder-rule",
           "query": {
-            "rule": "atk_fp__project_budget",
+            "rule": "atk_fp_stat__project_budget",
             "operator": ">=",
             "value": "1000",
             "option": null
@@ -75,7 +75,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "atk_fp__project_name",
+                  "rule": "atk_fp_stat__project_name",
                   "operator": "matches regular expression",
                   "value": "[a-zA-Z]",
                   "option": null
@@ -84,7 +84,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "atk_fp__client_country_iso",
+                  "rule": "atk_fp_stat__client_country_iso",
                   "operator": "equals",
                   "value": "BR",
                   "option": {
@@ -97,7 +97,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "atk_fp__start_date",
+                  "rule": "atk_fp_stat__start_date",
                   "operator": "is on",
                   "value": "2020-10-22",
                   "option": null
@@ -114,7 +114,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "atk_fp__finish_time",
+                  "rule": "atk_fp_stat__finish_time",
                   "operator": "is not on",
                   "value": "22:22",
                   "option": null
@@ -123,7 +123,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "atk_fp__is_commercial",
+                  "rule": "atk_fp_stat__is_commercial",
                   "operator": "equals",
                   "value": "0",
                   "option": null
@@ -132,7 +132,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "atk_fp__currency",
+                  "rule": "atk_fp_stat__currency",
                   "operator": "equals",
                   "value": "USD",
                   "option": null

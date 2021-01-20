@@ -17,15 +17,15 @@ require_once __DIR__ . '/../init-app.php';
 
 \Atk4\Ui\Header::addTo($app, ['Models', 'size' => 1, 'subHeader' => 'Card may display information from many models.']);
 
-$stats = new Stat($app->db);
-$stats->loadAny();
+$stat = new Stat($app->db);
+$stat->loadAny();
 
 $c = \Atk4\Ui\Card::addTo($app);
-$c->setModel($stats, [$stats->fieldName()->client_name, $stats->fieldName()->description]);
+$c->setModel($stat, [$stat->fieldName()->client_name, $stat->fieldName()->description]);
 
-$c->addSection('Project: ', $stats, [$stats->fieldName()->start_date, $stats->fieldName()->finish_date], true);
+$c->addSection('Project: ', $stat, [$stat->fieldName()->start_date, $stat->fieldName()->finish_date], true);
 
-$country = $stats->client_country_iso->loadAny();
+$country = $stat->client_country_iso->loadAny();
 $notify = $country->addUserAction('Notify', [
     'args' => [
         'note' => ['type' => 'string', 'required' => true],
