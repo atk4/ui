@@ -21,7 +21,7 @@ $form = Form::addTo($demo->right);
 
 $form->addControl('category_id', [Form\Control\Dropdown::class, 'model' => new Category($app->db)]);
 $form->addControl('sub_category_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => Category::hinting()->fieldName()->SubCategories]);
-// DEBUG only, uncomment before merge!!! $form->addControl('product_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => SubCategory::hinting()->fieldName()->Products]);
+$form->addControl('product_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => SubCategory::hinting()->fieldName()->Products]);
 
 $form->onSubmit(function (Form $form) use ($app) {
     $message = $app->encodeJson($form->model->get());

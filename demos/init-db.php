@@ -223,7 +223,7 @@ class File extends Model
         $this->addField($this->fieldName()->type, ['caption' => 'MIME Type']);
         $this->addField($this->fieldName()->is_folder, ['type' => 'boolean']);
 
-        $this->hasMany($this->fieldName()->SubFolder, ['model' => [self::class], 'their_field' => $this->fieldName()->parent_folder_id])
+        $this->hasMany($this->fieldName()->SubFolder, ['model' => [self::class], 'their_field' => self::hinting()->fieldName()->parent_folder_id])
             ->addField($this->fieldName()->count, ['aggregate' => 'count', 'field' => $this->persistence->expr($this, '*')]);
 
         $this->hasOne($this->fieldName()->parent_folder_id, ['model' => [Folder::class]])
@@ -304,8 +304,8 @@ class Category extends Model
         parent::init();
         $this->addField($this->fieldName()->name);
 
-        $this->hasMany($this->fieldName()->SubCategories, ['model' => [SubCategory::class]]);
-        $this->hasMany($this->fieldName()->Products, ['model' => [Product::class]]);
+        $this->hasMany($this->fieldName()->SubCategories, ['model' => [SubCategory::class], 'their_field' => SubCategory::hinting()->fieldName()->product_category_id]);
+        $this->hasMany($this->fieldName()->Products, ['model' => [Product::class], 'their_field' => Product::hinting()->fieldName()->product_category_id]);
     }
 }
 
@@ -325,7 +325,7 @@ class SubCategory extends Model
         $this->addField($this->fieldName()->name);
 
         $this->hasOne($this->fieldName()->product_category_id, ['model' => [Category::class]]);
-        $this->hasMany($this->fieldName()->Products, ['model' => [Product::class]]);
+        $this->hasMany($this->fieldName()->Products, ['model' => [Product::class], 'their_field' => Product::hinting()->fieldName()->product_category_id]);
     }
 }
 
