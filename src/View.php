@@ -979,10 +979,10 @@ class View extends AbstractView implements JsExpressionable
      *
      * @see http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string                            $event    JavaScript event
-     * @param string                            $selector Optional jQuery-style selector
-     * @param mixed                             $action   code to execute (JsChain|\Closure|Model\UserAction|JsExpression)
-     * @param array                             $defaults Options
+     * @param string $event    JavaScript event
+     * @param string $selector Optional jQuery-style selector
+     * @param mixed  $action   code to execute
+     * @param array  $defaults Options
      *
      * @return Jquery
      */
