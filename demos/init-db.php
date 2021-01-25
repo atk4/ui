@@ -325,7 +325,7 @@ class SubCategory extends Model
         $this->addField($this->fieldName()->name);
 
         $this->hasOne($this->fieldName()->product_category_id, ['model' => [Category::class]]);
-        $this->hasMany($this->fieldName()->Products, ['model' => [Product::class], 'their_field' => Product::hinting()->fieldName()->product_category_id]);
+        $this->hasMany($this->fieldName()->Products, ['model' => [Product::class], 'their_field' => Product::hinting()->fieldName()->product_sub_category_id]);
     }
 }
 
