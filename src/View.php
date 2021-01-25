@@ -981,7 +981,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * @param string                            $event    JavaScript event
      * @param string                            $selector Optional jQuery-style selector
-     * @param JsChain|\Closure|Model\UserAction $action   code to execute or \Atk4\Data\UserAction
+     * @param mixed                             $action   code to execute (JsChain|\Closure|Model\UserAction|JsExpression)
      * @param array                             $defaults Options
      *
      * @return Jquery
