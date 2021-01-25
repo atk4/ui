@@ -713,24 +713,6 @@ parameters:
             message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): void given\.$~'
         -
             path: 'demos/javascript/js.php'
-            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsExpression given\.$~'
-        -
-            path: 'demos/javascript/js.php'
-            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\Jquery given\.$~'
-        -
-            path: 'demos/javascript/js.php'
-            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(mixed\): void given\.$~'
-        -
-            path: 'demos/javascript/js.php'
-            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(mixed\): string given\.$~'
-        -
-            path: 'demos/javascript/js.php'
-            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(mixed\): mixed given\.$~'
-        -
-            path: 'demos/javascript/js.php'
-            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(mixed, mixed\): string given\.$~'
-        -
-            path: 'demos/javascript/js.php'
             message: '~^Parameter \#3 \$action of method Atk4\\Ui\\View::on\(\) expects Atk4\\Data\\Model\\UserAction\|Atk4\\Ui\\JsChain\|Closure\|null, array\(Atk4\\Ui\\JsExpression\) given\.$~'
         -
             path: 'demos/javascript/reloading.php'
