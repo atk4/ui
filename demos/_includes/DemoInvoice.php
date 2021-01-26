@@ -25,6 +25,9 @@ class DemoInvoice extends \Atk4\Data\Model
                 function ($v) {
                     return ($v instanceof \DateTime) ? date_format($v, $this->dateFormat) : $v;
                 },
+                function ($v) {
+                    return $v;
+                },
             ],
         ]);
     }
