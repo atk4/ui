@@ -68,7 +68,7 @@ $wizard->addStep('Define User Action', function ($page) {
         $country->tryLoadAny();
 
         $card = \Atk4\Ui\Card::addTo($owner);
-        $card->setModel($country, ['iso']);
+        $card->setModel($country, [$country->fieldName()->iso]);
         $card->addClickAction($country->getUserAction('send_message'));
     });
 });
