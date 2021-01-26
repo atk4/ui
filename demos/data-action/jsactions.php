@@ -20,8 +20,8 @@ $country = new Country($app->db);
 
 $sendEmailAction = $country->addUserAction('Email', [
     'confirmation' => 'Are you sure you wish to send an email?',
-    'callback' => function ($model) {
-        return 'Email to Kristy in ' . $model->get('name') . ' has been sent!';
+    'callback' => function (Country $country) {
+        return 'Email to Kristy in ' . $country->fieldName()->name . ' has been sent!';
     },
 ]);
 
@@ -72,7 +72,7 @@ $card->addContent($content);
 $card->addDescription('Kristy is a friend of Mully.');
 
 $s = $card->addSection('Country');
-$s->addFields($country->loadAny(), ['name', 'iso']);
+$s->addFields($country->loadAny(), [$country->fieldName()->name, $country->fieldName()->iso]);
 
 // Pass the model action to the Card::addClickAction() method.
 $card->addClickAction($sendEmailAction);

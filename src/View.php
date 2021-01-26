@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence\Static_;
+use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**
  * Implements a most core view, which all of the other components descend
@@ -119,6 +119,9 @@ class View extends AbstractView implements JsExpressionable
      * @var string
      */
     public $element;
+
+    /** @var ExecutorFactory Seed class name */
+    public $executorFactory;
 
     // }}}
 
@@ -306,6 +309,11 @@ class View extends AbstractView implements JsExpressionable
         if ($this->model) {
             $this->setModel($this->model);
         }
+    }
+
+    public function getExecutorFactory(): ExecutorFactory
+    {
+        return $this->executorFactory ?? $this->getApp()->getExecutorFactory();
     }
 
     /**
@@ -686,7 +694,7 @@ class View extends AbstractView implements JsExpressionable
         $this->renderAll();
 
         return $this->getJs($forceReturn)
-            . $this->renderTemplateToHtml();
+               . $this->renderTemplateToHtml();
     }
 
     /**
@@ -1045,26 +1053,10 @@ class View extends AbstractView implements JsExpressionable
             }, $arguments);
 
             $actions[] = $cb;
-        } elseif ($action instanceof Model\UserAction) {
+        } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof Model\UserAction) {
             // Setup UserAction executor.
-            if (isset($action->ui['executor'])) {
-                $class = $action->ui['executor'];
-            } elseif (isset($defaults['executor'])) {
-                $class = $defaults['executor'];
-            } elseif (!$action->args && !$action->fields && !$action->preview) {
-                $class = [UserAction\JsCallbackExecutor::class];
-            } else {
-                $class = [UserAction\ModalExecutor::class];
-            }
-            $ex = Factory::factory($class);
+            $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->create($action, $this) : $action;
             if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
-                // Executor may already had been add to layout. Like in CardDeck.
-                if (!isset($this->getApp()->html->elements[$ex->short_name])) {
-                    // very dirty hack, @TODO, attach modals in the standard render tree
-                    // but only render the result to a different place/html DOM
-                    $ex->viewForUrl = $this;
-                    $ex = $this->getApp()->html->add($ex, 'Modals')->setAction($action);
-                }
                 if (isset($arguments[0])) {
                     $arguments[$ex->name] = $arguments[0];
                 }
@@ -1082,15 +1074,16 @@ class View extends AbstractView implements JsExpressionable
                 } else {
                     $actions[] = $ex_actions;
                 }
+                $ex->executeModelAction();
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
-                $ex = $this->add($ex)->setAction($action, $arguments);
-                if ($conf = $action->getConfirmation()) {
+                if ($conf = $ex->getAction()->getConfirmation()) {
                     $defaults['confirm'] = $conf;
                 }
                 if ($defaults['apiConfig'] ?? null) {
                     $ex->apiConfig = $defaults['apiConfig'];
                 }
                 $actions[] = $ex;
+                $ex->executeModelAction($arguments);
             } else {
                 throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or extend View and implement UserAction\JsExecutorInterface');
             }
@@ -1186,8 +1179,8 @@ class View extends AbstractView implements JsExpressionable
         $ready = new JsFunction($actions);
 
         return "<script>\n" .
-            (new Jquery($ready))->jsRender() .
-            '</script>';
+               (new Jquery($ready))->jsRender() .
+               '</script>';
     }
 
     // }}}

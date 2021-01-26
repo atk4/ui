@@ -49,12 +49,12 @@ $myFactory = get_class(new class() extends ExecutorFactory {
 // Set new executor factory globally.
 $app->setExecutorFactory(new $myFactory());
 
-$model = new CountryLock($app->db);
+$country = new CountryLock($app->db);
 
 $crud = \Atk4\Ui\Crud::addTo($app, ['ipp' => 5]);
-$crud->setModel($model);
+$crud->setModel($country);
 
 View::addTo($app, ['class' => ['ui divider']]);
 
 $deck = CardDeck::addTo($app, ['menu' => false, 'search' => false, 'paginator' => false, 'useTable' => true]);
-$deck->setModel($model->setLimit(3), ['iso', 'iso3']);
+$deck->setModel($country->setLimit(3), [$country->fieldName()->iso, $country->fieldName()->iso3]);

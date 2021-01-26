@@ -6,14 +6,9 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
-use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
-
-Button::addTo($app, ['Card Model', 'small left floated basic blue', 'icon' => 'left arrow'])
-    ->link(['card-action']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
 
 Header::addTo($app, ['Card Deck', 'size' => 1, 'subHeader' => 'Card can be display in a deck, also using model action.']);
 
