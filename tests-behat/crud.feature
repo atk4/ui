@@ -11,7 +11,7 @@ Feature: Crud
     Then I fill in "atk_fp_country__iso3" with "TTT"
     Then I fill in "atk_fp_country__numcode" with "123"
     Then I fill in "atk_fp_country__phonecode" with "1"
-    Then I press Modal button "Add"
+    Then I press Modal button "Save"
     Then Toast display should contains text "Form Submit"
 
   Scenario: search
@@ -23,7 +23,7 @@ Feature: Crud
   Scenario: edit
     Then I press button "Edit"
     Then Modal is open with text "Edit Country"
-    Then I press Modal button "Edit"
+    Then I press Modal button "Save"
     Then Toast display should contains text "Form Submit"
 #    make sure search query stick
     Then I should see "United Kingdom"
