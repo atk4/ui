@@ -204,7 +204,7 @@ $wizard->addStep('Crud integration', function ($page) {
             [Button::class, null, 'icon' => 'blue mail'],
             $country->getUserAction('mail')
         );
-        \Atk4\Ui\Crud::addTo($owner, ['ipp' => 5])->setModel($country, ['name', 'iso']);
+        \Atk4\Ui\Crud::addTo($owner, ['ipp' => 5])->setModel($country, [$country->fieldName()->name, $country->fieldName()->iso]);
     });
 });
 

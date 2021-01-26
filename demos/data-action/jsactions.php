@@ -43,7 +43,7 @@ $country->addUserAction('greet', [
             'required' => true,
         ],
     ],
-    'callback' => function ($model, $name) {
+    'callback' => function (Country $model, $name) {
         return 'Hello ' . $name;
     },
 ]);
