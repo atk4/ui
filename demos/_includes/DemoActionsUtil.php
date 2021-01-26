@@ -84,7 +84,7 @@ class DemoActionsUtil
                 'description' => function ($action) {
                     return 'Edit ISO3 for country: ' . $action->getModel()->getTitle();
                 },
-                'fields' => ['iso3'],
+                'fields' => [$country->fieldName()->iso3],
                 'callback' => function () {
                     return 'ok';
                 },
@@ -112,7 +112,7 @@ class DemoActionsUtil
                 'caption' => 'User Confirmation',
                 'description' => 'Confirm the action using a ConfirmationExecutor',
                 'confirmation' => function ($a) {
-                    return 'Are you sure you want to perform this action on: <b>' . $a->getModel()->getTitle() . ' (' . $a->getModel()->get('iso3') . ')</b>';
+                    return 'Are you sure you want to perform this action on: <b>' . $a->getModel()->getTitle() . ' (' . $a->getModel()->iso3 . ')</b>';
                 },
                 'callback' => function ($model) {
                     return 'Confirm country ' . $model->getTitle();
@@ -130,7 +130,7 @@ class DemoActionsUtil
                     'city' => [],
                     'gender' => ['type' => 'enum', 'values' => ['m' => 'Male', 'f' => 'Female'], 'required' => true, 'default' => 'm'],
                 ],
-                'fields' => ['iso3'],
+                'fields' => [$country->fieldName()->iso3],
                 'callback' => function ($model, $age, $city, $gender) {
                     $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
 

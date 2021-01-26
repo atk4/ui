@@ -21,7 +21,7 @@ $model->addUserAction('test', function ($model) {
 $grid->setModel($model);
 
 // Adding Quicksearch on Name field using auto query.
-$grid->addQuickSearch(['name'], true);
+$grid->addQuickSearch([$model->fieldName()->name], true);
 
 $grid->menu->addItem(['Add Country', 'icon' => 'add square'], new \Atk4\Ui\JsExpression('alert(123)'));
 $grid->menu->addItem(['Re-Import', 'icon' => 'power'], new \Atk4\Ui\JsReload($grid));
@@ -33,7 +33,9 @@ $grid->addColumn(null, [\Atk4\Ui\Table\Column\Template::class, 'hello<b>world</b
 $grid->addExecutorButton($grid->getExecutorFactory()->create($model->getUserAction('test'), $grid));
 
 $grid->addActionButton('Say HI', function ($j, $id) use ($grid) {
-    return 'Loaded "' . $grid->model->load($id)->get('name') . '" from ID=' . $id;
+    $model = Country::assertInstanceOf($grid->model);
+
+    return 'Loaded "' . $model->load($id)->name . '" from ID=' . $id;
 });
 
 $grid->addModalAction(['icon' => [\Atk4\Ui\Icon::class, 'external']], 'Modal Test', function ($p, $id) {

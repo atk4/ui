@@ -46,7 +46,7 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
         $this->assertSameTagTree('hello', $tagTreeFoo);
 
         $tagTreeFoo->getChildren()[0]->set('good bye');
-        $this->assertSameTemplate('{foo}good bye{/}, cruel {bar}world{/}. {foo}good bye{/}', /* not possible with dual renderer $t*/$tagTreeFoo->getParentTemplate());
+        $this->assertSameTemplate('{foo}good bye{/}, cruel {bar}world{/}. {foo}good bye{/}', /* not possible with dual renderer $t*/ $tagTreeFoo->getParentTemplate());
     }
 
     public function testGetTagRefNotFoundException()

@@ -48,7 +48,9 @@ $addAccordionFunc = function ($view, $maxDepth = 2, $level = 0) use (&$addAccord
             $addAccordionFunc($v, $maxDepth, $level + 1);
         }
     });
+
+    return $accordion;
 };
 
 // add accordion structure
-$a = $addAccordionFunc($app);
+$addAccordionFunc($app);

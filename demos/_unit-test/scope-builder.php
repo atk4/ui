@@ -18,13 +18,13 @@ require_once __DIR__ . '/../init-app.php';
 
 $model = new Stat($app->db, ['caption' => 'Demo Stat']);
 
-$project = new Condition('project_name', Condition::OPERATOR_REGEXP, '[a-zA-Z]');
-$brazil = new Condition('client_country_iso', '=', 'BR');
-$start = new Condition('start_date', '=', '2020-10-22');
-$finish = new Condition('finish_time', '!=', '22:22');
-$isCommercial = new Condition('is_commercial', '0');
-$budget = new Condition('project_budget', '>=', '1000');
-$currency = new Condition('currency', 'USD');
+$project = new Condition($model->fieldName()->project_name, Condition::OPERATOR_REGEXP, '[a-zA-Z]');
+$brazil = new Condition($model->fieldName()->client_country_iso, '=', 'BR');
+$start = new Condition($model->fieldName()->start_date, '=', '2020-10-22');
+$finish = new Condition($model->fieldName()->finish_time, '!=', '22:22');
+$isCommercial = new Condition($model->fieldName()->is_commercial, '0');
+$budget = new Condition($model->fieldName()->project_budget, '>=', '1000');
+$currency = new Condition($model->fieldName()->currency, 'USD');
 
 $scope = Scope::createAnd($project, $brazil, $start);
 $orScope = Scope::createOr($finish, $isCommercial, $currency);
@@ -61,7 +61,7 @@ $expectedInput = <<< 'EOF'
         {
           "type": "query-builder-rule",
           "query": {
-            "rule": "project_budget",
+            "rule": "atk_fp_stat__project_budget",
             "operator": ">=",
             "value": "1000",
             "option": null
@@ -75,7 +75,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "project_name",
+                  "rule": "atk_fp_stat__project_name",
                   "operator": "matches regular expression",
                   "value": "[a-zA-Z]",
                   "option": null
@@ -84,7 +84,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "client_country_iso",
+                  "rule": "atk_fp_stat__client_country_iso",
                   "operator": "equals",
                   "value": "BR",
                   "option": {
@@ -97,7 +97,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "start_date",
+                  "rule": "atk_fp_stat__start_date",
                   "operator": "is on",
                   "value": "2020-10-22",
                   "option": null
@@ -114,7 +114,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "finish_time",
+                  "rule": "atk_fp_stat__finish_time",
                   "operator": "is not on",
                   "value": "22:22",
                   "option": null
@@ -123,7 +123,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "is_commercial",
+                  "rule": "atk_fp_stat__is_commercial",
                   "operator": "equals",
                   "value": "0",
                   "option": null
@@ -132,7 +132,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "currency",
+                  "rule": "atk_fp_stat__currency",
                   "operator": "equals",
                   "value": "USD",
                   "option": null

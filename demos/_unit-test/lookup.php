@@ -13,15 +13,15 @@ use Atk4\Ui\UserAction\ExecutorFactory;
 require_once __DIR__ . '/../init-app.php';
 
 $model = new ProductLock($app->db);
-$model->addCondition('name', '=', 'Mustard');
+$model->addCondition($model->fieldName()->name, '=', 'Mustard');
 
 // use default.
 $app->getExecutorFactory()->useTriggerDefault(ExecutorFactory::TABLE_BUTTON);
 
 $edit = $model->getUserAction('edit');
 $edit->callback = function ($model) {
-    return $model->ref('product_category_id')->getTitle() . ' - ' . $model->ref('product_sub_category_id')->getTitle();
+    return $model->product_category_id->getTitle() . ' - ' . $model->product_sub_category_id->getTitle();
 };
 
 $crud = Crud::addTo($app);
-$crud->setModel($model, ['name']);
+$crud->setModel($model, [$model->fieldName()->name]);

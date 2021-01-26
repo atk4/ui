@@ -12,13 +12,13 @@ $model = new CountryLock($app->db);
 $crud = \Atk4\Ui\Crud::addTo($app, ['ipp' => 10]);
 
 // callback for model action add form.
-$crud->onFormAdd(function ($form, $t) {
-    $form->js(true, $form->getControl('name')->jsInput()->val('Entering value via javascript'));
+$crud->onFormAdd(function ($form, $t) use ($model) {
+    $form->js(true, $form->getControl($model->fieldName()->name)->jsInput()->val('Entering value via javascript'));
 });
 
 // callback for model action edit form.
-$crud->onFormEdit(function ($form) {
-    $form->js(true, $form->getControl('name')->jsInput()->attr('readonly', true));
+$crud->onFormEdit(function ($form) use ($model) {
+    $form->js(true, $form->getControl($model->fieldName()->name)->jsInput()->attr('readonly', true));
 });
 
 // callback for both model action edit and add.
@@ -40,8 +40,8 @@ $column = $columns->addColumn(0, 'ui blue segment');
 // Crud can operate with various fields
 \Atk4\Ui\Header::addTo($column, ['Configured Crud']);
 $crud = \Atk4\Ui\Crud::addTo($column, [
-    'displayFields' => ['name'], // field to display in Crud
-    'editFields' => ['name', 'iso', 'iso3'], // field to display on 'edit' action
+    'displayFields' => [$model->fieldName()->name], // field to display in Crud
+    'editFields' => [$model->fieldName()->name, $model->fieldName()->iso, $model->fieldName()->iso3], // field to display on 'edit' action
     'ipp' => 5,
     'paginator' => ['range' => 2, 'class' => ['blue inverted']],  // reduce range on the paginator
     'menu' => ['class' => ['green inverted']],
@@ -49,11 +49,11 @@ $crud = \Atk4\Ui\Crud::addTo($column, [
 ]);
 // Condition on the model can be applied on a model
 $model = new CountryLock($app->db);
-$model->addCondition('numcode', '<', 200);
+$model->addCondition($model->fieldName()->numcode, '<', 200);
 $model->onHook(\Atk4\Data\Model::HOOK_VALIDATE, function ($model, $intent) {
     $err = [];
-    if ($model->get('numcode') >= 200) {
-        $err['numcode'] = 'Should be less than 200';
+    if ($model->numcode >= 200) {
+        $err[$model->fieldName()->numcode] = 'Should be less than 200';
     }
 
     return $err;
@@ -62,7 +62,8 @@ $crud->setModel($model);
 
 // Because Crud inherits Grid, you can also define custom actions
 $crud->addModalAction(['icon' => [\Atk4\Ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($crud) {
-    \Atk4\Ui\Message::addTo($p, ['Details for: ' . $crud->model->load($id)->get('name') . ' (id: ' . $id . ')']);
+    $model = CountryLock::assertInstanceOf($crud->model);
+    \Atk4\Ui\Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $id . ')']);
 });
 
 $column = $columns->addColumn();
@@ -78,9 +79,9 @@ $myExecutorClass = get_class(new class() extends \Atk4\Ui\UserAction\ModalExecut
 
         $result = parent::addFormTo($left);
 
-        if ($this->action->getOwner()->get('is_folder')) {
+        if ($this->action->getOwner()->get(File::hinting()->fieldName()->is_folder)) {
             \Atk4\Ui\Grid::addTo($right, ['menu' => false, 'ipp' => 5])
-                ->setModel($this->action->getOwner()->ref('SubFolder'));
+                ->setModel(File::assertInstanceOf($this->action->getOwner())->SubFolder);
         } else {
             \Atk4\Ui\Message::addTo($right, ['Not a folder', 'warning']);
         }
@@ -99,4 +100,4 @@ $crud = \Atk4\Ui\Crud::addTo($column, [
 $crud->menu->addItem(['Rescan', 'icon' => 'recycle']);
 
 // Condition on the model can be applied after setting the model
-$crud->setModel($file)->addCondition('parent_folder_id', null);
+$crud->setModel($file)->addCondition($file->fieldName()->parent_folder_id, null);

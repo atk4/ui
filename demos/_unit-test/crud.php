@@ -21,4 +21,4 @@ $model = new CountryLock($app->db);
 $crud = \Atk4\Ui\Crud::addTo($app, ['ipp' => 10, 'menu' => ['class' => ['atk-grid-menu']]]);
 $crud->setModel($model);
 
-$crud->addQuickSearch(['name'], true);
+$crud->addQuickSearch([$model->fieldName()->name], true);

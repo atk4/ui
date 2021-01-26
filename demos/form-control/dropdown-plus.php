@@ -20,8 +20,8 @@ $txt->addParagraph('Dropdown may also be used in a cascade manner.');
 $form = Form::addTo($demo->right);
 
 $form->addControl('category_id', [Form\Control\Dropdown::class, 'model' => new Category($app->db)]);
-$form->addControl('sub_category_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
-$form->addControl('product_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
+$form->addControl('sub_category_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => Category::hinting()->fieldName()->SubCategories]);
+$form->addControl('product_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => SubCategory::hinting()->fieldName()->Products]);
 
 $form->onSubmit(function (Form $form) use ($app) {
     $message = $app->encodeJson($form->model->get());
@@ -52,10 +52,10 @@ $form->addControl(
         Form\Control\Dropdown::class,
         'caption' => 'Dropdown with data from Model',
         'model' => (new Country($app->db))->setLimit(25),
-        'renderRowFunction' => function (Model $row) {
+        'renderRowFunction' => function (Country $row) {
             return [
                 'value' => $row->getId(),
-                'title' => $row->getTitle() . ' (' . $row->get('iso3') . ')',
+                'title' => $row->getTitle() . ' (' . $row->iso3 . ')',
             ];
         },
     ]
@@ -68,11 +68,11 @@ $form->addControl(
         Form\Control\Dropdown::class,
         'caption' => 'Dropdown with data from Model',
         'model' => (new File($app->db))->setLimit(25),
-        'renderRowFunction' => function (Model $row) {
+        'renderRowFunction' => function (File $row) {
             return [
                 'value' => $row->getId(),
                 'title' => $row->getTitle(),
-                'icon' => $row->get('is_folder') ? 'folder' : 'file',
+                'icon' => $row->is_folder ? 'folder' : 'file',
             ];
         },
     ]

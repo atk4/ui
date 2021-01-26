@@ -5,12 +5,6 @@ declare(strict_types=1);
  * Dropdown form control that will based it's list value
  * according to another input value.
  * Also possible to cascade value from another cascade field.
- * For example:
- *  - you need to narrow product base on Category and sub category
- *       $form = Form::addTo($app);
- *       $form->addControl('category_id', [Dropdown::class, 'model' => new Category($db)])->set(3);
- *       $form->addControl('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
- *       $form->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);.
  */
 
 namespace Atk4\Ui\Form\Control;

@@ -145,6 +145,6 @@ class Callback extends AbstractView
         // DEV NOTE:
         // - getUrlArguments $value used only in https://github.com/atk4/ui/blob/08644a685a9ee07b4e94d1e35e3bd3c95b7a013d/src/VirtualPage.php#L134
         // - $_GET['__atk_callback'] from getUrlArguments seems to control terminating behaviour!
-        return array_merge(parent::_getStickyArgs(), $this->getUrlArguments() /* TODO we do not want/need all Callback args probably */);
+        return array_merge(parent::_getStickyArgs(), $this->getUrlArguments() /* TODO we do not want/need all Callback args probably*/);
     }
 }

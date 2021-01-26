@@ -18,7 +18,7 @@ $c = \Atk4\Ui\Columns::addTo($app);
 $c1 = $c->addColumn();
 $g1 = \Atk4\Ui\Crud::addTo($c1);
 $m1 = $g1->setModel(new CountryLock($app->db));
-$g1->addQuickSearch(['name', 'iso']);
+$g1->addQuickSearch([CountryLock::hinting()->fieldName()->name, CountryLock::hinting()->fieldName()->iso]);
 
 // demo for additional action buttons in Crud + JsPaginator
 $g1->addModalAction(['icon' => [\Atk4\Ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($g1) {

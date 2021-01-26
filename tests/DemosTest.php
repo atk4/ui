@@ -77,7 +77,7 @@ class DemosTest extends AtkPhpunit\TestCase
             if (!isset(self::$_failedParentTests[$this->getName()])) {
                 self::$_failedParentTests[$this->getName()] = $this->getStatus();
             } else {
-                $this->markTestIncomplete('Test failed, but parent non-HTTP test failed too. Fix it first.');
+                $this->markTestIncomplete('Test failed, but non-HTTP test failed too. Fix it first.');
             }
         }
 
@@ -234,7 +234,7 @@ class DemosTest extends AtkPhpunit\TestCase
 
     public function demoFilesProvider(): array
     {
-        $excludeDirs = ['_demo-data', '_includes', '_unit-test', 'special'];
+        $excludeDirs = ['_demo-data', '_includes'];
         $excludeFiles = ['layout/layouts_error.php'];
 
         $files = [];

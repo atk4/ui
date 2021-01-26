@@ -14,7 +14,7 @@ require_once __DIR__ . '/../init-app.php';
 $c = \Atk4\Ui\Columns::addTo($app);
 
 $grid = \Atk4\Ui\Grid::addTo($c->addColumn(), ['ipp' => 10, 'menu' => false]);
-$grid->setModel(new Country($app->db), ['name']);
+$grid->setModel(new Country($app->db), [Country::hinting()->fieldName()->name]);
 
 $countryLoader = \Atk4\Ui\Loader::addTo($c->addColumn(), ['loadEvent' => false, 'shim' => [\Atk4\Ui\Text::class, 'Select country on your left']]);
 
