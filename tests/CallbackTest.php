@@ -152,7 +152,6 @@ class CallbackTest extends AtkPhpunit\TestCase
             $var = 25;
         });
 
-
         $this->expectOutputRegex('/^..DOCTYPE/');
         $this->app->run();
         $this->assertSame(25, $var);
@@ -188,7 +187,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $var = null;
 
         $vp = \Atk4\Ui\VirtualPage::addTo($this->app);
-        
+
         // simulate triggering
         $_GET[$vp->name] = '1';
 

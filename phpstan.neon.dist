@@ -559,12 +559,6 @@ parameters:
             path: 'src/View.php'
             message: '~^If condition is always true\.$~'
         -
-            path: 'src/VirtualPage.php'
-            message: '~^If condition is always true\.$~'
-        -
-            path: 'src/VirtualPage.php'
-            message: '~^Unreachable statement \- code above always terminates\.$~'
-        -
             path: 'src/Wizard.php'
             message: '~^Negated boolean expression is always false\.$~'
         -
