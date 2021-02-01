@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use _HumbugBoxd1d863f2278d\Nette\PhpGenerator\Closure;
+
 /**
  * Virtual page normally does not render, yet it has it's own trigger and will respond
  * to the trigger in a number of useful way depending on trigger's argument:.
@@ -17,9 +19,6 @@ class VirtualPage extends View
 {
     /** @var Callback */
     public $cb;
-
-    /** @var \Closure Optional callback function of virtual page */
-    public $fx;
 
     /** @var string specify custom callback trigger for the URL (see Callback::$urlTrigger) */
     public $urlTrigger;
@@ -40,27 +39,18 @@ class VirtualPage extends View
     /**
      * Set callback function of virtual page.
      *
-     * Note that only one callback function can be defined.
-     *
-     * @param array $fx   Need this to be defined as array otherwise we get warning in PHP7
+     * @param callable $fx   Need this to be defined as array otherwise we get warning in PHP7
      * @param mixed $junk
      *
      * @return $this
      */
-    public function set($fx = [], $junk = null)
+    public function set($fx = null, $junk = null)
     {
-        if (!$fx) {
-            return $this;
+        if (!$fx || !is_callable($fx)) {
+            throw new Exception('Virtual page required a callable.');
         }
 
-        if ($this->fx) {
-            throw (new Exception('Callback for this Virtual Page is already defined'))
-                ->addMoreInfo('vp', $this)
-                ->addMoreInfo('old_fx', $this->fx)
-                ->addMoreInfo('new_fx', $fx);
-        }
-        $this->fx = $fx;
-
+        $this->cb->set($fx, [$this]);
         return $this;
     }
 
@@ -104,14 +94,9 @@ class VirtualPage extends View
      */
     public function getHtml()
     {
-        $this->cb->set(function () {
-            // if virtual page callback is triggered
-            if ($mode = $this->cb->getTriggeredValue()) {
-                // process callback
-                if ($this->fx) {
-                    ($this->fx)($this);
-                }
+        if ($this->cb->canTerminate() ) {
 
+            if ($mode = $this->cb->getTriggeredValue()) {
                 // special treatment for popup
                 if ($mode === 'popup') {
                     $this->getApp()->html->template->set('title', $this->getApp()->title);
@@ -161,7 +146,7 @@ class VirtualPage extends View
             $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getApp()->layout->getJs());
 
             $this->getApp()->terminateHtml($this->getApp()->html->template);
-        });
+        }
     }
 
     protected function mergeStickyArgsFromChildView(): ?AbstractView
