@@ -45,7 +45,7 @@ class VirtualPage extends View
     public function set($fx = null, $junk = null)
     {
         if (!$fx || !is_callable($fx)) {
-            throw new Exception('Virtual page required a callable.');
+            throw new Exception('Virtual page requires a callable.');
         }
 
         $this->cb->set($fx, [$this]);
