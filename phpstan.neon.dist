@@ -577,9 +577,6 @@ parameters:
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 5
         -
-            path: 'demos/_includes/DemoLookup.php'
-            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): void given\.$~'
-        -
             path: 'demos/_includes/ReloadTest.php'
             message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsReload given\.$~'
         -
@@ -592,9 +589,6 @@ parameters:
             path: 'demos/_unit-test/reload.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsReload given\.$~'
         -
-            path: 'demos/basic/button.php'
-            message: '~^Parameter \#1 \$label of class Atk4\\Ui\\Button constructor expects array\|string\|null, int given\.$~'
-        -
             path: 'demos/basic/label.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsReload given\.$~'
         -
@@ -606,9 +600,6 @@ parameters:
         -
             path: 'demos/basic/view.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsReload given\.$~'
-        -
-            path: 'demos/basic/view.php'
-            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): void given\.$~'
         -
             path: 'demos/basic/view.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsModal given\.$~'
@@ -627,9 +618,6 @@ parameters:
         -
             path: 'demos/collection/grid.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsExpression given\.$~'
-        -
-            path: 'demos/collection/multitable.php'
-            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): void given\.$~'
         -
             path: 'demos/collection/multitable.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsModal given\.$~'
@@ -694,9 +682,6 @@ parameters:
             path: 'demos/interactive/virtual.php'
             message: '~^Parameter \#1 \$title of class Atk4\\Ui\\JsModal constructor expects string, null given\.$~'
         -
-            path: 'demos/interactive/virtual.php'
-            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): void given\.$~'
-        -
             path: 'demos/javascript/reloading.php'
             message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsReload given\.$~'
         -
@@ -733,9 +718,6 @@ parameters:
             path: 'demos/tutorial/intro.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(\): string given\.$~'
         -
-            path: 'src/Accordion.php'
-            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure given\.$~'
-        -
             path: 'src/App.php'
             message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array\<string, bool\|string\> given\.$~'
         -
@@ -744,9 +726,6 @@ parameters:
         -
             path: 'src/Card.php'
             message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array\<int\|string, \$this\(Atk4\\Ui\\Card\)\|string\> given\.$~'
-        -
-            path: 'src/Card.php'
-            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): void given\.$~'
         -
             path: 'src/Card.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsModal given\.$~'
@@ -786,9 +765,6 @@ parameters:
         -
             path: 'src/Form/Control/Input.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
-        -
-            path: 'src/Form/Control/Lookup.php'
-            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): void given\.$~'
         -
             path: 'src/Form/Control/Lookup.php'
             message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array given\.$~'
@@ -880,9 +856,6 @@ parameters:
             path: 'src/Table/Column/Tooltip.php'
             message: '~^Parameter \#2 \$attr of method Atk4\\Ui\\App::getTag\(\) expects string\|null, array\<string, string\> given\.$~'
         -
-            path: 'src/Tabs.php'
-            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure given\.$~'
-        -
             path: 'src/UserAction/BasicExecutor.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Closure\(\): mixed given\.$~'
         -
@@ -918,9 +891,6 @@ parameters:
         -
             path: 'tests-behat/bootstrap/Context.php'
             message: '~^Parameter \#1 \$id of method Behat\\Mink\\Element\\TraversableElement::findById\(\) expects string, null given\.$~'
-        -
-            path: 'tests/CallbackTest.php'
-            message: '~^Parameter \#1 \$fx of method Atk4\\Ui\\VirtualPage::set\(\) expects array, Closure\(mixed\): void given\.$~'
         -
             path: 'tests/HtmlTemplateTest.php'
             message: '~^Parameter \#2 \$value of method Atk4\\Ui\\HtmlTemplate::set\(\) expects string\|null, stdClass given\.$~'
