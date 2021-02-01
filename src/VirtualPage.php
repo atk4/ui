@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-use _HumbugBoxd1d863f2278d\Nette\PhpGenerator\Closure;
-
 /**
  * Virtual page normally does not render, yet it has it's own trigger and will respond
  * to the trigger in a number of useful way depending on trigger's argument:.
@@ -40,7 +38,7 @@ class VirtualPage extends View
      * Set callback function of virtual page.
      *
      * @param callable $fx   Need this to be defined as array otherwise we get warning in PHP7
-     * @param mixed $junk
+     * @param mixed    $junk
      *
      * @return $this
      */
@@ -51,6 +49,7 @@ class VirtualPage extends View
         }
 
         $this->cb->set($fx, [$this]);
+
         return $this;
     }
 
@@ -94,8 +93,7 @@ class VirtualPage extends View
      */
     public function getHtml()
     {
-        if ($this->cb->canTerminate() ) {
-
+        if ($this->cb->canTerminate()) {
             if ($mode = $this->cb->getTriggeredValue()) {
                 // special treatment for popup
                 if ($mode === 'popup') {
