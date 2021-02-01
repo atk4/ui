@@ -581,7 +581,7 @@ parameters:
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsModal given\.$~'
         -
             path: 'demos/_unit-test/lookup-virtual-page.php'
-            message: '~^Parameter #2 $action of method Atk4\Ui\Menu::addItem() expects array|string|null, Atk4\Ui\JsModal given\.$~'
+            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsModal given\.$~'
         -
             path: 'demos/_unit-test/reload.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\JsReload given\.$~'
