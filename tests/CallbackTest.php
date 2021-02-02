@@ -191,7 +191,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         // simulate triggering
         $_GET[$vp->name] = '1';
 
-        $vp->set([$this, 'callPull230']);
+        $vp->set(\Closure::fromCallable([$this, 'callPull230']));
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $this->app->run();
