@@ -37,15 +37,15 @@ class VirtualPage extends View
     /**
      * Set callback function of virtual page.
      *
-     * @param callable $fx   Need this to be defined as array otherwise we get warning in PHP7
+     * @param \Closure $fx
      * @param mixed    $junk
      *
      * @return $this
      */
     public function set($fx = null, $junk = null)
     {
-        if (!$fx || !is_callable($fx)) {
-            throw new Exception('Virtual page requires a callable.');
+        if (!$fx || !$fx instanceof \Closure) {
+            throw new Exception('Virtual page requires a Closure.');
         }
 
         $this->cb->set($fx, [$this]);

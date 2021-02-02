@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 /**
- * Behat testing.
  * Test for Lookup inside VirtualPage.
  */
 
