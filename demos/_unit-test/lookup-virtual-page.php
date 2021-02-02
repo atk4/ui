@@ -27,7 +27,7 @@ $vp->set(function ($page) {
     $form->onSubmit(function ($f) {
         $category = $f->getControl('category')->model->load($f->model->get('category'));
 
-        return new JsToast($category->gettitle());
+        return new JsToast($category->getTitle());
     });
 });
 
