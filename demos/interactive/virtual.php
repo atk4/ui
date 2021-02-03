@@ -68,7 +68,7 @@ $table->setModel(new SomeData());
 
 $frame = \Atk4\Ui\VirtualPage::addTo($app);
 $frame->set(function ($frame) {
-    \Atk4\Ui\Header::addTo($frame, ['Clicked row with ID = ' . $_GET['id']]);
+    \Atk4\Ui\Header::addTo($frame, ['Clicked row with ID = ' . ($_GET['id'] ?? '')]);
 });
 
 $table->onRowClick(new \Atk4\Ui\JsModal('Row Clicked', $frame, ['id' => $table->jsRow()->data('id')]));

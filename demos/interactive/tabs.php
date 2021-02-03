@@ -26,7 +26,7 @@ $tabs->addTab('Default Active Tab', function ($tab) {
 // dynamic tab
 $tabs->addTab('Dynamic Lorem Ipsum', function ($tab) {
     \Atk4\Ui\Message::addTo($tab, ['Every time you come to this tab, you will see a different text']);
-    \Atk4\Ui\LoremIpsum::addTo($tab, ['size' => (int) $_GET['size'] ?? 1]);
+    \Atk4\Ui\LoremIpsum::addTo($tab, ['size' => (int) ($_GET['size'] ?? 1)]);
 }, ['apiSettings' => ['data' => ['size' => random_int(1, 4)]]]);
 
 // modal tab
