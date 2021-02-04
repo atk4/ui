@@ -93,6 +93,10 @@ class VirtualPage extends View
      */
     public function getHtml()
     {
+        if ($this->cb->isTriggered() && !$this->cb->canTerminate()) {
+            return parent::getHtml();
+        }
+
         if ($this->cb->canTerminate()) {
             if ($mode = $this->cb->getTriggeredValue()) {
                 // special treatment for popup

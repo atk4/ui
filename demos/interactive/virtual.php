@@ -14,7 +14,7 @@ $virtualPage = \Atk4\Ui\VirtualPage::addTo($app->layout, ['urlTrigger' => 'in'])
 
 // Add content to virtual page.
 if (isset($_GET['p_id'])) {
-    \Atk4\Ui\Header::addTo($virtualPage, [$_GET['p_id']]);
+    \Atk4\Ui\Header::addTo($virtualPage, [$_GET['p_id']])->addClass('__atk-behat-test-car');
 }
 \Atk4\Ui\LoremIpsum::addTo($virtualPage, ['size' => 1]);
 $virtualPageButton = \Atk4\Ui\Button::addTo($virtualPage, ['Back', 'icon' => 'left arrow']);
@@ -36,7 +36,7 @@ $btn->link($virtualPage->cb->getUrl() . '&p_id=Bike');
 \Atk4\Ui\Header::addTo($app, ['Virtual Page Logic']);
 
 $virtualPage = \Atk4\Ui\VirtualPage::addTo($app); // this page will not be visible unless you trigger it specifically
-\Atk4\Ui\Header::addTo($virtualPage, ['Contens of your pop-up here']);
+\Atk4\Ui\View::addTo($virtualPage, ['Contents of your pop-up here'])->addClass('ui header __atk-behat-test-content');
 \Atk4\Ui\LoremIpsum::addTo($virtualPage, ['size' => 2]);
 
 Counter::addTo($virtualPage);
