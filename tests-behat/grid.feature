@@ -16,6 +16,7 @@ Feature: Grid
   Scenario: search no ajax
     Given I am on "collection/grid.php?no-ajax=1"
     Then I search grid for "kingdom"
+    And I wait for loading to start in "button.atk-search-button"
     ## Firefox needs some waiting time.
     Then I wait 50 ms
     Then I should see "United Kingdom"
