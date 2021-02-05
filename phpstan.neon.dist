@@ -242,7 +242,6 @@ parameters:
         - '~^Property Atk4\\Ui\\Grid::\$table \(Atk4\\Ui\\Table\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
         - '~^Property Atk4\\Ui\\Grid::\$paginator \(Atk4\\Ui\\Paginator\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
         - '~^Property Atk4\\Ui\\Grid::\$paginator \(Atk4\\Ui\\Paginator\|false\) does not accept null\.$~'
-        - '~^Property Atk4\\Ui\\Grid::\$quickSearch \(array\|Atk4\\Ui\\Form\\Control\) does not accept Atk4\\Ui\\JsSearch\.$~'
         - '~^Property Atk4\\Ui\\Grid::\$actionButtons \(Atk4\\Ui\\Table\\Column\\ActionButtons\) does not accept Atk4\\Ui\\Table\\Column\.$~'
         - '~^Property Atk4\\Ui\\Grid::\$selection \(Atk4\\Ui\\Table\\Column\\Checkbox\) does not accept Atk4\\Ui\\Table\\Column\.$~'
         - '~^Method Atk4\\Ui\\Grid::addSelection\(\) should return Atk4\\Ui\\Table\\Column\\Checkbox but returns Atk4\\Ui\\Table\\Column\.$~'
@@ -452,9 +451,6 @@ parameters:
         -
             path: 'src/Form/Layout/Custom.php'
             message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Instanceof between array\|Atk4\\Ui\\Form\\Control and Atk4\\Ui\\JsSearch will always evaluate to false\.$~'
         -
             path: 'src/Grid.php'
             message: '~^Negated boolean expression is always false\.$~'
