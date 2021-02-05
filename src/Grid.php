@@ -28,7 +28,7 @@ class Grid extends View
     /** @var JsSearch */
     public $quickSearch;
 
-    /** @var array Field names to search for in Model. It will automatically add component to grid if set. */
+    /** @var array Field names to search for in Model. It will automatically add quicksearch component to grid if set. */
     public $searchFieldNames = [];
 
     /**
