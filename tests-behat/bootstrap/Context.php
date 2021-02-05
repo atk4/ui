@@ -301,7 +301,7 @@ class Context extends RawMinkContext implements BehatContext
         }
         // find text in modal
         $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
-        if (!$text || $text->getText() !== $arg1) {
+        if (!$text || trim($text->getText()) !== $arg1) {
             throw new Exception('No such text in modal');
         }
     }
@@ -556,6 +556,21 @@ class Context extends RawMinkContext implements BehatContext
 
         if (preg_replace('~\s*~', '', $expected) !== preg_replace('~\s*~', '', $input->getValue())) {
             throw new Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expected);
+        }
+    }
+
+    /**
+     * @Then /^text in container using \'([^\']*)\' should contains \'([^\']*)\'$/
+     */
+    public function textInContainerUsingShouldContains($containerCss, $text)
+    {
+        $container = $this->getSession()->getPage()->find('css', $containerCss);
+        if (!$container) {
+            throw new Exception('Unable to find container: ' . $containerCss);
+        }
+
+        if (trim($container->getText()) !== $text) {
+            throw new Exception('Text not in container ' . $text . ' - ' . $container->getText());
         }
     }
 

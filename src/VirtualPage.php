@@ -38,17 +38,17 @@ class VirtualPage extends View
      * Set callback function of virtual page.
      *
      * @param \Closure $fx
-     * @param mixed    $junk
+     * @param array    $args arguments for \Closure
      *
      * @return $this
      */
-    public function set($fx = null, $junk = null)
+    public function set($fx = null, $args = [])
     {
         if (!$fx || !$fx instanceof \Closure) {
             throw new Exception('Virtual page requires a Closure.');
         }
 
-        $this->cb->set($fx, [$this]);
+        $this->cb->set($fx, array_merge([$this], $args));
 
         return $this;
     }
@@ -93,6 +93,10 @@ class VirtualPage extends View
      */
     public function getHtml()
     {
+        if ($this->cb->isTriggered() && !$this->cb->canTerminate()) {
+            return parent::getHtml();
+        }
+
         if ($this->cb->canTerminate()) {
             if ($mode = $this->cb->getTriggeredValue()) {
                 // special treatment for popup
