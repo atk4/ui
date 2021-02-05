@@ -12,6 +12,7 @@ import { atkOptions, atkEventBus, atkUtils } from './atk-utils';
 import dataService from './services/data.service';
 import panelService from './services/panel.service';
 import vueService from './services/vue.service';
+import popupService from "./services/popup.service";
 
 const atk = { ...atkSemantic };
 
@@ -34,6 +35,7 @@ atk.dataService = dataService;
 atk.panelService = panelService;
 atk.tableDropdown = tableDropdown;
 atk.vueService = vueService;
+atk.popupService = popupService;
 
 /**
  * Exporting services in order to be available globally

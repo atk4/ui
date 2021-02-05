@@ -444,6 +444,17 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
+     * @Then /^page url should contains \'([^\']*)\'$/
+     */
+    public function pageUrlShouldContains($text)
+    {
+        $url = $this->getSession()->getCurrentUrl();
+        if (!strpos($url, $text)) {
+            throw new Exception('Text : "' . $text . '" not found in ' . $url);
+        }
+    }
+
+    /**
      * @Then I click icon using css :arg1
      */
     public function iClickIconUsingCss($arg1)
@@ -679,7 +690,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^the "([^"]*)"  should start with "([^"]*)"$/
+     * @Then /^the field "([^"]*)"  should start with "([^"]*)"$/
      */
     public function theShouldStartWith($arg1, $arg2)
     {

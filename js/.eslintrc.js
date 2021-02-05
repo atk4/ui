@@ -32,7 +32,7 @@ module.exports = {
         'no-nested-ternary': 'off',
         'import/prefer-default-export': 'off',
         'no-console': ['error', { allow: ['warn', 'error'] }],
-        'no-underscore-dangle': ['error', { allow: ['__atkml', '__atkml_action', '__atk-reload'] }],
+        'no-underscore-dangle': ['error', { allow: ['__atkml', '__atkml_action', '__atk_reload'] }],
         'max-len': ['error', {
             code: 120,
             ignoreTemplateLiterals: true,

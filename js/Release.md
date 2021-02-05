@@ -1,5 +1,10 @@
 ## Release note
 
+### version 1.19.2 (2021-02-05)
+
+- Fix issue in js-search plugin when not using ajax request.
+- Add missing popupService to atk object.
+
 ### version 1.19.1 (2021-01-05)
 
 - Update package dependency

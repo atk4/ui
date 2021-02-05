@@ -343,8 +343,6 @@ class Grid extends View
         $view = View::addTo($this->menu
             ->addMenuRight()->addItem()->setElement('div'));
 
-        $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
-
         $q = trim($this->stickyGet('_q') ?? '');
         if ($q !== '') {
             $scope = Model\Scope::createOr();
@@ -353,6 +351,8 @@ class Grid extends View
             }
             $this->model->addCondition($scope);
         }
+
+        $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery, 'initValue' => $q]);
     }
 
     /**
