@@ -25,16 +25,11 @@ class Grid extends View
      */
     public $menu;
 
-    /**
-     * Calling addQuickSearch will create a form with a field inside $menu to perform quick searches.
-     *
-     * If you pass this property as array of field names while creating Grid, then when you will call
-     * setModel() QuickSearch object will be created automatically and these model fields will be used
-     * for filtering.
-     *
-     * @var array|Form\Control
-     */
+    /** @var JsSearch */
     public $quickSearch;
+
+    /** @var array Field names to search for in Model. It will automatically add component to grid if set. */
+    public $searchFieldNames = [];
 
     /**
      * Paginator is automatically added below the table and will divide long tables into pages.
@@ -612,8 +607,8 @@ class Grid extends View
     {
         $this->model = $this->table->setModel($model, $columns);
 
-        if (is_array($this->quickSearch)) {
-            $this->addQuickSearch($this->quickSearch);
+        if ($this->searchFieldNames) {
+            $this->addQuickSearch($this->searchFieldNames, true);
         }
 
         return $this->model;
