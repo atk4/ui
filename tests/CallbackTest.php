@@ -144,13 +144,13 @@ class CallbackTest extends AtkPhpunit\TestCase
         $var = null;
 
         $vp = \Atk4\Ui\VirtualPage::addTo($this->app);
+
         // simulate triggering
+        $_GET[$vp->name] = '1';
 
         $vp->set(function ($p) use (&$var) {
             $var = 25;
         });
-
-        $_GET[$vp->name] = '1';
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $this->app->run();
@@ -162,12 +162,13 @@ class CallbackTest extends AtkPhpunit\TestCase
         $var = null;
 
         $vp = \Atk4\Ui\VirtualPage::addTo($this->app, ['urlTrigger' => 'bah']);
-        $vp->set(function ($p) use (&$var) {
-            $var = 25;
-        });
 
         // simulate triggering
         $_GET['bah'] = '1';
+
+        $vp->set(function ($p) use (&$var) {
+            $var = 25;
+        });
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $this->app->run();
@@ -186,10 +187,11 @@ class CallbackTest extends AtkPhpunit\TestCase
         $var = null;
 
         $vp = \Atk4\Ui\VirtualPage::addTo($this->app);
-        $vp->set([$this, 'callPull230']);
 
         // simulate triggering
         $_GET[$vp->name] = '1';
+
+        $vp->set(\Closure::fromCallable([$this, 'callPull230']));
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $this->app->run();

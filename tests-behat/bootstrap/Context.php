@@ -301,7 +301,7 @@ class Context extends RawMinkContext implements BehatContext
         }
         // find text in modal
         $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
-        if (!$text || $text->getText() !== $arg1) {
+        if (!$text || trim($text->getText()) !== $arg1) {
             throw new Exception('No such text in modal');
         }
     }
@@ -329,11 +329,11 @@ class Context extends RawMinkContext implements BehatContext
      * Exemple: Use with a modal window where reloaded content
      * will resize it's window thus making it not accessible at first.
      */
-    private function waitForNodeElement(string $selector): ?NodeElement
+    private function waitForNodeElement(string $selector, int $ms = 20): ?NodeElement
     {
         $counter = 0;
         $element = null;
-        while ($counter < 20) {
+        while ($counter < $ms) {
             $element = $this->getSession()->getPage()->find('css', $selector);
             if ($element === null) {
                 usleep(1000);
@@ -441,6 +441,28 @@ class Context extends RawMinkContext implements BehatContext
         }
 
         $search->setValue($arg1);
+    }
+
+    /**
+     * @Then /^page url should contains \'([^\']*)\'$/
+     */
+    public function pageUrlShouldContains($text)
+    {
+        $url = $this->getSession()->getCurrentUrl();
+        if (!strpos($url, $text)) {
+            throw new Exception('Text : "' . $text . '" not found in ' . $url);
+        }
+    }
+
+    /**
+     * @Then /^I wait for the page to be loaded$/
+     */
+    public function waitForThePageToBeLoaded()
+    {
+        // This line in test-unit.yml is causing test to fail. Need to increase wait time to compensate.
+        // sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php
+        usleep(500000);
+        $this->getSession()->wait(10000, "document.readyState === 'complete'");
     }
 
     /**
@@ -560,6 +582,21 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
+     * @Then /^text in container using \'([^\']*)\' should contains \'([^\']*)\'$/
+     */
+    public function textInContainerUsingShouldContains($containerCss, $text)
+    {
+        $container = $this->getSession()->getPage()->find('css', $containerCss);
+        if (!$container) {
+            throw new Exception('Unable to find container: ' . $containerCss);
+        }
+
+        if (trim($container->getText()) !== $text) {
+            throw new Exception('Text not in container ' . $text . ' - ' . $container->getText());
+        }
+    }
+
+    /**
      * Find a dropdown component within an html element
      * and check if value is set in dropdown.
      */
@@ -664,7 +701,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^the "([^"]*)"  should start with "([^"]*)"$/
+     * @Then /^the field "([^"]*)"  should start with "([^"]*)"$/
      */
     public function theShouldStartWith($arg1, $arg2)
     {

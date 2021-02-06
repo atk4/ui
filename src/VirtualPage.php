@@ -18,9 +18,6 @@ class VirtualPage extends View
     /** @var Callback */
     public $cb;
 
-    /** @var \Closure Optional callback function of virtual page */
-    public $fx;
-
     /** @var string specify custom callback trigger for the URL (see Callback::$urlTrigger) */
     public $urlTrigger;
 
@@ -40,26 +37,18 @@ class VirtualPage extends View
     /**
      * Set callback function of virtual page.
      *
-     * Note that only one callback function can be defined.
-     *
-     * @param array $fx   Need this to be defined as array otherwise we get warning in PHP7
-     * @param mixed $junk
+     * @param \Closure $fx
+     * @param array    $args arguments for \Closure
      *
      * @return $this
      */
-    public function set($fx = [], $junk = null)
+    public function set($fx = null, $args = [])
     {
-        if (!$fx) {
-            return $this;
+        if (!$fx || !$fx instanceof \Closure) {
+            throw new Exception('Virtual page requires a Closure.');
         }
 
-        if ($this->fx) {
-            throw (new Exception('Callback for this Virtual Page is already defined'))
-                ->addMoreInfo('vp', $this)
-                ->addMoreInfo('old_fx', $this->fx)
-                ->addMoreInfo('new_fx', $fx);
-        }
-        $this->fx = $fx;
+        $this->cb->set($fx, array_merge([$this], $args));
 
         return $this;
     }
@@ -104,14 +93,12 @@ class VirtualPage extends View
      */
     public function getHtml()
     {
-        $this->cb->set(function () {
-            // if virtual page callback is triggered
-            if ($mode = $this->cb->getTriggeredValue()) {
-                // process callback
-                if ($this->fx) {
-                    ($this->fx)($this);
-                }
+        if ($this->cb->isTriggered() && !$this->cb->canTerminate()) {
+            return parent::getHtml();
+        }
 
+        if ($this->cb->canTerminate()) {
+            if ($mode = $this->cb->getTriggeredValue()) {
                 // special treatment for popup
                 if ($mode === 'popup') {
                     $this->getApp()->html->template->set('title', $this->getApp()->title);
@@ -161,7 +148,7 @@ class VirtualPage extends View
             $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getApp()->layout->getJs());
 
             $this->getApp()->terminateHtml($this->getApp()->html->template);
-        });
+        }
     }
 
     protected function mergeStickyArgsFromChildView(): ?AbstractView

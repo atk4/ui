@@ -399,8 +399,8 @@ class View extends AbstractView implements JsExpressionable
      * Override this method without compatibility with parent, if you wish
      * to set your own things your own way for your view.
      *
-     * @param string|array $arg1
-     * @param string|null  $arg2
+     * @param mixed $arg1
+     * @param mixed $arg2
      *
      * @return $this
      */
