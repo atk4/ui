@@ -329,11 +329,11 @@ class Context extends RawMinkContext implements BehatContext
      * Exemple: Use with a modal window where reloaded content
      * will resize it's window thus making it not accessible at first.
      */
-    private function waitForNodeElement(string $selector): ?NodeElement
+    private function waitForNodeElement(string $selector, int $ms = 20): ?NodeElement
     {
         $counter = 0;
         $element = null;
-        while ($counter < 20) {
+        while ($counter < $ms) {
             $element = $this->getSession()->getPage()->find('css', $selector);
             if ($element === null) {
                 usleep(1000);
@@ -441,6 +441,25 @@ class Context extends RawMinkContext implements BehatContext
         }
 
         $search->setValue($arg1);
+    }
+
+    /**
+     * @Then /^page url should contains \'([^\']*)\'$/
+     */
+    public function pageUrlShouldContains($text)
+    {
+        $url = $this->getSession()->getCurrentUrl();
+        if (!strpos($url, $text)) {
+            throw new Exception('Text : "' . $text . '" not found in ' . $url);
+        }
+    }
+
+    /**
+     * @Then /^I wait for the page to be loaded$/
+     */
+    public function waitForThePageToBeLoaded()
+    {
+        $this->getSession()->wait(10000, "document.readyState === 'complete'");
     }
 
     /**
