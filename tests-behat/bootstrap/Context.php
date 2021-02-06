@@ -459,6 +459,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function waitForThePageToBeLoaded()
     {
+        // This line in test-unit.yml is causing test to fail. Need to increase wait time to compensate.
+        // sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php
+        usleep(500000);
         $this->getSession()->wait(10000, "document.readyState === 'complete'");
     }
 
