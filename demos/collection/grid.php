@@ -28,6 +28,10 @@ $grid->setModel($model);
 // Adding Quicksearch on Name field using auto query.
 $grid->addQuickSearch([$model->fieldName()->name], true);
 
+if ($app->stickyGet('no-ajax')) {
+    $grid->quickSearch->useAjax = false;
+}
+
 $grid->menu->addItem(['Add Country', 'icon' => 'add square'], new \Atk4\Ui\JsExpression('alert(123)'));
 $grid->menu->addItem(['Re-Import', 'icon' => 'power'], new \Atk4\Ui\JsReload($grid));
 $grid->menu->addItem(['Delete All', 'icon' => 'trash', 'red active']);
