@@ -1094,7 +1094,7 @@ class App
 
         $this->outputResponse(
             $data,
-            array_merge($this->normalizeHeaders($headers), ['content-type' => 'application/json'])
+            array_merge($this->normalizeHeaders($headers), ['content-type' => 'application/json; charset=utf-8'])
         );
     }
 
