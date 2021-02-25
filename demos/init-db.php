@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Form;
+use Mvorisek\Atk4\Hintable\Data\HintablePropertyDef;
 
 try {
     if (file_exists(__DIR__ . '/db.php')) {
@@ -20,6 +21,40 @@ try {
 }
 
 // a very basic file that sets up Agile Data to be used in some demonstrations
+
+class ModelWithPrefixedFields extends Model
+{
+    private function prefixFieldName(string $fieldName, bool $forActualName = false): string
+    {
+        if ($forActualName) {
+            $fieldName = preg_replace('~^' . preg_quote('atk_fp_' . $this->table . '__', '~') . '~', '', $fieldName);
+        }
+
+        if ($fieldName === 'id') {
+            return $fieldName;
+        }
+
+        return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $this->table . '__' . $fieldName;
+    }
+
+    protected function createHintablePropsFromClassDoc(string $className): array
+    {
+        return array_map(function (HintablePropertyDef $hintableProp) {
+            $hintableProp->fieldName = $this->prefixFieldName($hintableProp->name);
+
+            return $hintableProp;
+        }, parent::createHintablePropsFromClassDoc($className));
+    }
+
+    public function addField($name, $seed = []): \Atk4\Data\Field
+    {
+        $seed = \Atk4\Core\Factory::mergeSeeds($seed, [
+            'actual' => $this->prefixFieldName($name, true),
+        ]);
+
+        return parent::addField($name, $seed);
+    }
+}
 
 trait ModelLockTrait
 {
@@ -42,14 +77,14 @@ trait ModelLockTrait
 }
 
 /**
- * @property string $name      @Atk\Field(field_name="atk_fp_country__name")
- * @property string $sys_name  @Atk\Field(field_name="atk_fp_country__sys_name")
- * @property string $iso       @Atk\Field(field_name="atk_fp_country__iso")
- * @property string $iso3      @Atk\Field(field_name="atk_fp_country__iso3")
- * @property string $numcode   @Atk\Field(field_name="atk_fp_country__numcode")
- * @property string $phonecode @Atk\Field(field_name="atk_fp_country__phonecode")
+ * @property string $name      @Atk\Field()
+ * @property string $sys_name  @Atk\Field()
+ * @property string $iso       @Atk\Field()
+ * @property string $iso3      @Atk\Field()
+ * @property string $numcode   @Atk\Field()
+ * @property string $phonecode @Atk\Field()
  */
-class Country extends Model
+class Country extends ModelWithPrefixedFields
 {
     public $table = 'country';
     public $title_field = 'atk_fp_country__name';
@@ -57,8 +92,8 @@ class Country extends Model
     protected function init(): void
     {
         parent::init();
-        $this->addField($this->fieldName()->name, ['actual' => 'atk_fp_country__nicename', 'required' => true, 'type' => 'string']);
-        $this->addField($this->fieldName()->sys_name, ['actual' => 'atk_fp_country__name', 'system' => true]);
+        $this->addField($this->fieldName()->name, ['actual' => 'atk_afp_country__nicename', 'required' => true, 'type' => 'string']);
+        $this->addField($this->fieldName()->sys_name, ['actual' => 'atk_afp_country__name', 'system' => true]);
 
         $this->addField($this->fieldName()->iso, ['caption' => 'ISO', 'required' => true, 'type' => 'string', 'ui' => ['table' => ['sortable' => false]]]);
         $this->addField($this->fieldName()->iso3, ['caption' => 'ISO3', 'required' => true, 'type' => 'string']);
@@ -109,33 +144,33 @@ class CountryLock extends Country
 }
 
 /**
- * @property string    $project_name           @Atk\Field(field_name="atk_fp_stat__project_name")
- * @property string    $project_code           @Atk\Field(field_name="atk_fp_stat__project_code")
- * @property string    $description            @Atk\Field(field_name="atk_fp_stat__description")
- * @property string    $client_name            @Atk\Field(field_name="atk_fp_stat__client_name")
- * @property string    $client_address         @Atk\Field(field_name="atk_fp_stat__client_address")
- * @property Country   $client_country_iso     @Atk\RefOne(field_name="atk_fp_stat__client_country_iso")
- * @property string    $client_country         @Atk\Field(field_name="atk_fp_stat__client_country")
- * @property bool      $is_commercial          @Atk\Field(field_name="atk_fp_stat__is_commercial")
- * @property string    $currency               @Atk\Field(field_name="atk_fp_stat__currency")
- * @property string    $currency_symbol        @Atk\Field(field_name="atk_fp_stat__currency_symbol")
- * @property float     $project_budget         @Atk\Field(field_name="atk_fp_stat__project_budget")
- * @property float     $project_invoiced       @Atk\Field(field_name="atk_fp_stat__project_invoiced")
- * @property float     $project_paid           @Atk\Field(field_name="atk_fp_stat__project_paid")
- * @property float     $project_hour_cost      @Atk\Field(field_name="atk_fp_stat__project_hour_cost")
- * @property int       $project_hours_est      @Atk\Field(field_name="atk_fp_stat__project_hours_est")
- * @property int       $project_hours_reported @Atk\Field(field_name="atk_fp_stat__project_hours_reported")
- * @property float     $project_expenses_est   @Atk\Field(field_name="atk_fp_stat__project_expenses_est")
- * @property float     $project_expenses       @Atk\Field(field_name="atk_fp_stat__project_expenses")
- * @property float     $project_mgmt_cost_pct  @Atk\Field(field_name="atk_fp_stat__project_mgmt_cost_pct")
- * @property float     $project_qa_cost_pct    @Atk\Field(field_name="atk_fp_stat__project_qa_cost_pct")
- * @property \DateTime $start_date             @Atk\Field(field_name="atk_fp_stat__start_date")
- * @property \DateTime $finish_date            @Atk\Field(field_name="atk_fp_stat__finish_date")
- * @property \DateTime $finish_time            @Atk\Field(field_name="atk_fp_stat__finish_time")
- * @property \DateTime $created                @Atk\Field(field_name="atk_fp_stat__created")
- * @property \DateTime $updated                @Atk\Field(field_name="atk_fp_stat__updated")
+ * @property string    $project_name           @Atk\Field()
+ * @property string    $project_code           @Atk\Field()
+ * @property string    $description            @Atk\Field()
+ * @property string    $client_name            @Atk\Field()
+ * @property string    $client_address         @Atk\Field()
+ * @property Country   $client_country_iso     @Atk\RefOne()
+ * @property string    $client_country         @Atk\Field()
+ * @property bool      $is_commercial          @Atk\Field()
+ * @property string    $currency               @Atk\Field()
+ * @property string    $currency_symbol        @Atk\Field()
+ * @property float     $project_budget         @Atk\Field()
+ * @property float     $project_invoiced       @Atk\Field()
+ * @property float     $project_paid           @Atk\Field()
+ * @property float     $project_hour_cost      @Atk\Field()
+ * @property int       $project_hours_est      @Atk\Field()
+ * @property int       $project_hours_reported @Atk\Field()
+ * @property float     $project_expenses_est   @Atk\Field()
+ * @property float     $project_expenses       @Atk\Field()
+ * @property float     $project_mgmt_cost_pct  @Atk\Field()
+ * @property float     $project_qa_cost_pct    @Atk\Field()
+ * @property \DateTime $start_date             @Atk\Field()
+ * @property \DateTime $finish_date            @Atk\Field()
+ * @property \DateTime $finish_time            @Atk\Field()
+ * @property \DateTime $created                @Atk\Field()
+ * @property \DateTime $updated                @Atk\Field()
  */
-class Stat extends Model
+class Stat extends ModelWithPrefixedFields
 {
     public $table = 'stat';
     public $title = 'Project Stat';
@@ -203,14 +238,14 @@ class Percent extends \Atk4\Data\Field
 }
 
 /**
- * @property string $name             @Atk\Field(field_name="atk_fp_file__name")
- * @property string $type             @Atk\Field(field_name="atk_fp_file__type")
- * @property bool   $is_folder        @Atk\Field(field_name="atk_fp_file__is_folder")
- * @property File   $SubFolder        @Atk\RefOne(field_name="atk_fp_file__SubFolder")
- * @property int    $count            @Atk\Field(field_name="atk_fp_file__count")
- * @property Folder $parent_folder_id @Atk\RefOne(field_name="atk_fp_file__parent_folder_id")
+ * @property string $name             @Atk\Field()
+ * @property string $type             @Atk\Field()
+ * @property bool   $is_folder        @Atk\Field()
+ * @property File   $SubFolder        @Atk\RefOne()
+ * @property int    $count            @Atk\Field()
+ * @property Folder $parent_folder_id @Atk\RefOne()
  */
-class File extends Model
+class File extends ModelWithPrefixedFields
 {
     public $table = 'file';
     public $title_field = 'atk_fp_file__name';
@@ -290,11 +325,11 @@ class FileLock extends File
 }
 
 /**
- * @property string      $name          @Atk\Field(field_name="atk_fp_product_category__name")
- * @property SubCategory $SubCategories @Atk\RefOne(field_name="atk_fp_product_category__SubCategories")
- * @property Product     $Products      @Atk\RefOne(field_name="atk_fp_product_category__Products")
+ * @property string      $name          @Atk\Field()
+ * @property SubCategory $SubCategories @Atk\RefOne()
+ * @property Product     $Products      @Atk\RefOne()
  */
-class Category extends Model
+class Category extends ModelWithPrefixedFields
 {
     public $table = 'product_category';
     public $title_field = 'atk_fp_product_category__name';
@@ -310,11 +345,11 @@ class Category extends Model
 }
 
 /**
- * @property string   $name                @Atk\Field(field_name="atk_fp_product_sub_category__name")
- * @property Category $product_category_id @Atk\RefOne(field_name="atk_fp_product_sub_category__product_category_id")
- * @property Product  $Products            @Atk\RefOne(field_name="atk_fp_product_sub_category__Products")
+ * @property string   $name                @Atk\Field()
+ * @property Category $product_category_id @Atk\RefOne()
+ * @property Product  $Products            @Atk\RefOne()
  */
-class SubCategory extends Model
+class SubCategory extends ModelWithPrefixedFields
 {
     public $table = 'product_sub_category';
     public $title_field = 'atk_fp_product_sub_category__name';
@@ -330,12 +365,12 @@ class SubCategory extends Model
 }
 
 /**
- * @property string      $name                    @Atk\Field(field_name="atk_fp_product__name")
- * @property string      $brand                   @Atk\Field(field_name="atk_fp_product__brand")
- * @property Category    $product_category_id     @Atk\RefOne(field_name="atk_fp_product__product_category_id")
- * @property SubCategory $product_sub_category_id @Atk\RefOne(field_name="atk_fp_product__product_sub_category_id")
+ * @property string      $name                    @Atk\Field()
+ * @property string      $brand                   @Atk\Field()
+ * @property Category    $product_category_id     @Atk\RefOne()
+ * @property SubCategory $product_sub_category_id @Atk\RefOne()
  */
-class Product extends Model
+class Product extends ModelWithPrefixedFields
 {
     public $table = 'product';
     public $title_field = 'atk_fp_product__name';

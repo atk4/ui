@@ -17,17 +17,19 @@ $persistence = new \Atk4\Data\Persistence\Sql('sqlite:' . $sqliteFile);
 
 class ImportModelWithPrefixedFields extends Model
 {
-    private function prefixFieldName(string $fieldName): string
+    private function prefixFieldName(string $fieldName, bool $forActualName = false): string
     {
         if ($fieldName === 'id') {
             return $fieldName;
         }
 
-        return 'atk_fp_' . $this->table . '__' . $fieldName;
+        return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $this->table . '__' . $fieldName;
     }
 
     public function addField($name, $seed = []): \Atk4\Data\Field
     {
+        $seed['actual'] = $this->prefixFieldName($name, true);
+
         return parent::addField($this->prefixFieldName($name), $seed);
     }
 
