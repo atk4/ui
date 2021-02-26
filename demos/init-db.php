@@ -196,7 +196,7 @@ class Stat extends ModelWithPrefixedFields
 
         $this->hasOne($this->fieldName()->client_country_iso, [
             'model' => [Country::class],
-            'our_field' => Country::hinting()->fieldName()->id,
+            'our_field' => $this->fieldName()->client_country_iso,
             'their_field' => Country::hinting()->fieldName()->iso,
             'type' => 'string',
             'ui' => [
