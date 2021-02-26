@@ -28,7 +28,9 @@ class ImportModelWithPrefixedFields extends Model
             $this->id_field = $this->prefixFieldName($name);
         }
 
-        $seed['actual'] = $this->prefixFieldName($name, true);
+        $seed = \Atk4\Core\Factory::mergeSeeds($seed, [
+            'actual' => $this->prefixFieldName($name, true),
+        ]);
 
         return parent::addField($this->prefixFieldName($name), $seed);
     }
