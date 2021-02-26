@@ -30,10 +30,6 @@ class ModelWithPrefixedFields extends Model
             $fieldName = preg_replace('~^' . preg_quote('atk_fp_' . $this->table . '__', '~') . '~', '', $fieldName);
         }
 
-        if ($fieldName === 'id') {
-            return $fieldName;
-        }
-
         return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $this->table . '__' . $fieldName;
     }
 
@@ -49,7 +45,7 @@ class ModelWithPrefixedFields extends Model
     protected function init(): void
     {
         if ($this->id_field === 'id') {
-//            $this->id_field = $this->prefixFieldName($this->id_field);
+            $this->id_field = $this->prefixFieldName($this->id_field);
         }
 
         if ($this->title_field === 'name') {

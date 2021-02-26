@@ -19,15 +19,15 @@ class ImportModelWithPrefixedFields extends Model
 {
     private function prefixFieldName(string $fieldName, bool $forActualName = false): string
     {
-        if ($fieldName === 'id') {
-            return $fieldName;
-        }
-
         return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $this->table . '__' . $fieldName;
     }
 
     public function addField($name, $seed = []): \Atk4\Data\Field
     {
+        if ($name === 'id') {
+            $this->id_field = $this->prefixFieldName($name);
+        }
+
         $seed['actual'] = $this->prefixFieldName($name, true);
 
         return parent::addField($this->prefixFieldName($name), $seed);
