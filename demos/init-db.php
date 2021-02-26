@@ -46,6 +46,19 @@ class ModelWithPrefixedFields extends Model
         }, parent::createHintablePropsFromClassDoc($className));
     }
 
+    protected function init(): void
+    {
+        if ($this->id_field === 'id') {
+//            $this->id_field = $this->prefixFieldName($this->id_field);
+        }
+
+        if ($this->title_field === 'name') {
+            $this->title_field = $this->prefixFieldName($this->title_field);
+        }
+
+        parent::init();
+    }
+
     public function addField($name, $seed = []): \Atk4\Data\Field
     {
         $seed = \Atk4\Core\Factory::mergeSeeds($seed, [
@@ -87,7 +100,6 @@ trait ModelLockTrait
 class Country extends ModelWithPrefixedFields
 {
     public $table = 'country';
-    public $title_field = 'atk_fp_country__name';
 
     protected function init(): void
     {
@@ -248,7 +260,6 @@ class Percent extends \Atk4\Data\Field
 class File extends ModelWithPrefixedFields
 {
     public $table = 'file';
-    public $title_field = 'atk_fp_file__name';
 
     protected function init(): void
     {
@@ -332,7 +343,6 @@ class FileLock extends File
 class Category extends ModelWithPrefixedFields
 {
     public $table = 'product_category';
-    public $title_field = 'atk_fp_product_category__name';
 
     protected function init(): void
     {
@@ -352,7 +362,6 @@ class Category extends ModelWithPrefixedFields
 class SubCategory extends ModelWithPrefixedFields
 {
     public $table = 'product_sub_category';
-    public $title_field = 'atk_fp_product_sub_category__name';
 
     protected function init(): void
     {
@@ -373,7 +382,6 @@ class SubCategory extends ModelWithPrefixedFields
 class Product extends ModelWithPrefixedFields
 {
     public $table = 'product';
-    public $title_field = 'atk_fp_product__name';
 
     protected function init(): void
     {
