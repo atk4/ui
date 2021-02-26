@@ -27,7 +27,7 @@ class ModelWithPrefixedFields extends Model
     private function prefixFieldName(string $fieldName, bool $forActualName = false): string
     {
         if ($forActualName) {
-            $fieldName = preg_replace('~^' . preg_quote('atk_fp_' . $this->table . '__', '~') . '~', '', $fieldName);
+            $fieldName = preg_replace('~^' . preg_quote('atk_fp_((?:\w(?<!_))+_)+__', '~') . '~', '', $fieldName);
         }
 
         return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $this->table . '__' . $fieldName;
@@ -196,6 +196,7 @@ class Stat extends ModelWithPrefixedFields
 
         $this->hasOne($this->fieldName()->client_country_iso, [
             'model' => [Country::class],
+            'our_field' => Country::hinting()->fieldName()->id,
             'their_field' => Country::hinting()->fieldName()->iso,
             'type' => 'string',
             'ui' => [
@@ -273,6 +274,7 @@ class File extends ModelWithPrefixedFields
 
         $this->hasOne($this->fieldName()->parent_folder_id, [
             'model' => [Folder::class],
+            'our_field' => Folder::hinting()->fieldName()->id,
         ])
             ->addTitle();
     }
@@ -377,6 +379,7 @@ class SubCategory extends ModelWithPrefixedFields
 
         $this->hasOne($this->fieldName()->product_category_id, [
             'model' => [Category::class],
+            'our_field' => Category::hinting()->fieldName()->id,
         ]);
         $this->hasMany($this->fieldName()->Products, [
             'model' => [Product::class],
@@ -402,9 +405,11 @@ class Product extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->brand);
         $this->hasOne($this->fieldName()->product_category_id, [
             'model' => [Category::class],
+            'our_field' => Category::hinting()->fieldName()->id,
         ])->addTitle();
         $this->hasOne($this->fieldName()->product_sub_category_id, [
             'model' => [SubCategory::class],
+            'our_field' => SubCategory::hinting()->fieldName()->id,
         ])->addTitle();
     }
 }
