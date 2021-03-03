@@ -53,7 +53,6 @@ jobs:
           if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/phpstan 'behat/*' --dev ; fi
           composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
           if [ "${{ matrix.type }}" = "StaticAnalysis" ]; then php -d phar.readonly=0 vendor/mahalux/atk4-hintable/patch-phpstan-static-type-issue-4267.php vendor/phpstan/phpstan/phpstan.phar ; fi
-          rm -r vendor/atk4/data && git clone https://github.com/atk4/data.git -b feature/fix-conditions vendor/atk4/data
 
       - name: Init
         run: |
@@ -141,7 +140,6 @@ jobs:
           composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
           if [ "${{ matrix.type }}" == "Phpunit Lowest" ]; then composer update  --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader ; fi
           if [ "${{ matrix.type }}" == "Phpunit Burn" ]; then sed -i 's/ *public function runBare(): void/public function runBare(): void { gc_collect_cycles(); $mem0 = memory_get_usage(); for ($i = 0; $i < '"$(if [ \"$GITHUB_EVENT_NAME\" == \"schedule\" ]; then echo 5; else echo 5; fi)"'; ++$i) { $this->_runBare(); if ($i === 0) { gc_collect_cycles(); $mem1 = memory_get_usage(); } } gc_collect_cycles(); $mem2 = memory_get_usage(); if ($mem2 - 3072 * 1024 > $mem0 || $mem2 - 1536 * 1024 > $mem1) { $this->onNotSuccessfulTest(new AssertionFailedError("Memory leak detected! (" . round($mem0 \/ (1024 * 1024), 3) . " + " . round(($mem1 - $mem0) \/ (1024 * 1024), 3) . " + " . round(($mem2 - $mem1) \/ (1024 * 1024), 3) . " MB, " . $i . " iterations)")); } } private function _runBare(): void/' vendor/phpunit/phpunit/src/Framework/TestCase.php && cat vendor/phpunit/phpunit/src/Framework/TestCase.php | grep '_runBare(' ; fi
-          rm -r vendor/atk4/data && git clone https://github.com/atk4/data.git -b feature/fix-conditions vendor/atk4/data
 
       - name: Init
         run: |
@@ -269,7 +267,6 @@ jobs:
           composer remove --no-interaction --no-update phpstan/phpstan --dev
           composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
           if [ "${{ matrix.type }}" == "Chrome Lowest" ]; then composer update  --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader ; fi
-          rm -r vendor/atk4/data && git clone https://github.com/atk4/data.git -b feature/fix-conditions vendor/atk4/data
 
       - name: Init
         run: |
