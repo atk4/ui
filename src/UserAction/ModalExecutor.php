@@ -345,7 +345,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         if ($prev = $this->getPreviousStep($this->step)) {
             $chain = $this->loader->jsload([
                 'step' => $prev,
-                $this->name => $this->action->getOwner()->get('id'),
+                $this->name => $this->action->getOwner()->getId(),
             ], ['method' => 'post'], $this->loader->name);
 
             $modal->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([$chain])));
@@ -361,7 +361,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
                         $this->loader->jsload(
                             [
                                 'step' => 'final',
-                                $this->name => $this->action->getOwner()->get('id'),
+                                $this->name => $this->action->getOwner()->getId(),
                             ],
                             ['method' => 'post'],
                             $this->loader->name
@@ -552,7 +552,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
                     $this->loader->jsAddStoreData($this->actionData, true),
                     $this->loader->jsload([
                         'step' => $this->getNextStep($step),
-                        $this->name => $this->action->getOwner()->get('id'),
+                        $this->name => $this->action->getOwner()->getId(),
                     ], ['method' => 'post'], $this->loader->name),
                 ];
             }
@@ -648,7 +648,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         if ($prev = $this->getPreviousStep($step)) {
             $chain = $this->loader->jsload([
                 'step' => $prev,
-                $this->name => $this->action->getOwner()->get('id'),
+                $this->name => $this->action->getOwner()->getId(),
             ], ['method' => 'post'], $this->loader->name);
 
             $view->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([$chain])));
