@@ -164,7 +164,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
                         $this->loader->jsload(
                             [
                                 'step' => 'exec',
-                                $this->name => $this->action->getOwner()->get('id'),
+                                $this->name => $this->action->getOwner()->getId(),
                             ],
                             ['method' => 'post']
                         ),

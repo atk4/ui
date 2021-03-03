@@ -10,7 +10,8 @@ class DemoActionsUtil
     {
         $country->addUserAction(
             'callback',
-            ['description' => 'Callback',
+            [
+                'description' => 'Callback',
                 'callback' => function ($model) {
                     return 'callback execute using country ' . $model->getTitle();
                 },

@@ -41,7 +41,8 @@ Header::addTo($left, ['Hint placement']);
 $form = Form::addTo($left, [
     'layout' => [
         Form\Layout::class,
-        ['defaultInputTemplate' => __DIR__ . '/templates/input.html',
+        [
+            'defaultInputTemplate' => __DIR__ . '/templates/input.html',
             'defaultHint' => [\Atk4\Ui\Label::class, 'class' => ['pointing', 'below']],
         ],
     ],
