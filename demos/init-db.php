@@ -27,7 +27,7 @@ class ModelWithPrefixedFields extends Model
     private function prefixFieldName(string $fieldName, bool $forActualName = false): string
     {
         if ($forActualName) {
-            $fieldName = preg_replace('~^atk_fp_(?:\w(?<!_|(?<!_)_(?!_)))+__~', '', $fieldName);
+            $fieldName = preg_replace('~^atk_fp_' . preg_quote($this->table, '~') . '__~', '', $fieldName);
         }
 
         return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $this->table . '__' . $fieldName;
