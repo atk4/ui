@@ -273,7 +273,6 @@ class File extends ModelWithPrefixedFields
 
         $this->hasOne($this->fieldName()->parent_folder_id, [
             'model' => [Folder::class],
-            'our_field' => $this->fieldName()->parent_folder_id,
         ])
             ->addTitle();
     }
@@ -378,7 +377,6 @@ class SubCategory extends ModelWithPrefixedFields
 
         $this->hasOne($this->fieldName()->product_category_id, [
             'model' => [Category::class],
-            'our_field' => $this->fieldName()->product_category_id,
         ]);
         $this->hasMany($this->fieldName()->Products, [
             'model' => [Product::class],
@@ -404,11 +402,9 @@ class Product extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->brand);
         $this->hasOne($this->fieldName()->product_category_id, [
             'model' => [Category::class],
-            'our_field' => $this->fieldName()->product_category_id,
         ])->addTitle();
         $this->hasOne($this->fieldName()->product_sub_category_id, [
             'model' => [SubCategory::class],
-            'our_field' => $this->fieldName()->product_sub_category_id,
         ])->addTitle();
     }
 }
