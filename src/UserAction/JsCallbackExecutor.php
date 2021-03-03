@@ -71,8 +71,8 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         }
 
         $this->set(function ($j) {
-            // may be id is pass within $post args.
-            $id = $_POST['c0'] ?? $_POST[$this->action->getOwner()->id_field] ?? null;
+            // may be id is passed as 'id' or model->id_field within $post args.
+            $id = $_POST['id'] ?? $_POST[$this->action->getOwner()->id_field] ?? null;
             if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
                 $this->action->getOwner()->tryLoad($id);
             }
@@ -90,7 +90,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
                     ? ($this->jsSuccess)($this, $this->action->getOwner(), $id, $return)
                     : $this->jsSuccess;
 
-                $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) ?: $success ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
+                $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) ?: ($success ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : '')));
             }
 
             return $js;
