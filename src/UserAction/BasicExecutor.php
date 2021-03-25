@@ -42,7 +42,7 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
     /**
      * @var Button | array  Button that trigger the action. Either as an array seed or object
      */
-    public $executorButton = [Button::class, 'Confirm', 'primary'];
+    public $executorButton;
 
     /**
      * @var array
@@ -64,12 +64,20 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
      */
     protected $jsSuccess;
 
+    public function getAction(): Model\UserAction
+    {
+        return $this->action;
+    }
+
     /**
      * Associate executor with action.
      */
     public function setAction(Model\UserAction $action): void
     {
         $this->action = $action;
+        if (!$this->executorButton) {
+            $this->executorButton = $this->getExecutorFactory()->createTrigger($action, $this->getExecutorFactory()::BASIC_BUTTON);
+        }
     }
 
     /**
@@ -126,7 +134,7 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
         $this->addHeader();
 
         \Atk4\Ui\Button::addToWithCl($this, $this->executorButton)->on('click', function () {
-            return $this->jsExecute();
+            return $this->executeModelAction();
         });
     }
 
@@ -135,7 +143,7 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
      *
      * @return mixed
      */
-    public function jsExecute()
+    public function executeModelAction()
     {
         $args = [];
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form\Control\Line;
-use Atk4\Ui\UserAction;
 use Atk4\Ui\UserAction\JsCallbackExecutor;
 
 /** @var \Atk4\Ui\App $app */
@@ -21,8 +20,8 @@ $country = new Country($app->db);
 
 $sendEmailAction = $country->addUserAction('Email', [
     'confirmation' => 'Are you sure you wish to send an email?',
-    'callback' => function (Country $model) {
-        return 'Email to Kristy in ' . $model->name . ' has been sent!';
+    'callback' => function (Country $country) {
+        return 'Email to Kristy in ' . $country->fieldName()->name . ' has been sent!';
     },
 ]);
 
@@ -44,7 +43,6 @@ $country->addUserAction('greet', [
             'required' => true,
         ],
     ],
-    'ui' => ['executor' => [UserAction\JsCallbackExecutor::class]],
     'callback' => function (Country $model, $name) {
         return 'Hello ' . $name;
     },

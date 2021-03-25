@@ -38,7 +38,7 @@ class FormExecutor extends BasicExecutor
         }
 
         $this->form->onSubmit(function (Form $form) {
-            return $this->jsExecute();
+            return $this->executeModelAction();
         });
     }
 

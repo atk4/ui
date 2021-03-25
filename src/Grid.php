@@ -7,6 +7,10 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
+use Atk4\Ui\Table\Column;
+use Atk4\Ui\Table\Column\ActionButtons;
+use Atk4\Ui\UserAction\ConfirmationExecutor;
+use Atk4\Ui\UserAction\ExecutorInterface;
 
 /**
  * Implements a more sophisticated and interactive Data-Table component.
@@ -92,8 +96,6 @@ class Grid extends View
      * @var Table|false
      */
     public $table;
-
-    public $executor_class = UserAction\BasicExecutor::class;
 
     /**
      * The container for table and paginator.
@@ -375,11 +377,28 @@ class Grid extends View
      */
     public function addActionButton($button, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
+        return $this->getActionButtons()->addButton($button, $action, $confirmMsg, $isDisabled);
+    }
+
+    /**
+     * Add a button for executing a model action via an action executor.
+     */
+    public function addExecutorButton(UserAction\ExecutorInterface $executor, Button $button = null)
+    {
+        $btn = $button ? $this->add($button) : $this->getExecutorFactory()->createTrigger($executor->getAction(), $this->getExecutorFactory()::TABLE_BUTTON);
+        $confirmation = $executor->getAction()->getConfirmation() ?: '';
+        $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+
+        return $this->getActionButtons()->addButton($btn, $executor, $confirmation, $disabled);
+    }
+
+    private function getActionButtons(): ActionButtons
+    {
         if (!$this->actionButtons) {
             $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
         }
 
-        return $this->actionButtons->addButton($button, $action, $confirmMsg, $isDisabled);
+        return $this->actionButtons;
     }
 
     /**
@@ -392,11 +411,26 @@ class Grid extends View
      */
     public function addActionMenuItem($view, $action = null, string $confirmMsg = '', bool $isDisabled = false)
     {
+        return $this->getActionMenu()->addActionMenuItem($view, $action, $confirmMsg, $isDisabled);
+    }
+
+    public function addExecutorMenuItem(ExecutorInterface $executor)
+    {
+        $item = $this->getExecutorFactory()->createTrigger($executor->getAction(), $this->getExecutorFactory()::TABLE_MENU_ITEM);
+        // ConfirmationExecutor take care of showing the user confirmation, thus make it empty.
+        $confirmation = !$executor instanceof ConfirmationExecutor ? ($executor->getAction()->getConfirmation() ?: '') : '';
+        $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+
+        return $this->getActionMenu()->addActionMenuItem($item, $executor, $confirmation, $disabled);
+    }
+
+    private function getActionMenu()
+    {
         if (!$this->actionMenu) {
             $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
         }
 
-        return $this->actionMenu->addActionMenuItem($view, $action, $confirmMsg, $isDisabled);
+        return $this->actionMenu;
     }
 
     /**
@@ -509,41 +543,15 @@ class Grid extends View
     }
 
     /**
-     * Find out more about the nature of the action from the supplied object, use addAction().
+     * Use addExecutorButton or addExecutorMenuItem.
+     *
+     * @deprecated.
      */
     public function addUserAction(Model\UserAction $action)
     {
-        $executor = null;
-        $args = [];
-        $title = $action->caption;
-        $button = $action->caption;
+        $executor = $this->getExecutorFactory()->create($action, $this);
 
-        if ($action->ui['Grid']['Button'] ?? null) {
-            $button = $action->ui['Grid']['Button'];
-        }
-
-        if ($action->ui['Grid']['Executor'] ?? null) {
-            $executor = $action->ui['Grid']['Executor'];
-        }
-
-        if (!$executor || is_string($executor)) {
-            $class = $executor ?? $this->executor_class;
-            $executor = new $class();
-        }
-
-        if ($this->paginator) {
-            $args[$this->paginator->name] = $this->paginator->getCurrentPage();
-        }
-
-        $this->addModalAction($button, $title, function ($page, $id) use ($action, $executor) {
-            $page->add($executor);
-
-            $this->hook(self::HOOK_ON_USER_ACTION, [$page, $executor]);
-
-            $action->getOwner()->load($id);
-
-            $executor->setAction($action);
-        }, $args);
+        $this->addExecutorButton($executor);
     }
 
     /**

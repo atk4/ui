@@ -6,7 +6,6 @@ namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
-use Atk4\Ui\Exception;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\JsToast;
@@ -38,38 +37,29 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
      */
     public $jsSuccess;
 
+    public function getAction(): Model\UserAction
+    {
+        return $this->action;
+    }
+
     /**
      * Set action to be execute.
-     *
-     * The first single value provide in $urlArgs array will be
-     * consider as the model Id to be loaded with the action owner model.
-     *
-     * Ex.
-     *      $btn = \Atk4\Ui\Button::addTo($app, ['Import File']);
-     *      $ex = JsCallbackExecutor::addTo($app);
-     *      $ex->setAction($f_action, [8, 'path' => '.']);
-     *
-     *      $btn->on('click', $ex, ['confirm'=> 'This will import a lot of file. Are you sure?']);
-     *
-     *
-     * Note: Id can be set using a single value or a JsExpression, like:
-     *      $ex->setAction($f_action, [$field->jsInput()->val(), 'path' => '.']);
-     *
-     * @param array $urlArgs url Argument to pass when callback is trigger
-     *
-     * @return $this
      */
-    public function setAction(Model\UserAction $action, $urlArgs = [])
+    public function setAction(Model\UserAction $action)
     {
-        if (!$this->_initialized) {
-            throw new Exception('JsCallbackExecutor must be initialized prior to call setAction()');
-        }
-
         $this->action = $action;
         if (!$this->action->enabled && $this->getOwner() instanceof View) {
             $this->getOwner()->addClass('disabled');
         }
 
+        return $this;
+    }
+
+    /**
+     * Execute model user action.
+     */
+    public function executeModelAction(array $args = [])
+    {
         $this->set(function ($j) {
             // may be id is passed as 'id' or model->id_field within $post args.
             $id = $_POST['c0'] ?? $_POST['id'] ?? $_POST[$this->action->getOwner()->id_field] ?? null;
@@ -94,7 +84,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
             }
 
             return $js;
-        }, $urlArgs);
+        }, $args);
 
         return $this;
     }

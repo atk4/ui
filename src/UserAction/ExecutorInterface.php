@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\UserAction;
 
+use Atk4\Data\Model\UserAction;
+
 /**
  * ExecutorInterface can be implemented by a View that can be displayed on a page or in a modal window
  * and it would have an interaction with the user before invoking Action's callback.
@@ -31,5 +33,9 @@ interface ExecutorInterface
     /**
      * Will associate executor with the action.
      */
-    public function setAction(\Atk4\Data\Model\UserAction $action);
+    public function setAction(UserAction $action);
+
+    public function getAction(): UserAction;
+
+    public function executeModelAction();
 }

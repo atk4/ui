@@ -24,12 +24,6 @@ class Crud extends Grid
     /** @var array Default notifier to perform when adding or editing is successful * */
     public $notifyDefault = [JsToast::class];
 
-    /** @var string default js action executor class in UI for model action. */
-    public $jsExecutor = [UserAction\JsCallbackExecutor::class];
-
-    /** @var string default action executor class in UI for model action. */
-    public $executor = [UserAction\ModalExecutor::class];
-
     /** @var bool|null should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
 
@@ -91,7 +85,7 @@ class Crud extends Grid
             foreach ($this->menuItems as $item) {
                 // Remove previous click handler and attach new one using sort argument.
                 $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
-                $ex = $item['action']->ui['executor'];
+                $ex = $item['executor'];
                 if ($ex instanceof UserAction\JsExecutorInterface) {
                     $ex->stickyGet($this->name . '_sort', $this->getSortBy());
                     $this->container->js(true, $item['item']->js()->on('click.atk_crud_item', new JsFunction($ex->jsExecute())));
@@ -125,25 +119,22 @@ class Crud extends Grid
         }
 
         foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD) as $action) {
-            $action->ui['executor'] = $this->initActionExecutor($action);
+            $executor = $this->initActionExecutor($action);
             if ($this->useMenuActions) {
-                $this->addActionMenuItem($action);
+                $this->addExecutorMenuItem($executor);
             } else {
-                $this->addActionButton($action);
+                $this->addExecutorButton($executor);
             }
         }
 
         if ($this->menu) {
             foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
                 if ($action->enabled) {
-                    $action->ui['executor'] = $this->initActionExecutor($action);
+                    $executor = $this->initActionExecutor($action);
                     $this->menuItems[$k]['item'] = $this->menu->addItem(
-                        array_merge(
-                            [$action->getCaption()],
-                            $action->modifier === Model\UserAction::MODIFIER_CREATE ? ['icon' => 'plus'] : []
-                        )
+                        $this->getExecutorFactory()->createTrigger($action, $this->getExecutorFactory()::MENU_ITEM)
                     );
-                    $this->menuItems[$k]['action'] = $action;
+                    $this->menuItems[$k]['executor'] = $executor;
                 }
             }
             $this->setItemsAction();
@@ -261,7 +252,7 @@ class Crud extends Grid
     protected function setItemsAction()
     {
         foreach ($this->menuItems as $k => $item) {
-            $this->container->js(true, $item['item']->on('click.atk_crud_item', $item['action']));
+            $this->container->js(true, $item['item']->on('click.atk_crud_item', $item['executor']));
         }
     }
 
@@ -272,10 +263,6 @@ class Crud extends Grid
      */
     protected function getExecutor(Model\UserAction $action)
     {
-        if (isset($action->ui['executor'])) {
-            return Factory::factory($action->ui['executor']);
-        }
-
         // prioritize Crud addFields over action->fields for Model add action.
         if ($action->short_name === 'add' && $this->addFields) {
             $action->fields = $this->addFields;
@@ -286,10 +273,7 @@ class Crud extends Grid
             $action->fields = $this->editFields;
         }
 
-        // setting right action fields is based on action fields.
-        $executor = (!$action->args && !$action->fields && !$action->preview) ? $this->jsExecutor : $this->executor;
-
-        return Factory::factory($executor);
+        return $this->getExecutorFactory()->create($action, $this);
     }
 
     /**

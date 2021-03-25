@@ -6,6 +6,7 @@ namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
+use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\JsExpressionable;
@@ -97,6 +98,11 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         return [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])];
     }
 
+    public function getAction(): UserAction
+    {
+        return $this->action;
+    }
+
     /**
      * Will associate executor with the action.
      *
@@ -112,7 +118,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
         $this->actionInitialized = true;
         $this->jsSetBtnState($this);
-        $this->doSteps();
 
         return $this;
     }
@@ -120,7 +125,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Perform this action steps.
      */
-    public function doSteps()
+    public function executeModelAction()
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {

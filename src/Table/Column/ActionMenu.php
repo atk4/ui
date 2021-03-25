@@ -13,6 +13,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsChain;
 use Atk4\Ui\Table;
+use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\View;
 
 class ActionMenu extends Table\Column
@@ -77,37 +78,14 @@ class ActionMenu extends Table\Column
     /**
      * Add a menu item in Dropdown.
      *
-     * @param View|string                    $item
-     * @param \Closure|Model\UserAction|null $action
+     * @param View|string                           $item
+     * @param \Closure|Model|ExecutorInterface|null $action
      *
      * @return object|string
      */
-    public function addActionMenuItem($item, $action = null, string $confirmMsg = '', bool $isDisabled = false)
+    public function addActionMenuItem($item, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
-        // If action is not specified, perhaps it is defined in the model
-        if (!$action) {
-            if (is_string($item)) {
-                $action = $this->table->model->getUserAction($item);
-            } elseif ($item instanceof Model\UserAction) {
-                $action = $item;
-            }
-
-            if ($action) {
-                $item = $action->caption;
-            }
-        }
-
         $name = $this->name . '_action_' . (count($this->items) + 1);
-
-        if ($action instanceof Model\UserAction) {
-            $confirmMsg = $action->ui['confirm'] ?? $confirmMsg;
-
-            $isDisabled = !$action->enabled;
-
-            if ($action->enabled instanceof \Closure) {
-                $this->callbacks[$name] = $action->enabled;
-            }
-        }
 
         if (!is_object($item)) {
             $item = Factory::factory([\Atk4\Ui\View::class], ['id' => false, 'ui' => 'item', 'content' => $item]);
@@ -117,8 +95,12 @@ class ActionMenu extends Table\Column
 
         $item->addClass('{$_' . $name . '_disabled} i_' . $name);
 
-        if ($isDisabled) {
+        if ($isDisabled === true) {
             $item->addClass('disabled');
+        }
+
+        if (is_callable($isDisabled)) {
+            $this->callbacks[$name] = $isDisabled;
         }
 
         // set executor context.

@@ -52,7 +52,7 @@ class ArgumentFormExecutor extends BasicExecutor
             // set arguments from the model
             $this->setArguments($form->model->get());
 
-            return $this->jsExecute();
+            return $this->executeModelAction();
         });
     }
 }

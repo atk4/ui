@@ -112,7 +112,6 @@ class DemoActionsUtil
             [
                 'caption' => 'User Confirmation',
                 'description' => 'Confirm the action using a ConfirmationExecutor',
-                'ui' => ['executor' => [\Atk4\Ui\UserAction\ConfirmationExecutor::class]],
                 'confirmation' => function ($a) {
                     return 'Are you sure you want to perform this action on: <b>' . $a->getModel()->getTitle() . ' (' . $a->getModel()->iso3 . ')</b>';
                 },
@@ -134,7 +133,6 @@ class DemoActionsUtil
                 ],
                 'fields' => [$country->fieldName()->iso3],
                 'callback' => function ($model, $age, $city, $gender) {
-                    //    $model->save();
                     $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
 
                     return 'Thank you ' . $n . ' at age ' . $age;

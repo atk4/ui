@@ -45,7 +45,7 @@ class PreviewExecutor extends BasicExecutor
         }
 
         \Atk4\Ui\Button::addToWithCl($this, $this->executorButton)->on('click', function () {
-            return $this->jsExecute();
+            return $this->executeModelAction();
         });
     }
 
