@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Core\DebugTrait;
+use Atk4\Core\TraitUtil;
+
 /**
  * Console is a black square component resembling terminal window. It can be programmed
  * to run a job and output results to the user.
@@ -343,11 +346,11 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
         if (is_object($object)) {
             // temporarily override app logging
-            if (isset($object->_appScopeTrait) && $object->issetApp()) {
+            if (TraitUtil::hasAppScopeTrait($object) && $object->issetApp()) {
                 $loggerBak = $object->getApp()->logger;
                 $object->getApp()->logger = $this;
             }
-            if (isset($object->_debugTrait)) {
+            if (TraitUtil::hasTrait($object, DebugTrait::class)) {
                 $debugBak = $object->debug;
                 $object->debug = true;
             }
@@ -357,10 +360,10 @@ class Console extends View implements \Psr\Log\LoggerInterface
             try {
                 $result = $object->{$method}(...$args);
             } finally {
-                if (isset($object->_appScopeTrait) && $object->issetApp()) {
+                if (TraitUtil::hasAppScopeTrait($object) && $object->issetApp()) {
                     $object->getApp()->logger = $loggerBak; // @phpstan-ignore-line
                 }
-                if (isset($object->_debugTrait)) {
+                if (TraitUtil::hasTrait($object, DebugTrait::class)) {
                     $object->debug = $debugBak; // @phpstan-ignore-line
                 }
             }
