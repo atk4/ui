@@ -86,9 +86,11 @@ class ExecutorFactory
     }
 
     /**
-     * Register an executor for a specific model User action.
+     * Register an executor instance for a specific model User action.
+     *
+     * @param array|ExecutorInterface $seed
      */
-    public function registerExecutor(UserAction $action, array $seed)
+    public function registerExecutor(UserAction $action, $seed)
     {
         $this->executorSeed[$this->getModelId($action)][$action->short_name] = $seed;
     }
