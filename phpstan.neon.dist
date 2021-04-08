@@ -111,10 +111,6 @@ parameters:
         - '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$queryArg\.$~'
         - '~^Call to an undefined method Atk4\\Ui\\AbstractView::addClass\(\)\.$~'
         - '~^Call to an undefined method Atk4\\Ui\\AbstractView::on\(\)\.$~'
-        # for src/Console.php
-        - '~^Call to an undefined method object::issetApp\(\)\.$~'
-        - '~^Call to an undefined method object::getApp\(\)\.$~'
-        - '~^Access to an undefined property object::\$debug\.$~'
         # for src/Crud.php
         - '~^Call to an undefined method Atk4\\Ui\\UserAction\\JsExecutorInterface::stickyGet\(\)\.$~'
         - '~^Method Atk4\\Ui\\UserAction\\JsExecutorInterface::jsExecute\(\) invoked with 0 parameters, 1 required\.$~'
