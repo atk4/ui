@@ -23,7 +23,7 @@ $c->setModel($stat, [$stat->fieldName()->client_name, $stat->fieldName()->descri
 
 $c->addSection('Project: ', $stat, [$stat->fieldName()->start_date, $stat->fieldName()->finish_date], true);
 
-$country = $stat->client_country_iso->loadAny();
+$country = $stat->client_country_iso->loadOne();
 $notify = $country->addUserAction('Notify', [
     'args' => [
         'note' => ['type' => 'string', 'required' => true],
