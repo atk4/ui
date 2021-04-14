@@ -16,6 +16,7 @@
         "crud"
     ],
     "homepage": "https://github.com/atk4/ui",
+    "version": "dev-develop",
     "license": "MIT",
     "authors": [
         {
