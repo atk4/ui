@@ -249,7 +249,7 @@ class Percent extends \Atk4\Data\Field
  * @property string $name             @Atk4\Field()
  * @property string $type             @Atk4\Field()
  * @property bool   $is_folder        @Atk4\Field()
- * @property File   $SubFolder        @Atk4\RefOne()
+ * @property File   $SubFolder        @Atk4\RefMany()
  * @property int    $count            @Atk4\Field()
  * @property Folder $parent_folder_id @Atk4\RefOne()
  */
@@ -338,8 +338,8 @@ class FileLock extends File
 
 /**
  * @property string      $name          @Atk4\Field()
- * @property SubCategory $SubCategories @Atk4\RefOne()
- * @property Product     $Products      @Atk4\RefOne()
+ * @property SubCategory $SubCategories @Atk4\RefMany()
+ * @property Product     $Products      @Atk4\RefMany()
  */
 class Category extends ModelWithPrefixedFields
 {
@@ -364,7 +364,7 @@ class Category extends ModelWithPrefixedFields
 /**
  * @property string   $name                @Atk4\Field()
  * @property Category $product_category_id @Atk4\RefOne()
- * @property Product  $Products            @Atk4\RefOne()
+ * @property Product  $Products            @Atk4\RefMany()
  */
 class SubCategory extends ModelWithPrefixedFields
 {
