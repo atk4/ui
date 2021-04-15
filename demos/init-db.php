@@ -86,12 +86,12 @@ trait ModelLockTrait
 }
 
 /**
- * @property string $name      @Atk\Field()
- * @property string $sys_name  @Atk\Field()
- * @property string $iso       @Atk\Field()
- * @property string $iso3      @Atk\Field()
- * @property string $numcode   @Atk\Field()
- * @property string $phonecode @Atk\Field()
+ * @property string $name      @Atk4\Field()
+ * @property string $sys_name  @Atk4\Field()
+ * @property string $iso       @Atk4\Field()
+ * @property string $iso3      @Atk4\Field()
+ * @property string $numcode   @Atk4\Field()
+ * @property string $phonecode @Atk4\Field()
  */
 class Country extends ModelWithPrefixedFields
 {
@@ -152,31 +152,31 @@ class CountryLock extends Country
 }
 
 /**
- * @property string    $project_name           @Atk\Field()
- * @property string    $project_code           @Atk\Field()
- * @property string    $description            @Atk\Field()
- * @property string    $client_name            @Atk\Field()
- * @property string    $client_address         @Atk\Field()
- * @property Country   $client_country_iso     @Atk\RefOne()
- * @property string    $client_country         @Atk\Field()
- * @property bool      $is_commercial          @Atk\Field()
- * @property string    $currency               @Atk\Field()
- * @property string    $currency_symbol        @Atk\Field()
- * @property float     $project_budget         @Atk\Field()
- * @property float     $project_invoiced       @Atk\Field()
- * @property float     $project_paid           @Atk\Field()
- * @property float     $project_hour_cost      @Atk\Field()
- * @property int       $project_hours_est      @Atk\Field()
- * @property int       $project_hours_reported @Atk\Field()
- * @property float     $project_expenses_est   @Atk\Field()
- * @property float     $project_expenses       @Atk\Field()
- * @property float     $project_mgmt_cost_pct  @Atk\Field()
- * @property float     $project_qa_cost_pct    @Atk\Field()
- * @property \DateTime $start_date             @Atk\Field()
- * @property \DateTime $finish_date            @Atk\Field()
- * @property \DateTime $finish_time            @Atk\Field()
- * @property \DateTime $created                @Atk\Field()
- * @property \DateTime $updated                @Atk\Field()
+ * @property string    $project_name           @Atk4\Field()
+ * @property string    $project_code           @Atk4\Field()
+ * @property string    $description            @Atk4\Field()
+ * @property string    $client_name            @Atk4\Field()
+ * @property string    $client_address         @Atk4\Field()
+ * @property Country   $client_country_iso     @Atk4\RefOne()
+ * @property string    $client_country         @Atk4\Field()
+ * @property bool      $is_commercial          @Atk4\Field()
+ * @property string    $currency               @Atk4\Field()
+ * @property string    $currency_symbol        @Atk4\Field()
+ * @property float     $project_budget         @Atk4\Field()
+ * @property float     $project_invoiced       @Atk4\Field()
+ * @property float     $project_paid           @Atk4\Field()
+ * @property float     $project_hour_cost      @Atk4\Field()
+ * @property int       $project_hours_est      @Atk4\Field()
+ * @property int       $project_hours_reported @Atk4\Field()
+ * @property float     $project_expenses_est   @Atk4\Field()
+ * @property float     $project_expenses       @Atk4\Field()
+ * @property float     $project_mgmt_cost_pct  @Atk4\Field()
+ * @property float     $project_qa_cost_pct    @Atk4\Field()
+ * @property \DateTime $start_date             @Atk4\Field()
+ * @property \DateTime $finish_date            @Atk4\Field()
+ * @property \DateTime $finish_time            @Atk4\Field()
+ * @property \DateTime $created                @Atk4\Field()
+ * @property \DateTime $updated                @Atk4\Field()
  */
 class Stat extends ModelWithPrefixedFields
 {
@@ -246,12 +246,12 @@ class Percent extends \Atk4\Data\Field
 }
 
 /**
- * @property string $name             @Atk\Field()
- * @property string $type             @Atk\Field()
- * @property bool   $is_folder        @Atk\Field()
- * @property File   $SubFolder        @Atk\RefOne()
- * @property int    $count            @Atk\Field()
- * @property Folder $parent_folder_id @Atk\RefOne()
+ * @property string $name             @Atk4\Field()
+ * @property string $type             @Atk4\Field()
+ * @property bool   $is_folder        @Atk4\Field()
+ * @property File   $SubFolder        @Atk4\RefOne()
+ * @property int    $count            @Atk4\Field()
+ * @property Folder $parent_folder_id @Atk4\RefOne()
  */
 class File extends ModelWithPrefixedFields
 {
@@ -337,9 +337,9 @@ class FileLock extends File
 }
 
 /**
- * @property string      $name          @Atk\Field()
- * @property SubCategory $SubCategories @Atk\RefOne()
- * @property Product     $Products      @Atk\RefOne()
+ * @property string      $name          @Atk4\Field()
+ * @property SubCategory $SubCategories @Atk4\RefOne()
+ * @property Product     $Products      @Atk4\RefOne()
  */
 class Category extends ModelWithPrefixedFields
 {
@@ -362,9 +362,9 @@ class Category extends ModelWithPrefixedFields
 }
 
 /**
- * @property string   $name                @Atk\Field()
- * @property Category $product_category_id @Atk\RefOne()
- * @property Product  $Products            @Atk\RefOne()
+ * @property string   $name                @Atk4\Field()
+ * @property Category $product_category_id @Atk4\RefOne()
+ * @property Product  $Products            @Atk4\RefOne()
  */
 class SubCategory extends ModelWithPrefixedFields
 {
@@ -386,10 +386,10 @@ class SubCategory extends ModelWithPrefixedFields
 }
 
 /**
- * @property string      $name                    @Atk\Field()
- * @property string      $brand                   @Atk\Field()
- * @property Category    $product_category_id     @Atk\RefOne()
- * @property SubCategory $product_sub_category_id @Atk\RefOne()
+ * @property string      $name                    @Atk4\Field()
+ * @property string      $brand                   @Atk4\Field()
+ * @property Category    $product_category_id     @Atk4\RefOne()
+ * @property SubCategory $product_sub_category_id @Atk4\RefOne()
  */
 class Product extends ModelWithPrefixedFields
 {
