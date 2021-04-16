@@ -38,7 +38,7 @@ class App
 
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
-        'atk' => 'https://raw.githack.com/atk4/ui/develop/public',
+        'atk' => 'https://raw.githack.com/atk4/ui/2.4.0/public',
         'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7',
@@ -49,7 +49,7 @@ class App
     protected $executorFactory;
 
     /** @var string Version of Agile UI */
-    public $version = '2.4-x';
+    public $version = '2.4.0';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';

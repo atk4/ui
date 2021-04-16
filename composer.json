@@ -16,7 +16,6 @@
         "crud"
     ],
     "homepage": "https://github.com/atk4/ui",
-    "version": "dev-develop",
     "license": "MIT",
     "authors": [
         {
@@ -53,10 +52,6 @@
         }
     ],
     "require": {
-        "php": ">=7.3.0",
-        "atk4/data": "dev-develop"
-    },
-    "require-release": {
         "php": ">=7.3.0",
         "atk4/data": "~2.4.0"
     },
