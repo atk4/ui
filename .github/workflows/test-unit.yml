@@ -184,7 +184,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['latest']
+        php: ['latest-npm']
         type: ['Chrome', 'Firefox', 'Chrome Lowest', 'Chrome Slow']
     env:
       LOG_COVERAGE: ''
@@ -220,7 +220,6 @@ jobs:
       - name: Install JS dependencies (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
-          apk add npm
           npm install --loglevel=error -g pug-cli less less-plugin-clean-css uglify-js
           (cd js && npm ci --loglevel=error)
 
