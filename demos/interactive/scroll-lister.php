@@ -18,7 +18,7 @@ require_once __DIR__ . '/../init-app.php';
 $container = \Atk4\Ui\View::addTo($app);
 
 $view = \Atk4\Ui\View::addTo($container, ['template' => new HtmlTemplate('
-{List}<div class="ui segment" style="height: 60px"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</div>{/}
+{List}<div class="ui segment" style="height: 60px"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{/}
 {$Content}')]);
 
 $lister = \Atk4\Ui\Lister::addTo($view, [], ['List']);
