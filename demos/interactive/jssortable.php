@@ -13,7 +13,7 @@ $view = \Atk4\Ui\View::addTo($app, ['template' => new HtmlTemplate(
     '<div class="ui header">Click and drag country to reorder</div>
     <div id="{$_id}" style="cursor: pointer">
         <ul>
-            {List}<li class="ui icon label" data-name="{$name}"><i class="{iso}ae{/} flag"></i> {$name}</li>{/}
+            {List}<li class="ui icon label" data-name="{$atk_fp_country__name}"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</li>{/}
         </ul>
     </div>'
 )]);
