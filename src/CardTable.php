@@ -43,8 +43,8 @@ class CardTable extends Table
 
         $this->_bypass = true;
         $mm = parent::setSource($data);
-        $this->addDecorator('value', [Table\Column\Multiformat::class, function ($row, $field) use ($model) {
-            $field = $model->getField($row->data['id']);
+        $this->addDecorator('value', [Table\Column\Multiformat::class, function (Model $row, $field) use ($model) {
+            $field = $model->getField($row->getId());
             $ret = $this->decoratorFactory(
                 $field,
                 $field->type === 'boolean' ? [Table\Column\Status::class,  ['positive' => [true, 'Yes'], 'negative' => [false, 'No']]] : []

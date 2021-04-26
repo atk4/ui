@@ -138,17 +138,17 @@ class TypeDatetime extends Column\FilterModel
     {
         switch ($dateModifier) {
             case 'exact':
-                $date = $this->data['exact_date'];
+                $date = $this->get('exact_date');
 
                 break;
             case 'x_day_ago':
             case 'x_day_before':
-                $date = new DateTime('-' . $this->data['number_days'] . ' days');
+                $date = new DateTime('-' . $this->get('number_days') . ' days');
 
                 break;
             case 'x_day_now':
             case 'x_day_after':
-                $date = new DateTime('+' . $this->data['number_days'] . ' days');
+                $date = new DateTime('+' . $this->get('number_days') . ' days');
 
                 break;
             default:
