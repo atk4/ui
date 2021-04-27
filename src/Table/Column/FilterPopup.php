@@ -54,6 +54,7 @@ class FilterPopup extends Popup
         $this->setHoverable();
 
         $model = FilterModel::factoryType($this->field);
+        $model = $model->createEntity();
 
         $this->form = Form::addTo($this)->addClass('');
         $this->form->buttonSave->addClass('');
