@@ -110,7 +110,7 @@ $form = Form::addTo($app);
 
 // Add multiline field and set model.
 $multiline = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
-$multiline->setModel($inventory->createEntity());
+$multiline->setModel($inventory);
 
 // Add total field.
 $sublayout = $form->layout->addSublayout([Form\Layout\Section\Columns::class]);
