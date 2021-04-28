@@ -49,7 +49,7 @@ $grid->addActionMenuItem($divider);
 $grid->addActionMenuItem($modelHeader);
 
 // Adding Model actions.
-foreach ($country->getUserActions(UserAction::APPLIES_TO_SINGLE_RECORD) as $action) {
+foreach ($country->createEntity()->getUserActions(UserAction::APPLIES_TO_SINGLE_RECORD) as $action) {
     if (in_array($action->short_name, ['add', 'edit', 'delete'], true)) {
         continue;
     }
