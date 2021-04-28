@@ -49,7 +49,7 @@ $myFactory = get_class(new class() extends ExecutorFactory {
 Header::addTo($app, ['Executor Factory set for this Card View only.']);
 
 DemoActionsUtil::setupDemoActions($country = new CountryLock($app->db));
-$country->loadAny();
+$country = $country->loadAny();
 
 $cardActions = Card::addTo($app, ['useLabel' => true, 'executorFactory' => new $myFactory()]);
 $cardActions->setModel($country);
@@ -65,7 +65,7 @@ foreach ($country->getUserActions() as $action) {
 Header::addTo($app, ['Card View using global Executor Factory']);
 
 $model = new CountryLock($app->db);
-$model->loadAny();
+$model = $model->loadAny();
 
 $card = Card::addTo($app, ['useLabel' => true]);
 $card->setModel($model);

@@ -94,7 +94,7 @@ $inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => 
 // Populate some data.
 $total = 0;
 for ($i = 1; $i < 3; ++$i) {
-    $inventory2 = clone $inventory;
+    $inventory2 = $inventory->createEntity();
     $inventory2->set('id', $i);
     $inventory2->set('inv_date', date($dateFormat));
     $inventory2->set('inv_time', date($timeFormat));
@@ -110,7 +110,7 @@ $form = Form::addTo($app);
 
 // Add multiline field and set model.
 $multiline = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
-$multiline->setModel($inventory);
+$multiline->setModel($inventory->createEntity());
 
 // Add total field.
 $sublayout = $form->layout->addSublayout([Form\Layout\Section\Columns::class]);

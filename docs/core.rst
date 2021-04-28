@@ -132,7 +132,7 @@ Agile UI uses various techniques to present data formats, so that as a developer
 have to worry over the details::
 
     $user = new User($db);
-    $user->load(1);
+    $user = $user->load(1);
 
     $view = View::addTo($app, ['template'=>'Hello, {$name}, your balance is {$balance}']);
     $view->setModel($user);

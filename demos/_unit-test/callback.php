@@ -22,7 +22,7 @@ $vp = $app->add(new \Atk4\Ui\VirtualPage());
 $vp->cb->triggerOnReload = false;
 
 $form = Form::addTo($vp);
-$form->setModel((clone $m)->tryLoadAny(), [$m->fieldName()->name]);
+$form->setModel($m->tryLoadAny(), [$m->fieldName()->name]);
 $form->getControl($m->fieldName()->name)->caption = 'TestName';
 
 $table = $app->add(new \Atk4\Ui\Table());

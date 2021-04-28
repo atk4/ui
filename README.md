@@ -162,7 +162,7 @@ $tabs->addTab('Settings', function($p) use($app) {
 
     // Second tab contains an AJAX form that stores itself back to DB.
     $m = new Settings($app->db);
-    $m->load(2);
+    $m = $m->load(2);
     \Atk4\Ui\Form::addTo($p)->setModel($m);
 });
 ```

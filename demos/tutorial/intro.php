@@ -145,7 +145,8 @@ $wizard->addStep('Business Model', function ($page) {
 
         Header::addTo($owner, ['Set invoice data:']);
         $form = \Atk4\Ui\Form::addTo($owner);
-        $form->setModel($model)->tryLoad(1);
+        $model = $model->tryLoad(1);
+        $form->setModel($model);
 
         if (!$model->loaded()) {
             // set default data
@@ -205,7 +206,7 @@ $wizard->addStep('Persistence', function ($page) {
         });
 
         Header::addTo($owner, ['Record display in Card View using model data.']);
-        $model->tryLoad(1);
+        $model = $model->tryLoad(1);
         if ($model->loaded()) {
             \Atk4\Ui\Card::addTo($owner, ['useLabel' => true])->setModel($model);
         } else {

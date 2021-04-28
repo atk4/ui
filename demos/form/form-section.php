@@ -14,7 +14,7 @@ require_once __DIR__ . '/../init-app.php';
 \Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
 $model = new CountryLock($app->db);
-$model->loadAny();
+$model = $model->loadAny();
 
 // Prevent form from saving
 $noSave = function (Form $form) {

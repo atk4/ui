@@ -430,7 +430,7 @@ class Lookup extends Input
         if ($this->field && $this->field->get()) {
             $id_field = $this->id_field ?: $this->model->id_field;
 
-            $this->model->tryLoadBy($id_field, $this->field->get());
+            $this->model = $this->model->tryLoadBy($id_field, $this->field->get());
 
             if ($this->model->loaded()) {
                 $row = $this->renderRow($this->model);

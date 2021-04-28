@@ -12,7 +12,7 @@ require_once __DIR__ . '/../init-app.php';
 // Demo for Model action
 
 $country = new CountryLock($app->db);
-$country->tryLoadAny();
+$country = $country->tryLoadAny();
 $countryId = $country->getId();
 
 // Model actions for this file are setup in DemoActionUtil.

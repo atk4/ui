@@ -174,6 +174,7 @@ $modelRegister = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_());
 $modelRegister->addField('name');
 $modelRegister->addField('email');
 $modelRegister->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);
+$modelRegister = $modelRegister->createEntity();
 
 $form = Form::addTo($tab, ['segment' => true]);
 $form->setModel($modelRegister);
@@ -195,7 +196,7 @@ $tab = $tabs->addTab('Layout Control');
 \Atk4\Ui\Header::addTo($tab, ['Shows example of grouping and multiple errors']);
 
 $form = Form::addTo($tab, ['segment']);
-$form->setModel(new \Atk4\Data\Model());
+$form->setModel((new \Atk4\Data\Model())->createEntity());
 
 $form->addHeader('Example fields added one-by-one');
 $form->addControl('name');

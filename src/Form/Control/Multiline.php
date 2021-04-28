@@ -333,7 +333,7 @@ class Multiline extends Form\Control
                 }
 
                 if ($fieldName === $row_model->id_field && $value) {
-                    $row_model->load($value);
+                    $row_model = $row_model->load($value);
                 }
 
                 $field = $row_model->getField($fieldName);

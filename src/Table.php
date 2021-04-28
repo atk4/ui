@@ -456,6 +456,8 @@ class Table extends Lister
      */
     public function setModel(\Atk4\Data\Model $model, $columns = null)
     {
+        $model->assertIsModel();
+
         parent::setModel($model);
 
         if ($columns === null) {

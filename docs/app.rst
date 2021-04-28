@@ -86,7 +86,7 @@ active. (See :ref:`system_pattern`)::
 
             // Load User from database based on session data
             if (isset($_SESSION['user_id'])) {
-                $this->user->tryLoad($_SESSION['user_id']);
+                $this->user = $this->user->tryLoad($_SESSION['user_id']);
             }
 
             // Make sure user is valid

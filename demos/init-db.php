@@ -130,7 +130,7 @@ class Country extends ModelWithPrefixedFields
         // look if name is unique
         $c = clone $this;
         $c->unload();
-        $c->tryLoadBy($this->fieldName()->name, $this->name);
+        $c = $c->tryLoadBy($this->fieldName()->name, $this->name);
         if ($c->loaded() && $c->getId() !== $this->getId()) {
             $errors[$this->fieldName()->name] = 'Country name must be unique';
         }

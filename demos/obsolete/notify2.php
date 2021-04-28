@@ -34,7 +34,7 @@ $form->cb->setUrlTrigger('test_notify');
 
 \Atk4\Ui\Label::addTo($form, ['Some of notification options that can be set.', 'top attached'], ['AboveControls']);
 $form->buttonSave->set('Show');
-$form->setModel(new $notifierClass($app->db), false);
+$form->setModel((new $notifierClass($app->db))->createEntity(), false);
 
 $formGroup = $form->addGroup(['Set Text and Icon:']);
 $formGroup->addControl('text', ['width' => 'eight']);
