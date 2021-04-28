@@ -49,7 +49,7 @@ class App
     protected $executorFactory;
 
     /** @var string Version of Agile UI */
-    public $version = 'dev';
+    public $version = '3.0-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
