@@ -530,7 +530,7 @@ class Multiline extends Form\Control
             $props['config']['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
         }
 
-        if ($field->reference) {
+        if ($field->getReference() !== null) {
             $props['config']['url'] = $this->dataCb->getUrl();
             $props['config']['reference'] = $field->short_name;
             $props['config']['search'] = true;
@@ -548,8 +548,8 @@ class Multiline extends Form\Control
      */
     public function setLookupOptionValue(Field $field, string $value)
     {
-        $model = $field->reference->refModel();
-        $rec = $model->tryLoadBy($field->reference->getTheirFieldName(), $value);
+        $model = $field->getReference()->refModel();
+        $rec = $model->tryLoadBy($field->getReference()->getTheirFieldName(), $value);
         if ($rec->loaded()) {
             $option = [
                 'key' => $value,
@@ -583,7 +583,7 @@ class Multiline extends Form\Control
             $component = $this->fieldMapToComponent['date'];
         } elseif ($field->type === 'text') {
             $component = $this->fieldMapToComponent['textarea'];
-        } elseif ($field->reference) {
+        } elseif ($field->getReference() !== null) {
             $component = $this->fieldMapToComponent['lookup'];
         } else {
             $component = $this->fieldMapToComponent['default'];
@@ -607,12 +607,12 @@ class Multiline extends Form\Control
         }
         if ($field->values && is_array($field->values)) {
             $items = array_chunk($field->values, $limit, true)[0];
-        } elseif ($field->reference) {
-            $model = $field->reference->refModel();
+        } elseif ($field->getReference() !== null) {
+            $model = $field->getReference()->refModel();
             $model->setLimit($limit);
 
             foreach ($model as $item) {
-                $items[$item->get($field->reference->getTheirFieldName())] = $item->get($model->title_field);
+                $items[$item->get($field->getReference()->getTheirFieldName())] = $item->get($model->title_field);
             }
         }
 

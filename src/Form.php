@@ -501,17 +501,17 @@ class Form extends View
 
         $fallbackSeed = [Form\Control\Line::class];
 
-        if ($field->type === 'array' && $field->reference) {
-            $limit = ($field->reference instanceof ContainsMany) ? 0 : 1;
-            $model = $field->reference->refModel();
+        if ($field->type === 'array' && $field->getReference() !== null) {
+            $limit = ($field->getReference() instanceof ContainsMany) ? 0 : 1;
+            $model = $field->getReference()->refModel();
             $fallbackSeed = [Form\Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
         } elseif ($field->type !== 'boolean') {
             if ($field->enum) {
                 $fallbackSeed = [Form\Control\Dropdown::class, 'values' => array_combine($field->enum, $field->enum)];
             } elseif ($field->values) {
                 $fallbackSeed = [Form\Control\Dropdown::class, 'values' => $field->values];
-            } elseif (isset($field->reference)) {
-                $fallbackSeed = [Form\Control\Lookup::class, 'model' => $field->reference->refModel()];
+            } elseif ($field->getReference() !== null) {
+                $fallbackSeed = [Form\Control\Lookup::class, 'model' => $field->getReference()->refModel()];
             }
         }
 

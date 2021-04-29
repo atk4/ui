@@ -31,8 +31,9 @@ trait VueLookupTrait
         $query = $_GET['atk_vlookup_q'] ?? null;
         $data = [];
         if ($fieldName) {
-            $model = $this->getModel()->getField($fieldName)->reference->refModel();
-            $refFieldName = $this->getModel()->getField($fieldName)->reference->getTheirFieldName();
+            $ref = $this->getModel()->getField($fieldName)->getReference();
+            $model = $ref->refModel();
+            $refFieldName = $ref->getTheirFieldName();
             if (!empty($query)) {
                 $model->addCondition($model->title_field, 'like', '%' . $query . '%');
             }

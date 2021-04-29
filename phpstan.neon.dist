@@ -351,9 +351,6 @@ parameters:
             message: '~^Negated boolean expression is always false\.$~'
         -
             path: 'src/Form/AbstractLayout.php'
-            message: '~^Strict comparison using \=\=\= between array\|null and false will always evaluate to false\.$~'
-        -
-            path: 'src/Form/AbstractLayout.php'
             message: '~^Else branch is unreachable because previous condition is always true\.$~'
         -
             path: 'src/Form/Control.php'
@@ -439,9 +436,6 @@ parameters:
         -
             path: 'src/Grid.php'
             message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Strict comparison using \!\=\= between null and null will always evaluate to false\.$~'
         -
             path: 'src/JsReload.php'
             message: '~^Ternary operator condition is always true\.$~'
