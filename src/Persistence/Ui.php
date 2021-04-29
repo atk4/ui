@@ -179,7 +179,7 @@ class Ui extends \Atk4\Data\Persistence
                 break;
         }
 
-        if (isset($f->reference)) {
+        if ($f->getReference() !== null) {
             if (empty($value)) {
                 $value = null;
             }

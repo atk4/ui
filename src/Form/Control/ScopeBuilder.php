@@ -386,7 +386,7 @@ class ScopeBuilder extends Control
     {
         if ($field->enum || $field->values) {
             $type = 'enum';
-        } elseif ($field->reference) {
+        } elseif ($field->getReference() !== null) {
             $type = 'lookup';
         } else {
             $type = $field->type;
@@ -415,7 +415,7 @@ class ScopeBuilder extends Control
             $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
         }
 
-        if ($field->reference) {
+        if ($field->getReference() !== null) {
             $props['url'] = $this->dataCb->getUrl();
             $props['reference'] = $field->short_name;
             $props['search'] = true;
@@ -456,7 +456,8 @@ class ScopeBuilder extends Control
      */
     protected function addReferenceRules(Field $field): self
     {
-        if ($reference = $field->reference) {
+        $reference = $field->getReference();
+        if ($reference !== null) {
             // add the number of records rule
             $this->rules[] = $this->getRule('numeric', [
                 'id' => $reference->link . '/#',
@@ -516,12 +517,12 @@ class ScopeBuilder extends Control
         }
         if ($field->values && is_array($field->values)) {
             $items = array_chunk($field->values, $limit, true)[0];
-        } elseif ($field->reference) {
-            $model = $field->reference->refModel();
+        } elseif ($field->getReference()) {
+            $model = $field->getReference()->refModel();
             $model->setLimit($limit);
 
             foreach ($model as $item) {
-                $items[$item->get($field->reference->getTheirFieldName())] = $item->get($model->title_field);
+                $items[$item->get($field->getReference()->getTheirFieldName())] = $item->get($model->title_field);
             }
         }
 
@@ -744,8 +745,9 @@ class ScopeBuilder extends Control
         $option = null;
         switch ($type) {
             case 'lookup':
-                $model = $condition->getModel()->getField($condition->key)->reference->refModel();
-                $fieldName = $condition->getModel()->getField($condition->key)->reference->getTheirFieldName();
+                $reference = $condition->getModel()->getField($condition->key)->getReference();
+                $model = $reference->refModel();
+                $fieldName = $reference->getTheirFieldName();
                 $rec = $model->tryLoadBy($fieldName, $value);
                 if ($rec->loaded()) {
                     $option = [
