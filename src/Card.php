@@ -280,7 +280,7 @@ class Card extends View
 
             $page->add($executor = new $executor());
 
-            $action->getOwner()->load($id);
+            $action->getModel()->load($id);
 
             $executor->setAction($action);
         });
