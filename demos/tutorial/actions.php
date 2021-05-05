@@ -65,7 +65,7 @@ $wizard->addStep('Define User Action', function ($page) {
         $country->addUserAction('send_message', function () {
             return 'sent';
         });
-        $country->tryLoadAny();
+        $country = $country->tryLoadAny();
 
         $card = \Atk4\Ui\Card::addTo($owner);
         $card->setModel($country, [$country->fieldName()->iso]);
@@ -85,7 +85,7 @@ $wizard->addStep('UI Integration', function ($page) {
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
         $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
-        $country->loadAny();
+        $country = $country->loadAny();
 
         \Atk4\Ui\Button::addTo($owner, ['Edit some country'])
             ->on('click', $country->getUserAction('edit'));
@@ -101,7 +101,7 @@ $wizard->addStep('UI Integration', function ($page) {
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
         $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
-        $country->loadAny();
+        $country = $country->loadAny();
 
         $menu = \Atk4\Ui\Menu::addTo($owner);
         $menu->addItem('Hello');

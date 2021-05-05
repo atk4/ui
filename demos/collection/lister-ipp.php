@@ -59,7 +59,7 @@ $container = \Atk4\Ui\View::addTo($app);
 
 $view = \Atk4\Ui\View::addTo($container, ['template' => new HtmlTemplate('<div>
 <ul>
-{List}<li class="ui icon label"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</li>{/}
+{List}<li class="ui icon label"><i class="{$atk_fp_country__iso} flag"></i>{$atk_fp_country__name}</li>{/}
 </ul>{$Content}</div>')]);
 
 $lister = \Atk4\Ui\Lister::addTo($view, [], ['List']);

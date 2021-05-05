@@ -267,6 +267,8 @@ class Form extends View
      */
     public function setModel(Model $model, $fields = null)
     {
+        $model->assertIsEntity();
+
         // Model is set for the form and also for the current layout
         try {
             $model = parent::setModel($model);
@@ -401,7 +403,7 @@ class Form extends View
     public function addControl(?string $name, $control = null, $field = null)
     {
         if (!$this->model) {
-            $this->model = new \Atk4\Ui\Misc\ProxyModel();
+            $this->model = (new \Atk4\Ui\Misc\ProxyModel())->createEntity();
         }
 
         return $this->layout->addControl($name, $control, $field);

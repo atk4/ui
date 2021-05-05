@@ -127,7 +127,7 @@ to populate a content::
     $grid->addModalAction('Details', 'Additional Details', function($p, $id) use ($grid) {
 
         // $id of the record which was clicked
-        // $grid->model->load($id);
+        // $grid->model = $grid->model->load($id);
 
         LoremIpsum::addTo($p);
     });

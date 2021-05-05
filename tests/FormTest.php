@@ -85,6 +85,7 @@ class FormTest extends AtkPhpunit\TestCase
         $m->addField('email', ['required' => true]);
         $m->addField('is_admin', ['default' => false]);
 
+        $m = $m->createEntity();
         $f->setModel($m, ['name', 'email']);
 
         $this->assertSame('John', $f->model->get('name'));
@@ -150,6 +151,7 @@ class FormTest extends AtkPhpunit\TestCase
         //$m->addField('opt3_zerotest', ['values'=>$options, 'required'=>true]);
         $m->addField('opt4', ['values' => $options, 'mandatory' => true]);
 
+        $m = $m->createEntity();
         $this->f->setModel($m);
         $this->assertSubmitError(['opt1' => '2', 'opt3' => '', 'opt3_zerotest' => '0'], function ($error) {
             // dropdown validates to make sure option is proper

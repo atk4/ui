@@ -32,7 +32,7 @@ $right = View::addTo($gridLayout, [], ['r1c1']);
 Header::addTo($right, ['Button on right']);
 
 $form = Form::addTo($right, ['layout' => [Form\Layout::class, 'defaultTemplate' => __DIR__ . '/templates/form-button-right.html']]);
-$form->setModel(new Flyers(new \Atk4\Data\Persistence\Array_()));
+$form->setModel((new Flyers(new \Atk4\Data\Persistence\Array_()))->tryLoadAny());
 $form->getControl('last_name')->hint = 'Please enter your last name.';
 
 $left = View::addTo($gridLayout, [], ['r1c2']);
@@ -47,14 +47,14 @@ $form = Form::addTo($left, [
         ],
     ],
 ]);
-$form->setModel(new Flyers(new \Atk4\Data\Persistence\Array_()));
+$form->setModel((new Flyers(new \Atk4\Data\Persistence\Array_()))->tryLoadAny());
 $form->getControl('last_name')->hint = 'Please enter your last name.';
 
 ////////////////////////////////////////
 $tab = $tabs->addTab('Custom layout class');
 
 $form = Form::addTo($tab, ['layout' => [Form\Layout\Custom::class, 'defaultTemplate' => __DIR__ . '/templates/form-custom-layout.html']]);
-$form->setModel(new \Atk4\Ui\Demos\CountryLock($app->db))->loadAny();
+$form->setModel((new \Atk4\Ui\Demos\CountryLock($app->db))->loadAny());
 
 $form->onSubmit(function ($form) {
     return new \Atk4\Ui\JsToast('Saving is disabled');

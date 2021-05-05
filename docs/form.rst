@@ -425,7 +425,7 @@ you can create a form to change profile of a currently logged user::
 
     $user = new User($db);
     $user->getControl('password')->never_persist = true; // ignore password field
-    $user->load($current_user);
+    $user = $user->load($current_user);
 
     // Display all fields (except password) and values
     $form = Form::addTo($app);
@@ -439,8 +439,7 @@ they're marked as System (https://agile-data.readthedocs.io/en/develop/fields.ht
 see https://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields#Model::onlyFields::
 
     $form = Form::addTo($app);
-    $form->setModel(new User($db), ['email', 'name']);
-    $form->model->load($current_user);
+    $form->setModel((new User($db))->load($current_user), ['email', 'name']);
 
 As before, field ``password`` will not be loaded from the database, but this time
 using onlyFields restriction rather then `never_persist`.
@@ -547,7 +546,7 @@ All available parameters can be found here: https://fomantic-ui.com/behaviors/ap
     Name of the template which will be used to render success message.
 
 To continue with the example, a new Person record can be added into the database
-but only if they have also accepted terms and conditions. An onSubmit handler 
+but only if they have also accepted terms and conditions. An onSubmit handler
 that would perform the check can be defined displaying error or success messages::
 
     $form->onSubmit(function($form) {

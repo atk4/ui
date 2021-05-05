@@ -44,7 +44,7 @@ class ForFieldUiTest extends AtkPhpunit\TestCase
     {
         $f = new \Atk4\Ui\Form();
         $f->invokeInit();
-        $f->setModel($this->m);
+        $f->setModel($this->m->createEntity());
         $this->assertFalse($f->getControl('regular_field')->readonly);
     }
 
@@ -52,7 +52,7 @@ class ForFieldUiTest extends AtkPhpunit\TestCase
     {
         $f = new \Atk4\Ui\Form();
         $f->invokeInit();
-        $f->setModel($this->m, ['just_for_data']);
+        $f->setModel($this->m->createEntity(), ['just_for_data']);
         $this->assertTrue($f->getControl('just_for_data')->readonly);
     }
 
@@ -60,7 +60,7 @@ class ForFieldUiTest extends AtkPhpunit\TestCase
     {
         $f = new \Atk4\Ui\Form();
         $f->invokeInit();
-        $f->setModel($this->m);
+        $f->setModel($this->m->createEntity());
         $this->assertFalse($f->getControl('no_persist_but_show_in_ui')->readonly);
     }
 }

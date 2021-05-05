@@ -59,7 +59,7 @@ For example the next code will use some logic::
     if ($id = $app->stickyGet('user_id')) {
 
         // perhaps we edit individual user?
-        $model->load($id);
+        $model = $model->load($id);
         $crumb->addCrumb($model->get('name'), []);
 
 

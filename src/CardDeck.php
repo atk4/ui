@@ -143,8 +143,6 @@ class CardDeck extends View
 
         if ($count = $this->initPaginator()) {
             $this->model->each(function ($m) use ($fields, $extra) {
-                // need model clone in order to keep it's loaded values
-                $m = clone $m;
                 $c = $this->cardHolder->add(Factory::factory($this->card, ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]))->addClass('segment');
                 $c->setModel($m, $fields);
                 if ($extra) {
@@ -153,9 +151,8 @@ class CardDeck extends View
                 if ($this->useAction) {
                     if ($singleActions = $this->getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD)) {
                         $args = $this->getReloadArgs();
-                        $id_arg = [];
                         foreach ($singleActions as $action) {
-                            $c->addClickAction($action, null, array_merge($id_arg, $args));
+                            $c->addClickAction($action, null, $this->getReloadArgs());
                         }
                     }
                 }
@@ -258,7 +255,7 @@ class CardDeck extends View
     protected function jsModelReturn(Model\UserAction $action = null, string $msg = 'Done!'): array
     {
         $js[] = $this->getNotifier($msg, $action);
-        if ($action->getOwner()->loaded() && $card = $this->findCard($action->getOwner())) {
+        if ($action->getModel()->loaded() && $card = $this->findCard($action->getModel())) {
             $js[] = $card->jsReload($this->getReloadArgs());
         } else {
             $js[] = $this->container->jsReload($this->getReloadArgs());

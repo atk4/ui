@@ -100,7 +100,7 @@ $executor->ui = 'segment';
 $executor->description = 'Only fields set in $action[field] array will be added in form.';
 $executor->setArguments(['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \Atk4\Ui\JsToast('Confirm! ' . $x->action->getModel()->name);
+    return new \Atk4\Ui\JsToast('Confirm! ' . $x->action->getEntity()->name);
 });
 
 View::addTo($leftColumn, ['ui' => 'hidden divider']);

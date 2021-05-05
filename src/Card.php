@@ -252,7 +252,7 @@ class Card extends View
      */
     public function addSection(string $title = null, Model $model = null, array $fields = null, bool $useTable = false, bool $useLabel = false)
     {
-        $section = $this->add([$this->cardSection, 'card' => $this], 'Section');
+        $section = CardSection::addToWithCl($this, [$this->cardSection, 'card' => $this], ['Section']);
         if ($title) {
             View::addTo($section, [$title, ['class' => 'header']]);
         }
@@ -280,7 +280,7 @@ class Card extends View
 
             $page->add($executor = new $executor());
 
-            $action->getOwner()->load($id);
+            $action->setEntity($action->getModel()->load($id));
 
             $executor->setAction($action);
         });

@@ -30,7 +30,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
     public function addControl(string $name, $control = null, $field = null)
     {
         if (!$this->form->model) {
-            $this->form->model = new \Atk4\Ui\Misc\ProxyModel();
+            $this->form->model = (new \Atk4\Ui\Misc\ProxyModel())->createEntity();
         }
 
         if (is_string($field)) {
@@ -121,6 +121,8 @@ abstract class AbstractLayout extends \Atk4\Ui\View
      */
     public function setModel(\Atk4\Data\Model $model, $fields = null)
     {
+        $model->assertIsEntity();
+
         parent::setModel($model);
 
         if ($fields === false) {

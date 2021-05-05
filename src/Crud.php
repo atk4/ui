@@ -101,6 +101,8 @@ class Crud extends Grid
      */
     public function setModel(Model $model, $fields = null): Model
     {
+        $model->assertIsModel();
+
         if ($fields !== null) {
             $this->displayFields = $fields;
         }
@@ -111,8 +113,6 @@ class Crud extends Grid
         $this->model->onHook(Model::HOOK_AFTER_DELETE, function ($model) {
             $this->deletedId = $model->getId();
         });
-
-        $this->model->unload();
 
         if ($this->useMenuActions === null) {
             $this->useMenuActions = count($model->getUserActions()) > 4;

@@ -301,7 +301,7 @@ class Multiline extends Form\Control
                     $field = $model->getField($fieldName);
                     // Save field value only if the field was editable
                     if (!$field->read_only) {
-                        $model->set($fieldName, $this->getApp()->ui_persistence->typecastLoadField($field, $value));
+                        $model->createEntity()->set($fieldName, $this->getApp()->ui_persistence->typecastLoadField($field, $value));
                     }
                 } catch (\Atk4\Core\Exception $e) {
                     $rowErrors[$rowId][] = ['name' => $fieldName, 'msg' => $e->getMessage()];
@@ -333,7 +333,7 @@ class Multiline extends Form\Control
                 }
 
                 if ($fieldName === $row_model->id_field && $value) {
-                    $row_model->load($value);
+                    $row_model = $row_model->load($value);
                 }
 
                 $field = $row_model->getField($fieldName);
@@ -684,7 +684,7 @@ class Multiline extends Form\Control
 
         switch ($action) {
             case 'update-row':
-                $model = $this->setDummyModelValue(clone $this->getModel());
+                $model = $this->setDummyModelValue($this->getModel()->createEntity());
                 $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
                 $this->getApp()->terminateJson(['success' => true, 'message' => 'Success', 'expressions' => $expressionValues]);
 

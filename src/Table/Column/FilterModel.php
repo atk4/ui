@@ -7,12 +7,13 @@ namespace Atk4\Ui\Table\Column;
 use Atk4\Core\NameTrait;
 use Atk4\Core\SessionTrait;
 use Atk4\Data\Field;
+use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 
 /**
  * Implement a generic filter model for filtering column data.
  */
-class FilterModel extends \Atk4\Data\Model
+class FilterModel extends Model
 {
     use NameTrait; // needed for SessionTrait
     use SessionTrait;
@@ -47,12 +48,8 @@ class FilterModel extends \Atk4\Data\Model
 
     /**
      * Factory method that will return a FilterModel Type class.
-     *
-     * @param Field $field
-     *
-     * @return mixed
      */
-    public static function factoryType($field)
+    public static function factoryType(Field $field): self
     {
         $persistence = new Persistence\Array_();
         $filterDomain = self::class . '\\Type';
@@ -68,7 +65,7 @@ class FilterModel extends \Atk4\Data\Model
          * Field class and setting your filter model class.
          */
         if (!empty($field->filterModel) && isset($field->filterModel)) {
-            if ($field->filterModel instanceof \Atk4\Data\Model) {
+            if ($field->filterModel instanceof self) {
                 return $field->filterModel;
             }
             $class = $field->filterModel;

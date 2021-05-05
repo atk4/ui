@@ -39,7 +39,7 @@ $finderClass = get_class(new class() extends \Atk4\Ui\Columns {
         while ($selections && $id = array_shift($selections)) {
             $path[] = $id;
             $pushModel = new $model($model->persistence);
-            $pushModel->tryLoad($id);
+            $pushModel = $pushModel->tryLoad($id);
             if (!$pushModel->loaded()) {
                 break;
             }

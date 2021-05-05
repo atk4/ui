@@ -16,14 +16,14 @@ require_once __DIR__ . '/../init-app.php';
 \Atk4\Ui\Header::addTo($app, ['Models', 'size' => 1, 'subHeader' => 'Card may display information from many models.']);
 
 $stat = new Stat($app->db);
-$stat->loadAny();
+$stat = $stat->loadAny();
 
 $c = \Atk4\Ui\Card::addTo($app);
 $c->setModel($stat, [$stat->fieldName()->client_name, $stat->fieldName()->description]);
 
 $c->addSection('Project: ', $stat, [$stat->fieldName()->start_date, $stat->fieldName()->finish_date], true);
 
-$country = $stat->client_country_iso->loadOne();
+$country = $stat->client_country_iso;
 $notify = $country->addUserAction('Notify', [
     'args' => [
         'note' => ['type' => 'string', 'required' => true],

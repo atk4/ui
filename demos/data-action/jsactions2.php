@@ -12,8 +12,8 @@ require_once __DIR__ . '/../init-app.php';
 // Demo for Model action
 
 $country = new CountryLock($app->db);
-$country->tryLoadAny();
-$countryId = $country->getId();
+$entity = $country->tryLoadAny();
+$countryId = $entity->getId();
 
 // Model actions for this file are setup in DemoActionUtil.
 DemoActionsUtil::setupDemoActions($country);
@@ -29,11 +29,10 @@ $msg->text->addParagraph('If action require arguments, fields and/or preview, th
 $gl = \Atk4\Ui\GridLayout::addTo($app, ['rows' => 1, 'columns' => 2]);
 $c = \Atk4\Ui\Card::addTo($gl, ['useLabel' => true], ['r1c1']);
 $c->addContent(new \Atk4\Ui\Header(['Using country: ']));
-$c->setModel($country, [$country->fieldName()->iso, $country->fieldName()->iso3, $country->fieldName()->phonecode]);
+$c->setModel($entity, [$country->fieldName()->iso, $country->fieldName()->iso3, $country->fieldName()->phonecode]);
 
 $buttons = \Atk4\Ui\View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
 
-$country->unload();
 // Create a button for every action in Country model.
 foreach ($country->getUserActions() as $action) {
     $b = \Atk4\Ui\Button::addTo($buttons, [$action->getCaption()]);

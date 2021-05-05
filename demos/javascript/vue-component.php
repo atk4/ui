@@ -15,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 // ****** Inline Edit *****************************
 
 $model = new Country($app->db);
-$model->loadAny();
+$model = $model->loadAny();
 
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
 \Atk4\Ui\Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);

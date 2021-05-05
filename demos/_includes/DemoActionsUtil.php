@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model\UserAction;
+
 class DemoActionsUtil
 {
     public static function setupDemoActions(CountryLock $country): void
@@ -82,8 +84,8 @@ class DemoActionsUtil
             'edit_iso',
             [
                 'caption' => 'Edit ISO3',
-                'description' => function ($action) {
-                    return 'Edit ISO3 for country: ' . $action->getModel()->getTitle();
+                'description' => function (UserAction $action) {
+                    return 'Edit ISO3 for country: ' . $action->getEntity()->getTitle();
                 },
                 'fields' => [$country->fieldName()->iso3],
                 'callback' => function () {
@@ -113,7 +115,7 @@ class DemoActionsUtil
                 'caption' => 'User Confirmation',
                 'description' => 'Confirm the action using a ConfirmationExecutor',
                 'confirmation' => function ($a) {
-                    return 'Are you sure you want to perform this action on: <b>' . $a->getModel()->getTitle() . ' (' . $a->getModel()->iso3 . ')</b>';
+                    return 'Are you sure you want to perform this action on: <b>' . $a->getEntity()->getTitle() . ' (' . $a->getEntity()->iso3 . ')</b>';
                 },
                 'callback' => function ($model) {
                     return 'Confirm country ' . $model->getTitle();

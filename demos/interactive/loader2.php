@@ -21,5 +21,5 @@ $countryLoader = \Atk4\Ui\Loader::addTo($c->addColumn(), ['loadEvent' => false, 
 $grid->table->onRowClick($countryLoader->jsLoad(['id' => $grid->table->jsRow()->data('id')]));
 
 $countryLoader->set(function ($p) {
-    \Atk4\Ui\Form::addTo($p)->setModel(new Country($p->getApp()->db))->load($_GET['id']);
+    \Atk4\Ui\Form::addTo($p)->setModel((new Country($p->getApp()->db))->load($_GET['id']));
 });

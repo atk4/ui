@@ -129,7 +129,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action->getOwner()->tryLoad($id);
+            $this->action->setEntity($this->action->getModel()->tryLoad($id));
         }
 
         $this->loader->set(function ($modal) {
@@ -169,7 +169,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
                         $this->loader->jsload(
                             [
                                 'step' => 'exec',
-                                $this->name => $this->action->getOwner()->getId(),
+                                $this->name => $this->action->getEntity()->getId(),
                             ],
                             ['method' => 'post']
                         ),
@@ -206,7 +206,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     {
         $return = $this->action->execute([]);
 
-        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->getOwner()->getId()));
+        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->getEntity()->getId()));
     }
 
     /**
@@ -215,7 +215,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     protected function jsGetExecute($obj, $id): array
     {
         $success = $this->jsSuccess instanceof \Closure
-            ? ($this->jsSuccess)($this, $this->action->getOwner(), $id)
+            ? ($this->jsSuccess)($this, $this->action->getModel(), $id)
             : $this->jsSuccess;
 
         return [

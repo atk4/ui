@@ -94,7 +94,7 @@ $inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => 
 // Populate some data.
 $total = 0;
 for ($i = 1; $i < 3; ++$i) {
-    $inventory2 = clone $inventory;
+    $inventory2 = $inventory->createEntity();
     $inventory2->set('id', $i);
     $inventory2->set('inv_date', date($dateFormat));
     $inventory2->set('inv_time', date($timeFormat));
