@@ -34,7 +34,7 @@ class FormExecutor extends BasicExecutor
             if (!$this->action->fields) {
                 $this->action->fields = $this->getModelFields($this->action->getModel());
             }
-            $this->form->setModel($this->action->getModel(), $this->action->fields);
+            $this->form->setModel($this->action->getEntity(), $this->action->fields);
         }
 
         $this->form->onSubmit(function (Form $form) {

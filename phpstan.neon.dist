@@ -104,7 +104,6 @@ parameters:
         - '~^Call to an undefined method Atk4\\Ui\\Panel\\Loadable::onOpen\(\)\.$~'
         - '~^Call to an undefined method Atk4\\Ui\\Panel\\Loadable::addConfirmation\(\)\.$~'
         # for src/Card.php
-        - '~^Call to an undefined method Atk4\\Ui\\AbstractView::addFields\(\)\.$~'
         - '~^Call to an undefined method Atk4\\Ui\\View::addDescription\(\)\.$~'
         # for src/CardDeck.php
         - '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$reload\.$~'
@@ -187,7 +186,6 @@ parameters:
         - '~^Property Atk4\\Ui\\Card::\$section \(Atk4\\Ui\\CardSection\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
         - '~^Method Atk4\\Ui\\Card::getSection\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'
         - '~^Method Atk4\\Ui\\Card::addContent\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'
-        - '~^Method Atk4\\Ui\\Card::addSection\(\) should return Atk4\\Ui\\View but returns Atk4\\Ui\\AbstractView\.$~'
         - '~^Method Atk4\\Ui\\Card::addExtraContent\(\) should return Atk4\\Ui\\View but returns Atk4\\Ui\\AbstractView\.$~'
         - '~^Method Atk4\\Ui\\Card::addImage\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'
         - '~^Method Atk4\\Ui\\Card::addButton\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'

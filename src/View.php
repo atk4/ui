@@ -1057,9 +1057,6 @@ class View extends AbstractView implements JsExpressionable
             // Setup UserAction executor.
             $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->create($action, $this) : $action;
             if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
-                if (isset($arguments[0])) {
-                    $arguments[$ex->name] = $arguments[0];
-                }
                 if (isset($arguments['id'])) {
                     $arguments[$ex->name] = $arguments['id'];
                     unset($arguments['id']);

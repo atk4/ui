@@ -128,9 +128,7 @@ class Country extends ModelWithPrefixedFields
         }
 
         // look if name is unique
-        $c = clone $this;
-        $c->unload();
-        $c = $c->tryLoadBy($this->fieldName()->name, $this->name);
+        $c = $this->getModel()->tryLoadBy($this->fieldName()->name, $this->name);
         if ($c->loaded() && $c->getId() !== $this->getId()) {
             $errors[$this->fieldName()->name] = 'Country name must be unique';
         }
@@ -295,7 +293,7 @@ class File extends ModelWithPrefixedFields
             }
 
             if ($name === 'src' || $name === 'demos' || $isSub) {
-                $m = clone $this;
+                $entity = $this->getModel(true)->createEntity();
 
                 /*
                 // Disabling saving file in db
@@ -307,7 +305,7 @@ class File extends ModelWithPrefixedFields
                 */
 
                 if ($fileinfo->isDir()) {
-                    $m->SubFolder->importFromFilesystem($dir->getPath() . '/' . $name, true);
+                    $entity->SubFolder->importFromFilesystem($dir->getPath() . '/' . $name, true);
                 }
             }
         }
