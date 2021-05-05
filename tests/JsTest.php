@@ -12,9 +12,6 @@ use Atk4\Ui\JsFunction;
 
 class JsTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test constructor.
-     */
     public function testBasicExpressions(): void
     {
         $this->assertSame('2+2', (new JsExpression('2+2'))->jsRender());

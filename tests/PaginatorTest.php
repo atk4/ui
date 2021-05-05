@@ -8,9 +8,6 @@ use Atk4\Core\AtkPhpunit;
 
 class PaginatorTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test constructor.
-     */
     public $p;
 
     public function addDataProvider()

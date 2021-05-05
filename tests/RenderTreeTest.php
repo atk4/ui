@@ -13,9 +13,6 @@ use Atk4\Ui\View;
  */
 class RenderTreeTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test constructor.
-     */
     public function testBasic(): void
     {
         $b = new View();
