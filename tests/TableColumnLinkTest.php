@@ -28,7 +28,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         $this->table->setModel($m, ['name', 'ref']);
     }
 
-    public function testgetDataRowHtml()
+    public function testgetDataRowHtml(): void
     {
         $this->assertSame('<td>{$name}</td><td>{$ref}</td>', $this->table->getDataRowHtml());
 
@@ -38,7 +38,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testMultipleFormatters()
+    public function testMultipleFormatters(): void
     {
         $this->table->addDecorator('name', new Table\Column\Template('<b>{$name}</b>'));
 
@@ -50,7 +50,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testTdLast()
+    public function testTdLast(): void
     {
         $salary = $this->table->addColumn('salary', new Table\Column\Money());
 
@@ -65,7 +65,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testTdNotLast()
+    public function testTdNotLast(): void
     {
         $salary = $this->table->addColumn('salary', new Table\Column\Money());
         $this->table->addDecorator('salary', new Table\Column\Template('<b>{$salary}</b>'));
@@ -81,7 +81,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testTwoMoneys()
+    public function testTwoMoneys(): void
     {
         $salary_1 = $this->table->addDecorator('name', new Table\Column\Money());
         $salary_2 = $this->table->addColumn('salary', new Table\Column\Money());
@@ -98,7 +98,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testTemplateStacking()
+    public function testTemplateStacking(): void
     {
         // Simplest way to integrate
         $this->table->addDecorator('name', new Table\Column\Template('<b>{$name}</b>'));
@@ -115,7 +115,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testRender1()
+    public function testRender1(): void
     {
         // Simplest way to integrate
         $this->table->addDecorator('name', new Table\Column\Template('<b>{$name}</b>'));
@@ -127,7 +127,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testRender1a()
+    public function testRender1a(): void
     {
         // Simplest way to integrate
         $this->table->addColumn(null, [Table\Column\Template::class, 'hello<b>world</b>']);
@@ -143,7 +143,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testLink1()
+    public function testLink1(): void
     {
         $link = $this->table->addDecorator('name', new Table\Column\Link('example.php?id={$id}'));
 
@@ -158,7 +158,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testLink1a()
+    public function testLink1a(): void
     {
         $link = $this->table->addDecorator('name', [Table\Column\Link::class, 'url' => 'example.php?id={$id}']);
 
@@ -173,7 +173,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testLink2()
+    public function testLink2(): void
     {
         $this->table->addDecorator('name', new Table\Column\Link(['example', 'id' => '{$id}']));
 
@@ -185,7 +185,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testLink3()
+    public function testLink3(): void
     {
         $this->table->addDecorator('name', new Table\Column\Link(['example'], ['id']));
 
@@ -195,7 +195,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testLink4()
+    public function testLink4(): void
     {
         $this->table->addDecorator('name', new Table\Column\Link(['example'], ['test' => 'id']));
 
@@ -205,7 +205,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testLink5()
+    public function testLink5(): void
     {
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id']]);
 
@@ -215,7 +215,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testLink6()
+    public function testLink6(): void
     {
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'force_download' => true]);
 
@@ -225,7 +225,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testLink7()
+    public function testLink7(): void
     {
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'target' => '_blank']);
 
@@ -235,7 +235,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testLink8()
+    public function testLink8(): void
     {
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'icon' => 'info']);
 
@@ -245,7 +245,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testLink9()
+    public function testLink9(): void
     {
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'use_label' => false]);
 
@@ -255,7 +255,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testLink10()
+    public function testLink10(): void
     {
         // need to reset all to set a nulled value in field name model
         $arr = ['table' => [1 => ['id' => 1, 'name' => '', 'ref' => 'ref123', 'salary' => -123]]];
@@ -276,7 +276,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testLink11()
+    public function testLink11(): void
     {
         $this->table->addDecorator('name', [Table\Column\Tooltip::class, ['tooltip_field' => 'ref']]);
 

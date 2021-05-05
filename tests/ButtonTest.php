@@ -12,7 +12,7 @@ class ButtonTest extends AtkPhpunit\TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testButtonIcon()
+    public function testButtonIcon(): void
     {
         $b = new Button(['Load', 'icon' => 'pause']);
         $b->render();

@@ -10,13 +10,13 @@ use Atk4\Ui\Locale;
 
 class LocaleTest extends AtkPhpunit\TestCase
 {
-    public function testException()
+    public function testException(): void
     {
         $this->expectException(Exception::class);
         $exc = new Locale();
     }
 
-    public function testGetPath()
+    public function testGetPath(): void
     {
         $rootDir = realpath(dirname(__DIR__) . '/src/..');
         $this->assertSame($rootDir . \DIRECTORY_SEPARATOR . 'locale', realpath(dirname(Locale::getPath())) . \DIRECTORY_SEPARATOR . basename(Locale::getPath()));

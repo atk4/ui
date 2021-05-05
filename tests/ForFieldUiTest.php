@@ -35,12 +35,12 @@ class ForFieldUiTest extends AtkPhpunit\TestCase
         $this->m = new MyTestModel($p);
     }
 
-    public function testModelLevel()
+    public function testModelLevel(): void
     {
         $this->assertTrue($this->m->getField('no_persist_but_show_in_ui')->isEditable());
     }
 
-    public function testRegularField()
+    public function testRegularField(): void
     {
         $f = new \Atk4\Ui\Form();
         $f->invokeInit();
@@ -48,7 +48,7 @@ class ForFieldUiTest extends AtkPhpunit\TestCase
         $this->assertFalse($f->getControl('regular_field')->readonly);
     }
 
-    public function testJustDataField()
+    public function testJustDataField(): void
     {
         $f = new \Atk4\Ui\Form();
         $f->invokeInit();
@@ -56,7 +56,7 @@ class ForFieldUiTest extends AtkPhpunit\TestCase
         $this->assertTrue($f->getControl('just_for_data')->readonly);
     }
 
-    public function testShowInUi()
+    public function testShowInUi(): void
     {
         $f = new \Atk4\Ui\Form();
         $f->invokeInit();

@@ -459,7 +459,7 @@ class DemosTest extends AtkPhpunit\TestCase
     /**
      * @dataProvider jsonResponsePostProvider
      */
-    public function testDemoAssertJsonResponsePost(string $uri, array $postData)
+    public function testDemoAssertJsonResponsePost(string $uri, array $postData): void
     {
         $response = $this->getResponseFromRequest($uri, ['form_params' => $postData]);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);

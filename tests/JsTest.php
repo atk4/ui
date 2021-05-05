@@ -15,13 +15,13 @@ class JsTest extends AtkPhpunit\TestCase
     /**
      * Test constructor.
      */
-    public function testBasicExpressions()
+    public function testBasicExpressions(): void
     {
         $this->assertSame('2+2', (new JsExpression('2+2'))->jsRender());
         $this->assertSame('3+4', (new JsExpression('[]+[]', [3, 4]))->jsRender());
     }
 
-    public function testNumbers()
+    public function testNumbers(): void
     {
         if (\PHP_INT_SIZE === 4) {
             $this->markTestIncomplete('Test is not supported on 32bit php');
@@ -64,7 +64,7 @@ class JsTest extends AtkPhpunit\TestCase
         }
     }
 
-    public function testNestedExpressions()
+    public function testNestedExpressions(): void
     {
         $this->assertSame(
             '10-(2+3)',
@@ -83,21 +83,21 @@ class JsTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testChain1()
+    public function testChain1(): void
     {
         $c = new JsChain('$myInput');
         $c->getTextInRange('start', 'end');
         $this->assertSame('$myInput.getTextInRange("start","end")', $c->jsRender());
     }
 
-    public function testChain2()
+    public function testChain2(): void
     {
         $c = new JsChain('$myInput');
         $c->getTextInRange(new JsExpression('getStart()'), 'end');
         $this->assertSame('$myInput.getTextInRange(getStart(),"end")', $c->jsRender());
     }
 
-    public function testJquery()
+    public function testJquery(): void
     {
         $c = new Jquery('.mytag');
         $c->find('li')->first()->hide();
@@ -105,7 +105,7 @@ class JsTest extends AtkPhpunit\TestCase
         $this->assertSame('$(".mytag").find("li").first().hide()', $c->jsRender());
     }
 
-    public function testArgs()
+    public function testArgs(): void
     {
         $c = new Jquery('.mytag');
         $c->val((new Jquery('.othertag'))->val());
@@ -113,7 +113,7 @@ class JsTest extends AtkPhpunit\TestCase
         $this->assertSame('$(".mytag").val($(".othertag").val())', $c->jsRender());
     }
 
-    public function testComplex1()
+    public function testComplex1(): void
     {
         // binding that maintains same height on
         $b1 = new Jquery('.box1');

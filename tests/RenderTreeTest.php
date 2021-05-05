@@ -16,7 +16,7 @@ class RenderTreeTest extends AtkPhpunit\TestCase
     /**
      * Test constructor.
      */
-    public function testBasic()
+    public function testBasic(): void
     {
         $b = new View();
         $b->render();
@@ -25,7 +25,7 @@ class RenderTreeTest extends AtkPhpunit\TestCase
         $this->assertNotNull($b->template);
     }
 
-    public function testBasicNest1()
+    public function testBasicNest1(): void
     {
         $b = new View();
 

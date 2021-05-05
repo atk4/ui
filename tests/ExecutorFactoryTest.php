@@ -59,7 +59,7 @@ class ExecutorFactoryTest extends AtkPhpunit\TestCase
         ]);
     }
 
-    public function testExecutorFactory()
+    public function testExecutorFactory(): void
     {
         $view = View::addTo($this->app);
 
@@ -81,7 +81,7 @@ class ExecutorFactoryTest extends AtkPhpunit\TestCase
         $this->assertInstanceOf(BasicExecutor::class, $myBasicExecutor, 'Not executor set for Basic action');
     }
 
-    public function testExecutorTrigger()
+    public function testExecutorTrigger(): void
     {
         $factory = $this->app->getExecutorFactory();
         $editAction = $this->model->getUserAction('edit');
@@ -111,7 +111,7 @@ class ExecutorFactoryTest extends AtkPhpunit\TestCase
         $this->assertSame($factory->getCaption($editAction, $factory::TABLE_MENU_ITEM), $tableMenuItem->content);
     }
 
-    public function testRegisterTrigger()
+    public function testRegisterTrigger(): void
     {
         $factory = $this->app->getExecutorFactory();
         $factory->useTriggerDefault($factory::TABLE_BUTTON);

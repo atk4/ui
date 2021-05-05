@@ -33,7 +33,7 @@ class FormTest extends AtkPhpunit\TestCase
     /**
      * Some tests for form.
      */
-    public function testGetField()
+    public function testGetField(): void
     {
         $f = $this->f;
         $f->addControl('test');
@@ -76,7 +76,7 @@ class FormTest extends AtkPhpunit\TestCase
         $_POST = [];
     }
 
-    public function testFormSubmit()
+    public function testFormSubmit(): void
     {
         $f = $this->f;
 
@@ -102,7 +102,7 @@ class FormTest extends AtkPhpunit\TestCase
         });
     }
 
-    public function testTextarea()
+    public function testTextarea(): void
     {
         $this->f->addControl('Textarea');
         $this->assertSubmit(['Textarea' => '0'], function (Model $m) {
@@ -139,7 +139,7 @@ class FormTest extends AtkPhpunit\TestCase
         }, $this->f_error);
     }
 
-    public function testSubmitError()
+    public function testSubmitError(): void
     {
         $m = new Model();
 
