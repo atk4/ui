@@ -136,6 +136,7 @@ class Ui extends \Atk4\Data\Persistence
         switch ($f->type) {
             case 'integer':
                 $value = (int) $value;
+
                 break;
             case 'string':
             case 'text':

@@ -422,7 +422,7 @@ class Multiline extends Form\Control
     {
         if (!$modelEntity && !$this->form->model->isEntity()) {
             throw new Exception('Model entity is not set.');
-        } else if (!$modelEntity) {
+        } elseif (!$modelEntity) {
             $modelEntity = $this->form->model;
         }
 
