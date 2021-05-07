@@ -210,7 +210,7 @@ class Multiline extends Form\Control
 
         // load the data associated with this input and validate it.
         $this->form->onHook(Form::HOOK_LOAD_POST, function ($form, &$post) {
-            $this->rowData = $this->loadRowData();
+            $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($_POST[$this->short_name]));
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
                 if ($this->rowErrors) {
@@ -247,11 +247,11 @@ class Multiline extends Form\Control
     /**
      * Typecast each loaded value.
      */
-    protected function loadRowData()
+    protected function typeCastLoadValues(array $values): array
     {
         $dataRows = [];
 
-        foreach ($this->getApp()->decodeJson($_POST[$this->short_name]) as $k => $row) {
+        foreach ($values as $k => $row) {
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
                     $dataRows[$k][$fieldName] = $value;
@@ -710,7 +710,7 @@ class Multiline extends Form\Control
 
                 break;
             case 'on-change':
-                $response = call_user_func($this->onChangeFunction, $this->getApp()->decodeJson($_POST['rows']), $this->form);
+                $response = call_user_func($this->onChangeFunction, $this->typeCastLoadValues($this->getApp()->decodeJson($_POST['rows'])), $this->form);
                 $this->renderCallback->terminateAjax($this->renderCallback->getAjaxec($response));
 
                 break;
