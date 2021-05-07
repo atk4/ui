@@ -324,24 +324,22 @@ class Multiline extends Form\Control
         $currentIds = array_column($model->export(), $model->id_field);
 
         foreach ($this->rowData as $row) {
-            // should clone model to be able to save it multiple times
-            $row_model = clone $model;
+            $entity = $model->createEntity();
 
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
                     continue;
                 }
 
-                if ($fieldName === $row_model->id_field && $value) {
-                    $row_model = $row_model->load($value);
+                if ($fieldName === $model->id_field && $value) {
+                    $entity = $model->load( $this->getApp()->ui_persistence->typecastLoadField($model->getField($fieldName), $value));
                 }
 
-                $field = $row_model->getField($fieldName);
-                if ($field->isEditable()) {
-                    $field->set($value);
+                if ($model->getField($fieldName)->isEditable()) {
+                    $entity->set($fieldName, $value);
                 }
             }
-            $id = $row_model->save()->getId();
+            $id = $entity->save()->getId();
 
             $k = array_search($id, $currentIds, true);
             if ($k !== false) {
@@ -420,13 +418,15 @@ class Multiline extends Form\Control
      * Otherwise, form will try to save 'multiline' field value as an array when form is save.
      * $multiline = $form->addControl('multiline', [Multiline::class], ['never_persist' => true])
      */
-    public function setReferenceModel(Model $refModel, string $linkByFieldName, array $fieldNames = []): Model
+    public function setReferenceModel(string $refModelName, Model $modelEntity = null, array $fieldNames = []): Model
     {
-        if (!$refModel->ref($linkByFieldName)->loaded()) {
-            throw new Exception('Parent model must be loaded in order to use reference.');
+        if (!$modelEntity && !$this->form->model->isEntity()) {
+            throw new Exception('Model entity is not set.');
+        } else if (!$modelEntity) {
+            $modelEntity = $this->form->model;
         }
 
-        return $this->setModel($refModel, $fieldNames);
+        return $this->setModel($modelEntity->ref($refModelName), $fieldNames);
     }
 
     /**

@@ -94,16 +94,16 @@ $inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => 
 // Populate some data.
 $total = 0;
 for ($i = 1; $i < 3; ++$i) {
-    $inventory2 = $inventory->createEntity();
-    $inventory2->set('id', $i);
-    $inventory2->set('inv_date', date($dateFormat));
-    $inventory2->set('inv_time', date($timeFormat));
-    $inventory2->set('item', 'item_' . $i);
-    $inventory2->set('country', random_int(1, 100));
-    $inventory2->set('qty', random_int(10, 100));
-    $inventory2->set('box', random_int(1, 10));
-    $total = $total + ($inventory2->get('qty') * $inventory2->get('box'));
-    $inventory2->saveAndUnload();
+    $entity = $inventory->createEntity();
+    $entity->set('id', $i);
+    $entity->set('inv_date', date($dateFormat));
+    $entity->set('inv_time', date($timeFormat));
+    $entity->set('item', 'item_' . $i);
+    $entity->set('country', random_int(1, 100));
+    $entity->set('qty', random_int(10, 100));
+    $entity->set('box', random_int(1, 10));
+    $total = $total + ($entity->get('qty') * $entity->get('box'));
+    $entity->saveAndUnload();
 }
 
 $form = Form::addTo($app);
