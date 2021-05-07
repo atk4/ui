@@ -210,7 +210,7 @@ class Multiline extends Form\Control
 
         // load the data associated with this input and validate it.
         $this->form->onHook(Form::HOOK_LOAD_POST, function ($form, &$post) {
-            $this->rowData = $this->getApp()->decodeJson($_POST[$this->short_name]);
+            $this->rowData = $this->loadRowData();
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
                 if ($this->rowErrors) {
@@ -242,6 +242,26 @@ class Multiline extends Form\Control
 
             return $jsError;
         });
+    }
+
+    /**
+     * Typecast each loaded value.
+     */
+    protected function loadRowData()
+    {
+        $dataRows = [];
+
+        foreach ($this->getApp()->decodeJson($_POST[$this->short_name]) as $k => $row) {
+            foreach ($row as $fieldName => $value) {
+                if ($fieldName === '__atkml') {
+                    $dataRows[$k][$fieldName] = $value;
+                } else {
+                    $dataRows[$k][$fieldName] = $this->getApp()->ui_persistence->typecastLoadField($this->getModel()->getField($fieldName), $value);
+                }
+            }
+        }
+
+        return $dataRows;
     }
 
     /**
@@ -301,7 +321,7 @@ class Multiline extends Form\Control
                     $field = $model->getField($fieldName);
                     // Save field value only if the field was editable
                     if (!$field->read_only) {
-                        $model->createEntity()->set($fieldName, $this->getApp()->ui_persistence->typecastLoadField($field, $value));
+                        $model->createEntity()->set($fieldName, $value);
                     }
                 } catch (\Atk4\Core\Exception $e) {
                     $rowErrors[$rowId][] = ['name' => $fieldName, 'msg' => $e->getMessage()];
@@ -332,7 +352,7 @@ class Multiline extends Form\Control
                 }
 
                 if ($fieldName === $model->id_field && $value) {
-                    $entity = $model->load($this->getApp()->ui_persistence->typecastLoadField($model->getField($fieldName), $value));
+                    $entity = $model->load($value);
                 }
 
                 if ($model->getField($fieldName)->isEditable()) {
