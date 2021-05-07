@@ -332,7 +332,7 @@ class Multiline extends Form\Control
                 }
 
                 if ($fieldName === $model->id_field && $value) {
-                    $entity = $model->load( $this->getApp()->ui_persistence->typecastLoadField($model->getField($fieldName), $value));
+                    $entity = $model->load($this->getApp()->ui_persistence->typecastLoadField($model->getField($fieldName), $value));
                 }
 
                 if ($model->getField($fieldName)->isEditable()) {
