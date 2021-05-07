@@ -869,7 +869,7 @@ class Multiline extends Form\Control
             case 'integer':
             case 'float':
                 // Value is 0 or the field value.
-                $value = $model->get($fieldName) ?: 0;
+                $value = (string) $model->get($fieldName) ?: 0;
 
                 break;
             default:
