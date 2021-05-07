@@ -344,15 +344,10 @@ class Multiline extends Form\Control
         $currentIds = array_column($model->export(), $model->id_field);
 
         foreach ($this->rowData as $row) {
-            $entity = $model->createEntity();
-
+            $entity = $model->tryLoad($row[$model->id_field] ?? null);
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
                     continue;
-                }
-
-                if ($fieldName === $model->id_field && $value) {
-                    $entity = $model->load($value);
                 }
 
                 if ($model->getField($fieldName)->isEditable()) {
