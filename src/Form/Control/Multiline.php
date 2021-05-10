@@ -12,7 +12,7 @@ declare(strict_types=1);
  *
  * // Add Multiline form control and set model for Invoice items.
  * $ml = $form->addControl('ml', ['Multiline::class']);
- * $ml->setReferenceModel($invoice->ref('Items'), 'invoice_id', ['item','cat','qty','price', 'total']);
+ * $ml->setReferenceModel('Items', null, ['item', 'cat', 'qty', 'price', 'total']);
  *
  * $form->onSubmit(function($form) use ($ml) {
  *     // Save Form model and then Multiline model
@@ -435,9 +435,11 @@ class Multiline extends Form\Control
      */
     public function setReferenceModel(string $refModelName, Model $modelEntity = null, array $fieldNames = []): Model
     {
-        if (!$modelEntity && !$this->form->model->isEntity()) {
-            throw new Exception('Model entity is not set.');
-        } elseif (!$modelEntity) {
+        if ($modelEntity === null) {
+            if (!$this->form->model->isEntity()) {
+                throw new Exception('Model entity is not set.');
+            }
+
             $modelEntity = $this->form->model;
         }
 
