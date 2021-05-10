@@ -32,10 +32,8 @@ class Content extends View implements LoadableContent
 
     /**
      * Set callback for panel.
-     *
-     * @return mixed|void
      */
-    public function setCb(Callback $cb)
+    public function setCb(Callback $cb): void
     {
         $this->cb = $this->add($cb);
     }
@@ -43,7 +41,7 @@ class Content extends View implements LoadableContent
     /**
      * Will load content into callback.
      */
-    public function onLoad(\Closure $fx)
+    public function onLoad(\Closure $fx): void
     {
         $this->cb->set(function () use ($fx) {
             $fx($this);

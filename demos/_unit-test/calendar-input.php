@@ -13,7 +13,7 @@ require_once __DIR__ . '/../init-app.php';
 $output = function (string $date) {
     $view = new \Atk4\Ui\Message();
     $view->invokeInit();
-    $view->text->addHTML($date);
+    $view->text->addHtml($date);
 
     return $view;
 };

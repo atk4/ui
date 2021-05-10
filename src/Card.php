@@ -180,7 +180,7 @@ class Card extends View
      *
      * @param array|false $fields an array of fields name to display in content
      *
-     * @return \Atk4\Data\Model|void
+     * @return \Atk4\Data\Model
      */
     public function setModel(Model $model, $fields = null)
     {

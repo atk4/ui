@@ -77,4 +77,4 @@ $columns = \Atk4\Ui\Columns::addTo($app);
 \Atk4\Ui\Paginator::addTo($columns->addColumn(), ['total' => 3, 'reload' => $columns])->addClass('green');
 
 \Atk4\Ui\Header::addTo($app, ['Can have a custom render logic']);
-\Atk4\Ui\Table::addTo($app)->addclass('green')->setSource(['One', 'Two', 'Three']);
+\Atk4\Ui\Table::addTo($app)->addClass('green')->setSource(['One', 'Two', 'Three']);

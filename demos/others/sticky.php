@@ -40,7 +40,7 @@ Button::addTo($app, [$app->url(['b' => 2, 'c' => null])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => 'abc'])]);
 
 // Sticky for xx=
-\Atk4\Ui\Header::addTo($app, ['Now add sticky for xx=' . $app->stickyGET('xx')]);
+\Atk4\Ui\Header::addTo($app, ['Now add sticky for xx=' . $app->stickyGet('xx')]);
 Button::addTo($app, [$app->url()]);
 Button::addTo($app, [$app->url(['b' => 2])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => false])]);
@@ -48,7 +48,7 @@ Button::addTo($app, [$app->url(['b' => 2, 'c' => null])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => 'abc'])]);
 
 // Sticky for c=
-\Atk4\Ui\Header::addTo($app, ['Now also add sticky for c=' . $app->stickyGET('c')]);
+\Atk4\Ui\Header::addTo($app, ['Now also add sticky for c=' . $app->stickyGet('c')]);
 Button::addTo($app, [$app->url()]);
 Button::addTo($app, [$app->url(['b' => 2])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => false])]);

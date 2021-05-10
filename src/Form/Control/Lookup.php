@@ -171,6 +171,8 @@ class Lookup extends Input
 
     /**
      * Generate API response.
+     *
+     * @return never
      */
     public function outputApiResponse()
     {

@@ -113,7 +113,7 @@ $multiline = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color'
 $multiline->setModel($inventory);
 
 // Add total field.
-$sublayout = $form->layout->addSublayout([Form\Layout\Section\Columns::class]);
+$sublayout = $form->layout->addSubLayout([Form\Layout\Section\Columns::class]);
 $sublayout->addColumn(12);
 $column = $sublayout->addColumn(4);
 $controlTotal = $column->addControl('total', ['readonly' => true])->set($total);

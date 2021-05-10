@@ -2,7 +2,7 @@ includes:
     - vendor/mahalux/atk4-hintable/phpstan-ext.neon
 
 parameters:
-    level: 5
+    level: 6
     paths:
         - ./
     excludes_analyse:
@@ -13,31 +13,43 @@ parameters:
     # TODO review once we drop PHP 7.x support
     treatPhpDocTypesAsCertain: false
 
+    # some extra rules
+    checkAlwaysTrueCheckTypeFunctionCall: true
+    checkAlwaysTrueInstanceof: true
+    checkAlwaysTrueStrictComparison: true
+    checkExplicitMixedMissingReturn: true
+    checkFunctionNameCase: true
+    # TODO checkMissingClosureNativeReturnTypehintRule: true
+    reportMaybesInMethodSignatures: true
+    reportStaticMethodSignatures: true
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkMissingIterableValueType: false # TODO
+
     ignoreErrors:
         - '~^Unsafe usage of new static\(\)\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 1
-        # for tsrc/AbstractView.php
+        # for src/AbstractView.php
         - '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$skin\.$~'
-        # for tsrc/CardDeck.php
+        # for src/CardDeck.php
         - '~^Access to an undefined property Atk4\\Ui\\CardDeck::\$editFields\.$~'
-        # for tsrc/Form/Control/Calendar.php
+        # for src/Form/Control/Calendar.php
         - '~^Class Atk4\\Ui\\JsFunction constructor invoked with 3 parameters, 0\-2 required\.$~'
-        # for tsrc/Form/Control/Lookup.php
+        # for src/Form/Control/Lookup.php
         - '~^Call to an undefined method Atk4\\Ui\\Form\\Control\\Lookup::search\(\)\.$~'
-        # for tsrc/Form/Control/ScopeBuilder.php
+        # for src/Form/Control/ScopeBuilder.php
         - '~^Variable \$inputType might not be defined\.$~'
-        # for tsrc/Modal.php
+        # for src/Modal.php
         - '~^Access to an undefined property Atk4\\Ui\\Modal::\$options\.$~'
-        # for tsrc/Table.php
+        # for src/Table.php
         - '~^Access to an undefined property Atk4\\Ui\\Table::\$t_row_master\.$~'
         - '~^Access to an undefined property Atk4\\Ui\\Table::\$model¨\.$~'
-        # for tsrc/Table/Column/Delete.php
+        # for src/Table/Column/Delete.php
         - '~^Access to an undefined property Atk4\\Ui\\Table\\Column\\Delete::\$vp\.$~'
-        # for tsrc/Table/Column/FilterModel/TypeTime.php
+        # for src/Table/Column/FilterModel/TypeTime.php
         - '~^Call to an undefined method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeTime::recalData\(\)\.$~'
-        # for tsrc/Wizard.php
+        # for src/Wizard.php
         - '~^Access to an undefined property Atk4\\Ui\\Wizard::\$stepTemplate\.$~'
         - '~^Access to an undefined property Atk4\\Ui\\Wizard::\$buttonFinish\.$~'
         # for tests/CallbackTest.php
@@ -167,6 +179,9 @@ parameters:
         - '~^Method Atk4\\Ui\\VirtualPage::getHtml\(\) should return string but return statement is missing\.$~'
         # for tests/FormTest.php
         - '~^Access to an undefined property Atk4\\Ui\\App::\$output\.$~'
+        - '~^Method Atk4\\Ui\\Tests\\AppFormTestMock::terminate\(\) should always throw an exception or terminate script execution but doesn''t do that\.$~'
+        # for tests/CallbackTest.php
+        - '~^Method Atk4\\Ui\\Tests\\AppMock::terminate\(\) should always throw an exception or terminate script execution but doesn''t do that\.$~'
         # for tests/jsTest.php
         - '~^Call to an undefined method Atk4\\Ui\\JsChain::getTextInRange\(\)\.$~'
 
@@ -479,9 +494,6 @@ parameters:
         -
             path: 'src/Table/Column.php'
             message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Table/Column/KeyValue.php'
-            message: '~^Unreachable statement \- code above always terminates\.$~'
         -
             path: 'src/Table/Column/Link.php'
             message: '~^Ternary operator condition is always true\.$~'
@@ -848,3 +860,1944 @@ parameters:
         -
             path: 'tests/JsTest.php'
             message: '~^Parameter \#1 \$args of class Atk4\\Ui\\JsFunction constructor expects array, null given\.$~'
+
+        # TODO these rules are generated, this ignores should be fixed in the code
+        # for level = 6
+        -
+            path: 'demos/_demo-data/create-sqlite-db.php'
+            message: '~^Method Atk4\\Ui\\Demos\\ImportModelWithPrefixedFields::addField\(\) has parameter \$name with no typehint specified\.$~'
+        -
+            path: 'demos/_includes/Demo.php'
+            message: '~^Property Atk4\\Ui\\Demos\\Demo::\$left has no typehint specified\.$~'
+        -
+            path: 'demos/_includes/Demo.php'
+            message: '~^Property Atk4\\Ui\\Demos\\Demo::\$right has no typehint specified\.$~'
+        -
+            path: 'demos/_includes/Demo.php'
+            message: '~^Property Atk4\\Ui\\Demos\\Demo::\$isInitialized has no typehint specified\.$~'
+        -
+            path: 'demos/_includes/Demo.php'
+            message: '~^Property Atk4\\Ui\\Demos\\Demo::\$highlightDefaultStyle has no typehint specified\.$~'
+        -
+            path: 'demos/_includes/Demo.php'
+            message: '~^Property Atk4\\Ui\\Demos\\Demo::\$left_width has no typehint specified\.$~'
+        -
+            path: 'demos/_includes/Demo.php'
+            message: '~^Property Atk4\\Ui\\Demos\\Demo::\$right_width has no typehint specified\.$~'
+        -
+            path: 'demos/_includes/Demo.php'
+            message: '~^Method Atk4\\Ui\\Demos\\Demo::setCodeAndCall\(\) has no return typehint specified\.$~'
+        -
+            path: 'demos/_includes/Demo.php'
+            message: '~^Method Atk4\\Ui\\Demos\\Demo::setCodeAndCall\(\) has parameter \$lang with no typehint specified\.$~'
+        -
+            path: 'demos/_includes/Demo.php'
+            message: '~^Method Atk4\\Ui\\Demos\\Demo::highLightCode\(\) has no return typehint specified\.$~'
+        -
+            path: 'demos/_includes/DemoInvoice.php'
+            message: '~^Property Atk4\\Ui\\Demos\\DemoInvoice::\$dateFormat has no typehint specified\.$~'
+        -
+            path: 'demos/_includes/DemoLookup.php'
+            message: '~^Method Atk4\\Ui\\Demos\\DemoLookup::initQuickNewRecord\(\) has no return typehint specified\.$~'
+        -
+            path: 'demos/_includes/DemoLookup.php'
+            message: '~^Call to function is_string\(\) with string will always evaluate to true\.$~'
+        -
+            path: 'demos/_includes/FlyersForm.php'
+            message: '~^Property Atk4\\Ui\\Demos\\FlyersForm::\$flyers has no typehint specified\.$~'
+        -
+            path: 'demos/_includes/FlyersForm.php'
+            message: '~^Property Atk4\\Ui\\Demos\\FlyersForm::\$cards has no typehint specified\.$~'
+        -
+            path: 'demos/_includes/Persistence_Faker.php'
+            message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::prepareIterator\(\) has no return typehint specified\.$~'
+        -
+            path: 'demos/_includes/Persistence_Faker.php'
+            message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::prepareIterator\(\) has parameter \$model with no typehint specified\.$~'
+        -
+            path: 'demos/_includes/Persistence_Faker.php'
+            message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::export\(\) has no return typehint specified\.$~'
+        -
+            path: 'demos/_includes/Persistence_Faker.php'
+            message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::export\(\) has parameter \$fields with no typehint specified\.$~'
+        -
+            path: 'demos/_includes/Persistence_Faker.php'
+            message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::export\(\) has parameter \$model with no typehint specified\.$~'
+        -
+            path: 'demos/_unit-test/console_run.php'
+            message: '~^Method class@anonymous/demos/_unit\-test/console_run\.php:13::test\(\) has no return typehint specified\.$~'
+        -
+            path: 'demos/basic/button.php'
+            message: '~^Method class@anonymous/demos/basic/button\.php:59::__construct\(\) has parameter \$n with no typehint specified\.$~'
+        -
+            path: 'demos/collection/multitable.php'
+            message: '~^Property class@anonymous/demos/collection/multitable\.php:13::\$route has no typehint specified\.$~'
+        -
+            path: 'demos/collection/multitable.php'
+            message: '~^Method class@anonymous/demos/collection/multitable\.php:13::setModel\(\) has parameter \$route with no typehint specified\.$~'
+        -
+            path: 'demos/data-action/factory-view.php'
+            message: '~^Property class@anonymous/demos/data\-action/factory\-view\.php:21::\$actionIcon has no typehint specified\.$~'
+        -
+            path: 'demos/data-action/factory-view.php'
+            message: '~^Method class@anonymous/demos/data\-action/factory\-view\.php:21::getCardButton\(\) has no return typehint specified\.$~'
+        -
+            path: 'demos/data-action/factory-view.php'
+            message: '~^Method class@anonymous/demos/data\-action/factory\-view\.php:21::getCardButton\(\) has parameter \$action with no typehint specified\.$~'
+        -
+            path: 'demos/data-action/factory-view.php'
+            message: '~^Method class@anonymous/demos/data\-action/factory\-view\.php:21::getCardButton\(\) has parameter \$type with no typehint specified\.$~'
+        -
+            path: 'demos/form-control/multiline.php'
+            message: '~^Property class@anonymous/demos/form\-control/multiline\.php:24::\$dateFormat has no typehint specified\.$~'
+        -
+            path: 'demos/form-control/multiline.php'
+            message: '~^Property class@anonymous/demos/form\-control/multiline\.php:24::\$timeFormat has no typehint specified\.$~'
+        -
+            path: 'demos/form-control/multiline.php'
+            message: '~^Property class@anonymous/demos/form\-control/multiline\.php:24::\$countryPersistence has no typehint specified\.$~'
+        -
+            path: 'demos/form/form2.php'
+            message: '~^Parameter \#1 \$intent \(string\) of method class@anonymous/demos/form/form2\.php:78::validate\(\) should be contravariant with parameter \$intent \(string\|null\) of method Atk4\\Data\\Model::validate\(\)$~'
+        -
+            path: 'demos/init-db.php'
+            message: '~^Method Atk4\\Ui\\Demos\\ModelWithPrefixedFields::addField\(\) has parameter \$name with no typehint specified\.$~'
+        -
+            path: 'demos/init-db.php'
+            message: '~^Parameter \#1 \$intent \(string\) of method Atk4\\Ui\\Demos\\Country::validate\(\) should be contravariant with parameter \$intent \(string\|null\) of method Atk4\\Data\\Model::validate\(\)$~'
+        -
+            path: 'demos/init-db.php'
+            message: '~^Property Atk4\\Ui\\Demos\\Stat::\$title has no typehint specified\.$~'
+        -
+            path: 'demos/init-db.php'
+            message: '~^Method Atk4\\Ui\\Demos\\File::importFromFilesystem\(\) has no return typehint specified\.$~'
+        -
+            path: 'demos/init-db.php'
+            message: '~^Method Atk4\\Ui\\Demos\\File::importFromFilesystem\(\) has parameter \$isSub with no typehint specified\.$~'
+        -
+            path: 'demos/init-db.php'
+            message: '~^Method Atk4\\Ui\\Demos\\File::importFromFilesystem\(\) has parameter \$path with no typehint specified\.$~'
+        -
+            path: 'demos/interactive/console.php'
+            message: '~^Method class@anonymous/demos/interactive/console\.php:11::generateReport\(\) has no return typehint specified\.$~'
+        -
+            path: 'demos/interactive/popup.php'
+            message: '~^Property class@anonymous/demos/interactive/popup\.php:21::\$items has no typehint specified\.$~'
+        -
+            path: 'demos/interactive/popup.php'
+            message: '~^Method class@anonymous/demos/interactive/popup\.php:21::addItem\(\) has no return typehint specified\.$~'
+        -
+            path: 'demos/interactive/popup.php'
+            message: '~^Method class@anonymous/demos/interactive/popup\.php:21::addItem\(\) has parameter \$item with no typehint specified\.$~'
+        -
+            path: 'demos/interactive/popup.php'
+            message: '~^Method class@anonymous/demos/interactive/popup\.php:21::removeItem\(\) has no return typehint specified\.$~'
+        -
+            path: 'demos/interactive/popup.php'
+            message: '~^Method class@anonymous/demos/interactive/popup\.php:21::removeItem\(\) has parameter \$no with no typehint specified\.$~'
+        -
+            path: 'demos/interactive/popup.php'
+            message: '~^Method class@anonymous/demos/interactive/popup\.php:88::linkCart\(\) has no return typehint specified\.$~'
+        -
+            path: 'demos/interactive/popup.php'
+            message: '~^Method class@anonymous/demos/interactive/popup\.php:88::linkCart\(\) has parameter \$cart with no typehint specified\.$~'
+        -
+            path: 'demos/interactive/popup.php'
+            message: '~^Method class@anonymous/demos/interactive/popup\.php:88::linkCart\(\) has parameter \$jsAction with no typehint specified\.$~'
+        -
+            path: 'src/AbstractView.php'
+            message: '~^Method Atk4\\Ui\\AbstractView::initDefaultApp\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/AbstractView.php'
+            message: '~^Method Atk4\\Ui\\AbstractView::add\(\) has parameter \$args with no typehint specified\.$~'
+        -
+            path: 'src/AbstractView.php'
+            message: '~^Instanceof between Atk4\\Ui\\View and Atk4\\Ui\\AbstractView will always evaluate to true\.$~'
+        -
+            path: 'src/AbstractView.php'
+            message: '~^Strict comparison using \!\=\= between Atk4\\Ui\\AbstractView and null will always evaluate to true\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Method Atk4\\Ui\\Accordion::activate\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Method Atk4\\Ui\\Accordion::jsRefresh\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Method Atk4\\Ui\\Accordion::jsRefresh\(\) has parameter \$when with no typehint specified\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Method Atk4\\Ui\\Accordion::jsOpen\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Method Atk4\\Ui\\Accordion::jsOpen\(\) has parameter \$section with no typehint specified\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Method Atk4\\Ui\\Accordion::jsOpen\(\) has parameter \$when with no typehint specified\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Method Atk4\\Ui\\Accordion::jsCloseOthers\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Method Atk4\\Ui\\Accordion::jsCloseOthers\(\) has parameter \$when with no typehint specified\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Method Atk4\\Ui\\Accordion::jsClose\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Method Atk4\\Ui\\Accordion::jsClose\(\) has parameter \$section with no typehint specified\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Method Atk4\\Ui\\Accordion::jsClose\(\) has parameter \$when with no typehint specified\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Method Atk4\\Ui\\Accordion::jsToggle\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Method Atk4\\Ui\\Accordion::jsToggle\(\) has parameter \$section with no typehint specified\.$~'
+        -
+            path: 'src/Accordion.php'
+            message: '~^Method Atk4\\Ui\\Accordion::jsToggle\(\) has parameter \$when with no typehint specified\.$~'
+        -
+            path: 'src/AccordionSection.php'
+            message: '~^Property Atk4\\Ui\\AccordionSection::\$icon has no typehint specified\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Property Atk4\\Ui\\App::\$templateClass has no typehint specified\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Method Atk4\\Ui\\App::setExecutorFactory\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Method Atk4\\Ui\\App::setupTemplateDirs\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Method Atk4\\Ui\\App::terminateHtml\(\) has parameter \$output with no typehint specified\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Method Atk4\\Ui\\App::terminateJson\(\) has parameter \$output with no typehint specified\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Method Atk4\\Ui\\App::initIncludes\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Method Atk4\\Ui\\App::addStyle\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Method Atk4\\Ui\\App::run\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Method Atk4\\Ui\\App::getRequestUrl\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Method Atk4\\Ui\\App::stickyForget\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Method Atk4\\Ui\\App::decodeJson\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/App.php'
+            message: '~^Method Atk4\\Ui\\App::encodeJson\(\) has parameter \$data with no typehint specified\.$~'
+        -
+            path: 'src/Breadcrumb.php'
+            message: '~^Method Atk4\\Ui\\Breadcrumb::addCrumb\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Breadcrumb.php'
+            message: '~^Method Atk4\\Ui\\Breadcrumb::addCrumbReverse\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Callback.php'
+            message: '~^Method Atk4\\Ui\\Callback::setUrlTrigger\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Callback.php'
+            message: '~^Method Atk4\\Ui\\Callback::set\(\) should return mixed but return statement is missing\.$~'
+        -
+            path: 'src/Callback.php'
+            message: '~^Method Atk4\\Ui\\Callback::isTriggered\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/CallbackLater.php'
+            message: '~^Method Atk4\\Ui\\CallbackLater::set\(\) should return mixed but return statement is missing\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Method Atk4\\Ui\\Card::setDataId\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Method Atk4\\Ui\\Card::setDataId\(\) has parameter \$id with no typehint specified\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Method Atk4\\Ui\\Card::addModelsActions\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Method Atk4\\Ui\\Card::addModelActions\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Method Atk4\\Ui\\Card::addAction\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Method Atk4\\Ui\\Card::addAction\(\) has parameter \$button with no typehint specified\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Method Atk4\\Ui\\Card::addAction\(\) has parameter \$executor with no typehint specified\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Method Atk4\\Ui\\Card::addExtraFields\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Strict comparison using \!\=\= between array\|null and false will always evaluate to true\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Strict comparison using \!\=\= between Atk4\\Ui\\Paginator\|null and false will always evaluate to true\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Method Atk4\\Ui\\CardDeck::addMenuBar\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Strict comparison using \!\=\= between array\|Atk4\\Ui\\Component\\ItemSearch and false will always evaluate to true\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Method Atk4\\Ui\\CardDeck::addPaginator\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Method Atk4\\Ui\\CardDeck::applyReload\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Method Atk4\\Ui\\CardDeck::jsExecute\(\) has parameter \$action with no typehint specified\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Method Atk4\\Ui\\CardDeck::jsExecute\(\) has parameter \$return with no typehint specified\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Method Atk4\\Ui\\CardDeck::addMenuButton\(\) has parameter \$args with no typehint specified\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Method Atk4\\Ui\\CardDeck::initPaginator\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/CardSection.php'
+            message: '~^Property Atk4\\Ui\\CardSection::\$card has no typehint specified\.$~'
+        -
+            path: 'src/CardSection.php'
+            message: '~^Property Atk4\\Ui\\CardSection::\$useTableField has no typehint specified\.$~'
+        -
+            path: 'src/CardSection.php'
+            message: '~^Property Atk4\\Ui\\CardSection::\$glue has no typehint specified\.$~'
+        -
+            path: 'src/CardSection.php'
+            message: '~^Property Atk4\\Ui\\CardSection::\$tableClass has no typehint specified\.$~'
+        -
+            path: 'src/CardSection.php'
+            message: '~^Method Atk4\\Ui\\CardSection::addFields\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/CardSection.php'
+            message: '~^Method Atk4\\Ui\\CardSection::addSectionFields\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/CardSection.php'
+            message: '~^Method Atk4\\Ui\\CardSection::addTableSection\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/CardTable.php'
+            message: '~^Property Atk4\\Ui\\CardTable::\$_bypass has no typehint specified\.$~'
+        -
+            path: 'src/Columns.php'
+            message: '~^Method Atk4\\Ui\\Columns::addColumn\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Columns.php'
+            message: '~^Strict comparison using \!\=\= between int and false will always evaluate to true\.$~'
+        -
+            path: 'src/Columns.php'
+            message: '~^Method Atk4\\Ui\\Columns::addRow\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Component/InlineEdit.php'
+            message: '~^Instanceof between Closure and Closure will always evaluate to true\.$~'
+        -
+            path: 'src/Component/InlineEdit.php'
+            message: '~^Method Atk4\\Ui\\Component\\InlineEdit::onChange\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Parameter \#1 \$fx \(Closure\) of method Atk4\\Ui\\Console::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Parameter \#2 \$event \(bool\|string\) of method Atk4\\Ui\\Console::set\(\) should be contravariant with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Property Atk4\\Ui\\Console::\$last_exit_code has no typehint specified\.$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Method Atk4\\Ui\\Console::exec\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Method Atk4\\Ui\\Console::exec\(\) has parameter \$args with no typehint specified\.$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Method Atk4\\Ui\\Console::exec\(\) has parameter \$exec with no typehint specified\.$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Method Atk4\\Ui\\Console::execRaw\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Method Atk4\\Ui\\Console::execRaw\(\) has parameter \$args with no typehint specified\.$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Method Atk4\\Ui\\Console::execRaw\(\) has parameter \$exec with no typehint specified\.$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Method Atk4\\Ui\\Console::setModel\(\) has parameter \$args with no typehint specified\.$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Method Atk4\\Ui\\Console::setModel\(\) has parameter \$method with no typehint specified\.$~'
+        -
+            path: 'src/Crud.php'
+            message: '~^Method Atk4\\Ui\\Crud::applySort\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Crud.php'
+            message: '~^Parameter \#2 \$fields \(array\|null\) of method Atk4\\Ui\\Crud::setModel\(\) should be contravariant with parameter \$columns \(array\|bool\) of method Atk4\\Ui\\Grid::setModel\(\)$~'
+        -
+            path: 'src/Crud.php'
+            message: '~^Method Atk4\\Ui\\Crud::jsExecute\(\) has parameter \$return with no typehint specified\.$~'
+        -
+            path: 'src/Crud.php'
+            message: '~^Method Atk4\\Ui\\Crud::setItemsAction\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Crud.php'
+            message: '~^Method Atk4\\Ui\\Crud::onFormEdit\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Crud.php'
+            message: '~^Method Atk4\\Ui\\Crud::onFormAdd\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Crud.php'
+            message: '~^Method Atk4\\Ui\\Crud::onFormAddEdit\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Dropdown.php'
+            message: '~^Method Atk4\\Ui\\Dropdown::onChange\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Exception/NoRenderTree.php'
+            message: '~^Method Atk4\\Ui\\Exception\\NoRenderTree::__construct\(\) has parameter \$action with no typehint specified\.$~'
+        -
+            path: 'src/Exception/NoRenderTree.php'
+            message: '~^Method Atk4\\Ui\\Exception\\NoRenderTree::__construct\(\) has parameter \$object with no typehint specified\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Method Atk4\\Ui\\Form::initLayout\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Call to function is_object\(\) with Atk4\\Ui\\Form\\Layout will always evaluate to true\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Instanceof between Atk4\\Data\\Field and Atk4\\Data\\Field will always evaluate to true\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Method Atk4\\Ui\\Form::loadPost\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form.php'
+            message: '~^Method Atk4\\Ui\\Form::ajaxSubmit\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/AbstractLayout.php'
+            message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/AbstractLayout.php'
+            message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) has parameter \$decorator with no typehint specified\.$~'
+        -
+            path: 'src/Form/AbstractLayout.php'
+            message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) has parameter \$field with no typehint specified\.$~'
+        -
+            path: 'src/Form/AbstractLayout.php'
+            message: '~^Call to function is_array\(\) with array\<int, array\(0 \=\> string, \?1 \=\> array\(''readonly'' \=\> true\)\)\> will always evaluate to true\.$~'
+        -
+            path: 'src/Form/Control.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control::\$width has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control::onChange\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control::jsInput\(\) has parameter \$action with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control::jsInput\(\) has parameter \$when with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Calendar.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Calendar::\$type has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Calendar.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Calendar::\$options has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Calendar.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Calendar::setOption\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Calendar.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Calendar::setOption\(\) has parameter \$name with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Calendar.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Calendar::setOption\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Calendar.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Calendar::setFirstDayOfWeek\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Calendar.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Calendar::requireLocale\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Calendar.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Calendar::setLocale\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Calendar.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Calendar::setDayOfWeek\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Calendar.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Calendar::onChange\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Calendar.php'
+            message: '~^Parameter \#1 \$expr \(array\|Atk4\\Ui\\JsExpression\|string\) of method Atk4\\Ui\\Form\\Control\\Calendar::onChange\(\) should be contravariant with parameter \$expr \(array\|Atk4\\Ui\\JsExpression\|Closure\|string\) of method Atk4\\Ui\\Form\\Control::onChange\(\)$~'
+        -
+            path: 'src/Form/Control/Checkbox.php'
+            message: '~^Parameter \#1 \$value \(bool\) of method Atk4\\Ui\\Form\\Control\\Checkbox::set\(\) should be contravariant with parameter \$value \(mixed\) of method Atk4\\Ui\\Form\\Control::set\(\)$~'
+        -
+            path: 'src/Form/Control/Checkbox.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Checkbox::jsChecked\(\) has parameter \$action with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Checkbox.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Checkbox::jsChecked\(\) has parameter \$when with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Dropdown.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::setDropdownOption\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Dropdown.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::setDropdownOptions\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Dropdown.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::htmlRenderValue\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Dropdown.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_renderItemsForModel\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Dropdown.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_renderItemsForValues\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Dropdown.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_addCallBackRow\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Dropdown.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_addCallBackRow\(\) has parameter \$key with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Dropdown.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_addCallBackRow\(\) has parameter \$row with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/DropdownCascade.php'
+            message: '~^Instanceof between Atk4\\Ui\\Form\\Control and Atk4\\Ui\\Form\\Control will always evaluate to true\.$~'
+        -
+            path: 'src/Form/Control/DropdownCascade.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\DropdownCascade::htmlRenderValue\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Hidden.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Hidden::\$inputType has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Input.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$inputType has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Input.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$placeholder has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Input.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$icon has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Input.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$iconLeft has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Input.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$loading has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Input.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$action has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Input.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$actionLeft has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Input.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$width has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Lookup::getCallbackUrl\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Lookup::initQuickNewRecord\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Call to function is_string\(\) with string will always evaluate to true\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Lookup::applyLimit\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Lookup::applyLimit\(\) has parameter \$limit with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Lookup::applySearchConditions\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Lookup::applyDependencyConditions\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Instanceof between Closure and Closure will always evaluate to true\.$~'
+        -
+            path: 'src/Form/Control/Lookup.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Lookup::initDropdown\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Multiline.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Multiline::setLookupOptionValue\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Multiline.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Multiline::getFieldItems\(\) has parameter \$limit with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Multiline.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Multiline::valuePropsBinding\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Multiline.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Multiline::getDummyExpression\(\) has parameter \$model with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Password.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Password::\$inputType has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Radio.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Radio::onChange\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/ScopeBuilder.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\ScopeBuilder::\$atkLookupOptions has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/ScopeBuilder.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\ScopeBuilder::getModel\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/ScopeBuilder.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\ScopeBuilder::buildQuery\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/ScopeBuilder.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\ScopeBuilder::getRule\(\) has parameter \$type with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/ScopeBuilder.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\ScopeBuilder::getChoices\(\) has parameter \$options with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/ScopeBuilder.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\ScopeBuilder::scopeToQuery\(\) has parameter \$inputsMap with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/ScopeBuilder.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\ScopeBuilder::conditionToQuery\(\) has parameter \$inputsMap with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/TreeItemSelector.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\TreeItemSelector::setTreeItems\(\) has parameter \$treeItems with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/TreeItemSelector.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\TreeItemSelector::getValue\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Upload::\$inputType has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Upload::\$hasDeleteCb has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Property Atk4\\Ui\\Form\\Control\\Upload::\$jsActions has no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Parameter \#1 \$fileId \(string\) of method Atk4\\Ui\\Form\\Control\\Upload::set\(\) should be contravariant with parameter \$value \(mixed\) of method Atk4\\Ui\\Form\\Control::set\(\)$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Parameter \#2 \$fileName \(string\|null\) of method Atk4\\Ui\\Form\\Control\\Upload::set\(\) should be contravariant with parameter \$junk \(mixed\) of method Atk4\\Ui\\Form\\Control::set\(\)$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Upload::setInput\(\) has parameter \$junk with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Upload::setFileId\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Upload::setFileId\(\) has parameter \$id with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Upload::addJsAction\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Upload::addJsAction\(\) has parameter \$action with no typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Upload::onUpload\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/Upload.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Upload::onDelete\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/UploadImage.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\UploadImage::setThumbnailSrc\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/UploadImage.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\UploadImage::clearThumbnail\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Control/UploadImage.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\UploadImage::clearThumbnail\(\) has parameter \$defaultThumbnail with no typehint specified\.$~'
+        -
+            path: 'src/Form/Layout.php'
+            message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Form/Layout.php'
+            message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) has parameter \$decorator with no typehint specified\.$~'
+        -
+            path: 'src/Form/Layout.php'
+            message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) has parameter \$field with no typehint specified\.$~'
+        -
+            path: 'src/Form/Layout/Section.php'
+            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section::\$formLayout has no typehint specified\.$~'
+        -
+            path: 'src/Form/Layout/Section.php'
+            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section::\$form has no typehint specified\.$~'
+        -
+            path: 'src/Form/Layout/Section/Accordion.php'
+            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section\\Accordion::\$formLayout has no typehint specified\.$~'
+        -
+            path: 'src/Form/Layout/Section/Accordion.php'
+            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section\\Accordion::\$form has no typehint specified\.$~'
+        -
+            path: 'src/Form/Layout/Section/Columns.php'
+            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section\\Columns::\$formLayout has no typehint specified\.$~'
+        -
+            path: 'src/Form/Layout/Section/Columns.php'
+            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section\\Columns::\$form has no typehint specified\.$~'
+        -
+            path: 'src/Form/Layout/Section/Tabs.php'
+            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section\\Tabs::\$formLayout has no typehint specified\.$~'
+        -
+            path: 'src/Form/Layout/Section/Tabs.php'
+            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section\\Tabs::\$form has no typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::setActionDecorator\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::setActionDecorator\(\) has parameter \$seed with no typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::setActionMenuDecorator\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::setActionMenuDecorator\(\) has parameter \$seed with no typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::addDecorator\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::addButton\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::setIpp\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Instanceof between Atk4\\Ui\\JsSearch and Atk4\\Ui\\JsSearch will always evaluate to true\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::addQuickSearch\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::addActionButton\(\) has parameter \$isDisabled with no typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::addExecutorButton\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::addActionMenuItem\(\) has parameter \$action with no typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::addExecutorMenuItem\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::getActionMenu\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::addActionMenuItems\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::addActionMenuFromModel\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::addDropdown\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::addUserAction\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::applySort\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Method Atk4\\Ui\\Grid::setModelLimitFromPaginator\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/GridLayout.php'
+            message: '~^Method Atk4\\Ui\\GridLayout::buildTemplate\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::_unsetFromTagTree\(\) has parameter \$k with no typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::_setOrAppend\(\) has parameter \$throwIfNotFound with no typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::setHtml\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::setHtml\(\) has parameter \$tag with no typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::setHtml\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::trySetHtml\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::trySetHtml\(\) has parameter \$tag with no typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::trySetHtml\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::appendHtml\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::appendHtml\(\) has parameter \$tag with no typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::appendHtml\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::tryAppendHtml\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::tryAppendHtml\(\) has parameter \$tag with no typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::tryAppendHtml\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::load\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::tryLoad\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::loadTemplateFromString\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Method Atk4\\Ui\\HtmlTemplate::render\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/HtmlTemplate.php'
+            message: '~^Instanceof between Atk4\\Ui\\HtmlTemplate and Atk4\\Ui\\HtmlTemplate will always evaluate to true\.$~'
+        -
+            path: 'src/ItemsPerPageSelector.php'
+            message: '~^Method Atk4\\Ui\\ItemsPerPageSelector::jsSetLabel\(\) has parameter \$ipp with no typehint specified\.$~'
+        -
+            path: 'src/ItemsPerPageSelector.php'
+            message: '~^Method Atk4\\Ui\\ItemsPerPageSelector::onPageLengthSelect\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/JsCallback.php'
+            message: '~^Method Atk4\\Ui\\JsCallback::setConfirm\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/JsConditionalForm.php'
+            message: '~^Method Atk4\\Ui\\JsConditionalForm::__construct\(\) has parameter \$rules with no typehint specified\.$~'
+        -
+            path: 'src/JsConditionalForm.php'
+            message: '~^Method Atk4\\Ui\\JsConditionalForm::__construct\(\) has parameter \$selector with no typehint specified\.$~'
+        -
+            path: 'src/JsConditionalForm.php'
+            message: '~^Method Atk4\\Ui\\JsConditionalForm::setRules\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/JsExpression.php'
+            message: '~^Method Atk4\\Ui\\JsExpression::_json_encode\(\) has parameter \$arg with no typehint specified\.$~'
+        -
+            path: 'src/JsModal.php'
+            message: '~^Method Atk4\\Ui\\JsModal::__construct\(\) has parameter \$url with no typehint specified\.$~'
+        -
+            path: 'src/JsModal.php'
+            message: '~^Method Atk4\\Ui\\JsModal::setOption\(\) has parameter \$options with no typehint specified\.$~'
+        -
+            path: 'src/JsModal.php'
+            message: '~^Method Atk4\\Ui\\JsModal::setOption\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Property Atk4\\Ui\\JsNotify::\$options has no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Property Atk4\\Ui\\JsNotify::\$attachTo has no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Method Atk4\\Ui\\JsNotify::__construct\(\) has parameter \$attachTo with no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Method Atk4\\Ui\\JsNotify::__construct\(\) has parameter \$options with no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Method Atk4\\Ui\\JsNotify::setMessage\(\) has parameter \$msg with no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Method Atk4\\Ui\\JsNotify::setMissingProperty\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Method Atk4\\Ui\\JsNotify::setContent\(\) has parameter \$content with no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Method Atk4\\Ui\\JsNotify::setColor\(\) has parameter \$color with no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Method Atk4\\Ui\\JsNotify::setIcon\(\) has parameter \$icon with no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Method Atk4\\Ui\\JsNotify::setTransition\(\) has parameter \$closeTransition with no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Method Atk4\\Ui\\JsNotify::setTransition\(\) has parameter \$openTransition with no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Method Atk4\\Ui\\JsNotify::setDuration\(\) has parameter \$duration with no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Method Atk4\\Ui\\JsNotify::setPosition\(\) has parameter \$position with no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Method Atk4\\Ui\\JsNotify::setWidth\(\) has parameter \$width with no typehint specified\.$~'
+        -
+            path: 'src/JsNotify.php'
+            message: '~^Method Atk4\\Ui\\JsNotify::attachTo\(\) has parameter \$to with no typehint specified\.$~'
+        -
+            path: 'src/JsPaginator.php'
+            message: '~^Method Atk4\\Ui\\JsPaginator::onScroll\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/JsReload.php'
+            message: '~^Property Atk4\\Ui\\JsReload::\$includeStorage has no typehint specified\.$~'
+        -
+            path: 'src/JsReload.php'
+            message: '~^Method Atk4\\Ui\\JsReload::__construct\(\) has parameter \$afterSuccess with no typehint specified\.$~'
+        -
+            path: 'src/JsReload.php'
+            message: '~^Method Atk4\\Ui\\JsReload::__construct\(\) has parameter \$apiConfig with no typehint specified\.$~'
+        -
+            path: 'src/JsReload.php'
+            message: '~^Method Atk4\\Ui\\JsReload::__construct\(\) has parameter \$args with no typehint specified\.$~'
+        -
+            path: 'src/JsReload.php'
+            message: '~^Method Atk4\\Ui\\JsReload::__construct\(\) has parameter \$includeStorage with no typehint specified\.$~'
+        -
+            path: 'src/JsReload.php'
+            message: '~^Method Atk4\\Ui\\JsReload::__construct\(\) has parameter \$view with no typehint specified\.$~'
+        -
+            path: 'src/JsSearch.php'
+            message: '~^Property Atk4\\Ui\\JsSearch::\$args has no typehint specified\.$~'
+        -
+            path: 'src/JsSearch.php'
+            message: '~^Property Atk4\\Ui\\JsSearch::\$filterIcon has no typehint specified\.$~'
+        -
+            path: 'src/JsSearch.php'
+            message: '~^Property Atk4\\Ui\\JsSearch::\$btnSearchIcon has no typehint specified\.$~'
+        -
+            path: 'src/JsSearch.php'
+            message: '~^Property Atk4\\Ui\\JsSearch::\$btnRemoveIcon has no typehint specified\.$~'
+        -
+            path: 'src/JsSearch.php'
+            message: '~^Property Atk4\\Ui\\JsSearch::\$btnStyle has no typehint specified\.$~'
+        -
+            path: 'src/JsSortable.php'
+            message: '~^Method Atk4\\Ui\\JsSortable::onReorder\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/JsSse.php'
+            message: '~^Method Atk4\\Ui\\JsSse::send\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/JsSse.php'
+            message: '~^Method Atk4\\Ui\\JsSse::send\(\) has parameter \$action with no typehint specified\.$~'
+        -
+            path: 'src/JsSse.php'
+            message: '~^Method Atk4\\Ui\\JsSse::send\(\) has parameter \$success with no typehint specified\.$~'
+        -
+            path: 'src/JsSse.php'
+            message: '~^Method Atk4\\Ui\\JsSse::sendEvent\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/JsSse.php'
+            message: '~^Method Atk4\\Ui\\JsSse::sendEvent\(\) has parameter \$data with no typehint specified\.$~'
+        -
+            path: 'src/JsSse.php'
+            message: '~^Method Atk4\\Ui\\JsSse::sendEvent\(\) has parameter \$eventName with no typehint specified\.$~'
+        -
+            path: 'src/JsSse.php'
+            message: '~^Method Atk4\\Ui\\JsSse::sendEvent\(\) has parameter \$id with no typehint specified\.$~'
+        -
+            path: 'src/JsSse.php'
+            message: '~^Method Atk4\\Ui\\JsSse::initSse\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/JsToast.php'
+            message: '~^Method Atk4\\Ui\\JsToast::__construct\(\) has parameter \$settings with no typehint specified\.$~'
+        -
+            path: 'src/JsToast.php'
+            message: '~^Method Atk4\\Ui\\JsToast::setMessage\(\) has parameter \$msg with no typehint specified\.$~'
+        -
+            path: 'src/JsVueService.php'
+            message: '~^Method Atk4\\Ui\\JsVueService::createAtkVue\(\) has parameter \$component with no typehint specified\.$~'
+        -
+            path: 'src/JsVueService.php'
+            message: '~^Method Atk4\\Ui\\JsVueService::createAtkVue\(\) has parameter \$id with no typehint specified\.$~'
+        -
+            path: 'src/JsVueService.php'
+            message: '~^Method Atk4\\Ui\\JsVueService::createVue\(\) has parameter \$component with no typehint specified\.$~'
+        -
+            path: 'src/JsVueService.php'
+            message: '~^Method Atk4\\Ui\\JsVueService::createVue\(\) has parameter \$componentName with no typehint specified\.$~'
+        -
+            path: 'src/JsVueService.php'
+            message: '~^Method Atk4\\Ui\\JsVueService::createVue\(\) has parameter \$id with no typehint specified\.$~'
+        -
+            path: 'src/Layout/Admin.php'
+            message: '~^Property Atk4\\Ui\\Layout\\Admin::\$menuLeft has no typehint specified\.$~'
+        -
+            path: 'src/Layout/Admin.php'
+            message: '~^Property Atk4\\Ui\\Layout\\Admin::\$menu has no typehint specified\.$~'
+        -
+            path: 'src/Layout/Admin.php'
+            message: '~^Property Atk4\\Ui\\Layout\\Admin::\$menuRight has no typehint specified\.$~'
+        -
+            path: 'src/Layout/Admin.php'
+            message: '~^Property Atk4\\Ui\\Layout\\Admin::\$burger has no typehint specified\.$~'
+        -
+            path: 'src/Layout/Admin.php'
+            message: '~^Method Atk4\\Ui\\Layout\\Admin::addMenuGroup\(\) has parameter \$seed with no typehint specified\.$~'
+        -
+            path: 'src/Layout/Admin.php'
+            message: '~^Method Atk4\\Ui\\Layout\\Admin::addMenuItem\(\) has parameter \$action with no typehint specified\.$~'
+        -
+            path: 'src/Layout/Admin.php'
+            message: '~^Method Atk4\\Ui\\Layout\\Admin::addMenuItem\(\) has parameter \$group with no typehint specified\.$~'
+        -
+            path: 'src/Layout/Admin.php'
+            message: '~^Method Atk4\\Ui\\Layout\\Admin::addMenuItem\(\) has parameter \$name with no typehint specified\.$~'
+        -
+            path: 'src/Layout/Centered.php'
+            message: '~^Property Atk4\\Ui\\Layout\\Centered::\$image_alt has no typehint specified\.$~'
+        -
+            path: 'src/Layout/Column.php'
+            message: '~^Property Atk4\\Ui\\Layout\\Column::\$menu has no typehint specified\.$~'
+        -
+            path: 'src/Layout/Column.php'
+            message: '~^Property Atk4\\Ui\\Layout\\Column::\$leftColumn has no typehint specified\.$~'
+        -
+            path: 'src/Layout/Column.php'
+            message: '~^Property Atk4\\Ui\\Layout\\Column::\$rightColumn has no typehint specified\.$~'
+        -
+            path: 'src/Layout/Maestro.php'
+            message: '~^Property Atk4\\Ui\\Layout\\Maestro::\$menuTemplate has no typehint specified\.$~'
+        -
+            path: 'src/Layout/Maestro.php'
+            message: '~^Method Atk4\\Ui\\Layout\\Maestro::addMenuGroup\(\) has parameter \$seed with no typehint specified\.$~'
+        -
+            path: 'src/Layout/Maestro.php'
+            message: '~^Method Atk4\\Ui\\Layout\\Maestro::addMenuItem\(\) has parameter \$action with no typehint specified\.$~'
+        -
+            path: 'src/Layout/Maestro.php'
+            message: '~^Method Atk4\\Ui\\Layout\\Maestro::addMenuItem\(\) has parameter \$group with no typehint specified\.$~'
+        -
+            path: 'src/Layout/Maestro.php'
+            message: '~^Method Atk4\\Ui\\Layout\\Maestro::addMenuItem\(\) has parameter \$name with no typehint specified\.$~'
+        -
+            path: 'src/Layout/NavigableInterface.php'
+            message: '~^Method Atk4\\Ui\\Layout\\NavigableInterface::addMenuGroup\(\) has parameter \$seed with no typehint specified\.$~'
+        -
+            path: 'src/Layout/NavigableInterface.php'
+            message: '~^Method Atk4\\Ui\\Layout\\NavigableInterface::addMenuItem\(\) has parameter \$action with no typehint specified\.$~'
+        -
+            path: 'src/Layout/NavigableInterface.php'
+            message: '~^Method Atk4\\Ui\\Layout\\NavigableInterface::addMenuItem\(\) has parameter \$group with no typehint specified\.$~'
+        -
+            path: 'src/Layout/NavigableInterface.php'
+            message: '~^Method Atk4\\Ui\\Layout\\NavigableInterface::addMenuItem\(\) has parameter \$name with no typehint specified\.$~'
+        -
+            path: 'src/Lister.php'
+            message: '~^Method Atk4\\Ui\\Lister::initChunks\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Lister.php'
+            message: '~^Method Atk4\\Ui\\Lister::renderRow\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Loader.php'
+            message: '~^Parameter \#1 \$fx \(Closure\) of method Atk4\\Ui\\Loader::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+        -
+            path: 'src/Loader.php'
+            message: '~^Method Atk4\\Ui\\Loader::jsLoad\(\) has parameter \$apiConfig with no typehint specified\.$~'
+        -
+            path: 'src/Loader.php'
+            message: '~^Method Atk4\\Ui\\Loader::jsLoad\(\) has parameter \$storeName with no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Property Atk4\\Ui\\Modal::\$loading_label has no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Property Atk4\\Ui\\Modal::\$headerCss has no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Property Atk4\\Ui\\Modal::\$fx has no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Property Atk4\\Ui\\Modal::\$cb has no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Property Atk4\\Ui\\Modal::\$cb_view has no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Property Atk4\\Ui\\Modal::\$args has no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Parameter \#1 \$fx \(Closure\) of method Atk4\\Ui\\Modal::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Method Atk4\\Ui\\Modal::enableCallback\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Method Atk4\\Ui\\Modal::addContentCss\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Method Atk4\\Ui\\Modal::addContentCss\(\) has parameter \$class with no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Method Atk4\\Ui\\Modal::setOption\(\) has parameter \$option with no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Method Atk4\\Ui\\Modal::setOption\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Method Atk4\\Ui\\Modal::setOptions\(\) has parameter \$options with no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Method Atk4\\Ui\\Modal::transition\(\) has parameter \$transition_type with no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Method Atk4\\Ui\\Modal::duration\(\) has parameter \$time with no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Method Atk4\\Ui\\Modal::settings\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Method Atk4\\Ui\\Modal::settings\(\) has parameter \$setting_option with no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Method Atk4\\Ui\\Modal::settings\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Method Atk4\\Ui\\Modal::addDenyAction\(\) has parameter \$label with no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Method Atk4\\Ui\\Modal::addApproveAction\(\) has parameter \$label with no typehint specified\.$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Method Atk4\\Ui\\Modal::addButtonAction\(\) has parameter \$button with no typehint specified\.$~'
+        -
+            path: 'src/Paginator.php'
+            message: '~^Method Atk4\\Ui\\Paginator::setTotal\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Paginator.php'
+            message: '~^Method Atk4\\Ui\\Paginator::addReloadArgs\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Paginator.php'
+            message: '~^Method Atk4\\Ui\\Paginator::renderItem\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Panel/Content.php'
+            message: '~^Property Atk4\\Ui\\Panel\\Content::\$cb has no typehint specified\.$~'
+        -
+            path: 'src/Panel/Loadable.php'
+            message: '~^Method Atk4\\Ui\\Panel\\Loadable::addDynamicContent\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Panel/Right.php'
+            message: '~^Method Atk4\\Ui\\Panel\\Right::addDynamicContent\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Panel/Right.php'
+            message: '~^Method Atk4\\Ui\\Panel\\Right::addConfirmation\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Panel/Right.php'
+            message: '~^Method Atk4\\Ui\\Panel\\Right::onOpen\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Persistence/Ui.php'
+            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$date_format has no typehint specified\.$~'
+        -
+            path: 'src/Persistence/Ui.php'
+            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$time_format has no typehint specified\.$~'
+        -
+            path: 'src/Persistence/Ui.php'
+            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$datetime_format has no typehint specified\.$~'
+        -
+            path: 'src/Persistence/Ui.php'
+            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$currency has no typehint specified\.$~'
+        -
+            path: 'src/Persistence/Ui.php'
+            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$yes has no typehint specified\.$~'
+        -
+            path: 'src/Persistence/Ui.php'
+            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$no has no typehint specified\.$~'
+        -
+            path: 'src/Persistence/Ui.php'
+            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$calendar_options has no typehint specified\.$~'
+        -
+            path: 'src/Popup.php'
+            message: '~^Method Atk4\\Ui\\Popup::__construct\(\) has parameter \$triggerBy with no typehint specified\.$~'
+        -
+            path: 'src/Popup.php'
+            message: '~^Parameter \#1 \$fx \(Closure\) of method Atk4\\Ui\\Popup::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+        -
+            path: 'src/Popup.php'
+            message: '~^Method Atk4\\Ui\\Popup::setTriggerBy\(\) has parameter \$trigger with no typehint specified\.$~'
+        -
+            path: 'src/Popup.php'
+            message: '~^Method Atk4\\Ui\\Popup::setOption\(\) has parameter \$name with no typehint specified\.$~'
+        -
+            path: 'src/Popup.php'
+            message: '~^Method Atk4\\Ui\\Popup::setOption\(\) has parameter \$option with no typehint specified\.$~'
+        -
+            path: 'src/Popup.php'
+            message: '~^Method Atk4\\Ui\\Popup::setOptions\(\) has parameter \$options with no typehint specified\.$~'
+        -
+            path: 'src/ProgressBar.php'
+            message: '~^Method Atk4\\Ui\\ProgressBar::__construct\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'src/Step.php'
+            message: '~^Method Atk4\\Ui\\Step::__construct\(\) has parameter \$title with no typehint specified\.$~'
+        -
+            path: 'src/Table.php'
+            message: '~^Method Atk4\\Ui\\Table::initChunks\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table.php'
+            message: '~^Call to function is_string\(\) with string will always evaluate to true\.$~'
+        -
+            path: 'src/Table.php'
+            message: '~^Method Atk4\\Ui\\Table::setFilterColumn\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table.php'
+            message: '~^Property Atk4\\Ui\\Table::\$typeToDecorator has no typehint specified\.$~'
+        -
+            path: 'src/Table.php'
+            message: '~^Method Atk4\\Ui\\Table::addTotals\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table.php'
+            message: '~^Method Atk4\\Ui\\Table::renderRow\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table.php'
+            message: '~^Method Atk4\\Ui\\Table::updateTotals\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column::setHeaderPopup\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column::setHeaderPopup\(\) has parameter \$id with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column::setHeaderPopupIcon\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column::setHeaderPopupIcon\(\) has parameter \$icon with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column::addDropdown\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column::setHeaderDropdown\(\) has parameter \$items with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column::getTagAttributes\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column::getTagAttributes\(\) has parameter \$attr with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column::getTagAttributes\(\) has parameter \$position with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/ActionButtons.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\ActionButtons::addButton\(\) has parameter \$isDisabled with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/ActionMenu.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\ActionMenu::addActionMenuItem\(\) has parameter \$isDisabled with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/Checkbox.php'
+            message: '~^Property Atk4\\Ui\\Table\\Column\\Checkbox::\$class has no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/Checkbox.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\Checkbox::jsChecked\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column/ColorRating.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::createGradients\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column/ColorRating.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::createGradientSingle\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column/ColorRating.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::createGradientSingle\(\) has parameter \$gradients with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/ColorRating.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::createGradientSingle\(\) has parameter \$hexFrom with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/ColorRating.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::createGradientSingle\(\) has parameter \$hexTo with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/ColorRating.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::createGradientSingle\(\) has parameter \$steps with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/ColorRating.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::getTagAttributes\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column/ColorRating.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::getTagAttributes\(\) has parameter \$attr with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/ColorRating.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::getTagAttributes\(\) has parameter \$position with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/ColorRating.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::getColorFromValue\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column/DragHandler.php'
+            message: '~^Property Atk4\\Ui\\Table\\Column\\DragHandler::\$class has no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/DragHandler.php'
+            message: '~^Property Atk4\\Ui\\Table\\Column\\DragHandler::\$tag has no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/DragHandler.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\DragHandler::onReorder\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterModel.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel::afterInit\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterModel.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel::setConditionForModel\(\) has parameter \$model with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterModel.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel::getFormDisplayRules\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeBoolean.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeBoolean::setConditionForModel\(\) has parameter \$model with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeDate.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeDate::setConditionForModel\(\) has parameter \$model with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeDate.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeDate::getFormDisplayRules\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeDatetime.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeDatetime::setConditionForModel\(\) has parameter \$model with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeDatetime.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeDatetime::getFormDisplayRules\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeEnum.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeEnum::setConditionForModel\(\) has parameter \$model with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeNumber.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeNumber::setConditionForModel\(\) has parameter \$model with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeNumber.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeNumber::getFormDisplayRules\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeString.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeString::setConditionForModel\(\) has parameter \$model with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeTime.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeTime::setConditionForModel\(\) has parameter \$model with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeTime.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeTime::getFormDisplayRules\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column/FilterPopup.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterPopup::setFilterCondition\(\) has parameter \$tableModel with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/JsHeader.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\JsHeader::onSelectItem\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column/KeyValue.php'
+            message: '~^Property Atk4\\Ui\\Table\\Column\\KeyValue::\$values has no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/Link.php'
+            message: '~^Property Atk4\\Ui\\Table\\Column\\Link::\$page has no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/Link.php'
+            message: '~^Property Atk4\\Ui\\Table\\Column\\Link::\$args has no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/Link.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\Link::__construct\(\) has parameter \$args with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/Link.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\Link::__construct\(\) has parameter \$page with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/Money.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\Money::getTagAttributes\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Table/Column/Money.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\Money::getTagAttributes\(\) has parameter \$attr with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/Money.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\Money::getTagAttributes\(\) has parameter \$position with no typehint specified\.$~'
+        -
+            path: 'src/Table/Column/Multiformat.php'
+            message: '~^Method Atk4\\Ui\\Table\\Column\\Multiformat::__construct\(\) has parameter \$callback with no typehint specified\.$~'
+        -
+            path: 'src/Tabs.php'
+            message: '~^Method Atk4\\Ui\\Tabs::addTabUrl\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/TabsSubview.php'
+            message: '~^Property Atk4\\Ui\\TabsSubview::\$dataTabName has no typehint specified\.$~'
+        -
+            path: 'src/TabsSubview.php'
+            message: '~^Method Atk4\\Ui\\TabsSubview::setActive\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/Text.php'
+            message: '~^Method Atk4\\Ui\\Text::render\(\) has parameter \$forceReturn with no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ArgumentFormExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ArgumentFormExecutor::initPreview\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/BasicExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\BasicExecutor::setArguments\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/BasicExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\BasicExecutor::hasAllArguments\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/BasicExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\BasicExecutor::initPreview\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/BasicExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\BasicExecutor::addHeader\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ConfirmationExecutor.php'
+            message: '~^Property Atk4\\Ui\\UserAction\\ConfirmationExecutor::\$actionInitialized has no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ConfirmationExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ConfirmationExecutor::afterActionInit\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ConfirmationExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ConfirmationExecutor::executeModelAction\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ConfirmationExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ConfirmationExecutor::jsSetBtnState\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ConfirmationExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ConfirmationExecutor::doConfirmation\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ConfirmationExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ConfirmationExecutor::addConfirmation\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ConfirmationExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ConfirmationExecutor::doFinal\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ConfirmationExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ConfirmationExecutor::jsGetExecute\(\) has parameter \$id with no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ConfirmationExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ConfirmationExecutor::jsGetExecute\(\) has parameter \$obj with no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ConfirmationExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ConfirmationExecutor::_jsSequencer\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ExecutorFactory.php'
+            message: '~^Property Atk4\\Ui\\UserAction\\ExecutorFactory::\$executorSeed has no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ExecutorFactory.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ExecutorFactory::registerTypeExecutor\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ExecutorFactory.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ExecutorFactory::registerTypeExecutor\(\) has parameter \$seed with no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ExecutorFactory.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ExecutorFactory::registerExecutor\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ExecutorFactory.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ExecutorFactory::registerTrigger\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ExecutorFactory.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ExecutorFactory::useTriggerDefault\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ExecutorFactory.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ExecutorFactory::registerCaption\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ExecutorInterface.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ExecutorInterface::setAction\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ExecutorInterface.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ExecutorInterface::executeModelAction\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/FormExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\FormExecutor::initPreview\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/JsCallbackExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\JsCallbackExecutor::setAction\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/JsCallbackExecutor.php'
+            message: '~^Instanceof between Atk4\\Ui\\View and Atk4\\Ui\\View will always evaluate to true\.$~'
+        -
+            path: 'src/UserAction/JsCallbackExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\JsCallbackExecutor::executeModelAction\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/JsCallbackExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\JsCallbackExecutor::_hasAllArguments\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/JsExecutorInterface.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\JsExecutorInterface::jsExecute\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Property Atk4\\Ui\\UserAction\\ModalExecutor::\$actionInitialized has no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Property Atk4\\Ui\\UserAction\\ModalExecutor::\$step has no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Property Atk4\\Ui\\UserAction\\ModalExecutor::\$nextStepBtn has no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Property Atk4\\Ui\\UserAction\\ModalExecutor::\$execActionBtn has no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Property Atk4\\Ui\\UserAction\\ModalExecutor::\$btns has no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Property Atk4\\Ui\\UserAction\\ModalExecutor::\$loaderUi has no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Property Atk4\\Ui\\UserAction\\ModalExecutor::\$loaderShim has no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::afterActionInit\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::executeModelAction\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::assignTrigger\(\) has parameter \$selector with no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::doArgs\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::doFields\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::doPreview\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::doFinal\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::jsGetExecute\(\) has parameter \$id with no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::jsGetExecute\(\) has parameter \$obj with no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::jsSetBtnState\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::jsSetSubmitBtn\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::jsSetPrevHandler\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::_addStepTitle\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::_jsSequencer\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::_handleException\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::_handleException\(\) has parameter \$step with no typehint specified\.$~'
+        -
+            path: 'src/UserAction/ModalExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::_handleException\(\) has parameter \$view with no typehint specified\.$~'
+        -
+            path: 'src/UserAction/PreviewExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\PreviewExecutor::initPreview\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/UserAction/PreviewExecutor.php'
+            message: '~^Method Atk4\\Ui\\UserAction\\PreviewExecutor::executePreview\(\) has no return typehint specified\.$~'
+        -
+            path: 'src/View.php'
+            message: '~^Call to function is_string\(\) with string will always evaluate to true\.$~'
+        -
+            path: 'src/View.php'
+            message: '~^Parameter \#1 \$object \(Atk4\\Ui\\View\) of method Atk4\\Ui\\View::add\(\) should be contravariant with parameter \$object \(Atk4\\Ui\\AbstractView\) of method Atk4\\Ui\\AbstractView::add\(\)$~'
+        -
+            path: 'src/View.php'
+            message: '~^Parameter \#2 \$region \(array\|string\|null\) of method Atk4\\Ui\\View::add\(\) should be contravariant with parameter \$args \(mixed\) of method Atk4\\Ui\\AbstractView::add\(\)$~'
+        -
+            path: 'src/View.php'
+            message: '~^Instanceof between Atk4\\Ui\\View and Atk4\\Ui\\View will always evaluate to true\.$~'
+        -
+            path: 'src/VirtualPage.php'
+            message: '~^Parameter \#1 \$fx \(Closure\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+        -
+            path: 'src/VirtualPage.php'
+            message: '~^Parameter \#2 \$args \(array\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+        -
+            path: 'src/VirtualPage.php'
+            message: '~^Instanceof between Atk4\\Ui\\View and Atk4\\Ui\\View will always evaluate to true\.$~'
+        -
+            path: 'src/Wizard.php'
+            message: '~^Method Atk4\\Ui\\Wizard::addFinish\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iWait\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iWait\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iPressButton\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iPressButton\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iPressMenuButtonUsingClass\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iPressMenuButtonUsingClass\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iPressMenuButtonUsingClass\(\) has parameter \$arg2 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iSetCalendarInputNameWithValue\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iSetCalendarInputNameWithValue\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iSetCalendarInputNameWithValue\(\) has parameter \$arg2 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iClickLink\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iClickLink\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iClickFilterColumnName\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iClickFilterColumnName\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iClickTabWithTitle\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iClickTabWithTitle\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iClickFirstCardOnPage\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iClickFirstElementUsingClass\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iClickFirstElementUsingClass\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iClickPaginatorPage\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iClickPaginatorPage\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iSee\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iSee\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::dump\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::dump\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iDontSee\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iDontSee\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::labelChangesToNumber\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::containerShouldHaveNumberOfItem\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::containerShouldHaveNumberOfItem\(\) has parameter \$selector with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iPressModalButton\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iPressModalButton\(\) has parameter \$arg with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::modalIsOpenWithText\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::modalIsOpenWithText\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::modalIsShowingText\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::modalIsShowingText\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::modalIsShowingText\(\) has parameter \$arg2 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::activeTabShouldBe\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::activeTabShouldBe\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iHideJsModal\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iScrollToTop\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::toastDisplayShouldContainText\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::toastDisplayShouldContainText\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iSelectValueInLookup\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iSelectValueInLookup\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iSelectValueInLookup\(\) has parameter \$arg2 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iSearchGridFor\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iSearchGridFor\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::pageUrlShouldContains\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::pageUrlShouldContains\(\) has parameter \$text with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::waitForThePageToBeLoaded\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iClickIconUsingCss\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iClickIconUsingCss\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderRule\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderRule\(\) has parameter \$name with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderRule\(\) has parameter \$operator with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderRule\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderReferenceRule\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderReferenceRule\(\) has parameter \$name with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderReferenceRule\(\) has parameter \$operator with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderReferenceRule\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderSelectRule\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderSelectRule\(\) has parameter \$name with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderSelectRule\(\) has parameter \$operator with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderSelectRule\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderDateRule\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderDateRule\(\) has parameter \$name with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderDateRule\(\) has parameter \$operator with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderDateRule\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderBoolRule\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderBoolRule\(\) has parameter \$name with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::scopeBuilderBoolRule\(\) has parameter \$value with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::compareElementText\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::compareElementText\(\) has parameter \$compareSelector with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::compareElementText\(\) has parameter \$compareToSelector with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::compareInputValueToElementText\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::compareInputValueToElementText\(\) has parameter \$inputName with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::compareInputValueToElementText\(\) has parameter \$selector with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::textInContainerUsingShouldContains\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::textInContainerUsingShouldContains\(\) has parameter \$containerCss with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::textInContainerUsingShouldContains\(\) has parameter \$text with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::assertDropdownValue\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::assertSelectedValue\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::assertInputValue\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iWaitForLoadingToStartIn\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::iWaitForLoadingToStartIn\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::jqueryWait\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::jqueryWait\(\) has parameter \$maxWaitdurationMs with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::theShouldStartWith\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::theShouldStartWith\(\) has parameter \$arg1 with no typehint specified\.$~'
+        -
+            path: 'tests-behat/bootstrap/Context.php'
+            message: '~^Method Atk4\\Ui\\Behat\\Context::theShouldStartWith\(\) has parameter \$arg2 with no typehint specified\.$~'
+        -
+            path: 'tests/AppTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\AppTest::getApp\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests/CallbackTest.php'
+            message: '~^Property Atk4\\Ui\\Tests\\AppMock::\$terminated has no typehint specified\.$~'
+        -
+            path: 'tests/CallbackTest.php'
+            message: '~^Property Atk4\\Ui\\Tests\\CallbackTest::\$var has no typehint specified\.$~'
+        -
+            path: 'tests/CallbackTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\CallbackTest::callPull230\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests/DemosHttpTest.php'
+            message: '~^Property Atk4\\Ui\\Tests\\DemosHttpTest::\$_process has no typehint specified\.$~'
+        -
+            path: 'tests/DemosHttpTest.php'
+            message: '~^Property Atk4\\Ui\\Tests\\DemosHttpTest::\$_processSessionDir has no typehint specified\.$~'
+        -
+            path: 'tests/DemosHttpTest.php'
+            message: '~^Property Atk4\\Ui\\Tests\\DemosHttpTest::\$host has no typehint specified\.$~'
+        -
+            path: 'tests/DemosHttpTest.php'
+            message: '~^Property Atk4\\Ui\\Tests\\DemosHttpTest::\$port has no typehint specified\.$~'
+        -
+            path: 'tests/DemosTest.php'
+            message: '~^Strict comparison using \!\=\= between bool and null will always evaluate to true\.$~'
+        -
+            path: 'tests/ExecutorFactoryTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\ExecutorFactoryTest::getApp\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests/FormTest.php'
+            message: '~^Instanceof between Atk4\\Ui\\Form\\Control and Atk4\\Ui\\Form\\Control will always evaluate to true\.$~'
+        -
+            path: 'tests/FormTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\FormTest::assertSubmit\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests/FormTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\FormTest::assertSubmitError\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests/FormTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\FormTest::assertFormControlError\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests/FormTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\FormTest::assertFromControlNoErrors\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests/FormTest.php'
+            message: '~^Property Atk4\\Ui\\Tests\\AppFormTestMock::\$output has no typehint specified\.$~'
+        -
+            path: 'tests/GridTest.php'
+            message: '~^Property Atk4\\Ui\\Tests\\GridTest::\$m has no typehint specified\.$~'
+        -
+            path: 'tests/PaginatorTest.php'
+            message: '~^Property Atk4\\Ui\\Tests\\PaginatorTest::\$p has no typehint specified\.$~'
+        -
+            path: 'tests/PaginatorTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\PaginatorTest::addDataProvider\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests/PaginatorTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\PaginatorTest::testPaginator\(\) has parameter \$expected with no typehint specified\.$~'
+        -
+            path: 'tests/PaginatorTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\PaginatorTest::testPaginator\(\) has parameter \$page with no typehint specified\.$~'
+        -
+            path: 'tests/PaginatorTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\PaginatorTest::testPaginator\(\) has parameter \$range with no typehint specified\.$~'
+        -
+            path: 'tests/PaginatorTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\PaginatorTest::testPaginator\(\) has parameter \$total with no typehint specified\.$~'
+        -
+            path: 'tests/TableColumnColorRatingTest.php'
+            message: '~^Property Atk4\\Ui\\Tests\\TableColumnColorRatingTest::\$db has no typehint specified\.$~'
+        -
+            path: 'tests/TableColumnColorRatingTest.php'
+            message: '~^Property Atk4\\Ui\\Tests\\TableColumnColorRatingTest::\$column has no typehint specified\.$~'
+        -
+            path: 'tests/TableColumnLinkTest.php'
+            message: '~^Property Atk4\\Ui\\Tests\\TableColumnLinkTest::\$db has no typehint specified\.$~'
+        -
+            path: 'tests/TableColumnLinkTest.php'
+            message: '~^Property Atk4\\Ui\\Tests\\TableColumnLinkTest::\$table has no typehint specified\.$~'
+        -
+            path: 'tests/TableColumnLinkTest.php'
+            message: '~^Property Atk4\\Ui\\Tests\\TableColumnLinkTest::\$column has no typehint specified\.$~'
+        -
+            path: 'tests/TagTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\TagTest::getApp\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests/TagTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\TagTest::assertTagRender\(\) has no return typehint specified\.$~'
+        -
+            path: 'tests/TagTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\TagTest::assertTagRender\(\) has parameter \$args with no typehint specified\.$~'
+        -
+            path: 'tests/TagTest.php'
+            message: '~^Method Atk4\\Ui\\Tests\\TagTest::assertTagRender\(\) has parameter \$html with no typehint specified\.$~'
+        -
+            path: 'tools/CoverageUtil.php'
+            message: '~^Method CoverageUtil::start\(\) has no return typehint specified\.$~'
+        -
+            path: 'tools/CoverageUtil.php'
+            message: '~^Method CoverageUtil::saveData\(\) has no return typehint specified\.$~'

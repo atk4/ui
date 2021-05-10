@@ -704,8 +704,7 @@ class Multiline extends Form\Control
                 $model = $this->setDummyModelValue($this->getModel()->createEntity());
                 $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
                 $this->getApp()->terminateJson(['success' => true, 'message' => 'Success', 'expressions' => $expressionValues]);
-
-                break;
+                // no break - expression above always terminate
             case 'on-change':
                 $response = call_user_func($this->onChangeFunction, $this->typeCastLoadValues($this->getApp()->decodeJson($_POST['rows'])), $this->form);
                 $this->renderCallback->terminateAjax($this->renderCallback->getAjaxec($response));

@@ -8,7 +8,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\HtmlTemplate\TagTree;
 use Atk4\Ui\HtmlTemplate\Value as HtmlValue;
 
-class HtmlTemplate implements \ArrayAccess
+class HtmlTemplate
 {
     use \Atk4\Core\AppScopeTrait;
 
@@ -447,37 +447,6 @@ class HtmlTemplate implements \ArrayAccess
 
         return $this;
     }
-
-    // {{{ ArrayAccess support - will be removed in v2.5
-    public function offsetExists($name)
-    {
-        'trigger_error'('Array access is deprecated. Use hasTag method instead', E_USER_DEPRECATED);
-
-        return $this->hasTag($name);
-    }
-
-    public function offsetGet($name)
-    {
-        'trigger_error'('Array access is deprecated. Use get method instead', E_USER_DEPRECATED);
-
-        return $this->getTagTree($name);
-    }
-
-    public function offsetSet($name, $val)
-    {
-        'trigger_error'('Array access is deprecated. Use set method instead', E_USER_DEPRECATED);
-
-        $this->set($name, $val);
-    }
-
-    public function offsetUnset($name)
-    {
-        'trigger_error'('Array access is deprecated. Use del method instead', E_USER_DEPRECATED);
-
-        $this->del($name);
-    }
-
-    // }}}
 
     public function loadFromFile(string $filename): self
     {

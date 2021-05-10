@@ -347,7 +347,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         }
 
         if ($prev = $this->getPreviousStep($this->step)) {
-            $chain = $this->loader->jsload([
+            $chain = $this->loader->jsLoad([
                 'step' => $prev,
                 $this->name => $this->action->getEntity()->getId(),
             ], ['method' => 'post'], $this->loader->name);
@@ -362,7 +362,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
                 'click',
                 new JsFunction(
                     [
-                        $this->loader->jsload(
+                        $this->loader->jsLoad(
                             [
                                 'step' => 'final',
                                 $this->name => $this->action->getEntity()->getId(),
@@ -554,7 +554,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
                 // store data and setup reload.
                 $js = [
                     $this->loader->jsAddStoreData($this->actionData, true),
-                    $this->loader->jsload([
+                    $this->loader->jsLoad([
                         'step' => $this->getNextStep($step),
                         $this->name => $this->action->getEntity()->getId(),
                     ], ['method' => 'post'], $this->loader->name),
@@ -650,7 +650,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     protected function jsSetPrevHandler(View $view, string $step)
     {
         if ($prev = $this->getPreviousStep($step)) {
-            $chain = $this->loader->jsload([
+            $chain = $this->loader->jsLoad([
                 'step' => $prev,
                 $this->name => $this->action->getEntity()->getId(),
             ], ['method' => 'post'], $this->loader->name);

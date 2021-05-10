@@ -120,7 +120,7 @@ class DemosTest extends AtkPhpunit\TestCase
     protected function createTestingApp(): App
     {
         $app = new class(['call_exit' => false, 'catch_exceptions' => false, 'always_run' => false]) extends App {
-            public function callExit($for_shutdown = false): void
+            public function callExit(): void
             {
                 throw new DemosTestExitException();
             }
@@ -199,7 +199,7 @@ class DemosTest extends AtkPhpunit\TestCase
             return $this->getClient()->request(isset($options['form_params']) !== null ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
         } catch (\GuzzleHttp\Exception\ServerException $ex) {
             $exFactoryWithFullBody = new class('', $ex->getRequest()) extends \GuzzleHttp\Exception\RequestException {
-                public static function getResponseBodySummary(ResponseInterface $response)
+                public static function getResponseBodySummary(ResponseInterface $response): string
                 {
                     return $response->getBody()->getContents();
                 }

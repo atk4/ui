@@ -14,7 +14,7 @@ trait VueLookupTrait
     /** @var Callback */
     public $dataCb;
 
-    public function initVueLookupCallback()
+    public function initVueLookupCallback(): void
     {
         if (!$this->dataCb) {
             $this->dataCb = Callback::addTo($this);
@@ -24,6 +24,8 @@ trait VueLookupTrait
 
     /**
      * Output lookup search query data.
+     *
+     * @return never
      */
     public function outputApiResponse()
     {

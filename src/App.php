@@ -243,19 +243,20 @@ class App
         $this->template_dir[] = dirname(__DIR__) . '/template/' . $this->skin;
     }
 
-    /**
-     * @param bool $for_shutdown if true will not pass in caughtException method
-     */
-    public function callExit($for_shutdown = false): void
+    public function callExitBegin(): void
     {
         if (!$this->exit_called) {
             $this->exit_called = true;
             $this->hook(self::HOOK_BEFORE_EXIT);
         }
+    }
 
-        if ($for_shutdown) {
-            return;
-        }
+    /**
+     * @return never
+     */
+    public function callExit(): void
+    {
+        $this->callExitBegin();
 
         if (!$this->call_exit) {
             // case process is not in shutdown mode
@@ -300,7 +301,7 @@ class App
 
         // Process is already in shutdown/stop
         // no need of call exit function
-        $this->callExit(true);
+        $this->callExitBegin();
     }
 
     /**
@@ -360,6 +361,8 @@ class App
      *
      * @param string|array $output  Array type is supported only for JSON response
      * @param string[]     $headers content-type header must be always set or consider using App::terminateHtml() or App::terminateJson() methods
+     *
+     * @return never
      */
     public function terminate($output = '', array $headers = []): void
     {
@@ -411,6 +414,9 @@ class App
         $this->callExit();
     }
 
+    /**
+     * @return never
+     */
     public function terminateHtml($output, array $headers = []): void
     {
         if ($output instanceof View) {
@@ -425,6 +431,9 @@ class App
         );
     }
 
+    /**
+     * @return never
+     */
     public function terminateJson($output, array $headers = []): void
     {
         if ($output instanceof View) {
@@ -994,7 +1003,7 @@ class App
      *   $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
      *   $app->layout->template->dangerouslySetHtml('Content', $e->getHtml());
      *   $app->run();
-     *   $app->callExit(true);
+     *   $app->callExitBegin();
      */
     public function renderExceptionHtml(\Throwable $exception): string
     {
@@ -1017,7 +1026,7 @@ class App
                     }
 
                     // call with true to trigger beforeExit event
-                    $this->callExit(true);
+                    $this->callExitBegin();
                 }
             }
         );

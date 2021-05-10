@@ -13,10 +13,8 @@ interface LoadableContent
 {
     /**
      * Add JsCallback.
-     *
-     * @return mixed
      */
-    public function setCb(Callback $cb);
+    public function setCb(Callback $cb): void;
 
     /**
      * Return js Callback url string.
@@ -26,5 +24,5 @@ interface LoadableContent
     /**
      * The callback for loading content.
      */
-    public function onLoad(\Closure $fx);
+    public function onLoad(\Closure $fx): void;
 }

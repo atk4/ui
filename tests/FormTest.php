@@ -181,6 +181,5 @@ class AppFormTestMock extends App
     public function terminate($output = '', array $headers = []): void
     {
         $this->output = $output;
-        // do nothing!
     }
 }
