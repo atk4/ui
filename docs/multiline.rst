@@ -101,22 +101,23 @@ Lets say a User can have many email addresses, but you want to store them in a s
         }
     }
 
-Using a form with User model won't automatically add a Multiline to edit the email addresses.
+Using a form with User model won't automatically add a Multiline to edit the related email addresses.
 
-.. php:method:: setReferenceModel(Model $refModel, string $linkByFieldName, array $field = [])
+.. php:method:: setReferenceModel(string $refModelName, Model $modelEntity = null, array $fieldNames = []): Model
 
-If you want to edit them along with the user, Multiline need to be set up accordingly::
+If you want to edit them along with the user, Multiline need to be set up accordingly using the setReferenceModel method::
 
     // Add a form to Ui in order to edit User record.
     $user_form = \Atk4\Ui\Form::addTo($app);
-    $user_form->setModel($user);
+    $user_form->setModel($user->load($userId));
 
     $ml = $user_form->addControl('emails', [\Atk4\Ui\Form\Control\Multiline::class]);
-    $ml->setReferenceModel($user->ref('Emails'), 'user_id');
+    $ml->setReferenceModel('Emails');
 
     // set up saving of Email on Form submit
     $user_form->onSubmit(function($form) use ($ml) {
         $form->model->save();
+        // save emails record related to current user.
         $ml->saveRows();
 
         return new JsToast(var_export($ml->model->export(), true));
