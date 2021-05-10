@@ -12,7 +12,7 @@ declare(strict_types=1);
  *
  * // Add Multiline form control and set model for Invoice items.
  * $ml = $form->addControl('ml', ['Multiline::class']);
- * $ml->setReferenceModel($invoice->ref('Items'), 'invoice_id', ['item','cat','qty','price', 'total']);
+ * $ml->setReferenceModel('Items', null, ['item', 'cat', 'qty', 'price', 'total']);
  *
  * $form->onSubmit(function($form) use ($ml) {
  *     // Save Form model and then Multiline model
@@ -210,7 +210,7 @@ class Multiline extends Form\Control
 
         // load the data associated with this input and validate it.
         $this->form->onHook(Form::HOOK_LOAD_POST, function ($form, &$post) {
-            $this->rowData = $this->getApp()->decodeJson($_POST[$this->short_name]);
+            $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($_POST[$this->short_name]));
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
                 if ($this->rowErrors) {
@@ -242,6 +242,26 @@ class Multiline extends Form\Control
 
             return $jsError;
         });
+    }
+
+    /**
+     * Typecast each loaded value.
+     */
+    protected function typeCastLoadValues(array $values): array
+    {
+        $dataRows = [];
+
+        foreach ($values as $k => $row) {
+            foreach ($row as $fieldName => $value) {
+                if ($fieldName === '__atkml') {
+                    $dataRows[$k][$fieldName] = $value;
+                } else {
+                    $dataRows[$k][$fieldName] = $this->getApp()->ui_persistence->typecastLoadField($this->getModel()->getField($fieldName), $value);
+                }
+            }
+        }
+
+        return $dataRows;
     }
 
     /**
@@ -301,7 +321,7 @@ class Multiline extends Form\Control
                     $field = $model->getField($fieldName);
                     // Save field value only if the field was editable
                     if (!$field->read_only) {
-                        $model->createEntity()->set($fieldName, $this->getApp()->ui_persistence->typecastLoadField($field, $value));
+                        $model->createEntity()->set($fieldName, $value);
                     }
                 } catch (\Atk4\Core\Exception $e) {
                     $rowErrors[$rowId][] = ['name' => $fieldName, 'msg' => $e->getMessage()];
@@ -324,24 +344,17 @@ class Multiline extends Form\Control
         $currentIds = array_column($model->export(), $model->id_field);
 
         foreach ($this->rowData as $row) {
-            // should clone model to be able to save it multiple times
-            $row_model = clone $model;
-
+            $entity = $model->tryLoad($row[$model->id_field] ?? null);
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
                     continue;
                 }
 
-                if ($fieldName === $row_model->id_field && $value) {
-                    $row_model = $row_model->load($value);
-                }
-
-                $field = $row_model->getField($fieldName);
-                if ($field->isEditable()) {
-                    $field->set($value);
+                if ($model->getField($fieldName)->isEditable()) {
+                    $entity->set($fieldName, $value);
                 }
             }
-            $id = $row_model->save()->getId();
+            $id = $entity->save()->getId();
 
             $k = array_search($id, $currentIds, true);
             if ($k !== false) {
@@ -420,13 +433,17 @@ class Multiline extends Form\Control
      * Otherwise, form will try to save 'multiline' field value as an array when form is save.
      * $multiline = $form->addControl('multiline', [Multiline::class], ['never_persist' => true])
      */
-    public function setReferenceModel(Model $refModel, string $linkByFieldName, array $fieldNames = []): Model
+    public function setReferenceModel(string $refModelName, Model $modelEntity = null, array $fieldNames = []): Model
     {
-        if (!$refModel->ref($linkByFieldName)->loaded()) {
-            throw new Exception('Parent model must be loaded in order to use reference.');
+        if ($modelEntity === null) {
+            if (!$this->form->model->isEntity()) {
+                throw new Exception('Model entity is not set.');
+            }
+
+            $modelEntity = $this->form->model;
         }
 
-        return $this->setModel($refModel, $fieldNames);
+        return $this->setModel($modelEntity->ref($refModelName), $fieldNames);
     }
 
     /**
@@ -690,7 +707,7 @@ class Multiline extends Form\Control
 
                 break;
             case 'on-change':
-                $response = call_user_func($this->onChangeFunction, $this->getApp()->decodeJson($_POST['rows']), $this->form);
+                $response = call_user_func($this->onChangeFunction, $this->typeCastLoadValues($this->getApp()->decodeJson($_POST['rows'])), $this->form);
                 $this->renderCallback->terminateAjax($this->renderCallback->getAjaxec($response));
 
                 break;
@@ -849,7 +866,7 @@ class Multiline extends Form\Control
             case 'integer':
             case 'float':
                 // Value is 0 or the field value.
-                $value = $model->get($fieldName) ?: 0;
+                $value = (string) $model->get($fieldName) ?: 0;
 
                 break;
             default:
