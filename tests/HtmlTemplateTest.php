@@ -36,7 +36,7 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
         $this->assertSameTemplate('hello, {foo}bar{/}', $t);
     }
 
-    public function testGetTagTree()
+    public function testGetTagTree(): void
     {
         $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $this->assertSameTagTree('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}', $t->getTagTree('_top'));
@@ -49,27 +49,27 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
         $this->assertSameTemplate('{foo}good bye{/}, cruel {bar}world{/}. {foo}good bye{/}', /* not possible with dual renderer $t*/ $tagTreeFoo->getParentTemplate());
     }
 
-    public function testGetTagRefNotFoundException()
+    public function testGetTagRefNotFoundException(): void
     {
         $t = new HtmlTemplate('{foo}hello{/}');
         $this->expectException(Exception::class);
         $t->getTagTree('bar');
     }
 
-    public function testLoadFromFileNonExistentFileException()
+    public function testLoadFromFileNonExistentFileException(): void
     {
         $t = new HtmlTemplate();
         $this->expectException(Exception::class);
         $t->loadFromFile(__DIR__ . '/bad_template_file');
     }
 
-    public function testTryLoadFromFileNonExistentFileException()
+    public function testTryLoadFromFileNonExistentFileException(): void
     {
         $t = new HtmlTemplate();
         $this->assertFalse($t->tryLoadFromFile(__DIR__ . 'bad_template_file'));
     }
 
-    public function testHasTag()
+    public function testHasTag(): void
     {
         $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $this->assertTrue($t->hasTag('foo'));
@@ -77,14 +77,14 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
         $this->assertFalse($t->hasTag(['foo', 'bar', 'non_existent_tag']));
     }
 
-    public function testSetBadTypeException()
+    public function testSetBadTypeException(): void
     {
         $t = new HtmlTemplate('{foo}hello{/} guys');
         $this->expectException(Exception::class);
         $t->set('foo', new \stdClass());
     }
 
-    public function testSetAppendDel()
+    public function testSetAppendDel(): void
     {
         $t = new HtmlTemplate('{foo}hello{/} guys');
 
@@ -123,7 +123,7 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
         $this->assertSameTemplate('{foo}Hi and <b>welcome</b> my dear and <b>smart</b>{/} guys', $t);
     }
 
-    public function testClone()
+    public function testClone(): void
     {
         $t = new HtmlTemplate('{foo}{inner}hello{/}{/} guys');
 
@@ -136,13 +136,13 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
         $this->assertSameTemplate('{inner}hello{/}', $topClone2->cloneRegion('foo'));
     }
 
-    public function testRenderRegion()
+    public function testRenderRegion(): void
     {
         $t = new HtmlTemplate('{foo}hello{/} guys');
         $this->assertSame('hello', $t->renderToHtml('foo'));
     }
 
-    public function testParseDollarTags()
+    public function testParseDollarTags(): void
     {
         $t = new HtmlTemplate('{$foo} guys and {$bar} here');
         $t->set([

@@ -8,9 +8,6 @@ use Atk4\Core\AtkPhpunit;
 
 class PaginatorTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test constructor.
-     */
     public $p;
 
     public function addDataProvider()
@@ -41,7 +38,7 @@ class PaginatorTest extends AtkPhpunit\TestCase
     /**
      * @dataProvider addDataProvider
      */
-    public function testPaginator($page, $range, $total, $expected)
+    public function testPaginator($page, $range, $total, $expected): void
     {
         $p = new \Atk4\Ui\Paginator(['page' => $page, 'range' => $range, 'total' => $total]);
         $this->assertSame($expected, $p->getPaginatorItems());

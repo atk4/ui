@@ -42,7 +42,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $_POST = [];
     }
 
-    public function testCallback()
+    public function testCallback(): void
     {
         $var = null;
 
@@ -58,7 +58,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertSame(34, $var);
     }
 
-    public function testCallbackNotFiring()
+    public function testCallbackNotFiring(): void
     {
         $var = null;
 
@@ -72,7 +72,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertNull($var);
     }
 
-    public function testCallbackLater()
+    public function testCallbackLater(): void
     {
         $var = null;
 
@@ -93,7 +93,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertSame(34, $var);
     }
 
-    public function testCallbackLaterNested()
+    public function testCallbackLaterNested(): void
     {
         $var = null;
 
@@ -120,7 +120,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertSame(34, $var);
     }
 
-    public function testCallbackLaterNotFiring()
+    public function testCallbackLaterNotFiring(): void
     {
         $var = null;
 
@@ -139,7 +139,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertNull($var);
     }
 
-    public function testVirtualPage()
+    public function testVirtualPage(): void
     {
         $var = null;
 
@@ -157,7 +157,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertSame(25, $var);
     }
 
-    public function testVirtualPageCustomTrigger()
+    public function testVirtualPageCustomTrigger(): void
     {
         $var = null;
 
@@ -182,7 +182,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->var = 26;
     }
 
-    public function testPull230()
+    public function testPull230(): void
     {
         $var = null;
 

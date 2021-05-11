@@ -50,7 +50,7 @@ class DemosTest extends AtkPhpunit\TestCase
             $initVars = get_defined_vars();
             $this->setSuperglobalsFromRequest(new Request('GET', 'http://localhost/demos/?APP_CALL_EXIT=0&APP_CATCH_EXCEPTIONS=0&APP_ALWAYS_RUN=0'));
 
-            /** @var App $app */ // @phpstan-ignore-next-line
+            /** @var App $app */
             require_once static::DEMOS_DIR . '/init-app.php';
             $initVars = array_diff_key(get_defined_vars(), $initVars + ['initVars' => true]);
 
@@ -120,7 +120,7 @@ class DemosTest extends AtkPhpunit\TestCase
     protected function createTestingApp(): App
     {
         $app = new class(['call_exit' => false, 'catch_exceptions' => false, 'always_run' => false]) extends App {
-            public function callExit($for_shutdown = false): void
+            public function callExit(): void
             {
                 throw new DemosTestExitException();
             }
@@ -199,7 +199,7 @@ class DemosTest extends AtkPhpunit\TestCase
             return $this->getClient()->request(isset($options['form_params']) !== null ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
         } catch (\GuzzleHttp\Exception\ServerException $ex) {
             $exFactoryWithFullBody = new class('', $ex->getRequest()) extends \GuzzleHttp\Exception\RequestException {
-                public static function getResponseBodySummary(ResponseInterface $response)
+                public static function getResponseBodySummary(ResponseInterface $response): string
                 {
                     return $response->getBody()->getContents();
                 }
@@ -459,7 +459,7 @@ class DemosTest extends AtkPhpunit\TestCase
     /**
      * @dataProvider jsonResponsePostProvider
      */
-    public function testDemoAssertJsonResponsePost(string $uri, array $postData)
+    public function testDemoAssertJsonResponsePost(string $uri, array $postData): void
     {
         $response = $this->getResponseFromRequest($uri, ['form_params' => $postData]);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);

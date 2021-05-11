@@ -117,7 +117,7 @@ class Loader extends View
         ]);
     }
 
-    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    protected function mergeStickyArgsFromChildView(): AbstractView
     {
         return $this->cb;
     }

@@ -342,10 +342,8 @@ class Crud extends Grid
 
     /**
      * Set onActions.
-     *
-     * @return mixed
      */
-    public function setOnActions(string $actionName, \Closure $fx)
+    public function setOnActions(string $actionName, \Closure $fx): void
     {
         $this->onActions[] = [$actionName => $fx];
     }

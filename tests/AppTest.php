@@ -18,7 +18,7 @@ class AppTest extends AtkPhpunit\TestCase
         ]);
     }
 
-    public function testTemplateClassDefault()
+    public function testTemplateClassDefault(): void
     {
         $app = $this->getApp();
 
@@ -28,7 +28,7 @@ class AppTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testTemplateClassCustom()
+    public function testTemplateClassCustom(): void
     {
         $anotherTemplateClass = new class() extends HtmlTemplate {
         };

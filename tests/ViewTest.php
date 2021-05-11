@@ -12,7 +12,7 @@ class ViewTest extends AtkPhpunit\TestCase
     /**
      * Test redering multiple times.
      */
-    public function testMultipleRender()
+    public function testMultipleRender(): void
     {
         $v = new \Atk4\Ui\View();
         $v->set('foo');
@@ -22,7 +22,7 @@ class ViewTest extends AtkPhpunit\TestCase
         $this->assertSame($a, $b);
     }
 
-    public function testAddAfterRender()
+    public function testAddAfterRender(): void
     {
         $this->expectException(Exception::class);
 

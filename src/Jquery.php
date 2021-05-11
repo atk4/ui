@@ -87,7 +87,7 @@ class Jquery extends JsChain
      * Start with: JsExpressionable|View|string $selector such as '.myclass' or $view.
      * Second argument would be $context. See jQuery manual for more info.
      *
-     * @param array $constructorArgs - passes $selector and $context to jQuery(..)
+     * @param mixed ...$constructorArgs - passes $selector and $context to jQuery(..)
      */
     public function __construct(...$constructorArgs)
     {

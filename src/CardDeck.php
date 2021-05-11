@@ -293,6 +293,8 @@ class CardDeck extends View
             // might be in result set but not in deck, for example when adding a card.
             return $deck[$model->getId()] ?? null;
         }
+
+        return null;
     }
 
     /**

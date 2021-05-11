@@ -53,7 +53,7 @@ if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
 }
 
 // allow custom layout override
-$app->initLayout([$app->stickyGET('layout') ?? \Atk4\Ui\Layout\Maestro::class]);
+$app->initLayout([$app->stickyGet('layout') ?? \Atk4\Ui\Layout\Maestro::class]);
 
 $layout = $app->layout;
 if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {

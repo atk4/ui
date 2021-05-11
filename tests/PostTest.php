@@ -24,7 +24,7 @@ class PostTest extends AtkPhpunit\TestCase
     /**
      * Test loading from POST persistence, some type mapping applies.
      */
-    public function testPost()
+    public function testPost(): void
     {
         $p = new \Atk4\Ui\Persistence\Post();
 

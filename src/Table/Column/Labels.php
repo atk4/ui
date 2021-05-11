@@ -24,7 +24,7 @@ class Labels extends Table\Column
     /**
      * @param Field|null $field
      *
-     * @return array|void
+     * @return array
      */
     public function getHtmlTags(Model $row, $field)
     {

@@ -13,7 +13,7 @@ use Exception;
 
 class Context extends RawMinkContext implements BehatContext
 {
-    /** @var null Temporary store button id when press. Used in js callback test. */
+    /** @var string|null Temporary store button id when press. Used in js callback test. */
     protected $buttonId;
 
     public function getSession($name = null): \Behat\Mink\Session
@@ -99,7 +99,7 @@ class Context extends RawMinkContext implements BehatContext
      *
      * @Then I wait :arg1 ms
      */
-    public function iWait($arg1)
+    public function iWait(int $arg1): void
     {
         $this->getSession()->wait($arg1);
     }
@@ -107,7 +107,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @When I press button :arg1
      */
-    public function iPressButton($arg1)
+    public function iPressButton(string $arg1): void
     {
         $button = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         // store button id.
@@ -120,7 +120,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I press menu button :arg1 using class :arg2
      */
-    public function iPressMenuButtonUsingClass($arg1, $arg2)
+    public function iPressMenuButtonUsingClass(string $arg1, string $arg2): void
     {
         $menu = $this->getSession()->getPage()->find('css', '.ui.menu.' . $arg2);
         if (!$menu) {
@@ -138,7 +138,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I set calendar input name :arg1 with value :arg2
      */
-    public function iSetCalendarInputNameWithValue($arg1, $arg2)
+    public function iSetCalendarInputNameWithValue(string $arg1, string $arg2): void
     {
         $script = '$(\'input[name="' . $arg1 . '"]\').get(0)._flatpickr.setDate("' . $arg2 . '")';
         $this->getSession()->executeScript($script);
@@ -147,7 +147,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Given I click link :arg1
      */
-    public function iClickLink($arg1)
+    public function iClickLink(string $arg1): void
     {
         $link = $this->getSession()->getPage()->find('xpath', '//a[text()="' . $arg1 . '"]');
         $link->click();
@@ -156,7 +156,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I click filter column name :arg1
      */
-    public function iClickFilterColumnName($arg1)
+    public function iClickFilterColumnName(string $arg1): void
     {
         $column = $this->getSession()->getPage()->find('css', "th[data-column='" . $arg1 . "']");
         if (!$column) {
@@ -174,7 +174,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Given I click tab with title :arg1
      */
-    public function iClickTabWithTitle($arg1)
+    public function iClickTabWithTitle(string $arg1): void
     {
         $tabMenu = $this->getSession()->getPage()->find('css', '.ui.tabular.menu');
         if (!$tabMenu) {
@@ -192,7 +192,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I click first card on page
      */
-    public function iClickFirstCardOnPage()
+    public function iClickFirstCardOnPage(): void
     {
         $this->getSession()->executeScript('$(".atk-card")[0].click()');
     }
@@ -200,7 +200,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I click first element using class :arg1
      */
-    public function iClickFirstElementUsingClass($arg1)
+    public function iClickFirstElementUsingClass(string $arg1): void
     {
         $this->getSession()->executeScript('$("' . $arg1 . '")[0].click()');
     }
@@ -208,7 +208,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I click paginator page :arg1
      */
-    public function iClickPaginatorPage($arg1)
+    public function iClickPaginatorPage(string $arg1): void
     {
         $this->getSession()->executeScript('$("a.item[data-page=' . $arg1 . ']").click()');
     }
@@ -216,7 +216,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I see button :arg1
      */
-    public function iSee($arg1)
+    public function iSee(string $arg1): void
     {
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         if ($element->getAttribute('style')) {
@@ -227,7 +227,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then dump :arg1
      */
-    public function dump($arg1)
+    public function dump(string $arg1): void
     {
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         var_dump($element->getOuterHtml());
@@ -236,7 +236,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I don't see button :arg1
      */
-    public function iDontSee($arg1)
+    public function iDontSee(string $arg1): void
     {
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (mb_strpos('display: none', $element->getAttribute('style')) !== false) {
@@ -247,7 +247,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then Label changes to a number
      */
-    public function labelChangesToNumber()
+    public function labelChangesToNumber(): void
     {
         $element = $this->getSession()->getPage()->findById($this->buttonId);
         $value = trim($element->getHtml());
@@ -259,7 +259,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then /^container "([^"]*)" should display "([^"]*)" item\(s\)$/
      */
-    public function containerShouldHaveNumberOfItem($selector, int $numberOfitems)
+    public function containerShouldHaveNumberOfItem(string $selector, int $numberOfitems): void
     {
         $items = $this->getSession()->getPage()->findAll('css', $selector);
         $count = 0;
@@ -274,7 +274,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I press Modal button :arg
      */
-    public function iPressModalButton($arg)
+    public function iPressModalButton(string $arg): void
     {
         $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
         if ($modal === null) {
@@ -293,7 +293,7 @@ class Context extends RawMinkContext implements BehatContext
      *
      * Check if text is present in modal or dynamic modal.
      */
-    public function modalIsOpenWithText($arg1)
+    public function modalIsOpenWithText(string $arg1): void
     {
         $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
         if ($modal === null) {
@@ -309,7 +309,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then Modal is showing text :arg1 inside tag :arg2
      */
-    public function modalIsShowingText($arg1, $arg2)
+    public function modalIsShowingText(string $arg1, string $arg2): void
     {
         // get modal
         $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
@@ -349,7 +349,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then Active tab should be :arg1
      */
-    public function activeTabShouldBe($arg1)
+    public function activeTabShouldBe(string $arg1): void
     {
         $tab = $this->getSession()->getPage()->find('css', '.ui.tabular.menu > .item.active');
         if ($tab->getText() !== $arg1) {
@@ -362,7 +362,7 @@ class Context extends RawMinkContext implements BehatContext
      *
      * Hide js modal.
      */
-    public function iHideJsModal()
+    public function iHideJsModal(): void
     {
         $this->getSession()->executeScript('$(".modal.active.front").modal("hide")');
     }
@@ -370,7 +370,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I scroll to top
      */
-    public function iScrollToTop()
+    public function iScrollToTop(): void
     {
         $this->getSession()->executeScript('window.scrollTo(0,0)');
     }
@@ -378,7 +378,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then Toast display should contains text :arg1
      */
-    public function toastDisplayShouldContainText($arg1)
+    public function toastDisplayShouldContainText(string $arg1): void
     {
         // get toast
         $toast = $this->getSession()->getPage()->find('css', '.ui.toast-container');
@@ -401,7 +401,7 @@ class Context extends RawMinkContext implements BehatContext
      *
      * Select a value in a lookup control.
      */
-    public function iSelectValueInLookup($arg1, $arg2)
+    public function iSelectValueInLookup(string $arg1, string $arg2): void
     {
         // get dropdown item from semantic ui which is direct parent of input html element
         $inputElem = $this->getSession()->getPage()->find('css', 'input[name=' . $arg2 . ']');
@@ -433,7 +433,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I search grid for :arg1
      */
-    public function iSearchGridFor($arg1)
+    public function iSearchGridFor(string $arg1): void
     {
         $search = $this->getSession()->getPage()->find('css', 'input.atk-grid-search');
         if (!$search) {
@@ -446,7 +446,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then /^page url should contains \'([^\']*)\'$/
      */
-    public function pageUrlShouldContains($text)
+    public function pageUrlShouldContains(string $text): void
     {
         $url = $this->getSession()->getCurrentUrl();
         if (!strpos($url, $text)) {
@@ -457,7 +457,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then /^I wait for the page to be loaded$/
      */
-    public function waitForThePageToBeLoaded()
+    public function waitForThePageToBeLoaded(): void
     {
         // This line in test-unit.yml is causing test to fail. Need to increase wait time to compensate.
         // sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php
@@ -468,7 +468,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I click icon using css :arg1
      */
-    public function iClickIconUsingCss($arg1)
+    public function iClickIconUsingCss(string $arg1): void
     {
         $icon = $this->getSession()->getPage()->find('css', $arg1);
         if (!$icon) {
@@ -483,9 +483,9 @@ class Context extends RawMinkContext implements BehatContext
      *
      * @Then /^rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
-    public function scopeBuilderRule($name, $operator, $value)
+    public function scopeBuilderRule(string $name, string $operator, string $value): void
     {
-        $rule = $this->assertScopeBuilderRuleExist($name);
+        $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
         $this->assertInputValue($rule, $value);
     }
@@ -495,9 +495,9 @@ class Context extends RawMinkContext implements BehatContext
      *
      * @Then /^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
-    public function scopeBuilderReferenceRule($name, $operator, $value)
+    public function scopeBuilderReferenceRule(string $name, string $operator, string $value): void
     {
-        $rule = $this->assertScopeBuilderRuleExist($name);
+        $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
         $this->assertDropdownValue($rule, $value, '.vqb-rule-input .active.item');
     }
@@ -507,9 +507,9 @@ class Context extends RawMinkContext implements BehatContext
      *
      * @Then /^select rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
-    public function scopeBuilderSelectRule($name, $operator, $value)
+    public function scopeBuilderSelectRule(string $name, string $operator, string $value): void
     {
-        $rule = $this->assertScopeBuilderRuleExist($name);
+        $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
         $this->assertSelectedValue($rule, $value, '.vqb-rule-input select');
     }
@@ -519,9 +519,9 @@ class Context extends RawMinkContext implements BehatContext
      *
      * @Then /^date rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
-    public function scopeBuilderDateRule($name, $operator, $value)
+    public function scopeBuilderDateRule(string $name, string $operator, string $value): void
     {
-        $rule = $this->assertScopeBuilderRuleExist($name);
+        $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
         $this->assertInputValue($rule, $value, 'input.form-control');
     }
@@ -531,9 +531,9 @@ class Context extends RawMinkContext implements BehatContext
      *
      * @Then /^bool rule "([^"]*)" has value "([^"]*)"$/
      */
-    public function scopeBuilderBoolRule($name, $value)
+    public function scopeBuilderBoolRule(string $name, string $value): void
     {
-        $this->assertScopeBuilderRuleExist($name);
+        $this->getScopeBuilderRuleElem($name);
         $idx = ($value === 'Yes') ? 0 : 1;
         $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="' . $name . '"]\').find(\'input\')[' . $idx . '].checked');
         if (!$isChecked) {
@@ -544,7 +544,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then /^I check if text in "([^"]*)" match text in "([^"]*)"/
      */
-    public function compareElementText($compareSelector, $compareToSelector)
+    public function compareElementText(string $compareSelector, string $compareToSelector): void
     {
         $compareContainer = $this->getSession()->getPage()->find('css', $compareSelector);
         if (!$compareContainer) {
@@ -568,7 +568,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then /^I check if input value for "([^"]*)" match text in "([^"]*)"$/
      */
-    public function compareInputValueToElementText($inputName, $selector)
+    public function compareInputValueToElementText(string $inputName, string $selector): void
     {
         $expected = $this->getSession()->getPage()->find('css', $selector)->getText();
         $input = $this->getSession()->getPage()->find('css', 'input[name="' . $inputName . '"]');
@@ -584,7 +584,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then /^text in container using \'([^\']*)\' should contains \'([^\']*)\'$/
      */
-    public function textInContainerUsingShouldContains($containerCss, $text)
+    public function textInContainerUsingShouldContains(string $containerCss, string $text): void
     {
         $container = $this->getSession()->getPage()->find('css', $containerCss);
         if (!$container) {
@@ -600,7 +600,7 @@ class Context extends RawMinkContext implements BehatContext
      * Find a dropdown component within an html element
      * and check if value is set in dropdown.
      */
-    private function assertDropdownValue(NodeElement $element, string $value, string $selector)
+    private function assertDropdownValue(NodeElement $element, string $value, string $selector): void
     {
         $dropdown = $element->find('css', $selector);
         if (!$dropdown) {
@@ -617,7 +617,7 @@ class Context extends RawMinkContext implements BehatContext
      * Find a select input type within an html element
      * and check if value is selected.
      */
-    private function assertSelectedValue(NodeElement $element, string $value, string $selector)
+    private function assertSelectedValue(NodeElement $element, string $value, string $selector): void
     {
         $select = $element->find('css', $selector);
         if (!$select) {
@@ -633,7 +633,7 @@ class Context extends RawMinkContext implements BehatContext
      * Find an input within an html element and check
      * if value is set.
      */
-    private function assertInputValue(NodeElement $element, string $value, string $selector = 'input')
+    private function assertInputValue(NodeElement $element, string $value, string $selector = 'input'): void
     {
         $input = $element->find('css', $selector);
         if (!$input) {
@@ -645,7 +645,7 @@ class Context extends RawMinkContext implements BehatContext
         }
     }
 
-    private function assertScopeBuilderRuleExist(string $ruleName): NodeElement
+    private function getScopeBuilderRuleElem(string $ruleName): NodeElement
     {
         $rule = $this->getSession()->getPage()->find('css', '.vqb-rule[data-name=' . $ruleName . ']');
         if (!$rule) {
@@ -663,7 +663,7 @@ class Context extends RawMinkContext implements BehatContext
      *
      * @Then I wait for loading to start in :arg1
      */
-    public function iWaitForLoadingToStartIn($arg1)
+    public function iWaitForLoadingToStartIn(string $arg1): void
     {
         $this->getSession()->wait(2000, '$("' . $arg1 . '").hasClass("loading")');
     }
@@ -678,7 +678,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Wait till jQuery AJAX request finished and no animation is perform.
      */
-    protected function jqueryWait(string $extraWaitCondition = 'true', $maxWaitdurationMs = 5000)
+    protected function jqueryWait(string $extraWaitCondition = 'true', int $maxWaitdurationMs = 5000): void
     {
         $finishedScript = '(' . $this->getFinishedScript() . ') && (' . $extraWaitCondition . ')';
 
@@ -703,13 +703,9 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then /^the field "([^"]*)"  should start with "([^"]*)"$/
      */
-    public function theShouldStartWith($arg1, $arg2)
+    public function theFieldShouldStartWith(string $arg1, string $arg2): void
     {
         $field = $this->assertSession()->fieldExists($arg1);
-
-        if (!$field) {
-            throw new Exception('Field' . $arg1 . ' does not exist');
-        }
 
         if (mb_strpos($field->getValue(), $arg2) === false) {
             throw new Exception('Field value ' . $field->getValue() . ' does not start with ' . $arg2);

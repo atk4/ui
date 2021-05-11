@@ -95,7 +95,7 @@ class Lister extends View
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
      *
-     * @return $this|void
+     * @return $this
      */
     public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = null)
     {

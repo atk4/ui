@@ -166,7 +166,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
                 'click',
                 new JsFunction(
                     [
-                        $this->loader->jsload(
+                        $this->loader->jsLoad(
                             [
                                 'step' => 'exec',
                                 $this->name => $this->action->getEntity()->getId(),

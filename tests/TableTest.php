@@ -11,7 +11,7 @@ class TableTest extends AtkPhpunit\TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAddColumnWithoutModel()
+    public function testAddColumnWithoutModel(): void
     {
         $t = new \Atk4\Ui\Table();
         $t->invokeInit();
