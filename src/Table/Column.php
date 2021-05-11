@@ -110,7 +110,7 @@ class Column
                 'on' => 'click',
                 'position' => 'bottom left',
                 'movePopup' => $this->columnData ? true : false,
-                'target' => $this->columnData ? "th[data-column={$this->columnData}]" : false,
+                'target' => $this->columnData ? 'th[data-column=' . $this->columnData . ']' : false,
                 'distanceAway' => 10,
                 'offset' => -2,
             ]
@@ -190,16 +190,16 @@ class Column
 
         $cb = Column\JsHeader::addTo($this->table);
 
-        $function = "function(value, text, item){
-                            if (value === undefined || value === '' || value === null) return;
+        $function = 'function(value, text, item){
+                            if (value === undefined || value === \'\' || value === null) return;
                             $(this)
                             .api({
-                                on:'now',
-                                url:'{$cb->getJsUrl()}',
-                                data:{item:value, id:$(this).data('menu-id')}
+                                on:\'now\',
+                                url:\'' . $cb->getJsUrl() . '\',
+                                data:{item:value, id:$(this).data(\'menu-id\')}
                                 }
                             );
-                     }";
+                     }';
 
         $chain = new Jquery('#' . $id);
         $chain->dropdown([

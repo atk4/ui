@@ -105,7 +105,7 @@ class TypeDatetime extends Column\FilterModel
                         $value2 = $model->persistence->typecastSaveField($model->getField($filter['name']), $d1);
                     }
                     $between_condition = $filter['op'] === '!=' ? 'not between' : 'between';
-                    $model->addCondition($model->expr("[field] {$between_condition} [value] and [value2]", ['field' => $model->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $model->addCondition($model->expr('[field] ' . $between_condition . ' [value] and [value2]', ['field' => $model->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
 
                     break;
                 case '>':

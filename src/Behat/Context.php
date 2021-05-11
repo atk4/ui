@@ -220,7 +220,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         if ($element->getAttribute('style')) {
-            throw new Exception("Element with text \"{$arg1}\" must be invisible");
+            throw new Exception('Element with text "' . $arg1 . '" must be invisible');
         }
     }
 
@@ -240,7 +240,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (mb_strpos('display: none', $element->getAttribute('style')) !== false) {
-            throw new Exception("Element with text \"{$arg1}\" must be invisible");
+            throw new Exception('Element with text "' . $arg1 . '" must be invisible');
         }
     }
 
