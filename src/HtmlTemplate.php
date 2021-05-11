@@ -17,10 +17,10 @@ class HtmlTemplate
 
     /** @var array<string, string|false> */
     private static $_filesCache = [];
-    /** @var array<string, TagTree[]> */
+    /** @var array<string, array<string, TagTree>> */
     private static $_parseCache = [];
 
-    /** @var TagTree[] */
+    /** @var array<string, TagTree> */
     private $tagTrees;
 
     public function __construct(string $template = '')
@@ -102,7 +102,7 @@ class HtmlTemplate
         return $template;
     }
 
-    protected function _unsetFromTagTree(TagTree $tagTree, $k): void
+    protected function _unsetFromTagTree(TagTree $tagTree, int $k): void
     {
         \Closure::bind(function () use ($tagTree, $k) {
             unset($tagTree->children[$k]);
@@ -128,7 +128,7 @@ class HtmlTemplate
      * @param string|array|Model $tag
      * @param string             $value
      */
-    protected function _setOrAppend($tag, $value = null, bool $encodeHtml = true, bool $append = false, $throwIfNotFound = true): void
+    protected function _setOrAppend($tag, $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
     {
         if ($tag instanceof Model) {
             if (!$encodeHtml) {
@@ -320,86 +320,6 @@ class HtmlTemplate
     }
 
     /**
-     * @deprecated use "dangerouslySetHtml" method instead - will be removed in v2.5
-     */
-    public function setHtml($tag, $value = null)
-    {
-        'trigger_error'('Method is deprecated. Use dangerouslySetHtml instead', \E_USER_DEPRECATED);
-
-        return $this->dangerouslySetHtml($tag, $value);
-    }
-
-    /**
-     * @deprecated use "tryDangerouslySetHtml" method instead - will be removed in v2.5
-     */
-    public function trySetHtml($tag, $value = null)
-    {
-        'trigger_error'('Method is deprecated. Use tryDangerouslySetHtml instead', \E_USER_DEPRECATED);
-
-        return $this->tryDangerouslySetHtml($tag, $value);
-    }
-
-    /**
-     * @deprecated use "dangerouslyAppendHtml" method instead - will be removed in v2.5
-     */
-    public function appendHtml($tag, $value)
-    {
-        'trigger_error'('Method is deprecated. Use dangerouslyAppendHtml instead', \E_USER_DEPRECATED);
-
-        return $this->dangerouslyAppendHtml($tag, $value);
-    }
-
-    /**
-     * @deprecated use "tryDangerouslyAppendHtml" method instead - will be removed in v2.5
-     */
-    public function tryAppendHtml($tag, $value)
-    {
-        'trigger_error'('Method is deprecated. Use tryDangerouslyAppendHtml instead', \E_USER_DEPRECATED);
-
-        return $this->tryDangerouslyAppendHtml($tag, $value);
-    }
-
-    /**
-     * @deprecated use "loadFromFile" method instead - will be removed in v2.5
-     */
-    public function load(string $filename)
-    {
-        'trigger_error'('Method is deprecated. Use loadFromFile instead', \E_USER_DEPRECATED);
-
-        return $this->loadFromFile($filename);
-    }
-
-    /**
-     * @deprecated use "tryLoadFromFile" method instead - will be removed in v2.5
-     */
-    public function tryLoad(string $filename)
-    {
-        'trigger_error'('Method is deprecated. Use tryLoadFromFile instead', \E_USER_DEPRECATED);
-
-        return $this->tryLoadFromFile($filename);
-    }
-
-    /**
-     * @deprecated use "loadFromString" method instead - will be removed in v2.5
-     */
-    public function loadTemplateFromString(string $template = '')
-    {
-        'trigger_error'('Method is deprecated. Use loadFromString instead', \E_USER_DEPRECATED);
-
-        return $this->loadFromString($template);
-    }
-
-    /**
-     * @deprecated use "renderToHtml" method instead - will be removed in v2.5
-     */
-    public function render(string $region = null)
-    {
-        'trigger_error'('Method is deprecated. Use renderToHtml instead', \E_USER_DEPRECATED);
-
-        return $this->renderToHtml($region);
-    }
-
-    /**
      * Empty contents of specified region. If region contains sub-hierarchy,
      * it will be also removed.
      *
@@ -545,10 +465,12 @@ class HtmlTemplate
             $inputReversed = array_reverse($input); // reverse to allow to use fast array_pop()
 
             $this->tagTrees = [];
-            $this->tagTrees[self::TOP_TAG] = $this->parseTemplateTree($inputReversed);
-
-            self::$_parseCache[$cKey] = $this->tagTrees;
-            $this->tagTrees = null;
+            try {
+                $this->tagTrees[self::TOP_TAG] = $this->parseTemplateTree($inputReversed);
+                self::$_parseCache[$cKey] = $this->tagTrees;
+            } finally {
+                $this->tagTrees = null; // @phpstan-ignore-line
+            }
         }
 
         $this->tagTrees = $this->cloneTagTrees(self::$_parseCache[$cKey]);
@@ -588,7 +510,7 @@ class HtmlTemplate
                 $res[] = $v->getHtml();
             } elseif ($v instanceof TagTree) {
                 $res[] = $this->renderTagTreeToHtml($v);
-            } elseif ($v instanceof self) {
+            } elseif ($v instanceof self) { // @phpstan-ignore-line
                 $res[] = $v->renderToHtml();
             } else {
                 throw (new Exception('Unexpected value class'))

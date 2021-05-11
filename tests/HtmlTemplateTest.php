@@ -81,7 +81,7 @@ class HtmlTemplateTest extends AtkPhpunit\TestCase
     {
         $t = new HtmlTemplate('{foo}hello{/} guys');
         $this->expectException(Exception::class);
-        $t->set('foo', new \stdClass());
+        $t->set('foo', new \stdClass()); // @phpstan-ignore-line
     }
 
     public function testSetAppendDel(): void

@@ -565,9 +565,6 @@ parameters:
             path: 'src/Header.php'
             message: '~^Property Atk4\\Ui\\Header::\$subHeader \(string\) does not accept \$this\(Atk4\\Ui\\Header\)\.$~'
         -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Property Atk4\\Ui\\HtmlTemplate::\$tagTrees \(array\<Atk4\\Ui\\HtmlTemplate\\TagTree\>\) does not accept null\.$~'
-        -
             path: 'src/JsSearch.php'
             message: '~^Property Atk4\\Ui\\JsSearch::\$placeHolder \(Atk4\\Ui\\Form\\Control\\Line\) does not accept default value of type string\.$~'
         -
@@ -1221,9 +1218,6 @@ parameters:
         -
             path: 'src/Wizard.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\Jquery given\.$~'
-        -
-            path: 'tests/HtmlTemplateTest.php'
-            message: '~^Parameter \#2 \$value of method Atk4\\Ui\\HtmlTemplate::set\(\) expects string\|null, stdClass given\.$~'
         -
             path: 'tests/JsIntegrationTest.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects string\|null, Atk4\\Ui\\Jquery given\.$~'
@@ -1959,63 +1953,6 @@ parameters:
         -
             path: 'src/GridLayout.php'
             message: '~^Method Atk4\\Ui\\GridLayout::buildTemplate\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::_unsetFromTagTree\(\) has parameter \$k with no typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::_setOrAppend\(\) has parameter \$throwIfNotFound with no typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::setHtml\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::setHtml\(\) has parameter \$tag with no typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::setHtml\(\) has parameter \$value with no typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::trySetHtml\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::trySetHtml\(\) has parameter \$tag with no typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::trySetHtml\(\) has parameter \$value with no typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::appendHtml\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::appendHtml\(\) has parameter \$tag with no typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::appendHtml\(\) has parameter \$value with no typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::tryAppendHtml\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::tryAppendHtml\(\) has parameter \$tag with no typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::tryAppendHtml\(\) has parameter \$value with no typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::load\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::tryLoad\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::loadTemplateFromString\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Method Atk4\\Ui\\HtmlTemplate::render\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/HtmlTemplate.php'
-            message: '~^Instanceof between Atk4\\Ui\\HtmlTemplate and Atk4\\Ui\\HtmlTemplate will always evaluate to true\.$~'
         -
             path: 'src/ItemsPerPageSelector.php'
             message: '~^Method Atk4\\Ui\\ItemsPerPageSelector::jsSetLabel\(\) has parameter \$ipp with no typehint specified\.$~'
