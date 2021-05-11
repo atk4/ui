@@ -243,7 +243,7 @@ class App
         $this->template_dir[] = dirname(__DIR__) . '/template/' . $this->skin;
     }
 
-    public function callExitBegin(): void
+    protected function callBeforeExit(): void
     {
         if (!$this->exit_called) {
             $this->exit_called = true;
@@ -256,7 +256,7 @@ class App
      */
     public function callExit(): void
     {
-        $this->callExitBegin();
+        $this->callBeforeExit();
 
         if (!$this->call_exit) {
             // case process is not in shutdown mode
@@ -301,7 +301,7 @@ class App
 
         // Process is already in shutdown/stop
         // no need of call exit function
-        $this->callExitBegin();
+        $this->callBeforeExit();
     }
 
     /**
@@ -1003,7 +1003,7 @@ class App
      *   $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
      *   $app->layout->template->dangerouslySetHtml('Content', $e->getHtml());
      *   $app->run();
-     *   $app->callExitBegin();
+     *   $app->callBeforeExit();
      */
     public function renderExceptionHtml(\Throwable $exception): string
     {
@@ -1026,7 +1026,7 @@ class App
                     }
 
                     // call with true to trigger beforeExit event
-                    $this->callExitBegin();
+                    $this->callBeforeExit();
                 }
             }
         );
