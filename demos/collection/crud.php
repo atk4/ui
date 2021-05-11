@@ -67,7 +67,7 @@ $crud->addModalAction(['icon' => [\Atk4\Ui\Icon::class, 'cogs']], 'Details', fun
 });
 
 $column = $columns->addColumn();
-\Atk4\Ui\Header::addTo($column, ['Cutomizations']);
+\Atk4\Ui\Header::addTo($column, ['Customizations']);
 
 /** @var \Atk4\Ui\UserAction\ModalExecutor $myExecutorClass */
 $myExecutorClass = get_class(new class() extends \Atk4\Ui\UserAction\ModalExecutor {
