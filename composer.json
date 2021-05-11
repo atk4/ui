@@ -53,11 +53,11 @@
         }
     ],
     "require": {
-        "php": ">=7.3.0",
+        "php": ">=7.4.0",
         "atk4/data": "dev-develop"
     },
     "require-release": {
-        "php": ">=7.3.0",
+        "php": ">=7.4.0",
         "atk4/data": "~3.0.0"
     },
     "require-dev": {
