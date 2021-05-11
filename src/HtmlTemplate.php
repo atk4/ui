@@ -324,7 +324,7 @@ class HtmlTemplate
      */
     public function setHtml($tag, $value = null)
     {
-        'trigger_error'('Method is deprecated. Use dangerouslySetHtml instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use dangerouslySetHtml instead', \E_USER_DEPRECATED);
 
         return $this->dangerouslySetHtml($tag, $value);
     }
@@ -334,7 +334,7 @@ class HtmlTemplate
      */
     public function trySetHtml($tag, $value = null)
     {
-        'trigger_error'('Method is deprecated. Use tryDangerouslySetHtml instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use tryDangerouslySetHtml instead', \E_USER_DEPRECATED);
 
         return $this->tryDangerouslySetHtml($tag, $value);
     }
@@ -344,7 +344,7 @@ class HtmlTemplate
      */
     public function appendHtml($tag, $value)
     {
-        'trigger_error'('Method is deprecated. Use dangerouslyAppendHtml instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use dangerouslyAppendHtml instead', \E_USER_DEPRECATED);
 
         return $this->dangerouslyAppendHtml($tag, $value);
     }
@@ -354,7 +354,7 @@ class HtmlTemplate
      */
     public function tryAppendHtml($tag, $value)
     {
-        'trigger_error'('Method is deprecated. Use tryDangerouslyAppendHtml instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use tryDangerouslyAppendHtml instead', \E_USER_DEPRECATED);
 
         return $this->tryDangerouslyAppendHtml($tag, $value);
     }
@@ -364,7 +364,7 @@ class HtmlTemplate
      */
     public function load(string $filename)
     {
-        'trigger_error'('Method is deprecated. Use loadFromFile instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use loadFromFile instead', \E_USER_DEPRECATED);
 
         return $this->loadFromFile($filename);
     }
@@ -374,7 +374,7 @@ class HtmlTemplate
      */
     public function tryLoad(string $filename)
     {
-        'trigger_error'('Method is deprecated. Use tryLoadFromFile instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use tryLoadFromFile instead', \E_USER_DEPRECATED);
 
         return $this->tryLoadFromFile($filename);
     }
@@ -384,7 +384,7 @@ class HtmlTemplate
      */
     public function loadTemplateFromString(string $template = '')
     {
-        'trigger_error'('Method is deprecated. Use loadFromString instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use loadFromString instead', \E_USER_DEPRECATED);
 
         return $this->loadFromString($template);
     }
@@ -394,7 +394,7 @@ class HtmlTemplate
      */
     public function render(string $region = null)
     {
-        'trigger_error'('Method is deprecated. Use renderToHtml instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use renderToHtml instead', \E_USER_DEPRECATED);
 
         return $this->renderToHtml($region);
     }
@@ -541,7 +541,7 @@ class HtmlTemplate
             // expand self-closing tags {$tag} -> {tag}{/tag}
             $str = preg_replace('~\{\$([\w\-:]+)\}~', '{\1}{/\1}', $str);
 
-            $input = preg_split('~\{(/?[\w\-:]*)\}~', $str, -1, PREG_SPLIT_DELIM_CAPTURE);
+            $input = preg_split('~\{(/?[\w\-:]*)\}~', $str, -1, \PREG_SPLIT_DELIM_CAPTURE);
             $inputReversed = array_reverse($input); // reverse to allow to use fast array_pop()
 
             $this->tagTrees = [];

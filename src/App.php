@@ -204,7 +204,7 @@ class App
                 static function (int $severity, string $msg, string $file, int $line): bool {
                     throw new \ErrorException($msg, 0, $severity, $file, $line);
                 },
-                E_ALL
+                \E_ALL
             );
         }
 
@@ -705,7 +705,7 @@ class App
         }
 
         // put URL together
-        $pageQuery = http_build_query($args, '', '&', PHP_QUERY_RFC3986);
+        $pageQuery = http_build_query($args, '', '&', \PHP_QUERY_RFC3986);
         $url = $pagePath . ($pageQuery ? '?' . $pageQuery : '');
 
         return $url;
@@ -967,19 +967,19 @@ class App
 
     public function decodeJson(string $json)
     {
-        $data = json_decode($json, true, 512, JSON_BIGINT_AS_STRING | JSON_THROW_ON_ERROR);
+        $data = json_decode($json, true, 512, \JSON_BIGINT_AS_STRING | \JSON_THROW_ON_ERROR);
 
         return $data;
     }
 
     public function encodeJson($data, bool $forceObject = false): string
     {
-        $options = JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT;
+        $options = \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT;
         if ($forceObject) {
-            $options |= JSON_FORCE_OBJECT;
+            $options |= \JSON_FORCE_OBJECT;
         }
 
-        $json = json_encode($data, $options | JSON_THROW_ON_ERROR, 512);
+        $json = json_encode($data, $options | \JSON_THROW_ON_ERROR, 512);
 
         // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
         // replace large JSON integers only, do not replace anything in JSON/JS strings

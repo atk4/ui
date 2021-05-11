@@ -170,7 +170,7 @@ abstract class AbstractView
         $childView = $this->mergeStickyArgsFromChildView();
         if ($childView !== null && (!($childView instanceof Callback) || $childView->isTriggered())) {
             $alreadyCalled = false;
-            foreach (debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT | DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
+            foreach (debug_backtrace(\DEBUG_BACKTRACE_PROVIDE_OBJECT | \DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
                 if ($childView === ($frame['object'] ?? null) && $frame['function'] === '_getStickyArgs') {
                     $alreadyCalled = true;
                 }
