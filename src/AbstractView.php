@@ -6,7 +6,6 @@ namespace Atk4\Ui;
 
 use Atk4\Core\AppScopeTrait;
 use Atk4\Core\ContainerTrait;
-use Atk4\Core\DiContainerTrait;
 use Atk4\Core\InitializerTrait;
 use Atk4\Core\StaticAddToTrait;
 use Atk4\Core\TrackableTrait;
@@ -24,7 +23,6 @@ abstract class AbstractView
     use ContainerTrait {
         add as private _add;
     }
-    use DiContainerTrait;
     use InitializerTrait {
         init as private _init;
     }
@@ -172,7 +170,7 @@ abstract class AbstractView
         $childView = $this->mergeStickyArgsFromChildView();
         if ($childView !== null && (!($childView instanceof Callback) || $childView->isTriggered())) {
             $alreadyCalled = false;
-            foreach (debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT | DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
+            foreach (debug_backtrace(\DEBUG_BACKTRACE_PROVIDE_OBJECT | \DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
                 if ($childView === ($frame['object'] ?? null) && $frame['function'] === '_getStickyArgs') {
                     $alreadyCalled = true;
                 }

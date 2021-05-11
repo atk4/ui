@@ -74,7 +74,7 @@ jobs:
         if: matrix.type == 'CodingStyle'
         run: |
           if [ "$(find demos/ -name '*.php' -print0 | xargs -0 grep -L "namespace Atk4\\\\Ui\\\\Demos;" | tee /dev/fd/2)" ]; then echo 'All demos/ files must have namespace declared' && (exit 1); fi
-          vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --diff-format=udiff --verbose --show-progress=dots
+          vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --verbose
 
       - name: Run Static Analysis (only for StaticAnalysis)
         if: matrix.type == 'StaticAnalysis'
@@ -90,7 +90,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.3', '7.4', 'latest']
+        php: ['7.4', 'latest']
         type: ['Phpunit']
         include:
           - php: 'latest'

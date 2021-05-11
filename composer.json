@@ -53,11 +53,11 @@
         }
     ],
     "require": {
-        "php": ">=7.3.0",
+        "php": ">=7.4.0",
         "atk4/data": "dev-develop"
     },
     "require-release": {
-        "php": ">=7.3.0",
+        "php": ">=7.4.0",
         "atk4/data": "~3.0.0"
     },
     "require-dev": {
@@ -66,7 +66,7 @@
         "behat/mink-extension": "^2.3.1",
         "behat/mink-selenium2-driver": "^1.4",
         "ergebnis/composer-normalize": "^2.13",
-        "friendsofphp/php-cs-fixer": "^2.17",
+        "friendsofphp/php-cs-fixer": "^3.0",
         "fzaninotto/faker": "^1.6",
         "guzzlehttp/guzzle": "^6.3",
         "instaclick/php-webdriver": "^1.4.7",
