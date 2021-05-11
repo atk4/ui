@@ -2838,9 +2838,3 @@ parameters:
         -
             path: 'tests/TagTest.php'
             message: '~^Method Atk4\\Ui\\Tests\\TagTest::assertTagRender\(\) has parameter \$html with no typehint specified\.$~'
-        -
-            path: 'tools/CoverageUtil.php'
-            message: '~^Method CoverageUtil::start\(\) has no return typehint specified\.$~'
-        -
-            path: 'tools/CoverageUtil.php'
-            message: '~^Method CoverageUtil::saveData\(\) has no return typehint specified\.$~'
