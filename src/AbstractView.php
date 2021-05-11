@@ -6,7 +6,6 @@ namespace Atk4\Ui;
 
 use Atk4\Core\AppScopeTrait;
 use Atk4\Core\ContainerTrait;
-use Atk4\Core\DiContainerTrait;
 use Atk4\Core\InitializerTrait;
 use Atk4\Core\StaticAddToTrait;
 use Atk4\Core\TrackableTrait;
@@ -24,7 +23,6 @@ abstract class AbstractView
     use ContainerTrait {
         add as private _add;
     }
-    use DiContainerTrait;
     use InitializerTrait {
         init as private _init;
     }
