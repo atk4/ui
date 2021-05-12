@@ -237,15 +237,15 @@ class Form extends View
     /**
      * Set display rule for a group collection.
      *
-     * @param array         $rules
-     * @param string|object $selector
+     * @param array       $rules
+     * @param string|View $selector
      *
      * @return $this
      */
     public function setGroupDisplayRules($rules = [], $selector = '.atk-form-group')
     {
-        if (is_object($selector) && isset($selector->name)) {
-            $selector = '#' . $selector->name;
+        if (is_object($selector)) {
+            $selector = $selector->jsRender();
         }
 
         $this->controlDisplayRules = $rules;

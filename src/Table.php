@@ -624,7 +624,7 @@ class Table extends Lister
      */
     public function jsRemoveRow($id, $transition = 'fade left')
     {
-        return $this->js()->find("tr[data-id={$id}]")->transition($transition);
+        return $this->js()->find('tr[data-id=' . $id . ']')->transition($transition);
     }
 
     /**

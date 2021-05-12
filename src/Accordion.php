@@ -151,9 +151,6 @@ class Accordion extends View
         return isset($_GET['__atk-dyn-section']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function renderView(): void
     {
         if ($this->type) {

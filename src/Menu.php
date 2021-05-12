@@ -167,9 +167,6 @@ class Menu extends View
         return parent::add([View::class, 'class' => ['divider']]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getHtml()
     {
         // if menu don't have a single element or content, then destroy it

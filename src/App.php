@@ -49,7 +49,7 @@ class App
     protected $executorFactory;
 
     /** @var string Version of Agile UI */
-    public $version = '3.0-dev';
+    public $version = '3.1-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -113,7 +113,7 @@ class App
     /** @var View For internal use */
     public $html;
 
-    /** @var LoggerInterface Target for objects with DebugTrait */
+    /** @var LoggerInterface|null Target for objects with DebugTrait */
     public $logger;
 
     /** @var Persistence|Persistence\Sql */
@@ -850,12 +850,10 @@ class App
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
      * @param string|array $tag
-     * @param string       $attr
+     * @param string|array $attr
      * @param string|array $value
-     *
-     * @return string
      */
-    public function getTag($tag = null, $attr = null, $value = null)
+    public function getTag($tag = null, $attr = null, $value = null): string
     {
         if ($tag === null) {
             $tag = 'div';
@@ -918,7 +916,7 @@ class App
         }
 
         if (!$attr) {
-            return "<{$tag}>" . ($value !== null ? $value . "</{$tag}>" : '');
+            return '<' . $tag . '>' . ($value !== null ? $value . '</' . $tag . '>' : '');
         }
         $tmp = [];
         if (substr($tag, -1) === '/') {
@@ -934,15 +932,15 @@ class App
                 continue;
             }
             if ($val === true) {
-                $tmp[] = "{$key}";
+                $tmp[] = $key;
             } elseif ($key === 0) {
                 $tag = $val;
             } else {
-                $tmp[] = "{$key}=\"" . $this->encodeAttribute($val) . '"';
+                $tmp[] = $key . '="' . $this->encodeAttribute($val) . '"';
             }
         }
 
-        return "<{$tag}" . ($tmp ? (' ' . implode(' ', $tmp)) : '') . $postfix . '>' . ($value !== null ? $value . "</{$tag}>" : '');
+        return '<' . $tag . ($tmp ? (' ' . implode(' ', $tmp)) : '') . $postfix . '>' . ($value !== null ? $value . '</' . $tag . '>' : '');
     }
 
     /**

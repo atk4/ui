@@ -28,7 +28,7 @@ class JsVueService
     /**
      * Create a new Vue instance using a component managed by ATK.
      *
-     * This output js: atk.vueService.createAtkVue("id","component",{});
+     * This output js: atk.vueService.createAtkVue("id", "component", {});
      *
      * @return mixed
      */
@@ -41,7 +41,7 @@ class JsVueService
      * Create a new Vue instance using an external component.
      * External component should be load via js file and define properly.
      *
-     * This output js: atk.vueService.createVue("id","component",{});
+     * This output js: atk.vueService.createVue("id", "component", {});
      *
      * @return mixed
      */

@@ -452,8 +452,6 @@ class Lookup extends Input
      * Convert value to expected comma separated list before setting it.
      *
      * {@inheritdoc}
-     *
-     * @see \Atk4\Ui\Form\Control::set()
      */
     public function set($value = null, $junk = null)
     {

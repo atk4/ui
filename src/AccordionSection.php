@@ -27,9 +27,6 @@ class AccordionSection extends View
 
     public $icon = 'dropdown';
 
-    /**
-     * {@inheritdoc}
-     */
     protected function renderView(): void
     {
         parent::renderView();
