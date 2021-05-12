@@ -792,9 +792,9 @@ class View extends AbstractView implements JsExpressionable
      *
      * @see http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string|bool|null $when     Event when chain will be executed
-     * @param JsExpression     $action   JavaScript action
-     * @param string           $selector If you wish to override jQuery($selector)
+     * @param string|bool|null             $when     Event when chain will be executed
+     * @param JsExpression                 $action   JavaScript action
+     * @param string|JsExpressionable|null $selector If you wish to override jQuery($selector)
      *
      * @return Jquery
      */
@@ -987,10 +987,10 @@ class View extends AbstractView implements JsExpressionable
      *
      * @see http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string $event    JavaScript event
-     * @param string $selector Optional jQuery-style selector
-     * @param mixed  $action   code to execute
-     * @param array  $defaults Options
+     * @param string                       $event    JavaScript event
+     * @param string|JsExpressionable|null $selector Optional jQuery-style selector
+     * @param mixed                        $action   code to execute
+     * @param array                        $defaults Options
      *
      * @return Jquery
      */

@@ -66,7 +66,7 @@ class ActionMenu extends Table\Column
         parent::init();
     }
 
-    public function getTag($position, $value, $attr = [])
+    public function getTag($position, $value, $attr = []): string
     {
         if ($this->table->hasCollapsingCssActionColumn && $position === 'body') {
             $attr['class'][] = 'collapsing';
@@ -111,9 +111,6 @@ class ActionMenu extends Table\Column
         return $item;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getHeaderCellHtml(\Atk4\Data\Field $field = null, $value = null)
     {
         $this->table->js(true)->find('.atk-action-menu')->dropdown(
@@ -131,9 +128,6 @@ class ActionMenu extends Table\Column
         return parent::getHeaderCellHtml($field, $value);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDataCellTemplate(\Atk4\Data\Field $field = null)
     {
         if (!$this->items) {

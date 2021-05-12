@@ -107,10 +107,7 @@ class ActionButtons extends Table\Column
         return $this->addButton($button, $modal->show(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTag($position, $value, $attr = [])
+    public function getTag($position, $value, $attr = []): string
     {
         if ($this->table->hasCollapsingCssActionColumn && $position === 'body') {
             $attr['class'][] = 'collapsing';
