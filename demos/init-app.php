@@ -45,13 +45,8 @@ try {
     throw new \Atk4\Ui\Exception('Database error: ' . $e->getMessage());
 }
 
-// Current sub directory of webserver - makes it independent where to run the demo from
-// basically we want to run it just from within the ui repo, but this adds a layer of
-// better user experience, when a user tries to copy it elsewhere and it works
-$currDir = substr(str_replace($_SERVER['DOCUMENT_ROOT'], "", dirname(__FILE__)), 1);
-
-[$rootUrl, $relUrl] = preg_split('~(?<=/)(?=' . $currDir . '(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
-$demosUrl = $rootUrl . $currDir . '/';
+[$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
+$demosUrl = $rootUrl . 'demos/';
 
 if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
     $app->cdn['atk'] = $rootUrl . 'public';
@@ -163,4 +158,4 @@ if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {
     \Atk4\Ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'teal', 'icon' => 'github'])
         ->on('click', $app->jsRedirect('https://github.com/atk4/ui/blob/develop/' . $relUrl, true));
 }
-unset($layout, $rootUrl, $relUrl, $demosUrl, $path, $menu, $currDir);
+unset($layout, $rootUrl, $relUrl, $demosUrl, $path, $menu);
