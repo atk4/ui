@@ -113,7 +113,7 @@ class App
     /** @var View For internal use */
     public $html;
 
-    /** @var LoggerInterface Target for objects with DebugTrait */
+    /** @var LoggerInterface|null Target for objects with DebugTrait */
     public $logger;
 
     /** @var Persistence|Persistence\Sql */
