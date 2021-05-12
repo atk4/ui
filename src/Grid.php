@@ -2,10 +2,15 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\core\HookTrait;
-use atk4\data\Model;
+use Atk4\Core\Factory;
+use Atk4\Core\HookTrait;
+use Atk4\Data\Model;
+use Atk4\Ui\Table\Column;
+use Atk4\Ui\Table\Column\ActionButtons;
+use Atk4\Ui\UserAction\ConfirmationExecutor;
+use Atk4\Ui\UserAction\ExecutorInterface;
 
 /**
  * Implements a more sophisticated and interactive Data-Table component.
@@ -24,16 +29,11 @@ class Grid extends View
      */
     public $menu;
 
-    /**
-     * Calling addQuickSearch will create a form with a field inside $menu to perform quick searches.
-     *
-     * If you pass this property as array of field names while creating Grid, then when you will call
-     * setModel() QuickSearch object will be created automatically and these model fields will be used
-     * for filtering.
-     *
-     * @var array|Form\Control
-     */
+    /** @var JsSearch */
     public $quickSearch;
+
+    /** @var array Field names to search for in Model. It will automatically add quicksearch component to grid if set. */
+    public $searchFieldNames = [];
 
     /**
      * Paginator is automatically added below the table and will divide long tables into pages.
@@ -97,8 +97,6 @@ class Grid extends View
      */
     public $table;
 
-    public $executor_class = UserAction\BasicExecutor::class;
-
     /**
      * The container for table and paginator.
      *
@@ -134,18 +132,18 @@ class Grid extends View
 
         // if menu not disabled ot not already assigned as existing object
         if ($this->menu !== false && !is_object($this->menu)) {
-            $this->menu = $this->add($this->factory([Menu::class, 'activate_on_click' => false], $this->menu), 'Menu');
+            $this->menu = $this->add(Factory::factory([Menu::class, 'activate_on_click' => false], $this->menu), 'Menu');
         }
 
-        $this->table = $this->container->add($this->factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
+        $this->table = $this->container->add(Factory::factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
 
         if ($this->paginator !== false) {
             $seg = View::addTo($this->container, [], ['Paginator'])->addStyle('text-align', 'center');
-            $this->paginator = $seg->add($this->factory([Paginator::class, 'reload' => $this->container], $this->paginator));
-            $this->app ? $this->app->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
+            $this->paginator = $seg->add(Factory::factory([Paginator::class, 'reload' => $this->container], $this->paginator));
+            $this->issetApp() ? $this->getApp()->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
         }
 
-        $this->app ? $this->app->stickyGet('_q') : $this->stickyGet('_q');
+        $this->issetApp() ? $this->getApp()->stickyGet('_q') : $this->stickyGet('_q');
     }
 
     /**
@@ -219,7 +217,7 @@ class Grid extends View
         if (is_array($ipp)) {
             $this->addItemsPerPageSelector($ipp, $label);
 
-            $this->ipp = $_GET['ipp'] ?? $ipp[0];
+            $this->ipp = isset($_GET['ipp']) ? (int) $_GET['ipp'] : $ipp[0];
         } else {
             $this->ipp = $ipp;
         }
@@ -235,7 +233,7 @@ class Grid extends View
      */
     public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Items per page:')
     {
-        if ($ipp = $this->container->stickyGet('ipp')) {
+        if ($ipp = (int) $this->container->stickyGet('ipp')) {
             $this->ipp = $ipp;
         } else {
             $this->ipp = $items[0];
@@ -248,7 +246,7 @@ class Grid extends View
             $pageLength->stickyGet($this->sortTrigger, $sortBy);
         }
 
-        $pageLength->onPageLengthSelect(function ($ipp) use ($pageLength) {
+        $pageLength->onPageLengthSelect(function ($ipp) {
             $this->ipp = $ipp;
             $this->setModelLimitFromPaginator();
             // add ipp to quicksearch
@@ -342,16 +340,16 @@ class Grid extends View
         $view = View::addTo($this->menu
             ->addMenuRight()->addItem()->setElement('div'));
 
-        $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
-
         $q = trim($this->stickyGet('_q') ?? '');
         if ($q !== '') {
-            $cond = [];
+            $scope = Model\Scope::createOr();
             foreach ($fields as $field) {
-                $cond[] = [$field, 'like', '%' . $q . '%'];
+                $scope->addCondition($field, 'like', '%' . $q . '%');
             }
-            $this->model->addCondition($cond);
+            $this->model->addCondition($scope);
         }
+
+        $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery, 'initValue' => $q]);
     }
 
     /**
@@ -361,7 +359,7 @@ class Grid extends View
      * @param JsExpression|null $afterSuccess
      * @param array             $apiConfig
      *
-     * @return \atk4\ui\JsReload
+     * @return \Atk4\Ui\JsReload
      */
     public function jsReload($args = [], $afterSuccess = null, $apiConfig = [])
     {
@@ -379,11 +377,28 @@ class Grid extends View
      */
     public function addActionButton($button, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
+        return $this->getActionButtons()->addButton($button, $action, $confirmMsg, $isDisabled);
+    }
+
+    /**
+     * Add a button for executing a model action via an action executor.
+     */
+    public function addExecutorButton(UserAction\ExecutorInterface $executor, Button $button = null)
+    {
+        $btn = $button ? $this->add($button) : $this->getExecutorFactory()->createTrigger($executor->getAction(), $this->getExecutorFactory()::TABLE_BUTTON);
+        $confirmation = $executor->getAction()->getConfirmation() ?: '';
+        $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+
+        return $this->getActionButtons()->addButton($btn, $executor, $confirmation, $disabled);
+    }
+
+    private function getActionButtons(): ActionButtons
+    {
         if (!$this->actionButtons) {
             $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
         }
 
-        return $this->actionButtons->addButton($button, $action, $confirmMsg, $isDisabled);
+        return $this->actionButtons;
     }
 
     /**
@@ -396,11 +411,26 @@ class Grid extends View
      */
     public function addActionMenuItem($view, $action = null, string $confirmMsg = '', bool $isDisabled = false)
     {
+        return $this->getActionMenu()->addActionMenuItem($view, $action, $confirmMsg, $isDisabled);
+    }
+
+    public function addExecutorMenuItem(ExecutorInterface $executor)
+    {
+        $item = $this->getExecutorFactory()->createTrigger($executor->getAction(), $this->getExecutorFactory()::TABLE_MENU_ITEM);
+        // ConfirmationExecutor take care of showing the user confirmation, thus make it empty.
+        $confirmation = !$executor instanceof ConfirmationExecutor ? ($executor->getAction()->getConfirmation() ?: '') : '';
+        $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+
+        return $this->getActionMenu()->addActionMenuItem($item, $executor, $confirmation, $disabled);
+    }
+
+    private function getActionMenu()
+    {
         if (!$this->actionMenu) {
             $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
         }
 
-        return $this->actionMenu->addActionMenuItem($view, $action, $confirmMsg, $isDisabled);
+        return $this->actionMenu;
     }
 
     /**
@@ -443,7 +473,7 @@ class Grid extends View
         if (!$this->menu) {
             throw new Exception('Unable to add Filter Column without Menu');
         }
-        $this->menu->addItem(['Clear Filters'], new \atk4\ui\JsReload($this->table->reload, ['atk_clear_filter' => 1]));
+        $this->menu->addItem(['Clear Filters'], new \Atk4\Ui\JsReload($this->table->reload, ['atk_clear_filter' => 1]));
         $this->table->setFilterColumn($names);
 
         return $this;
@@ -513,41 +543,15 @@ class Grid extends View
     }
 
     /**
-     * Find out more about the nature of the action from the supplied object, use addAction().
+     * Use addExecutorButton or addExecutorMenuItem.
+     *
+     * @deprecated.
      */
     public function addUserAction(Model\UserAction $action)
     {
-        $executor = null;
-        $args = [];
-        $title = $action->caption;
-        $button = $action->caption;
+        $executor = $this->getExecutorFactory()->create($action, $this);
 
-        if ($action->ui['Grid']['Button'] ?? null) {
-            $button = $action->ui['Grid']['Button'];
-        }
-
-        if ($action->ui['Grid']['Executor'] ?? null) {
-            $executor = $action->ui['Grid']['Executor'];
-        }
-
-        if (!$executor || is_string($executor)) {
-            $class = $executor ?? $this->executor_class;
-            $executor = new $class();
-        }
-
-        if ($this->paginator) {
-            $args[$this->paginator->name] = $this->paginator->getCurrentPage();
-        }
-
-        $this->addModalAction($button, $title, function ($page, $id) use ($action, $executor) {
-            $page->add($executor);
-
-            $this->hook(self::HOOK_ON_USER_ACTION, [$page, $executor]);
-
-            $action->owner->load($id);
-
-            $executor->setAction($action);
-        }, $args);
+        $this->addExecutorButton($executor);
     }
 
     /**
@@ -605,14 +609,14 @@ class Grid extends View
      *
      * @param array|bool $columns
      *
-     * @return \atk4\data\Model
+     * @return \Atk4\Data\Model
      */
     public function setModel(Model $model, $columns = null)
     {
         $this->model = $this->table->setModel($model, $columns);
 
-        if (is_array($this->quickSearch)) {
-            $this->addQuickSearch($this->quickSearch);
+        if ($this->searchFieldNames) {
+            $this->addQuickSearch($this->searchFieldNames, true);
         }
 
         return $this->model;

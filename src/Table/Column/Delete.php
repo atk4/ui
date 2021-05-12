@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\ui\Table;
+use Atk4\Ui\Table;
 
 /**
  * Formatting action buttons column.
@@ -15,24 +15,24 @@ class Delete extends Table\Column
     {
         parent::init();
 
-        $this->vp = $this->table->add(new \atk4\ui\CallbackLater());
+        $this->vp = $this->table->add(new \Atk4\Ui\CallbackLater());
         $this->vp->set(function () {
             $this->table->model->load($_POST[$this->name])->delete();
 
             $reload = $this->table->reload ?: $this->table;
 
-            $this->table->app->terminateJson($reload);
+            $this->table->getApp()->terminateJson($reload);
         });
     }
 
-    public function getDataCellTemplate(\atk4\data\Field $field = null)
+    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
     {
-        $this->table->on('click', 'a.' . $this->short_name, null, ['confirm' => (new \atk4\ui\Jquery())->attr('title')])->atkAjaxec([
+        $this->table->on('click', 'a.' . $this->short_name, null, ['confirm' => (new \Atk4\Ui\Jquery())->attr('title')])->atkAjaxec([
             'uri' => $this->vp->getJsUrl(),
             'uri_options' => [$this->name => $this->table->jsRow()->data('id')],
         ]);
 
-        return $this->app->getTag(
+        return $this->getApp()->getTag(
             'a',
             ['href' => '#', 'title' => 'Delete {$' . $this->table->model->title_field . '}?', 'class' => $this->short_name],
             [

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Paginate content using scroll event in JS.
@@ -38,7 +38,7 @@ class JsPaginator extends JsCallback
         parent::init();
 
         if (!$this->view) {
-            $this->view = $this->owner;
+            $this->view = $this->getOwner();
         }
 
         $this->view->js(true)->atkScroll([

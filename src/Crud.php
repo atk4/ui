@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\data\Model;
+use Atk4\Core\Factory;
+use Atk4\Data\Model;
 
 /**
  * Implements a more sophisticated and interactive Data-Table component.
@@ -22,12 +23,6 @@ class Crud extends Grid
 
     /** @var array Default notifier to perform when adding or editing is successful * */
     public $notifyDefault = [JsToast::class];
-
-    /** @var string default js action executor class in UI for model action. */
-    public $jsExecutor = [UserAction\JsCallbackExecutor::class];
-
-    /** @var string default action executor class in UI for model action. */
-    public $executor = [UserAction\ModalExecutor::class];
 
     /** @var bool|null should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
@@ -56,26 +51,12 @@ class Crud extends Grid
     /** @var mixed recently deleted record id. */
     private $deletedId;
 
-    /**
-     * @var array Action name container that will reload Table after executing
-     *
-     * @deprecated use action modifier instead
-     */
-    public $reloadTableActions = [];
-
-    /**
-     * @var array Action name container that will remove the corresponding table row after executing
-     *
-     * @deprecated use action modifier instead
-     */
-    public $removeRowActions = [];
-
     protected function init(): void
     {
         parent::init();
 
         if ($sortBy = $this->getSortBy()) {
-            $this->app ? $this->app->stickyGet($this->name . '_sort') : $this->stickyGet($this->name . '_sort', $sortBy);
+            $this->issetApp() ? $this->getApp()->stickyGet($this->name . '_sort') : $this->stickyGet($this->name . '_sort', $sortBy);
         }
     }
 
@@ -90,7 +71,7 @@ class Crud extends Grid
             foreach ($this->menuItems as $item) {
                 // Remove previous click handler and attach new one using sort argument.
                 $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
-                $ex = $item['action']->ui['executor'];
+                $ex = $item['executor'];
                 if ($ex instanceof UserAction\JsExecutorInterface) {
                     $ex->stickyGet($this->name . '_sort', $this->getSortBy());
                     $this->container->js(true, $item['item']->js()->on('click.atk_crud_item', new JsFunction($ex->jsExecute())));
@@ -106,6 +87,8 @@ class Crud extends Grid
      */
     public function setModel(Model $model, $fields = null): Model
     {
+        $model->assertIsModel();
+
         if ($fields !== null) {
             $this->displayFields = $fields;
         }
@@ -114,30 +97,30 @@ class Crud extends Grid
 
         // Grab model id when using delete. Must be set before delete action execute.
         $this->model->onHook(Model::HOOK_AFTER_DELETE, function ($model) {
-            $this->deletedId = $model->get($model->id_field);
+            $this->deletedId = $model->getId();
         });
-
-        $this->model->unload();
 
         if ($this->useMenuActions === null) {
             $this->useMenuActions = count($model->getUserActions()) > 4;
         }
 
         foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD) as $action) {
-            $action->ui['executor'] = $this->initActionExecutor($action);
+            $executor = $this->initActionExecutor($action);
             if ($this->useMenuActions) {
-                $this->addActionMenuItem($action);
+                $this->addExecutorMenuItem($executor);
             } else {
-                $this->addActionButton($action);
+                $this->addExecutorButton($executor);
             }
         }
 
         if ($this->menu) {
             foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
                 if ($action->enabled) {
-                    $action->ui['executor'] = $this->initActionExecutor($action);
-                    $this->menuItems[$k]['item'] = $this->menu->addItem([$action->getDescription(), 'icon' => 'plus']);
-                    $this->menuItems[$k]['action'] = $action;
+                    $executor = $this->initActionExecutor($action);
+                    $this->menuItems[$k]['item'] = $this->menu->addItem(
+                        $this->getExecutorFactory()->createTrigger($action, $this->getExecutorFactory()::MENU_ITEM)
+                    );
+                    $this->menuItems[$k]['executor'] = $executor;
                 }
             }
             $this->setItemsAction();
@@ -241,7 +224,7 @@ class Crud extends Grid
      */
     protected function getNotifier(string $msg = null)
     {
-        $notifier = $this->factory($this->notifyDefault);
+        $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {
             $notifier->setMessage($msg);
         }
@@ -255,7 +238,7 @@ class Crud extends Grid
     protected function setItemsAction()
     {
         foreach ($this->menuItems as $k => $item) {
-            $this->container->js(true, $item['item']->on('click.atk_crud_item', $item['action']));
+            $this->container->js(true, $item['item']->on('click.atk_crud_item', $item['executor']));
         }
     }
 
@@ -266,10 +249,6 @@ class Crud extends Grid
      */
     protected function getExecutor(Model\UserAction $action)
     {
-        if (isset($action->ui['executor'])) {
-            return $this->factory($action->ui['executor']);
-        }
-
         // prioritize Crud addFields over action->fields for Model add action.
         if ($action->short_name === 'add' && $this->addFields) {
             $action->fields = $this->addFields;
@@ -280,10 +259,7 @@ class Crud extends Grid
             $action->fields = $this->editFields;
         }
 
-        // setting right action fields is based on action fields.
-        $executor = (!$action->args && !$action->fields && !$action->preview) ? $this->jsExecutor : $this->executor;
-
-        return $this->factory($executor);
+        return $this->getExecutorFactory()->create($action, $this);
     }
 
     /**
@@ -352,10 +328,8 @@ class Crud extends Grid
 
     /**
      * Set onActions.
-     *
-     * @return mixed|null
      */
-    public function setOnActions(string $actionName, \Closure $fx)
+    public function setOnActions(string $actionName, \Closure $fx): void
     {
         $this->onActions[] = [$actionName => $fx];
     }

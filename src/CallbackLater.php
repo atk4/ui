@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Works same as Callback but will be executed when the current
@@ -19,19 +19,17 @@ class CallbackLater extends Callback
      * @param \Closure $fx
      * @param array    $args
      *
-     * @return mixed|null
+     * @return mixed
      */
     public function set($fx = null, $args = null)
     {
-        if (!$this->app) {
-            throw new Exception('Call-back must be part of a RenderTree');
-        }
+        $this->getApp(); // assert has App
 
-        if ($this->app->is_rendering) {
+        if ($this->getApp()->is_rendering) {
             return parent::set($fx, $args);
         }
 
-        $this->app->onHook(App::HOOK_BEFORE_RENDER, function () use ($fx, $args) {
+        $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () use ($fx, $args) {
             return parent::set($fx, $args);
         });
     }

@@ -1,22 +1,25 @@
 
-.. php:namespace:: atk4\ui\Form\Control
+.. php:namespace:: Atk4\Ui\Form\Control
 
 .. php:class:: Multiline
-
 
 ======================
 Multiline Form Control
 ======================
 
+The Multiline form control is not simply a single control, but will add multiple control in order to be able to edit
+multiple Model fields related to a single record reference into another Model.
 
-The Multiline form control is not a single field, but is used to edit several Model records.
-A good example is a user who can have many addresses. In this example, the Model `User` containsMany `Addresses`.
-This means that the addresses are not stored into a separate database table but into the field `addresses` of user table::
+A good example is a user who can have many addresses.
+In this example, the Model `User` containsMany `Addresses`. Since the Model field addresses is defined with containsMany()
+inside the main model, Multiline will store addresses content as Json value inside the table blobl addresses field.
+
+For example::
 
     /**
      * User model
      */
-    class User extends \atk4\data\Model
+    class User extends \Atk4\Data\Model
     {
         public $table = 'user';
 
@@ -28,17 +31,14 @@ This means that the addresses are not stored into a separate database table but 
             $this->addField('lastname', ['type' => 'string']);
 
             $this->containsMany('addresses', [Address::class, 'system' => false]);
-            //$this->hasMany('Email', [Email::class]);
         }
     }
 
     /**
      * Address Model
      */
-    class Address extends \atk4\data\Model
+    class Address extends \Atk4\Data\Model
     {
-        public $table = 'addresses';
-
         protected function init(): void
         {
             parent::init();
@@ -50,38 +50,26 @@ This means that the addresses are not stored into a separate database table but 
         }
     }
 
-    // Create some sample record of user Model
-    $user = new User(new \atk4\data\Persistence\Array_());
-    $user->set('firstname', 'Hans');
-    $user->set('lastname', 'Test');
-    $user->save();
+    \Atk4\Ui\Crud::addTo($app)->setModel(new User($app->db));
 
-
-    // Add a Form to the UI and set User as Model
-    $user_form = \atk4\ui\Form::addTo($app);
-    $user_form->setModel($user);
-
-This leads to a Multiline component automatically rendered for adding, editing and deleting Addresses of the user:
+This leads to a Multiline component automatically rendered for adding, editing and deleting Addresses of the current user record:
 
 .. image:: images/multiline_user_addresses.png
 
 You can also check LINK_TO_DEMO/multiline.php for this example
 
+Using Multiline with hasMany() relation
+=======================================
 
+Multiline form control is used by default when a Model field used `containsMany()` or `containsOne()`, but you can set
+up the multiline component to be used with hasMany() relation and edit related record accordingly.
 
-
-
-Manually setting up Multiline
-=============================
-
-Multiline form control is used by default if a Model `containsMany()` or `containsOne()` other Model, but you can set up the multiline component manually. For example, if you wish to edit
-a `hasMany()` relation of a Model along with the Model itself. (In contrary to containsMany(), the records of the related Model are stored in a separate table). Lets say a User can have many email addresses,
-but you want to store them in a separate table. Uncomment the line `//$this->hasMany('Email', [Email::class]);` in User Model to use it::
+Lets say a User can have many email addresses, but you want to store them in a separate table.::
 
     /**
      * Email Model
      */
-    class Email extends \atk4\data\Model
+    class Email extends \Atk4\Data\Model
     {
         public $table = 'email';
 
@@ -95,115 +83,165 @@ but you want to store them in a separate table. Uncomment the line `//$this->has
         }
     }
 
-Now when we use a Form for User records, it won't automatically add a Multiline to edit the email addresses.
-If you want to edit them along with the user, Multiline is set up in a few lines::
+     /**
+     * User model
+     */
+    class User extends \Atk4\Data\Model
+    {
+        public $table = 'user';
 
-    // Create some sample record of user Model
-    $user = new User(new \atk4\data\Persistence\Array_());
-    $user->id = 1;
-    $user->set('firstname', 'Hans');
-    $user->set('lastname', 'Test');
-    $user->save();
+        protected function init(): void
+        {
+            parent:: init();
 
-    // Add a form to UI to edit User record
-    $user_form = \atk4\ui\Form::addTo($app);
-    $user_form->setModel($user);
-    $ml = $user_form->addField('email_addresses', [\atk4\ui\Form\Control\Multiline::class]);
-    $ml->setModel($user->ref('Email'));
+            $this->addField('firstname', ['type' => 'string']);
+            $this->addField('lastname', ['type' => 'string']);
+
+            $this->hasMany('Emails', [Email::class]);
+        }
+    }
+
+Using a form with User model won't automatically add a Multiline to edit the related email addresses.
+
+.. php:method:: setReferenceModel(string $refModelName, Model $modelEntity = null, array $fieldNames = []): Model
+
+If you want to edit them along with the user, Multiline need to be set up accordingly using the setReferenceModel method::
+
+    // Add a form to Ui in order to edit User record.
+    $user_form = \Atk4\Ui\Form::addTo($app);
+    $user_form->setModel($user->load($userId));
+
+    $ml = $user_form->addControl('emails', [\Atk4\Ui\Form\Control\Multiline::class]);
+    $ml->setReferenceModel('Emails');
 
     // set up saving of Email on Form submit
     $user_form->onSubmit(function($form) use ($ml) {
         $form->model->save();
+        // save emails record related to current user.
         $ml->saveRows();
-        // show saved data for testing purposes
+
         return new JsToast(var_export($ml->model->export(), true));
     });
 
 
-Now, there is another Multiline form contol to add, edit or delete the users email addresses:
+Using the example above will create a form with control from the User model as well as a Multiline control for editing
+the Email model's field.
 
-.. image:: images/multiline_email_address.png
+Important
+---------
 
+It is important to note that for Email's record to be properly saved, in relation to their User record, the User model
+need to be load prior to call Multiline::setReferenceModel() method.
+
+Also note that Multiline::saveRows() method need to be called for related record to be saved in related table. You would
+normally call this method in your form onSubmit handler method.
 
 Multiline and Expressions
 =========================
-If a Model has Expressions, they automatically get updated when a form control value is changed. A loading icon on the ``+`` sign indicates that the expression values are updated.
+If a Model contains Expressions, there resulting values will automatically get updated when one of the form control value is changed.
+A loading icon on the ``+`` button will indicates that the expression values are being update.
+
 Lets use the example of demos/multiline.php::
 
-    class InventoryItem extends \atk4\data\Model
+    class InventoryItem extends \Atk4\Data\Model
     {
         protected function init(): void
         {
             parent::init();
             $this->addField('item', ['required' => true, 'default' => 'item']);
-            $this->addField('qty', ['type' => 'number', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
-            $this->addField('box', ['type' => 'number', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
+            $this->addField('qty', ['type' => 'number', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
+            $this->addField('box', ['type' => 'number', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
             $this->addExpression('total', ['expr' => function (Model $row) {
                 return $row->get('qty') * $row->get('box');
             }, 'type' => 'number']);
         }
     }
     
-The 'total' expression will get updated on each field change automatically when InventoryItem is set as model to Multiline.
+The 'total' expression will get updated on each field change automatically.
 
+OnLineChange Callback
+=====================
+If you want to define a callback which gets executed when a field value in a Multiline row is changed,
+you can do so using the ``onLineChange()`` method.
+The first parameter is the callback function, the second one is an array containing field names that will trigger
+the callback when values are changed.
+You can return a single JsExpressionable or an array of JsExpressionables which then will be sent to the browser.
 
-Manually adding actions on a form control value change
-======================================================
-If you want to define a callback which gets executed if a field value is changed, you can do so using the ``onLineChange()`` method. The first parameter is the callback, the second one an array including the field names which trigger the callback when changed. You can return a single JsExpressionable or an array of JsExpressionables which then will be sent to the browser. In this case we display a Toast with some message::
+In this case we display a message when any of the control value for 'qty' and 'box' are changed::
 
     $multiline->onLineChange(function ($rows, $form) {
         $total = 0;
         foreach ($rows as $row => $cols) {
-            $qty = array_column($cols, 'qty')[0];
-            $box = array_column($cols, 'box')[0];
+            $qty = $cols['qty'] ?? 0;
+            $box = $cols['box'] ?? 0;
             $total = $total + ($qty * $box);
         }
         return new JsToast('The new Total is '.number_format($total, 2));
-    }, ['field1', 'field2']);
+    }, ['qty', 'box']);
 
 
-Changing appearance of Multiline
-================================
+Multiline Vue Component
+=======================
+
+Multiline is a Vue component by itself and rely on many others Vue components to render itself.
+Each control is render via a Vue component and the Vue component used will depend on the model
+field type associated with Multiline control.
+
+You will find a list of Vue component associated with each field type within the Multiline $fieldMapToComponent array.
+
+.. php:attr:: fieldMapToComponent
+
+Each control being a Vue component means that they accept 'Props' that may change their look or behaviour.
+Props on each component may be applied globally, i.e. to all control within Multiline that use that control, or
+per component.
+
+Setting component Props globally
+---------------------------------
+Use the $componentProps property of Multiline in order to apply 'Props' to component globally.
+
+.. php:attr:: componentProps
+
+Example of changing all Dropdown(sui-dropdown) within Multiline::
+
+    $ml = $form->addControl('ml', [Multiline::class, 'compponentProps' => [Multiline::SELECT => ['floating' => true]]]);
+
+Setting component Props per field
+---------------------------------
+
+Specific field components Props may be applied using the 'ui' field property when adding field to your model::
+
+    $this->addField('email', [
+        'required' => true,
+        'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'envelope', 'type' => 'email']]]
+    ]);
+    $this->addField('password', [
+        'required' => true,
+        'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'key', 'type' => 'password']]]
+    ]);
+
+Note on Multiline control
+-------------------------
+
+Each control inside Multiline is wrap within a table cell(sui-table-cell) component and this component can be customize as
+well using the 'ui' property of the model's field::
+
+    $this->addExpression('total', [
+        'expr' => function (Model $row) {
+            return $row->get('qty') * $row->get('box');
+        },
+        'type' => 'integer',
+        'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 1, 'class' => 'blue']]],
+    ]);
+
+Table appearance within Multiline
+---------------------------------
+Table(sui-table) Props can be set using $tableProps property of Multiline::
+
+    $ml = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'blue']]);
 
 Header
 ------
 - The header uses the field's caption by default. 
-- You can edit it by setting the ``header`` property. 
-- If you want to hide the header, set the ``$header`` property to an empty string ``''``.
+- You can edit it by setting the ``$caption`` property.
+- If you want to hide the header, set the ``$caption`` property to an empty string ``''``.
 
-Changing how fields are displayed
----------------------------------
-If you want to change how single inputs are displayed in the multiline, you can use field's ui property::
-
-    $model->addFields([
-        ['name', 'type' => 'string', 'ui' => ['multiline' => ['input', ['icon' => 'user', 'type' => 'text']]]],
-        ['value', 'type' => 'string', 'ui' => ['multiline' => ['input', ['type' => 'number']]]],
-        ['description', 'type' => 'string', 'ui' => ['multiline' => ['textarea']]],
-    ]);
-    
-This above will display a 'name', 'value' and 'description' form controls within a multiline form control. The 'value' form control input will use the html attribute type set to number and the
-'description' form control will be displayed as a textarea input.
-
-The `$ui['multiline']` property can be set using an array. The first element of the array is the field type to render as html in multiline form control and should contain a string value. The supported form control types are input, textarea, dropdown or checkbox.
-The second element of the array represent the options associated with the field type and should contains an array.
-Since Multiline form control used some of Semantic-ui Vue component to render the field type in html, the options accepted
-are based on Semantic-ui vue supported property. For example, input control type, or component in Semantic-ui Vue can have its html type attribute set using the type option, like the 'value' form control set above.
-
-You may see each option you can use by looking at Semantic-ui vue component property:
-- `input <https://semantic-ui-vue.github.io/#/elements/input>`_
-- `dropdown <https://semantic-ui-vue.github.io/#/modules/dropdown>`_
-- `checkbox <https://semantic-ui-vue.github.io/#/modules/checkbox>`_
-
-Note: There is no option available for textarea.
-
-Footer
-------
-You can add a footer to Multiline form control by adding a sublayout to it. In this example, we add a footer containing a read-only input which could get the value from ``onLineChange`` callback (see above)::
-   
-    $ml = $form->addControl('ml', [\atk4\ui\FormField\Multiline::class, 'options' => ['color' => 'blue']]);
-    $ml->setModel($inventory);
-    // Add sublayout with total form control.
-    $sub_layout = $form->layout->addSublayout([\atk4\ui\Form\Layout\Section\Columns::class]);
-    $sub_layout->addColumn(12);
-    $c = $sub_layout->addColumn(4);
-    $f_total = $c->addControl('total', ['readonly' => true])->set($total);

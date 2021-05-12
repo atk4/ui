@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Provides a handy object that generates some amount of random text-filler.

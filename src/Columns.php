@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
+
+use Atk4\Core\Factory;
 
 /**
  * Imprements vertically distributed columns based on CSS Grid system.
@@ -48,7 +50,7 @@ class Columns extends View
         $size = $defaults[0];
         unset($defaults[0]);
 
-        $column = $this->factory([\atk4\ui\View::class], $defaults);
+        $column = Factory::factory([\Atk4\Ui\View::class], $defaults);
         $this->add($column);
 
         if ($size && isset($this->sizes[$size])) {

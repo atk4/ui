@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
-use atk4\ui\Exception;
+use Atk4\Ui\Exception;
+use Atk4\Ui\View;
 
 /**
  * Class Upload.
@@ -50,7 +51,7 @@ class Upload extends Input
     /**
      * Callback is use for onUpload or onDelete.
      *
-     * @var \atk4\ui\JsCallback
+     * @var \Atk4\Ui\JsCallback
      */
     public $cb;
 
@@ -92,10 +93,10 @@ class Upload extends Input
 
         //$this->inputType = 'hidden';
 
-        $this->cb = \atk4\ui\JsCallback::addTo($this);
+        $this->cb = \Atk4\Ui\JsCallback::addTo($this);
 
         if (!$this->action) {
-            $this->action = new \atk4\ui\Button(['icon' => 'upload', 'disabled' => ($this->disabled || $this->readonly)]);
+            $this->action = new \Atk4\Ui\Button(['icon' => 'upload', 'disabled' => ($this->disabled || $this->readonly)]);
         }
     }
 
@@ -177,7 +178,7 @@ class Upload extends Input
                     $postFile = $_FILES[$k];
                     if ($postFile['error'] !== 0) {
                         // unset all details on upload error
-                        $postFile = array_intersect_key($postFile, array_flip('error', 'name'));
+                        $postFile = array_intersect_key($postFile, array_flip(['error', 'name']));
                     }
                     $postFiles[] = $postFile;
                 }

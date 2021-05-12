@@ -5,7 +5,7 @@
 Crud
 ====
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 .. php:class:: Crud
 
 Crud class offers a very usable extension to :php:class:`Grid` class, which automatically adds actions for deleting,
@@ -26,7 +26,7 @@ The basic usage of Crud is::
 
     Crud::addTo($app)->setModel(new Country($app->db));
 
-Users are now able to fully interract with the table. There are ways to restrict which "rows" and which "columns" user
+Users are now able to fully interact with the table. There are ways to restrict which "rows" and which "columns" user
 can access. First we can only allow user to read, manage and delete only countries that are part of European Union::
 
     $eu_countries = new Country($app->db);
@@ -57,11 +57,11 @@ Model action using system property set to true, will not be display in Crud. Not
 Specifying Fields (for different views)
 =======================================
 
-.. php:attr:: $displayFields
+.. php:attr:: displayFields
 
 Only fields name set in this property will be display in Grid. Leave empty for all fields.
 
-.. php:attr:: $editFields
+.. php:attr:: editFields
 
 If you'd like to have different fields in the grid of the CRUD, but you need more/different fields in the editting modal (which opens when clicking on an entry),
 you can choose here the fields that are available in the editting modal window.
@@ -75,10 +75,10 @@ Example::
     $crud->displayFields(['field1, field2']);
     $crud->editFields(['field1, field2, field3, field4']);
 
-.. php:attr:: $addFields
+.. php:attr:: addFields
 
 Through those properties you can specify which fields to use when form is display for add and edit action.
-Field name add here will have priorities over the action fields properties. When set to null, the action fields propery
+Field name add here will have priorities over the action fields properties. When set to null, the action fields property
 will be used.
 
 
@@ -101,7 +101,7 @@ specify your own form behavior using a callback for action::
     // callback for both model action edit and add.
     $g->onFormAddEdit(function ($form, $ex) {
         $form->onSubmit(function ($form) use ($ex) {
-            return [$ex->hide(), new \atk4\ui\JsToast('Submit all right! This demo does not saved data.')];
+            return [$ex->hide(), new \Atk4\Ui\JsToast('Submit all right! This demo does not saved data.')];
         });
     });
 

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\ui\Table;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Ui\Table;
 
 class TableColumnColorRatingTest extends AtkPhpunit\TestCase
 {
@@ -28,17 +28,17 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
                 ],
             ],
         ];
-        $db = new \atk4\data\Persistence\Array_($arr);
-        $m = new \atk4\data\Model($db, 'table');
+        $db = new \Atk4\Data\Persistence\Array_($arr);
+        $m = new \Atk4\Data\Model($db, ['table' => 'table']);
         $m->addField('name');
         $m->addField('ref');
         $m->addField('rating');
-        $this->table = new \atk4\ui\Table();
+        $this->table = new \Atk4\Ui\Table();
         $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref', 'rating']);
     }
 
-    public function testValueGreaterThanMax()
+    public function testValueGreaterThanMax(): void
     {
         $rating = $this->table->addDecorator('rating', [
             Table\Column\ColorRating::class,
@@ -65,7 +65,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testValueGreaterThanMaxNoColor()
+    public function testValueGreaterThanMaxNoColor(): void
     {
         $this->table->addDecorator('rating', [
             Table\Column\ColorRating::class,
@@ -88,7 +88,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testValueLowerThanMin()
+    public function testValueLowerThanMin(): void
     {
         $rating = $this->table->addDecorator('rating', [
             Table\Column\ColorRating::class,
@@ -115,7 +115,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testValueLowerThanMinNoColor()
+    public function testValueLowerThanMinNoColor(): void
     {
         $this->table->addDecorator('rating', [
             Table\Column\ColorRating::class,
@@ -138,9 +138,9 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testExceptionMinGreaterThanMax()
+    public function testExceptionMinGreaterThanMax(): void
     {
-        $this->expectException(\atk4\ui\Exception::class);
+        $this->expectException(\Atk4\Ui\Exception::class);
 
         $this->table->addDecorator('rating', [
             Table\Column\ColorRating::class,
@@ -157,9 +157,9 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         ]);
     }
 
-    public function testExceptionMinEqualsMax()
+    public function testExceptionMinEqualsMax(): void
     {
-        $this->expectException(\atk4\ui\Exception::class);
+        $this->expectException(\Atk4\Ui\Exception::class);
 
         $this->table->addDecorator('rating', [
             Table\Column\ColorRating::class,
@@ -176,9 +176,9 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         ]);
     }
 
-    public function testExceptionZeroSteps()
+    public function testExceptionZeroSteps(): void
     {
-        $this->expectException(\atk4\ui\Exception::class);
+        $this->expectException(\Atk4\Ui\Exception::class);
 
         $this->table->addDecorator('rating', [
             Table\Column\ColorRating::class,
@@ -195,9 +195,9 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         ]);
     }
 
-    public function testExceptionLessThan2ColorsDefined()
+    public function testExceptionLessThan2ColorsDefined(): void
     {
-        $this->expectException(\atk4\ui\Exception::class);
+        $this->expectException(\Atk4\Ui\Exception::class);
 
         $this->table->addDecorator('rating', [
             Table\Column\ColorRating::class,

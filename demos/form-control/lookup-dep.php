@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Form;
+use Atk4\Ui\Form;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Header::addTo($app, ['Lookup dependency']);
+\Atk4\Ui\Header::addTo($app, ['Lookup dependency']);
 
 $form = Form::addTo($app, ['segment']);
-\atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveControls']);
+\Atk4\Ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveControls']);
 
 $form->addControl('starts_with', [
     Form\Control\Dropdown::class,
@@ -35,30 +35,25 @@ $form->addControl('contains', [
 $lookup = $form->addControl('country', [
     Form\Control\Lookup::class,
     'model' => new Country($app->db),
-    'dependency' => function ($model, $data) {
-        $conditions = [];
+    'dependency' => function (Country $model, $data) {
         foreach (explode(',', $data['starts_with'] ?? '') as $letter) {
-            $conditions[] = ['name', 'like', $letter . '%'];
+            $model->addCondition($model->fieldName()->name, 'like', $letter . '%');
         }
 
-        if ($conditions) {
-            $model->addCondition($conditions);
-        }
-
-        isset($data['contains']) ? $model->addCondition('name', 'like', '%' . $data['contains'] . '%') : null;
+        isset($data['contains']) ? $model->addCondition($model->fieldName()->name, 'like', '%' . $data['contains'] . '%') : null;
     },
     'placeholder' => 'Selection depends on Dropdown above',
-    'search' => ['name', 'iso', 'iso3'],
+    'search' => [Country::hinting()->fieldName()->name, Country::hinting()->fieldName()->iso, Country::hinting()->fieldName()->iso3],
 ]);
 
 $form->onSubmit(function (Form $form) {
     return 'Submitted: ' . print_r($form->model->get(), true);
 });
 
-\atk4\ui\Header::addTo($app, ['Lookup multiple values']);
+\Atk4\Ui\Header::addTo($app, ['Lookup multiple values']);
 
 $form = Form::addTo($app, ['segment']);
-\atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveControls']);
+\Atk4\Ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveControls']);
 
 $form->addControl('ends_with', [
     Form\Control\Dropdown::class,
@@ -74,11 +69,11 @@ $form->addControl('ends_with', [
 $lookup = $form->addControl('country', [
     Form\Control\Lookup::class,
     'model' => new Country($app->db),
-    'dependency' => function ($model, $data) {
-        isset($data['ends_with']) ? $model->addCondition('name', 'like', '%' . $data['ends_with']) : null;
+    'dependency' => function (Country $model, $data) {
+        isset($data['ends_with']) ? $model->addCondition($model->fieldName()->name, 'like', '%' . $data['ends_with']) : null;
     },
     'multiple' => true,
-    'search' => ['name', 'iso', 'iso3'],
+    'search' => [Country::hinting()->fieldName()->name, Country::hinting()->fieldName()->iso, Country::hinting()->fieldName()->iso3],
 ]);
 
 $form->onSubmit(function (Form $form) {

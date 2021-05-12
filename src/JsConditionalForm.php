@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Implements conditions for displaying fields on form.
  */
 class JsConditionalForm implements JsExpressionable
 {
-    use \atk4\core\DiContainerTrait;
+    use \Atk4\Core\DiContainerTrait;
 
     // {{{ Properties
 
@@ -55,7 +55,7 @@ class JsConditionalForm implements JsExpressionable
         $this->fieldRules = $rules;
     }
 
-    public function jsRender()
+    public function jsRender(): string
     {
         $chain = (new Jquery($this->form))
             ->atkConditionalForm([

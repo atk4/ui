@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Class JsNotify.
  */
 class JsNotify implements JsExpressionable
 {
-    use \atk4\core\DiContainerTrait;
+    use \Atk4\Core\DiContainerTrait;
 
     public $options = [];
     public $attachTo;
@@ -170,12 +170,7 @@ class JsNotify implements JsExpressionable
         return $this;
     }
 
-    /**
-     * Render the notifier.
-     *
-     * @return string
-     */
-    public function jsRender()
+    public function jsRender(): string
     {
         if ($this->attachTo) {
             $final = $this->attachTo->js();

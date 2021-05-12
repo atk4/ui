@@ -2,15 +2,12 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Implements a class that can be mapped into arbitrary JavaScript expression.
  */
 interface JsExpressionable
 {
-    /**
-     * Convert JsExpression into string.
-     */
-    public function jsRender();
+    public function jsRender(): string;
 }

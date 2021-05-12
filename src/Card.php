@@ -22,9 +22,10 @@ declare(strict_types=1);
  * the id available via javascript (new Jquery())->data('id')
  */
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\data\Model;
+use Atk4\Core\Factory;
+use Atk4\Data\Model;
 
 class Card extends View
 {
@@ -177,10 +178,9 @@ class Card extends View
      * If Fields are past with $model that field will be add
      * to the main section of this card.
      *
-     * @param \atk4\data\Model $model  the model
-     * @param array|false      $fields an array of fields name to display in content
+     * @param array|false $fields an array of fields name to display in content
      *
-     * @return \atk4\data\Model|void
+     * @return \Atk4\Data\Model
      */
     public function setModel(Model $model, $fields = null)
     {
@@ -198,7 +198,7 @@ class Card extends View
             $fields = [];
         }
 
-        $this->setDataId($this->model->get($this->model->id_field));
+        $this->setDataId($this->model->getId());
 
         if (is_array($fields)) {
             View::addTo($this->getSection(), [$model->getTitle(), ['class' => 'header']]);
@@ -252,7 +252,7 @@ class Card extends View
      */
     public function addSection(string $title = null, Model $model = null, array $fields = null, bool $useTable = false, bool $useLabel = false)
     {
-        $section = $this->add([$this->cardSection, 'card' => $this], 'Section');
+        $section = CardSection::addToWithCl($this, [$this->cardSection, 'card' => $this], ['Section']);
         if ($title) {
             View::addTo($section, [$title, ['class' => 'header']]);
         }
@@ -280,7 +280,7 @@ class Card extends View
 
             $page->add($executor = new $executor());
 
-            $action->owner->load($id);
+            $action->setEntity($action->getModel()->load($id));
 
             $executor->setAction($action);
         });
@@ -289,25 +289,17 @@ class Card extends View
     }
 
     /**
-     * Add an Event action executor of type 'click' using a button
-     * as target.
-     *
-     * @param []     $args    The action argument
-     * @param string $confirm the confirmation message
-     *
-     * @return Card
+     * Execute Model user action via button in Card.
      */
-    public function addClickAction(Model\UserAction $action, $button = null, $args = [], $confirm = null)
+    public function addClickAction(Model\UserAction $action, Button $button = null, array $args = [], string $confirm = null): self
     {
         $defaults = [];
-        if (!$button) {
-            $button = $action->ui['button'] ?? new Button([$action->caption]);
-        }
-        $btn = $this->addButton($button);
+
+        $btn = $this->addButton($button ?? $this->getExecutorFactory()->createTrigger($action, $this->getExecutorFactory()::CARD_BUTTON));
 
         // Setting arg for model id. $args[0] is consider to hold a model id, i.e. as a js expression.
         if ($this->model && $this->model->loaded() && !isset($args[0])) {
-            $defaults[] = $this->model->id;
+            $defaults[] = $this->model->getId();
         }
 
         if (!empty($args)) {
@@ -316,8 +308,6 @@ class Card extends View
 
         if ($confirm) {
             $defaults['confirm'] = $confirm;
-        } elseif (isset($action->ui['confirm'])) {
-            $defaults['confirm'] = $action->ui['confirm'];
         }
 
         $btn->on('click', $action, $defaults);
@@ -327,15 +317,9 @@ class Card extends View
 
     /**
      * Set extra content using model field.
-     *
-     * @param Model  $model  The model
-     * @param array  $fields an array of fields name
-     * @param string $glue   a separator string between each field
      */
-    public function addExtraFields(Model $model, $fields, $glue = null)
+    public function addExtraFields(Model $model, array $fields, string $glue = null)
     {
-        $this->setModel($model, false);
-
         // display extra field in line.
         if ($glue) {
             $extra = '';
@@ -395,8 +379,7 @@ class Card extends View
     /**
      * Add button to card.
      *
-     * @param Button $button  a Button
-     * @param bool   $isFluid make the buttons spread evenly in Card
+     * @param Button $button a Button
      *
      * @return View|null
      */
@@ -407,7 +390,7 @@ class Card extends View
         }
 
         if (!is_object($button)) {
-            $button = $this->factory([Button::class], $button);
+            $button = Factory::factory([Button::class], $button);
         }
 
         $btn = $this->getButtonContainer()->add($button);

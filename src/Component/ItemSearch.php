@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Component;
+namespace Atk4\Ui\Component;
 
-use atk4\data\Model;
-use atk4\ui\JsVueService;
-use atk4\ui\View;
+use Atk4\Data\Model;
+use Atk4\Ui\JsVueService;
+use Atk4\Ui\View;
 
 /**
  * Will send query with define callback and reload a specific view.
@@ -84,7 +84,7 @@ class ItemSearch extends View
     public function setModelCondition(Model $model): Model
     {
         if ($q = $this->getQuery()) {
-            $model->addCondition('name', 'like', '%' . $q . '%');
+            $model->addCondition($model->title_field, 'like', '%' . $q . '%');
         }
 
         return $model;
@@ -93,7 +93,6 @@ class ItemSearch extends View
     protected function renderView(): void
     {
         $this->class = [];
-        $this->template->set('inputCss', $this->inputCss);
         parent::renderView();
 
         // reloadId is the view id selector name that need to be reload.
@@ -113,7 +112,10 @@ class ItemSearch extends View
                 'url' => $this->reload->jsUrl(),
                 'q' => $this->q,
                 'context' => $this->context,
-                'options' => ['inputTimeOut' => $this->inputTimeOut],
+                'options' => [
+                    'inputTimeOut' => $this->inputTimeOut,
+                    'inputCss' => $this->inputCss,
+                ],
             ]
         ));
     }

@@ -10,13 +10,14 @@ declare(strict_types=1);
  * This view must implement a callback for content to be add via the callback function.
  */
 
-namespace atk4\ui\Panel;
+namespace Atk4\Ui\Panel;
 
-use atk4\ui\Button;
-use atk4\ui\Jquery;
-use atk4\ui\JsExpression;
-use atk4\ui\Modal;
-use atk4\ui\View;
+use Atk4\Core\Factory;
+use Atk4\Ui\Button;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsExpression;
+use Atk4\Ui\Modal;
+use Atk4\Ui\View;
 
 class Right extends View implements Loadable
 {
@@ -55,7 +56,7 @@ class Right extends View implements Loadable
     {
         parent::init();
         if ($this->dynamic) {
-            $this->addDynamicContent($this->factory($this->dynamic));
+            $this->addDynamicContent(Factory::factory($this->dynamic));
         }
     }
 
@@ -77,12 +78,10 @@ class Right extends View implements Loadable
 
     /**
      * Return js expression in order to retrieve panelService.
-     *
-     * @return mixed
      */
     public function service(): JsExpression
     {
-        return new \atk4\ui\JsChain('atk.panelService');
+        return new \Atk4\Ui\JsChain('atk.panelService');
     }
 
     /**
@@ -91,8 +90,6 @@ class Right extends View implements Loadable
      * @param array        $args      the data attribute name to include in reload from the triggering element
      * @param string|null  $activeCss the css class name to apply on triggering element when panel is open
      * @param JsExpression $jsTrigger JsExpression that trigger panel to open. Default = $(this).
-     *
-     * @return mixed
      */
     public function jsOpen(array $args = [], string $activeCss = null, JsExpression $jsTrigger = null): JsExpression
     {
@@ -106,8 +103,6 @@ class Right extends View implements Loadable
 
     /**
      * Will reload panel passing args as Get param via js flyoutService.
-     *
-     * @return mixed
      */
     public function jsPanelReload(array $args = []): JsExpression
     {
@@ -116,8 +111,6 @@ class Right extends View implements Loadable
 
     /**
      * Return js expression need to close panel via js panelService.
-     *
-     * @return mixed
      */
     public function jsClose(): JsExpression
     {
@@ -138,10 +131,10 @@ class Right extends View implements Loadable
         if (!$cancelBtn) {
             $cancelBtn = (new Button(['Cancel']))->addClass('cancel');
         }
-        $this->closeModal = $this->app->add(array_merge($this->defaultModal, ['title' => $title]));
+        $this->closeModal = $this->getApp()->add(array_merge($this->defaultModal, ['title' => $title]));
         $this->closeModal->add([View::class, $msg, 'element' => 'p']);
-        $this->closeModal->addButtonAction($this->factory($okBtn));
-        $this->closeModal->addButtonAction($this->factory($cancelBtn));
+        $this->closeModal->addButtonAction(Factory::factory($okBtn));
+        $this->closeModal->addButtonAction(Factory::factory($cancelBtn));
 
         $this->closeModal->notClosable();
     }
@@ -157,8 +150,6 @@ class Right extends View implements Loadable
 
     /**
      * Display or not a Warning sign in Panel.
-     *
-     * @param string $selector
      *
      * @return Jquery
      */
@@ -212,7 +203,7 @@ class Right extends View implements Loadable
         $this->js(true, $this->service()->addPanel($this->getPanelOptions()));
     }
 
-    protected function mergeStickyArgsFromChildView(): ?\atk4\ui\AbstractView
+    protected function mergeStickyArgsFromChildView(): ?\Atk4\Ui\AbstractView
     {
         return $this->dynamicContent;
     }

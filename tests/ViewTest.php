@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\core\Exception;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Exception;
 
 class ViewTest extends AtkPhpunit\TestCase
 {
     /**
      * Test redering multiple times.
      */
-    public function testMultipleRender()
+    public function testMultipleRender(): void
     {
-        $v = new \atk4\ui\View();
+        $v = new \Atk4\Ui\View();
         $v->set('foo');
 
         $a = $v->render();
@@ -22,15 +22,15 @@ class ViewTest extends AtkPhpunit\TestCase
         $this->assertSame($a, $b);
     }
 
-    public function testAddAfterRender()
+    public function testAddAfterRender(): void
     {
         $this->expectException(Exception::class);
 
-        $v = new \atk4\ui\View();
+        $v = new \Atk4\Ui\View();
         $v->set('foo');
 
         $a = $v->render();
-        \atk4\ui\View::addTo($v);  // this should fail. No adding after rendering.
+        \Atk4\Ui\View::addTo($v);  // this should fail. No adding after rendering.
         $b = $v->render();
         $this->assertSame($a, $b);
     }

@@ -5,7 +5,7 @@
 Grid
 ====
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 .. php:class:: Grid
 
 If you didn't read documentation on :ref:`table` you should start with that. While table implements the actual
@@ -25,12 +25,12 @@ To make your grid look nicer, you might want to add some buttons and enable quic
     $grid->setModel(new Country($db));
 
     $grid->addQuickSearch();
-    $grid->menu->addItem('Reload Grid', new \atk4\ui\JsReload($grid));
+    $grid->menu->addItem('Reload Grid', new \Atk4\Ui\JsReload($grid));
 
 Adding Menu Items
 =================
 
-.. php:attr:: $menu
+.. php:attr:: menu
 
 .. php:method: addButton($label)
 
@@ -52,7 +52,7 @@ If you don't need menu, you can disable menu bar entirely::
 Adding Quick Search
 ===================
 
-.. php:attr:: $quickSearch
+.. php:attr:: quickSearch
 
 .. php:method: addQuickSearch($fields = [], $hasAutoQuery = false)
 
@@ -72,9 +72,9 @@ querying the server automatically, i.e. after the user has finished typing, by s
 Paginator
 =========
 
-.. php:attr:: $paginator
+.. php:attr:: paginator
 
-.. php:attr:: $ipp
+.. php:attr:: ipp
 
 Grid comes with a paginator already. You can disable it by setting $paginator property to false. Alternatively you
 can provide seed for the paginator or even entire object::
@@ -127,14 +127,14 @@ to populate a content::
     $grid->addModalAction('Details', 'Additional Details', function($p, $id) use ($grid) {
 
         // $id of the record which was clicked
-        // $grid->model->load($id);
+        // $grid->model = $grid->model->load($id);
 
         LoremIpsum::addTo($p);
     });
 
 Calling this method multiple times will add button into same action column.
 
-See :php:meth:`atk4\\ui\\Table\\Column\\Actions::addModal`
+See :php:meth:`Atk4\\Ui\\Table\\Column\\Actions::addModal`
 
 
 Column Menus
@@ -144,8 +144,8 @@ Column Menus
 
 .. php:method:: addPopup($columnName, $popup = null, $icon = 'caret square down')
 
-Methods addDropdown and addPopup provide a wrapper for :php:meth:`atk4\\ui\\Table\\Column::addDropdown` and
-:php:meth:`atk4\\ui\\\Table\\Column::addPopup` methods.
+Methods addDropdown and addPopup provide a wrapper for :php:meth:`Atk4\\Ui\\Table\\Column::addDropdown` and
+:php:meth:`Atk4\\Ui\\\Table\\Column::addPopup` methods.
 
 Selection
 =========
@@ -155,14 +155,14 @@ additionally place this column before any other column inside a grid. You can us
 method to reference value of selected checkboxes inside any :ref:`js_action`::
 
     $sel = $grid->addSelection();
-    $grid->menu->addItem('show selection')->on('click', new \atk4\ui\JsExpression(
+    $grid->menu->addItem('show selection')->on('click', new \Atk4\Ui\JsExpression(
         'alert("Selected: "+[])', [$sel->jsChecked()]
     ));
 
 Sorting
 =======
 
-.. php:attr:: $sortable
+.. php:attr:: sortable
 
 When grid is associated with a model that supports order, it will automatically make itself sortable. You can
 override this behaviour by setting $sortable property to `true` or `false`.
@@ -176,6 +176,6 @@ See also :php:attr:`Table::$sortable`.
 Advanced Usage
 ==============
 
-.. php:attr:: $table
+.. php:attr:: table
 
 You can use a different component instead of default :php:class:`Table` by injecting $table property.

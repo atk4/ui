@@ -8,12 +8,12 @@ understand :ref:`callback`.
 
 .. php:class:: VirtualPage
 
-Unlike any of the Callback classes, VirtualPage is a legit :php:class:`View`, but it's behaviour is a little
+Unlike any of the Callback classes, VirtualPage is a legitimate :php:class:`View`, but it's behavior is a little
 "different". In normal circumstances, rendering VirtualPage will result in empty string. Adding VirtualPage
 anywhere inside your :ref:`render_tree` simply won't have any visible effect::
 
-    $vp = \atk4\ui\VirtualPage::addTo($layout);
-    \atk4\ui\LoremIpsum::addTo($vp);
+    $vp = \Atk4\Ui\VirtualPage::addTo($layout);
+    \Atk4\Ui\LoremIpsum::addTo($vp);
 
 However, VirtualPage has a special trigger argument. If found, then VirtualPage will interrupt normal rendering
 progress and output HTML of itself and any other Components you added to that page.
@@ -29,7 +29,7 @@ This pattern is very easy to implement and is used by many components to transpa
 Next is an example where :php:class:`Tabs` has support for call-back for generating dynamic content for the tab::
 
     $tabs->addTab('Dynamic Tab Content', function($vp) {
-        \atk4\ui\LoremIpsum::addTo($vp);
+        \Atk4\Ui\LoremIpsum::addTo($vp);
     });
 
 Using VirtualPage inside your component can significantly enhance usability without introducing any complexity
@@ -38,15 +38,15 @@ for developers.
 (For situations when Component does not natively support VirtualPage, you can still use :php:class:`Loader`, documented
 below).
 
-.. php:attr:: $cb
+.. php:attr:: cb
 
-VirtuaPage relies on :php:class:`CallbackLater` object, which is stored in a property $cb. If the Calllback is triggered
+VirtuaPage relies on :php:class:`CallbackLater` object, which is stored in a property $cb. If the Callback is triggered
 through a GET argument, then VirtualPage will change it's rendering technique. Lets examine it in more detail::
 
-    $vp = \atk4\ui\VirtualPage::addTo($layout);
-    \atk4\ui\LoremIpsum::addTo($vp);
+    $vp = \Atk4\Ui\VirtualPage::addTo($layout);
+    \Atk4\Ui\LoremIpsum::addTo($vp);
 
-    $label = \atk4\ui\Label::addTo($layout);
+    $label = \Atk4\Ui\Label::addTo($layout);
 
     $label->detail = $vp->cb->getUrl();
     $label->link($vp->cb->getUrl());
@@ -54,7 +54,7 @@ through a GET argument, then VirtualPage will change it's rendering technique. L
 This code will only show the link containing a URL, but will not show LoremIpsum text.  If you do follow the link, you'll
 see only the 'LoremIpsum' text.
 
-.. php:attr:: $urlTrigger
+.. php:attr:: urlTrigger
 
 See :php:attr:`Callback::urlTrigger`.
 
@@ -82,12 +82,12 @@ Setting Callback
 
 Although VirtualPage can work without defining a callback, using one is more reliable and is always recommended::
 
-    $vp = \atk4\ui\VirtualPage::addTo($layout);
+    $vp = \Atk4\Ui\VirtualPage::addTo($layout);
     $vp->set(function($vp){
-        \atk4\ui\LoremIpsum::addTo($vp);
+        \Atk4\Ui\LoremIpsum::addTo($vp);
     });
 
-    $label = \atk4\ui\Label::addTo($layout);
+    $label = \Atk4\Ui\Label::addTo($layout);
 
     $label->detail = $vp->cb->getUrl();
     $label->link($vp->cb->getUrl());
@@ -98,25 +98,25 @@ also makes it possible for VirtualPage to be embedded into any :ref:`component` 
 
 To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the following code::
 
-    $t = \atk4\ui\Tabs::addTo($layout);
+    $t = \Atk4\Ui\Tabs::addTo($layout);
 
-    \atk4\ui\LoremIpsum::addTo($t->addTab('Tab1')); // regular tab
-    $t->addTab('Tab2', function($p){ \atk4\ui\LoremIpsum::addTo($p); }); // dynamic tab
+    \Atk4\Ui\LoremIpsum::addTo($t->addTab('Tab1')); // regular tab
+    $t->addTab('Tab2', function($p){ \Atk4\Ui\LoremIpsum::addTo($p); }); // dynamic tab
 
 .. php:method:: getUrl($html_wrapping)
 
     You can use this shortcut method instead of $vp->cb->getUrl().
 
-.. php:attr:: $ui
+.. php:attr:: ui
 
 When using 'popup' mode, the output appears inside a `<div class="ui container">`. If you want to change this
 class, you can set $ui property to something else. Try::
 
-    $vp = \atk4\ui\VirtualPage::addTo($layout);
-    \atk4\ui\LoremIpsum::addTo($vp);
+    $vp = \Atk4\Ui\VirtualPage::addTo($layout);
+    \Atk4\Ui\LoremIpsum::addTo($vp);
     $vp->ui = 'red inverted segment';
 
-    $label = \atk4\ui\Label::addTo($layout);
+    $label = \Atk4\Ui\Label::addTo($layout);
 
     $label->detail = $vp->cb->getUrl('popup');
     $label->link($vp->cb->getUrl('popup'));
@@ -141,12 +141,12 @@ Loader extends VirtualPage and is quite similar to it.
 Like with a VirtualPage - you should use `set()` to define content that will be loaded dynamically,
 while a spinner is shown to a user::
 
-    $loader = \atk4\ui\Loader::addTo($app);
+    $loader = \Atk4\Ui\Loader::addTo($app);
     $loader->set(function($p) {
 
         // Simulate slow-loading component
         sleep(2);
-        \atk4\ui\LoremIpsum::addTo($p);
+        \Atk4\Ui\LoremIpsum::addTo($p);
 
     });
 
@@ -154,17 +154,17 @@ while a spinner is shown to a user::
 A good use-case example would be a dashboard graph. Unlike VirtualPage which is not visible to a regular render,
 Loader needs to occupy some space.
 
-.. php:attr:: $shim
+.. php:attr:: shim
 
 By default it will display a white segment with 7em height, but you can specify any other view thorugh $shim
 property::
 
-    $loader = \atk4\ui\Loader::addTo($app, ['shim'=>['Message', 'Please wait until we load LoremIpsum...', 'red']]);
+    $loader = \Atk4\Ui\Loader::addTo($app, ['shim'=>['Message', 'Please wait until we load LoremIpsum...', 'red']]);
     $loader->set(function($p) {
 
         // Simulate slow-loading component
         sleep(2);
-        \atk4\ui\LoremIpsum::addTo($p);
+        \Atk4\Ui\LoremIpsum::addTo($p);
 
     });
 
@@ -184,7 +184,7 @@ Returns JS action which will trigger loading. The action will be carried out in 
 - Content will be placed inside Loader's DIV replacing shiv (or previously loaded content)
 - loading indicator will is hidden
 
-.. php:attr:: $loadEvent = null
+.. php:attr:: loadEvent = null
 
 If you have NOT invoked jsLoad in your code, Loader will automatically assign it do DOM Ready(). If the automatic
 behaviour does not work, you should set value for $loadEvent:
@@ -196,14 +196,14 @@ behaviour does not work, you should set value for $loadEvent:
 
 To indicate how custom binding works::
 
-    $loader = \atk4\ui\Loader::addTo($app, ['loadEvent' => 'kaboom']);
+    $loader = \Atk4\Ui\Loader::addTo($app, ['loadEvent' => 'kaboom']);
 
     $loader->set(function($p){
-        \atk4\ui\LoremIpsum::addTo($p);
+        \Atk4\Ui\LoremIpsum::addTo($p);
     });
 
 
-    \atk4\ui\Button::addTo($app, ['Load data'])->on('click', $loader->js()->trigger('kaboom'));
+    \Atk4\Ui\Button::addTo($app, ['Load data'])->on('click', $loader->js()->trigger('kaboom'));
 
 This approach allow you to trigger loader from inside JavaScript easily. See also: https://api.jquery.com/trigger/
 
@@ -216,31 +216,31 @@ If you execute :php:class:`JsReload` action on the Loader, it will return to ori
 Inline Editing Example
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Next example will display DataTable, but will allow you to repalce data with a form temporarily::
+Next example will display DataTable, but will allow you to replace data with a form temporarily::
 
 
-    $box = \atk4\ui\View::addTo($app, ['ui'=>'segment']);
+    $box = \Atk4\Ui\View::addTo($app, ['ui'=>'segment']);
 
-    $loader = \atk4\ui\Loader::addTo($box, ['loadEvent'=>'edit']);
-    \atk4\ui\Table::addTo($loader)
+    $loader = \Atk4\Ui\Loader::addTo($box, ['loadEvent'=>'edit']);
+    \Atk4\Ui\Table::addTo($loader)
         ->setModel($data)
         ->addCondition('year', $app->stickyGet('year'));
 
-    \atk4\ui\Button::addTo($box, ['Edit Data Settings'])->on('click', $loader->js()->trigger('edit'));
+    \Atk4\Ui\Button::addTo($box, ['Edit Data Settings'])->on('click', $loader->js()->trigger('edit'));
 
     $loader->set(function($p) use($loader) {
-        $form = \atk4\ui\Form::addTo($p);
+        $form = \Atk4\Ui\Form::addTo($p);
         $form->addControl('year');
 
         $form->onSubmit(function($form) use ($loader) {
-            return new \atk4\ui\JsReload($loader, ['year'=>$form->model->get('year')]);
+            return new \Atk4\Ui\JsReload($loader, ['year'=>$form->model->get('year')]);
         });
     });
 
 Progress Bar
 ^^^^^^^^^^^^
 
-.. php:attr:: $progressBar = null
+.. php:attr:: progressBar = null
 
 Loader can have a progress bar. Imagine that your Loader has to run slow process 4 times::
 
@@ -251,7 +251,7 @@ Loader can have a progress bar. Imagine that your Loader has to run slow process
 
 You can notify user about this progress through a simple code::
 
-    $loader = \atk4\ui\Loader::addTo($app, ['progressBar'=>true]);
+    $loader = \Atk4\Ui\Loader::addTo($app, ['progressBar'=>true]);
     $loader->set(function($p) {
 
         // Simulate slow-loading component
@@ -263,7 +263,7 @@ You can notify user about this progress through a simple code::
         $p->setProgress(0.75);
         sleep(1);
 
-        \atk4\ui\LoremIpsum::addTo($p);
+        \Atk4\Ui\LoremIpsum::addTo($p);
 
     });
 

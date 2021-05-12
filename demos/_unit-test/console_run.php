@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\JsSse;
+use Atk4\Ui\JsSse;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/** @var \atk4\ui\View $testRunClass */
-$testRunClass = get_class(new class() extends \atk4\ui\View {
-    use \atk4\core\DebugTrait;
+/** @var \Atk4\Ui\View $testRunClass */
+$testRunClass = get_class(new class() extends \Atk4\Ui\View {
+    use \Atk4\Core\DebugTrait;
 
     public function test()
     {
@@ -32,5 +32,5 @@ $testRunClass = get_class(new class() extends \atk4\ui\View {
 $sse = JsSse::addTo($app);
 $sse->setUrlTrigger('console_test');
 
-$console = \atk4\ui\Console::addTo($app, ['sse' => $sse]);
+$console = \Atk4\Ui\Console::addTo($app, ['sse' => $sse]);
 $console->runMethod($testRunClass::addTo($app), 'test');

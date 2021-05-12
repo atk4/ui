@@ -1,21 +1,23 @@
 <template>
     <!-- eslint-disable vue/no-v-html -->
-    <div class="vqb-rule ui fluid card" :class="labels.spaceRule">
+    <div class="vqb-rule ui fluid card" :class="labels.spaceRule" :data-name="rule.id">
         <div class="content">
             <div class="ui grid">
                 <div class="middle aligned row atk-qb">
                     <div class="thirteen wide column">
                         <div class="ui horizontal list">
-                            <div class="item">
+                            <div class="item vqb-rule-label">
                                 <h5 class>{{ rule.label }}</h5>
                             </div>
-                            <div class="item" v-if="typeof rule.operands !== 'undefined'">
+                            <div class="item vqb-rule-operand" v-if="typeof rule.operands !== 'undefined'">
                                 <!-- List of operands (optional) -->
                                 <select v-model="query.operand" class="atk-qb-select">
                                     <option v-for="operand in rule.operands" :key="operand">{{ operand }}</option>
                                 </select>
                             </div>
-                            <div class="item" v-if="typeof rule.operators !== 'undefined' && rule.operators.length > 1">
+                            <div class="item vqb-rule-operator"
+                                 v-if="typeof rule.operators !== 'undefined'
+                                 && rule.operators.length > 1">
                                 <!-- List of operators (e.g. =, !=, >, <) -->
                                 <select v-model="query.operator" class="atk-qb-select">
                                     <option v-for="operator in rule.operators" :key="operator" :value="operator">
@@ -23,7 +25,7 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="item">
+                            <div class="item vqb-rule-input">
                                 <!-- text input -->
                                 <template v-if="canDisplay('input')">
                                     <div class="ui small input atk-qb" >
@@ -32,18 +34,6 @@
                                                 :type="rule.inputType"
                                                 :placeholder="labels.textInputPlaceholder"
                                         >
-                                    </div>
-                                </template>
-                                <!-- Date input -->
-                                <template v-if="canDisplay('date')">
-                                    <div class="ui small input atk-qb">
-                                        <v-date-picker
-                                                :locale='dateLocale'
-                                                :input-props="{class: 'atk-qb-date-picker'}"
-                                                v-model="dateValue"
-                                                :masks="dateMask"
-                                                :popover="{ placement: 'bottom', visibility: 'click' }"
-                                                ref="dateRef"></v-date-picker>
                                     </div>
                                 </template>
                                 <!-- Checkbox or Radio input -->
@@ -65,11 +55,23 @@
                                         <option
                                             v-for="choice in rule.choices"
                                             :key="choice.value"
-                                            :value="choice.label">
+                                            :value="choice.value">
                                             {{choice.label}}
                                         </option>
                                     </select>
                                 </template>
+                              <!-- Custom component -->
+                              <template v-if="canDisplay('custom-component')">
+                                <div class="ui small input atk-qb">
+                                  <component :is="rule.component"
+                                      :config="rule.componentProps"
+                                      :value="query.value"
+                                      :optionalValue="query.option"
+                                      @onChange="onChange"
+                                      @setDefault="onChange">
+                                  </component>
+                                </div>
+                              </template>
                             </div>
                         </div>
                     </div>
@@ -85,30 +87,22 @@
 
 <script>
 import QueryBuilderRule from 'vue-query-builder/dist/rule/QueryBuilderRule.umd';
+import AtkDatePicker from '../share/atk-date-picker';
+import AtkLookup from '../share/atk-lookup';
 
 export default {
     extends: QueryBuilderRule,
-    component: {
-    },
+    components: { 'atk-date-picker': AtkDatePicker, 'atk-lookup': AtkLookup },
     data: function () {
-        return {
-            dateMask: { input: this.rule.format ? this.rule.format : 'YYYY-MM-DD' },
-            dateLocale: this.rule.locale ? this.rule.locale : 'en-En',
-        };
+        return {};
     },
-    mounted: function () {
-        if (this.isDatePicker) {
-            this.$nextTick(() => {
-                this.dateValue = this.getDateFromString(this.query.value);
-            });
-        }
-    },
+    inject: ['getRootData'],
     computed: {
         isInput: function () {
             return this.rule.type === 'text' || this.rule.type === 'numeric';
         },
-        isDatePicker: function () {
-            return this.rule.type === 'custom-component' && this.rule.component === 'DatePicker';
+        isComponent: function () {
+            return this.rule.type === 'custom-component';
         },
         isRadio: function () {
             return this.rule.type === 'radio';
@@ -118,14 +112,6 @@ export default {
         },
         isSelect: function () {
             return this.rule.type === 'select';
-        },
-        dateValue: {
-            get: function () {
-                return this.getDateFromString(this.query.value);
-            },
-            set: function (date) {
-                this.query.value = date ? atk.phpDate('Y-m-d', date) : '';
-            },
         },
     },
     methods: {
@@ -143,28 +129,21 @@ export default {
 
             switch (type) {
             case 'input': return this.isInput;
-            case 'date': return this.isDatePicker;
             case 'checkbox': return this.isCheckbox;
             case 'select': return this.isSelect;
+            case 'custom-component': return this.isComponent;
             default: return false;
             }
         },
-        getDateFromString: function (dateString) {
-            if (dateString) {
-                // fix date parsing for different time zone if time is not supply.
-                if (dateString.match(/^[0-9]{4}[/\-.][0-9]{2}[/\-.][0-9]{2}$/)) {
-                    dateString += ' 00:00:00';
-                }
-                return new Date(dateString);
-            }
-            return new Date();
+        onChange: function (value) {
+            this.query.value = value;
         },
     },
 };
 </script>
 
 <style>
-    .ui.input.atk-qb > input, .ui.input.atk-qb > span > input, .ui.form .input.atk-qb {
+    .ui.input.atk-qb > input, .ui.input.atk-qb span > input, .ui.form .input.atk-qb {
         padding: 6px;
     }
     .ui.grid > .row.atk-qb {

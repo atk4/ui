@@ -2,21 +2,22 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\data\Model;
-use atk4\ui\Table;
+use Atk4\Data\Model;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Table;
 
 /**
  * Implements Column helper for grid.
  * Use
  *   new Link('http://yahoo.com?id={$id}');
  * or
- *   new Link(['order', 'id'=>'id' ]);
+ *   new Link(['order', 'id' => 'id' ]);
  * or
  *   new Link(['order', 'id' ]);
  * or
- *   new Link([['order', 'x'=>$myval], 'id' ]);.
+ *   new Link([['order', 'x' => $myval], 'id' ]);.
  */
 class Link extends Table\Column
 {
@@ -31,9 +32,9 @@ class Link extends Table\Column
     /**
      * If string 'example', then will be passed to $app->url('example') along with any defined arguments.
      * If set as arrray, then non-0 key/values will be also passed to the URL:
-     *  $page = ['example', 'type'=>'123'];.
+     *  $page = ['example', 'type' => '123'];.
      *
-     * $url = $app->url(['example', 'type'=>'123']);
+     * $url = $app->url(['example', 'type' => '123']);
      *
      * In addition to abpove "args" refer to values picked up from a current row.
      */
@@ -41,12 +42,12 @@ class Link extends Table\Column
 
     /**
      * When constructing a URL using 'page', this specifies list of values which will be added
-     * to the destination URL. For example if you set $args = ['document_id'=>'id'] then row value
+     * to the destination URL. For example if you set $args = ['document_id' => 'id'] then row value
      * of ['id'] will be added to url's property "document_id".
      *
      * For a full example:
-     *  $page = ['example', 'type'=>'client'];
-     *  $args = ['contact_id'=>'id'];
+     *  $page = ['example', 'type' => 'client'];
+     *  $args = ['contact_id' => 'id'];
      *
      * Link URL will be "example.php?type=client&contact_id=4"
      *
@@ -108,7 +109,8 @@ class Link extends Table\Column
         if (isset($properties[0])) {
             $this->args = array_shift($properties);
         }
-        parent::setDefaults($properties);
+
+        return parent::setDefaults($properties);
     }
 
     protected function init(): void
@@ -116,14 +118,14 @@ class Link extends Table\Column
         parent::init();
 
         if (is_string($this->url)) {
-            $this->url = new \atk4\ui\Template($this->url);
+            $this->url = new HtmlTemplate($this->url);
         }
         if (is_string($this->page)) {
             $this->page = [$this->page];
         }
     }
 
-    public function getDataCellTemplate(\atk4\data\Field $field = null)
+    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
     {
         $download = $this->force_download ? ' download="true" ' : '';
         $external = $this->target ? ' target="' . $this->target . '" ' : '';
@@ -151,9 +153,9 @@ class Link extends Table\Column
     {
         // Decide on the content
         if ($this->url) {
-            $rowValues = $this->app->ui_persistence ? $this->app->ui_persistence->typecastSaveRow($row, $row->get()) : $row->get();
+            $rowValues = $this->getApp()->ui_persistence ? $this->getApp()->ui_persistence->typecastSaveRow($row, $row->get()) : $row->get();
 
-            return ['c_' . $this->short_name => $this->url->set($rowValues)->render()];
+            return ['c_' . $this->short_name => $this->url->set($rowValues)->renderToHtml()];
         }
 
         $p = $this->page ?: [];

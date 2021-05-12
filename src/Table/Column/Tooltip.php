@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\data\Field;
-use atk4\data\Model;
-use atk4\ui\Exception;
-use atk4\ui\Table;
+use Atk4\Data\Field;
+use Atk4\Data\Model;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Table;
 
 /**
  * Class Tooltip.
@@ -15,9 +15,9 @@ use atk4\ui\Table;
  * column to add a little icon to show on hover a text
  * text is taken by the Row Model in $tooltip_field
  *
- * @usage   : $crud->addDecorator('paid_date',  new \atk4\ui\Table\Column\Tooltip('note'));
+ * @usage   : $crud->addDecorator('paid_date',  new \Atk4\Ui\Table\Column\Tooltip('note'));
  *
- * @usage   : $crud->addDecorator('paid_date',  new \atk4\ui\Table\Column\Tooltip('note','error red'));
+ * @usage   : $crud->addDecorator('paid_date',  new \Atk4\Ui\Table\Column\Tooltip('note','error red'));
  */
 class Tooltip extends Table\Column
 {
@@ -58,8 +58,8 @@ class Tooltip extends Table\Column
             $extra_tags['class'] = implode(' ', $extra_tags['class']);
         }
 
-        return $this->app->getTag('td', $extra_tags, [
-            ' {$' . $field->short_name . '}' . $this->app->getTag('span', [
+        return $this->getApp()->getTag('td', $extra_tags, [
+            ' {$' . $field->short_name . '}' . $this->getApp()->getTag('span', [
                 'class' => 'ui icon link {$_' . $field->short_name . '_data_visible_class}',
                 'data-tooltip' => '{$_' . $field->short_name . '_data_tooltip}',
             ], [

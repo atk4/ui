@@ -14,25 +14,25 @@ declare(strict_types=1);
  * see demos/tree-item-selector.php to see how tree items are build.
  */
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
-use atk4\ui\Form;
-use atk4\ui\JsCallback;
-use atk4\ui\Template;
+use Atk4\Ui\Form;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\JsCallback;
 
 class TreeItemSelector extends Form\Control
 {
     /**
      * Template for the item selector view.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $itemSelectorTemplate;
 
     /**
      * The tree item selector View.
      *
-     * @var \atk4\ui\View|null
+     * @var \Atk4\Ui\View|null
      */
     public $itemSelector;
 
@@ -83,10 +83,10 @@ class TreeItemSelector extends Form\Control
         $this->addClass(['ui', 'vertical', 'segment', 'basic', $this->loaderCssName])->addStyle(['padding' => '0px!important']);
 
         if (!$this->itemSelectorTemplate) {
-            $this->itemSelectorTemplate = new Template('<div id="{$_id}" class="ui list" style="margin-left: 16px"><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
+            $this->itemSelectorTemplate = new HtmlTemplate('<div id="{$_id}" class="ui list" style="margin-left: 16px"><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
-        $this->itemSelector = \atk4\ui\View::addTo($this, ['template' => $this->itemSelectorTemplate]);
+        $this->itemSelector = \Atk4\Ui\View::addTo($this, ['template' => $this->itemSelectorTemplate]);
     }
 
     /**
@@ -99,7 +99,10 @@ class TreeItemSelector extends Form\Control
     public function onItem(\Closure $fx)
     {
         $this->cb = JsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
-            $value = $this->allowMultiple ? json_decode($data, true) : json_decode($data, true)[0];
+            $value = $this->getApp()->decodeJson($data);
+            if (!$this->allowMultiple) {
+                $value = $value[0];
+            }
 
             return $fx($value);
         }, ['data' => 'value']);
@@ -126,7 +129,7 @@ class TreeItemSelector extends Form\Control
      */
     public function getInput()
     {
-        return $this->app->getTag('input', [
+        return $this->getApp()->getTag('input', [
             'name' => $this->short_name,
             'type' => 'hidden',
             'value' => $this->getValue(),
@@ -136,14 +139,14 @@ class TreeItemSelector extends Form\Control
 
     public function getValue()
     {
-        return $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get());
+        return $this->getApp()->ui_persistence->typecastSaveField($this->field, $this->field->get());
     }
 
     protected function renderView(): void
     {
         parent::renderView();
 
-        $this->itemSelector->template->trySetHtml('Input', $this->getInput());
+        $this->itemSelector->template->tryDangerouslySetHtml('Input', $this->getInput());
 
         $this->itemSelector->vue(
             'atk-tree-item-selector',

@@ -2,32 +2,33 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\core\NameTrait;
-use atk4\core\SessionTrait;
-use atk4\data\Field;
-use atk4\data\Persistence;
+use Atk4\Core\NameTrait;
+use Atk4\Core\SessionTrait;
+use Atk4\Data\Field;
+use Atk4\Data\Model;
+use Atk4\Data\Persistence;
 
 /**
  * Implement a generic filter model for filtering column data.
  */
-class FilterModel extends \atk4\data\Model
+class FilterModel extends Model
 {
-    use SessionTrait;
     use NameTrait; // needed for SessionTrait
+    use SessionTrait;
 
     /**
      * The operator for defining a condition on a field.
      *
-     * @var
+     * @var Field
      */
     public $op;
 
     /**
      * The value for defining a condition on a field.
      *
-     * @var
+     * @var Field
      */
     public $value;
 
@@ -47,13 +48,8 @@ class FilterModel extends \atk4\data\Model
 
     /**
      * Factory method that will return a FilterModel Type class.
-     *
-     * @param Field       $field
-     * @param Persistence $persistence
-     *
-     * @return mixed
      */
-    public static function factoryType($field)
+    public static function factoryType(Field $field): self
     {
         $persistence = new Persistence\Array_();
         $filterDomain = self::class . '\\Type';
@@ -69,7 +65,7 @@ class FilterModel extends \atk4\data\Model
          * Field class and setting your filter model class.
          */
         if (!empty($field->filterModel) && isset($field->filterModel)) {
-            if ($field->filterModel instanceof \atk4\data\Model) {
+            if ($field->filterModel instanceof self) {
                 return $field->filterModel;
             }
             $class = $field->filterModel;

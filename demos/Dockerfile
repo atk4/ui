@@ -26,12 +26,12 @@ RUN npm install -g less clean-css
 COPY js js
 COPY public public
 
-RUN (cd js && npm install && npm run build)
+RUN (cd js && npm ci && npm run build)
 RUN (cd public && lessc agileui.less agileui.css)
 
 ADD composer.json .
 RUN jq 'del(."require-release")|del(."require-dev")' < composer.json > tmp && mv tmp composer.json \
-    && composer require --no-update fzaninotto/faker \
+    && composer require --no-update fzaninotto/faker:^1.6 \
     && composer install --no-dev
 
 RUN echo 'disable_functions = pcntl_exec,exec,passthru,proc_open,shell_exec,system,popen/g' >> "$PHP_INI_DIR/php.ini"

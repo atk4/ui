@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Virtual page normally does not render, yet it has it's own trigger and will respond
@@ -17,9 +17,6 @@ class VirtualPage extends View
 {
     /** @var Callback */
     public $cb;
-
-    /** @var \Closure Optional callback function of virtual page */
-    public $fx;
 
     /** @var string specify custom callback trigger for the URL (see Callback::$urlTrigger) */
     public $urlTrigger;
@@ -40,26 +37,18 @@ class VirtualPage extends View
     /**
      * Set callback function of virtual page.
      *
-     * Note that only one callback function can be defined.
-     *
-     * @param array $fx   Need this to be defined as array otherwise we get warning in PHP7
-     * @param mixed $junk
+     * @param \Closure $fx
+     * @param array    $args arguments for \Closure
      *
      * @return $this
      */
-    public function set($fx = [], $junk = null)
+    public function set($fx = null, $args = [])
     {
-        if (!$fx) {
-            return $this;
+        if (!$fx || !$fx instanceof \Closure) {
+            throw new Exception('Virtual page requires a Closure.');
         }
 
-        if ($this->fx) {
-            throw (new Exception('Callback for this Virtual Page is already defined'))
-                ->addMoreInfo('vp', $this)
-                ->addMoreInfo('old_fx', $this->fx)
-                ->addMoreInfo('new_fx', $fx);
-        }
-        $this->fx = $fx;
+        $this->cb->set($fx, array_merge([$this], $args));
 
         return $this;
     }
@@ -104,67 +93,65 @@ class VirtualPage extends View
      */
     public function getHtml()
     {
-        $this->cb->set(function () {
-            // if virtual page callback is triggered
-            if ($mode = $this->cb->getTriggeredValue()) {
-                // process callback
-                if ($this->fx) {
-                    ($this->fx)($this);
-                }
+        if ($this->cb->isTriggered() && !$this->cb->canTerminate()) {
+            return parent::getHtml();
+        }
 
+        if ($this->cb->canTerminate()) {
+            if ($mode = $this->cb->getTriggeredValue()) {
                 // special treatment for popup
                 if ($mode === 'popup') {
-                    $this->app->html->template->set('title', $this->app->title);
-                    $this->app->html->template->setHtml('Content', parent::getHtml());
-                    $this->app->html->template->appendHtml('HEAD', $this->getJs());
+                    $this->getApp()->html->template->set('title', $this->getApp()->title);
+                    $this->getApp()->html->template->dangerouslySetHtml('Content', parent::getHtml());
+                    $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getJs());
 
-                    $this->app->terminateHtml($this->app->html->template);
+                    $this->getApp()->terminateHtml($this->getApp()->html->template);
                 }
 
                 // render and terminate
                 if (isset($_GET['__atk_json'])) {
-                    $this->app->terminateJson($this);
+                    $this->getApp()->terminateJson($this);
                 }
 
                 if (isset($_GET['__atk_tab'])) {
-                    $this->app->terminateHtml($this->renderToTab());
+                    $this->getApp()->terminateHtml($this->renderToTab());
                 }
 
                 // do not terminate if callback supplied (no cutting)
                 if ($mode !== 'callback') {
-                    $this->app->terminateHtml($this);
+                    $this->getApp()->terminateHtml($this);
                 }
             }
 
             // Remove all elements from inside the Content
-            foreach ($this->app->layout->elements as $key => $view) {
+            foreach ($this->getApp()->layout->elements as $key => $view) {
                 if ($view instanceof View && $view->region === 'Content') {
-                    unset($this->app->layout->elements[$key]);
+                    unset($this->getApp()->layout->elements[$key]);
                 }
             }
 
             // Prepare modals in order to include them in VirtualPage.
             $modalHtml = '';
-            foreach ($this->app->html !== null ? $this->app->html->elements : [] as $view) {
+            foreach ($this->getApp()->html !== null ? $this->getApp()->html->elements : [] as $view) {
                 if ($view instanceof Modal) {
                     $modalHtml .= $view->getHtml();
-                    $this->app->layout->_js_actions = array_merge($this->app->layout->_js_actions, $view->_js_actions);
+                    $this->getApp()->layout->_js_actions = array_merge($this->getApp()->layout->_js_actions, $view->_js_actions);
                 }
             }
 
-            $this->app->layout->template->setHtml('Content', parent::getHtml());
-            $this->app->layout->_js_actions = array_merge($this->app->layout->_js_actions, $this->_js_actions);
+            $this->getApp()->layout->template->dangerouslySetHtml('Content', parent::getHtml());
+            $this->getApp()->layout->_js_actions = array_merge($this->getApp()->layout->_js_actions, $this->_js_actions);
 
-            $this->app->html->template->setHtml('Content', $this->app->layout->template->render());
-            $this->app->html->template->setHtml('Modals', $modalHtml);
+            $this->getApp()->html->template->dangerouslySetHtml('Content', $this->getApp()->layout->template->renderToHtml());
+            $this->getApp()->html->template->dangerouslySetHtml('Modals', $modalHtml);
 
-            $this->app->html->template->appendHtml('HEAD', $this->app->layout->getJs());
+            $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getApp()->layout->getJs());
 
-            $this->app->terminateHtml($this->app->html->template);
-        });
+            $this->getApp()->terminateHtml($this->getApp()->html->template);
+        }
     }
 
-    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    protected function mergeStickyArgsFromChildView(): AbstractView
     {
         return $this->cb;
     }

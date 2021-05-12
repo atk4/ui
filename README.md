@@ -56,10 +56,10 @@ Create "index.php" file with:
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-$app = new \atk4\ui\App();   // That's your UI application
-$app->initLayout([\atk4\ui\Layout\Centered::class]);
+$app = new \Atk4\Ui\App();   // That's your UI application
+$app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
-$form = \atk4\ui\Form::addTo($app); // Yeah, that's a form!
+$form = \Atk4\Ui\Form::addTo($app); // Yeah, that's a form!
 
 $form->addField('email');    // adds field
 $form->onSubmit(function ($form) {
@@ -88,11 +88,11 @@ To get most of ATK UI, use [ATK Data](https://github.com/atk4/data) to describe 
 [Crud](https://ui.agiletoolkit.org/demos/crud.php) is a fully-interractive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
 
 ``` php
-$app = new \atk4\ui\App('hello world');
-$app->initLayout([\atk4\ui\Layout\Admin::class]);
-$app->db = \atk4\data\Persistence::connect('mysql://user:pass@localhost/atk');
+$app = new \Atk4\Ui\App('hello world');
+$app->initLayout([\Atk4\Ui\Layout\Admin::class]);
+$app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 
-\atk4\ui\Crud::addTo($app)->setModel(new User($app->db));
+\Atk4\Ui\Crud::addTo($app)->setModel(new User($app->db));
 ```
 
 ATK Data allows you to set up relations between models:
@@ -104,7 +104,7 @@ class User extends Model {
 
         $this->addField('name');
         $this->addField('gender', ['enum'=>'female','male','other']);
-        $this->hasMany('Purchases', new Purchase());
+        $this->hasMany('Purchases', ['model' => [Purchase::class]]);
     }
 }
 ```
@@ -112,7 +112,7 @@ class User extends Model {
 Conventional Crud works only with a single model, but with add-on you can take advantage this relationship information: https://github.com/atk4/mastercrud
 
 ``` php
-use \atk4\mastercrud\MasterCrud;
+use \Atk4\Mastercrud\MasterCrud;
 
 // set up $app here
 
@@ -149,21 +149,21 @@ Agile UI has some unique features:
 One of the fundamental features of ATK is Callback - ability to dynamically generate a route then have JS part of the component invoke it. Thanks to this approach, code can be fluid, simple and readable:
 
 ``` php
-$tabs = \atk4\ui\Tabs::addTo($app);
-\atk4\ui\Message::addTo($tabs->addTab('Intro'), ['Other tabs are loaded dynamically!']);
+$tabs = \Atk4\Ui\Tabs::addTo($app);
+\Atk4\Ui\Message::addTo($tabs->addTab('Intro'), ['Other tabs are loaded dynamically!']);
 
 $tabs->addTab('Users', function($p) use($app) {
 
     // This tab is loaded dynamically, but also contains dynamic component
-    \atk4\ui\Crud::addTo($p)->setModel(new User($app->db));
+    \Atk4\Ui\Crud::addTo($p)->setModel(new User($app->db));
 });
 
 $tabs->addTab('Settings', function($p) use($app) {
 
     // Second tab contains an AJAX form that stores itself back to DB.
     $m = new Settings($app->db);
-    $m->load(2);
-    \atk4\ui\Form::addTo($p)->setModel($m);
+    $m = $m->load(2);
+    \Atk4\Ui\Form::addTo($p)->setModel($m);
 });
 ```
 
@@ -173,7 +173,7 @@ Another component implementation using a very friendly PHP syntax:
 
 ![wizard](docs/images/wizard.png)
 
-You get most benefit when you use various ATK UI Components together. Try the following demo: https://ui.agiletoolkit.org/demos/wizard.php. The demo implements:
+You get most benefit when you use various ATK UI Components together. Try the following demo: https://ui.agiletoolkit.org/demos/interactive/wizard.php. The demo implements:
 
 -   Multi-step wizard with ability to navigate forward and backward
 -   Form with validation
@@ -181,7 +181,7 @@ You get most benefit when you use various ATK UI Components together. Try the fo
 -   Table with column formatter, Messages
 -   Real-time output console
 
-With ATK it [takes about 50 lines of PHP code only](https://github.com/atk4/ui/blob/develop/demos/wizard.php) to build it all.
+With ATK it [takes about 50 lines of PHP code only](https://github.com/atk4/ui/blob/develop/demos/interactive/wizard.php) to build it all.
 
 ## Getting Started: Build your admin
 
@@ -190,11 +190,11 @@ It's really easy to put together a complex Admin system. Add this code to a new 
 ``` php
 <?php
 
-$app = new \atk4\ui\App('My App');
-$app->initLayout([\atk4\ui\Layout\Admin::class]);
-$app->db = \atk4\data\Persistence::connect('mysql://user:pass@localhost/yourdb');
+$app = new \Atk4\Ui\App('My App');
+$app->initLayout([\Atk4\Ui\Layout\Admin::class]);
+$app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/yourdb');
 
-class User extends \atk4\data\Model {
+class User extends \Atk4\Data\Model {
     public $table = 'user';
     function init(): void {
         parent::init();
@@ -205,7 +205,7 @@ class User extends \atk4\data\Model {
     }
 }
 
-\atk4\ui\Crud::addTo($app)->setModel(new User($app->db));
+\Atk4\Ui\Crud::addTo($app)->setModel(new User($app->db));
 ```
 
 The result is here:
@@ -216,33 +216,35 @@ The result is here:
 
 Agile UI comes with many built-in components:
 
+_All components can be view using the [demos](ui.agiletoolkit.org/demos) application._
+
 | Component                                                    | Description                                                  | Introduced |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------- |
-| [View](https://ui.agiletoolkit.org/demos/view.php)            | Template, Render Tree and various patterns                   | 0.1        |
-| [Button](https://ui.agiletoolkit.org/demos/button.php)        | Button in various variations including icons, labels, styles and tags | 0.1        |
-| [Input](https://ui.agiletoolkit.org/demos/field.php)          | Decoration of input fields, integration with buttons.        | 0.2        |
-| [JS](https://ui.agiletoolkit.org/demos/button2.php)           | Assign JS events and abstraction of PHP callbacks.           | 0.2        |
-| [Header](https://ui.agiletoolkit.org/demos/header.php)        | Simple view for header.                                      | 0.3        |
-| [Menu](https://ui.agiletoolkit.org/demos/layout2.php)         | Horizontal and vertical multi-dimensional menus with icons.  | 0.4        |
-| [Form](https://ui.agiletoolkit.org/demos/form.php)            | Validation, Interactivity, Feedback, Layouts, Field types.   | 0.4        |
-| [Layouts](https://ui.agiletoolkit.org/demos/layouts.php)      | Admin, Centered.                                             | 0.4        |
-| [Table](https://ui.agiletoolkit.org/demos/table.php)          | Formatting, Columns, Status, Link, Template, Delete.         | 1.0        |
-| [Grid](https://ui.agiletoolkit.org/demos/grid.php)            | Toolbar, Paginator, Quick-search, Expander, Actions.         | 1.1        |
-| [Message](https://ui.agiletoolkit.org/demos/message.php)      | Such as "Info", "Error", "Warning" or "Tip" for easy use.    | 1.1        |
-| [Modal](https://ui.agiletoolkit.org/demos/modal.php)         | Modal dialog with dynamically loaded content.                | 1.1        |
-| [Reloading](https://ui.agiletoolkit.org/demos/reloading.php)  | Dynamically re-render part of the UI.                        | 1.1        |
-| [Actions](https://ui.agiletoolkit.org/demos/reloading.php)   | Extended buttons with various interactions                   | 1.1        |
-| [Crud](https://ui.agiletoolkit.org/demos/crud.php)            | Create, List, Edit and Delete records (based on Advanced Grid) | 1.1        |
-| [Tabs](https://ui.agiletoolkit.org/demos/tabs.php)           | 4 Responsive: Admin, Centered, Site, Wide.                   | 1.2        |
-| [Loader](https://ui.agiletoolkit.org/demos/loader.php)        | Dynamically load itself and contained components inside.     | 1.3        |
-| [Modal View](https://ui.agiletoolkit.org/demos/modal2.php)    | Open/Load contained components in a dialog.                  | 1.3        |
-| [Breadcrumb](https://ui.agiletoolkit.org/demos/breadcrumb.php) | Push links to pages for navigation. Wizard.                  | 1.4        |
-| [ProgressBar](https://ui.agiletoolkit.org/demos/progress.php) | Interactive display of a multi-step PHP code execution progress | 1.4        |
-| [Console](https://ui.agiletoolkit.org/demos/console.php)      | Execute server/shell commands and display progress live      | 1.4        |
-| [Items and Lists](https://ui.agiletoolkit.org/demos/lister.php) | Flexible and high-performance way to display lists of items. | 1.4        |
-| [Wizard](https://ui.agiletoolkit.org/demos/wizard.php)        | Multi-step, wizard with temporary data storing.              | 1.4        |
-| [Actions](https://ui.agiletoolkit.org/demos/actions.php)      | Vizualization of user-defined actions              | 2.0        |
-|                                                              |                                                              |            |
+| View | Template, Render Tree and various patterns  | 0.1   |
+| Button | Button in various variations including icons, labels, styles and tags | 0.1 |
+| Input | Decoration of input fields, integration with buttons. | 0.2 |
+| JS| Assign JS events and abstraction of PHP callbacks. | 0.2 |
+| Header| Simple view for header. | 0.3 |
+| Menu | Horizontal and vertical multi-dimensional menus with icons. | 0.4 |
+| Form| Validation, Interactivity, Feedback, Layouts, Field types. | 0.4 |
+| Layouts | Admin, Centered. | 0.4 |
+| Table | Formatting, Columns, Status, Link, Template, Delete. | 1.0  |
+| Grid | Toolbar, Paginator, Quick-search, Expander, Actions. | 1.1 |
+| Message | Such as "Info", "Error", "Warning" or "Tip" for easy use.| 1.1 |
+| Modal | Modal dialog with dynamically loaded content. | 1.1 |
+| Reloading | Dynamically re-render part of the UI. | 1.1  |
+| Actions | Extended buttons with various interactions  | 1.1 |
+| Crud | Create, List, Edit and Delete records (based on Advanced Grid) | 1.1 |
+| Tabs | 4 Responsive: Admin, Centered, Site, Wide. | 1.2 |
+| Loader | Dynamically load itself and contained components inside. | 1.3  |
+| Modal View | Open/Load contained components in a dialog. | 1.3  |
+| Breadcrumb | Push links to pages for navigation. Wizard. | 1.4  |
+| ProgressBar | Interactive display of a multi-step PHP code execution progress | 1.4 |
+| Console | Execute server/shell commands and display progress live | 1.4 |
+| Items and Lists | Flexible and high-performance way to display lists of items. | 1.4 |
+| Wizard | Multi-step, wizard with temporary data storing. | 1.4  |
+| Actions | Vizualization of user-defined actions | 2.0 |
+
 
 ## Add-ons and integrations
 

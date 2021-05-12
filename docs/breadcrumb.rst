@@ -5,7 +5,7 @@
 Breadcrumb
 ==========
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 .. php:class:: Breadcrumb
 
 Implement navigational Breadcrumb, by using https://fomantic-ui.com/collections/breadcrumb.html
@@ -30,7 +30,7 @@ be passed to url() (:php:meth:`View::url`).
 Changing Divider
 ================
 
-.. php:attr:: $dividerClass
+.. php:attr:: dividerClass
 
 By default value `right angle icon` is used, but you can change it to `right chevron icon` or simply set to empty string `""`
 to use slash.
@@ -39,7 +39,7 @@ to use slash.
 Working with Path
 =================
 
-.. php:attr:: $path
+.. php:attr:: path
 .. php:method: popTitle()
 
 Calling addCrumb adds more elements into the $path property. Each element there would contain 3 hash values:
@@ -59,7 +59,7 @@ For example the next code will use some logic::
     if ($id = $app->stickyGet('user_id')) {
 
         // perhaps we edit individual user?
-        $model->load($id);
+        $model = $model->load($id);
         $crumb->addCrumb($model->get('name'), []);
 
 
@@ -72,7 +72,7 @@ For example the next code will use some logic::
         // display list of users
         $table = Table::addTo($app);
         $table->setModel($model);
-        $table->addDecorator(['name', [\atk4\ui\Table\Column\Link::class, [], ['user_id'=>'id']);
+        $table->addDecorator(['name', [\Atk4\Ui\Table\Column\Link::class, [], ['user_id'=>'id']);
     }
 
     $crumb->popTitle();

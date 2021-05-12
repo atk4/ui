@@ -6,7 +6,7 @@ declare(strict_types=1);
  * the atk javascript vue service.
  */
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 class JsVueService
 {
@@ -28,7 +28,7 @@ class JsVueService
     /**
      * Create a new Vue instance using a component managed by ATK.
      *
-     * This output js: atk.vueService.createAtkVue("id","component",{});
+     * This output js: atk.vueService.createAtkVue("id", "component", {});
      *
      * @return mixed
      */
@@ -41,26 +41,13 @@ class JsVueService
      * Create a new Vue instance using an external component.
      * External component should be load via js file and define properly.
      *
-     * This output js: atk.vueService.createVue("id","component",{});
+     * This output js: atk.vueService.createVue("id", "component", {});
      *
      * @return mixed
      */
     public function createVue($id, $componentName, $component, array $data = [])
     {
         return $this->service->createVue($id, $componentName, $component, $data);
-    }
-
-    /**
-     * Emit an event that other component can listen too.
-     * Allow Vue instances to talk to each other.
-     *
-     * This output js: atk.vueService.emitEvent("eventName", {});
-     *
-     * @return mixed
-     */
-    public function emitEvent($eventName, array $data = [])
-    {
-        return $this->service->emitEvent($eventName, $data);
     }
 
     /**

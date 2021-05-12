@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Simple text block view.
@@ -30,8 +30,8 @@ class Text extends View
      */
     public function addParagraph($text)
     {
-        $this->content .= isset($this->app)
-            ? $this->app->getTag('p', $text)
+        $this->content .= $this->issetApp()
+            ? $this->getApp()->getTag('p', $text)
             : '<p>' . htmlspecialchars($text) . '</p>';
 
         return $this;

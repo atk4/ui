@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
+
+use Atk4\Core\Factory;
 
 /**
  * Wizard widget.
  */
 class Wizard extends View
 {
-    use \atk4\core\SessionTrait;
+    use \Atk4\Core\SessionTrait;
 
     public $defaultTemplate = 'wizard.html';
     public $ui = 'steps';
@@ -94,7 +96,7 @@ class Wizard extends View
      */
     public function addStep($name, $callback)
     {
-        $step = $this->factory([
+        $step = Factory::factory([
             Step::class,
             'wizard' => $this,
             'template' => clone $this->stepTemplate,
@@ -138,7 +140,7 @@ class Wizard extends View
             $this->buttonNext->addClass('disabled')->set('Completed');
             $this->buttonFinish->destroy();
 
-            $this->app->catch_runaway_callbacks = false;
+            $this->getApp()->catch_runaway_callbacks = false;
             $callback($this);
         } else {
             $this->buttonFinish->destroy();
@@ -151,8 +153,10 @@ class Wizard extends View
 
         if ($result instanceof Form) {
             // mingle with the button icon
-            $result->buttonSave->destroy();
-            $result->buttonSave = null;
+            if ($result->buttonSave !== null) {
+                $result->buttonSave->destroy();
+                $result->buttonSave = null;
+            }
 
             $this->buttonNext->on('click', $result->js()->submit());
         }
@@ -213,7 +217,7 @@ class Wizard extends View
         parent::renderView();
     }
 
-    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    protected function mergeStickyArgsFromChildView(): AbstractView
     {
         return $this->stepCallback;
     }

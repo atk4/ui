@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * An accordion item in Accordion.
@@ -27,9 +27,6 @@ class AccordionSection extends View
 
     public $icon = 'dropdown';
 
-    /**
-     * {@inheritdoc}
-     */
     protected function renderView(): void
     {
         parent::renderView();

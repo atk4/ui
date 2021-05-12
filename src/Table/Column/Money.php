@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\data\Model;
-use atk4\ui\Table;
+use Atk4\Data\Model;
+use Atk4\Ui\Table;
 
 /**
  * Column for formatting money.
@@ -18,17 +18,17 @@ class Money extends Table\Column
     // overrides
     public $attr = ['all' => ['class' => ['right aligned single line']]];
 
-    public function getTagAttributes($position, $attr = [])
+    public function getTagAttributes($position, array $attr = []): array
     {
         $attr = array_merge_recursive($attr, ['class' => ['{$_' . $this->short_name . '_class}']]);
 
         return parent::getTagAttributes($position, $attr);
     }
 
-    public function getDataCellHtml(\atk4\data\Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(\Atk4\Data\Field $field = null, $extra_tags = [])
     {
         if (!isset($field)) {
-            throw new \atk4\ui\Exception('Money column requires a field');
+            throw new \Atk4\Ui\Exception('Money column requires a field');
         }
 
         return $this->getTag(

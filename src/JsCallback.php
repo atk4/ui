@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 class JsCallback extends Callback implements JsExpressionable
 {
@@ -68,11 +68,9 @@ class JsCallback extends Callback implements JsExpressionable
         return $out;
     }
 
-    public function jsRender()
+    public function jsRender(): string
     {
-        if (!$this->app) {
-            throw new Exception('Call-back must be part of a RenderTree');
-        }
+        $this->getApp(); // assert has App
 
         return (new Jquery())->atkAjaxec([
             'uri' => $this->getJsUrl(),
@@ -117,7 +115,7 @@ class JsCallback extends Callback implements JsExpressionable
                 $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
 
                 $this->terminateAjax($ajaxec);
-            } catch (\atk4\data\ValidationException $e) {
+            } catch (\Atk4\Data\ValidationException $e) {
                 // Validation exceptions will be presented to user in a friendly way
                 $msg = new Message($e->getMessage());
                 $msg->addClass('error');
@@ -133,14 +131,14 @@ class JsCallback extends Callback implements JsExpressionable
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
      *
-     * @param array|JsExpressionable $ajaxec  Array of JsExpressionable
-     * @param string                 $msg     General message, typically won't be displayed
-     * @param bool                   $success Was request successful or not
+     * @param string|null $ajaxec  Array of JsExpressionable
+     * @param string      $msg     General message, typically won't be displayed
+     * @param bool        $success Was request successful or not
      */
-    public function terminateAjax($ajaxec, $msg = null, $success = true)
+    public function terminateAjax($ajaxec, $msg = null, $success = true): void
     {
         if ($this->canTerminate()) {
-            $this->app->terminateJson(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
+            $this->getApp()->terminateJson(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
         }
     }
 
@@ -148,7 +146,7 @@ class JsCallback extends Callback implements JsExpressionable
      * Provided with a $response from callbacks convert it into a JavaScript code.
      *
      * @param array|JsExpressionable $response response from callbacks,
-     * @param string                 $chain    JavaScript string
+     * @param JsExpressionable       $chain
      */
     public function getAjaxec($response, $chain = null): string
     {

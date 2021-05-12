@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\UserAction;
+namespace Atk4\Ui\UserAction;
 
-use atk4\data\Model;
-use atk4\ui\Form;
+use Atk4\Data\Model;
+use Atk4\Ui\Form;
 
 class FormExecutor extends BasicExecutor
 {
@@ -32,13 +32,13 @@ class FormExecutor extends BasicExecutor
         // Setup form model using action fields.
         if (!$this->form->model) {
             if (!$this->action->fields) {
-                $this->action->fields = $this->getModelFields($this->action->owner);
+                $this->action->fields = $this->getModelFields($this->action->getModel());
             }
-            $this->form->setModel($this->action->owner, $this->action->fields);
+            $this->form->setModel($this->action->getEntity(), $this->action->fields);
         }
 
         $this->form->onSubmit(function (Form $form) {
-            return $this->jsExecute();
+            return $this->executeModelAction();
         });
     }
 

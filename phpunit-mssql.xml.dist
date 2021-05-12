@@ -1,0 +1,35 @@
+<phpunit bootstrap="vendor/autoload.php" printerClass="Atk4\Core\AtkPhpunit\ResultPrinter" colors="true">
+    <php>
+        <var name="DB_DSN" value="sqlsrv:Server=mssql;Database=master" />
+        <var name="DB_USER" value="sa" />
+        <var name="DB_PASSWD" value="atk4_pass" />
+        <var name="DB_DBNAME" value="master" />
+    </php>
+    <testsuites>
+        <testsuite name="tests">
+            <directory>tests</directory>
+            <file>tests/DemosTest.php</file>
+            <file>tests/DemosHttpTest.php</file>
+            <file>tests/DemosHttpNoExitTest.php</file>
+            <exclude>tests/DemosTest.php</exclude>
+            <exclude>tests/DemosHttpTest.php</exclude>
+            <exclude>tests/DemosHttpNoExitTest.php</exclude>
+        </testsuite>
+    </testsuites>
+    <groups>
+        <exclude>
+            <group>demos_http</group>
+        </exclude>
+    </groups>
+    <listeners>
+        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener" />
+    </listeners>
+    <coverage>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <report>
+            <php outputFile="build/logs/clover-mssql.cov" />
+        </report>
+    </coverage>
+</phpunit>

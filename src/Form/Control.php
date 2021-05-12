@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form;
+namespace Atk4\Ui\Form;
 
-use atk4\ui\Exception;
-use atk4\ui\Form;
-use atk4\ui\View;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Form;
+use Atk4\Ui\View;
 
 /**
  * Provides generic functionality for a form control.
@@ -19,12 +19,9 @@ class Control extends View
     public $form;
 
     /**
-     * @var \atk4\data\Field - points to model field
+     * @var \Atk4\Data\Field - points to model field
      */
     public $field;
-
-    /** @deprecated use controlClass instead - will be removed in dec-2020 */
-    public $fieldClass = '';
 
     /** @var string control class */
     public $controlClass = '';
@@ -53,9 +50,9 @@ class Control extends View
 
     /**
      * Placed as a pointing label below the field. This only works when Form\Control appears in a form. You can also
-     * set this to object, such as \atk4\ui\Text otherwise HTML characters are escaped.
+     * set this to object, such as \Atk4\Ui\Text otherwise HTML characters are escaped.
      *
-     * @var string|\atk4\ui\View|array
+     * @var string|\Atk4\Ui\View|array
      */
     public $hint;
 
@@ -103,7 +100,7 @@ class Control extends View
     public function set($value = null, $junk = null)
     {
         if ($this->field) {
-            $value = $this->app->ui_persistence->typecastLoadField($this->field, $value);
+            $value = $this->getApp()->ui_persistence->typecastLoadField($this->field, $value);
             $this->field->set($value);
 
             return $this;
@@ -150,16 +147,16 @@ class Control extends View
      *
      * Examples:
      * $control->onChange('console.log("changed")');
-     * $control->onChange(new \atk4\ui\JsExpression('console.log("changed")'));
+     * $control->onChange(new \Atk4\Ui\JsExpression('console.log("changed")'));
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
-     * @param string|\atk4\ui\JsExpression|array|\Closure $expr
+     * @param string|\Atk4\Ui\JsExpression|array|\Closure $expr
      * @param array|bool                                  $default
      */
     public function onChange($expr, $default = [])
     {
         if (is_string($expr)) {
-            $expr = new \atk4\ui\JsExpression($expr);
+            $expr = new \Atk4\Ui\JsExpression($expr);
         }
 
         if (is_bool($default)) {
@@ -176,7 +173,7 @@ class Control extends View
      *
      * $field->jsInput(true)->val(123);
      *
-     * @return \atk4\ui\Jquery
+     * @return \Atk4\Ui\Jquery
      */
     public function jsInput($when = null, $action = null)
     {
@@ -184,23 +181,10 @@ class Control extends View
     }
 
     /**
-     * @deprecated use Control::getControlClass instead - will be removed in dec-2020
-     */
-    public function getFieldClass()
-    {
-        'trigger_error'('Method is deprecated. Use Control::getControlClass instead', E_USER_DEPRECATED);
-
-        return $this->getControlClass();
-    }
-
-    /**
-     * Return control class.
-     *
      * @return string
      */
     public function getControlClass()
     {
-        // use of fieldClass for backward compatibility - will be removed in dec-2020
-        return $this->controlClass ?: $this->fieldClass;
+        return $this->controlClass;
     }
 }

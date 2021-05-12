@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\data\Model;
-use atk4\data\Reference\ContainsMany;
+use Atk4\Core\Factory;
+use Atk4\Data\Model;
+use Atk4\Data\Reference\ContainsMany;
 
 /**
  * Implements a form.
  */
 class Form extends View
 {
-    use \atk4\core\HookTrait;
+    use \Atk4\Core\HookTrait;
 
     /** @const string Executed when form is submitted */
     public const HOOK_SUBMIT = self::class . '@submit';
@@ -62,7 +63,7 @@ class Form extends View
     /**
      * A current layout of a form, needed if you call $form->addControl().
      *
-     * @var \atk4\ui\Form\Layout
+     * @var \Atk4\Ui\Form\Layout
      */
     public $layout;
 
@@ -94,11 +95,6 @@ class Form extends View
     public $successTemplate = 'form-success.html';
 
     /**
-     * @deprecated use controlDisplayRules - will be removed in dec-2020
-     */
-    public $fieldsDisplayRules = [];
-
-    /**
      * Collection of field's conditions for displaying a target field on the form.
      *
      * Specifying a condition for showing a target field required the name of the target field
@@ -122,11 +118,6 @@ class Form extends View
      * @var array
      */
     public $controlDisplayRules = [];
-
-    /**
-     * @deprecated use controlDisplaySelector - will be removed in dec-2020
-     */
-    public $fieldDisplaySelector = '';
 
     /**
      * Default css selector for JsConditionalForm.
@@ -184,11 +175,6 @@ class Form extends View
     {
         parent::init();
 
-        // BC-break warning - will be removed dec-2020
-        if ($this->template->hasTag('AboveFields')) {
-            throw new Exception('AboveFields region has be deprecated. Use AboveControls instead');
-        }
-
         $this->formElement = View::addTo($this, ['element' => 'form', 'short_name' => 'form'], ['FormElementOnly']);
 
         // Initialize layout, so when you call addControl / setModel next time, form will know
@@ -212,7 +198,7 @@ class Form extends View
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
-            $this->layout = $this->factory($this->layout, ['form' => $this]);
+            $this->layout = Factory::factory($this->layout, ['form' => $this]);
             $this->layout = $this->add($this->layout);
         } elseif (is_object($this->layout)) {
             $this->layout->form = $this;
@@ -235,16 +221,6 @@ class Form extends View
     }
 
     /**
-     * @deprecated use Form::setControlsDisplayRules - will be removed in dec-2020
-     */
-    public function setFieldsDisplayRules($rules = [])
-    {
-        'trigger_error'('Method is deprecated. Use Form::setControlsDisplayRules instead', E_USER_DEPRECATED);
-
-        return $this->setControlsDisplayRules(...func_get_args());
-    }
-
-    /**
      * Setter for control display rules.
      *
      * @param array $rules
@@ -261,15 +237,15 @@ class Form extends View
     /**
      * Set display rule for a group collection.
      *
-     * @param array         $rules
-     * @param string|object $selector
+     * @param array       $rules
+     * @param string|View $selector
      *
      * @return $this
      */
     public function setGroupDisplayRules($rules = [], $selector = '.atk-form-group')
     {
-        if (is_object($selector) && isset($selector->name)) {
-            $selector = '#' . $selector->name;
+        if (is_object($selector)) {
+            $selector = $selector->jsRender();
         }
 
         $this->controlDisplayRules = $rules;
@@ -287,10 +263,12 @@ class Form extends View
      *
      * @param array $fields
      *
-     * @return \atk4\data\Model
+     * @return \Atk4\Data\Model
      */
     public function setModel(Model $model, $fields = null)
     {
+        $model->assertIsEntity();
+
         // Model is set for the form and also for the current layout
         try {
             $model = parent::setModel($model);
@@ -317,7 +295,7 @@ class Form extends View
                 $response = $this->hook(self::HOOK_SUBMIT);
 
                 if (!$response) {
-                    if (!$this->model instanceof \atk4\ui\Misc\ProxyModel) {
+                    if (!$this->model instanceof \Atk4\Ui\Misc\ProxyModel) {
                         $this->model->save();
 
                         return $this->success('Form data has been saved');
@@ -327,7 +305,7 @@ class Form extends View
                 }
 
                 return $response;
-            } catch (\atk4\data\ValidationException $val) {
+            } catch (\Atk4\Data\ValidationException $val) {
                 $response = [];
                 foreach ($val->errors as $field => $error) {
                     $response[] = $this->error($field, $error);
@@ -338,16 +316,6 @@ class Form extends View
         });
 
         return $this;
-    }
-
-    /**
-     * @deprecated use Form::getControl - will be removed in dec-2020
-     */
-    public function getField($name): Form\Control
-    {
-        'trigger_error'('Method is deprecated. Use Form::getControl instead', E_USER_DEPRECATED);
-
-        return $this->getControl($name);
     }
 
     /**
@@ -400,19 +368,19 @@ class Form extends View
         if ($success instanceof View) {
             $response = $success;
         } elseif ($useTemplate) {
-            $response = $this->app->loadTemplate($this->successTemplate);
-            $response['header'] = $success;
+            $response = $this->getApp()->loadTemplate($this->successTemplate);
+            $response->set('header', $success);
 
             if ($sub_header) {
-                $response['message'] = $sub_header;
+                $response->set('message', $sub_header);
             } else {
                 $response->del('p');
             }
 
-            $response = $this->js()->html($response->render());
+            $response = $this->js()->html($response->renderToHtml());
         } else {
             $response = new Message([$success, 'type' => 'success', 'icon' => 'check']);
-            $response->app = $this->app;
+            $response->setApp($this->getApp());
             $response->invokeInit();
             $response->text->addParagraph($sub_header);
         }
@@ -425,16 +393,6 @@ class Form extends View
     // {{{ Layout Manipulation
 
     /**
-     * @deprecated - use Form::addControl instead - will be removed in dec-2020
-     */
-    public function addField(?string $name, $decorator = null, $field = null)
-    {
-        'trigger_error'('Method is deprecated. Use Form::addControl instead', E_USER_DEPRECATED);
-
-        return $this->addControl(...func_get_args());
-    }
-
-    /**
      * Add form control into current layout. If no layout, create one. If no model, create blank one.
      *
      * @param array|string|object|null $control
@@ -445,20 +403,10 @@ class Form extends View
     public function addControl(?string $name, $control = null, $field = null)
     {
         if (!$this->model) {
-            $this->model = new \atk4\ui\Misc\ProxyModel();
+            $this->model = (new \Atk4\Ui\Misc\ProxyModel())->createEntity();
         }
 
         return $this->layout->addControl($name, $control, $field);
-    }
-
-    /**
-     * @deprecated - use Form::addControls instead - will be removed in dec-2020
-     */
-    public function addFields($fields)
-    {
-        'trigger_error'('Method is deprecated. Use Form::addControls instead', E_USER_DEPRECATED);
-
-        return $this->addControls(...func_get_args());
     }
 
     /**
@@ -515,16 +463,6 @@ class Form extends View
     }
 
     /**
-     * @deprecated - use Form::jsControl instead - will be removed in dec-2020
-     */
-    public function jsField($name)
-    {
-        'trigger_error'('Method is deprecated. Use Form::jsControl instead', E_USER_DEPRECATED);
-
-        return $this->jsControl(...func_get_args());
-    }
-
-    /**
      * Returns JS Chain that targets INPUT of a specified element. This method is handy
      * if you wish to set a value to a certain field.
      *
@@ -542,16 +480,6 @@ class Form extends View
     // {{{ Internals
 
     /**
-     * @deprecated use Form::controlFactory - will be removed in dec-2020
-     */
-    public function decoratorFactory(\atk4\data\Field $field, $seed = [])
-    {
-        'trigger_error'('Method is deprecated. Use Form::controlFactory instead', E_USER_DEPRECATED);
-
-        return $this->controlFactory(...func_get_args());
-    }
-
-    /**
      * Provided with a Agile Data Model Field, this method have to decide
      * and create instance of a View that will act as a form-control. It takes
      * various input and looks for hints as to which class to use:.
@@ -561,31 +489,31 @@ class Form extends View
      * 3. $f->type is converted into seed and evaluated
      * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
      *
-     * @param \atk4\data\Field $field Data model field
-     * @param array            $seed  Defaults to pass to factory() when control object is initialized
+     * @param \Atk4\Data\Field $field Data model field
+     * @param array            $seed  Defaults to pass to Factory::factory() when control object is initialized
      *
      * @return Form\Control
      */
-    public function controlFactory(\atk4\data\Field $field, $seed = [])
+    public function controlFactory(\Atk4\Data\Field $field, $seed = [])
     {
-        if ($field && !$field instanceof \atk4\data\Field) {
-            throw (new Exception('Argument 1 for controlFactory must be \atk4\data\Field or null'))
+        if ($field && !$field instanceof \Atk4\Data\Field) {
+            throw (new Exception('Argument 1 for controlFactory must be \Atk4\Data\Field or null'))
                 ->addMoreInfo('field', $field);
         }
 
         $fallbackSeed = [Form\Control\Line::class];
 
-        if ($field->type === 'array' && $field->reference) {
-            $limit = ($field->reference instanceof ContainsMany) ? 0 : 1;
-            $model = $field->reference->refModel();
+        if ($field->type === 'array' && $field->getReference() !== null) {
+            $limit = ($field->getReference() instanceof ContainsMany) ? 0 : 1;
+            $model = $field->getReference()->refModel();
             $fallbackSeed = [Form\Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
         } elseif ($field->type !== 'boolean') {
             if ($field->enum) {
                 $fallbackSeed = [Form\Control\Dropdown::class, 'values' => array_combine($field->enum, $field->enum)];
             } elseif ($field->values) {
                 $fallbackSeed = [Form\Control\Dropdown::class, 'values' => $field->values];
-            } elseif (isset($field->reference)) {
-                $fallbackSeed = [Form\Control\Lookup::class, 'model' => $field->reference->refModel()];
+            } elseif ($field->getReference() !== null) {
+                $fallbackSeed = [Form\Control\Lookup::class, 'model' => $field->getReference()->refModel()];
             }
         }
 
@@ -597,7 +525,7 @@ class Form extends View
             $fallbackSeed['placeholder'] = $field->ui['placeholder'];
         }
 
-        $seed = $this->mergeSeeds(
+        $seed = Factory::mergeSeeds(
             $seed,
             $field->ui['form'] ?? null,
             $this->typeToControl[$field->type] ?? null,
@@ -610,7 +538,7 @@ class Form extends View
             'short_name' => $field->short_name,
         ];
 
-        return $this->factory($seed, $defaults);
+        return Factory::factory($seed, $defaults);
     }
 
     /**
@@ -623,9 +551,9 @@ class Form extends View
         'text' => [Form\Control\Textarea::class],
         'string' => [Form\Control\Line::class],
         'password' => [Form\Control\Password::class],
-        'datetime' => [Form\Control\Calendar::class],
-        'date' => [Form\Control\Calendar::class, 'type' => 'date'],
-        'time' => [Form\Control\Calendar::class, 'type' => 'time', 'ampm' => false],
+        'datetime' => [Form\Control\Calendar::class, ['type' => 'datetime']],
+        'date' => [Form\Control\Calendar::class, ['type' => 'date']],
+        'time' => [Form\Control\Calendar::class, ['type' => 'time']],
         'money' => [Form\Control\Money::class],
     ];
 
@@ -645,13 +573,13 @@ class Form extends View
                 if (!$field->readonly && !$field->disabled) {
                     $field->set($post[$key] ?? null);
                 }
-            } catch (\atk4\core\Exception $e) {
+            } catch (\Atk4\Core\Exception $e) {
                 $errors[$key] = $e->getMessage();
             }
         }
 
         if ($errors) {
-            throw new \atk4\data\ValidationException($errors);
+            throw new \Atk4\Data\ValidationException($errors);
         }
     }
 
@@ -659,8 +587,7 @@ class Form extends View
     {
         $this->ajaxSubmit();
         if (!empty($this->controlDisplayRules)) {
-            // backward compatibility for fieldsDisplayRules and fieldDisplaySelector
-            $this->js(true, new JsConditionalForm($this, $this->fieldsDisplayRules ?: $this->controlDisplayRules, $this->fieldDisplaySelector ?: $this->controlDisplaySelector));
+            $this->js(true, new JsConditionalForm($this, $this->controlDisplayRules, $this->controlDisplaySelector));
         }
 
         parent::renderView();

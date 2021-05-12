@@ -2,35 +2,32 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\core\AppScopeTrait;
-use atk4\core\ContainerTrait;
-use atk4\core\DiContainerTrait;
-use atk4\core\FactoryTrait;
-use atk4\core\InitializerTrait;
-use atk4\core\StaticAddToTrait;
-use atk4\core\TrackableTrait;
+use Atk4\Core\AppScopeTrait;
+use Atk4\Core\ContainerTrait;
+use Atk4\Core\InitializerTrait;
+use Atk4\Core\StaticAddToTrait;
+use Atk4\Core\TrackableTrait;
 
 /**
  * Abstract view tree item (used only for View and Callback, you want probably to extend one of these).
  *
- * @property View   $owner
  * @property View[] $elements
+ *
+ * @method View getOwner()
  */
 abstract class AbstractView
 {
+    use AppScopeTrait;
     use ContainerTrait {
         add as private _add;
     }
     use InitializerTrait {
         init as private _init;
     }
-    use TrackableTrait;
-    use AppScopeTrait;
-    use FactoryTrait;
-    use DiContainerTrait;
     use StaticAddToTrait;
+    use TrackableTrait;
 
     /**
      * Default name of the element.
@@ -66,13 +63,13 @@ abstract class AbstractView
      */
     protected function initDefaultApp()
     {
-        $this->app = new App([
+        $this->setApp(new App([
             'skin' => $this->skin,
             'catch_exceptions' => false,
             'always_run' => false,
             'catch_runaway_callbacks' => false,
-        ]);
-        $this->app->invokeInit();
+        ]));
+        $this->getApp()->invokeInit();
     }
 
     /**
@@ -81,7 +78,7 @@ abstract class AbstractView
      */
     protected function init(): void
     {
-        if (!$this->app) {
+        if (!$this->issetApp()) {
             $this->initDefaultApp();
         }
 
@@ -111,7 +108,7 @@ abstract class AbstractView
             throw new Exception('You cannot add anything into the view after it was rendered');
         }
 
-        if (!$this->app) {
+        if (!$this->issetApp()) {
             $this->_add_later[] = [$object, $args];
 
             return $object;
@@ -141,7 +138,7 @@ abstract class AbstractView
      */
     public function jsUrl($page = [])
     {
-        return $this->app->jsUrl($page, false, $this->_getStickyArgs());
+        return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
     }
 
     /**
@@ -155,7 +152,7 @@ abstract class AbstractView
      */
     public function url($page = [])
     {
-        return $this->app->url($page, false, $this->_getStickyArgs());
+        return $this->getApp()->url($page, false, $this->_getStickyArgs());
     }
 
     /**
@@ -163,8 +160,8 @@ abstract class AbstractView
      */
     protected function _getStickyArgs(): array
     {
-        if ($this->owner && $this->owner instanceof self) {
-            $stickyArgs = array_merge($this->owner->_getStickyArgs(), $this->stickyArgs);
+        if ($this->issetOwner() && $this->getOwner() instanceof self) {
+            $stickyArgs = array_merge($this->getOwner()->_getStickyArgs(), $this->stickyArgs);
         } else {
             $stickyArgs = $this->stickyArgs;
         }
@@ -173,7 +170,7 @@ abstract class AbstractView
         $childView = $this->mergeStickyArgsFromChildView();
         if ($childView !== null && (!($childView instanceof Callback) || $childView->isTriggered())) {
             $alreadyCalled = false;
-            foreach (debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT | DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
+            foreach (debug_backtrace(\DEBUG_BACKTRACE_PROVIDE_OBJECT | \DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
                 if ($childView === ($frame['object'] ?? null) && $frame['function'] === '_getStickyArgs') {
                     $alreadyCalled = true;
                 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 class Paginator extends View
 {
@@ -184,8 +184,8 @@ class Paginator extends View
     /**
      * Render page item using template $t for the page number $page.
      *
-     * @param Template   $t
-     * @param int|string $page
+     * @param HtmlTemplate $t
+     * @param int|string   $page
      */
     public function renderItem($t, $page = null)
     {
@@ -196,7 +196,7 @@ class Paginator extends View
             $t->trySet('active', $page === $this->page ? 'active' : '');
         }
 
-        $this->template->appendHtml('rows', $t->render());
+        $this->template->dangerouslyAppendHtml('rows', $t->renderToHtml());
     }
 
     protected function renderView(): void

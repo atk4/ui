@@ -1,5 +1,5 @@
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Tabs
 
@@ -7,7 +7,7 @@
 Tabs
 ====
 
-Tabs implement a yet another way to organise your data. The implementation is based on: https://fomantic-ui.com/elements/icon.html.
+Tabs implement a yet another way to organize your data. The implementation is based on: https://fomantic-ui.com/elements/icon.html.
 
 
 Demo: https://ui.agiletoolkit.org/demos/tabs.php
@@ -21,7 +21,7 @@ Once you create Tabs container you can then mix and match static and dynamic tab
     $tabs = Tabs::addTo($app);
 
 
-Adding a static conten is pretty simple::
+Adding a static content is pretty simple::
 
     LoremIpsum::addTo($tabs->addTab('Static Tab'));
 
@@ -63,7 +63,7 @@ Note that tab contents are refreshed including any values you put on the form::
 
     // dynamic tab
     $t->addTab('Dynamic Form', function ($tab) {
-        $m_register = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
+        $m_register = new \Atk4\Data\Model(new \Atk4\Data\Persistence_Array($a));
         $m_register->addField('name', ['caption'=>'Please enter your name (John)']);
 
         $form = Form::addTo($tab, ['segment'=>true]);

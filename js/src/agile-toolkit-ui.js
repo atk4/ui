@@ -1,46 +1,41 @@
-/* global _ATKVERSION_:true */
+/* eslint-disable */
+/* global _ATKVERSION_:true, __webpack_public_path__:true */
+__webpack_public_path__ = window.__atkBundlePublicPath === undefined ? '/public/' :  window.__atkBundlePublicPath + '/';
 
 import debounce from 'debounce';
 import 'core-js/stable';
-import atk from 'atk-semantic-ui';
-import 'helpers/url.helper';
+import atkSemantic from 'atk-semantic-ui';
 import date from 'locutus/php/datetime/date';
 import { tableDropdown } from './helpers/table-dropdown.helper';
-import { plugin, createAtkplugins } from './plugin';
-import vueService from './services/vue.service';
+import { plugin } from './plugin';
+import { atkOptions, atkEventBus, atkUtils } from './atk-utils';
 import dataService from './services/data.service';
 import panelService from './services/panel.service';
+import vueService from './services/vue.service';
+import popupService from "./services/popup.service";
 
-// Create atk plugins.
-createAtkplugins();
+const atk = { ...atkSemantic };
+
 // add version function to atk.
 atk.version = () => _ATKVERSION_;
+atk.options = atkOptions;
+atk.eventBus = atkEventBus;
+atk.utils = atkUtils;
 
-// Use closure for atk options property in order to keep them private.
-atk.options = (function () {
-    const options = {
-        // Value for debounce time out (in ms) that will be apply globally when set using atk.debounce.
-        debounceTimeout: null,
-    };
-    return {
-        set: (name, value) => { options[name] = value; },
-        get: (name) => options[name],
-    };
-}());
-
-atk.debounce = (fn, value) => {
+atk.debounce = (fn, value, immediate = false) => {
     const timeOut = atk.options.get('debounceTimeout');
-    return debounce(fn, timeOut !== null ? timeOut : value);
+    return debounce(fn, timeOut !== null ? timeOut : value, immediate);
 };
 
 // Allow to register a plugin with jQuery;
 atk.registerPlugin = plugin;
 
 atk.phpDate = date;
-atk.vueService = vueService;
 atk.dataService = dataService;
 atk.panelService = panelService;
 atk.tableDropdown = tableDropdown;
+atk.vueService = vueService;
+atk.popupService = popupService;
 
 /**
  * Exporting services in order to be available globally

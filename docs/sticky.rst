@@ -19,7 +19,7 @@ The next code creates Loader area which will display a console. Result is - nest
         });
     });
 
-What if you need to pass a variable `client_id` to display on console output? Techincally you
+What if you need to pass a variable `client_id` to display on console output? Technically you
 would need to tweak the call-back url of "Loader" and also callback url of "Console".
 
 Sticky GET is a better approach. It works like this::
@@ -63,20 +63,20 @@ View Reachability
 ^^^^^^^^^^^^^^^^^
 
 Agile UI views have a method View::url() which will return URL that is guaranteed to trigger their "init"
-method. This is regardless of the placement of your View and also it honours all the arguments that are
+method. This is regardless of the placement of your View and also it honors all the arguments that are
 defined as sticky globally.
 
 Consider this code::
 
-    $b1 = \atk4\ui\Button::addTo($app);
+    $b1 = \Atk4\Ui\Button::addTo($app);
     $b1->set($b1->url());
 
     Loader::addTo($app)->set(function($page) {
-        $b2 = \atk4\ui\Button::addTo($page);
+        $b2 = \Atk4\Ui\Button::addTo($page);
         $b2->set($b2->url());
     });
 
-    $b3 = \atk4\ui\Button::addTo($app);
+    $b3 = \Atk4\Ui\Button::addTo($app);
     $b3->set($b3->url());
 
 This will display 3 buttons and each button will contain a URL which needs to be opened in order for

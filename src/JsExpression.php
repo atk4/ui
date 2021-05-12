@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Implements a class that can be mapped into arbitrary JavaScript expression.
  */
 class JsExpression implements JsExpressionable
 {
-    use \atk4\core\DiContainerTrait;
+    use \Atk4\Core\DiContainerTrait;
 
     /**
      * @var string
@@ -21,13 +21,7 @@ class JsExpression implements JsExpressionable
      */
     public $args = [];
 
-    /**
-     * Constructor.
-     *
-     * @param string $template
-     * @param array  $args
-     */
-    public function __construct($template = '', $args = [])
+    public function __construct(string $template = '', array $args = [])
     {
         $this->template = $template;
         $this->args = $args;
@@ -35,10 +29,8 @@ class JsExpression implements JsExpressionable
 
     /**
      * Converts this arbitrary JavaScript expression into string.
-     *
-     * @return string
      */
-    public function jsRender()
+    public function jsRender(): string
     {
         $namelessCount = 0;
 
@@ -82,14 +74,10 @@ class JsExpression implements JsExpressionable
     }
 
     /**
-     * Provides replacement for json_encode that will respect JsExpressionable objects
+     * Provides replacement for json_encode() that will respect JsExpressionable objects
      * and call jsRender() for them instead of escaping.
-     *
-     * @param mixed $arg anything
-     *
-     * @return string valid JSON expression
      */
-    protected function _json_encode($arg)
+    protected function _json_encode($arg): string
     {
         /*
          * This function is very similar to json_encode, however it will traverse array
@@ -126,7 +114,7 @@ class JsExpression implements JsExpressionable
                 $string = '[' . implode(',', $array) . ']';
             }
         } elseif (is_string($arg)) {
-            $string = '"' . $this->_safe_js_string($arg) . '"';
+            $string = json_encode($arg, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
         } elseif (is_bool($arg)) {
             $string = json_encode($arg);
         } elseif (is_int($arg)) {
@@ -142,45 +130,5 @@ class JsExpression implements JsExpressionable
         }
 
         return $string;
-    }
-
-    /**
-     * TODO: Escapes the string, but needs a reference to where this code has been from.
-     *
-     * @internal
-     *
-     * @param string $str
-     */
-    public function _safe_js_string($str)
-    {
-        $length = strlen($str);
-        $ret = '';
-        for ($i = 0; $i < $length; ++$i) {
-            switch ($str[$i]) {
-                case "\r":
-                    $ret .= '\\r';
-
-                    break;
-                case "\n":
-                    $ret .= '\\n';
-
-                    break;
-                case '"':
-                case "'":
-                case '<':
-                case '>':
-                case '&':
-                case '\\':
-                    $ret .= '\x' . dechex(ord($str[$i]));
-
-                    break;
-                default:
-                    $ret .= $str[$i];
-
-                    break;
-            }
-        }
-
-        return $ret;
     }
 }

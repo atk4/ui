@@ -4,7 +4,7 @@
 Text
 ====
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Text
 
@@ -48,7 +48,7 @@ Usage
 =====
 
 Text is usable in generic components, where you want to leave possibility of text injection. For instance,
-:php:class:`Message` uses text allowing you to add few parapraphs of text::
+:php:class:`Message` uses text allowing you to add few paragraphs of text::
 
     $message = Message::addTo($app, ['Message Title']);
     $message->addClass('warning');

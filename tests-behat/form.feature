@@ -28,4 +28,4 @@ Scenario: test form response
 
   When I fill in "email5" with "foo@bar"
   And I press button "Save5"
-  Then the "email5"  should start with "random is"
+  Then the field "email5"  should start with "random is"

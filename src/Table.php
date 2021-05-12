@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
+
+use Atk4\Core\Factory;
 
 class Table extends Lister
 {
@@ -67,28 +69,28 @@ class Table extends Lister
     /**
      * Contain the template for the "Head" type row.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $t_head;
 
     /**
      * Contain the template for the "Body" type row.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $t_row;
 
     /**
      * Contain the template for the "Foot" type row.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $t_totals;
 
     /**
      * Contains the output to show if table contains no rows.
      *
-     * @var Template
+     * @var HtmlTemplate
      */
     public $t_empty;
 
@@ -185,7 +187,7 @@ class Table extends Lister
         }
 
         if (!$this->model) {
-            $this->model = new \atk4\ui\Misc\ProxyModel();
+            $this->model = new \Atk4\Ui\Misc\ProxyModel();
         }
 
         // This code should be vaugely consistent with Form\Layout::addControl()
@@ -295,7 +297,7 @@ class Table extends Lister
      * Add column Decorator.
      *
      * @param string $name Column name
-     * @param mixed  $seed Defaults to pass to factory() when decorator is initialized
+     * @param mixed  $seed Defaults to pass to Factory::factory() when decorator is initialized
      *
      * @return Table\Column
      */
@@ -344,14 +346,14 @@ class Table extends Lister
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
      *
-     * @param \atk4\data\Field $field Data model field
-     * @param mixed            $seed  Defaults to pass to factory() when decorator is initialized
+     * @param \Atk4\Data\Field $field Data model field
+     * @param mixed            $seed  Defaults to pass to Factory::factory() when decorator is initialized
      *
      * @return Table\Column
      */
-    public function decoratorFactory(\atk4\data\Field $field, $seed = [])
+    public function decoratorFactory(\Atk4\Data\Field $field, $seed = [])
     {
-        $seed = $this->mergeSeeds(
+        $seed = Factory::mergeSeeds(
             $seed,
             $field->ui['table'] ?? null,
             $this->typeToDecorator[$field->type] ?? null,
@@ -376,7 +378,7 @@ class Table extends Lister
      * ex:
      *  $table->resizableColumn(function($j, $w){
      *       // do somethings with columns width
-     *       $columns = json_decode($w);
+     *       $columns = $this->getApp()->decodeJson($w);
      *   });
      *
      * @param \Closure $fx             a callback function with columns widths as parameter
@@ -417,7 +419,7 @@ class Table extends Lister
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
      *
-     * @return $this|void
+     * @return $this
      */
     public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
     {
@@ -450,10 +452,12 @@ class Table extends Lister
      *
      * @param array|bool $columns
      *
-     * @return \atk4\data\Model
+     * @return \Atk4\Data\Model
      */
-    public function setModel(\atk4\data\Model $model, $columns = null)
+    public function setModel(\Atk4\Data\Model $model, $columns = null)
     {
+        $model->assertIsModel();
+
         parent::setModel($model);
 
         if ($columns === null) {
@@ -482,15 +486,15 @@ class Table extends Lister
 
         // Generate Header Row
         if ($this->header) {
-            $this->t_head->setHtml('cells', $this->getHeaderRowHtml());
-            $this->template->setHtml('Head', $this->t_head->render());
+            $this->t_head->dangerouslySetHtml('cells', $this->getHeaderRowHtml());
+            $this->template->dangerouslySetHtml('Head', $this->t_head->renderToHtml());
         }
 
         // Generate template for data row
-        $this->t_row_master->setHtml('cells', $this->getDataRowHtml());
-        $this->t_row_master['_id'] = '{$_id}';
-        $this->t_row = new Template($this->t_row_master->render());
-        $this->t_row->app = $this->app;
+        $this->t_row_master->dangerouslySetHtml('cells', $this->getDataRowHtml());
+        $this->t_row_master->set('_id', '{$_id}');
+        $this->t_row = new HtmlTemplate($this->t_row_master->renderToHtml());
+        $this->t_row->setApp($this->getApp());
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
@@ -525,11 +529,11 @@ class Table extends Lister
         // Add totals rows or empty message
         if (!$this->_rendered_rows_count) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
-                $this->template->appendHtml('Body', $this->t_empty->render());
+                $this->template->dangerouslyAppendHtml('Body', $this->t_empty->renderToHtml());
             }
         } elseif ($this->totals_plan) {
-            $this->t_totals->setHtml('cells', $this->getTotalsRowHtml());
-            $this->template->appendHtml('Foot', $this->t_totals->render());
+            $this->t_totals->dangerouslySetHtml('cells', $this->getTotalsRowHtml());
+            $this->template->dangerouslyAppendHtml('Foot', $this->t_totals->renderToHtml());
         }
 
         // stop JsPaginator if there are no more records to fetch
@@ -572,12 +576,12 @@ class Table extends Lister
             }
 
             // Render row and add to body
-            $this->t_row->setHtml($html_tags);
-            $this->t_row->set('_id', $this->model->id);
-            $this->template->appendHtml('Body', $this->t_row->render());
+            $this->t_row->dangerouslySetHtml($html_tags);
+            $this->t_row->set('_id', $this->model->getId());
+            $this->template->dangerouslyAppendHtml('Body', $this->t_row->renderToHtml());
             $this->t_row->del(array_keys($html_tags));
         } else {
-            $this->template->appendHtml('Body', $this->t_row->render());
+            $this->template->dangerouslyAppendHtml('Body', $this->t_row->renderToHtml());
         }
     }
 
@@ -620,7 +624,7 @@ class Table extends Lister
      */
     public function jsRemoveRow($id, $transition = 'fade left')
     {
-        return $this->js()->find("tr[data-id={$id}]")->transition($transition);
+        return $this->js()->find('tr[data-id=' . $id . ']')->transition($transition);
     }
 
     /**
@@ -639,7 +643,7 @@ class Table extends Lister
                 }
 
                 // closure support
-                // arguments - current value, key, \atk4\ui\Table object
+                // arguments - current value, key, \Atk4\Ui\Table object
                 if ($f instanceof \Closure) {
                     $this->totals[$key] += ($f($this->model->get($key), $key, $this) ?: 0);
                 } elseif (is_string($f)) { // built-in methods

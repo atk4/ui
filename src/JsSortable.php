@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 class JsSortable extends JsCallback
 {
@@ -58,9 +58,9 @@ class JsSortable extends JsCallback
     {
         parent::init();
         if (!$this->view) {
-            $this->view = $this->owner;
+            $this->view = $this->getOwner();
         }
-        $this->app->requireJs('https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.5/lib/draggable.bundle.js');
+        $this->getApp()->requireJs('https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.5/lib/draggable.bundle.js');
 
         $this->view->js(true)->atkJsSortable([
             'uri' => $this->getJsUrl(),

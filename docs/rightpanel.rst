@@ -5,21 +5,21 @@
 Right Panel
 ===========
 
-.. php:namespace:: atk4\ui\Panel
+.. php:namespace:: Atk4\Ui\Panel
 
 .. php:class:: Right
 
 Right panel are view attached to the app layout. They are display on demand via javascript event
 and can display content statically or dynamically using Loadable Content.
 
-Demo: https://ui.agiletoolkit.org/demos/layout-panel.php
+Demo: https://ui.agiletoolkit.org/demos/layout/layout-panel.php
 
 Basic Usage
 ===========
 
 Adding a right panel to the app layout and adding content to it::
 
-    $panel = $app->layout->addRightPanel(new \atk4\ui\Panel\Right(['dynamic' => false]));
+    $panel = $app->layout->addRightPanel(new \Atk4\Ui\Panel\Right(['dynamic' => false]));
     Message::addTo($panel, ['This panel contains only static content.']);
 
 By default, panel content are loaded dynamically. If you want to only add static content, you need to specify
@@ -40,7 +40,7 @@ Loading dynamic content within panel is done via the onOpen method
 
 Initializing a panel with onOpen callback::
 
-    $panel_1 = $app->layout->addRightPanel(new \atk4\ui\Panel\Right());
+    $panel_1 = $app->layout->addRightPanel(new \Atk4\Ui\Panel\Right());
     Message::addTo($panel_1, ['This panel will load content dynamically below according to button select on the right.']);
     $btn = Button::addTo($app, ['Button 1']);
     $btn->js(true)->data('btn', '1');
@@ -60,7 +60,7 @@ This method may take up to three arguments.
     as a data property name id (data-id) then if specify, the data id value will be sent as a get argument
     with the callback url.
 
-    $activeCss: a string representing the active state of the triggering element. This css class will be appied
+    $activeCss: a string representing the active state of the triggering element. This css class will be applied
     to the trigger element as long as the panel remains open. This help visualize, which element has trigger the
     panel opening.
 

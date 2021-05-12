@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
 /**
  * Input element for a form control.
@@ -19,7 +19,7 @@ class Textarea extends Input
      */
     public function getInput()
     {
-        return $this->app->getTag(
+        return $this->getApp()->getTag(
             'textarea',
             array_merge([
                 'name' => $this->short_name,

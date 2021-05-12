@@ -2,44 +2,48 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
-use atk4\ui\Form;
-use atk4\ui\JsReload;
+use Atk4\Data\Model;
+use Atk4\Ui\Form;
+use Atk4\Ui\JsReload;
 
-/** @var \atk4\ui\App $app */
+/** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // Testing form.
 
-\atk4\ui\Header::addTo($app, ['Form automatically decided how many columns to use']);
+\Atk4\Ui\Header::addTo($app, ['Form automatically decided how many columns to use']);
 
-$buttons = \atk4\ui\View::addTo($app, ['ui' => 'green basic buttons']);
+$buttons = \Atk4\Ui\View::addTo($app, ['ui' => 'green basic buttons']);
 
-$seg = \atk4\ui\View::addTo($app, ['ui' => 'raised segment']);
+$seg = \Atk4\Ui\View::addTo($app, ['ui' => 'raised segment']);
 
-\atk4\ui\Button::addTo($buttons, ['Use Country Model', 'icon' => 'arrow down'])
+\Atk4\Ui\Button::addTo($buttons, ['Use Country Model', 'icon' => 'arrow down'])
     ->on('click', new JsReload($seg, ['m' => 'country']));
-\atk4\ui\Button::addTo($buttons, ['Use File Model', 'icon' => 'arrow down'])
+\Atk4\Ui\Button::addTo($buttons, ['Use File Model', 'icon' => 'arrow down'])
     ->on('click', new JsReload($seg, ['m' => 'file']));
-\atk4\ui\Button::addTo($buttons, ['Use Stat Model', 'icon' => 'arrow down'])
+\Atk4\Ui\Button::addTo($buttons, ['Use Stat Model', 'icon' => 'arrow down'])
     ->on('click', new JsReload($seg, ['m' => 'stat']));
 
 $form = Form::addTo($seg, ['layout' => [Form\Layout\Columns::class]]);
-$form->setModel(
+$form->setModel((
     isset($_GET['m']) ? (
         $_GET['m'] === 'country' ? new Country($app->db) : (
             $_GET['m'] === 'file' ? new File($app->db) : new Stat($app->db)
         )
     ) : new Stat($app->db)
-)->tryLoadAny();
+)->tryLoadAny());
 
 $form->onSubmit(function (Form $form) {
     $errors = [];
-    foreach ($form->model->dirty as $field => $value) {
+    $modelDirty = \Closure::bind(function () use ($form): array { // TODO Model::dirty property is private
+        return $form->model->dirty;
+    }, null, Model::class)();
+    foreach ($modelDirty as $field => $value) {
         // we should care only about editable fields
         if ($form->model->getField($field)->isEditable()) {
-            $errors[] = $form->error($field, 'Value was changed, ' . json_encode($value) . ' to ' . json_encode($form->model->get($field)));
+            $errors[] = $form->error($field, 'Value was changed, ' . $form->getApp()->encodeJson($value) . ' to ' . $form->getApp()->encodeJson($form->model->get($field)));
         }
     }
 

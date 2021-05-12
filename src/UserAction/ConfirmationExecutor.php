@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\UserAction;
+namespace Atk4\Ui\UserAction;
 
-use atk4\core\HookTrait;
-use atk4\data\Model;
-use atk4\ui\Button;
-use atk4\ui\Exception;
-use atk4\ui\JsExpressionable;
-use atk4\ui\JsFunction;
-use atk4\ui\JsToast;
-use atk4\ui\Loader;
-use atk4\ui\Modal;
-use atk4\ui\Text;
-use atk4\ui\View;
+use Atk4\Core\HookTrait;
+use Atk4\Data\Model;
+use Atk4\Data\Model\UserAction;
+use Atk4\Ui\Button;
+use Atk4\Ui\Exception;
+use Atk4\Ui\JsExpressionable;
+use Atk4\Ui\JsFunction;
+use Atk4\Ui\JsToast;
+use Atk4\Ui\Loader;
+use Atk4\Ui\Modal;
+use Atk4\Ui\Text;
+use Atk4\Ui\View;
 
 /**
  * Modal executor for action that required a confirmation.
@@ -97,6 +98,11 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         return [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])];
     }
 
+    public function getAction(): UserAction
+    {
+        return $this->action;
+    }
+
     /**
      * Will associate executor with the action.
      *
@@ -107,12 +113,11 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->action = $action;
         $this->afterActionInit($action);
 
-        $this->title = $this->title ?? trim($action->caption . ' ' . $this->action->owner->getModelCaption());
+        $this->title = $this->title ?? $action->getDescription();
         $this->step = $this->stickyGet('step');
 
         $this->actionInitialized = true;
         $this->jsSetBtnState($this);
-        $this->doSteps();
 
         return $this;
     }
@@ -120,11 +125,11 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Perform this action steps.
      */
-    public function doSteps()
+    public function executeModelAction()
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action->owner->tryLoad($id);
+            $this->action->setEntity($this->action->getModel()->tryLoad($id));
         }
 
         $this->loader->set(function ($modal) {
@@ -161,10 +166,10 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
                 'click',
                 new JsFunction(
                     [
-                        $this->loader->jsload(
+                        $this->loader->jsLoad(
                             [
                                 'step' => 'exec',
-                                $this->name => $this->action->owner->get('id'),
+                                $this->name => $this->action->getEntity()->getId(),
                             ],
                             ['method' => 'post']
                         ),
@@ -201,19 +206,16 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     {
         $return = $this->action->execute([]);
 
-        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->owner->id));
+        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->getEntity()->getId()));
     }
 
     /**
      * Return proper js statement when action execute.
-     *
-     * @param $obj
-     * @param $id
      */
     protected function jsGetExecute($obj, $id): array
     {
         $success = $this->jsSuccess instanceof \Closure
-            ? ($this->jsSuccess)($this, $this->action->owner, $id)
+            ? ($this->jsSuccess)($this, $this->action->getModel(), $id)
             : $this->jsSuccess;
 
         return [

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * One Tab of Tabs widget.
@@ -24,7 +24,7 @@ class Tab extends Item
      */
     public function setPath($path)
     {
-        $this->path = $this->app->url($path) . '#';
+        $this->path = $this->getApp()->url($path) . '#';
 
         return $this;
     }
@@ -48,7 +48,7 @@ class Tab extends Item
 
         $this->js(true)->tab($this->settings);
 
-        if ($this->owner->activeTabName === $this->name) {
+        if ($this->getOwner()->activeTabName === $this->name) {
             $this->js(true)->click();
         }
 

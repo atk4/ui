@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * This class generates action, that will be able to loop-back to the callback method.
@@ -50,7 +50,7 @@ class JsReload implements JsExpressionable
         $this->includeStorage = $includeStorage;
     }
 
-    public function jsRender()
+    public function jsRender(): string
     {
         $final = (new Jquery($this->view))
             ->atkReloadView(

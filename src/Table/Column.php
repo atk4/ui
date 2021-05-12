@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table;
+namespace Atk4\Ui\Table;
 
-use atk4\data\Field;
-use atk4\data\Model;
-use atk4\ui\Exception;
-use atk4\ui\Jquery;
-use atk4\ui\JsExpression;
-use atk4\ui\Popup;
+use Atk4\Data\Field;
+use Atk4\Data\Model;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsExpression;
+use Atk4\Ui\Popup;
 
 /**
  * Implements Column helper for table.
  *
- * @property \atk4\ui\Table $owner
+ * @method \Atk4\Ui\Table getOwner()
  */
 class Column
 {
-    use \atk4\core\AppScopeTrait;
-    use \atk4\core\InitializerTrait;
-    use \atk4\core\TrackableTrait;
-    use \atk4\core\DiContainerTrait;
+    use \Atk4\Core\AppScopeTrait;
+    use \Atk4\Core\DiContainerTrait;
+    use \Atk4\Core\InitializerTrait;
+    use \Atk4\Core\TrackableTrait;
 
     /** @const string */
     public const HOOK_GET_HTML_TAGS = self::class . '@getHtmlTags';
@@ -31,7 +31,7 @@ class Column
     /**
      * Link back to the table, where column is used.
      *
-     * @var \atk4\ui\Table
+     * @var \Atk4\Ui\Table
      */
     public $table;
 
@@ -99,7 +99,7 @@ class Column
     {
         $id = $this->name . '_ac';
 
-        $popup = $this->table->owner->add($popup ?: [Popup::class])->setHoverable();
+        $popup = $this->table->getOwner()->add($popup ?: [Popup::class])->setHoverable();
 
         $this->setHeaderPopup($icon, $id);
 
@@ -110,7 +110,7 @@ class Column
                 'on' => 'click',
                 'position' => 'bottom left',
                 'movePopup' => $this->columnData ? true : false,
-                'target' => $this->columnData ? "th[data-column={$this->columnData}]" : false,
+                'target' => $this->columnData ? 'th[data-column=' . $this->columnData . ']' : false,
                 'distanceAway' => 10,
                 'offset' => -2,
             ]
@@ -173,7 +173,7 @@ class Column
      * This method return a callback where you can detect
      * menu item change via $cb->onMenuItem($item) function.
      *
-     * @return \atk4\ui\JsCallback
+     * @return \Atk4\Ui\JsCallback
      */
     public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null)
     {
@@ -190,16 +190,16 @@ class Column
 
         $cb = Column\JsHeader::addTo($this->table);
 
-        $function = "function(value, text, item){
-                            if (value === undefined || value === '' || value === null) return;
+        $function = 'function(value, text, item){
+                            if (value === undefined || value === \'\' || value === null) return;
                             $(this)
                             .api({
-                                on:'now',
-                                url:'{$cb->getJsUrl()}',
-                                data:{item:value, id:$(this).data('menu-id')}
+                                on:\'now\',
+                                url:\'' . $cb->getJsUrl() . '\',
+                                data:{item:value, id:$(this).data(\'menu-id\')}
                                 }
                             );
-                     }";
+                     }';
 
         $chain = new Jquery('#' . $id);
         $chain->dropdown([
@@ -253,7 +253,7 @@ class Column
         return $this;
     }
 
-    public function getTagAttributes($position, $attr = [])
+    public function getTagAttributes($position, array $attr = []): array
     {
         // "all" applies on all positions
         // $position is for specific position classes
@@ -270,13 +270,11 @@ class Column
      * Returns a suitable cell tag with the supplied value. Applies modifiers
      * added through addClass and setAttr.
      *
-     * @param string $position - 'head', 'body' or 'tail'
-     * @param string $value    - what is inside? either html or array defining HTML structure, see App::getTag help
-     * @param array  $attr     - extra attributes to apply on the tag
-     *
-     * @return string
+     * @param string       $position 'head', 'body' or 'tail'
+     * @param string|array $value    either html or array defining HTML structure, see App::getTag help
+     * @param array        $attr     extra attributes to apply on the tag
      */
-    public function getTag($position, $value, $attr = [])
+    public function getTag($position, $value, $attr = []): string
     {
         $attr = $this->getTagAttributes($position, $attr);
 
@@ -284,7 +282,7 @@ class Column
             $attr['class'] = implode(' ', $attr['class']);
         }
 
-        return $this->app->getTag($position === 'body' ? 'td' : 'th', $attr, $value);
+        return $this->getApp()->getTag($position === 'body' ? 'td' : 'th', $attr, $value);
     }
 
     /**
@@ -359,7 +357,7 @@ class Column
      */
     public function getTotalsCellHtml(Field $field, $value)
     {
-        return $this->getTag('foot', $this->app->ui_persistence->typecastSaveField($field, $value));
+        return $this->getTag('foot', $this->getApp()->ui_persistence->typecastSaveField($field, $value));
     }
 
     /**

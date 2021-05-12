@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Control;
+namespace Atk4\Ui\Form\Control;
 
-use atk4\ui\Exception;
-use atk4\ui\Form;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Form;
+use Atk4\Ui\Jquery;
 
 /**
  * Input element for a form control.
@@ -68,7 +69,7 @@ class Checkbox extends Form\Control
                 ->addMoreInfo('value', $value);
         }
 
-        parent::set($value);
+        return parent::set($value);
     }
 
     /**

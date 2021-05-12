@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Layout;
+namespace Atk4\Ui\Layout;
 
-use atk4\ui\Header;
-use atk4\ui\Icon;
-use atk4\ui\Item;
-use atk4\ui\Jquery;
-use atk4\ui\Menu;
+use Atk4\Ui\Header;
+use Atk4\Ui\Icon;
+use Atk4\Ui\Item;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\Menu;
 
 /**
  * Implements a classic 100% width admin layout.
@@ -32,7 +32,7 @@ use atk4\ui\Menu;
  *
  *  - Content
  */
-class Admin extends \atk4\ui\Layout implements NavigableInterface
+class Admin extends \Atk4\Ui\Layout implements NavigableInterface
 {
     public $menuLeft;    // vertical menu
     public $menu;        // horizontal menu
@@ -62,7 +62,7 @@ class Admin extends \atk4\ui\Layout implements NavigableInterface
             ]);
             Icon::addTo($this->burger, ['content']);
 
-            Header::addTo($this->menu, [$this->app->title, 'size' => 4]);
+            Header::addTo($this->menu, [$this->getApp()->title, 'size' => 4]);
         }
 
         if ($this->menuRight === null) {
@@ -74,13 +74,11 @@ class Admin extends \atk4\ui\Layout implements NavigableInterface
             $this->menuLeft = Menu::addTo($this, ['ui' => 'atk-sidenav-content'], ['LeftMenu']);
         }
 
-        $this->template->trySet('version', $this->app->version);
+        $this->template->trySet('version', $this->getApp()->version);
     }
 
     /**
      * Add a group to left menu.
-     *
-     * @param $seed
      */
     public function addMenuGroup($seed): Menu
     {

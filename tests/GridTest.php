@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\ui\Table;
+use Atk4\Ui\Table;
 
-class GridTest extends \atk4\core\AtkPhpunit\TestCase
+class GridTest extends \Atk4\Core\AtkPhpunit\TestCase
 {
     use Concerns\HandlesTable;
 
@@ -18,10 +18,10 @@ class GridTest extends \atk4\core\AtkPhpunit\TestCase
             1 => ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'],
             2 => ['id' => 2, 'email' => 'test@yahoo.com', 'password' => 'secret'],
         ];
-        $this->m = new MyModel(new \atk4\data\Persistence\Array_($a));
+        $this->m = new MyModel(new \Atk4\Data\Persistence\Array_($a));
     }
 
-    public function test1()
+    public function test1(): void
     {
         $t = new Table();
         $t->invokeInit();
@@ -37,7 +37,7 @@ class GridTest extends \atk4\core\AtkPhpunit\TestCase
         );
     }
 
-    public function test1a()
+    public function test1a(): void
     {
         $t = new Table();
         $t->invokeInit();
@@ -53,7 +53,7 @@ class GridTest extends \atk4\core\AtkPhpunit\TestCase
         );
     }
 
-    public function test2()
+    public function test2(): void
     {
         $t = new Table();
         $t->invokeInit();
@@ -67,7 +67,7 @@ class GridTest extends \atk4\core\AtkPhpunit\TestCase
         );
     }
 
-    public function test3()
+    public function test3(): void
     {
         $t = new Table();
         $t->invokeInit();
@@ -82,7 +82,7 @@ class GridTest extends \atk4\core\AtkPhpunit\TestCase
     }
 }
 
-class MyModel extends \atk4\data\Model
+class MyModel extends \Atk4\Data\Model
 {
     public $title_field = 'email';
 

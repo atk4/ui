@@ -5,9 +5,9 @@ declare(strict_types=1);
  * Display a card section within a Card View.
  */
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\data\Model;
+use Atk4\Data\Model;
 
 class CardSection extends View
 {
@@ -17,7 +17,7 @@ class CardSection extends View
 
     public $glue = ': ';
 
-    public $tableClass = 'ui fixed small';
+    public $tableClass = ['ui', 'fixed', 'small'];
 
     protected function init(): void
     {
@@ -67,8 +67,11 @@ class CardSection extends View
     private function addSectionFields(Model $model, array $fields, bool $useLabel = false)
     {
         foreach ($fields as $field) {
+            if ($model->title_field === $field) {
+                continue;
+            }
             $label = $model->getField($field)->getCaption();
-            $value = $this->app ? $this->app->ui_persistence->typecastSaveField($model->getField($field), $model->get($field)) : $model->get($field);
+            $value = $this->issetApp() ? $this->getApp()->ui_persistence->typecastSaveField($model->getField($field), $model->get($field)) : $model->get($field);
             if ($useLabel) {
                 $value = $label . $this->glue . $value;
             }
@@ -82,9 +85,7 @@ class CardSection extends View
      */
     private function addTableSection(Model $model, array $fields)
     {
-        $cardTable = new CardTable(['class' => $this->tableClass]);
-        $cardTable->invokeInit();
-        $model = $cardTable->setModel($model, $fields);
-        $this->add($cardTable);
+        $cardTable = CardTable::addTo($this, ['class' => $this->tableClass]);
+        $cardTable->setModel($model, $fields);
     }
 }

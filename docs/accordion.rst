@@ -1,5 +1,5 @@
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Accordion
 
@@ -7,7 +7,7 @@
 Accordion
 =========
 
-Accordion implement another way to organise your data. The implementation is based on: https://fomantic-ui.com/modules/accordion.html.
+Accordion implement another way to organize your data. The implementation is based on: https://fomantic-ui.com/modules/accordion.html.
 
 
 Demo: https://ui.agiletoolkit.org/demos/accordion.php

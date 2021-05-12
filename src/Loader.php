@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Class implements Loader, which is a View that will dynamically render it's content.
@@ -64,14 +64,11 @@ class Loader extends View
      * Or
      *  $l1->set([$my_object, 'run_long_process']);
      *
-     * NOTE: default values are like that due ot PHP 7.0 warning:
-     * Declaration of \atk4\ui\Loader::set($fx, $args = Array) should be compatible with \atk4\ui\View::set($arg1 = Array, $arg2 = NULL)
-     *
      * @param \Closure $fx
      *
      * @return $this
      */
-    public function set($fx = [], $ignore = null)
+    public function set($fx = null, $ignore = null)
     {
         if (!($fx instanceof \Closure)) {
             throw new Exception('Need to pass a function to Loader::set()');
@@ -120,7 +117,7 @@ class Loader extends View
         ]);
     }
 
-    protected function mergeStickyArgsFromChildView(): ?AbstractView
+    protected function mergeStickyArgsFromChildView(): AbstractView
     {
         return $this->cb;
     }

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\core\DiContainerTrait;
+use Atk4\Core\DiContainerTrait;
 
 /**
  * Class JsToast
@@ -49,7 +49,7 @@ class JsToast implements JsExpressionable
         return $this;
     }
 
-    public function jsRender()
+    public function jsRender(): string
     {
         return (new Jquery('body'))->toast($this->settings)->jsRender();
     }

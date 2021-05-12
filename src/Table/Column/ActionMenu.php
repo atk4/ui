@@ -6,19 +6,18 @@ declare(strict_types=1);
  * Will create a dropdown menu within table column.
  */
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\core\FactoryTrait;
-use atk4\data\Model;
-use atk4\ui\Jquery;
-use atk4\ui\JsChain;
-use atk4\ui\Table;
-use atk4\ui\View;
+use Atk4\Core\Factory;
+use Atk4\Data\Model;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsChain;
+use Atk4\Ui\Table;
+use Atk4\Ui\UserAction\ExecutorInterface;
+use Atk4\Ui\View;
 
 class ActionMenu extends Table\Column
 {
-    use FactoryTrait;
-
     /**
      * Menu items collections.
      *
@@ -67,7 +66,7 @@ class ActionMenu extends Table\Column
         parent::init();
     }
 
-    public function getTag($position, $value, $attr = [])
+    public function getTag($position, $value, $attr = []): string
     {
         if ($this->table->hasCollapsingCssActionColumn && $position === 'body') {
             $attr['class'][] = 'collapsing';
@@ -79,48 +78,29 @@ class ActionMenu extends Table\Column
     /**
      * Add a menu item in Dropdown.
      *
-     * @param View|string                    $item
-     * @param \Closure|Model\UserAction|null $action
+     * @param View|string                           $item
+     * @param \Closure|Model|ExecutorInterface|null $action
      *
      * @return object|string
      */
-    public function addActionMenuItem($item, $action = null, string $confirmMsg = '', bool $isDisabled = false)
+    public function addActionMenuItem($item, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
-        // If action is not specified, perhaps it is defined in the model
-        if (!$action) {
-            if (is_string($item)) {
-                $action = $this->table->model->getUserAction($item);
-            } elseif ($item instanceof Model\UserAction) {
-                $action = $item;
-            }
-
-            if ($action) {
-                $item = $action->caption;
-            }
-        }
-
         $name = $this->name . '_action_' . (count($this->items) + 1);
 
-        if ($action instanceof Model\UserAction) {
-            $confirmMsg = $action->ui['confirm'] ?? $confirmMsg;
-
-            $isDisabled = !$action->enabled;
-
-            if ($action->enabled instanceof \Closure) {
-                $this->callbacks[$name] = $action->enabled;
-            }
-        }
-
         if (!is_object($item)) {
-            $item = $this->factory([\atk4\ui\View::class], ['id' => false, 'ui' => 'item', 'content' => $item]);
+            $item = Factory::factory([\Atk4\Ui\View::class], ['id' => false, 'ui' => 'item', 'content' => $item]);
         }
 
         $this->items[] = $item;
 
         $item->addClass('{$_' . $name . '_disabled} i_' . $name);
 
-        if ($isDisabled) {
+        if ($isDisabled === true) {
             $item->addClass('disabled');
+        }
+
+        if (is_callable($isDisabled)) {
+            $this->callbacks[$name] = $isDisabled;
         }
 
         // set executor context.
@@ -131,10 +111,7 @@ class ActionMenu extends Table\Column
         return $item;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getHeaderCellHtml(\atk4\data\Field $field = null, $value = null)
+    public function getHeaderCellHtml(\Atk4\Data\Field $field = null, $value = null)
     {
         $this->table->js(true)->find('.atk-action-menu')->dropdown(
             array_merge(
@@ -151,10 +128,7 @@ class ActionMenu extends Table\Column
         return parent::getHeaderCellHtml($field, $value);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDataCellTemplate(\atk4\data\Field $field = null)
+    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
     {
         if (!$this->items) {
             return '';

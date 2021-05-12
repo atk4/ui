@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column\FilterModel;
+namespace Atk4\Ui\Table\Column\FilterModel;
 
-use atk4\data\Model;
-use atk4\ui\Table\Column;
+use Atk4\Data\Model;
+use Atk4\Ui\Table\Column;
 use DateTime;
 
 class TypeDate extends Column\FilterModel
@@ -60,7 +60,7 @@ class TypeDate extends Column\FilterModel
         $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);
 
         // The integer field to generate a date when x day selector is used.
-        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [\atk4\ui\Form\Control\Line::class, 'inputType' => 'number']]]);
+        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [\Atk4\Ui\Form\Control\Line::class, 'inputType' => 'number']]]);
     }
 
     /**
@@ -114,17 +114,17 @@ class TypeDate extends Column\FilterModel
     {
         switch ($dateModifier) {
             case 'exact':
-                $date = $this->data['exact_date'];
+                $date = $this->get('exact_date');
 
                 break;
             case 'x_day_ago':
             case 'x_day_before':
-                $date = new DateTime('-' . $this->data['number_days'] . ' days');
+                $date = new DateTime('-' . $this->get('number_days') . ' days');
 
                 break;
             case 'x_day_now':
             case 'x_day_after':
-                $date = new DateTime('+' . $this->data['number_days'] . ' days');
+                $date = new DateTime('+' . $this->get('number_days') . ' days');
 
                 break;
             default:

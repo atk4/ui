@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\ui\View;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Ui\View;
 
 /**
  * Multiple tests to ensure that adding views through various patterns initializes them
@@ -13,19 +13,16 @@ use atk4\ui\View;
  */
 class RenderTreeTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test constructor.
-     */
-    public function testBasic()
+    public function testBasic(): void
     {
         $b = new View();
         $b->render();
 
-        $this->assertNotNull($b->app);
+        $this->assertNotNull($b->getApp());
         $this->assertNotNull($b->template);
     }
 
-    public function testBasicNest1()
+    public function testBasicNest1(): void
     {
         $b = new View();
 
@@ -33,9 +30,9 @@ class RenderTreeTest extends AtkPhpunit\TestCase
 
         $b->render();
 
-        $this->assertNotNull($b2->app);
+        $this->assertNotNull($b2->getApp());
         $this->assertNotNull($b2->template);
 
-        $this->assertSame($b2->app, $b->app);
+        $this->assertSame($b2->getApp(), $b->getApp());
     }
 }

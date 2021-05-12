@@ -2,7 +2,7 @@
 Core Concepts
 =============
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 Agile Toolkit and Agile UI are built upon specific core concepts. Understanding those
 concepts is very important especially if you plan to write and distribute your own
@@ -15,8 +15,8 @@ In any Agile UI application you will always need to have an App class. Even if y
 create this class explicitly, components generally will do it for you. The common pattern
 is::
 
-    $app = new \atk4\ui\App('My App');
-    $app->initLayout([\atk4\ui\Layout\Centered::class]);
+    $app = new \Atk4\Ui\App('My App');
+    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
     LoremIpsum::addTo($app);
 
 .. toctree::
@@ -55,7 +55,7 @@ hierarchy will render itself and will present HTML output that would appear to u
 
 You can create and link multiple UI objects together before linking them with other chunks of your UI::
 
-    $msg = new \atk4\ui\Message('Hey There');
+    $msg = new \Atk4\Ui\Message('Hey There');
     Button::addTo($msg, ['Button']);
 
     $app->add($msg);
@@ -82,7 +82,7 @@ we use :php:class:`Console` instead, which must display an interactive data stre
 
 In Agile UI you can request that some $_GET arguments are preserved and included into callback urls::
 
-    if($this->app->stickyGet('message')) {
+    if($this->getApp()->stickyGet('message')) {
         Message::addTo($app)->set($_GET['message']);
     }
 
@@ -132,7 +132,7 @@ Agile UI uses various techniques to present data formats, so that as a developer
 have to worry over the details::
 
     $user = new User($db);
-    $user->load(1);
+    $user = $user->load(1);
 
     $view = View::addTo($app, ['template'=>'Hello, {$name}, your balance is {$balance}']);
     $view->setModel($user);

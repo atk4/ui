@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\ui\App;
-use atk4\ui\Template;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Ui\App;
+use Atk4\Ui\HtmlTemplate;
 
 class AppTest extends AtkPhpunit\TestCase
 {
@@ -18,19 +18,19 @@ class AppTest extends AtkPhpunit\TestCase
         ]);
     }
 
-    public function testTemplateClassDefault()
+    public function testTemplateClassDefault(): void
     {
         $app = $this->getApp();
 
         $this->assertInstanceOf(
-            Template::class,
+            HtmlTemplate::class,
             $app->loadTemplate('html.html')
         );
     }
 
-    public function testTemplateClassCustom()
+    public function testTemplateClassCustom(): void
     {
-        $anotherTemplateClass = new class() extends Template {
+        $anotherTemplateClass = new class() extends HtmlTemplate {
         };
 
         $app = $this->getApp();

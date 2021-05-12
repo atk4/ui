@@ -5,18 +5,16 @@ declare(strict_types=1);
  * LoadableContent interface.
  */
 
-namespace atk4\ui\Panel;
+namespace Atk4\Ui\Panel;
 
-use atk4\ui\Callback;
+use Atk4\Ui\Callback;
 
 interface LoadableContent
 {
     /**
      * Add JsCallback.
-     *
-     * @return mixed
      */
-    public function setCb(Callback $cb);
+    public function setCb(Callback $cb): void;
 
     /**
      * Return js Callback url string.
@@ -26,5 +24,5 @@ interface LoadableContent
     /**
      * The callback for loading content.
      */
-    public function onLoad(\Closure $fx);
+    public function onLoad(\Closure $fx): void;
 }

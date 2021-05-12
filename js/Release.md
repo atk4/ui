@@ -1,5 +1,66 @@
 ## Release note
 
+### version 1.19.2 (2021-02-05)
+
+- Fix issue in js-search plugin when not using ajax request.
+- Add missing popupService to atk object.
+
+### version 1.19.1 (2021-01-05)
+
+- Update package dependency
+
+### version 1.19.0 (2020-12-18)
+
+- Multiline component
+  - add support for Lookup;
+  - refactor entire component; 
+
+### version 1.18.0 (2020-11-25)
+
+- Add atk-lookup share component for query-builder.
+
+### version 1.17.0 (2020-11-10)
+
+- atk-date-picker use vue-flatpickr-component instead of v-date-picker;
+- enable time and datetime in query builder;
+- enable time and datetime in multiline;
+
+### version 1.16.4 (2020-11-09)
+
+- adding textarea form control to be detect by form leave when set.
+  see https://github.com/atk4/ui/issues/1527
+- Refactor arrow function.  
+
+### version 1.16.3 (2020-09-30)
+
+- create atk-date-picker vue component.
+- Update query-builder
+    - allow date picker customization;
+    
+- add atk-date-picker to multiline component.
+
+
+### version 1.16.2 (2020-09-23)
+- VueService
+    - Add possibility to check if all components on page are load.
+    - Add Loading and Error component for dynamic component.
+- Rename window var bundlePublicPath to __atkBundlePublicPath
+
+### version 1.16.1 (2020-09-17)
+- set js bundle path dynamically for loading ressource.
+
+### version 1.16.0 (2020-09-16)
+
+- Split Vue component into chunk files.
+    - each vue component is now load dynamically as needed.
+
+### version 1.15.4 (2020-09-08)
+
+- add atk eventBus for listening and publishing event.
+    - replace deprecated Vue eventBus;
+- create atk-utils file for options and eventBus.
+- remove Vue component deprecated inline-template in v3.
+
 ### version 1.15.3 (2020-08-27)
 
  - set proper debounce value in:

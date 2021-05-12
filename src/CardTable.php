@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-use atk4\data\Model;
+use Atk4\Data\Model;
 
 /**
  * Card class displays a single record data.
@@ -29,7 +29,7 @@ class CardTable extends Table
 
         $data = [];
 
-        $ui_values = $this->app ? $this->app->ui_persistence->typecastSaveRow($model, $model->get()) : $model->get();
+        $ui_values = $this->issetApp() ? $this->getApp()->ui_persistence->typecastSaveRow($model, $model->get()) : $model->get();
 
         foreach ($model->get() as $key => $value) {
             if (!$columndef || ($columndef && in_array($key, $columndef, true))) {
@@ -43,9 +43,12 @@ class CardTable extends Table
 
         $this->_bypass = true;
         $mm = parent::setSource($data);
-        $this->addDecorator('value', [Table\Column\Multiformat::class, function ($row, $field) use ($model) {
-            $field = $model->getField($row->data['id']);
-            $ret = $this->decoratorFactory($field);
+        $this->addDecorator('value', [Table\Column\Multiformat::class, function (Model $row, $field) use ($model) {
+            $field = $model->getField($row->getId());
+            $ret = $this->decoratorFactory(
+                $field,
+                $field->type === 'boolean' ? [Table\Column\Status::class,  ['positive' => [true, 'Yes'], 'negative' => [false, 'No']]] : []
+            );
             if ($ret instanceof Table\Column\Money) {
                 $ret->attr['all']['class'] = ['single line'];
             }

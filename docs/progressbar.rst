@@ -1,5 +1,5 @@
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: ProgressBar
 
@@ -7,7 +7,7 @@
 ProgressBar
 ===========
 
-ProgressBar is actually a quite simple element, but it can be made quite interractive along with
+ProgressBar is actually a quite simple element, but it can be made quite interactive along with
 :php:class:`JsSse`.
 
 Demo: https://ui.agiletoolkit.org/demos/progressbar.php

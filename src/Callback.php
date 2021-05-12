@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Add this object to your render tree and it will expose a unique URL which, when
@@ -33,9 +33,7 @@ class Callback extends AbstractView
      */
     protected function init(): void
     {
-        if (!$this->app) {
-            throw new Exception('Callback must be part of a render tree');
-        }
+        $this->getApp(); // assert has App
 
         parent::init();
 
@@ -58,16 +56,16 @@ class Callback extends AbstractView
      * @param \Closure $fx
      * @param array    $args
      *
-     * @return mixed|null
+     * @return mixed
      */
     public function set($fx = null, $args = null)
     {
         if ($this->isTriggered() && $this->canTrigger()) {
-            $this->app->catch_runaway_callbacks = false;
-            $t = $this->app->run_called;
-            $this->app->run_called = true;
+            $this->getApp()->catch_runaway_callbacks = false;
+            $t = $this->getApp()->run_called;
+            $this->getApp()->run_called = true;
             $ret = $fx(...($args ?? []));
-            $this->app->run_called = $t;
+            $this->getApp()->run_called = $t;
 
             return $ret;
         }
@@ -79,7 +77,7 @@ class Callback extends AbstractView
     public function terminateJson(AbstractView $view): void
     {
         if ($this->canTerminate()) {
-            $this->app->terminateJson($view);
+            $this->getApp()->terminateJson($view);
         }
     }
 
@@ -147,6 +145,6 @@ class Callback extends AbstractView
         // DEV NOTE:
         // - getUrlArguments $value used only in https://github.com/atk4/ui/blob/08644a685a9ee07b4e94d1e35e3bd3c95b7a013d/src/VirtualPage.php#L134
         // - $_GET['__atk_callback'] from getUrlArguments seems to control terminating behaviour!
-        return array_merge(parent::_getStickyArgs(), $this->getUrlArguments() /* TODO we do not want/need all Callback args probably */);
+        return array_merge(parent::_getStickyArgs(), $this->getUrlArguments() /* TODO we do not want/need all Callback args probably*/);
     }
 }

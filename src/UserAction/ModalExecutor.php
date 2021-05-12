@@ -2,20 +2,21 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\UserAction;
+namespace Atk4\Ui\UserAction;
 
-use atk4\core\HookTrait;
-use atk4\data\Model;
-use atk4\data\ValidationException;
-use atk4\ui\Button;
-use atk4\ui\Exception;
-use atk4\ui\Form;
-use atk4\ui\JsExpressionable;
-use atk4\ui\JsFunction;
-use atk4\ui\JsToast;
-use atk4\ui\Message;
-use atk4\ui\Modal;
-use atk4\ui\View;
+use Atk4\Core\Factory;
+use Atk4\Core\HookTrait;
+use Atk4\Data\Model;
+use Atk4\Data\ValidationException;
+use Atk4\Ui\Button;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Form;
+use Atk4\Ui\JsExpressionable;
+use Atk4\Ui\JsFunction;
+use Atk4\Ui\JsToast;
+use Atk4\Ui\Message;
+use Atk4\Ui\Modal;
+use Atk4\Ui\View;
 
 /**
  * Modal executor for action.
@@ -99,7 +100,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * The Loader that will execute all action step.
      *
-     * @var \atk4\ui\Loader
+     * @var \Atk4\Ui\Loader
      */
     public $loader;
     public $loaderUi = 'ui basic segment';
@@ -109,6 +110,11 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     {
         parent::init();
         $this->observeChanges();
+    }
+
+    public function getAction(): Model\UserAction
+    {
+        return $this->action;
     }
 
     /**
@@ -136,7 +142,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);
         $this->addButtonAction($this->btns);
 
-        $this->loader = \atk4\ui\Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader = \Atk4\Ui\Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
         $this->loader->addClass('atk-hide-loading-content');
         $this->actionData = $this->loader->jsGetStoreData()['session'];
@@ -154,15 +160,14 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
         // get necessary step need prior to execute action.
         if ($this->steps = $this->getSteps($action)) {
-            $this->title = $this->title ?? trim($action->caption . ' ' . $this->action->owner->getModelCaption());
+            $this->title = $this->title ?? $action->getDescription();
 
-            $this->btns->add($this->execActionBtn = $this->factory($this->action->ui['execButton'] ?? [Button::class, $this->action->caption, 'blue'], []));
+            $this->btns->add($this->execActionBtn = $this->getExecutorFactory()->createTrigger($action, $this->getExecutorFactory()::MODAL_BUTTON));
 
             // get current step.
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
             // set initial button state
             $this->jsSetBtnState($this, $this->step);
-            $this->doSteps();
         }
 
         $this->actionInitialized = true;
@@ -171,13 +176,13 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     }
 
     /**
-     * Perform action steps.
+     * Perform model action by stepping through args - fields - preview.
      */
-    public function doSteps()
+    public function executeModelAction()
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action->owner->tryLoad($id);
+            $this->action->setEntity($this->action->getModel()->tryLoad($id));
         }
 
         if ($this->action->fields === true) {
@@ -279,7 +284,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             }
 
             if (isset($val['model'])) {
-                $val['model'] = $this->factory($val['model']);
+                $val['model'] = Factory::factory($val['model']);
                 $form->addControl($key, [Form\Control\Lookup::class])->setModel($val['model']);
             } else {
                 $form->addControl($key, null, $val);
@@ -287,13 +292,13 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         }
 
         // set args value if available.
-        $this->setFormField($form, $this->actionData['args'] ?? [], $this->step);
+        $this->setFormField($form, $this->getActionData('args'), $this->step);
 
         // setup exec, next and prev button handler for this step.
         $this->jsSetSubmitBtn($modal, $form, $this->step);
         $this->jsSetPrevHandler($modal, $this->step);
 
-        $form->onSubmit(function (Form $form) use ($modal) {
+        $form->onSubmit(function (Form $form) {
             // collect arguments.
             $this->actionData['args'] = $form->model->get();
 
@@ -309,9 +314,9 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->_addStepTitle($modal, $this->step);
         $form = $this->addFormTo($modal);
 
-        $form->setModel($this->action->owner, $this->action->fields);
+        $form->setModel($this->action->getEntity(), $this->action->fields);
         // set Fields value if set from another step.
-        $this->setFormField($form, $this->actionData['fields'] ?? [], $this->step);
+        $this->setFormField($form, $this->getActionData('fields'), $this->step);
 
         // setup exec, next and prev button handler for this step.
         $this->jsSetSubmitBtn($modal, $form, $this->step);
@@ -337,14 +342,14 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     {
         $this->_addStepTitle($modal, $this->step);
 
-        if ($fields = $this->actionData['fields'] ?? null) {
-            $this->action->getModel()->setMulti($fields);
+        if ($fields = $this->getActionData('fields')) {
+            $this->action->getEntity()->setMulti($fields);
         }
 
         if ($prev = $this->getPreviousStep($this->step)) {
-            $chain = $this->loader->jsload([
+            $chain = $this->loader->jsLoad([
                 'step' => $prev,
-                $this->name => $this->action->owner->get('id'),
+                $this->name => $this->action->getEntity()->getId(),
             ], ['method' => 'post'], $this->loader->name);
 
             $modal->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([$chain])));
@@ -357,10 +362,10 @@ class ModalExecutor extends Modal implements JsExecutorInterface
                 'click',
                 new JsFunction(
                     [
-                        $this->loader->jsload(
+                        $this->loader->jsLoad(
                             [
                                 'step' => 'final',
-                                $this->name => $this->action->owner->get('id'),
+                                $this->name => $this->action->getEntity()->getId(),
                             ],
                             ['method' => 'post'],
                             $this->loader->name
@@ -385,7 +390,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
                 break;
             case 'html':
                 $preview = View::addTo($modal, ['ui' => 'basic segment']);
-                $preview->template->setHtml('Content', $text);
+                $preview->template->dangerouslySetHtml('Content', $text);
 
                 break;
         }
@@ -396,13 +401,23 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      */
     protected function doFinal(View $modal)
     {
-        foreach ($this->actionData['fields'] ?? [] as $field => $value) {
-            $this->action->owner->set($field, $value);
+        foreach ($this->getActionData('fields') as $field => $value) {
+            $this->action->getEntity()->set($field, $value);
         }
 
-        $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
+        $return = $this->action->execute(...$this->_getActionArgs($this->getActionData('args')));
 
-        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->owner->id));
+        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->getEntity()->getId()));
+    }
+
+    protected function getActionData(string $step): array
+    {
+        return $this->actionData[$step] ?? [];
+    }
+
+    protected function getStep(): string
+    {
+        return $this->step;
     }
 
     /**
@@ -413,7 +428,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     protected function jsGetExecute($obj, $id)
     {
         $success = $this->jsSuccess instanceof \Closure
-            ? ($this->jsSuccess)($this, $this->action->owner, $id, $obj)
+            ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
 
         return [
@@ -533,15 +548,15 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         try {
             if ($this->isLastStep($step)) {
                 // collect argument and execute action.
-                $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
-                $js = $this->jsGetExecute($return, $this->action->owner->id);
+                $return = $this->action->execute(...$this->_getActionArgs($this->getActionData('args')));
+                $js = $this->jsGetExecute($return, $this->action->getEntity()->getId());
             } else {
                 // store data and setup reload.
                 $js = [
                     $this->loader->jsAddStoreData($this->actionData, true),
-                    $this->loader->jsload([
+                    $this->loader->jsLoad([
                         'step' => $this->getNextStep($step),
-                        $this->name => $this->action->owner->get('id'),
+                        $this->name => $this->action->getEntity()->getId(),
                     ], ['method' => 'post'], $this->loader->name),
                 ];
             }
@@ -552,7 +567,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         } catch (\Throwable $e) {
             $msg = new Message('Error executing ' . $this->action->caption, 'red');
             $msg->invokeInit();
-            $msg->text->content = $this->app->renderExceptionHtml($e);
+            $msg->text->content = $this->getApp()->renderExceptionHtml($e);
 
             return $msg;
         }
@@ -635,9 +650,9 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     protected function jsSetPrevHandler(View $view, string $step)
     {
         if ($prev = $this->getPreviousStep($step)) {
-            $chain = $this->loader->jsload([
+            $chain = $this->loader->jsLoad([
                 'step' => $prev,
-                $this->name => $this->action->owner->get('id'),
+                $this->name => $this->action->getEntity()->getId(),
             ], ['method' => 'post'], $this->loader->name);
 
             $view->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([$chain])));
@@ -646,8 +661,6 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
     /**
      * Utility for setting form in each step.
-     *
-     * @return Form |null
      */
     protected function addFormTo(View $view): Form
     {
@@ -677,7 +690,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $args = [];
 
         foreach ($this->action->args as $key => $val) {
-            $args[] = $this->actionData['args'][$key];
+            $args[] = $this->getActionData('args')[$key];
         }
 
         return $this->action->preview(...$args);
@@ -716,7 +729,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     private function _handleException(\Throwable $exception, $view, $step)
     {
         $msg = Message::addTo($view, ['Error:', 'type' => 'error']);
-        $msg->text->addHtml($this->app->renderExceptionHtml($exception));
+        $msg->text->addHtml($this->getApp()->renderExceptionHtml($exception));
         $view->js(true, $this->nextStepBtn->js()->addClass('disabled'));
         if (!$this->isFirstStep($step)) {
             $this->jsSetPrevHandler($view, $step);

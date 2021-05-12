@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\data\Field;
-use atk4\data\Model;
-use atk4\ui\Exception;
-use atk4\ui\Table;
+use Atk4\Data\Field;
+use Atk4\Data\Model;
+use Atk4\Ui\Exception;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Table;
 
 /**
  * Swaps out column decorators based on logic.
@@ -53,7 +54,7 @@ class Multiformat extends Table\Column
         $html_tags = [];
         foreach ($decorators as $c) {
             if (!is_object($c)) {
-                $c = $this->owner->decoratorFactory($field, $c);
+                $c = $this->getOwner()->decoratorFactory($field, $c);
             }
 
             if (--$cnt) {
@@ -80,12 +81,12 @@ class Multiformat extends Table\Column
             $html_tags = array_merge($c->getHtmlTags($row, $field), $html_tags);
         }
 
-        $template = new \atk4\ui\Template($cell);
-        $template->app = $this->app;
+        $template = new HtmlTemplate($cell);
+        $template->setApp($this->getApp());
         $template->set($row);
-        $template->setHtml($html_tags);
+        $template->dangerouslySetHtml($html_tags);
 
-        $val = $template->render();
+        $val = $template->renderToHtml();
 
         return ['c_' . $this->short_name => $val];
     }

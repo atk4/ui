@@ -5,18 +5,18 @@
 Paginator
 =========
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 .. php:class:: Paginator
 
 Paginator displays a horizontal UI menu providing links to pages when all of the content does not fit
-on a page. Paginator is a stand-alone component but you can use it in conjunction with other compononents.
+on a page. Paginator is a stand-alone component but you can use it in conjunction with other components.
 
 Adding and Using
 ================
 
-.. php:attr:: $total
+.. php:attr:: total
 
-.. php:attr:: $page
+.. php:attr:: page
 
 Place paginator in a designated spot on your page. You also should specify what's the total number of pages
 paginator should have::
@@ -47,17 +47,17 @@ Range and Logic
 
 You can configure Paginator through properties.
 
-.. php:attr:: $range
+.. php:attr:: range
 
 Reasonable values for $range would be 2 to 5, depending on how big you want your paganiator to appear. Provided
 that you have enough pages, user should see $range*2+1 bars.
 
-.. php:meth: getPaginatorItems
+.. php:method:: getPaginatorItems
 
 You can override this method to implement a different logic for calculating which page links to display given
 the current and total pages.
 
-.. php:meth: getCurrentPage
+.. php:method:: getCurrentPage
 
 Returns number of current page.
 
@@ -78,12 +78,12 @@ The template for Paginator uses custom logic:
 Each of the above (except Spacer) may have `active`, `link` and `page` tags.
 
 
-.. php:meth: renderItem($t, $page = null)
+.. php:method:: renderItem($t, $page = null)
 
 Dynamic Reloading
 =================
 
-.. php:attr:: $reload
+.. php:attr:: reload
 
 Specifying a view here will cause paginator to only reload this particular component and not all the page entirely.
 Usually the View you specify here should also contain the paginator as well as possibly other components that

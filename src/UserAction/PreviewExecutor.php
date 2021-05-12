@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\UserAction;
+namespace Atk4\Ui\UserAction;
 
-use atk4\ui\View;
+use Atk4\Ui\View;
 
 class PreviewExecutor extends BasicExecutor
 {
@@ -19,7 +19,7 @@ class PreviewExecutor extends BasicExecutor
     public function initPreview()
     {
         if (!$this->hasAllArguments()) {
-            \atk4\ui\Message::addTo($this, ['type' => 'error', 'Insufficient arguments']);
+            \Atk4\Ui\Message::addTo($this, ['type' => 'error', $this->missingArgsMsg]);
 
             return;
         }
@@ -39,13 +39,13 @@ class PreviewExecutor extends BasicExecutor
                 break;
             case 'html':
                 $this->preview = View::addTo($this, ['ui' => 'segment']);
-                $this->preview->template->setHtml('Content', $text);
+                $this->preview->template->dangerouslySetHtml('Content', $text);
 
                 break;
         }
 
-        \atk4\ui\Button::addToWithCl($this, $this->executorButton)->on('click', function () {
-            return $this->jsExecute();
+        \Atk4\Ui\Button::addToWithCl($this, $this->executorButton)->on('click', function () {
+            return $this->executeModelAction();
         });
     }
 

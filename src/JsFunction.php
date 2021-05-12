@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Implements structure for js closure.
@@ -53,12 +53,7 @@ class JsFunction implements JsExpressionable
         }
     }
 
-    /**
-     * Render function/expression.
-     *
-     * @return string
-     */
-    public function jsRender()
+    public function jsRender(): string
     {
         $pre = '';
 

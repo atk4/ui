@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 class Layout extends View
 {
@@ -11,6 +11,6 @@ class Layout extends View
      */
     public function addRightPanel(Panel\Loadable $panel): Panel\Loadable
     {
-        return $this->owner->add($panel, 'RightPanel');
+        return $this->getOwner()->add($panel, 'RightPanel');
     }
 }

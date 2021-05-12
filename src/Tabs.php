@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
+
+use Atk4\Core\Factory;
 
 /**
  * Tabs widget.
@@ -72,7 +74,7 @@ class Tabs extends View
             $tab = new Tab($name);
         }
 
-        $tab = $this->add($this->mergeSeeds(['class' => ['item'], 'settings' => $settings], $tab), 'Menu')
+        $tab = $this->add(Factory::mergeSeeds(['class' => ['item'], 'settings' => $settings], $tab), 'Menu')
             ->setElement('a')
             ->setAttr('data-tab', $tab->name);
 

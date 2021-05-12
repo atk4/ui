@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\core\FactoryTrait;
-use atk4\data\Model;
-use atk4\ui\Table;
+use Atk4\Core\Factory;
+use Atk4\Data\Model;
+use Atk4\Ui\Button;
+use Atk4\Ui\JsChain;
+use Atk4\Ui\Table;
+use Atk4\Ui\UserAction\ExecutorInterface;
 
 /**
  * Formatting action buttons column.
  */
 class ActionButtons extends Table\Column
 {
-    use FactoryTrait;
-
     /**
      * Stores all the buttons that have been added.
      *
@@ -40,55 +41,35 @@ class ActionButtons extends Table\Column
      *
      * Returns button object
      *
-     * @param \atk4\ui\View|string           $button
-     * @param \Closure|Model\UserAction|null $action
+     * @param \Atk4\Ui\View|string               $button
+     * @param JsChain|\Closure|ExecutorInterface $action
      *
-     * @return \atk4\ui\View
+     * @return \Atk4\Ui\View
      */
-    public function addButton($button, $action = null, string $confirmMsg = '', bool $isDisabled = false)
+    public function addButton($button, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
-        // If action is not specified, perhaps it is defined in the model
-        if (!$action) {
-            if (is_string($button)) {
-                $action = $this->table->model->getUserAction($button);
-            } elseif ($button instanceof Model\UserAction) {
-                $action = $button;
-            }
-
-            if ($action) {
-                $button = $action->caption;
-            }
-        }
-
         $name = $this->name . '_button_' . (count($this->buttons) + 1);
-
-        if ($action instanceof Model\UserAction) {
-            $button = $action->ui['button'] ?? $button;
-
-            $confirmMsg = $action->ui['confirm'] ?? $confirmMsg;
-
-            $isDisabled = !$action->enabled;
-
-            if ($action->enabled instanceof \Closure) {
-                $this->callbacks[$name] = $action->enabled;
-            }
-        }
 
         if (!is_object($button)) {
             if (is_string($button)) {
                 $button = [1 => $button];
             }
 
-            $button = $this->factory([\atk4\ui\Button::class], $this->mergeSeeds($button, ['id' => false]));
+            $button = Factory::factory([\Atk4\Ui\Button::class], Factory::mergeSeeds($button, ['id' => false]));
         }
 
-        $button->app = $this->table->app;
+        if ($isDisabled === true) {
+            $button->addClass('disabled');
+        }
+
+        if (is_callable($isDisabled)) {
+            $this->callbacks[$name] = $isDisabled;
+        }
+
+        $button->setApp($this->table->getApp());
 
         $this->buttons[$name] = $button->addClass('{$_' . $name . '_disabled} compact b_' . $name);
 
-        if ($isDisabled) {
-            $button->addClass('disabled');
-        }
         $this->table->on('click', '.b_' . $name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirmMsg]);
 
         return $button;
@@ -98,16 +79,16 @@ class ActionButtons extends Table\Column
      * Adds a new button which will open a modal dialog and dynamically
      * load contents through $callback. Will pass a virtual page.
      *
-     * @param \atk4\ui\View|string $button
+     * @param \Atk4\Ui\View|string $button
      * @param string|array         $defaults modal title or modal defaults array
-     * @param \atk4\ui\View        $owner
+     * @param \Atk4\Ui\View        $owner
      * @param array                $args
      *
-     * @return \atk4\ui\View
+     * @return \Atk4\Ui\View
      */
     public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [])
     {
-        $owner = $owner ?: $this->owner->owner;
+        $owner = $owner ?: $this->getOwner()->getOwner();
 
         if (is_string($defaults)) {
             $defaults = ['title' => $defaults];
@@ -115,21 +96,18 @@ class ActionButtons extends Table\Column
 
         $defaults['appStickyCb'] = true;
 
-        $modal = \atk4\ui\Modal::addTo($owner, $defaults);
+        $modal = \Atk4\Ui\Modal::addTo($owner, $defaults);
 
         $modal->observeChanges(); // adds scrollbar if needed
 
         $modal->set(function ($t) use ($callback) {
-            $callback($t, $this->app->stickyGet($this->name));
+            $callback($t, $this->getApp()->stickyGet($this->name));
         });
 
-        return $this->addButton($button, $modal->show(array_merge([$this->name => $this->owner->jsRow()->data('id')], $args)));
+        return $this->addButton($button, $modal->show(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTag($position, $value, $attr = [])
+    public function getTag($position, $value, $attr = []): string
     {
         if ($this->table->hasCollapsingCssActionColumn && $position === 'body') {
             $attr['class'][] = 'collapsing';
@@ -138,7 +116,7 @@ class ActionButtons extends Table\Column
         return parent::getTag($position, $value, $attr);
     }
 
-    public function getDataCellTemplate(\atk4\data\Field $field = null)
+    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
     {
         if (!$this->buttons) {
             return '';

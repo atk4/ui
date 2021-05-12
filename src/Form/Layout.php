@@ -2,18 +2,17 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form;
+namespace Atk4\Ui\Form;
 
-use atk4\ui\Exception;
-use atk4\ui\Label;
-use atk4\ui\Template;
+use Atk4\Core\Factory;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Label;
 
 /**
  * Provides generic layout for a form.
  */
 class Layout extends AbstractLayout
 {
-    /** {@inheritdoc} */
     public $defaultTemplate = 'form/layout/generic.html';
 
     /** @var string Default input template file. */
@@ -41,7 +40,7 @@ class Layout extends AbstractLayout
      */
     public $inline = false;
 
-    /** @var Template Template holding input html. */
+    /** @var HtmlTemplate Template holding input html. */
     public $inputTemplate;
 
     /** @var array Seed for creating input hint View used in this layout. */
@@ -57,20 +56,20 @@ class Layout extends AbstractLayout
         parent::init();
 
         if (!$this->inputTemplate) {
-            $this->inputTemplate = $this->app->loadTemplate($this->defaultInputTemplate);
+            $this->inputTemplate = $this->getApp()->loadTemplate($this->defaultInputTemplate);
         }
     }
 
     /**
      * Adds Button.
      *
-     * @param \atk4\ui\Button|array|string $seed
+     * @param \Atk4\Ui\Button|array|string $seed
      *
-     * @return \atk4\ui\Button
+     * @return \Atk4\Ui\Button
      */
     public function addButton($seed)
     {
-        return $this->add($this->mergeSeeds([\atk4\ui\Button::class], $seed), 'Buttons');
+        return $this->add(Factory::mergeSeeds([\Atk4\Ui\Button::class], $seed), 'Buttons');
     }
 
     /**
@@ -82,7 +81,7 @@ class Layout extends AbstractLayout
      */
     public function addHeader($label)
     {
-        \atk4\ui\Header::addTo($this, [$label, 'dividing', 'element' => 'h4']);
+        \Atk4\Ui\Header::addTo($this, [$label, 'dividing', 'element' => 'h4']);
 
         return $this;
     }
@@ -120,13 +119,13 @@ class Layout extends AbstractLayout
      */
     public function addSubLayout($seed = [self::class], $addDivider = true)
     {
-        $v = $this->add($this->factory($seed, ['form' => $this->form]));
-        if ($v instanceof \atk4\ui\Form\Layout\Section) {
+        $v = $this->add(Factory::factory($seed, ['form' => $this->form]));
+        if ($v instanceof \Atk4\Ui\Form\Layout\Section) {
             $v = $v->addSection();
         }
 
         if ($addDivider) {
-            \atk4\ui\View::addTo($this, ['ui' => 'hidden divider']);
+            \Atk4\Ui\View::addTo($this, ['ui' => 'hidden divider']);
         }
 
         return $v;
@@ -146,8 +145,8 @@ class Layout extends AbstractLayout
 
         foreach ($this->elements as $element) {
             // Buttons go under Button section
-            if ($element instanceof \atk4\ui\Button) {
-                $this->template->appendHtml('Buttons', $element->getHtml());
+            if ($element instanceof \Atk4\Ui\Button) {
+                $this->template->dangerouslyAppendHtml('Buttons', $element->getHtml());
 
                 continue;
             }
@@ -167,16 +166,16 @@ class Layout extends AbstractLayout
                 if ($element->inline) {
                     $template->set('class', 'inline');
                 }
-                $template->setHtml('Content', $element->getHtml());
+                $template->dangerouslySetHtml('Content', $element->getHtml());
 
-                $this->template->appendHtml('Content', $template->render());
+                $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
 
                 continue;
             }
 
             // Anything but controls or explicitly defined controls get inserted directly
             if (!$element instanceof Control || !$element->layoutWrap) {
-                $this->template->appendHtml('Content', $element->getHtml());
+                $this->template->dangerouslyAppendHtml('Content', $element->getHtml());
 
                 continue;
             }
@@ -185,7 +184,7 @@ class Layout extends AbstractLayout
             $label = $element->caption ?: $element->field->getCaption();
 
             // Anything but form controls gets inserted directly
-            if ($element instanceof \atk4\ui\Form\Control\Checkbox) {
+            if ($element instanceof \Atk4\Ui\Form\Control\Checkbox) {
                 $template = $noLabelControl;
                 $element->template->set('Content', $label);
             }
@@ -200,15 +199,10 @@ class Layout extends AbstractLayout
             }
 
             // Controls get extra pampering
-            $template->setHtml('Input', $element->getHtml());
+            $template->dangerouslySetHtml('Input', $element->getHtml());
             $template->trySet('label', $label);
             $template->trySet('label_for', $element->id . '_input');
             $template->set('control_class', $element->getControlClass());
-
-            // BC-break exception - will be removed dec-2020
-            if ($template->hasTag('field_class')) {
-                throw new Exception('field_class region has be deprecated. Use control_class instead');
-            }
 
             if ($element->field->required) {
                 $template->append('control_class', 'required ');
@@ -219,22 +213,22 @@ class Layout extends AbstractLayout
             }
 
             if ($element->hint && $template->hasTag('Hint')) {
-                $hint = $this->factory($this->defaultHint);
+                $hint = Factory::factory($this->defaultHint);
                 $hint->id = $element->id . '_hint';
                 if (is_object($element->hint) || is_array($element->hint)) {
                     $hint->add($element->hint);
                 } else {
                     $hint->set($element->hint);
                 }
-                $template->setHtml('Hint', $hint->getHtml());
+                $template->dangerouslySetHtml('Hint', $hint->getHtml());
             } elseif ($template->hasTag('Hint')) {
                 $template->del('Hint');
             }
 
             if ($this->template->hasTag($element->short_name)) {
-                $this->template->trySetHtml($element->short_name, $template->render());
+                $this->template->tryDangerouslySetHtml($element->short_name, $template->renderToHtml());
             } else {
-                $this->template->appendHtml('Content', $template->render());
+                $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
             }
         }
 

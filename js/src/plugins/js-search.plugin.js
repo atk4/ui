@@ -24,8 +24,6 @@ export default class JsSearch extends atkPlugin {
 
     /**
    * Set input field event handler.
-   *
-   * @param that
    */
     setInputAction() {
         if (this.settings.autoQuery) {
@@ -39,22 +37,21 @@ export default class JsSearch extends atkPlugin {
    * Query server on each keystroke after proper timeout.
    */
     onAutoQueryAction() {
-        const that = this;
         this.textInput.on('keyup', atk.debounce((e) => {
-            const options = $.extend({}, that.urlArgs, that.settings.uri_options);
+            const options = $.extend({}, this.urlArgs, this.settings.uri_options);
             if (e.target.value === '' || e.keyCode === 27) {
-                that.doSearch(that.settings.uri, null, options, () => {
-                    that.setButtonState(false);
-                    that.setFilterState(false);
-                    that.textInput.val('');
+                this.doSearch(this.settings.uri, null, options, () => {
+                    this.setButtonState(false);
+                    this.setFilterState(false);
+                    this.textInput.val('');
                 });
-            } else if (e.target.value !== that.$el.data('preValue')) {
-                that.doSearch(that.settings.uri, e.target.value, options, () => {
-                    that.setButtonState(true);
-                    that.setFilterState(true);
+            } else if (e.target.value !== this.$el.data('preValue')) {
+                this.doSearch(this.settings.uri, e.target.value, options, () => {
+                    this.setButtonState(true);
+                    this.setFilterState(true);
                 });
             }
-            that.$el.data('preValue', e.target.value);
+            this.$el.data('preValue', e.target.value);
         }, this.settings.timeOut));
     }
 
@@ -62,24 +59,23 @@ export default class JsSearch extends atkPlugin {
    * Query server after pressing Enter.
    */
     onEnterAction() {
-        const that = this;
         this.textInput.on('keyup', (e) => {
-            const options = $.extend({}, that.urlArgs, that.settings.uri_options);
+            const options = $.extend({}, this.urlArgs, this.settings.uri_options);
             if (e.keyCode === 13 && e.target.value) {
-                that.doSearch(that.settings.uri, e.target.value, options, () => {
-                    that.setButtonState(true);
-                    that.setFilterState(true);
+                this.doSearch(this.settings.uri, e.target.value, options, () => {
+                    this.setButtonState(true);
+                    this.setFilterState(true);
                 });
-                that.$el.data('preValue', e.target.value);
+                this.$el.data('preValue', e.target.value);
             } else if ((e.keyCode === 27 && e.target.value) || (e.keyCode === 13 && e.target.value === '')) {
-                that.doSearch(that.settings.uri, null, options, () => {
-                    that.setButtonState(false);
-                    that.setFilterState(false);
+                this.doSearch(this.settings.uri, null, options, () => {
+                    this.setButtonState(false);
+                    this.setFilterState(false);
                 });
-                that.$el.data('preValue', '');
-                that.textInput.val('');
-            } else if (that.$el.data('preValue') !== e.target.value) {
-                that.setButtonState(false);
+                this.$el.data('preValue', '');
+                this.textInput.val('');
+            } else if (this.$el.data('preValue') !== e.target.value) {
+                this.setButtonState(false);
             }
         });
     }
@@ -89,12 +85,11 @@ export default class JsSearch extends atkPlugin {
    * When Search text is already empty the event will bubble up normally.
    */
     onEscapeKeyAction() {
-        const that = this;
         this.textInput.keydown((e) => {
-            if (that.textInput.val() !== '' && e.key === 'Escape') {
-                that.setButtonState(false);
-                that.setFilterState(false);
-                that.textInput.val('');
+            if (this.textInput.val() !== '' && e.key === 'Escape') {
+                this.setButtonState(false);
+                this.setFilterState(false);
+                this.textInput.val('');
                 return false;
             }
         });
@@ -102,26 +97,23 @@ export default class JsSearch extends atkPlugin {
 
     /**
    * Set Search button event handler.
-   *
-   * @param that
    */
     setSearchAction() {
-        const that = this;
         this.searchAction.on('click', (e) => {
-            const options = $.extend({}, that.urlArgs, that.settings.uri_options);
-            if (that.state.button) {
-                that.doSearch(that.settings.uri, null, options, () => {
-                    that.setButtonState(false);
-                    that.setFilterState(false);
+            const options = $.extend({}, this.urlArgs, this.settings.uri_options);
+            if (this.state.button) {
+                this.doSearch(this.settings.uri, null, options, () => {
+                    this.setButtonState(false);
+                    this.setFilterState(false);
                 });
-                that.textInput.val('');
-                that.$el.data('preValue', '');
+                this.textInput.val('');
+                this.$el.data('preValue', '');
             }
 
-            if (!that.state.button && that.textInput.val()) {
-                that.doSearch(that.settings.uri, that.textInput.val(), options, () => {
-                    that.setButtonState(true);
-                    that.setFilterState(true);
+            if (!this.state.button && this.textInput.val()) {
+                this.doSearch(this.settings.uri, this.textInput.val(), options, () => {
+                    this.setButtonState(true);
+                    this.setFilterState(true);
                 });
             }
         });
@@ -203,29 +195,25 @@ export default class JsSearch extends atkPlugin {
         if (query) {
             options = $.extend(options, { _q: query });
         }
-        // if we are not using ajax simply reload page.
-        if (!this.settings.useAjax) {
-            uri = $.atkRemoveParam(uri, '_q');
-            // prevent lint-fix from creating error when using options['__atk-reload']
-            const reloadArg = '__atk-reload';
-            delete options[reloadArg];
 
-            // if (query) {
-            //   uri = $.atkAddParams(uri, {'_q': query});
-            // }
+        if (this.settings.useAjax) {
+            this.$el.api({
+                on: 'now',
+                url: uri,
+                data: options,
+                method: 'GET',
+                obj: this.$el,
+                stateContext: this.searchAction,
+                onComplete: cb,
+            });
+        } else {
+            uri = $.atkRemoveParam(uri, '_q');
+            if (options.__atk_reload) {
+                delete options.__atk_reload;
+            }
             uri = $.atkAddParams(uri, options);
             window.location = uri;
-            return;
         }
-        this.$el.api({
-            on: 'now',
-            url: uri,
-            data: options,
-            method: 'GET',
-            obj: this.$el,
-            stateContext: this.searchAction,
-            onComplete: cb,
-        });
     }
 }
 

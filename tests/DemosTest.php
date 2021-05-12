@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\data\Persistence;
-use atk4\ui\App;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Data\Persistence;
+use Atk4\Ui\App;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
@@ -27,7 +27,7 @@ class DemosTest extends AtkPhpunit\TestCase
     /** @var array */
     private static $_serverSuperglobalBackup;
 
-    /** @var Persistence Initialized DB connection */
+    /** @var Persistence\Sql Initialized DB connection */
     private static $_db;
 
     /** @var array */
@@ -55,12 +55,14 @@ class DemosTest extends AtkPhpunit\TestCase
             $initVars = array_diff_key(get_defined_vars(), $initVars + ['initVars' => true]);
 
             if (array_keys($initVars) !== ['app']) {
-                throw new \atk4\ui\Exception('Demos init must setup only $app variable');
+                throw new \Atk4\Ui\Exception('Demos init must setup only $app variable');
             }
 
+            // @phpstan-ignore-next-line remove once https://github.com/phpstan/phpstan/issues/4155 is resolved
             self::$_db = $app->db;
 
             // prevent $app to run on shutdown
+            // @phpstan-ignore-next-line remove once https://github.com/phpstan/phpstan/issues/4155 is resolved
             $app->run_called = true;
         }
     }
@@ -75,7 +77,7 @@ class DemosTest extends AtkPhpunit\TestCase
             if (!isset(self::$_failedParentTests[$this->getName()])) {
                 self::$_failedParentTests[$this->getName()] = $this->getStatus();
             } else {
-                $this->markTestIncomplete('Test failed, but parent non-HTTP test failed too. Fix it first.');
+                $this->markTestIncomplete('Test failed, but non-HTTP test failed too. Fix it first.');
             }
         }
 
@@ -118,12 +120,12 @@ class DemosTest extends AtkPhpunit\TestCase
     protected function createTestingApp(): App
     {
         $app = new class(['call_exit' => false, 'catch_exceptions' => false, 'always_run' => false]) extends App {
-            public function callExit($for_shutdown = false): void
+            public function callExit(): void
             {
                 throw new DemosTestExitException();
             }
         };
-        $app->initLayout([\atk4\ui\Layout\Maestro::class]);
+        $app->initLayout([\Atk4\Ui\Layout\Maestro::class]);
 
         // clone DB (mainly because all Models remains attached now, TODO can be removed once they are GCed)
         $app->db = clone self::$_db;
@@ -197,7 +199,7 @@ class DemosTest extends AtkPhpunit\TestCase
             return $this->getClient()->request(isset($options['form_params']) !== null ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
         } catch (\GuzzleHttp\Exception\ServerException $ex) {
             $exFactoryWithFullBody = new class('', $ex->getRequest()) extends \GuzzleHttp\Exception\RequestException {
-                public static function getResponseBodySummary(ResponseInterface $response)
+                public static function getResponseBodySummary(ResponseInterface $response): string
                 {
                     return $response->getBody()->getContents();
                 }
@@ -212,7 +214,9 @@ class DemosTest extends AtkPhpunit\TestCase
         return 'demos/' . $path;
     }
 
-    protected $regexHtml = '~^..DOCTYPE~';
+    /** @var string */
+    protected $regexHtml = '~^<!DOCTYPE~';
+    /** @var string */
     protected $regexJson = '~
         (?(DEFINE)
            (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
@@ -225,36 +229,49 @@ class DemosTest extends AtkPhpunit\TestCase
         )
         \A (?&json) \Z
         ~six';
+    /** @var string */
     protected $regexSse = '~^(id|event|data).*$~m';
 
     public function demoFilesProvider(): array
     {
-        $excludeDirs = ['_demo-data', '_includes', '_unit-test', 'special'];
+        $excludeDirs = ['_demo-data', '_includes'];
         $excludeFiles = ['layout/layouts_error.php'];
 
-        // these tests require SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
-        if (static::class === self::class) {
-            $excludeFiles[] = 'collection/tablefilter.php';
-            $excludeFiles[] = 'interactive/popup.php';
-        }
-
         $files = [];
-        $files[] = ['index.php'];
+        $files[] = 'index.php';
         foreach (array_diff(scandir(static::DEMOS_DIR), ['.', '..'], $excludeDirs) as $dir) {
             if (!is_dir(static::DEMOS_DIR . '/' . $dir)) {
                 continue;
             }
 
             foreach (scandir(static::DEMOS_DIR . '/' . $dir) as $f) {
-                if (substr($f, -4) !== '.php' || in_array($dir . '/' . $f, $excludeFiles, true)) {
+                $path = $dir . '/' . $f;
+                if (substr($path, -4) !== '.php' || in_array($path, $excludeFiles, true)) {
                     continue;
                 }
 
-                $files[] = [$dir . '/' . $f];
+                $files[] = $path;
             }
         }
 
-        return $files;
+        // these tests require SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
+        // always move these tests to the end, so data provider # stays same as much as possible across tests for fast skip
+        $httpOnlyFiles = ['collection/tablefilter.php', 'interactive/popup.php'];
+        foreach ($files as $k => $path) {
+            if (in_array($path, $httpOnlyFiles, true)) {
+                unset($files[$k]);
+                $files[] = $path;
+            }
+        }
+        if (static::class === self::class) {
+            foreach ($files as $k => $path) {
+                if (in_array($path, $httpOnlyFiles, true)) {
+                    unset($files[$k]);
+                }
+            }
+        }
+
+        return array_map(function (string $v) { return [$v]; }, $files);
     }
 
     /**
@@ -442,7 +459,7 @@ class DemosTest extends AtkPhpunit\TestCase
     /**
      * @dataProvider jsonResponsePostProvider
      */
-    public function testDemoAssertJsonResponsePost(string $uri, array $postData)
+    public function testDemoAssertJsonResponsePost(string $uri, array $postData): void
     {
         $response = $this->getResponseFromRequest($uri, ['form_params' => $postData]);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
@@ -450,6 +467,6 @@ class DemosTest extends AtkPhpunit\TestCase
     }
 }
 
-class DemosTestExitException extends \atk4\ui\Exception
+class DemosTestExitException extends \Atk4\Ui\Exception
 {
 }

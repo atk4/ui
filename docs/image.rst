@@ -5,7 +5,7 @@
 Image
 =====
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Image
 
@@ -18,7 +18,7 @@ Implements basic image::
 
     $icon = Image::addTo($app, ['image.gif']);
 
-You need to make sure that argumen specified to Image is a valid URL to an image.
+You need to make sure that argument specified to Image is a valid URL to an image.
 
 Specify classes
 ===============

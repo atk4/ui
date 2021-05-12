@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\tests;
+namespace Atk4\Ui\Tests;
 
-use atk4\core\AtkPhpunit;
+use Atk4\Core\AtkPhpunit;
 
-class AppMock extends \atk4\ui\App
+class AppMock extends \Atk4\Ui\App
 {
     public $terminated = false;
 
@@ -26,30 +26,27 @@ class AppMock extends \atk4\ui\App
 
 class CallbackTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test constructor.
-     */
-    private $regex = '/^..DOCTYPE/';
+    /** @var string */
+    private $htmlDoctypeRegex = '~^<!DOCTYPE~';
 
+    /** @var \Atk4\Ui\App */
     public $app;
 
     protected function setUp(): void
     {
         $this->app = new AppMock(['always_run' => false, 'catch_exceptions' => false]);
-        $this->app->initLayout([\atk4\ui\Layout\Centered::class]);
+        $this->app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
         // reset var, between tests
         $_GET = [];
         $_POST = [];
     }
 
-    public function testCallback()
+    public function testCallback(): void
     {
         $var = null;
 
-        $app = $this->app;
-
-        $cb = \atk4\ui\Callback::addTo($app);
+        $cb = \Atk4\Ui\Callback::addTo($this->app);
 
         // simulate triggering
         $_GET[$cb->name] = '1';
@@ -61,13 +58,11 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertSame(34, $var);
     }
 
-    public function testCallbackNotFiring()
+    public function testCallbackNotFiring(): void
     {
         $var = null;
 
-        $app = $this->app;
-
-        $cb = \atk4\ui\Callback::addTo($app);
+        $cb = \Atk4\Ui\Callback::addTo($this->app);
 
         // don't simulate triggering
         $cb->set(function ($x) use (&$var) {
@@ -77,13 +72,11 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertNull($var);
     }
 
-    public function testCallbackLater()
+    public function testCallbackLater(): void
     {
         $var = null;
 
-        $app = $this->app;
-
-        $cb = \atk4\ui\CallbackLater::addTo($app);
+        $cb = \Atk4\Ui\CallbackLater::addTo($this->app);
 
         // simulate triggering
         $_GET[$cb->name] = '1';
@@ -94,26 +87,25 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $this->assertNull($var);
 
-        $this->expectOutputRegex($this->regex);
-        $app->run();
+        $this->expectOutputRegex($this->htmlDoctypeRegex);
+        $this->app->run();
 
         $this->assertSame(34, $var);
     }
 
-    public function testCallbackLaterNested()
+    public function testCallbackLaterNested(): void
     {
         $var = null;
 
-        $app = $this->app;
-
-        $cb = \atk4\ui\CallbackLater::addTo($app);
+        $cb = \Atk4\Ui\CallbackLater::addTo($this->app);
 
         // simulate triggering
         $_GET[$cb->name] = '1';
         $_GET[$cb->name . '_2'] = '1';
 
+        $app = $this->app;
         $cb->set(function ($x) use (&$var, $app, &$cbname) {
-            $cb2 = \atk4\ui\CallbackLater::addTo($app);
+            $cb2 = \Atk4\Ui\CallbackLater::addTo($app);
             $cbname = $cb2->name;
             $cb2->set(function ($y) use (&$var) {
                 $var = $y;
@@ -122,19 +114,17 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $this->assertNull($var);
 
-        $this->expectOutputRegex($this->regex);
-        $app->run();
+        $this->expectOutputRegex($this->htmlDoctypeRegex);
+        $this->app->run();
 
         $this->assertSame(34, $var);
     }
 
-    public function testCallbackLaterNotFiring()
+    public function testCallbackLaterNotFiring(): void
     {
         $var = null;
 
-        $app = $this->app;
-
-        $cb = \atk4\ui\CallbackLater::addTo($app);
+        $cb = \Atk4\Ui\CallbackLater::addTo($this->app);
 
         // don't simulate triggering
         $cb->set(function ($x) use (&$var) {
@@ -143,48 +133,45 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $this->assertNull($var);
 
-        $this->expectOutputRegex($this->regex);
-        $app->run();
+        $this->expectOutputRegex($this->htmlDoctypeRegex);
+        $this->app->run();
 
         $this->assertNull($var);
     }
 
-    public function testVirtualPage()
+    public function testVirtualPage(): void
     {
         $var = null;
 
-        $app = $this->app;
+        $vp = \Atk4\Ui\VirtualPage::addTo($this->app);
 
-        $vp = \atk4\ui\VirtualPage::addTo($app);
         // simulate triggering
+        $_GET[$vp->name] = '1';
 
         $vp->set(function ($p) use (&$var) {
             $var = 25;
         });
 
-        $_GET[$vp->name] = '1';
-
         $this->expectOutputRegex('/^..DOCTYPE/');
-        $app->run();
+        $this->app->run();
         $this->assertSame(25, $var);
     }
 
-    public function testVirtualPageCustomTrigger()
+    public function testVirtualPageCustomTrigger(): void
     {
         $var = null;
 
-        $app = $this->app;
-
-        $vp = \atk4\ui\VirtualPage::addTo($app, ['urlTrigger' => 'bah']);
-        $vp->set(function ($p) use (&$var) {
-            $var = 25;
-        });
+        $vp = \Atk4\Ui\VirtualPage::addTo($this->app, ['urlTrigger' => 'bah']);
 
         // simulate triggering
         $_GET['bah'] = '1';
 
+        $vp->set(function ($p) use (&$var) {
+            $var = 25;
+        });
+
         $this->expectOutputRegex('/^..DOCTYPE/');
-        $app->run();
+        $this->app->run();
         $this->assertSame(25, $var);
     }
 
@@ -195,20 +182,19 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->var = 26;
     }
 
-    public function testPull230()
+    public function testPull230(): void
     {
         $var = null;
 
-        $app = $this->app;
-
-        $vp = \atk4\ui\VirtualPage::addTo($app);
-        $vp->set([$this, 'callPull230']);
+        $vp = \Atk4\Ui\VirtualPage::addTo($this->app);
 
         // simulate triggering
         $_GET[$vp->name] = '1';
 
+        $vp->set(\Closure::fromCallable([$this, 'callPull230']));
+
         $this->expectOutputRegex('/^..DOCTYPE/');
-        $app->run();
+        $this->app->run();
         $this->assertSame(26, $this->var);
     }
 }

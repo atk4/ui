@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui;
-
-use atk4\data\Model;
+namespace Atk4\Ui;
 
 /**
  * Place menu.
@@ -29,7 +27,7 @@ class Menu extends View
      *
      * @internal
      *
-     * @var [type]
+     * @var bool
      */
     public $in_dropdown = false;
 
@@ -63,7 +61,7 @@ class Menu extends View
             $item->js('click', $action);
         }
 
-        if ($action instanceof Model\UserAction) {
+        if ($action instanceof UserAction\ExecutorInterface) {
             $item->on('click', $action);
         }
 
@@ -169,9 +167,6 @@ class Menu extends View
         return parent::add([View::class, 'class' => ['divider']]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getHtml()
     {
         // if menu don't have a single element or content, then destroy it

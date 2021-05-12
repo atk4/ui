@@ -5,7 +5,7 @@
 Lister
 ======
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Lister
 
@@ -46,7 +46,7 @@ we need to add some tags into your template::
 
 Here the `{Countries}` region will be replaced with the lister, but the contents of
 this region will be re-used as the list template. Refresh your page and your output
-should not be affected at all, becuse View clears out all extra template tags.
+should not be affected at all, because View clears out all extra template tags.
 
 Next I'll add Lister::
 
@@ -96,14 +96,14 @@ Tweaking the output
 Output is formatted using the standard :ref:`ui_persistence` routine, but you can also fine-tune the content
 of your tags like this::
 
-    $lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function(\atk4\ui\Lister $lister){
+    $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function(\Atk4\Ui\Lister $lister){
         $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
     })
 
 Model vs Static Source
 ======================
 
-Since Lister is non-interractive, you can also set a static source for your lister to avoid hassle::
+Since Lister is non-interactive, you can also set a static source for your lister to avoid hassle::
 
     $lister->setSource([
         ['flag'=>'ca', 'name'=>'Canada'],

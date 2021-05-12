@@ -2,26 +2,19 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\demo;
+namespace Atk4\Ui\Demos;
 
 date_default_timezone_set('UTC');
 
-$isRootProject = file_exists(__DIR__ . '/../vendor/autoload.php');
-/** @var \Composer\Autoload\ClassLoader $loader */
-$loader = require dirname(__DIR__, $isRootProject ? 1 : 4) . '/vendor/autoload.php';
-if (!$isRootProject && !class_exists(\atk4\ui\tests\ViewTest::class)) {
-    throw new \Error('Demos can be run only if atk4/ui is a root composer project or if dev files are autoloaded');
-}
-$loader->setPsr4('atk4\ui\demo\\', __DIR__ . '/_includes');
-unset($isRootProject, $loader);
+require_once __DIR__ . '/init-autoloader.php';
 
 // collect coverage for HTTP tests 1/2
-if (file_exists(__DIR__ . '/coverage.php') && !class_exists(\PHPUnit\Framework\TestCase::class, false)) {
-    require_once __DIR__ . '/coverage.php';
+if (file_exists(__DIR__ . '/CoverageUtil.php') && !class_exists(\PHPUnit\Framework\TestCase::class, false)) {
+    require_once __DIR__ . '/CoverageUtil.php';
     \CoverageUtil::start();
 }
 
-$app = new \atk4\ui\App([
+$app = new \Atk4\Ui\App([
     'call_exit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
     'catch_exceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
     'always_run' => (bool) ($_GET['APP_ALWAYS_RUN'] ?? true),
@@ -37,18 +30,19 @@ if ($app->catch_exceptions !== true) {
 }
 
 // collect coverage for HTTP tests 2/2
-if (file_exists(__DIR__ . '/coverage.php') && !class_exists(\PHPUnit\Framework\TestCase::class, false)) {
-    $app->onHook(\atk4\ui\App::HOOK_BEFORE_EXIT, function () {
+if (file_exists(__DIR__ . '/CoverageUtil.php') && !class_exists(\PHPUnit\Framework\TestCase::class, false)) {
+    $app->onHook(\Atk4\Ui\App::HOOK_BEFORE_EXIT, function () {
         \CoverageUtil::saveData();
     });
 }
 
 try {
+    /** @var \Atk4\Data\Persistence\Sql $db */
     require_once __DIR__ . '/init-db.php';
     $app->db = $db;
     unset($db);
 } catch (\Throwable $e) {
-    throw new \atk4\ui\Exception('Database error: ' . $e->getMessage());
+    throw new \Atk4\Ui\Exception('Database error: ' . $e->getMessage());
 }
 
 // Current sub directory of webserver - makes it independent where to run the demo from
@@ -64,16 +58,16 @@ if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
 }
 
 // allow custom layout override
-$app->initLayout([$app->stickyGET('layout') ?? \atk4\ui\Layout\Maestro::class]);
+$app->initLayout([$app->stickyGet('layout') ?? \Atk4\Ui\Layout\Maestro::class]);
 
 $layout = $app->layout;
-if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
+if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], [$demosUrl . 'index']);
 
     $path = $demosUrl . 'layout/';
     $menu = $layout->addMenuGroup(['Layout', 'icon' => 'object group']);
     $layout->addMenuItem(['Layouts'], [$path . 'layouts'], $menu);
-    $layout->addMenuItem(['Panel'], [$path . 'layout-panel'], $menu);
+    $layout->addMenuItem(['Sliding Panel'], [$path . 'layout-panel'], $menu);
 
     $path = $demosUrl . 'basic/';
     $menu = $layout->addMenuGroup(['Basics', 'icon' => 'cubes']);
@@ -101,6 +95,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $menu = $layout->addMenuGroup(['Form Controls', 'icon' => 'keyboard outline']);
     $layout->addMenuItem(['Input'], [$path . 'input2'], $menu);
     $layout->addMenuItem('Input Decoration', [$path . 'input'], $menu);
+    $layout->addMenuItem('Calendar', [$path . 'calendar'], $menu);
     $layout->addMenuItem(['Checkboxes'], [$path . 'checkbox'], $menu);
     $layout->addMenuItem(['Value Selectors'], [$path . 'form6'], $menu);
     $layout->addMenuItem(['Lookup'], [$path . 'lookup'], $menu);
@@ -109,11 +104,10 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['File Upload'], [$path . 'upload'], $menu);
     $layout->addMenuItem(['Multi Line'], [$path . 'multiline'], $menu);
     $layout->addMenuItem(['Tree Selector'], [$path . 'tree-item-selector'], $menu);
-    $layout->addMenuItem(['Query Builder'], [$path . 'query-builder'], $menu);
+    $layout->addMenuItem(['Scope Builder'], [$path . 'scope-builder'], $menu);
 
     $path = $demosUrl . 'collection/';
     $menu = $layout->addMenuGroup(['Data Collection', 'icon' => 'table']);
-    $layout->addMenuItem(['Actions - Integration Examples'], [$path . 'actions'], $menu);
     $layout->addMenuItem('Data table with formatted columns', [$path . 'table'], $menu);
     $layout->addMenuItem(['Advanced table examples'], [$path . 'table2'], $menu);
     $layout->addMenuItem('Table interractions', [$path . 'multitable'], $menu);
@@ -122,9 +116,18 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem('Grid - Table+Bar+Search+Paginator', [$path . 'grid'], $menu);
     $layout->addMenuItem('Crud - Full editing solution', [$path . 'crud'], $menu);
     $layout->addMenuItem(['Crud with Array Persistence'], [$path . 'crud3'], $menu);
+    $layout->addMenuItem('Card Deck', [$path . 'card-deck'], $menu);
     $layout->addMenuItem(['Lister'], [$path . 'lister-ipp'], $menu);
     $layout->addMenuItem(['Table column decorator from model'], [$path . 'tablecolumns'], $menu);
-    $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $menu);
+
+    $path = $demosUrl . 'data-action/';
+    $menu = $layout->addMenuGroup(['Data Action Executor', 'icon' => 'wrench']);
+    $layout->addMenuItem(['Executor Examples'], [$path . 'actions'], $menu);
+    $layout->addMenuItem(['Assign action to event'], [$path . 'jsactions'], $menu);
+    $layout->addMenuItem(['Assign action to button event'], [$path . 'jsactions2'], $menu);
+    $layout->addMenuItem(['Execute from Grid'], [$path . 'jsactionsgrid'], $menu);
+    $layout->addMenuItem(['Execute from Crud'], [$path . 'jsactionscrud'], $menu);
+    $layout->addMenuItem(['Executor Factory'], [$path . 'factory'], $menu);
 
     $path = $demosUrl . 'interactive/';
     $menu = $layout->addMenuGroup(['Interactive', 'icon' => 'talk']);
@@ -142,6 +145,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['Pop-up'], [$path . 'popup'], $menu);
     $layout->addMenuItem(['Toast'], [$path . 'toast'], $menu);
     $layout->addMenuItem('Paginator', [$path . 'paginator'], $menu);
+    $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $menu);
 
     $path = $demosUrl . 'javascript/';
     $menu = $layout->addMenuGroup(['Javascript', 'icon' => 'code']);
@@ -156,7 +160,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem('Recursive Views', [$path . 'recursive'], $menu);
 
     // view demo source page on Github
-    \atk4\ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'teal', 'icon' => 'github'])
+    \Atk4\Ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'teal', 'icon' => 'github'])
         ->on('click', $app->jsRedirect('https://github.com/atk4/ui/blob/develop/' . $relUrl, true));
 }
 unset($layout, $rootUrl, $relUrl, $demosUrl, $path, $menu, $currDir);

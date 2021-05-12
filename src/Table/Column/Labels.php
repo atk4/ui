@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column;
+namespace Atk4\Ui\Table\Column;
 
-use atk4\data\Field;
-use atk4\data\Model;
-use atk4\ui\Table;
+use Atk4\Data\Field;
+use Atk4\Data\Model;
+use Atk4\Ui\Table;
 
 /**
  * Class Labels.
@@ -24,7 +24,7 @@ class Labels extends Table\Column
     /**
      * @param Field|null $field
      *
-     * @return array|void
+     * @return array
      */
     public function getHtmlTags(Model $row, $field)
     {
@@ -41,7 +41,7 @@ class Labels extends Table\Column
             $id = $values[$id] ?? $id;
 
             if (!empty($id)) {
-                $labels[] = $this->app->getTag('div', ['class' => 'ui label'], $id);
+                $labels[] = $this->getApp()->getTag('div', ['class' => 'ui label'], $id);
             }
         }
 
