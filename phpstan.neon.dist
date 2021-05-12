@@ -302,9 +302,6 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::notClosable\(\)\.$~'
         -
             path: 'src/Panel/Right.php'
-            message: '~^PHPDoc tag @param references unknown parameter: \$selector$~'
-        -
-            path: 'src/Panel/Right.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Panel\\LoadableContent::getClearSelector\(\)\.$~'
         -
             path: 'src/Panel/Right.php'

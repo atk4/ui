@@ -151,8 +151,6 @@ class Right extends View implements Loadable
     /**
      * Display or not a Warning sign in Panel.
      *
-     * @param string $selector
-     *
      * @return Jquery
      */
     public function jsDisplayWarning(bool $state = true): JsExpression
