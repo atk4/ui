@@ -6,6 +6,7 @@ import { plugin } from './plugin';
 import { atkOptions, atkEventBus, atkUtils } from './atk-utils';
 import dataService from './services/data.service';
 import panelService from './services/panel.service';
+import lodashDebounce from 'lodash/debounce';
 import vueService from './services/vue.service';
 import popupService from './services/popup.service';
 
@@ -22,9 +23,35 @@ atk.options = atkOptions;
 atk.eventBus = atkEventBus;
 atk.utils = atkUtils;
 
-atk.debounce = (fn, value, immediate = false) => {
-    const timeOut = atk.options.get('debounceTimeout');
-    return debounce(fn, timeOut !== null ? timeOut : value, immediate);
+atk.debounce = function (func, wait, options) {
+    let timerId;
+    let debouncedInner;
+
+    function createTimer() {
+        timerId = setInterval(() => {
+            if (!debouncedInner.pending()) {
+                clearInterval(timerId);
+                timerId = undefined;
+                jQuery.active--;
+            }
+        }, 25);
+        jQuery.active++;
+    }
+
+    debouncedInner = lodashDebounce(func, wait, options);
+
+    function debounced(...args) {
+        if (timerId === undefined) {
+            createTimer();
+        }
+
+        return debouncedInner(...args);
+    }
+    debounced.cancel = debouncedInner.cancel;
+    debounced.flush = debouncedInner.flush;
+    debounced.pending = debouncedInner.pending;
+
+    return debounced;
 };
 
 // Allow to register a plugin with jQuery;

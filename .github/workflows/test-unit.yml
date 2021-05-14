@@ -254,7 +254,6 @@ jobs:
         run: |
           cp -r public public.orig && rm public/*.js
           (cd js && npm run build)
-          sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
           diff -qr public public.orig
           rm -r public.orig
 
@@ -270,6 +269,7 @@ jobs:
         run: |
           mkdir -p build/logs
           php demos/_demo-data/create-sqlite-db.php
+          sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
 
       - name: "Run tests: Behat"
         run: |

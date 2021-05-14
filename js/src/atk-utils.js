@@ -4,14 +4,12 @@ import 'helpers/url.helper';
 /**
  * Define atk global options.
  * In Js:
- *  atk.options.set('name','value');
+ *  atk.options.set('name', 'value');
  * In Php:
  *  (new JsChain('atk.options')->set('name', 'value');
  */
 const atkOptions = (function () {
     const options = {
-    // Value for debounce time out (in ms) that will be apply globally when set using atk.debounce.
-        debounceTimeout: null,
     };
     return {
         set: (name, value) => { options[name] = value; },

@@ -43,7 +43,6 @@ class Context extends RawMinkContext implements BehatContext
         $this->jqueryWait();
         $this->disableAnimations();
         $this->assertNoException();
-        $this->disableDebounce();
     }
 
     protected function getFinishedScript(): string
@@ -119,11 +118,6 @@ class Context extends RawMinkContext implements BehatContext
                 throw new Exception('Page contains uncaught exception');
             }
         }
-    }
-
-    protected function disableDebounce(): void
-    {
-        $this->getSession()->executeScript('atk.options.set("debounceTimeout", 20)');
     }
 
     /**
@@ -327,10 +321,11 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function modalIsOpenWithText(string $arg1): void
     {
-        $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
+        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
         if ($modal === null) {
             throw new Exception('No modal found');
         }
+
         // find text in modal
         $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (!$text || trim($text->getText()) !== $arg1) {
@@ -344,38 +339,16 @@ class Context extends RawMinkContext implements BehatContext
     public function modalIsShowingText(string $arg1, string $arg2): void
     {
         // get modal
-        $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
+        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
         if ($modal === null) {
             throw new Exception('No modal found');
         }
+
         // find text in modal
         $text = $modal->find('xpath', '//' . $arg2 . '[text()="' . $arg1 . '"]');
         if (!$text || $text->getText() !== $arg1) {
             throw new Exception('No such text in modal');
         }
-    }
-
-    /**
-     * Get a node element by it's selector.
-     * Will try to get element for 20ms.
-     * Exemple: Use with a modal window where reloaded content
-     * will resize it's window thus making it not accessible at first.
-     */
-    private function waitForNodeElement(string $selector, int $ms = 20): ?NodeElement
-    {
-        $counter = 0;
-        $element = null;
-        while ($counter < $ms) {
-            $element = $this->getSession()->getPage()->find('css', $selector);
-            if ($element === null) {
-                usleep(1000);
-                ++$counter;
-            } else {
-                break;
-            }
-        }
-
-        return $element;
     }
 
     /**
@@ -484,17 +457,6 @@ class Context extends RawMinkContext implements BehatContext
         if (!strpos($url, $text)) {
             throw new Exception('Text : "' . $text . '" not found in ' . $url);
         }
-    }
-
-    /**
-     * @Then /^I wait for the page to be loaded$/
-     */
-    public function waitForThePageToBeLoaded(): void
-    {
-        // This line in test-unit.yml is causing test to fail. Need to increase wait time to compensate.
-        // sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php
-        usleep(500000);
-        $this->getSession()->wait(10000, "document.readyState === 'complete'");
     }
 
     /**
