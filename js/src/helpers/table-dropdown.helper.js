@@ -1,4 +1,4 @@
-import throttle from 'lodash.throttle';
+import lodashThrottle from 'lodash/throttle';
 import $ from 'jquery';
 
 /**
@@ -48,7 +48,7 @@ function showTableDropdown() {
     }
 
     setCssPosition();
-    $(window).on('scroll.atktable', throttle(setCssPosition, 10));
+    $(window).on('scroll.atktable', lodashThrottle(setCssPosition, 10));
     $(window).on('resize.atktable', () => {
         $that.dropdown('hide');
     });

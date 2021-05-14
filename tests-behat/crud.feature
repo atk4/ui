@@ -16,7 +16,7 @@ Feature: Crud
 
   Scenario: search
     Then I search grid for "united kingdom"
-#    make sure auto query trigger
+    # make sure auto query trigger
     And I wait for loading to start in "button.atk-search-button"
     Then I should see "United Kingdom"
 
@@ -25,7 +25,7 @@ Feature: Crud
     Then Modal is open with text "Edit Country"
     Then I press Modal button "Save"
     Then Toast display should contains text "Form Submit"
-#    make sure search query stick
+    # make sure search query stick
     Then I should see "United Kingdom"
 
   Scenario: delete

@@ -6,7 +6,7 @@ Feature: UserAction
     And I press button "Callback"
     Then Toast display should contains text "callback execute using country"
 
-    #    Need to reload page for this step
+    # need to reload page for this step
   Scenario:
     Given I am on "data-action/jsactions2.php"
     And I press button "Argument"
@@ -15,14 +15,14 @@ Feature: UserAction
     Then I press Modal button "Argument"
     Then Toast display should contains text "22 is old enough to visit"
 
-    #    Need to reload page for this step
+    # need to reload page for this step
   Scenario:
     Given I am on "data-action/jsactions2.php"
     And I press button "User Confirmation"
     And I press Modal button "Ok"
     Then Toast display should contains text "Confirm country"
 
-#    Need to reload page for this step
+    # need to reload page for this step
   Scenario:
     Given I am on "data-action/jsactions2.php"
     And I press button "Multi Step"

@@ -1,8 +1,3 @@
-/* eslint-disable */
-/* global _ATKVERSION_:true, __webpack_public_path__:true */
-__webpack_public_path__ = window.__atkBundlePublicPath === undefined ? '/public/' :  window.__atkBundlePublicPath + '/';
-
-import debounce from 'debounce';
 import 'core-js/stable';
 import atkSemantic from 'atk-semantic-ui';
 import date from 'locutus/php/datetime/date';
@@ -12,7 +7,12 @@ import { atkOptions, atkEventBus, atkUtils } from './atk-utils';
 import dataService from './services/data.service';
 import panelService from './services/panel.service';
 import vueService from './services/vue.service';
-import popupService from "./services/popup.service";
+import popupService from './services/popup.service';
+
+/* eslint-disable */
+/* global _ATKVERSION_:true, __webpack_public_path__:true */
+__webpack_public_path__ = window.__atkBundlePublicPath === undefined ? '/public/' :  window.__atkBundlePublicPath + '/';
+/* eslint-enable */
 
 const atk = { ...atkSemantic };
 

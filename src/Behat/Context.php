@@ -46,6 +46,38 @@ class Context extends RawMinkContext implements BehatContext
         $this->disableDebounce();
     }
 
+    protected function getFinishedScript(): string
+    {
+        return 'document.readyState === \'complete\''
+            . ' && typeof jQuery !== \'undefined\' && jQuery.active === 0'
+            . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()';
+    }
+
+    /**
+     * Wait till jQuery AJAX request finished and no animation is perform.
+     */
+    protected function jqueryWait(string $extraWaitCondition = 'true', int $maxWaitdurationMs = 5000): void
+    {
+        $finishedScript = '(' . $this->getFinishedScript() . ') && (' . $extraWaitCondition . ')';
+
+        $s = microtime(true);
+        $c = 0;
+        while (microtime(true) - $s <= $maxWaitdurationMs / 1000) {
+            $this->getSession()->wait($maxWaitdurationMs, $finishedScript);
+            usleep(10000);
+            if ($this->getSession()->evaluateScript($finishedScript)) {
+                if (++$c >= 2) {
+                    return;
+                }
+            } else {
+                $c = 0;
+                usleep(50000);
+            }
+        }
+
+        throw new Exception('jQuery did not finished within a time limit');
+    }
+
     protected function disableAnimations(): void
     {
         // disable all CSS/jQuery animations/transitions
@@ -97,9 +129,9 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Sleep for a certain time in ms.
      *
-     * @Then I wait :arg1 ms
+     * @Then I sleep :arg1 ms
      */
-    public function iWait(int $arg1): void
+    public function iSleep(int $arg1): void
     {
         $this->getSession()->wait($arg1);
     }
@@ -653,51 +685,6 @@ class Context extends RawMinkContext implements BehatContext
         }
 
         return $rule;
-    }
-
-    /**
-     * Wait for an element, usually an auto trigger element, to show that loading has start"
-     * Example, when entering value in JsSearch for grid. We need to auto trigger to fire before
-     * doing waiting for callback.
-     * $arg1 should represent the element selector for jQuery.
-     *
-     * @Then I wait for loading to start in :arg1
-     */
-    public function iWaitForLoadingToStartIn(string $arg1): void
-    {
-        $this->getSession()->wait(2000, '$("' . $arg1 . '").hasClass("loading")');
-    }
-
-    protected function getFinishedScript(): string
-    {
-        return 'document.readyState === \'complete\''
-            . ' && typeof jQuery !== \'undefined\' && jQuery.active === 0'
-            . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()';
-    }
-
-    /**
-     * Wait till jQuery AJAX request finished and no animation is perform.
-     */
-    protected function jqueryWait(string $extraWaitCondition = 'true', int $maxWaitdurationMs = 5000): void
-    {
-        $finishedScript = '(' . $this->getFinishedScript() . ') && (' . $extraWaitCondition . ')';
-
-        $s = microtime(true);
-        $c = 0;
-        while (microtime(true) - $s <= $maxWaitdurationMs / 1000) {
-            $this->getSession()->wait($maxWaitdurationMs, $finishedScript);
-            usleep(10000);
-            if ($this->getSession()->evaluateScript($finishedScript)) {
-                if (++$c >= 2) {
-                    return;
-                }
-            } else {
-                $c = 0;
-                usleep(50000);
-            }
-        }
-
-        throw new Exception('jQuery did not finished within a time limit');
     }
 
     /**
