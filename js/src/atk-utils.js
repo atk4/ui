@@ -1,5 +1,6 @@
 import mitt from 'mitt';
 import 'helpers/url.helper';
+import lodashDebounce from 'lodash/debounce';
 
 /**
  * Define atk global options.
@@ -67,4 +68,37 @@ const atkUtils = (function () {
     };
 }());
 
-export { atkOptions, atkEventBus, atkUtils };
+function atkDebounce(func, wait, options) {
+    let timerId;
+    let debouncedInner;
+
+    function createTimer() {
+        timerId = setInterval(() => {
+            if (!debouncedInner.pending()) {
+                clearInterval(timerId);
+                timerId = undefined;
+                jQuery.active--;
+            }
+        }, 25);
+        jQuery.active++;
+    }
+
+    debouncedInner = lodashDebounce(func, wait, options);
+
+    function debounced(...args) {
+        if (timerId === undefined) {
+            createTimer();
+        }
+
+        return debouncedInner(...args);
+    }
+    debounced.cancel = debouncedInner.cancel;
+    debounced.flush = debouncedInner.flush;
+    debounced.pending = debouncedInner.pending;
+
+    return debounced;
+}
+
+export {
+    atkOptions, atkEventBus, atkUtils, atkDebounce,
+};
