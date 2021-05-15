@@ -69,14 +69,14 @@ const atkUtils = (function () {
 }());
 
 function atkDebounce(func, wait, options) {
-    let timerId;
+    let timerId = null;
     let debouncedInner;
 
     function createTimer() {
         timerId = setInterval(() => {
             if (!debouncedInner.pending()) {
                 clearInterval(timerId);
-                timerId = undefined;
+                timerId = null;
                 jQuery.active--;
             }
         }, 25);
@@ -86,7 +86,7 @@ function atkDebounce(func, wait, options) {
     debouncedInner = lodashDebounce(func, wait, options);
 
     function debounced(...args) {
-        if (timerId === undefined) {
+        if (timerId === null) {
             createTimer();
         }
 
