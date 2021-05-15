@@ -8,6 +8,7 @@ parameters:
     excludes_analyse:
         - cache/
         - build/
+        - js/
         - vendor/
 
     # TODO review once we drop PHP 7.x support
