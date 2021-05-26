@@ -180,7 +180,7 @@ jobs:
     name: Behat
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/mvorisek/image-php:${{ matrix.php }}-npm
+      image: ghcr.io/mvorisek/image-php:${{ matrix.php }}-node
     strategy:
       fail-fast: false
       matrix:
