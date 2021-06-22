@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 use Atk4\Ui\App;
 use Atk4\Ui\Form;
 
-class FormTest extends AtkPhpunit\TestCase
+class FormTest extends TestCase
 {
     /** @var Form */
     public $f;

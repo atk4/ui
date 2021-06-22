@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 
-class PostTest extends AtkPhpunit\TestCase
+class PostTest extends TestCase
 {
     /** @var Model */
     public $model;

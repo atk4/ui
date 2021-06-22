@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\View;
 
 /**
  * Multiple tests to ensure that adding views through various patterns initializes them
  * nicely still.
  */
-class RenderTreeTest extends AtkPhpunit\TestCase
+class RenderTreeTest extends TestCase
 {
     public function testBasic(): void
     {

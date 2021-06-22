@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 
-class TableTest extends AtkPhpunit\TestCase
+class TableTest extends TestCase
 {
     /**
      * @doesNotPerformAssertions
