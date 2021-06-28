@@ -6,7 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Ui\Table;
 
-class GridTest extends \Atk4\Core\AtkPhpunit\TestCase
+class GridTest extends \Atk4\Core\Phpunit\TestCase
 {
     use Concerns\HandlesTable;
 

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Exception;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\HtmlTemplate\TagTree;
 
-class HtmlTemplateTest extends AtkPhpunit\TestCase
+class HtmlTemplateTest extends TestCase
 {
     protected function assertSameTemplate(string $expectedTemplateStr, HtmlTemplate $template): void
     {

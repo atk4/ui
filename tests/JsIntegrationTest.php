@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Button;
 use Atk4\Ui\View;
 
-class JsIntegrationTest extends AtkPhpunit\TestCase
+class JsIntegrationTest extends TestCase
 {
     public function testIdIntegrity1(): void
     {
