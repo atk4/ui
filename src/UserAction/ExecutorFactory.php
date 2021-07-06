@@ -10,7 +10,6 @@ use Atk4\Ui\AbstractView;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Item;
-use Atk4\Ui\Modal;
 use Atk4\Ui\View;
 
 /**
