@@ -124,6 +124,9 @@ class App
         'cache-control' => 'no-store', // disable caching by default
     ];
 
+    /** @var Modal[]  Modal view that need to be rendered using json output. */
+    private $modals = [];
+
     /**
      * @var bool whether or not semantic-ui vue has been initialised
      */
@@ -220,6 +223,17 @@ class App
 
         // setting up default executor factory.
         $this->executorFactory = Factory::factory([ExecutorFactory::class]);
+    }
+
+    /**
+     * Register a modal view.
+     * Fomantic-ui Modal are teleported in HTML template
+     * within specific location. This will keep track
+     * of modals when terminating app using json.
+     */
+    public function registerModal(Modal $modal): void
+    {
+        $this->modals[$modal->short_name] = $modal;
     }
 
     public function setExecutorFactory(ExecutorFactory $factory)
@@ -1132,11 +1146,9 @@ class App
         unset($_GET['__atk_reload']);
 
         $modals = [];
-        foreach ($this->html !== null ? $this->html->elements : [] as $view) {
-            if ($view instanceof Modal) {
-                $modals[$view->name]['html'] = $view->getHtml();
-                $modals[$view->name]['js'] = $view->getJsRenderActions();
-            }
+        foreach ($this->modals as $view) {
+            $modals[$view->name]['html'] = $view->getHtml();
+            $modals[$view->name]['js'] = $view->getJsRenderActions();
         }
 
         return $modals;

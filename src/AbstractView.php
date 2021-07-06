@@ -166,27 +166,7 @@ abstract class AbstractView
             $stickyArgs = $this->stickyArgs;
         }
 
-        /** @var self $childView */
-        $childView = $this->mergeStickyArgsFromChildView();
-        if ($childView !== null && (!($childView instanceof Callback) || $childView->isTriggered())) {
-            $alreadyCalled = false;
-            foreach (debug_backtrace(\DEBUG_BACKTRACE_PROVIDE_OBJECT | \DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
-                if ($childView === ($frame['object'] ?? null) && $frame['function'] === '_getStickyArgs') {
-                    $alreadyCalled = true;
-                }
-            }
-
-            if (!$alreadyCalled) {
-                $stickyArgs = array_merge($stickyArgs, $childView->_getStickyArgs());
-            }
-        }
-
         return $stickyArgs;
-    }
-
-    protected function mergeStickyArgsFromChildView(): ?self
-    {
-        return null;
     }
 
     /**

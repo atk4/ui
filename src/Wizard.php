@@ -216,9 +216,4 @@ class Wizard extends View
 
         parent::renderView();
     }
-
-    protected function mergeStickyArgsFromChildView(): AbstractView
-    {
-        return $this->stepCallback;
-    }
 }
