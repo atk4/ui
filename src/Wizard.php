@@ -19,16 +19,16 @@ class Wizard extends View
     /** @var string Get argument for this wizard. */
     public $urlTrigger;
 
-    /** @var array List of steps.*/
+    /** @var array List of steps. */
     public $steps = [];
 
-    /** @var int Current step.*/
+    /** @var int Current step. */
     public $currentStep;
 
-    /** @var Button Button for going to previous step.*/
+    /** @var Button Button for going to previous step. */
     public $buttonPrev;
 
-    /** @var Button Buttor for going to next step.*/
+    /** @var Button Buttor for going to next step. */
     public $buttonNext;
 
     /**
@@ -74,7 +74,7 @@ class Wizard extends View
     /**
      * Adds step to the wizard.
      *
-     * @param mixed $name     Name of tab or Tab object
+     * @param mixed $name Name of tab or Tab object
      *
      * @return View
      */
