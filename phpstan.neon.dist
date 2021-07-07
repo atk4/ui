@@ -907,9 +907,6 @@ parameters:
             path: 'src/View.php'
             message: '~^If condition is always true\.$~'
         -
-            path: 'src/Wizard.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
             path: 'tests/DemosTest.php'
             message: '~^Else branch is unreachable because ternary operator condition is always true\.$~'
 
