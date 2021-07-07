@@ -63,7 +63,6 @@ class Callback extends AbstractView
     public function set($fx = null, $args = null)
     {
         if ($this->isTriggered() && $this->canTrigger()) {
-
             return $fx(...($args ?? []));
         }
     }
