@@ -111,7 +111,7 @@ class Callback extends AbstractView
 
     /**
      * Return URL that will trigger action on this call-back. If you intend to request
-     * the URL direcly in your browser (as iframe, new tab, or document location), you
+     * the URL directly in your browser (as iframe, new tab, or document location), you
      * should use getUrl instead.
      */
     public function getJsUrl(string $value = 'ajax'): string
