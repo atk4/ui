@@ -63,13 +63,8 @@ class Callback extends AbstractView
     public function set($fx = null, $args = null)
     {
         if ($this->isTriggered() && $this->canTrigger()) {
-            $this->getApp()->catch_runaway_callbacks = false;
-            $t = $this->getApp()->run_called;
-            $this->getApp()->run_called = true;
-            $ret = $fx(...($args ?? []));
-            $this->getApp()->run_called = $t;
 
-            return $ret;
+            return $fx(...($args ?? []));
         }
     }
 

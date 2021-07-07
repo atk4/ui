@@ -568,7 +568,8 @@ class App
             $this->hook(self::HOOK_BEFORE_OUTPUT);
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
-                throw new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.');
+                throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
+                        ->addMoreInfo('callback', $_GET['__atk_callback']);
             }
 
             $output = $this->html->template->renderToHtml();
