@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.19.3 (2021-07-09)
+
+- Update package dependencies.
+
 ### version 1.19.2 (2021-02-05)
 
 - Fix issue in js-search plugin when not using ajax request.
