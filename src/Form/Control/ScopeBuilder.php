@@ -769,6 +769,7 @@ class ScopeBuilder extends Control
      * @param string $value
      *
      * @return string
+     * @phpstan-return non-empty-string
      */
     public static function detectDelimiter($value)
     {
