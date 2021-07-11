@@ -1,8 +1,12 @@
 ## Release note
 
-### version 1.19.3 (2021-02-05)
+### version 1.19.4 (2021-07-11)
 
 - Remove "debounceTimeout" atk option.
+
+### version 1.19.3 (2021-07-09)
+
+- Update package dependencies.
 
 ### version 1.19.2 (2021-02-05)
 

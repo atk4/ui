@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsChain;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsFunction;
 
-class JsTest extends AtkPhpunit\TestCase
+class JsTest extends TestCase
 {
     public function testBasicExpressions(): void
     {
