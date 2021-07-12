@@ -11,7 +11,7 @@ jobs:
     name: Smoke
     runs-on: ubuntu-latest
     container:
-      image: atk4/image:${{ matrix.php }}
+      image: ghcr.io/mvorisek/image-php:${{ matrix.php }}
     strategy:
       fail-fast: false
       matrix:
@@ -86,7 +86,7 @@ jobs:
     name: Unit
     runs-on: ubuntu-latest
     container:
-      image: atk4/image:${{ matrix.php }}
+      image: ghcr.io/mvorisek/image-php:${{ matrix.php }}
     strategy:
       fail-fast: false
       matrix:
@@ -181,11 +181,11 @@ jobs:
     name: Behat
     runs-on: ubuntu-latest
     container:
-      image: atk4/image:${{ matrix.php }}
+      image: ghcr.io/mvorisek/image-php:${{ matrix.php }}-node
     strategy:
       fail-fast: false
       matrix:
-        php: ['latest-npm']
+        php: ['latest']
         type: ['Chrome', 'Firefox', 'Chrome Lowest', 'Chrome Slow']
     env:
       LOG_COVERAGE: ''
@@ -255,7 +255,6 @@ jobs:
         run: |
           cp -r public public.orig && rm public/*.js
           (cd js && npm run build)
-          sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
           diff -qr public public.orig
           rm -r public.orig
 
@@ -271,6 +270,7 @@ jobs:
         run: |
           mkdir -p build/logs
           php demos/_demo-data/create-sqlite-db.php
+          sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
 
       - name: "Run tests: Behat"
         run: |

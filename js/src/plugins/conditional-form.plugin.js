@@ -1,7 +1,7 @@
-/* eslint-disable no-bitwise */
-
 import atkPlugin from './atk.plugin';
 import formService from '../services/form.service';
+
+/* eslint-disable no-bitwise */
 
 /**
  * Show or hide input field base on other input field condition.
@@ -64,7 +64,7 @@ export default class conditionalForm extends atkPlugin {
         this.$el.find('input[type="hidden"]')
             .on('change', this, atk.debounce(this.onInputChange, 100, true));
         this.$el.find('input')
-            .on(this.settings.validateEvent, this, atk.debounce(this.onInputChange, 350));
+            .on(this.settings.validateEvent, this, atk.debounce(this.onInputChange, 250));
         this.$el.find('select')
             .on('change', this, atk.debounce(this.onInputChange, 100));
 
