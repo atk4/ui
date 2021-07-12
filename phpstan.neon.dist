@@ -842,9 +842,6 @@ parameters:
             path: 'src/Message.php'
             message: '~^If condition is always true\.$~'
         -
-            path: 'src/Message.php'
-            message: '~^Call to function is_object\(\) with string will always evaluate to false\.$~'
-        -
             path: 'src/Paginator.php'
             message: '~^If condition is always true\.$~'
         -
@@ -1101,7 +1098,7 @@ parameters:
             message: '~^Method Atk4\\Ui\\Demos\\DemoLookup::initQuickNewRecord\(\) has no return typehint specified\.$~'
         -
             path: 'demos/_includes/DemoLookup.php'
-            message: '~^Call to function is_string\(\) with string will always evaluate to true\.$~'
+            message: '~^Call to function is_string\(\) with non-empty-string will always evaluate to true\.$~'
         -
             path: 'demos/_includes/FlyersForm.php'
             message: '~^Property Atk4\\Ui\\Demos\\FlyersForm::\$flyers has no typehint specified\.$~'
@@ -1590,7 +1587,7 @@ parameters:
             message: '~^Method Atk4\\Ui\\Form\\Control\\Lookup::initQuickNewRecord\(\) has no return typehint specified\.$~'
         -
             path: 'src/Form/Control/Lookup.php'
-            message: '~^Call to function is_string\(\) with string will always evaluate to true\.$~'
+            message: '~^Call to function is_string\(\) with non-empty-string will always evaluate to true\.$~'
         -
             path: 'src/Form/Control/Lookup.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Lookup::applyLimit\(\) has no return typehint specified\.$~'

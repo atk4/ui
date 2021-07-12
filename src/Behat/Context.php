@@ -123,9 +123,9 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Sleep for a certain time in ms.
      *
-     * @Then I sleep :arg1 ms
+     * @Then I wait :arg1 ms
      */
-    public function iSleep(int $arg1): void
+    public function iWait(int $arg1): void
     {
         $this->getSession()->wait($arg1);
     }
