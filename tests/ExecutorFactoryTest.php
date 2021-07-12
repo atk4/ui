@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence\Array_;
 use Atk4\Ui\App;
@@ -36,7 +36,7 @@ class TestModel extends Model
     }
 }
 
-class ExecutorFactoryTest extends AtkPhpunit\TestCase
+class ExecutorFactoryTest extends TestCase
 {
     /** @var Model */
     public $model;

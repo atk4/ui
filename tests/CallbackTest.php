@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 
 class AppMock extends \Atk4\Ui\App
 {
@@ -24,7 +24,7 @@ class AppMock extends \Atk4\Ui\App
     }
 }
 
-class CallbackTest extends AtkPhpunit\TestCase
+class CallbackTest extends TestCase
 {
     /** @var string */
     private $htmlDoctypeRegex = '~^<!DOCTYPE~';

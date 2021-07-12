@@ -1,8 +1,8 @@
 ## Release note
 
-### version 1.19.3 (2021-02-05)
+### version 1.19.3 (2021-07-09)
 
-- Remove "debounceTimeout" atk option.
+- Update package dependencies.
 
 ### version 1.19.2 (2021-02-05)
 
@@ -17,7 +17,7 @@
 
 - Multiline component
   - add support for Lookup;
-  - refactor entire component;
+  - refactor entire component; 
 
 ### version 1.18.0 (2020-11-25)
 
@@ -33,14 +33,14 @@
 
 - adding textarea form control to be detect by form leave when set.
   see https://github.com/atk4/ui/issues/1527
-- Refactor arrow function.
+- Refactor arrow function.  
 
 ### version 1.16.3 (2020-09-30)
 
 - create atk-date-picker vue component.
 - Update query-builder
     - allow date picker customization;
-
+    
 - add atk-date-picker to multiline component.
 
 
@@ -73,10 +73,10 @@
     - panel service
  - Fix issue with Querybuilder date.
    - https://github.com/atk4/ui/issues/1420
- - Package
+ - Package 
     - update package dependencies to latest release;
         - note: css-loader v4 now require style-loader
-
+  
   PR: https://github.com/atk4/ui/pull/1430
 
 ### version 1.15.2 (2020-08-19)
@@ -84,7 +84,7 @@
  - sidenav.plugin.js
     - fix issue (1406) when using Control or Command click on a link (https://github.com/atk4/ui/issues/1406 )
 
- - Package
+ - Package 
     - update package dependencies to latest release;
     - fix eslint;
 
@@ -101,7 +101,7 @@
 
 ### version 1.14.3 (2020-07-13)
  - Update dependencies.
-
+ 
 ### version 1.14.2 (2020-05-04)
  - Build releases automatically on ui.agiletoolkit.org deploy
 
@@ -112,12 +112,12 @@
     Add option to close event on window beforeUnload
 
 ### version 1.14.0 (2020-04-21)
-
+    
 - Add a jQuery plugin for layout that support side navigation.
   - sidenav.plugin.js
 
 ### version 1.13.0 (2020-04-14)
-
+    
 - New PanelService.
 
 ### version 1.12.8 (2020-04-14)
@@ -135,7 +135,7 @@
 ### version 1.12.5 (2020-03-24)
 
 - make sure $ var is assign to jQuery ($ = jQuery) in all module by adding missing import statement.
-
+  
 ### version 1.12.4 (2020-03-18)
 
 - Update dependencie package
@@ -153,7 +153,7 @@
 
 ### version 1.12.2 (2020-02-04)
 
-- Fix https://github.com/atk4/ui/issues/902
+- Fix https://github.com/atk4/ui/issues/902 
    Throwing error on server was not clearing api.data object, thus keeping
    old value with new server request. This fix make sure api.data gets clear
    on all server response, successful or not.
@@ -165,21 +165,21 @@
 
 ### version 1.12.0 (2019-11-06)
 
-- add table-dropdown-helper.js
+- add table-dropdown-helper.js 
     Utlity to dipslay Fomantic ui drodown as a table column.
 
 ### version 1.11.0 (2019-10-24)
 
-- Add DataService.
+- Add DataService. 
     Enable usage of web storage: local or session.
 - Update atk.reloadView jQuery plugin.
     Can include web storage in api request,
     Possible to set specific Fomantic api settings
 - Update atk.ajaxExec jQuery plugin.
     Can include web storage in api request,
-    Possible to set specific Fomantic api settings
-
-- Update url.helpers
+    Possible to set specific Fomantic api settings    
+    
+- Update url.helpers 
 
 Fix
 - issue #487 - Avoid Multi modal
@@ -192,7 +192,7 @@ Fix
 ### version 1.9.1 (2019-10-06)
 
 - fix issue where new row is added pressing Enter key in form.
-- Add new option in order to add row automatically when tabbing out of
+- Add new option in order to add row automatically when tabbing out of 
 the last column and last row.
 - Add ability to execute javascript when adding or deleting a row.
 
@@ -217,9 +217,9 @@ the last column and last row.
 ### version 1.6.8
 
 - Babel configuration.
-    - fix core.js warning during build.
+    - fix core.js warning during build. 
 - create-modal.plugin
-    - fix: now allow to pass css class name to create modal.
+    - fix: now allow to pass css class name to create modal. 
     Useful when need to create modal with full width for example.
 - file-upload.plugin
     - remove support for opening file dialog when input get focus. Because File dialog
@@ -227,19 +227,19 @@ the last column and last row.
     multiple time. Now only open when input or button is clicked.
 
 ### version 1.6.7
-
+   
 - plugin.js
    - fix: Prevent plugin from being create if a plugin method is called prior to the plugin
    instantiation. Was causing unexpected result when plugin was create using a method call, since
-   there was no setting.
+   there was no setting. 
 - atkJsSearch plugin
   - Now support initial display setup value.
-  - Add support for reloading page via window.location and not using ajax.
+  - Add support for reloading page via window.location and not using ajax. 
 - url.helpers, previously add-param.helpers
-  - Add new plugin function: atkRemoveParam.
+  - Add new plugin function: atkRemoveParam. 
   You can use this function for removing an url query parameter from an url string.
   ex: $.atkRemoveParam('test.php?sort=2&id=3', 'sort') will output:  test.php?id=3
-
+   
 
 ### version 1.6.6
 
@@ -307,20 +307,20 @@ Maintenance release.
 ### version 1.3.8
 
   - allow jQuery FormSerializer to accept _ char at beginning of input name. ex: _e-mail
-  - Check for FormSerializer to be present before extending it.
+  - Check for FormSerializer to be present before extending it. 
 
 
 ### version 1.3.7
 
-  - allow jQuery FormSerializer to accept dash char in input name. ex: e-mail.
+  - allow jQuery FormSerializer to accept dash char in input name. ex: e-mail. 
 
 ### version 1.3.6
 
   - Add locutus library dependency for outputing js date using php format.
-    - use in Calendar.js formatter.
-  - Fix fileUpload plugin to handle click event
+    - use in Calendar.js formatter. 
+  - Fix fileUpload plugin to handle click event 
     - allow to use click event after user cancel file upload open dialog using cancel button.
-  - fix fileUload plugin to find button eleemnt instead of direct setup.
+  - fix fileUload plugin to find button eleemnt instead of direct setup. 
     - now use this.$el.find... for multi jQuery compatibility.
 
 ### version 1.3.5
@@ -329,9 +329,9 @@ Maintenance release.
   - Set top modal position value to 'absolute'
     - this fix semantic.ui 2.3.2 modal positioning problem.
   - Add esc key handler to document while modal are in service.
-    - this allow to close all open modal window using esc key one after the others.
+    - this allow to close all open modal window using esc key one after the others.  
 #### Changes in createModal
-  - Allow to pass a string icon value for closing icon.
+  - Allow to pass a string icon value for closing icon.  
 
 ### version 1.3.4
 
@@ -349,11 +349,11 @@ Maintenance release.
 ### version 1.3.1
 
   - Add more generic method JsSearch::setUrlArgs(arg, value) in favor of deprecared setSortArgs method.
-
+  
 ### version 1.3.0
 
   - add plugin, conditionalForm, to allow field to show or hide upon other field condition.
-  - add formService throughout the app.
+  - add formService throughout the app.  
   - Add PopupService in order to be able to load popup content dynamically via Callback.
 
 ### version 1.2.1
@@ -380,4 +380,4 @@ Maintenance release.
 - add new function for exporting package version number;
   ```
     atk.version()
-  ```
+  ``` 

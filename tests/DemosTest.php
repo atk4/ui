@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Persistence;
 use Atk4\Ui\App;
 use GuzzleHttp\Client;
@@ -17,7 +17,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * Requests are emulated in the same process. It is fast, but some output or shutdown functionality can not be fully tested.
  */
-class DemosTest extends AtkPhpunit\TestCase
+class DemosTest extends TestCase
 {
     /** @const string */
     protected const ROOT_DIR = __DIR__ . '/..';

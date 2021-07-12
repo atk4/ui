@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Locale;
 
-class LocaleTest extends AtkPhpunit\TestCase
+class LocaleTest extends TestCase
 {
     public function testException(): void
     {
