@@ -1,6 +1,6 @@
 {
   "name": "atkjs-ui",
-  "version": "1.19.3",
+  "version": "1.20.0",
   "description": "Agile Toolkit Javascript library.",
   "main": "lib/atkjs-ui.js",
   "scripts": {
@@ -45,7 +45,7 @@
     "core-js": "^3.15.2",
     "debounce": "^1.2.1",
     "locutus": "^2.0.15",
-    "lodash.throttle": "^4.1.1",
+    "lodash": "https://github.com/lodash/lodash.git#2da024c3b4",
     "mitt": "^2.1.0",
     "semantic-ui-vue": "^0.11.0",
     "vue": "^2.6.14",

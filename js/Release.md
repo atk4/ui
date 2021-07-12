@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.20.0 (2021-07-12)
+
+- Update lodash to v5.0.
+
 ### version 1.19.3 (2021-07-09)
 
 - Update package dependencies.
