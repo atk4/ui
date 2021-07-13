@@ -43,7 +43,38 @@ class Context extends RawMinkContext implements BehatContext
         $this->jqueryWait();
         $this->disableAnimations();
         $this->assertNoException();
-        $this->disableDebounce();
+    }
+
+    protected function getFinishedScript(): string
+    {
+        return 'document.readyState === \'complete\''
+            . ' && typeof jQuery !== \'undefined\' && jQuery.active === 0'
+            . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()';
+    }
+
+    /**
+     * Wait till jQuery AJAX request finished and no animation is perform.
+     */
+    protected function jqueryWait(string $extraWaitCondition = 'true', int $maxWaitdurationMs = 5000): void
+    {
+        $finishedScript = '(' . $this->getFinishedScript() . ') && (' . $extraWaitCondition . ')';
+
+        $s = microtime(true);
+        $c = 0;
+        while (microtime(true) - $s <= $maxWaitdurationMs / 1000) {
+            $this->getSession()->wait($maxWaitdurationMs, $finishedScript);
+            usleep(10000);
+            if ($this->getSession()->evaluateScript($finishedScript)) {
+                if (++$c >= 2) {
+                    return;
+                }
+            } else {
+                $c = 0;
+                usleep(50000);
+            }
+        }
+
+        throw new Exception('jQuery did not finished within a time limit');
     }
 
     protected function disableAnimations(): void
@@ -87,11 +118,6 @@ class Context extends RawMinkContext implements BehatContext
                 throw new Exception('Page contains uncaught exception');
             }
         }
-    }
-
-    protected function disableDebounce(): void
-    {
-        $this->getSession()->executeScript('atk.options.set("debounceTimeout", 20)');
     }
 
     /**
@@ -295,10 +321,11 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function modalIsOpenWithText(string $arg1): void
     {
-        $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
+        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
         if ($modal === null) {
             throw new Exception('No modal found');
         }
+
         // find text in modal
         $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (!$text || trim($text->getText()) !== $arg1) {
@@ -312,38 +339,16 @@ class Context extends RawMinkContext implements BehatContext
     public function modalIsShowingText(string $arg1, string $arg2): void
     {
         // get modal
-        $modal = $this->waitForNodeElement('.modal.transition.visible.active.front');
+        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
         if ($modal === null) {
             throw new Exception('No modal found');
         }
+
         // find text in modal
         $text = $modal->find('xpath', '//' . $arg2 . '[text()="' . $arg1 . '"]');
         if (!$text || $text->getText() !== $arg1) {
             throw new Exception('No such text in modal');
         }
-    }
-
-    /**
-     * Get a node element by it's selector.
-     * Will try to get element for 20ms.
-     * Exemple: Use with a modal window where reloaded content
-     * will resize it's window thus making it not accessible at first.
-     */
-    private function waitForNodeElement(string $selector, int $ms = 20): ?NodeElement
-    {
-        $counter = 0;
-        $element = null;
-        while ($counter < $ms) {
-            $element = $this->getSession()->getPage()->find('css', $selector);
-            if ($element === null) {
-                usleep(1000);
-                ++$counter;
-            } else {
-                break;
-            }
-        }
-
-        return $element;
     }
 
     /**
@@ -452,17 +457,6 @@ class Context extends RawMinkContext implements BehatContext
         if (!strpos($url, $text)) {
             throw new Exception('Text : "' . $text . '" not found in ' . $url);
         }
-    }
-
-    /**
-     * @Then /^I wait for the page to be loaded$/
-     */
-    public function waitForThePageToBeLoaded(): void
-    {
-        // This line in test-unit.yml is causing test to fail. Need to increase wait time to compensate.
-        // sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php
-        usleep(500000);
-        $this->getSession()->wait(10000, "document.readyState === 'complete'");
     }
 
     /**
@@ -653,51 +647,6 @@ class Context extends RawMinkContext implements BehatContext
         }
 
         return $rule;
-    }
-
-    /**
-     * Wait for an element, usually an auto trigger element, to show that loading has start"
-     * Example, when entering value in JsSearch for grid. We need to auto trigger to fire before
-     * doing waiting for callback.
-     * $arg1 should represent the element selector for jQuery.
-     *
-     * @Then I wait for loading to start in :arg1
-     */
-    public function iWaitForLoadingToStartIn(string $arg1): void
-    {
-        $this->getSession()->wait(2000, '$("' . $arg1 . '").hasClass("loading")');
-    }
-
-    protected function getFinishedScript(): string
-    {
-        return 'document.readyState === \'complete\''
-            . ' && typeof jQuery !== \'undefined\' && jQuery.active === 0'
-            . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()';
-    }
-
-    /**
-     * Wait till jQuery AJAX request finished and no animation is perform.
-     */
-    protected function jqueryWait(string $extraWaitCondition = 'true', int $maxWaitdurationMs = 5000): void
-    {
-        $finishedScript = '(' . $this->getFinishedScript() . ') && (' . $extraWaitCondition . ')';
-
-        $s = microtime(true);
-        $c = 0;
-        while (microtime(true) - $s <= $maxWaitdurationMs / 1000) {
-            $this->getSession()->wait($maxWaitdurationMs, $finishedScript);
-            usleep(10000);
-            if ($this->getSession()->evaluateScript($finishedScript)) {
-                if (++$c >= 2) {
-                    return;
-                }
-            } else {
-                $c = 0;
-                usleep(50000);
-            }
-        }
-
-        throw new Exception('jQuery did not finished within a time limit');
     }
 
     /**
