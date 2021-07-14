@@ -65,6 +65,9 @@ const atkUtils = (function () {
                 },
             };
         },
+        redirect: function (url, params) {
+            document.location = $.atkAddParams(url, params);
+        }
     };
 }());
 
