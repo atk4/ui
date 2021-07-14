@@ -118,8 +118,6 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      * Assign a View that will fire action execution.
      * If action require steps, it will automatically initialize
      * proper step to execute first.
-     *
-     * @return View
      */
     public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', $selector = null): self
     {
@@ -166,6 +164,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      */
     protected function jsGetExecute($obj, $id): array
     {
+        //@phpstan-ignore-next-line
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;

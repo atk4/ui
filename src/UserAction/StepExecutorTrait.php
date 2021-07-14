@@ -87,7 +87,8 @@ trait StepExecutorTrait
      */
     protected function addFormTo(View $view): Form
     {
-        $f = $view->add($this->formSeed);
+        /** @var Form $f */
+        $f = $view->add(Factory::factory($this->formSeed));
         $f->buttonSave->destroy();
 
         return $f;
@@ -258,7 +259,7 @@ trait StepExecutorTrait
 
     protected function doFinal(View $page): void
     {
-        View::addTo($page)->set($this->finalMsg);
+        View::addTo($page, ['content' => $this->finalMsg]);
         foreach ($this->getActionData('fields') as $field => $value) {
             $this->action->getEntity()->set($field, $value);
         }

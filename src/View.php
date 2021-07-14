@@ -793,7 +793,7 @@ class View extends AbstractView implements JsExpressionable
      * @see http://agile-ui.readthedocs.io/en/latest/js.html
      *
      * @param string|bool|null $when     Event when chain will be executed
-     * @param JsExpression     $action   JavaScript action
+     * @param JsExpressionable $action   JavaScript action
      * @param string|View|null $selector If you wish to override jQuery($selector)
      *
      * @return Jquery
@@ -1065,12 +1065,7 @@ class View extends AbstractView implements JsExpressionable
                     $arguments[$ex->name] = $arguments[0];
                     unset($arguments[0]);
                 }
-                $ex_actions = $ex->jsExecute($arguments);
-                if (is_array($ex_actions)) {
-                    $actions = $ex_actions;
-                } else {
-                    $actions[] = $ex_actions;
-                }
+                $actions = $ex->jsExecute($arguments);
                 $ex->executeModelAction();
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
                 if ($conf = $ex->getAction()->getConfirmation()) {

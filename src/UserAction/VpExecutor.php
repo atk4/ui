@@ -48,7 +48,9 @@ class VpExecutor extends View implements JsExecutorInterface
     {
         parent::init();
         $this->vp = VirtualPage::addTo($this);
-        $this->vp->add(Factory::factory($this->cancelBtnSeed))->link($this->url());
+        /** @var Button $b */
+        $b = $this->vp->add(Factory::factory($this->cancelBtnSeed));
+        $b->link($this->url());
         View::addTo($this->vp, ['ui' => 'ui clearing divider']);
 
         $this->header = Header::addTo($this->vp);
@@ -151,25 +153,16 @@ class VpExecutor extends View implements JsExecutorInterface
      */
     protected function jsGetExecute($obj, $id): array
     {
+        //@phpstan-ignore-next-line
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
 
         return [
-            (new JsChain('atk.utils'))->redirect($this->getApp()->url()),
+            (new JsChain('atk.utils'))->redirect($this->getApp()->url()), //@phpstan-ignore-line
             $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) ?:
                 $success ?: new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
             $this->loader->jsClearStoreData(true),
         ];
-    }
-
-    /**
-     * Add an action button to modal.
-     */
-    public function addButtonAction($button): self
-    {
-        $this->add($button);
-
-        return $this;
     }
 }
