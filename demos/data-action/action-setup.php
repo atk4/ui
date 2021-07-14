@@ -10,8 +10,8 @@ use Atk4\Ui\App;
 use Atk4\Ui\Message;
 
 /** @var App $app */
-$country   = new CountryLock($app->db);
-$entity    = $country->tryLoadAny();
+$country = new CountryLock($app->db);
+$entity = $country->tryLoadAny();
 $countryId = $entity->getId();
 
 // Model actions for this file are setup in DemoActionUtil.
