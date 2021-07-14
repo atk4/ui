@@ -66,7 +66,7 @@ class VpExecutor extends View implements JsExecutorInterface
      * to make sure that view id is properly set for loader and button
      * js action to run properly.
      */
-    public function afterActionInit(Model\UserAction $action)
+    public function afterActionInit(Model\UserAction $action): void
     {
         $this->loader = Loader::addTo($this->vp, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
@@ -97,13 +97,14 @@ class VpExecutor extends View implements JsExecutorInterface
     {
         $urlArgs['step'] = $this->step;
 
+        //@phpstan-ignore-next-line
         return [(new JsChain('atk.utils'))->redirect($this->vp->getUrl(), $urlArgs)];
     }
 
     /**
      * Perform model action by stepping through args - fields - preview.
      */
-    public function executeModelAction()
+    public function executeModelAction(): void
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
@@ -121,7 +122,7 @@ class VpExecutor extends View implements JsExecutorInterface
         });
     }
 
-    protected function addStepList()
+    protected function addStepList(): void
     {
         if (count($this->steps) === 1) {
             return;
@@ -132,7 +133,7 @@ class VpExecutor extends View implements JsExecutorInterface
         }
     }
 
-    protected function jsSetListState(View $view, string $currentStep)
+    protected function jsSetListState(View $view, string $currentStep): void
     {
         $view->js(true, $this->stepList->js()->find('.item')->removeClass('active'));
         foreach ($this->steps as $step) {
@@ -147,10 +148,8 @@ class VpExecutor extends View implements JsExecutorInterface
      *
      * @param mixed      $obj
      * @param string|int $id
-     *
-     * @return array
      */
-    protected function jsGetExecute($obj, $id)
+    protected function jsGetExecute($obj, $id): array
     {
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)

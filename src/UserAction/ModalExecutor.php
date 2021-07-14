@@ -53,7 +53,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      * to make sure that view id is properly set for loader and button
      * js action to run properly.
      */
-    public function afterActionInit(Model\UserAction $action)
+    public function afterActionInit(Model\UserAction $action): void
     {
         $getTableName = function ($arr) {
             foreach ($arr as $k => $v) {
@@ -98,7 +98,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * Perform model action by stepping through args - fields - preview.
      */
-    public function executeModelAction()
+    public function executeModelAction(): void
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
@@ -121,7 +121,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      *
      * @return View
      */
-    public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', $selector = null)
+    public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', $selector = null): self
     {
         if (!$this->actionInitialized) {
             throw new Exception('Action must be set prior to assign trigger.');
@@ -161,9 +161,10 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * Return proper js statement need after action execution.
      *
-     * @return array
+     * @param mixed      $obj
+     * @param string|int $id
      */
-    protected function jsGetExecute($obj, $id)
+    protected function jsGetExecute($obj, $id): array
     {
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
