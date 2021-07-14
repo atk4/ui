@@ -627,12 +627,6 @@ parameters:
             message: '~^Property Atk4\\Ui\\UserAction\\JsCallbackExecutor::\$jsSuccess \(Atk4\\Ui\\JsExpressionable\) does not accept array\|Closure\.$~'
         -
             path: 'src/UserAction/ModalExecutor.php'
-            message: '~^Property Atk4\\Ui\\UserAction\\ModalExecutor::\$form \(string\) does not accept default value of type array\<int, string\>\.$~'
-        -
-            path: 'src/UserAction/ModalExecutor.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::jsStepSubmit\(\) should return array but returns Atk4\\Ui\\Message\.$~'
-        -
-            path: 'src/UserAction/ModalExecutor.php'
             message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::addFormTo\(\) should return Atk4\\Ui\\Form but returns Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/View.php'
@@ -887,9 +881,6 @@ parameters:
             path: 'src/UserAction/JsCallbackExecutor.php'
             message: '~^Instanceof between Atk4\\Ui\\JsExpressionable and Closure will always evaluate to false\.$~'
         -
-            path: 'src/UserAction/ModalExecutor.php'
-            message: '~^Instanceof between Atk4\\Ui\\JsExpressionable and Closure will always evaluate to false\.$~'
-        -
             path: 'src/View.php'
             message: '~^Negated boolean expression is always false\.$~'
         -
@@ -1045,9 +1036,6 @@ parameters:
         -
             path: 'src/UserAction/ModalExecutor.php'
             message: '~^Parameter \#2 \$action of method Atk4\\Ui\\View::js\(\) expects Atk4\\Ui\\JsExpression\|null, Atk4\\Ui\\JsExpressionable given\.$~'
-        -
-            path: 'src/UserAction/ModalExecutor.php'
-            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, string given\.$~'
         -
             path: 'src/View.php'
             message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\JsCallback given\.$~'
@@ -2402,9 +2390,6 @@ parameters:
             path: 'src/UserAction/JsCallbackExecutor.php'
             message: '~^Method Atk4\\Ui\\UserAction\\JsCallbackExecutor::_hasAllArguments\(\) has no return typehint specified\.$~'
         -
-            path: 'src/UserAction/JsExecutorInterface.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\JsExecutorInterface::jsExecute\(\) has no return typehint specified\.$~'
-        -
             path: 'src/UserAction/ModalExecutor.php'
             message: '~^Property Atk4\\Ui\\UserAction\\ModalExecutor::\$actionInitialized has no typehint specified\.$~'
         -
@@ -2461,21 +2446,6 @@ parameters:
         -
             path: 'src/UserAction/ModalExecutor.php'
             message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::jsSetPrevHandler\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/UserAction/ModalExecutor.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::_addStepTitle\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/UserAction/ModalExecutor.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::_jsSequencer\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/UserAction/ModalExecutor.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::_handleException\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/UserAction/ModalExecutor.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::_handleException\(\) has parameter \$step with no typehint specified\.$~'
-        -
-            path: 'src/UserAction/ModalExecutor.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\ModalExecutor::_handleException\(\) has parameter \$view with no typehint specified\.$~'
         -
             path: 'src/UserAction/PreviewExecutor.php'
             message: '~^Method Atk4\\Ui\\UserAction\\PreviewExecutor::initPreview\(\) has no return typehint specified\.$~'

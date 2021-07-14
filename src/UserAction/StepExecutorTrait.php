@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\UserAction;
+namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\Exception;
 use Atk4\Core\Factory;
