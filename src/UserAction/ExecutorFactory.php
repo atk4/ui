@@ -20,7 +20,7 @@ use Atk4\Ui\View;
 class ExecutorFactory
 {
     public const JS_EXECUTOR = self::class . '@jsExecutorSeed';
-    public const MODAL_EXECUTOR = self::class . '@modalExecutorSeed';
+    public const STEP_EXECUTOR = self::class . '@modalExecutorSeed';
     public const CONFIRMATION_EXECUTOR = self::class . '@confirmationExecutorClass';
     public const BASIC_BUTTON = self::class . '@basicButton';
     public const MODAL_BUTTON = self::class . '@modalExecutorButton';
@@ -38,7 +38,7 @@ class ExecutorFactory
      */
     protected $executorSeed = [
         self::JS_EXECUTOR => [JsCallbackExecutor::class],
-        self::MODAL_EXECUTOR => [ModalExecutor::class],
+        self::STEP_EXECUTOR => [ModalExecutor::class],
         self::CONFIRMATION_EXECUTOR => [ConfirmationExecutor::class],
     ];
 
@@ -168,7 +168,7 @@ class ExecutorFactory
             } else {
                 $seed = (!$action->args && !$action->fields && !$action->preview)
                         ? $this->executorSeed[self::JS_EXECUTOR]
-                        : $this->executorSeed[self::MODAL_EXECUTOR];
+                        : $this->executorSeed[self::STEP_EXECUTOR];
             }
         }
 
