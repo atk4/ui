@@ -119,7 +119,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      * If action require steps, it will automatically initialize
      * proper step to execute first.
      */
-    public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', $selector = null): self
+    public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', string $selector = null): self
     {
         if (!$this->actionInitialized) {
             throw new Exception('Action must be set prior to assign trigger.');
