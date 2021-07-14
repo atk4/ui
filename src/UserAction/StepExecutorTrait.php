@@ -75,7 +75,7 @@ trait StepExecutorTrait
     /**
      * Utility for setting Title for each step.
      */
-    protected function addStepTitle(View $view, string $step)
+    protected function addStepTitle(View $view, string $step): void
     {
         if ($seed = $this->stepTitle[$step] ?? null) {
             $view->add(Factory::factory($seed));
@@ -106,7 +106,7 @@ trait StepExecutorTrait
         return $form;
     }
 
-    protected function runSteps()
+    protected function runSteps(): void
     {
         $this->loader->set(function ($page) {
             try {
@@ -134,7 +134,7 @@ trait StepExecutorTrait
         });
     }
 
-    protected function doArgs(View $page)
+    protected function doArgs(View $page): void
     {
         $this->addStepTitle($page, $this->step);
 
@@ -172,7 +172,7 @@ trait StepExecutorTrait
         });
     }
 
-    protected function doFields(View $page)
+    protected function doFields(View $page): void
     {
         $this->addStepTitle($page, $this->step);
         $form = $this->addFormTo($page);
@@ -198,7 +198,7 @@ trait StepExecutorTrait
         }
     }
 
-    protected function doPreview(View $page)
+    protected function doPreview(View $page): void
     {
         $this->addStepTitle($page, $this->step);
 
@@ -256,7 +256,7 @@ trait StepExecutorTrait
         }
     }
 
-    protected function doFinal(View $page)
+    protected function doFinal(View $page): void
     {
         View::addTo($page)->set($this->finalMsg);
         foreach ($this->getActionData('fields') as $field => $value) {
@@ -359,7 +359,7 @@ trait StepExecutorTrait
     /**
      * Generate js for setting Buttons state based on current step.
      */
-    protected function jsSetBtnState(View $view, string $step)
+    protected function jsSetBtnState(View $view, string $step): void
     {
         if (count($this->steps) === 1) {
             $view->js(true, $this->prevStepBtn->js()->hide());
@@ -417,7 +417,7 @@ trait StepExecutorTrait
     /**
      * Generate js function for Previous button.
      */
-    protected function jsSetPrevHandler(View $view, string $step)
+    protected function jsSetPrevHandler(View $view, string $step): void
     {
         if ($prev = $this->getPreviousStep($step)) {
             $chain = $this->loader->jsLoad([
@@ -432,7 +432,7 @@ trait StepExecutorTrait
     /**
      * Determine which button is responsible for submitting form on a specific step.
      */
-    protected function jsSetSubmitBtn(View $view, Form $form, string $step)
+    protected function jsSetSubmitBtn(View $view, Form $form, string $step): void
     {
         if ($this->isLastStep($step)) {
             $view->js(true, $this->execActionBtn->js()->on('click', new JsFunction([$form->js(null, null, $form->formElement)->form('submit')])));
@@ -445,7 +445,7 @@ trait StepExecutorTrait
     /**
      * Get proper js after submitting a form in a step.
      *
-     * @return array
+     * @return mixed
      */
     protected function jsStepSubmit(string $step)
     {
@@ -517,7 +517,7 @@ trait StepExecutorTrait
      *
      * @param array|JsExpressionable $js
      */
-    protected function jsSequencer(View $view, $js)
+    protected function jsSequencer(View $view, $js): void
     {
         if (is_array($js)) {
             foreach ($js as $jq) {
@@ -528,7 +528,7 @@ trait StepExecutorTrait
         }
     }
 
-    protected function handleException(\Throwable $exception, View $view, string $step)
+    protected function handleException(\Throwable $exception, View $view, string $step): void
     {
         $msg = Message::addTo($view, ['Error:', 'type' => 'error']);
         $msg->text->addHtml($this->getApp()->renderExceptionHtml($exception));
