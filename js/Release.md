@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.20.0 (2021-07-14)
+
+- Add redirect utils method.
+
 ### version 1.19.4 (2021-07-11)
 
 - Remove "debounceTimeout" atk option.

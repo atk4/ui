@@ -89,7 +89,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
      *
      * @return mixed
      */
-    public function jsExecute(array $urlArgs)
+    public function jsExecute(array $urlArgs): array
     {
         if (!$this->actionInitialized) {
             throw new Exception('Action must be set prior to assign trigger.');

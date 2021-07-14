@@ -119,7 +119,8 @@ if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {
     $menu = $layout->addMenuGroup(['Data Action Executor', 'icon' => 'wrench']);
     $layout->addMenuItem(['Executor Examples'], [$path . 'actions'], $menu);
     $layout->addMenuItem(['Assign action to event'], [$path . 'jsactions'], $menu);
-    $layout->addMenuItem(['Assign action to button event'], [$path . 'jsactions2'], $menu);
+    $layout->addMenuItem(['Assign action to button (Modal)'], [$path . 'jsactions2'], $menu);
+    $layout->addMenuItem(['Assign action to button (V. Page)'], [$path . 'jsactions-vp'], $menu);
     $layout->addMenuItem(['Execute from Grid'], [$path . 'jsactionsgrid'], $menu);
     $layout->addMenuItem(['Execute from Crud'], [$path . 'jsactionscrud'], $menu);
     $layout->addMenuItem(['Executor Factory'], [$path . 'factory'], $menu);
