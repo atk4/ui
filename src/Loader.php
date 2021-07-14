@@ -37,6 +37,9 @@ class Loader extends View
     /** @var Callback for triggering */
     protected $cb;
 
+    /** @var array Url arguments. */
+    public $urlArgs = [];
+
     protected function init(): void
     {
         parent::init();
@@ -92,7 +95,7 @@ class Loader extends View
     {
         if (!$this->cb->isTriggered()) {
             if ($this->loadEvent) {
-                $this->js($this->loadEvent, $this->jsLoad());
+                $this->js($this->loadEvent, $this->jsLoad($this->urlArgs));
             }
             $this->add($this->shim);
         }
