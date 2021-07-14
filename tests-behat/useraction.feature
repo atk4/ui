@@ -33,3 +33,25 @@ Feature: UserAction
     Then Modal is open with text "Gender = m / Age = 22"
     Then I press Modal button "Multi Step"
     Then Toast display should contains text "Thank you Mr. at age 22"
+
+  Scenario: testing VpExecutor
+    Given I am on "data-action/jsactions-vp.php"
+    And I press button "Argument"
+    Then I should see "Age"
+    When I fill in "age" with "22"
+    Then I press button "Argument"
+
+  Scenario: testing return
+    Then I should see "Assign Model action to button event"
+
+  Scenario: testing multi
+    And I press button "Multi Step"
+    Then I should see "Age"
+    When I fill in "age" with "22"
+    Then I press button "Next"
+    Then I press button "Next"
+    Then I should see "Gender = m / Age = 22"
+    Then I press button "Multi Step"
+
+  Scenario: testing return
+    Then I should see "Assign Model action to button event"
