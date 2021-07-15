@@ -163,7 +163,6 @@ class VpExecutor extends View implements JsExecutorInterface
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
 
-        //@phpstan-ignore-next-line
         return [
             $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) ?:
                 $success ?: new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
