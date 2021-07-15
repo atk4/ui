@@ -47,6 +47,11 @@ class VpExecutor extends View implements JsExecutorInterface
     protected function init(): void
     {
         parent::init();
+        $this->initExecutor();
+    }
+
+    protected function initExecutor()
+    {
         $this->vp = VirtualPage::addTo($this);
         /** @var Button $b */
         $b = $this->vp->add(Factory::factory($this->cancelBtnSeed));
@@ -159,10 +164,10 @@ class VpExecutor extends View implements JsExecutorInterface
             : $this->jsSuccess;
 
         return [
-            (new JsChain('atk.utils'))->redirect($this->getApp()->url()), //@phpstan-ignore-line
             $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) ?:
                 $success ?: new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
             $this->loader->jsClearStoreData(true),
+            (new JsChain('atk.utils'))->redirect($this->getApp()->url()), //@phpstan-ignore-line
         ];
     }
 }
