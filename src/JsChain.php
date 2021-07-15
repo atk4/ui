@@ -13,6 +13,8 @@ namespace Atk4\Ui;
  * IMPORTANT: don't write any JavaScript logic in PHP, only bind.
  *
  * IMPORTANT: all methods in this class are pre-pended with '_', to avoid clashes with js-mapping.
+ *
+ *  @method Jquery redirect(...$args)
  */
 class JsChain extends JsExpression
 {
