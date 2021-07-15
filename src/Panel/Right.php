@@ -58,6 +58,8 @@ class Right extends View implements Loadable
         if ($this->dynamic) {
             $this->addDynamicContent(Factory::factory($this->dynamic));
         }
+
+        $this->getApp()->registerPortals($this);
     }
 
     /**
@@ -87,15 +89,17 @@ class Right extends View implements Loadable
     /**
      * Return js expression need to open panel via js panelService.
      *
-     * @param array        $args      the data attribute name to include in reload from the triggering element
-     * @param string|null  $activeCss the css class name to apply on triggering element when panel is open
-     * @param JsExpression $jsTrigger JsExpression that trigger panel to open. Default = $(this).
+     * @param array        $urlArgs       the argument to include when dynamic content panel open
+     * @param array        $dataAttribute the data attribute name to include in reload from the triggering element
+     * @param string|null  $activeCss     the css class name to apply on triggering element when panel is open
+     * @param JsExpression $jsTrigger     JsExpression that trigger panel to open. Default = $(this).
      */
-    public function jsOpen(array $args = [], string $activeCss = null, JsExpression $jsTrigger = null): JsExpression
+    public function jsOpen(array $urlArgs = [], array $dataAttribute = [], string $activeCss = null, JsExpression $jsTrigger = null): JsExpression
     {
         return $this->service()->openPanel([
             'triggered' => $jsTrigger ?? new Jquery(),
-            'reloadArgs' => $args,
+            'reloadArgs' => $dataAttribute,
+            'urlArgs' => $urlArgs,
             'openId' => $this->name,
             'activeCSS' => $activeCss,
         ]);

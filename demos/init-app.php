@@ -120,6 +120,7 @@ if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['Executor Examples'], [$path . 'actions'], $menu);
     $layout->addMenuItem(['Assign action to event'], [$path . 'jsactions'], $menu);
     $layout->addMenuItem(['Assign action to button (Modal)'], [$path . 'jsactions2'], $menu);
+    $layout->addMenuItem(['Assign action to button (Panel)'], [$path . 'jsactions-panel'], $menu);
     $layout->addMenuItem(['Assign action to button (V. Page)'], [$path . 'jsactions-vp'], $menu);
     $layout->addMenuItem(['Execute from Grid'], [$path . 'jsactionsgrid'], $menu);
     $layout->addMenuItem(['Execute from Crud'], [$path . 'jsactionscrud'], $menu);

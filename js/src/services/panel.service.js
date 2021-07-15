@@ -24,6 +24,18 @@ class PanelService {
     }
 
     /**
+     * Remove existing panel from service panels and dom.
+     *
+     * @param id
+     */
+    removePanel(id) {
+        // remove from dom
+        this.getPropertyValue(id, '$panel').remove();
+        const temp = this.service.panels.filter((panel) => !panel[id]);
+        this.service.panels.splice(0, this.service.panels.length, ...temp);
+    }
+
+    /**
    * Add a panel to this service and
    * initial panel setup.
    *
@@ -35,9 +47,9 @@ class PanelService {
     addPanel(params) {
         const that = this;
 
-        // don't add if already there.
+        // Remove existing one. Can be added by a reload.
         if (this.getPropertyValue(params.id, 'id')) {
-            return;
+            this.removePanel(params.id);
         }
 
         const newPanel = {
@@ -62,6 +74,8 @@ class PanelService {
         newPanel[params.id].$panel.on('click', params.closeSelector, () => {
             that.closePanel(params.id);
         });
+
+        newPanel[params.id].$panel.appendTo($('.atk-side-panels'));
 
         this.service.panels.push(newPanel);
     }

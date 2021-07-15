@@ -89,14 +89,14 @@ class ApiService {
                         // throw({message:'Unable to replace element with id: '+ response.id});
                     }
                 }
-                if (response && response.modals) {
-                    // Create app modal from json response.
-                    const modals = Object.keys(response.modals);
-                    modals.forEach((modal) => {
-                        const m = $('.ui.dimmer.modals.page').find('#' + modal);
+                if (response && response.portals) {
+                    // Create app portal from json response.
+                    const portals = Object.keys(response.portals);
+                    portals.forEach((portalID) => {
+                        const m = $('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
                         if (m.length === 0) {
-                            $(document.body).append(response.modals[modal].html);
-                            atk.apiService.evalResponse(response.modals[modal].js, jQuery);
+                            $(document.body).append(response.portals[portalID].html);
+                            atk.apiService.evalResponse(response.portals[portalID].js, jQuery);
                         }
                     });
                 }

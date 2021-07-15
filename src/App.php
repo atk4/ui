@@ -125,7 +125,7 @@ class App
     ];
 
     /** @var Modal[] Modal view that need to be rendered using json output. */
-    private $modals = [];
+    private $portals = [];
 
     /**
      * @var bool whether or not semantic-ui vue has been initialised
@@ -226,14 +226,14 @@ class App
     }
 
     /**
-     * Register a modal view.
-     * Fomantic-ui Modal are teleported in HTML template
+     * Register a portal view.
+     * Fomantic-ui Modal or atk Panel are teleported in HTML template
      * within specific location. This will keep track
-     * of modals when terminating app using json.
+     * of them when terminating app using json.
      */
-    public function registerModal(Modal $modal): void
+    public function registerPortals(View $portal): void
     {
-        $this->modals[$modal->short_name] = $modal;
+        $this->portals[$portal->short_name] = $portal;
     }
 
     public function setExecutorFactory(ExecutorFactory $factory)
@@ -396,7 +396,7 @@ class App
             if (is_string($output)) {
                 $output = $this->decodeJson($output);
             }
-            $output['modals'] = $this->getRenderedModals();
+            $output['portals'] = $this->getRenderedPortals();
 
             $this->outputResponseJson($output, $headers);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
@@ -405,7 +405,7 @@ class App
             // we need to hack output to include app modal.
             $keys = null;
             $remove_function = '';
-            foreach ($this->getRenderedModals() as $key => $modal) {
+            foreach ($this->getRenderedPortals() as $key => $modal) {
                 // add modal rendering to output
                 $keys[] = '#' . $key;
                 $output['atkjs'] = $output['atkjs'] . ';' . $modal['js'];
@@ -413,7 +413,7 @@ class App
             }
             if ($keys) {
                 $ids = implode(',', $keys);
-                $remove_function = '$(\'.ui.dimmer.modals.page\').find(\'' . $ids . '\').remove();';
+                $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . $ids . '\').remove();';
             }
             $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
 
@@ -1141,17 +1141,17 @@ class App
     /**
      * Generated html and js for modals attached to $html view.
      */
-    public function getRenderedModals(): array
+    private function getRenderedPortals(): array
     {
         // prevent looping (calling App::terminateJson() recursively) if JsReload is used in Modal
         unset($_GET['__atk_reload']);
 
-        $modals = [];
-        foreach ($this->modals as $view) {
-            $modals[$view->name]['html'] = $view->getHtml();
-            $modals[$view->name]['js'] = $view->getJsRenderActions();
+        $portals = [];
+        foreach ($this->portals as $view) {
+            $portals[$view->name]['html'] = $view->getHtml();
+            $portals[$view->name]['js'] = $view->getJsRenderActions();
         }
 
-        return $modals;
+        return $portals;
     }
 }

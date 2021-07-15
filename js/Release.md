@@ -1,5 +1,11 @@
 ## Release note
 
+### version 1.21.0 (2021-07-15)
+
+- Implement Panel as portal view in order to properly manage them on reload.
+    - Changes in api service.
+- Add remove panel to panel service. Will now remove panel from list of panels but also remove them from dom, like Modal.
+
 ### version 1.20.0 (2021-07-14)
 
 - Add redirect utils method.
