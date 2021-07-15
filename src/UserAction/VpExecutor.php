@@ -50,7 +50,7 @@ class VpExecutor extends View implements JsExecutorInterface
         $this->vp = VirtualPage::addTo($this);
         /** @var Button $b */
         $b = $this->vp->add(Factory::factory($this->cancelBtnSeed));
-        $b->link($this->url());
+        $b->link($this->getApp()->url());
         View::addTo($this->vp, ['ui' => 'ui clearing divider']);
 
         $this->header = Header::addTo($this->vp);
