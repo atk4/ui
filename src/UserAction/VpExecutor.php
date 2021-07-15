@@ -50,7 +50,7 @@ class VpExecutor extends View implements JsExecutorInterface
         $this->initExecutor();
     }
 
-    protected function initExecutor()
+    protected function initExecutor(): void
     {
         $this->vp = VirtualPage::addTo($this);
         /** @var Button $b */
