@@ -119,9 +119,4 @@ class Loader extends View
             'storeName' => $storeName ? $storeName : null,
         ]);
     }
-
-    protected function mergeStickyArgsFromChildView(): AbstractView
-    {
-        return $this->cb;
-    }
 }
