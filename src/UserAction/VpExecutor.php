@@ -104,7 +104,6 @@ class VpExecutor extends View implements JsExecutorInterface
     {
         $urlArgs['step'] = $this->step;
 
-        //@phpstan-ignore-next-line
         return [(new JsChain('atk.utils'))->redirect($this->vp->getUrl(), $urlArgs)];
     }
 
