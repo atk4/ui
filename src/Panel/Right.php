@@ -31,8 +31,11 @@ class Right extends View implements Loadable
     /** @var View|null The content to display inside flyout */
     protected $dynamicContent;
 
-    /** @var bool can be closed via esc or by clicking outside panel. */
+    /** @var bool can be closed by clicking outside panel. */
     protected $hasClickAway = true;
+
+    /** @var bool can be closed via esc key. */
+    protected $hasEscAway = true;
 
     /** @var array The default content seed. */
     public $dynamic = [Content::class];
@@ -187,6 +190,7 @@ class Right extends View implements Loadable
             'visible' => 'atk-visible', // the triggering css class that will make this panel visible.
             'closeSelector' => $this->closeSelector, // the css selector to close this flyout.
             'hasClickAway' => $this->hasClickAway,
+            'hasEscAway' => $this->hasEscAway,
         ];
 
         if ($this->dynamicContent) {

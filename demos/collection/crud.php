@@ -79,9 +79,9 @@ $myExecutorClass = get_class(new class() extends \Atk4\Ui\UserAction\ModalExecut
 
         $result = parent::addFormTo($left);
 
-        if ($this->action->getModel()->get(File::hinting()->fieldName()->is_folder)) {
+        if ($this->getAction()->getModel()->get(File::hinting()->fieldName()->is_folder)) {
             \Atk4\Ui\Grid::addTo($right, ['menu' => false, 'ipp' => 5])
-                ->setModel(File::assertInstanceOf($this->action->getModel())->SubFolder);
+                ->setModel(File::assertInstanceOf($this->getAction()->getModel())->SubFolder);
         } else {
             \Atk4\Ui\Message::addTo($right, ['Not a folder', 'warning']);
         }

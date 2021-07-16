@@ -66,11 +66,12 @@ class PanelService {
                 clearable: params.clearable,
                 loader: { selector: params.loader.selector, trigger: params.loader.trigger },
                 hasClickAway: params.hasClickAway,
+                hasEscAway: params.hasEscAway,
                 modalAction: null,
             },
         };
 
-        // add click handler.
+        // add click handler for closing panel.
         newPanel[params.id].$panel.on('click', params.closeSelector, () => {
             that.closePanel(params.id);
         });
@@ -191,11 +192,6 @@ class PanelService {
 
         // will apply css class to triggering element if provide.
         if (triggerElement.length > 0) {
-            // no need to do anything if we are using the same panel.
-            // if (this.getPropertyValue(panelId, 'on') && this.isSameElement(panelId, triggerElement)) {
-            //   return;
-            // }
-
             this.setTriggerElement(panelId, triggerElement, params);
         }
 
@@ -203,6 +199,9 @@ class PanelService {
         this.service.currentVisibleId = panelId;
         if (this.getPropertyValue(panelId, 'hasClickAway')) {
             this.addClickAwayEvent(panelId);
+        }
+        if (this.getPropertyValue(panelId, 'hasEscAway')) {
+            this.addEscAwayEvent(panelId);
         }
     }
 
@@ -309,19 +308,24 @@ class PanelService {
     }
 
     /**
-   * Add click away and esc closing event handler.
+   * Add click away closing event handler.
    */
     addClickAwayEvent(id) {
-        const that = this;
         // clicking anywhere in main tag will close panel.
         $('main').on('click.atkPanel', atk.debounce((evt) => {
-            that.closePanel(id);
+            this.closePanel(id);
         }, 250));
+    }
 
+    /**
+     * Add esc away closing event handler.
+     */
+    addEscAwayEvent(id) {
+        // const that = this;
         // pressing esc key will close panel.
         $(document).on('keyup.atkPanel', atk.debounce((evt) => {
             if (evt.keyCode === 27) {
-                that.closePanel(id);
+                this.closePanel(id);
             }
         }, 100));
     }
