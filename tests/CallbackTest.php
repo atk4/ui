@@ -57,6 +57,7 @@ class CallbackTest extends TestCase
         }, [34]);
 
         $this->assertSame(34, $var);
+        $this->assertSame('1', $cb->getTriggeredValue());
     }
 
     public function testCallbackTrigger(): void
