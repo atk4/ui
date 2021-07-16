@@ -206,15 +206,6 @@ parameters:
             path: 'demos/interactive/wizard.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Wizard::\$buttonFinish\.$~'
         -
-            path: 'demos/layout/layout-panel.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\Panel\\Loadable::jsOpen\(\)\.$~'
-        -
-            path: 'demos/layout/layout-panel.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\Panel\\Loadable::onOpen\(\)\.$~'
-        -
-            path: 'demos/layout/layout-panel.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\Panel\\Loadable::addConfirmation\(\)\.$~'
-        -
             path: 'src/Callback.php'
             message: '~^Method Atk4\\Ui\\Callback::set\(\) should return mixed but return statement is missing\.$~'
         -

@@ -25,7 +25,8 @@ class PanelExecutor extends Right implements JsExecutorInterface
     /** @const string */
     public const HOOK_STEP = self::class . '@onStep';
 
-    public $dynamic = false;
+    /** @var array No need for dynamic content. It is manage with step loader. */
+    public $dynamic = [];
     public $hasClickAway = false;
 
     /** @var string */

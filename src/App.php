@@ -124,7 +124,7 @@ class App
         'cache-control' => 'no-store', // disable caching by default
     ];
 
-    /** @var Modal[] Modal view that need to be rendered using json output. */
+    /** @var View[] Modal view that need to be rendered using json output. */
     private $portals = [];
 
     /**
