@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Ui\Callback;
 
 class AppMock extends \Atk4\Ui\App
 {
@@ -56,6 +57,15 @@ class CallbackTest extends TestCase
         }, [34]);
 
         $this->assertSame(34, $var);
+    }
+
+    public function testCallbackTrigger(): void
+    {
+        $cb = \Atk4\Ui\Callback::addTo($this->app);
+        $this->assertSame($this->app->layout->name . '_' . $cb->short_name, $cb->getUrlTrigger());
+
+        $cb = Callback::addTo($this->app, ['urlTrigger' => 'test']);
+        $this->assertSame('test', $cb->getUrlTrigger());
     }
 
     public function testCallbackNotFiring(): void
