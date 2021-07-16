@@ -20,7 +20,7 @@ Header::addTo($app, ['Right Panel', 'subHeader' => 'Content on the fly!']);
 // PANEL
 
 Header::addTo($app, ['Static', 'size' => 4, 'subHeader' => 'Panel may have static content only.']);
-$panel = Right::addTo($app, ['dynamic' => false]);
+$panel = Right::addTo($app, ['dynamic' => []]);
 Message::addTo($panel, ['This panel contains only static content.']);
 $btn = \Atk4\Ui\Button::addTo($app, ['Open Static']);
 $btn->on('click', $panel->jsOpen());
