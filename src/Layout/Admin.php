@@ -8,6 +8,7 @@ use Atk4\Ui\Header;
 use Atk4\Ui\Icon;
 use Atk4\Ui\Item;
 use Atk4\Ui\Jquery;
+use Atk4\Ui\Layout;
 use Atk4\Ui\Menu;
 
 /**
@@ -32,7 +33,7 @@ use Atk4\Ui\Menu;
  *
  *  - Content
  */
-class Admin extends \Atk4\Ui\Layout implements NavigableInterface
+class Admin extends Layout implements NavigableInterface
 {
     public $menuLeft;    // vertical menu
     public $menu;        // horizontal menu
