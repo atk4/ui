@@ -634,7 +634,7 @@ class View extends AbstractView implements JsExpressionable
     {
         $triggers = [];
         foreach ($_GET as $k => $get) {
-            if (str_starts_with($k, self::TRIGGER_PREFIX)) {
+            if (str_starts_with($k, self::CALLBACK_TRIGGER_PREFIX)) {
                 $triggers[$k] = $get;
             }
         }

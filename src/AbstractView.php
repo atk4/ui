@@ -53,7 +53,7 @@ abstract class AbstractView
      */
     protected $_rendered = false;
 
-    protected const TRIGGER_PREFIX = '__atkcb_';
+    public const CALLBACK_TRIGGER_PREFIX = '__atkcb_';
 
     // }}}
 

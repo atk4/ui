@@ -80,7 +80,7 @@ class Callback extends AbstractView
      */
     public function isTriggered()
     {
-        return isset($_GET[self::TRIGGER_PREFIX . $this->urlTrigger] );
+        return isset($_GET[self::CALLBACK_TRIGGER_PREFIX . $this->urlTrigger]);
     }
 
     /**
@@ -88,7 +88,7 @@ class Callback extends AbstractView
      */
     public function getTriggeredValue(): string
     {
-        return $_GET[self::TRIGGER_PREFIX . $this->urlTrigger] ?? '';
+        return $_GET[self::CALLBACK_TRIGGER_PREFIX . $this->urlTrigger] ?? '';
     }
 
     /**
@@ -131,7 +131,6 @@ class Callback extends AbstractView
      */
     private function getUrlArguments(string $value = null): array
     {
-        return ['__atk_callback' => $this->urlTrigger, self::TRIGGER_PREFIX . $this->urlTrigger => $value ?? $this->getTriggeredValue()];
+        return ['__atk_callback' => $this->urlTrigger, self::CALLBACK_TRIGGER_PREFIX . $this->urlTrigger => $value ?? $this->getTriggeredValue()];
     }
-
 }
