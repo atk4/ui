@@ -53,8 +53,6 @@ abstract class AbstractView
      */
     protected $_rendered = false;
 
-    public const CALLBACK_TRIGGER_PREFIX = '__atkcb_';
-
     // }}}
 
     // {{{ Default init() method and add() logic

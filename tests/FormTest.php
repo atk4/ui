@@ -7,7 +7,6 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 use Atk4\Ui\App;
-use Atk4\Ui\Callback;
 use Atk4\Ui\Form;
 
 class FormTest extends TestCase
@@ -48,7 +47,7 @@ class FormTest extends TestCase
         $submit_called = false;
         $_POST = $post_data;
         // trigger callback
-        $_GET[Callback::CALLBACK_TRIGGER_PREFIX . 'atk_submit'] = 'ajax';
+        $_GET['atk_submit'] = 'ajax';
         $_GET['__atk_callback'] = 'atk_submit';
 
         $this->f->onSubmit(function (Form $form) use (&$submit_called, $submit) {

@@ -597,9 +597,9 @@ class View extends AbstractView implements JsExpressionable
      *
      * @return string
      */
-    public function jsUrl($page = [], bool $includeRunningCallback = false)
+    public function jsUrl($page = [])
     {
-        return $this->getApp()->jsUrl($page, false, array_merge($this->_getStickyArgs(), $includeRunningCallback ? $this->getCallbackArguments() : []));
+        return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
     }
 
     /**
@@ -611,9 +611,9 @@ class View extends AbstractView implements JsExpressionable
      *
      * @return string
      */
-    public function url($page = [], bool $includeRunningCallback = false)
+    public function url($page = [])
     {
-        return $this->getApp()->url($page, false, array_merge($this->_getStickyArgs(), $includeRunningCallback ? $this->getCallbackArguments() : []));
+        return $this->getApp()->url($page, false, $this->_getStickyArgs());
     }
 
     /**
@@ -628,18 +628,6 @@ class View extends AbstractView implements JsExpressionable
         }
 
         return $stickyArgs;
-    }
-
-    protected function getCallbackArguments(): array
-    {
-        $triggers = [];
-        foreach ($_GET as $k => $get) {
-            if (str_starts_with($k, self::CALLBACK_TRIGGER_PREFIX)) {
-                $triggers[$k] = $get;
-            }
-        }
-
-        return $triggers;
     }
 
     /**

@@ -43,6 +43,8 @@ class Callback extends AbstractView
     public function setUrlTrigger(string $trigger = null)
     {
         $this->urlTrigger = $trigger ?: $this->name;
+
+        $this->getOwner()->stickyGet($this->urlTrigger);
     }
 
     public function getUrlTrigger(): string
@@ -80,7 +82,7 @@ class Callback extends AbstractView
      */
     public function isTriggered()
     {
-        return isset($_GET[self::CALLBACK_TRIGGER_PREFIX . $this->urlTrigger]);
+        return isset($_GET[$this->urlTrigger]);
     }
 
     /**
@@ -88,7 +90,7 @@ class Callback extends AbstractView
      */
     public function getTriggeredValue(): string
     {
-        return $_GET[self::CALLBACK_TRIGGER_PREFIX . $this->urlTrigger] ?? '';
+        return $_GET[$this->urlTrigger] ?? '';
     }
 
     /**
@@ -114,7 +116,7 @@ class Callback extends AbstractView
      */
     public function getJsUrl(string $value = 'ajax'): string
     {
-        return $this->getOwner()->jsUrl($this->getUrlArguments($value), true);
+        return $this->getOwner()->jsUrl($this->getUrlArguments($value));
     }
 
     /**
@@ -123,7 +125,7 @@ class Callback extends AbstractView
      */
     public function getUrl(string $value = 'callback'): string
     {
-        return $this->getOwner()->url($this->getUrlArguments($value), true);
+        return $this->getOwner()->url($this->getUrlArguments($value));
     }
 
     /**
@@ -131,6 +133,6 @@ class Callback extends AbstractView
      */
     private function getUrlArguments(string $value = null): array
     {
-        return ['__atk_callback' => $this->urlTrigger, self::CALLBACK_TRIGGER_PREFIX . $this->urlTrigger => $value ?? $this->getTriggeredValue()];
+        return ['__atk_callback' => $this->urlTrigger, $this->urlTrigger => $value ?? $this->getTriggeredValue()];
     }
 }

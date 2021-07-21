@@ -50,7 +50,7 @@ class CallbackTest extends TestCase
         $cb = \Atk4\Ui\Callback::addTo($this->app);
 
         // simulate triggering
-        $_GET[Callback::CALLBACK_TRIGGER_PREFIX . $cb->name] = '1';
+        $_GET[$cb->name] = '1';
 
         $cb->set(function ($x) use (&$var) {
             $var = $x;
@@ -113,7 +113,7 @@ class CallbackTest extends TestCase
         $cb = \Atk4\Ui\CallbackLater::addTo($this->app);
 
         // simulate triggering
-        $_GET[Callback::CALLBACK_TRIGGER_PREFIX . $cb->name] = '1';
+        $_GET[$cb->name] = '1';
 
         $cb->set(function ($x) use (&$var) {
             $var = $x;
@@ -134,8 +134,8 @@ class CallbackTest extends TestCase
         $cb = \Atk4\Ui\CallbackLater::addTo($this->app);
 
         // simulate triggering
-        $_GET[Callback::CALLBACK_TRIGGER_PREFIX . $cb->name] = '1';
-        $_GET[Callback::CALLBACK_TRIGGER_PREFIX . $cb->name . '_2'] = '1';
+        $_GET[$cb->name] = '1';
+        $_GET[$cb->name . '_2'] = '1';
 
         $app = $this->app;
         $cb->set(function ($x) use (&$var, $app, &$cbname) {
@@ -180,7 +180,7 @@ class CallbackTest extends TestCase
         $vp = \Atk4\Ui\VirtualPage::addTo($this->app);
 
         // simulate triggering
-        $_GET[Callback::CALLBACK_TRIGGER_PREFIX . $vp->name] = '1';
+        $_GET[$vp->name] = '1';
 
         $vp->set(function ($p) use (&$var) {
             $var = 25;
@@ -198,7 +198,7 @@ class CallbackTest extends TestCase
         $vp = \Atk4\Ui\VirtualPage::addTo($this->app, ['urlTrigger' => 'bah']);
 
         // simulate triggering
-        $_GET[Callback::CALLBACK_TRIGGER_PREFIX . 'bah'] = '1';
+        $_GET['bah'] = '1';
 
         $vp->set(function ($p) use (&$var) {
             $var = 25;
@@ -223,7 +223,7 @@ class CallbackTest extends TestCase
         $vp = \Atk4\Ui\VirtualPage::addTo($this->app);
 
         // simulate triggering
-        $_GET[Callback::CALLBACK_TRIGGER_PREFIX . $vp->name] = '1';
+        $_GET[$vp->name] = '1';
 
         $vp->set(\Closure::fromCallable([$this, 'callPull230']));
 
