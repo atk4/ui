@@ -32,7 +32,6 @@ class CallbackTest extends TestCase
 
     /** @var \Atk4\Ui\App */
     public $app;
-    public $cbPrefix;
 
     protected function setUp(): void
     {
