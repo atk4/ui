@@ -69,7 +69,7 @@ class CallbackTest extends TestCase
         $this->assertSame('test', $cb->getUrlTrigger());
     }
 
-    public function testViewUrlCallback()
+    public function testViewUrlCallback(): void
     {
         $var = null;
 
