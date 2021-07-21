@@ -12,7 +12,6 @@ use Atk4\Core\HookTrait;
 use Atk4\Core\InitializerTrait;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationException;
-use Atk4\Ui\Callback;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Psr\Log\LoggerInterface;
