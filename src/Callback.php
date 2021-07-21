@@ -22,7 +22,7 @@ namespace Atk4\Ui;
  */
 class Callback extends AbstractView
 {
-    public const CALLBACK_TRIGGER_PREFIX = '__atkcb_';
+    public const URL_TRIGGER_PREFIX = '__atkcb_';
 
     /** @var string Specify a custom GET trigger. */
     protected $urlTrigger;
@@ -84,7 +84,7 @@ class Callback extends AbstractView
      */
     public function isTriggered()
     {
-        return isset($_GET[self::CALLBACK_TRIGGER_PREFIX . $this->urlTrigger]);
+        return isset($_GET[self::URL_TRIGGER_PREFIX . $this->urlTrigger]);
     }
 
     /**
@@ -92,7 +92,7 @@ class Callback extends AbstractView
      */
     public function getTriggeredValue(): string
     {
-        return $_GET[self::CALLBACK_TRIGGER_PREFIX . $this->urlTrigger] ?? '';
+        return $_GET[self::URL_TRIGGER_PREFIX . $this->urlTrigger] ?? '';
     }
 
     /**
@@ -135,6 +135,6 @@ class Callback extends AbstractView
      */
     private function getUrlArguments(string $value = null): array
     {
-        return ['__atk_callback' => $this->urlTrigger, self::CALLBACK_TRIGGER_PREFIX . $this->urlTrigger => $value ?? $this->getTriggeredValue()];
+        return ['__atk_callback' => $this->urlTrigger, self::URL_TRIGGER_PREFIX . $this->urlTrigger => $value ?? $this->getTriggeredValue()];
     }
 }

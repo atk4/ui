@@ -48,7 +48,7 @@ class FormTest extends TestCase
         $submit_called = false;
         $_POST = $post_data;
         // trigger callback
-        $_GET[Callback::CALLBACK_TRIGGER_PREFIX . 'atk_submit'] = 'ajax';
+        $_GET[Callback::URL_TRIGGER_PREFIX . 'atk_submit'] = 'ajax';
         $_GET['__atk_callback'] = 'atk_submit';
 
         $this->f->onSubmit(function (Form $form) use (&$submit_called, $submit) {
