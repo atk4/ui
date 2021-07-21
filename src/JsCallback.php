@@ -43,7 +43,6 @@ class JsCallback extends Callback implements JsExpressionable
      * @var bool
      */
     public $triggerOnReload = false;
-
     /**
      * When multiple JsExpressionable's are collected inside an array and may
      * have some degree of nesting, convert it into a one-dimensional array,
