@@ -37,8 +37,10 @@ class CallbackTest extends TestCase
     {
         $this->app = new AppMock(['always_run' => false, 'catch_exceptions' => false]);
         $this->app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+    }
 
-        // reset var, between tests
+    protected function tearDown(): void
+    {
         $_GET = [];
         $_POST = [];
     }
@@ -77,7 +79,7 @@ class CallbackTest extends TestCase
         $cb = \Atk4\Ui\Callback::addTo($v1);
 
         // simulate triggering
-        $_GET[Callback::CALLBACK_TRIGGER_PREFIX . $cb->name] = '1';
+        $_GET[$cb->name] = '1';
 
         $cb->set(function ($x) use (&$var, $v1) {
             $v3 = \Atk4\Ui\View::addTo($v1);
