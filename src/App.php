@@ -12,6 +12,7 @@ use Atk4\Core\HookTrait;
 use Atk4\Core\InitializerTrait;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationException;
+use Atk4\Ui\Callback;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Psr\Log\LoggerInterface;
@@ -567,9 +568,9 @@ class App
             $this->is_rendering = false;
             $this->hook(self::HOOK_BEFORE_OUTPUT);
 
-            if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
+            if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catch_runaway_callbacks) {
                 throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
-                    ->addMoreInfo('callback', $_GET['__atk_callback']);
+                    ->addMoreInfo('callback', $_GET[Callback::URL_QUERY_TARGET]);
             }
 
             $output = $this->html->template->renderToHtml();

@@ -9,7 +9,7 @@ namespace Atk4\Ui;
  * executed directly will perform a PHP callback that you set().
  *
  * Callback function run when triggered, i.e. when it's urlTrigger param value is present in the $_GET request.
- * The current callback will be set within the $_GET['__atk_callback'] and will be set to urlTrigger as well.
+ * The current callback will be set within the $_GET[Callback::URL_QUERY_TARGET] and will be set to urlTrigger as well.
  *
  * $button = Button::addTo($layout);
  * $button->set('Click to do something')->link(
@@ -22,7 +22,11 @@ namespace Atk4\Ui;
  */
 class Callback extends AbstractView
 {
-    public const URL_TRIGGER_PREFIX = '__atkcb_';
+    /** @const string */
+    public const URL_QUERY_TRIGGER_PREFIX = '__atk_cb_';
+
+    /** @const string */
+    public const URL_QUERY_TARGET = '__atk_cbtarget';
 
     /** @var string Specify a custom GET trigger. */
     protected $urlTrigger;
@@ -46,7 +50,7 @@ class Callback extends AbstractView
     {
         $this->urlTrigger = $trigger ?: $this->name;
 
-        $this->getOwner()->stickyGet($this->urlTrigger);
+        $this->getOwner()->stickyGet(self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger);
     }
 
     public function getUrlTrigger(): string
@@ -84,7 +88,7 @@ class Callback extends AbstractView
      */
     public function isTriggered()
     {
-        return isset($_GET[self::URL_TRIGGER_PREFIX . $this->urlTrigger]);
+        return isset($_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger]);
     }
 
     /**
@@ -92,7 +96,7 @@ class Callback extends AbstractView
      */
     public function getTriggeredValue(): string
     {
-        return $_GET[self::URL_TRIGGER_PREFIX . $this->urlTrigger] ?? '';
+        return $_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger] ?? '';
     }
 
     /**
@@ -100,7 +104,7 @@ class Callback extends AbstractView
      */
     public function canTerminate(): bool
     {
-        return isset($_GET['__atk_callback']) && $_GET['__atk_callback'] === $this->urlTrigger;
+        return isset($_GET[self::URL_QUERY_TARGET]) && $_GET[self::URL_QUERY_TARGET] === $this->urlTrigger;
     }
 
     /**
@@ -135,6 +139,6 @@ class Callback extends AbstractView
      */
     private function getUrlArguments(string $value = null): array
     {
-        return ['__atk_callback' => $this->urlTrigger, self::URL_TRIGGER_PREFIX . $this->urlTrigger => $value ?? $this->getTriggeredValue()];
+        return [self::URL_QUERY_TARGET => $this->urlTrigger, self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger => $value ?? $this->getTriggeredValue()];
     }
 }
