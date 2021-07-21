@@ -328,7 +328,7 @@ class DemosTest extends TestCase
         }
 
         $response = $this->getResponseFromRequest(
-            'interactive/wizard.php?demo_wizard=1&' . Callback::CALLBACK_TRIGGER_PREFIX .'w_form_submit=ajax&__atk_callback=w_form_submit',
+            'interactive/wizard.php?demo_wizard=1&' . Callback::CALLBACK_TRIGGER_PREFIX . 'w_form_submit=ajax&__atk_callback=w_form_submit',
             ['form_params' => [
                 'dsn' => 'mysql://root:root@db-host.example.com/atk4',
             ]]
