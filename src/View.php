@@ -478,9 +478,9 @@ class View extends AbstractView
      *
      * @param string|array<0|string, string|int|false> $page URL as string or array with page name as first element and other GET arguments
      */
-    public function url($page = []): string
+    public function url($page = [], bool $includeRunningCallback = false): string
     {
-        return $this->getApp()->url($page, false, $this->_getStickyArgs());
+        return $this->getApp()->url($page, false, array_merge($this->_getStickyArgs(), $includeRunningCallback ? $this->getCallbackArguments() : []));
     }
 
     /**
@@ -488,9 +488,9 @@ class View extends AbstractView
      *
      * @param string|array<0|string, string|int|false> $page URL as string or array with page name as first element and other GET arguments
      */
-    public function jsUrl($page = []): string
+    public function jsUrl($page = [], bool $includeRunningCallback = false): string
     {
-        return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
+        return $this->getApp()->jsUrl($page, false, array_merge($this->_getStickyArgs(), $includeRunningCallback ? $this->getCallbackArguments() : []));
     }
 
     /**
@@ -505,6 +505,18 @@ class View extends AbstractView
         }
 
         return $stickyArgs;
+    }
+
+    protected function getCallbackArguments(): array
+    {
+        $triggers = [];
+        foreach ($_GET ?? [] as $k => $get) {
+            if (str_starts_with($k, Callback::URL_QUERY_TRIGGER_PREFIX)) {
+                $triggers[$k] = $get;
+            }
+        }
+
+        return $triggers;
     }
 
     /**
