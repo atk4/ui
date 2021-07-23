@@ -274,7 +274,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then Panel is open
      */
-    public function panelIsOpen()
+    public function panelIsOpen(): void
     {
         $this->assertElementInPage('.atk-right-panel.atk-visible');
     }
@@ -283,7 +283,7 @@ class Context extends RawMinkContext implements BehatContext
      * @Then Panel is open with text :arg1
      * @Then Panel is open with text :arg1 in tag :arg2
      */
-    public function panelIsOpenWithText(string $text, string $tag = 'div')
+    public function panelIsOpenWithText(string $text, string $tag = 'div'): void
     {
         $panel = $this->assertElementInPage('.atk-right-panel.atk-visible');
         $this->assertElementInElement($panel, '//' . $tag . '[text()="' . $text . '"]', 'xpath');
