@@ -120,6 +120,26 @@ class Context extends RawMinkContext implements BehatContext
         }
     }
 
+    protected function getElementInPage(string $selector, string $method = 'css'): NodeElement
+    {
+        $element = $this->getSession()->getPage()->find($method, $selector);
+        if ($element === null) {
+            throw new Exception('Could not get element in page using this selector: ' . $selector);
+        }
+
+        return $element;
+    }
+
+    protected function getElementInElement(NodeElement $element, string $selector, string $method = 'css'): NodeElement
+    {
+        $find = $element->find($method, $selector);
+        if ($find === null) {
+            throw new Exception('Could not get element in element using this selector: ' . $selector);
+        }
+
+        return $find;
+    }
+
     /**
      * Sleep for a certain time in ms.
      *
@@ -591,25 +611,5 @@ class Context extends RawMinkContext implements BehatContext
     private function getScopeBuilderRuleElem(string $ruleName): NodeElement
     {
         return $this->getElementInPage('.vqb-rule[data-name=' . $ruleName . ']');
-    }
-
-    protected function getElementInPage(string $selector, string $method = 'css'): NodeElement
-    {
-        $element = $this->getSession()->getPage()->find($method, $selector);
-        if ($element === null) {
-            throw new Exception('Could not get element in page using this selector: ' . $selector);
-        }
-
-        return $element;
-    }
-
-    protected function getElementInElement(NodeElement $element, string $selector, string $method = 'css'): NodeElement
-    {
-        $find = $element->find($method, $selector);
-        if ($find === null) {
-            throw new Exception('Could not get element in element using this selector: ' . $selector);
-        }
-
-        return $find;
     }
 }
