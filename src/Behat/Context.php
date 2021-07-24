@@ -48,8 +48,8 @@ class Context extends RawMinkContext implements BehatContext
     protected function getFinishedScript(): string
     {
         return 'document.readyState === \'complete\''
-               . ' && typeof jQuery !== \'undefined\' && jQuery.active === 0'
-               . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()';
+           . ' && typeof jQuery !== \'undefined\' && jQuery.active === 0'
+           . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()';
     }
 
     /**
@@ -137,7 +137,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iPressButton(string $btnLabel): void
     {
-        $button = $this->assertElementInPage('//div[text()="' . $btnLabel . '"]', 'xpath');
+        $button = $this->getElementInPage('//div[text()="' . $btnLabel . '"]', 'xpath');
         // store button id.
         $this->buttonId = $button->getAttribute('id');
         // fix "is out of bounds of viewport width and height" for Firefox
@@ -150,8 +150,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iPressMenuButtonUsingClass(string $btnLabel, string $selector): void
     {
-        $menu = $this->assertElementInPage('.ui.menu.' . $selector);
-        $link = $this->assertElementInElement($menu, '//a[text()="' . $btnLabel . '"]', 'xpath');
+        $menu = $this->getElementInPage('.ui.menu.' . $selector);
+        $link = $this->getElementInElement($menu, '//a[text()="' . $btnLabel . '"]', 'xpath');
         $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
     }
 
@@ -160,7 +160,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSee(string $buttonLabel): void
     {
-        $this->assertElementInPage('//div[text()="' . $buttonLabel . '"]', 'xpath');
+        $this->getElementInPage('//div[text()="' . $buttonLabel . '"]', 'xpath');
     }
 
     /**
@@ -168,7 +168,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function elementIsHide(string $text): void
     {
-        $element = $this->assertElementInPage('//div[text()="' . $text . '"]', 'xpath');
+        $element = $this->getElementInPage('//div[text()="' . $text . '"]', 'xpath');
         if (mb_strpos('display: none', $element->getAttribute('style')) !== false) {
             throw new Exception('Element with text "' . $text . '" must be invisible');
         }
@@ -195,7 +195,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickLink(string $label): void
     {
-        $this->assertElementInPage('//a[text()="' . $label . '"]', 'xpath')->click();
+        $this->getElementInPage('//a[text()="' . $label . '"]', 'xpath')->click();
     }
 
     /**
@@ -227,7 +227,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickIconUsingCss(string $selector): void
     {
-        $icon = $this->assertElementInPage($selector);
+        $icon = $this->getElementInPage($selector);
         $icon->click();
     }
 
@@ -240,8 +240,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iPressModalButton(string $buttonLabel): void
     {
-        $modal = $this->assertElementInPage('.modal.transition.visible.active.front');
-        $btn = $this->assertElementInElement($modal, '//div[text()="' . $buttonLabel . '"]', 'xpath');
+        $modal = $this->getElementInPage('.modal.transition.visible.active.front');
+        $btn = $this->getElementInElement($modal, '//div[text()="' . $buttonLabel . '"]', 'xpath');
         $btn->click();
     }
 
@@ -253,8 +253,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function modalIsOpenWithText(string $text, string $tag = 'div'): void
     {
-        $modal = $this->assertElementInPage('.modal.transition.visible.active.front');
-        $this->assertElementInElement($modal, '//' . $tag . '[text()="' . $text . '"]', 'xpath');
+        $modal = $this->getElementInPage('.modal.transition.visible.active.front');
+        $this->getElementInElement($modal, '//' . $tag . '[text()="' . $text . '"]', 'xpath');
     }
 
     /**
@@ -276,7 +276,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function panelIsOpen(): void
     {
-        $this->assertElementInPage('.atk-right-panel.atk-visible');
+        $this->getElementInPage('.atk-right-panel.atk-visible');
     }
 
     /**
@@ -285,8 +285,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function panelIsOpenWithText(string $text, string $tag = 'div'): void
     {
-        $panel = $this->assertElementInPage('.atk-right-panel.atk-visible');
-        $this->assertElementInElement($panel, '//' . $tag . '[text()="' . $text . '"]', 'xpath');
+        $panel = $this->getElementInPage('.atk-right-panel.atk-visible');
+        $this->getElementInElement($panel, '//' . $tag . '[text()="' . $text . '"]', 'xpath');
     }
 
     /**
@@ -294,8 +294,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iPressPanelButton(string $buttonLabel): void
     {
-        $panel = $this->assertElementInPage('.atk-right-panel.atk-visible');
-        $btn = $this->assertElementInElement($panel, '//div[text()="' . $buttonLabel . '"]', 'xpath');
+        $panel = $this->getElementInPage('.atk-right-panel.atk-visible');
+        $btn = $this->getElementInElement($panel, '//div[text()="' . $buttonLabel . '"]', 'xpath');
         $btn->click();
     }
 
@@ -308,8 +308,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickTabWithTitle(string $tabTitle): void
     {
-        $tabMenu = $this->assertElementInPage('.ui.tabular.menu');
-        $link = $this->assertElementInElement($tabMenu, '//a[text()="' . $tabTitle . '"]', 'xpath');
+        $tabMenu = $this->getElementInPage('.ui.tabular.menu');
+        $link = $this->getElementInElement($tabMenu, '//a[text()="' . $tabTitle . '"]', 'xpath');
 
         $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
     }
@@ -319,7 +319,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function activeTabShouldBe(string $title): void
     {
-        $tab = $this->assertElementInPage('.ui.tabular.menu > .item.active');
+        $tab = $this->getElementInPage('.ui.tabular.menu > .item.active');
         if ($tab->getText() !== $title) {
             throw new Exception('Active tab is not ' . $title);
         }
@@ -355,7 +355,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSearchGridFor(string $text): void
     {
-        $search = $this->assertElementInPage('input.atk-grid-search');
+        $search = $this->getElementInPage('input.atk-grid-search');
         $search->setValue($text);
     }
 
@@ -367,7 +367,7 @@ class Context extends RawMinkContext implements BehatContext
     public function iSelectValueInLookup(string $value, string $inputName): void
     {
         // get dropdown item from semantic ui which is direct parent of input html element
-        $inputElem = $this->assertElementInPage('input[name=' . $inputName . ']');
+        $inputElem = $this->getElementInPage('input[name=' . $inputName . ']');
         $lookupElem = $inputElem->getParent();
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
@@ -375,7 +375,7 @@ class Context extends RawMinkContext implements BehatContext
         $this->jqueryWait('$("#' . $lookupElem->getAttribute('id') . '").hasClass("visible")');
 
         // select value
-        $valueElem = $this->assertElementInElement($lookupElem, '//div[text()="' . $value . '"]', 'xpath');
+        $valueElem = $this->getElementInElement($lookupElem, '//div[text()="' . $value . '"]', 'xpath');
         $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("set selected", ' . $valueElem->getAttribute('data-value') . ');');
         $this->jqueryWait();
 
@@ -455,8 +455,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function compareInputValueToElementText(string $inputName, string $selector): void
     {
-        $expectedText = $this->assertElementInPage($selector)->getText();
-        $input = $this->assertElementInPage('input[name="' . $inputName . '"]');
+        $expectedText = $this->getElementInPage($selector)->getText();
+        $input = $this->getElementInPage('input[name="' . $inputName . '"]');
 
         if (preg_replace('~\s*~', '', $expectedText) !== preg_replace('~\s*~', '', $input->getValue())) {
             throw new Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expectedText);
@@ -481,8 +481,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickFilterColumnName(string $columnName): void
     {
-        $column = $this->assertElementInPage("th[data-column='" . $columnName . "']");
-        $icon = $this->assertElementInElement($column, 'i');
+        $column = $this->getElementInPage("th[data-column='" . $columnName . "']");
+        $icon = $this->getElementInElement($column, 'i');
 
         $this->getSession()->executeScript('$("#' . $icon->getAttribute('id') . '").click()');
     }
@@ -516,8 +516,8 @@ class Context extends RawMinkContext implements BehatContext
     public function toastDisplayShouldContainText(string $text): void
     {
         // get toast
-        $toast = $this->assertElementInPage('.ui.toast-container');
-        if (mb_strpos($this->assertElementInElement($toast, '.content')->getText(), $text) === false) {
+        $toast = $this->getElementInPage('.ui.toast-container');
+        if (mb_strpos($this->getElementInElement($toast, '.content')->getText(), $text) === false) {
             throw new Exception('Cannot find text: "' . $text . '" in toast');
         }
     }
@@ -538,7 +538,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function compareElementText(string $compareSelector, string $compareToSelector): void
     {
-        if ($this->assertElementInPage($compareSelector)->getText() !== $this->assertElementInPage($compareToSelector)->getText()) {
+        if ($this->getElementInPage($compareSelector)->getText() !== $this->getElementInPage($compareToSelector)->getText()) {
             throw new Exception('Text does not match between: ' . $compareSelector . ' and ' . $compareToSelector);
         }
     }
@@ -548,7 +548,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function textInContainerUsingShouldContains(string $selector, string $text): void
     {
-        if (trim($this->assertElementInPage($selector)->getText()) !== $text) {
+        if (trim($this->getElementInPage($selector)->getText()) !== $text) {
             throw new Exception('Container with selector: ' . $selector . ' does not contain text: ' . $text);
         }
     }
@@ -561,7 +561,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     private function assertDropdownValue(NodeElement $element, string $value, string $selector): void
     {
-        if ($this->assertElementInElement($element, $selector)->getHtml() !== $value) {
+        if ($this->getElementInElement($element, $selector)->getHtml() !== $value) {
             throw new Exception('Value: "' . $value . '" not set using selector: ' . $selector);
         }
     }
@@ -572,7 +572,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     private function assertSelectedValue(NodeElement $element, string $value, string $selector): void
     {
-        if ($this->assertElementInElement($element, $selector)->getValue() !== $value) {
+        if ($this->getElementInElement($element, $selector)->getValue() !== $value) {
             throw new Exception('Value: "' . $value . '" not set using selector: ' . $selector);
         }
     }
@@ -583,31 +583,31 @@ class Context extends RawMinkContext implements BehatContext
      */
     private function assertInputValue(NodeElement $element, string $value, string $selector = 'input'): void
     {
-        if ($this->assertElementInElement($element, $selector)->getValue() !== $value) {
+        if ($this->getElementInElement($element, $selector)->getValue() !== $value) {
             throw new Exception('Input value not is not: ' . $value);
         }
     }
 
     private function getScopeBuilderRuleElem(string $ruleName): NodeElement
     {
-        return $this->assertElementInPage('.vqb-rule[data-name=' . $ruleName . ']');
+        return $this->getElementInPage('.vqb-rule[data-name=' . $ruleName . ']');
     }
 
-    private function assertElementInPage(string $selector, string $method = 'css'): NodeElement
+    protected function getElementInPage(string $selector, string $method = 'css'): NodeElement
     {
         $element = $this->getSession()->getPage()->find($method, $selector);
         if ($element === null) {
-            throw new Exception('No element found with class name: ' . $selector);
+            throw new Exception('Could not get element in page using this selector: ' . $selector);
         }
 
         return $element;
     }
 
-    private function assertElementInElement(NodeElement $element, string $selector, string $method = 'css'): NodeElement
+    protected function getElementInElement(NodeElement $element, string $selector, string $method = 'css'): NodeElement
     {
         $find = $element->find($method, $selector);
         if ($find === null) {
-            throw new Exception('Could not find element using this selector: ' . $selector);
+            throw new Exception('Could not get element in element using this selector: ' . $selector);
         }
 
         return $find;
