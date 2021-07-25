@@ -52,7 +52,6 @@ abstract class AbstractView
      * @var bool
      */
     protected $_rendered = false;
-
     // }}}
 
     // {{{ Default init() method and add() logic

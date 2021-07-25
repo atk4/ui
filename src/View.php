@@ -40,7 +40,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * @var string
      */
-    public $region; //'Content';
+    public $region;
 
     /**
      * Enables UI keyword for Semantic UI indicating that this is a
@@ -122,7 +122,6 @@ class View extends AbstractView implements JsExpressionable
 
     /** @var ExecutorFactory Seed class name */
     public $executorFactory;
-
     // }}}
 
     // {{{ Setting Things up

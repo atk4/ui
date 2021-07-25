@@ -37,8 +37,10 @@ class CallbackTest extends TestCase
     {
         $this->app = new AppMock(['always_run' => false, 'catch_exceptions' => false]);
         $this->app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+    }
 
-        // reset var, between tests
+    protected function tearDown(): void
+    {
         $_GET = [];
         $_POST = [];
     }
@@ -50,7 +52,7 @@ class CallbackTest extends TestCase
         $cb = \Atk4\Ui\Callback::addTo($this->app);
 
         // simulate triggering
-        $_GET[$cb->name] = '1';
+        $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . $cb->name] = '1';
 
         $cb->set(function ($x) use (&$var) {
             $var = $x;
@@ -67,6 +69,29 @@ class CallbackTest extends TestCase
 
         $cb = Callback::addTo($this->app, ['urlTrigger' => 'test']);
         $this->assertSame('test', $cb->getUrlTrigger());
+    }
+
+    public function testViewUrlCallback(): void
+    {
+        $var = null;
+
+        $v1 = \Atk4\Ui\View::addTo($this->app);
+        $cb = \Atk4\Ui\Callback::addTo($v1);
+
+        // simulate triggering
+        $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . $cb->name] = '1';
+
+        $cb->set(function ($x) use (&$var, $v1) {
+            $v3 = \Atk4\Ui\View::addTo($v1);
+            $this->assertSame('test.php', $v3->url(['test']));
+            $var = $x;
+        }, [34]);
+
+        $v2 = \Atk4\Ui\View::addTo($v1);
+        $v2->stickyGet('g1', '1');
+
+        $this->assertSame(34, $var);
+        $this->assertSame('test.php?g1=1', $v2->url(['test']));
     }
 
     public function testCallbackNotFiring(): void
@@ -90,7 +115,7 @@ class CallbackTest extends TestCase
         $cb = \Atk4\Ui\CallbackLater::addTo($this->app);
 
         // simulate triggering
-        $_GET[$cb->name] = '1';
+        $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . $cb->name] = '1';
 
         $cb->set(function ($x) use (&$var) {
             $var = $x;
@@ -111,8 +136,8 @@ class CallbackTest extends TestCase
         $cb = \Atk4\Ui\CallbackLater::addTo($this->app);
 
         // simulate triggering
-        $_GET[$cb->name] = '1';
-        $_GET[$cb->name . '_2'] = '1';
+        $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . $cb->name] = '1';
+        $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . $cb->name . '_2'] = '1';
 
         $app = $this->app;
         $cb->set(function ($x) use (&$var, $app, &$cbname) {
@@ -157,7 +182,7 @@ class CallbackTest extends TestCase
         $vp = \Atk4\Ui\VirtualPage::addTo($this->app);
 
         // simulate triggering
-        $_GET[$vp->name] = '1';
+        $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . $vp->name] = '1';
 
         $vp->set(function ($p) use (&$var) {
             $var = 25;
@@ -175,7 +200,7 @@ class CallbackTest extends TestCase
         $vp = \Atk4\Ui\VirtualPage::addTo($this->app, ['urlTrigger' => 'bah']);
 
         // simulate triggering
-        $_GET['bah'] = '1';
+        $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . 'bah'] = '1';
 
         $vp->set(function ($p) use (&$var) {
             $var = 25;
@@ -200,7 +225,7 @@ class CallbackTest extends TestCase
         $vp = \Atk4\Ui\VirtualPage::addTo($this->app);
 
         // simulate triggering
-        $_GET[$vp->name] = '1';
+        $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . $vp->name] = '1';
 
         $vp->set(\Closure::fromCallable([$this, 'callPull230']));
 
