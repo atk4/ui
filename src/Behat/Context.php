@@ -283,7 +283,7 @@ class Context extends RawMinkContext implements BehatContext
     public function iFillModalField(string $fieldName, string $value): void
     {
         $modal = $this->getElementInPage('.modal.transition.visible.active.front');
-        $field = $modal->find('named', array('field', $fieldName));
+        $field = $modal->find('named', ['field', $fieldName]);
         $field->setValue($value);
     }
 
@@ -325,7 +325,7 @@ class Context extends RawMinkContext implements BehatContext
     public function iFillPanelField(string $fieldName, string $value): void
     {
         $panel = $this->getElementInPage('.atk-right-panel.atk-visible');
-        $field = $panel->find('named', array('field', $fieldName));
+        $field = $panel->find('named', ['field', $fieldName]);
         $field->setValue($value);
     }
 
