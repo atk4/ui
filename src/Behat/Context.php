@@ -120,22 +120,44 @@ class Context extends RawMinkContext implements BehatContext
         }
     }
 
+    protected function getElementInPage(string $selector, string $method = 'css'): NodeElement
+    {
+        $element = $this->getSession()->getPage()->find($method, $selector);
+        if ($element === null) {
+            throw new Exception('Could not get element in page using this selector: ' . $selector);
+        }
+
+        return $element;
+    }
+
+    protected function getElementInElement(NodeElement $element, string $selector, string $method = 'css'): NodeElement
+    {
+        $find = $element->find($method, $selector);
+        if ($find === null) {
+            throw new Exception('Could not get element in element using this selector: ' . $selector);
+        }
+
+        return $find;
+    }
+
     /**
      * Sleep for a certain time in ms.
      *
      * @Then I wait :arg1 ms
      */
-    public function iWait(int $arg1): void
+    public function iWait(int $ms): void
     {
-        $this->getSession()->wait($arg1);
+        $this->getSession()->wait($ms);
     }
+
+    // {{{ button
 
     /**
      * @When I press button :arg1
      */
-    public function iPressButton(string $arg1): void
+    public function iPressButton(string $btnLabel): void
     {
-        $button = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
+        $button = $this->getElementInPage('//div[text()="' . $btnLabel . '"]', 'xpath');
         // store button id.
         $this->buttonId = $button->getAttribute('id');
         // fix "is out of bounds of viewport width and height" for Firefox
@@ -146,127 +168,29 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I press menu button :arg1 using class :arg2
      */
-    public function iPressMenuButtonUsingClass(string $arg1, string $arg2): void
+    public function iPressMenuButtonUsingClass(string $btnLabel, string $selector): void
     {
-        $menu = $this->getSession()->getPage()->find('css', '.ui.menu.' . $arg2);
-        if (!$menu) {
-            throw new Exception('Unable to find a menu with class ' . $arg2);
-        }
-
-        $link = $menu->find('xpath', '//a[text()="' . $arg1 . '"]');
-        if (!$link) {
-            throw new Exception('Unable to find menu with title ' . $arg1);
-        }
-
+        $menu = $this->getElementInPage('.ui.menu.' . $selector);
+        $link = $this->getElementInElement($menu, '//a[text()="' . $btnLabel . '"]', 'xpath');
         $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
-    }
-
-    /**
-     * @Then I set calendar input name :arg1 with value :arg2
-     */
-    public function iSetCalendarInputNameWithValue(string $arg1, string $arg2): void
-    {
-        $script = '$(\'input[name="' . $arg1 . '"]\').get(0)._flatpickr.setDate("' . $arg2 . '")';
-        $this->getSession()->executeScript($script);
-    }
-
-    /**
-     * @Given I click link :arg1
-     */
-    public function iClickLink(string $arg1): void
-    {
-        $link = $this->getSession()->getPage()->find('xpath', '//a[text()="' . $arg1 . '"]');
-        $link->click();
-    }
-
-    /**
-     * @Then I click filter column name :arg1
-     */
-    public function iClickFilterColumnName(string $arg1): void
-    {
-        $column = $this->getSession()->getPage()->find('css', "th[data-column='" . $arg1 . "']");
-        if (!$column) {
-            throw new Exception('Unable to find a column ' . $arg1);
-        }
-
-        $icon = $column->find('css', 'i');
-        if (!$icon) {
-            throw new Exception('Column does not contain clickable icon.');
-        }
-
-        $this->getSession()->executeScript('$("#' . $icon->getAttribute('id') . '").click()');
-    }
-
-    /**
-     * @Given I click tab with title :arg1
-     */
-    public function iClickTabWithTitle(string $arg1): void
-    {
-        $tabMenu = $this->getSession()->getPage()->find('css', '.ui.tabular.menu');
-        if (!$tabMenu) {
-            throw new Exception('Unable to find a tab menu.');
-        }
-
-        $link = $tabMenu->find('xpath', '//a[text()="' . $arg1 . '"]');
-        if (!$link) {
-            throw new Exception('Unable to find tab with title ' . $arg1);
-        }
-
-        $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
-    }
-
-    /**
-     * @Then I click first card on page
-     */
-    public function iClickFirstCardOnPage(): void
-    {
-        $this->getSession()->executeScript('$(".atk-card")[0].click()');
-    }
-
-    /**
-     * @Then I click first element using class :arg1
-     */
-    public function iClickFirstElementUsingClass(string $arg1): void
-    {
-        $this->getSession()->executeScript('$("' . $arg1 . '")[0].click()');
-    }
-
-    /**
-     * @Then I click paginator page :arg1
-     */
-    public function iClickPaginatorPage(string $arg1): void
-    {
-        $this->getSession()->executeScript('$("a.item[data-page=' . $arg1 . ']").click()');
     }
 
     /**
      * @Then I see button :arg1
      */
-    public function iSee(string $arg1): void
+    public function iSee(string $buttonLabel): void
     {
-        $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
-        if ($element->getAttribute('style')) {
-            throw new Exception('Element with text "' . $arg1 . '" must be invisible');
-        }
-    }
-
-    /**
-     * @Then dump :arg1
-     */
-    public function dump(string $arg1): void
-    {
-        $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
-        var_dump($element->getOuterHtml());
+        $this->getElementInPage('//div[text()="' . $buttonLabel . '"]', 'xpath');
     }
 
     /**
      * @Then I don't see button :arg1
      */
-    public function iDontSee(string $arg1): void
+    public function elementIsHide(string $text): void
     {
-        $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
+        $element = $this->getElementInPage('//div[text()="' . $text . '"]', 'xpath');
         if (mb_strpos('display: none', $element->getAttribute('style')) !== false) {
-            throw new Exception('Element with text "' . $arg1 . '" must be invisible');
+            throw new Exception('Element with text "' . $text . '" must be invisible');
         }
     }
 
@@ -282,84 +206,75 @@ class Context extends RawMinkContext implements BehatContext
         }
     }
 
+    // }}}
+
+    // {{{ link
+
     /**
-     * @Then /^container "([^"]*)" should display "([^"]*)" item\(s\)$/
+     * @Given I click link :arg1
      */
-    public function containerShouldHaveNumberOfItem(string $selector, int $numberOfitems): void
+    public function iClickLink(string $label): void
     {
-        $items = $this->getSession()->getPage()->findAll('css', $selector);
-        $count = 0;
-        foreach ($items as $el => $item) {
-            ++$count;
-        }
-        if ($count !== $numberOfitems) {
-            throw new Exception('Items does not match. There were ' . $count . ' item in container');
-        }
+        $this->getElementInPage('//a[text()="' . $label . '"]', 'xpath')->click();
     }
+
+    /**
+     * @Then I click first card on page
+     */
+    public function iClickFirstCardOnPage(): void
+    {
+        $this->getSession()->executeScript('$(".atk-card")[0].click()');
+    }
+
+    /**
+     * @Then I click first element using class :arg1
+     */
+    public function iClickFirstElementUsingClass(string $selector): void
+    {
+        $this->getSession()->executeScript('$("' . $selector . '")[0].click()');
+    }
+
+    /**
+     * @Then I click paginator page :arg1
+     */
+    public function iClickPaginatorPage(string $pageNumber): void
+    {
+        $this->getSession()->executeScript('$("a.item[data-page=' . $pageNumber . ']").click()');
+    }
+
+    /**
+     * @Then I click icon using css :arg1
+     */
+    public function iClickIconUsingCss(string $selector): void
+    {
+        $icon = $this->getElementInPage($selector);
+        $icon->click();
+    }
+
+    // }}}
+
+    // {{{ modal
 
     /**
      * @Then I press Modal button :arg
      */
-    public function iPressModalButton(string $arg): void
+    public function iPressModalButton(string $buttonLabel): void
     {
-        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
-        if ($modal === null) {
-            throw new Exception('No modal found');
-        }
-        // find button in modal
-        $btn = $modal->find('xpath', '//div[text()="' . $arg . '"]');
-        if (!$btn) {
-            throw new Exception('Cannot find button in modal');
-        }
+        $modal = $this->getElementInPage('.modal.transition.visible.active.front');
+        $btn = $this->getElementInElement($modal, '//div[text()="' . $buttonLabel . '"]', 'xpath');
         $btn->click();
     }
 
     /**
      * @Then Modal is open with text :arg1
+     * @Then Modal is open with text :arg1 in tag :arg2
      *
      * Check if text is present in modal or dynamic modal.
      */
-    public function modalIsOpenWithText(string $arg1): void
+    public function modalIsOpenWithText(string $text, string $tag = 'div'): void
     {
-        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
-        if ($modal === null) {
-            throw new Exception('No modal found');
-        }
-
-        // find text in modal
-        $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
-        if (!$text || trim($text->getText()) !== $arg1) {
-            throw new Exception('No such text in modal');
-        }
-    }
-
-    /**
-     * @Then Modal is showing text :arg1 inside tag :arg2
-     */
-    public function modalIsShowingText(string $arg1, string $arg2): void
-    {
-        // get modal
-        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
-        if ($modal === null) {
-            throw new Exception('No modal found');
-        }
-
-        // find text in modal
-        $text = $modal->find('xpath', '//' . $arg2 . '[text()="' . $arg1 . '"]');
-        if (!$text || $text->getText() !== $arg1) {
-            throw new Exception('No such text in modal');
-        }
-    }
-
-    /**
-     * @Then Active tab should be :arg1
-     */
-    public function activeTabShouldBe(string $arg1): void
-    {
-        $tab = $this->getSession()->getPage()->find('css', '.ui.tabular.menu > .item.active');
-        if ($tab->getText() !== $arg1) {
-            throw new Exception('Active tab is not ' . $arg1);
-        }
+        $modal = $this->getElementInPage('.modal.transition.visible.active.front');
+        $this->getElementInElement($modal, '//' . $tag . '[text()="' . $text . '"]', 'xpath');
     }
 
     /**
@@ -372,33 +287,96 @@ class Context extends RawMinkContext implements BehatContext
         $this->getSession()->executeScript('$(".modal.active.front").modal("hide")');
     }
 
+    // }}}
+
+    // {{{ panel
+
     /**
-     * @Then I scroll to top
+     * @Then Panel is open
      */
-    public function iScrollToTop(): void
+    public function panelIsOpen(): void
     {
-        $this->getSession()->executeScript('window.scrollTo(0,0)');
+        $this->getElementInPage('.atk-right-panel.atk-visible');
     }
 
     /**
-     * @Then Toast display should contains text :arg1
+     * @Then Panel is open with text :arg1
+     * @Then Panel is open with text :arg1 in tag :arg2
      */
-    public function toastDisplayShouldContainText(string $arg1): void
+    public function panelIsOpenWithText(string $text, string $tag = 'div'): void
     {
-        // get toast
-        $toast = $this->getSession()->getPage()->find('css', '.ui.toast-container');
-        if ($toast === null) {
-            throw new Exception('No toast found');
+        $panel = $this->getElementInPage('.atk-right-panel.atk-visible');
+        $this->getElementInElement($panel, '//' . $tag . '[text()="' . $text . '"]', 'xpath');
+    }
+
+    /**
+     * @Then I press Panel button :arg
+     */
+    public function iPressPanelButton(string $buttonLabel): void
+    {
+        $panel = $this->getElementInPage('.atk-right-panel.atk-visible');
+        $btn = $this->getElementInElement($panel, '//div[text()="' . $buttonLabel . '"]', 'xpath');
+        $btn->click();
+    }
+
+    // }}}
+
+    // {{{ tab
+
+    /**
+     * @Given I click tab with title :arg1
+     */
+    public function iClickTabWithTitle(string $tabTitle): void
+    {
+        $tabMenu = $this->getElementInPage('.ui.tabular.menu');
+        $link = $this->getElementInElement($tabMenu, '//a[text()="' . $tabTitle . '"]', 'xpath');
+
+        $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
+    }
+
+    /**
+     * @Then Active tab should be :arg1
+     */
+    public function activeTabShouldBe(string $title): void
+    {
+        $tab = $this->getElementInPage('.ui.tabular.menu > .item.active');
+        if ($tab->getText() !== $title) {
+            throw new Exception('Active tab is not ' . $title);
         }
-        $content = $toast->find('css', '.content');
-        if ($content === null) {
-            throw new Exception('No Content in Toast');
+    }
+
+    // }}}
+
+    // {{{ input
+
+    /**
+     * @Then /^input "([^"]*)" value should start with "([^"]*)"$/
+     */
+    public function inputValueShouldStartWith(string $inputName, string $text): void
+    {
+        $field = $this->assertSession()->fieldExists($inputName);
+
+        if (mb_strpos($field->getValue(), $text) === false) {
+            throw new Exception('Field value ' . $field->getValue() . ' does not start with ' . $text);
         }
-        // find text in toast
-        $text = $content->find('xpath', '//div');
-        if (!$text || mb_strpos($text->getText(), $arg1) === false) {
-            throw new Exception('No such text in toast');
-        }
+    }
+
+    /**
+     * @Then I set calendar input name :arg1 with value :arg2
+     */
+    public function iSetCalendarInputNameWithValue(string $inputName, string $value): void
+    {
+        $script = '$(\'input[name="' . $inputName . '"]\').get(0)._flatpickr.setDate("' . $value . '")';
+        $this->getSession()->executeScript($script);
+    }
+
+    /**
+     * @Then I search grid for :arg1
+     */
+    public function iSearchGridFor(string $text): void
+    {
+        $search = $this->getElementInPage('input.atk-grid-search');
+        $search->setValue($text);
     }
 
     /**
@@ -406,13 +384,10 @@ class Context extends RawMinkContext implements BehatContext
      *
      * Select a value in a lookup control.
      */
-    public function iSelectValueInLookup(string $arg1, string $arg2): void
+    public function iSelectValueInLookup(string $value, string $inputName): void
     {
         // get dropdown item from semantic ui which is direct parent of input html element
-        $inputElem = $this->getSession()->getPage()->find('css', 'input[name=' . $arg2 . ']');
-        if ($inputElem === null) {
-            throw new Exception('Lookup element not found: ' . $arg2);
-        }
+        $inputElem = $this->getElementInPage('input[name=' . $inputName . ']');
         $lookupElem = $inputElem->getParent();
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
@@ -420,10 +395,7 @@ class Context extends RawMinkContext implements BehatContext
         $this->jqueryWait('$("#' . $lookupElem->getAttribute('id') . '").hasClass("visible")');
 
         // select value
-        $valueElem = $lookupElem->find('xpath', '//div[text()="' . $arg1 . '"]');
-        if ($valueElem === null || $valueElem->getText() !== $arg1) {
-            throw new Exception('Value not found: ' . $arg1);
-        }
+        $valueElem = $this->getElementInElement($lookupElem, '//div[text()="' . $value . '"]', 'xpath');
         $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("set selected", ' . $valueElem->getAttribute('data-value') . ');');
         $this->jqueryWait();
 
@@ -433,43 +405,6 @@ class Context extends RawMinkContext implements BehatContext
         // for unknown reasons, dropdown very often remains visible in CI, so hide twice
         $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("hide");');
         $this->jqueryWait('!$("#' . $lookupElem->getAttribute('id') . '").hasClass("visible")');
-    }
-
-    /**
-     * @Then I search grid for :arg1
-     */
-    public function iSearchGridFor(string $arg1): void
-    {
-        $search = $this->getSession()->getPage()->find('css', 'input.atk-grid-search');
-        if (!$search) {
-            throw new Exception('Unable to find search input.');
-        }
-
-        $search->setValue($arg1);
-    }
-
-    /**
-     * @Then /^page url should contains \'([^\']*)\'$/
-     */
-    public function pageUrlShouldContains(string $text): void
-    {
-        $url = $this->getSession()->getCurrentUrl();
-        if (!strpos($url, $text)) {
-            throw new Exception('Text : "' . $text . '" not found in ' . $url);
-        }
-    }
-
-    /**
-     * @Then I click icon using css :arg1
-     */
-    public function iClickIconUsingCss(string $arg1): void
-    {
-        $icon = $this->getSession()->getPage()->find('css', $arg1);
-        if (!$icon) {
-            throw new Exception('Unable to find search remove icon.');
-        }
-
-        $icon->click();
     }
 
     /**
@@ -536,59 +471,108 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^I check if text in "([^"]*)" match text in "([^"]*)"/
-     */
-    public function compareElementText(string $compareSelector, string $compareToSelector): void
-    {
-        $compareContainer = $this->getSession()->getPage()->find('css', $compareSelector);
-        if (!$compareContainer) {
-            throw new Exception('Unable to find compare container: ' . $compareSelector);
-        }
-
-        $expectedText = $compareContainer->getText();
-
-        $compareToContainer = $this->getSession()->getPage()->find('css', $compareToSelector);
-        if (!$compareToContainer) {
-            throw new Exception('Unable to find compare to container: ' . $compareToSelector);
-        }
-
-        $compareToText = $compareToContainer->getText();
-
-        if ($expectedText !== $compareToText) {
-            throw new Exception('Data word does not match: ' . $compareToText . ' expected: ' . $expectedText);
-        }
-    }
-
-    /**
      * @Then /^I check if input value for "([^"]*)" match text in "([^"]*)"$/
      */
     public function compareInputValueToElementText(string $inputName, string $selector): void
     {
-        $expected = $this->getSession()->getPage()->find('css', $selector)->getText();
-        $input = $this->getSession()->getPage()->find('css', 'input[name="' . $inputName . '"]');
-        if (!$input) {
-            throw new Exception('Unable to find input name: ' . $inputName);
-        }
+        $expectedText = $this->getElementInPage($selector)->getText();
+        $input = $this->getElementInPage('input[name="' . $inputName . '"]');
 
-        if (preg_replace('~\s*~', '', $expected) !== preg_replace('~\s*~', '', $input->getValue())) {
-            throw new Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expected);
+        if (preg_replace('~\s*~', '', $expectedText) !== preg_replace('~\s*~', '', $input->getValue())) {
+            throw new Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expectedText);
+        }
+    }
+
+    // }}}
+
+    // {{{ misc
+
+    /**
+     * @Then dump :arg1
+     */
+    public function dump(string $arg1): void
+    {
+        $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
+        var_dump($element->getOuterHtml());
+    }
+
+    /**
+     * @Then I click filter column name :arg1
+     */
+    public function iClickFilterColumnName(string $columnName): void
+    {
+        $column = $this->getElementInPage("th[data-column='" . $columnName . "']");
+        $icon = $this->getElementInElement($column, 'i');
+
+        $this->getSession()->executeScript('$("#' . $icon->getAttribute('id') . '").click()');
+    }
+
+    /**
+     * @Then /^container "([^"]*)" should display "([^"]*)" item\(s\)$/
+     */
+    public function containerShouldHaveNumberOfItem(string $selector, int $numberOfitems): void
+    {
+        $items = $this->getSession()->getPage()->findAll('css', $selector);
+        $count = 0;
+        foreach ($items as $el => $item) {
+            ++$count;
+        }
+        if ($count !== $numberOfitems) {
+            throw new Exception('Items does not match. There were ' . $count . ' item in container');
+        }
+    }
+
+    /**
+     * @Then I scroll to top
+     */
+    public function iScrollToTop(): void
+    {
+        $this->getSession()->executeScript('window.scrollTo(0,0)');
+    }
+
+    /**
+     * @Then Toast display should contains text :arg1
+     */
+    public function toastDisplayShouldContainText(string $text): void
+    {
+        $toast = $this->getElementInPage('.ui.toast-container');
+        if (mb_strpos($this->getElementInElement($toast, '.content')->getText(), $text) === false) {
+            throw new Exception('Cannot find text: "' . $text . '" in toast');
+        }
+    }
+
+    /**
+     * @Then /^page url should contains \'([^\']*)\'$/
+     */
+    public function pageUrlShouldContains(string $text): void
+    {
+        $url = $this->getSession()->getCurrentUrl();
+        if (!strpos($url, $text)) {
+            throw new Exception('Text : "' . $text . '" not found in ' . $url);
+        }
+    }
+
+    /**
+     * @Then /^I check if text in "([^"]*)" match text in "([^"]*)"/
+     */
+    public function compareElementText(string $compareSelector, string $compareToSelector): void
+    {
+        if ($this->getElementInPage($compareSelector)->getText() !== $this->getElementInPage($compareToSelector)->getText()) {
+            throw new Exception('Text does not match between: ' . $compareSelector . ' and ' . $compareToSelector);
         }
     }
 
     /**
      * @Then /^text in container using \'([^\']*)\' should contains \'([^\']*)\'$/
      */
-    public function textInContainerUsingShouldContains(string $containerCss, string $text): void
+    public function textInContainerUsingShouldContains(string $selector, string $text): void
     {
-        $container = $this->getSession()->getPage()->find('css', $containerCss);
-        if (!$container) {
-            throw new Exception('Unable to find container: ' . $containerCss);
-        }
-
-        if (trim($container->getText()) !== $text) {
-            throw new Exception('Text not in container ' . $text . ' - ' . $container->getText());
+        if (trim($this->getElementInPage($selector)->getText()) !== $text) {
+            throw new Exception('Container with selector: ' . $selector . ' does not contain text: ' . $text);
         }
     }
+
+    // }}}
 
     /**
      * Find a dropdown component within an html element
@@ -596,13 +580,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     private function assertDropdownValue(NodeElement $element, string $value, string $selector): void
     {
-        $dropdown = $element->find('css', $selector);
-        if (!$dropdown) {
-            throw new Exception('Dropdown input not found using selector: ' . $selector);
-        }
-
-        $dropdownValue = $dropdown->getHtml();
-        if ($dropdownValue !== $value) {
+        if ($this->getElementInElement($element, $selector)->getHtml() !== $value) {
             throw new Exception('Value: "' . $value . '" not set using selector: ' . $selector);
         }
     }
@@ -613,12 +591,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     private function assertSelectedValue(NodeElement $element, string $value, string $selector): void
     {
-        $select = $element->find('css', $selector);
-        if (!$select) {
-            throw new Exception('Select input not found using selector: ' . $selector);
-        }
-        $selectValue = $select->getValue();
-        if ($selectValue !== $value) {
+        if ($this->getElementInElement($element, $selector)->getValue() !== $value) {
             throw new Exception('Value: "' . $value . '" not set using selector: ' . $selector);
         }
     }
@@ -629,35 +602,13 @@ class Context extends RawMinkContext implements BehatContext
      */
     private function assertInputValue(NodeElement $element, string $value, string $selector = 'input'): void
     {
-        $input = $element->find('css', $selector);
-        if (!$input) {
-            throw new Exception('Input not found in selector: ' . $selector);
-        }
-        $inputValue = $input->getValue();
-        if ($inputValue !== $value) {
+        if ($this->getElementInElement($element, $selector)->getValue() !== $value) {
             throw new Exception('Input value not is not: ' . $value);
         }
     }
 
     private function getScopeBuilderRuleElem(string $ruleName): NodeElement
     {
-        $rule = $this->getSession()->getPage()->find('css', '.vqb-rule[data-name=' . $ruleName . ']');
-        if (!$rule) {
-            throw new Exception('Rule not found: ' . $ruleName);
-        }
-
-        return $rule;
-    }
-
-    /**
-     * @Then /^the field "([^"]*)"  should start with "([^"]*)"$/
-     */
-    public function theFieldShouldStartWith(string $arg1, string $arg2): void
-    {
-        $field = $this->assertSession()->fieldExists($arg1);
-
-        if (mb_strpos($field->getValue(), $arg2) === false) {
-            throw new Exception('Field value ' . $field->getValue() . ' does not start with ' . $arg2);
-        }
+        return $this->getElementInPage('.vqb-rule[data-name=' . $ruleName . ']');
     }
 }
