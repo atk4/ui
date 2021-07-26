@@ -103,6 +103,7 @@ class CardDeck extends View
 
         if ($this->paginator !== false) {
             $this->addPaginator();
+            $this->stickyGet($this->paginator->name);
         }
     }
 
