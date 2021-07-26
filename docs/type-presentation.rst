@@ -17,7 +17,7 @@ important concept to understand is the distinction between data Presentation and
 
 Agile UI believes that presentation must be consistent throughout the system. A monetary
 field will use same format on the :php:class:`Form`, :php:class:`Table` and even inside a
-custom HTML template specified into generic :php:class:`View`. 
+custom HTML template specified into generic :php:class:`View`.
 
 When it comes to decoration, the method is very dependent on the context. A form may present
 Calendar (DatePicker) or enable control icon to indicate currency.
@@ -112,7 +112,7 @@ This is reverse scenario. Field `account_number` needs to be stored as-is but sh
 hidden when presented. To hide it from Table::
 
     $model = new User($app->db);
-    
+
     $table->setModel($model);
     $model->addDecorator('account_number', new \Atk4\Ui\Table\Column\Password());
 
@@ -132,7 +132,7 @@ yet make it available when editing, you could create your own :php:class:`Table\
         public function getHtmlTags(\Atk4\Data\Model $row, $field)
         {
             return [
-                'mask' => substr($field->get(), -4) 
+                'mask' => substr($field->get(), -4)
             ];
         }
     }
@@ -153,9 +153,9 @@ extending :php:class:`Persistence\\Ui`::
         public function _typecastSaveField(\Atk4\Data\Field $field, $value)
         {
             switch ($field->type) {
-            case 'card':
-                $parts = str_split($value, 4);
-                return join(' ', $parts);
+                case 'card':
+                    $parts = str_split($value, 4);
+                    return join(' ', $parts);
             }
             return parent::_typecastSaveField($field, $value);
         }
@@ -163,8 +163,8 @@ extending :php:class:`Persistence\\Ui`::
         public function _typecastLoadField(\Atk4\Data\Field $field, $value)
         {
             switch ($field->type) {
-            case 'card':
-                return str_replace(' ', '', $value);
+                case 'card':
+                    return str_replace(' ', '', $value);
             }
             return parent::_typecastLoadField($field, $value);
         }

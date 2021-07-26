@@ -11,7 +11,7 @@ jobs:
     name: Smoke
     runs-on: ubuntu-latest
     container:
-      image: atk4/image:${{ matrix.php }}
+      image: ghcr.io/mvorisek/image-php:${{ matrix.php }}
     strategy:
       fail-fast: false
       matrix:
@@ -51,8 +51,7 @@ jobs:
           if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev ; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
           if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/phpstan 'behat/*' --dev ; fi
-          if [ "${{ matrix.php }}" == "8.0" ]; then composer config platform.php 7.4.5 ; fi
-          composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
+          composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
       - name: Init
         run: |
@@ -63,7 +62,7 @@ jobs:
         if: matrix.type == 'Phpunit'
         run: |
           if [ -n "$LOG_COVERAGE" ]; then
-            cp tools/coverage.php demos
+            cp tools/CoverageUtil.php demos
             mkdir coverage
             vendor/bin/phpunit --exclude-group none --coverage-text -v
             ls -l coverage | wc -l && mv coverage/* build/logs
@@ -71,15 +70,11 @@ jobs:
             vendor/bin/phpunit --exclude-group none --no-coverage -v
           fi
 
-      - name: Lint / check syntax (only for CodingStyle)
-        if: matrix.type == 'CodingStyle'
-        run: find . \( -type d \( -path './vendor/*' \) \) -prune -o ! -type d -name '*.php' -print0 | xargs -0 -n1 php -l
-
       - name: Check Coding Style (only for CodingStyle)
         if: matrix.type == 'CodingStyle'
         run: |
           if [ "$(find demos/ -name '*.php' -print0 | xargs -0 grep -L "namespace Atk4\\\\Ui\\\\Demos;" | tee /dev/fd/2)" ]; then echo 'All demos/ files must have namespace declared' && (exit 1); fi
-          vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --diff-format=udiff --verbose --show-progress=dots
+          vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --verbose
 
       - name: Run Static Analysis (only for StaticAnalysis)
         if: matrix.type == 'StaticAnalysis'
@@ -91,11 +86,11 @@ jobs:
     name: Unit
     runs-on: ubuntu-latest
     container:
-      image: atk4/image:${{ matrix.php }}
+      image: ghcr.io/mvorisek/image-php:${{ matrix.php }}
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.3', 'latest', '8.0']
+        php: ['7.4', 'latest']
         type: ['Phpunit']
         include:
           - php: 'latest'
@@ -107,7 +102,7 @@ jobs:
     services:
       mysql:
         image: mysql:8
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass -e MYSQL_USER=atk4_test -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test__data --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test__data --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
       mssql:
         image: mcr.microsoft.com/mssql/server
         env:
@@ -141,21 +136,21 @@ jobs:
           if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "Phpunit Lowest" ] && [ "${{ matrix.type }}" != "Phpunit Burn" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev ; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
           if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/phpstan 'behat/*' --dev ; fi
-          if [ "${{ matrix.php }}" == "8.0" ]; then composer config platform.php 7.4.5 ; fi
-          composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
+          composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
           if [ "${{ matrix.type }}" == "Phpunit Lowest" ]; then composer update  --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader ; fi
-          if [ "${{ matrix.type }}" == "Phpunit Burn" ]; then sed -i 's/ *public function runBare(): void/public function runBare(): void { gc_collect_cycles(); $mem0 = memory_get_usage(); for ($i = 0; $i < '"$(if [ \"$GITHUB_EVENT_NAME\" == \"schedule\" ]; then echo 5; else echo 5; fi)"'; ++$i) { $this->_runBare(); if ($i === 0) { gc_collect_cycles(); $mem1 = memory_get_usage(); } } gc_collect_cycles(); $mem2 = memory_get_usage(); if ($mem2 - 3072 * 1024 > $mem0 || $mem2 - 1536 * 1024 > $mem1) { $this->onNotSuccessfulTest(new AssertionFailedError("Memory leak detected! (" . round($mem0 \/ (1024 * 1024), 3) . " + " . round(($mem1 - $mem0) \/ (1024 * 1024), 3) . " + " . round(($mem2 - $mem1) \/ (1024 * 1024), 3) . " MB, " . $i . " iterations)")); } } private function _runBare(): void/' vendor/phpunit/phpunit/src/Framework/TestCase.php && cat vendor/phpunit/phpunit/src/Framework/TestCase.php | grep '_runBare(' ; fi
+          if [ "${{ matrix.type }}" == "Phpunit Burn" ]; then sed -i 's/ *public function runBare(): void/public function runBare(): void { gc_collect_cycles(); gc_collect_cycles(); $mem0 = memory_get_usage(); for ($i = 0; $i < '"$(if [ \"$GITHUB_EVENT_NAME\" == \"schedule\" ]; then echo 20; else echo 5; fi)"'; ++$i) { $this->_runBare(); gc_collect_cycles(); gc_collect_cycles(); if ($i === 0) { $mem1 = memory_get_usage(); } } $mem2 = memory_get_usage(); if ($mem2 - 3072 * 1024 > $mem0 || $mem2 - 1536 * 1024 > $mem1) { $this->onNotSuccessfulTest(new AssertionFailedError("Memory leak detected! (" . round($mem0 \/ (1024 * 1024), 3) . " MB + " . round(($mem1 - $mem0) \/ (1024 * 1024), 3) . " MB + " . round(($mem2 - $mem1) \/ 1024, 3) . " KB, " . $i . " iterations)")); } } private function _runBare(): void/' vendor/phpunit/phpunit/src/Framework/TestCase.php && cat vendor/phpunit/phpunit/src/Framework/TestCase.php | grep '_runBare(' ; fi
 
       - name: Init
         run: |
           mkdir -p build/logs
+          php -r '(new PDO("mysql:host=mysql", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php demos/_demo-data/create-sqlite-db.php
 
       - name: "Run tests: SQLite (only for Phpunit)"
         if: startsWith(matrix.type, 'Phpunit')
         run: |
           if [ -n "$LOG_COVERAGE" ]; then
-            cp tools/coverage.php demos
+            cp tools/CoverageUtil.php demos
             mkdir coverage
             vendor/bin/phpunit --exclude-group none --coverage-text -v
             ls -l coverage | wc -l && mv coverage/* build/logs
@@ -186,7 +181,7 @@ jobs:
     name: Behat
     runs-on: ubuntu-latest
     container:
-      image: atk4/image:${{ matrix.php }}
+      image: ghcr.io/mvorisek/image-php:${{ matrix.php }}-node
     strategy:
       fail-fast: false
       matrix:
@@ -226,7 +221,6 @@ jobs:
       - name: Install JS dependencies (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
-          apk add npm
           npm install --loglevel=error -g pug-cli less less-plugin-clean-css uglify-js
           (cd js && npm ci --loglevel=error)
 
@@ -261,7 +255,6 @@ jobs:
         run: |
           cp -r public public.orig && rm public/*.js
           (cd js && npm run build)
-          sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
           diff -qr public public.orig
           rm -r public.orig
 
@@ -270,13 +263,14 @@ jobs:
           composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev
           composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev
           composer remove --no-interaction --no-update phpstan/phpstan --dev
-          composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
+          composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
           if [ "${{ matrix.type }}" == "Chrome Lowest" ]; then composer update  --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader ; fi
 
       - name: Init
         run: |
           mkdir -p build/logs
           php demos/_demo-data/create-sqlite-db.php
+          sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
 
       - name: "Run tests: Behat"
         run: |

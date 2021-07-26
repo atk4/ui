@@ -1,17 +1,16 @@
 import mitt from 'mitt';
 import 'helpers/url.helper';
+import lodashDebounce from 'lodash/debounce';
 
 /**
  * Define atk global options.
  * In Js:
- *  atk.options.set('name','value');
+ *  atk.options.set('name', 'value');
  * In Php:
  *  (new JsChain('atk.options')->set('name', 'value');
  */
 const atkOptions = (function () {
     const options = {
-    // Value for debounce time out (in ms) that will be apply globally when set using atk.debounce.
-        debounceTimeout: null,
     };
     return {
         set: (name, value) => { options[name] = value; },
@@ -43,6 +42,18 @@ const atkEventBus = (function () {
 */
 const atkUtils = (function () {
     return {
+        json: function () {
+            return {
+                // try parsing string as JSON. Return parse if valid, otherwise return onError value.
+                tryParse: function (str, onError = null) {
+                    try {
+                        return JSON.parse(str);
+                    } catch (e) {
+                        return onError;
+                    }
+                },
+            };
+        },
         date: function () {
             return {
                 // fix date parsing for different time zone if time is not supply.
@@ -57,4 +68,37 @@ const atkUtils = (function () {
     };
 }());
 
-export { atkOptions, atkEventBus, atkUtils };
+function atkDebounce(func, wait, options) {
+    let timerId = null;
+    let debouncedInner;
+
+    function createTimer() {
+        timerId = setInterval(() => {
+            if (!debouncedInner.pending()) {
+                clearInterval(timerId);
+                timerId = null;
+                jQuery.active--;
+            }
+        }, 25);
+        jQuery.active++;
+    }
+
+    debouncedInner = lodashDebounce(func, wait, options);
+
+    function debounced(...args) {
+        if (timerId === null) {
+            createTimer();
+        }
+
+        return debouncedInner(...args);
+    }
+    debounced.cancel = debouncedInner.cancel;
+    debounced.flush = debouncedInner.flush;
+    debounced.pending = debouncedInner.pending;
+
+    return debounced;
+}
+
+export {
+    atkOptions, atkEventBus, atkUtils, atkDebounce,
+};

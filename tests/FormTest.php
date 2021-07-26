@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 use Atk4\Ui\App;
+use Atk4\Ui\Callback;
 use Atk4\Ui\Form;
 
-class FormTest extends AtkPhpunit\TestCase
+class FormTest extends TestCase
 {
     /** @var Form */
     public $f;
@@ -33,7 +34,7 @@ class FormTest extends AtkPhpunit\TestCase
     /**
      * Some tests for form.
      */
-    public function testGetField()
+    public function testGetField(): void
     {
         $f = $this->f;
         $f->addControl('test');
@@ -47,8 +48,8 @@ class FormTest extends AtkPhpunit\TestCase
         $submit_called = false;
         $_POST = $post_data;
         // trigger callback
-        $_GET['atk_submit'] = 'ajax';
-        $_GET['__atk_callback'] = 'atk_submit';
+        $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . 'atk_submit'] = 'ajax';
+        $_GET[Callback::URL_QUERY_TARGET] = 'atk_submit';
 
         $this->f->onSubmit(function (Form $form) use (&$submit_called, $submit) {
             $submit_called = true;
@@ -76,7 +77,7 @@ class FormTest extends AtkPhpunit\TestCase
         $_POST = [];
     }
 
-    public function testFormSubmit()
+    public function testFormSubmit(): void
     {
         $f = $this->f;
 
@@ -85,6 +86,7 @@ class FormTest extends AtkPhpunit\TestCase
         $m->addField('email', ['required' => true]);
         $m->addField('is_admin', ['default' => false]);
 
+        $m = $m->createEntity();
         $f->setModel($m, ['name', 'email']);
 
         $this->assertSame('John', $f->model->get('name'));
@@ -101,7 +103,7 @@ class FormTest extends AtkPhpunit\TestCase
         });
     }
 
-    public function testTextarea()
+    public function testTextarea(): void
     {
         $this->f->addControl('Textarea');
         $this->assertSubmit(['Textarea' => '0'], function (Model $m) {
@@ -138,7 +140,7 @@ class FormTest extends AtkPhpunit\TestCase
         }, $this->f_error);
     }
 
-    public function testSubmitError()
+    public function testSubmitError(): void
     {
         $m = new Model();
 
@@ -150,6 +152,7 @@ class FormTest extends AtkPhpunit\TestCase
         //$m->addField('opt3_zerotest', ['values'=>$options, 'required'=>true]);
         $m->addField('opt4', ['values' => $options, 'mandatory' => true]);
 
+        $m = $m->createEntity();
         $this->f->setModel($m);
         $this->assertSubmitError(['opt1' => '2', 'opt3' => '', 'opt3_zerotest' => '0'], function ($error) {
             // dropdown validates to make sure option is proper
@@ -179,6 +182,5 @@ class AppFormTestMock extends App
     public function terminate($output = '', array $headers = []): void
     {
         $this->output = $output;
-        // do nothing!
     }
 }

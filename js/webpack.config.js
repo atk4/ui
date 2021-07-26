@@ -23,7 +23,7 @@
 const webpack = require('webpack');
 const path = require('path');
 // VUe file loader.
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 const TerserPlugin = require('terser-webpack-plugin');
 const packageVersion = require('./package.json').version;
 

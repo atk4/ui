@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model\UserAction;
+
 class DemoActionsUtil
 {
     public static function setupDemoActions(CountryLock $country): void
     {
         $country->addUserAction(
             'callback',
-            ['description' => 'Callback',
+            [
+                'description' => 'Callback',
                 'callback' => function ($model) {
                     return 'callback execute using country ' . $model->getTitle();
                 },
@@ -81,10 +84,10 @@ class DemoActionsUtil
             'edit_iso',
             [
                 'caption' => 'Edit ISO3',
-                'description' => function ($action) {
-                    return 'Edit ISO3 for country: ' . $action->getModel()->getTitle();
+                'description' => function (UserAction $action) {
+                    return 'Edit ISO3 for country: ' . $action->getEntity()->getTitle();
                 },
-                'fields' => ['iso3'],
+                'fields' => [$country->fieldName()->iso3],
                 'callback' => function () {
                     return 'ok';
                 },
@@ -111,9 +114,8 @@ class DemoActionsUtil
             [
                 'caption' => 'User Confirmation',
                 'description' => 'Confirm the action using a ConfirmationExecutor',
-                'ui' => ['executor' => [\Atk4\Ui\UserAction\ConfirmationExecutor::class]],
                 'confirmation' => function ($a) {
-                    return 'Are you sure you want to perform this action on: <b>' . $a->getModel()->getTitle() . ' (' . $a->getModel()->get('iso3') . ')</b>';
+                    return 'Are you sure you want to perform this action on: <b>' . $a->getEntity()->getTitle() . ' (' . $a->getEntity()->iso3 . ')</b>';
                 },
                 'callback' => function ($model) {
                     return 'Confirm country ' . $model->getTitle();
@@ -131,9 +133,8 @@ class DemoActionsUtil
                     'city' => [],
                     'gender' => ['type' => 'enum', 'values' => ['m' => 'Male', 'f' => 'Female'], 'required' => true, 'default' => 'm'],
                 ],
-                'fields' => ['iso3'],
+                'fields' => [$country->fieldName()->iso3],
                 'callback' => function ($model, $age, $city, $gender) {
-                    //    $model->save();
                     $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
 
                     return 'Thank you ' . $n . ' at age ' . $age;

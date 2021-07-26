@@ -5,12 +5,6 @@ declare(strict_types=1);
  * Dropdown form control that will based it's list value
  * according to another input value.
  * Also possible to cascade value from another cascade field.
- * For example:
- *  - you need to narrow product base on Category and sub category
- *       $form = Form::addTo($app);
- *       $form->addControl('category_id', [Dropdown::class, 'model' => new Category($db)])->set(3);
- *       $form->addControl('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
- *       $form->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);.
  */
 
 namespace Atk4\Ui\Form\Control;
@@ -47,7 +41,7 @@ class DropdownCascade extends Dropdown
             throw new Exception('cascadeFrom property should be an instance of ' . Form\Control::class);
         }
 
-        $this->cascadeControlValue = $_POST[$this->cascadeControl->name] ?? $this->cascadeControl->field->get('value');
+        $this->cascadeControlValue = $_POST[$this->cascadeControl->name] ?? $this->cascadeControl->field->get();
 
         $this->model = $this->cascadeControl->model ? $this->cascadeControl->model->ref($this->reference) : null;
 
@@ -87,7 +81,7 @@ class DropdownCascade extends Dropdown
                 $res = ($this->renderRowFunction)($row, $k);
                 $values[] = ['value' => $res['value'], 'text' => $row->get('name'), 'name' => $res['title']];
             } else {
-                $values[] = ['value' => $row->get($model->id_field), 'text' => $row->get($model->title_field), 'name' => $row->get($model->title_field)];
+                $values[] = ['value' => $row->getId(), 'text' => $row->get($model->title_field), 'name' => $row->get($model->title_field)];
             }
         }
 
@@ -98,8 +92,8 @@ class DropdownCascade extends Dropdown
      *  Will mark current value as selected from a list
      *  of possible values.
      *
-     * @param $values    an array of possible values
-     * @param $value     the current field value
+     * @param array  $values an array of possible values
+     * @param string $value  the current field value
      */
     private function getJsValues(array $values, string $value): array
     {

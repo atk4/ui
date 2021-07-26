@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Form\Control\Line;
-use Atk4\Ui\UserAction;
 use Atk4\Ui\UserAction\JsCallbackExecutor;
 
 /** @var \Atk4\Ui\App $app */
@@ -21,8 +21,8 @@ $country = new Country($app->db);
 
 $sendEmailAction = $country->addUserAction('Email', [
     'confirmation' => 'Are you sure you wish to send an email?',
-    'callback' => function ($model) {
-        return 'Email to Kristy in ' . $model->get('name') . ' has been sent!';
+    'callback' => function (Country $country) {
+        return 'Email to Kristy in ' . $country->name . ' has been sent!';
     },
 ]);
 
@@ -38,14 +38,14 @@ $sendEmailAction = $country->addUserAction('Email', [
 
 // Note here that we explicitly required a JsCallbackExecutor for the greet action.
 $country->addUserAction('greet', [
+    'appliesTo' => UserAction::APPLIES_TO_NO_RECORDS,
     'args' => [
         'name' => [
             'type' => 'string',
             'required' => true,
         ],
     ],
-    'ui' => ['executor' => [UserAction\JsCallbackExecutor::class]],
-    'callback' => function ($model, $name) {
+    'callback' => function (Country $model, $name) {
         return 'Hello ' . $name;
     },
 ]);
@@ -74,7 +74,7 @@ $card->addContent($content);
 $card->addDescription('Kristy is a friend of Mully.');
 
 $s = $card->addSection('Country');
-$s->addFields($country->loadAny(), ['name', 'iso']);
+$s->addFields($entity = $country->loadAny(), [$country->fieldName()->name, $country->fieldName()->iso]);
 
 // Pass the model action to the Card::addClickAction() method.
-$card->addClickAction($sendEmailAction);
+$card->addClickAction($sendEmailAction, null, ['id' => $entity->getId()]);

@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Exception;
 use Atk4\Ui\HtmlTemplate;
 
-class ListerTest extends AtkPhpunit\TestCase
+class ListerTest extends TestCase
 {
     /**
      * @doesNotPerformAssertions
      */
-    public function testListerRender()
+    public function testListerRender(): void
     {
         $v = new \Atk4\Ui\View();
         $v->invokeInit();
@@ -24,7 +24,7 @@ class ListerTest extends AtkPhpunit\TestCase
     /**
      * Or clone lister's template from parent.
      */
-    public function testListerRender2()
+    public function testListerRender2(): void
     {
         $v = new \Atk4\Ui\View(['template' => new HtmlTemplate('hello{list}, world{/list}')]);
         $v->invokeInit();
@@ -33,7 +33,7 @@ class ListerTest extends AtkPhpunit\TestCase
         $this->assertSame('hello, world, world', $v->render());
     }
 
-    public function testAddAfterRender()
+    public function testAddAfterRender(): void
     {
         $this->expectException(Exception::class);
         $v = new \Atk4\Ui\View();

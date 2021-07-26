@@ -120,19 +120,19 @@ class Popup extends View
         parent::init();
 
         if (
-            $this->getOwner() instanceof Item ||
-            $this->getOwner() instanceof Menu ||
-            $this->getOwner() instanceof Dropdown ||
-            $this->getOwner() instanceof Button
+            $this->getOwner() instanceof Item
+            || $this->getOwner() instanceof Menu
+            || $this->getOwner() instanceof Dropdown
+            || $this->getOwner() instanceof Button
         ) {
             throw (new Exception('Although it may be tempting to add pop-up into Button/Menu/Item, this may cause some random issues. Add elsewhere and use "triggerBy"'))
                 ->addMoreInfo('owner', $this->getOwner());
         }
 
         if (
-            ($this->triggerBy instanceof Item ||
-            $this->triggerBy instanceof Menu ||
-            $this->triggerBy instanceof Dropdown) && $this->triggerOn === null
+            ($this->triggerBy instanceof Item
+            || $this->triggerBy instanceof Menu
+            || $this->triggerBy instanceof Dropdown) && $this->triggerOn === null
         ) {
             $this->triggerOn = 'hover';
         }
@@ -182,6 +182,8 @@ class Popup extends View
         // only render our content view.
         // PopupService will replace content with this one.
         $this->cb->terminateJson($content);
+
+        return $this;
     }
 
     /**
@@ -292,10 +294,5 @@ class Popup extends View
         //$this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
 
         parent::renderView();
-    }
-
-    protected function mergeStickyArgsFromChildView(): ?AbstractView
-    {
-        return $this->cb;
     }
 }

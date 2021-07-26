@@ -8,13 +8,13 @@ $finder = PhpCsFixer\Finder::create()
         'vendor',
     ]);
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@PhpCsFixer' => true,
-        '@PhpCsFixer:risky' =>true,
-        '@PHP71Migration:risky' => true,
-        '@PHP73Migration' => true,
+        '@PhpCsFixer:risky' => true,
+        '@PHP74Migration:risky' => true,
+        '@PHP74Migration' => true,
 
         // required by PSR-12
         'concat_space' => [
@@ -36,10 +36,8 @@ return PhpCsFixer\Config::create()
             'equal' => false,
             'identical' => false,
         ],
+        'native_constant_invocation' => true,
         'native_function_invocation' => false,
-        'non_printable_character' => [
-            'use_escape_sequences_in_strings' => true,
-        ],
         'void_return' => false,
         'blank_line_before_statement' => [
             'statements' => ['break', 'continue', 'declare', 'return', 'throw', 'exit'],
@@ -57,13 +55,16 @@ return PhpCsFixer\Config::create()
         'phpdoc_add_missing_param_annotation' => false,
         'return_assignment' => false,
         'comment_to_phpdoc' => false,
-        'list_syntax' => ['syntax' => 'short'],
         'general_phpdoc_annotation_remove' => [
             'annotations' => ['author', 'copyright', 'throws'],
         ],
         'nullable_type_declaration_for_default_null_value' => [
             'use_nullable_type_declaration' => false,
         ],
+
+        // fn => without curly brackets is less readable,
+        // also prevent bounding of unwanted variables for GC
+        'use_arrow_functions' => false,
     ])
     ->setFinder($finder)
-    ->setCacheFile(__DIR__ . '/.php_cs.cache');
+    ->setCacheFile(sys_get_temp_dir() . '/php-cs-fixer.' . md5(__DIR__) . '.cache');

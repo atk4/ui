@@ -15,7 +15,40 @@ if (file_exists($sqliteFile)) {
 
 $persistence = new \Atk4\Data\Persistence\Sql('sqlite:' . $sqliteFile);
 
-$model = new Model($persistence, 'client');
+class ImportModelWithPrefixedFields extends Model
+{
+    private function prefixFieldName(string $fieldName, bool $forActualName = false): string
+    {
+        return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $this->table . '__' . $fieldName;
+    }
+
+    public function addField($name, $seed = []): \Atk4\Data\Field
+    {
+        if ($name === 'id') {
+            $this->id_field = $this->prefixFieldName($name);
+        }
+
+        $seed = \Atk4\Core\Factory::mergeSeeds($seed, [
+            'actual' => $this->prefixFieldName($name, true),
+        ]);
+
+        return parent::addField($this->prefixFieldName($name), $seed);
+    }
+
+    public function import(array $rowsMulti)
+    {
+        return parent::import(array_map(function (array $rows): array {
+            $rowsPrefixed = [];
+            foreach ($rows as $k => $v) {
+                $rowsPrefixed[$this->prefixFieldName($k)] = $v;
+            }
+
+            return $rowsPrefixed;
+        }, $rowsMulti));
+    }
+}
+
+$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'client']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('addresses', ['type' => 'text']);
 $model->addField('accounts', ['type' => 'text']);
@@ -25,7 +58,7 @@ $model->import([
     ['id' => 2, 'name' => 'Jane', 'addresses' => null, 'accounts' => null],
 ]);
 
-$model = new Model($persistence, 'country');
+$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'country']);
 $model->addField('iso', ['type' => 'string']); // should be CHAR(2) NOT NULL
 $model->addField('name', ['type' => 'string']);
 $model->addField('nicename', ['type' => 'string']);
@@ -288,7 +321,7 @@ $model->import([
     ['id' => 253, 'iso' => 'SS', 'name' => 'SOUTH SUDAN', 'nicename' => 'South Sudan', 'iso3' => 'SSD', 'numcode' => 728, 'phonecode' => 211],
 ]);
 
-$model = new Model($persistence, 'file');
+$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'file']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('type', ['type' => 'string']);
 $model->addField('is_folder', ['type' => 'boolean']);
@@ -359,7 +392,7 @@ $model->import([
     ['id' => 61, 'name' => 'Button.php', 'type' => 'php', 'is_folder' => 0, 'parent_folder_id' => 46],
 ]);
 
-$model = new Model($persistence, 'stats');
+$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'stat']);
 $model->addField('project_name', ['type' => 'string']);
 $model->addField('project_code', ['type' => 'string']);
 $model->addField('description', ['type' => 'text']);
@@ -386,13 +419,13 @@ $model->addField('created', ['type' => 'datetime']);
 $model->addField('updated', ['type' => 'datetime']);
 (new \Atk4\Schema\Migration($model))->dropIfExists()->create();
 $model->import([
-    ['id' => 1, 'project_name' => 'Agile DSQL', 'project_code' => 'at01', 'description' => 'DSQL is a composable SQL query builder. You can write multi-vendor queries in PHP profiting from better security, clean syntax and avoid human errors.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,\nGarden City\nUK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 1, 'project_budget' => 7000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 150, 'project_hours_reported' => 125, 'project_expenses_est' => 50, 'project_expenses' => 0, 'project_mgmt_cost_pct' => 0.1, 'project_qa_cost_pct' => 0.2, 'start_date' => '2016-01-26', 'finish_date' => '2016-06-23', 'finish_time' => '12:50:00', 'created' => '2017-04-06 10:34:34', 'updated' => '2017-04-06 10:35:04'],
-    ['id' => 2, 'project_name' => 'Agile Core', 'project_code' => 'at02', 'description' => 'Collection of PHP Traits for designing object-oriented frameworks.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,\nGarden City\nUK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 1, 'project_budget' => 3000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 70, 'project_hours_reported' => 56, 'project_expenses_est' => 50, 'project_expenses' => 0, 'project_mgmt_cost_pct' => 0.1, 'project_qa_cost_pct' => 0.2, 'start_date' => '2016-04-27', 'finish_date' => '2016-05-21', 'finish_time' => '18:41:00', 'created' => '2017-04-06 10:21:50', 'updated' => '2017-04-06 10:35:04'],
-    ['id' => 3, 'project_name' => 'Agile Data', 'project_code' => 'at03', 'description' => 'Agile Data implements an entirely new pattern for data abstraction, that is specifically designed for remote databases such as RDS, Cloud SQL, BigQuery and other distributed data storage architectures. It focuses on reducing number of requests your App have to send to the Database by using more sophisticated queries while also offering full Domain Model mapping and Database vendor abstraction.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,\nGarden City\nUK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 1, 'project_budget' => 12000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 300, 'project_hours_reported' => 394, 'project_expenses_est' => 600, 'project_expenses' => 430, 'project_mgmt_cost_pct' => 0.2, 'project_qa_cost_pct' => 0.3, 'start_date' => '2016-04-17', 'finish_date' => '2016-06-20', 'finish_time' => '03:04:00', 'created' => '2017-04-06 10:30:15', 'updated' => '2017-04-06 10:35:04'],
-    ['id' => 4, 'project_name' => 'Agile UI', 'project_code' => 'at04', 'description' => 'Web UI Component library.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,\nGarden City\nUK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 0, 'project_budget' => 20000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 600, 'project_hours_reported' => 368, 'project_expenses_est' => 1200, 'project_expenses' => 0, 'project_mgmt_cost_pct' => 0.3, 'project_qa_cost_pct' => 0.4, 'start_date' => '2016-09-17', 'finish_date' => '', 'finish_time' => '', 'created' => '2017-04-06 10:30:15', 'updated' => '2017-04-06 10:35:04'],
+    ['id' => 1, 'project_name' => 'Agile DSQL', 'project_code' => 'at01', 'description' => 'DSQL is a composable SQL query builder. You can write multi-vendor queries in PHP profiting from better security, clean syntax and avoid human errors.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,' . "\n" . 'Garden City' . "\n" . 'UK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 1, 'project_budget' => 7000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 150, 'project_hours_reported' => 125, 'project_expenses_est' => 50, 'project_expenses' => 0, 'project_mgmt_cost_pct' => 0.1, 'project_qa_cost_pct' => 0.2, 'start_date' => '2016-01-26', 'finish_date' => '2016-06-23', 'finish_time' => '12:50:00', 'created' => '2017-04-06 10:34:34', 'updated' => '2017-04-06 10:35:04'],
+    ['id' => 2, 'project_name' => 'Agile Core', 'project_code' => 'at02', 'description' => 'Collection of PHP Traits for designing object-oriented frameworks.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,' . "\n" . 'Garden City' . "\n" . 'UK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 1, 'project_budget' => 3000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 70, 'project_hours_reported' => 56, 'project_expenses_est' => 50, 'project_expenses' => 0, 'project_mgmt_cost_pct' => 0.1, 'project_qa_cost_pct' => 0.2, 'start_date' => '2016-04-27', 'finish_date' => '2016-05-21', 'finish_time' => '18:41:00', 'created' => '2017-04-06 10:21:50', 'updated' => '2017-04-06 10:35:04'],
+    ['id' => 3, 'project_name' => 'Agile Data', 'project_code' => 'at03', 'description' => 'Agile Data implements an entirely new pattern for data abstraction, that is specifically designed for remote databases such as RDS, Cloud SQL, BigQuery and other distributed data storage architectures. It focuses on reducing number of requests your App have to send to the Database by using more sophisticated queries while also offering full Domain Model mapping and Database vendor abstraction.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,' . "\n" . 'Garden City' . "\n" . 'UK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 1, 'project_budget' => 12000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 300, 'project_hours_reported' => 394, 'project_expenses_est' => 600, 'project_expenses' => 430, 'project_mgmt_cost_pct' => 0.2, 'project_qa_cost_pct' => 0.3, 'start_date' => '2016-04-17', 'finish_date' => '2016-06-20', 'finish_time' => '03:04:00', 'created' => '2017-04-06 10:30:15', 'updated' => '2017-04-06 10:35:04'],
+    ['id' => 4, 'project_name' => 'Agile UI', 'project_code' => 'at04', 'description' => 'Web UI Component library.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,' . "\n" . 'Garden City' . "\n" . 'UK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 0, 'project_budget' => 20000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 600, 'project_hours_reported' => 368, 'project_expenses_est' => 1200, 'project_expenses' => 0, 'project_mgmt_cost_pct' => 0.3, 'project_qa_cost_pct' => 0.4, 'start_date' => '2016-09-17', 'finish_date' => '', 'finish_time' => '', 'created' => '2017-04-06 10:30:15', 'updated' => '2017-04-06 10:35:04'],
 ]);
 
-$model = new Model($persistence, 'product_category');
+$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'product_category']);
 $model->addField('name', ['type' => 'string']);
 (new \Atk4\Schema\Migration($model))->dropIfExists()->create();
 $model->import([
@@ -401,7 +434,7 @@ $model->import([
     ['id' => 3, 'name' => 'Dairy'],
 ]);
 
-$model = new Model($persistence, 'product_sub_category');
+$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'product_sub_category']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('product_category_id', ['type' => 'bigint']);
 (new \Atk4\Schema\Migration($model))->dropIfExists()->create();
@@ -417,7 +450,7 @@ $model->import([
     ['id' => 9, 'name' => 'Sugar/Sweetened', 'product_category_id' => 2],
 ]);
 
-$model = new Model($persistence, 'product');
+$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'product']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('brand', ['type' => 'string']);
 $model->addField('product_category_id', ['type' => 'bigint']);

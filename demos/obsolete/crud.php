@@ -14,4 +14,4 @@ $model->getUserAction('delete')->system = true;
 
 $grid = \Atk4\Ui\Crud::addTo($app, ['paginator' => false]);
 $grid->setModel($model);
-$grid->addDecorator('project_code', [\Atk4\Ui\Table\Column\Link::class]);
+$grid->addDecorator($model->fieldName()->project_code, [\Atk4\Ui\Table\Column\Link::class]);

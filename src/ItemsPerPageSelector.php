@@ -47,7 +47,7 @@ class ItemsPerPageSelector extends View
         parent::init();
 
         Icon::addTo($this)->set('dropdown');
-        $this->template->tryset('Label', $this->label);
+        $this->template->trySet('Label', $this->label);
 
         // Callback later will give us time to properly render menu item before final output.
         $this->cb = CallbackLater::addTo($this);
@@ -93,16 +93,16 @@ class ItemsPerPageSelector extends View
             $menuItems[] = ['name' => $item, 'value' => $item];
         }
         // set semantic-ui dropdown onChange function.
-        $function = "function(value, text, item){
-                            if (value === undefined || value === '' || value === null) return;
+        $function = 'function(value, text, item){
+                            if (value === undefined || value === \'\' || value === null) return;
                             $(this)
                             .api({
-                                on:'now',
-                                url:'{$this->cb->getUrl()}',
+                                on:\'now\',
+                                url:\'' . $this->cb->getUrl() . '\',
                                 data:{ipp:value}
                                 }
                             );
-                     }";
+                     }';
 
         $this->js(true)->dropdown([
             'values' => $menuItems,

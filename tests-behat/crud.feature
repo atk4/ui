@@ -5,27 +5,25 @@ Feature: Crud
     Given I am on "_unit-test/crud.php"
 
   Scenario: add
-    Then I press menu button "Add" using class "atk-grid-menu"
-    Then I fill in "name" with "Test"
-    Then I fill in "iso" with "TT"
-    Then I fill in "iso3" with "TTT"
-    Then I fill in "numcode" with "123"
-    Then I fill in "phonecode" with "1"
-    Then I press Modal button "Add"
+    Then I press menu button "Add Country" using class "atk-grid-menu"
+    Then I fill in "atk_fp_country__name" with "Test"
+    Then I fill in "atk_fp_country__iso" with "TT"
+    Then I fill in "atk_fp_country__iso3" with "TTT"
+    Then I fill in "atk_fp_country__numcode" with "123"
+    Then I fill in "atk_fp_country__phonecode" with "1"
+    Then I press Modal button "Save"
     Then Toast display should contains text "Form Submit"
 
   Scenario: search
     Then I search grid for "united kingdom"
-#    make sure auto query trigger
-    And I wait for loading to start in "button.atk-search-button"
     Then I should see "United Kingdom"
 
   Scenario: edit
     Then I press button "Edit"
     Then Modal is open with text "Edit Country"
-    Then I press Modal button "Edit"
+    Then I press Modal button "Save"
     Then Toast display should contains text "Form Submit"
-#    make sure search query stick
+    # make sure search query stick
     Then I should see "United Kingdom"
 
   Scenario: delete

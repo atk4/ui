@@ -60,7 +60,7 @@ export default {
             if (this.hasError()) {
                 const rows = Object.keys(this.errors);
                 for (let i = 0; i < rows.length; i++) {
-                    const error = this.errors[rows[i]].filter((col) => col.field === column.field);
+                    const error = this.errors[rows[i]].filter((col) => col.name === column.name);
                     if (error.length > 0) {
                         return error[0].msg;
                     }

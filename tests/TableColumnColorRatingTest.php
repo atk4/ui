@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Table;
 
-class TableColumnColorRatingTest extends AtkPhpunit\TestCase
+class TableColumnColorRatingTest extends TestCase
 {
     use Concerns\HandlesTable;
 
@@ -29,7 +29,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
             ],
         ];
         $db = new \Atk4\Data\Persistence\Array_($arr);
-        $m = new \Atk4\Data\Model($db, 'table');
+        $m = new \Atk4\Data\Model($db, ['table' => 'table']);
         $m->addField('name');
         $m->addField('ref');
         $m->addField('rating');
@@ -38,7 +38,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $this->table->setModel($m, ['name', 'ref', 'rating']);
     }
 
-    public function testValueGreaterThanMax()
+    public function testValueGreaterThanMax(): void
     {
         $rating = $this->table->addDecorator('rating', [
             Table\Column\ColorRating::class,
@@ -65,7 +65,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testValueGreaterThanMaxNoColor()
+    public function testValueGreaterThanMaxNoColor(): void
     {
         $this->table->addDecorator('rating', [
             Table\Column\ColorRating::class,
@@ -88,7 +88,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testValueLowerThanMin()
+    public function testValueLowerThanMin(): void
     {
         $rating = $this->table->addDecorator('rating', [
             Table\Column\ColorRating::class,
@@ -115,7 +115,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testValueLowerThanMinNoColor()
+    public function testValueLowerThanMinNoColor(): void
     {
         $this->table->addDecorator('rating', [
             Table\Column\ColorRating::class,
@@ -138,7 +138,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testExceptionMinGreaterThanMax()
+    public function testExceptionMinGreaterThanMax(): void
     {
         $this->expectException(\Atk4\Ui\Exception::class);
 
@@ -157,7 +157,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         ]);
     }
 
-    public function testExceptionMinEqualsMax()
+    public function testExceptionMinEqualsMax(): void
     {
         $this->expectException(\Atk4\Ui\Exception::class);
 
@@ -176,7 +176,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         ]);
     }
 
-    public function testExceptionZeroSteps()
+    public function testExceptionZeroSteps(): void
     {
         $this->expectException(\Atk4\Ui\Exception::class);
 
@@ -195,7 +195,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         ]);
     }
 
-    public function testExceptionLessThan2ColorsDefined()
+    public function testExceptionLessThan2ColorsDefined(): void
     {
         $this->expectException(\Atk4\Ui\Exception::class);
 

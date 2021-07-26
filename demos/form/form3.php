@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Form;
 use Atk4\Ui\JsReload;
 
@@ -26,17 +27,20 @@ $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'raised segment']);
     ->on('click', new JsReload($seg, ['m' => 'stat']));
 
 $form = Form::addTo($seg, ['layout' => [Form\Layout\Columns::class]]);
-$form->setModel(
+$form->setModel((
     isset($_GET['m']) ? (
         $_GET['m'] === 'country' ? new Country($app->db) : (
             $_GET['m'] === 'file' ? new File($app->db) : new Stat($app->db)
         )
     ) : new Stat($app->db)
-)->tryLoadAny();
+)->tryLoadAny());
 
 $form->onSubmit(function (Form $form) {
     $errors = [];
-    foreach ($form->model->dirty as $field => $value) {
+    $modelDirty = \Closure::bind(function () use ($form): array { // TODO Model::dirty property is private
+        return $form->model->dirty;
+    }, null, Model::class)();
+    foreach ($modelDirty as $field => $value) {
         // we should care only about editable fields
         if ($form->model->getField($field)->isEditable()) {
             $errors[] = $form->error($field, 'Value was changed, ' . $form->getApp()->encodeJson($value) . ' to ' . $form->getApp()->encodeJson($form->model->get($field)));

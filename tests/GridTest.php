@@ -6,7 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Ui\Table;
 
-class GridTest extends \Atk4\Core\AtkPhpunit\TestCase
+class GridTest extends \Atk4\Core\Phpunit\TestCase
 {
     use Concerns\HandlesTable;
 
@@ -21,7 +21,7 @@ class GridTest extends \Atk4\Core\AtkPhpunit\TestCase
         $this->m = new MyModel(new \Atk4\Data\Persistence\Array_($a));
     }
 
-    public function test1()
+    public function test1(): void
     {
         $t = new Table();
         $t->invokeInit();
@@ -37,7 +37,7 @@ class GridTest extends \Atk4\Core\AtkPhpunit\TestCase
         );
     }
 
-    public function test1a()
+    public function test1a(): void
     {
         $t = new Table();
         $t->invokeInit();
@@ -53,7 +53,7 @@ class GridTest extends \Atk4\Core\AtkPhpunit\TestCase
         );
     }
 
-    public function test2()
+    public function test2(): void
     {
         $t = new Table();
         $t->invokeInit();
@@ -67,7 +67,7 @@ class GridTest extends \Atk4\Core\AtkPhpunit\TestCase
         );
     }
 
-    public function test3()
+    public function test3(): void
     {
         $t = new Table();
         $t->invokeInit();

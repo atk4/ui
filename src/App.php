@@ -7,22 +7,24 @@ namespace Atk4\Ui;
 use Atk4\Core\AppScopeTrait;
 use Atk4\Core\DiContainerTrait;
 use Atk4\Core\DynamicMethodTrait;
+use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Core\InitializerTrait;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationException;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
+use Atk4\Ui\UserAction\ExecutorFactory;
 use Psr\Log\LoggerInterface;
 
 class App
 {
+    use AppScopeTrait;
+    use DiContainerTrait;
+    use DynamicMethodTrait;
+    use HookTrait;
     use InitializerTrait {
         init as _init;
     }
-    use HookTrait;
-    use DynamicMethodTrait;
-    use AppScopeTrait;
-    use DiContainerTrait;
 
     /** @const string */
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
@@ -39,12 +41,15 @@ class App
         'atk' => 'https://raw.githack.com/atk4/ui/develop/public',
         'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7',
+        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8',
         'flatpickr' => 'https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.6',
     ];
 
+    /** @var ExecutorFactory App wide executor factory object for Model user action. */
+    protected $executorFactory;
+
     /** @var string Version of Agile UI */
-    public $version = '2.4-x';
+    public $version = '3.1-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -108,7 +113,7 @@ class App
     /** @var View For internal use */
     public $html;
 
-    /** @var LoggerInterface Target for objects with DebugTrait */
+    /** @var LoggerInterface|null Target for objects with DebugTrait */
     public $logger;
 
     /** @var Persistence|Persistence\Sql */
@@ -118,6 +123,9 @@ class App
     protected $response_headers = [
         'cache-control' => 'no-store', // disable caching by default
     ];
+
+    /** @var Modal[] Modal view that need to be rendered using json output. */
+    private $modals = [];
 
     /**
      * @var bool whether or not semantic-ui vue has been initialised
@@ -196,7 +204,7 @@ class App
         if ($this->catch_exceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
             set_error_handler(
-                static function ($severity, $msg, $file, $line) {
+                static function (int $severity, string $msg, string $file, int $line): bool {
                     throw new \ErrorException($msg, 0, $severity, $file, $line);
                 },
                 \E_ALL
@@ -212,6 +220,30 @@ class App
         if (!isset($this->ui_persistence)) {
             $this->ui_persistence = new UiPersistence();
         }
+
+        // setting up default executor factory.
+        $this->executorFactory = Factory::factory([ExecutorFactory::class]);
+    }
+
+    /**
+     * Register a modal view.
+     * Fomantic-ui Modal are teleported in HTML template
+     * within specific location. This will keep track
+     * of modals when terminating app using json.
+     */
+    public function registerModal(Modal $modal): void
+    {
+        $this->modals[$modal->short_name] = $modal;
+    }
+
+    public function setExecutorFactory(ExecutorFactory $factory)
+    {
+        $this->executorFactory = $factory;
+    }
+
+    public function getExecutorFactory(): ExecutorFactory
+    {
+        return $this->executorFactory;
     }
 
     protected function setupTemplateDirs()
@@ -225,26 +257,27 @@ class App
         $this->template_dir[] = dirname(__DIR__) . '/template/' . $this->skin;
     }
 
-    /**
-     * @param bool $for_shutdown if true will not pass in caughtException method
-     */
-    public function callExit($for_shutdown = false): void
+    protected function callBeforeExit(): void
     {
         if (!$this->exit_called) {
             $this->exit_called = true;
             $this->hook(self::HOOK_BEFORE_EXIT);
         }
+    }
 
-        if ($for_shutdown) {
-            return;
-        }
+    /**
+     * @return never
+     */
+    public function callExit(): void
+    {
+        $this->callBeforeExit();
 
         if (!$this->call_exit) {
             // case process is not in shutdown mode
             // App as already done everything
             // App need to stop output
             // set_handler to catch/trap any exception
-            set_exception_handler(function (\Throwable $t) {});
+            set_exception_handler(static function (\Throwable $t): void {});
             // raise exception to be trapped and stop execution
             throw new ExitApplicationException();
         }
@@ -282,7 +315,7 @@ class App
 
         // Process is already in shutdown/stop
         // no need of call exit function
-        $this->callExit(true);
+        $this->callBeforeExit();
     }
 
     /**
@@ -342,6 +375,8 @@ class App
      *
      * @param string|array $output  Array type is supported only for JSON response
      * @param string[]     $headers content-type header must be always set or consider using App::terminateHtml() or App::terminateJson() methods
+     *
+     * @return never
      */
     public function terminate($output = '', array $headers = []): void
     {
@@ -393,6 +428,9 @@ class App
         $this->callExit();
     }
 
+    /**
+     * @return never
+     */
     public function terminateHtml($output, array $headers = []): void
     {
         if ($output instanceof View) {
@@ -407,6 +445,9 @@ class App
         );
     }
 
+    /**
+     * @return never
+     */
     public function terminateJson($output, array $headers = []): void
     {
         if ($output instanceof View) {
@@ -526,8 +567,9 @@ class App
             $this->is_rendering = false;
             $this->hook(self::HOOK_BEFORE_OUTPUT);
 
-            if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
-                throw new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.');
+            if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catch_runaway_callbacks) {
+                throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
+                    ->addMoreInfo('callback', $_GET[Callback::URL_QUERY_TARGET]);
             }
 
             $output = $this->html->template->renderToHtml();
@@ -678,7 +720,7 @@ class App
         }
 
         // put URL together
-        $pageQuery = http_build_query($args, '', '&', PHP_QUERY_RFC3986);
+        $pageQuery = http_build_query($args, '', '&', \PHP_QUERY_RFC3986);
         $url = $pagePath . ($pageQuery ? '?' . $pageQuery : '');
 
         return $url;
@@ -823,12 +865,10 @@ class App
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
      * @param string|array $tag
-     * @param string       $attr
+     * @param string|array $attr
      * @param string|array $value
-     *
-     * @return string
      */
-    public function getTag($tag = null, $attr = null, $value = null)
+    public function getTag($tag = null, $attr = null, $value = null): string
     {
         if ($tag === null) {
             $tag = 'div';
@@ -891,7 +931,7 @@ class App
         }
 
         if (!$attr) {
-            return "<{$tag}>" . ($value !== null ? $value . "</{$tag}>" : '');
+            return '<' . $tag . '>' . ($value !== null ? $value . '</' . $tag . '>' : '');
         }
         $tmp = [];
         if (substr($tag, -1) === '/') {
@@ -907,15 +947,15 @@ class App
                 continue;
             }
             if ($val === true) {
-                $tmp[] = "{$key}";
+                $tmp[] = $key;
             } elseif ($key === 0) {
                 $tag = $val;
             } else {
-                $tmp[] = "{$key}=\"" . $this->encodeAttribute($val) . '"';
+                $tmp[] = $key . '="' . $this->encodeAttribute($val) . '"';
             }
         }
 
-        return "<{$tag}" . ($tmp ? (' ' . implode(' ', $tmp)) : '') . $postfix . '>' . ($value !== null ? $value . "</{$tag}>" : '');
+        return '<' . $tag . ($tmp ? (' ' . implode(' ', $tmp)) : '') . $postfix . '>' . ($value !== null ? $value . '</' . $tag . '>' : '');
     }
 
     /**
@@ -940,19 +980,19 @@ class App
 
     public function decodeJson(string $json)
     {
-        $data = json_decode($json, true, 512, JSON_BIGINT_AS_STRING | JSON_THROW_ON_ERROR);
+        $data = json_decode($json, true, 512, \JSON_BIGINT_AS_STRING | \JSON_THROW_ON_ERROR);
 
         return $data;
     }
 
     public function encodeJson($data, bool $forceObject = false): string
     {
-        $options = JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT;
+        $options = \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT;
         if ($forceObject) {
-            $options |= JSON_FORCE_OBJECT;
+            $options |= \JSON_FORCE_OBJECT;
         }
 
-        $json = json_encode($data, $options | JSON_THROW_ON_ERROR, 512);
+        $json = json_encode($data, $options | \JSON_THROW_ON_ERROR, 512);
 
         // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
         // replace large JSON integers only, do not replace anything in JSON/JS strings
@@ -976,7 +1016,7 @@ class App
      *   $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
      *   $app->layout->template->dangerouslySetHtml('Content', $e->getHtml());
      *   $app->run();
-     *   $app->callExit(true);
+     *   $app->callBeforeExit();
      */
     public function renderExceptionHtml(\Throwable $exception): string
     {
@@ -999,7 +1039,7 @@ class App
                     }
 
                     // call with true to trigger beforeExit event
-                    $this->callExit(true);
+                    $this->callBeforeExit();
                 }
             }
         );
@@ -1107,11 +1147,9 @@ class App
         unset($_GET['__atk_reload']);
 
         $modals = [];
-        foreach ($this->html !== null ? $this->html->elements : [] as $view) {
-            if ($view instanceof Modal) {
-                $modals[$view->name]['html'] = $view->getHtml();
-                $modals[$view->name]['js'] = $view->getJsRenderActions();
-            }
+        foreach ($this->modals as $view) {
+            $modals[$view->name]['html'] = $view->getHtml();
+            $modals[$view->name]['js'] = $view->getJsRenderActions();
         }
 
         return $modals;

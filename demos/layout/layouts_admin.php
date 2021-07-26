@@ -37,7 +37,7 @@ $layout->template->set('Footer', 'ATK is awesome');
 \Atk4\Ui\Header::addTo($layout, ['Basic Form Example']);
 
 $form = \Atk4\Ui\Form::addTo($layout, ['segment']);
-$form->setModel(new \Atk4\Data\Model());
+$form->setModel((new \Atk4\Data\Model())->createEntity());
 
 $formGroup = $form->addGroup('Name');
 $formGroup->addControl('first_name', ['width' => 'eight']);

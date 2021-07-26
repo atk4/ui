@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-// log coverage for test-suite
-
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Driver\Driver;
 use SebastianBergmann\CodeCoverage\Filter;
@@ -19,7 +17,7 @@ final class CoverageUtil
         // zeroton
     }
 
-    public static function start()
+    public static function start(): void
     {
         if (self::$coverage !== null) {
             throw new \Error('Coverage already started');
@@ -31,7 +29,7 @@ final class CoverageUtil
         self::$coverage->start($_SERVER['SCRIPT_NAME']);
     }
 
-    public static function saveData()
+    public static function saveData(): void
     {
         self::$coverage->stop();
         $writer = new Report\PHP();

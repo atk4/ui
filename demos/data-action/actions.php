@@ -21,7 +21,7 @@ $action = $files->addUserAction(
     [
         // Which fields may be edited for the action. Default to all fields.
         // ModalExecutor for example, will only display fields set in this array.
-        'fields' => ['name'],
+        'fields' => [$files->fieldName()->name],
         // callback function to call in model when action execute.
         // Can use a closure function or model method.
         'callback' => 'importFromFilesystem',
@@ -60,11 +60,12 @@ Header::addTo($rightColumn, [
 // Explicitly adding an Action executor.
 $executor = UserAction\JsCallbackExecutor::addTo($rightColumn);
 // Passing Model action to executor and action argument via url.
-$executor->setAction($action, ['path' => '.']);
+$executor->setAction($action);
 // Setting user response after model action get execute.
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($t, $m) {
     return new \Atk4\Ui\JsToast('Files imported');
 });
+$executor->executeModelAction(['path' => '.']);
 
 $btn = \Atk4\Ui\Button::addTo($rightColumn, ['Import File']);
 $btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);
@@ -82,7 +83,7 @@ $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x) {
 View::addTo($rightColumn, ['ui' => 'hidden divider']);
 
 Header::addTo($rightColumn, ['PreviewExecutor']);
-$executor = UserAction\PreviewExecutor::addTo($rightColumn);
+$executor = UserAction\PreviewExecutor::addTo($rightColumn, ['executorButton' => [Button::class, 'Confirm', 'primary']]);
 $executor->setAction($action);
 $executor->ui = 'segment';
 $executor->previewType = 'console';
@@ -99,7 +100,7 @@ $executor->ui = 'segment';
 $executor->description = 'Only fields set in $action[field] array will be added in form.';
 $executor->setArguments(['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \Atk4\Ui\JsToast('Confirm! ' . $x->action->getModel()->get('name'));
+    return new \Atk4\Ui\JsToast('Confirm! ' . $x->action->getEntity()->name);
 });
 
 View::addTo($leftColumn, ['ui' => 'hidden divider']);

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Core\DebugTrait;
+use Atk4\Core\TraitUtil;
+
 /**
  * Console is a black square component resembling terminal window. It can be programmed
  * to run a job and output results to the user.
@@ -91,7 +94,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             $this->sseInProgress = true;
 
             if ($this->issetApp()) {
-                $old_logger = $this->getApp()->logger;
+                $oldLogger = $this->getApp()->logger;
                 $this->getApp()->logger = $this;
             }
 
@@ -118,7 +121,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }
 
             if ($this->issetApp()) {
-                $this->getApp()->logger = $old_logger;
+                $this->getApp()->logger = $oldLogger; // @phpstan-ignore-line
             }
 
             $this->sseInProgress = false;
@@ -213,7 +216,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * This method can be executed from inside callback or
      * without it.
      *
-     * Example: runCommand('ping', ['-c', '5', '8.8.8.8']);
+     * Example: $console->exec('ping', ['-c', '5', '8.8.8.8']);
      *
      * All arguments are escaped.
      */
@@ -267,7 +270,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }
         }
 
-        $this->last_exit_code = $stat['exitcode'];
+        $this->last_exit_code = $stat['exitcode']; // @phpstan-ignore-line
 
         return $this->last_exit_code ? false : $this;
     }
@@ -307,7 +310,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     }
 
     /**
-     * Execute method of a certain object. If object uses atk4/core/DebugTrait,
+     * Execute method of a certain object. If object uses Atk4\Core\DebugTrait,
      * then debugging will also be used.
      *
      * During the invocation, Console will substitute $app->logger with itself,
@@ -343,11 +346,11 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
         if (is_object($object)) {
             // temporarily override app logging
-            if (isset($object->_appScopeTrait) && $object->issetApp()) {
+            if (TraitUtil::hasAppScopeTrait($object) && $object->issetApp()) {
                 $loggerBak = $object->getApp()->logger;
                 $object->getApp()->logger = $this;
             }
-            if (isset($object->_debugTrait)) {
+            if (TraitUtil::hasTrait($object, DebugTrait::class)) {
                 $debugBak = $object->debug;
                 $object->debug = true;
             }
@@ -357,11 +360,11 @@ class Console extends View implements \Psr\Log\LoggerInterface
             try {
                 $result = $object->{$method}(...$args);
             } finally {
-                if (isset($object->_appScopeTrait) && $object->issetApp()) {
-                    $object->getApp()->logger = $loggerBak;
+                if (TraitUtil::hasAppScopeTrait($object) && $object->issetApp()) {
+                    $object->getApp()->logger = $loggerBak; // @phpstan-ignore-line
                 }
-                if (isset($object->_debugTrait)) {
-                    $object->debug = $debugBak;
+                if (TraitUtil::hasTrait($object, DebugTrait::class)) {
+                    $object->debug = $debugBak; // @phpstan-ignore-line
                 }
             }
         } elseif (is_string($object)) {

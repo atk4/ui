@@ -157,7 +157,7 @@ class Lookup extends Input
         $this->callback = \Atk4\Ui\Callback::addTo($this);
 
         $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () {
-            $this->callback->set([$this, 'outputApiResponse']);
+            $this->callback->set(\Closure::fromCallable([$this, 'outputApiResponse']));
         });
     }
 
@@ -171,6 +171,8 @@ class Lookup extends Input
 
     /**
      * Generate API response.
+     *
+     * @return never
      */
     public function outputApiResponse()
     {
@@ -430,7 +432,7 @@ class Lookup extends Input
         if ($this->field && $this->field->get()) {
             $id_field = $this->id_field ?: $this->model->id_field;
 
-            $this->model->tryLoadBy($id_field, $this->field->get());
+            $this->model = $this->model->tryLoadBy($id_field, $this->field->get());
 
             if ($this->model->loaded()) {
                 $row = $this->renderRow($this->model);
@@ -450,8 +452,6 @@ class Lookup extends Input
      * Convert value to expected comma separated list before setting it.
      *
      * {@inheritdoc}
-     *
-     * @see \Atk4\Ui\Form\Control::set()
      */
     public function set($value = null, $junk = null)
     {

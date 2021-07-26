@@ -8,13 +8,14 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
-use Atk4\Ui\Callback;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form\Control;
 use Atk4\Ui\HtmlTemplate;
 
 class ScopeBuilder extends Control
 {
+    use VueLookupTrait;
+
     /** @var bool Do not render label for this input. */
     public $renderLabel = false;
 
@@ -102,9 +103,6 @@ class ScopeBuilder extends Control
      * @var array
      */
     public $labels = [];
-
-    /** @var Callback */
-    public $dataCb;
 
     /**
      * Default VueQueryBuilder query.
@@ -332,6 +330,11 @@ class ScopeBuilder extends Control
         }
     }
 
+    public function getModel()
+    {
+        return $this->model;
+    }
+
     /**
      * Set the model to build scope for.
      *
@@ -341,39 +344,11 @@ class ScopeBuilder extends Control
     {
         $model = parent::setModel($model);
 
-        if (!$this->dataCb) {
-            $this->dataCb = Callback::addTo($this);
-        }
-        $this->dataCb->set([$this, 'outputApiResponse']);
+        $this->initVueLookupCallback();
 
         $this->buildQuery($model);
 
         return $model;
-    }
-
-    /**
-     * Output lookup search query data.
-     */
-    public function outputApiResponse()
-    {
-        $fieldName = $_GET['atk_vlookup_field'] ?? null;
-        $query = $_GET['atk_vlookup_q'] ?? null;
-        $data = [];
-        if ($fieldName) {
-            $model = $this->model->getField($fieldName)->reference->refModel();
-            $refFieldName = $this->model->getField($fieldName)->reference->getTheirFieldName();
-            if (!empty($query)) {
-                $model->addCondition($model->title_field, 'like', '%' . $query . '%');
-            }
-            foreach ($model as $row) {
-                $data[] = ['key' => $row->get($refFieldName), 'text' => $row->getTitle(), 'value' => $row->get($refFieldName)];
-            }
-        }
-
-        $this->getApp()->terminateJson([
-            'success' => true,
-            'results' => $data,
-        ]);
     }
 
     /**
@@ -411,7 +386,7 @@ class ScopeBuilder extends Control
     {
         if ($field->enum || $field->values) {
             $type = 'enum';
-        } elseif ($field->reference) {
+        } elseif ($field->getReference() !== null) {
             $type = 'lookup';
         } else {
             $type = $field->type;
@@ -440,7 +415,7 @@ class ScopeBuilder extends Control
             $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
         }
 
-        if ($field->reference) {
+        if ($field->getReference() !== null) {
             $props['url'] = $this->dataCb->getUrl();
             $props['reference'] = $field->short_name;
             $props['search'] = true;
@@ -481,7 +456,8 @@ class ScopeBuilder extends Control
      */
     protected function addReferenceRules(Field $field): self
     {
-        if ($reference = $field->reference) {
+        $reference = $field->getReference();
+        if ($reference !== null) {
             // add the number of records rule
             $this->rules[] = $this->getRule('numeric', [
                 'id' => $reference->link . '/#',
@@ -541,12 +517,12 @@ class ScopeBuilder extends Control
         }
         if ($field->values && is_array($field->values)) {
             $items = array_chunk($field->values, $limit, true)[0];
-        } elseif ($field->reference) {
-            $model = $field->reference->refModel();
+        } elseif ($field->getReference()) {
+            $model = $field->getReference()->refModel();
             $model->setLimit($limit);
 
             foreach ($model as $item) {
-                $items[$item->get($field->reference->getTheirFieldName())] = $item->get($model->title_field);
+                $items[$item->get($field->getReference()->getTheirFieldName())] = $item->get($model->title_field);
             }
         }
 
@@ -653,7 +629,6 @@ class ScopeBuilder extends Control
 
                 break;
             default:
-
                 break;
         }
 
@@ -770,8 +745,9 @@ class ScopeBuilder extends Control
         $option = null;
         switch ($type) {
             case 'lookup':
-                $model = $condition->getModel()->getField($condition->key)->reference->refModel();
-                $fieldName = $condition->getModel()->getField($condition->key)->reference->getTheirFieldName();
+                $reference = $condition->getModel()->getField($condition->key)->getReference();
+                $model = $reference->refModel();
+                $fieldName = $reference->getTheirFieldName();
                 $rec = $model->tryLoadBy($fieldName, $value);
                 if ($rec->loaded()) {
                     $option = [
@@ -793,6 +769,7 @@ class ScopeBuilder extends Control
      * @param string $value
      *
      * @return string
+     * @phpstan-return non-empty-string
      */
     public static function detectDelimiter($value)
     {

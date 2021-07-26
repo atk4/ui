@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\Lister;
 
 /**
  * Input element for a form control.
@@ -36,7 +37,7 @@ class Radio extends Form\Control
     {
         parent::init();
 
-        $this->lister = \Atk4\Ui\Lister::addTo($this, [], ['Radio']);
+        $this->lister = Lister::addTo($this, [], ['Radio']);
         $this->lister->t_row->set('_name', $this->short_name);
     }
 
@@ -55,7 +56,7 @@ class Radio extends Form\Control
             $this->addClass('disabled');
         }
 
-        $this->lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) use ($value) {
+        $this->lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) use ($value) {
             if ($this->readonly) {
                 $lister->t_row->set('disabled', $value !== (string) $lister->model->getId() ? 'disabled="disabled"' : '');
             } elseif ($this->disabled) {

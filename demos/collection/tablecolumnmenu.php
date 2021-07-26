@@ -49,10 +49,10 @@ $grid->setModel(new Country($app->db));
 $grid->ipp = 5;
 
 // Adding a dropdown menu to the column 'name'.
-$grid->addDropdown('name', ['Rename', 'Delete'], function ($item) {
+$grid->addDropdown(Country::hinting()->fieldName()->name, ['Rename', 'Delete'], function ($item) {
     return $item;
 });
 
 // Adding a popup view to the column 'iso'
-$pop = $grid->addPopup('iso');
+$pop = $grid->addPopup(Country::hinting()->fieldName()->iso);
 \Atk4\Ui\Text::addTo($pop)->set('Grid column popup');

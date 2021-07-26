@@ -71,20 +71,20 @@ class Status extends Table\Column
         }
 
         switch ($cl) {
-        case 'positive':
-            $ic = 'checkmark';
+            case 'positive':
+                $ic = 'checkmark';
 
-            break;
-        case 'negative':
-            $ic = 'close';
+                break;
+            case 'negative':
+                $ic = 'close';
 
-            break;
-        case 'default':
-            $ic = 'question';
+                break;
+            case 'default':
+                $ic = 'question';
 
-            break;
-        default:
-            $ic = '';
+                break;
+            default:
+                $ic = '';
         }
 
         return [

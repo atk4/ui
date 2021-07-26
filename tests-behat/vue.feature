@@ -3,7 +3,7 @@ Feature: Vue
 
   Scenario: testing InlineEdit
     Given I am on "javascript/vue-component.php"
-    When I fill in "name" with "test"
+    When I fill in "atk_fp_country__name" with "test"
     Then I should see "new value: test"
     Then I hide js modal
 

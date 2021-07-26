@@ -100,7 +100,7 @@ class Ui extends \Atk4\Data\Persistence
             case 'array':
             case 'object':
                 // don't encode if we already use some kind of serialization
-                $value = $f->serialize ? $value : json_encode($value, JSON_THROW_ON_ERROR);
+                $value = $f->serialize ? $value : json_encode($value, \JSON_THROW_ON_ERROR);
 
                 break;
         }
@@ -134,6 +134,10 @@ class Ui extends \Atk4\Data\Persistence
         }
 
         switch ($f->type) {
+            case 'integer':
+                $value = (int) $value;
+
+                break;
             case 'string':
             case 'text':
                 break;
@@ -179,7 +183,7 @@ class Ui extends \Atk4\Data\Persistence
                 break;
         }
 
-        if (isset($f->reference)) {
+        if ($f->getReference() !== null) {
             if (empty($value)) {
                 $value = null;
             }

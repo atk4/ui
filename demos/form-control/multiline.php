@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
+use Atk4\Ui\Form\Control\Multiline;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsFunction;
@@ -23,12 +24,17 @@ $timeFormat = $app->ui_persistence->time_format;
 $inventoryItemClass = get_class(new class() extends Model {
     public $dateFormat;
     public $timeFormat;
+    public $countryPersistence;
 
     protected function init(): void
     {
         parent::init();
 
-        $this->addField('item', ['required' => true, 'default' => 'item']);
+        $this->addField('item', [
+            'required' => true,
+            'default' => 'item',
+            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
+        ]);
         $this->addField('inv_date', [
             'default' => date($this->dateFormat),
             'type' => 'date',
@@ -40,7 +46,7 @@ $inventoryItemClass = get_class(new class() extends Model {
                     return $v;
                 },
             ],
-            'ui' => ['multiline' => ['width' => 3]],
+            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->addField('inv_time', [
             'default' => date($this->timeFormat),
@@ -53,40 +59,61 @@ $inventoryItemClass = get_class(new class() extends Model {
                     return $v;
                 },
             ],
-            'ui' => ['multiline' => ['width' => 3]],
+            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
-        $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
-        $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
-        $this->addExpression('total', ['expr' => function (Model $row) {
-            return $row->get('qty') * $row->get('box');
-        }, 'type' => 'integer']);
+        $this->hasOne('country', [
+            'model' => new Country($this->countryPersistence),
+            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 3]]],
+        ]);
+        $this->addField('qty', [
+            'type' => 'integer',
+            'caption' => 'Qty / Box',
+            'default' => 1,
+            'required' => true,
+            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
+        ]);
+        $this->addField('box', [
+            'type' => 'integer',
+            'caption' => '# of Boxes',
+            'default' => 1,
+            'required' => true,
+            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
+        ]);
+        $this->addExpression('total', [
+            'expr' => function (Model $row) {
+                return $row->get('qty') * $row->get('box');
+            },
+            'type' => 'integer',
+            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 1, 'class' => 'blue']]],
+        ]);
     }
 });
 
-$inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => $dateFormat, 'timeFormat' => $timeFormat]);
+$inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => $dateFormat, 'timeFormat' => $timeFormat, 'countryPersistence' => $app->db]);
 
 // Populate some data.
 $total = 0;
 for ($i = 1; $i < 3; ++$i) {
-    $inventory2 = clone $inventory;
-    $inventory2->set('id', $i);
-    $inventory2->set('inv_date', date($dateFormat));
-    $inventory2->set('inv_time', date($timeFormat));
-    $inventory2->set('item', 'item_' . $i);
-    $inventory2->set('qty', random_int(10, 100));
-    $inventory2->set('box', random_int(1, 10));
-    $total = $total + ($inventory2->get('qty') * $inventory2->get('box'));
-    $inventory2->saveAndUnload();
+    $entity = $inventory->createEntity();
+    $entity->set('id', $i);
+    $entity->set('inv_date', date($dateFormat));
+    $entity->set('inv_time', date($timeFormat));
+    $entity->set('item', 'item_' . $i);
+    $entity->set('country', random_int(1, 100));
+    $entity->set('qty', random_int(10, 100));
+    $entity->set('box', random_int(1, 10));
+    $total = $total + ($entity->get('qty') * $entity->get('box'));
+    $entity->saveAndUnload();
 }
 
 $form = Form::addTo($app);
-$form->addControl('test');
+
 // Add multiline field and set model.
-$multiline = $form->addControl('ml', [Form\Control\Multiline::class, 'options' => ['color' => 'blue'], 'rowLimit' => 10, 'addOnTab' => true]);
+$multiline = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
 $multiline->setModel($inventory);
 
 // Add total field.
-$sublayout = $form->layout->addSublayout([Form\Layout\Section\Columns::class]);
+$sublayout = $form->layout->addSubLayout([Form\Layout\Section\Columns::class]);
 $sublayout->addColumn(12);
 $column = $sublayout->addColumn(4);
 $controlTotal = $column->addControl('total', ['readonly' => true])->set($total);
@@ -95,8 +122,8 @@ $controlTotal = $column->addControl('total', ['readonly' => true])->set($total);
 $multiline->onLineChange(function ($rows, $form) use ($controlTotal) {
     $total = 0;
     foreach ($rows as $row => $cols) {
-        $qty = array_column($cols, 'qty')[0];
-        $box = array_column($cols, 'box')[0];
+        $qty = $cols['qty'] ?? 0;
+        $box = $cols['box'] ?? 0;
         $total = $total + ($qty * $box);
     }
 

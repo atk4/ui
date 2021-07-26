@@ -451,3 +451,40 @@ infrastructure, Linux and SSH. A good place to start is Heroku (https://www.hero
 We reference Heroku in our tutorials, but Agile Toolkit can work with any cloud
 hosting that runs PHP apps.
 
+
+Hosted Demo showing many functions
+==================================
+
+There's a demo available of atk4/ui which shows many of the modules and functions available
+in atk4.
+You can watch & use the source code of each example to find best practice examples and to see
+how to use atk4 in certain application cases.
+
+You can find the demo here:
+https://ui.agiletoolkit.org/demos/
+
+Local Demo/Sandpit
+=====================================
+When you download and install atk4 you will find a subdirectory called "demos" in the atk4
+repository which also could be locally executed.
+
+Setup the demo
+--------------
+
+To run the demo:
+ - Create a directory called "atk4" and create a separate folder for each repo (ui, data, etc.), in this case "ui"
+ - Fork the original repo into this directory
+ - Copy the file "db.default.php" from the "atk4/ui/demos" subdirectory
+ - Rename the copied file to "db.php"
+ - Open the renamed file and edit your database details accordingly to fit to your database
+ - Setup an Sqlite file database using a provided script (see below)
+ - Open the demos from your browser (e.g. https://localhost/atk4/ui/demos/)
+
+Setup Sqlite file database
+---------------------
+The demo also includes a script that let's you setup a Sqlite file database with an example data.
+You will find this script in the subdirectory "atk4/ui/demos/_demo-data/". To run this script,
+use the following command:
+    ```
+    php atk4/ui/demos/_demo-data/create-sqlite-db.php;
+    ```

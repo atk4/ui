@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\View;
 
 /**
  * Multiple tests to ensure that adding views through various patterns initializes them
  * nicely still.
  */
-class RenderTreeTest extends AtkPhpunit\TestCase
+class RenderTreeTest extends TestCase
 {
-    /**
-     * Test constructor.
-     */
-    public function testBasic()
+    public function testBasic(): void
     {
         $b = new View();
         $b->render();
@@ -25,7 +22,7 @@ class RenderTreeTest extends AtkPhpunit\TestCase
         $this->assertNotNull($b->template);
     }
 
-    public function testBasicNest1()
+    public function testBasicNest1(): void
     {
         $b = new View();
 

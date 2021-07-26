@@ -12,12 +12,14 @@ class GetAssets extends \Atk4\Ui\App
     public function requireJs($path, $isAsync = false, $isDefer = false)
     {
         $file = 'public/' . basename($path);
-        echo "Downloading {$path} into {$file}..\n";
+        echo 'Downloading ' . $path . ' into ' . $file . '...' . "\n";
         if (@copy($path, $file)) {
             echo "  ok\n";
         } else {
             echo "  failed\n";
         }
+
+        return $this;
     }
 
     public function requireCss($path)

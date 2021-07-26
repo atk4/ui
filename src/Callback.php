@@ -9,7 +9,7 @@ namespace Atk4\Ui;
  * executed directly will perform a PHP callback that you set().
  *
  * Callback function run when triggered, i.e. when it's urlTrigger param value is present in the $_GET request.
- * The current callback will be set within the $_GET['__atk_callback'] and will be set to urlTrigger as well.
+ * The current callback will be set within the $_GET[Callback::URL_QUERY_TARGET] and will be set to urlTrigger as well.
  *
  * $button = Button::addTo($layout);
  * $button->set('Click to do something')->link(
@@ -22,6 +22,12 @@ namespace Atk4\Ui;
  */
 class Callback extends AbstractView
 {
+    /** @const string */
+    public const URL_QUERY_TRIGGER_PREFIX = '__atk_cb_';
+
+    /** @const string */
+    public const URL_QUERY_TARGET = '__atk_cbtarget';
+
     /** @var string Specify a custom GET trigger. */
     protected $urlTrigger;
 
@@ -43,6 +49,8 @@ class Callback extends AbstractView
     public function setUrlTrigger(string $trigger = null)
     {
         $this->urlTrigger = $trigger ?: $this->name;
+
+        $this->getOwner()->stickyGet(self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger);
     }
 
     public function getUrlTrigger(): string
@@ -61,13 +69,7 @@ class Callback extends AbstractView
     public function set($fx = null, $args = null)
     {
         if ($this->isTriggered() && $this->canTrigger()) {
-            $this->getApp()->catch_runaway_callbacks = false;
-            $t = $this->getApp()->run_called;
-            $this->getApp()->run_called = true;
-            $ret = $fx(...($args ?? []));
-            $this->getApp()->run_called = $t;
-
-            return $ret;
+            return $fx(...($args ?? []));
         }
     }
 
@@ -86,7 +88,7 @@ class Callback extends AbstractView
      */
     public function isTriggered()
     {
-        return isset($_GET[$this->urlTrigger]);
+        return isset($_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger]);
     }
 
     /**
@@ -94,7 +96,7 @@ class Callback extends AbstractView
      */
     public function getTriggeredValue(): string
     {
-        return $_GET[$this->urlTrigger] ?? '';
+        return $_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger] ?? '';
     }
 
     /**
@@ -102,7 +104,7 @@ class Callback extends AbstractView
      */
     public function canTerminate(): bool
     {
-        return isset($_GET['__atk_callback']) && $_GET['__atk_callback'] === $this->urlTrigger;
+        return isset($_GET[self::URL_QUERY_TARGET]) && $_GET[self::URL_QUERY_TARGET] === $this->urlTrigger;
     }
 
     /**
@@ -115,12 +117,12 @@ class Callback extends AbstractView
 
     /**
      * Return URL that will trigger action on this call-back. If you intend to request
-     * the URL direcly in your browser (as iframe, new tab, or document location), you
+     * the URL directly in your browser (as iframe, new tab, or document location), you
      * should use getUrl instead.
      */
     public function getJsUrl(string $value = 'ajax'): string
     {
-        return $this->jsUrl($this->getUrlArguments($value));
+        return $this->getOwner()->jsUrl($this->getUrlArguments($value));
     }
 
     /**
@@ -129,7 +131,7 @@ class Callback extends AbstractView
      */
     public function getUrl(string $value = 'callback'): string
     {
-        return $this->url($this->getUrlArguments($value));
+        return $this->getOwner()->url($this->getUrlArguments($value));
     }
 
     /**
@@ -137,14 +139,6 @@ class Callback extends AbstractView
      */
     private function getUrlArguments(string $value = null): array
     {
-        return ['__atk_callback' => $this->urlTrigger, $this->urlTrigger => $value ?? $this->getTriggeredValue()];
-    }
-
-    protected function _getStickyArgs(): array
-    {
-        // DEV NOTE:
-        // - getUrlArguments $value used only in https://github.com/atk4/ui/blob/08644a685a9ee07b4e94d1e35e3bd3c95b7a013d/src/VirtualPage.php#L134
-        // - $_GET['__atk_callback'] from getUrlArguments seems to control terminating behaviour!
-        return array_merge(parent::_getStickyArgs(), $this->getUrlArguments() /* TODO we do not want/need all Callback args probably */);
+        return [self::URL_QUERY_TARGET => $this->urlTrigger, self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger => $value ?? $this->getTriggeredValue()];
     }
 }

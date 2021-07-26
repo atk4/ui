@@ -70,7 +70,7 @@ $form->onSubmit(function (Form $form) {
     $message = 'field = ' . print_r($form->model->get('field'), true) . '; <br> control = ' . print_r($form->model->get('control'), true);
     $view = new \Atk4\Ui\Message('Date field vs control:');
     $view->invokeInit();
-    $view->text->addHTML($message);
+    $view->text->addHtml($message);
 
     return $view;
 });
@@ -132,7 +132,7 @@ $form->onSubmit(function (Form $form) use ($control) {
 /////////////////////////////////////////////////////////////////////
 $tab = $tabs->addTab('Handler Safety');
 
-\Atk4\Ui\Header::addTo($tab, ['Form handles errors (PHP 7.0+)', 'size' => 2]);
+\Atk4\Ui\Header::addTo($tab, ['Form handles errors', 'size' => 2]);
 
 $form = Form::addTo($tab);
 $form->addControl('email');
@@ -174,6 +174,7 @@ $modelRegister = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_());
 $modelRegister->addField('name');
 $modelRegister->addField('email');
 $modelRegister->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);
+$modelRegister = $modelRegister->createEntity();
 
 $form = Form::addTo($tab, ['segment' => true]);
 $form->setModel($modelRegister);
@@ -195,7 +196,7 @@ $tab = $tabs->addTab('Layout Control');
 \Atk4\Ui\Header::addTo($tab, ['Shows example of grouping and multiple errors']);
 
 $form = Form::addTo($tab, ['segment']);
-$form->setModel(new \Atk4\Data\Model());
+$form->setModel((new \Atk4\Data\Model())->createEntity());
 
 $form->addHeader('Example fields added one-by-one');
 $form->addControl('name');

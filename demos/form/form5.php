@@ -62,6 +62,8 @@ $model->addField('five', ['ui' => ['form' => [Form\Control\Checkbox::class, 'cap
 // Form-specific caption overrides general caption of a field. Also you can specify object instead of seed
 $model->addField('six', ['caption' => 'badcaption', 'ui' => ['form' => new Form\Control\Checkbox(['caption' => 'Caption4'])]]);
 
+$model = $model->createEntity();
+
 $form = Form::addTo($cc->addColumn());
 $form->setModel($model);
 $form->onSubmit($formSubmit);

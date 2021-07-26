@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Button;
 use Atk4\Ui\View;
 
-class JsIntegrationTest extends AtkPhpunit\TestCase
+class JsIntegrationTest extends TestCase
 {
-    public function testIdIntegrity1()
+    public function testIdIntegrity1(): void
     {
         $v = new Button(['icon' => 'pencil']);
         $html = $v->render();
@@ -19,7 +19,7 @@ class JsIntegrationTest extends AtkPhpunit\TestCase
         $this->assertNotSame($v->id, $v->icon->id);
     }
 
-    public function testIdIntegrity2()
+    public function testIdIntegrity2(): void
     {
         $v = new View(['ui' => 'buttons']);
         $b1 = Button::addTo($v);
@@ -32,7 +32,7 @@ class JsIntegrationTest extends AtkPhpunit\TestCase
     /**
      * make sure that chain is crated correctly.
      */
-    public function testBasicChain1()
+    public function testBasicChain1(): void
     {
         $v = new Button(['id' => 'b']);
         $j = $v->js()->hide();
@@ -44,7 +44,7 @@ class JsIntegrationTest extends AtkPhpunit\TestCase
     /**
      * make sure that onReady chains are included in output.
      */
-    public function testBasicChain2()
+    public function testBasicChain2(): void
     {
         $v = new Button(['id' => 'b']);
         $j = $v->js(true)->hide();
@@ -59,7 +59,7 @@ $(function() {
     /**
      * make sure that js('event') chains are included in output with appropriate callback.
      */
-    public function testBasicChain3()
+    public function testBasicChain3(): void
     {
         $v = new Button(['id' => 'b']);
         $v->js('click')->hide();
@@ -76,7 +76,7 @@ $(function() {
     /**
      * make sure that on('event', js) chains are included in output.
      */
-    public function testBasicChain4()
+    public function testBasicChain4(): void
     {
         $bb = new View(['ui' => 'buttons']);
         $b1 = Button::addTo($bb, ['id' => 'b1']);

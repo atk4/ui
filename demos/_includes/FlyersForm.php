@@ -39,7 +39,11 @@ class FlyersForm extends Form
             'dependency' => function ($model, $data) {
                 isset($data['contains']) ? $model->addCondition('name', 'like', '%' . $data['contains'] . '%') : null;
             },
-            'search' => ['name', 'iso', 'iso3'],
+            'search' => [
+                \Atk4\Ui\Demos\Country::hinting()->fieldName()->name,
+                \Atk4\Ui\Demos\Country::hinting()->fieldName()->iso,
+                \Atk4\Ui\Demos\Country::hinting()->fieldName()->iso3,
+            ],
             'caption' => 'Destination',
             'placeholder' => 'Select your destination',
         ], ['required' => true]);

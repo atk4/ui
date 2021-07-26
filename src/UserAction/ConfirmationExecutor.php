@@ -6,6 +6,7 @@ namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
+use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\JsExpressionable;
@@ -97,6 +98,11 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         return [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])];
     }
 
+    public function getAction(): UserAction
+    {
+        return $this->action;
+    }
+
     /**
      * Will associate executor with the action.
      *
@@ -112,7 +118,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
         $this->actionInitialized = true;
         $this->jsSetBtnState($this);
-        $this->doSteps();
 
         return $this;
     }
@@ -120,11 +125,11 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Perform this action steps.
      */
-    public function doSteps()
+    public function executeModelAction()
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action->getOwner()->tryLoad($id);
+            $this->action->setEntity($this->action->getModel()->tryLoad($id));
         }
 
         $this->loader->set(function ($modal) {
@@ -161,10 +166,10 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
                 'click',
                 new JsFunction(
                     [
-                        $this->loader->jsload(
+                        $this->loader->jsLoad(
                             [
                                 'step' => 'exec',
-                                $this->name => $this->action->getOwner()->get('id'),
+                                $this->name => $this->action->getEntity()->getId(),
                             ],
                             ['method' => 'post']
                         ),
@@ -201,19 +206,16 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     {
         $return = $this->action->execute([]);
 
-        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->getOwner()->getId()));
+        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->getEntity()->getId()));
     }
 
     /**
      * Return proper js statement when action execute.
-     *
-     * @param $obj
-     * @param $id
      */
     protected function jsGetExecute($obj, $id): array
     {
         $success = $this->jsSuccess instanceof \Closure
-            ? ($this->jsSuccess)($this, $this->action->getOwner(), $id)
+            ? ($this->jsSuccess)($this, $this->action->getModel(), $id)
             : $this->jsSuccess;
 
         return [

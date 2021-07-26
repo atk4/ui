@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence\Static_;
+use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**
  * Implements a most core view, which all of the other components descend
@@ -40,7 +40,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * @var string
      */
-    public $region; //'Content';
+    public $region;
 
     /**
      * Enables UI keyword for Semantic UI indicating that this is a
@@ -120,6 +120,8 @@ class View extends AbstractView implements JsExpressionable
      */
     public $element;
 
+    /** @var ExecutorFactory Seed class name */
+    public $executorFactory;
     // }}}
 
     // {{{ Setting Things up
@@ -198,7 +200,7 @@ class View extends AbstractView implements JsExpressionable
             }
         }
 
-        $this->setModel(new Model(new Static_($data)), $fields);
+        $this->setModel(new Model(new Static_($data)), $fields); // @phpstan-ignore-line
         $this->model->getField($this->model->id_field)->type = null; // TODO probably unwanted
 
         return $this->model;
@@ -308,6 +310,11 @@ class View extends AbstractView implements JsExpressionable
         }
     }
 
+    public function getExecutorFactory(): ExecutorFactory
+    {
+        return $this->executorFactory ?? $this->getApp()->getExecutorFactory();
+    }
+
     /**
      * In addition to adding a child object, sets up it's template
      * and associate it's output with the region in our template.
@@ -391,8 +398,8 @@ class View extends AbstractView implements JsExpressionable
      * Override this method without compatibility with parent, if you wish
      * to set your own things your own way for your view.
      *
-     * @param string|array $arg1
-     * @param string|null  $arg2
+     * @param mixed $arg1
+     * @param mixed $arg2
      *
      * @return $this
      */
@@ -576,6 +583,71 @@ class View extends AbstractView implements JsExpressionable
 
     // }}}
 
+    // {{{ Sticky URLs
+
+    /** @var string[] stickyGet arguments */
+    public $stickyArgs = [];
+
+    /**
+     * Build an URL which this view can use for js call-backs. It should
+     * be guaranteed that requesting returned URL would at some point call
+     * $this->invokeInit().
+     *
+     * @param array $page
+     *
+     * @return string
+     */
+    public function jsUrl($page = [])
+    {
+        return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
+    }
+
+    /**
+     * Build an URL which this view can use for call-backs. It should
+     * be guaranteed that requesting returned URL would at some point call
+     * $this->invokeInit().
+     *
+     * @param string|array $page URL as string or array with page name as first element and other GET arguments
+     *
+     * @return string
+     */
+    public function url($page = [])
+    {
+        return $this->getApp()->url($page, false, $this->_getStickyArgs());
+    }
+
+    /**
+     * Get sticky arguments defined by the view and parents (including API).
+     */
+    protected function _getStickyArgs(): array
+    {
+        if ($this->issetOwner() && $this->getOwner() instanceof self) {
+            $stickyArgs = array_merge($this->getOwner()->_getStickyArgs(), $this->stickyArgs);
+        } else {
+            $stickyArgs = $this->stickyArgs;
+        }
+
+        return $stickyArgs;
+    }
+
+    /**
+     * Mark GET argument as sticky. Calling url() on this view or any
+     * sub-views will embedd the value of this GET argument.
+     *
+     * If GET argument is empty or false, it won't make into URL.
+     *
+     * If GET argument is not presently set you can specify a 2nd argument
+     * to forge-set the GET argument for current view and it's sub-views.
+     */
+    public function stickyGet(string $name, string $newValue = null): ?string
+    {
+        $this->stickyArgs[$name] = $newValue ?? $_GET[$name] ?? null;
+
+        return $this->stickyArgs[$name];
+    }
+
+    // }}}
+
     // {{{ Rendering
 
     /**
@@ -686,7 +758,7 @@ class View extends AbstractView implements JsExpressionable
         $this->renderAll();
 
         return $this->getJs($forceReturn)
-            . $this->renderTemplateToHtml();
+               . $this->renderTemplateToHtml();
     }
 
     /**
@@ -786,7 +858,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * @param string|bool|null $when     Event when chain will be executed
      * @param JsExpression     $action   JavaScript action
-     * @param string           $selector If you wish to override jQuery($selector)
+     * @param string|View|null $selector If you wish to override jQuery($selector)
      *
      * @return Jquery
      */
@@ -834,13 +906,13 @@ class View extends AbstractView implements JsExpressionable
      * ex: atk.vueService.getVue().component('external_component', externalComponent). This is the same
      * as Vue.component() method.
      *
-     * @param string      $component           The component name;
-     * @param array       $initData            The component properties passed as the initData prop.
-     *                                         This is the initial data pass to your main component via the initData bind property
-     *                                         of the vue component instance created via the vueService.
-     * @param string|null $componentDefinition The name of the js var holding a component definition object.
-     *                                         This var must be defined and accessible in window object. window['var_name']
-     * @param string      $selector            the selector for creating the base root object in Vue
+     * @param string           $component           The component name;
+     * @param array            $initData            The component properties passed as the initData prop.
+     *                                              This is the initial data pass to your main component via the initData bind property
+     *                                              of the vue component instance created via the vueService.
+     * @param string|null      $componentDefinition The name of the js var holding a component definition object.
+     *                                              This var must be defined and accessible in window object. window['var_name']
+     * @param string|View|null $selector            the selector for creating the base root object in Vue
      *
      * @return $this
      */
@@ -887,8 +959,8 @@ class View extends AbstractView implements JsExpressionable
      */
     public function jsGetStoreData()
     {
-        $data['local'] = json_decode($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null', true, 512, JSON_THROW_ON_ERROR);
-        $data['session'] = json_decode($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null', true, 512, JSON_THROW_ON_ERROR);
+        $data['local'] = json_decode($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null', true, 512, \JSON_THROW_ON_ERROR);
+        $data['session'] = json_decode($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null', true, 512, \JSON_THROW_ON_ERROR);
 
         return $data;
     }
@@ -930,7 +1002,7 @@ class View extends AbstractView implements JsExpressionable
             throw new Exception('View property name needs to be set.');
         }
 
-        return (new JsChain('atk.dataService'))->addJsonData($name, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR), $type);
+        return (new JsChain('atk.dataService'))->addJsonData($name, json_encode($data, \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR), $type);
     }
 
     /**
@@ -980,8 +1052,8 @@ class View extends AbstractView implements JsExpressionable
      * @see http://agile-ui.readthedocs.io/en/latest/js.html
      *
      * @param string                            $event    JavaScript event
-     * @param string                            $selector Optional jQuery-style selector
-     * @param JsChain|\Closure|Model\UserAction $action   code to execute or \Atk4\Data\UserAction
+     * @param string|View|JsExpressionable|null $selector Optional jQuery-style selector
+     * @param mixed                             $action   code to execute
      * @param array                             $defaults Options
      *
      * @return Jquery
@@ -1045,29 +1117,10 @@ class View extends AbstractView implements JsExpressionable
             }, $arguments);
 
             $actions[] = $cb;
-        } elseif ($action instanceof Model\UserAction) {
+        } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof Model\UserAction) {
             // Setup UserAction executor.
-            if (isset($action->ui['executor'])) {
-                $class = $action->ui['executor'];
-            } elseif (isset($defaults['executor'])) {
-                $class = $defaults['executor'];
-            } elseif (!$action->args && !$action->fields && !$action->preview) {
-                $class = [UserAction\JsCallbackExecutor::class];
-            } else {
-                $class = [UserAction\ModalExecutor::class];
-            }
-            $ex = Factory::factory($class);
+            $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->create($action, $this) : $action;
             if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
-                // Executor may already had been add to layout. Like in CardDeck.
-                if (!isset($this->getApp()->html->elements[$ex->short_name])) {
-                    // very dirty hack, @TODO, attach modals in the standard render tree
-                    // but only render the result to a different place/html DOM
-                    $ex->viewForUrl = $this;
-                    $ex = $this->getApp()->html->add($ex, 'Modals')->setAction($action);
-                }
-                if (isset($arguments[0])) {
-                    $arguments[$ex->name] = $arguments[0];
-                }
                 if (isset($arguments['id'])) {
                     $arguments[$ex->name] = $arguments['id'];
                     unset($arguments['id']);
@@ -1082,15 +1135,16 @@ class View extends AbstractView implements JsExpressionable
                 } else {
                     $actions[] = $ex_actions;
                 }
+                $ex->executeModelAction();
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
-                $ex = $this->add($ex)->setAction($action, $arguments);
-                if ($conf = $action->getConfirmation()) {
+                if ($conf = $ex->getAction()->getConfirmation()) {
                     $defaults['confirm'] = $conf;
                 }
                 if ($defaults['apiConfig'] ?? null) {
                     $ex->apiConfig = $defaults['apiConfig'];
                 }
                 $actions[] = $ex;
+                $ex->executeModelAction($arguments);
             } else {
                 throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or extend View and implement UserAction\JsExecutorInterface');
             }
@@ -1132,7 +1186,7 @@ class View extends AbstractView implements JsExpressionable
             throw new Exception('Render tree must be initialized before materializing JsChains.');
         }
 
-        return json_encode('#' . $this->id, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+        return json_encode('#' . $this->id, \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -1186,8 +1240,8 @@ class View extends AbstractView implements JsExpressionable
         $ready = new JsFunction($actions);
 
         return "<script>\n" .
-            (new Jquery($ready))->jsRender() .
-            '</script>';
+               (new Jquery($ready))->jsRender() .
+               '</script>';
     }
 
     // }}}

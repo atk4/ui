@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Form;
+use Mvorisek\Atk4\Hintable\Data\HintablePropertyDef;
 
 try {
     if (file_exists(__DIR__ . '/db.php')) {
@@ -19,6 +21,49 @@ try {
 }
 
 // a very basic file that sets up Agile Data to be used in some demonstrations
+
+class ModelWithPrefixedFields extends Model
+{
+    private function prefixFieldName(string $fieldName, bool $forActualName = false): string
+    {
+        if ($forActualName) {
+            $fieldName = preg_replace('~^atk_fp_' . preg_quote($this->table, '~') . '__~', '', $fieldName);
+        }
+
+        return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $this->table . '__' . $fieldName;
+    }
+
+    protected function createHintablePropsFromClassDoc(string $className): array
+    {
+        return array_map(function (HintablePropertyDef $hintableProp) {
+            $hintableProp->fieldName = $this->prefixFieldName($hintableProp->name);
+
+            return $hintableProp;
+        }, parent::createHintablePropsFromClassDoc($className));
+    }
+
+    protected function init(): void
+    {
+        if ($this->id_field === 'id') {
+            $this->id_field = $this->prefixFieldName($this->id_field);
+        }
+
+        if ($this->title_field === 'name') {
+            $this->title_field = $this->prefixFieldName($this->title_field);
+        }
+
+        parent::init();
+    }
+
+    public function addField($name, $seed = []): \Atk4\Data\Field
+    {
+        $seed = \Atk4\Core\Factory::mergeSeeds($seed, [
+            'actual' => $this->prefixFieldName($name, true),
+        ]);
+
+        return parent::addField($name, $seed);
+    }
+}
 
 trait ModelLockTrait
 {
@@ -40,24 +85,32 @@ trait ModelLockTrait
     }
 }
 
-class Country extends \Atk4\Data\Model
+/**
+ * @property string $name      @Atk4\Field()
+ * @property string $sys_name  @Atk4\Field()
+ * @property string $iso       @Atk4\Field()
+ * @property string $iso3      @Atk4\Field()
+ * @property string $numcode   @Atk4\Field()
+ * @property string $phonecode @Atk4\Field()
+ */
+class Country extends ModelWithPrefixedFields
 {
     public $table = 'country';
 
     protected function init(): void
     {
         parent::init();
-        $this->addField('name', ['actual' => 'nicename', 'required' => true, 'type' => 'string']);
-        $this->addField('sys_name', ['actual' => 'name', 'system' => true]);
+        $this->addField($this->fieldName()->name, ['actual' => 'atk_afp_country__nicename', 'required' => true, 'type' => 'string']);
+        $this->addField($this->fieldName()->sys_name, ['actual' => 'atk_afp_country__name', 'system' => true]);
 
-        $this->addField('iso', ['caption' => 'ISO', 'required' => true, 'type' => 'string', 'ui' => ['table' => ['sortable' => false]]]);
-        $this->addField('iso3', ['caption' => 'ISO3', 'required' => true, 'type' => 'string']);
-        $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
-        $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number', 'required' => true]);
+        $this->addField($this->fieldName()->iso, ['caption' => 'ISO', 'required' => true, 'type' => 'string', 'ui' => ['table' => ['sortable' => false]]]);
+        $this->addField($this->fieldName()->iso3, ['caption' => 'ISO3', 'required' => true, 'type' => 'string']);
+        $this->addField($this->fieldName()->numcode, ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
+        $this->addField($this->fieldName()->phonecode, ['caption' => 'Phone Prefix', 'type' => 'number', 'required' => true]);
 
-        $this->onHook(\Atk4\Data\Model::HOOK_BEFORE_SAVE, function (\Atk4\Data\Model $model) {
-            if (!$model->get('sys_name')) {
-                $model->set('sys_name', mb_strtoupper($model->get('name')));
+        $this->onHook(Model::HOOK_BEFORE_SAVE, function (self $model) {
+            if (!$model->sys_name) {
+                $model->sys_name = mb_strtoupper($model->name);
             }
         });
     }
@@ -66,20 +119,18 @@ class Country extends \Atk4\Data\Model
     {
         $errors = parent::validate($intent);
 
-        if (mb_strlen($this->get('iso')) !== 2) {
-            $errors['iso'] = 'Must be exactly 2 characters';
+        if (mb_strlen($this->iso) !== 2) {
+            $errors[$this->fieldName()->iso] = 'Must be exactly 2 characters';
         }
 
-        if (mb_strlen($this->get('iso3')) !== 3) {
-            $errors['iso3'] = 'Must be exactly 3 characters';
+        if (mb_strlen($this->iso3) !== 3) {
+            $errors[$this->fieldName()->iso3] = 'Must be exactly 3 characters';
         }
 
         // look if name is unique
-        $c = clone $this;
-        $c->unload();
-        $c->tryLoadBy('name', $this->get('name'));
+        $c = $this->getModel()->tryLoadBy($this->fieldName()->name, $this->name);
         if ($c->loaded() && $c->getId() !== $this->getId()) {
-            $errors['name'] = 'Country name must be unique';
+            $errors[$this->fieldName()->name] = 'Country name must be unique';
         }
 
         return $errors;
@@ -98,56 +149,92 @@ class CountryLock extends Country
     }
 }
 
-class Stat extends \Atk4\Data\Model
+/**
+ * @property string    $project_name           @Atk4\Field()
+ * @property string    $project_code           @Atk4\Field()
+ * @property string    $description            @Atk4\Field()
+ * @property string    $client_name            @Atk4\Field()
+ * @property string    $client_address         @Atk4\Field()
+ * @property Country   $client_country_iso     @Atk4\RefOne()
+ * @property string    $client_country         @Atk4\Field()
+ * @property bool      $is_commercial          @Atk4\Field()
+ * @property string    $currency               @Atk4\Field()
+ * @property string    $currency_symbol        @Atk4\Field()
+ * @property float     $project_budget         @Atk4\Field()
+ * @property float     $project_invoiced       @Atk4\Field()
+ * @property float     $project_paid           @Atk4\Field()
+ * @property float     $project_hour_cost      @Atk4\Field()
+ * @property int       $project_hours_est      @Atk4\Field()
+ * @property int       $project_hours_reported @Atk4\Field()
+ * @property float     $project_expenses_est   @Atk4\Field()
+ * @property float     $project_expenses       @Atk4\Field()
+ * @property float     $project_mgmt_cost_pct  @Atk4\Field()
+ * @property float     $project_qa_cost_pct    @Atk4\Field()
+ * @property \DateTime $start_date             @Atk4\Field()
+ * @property \DateTime $finish_date            @Atk4\Field()
+ * @property \DateTime $finish_time            @Atk4\Field()
+ * @property \DateTime $created                @Atk4\Field()
+ * @property \DateTime $updated                @Atk4\Field()
+ */
+class Stat extends ModelWithPrefixedFields
 {
-    public $table = 'stats';
+    public $table = 'stat';
     public $title = 'Project Stat';
 
     protected function init(): void
     {
         parent::init();
 
-        $this->addFields(['project_name', 'project_code'], ['type' => 'string']);
-        $this->title_field = 'project_name';
-        $this->addField('description', ['type' => 'text']);
-        $this->addField('client_name', ['type' => 'string']);
-        $this->addField('client_address', ['type' => 'text', 'ui' => ['form' => [Form\Control\Textarea::class, 'rows' => 4]]]);
+        $this->addField($this->fieldName()->project_name, ['type' => 'string']);
+        $this->addField($this->fieldName()->project_code, ['type' => 'string']);
+        $this->title_field = $this->fieldName()->project_name;
+        $this->addField($this->fieldName()->description, ['type' => 'text']);
+        $this->addField($this->fieldName()->client_name, ['type' => 'string']);
+        $this->addField($this->fieldName()->client_address, ['type' => 'text', 'ui' => ['form' => [Form\Control\Textarea::class, 'rows' => 4]]]);
 
-        $this->hasOne('client_country_iso', [
-            new Country(),
-            'their_field' => 'iso',
+        $this->hasOne($this->fieldName()->client_country_iso, [
+            'model' => [Country::class],
+            'their_field' => Country::hinting()->fieldName()->iso,
+            'type' => 'string',
             'ui' => [
                 'form' => [Form\Control\Line::class],
             ],
         ])
-            ->addField('client_country', 'name');
+            ->addField($this->fieldName()->client_country, Country::hinting()->fieldName()->name);
 
-        $this->addField('is_commercial', ['type' => 'boolean']);
-        $this->addField('currency', ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
-        $this->addField('currency_symbol', ['never_persist' => true]);
-        $this->onHook(\Atk4\Data\Model::HOOK_AFTER_LOAD, function (\Atk4\Data\Model $model) {
+        $this->addField($this->fieldName()->is_commercial, ['type' => 'boolean']);
+        $this->addField($this->fieldName()->currency, ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
+        $this->addField($this->fieldName()->currency_symbol, ['never_persist' => true]);
+        $this->onHook(Model::HOOK_AFTER_LOAD, function (self $model) {
             /* implementation for "intl"
-            $locale='en-UK';
-            $fmt = new \NumberFormatter( $locale."@currency=".$model->get('currency'), NumberFormatter::CURRENCY );
-            $model->set('currency_symbol', $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL));
+            $locale = 'en-UK';
+            $fmt = new \NumberFormatter($locale . '@currency=' . $model->currency, NumberFormatter::CURRENCY);
+            $model->currency_symbol = $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
              */
 
             $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
-            $model->set('currency_symbol', $map[$model->get('currency')] ?? '?');
+            $model->currency_symbol = $map[$model->currency] ?? '?';
         });
 
-        $this->addFields(['project_budget', 'project_invoiced', 'project_paid', 'project_hour_cost'], ['type' => 'money']);
+        $this->addField($this->fieldName()->project_budget, ['type' => 'money']);
+        $this->addField($this->fieldName()->project_invoiced, ['type' => 'money']);
+        $this->addField($this->fieldName()->project_paid, ['type' => 'money']);
+        $this->addField($this->fieldName()->project_hour_cost, ['type' => 'money']);
 
-        $this->addFields(['project_hours_est', 'project_hours_reported'], ['type' => 'integer']);
+        $this->addField($this->fieldName()->project_hours_est, ['type' => 'integer']);
+        $this->addField($this->fieldName()->project_hours_reported, ['type' => 'integer']);
 
-        $this->addFields(['project_expenses_est', 'project_expenses'], ['type' => 'money']);
-        $this->addField('project_mgmt_cost_pct', new Percent());
-        $this->addField('project_qa_cost_pct', new Percent());
+        $this->addField($this->fieldName()->project_expenses_est, ['type' => 'money']);
+        $this->addField($this->fieldName()->project_expenses, ['type' => 'money']);
+        $this->addField($this->fieldName()->project_mgmt_cost_pct, new Percent());
+        $this->addField($this->fieldName()->project_qa_cost_pct, new Percent());
 
-        $this->addFields(['start_date', 'finish_date'], ['type' => 'date']);
-        $this->addField('finish_time', ['type' => 'time']);
+        $this->addField($this->fieldName()->start_date, ['type' => 'date']);
+        $this->addField($this->fieldName()->finish_date, ['type' => 'date']);
+        $this->addField($this->fieldName()->finish_time, ['type' => 'time']);
 
-        $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => ['disabled' => true]]]);
+        $this->addField($this->fieldName()->created, ['type' => 'datetime', 'ui' => ['form' => ['disabled' => true]]]);
+        $this->addField($this->fieldName()->updated, ['type' => 'datetime', 'ui' => ['form' => ['disabled' => true]]]);
     }
 }
 
@@ -156,22 +243,35 @@ class Percent extends \Atk4\Data\Field
     public $type = 'float'; // will need to be able to affect rendering and storage
 }
 
-class File extends \Atk4\Data\Model
+/**
+ * @property string $name             @Atk4\Field()
+ * @property string $type             @Atk4\Field()
+ * @property bool   $is_folder        @Atk4\Field()
+ * @property File   $SubFolder        @Atk4\RefMany()
+ * @property int    $count            @Atk4\Field()
+ * @property Folder $parent_folder_id @Atk4\RefOne()
+ */
+class File extends ModelWithPrefixedFields
 {
     public $table = 'file';
 
     protected function init(): void
     {
         parent::init();
-        $this->addField('name');
+        $this->addField($this->fieldName()->name);
 
-        $this->addField('type', ['caption' => 'MIME Type']);
-        $this->addField('is_folder', ['type' => 'boolean']);
+        $this->addField($this->fieldName()->type, ['caption' => 'MIME Type']);
+        $this->addField($this->fieldName()->is_folder, ['type' => 'boolean']);
 
-        $this->hasMany('SubFolder', [new self(), 'their_field' => 'parent_folder_id'])
-            ->addField('count', ['aggregate' => 'count', 'field' => $this->persistence->expr($this, '*')]);
+        $this->hasMany($this->fieldName()->SubFolder, [
+            'model' => [self::class],
+            'their_field' => self::hinting()->fieldName()->parent_folder_id,
+        ])
+            ->addField($this->fieldName()->count, ['aggregate' => 'count', 'field' => $this->persistence->expr($this, '*')]);
 
-        $this->hasOne('parent_folder_id', Folder::class)
+        $this->hasOne($this->fieldName()->parent_folder_id, [
+            'model' => [Folder::class],
+        ])
             ->addTitle();
     }
 
@@ -193,19 +293,19 @@ class File extends \Atk4\Data\Model
             }
 
             if ($name === 'src' || $name === 'demos' || $isSub) {
-                $m = clone $this;
+                $entity = $this->getModel(true)->createEntity();
 
                 /*
                 // Disabling saving file in db
                 $m->save([
-                    'name' => $fileinfo->getFilename(),
-                    'is_folder' => $fileinfo->isDir(),
-                    'type' => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
+                    $this->fieldName()->name => $fileinfo->getFilename(),
+                    $this->fieldName()->is_folder => $fileinfo->isDir(),
+                    $this->fieldName()->type => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
                 ]);
                 */
 
                 if ($fileinfo->isDir()) {
-                    $m->ref('SubFolder')->importFromFilesystem($dir->getPath() . '/' . $name, true);
+                    $entity->SubFolder->importFromFilesystem($dir->getPath() . '/' . $name, true);
                 }
             }
         }
@@ -218,7 +318,7 @@ class Folder extends File
     {
         parent::init();
 
-        $this->addCondition('is_folder', true);
+        $this->addCondition($this->fieldName()->is_folder, true);
     }
 }
 
@@ -234,45 +334,76 @@ class FileLock extends File
     }
 }
 
-class Category extends \Atk4\Data\Model
+/**
+ * @property string      $name          @Atk4\Field()
+ * @property SubCategory $SubCategories @Atk4\RefMany()
+ * @property Product     $Products      @Atk4\RefMany()
+ */
+class Category extends ModelWithPrefixedFields
 {
     public $table = 'product_category';
 
     protected function init(): void
     {
         parent::init();
-        $this->addField('name');
+        $this->addField($this->fieldName()->name);
 
-        $this->hasMany('SubCategories', new SubCategory());
-        $this->hasMany('Products', new Product());
+        $this->hasMany($this->fieldName()->SubCategories, [
+            'model' => [SubCategory::class],
+            'their_field' => SubCategory::hinting()->fieldName()->product_category_id,
+        ]);
+        $this->hasMany($this->fieldName()->Products, [
+            'model' => [Product::class],
+            'their_field' => Product::hinting()->fieldName()->product_category_id,
+        ]);
     }
 }
 
-class SubCategory extends \Atk4\Data\Model
+/**
+ * @property string   $name                @Atk4\Field()
+ * @property Category $product_category_id @Atk4\RefOne()
+ * @property Product  $Products            @Atk4\RefMany()
+ */
+class SubCategory extends ModelWithPrefixedFields
 {
     public $table = 'product_sub_category';
 
     protected function init(): void
     {
         parent::init();
-        $this->addField('name');
+        $this->addField($this->fieldName()->name);
 
-        $this->hasOne('product_category_id', new Category());
-        $this->hasMany('Products', new Product());
+        $this->hasOne($this->fieldName()->product_category_id, [
+            'model' => [Category::class],
+        ]);
+        $this->hasMany($this->fieldName()->Products, [
+            'model' => [Product::class],
+            'their_field' => Product::hinting()->fieldName()->product_sub_category_id,
+        ]);
     }
 }
 
-class Product extends \Atk4\Data\Model
+/**
+ * @property string      $name                    @Atk4\Field()
+ * @property string      $brand                   @Atk4\Field()
+ * @property Category    $product_category_id     @Atk4\RefOne()
+ * @property SubCategory $product_sub_category_id @Atk4\RefOne()
+ */
+class Product extends ModelWithPrefixedFields
 {
     public $table = 'product';
 
     protected function init(): void
     {
         parent::init();
-        $this->addField('name');
-        $this->addField('brand');
-        $this->hasOne('product_category_id', [new Category()])->addTitle();
-        $this->hasOne('product_sub_category_id', [new SubCategory()])->addTitle();
+        $this->addField($this->fieldName()->name);
+        $this->addField($this->fieldName()->brand);
+        $this->hasOne($this->fieldName()->product_category_id, [
+            'model' => [Category::class],
+        ])->addTitle();
+        $this->hasOne($this->fieldName()->product_sub_category_id, [
+            'model' => [SubCategory::class],
+        ])->addTitle();
     }
 }
 

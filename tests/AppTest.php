@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\App;
 use Atk4\Ui\HtmlTemplate;
 
-class AppTest extends AtkPhpunit\TestCase
+class AppTest extends TestCase
 {
     protected function getApp()
     {
@@ -18,7 +18,7 @@ class AppTest extends AtkPhpunit\TestCase
         ]);
     }
 
-    public function testTemplateClassDefault()
+    public function testTemplateClassDefault(): void
     {
         $app = $this->getApp();
 
@@ -28,7 +28,7 @@ class AppTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testTemplateClassCustom()
+    public function testTemplateClassCustom(): void
     {
         $anotherTemplateClass = new class() extends HtmlTemplate {
         };

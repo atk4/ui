@@ -54,7 +54,7 @@ class KeyValue extends Table\Column
     /**
      * @param Field|null $field
      *
-     * @return array|void
+     * @return array
      */
     public function getHtmlTags(Model $row, $field)
     {
@@ -62,14 +62,10 @@ class KeyValue extends Table\Column
 
         if (!is_array($values)) {
             throw new Exception('KeyValues Column need values in field definition');
-
-            return;
         }
 
         if (count($values) === 0) {
             throw new Exception('KeyValues Column values must have elements');
-
-            return;
         }
 
         $key = $field->get();

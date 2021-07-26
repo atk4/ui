@@ -13,14 +13,15 @@ $view = \Atk4\Ui\View::addTo($app, ['template' => new HtmlTemplate(
     '<div class="ui header">Click and drag country to reorder</div>
     <div id="{$_id}" style="cursor: pointer">
         <ul>
-            {List}<li class="ui icon label" data-name="{$name}"><i class="{iso}ae{/} flag"></i> {$name}</li>{/}
+            {List}<li class="ui icon label" data-name="{$atk_fp_country__name}"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</li>{/}
         </ul>
     </div>'
 )]);
 
 $lister = \Atk4\Ui\Lister::addTo($view, [], ['List']);
 $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
-    $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
+    $row = Country::assertInstanceOf($lister->current_row);
+    $row->iso = mb_strtolower($row->iso);
 });
 $lister->setModel(new Country($app->db))
     ->setLimit(20);

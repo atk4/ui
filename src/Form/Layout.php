@@ -13,7 +13,6 @@ use Atk4\Ui\Label;
  */
 class Layout extends AbstractLayout
 {
-    /** {@inheritdoc} */
     public $defaultTemplate = 'form/layout/generic.html';
 
     /** @var string Default input template file. */

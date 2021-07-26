@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Persistence;
 use Atk4\Ui\App;
+use Atk4\Ui\Callback;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
@@ -17,7 +18,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * Requests are emulated in the same process. It is fast, but some output or shutdown functionality can not be fully tested.
  */
-class DemosTest extends AtkPhpunit\TestCase
+class DemosTest extends TestCase
 {
     /** @const string */
     protected const ROOT_DIR = __DIR__ . '/..';
@@ -77,7 +78,7 @@ class DemosTest extends AtkPhpunit\TestCase
             if (!isset(self::$_failedParentTests[$this->getName()])) {
                 self::$_failedParentTests[$this->getName()] = $this->getStatus();
             } else {
-                $this->markTestIncomplete('Test failed, but parent non-HTTP test failed too. Fix it first.');
+                $this->markTestIncomplete('Test failed, but non-HTTP test failed too. Fix it first.');
             }
         }
 
@@ -120,7 +121,7 @@ class DemosTest extends AtkPhpunit\TestCase
     protected function createTestingApp(): App
     {
         $app = new class(['call_exit' => false, 'catch_exceptions' => false, 'always_run' => false]) extends App {
-            public function callExit($for_shutdown = false): void
+            public function callExit(): void
             {
                 throw new DemosTestExitException();
             }
@@ -199,7 +200,7 @@ class DemosTest extends AtkPhpunit\TestCase
             return $this->getClient()->request(isset($options['form_params']) !== null ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
         } catch (\GuzzleHttp\Exception\ServerException $ex) {
             $exFactoryWithFullBody = new class('', $ex->getRequest()) extends \GuzzleHttp\Exception\RequestException {
-                public static function getResponseBodySummary(ResponseInterface $response)
+                public static function getResponseBodySummary(ResponseInterface $response): string
                 {
                     return $response->getBody()->getContents();
                 }
@@ -234,7 +235,7 @@ class DemosTest extends AtkPhpunit\TestCase
 
     public function demoFilesProvider(): array
     {
-        $excludeDirs = ['_demo-data', '_includes', '_unit-test', 'special'];
+        $excludeDirs = ['_demo-data', '_includes'];
         $excludeFiles = ['layout/layouts_error.php'];
 
         $files = [];
@@ -327,7 +328,7 @@ class DemosTest extends AtkPhpunit\TestCase
         }
 
         $response = $this->getResponseFromRequest(
-            'interactive/wizard.php?demo_wizard=1&w_form_submit=ajax&__atk_callback=w_form_submit',
+            'interactive/wizard.php?demo_wizard=1&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'w_form_submit=ajax&' . Callback::URL_QUERY_TARGET . '=w_form_submit',
             ['form_params' => [
                 'dsn' => 'mysql://root:root@db-host.example.com/atk4',
             ]]
@@ -350,10 +351,10 @@ class DemosTest extends AtkPhpunit\TestCase
         // simple reload
         $files[] = ['_unit-test/reload.php?__atk_reload=reload'];
         // loader callback reload
-        $files[] = ['_unit-test/reload.php?c_reload=ajax&__atk_callback=c_reload'];
+        $files[] = ['_unit-test/reload.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'c_reload=ajax&' . Callback::URL_QUERY_TARGET . '=c_reload'];
         // test catch exceptions
-        $files[] = ['_unit-test/exception.php?m_cb=ajax&__atk_callback=m_cb&__atk_json=1'];
-        $files[] = ['_unit-test/exception.php?m2_cb=ajax&__atk_callback=m2_cb&__atk_json=1'];
+        $files[] = ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m_cb&__atk_json=1'];
+        $files[] = ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm2_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m2_cb&__atk_json=1'];
 
         return $files;
     }
@@ -383,11 +384,11 @@ class DemosTest extends AtkPhpunit\TestCase
     public function sseResponseProvider(): array
     {
         $files = [];
-        $files[] = ['_unit-test/sse.php?see_test=ajax&__atk_callback=1&__atk_sse=1'];
-        $files[] = ['_unit-test/console.php?console_test=ajax&__atk_callback=1&__atk_sse=1'];
+        $files[] = ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
+        $files[] = ['_unit-test/console.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
         if (!($this instanceof DemosHttpNoExitTest)) { // ignore content type mismatch when App->call_exit equals to true
-            $files[] = ['_unit-test/console_run.php?console_test=ajax&__atk_callback=1&__atk_sse=1'];
-            $files[] = ['_unit-test/console_exec.php?console_test=ajax&__atk_callback=1&__atk_sse=1'];
+            $files[] = ['_unit-test/console_run.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
+            $files[] = ['_unit-test/console_exec.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
         }
 
         return $files;
@@ -433,7 +434,7 @@ class DemosTest extends AtkPhpunit\TestCase
     {
         $files = [];
         $files[] = [
-            '_unit-test/post.php?test_submit=ajax&__atk_callback=test_submit',
+            '_unit-test/post.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_submit=ajax&' . Callback::URL_QUERY_TARGET . '=test_submit',
             [
                 'f1' => 'v1',
             ],
@@ -441,7 +442,7 @@ class DemosTest extends AtkPhpunit\TestCase
 
         // for JsNotify coverage
         $files[] = [
-            'obsolete/notify2.php?test_notify=ajax&__atk_callback=test_notify',
+            'obsolete/notify2.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_notify=ajax&' . Callback::URL_QUERY_TARGET . '=test_notify',
             [
                 'text' => 'This text will appear in notification',
                 'icon' => 'warning sign',
@@ -459,7 +460,7 @@ class DemosTest extends AtkPhpunit\TestCase
     /**
      * @dataProvider jsonResponsePostProvider
      */
-    public function testDemoAssertJsonResponsePost(string $uri, array $postData)
+    public function testDemoAssertJsonResponsePost(string $uri, array $postData): void
     {
         $response = $this->getResponseFromRequest($uri, ['form_params' => $postData]);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);

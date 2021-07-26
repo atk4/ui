@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 
-class PostTest extends AtkPhpunit\TestCase
+class PostTest extends TestCase
 {
     /** @var Model */
     public $model;
@@ -24,18 +24,19 @@ class PostTest extends AtkPhpunit\TestCase
     /**
      * Test loading from POST persistence, some type mapping applies.
      */
-    public function testPost()
+    public function testPost(): void
     {
         $p = new \Atk4\Ui\Persistence\Post();
 
-        $this->model->set('surname', 'DefSurname');
+        $m = $this->model;
+        $m->addField('id');
+        $m->persistence = $p;
 
-        $this->model->addField('id');
-        $this->model->persistence = $p;
-        $this->model->load(0);
+        $m = $m->load(0);
+        $m->set('surname', 'DefSurname');
 
-        $this->assertSame('John', $this->model->get('name'));
-        $this->assertTrue($this->model->get('is_married'));
-        $this->assertSame('DefSurname', $this->model->get('surname'));
+        $this->assertSame('John', $m->get('name'));
+        $this->assertTrue($m->get('is_married'));
+        $this->assertSame('DefSurname', $m->get('surname'));
     }
 }

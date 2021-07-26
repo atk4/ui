@@ -14,14 +14,12 @@ interface NavigableInterface
 {
     /**
      * Add a group to left menu.
-     *
-     * @param $seed
      */
     public function addMenuGroup($seed): Menu;
 
     /**
      * Add items to left menu.
-     *  Will place item in a group if supply.
+     * Will place item in a group if supply.
      */
     public function addMenuItem($name, $action = null, $group = null): Item;
 }

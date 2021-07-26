@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Exception;
+use Atk4\Ui\View;
 
 /**
  * Class Upload.
@@ -177,7 +178,7 @@ class Upload extends Input
                     $postFile = $_FILES[$k];
                     if ($postFile['error'] !== 0) {
                         // unset all details on upload error
-                        $postFile = array_intersect_key($postFile, array_flip('error', 'name'));
+                        $postFile = array_intersect_key($postFile, array_flip(['error', 'name']));
                     }
                     $postFiles[] = $postFile;
                 }

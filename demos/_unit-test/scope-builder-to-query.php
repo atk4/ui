@@ -21,7 +21,7 @@ $query = <<<'EOF'
         {
           "type": "query-builder-rule",
           "query": {
-            "rule": "product_category_id",
+            "rule": "atk_fp_product__product_category_id",
             "operator": "equals",
             "operand": "Product Category Id",
             "value": "3"
@@ -30,7 +30,7 @@ $query = <<<'EOF'
         {
           "type": "query-builder-rule",
           "query": {
-            "rule": "product_sub_category_id",
+            "rule": "atk_fp_product__product_sub_category_id",
             "operator": "equals",
             "operand": "Product Sub Category Id",
             "value": "6"
@@ -40,7 +40,7 @@ $query = <<<'EOF'
     }
     EOF;
 
-$q = $app->decodeJson($query, true);
+$q = $app->decodeJson($query);
 $scope = ScopeBuilder::queryToScope($q);
 
 $product = new Product($app->db);

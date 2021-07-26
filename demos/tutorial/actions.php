@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
+use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -63,10 +65,10 @@ $wizard->addStep('Define User Action', function ($page) {
         $country->addUserAction('send_message', function () {
             return 'sent';
         });
-        $country->tryLoadAny();
+        $country = $country->tryLoadAny();
 
         $card = \Atk4\Ui\Card::addTo($owner);
-        $card->setModel($country, ['iso']);
+        $card->setModel($country, [$country->fieldName()->iso]);
         $card->addClickAction($country->getUserAction('send_message'));
     });
 });
@@ -83,7 +85,7 @@ $wizard->addStep('UI Integration', function ($page) {
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
         $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
-        $country->loadAny();
+        $country = $country->loadAny();
 
         \Atk4\Ui\Button::addTo($owner, ['Edit some country'])
             ->on('click', $country->getUserAction('edit'));
@@ -99,7 +101,7 @@ $wizard->addStep('UI Integration', function ($page) {
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
         $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
-        $country->loadAny();
+        $country = $country->loadAny();
 
         $menu = \Atk4\Ui\Menu::addTo($owner);
         $menu->addItem('Hello');
@@ -118,7 +120,7 @@ $wizard->addStep('Arguments', function ($page) {
     );
 
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
-        $model = new \Atk4\Data\Model($owner->getApp()->db, 'test');
+        $model = new \Atk4\Data\Model($owner->getApp()->db, ['table' => 'test']);
 
         $model->addUserAction('greet', [
             'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
@@ -130,7 +132,6 @@ $wizard->addStep('Arguments', function ($page) {
             'callback' => function ($model, $name) {
                 return 'Hi ' . $name;
             },
-            'ui' => ['executor' => [\Atk4\Ui\UserAction\JsCallbackExecutor::class]],
         ]);
 
         $model->addUserAction('ask_age', [
@@ -189,16 +190,21 @@ $wizard->addStep('Crud integration', function ($page) {
     $page->add(new Demo())->setCodeAndCall(function (View $owner) {
         $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
-        $country->getUserAction('delete')->enabled = function () { return random_int(1, 2) > 1; };
+        $country->getUserAction('delete')->enabled = function (Country $m) { return $m->id % 2 === 0; };
         $country->addUserAction('mail', [
             'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
             'preview' => function ($model) { return 'here is email preview for ' . $model->get('name'); },
             'callback' => function ($model) { return 'email sent to ' . $model->get('name'); },
             'description' => 'Email testing',
-            'ui' => ['icon' => 'mail', 'button' => [null, 'icon' => 'green mail']],
         ]);
 
-        \Atk4\Ui\Crud::addTo($owner, ['ipp' => 5])->setModel($country, ['name', 'iso']);
+        // Register a trigger for mail action in Crud
+        $owner->getExecutorFactory()->registerTrigger(
+            ExecutorFactory::TABLE_BUTTON,
+            [Button::class, null, 'icon' => 'blue mail'],
+            $country->getUserAction('mail')
+        );
+        \Atk4\Ui\Crud::addTo($owner, ['ipp' => 5])->setModel($country, [$country->fieldName()->name, $country->fieldName()->iso]);
     });
 });
 
