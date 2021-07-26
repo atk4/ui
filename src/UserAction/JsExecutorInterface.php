@@ -12,5 +12,5 @@ interface JsExecutorInterface extends ExecutorInterface
     /**
      * Return js expression that will trigger action executor.
      */
-    public function jsExecute(array $urlArgs);
+    public function jsExecute(array $urlArgs): array;
 }
