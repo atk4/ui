@@ -9,7 +9,6 @@ use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Loader;
-use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
 use Atk4\Ui\View;
 
@@ -37,70 +36,6 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
     /** @const string */
     public const HOOK_STEP = self::class . '@onStep';
-
-    /**
-     * @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
-     */
-    public $jsSuccess;
-
-    /**
-     * @var array will collect action data while doing action step
-     */
-    private $actionData = [];
-    protected $actionInitialized = false;
-
-    /**
-     * The action to execute.
-     *
-     * @var Model\UserAction
-     */
-    public $action;
-
-    /**
-     * The action steps.
-     *
-     * @var string[]
-     */
-    private $steps;
-    private $step;
-
-    /**
-     * The action step button.
-     *
-     * @var Button
-     */
-    private $prevStepBtn;
-    private $nextStepBtn;
-    private $execActionBtn;
-    private $btns;
-
-    /**
-     * A form for action argument and fields user entry.
-     *
-     * @var string
-     */
-    public $form = [Form::class];
-
-    /**
-     * @var string can be "console", "text", or "html"
-     */
-    public $previewType = 'html';
-
-    /**
-     * View seed for displaying title for each step.
-     *
-     * @var array
-     */
-    public $stepTitle = ['args' => null, 'fields' => null, 'preview' => null];
-
-    /**
-     * The Loader that will execute all action step.
-     *
-     * @var Loader
-     */
-    public $loader;
-    public $loaderUi = 'ui basic segment';
-    public $loaderShim = [];
 
     protected function init(): void
     {
