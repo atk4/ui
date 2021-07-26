@@ -16,7 +16,7 @@ $app->catchRunawayCallbacks = false;
 
 $expectedWord = <<<'EOF'
     v3 url: callback_url.php /
-    callback url: callback_url.php?__atk_cb_test=callback&__atk_cbtarget=test /
+    callback url: callback_url.php?test=callback&__atk_cbtarget=test /
     v2 url: callback_url.php
     EOF;
 

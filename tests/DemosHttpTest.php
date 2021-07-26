@@ -119,7 +119,7 @@ class DemosHttpTest extends DemosTest
      */
     public function testDemoLateOutputError(string $urlTrigger, string $expectedOutput): void
     {
-        $path = '_unit-test/late-output-error.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . $urlTrigger . '=ajax&'
+        $path = '_unit-test/late-output-error.php?' . $urlTrigger . '=ajax&'
             . Callback::URL_QUERY_TARGET . '=' . $urlTrigger . '&__atk_json=1';
 
         $response = $this->getResponseFromRequest5xx($path);

@@ -53,7 +53,7 @@ class CallbackTest extends TestCase
      */
     protected function simulateCallbackTriggering(AbstractView $cb): void
     {
-        $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . $cb->getUrlTrigger()] = '1';
+        $_GET[$cb->getUrlTrigger()] = '1';
     }
 
     public function testCallback(): void
@@ -89,8 +89,8 @@ class CallbackTest extends TestCase
         $this->simulateCallbackTriggering($cbApp);
         $this->simulateCallbackTriggering($cb);
 
-        $expectedUrlCbApp = '?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=callback&' . Callback::URL_QUERY_TARGET . '=aa';
-        $expectedUrlCb = '?' . /* Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=1&' . */ Callback::URL_QUERY_TRIGGER_PREFIX . 'bb=callback&' . Callback::URL_QUERY_TARGET . '=bb';
+        $expectedUrlCbApp = '?aa=callback&' . Callback::URL_QUERY_TARGET . '=aa';
+        $expectedUrlCb = '?' . /* 'aa=1&' . */ 'bb=callback&' . Callback::URL_QUERY_TARGET . '=bb';
         self::assertSame($expectedUrlCbApp, $cbApp->getUrl());
         self::assertSame($expectedUrlCb, $cb->getUrl());
 
