@@ -8,7 +8,6 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 use Atk4\Ui\JsToast;
-use Atk4\Ui\Loader;
 use Atk4\Ui\Modal;
 use Atk4\Ui\View;
 
@@ -61,13 +60,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      */
     public function afterActionInit(Model\UserAction $action): void
     {
-        // Add buttons to modal for next and previous.
-        $this->btns = (new View())->addStyle(['min-height' => '24px']);
-        $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
-        $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);
-        $this->addButtonAction($this->btns);
-
-        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader = \Atk4\Ui\Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
         $this->loader->addClass('atk-hide-loading-content');
         $this->actionData = $this->loader->jsGetStoreData()['session'];
