@@ -68,7 +68,7 @@ class FormTest extends TestCase
         $_POST = array_merge(array_map(fn () => '', $this->form->controls), $postData);
         try {
             // trigger callback
-            $_GET['atk_submit'] = 'ajax';
+            $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . 'atk_submit'] = 'ajax';
             $_GET[Callback::URL_QUERY_TARGET] = 'atk_submit';
 
             $this->form->onSubmit(function (Form $form) use (&$wasSubmitCalled, $submitFx): void {
