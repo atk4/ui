@@ -14,6 +14,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\JsFunction;
 use Atk4\Ui\JsToast;
+use Atk4\Ui\Loader;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
 use Atk4\Ui\View;
@@ -100,7 +101,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * The Loader that will execute all action step.
      *
-     * @var \Atk4\Ui\Loader
+     * @var Loader
      */
     public $loader;
     public $loaderUi = 'ui basic segment';
@@ -125,24 +126,13 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      */
     public function afterActionInit(Model\UserAction $action)
     {
-        $getTableName = function ($arr) {
-            foreach ($arr as $k => $v) {
-                return is_numeric($k) ? $v : $k;
-            }
-        };
-
-        $table_name = is_array($action->getModel()->table) ? $getTableName($action->getModel()->table) : $action->getModel()->table;
-
-        $this->id = preg_replace('~[^A-Za-z0-9\-]~', '_', mb_strtolower($this->name . '_' . $table_name . '_' . $action->short_name));
-        $this->name = $this->id;
-
         // Add buttons to modal for next and previous.
         $this->btns = (new View())->addStyle(['min-height' => '24px']);
         $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
         $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);
         $this->addButtonAction($this->btns);
 
-        $this->loader = \Atk4\Ui\Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
         $this->loader->addClass('atk-hide-loading-content');
         $this->actionData = $this->loader->jsGetStoreData()['session'];
