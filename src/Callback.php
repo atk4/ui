@@ -97,7 +97,7 @@ class Callback extends AbstractView
      */
     public function isTriggered(): bool
     {
-        return isset($_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger]) || isset($_GET['__atk_reload']);
+        return isset($_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger]);
     }
 
     public function getTriggeredValue(): string
