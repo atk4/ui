@@ -510,7 +510,7 @@ class Table extends Lister
         $this->addClass('selectable');
         $this->js(true)->find('tbody')->css('cursor', 'pointer');
 
-        $this->on('click', 'tbody tr td' . $excludeSelector ? ":not('" . implode(',', $excludeSelector) . "')" : '', $action);
+        $this->on('click', 'tbody tr td' . ($excludeSelector ? ':not(' . implode(',', $excludeSelector) . ')' : ''), $action);
     }
 
     /**
