@@ -230,14 +230,6 @@ $stepModal->set(function (View $p) use ($session, $previousAction, $nextAction) 
     }
 });
 
-$previousAction->on('click', $stepModal->js()->atkReloadView(
-    ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'previous']]
-));
-
-$nextAction->on('click', $stepModal->js()->atkReloadView(
-    ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'next']]
-));
-
 // Bind display modal to page display button.
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($menuBar)->set('Multi Step Modal');

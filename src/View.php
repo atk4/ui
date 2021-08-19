@@ -508,8 +508,13 @@ class View extends AbstractView
             }
         }
 
+        $parentRenderView = null;
         if ($this->issetOwner() && $this->getOwner() instanceof self) {
-            $args = array_merge($this->getOwner()->getRunningCallbackArgs($isTerminated, $page), $args);
+            $parentRenderView = $this->getOwner();
+        } // else
+
+        if ($parentRenderView !== null) {
+            $args = array_merge($parentRenderView->getRunningCallbackArgs($isTerminated, $page), $args);
         }
 
         return $args;
