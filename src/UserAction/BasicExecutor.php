@@ -40,7 +40,7 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
     public $disableMsg = 'Action is disabled and cannot be executed';
 
     /**
-     * @var Button | array  Button that trigger the action. Either as an array seed or object
+     * @var Button|array Button that trigger the action. Either as an array seed or object
      */
     public $executorButton;
 
