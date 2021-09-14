@@ -18,14 +18,14 @@ class DropdownCascade extends Dropdown
     /** @var string|Form\Control|null the form input to use for setting this dropdown list values from. */
     public $cascadeFrom;
 
-    /** @var string|Model|null the hasMany reference model that will generated value for this dropdown list. */
+    /** @var string|Model|null the hasMany reference model that will generate value for this dropdown list. */
     public $reference;
 
     /** @var Form\Control The form control object created based on cascadeFrom */
-    protected $cascadeControl;
+    protected $cascadeFromControl;
 
-    /** @var string The casacade input value. */
-    protected $cascadeControlValue;
+    /** @var string|int The cascade input value. */
+    protected $cascadeFromControlValue;
 
     protected function init(): void
     {
@@ -35,25 +35,25 @@ class DropdownCascade extends Dropdown
             throw new Exception('cascadeFrom property is not set.');
         }
 
-        $this->cascadeControl = is_string($this->cascadeFrom) ? $this->form->getControl($this->cascadeFrom) : $this->cascadeFrom;
+        $this->cascadeFromControl = is_string($this->cascadeFrom) ? $this->form->getControl($this->cascadeFrom) : $this->cascadeFrom;
 
-        if (!$this->cascadeControl instanceof Form\Control) {
+        if (!$this->cascadeFromControl instanceof Form\Control) {
             throw new Exception('cascadeFrom property should be an instance of ' . Form\Control::class);
         }
 
-        $this->cascadeControlValue = $_POST[$this->cascadeControl->name] ?? $this->cascadeControl->field->get();
+        $this->cascadeFromControlValue = $_POST[$this->cascadeFromControl->name] ?? $this->cascadeFromControl->field->get();
 
-        $this->model = $this->cascadeControl->model ? $this->cascadeControl->model->ref($this->reference) : null;
+        $this->model = $this->cascadeFromControl->model ? $this->cascadeFromControl->model->ref($this->reference) : null;
 
-        // setup initial values and add it via dropdownOptions.
-        $values = $this->getJsValues($this->getNewValues((string) $this->cascadeControlValue), (string) $this->field->get());
+        // populate default dropdown values and add it via dropdownOptions.
+        $values = $this->getJsValues($this->getNewValues($this->cascadeFromControlValue), $this->field->get());
         $this->dropdownOptions = array_merge($this->dropdownOptions, ['values' => $values]);
 
         // js to execute for the onChange handler of the parent dropdown.
         $expr = [
             function ($t) {
                 return [
-                    $this->js()->dropdown('change values', $this->getNewValues((string) $this->cascadeControlValue)),
+                    $this->js()->dropdown('change values', $this->getNewValues($this->cascadeFromControlValue)),
                     $this->js()->removeClass('loading'),
                 ];
             },
@@ -61,20 +61,35 @@ class DropdownCascade extends Dropdown
             $this->js()->addClass('loading'),
         ];
 
-        $this->cascadeControl->onChange($expr, ['args' => [$this->cascadeControl->name => $this->cascadeControl->jsInput()->val()]]);
+        $this->cascadeFromControl->onChange($expr, ['args' => [$this->cascadeFromControl->name => $this->cascadeFromControl->jsInput()->val()]]);
+    }
+
+    /**
+     * Allow initializing CascadeDropdown with preset value.
+     *
+     * @param string|int $initialValue       The initial ID value to set this dropdown using reference model values
+     * @param string|int $fromReferenceValue The Cascade from reference ID value where reference model values
+     */
+    public function setInitialValues($initialValue, $fromReferenceValue): self
+    {
+        $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($fromReferenceValue), $initialValue);
+
+        return $this;
     }
 
     /**
      * Generate new dropdown values based on cascadeInput model selected id.
      * Return an empty value set if id is null.
+     *
+     * @param string|int $id
      */
-    public function getNewValues(string $id): array
+    public function getNewValues($id): array
     {
         if (!$id) {
             return [['value' => '', 'text' => $this->empty, 'name' => $this->empty]];
         }
 
-        $model = $this->cascadeControl->model->load($id)->ref($this->reference);
+        $model = $this->cascadeFromControl->model->tryLoad($id)->ref($this->reference);
         $values = [];
         foreach ($model as $k => $row) {
             if ($this->renderRowFunction) {
@@ -92,10 +107,9 @@ class DropdownCascade extends Dropdown
      *  Will mark current value as selected from a list
      *  of possible values.
      *
-     * @param array  $values an array of possible values
-     * @param string $value  the current field value
+     * @param string|int $value the current field value
      */
-    private function getJsValues(array $values, string $value): array
+    private function getJsValues(array $values, $value): array
     {
         foreach ($values as $k => $v) {
             if ($v['value'] === $value) {
