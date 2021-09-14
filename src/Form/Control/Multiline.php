@@ -308,26 +308,26 @@ class Multiline extends Form\Control
     public function validate(array $rows): array
     {
         $rowErrors = [];
-        $model = $this->getModel();
+        $entity = $this->getModel()->createEntity();
 
         foreach ($rows as $cols) {
             $rowId = $this->getMlRowId($cols);
             foreach ($cols as $fieldName => $value) {
-                if ($fieldName === '__atkml' || $fieldName === $model->id_field) {
+                if ($fieldName === '__atkml' || $fieldName === $entity->id_field) {
                     continue;
                 }
 
                 try {
-                    $field = $model->getField($fieldName);
+                    $field = $entity->getField($fieldName);
                     // Save field value only if the field was editable
                     if (!$field->read_only) {
-                        $model->createEntity()->set($fieldName, $value);
+                        $entity->set($fieldName, $value);
                     }
                 } catch (\Atk4\Core\Exception $e) {
                     $rowErrors[$rowId][] = ['name' => $fieldName, 'msg' => $e->getMessage()];
                 }
             }
-            $rowErrors = $this->addModelValidateErrors($rowErrors, $rowId, $model);
+            $rowErrors = $this->addModelValidateErrors($rowErrors, $rowId, $entity);
         }
 
         return $rowErrors;
@@ -373,12 +373,12 @@ class Multiline extends Form\Control
     /**
      * Check for model validate error.
      */
-    protected function addModelValidateErrors(array $errors, string $rowId, Model $model): array
+    protected function addModelValidateErrors(array $errors, string $rowId, Model $entity): array
     {
-        $e = $model->validate();
-        if ($e) {
-            foreach ($e as $field => $msg) {
-                $errors[$rowId][] = ['field' => $field, 'msg' => $msg];
+        $entityErrors = $entity->validate();
+        if ($entityErrors) {
+            foreach ($entityErrors as $fieldName => $msg) {
+                $errors[$rowId][] = ['name' => $fieldName, 'msg' => $msg];
             }
         }
 
