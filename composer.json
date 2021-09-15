@@ -70,10 +70,10 @@
         "fzaninotto/faker": "^1.6",
         "guzzlehttp/guzzle": "^6.3",
         "instaclick/php-webdriver": "^1.4.7",
-        "johnkary/phpunit-speedtrap": "^3.2",
+        "johnkary/phpunit-speedtrap": "^3.3",
         "phpstan/phpstan": "^0.12.82",
         "phpunit/phpcov": "*",
-        "phpunit/phpunit": ">=9.3",
+        "phpunit/phpunit": ">=9.5",
         "symfony/process": "^4.4 || ^5.0"
     },
     "config": {
