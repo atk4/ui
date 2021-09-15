@@ -69,8 +69,10 @@ class DropdownCascade extends Dropdown
      *
      * @param mixed $value The initial ID value to set this dropdown using reference model values
      * @param mixed $junk
+     *
+     * @return $this
      */
-    public function set($value = null, $junk = null): self
+    public function set($value = null, $junk = null)
     {
         $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($this->cascadeFromControl->field->get()), $value);
 
