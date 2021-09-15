@@ -67,7 +67,7 @@ class DropdownCascade extends Dropdown
     /**
      * Allow initializing CascadeDropdown with preset value.
      *
-     * @param string|int $value The initial ID value to set this dropdown using reference model values
+     * @param mixed $value The initial ID value to set this dropdown using reference model values
      * @param mixed $junk
      */
     public function set($value = null, $junk = null): self
