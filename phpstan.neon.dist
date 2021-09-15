@@ -423,10 +423,10 @@ parameters:
             message: '~^Property Atk4\\Ui\\CardDeck::\$card \(Atk4\\Ui\\View\|string\) does not accept default value of type array\<int, string\>\.$~'
         -
             path: 'src/CardDeck.php'
-            message: '~^Property Atk4\\Ui\\CardDeck::\$container \(Atk4\\Ui\\View\|null\) does not accept default value of type array\<int\|string, string\>\.$~'
+            message: '~^Property Atk4\\Ui\\CardDeck::\$container \(Atk4\\Ui\\View\|null\) does not accept default value of type array\<int\|string, class-string\|string\>\.$~'
         -
             path: 'src/CardDeck.php'
-            message: '~^Property Atk4\\Ui\\CardDeck::\$cardHolder \(Atk4\\Ui\\View\) does not accept default value of type array\<int\|string, string\>\.$~'
+            message: '~^Property Atk4\\Ui\\CardDeck::\$cardHolder \(Atk4\\Ui\\View\) does not accept default value of type array\<int\|string, class-string\|string\>\.$~'
         -
             path: 'src/CardDeck.php'
             message: '~^Property Atk4\\Ui\\CardDeck::\$paginator \(Atk4\\Ui\\Paginator\|null\) does not accept default value of type array\<int, string\>\.$~'
