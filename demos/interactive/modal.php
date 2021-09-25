@@ -77,8 +77,8 @@ $vp1Modal->set(function ($modal) use ($vp2Modal) {
 
 // When $vp2Modal->show() is activate, it will dynamically add this content to it.
 $vp2Modal->set(function ($modal) use ($vp3Modal) {
-    // ViewTester::addTo($modal);
-    \Atk4\Ui\Message::addTo($modal, ['Message', @$_GET['color']])->text->addParagraph('This text is loaded using a second modal.');
+    ViewTester::addTo($modal);
+    \Atk4\Ui\Message::addTo($modal, ['Message', $_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
     \Atk4\Ui\Button::addTo($modal)->set('Third modal')->on('click', $vp3Modal->show());
 });
 

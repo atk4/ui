@@ -1248,7 +1248,7 @@ parameters:
             message: '~^Method Atk4\\Ui\\Callback::setUrlTrigger\(\) has no return typehint specified\.$~'
         -
             path: 'src/Callback.php'
-            message: '~^Method Atk4\\Ui\\Callback::isTriggered\(\) has no return typehint specified\.$~'
+            message: '~^Method Atk4\\Ui\\Callback::add\(\) has parameter \$args with no typehint specified\.$~'
         -
             path: 'src/Card.php'
             message: '~^Method Atk4\\Ui\\Card::setDataId\(\) has no return typehint specified\.$~'
