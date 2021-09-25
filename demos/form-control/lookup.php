@@ -39,7 +39,12 @@ $form->addControl('country3', [
 ]);
 
 $form->onSubmit(function (Form $form) {
-    $str = $form->model->ref('country1')->get('name') . ' ' . $form->model->ref('country2')->get('name') . ' ' . (new Country($form->getApp()->db))->tryLoad($form->model->get('country3'))->get('name');
+    $str = $form->model->ref('country1')->get(Country::hinting()->fieldName()->name);
+    $str .= '; ';
+    $str .= $form->model->ref('country2')->get(Country::hinting()->fieldName()->name);
+    $str .= '; ';
+    $str .= (new Country($form->getApp()->db))->tryLoad($form->model->get('country3'))->get(Country::hinting()->fieldName()->name);
+
     $view = new \Atk4\Ui\Message('Select:'); // need in behat test.
     $view->invokeInit();
     $view->text->addParagraph($str);
