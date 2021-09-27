@@ -34,6 +34,11 @@ class Callback extends AbstractView
     /** @var bool Allow this callback to trigger during a reload. */
     public $triggerOnReload = true;
 
+    public function add($object, $args = null): AbstractView
+    {
+        throw new Exception('Callback can NOT contains children');
+    }
+
     /**
      * Initialization.
      */
@@ -86,7 +91,7 @@ class Callback extends AbstractView
     /**
      * Return true if urlTrigger is part of the request.
      */
-    public function isTriggered()
+    public function isTriggered(): bool
     {
         return isset($_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger]);
     }
