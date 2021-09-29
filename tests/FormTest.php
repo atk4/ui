@@ -149,7 +149,7 @@ class FormTest extends TestCase
         $m->addField('opt1', ['values' => $options]);
         $m->addField('opt2', ['values' => $options]);
         $m->addField('opt3', ['values' => $options, 'required' => true]);
-        //$m->addField('opt3_zerotest', ['values'=>$options, 'required'=>true]);
+        //$m->addField('opt3_zerotest', ['values' => $options, 'required' => true]);
         $m->addField('opt4', ['values' => $options, 'mandatory' => true]);
 
         $m = $m->createEntity();

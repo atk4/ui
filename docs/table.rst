@@ -45,18 +45,18 @@ Using with Array Data
 You can also use Table with Array data source like this::
 
     $my_array = [
-        ['name'=>'Vinny', 'surname'=>'Sihra', 'birthdate'=>new \DateTime('1973-02-03')],
-        ['name'=>'Zoe', 'surname'=>'Shatwell', 'birthdate'=>new \DateTime('1958-08-21')],
-        ['name'=>'Darcy', 'surname'=>'Wild', 'birthdate'=>new \DateTime('1968-11-01')],
-        ['name'=>'Brett', 'surname'=>'Bird', 'birthdate'=>new \DateTime('1988-12-20')],
+        ['name' => 'Vinny', 'surname' => 'Sihra', 'birthdate' => new \DateTime('1973-02-03')],
+        ['name' => 'Zoe', 'surname' => 'Shatwell', 'birthdate' => new \DateTime('1958-08-21')],
+        ['name' => 'Darcy', 'surname' => 'Wild', 'birthdate' => new \DateTime('1968-11-01')],
+        ['name' => 'Brett', 'surname' => 'Bird', 'birthdate' => new \DateTime('1988-12-20')],
     ];
 
     $table = Table::addTo($app);
     $table->setSource($my_array);
 
     $table->addColumn('name');
-    $table->addColumn('surname', [\Atk4\Ui\Table\Column\Link::class, 'url'=>'details.php?surname={$surname}']);
-    $table->addColumn('birthdate', null, ['type'=>'date']);
+    $table->addColumn('surname', [\Atk4\Ui\Table\Column\Link::class, 'url' => 'details.php?surname={$surname}']);
+    $table->addColumn('birthdate', null, ['type' => 'date']);
 
 .. warning:: I encourage you to seek appropriate Agile Data persistence instead of
     handling data like this. The implementation of :php:meth:`View::setSource` will
@@ -121,8 +121,8 @@ specify the caption, you can use code like this::
 
     $order->addExpression('total', [
         '[price]*[amount]',
-        'type'=>'money',
-        'caption'=>'Total Price'
+        'type' => 'money',
+        'caption' => 'Total Price'
     ]);
 
     $table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
@@ -268,7 +268,7 @@ The tag will override model value. Here is example usage of :php:meth:`Table\\Co
 
         function getHtmlTags(\Atk4\Data\Model $row)
         {
-            return ['_expired'=>
+            return ['_expired' =>
                 $row->get('date') < new \DateTime() ?
                 '<td class="danger">EXPIRED</td>' :
                 '<td></td>'

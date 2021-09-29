@@ -31,7 +31,7 @@ Decorating Menu Items
 
 See :php:class:`Item` for more options::
 
-    $menu->addItem(['foo', 'icon'=>'book']);
+    $menu->addItem(['foo', 'icon' => 'book']);
 
 Specifying Links and Actions
 ============================

@@ -103,7 +103,7 @@ class User extends Model {
         parent::init();
 
         $this->addField('name');
-        $this->addField('gender', ['enum'=>'female','male','other']);
+        $this->addField('gender', ['enum' => 'female','male','other']);
         $this->hasMany('Purchases', ['model' => [Purchase::class]]);
     }
 }
@@ -118,7 +118,7 @@ use \Atk4\Mastercrud\MasterCrud;
 
 $master_crud = MasterCrud::addTo($app);
 $master_crud->setModel(new User($app->db), [
-  'Purchases'=>[]
+  'Purchases' => []
 ]);
 
 ```
@@ -200,8 +200,8 @@ class User extends \Atk4\Data\Model {
         parent::init();
 
         $this->addField('name');
-        $this->addField('email', ['required'=>true]);
-        $this->addField('password', ['type'=>'password']);
+        $this->addField('email', ['required' => true]);
+        $this->addField('password', ['type' => 'password']);
     }
 }
 

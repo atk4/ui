@@ -23,8 +23,8 @@ implementation that load and store data in a regular PHP arrays. For the "quick 
 method :php:meth:`View::setSource` which will work-around complexities and give you a syntax::
 
     $grid->setSource([
-        1 => ['name'=>'John', 'surname'=>'Smith', 'age'=>10],
-        2 => ['name'=>'Sarah', 'surname'=>'Kelly', 'age'=>20],
+        1 => ['name' => 'John', 'surname' => 'Smith', 'age' => 10],
+        2 => ['name' => 'Sarah', 'surname' => 'Kelly', 'age' => 20],
     ]);
 
 .. note::

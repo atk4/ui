@@ -189,7 +189,7 @@ class Form extends View
 
     /**
      * initialize form layout. You can inject custom layout
-     * if you 'layout'=>.. to constructor.
+     * if you 'layout' => .. to constructor.
      */
     protected function initLayout()
     {

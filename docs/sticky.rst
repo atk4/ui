@@ -88,7 +88,7 @@ Dropping sticky argument
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 Sometimes you want to drop a sticky argument. If your sticky was set locally, you can drop it by calling
-either a parent's url or $app->url(), however for global sticky Get you can use either `url(['client_id'=>false])` 
+either a parent's url or $app->url(), however for global sticky Get you can use either `url(['client_id' => false])` 
 or `stickyForget('client_id')`.
 
 

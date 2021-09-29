@@ -27,7 +27,7 @@ items. If your HTML looks like this::
 
 you should put that into file `myview.html` then use it with a view::
 
-    $view = View::addTo($app, ['template'=>'myview.html']);
+    $view = View::addTo($app, ['template' => 'myview.html']);
 
 Now your application should contain list of 3 sample countires as you have specified in HTML, but next
 we need to add some tags into your template::
@@ -106,8 +106,8 @@ Model vs Static Source
 Since Lister is non-interactive, you can also set a static source for your lister to avoid hassle::
 
     $lister->setSource([
-        ['flag'=>'ca', 'name'=>'Canada'],
-        ['flag'=>'uk', 'name'=>'UK'],
+        ['flag' => 'ca', 'name' => 'Canada'],
+        ['flag' => 'uk', 'name' => 'UK'],
     ]);
 
 Special template tags
@@ -138,7 +138,7 @@ Using without Template
 Agile UI comes with a one sample template for your lister, although it's not set by default,
 you can specify it explicitly::
 
-    Lister::addTo($app, ['defaultTemplate'=>'lister.html']);
+    Lister::addTo($app, ['defaultTemplate' => 'lister.html']);
 
 This should display a list nicely formatted by Fomantic UI, with header, links, icons and description area.
 

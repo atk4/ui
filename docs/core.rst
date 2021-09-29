@@ -74,7 +74,7 @@ declare "sticky GET arguments". Here is example::
         Message::addTo($app)->set($_GET['message']);
     }
 
-    Button::addTo($app, ['Trigger message'])->link(['message'=>'Hello World']);
+    Button::addTo($app, ['Trigger message'])->link(['message' => 'Hello World']);
 
 The code is simple - if you click the button, page will appear with the message just above, however
 there is a potential problem here. What if "Message" wanted to perform a :ref:`Callback`? What if
@@ -86,7 +86,7 @@ In Agile UI you can request that some $_GET arguments are preserved and included
         Message::addTo($app)->set($_GET['message']);
     }
 
-    Button::addTo($app, ['Trigger message'])->link(['message'=>'Hello World']);
+    Button::addTo($app, ['Trigger message'])->link(['message' => 'Hello World']);
 
 There are two types of "sticky" parameters, application-wide and view-specific.
 
@@ -134,7 +134,7 @@ have to worry over the details::
     $user = new User($db);
     $user = $user->load(1);
 
-    $view = View::addTo($app, ['template'=>'Hello, {$name}, your balance is {$balance}']);
+    $view = View::addTo($app, ['template' => 'Hello, {$name}, your balance is {$balance}']);
     $view->setModel($user);
 
 Next section will explain you how the Agile UI interacts with the data layer and how it outputs or

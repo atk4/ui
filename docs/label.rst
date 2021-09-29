@@ -50,12 +50,12 @@ Icons
 
 There are two properties (icon, iconRight) but you can set only one at a time::
 
-    Label::addTo($app, ['23', 'icon'=>'mail']);
-    Label::addTo($app, ['new', 'iconRight'=>'delete']);
+    Label::addTo($app, ['23', 'icon' => 'mail']);
+    Label::addTo($app, ['new', 'iconRight' => 'delete']);
 
 You can also specify icon as an object::
 
-    Label::addTo($app, ['new', 'iconRight'=>new \Atk4\Ui\Icon('delete')]);
+    Label::addTo($app, ['new', 'iconRight' => new \Atk4\Ui\Icon('delete')]);
 
 For more information, see: :php:class:`Icon`
 
@@ -65,14 +65,14 @@ Image
 Image cannot be specified at the same time with the icon, but you can use PNG/GIF/JPG image on your label::
 
     $img = 'https://raw.githubusercontent.com/atk4/ui/2.0.4/public/logo.png';
-    Label::addTo($app, ['Coded in PHP', 'image'=>$img]);
+    Label::addTo($app, ['Coded in PHP', 'image' => $img]);
 
 Detail
 ======
 
 You can specify "detail" component to your label::
 
-    Label::addTo($app, ['Number of lines', 'detail'=>'33']);
+    Label::addTo($app, ['Number of lines', 'detail' => '33']);
 
 Groups
 ======
@@ -80,7 +80,7 @@ Groups
 Label can be part of the group, but you would need to either use custom HTML template or
 composition::
 
-    $group = View::addTo($app, [false, 'blue tag', 'ui'=>'labels']);
+    $group = View::addTo($app, [false, 'blue tag', 'ui' => 'labels']);
     Label::addTo($group, ['$9.99']);
     Label::addTo($group, ['$19.99', 'red tag']);
     Label::addTo($group, ['$24.99']);
@@ -93,28 +93,28 @@ Based on Fomantic UI documentation, you can add more classes to your labels::
     $columns = Columns::addTo($app);
 
     $c = $columns->addColumn();
-    $col = View::addTo($c, ['ui'=>'raised segment']);
+    $col = View::addTo($c, ['ui' => 'raised segment']);
 
     // attach label to the top of left column
-    Label::addTo($col, ['Left Column', 'top attached', 'icon'=>'book']);
+    Label::addTo($col, ['Left Column', 'top attached', 'icon' => 'book']);
 
     // ribbon around left column
-    Label::addTo($col, ['Lorem', 'red ribbon', 'icon'=>'cut']);
+    Label::addTo($col, ['Lorem', 'red ribbon', 'icon' => 'cut']);
 
     // add some content inside column
-    LoremIpsum::addTo($col, ['size'=>1]);
+    LoremIpsum::addTo($col, ['size' => 1]);
 
     $c = $columns->addColumn();
-    $col = View::addTo($c, ['ui'=>'raised segment']);
+    $col = View::addTo($c, ['ui' => 'raised segment']);
 
     // attach label to the top of right column
-    Label::addTo($col, ['Right Column', 'top attached', 'icon'=>'book']);
+    Label::addTo($col, ['Right Column', 'top attached', 'icon' => 'book']);
 
     // some content
-    LoremIpsum::addTo($col, ['size'=>1]);
+    LoremIpsum::addTo($col, ['size' => 1]);
 
     // right bottom corner label
-    Label::addTo($col, ['Ipsum', 'orange bottom right attached', 'icon'=>'cut']);
+    Label::addTo($col, ['Ipsum', 'orange bottom right attached', 'icon' => 'cut']);
 
 Added labels into Table
 =======================
@@ -125,7 +125,7 @@ the following code is needed::
     $table->onHook(\Atk4\Ui\Table\Column::HOOK_GET_HTML_TAGS, function ($table, Model $row) {
         if ($row->getId() == 1) {
             return [
-                'name'=> $table->getApp()->getTag('div', ['class'=>'ui ribbon label'], $row->get('name')),
+                'name' => $table->getApp()->getTag('div', ['class' => 'ui ribbon label'], $row->get('name')),
             ];
         }
     });

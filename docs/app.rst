@@ -248,11 +248,11 @@ to provide a simple way to redirect for users who are not familiar with JavaScri
 so well.  Example::
 
     if (!isset($_GET['age'])) {
-        $app->redirect(['age'=>18]);
+        $app->redirect(['age' => 18]);
     }
 
     Button::addTo($app, ['Increase age'])
-        ->on('click', $app->jsRedirect(['age'=>$_GET['age']+1]));
+        ->on('click', $app->jsRedirect(['age' => $_GET['age']+1]));
 
 No much magic in these methods.
 
@@ -298,7 +298,7 @@ Links
 
 Method to generate links between pages. Specified with associative array::
 
-    $url = $app->url(['contact', 'from'=>'John Smith']);
+    $url = $app->url(['contact', 'from' => 'John Smith']);
 
 This method must respond with a properly formatted url, such as::
 

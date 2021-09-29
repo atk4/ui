@@ -21,7 +21,7 @@ class Custom extends AbstractLayout
         parent::init();
 
         if (!$this->template) {
-            throw new Exception('You must specify template for Form/Layout/Custom. Try [\'Custom\', \'defaultTemplate\'=>\'./yourform.html\']');
+            throw new Exception('You must specify template for Form/Layout/Custom. Try [\'Custom\', \'defaultTemplate\' => \'./yourform.html\']');
         }
     }
 

@@ -805,46 +805,46 @@ class App
     /**
      * Construct HTML tag with supplied attributes.
      *
-     * $html = getTag('img/', ['src'=>'foo.gif','border'=>0]);
+     * $html = getTag('img/', ['src' => 'foo.gif','border' => 0]);
      * // "<img src="foo.gif" border="0"/>"
      *
      *
      * The following rules are respected:
      *
-     * 1. all array key=>val elements appear as attributes with value escaped.
-     * getTag('div/', ['data'=>'he"llo']);
+     * 1. all array key => val elements appear as attributes with value escaped.
+     * getTag('div/', ['data' => 'he"llo']);
      * --> <div data="he\"llo"/>
      *
      * 2. boolean value true will add attribute without value
-     * getTag('td', ['nowrap'=>true]);
+     * getTag('td', ['nowrap' => true]);
      * --> <td nowrap>
      *
      * 3. null and false value will ignore the attribute
-     * getTag('img', ['src'=>false]);
+     * getTag('img', ['src' => false]);
      * --> <img>
      *
-     * 4. passing key 0=>"val" will re-define the element itself
-     * getTag('img', ['input', 'type'=>'picture']);
+     * 4. passing key 0 => "val" will re-define the element itself
+     * getTag('img', ['input', 'type' => 'picture']);
      * --> <input type="picture" src="foo.gif">
      *
      * 5. use '/' at end of tag to close it.
-     * getTag('img/', ['src'=>'foo.gif']);
+     * getTag('img/', ['src' => 'foo.gif']);
      * --> <img src="foo.gif"/>
      *
      * 6. if main tag is self-closing, overriding it keeps it self-closing
-     * getTag('img/', ['input', 'type'=>'picture']);
+     * getTag('img/', ['input', 'type' => 'picture']);
      * --> <input type="picture" src="foo.gif"/>
      *
      * 7. simple way to close tag. Any attributes to closing tags are ignored
      * getTag('/td');
      * --> </td>
      *
-     * 7b. except for 0=>'newtag'
-     * getTag('/td', ['th', 'align'=>'left']);
+     * 7b. except for 0 => 'newtag'
+     * getTag('/td', ['th', 'align' => 'left']);
      * --> </th>
      *
      * 8. using $value will add value inside tag. It will also encode value.
-     * getTag('a', ['href'=>'foo.html'] ,'click here >>');
+     * getTag('a', ['href' => 'foo.html'] ,'click here >>');
      * --> <a href="foo.html">click here &gt;&gt;</a>
      *
      * 9. you may skip attribute argument.
@@ -853,13 +853,13 @@ class App
      *
      * 10. pass array as 3rd parameter to nest tags. Each element can be either string (inserted as-is) or
      * array (passed to getTag recursively)
-     * getTag('a', ['href'=>'foo.html'], [['b','click here'], ' for fun']);
+     * getTag('a', ['href' => 'foo.html'], [['b','click here'], ' for fun']);
      * --> <a href="foo.html"><b>click here</b> for fun</a>
      *
      * 11. extended example:
-     * getTag('a', ['href'=>'hello'], [
-     *    ['b', 'class'=>'red', [
-     *        ['i', 'class'=>'blue', 'welcome']
+     * getTag('a', ['href' => 'hello'], [
+     *    ['b', 'class' => 'red', [
+     *        ['i', 'class' => 'blue', 'welcome']
      *    ]]
      * ]);
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
