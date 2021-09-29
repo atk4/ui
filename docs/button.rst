@@ -37,11 +37,11 @@ Button Icon
 
 Property $icon will place icon on your button and can be specified in one of the following two ways::
 
-    $button = Button::addTo($app, ['Like', 'blue', 'icon'=>'thumbs up']);
+    $button = Button::addTo($app, ['Like', 'blue', 'icon' => 'thumbs up']);
 
     // or
 
-    $button = Button::addTo($app, ['Like', 'blue', 'icon'=>new Icon('thumbs up')]);
+    $button = Button::addTo($app, ['Like', 'blue', 'icon' => new Icon('thumbs up')]);
 
 or if you prefer initializing objects::
 
@@ -56,7 +56,7 @@ or if you prefer initializing objects::
 Setting this will display icon on the right of the button::
 
 
-    $button = Button::addTo($app, ['Next', 'iconRight'=>'right arrow']);
+    $button = Button::addTo($app, ['Next', 'iconRight' => 'right arrow']);
 
 Apart from being on the right, the same rules apply as :php:attr:`Button::$icon`. Both
 icons cannot be specified simultaniously.
@@ -67,11 +67,11 @@ Button Bar
 Buttons can be aranged into a bar. You would need to create a :php:class:`View` component
 with property ``ui='buttons'`` and add your other buttons inside::
 
-    $bar = View::addTo($app, ['ui'=>'vertical buttons']);
+    $bar = View::addTo($app, ['ui' => 'vertical buttons']);
 
-    Button::addTo($bar, ['Play', 'icon'=>'play']);
-    Button::addTo($bar, ['Pause', 'icon'=>'pause']);
-    Button::addTo($bar, ['Shuffle', 'icon'=>'shuffle']);
+    Button::addTo($bar, ['Play', 'icon' => 'play']);
+    Button::addTo($bar, ['Pause', 'icon' => 'pause']);
+    Button::addTo($bar, ['Shuffle', 'icon' => 'shuffle']);
 
 At this point using alternative syntax where you initialize objects yourself becomes a bit too complex and lengthy::
 
@@ -103,7 +103,7 @@ Will link button to a destination URL or page::
 
     $button->link('https://google.com/');
     // or
-    $button->link(['details', 'id'=>123]);
+    $button->link(['details', 'id' => 123]);
 
 If array is used, it's routed to :php:meth:`App::url`
 
@@ -119,7 +119,7 @@ Complex Buttons
 Knowledge of the Fomantic UI button (https://fomantic-ui.com/elements/button.html) can help you
 in creating more complex buttons::
 
-    $forks = new Button(['labeled'=> true]); // Button, not Buttons!
+    $forks = new Button(['labeled' => true]); // Button, not Buttons!
     Icon::addTo(Button::addTo($forks, ['Forks', 'blue']), ['fork']);
     Label::addTo($forks, ['1,048', 'basic blue left pointing']);
     $app->add($forks);

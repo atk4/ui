@@ -79,7 +79,7 @@ Paginator
 Grid comes with a paginator already. You can disable it by setting $paginator property to false. Alternatively you
 can provide seed for the paginator or even entire object::
 
-    $grid = Grid::addTo($app, ['paginator'=>['range'=>2]]);
+    $grid = Grid::addTo($app, ['paginator' => ['range' => 2]]);
 
 You can use $ipp property to specify different number of items per page::
 
@@ -111,7 +111,7 @@ Actions
 :php:class:`Table` supports use of :php:class:`Table\\Column\\\Actions`, which allows to display button for each row.
 Calling addAction() provides a useful short-cut for creating column-based actions.
 
-$button can be either a string (for a button label) or something like `['icon'=>'book']`.
+$button can be either a string (for a button label) or something like `['icon' => 'book']`.
 
 If $confirm is set to true, then user will see a confirmation when he clicks on the action (yes/no).
 

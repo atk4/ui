@@ -16,9 +16,9 @@ require_once __DIR__ . '/../init-app.php';
 
 // create form
 $form = Form::addTo($app, ['segment']);
-//$form = Form::addTo($app, ['segment', 'buttonSave'=>false]);
-//$form = Form::addTo($app, ['segment', 'buttonSave'=>new \Atk4\Ui\Button(['Import', 'secondary', 'iconRight'=>'list'])]);
-//$form = Form::addTo($app, ['segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]);
+//$form = Form::addTo($app, ['segment', 'buttonSave' => false]);
+//$form = Form::addTo($app, ['segment', 'buttonSave' => new \Atk4\Ui\Button(['Import', 'secondary', 'iconRight' => 'list'])]);
+//$form = Form::addTo($app, ['segment', 'buttonSave' => [null, 'Import', 'secondary', 'iconRight' => 'list']]);
 \Atk4\Ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveControls']);
 
 $form->setModel((new Country($app->db))->createEntity(), false);

@@ -45,8 +45,8 @@ which is described below. You can also provide first argument to addStep as a se
 
     $wizard->addStep([
         'Set DSN',
-        'icon'=>'configure',
-        'description'=>'Database Connection String'
+        'icon' => 'configure',
+        'description' => 'Database Connection String'
     ], function ($p) {
         // some code here
     });

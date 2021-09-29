@@ -15,10 +15,10 @@ use Atk4\Ui\Table;
  * [
  * ColorRating::class,
  *      [
- *      'min'     => 1,
- *      'max'     => 3,
- *      'steps'   => 3,
- *      'colors'  => [
+ *      'min' => 1,
+ *      'max' => 3,
+ *      'steps' => 3,
+ *      'colors' => [
  *          '#FF0000',
  *          '#FFFF00',
  *          '#00FF00'

@@ -72,7 +72,7 @@ For example the next code will use some logic::
         // display list of users
         $table = Table::addTo($app);
         $table->setModel($model);
-        $table->addDecorator(['name', [\Atk4\Ui\Table\Column\Link::class, [], ['user_id'=>'id']);
+        $table->addDecorator(['name', [\Atk4\Ui\Table\Column\Link::class, [], ['user_id' => 'id']);
     }
 
     $crumb->popTitle();

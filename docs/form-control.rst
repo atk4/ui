@@ -75,12 +75,12 @@ into multiple Tabs or detach form control groups or even create nested layouts::
 
     $form = \Atk4\Ui\Form::addTo($app);
     $tabs = \Atk4\Ui\Tabs::addTo($form, [], ['AboveControls']);
-    \Atk4\Ui\View::addTo($form, ['ui'=>'divider'], ['AboveControls']);
+    \Atk4\Ui\View::addTo($form, ['ui' => 'divider'], ['AboveControls']);
 
-    $form_page = Form\Layout::addTo($tabs->addTab('Basic Info'), ['form'=>$form]);
+    $form_page = Form\Layout::addTo($tabs->addTab('Basic Info'), ['form' => $form]);
     $form_page->addControl('name', new \Atk4\Ui\Form\Control\Line());
 
-    $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form'=>$form]);
+    $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
     $form_page->addControl('age', new \Atk4\Ui\Form\Control\Line());
 
     $form->onSubmit(function($form) { return $form->model->get('name').' has age '.$form->model->get('age'); });
@@ -106,19 +106,19 @@ will update to use a more suitable form control.
 Hint can be specified either inside Form Control decorator seed or inside the Field::ui attribute::
 
 
-    $form->addControl('title', null, ['values'=>['Mr', 'Mrs', 'Miss'], 'hint'=>'select one']);
+    $form->addControl('title', null, ['values' => ['Mr', 'Mrs', 'Miss'], 'hint' => 'select one']);
 
-    $form->addControl('name', ['hint'=>'Full Name Only']);
+    $form->addControl('name', ['hint' => 'Full Name Only']);
 
 Text will have HTML characters escaped. You may also specify hint value as an object::
 
-    $form->addControl('name', ['hint'=>new \Atk4\Ui\Text(
+    $form->addControl('name', ['hint' => new \Atk4\Ui\Text(
         'Click <a href="https://example.com/" target="_blank">here</a>'
     )]);
 
 or you can inject a view with a custom template::
 
-    $form->addControl('name', ['hint'=>['template'=>new \Atk4\Ui\Template(
+    $form->addControl('name', ['hint' => ['template' => new \Atk4\Ui\Template(
         'Click <a href="https://example.com/" target="_blank">here</a>'
     )]]);
 
@@ -183,12 +183,12 @@ The rules are rather straightforward but may change in future versions of Agile 
 
 You always have an option to explicitly specify which field you would like to use::
 
-    $model->addField('long_text', ['ui'=>['rorm'=>\Atk4\Ui\Form\Control\TextArea::class]]);
+    $model->addField('long_text', ['ui' => ['rorm' => \Atk4\Ui\Form\Control\TextArea::class]]);
 
 It is recommended however, that you use type when possible, because types will be universally supported
 by all components::
 
-    $model->addField('long_text', ['type'=>'text']);
+    $model->addField('long_text', ['type' => 'text']);
 
 .. note:: All forms will be associted with a model. If form is not explicitly linked with a model, it will create
     a ProxyModel and all form controls will be created automatically in that model. As a result, all Form Control Decorators
@@ -224,7 +224,7 @@ element. For example, `icon` property:
 Here are few ways to specify `icon` to an Input::
 
     // compact
-    Line::addTo($page, ['icon'=>'search']);
+    Line::addTo($page, ['icon' => 'search']);
 
     // Type-hinting friendly
     $line = new \Atk4\Ui\Form\Control\Line();
@@ -232,7 +232,7 @@ Here are few ways to specify `icon` to an Input::
     $page->add($line);
 
     // using class factory
-    Line::addTo($page, ['icon'=>'search']);
+    Line::addTo($page, ['icon' => 'search']);
 
 The 'icon' property can be either string or a View. The string is for convenience and will
 be automatically substituted with `new Icon($icon)`. If you wish to be more specifc
@@ -304,7 +304,7 @@ $expression argument can be string, JsExpression, array of JsExpressions or even
     $f2->onChange(function(){return new \Atk4\Ui\JsExpression('console.log("f2 changed")');});
 
     // Calendar form control - wraps in function call with arguments date, text and mode
-    $c1 = $form->addControl('c1', new \Atk4\Ui\Form\Control\Calendar(['type'=>'date']));
+    $c1 = $form->addControl('c1', new \Atk4\Ui\Form\Control\Calendar(['type' => 'date']));
     $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
 
 
@@ -326,7 +326,7 @@ of records to display. Dropdown renders all records when the paged is rendered, 
 
 To render a model field as Dropdown, use the ui property of the field::
 
-    $model->addField('someField', ['ui' => ['form' =>[\Atk4\Ui\Form\Control\Dropdown::class]]]);
+    $model->addField('someField', ['ui' => ['form' => [\Atk4\Ui\Form\Control\Dropdown::class]]]);
 
 ..  Customizing how a Model's records are displayed in Dropdown
 As default, Dropdown will use the `$model->id_field` as value, and `$model->title_field` as title for each menu item.
@@ -346,7 +346,7 @@ You can also use this function to add an Icon to a record::
         return [
             'value' => $record->id_field,
             'title' => $record->getTitle().' ('.$record->get('subtitle').')',
-            'icon'  => $record->get('value') > 100 ? 'money' : 'coins',
+            'icon' => $record->get('value') > 100 ? 'money' : 'coins',
         ];
     }
 
@@ -378,7 +378,7 @@ With the according renderRowFunction::
         return [
             'value' => $record->getId(),
             'title' => $record->getTitle,
-            'icon'  => $record->value > 100 ? 'money' : 'coins',
+            'icon' => $record->value > 100 ? 'money' : 'coins',
             'someOtherField' => $record->get('SomeOtherField'),
             'someOtherField2' => $record->get('SomeOtherField2'),
         ];
@@ -392,18 +392,18 @@ Usage with $values property
 If not used with a model, you can define the Dropdown values in $values array. The pattern is value => title::
 
     $dropdown->values = [
-        'decline'   => 'No thanks',
+        'decline' => 'No thanks',
         'postprone' => 'Maybe later',
-        'accept'    => 'Yes, I want to!',
+        'accept' => 'Yes, I want to!',
     ];
     
 You can also define an Icon right away::
 
      $dropdown->values = [
-         'tag'        => ['Tag', 'icon' => 'tag icon'],
-         'globe'      => ['Globe', 'icon' => 'globe icon'],
+         'tag' => ['Tag', 'icon' => 'tag icon'],
+         'globe' => ['Globe', 'icon' => 'globe icon'],
          'registered' => ['Registered', 'icon' => 'registered icon'],
-         'file'       => ['File', 'icon' => 'file icon']
+         'file' => ['File', 'icon' => 'file icon']
      ].
 
 If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.
@@ -445,8 +445,8 @@ By default Dropdown will save values as comma-separated string value in data mod
 See this example from Model class init method::
     $expr_model = $this->ref('Expressions');
     $this->addField('expressions', [
-        'type'      => 'array',
-        'required'  => true,
+        'type' => 'array',
+        'required' => true,
         'serialize' => 'json',
         'ui' => [
             'form' => [

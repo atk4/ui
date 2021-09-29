@@ -28,11 +28,11 @@ the treeItems array and that nodes key is not empty. Below is a sample of a grou
             'nodes' => [
                 [
                     'name' => 'tv',
-                    'id'   => '100'
+                    'id' => '100'
                 ],
                 [
                     'name' => 'radio',
-                    'id'   => '100'
+                    'id' => '100'
                 ],
             ]
         ]

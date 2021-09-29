@@ -109,9 +109,9 @@ clarifications::
             // Persistence may not have structure, so we define here
             $this->addField('domain_name');
             $this->addFields(['contact_email', 'contact_phone']);
-            $this->addField('date', ['type'=>'date']);
-            $this->addField('offer', ['type'=>'money']);
-            $this->addField('is_accepted', ['type'=>'boolean']);
+            $this->addField('date', ['type' => 'date']);
+            $this->addField('offer', ['type' => 'money']);
+            $this->addField('is_accepted', ['type' => 'boolean']);
         }
     }
 
@@ -206,7 +206,7 @@ flexibility. The next example adds a "Cancel" button to a form::
 
     $button = \Atk4\Ui\Button::addTo($form, [
         'Cancel',
-        'icon'=>new \Atk4\Ui\Icon('pencil')
+        'icon' => new \Atk4\Ui\Icon('pencil')
     ])->link('dashboard.php');
 
 :php:class:`Button` and :php:class:`Icon` are some of the most basic components in
@@ -252,7 +252,7 @@ Factory is a mechanism which allow you to use shorter syntax for creating object
 The goal of Agile UI is to be simple to read and use; so taking advantage of loose types
 in PHP language allows us to use an alternative shorter syntax::
 
-    \Atk4\Ui\Button::addTo($form, ['Cancel', 'icon'=>'pencil'])
+    \Atk4\Ui\Button::addTo($form, ['Cancel', 'icon' => 'pencil'])
         ->link('dashboard.php');
 
 By default, class names specified as the first array elements passed to the add() method are

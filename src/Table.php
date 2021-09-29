@@ -431,9 +431,9 @@ class Table extends Lister
     /**
      * Override works like this:.
      * [
-     *   'name'=>'Totals for {$num} rows:',
-     *   'price'=>'--',
-     *   'total'=>['sum']
+     *   'name' => 'Totals for {$num} rows:',
+     *   'price' => '--',
+     *   'total' => ['sum']
      * ].
      *
      * @param array $plan

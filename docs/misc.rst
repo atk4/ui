@@ -29,7 +29,7 @@ By default width is equally divided by columns. You may specify a custom width e
 You can specify how many columns are expected in a grid, but if you do you can't specify widths of individual
 columns. This seem like a limitation of Fomantic UI::
 
-    $c = Columns::addTo($page, ['width'=>4]);
+    $c = Columns::addTo($page, ['width' => 4]);
     Box::addTo($c->addColumn(), ['red']);
     Box::addTo($c->addColumn([null, 'right floated']), ['blue']);
 

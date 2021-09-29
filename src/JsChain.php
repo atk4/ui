@@ -63,11 +63,11 @@ class JsChain extends JsExpression
      * Call chain. All calls to this mapper will be recorded here. Property traversal
      * is also stored here.
      *
-     * $js->foo()->bar(1)->baz->test(['abc'=>123']);
+     * $js->foo()->bar(1)->baz->test(['abc' => 123']);
      *
      * will be stored in $chain as
      *
-     * [ ['foo'], ['bar', [1]], 'baz', ['test', ['abc=>123]] ]
+     * [ ['foo'], ['bar', [1]], 'baz', ['test', ['abc => 123]] ]
      *
      * will map into:
      *

@@ -66,7 +66,7 @@ class Lister extends View
     public function initChunks()
     {
         if (!$this->template) {
-            throw new Exception('Lister does not have default template. Either supply your own HTML or use "defaultTemplate"=>"lister.html"');
+            throw new Exception('Lister does not have default template. Either supply your own HTML or use "defaultTemplate" => "lister.html"');
         }
 
         // empty row template
