@@ -346,7 +346,7 @@ You can also use this function to add an Icon to a record::
         return [
             'value' => $record->id_field,
             'title' => $record->getTitle().' ('.$record->get('subtitle').')',
-            'icon'  => $record->get('value') > 100 ? 'money' : 'coins',
+            'icon' => $record->get('value') > 100 ? 'money' : 'coins',
         ];
     }
 
@@ -378,7 +378,7 @@ With the according renderRowFunction::
         return [
             'value' => $record->getId(),
             'title' => $record->getTitle,
-            'icon'  => $record->value > 100 ? 'money' : 'coins',
+            'icon' => $record->value > 100 ? 'money' : 'coins',
             'someOtherField' => $record->get('SomeOtherField'),
             'someOtherField2' => $record->get('SomeOtherField2'),
         ];
@@ -392,18 +392,18 @@ Usage with $values property
 If not used with a model, you can define the Dropdown values in $values array. The pattern is value => title::
 
     $dropdown->values = [
-        'decline'   => 'No thanks',
+        'decline' => 'No thanks',
         'postprone' => 'Maybe later',
-        'accept'    => 'Yes, I want to!',
+        'accept' => 'Yes, I want to!',
     ];
     
 You can also define an Icon right away::
 
      $dropdown->values = [
-         'tag'        => ['Tag', 'icon' => 'tag icon'],
-         'globe'      => ['Globe', 'icon' => 'globe icon'],
+         'tag' => ['Tag', 'icon' => 'tag icon'],
+         'globe' => ['Globe', 'icon' => 'globe icon'],
          'registered' => ['Registered', 'icon' => 'registered icon'],
-         'file'       => ['File', 'icon' => 'file icon']
+         'file' => ['File', 'icon' => 'file icon']
      ].
 
 If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.
@@ -445,8 +445,8 @@ By default Dropdown will save values as comma-separated string value in data mod
 See this example from Model class init method::
     $expr_model = $this->ref('Expressions');
     $this->addField('expressions', [
-        'type'      => 'array',
-        'required'  => true,
+        'type' => 'array',
+        'required' => true,
         'serialize' => 'json',
         'ui' => [
             'form' => [
