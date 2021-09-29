@@ -503,7 +503,7 @@ class Form extends View
 
         $fallbackSeed = [Form\Control\Line::class];
 
-        if ($field->type === 'array' && $field->getReference() !== null) {
+        if ($field->type === 'json' && $field->getReference() !== null) {
             $limit = ($field->getReference() instanceof ContainsMany) ? 0 : 1;
             $model = $field->getReference()->refModel();
             $fallbackSeed = [Form\Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];

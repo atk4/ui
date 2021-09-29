@@ -56,13 +56,8 @@ class Ui extends \Atk4\Data\Persistence
      */
     public function _typecastSaveField(\Atk4\Data\Field $f, $value)
     {
-        // serialize if we explicitly want that
-        if ($f->serialize) {
-            $value = $this->serializeSaveField($f, $value);
-        }
-
         // always normalize string EOL
-        if (is_string($value) && !$f->serialize) {
+        if (is_string($value)) {
             $value = preg_replace('~\r?\n|\r~', "\n", $value);
         }
 
@@ -98,9 +93,9 @@ class Ui extends \Atk4\Data\Persistence
 
                 break;
             case 'array':
+            case 'json':
             case 'object':
-                // don't encode if we already use some kind of serialization
-                $value = $f->serialize ? $value : json_encode($value, \JSON_THROW_ON_ERROR);
+                $value = json_encode($value, \JSON_THROW_ON_ERROR);
 
                 break;
         }
@@ -115,21 +110,8 @@ class Ui extends \Atk4\Data\Persistence
      */
     public function _typecastLoadField(\Atk4\Data\Field $f, $value)
     {
-        // serialize if we explicitly want that
-        if ($f->serialize && $value) {
-            try {
-                $new_value = $this->serializeLoadField($f, $value);
-            } catch (\Exception $e) {
-                throw (new Exception('Unable to serialize field value on load'))
-                    ->addMoreInfo('serializator', $f->serialize)
-                    ->addMoreInfo('value', $value)
-                    ->addMoreInfo('field', $f);
-            }
-            $value = $new_value;
-        }
-
         // always normalize string EOL
-        if (is_string($value) && !$f->serialize) {
+        if (is_string($value)) {
             $value = preg_replace('~\r?\n|\r~', "\n", $value);
         }
 

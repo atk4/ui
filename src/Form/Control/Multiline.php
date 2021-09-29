@@ -219,7 +219,7 @@ class Multiline extends Form\Control
             }
 
             // remove __atml id from array field.
-            if ($this->form->model->getField($this->short_name)->type === 'array') {
+            if ($this->form->model->getField($this->short_name)->type === 'json') {
                 $rows = [];
                 foreach ($this->rowData as $key => $cols) {
                     unset($cols['__atkml']);
@@ -281,7 +281,7 @@ class Multiline extends Form\Control
      */
     public function getValue(): string
     {
-        if ($this->field->type === 'array') {
+        if ($this->field->type === 'json') {
             $jsonValues = $this->getApp()->ui_persistence->_typecastSaveField($this->field, $this->field->get() ?? []);
         } else {
             // set data according to hasMany ref. or using model.

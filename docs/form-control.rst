@@ -339,7 +339,7 @@ This function is called with each model record and needs to return an array::
             'title' => $record->getTitle().' ('.$record->get('subtitle').')',
         ];
     }
-    
+
 You can also use this function to add an Icon to a record::
 
     $dropdown->renderRowFunction = function($record) {
@@ -353,9 +353,9 @@ You can also use this function to add an Icon to a record::
 If you'd like to even further adjust How each item is displayed (e.g. complex HTML and more model fields), you can extend the Dropdown class and create your own template with the complex HTML::
 
     class MyDropdown extends \Atk4\Ui\Dropdown {
-        
+
         public $defaultTemplate = 'my_dropdown.html';
-        
+
         /*
          * used when a custom callback is defined for row rendering. Sets
          * values to item template and appends it to main template
@@ -396,7 +396,7 @@ If not used with a model, you can define the Dropdown values in $values array. T
         'postprone' => 'Maybe later',
         'accept' => 'Yes, I want to!',
     ];
-    
+
 You can also define an Icon right away::
 
      $dropdown->values = [
@@ -425,7 +425,7 @@ There's a bunch of settings to influence Dropdown behaviour.
 
 Define a string for the empty option (no selection). Standard is non-breaking space symbol.
 
-.. php:attr:: isValueRequired 
+.. php:attr:: isValueRequired
 
 Whether or not this dropdown requires a value. When set to true, $empty is shown on page load but is not selectable once a value has been chosen.
 
@@ -436,7 +436,7 @@ Here you can pass an array of Fomantic UI dropdown options (https://fomantic-ui.
     $dropdown = new Dropdown(['dropdownOptions' => [
         'selectOnKeydown' => false,
     ]]);
-    
+
 .. php:attr:: isMultiple
 
 If set to true, multiple items can be selected in Dropdown. They will be sent comma seperated (value1,value2,value3) on form submit.
@@ -445,9 +445,8 @@ By default Dropdown will save values as comma-separated string value in data mod
 See this example from Model class init method::
     $expr_model = $this->ref('Expressions');
     $this->addField('expressions', [
-        'type' => 'array',
+        'type' => 'json',
         'required' => true,
-        'serialize' => 'json',
         'ui' => [
             'form' => [
                 \Atk4\Ui\Form\Control\Dropdown::class,
@@ -460,8 +459,8 @@ See this example from Model class init method::
             ],
         ],
     ]);
-    
-    
+
+
 DropdownCascade
 ===============
 

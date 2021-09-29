@@ -248,7 +248,7 @@ Data Field
 
 Data field is the 3rd argument to ``Form::addControl()``.
 
-There are 3 ways to define Data form control using 'string', 'array' or 'object'::
+There are 3 ways to define Data form control using 'string', 'json' or 'object'::
 
     $form->addControl('accept_terms', [\Atk4\Ui\Form\Control\Checkbox::class], 'Accept Terms & Conditions');
     $form->addControl('gender', null, ['enum' => ['Female', 'Male']]);
