@@ -24,7 +24,7 @@ class Persistence_Faker extends \Atk4\Data\Persistence
         }
     }
 
-    public function export($model, $fields = [])
+    private function export($model, $fields = [])
     {
         if (!$fields) {
             foreach ($model->getFields() as $name => $e) {
@@ -58,8 +58,6 @@ class Persistence_Faker extends \Atk4\Data\Persistence
             $data[] = $row;
         }
 
-        return array_map(function ($row) use ($model) {
-            return $this->typecastLoadRow($model, $row);
-        }, $data);
+        return $data;
     }
 }
