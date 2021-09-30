@@ -105,8 +105,8 @@ class Country extends ModelWithPrefixedFields
 
         $this->addField($this->fieldName()->iso, ['caption' => 'ISO', 'required' => true, 'type' => 'string', 'ui' => ['table' => ['sortable' => false]]]);
         $this->addField($this->fieldName()->iso3, ['caption' => 'ISO3', 'required' => true, 'type' => 'string']);
-        $this->addField($this->fieldName()->numcode, ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
-        $this->addField($this->fieldName()->phonecode, ['caption' => 'Phone Prefix', 'type' => 'number', 'required' => true]);
+        $this->addField($this->fieldName()->numcode, ['caption' => 'ISO Numeric Code', 'type' => 'integer', 'required' => true]);
+        $this->addField($this->fieldName()->phonecode, ['caption' => 'Phone Prefix', 'type' => 'integer', 'required' => true]);
 
         $this->onHook(Model::HOOK_BEFORE_SAVE, function (self $model) {
             if (!$model->sys_name) {
