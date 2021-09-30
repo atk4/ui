@@ -52,7 +52,7 @@ class FlyersForm extends Form
         $ml->setModel(new Flyers(new \Atk4\Data\Persistence\Array_($this->flyers)));
 
         $cards = $this->addControl('cards', [Form\Control\TreeItemSelector::class, 'treeItems' => $this->cards, 'caption' => 'Flyers program:'], ['type' => 'json']);
-        $cards->set($this->getApp()->encodeJson([]));
+        $cards->set([]);
 
         $this->onSubmit(function ($form) {
             return new \Atk4\Ui\JsToast('Thank you!');
