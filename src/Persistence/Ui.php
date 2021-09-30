@@ -50,18 +50,16 @@ class Ui extends \Atk4\Data\Persistence
 
     /**
      * This method contains the logic of casting generic values into user-friendly format.
-     *
-     * @return string|string[]
      */
-    public function _typecastSaveField(\Atk4\Data\Field $f, $value)
+    public function _typecastSaveField(\Atk4\Data\Field $f, $value): string
     {
+        // work only on cloned value
+        $value = is_object($value) ? clone $value : $value;
+
         // always normalize string EOL
         if (is_string($value)) {
             $value = preg_replace('~\r?\n|\r~', "\n", $value);
         }
-
-        // work only on copied value not real one !!!
-        $value = is_object($value) ? clone $value : $value;
 
         switch ($f->type) {
             case 'boolean':
@@ -99,9 +97,7 @@ class Ui extends \Atk4\Data\Persistence
                 break;
         }
 
-        return is_array($value)
-            ? array_map(function ($v) { return (string) $v; }, $value)
-            : (string) $value;
+        return (string) $value;
     }
 
     /**
