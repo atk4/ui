@@ -219,7 +219,7 @@ class Multiline extends Form\Control
             }
 
             // remove __atml id from array field.
-            if ($this->form->model->getField($this->short_name)->type === 'array') {
+            if ($this->form->model->getField($this->short_name)->type === 'json') {
                 $rows = [];
                 foreach ($this->rowData as $key => $cols) {
                     unset($cols['__atkml']);
@@ -281,7 +281,7 @@ class Multiline extends Form\Control
      */
     public function getValue(): string
     {
-        if ($this->field->type === 'array') {
+        if ($this->field->type === 'json') {
             $jsonValues = $this->getApp()->ui_persistence->_typecastSaveField($this->field, $this->field->get() ?? []);
         } else {
             // set data according to hasMany ref. or using model.
@@ -459,7 +459,7 @@ class Multiline extends Form\Control
             'definition' => $this->getComponentDefinition($field),
             'cellProps' => $this->getSuiTableCellProps($field),
             'caption' => $field->getCaption(),
-            'default' => $field->default,
+            'default' => $this->getApp()->ui_persistence->typecastSaveField($field, $field->default),
             'isExpr' => isset($field->expr),
             'isEditable' => $field->isEditable(),
             'isHidden' => $field->isHidden(),
@@ -478,7 +478,7 @@ class Multiline extends Form\Control
     {
         $props = [];
 
-        if ($field->type === 'money' || $field->type === 'number' || $field->type === 'integer') {
+        if ($field->type === 'money' || $field->type === 'integer') {
             $props['text-align'] = 'right';
         }
 
@@ -492,7 +492,7 @@ class Multiline extends Form\Control
     {
         $props = $this->componentProps[self::INPUT] ?? [];
 
-        $props['type'] = ($field->type === 'integer' || $field->type === 'float' || $field->type === 'money' || $field->type === 'number') ? 'number' : 'text';
+        $props['type'] = ($field->type === 'integer' || $field->type === 'float' || $field->type === 'money') ? 'number' : 'text';
 
         return array_merge($props, $field->ui['multiline'][self::INPUT] ?? []);
     }

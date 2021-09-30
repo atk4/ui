@@ -35,7 +35,7 @@ $model->scope()->add($orScope);
 
 $form = \Atk4\Ui\Form::addTo($app);
 
-$form->addControl('qb', [\Atk4\Ui\Form\Control\ScopeBuilder::class, 'model' => $model]);
+$form->addControl('qb', [\Atk4\Ui\Form\Control\ScopeBuilder::class, 'model' => $model], ['type' => 'object']);
 
 $form->onSubmit(function ($form) use ($model) {
     $message = $form->model->get('qb')->toWords($model);

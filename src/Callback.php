@@ -74,7 +74,12 @@ class Callback extends AbstractView
     public function set($fx = null, $args = null)
     {
         if ($this->isTriggered() && $this->canTrigger()) {
-            return $fx(...($args ?? []));
+            try {
+                return $fx(...($args ?? []));
+            } catch (\Exception $e) {
+                // prevent "Callback requested, but never reached" error
+                throw new \Error('Unexpected callback exception', 0, $e);
+            }
         }
     }
 

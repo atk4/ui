@@ -115,6 +115,16 @@ class Context extends RawMinkContext implements BehatContext
     {
         foreach ($this->getSession()->getPage()->findAll('css', 'div.ui.negative.icon.message > div.content > div.header') as $elem) {
             if ($elem->getText() === 'Critical Error') {
+                echo "\n" . trim(preg_replace(
+                    '~(?<=\n)(\d+|Stack Trace\n#FileObjectMethod)(?=\n)~',
+                    '',
+                    preg_replace(
+                        '~(^.*?)?\s*Critical Error\s*\n\s*|(\s*\n)+\s{0,16}~s',
+                        "\n",
+                        strip_tags($elem->find('xpath', '../../..')->getHtml())
+                    )
+                )) . "\n";
+
                 throw new Exception('Page contains uncaught exception');
             }
         }
