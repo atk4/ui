@@ -96,9 +96,9 @@ $group->addControl('Lookup_disb', [
 
 $group = $form->addGroup('Calendar');
 
-$group->addControl('date_norm', [Form\Control\Calendar::class, 'type' => 'date'])->set(date($app->ui_persistence->date_format));
-$group->addControl('date_read', [Form\Control\Calendar::class, 'type' => 'date', 'readonly' => true])->set(date($app->ui_persistence->date_format));
-$group->addControl('date_disb', [Form\Control\Calendar::class, 'type' => 'date', 'disabled' => true])->set(date($app->ui_persistence->date_format));
+$group->addControl('date_norm', [Form\Control\Calendar::class, 'type' => 'date'])->set(new \DateTime());
+$group->addControl('date_read', [Form\Control\Calendar::class, 'type' => 'date', 'readonly' => true])->set(new \DateTime());
+$group->addControl('date_disb', [Form\Control\Calendar::class, 'type' => 'date', 'disabled' => true])->set(new \DateTime());
 
 $form->onSubmit(function (Form $form) {
 });

@@ -35,6 +35,8 @@ abstract class AbstractLayout extends \Atk4\Ui\View
 
         if (is_string($field)) {
             $field = ['type' => $field];
+        } elseif (is_array($control) && isset($control['type'])) {
+            $field = ['type' => $control['type']];
         }
 
         try {

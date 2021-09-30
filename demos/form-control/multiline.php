@@ -36,7 +36,7 @@ $inventoryItemClass = get_class(new class() extends Model {
             'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->addField('inv_date', [
-            'default' => date($this->dateFormat),
+            'default' => new \DateTime(),
             'type' => 'date',
             'typecast' => [
                 function ($v) {
@@ -49,7 +49,7 @@ $inventoryItemClass = get_class(new class() extends Model {
             'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->addField('inv_time', [
-            'default' => date($this->timeFormat),
+            'default' => new \DateTime(),
             'type' => 'time',
             'typecast' => [
                 function ($v) {
@@ -96,8 +96,8 @@ $total = 0;
 for ($i = 1; $i < 3; ++$i) {
     $entity = $inventory->createEntity();
     $entity->set('id', $i);
-    $entity->set('inv_date', date($dateFormat));
-    $entity->set('inv_time', date($timeFormat));
+    $entity->set('inv_date', new \DateTime());
+    $entity->set('inv_time', new \DateTime());
     $entity->set('item', 'item_' . $i);
     $entity->set('country', random_int(1, 100));
     $entity->set('qty', random_int(10, 100));
