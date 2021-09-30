@@ -38,27 +38,11 @@ $inventoryItemClass = get_class(new class() extends Model {
         $this->addField('inv_date', [
             'default' => new \DateTime(),
             'type' => 'date',
-            'typecast' => [
-                function ($v) {
-                    return ($v instanceof \DateTime) ? date_format($v, $this->dateFormat) : $v;
-                },
-                function ($v) {
-                    return $v;
-                },
-            ],
             'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->addField('inv_time', [
             'default' => new \DateTime(),
             'type' => 'time',
-            'typecast' => [
-                function ($v) {
-                    return ($v instanceof \DateTime) ? date_format($v, $this->timeFormat) : $v;
-                },
-                function ($v) {
-                    return $v;
-                },
-            ],
             'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->hasOne('country', [
