@@ -24,7 +24,6 @@ class Ui extends \Atk4\Data\Persistence
     public $time_format = 'H:i';
 
     public $datetime_format = 'M d, Y H:i:s';
-    // 'D, d M Y H:i:s O';
 
     /**
      * Calendar input first day of week.
@@ -76,8 +75,8 @@ class Ui extends \Atk4\Data\Persistence
             case 'date':
             case 'datetime':
             case 'time':
-                $dt_class = $f->dateTimeClass ?? \DateTime::class;
-                $tz_class = $f->dateTimeZoneClass ?? \DateTimeZone::class;
+                $dt_class = \DateTime::class;
+                $tz_class = \DateTimeZone::class;
 
                 if ($value instanceof $dt_class || $value instanceof \DateTimeInterface) {
                     $formats = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
@@ -134,8 +133,8 @@ class Ui extends \Atk4\Data\Persistence
             case 'date':
             case 'datetime':
             case 'time':
-                $dt_class = $f->dateTimeClass ?? \DateTime::class;
-                $tz_class = $f->dateTimeZoneClass ?? \DateTimeZone::class;
+                $dt_class = \DateTime::class;
+                $tz_class = \DateTimeZone::class;
 
                 // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
                 $formats = ['date' => '!+' . $this->date_format, 'datetime' => '!+' . $this->datetime_format, 'time' => '!+' . $this->time_format];
