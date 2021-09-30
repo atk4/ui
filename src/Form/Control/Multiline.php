@@ -478,7 +478,7 @@ class Multiline extends Form\Control
     {
         $props = [];
 
-        if ($field->type === 'money' || $field->type === 'number' || $field->type === 'integer') {
+        if ($field->type === 'money' || $field->type === 'integer') {
             $props['text-align'] = 'right';
         }
 
@@ -492,7 +492,7 @@ class Multiline extends Form\Control
     {
         $props = $this->componentProps[self::INPUT] ?? [];
 
-        $props['type'] = ($field->type === 'integer' || $field->type === 'float' || $field->type === 'money' || $field->type === 'number') ? 'number' : 'text';
+        $props['type'] = ($field->type === 'integer' || $field->type === 'float' || $field->type === 'money') ? 'number' : 'text';
 
         return array_merge($props, $field->ui['multiline'][self::INPUT] ?? []);
     }

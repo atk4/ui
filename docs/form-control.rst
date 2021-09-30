@@ -156,8 +156,8 @@ The most common use-case in large application is the use with Models. You would 
 
             $this->addField('iso', ['caption' => 'ISO', 'required' => true, 'type' => 'string']);
             $this->addField('iso3', ['caption' => 'ISO3', 'required' => true, 'type' => 'string']);
-            $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
-            $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number']);
+            $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'integer', 'required' => true]);
+            $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'integer']);
         }
     }
 

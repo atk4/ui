@@ -106,7 +106,7 @@ class Form extends View
      *   Show 'target' if 'source1' is not empty AND 'source2' is notEmpty.
      *
      *  Combine multiple condition to the same source field.
-     *   ex: ['target' => ['source1' => ['notEmpty','number']]
+     *   ex: ['target' => ['source1' => ['notEmpty', 'number']]
      *   Show 'target' if 'source1 is notEmpty AND is a number.
      *
      *  Combine multiple arrays of rules will OR the rules for the target field.

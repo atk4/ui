@@ -185,10 +185,10 @@ class InlineEdit extends View
     {
         parent::renderView();
 
-        $type = ($this->model && $this->field) ? $this->model->getField($this->field)->type : 'text';
-        $type = ($type === 'string') ? 'text' : $type;
+        $type = $this->model && $this->field ? $this->model->getField($this->field)->type : 'text';
+        $type = $type === 'string' ? 'text' : $type;
 
-        if ($type !== 'text' && $type !== 'number') {
+        if ($type !== 'text' && $type !== 'integer') {
             throw new Exception('Only string or number field can be edited inline. Field Type = ' . $type);
         }
 
