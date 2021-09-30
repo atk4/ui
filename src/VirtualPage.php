@@ -50,7 +50,7 @@ class VirtualPage extends View
      */
     public function set($fx = null, $args = [])
     {
-        if (!$fx || !$fx instanceof \Closure) {
+        if (!$fx instanceof \Closure) {
             throw new Exception('Virtual page requires a Closure.');
         }
 

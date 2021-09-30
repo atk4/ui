@@ -72,7 +72,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
                 throw (new Exception('Value of $control argument is incorrect'))
                     ->addMoreInfo('control', $control);
             }
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             throw (new Exception('Unable to add form control', 0, $e))
                 ->addMoreInfo('name', $name)
                 ->addMoreInfo('control', $control)

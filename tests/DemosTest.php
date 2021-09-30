@@ -123,7 +123,7 @@ class DemosTest extends TestCase
         $app = new class(['call_exit' => false, 'catch_exceptions' => false, 'always_run' => false]) extends App {
             public function callExit(): void
             {
-                throw new DemosTestExitException();
+                throw new DemosTestExitError();
             }
         };
         $app->initLayout([\Atk4\Ui\Layout\Maestro::class]);
@@ -156,7 +156,7 @@ class DemosTest extends TestCase
                     $this->expectExceptionObject($e);
                 }
 
-                if (!($e instanceof DemosTestExitException)) {
+                if (!($e instanceof DemosTestExitError)) {
                     throw $e;
                 }
             } finally {
@@ -468,6 +468,6 @@ class DemosTest extends TestCase
     }
 }
 
-class DemosTestExitException extends \Atk4\Ui\Exception
+class DemosTestExitError extends \Error
 {
 }
