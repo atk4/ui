@@ -308,7 +308,7 @@ class ScopeBuilder extends Control
         ],
         'integer' => 'numeric',
         'float' => 'numeric',
-        'money' => 'numeric',
+        'atk4_money' => 'numeric',
         'checkbox' => 'boolean',
     ];
 

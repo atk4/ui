@@ -36,9 +36,9 @@ Generic Column Decorator
     Generic description of a column for :php:class:`Atk4\\Ui\\Table`
 
 Table object relies on a separate class: `\\Atk4\\Ui\\Table\\Column` to present most of the values. The goals
-of the column object is to format anything around the actual values. The type = 'money' will result in
+of the column object is to format anything around the actual values. The type = 'atk4_money' will result in
 a custom formatting of the value, but will also require column to be right-aligned. To simplify this,
-type = 'money' will use a different column class - :php:class:`Table\\Column\\Money`. There are several others,
+type = 'atk4_money' will use a different column class - :php:class:`Table\\Column\\Money`. There are several others,
 but first we need to look at the generic column and understand it's base capabilities:
 
 A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table

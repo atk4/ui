@@ -102,12 +102,12 @@ field if it's not alrady defined in ``Order::init()``::
     $table = Table::addTo($app);
     $order = new Order($db);
 
-    $order->addExpression('total', '[price]*[amount]')->type = 'money';
+    $order->addExpression('total', '[price]*[amount]')->type = 'atk4_money';
 
     $table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
 
 The type of the Model Field determines the way how value is presented in the table. I've specified
-value to be 'money' which makes column align values to the right, format it with 2 decimal signs
+value to be 'atk4_money' which makes column align values to the right, format it with 2 decimal signs
 and possibly add a currency sign.
 
 To learn about value formatting, read documentation on :ref:`ui_persistence`.
@@ -121,7 +121,7 @@ specify the caption, you can use code like this::
 
     $order->addExpression('total', [
         '[price]*[amount]',
-        'type' => 'money',
+        'type' => 'atk4_money',
         'caption' => 'Total Price'
     ]);
 
@@ -148,7 +148,7 @@ then to save memory Table will re-use the same objects for all generic fields.
 
 Protected property that will contain "generic" column that will be used to format all
 columns, unless a different column type is specified or the Field type will require a use
-of a different class (e.g. 'money'). Value will be initialized after first call to
+of a different class (e.g. 'atk4_money'). Value will be initialized after first call to
 :php:meth:`Table::addColumn`
 
 .. php:attr:: columns
