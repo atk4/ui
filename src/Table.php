@@ -364,7 +364,6 @@ class Table extends Lister
     }
 
     protected $typeToDecorator = [
-        'password' => [Table\Column\Password::class],
         'money' => [Table\Column\Money::class],
         'text' => [Table\Column\Text::class],
         'boolean' => [Table\Column\Status::class, ['positive' => [true], 'negative' => [false]]],

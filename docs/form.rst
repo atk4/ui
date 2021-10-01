@@ -361,7 +361,7 @@ You can specify ``'ui' => ['form' => $decorator_seed]`` when defining your model
             parent::init();
 
             $this->addField('email');
-            $this->addField('password', ['type' => 'password']);
+            $this->addField('password');
 
             $this->addField('birth_year', ['type' => 'date', 'ui' => ['type' => 'month']);
         }
