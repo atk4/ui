@@ -48,7 +48,7 @@ class JsTest extends TestCase
             $expectedRaw = json_decode($expected);
             foreach ([
                 [$expectedRaw, $in], // direct value
-                [[$expectedRaw => 'x'], [$in => 'x']], // as key
+                [[(string) $expectedRaw => 'x'], [(string) $in => 'x']], // as key
                 [[$expectedRaw], [$in]], // as value in JSON array
                 [['x' => $expectedRaw], ['x' => $in]], // as value in JSON object
             ] as [$expectedData, $inData]) {
