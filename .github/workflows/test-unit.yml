@@ -185,8 +185,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['latest']
-        type: ['Chrome', 'Firefox', 'Chrome Lowest', 'Chrome Slow']
+        php: ['7.4', '8.0', '8.1']
+        type: ['Chrome']
+        include:
+          - php: 'latest'
+            type: 'Firefox'
+          - php: 'latest'
+            type: 'Chrome Lowest'
+          - php: 'latest'
+            type: 'Chrome Slow'
     env:
       LOG_COVERAGE: ''
     services:
