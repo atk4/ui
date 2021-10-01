@@ -553,7 +553,7 @@ class Form extends View
         'datetime' => [Form\Control\Calendar::class, ['type' => 'datetime']],
         'date' => [Form\Control\Calendar::class, ['type' => 'date']],
         'time' => [Form\Control\Calendar::class, ['type' => 'time']],
-        'money' => [Form\Control\Money::class],
+        'atk4_money' => [Form\Control\Money::class],
     ];
 
     /**

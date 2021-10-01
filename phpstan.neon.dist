@@ -1,5 +1,5 @@
 includes:
-    - vendor/mahalux/atk4-hintable/phpstan-ext.neon
+    - vendor/mvorisek/atk4-hintable/phpstan-ext.neon
 
 parameters:
     level: 6

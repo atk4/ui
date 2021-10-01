@@ -110,7 +110,7 @@ clarifications::
             $this->addField('domain_name');
             $this->addFields(['contact_email', 'contact_phone']);
             $this->addField('date', ['type' => 'date']);
-            $this->addField('offer', ['type' => 'money']);
+            $this->addField('offer', ['type' => 'atk4_money']);
             $this->addField('is_accepted', ['type' => 'boolean']);
         }
     }

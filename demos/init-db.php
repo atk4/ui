@@ -216,16 +216,16 @@ class Stat extends ModelWithPrefixedFields
             $model->currency_symbol = $map[$model->currency] ?? '?';
         });
 
-        $this->addField($this->fieldName()->project_budget, ['type' => 'money']);
-        $this->addField($this->fieldName()->project_invoiced, ['type' => 'money']);
-        $this->addField($this->fieldName()->project_paid, ['type' => 'money']);
-        $this->addField($this->fieldName()->project_hour_cost, ['type' => 'money']);
+        $this->addField($this->fieldName()->project_budget, ['type' => 'atk4_money']);
+        $this->addField($this->fieldName()->project_invoiced, ['type' => 'atk4_money']);
+        $this->addField($this->fieldName()->project_paid, ['type' => 'atk4_money']);
+        $this->addField($this->fieldName()->project_hour_cost, ['type' => 'atk4_money']);
 
         $this->addField($this->fieldName()->project_hours_est, ['type' => 'integer']);
         $this->addField($this->fieldName()->project_hours_reported, ['type' => 'integer']);
 
-        $this->addField($this->fieldName()->project_expenses_est, ['type' => 'money']);
-        $this->addField($this->fieldName()->project_expenses, ['type' => 'money']);
+        $this->addField($this->fieldName()->project_expenses_est, ['type' => 'atk4_money']);
+        $this->addField($this->fieldName()->project_expenses, ['type' => 'atk4_money']);
         $this->addField($this->fieldName()->project_mgmt_cost_pct, new Percent());
         $this->addField($this->fieldName()->project_qa_cost_pct, new Percent());
 

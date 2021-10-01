@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Data\Schema\Migration;
 
 require_once __DIR__ . '/../init-autoloader.php';
 
@@ -52,7 +53,7 @@ $model = new ImportModelWithPrefixedFields($persistence, ['table' => 'client']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('addresses', ['type' => 'text']);
 $model->addField('accounts', ['type' => 'text']);
-(new \Atk4\Schema\Migration($model))->dropIfExists()->create();
+(new Migration($model))->dropIfExists()->create();
 $model->import([
     ['id' => 1, 'name' => 'John', 'addresses' => null, 'accounts' => null],
     ['id' => 2, 'name' => 'Jane', 'addresses' => null, 'accounts' => null],
@@ -65,7 +66,7 @@ $model->addField('nicename', ['type' => 'string']);
 $model->addField('iso3', ['type' => 'string']); // should be CHAR(3) NOT NULL
 $model->addField('numcode', ['type' => 'smallint']);
 $model->addField('phonecode', ['type' => 'integer']);
-(new \Atk4\Schema\Migration($model))->dropIfExists()->create();
+(new Migration($model))->dropIfExists()->create();
 $model->import([
     ['id' => 1, 'iso' => 'AF', 'name' => 'AFGHANISTAN', 'nicename' => 'Afghanistan', 'iso3' => 'AFG', 'numcode' => 4, 'phonecode' => 93],
     ['id' => 2, 'iso' => 'AL', 'name' => 'ALBANIA', 'nicename' => 'Albania', 'iso3' => 'ALB', 'numcode' => 8, 'phonecode' => 355],
@@ -327,7 +328,7 @@ $model->addField('type', ['type' => 'string']);
 $model->addField('is_folder', ['type' => 'boolean']);
 $model->addField('parent_folder_id', ['type' => 'bigint']);
 // KEY `fk_file_file_idx` (`parent_folder_id`)
-(new \Atk4\Schema\Migration($model))->dropIfExists()->create();
+(new Migration($model))->dropIfExists()->create();
 $model->import([
     ['id' => 1, 'name' => 'phpunit.xml', 'type' => 'xml', 'is_folder' => 0, 'parent_folder_id' => null],
     ['id' => 2, 'name' => 'LICENSE', 'type' => '', 'is_folder' => 0, 'parent_folder_id' => null],
@@ -417,17 +418,23 @@ $model->addField('finish_date', ['type' => 'date']);
 $model->addField('finish_time', ['type' => 'time']);
 $model->addField('created', ['type' => 'datetime']);
 $model->addField('updated', ['type' => 'datetime']);
-(new \Atk4\Schema\Migration($model))->dropIfExists()->create();
-$model->import([
+(new Migration($model))->dropIfExists()->create();
+$data = [
     ['id' => 1, 'project_name' => 'Agile DSQL', 'project_code' => 'at01', 'description' => 'DSQL is a composable SQL query builder. You can write multi-vendor queries in PHP profiting from better security, clean syntax and avoid human errors.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,' . "\n" . 'Garden City' . "\n" . 'UK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 1, 'project_budget' => 7000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 150, 'project_hours_reported' => 125, 'project_expenses_est' => 50, 'project_expenses' => 0, 'project_mgmt_cost_pct' => 0.1, 'project_qa_cost_pct' => 0.2, 'start_date' => '2016-01-26', 'finish_date' => '2016-06-23', 'finish_time' => '12:50:00', 'created' => '2017-04-06 10:34:34', 'updated' => '2017-04-06 10:35:04'],
     ['id' => 2, 'project_name' => 'Agile Core', 'project_code' => 'at02', 'description' => 'Collection of PHP Traits for designing object-oriented frameworks.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,' . "\n" . 'Garden City' . "\n" . 'UK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 1, 'project_budget' => 3000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 70, 'project_hours_reported' => 56, 'project_expenses_est' => 50, 'project_expenses' => 0, 'project_mgmt_cost_pct' => 0.1, 'project_qa_cost_pct' => 0.2, 'start_date' => '2016-04-27', 'finish_date' => '2016-05-21', 'finish_time' => '18:41:00', 'created' => '2017-04-06 10:21:50', 'updated' => '2017-04-06 10:35:04'],
     ['id' => 3, 'project_name' => 'Agile Data', 'project_code' => 'at03', 'description' => 'Agile Data implements an entirely new pattern for data abstraction, that is specifically designed for remote databases such as RDS, Cloud SQL, BigQuery and other distributed data storage architectures. It focuses on reducing number of requests your App have to send to the Database by using more sophisticated queries while also offering full Domain Model mapping and Database vendor abstraction.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,' . "\n" . 'Garden City' . "\n" . 'UK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 1, 'project_budget' => 12000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 300, 'project_hours_reported' => 394, 'project_expenses_est' => 600, 'project_expenses' => 430, 'project_mgmt_cost_pct' => 0.2, 'project_qa_cost_pct' => 0.3, 'start_date' => '2016-04-17', 'finish_date' => '2016-06-20', 'finish_time' => '03:04:00', 'created' => '2017-04-06 10:30:15', 'updated' => '2017-04-06 10:35:04'],
     ['id' => 4, 'project_name' => 'Agile UI', 'project_code' => 'at04', 'description' => 'Web UI Component library.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,' . "\n" . 'Garden City' . "\n" . 'UK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 0, 'project_budget' => 20000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 600, 'project_hours_reported' => 368, 'project_expenses_est' => 1200, 'project_expenses' => 0, 'project_mgmt_cost_pct' => 0.3, 'project_qa_cost_pct' => 0.4, 'start_date' => '2016-09-17', 'finish_date' => '', 'finish_time' => '', 'created' => '2017-04-06 10:30:15', 'updated' => '2017-04-06 10:35:04'],
-]);
+];
+foreach ($data as $rowIndex => $row) {
+    foreach (['start_date', 'finish_date', 'finish_time', 'created', 'updated'] as $k) {
+        $data[$rowIndex][$k] = new \DateTime($row[$k] . ' GMT');
+    }
+}
+$model->import($data);
 
 $model = new ImportModelWithPrefixedFields($persistence, ['table' => 'product_category']);
 $model->addField('name', ['type' => 'string']);
-(new \Atk4\Schema\Migration($model))->dropIfExists()->create();
+(new Migration($model))->dropIfExists()->create();
 $model->import([
     ['id' => 1, 'name' => 'Condiments and Gravies'],
     ['id' => 2, 'name' => 'Beverages'],
@@ -437,7 +444,7 @@ $model->import([
 $model = new ImportModelWithPrefixedFields($persistence, ['table' => 'product_sub_category']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('product_category_id', ['type' => 'bigint']);
-(new \Atk4\Schema\Migration($model))->dropIfExists()->create();
+(new Migration($model))->dropIfExists()->create();
 $model->import([
     ['id' => 1, 'name' => 'Gravie', 'product_category_id' => 1],
     ['id' => 2, 'name' => 'Spread', 'product_category_id' => 1],
@@ -455,7 +462,7 @@ $model->addField('name', ['type' => 'string']);
 $model->addField('brand', ['type' => 'string']);
 $model->addField('product_category_id', ['type' => 'bigint']);
 $model->addField('product_sub_category_id', ['type' => 'bigint']);
-(new \Atk4\Schema\Migration($model))->dropIfExists()->create();
+(new Migration($model))->dropIfExists()->create();
 $model->import([
     ['id' => 1, 'name' => 'Mustard', 'brand' => 'Condiment Corp.', 'product_category_id' => 1, 'product_sub_category_id' => 2],
     ['id' => 2, 'name' => 'Ketchup', 'brand' => 'Condiment Corp.', 'product_category_id' => 1, 'product_sub_category_id' => 2],

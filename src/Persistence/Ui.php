@@ -66,7 +66,7 @@ class Ui extends \Atk4\Data\Persistence
                 $value = $value ? $this->yes : $this->no;
 
                 break;
-            case 'money':
+            case 'atk4_money':
                 $value = ($this->currency ? $this->currency . ' ' : '') . number_format($value, $this->currency_decimals);
 
                 break;
@@ -122,8 +122,8 @@ class Ui extends \Atk4\Data\Persistence
                 $value = (bool) $value;
 
                 break;
-            case 'money':
-                $value = str_replace(',', '', $value);
+            case 'atk4_money':
+                $value = str_replace(',', '', $value); // we should use standard Field::normalize here
 
                 break;
             case 'date':

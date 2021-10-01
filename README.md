@@ -31,7 +31,7 @@ three steps involved:
  3. If needed - Use [Agile API](https://github.com/atk4/api) to provide API access for your Mobile/React app or IoT devices.
 
 Agile Data allows you to define models, fields, relations, formulas, aggregates, expressions, user action and
-access control rules. Both Agile UI and Agile API will follow those rules. 
+access control rules. Both Agile UI and Agile API will follow those rules.
 
 ### Integrations and Apps using Agile UI
 
@@ -256,7 +256,6 @@ Add-ons:
 -   [Charts add-on](https://github.com/atk4/chart) - Modern looking and free charts with [chartJS](https://www.chartjs.org/)
 -   [Audit for Models](https://github.com/atk4/audit) - Record all DB operations with Undo/Redo support for Agile Data
 -   [Data for Reports](https://github.com/atk4/report) - Implement data aggregation and union models for Agile Data
--   [Schema and Migration](https://github.com/atk4/schema) - Tools to migrate your database structure
 
 Integrations:
 
