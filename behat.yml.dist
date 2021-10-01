@@ -4,8 +4,8 @@ default:
       paths:
         features: '%paths.base%/tests-behat'
       contexts:
-        - Atk4\Ui\Behat\Context
         - Behat\MinkExtension\Context\MinkContext
+        - Atk4\Ui\Behat\Context
   extensions:
     Behat\MinkExtension:
       base_url: 'http://172.18.0.2:8888/demos'
