@@ -550,7 +550,6 @@ class Form extends View
         'boolean' => [Form\Control\Checkbox::class],
         'text' => [Form\Control\Textarea::class],
         'string' => [Form\Control\Line::class],
-        'password' => [Form\Control\Password::class],
         'datetime' => [Form\Control\Calendar::class, ['type' => 'datetime']],
         'date' => [Form\Control\Calendar::class, ['type' => 'date']],
         'time' => [Form\Control\Calendar::class, ['type' => 'time']],

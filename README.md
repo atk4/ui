@@ -201,7 +201,7 @@ class User extends \Atk4\Data\Model {
 
         $this->addField('name');
         $this->addField('email', ['required' => true]);
-        $this->addField('password', ['type' => 'password']);
+        $this->addField('password');
     }
 }
 

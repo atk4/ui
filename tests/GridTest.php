@@ -37,32 +37,18 @@ class GridTest extends \Atk4\Core\Phpunit\TestCase
         );
     }
 
-    public function test1a(): void
+    public function test2(): void
     {
         $t = new Table();
         $t->invokeInit();
         $t->setModel($this->m, false);
 
         $t->addColumn('email');
-        $t->addColumn('password');
+        $t->addColumn('password', [Table\Column\Password::class]);
 
         $this->assertSame('<td>{$email}</td><td>***</td>', $t->getDataRowHtml());
         $this->assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>***</td></tr>',
-            $this->extractTableRow($t)
-        );
-    }
-
-    public function test2(): void
-    {
-        $t = new Table();
-        $t->invokeInit();
-        $t->setModel($this->m, ['email']);
-        $del = $t->addColumn(null, [Table\Column\Delete::class]);
-
-        $this->assertSame('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="' . $del->short_name . '"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHtml());
-        $this->assertSame(
-            '<tr data-id="1"><td>test@test.com</td><td><a href="#" title="Delete test@test.com?" class="' . $del->short_name . '"><i class="ui red trash icon"></i>Delete</a></td></tr>',
             $this->extractTableRow($t)
         );
     }
@@ -72,11 +58,11 @@ class GridTest extends \Atk4\Core\Phpunit\TestCase
         $t = new Table();
         $t->invokeInit();
         $t->setModel($this->m, ['email']);
-        $t->addColumn('xtra', null, ['type' => 'password']);
+        $del = $t->addColumn(null, [Table\Column\Delete::class]);
 
-        $this->assertSame('<td>{$email}</td><td>***</td>', $t->getDataRowHtml());
+        $this->assertSame('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="' . $del->short_name . '"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHtml());
         $this->assertSame(
-            '<tr data-id="1"><td>test@test.com</td><td>***</td></tr>',
+            '<tr data-id="1"><td>test@test.com</td><td><a href="#" title="Delete test@test.com?" class="' . $del->short_name . '"><i class="ui red trash icon"></i>Delete</a></td></tr>',
             $this->extractTableRow($t)
         );
     }
@@ -91,6 +77,6 @@ class MyModel extends \Atk4\Data\Model
         parent::init();
 
         $this->addField('email');
-        $this->addField('password', ['type' => 'password']);
+        $this->addField('password');
     }
 }
