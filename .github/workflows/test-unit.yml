@@ -91,10 +91,8 @@ jobs:
       fail-fast: false
       matrix:
         php: ['7.4', '8.0', '8.1']
-        type: ['Phpunit']
+        type: ['Phpunit', 'Phpunit Lowest']
         include:
-          - php: 'latest'
-            type: 'Phpunit Lowest'
           - php: 'latest'
             type: 'Phpunit Burn'
     env:
@@ -186,12 +184,10 @@ jobs:
       fail-fast: false
       matrix:
         php: ['7.4', '8.0', '8.1']
-        type: ['Chrome']
+        type: ['Chrome', 'Chrome Lowest']
         include:
           - php: 'latest'
             type: 'Firefox'
-          - php: 'latest'
-            type: 'Chrome Lowest'
           - php: 'latest'
             type: 'Chrome Slow'
     env:
