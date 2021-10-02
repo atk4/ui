@@ -485,9 +485,6 @@ parameters:
             path: 'src/Form/Control/Checkbox.php'
             message: '~^Property Atk4\\Ui\\View::\$content \(string\|false\) does not accept null\.$~'
         -
-            path: 'src/Form/Control/Checkbox.php'
-            message: '~^Parameter \#1 \$value \(bool\) of method Atk4\\Ui\\Form\\Control\\Checkbox::set\(\) should be contravariant with parameter \$value \(mixed\) of method Atk4\\Ui\\Form\\Control::set\(\)$~'
-        -
             path: 'src/Form/Control/Input.php'
             message: '~^Property Atk4\\Ui\\View::\$content \(string\|false\) does not accept null\.$~'
         -

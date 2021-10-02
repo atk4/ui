@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
-use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Jquery;
 
@@ -54,22 +53,6 @@ class Checkbox extends Form\Control
                 $post[$this->field->short_name] = isset($post[$this->field->short_name]);
             });
         }
-    }
-
-    /**
-     * Set field value.
-     *
-     * @param bool  $value
-     * @param mixed $junk
-     */
-    public function set($value = null, $junk = null)
-    {
-        if (!is_bool($value)) {
-            throw (new Exception('Field\Checkbox::set() needs value to be a boolean'))
-                ->addMoreInfo('value', $value);
-        }
-
-        return parent::set($value);
     }
 
     /**
