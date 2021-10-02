@@ -10,10 +10,10 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$output = function (string $str) {
+$output = function (?\DateTime $dt, string $format) {
     $view = new \Atk4\Ui\Message();
     $view->invokeInit();
-    $view->text->addHtml($str);
+    $view->text->addHtml($dt === null ? 'empty' : $dt->format($format));
 
     return $view;
 };
@@ -24,7 +24,7 @@ $c = $form->addControl('field', null, ['type' => 'date']);
 $form->buttonSave->set($c->short_name);
 
 $form->onSubmit(function ($form) use ($output, $c, $app) {
-    return $output($form->model->get($c->short_name)->format($app->ui_persistence->date_format));
+    return $output($form->model->get($c->short_name), $app->ui_persistence->date_format);
 });
 
 View::addTo($app, ['ui' => 'hidden divider']);
@@ -34,7 +34,7 @@ $c = $form->addControl('date_ymd', [Form\Control\Calendar::class, 'type' => 'dat
 $form->buttonSave->set($c->short_name);
 
 $form->onSubmit(function ($form) use ($output, $c, $app) {
-    return $output($form->model->get($c->short_name)->format($app->ui_persistence->date_format));
+    return $output($form->model->get($c->short_name), $app->ui_persistence->date_format);
 });
 
 View::addTo($app, ['ui' => 'hidden divider']);
@@ -44,7 +44,7 @@ $c = $form->addControl('time_24hr', [Form\Control\Calendar::class, 'type' => 'ti
 $form->buttonSave->set($c->short_name);
 
 $form->onSubmit(function ($form) use ($output, $c, $app) {
-    return $output($form->model->get($c->short_name)->format($app->ui_persistence->time_format));
+    return $output($form->model->get($c->short_name), $app->ui_persistence->time_format);
 });
 
 View::addTo($app, ['ui' => 'hidden divider']);
@@ -54,7 +54,7 @@ $c = $form->addControl('time_am', [Form\Control\Calendar::class, 'type' => 'time
 $form->buttonSave->set($c->short_name);
 
 $form->onSubmit(function ($form) use ($output, $c, $app) {
-    return $output($form->model->get($c->short_name)->format($app->ui_persistence->time_format));
+    return $output($form->model->get($c->short_name), $app->ui_persistence->time_format);
 });
 
 View::addTo($app, ['ui' => 'hidden divider']);
@@ -64,5 +64,5 @@ $c = $form->addControl('datetime', [Form\Control\Calendar::class, 'type' => 'dat
 $form->buttonSave->set($c->short_name);
 
 $form->onSubmit(function ($form) use ($output, $c, $app) {
-    return $output($form->model->get($c->short_name)->format($app->ui_persistence->datetime_format));
+    return $output($form->model->get($c->short_name), $app->ui_persistence->datetime_format);
 });

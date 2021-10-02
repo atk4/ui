@@ -2051,27 +2051,6 @@ parameters:
             path: 'src/Panel/Right.php'
             message: '~^Method Atk4\\Ui\\Panel\\Right::onOpen\(\) has no return typehint specified\.$~'
         -
-            path: 'src/Persistence/Ui.php'
-            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$date_format has no typehint specified\.$~'
-        -
-            path: 'src/Persistence/Ui.php'
-            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$time_format has no typehint specified\.$~'
-        -
-            path: 'src/Persistence/Ui.php'
-            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$datetime_format has no typehint specified\.$~'
-        -
-            path: 'src/Persistence/Ui.php'
-            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$currency has no typehint specified\.$~'
-        -
-            path: 'src/Persistence/Ui.php'
-            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$yes has no typehint specified\.$~'
-        -
-            path: 'src/Persistence/Ui.php'
-            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$no has no typehint specified\.$~'
-        -
-            path: 'src/Persistence/Ui.php'
-            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$calendar_options has no typehint specified\.$~'
-        -
             path: 'src/Popup.php'
             message: '~^Method Atk4\\Ui\\Popup::__construct\(\) has parameter \$triggerBy with no typehint specified\.$~'
         -

@@ -282,7 +282,7 @@ class Multiline extends Form\Control
     public function getValue(): string
     {
         if ($this->field->type === 'json') {
-            $jsonValues = $this->getApp()->ui_persistence->_typecastSaveField($this->field, $this->field->get() ?? []);
+            $jsonValues = $this->getApp()->ui_persistence->typecastSaveField($this->field, $this->field->get() ?? []);
         } else {
             // set data according to hasMany ref. or using model.
             $model = $this->getModel();
@@ -291,7 +291,7 @@ class Multiline extends Form\Control
                 $cols = [];
                 foreach ($this->rowFields as $fieldName) {
                     $field = $model->getField($fieldName);
-                    $value = $this->getApp()->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
+                    $value = $this->getApp()->ui_persistence->typecastSaveField($field, $row->get($field->short_name));
                     $cols[$fieldName] = $value;
                 }
                 $rows[] = $cols;
@@ -729,7 +729,7 @@ class Multiline extends Form\Control
             $field = $model->getField($fieldName);
             if ($field instanceof Callback) {
                 $value = ($field->expr)($model);
-                $values[$fieldName] = $this->getApp()->ui_persistence->_typecastSaveField($field, $value);
+                $values[$fieldName] = $this->getApp()->ui_persistence->typecastSaveField($field, $value);
             }
         }
 
@@ -793,7 +793,7 @@ class Multiline extends Form\Control
             foreach ($values as $f => $value) {
                 if ($value) {
                     $field = $model->getField($f);
-                    $formatValues[$f] = $this->getApp()->ui_persistence->_typecastSaveField($field, $value);
+                    $formatValues[$f] = $this->getApp()->ui_persistence->typecastSaveField($field, $value);
                 }
             }
         }

@@ -150,7 +150,7 @@ extending :php:class:`Persistence\\Ui`::
     class MyPersistence extends \Atk4\Ui\Persistence\Ui
     {
 
-        public function _typecastSaveField(\Atk4\Data\Field $field, $value)
+        protected function _typecastSaveField(\Atk4\Data\Field $field, $value)
         {
             switch ($field->type) {
                 case 'card':

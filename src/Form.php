@@ -561,23 +561,27 @@ class Form extends View
      */
     protected function loadPost()
     {
-        $post = $_POST;
+        $postDataRaw = $_POST;
+        $this->hook(self::HOOK_LOAD_POST, [&$postDataRaw]);
 
-        $this->hook(self::HOOK_LOAD_POST, [&$post]);
         $errors = [];
-
-        foreach ($this->controls as $key => $field) {
+        foreach ($this->controls as $k => $control) {
             try {
                 // save field value only if field was editable in form at all
-                if (!$field->readonly && !$field->disabled) {
-                    $field->set($post[$key] ?? null);
+                if (!$control->readonly && !$control->disabled) {
+                    $control->set($this->getApp()->ui_persistence->typecastLoadField($control->field, $postDataRaw[$k] ?? null));
                 }
-            } catch (\Atk4\Core\Exception $e) {
-                $errors[$key] = $e->getMessage();
+            } catch (\Exception $e) {
+                $messages = [];
+                do {
+                    $messages[] = $e->getMessage();
+                } while ($e = $e->getPrevious());
+
+                $errors[$k] = implode(': ', $messages);
             }
         }
 
-        if ($errors) {
+        if (count($errors) > 0) {
             throw new \Atk4\Data\ValidationException($errors);
         }
     }
