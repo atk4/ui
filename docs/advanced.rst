@@ -14,7 +14,7 @@ for use in Agile UI.
 
 With Agile Data you can easily connect your UI with your data and make
 UI components store your data in SQL, NoSQL or RestAPI. On top of the
-existing persistences, Agile UI introduces a new persistence class: "UI".
+existing persistencies, Agile UI introduces a new persistence class: "UI".
 
 This UI persistence will be extensively used when data needs to be
 displayed to the user through UI elements or when input must be
