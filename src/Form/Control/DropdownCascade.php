@@ -32,7 +32,7 @@ class DropdownCascade extends Dropdown
         parent::init();
 
         if (!$this->cascadeFrom) {
-            throw new Exception('cascadeFrom property is not set.');
+            throw new Exception('cascadeFrom property is not set');
         }
 
         $this->cascadeControl = is_string($this->cascadeFrom) ? $this->form->getControl($this->cascadeFrom) : $this->cascadeFrom;
@@ -41,7 +41,9 @@ class DropdownCascade extends Dropdown
             throw new Exception('cascadeFrom property should be an instance of ' . Form\Control::class);
         }
 
-        $this->cascadeControlValue = $_POST[$this->cascadeControl->name] ?? $this->cascadeControl->field->get();
+        $this->cascadeControlValue = isset($_POST[$this->cascadeControl->name])
+            ? $this->getApp()->ui_persistence->typecastLoadField($this->cascadeControl->field, $_POST[$this->cascadeControl->name])
+            : $this->cascadeControl->field->get();
 
         $this->model = $this->cascadeControl->model ? $this->cascadeControl->model->ref($this->reference) : null;
 

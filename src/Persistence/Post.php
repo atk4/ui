@@ -25,6 +25,8 @@ class Post extends \Atk4\Data\Persistence
             }
         }
 
+        // TODO typecast!
+
 //        return array_merge($model->get(), $data);
         return $data;
     }

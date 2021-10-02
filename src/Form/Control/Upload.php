@@ -227,10 +227,10 @@ class Upload extends Input
         parent::renderView();
 
         if ($this->cb->canTerminate()) {
-            $uploadAction = $_POST['f_upload_action'] ?? null;
-            if (!$this->hasUploadCb && ($uploadAction === self::UPLOAD_ACTION)) {
+            $uploadActionRaw = $_POST['f_upload_action'] ?? null;
+            if (!$this->hasUploadCb && ($uploadActionRaw === self::UPLOAD_ACTION)) {
                 throw new Exception('Missing onUpload callback.');
-            } elseif (!$this->hasDeleteCb && ($uploadAction === self::DELETE_ACTION)) {
+            } elseif (!$this->hasDeleteCb && ($uploadActionRaw === self::DELETE_ACTION)) {
                 throw new Exception('Missing onDelete callback.');
             }
         }

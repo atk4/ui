@@ -209,7 +209,7 @@ class Multiline extends Form\Control
         $this->renderCallback = JsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
-        $this->form->onHook(Form::HOOK_LOAD_POST, function ($form, &$post) {
+        $this->form->onHook(Form::HOOK_LOAD_POST, function ($form, &$postRawData) {
             $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($_POST[$this->short_name]));
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
@@ -225,7 +225,7 @@ class Multiline extends Form\Control
                     unset($cols['__atkml']);
                     $rows[] = $cols;
                 }
-                $post[$this->short_name] = json_encode($rows);
+                $postRawData[$this->short_name] = json_encode($rows);
             }
         });
 
@@ -697,9 +697,7 @@ class Multiline extends Form\Control
      */
     private function outputJson(): void
     {
-        $action = $_POST['__atkml_action'] ?? null;
-
-        switch ($action) {
+        switch ($_POST['__atkml_action'] ?? null) {
             case 'update-row':
                 $model = $this->setDummyModelValue($this->getModel()->createEntity());
                 $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
@@ -744,16 +742,16 @@ class Multiline extends Form\Control
      */
     private function setDummyModelValue(Model $model): Model
     {
-        $row = $_POST;
-
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['name'];
             if ($fieldName === $model->id_field) {
                 continue;
             }
 
-            $value = $row[$fieldName] ?? null;
-            if ($model->getField($fieldName)->isEditable()) {
+            $field = $model->getField($fieldName);
+
+            $value = $this->getApp()->ui_persistence->typecastLoadField($field, $_POST[$fieldName] ?? null);
+            if ($field->isEditable()) {
                 try {
                     $model->set($fieldName, $value);
                 } catch (ValidationException $e) {
