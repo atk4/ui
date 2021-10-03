@@ -10,6 +10,8 @@ use Atk4\Core\DynamicMethodTrait;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Core\InitializerTrait;
+use Atk4\Core\TraitUtil;
+use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationException;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
@@ -205,6 +207,16 @@ class App
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
             set_error_handler(
                 static function (int $severity, string $msg, string $file, int $line): bool {
+                    if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
+                        // allow to supress undefined property warnings
+                        foreach (debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
+                            if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
+                                && $frame['function'] === 'warnPropertyDoesNotExist') {
+                                return false;
+                            }
+                        }
+                    }
+
                     throw new \ErrorException($msg, 0, $severity, $file, $line);
                 },
                 \E_ALL
