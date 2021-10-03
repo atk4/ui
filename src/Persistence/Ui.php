@@ -130,6 +130,8 @@ class Ui extends \Atk4\Data\Persistence
                     }
                 }
 
+                $value = parent::_typecastSaveField($field, $value);
+
                 break;
             // SECURTIY: Do not unserialize any user input
             // https://github.com/search?q=unserialize+repo%3Adoctrine%2Fdbal+path%3A%2Fsrc%2FTypes
@@ -145,7 +147,6 @@ class Ui extends \Atk4\Data\Persistence
         }
 
         // typecast using DBAL types
-        $value = parent::_typecastSaveField($field, $value);
         $value = parent::_typecastLoadField($field, $value);
 
         return $value;
