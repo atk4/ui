@@ -622,7 +622,7 @@ class App
             }
         }
 
-        throw (new Exception('Can not find template file'))
+        throw (new Exception('Cannot find template file'))
             ->addMoreInfo('filename', $filename)
             ->addMoreInfo('template_dir', $this->template_dir);
     }
@@ -1073,7 +1073,7 @@ class App
         }
 
         if ($lateError === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
-            $lateError = 'Headers already sent, more headers can not be set at this stage.';
+            $lateError = 'Headers already sent, more headers cannot be set at this stage.';
         }
 
         if (!headers_sent() || $isCli) {

@@ -132,7 +132,7 @@ change their value.
 
 .. php:attr:: disabled
 
-Disabled form controls can be  seend in form, can not be focused and will not be submitted. And of course we
+Disabled form controls can be  seend in form, cannot be focused and will not be submitted. And of course we
 don't allow to change their value. Disabled form controls are used for read only model fields for example.
 
 

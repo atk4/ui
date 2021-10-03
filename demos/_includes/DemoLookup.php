@@ -8,7 +8,7 @@ use Atk4\Core\Factory;
 
 /**
  * Setup file - do not test.
- * Lookup that can not saved data.
+ * Lookup that cannot saved data.
  */
 class DemoLookup extends \Atk4\Ui\Form\Control\Lookup
 {
@@ -51,7 +51,7 @@ class DemoLookup extends \Atk4\Ui\Form\Control\Lookup
                 // $form->model->save();
 
                 $ret = [
-                    new \Atk4\Ui\JsToast('Form submit!. Demo can not saved data.'),
+                    new \Atk4\Ui\JsToast('Form submit!. Demo cannot saved data.'),
                     (new \Atk4\Ui\Jquery('.atk-modal'))->modal('hide'),
                 ];
 

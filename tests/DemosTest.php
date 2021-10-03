@@ -16,7 +16,7 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Test if all demos can be rendered successfully and test some expected data.
  *
- * Requests are emulated in the same process. It is fast, but some output or shutdown functionality can not be fully tested.
+ * Requests are emulated in the same process. It is fast, but some output or shutdown functionality cannot be fully tested.
  */
 class DemosTest extends TestCase
 {

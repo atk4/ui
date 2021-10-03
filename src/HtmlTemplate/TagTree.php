@@ -75,7 +75,7 @@ class TagTree
     {
         // very important check
         if ($value instanceof self) {
-            throw new Exception('Tag tree can not be added directly');
+            throw new Exception('Tag tree cannot be added directly');
         }
 
         // not strictly needed, but catch issues sooner
