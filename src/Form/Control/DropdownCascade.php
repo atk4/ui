@@ -45,9 +45,8 @@ class DropdownCascade extends Dropdown
 
         $this->model = $this->cascadeFromControl->model ? $this->cascadeFromControl->model->ref($this->reference) : null;
 
-        // populate default dropdown values and add it via dropdownOptions.
-        $values = $this->getJsValues($this->getNewValues($this->cascadeFromControlValue), $this->field->get());
-        $this->dropdownOptions = array_merge($this->dropdownOptions, ['values' => $values]);
+        // populate default dropdown values
+        $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($this->cascadeFromControlValue), $this->field->get());
 
         // js to execute for the onChange handler of the parent dropdown.
         $expr = [
