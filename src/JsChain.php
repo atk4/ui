@@ -117,11 +117,13 @@ class JsChain extends JsExpression
      *
      * @return $this
      */
-    public function __get($property)
+    public function &__get($property)
     {
         $this->_chain[] = $property;
 
-        return $this;
+        $res = $this; // TODO & before __get is needed for atk4/core PR 329, remove once PHP 8.1 support is dropped
+
+        return $res;
     }
 
     /**
