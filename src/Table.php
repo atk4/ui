@@ -649,7 +649,7 @@ class Table extends Lister
 
                             break;
                         case 'max':
-                            if ($this->model¨->get($key) > $this->totals[$key]) {
+                            if ($this->model->get($key) > $this->totals[$key]) {
                                 $this->totals[$key] = $this->model->get($key);
                             }
 

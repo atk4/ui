@@ -19,7 +19,7 @@ class Delete extends Table\Column
     {
         parent::init();
 
-        $this->vp = $this->table->add(new CallbackLater());
+        $this->vp = CallbackLater::addTo($this->table);
         $this->vp->set(function () {
             $this->table->model->load($_POST[$this->name])->delete();
 
