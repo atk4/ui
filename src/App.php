@@ -577,7 +577,6 @@ class App
             $this->html->renderAll();
             $this->html->template->dangerouslyAppendHtml('HEAD', $this->html->getJs());
             $this->is_rendering = false;
-            $this->hook(self::HOOK_BEFORE_OUTPUT);
 
             if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catch_runaway_callbacks) {
                 throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
@@ -590,7 +589,8 @@ class App
             $isExitException = true;
         }
 
-        if (!$this->exit_called) { // output already send by terminate()
+        $this->hook(self::HOOK_BEFORE_OUTPUT);
+        if (!$this->exit_called) { // output already sent by terminate()
             if ($this->isJsUrlRequest()) {
                 $this->outputResponseJson($output);
             } else {

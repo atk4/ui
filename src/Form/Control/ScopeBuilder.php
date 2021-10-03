@@ -46,11 +46,7 @@ class ScopeBuilder extends Control
      */
     public $fields = [];
 
-    /**
-     * The template needed for the scopebuilder view.
-     *
-     * @var HtmlTemplate
-     */
+    /** @var HtmlTemplate The template needed for the ScopeBuilder view. */
     public $scopeBuilderTemplate;
 
     /**

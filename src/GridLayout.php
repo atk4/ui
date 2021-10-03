@@ -18,24 +18,13 @@ class GridLayout extends View
         'thirteen', 'fourteen', 'fifteen', 'sixteen',
     ];
 
-    /**
-     * @var HtmlTemplate
-     */
+    /** @var HtmlTemplate */
     protected $t_wrap;
-
-    /**
-     * @var HtmlTemplate
-     */
+    /** @var HtmlTemplate */
     protected $t_row;
-
-    /**
-     * @var HtmlTemplate
-     */
+    /** @var HtmlTemplate */
     protected $t_col;
-
-    /**
-     * @var HtmlTemplate
-     */
+    /** @var HtmlTemplate */
     public $template;
 
     /** @var string Semantic UI CSS class */

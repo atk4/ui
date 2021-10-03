@@ -184,18 +184,22 @@ class Layout extends AbstractLayout
             $label = $element->caption ?: $element->field->getCaption();
 
             // Anything but form controls gets inserted directly
-            if ($element instanceof \Atk4\Ui\Form\Control\Checkbox) {
+            if ($element instanceof Control\Checkbox) {
                 $template = $noLabelControl;
                 $element->template->set('Content', $label);
             }
 
             if ($this->label && $this->inline) {
-                $element->placeholder = $label;
+                if ($element instanceof Control\Input) {
+                    $element->placeholder = $label;
+                }
                 $label = $this->label;
                 $this->label = null;
             } elseif ($this->label || $this->inline) {
                 $template = $noLabelControl;
-                $element->placeholder = $label;
+                if ($element instanceof Control\Input) {
+                    $element->placeholder = $label;
+                }
             }
 
             // Controls get extra pampering

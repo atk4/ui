@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column;
 
+use Atk4\Ui\CallbackLater;
 use Atk4\Ui\Table;
 
 /**
@@ -11,11 +12,14 @@ use Atk4\Ui\Table;
  */
 class Delete extends Table\Column
 {
+    /** @var CallbackLater */
+    protected $vp;
+
     protected function init(): void
     {
         parent::init();
 
-        $this->vp = $this->table->add(new \Atk4\Ui\CallbackLater());
+        $this->vp = $this->table->add(new CallbackLater());
         $this->vp->set(function () {
             $this->table->model->load($_POST[$this->name])->delete();
 

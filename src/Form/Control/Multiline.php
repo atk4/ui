@@ -460,7 +460,7 @@ class Multiline extends Form\Control
             'cellProps' => $this->getSuiTableCellProps($field),
             'caption' => $field->getCaption(),
             'default' => $this->getApp()->ui_persistence->typecastSaveField($field, $field->default),
-            'isExpr' => isset($field->expr),
+            'isExpr' => @isset($field->expr),
             'isEditable' => $field->isEditable(),
             'isHidden' => $field->isHidden(),
             'isVisible' => $field->isVisible(),
