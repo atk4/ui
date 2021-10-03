@@ -24,7 +24,6 @@ class Ui extends \Atk4\Data\Persistence
     public $time_format = 'H:i';
 
     public $datetime_format = 'M d, Y H:i:s';
-    // 'D, d M Y H:i:s O';
 
     /**
      * Calendar input first day of week.
@@ -51,38 +50,31 @@ class Ui extends \Atk4\Data\Persistence
 
     /**
      * This method contains the logic of casting generic values into user-friendly format.
-     *
-     * @return string|string[]
      */
-    public function _typecastSaveField(\Atk4\Data\Field $f, $value)
+    public function _typecastSaveField(\Atk4\Data\Field $f, $value): string
     {
-        // serialize if we explicitly want that
-        if ($f->serialize) {
-            $value = $this->serializeSaveField($f, $value);
-        }
+        // work only on cloned value
+        $value = is_object($value) ? clone $value : $value;
 
         // always normalize string EOL
-        if (is_string($value) && !$f->serialize) {
+        if (is_string($value)) {
             $value = preg_replace('~\r?\n|\r~', "\n", $value);
         }
-
-        // work only on copied value not real one !!!
-        $value = is_object($value) ? clone $value : $value;
 
         switch ($f->type) {
             case 'boolean':
                 $value = $value ? $this->yes : $this->no;
 
                 break;
-            case 'money':
+            case 'atk4_money':
                 $value = ($this->currency ? $this->currency . ' ' : '') . number_format($value, $this->currency_decimals);
 
                 break;
             case 'date':
             case 'datetime':
             case 'time':
-                $dt_class = $f->dateTimeClass ?? \DateTime::class;
-                $tz_class = $f->dateTimeZoneClass ?? \DateTimeZone::class;
+                $dt_class = \DateTime::class;
+                $tz_class = \DateTimeZone::class;
 
                 if ($value instanceof $dt_class || $value instanceof \DateTimeInterface) {
                     $formats = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
@@ -98,16 +90,14 @@ class Ui extends \Atk4\Data\Persistence
 
                 break;
             case 'array':
+            case 'json':
             case 'object':
-                // don't encode if we already use some kind of serialization
-                $value = $f->serialize ? $value : json_encode($value, \JSON_THROW_ON_ERROR);
+                $value = json_encode($value, \JSON_THROW_ON_ERROR);
 
                 break;
         }
 
-        return is_array($value)
-            ? array_map(function ($v) { return (string) $v; }, $value)
-            : (string) $value;
+        return (string) $value;
     }
 
     /**
@@ -115,21 +105,8 @@ class Ui extends \Atk4\Data\Persistence
      */
     public function _typecastLoadField(\Atk4\Data\Field $f, $value)
     {
-        // serialize if we explicitly want that
-        if ($f->serialize && $value) {
-            try {
-                $new_value = $this->serializeLoadField($f, $value);
-            } catch (\Exception $e) {
-                throw (new Exception('Unable to serialize field value on load'))
-                    ->addMoreInfo('serializator', $f->serialize)
-                    ->addMoreInfo('value', $value)
-                    ->addMoreInfo('field', $f);
-            }
-            $value = $new_value;
-        }
-
         // always normalize string EOL
-        if (is_string($value) && !$f->serialize) {
+        if (is_string($value)) {
             $value = preg_replace('~\r?\n|\r~', "\n", $value);
         }
 
@@ -145,24 +122,24 @@ class Ui extends \Atk4\Data\Persistence
                 $value = (bool) $value;
 
                 break;
-            case 'money':
-                $value = str_replace(',', '', $value);
+            case 'atk4_money':
+                $value = str_replace(',', '', $value); // we should use standard Field::normalize here
 
                 break;
             case 'date':
             case 'datetime':
             case 'time':
-                $dt_class = $f->dateTimeClass ?? \DateTime::class;
-                $tz_class = $f->dateTimeZoneClass ?? \DateTimeZone::class;
+                $dt_class = \DateTime::class;
+                $tz_class = \DateTimeZone::class;
 
                 // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
                 $formats = ['date' => '!+' . $this->date_format, 'datetime' => '!+' . $this->datetime_format, 'time' => '!+' . $this->time_format];
                 $format = $f->persist_format ?: $formats[$f->type];
 
                 // datetime only - set from persisting timezone
-                $valueStr = $value;
+                $valueStr = is_object($value) ? $this->_typecastSaveField($f, $value) : $value;
                 if ($f->type === 'datetime' && isset($f->persist_timezone)) {
-                    $value = $dt_class::createFromFormat($format, $value, new $tz_class($f->persist_timezone));
+                    $value = $dt_class::createFromFormat($format, $valueStr, new $tz_class($f->persist_timezone));
                     if ($value === false) {
                         throw (new Exception('Incorrectly formatted datetime'))
                             ->addMoreInfo('format', $format)
@@ -171,7 +148,7 @@ class Ui extends \Atk4\Data\Persistence
                     }
                     $value->setTimeZone(new $tz_class(date_default_timezone_get()));
                 } else {
-                    $value = $dt_class::createFromFormat($format, $value);
+                    $value = $dt_class::createFromFormat($format, $valueStr);
                     if ($value === false) {
                         throw (new Exception('Incorrectly formatted date/time'))
                             ->addMoreInfo('format', $format)

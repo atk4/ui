@@ -19,7 +19,7 @@ Agile UI is a component framework, which follows a software patterns known as
 
 View object is recursive. You can take one view and add another View inside of it::
 
-    $v = new \Atk4\Ui\View(['ui'=>'segment', 'inverted']);
+    $v = new \Atk4\Ui\View(['ui' => 'segment', 'inverted']);
     Button::addTo($v, ['Orange', 'inverted orange']);
 
 The above code will produce the following HTML block:
@@ -72,8 +72,8 @@ in any way you wish, before they will actuallized.
 In the next example I'll be creating 3 views, but it at the time their __constructor
 is executed it will be impossible to determine each view's position inside render tree::
 
-    $middle = new \Atk4\Ui\View(['ui'=>'segment', 'red']);
-    $top = new \Atk4\Ui\View(['ui'=>'segments']);
+    $middle = new \Atk4\Ui\View(['ui' => 'segment', 'red']);
+    $top = new \Atk4\Ui\View(['ui' => 'segments']);
     $bottom = new \Atk4\Ui\Button(['Hello World', 'orange']);
 
     // not arranged into render-tree yet
@@ -94,18 +94,18 @@ child elements. To make your execution more straightforward we recommend you to 
 App class first and then continue with Layout initialization::
 
     $app = new \Atk4\Ui\App('My App');
-    $top = $app->initLayout(new \Atk4\Ui\View(['ui'=>'segments']));
+    $top = $app->initLayout(new \Atk4\Ui\View(['ui' => 'segments']));
 
-    $middle = View::addTo($top, ['ui'=>'segment', 'red']);
+    $middle = View::addTo($top, ['ui' => 'segment', 'red']);
 
     $bottom = Button::addTo($middle, ['Hello World', 'orange']);
 
 Finally, if you prefer a more consise code, you can also use the following format::
 
     $app = new \Atk4\Ui\App('My App');
-    $top = $app->initLayout([\Atk4\Ui\View::class, 'ui'=>'segments']);
+    $top = $app->initLayout([\Atk4\Ui\View::class, 'ui' => 'segments']);
 
-    $middle = View::addTo($top, ['ui'=>'segment', 'red']);
+    $middle = View::addTo($top, ['ui' => 'segment', 'red']);
 
     $bottom = Button::addTo($middle, ['Hello World', 'orange']);
 
@@ -197,17 +197,17 @@ wide varietty of roles. In some cases, a dedicated object will exist, for
 example a Button. In other cases, you can use a View and specify a UI role
 explicitly::
 
-    $view = View::addTo($app, ['ui'=>'segment']);
+    $view = View::addTo($app, ['ui' => 'segment']);
 
 If you happen to pass more key/values to the constructor or as second argument
 to add() they will be treated as default values for the properties of that
 specific view::
 
-    $view = View::addTo($app, ['ui'=>'segment', 'id'=>'test-id']);
+    $view = View::addTo($app, ['ui' => 'segment', 'id' => 'test-id']);
 
 For a more IDE-friendly format, however, I recommend to use the following syntax::
 
-    $view = View::addTo($app, ['ui'=>'segment']);
+    $view = View::addTo($app, ['ui' => 'segment']);
     $view->id = 'test-id';
 
 You must be aware of a difference here - passing array to constructor will
@@ -221,7 +221,7 @@ which syntax you are using.
 If you are don't specify key for the properties, they will be considered an
 extra class for a view::
 
-    $view = View::addTo($app, ['inverted', 'orange', 'ui'=>'segment']);
+    $view = View::addTo($app, ['inverted', 'orange', 'ui' => 'segment']);
     $view->id = 'test-id';
 
 You can either specify multiple classes one-by-one or as a single string
@@ -262,7 +262,7 @@ by creating instance of \Atk4\Ui\Icon() inside the button.
 
 The same pattern can be used for other scenarios::
 
-    $button = Button::addTo($app, ['icon'=>'book']);
+    $button = Button::addTo($app, ['icon' => 'book']);
 
 This code will have same effect as::
 
@@ -276,7 +276,7 @@ During the Render of a button, the following code will be executed::
 If you wish to use a different icon-set, you can change Factory's route for 'Icon'
 to your own implementation OR you can pass icon as a view::
 
-    $button = Button::addTo($app, ['icon'=>new MyAwesomeIcon('book')]);
+    $button = Button::addTo($app, ['icon' => new MyAwesomeIcon('book')]);
 
 
 Rendering of a Tree
@@ -337,20 +337,20 @@ to do something before child render, override method :php:meth:`View::recursiveR
 Template of a current view. This attribute contains an object of a class :php:class:`Template`.
 You may secify this value explicitly::
 
-    View::addTo($app, ['template'=>new \Atk4\Ui\Template('<b>hello</b>')]);
+    View::addTo($app, ['template' => new \Atk4\Ui\Template('<b>hello</b>')]);
 
 .. php:attr:: defaultTemplate
 
 By default, if value of :php:attr:`View::$template` is not set, then it is loaded from class
 specified in `defaultTemplate`::
 
-    View::addTo($app, ['defaultTemplate'=>'./mytpl.html']);
+    View::addTo($app, ['defaultTemplate' => './mytpl.html']);
 
 You should specify defaultTemplate using relative path to your project root or, for add-ons,
 relative to a current file::
 
     // in Add-on
-    View::addTo($app, ['defaultTemplate'=>__DIR__.'/../templates/mytpl.httml']);
+    View::addTo($app, ['defaultTemplate' => __DIR__.'/../templates/mytpl.httml']);
 
 Agile UI does not currently provide advanced search path for templates, by default the
 template is loaded from folder `vendor/atk4/ui/template/semantic-ui/`. To change this
@@ -380,7 +380,7 @@ Here is a best practice for using custom template::
 As soon as the view becomes part of a render-tree, the Template object will also be allocated.
 At this point it's also possible to override default template::
 
-    MyView::addTo($app, ['template'=>$template->cloneRegion('MyRegion')]);
+    MyView::addTo($app, ['template' => $template->cloneRegion('MyRegion')]);
 
 Or you can set $template into object inside your constructor, in which case it will be left as-is.
 
@@ -389,7 +389,7 @@ will automatically clone region of a parent.
 
 ``Lister`` is a class that has no default template, and therefore you can add it like this::
 
-    $profile = View::addTo($app, ['template'=>'myview.html']);
+    $profile = View::addTo($app, ['template' => 'myview.html']);
     $profile->setModel($user);
     Lister::addTo($profile, [], ['Tags'])->setModel($user->ref('Tags'));
 
@@ -409,7 +409,7 @@ Unique ID tag
 
 Agile UI will maintain unique ID for all the elements. The tag is set through 'id' property::
 
-    $b = new \Atk4\Ui\Button(['id'=>'my-button3']);
+    $b = new \Atk4\Ui\Button(['id' => 'my-button3']);
     echo $b->render();
 
 Outputs:

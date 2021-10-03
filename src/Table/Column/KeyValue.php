@@ -36,7 +36,7 @@ use Atk4\Ui\Table;
  *      2 => __('invoiced'),
  *      3 => __('paid'),
  *  ],
- *  'ui'      => [
+ *  'ui' => [
  *      'form' => [\Atk4\Ui\Form\Control\Dropdown::class],
  *      'table' => ['KeyValue'],
  *  ],

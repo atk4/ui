@@ -45,18 +45,18 @@ Using with Array Data
 You can also use Table with Array data source like this::
 
     $my_array = [
-        ['name'=>'Vinny', 'surname'=>'Sihra', 'birthdate'=>new \DateTime('1973-02-03')],
-        ['name'=>'Zoe', 'surname'=>'Shatwell', 'birthdate'=>new \DateTime('1958-08-21')],
-        ['name'=>'Darcy', 'surname'=>'Wild', 'birthdate'=>new \DateTime('1968-11-01')],
-        ['name'=>'Brett', 'surname'=>'Bird', 'birthdate'=>new \DateTime('1988-12-20')],
+        ['name' => 'Vinny', 'surname' => 'Sihra', 'birthdate' => new \DateTime('1973-02-03')],
+        ['name' => 'Zoe', 'surname' => 'Shatwell', 'birthdate' => new \DateTime('1958-08-21')],
+        ['name' => 'Darcy', 'surname' => 'Wild', 'birthdate' => new \DateTime('1968-11-01')],
+        ['name' => 'Brett', 'surname' => 'Bird', 'birthdate' => new \DateTime('1988-12-20')],
     ];
 
     $table = Table::addTo($app);
     $table->setSource($my_array);
 
     $table->addColumn('name');
-    $table->addColumn('surname', [\Atk4\Ui\Table\Column\Link::class, 'url'=>'details.php?surname={$surname}']);
-    $table->addColumn('birthdate', null, ['type'=>'date']);
+    $table->addColumn('surname', [\Atk4\Ui\Table\Column\Link::class, 'url' => 'details.php?surname={$surname}']);
+    $table->addColumn('birthdate', null, ['type' => 'date']);
 
 .. warning:: I encourage you to seek appropriate Agile Data persistence instead of
     handling data like this. The implementation of :php:meth:`View::setSource` will
@@ -102,12 +102,12 @@ field if it's not alrady defined in ``Order::init()``::
     $table = Table::addTo($app);
     $order = new Order($db);
 
-    $order->addExpression('total', '[price]*[amount]')->type = 'money';
+    $order->addExpression('total', '[price]*[amount]')->type = 'atk4_money';
 
     $table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
 
 The type of the Model Field determines the way how value is presented in the table. I've specified
-value to be 'money' which makes column align values to the right, format it with 2 decimal signs
+value to be 'atk4_money' which makes column align values to the right, format it with 2 decimal signs
 and possibly add a currency sign.
 
 To learn about value formatting, read documentation on :ref:`ui_persistence`.
@@ -121,8 +121,8 @@ specify the caption, you can use code like this::
 
     $order->addExpression('total', [
         '[price]*[amount]',
-        'type'=>'money',
-        'caption'=>'Total Price'
+        'type' => 'atk4_money',
+        'caption' => 'Total Price'
     ]);
 
     $table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
@@ -148,7 +148,7 @@ then to save memory Table will re-use the same objects for all generic fields.
 
 Protected property that will contain "generic" column that will be used to format all
 columns, unless a different column type is specified or the Field type will require a use
-of a different class (e.g. 'money'). Value will be initialized after first call to
+of a different class (e.g. 'atk4_money'). Value will be initialized after first call to
 :php:meth:`Table::addColumn`
 
 .. php:attr:: columns
@@ -268,7 +268,7 @@ The tag will override model value. Here is example usage of :php:meth:`Table\\Co
 
         function getHtmlTags(\Atk4\Data\Model $row)
         {
-            return ['_expired'=>
+            return ['_expired' =>
                 $row->get('date') < new \DateTime() ?
                 '<td class="danger">EXPIRED</td>' :
                 '<td></td>'

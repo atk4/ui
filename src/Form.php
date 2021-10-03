@@ -106,7 +106,7 @@ class Form extends View
      *   Show 'target' if 'source1' is not empty AND 'source2' is notEmpty.
      *
      *  Combine multiple condition to the same source field.
-     *   ex: ['target' => ['source1' => ['notEmpty','number']]
+     *   ex: ['target' => ['source1' => ['notEmpty', 'number']]
      *   Show 'target' if 'source1 is notEmpty AND is a number.
      *
      *  Combine multiple arrays of rules will OR the rules for the target field.
@@ -189,7 +189,7 @@ class Form extends View
 
     /**
      * initialize form layout. You can inject custom layout
-     * if you 'layout'=>.. to constructor.
+     * if you 'layout' => .. to constructor.
      */
     protected function initLayout()
     {
@@ -503,7 +503,7 @@ class Form extends View
 
         $fallbackSeed = [Form\Control\Line::class];
 
-        if ($field->type === 'array' && $field->getReference() !== null) {
+        if ($field->type === 'json' && $field->getReference() !== null) {
             $limit = ($field->getReference() instanceof ContainsMany) ? 0 : 1;
             $model = $field->getReference()->refModel();
             $fallbackSeed = [Form\Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
@@ -550,11 +550,10 @@ class Form extends View
         'boolean' => [Form\Control\Checkbox::class],
         'text' => [Form\Control\Textarea::class],
         'string' => [Form\Control\Line::class],
-        'password' => [Form\Control\Password::class],
         'datetime' => [Form\Control\Calendar::class, ['type' => 'datetime']],
         'date' => [Form\Control\Calendar::class, ['type' => 'date']],
         'time' => [Form\Control\Calendar::class, ['type' => 'time']],
-        'money' => [Form\Control\Money::class],
+        'atk4_money' => [Form\Control\Money::class],
     ];
 
     /**

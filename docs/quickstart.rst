@@ -142,12 +142,12 @@ single ToDo item::
         function init(): void {
             parent::init();
 
-            $this->addField('name', ['caption'=>'Task Name', 'required'=>true]);
+            $this->addField('name', ['caption' => 'Task Name', 'required' => true]);
                                                    // 7
             $this->addField('due', [
-              'type'=>'date',                      // 8
-              'caption'=>'Due Date',
-              'default'=>new \DateTime('+1 week')  // 9
+              'type' => 'date',                      // 8
+              'caption' => 'Due Date',
+              'default' => new \DateTime('+1 week')  // 9
             ]);
         }
     }
@@ -241,14 +241,14 @@ Grid and Crud
 As mentioned before, UI Components in Agile Toolkit are often interchangeable, you can swap one for
 another. In our example replace right column (label 17) with the following code::
 
-    $grid = \Atk4\Ui\Crud::addTo($col->addColumn(), ['paginator'=>false, // 18
-        'canCreate'=>false, 'canDelete'=>false                  // 19
+    $grid = \Atk4\Ui\Crud::addTo($col->addColumn(), ['paginator' => false, // 18
+        'canCreate' => false, 'canDelete' => false                  // 19
     ]);
     $grid->setModel(new ToDoItem($s));
 
     $grid->menu->addItem('Complete Selected',                   // 20
         new \Atk4\Ui\JsReload($grid->table, [                   // 21
-            'delete'=>$grid->addSelection()->jsChecked()        // 22
+            'delete' => $grid->addSelection()->jsChecked()        // 22
         ])
     );
 

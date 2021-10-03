@@ -96,7 +96,7 @@ $formGroup->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language' => [
 
 //////////////////////////////////////////////////////////
 /*
-\Atk4\Ui\Header::addTo($app, ['Hide or show accordion section', 'size'=>2]);
+\Atk4\Ui\Header::addTo($app, ['Hide or show accordion section', 'size' => 2]);
 
 $f_acc = Form::addTo($app, ['segment']);
 \Atk4\Ui\Label::addTo($f_acc, ['Work on section layouts too.', 'top attached'], ['AboveControls']);
@@ -108,7 +108,7 @@ $accordion_layout = $f_acc->layout->addSubLayout([Form\Layout\Section\Accordion:
 $adr_section = $accordion_layout->addSection('Business Address');
 
 $gr = $adr_section->addGroup('Street and City');
-$gr->addControl('addr1', ['width' => 'eight'], ['required'=>true]);
+$gr->addControl('addr1', ['width' => 'eight'], ['required' => true]);
 $gr->addControl('city1', ['width' => 'eight']);
 
 $gr = $adr_section->addGroup('State, Country and Postal Code');
@@ -116,13 +116,13 @@ $gr->addControl('state1', ['width' => 'six']);
 $gr->addControl('country1', ['width' => 'six']);
 $gr->addControl('postal1', ['width' => 'four']);
 
-$adr_section->addControl('custom_shipping', [Form\Control\Checkbox::class, 'caption'=>'Different Shipping Address']);
+$adr_section->addControl('custom_shipping', [Form\Control\Checkbox::class, 'caption' => 'Different Shipping Address']);
 
 // Section - shipping address
 $ship_section = $accordion_layout->addSection('Shipping address');
 
 $gr = $ship_section->addGroup('Street and City');
-$gr->addControl('addr2', ['width' => 'eight'], ['required'=>true]);
+$gr->addControl('addr2', ['width' => 'eight'], ['required' => true]);
 $gr->addControl('city2', ['width' => 'eight']);
 
 $gr = $ship_section->addGroup('State, Country and Postal Code');

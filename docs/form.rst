@@ -55,7 +55,7 @@ of it. Form uses :php:class:`Button` that you can tweak to your liking::
 
 or you can tweak it when you create form like this::
 
-    $form = Form::addTo($app, ['buttonSave'=>[null, 'Subscribe', 'icon'=>'mail']]);
+    $form = Form::addTo($app, ['buttonSave' => [null, 'Subscribe', 'icon' => 'mail']]);
 
 To set the default values in the form controls you can use the model property of the form.
 Even if model not explicitly set (see section below) each form has an underlying model which is automatically generated::
@@ -161,8 +161,8 @@ Create a new control on a form::
 
     $form = Form::addTo($app);
     $form->addControl('email');
-    $form->addControl('gender', [\Atk4\Ui\Form\Control\Dropdown::class, 'values'=>['Female', 'Male']]);
-    $form->addControl('terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']);
+    $form->addControl('gender', [\Atk4\Ui\Form\Control\Dropdown::class, 'values' => ['Female', 'Male']]);
+    $form->addControl('terms', null, ['type' => 'boolean', 'caption' => 'Agree to Terms & Conditions']);
 
 Create a new control on a form using Model does not require you to describe each control.
 Form will rely on Model Field Definition and UI meta-values to decide on the best way to handle
@@ -174,8 +174,8 @@ specific field type::
 Form control does not have to be added directly into the form. You can use a separate
 :php:class:`Form\\Layout` or even a regular view. Simply specify property :php:meth:`Form\\Control::$form`::
 
-    $myview = View::addTo($form, ['defaultTemplate'=>'./mytemplate.html']);
-    Form\Control\Dropdown::addTo($myview, ['form'=>$form]);
+    $myview = View::addTo($form, ['defaultTemplate' => './mytemplate.html']);
+    Form\Control\Dropdown::addTo($myview, ['form' => $form]);
 
 .. php:method:: addControls($fields)
 
@@ -184,8 +184,8 @@ Similar to :php:meth:`Form::addControl()`, but allows to add multiple form contr
     $form = Form::addTo($app);
     $form->addControls([
         'email',
-        ['gender', [\Atk4\Ui\Form\Control\Dropdown::class, 'values'=>['Female', 'Male']]],
-        ['terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']],
+        ['gender', [\Atk4\Ui\Form\Control\Dropdown::class, 'values' => ['Female', 'Male']]],
+        ['terms', null, ['type' => 'boolean', 'caption' => 'Agree to Terms & Conditions']],
     ]);
 
 Adding new controls
@@ -228,7 +228,7 @@ For some examples see: https://ui.agiletoolkit.org/demos/form3.php
 Field Decorator can be passed to ``addControl`` using 'string', :php:ref:`seed` or 'object'::
 
     $form->addControl('accept_terms', [\Atk4\Ui\Form\Control\Checkbox::class]);
-    $form->addControl('gender', [\Atk4\Ui\Form\Control\Dropdown::class, 'values'=>['Female', 'Male']]);
+    $form->addControl('gender', [\Atk4\Ui\Form\Control\Dropdown::class, 'values' => ['Female', 'Male']]);
 
     $calendar = new \Atk4\Ui\Form\Control\Calendar();
     $calendar->type = 'tyme';
@@ -248,10 +248,10 @@ Data Field
 
 Data field is the 3rd argument to ``Form::addControl()``.
 
-There are 3 ways to define Data form control using 'string', 'array' or 'object'::
+There are 3 ways to define Data form control using 'string', 'json' or 'object'::
 
     $form->addControl('accept_terms', [\Atk4\Ui\Form\Control\Checkbox::class], 'Accept Terms & Conditions');
-    $form->addControl('gender', null, ['enum'=>['Female', 'Male']]);
+    $form->addControl('gender', null, ['enum' => ['Female', 'Male']]);
 
     class MyBoolean extends \Atk4\Data\Field {
         public $type = 'boolean';
@@ -273,7 +273,7 @@ existing field properties. This example make email field mandatory for the form:
     $form = Form::addTo($app);
     $form->setModel(new User($db), false);
 
-    $form->addControl('email', null, ['required'=>true]);
+    $form->addControl('email', null, ['required' => true]);
 
 addControl into Form with Existing Model
 ----------------------------------------
@@ -299,7 +299,7 @@ example displays a registration form for a User::
 
     // add password verification field
     $form->addControl('password_verify', [\Atk4\Ui\Form\Control\Password::class], 'Type password again');
-    $form->addControl('accept_terms', null, ['type'=>'boolean']);
+    $form->addControl('accept_terms', null, ['type' => 'boolean']);
 
     // submit event
     $form->onSubmit(function($form){
@@ -325,8 +325,8 @@ It is always recommended to use data field type, because it will take care of ty
 for you. Here is an example with date::
 
     $form = Form::addTo($app);
-    $form->addControl('date1', null, ['type'=>'date']);
-    $form->addControl('date2', [\Atk4\Ui\Form\Control\Calendar::class, 'type'=>'date']);
+    $form->addControl('date1', null, ['type' => 'date']);
+    $form->addControl('date2', [\Atk4\Ui\Form\Control\Calendar::class, 'type' => 'date']);
 
     $form->onSubmit(function($form) {
         echo 'date1 = '.print_r($form->model->get('date1'), true).' and date2 = '.print_r($form->model->get('date2'), true);
@@ -335,7 +335,7 @@ for you. Here is an example with date::
 Field ``date1`` is defined inside a :php:class:`ProxyModel` as a date field and will
 be automatically converted into DateTime object by Persistence typecasting.
 
-Field ``date2`` has no data type, do not confuse with ui type=>date pass as second argument for Calendar field,
+Field ``date2`` has no data type, do not confuse with ui type => date pass as second argument for Calendar field,
 and therefore Persistence typecasting will not modify it's value and it's stored inside model as a string.
 
 The above code result in the following output::
@@ -352,7 +352,7 @@ use a custom decorator?
 
 This is where ``$field->ui`` comes in (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui).
 
-You can specify ``'ui'=>['form' => $decorator_seed]`` when defining your model field inside your Model::
+You can specify ``'ui' => ['form' => $decorator_seed]`` when defining your model field inside your Model::
 
     class User extends \Atk4\Data\Model {
         public $table = 'user';
@@ -361,9 +361,9 @@ You can specify ``'ui'=>['form' => $decorator_seed]`` when defining your model f
             parent::init();
 
             $this->addField('email');
-            $this->addField('password', ['type'=>'password']);
+            $this->addField('password');
 
-            $this->addField('birth_year', ['type'=>'date', 'ui'=>['type'=>'month']);
+            $this->addField('birth_year', ['type' => 'date', 'ui' => ['type' => 'month']);
         }
     }
 
@@ -371,7 +371,7 @@ The seed for the UI will be combined with the default overriding :php:attr:`Form
 to allow month/year entry by the Calendar extension, which will then be saved and
 stored as a regular date. Obviously you can also specify decorator class::
 
-    $this->addField('birth_year', ['ui'=>[\Atk4\Ui\Form\Control\Calendar::class, 'type'=>'month']);
+    $this->addField('birth_year', ['ui' => [\Atk4\Ui\Form\Control\Calendar::class, 'type' => 'month']);
 
 Without the data 'type' property, now the calendar selection will be stored as text.
 
@@ -487,7 +487,7 @@ Example use of Model's validate() method::
         protected function init(): void
         {
             parent::init();
-            $this->addField('name', ['required'=>true]);
+            $this->addField('name', ['required' => true]);
             $this->addField('surname');
             $this->addField('gender', ['enum' => ['M', 'F']]);
         }
@@ -514,7 +514,7 @@ This should display a following form::
 
     $form->addControl(
         'terms',
-        ['type'=>'boolean', 'ui'=>['caption'=>'Accept Terms and Conditions']]
+        ['type' => 'boolean', 'ui' => ['caption' => 'Accept Terms and Conditions']]
     );
 
 Form Submit Handling
@@ -655,21 +655,21 @@ By default grouped form controls will appear with fixed width. To distribute spa
 proportions manually::
 
     $group = $form->addGroup('Address');
-    $group->addControl('address', ['width'=>'twelve']);
-    $group->addControl('code', ['Post Code', 'width'=>'four']);
+    $group->addControl('address', ['width' => 'twelve']);
+    $group->addControl('code', ['Post Code', 'width' => 'four']);
 
 or you can divide space equally between form controls. Header is also omitted for this group::
 
-    $group = $form->addGroup(['width'=>'two']);
+    $group = $form->addGroup(['width' => 'two']);
     $group->addControls(['city', 'country']);
 
 You can also use in-line form groups. Controls in such a group will display header on the left and
 the error messages appearing on the right from the control::
 
-    $group = $form->addGroup(['Name', 'inline'=>true]);
-    $group->addControl('first_name', ['width'=>'eight']);
-    $group->addControl('middle_name', ['width'=>'three', 'disabled'=>true]);
-    $group->addControl('last_name', ['width'=>'five']);
+    $group = $form->addGroup(['Name', 'inline' => true]);
+    $group->addControl('first_name', ['width' => 'eight']);
+    $group->addControl('middle_name', ['width' => 'three', 'disabled' => true]);
+    $group->addControl('last_name', ['width' => 'five']);
 
 Using Sub-layout
 ----------------
@@ -759,9 +759,9 @@ The logic is based around passing a declarative array::
     $form->addControl('phone4');
 
     $form->setControlsDisplayRules([
-        'phone2'=>['phone1'=>'empty'],
-        'phone3'=>['phone1'=>'empty', 'phone2'=>'empty'],
-        'phone4'=>['phone1'=>'empty', 'phone2'=>'empty', 'phone3'=>'empty'],
+        'phone2' => ['phone1' => 'empty'],
+        'phone3' => ['phone1' => 'empty', 'phone2' => 'empty'],
+        'phone4' => ['phone1' => 'empty', 'phone2' => 'empty', 'phone3' => 'empty'],
     ]);
 
 The only catch here is that "empty" means "not empty". ATK UI relies on rules defined by FomanticUI
@@ -773,9 +773,9 @@ Here is a more advanced example::
     $f_sub->addControl('name');
     $f_sub->addControl('subscribe', [\Atk4\Ui\Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'toggle']);
     $f_sub->addControl('email');
-    $f_sub->addControl('gender', [\Atk4\Ui\Form\Control\Radio::class], ['enum'=>['Female', 'Male']])->set('Female');
-    $f_sub->addControl('m_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption'=>'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
-    $f_sub->addControl('f_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption'=>'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
+    $f_sub->addControl('gender', [\Atk4\Ui\Form\Control\Radio::class], ['enum' => ['Female', 'Male']])->set('Female');
+    $f_sub->addControl('m_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
+    $f_sub->addControl('f_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption' => 'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
 
     // Show email and gender when subscribe is checked.
 
@@ -784,9 +784,9 @@ Here is a more advanced example::
 
     $f_sub->setControlsDisplayRules([
        'email' => ['subscribe' => 'checked'],
-       'gender'=> ['subscribe' => 'checked'],
-       'm_gift'=> ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
-       'f_gift'=> ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
+       'gender' => ['subscribe' => 'checked'],
+       'm_gift' => ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
+       'f_gift' => ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
     ]);
 
 You may also define multiple conditions for the form control to be visible if you wrap them inside and array::
@@ -801,7 +801,7 @@ You may also define multiple conditions for the form control to be visible if yo
     // OR
     // Show 'hair_cut' when race contains exactly the word 'bichon'
     $f_dog->setControlsDisplayRules([
-        'hair_cut' => [['race' => 'contains[poodle]', 'age'=>'integer[1..5]'], ['race' => 'isExactly[bichon]']],
+        'hair_cut' => [['race' => 'contains[poodle]', 'age' => 'integer[1..5]'], ['race' => 'isExactly[bichon]']],
     ]);
 
 Hiding / Showing group of field
@@ -835,7 +835,7 @@ Instead of defining rules for form controls individually you can hide/show entir
 
     $f_group->setGroupDisplayRules([
         'php' => ['dev' => 'checked'],
-        'language'=>['dev'=>'checked']
+        'language' => ['dev' => 'checked']
     ]);
 
 .. todo:: MOVE THIS TO SEPARATE FILE

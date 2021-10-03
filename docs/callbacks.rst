@@ -163,7 +163,7 @@ know about :php:class:`JsReload` already?
 
 Here is example of JsReload::
 
-    $view = \Atk4\Ui\View::addTo($app, ['ui'=>'tertiary green inverted segment']);
+    $view = \Atk4\Ui\View::addTo($app, ['ui' => 'tertiary green inverted segment']);
     $button = \Atk4\Ui\Button::addTo($app, ['Reload Lorem']);
 
     $button->on('click', new \Atk4\Ui\JsReload($view));
@@ -262,7 +262,7 @@ property::
 
     $label->on('click', function() {
         return 'ok';
-    }, ['confirm'=>'sure?']);
+    }, ['confirm' => 'sure?']);
 
 JavaScript arguments
 ^^^^^^^^^^^^^^^^^^^^
@@ -290,7 +290,7 @@ also supports argument passing::
 
     $label->on('click', function($j, $arg1) {
         return 'width is '.$arg1;
-    }, ['confirm'=>'sure?', 'args'=>[new \Atk4\Ui\JsExpression( '$(window).width()' )]]);
+    }, ['confirm' => 'sure?', 'args' => [new \Atk4\Ui\JsExpression( '$(window).width()' )]]);
 
 If you do not need to specify confirm, you can actually pass arguments in a key-less array too::
 

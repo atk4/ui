@@ -42,9 +42,9 @@ class DemoLookup extends \Atk4\Ui\Form\Control\Lookup
         $vp->set(function ($page) {
             $form = \Atk4\Ui\Form::addTo($page);
 
-            $model = clone $this->model;
+            $entity = $this->model->createEntity();
 
-            $form->setModel($model->onlyFields($this->plus['fields'] ?? []));
+            $form->setModel($entity->onlyFields($this->plus['fields'] ?? []));
 
             $form->onSubmit(function (\Atk4\Ui\Form $form) {
                 // Prevent from saving

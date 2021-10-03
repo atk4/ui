@@ -17,11 +17,11 @@ class Dropdown extends Input
      * Values need for the dropdown.
      *  Note: Now possible to display icon with value in dropdown by passing the
      *        icon class with your values.
-     * ex: 'values'  => [
-     *          'tag'        => ['Tag', 'icon' => 'tag icon'],
-     *          'globe'      => ['Globe', 'icon' => 'globe icon'],
+     * ex: 'values' => [
+     *          'tag' => ['Tag', 'icon' => 'tag icon'],
+     *          'globe' => ['Globe', 'icon' => 'globe icon'],
      *          'registered' => ['Registered', 'icon' => 'registered icon'],
-     *          'file'       => ['File', 'icon' => 'file icon']
+     *          'file' => ['File', 'icon' => 'file icon']
      *          ].
      *
      * @var array
@@ -94,17 +94,17 @@ class Dropdown extends Input
      * Example 2 with Model: Add an icon
      * function(Model $row) {
      *     return [
-     *         'value'   => $row->getId(),
-     *         'title'   => $row->getTitle(),
-     *         'icon'    => $row->get('amount') > 1000 ? 'money' : '',
+     *         'value' => $row->getId(),
+     *         'title' => $row->getTitle(),
+     *         'icon' => $row->get('amount') > 1000 ? 'money' : '',
      *     ];
      * }
      *
      * Example 3 with Model: Combine Title from model fields
      * function(Model $row) {
      *     return [
-     *         'value'   => $row->getId(),
-     *         'title'   => $row->getTitle().' ('.$row->get('title2').')',
+     *         'value' => $row->getId(),
+     *         'title' => $row->getTitle().' ('.$row->get('title2').')',
      *     ];
      * }
      *
@@ -113,7 +113,7 @@ class Dropdown extends Input
      *     return [
      *        'value' => $key,
      *        'title' => mb_strtoupper($value),
-     *        'icon'  => strpos('Month', $value) !== false ? 'calendar' : '',
+     *        'icon' => strpos('Month', $value) !== false ? 'calendar' : '',
      *     ];
      * }
      *
@@ -194,7 +194,7 @@ class Dropdown extends Input
     public function set($value = null, $junk = null)
     {
         if ($this->field) {
-            if ($this->field->type === 'array' && is_string($value)) {
+            if ($this->field->type === 'json' && is_string($value)) {
                 $value = explode(',', $value);
             }
             $this->field->set($value);

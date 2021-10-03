@@ -149,14 +149,14 @@ Lets use the example of demos/multiline.php::
         {
             parent::init();
             $this->addField('item', ['required' => true, 'default' => 'item']);
-            $this->addField('qty', ['type' => 'number', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
-            $this->addField('box', ['type' => 'number', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
+            $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
+            $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
             $this->addExpression('total', ['expr' => function (Model $row) {
                 return $row->get('qty') * $row->get('box');
-            }, 'type' => 'number']);
+            }, 'type' => 'integer']);
         }
     }
-    
+
 The 'total' expression will get updated on each field change automatically.
 
 OnLineChange Callback
@@ -241,7 +241,7 @@ Table(sui-table) Props can be set using $tableProps property of Multiline::
 
 Header
 ------
-- The header uses the field's caption by default. 
+- The header uses the field's caption by default.
 - You can edit it by setting the ``$caption`` property.
 - If you want to hide the header, set the ``$caption`` property to an empty string ``''``.
 

@@ -95,7 +95,7 @@ class Lookup extends Input
 
     /**
      * Semantic UI uses cache to remember choices. For dynamic sites this may be dangerous, so
-     * it's disabled by default. To switch cache on, set 'cache'=>'local'.
+     * it's disabled by default. To switch cache on, set 'cache' => 'local'.
      *
      * Use this apiConfig variable to pass API settings to Semantic UI in .dropdown()
      *
@@ -110,14 +110,14 @@ class Lookup extends Input
      *
      * For example, using this setting will automatically submit
      * form when field value is changes.
-     * $form->addControl('field', [\Atk4\Ui\Form\Control\Lookup::class, 'settings'=>['allowReselection' => true,
+     * $form->addControl('field', [\Atk4\Ui\Form\Control\Lookup::class, 'settings' => ['allowReselection' => true,
      *                           'selectOnKeydown' => false,
-     *                           'onChange'        => new Atk4\Ui\JsExpression('function(value,t,c){
-     *                                                          if ($(this).data("value") !== value) {
-     *                                                            $(this).parents(".form").form("submit");
-     *                                                            $(this).data("value", value);
-     *                                                          }
-     *                                                         }'),
+     *                           'onChange' => new Atk4\Ui\JsExpression('function(value,t,c) {
+     *                                 if ($(this).data("value") !== value) {
+     *                                   $(this).parents(".form").form("submit");
+     *                                   $(this).data("value", value);
+     *                                 }
+     *                               }'),
      *                          ]]);
      *
      * @var array
@@ -270,9 +270,9 @@ class Lookup extends Input
         $vp->set(function ($page) {
             $form = \Atk4\Ui\Form::addTo($page);
 
-            $model = clone $this->model;
+            $entity = $this->model->createEntity();
 
-            $form->setModel($model->onlyFields($this->plus['fields'] ?? []));
+            $form->setModel($entity->onlyFields($this->plus['fields'] ?? []));
 
             $form->onSubmit(function (\Atk4\Ui\Form $form) {
                 $form->model->save();

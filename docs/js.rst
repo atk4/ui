@@ -341,8 +341,8 @@ The template language for JsExpression is super-simple:
 So the following lines are identical::
 
     $sum = new JsExpression('[]+[]', [$h1, $h2]);
-    $sum = new JsExpression('[0]+[1]', [0=>$h1, 1=>$h2]);
-    $sum = new JsExpression('[a]+[b]', ['a'=>$h1, 'b'=>$h2]);
+    $sum = new JsExpression('[0]+[1]', [0 => $h1, 1 => $h2]);
+    $sum = new JsExpression('[a]+[b]', ['a' => $h1, 'b' => $h2]);
 
 .. important::
 
@@ -484,7 +484,7 @@ some feedback to the user. JsNotify can display a bar on top of the screen for s
 
     $modal->set(function ($p) use ($modal) {
         $form = \Atk4\Ui\Form::addTo($p);
-        $form->addControl('name', null, ['caption'=>'Add your name']);
+        $form->addControl('name', null, ['caption' => 'Add your name']);
 
         $form->onSubmit(function ($form) use ($modal) {
             if (empty($form->model->get('name'))) {
@@ -573,7 +573,7 @@ The following will **not** work::
     $table = \Atk4\Ui\Table::addTo($app);
     $table->setModel(clone $model));
 
-    $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon'=>'plus']);
+    $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
     $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
 
     $form->onSubmit(function($form) use($table) {
@@ -597,7 +597,7 @@ Table needs to be first! The following works::
     $form = \Atk4\Ui\Form::addTo($vp);
     $form->setModel(clone $model);
 
-    $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon'=>'plus']);
+    $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
     $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
 
     $form->onSubmit(function($form) use($table) {
@@ -629,7 +629,7 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
         });
     });
 
-    $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon'=>'plus']);
+    $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
     $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
 
 Note that in no case you will be able to render the button *above* the table (because the button needs a

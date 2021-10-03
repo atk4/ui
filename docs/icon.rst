@@ -20,12 +20,12 @@ Alternatively::
 Most commonly icon class is used for embedded icons on a :php:class:`Button`
 or inside other components (see :ref:`icon_other_comp`)::
 
-    $b1 = new \Atk4\Ui\Button(['Click Me', 'icon'=>'book']);
+    $b1 = new \Atk4\Ui\Button(['Click Me', 'icon' => 'book']);
 
 You can, of course, create instance of an Icon yourself::
 
     $icon = new \Atk4\Ui\Icon('book');
-    $b1 = new \Atk4\Ui\Button(['Click Me', 'icon'=>$icon]);
+    $b1 = new \Atk4\Ui\Button(['Click Me', 'icon' => $icon]);
 
 You do not need to add an icon into the render tree when specifying like that. The icon is selected
 through class. To find out what icons are available, refer to Fomantic-UI icon documentation:
@@ -34,9 +34,9 @@ https://fomantic-ui.com/elements/icon.html
 
 You can also use States, Variations by passing classes to your button::
 
-    Button::addTo($app, ['Click Me', 'red', 'icon'=>'flipped big question']);
+    Button::addTo($app, ['Click Me', 'red', 'icon' => 'flipped big question']);
 
-    Label::addTo($app, ['Battery Low', 'green', 'icon'=>'battery low']);
+    Label::addTo($app, ['Battery Low', 'green', 'icon' => 'battery low']);
 
 .. _icon_other_comp:
 
@@ -47,15 +47,15 @@ You can use icon on the following components: :php:class:`Button`, :php:class:`L
 :php:class:`Message`, :php:class:`Menu` and possibly some others. Here are some examples::
 
 
-    Header::addTo($app, ['Header', 'red', 'icon'=>'flipped question']);
-    Button::addTo($app, ['Button', 'red', 'icon'=>'flipped question']);
+    Header::addTo($app, ['Header', 'red', 'icon' => 'flipped question']);
+    Button::addTo($app, ['Button', 'red', 'icon' => 'flipped question']);
 
     $menu = Menu::addTo($app);
-    $menu->addItem(['Menu Item', 'icon'=>'flipped question']);
-    $sub_menu = $menu->addMenu(['Sub-menu', 'icon'=>'flipped question']);
-    $sub_menu->addItem(['Sub Item', 'icon'=>'flipped question']);
+    $menu->addItem(['Menu Item', 'icon' => 'flipped question']);
+    $sub_menu = $menu->addMenu(['Sub-menu', 'icon' => 'flipped question']);
+    $sub_menu->addItem(['Sub Item', 'icon' => 'flipped question']);
 
-    Label::addTo($app, ['Label', 'right ribbon red', 'icon'=>'flipped question']);
+    Label::addTo($app, ['Label', 'right ribbon red', 'icon' => 'flipped question']);
 
 
 
@@ -65,7 +65,7 @@ Groups
 Fomantic UI support icon groups. The best way to implement is to supply :php:class:`Template` to an
 icon::
 
-    Icon::addTo($app, ['template'=>new \Atk4\Ui\Template('<i class="huge icons">
+    Icon::addTo($app, ['template' => new \Atk4\Ui\Template('<i class="huge icons">
       <i class="big thin circle icon"></i>
       <i class="user icon"></i>
     </i>'), false]);
@@ -75,7 +75,7 @@ exclusive to Icon, but I'm adding a few examples here, just for your convenience
 
 Let's start with a View that contains your custom HTML loaded from file or embedded like this::
 
-    $view = View::addTo($app, ['template'=>new \Atk4\Ui\Template('<div>Hello my {Icon}<i class="huge icons">
+    $view = View::addTo($app, ['template' => new \Atk4\Ui\Template('<div>Hello my {Icon}<i class="huge icons">
       <i class="big thin circle icon"></i>
       <i class="{Content}user{/} icon"></i>
     </i>{/}, It is me</div>')]);
@@ -85,7 +85,7 @@ a text message with a user icon in a circle. You can replace this region by pass
 into Icon class. For that you need to disable a standard Icon template and specify a correct Spot
 when adding::
 
-    $icon = Icon::addTo($view, ['red book', 'template'=>false], ['Icon']);
+    $icon = Icon::addTo($view, ['red book', 'template' => false], ['Icon']);
 
 This technique may be helpful for you if you are creating re-usable elements and you wish to store
 Icon object in one of your public properties.
@@ -95,7 +95,7 @@ Composing
 
 Composing offers you another way to deal with Group icons::
 
-    $no_users = new \Atk4\Ui\View([null, 'huge icons', 'element'=>'i']);
+    $no_users = new \Atk4\Ui\View([null, 'huge icons', 'element' => 'i']);
     Icon::addTo($no_users, ['big red dont']);
     Icon::addTo($no_users, ['black user icon']);
 
@@ -118,7 +118,7 @@ Here is the code with comments::
      * Implements a social network add button. You can initialize the button by passing
      * social network as a parameter: new SocialAdd('facebook')
      * or alternatively you can specify $social, $icon and content individually:
-     * new SocialAdd(['Follow on Facebook', 'social'=>'facebook', 'icon'=>'facebook f']);
+     * new SocialAdd(['Follow on Facebook', 'social' => 'facebook', 'icon' => 'facebook f']);
      *
      * For convenience use this with link(), which will automatically open a new window
      * too.
@@ -171,8 +171,8 @@ Here is the code with comments::
     SocialAdd::addTo($app, ['instagram']);
 
     // Next specify label and separately name of social network
-    SocialAdd::addTo($app, ['Follow on Twitter', 'social'=>'twitter']);
+    SocialAdd::addTo($app, ['Follow on Twitter', 'social' => 'twitter']);
 
     // Finally provide custom icon and make the button clickable.
-    SocialAdd::addTo($app, ['facebook', 'icon'=>'facebook f'])
+    SocialAdd::addTo($app, ['facebook', 'icon' => 'facebook f'])
         ->link('https://facebook.com', '_blank');

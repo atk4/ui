@@ -22,7 +22,7 @@ class SomeData extends \Atk4\Data\Model
         $model->addField('name');
         $model->addField('surname', ['actual' => 'name']);
         $model->addField('date', ['type' => 'date']);
-        $model->addField('salary', ['type' => 'money', 'actual' => 'randomNumber']);
+        $model->addField('salary', ['type' => 'atk4_money', 'actual' => 'randomNumber']);
         $model->addField('logo_url');
     }
 }

@@ -153,7 +153,7 @@ $wizard->addStep('Business Model', function ($page) {
             $model->setMulti([
                 'id' => 1,
                 'reference' => 'Inv-' . random_int(1000, 9999),
-                'date' => date($owner->getApp()->ui_persistence->date_format),
+                'date' => new \DateTime(),
             ]);
             $model->save();
         }

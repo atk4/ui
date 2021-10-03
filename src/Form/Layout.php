@@ -26,7 +26,7 @@ class Layout extends AbstractLayout
     public $label;
 
     /**
-     * Specify width of a group in numerical word e.g. 'width'=>'two' as per
+     * Specify width of a group in numerical word e.g. 'width' => 'two' as per
      * Semantic UI grid system.
      *
      * @var string

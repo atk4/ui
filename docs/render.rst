@@ -124,7 +124,7 @@ name. Ultimately, you can create a View that uses it's name to store some inform
             parent::init();
 
             if ($_GET[$this->name]) {
-                \Atk4\Ui\Label::addTo($this, ['Secret info is', 'big red', 'detail'=>$_GET[$this->name]]);
+                \Atk4\Ui\Label::addTo($this, ['Secret info is', 'big red', 'detail' => $_GET[$this->name]]);
             }
 
             \Atk4\Ui\Button::addTo($this, ['Send info to ourselves'])
