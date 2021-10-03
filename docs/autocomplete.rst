@@ -19,7 +19,7 @@ for AutoComplete form control. Although they look similar, there are some differ
  - AutoComplete has additional feature called "Plus"
  - AutoComplete only works with models. Won't work for pre-defined value lists.
 
-AutoComplete can be a drop-in replacement for Dropdown. 
+AutoComplete can be a drop-in replacement for Dropdown.
 
 Using Plus mode
 ---------------
@@ -46,7 +46,7 @@ Advanced Usage
 You can do much more with AutoComplete form control by passing dropdown settings::
 
     $form->addControl('test', [
-        \Atk4\Ui\Form\Control\AutoComplete::class, 
+        \Atk4\Ui\Form\Control\AutoComplete::class,
         'settings' => [
             'allowReselection' => true,
             'selectOnKeydown' => false,

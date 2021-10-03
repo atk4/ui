@@ -35,7 +35,7 @@ for UI framework design:
 
 Agile Data is distributed under same open-source license as Agile UI
 and the rest of this documentation will assume you are using Agile
-Data for the purpose of overall clarity. 
+Data for the purpose of overall clarity.
 
 Interface Stability
 ===================
@@ -63,7 +63,7 @@ components come fully tested across multiple browsers. In most cases
 browser compatibility is defined by the underlying CSS framework.
 
 With Agile UI we will provide you with a guide how to test your
-own components. 
+own components.
 
 Unit Tests
 ----------
@@ -107,7 +107,7 @@ Component Tests
 All of the basic components are tested for you using UI tests,
 but you should test your own components. This test will place
 your component under various configurations and will make sure
-that it continues to work. 
+that it continues to work.
 
 If your component relies on a model, this can also attempt
 various model combinations for an extensive test.

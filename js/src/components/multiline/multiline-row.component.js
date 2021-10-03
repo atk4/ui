@@ -16,7 +16,7 @@ export default {
         <sui-table-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDelete" v-model="toDelete"></input></sui-table-cell>
         <sui-table-cell  @keydown.tab="onTab(idx)" v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" v-bind="column.cellProps" :style="{overflow: 'visible'}" v-if="column.isVisible">
          <atk-multiline-cell
-           :cellData="column" 
+           :cellData="column"
            @update-value="onUpdateValue"
            :fieldValue="getValue(column)"></atk-multiline-cell>
         </sui-table-cell>

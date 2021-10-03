@@ -26,7 +26,7 @@ Tags
 
 the usage of `{` denotes a "tag" inside your HTML, which must be followed by
 alpha-numeric identifier and a closing `}`. Tag needs to be closed with either
-`{/mytag}` or `{/}`. 
+`{/mytag}` or `{/}`.
 
 The following code will initialize template inside a PHP code::
 
@@ -63,7 +63,7 @@ When this template is parsed, region 'Content' will contain tags
 $user and $amount. Although technically you can still use `set()`
 to change value of a tag even if it's inside a region, we often
 use Region to delegate rendering to another View (more about this
-in section for Views). 
+in section for Views).
 
 There are some operations you can do with a region, such as::
 
@@ -145,7 +145,7 @@ Alternatively, if you wish to load template from a file:
 
 If the template is already loaded, you can load another template from
 another source which will override the existing one.
-  
+
 Template Parsing
 ----------------
 
