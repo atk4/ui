@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Core\DiContainerTrait;
+
 /**
  * Implements conditions for displaying fields on form.
  */
 class JsConditionalForm implements JsExpressionable
 {
-    use \Atk4\Core\DiContainerTrait;
+    use DiContainerTrait;
 
     // {{{ Properties
 

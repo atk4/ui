@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Core\DiContainerTrait;
+
 /**
  * Implements a class that can be mapped into arbitrary JavaScript expression.
  */
 class JsExpression implements JsExpressionable
 {
-    use \Atk4\Core\DiContainerTrait;
+    use DiContainerTrait;
 
     /**
      * @var string

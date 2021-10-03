@@ -8,8 +8,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Core\WarnDynamicPropertyTrait;
+
 class JsVueService
 {
+    use WarnDynamicPropertyTrait;
+
     /**
      * The atk vue service to talk too.
      *

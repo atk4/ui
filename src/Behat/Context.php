@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Behat;
 
+use Atk4\Core\WarnDynamicPropertyTrait;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
@@ -13,6 +14,8 @@ use Exception;
 
 class Context extends RawMinkContext implements BehatContext
 {
+    use WarnDynamicPropertyTrait;
+
     /** @var string|null Temporary store button id when press. Used in js callback test. */
     protected $buttonId;
 

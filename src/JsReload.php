@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Core\WarnDynamicPropertyTrait;
+
 /**
  * This class generates action, that will be able to loop-back to the callback method.
  */
 class JsReload implements JsExpressionable
 {
+    use WarnDynamicPropertyTrait;
+
     /**
      * Specifies which view to reload. Use constructor to set.
      *

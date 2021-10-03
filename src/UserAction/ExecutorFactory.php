@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\Factory;
+use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\AbstractView;
 use Atk4\Ui\Button;
@@ -18,6 +19,8 @@ use Atk4\Ui\View;
  */
 class ExecutorFactory
 {
+    use WarnDynamicPropertyTrait;
+
     public const JS_EXECUTOR = self::class . '@jsExecutorSeed';
     public const STEP_EXECUTOR = self::class . '@stepExecutorSeed';
     public const CONFIRMATION_EXECUTOR = self::class . '@confirmationExecutorClass';
