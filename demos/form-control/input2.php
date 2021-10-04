@@ -30,9 +30,9 @@ $group->addControl('text_read', [Form\Control\Textarea::class, 'readonly' => tru
 $group->addControl('text_disb', [Form\Control\Textarea::class, 'disabled' => true])->set('disabled');
 
 $group = $form->addGroup('Checkbox');
-$group->addControl('c_norm', [Form\Control\Checkbox::class])->set(true);
-$group->addControl('c_read', [Form\Control\Checkbox::class, 'readonly' => true])->set(true); // allows to change value
-$group->addControl('c_disb', [Form\Control\Checkbox::class, 'disabled' => true])->set(true); // input is not disabled
+$group->addControl('c_norm', [Form\Control\Checkbox::class], ['type' => 'boolean'])->set(true);
+$group->addControl('c_read', [Form\Control\Checkbox::class, 'readonly' => true], ['type' => 'boolean'])->set(true); // allows to change value
+$group->addControl('c_disb', [Form\Control\Checkbox::class, 'disabled' => true], ['type' => 'boolean'])->set(true); // input is not disabled
 
 $group = $form->addGroup('Dropdown');
 $values = [
@@ -96,9 +96,9 @@ $group->addControl('Lookup_disb', [
 
 $group = $form->addGroup('Calendar');
 
-$group->addControl('date_norm', [Form\Control\Calendar::class, 'type' => 'date'])->set(date($app->ui_persistence->date_format));
-$group->addControl('date_read', [Form\Control\Calendar::class, 'type' => 'date', 'readonly' => true])->set(date($app->ui_persistence->date_format));
-$group->addControl('date_disb', [Form\Control\Calendar::class, 'type' => 'date', 'disabled' => true])->set(date($app->ui_persistence->date_format));
+$group->addControl('date_norm', [Form\Control\Calendar::class, 'type' => 'date'])->set(new \DateTime());
+$group->addControl('date_read', [Form\Control\Calendar::class, 'type' => 'date', 'readonly' => true])->set(new \DateTime());
+$group->addControl('date_disb', [Form\Control\Calendar::class, 'type' => 'date', 'disabled' => true])->set(new \DateTime());
 
 $form->onSubmit(function (Form $form) {
 });

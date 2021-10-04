@@ -18,7 +18,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $m = (new CountryLock($app->db))->setLimit(5);
 
-$vp = $app->add(new \Atk4\Ui\VirtualPage());
+$vp = \Atk4\Ui\VirtualPage::addTo($app);
 $vp->cb->triggerOnReload = false;
 
 $form = Form::addTo($vp);

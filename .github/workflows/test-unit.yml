@@ -90,15 +90,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', 'latest']
-        type: ['Phpunit']
+        php: ['7.4', '8.0', '8.1']
+        type: ['Phpunit', 'Phpunit Lowest']
         include:
-          - php: 'latest'
-            type: 'Phpunit Lowest'
           - php: 'latest'
             type: 'Phpunit Burn'
     env:
-      LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == 'latest' && matrix.type == 'Phpunit' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
+      LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == '8.0' && matrix.type == 'Phpunit' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
     services:
       mysql:
         image: mysql:8
@@ -185,8 +183,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['latest']
-        type: ['Chrome', 'Firefox', 'Chrome Lowest', 'Chrome Slow']
+        php: ['7.4', '8.0', '8.1']
+        type: ['Chrome', 'Chrome Lowest']
+        include:
+          - php: 'latest'
+            type: 'Firefox'
+          - php: 'latest'
+            type: 'Chrome Slow'
     env:
       LOG_COVERAGE: ''
     services:
@@ -237,7 +240,7 @@ jobs:
             fhtml=${fpug/.pug/.html}
             mv "$fhtml" "$fhtml.orig"
             pug --silent --pretty "$fpug"
-            diff "$fhtml" "$fhtml.orig"
+            diff "$fhtml.orig" "$fhtml"
             rm "$fhtml.orig"
           done
 
@@ -255,7 +258,7 @@ jobs:
         run: |
           cp -r public public.orig && rm public/*.js
           (cd js && npm run build)
-          diff -qr public public.orig
+          diff -qr public.orig public
           rm -r public.orig
 
       - name: Install PHP dependencies

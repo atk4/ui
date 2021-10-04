@@ -14,4 +14,15 @@ Feature: Lookup
     Then I press menu button "Add Category" using class "atk-grid-menu"
     Then I select value "Beverages" in lookup "category"
     Then I press Modal button "Save"
-    Then Toast display should contains text 'Beverages'
+    Then Toast display should contains text "Beverages"
+
+  Scenario: Testing lookup add
+    Given I am on "form-control/lookup.php"
+    Then I press button "Add New"
+    When I fill in "atk_fp_country__name" with "New country"
+    When I fill in "atk_fp_country__iso" with "AA"
+    When I fill in "atk_fp_country__iso3" with "AAA"
+    When I fill in "atk_fp_country__numcode" with "88"
+    When I fill in "atk_fp_country__phonecode" with "8"
+    Then I press Modal button "Save"
+    Then Toast display should contains text "Form submit!"

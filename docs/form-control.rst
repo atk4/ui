@@ -75,12 +75,12 @@ into multiple Tabs or detach form control groups or even create nested layouts::
 
     $form = \Atk4\Ui\Form::addTo($app);
     $tabs = \Atk4\Ui\Tabs::addTo($form, [], ['AboveControls']);
-    \Atk4\Ui\View::addTo($form, ['ui'=>'divider'], ['AboveControls']);
+    \Atk4\Ui\View::addTo($form, ['ui' => 'divider'], ['AboveControls']);
 
-    $form_page = Form\Layout::addTo($tabs->addTab('Basic Info'), ['form'=>$form]);
+    $form_page = Form\Layout::addTo($tabs->addTab('Basic Info'), ['form' => $form]);
     $form_page->addControl('name', new \Atk4\Ui\Form\Control\Line());
 
-    $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form'=>$form]);
+    $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
     $form_page->addControl('age', new \Atk4\Ui\Form\Control\Line());
 
     $form->onSubmit(function($form) { return $form->model->get('name').' has age '.$form->model->get('age'); });
@@ -106,19 +106,19 @@ will update to use a more suitable form control.
 Hint can be specified either inside Form Control decorator seed or inside the Field::ui attribute::
 
 
-    $form->addControl('title', null, ['values'=>['Mr', 'Mrs', 'Miss'], 'hint'=>'select one']);
+    $form->addControl('title', null, ['values' => ['Mr', 'Mrs', 'Miss'], 'hint' => 'select one']);
 
-    $form->addControl('name', ['hint'=>'Full Name Only']);
+    $form->addControl('name', ['hint' => 'Full Name Only']);
 
 Text will have HTML characters escaped. You may also specify hint value as an object::
 
-    $form->addControl('name', ['hint'=>new \Atk4\Ui\Text(
+    $form->addControl('name', ['hint' => new \Atk4\Ui\Text(
         'Click <a href="https://example.com/" target="_blank">here</a>'
     )]);
 
 or you can inject a view with a custom template::
 
-    $form->addControl('name', ['hint'=>['template'=>new \Atk4\Ui\Template(
+    $form->addControl('name', ['hint' => ['template' => new \Atk4\Ui\Template(
         'Click <a href="https://example.com/" target="_blank">here</a>'
     )]]);
 
@@ -132,7 +132,7 @@ change their value.
 
 .. php:attr:: disabled
 
-Disabled form controls can be  seend in form, can not be focused and will not be submitted. And of course we
+Disabled form controls can be  seend in form, cannot be focused and will not be submitted. And of course we
 don't allow to change their value. Disabled form controls are used for read only model fields for example.
 
 
@@ -156,8 +156,8 @@ The most common use-case in large application is the use with Models. You would 
 
             $this->addField('iso', ['caption' => 'ISO', 'required' => true, 'type' => 'string']);
             $this->addField('iso3', ['caption' => 'ISO3', 'required' => true, 'type' => 'string']);
-            $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
-            $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number']);
+            $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'integer', 'required' => true]);
+            $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'integer']);
         }
     }
 
@@ -183,12 +183,12 @@ The rules are rather straightforward but may change in future versions of Agile 
 
 You always have an option to explicitly specify which field you would like to use::
 
-    $model->addField('long_text', ['ui'=>['rorm'=>\Atk4\Ui\Form\Control\TextArea::class]]);
+    $model->addField('long_text', ['ui' => ['rorm' => \Atk4\Ui\Form\Control\TextArea::class]]);
 
 It is recommended however, that you use type when possible, because types will be universally supported
 by all components::
 
-    $model->addField('long_text', ['type'=>'text']);
+    $model->addField('long_text', ['type' => 'text']);
 
 .. note:: All forms will be associted with a model. If form is not explicitly linked with a model, it will create
     a ProxyModel and all form controls will be created automatically in that model. As a result, all Form Control Decorators
@@ -224,7 +224,7 @@ element. For example, `icon` property:
 Here are few ways to specify `icon` to an Input::
 
     // compact
-    Line::addTo($page, ['icon'=>'search']);
+    Line::addTo($page, ['icon' => 'search']);
 
     // Type-hinting friendly
     $line = new \Atk4\Ui\Form\Control\Line();
@@ -232,7 +232,7 @@ Here are few ways to specify `icon` to an Input::
     $page->add($line);
 
     // using class factory
-    Line::addTo($page, ['icon'=>'search']);
+    Line::addTo($page, ['icon' => 'search']);
 
 The 'icon' property can be either string or a View. The string is for convenience and will
 be automatically substituted with `new Icon($icon)`. If you wish to be more specifc
@@ -304,7 +304,7 @@ $expression argument can be string, JsExpression, array of JsExpressions or even
     $f2->onChange(function(){return new \Atk4\Ui\JsExpression('console.log("f2 changed")');});
 
     // Calendar form control - wraps in function call with arguments date, text and mode
-    $c1 = $form->addControl('c1', new \Atk4\Ui\Form\Control\Calendar(['type'=>'date']));
+    $c1 = $form->addControl('c1', new \Atk4\Ui\Form\Control\Calendar(['type' => 'date']));
     $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
 
 
@@ -326,7 +326,7 @@ of records to display. Dropdown renders all records when the paged is rendered, 
 
 To render a model field as Dropdown, use the ui property of the field::
 
-    $model->addField('someField', ['ui' => ['form' =>[\Atk4\Ui\Form\Control\Dropdown::class]]]);
+    $model->addField('someField', ['ui' => ['form' => [\Atk4\Ui\Form\Control\Dropdown::class]]]);
 
 ..  Customizing how a Model's records are displayed in Dropdown
 As default, Dropdown will use the `$model->id_field` as value, and `$model->title_field` as title for each menu item.
@@ -339,23 +339,23 @@ This function is called with each model record and needs to return an array::
             'title' => $record->getTitle().' ('.$record->get('subtitle').')',
         ];
     }
-    
+
 You can also use this function to add an Icon to a record::
 
     $dropdown->renderRowFunction = function($record) {
         return [
             'value' => $record->id_field,
             'title' => $record->getTitle().' ('.$record->get('subtitle').')',
-            'icon'  => $record->get('value') > 100 ? 'money' : 'coins',
+            'icon' => $record->get('value') > 100 ? 'money' : 'coins',
         ];
     }
 
 If you'd like to even further adjust How each item is displayed (e.g. complex HTML and more model fields), you can extend the Dropdown class and create your own template with the complex HTML::
 
     class MyDropdown extends \Atk4\Ui\Dropdown {
-        
+
         public $defaultTemplate = 'my_dropdown.html';
-        
+
         /*
          * used when a custom callback is defined for row rendering. Sets
          * values to item template and appends it to main template
@@ -378,7 +378,7 @@ With the according renderRowFunction::
         return [
             'value' => $record->getId(),
             'title' => $record->getTitle,
-            'icon'  => $record->value > 100 ? 'money' : 'coins',
+            'icon' => $record->value > 100 ? 'money' : 'coins',
             'someOtherField' => $record->get('SomeOtherField'),
             'someOtherField2' => $record->get('SomeOtherField2'),
         ];
@@ -392,18 +392,18 @@ Usage with $values property
 If not used with a model, you can define the Dropdown values in $values array. The pattern is value => title::
 
     $dropdown->values = [
-        'decline'   => 'No thanks',
+        'decline' => 'No thanks',
         'postprone' => 'Maybe later',
-        'accept'    => 'Yes, I want to!',
+        'accept' => 'Yes, I want to!',
     ];
-    
+
 You can also define an Icon right away::
 
      $dropdown->values = [
-         'tag'        => ['Tag', 'icon' => 'tag icon'],
-         'globe'      => ['Globe', 'icon' => 'globe icon'],
+         'tag' => ['Tag', 'icon' => 'tag icon'],
+         'globe' => ['Globe', 'icon' => 'globe icon'],
          'registered' => ['Registered', 'icon' => 'registered icon'],
-         'file'       => ['File', 'icon' => 'file icon']
+         'file' => ['File', 'icon' => 'file icon']
      ].
 
 If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.
@@ -425,7 +425,7 @@ There's a bunch of settings to influence Dropdown behaviour.
 
 Define a string for the empty option (no selection). Standard is non-breaking space symbol.
 
-.. php:attr:: isValueRequired 
+.. php:attr:: isValueRequired
 
 Whether or not this dropdown requires a value. When set to true, $empty is shown on page load but is not selectable once a value has been chosen.
 
@@ -436,7 +436,7 @@ Here you can pass an array of Fomantic UI dropdown options (https://fomantic-ui.
     $dropdown = new Dropdown(['dropdownOptions' => [
         'selectOnKeydown' => false,
     ]]);
-    
+
 .. php:attr:: isMultiple
 
 If set to true, multiple items can be selected in Dropdown. They will be sent comma seperated (value1,value2,value3) on form submit.
@@ -445,9 +445,8 @@ By default Dropdown will save values as comma-separated string value in data mod
 See this example from Model class init method::
     $expr_model = $this->ref('Expressions');
     $this->addField('expressions', [
-        'type'      => 'array',
-        'required'  => true,
-        'serialize' => 'json',
+        'type' => 'json',
+        'required' => true,
         'ui' => [
             'form' => [
                 \Atk4\Ui\Form\Control\Dropdown::class,
@@ -460,8 +459,8 @@ See this example from Model class init method::
             ],
         ],
     ]);
-    
-    
+
+
 DropdownCascade
 ===============
 

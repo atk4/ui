@@ -19,7 +19,7 @@ for AutoComplete form control. Although they look similar, there are some differ
  - AutoComplete has additional feature called "Plus"
  - AutoComplete only works with models. Won't work for pre-defined value lists.
 
-AutoComplete can be a drop-in replacement for Dropdown. 
+AutoComplete can be a drop-in replacement for Dropdown.
 
 Using Plus mode
 ---------------
@@ -31,14 +31,14 @@ form where you can enter new record details.
 The form save will re-use the model of your auto-complete, so be sure to set() defaults and
 addCondition()s::
 
-    $form->addControl('test', [\Atk4\Ui\Form\Control\AutoComplete::class, 'plus'=>true])->setModel(new Country($db));
+    $form->addControl('test', [\Atk4\Ui\Form\Control\AutoComplete::class, 'plus' => true])->setModel(new Country($db));
 
 Specifying in Model
 -------------------
 
 You can also specify that you prefer to use AutoComplete inside your model definition::
 
-    $model->hasOne('country_id', ['model' => [Country::class], 'ui' => ['form'=>[\Atk4\Ui\Form\Control\AutoComplete::class]]]);
+    $model->hasOne('country_id', ['model' => [Country::class], 'ui' => ['form' => [\Atk4\Ui\Form\Control\AutoComplete::class]]]);
 
 Advanced Usage
 --------------
@@ -46,15 +46,15 @@ Advanced Usage
 You can do much more with AutoComplete form control by passing dropdown settings::
 
     $form->addControl('test', [
-        \Atk4\Ui\Form\Control\AutoComplete::class, 
-        'settings'=>[
+        \Atk4\Ui\Form\Control\AutoComplete::class,
+        'settings' => [
             'allowReselection' => true,
             'selectOnKeydown' => false,
-            'onChange'        => new \Atk4\Ui\JsExpression('function(value,t,c){
-                                    if ($(this).data("value") !== value) {
-                                    $(this).parents(".form").form("submit");
-                                    $(this).data("value", value);
-                                   }}'),
+            'onChange' => new \Atk4\Ui\JsExpression('function(value,t,c){
+                  if ($(this).data("value") !== value) {
+                  $(this).parents(".form").form("submit");
+                  $(this).data("value", value);
+                }}'),
         ]
     ])->setModel(new Country($db));
 

@@ -7,7 +7,6 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
-use Atk4\Ui\Table\Column;
 use Atk4\Ui\Table\Column\ActionButtons;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\ExecutorInterface;
@@ -207,7 +206,7 @@ class Grid extends View
     /**
      * Set item per page value.
      *
-     * if an array is passed, it will also add an ItemPerPageSelector to paginator.
+     * If an array is passed, it will also add an ItemPerPageSelector to paginator.
      *
      * @param int|array $ipp
      * @param string    $label
@@ -216,8 +215,6 @@ class Grid extends View
     {
         if (is_array($ipp)) {
             $this->addItemsPerPageSelector($ipp, $label);
-
-            $this->ipp = isset($_GET['ipp']) ? (int) $_GET['ipp'] : $ipp[0];
         } else {
             $this->ipp = $ipp;
         }

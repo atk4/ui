@@ -11,7 +11,7 @@ namespace Atk4\Ui;
  * $modal->show() is the triggered needed to actually display the modal.
  *
  * Modal can be use as a regular view, simply by adding other view to it.
- *  Message::addTo($modal, ['title'=>'Welcome to Agile Toolkit'])->text('Your text here');
+ *  Message::addTo($modal, ['title' => 'Welcome to Agile Toolkit'])->text('Your text here');
  *
  * Modal can add content dynamically via CallbackLater.
  *  $modal->set(function ($modal) {
@@ -40,6 +40,8 @@ class Modal extends View
     public $cb;
     public $cb_view;
     public $args = [];
+    /** @var array */
+    public $options = [];
 
     /** @var string Currently only "json" response type is supported. */
     public $type = 'json';

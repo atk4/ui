@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Core\WarnDynamicPropertyTrait;
+
 /**
  * Implements structure for js closure.
  */
 class JsFunction implements JsExpressionable
 {
+    use WarnDynamicPropertyTrait;
+
     /** @var array Array of arguments */
     public $fx_args;
 

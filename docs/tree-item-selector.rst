@@ -28,11 +28,11 @@ the treeItems array and that nodes key is not empty. Below is a sample of a grou
             'nodes' => [
                 [
                     'name' => 'tv',
-                    'id'   => '100'
+                    'id' => '100'
                 ],
                 [
                     'name' => 'radio',
-                    'id'   => '100'
+                    'id' => '100'
                 ],
             ]
         ]
@@ -76,10 +76,10 @@ Adding a TreeItemSelector form control to a Form::
 
 
     $form = \Atk4\Ui\Form::addTo($app);
-    $control = $form->addControl('tree', [new TreeItemSelector(['treeItems' => $items]), 'caption' => 'Select items:'], ['type' => 'array', 'serialize' => 'json']);
+    $control = $form->addControl('tree', [new TreeItemSelector(['treeItems' => $items]), 'caption' => 'Select items:'], ['type' => 'json']);
     $control->set([201, 301, 503]);
 
-Please note that when using TreeItemSelector in multiple mode, you need to specify field attribute type to 'array' and serialize attribute to json
+Please note that when using TreeItemSelector in multiple mode, you need to specify field attribute type to 'json'
 because in multiple mode, it will collect item value as an array type.
 
 

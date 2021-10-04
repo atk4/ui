@@ -14,7 +14,7 @@ namespace Atk4\Ui;
  *
  * IMPORTANT: all methods in this class are pre-pended with '_', to avoid clashes with js-mapping.
  *
- *  @method JsChain redirect(...$args)
+ *  @method Jquery redirect(...$args)
  */
 class JsChain extends JsExpression
 {
@@ -63,11 +63,11 @@ class JsChain extends JsExpression
      * Call chain. All calls to this mapper will be recorded here. Property traversal
      * is also stored here.
      *
-     * $js->foo()->bar(1)->baz->test(['abc'=>123']);
+     * $js->foo()->bar(1)->baz->test(['abc' => 123']);
      *
      * will be stored in $chain as
      *
-     * [ ['foo'], ['bar', [1]], 'baz', ['test', ['abc=>123]] ]
+     * [ ['foo'], ['bar', [1]], 'baz', ['test', ['abc => 123]] ]
      *
      * will map into:
      *
@@ -117,11 +117,13 @@ class JsChain extends JsExpression
      *
      * @return $this
      */
-    public function __get($property)
+    public function &__get($property)
     {
         $this->_chain[] = $property;
 
-        return $this;
+        $res = $this; // TODO & before __get is needed for atk4/core PR 329, remove once PHP 8.1 support is dropped
+
+        return $res;
     }
 
     /**

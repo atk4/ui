@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Behat;
 
+use Atk4\Core\WarnDynamicPropertyTrait;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
@@ -13,6 +14,8 @@ use Exception;
 
 class Context extends RawMinkContext implements BehatContext
 {
+    use WarnDynamicPropertyTrait;
+
     /** @var string|null Temporary store button id when press. Used in js callback test. */
     protected $buttonId;
 
@@ -115,6 +118,16 @@ class Context extends RawMinkContext implements BehatContext
     {
         foreach ($this->getSession()->getPage()->findAll('css', 'div.ui.negative.icon.message > div.content > div.header') as $elem) {
             if ($elem->getText() === 'Critical Error') {
+                echo "\n" . trim(preg_replace(
+                    '~(?<=\n)(\d+|Stack Trace\n#FileObjectMethod)(?=\n)~',
+                    '',
+                    preg_replace(
+                        '~(^.*?)?\s*Critical Error\s*\n\s*|(\s*\n)+\s{0,16}~s',
+                        "\n",
+                        strip_tags($elem->find('xpath', '../../..')->getHtml())
+                    )
+                )) . "\n";
+
                 throw new Exception('Page contains uncaught exception');
             }
         }

@@ -159,7 +159,7 @@ Loader needs to occupy some space.
 By default it will display a white segment with 7em height, but you can specify any other view thorugh $shim
 property::
 
-    $loader = \Atk4\Ui\Loader::addTo($app, ['shim'=>['Message', 'Please wait until we load LoremIpsum...', 'red']]);
+    $loader = \Atk4\Ui\Loader::addTo($app, ['shim' => ['Message', 'Please wait until we load LoremIpsum...', 'red']]);
     $loader->set(function($p) {
 
         // Simulate slow-loading component
@@ -219,9 +219,9 @@ Inline Editing Example
 Next example will display DataTable, but will allow you to replace data with a form temporarily::
 
 
-    $box = \Atk4\Ui\View::addTo($app, ['ui'=>'segment']);
+    $box = \Atk4\Ui\View::addTo($app, ['ui' => 'segment']);
 
-    $loader = \Atk4\Ui\Loader::addTo($box, ['loadEvent'=>'edit']);
+    $loader = \Atk4\Ui\Loader::addTo($box, ['loadEvent' => 'edit']);
     \Atk4\Ui\Table::addTo($loader)
         ->setModel($data)
         ->addCondition('year', $app->stickyGet('year'));
@@ -233,7 +233,7 @@ Next example will display DataTable, but will allow you to replace data with a f
         $form->addControl('year');
 
         $form->onSubmit(function($form) use ($loader) {
-            return new \Atk4\Ui\JsReload($loader, ['year'=>$form->model->get('year')]);
+            return new \Atk4\Ui\JsReload($loader, ['year' => $form->model->get('year')]);
         });
     });
 
@@ -249,9 +249,9 @@ Loader can have a progress bar. Imagine that your Loader has to run slow process
     sleep(1);
     sleep(1);
 
-You can notify user about this progress through a simple code::
+You cannotify user about this progress through a simple code::
 
-    $loader = \Atk4\Ui\Loader::addTo($app, ['progressBar'=>true]);
+    $loader = \Atk4\Ui\Loader::addTo($app, ['progressBar' => true]);
     $loader->set(function($p) {
 
         // Simulate slow-loading component

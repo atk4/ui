@@ -64,7 +64,7 @@ class FilterModel extends Model
          * You can set your own filter model condition by extending
          * Field class and setting your filter model class.
          */
-        if (!empty($field->filterModel) && isset($field->filterModel)) {
+        if (!@empty($field->filterModel)) {
             if ($field->filterModel instanceof self) {
                 return $field->filterModel;
             }

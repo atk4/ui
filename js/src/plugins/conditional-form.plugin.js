@@ -29,7 +29,7 @@ import formService from '../services/form.service';
  *      [ 'fieldRules =>
  *        [
  *          'hair_cut' => [
- *                          ['race' => 'contains[poodle]', 'age'=>'integer[0..5]'],
+ *                          ['race' => 'contains[poodle]', 'age' => 'integer[0..5]'],
  *                          ['race' => 'isExactly[bichon]']
  *                        ]
  *       ]

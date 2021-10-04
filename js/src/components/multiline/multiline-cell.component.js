@@ -5,10 +5,10 @@ import atkLookup from '../share/atk-lookup';
 
 export default {
     name: 'atk-multiline-cell',
-    template: ` 
+    template: `
     <component :is="getComponent()"
-        :fluid="true"  
-        class="fluid" 
+        :fluid="true"
+        class="fluid"
         @input="onInput"
         @onChange="onChange"
         v-model="inputValue"

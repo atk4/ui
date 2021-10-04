@@ -56,7 +56,7 @@ to pass a call-back which will be triggered when user clicks on the section titl
 
     // dynamic section
     $acc->addSection('Dynamic Lorem Ipsum', function ($section) {
-        LoremIpsum::addTo($section, ['size'=>2]);
+        LoremIpsum::addTo($section, ['size' => 2]);
     });
 
 Controlling Accordion Section via Javascript

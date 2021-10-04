@@ -16,7 +16,7 @@ $data = [
 ];
 
 $model = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Static_($data));
-$model->getField('amount')->type = 'money';
+$model->getField('amount')->type = 'atk4_money';
 
 \Atk4\Ui\Header::addTo($app, ['Table with various headers', 'subHeader' => 'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon' => 'table']);
 
@@ -54,7 +54,7 @@ $table->setModel($model, ['action']);
 // copy of amount through a PHP callback
 $model->addExpression('amount_copy', [function (\Atk4\Data\Model $model) {
     return $model->get('amount');
-}, 'type' => 'money']);
+}, 'type' => 'atk4_money']);
 
 // column with 2 decorators that stack. Money will use red ink and alignment, format will change text.
 $table->addColumn('amount', [Table\Column\Money::class]);

@@ -61,17 +61,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
      */
     public function afterActionInit(Model\UserAction $action)
     {
-        $getTableName = function ($arr) {
-            foreach ($arr as $k => $v) {
-                return is_numeric($k) ? $v : $k;
-            }
-        };
-
-        $table_name = is_array($action->getModel()->table) ? $getTableName($action->getModel()->table) : $action->getModel()->table;
-
-        $this->id = mb_strtolower($this->name . '_' . $table_name . '_' . $action->short_name);
-        $this->name = $this->id;
-
         // Add buttons to modal for next and previous.
         $btns = (new View())->addStyle(['min-height' => '24px']);
         $this->ok = Button::addTo($btns, ['Ok', 'blue']);

@@ -10,6 +10,8 @@ use Atk4\Core\DynamicMethodTrait;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Core\InitializerTrait;
+use Atk4\Core\TraitUtil;
+use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationException;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
@@ -205,6 +207,16 @@ class App
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
             set_error_handler(
                 static function (int $severity, string $msg, string $file, int $line): bool {
+                    if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
+                        // allow to supress undefined property warnings
+                        foreach (debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
+                            if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
+                                && $frame['function'] === 'warnPropertyDoesNotExist') {
+                                return false;
+                            }
+                        }
+                    }
+
                     throw new \ErrorException($msg, 0, $severity, $file, $line);
                 },
                 \E_ALL
@@ -565,7 +577,6 @@ class App
             $this->html->renderAll();
             $this->html->template->dangerouslyAppendHtml('HEAD', $this->html->getJs());
             $this->is_rendering = false;
-            $this->hook(self::HOOK_BEFORE_OUTPUT);
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
                 throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
@@ -578,7 +589,8 @@ class App
             $isExitException = true;
         }
 
-        if (!$this->exit_called) { // output already send by terminate()
+        $this->hook(self::HOOK_BEFORE_OUTPUT);
+        if (!$this->exit_called) { // output already sent by terminate()
             if ($this->isJsUrlRequest()) {
                 $this->outputResponseJson($output);
             } else {
@@ -622,7 +634,7 @@ class App
             }
         }
 
-        throw (new Exception('Can not find template file'))
+        throw (new Exception('Cannot find template file'))
             ->addMoreInfo('filename', $filename)
             ->addMoreInfo('template_dir', $this->template_dir);
     }
@@ -805,46 +817,46 @@ class App
     /**
      * Construct HTML tag with supplied attributes.
      *
-     * $html = getTag('img/', ['src'=>'foo.gif','border'=>0]);
+     * $html = getTag('img/', ['src' => 'foo.gif','border' => 0]);
      * // "<img src="foo.gif" border="0"/>"
      *
      *
      * The following rules are respected:
      *
-     * 1. all array key=>val elements appear as attributes with value escaped.
-     * getTag('div/', ['data'=>'he"llo']);
+     * 1. all array key => val elements appear as attributes with value escaped.
+     * getTag('div/', ['data' => 'he"llo']);
      * --> <div data="he\"llo"/>
      *
      * 2. boolean value true will add attribute without value
-     * getTag('td', ['nowrap'=>true]);
+     * getTag('td', ['nowrap' => true]);
      * --> <td nowrap>
      *
      * 3. null and false value will ignore the attribute
-     * getTag('img', ['src'=>false]);
+     * getTag('img', ['src' => false]);
      * --> <img>
      *
-     * 4. passing key 0=>"val" will re-define the element itself
-     * getTag('img', ['input', 'type'=>'picture']);
+     * 4. passing key 0 => "val" will re-define the element itself
+     * getTag('img', ['input', 'type' => 'picture']);
      * --> <input type="picture" src="foo.gif">
      *
      * 5. use '/' at end of tag to close it.
-     * getTag('img/', ['src'=>'foo.gif']);
+     * getTag('img/', ['src' => 'foo.gif']);
      * --> <img src="foo.gif"/>
      *
      * 6. if main tag is self-closing, overriding it keeps it self-closing
-     * getTag('img/', ['input', 'type'=>'picture']);
+     * getTag('img/', ['input', 'type' => 'picture']);
      * --> <input type="picture" src="foo.gif"/>
      *
      * 7. simple way to close tag. Any attributes to closing tags are ignored
      * getTag('/td');
      * --> </td>
      *
-     * 7b. except for 0=>'newtag'
-     * getTag('/td', ['th', 'align'=>'left']);
+     * 7b. except for 0 => 'newtag'
+     * getTag('/td', ['th', 'align' => 'left']);
      * --> </th>
      *
      * 8. using $value will add value inside tag. It will also encode value.
-     * getTag('a', ['href'=>'foo.html'] ,'click here >>');
+     * getTag('a', ['href' => 'foo.html'] ,'click here >>');
      * --> <a href="foo.html">click here &gt;&gt;</a>
      *
      * 9. you may skip attribute argument.
@@ -853,13 +865,13 @@ class App
      *
      * 10. pass array as 3rd parameter to nest tags. Each element can be either string (inserted as-is) or
      * array (passed to getTag recursively)
-     * getTag('a', ['href'=>'foo.html'], [['b','click here'], ' for fun']);
+     * getTag('a', ['href' => 'foo.html'], [['b','click here'], ' for fun']);
      * --> <a href="foo.html"><b>click here</b> for fun</a>
      *
      * 11. extended example:
-     * getTag('a', ['href'=>'hello'], [
-     *    ['b', 'class'=>'red', [
-     *        ['i', 'class'=>'blue', 'welcome']
+     * getTag('a', ['href' => 'hello'], [
+     *    ['b', 'class' => 'red', [
+     *        ['i', 'class' => 'blue', 'welcome']
      *    ]]
      * ]);
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
@@ -1073,7 +1085,7 @@ class App
         }
 
         if ($lateError === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
-            $lateError = 'Headers already sent, more headers can not be set at this stage.';
+            $lateError = 'Headers already sent, more headers cannot be set at this stage.';
         }
 
         if (!headers_sent() || $isCli) {

@@ -36,9 +36,9 @@ Generic Column Decorator
     Generic description of a column for :php:class:`Atk4\\Ui\\Table`
 
 Table object relies on a separate class: `\\Atk4\\Ui\\Table\\Column` to present most of the values. The goals
-of the column object is to format anything around the actual values. The type = 'money' will result in
+of the column object is to format anything around the actual values. The type = 'atk4_money' will result in
 a custom formatting of the value, but will also require column to be right-aligned. To simplify this,
-type = 'money' will use a different column class - :php:class:`Table\\Column\\Money`. There are several others,
+type = 'atk4_money' will use a different column class - :php:class:`Table\\Column\\Money`. There are several others,
 but first we need to look at the generic column and understand it's base capabilities:
 
 A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
@@ -164,12 +164,12 @@ are two usage patterns. With the first you can specify full URL as a string::
 
 The URL may also be specified as an array. It will be passed to App::url() which will encode arguments::
 
-    $table->addColumn('name', [\Atk4\Ui\Table\Column\Link::class, ['details', 'id'=>123, 'q'=>$anything]]);
+    $table->addColumn('name', [\Atk4\Ui\Table\Column\Link::class, ['details', 'id' => 123, 'q' => $anything]]);
 
 In this case even if `$anything = '{$name}'` the substitution will not take place for safety reasons. To
 pass on some values from your model, use second argument to constructor::
 
-    $table->addColumn('name', [\Atk4\Ui\Table\Column\Link::class, ['details', 'id'=>123], ['q'=>'name']]);
+    $table->addColumn('name', [\Atk4\Ui\Table\Column\Link::class, ['details', 'id' => 123], ['q' => 'name']]);
 
 
 Money
@@ -194,7 +194,7 @@ If your column "status" can be one of the following "pending", "declined", "arch
 to use different icons and colors to emphasise status::
 
 
-    $states = [ 'positive'=>['paid', 'archived'], 'negative'=>['declined'] ];
+    $states = [ 'positive' => ['paid', 'archived'], 'negative' => ['declined'] ];
 
     $table->addColumn('status', new \Atk4\Ui\Table\Column\Status($states));
 
@@ -247,7 +247,7 @@ Can be used to add "action buttons" column to your table::
 
 If you want to have label above the action column, then::
 
-    $action = $table->addColumn(null, [Table\Column\ActionButtons::class, 'caption'=>'User Actions']);
+    $action = $table->addColumn(null, [Table\Column\ActionButtons::class, 'caption' => 'User Actions']);
 
 .. php:method:: addAction($button, $action, $confirm = false)
 
@@ -259,7 +259,7 @@ See also :php:meth:`Atk4\\Ui\\Grid::addAction()`::
 Normally you would also want to pass the ID of the row which was clicked. You can use :php:meth:`Atk4\\Ui\\Table:jsRow()`
 and jQuery's data() method to reference it::
 
-    $button = $action->addAction('Reload Table', $table->jsReload(['clicked'=>$table->jsRow()->data('id')]));
+    $button = $action->addAction('Reload Table', $table->jsReload(['clicked' => $table->jsRow()->data('id')]));
 
 Moreover you may pass $action argument as a PHP callback.
 
@@ -287,7 +287,7 @@ click on the button, it will reload $segment component while passing all the id'
 
     $box = $table->addColumn(new \Atk4\Ui\Table\Column\CheckBox());
 
-    $button->on('click', new JsReload($segment, ['ids'=>$box->jsChecked()]));
+    $button->on('click', new JsReload($segment, ['ids' => $box->jsChecked()]));
 
 jsChecked expression represents a JavaScript string which you can place inside a form control,
 use as argument etc.
@@ -302,7 +302,7 @@ only on certain rows. For this you can use an `\\Atk4\Ui\\Table\\Column\\Multifo
     $table->addColumn('amount', [\Atk4\Ui\Table\Column\Multiformat::class, function($model) {
 
         if ($model->get('is_invoiced') > 0) {
-            return [\Atk4\Ui\Table\Column\Money::class, [\Atk4\Ui\Table\Column\Link::class, 'invoice', ['invoice_id'=>'id']]];
+            return [\Atk4\Ui\Table\Column\Money::class, [\Atk4\Ui\Table\Column\Link::class, 'invoice', ['invoice_id' => 'id']]];
         } elseif (abs($model->get('is_refunded')) < 50) {
             return [[\Atk4\Ui\Table\Column\Template::class, 'Amount was <b>refunded</b>']];
         }

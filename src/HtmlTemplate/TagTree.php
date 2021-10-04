@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\HtmlTemplate;
 
+use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Ui\Exception;
 use Atk4\Ui\HtmlTemplate;
 
 class TagTree
 {
+    use WarnDynamicPropertyTrait;
+
     /** @var HtmlTemplate */
     private $parentTemplate;
 
@@ -75,7 +78,7 @@ class TagTree
     {
         // very important check
         if ($value instanceof self) {
-            throw new Exception('Tag tree can not be added directly');
+            throw new Exception('Tag tree cannot be added directly');
         }
 
         // not strictly needed, but catch issues sooner

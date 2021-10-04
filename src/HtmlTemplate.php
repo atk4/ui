@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Core\AppScopeTrait;
+use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\HtmlTemplate\TagTree;
 use Atk4\Ui\HtmlTemplate\Value as HtmlValue;
 
 class HtmlTemplate
 {
-    use \Atk4\Core\AppScopeTrait;
+    use AppScopeTrait;
+    use WarnDynamicPropertyTrait;
 
     /** @const string */
     public const TOP_TAG = '_top';

@@ -70,8 +70,8 @@ you can choose here the fields that are available in the editting modal window.
 
 Example::
 
-    $crud = \atk4\ui\Crud::addTo($app);
-    $model = new \atk4\data\Model($app->db);
+    $crud = \Atk4\Ui\Crud::addTo($app);
+    $model = new \Atk4\Data\Model($app->db);
     $crud->displayFields(['field1, field2']);
     $crud->editFields(['field1, field2, field3, field4']);
 
@@ -117,8 +117,8 @@ Changing titles
 
 Here's an example::
 
-    $crud = \atk4\ui\Crud::addTo($app);
-    $model = new \atk4\data\Model($app->db);
+    $crud = \Atk4\Ui\Crud::addTo($app);
+    $model = new \Atk4\Data\Model($app->db);
     $model->getUserAction('add')->description = 'New title for adding a record'; // the button of the overview - must be loaded before setting model
     $crud->setModel($model);
     $model->getUserAction('add')->ui['executor']->title = 'New title for modal'; // the button of the modal - must be rendered after setting model

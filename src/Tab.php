@@ -6,6 +6,8 @@ namespace Atk4\Ui;
 
 /**
  * One Tab of Tabs widget.
+ *
+ * @method Tabs getOwner()
  */
 class Tab extends Item
 {

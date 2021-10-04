@@ -31,7 +31,7 @@ Form\Control\Checkbox::addTo($app, ['Custom setting?'])->js(true)->checkbox('set
 \Atk4\Ui\Header::addTo($app, ['CheckBoxes in a form', 'size' => 2]);
 $form = Form::addTo($app);
 $form->addControl('test', [Form\Control\Checkbox::class]);
-$form->addControl('test_checked', [Form\Control\Checkbox::class])->set(true);
+$form->addControl('test_checked', [Form\Control\Checkbox::class])->set(1);
 $form->addControl('also_checked', 'Hello World', 'boolean')->set(true);
 
 $form->onSubmit(function ($f) use ($app) {

@@ -49,7 +49,7 @@ trait StepExecutorTrait
     protected $btns;
 
     /** @var UserAction The action to execute. */
-    private $action;
+    public $action;
 
     /** @var array will collect data while doing action step. */
     private $actionData = [];

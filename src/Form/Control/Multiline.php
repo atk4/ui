@@ -209,7 +209,7 @@ class Multiline extends Form\Control
         $this->renderCallback = JsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
-        $this->form->onHook(Form::HOOK_LOAD_POST, function ($form, &$post) {
+        $this->form->onHook(Form::HOOK_LOAD_POST, function ($form, &$postRawData) {
             $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($_POST[$this->short_name]));
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
@@ -219,13 +219,13 @@ class Multiline extends Form\Control
             }
 
             // remove __atml id from array field.
-            if ($this->form->model->getField($this->short_name)->type === 'array') {
+            if ($this->form->model->getField($this->short_name)->type === 'json') {
                 $rows = [];
                 foreach ($this->rowData as $key => $cols) {
                     unset($cols['__atkml']);
                     $rows[] = $cols;
                 }
-                $post[$this->short_name] = json_encode($rows);
+                $postRawData[$this->short_name] = json_encode($rows);
             }
         });
 
@@ -281,8 +281,8 @@ class Multiline extends Form\Control
      */
     public function getValue(): string
     {
-        if ($this->field->type === 'array') {
-            $jsonValues = $this->getApp()->ui_persistence->_typecastSaveField($this->field, $this->field->get() ?? []);
+        if ($this->field->type === 'json') {
+            $jsonValues = $this->getApp()->ui_persistence->typecastSaveField($this->field, $this->field->get() ?? []);
         } else {
             // set data according to hasMany ref. or using model.
             $model = $this->getModel();
@@ -291,7 +291,7 @@ class Multiline extends Form\Control
                 $cols = [];
                 foreach ($this->rowFields as $fieldName) {
                     $field = $model->getField($fieldName);
-                    $value = $this->getApp()->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
+                    $value = $this->getApp()->ui_persistence->typecastSaveField($field, $row->get($field->short_name));
                     $cols[$fieldName] = $value;
                 }
                 $rows[] = $cols;
@@ -308,26 +308,26 @@ class Multiline extends Form\Control
     public function validate(array $rows): array
     {
         $rowErrors = [];
-        $model = $this->getModel();
+        $entity = $this->getModel()->createEntity();
 
         foreach ($rows as $cols) {
             $rowId = $this->getMlRowId($cols);
             foreach ($cols as $fieldName => $value) {
-                if ($fieldName === '__atkml' || $fieldName === $model->id_field) {
+                if ($fieldName === '__atkml' || $fieldName === $entity->id_field) {
                     continue;
                 }
 
                 try {
-                    $field = $model->getField($fieldName);
+                    $field = $entity->getField($fieldName);
                     // Save field value only if the field was editable
                     if (!$field->read_only) {
-                        $model->createEntity()->set($fieldName, $value);
+                        $entity->set($fieldName, $value);
                     }
                 } catch (\Atk4\Core\Exception $e) {
                     $rowErrors[$rowId][] = ['name' => $fieldName, 'msg' => $e->getMessage()];
                 }
             }
-            $rowErrors = $this->addModelValidateErrors($rowErrors, $rowId, $model);
+            $rowErrors = $this->addModelValidateErrors($rowErrors, $rowId, $entity);
         }
 
         return $rowErrors;
@@ -373,12 +373,12 @@ class Multiline extends Form\Control
     /**
      * Check for model validate error.
      */
-    protected function addModelValidateErrors(array $errors, string $rowId, Model $model): array
+    protected function addModelValidateErrors(array $errors, string $rowId, Model $entity): array
     {
-        $e = $model->validate();
-        if ($e) {
-            foreach ($e as $field => $msg) {
-                $errors[$rowId][] = ['field' => $field, 'msg' => $msg];
+        $entityErrors = $entity->validate();
+        if ($entityErrors) {
+            foreach ($entityErrors as $fieldName => $msg) {
+                $errors[$rowId][] = ['name' => $fieldName, 'msg' => $msg];
             }
         }
 
@@ -459,8 +459,8 @@ class Multiline extends Form\Control
             'definition' => $this->getComponentDefinition($field),
             'cellProps' => $this->getSuiTableCellProps($field),
             'caption' => $field->getCaption(),
-            'default' => $field->default,
-            'isExpr' => isset($field->expr),
+            'default' => $this->getApp()->ui_persistence->typecastSaveField($field, $field->default),
+            'isExpr' => @isset($field->expr),
             'isEditable' => $field->isEditable(),
             'isHidden' => $field->isHidden(),
             'isVisible' => $field->isVisible(),
@@ -478,7 +478,7 @@ class Multiline extends Form\Control
     {
         $props = [];
 
-        if ($field->type === 'money' || $field->type === 'number' || $field->type === 'integer') {
+        if ($field->type === 'integer' || $field->type === 'atk4_money') {
             $props['text-align'] = 'right';
         }
 
@@ -492,7 +492,7 @@ class Multiline extends Form\Control
     {
         $props = $this->componentProps[self::INPUT] ?? [];
 
-        $props['type'] = ($field->type === 'integer' || $field->type === 'float' || $field->type === 'money' || $field->type === 'number') ? 'number' : 'text';
+        $props['type'] = ($field->type === 'integer' || $field->type === 'float' || $field->type === 'atk4_money') ? 'number' : 'text';
 
         return array_merge($props, $field->ui['multiline'][self::INPUT] ?? []);
     }
@@ -697,9 +697,7 @@ class Multiline extends Form\Control
      */
     private function outputJson(): void
     {
-        $action = $_POST['__atkml_action'] ?? null;
-
-        switch ($action) {
+        switch ($_POST['__atkml_action'] ?? null) {
             case 'update-row':
                 $model = $this->setDummyModelValue($this->getModel()->createEntity());
                 $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
@@ -729,7 +727,7 @@ class Multiline extends Form\Control
             $field = $model->getField($fieldName);
             if ($field instanceof Callback) {
                 $value = ($field->expr)($model);
-                $values[$fieldName] = $this->getApp()->ui_persistence->_typecastSaveField($field, $value);
+                $values[$fieldName] = $this->getApp()->ui_persistence->typecastSaveField($field, $value);
             }
         }
 
@@ -744,16 +742,16 @@ class Multiline extends Form\Control
      */
     private function setDummyModelValue(Model $model): Model
     {
-        $row = $_POST;
-
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['name'];
             if ($fieldName === $model->id_field) {
                 continue;
             }
 
-            $value = $row[$fieldName] ?? null;
-            if ($model->getField($fieldName)->isEditable()) {
+            $field = $model->getField($fieldName);
+
+            $value = $this->getApp()->ui_persistence->typecastLoadField($field, $_POST[$fieldName] ?? null);
+            if ($field->isEditable()) {
                 try {
                     $model->set($fieldName, $value);
                 } catch (ValidationException $e) {
@@ -793,7 +791,7 @@ class Multiline extends Form\Control
             foreach ($values as $f => $value) {
                 if ($value) {
                     $field = $model->getField($f);
-                    $formatValues[$f] = $this->getApp()->ui_persistence->_typecastSaveField($field, $value);
+                    $formatValues[$f] = $this->getApp()->ui_persistence->typecastSaveField($field, $value);
                 }
             }
         }
@@ -861,9 +859,9 @@ class Multiline extends Form\Control
     private function getValueForExpression(Field $exprField, string $fieldName, Model $model)
     {
         switch ($exprField->type) {
-            case 'money':
             case 'integer':
             case 'float':
+            case 'atk4_money':
                 // Value is 0 or the field value.
                 $value = (string) $model->get($fieldName) ?: 0;
 

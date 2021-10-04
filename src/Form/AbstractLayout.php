@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form;
 
+use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Ui\Exception;
 
 /**
@@ -11,6 +12,8 @@ use Atk4\Ui\Exception;
  */
 abstract class AbstractLayout extends \Atk4\Ui\View
 {
+    use WarnDynamicPropertyTrait;
+
     /**
      * Links layout to the form.
      *
@@ -35,6 +38,8 @@ abstract class AbstractLayout extends \Atk4\Ui\View
 
         if (is_string($field)) {
             $field = ['type' => $field];
+        } elseif (is_array($control) && isset($control['type'])) {
+            $field = ['type' => $control['type']];
         }
 
         try {
@@ -70,7 +75,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
                 throw (new Exception('Value of $control argument is incorrect'))
                     ->addMoreInfo('control', $control);
             }
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             throw (new Exception('Unable to add form control', 0, $e))
                 ->addMoreInfo('name', $name)
                 ->addMoreInfo('control', $control)

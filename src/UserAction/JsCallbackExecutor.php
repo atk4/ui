@@ -18,12 +18,12 @@ use Atk4\Ui\View;
  *
  * Usage:
  * When use with View::on method, then JsCallbackExecutor executor is automatically create.
- *  $btn->on('click', $model->getUserAction('delete') , [4, 'confirm'=> 'This will delete record with id 4. Are you sure?']);
+ *  $btn->on('click', $model->getUserAction('delete') , [4, 'confirm' => 'This will delete record with id 4. Are you sure?']);
  *
  * Manual setup.
  * $action = $model->getUserAction('delete')
  * $ex = JsCallbackExecutor::addTo($app)->setAction($action, [4])
- * $btn->on('click', $ex, ['confirm'=> 'This will delete record with id 4. Are you sure?']);
+ * $btn->on('click', $ex, ['confirm' => 'This will delete record with id 4. Are you sure?']);
  */
 class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 {
