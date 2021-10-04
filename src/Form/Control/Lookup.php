@@ -319,7 +319,7 @@ class Lookup extends Input
         }
 
         if ($this->search instanceof \Closure) {
-            $this->search($this->model, $_GET['q']);
+            ($this->search)($this->model, $_GET['q']);
         } elseif (is_array($this->search)) {
             $scope = Model\Scope::createOr();
             foreach ($this->search as $field) {

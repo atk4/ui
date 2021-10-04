@@ -29,7 +29,7 @@ class TypeTime extends Column\FilterModel
 
     public function setConditionForModel($model)
     {
-        $filter = $this->recalData();
+        $filter = $this->recallData();
         if (isset($filter['id'])) {
             switch ($filter['op']) {
                 case 'between':
