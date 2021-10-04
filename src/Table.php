@@ -66,32 +66,19 @@ class Table extends Lister
      */
     public $totals = [];
 
-    /**
-     * Contain the template for the "Head" type row.
-     *
-     * @var HtmlTemplate
-     */
+    /** @var HtmlTemplate Contain the template for the "Head" type row. */
     public $t_head;
 
-    /**
-     * Contain the template for the "Body" type row.
-     *
-     * @var HtmlTemplate
-     */
+    /** @var HtmlTemplate */
+    public $t_row_master;
+
+    /** @var HtmlTemplate Contain the template for the "Body" type row. */
     public $t_row;
 
-    /**
-     * Contain the template for the "Foot" type row.
-     *
-     * @var HtmlTemplate
-     */
+    /** @var HtmlTemplate Contain the template for the "Foot" type row. */
     public $t_totals;
 
-    /**
-     * Contains the output to show if table contains no rows.
-     *
-     * @var HtmlTemplate
-     */
+    /** @var HtmlTemplate Contains the output to show if table contains no rows. */
     public $t_empty;
 
     /**
@@ -662,7 +649,7 @@ class Table extends Lister
 
                             break;
                         case 'max':
-                            if ($this->model¨->get($key) > $this->totals[$key]) {
+                            if ($this->model->get($key) > $this->totals[$key]) {
                                 $this->totals[$key] = $this->model->get($key);
                             }
 

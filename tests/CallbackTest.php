@@ -11,11 +11,12 @@ use Atk4\Ui\VirtualPage;
 
 class AppMock extends \Atk4\Ui\App
 {
+    /** @var bool */
     public $terminated = false;
 
     public function terminate($output = '', array $headers = []): void
     {
-        $this->terminate = true;
+        $this->terminated = true;
     }
 
     /**

@@ -137,7 +137,7 @@ class InlineEdit extends View
     public function onChange(\Closure $fx)
     {
         if (!$this->autoSave) {
-            $value = $_POST['value'] ?? null;
+            $value = $this->getApp()->ui_persistence->typecastLoadField($this->model->getField($this->field), $_POST['value'] ?? null);
             $this->cb->set(function () use ($fx, $value) {
                 return $fx($value);
             });

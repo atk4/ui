@@ -8,12 +8,12 @@ use Atk4\Core\Phpunit\TestCase;
 
 class TagTest extends TestCase
 {
-    public function getApp()
+    public function getApp(): \Atk4\Ui\App
     {
         return new \Atk4\Ui\App(['catch_exceptions' => false, 'always_run' => false]);
     }
 
-    public function assertTagRender($html, $args)
+    public function assertTagRender(string $html, array $args): void
     {
         $app = $this->getApp();
         $this->assertSame($html, $app->getTag(...$args));

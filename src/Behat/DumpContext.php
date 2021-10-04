@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Behat;
 
+use Atk4\Core\WarnDynamicPropertyTrait;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\MinkExtension\Context\RawMinkContext;
@@ -11,6 +12,8 @@ use Behat\Testwork\Tester\Result\TestResult;
 
 class DumpContext extends RawMinkContext implements BehatContext
 {
+    use WarnDynamicPropertyTrait;
+
     /**
      * Dump current page data when step failed for CI.
      *

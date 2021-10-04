@@ -7,7 +7,6 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
-use Atk4\Ui\Table\Column;
 use Atk4\Ui\Table\Column\ActionButtons;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\ExecutorInterface;

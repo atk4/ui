@@ -40,6 +40,8 @@ class Modal extends View
     public $cb;
     public $cb_view;
     public $args = [];
+    /** @var array */
+    public $options = [];
 
     /** @var string Currently only "json" response type is supported. */
     public $type = 'json';

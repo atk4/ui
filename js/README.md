@@ -12,10 +12,10 @@ Calling this function in your custom js script or in console will output the pac
     atk.version();
 ```
 
-### Services 
+### Services
 
 All services are export via the atk global object. You can access them via atk.serviceName.
-Certain functionalities are offered from these services. 
+Certain functionalities are offered from these services.
 
 For example, if one of your script need to send an ajax request directly, without using semantic-ui api request, you could use the apiService.atkSuccessTest
 to run and evaluate the server response from Atk4\Ui.
@@ -34,7 +34,7 @@ Another example would be the upload service for file uploading using one of your
       filesArraytoUpload,
       theElement,
       {data: 'value'},
-      url,             
+      url,
       onComplete(){}, // the callback function when upload is complete.
       onXhr(){}       // the callback function when uploading files is in progress.
     );
@@ -65,7 +65,7 @@ You may change this package to suit your own needs.
 
 ### Package installation
 
-First start by installing the package using npm install. 
+First start by installing the package using npm install.
 
 ```
     cd atk4/ui/js
@@ -87,15 +87,15 @@ Any change made to the source, will also be re-compile automatically when using 
 
 #### Analyzing bundle profile
 
-Bundle profile may be analyze using various tools. npm script are availabe for producing 
-the json file for this. 
+Bundle profile may be analyze using various tools. npm script are availabe for producing
+the json file for this.
 
 ```
     npm run profile
 ```
 
-This command will create a profile json file `atkjs-bundle-profile.json` with bundle information inside the profile folder. You can use this file with your 
-favorite bundle analyzer. 
+This command will create a profile json file `atkjs-bundle-profile.json` with bundle information inside the profile folder. You can use this file with your
+favorite bundle analyzer.
 
 Another npm script is available for analyzing the bundle using the webpack-bundle-analyzer tool.
 

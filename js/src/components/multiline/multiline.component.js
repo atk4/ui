@@ -17,7 +17,7 @@ export default {
                         <sui-table-header-cell :colspan="getSpan" textAlign="right">
                         <div is="sui-button-group">
                          <sui-button size="small" @click.stop.prevent="onAdd" type="button" icon="plus" ref="addBtn" :disabled="isLimitReached"></sui-button>
-                         <sui-button size="small" @click.stop.prevent="onDelete" type="button" icon="trash" :disabled="isDeleteDisable"></sui-button>                        
+                         <sui-button size="small" @click.stop.prevent="onDelete" type="button" icon="trash" :disabled="isDeleteDisable"></sui-button>
                          </div>
                         </sui-table-header-cell>
                     </sui-table-row>

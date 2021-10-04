@@ -36,7 +36,7 @@ class Callback extends AbstractView
 
     public function add($object, $args = null): AbstractView
     {
-        throw new Exception('Callback can NOT contains children');
+        throw new Exception('Callback cannot contains children');
     }
 
     /**

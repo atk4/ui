@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\HtmlTemplate;
 
+use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Ui\Exception;
 
 class Value
 {
+    use WarnDynamicPropertyTrait;
+
     /** @var string */
     private $value = '';
 

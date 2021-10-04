@@ -249,7 +249,7 @@ Loader can have a progress bar. Imagine that your Loader has to run slow process
     sleep(1);
     sleep(1);
 
-You can notify user about this progress through a simple code::
+You cannotify user about this progress through a simple code::
 
     $loader = \Atk4\Ui\Loader::addTo($app, ['progressBar' => true]);
     $loader->set(function($p) {

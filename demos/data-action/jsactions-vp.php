@@ -12,4 +12,4 @@ require_once __DIR__ . '/../init-app.php';
 $factory = $app->getExecutorFactory();
 $factory->registerTypeExecutor($factory::STEP_EXECUTOR, [VpExecutor::class]);
 
-require_once 'action-setup.php';
+require_once 'jsactions2.php';

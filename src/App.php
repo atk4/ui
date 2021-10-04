@@ -10,6 +10,8 @@ use Atk4\Core\DynamicMethodTrait;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Core\InitializerTrait;
+use Atk4\Core\TraitUtil;
+use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationException;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
@@ -205,6 +207,16 @@ class App
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
             set_error_handler(
                 static function (int $severity, string $msg, string $file, int $line): bool {
+                    if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
+                        // allow to supress undefined property warnings
+                        foreach (debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
+                            if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
+                                && $frame['function'] === 'warnPropertyDoesNotExist') {
+                                return false;
+                            }
+                        }
+                    }
+
                     throw new \ErrorException($msg, 0, $severity, $file, $line);
                 },
                 \E_ALL
@@ -565,7 +577,6 @@ class App
             $this->html->renderAll();
             $this->html->template->dangerouslyAppendHtml('HEAD', $this->html->getJs());
             $this->is_rendering = false;
-            $this->hook(self::HOOK_BEFORE_OUTPUT);
 
             if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catch_runaway_callbacks) {
                 throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
@@ -578,7 +589,8 @@ class App
             $isExitException = true;
         }
 
-        if (!$this->exit_called) { // output already send by terminate()
+        $this->hook(self::HOOK_BEFORE_OUTPUT);
+        if (!$this->exit_called) { // output already sent by terminate()
             if ($this->isJsUrlRequest()) {
                 $this->outputResponseJson($output);
             } else {
@@ -622,7 +634,7 @@ class App
             }
         }
 
-        throw (new Exception('Can not find template file'))
+        throw (new Exception('Cannot find template file'))
             ->addMoreInfo('filename', $filename)
             ->addMoreInfo('template_dir', $this->template_dir);
     }
@@ -1073,7 +1085,7 @@ class App
         }
 
         if ($lateError === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
-            $lateError = 'Headers already sent, more headers can not be set at this stage.';
+            $lateError = 'Headers already sent, more headers cannot be set at this stage.';
         }
 
         if (!headers_sent() || $isCli) {

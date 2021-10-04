@@ -16,13 +16,13 @@ import $ from 'jquery';
 
 const template = `
       <div :class="[options.inputCss, hasError ? 'error' : '' ]">
-            <input 
-            :class="options.inlineCss" 
-            :name="options.fieldName" 
-            :type="options.fieldType" 
-            v-model="value" 
-            @keyup="onKeyup" 
-            @focus="onFocus" 
+            <input
+            :class="options.inlineCss"
+            :name="options.fieldName"
+            :type="options.fieldType"
+            v-model="value"
+            @keyup="onKeyup"
+            @focus="onFocus"
             @blur="onBlur"/><i class="icon"></i>
       </div>`;
 

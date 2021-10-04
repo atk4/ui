@@ -43,7 +43,7 @@ export default class notify extends atkPlugin {
      * @returns {string}
      */
     getNotifier(options) {
-        return `<div class="atk-notify transition hidden"> 
+        return `<div class="atk-notify transition hidden">
                 <div class="ui ${options.color} ${options.size} inverted segment" style="overflow: auto; display: block !important">
                     <i class="close icon" style="float:right"></i>
                     <div class="content">

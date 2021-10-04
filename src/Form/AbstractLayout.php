@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form;
 
+use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Ui\Exception;
 
 /**
@@ -11,6 +12,8 @@ use Atk4\Ui\Exception;
  */
 abstract class AbstractLayout extends \Atk4\Ui\View
 {
+    use WarnDynamicPropertyTrait;
+
     /**
      * Links layout to the form.
      *

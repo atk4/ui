@@ -46,11 +46,7 @@ class ScopeBuilder extends Control
      */
     public $fields = [];
 
-    /**
-     * The template needed for the scopebuilder view.
-     *
-     * @var HtmlTemplate
-     */
+    /** @var HtmlTemplate The template needed for the ScopeBuilder view. */
     public $scopeBuilderTemplate;
 
     /**
@@ -323,9 +319,9 @@ class ScopeBuilder extends Control
         $this->scopeBuilderView = \Atk4\Ui\View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
 
         if ($this->form) {
-            $this->form->onHook(\Atk4\Ui\Form::HOOK_LOAD_POST, function ($form, &$post) {
+            $this->form->onHook(\Atk4\Ui\Form::HOOK_LOAD_POST, function ($form, &$postRawData) {
                 $key = $this->field->short_name;
-                $post[$key] = $this->queryToScope($this->getApp()->decodeJson($post[$key] ?? '{}'));
+                $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
             });
         }
     }

@@ -35,7 +35,7 @@ $form->addControl('three', ['caption' => 'Caption2']);
 $form->addControl('four', [Form\Control\Checkbox::class, 'caption' => 'Caption2']);
 
 // Use explicit object for user-defined or 3rd party field
-$form->addControl('five', new Form\Control\Checkbox())->set(true);
+$form->addControl('five', new Form\Control\Checkbox(), ['type' => 'boolean'])->set(true);
 
 // Objects still accept seed
 $form->addControl('six', new Form\Control\Checkbox(['caption' => 'Caption3']));

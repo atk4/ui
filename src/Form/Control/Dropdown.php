@@ -237,7 +237,7 @@ class Dropdown extends Input
     /**
      * Render values as html for Dropdown.
      */
-    protected function htmlRenderValue()
+    protected function htmlRenderValue(): void
     {
         // add selection only if no value is required and Dropdown has no multiple selections enabled
         if ($this->field !== null && !$this->field->required && !$this->isMultiple) {

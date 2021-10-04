@@ -32,12 +32,6 @@ parameters:
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 1
         -
-            path: 'src/AbstractView.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$skin\.$~'
-        -
-            path: 'src/CardDeck.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\CardDeck::\$editFields\.$~'
-        -
             path: 'src/Form/Control/Calendar.php'
             message: '~^Class Atk4\\Ui\\JsFunction constructor invoked with 3 parameters, 0\-2 required\.$~'
         -
@@ -47,29 +41,8 @@ parameters:
             path: 'src/Form/Control/ScopeBuilder.php'
             message: '~^Variable \$inputType might not be defined\.$~'
         -
-            path: 'src/Modal.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Modal::\$options\.$~'
-        -
-            path: 'src/Table.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Table::\$t_row_master\.$~'
-        -
-            path: 'src/Table.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Table::\$model¨\.$~'
-        -
-            path: 'src/Table/Column/Delete.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Table\\Column\\Delete::\$vp\.$~'
-        -
             path: 'src/Table/Column/FilterModel/TypeTime.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeTime::recalData\(\)\.$~'
-        -
-            path: 'src/Wizard.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Wizard::\$stepTemplate\.$~'
-        -
-            path: 'src/Wizard.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Wizard::\$buttonFinish\.$~'
-        -
-            path: 'tests/CallbackTest.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Tests\\AppMock::\$terminate\.$~'
         -
             path: 'tests/CallbackTest.php'
             message: '~^Method Atk4\\Ui\\Tests\\AppMock::terminate\(\) should always throw an exception or terminate script execution but doesn''t do that\.$~'
@@ -82,9 +55,6 @@ parameters:
         -
             path: 'demos/_includes/Demo.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsChain::initHighlighting\(\)\.$~'
-        -
-            path: 'demos/_unit-test/callback.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$cb\.$~'
         -
             path: 'demos/_unit-test/callback.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setModel\(\)\.$~'
@@ -118,21 +88,6 @@ parameters:
         -
             path: 'demos/form-control/multiline.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::addColumn\(\)\.$~'
-        -
-            path: 'demos/form-control/multiline.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onLineChange\(\)\.$~'
-        -
-            path: 'demos/form-control/multiline.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$jsAfterAdd\.$~'
-        -
-            path: 'demos/form-control/multiline.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$jsAfterDelete\.$~'
-        -
-            path: 'demos/form-control/multiline.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::saveRows\(\)\.$~'
-        -
-            path: 'demos/form-control/upload.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$cb\.$~'
         -
             path: 'demos/form-control/upload.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onDelete\(\)\.$~'
@@ -203,9 +158,6 @@ parameters:
             path: 'demos/interactive/wizard.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$placeholder\.$~'
         -
-            path: 'demos/interactive/wizard.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Wizard::\$buttonFinish\.$~'
-        -
             path: 'demos/layout/layout-panel.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Panel\\Loadable::jsOpen\(\)\.$~'
         -
@@ -266,9 +218,6 @@ parameters:
             path: 'src/Form/Control/Input.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::on\(\)\.$~'
         -
-            path: 'src/Form/Layout.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$placeholder\.$~'
-        -
             path: 'src/JsCallback.php'
             message: '~^Access to an undefined property Atk4\\Ui\\JsExpressionable::\$_chain\.$~'
         -
@@ -308,17 +257,11 @@ parameters:
             path: 'src/Panel/Right.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsExpression::addPanel\(\)\.$~'
         -
-            path: 'src/Tab.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\View::\$activeTabName\.$~'
-        -
             path: 'src/Table/Column.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setHoverable\(\)\.$~'
         -
             path: 'src/Table/Column.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsCallback::onSelectItem\(\)\.$~'
-        -
-            path: 'src/Table/Column/Delete.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::set\(\)\.$~'
         -
             path: 'src/Table/Column/DragHandler.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsCallback::onReorder\(\)\.$~'
@@ -381,7 +324,7 @@ parameters:
             message: '~^Property Atk4\\Ui\\Form\\Control\\Lookup::\$plus \(bool\|string\|null\) does not accept array\<string, string\>\.$~'
         -
             path: 'demos/form/form2.php'
-            message: '~^Parameter \#1 \$intent \(string\) of method class@anonymous/demos/form/form2\.php:78::validate\(\) should be contravariant with parameter \$intent \(string\|null\) of method Atk4\\Data\\Model::validate\(\)$~'
+            message: '~^Parameter \#1 \$intent \(string\) of method class@anonymous/demos/form/form2\.php:\d+::validate\(\) should be contravariant with parameter \$intent \(string\|null\) of method Atk4\\Data\\Model::validate\(\)$~'
         -
             path: 'demos/init-db.php'
             message: '~^Parameter \#1 \$intent \(string\) of method Atk4\\Ui\\Demos\\Country::validate\(\) should be contravariant with parameter \$intent \(string\|null\) of method Atk4\\Data\\Model::validate\(\)$~'
@@ -484,9 +427,6 @@ parameters:
         -
             path: 'src/Form/Control/Checkbox.php'
             message: '~^Property Atk4\\Ui\\View::\$content \(string\|false\) does not accept null\.$~'
-        -
-            path: 'src/Form/Control/Checkbox.php'
-            message: '~^Parameter \#1 \$value \(bool\) of method Atk4\\Ui\\Form\\Control\\Checkbox::set\(\) should be contravariant with parameter \$value \(mixed\) of method Atk4\\Ui\\Form\\Control::set\(\)$~'
         -
             path: 'src/Form/Control/Input.php'
             message: '~^Property Atk4\\Ui\\View::\$content \(string\|false\) does not accept null\.$~'
@@ -649,9 +589,6 @@ parameters:
         -
             path: 'src/Wizard.php'
             message: '~^Method Atk4\\Ui\\Wizard::jsNext\(\) should return string but returns Atk4\\Ui\\JsExpression\.$~'
-        -
-            path: 'tests/FormTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\FormTest::\$f \(Atk4\\Ui\\Form\) does not accept null\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 4
@@ -998,9 +935,6 @@ parameters:
             path: 'src/Panel/Right.php'
             message: '~^Parameter \#1 \$object of method Atk4\\Ui\\AbstractView::add\(\) expects Atk4\\Ui\\AbstractView, array\<int\|string, string\> given\.$~'
         -
-            path: 'src/Table/Column/Delete.php'
-            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\CallbackLater given\.$~'
-        -
             path: 'src/UserAction/ModalExecutor.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array\<int, mixed\> given\.$~'
         -
@@ -1077,37 +1011,37 @@ parameters:
             message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::export\(\) has parameter \$model with no typehint specified\.$~'
         -
             path: 'demos/_unit-test/console_run.php'
-            message: '~^Method class@anonymous/demos/_unit\-test/console_run\.php:13::test\(\) has no return typehint specified\.$~'
+            message: '~^Method class@anonymous/demos/_unit\-test/console_run\.php:\d+::test\(\) has no return typehint specified\.$~'
         -
             path: 'demos/basic/button.php'
-            message: '~^Method class@anonymous/demos/basic/button\.php:59::__construct\(\) has parameter \$n with no typehint specified\.$~'
+            message: '~^Method class@anonymous/demos/basic/button\.php:\d+::__construct\(\) has parameter \$n with no typehint specified\.$~'
         -
             path: 'demos/collection/multitable.php'
-            message: '~^Property class@anonymous/demos/collection/multitable\.php:13::\$route has no typehint specified\.$~'
+            message: '~^Property class@anonymous/demos/collection/multitable\.php:\d+::\$route has no typehint specified\.$~'
         -
             path: 'demos/collection/multitable.php'
-            message: '~^Method class@anonymous/demos/collection/multitable\.php:13::setModel\(\) has parameter \$route with no typehint specified\.$~'
+            message: '~^Method class@anonymous/demos/collection/multitable\.php:\d+::setModel\(\) has parameter \$route with no typehint specified\.$~'
         -
             path: 'demos/data-action/factory-view.php'
-            message: '~^Property class@anonymous/demos/data\-action/factory\-view\.php:21::\$actionIcon has no typehint specified\.$~'
+            message: '~^Property class@anonymous/demos/data\-action/factory\-view\.php:\d+::\$actionIcon has no typehint specified\.$~'
         -
             path: 'demos/data-action/factory-view.php'
-            message: '~^Method class@anonymous/demos/data\-action/factory\-view\.php:21::getCardButton\(\) has no return typehint specified\.$~'
+            message: '~^Method class@anonymous/demos/data\-action/factory\-view\.php:\d+::getCardButton\(\) has no return typehint specified\.$~'
         -
             path: 'demos/data-action/factory-view.php'
-            message: '~^Method class@anonymous/demos/data\-action/factory\-view\.php:21::getCardButton\(\) has parameter \$action with no typehint specified\.$~'
+            message: '~^Method class@anonymous/demos/data\-action/factory\-view\.php:\d+::getCardButton\(\) has parameter \$action with no typehint specified\.$~'
         -
             path: 'demos/data-action/factory-view.php'
-            message: '~^Method class@anonymous/demos/data\-action/factory\-view\.php:21::getCardButton\(\) has parameter \$type with no typehint specified\.$~'
+            message: '~^Method class@anonymous/demos/data\-action/factory\-view\.php:\d+::getCardButton\(\) has parameter \$type with no typehint specified\.$~'
         -
             path: 'demos/form-control/multiline.php'
-            message: '~^Property class@anonymous/demos/form\-control/multiline\.php:24::\$dateFormat has no typehint specified\.$~'
+            message: '~^Property class@anonymous/demos/form\-control/multiline\.php:\d+::\$dateFormat has no typehint specified\.$~'
         -
             path: 'demos/form-control/multiline.php'
-            message: '~^Property class@anonymous/demos/form\-control/multiline\.php:24::\$timeFormat has no typehint specified\.$~'
+            message: '~^Property class@anonymous/demos/form\-control/multiline\.php:\d+::\$timeFormat has no typehint specified\.$~'
         -
             path: 'demos/form-control/multiline.php'
-            message: '~^Property class@anonymous/demos/form\-control/multiline\.php:24::\$countryPersistence has no typehint specified\.$~'
+            message: '~^Property class@anonymous/demos/form\-control/multiline\.php:\d+::\$countryPersistence has no typehint specified\.$~'
         -
             path: 'demos/init-db.php'
             message: '~^Method Atk4\\Ui\\Demos\\ModelWithPrefixedFields::addField\(\) has parameter \$name with no typehint specified\.$~'
@@ -1125,31 +1059,31 @@ parameters:
             message: '~^Method Atk4\\Ui\\Demos\\File::importFromFilesystem\(\) has parameter \$path with no typehint specified\.$~'
         -
             path: 'demos/interactive/console.php'
-            message: '~^Method class@anonymous/demos/interactive/console\.php:11::generateReport\(\) has no return typehint specified\.$~'
+            message: '~^Method class@anonymous/demos/interactive/console\.php:\d+::generateReport\(\) has no return typehint specified\.$~'
         -
             path: 'demos/interactive/popup.php'
-            message: '~^Property class@anonymous/demos/interactive/popup\.php:21::\$items has no typehint specified\.$~'
+            message: '~^Property class@anonymous/demos/interactive/popup\.php:\d+::\$items has no typehint specified\.$~'
         -
             path: 'demos/interactive/popup.php'
-            message: '~^Method class@anonymous/demos/interactive/popup\.php:21::addItem\(\) has no return typehint specified\.$~'
+            message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::addItem\(\) has no return typehint specified\.$~'
         -
             path: 'demos/interactive/popup.php'
-            message: '~^Method class@anonymous/demos/interactive/popup\.php:21::addItem\(\) has parameter \$item with no typehint specified\.$~'
+            message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::addItem\(\) has parameter \$item with no typehint specified\.$~'
         -
             path: 'demos/interactive/popup.php'
-            message: '~^Method class@anonymous/demos/interactive/popup\.php:21::removeItem\(\) has no return typehint specified\.$~'
+            message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::removeItem\(\) has no return typehint specified\.$~'
         -
             path: 'demos/interactive/popup.php'
-            message: '~^Method class@anonymous/demos/interactive/popup\.php:21::removeItem\(\) has parameter \$no with no typehint specified\.$~'
+            message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::removeItem\(\) has parameter \$no with no typehint specified\.$~'
         -
             path: 'demos/interactive/popup.php'
-            message: '~^Method class@anonymous/demos/interactive/popup\.php:88::linkCart\(\) has no return typehint specified\.$~'
+            message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::linkCart\(\) has no return typehint specified\.$~'
         -
             path: 'demos/interactive/popup.php'
-            message: '~^Method class@anonymous/demos/interactive/popup\.php:88::linkCart\(\) has parameter \$cart with no typehint specified\.$~'
+            message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::linkCart\(\) has parameter \$cart with no typehint specified\.$~'
         -
             path: 'demos/interactive/popup.php'
-            message: '~^Method class@anonymous/demos/interactive/popup\.php:88::linkCart\(\) has parameter \$jsAction with no typehint specified\.$~'
+            message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::linkCart\(\) has parameter \$jsAction with no typehint specified\.$~'
         -
             path: 'src/AbstractView.php'
             message: '~^Method Atk4\\Ui\\AbstractView::initDefaultApp\(\) has no return typehint specified\.$~'
@@ -1479,9 +1413,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::setDropdownOptions\(\) has no return typehint specified\.$~'
         -
             path: 'src/Form/Control/Dropdown.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::htmlRenderValue\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/Form/Control/Dropdown.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_renderItemsForModel\(\) has no return typehint specified\.$~'
         -
             path: 'src/Form/Control/Dropdown.php'
@@ -1495,12 +1426,6 @@ parameters:
         -
             path: 'src/Form/Control/Dropdown.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_addCallBackRow\(\) has parameter \$row with no typehint specified\.$~'
-        -
-            path: 'src/Form/Control/DropdownCascade.php'
-            message: '~^Instanceof between Atk4\\Ui\\Form\\Control and Atk4\\Ui\\Form\\Control will always evaluate to true\.$~'
-        -
-            path: 'src/Form/Control/DropdownCascade.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\DropdownCascade::htmlRenderValue\(\) has no return typehint specified\.$~'
         -
             path: 'src/Form/Control/Hidden.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\Hidden::\$inputType has no typehint specified\.$~'
@@ -2054,27 +1979,6 @@ parameters:
             path: 'src/Panel/Right.php'
             message: '~^Method Atk4\\Ui\\Panel\\Right::onOpen\(\) has no return typehint specified\.$~'
         -
-            path: 'src/Persistence/Ui.php'
-            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$date_format has no typehint specified\.$~'
-        -
-            path: 'src/Persistence/Ui.php'
-            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$time_format has no typehint specified\.$~'
-        -
-            path: 'src/Persistence/Ui.php'
-            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$datetime_format has no typehint specified\.$~'
-        -
-            path: 'src/Persistence/Ui.php'
-            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$currency has no typehint specified\.$~'
-        -
-            path: 'src/Persistence/Ui.php'
-            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$yes has no typehint specified\.$~'
-        -
-            path: 'src/Persistence/Ui.php'
-            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$no has no typehint specified\.$~'
-        -
-            path: 'src/Persistence/Ui.php'
-            message: '~^Property Atk4\\Ui\\Persistence\\Ui::\$calendar_options has no typehint specified\.$~'
-        -
             path: 'src/Popup.php'
             message: '~^Method Atk4\\Ui\\Popup::__construct\(\) has parameter \$triggerBy with no typehint specified\.$~'
         -
@@ -2373,9 +2277,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Tests\\AppTest::getApp\(\) has no return typehint specified\.$~'
         -
             path: 'tests/CallbackTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\AppMock::\$terminated has no typehint specified\.$~'
-        -
-            path: 'tests/CallbackTest.php'
             message: '~^Property Atk4\\Ui\\Tests\\CallbackTest::\$var has no typehint specified\.$~'
         -
             path: 'tests/CallbackTest.php'
@@ -2398,24 +2299,6 @@ parameters:
         -
             path: 'tests/ExecutorFactoryTest.php'
             message: '~^Method Atk4\\Ui\\Tests\\ExecutorFactoryTest::getApp\(\) has no return typehint specified\.$~'
-        -
-            path: 'tests/FormTest.php'
-            message: '~^Instanceof between Atk4\\Ui\\Form\\Control and Atk4\\Ui\\Form\\Control will always evaluate to true\.$~'
-        -
-            path: 'tests/FormTest.php'
-            message: '~^Method Atk4\\Ui\\Tests\\FormTest::assertSubmit\(\) has no return typehint specified\.$~'
-        -
-            path: 'tests/FormTest.php'
-            message: '~^Method Atk4\\Ui\\Tests\\FormTest::assertSubmitError\(\) has no return typehint specified\.$~'
-        -
-            path: 'tests/FormTest.php'
-            message: '~^Method Atk4\\Ui\\Tests\\FormTest::assertFormControlError\(\) has no return typehint specified\.$~'
-        -
-            path: 'tests/FormTest.php'
-            message: '~^Method Atk4\\Ui\\Tests\\FormTest::assertFromControlNoErrors\(\) has no return typehint specified\.$~'
-        -
-            path: 'tests/FormTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\AppFormTestMock::\$output has no typehint specified\.$~'
         -
             path: 'tests/GridTest.php'
             message: '~^Property Atk4\\Ui\\Tests\\GridTest::\$m has no typehint specified\.$~'
@@ -2452,15 +2335,3 @@ parameters:
         -
             path: 'tests/TableColumnLinkTest.php'
             message: '~^Property Atk4\\Ui\\Tests\\TableColumnLinkTest::\$column has no typehint specified\.$~'
-        -
-            path: 'tests/TagTest.php'
-            message: '~^Method Atk4\\Ui\\Tests\\TagTest::getApp\(\) has no return typehint specified\.$~'
-        -
-            path: 'tests/TagTest.php'
-            message: '~^Method Atk4\\Ui\\Tests\\TagTest::assertTagRender\(\) has no return typehint specified\.$~'
-        -
-            path: 'tests/TagTest.php'
-            message: '~^Method Atk4\\Ui\\Tests\\TagTest::assertTagRender\(\) has parameter \$args with no typehint specified\.$~'
-        -
-            path: 'tests/TagTest.php'
-            message: '~^Method Atk4\\Ui\\Tests\\TagTest::assertTagRender\(\) has parameter \$html with no typehint specified\.$~'

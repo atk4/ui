@@ -27,9 +27,13 @@ class Wizard extends View
 
     /** @var Button Button for going to previous step. */
     public $buttonPrev;
-
-    /** @var Button Buttor for going to next step. */
+    /** @var Button Button for going to next step. */
     public $buttonNext;
+    /** @var Button */
+    public $buttonFinish;
+
+    /** @var HtmlTemplate */
+    private $stepTemplate;
 
     /**
      * Icon that will be used on all steps by default.

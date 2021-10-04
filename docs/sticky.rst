@@ -5,7 +5,7 @@ Introduction
 
 Ability to automatically generate callback URLs is one of the unique features in Agile UI.
 With most UI widgets they would rely on a specific URL to be available or would require
-you to define them. 
+you to define them.
 
 With Agile UI the backend URLs are created dynamically by using unique names and call-backs.
 
@@ -41,7 +41,7 @@ Global vs Local Sticky GET
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In earlier example, we have called `$app->stickyGet` which creates a global stickyGet. After
-executing, all the invocations to App::url() or View::url() will contain "client_id". 
+executing, all the invocations to App::url() or View::url() will contain "client_id".
 
 In some cases, Sticky GET only make sense within a certain branch of a Render Tree. For instance,
 when Loader wishes to load content dynamically, it must pass extra _GET parameter to trigger a
@@ -88,7 +88,7 @@ Dropping sticky argument
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 Sometimes you want to drop a sticky argument. If your sticky was set locally, you can drop it by calling
-either a parent's url or $app->url(), however for global sticky Get you can use either `url(['client_id' => false])` 
+either a parent's url or $app->url(), however for global sticky Get you can use either `url(['client_id' => false])`
 or `stickyForget('client_id')`.
 
 

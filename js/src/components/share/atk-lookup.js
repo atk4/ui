@@ -14,13 +14,13 @@
  *  optionalValue: The initial list of options for the dropdown.
  */
 
-const template = `<sui-dropdown 
+const template = `<sui-dropdown
                     ref="drop"
-                    v-bind="dropdownProps" 
-                    :loading="isLoading" 
-                    @input="onChange" 
-                    @filtered="onFiltered" 
-                    v-model="current" 
+                    v-bind="dropdownProps"
+                    :loading="isLoading"
+                    @input="onChange"
+                    @filtered="onFiltered"
+                    v-model="current"
                     :class="css"></sui-dropdown>`;
 
 export default {

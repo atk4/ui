@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\Popup;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -84,20 +85,20 @@ $cartClass = get_class(new class() extends \Atk4\Ui\Lister {
  * item inside a cart reloading it afterwards.
  */
 
-/** @var \Atk4\Ui\View $itemShelfClass */
-$itemShelfClass = get_class(new class() extends \Atk4\Ui\View {
+/** @var View $itemShelfClass */
+$itemShelfClass = get_class(new class() extends View {
     public $ui = 'green segment';
 
     protected function init(): void
     {
         parent::init();
 
-        $v = \Atk4\Ui\View::addTo($this, ['ui' => 'fluid']);
+        $v = View::addTo($this, ['ui' => 'fluid']);
         $cols = \Atk4\Ui\Columns::addTo($v, ['ui' => 'relaxed divided grid']);
 
         $c1 = $cols->addColumn();
         \Atk4\Ui\Header::addTo($c1, ['size' => 'small'])->set('Snacks');
-        $l1 = \Atk4\Ui\View::addTo($c1, ['ui' => 'list']);
+        $l1 = View::addTo($c1, ['ui' => 'list']);
         \Atk4\Ui\Item::addTo($l1, ['content' => 'Crisps', 'ui' => 'item'])->setElement('a');
         \Atk4\Ui\Item::addTo($l1, ['content' => 'Pork Scratchings', 'ui' => 'item'])->setElement('a');
         \Atk4\Ui\Item::addTo($l1, ['content' => 'Candies', 'ui' => 'item'])->setElement('a');
@@ -105,7 +106,7 @@ $itemShelfClass = get_class(new class() extends \Atk4\Ui\View {
 
         $c2 = $cols->addColumn();
         \Atk4\Ui\Header::addTo($c2, ['size' => 'small'])->set('Drinks');
-        $l2 = \Atk4\Ui\View::addTo($c2, ['ui' => 'list']);
+        $l2 = View::addTo($c2, ['ui' => 'list']);
         \Atk4\Ui\Item::addTo($l2, ['content' => 'Fizzy Drink', 'ui' => 'item'])->setElement('a');
         \Atk4\Ui\Item::addTo($l2, ['content' => 'Hot Latte', 'ui' => 'item'])->setElement('a');
         \Atk4\Ui\Item::addTo($l2, ['content' => 'Water', 'ui' => 'item'])->setElement('a');
@@ -113,7 +114,7 @@ $itemShelfClass = get_class(new class() extends \Atk4\Ui\View {
 
         $c3 = $cols->addColumn();
         \Atk4\Ui\Header::addTo($c3, ['size' => 'small'])->set('Mains');
-        $l3 = \Atk4\Ui\View::addTo($c3, ['ui' => 'list']);
+        $l3 = View::addTo($c3, ['ui' => 'list']);
         \Atk4\Ui\Item::addTo($l3, ['content' => 'Chicken Tikka', 'ui' => 'item'])->setElement('a');
         \Atk4\Ui\Item::addTo($l3, ['content' => 'Green Curry', 'ui' => 'item'])->setElement('a');
         \Atk4\Ui\Item::addTo($l3, ['content' => 'Pastries', 'ui' => 'item'])->setElement('a');
@@ -146,7 +147,7 @@ $browse = \Atk4\Ui\Dropdown::addTo($menu, ['Browse']);
 // Add cart item into the menu, with a popup inside
 $cartItem = $menu->addItem([$cartClass, 'icon' => 'cart'])->set('Cart');
 
-$cartPopup = \Atk4\Ui\Popup::addTo($app, [$cartItem, 'position' => 'bottom left']);
+$cartPopup = Popup::addTo($app, [$cartItem, 'position' => 'bottom left']);
 // Popup won't dissapear as you hover over it.
 $cartPopup->setHoverable();
 
@@ -207,7 +208,7 @@ $shelf->linkCart($cart, [
 
 // label placed on top of menu item, not in the popup
 
-$pop = \Atk4\Ui\Popup::addTo($app, [$browse, 'position' => 'bottom left', 'minWidth' => '500px'])
+$pop = Popup::addTo($app, [$browse, 'position' => 'bottom left', 'minWidth' => '500px'])
     ->setHoverable()
     ->setOption('delay', ['show' => 100, 'hide' => 400]);
 $shelf2 = $itemShelfClass::addTo($pop);
@@ -221,7 +222,7 @@ $rightMenu = $userMenu->addMenu(['', 'icon' => 'user']);
 
 // If you add popup right inside the view, it will link itself with the element. If you are adding it into other container,
 // you can still manually link it and specify an event.
-$signup = \Atk4\Ui\Popup::addTo($app, [$rightMenu, 'position' => 'bottom right'])->setHoverable();
+$signup = Popup::addTo($app, [$rightMenu, 'position' => 'bottom right'])->setHoverable();
 
 // This popup will be dynamically loaded.
 $signup->stickyGet('logged');
@@ -257,17 +258,17 @@ $signup->set(function ($pop) {
 
 $button = \Atk4\Ui\Button::addTo($app, ['Click Me', 'primary']);
 
-$buttonPopup = \Atk4\Ui\Popup::addTo($app, [$button]);
+$buttonPopup = Popup::addTo($app, [$button]);
 
 \Atk4\Ui\Header::addTo($buttonPopup)->set('Using click events');
-\Atk4\Ui\View::addTo($buttonPopup)->set('Adding popup into button activates on click by default. Clicked popups will close if you click away.');
+View::addTo($buttonPopup)->set('Adding popup into button activates on click by default. Clicked popups will close if you click away.');
 
 $input = Form\Control\Line::addTo($app, ['placeholder' => 'Search users', 'icon' => 'circular search link']);
 
-$inputPopup = \Atk4\Ui\Popup::addTo($app, [$input, 'triggerOn' => 'focus']);
-\Atk4\Ui\View::addTo($inputPopup)->set('You can use this field to search data.');
+$inputPopup = Popup::addTo($app, [$input, 'triggerOn' => 'focus']);
+View::addTo($inputPopup)->set('You can use this field to search data.');
 
 $button = \Atk4\Ui\Button::addTo($app, [null, 'icon' => 'volume down']);
-$buttonPopup = \Atk4\Ui\Popup::addTo($app, [$button, 'triggerOn' => 'hover'])->setHoverable();
+$buttonPopup = Popup::addTo($app, [$button, 'triggerOn' => 'hover'])->setHoverable();
 
 Form\Control\Checkbox::addTo($buttonPopup, ['Just On/Off', 'slider'])->on('change', $button->js()->find('.icon')->toggleClass('up down'));
