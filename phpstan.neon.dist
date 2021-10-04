@@ -389,9 +389,6 @@ parameters:
             path: 'src/Form/Control/Calendar.php'
             message: '~^Parameter \#1 \$expr \(array\|Atk4\\Ui\\JsExpression\|string\) of method Atk4\\Ui\\Form\\Control\\Calendar::onChange\(\) should be contravariant with parameter \$expr \(array\|Atk4\\Ui\\JsExpression\|Closure\|string\) of method Atk4\\Ui\\Form\\Control::onChange\(\)$~'
         -
-            path: 'src/Form/Control/Calendar.php'
-            message: '~^Cannot access offset ''preventDefault'' on bool\.$~'
-        -
             path: 'src/Form/Control/Checkbox.php'
             message: '~^Property Atk4\\Ui\\View::\$content \(string\|false\) does not accept null\.$~'
         -
@@ -514,9 +511,6 @@ parameters:
         -
             path: 'src/Table/Column/FilterModel/TypeEnum.php'
             message: '~^Property Atk4\\Ui\\Table\\Column\\FilterModel::\$op \(Atk4\\Data\\Field\) does not accept null\.$~'
-        -
-            path: 'src/Table/Column/Link.php'
-            message: '~^Property Atk4\\Ui\\Table\\Column\\Link::\$url \(array\|string\) does not accept Atk4\\Ui\\HtmlTemplate\.$~'
         -
             path: 'src/Tabs.php'
             message: '~^Property Atk4\\Ui\\View::\$content \(string\|false\) does not accept null\.$~'

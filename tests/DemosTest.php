@@ -28,7 +28,7 @@ class DemosTest extends TestCase
     /** @var array */
     private static $_serverSuperglobalBackup;
 
-    /** @var Persistence\Sql Initialized DB connection */
+    /** @var Persistence Initialized DB connection */
     private static $_db;
 
     /** @var array */
@@ -52,6 +52,7 @@ class DemosTest extends TestCase
             $this->setSuperglobalsFromRequest(new Request('GET', 'http://localhost/demos/?APP_CALL_EXIT=0&APP_CATCH_EXCEPTIONS=0&APP_ALWAYS_RUN=0'));
 
             /** @var App $app */
+            $app = 'for-phpstan';
             require_once static::DEMOS_DIR . '/init-app.php';
             $initVars = array_diff_key(get_defined_vars(), $initVars + ['initVars' => true]);
 
@@ -59,11 +60,9 @@ class DemosTest extends TestCase
                 throw new \Atk4\Ui\Exception('Demos init must setup only $app variable');
             }
 
-            // @phpstan-ignore-next-line remove once https://github.com/phpstan/phpstan/issues/4155 is resolved
             self::$_db = $app->db;
 
             // prevent $app to run on shutdown
-            // @phpstan-ignore-next-line remove once https://github.com/phpstan/phpstan/issues/4155 is resolved
             $app->run_called = true;
         }
     }

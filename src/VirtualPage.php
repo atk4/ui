@@ -96,6 +96,8 @@ class VirtualPage extends View
     /**
      * VirtualPage is not rendered normally. It's invisible. Only when
      * it is triggered, it will exclusively output it's content.
+     *
+     * @return string
      */
     public function getHtml()
     {
