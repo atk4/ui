@@ -10,51 +10,38 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Data\Model;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 
 class DropdownCascade extends Dropdown
 {
-    /** @var string|Form\Control|null the form input to use for setting this dropdown list values from. */
+    /** @var string|Form\Control The form control to use for setting this dropdown list values from. */
     public $cascadeFrom;
 
-    /** @var string|Model|null the hasMany reference model that will generate value for this dropdown list. */
+    /** @var string|Model|null The hasMany reference model that will generate value for this dropdown list. */
     public $reference;
-
-    /** @var Form\Control The form control object created based on cascadeFrom */
-    protected $cascadeFromControl;
-
-    /** @var string|int The cascade input value. */
-    protected $cascadeFromControlValue;
 
     protected function init(): void
     {
         parent::init();
 
-        if (!$this->cascadeFrom) {
-            throw new Exception('cascadeFrom property is not set');
+        if (!$this->cascadeFrom instanceof Form\Control) {
+            $this->cascadeFrom = $this->form->getControl($this->cascadeFrom);
         }
 
-        $this->cascadeFromControl = is_string($this->cascadeFrom) ? $this->form->getControl($this->cascadeFrom) : $this->cascadeFrom;
+        $cascadeFromValue = isset($_POST[$this->cascadeFrom->name])
+            ? $this->getApp()->ui_persistence->typecastLoadField($this->cascadeFrom->field, $_POST[$this->cascadeFrom->name])
+            : $this->cascadeFrom->field->get();
 
-        if (!$this->cascadeFromControl instanceof Form\Control) {
-            throw new Exception('cascadeFrom property should be an instance of ' . Form\Control::class);
-        }
-
-        $this->cascadeControlValue = isset($_POST[$this->cascadeFromControl->name])
-            ? $this->getApp()->ui_persistence->typecastLoadField($this->cascadeFromControl->field, $_POST[$this->cascadeFromControl->name])
-            : $this->cascadeFromControl->field->get();
-
-        $this->model = $this->cascadeFromControl->model ? $this->cascadeFromControl->model->ref($this->reference) : null;
+        $this->model = $this->cascadeFrom->model ? $this->cascadeFrom->model->ref($this->reference) : null;
 
         // populate default dropdown values
-        $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($this->cascadeFromControlValue), $this->field->get());
+        $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($cascadeFromValue), $this->field->get());
 
         // js to execute for the onChange handler of the parent dropdown.
         $expr = [
-            function ($t) {
+            function ($t) use ($cascadeFromValue) {
                 return [
-                    $this->js()->dropdown('change values', $this->getNewValues($this->cascadeFromControlValue)),
+                    $this->js()->dropdown('change values', $this->getNewValues($cascadeFromValue)),
                     $this->js()->removeClass('loading'),
                 ];
             },
@@ -62,7 +49,7 @@ class DropdownCascade extends Dropdown
             $this->js()->addClass('loading'),
         ];
 
-        $this->cascadeFromControl->onChange($expr, ['args' => [$this->cascadeFromControl->name => $this->cascadeFromControl->jsInput()->val()]]);
+        $this->cascadeFrom->onChange($expr, ['args' => [$this->cascadeFrom->name => $this->cascadeFrom->jsInput()->val()]]);
     }
 
     /**
@@ -75,7 +62,7 @@ class DropdownCascade extends Dropdown
      */
     public function set($value = null, $junk = null)
     {
-        $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($this->cascadeFromControl->field->get()), $value);
+        $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($this->cascadeFrom->field->get()), $value);
 
         return parent::set($value, $junk);
     }
@@ -92,7 +79,7 @@ class DropdownCascade extends Dropdown
             return [['value' => '', 'text' => $this->empty, 'name' => $this->empty]];
         }
 
-        $model = $this->cascadeFromControl->model->tryLoad($id)->ref($this->reference);
+        $model = $this->cascadeFrom->model->tryLoad($id)->ref($this->reference);
         $values = [];
         foreach ($model as $k => $row) {
             if ($this->renderRowFunction) {
@@ -125,17 +112,14 @@ class DropdownCascade extends Dropdown
         return $values;
     }
 
-    /**
-     * Call during parent::renderView()
-     * Cascade Dropdown values are only render via js.
-     */
-    protected function htmlRenderValue()
+    protected function htmlRenderValue(): void
     {
+        // Called in parent::renderView(), but values are rendered only via js
     }
 
     protected function renderView(): void
     {
-        // can't be multiple selection.
+        // multiple selection is not supported
         $this->isMultiple = false;
         parent::renderView();
     }

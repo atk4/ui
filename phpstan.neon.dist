@@ -1413,9 +1413,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::setDropdownOptions\(\) has no return typehint specified\.$~'
         -
             path: 'src/Form/Control/Dropdown.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::htmlRenderValue\(\) has no return typehint specified\.$~'
-        -
-            path: 'src/Form/Control/Dropdown.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_renderItemsForModel\(\) has no return typehint specified\.$~'
         -
             path: 'src/Form/Control/Dropdown.php'
@@ -1429,12 +1426,6 @@ parameters:
         -
             path: 'src/Form/Control/Dropdown.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_addCallBackRow\(\) has parameter \$row with no typehint specified\.$~'
-        -
-            path: 'src/Form/Control/DropdownCascade.php'
-            message: '~^Instanceof between Atk4\\Ui\\Form\\Control and Atk4\\Ui\\Form\\Control will always evaluate to true\.$~'
-        -
-            path: 'src/Form/Control/DropdownCascade.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\DropdownCascade::htmlRenderValue\(\) has no return typehint specified\.$~'
         -
             path: 'src/Form/Control/Hidden.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\Hidden::\$inputType has no typehint specified\.$~'
