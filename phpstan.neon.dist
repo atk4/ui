@@ -158,9 +158,6 @@ parameters:
             path: 'demos/interactive/wizard.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$placeholder\.$~'
         -
-            path: 'demos/interactive/wizard.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Wizard::\$buttonFinish\.$~'
-        -
             path: 'src/Callback.php'
             message: '~^Method Atk4\\Ui\\Callback::set\(\) should return mixed but return statement is missing\.$~'
         -
