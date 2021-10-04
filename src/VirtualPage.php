@@ -96,56 +96,54 @@ class VirtualPage extends View
     /**
      * VirtualPage is not rendered normally. It's invisible. Only when
      * it is triggered, it will exclusively output it's content.
-     *
-     * @return string
      */
     public function getHtml()
     {
-        if ($this->cb->isTriggered() && !$this->cb->canTerminate()) {
+        if (!$this->cb->isTriggered()) {
+            return '';
+        } elseif (!$this->cb->canTerminate()) {
             return parent::getHtml();
         }
 
-        if ($this->cb->canTerminate()) {
-            if ($mode = $this->cb->getTriggeredValue()) {
-                // special treatment for popup
-                if ($mode === 'popup') {
-                    $this->getApp()->html->template->set('title', $this->getApp()->title);
-                    $this->getApp()->html->template->dangerouslySetHtml('Content', parent::getHtml());
-                    $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getJs());
+        if ($mode = $this->cb->getTriggeredValue()) {
+            // special treatment for popup
+            if ($mode === 'popup') {
+                $this->getApp()->html->template->set('title', $this->getApp()->title);
+                $this->getApp()->html->template->dangerouslySetHtml('Content', parent::getHtml());
+                $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getJs());
 
-                    $this->getApp()->terminateHtml($this->getApp()->html->template);
-                }
-
-                // render and terminate
-                if (isset($_GET['__atk_json'])) {
-                    $this->getApp()->terminateJson($this);
-                }
-
-                if (isset($_GET['__atk_tab'])) {
-                    $this->getApp()->terminateHtml($this->renderToTab());
-                }
-
-                // do not terminate if callback supplied (no cutting)
-                if ($mode !== 'callback') {
-                    $this->getApp()->terminateHtml($this);
-                }
+                $this->getApp()->terminateHtml($this->getApp()->html->template);
             }
 
-            // Remove all elements from inside the Content
-            foreach ($this->getApp()->layout->elements as $key => $view) {
-                if ($view instanceof View && $view->region === 'Content') {
-                    unset($this->getApp()->layout->elements[$key]);
-                }
+            // render and terminate
+            if (isset($_GET['__atk_json'])) {
+                $this->getApp()->terminateJson($this);
             }
 
-            $this->getApp()->layout->template->dangerouslySetHtml('Content', parent::getHtml());
-            $this->getApp()->layout->_js_actions = array_merge($this->getApp()->layout->_js_actions, $this->_js_actions);
+            if (isset($_GET['__atk_tab'])) {
+                $this->getApp()->terminateHtml($this->renderToTab());
+            }
 
-            $this->getApp()->html->template->dangerouslySetHtml('Content', $this->getApp()->layout->template->renderToHtml());
-
-            $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getApp()->layout->getJs());
-
-            $this->getApp()->terminateHtml($this->getApp()->html->template);
+            // do not terminate if callback supplied (no cutting)
+            if ($mode !== 'callback') {
+                $this->getApp()->terminateHtml($this);
+            }
         }
+
+        // Remove all elements from inside the Content
+        foreach ($this->getApp()->layout->elements as $key => $view) {
+            if ($view instanceof View && $view->region === 'Content') {
+                unset($this->getApp()->layout->elements[$key]);
+            }
+        }
+
+        $this->getApp()->layout->template->dangerouslySetHtml('Content', parent::getHtml());
+        $this->getApp()->layout->_js_actions = array_merge($this->getApp()->layout->_js_actions, $this->_js_actions);
+
+        $this->getApp()->html->template->dangerouslySetHtml('Content', $this->getApp()->layout->template->renderToHtml());
+
+        $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getApp()->layout->getJs());
+
+        $this->getApp()->terminateHtml($this->getApp()->html->template);
     }
 }
