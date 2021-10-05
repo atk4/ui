@@ -14,6 +14,7 @@ use Atk4\Core\TraitUtil;
 use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationException;
+use Atk4\Ui\Panel\Right;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Psr\Log\LoggerInterface;
@@ -242,8 +243,10 @@ class App
      * Fomantic-ui Modal or atk Panel are teleported in HTML template
      * within specific location. This will keep track
      * of them when terminating app using json.
+     *
+     * @param Modal|Right $portal
      */
-    public function registerPortals(View $portal): void
+    public function registerPortals($portal): void
     {
         $this->portals[$portal->short_name] = $portal;
     }
@@ -578,9 +581,9 @@ class App
             $this->html->template->dangerouslyAppendHtml('HEAD', $this->html->getJs());
             $this->is_rendering = false;
 
-            if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
+            if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catch_runaway_callbacks) {
                 throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
-                    ->addMoreInfo('callback', $_GET['__atk_callback']);
+                    ->addMoreInfo('callback', $_GET[Callback::URL_QUERY_TARGET]);
             }
 
             $output = $this->html->template->renderToHtml();
