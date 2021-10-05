@@ -15,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Testing ModalExecutor reload']);
 
-$modal = Modal::addTo($app->html, ['title' => 'Modal Executor', 'region' => 'Modals']);
+$modal = Modal::addTo($app->html, ['title' => 'Modal Executor']);
 
 $modal->set(function ($modal) {
     ReloadTest::addTo($modal);
