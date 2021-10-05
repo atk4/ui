@@ -27,7 +27,7 @@ $action = $countries->addUserAction('book', [
 $app->getExecutorFactory()->registerTrigger($app->getExecutorFactory()::CARD_BUTTON, [Button::class, null, 'blue', 'icon' => 'plane'], $action);
 
 $action->args = [
-    'email' => ['type' => 'email', 'required' => true, 'caption' => 'Please let us know your email address:'],
+    'email' => ['type' => 'string', 'required' => true, 'caption' => 'Please let us know your email address:'],
     'city' => ['type' => 'string', 'required' => true, 'caption' => 'Arrive at which city:'],
 ];
 
@@ -39,7 +39,7 @@ $infoAction = $countries->addUserAction('request_info', [
 ]);
 
 $infoAction->args = [
-    'email' => ['type' => 'email', 'required' => true, 'caption' => 'Please let us know your email address:'],
+    'email' => ['type' => 'string', 'required' => true, 'caption' => 'Please let us know your email address:'],
     'country' => ['required' => true, 'ui' => ['form' => [\Atk4\Ui\Form\Control\Lookup::class, 'model' => new Country($app->db), 'placeholder' => 'Please select a country.']]],
 ];
 
