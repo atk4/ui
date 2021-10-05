@@ -291,6 +291,16 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
+     * @When I fill Modal field :arg1 with :arg2
+     */
+    public function iFillModalField(string $fieldName, string $value): void
+    {
+        $modal = $this->getElementInPage('.modal.transition.visible.active.front');
+        $field = $modal->find('named', ['field', $fieldName]);
+        $field->setValue($value);
+    }
+
+    /**
      * @Then I hide js modal
      *
      * Hide js modal.
@@ -320,6 +330,16 @@ class Context extends RawMinkContext implements BehatContext
     {
         $panel = $this->getElementInPage('.atk-right-panel.atk-visible');
         $this->getElementInElement($panel, '//' . $tag . '[text()="' . $text . '"]', 'xpath');
+    }
+
+    /**
+     * @When I fill Panel field :arg1 with :arg2
+     */
+    public function iFillPanelField(string $fieldName, string $value): void
+    {
+        $panel = $this->getElementInPage('.atk-right-panel.atk-visible');
+        $field = $panel->find('named', ['field', $fieldName]);
+        $field->setValue($value);
     }
 
     /**
