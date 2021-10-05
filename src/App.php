@@ -1154,7 +1154,7 @@ class App
     }
 
     /**
-     * Generated html and js for modals attached to $html view.
+     * Generated html and js for portal view registered to app.
      */
     private function getRenderedPortals(): array
     {

@@ -137,7 +137,7 @@ class JsSse extends JsCallback
         }
 
         $this->output('id: ' . $id . "\n");
-        if (strlen($name) > 0) {
+        if ($name !== null) {
             $this->output('event: ' . $name . "\n");
         }
         $this->output($this->wrapData($data) . "\n");

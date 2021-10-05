@@ -553,7 +553,7 @@ class Multiline extends Form\Control
             $props['config']['search'] = true;
         }
 
-        $props['config']['placeholder'] = $props['config']['placeholder'] ?? 'Select ' . $field->getCaption();
+        $props['config']['placeholder'] ??= 'Select ' . $field->getCaption();
 
         $this->valuePropsBinding[$field->short_name] = [__CLASS__, 'setLookupOptionValue'];
 

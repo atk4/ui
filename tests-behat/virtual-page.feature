@@ -4,6 +4,8 @@ Feature: VirtualPage
     Given I am on "interactive/virtual.php"
     Then I click link 'More info on Car'
     Then text in container using '.__atk-behat-test-car' should contains 'Car'
+    Then I press button "Open Lorem Ipsum"
+    Then Modal is open with text 'This is yet another modal'
 
   Scenario:
     Given I am on "interactive/virtual.php"

@@ -78,7 +78,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
         // get necessary step need prior to execute action.
         if ($this->steps = $this->getSteps($action)) {
-            $this->title = $this->title ?? $action->getDescription();
+            $this->title ??= $action->getDescription();
 
             // get current step.
             $this->step = $this->stickyGet('step') ?? $this->steps[0];

@@ -56,7 +56,7 @@ Button::addTo($bar, ['icon' => 'upload', 'disabled' => true]);
 // Creating your own button component example
 
 /** @var Button $forkButtonClass */
-$forkButtonClass = get_class(new class(0) extends Button { // need 0 argument here for constructor
+$forkButtonClass = get_class(new class(0) /* need 0 argument here for constructor */ extends Button {
     public function __construct($n)
     {
         Icon::addTo(Button::addTo($this, ['Forks', 'blue']), ['fork']);
