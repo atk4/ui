@@ -70,7 +70,7 @@ $r = $c->addRow();
  */
 
 /** @var \Atk4\Ui\View $boxClass */
-$boxClass = get_class(new class() extends \Atk4\Ui\View {
+$boxClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\View {
     public $ui = 'segment';
     public $content = false;
 

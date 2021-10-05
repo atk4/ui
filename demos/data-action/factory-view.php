@@ -18,7 +18,7 @@ Button::addTo($app, ['Executor Factory in App instance', 'small left floated bas
 View::addTo($app, ['ui' => 'ui clearing divider']);
 
 // Overriding basic ExecutorFactory in order to change Card button.
-$myFactory = get_class(new class() extends ExecutorFactory {
+$myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends ExecutorFactory {
     public const BUTTON_PRIMARY_COLOR = 'green';
 
     protected $actionIcon = [

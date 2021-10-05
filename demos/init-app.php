@@ -36,6 +36,32 @@ if (file_exists(__DIR__ . '/CoverageUtil.php') && !class_exists(\PHPUnit\Framewo
     });
 }
 
+final class AnonymousClassNameCache
+{
+    /** @var array<string, string> */
+    private static $classNameByFxHash = [];
+
+    private function __construct()
+    {
+    }
+
+    public static function get_class(\Closure $createAnonymousClassFx): string
+    {
+        $fxRefl = new \ReflectionFunction($createAnonymousClassFx);
+        $fxHash = $fxRefl->getFileName() . ':' . $fxRefl->getStartLine() . "\n" . implode("\n", array_slice(
+            explode("\n", file_get_contents($fxRefl->getFileName())),
+            $fxRefl->getStartLine() - 1,
+            $fxRefl->getEndLine() - $fxRefl->getStartLine() + 1
+        ));
+
+        if (!isset(self::$classNameByFxHash[$fxHash])) {
+            self::$classNameByFxHash[$fxHash] = get_class($createAnonymousClassFx());
+        }
+
+        return self::$classNameByFxHash[$fxHash];
+    }
+}
+
 try {
     /** @var \Atk4\Data\Persistence\Sql $db */
     require_once __DIR__ . '/init-db.php';

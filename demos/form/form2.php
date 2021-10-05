@@ -75,7 +75,7 @@ $form->onSubmit(function (Form $form) {
 // ======
 
 /** @var \Atk4\Data\Model $personClass */
-$personClass = get_class(new class() extends \Atk4\Data\Model {
+$personClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Data\Model {
     public $table = 'person';
 
     protected function init(): void
