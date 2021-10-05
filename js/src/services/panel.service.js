@@ -45,8 +45,6 @@ class PanelService {
    * @param params
    */
     addPanel(params) {
-        const that = this;
-
         // Remove existing one. Can be added by a reload.
         if (this.getPropertyValue(params.id, 'id')) {
             this.removePanel(params.id);
@@ -73,7 +71,7 @@ class PanelService {
 
         // add click handler for closing panel.
         newPanel[params.id].$panel.on('click', params.closeSelector, () => {
-            that.closePanel(params.id);
+            this.closePanel(params.id);
         });
 
         newPanel[params.id].$panel.appendTo($('.atk-side-panels'));
@@ -95,8 +93,8 @@ class PanelService {
    * @returns {PanelService|*}
    */
     openPanel(params) {
-    // if no id is provide, then get the first one.
-    // no id mean the first panel in list.
+        // if no id is provide, then get the first one.
+        // no id mean the first panel in list.
         const panelId = (params.openId) ? params.openId : Object.keys(this.service.panels[0])[0];
         // save our open param.
         this.service.currentParams = params;
@@ -116,14 +114,13 @@ class PanelService {
    * @param id
    */
     initOpen(id) {
-        const that = this;
         if (this.service.currentVisibleId && id !== this.service.currentVisibleId) {
             // trying to open a different panel so close current one if allowed.
             if (this.needConfirmation(this.service.currentVisibleId)) {
                 // need to ask user
                 const $modal = $(this.getPropertyValue(this.service.currentVisibleId, 'modal'));
                 $modal.modal('setting', 'onApprove', (e) => {
-                    that.doClosePanel(id);
+                    this.doClosePanel(id);
                 });
                 $modal.modal('show');
             } else {
@@ -136,8 +133,8 @@ class PanelService {
             if (this.needConfirmation(id)) {
                 const $modal = $(this.getPropertyValue(id, 'modal'));
                 $modal.modal('setting', 'onApprove', (e) => {
-                    that.doOpenPanel(id);
-                    that.initPanelReload(id);
+                    this.doOpenPanel(id);
+                    this.initPanelReload(id);
                 });
                 $modal.modal('show');
             } else {
@@ -210,11 +207,10 @@ class PanelService {
    * if confirmation is needed, will ask user.
    */
     closePanel(id) {
-        const that = this;
         if (this.needConfirmation(id)) {
             const $modal = $(this.getPropertyValue(id, 'modal'));
             $modal.modal('setting', 'onApprove', (e) => {
-                that.doClosePanel(id);
+                this.doClosePanel(id);
             }).modal('show');
         } else {
             this.doClosePanel(id);
@@ -321,7 +317,6 @@ class PanelService {
      * Add esc away closing event handler.
      */
     addEscAwayEvent(id) {
-        // const that = this;
         // pressing esc key will close panel.
         $(document).on('keyup.atkPanel', atk.debounce((evt) => {
             if (evt.keyCode === 27) {
