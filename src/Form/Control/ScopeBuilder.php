@@ -417,7 +417,7 @@ class ScopeBuilder extends Control
             $props['search'] = true;
         }
 
-        $props['placeholder'] = $props['placeholder'] ?? 'Select ' . $field->getCaption();
+        $props['placeholder'] ??= 'Select ' . $field->getCaption();
 
         return $props;
     }

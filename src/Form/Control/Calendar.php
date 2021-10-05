@@ -80,14 +80,14 @@ class Calendar extends Input
 
         if ($this->type === 'datetime' || $this->type === 'time') {
             $this->options['enableTime'] = true;
-            $this->options['time_24hr'] = $this->options['time_24hr'] ?? $this->use24hrTimeFormat($this->options['altFormat'] ?? $this->options['dateFormat']);
+            $this->options['time_24hr'] ??= $this->use24hrTimeFormat($this->options['altFormat'] ?? $this->options['dateFormat']);
             $this->options['noCalendar'] = ($this->type === 'time');
 
             // Add seconds picker if set
-            $this->options['enableSeconds'] = $this->options['enableSeconds'] ?? $this->useSeconds($this->options['altFormat'] ?? $this->options['dateFormat']);
+            $this->options['enableSeconds'] ??= $this->useSeconds($this->options['altFormat'] ?? $this->options['dateFormat']);
 
             // Allow edit if microseconds is set.
-            $this->options['allowInput'] = $this->options['allowInput'] ?? $this->allowMicroSecondsInput($this->options['altFormat'] ?? $this->options['dateFormat']);
+            $this->options['allowInput'] ??= $this->allowMicroSecondsInput($this->options['altFormat'] ?? $this->options['dateFormat']);
         }
     }
 
