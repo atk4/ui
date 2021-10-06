@@ -48,11 +48,7 @@ final class AnonymousClassNameCache
     public static function get_class(\Closure $createAnonymousClassFx): string
     {
         $fxRefl = new \ReflectionFunction($createAnonymousClassFx);
-        $fxHash = $fxRefl->getFileName() . ':' . $fxRefl->getStartLine() . "\n" . implode("\n", array_slice(
-            explode("\n", file_get_contents($fxRefl->getFileName())),
-            $fxRefl->getStartLine() - 1,
-            $fxRefl->getEndLine() - $fxRefl->getStartLine() + 1
-        ));
+        $fxHash = $fxRefl->getFileName() . ':' . $fxRefl->getStartLine() . '-' . $fxRefl->getEndLine();
 
         if (!isset(self::$classNameByFxHash[$fxHash])) {
             self::$classNameByFxHash[$fxHash] = get_class($createAnonymousClassFx());
