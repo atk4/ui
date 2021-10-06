@@ -150,7 +150,7 @@ jobs:
           if [ -n "$LOG_COVERAGE" ]; then
             cp tools/CoverageUtil.php demos
             mkdir coverage
-            php vendor/bin/phpunit --exclude-group none --coverage-text -v
+            vendor/bin/phpunit --exclude-group none --coverage-text -v
             ls -l coverage | wc -l && mv coverage/* build/logs
           else
             php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none --no-coverage -v
