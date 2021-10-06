@@ -35,7 +35,7 @@ $crud->addDecorator($model->title_field, [\Atk4\Ui\Table\Column\Link::class, ['t
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
 $columns = \Atk4\Ui\Columns::addTo($app);
-$column = $columns->addColumn(0, 'ui blue segment');
+$column = $columns->addColumn();
 
 // Crud can operate with various fields
 \Atk4\Ui\Header::addTo($column, ['Configured Crud']);

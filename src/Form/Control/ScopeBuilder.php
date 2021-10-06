@@ -682,6 +682,8 @@ class ScopeBuilder extends Control
         $operator = $condition->operator;
         $value = $condition->value;
 
+        $inputType = $inputsMap[$rule] ?? 'text';
+
         if (in_array($operator, [Condition::OPERATOR_LIKE, Condition::OPERATOR_NOT_LIKE], true)) {
             // no %
             $match = 0;
@@ -718,10 +720,7 @@ class ScopeBuilder extends Control
                 $operator = $map[$operator] ?? Condition::OPERATOR_NOT_IN;
             }
 
-            $inputType = $inputsMap[$rule] ?? 'text';
-
             $operatorsMap = array_merge(self::$operatorsMap[$inputType] ?? [], self::$operatorsMap['text']);
-
             $operator = array_search(strtoupper($operator), $operatorsMap, true) ?: self::OPERATOR_EQUALS;
         }
 

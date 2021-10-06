@@ -100,7 +100,7 @@ class VpExecutor extends View implements JsExecutorInterface
         return $this;
     }
 
-    public function jsExecute(array $urlArgs): array
+    public function jsExecute(array $urlArgs = []): array
     {
         $urlArgs['step'] = $this->step;
 

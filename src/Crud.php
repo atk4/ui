@@ -74,7 +74,7 @@ class Crud extends Grid
                 $ex = $item['executor'];
                 if ($ex instanceof UserAction\JsExecutorInterface) {
                     $ex->stickyGet($this->name . '_sort', $this->getSortBy());
-                    $this->container->js(true, $item['item']->js()->on('click.atk_crud_item', new JsFunction($ex->jsExecute())));
+                    $this->container->js(true, $item['item']->js()->on('click.atk_crud_item', new JsFunction($ex->jsExecute([]))));
                 }
             }
         }

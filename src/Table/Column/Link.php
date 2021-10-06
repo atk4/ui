@@ -25,7 +25,7 @@ class Link extends Table\Column
      * If $url is set up, we will use pattern-matching to fill-in any part of this
      * with values of the model.
      *
-     * @var string|array Destination definition
+     * @var string|HtmlTemplate Destination definition
      */
     public $url;
 

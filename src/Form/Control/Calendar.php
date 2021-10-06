@@ -113,6 +113,8 @@ class Calendar extends Input
      * $control->onChange(new \Atk4\Ui\JsExpression('console.log(date, text, mode)'));
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
+     * Note: Unlike Control::onChange() method, flatpickr onChange options does not use $default settings.
+     *
      * @param string|JsExpression|array $expr
      * @param array|bool                $default
      */
@@ -125,13 +127,8 @@ class Calendar extends Input
             $expr = [$expr];
         }
 
-        if (is_bool($default)) {
-            $default['preventDefault'] = $default;
-            $default['stopPropagation'] = $default;
-        }
-
         // flatpickr on change event
-        $this->options['onChange'] = new \Atk4\Ui\JsFunction(['date', 'text', 'mode'], $expr, $default);
+        $this->options['onChange'] = new \Atk4\Ui\JsFunction(['date', 'text', 'mode'], $expr);
     }
 
     /**

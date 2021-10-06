@@ -29,20 +29,7 @@ parameters:
     ignoreErrors:
         - '~^Unsafe usage of new static\(\)\.$~'
 
-        # TODO these rules are generated, this ignores should be fixed in the code
-        # for level = 1
-        -
-            path: 'src/Form/Control/Calendar.php'
-            message: '~^Class Atk4\\Ui\\JsFunction constructor invoked with 3 parameters, 0\-2 required\.$~'
-        -
-            path: 'src/Form/Control/Lookup.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control\\Lookup::search\(\)\.$~'
-        -
-            path: 'src/Form/Control/ScopeBuilder.php'
-            message: '~^Variable \$inputType might not be defined\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeTime.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeTime::recalData\(\)\.$~'
+        # for level = 1 - these two errors cannot be ignored from the code
         -
             path: 'tests/CallbackTest.php'
             message: '~^Method Atk4\\Ui\\Tests\\AppMock::terminate\(\) should always throw an exception or terminate script execution but doesn''t do that\.$~'
@@ -61,12 +48,6 @@ parameters:
         -
             path: 'demos/_unit-test/callback.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::jsReload\(\)\.$~'
-        -
-            path: 'demos/collection/crud.php'
-            message: '~^Method Atk4\\Ui\\Columns::addColumn\(\) invoked with 2 parameters, 0\-1 required\.$~'
-        -
-            path: 'demos/collection/multitable.php'
-            message: '~^Method Atk4\\Ui\\View::setModel\(\) invoked with 2 parameters, 1 required\.$~'
         -
             path: 'demos/collection/tablefilter.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Demos\\CountryLock::expr\(\)\.$~'
@@ -188,9 +169,6 @@ parameters:
             path: 'src/Crud.php'
             message: '~^Call to an undefined method Atk4\\Ui\\UserAction\\JsExecutorInterface::stickyGet\(\)\.$~'
         -
-            path: 'src/Crud.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\JsExecutorInterface::jsExecute\(\) invoked with 0 parameters, 1 required\.$~'
-        -
             path: 'src/Form.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsChain::preventFormLeave\(\)\.$~'
         -
@@ -263,9 +241,6 @@ parameters:
             path: 'src/Table/Column/FilterPopup.php'
             message: '~^Call to an undefined method Atk4\\Data\\Model::setConditionForModel\(\)\.$~'
         -
-            path: 'src/Table/Column/Link.php'
-            message: '~^Cannot call method set\(\) on array\|string\.$~'
-        -
             path: 'src/Tabs.php'
             message: '~^Call to an undefined method Atk4\\Ui\\View::setPath\(\)\.$~'
         -
@@ -292,12 +267,6 @@ parameters:
         -
             path: 'src/View.php'
             message: '~^Call to an undefined method Atk4\\Ui\\App::getViewJS\(\)\.$~'
-        -
-            path: 'src/VirtualPage.php'
-            message: '~^Method Atk4\\Ui\\VirtualPage::getHtml\(\) should return string but return statement is missing\.$~'
-        -
-            path: 'tests/DemosTest.php'
-            message: '~^Variable \$app in PHPDoc tag @var does not exist\.$~'
         -
             path: 'tests/FormTest.php'
             message: '~^Access to an undefined property Atk4\\Ui\\App::\$output\.$~'
@@ -412,9 +381,6 @@ parameters:
         -
             path: 'src/Form/Control/Calendar.php'
             message: '~^Parameter \#1 \$expr \(array\|Atk4\\Ui\\JsExpression\|string\) of method Atk4\\Ui\\Form\\Control\\Calendar::onChange\(\) should be contravariant with parameter \$expr \(array\|Atk4\\Ui\\JsExpression\|Closure\|string\) of method Atk4\\Ui\\Form\\Control::onChange\(\)$~'
-        -
-            path: 'src/Form/Control/Calendar.php'
-            message: '~^Cannot access offset ''preventDefault'' on bool\.$~'
         -
             path: 'src/Form/Control/Checkbox.php'
             message: '~^Property Atk4\\Ui\\View::\$content \(string\|false\) does not accept null\.$~'
@@ -538,9 +504,6 @@ parameters:
         -
             path: 'src/Table/Column/FilterModel/TypeEnum.php'
             message: '~^Property Atk4\\Ui\\Table\\Column\\FilterModel::\$op \(Atk4\\Data\\Field\) does not accept null\.$~'
-        -
-            path: 'src/Table/Column/Link.php'
-            message: '~^Property Atk4\\Ui\\Table\\Column\\Link::\$url \(array\|string\) does not accept Atk4\\Ui\\HtmlTemplate\.$~'
         -
             path: 'src/Tabs.php'
             message: '~^Property Atk4\\Ui\\View::\$content \(string\|false\) does not accept null\.$~'
