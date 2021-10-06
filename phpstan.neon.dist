@@ -1273,12 +1273,6 @@ parameters:
             path: 'src/Dropdown.php'
             message: '~^Method Atk4\\Ui\\Dropdown::onChange\(\) has no return typehint specified\.$~'
         -
-            path: 'src/Exception/NoRenderTree.php'
-            message: '~^Method Atk4\\Ui\\Exception\\NoRenderTree::__construct\(\) has parameter \$action with no typehint specified\.$~'
-        -
-            path: 'src/Exception/NoRenderTree.php'
-            message: '~^Method Atk4\\Ui\\Exception\\NoRenderTree::__construct\(\) has parameter \$object with no typehint specified\.$~'
-        -
             path: 'src/Form.php'
             message: '~^Method Atk4\\Ui\\Form::initLayout\(\) has no return typehint specified\.$~'
         -
