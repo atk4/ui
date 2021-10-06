@@ -81,12 +81,3 @@ Button::addTo($app, ['Previous', 'top attached']);
 \Atk4\Ui\Table::addTo($app, ['attached', 'header' => false])
     ->setSource(['One', 'Two', 'Three', 'Four']);
 Button::addTo($app, ['Next', 'bottom attached']);
-
-// leaky
-if (!class_exists(Leaky::class)) {
-    class Leaky
-    {
-        public static $arr;
-    }
-}
-Leaky::$arr[] = mt_rand();
