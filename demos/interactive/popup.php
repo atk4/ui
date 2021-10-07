@@ -19,7 +19,7 @@ require_once __DIR__ . '/../init-app.php';
  */
 
 /** @var \Atk4\Ui\Lister $cartClass */
-$cartClass = get_class(new class() extends \Atk4\Ui\Lister {
+$cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\Lister {
     use \Atk4\Core\SessionTrait;
     public $items = [];
 
@@ -86,7 +86,7 @@ $cartClass = get_class(new class() extends \Atk4\Ui\Lister {
  */
 
 /** @var View $itemShelfClass */
-$itemShelfClass = get_class(new class() extends View {
+$itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
     public $ui = 'green segment';
 
     protected function init(): void

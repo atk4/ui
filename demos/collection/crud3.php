@@ -8,7 +8,7 @@ namespace Atk4\Ui\Demos;
 require_once __DIR__ . '/../init-app.php';
 
 /** @var \Atk4\Data\Model $modelClass */
-$modelClass = get_class(new class() extends \Atk4\Data\Model {
+$modelClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Data\Model {
     use ModelLockTrait;
 
     public $table = 'test';

@@ -10,7 +10,7 @@ use Atk4\Ui\Table;
 require_once __DIR__ . '/../init-app.php';
 
 /** @var \Atk4\Data\Model $modelColorClass */
-$modelColorClass = get_class(new class() extends \Atk4\Data\Model {
+$modelColorClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Data\Model {
     protected function init(): void
     {
         parent::init();

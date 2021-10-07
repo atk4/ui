@@ -8,7 +8,7 @@ namespace Atk4\Ui\Demos;
 require_once __DIR__ . '/../init-app.php';
 
 /** @var \Atk4\Ui\View $testRunClass */
-$testRunClass = get_class(new class() extends \Atk4\Ui\View {
+$testRunClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\View {
     use \Atk4\Core\DebugTrait;
 
     public function generateReport()

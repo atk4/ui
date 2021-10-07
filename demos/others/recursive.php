@@ -8,7 +8,7 @@ namespace Atk4\Ui\Demos;
 require_once __DIR__ . '/../init-app.php';
 
 /** @var \Atk4\Ui\View $mySwitcherClass */
-$mySwitcherClass = get_class(new class() extends \Atk4\Ui\View {
+$mySwitcherClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\View {
     protected function init(): void
     {
         parent::init();

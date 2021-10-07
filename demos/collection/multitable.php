@@ -9,7 +9,7 @@ require_once __DIR__ . '/../init-app.php';
 
 // Re-usable component implementing counter
 
-$finderClass = get_class(new class() extends \Atk4\Ui\Columns {
+$finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\Columns {
     public $route = [];
 
     public function setModel(\Atk4\Data\Model $model, $route = [])

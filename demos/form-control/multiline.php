@@ -21,7 +21,7 @@ $dateFormat = $app->ui_persistence->date_format;
 $timeFormat = $app->ui_persistence->time_format;
 
 /** @var Model $inventoryItemClass */
-$inventoryItemClass = get_class(new class() extends Model {
+$inventoryItemClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
     public $dateFormat;
     public $timeFormat;
     public $countryPersistence;

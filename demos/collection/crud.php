@@ -70,7 +70,7 @@ $column = $columns->addColumn();
 \Atk4\Ui\Header::addTo($column, ['Customizations']);
 
 /** @var \Atk4\Ui\UserAction\ModalExecutor $myExecutorClass */
-$myExecutorClass = get_class(new class() extends \Atk4\Ui\UserAction\ModalExecutor {
+$myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\UserAction\ModalExecutor {
     public function addFormTo(\Atk4\Ui\View $view): \Atk4\Ui\Form
     {
         $columns = \Atk4\Ui\Columns::addTo($view);
