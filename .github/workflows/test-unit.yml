@@ -107,7 +107,6 @@ jobs:
         image: wnameless/oracle-xe-11g-r2
         env:
           ORACLE_ALLOW_REMOTE: true
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -144,11 +143,8 @@ jobs:
           php -r '(new PDO("mysql:host=mysql", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test", "atk4_pass"))->exec("ALTER ROLE atk4_test CONNECTION LIMIT 1");'
+          if [ -n "$LOG_COVERAGE" ]; then mkdir coverage && cp tools/CoverageUtil.php demos; fi
           sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWD'] ?? null);/g" -i demos/db.default.php
-          if [ -n "$LOG_COVERAGE" ]; then
-            mkdir coverage
-            cp tools/CoverageUtil.php demos
-          fi
 
       - name: "Run tests: SQLite (only for Phpunit)"
         if: startsWith(matrix.type, 'Phpunit')
@@ -220,10 +216,10 @@ jobs:
 
       - name: Upload coverage logs 2/2 (only for latest Phpunit)
         if: env.LOG_COVERAGE
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage/merged.xml
+          file: coverage/merged.xml
 
   behat-test:
     name: Behat
@@ -321,10 +317,7 @@ jobs:
 
       - name: Init
         run: |
-          if [ -n "$LOG_COVERAGE" ]; then
-            mkdir coverage
-            cp tools/CoverageUtil.php demos
-          fi
+          if [ -n "$LOG_COVERAGE" ]; then mkdir coverage && cp tools/CoverageUtil.php demos; fi
           sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
 
       - name: "Run tests: Behat"
@@ -350,7 +343,7 @@ jobs:
 
       - name: Upload coverage logs 2/2 (only for latest Phpunit)
         if: env.LOG_COVERAGE
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage/merged.xml
+          file: coverage/merged.xml
