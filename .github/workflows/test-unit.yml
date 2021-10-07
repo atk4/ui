@@ -160,7 +160,7 @@ jobs:
       - name: "Run tests: MySQL (only for Phpunit)"
         if: startsWith(matrix.type, 'Phpunit')
         env:
-          DB_DSN: "mysql:dbname=host=mysql;atk4_test"
+          DB_DSN: "mysql:host=mysql;dbname=atk4_test"
           DB_USER: atk4_test
           DB_PASSWD: atk4_pass
         run: |
