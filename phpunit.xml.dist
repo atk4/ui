@@ -3,7 +3,6 @@
         <var name="DB_DSN" value="sqlite::memory:" />
         <var name="DB_USER" value="" />
         <var name="DB_PASSWD" value="" />
-        <var name="DB_DBNAME" value="" />
     </php>
     <testsuites>
         <testsuite name="tests">
@@ -29,7 +28,7 @@
             <directory suffix=".php">src</directory>
         </include>
         <report>
-            <php outputFile="build/logs/clover.cov" />
+            <php outputFile="coverage/phpunit.cov" />
         </report>
     </coverage>
 </phpunit>

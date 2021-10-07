@@ -10,11 +10,13 @@ use Atk4\Data\Schema\Migration;
 require_once __DIR__ . '/../init-autoloader.php';
 
 $sqliteFile = __DIR__ . '/db.sqlite';
-if (file_exists($sqliteFile)) {
-    unlink($sqliteFile);
+if (!file_exists($sqliteFile)) {
+    new \Atk4\Data\Persistence\Sql('sqlite:' . $sqliteFile);
 }
+unset($sqliteFile);
 
-$persistence = new \Atk4\Data\Persistence\Sql('sqlite:' . $sqliteFile);
+/** @var \Atk4\Data\Persistence\Sql $db */
+require_once __DIR__ . '/../init-db.php';
 
 class ImportModelWithPrefixedFields extends Model
 {
@@ -49,7 +51,7 @@ class ImportModelWithPrefixedFields extends Model
     }
 }
 
-$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'client']);
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'client']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('addresses', ['type' => 'text']);
 $model->addField('accounts', ['type' => 'text']);
@@ -59,7 +61,7 @@ $model->import([
     ['id' => 2, 'name' => 'Jane', 'addresses' => null, 'accounts' => null],
 ]);
 
-$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'country']);
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'country']);
 $model->addField('iso', ['type' => 'string']); // should be CHAR(2) NOT NULL
 $model->addField('name', ['type' => 'string']);
 $model->addField('nicename', ['type' => 'string']);
@@ -322,7 +324,7 @@ $model->import([
     ['id' => 253, 'iso' => 'SS', 'name' => 'SOUTH SUDAN', 'nicename' => 'South Sudan', 'iso3' => 'SSD', 'numcode' => 728, 'phonecode' => 211],
 ]);
 
-$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'file']);
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'file']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('type', ['type' => 'string']);
 $model->addField('is_folder', ['type' => 'boolean']);
@@ -393,7 +395,7 @@ $model->import([
     ['id' => 61, 'name' => 'Button.php', 'type' => 'php', 'is_folder' => 0, 'parent_folder_id' => 46],
 ]);
 
-$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'stat']);
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'stat']);
 $model->addField('project_name', ['type' => 'string']);
 $model->addField('project_code', ['type' => 'string']);
 $model->addField('description', ['type' => 'text']);
@@ -432,7 +434,7 @@ foreach ($data as $rowIndex => $row) {
 }
 $model->import($data);
 
-$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'product_category']);
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'product_category']);
 $model->addField('name', ['type' => 'string']);
 (new Migration($model))->create();
 $model->import([
@@ -441,7 +443,7 @@ $model->import([
     ['id' => 3, 'name' => 'Dairy'],
 ]);
 
-$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'product_sub_category']);
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'product_sub_category']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('product_category_id', ['type' => 'bigint']);
 (new Migration($model))->create();
@@ -457,7 +459,7 @@ $model->import([
     ['id' => 9, 'name' => 'Sugar/Sweetened', 'product_category_id' => 2],
 ]);
 
-$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'product']);
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'product']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('brand', ['type' => 'string']);
 $model->addField('product_category_id', ['type' => 'bigint']);

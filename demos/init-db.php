@@ -9,13 +9,11 @@ use Atk4\Ui\Form;
 use Mvorisek\Atk4\Hintable\Data\HintablePropertyDef;
 
 try {
-    if (file_exists(__DIR__ . '/db.php')) {
-        require_once __DIR__ . '/db.php';
-    } else {
-        require_once __DIR__ . '/db.default.php';
-    }
+    require_once file_exists(__DIR__ . '/db.php')
+        ? __DIR__ . '/db.php'
+        : __DIR__ . '/db.default.php';
 } catch (\PDOException $e) {
-    // do not pass $e unless you can secure DSN!
+    // do not show $e unless you can secure DSN!
     throw (new \Atk4\Ui\Exception('This demo requires access to the database. See "demos/init-db.php"'))
         ->addMoreInfo('PDO error', $e->getMessage());
 }
