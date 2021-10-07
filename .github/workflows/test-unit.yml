@@ -154,7 +154,7 @@ jobs:
         if: startsWith(matrix.type, 'Phpunit')
         run: |
           php demos/_demo-data/create-db.php
-          vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-sqlite.cov; fi
 
       - name: "Run tests: MySQL (only for Phpunit)"
@@ -165,7 +165,7 @@ jobs:
           DB_PASSWD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
-          vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mysql.cov; fi
 
       - name: "Run tests: MariaDB (only for Phpunit)"
@@ -176,7 +176,7 @@ jobs:
           DB_PASSWD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
-          vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mariadb.cov; fi
 
       - name: "Run tests: PostgreSQL (only for Phpunit)"
@@ -187,7 +187,7 @@ jobs:
           DB_PASSWD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
-          vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-postgres.cov; fi
 
       - name: "Run tests: MSSQL (only for Phpunit)"
@@ -198,7 +198,7 @@ jobs:
           DB_PASSWD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
-          vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mssql.cov; fi
 
       - name: "Run tests: Oracle (only for Phpunit)"
@@ -209,7 +209,7 @@ jobs:
           DB_PASSWD: oracle
         run: |
           php demos/_demo-data/create-db.php
-          vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-oracle.cov; fi
 
       - name: Upload coverage logs 1/2 (only for latest Phpunit)
