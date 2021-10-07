@@ -170,7 +170,7 @@ class Table extends Lister
     public function addColumn(?string $name, $columnDecorator = null, $field = null)
     {
         if (!$this->_initialized) {
-            throw new Exception\NoRenderTree($this, 'addColumn()');
+            throw new Exception('Table component must be added to the render tree & initialized first');
         }
 
         if (!$this->model) {

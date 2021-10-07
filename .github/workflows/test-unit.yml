@@ -164,11 +164,11 @@ jobs:
         if: startsWith(matrix.type, 'Phpunit')
         run: "php -d opcache.enable_cli=1 vendor/bin/phpunit --configuration phpunit-mssql.xml.dist --exclude-group none --no-coverage -v"
 
-      - name: Upload coverage logs 1/2 (only for "latest" Phpunit)
+      - name: Upload coverage logs 1/2 (only for latest Phpunit)
         if: env.LOG_COVERAGE
         run: vendor/bin/phpcov merge build/logs/ --clover build/logs/cc.xml
 
-      - name: Upload coverage logs 2/2 (only for "latest" Phpunit)
+      - name: Upload coverage logs 2/2 (only for latest Phpunit)
         if: env.LOG_COVERAGE
         uses: codecov/codecov-action@v1
         with:
@@ -191,7 +191,7 @@ jobs:
           - php: 'latest'
             type: 'Chrome Slow'
     env:
-      LOG_COVERAGE: ''
+      LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == '8.0' && matrix.type == 'Chrome' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
     services:
       selenium-chrome:
         image: selenium/standalone-chrome:latest
@@ -263,7 +263,7 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev
+          composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap --dev
           composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev
           composer remove --no-interaction --no-update phpstan/phpstan --dev
           composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
@@ -287,4 +287,22 @@ jobs:
           sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink/src/Element/Element.php
           sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php
 
+          if [ -n "$LOG_COVERAGE" ]; then
+            cp tools/CoverageUtil.php demos
+            mkdir coverage
+          fi
           vendor/bin/behat -vv --config behat.yml.dist
+          if [ -n "$LOG_COVERAGE" ]; then
+            ls -l coverage | wc -l && mv coverage/* build/logs
+          fi
+
+      - name: Upload coverage logs 1/2 (only for latest Chrome)
+        if: env.LOG_COVERAGE
+        run: vendor/bin/phpcov merge build/logs/ --clover build/logs/cc.xml
+
+      - name: Upload coverage logs 2/2 (only for latest Chrome)
+        if: env.LOG_COVERAGE
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: build/logs/cc.xml
