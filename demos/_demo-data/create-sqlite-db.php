@@ -23,7 +23,7 @@ class ImportModelWithPrefixedFields extends Model
         return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $this->table . '__' . $fieldName;
     }
 
-    public function addField($name, $seed = []): \Atk4\Data\Field
+    public function addField(string $name, $seed = []): \Atk4\Data\Field
     {
         if ($name === 'id') {
             $this->id_field = $this->prefixFieldName($name);
