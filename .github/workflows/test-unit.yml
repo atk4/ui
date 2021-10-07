@@ -56,7 +56,7 @@ jobs:
       - name: Init
         run: |
           mkdir -p build/logs
-          php demos/_demo-data/create-sqlite-db.php
+          php demos/_demo-data/create-db.php
 
       - name: "Run tests: SQLite (only for Phpunit)"
         if: matrix.type == 'Phpunit'
@@ -142,7 +142,7 @@ jobs:
         run: |
           mkdir -p build/logs
           php -r '(new PDO("mysql:host=mysql", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
-          php demos/_demo-data/create-sqlite-db.php
+          php demos/_demo-data/create-db.php
 
       - name: "Run tests: SQLite (only for Phpunit)"
         if: startsWith(matrix.type, 'Phpunit')
@@ -272,7 +272,7 @@ jobs:
       - name: Init
         run: |
           mkdir -p build/logs
-          php demos/_demo-data/create-sqlite-db.php
+          php demos/_demo-data/create-db.php
           sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
 
       - name: "Run tests: Behat"

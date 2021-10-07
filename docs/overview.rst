@@ -480,11 +480,11 @@ To run the demo:
  - Setup an Sqlite file database using a provided script (see below)
  - Open the demos from your browser (e.g. https://localhost/atk4/ui/demos/)
 
-Setup Sqlite file database
+Setup database with example data
 ---------------------
 The demo also includes a script that let's you setup a Sqlite file database with an example data.
 You will find this script in the subdirectory "atk4/ui/demos/_demo-data/". To run this script,
 use the following command:
     ```
-    php atk4/ui/demos/_demo-data/create-sqlite-db.php;
+    php atk4/ui/demos/_demo-data/create-db.php;
     ```
