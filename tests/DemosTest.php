@@ -235,7 +235,7 @@ class DemosTest extends TestCase
     public function demoFilesProvider(): array
     {
         $excludeDirs = ['_demo-data', '_includes'];
-        $excludeFiles = ['layout/layouts_error.php', 'form-control/multiline-containsmany.php' /* TODO fix for MySQL */];
+        $excludeFiles = ['layout/layouts_error.php'];
 
         $files = [];
         $files[] = 'index.php';

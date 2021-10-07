@@ -176,7 +176,7 @@ jobs:
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mariadb.cov; fi
 
       - name: "Run tests: PostgreSQL (only for Phpunit)"
-        if: startsWith(matrix.type, 'PhpunitxxxFAILINGxxx')
+        if: startsWith(matrix.type, 'Phpunit')
         env:
           DB_DSN: "pgsql:host=postgres;dbname=atk4_test"
           DB_USER: atk4_test
@@ -198,7 +198,7 @@ jobs:
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mssql.cov; fi
 
       - name: "Run tests: Oracle (only for Phpunit)"
-        if: startsWith(matrix.type, 'PhpunitxxxFAILINGxxx')
+        if: startsWith(matrix.type, 'Phpunit')
         env:
           DB_DSN: "oci:dbname=oracle/xe;charset=UTF8"
           DB_USER: system
