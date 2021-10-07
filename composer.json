@@ -54,11 +54,12 @@
     ],
     "require": {
         "php": ">=7.4 <8.2",
-        "atk4/data": "dev-develop"
+        "atk4/core": "dev-develop",
+        "doctrine/dbal": "^2.13.3 || ^3.0",
+        "mvorisek/atk4-hintable": "~1.5.0"
     },
-    "require-release": {
-        "php": ">=7.4 <8.2",
-        "atk4/data": "~3.1.0"
+    "provide": {
+        "atk4/data": "dev-develop"
     },
     "require-dev": {
         "behat/behat": "^3.8.2 || dev-master#6f38d11",
@@ -84,8 +85,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Atk4\\Ui\\": "src/"
-        }
+            "Atk4\\Ui\\": "src/",
+            "Atk4\\Data\\": "data/src/"
+        },
+        "files": [
+            "data/bootstrap-types.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
