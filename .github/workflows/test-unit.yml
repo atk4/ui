@@ -406,13 +406,13 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: Upload coverage logs 1/2 (only for latest Phpunit)
+      - name: Upload coverage logs 1/2 (only for latest Chrome)
         if: env.LOG_COVERAGE
         run: |
           ls -l coverage | wc -l
           php -d memory_limit=2G vendor/bin/phpcov merge coverage/ --clover coverage/merged.xml
 
-      - name: Upload coverage logs 2/2 (only for latest Phpunit)
+      - name: Upload coverage logs 2/2 (only for latest Chrome)
         if: env.LOG_COVERAGE
         uses: codecov/codecov-action@v1
         with:
