@@ -87,14 +87,14 @@ jobs:
     services:
       mysql:
         image: mysql:8
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
       mariadb:
         image: mariadb
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       postgres:
         image: postgres:12-alpine
         env:
-          POSTGRES_USER: atk4_test
+          POSTGRES_USER: atk4_test_user
           POSTGRES_PASSWORD: atk4_pass
           POSTGRES_DB: atk4_test
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -140,9 +140,9 @@ jobs:
 
       - name: Init
         run: |
-          php -r '(new PDO("mysql:host=mysql", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
-          php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
-          php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test", "atk4_pass"))->exec("ALTER ROLE atk4_test CONNECTION LIMIT 1");'
+          php -r '(new PDO("mysql:host=mysql", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
+          php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
+          php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage && cp tools/CoverageUtil.php demos; fi
           sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWD'] ?? null);/g" -i demos/db.default.php
 
@@ -157,7 +157,7 @@ jobs:
         if: startsWith(matrix.type, 'Phpunit')
         env:
           DB_DSN: "mysql:host=mysql;dbname=atk4_test"
-          DB_USER: atk4_test
+          DB_USER: atk4_test_user
           DB_PASSWD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
@@ -168,7 +168,7 @@ jobs:
         if: startsWith(matrix.type, 'Phpunit')
         env:
           DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
-          DB_USER: atk4_test
+          DB_USER: atk4_test_user
           DB_PASSWD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
@@ -179,7 +179,7 @@ jobs:
         if: startsWith(matrix.type, 'Phpunit')
         env:
           DB_DSN: "pgsql:host=postgres;dbname=atk4_test"
-          DB_USER: atk4_test
+          DB_USER: atk4_test_user
           DB_PASSWD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
