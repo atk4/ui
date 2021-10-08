@@ -22,7 +22,7 @@ try {
 
 class ModelWithPrefixedFields extends Model
 {
-    /** @var <string, string> */
+    /** @var array<string, string> */
     private static $prefixedFieldNames = [];
 
     private function prefixFieldName(string $fieldName, bool $forActualName = false): string
