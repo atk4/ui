@@ -33,7 +33,20 @@ class ModelWithPrefixedFields extends Model
             $fieldName = preg_replace('~^atk_fp_' . preg_quote($tableShort, '~') . '__~', '', $fieldName);
         }
 
-        return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $tableShort . '__' . $fieldName;
+        $fieldShort = $fieldName;
+        $fieldWithIdSuffix = false;
+        if (str_ends_with($fieldShort, '_id')) {
+            $fieldShort = substr($fieldShort, 0, -strlen('_id'));
+            $fieldWithIdSuffix = true;
+        }
+        if (strlen($fieldShort) > 8) {
+            $fieldShort = substr(md5($fieldShort), 0, 8);
+        }
+        if ($fieldWithIdSuffix) {
+            $fieldShort .= '_id';
+        }
+
+        return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $tableShort . '__' . $fieldShort;
     }
 
     protected function createHintablePropsFromClassDoc(string $className): array
