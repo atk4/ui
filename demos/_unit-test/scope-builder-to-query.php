@@ -14,33 +14,29 @@ use Atk4\Ui\Grid;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$query = <<<'EOF'
-    {
-      "logicalOperator": "AND",
-      "children": [
-        {
-          "type": "query-builder-rule",
-          "query": {
-            "rule": "atk_fp_product__product_category_id",
-            "operator": "equals",
-            "operand": "Product Category Id",
-            "value": "3"
-          }
-        },
-        {
-          "type": "query-builder-rule",
-          "query": {
-            "rule": "atk_fp_product__product_sub_category_id",
-            "operator": "equals",
-            "operand": "Product Sub Category Id",
-            "value": "6"
-          }
-        }
-      ]
-    }
-    EOF;
-
-$q = $app->decodeJson($query);
+$q = [
+    'logicalOperator' => 'AND',
+    'children' => [
+        [
+            'type' => 'query-builder-rule',
+            'query' => [
+                'rule' => Product::hinting()->fieldName()->product_category_id,
+                'operator' => 'equals',
+                'operand' => 'Product Category Id',
+                'value' => '3',
+            ],
+        ],
+        [
+            'type' => 'query-builder-rule',
+            'query' => [
+                'rule' => Product::hinting()->fieldName()->product_sub_category_id,
+                'operator' => 'equals',
+                'operand' => 'Product Sub Category Id',
+                'value' => '6',
+            ],
+        ],
+    ],
+];
 $scope = ScopeBuilder::queryToScope($q);
 
 $product = new Product($app->db);
