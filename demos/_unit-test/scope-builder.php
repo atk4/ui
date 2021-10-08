@@ -54,14 +54,15 @@ $expectedWord = <<<'EOF'
     and (Finish Time is not equal to '22:22' or Is Commercial is equal to '0' or Currency is equal to 'USD')
     EOF;
 
-$expectedInput = <<< 'EOF'
+$statModelForHinting = new Stat($app->db);
+$expectedInput = <<<"EOF"
     {
       "logicalOperator": "AND",
       "children": [
         {
           "type": "query-builder-rule",
           "query": {
-            "rule": "atk_fp_stat__project_budget",
+            "rule": "{$statModelForHinting->fieldName()->project_budget}",
             "operator": ">=",
             "value": "1000",
             "option": null
@@ -75,7 +76,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "atk_fp_stat__project_name",
+                  "rule": "{$statModelForHinting->fieldName()->project_name}",
                   "operator": "matches regular expression",
                   "value": "[a-zA-Z]",
                   "option": null
@@ -84,7 +85,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "atk_fp_stat__client_country_iso",
+                  "rule": "{$statModelForHinting->fieldName()->client_country_iso}",
                   "operator": "equals",
                   "value": "BR",
                   "option": {
@@ -97,7 +98,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "atk_fp_stat__start_date",
+                  "rule": "{$statModelForHinting->fieldName()->start_date}",
                   "operator": "is on",
                   "value": "2020-10-22",
                   "option": null
@@ -114,7 +115,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "atk_fp_stat__finish_time",
+                  "rule": "{$statModelForHinting->fieldName()->finish_time}",
                   "operator": "is not on",
                   "value": "22:22",
                   "option": null
@@ -123,7 +124,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "atk_fp_stat__is_commercial",
+                  "rule": "{$statModelForHinting->fieldName()->is_commercial}",
                   "operator": "equals",
                   "value": "0",
                   "option": null
@@ -132,7 +133,7 @@ $expectedInput = <<< 'EOF'
               {
                 "type": "query-builder-rule",
                 "query": {
-                  "rule": "atk_fp_stat__currency",
+                  "rule": "{$statModelForHinting->fieldName()->currency}",
                   "operator": "equals",
                   "value": "USD",
                   "option": null
