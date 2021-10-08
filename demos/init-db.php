@@ -22,6 +22,9 @@ try {
 
 class ModelWithPrefixedFields extends Model
 {
+    /** @var <string, string> */
+    private static $prefixedFieldNames = [];
+
     private function prefixFieldName(string $fieldName, bool $forActualName = false): string
     {
         $tableShort = $this->table;
@@ -30,7 +33,7 @@ class ModelWithPrefixedFields extends Model
         }
 
         if ($forActualName) {
-            $fieldName = preg_replace('~^atk_fp_' . preg_quote($tableShort, '~') . '__~', '', $fieldName);
+            $fieldName = $this->unprefixFieldName($fieldName);
         }
 
         $fieldShort = $fieldName;
@@ -46,7 +49,24 @@ class ModelWithPrefixedFields extends Model
             $fieldShort .= '_id';
         }
 
-        return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $tableShort . '__' . $fieldShort;
+        $res = 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $tableShort . '__' . $fieldShort;
+
+        self::$prefixedFieldNames[$res] = $fieldName;
+
+        return $res;
+    }
+
+    private function unprefixFieldName(string $name): string
+    {
+        if (!str_starts_with($name, 'atk_fp_')) {
+            return $name;
+        }
+
+        if (isset(self::$prefixedFieldNames[$name . '_id'])) {
+            return self::$prefixedFieldNames[$name . '_id'];
+        }
+
+        return self::$prefixedFieldNames[$name];
     }
 
     protected function createHintablePropsFromClassDoc(string $className): array
@@ -75,6 +95,7 @@ class ModelWithPrefixedFields extends Model
     {
         $seed = \Atk4\Core\Factory::mergeSeeds($seed, [
             'actual' => $this->prefixFieldName($name, true),
+            'caption' => $this->readableCaption($this->unprefixFieldName($name)),
         ]);
 
         return parent::addField($name, $seed);

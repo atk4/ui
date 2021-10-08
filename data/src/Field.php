@@ -441,7 +441,7 @@ class Field implements Expressionable
      */
     public function getCaption(): string
     {
-        return $this->caption ?? $this->ui['caption'] ?? $this->readableCaption(preg_replace('~^atk_fp_\w+?__~', '', $this->short_name));
+        return $this->caption ?? $this->ui['caption'] ?? $this->readableCaption($this->short_name);
     }
 
     // }}}
