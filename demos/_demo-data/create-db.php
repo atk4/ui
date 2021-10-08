@@ -22,7 +22,12 @@ class ImportModelWithPrefixedFields extends Model
 {
     private function prefixFieldName(string $fieldName, bool $forActualName = false): string
     {
-        return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $this->table . '__' . $fieldName;
+        $tableShort = $this->table;
+        if (strlen($tableShort) > 8) {
+            $tableShort = substr(md5($tableShort), 0, 8);
+        }
+
+        return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $tableShort . '__' . $fieldName;
     }
 
     public function addField(string $name, $seed = []): \Atk4\Data\Field

@@ -24,11 +24,16 @@ class ModelWithPrefixedFields extends Model
 {
     private function prefixFieldName(string $fieldName, bool $forActualName = false): string
     {
-        if ($forActualName) {
-            $fieldName = preg_replace('~^atk_fp_' . preg_quote($this->table, '~') . '__~', '', $fieldName);
+        $tableShort = $this->table;
+        if (strlen($tableShort) > 8) {
+            $tableShort = substr(md5($tableShort), 0, 8);
         }
 
-        return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $this->table . '__' . $fieldName;
+        if ($forActualName) {
+            $fieldName = preg_replace('~^atk_fp_' . preg_quote($tableShort, '~') . '__~', '', $fieldName);
+        }
+
+        return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $tableShort . '__' . $fieldName;
     }
 
     protected function createHintablePropsFromClassDoc(string $className): array
