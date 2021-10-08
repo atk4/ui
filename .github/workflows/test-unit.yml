@@ -240,6 +240,28 @@ jobs:
     env:
       LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == '8.0' && matrix.type == 'Chrome' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
     services:
+      mysql:
+        image: mysql:8
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
+      mariadb:
+        image: mariadb
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+      postgres:
+        image: postgres:12-alpine
+        env:
+          POSTGRES_USER: atk4_test_user
+          POSTGRES_PASSWORD: atk4_pass
+          POSTGRES_DB: atk4_test
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      mssql:
+        image: mcr.microsoft.com/mssql/server
+        env:
+          ACCEPT_EULA: Y
+          SA_PASSWORD: atk4_pass
+      oracle:
+        image: wnameless/oracle-xe-11g-r2
+        env:
+          ORACLE_ALLOW_REMOTE: true
       selenium-chrome:
         image: selenium/standalone-chrome:latest
         options: --health-cmd "/opt/bin/check-grid.sh"
@@ -318,11 +340,12 @@ jobs:
 
       - name: Init
         run: |
+          php -r '(new PDO("mysql:host=mysql", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
+          php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
+          php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage && cp tools/CoverageUtil.php demos; fi
+          sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWD'] ?? null);/g" -i demos/db.default.php
           sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
-
-      - name: "Run tests: Behat"
-        run: |
           php -S 172.18.0.2:8888 > /dev/null 2>&1 &
           sleep 0.2
           if [ "${{ matrix.type }}" == "Firefox" ]; then sed -i "s~chrome~firefox~" behat.yml.dist; fi
@@ -333,6 +356,53 @@ jobs:
           sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink/src/Element/Element.php
           sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php
 
+      - name: "Run tests: SQLite"
+        run: |
+          php demos/_demo-data/create-db.php
+          vendor/bin/behat -vv --config behat.yml.dist
+
+      - name: "Run tests: MySQL"
+        env:
+          DB_DSN: "mysql:host=mysql;dbname=atk4_test"
+          DB_USER: atk4_test_user
+          DB_PASSWD: atk4_pass
+        run: |
+          php demos/_demo-data/create-db.php
+          vendor/bin/behat -vv --config behat.yml.dist
+
+      - name: "Run tests: MariaDB"
+        env:
+          DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
+          DB_USER: atk4_test_user
+          DB_PASSWD: atk4_pass
+        run: |
+          php demos/_demo-data/create-db.php
+          vendor/bin/behat -vv --config behat.yml.dist
+
+      - name: "Run tests: PostgreSQL"
+        env:
+          DB_DSN: "pgsql:host=postgres;dbname=atk4_test"
+          DB_USER: atk4_test_user
+          DB_PASSWD: atk4_pass
+        run: |
+          php demos/_demo-data/create-db.php
+          vendor/bin/behat -vv --config behat.yml.dist
+
+      - name: "Run tests: MSSQL"
+        env:
+          DB_DSN: "sqlsrv:Server=mssql;Database=master"
+          DB_USER: sa
+          DB_PASSWD: atk4_pass
+        run: |
+          php demos/_demo-data/create-db.php
+          vendor/bin/behat -vv --config behat.yml.dist
+
+      - name: "Run tests: Oracle"
+        env:
+          DB_DSN: "oci:dbname=oracle/xe;charset=UTF8"
+          DB_USER: system
+          DB_PASSWD: oracle
+        run: |
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 

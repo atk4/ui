@@ -493,4 +493,4 @@ $model->import([
     ['id' => 7, 'name' => 'Ice Cream', 'brand' => 'Milk Corp.', 'product_category_id' => 3, 'product_sub_category_id' => 8],
 ]);
 
-echo 'import complete!' . "\n";
+echo 'import complete!' . "\n\n";
