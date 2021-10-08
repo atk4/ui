@@ -740,7 +740,7 @@ class Sql extends Persistence
             // PostgreSQL uses sequence internally for PK autoincrement,
             // use default name if not set explicitly
             if ($this->connection instanceof \Atk4\Data\Persistence\Sql\Postgresql\Connection) {
-                $sequenceName = $model->table . '_' . $model->id_field . '_seq';
+                $sequenceName = $model->table . '_' . $model->getField($model->id_field)->getPersistenceName() . '_seq';
             }
         }
 
@@ -757,7 +757,7 @@ class Sql extends Persistence
             }
 
             $query = $this->connection->dsql()->table($model->table);
-            $query->field($query->expr('max({id_col})', ['id_col' => $model->id_field]), 'max_id');
+            $query->field($query->expr('max({id_col})', ['id_col' => $model->getField($model->id_field)->getPersistenceName()]), 'max_id');
 
             return $query->getOne();
         }
@@ -771,7 +771,7 @@ class Sql extends Persistence
         if ($this->connection instanceof \Atk4\Data\Persistence\Sql\Postgresql\Connection) {
             $this->connection->expr(
                 'select setval([], coalesce(max({}), 0) + 1, false) from {}',
-                [$this->getIdSequenceName($model), $model->id_field, $model->table]
+                [$this->getIdSequenceName($model), $model->getField($model->id_field)->getPersistenceName(), $model->table]
             )->execute();
         }
     }

@@ -12,7 +12,7 @@ require_once __DIR__ . '/../init-app.php';
 // This demo require specific Database setup.
 
 if (!class_exists(Client::class)) {
-    class Client extends \Atk4\Data\Model
+    class Client extends ModelWithPrefixedFields
     {
         public $table = 'client';
         public $caption = 'Client';
@@ -22,11 +22,11 @@ if (!class_exists(Client::class)) {
             parent::init();
 
             $this->addField('name');
-            $this->containsMany('Accounts', ['model' => [Account::class]]);
+            $this->containsMany('accounts' /* TODO "Accounts" was here, but tests are failing for PostgreSQL, different casing should be supported */ , ['model' => [Account::class]]);
         }
     }
 
-    class Account extends \Atk4\Data\Model
+    class Account extends ModelWithPrefixedFields
     {
         public $caption = ' ';
 

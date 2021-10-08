@@ -5,21 +5,30 @@ declare(strict_types=1);
 namespace Atk4\Data\Persistence\Sql\Oracle;
 
 use Atk4\Data\Persistence\Sql\Connection as BaseConnection;
+use Doctrine\Common\EventManager;
+use Doctrine\DBAL\Event\Listeners\OracleSessionInit;
 
 class Connection extends BaseConnection
 {
     protected $query_class = Query::class;
 
-    public function __construct($properties = [])
+    protected static function createDbalEventManager(): EventManager
     {
-        parent::__construct($properties);
+        $evm = new EventManager();
 
-        // date and datetime format should be like this for Agile Data to correctly pick it up and typecast
-        $this->expr('ALTER SESSION SET NLS_TIMESTAMP_FORMAT={datetime_format} NLS_DATE_FORMAT={date_format} NLS_NUMERIC_CHARACTERS={dec_char}', [
-            'datetime_format' => 'YYYY-MM-DD HH24:MI:SS', // datetime format
-            'date_format' => 'YYYY-MM-DD', // date format
-            'dec_char' => '. ', // decimal separator, no thousands separator
-        ])->execute();
+        // setup connection globalization to use standard datetime format incl. microseconds support
+        $dateFormat = 'YYYY-MM-DD';
+        $timeFormat = 'HH24:MI:SS.FF6';
+        $tzFormat = 'TZH:TZM';
+        $evm->addEventSubscriber(new OracleSessionInit([
+            'NLS_DATE_FORMAT' => $dateFormat,
+            'NLS_TIME_FORMAT' => $timeFormat,
+            'NLS_TIMESTAMP_FORMAT' => $dateFormat . ' ' . $timeFormat,
+            'NLS_TIME_TZ_FORMAT' => $timeFormat . ' ' . $tzFormat,
+            'NLS_TIMESTAMP_TZ_FORMAT' => $dateFormat . ' ' . $timeFormat . ' ' . $tzFormat,
+        ]));
+
+        return $evm;
     }
 
     // {{{ fix for too many connections for CI testing

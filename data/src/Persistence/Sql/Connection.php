@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Atk4\Data\Persistence\Sql;
 
 use Atk4\Core\DiContainerTrait;
+use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection as DbalConnection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Event\ConnectionEventArgs;
+use Doctrine\DBAL\Events;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\OraclePlatform;
 use Doctrine\DBAL\Platforms\PostgreSQL94Platform;
@@ -194,6 +197,11 @@ abstract class Connection
         return !class_exists(DbalResult::class);
     }
 
+    protected static function createDbalEventManager(): EventManager
+    {
+        return new EventManager();
+    }
+
     /**
      * Establishes connection based on a $dsn.
      *
@@ -215,7 +223,7 @@ abstract class Connection
         if (self::isComposerDbal2x()) {
             $dbalConnection = DriverManager::getConnection([
                 'pdo' => $pdo,
-            ]);
+            ], null, (static::class)::createDbalEventManager());
         } else {
             $pdoConnection = (new \ReflectionClass(\Doctrine\DBAL\Driver\PDO\Connection::class))
                 ->newInstanceWithoutConstructor();
@@ -225,10 +233,18 @@ abstract class Connection
             }, null, \Doctrine\DBAL\Driver\PDO\Connection::class)();
             $dbalConnection = DriverManager::getConnection([
                 'driver' => 'pdo_' . $pdo->getAttribute(\PDO::ATTR_DRIVER_NAME),
-            ]);
+            ], null, (static::class)::createDbalEventManager());
             \Closure::bind(function () use ($dbalConnection, $pdoConnection): void {
                 $dbalConnection->_conn = $pdoConnection;
             }, null, \Doctrine\DBAL\Connection::class)();
+        }
+
+        // postConnect event is not dispatched when PDO is passed, call it manually
+        if ($dbalConnection->getEventManager()->hasListeners(Events::postConnect)) {
+            $dbalConnection->getEventManager()->dispatchEvent(
+                Events::postConnect,
+                new ConnectionEventArgs($dbalConnection)
+            );
         }
 
         // DBAL 3.x removed some old platforms, to support instanceof reliably,

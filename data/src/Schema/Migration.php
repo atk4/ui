@@ -15,6 +15,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\OraclePlatform;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\Table;
 
 class Migration
@@ -73,11 +74,21 @@ class Migration
         return $this;
     }
 
+    private function getPrimaryKeyColumn(): ?Column
+    {
+        if ($this->table->getPrimaryKey() === null) {
+            return null;
+        }
+
+        return $this->table->getColumn($this->table->getPrimaryKey()->getColumns()[0]);
+    }
+
     public function create(): self
     {
         $this->getSchemaManager()->createTable($this->table);
 
-        if ($this->getDatabasePlatform() instanceof OraclePlatform) {
+        $pkColumn = $this->getPrimaryKeyColumn();
+        if ($this->getDatabasePlatform() instanceof OraclePlatform && $pkColumn !== null) {
             $this->connection->expr(
                 <<<'EOT'
                     begin
@@ -90,17 +101,18 @@ class Migration
                             create or replace trigger {table_ai_trigger_before}
                                 before insert on {table}
                                 for each row
-                                when (new."id" is null)
+                                when (new.{id_column} is null)
                             declare
-                                last_id {table}."id"%type;
+                                last_id {table}.{id_column}%type;
                             begin
-                                select nvl(max("id"), 0) into last_id from {table};
-                                :new."id" := last_id + 1;
+                                select nvl(max({id_column}), 0) into last_id from {table};
+                                :new.{id_column} := last_id + 1;
                             end;
                             EOT,
                         [
                             'table' => $this->table->getName(),
                             'table_ai_trigger_before' => $this->table->getName() . '__aitb',
+                            'id_column' => $pkColumn->getName(),
                         ]
                     )->render(),
                 ]
@@ -154,6 +166,10 @@ class Migration
 
     public function field(string $fieldName, array $options = []): self
     {
+        if ($options['type'] === 'time' && $this->getDatabasePlatform() instanceof OraclePlatform) {
+            $options['type'] = 'string';
+        }
+
         $refType = $options['ref_type'] ?? self::REF_TYPE_NONE;
         unset($options['ref_type']);
 
