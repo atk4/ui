@@ -361,7 +361,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MySQL"
+      - name: "Run tests: MySQL (only for latest Chrome)"
+        if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "mysql:host=mysql;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -370,7 +371,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MariaDB"
+      - name: "Run tests: MariaDB (only for latest Chrome)"
+        if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -379,7 +381,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: PostgreSQL"
+      - name: "Run tests: PostgreSQL (only for latest Chrome)"
+        if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "pgsql:host=postgres;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -388,7 +391,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MSSQL"
+      - name: "Run tests: MSSQL (only for latest Chrome)"
+        if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "sqlsrv:Server=mssql;Database=master"
           DB_USER: sa
@@ -397,7 +401,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: Oracle"
+      - name: "Run tests: Oracle (only for latest Chrome)"
+        if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "oci:dbname=oracle/xe;charset=UTF8"
           DB_USER: system
