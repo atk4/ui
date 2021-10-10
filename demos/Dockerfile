@@ -42,5 +42,5 @@ COPY template template
 COPY demos demos
 
 COPY demos/db.default.php demos
-RUN php demos/_demo-data/create-sqlite-db.php
-RUN sed -E "s/\(('sqlite:.+')\);/(\$_ENV['DSN'] ?? \\1);/g" -i demos/db.default.php
+RUN php demos/_demo-data/create-db.php
+RUN sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWD'] ?? null);/g" -i demos/db.default.php

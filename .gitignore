@@ -1,9 +1,10 @@
-docs/build
-/build
+/docs/build
+/coverage
 /vendor
 /composer.lock
 .idea
 nbproject
+.vscode
 .DS_Store
 
 local
@@ -19,7 +20,6 @@ cache
 /demos/_demo-data/db.sqlite
 /demos/_demo-data/db.sqlite-journal
 /phpunit.xml
-/phpunit-*.xml
 /behat.yml
 
 package-lock.json
@@ -29,5 +29,3 @@ package-lock.json
 *.bak
 *.codekit3
 yarn.lock
-/coverage
-/demos/test/

@@ -10,20 +10,40 @@ use Atk4\Data\Schema\Migration;
 require_once __DIR__ . '/../init-autoloader.php';
 
 $sqliteFile = __DIR__ . '/db.sqlite';
-if (file_exists($sqliteFile)) {
-    unlink($sqliteFile);
+if (!file_exists($sqliteFile)) {
+    new \Atk4\Data\Persistence\Sql('sqlite:' . $sqliteFile);
 }
+unset($sqliteFile);
 
-$persistence = new \Atk4\Data\Persistence\Sql('sqlite:' . $sqliteFile);
+/** @var \Atk4\Data\Persistence\Sql $db */
+require_once __DIR__ . '/../init-db.php';
 
 class ImportModelWithPrefixedFields extends Model
 {
     private function prefixFieldName(string $fieldName, bool $forActualName = false): string
     {
-        return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $this->table . '__' . $fieldName;
+        $tableShort = $this->table;
+        if (strlen($tableShort) > 8) {
+            $tableShort = substr(md5($tableShort), 0, 8);
+        }
+
+        $fieldShort = $fieldName;
+        $fieldWithIdSuffix = false;
+        if (str_ends_with($fieldShort, '_id')) {
+            $fieldShort = substr($fieldShort, 0, -strlen('_id'));
+            $fieldWithIdSuffix = true;
+        }
+        if (strlen($fieldShort) > 8) {
+            $fieldShort = substr(md5($fieldShort), 0, 8);
+        }
+        if ($fieldWithIdSuffix) {
+            $fieldShort .= '_id';
+        }
+
+        return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $tableShort . '__' . $fieldShort;
     }
 
-    public function addField($name, $seed = []): \Atk4\Data\Field
+    public function addField(string $name, $seed = []): \Atk4\Data\Field
     {
         if ($name === 'id') {
             $this->id_field = $this->prefixFieldName($name);
@@ -49,24 +69,24 @@ class ImportModelWithPrefixedFields extends Model
     }
 }
 
-$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'client']);
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'client']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('addresses', ['type' => 'text']);
 $model->addField('accounts', ['type' => 'text']);
-(new Migration($model))->dropIfExists()->create();
+(new Migration($model))->create();
 $model->import([
     ['id' => 1, 'name' => 'John', 'addresses' => null, 'accounts' => null],
     ['id' => 2, 'name' => 'Jane', 'addresses' => null, 'accounts' => null],
 ]);
 
-$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'country']);
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'country']);
 $model->addField('iso', ['type' => 'string']); // should be CHAR(2) NOT NULL
 $model->addField('name', ['type' => 'string']);
 $model->addField('nicename', ['type' => 'string']);
 $model->addField('iso3', ['type' => 'string']); // should be CHAR(3) NOT NULL
 $model->addField('numcode', ['type' => 'smallint']);
 $model->addField('phonecode', ['type' => 'integer']);
-(new Migration($model))->dropIfExists()->create();
+(new Migration($model))->create();
 $model->import([
     ['id' => 1, 'iso' => 'AF', 'name' => 'AFGHANISTAN', 'nicename' => 'Afghanistan', 'iso3' => 'AFG', 'numcode' => 4, 'phonecode' => 93],
     ['id' => 2, 'iso' => 'AL', 'name' => 'ALBANIA', 'nicename' => 'Albania', 'iso3' => 'ALB', 'numcode' => 8, 'phonecode' => 355],
@@ -322,13 +342,13 @@ $model->import([
     ['id' => 253, 'iso' => 'SS', 'name' => 'SOUTH SUDAN', 'nicename' => 'South Sudan', 'iso3' => 'SSD', 'numcode' => 728, 'phonecode' => 211],
 ]);
 
-$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'file']);
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'file']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('type', ['type' => 'string']);
 $model->addField('is_folder', ['type' => 'boolean']);
 $model->addField('parent_folder_id', ['type' => 'bigint']);
 // KEY `fk_file_file_idx` (`parent_folder_id`)
-(new Migration($model))->dropIfExists()->create();
+(new Migration($model))->create();
 $model->import([
     ['id' => 1, 'name' => 'phpunit.xml', 'type' => 'xml', 'is_folder' => 0, 'parent_folder_id' => null],
     ['id' => 2, 'name' => 'LICENSE', 'type' => '', 'is_folder' => 0, 'parent_folder_id' => null],
@@ -393,7 +413,7 @@ $model->import([
     ['id' => 61, 'name' => 'Button.php', 'type' => 'php', 'is_folder' => 0, 'parent_folder_id' => 46],
 ]);
 
-$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'stat']);
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'stat']);
 $model->addField('project_name', ['type' => 'string']);
 $model->addField('project_code', ['type' => 'string']);
 $model->addField('description', ['type' => 'text']);
@@ -418,7 +438,7 @@ $model->addField('finish_date', ['type' => 'date']);
 $model->addField('finish_time', ['type' => 'time']);
 $model->addField('created', ['type' => 'datetime']);
 $model->addField('updated', ['type' => 'datetime']);
-(new Migration($model))->dropIfExists()->create();
+(new Migration($model))->create();
 $data = [
     ['id' => 1, 'project_name' => 'Agile DSQL', 'project_code' => 'at01', 'description' => 'DSQL is a composable SQL query builder. You can write multi-vendor queries in PHP profiting from better security, clean syntax and avoid human errors.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,' . "\n" . 'Garden City' . "\n" . 'UK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 1, 'project_budget' => 7000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 150, 'project_hours_reported' => 125, 'project_expenses_est' => 50, 'project_expenses' => 0, 'project_mgmt_cost_pct' => 0.1, 'project_qa_cost_pct' => 0.2, 'start_date' => '2016-01-26', 'finish_date' => '2016-06-23', 'finish_time' => '12:50:00', 'created' => '2017-04-06 10:34:34', 'updated' => '2017-04-06 10:35:04'],
     ['id' => 2, 'project_name' => 'Agile Core', 'project_code' => 'at02', 'description' => 'Collection of PHP Traits for designing object-oriented frameworks.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,' . "\n" . 'Garden City' . "\n" . 'UK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 1, 'project_budget' => 3000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 70, 'project_hours_reported' => 56, 'project_expenses_est' => 50, 'project_expenses' => 0, 'project_mgmt_cost_pct' => 0.1, 'project_qa_cost_pct' => 0.2, 'start_date' => '2016-04-27', 'finish_date' => '2016-05-21', 'finish_time' => '18:41:00', 'created' => '2017-04-06 10:21:50', 'updated' => '2017-04-06 10:35:04'],
@@ -432,19 +452,19 @@ foreach ($data as $rowIndex => $row) {
 }
 $model->import($data);
 
-$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'product_category']);
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'product_category']);
 $model->addField('name', ['type' => 'string']);
-(new Migration($model))->dropIfExists()->create();
+(new Migration($model))->create();
 $model->import([
     ['id' => 1, 'name' => 'Condiments and Gravies'],
     ['id' => 2, 'name' => 'Beverages'],
     ['id' => 3, 'name' => 'Dairy'],
 ]);
 
-$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'product_sub_category']);
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'product_sub_category']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('product_category_id', ['type' => 'bigint']);
-(new Migration($model))->dropIfExists()->create();
+(new Migration($model))->create();
 $model->import([
     ['id' => 1, 'name' => 'Gravie', 'product_category_id' => 1],
     ['id' => 2, 'name' => 'Spread', 'product_category_id' => 1],
@@ -457,12 +477,12 @@ $model->import([
     ['id' => 9, 'name' => 'Sugar/Sweetened', 'product_category_id' => 2],
 ]);
 
-$model = new ImportModelWithPrefixedFields($persistence, ['table' => 'product']);
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'product']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('brand', ['type' => 'string']);
 $model->addField('product_category_id', ['type' => 'bigint']);
 $model->addField('product_sub_category_id', ['type' => 'bigint']);
-(new Migration($model))->dropIfExists()->create();
+(new Migration($model))->create();
 $model->import([
     ['id' => 1, 'name' => 'Mustard', 'brand' => 'Condiment Corp.', 'product_category_id' => 1, 'product_sub_category_id' => 2],
     ['id' => 2, 'name' => 'Ketchup', 'brand' => 'Condiment Corp.', 'product_category_id' => 1, 'product_sub_category_id' => 2],
@@ -473,4 +493,4 @@ $model->import([
     ['id' => 7, 'name' => 'Ice Cream', 'brand' => 'Milk Corp.', 'product_category_id' => 3, 'product_sub_category_id' => 8],
 ]);
 
-echo 'import complete!' . "\n";
+echo 'import complete!' . "\n\n";

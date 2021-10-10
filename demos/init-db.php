@@ -9,13 +9,11 @@ use Atk4\Ui\Form;
 use Mvorisek\Atk4\Hintable\Data\HintablePropertyDef;
 
 try {
-    if (file_exists(__DIR__ . '/db.php')) {
-        require_once __DIR__ . '/db.php';
-    } else {
-        require_once __DIR__ . '/db.default.php';
-    }
+    require_once file_exists(__DIR__ . '/db.php')
+        ? __DIR__ . '/db.php'
+        : __DIR__ . '/db.default.php';
 } catch (\PDOException $e) {
-    // do not pass $e unless you can secure DSN!
+    // do not show $e unless you can secure DSN!
     throw (new \Atk4\Ui\Exception('This demo requires access to the database. See "demos/init-db.php"'))
         ->addMoreInfo('PDO error', $e->getMessage());
 }
@@ -24,13 +22,51 @@ try {
 
 class ModelWithPrefixedFields extends Model
 {
+    /** @var array<string, string> */
+    private static $prefixedFieldNames = [];
+
     private function prefixFieldName(string $fieldName, bool $forActualName = false): string
     {
-        if ($forActualName) {
-            $fieldName = preg_replace('~^atk_fp_' . preg_quote($this->table, '~') . '__~', '', $fieldName);
+        $tableShort = $this->table;
+        if (strlen($tableShort) > 8) {
+            $tableShort = substr(md5($tableShort), 0, 8);
         }
 
-        return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $this->table . '__' . $fieldName;
+        if ($forActualName) {
+            $fieldName = $this->unprefixFieldName($fieldName);
+        }
+
+        $fieldShort = $fieldName;
+        $fieldWithIdSuffix = false;
+        if (str_ends_with($fieldShort, '_id')) {
+            $fieldShort = substr($fieldShort, 0, -strlen('_id'));
+            $fieldWithIdSuffix = true;
+        }
+        if (strlen($fieldShort) > 8) {
+            $fieldShort = substr(md5($fieldShort), 0, 8);
+        }
+        if ($fieldWithIdSuffix) {
+            $fieldShort .= '_id';
+        }
+
+        $res = 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $tableShort . '__' . $fieldShort;
+
+        self::$prefixedFieldNames[$res] = $fieldName;
+
+        return $res;
+    }
+
+    private function unprefixFieldName(string $name): string
+    {
+        if (!str_starts_with($name, 'atk_fp_')) {
+            return $name;
+        }
+
+        if (isset(self::$prefixedFieldNames[$name . '_id'])) {
+            return self::$prefixedFieldNames[$name . '_id'];
+        }
+
+        return self::$prefixedFieldNames[$name];
     }
 
     protected function createHintablePropsFromClassDoc(string $className): array
@@ -59,6 +95,7 @@ class ModelWithPrefixedFields extends Model
     {
         $seed = \Atk4\Core\Factory::mergeSeeds($seed, [
             'actual' => $this->prefixFieldName($name, true),
+            'caption' => $this->readableCaption($this->unprefixFieldName($name)),
         ]);
 
         return parent::addField($name, $seed);

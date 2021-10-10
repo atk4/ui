@@ -898,9 +898,6 @@ parameters:
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 6
         -
-            path: 'demos/_demo-data/create-sqlite-db.php'
-            message: '~^Method Atk4\\Ui\\Demos\\ImportModelWithPrefixedFields::addField\(\) has parameter \$name with no typehint specified\.$~'
-        -
             path: 'demos/_includes/Demo.php'
             message: '~^Property Atk4\\Ui\\Demos\\Demo::\$left has no typehint specified\.$~'
         -
