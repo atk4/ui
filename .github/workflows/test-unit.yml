@@ -252,7 +252,7 @@ jobs:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
       oracle:
-        image: wnameless/oracle-xe-11g-r2
+        image: ghcr.io/mvorisek/docker-oracle-xe-11g
         env:
           ORACLE_ALLOW_REMOTE: true
       selenium-chrome:
