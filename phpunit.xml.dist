@@ -1,6 +1,6 @@
 <phpunit bootstrap="vendor/autoload.php" printerClass="Atk4\Core\Phpunit\ResultPrinter" colors="true">
     <php>
-        <env name="DB_DSN" value="sqlite::memory:" />
+        <env name="DB_DSN" value="" />
         <env name="DB_USER" value="" />
         <env name="DB_PASSWD" value="" />
     </php>
