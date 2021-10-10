@@ -105,8 +105,8 @@ jobs:
           SA_PASSWORD: atk4_pass
       oracle:
         image: wnameless/oracle-xe-11g-r2
-        env:
-          ORACLE_ALLOW_REMOTE: true
+        options: |
+          -e ORACLE_ALLOW_REMOTE=true --entrypoint sh wnameless/oracle-xe-11g-r2 -c "echo \"alter system set processes=50 scope=spfile;\" > /docker-entrypoint-initdb.d/ci.sql && /usr/sbin/startup.sh && service oracle-xe restart && tail -f /dev/null"
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -197,10 +197,9 @@ jobs:
           DB_DSN: "oci:dbname=oracle/xe;charset=UTF8"
           DB_USER: system
           DB_PASSWD: oracle
-        # TODO phpunit does not complete with Oracle because it seems it cannot handle burst of short-lived connections
         run: |
           php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit                      $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-oracle.cov; fi
 
       - name: Upload coverage logs 1/2 (only for latest Phpunit)
