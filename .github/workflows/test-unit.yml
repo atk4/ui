@@ -104,9 +104,9 @@ jobs:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
       oracle:
-        image: wnameless/oracle-xe-11g-r2
-        options: |
-          -e ORACLE_ALLOW_REMOTE=true --entrypoint sh wnameless/oracle-xe-11g-r2 -c "echo \"alter system set processes=200 scope=spfile;\" > /docker-entrypoint-initdb.d/ci.sql && /usr/sbin/startup.sh && service oracle-xe restart && tail -f /dev/null"
+        image: ghcr.io/mvorisek/docker-oracle-xe-11g
+        env:
+          ORACLE_ALLOW_REMOTE: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
