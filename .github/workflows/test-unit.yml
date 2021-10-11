@@ -104,7 +104,7 @@ jobs:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
       oracle:
-        image: wnameless/oracle-xe-11g-r2
+        image: ghcr.io/mvorisek/docker-oracle-xe-11g
         env:
           ORACLE_ALLOW_REMOTE: true
     steps:
@@ -144,69 +144,62 @@ jobs:
           php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage && cp tools/CoverageUtil.php demos; fi
-          sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWD'] ?? null);/g" -i demos/db.default.php
+          sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWORD'] ?? null);/g" -i demos/db.default.php
 
-      - name: "Run tests: SQLite (only for Phpunit)"
-        if: startsWith(matrix.type, 'Phpunit')
+      - name: "Run tests: SQLite"
         run: |
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-sqlite.cov; fi
 
-      - name: "Run tests: MySQL (only for Phpunit)"
-        if: startsWith(matrix.type, 'Phpunit')
+      - name: "Run tests: MySQL"
         env:
           DB_DSN: "mysql:host=mysql;dbname=atk4_test"
           DB_USER: atk4_test_user
-          DB_PASSWD: atk4_pass
+          DB_PASSWORD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mysql.cov; fi
 
-      - name: "Run tests: MariaDB (only for Phpunit)"
-        if: startsWith(matrix.type, 'Phpunit')
+      - name: "Run tests: MariaDB"
         env:
           DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
           DB_USER: atk4_test_user
-          DB_PASSWD: atk4_pass
+          DB_PASSWORD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mariadb.cov; fi
 
-      - name: "Run tests: PostgreSQL (only for Phpunit)"
-        if: startsWith(matrix.type, 'Phpunit')
+      - name: "Run tests: PostgreSQL"
         env:
           DB_DSN: "pgsql:host=postgres;dbname=atk4_test"
           DB_USER: atk4_test_user
-          DB_PASSWD: atk4_pass
+          DB_PASSWORD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-postgres.cov; fi
 
-      - name: "Run tests: MSSQL (only for Phpunit)"
-        if: startsWith(matrix.type, 'Phpunit')
+      - name: "Run tests: MSSQL"
         env:
           DB_DSN: "sqlsrv:Server=mssql;Database=master"
           DB_USER: sa
-          DB_PASSWD: atk4_pass
+          DB_PASSWORD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mssql.cov; fi
 
-      - name: "Run tests: Oracle (only for Phpunit)"
-        if: startsWith(matrix.type, 'Phpunit')
+      - name: "Run tests: Oracle"
         env:
           DB_DSN: "oci:dbname=oracle/xe;charset=UTF8"
           DB_USER: system
-          DB_PASSWD: oracle
-        # TODO phpunit does not complete with Oracle because it seems it cannot handle burst of short-lived connections
+          DB_PASSWORD: oracle
         run: |
           php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit                      $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-oracle.cov; fi
 
       - name: Upload coverage logs 1/2 (only for latest Phpunit)
@@ -259,7 +252,7 @@ jobs:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
       oracle:
-        image: wnameless/oracle-xe-11g-r2
+        image: ghcr.io/mvorisek/docker-oracle-xe-11g
         env:
           ORACLE_ALLOW_REMOTE: true
       selenium-chrome:
@@ -344,7 +337,7 @@ jobs:
           php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage && cp tools/CoverageUtil.php demos; fi
-          sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWD'] ?? null);/g" -i demos/db.default.php
+          sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWORD'] ?? null);/g" -i demos/db.default.php
           sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
           php -S 172.18.0.2:8888 > /dev/null 2>&1 &
           sleep 0.2
@@ -361,52 +354,52 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MySQL (only for latest Chrome)"
+      - name: "Run tests: MySQL (only for latest Chrome or cron)"
         if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "mysql:host=mysql;dbname=atk4_test"
           DB_USER: atk4_test_user
-          DB_PASSWD: atk4_pass
+          DB_PASSWORD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MariaDB (only for latest Chrome)"
+      - name: "Run tests: MariaDB (only for latest Chrome or cron)"
         if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
           DB_USER: atk4_test_user
-          DB_PASSWD: atk4_pass
+          DB_PASSWORD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: PostgreSQL (only for latest Chrome)"
+      - name: "Run tests: PostgreSQL (only for latest Chrome or cron)"
         if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "pgsql:host=postgres;dbname=atk4_test"
           DB_USER: atk4_test_user
-          DB_PASSWD: atk4_pass
+          DB_PASSWORD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MSSQL (only for latest Chrome)"
+      - name: "Run tests: MSSQL (only for latest Chrome or cron)"
         if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "sqlsrv:Server=mssql;Database=master"
           DB_USER: sa
-          DB_PASSWD: atk4_pass
+          DB_PASSWORD: atk4_pass
         run: |
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: Oracle (only for latest Chrome)"
+      - name: "Run tests: Oracle (only for latest Chrome or cron)"
         if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "oci:dbname=oracle/xe;charset=UTF8"
           DB_USER: system
-          DB_PASSWD: oracle
+          DB_PASSWORD: oracle
         run: |
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
