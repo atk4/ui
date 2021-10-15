@@ -66,9 +66,9 @@ Line::addTo($app, ['action' => $country->getUserAction('greet')]);
 // Card component.
 $card = \Atk4\Ui\Card::addTo($app);
 $content = new \Atk4\Ui\View(['class' => ['content']]);
-$content->add($img = new \Atk4\Ui\Image(['../images/kristy.png']));
+$img = \Atk4\Ui\Image::addTo($content, ['../images/kristy.png']);
 $img->addClass('right floated mini ui image');
-$content->add(new \Atk4\Ui\Header(['Kristy']));
+\Atk4\Ui\Header::addTo($content, ['Kristy']);
 
 $card->addContent($content);
 $card->addDescription('Kristy is a friend of Mully.');

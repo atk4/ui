@@ -267,18 +267,20 @@ class Card extends View
 
     /**
      * Add action executor to card.
+     *
+     * @param class-string<View&UserAction\ExecutorInterface> $executorClass
      */
-    public function addAction(Model\UserAction $action, $executor, $button = null)
+    public function addAction(Model\UserAction $action, $executorClass, $button = null)
     {
         if (!$button) {
             $button = new Button([$action->caption]);
         }
         $btn = $this->addButton($button);
 
-        $vp = VirtualPage::addTo($this)->set(function ($page) use ($executor, $action) {
+        $vp = VirtualPage::addTo($this)->set(function (View $page) use ($executorClass, $action) {
             $id = $this->stickyGet($this->name);
 
-            $page->add($executor = new $executor());
+            $executor = $page->add(new $executorClass());
 
             $action->setEntity($action->getModel()->load($id));
 

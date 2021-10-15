@@ -43,12 +43,6 @@ parameters:
             path: 'demos/_includes/Demo.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsChain::initHighlighting\(\)\.$~'
         -
-            path: 'demos/_unit-test/callback.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setModel\(\)\.$~'
-        -
-            path: 'demos/_unit-test/callback.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::jsReload\(\)\.$~'
-        -
             path: 'demos/collection/tablefilter.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Demos\\CountryLock::expr\(\)\.$~'
         -
@@ -144,6 +138,9 @@ parameters:
         -
             path: 'src/CallbackLater.php'
             message: '~^Method Atk4\\Ui\\CallbackLater::set\(\) should return mixed but return statement is missing\.$~'
+        -
+            path: 'src/Card.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setAction\(\)\.$~'
         -
             path: 'src/Card.php'
             message: '~^Call to an undefined method Atk4\\Ui\\View::addFields\(\)\.$~'
@@ -323,9 +320,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Card::addButton\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/CardDeck.php'
-            message: '~^Property Atk4\\Ui\\CardDeck::\$card \(Atk4\\Ui\\View\|string\) does not accept default value of type array\<int, string\>\.$~'
-        -
-            path: 'src/CardDeck.php'
             message: '~^Property Atk4\\Ui\\CardDeck::\$container \(Atk4\\Ui\\View\|null\) does not accept default value of type array\<int\|string, class-string\|string\>\.$~'
         -
             path: 'src/CardDeck.php'
@@ -366,9 +360,6 @@ parameters:
         -
             path: 'src/Crud.php'
             message: '~^Parameter \#2 \$fields \(array\|null\) of method Atk4\\Ui\\Crud::setModel\(\) should be contravariant with parameter \$columns \(array\|bool\) of method Atk4\\Ui\\Grid::setModel\(\)$~'
-        -
-            path: 'src/Form.php'
-            message: '~^Property Atk4\\Ui\\Form::\$cb \(Atk4\\Ui\\Callback\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Form.php'
             message: '~^Property Atk4\\Ui\\Form::\$layout \(Atk4\\Ui\\Form\\Layout\) does not accept array\<int, string\>\.$~'
@@ -525,9 +516,6 @@ parameters:
         -
             path: 'src/View.php'
             message: '~^Method Atk4\\Ui\\View::getClosestOwner\(\) should return Atk4\\Ui\\View\|null but empty return statement found\.$~'
-        -
-            path: 'src/VirtualPage.php'
-            message: '~^Property Atk4\\Ui\\VirtualPage::\$cb \(Atk4\\Ui\\Callback\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/VirtualPage.php'
             message: '~^Parameter \#1 \$fx \(Closure\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
@@ -842,9 +830,6 @@ parameters:
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
         -
             path: 'src/Form.php'
-            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\JsCallback given\.$~'
-        -
-            path: 'src/Form.php'
             message: '~^Parameter \#2 \$value of method Atk4\\Ui\\View::setAttr\(\) expects string\|null, int given\.$~'
         -
             path: 'src/Form/Layout/Columns.php'
@@ -885,12 +870,6 @@ parameters:
         -
             path: 'src/UserAction/ModalExecutor.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array\<int, mixed\> given\.$~'
-        -
-            path: 'src/View.php'
-            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\JsCallback given\.$~'
-        -
-            path: 'src/VirtualPage.php'
-            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array\<int\|string, string\> given\.$~'
         -
             path: 'tests/JsTest.php'
             message: '~^Parameter \#1 \$args of class Atk4\\Ui\\JsFunction constructor expects array, null given\.$~'
@@ -1146,9 +1125,6 @@ parameters:
         -
             path: 'src/Card.php'
             message: '~^Method Atk4\\Ui\\Card::addAction\(\) has parameter \$button with no typehint specified\.$~'
-        -
-            path: 'src/Card.php'
-            message: '~^Method Atk4\\Ui\\Card::addAction\(\) has parameter \$executor with no typehint specified\.$~'
         -
             path: 'src/Card.php'
             message: '~^Method Atk4\\Ui\\Card::addExtraFields\(\) has no return typehint specified\.$~'

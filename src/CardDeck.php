@@ -16,8 +16,8 @@ class CardDeck extends View
 {
     public $ui = '';
 
-    /** @var string|View Card type inside this deck. */
-    public $card = [Card::class];
+    /** @var string Card type inside this deck. */
+    public $card = Card::class;
 
     /** @var string default template file. */
     public $defaultTemplate = 'card-deck.html';
@@ -144,7 +144,7 @@ class CardDeck extends View
 
         if ($count = $this->initPaginator()) {
             $this->model->each(function ($m) use ($fields, $extra) {
-                $c = $this->cardHolder->add(Factory::factory($this->card, ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]))->addClass('segment');
+                $c = $this->cardHolder->add(Factory::factory([$this->card], ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]))->addClass('segment');
                 $c->setModel($m, $fields);
                 if ($extra) {
                     $c->addExtraFields($m, $extra, $this->extraGlue);

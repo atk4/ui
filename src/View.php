@@ -1104,7 +1104,7 @@ class View extends AbstractView implements JsExpressionable
             }
 
             // create callback, that will include event as part of the full name
-            $this->add($cb = new JsCallback(), ['desired_name' => $event]);
+            $cb = JsCallback::addTo($this, [], [['desired_name' => $event]]);
             if ($defaults['apiConfig'] ?? null) {
                 $cb->apiConfig = $defaults['apiConfig'];
             }
