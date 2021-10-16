@@ -36,7 +36,7 @@ $wizard->addStep('Define User Action', function ($page) {
             EOF
     );
 
-    $page->add(new Demo())->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
 
         $country->addUserAction('send_message');
@@ -59,7 +59,7 @@ $wizard->addStep('Define User Action', function ($page) {
             EOF
     );
 
-    $page->add(new Demo())->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
 
         $country->addUserAction('send_message', function () {
@@ -83,7 +83,7 @@ $wizard->addStep('UI Integration', function ($page) {
             EOF
     );
 
-    $page->add(new Demo())->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
         $country = $country->loadAny();
 
@@ -99,7 +99,7 @@ $wizard->addStep('UI Integration', function ($page) {
             EOF
     );
 
-    $page->add(new Demo())->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
         $country = $country->loadAny();
 
@@ -119,7 +119,7 @@ $wizard->addStep('Arguments', function ($page) {
             EOF
     );
 
-    $page->add(new Demo())->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $model = new \Atk4\Data\Model($owner->getApp()->db, ['table' => 'test']);
 
         $model->addUserAction('greet', [
@@ -147,9 +147,9 @@ $wizard->addStep('Arguments', function ($page) {
             },
         ]);
 
-        $owner->add(new \Atk4\Ui\Form\Control\Line([
+        \Atk4\Ui\Form\Control\Line::addTo($owner, [
             'action' => $model->getUserAction('greet'),
-        ]));
+        ]);
 
         \Atk4\Ui\View::addTo($owner, ['ui' => 'divider']);
 
@@ -160,7 +160,7 @@ $wizard->addStep('Arguments', function ($page) {
 
 /*
 $wizard->addStep('More Ways', function ($page) {
-    $page->add(new Demo(['left_width' => 5, 'right_width' => 11]))->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page, ['left_width' => 5, 'right_width' => 11])->setCodeAndCall(function (View $owner) {
         $model = new Stat($owner->getApp()->db);
         $model->addUserAction('mail', [
             'fields' => ['currency_field'],
@@ -187,7 +187,7 @@ $wizard->addStep('Crud integration', function ($page) {
             EOF
     );
 
-    $page->add(new Demo())->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
         $country->getUserAction('delete')->enabled = function (Country $m) { return $m->id % 2 === 0; };

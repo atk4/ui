@@ -25,7 +25,7 @@ $form = Form::addTo($vp);
 $form->setModel($m->tryLoadAny(), [$m->fieldName()->name]);
 $form->getControl($m->fieldName()->name)->caption = 'TestName';
 
-$table = $app->add(new \Atk4\Ui\Table());
+$table = \Atk4\Ui\Table::addTo($app);
 $table->setModel($m);
 
 $button = Button::addTo($app, ['First', ['ui' => 'atk-test']]);

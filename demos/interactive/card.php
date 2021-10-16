@@ -33,9 +33,9 @@ $card->addExtraContent(new \Atk4\Ui\View(['Copyright notice: Image from Semantic
 
 $card = \Atk4\Ui\Card::addTo($app);
 $content = new \Atk4\Ui\View(['class' => ['content']]);
-$content->add($img = new \Atk4\Ui\Image(['../images/kristy.png']));
+$img = \Atk4\Ui\Image::addTo($content, ['../images/kristy.png']);
 $img->addClass('right floated mini ui image');
-$content->add($header = new \Atk4\Ui\Header(['Kristy']));
+$header = \Atk4\Ui\Header::addTo($content, ['Kristy']);
 
 $card->addContent($content);
 $card->addDescription('Friend of Bob');

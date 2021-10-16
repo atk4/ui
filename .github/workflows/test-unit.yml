@@ -60,7 +60,7 @@ jobs:
       - name: Check Coding Style (only for CodingStyle)
         if: matrix.type == 'CodingStyle'
         run: |
-          if [ "$(find demos/ -name '*.php' -print0 | xargs -0 grep -L "namespace Atk4\\\\Ui\\\\Demos;" | tee /dev/fd/2)" ]; then echo 'All demos/ files must have namespace declared' && (exit 1); fi
+          if [ "$(find demos/ -name '*.php' -print0 | xargs -0 grep -L "namespace Atk4\\\\Ui\\\\Demos[;\\\\]" | tee /dev/fd/2)" ]; then echo 'All demos/ files must have namespace declared' && (exit 1); fi
           vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --verbose
 
       - name: Run Static Analysis (only for StaticAnalysis)
@@ -219,7 +219,7 @@ jobs:
     name: Behat
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/mvorisek/image-php:${{ matrix.php }}-node
+      image: ghcr.io/mvorisek/image-php:${{ matrix.php }}-selenium
     strategy:
       fail-fast: false
       matrix:
@@ -255,12 +255,6 @@ jobs:
         image: ghcr.io/mvorisek/docker-oracle-xe-11g
         env:
           ORACLE_ALLOW_REMOTE: true
-      selenium-chrome:
-        image: selenium/standalone-chrome:latest
-        options: --health-cmd "/opt/bin/check-grid.sh"
-      selenium-firefox:
-        image: selenium/standalone-firefox:latest
-        options: --health-cmd "/opt/bin/check-grid.sh"
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -339,15 +333,16 @@ jobs:
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage && cp tools/CoverageUtil.php demos; fi
           sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWORD'] ?? null);/g" -i demos/db.default.php
           sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
-          php -S 172.18.0.2:8888 > /dev/null 2>&1 &
-          sleep 0.2
+          ci_wait_until () { timeout 30 sh -c "until { $1 2> /dev/null; }; do sleep 0.02; done" || timeout 15 sh -c "$1" || { echo "health timeout: $1"; exit 1; }; }
+          php -S 127.0.0.1:8888 > /dev/null 2>&1 &
+          ci_wait_until 'nc -w 1 127.0.0.1 8888'
+          if [ -f /etc/alpine-release ]; then addgroup browser && adduser browser -G browser -D -s /bin/sh; else adduser browser --gecos "" --disabled-login -shell /bin/sh > /dev/null; fi
+          { Xvfb -ac :99 -screen 0 1920x1200x24 2> /dev/null & } && export DISPLAY=:99
+          ci_wait_until '[ -e /tmp/.X11-unix/X99 ]'
+          su browser -c 'java -Dwebdriver.chrome.whitelistedIps=127.0.0.1 -jar /opt/selenium-server-standalone.jar -role standalone -host 127.0.0.1 -port 4444 -sessionTimeout 15 -browserTimeout 12 > /dev/null 2>&1 &'
+          ci_wait_until 'nc -w 1 127.0.0.1 4444'
           if [ "${{ matrix.type }}" == "Firefox" ]; then sed -i "s~chrome~firefox~" behat.yml.dist; fi
           if [ "${{ matrix.type }}" == "Chrome Slow" ]; then echo 'sleep(1);' >> demos/init-app.php; fi
-
-          # remove once https://github.com/minkphp/Mink/pull/801
-          # and https://github.com/minkphp/MinkSelenium2Driver/pull/322 are released
-          sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink/src/Element/Element.php
-          sed -i 's/usleep(100000)/usleep(5000)/' vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php
 
       - name: "Run tests: SQLite"
         run: |

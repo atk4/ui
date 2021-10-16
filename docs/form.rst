@@ -77,7 +77,7 @@ decorators defined at ``\Atk4\Ui\Form::Control``. See dedicated documentation fo
 
 To tweak the UI properties of an form control input use ``setInputAttr()`` (and not the surrounding <div> as ``setAttr()`` would do). Here is how to set the HTML "maxlength" attribute on the generated input field::
 
-	$form = $this->add(new \Atk4\Ui\Form);
+	$form = \Atk4\Ui\Form::addTo($this);
 	$form->setModel($model);
 	$form->getControl('name')->setInputAttr('maxlength', 20);
 

@@ -184,7 +184,7 @@ class Form extends View
         // set css loader for this form
         $this->setApiConfig(['stateContext' => '#' . $this->name]);
 
-        $this->cb = $this->add(new JsCallback(), ['desired_name' => 'submit']);
+        $this->cb = JsCallback::addTo($this, [], [['desired_name' => 'submit']]);
     }
 
     /**

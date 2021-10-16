@@ -77,7 +77,7 @@ class Context extends RawMinkContext implements BehatContext
             }
         }
 
-        throw new Exception('jQuery did not finished within a time limit');
+        throw new Exception('jQuery did not finish within a time limit');
     }
 
     protected function disableAnimations(): void

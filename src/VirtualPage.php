@@ -31,7 +31,7 @@ class VirtualPage extends View
     {
         parent::init();
 
-        $this->cb = $this->add([Callback::class, 'urlTrigger' => $this->urlTrigger ?: $this->name]);
+        $this->cb = Callback::addTo($this, ['urlTrigger' => $this->urlTrigger ?: $this->name]);
         unset($this->{'urlTrigger'});
     }
 
