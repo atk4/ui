@@ -144,7 +144,6 @@ jobs:
           php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage && cp tools/CoverageUtil.php demos; fi
-          sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWORD'] ?? null);/g" -i demos/db.default.php
 
       - name: "Run tests: SQLite"
         run: |
@@ -158,6 +157,7 @@ jobs:
           DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mysql.cov; fi
@@ -168,6 +168,7 @@ jobs:
           DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mariadb.cov; fi
@@ -178,6 +179,7 @@ jobs:
           DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-postgres.cov; fi
@@ -188,6 +190,7 @@ jobs:
           DB_USER: sa
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mssql.cov; fi
@@ -198,6 +201,7 @@ jobs:
           DB_USER: system
           DB_PASSWORD: oracle
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-oracle.cov; fi
@@ -206,6 +210,7 @@ jobs:
         if: env.LOG_COVERAGE
         run: |
           ls -l coverage | wc -l
+          composer require --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader phpunit/phpcov
           php -d memory_limit=2G vendor/bin/phpcov merge coverage/ --clover coverage/merged.xml
 
       - name: Upload coverage logs 2/2 (only for latest Phpunit)
@@ -331,7 +336,6 @@ jobs:
           php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage && cp tools/CoverageUtil.php demos; fi
-          sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWORD'] ?? null);/g" -i demos/db.default.php
           sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
           ci_wait_until () { timeout 30 sh -c "until { $1 2> /dev/null; }; do sleep 0.02; done" || timeout 15 sh -c "$1" || { echo "health timeout: $1"; exit 1; }; }
           php -S 127.0.0.1:8888 > /dev/null 2>&1 &
@@ -356,6 +360,7 @@ jobs:
           DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
@@ -366,6 +371,7 @@ jobs:
           DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
@@ -376,6 +382,7 @@ jobs:
           DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
@@ -386,6 +393,7 @@ jobs:
           DB_USER: sa
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
@@ -396,6 +404,7 @@ jobs:
           DB_USER: system
           DB_PASSWORD: oracle
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
@@ -403,6 +412,7 @@ jobs:
         if: env.LOG_COVERAGE
         run: |
           ls -l coverage | wc -l
+          composer require --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader phpunit/phpcov
           php -d memory_limit=2G vendor/bin/phpcov merge coverage/ --clover coverage/merged.xml
 
       - name: Upload coverage logs 2/2 (only for latest Chrome)
