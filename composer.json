@@ -73,7 +73,6 @@
         "johnkary/phpunit-speedtrap": "^3.3",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^0.12.82",
-        "phpunit/phpcov": "*",
         "phpunit/phpunit": "^9.5.5",
         "symfony/console": "^4.4.30 || ^5.3.7",
         "symfony/css-selector": "^4.4.24 || ^5.2.9",
