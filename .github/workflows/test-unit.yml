@@ -46,9 +46,9 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev; fi
+          if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap --dev; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev; fi
-          if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/phpstan 'behat/*' --dev; fi
+          if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/* 'behat/*' --dev; fi
           composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
       - name: "Run tests: SQLite (only for Phpunit)"
@@ -131,11 +131,12 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "Phpunit Lowest" ] && [ "${{ matrix.type }}" != "Phpunit Burn" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap phpunit/phpcov --dev; fi
+          if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "Phpunit Lowest" ] && [ "${{ matrix.type }}" != "Phpunit Burn" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap --dev; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev; fi
-          if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/phpstan 'behat/*' --dev; fi
+          if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/* 'behat/*' --dev; fi
+          if [ -n "$LOG_COVERAGE" ]; then composer require --no-interaction --no-update phpunit/phpcov; fi
           composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
-          if [ "${{ matrix.type }}" == "Phpunit Lowest" ]; then composer update  --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader; fi
+          if [ "${{ matrix.type }}" == "Phpunit Lowest" ]; then composer update --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader; fi
           if [ "${{ matrix.type }}" == "Phpunit Burn" ]; then sed -i 's~ *public function runBare(): void~public function runBare(): void { gc_collect_cycles(); gc_collect_cycles(); $memDiffs = array_fill(0, '"$(if [ \"$GITHUB_EVENT_NAME\" == \"schedule\" ]; then echo 64; else echo 16; fi)"', 0); for ($i = -1; $i < count($memDiffs); ++$i) { $this->_runBare(); gc_collect_cycles(); gc_collect_cycles(); $mem = memory_get_usage(); if ($i !== -1) { $memDiffs[$i] = $mem - $memPrev; } $memPrev = $mem; rsort($memDiffs); if (array_sum($memDiffs) >= 4096 * 1024 || $memDiffs[2] > 0) { $this->onNotSuccessfulTest(new AssertionFailedError( "Memory leak detected! (" . implode(" + ", array_map(fn ($v) => number_format($v / 1024, 3, ".", " "), array_filter($memDiffs))) . " KB, " . ($i + 2) . " iterations)" )); } } } private function _runBare(): void~' vendor/phpunit/phpunit/src/Framework/TestCase.php && cat vendor/phpunit/phpunit/src/Framework/TestCase.php | grep '_runBare('; fi
 
       - name: Init
@@ -144,7 +145,6 @@ jobs:
           php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage && cp tools/CoverageUtil.php demos; fi
-          sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWORD'] ?? null);/g" -i demos/db.default.php
 
       - name: "Run tests: SQLite"
         run: |
@@ -158,6 +158,7 @@ jobs:
           DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mysql.cov; fi
@@ -168,6 +169,7 @@ jobs:
           DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mariadb.cov; fi
@@ -178,6 +180,7 @@ jobs:
           DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-postgres.cov; fi
@@ -188,6 +191,7 @@ jobs:
           DB_USER: sa
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mssql.cov; fi
@@ -198,6 +202,7 @@ jobs:
           DB_USER: system
           DB_PASSWORD: oracle
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-oracle.cov; fi
@@ -321,9 +326,10 @@ jobs:
         run: |
           composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap --dev
           composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev
-          composer remove --no-interaction --no-update phpstan/phpstan --dev
+          composer remove --no-interaction --no-update phpstan/* --dev
+          if [ -n "$LOG_COVERAGE" ]; then composer require --no-interaction --no-update phpunit/phpcov; fi
           composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
-          if [ "${{ matrix.type }}" == "Chrome Lowest" ]; then composer update  --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader; fi
+          if [ "${{ matrix.type }}" == "Chrome Lowest" ]; then composer update --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader; fi
 
       - name: Init
         run: |
@@ -331,7 +337,6 @@ jobs:
           php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage && cp tools/CoverageUtil.php demos; fi
-          sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWORD'] ?? null);/g" -i demos/db.default.php
           sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
           ci_wait_until () { timeout 30 sh -c "until { $1 2> /dev/null; }; do sleep 0.02; done" || timeout 15 sh -c "$1" || { echo "health timeout: $1"; exit 1; }; }
           php -S 127.0.0.1:8888 > /dev/null 2>&1 &
@@ -356,6 +361,7 @@ jobs:
           DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
@@ -366,6 +372,7 @@ jobs:
           DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
@@ -376,6 +383,7 @@ jobs:
           DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
@@ -386,6 +394,7 @@ jobs:
           DB_USER: sa
           DB_PASSWORD: atk4_pass
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
@@ -396,6 +405,7 @@ jobs:
           DB_USER: system
           DB_PASSWORD: oracle
         run: |
+          sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
