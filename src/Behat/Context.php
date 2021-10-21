@@ -52,6 +52,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         return 'document.readyState === \'complete\''
             . ' && typeof jQuery !== \'undefined\' && jQuery.active === 0'
+            . ' && document.querySelectorAll(\'.animating.ui.transition:not(.looping)\').length === 0'
             . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()';
     }
 
@@ -273,7 +274,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iPressModalButton(string $buttonLabel): void
     {
-        $modal = $this->getElementInPage('.modal.transition.visible.active.front');
+        $modal = $this->getElementInPage('.modal.visible.active.front');
         $btn = $this->getElementInElement($modal, '//div[text()="' . $buttonLabel . '"]', 'xpath');
         $btn->click();
     }
@@ -286,7 +287,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function modalIsOpenWithText(string $text, string $tag = 'div'): void
     {
-        $modal = $this->getElementInPage('.modal.transition.visible.active.front');
+        $modal = $this->getElementInPage('.modal.visible.active.front');
         $this->getElementInElement($modal, '//' . $tag . '[text()="' . $text . '"]', 'xpath');
     }
 
@@ -295,7 +296,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iFillModalField(string $fieldName, string $value): void
     {
-        $modal = $this->getElementInPage('.modal.transition.visible.active.front');
+        $modal = $this->getElementInPage('.modal.visible.active.front');
         $field = $modal->find('named', ['field', $fieldName]);
         $field->setValue($value);
     }
