@@ -67,9 +67,6 @@ class App
      */
     public $template_dir;
 
-    /** @var string Name of skin */
-    public $skin = 'semantic-ui';
-
     /**
      * Will replace an exception handler with our own, that will output errors nicely.
      *
@@ -269,7 +266,7 @@ class App
             $this->template_dir = [$this->template_dir];
         }
 
-        $this->template_dir[] = dirname(__DIR__) . '/template/' . $this->skin;
+        $this->template_dir[] = dirname(__DIR__) . '/template';
     }
 
     protected function callBeforeExit(): void
