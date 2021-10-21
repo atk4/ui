@@ -80,13 +80,6 @@ class View extends AbstractView implements JsExpressionable
     public $attr = [];
 
     /**
-     * Just here temporarily, until App picks it up.
-     *
-     * @var string
-     */
-    protected $skin;
-
-    /**
      * Template object, that, for most Views will be rendered to
      * produce HTML output. If you leave this object as "null" then
      * a new Template will be generated during init() based on the

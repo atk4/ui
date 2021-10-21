@@ -339,7 +339,7 @@ jobs:
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage && cp tools/CoverageUtil.php demos; fi
           sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'/public',~" src/App.php
           ci_wait_until () { timeout 30 sh -c "until { $1 2> /dev/null; }; do sleep 0.02; done" || timeout 15 sh -c "$1" || { echo "health timeout: $1"; exit 1; }; }
-          php -S 127.0.0.1:8888 > /dev/null 2>&1 &
+          php -d opcache.enable_cli=1 -S 127.0.0.1:8888 > /dev/null 2>&1 &
           ci_wait_until 'nc -w 1 127.0.0.1 8888'
           if [ -f /etc/alpine-release ]; then addgroup browser && adduser browser -G browser -D -s /bin/sh; else adduser browser --gecos "" --disabled-login -shell /bin/sh > /dev/null; fi
           { Xvfb -ac :99 -screen 0 1920x1200x24 2> /dev/null & } && export DISPLAY=:99

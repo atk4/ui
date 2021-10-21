@@ -198,7 +198,7 @@ Loading Templates for Views
 .. php:method:: loadTemplate($name)
 
 Views use :php:attr:`View::$defaultTemplate` to specify which template they are using. By default
-those are loaded from `vendor/atk4/ui/template/semantic-ui` however by overriding this method,
+those are loaded from `vendor/atk4/ui/template` however by overriding this method,
 you can specify extended logic.
 
 You may override this method if you are using a different CSS framework.
