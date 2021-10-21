@@ -33,8 +33,8 @@ class Context extends RawMinkContext implements BehatContext
             return;
         }
 
-        if (strpos($event->getStep()->getText(), 'Toast display should contains text ') !== 0) {
-            $this->getSession()->executeScript('$(\'.toast-box > .ui.toast\').toast(\'close\');');
+        if (!str_starts_with($event->getStep()->getText(), 'Toast display should contains text ')) {
+            $this->getSession()->executeScript('jQuery(\'.toast-box > .ui.toast\').toast(\'close\');');
         }
     }
 
