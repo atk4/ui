@@ -74,7 +74,7 @@ class Context extends RawMinkContext implements BehatContext
                 }
             } else {
                 $c = 0;
-                usleep(50000);
+                usleep(20000);
             }
         }
 
