@@ -169,7 +169,7 @@ class Lister extends View
         // empty message
         if (!$this->_rendered_rows_count) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
-                $empty = isset($this->t_empty) ? $this->t_empty->renderToHtml() : '';
+                $empty = $this->t_empty !== null ? $this->t_empty->renderToHtml() : '';
                 if ($this->template->hasTag('rows')) {
                     $this->template->dangerouslyAppendHtml('rows', $empty);
                 } else {
