@@ -468,9 +468,6 @@ parameters:
             message: '~^Property Atk4\\Ui\\UserAction\\JsCallbackExecutor::\$jsSuccess \(Atk4\\Ui\\JsExpressionable\) does not accept array\|Closure\.$~'
         -
             path: 'src/View.php'
-            message: '~^Property Atk4\\Data\\Field::\$type \(string\) does not accept null\.$~'
-        -
-            path: 'src/View.php'
             message: '~^Parameter \#1 \$object \(Atk4\\Ui\\View\) of method Atk4\\Ui\\View::add\(\) should be contravariant with parameter \$object \(Atk4\\Ui\\AbstractView\) of method Atk4\\Ui\\AbstractView::add\(\)$~'
         -
             path: 'src/View.php'
