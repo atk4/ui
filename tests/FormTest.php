@@ -9,6 +9,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\App;
 use Atk4\Ui\Callback;
 use Atk4\Ui\Form;
+use Mvorisek\Atk4\Hintable\Phpstan\PhpstanUtil;
 
 class FormTest extends TestCase
 {
@@ -183,5 +184,7 @@ class AppFormTestMock extends App
     public function terminate($output = '', array $headers = []): void
     {
         $this->output = $output;
+
+        PhpstanUtil::fakeNeverReturn();
     }
 }

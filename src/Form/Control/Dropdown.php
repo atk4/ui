@@ -177,7 +177,7 @@ class Dropdown extends Input
      */
     public function getValue()
     {
-        return isset($this->field)
+        return $this->field !== null
             ? (is_array($this->field->get()) ? implode(',', $this->field->get()) : $this->field->get())
             : parent::getValue();
     }
@@ -247,7 +247,7 @@ class Dropdown extends Input
         }
 
         // model set? use this, else values property
-        if (isset($this->model)) {
+        if ($this->model !== null) {
             if ($this->renderRowFunction) {
                 foreach ($this->model as $row) {
                     $this->_addCallBackRow($row);

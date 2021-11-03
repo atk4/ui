@@ -68,7 +68,7 @@ class Lookup extends Input
      * true = will use "Add new" label
      * string = will use your string
      *
-     * @var bool|string|null
+     * @var bool|string|array|null
      */
     public $plus = false;
 
@@ -249,17 +249,22 @@ class Lookup extends Input
             return;
         }
 
-        $this->plus = is_bool($this->plus) ? 'Add New' : $this->plus;
+        if ($this->plus === true) {
+            $this->plus = 'Add New';
+        }
 
-        $this->plus = is_string($this->plus) ? ['button' => $this->plus] : $this->plus;
+        if (is_string($this->plus)) {
+            $this->plus = ['button' => $this->plus];
+        }
 
         $buttonSeed = $this->plus['button'] ?? [];
-
-        $buttonSeed = is_string($buttonSeed) ? ['content' => $buttonSeed] : $buttonSeed;
+        if (is_string($buttonSeed)) {
+            $buttonSeed = ['content' => $buttonSeed];
+        }
 
         $defaultSeed = [\Atk4\Ui\Button::class, 'disabled' => ($this->disabled || $this->readonly)];
 
-        $this->action = Factory::factory(array_merge($defaultSeed, (array) $buttonSeed));
+        $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
 
         if ($this->form) {
             $vp = \Atk4\Ui\VirtualPage::addTo($this->form);

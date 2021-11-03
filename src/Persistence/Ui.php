@@ -71,7 +71,7 @@ class Ui extends \Atk4\Data\Persistence
                     $format = $field->persist_format ?: $formats[$field->type];
 
                     // datetime only - set to persisting timezone
-                    if ($field->type === 'datetime' && isset($field->persist_timezone)) {
+                    if ($field->type === 'datetime') {
                         $value = new \DateTime($value->format('Y-m-d H:i:s.u'), $value->getTimezone());
                         $value->setTimezone(new \DateTimeZone($field->persist_timezone));
                     }
@@ -111,7 +111,7 @@ class Ui extends \Atk4\Data\Persistence
 
                 // datetime only - set from persisting timezone
                 $valueStr = is_object($value) ? $this->_typecastSaveField($field, $value) : $value;
-                if ($field->type === 'datetime' && isset($field->persist_timezone)) {
+                if ($field->type === 'datetime') {
                     $value = $dt_class::createFromFormat($format, $valueStr, new $tz_class($field->persist_timezone));
                     if ($value === false) {
                         throw (new Exception('Incorrectly formatted datetime'))

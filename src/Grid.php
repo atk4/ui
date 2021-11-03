@@ -18,9 +18,6 @@ class Grid extends View
 {
     use HookTrait;
 
-    /** @const string not used, make it public if needed or drop it */
-    private const HOOK_ON_USER_ACTION = self::class . '@onUserAction';
-
     /**
      * Will be initialized to Menu object, however you can set this to false to disable menu.
      *

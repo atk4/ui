@@ -97,7 +97,7 @@ class Input extends Form\Control
      */
     public function getValue()
     {
-        return isset($this->field)
+        return $this->field !== null
                     ? $this->getApp()->ui_persistence->typecastSaveField($this->field, $this->field->get())
                     : ($this->content ?? '');
     }
