@@ -72,8 +72,8 @@ trait StepExecutorTrait
     /** @var string */
     public $finalMsg = 'Complete!';
 
-    /** @var UserAction */
-    private $cloneAction;
+    /** @var array */
+    private $cloneArgs;
 
     /**
      * Utility for setting Title for each step.
@@ -117,9 +117,7 @@ trait StepExecutorTrait
      */
     protected function getModelForArgs(): Model
     {
-        $this->cloneAction = clone $this->getAction();
-        $args = $this->cloneAction->args;
-        $this->cloneAction->args = [];
+        $args = $this->getAction()->args;
         if (array_key_exists('__atk_model', $args)) {
             /** @var Model $argsModel */
             $argsModel = Factory::factory($args['__atk_model']);
@@ -139,7 +137,7 @@ trait StepExecutorTrait
 
         // set userAction args using model field.
         foreach ($argsModel->getFields('editable') as $k => $field) {
-            $this->cloneAction->args[$k] = $field->short_name;
+            $this->cloneArgs[$k] = $field->short_name;
         }
 
         return $argsModel;
@@ -528,7 +526,7 @@ trait StepExecutorTrait
     {
         $args = [];
 
-        foreach ($this->cloneAction->args as $key => $val) {
+        foreach ($this->cloneArgs as $key => $val) {
             $args[] = $this->getActionData('args')[$key];
         }
 
@@ -542,7 +540,7 @@ trait StepExecutorTrait
     {
         $args = [];
 
-        foreach ($this->cloneAction->args as $key => $val) {
+        foreach ($this->cloneArgs as $key => $val) {
             $args[] = $data[$key];
         }
 
