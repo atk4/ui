@@ -73,7 +73,7 @@ trait StepExecutorTrait
     public $finalMsg = 'Complete!';
 
     /** @var array An extended copy of UserAction arguments. It contains original action arguments and arguments set by '__atk_model'. */
-    private $cloneArgs;
+    private $cloneArgs = [];
 
     /**
      * Utility for setting Title for each step.
