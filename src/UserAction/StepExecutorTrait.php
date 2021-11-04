@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\UserAction;
 
-use Atk4\Core\Exception;
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
+use Atk4\Data\Persistence\Array_;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
@@ -102,18 +102,54 @@ trait StepExecutorTrait
         foreach ($fields as $k => $val) {
             $form->getControl($k)->set($val);
         }
+
         $this->hook(self::HOOK_STEP, [$step, $form]);
 
         return $form;
     }
 
+    /**
+     * Set model for userAction arguments.
+     * Override existing argument with model definition.
+     */
+    protected function getModelForArgs(): Model
+    {
+        $args = $this->getAction()->args;
+        $this->getAction()->args = [];
+        if (array_key_exists('__atk_model', $args)) {
+            /** @var Model $argsModel */
+            $argsModel = Factory::factory($args['__atk_model']);
+            // if seed is supplied, we need to initialize.
+            if (!$argsModel->_initialized) {
+                $argsModel->invokeInit();
+            }
+
+            unset($args['__atk_model']);
+        } else {
+            $argsModel = new Model(new Array_([]));
+        }
+
+        foreach ($args as $key => $val) {
+            $argsModel->addField($key, $val);
+        }
+
+        // set userAction args using model field.
+        foreach ($argsModel->getFields('editable') as $k => $field) {
+            $this->getAction()->args[$k] = $field->short_name;
+        }
+
+        return $argsModel;
+    }
+
     protected function runSteps(): void
     {
-        $this->loader->set(function ($page) {
+        $argModel = $this->getModelForArgs();
+
+        $this->loader->set(function ($page) use ($argModel) {
             try {
                 switch ($this->step) {
                     case 'args':
-                        $this->doArgs($page);
+                        $this->doArgs($page, $argModel);
 
                         break;
                     case 'fields':
@@ -135,28 +171,13 @@ trait StepExecutorTrait
         });
     }
 
-    protected function doArgs(View $page): void
+    protected function doArgs(View $page, Model $model): void
     {
         $this->addStepTitle($page, $this->step);
 
         $form = $this->addFormTo($page);
-        foreach ($this->action->args as $key => $val) {
-            if (is_numeric($key)) {
-                throw (new Exception('Action arguments must be named'))
-                    ->addMoreInfo('args', $this->action->args);
-            }
 
-            if ($val instanceof Model) {
-                $val = ['model' => $val];
-            }
-
-            if (isset($val['model'])) {
-                $val['model'] = Factory::factory($val['model']);
-                $form->addControl($key, [Form\Control\Lookup::class])->setModel($val['model']);
-            } else {
-                $form->addControl($key, null, $val);
-            }
-        }
+        $form->setModel($model->createEntity());
 
         // set args value if available.
         $this->setFormField($form, $this->getActionData('args'), $this->step);
@@ -166,8 +187,12 @@ trait StepExecutorTrait
         $this->jsSetPrevHandler($page, $this->step);
 
         $form->onSubmit(function (Form $form) {
+            $form->model->save();
             // collect arguments.
-            $this->actionData['args'] = $form->model->get();
+            foreach ($form->model->getFields('editable') as $k => $field) {
+                $argValues[$k] = $form->model->get($k);
+            }
+            $this->setActionData('args', $argValues ?? []);
 
             return $this->jsStepSubmit($this->step);
         });
@@ -188,11 +213,11 @@ trait StepExecutorTrait
 
         if (!$form->hookHasCallbacks(Form::HOOK_SUBMIT)) {
             $form->onSubmit(function (Form $form) {
-                // collect fields.
-                $form_fields = $form->model->get();
-                foreach ($this->action->fields as $field) {
-                    $this->actionData['fields'][$field] = $form_fields[$field];
-                }
+                // collect fields define in Model\UserAction.
+                $fields = array_filter($form->model->get(), function ($field) {
+                    return in_array($field, $this->action->fields, true);
+                }, \ARRAY_FILTER_USE_KEY);
+                $this->setActionData('fields', $fields);
 
                 return $this->jsStepSubmit($this->step);
             });
@@ -481,6 +506,13 @@ trait StepExecutorTrait
     protected function getActionData(string $step): array
     {
         return $this->actionData[$step] ?? [];
+    }
+
+    protected function setActionData(string $step, array $values)
+    {
+        foreach ($values as $k => $value) {
+            $this->actionData[$step][$k] = $value;
+        }
     }
 
     /**

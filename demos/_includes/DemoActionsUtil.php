@@ -4,7 +4,31 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
+use Atk4\Data\Persistence\Array_;
+use Atk4\Ui\Form\Control\Dropdown;
+
+class ArgModel extends Model
+{
+    protected function init(): void
+    {
+        parent::init();
+        $this->addField('age', ['type' => 'integer', 'required' => true, 'caption' => 'Age must be 21 or over:']);
+        $this->addField('city');
+        $this->addField('gender', ['default' => 'm', 'ui' => ['form' => [Dropdown::class, 'values' => ['m' => 'Male', 'f' => 'Female']]]]);
+    }
+
+    public function validate($intent = null): array
+    {
+        $error = [];
+        if ($this->get('age') < 21) {
+            $error = ['age' => 'You must be at least 21 years old.'];
+        }
+
+        return array_merge($error, parent::validate($intent));
+    }
+}
 
 class DemoActionsUtil
 {
@@ -131,7 +155,37 @@ class DemoActionsUtil
                 'args' => [
                     'age' => ['type' => 'integer', 'required' => true],
                     'city' => [],
-                    'gender' => ['type' => 'string', /* TODO 'values' => ['m' => 'Male', 'f' => 'Female'],*/ 'required' => true, 'default' => 'm'],
+                    'gender' => [
+                        'type' => 'string',
+                        'required' => true,
+                        'default' => 'm',
+                        'ui' => [
+                            'form' => [
+                                Dropdown::class, 'values' => ['m' => 'Male', 'f' => 'Female'],
+                            ],
+                        ],
+                    ],
+                ],
+                'fields' => [$country->fieldName()->iso3],
+                'callback' => function ($model, $age, $city, $gender) {
+                    $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
+
+                    return 'Thank you ' . $n . ' at age ' . $age;
+                },
+                'preview' => function ($model, $age, $city, $gender) {
+                    return 'Gender = ' . $gender . ' / Age = ' . $age;
+                },
+            ]
+        );
+
+        $country->addUserAction(
+            'arg_using_model',
+            [
+                'caption' => 'Arg with Model',
+                'description' => 'Ask for Arguments set via a Data\Model. Allow usage of model validate() for your arguments',
+                'args' => [
+                    '__atk_model' => new ArgModel(new Array_([])),
+                    'extra' => ['type' => 'string'],
                 ],
                 'fields' => [$country->fieldName()->iso3],
                 'callback' => function ($model, $age, $city, $gender) {
