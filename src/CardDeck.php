@@ -151,9 +151,8 @@ class CardDeck extends View
                 }
                 if ($this->useAction) {
                     if ($singleActions = $this->getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD)) {
-                        $args = $this->getReloadArgs();
                         foreach ($singleActions as $action) {
-                            $c->addClickAction($action, null, $this->getReloadArgs());
+                            $c->addClickAction(clone $action, null, $this->getReloadArgs());
                         }
                     }
                 }
