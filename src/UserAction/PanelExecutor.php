@@ -29,7 +29,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
     public $dynamic = [];
     public $hasClickAway = false;
 
-    /** @var string */
+    /** @var string|null */
     public $title;
 
     /** @var Header */

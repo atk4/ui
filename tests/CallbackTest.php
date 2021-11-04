@@ -8,6 +8,7 @@ use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\AbstractView;
 use Atk4\Ui\Callback;
 use Atk4\Ui\VirtualPage;
+use Mvorisek\Atk4\Hintable\Phpstan\PhpstanUtil;
 
 class AppMock extends \Atk4\Ui\App
 {
@@ -17,6 +18,8 @@ class AppMock extends \Atk4\Ui\App
     public function terminate($output = '', array $headers = []): void
     {
         $this->terminated = true;
+
+        PhpstanUtil::fakeNeverReturn();
     }
 
     /**

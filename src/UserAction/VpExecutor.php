@@ -29,7 +29,7 @@ class VpExecutor extends View implements JsExecutorInterface
     /** @var VirtualPage */
     protected $vp;
 
-    /** @var string */
+    /** @var string|null */
     public $title;
 
     /** @var Header */
