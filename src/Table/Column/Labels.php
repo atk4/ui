@@ -18,7 +18,7 @@ use Atk4\Ui\Table;
  */
 class Labels extends Table\Column
 {
-    /** @var array Array of allowed values. This have precedence over->values */
+    /** @var array|null Array of allowed values. This have precedence over->values */
     public $values;
 
     /**

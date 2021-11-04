@@ -14,8 +14,6 @@ use Atk4\Ui\UserAction\ExecutorFactory;
  */
 class View extends AbstractView implements JsExpressionable
 {
-    // {{{ Properties of the class
-
     /**
      * When you call render() this will be populated with JavaScript
      * chains.
@@ -102,7 +100,7 @@ class View extends AbstractView implements JsExpressionable
     /**
      * Set static contents of this view.
      *
-     * @var string|false
+     * @var string|false|null
      */
     public $content;
 
@@ -113,9 +111,8 @@ class View extends AbstractView implements JsExpressionable
      */
     public $element;
 
-    /** @var ExecutorFactory Seed class name */
-    public $executorFactory;
-    // }}}
+    /** @var ExecutorFactory|null Seed class name */
+    protected $executorFactory;
 
     // {{{ Setting Things up
 
@@ -711,7 +708,7 @@ class View extends AbstractView implements JsExpressionable
             }
         }
 
-        if (isset($this->content) && $this->content !== false) {
+        if ($this->content !== null && $this->content !== false) {
             $this->template->append('Content', $this->content);
         }
     }

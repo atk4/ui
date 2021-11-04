@@ -128,11 +128,6 @@ class App
     private $portals = [];
 
     /**
-     * @var bool whether or not semantic-ui vue has been initialised
-     */
-    private $is_sui_init = false;
-
-    /**
      * @var string used in method App::url to build the url
      *
      * Used only in method App::url
@@ -227,7 +222,7 @@ class App
         }
 
         // Set up UI persistence
-        if (!isset($this->ui_persistence)) {
+        if ($this->ui_persistence === null) {
             $this->ui_persistence = new UiPersistence();
         }
 
@@ -484,7 +479,7 @@ class App
         $layout = Layout::fromSeed($seed);
         $layout->setApp($this);
 
-        if (!$this->html) {
+        if ($this->html === null) {
             $this->html = new View(['defaultTemplate' => 'html.html']);
             $this->html->setApp($this);
             $this->html->invokeInit();
@@ -535,9 +530,6 @@ class App
      */
     public function addStyle($style)
     {
-        if (!$this->html) {
-            throw new Exception('App does not know how to add style');
-        }
         $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('style', $style));
     }
 
@@ -567,11 +559,6 @@ class App
             $this->run_called = true;
             $this->hook(self::HOOK_BEFORE_RENDER);
             $this->is_rendering = true;
-
-            // if no App layout set
-            if (!isset($this->html)) {
-                throw new Exception('App layout should be set.');
-            }
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();

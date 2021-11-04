@@ -255,7 +255,7 @@ class ExecutorFactory
      */
     protected function getAddActionCaption(UserAction $action): string
     {
-        return 'Add ' . $action->getModel()->caption ?? '';
+        return 'Add' . ($action->getModel()->caption ? ' ' . $action->getModel()->caption : '');
     }
 
     // Generate id for a model user action.

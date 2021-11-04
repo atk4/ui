@@ -84,9 +84,6 @@ class Upload extends Input
     public const UPLOAD_ACTION = 'upload';
     public const DELETE_ACTION = 'delete';
 
-    /** @var bool check if callback is trigger by one of the action. */
-    private $_isCbRunning = false;
-
     protected function init(): void
     {
         parent::init();

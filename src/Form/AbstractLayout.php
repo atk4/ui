@@ -163,16 +163,9 @@ abstract class AbstractLayout extends \Atk4\Ui\View
     /**
      * Return Field decorator associated with
      * the form's field.
-     *
-     * @return \Atk4\Ui\Form\Control
      */
     public function getControl(string $name): Control
     {
-        if (empty($this->form)) {
-            throw (new Exception('Incorrect value for $form'))
-                ->addMoreInfo('form', $this->form);
-        }
-
         return $this->form->getControl($name);
     }
 
