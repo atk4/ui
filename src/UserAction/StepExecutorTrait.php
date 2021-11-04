@@ -216,9 +216,7 @@ trait StepExecutorTrait
         if (!$form->hookHasCallbacks(Form::HOOK_SUBMIT)) {
             $form->onSubmit(function (Form $form) {
                 // collect fields define in Model\UserAction.
-                $fields = array_filter($form->model->get(), function ($field) {
-                    return in_array($field, $this->action->fields, true);
-                }, \ARRAY_FILTER_USE_KEY);
+                $fields = array_intersect_key($form->model->get(), array_flip($this->action->fields));
                 $this->setActionData('fields', $fields);
 
                 return $this->jsStepSubmit($this->step);
