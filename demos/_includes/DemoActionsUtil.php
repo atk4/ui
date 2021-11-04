@@ -19,7 +19,7 @@ class ArgModel extends Model
         $this->addField('gender', ['default' => 'm', 'ui' => ['form' => [Dropdown::class, 'values' => ['m' => 'Male', 'f' => 'Female']]]]);
     }
 
-    public function validate($intent = null): array
+    public function validate(string $intent = null): array
     {
         $error = [];
         if ($this->get('age') < 21) {
