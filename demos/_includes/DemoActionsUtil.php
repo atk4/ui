@@ -149,6 +149,7 @@ class DemoActionsUtil
                 'description' => 'Confirm the action using a ConfirmationExecutor',
                 'confirmation' => function (UserAction $a) {
                     $iso3 = $a->getEntity()->get(Country::hinting()->fieldName()->iso3);
+
                     return 'Are you sure you want to perform this action on: <b>' . $a->getEntity()->getTitle() . ' (' . $iso3 . ')</b>';
                 },
                 'callback' => function (Country $model) {
