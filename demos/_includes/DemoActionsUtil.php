@@ -10,13 +10,12 @@ use Atk4\Data\Persistence\Array_;
 use Atk4\Ui\Form\Control\Dropdown;
 
 /**
- *  @property string $age @Atk4\Field()
- *  @property string $city @Atk4\Field()
- *  @property string $gender @Atk4\Field()
+ *  @property string $age           @Atk4\Field()
+ *  @property string $city          @Atk4\Field()
+ *  @property string $gender        @Atk4\Field()
  */
 class ArgModel extends Model
 {
-
     protected function init(): void
     {
         parent::init();
@@ -24,16 +23,16 @@ class ArgModel extends Model
         $this->addField($this->fieldName()->city);
         $this->addField($this->fieldName()->gender, [
             'default' => 'm',
-            'ui' => ['form' => [Dropdown::class, 'values' => ['m' => 'Male', 'f' => 'Female']]
-            ]
+            'ui' => ['form' => [Dropdown::class, 'values' => ['m' => 'Male', 'f' => 'Female']],
+            ],
         ]);
     }
 
     public function validate(string $intent = null): array
     {
         $error = [];
-        if ($this->get(ArgModel::hinting()->fieldName()->age) < 21) {
-            $error = [ArgModel::hinting()->fieldName()->age => 'You must be at least 21 years old.'];
+        if ($this->get(self::hinting()->fieldName()->age) < 21) {
+            $error = [self::hinting()->fieldName()->age => 'You must be at least 21 years old.'];
         }
 
         return array_merge($error, parent::validate($intent));
