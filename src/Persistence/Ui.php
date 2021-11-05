@@ -41,12 +41,19 @@ class Ui extends \Atk4\Data\Persistence
 
     public function typecastSaveField(Field $field, $value)
     {
-        // relax strict nullable checks for UI render for not yet set values
-        if ($value === null) {
-            return null;
+        // relax empty checks for UI render for not yet set values
+        $fieldRequiredOrig = $field->required;
+        $fieldMandatoryOrig = $field->mandatory;
+        if (in_array($value, [null, false, 0, 0.0, ''], true)) {
+            $field->required = false;
+            $field->mandatory = false;
         }
-
-        return parent::typecastSaveField($field, $value);
+        try {
+            return parent::typecastSaveField($field, $value);
+        } finally {
+            $field->required = $fieldRequiredOrig;
+            $field->mandatory = $fieldMandatoryOrig;
+        }
     }
 
     /**
