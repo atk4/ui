@@ -191,10 +191,11 @@ trait StepExecutorTrait
         $form->onSubmit(function (Form $form) {
             $form->model->save();
             // collect arguments.
+            $argValues = [];
             foreach ($form->model->getFields('editable') as $k => $field) {
                 $argValues[$k] = $form->model->get($k);
             }
-            $this->setActionData('args', $argValues ?? []);
+            $this->setActionData('args', $argValues);
 
             return $this->jsStepSubmit($this->step);
         });

@@ -9,21 +9,31 @@ use Atk4\Data\Model\UserAction;
 use Atk4\Data\Persistence\Array_;
 use Atk4\Ui\Form\Control\Dropdown;
 
+/**
+ *  @property string $age @Atk4\Field()
+ *  @property string $city @Atk4\Field()
+ *  @property string $gender @Atk4\Field()
+ */
 class ArgModel extends Model
 {
+
     protected function init(): void
     {
         parent::init();
-        $this->addField('age', ['type' => 'integer', 'required' => true, 'caption' => 'Age must be 21 or over:']);
-        $this->addField('city');
-        $this->addField('gender', ['default' => 'm', 'ui' => ['form' => [Dropdown::class, 'values' => ['m' => 'Male', 'f' => 'Female']]]]);
+        $this->addField($this->fieldName()->age, ['type' => 'integer', 'required' => true, 'caption' => 'Age must be 21 or over:']);
+        $this->addField($this->fieldName()->city);
+        $this->addField($this->fieldName()->gender, [
+            'default' => 'm',
+            'ui' => ['form' => [Dropdown::class, 'values' => ['m' => 'Male', 'f' => 'Female']]
+            ]
+        ]);
     }
 
     public function validate(string $intent = null): array
     {
         $error = [];
-        if ($this->get('age') < 21) {
-            $error = ['age' => 'You must be at least 21 years old.'];
+        if ($this->get(ArgModel::hinting()->fieldName()->age) < 21) {
+            $error = [ArgModel::hinting()->fieldName()->age => 'You must be at least 21 years old.'];
         }
 
         return array_merge($error, parent::validate($intent));
