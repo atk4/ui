@@ -47,7 +47,7 @@ class DemoActionsUtil
             'callback',
             [
                 'description' => 'Callback',
-                'callback' => function ($model) {
+                'callback' => function (Country $model) {
                     return 'callback execute using country ' . $model->getTitle();
                 },
             ]
@@ -57,10 +57,10 @@ class DemoActionsUtil
             'preview',
             [
                 'description' => 'Display Preview prior to run the action',
-                'preview' => function ($model) {
+                'preview' => function (Country $model) {
                     return 'Previewing country ' . $model->getTitle();
                 },
-                'callback' => function ($model) {
+                'callback' => function (Country $model) {
                     return 'Done previewing ' . $model->getTitle();
                 },
             ]
@@ -86,7 +86,7 @@ class DemoActionsUtil
                 'args' => [
                     'age' => ['type' => 'integer', 'required' => true],
                 ],
-                'callback' => function ($model, $age) {
+                'callback' => function (Country $model, int $age) {
                     if ($age < 18) {
                         $text = 'Sorry not old enough to visit ' . $model->getTitle();
                     } else {
@@ -104,7 +104,7 @@ class DemoActionsUtil
                 'caption' => 'Argument/Preview',
                 'description' => 'Ask for argument "Age" and display preview prior to execute',
                 'args' => ['age' => ['type' => 'integer', 'required' => true]],
-                'preview' => function ($model, $age) {
+                'preview' => function (Country $model, int $age) {
                     return 'You age is: ' . $age;
                 },
                 'callback' => function ($model, $age) {
@@ -147,10 +147,10 @@ class DemoActionsUtil
             [
                 'caption' => 'User Confirmation',
                 'description' => 'Confirm the action using a ConfirmationExecutor',
-                'confirmation' => function ($a) {
+                'confirmation' => function (UserAction $a) {
                     return 'Are you sure you want to perform this action on: <b>' . $a->getEntity()->getTitle() . ' (' . $a->getEntity()->iso3 . ')</b>';
                 },
-                'callback' => function ($model) {
+                'callback' => function (Country $model) {
                     return 'Confirm country ' . $model->getTitle();
                 },
             ]
@@ -176,12 +176,12 @@ class DemoActionsUtil
                     ],
                 ],
                 'fields' => [$country->fieldName()->iso3],
-                'callback' => function ($model, $age, $city, $gender) {
+                'callback' => function (Country $model, int $age, string $city, string $gender) {
                     $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
 
                     return 'Thank you ' . $n . ' at age ' . $age;
                 },
-                'preview' => function ($model, $age, $city, $gender) {
+                'preview' => function (Country $model, int $age, string $city, string $gender) {
                     return 'Gender = ' . $gender . ' / Age = ' . $age;
                 },
             ]
@@ -197,12 +197,12 @@ class DemoActionsUtil
                     'extra' => ['type' => 'string'],
                 ],
                 'fields' => [$country->fieldName()->iso3],
-                'callback' => function ($model, $age, $city, $gender) {
+                'callback' => function (Country $model, int $age, string $city, string $gender) {
                     $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
 
                     return 'Thank you ' . $n . ' at age ' . $age;
                 },
-                'preview' => function ($model, $age, $city, $gender) {
+                'preview' => function (Country $model, int $age, string $city, string $gender) {
                     return 'Gender = ' . $gender . ' / Age = ' . $age;
                 },
             ]
