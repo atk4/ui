@@ -73,7 +73,7 @@ trait StepExecutorTrait
     public $finalMsg = 'Complete!';
 
     /** @var array An extended copy of UserAction arguments. It contains original action arguments and arguments set by '__atk_model'. */
-    private $cloneArgs = [];
+    private $cloneArgs;
 
     /**
      * Utility for setting Title for each step.
@@ -115,7 +115,7 @@ trait StepExecutorTrait
      * Set model for userAction arguments.
      * Override existing argument with model definition.
      */
-    protected function getModelForArgs(): Model
+    protected function initActionArguments(): Model
     {
         $args = $this->getAction()->args;
         if (array_key_exists('__atk_model', $args)) {
@@ -135,6 +135,7 @@ trait StepExecutorTrait
             $argsModel->addField($key, $val);
         }
 
+        $this->cloneArgs = [];
         // set userAction args using model field.
         foreach ($argsModel->getFields('editable') as $k => $field) {
             $this->cloneArgs[$k] = $field->short_name;
@@ -145,7 +146,7 @@ trait StepExecutorTrait
 
     protected function runSteps(): void
     {
-        $argModel = $this->getModelForArgs();
+        $argModel = $this->initActionArguments();
 
         $this->loader->set(function ($page) use ($argModel) {
             try {
