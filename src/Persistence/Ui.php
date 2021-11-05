@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Persistence;
 
 use Atk4\Data\Model;
+use Atk4\Data\Field;
 use Atk4\Ui\Exception;
 
 /**
@@ -37,6 +38,15 @@ class Ui extends \Atk4\Data\Persistence
     public $yes = 'Yes';
     /** @var string */
     public $no = 'No';
+
+    public function typecastSaveField(Field $field, $value)
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return parent::typecastSaveField($field, $value);
+    }
 
     /**
      * This method contains the logic of casting generic values into user-friendly format.
