@@ -551,15 +551,6 @@ parameters:
             path: 'src/Form.php'
             message: '~^Else branch is unreachable because previous condition is always true\.$~'
         -
-            path: 'src/Form.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Form.php'
-            message: '~^Left side of && is always true\.$~'
-        -
-            path: 'src/Form/AbstractLayout.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
             path: 'src/Form/AbstractLayout.php'
             message: '~^Else branch is unreachable because previous condition is always true\.$~'
         -
@@ -778,6 +769,9 @@ parameters:
         -
             path: 'src/Form.php'
             message: '~^Parameter #2 \$value of method Atk4\\Ui\\View::setAttr\(\) expects string\|null, int given\.$~'
+        -
+            path: 'src/Form/AbstractLayout.ph'
+            message: '~^Parameter #2 \$seed of method Atk4\\Ui\\Form::controlFactory\(\) expects array, Atk4\\Ui\\Form\\Control given\.$~'
         -
             path: 'src/Form/Layout/Section.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
@@ -1180,9 +1174,6 @@ parameters:
         -
             path: 'src/Form.php'
             message: '~^Call to function is_object\(\) with Atk4\\Ui\\Form\\Layout will always evaluate to true\.$~'
-        -
-            path: 'src/Form.php'
-            message: '~^Instanceof between Atk4\\Data\\Field and Atk4\\Data\\Field will always evaluate to true\.$~'
         -
             path: 'src/Form.php'
             message: '~^Method Atk4\\Ui\\Form::loadPost\(\) has no return type specified\.$~'

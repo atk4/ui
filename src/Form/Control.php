@@ -6,6 +6,7 @@ namespace Atk4\Ui\Form;
 
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
+use Atk4\Ui\Form\Control\EntityFieldProxy;
 use Atk4\Ui\View;
 
 /**
@@ -14,20 +15,20 @@ use Atk4\Ui\View;
 class Control extends View
 {
     /**
-     * @var Form - to which this field belongs
+     * @var Form to which this field belongs
      */
     public $form;
 
     /**
-     * @var \Atk4\Data\Field - points to model field
+     * @var EntityFieldProxy
      */
     public $field;
 
-    /** @var string control class */
+    /** @var string */
     public $controlClass = '';
 
     /**
-     * @var bool - Whether you need this field to be rendered wrap in a form layout or as his
+     * @var bool Whether you need this field to be rendered wrap in a form layout or as his
      */
     public $layoutWrap = true;
 
@@ -80,11 +81,11 @@ class Control extends View
         parent::init();
 
         if ($this->form && $this->field) {
-            if (isset($this->form->controls[$this->field->short_name])) {
+            if (isset($this->form->controls[$this->field->getFieldName()])) {
                 throw (new Exception('Form already has a field with the same name'))
-                    ->addMoreInfo('name', $this->field->short_name);
+                    ->addMoreInfo('name', $this->field->getFieldName());
             }
-            $this->form->controls[$this->field->short_name] = $this;
+            $this->form->controls[$this->field->getFieldName()] = $this;
         }
     }
 

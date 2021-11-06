@@ -29,7 +29,7 @@ class DropdownCascade extends Dropdown
         }
 
         $cascadeFromValue = isset($_POST[$this->cascadeFrom->name])
-            ? $this->getApp()->ui_persistence->typecastLoadField($this->cascadeFrom->field, $_POST[$this->cascadeFrom->name])
+            ? $this->getApp()->ui_persistence->typecastLoadField($this->cascadeFrom->field->getField(), $_POST[$this->cascadeFrom->name])
             : $this->cascadeFrom->field->get();
 
         $this->model = $this->cascadeFrom->model ? $this->cascadeFrom->model->ref($this->reference) : null;

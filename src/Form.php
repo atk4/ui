@@ -7,6 +7,7 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Data\Reference\ContainsMany;
+use Atk4\Ui\Form\Control\EntityFieldProxy;
 
 /**
  * Implements a form.
@@ -402,7 +403,7 @@ class Form extends View
      */
     public function addControl(?string $name, $control = null, $field = null)
     {
-        if (!$this->model) {
+        if ($this->model === null) { // TODO do only on one place
             $this->model = (new \Atk4\Ui\Misc\ProxyModel())->createEntity();
         }
 
@@ -489,18 +490,10 @@ class Form extends View
      * 3. $f->type is converted into seed and evaluated
      * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
      *
-     * @param \Atk4\Data\Field $field Data model field
-     * @param array            $seed  Defaults to pass to Factory::factory() when control object is initialized
-     *
-     * @return Form\Control
+     * @param array $seed Defaults to pass to Factory::factory() when control object is initialized
      */
-    public function controlFactory(\Atk4\Data\Field $field, $seed = [])
+    public function controlFactory(\Atk4\Data\Field $field, $seed = []): Form\Control
     {
-        if ($field && !$field instanceof \Atk4\Data\Field) {
-            throw (new Exception('Argument 1 for controlFactory must be \Atk4\Data\Field or null'))
-                ->addMoreInfo('field', $field);
-        }
-
         $fallbackSeed = [Form\Control\Line::class];
 
         if ($field->type === 'json' && $field->getReference() !== null) {
@@ -534,7 +527,7 @@ class Form extends View
 
         $defaults = [
             'form' => $this,
-            'field' => $field,
+            'field' => new EntityFieldProxy($field->getOwner(), $field->short_name),
             'short_name' => $field->short_name,
         ];
 
@@ -568,7 +561,7 @@ class Form extends View
             try {
                 // save field value only if field was editable in form at all
                 if (!$control->readonly && !$control->disabled) {
-                    $control->set($this->getApp()->ui_persistence->typecastLoadField($control->field, $_POST[$k] ?? null));
+                    $control->set($this->getApp()->ui_persistence->typecastLoadField($control->field->getField(), $_POST[$k] ?? null));
                 }
             } catch (\Exception $e) {
                 $messages = [];

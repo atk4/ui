@@ -181,7 +181,7 @@ class Layout extends AbstractLayout
             }
 
             $template = $element->renderLabel ? $labeledControl : $noLabelControl;
-            $label = $element->caption ?: $element->field->getCaption();
+            $label = $element->caption ?: $element->field->getField()->getCaption();
 
             // Anything but form controls gets inserted directly
             if ($element instanceof Control\Checkbox) {
@@ -208,7 +208,7 @@ class Layout extends AbstractLayout
             $template->trySet('label_for', $element->id . '_input');
             $template->set('control_class', $element->getControlClass());
 
-            if ($element->field->required) {
+            if ($element->field->getField()->required) {
                 $template->append('control_class', 'required ');
             }
 

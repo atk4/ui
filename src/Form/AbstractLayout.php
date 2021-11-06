@@ -32,7 +32,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
      */
     public function addControl(string $name, $control = null, $field = null)
     {
-        if (!$this->form->model) {
+        if ($this->form->model === null) {
             $this->form->model = (new \Atk4\Ui\Misc\ProxyModel())->createEntity();
         }
 
@@ -44,7 +44,8 @@ abstract class AbstractLayout extends \Atk4\Ui\View
 
         try {
             if (!$this->form->model->hasField($name)) {
-                $field = $this->form->model->addField($name, $field);
+                $this->form->model->getModel()->addField($name, $field);
+                $field = $this->form->model->addField($name, $field); // TODO adding field to a model MUST be enough
             } else {
                 $existingField = $this->form->model->getField($name);
 
@@ -62,15 +63,10 @@ abstract class AbstractLayout extends \Atk4\Ui\View
                 $control = $this->form->controlFactory($field, ['caption' => $control]);
             } elseif (is_array($control)) {
                 $control = $this->form->controlFactory($field, $control);
-            } elseif (!$control) {
+            } elseif ($control === null) {
                 $control = $this->form->controlFactory($field);
-            } elseif (is_object($control)) {
-                if (!$control instanceof \Atk4\Ui\Form\Control) {
-                    throw (new Exception('Form control must descend from ' . \Atk4\Ui\Form\Control::class))
-                        ->addMoreInfo('control', $control);
-                }
-                $control->field = $field;
-                $control->form = $this->form;
+            } elseif ($control instanceof Control) {
+                $control = $this->form->controlFactory($field, $control);
             } else {
                 throw (new Exception('Value of $control argument is incorrect'))
                     ->addMoreInfo('control', $control);
