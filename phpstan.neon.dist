@@ -465,7 +465,7 @@ parameters:
             message: '~^Argument of an invalid type bool supplied for foreach, only iterables are supported\.$~'
         -
             path: 'src/Table.php'
-            message: '~^Cannot access offset \(int\|string\) on bool\.$~'
+            message: '~^Cannot access offset int\|string on bool\.$~'
         -
             path: 'src/Table/Column/FilterModel/TypeEnum.php'
             message: '~^Property Atk4\\Ui\\Table\\Column\\FilterModel::\$op \(Atk4\\Data\\Field\) does not accept null\.$~'
@@ -676,9 +676,6 @@ parameters:
         -
             path: 'src/Table/Column.php'
             message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Table/Column/Link.php'
-            message: '~^Ternary operator condition is always true\.$~'
         -
             path: 'src/Table/Column/Multiformat.php'
             message: '~^Negated boolean expression is always false\.$~'

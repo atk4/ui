@@ -32,7 +32,7 @@ class Table extends Lister
     /**
      * Contains list of declared columns. Value will always be a column object.
      *
-     * @var array
+     * @var array<int|string, Table\Column|array<int, Table\Column>>
      */
     public $columns = [];
 
@@ -552,9 +552,6 @@ class Table extends Lister
                 }
                 $field = !is_int($name) && $this->model->getModel()->hasField($name) ? $this->model->getField($name) : null;
                 foreach ($columns as $column) {
-                    if (!method_exists($column, 'getHtmlTags')) {
-                        continue;
-                    }
                     $html_tags = array_merge($column->getHtmlTags($this->model, $field), $html_tags);
                 }
             }
