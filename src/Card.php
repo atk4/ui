@@ -198,10 +198,8 @@ class Card extends View
 
         $this->setDataId($this->model->getId());
 
-        if (is_array($fields)) {
-            View::addTo($this->getSection(), [$model->getTitle(), ['class' => 'header']]);
-            $this->getSection()->addFields($model, $fields, $this->useLabel, $this->useTable);
-        }
+        View::addTo($this->getSection(), [$model->getTitle(), ['class' => 'header']]);
+        $this->getSection()->addFields($model, $fields, $this->useLabel, $this->useTable);
 
         return $model;
     }

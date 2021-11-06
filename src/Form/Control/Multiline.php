@@ -414,7 +414,7 @@ class Multiline extends Form\Control
      *
      * @return Model
      */
-    public function setModel(Model $model, array $fieldNames = [])
+    public function setModel(Model $model, array $fieldNames = null)
     {
         $model = parent::setModel($model);
         $this->initVueLookupCallback();
@@ -833,7 +833,7 @@ class Multiline extends Form\Control
      *
      * @return mixed
      */
-    private function getDummyExpression(FieldSqlExpression $exprField, $model)
+    private function getDummyExpression(FieldSqlExpression $exprField, Model $model)
     {
         $expr = $exprField->expr;
         $matches = [];

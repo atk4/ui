@@ -28,7 +28,7 @@ class TypeEnum extends Column\FilterModel
         }
     }
 
-    public function setConditionForModel($model)
+    public function setConditionForModel(Model $model)
     {
         if ($filter = $this->recallData()) {
             $values = [];

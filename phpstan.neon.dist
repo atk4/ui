@@ -221,6 +221,18 @@ parameters:
             path: 'src/Table/Column/DragHandler.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsCallback::onReorder\(\)\.$~'
         -
+            path: 'src/Table/Column/FilterModel/TypeDate.php'
+            message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeDatetime.php'
+            message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeNumber.php'
+            message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeTime.php'
+            message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'
+        -
             path: 'src/Table/Column/FilterPopup.php'
             message: '~^Call to an undefined method Atk4\\Data\\Model::recallData\(\)\.$~'
         -
@@ -337,9 +349,6 @@ parameters:
         -
             path: 'src/Console.php'
             message: '~^Property Atk4\\Ui\\JsSse::\$echoFunction \(Closure\) does not accept false\.$~'
-        -
-            path: 'src/Crud.php'
-            message: '~^Parameter \#2 \$fields \(array\|null\) of method Atk4\\Ui\\Crud::setModel\(\) should be contravariant with parameter \$columns \(array\|bool\) of method Atk4\\Ui\\Grid::setModel\(\)$~'
         -
             path: 'src/Form.php'
             message: '~^Property Atk4\\Ui\\Form::\$layout \(Atk4\\Ui\\Form\\Layout\) does not accept array<int, string>\.$~'
@@ -523,9 +532,6 @@ parameters:
         -
             path: 'src/CardDeck.php'
             message: '~^Result of \|\| is always true\.$~'
-        -
-            path: 'src/CardTable.php'
-            message: '~^Left side of && is always true\.$~'
         -
             path: 'src/Component/InlineEdit.php'
             message: '~^Left side of && is always true\.$~'
@@ -858,16 +864,10 @@ parameters:
             message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::prepareIterator\(\) has no return type specified\.$~'
         -
             path: 'demos/_includes/Persistence_Faker.php'
-            message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::prepareIterator\(\) has parameter \$model with no type specified\.$~'
-        -
-            path: 'demos/_includes/Persistence_Faker.php'
             message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::export\(\) has no return type specified\.$~'
         -
             path: 'demos/_includes/Persistence_Faker.php'
             message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::export\(\) has parameter \$fields with no type specified\.$~'
-        -
-            path: 'demos/_includes/Persistence_Faker.php'
-            message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::export\(\) has parameter \$model with no type specified\.$~'
         -
             path: 'demos/_unit-test/console_run.php'
             message: '~^Method class@anonymous/demos/_unit\-test/console_run\.php:\d+::test\(\) has no return type specified\.$~'
@@ -1154,12 +1154,6 @@ parameters:
             path: 'src/Console.php'
             message: '~^Method Atk4\\Ui\\Console::execRaw\(\) has parameter \$exec with no type specified\.$~'
         -
-            path: 'src/Console.php'
-            message: '~^Method Atk4\\Ui\\Console::setModel\(\) has parameter \$args with no type specified\.$~'
-        -
-            path: 'src/Console.php'
-            message: '~^Method Atk4\\Ui\\Console::setModel\(\) has parameter \$method with no type specified\.$~'
-        -
             path: 'src/Crud.php'
             message: '~^Method Atk4\\Ui\\Crud::applySort\(\) has no return type specified\.$~'
         -
@@ -1336,9 +1330,6 @@ parameters:
         -
             path: 'src/Form/Control/Multiline.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Multiline::valuePropsBinding\(\) has no return type specified\.$~'
-        -
-            path: 'src/Form/Control/Multiline.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Multiline::getDummyExpression\(\) has parameter \$model with no type specified\.$~'
         -
             path: 'src/Form/Control/Password.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\Password::\$inputType has no type specified\.$~'
@@ -1938,40 +1929,16 @@ parameters:
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel::afterInit\(\) has no return type specified\.$~'
         -
             path: 'src/Table/Column/FilterModel.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel::getFormDisplayRules\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeBoolean.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeBoolean::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeDate.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeDate::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
         -
             path: 'src/Table/Column/FilterModel/TypeDate.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeDate::getFormDisplayRules\(\) has no return type specified\.$~'
         -
             path: 'src/Table/Column/FilterModel/TypeDatetime.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeDatetime::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeDatetime.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeDatetime::getFormDisplayRules\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeEnum.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeEnum::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeNumber.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeNumber::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
         -
             path: 'src/Table/Column/FilterModel/TypeNumber.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeNumber::getFormDisplayRules\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeString.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeString::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeTime.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeTime::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
         -
             path: 'src/Table/Column/FilterModel/TypeTime.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeTime::getFormDisplayRules\(\) has no return type specified\.$~'
@@ -2146,9 +2113,6 @@ parameters:
         -
             path: 'tests/ExecutorFactoryTest.php'
             message: '~^Method Atk4\\Ui\\Tests\\ExecutorFactoryTest::getApp\(\) has no return type specified\.$~'
-        -
-            path: 'tests/GridTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\GridTest::\$m has no type specified\.$~'
         -
             path: 'tests/PaginatorTest.php'
             message: '~^Property Atk4\\Ui\\Tests\\PaginatorTest::\$p has no type specified\.$~'

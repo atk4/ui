@@ -10,6 +10,7 @@ class GridTest extends \Atk4\Core\Phpunit\TestCase
 {
     use Concerns\HandlesTable;
 
+    /** @var MyModel */
     public $m;
 
     protected function setUp(): void

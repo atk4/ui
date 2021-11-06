@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
+
 class Persistence_Faker extends \Atk4\Data\Persistence
 {
     /** @var \Faker\Generator */
@@ -17,14 +19,14 @@ class Persistence_Faker extends \Atk4\Data\Persistence
         $this->faker = \Faker\Factory::create();
     }
 
-    public function prepareIterator($model)
+    public function prepareIterator(Model $model)
     {
         foreach ($this->export($model) as $row) {
             yield $row;
         }
     }
 
-    private function export($model, $fields = [])
+    private function export(Model $model, $fields = [])
     {
         if (!$fields) {
             foreach ($model->getFields() as $name => $e) {
