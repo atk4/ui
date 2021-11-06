@@ -21,11 +21,11 @@ class Columns extends Form\Layout
     /**
      * Sets form model and adds form controls.
      *
-     * @param array|null $fields
+     * @param array<int, string>|null $fields
      *
      * @return \Atk4\Data\Model
      */
-    public function setModel(\Atk4\Data\Model $model, $fields = null)
+    public function setModel(\Atk4\Data\Model $model, array $fields = null)
     {
         // dont add any fields automatically
         parent::setModel($model, []);

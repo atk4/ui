@@ -261,11 +261,11 @@ class Form extends View
      * If $actualFields are not specified, then all "editable" fields
      * will be added.
      *
-     * @param array $fields
+     * @param array<int, string>|null $fields
      *
      * @return \Atk4\Data\Model
      */
-    public function setModel(Model $model, $fields = null)
+    public function setModel(Model $model, array $fields = null)
     {
         $model->assertIsEntity();
 

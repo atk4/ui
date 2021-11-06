@@ -601,11 +601,11 @@ class Grid extends View
      * visible model fields. If $columns is set to false, then will not add
      * columns at all.
      *
-     * @param array|bool $columns
+     * @param array<int, string>|null $columns
      *
      * @return \Atk4\Data\Model
      */
-    public function setModel(Model $model, $columns = null)
+    public function setModel(Model $model, array $columns = null)
     {
         $this->model = $this->table->setModel($model, $columns);
 

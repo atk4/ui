@@ -83,9 +83,11 @@ class Crud extends Grid
     /**
      * Sets data model of Crud.
      *
-     * @param array|null $fields
+     * @param array<int, string>|null $fields
+     *
+     * @return Model
      */
-    public function setModel(Model $model, $fields = null): Model
+    public function setModel(Model $model, array $fields = null)
     {
         $model->assertIsModel();
 

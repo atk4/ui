@@ -120,19 +120,15 @@ abstract class AbstractLayout extends \Atk4\Ui\View
     /**
      * Sets form model and adds form controls.
      *
-     * @param array|null $fields
+     * @param array<int, string>|null $fields
      *
      * @return \Atk4\Data\Model
      */
-    public function setModel(\Atk4\Data\Model $model, $fields = null)
+    public function setModel(\Atk4\Data\Model $model, array $fields = null)
     {
         $model->assertIsEntity();
 
         parent::setModel($model);
-
-        if ($fields === false) {
-            return $model;
-        }
 
         if ($fields === null) {
             $fields = $this->getModelFields($model);

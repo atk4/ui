@@ -409,12 +409,17 @@ class Multiline extends Form\Control
         return $this->model;
     }
 
-    public function setModel(Model $model, array $fieldNames = []): Model
+    /**
+     * @param array<int, string>|null $fieldNames
+     *
+     * @return Model
+     */
+    public function setModel(Model $model, array $fieldNames = [])
     {
         $model = parent::setModel($model);
         $this->initVueLookupCallback();
 
-        if (!$fieldNames) {
+        if ($fieldNames === null) {
             $fieldNames = array_keys($model->getFields('not system'));
         }
         $this->rowFields = array_merge([$model->id_field], $fieldNames);

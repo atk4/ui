@@ -134,7 +134,12 @@ class CardDeck extends View
         $this->paginator = $seg->add(Factory::factory($this->paginator, ['reload' => $this->container]));
     }
 
-    public function setModel(Model $model, array $fields = null, array $extra = null): Model
+    /**
+     * @param array<int, string>|null $fields
+     *
+     * @return Model
+     */
+    public function setModel(Model $model, array $fields = null, array $extra = null)
     {
         parent::setModel($model);
 

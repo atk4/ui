@@ -16,7 +16,12 @@ class CardTable extends Table
 {
     protected $_bypass = false;
 
-    public function setModel(Model $model, $columndef = null)
+    /**
+     * @param array<int, string>|null $columns
+     *
+     * @return Model
+     */
+    public function setModel(Model $model, array $columns = null)
     {
         if ($this->_bypass) {
             return parent::setModel($model);
@@ -32,7 +37,7 @@ class CardTable extends Table
         $ui_values = $this->issetApp() ? $this->getApp()->ui_persistence->typecastSaveRow($model, $model->get()) : $model->get();
 
         foreach ($model->get() as $key => $value) {
-            if (!$columndef || ($columndef && in_array($key, $columndef, true))) {
+            if ($columns === null || in_array($key, $columns, true)) {
                 $data[] = [
                     'id' => $key,
                     'field' => $model->getField($key)->getCaption(),
