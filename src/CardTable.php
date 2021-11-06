@@ -34,14 +34,14 @@ class CardTable extends Table
 
         $data = [];
 
-        $ui_values = $this->issetApp() ? $this->getApp()->ui_persistence->typecastSaveRow($model, $model->get()) : $model->get();
+        $uiValues = $this->getApp()->ui_persistence->typecastSaveRow($model->getModel(), $model->get());
 
         foreach ($model->get() as $key => $value) {
             if ($columns === null || in_array($key, $columns, true)) {
                 $data[] = [
                     'id' => $key,
                     'field' => $model->getField($key)->getCaption(),
-                    'value' => $ui_values[$key],
+                    'value' => $uiValues[$key],
                 ];
             }
         }

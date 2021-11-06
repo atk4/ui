@@ -30,7 +30,7 @@ class Labels extends Table\Column
     {
         $values = $this->values ?? $field->values;
 
-        $v = $field->get();
+        $v = $field->get($row);
         $v = is_string($v) ? explode(',', $v) : $v;
 
         $labels = [];

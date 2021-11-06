@@ -59,7 +59,7 @@ class Status extends Table\Column
 
         // search for a class
         foreach ($this->states as $class => $values) {
-            if (in_array($field->get(), $values, true)) {
+            if (in_array($field->get($row), $values, true)) {
                 $cl = $class;
 
                 break;

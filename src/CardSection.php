@@ -64,14 +64,14 @@ class CardSection extends View
     /**
      * Add fields label and value to section.
      */
-    private function addSectionFields(Model $model, array $fields, bool $useLabel = false)
+    private function addSectionFields(Model $entity, array $fields, bool $useLabel = false)
     {
         foreach ($fields as $field) {
-            if ($model->title_field === $field) {
+            if ($entity->getModel()->title_field === $field) {
                 continue;
             }
-            $label = $model->getField($field)->getCaption();
-            $value = $this->issetApp() ? $this->getApp()->ui_persistence->typecastSaveField($model->getField($field), $model->get($field)) : $model->get($field);
+            $label = $entity->getField($field)->getCaption();
+            $value = $this->getApp()->ui_persistence->typecastSaveField($entity->getField($field), $entity->get($field));
             if ($useLabel) {
                 $value = $label . $this->glue . $value;
             }

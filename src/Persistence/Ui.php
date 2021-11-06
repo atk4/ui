@@ -179,6 +179,8 @@ class Ui extends \Atk4\Data\Persistence
      */
     public function typecastSaveRow(Model $model, array $row): array
     {
+        $model->assertIsModel();
+
         $result = [];
         foreach ($row as $key => $value) {
             // no knowledge of the field, it wasn't defined, leave it as-is

@@ -45,7 +45,8 @@ abstract class AbstractLayout extends \Atk4\Ui\View
         try {
             if (!$this->form->model->hasField($name)) {
                 $this->form->model->getModel()->addField($name, $field);
-                $field = $this->form->model->addField($name, $field); // TODO adding field to a model MUST be enough
+
+                $field = $this->form->model->getField($name); // TODO dev only - addField returns unbound (non-entity) Field
             } else {
                 $existingField = $this->form->model->getField($name);
 

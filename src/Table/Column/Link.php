@@ -151,9 +151,8 @@ class Link extends Table\Column
 
     public function getHtmlTags(Model $row, $field)
     {
-        // Decide on the content
         if ($this->url) {
-            $rowValues = $this->getApp()->ui_persistence ? $this->getApp()->ui_persistence->typecastSaveRow($row, $row->get()) : $row->get();
+            $rowValues = $this->getApp()->ui_persistence->typecastSaveRow($row->getModel(), $row->get());
 
             return ['c_' . $this->short_name => $this->url->set($rowValues)->renderToHtml()];
         }

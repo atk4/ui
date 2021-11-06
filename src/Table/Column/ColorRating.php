@@ -200,7 +200,7 @@ class ColorRating extends Table\Column
 
     public function getHtmlTags(Model $row, $field)
     {
-        $value = $field->get();
+        $value = $field->get($row);
         if ($value === null) {
             return parent::getHtmlTags($row, $field);
         }

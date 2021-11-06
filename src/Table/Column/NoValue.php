@@ -34,7 +34,7 @@ class NoValue extends Table\Column
 
     public function getHtmlTags(Model $row, $field)
     {
-        $actualValue = $field->get();
+        $actualValue = $field->get($row);
 
         if (empty($actualValue) || $actualValue === null) {
             return [$field->short_name => $this->no_value];
