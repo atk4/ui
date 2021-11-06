@@ -164,7 +164,7 @@ class Link extends Table\Column
                 $key = $val;
             }
 
-            if ($row->hasField($val)) {
+            if ($row->getModel()->hasField($val)) {
                 $p[$key] = $row->get($val);
             }
         }
