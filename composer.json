@@ -54,7 +54,7 @@
     ],
     "require": {
         "php": ">=7.4 <8.2",
-        "atk4/data": "dev-develop"
+        "atk4/data": "dev-stricter_model_vs_entity as dev-develop"
     },
     "require-release": {
         "php": ">=7.4 <8.2",
