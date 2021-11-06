@@ -25,7 +25,7 @@ class GridTest extends \Atk4\Core\Phpunit\TestCase
     {
         $t = new Table();
         $t->invokeInit();
-        $t->setModel($this->m, false);
+        $t->setModel($this->m, []);
 
         $t->addColumn('email');
         $t->addColumn(null, new Table\Column\Template('password={$password}'));
@@ -41,7 +41,7 @@ class GridTest extends \Atk4\Core\Phpunit\TestCase
     {
         $t = new Table();
         $t->invokeInit();
-        $t->setModel($this->m, false);
+        $t->setModel($this->m, []);
 
         $t->addColumn('email');
         $t->addColumn('password', [Table\Column\Password::class]);

@@ -70,7 +70,7 @@ $form->onSubmit($formSubmit);
 
 // Next form won't initalize default fields, but we'll add them individually
 $form = Form::addTo($cc->addColumn());
-$form->setModel($model, false);
+$form->setModel($model, []);
 
 // adding that same field but with custom form control seed
 $form->addControl('one', ['caption' => 'Caption0']);

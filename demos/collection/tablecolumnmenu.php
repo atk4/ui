@@ -12,7 +12,7 @@ require_once __DIR__ . '/../init-app.php';
 // Better Popup positionning when Popup are inside a container.
 $container = \Atk4\Ui\View::addTo($app, ['ui' => 'vertical segment']);
 $table = \Atk4\Ui\Table::addTo($container, ['celled' => true]);
-$table->setModel(new SomeData(), false);
+$table->setModel(new SomeData(), []);
 
 // will add popup to this column.
 $colName = $table->addColumn('name');

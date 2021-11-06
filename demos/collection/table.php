@@ -21,7 +21,7 @@ $table = \Atk4\Ui\Table::addTo($app, ['celled' => true]);
 
 $bb->on('click', $table->js()->reload());
 
-$table->setModel(new SomeData(), false);
+$table->setModel(new SomeData(), []);
 
 $table->addColumn('name', new Table\Column\Link(['table', 'id' => '{$id}']));
 $table->addColumn('surname', new Table\Column\Template('{$surname}'))->addClass('warning');

@@ -271,7 +271,7 @@ If field already exist inside model, then values of $field will be merged into
 existing field properties. This example make email field mandatory for the form::
 
     $form = Form::addTo($app);
-    $form->setModel(new User($db), false);
+    $form->setModel(new User($db), []);
 
     $form->addControl('email', null, ['required' => true]);
 
@@ -405,7 +405,7 @@ Using setModel() on a sub layout
 You may add form controls to sub layout directly using setModel method on the sub layout itself.::
 
     $form = Form::addTo($app);
-    $form->setModel($model, false);
+    $form->setModel($model, []);
 
     $sub_layout = $form->layout->addSubLayout();
     $sub_layout->setModel($model, ['first_name', 'last_name']);
@@ -644,7 +644,7 @@ and where you can setup specific width for each field.
 
 My next example will add multiple controls on the same line::
 
-    $form->setModel(new User($db), false);  // will not populate any form controls automatically
+    $form->setModel(new User($db), []);  // will not populate any form controls automatically
 
     $form->addControls(['name', 'surname']);
 
@@ -685,7 +685,7 @@ organize fields in either accordion, tabs or columns.
 The following example will show how to organize fields using regular sub layout and accordion sections::
 
     $form = Form::addTo($app);
-    $form->setModel($model, false);
+    $form->setModel($model, []);
 
     $sub_layout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section::class]);
 

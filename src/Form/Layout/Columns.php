@@ -28,7 +28,7 @@ class Columns extends Form\Layout
     public function setModel(\Atk4\Data\Model $model, $fields = null)
     {
         // dont add any fields automatically
-        parent::setModel($model, false);
+        parent::setModel($model, []);
 
         if ($fields === null) {
             $fields = $this->getModelFields($model);

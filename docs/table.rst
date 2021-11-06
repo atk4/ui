@@ -81,7 +81,7 @@ columns. See also :ref:`field_visibility`.
 
 You can also add individual column to your table::
 
-    $table->setModel(new Order($db), false); // false here means - don't add any fields by default
+    $table->setModel(new Order($db), []); // [] here means - don't add any fields by default
     $table->addColumn('name');
     $table->addColumn('price');
 

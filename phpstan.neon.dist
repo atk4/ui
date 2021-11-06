@@ -746,15 +746,6 @@ parameters:
             path: 'demos/form-control/input2.php'
             message: '~^Parameter \#1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
         -
-            path: 'demos/form/form-section.php'
-            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
-        -
-            path: 'demos/form/form2.php'
-            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
-        -
-            path: 'demos/form/form5.php'
-            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
-        -
             path: 'demos/interactive/sse.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, Atk4\\Ui\\Jquery> given\.$~'
         -
@@ -766,9 +757,6 @@ parameters:
         -
             path: 'demos/layout/layout-panel.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, mixed> given\.$~'
-        -
-            path: 'demos/obsolete/notify2.php'
-            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
         -
             path: 'demos/tutorial/actions.php'
             message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
@@ -784,9 +772,6 @@ parameters:
         -
             path: 'src/Form.php'
             message: '~^Parameter \#2 \$value of method Atk4\\Ui\\View::setAttr\(\) expects string\|null, int given\.$~'
-        -
-            path: 'src/Form/Layout/Columns.php'
-            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form\\AbstractLayout::setModel\(\) expects array\|null, false given\.$~'
         -
             path: 'src/Form/Layout/Section.php'
             message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
@@ -1221,7 +1206,7 @@ parameters:
             message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) has parameter \$field with no type specified\.$~'
         -
             path: 'src/Form/AbstractLayout.php'
-            message: '~^Call to function is_array\(\) with array<int, array\{0: string, 1\?: array\{readonly: true\}\}> will always evaluate to true\.$~'                        
+            message: '~^Call to function is_array\(\) with array<int, array\{0: string, 1\?: array\{readonly: true\}\}> will always evaluate to true\.$~'
         -
             path: 'src/Form/Control.php'
             message: '~^Property Atk4\\Ui\\Form\\Control::\$width has no type specified\.$~'
