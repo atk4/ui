@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form;
 
 use Atk4\Core\WarnDynamicPropertyTrait;
+use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 
 /**
@@ -109,9 +110,9 @@ abstract class AbstractLayout extends \Atk4\Ui\View
      *
      * @return array
      */
-    protected function getModelFields(\Atk4\Data\Model $model)
+    protected function getModelFields(Model $model)
     {
-        return array_keys($model->getFields('editable'));
+        return array_keys($model->getModel()->getFields('editable'));
     }
 
     /**
@@ -121,7 +122,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
      *
      * @return \Atk4\Data\Model
      */
-    public function setModel(\Atk4\Data\Model $model, array $fields = null)
+    public function setModel(Model $model, array $fields = null)
     {
         $model->assertIsEntity();
 
