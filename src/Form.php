@@ -488,7 +488,7 @@ class Form extends View
      */
     public function controlFactory(Model $entity, Field $field, $ControlSeed = []): Control
     {
-        $entity->assertIsEntity($field->getOwner());
+        $entity->assertIsEntity($field->getOwner()); // TODO there should be no $entity param
 
         $fallbackSeed = [Control\Line::class];
 
