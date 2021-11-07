@@ -196,7 +196,8 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mssql.cov; fi
 
-      - name: "Run tests: Oracle"
+      - name: "Run tests: Oracle (only for coverage or cron)"
+        if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "oci:dbname=oracle/xe;charset=UTF8"
           DB_USER: system
@@ -204,7 +205,8 @@ jobs:
         run: |
           sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v \
+          || php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-oracle.cov; fi
 
       - name: Upload coverage logs 1/2 (only for latest Phpunit)
@@ -354,7 +356,7 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MySQL (only for latest Chrome or cron)"
+      - name: "Run tests: MySQL (only for coverage or cron)"
         if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "mysql:host=mysql;dbname=atk4_test"
@@ -365,7 +367,7 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MariaDB (only for latest Chrome or cron)"
+      - name: "Run tests: MariaDB (only for coverage or cron)"
         if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
@@ -376,7 +378,7 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: PostgreSQL (only for latest Chrome or cron)"
+      - name: "Run tests: PostgreSQL (only for coverage or cron)"
         if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "pgsql:host=postgres;dbname=atk4_test"
@@ -387,7 +389,7 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MSSQL (only for latest Chrome or cron)"
+      - name: "Run tests: MSSQL (only for coverage or cron)"
         if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "sqlsrv:Server=mssql;Database=master"
@@ -398,7 +400,7 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: Oracle (only for latest Chrome or cron)"
+      - name: "Run tests: Oracle (only for coverage or cron)"
         if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
           DB_DSN: "oci:dbname=oracle/xe;charset=UTF8"
@@ -407,7 +409,8 @@ jobs:
         run: |
           sed -E "s~(\\\$db = new.+Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
-          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist \
+          || vendor/bin/behat -vv --config behat.yml.dist
 
       - name: Upload coverage logs 1/2 (only for latest Chrome)
         if: env.LOG_COVERAGE
