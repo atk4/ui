@@ -155,14 +155,14 @@ More on Form layout and sub layout below.
 Adding Controls
 ===============
 
-.. php:method:: addControl($name, $decorator = null, $field = null)
+.. php:method:: addControl($name, $decorator = [], $field = [])
 
 Create a new control on a form::
 
     $form = Form::addTo($app);
     $form->addControl('email');
     $form->addControl('gender', [\Atk4\Ui\Form\Control\Dropdown::class, 'values' => ['Female', 'Male']]);
-    $form->addControl('terms', null, ['type' => 'boolean', 'caption' => 'Agree to Terms & Conditions']);
+    $form->addControl('terms', [], ['type' => 'boolean', 'caption' => 'Agree to Terms & Conditions']);
 
 Create a new control on a form using Model does not require you to describe each control.
 Form will rely on Model Field Definition and UI meta-values to decide on the best way to handle
@@ -251,13 +251,13 @@ Data field is the 3rd argument to ``Form::addControl()``.
 There are 3 ways to define Data form control using 'string', 'json' or 'object'::
 
     $form->addControl('accept_terms', [\Atk4\Ui\Form\Control\Checkbox::class], 'Accept Terms & Conditions');
-    $form->addControl('gender', null, ['enum' => ['Female', 'Male']]);
+    $form->addControl('gender', [], ['enum' => ['Female', 'Male']]);
 
     class MyBoolean extends \Atk4\Data\Field {
         public $type = 'boolean';
         public $enum = ['N', 'Y'];
     }
-    $form->addControl('test2', null, new MyBoolean());
+    $form->addControl('test2', [], new MyBoolean());
 
 String will be converted into ``['caption' => $string]`` a short way to give
 field a custom label. Without a custom label, Form will clean up the name (1st
@@ -273,7 +273,7 @@ existing field properties. This example make email field mandatory for the form:
     $form = Form::addTo($app);
     $form->setModel(new User($db), []);
 
-    $form->addControl('email', null, ['required' => true]);
+    $form->addControl('email', [], ['required' => true]);
 
 addControl into Form with Existing Model
 ----------------------------------------
@@ -299,7 +299,7 @@ example displays a registration form for a User::
 
     // add password verification field
     $form->addControl('password_verify', [\Atk4\Ui\Form\Control\Password::class], 'Type password again');
-    $form->addControl('accept_terms', null, ['type' => 'boolean']);
+    $form->addControl('accept_terms', [], ['type' => 'boolean']);
 
     // submit event
     $form->onSubmit(function($form){
@@ -325,7 +325,7 @@ It is always recommended to use data field type, because it will take care of ty
 for you. Here is an example with date::
 
     $form = Form::addTo($app);
-    $form->addControl('date1', null, ['type' => 'date']);
+    $form->addControl('date1', [], ['type' => 'date']);
     $form->addControl('date2', [\Atk4\Ui\Form\Control\Calendar::class, 'type' => 'date']);
 
     $form->onSubmit(function($form) {

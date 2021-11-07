@@ -163,7 +163,7 @@ class Table extends Lister
      *
      * @param string|null              $name            Data model field name
      * @param array|string|object|null $columnDecorator
-     * @param array|string|object|null $field
+     * @param array|object|null        $field
      *
      * @return Table\Column
      */
@@ -178,10 +178,6 @@ class Table extends Lister
         }
 
         // This code should be vaugely consistent with Form\Layout::addControl()
-
-        if (is_string($field)) {
-            $field = ['type' => $field];
-        }
 
         if ($name === null) {
             // table column without respective field in model
@@ -203,6 +199,7 @@ class Table extends Lister
             }
         }
 
+        // TODO simplify to single $this->decoratorFactory call
         if ($field === null) {
             // column is not associated with any model field
             $columnDecorator = $this->_addUnchecked(Table\Column::fromSeed($columnDecorator, ['table' => $this]));
@@ -210,11 +207,7 @@ class Table extends Lister
             $columnDecorator = $this->decoratorFactory($field, array_merge(['columnData' => $name], is_string($columnDecorator) ? [$columnDecorator] : $columnDecorator));
         } elseif (!$columnDecorator) {
             $columnDecorator = $this->decoratorFactory($field, ['columnData' => $name]);
-        } elseif (is_object($columnDecorator)) {
-            if (!$columnDecorator instanceof Table\Column) {
-                throw (new Exception('Column decorator must descend from ' . Table\Column::class))
-                    ->addMoreInfo('columnDecorator', $columnDecorator);
-            }
+        } elseif ($columnDecorator instanceof Table\Column) {
             $columnDecorator->table = $this;
             if (!$columnDecorator->columnData) {
                 $columnDecorator->columnData = $name;
@@ -368,8 +361,8 @@ class Table extends Lister
      *   });
      *
      * @param \Closure $fx             a callback function with columns widths as parameter
-     * @param int[]    $widths         An array of widths value, integer only. ex: [100,200,300,100]
-     * @param array    $resizerOptions An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
+     * @param int[]    $widths         ex: [100, 200, 300, 100]
+     * @param array    $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
      *
      * @return $this
      */

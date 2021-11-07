@@ -234,7 +234,7 @@ $signup->set(function ($pop) {
             ->link($pop->getApp()->url());
     } else {
         $form = Form::addTo($pop);
-        $form->addControl('email', null, ['required' => true]);
+        $form->addControl('email', [], ['required' => true]);
         $form->addControl('password', [Form\Control\Password::class], ['required' => true]);
         $form->buttonSave->set('Login');
 

@@ -32,7 +32,7 @@ Form\Control\Checkbox::addTo($app, ['Custom setting?'])->js(true)->checkbox('set
 $form = Form::addTo($app);
 $form->addControl('test', [Form\Control\Checkbox::class]);
 $form->addControl('test_checked', [Form\Control\Checkbox::class])->set(1);
-$form->addControl('also_checked', 'Hello World', 'boolean')->set(true);
+$form->addControl('also_checked', ['caption' => 'Hello World'], ['type' => 'boolean'])->set(true);
 
 $form->onSubmit(function ($f) use ($app) {
     return new \Atk4\Ui\JsToast($app->encodeJson($f->model->get()));

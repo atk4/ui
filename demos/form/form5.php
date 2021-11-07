@@ -25,9 +25,6 @@ $form = Form::addTo($cc->addColumn());
 // adding field without model creates a regular line
 $form->addControl('one');
 
-// Second argument string is used as a caption
-$form->addControl('two', 'Caption');
-
 // Array second is a default seed for default line field
 $form->addControl('three', ['caption' => 'Caption2']);
 
@@ -74,9 +71,6 @@ $form->setModel($model, []);
 
 // adding that same field but with custom form control seed
 $form->addControl('one', ['caption' => 'Caption0']);
-
-// another way to override caption
-$form->addControl('two', 'Caption2');
 
 // We can override type, but seed from model will still be respected
 $form->addControl('three', [Form\Control\Checkbox::class]);

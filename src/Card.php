@@ -75,7 +75,7 @@ class Card extends View
     /** @var string Default executor class. */
     public $executor = UserAction\ModalExecutor::class;
 
-    /** @var array Array of columns css wide classes */
+    /** @var array Columns CSS wide classes */
     protected $words = [
         '', 'fluid', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
         'thirteen', 'fourteen', 'fifteen', 'sixteen',

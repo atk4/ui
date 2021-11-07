@@ -106,7 +106,7 @@ will update to use a more suitable form control.
 Hint can be specified either inside Form Control decorator seed or inside the Field::ui attribute::
 
 
-    $form->addControl('title', null, ['values' => ['Mr', 'Mrs', 'Miss'], 'hint' => 'select one']);
+    $form->addControl('title', [], ['values' => ['Mr', 'Mrs', 'Miss'], 'hint' => 'select one']);
 
     $form->addControl('name', ['hint' => 'Full Name Only']);
 

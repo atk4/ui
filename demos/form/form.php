@@ -62,7 +62,7 @@ $form->onSubmit(function (Form $form) use ($app) {
 
 \Atk4\Ui\Header::addTo($tab, ['Comparing Field type vs Form control class']);
 $form = Form::addTo($tab);
-$form->addControl('field', null, ['type' => 'date', 'caption' => 'Date using model field:']);
+$form->addControl('field', [], ['type' => 'date', 'caption' => 'Date using model field:']);
 $form->addControl('control', [Form\Control\Calendar::class, 'type' => 'date', 'caption' => 'Date using form control: ']);
 $form->buttonSave->set('Compare Date');
 

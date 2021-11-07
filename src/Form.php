@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Reference\ContainsMany;
+use Atk4\Ui\Form\Control;
 use Atk4\Ui\Form\Control\EntityFieldProxy;
 
 /**
@@ -71,7 +73,7 @@ class Form extends View
     /**
      * List of form controls currently registered with this form.
      *
-     * @var array Array of Form\Control objects
+     * @var array<string, Control>
      */
     public $controls = [];
 
@@ -324,7 +326,7 @@ class Form extends View
      *
      * @param string $name Name of the control
      */
-    public function getControl(string $name): Form\Control
+    public function getControl(string $name): Control
     {
         return $this->controls[$name];
     }
@@ -396,31 +398,23 @@ class Form extends View
     /**
      * Add form control into current layout. If no layout, create one. If no model, create blank one.
      *
-     * @param array|string|object|null $control
-     * @param array|string|object|null $field
-     *
-     * @return Form\Control
+     * @param array|Control $control
+     * @param array|Field   $field
      */
-    public function addControl(?string $name, $control = null, $field = null)
+    public function addControl(string $name, $control = [], $field = []): Control
     {
-        if ($this->model === null) { // TODO do only on one place
-            $this->model = (new \Atk4\Ui\Misc\ProxyModel())->createEntity();
-        }
-
         return $this->layout->addControl($name, $control, $field);
     }
 
     /**
-     * Add more than one field in one shot.
-     *
-     * @param array $controls
+     * @param array<int, array> $controls
      *
      * @return $this
      */
-    public function addControls($controls)
+    public function addControls(array $controls)
     {
         foreach ($controls as $control) {
-            $this->addControl(...(array) $control);
+            $this->addControl(...$control);
         }
 
         return $this;
@@ -490,23 +484,23 @@ class Form extends View
      * 3. $f->type is converted into seed and evaluated
      * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
      *
-     * @param array $seed Defaults to pass to Factory::factory() when control object is initialized
+     * @param array $ControlSeed
      */
-    public function controlFactory(\Atk4\Data\Field $field, $seed = []): Form\Control
+    public function controlFactory(Field $field, $ControlSeed = []): Control
     {
-        $fallbackSeed = [Form\Control\Line::class];
+        $fallbackSeed = [Control\Line::class];
 
         if ($field->type === 'json' && $field->getReference() !== null) {
             $limit = ($field->getReference() instanceof ContainsMany) ? 0 : 1;
             $model = $field->getReference()->refModel();
-            $fallbackSeed = [Form\Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
+            $fallbackSeed = [Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
         } elseif ($field->type !== 'boolean') {
             if ($field->enum) {
-                $fallbackSeed = [Form\Control\Dropdown::class, 'values' => array_combine($field->enum, $field->enum)];
+                $fallbackSeed = [Control\Dropdown::class, 'values' => array_combine($field->enum, $field->enum)];
             } elseif ($field->values) {
-                $fallbackSeed = [Form\Control\Dropdown::class, 'values' => $field->values];
+                $fallbackSeed = [Control\Dropdown::class, 'values' => $field->values];
             } elseif ($field->getReference() !== null) {
-                $fallbackSeed = [Form\Control\Lookup::class, 'model' => $field->getReference()->refModel()];
+                $fallbackSeed = [Control\Lookup::class, 'model' => $field->getReference()->refModel()];
             }
         }
 
@@ -518,8 +512,8 @@ class Form extends View
             $fallbackSeed['placeholder'] = $field->ui['placeholder'];
         }
 
-        $seed = Factory::mergeSeeds(
-            $seed,
+        $ControlSeed = Factory::mergeSeeds(
+            $ControlSeed,
             $field->ui['form'] ?? null,
             $this->typeToControl[$field->type] ?? null,
             $fallbackSeed
@@ -531,7 +525,7 @@ class Form extends View
             'short_name' => $field->short_name,
         ];
 
-        return Factory::factory($seed, $defaults);
+        return Factory::factory($ControlSeed, $defaults);
     }
 
     /**
@@ -540,13 +534,13 @@ class Form extends View
      * @var array Describes how factory converts type to control seed
      */
     protected $typeToControl = [
-        'boolean' => [Form\Control\Checkbox::class],
-        'text' => [Form\Control\Textarea::class],
-        'string' => [Form\Control\Line::class],
-        'datetime' => [Form\Control\Calendar::class, ['type' => 'datetime']],
-        'date' => [Form\Control\Calendar::class, ['type' => 'date']],
-        'time' => [Form\Control\Calendar::class, ['type' => 'time']],
-        'atk4_money' => [Form\Control\Money::class],
+        'boolean' => [Control\Checkbox::class],
+        'text' => [Control\Textarea::class],
+        'string' => [Control\Line::class],
+        'datetime' => [Control\Calendar::class, ['type' => 'datetime']],
+        'date' => [Control\Calendar::class, ['type' => 'date']],
+        'time' => [Control\Calendar::class, ['type' => 'time']],
+        'atk4_money' => [Control\Money::class],
     ];
 
     /**

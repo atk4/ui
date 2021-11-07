@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form;
 
 use Atk4\Core\Factory;
+use Atk4\Data\Field;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Label;
 
@@ -46,9 +47,9 @@ class Layout extends AbstractLayout
     /** @var array Seed for creating input hint View used in this layout. */
     public $defaultHint = [Label::class, 'class' => ['pointing']];
 
-    protected function _addControl($decorator, $field)
+    protected function _addControl(Control $control, Field $field): Control
     {
-        return $this->add($decorator, ['desired_name' => $field->short_name]);
+        return $this->add($control, ['desired_name' => $field->short_name]);
     }
 
     protected function init(): void

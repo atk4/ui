@@ -356,6 +356,9 @@ parameters:
             path: 'src/Form.php'
             message: '~^Property Atk4\\Ui\\Form::\$layout \(Atk4\\Ui\\Form\\Layout\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
+            path: 'src/Form/AbstractLayout.php'
+            message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) should return Atk4\\Ui\\Form\\Control but returns Atk4\\Ui\\AbstractView\.$~'
+        -
             path: 'src/Form/Control.php'
             message: '~^Cannot access offset ''preventDefault'' on bool\.$~'
         -
@@ -373,6 +376,9 @@ parameters:
         -
             path: 'src/Form/Layout.php'
             message: '~^Method Atk4\\Ui\\Form\\Layout::addButton\(\) should return Atk4\\Ui\\Button but returns Atk4\\Ui\\AbstractView\.$~'
+        -
+            path: 'src/Form/Layout.php'
+            message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) should return Atk4\\Ui\\Form\\Control but returns Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Form/Layout.php'
             message: '~^Method Atk4\\Ui\\Form\\Layout::addSubLayout\(\) should return static\(Atk4\\Ui\\Form\\Layout\) but returns Atk4\\Ui\\AbstractView\.$~'
@@ -766,9 +772,6 @@ parameters:
         -
             path: 'src/Form.php'
             message: '~^Parameter #2 \$value of method Atk4\\Ui\\View::setAttr\(\) expects string\|null, int given\.$~'
-        -
-            path: 'src/Form/AbstractLayout.ph'
-            message: '~^Parameter #2 \$seed of method Atk4\\Ui\\Form::controlFactory\(\) expects array, Atk4\\Ui\\Form\\Control given\.$~'
         -
             path: 'src/Form/Layout/Section.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
@@ -1179,15 +1182,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Form::ajaxSubmit\(\) has no return type specified\.$~'
         -
             path: 'src/Form/AbstractLayout.php'
-            message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) has no return type specified\.$~'
-        -
-            path: 'src/Form/AbstractLayout.php'
-            message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) has parameter \$decorator with no type specified\.$~'
-        -
-            path: 'src/Form/AbstractLayout.php'
-            message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) has parameter \$field with no type specified\.$~'
-        -
-            path: 'src/Form/AbstractLayout.php'
             message: '~^Call to function is_array\(\) with array<int, array\{0: string, 1\?: array\{readonly: true\}\}> will always evaluate to true\.$~'
         -
             path: 'src/Form/Control.php'
@@ -1390,15 +1384,6 @@ parameters:
         -
             path: 'src/Form/Control/UploadImage.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\UploadImage::clearThumbnail\(\) has parameter \$defaultThumbnail with no type specified\.$~'
-        -
-            path: 'src/Form/Layout.php'
-            message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) has no return type specified\.$~'
-        -
-            path: 'src/Form/Layout.php'
-            message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) has parameter \$decorator with no type specified\.$~'
-        -
-            path: 'src/Form/Layout.php'
-            message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) has parameter \$field with no type specified\.$~'
         -
             path: 'src/Form/Layout/Section.php'
             message: '~^Property Atk4\\Ui\\Form\\Layout\\Section::\$formLayout has no type specified\.$~'

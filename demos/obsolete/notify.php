@@ -16,7 +16,7 @@ $modal = \Atk4\Ui\Modal::addTo($app, ['Modal Title']);
 
 $modal->set(function ($p) use ($modal) {
     $form = \Atk4\Ui\Form::addTo($p);
-    $form->addControl('name', null, ['caption' => 'Add your name']);
+    $form->addControl('name', [], ['caption' => 'Add your name']);
 
     $form->onSubmit(function (\Atk4\Ui\Form $form) use ($modal) {
         if (empty($form->model->get('name'))) {

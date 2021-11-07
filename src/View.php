@@ -170,7 +170,6 @@ class View extends AbstractView implements JsExpressionable
     /**
      * Sets source of the View.
      *
-     * @param array $data   Array of data
      * @param array $fields Limit model to particular fields
      *
      * @return Model

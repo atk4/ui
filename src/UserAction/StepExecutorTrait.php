@@ -154,7 +154,7 @@ trait StepExecutorTrait
                 $val['model'] = Factory::factory($val['model']);
                 $form->addControl($key, [Form\Control\Lookup::class])->setModel($val['model']);
             } else {
-                $form->addControl($key, null, $val);
+                $form->addControl($key, [], $val);
             }
         }
 

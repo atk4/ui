@@ -108,7 +108,7 @@ $tab = $tabs->addTab('Use after form submit', function ($tab) {
     session_start();
 
     $form = \Atk4\Ui\Form::addTo($tab);
-    $form->addControls(['foo', 'bar']);
+    $form->addControls([['foo'], ['bar']]);
 
     $console = \Atk4\Ui\Console::addTo($tab, ['event' => false]);
     $console->set(function ($console) {
