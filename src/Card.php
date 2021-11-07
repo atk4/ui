@@ -193,7 +193,7 @@ class Card extends View
         }
 
         if ($fields === null) {
-            $fields = array_keys($this->model->getModel()->getFields(['editable', 'visible']));
+            $fields = array_keys($this->model->getFields(['editable', 'visible']));
         }
 
         $this->setDataId($this->model->getId());

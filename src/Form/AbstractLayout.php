@@ -92,7 +92,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
      */
     protected function getModelFields(Model $model)
     {
-        return array_keys($model->getModel()->getFields('editable'));
+        return array_keys($model->getFields('editable'));
     }
 
     /**
