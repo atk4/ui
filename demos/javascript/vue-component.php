@@ -53,7 +53,7 @@ $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lis
     $row->iso = mb_strtolower($row->iso);
 
     ++$lister->ipp;
-    if ($lister->ipp === $lister->model->getModel()->limit[0]) {
+    if ($lister->ipp === $lister->model->limit[0]) {
         $lister->t_row->dangerouslySetHtml('end', '<div class="ui circular basic label"> ...</div>');
     }
 });

@@ -137,7 +137,7 @@ class InlineEdit extends View
     public function onChange(\Closure $fx)
     {
         if (!$this->autoSave) {
-            $value = $this->getApp()->ui_persistence->typecastLoadField($this->model->getModel()->getField($this->fieldName), $_POST['value'] ?? null);
+            $value = $this->getApp()->ui_persistence->typecastLoadField($this->model->getField($this->fieldName), $_POST['value'] ?? null);
             $this->cb->set(function () use ($fx, $value) {
                 return $fx($value);
             });
@@ -185,7 +185,7 @@ class InlineEdit extends View
     {
         parent::renderView();
 
-        $type = $this->model && $this->fieldName ? $this->model->getModel()->getField($this->fieldName)->type : 'text';
+        $type = $this->model && $this->fieldName ? $this->model->getField($this->fieldName)->type : 'text';
         $type = $type === 'string' ? 'text' : $type;
 
         if ($type !== 'text' && $type !== 'integer') {

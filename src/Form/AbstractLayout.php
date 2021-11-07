@@ -42,9 +42,9 @@ abstract class AbstractLayout extends \Atk4\Ui\View
 
         try {
             if (!$this->form->model->getModel()->hasField($name)) {
-                $field = $this->form->model->getModel()->addField($name, $field);
+                $field = $this->form->model->addField($name, $field);
             } else {
-                $existingField = $this->form->model->getModel()->getField($name);
+                $existingField = $this->form->model->getField($name);
 
                 if (is_array($field)) {
                     $field = $existingField->setDefaults($field);
@@ -115,7 +115,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
         // prepare array of controls - check if fields are editable or read_only/disabled
         $controls = [];
         foreach ($fields as $fieldName) {
-            $field = $model->getModel()->getField($fieldName);
+            $field = $model->getField($fieldName);
 
             if ($field->isEditable()) {
                 $controls[] = [$field->short_name];

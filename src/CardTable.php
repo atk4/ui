@@ -40,7 +40,7 @@ class CardTable extends Table
             if ($columns === null || in_array($key, $columns, true)) {
                 $data[] = [
                     'id' => $key,
-                    'field' => $model->getModel()->getField($key)->getCaption(),
+                    'field' => $model->getField($key)->getCaption(),
                     'value' => $uiValues[$key],
                 ];
             }
@@ -49,7 +49,7 @@ class CardTable extends Table
         $this->_bypass = true;
         $mm = parent::setSource($data);
         $this->addDecorator('value', [Table\Column\Multiformat::class, function (Model $row, $field) use ($model) {
-            $field = $model->getModel()->getField($row->getId());
+            $field = $model->getField($row->getId());
             $ret = $this->decoratorFactory(
                 $field,
                 $field->type === 'boolean' ? [Table\Column\Status::class,  ['positive' => [true, 'Yes'], 'negative' => [false, 'No']]] : []
