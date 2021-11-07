@@ -34,7 +34,7 @@ class CardTable extends Table
 
         $data = [];
 
-        $uiValues = $this->getApp()->ui_persistence->typecastSaveRow($model->getModel(), $model->get());
+        $uiValues = $this->getApp()->ui_persistence->typecastSaveRow($model, $model->get());
 
         foreach ($model->get() as $key => $value) {
             if ($columns === null || in_array($key, $columns, true)) {

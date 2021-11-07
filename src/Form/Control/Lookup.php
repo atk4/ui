@@ -231,8 +231,8 @@ class Lookup extends Input
      */
     public static function defaultRenderRow($field, Model $row, $key = null)
     {
-        $id_field = $field->id_field ?: $row->getModel()->id_field;
-        $title_field = $field->title_field ?: $row->getModel()->title_field;
+        $id_field = $field->id_field ?: $row->id_field;
+        $title_field = $field->title_field ?: $row->title_field;
 
         return [
             'value' => $row->get($id_field),

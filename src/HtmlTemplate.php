@@ -138,7 +138,7 @@ class HtmlTemplate
                 throw new Exception('HTML is not allowed to be dangerously set from Model');
             }
 
-            $tag = $this->getApp()->ui_persistence->typecastSaveRow($tag->getModel(), $tag->get());
+            $tag = $this->getApp()->ui_persistence->typecastSaveRow($tag, $tag->get());
         }
 
         // $tag passed as associative array [tag => value]
