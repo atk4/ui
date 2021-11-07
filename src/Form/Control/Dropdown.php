@@ -177,8 +177,8 @@ class Dropdown extends Input
      */
     public function getValue()
     {
-        return $this->field !== null
-            ? (is_array($this->field->get()) ? implode(',', $this->field->get()) : $this->field->get())
+        return $this->entityField !== null
+            ? (is_array($this->entityField->get()) ? implode(',', $this->entityField->get()) : $this->entityField->get())
             : parent::getValue();
     }
 
@@ -193,11 +193,11 @@ class Dropdown extends Input
      */
     public function set($value = null, $junk = null)
     {
-        if ($this->field) {
-            if ($this->field->getField()->type === 'json' && is_string($value)) {
+        if ($this->entityField) {
+            if ($this->entityField->getField()->type === 'json' && is_string($value)) {
                 $value = explode(',', $value);
             }
-            $this->field->set($value);
+            $this->entityField->set($value);
 
             return $this;
         }
@@ -240,7 +240,7 @@ class Dropdown extends Input
     protected function htmlRenderValue(): void
     {
         // add selection only if no value is required and Dropdown has no multiple selections enabled
-        if ($this->field !== null && !$this->field->getField()->required && !$this->isMultiple) {
+        if ($this->entityField !== null && !$this->entityField->getField()->required && !$this->isMultiple) {
             $this->_tItem->set('value', '');
             $this->_tItem->set('title', $this->empty || is_numeric($this->empty) ? (string) $this->empty : '');
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());

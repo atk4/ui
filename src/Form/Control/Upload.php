@@ -137,7 +137,7 @@ class Upload extends Input
      */
     public function getInputValue()
     {
-        return $this->field ? $this->field->get() : $this->content;
+        return $this->entityField ? $this->entityField->get() : $this->content;
     }
 
     public function setFileId($id)
@@ -246,7 +246,7 @@ class Upload extends Input
         $this->js(true)->atkFileUpload([
             'uri' => $this->cb->getJsUrl(),
             'action' => $this->action->name,
-            'file' => ['id' => $this->fileId ?: $this->field->get(), 'name' => $this->getInputValue()],
+            'file' => ['id' => $this->fileId ?: $this->entityField->get(), 'name' => $this->getInputValue()],
             'hasFocus' => $this->hasFocusEnable,
             'submit' => ($this->form->buttonSave) ? $this->form->buttonSave->name : null,
         ]);

@@ -29,13 +29,13 @@ class DropdownCascade extends Dropdown
         }
 
         $cascadeFromValue = isset($_POST[$this->cascadeFrom->name])
-            ? $this->getApp()->ui_persistence->typecastLoadField($this->cascadeFrom->field->getField(), $_POST[$this->cascadeFrom->name])
-            : $this->cascadeFrom->field->get();
+            ? $this->getApp()->ui_persistence->typecastLoadField($this->cascadeFrom->entityField->getField(), $_POST[$this->cascadeFrom->name])
+            : $this->cascadeFrom->entityField->get();
 
         $this->model = $this->cascadeFrom->model ? $this->cascadeFrom->model->ref($this->reference) : null;
 
         // populate default dropdown values
-        $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($cascadeFromValue), $this->field->get());
+        $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($cascadeFromValue), $this->entityField->get());
 
         // js to execute for the onChange handler of the parent dropdown.
         $expr = [
@@ -62,7 +62,7 @@ class DropdownCascade extends Dropdown
      */
     public function set($value = null, $junk = null)
     {
-        $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($this->cascadeFrom->field->get()), $value);
+        $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($this->cascadeFrom->entityField->get()), $value);
 
         return parent::set($value, $junk);
     }

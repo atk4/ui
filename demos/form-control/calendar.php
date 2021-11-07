@@ -71,7 +71,7 @@ $control = $form->addControl('date_action', [
     'caption' => 'Javascript action',
     'options' => ['clickOpens' => false],
 ])->set(new \DateTime());
-$control->addAction(['Today', 'icon' => 'calendar day'])->on('click', $control->getJsInstance()->setDate($app->ui_persistence->typecastSaveField($control->field->getField(), new \DateTime())));
+$control->addAction(['Today', 'icon' => 'calendar day'])->on('click', $control->getJsInstance()->setDate($app->ui_persistence->typecastSaveField($control->entityField->getField(), new \DateTime())));
 $control->addAction(['Select...', 'icon' => 'calendar'])->on('click', $control->getJsInstance()->open());
 $control->addAction(['Clear', 'icon' => 'times red'])->on('click', $control->getJsInstance()->clear());
 

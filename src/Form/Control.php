@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form;
 
+use Atk4\Data\Model\EntityField;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
-use Atk4\Ui\Form\Control\EntityFieldProxy;
 use Atk4\Ui\View;
 
 /**
@@ -20,9 +20,9 @@ class Control extends View
     public $form;
 
     /**
-     * @var EntityFieldProxy
+     * @var EntityField
      */
-    public $field;
+    public $entityField;
 
     /** @var string */
     public $controlClass = '';
@@ -80,12 +80,12 @@ class Control extends View
     {
         parent::init();
 
-        if ($this->form && $this->field) {
-            if (isset($this->form->controls[$this->field->getFieldName()])) {
+        if ($this->form && $this->entityField) {
+            if (isset($this->form->controls[$this->entityField->getFieldName()])) {
                 throw (new Exception('Form already has a field with the same name'))
-                    ->addMoreInfo('name', $this->field->getFieldName());
+                    ->addMoreInfo('name', $this->entityField->getFieldName());
             }
-            $this->form->controls[$this->field->getFieldName()] = $this;
+            $this->form->controls[$this->entityField->getFieldName()] = $this;
         }
     }
 
@@ -100,8 +100,8 @@ class Control extends View
      */
     public function set($value = null, $junk = null)
     {
-        if ($this->field) {
-            $this->field->set($value);
+        if ($this->entityField) {
+            $this->entityField->set($value);
 
             return $this;
         }

@@ -7,9 +7,9 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Data\Model\EntityField;
 use Atk4\Data\Reference\ContainsMany;
 use Atk4\Ui\Form\Control;
-use Atk4\Ui\Form\Control\EntityFieldProxy;
 
 /**
  * Implements a form.
@@ -523,7 +523,7 @@ class Form extends View
 
         $defaults = [
             'form' => $this,
-            'field' => new EntityFieldProxy($entity, $field->short_name),
+            'entityField' => new EntityField($entity, $field->short_name),
             'short_name' => $field->short_name,
         ];
 
@@ -557,7 +557,7 @@ class Form extends View
             try {
                 // save field value only if field was editable in form at all
                 if (!$control->readonly && !$control->disabled) {
-                    $control->set($this->getApp()->ui_persistence->typecastLoadField($control->field->getField(), $_POST[$k] ?? null));
+                    $control->set($this->getApp()->ui_persistence->typecastLoadField($control->entityField->getField(), $_POST[$k] ?? null));
                 }
             } catch (\Exception $e) {
                 $messages = [];

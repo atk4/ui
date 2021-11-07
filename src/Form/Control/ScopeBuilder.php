@@ -320,7 +320,7 @@ class ScopeBuilder extends Control
 
         if ($this->form) {
             $this->form->onHook(\Atk4\Ui\Form::HOOK_LOAD_POST, function ($form, &$postRawData) {
-                $key = $this->field->getFieldName();
+                $key = $this->entityField->getFieldName();
                 $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
             });
         }
@@ -366,8 +366,8 @@ class ScopeBuilder extends Control
         // this is used when selecting proper operator for the inputType (see self::$operatorsMap)
         $inputsMap = array_column($this->rules, 'inputType', 'id');
 
-        if ($this->field && $this->field->get() !== null) {
-            $scope = $this->field->get();
+        if ($this->entityField && $this->entityField->get() !== null) {
+            $scope = $this->entityField->get();
         } else {
             $scope = $model->scope();
         }

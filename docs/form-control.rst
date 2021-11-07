@@ -200,7 +200,7 @@ Link to Model Field
 .. php:attr:: field
 
 Form decorator defines $field property which will be pointing to a field object of a model, so technically
-the value of the field would be read from `$decorator->field->get()`.
+the value of the field would be read from `$decorator->entityField->get()`.
 
 .. php:namespace:: Atk4\Ui\Form\Control
 
