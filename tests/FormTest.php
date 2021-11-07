@@ -150,12 +150,14 @@ class FormTest extends TestCase
         $m->addField('opt1', ['values' => $options]);
         $m->addField('opt2', ['values' => $options]);
         $m->addField('opt3', ['values' => $options, 'required' => true]);
-        //$m->addField('opt3_zerotest', ['values' => $options, 'required' => true]);
+        $m->addField('opt3_z', ['values' => $options, 'required' => true]);
         $m->addField('opt4', ['values' => $options, 'mandatory' => true]);
+        $m->addField('opt4_z', ['values' => $options, 'mandatory' => true]);
 
         $m = $m->createEntity();
         $this->form->setModel($m);
-        $this->assertSubmitError(['opt1' => '2', 'opt3' => '', 'opt3_zerotest' => '0'], function ($error) {
+
+        $this->assertSubmitError(['opt1' => '2', 'opt3' => '', 'opt3_z' => '0', 'opt4_z' => '0'], function ($error) {
             // dropdown validates to make sure option is proper
             $this->assertFormControlError('opt1', 'not one of the allowed values');
 
@@ -164,14 +166,9 @@ class FormTest extends TestCase
 
             // dropdown insists for value to be there
             $this->assertFormControlError('opt3', 'Must not be empty');
-
-            // value with '0' is valid selection
-            // TODO: currently fails!! See https://github.com/atk4/ui/issues/781
-            //$this->assertFromControlNoErrors('opt3_zerotest');
-
-            // mandatory will error during save(), but form does not care about it. This is normal
-            // as there may be further changes to this field on beforeSave hook...
-            $this->assertFromControlNoErrors('opt4');
+            $this->assertFormControlError('opt3_z', 'Must not be empty');
+            $this->assertFormControlError('opt4', 'Must not be null');
+            $this->assertFromControlNoErrors('opt4_z');
         });
     }
 }

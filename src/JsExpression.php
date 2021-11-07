@@ -35,9 +35,8 @@ class JsExpression implements JsExpressionable
     public function jsRender(): string
     {
         $namelessCount = 0;
-
         $res = preg_replace_callback(
-            '/\[[a-z0-9_]*\]|{[a-z0-9_]*}/',
+            '~\[[\w]*\]|{[\w]*}~',
             function ($matches) use (&$namelessCount) {
                 $identifier = substr($matches[0], 1, -1);
 

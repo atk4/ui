@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Persistence;
 
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 
@@ -38,10 +39,27 @@ class Ui extends \Atk4\Data\Persistence
     /** @var string */
     public $no = 'No';
 
+    public function typecastSaveField(Field $field, $value)
+    {
+        // relax empty checks for UI render for not yet set values
+        $fieldRequiredOrig = $field->required;
+        $fieldMandatoryOrig = $field->mandatory;
+        if (in_array($value, [null, false, 0, 0.0, ''], true)) {
+            $field->required = false;
+            $field->mandatory = false;
+        }
+        try {
+            return parent::typecastSaveField($field, $value);
+        } finally {
+            $field->required = $fieldRequiredOrig;
+            $field->mandatory = $fieldMandatoryOrig;
+        }
+    }
+
     /**
      * This method contains the logic of casting generic values into user-friendly format.
      */
-    protected function _typecastSaveField(\Atk4\Data\Field $field, $value): string
+    protected function _typecastSaveField(Field $field, $value): string
     {
         // always normalize string EOL
         if (is_string($value)) {
@@ -87,7 +105,7 @@ class Ui extends \Atk4\Data\Persistence
     /**
      * Interpret user-defined input for various types.
      */
-    protected function _typecastLoadField(\Atk4\Data\Field $field, $value)
+    protected function _typecastLoadField(Field $field, $value)
     {
         // always normalize string EOL
         if (is_string($value)) {
