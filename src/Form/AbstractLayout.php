@@ -41,7 +41,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
         }
 
         try {
-            if (!$this->form->model->getModel()->hasField($name)) {
+            if (!$this->form->model->hasField($name)) {
                 $field = $this->form->model->addField($name, $field);
             } else {
                 $existingField = $this->form->model->getField($name);
