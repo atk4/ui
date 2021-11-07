@@ -486,8 +486,10 @@ class Form extends View
      *
      * @param array $ControlSeed
      */
-    public function controlFactory(Field $field, $ControlSeed = []): Control
+    public function controlFactory(Model $entity, Field $field, $ControlSeed = []): Control
     {
+        $entity->assertIsEntity($field->getOwner());
+
         $fallbackSeed = [Control\Line::class];
 
         if ($field->type === 'json' && $field->getReference() !== null) {
@@ -521,7 +523,7 @@ class Form extends View
 
         $defaults = [
             'form' => $this,
-            'field' => new EntityFieldProxy($field->getOwner(), $field->short_name),
+            'field' => new EntityFieldProxy($entity, $field->short_name),
             'short_name' => $field->short_name,
         ];
 

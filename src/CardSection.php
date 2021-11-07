@@ -70,8 +70,8 @@ class CardSection extends View
             if ($entity->getModel()->title_field === $field) {
                 continue;
             }
-            $label = $entity->getField($field)->getCaption();
-            $value = $this->getApp()->ui_persistence->typecastSaveField($entity->getField($field), $entity->get($field));
+            $label = $entity->getModel()->getField($field)->getCaption();
+            $value = $this->getApp()->ui_persistence->typecastSaveField($entity->getModel()->getField($field), $entity->get($field));
             if ($useLabel) {
                 $value = $label . $this->glue . $value;
             }
