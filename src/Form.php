@@ -7,7 +7,7 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use Atk4\Data\Model\EntityField;
+use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Data\Reference\ContainsMany;
 use Atk4\Ui\Form\Control;
 
@@ -523,7 +523,7 @@ class Form extends View
 
         $defaults = [
             'form' => $this,
-            'entityField' => new EntityField($entity, $field->short_name),
+            'entityField' => new EntityFieldPair($entity, $field->short_name),
             'short_name' => $field->short_name,
         ];
 
