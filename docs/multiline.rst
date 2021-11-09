@@ -58,7 +58,7 @@ This leads to a Multiline component automatically rendered for adding, editing a
 
 You can also check LINK_TO_DEMO/multiline.php for this example
 
-Using Multiline with hasMany() relation
+Using Multiline with HasMany relation
 =======================================
 
 Multiline form control is used by default when a Model field used `containsMany()` or `containsOne()`, but you can set

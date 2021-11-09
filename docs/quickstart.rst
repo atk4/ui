@@ -253,7 +253,7 @@ another. In our example replace right column (label 17) with the following code:
     );
 
     if (isset($_GET['delete'])) {                               // 23
-        foreach(explode(',', $_GET['delete']) as $id) {
+        foreach (explode(',', $_GET['delete']) as $id) {
             $grid->model->delete($id);                          // 24
         }
     }

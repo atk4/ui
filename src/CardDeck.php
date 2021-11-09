@@ -148,7 +148,7 @@ class CardDeck extends View
         }
 
         if ($count = $this->initPaginator()) {
-            $this->model->each(function ($m) use ($fields, $extra) {
+            foreach ($this->model as $m) {
                 $c = $this->cardHolder->add(Factory::factory([$this->card], ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]))->addClass('segment');
                 $c->setModel($m, $fields);
                 if ($extra) {
@@ -162,7 +162,7 @@ class CardDeck extends View
                         }
                     }
                 }
-            });
+            }
         } else {
             $this->cardHolder->addClass('centered')->add(Factory::factory($this->noRecordDisplay));
         }
