@@ -131,7 +131,7 @@ class Grid extends View
             $this->menu = $this->add(Factory::factory([Menu::class, 'activate_on_click' => false], $this->menu), 'Menu');
         }
 
-        $this->table = $this->container->add(Factory::factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
+        $this->table = $this->initTable();
 
         if ($this->paginator !== false) {
             $seg = View::addTo($this->container, [], ['Paginator'])->addStyle('text-align', 'center');
@@ -140,6 +140,14 @@ class Grid extends View
         }
 
         $this->issetApp() ? $this->getApp()->stickyGet('_q') : $this->stickyGet('_q');
+    }
+
+    protected function initTable(): Table
+    {
+        /** @var Table $table */
+        $table = $this->container->add(Factory::factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
+
+        return $table;
     }
 
     /**
