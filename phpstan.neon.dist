@@ -393,9 +393,6 @@ parameters:
             message: '~^Property Atk4\\Ui\\Grid::\$menu \(Atk4\\Ui\\Menu\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Grid.php'
-            message: '~^Property Atk4\\Ui\\Grid::\$table \(Atk4\\Ui\\Table\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
-        -
-            path: 'src/Grid.php'
             message: '~^Property Atk4\\Ui\\Grid::\$paginator \(Atk4\\Ui\\Paginator\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Grid.php'
