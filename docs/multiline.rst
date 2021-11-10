@@ -11,7 +11,7 @@ The Multiline form control is not simply a single control, but will add multiple
 multiple Model fields related to a single record reference into another Model.
 
 A good example is a user who can have many addresses.
-In this example, the Model `User` containsMany `Addresses`. Since the Model field addresses is defined with containsMany()
+In this example, the Model `User` containsMany `Addresses`. Since the Model field addresses is defined with addContainsMany()
 inside the main model, Multiline will store addresses content as Json value inside the table blobl addresses field.
 
 For example::
@@ -30,7 +30,7 @@ For example::
             $this->addField('firstname', ['type' => 'string']);
             $this->addField('lastname', ['type' => 'string']);
 
-            $this->containsMany('addresses', [Address::class, 'system' => false]);
+            $this->addContainsMany('addresses', [Address::class, 'system' => false]);
         }
     }
 
@@ -58,11 +58,11 @@ This leads to a Multiline component automatically rendered for adding, editing a
 
 You can also check LINK_TO_DEMO/multiline.php for this example
 
-Using Multiline with hasMany() relation
+Using Multiline with HasMany relation
 =======================================
 
-Multiline form control is used by default when a Model field used `containsMany()` or `containsOne()`, but you can set
-up the multiline component to be used with hasMany() relation and edit related record accordingly.
+Multiline form control is used by default when a Model field used `addContainsMany()` or `addContainsOne()`, but you can set
+up the multiline component to be used with addHasMany() relation and edit related record accordingly.
 
 Lets say a User can have many email addresses, but you want to store them in a separate table.::
 
@@ -79,7 +79,7 @@ Lets say a User can have many email addresses, but you want to store them in a s
 
             $this->addField('email_address', ['type' => 'string']);
 
-            $this->hasOne('user_id', [User::class]);
+            $this->addHasOne('user_id', [User::class]);
         }
     }
 
@@ -97,7 +97,7 @@ Lets say a User can have many email addresses, but you want to store them in a s
             $this->addField('firstname', ['type' => 'string']);
             $this->addField('lastname', ['type' => 'string']);
 
-            $this->hasMany('Emails', [Email::class]);
+            $this->addHasMany('Emails', [Email::class]);
         }
     }
 

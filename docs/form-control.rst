@@ -319,8 +319,8 @@ Dropdown uses Fomantic UI Dropdown (https://fomantic-ui.com/modules/dropdown.htm
 
 Usage with a Model
 ------------------
-A Dropdown is not used as default Form Control decorator (`$model->hasOne()` uses :php:class:`Lookup`), but in your Model, you can define that
-UI should render a Field as Dropdown. For example, this makes sense when a `hasOne()` relationship only has a very limited amount (like 20)
+A Dropdown is not used as default Form Control decorator (`$model->addHasOne()` uses :php:class:`Lookup`), but in your Model, you can define that
+UI should render a Field as Dropdown. For example, this makes sense when a hasOne relationship only has a very limited amount (like 20)
 of records to display. Dropdown renders all records when the paged is rendered, while Lookup always sends an additional request to the server.
 :php:class:`Lookup` on the other hand is the better choice if there is lots of records (like more than 50).
 

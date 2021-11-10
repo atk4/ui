@@ -84,8 +84,8 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
         $this->addField('name', ['required' => true]);
         $this->addField('surname', ['ui' => ['placeholder' => 'e.g. Smith']]);
         $this->addField('gender', ['enum' => ['M', 'F']]);
-        $this->hasOne('country_lookup_id', ['model' => [Country::class]]); // this works fast
-        $this->hasOne('country_dropdown_id', ['model' => [Country::class], 'ui' => ['form' => new Form\Control\Dropdown()]]); // this works slow
+        $this->addHasOne('country_lookup_id', ['model' => [Country::class]]); // this works fast
+        $this->addHasOne('country_dropdown_id', ['model' => [Country::class], 'ui' => ['form' => new Form\Control\Dropdown()]]); // this works slow
     }
 
     public function validate($intent = null): array

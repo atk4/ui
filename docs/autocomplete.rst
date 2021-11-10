@@ -38,7 +38,7 @@ Specifying in Model
 
 You can also specify that you prefer to use AutoComplete inside your model definition::
 
-    $model->hasOne('country_id', ['model' => [Country::class], 'ui' => ['form' => [\Atk4\Ui\Form\Control\AutoComplete::class]]]);
+    $model->addHasOne('country_id', ['model' => [Country::class], 'ui' => ['form' => [\Atk4\Ui\Form\Control\AutoComplete::class]]]);
 
 Advanced Usage
 --------------

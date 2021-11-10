@@ -229,7 +229,7 @@ class Stat extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->client_name, ['type' => 'string']);
         $this->addField($this->fieldName()->client_address, ['type' => 'text', 'ui' => ['form' => [Form\Control\Textarea::class, 'rows' => 4]]]);
 
-        $this->hasOne($this->fieldName()->client_country_iso, [
+        $this->addHasOne($this->fieldName()->client_country_iso, [
             'model' => [Country::class],
             'their_field' => Country::hinting()->fieldName()->iso,
             'type' => 'string',
@@ -300,13 +300,13 @@ class File extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->type, ['caption' => 'MIME Type']);
         $this->addField($this->fieldName()->is_folder, ['type' => 'boolean']);
 
-        $this->hasMany($this->fieldName()->SubFolder, [
+        $this->addHasMany($this->fieldName()->SubFolder, [
             'model' => [self::class],
             'their_field' => self::hinting()->fieldName()->parent_folder_id,
         ])
             ->addField($this->fieldName()->count, ['aggregate' => 'count', 'field' => $this->persistence->expr($this, '*')]);
 
-        $this->hasOne($this->fieldName()->parent_folder_id, [
+        $this->addHasOne($this->fieldName()->parent_folder_id, [
             'model' => [Folder::class],
         ])
             ->addTitle();
@@ -385,11 +385,11 @@ class Category extends ModelWithPrefixedFields
         parent::init();
         $this->addField($this->fieldName()->name);
 
-        $this->hasMany($this->fieldName()->SubCategories, [
+        $this->addHasMany($this->fieldName()->SubCategories, [
             'model' => [SubCategory::class],
             'their_field' => SubCategory::hinting()->fieldName()->product_category_id,
         ]);
-        $this->hasMany($this->fieldName()->Products, [
+        $this->addHasMany($this->fieldName()->Products, [
             'model' => [Product::class],
             'their_field' => Product::hinting()->fieldName()->product_category_id,
         ]);
@@ -410,10 +410,10 @@ class SubCategory extends ModelWithPrefixedFields
         parent::init();
         $this->addField($this->fieldName()->name);
 
-        $this->hasOne($this->fieldName()->product_category_id, [
+        $this->addHasOne($this->fieldName()->product_category_id, [
             'model' => [Category::class],
         ]);
-        $this->hasMany($this->fieldName()->Products, [
+        $this->addHasMany($this->fieldName()->Products, [
             'model' => [Product::class],
             'their_field' => Product::hinting()->fieldName()->product_sub_category_id,
         ]);
@@ -435,10 +435,10 @@ class Product extends ModelWithPrefixedFields
         parent::init();
         $this->addField($this->fieldName()->name);
         $this->addField($this->fieldName()->brand);
-        $this->hasOne($this->fieldName()->product_category_id, [
+        $this->addHasOne($this->fieldName()->product_category_id, [
             'model' => [Category::class],
         ])->addTitle();
-        $this->hasOne($this->fieldName()->product_sub_category_id, [
+        $this->addHasOne($this->fieldName()->product_sub_category_id, [
             'model' => [SubCategory::class],
         ])->addTitle();
     }

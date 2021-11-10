@@ -45,7 +45,7 @@ $inventoryItemClass = AnonymousClassNameCache::get_class(fn () => new class() ex
             'type' => 'time',
             'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
-        $this->hasOne('country', [
+        $this->addHasOne('country', [
             'model' => new Country($this->countryPersistence),
             'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 3]]],
         ]);
