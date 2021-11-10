@@ -237,7 +237,7 @@ class Stat extends ModelWithPrefixedFields
                 'form' => [Form\Control\Line::class],
             ],
         ])
-            ->addField($this->fieldName()->client_country, [], Country::hinting()->fieldName()->name);
+            ->addField($this->fieldName()->client_country, Country::hinting()->fieldName()->name);
 
         $this->addField($this->fieldName()->is_commercial, ['type' => 'boolean']);
         $this->addField($this->fieldName()->currency, ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
