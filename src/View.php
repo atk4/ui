@@ -361,7 +361,7 @@ class View extends AbstractView implements JsExpressionable
      * Note: this is internal method, but should be public because other objects
      *       should be able to call it.
      */
-    public function getClosestOwner(self $object, string $class): ?View
+    public function getClosestOwner(self $object, string $class): ?self
     {
         if ($object->issetOwner()) {
             return null;
@@ -379,7 +379,7 @@ class View extends AbstractView implements JsExpressionable
     // {{{ Manipulating classes and view properties
 
     /**
-     * TODO this method is hard to override, drop it from View
+     * TODO this method is hard to override, drop it from View.
      *
      * Override this method without compatibility with parent, if you wish
      * to set your own things your own way for your view.

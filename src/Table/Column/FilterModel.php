@@ -101,7 +101,7 @@ class FilterModel extends Model
         }
 
         // Add hook in order to persist data in session.
-        $this->onHook(self::HOOK_AFTER_SAVE, function ($model) {
+        $this->onHook(self::HOOK_AFTER_SAVE, function (Model $model) {
             $this->memorize('data', $model->get());
         });
     }

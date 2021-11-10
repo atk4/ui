@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
+use Atk4\Ui\Form;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -12,18 +15,18 @@ $model = new CountryLock($app->db);
 $crud = \Atk4\Ui\Crud::addTo($app, ['ipp' => 10]);
 
 // callback for model action add form.
-$crud->onFormAdd(function ($form, $t) use ($model) {
+$crud->onFormAdd(function (Form $form, $t) use ($model) {
     $form->js(true, $form->getControl($model->fieldName()->name)->jsInput()->val('Entering value via javascript'));
 });
 
 // callback for model action edit form.
-$crud->onFormEdit(function ($form) use ($model) {
+$crud->onFormEdit(function (Form $form) use ($model) {
     $form->js(true, $form->getControl($model->fieldName()->name)->jsInput()->attr('readonly', true));
 });
 
 // callback for both model action edit and add.
-$crud->onFormAddEdit(function ($form, $ex) {
-    $form->onSubmit(function (\Atk4\Ui\Form $form) use ($ex) {
+$crud->onFormAddEdit(function (Form $form, $ex) {
+    $form->onSubmit(function (Form $form) use ($ex) {
         return [$ex->hide(), new \Atk4\Ui\JsToast('Submit all right! This demo does not saved data.')];
     });
 });
@@ -50,7 +53,7 @@ $crud = \Atk4\Ui\Crud::addTo($column, [
 // Condition on the model can be applied on a model
 $model = new CountryLock($app->db);
 $model->addCondition($model->fieldName()->numcode, '<', 200);
-$model->onHook(\Atk4\Data\Model::HOOK_VALIDATE, function ($model, $intent) {
+$model->onHook(\Atk4\Data\Model::HOOK_VALIDATE, function (Country $model, $intent) {
     $err = [];
     if ($model->numcode >= 200) {
         $err[$model->fieldName()->numcode] = 'Should be less than 200';
@@ -71,7 +74,7 @@ $column = $columns->addColumn();
 
 /** @var \Atk4\Ui\UserAction\ModalExecutor $myExecutorClass */
 $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\UserAction\ModalExecutor {
-    public function addFormTo(\Atk4\Ui\View $view): \Atk4\Ui\Form
+    public function addFormTo(\Atk4\Ui\View $view): Form
     {
         $columns = \Atk4\Ui\Columns::addTo($view);
         $left = $columns->addColumn();

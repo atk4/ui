@@ -34,8 +34,8 @@ $form->addControl('test', [Form\Control\Checkbox::class]);
 $form->addControl('test_checked', [Form\Control\Checkbox::class])->set(1);
 $form->addControl('also_checked', ['caption' => 'Hello World'], ['type' => 'boolean'])->set(true);
 
-$form->onSubmit(function ($f) use ($app) {
-    return new \Atk4\Ui\JsToast($app->encodeJson($f->model->get()));
+$form->onSubmit(function (Form $form) use ($app) {
+    return new \Atk4\Ui\JsToast($app->encodeJson($form->model->get()));
 });
 
 View::addTo($app, ['ui' => 'divider']);

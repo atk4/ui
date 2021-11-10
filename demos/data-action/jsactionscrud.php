@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
@@ -22,7 +23,7 @@ $action = $files->addUserAction(
         'caption' => 'Import',
         'callback' => 'importFromFilesystem',
         'description' => 'Import file using path:',
-        'preview' => function ($model, $path) {
+        'preview' => function (Model $model, $path) {
             return 'Execute Import using path: "' . $path . '"';
         },
         'args' => [
@@ -32,7 +33,7 @@ $action = $files->addUserAction(
     ]
 );
 
-$files->addUserAction('download', function (\Atk4\Data\Model $model) {
+$files->addUserAction('download', function (Model $model) {
     return 'File has been download!';
 });
 

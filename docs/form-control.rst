@@ -83,7 +83,7 @@ into multiple Tabs or detach form control groups or even create nested layouts::
     $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
     $form_page->addControl('age', new \Atk4\Ui\Form\Control\Line());
 
-    $form->onSubmit(function($form) { return $form->model->get('name').' has age '.$form->model->get('age'); });
+    $form->onSubmit(function(Form $form) { return $form->model->get('name').' has age '.$form->model->get('age'); });
 
 This is further explained in documentation for :php:class:`Atk4\\Ui\\Form\\Layout` class,
 however if you do plan on adding your own form control types, it's important that you extend it

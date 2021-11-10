@@ -96,7 +96,7 @@ Example showing the onUpload callback on the UploadImage field::
 When user submit the form, the form control data value that will be submitted is the fileId set during the onUpload callback.
 The fileId is set to file name by default if omitted::
 
-    $form->onSubmit(function ($form) {
+    $form->onSubmit(function (Form $form) {
         // implement submission here
         return $form->success('Thanks for submitting file: '.$form->model->get('img'));
     });

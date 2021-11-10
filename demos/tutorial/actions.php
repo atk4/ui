@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\View;
@@ -129,7 +130,7 @@ $wizard->addStep('Arguments', function ($page) {
                     'type' => 'string',
                 ],
             ],
-            'callback' => function ($model, $name) {
+            'callback' => function (Model $model, $name) {
                 return 'Hi ' . $name;
             },
         ]);
@@ -142,7 +143,7 @@ $wizard->addStep('Arguments', function ($page) {
                     'required' => true,
                 ],
             ],
-            'callback' => function ($model, $age) {
+            'callback' => function (Model $model, $age) {
                 return 'Age is ' . $age;
             },
         ]);
@@ -193,8 +194,8 @@ $wizard->addStep('Crud integration', function ($page) {
         $country->getUserAction('delete')->enabled = function (Country $m) { return $m->id % 2 === 0; };
         $country->addUserAction('mail', [
             'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'preview' => function ($model) { return 'here is email preview for ' . $model->get('name'); },
-            'callback' => function ($model) { return 'email sent to ' . $model->get('name'); },
+            'preview' => function (Model $model) { return 'here is email preview for ' . $model->get('name'); },
+            'callback' => function (Model $model) { return 'email sent to ' . $model->get('name'); },
             'description' => 'Email testing',
         ]);
 

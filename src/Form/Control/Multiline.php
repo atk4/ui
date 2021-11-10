@@ -1,6 +1,21 @@
 <?php
 
 declare(strict_types=1);
+
+namespace Atk4\Ui\Form\Control;
+
+use Atk4\Data\Field;
+use Atk4\Data\Field\Callback;
+use Atk4\Data\FieldSqlExpression;
+use Atk4\Data\Model;
+use Atk4\Data\ValidationException;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Form;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\JsCallback;
+use Atk4\Ui\JsFunction;
+use Atk4\Ui\View;
+
 /**
  * Creates a Multiline field within a table, which allows adding/editing multiple
  * data rows.
@@ -14,7 +29,7 @@ declare(strict_types=1);
  * $ml = $form->addControl('ml', ['Multiline::class']);
  * $ml->setReferenceModel('Items', null, ['item', 'cat', 'qty', 'price', 'total']);
  *
- * $form->onSubmit(function($form) use ($ml) {
+ * $form->onSubmit(function(Form $form) use ($ml) {
  *     // Save Form model and then Multiline model
  *     $form->model->save(); // Saving Invoice record.
  *     $ml->saveRows(); // Saving invoice items record related to invoice.
@@ -55,26 +70,11 @@ declare(strict_types=1);
  * $ml = $form->addControl('ml', [Form\Control\Multiline::class]);
  * $ml->setModel($user, ['name','is_vip']);
  *
- * $form->onSubmit(function($form) use ($ml) {
+ * $form->onSubmit(function(Form $form) use ($ml) {
  *     $ml->saveRows();
  *     return new JsToast('Saved!');
  * });
  */
-
-namespace Atk4\Ui\Form\Control;
-
-use Atk4\Data\Field;
-use Atk4\Data\Field\Callback;
-use Atk4\Data\FieldSqlExpression;
-use Atk4\Data\Model;
-use Atk4\Data\ValidationException;
-use Atk4\Ui\Exception;
-use Atk4\Ui\Form;
-use Atk4\Ui\HtmlTemplate;
-use Atk4\Ui\JsCallback;
-use Atk4\Ui\JsFunction;
-use Atk4\Ui\View;
-
 class Multiline extends Form\Control
 {
     use VueLookupTrait;
@@ -209,7 +209,7 @@ class Multiline extends Form\Control
         $this->renderCallback = JsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
-        $this->form->onHook(Form::HOOK_LOAD_POST, function ($form, &$postRawData) {
+        $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
             $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($_POST[$this->short_name]));
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
@@ -230,7 +230,7 @@ class Multiline extends Form\Control
         });
 
         // Change form error handling.
-        $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function ($form, $fieldName, $str) {
+        $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
             // When errors are coming from this Multiline field, then notify Multiline component about them.
             // Otherwise use normal field error.
             if ($fieldName === $this->short_name) {

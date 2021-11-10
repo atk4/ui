@@ -89,18 +89,18 @@ Custom Form Behavior
 specify your own form behavior using a callback for action::
 
     // callback for model action add form.
-    $g->onFormAdd(function ($form, $ex) {
+    $g->onFormAdd(function (Form $form, $ex) {
         $form->js(true, $form->getControl('name')->jsInput()->val('Entering value via javascript'));
     });
 
     // callback for model action edit form.
-    $g->onFormEdit(function ($form, $ex) {
+    $g->onFormEdit(function (Form $form, $ex) {
         $form->js(true, $form->getControl('name')->jsInput()->attr('readonly', true));
     });
 
     // callback for both model action edit and add.
-    $g->onFormAddEdit(function ($form, $ex) {
-        $form->onSubmit(function ($form) use ($ex) {
+    $g->onFormAddEdit(function (Form $form, $ex) {
+        $form->onSubmit(function (Form $form) use ($ex) {
             return [$ex->hide(), new \Atk4\Ui\JsToast('Submit all right! This demo does not saved data.')];
         });
     });

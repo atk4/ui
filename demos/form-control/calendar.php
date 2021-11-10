@@ -75,6 +75,6 @@ $control->addAction(['Today', 'icon' => 'calendar day'])->on('click', $control->
 $control->addAction(['Select...', 'icon' => 'calendar'])->on('click', $control->getJsInstance()->open());
 $control->addAction(['Clear', 'icon' => 'times red'])->on('click', $control->getJsInstance()->clear());
 
-$form->onSubmit(function ($f) use ($app) {
-    return new JsToast($app->encodeJson($f->model->get()));
+$form->onSubmit(function (Form $form) use ($app) {
+    return new JsToast($app->encodeJson($form->model->get()));
 });

@@ -32,6 +32,9 @@ parameters:
             path: 'demos/_includes/Demo.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsChain::initHighlighting\(\)\.$~'
         -
+            path: 'demos/collection/multitable.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\Jquery::remove\(\)\.$~'
+        -
             path: 'demos/collection/tablefilter.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Demos\\CountryLock::expr\(\)\.$~'
         -
@@ -172,6 +175,9 @@ parameters:
         -
             path: 'src/Form/Control/Input.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::on\(\)\.$~'
+        -
+            path: 'src/Form/Layout/Section/Accordion.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\View::jsOpen\(\)\.$~'
         -
             path: 'src/JsCallback.php'
             message: '~^Access to an undefined property Atk4\\Ui\\JsExpressionable::\$_chain\.$~'
@@ -487,9 +493,6 @@ parameters:
         -
             path: 'src/View.php'
             message: '~^Parameter #2 \$region \(array\|string\|null\) of method Atk4\\Ui\\View::add\(\) should be contravariant with parameter \$args \(mixed\) of method Atk4\\Ui\\AbstractView::add\(\)$~'
-        -
-            path: 'src/View.php'
-            message: '~^Method Atk4\\Ui\\View::getClosestOwner\(\) should return Atk4\\Ui\\View\|null but empty return statement found\.$~'
         -
             path: 'src/VirtualPage.php'
             message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
