@@ -486,9 +486,9 @@ class Form extends View
      *
      * @param array $ControlSeed
      */
-    public function controlFactory(Model $entity, Field $field, $ControlSeed = []): Control
+    public function controlFactory(Field $field, $ControlSeed = []): Control
     {
-        $entity->assertIsEntity($field->getOwner()); // TODO there should be no $entity param
+        $this->model->assertIsEntity($field->getOwner());
 
         $fallbackSeed = [Control\Line::class];
 
@@ -523,7 +523,7 @@ class Form extends View
 
         $defaults = [
             'form' => $this,
-            'entityField' => new EntityFieldPair($entity, $field->short_name),
+            'entityField' => new EntityFieldPair($this->model, $field->short_name),
             'short_name' => $field->short_name,
         ];
 

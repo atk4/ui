@@ -54,7 +54,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
                 }
             }
 
-            $control = $this->form->controlFactory($this->form->model, $field, $control);
+            $control = $this->form->controlFactory($field, $control);
         } catch (\Exception $e) {
             throw (new Exception('Unable to add form control', 0, $e))
                 ->addMoreInfo('name', $name)
