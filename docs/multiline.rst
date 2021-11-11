@@ -58,7 +58,7 @@ This leads to a Multiline component automatically rendered for adding, editing a
 
 You can also check LINK_TO_DEMO/multiline.php for this example
 
-Using Multiline with hasMany() relation
+Using Multiline with HasMany relation
 =======================================
 
 Multiline form control is used by default when a Model field used `containsMany()` or `containsOne()`, but you can set
@@ -115,7 +115,7 @@ If you want to edit them along with the user, Multiline need to be set up accord
     $ml->setReferenceModel('Emails');
 
     // set up saving of Email on Form submit
-    $user_form->onSubmit(function($form) use ($ml) {
+    $user_form->onSubmit(function(Form $form) use ($ml) {
         $form->model->save();
         // save emails record related to current user.
         $ml->saveRows();
@@ -169,7 +169,7 @@ You can return a single JsExpressionable or an array of JsExpressionables which 
 
 In this case we display a message when any of the control value for 'qty' and 'box' are changed::
 
-    $multiline->onLineChange(function ($rows, $form) {
+    $multiline->onLineChange(function ($rows, Form $form) {
         $total = 0;
         foreach ($rows as $row => $cols) {
             $qty = $cols['qty'] ?? 0;

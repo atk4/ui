@@ -44,7 +44,7 @@ class ArgumentFormExecutor extends BasicExecutor
                 $val['model'] = Factory::factory($val['model']);
                 $this->form->addControl($key, [Form\Control\Lookup::class])->setModel($val['model']);
             } else {
-                $this->form->addControl($key, null, $val);
+                $this->form->addControl($key, [], $val);
             }
         }
 

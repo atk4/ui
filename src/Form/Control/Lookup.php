@@ -434,17 +434,17 @@ class Lookup extends Input
 
         $this->initDropdown($chain);
 
-        if ($this->field && $this->field->get()) {
+        if ($this->entityField && $this->entityField->get()) {
             $id_field = $this->id_field ?: $this->model->id_field;
 
-            $this->model = $this->model->tryLoadBy($id_field, $this->field->get());
+            $this->model = $this->model->tryLoadBy($id_field, $this->entityField->get());
 
             if ($this->model->loaded()) {
                 $row = $this->renderRow($this->model);
 
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
             } else {
-                $this->field->setNull();
+                $this->entityField->setNull();
             }
         }
 

@@ -18,16 +18,16 @@ require_once __DIR__ . '/../init-app.php';
 $cc = \Atk4\Ui\Columns::addTo($app);
 $form = Form::addTo($cc->addColumn());
 
-$form->addControl('one', null, ['enum' => ['female', 'male']])->set('male');
+$form->addControl('one', [], ['enum' => ['female', 'male']])->set('male');
 $form->addControl('two', [Form\Control\Radio::class], ['enum' => ['female', 'male']])->set('male');
 
-$form->addControl('three', null, ['values' => ['female', 'male']])->set(1);
+$form->addControl('three', [], ['values' => ['female', 'male']])->set(1);
 $form->addControl('four', [Form\Control\Radio::class], ['values' => ['female', 'male']])->set(1);
 
-$form->addControl('five', null, ['values' => [5 => 'female', 7 => 'male']])->set(7);
+$form->addControl('five', [], ['values' => [5 => 'female', 7 => 'male']])->set(7);
 $form->addControl('six', [Form\Control\Radio::class], ['values' => [5 => 'female', 7 => 'male']])->set(7);
 
-$form->addControl('seven', null, ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
+$form->addControl('seven', [], ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
 $form->addControl('eight', [Form\Control\Radio::class], ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
 
 $form->onSubmit(function (Form $form) use ($app) {

@@ -17,7 +17,7 @@ $cb->setUrlTrigger('m_cb');
 $modal = \Atk4\Ui\Modal::addTo($app, ['cb' => $cb]);
 $modal->name = 'm_test';
 
-$modal->set(function ($m) {
+$modal->set(function () {
     throw new \Exception('TEST!');
 });
 
@@ -27,7 +27,7 @@ $button->on('click', $modal->show());
 $cb1 = CallbackLater::addTo($app, ['urlTrigger' => 'm2_cb']);
 $modal2 = \Atk4\Ui\Modal::addTo($app, ['cb' => $cb1]);
 
-$modal2->set(function ($m) {
+$modal2->set(function () {
     trigger_error('error triggered');
 });
 

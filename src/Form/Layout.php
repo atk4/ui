@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form;
 
 use Atk4\Core\Factory;
+use Atk4\Data\Field;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Label;
 
@@ -46,9 +47,9 @@ class Layout extends AbstractLayout
     /** @var array Seed for creating input hint View used in this layout. */
     public $defaultHint = [Label::class, 'class' => ['pointing']];
 
-    protected function _addControl($decorator, $field)
+    protected function _addControl(Control $control, Field $field): Control
     {
-        return $this->add($decorator, ['desired_name' => $field->short_name]);
+        return $this->add($control, ['desired_name' => $field->short_name]);
     }
 
     protected function init(): void
@@ -181,7 +182,7 @@ class Layout extends AbstractLayout
             }
 
             $template = $element->renderLabel ? $labeledControl : $noLabelControl;
-            $label = $element->caption ?: $element->field->getCaption();
+            $label = $element->caption ?: $element->entityField->getField()->getCaption();
 
             // Anything but form controls gets inserted directly
             if ($element instanceof Control\Checkbox) {
@@ -208,7 +209,7 @@ class Layout extends AbstractLayout
             $template->trySet('label_for', $element->id . '_input');
             $template->set('control_class', $element->getControlClass());
 
-            if ($element->field->required) {
+            if ($element->entityField->getField()->required) {
                 $template->append('control_class', 'required ');
             }
 

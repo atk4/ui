@@ -13,10 +13,10 @@ class JsFunction implements JsExpressionable
 {
     use WarnDynamicPropertyTrait;
 
-    /** @var array Array of arguments */
+    /** @var array */
     public $fx_args;
 
-    /** @var array Array of statements */
+    /** @var array */
     public $fx_statements = [];
 
     /** @var bool add preventDefault(event) to generated method */
@@ -25,7 +25,7 @@ class JsFunction implements JsExpressionable
     /** @var bool add stopPropagation(event) to generated method */
     public $stopPropagation = false;
 
-    /** @var string Array of statements */
+    /** @var string */
     public $indent = '  ';
 
     /**

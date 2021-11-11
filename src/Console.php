@@ -300,16 +300,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
     }
 
     /**
-     * This method is obsolete. Use Console::runMethod() instead.
-     */
-    public function setModel(\Atk4\Data\Model $model, $method = null, $args = [])
-    {
-        $this->runMethod($model, $method, $args);
-
-        return $model;
-    }
-
-    /**
      * Execute method of a certain object. If object uses Atk4\Core\DebugTrait,
      * then debugging will also be used.
      *

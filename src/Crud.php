@@ -83,9 +83,11 @@ class Crud extends Grid
     /**
      * Sets data model of Crud.
      *
-     * @param array|null $fields
+     * @param array<int, string>|null $fields
+     *
+     * @return Model
      */
-    public function setModel(Model $model, $fields = null): Model
+    public function setModel(Model $model, array $fields = null)
     {
         $model->assertIsModel();
 
@@ -96,7 +98,7 @@ class Crud extends Grid
         parent::setModel($model, $this->displayFields);
 
         // Grab model id when using delete. Must be set before delete action execute.
-        $this->model->onHook(Model::HOOK_AFTER_DELETE, function ($model) {
+        $this->model->onHook(Model::HOOK_AFTER_DELETE, function (Model $model) {
             $this->deletedId = $model->getId();
         });
 

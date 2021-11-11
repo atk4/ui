@@ -9,6 +9,7 @@ use Atk4\Data\Model;
 use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Form;
 use Atk4\Ui\Form\Control;
 use Atk4\Ui\HtmlTemplate;
 
@@ -319,8 +320,8 @@ class ScopeBuilder extends Control
         $this->scopeBuilderView = \Atk4\Ui\View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
 
         if ($this->form) {
-            $this->form->onHook(\Atk4\Ui\Form::HOOK_LOAD_POST, function ($form, &$postRawData) {
-                $key = $this->field->short_name;
+            $this->form->onHook(\Atk4\Ui\Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
+                $key = $this->entityField->getFieldName();
                 $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
             });
         }
@@ -366,8 +367,8 @@ class ScopeBuilder extends Control
         // this is used when selecting proper operator for the inputType (see self::$operatorsMap)
         $inputsMap = array_column($this->rules, 'inputType', 'id');
 
-        if ($this->field && $this->field->get() !== null) {
-            $scope = $this->field->get();
+        if ($this->entityField && $this->entityField->get() !== null) {
+            $scope = $this->entityField->get();
         } else {
             $scope = $model->scope();
         }
@@ -514,7 +515,7 @@ class ScopeBuilder extends Control
         if ($field->values && is_array($field->values)) {
             $items = array_chunk($field->values, $limit, true)[0];
         } elseif ($field->getReference()) {
-            $model = $field->getReference()->refModel();
+            $model = $field->getReference()->refModel($this->model);
             $model->setLimit($limit);
 
             foreach ($model as $item) {
@@ -740,8 +741,9 @@ class ScopeBuilder extends Control
         $option = null;
         switch ($type) {
             case 'lookup':
-                $reference = $condition->getModel()->getField($condition->key)->getReference();
-                $model = $reference->refModel();
+                $condField = $condition->getModel()->getField($condition->key);
+                $reference = $condField->getReference();
+                $model = $reference->refModel($condField->getOwner());
                 $fieldName = $reference->getTheirFieldName();
                 $rec = $model->tryLoadBy($fieldName, $value);
                 if ($rec->loaded()) {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Layout\Section;
 
 use Atk4\Ui\AccordionSection;
+use Atk4\Ui\Form;
 
 /**
  * Represents form controls in accordion.
@@ -23,7 +24,7 @@ class Accordion extends \Atk4\Ui\Accordion
     {
         parent::init();
 
-        $this->form->onHook(\Atk4\Ui\Form::HOOK_DISPLAY_ERROR, function ($form, $fieldName, $str) {
+        $this->form->onHook(\Atk4\Ui\Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
             // default behavior
             $jsError = [$form->js()->form('add prompt', $fieldName, $str)];
 

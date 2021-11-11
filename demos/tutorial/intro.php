@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
+use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
@@ -139,7 +141,7 @@ $wizard->addStep('Business Model', function ($page) {
         session_start();
 
         $model = new \Atk4\Ui\Demos\DemoInvoice(new \Atk4\Data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
-        $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function ($model) {
+        $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function (Model $model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
 
@@ -158,8 +160,8 @@ $wizard->addStep('Business Model', function ($page) {
             $model->save();
         }
 
-        $form->onSubmit(function ($f) {
-            $f->model->save();
+        $form->onSubmit(function (Form $form) {
+            $form->model->save();
 
             return new JsToast('Saved!');
         });
@@ -201,7 +203,7 @@ $wizard->addStep('Persistence', function ($page) {
         session_start();
 
         $model = new \Atk4\Ui\Demos\DemoInvoice(new \Atk4\Data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
-        $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function ($model) {
+        $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function (Model $model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
 

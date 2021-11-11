@@ -134,7 +134,12 @@ class CardDeck extends View
         $this->paginator = $seg->add(Factory::factory($this->paginator, ['reload' => $this->container]));
     }
 
-    public function setModel(Model $model, array $fields = null, array $extra = null): Model
+    /**
+     * @param array<int, string>|null $fields
+     *
+     * @return Model
+     */
+    public function setModel(Model $model, array $fields = null, array $extra = null)
     {
         parent::setModel($model);
 
@@ -143,7 +148,7 @@ class CardDeck extends View
         }
 
         if ($count = $this->initPaginator()) {
-            $this->model->each(function ($m) use ($fields, $extra) {
+            foreach ($this->model as $m) {
                 $c = $this->cardHolder->add(Factory::factory([$this->card], ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]))->addClass('segment');
                 $c->setModel($m, $fields);
                 if ($extra) {
@@ -157,7 +162,7 @@ class CardDeck extends View
                         }
                     }
                 }
-            });
+            }
         } else {
             $this->cardHolder->addClass('centered')->add(Factory::factory($this->noRecordDisplay));
         }

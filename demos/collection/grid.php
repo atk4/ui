@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsToast;
@@ -14,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $grid = \Atk4\Ui\Grid::addTo($app);
 $model = new CountryLock($app->db);
-$model->addUserAction('test', function ($model) {
+$model->addUserAction('test', function (Model $model) {
     return 'test from ' . $model->getTitle() . ' was successful!';
 });
 

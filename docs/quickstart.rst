@@ -198,7 +198,7 @@ Next we need to add Components that are capable of manipulating the data::
 
     $form = \Atk4\Ui\Form::addTo($col->addColumn());                 // 12
     $form->setModel(new ToDoItem($s));                      // 13
-    $form->onSubmit(function($form) use($col_reload) {      // 14
+    $form->onSubmit(function(Form $form) use($col_reload) {      // 14
         $form->model->save();                               // 15
 
         return $col_reload;                                 // 16
@@ -253,7 +253,7 @@ another. In our example replace right column (label 17) with the following code:
     );
 
     if (isset($_GET['delete'])) {                               // 23
-        foreach(explode(',', $_GET['delete']) as $id) {
+        foreach (explode(',', $_GET['delete']) as $id) {
             $grid->model->delete($id);                          // 24
         }
     }

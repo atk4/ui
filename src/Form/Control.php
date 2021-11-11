@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form;
 
+use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\View;
@@ -14,20 +15,20 @@ use Atk4\Ui\View;
 class Control extends View
 {
     /**
-     * @var Form - to which this field belongs
+     * @var Form to which this field belongs
      */
     public $form;
 
     /**
-     * @var \Atk4\Data\Field - points to model field
+     * @var EntityFieldPair
      */
-    public $field;
+    public $entityField;
 
-    /** @var string control class */
+    /** @var string */
     public $controlClass = '';
 
     /**
-     * @var bool - Whether you need this field to be rendered wrap in a form layout or as his
+     * @var bool Whether you need this field to be rendered wrap in a form layout or as his
      */
     public $layoutWrap = true;
 
@@ -79,12 +80,12 @@ class Control extends View
     {
         parent::init();
 
-        if ($this->form && $this->field) {
-            if (isset($this->form->controls[$this->field->short_name])) {
+        if ($this->form && $this->entityField) {
+            if (isset($this->form->controls[$this->entityField->getFieldName()])) {
                 throw (new Exception('Form already has a field with the same name'))
-                    ->addMoreInfo('name', $this->field->short_name);
+                    ->addMoreInfo('name', $this->entityField->getFieldName());
             }
-            $this->form->controls[$this->field->short_name] = $this;
+            $this->form->controls[$this->entityField->getFieldName()] = $this;
         }
     }
 
@@ -99,8 +100,8 @@ class Control extends View
      */
     public function set($value = null, $junk = null)
     {
-        if ($this->field) {
-            $this->field->set($value);
+        if ($this->entityField) {
+            $this->entityField->set($value);
 
             return $this;
         }

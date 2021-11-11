@@ -106,17 +106,17 @@ trait ModelLockTrait
 {
     public function lock(): void
     {
-        $this->getUserAction('add')->callback = function ($model) {
+        $this->getUserAction('add')->callback = function (Model $model) {
             return 'Form Submit! Data are not save in demo mode.';
         };
-        $this->getUserAction('edit')->callback = function ($model) {
+        $this->getUserAction('edit')->callback = function (Model $model) {
             return 'Form Submit! Data are not save in demo mode.';
         };
 
         $delete = $this->getUserAction('delete');
         $delete->confirmation = 'Please go ahead. Demo mode does not really delete data.';
 
-        $delete->callback = function ($model) {
+        $delete->callback = function (Model $model) {
             return 'Only simulating delete when in demo mode.';
         };
     }

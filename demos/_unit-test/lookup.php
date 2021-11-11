@@ -19,7 +19,7 @@ $model->addCondition($model->fieldName()->name, '=', 'Mustard');
 $app->getExecutorFactory()->useTriggerDefault(ExecutorFactory::TABLE_BUTTON);
 
 $edit = $model->getUserAction('edit');
-$edit->callback = function ($model) {
+$edit->callback = function (Product $model) {
     return $model->product_category_id->getTitle() . ' - ' . $model->product_sub_category_id->getTitle();
 };
 

@@ -56,6 +56,6 @@ $tab = $tabs->addTab('Custom layout class');
 $form = Form::addTo($tab, ['layout' => [Form\Layout\Custom::class, 'defaultTemplate' => __DIR__ . '/templates/form-custom-layout.html']]);
 $form->setModel((new \Atk4\Ui\Demos\CountryLock($app->db))->loadAny());
 
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (Form $form) {
     return new \Atk4\Ui\JsToast('Saving is disabled');
 });

@@ -68,7 +68,7 @@ class KeyValue extends Table\Column
             throw new Exception('KeyValues Column values must have elements');
         }
 
-        $key = $field->get();
+        $key = $field->get($row);
         $value = $values[$key] ?? '';
 
         return [$field->short_name => $value];

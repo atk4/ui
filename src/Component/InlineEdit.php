@@ -46,7 +46,7 @@ class InlineEdit extends View
      *
      * @var string|null the name of the field
      */
-    public $field;
+    public $fieldName;
 
     /**
      * Whether component should save it's value when input get blur.
@@ -91,7 +91,7 @@ class InlineEdit extends View
         // Set default validation error handler.
         if (!$this->formatErrorMsg || !($this->formatErrorMsg instanceof \Closure)) {
             $this->formatErrorMsg = function ($e, $value) {
-                $caption = $this->model->getField($this->field)->getCaption();
+                $caption = $this->model->getField($this->fieldName)->getCaption();
 
                 return $caption . ' - ' . $e->getMessage() . '. <br>Trying to set this value: "' . $value . '"';
             };
@@ -106,12 +106,12 @@ class InlineEdit extends View
     public function setModel(\Atk4\Data\Model $model)
     {
         parent::setModel($model);
-        $this->field = $this->field ?: $this->model->title_field;
+        $this->fieldName = $this->fieldName ?: $this->model->title_field;
         if ($this->autoSave && $this->model->loaded()) {
             $value = $_POST['value'] ?? null;
             $this->cb->set(function () use ($value) {
                 try {
-                    $this->model->set($this->field, $this->getApp()->ui_persistence->typecastLoadField($this->model->getField($this->field), $value));
+                    $this->model->set($this->fieldName, $this->getApp()->ui_persistence->typecastLoadField($this->model->getField($this->fieldName), $value));
                     $this->model->save();
 
                     return $this->jsSuccess('Update successfully');
@@ -137,7 +137,7 @@ class InlineEdit extends View
     public function onChange(\Closure $fx)
     {
         if (!$this->autoSave) {
-            $value = $this->getApp()->ui_persistence->typecastLoadField($this->model->getField($this->field), $_POST['value'] ?? null);
+            $value = $this->getApp()->ui_persistence->typecastLoadField($this->model->getField($this->fieldName), $_POST['value'] ?? null);
             $this->cb->set(function () use ($fx, $value) {
                 return $fx($value);
             });
@@ -185,7 +185,7 @@ class InlineEdit extends View
     {
         parent::renderView();
 
-        $type = $this->model && $this->field ? $this->model->getField($this->field)->type : 'text';
+        $type = $this->model && $this->fieldName ? $this->model->getField($this->fieldName)->type : 'text';
         $type = $type === 'string' ? 'text' : $type;
 
         if ($type !== 'text' && $type !== 'integer') {
@@ -193,12 +193,12 @@ class InlineEdit extends View
         }
 
         if ($this->model && $this->model->loaded()) {
-            $initValue = $this->model->get($this->field);
+            $initValue = $this->model->get($this->fieldName);
         } else {
             $initValue = $this->initValue;
         }
 
-        $fieldName = $this->field ?: 'name';
+        $fieldName = $this->fieldName ?: 'name';
 
         $this->vue('atk-inline-edit', [
             'initValue' => $initValue,

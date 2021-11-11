@@ -1,6 +1,21 @@
 <?php
 
 declare(strict_types=1);
+
+namespace Atk4\Ui\Form\Control;
+
+use Atk4\Data\Field;
+use Atk4\Data\Field\Callback;
+use Atk4\Data\FieldSqlExpression;
+use Atk4\Data\Model;
+use Atk4\Data\ValidationException;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Form;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\JsCallback;
+use Atk4\Ui\JsFunction;
+use Atk4\Ui\View;
+
 /**
  * Creates a Multiline field within a table, which allows adding/editing multiple
  * data rows.
@@ -8,13 +23,13 @@ declare(strict_types=1);
  * Using hasMany reference will required to save reference data using Multiline::saveRows() method.
  *
  * $form = Form::addTo($app);
- * $form->setModel($invoice, false);
+ * $form->setModel($invoice, []);
  *
  * // Add Multiline form control and set model for Invoice items.
  * $ml = $form->addControl('ml', ['Multiline::class']);
  * $ml->setReferenceModel('Items', null, ['item', 'cat', 'qty', 'price', 'total']);
  *
- * $form->onSubmit(function($form) use ($ml) {
+ * $form->onSubmit(function(Form $form) use ($ml) {
  *     // Save Form model and then Multiline model
  *     $form->model->save(); // Saving Invoice record.
  *     $ml->saveRows(); // Saving invoice items record related to invoice.
@@ -55,26 +70,11 @@ declare(strict_types=1);
  * $ml = $form->addControl('ml', [Form\Control\Multiline::class]);
  * $ml->setModel($user, ['name','is_vip']);
  *
- * $form->onSubmit(function($form) use ($ml) {
+ * $form->onSubmit(function(Form $form) use ($ml) {
  *     $ml->saveRows();
  *     return new JsToast('Saved!');
  * });
  */
-
-namespace Atk4\Ui\Form\Control;
-
-use Atk4\Data\Field;
-use Atk4\Data\Field\Callback;
-use Atk4\Data\FieldSqlExpression;
-use Atk4\Data\Model;
-use Atk4\Data\ValidationException;
-use Atk4\Ui\Exception;
-use Atk4\Ui\Form;
-use Atk4\Ui\HtmlTemplate;
-use Atk4\Ui\JsCallback;
-use Atk4\Ui\JsFunction;
-use Atk4\Ui\View;
-
 class Multiline extends Form\Control
 {
     use VueLookupTrait;
@@ -209,7 +209,7 @@ class Multiline extends Form\Control
         $this->renderCallback = JsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
-        $this->form->onHook(Form::HOOK_LOAD_POST, function ($form, &$postRawData) {
+        $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
             $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($_POST[$this->short_name]));
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
@@ -230,7 +230,7 @@ class Multiline extends Form\Control
         });
 
         // Change form error handling.
-        $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function ($form, $fieldName, $str) {
+        $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
             // When errors are coming from this Multiline field, then notify Multiline component about them.
             // Otherwise use normal field error.
             if ($fieldName === $this->short_name) {
@@ -281,8 +281,8 @@ class Multiline extends Form\Control
      */
     public function getValue(): string
     {
-        if ($this->field->type === 'json') {
-            $jsonValues = $this->getApp()->ui_persistence->typecastSaveField($this->field, $this->field->get() ?? []);
+        if ($this->entityField->getField()->type === 'json') {
+            $jsonValues = $this->getApp()->ui_persistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
         } else {
             // set data according to hasMany ref. or using model.
             $model = $this->getModel();
@@ -409,12 +409,17 @@ class Multiline extends Form\Control
         return $this->model;
     }
 
-    public function setModel(Model $model, array $fieldNames = []): Model
+    /**
+     * @param array<int, string>|null $fieldNames
+     *
+     * @return Model
+     */
+    public function setModel(Model $model, array $fieldNames = null)
     {
         $model = parent::setModel($model);
         $this->initVueLookupCallback();
 
-        if (!$fieldNames) {
+        if ($fieldNames === null) {
             $fieldNames = array_keys($model->getFields('not system'));
         }
         $this->rowFields = array_merge([$model->id_field], $fieldNames);
@@ -565,7 +570,7 @@ class Multiline extends Form\Control
      */
     public function setLookupOptionValue(Field $field, string $value)
     {
-        $model = $field->getReference()->refModel();
+        $model = $field->getReference()->refModel($this->model);
         $rec = $model->tryLoadBy($field->getReference()->getTheirFieldName(), $value);
         if ($rec->loaded()) {
             $option = [
@@ -625,7 +630,7 @@ class Multiline extends Form\Control
         if ($field->values && is_array($field->values)) {
             $items = array_chunk($field->values, $limit, true)[0];
         } elseif ($field->getReference() !== null) {
-            $model = $field->getReference()->refModel();
+            $model = $field->getReference()->refModel($this->model);
             $model->setLimit($limit);
 
             foreach ($model as $item) {
@@ -828,7 +833,7 @@ class Multiline extends Form\Control
      *
      * @return mixed
      */
-    private function getDummyExpression(FieldSqlExpression $exprField, $model)
+    private function getDummyExpression(FieldSqlExpression $exprField, Model $model)
     {
         $expr = $exprField->expr;
         $matches = [];
