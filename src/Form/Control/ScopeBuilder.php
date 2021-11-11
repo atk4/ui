@@ -515,7 +515,7 @@ class ScopeBuilder extends Control
         if ($field->values && is_array($field->values)) {
             $items = array_chunk($field->values, $limit, true)[0];
         } elseif ($field->getReference()) {
-            $model = $field->getReference()->refModel();
+            $model = $field->getReference()->refModel($this->model);
             $model->setLimit($limit);
 
             foreach ($model as $item) {
@@ -741,8 +741,9 @@ class ScopeBuilder extends Control
         $option = null;
         switch ($type) {
             case 'lookup':
-                $reference = $condition->getModel()->getField($condition->key)->getReference();
-                $model = $reference->refModel();
+                $condField = $condition->getModel()->getField($condition->key);
+                $reference = $condField->getReference();
+                $model = $reference->refModel($condField->getOwner());
                 $fieldName = $reference->getTheirFieldName();
                 $rec = $model->tryLoadBy($fieldName, $value);
                 if ($rec->loaded()) {
