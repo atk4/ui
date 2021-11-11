@@ -35,6 +35,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
         if ($this->form->model === null) {
             $this->form->model = (new \Atk4\Ui\Misc\ProxyModel())->createEntity();
         }
+        $this->form->model->assertIsEntity();
 
         if (is_array($control) && isset($control['type'])) {
             $field['type'] = $control['type'];
@@ -42,7 +43,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
 
         try {
             if (!$this->form->model->hasField($name)) {
-                $field = $this->form->model->addField($name, $field);
+                $field = $this->form->model->getModel()->addField($name, $field);
             } else {
                 $existingField = $this->form->model->getField($name);
 
