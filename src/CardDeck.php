@@ -136,8 +136,6 @@ class CardDeck extends View
 
     /**
      * @param array<int, string>|null $fields
-     *
-     * @return Model
      */
     public function setModel(Model $model, array $fields = null, array $extra = null): void
     {
