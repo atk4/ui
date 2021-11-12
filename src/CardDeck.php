@@ -139,12 +139,12 @@ class CardDeck extends View
      *
      * @return Model
      */
-    public function setModel(Model $model, array $fields = null, array $extra = null)
+    public function setModel(Model $model, array $fields = null, array $extra = null): void
     {
         parent::setModel($model);
 
         if ($this->search !== false) {
-            $this->model = $this->search->setModelCondition($this->model);
+            $this->search->setModelCondition($this->model);
         }
 
         if ($count = $this->initPaginator()) {
@@ -175,8 +175,6 @@ class CardDeck extends View
                 $this->menuActions[$k]['executor'] = $executor;
             }
         }
-
-        return $this->model;
     }
 
     /**

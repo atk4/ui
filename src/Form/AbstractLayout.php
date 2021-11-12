@@ -100,10 +100,8 @@ abstract class AbstractLayout extends \Atk4\Ui\View
      * Sets form model and adds form controls.
      *
      * @param array<int, string>|null $fields
-     *
-     * @return \Atk4\Data\Model
      */
-    public function setModel(Model $model, array $fields = null)
+    public function setModel(Model $model, array $fields = null): void
     {
         $model->assertIsEntity();
 
@@ -131,8 +129,6 @@ abstract class AbstractLayout extends \Atk4\Ui\View
             throw (new Exception('Incorrect value for $fields'))
                 ->addMoreInfo('controls', $controls);
         }
-
-        return $model;
     }
 
     /**

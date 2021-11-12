@@ -103,4 +103,5 @@ $crud = \Atk4\Ui\Crud::addTo($column, [
 $crud->menu->addItem(['Rescan', 'icon' => 'recycle']);
 
 // Condition on the model can be applied after setting the model
-$crud->setModel($file)->addCondition($file->fieldName()->parent_folder_id, null);
+$crud->setModel($file);
+$file->addCondition($file->fieldName()->parent_folder_id, null);

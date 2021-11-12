@@ -31,7 +31,8 @@ form where you can enter new record details.
 The form save will re-use the model of your auto-complete, so be sure to set() defaults and
 addCondition()s::
 
-    $form->addControl('test', [\Atk4\Ui\Form\Control\AutoComplete::class, 'plus' => true])->setModel(new Country($db));
+    $form->addControl('test', [\Atk4\Ui\Form\Control\AutoComplete::class, 'plus' => true])
+        ->setModel(new Country($db));
 
 Specifying in Model
 -------------------

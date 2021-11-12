@@ -59,7 +59,9 @@ $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lis
 });
 
 $search->reload = $lister_container;
-$lister->setModel($search->setModelCondition($model))->setLimit(50);
+$search->setModelCondition($model);
+$model->setLimit(50);
+$lister->setModel($model);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 

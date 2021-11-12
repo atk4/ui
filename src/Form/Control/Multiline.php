@@ -411,12 +411,10 @@ class Multiline extends Form\Control
 
     /**
      * @param array<int, string>|null $fieldNames
-     *
-     * @return Model
      */
-    public function setModel(Model $model, array $fieldNames = null)
+    public function setModel(Model $model, array $fieldNames = null): void
     {
-        $model = parent::setModel($model);
+        parent::setModel($model);
         $this->initVueLookupCallback();
 
         if ($fieldNames === null) {
@@ -427,8 +425,6 @@ class Multiline extends Form\Control
         foreach ($this->rowFields as $fieldName) {
             $this->fieldDefs[] = $this->getFieldDef($model->getField($fieldName));
         }
-
-        return $model;
     }
 
     /**
@@ -438,17 +434,17 @@ class Multiline extends Form\Control
      * Otherwise, form will try to save 'multiline' field value as an array when form is save.
      * $multiline = $form->addControl('multiline', [Multiline::class], ['never_persist' => true])
      */
-    public function setReferenceModel(string $refModelName, Model $modelEntity = null, array $fieldNames = []): Model
+    public function setReferenceModel(string $refModelName, Model $modelEntity = null, array $fieldNames = []): void
     {
         if ($modelEntity === null) {
             if (!$this->form->model->isEntity()) {
-                throw new Exception('Model entity is not set.');
+                throw new Exception('Model entity is not set');
             }
 
             $modelEntity = $this->form->model;
         }
 
-        return $this->setModel($modelEntity->ref($refModelName), $fieldNames);
+        $this->setModel($modelEntity->ref($refModelName), $fieldNames);
     }
 
     /**

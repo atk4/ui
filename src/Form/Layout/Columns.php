@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Layout;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Form;
 
 /**
@@ -22,10 +23,8 @@ class Columns extends Form\Layout
      * Sets form model and adds form controls.
      *
      * @param array<int, string>|null $fields
-     *
-     * @return \Atk4\Data\Model
      */
-    public function setModel(\Atk4\Data\Model $model, array $fields = null)
+    public function setModel(Model $model, array $fields = null): void
     {
         // dont add any fields automatically
         parent::setModel($model, []);
@@ -65,11 +64,10 @@ class Columns extends Form\Layout
         $chunks = array_chunk($fields, (int) ceil($cnt / $col));
         foreach ($chunks as $chunk) {
             $cc = $c->addColumn();
-            Form\Layout::addTo($cc, ['form' => $this->form])->setModel($model, $chunk);
+            Form\Layout::addTo($cc, ['form' => $this->form])
+                ->setModel($model, $chunk);
         }
 
         \Atk4\Ui\View::addTo($this, ['ui' => 'clearing hidden divider']);
-
-        return $model;
     }
 }

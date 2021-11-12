@@ -179,17 +179,15 @@ class Card extends View
      * to the main section of this card.
      *
      * @param array<int, string>|null $fields
-     *
-     * @return \Atk4\Data\Model
      */
-    public function setModel(Model $model, array $fields = null)
+    public function setModel(Model $model, array $fields = null): void
     {
         if (!$model->loaded()) {
             throw new Exception('Model need to be loaded.');
         }
 
         if (!$this->model) {
-            $model = parent::setModel($model);
+            parent::setModel($model);
         }
 
         if ($fields === null) {
@@ -200,8 +198,6 @@ class Card extends View
 
         View::addTo($this->getSection(), [$model->getTitle(), ['class' => 'header']]);
         $this->getSection()->addFields($model, $fields, $this->useLabel, $this->useTable);
-
-        return $model;
     }
 
     /**

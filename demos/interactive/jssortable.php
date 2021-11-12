@@ -23,8 +23,9 @@ $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lis
     $row = Country::assertInstanceOf($lister->current_row);
     $row->iso = mb_strtolower($row->iso);
 });
-$lister->setModel(new Country($app->db))
-    ->setLimit(20);
+$model = new Country($app->db);
+$model->setLimit(20);
+$lister->setModel($model);
 
 $sortable = \Atk4\Ui\JsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 

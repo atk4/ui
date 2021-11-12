@@ -28,8 +28,9 @@ $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lis
     $row = Country::assertInstanceOf($lister->current_row);
     $row->iso = mb_strtolower($row->iso);
 });
-$lister->setModel(new Country($app->db))
-    ->setLimit(20);
+$model = new Country($app->db);
+$model->setLimit(20);
+$lister->setModel($model);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'clearing divider']);
 
@@ -49,8 +50,9 @@ $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lis
     $row = Country::assertInstanceOf($lister->current_row);
     $row->iso = mb_strtolower($row->iso);
 });
-$lister->setModel(new Country($app->db))
-    ->addCondition(Country::hinting()->fieldName()->id, -1); // no such records so model will be empty
+$model = new Country($app->db);
+$model->addCondition(Country::hinting()->fieldName()->id, -1); // no such records so model will be empty
+$lister->setModel($model);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'clearing divider']);
 \Atk4\Ui\Header::addTo($app, ['Item per page', 'subHeader' => 'Lister can display a certain amount of items']);
@@ -68,7 +70,9 @@ $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lis
     $row->iso = mb_strtolower($row->iso);
 });
 
-$model = $lister->setModel(new Country($app->db))->setLimit(12);
+$model = new Country($app->db);
+$model->setLimit(12);
+$lister->setModel($model);
 
 $ipp = \Atk4\Ui\ItemsPerPageSelector::addTo($view, ['label' => 'Select how many countries:', 'pageLengthItems' => [12, 24, 36]], ['Content']);
 

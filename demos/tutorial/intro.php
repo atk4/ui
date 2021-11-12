@@ -210,7 +210,8 @@ $wizard->addStep('Persistence', function ($page) {
         Header::addTo($owner, ['Record display in Card View using model data.']);
         $model = $model->tryLoad(1);
         if ($model->loaded()) {
-            \Atk4\Ui\Card::addTo($owner, ['useLabel' => true])->setModel($model);
+            \Atk4\Ui\Card::addTo($owner, ['useLabel' => true])
+                ->setModel($model);
         } else {
             Message::addTo($owner, ['Empty record.']);
         }

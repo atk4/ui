@@ -334,18 +334,14 @@ class ScopeBuilder extends Control
 
     /**
      * Set the model to build scope for.
-     *
-     * @return Model
      */
-    public function setModel(Model $model)
+    public function setModel(Model $model): void
     {
-        $model = parent::setModel($model);
+        parent::setModel($model);
 
         $this->initVueLookupCallback();
 
         $this->buildQuery($model);
-
-        return $model;
     }
 
     /**
