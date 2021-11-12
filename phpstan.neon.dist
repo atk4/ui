@@ -528,9 +528,6 @@ parameters:
             message: '~^Negated boolean expression is always false\.$~'
         -
             path: 'src/Card.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Card.php'
             message: '~^Left side of && is always true\.$~'
         -
             path: 'src/CardDeck.php'
