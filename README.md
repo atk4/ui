@@ -54,21 +54,22 @@ Create "index.php" file with:
 
 ``` php
 <?php
+
 require_once __DIR__ . '/vendor/autoload.php';
 
-$app = new \Atk4\Ui\App();   // That's your UI application
+$app = new \Atk4\Ui\App();
 $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
-$form = \Atk4\Ui\Form::addTo($app); // Yeah, that's a form!
+$form = \Atk4\Ui\Form::addTo($app);
 
-$form->addField('email');    // adds field
+$form->addField('email');
 $form->onSubmit(function (Form $form) {
     // implement subscribe here
 
     return $form->success('Subscribed ' . $form->model->get('email') . ' to newsletter.');
 });
 
-// Decorate anything
+// decorate anything
 $form->buttonSave->set('Subscribe');
 $form->buttonSave->icon = 'mail';
 
@@ -118,7 +119,7 @@ use \Atk4\Mastercrud\MasterCrud;
 
 $master_crud = MasterCrud::addTo($app);
 $master_crud->setModel(new User($app->db), [
-  'Purchases' => []
+    'Purchases' => []
 ]);
 
 ```
@@ -134,7 +135,10 @@ It's easy to create your own application styling. Here are some example UI:
 As of version 2.0 - Agile Toolkit offers support for User Actions. Those are easy to define in your Data Model declaration:
 
 ``` php
-$this->addAction('archive', function(Model $m) { $m->get('is_archived') = true; $this->saveAndUnload(); });
+$this->addAction('archive', function(Model $m) {
+    $m->get('is_archived') = true;
+    $this->saveAndUnload();
+});
 ```
 
 User interface such as Crud or Card will automatically recognize new action and offer user to execute it. You can also
@@ -153,14 +157,14 @@ $tabs = \Atk4\Ui\Tabs::addTo($app);
 \Atk4\Ui\Message::addTo($tabs->addTab('Intro'), ['Other tabs are loaded dynamically!']);
 
 $tabs->addTab('Users', function($p) use($app) {
+    // this tab is loaded dynamically, but also contains dynamic component
 
-    // This tab is loaded dynamically, but also contains dynamic component
     \Atk4\Ui\Crud::addTo($p)->setModel(new User($app->db));
 });
 
 $tabs->addTab('Settings', function($p) use($app) {
+    // second tab contains an AJAX form that stores itself back to DB
 
-    // Second tab contains an AJAX form that stores itself back to DB.
     $m = new Settings($app->db);
     $m = $m->load(2);
     \Atk4\Ui\Form::addTo($p)->setModel($m);
@@ -196,6 +200,7 @@ $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/yourdb')
 
 class User extends \Atk4\Data\Model {
     public $table = 'user';
+
     function init(): void {
         parent::init();
 
