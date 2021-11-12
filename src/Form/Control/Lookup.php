@@ -8,6 +8,7 @@ use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\App;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsFunction;
@@ -190,7 +191,7 @@ class Lookup extends Input
     public function getData($limit = true): array
     {
         if (!$this->model) {
-            return [['value' => '-1', 'title' => 'Model must be set for Lookup']];
+            throw new Exception('Model must be set for Lookup');
         }
 
         $this->applyLimit($limit);

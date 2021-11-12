@@ -186,9 +186,7 @@ class Card extends View
             throw new Exception('Model need to be loaded.');
         }
 
-        if (!$this->model) {
-            parent::setModel($model);
-        }
+        parent::setModel($model);
 
         if ($fields === null) {
             $fields = array_keys($this->model->getFields(['editable', 'visible']));

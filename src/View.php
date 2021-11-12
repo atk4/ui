@@ -160,6 +160,10 @@ class View extends AbstractView implements JsExpressionable
      */
     public function setModel(Model $model): void
     {
+        if ($this->model !== null && $this->model !== $model) {
+            throw new Exception('Different model already set');
+        }
+
         $this->model = $model;
     }
 
