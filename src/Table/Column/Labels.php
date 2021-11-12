@@ -18,7 +18,7 @@ use Atk4\Ui\Table;
  */
 class Labels extends Table\Column
 {
-    /** @var array|null Array of allowed values. This have precedence over->values */
+    /** @var array|null Allowed values, prioritized over ->values */
     public $values;
 
     /**
@@ -30,7 +30,7 @@ class Labels extends Table\Column
     {
         $values = $this->values ?? $field->values;
 
-        $v = $field->get();
+        $v = $field->get($row);
         $v = is_string($v) ? explode(',', $v) : $v;
 
         $labels = [];

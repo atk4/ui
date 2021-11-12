@@ -167,7 +167,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function outputHtml(string $message, array $context = [])
     {
-        $message = preg_replace_callback('/{([a-z0-9_-]+)}/i', function ($match) use ($context) {
+        $message = preg_replace_callback('~{([\w]+)}~', function ($match) use ($context) {
             if (isset($context[$match[1]])) {
                 return $context[$match[1]];
             }
@@ -297,16 +297,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
         }
 
         return [$proc, $pipes];
-    }
-
-    /**
-     * This method is obsolete. Use Console::runMethod() instead.
-     */
-    public function setModel(\Atk4\Data\Model $model, $method = null, $args = [])
-    {
-        $this->runMethod($model, $method, $args);
-
-        return $model;
     }
 
     /**

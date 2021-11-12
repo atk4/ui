@@ -41,7 +41,7 @@ It only takes 2 PHP lines to create a fully working form::
 The form component can be further tweaked by setting a custom call-back handler
 directly in PHP::
 
-    $form->onSubmit(function($form) {
+    $form->onSubmit(function(Form $form) {
         // implement subscribe here
 
         return "Subscribed ".$form->model->get('email')." to newsletter.";
@@ -155,14 +155,14 @@ More on Form layout and sub layout below.
 Adding Controls
 ===============
 
-.. php:method:: addControl($name, $decorator = null, $field = null)
+.. php:method:: addControl($name, $decorator = [], $field = [])
 
 Create a new control on a form::
 
     $form = Form::addTo($app);
     $form->addControl('email');
     $form->addControl('gender', [\Atk4\Ui\Form\Control\Dropdown::class, 'values' => ['Female', 'Male']]);
-    $form->addControl('terms', null, ['type' => 'boolean', 'caption' => 'Agree to Terms & Conditions']);
+    $form->addControl('terms', [], ['type' => 'boolean', 'caption' => 'Agree to Terms & Conditions']);
 
 Create a new control on a form using Model does not require you to describe each control.
 Form will rely on Model Field Definition and UI meta-values to decide on the best way to handle
@@ -251,13 +251,13 @@ Data field is the 3rd argument to ``Form::addControl()``.
 There are 3 ways to define Data form control using 'string', 'json' or 'object'::
 
     $form->addControl('accept_terms', [\Atk4\Ui\Form\Control\Checkbox::class], 'Accept Terms & Conditions');
-    $form->addControl('gender', null, ['enum' => ['Female', 'Male']]);
+    $form->addControl('gender', [], ['enum' => ['Female', 'Male']]);
 
     class MyBoolean extends \Atk4\Data\Field {
         public $type = 'boolean';
         public $enum = ['N', 'Y'];
     }
-    $form->addControl('test2', null, new MyBoolean());
+    $form->addControl('test2', [], new MyBoolean());
 
 String will be converted into ``['caption' => $string]`` a short way to give
 field a custom label. Without a custom label, Form will clean up the name (1st
@@ -271,9 +271,9 @@ If field already exist inside model, then values of $field will be merged into
 existing field properties. This example make email field mandatory for the form::
 
     $form = Form::addTo($app);
-    $form->setModel(new User($db), false);
+    $form->setModel(new User($db), []);
 
-    $form->addControl('email', null, ['required' => true]);
+    $form->addControl('email', [], ['required' => true]);
 
 addControl into Form with Existing Model
 ----------------------------------------
@@ -299,10 +299,10 @@ example displays a registration form for a User::
 
     // add password verification field
     $form->addControl('password_verify', [\Atk4\Ui\Form\Control\Password::class], 'Type password again');
-    $form->addControl('accept_terms', null, ['type' => 'boolean']);
+    $form->addControl('accept_terms', [], ['type' => 'boolean']);
 
     // submit event
-    $form->onSubmit(function($form){
+    $form->onSubmit(function(Form $form) {
         if ($form->model->get('password') != $form->model->get('password_verify')) {
             return $form->error('password_verify', 'Passwords do not match');
         }
@@ -325,10 +325,10 @@ It is always recommended to use data field type, because it will take care of ty
 for you. Here is an example with date::
 
     $form = Form::addTo($app);
-    $form->addControl('date1', null, ['type' => 'date']);
+    $form->addControl('date1', [], ['type' => 'date']);
     $form->addControl('date2', [\Atk4\Ui\Form\Control\Calendar::class, 'type' => 'date']);
 
-    $form->onSubmit(function($form) {
+    $form->onSubmit(function(Form $form) {
         echo 'date1 = '.print_r($form->model->get('date1'), true).' and date2 = '.print_r($form->model->get('date2'), true);
     });
 
@@ -405,7 +405,7 @@ Using setModel() on a sub layout
 You may add form controls to sub layout directly using setModel method on the sub layout itself.::
 
     $form = Form::addTo($app);
-    $form->setModel($model, false);
+    $form->setModel($model, []);
 
     $sub_layout = $form->layout->addSubLayout();
     $sub_layout->setModel($model, ['first_name', 'last_name']);
@@ -549,7 +549,7 @@ To continue with the example, a new Person record can be added into the database
 but only if they have also accepted terms and conditions. An onSubmit handler
 that would perform the check can be defined displaying error or success messages::
 
-    $form->onSubmit(function($form) {
+    $form->onSubmit(function(Form $form) {
         if (!$form->model->get('terms')) {
             return $form->error('terms', 'You must accept terms and conditions');
         }
@@ -564,7 +564,7 @@ Callback function can return one or multiple JavaScript actions. Methods such as
 Here is a code that can be used to output multiple errors at once. Errors were intentionally not grouped
 with a message about failure to accept of terms and conditions::
 
-    $form->onSubmit(function($form) {
+    $form->onSubmit(function(Form $form) {
         $errors = [];
 
         if (!$form->model->get('name')) {
@@ -644,7 +644,7 @@ and where you can setup specific width for each field.
 
 My next example will add multiple controls on the same line::
 
-    $form->setModel(new User($db), false);  // will not populate any form controls automatically
+    $form->setModel(new User($db), []);  // will not populate any form controls automatically
 
     $form->addControls(['name', 'surname']);
 
@@ -685,7 +685,7 @@ organize fields in either accordion, tabs or columns.
 The following example will show how to organize fields using regular sub layout and accordion sections::
 
     $form = Form::addTo($app);
-    $form->setModel($model, false);
+    $form->setModel($model, []);
 
     $sub_layout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section::class]);
 

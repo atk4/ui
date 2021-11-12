@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form;
 
 use Atk4\Core\WarnDynamicPropertyTrait;
+use Atk4\Data\Field;
+use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 
 /**
@@ -25,56 +27,35 @@ abstract class AbstractLayout extends \Atk4\Ui\View
      * Places element inside a layout somewhere. Should be called
      * through $form->addControl().
      *
-     * @param array|string|object|null $control
-     * @param array|string|object|null $field
-     *
-     * @return \Atk4\Ui\Form\Control
+     * @param array|Control $control
+     * @param array|Field   $field
      */
-    public function addControl(string $name, $control = null, $field = null)
+    public function addControl(string $name, $control = [], $field = []): Control
     {
-        if (!$this->form->model) {
+        if ($this->form->model === null) {
             $this->form->model = (new \Atk4\Ui\Misc\ProxyModel())->createEntity();
         }
+        $this->form->model->assertIsEntity();
 
-        if (is_string($field)) {
-            $field = ['type' => $field];
-        } elseif (is_array($control) && isset($control['type'])) {
-            $field = ['type' => $control['type']];
+        if (is_array($control) && isset($control['type'])) {
+            $field['type'] = $control['type'];
         }
 
         try {
             if (!$this->form->model->hasField($name)) {
-                $field = $this->form->model->addField($name, $field);
+                $field = $this->form->model->getModel()->addField($name, $field);
             } else {
                 $existingField = $this->form->model->getField($name);
 
                 if (is_array($field)) {
                     $field = $existingField->setDefaults($field);
-                } elseif (is_object($field)) {
+                } else {
                     throw (new Exception('Duplicate field'))
                         ->addMoreInfo('name', $name);
-                } else {
-                    $field = $existingField;
                 }
             }
 
-            if (is_string($control)) {
-                $control = $this->form->controlFactory($field, ['caption' => $control]);
-            } elseif (is_array($control)) {
-                $control = $this->form->controlFactory($field, $control);
-            } elseif (!$control) {
-                $control = $this->form->controlFactory($field);
-            } elseif (is_object($control)) {
-                if (!$control instanceof \Atk4\Ui\Form\Control) {
-                    throw (new Exception('Form control must descend from ' . \Atk4\Ui\Form\Control::class))
-                        ->addMoreInfo('control', $control);
-                }
-                $control->field = $field;
-                $control->form = $this->form;
-            } else {
-                throw (new Exception('Value of $control argument is incorrect'))
-                    ->addMoreInfo('control', $control);
-            }
+            $control = $this->form->controlFactory($field, $control);
         } catch (\Exception $e) {
             throw (new Exception('Unable to add form control', 0, $e))
                 ->addMoreInfo('name', $name)
@@ -85,22 +66,20 @@ abstract class AbstractLayout extends \Atk4\Ui\View
         return $this->_addControl($control, $field);
     }
 
-    protected function _addControl($decorator, $field)
+    protected function _addControl(Control $control, Field $field): Control
     {
-        return $this->add($decorator, $this->template->hasTag($field->short_name) ? $field->short_name : null);
+        return $this->add($control, $this->template->hasTag($field->short_name) ? $field->short_name : null);
     }
 
     /**
-     * Add more than one control in one shot.
-     *
-     * @param array $controls
+     * @param array<int, array> $controls
      *
      * @return $this
      */
-    public function addControls($controls)
+    public function addControls(array $controls)
     {
         foreach ($controls as $control) {
-            $this->addControl(...(array) $control);
+            $this->addControl(...$control);
         }
 
         return $this;
@@ -112,7 +91,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
      *
      * @return array
      */
-    protected function getModelFields(\Atk4\Data\Model $model)
+    protected function getModelFields(Model $model)
     {
         return array_keys($model->getFields('editable'));
     }
@@ -120,19 +99,15 @@ abstract class AbstractLayout extends \Atk4\Ui\View
     /**
      * Sets form model and adds form controls.
      *
-     * @param array|null $fields
+     * @param array<int, string>|null $fields
      *
      * @return \Atk4\Data\Model
      */
-    public function setModel(\Atk4\Data\Model $model, $fields = null)
+    public function setModel(Model $model, array $fields = null)
     {
         $model->assertIsEntity();
 
         parent::setModel($model);
-
-        if ($fields === false) {
-            return $model;
-        }
 
         if ($fields === null) {
             $fields = $this->getModelFields($model);

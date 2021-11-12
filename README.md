@@ -62,7 +62,7 @@ $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 $form = \Atk4\Ui\Form::addTo($app); // Yeah, that's a form!
 
 $form->addField('email');    // adds field
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (Form $form) {
     // implement subscribe here
 
     return $form->success('Subscribed ' . $form->model->get('email') . ' to newsletter.');

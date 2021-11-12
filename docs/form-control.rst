@@ -83,7 +83,7 @@ into multiple Tabs or detach form control groups or even create nested layouts::
     $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
     $form_page->addControl('age', new \Atk4\Ui\Form\Control\Line());
 
-    $form->onSubmit(function($form) { return $form->model->get('name').' has age '.$form->model->get('age'); });
+    $form->onSubmit(function(Form $form) { return $form->model->get('name').' has age '.$form->model->get('age'); });
 
 This is further explained in documentation for :php:class:`Atk4\\Ui\\Form\\Layout` class,
 however if you do plan on adding your own form control types, it's important that you extend it
@@ -106,7 +106,7 @@ will update to use a more suitable form control.
 Hint can be specified either inside Form Control decorator seed or inside the Field::ui attribute::
 
 
-    $form->addControl('title', null, ['values' => ['Mr', 'Mrs', 'Miss'], 'hint' => 'select one']);
+    $form->addControl('title', [], ['values' => ['Mr', 'Mrs', 'Miss'], 'hint' => 'select one']);
 
     $form->addControl('name', ['hint' => 'Full Name Only']);
 
@@ -200,7 +200,7 @@ Link to Model Field
 .. php:attr:: field
 
 Form decorator defines $field property which will be pointing to a field object of a model, so technically
-the value of the field would be read from `$decorator->field->get()`.
+the value of the field would be read from `$decorator->entityField->get()`.
 
 .. php:namespace:: Atk4\Ui\Form\Control
 

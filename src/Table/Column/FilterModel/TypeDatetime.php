@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column\FilterModel;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Table\Column;
 use DateTime;
 
@@ -62,12 +63,7 @@ class TypeDatetime extends Column\FilterModel
         $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [\Atk4\Ui\Form\Control\Line::class, 'inputType' => 'number']]]);
     }
 
-    /**
-     * Set model condition base on filter value.
-     *
-     * @return mixed
-     */
-    public function setConditionForModel($model)
+    public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();
         if (isset($filter['id'])) {

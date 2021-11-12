@@ -47,7 +47,7 @@ class Radio extends Form\Control
             $this->setSource($this->values);
         }
 
-        $value = $this->field ? $this->field->get() : $this->content;
+        $value = $this->entityField ? $this->entityField->get() : $this->content;
 
         $this->lister->setModel($this->model);
 

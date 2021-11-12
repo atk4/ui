@@ -75,7 +75,7 @@ class Card extends View
     /** @var string Default executor class. */
     public $executor = UserAction\ModalExecutor::class;
 
-    /** @var array Array of columns css wide classes */
+    /** @var array Columns CSS wide classes */
     protected $words = [
         '', 'fluid', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
         'thirteen', 'fourteen', 'fifteen', 'sixteen',
@@ -178,11 +178,11 @@ class Card extends View
      * If Fields are past with $model that field will be add
      * to the main section of this card.
      *
-     * @param array|false $fields an array of fields name to display in content
+     * @param array<int, string>|null $fields
      *
      * @return \Atk4\Data\Model
      */
-    public function setModel(Model $model, $fields = null)
+    public function setModel(Model $model, array $fields = null)
     {
         if (!$model->loaded()) {
             throw new Exception('Model need to be loaded.');
@@ -194,16 +194,12 @@ class Card extends View
 
         if ($fields === null) {
             $fields = array_keys($this->model->getFields(['editable', 'visible']));
-        } elseif ($fields === false) {
-            $fields = [];
         }
 
         $this->setDataId($this->model->getId());
 
-        if (is_array($fields)) {
-            View::addTo($this->getSection(), [$model->getTitle(), ['class' => 'header']]);
-            $this->getSection()->addFields($model, $fields, $this->useLabel, $this->useTable);
-        }
+        View::addTo($this->getSection(), [$model->getTitle(), ['class' => 'header']]);
+        $this->getSection()->addFields($model, $fields, $this->useLabel, $this->useTable);
 
         return $model;
     }

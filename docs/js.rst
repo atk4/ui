@@ -484,9 +484,9 @@ some feedback to the user. JsNotify can display a bar on top of the screen for s
 
     $modal->set(function ($p) use ($modal) {
         $form = \Atk4\Ui\Form::addTo($p);
-        $form->addControl('name', null, ['caption' => 'Add your name']);
+        $form->addControl('name', [], ['caption' => 'Add your name']);
 
-        $form->onSubmit(function ($form) use ($modal) {
+        $form->onSubmit(function (Form $form) use ($modal) {
             if (empty($form->model->get('name'))) {
                 return $form->error('name', 'Please add a name!');
             } else {
@@ -535,7 +535,7 @@ other view::
 
     $form->setModel($m_book);
 
-    $form->onSubmit(function($form) use($table) {
+    $form->onSubmit(function(Form $form) use($table) {
         $form->model->save();
         return new \Atk4\Ui\JsReload($table);
     });
@@ -576,7 +576,7 @@ The following will **not** work::
     $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
     $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
 
-    $form->onSubmit(function($form) use($table) {
+    $form->onSubmit(function(Form $form) use($table) {
       $form->model->save();
       return [
         $table->jsReload(),
@@ -600,7 +600,7 @@ Table needs to be first! The following works::
     $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
     $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
 
-    $form->onSubmit(function($form) use($table) {
+    $form->onSubmit(function(Form $form) use($table) {
       $form->model->save();
       return [
         $table->jsReload(),
@@ -620,7 +620,7 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
     $vp->set(function($p) use ($table, $model) {
         $form = \Atk4\Ui\Form::addTo($p);
         $form->setModel(clone $model);
-        $form->onSubmit(function($form) use($table) {
+        $form->onSubmit(function(Form $form) use($table) {
             $form->model->save();
             return [
                 $table->jsReload(),

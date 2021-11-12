@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Button;
 
 /** @var \Atk4\Ui\App $app */
@@ -28,7 +29,7 @@ $notify = $country->addUserAction('Notify', [
     'args' => [
         'note' => ['type' => 'string', 'required' => true],
     ],
-    'callback' => function ($model, $note) {
+    'callback' => function (Model $model, $note) {
         return 'Note to client is sent: ' . $note;
     },
 ]);

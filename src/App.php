@@ -26,7 +26,7 @@ class App
     use DynamicMethodTrait;
     use HookTrait;
     use InitializerTrait {
-        init as _init;
+        init as private _init;
     }
 
     /** @const string */

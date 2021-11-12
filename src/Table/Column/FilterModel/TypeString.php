@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column\FilterModel;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Table\Column;
 
 class TypeString extends Column\FilterModel
@@ -16,7 +17,7 @@ class TypeString extends Column\FilterModel
         $this->op->default = 'is';
     }
 
-    public function setConditionForModel($model)
+    public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();
         if (isset($filter['id'])) {

@@ -27,8 +27,8 @@ $vp->set(function ($firstPage) {
             View::addTo($thirdPage)->set('Third Level Page')->addClass('__atk-behat-test-third');
             $form = Form::addTo($thirdPage);
             $form->addControl('category', [Form\Control\Lookup::class, 'model' => new Category($thirdPage->getApp()->db)]);
-            $form->onSubmit(function ($f) {
-                $category = $f->getControl('category')->model->load($f->model->get('category'));
+            $form->onSubmit(function (Form $form) {
+                $category = $form->getControl('category')->model->load($form->model->get('category'));
 
                 return new JsToast($category->getTitle());
             });

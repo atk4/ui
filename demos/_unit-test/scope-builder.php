@@ -10,6 +10,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
+use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\View;
 
@@ -37,7 +38,7 @@ $form = \Atk4\Ui\Form::addTo($app);
 
 $form->addControl('qb', [\Atk4\Ui\Form\Control\ScopeBuilder::class, 'model' => $model], ['type' => 'object']);
 
-$form->onSubmit(function ($form) use ($model) {
+$form->onSubmit(function (Form $form) use ($model) {
     $message = $form->model->get('qb')->toWords($model);
     $view = (new \Atk4\Ui\View(['id' => false]))->addClass('atk-scope-builder-response');
     $view->invokeInit();

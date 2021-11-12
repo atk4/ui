@@ -32,6 +32,9 @@ parameters:
             path: 'demos/_includes/Demo.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsChain::initHighlighting\(\)\.$~'
         -
+            path: 'demos/collection/multitable.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\Jquery::remove\(\)\.$~'
+        -
             path: 'demos/collection/tablefilter.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Demos\\CountryLock::expr\(\)\.$~'
         -
@@ -173,6 +176,9 @@ parameters:
             path: 'src/Form/Control/Input.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::on\(\)\.$~'
         -
+            path: 'src/Form/Layout/Section/Accordion.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\View::jsOpen\(\)\.$~'
+        -
             path: 'src/JsCallback.php'
             message: '~^Access to an undefined property Atk4\\Ui\\JsExpressionable::\$_chain\.$~'
         -
@@ -221,6 +227,18 @@ parameters:
             path: 'src/Table/Column/DragHandler.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsCallback::onReorder\(\)\.$~'
         -
+            path: 'src/Table/Column/FilterModel/TypeDate.php'
+            message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeDatetime.php'
+            message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeNumber.php'
+            message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'
+        -
+            path: 'src/Table/Column/FilterModel/TypeTime.php'
+            message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'
+        -
             path: 'src/Table/Column/FilterPopup.php'
             message: '~^Call to an undefined method Atk4\\Data\\Model::recallData\(\)\.$~'
         -
@@ -264,10 +282,10 @@ parameters:
         # for level = 3
         -
             path: 'demos/form/form2.php'
-            message: '~^Parameter \#1 \$intent \(string\) of method class@anonymous/demos/form/form2\.php:\d+::validate\(\) should be contravariant with parameter \$intent \(string\|null\) of method Atk4\\Data\\Model::validate\(\)$~'
+            message: '~^Parameter #1 \$intent \(string\) of method class@anonymous/demos/form/form2\.php:\d+::validate\(\) should be contravariant with parameter \$intent \(string\|null\) of method Atk4\\Data\\Model::validate\(\)$~'
         -
             path: 'demos/init-db.php'
-            message: '~^Parameter \#1 \$intent \(string\) of method Atk4\\Ui\\Demos\\Country::validate\(\) should be contravariant with parameter \$intent \(string\|null\) of method Atk4\\Data\\Model::validate\(\)$~'
+            message: '~^Parameter #1 \$intent \(string\) of method Atk4\\Ui\\Demos\\Country::validate\(\) should be contravariant with parameter \$intent \(string\|null\) of method Atk4\\Data\\Model::validate\(\)$~'
         -
             path: 'demos/interactive/popup.php'
             message: '~^Property Atk4\\Ui\\Label::\$detail \(string\|false\|null\) does not accept int<0, max>\.$~'
@@ -330,16 +348,13 @@ parameters:
             message: '~^Property Atk4\\Ui\\Columns::\$calculated_width \(int\) does not accept false\.$~'
         -
             path: 'src/Console.php'
-            message: '~^Parameter \#1 \$fx \(Closure\) of method Atk4\\Ui\\Console::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Console::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Console.php'
-            message: '~^Parameter \#2 \$event \(bool\|string\) of method Atk4\\Ui\\Console::set\(\) should be contravariant with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #2 \$event \(bool\|string\) of method Atk4\\Ui\\Console::set\(\) should be contravariant with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Console.php'
             message: '~^Property Atk4\\Ui\\JsSse::\$echoFunction \(Closure\) does not accept false\.$~'
-        -
-            path: 'src/Crud.php'
-            message: '~^Parameter \#2 \$fields \(array\|null\) of method Atk4\\Ui\\Crud::setModel\(\) should be contravariant with parameter \$columns \(array\|bool\) of method Atk4\\Ui\\Grid::setModel\(\)$~'
         -
             path: 'src/Form.php'
             message: '~^Property Atk4\\Ui\\Form::\$layout \(Atk4\\Ui\\Form\\Layout\) does not accept array<int, string>\.$~'
@@ -347,23 +362,29 @@ parameters:
             path: 'src/Form.php'
             message: '~^Property Atk4\\Ui\\Form::\$layout \(Atk4\\Ui\\Form\\Layout\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
+            path: 'src/Form/AbstractLayout.php'
+            message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) should return Atk4\\Ui\\Form\\Control but returns Atk4\\Ui\\AbstractView\.$~'
+        -
             path: 'src/Form/Control.php'
             message: '~^Cannot access offset ''preventDefault'' on bool\.$~'
         -
             path: 'src/Form/Control/Calendar.php'
-            message: '~^Parameter \#1 \$expr \(array\|Atk4\\Ui\\JsExpression\|string\) of method Atk4\\Ui\\Form\\Control\\Calendar::onChange\(\) should be contravariant with parameter \$expr \(array\|Atk4\\Ui\\JsExpression\|Closure\|string\) of method Atk4\\Ui\\Form\\Control::onChange\(\)$~'
+            message: '~^Parameter #1 \$expr \(array\|Atk4\\Ui\\JsExpression\|string\) of method Atk4\\Ui\\Form\\Control\\Calendar::onChange\(\) should be contravariant with parameter \$expr \(array\|Atk4\\Ui\\JsExpression\|Closure\|string\) of method Atk4\\Ui\\Form\\Control::onChange\(\)$~'
         -
             path: 'src/Form/Control/Radio.php'
             message: '~^Cannot access offset ''preventDefault'' on bool\.$~'
         -
             path: 'src/Form/Control/Upload.php'
-            message: '~^Parameter \#1 \$fileId \(string\) of method Atk4\\Ui\\Form\\Control\\Upload::set\(\) should be contravariant with parameter \$value \(mixed\) of method Atk4\\Ui\\Form\\Control::set\(\)$~'
+            message: '~^Parameter #1 \$fileId \(string\) of method Atk4\\Ui\\Form\\Control\\Upload::set\(\) should be contravariant with parameter \$value \(mixed\) of method Atk4\\Ui\\Form\\Control::set\(\)$~'
         -
             path: 'src/Form/Control/Upload.php'
-            message: '~^Parameter \#2 \$fileName \(string\|null\) of method Atk4\\Ui\\Form\\Control\\Upload::set\(\) should be contravariant with parameter \$junk \(mixed\) of method Atk4\\Ui\\Form\\Control::set\(\)$~'
+            message: '~^Parameter #2 \$fileName \(string\|null\) of method Atk4\\Ui\\Form\\Control\\Upload::set\(\) should be contravariant with parameter \$junk \(mixed\) of method Atk4\\Ui\\Form\\Control::set\(\)$~'
         -
             path: 'src/Form/Layout.php'
             message: '~^Method Atk4\\Ui\\Form\\Layout::addButton\(\) should return Atk4\\Ui\\Button but returns Atk4\\Ui\\AbstractView\.$~'
+        -
+            path: 'src/Form/Layout.php'
+            message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) should return Atk4\\Ui\\Form\\Control but returns Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Form/Layout.php'
             message: '~^Method Atk4\\Ui\\Form\\Layout::addSubLayout\(\) should return static\(Atk4\\Ui\\Form\\Layout\) but returns Atk4\\Ui\\AbstractView\.$~'
@@ -391,9 +412,6 @@ parameters:
         -
             path: 'src/Grid.php'
             message: '~^Property Atk4\\Ui\\Grid::\$menu \(Atk4\\Ui\\Menu\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Property Atk4\\Ui\\Grid::\$table \(Atk4\\Ui\\Table\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Grid.php'
             message: '~^Property Atk4\\Ui\\Grid::\$paginator \(Atk4\\Ui\\Paginator\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
@@ -429,7 +447,7 @@ parameters:
             message: '~^Property Atk4\\Ui\\Loader::\$shim \(Atk4\\Ui\\View\) does not accept array<int\|string, array<int\|string, string>\|class\-string>\.$~'
         -
             path: 'src/Loader.php'
-            message: '~^Parameter \#1 \$fx \(Closure\) of method Atk4\\Ui\\Loader::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Loader::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Menu.php'
             message: '~^Method Atk4\\Ui\\Menu::addDivider\(\) should return Atk4\\Ui\\View but returns Atk4\\Ui\\AbstractView\.$~'
@@ -438,7 +456,7 @@ parameters:
             message: '~^Property Atk4\\Ui\\Message::\$icon \(string\) does not accept Atk4\\Ui\\Icon\.$~'
         -
             path: 'src/Modal.php'
-            message: '~^Parameter \#1 \$fx \(Closure\) of method Atk4\\Ui\\Modal::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Modal::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Panel/Right.php'
             message: '~^Method Atk4\\Ui\\Panel\\Right::getDynamicContent\(\) should return Atk4\\Ui\\Panel\\LoadableContent but returns Atk4\\Ui\\View\|null\.$~'
@@ -447,7 +465,7 @@ parameters:
             message: '~^Property Atk4\\Ui\\Panel\\Right::\$closeModal \(Atk4\\Ui\\Modal\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Popup.php'
-            message: '~^Parameter \#1 \$fx \(Closure\) of method Atk4\\Ui\\Popup::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Popup::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Table.php'
             message: '~^Property Atk4\\Ui\\Table::\$totals_plan \(bool\) does not accept array\.$~'
@@ -456,7 +474,7 @@ parameters:
             message: '~^Argument of an invalid type bool supplied for foreach, only iterables are supported\.$~'
         -
             path: 'src/Table.php'
-            message: '~^Cannot access offset \(int\|string\) on bool\.$~'
+            message: '~^Cannot access offset int\|string on bool\.$~'
         -
             path: 'src/Table/Column/FilterModel/TypeEnum.php'
             message: '~^Property Atk4\\Ui\\Table\\Column\\FilterModel::\$op \(Atk4\\Data\\Field\) does not accept null\.$~'
@@ -468,19 +486,16 @@ parameters:
             message: '~^Property Atk4\\Ui\\UserAction\\JsCallbackExecutor::\$jsSuccess \(Atk4\\Ui\\JsExpressionable\) does not accept array\|Closure\.$~'
         -
             path: 'src/View.php'
-            message: '~^Parameter \#1 \$object \(Atk4\\Ui\\View\) of method Atk4\\Ui\\View::add\(\) should be contravariant with parameter \$object \(Atk4\\Ui\\AbstractView\) of method Atk4\\Ui\\AbstractView::add\(\)$~'
+            message: '~^Parameter #1 \$object \(Atk4\\Ui\\View\) of method Atk4\\Ui\\View::add\(\) should be contravariant with parameter \$object \(Atk4\\Ui\\AbstractView\) of method Atk4\\Ui\\AbstractView::add\(\)$~'
         -
             path: 'src/View.php'
-            message: '~^Parameter \#2 \$region \(array\|string\|null\) of method Atk4\\Ui\\View::add\(\) should be contravariant with parameter \$args \(mixed\) of method Atk4\\Ui\\AbstractView::add\(\)$~'
-        -
-            path: 'src/View.php'
-            message: '~^Method Atk4\\Ui\\View::getClosestOwner\(\) should return Atk4\\Ui\\View\|null but empty return statement found\.$~'
+            message: '~^Parameter #2 \$region \(array\|string\|null\) of method Atk4\\Ui\\View::add\(\) should be contravariant with parameter \$args \(mixed\) of method Atk4\\Ui\\AbstractView::add\(\)$~'
         -
             path: 'src/VirtualPage.php'
-            message: '~^Parameter \#1 \$fx \(Closure\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/VirtualPage.php'
-            message: '~^Parameter \#2 \$args \(array\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #2 \$args \(array\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Wizard.php'
             message: '~^Property Atk4\\Ui\\Form::\$buttonSave \(array\|Atk4\\Ui\\Button\|false\) does not accept null\.$~'
@@ -524,9 +539,6 @@ parameters:
             path: 'src/CardDeck.php'
             message: '~^Result of \|\| is always true\.$~'
         -
-            path: 'src/CardTable.php'
-            message: '~^Left side of && is always true\.$~'
-        -
             path: 'src/Component/InlineEdit.php'
             message: '~^Left side of && is always true\.$~'
         -
@@ -544,15 +556,6 @@ parameters:
         -
             path: 'src/Form.php'
             message: '~^Else branch is unreachable because previous condition is always true\.$~'
-        -
-            path: 'src/Form.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Form.php'
-            message: '~^Left side of && is always true\.$~'
-        -
-            path: 'src/Form/AbstractLayout.php'
-            message: '~^Negated boolean expression is always false\.$~'
         -
             path: 'src/Form/AbstractLayout.php'
             message: '~^Else branch is unreachable because previous condition is always true\.$~'
@@ -680,9 +683,6 @@ parameters:
             path: 'src/Table/Column.php'
             message: '~^Negated boolean expression is always false\.$~'
         -
-            path: 'src/Table/Column/Link.php'
-            message: '~^Ternary operator condition is always true\.$~'
-        -
             path: 'src/Table/Column/Multiformat.php'
             message: '~^Negated boolean expression is always false\.$~'
         -
@@ -726,106 +726,100 @@ parameters:
         # for level = 5
         -
             path: 'demos/_unit-test/lookup-virtual-page.php'
-            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsModal given\.$~'
+            message: '~^Parameter #2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsModal given\.$~'
         -
             path: 'demos/basic/view.php'
-            message: '~^Parameter \#2 \$value of method Atk4\\Ui\\HtmlTemplate::set\(\) expects string\|null, int<100, 999> given\.$~'
+            message: '~^Parameter #2 \$value of method Atk4\\Ui\\HtmlTemplate::set\(\) expects string\|null, int<100, 999> given\.$~'
         -
             path: 'demos/collection/grid.php'
-            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsExpression given\.$~'
+            message: '~^Parameter #2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsExpression given\.$~'
         -
             path: 'demos/collection/grid.php'
-            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsReload given\.$~'
+            message: '~^Parameter #2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsReload given\.$~'
         -
             path: 'demos/collection/grid.php'
-            message: '~^Parameter \#1 \$name of method Atk4\\Ui\\Grid::addColumn\(\) expects string, null given\.$~'
+            message: '~^Parameter #1 \$name of method Atk4\\Ui\\Grid::addColumn\(\) expects string, null given\.$~'
+        -
+            path: 'demos/data-action/jsactions2.php'
+            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
         -
             path: 'demos/data-action/jsactionsgrid.php'
-            message: '~^Parameter \#1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View, string given\.$~'
+            message: '~^Parameter #1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View, string given\.$~'
         -
             path: 'demos/form-control/input2.php'
-            message: '~^Parameter \#1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
-        -
-            path: 'demos/form/form-section.php'
-            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
-        -
-            path: 'demos/form/form2.php'
-            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
-        -
-            path: 'demos/form/form5.php'
-            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
+            message: '~^Parameter #1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
         -
             path: 'demos/interactive/sse.php'
-            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, Atk4\\Ui\\Jquery> given\.$~'
+            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, Atk4\\Ui\\Jquery> given\.$~'
         -
             path: 'demos/interactive/virtual.php'
-            message: '~^Parameter \#1 \$title of class Atk4\\Ui\\JsModal constructor expects string, null given\.$~'
+            message: '~^Parameter #1 \$title of class Atk4\\Ui\\JsModal constructor expects string, null given\.$~'
         -
             path: 'demos/javascript/reloading.php'
-            message: '~^Parameter \#1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
+            message: '~^Parameter #1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
         -
             path: 'demos/layout/layout-panel.php'
-            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, mixed> given\.$~'
+            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, mixed> given\.$~'
         -
-            path: 'demos/obsolete/notify2.php'
-            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form::setModel\(\) expects array\|null, false given\.$~'
-        -
-            path: 'demos/tutorial/actions.php'
-            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
+            path: 'demos/layout/layout-panel.php'
+            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
         -
             path: 'demos/tutorial/actions.php'
-            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
+            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
+        -
+            path: 'demos/tutorial/actions.php'
+            message: '~^Parameter #2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
         -
             path: 'src/Card.php'
-            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, \$this\(Atk4\\Ui\\Card\)\|string> given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, \$this\(Atk4\\Ui\\Card\)\|string> given\.$~'
         -
             path: 'src/Card.php'
-            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
+            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
         -
             path: 'src/Form.php'
-            message: '~^Parameter \#2 \$value of method Atk4\\Ui\\View::setAttr\(\) expects string\|null, int given\.$~'
-        -
-            path: 'src/Form/Layout/Columns.php'
-            message: '~^Parameter \#2 \$fields of method Atk4\\Ui\\Form\\AbstractLayout::setModel\(\) expects array\|null, false given\.$~'
+            message: '~^Parameter #2 \$value of method Atk4\\Ui\\View::setAttr\(\) expects string\|null, int given\.$~'
         -
             path: 'src/Form/Layout/Section.php'
-            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
         -
             path: 'src/Form/Layout/Section/Accordion.php'
-            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
         -
             path: 'src/Form/Layout/Section/Tabs.php'
-            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
         -
             path: 'src/Grid.php'
-            message: '~^Parameter \#2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Table\|false given\.$~'
+            message: '~^Parameter #2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Table\|false given\.$~'
         -
             path: 'src/Grid.php'
-            message: '~^Parameter \#2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Paginator given\.$~'
+            message: '~^Parameter #2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Paginator given\.$~'
         -
             path: 'src/Grid.php'
-            message: '~^Parameter \#2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsReload given\.$~'
+            message: '~^Parameter #2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsReload given\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Parameter #1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View, Atk4\\Data\\Model\\UserAction given\.$~'
         -
             path: 'src/JsSearch.php'
-            message: '~^Parameter \#2 \$value of method Atk4\\Ui\\HtmlTemplate::trySet\(\) expects string\|null, Atk4\\Ui\\Form\\Control\\Line given\.$~'
+            message: '~^Parameter #2 \$value of method Atk4\\Ui\\HtmlTemplate::trySet\(\) expects string\|null, Atk4\\Ui\\Form\\Control\\Line given\.$~'
         -
             path: 'src/Layout/Admin.php'
-            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, Atk4\\Ui\\Jquery> given\.$~'
+            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, Atk4\\Ui\\Jquery> given\.$~'
         -
             path: 'src/Menu.php'
-            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, array<int, string>\|class\-string> given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, array<int, string>\|class\-string> given\.$~'
         -
             path: 'src/Panel/Content.php'
-            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\Callback given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\Callback given\.$~'
         -
             path: 'src/Panel/Right.php'
-            message: '~^Parameter \#1 \$object of method Atk4\\Ui\\AbstractView::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, string> given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\AbstractView::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, string> given\.$~'
         -
             path: 'src/UserAction/ModalExecutor.php'
-            message: '~^Parameter \#2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, mixed> given\.$~'
+            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, mixed> given\.$~'
         -
             path: 'tests/JsTest.php'
-            message: '~^Parameter \#1 \$args of class Atk4\\Ui\\JsFunction constructor expects array, null given\.$~'
+            message: '~^Parameter #1 \$args of class Atk4\\Ui\\JsFunction constructor expects array, null given\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 6
@@ -873,16 +867,10 @@ parameters:
             message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::prepareIterator\(\) has no return type specified\.$~'
         -
             path: 'demos/_includes/Persistence_Faker.php'
-            message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::prepareIterator\(\) has parameter \$model with no type specified\.$~'
-        -
-            path: 'demos/_includes/Persistence_Faker.php'
             message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::export\(\) has no return type specified\.$~'
         -
             path: 'demos/_includes/Persistence_Faker.php'
             message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::export\(\) has parameter \$fields with no type specified\.$~'
-        -
-            path: 'demos/_includes/Persistence_Faker.php'
-            message: '~^Method Atk4\\Ui\\Demos\\Persistence_Faker::export\(\) has parameter \$model with no type specified\.$~'
         -
             path: 'demos/_unit-test/console_run.php'
             message: '~^Method class@anonymous/demos/_unit\-test/console_run\.php:\d+::test\(\) has no return type specified\.$~'
@@ -1169,12 +1157,6 @@ parameters:
             path: 'src/Console.php'
             message: '~^Method Atk4\\Ui\\Console::execRaw\(\) has parameter \$exec with no type specified\.$~'
         -
-            path: 'src/Console.php'
-            message: '~^Method Atk4\\Ui\\Console::setModel\(\) has parameter \$args with no type specified\.$~'
-        -
-            path: 'src/Console.php'
-            message: '~^Method Atk4\\Ui\\Console::setModel\(\) has parameter \$method with no type specified\.$~'
-        -
             path: 'src/Crud.php'
             message: '~^Method Atk4\\Ui\\Crud::applySort\(\) has no return type specified\.$~'
         -
@@ -1203,25 +1185,13 @@ parameters:
             message: '~^Call to function is_object\(\) with Atk4\\Ui\\Form\\Layout will always evaluate to true\.$~'
         -
             path: 'src/Form.php'
-            message: '~^Instanceof between Atk4\\Data\\Field and Atk4\\Data\\Field will always evaluate to true\.$~'
-        -
-            path: 'src/Form.php'
             message: '~^Method Atk4\\Ui\\Form::loadPost\(\) has no return type specified\.$~'
         -
             path: 'src/Form.php'
             message: '~^Method Atk4\\Ui\\Form::ajaxSubmit\(\) has no return type specified\.$~'
         -
             path: 'src/Form/AbstractLayout.php'
-            message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) has no return type specified\.$~'
-        -
-            path: 'src/Form/AbstractLayout.php'
-            message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) has parameter \$decorator with no type specified\.$~'
-        -
-            path: 'src/Form/AbstractLayout.php'
-            message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) has parameter \$field with no type specified\.$~'
-        -
-            path: 'src/Form/AbstractLayout.php'
-            message: '~^Call to function is_array\(\) with array<int, array\{0: string, 1\?: array\{readonly: true\}\}> will always evaluate to true\.$~'                        
+            message: '~^Call to function is_array\(\) with array<int, array\{0: string, 1\?: array\{readonly: true\}\}> will always evaluate to true\.$~'
         -
             path: 'src/Form/Control.php'
             message: '~^Property Atk4\\Ui\\Form\\Control::\$width has no type specified\.$~'
@@ -1352,9 +1322,6 @@ parameters:
             path: 'src/Form/Control/Multiline.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Multiline::valuePropsBinding\(\) has no return type specified\.$~'
         -
-            path: 'src/Form/Control/Multiline.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Multiline::getDummyExpression\(\) has parameter \$model with no type specified\.$~'
-        -
             path: 'src/Form/Control/Password.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\Password::\$inputType has no type specified\.$~'
         -
@@ -1426,15 +1393,6 @@ parameters:
         -
             path: 'src/Form/Control/UploadImage.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\UploadImage::clearThumbnail\(\) has parameter \$defaultThumbnail with no type specified\.$~'
-        -
-            path: 'src/Form/Layout.php'
-            message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) has no return type specified\.$~'
-        -
-            path: 'src/Form/Layout.php'
-            message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) has parameter \$decorator with no type specified\.$~'
-        -
-            path: 'src/Form/Layout.php'
-            message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) has parameter \$field with no type specified\.$~'
         -
             path: 'src/Form/Layout/Section.php'
             message: '~^Property Atk4\\Ui\\Form\\Layout\\Section::\$formLayout has no type specified\.$~'
@@ -1953,40 +1911,16 @@ parameters:
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel::afterInit\(\) has no return type specified\.$~'
         -
             path: 'src/Table/Column/FilterModel.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel::getFormDisplayRules\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeBoolean.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeBoolean::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeDate.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeDate::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
         -
             path: 'src/Table/Column/FilterModel/TypeDate.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeDate::getFormDisplayRules\(\) has no return type specified\.$~'
         -
             path: 'src/Table/Column/FilterModel/TypeDatetime.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeDatetime::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeDatetime.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeDatetime::getFormDisplayRules\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeEnum.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeEnum::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeNumber.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeNumber::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
         -
             path: 'src/Table/Column/FilterModel/TypeNumber.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeNumber::getFormDisplayRules\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeString.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeString::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeTime.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeTime::setConditionForModel\(\) has parameter \$model with no type specified\.$~'
         -
             path: 'src/Table/Column/FilterModel/TypeTime.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeTime::getFormDisplayRules\(\) has no return type specified\.$~'
@@ -2161,9 +2095,6 @@ parameters:
         -
             path: 'tests/ExecutorFactoryTest.php'
             message: '~^Method Atk4\\Ui\\Tests\\ExecutorFactoryTest::getApp\(\) has no return type specified\.$~'
-        -
-            path: 'tests/GridTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\GridTest::\$m has no type specified\.$~'
         -
             path: 'tests/PaginatorTest.php'
             message: '~^Property Atk4\\Ui\\Tests\\PaginatorTest::\$p has no type specified\.$~'

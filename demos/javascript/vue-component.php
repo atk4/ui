@@ -21,7 +21,7 @@ $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or 
 \Atk4\Ui\Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
 
 $inline_edit = \Atk4\Ui\Component\InlineEdit::addTo($app);
-$inline_edit->field = $model->fieldName()->name;
+$inline_edit->fieldName = $model->fieldName()->name;
 $inline_edit->setModel($model);
 
 $inline_edit->onChange(function ($value) {

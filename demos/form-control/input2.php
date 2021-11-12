@@ -115,7 +115,7 @@ $button->on('click', new \Atk4\Ui\JsExpression('alert("field value is: "+[])', [
 \Atk4\Ui\Header::addTo($app, ['Line in a Form']);
 $form = Form::addTo($app);
 
-$control = $form->addControl('Title', null, ['values' => ['Mr', 'Mrs', 'Miss'], 'ui' => ['hint' => 'select one']]);
+$control = $form->addControl('Title', [], ['values' => ['Mr', 'Mrs', 'Miss'], 'ui' => ['hint' => 'select one']]);
 
 $control = $form->addControl('name', [Form\Control\Line::class, 'hint' => 'this is sample hint that escapes <html> characters']);
 $control->set('value in a form');

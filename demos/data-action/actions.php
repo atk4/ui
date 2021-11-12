@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Header;
@@ -30,7 +31,7 @@ $action = $files->addUserAction(
         'description' => 'Import file in a specify path.',
         // Display information prior to execute the action.
         // ModalExecutor or PreviewExecutor will display preview.
-        'preview' => function ($model, $path) {
+        'preview' => function (Model $model, $path) {
             return 'Execute Import using path: "' . $path . '"';
         },
         // Argument needed to run the callback action method.

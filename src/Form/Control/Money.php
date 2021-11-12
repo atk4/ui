@@ -11,7 +11,7 @@ class Money extends Input
 {
     public function getValue()
     {
-        $v = $this->field ? $this->field->get() : ($this->content ?: null);
+        $v = $this->entityField ? $this->entityField->get() : ($this->content ?: null);
 
         if ($v === null) {
             return;

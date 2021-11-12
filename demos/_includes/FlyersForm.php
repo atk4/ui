@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Form;
 
 class FlyersForm extends Form
@@ -36,8 +37,10 @@ class FlyersForm extends Form
         $this->addControl('country', [
             Form\Control\Lookup::class,
             'model' => new \Atk4\Ui\Demos\Country($this->getApp()->db),
-            'dependency' => function ($model, $data) {
-                isset($data['contains']) ? $model->addCondition('name', 'like', '%' . $data['contains'] . '%') : null;
+            'dependency' => function (Model $model, $data) {
+                if (isset($data['contains'])) {
+                    $model->addCondition(\Atk4\Ui\Demos\Country::hinting()->fieldName()->name, 'like', '%' . $data['contains'] . '%');
+                }
             },
             'search' => [
                 \Atk4\Ui\Demos\Country::hinting()->fieldName()->name,
@@ -54,7 +57,7 @@ class FlyersForm extends Form
         $cards = $this->addControl('cards', [Form\Control\TreeItemSelector::class, 'treeItems' => $this->cards, 'caption' => 'Flyers program:'], ['type' => 'json']);
         $cards->set([]);
 
-        $this->onSubmit(function ($form) {
+        $this->onSubmit(function (Form $form) {
             return new \Atk4\Ui\JsToast('Thank you!');
         });
     }

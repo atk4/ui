@@ -29,7 +29,7 @@ $noSave = function (Form $form) {
 ////////////////////////////////
 
 $form = Form::addTo($app);
-$form->setModel($model, false);
+$form->setModel($model, []);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
@@ -53,7 +53,7 @@ $form->onSubmit($noSave);
 ////////////////////////////////
 
 $form = Form::addTo($app);
-$form->setModel($model, false);
+$form->setModel($model, []);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
@@ -75,7 +75,7 @@ $form->onSubmit($noSave);
 ////////////////////////////////
 
 $form = Form::addTo($app);
-$form->setModel($model, false);
+$form->setModel($model, []);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
@@ -99,7 +99,7 @@ $form->onSubmit($noSave);
 \Atk4\Ui\Header::addTo($app, ['Color in form']);
 
 $form = Form::addTo($app);
-$form->setModel($model, false);
+$form->setModel($model, []);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment red inverted'], false);
 

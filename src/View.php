@@ -170,7 +170,6 @@ class View extends AbstractView implements JsExpressionable
     /**
      * Sets source of the View.
      *
-     * @param array $data   Array of data
      * @param array $fields Limit model to particular fields
      *
      * @return Model
@@ -361,16 +360,11 @@ class View extends AbstractView implements JsExpressionable
      *
      * Note: this is internal method, but should be public because other objects
      *       should be able to call it.
-     *
-     * @param View   $object
-     * @param string $class
-     *
-     * @return View|null
      */
-    public function getClosestOwner(self $object, $class)
+    public function getClosestOwner(self $object, string $class): ?self
     {
         if ($object->issetOwner()) {
-            return;
+            return null;
         }
 
         if ($object->getOwner() instanceof $class) {
@@ -385,6 +379,8 @@ class View extends AbstractView implements JsExpressionable
     // {{{ Manipulating classes and view properties
 
     /**
+     * TODO this method is hard to override, drop it from View.
+     *
      * Override this method without compatibility with parent, if you wish
      * to set your own things your own way for your view.
      *

@@ -12,7 +12,7 @@ class GridLayout extends View
     /** @var int Number of columns */
     protected $columns = 2;
 
-    /** @var array Array of columns css wide classes */
+    /** @var array columns CSS wide classes */
     protected $words = [
         '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
         'thirteen', 'fourteen', 'fifteen', 'sixteen',

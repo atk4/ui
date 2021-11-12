@@ -34,7 +34,7 @@ trait VueLookupTrait
         $data = [];
         if ($fieldName) {
             $ref = $this->getModel()->getField($fieldName)->getReference();
-            $model = $ref->refModel();
+            $model = $ref->refModel($this->model);
             $refFieldName = $ref->getTheirFieldName();
             if (!empty($query)) {
                 $model->addCondition($model->title_field, 'like', '%' . $query . '%');

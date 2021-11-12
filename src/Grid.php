@@ -131,7 +131,7 @@ class Grid extends View
             $this->menu = $this->add(Factory::factory([Menu::class, 'activate_on_click' => false], $this->menu), 'Menu');
         }
 
-        $this->table = $this->container->add(Factory::factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
+        $this->table = $this->initTable();
 
         if ($this->paginator !== false) {
             $seg = View::addTo($this->container, [], ['Paginator'])->addStyle('text-align', 'center');
@@ -140,6 +140,14 @@ class Grid extends View
         }
 
         $this->issetApp() ? $this->getApp()->stickyGet('_q') : $this->stickyGet('_q');
+    }
+
+    protected function initTable(): Table
+    {
+        /** @var Table */
+        $table = $this->container->add(Factory::factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
+
+        return $table;
     }
 
     /**
@@ -484,10 +492,11 @@ class Grid extends View
      */
     public function addDropdown($columnName, $items, \Closure $fx, $icon = 'caret square down', $menuId = null)
     {
-        $column = $this->table->columns[$columnName];
-        if (!isset($column)) {
+        if (!isset($this->table->columns[$columnName])) {
             throw new Exception('The column where you want to add dropdown does not exist: ' . $columnName);
         }
+        $column = $this->table->columns[$columnName];
+
         if (!$menuId) {
             $menuId = $columnName;
         }
@@ -508,10 +517,10 @@ class Grid extends View
      */
     public function addPopup($columnName, $popup = null, $icon = 'caret square down')
     {
-        $column = $this->table->columns[$columnName];
-        if (!isset($column)) {
+        if (!isset($this->table->columns[$columnName])) {
             throw new Exception('The column where you want to add popup does not exist: ' . $columnName);
         }
+        $column = $this->table->columns[$columnName];
 
         return $column->addPopup($popup, $icon);
     }
@@ -601,11 +610,11 @@ class Grid extends View
      * visible model fields. If $columns is set to false, then will not add
      * columns at all.
      *
-     * @param array|bool $columns
+     * @param array<int, string>|null $columns
      *
      * @return \Atk4\Data\Model
      */
-    public function setModel(Model $model, $columns = null)
+    public function setModel(Model $model, array $columns = null)
     {
         $this->model = $this->table->setModel($model, $columns);
 

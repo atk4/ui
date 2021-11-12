@@ -107,7 +107,7 @@ class DemoActionsUtil
                 'preview' => function (Country $model, int $age) {
                     return 'You age is: ' . $age;
                 },
-                'callback' => function ($model, $age) {
+                'callback' => function (Model $model, $age) {
                     return 'age = ' . $age;
                 },
             ]
