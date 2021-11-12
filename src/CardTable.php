@@ -58,7 +58,5 @@ class CardTable extends Table
             return $ret;
         }]);
         $this->_bypass = false;
-
-        return $mm;
     }
 }
