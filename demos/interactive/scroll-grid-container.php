@@ -17,7 +17,8 @@ $c = \Atk4\Ui\Columns::addTo($app);
 
 $c1 = $c->addColumn();
 $g1 = \Atk4\Ui\Crud::addTo($c1);
-$m1 = $g1->setModel(new CountryLock($app->db));
+$m1 = new CountryLock($app->db);
+$g1->setModel($m1);
 $g1->addQuickSearch([CountryLock::hinting()->fieldName()->name, CountryLock::hinting()->fieldName()->iso]);
 
 // demo for additional action buttons in Crud + JsPaginator
@@ -32,9 +33,11 @@ $g1->addJsPaginatorInContainer(30, 350);
 
 $c2 = $c->addColumn();
 $g2 = \Atk4\Ui\Grid::addTo($c2, ['menu' => false]);
-$m2 = $g2->setModel(new CountryLock($app->db));
+$m2 = new CountryLock($app->db);
+$g2->setModel($m2);
 $g2->addJsPaginatorInContainer(20, 200);
 
 $g3 = \Atk4\Ui\Grid::addTo($c2, ['menu' => false]);
-$m3 = $g3->setModel(new CountryLock($app->db));
+$m3 = new CountryLock($app->db);
+$g3->setModel($m3);
 $g3->addJsPaginatorInContainer(10, 150);

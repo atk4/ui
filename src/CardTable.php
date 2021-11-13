@@ -18,13 +18,13 @@ class CardTable extends Table
 
     /**
      * @param array<int, string>|null $columns
-     *
-     * @return Model
      */
-    public function setModel(Model $model, array $columns = null)
+    public function setModel(Model $model, array $columns = null): void
     {
         if ($this->_bypass) {
-            return parent::setModel($model);
+            parent::setModel($model);
+
+            return;
         }
 
         if (!$model->loaded()) {
@@ -33,15 +33,12 @@ class CardTable extends Table
         }
 
         $data = [];
-
-        $uiValues = $this->getApp()->ui_persistence->typecastSaveRow($model, $model->get());
-
         foreach ($model->get() as $key => $value) {
             if ($columns === null || in_array($key, $columns, true)) {
                 $data[] = [
                     'id' => $key,
                     'field' => $model->getField($key)->getCaption(),
-                    'value' => $uiValues[$key],
+                    'value' => $this->getApp()->ui_persistence->typecastSaveField($model->getField($key), $value),
                 ];
             }
         }
@@ -61,7 +58,5 @@ class CardTable extends Table
             return $ret;
         }]);
         $this->_bypass = false;
-
-        return $mm;
     }
 }

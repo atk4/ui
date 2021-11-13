@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Component;
 
+use Atk4\Data\Model;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Exception;
 use Atk4\Ui\JsToast;
@@ -100,12 +101,11 @@ class InlineEdit extends View
 
     /**
      * Set Model of this View.
-     *
-     * @return \Atk4\Data\Model
      */
-    public function setModel(\Atk4\Data\Model $model)
+    public function setModel(Model $model): void
     {
         parent::setModel($model);
+
         $this->fieldName = $this->fieldName ?: $this->model->title_field;
         if ($this->autoSave && $this->model->loaded()) {
             $value = $_POST['value'] ?? null;
@@ -124,8 +124,6 @@ class InlineEdit extends View
                 }
             });
         }
-
-        return $this->model;
     }
 
     /**

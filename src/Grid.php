@@ -611,18 +611,16 @@ class Grid extends View
      * columns at all.
      *
      * @param array<int, string>|null $columns
-     *
-     * @return \Atk4\Data\Model
      */
-    public function setModel(Model $model, array $columns = null)
+    public function setModel(Model $model, array $columns = null): void
     {
-        $this->model = $this->table->setModel($model, $columns);
+        $this->table->setModel($model, $columns);
+
+        parent::setModel($model);
 
         if ($this->searchFieldNames) {
             $this->addQuickSearch($this->searchFieldNames, true);
         }
-
-        return $this->model;
     }
 
     /**

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
+use Atk4\Data\Model;
 
 class Table extends Lister
 {
@@ -430,10 +431,8 @@ class Table extends Lister
      * columns at all.
      *
      * @param array<int, string>|null $columns
-     *
-     * @return \Atk4\Data\Model
      */
-    public function setModel(\Atk4\Data\Model $model, array $columns = null)
+    public function setModel(Model $model, array $columns = null): void
     {
         $model->assertIsModel();
 
@@ -446,8 +445,6 @@ class Table extends Lister
         foreach ($columns as $column) {
             $this->addColumn($column);
         }
-
-        return $this->model;
     }
 
     protected function renderView(): void

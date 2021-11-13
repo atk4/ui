@@ -157,14 +157,14 @@ class View extends AbstractView implements JsExpressionable
      *
      * Do not try to create your own "Model" implementation, instead you must be looking for
      * your own "Persistence" implementation.
-     *
-     * @return Model
      */
-    public function setModel(Model $model)
+    public function setModel(Model $model): void
     {
-        $this->model = $model;
+        if ($this->model !== null && $this->model !== $model) {
+            throw new Exception('Different model already set');
+        }
 
-        return $model;
+        $this->model = $model;
     }
 
     /**

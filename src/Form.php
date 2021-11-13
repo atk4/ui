@@ -265,19 +265,15 @@ class Form extends View
      * will be added.
      *
      * @param array<int, string>|null $fields
-     *
-     * @return \Atk4\Data\Model
      */
-    public function setModel(Model $model, array $fields = null)
+    public function setModel(Model $model, array $fields = null): void
     {
         $model->assertIsEntity();
 
         // Model is set for the form and also for the current layout
         try {
-            $model = parent::setModel($model);
+            parent::setModel($model);
             $this->layout->setModel($model, $fields);
-
-            return $model;
         } catch (Exception $e) {
             throw $e->addMoreInfo('model', $model);
         }
