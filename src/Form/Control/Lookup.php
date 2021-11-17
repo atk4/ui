@@ -454,11 +454,6 @@ class Lookup extends Input
         parent::renderView();
     }
 
-    /**
-     * Convert value to expected comma separated list before setting it.
-     *
-     * {@inheritdoc}
-     */
     public function set($value = null, $junk = null)
     {
         $value = implode(',', (array) $value);
