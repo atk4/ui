@@ -76,7 +76,7 @@ class Layout extends AbstractLayout
     /**
      * Adds Header in form layout.
      *
-     * @param string $label
+     * @param string|array $label
      *
      * @return $this
      */
