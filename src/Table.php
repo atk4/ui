@@ -170,9 +170,7 @@ class Table extends Lister
      */
     public function addColumn(?string $name, $columnDecorator = null, $field = null)
     {
-        if (!$this->_initialized) {
-            throw new Exception('Table component must be added to the render tree & initialized first');
-        }
+        $this->assertIsInitialized();
 
         if (!$this->model) {
             $this->model = new \Atk4\Ui\Misc\ProxyModel();

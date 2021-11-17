@@ -715,7 +715,7 @@ class View extends AbstractView implements JsExpressionable
      */
     public function renderAll(): void
     {
-        if (!$this->_initialized) {
+        if (!$this->isInitialized()) {
             $this->invokeInit();
         }
 
@@ -1163,9 +1163,7 @@ class View extends AbstractView implements JsExpressionable
      */
     public function jsRender(): string
     {
-        if (!$this->_initialized) {
-            throw new Exception('Render tree must be initialized before materializing JsChains.');
-        }
+        $this->assertIsInitialized();
 
         return json_encode('#' . $this->id, \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
     }
