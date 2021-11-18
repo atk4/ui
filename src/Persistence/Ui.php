@@ -168,10 +168,8 @@ class Ui extends \Atk4\Data\Persistence
         // typecast using DBAL types
         $value = parent::_typecastLoadField($field, $value);
 
-        if ($value !== null && $field instanceof PasswordField) {
-            if (!\Closure::bind(fn () => $field->hashPasswordIsHashed($value), null, PasswordField::class)()) {
-                $value = $field->hashPassword($value);
-            }
+        if ($value !== null && $field instanceof PasswordField && !$field->hashPasswordIsHashed($value)) {
+            $value = $field->hashPassword($value);
         }
 
         return $value;
