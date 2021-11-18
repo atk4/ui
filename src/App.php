@@ -110,7 +110,7 @@ class App
     /** @var UiPersistence */
     public $ui_persistence;
 
-    /** @var View For internal use */
+    /** @var View|null For internal use */
     public $html;
 
     /** @var LoggerInterface|null Target for objects with DebugTrait */

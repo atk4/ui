@@ -290,15 +290,6 @@ parameters:
             path: 'demos/interactive/popup.php'
             message: '~^Property Atk4\\Ui\\Label::\$detail \(string\|false\|null\) does not accept int<0, max>\.$~'
         -
-            path: 'demos/layout/layouts_manual.php'
-            message: '~^Property Atk4\\Ui\\App::\$html \(Atk4\\Ui\\View\) does not accept null\.$~'
-        -
-            path: 'demos/layout/layouts_nolayout.php'
-            message: '~^Property Atk4\\Ui\\App::\$html \(Atk4\\Ui\\View\) does not accept null\.$~'
-        -
-            path: 'src/App.php'
-            message: '~^Property Atk4\\Ui\\App::\$html \(Atk4\\Ui\\View\) does not accept null\.$~'
-        -
             path: 'src/App.php'
             message: '~^Property Atk4\\Ui\\App::\$layout \(Atk4\\Ui\\Layout\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
