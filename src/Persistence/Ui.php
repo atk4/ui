@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Persistence;
 
 use Atk4\Data\Field;
+use Atk4\Data\Field\PasswordField;
 use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 
@@ -167,8 +168,8 @@ class Ui extends \Atk4\Data\Persistence
         // typecast using DBAL types
         $value = parent::_typecastLoadField($field, $value);
 
-        if ($value !== null && $field instanceof Field\Password) {
-            if (!\Closure::bind(fn () => $field->hashPasswordIsHashed($value), null, Field\Password::class)()) {
+        if ($value !== null && $field instanceof PasswordField) {
+            if (!\Closure::bind(fn () => $field->hashPasswordIsHashed($value), null, PasswordField::class)()) {
                 $value = $field->hashPassword($value);
             }
         }

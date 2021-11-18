@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Data\Field;
-use Atk4\Data\Field\Callback;
-use Atk4\Data\FieldSqlExpression;
+use Atk4\Data\Field\CallbackField;
+use Atk4\Data\Field\SqlExpressionField;
 use Atk4\Data\Model;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Exception;
@@ -726,7 +726,7 @@ class Multiline extends Form\Control
                 continue;
             }
             $field = $model->getField($fieldName);
-            if ($field instanceof Callback) {
+            if ($field instanceof CallbackField) {
                 $value = ($field->expr)($model);
                 $values[$fieldName] = $this->getApp()->ui_persistence->typecastSaveField($field, $value);
             }
@@ -810,7 +810,7 @@ class Multiline extends Form\Control
     {
         $fields = [];
         foreach ($model->getFields() as $field) {
-            if (!$field instanceof FieldSqlExpression || !in_array($field->short_name, $this->rowFields, true)) {
+            if (!$field instanceof SqlExpressionField || !in_array($field->short_name, $this->rowFields, true)) {
                 continue;
             }
 
@@ -829,7 +829,7 @@ class Multiline extends Form\Control
      *
      * @return mixed
      */
-    private function getDummyExpression(FieldSqlExpression $exprField, Model $model)
+    private function getDummyExpression(SqlExpressionField $exprField, Model $model)
     {
         $expr = $exprField->expr;
         $matches = [];
@@ -839,7 +839,7 @@ class Multiline extends Form\Control
         foreach ($matches[0] as $match) {
             $fieldName = substr($match, 1, -1);
             $field = $model->getField($fieldName);
-            if ($field instanceof FieldSqlExpression) {
+            if ($field instanceof SqlExpressionField) {
                 $expr = str_replace($match, $this->getDummyExpression($field, $model), $expr);
             } else {
                 $expr = str_replace($match, $this->getValueForExpression($exprField, $fieldName, $model), $expr);
