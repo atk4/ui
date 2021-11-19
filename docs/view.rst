@@ -149,7 +149,7 @@ Integration with Agile Data
 If you have used Agile Data, you should be familiar with a concept of creating
 Models::
 
-    $db = new \Atk4\Data\Persistence_SQL::connect($dsn);
+    $db = new \Atk4\Data\Persistence\Sql($dsn);
 
     $client = new Client($db);  // extends \Atk4\Data\Model();
 
@@ -161,7 +161,7 @@ so that those Views would be able to interact with your persistence directly::
 In most environments, however, your application will rely on a primary Database, which
 can be set through your $app class::
 
-    $app->db = new \Atk4\Data\Persistence_SQL::connect($dsn);
+    $app->db = new \Atk4\Data\Persistence\Sql($dsn);
 
     // next, anywhere in a view
     $client = new Client($this->getApp()->db);
@@ -169,7 +169,7 @@ can be set through your $app class::
 
 Or if you prefer a more consise code::
 
-    $app->db = new \Atk4\Data\Persistence_SQL::connect($dsn);
+    $app->db = new \Atk4\Data\Persistence\Sql($dsn);
 
     // next, anywhere in a view
     $form->setModel('Client');

@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Data\Persistence;
 
-class Persistence_Faker extends \Atk4\Data\Persistence
+class FakerPersistence extends Persistence
 {
     /** @var \Faker\Generator */
     public $faker;

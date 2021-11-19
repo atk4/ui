@@ -35,7 +35,7 @@ Using App for Injecting Dependencies
 Since App class becomes available for all objects and components of Agile Toolkit, you may add
 properties into the App class::
 
-    $app->db = new \Atk4\Ui\Persistence_SQL($dsn);
+    $app->db = new \Atk4\Data\Persistence\Sql($dsn);
 
     // later anywhere in the code:
 
@@ -70,7 +70,7 @@ active. (See :ref:`system_pattern`)::
             parent::__construct('Warehouse App v0.4');
 
             // My App class will establish database connection
-            $this->db = new \Atk4\Data\Persistence_SQL($_CLEARDB_DATABASE_URL['DSN']);
+            $this->db = new \Atk4\Data\Persistence\Sql($_CLEARDB_DATABASE_URL['DSN']);
             $this->db->setApp($this);
 
             // My App class provides access to a currently logged user and currently selected system.

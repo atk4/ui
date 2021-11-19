@@ -5,17 +5,18 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Data\Persistence;
 use Atk4\Data\Schema\Migrator;
 
 require_once __DIR__ . '/../init-autoloader.php';
 
 $sqliteFile = __DIR__ . '/db.sqlite';
 if (!file_exists($sqliteFile)) {
-    new \Atk4\Data\Persistence\Sql('sqlite:' . $sqliteFile);
+    new Persistence\Sql('sqlite:' . $sqliteFile);
 }
 unset($sqliteFile);
 
-/** @var \Atk4\Data\Persistence\Sql $db */
+/** @var Persistence\Sql $db */
 require_once __DIR__ . '/../init-db.php';
 
 class ImportModelWithPrefixedFields extends Model

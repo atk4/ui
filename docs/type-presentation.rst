@@ -145,9 +145,9 @@ Display credit card number with spaces
 --------------------------------------
 If we always have to display card numbers with spaces, e.g. "1234 1234 1234 1234" but have
 the database store them without spaces, then this is a data formatting task best done by
-extending :php:class:`Persistence\\Ui`::
+extending :php:class:`Persistence\Ui`::
 
-    class MyPersistence extends \Atk4\Ui\Persistence\Ui
+    class MyPersistence extends Persistence\Ui
     {
 
         protected function _typecastSaveField(\Atk4\Data\Field $field, $value)

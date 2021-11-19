@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
 
 class FlyersForm extends Form
@@ -52,7 +53,7 @@ class FlyersForm extends Form
         ], ['required' => true]);
 
         $ml = $this->addControl('multi', [Form\Control\Multiline::class, 'rowLimit' => 4, 'addOnTab' => true, 'caption' => 'Additional passengers:', 'renderLabel' => false]);
-        $ml->setModel(new Flyers(new \Atk4\Data\Persistence\Array_($this->flyers)));
+        $ml->setModel(new Flyers(new Persistence\Array_($this->flyers)));
 
         $cards = $this->addControl('cards', [Form\Control\TreeItemSelector::class, 'treeItems' => $this->cards, 'caption' => 'Flyers program:'], ['type' => 'json']);
         $cards->set([]);

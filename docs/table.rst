@@ -298,7 +298,7 @@ of issues from your Github repository::
 
 
     // Show contents of dropbox
-    $github = \Atk4\Github\Persistence_Issues($github_api_config);
+    $github = \Atk4\Github\IssuePersistence($github_api_config);
     $issues = new \Atk4\Github\Model\Issue($github);
 
     Table::addTo($app)->setModel($issues);
@@ -353,7 +353,7 @@ is also responsible for setting class of the column, labeling the column and som
 nicer especially inside a table.
 
 .. important:: Decorating is not formatting. If we talk "date", then in order to display it to
-    the user, date must be in a proper format. Formatting of data is done by Persistence_UI and
+    the user, date must be in a proper format. Formatting of data is done by `Persistence\Ui` and
     is not limited to the table columns. Decorators may add an icon, change cell style, align cell
     or hide overflowing text to make table output look better.
 

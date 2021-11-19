@@ -7,6 +7,7 @@ namespace Atk4\Ui\Persistence;
 use Atk4\Data\Field;
 use Atk4\Data\Field\PasswordField;
 use Atk4\Data\Model;
+use Atk4\Data\Persistence;
 use Atk4\Ui\Exception;
 
 /**
@@ -19,7 +20,7 @@ use Atk4\Ui\Exception;
  *
  * You may want to localize some of the output.
  */
-class Ui extends \Atk4\Data\Persistence
+class Ui extends Persistence
 {
     /** @var string */
     public $currency = '€';

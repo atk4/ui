@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Data\Persistence;
 use Atk4\Ui\Table;
 
 class TableColumnLinkTest extends TestCase
@@ -18,7 +19,7 @@ class TableColumnLinkTest extends TestCase
     protected function setUp(): void
     {
         $arr = ['table' => [1 => ['id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'salary' => -123]]];
-        $db = new \Atk4\Data\Persistence\Array_($arr);
+        $db = new Persistence\Array_($arr);
         $m = new \Atk4\Data\Model($db, ['table' => 'table']);
         $m->addField('name');
         $m->addField('ref');
@@ -259,7 +260,7 @@ class TableColumnLinkTest extends TestCase
     {
         // need to reset all to set a nulled value in field name model
         $arr = ['table' => [1 => ['id' => 1, 'name' => '', 'ref' => 'ref123', 'salary' => -123]]];
-        $db = new \Atk4\Data\Persistence\Array_($arr);
+        $db = new Persistence\Array_($arr);
         $m = new \Atk4\Data\Model($db, ['table' => 'table']);
         $m->addField('name');
         $m->addField('ref');
