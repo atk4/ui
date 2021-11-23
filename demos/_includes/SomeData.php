@@ -8,7 +8,7 @@ class SomeData extends \Atk4\Data\Model
 {
     public function __construct()
     {
-        $fakerPersistence = new Persistence_Faker();
+        $fakerPersistence = new FakerPersistence();
 
         parent::__construct($fakerPersistence);
     }

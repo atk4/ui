@@ -10,6 +10,8 @@ use Atk4\Ui\App;
 use Atk4\Ui\Callback;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -174,10 +176,10 @@ class DemosTest extends TestCase
             }, null, App::class)();
 
             // Attach a response to the easy handle with the parsed headers.
-            $response = new \GuzzleHttp\Psr7\Response(
+            $response = new Response(
                 $statusCode,
                 $headers,
-                \GuzzleHttp\Psr7\stream_for($body),
+                class_exists(Utils::class) ? Utils::streamFor($body) : \GuzzleHttp\Psr7\stream_for($body), // @phpstan-ignore-line Utils class present since guzzlehttp/psr7 v1.7
                 '1.0'
             );
 

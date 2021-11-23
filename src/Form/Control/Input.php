@@ -171,7 +171,7 @@ class Input extends Form\Control
                 $button->on('click', $executor);
             }
         }
-        if (!$button->_initialized) {
+        if (!$button->isInitialized()) {
             $this->add($button, $spot);
             $this->addClass('action');
         }

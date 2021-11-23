@@ -6,7 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
-use Atk4\Data\Persistence\Array_;
+use Atk4\Data\Persistence;
 use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Item;
@@ -45,7 +45,7 @@ class ExecutorFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $p = new Array_();
+        $p = new Persistence\Array_();
         $this->model = new TestModel($p);
         $this->app = $this->getApp();
         $this->app->initLayout([\Atk4\Ui\Layout\Admin::class]);
@@ -119,7 +119,7 @@ class ExecutorFactoryTest extends TestCase
 
         $editAction = $this->model->getUserAction('edit');
 
-        $p = new Array_();
+        $p = new Persistence\Array_();
         $otherModelClass = get_class(new class() extends Model {
         });
         $secondEditAction = (new $otherModelClass($p))->getUserAction('edit');

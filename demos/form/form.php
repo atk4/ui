@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
 
 /** @var \Atk4\Ui\App $app */
@@ -170,7 +171,7 @@ $tab = $tabs->addTab('Complex Examples');
 
 \Atk4\Ui\Header::addTo($tab, ['Conditional response']);
 
-$modelRegister = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_());
+$modelRegister = new \Atk4\Data\Model(new Persistence\Array_());
 $modelRegister->addField('name');
 $modelRegister->addField('email');
 $modelRegister->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);

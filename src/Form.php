@@ -419,7 +419,7 @@ class Form extends View
     /**
      * Add header into the form, which appears as a separator.
      *
-     * @param string $title
+     * @param string|array $title
      *
      * @return Form\Layout
      */

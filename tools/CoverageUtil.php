@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use SebastianBergmann\CodeCoverage\CodeCoverage;
-use SebastianBergmann\CodeCoverage\Driver\Driver;
+use SebastianBergmann\CodeCoverage\Driver\Selector as DriverSelector;
 use SebastianBergmann\CodeCoverage\Filter;
 use SebastianBergmann\CodeCoverage\Report;
 
@@ -25,7 +25,7 @@ final class CoverageUtil
 
         $filter = new Filter();
         $filter->includeDirectory(__DIR__ . '/../src');
-        self::$coverage = new CodeCoverage(Driver::forLineCoverage($filter), $filter);
+        self::$coverage = new CodeCoverage((new DriverSelector())->forLineCoverage($filter), $filter);
         self::$coverage->start($_SERVER['SCRIPT_NAME']);
     }
 

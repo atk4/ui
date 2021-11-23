@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Persistence;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -180,7 +182,7 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
         $modal->js(true, $prevAction->js()->addClass('disabled'));
         $modal->js(true, $nextAction->js(true)->removeClass('disabled'));
     } elseif ($page === 2) {
-        $modelRegister = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_());
+        $modelRegister = new \Atk4\Data\Model(new Persistence\Array_());
         $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
         $form = \Atk4\Ui\Form::addTo($modal, ['segment' => true]);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
 use Atk4\Ui\GridLayout;
 use Atk4\Ui\Header;
@@ -32,7 +33,7 @@ $right = View::addTo($gridLayout, [], ['r1c1']);
 Header::addTo($right, ['Button on right']);
 
 $form = Form::addTo($right, ['layout' => [Form\Layout::class, 'defaultTemplate' => __DIR__ . '/templates/form-button-right.html']]);
-$form->setModel((new Flyers(new \Atk4\Data\Persistence\Array_()))->tryLoadAny());
+$form->setModel((new Flyers(new Persistence\Array_()))->tryLoadAny());
 $form->getControl('last_name')->hint = 'Please enter your last name.';
 
 $left = View::addTo($gridLayout, [], ['r1c2']);
@@ -47,7 +48,7 @@ $form = Form::addTo($left, [
         ],
     ],
 ]);
-$form->setModel((new Flyers(new \Atk4\Data\Persistence\Array_()))->tryLoadAny());
+$form->setModel((new Flyers(new Persistence\Array_()))->tryLoadAny());
 $form->getControl('last_name')->hint = 'Please enter your last name.';
 
 ////////////////////////////////////////

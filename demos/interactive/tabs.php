@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Persistence;
+
 /**
  * Demonstrates how to use tabs.
  */
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -40,7 +43,7 @@ $tabs->addTab('Modal popup', function ($tab) {
 $tabs->addTab('Dynamic Form', function ($tab) {
     \Atk4\Ui\Message::addTo($tab, ['It takes 2 seconds for this tab to load', 'warning']);
     sleep(2);
-    $modelRegister = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_());
+    $modelRegister = new \Atk4\Data\Model(new Persistence\Array_());
     $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
     $form = \Atk4\Ui\Form::addTo($tab, ['segment' => true]);

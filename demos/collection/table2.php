@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Persistence;
 use Atk4\Ui\Table;
 
 /** @var \Atk4\Ui\App $app */
@@ -15,7 +16,7 @@ $data = [
     ['id' => 3, 'action' => 'Tax', 'amount' => -40],
 ];
 
-$model = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Static_($data));
+$model = new \Atk4\Data\Model(new Persistence\Static_($data));
 $model->getField('amount')->type = 'atk4_money';
 
 \Atk4\Ui\Header::addTo($app, ['Table with various headers', 'subHeader' => 'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon' => 'table']);

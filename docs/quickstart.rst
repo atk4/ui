@@ -113,7 +113,7 @@ with it::
 
     <?php
     session_start();
-    $s = new \Atk4\Data\Persistence_Array($_SESSION);
+    $s = new \Atk4\Data\Persistence\Array_($_SESSION);
 
 If you're establishing a database connection that should be used throughout your whole application and in many classes,
 you can define it in the $app->db class::
