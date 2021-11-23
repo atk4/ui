@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form;
 
+use Atk4\Data\Field;
+use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
@@ -19,9 +21,7 @@ class Control extends View
      */
     public $form;
 
-    /**
-     * @var EntityFieldPair
-     */
+    /** @var EntityFieldPair<Model, Field> */
     public $entityField;
 
     /** @var string */
