@@ -742,7 +742,7 @@ class ScopeBuilder extends Control
                 $model = $reference->refModel($condField->getOwner());
                 $fieldName = $reference->getTheirFieldName();
                 $rec = $model->tryLoadBy($fieldName, $value);
-                if ($rec->loaded()) {
+                if ($rec->isLoaded()) {
                     $option = [
                         'key' => $value,
                         'text' => $rec->get($model->title_field),
