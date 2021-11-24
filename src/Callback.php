@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
+
 /**
  * Add this object to your render tree and it will expose a unique URL which, when
  * executed directly will perform a PHP callback that you set().
@@ -77,8 +79,9 @@ class Callback extends AbstractView
             try {
                 return $fx(...($args ?? []));
             } catch (\Exception $e) {
-                // prevent "Callback requested, but never reached" error
-                throw new \Error('Unexpected callback exception', 0, $e);
+                // wrap exception using a custom Error class to prevent "Callback requested, but never reached"
+                // exception which is hard to understand/locate as thrown from the main context
+                throw new UnhandledCallbackExceptionError('', 0, $e);
             }
         }
     }
