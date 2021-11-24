@@ -52,13 +52,25 @@ class FilterModel extends Model
     public static function factoryType(Field $field): self
     {
         $persistence = new Persistence\Array_();
-        $filterDomain = self::class . '\\Type';
 
-        // check if field as a type and use string as default
-        if (empty($type = $field->type)) {
-            $type = 'string';
-        }
-        $class = $filterDomain . ucfirst($type);
+        $class = [
+            \Doctrine\DBAL\Types\Types::STRING => FilterModel\TypeString::class,
+            \Doctrine\DBAL\Types\Types::TEXT => FilterModel\TypeString::class,
+
+            \Doctrine\DBAL\Types\Types::BOOLEAN => FilterModel\TypeBoolean::class,
+            \Doctrine\DBAL\Types\Types::INTEGER => FilterModel\TypeNumber::class,
+            \Doctrine\DBAL\Types\Types::FLOAT => FilterModel\TypeNumber::class,
+            \Atk4\Data\Types\Types::MONEY => FilterModel\TypeNumber::class,
+
+            \Doctrine\DBAL\Types\Types::DATE_MUTABLE => FilterModel\TypeDate::class,
+            \Doctrine\DBAL\Types\Types::DATE_IMMUTABLE => FilterModel\TypeDate::class,
+            \Doctrine\DBAL\Types\Types::TIME_MUTABLE => FilterModel\TypeTime::class,
+            \Doctrine\DBAL\Types\Types::TIME_IMMUTABLE => FilterModel\TypeTime::class,
+            \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE => FilterModel\TypeDatetime::class,
+            \Doctrine\DBAL\Types\Types::DATETIME_IMMUTABLE => FilterModel\TypeDatetime::class,
+
+            'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
+        ][$field->type ?? 'string'];
 
         /*
          * You can set your own filter model condition by extending
