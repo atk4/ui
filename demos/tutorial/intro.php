@@ -151,7 +151,7 @@ $wizard->addStep('Business Model', function ($page) {
         $model = $model->tryLoad(1);
         $form->setModel($model);
 
-        if (!$model->loaded()) {
+        if (!$model->isLoaded()) {
             // set default data
             $model->setMulti([
                 'id' => 1,
@@ -210,7 +210,7 @@ $wizard->addStep('Persistence', function ($page) {
 
         Header::addTo($owner, ['Record display in Card View using model data.']);
         $model = $model->tryLoad(1);
-        if ($model->loaded()) {
+        if ($model->isLoaded()) {
             \Atk4\Ui\Card::addTo($owner, ['useLabel' => true])
                 ->setModel($model);
         } else {

@@ -41,7 +41,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
             $path[] = $id;
             $pushModel = new $model($model->persistence);
             $pushModel = $pushModel->tryLoad($id);
-            if (!$pushModel->loaded()) {
+            if (!$pushModel->isLoaded()) {
                 break;
             }
             $ref = array_shift($route);

@@ -278,7 +278,7 @@ class Lookup extends Input
 
             $entity = $this->model->createEntity();
 
-            $form->setModel($entity->onlyFields($this->plus['fields'] ?? []));
+            $form->setModel($entity->setOnlyFields($this->plus['fields'] ?? []));
 
             $form->onSubmit(function (\Atk4\Ui\Form $form) {
                 $form->model->save();
@@ -440,7 +440,7 @@ class Lookup extends Input
 
             $this->model = $this->model->tryLoadBy($id_field, $this->entityField->get());
 
-            if ($this->model->loaded()) {
+            if ($this->model->isLoaded()) {
                 $row = $this->renderRow($this->model);
 
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);

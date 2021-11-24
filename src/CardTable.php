@@ -27,10 +27,7 @@ class CardTable extends Table
             return;
         }
 
-        if (!$model->loaded()) {
-            throw (new Exception('Model must be loaded'))
-                ->addMoreInfo('model', $model);
-        }
+        $model->assertIsLoaded();
 
         $data = [];
         foreach ($model->get() as $key => $value) {

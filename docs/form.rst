@@ -436,7 +436,7 @@ POST data to submit itself and will re-use the query string, so you can also saf
 use any GET arguments for passing record $id. You may also perform model load after
 record association. This gives the benefit of not loading any other fields, unless
 they're marked as System (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$system),
-see https://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields#Model::onlyFields::
+see https://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields#Model::setOnlyFields::
 
     $form = Form::addTo($app);
     $form->setModel((new User($db))->load($current_user), ['email', 'name']);
