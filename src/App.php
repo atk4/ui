@@ -17,6 +17,8 @@ use Atk4\Ui\Exception\ExitApplicationException;
 use Atk4\Ui\Panel\Right;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -157,6 +159,12 @@ class App
 
     public $templateClass = HtmlTemplate::class;
 
+    /** @var ResponseInterface */
+    private $response;
+
+    /** @var string Seed Response class  */
+    public $responseClass = Response::class;
+
     /**
      * Constructor.
      *
@@ -175,6 +183,8 @@ class App
             $defaults['title'] = $defaults[0];
             unset($defaults[0]);
         }
+
+        $this->response = Factory::factory([$defaults['responseClass'] ?? $this->responseClass]);
 
         /*
         if (is_array($defaults)) {
@@ -270,6 +280,9 @@ class App
             $this->exit_called = true;
             $this->hook(self::HOOK_BEFORE_EXIT);
         }
+
+        // Response - except for SSE - must be emitted only one time
+        $this->emitResponse();
     }
 
     /**
@@ -1071,11 +1084,11 @@ class App
             }
         }
 
-        if ($lateError === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
+        if ($lateError === null && count($headersNew) > 0 && !empty($this->response->getHeaders()) && !$isCli) {
             $lateError = 'Headers already sent, more headers cannot be set at this stage.';
         }
 
-        if (!headers_sent() || $isCli) {
+        if (empty($this->response->getHeaders()) || $isCli) {
             if ($lateError !== null) {
                 $headersNew = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500'];
             }
@@ -1083,13 +1096,12 @@ class App
             foreach ($headersNew as $k => $v) {
                 if (!$isCli) {
                     if ($k === self::HEADER_STATUS_CODE) {
-                        http_response_code($v === (string) (int) $v ? (int) $v : 500);
+                        $this->response = $this->response->withStatus($v === (string) (int) $v ? (int) $v : 500);
                     } else {
                         $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
                             return strtoupper($matches[0]);
                         }, $k);
-
-                        header($kCamelCase . ': ' . $v);
+                        $this->response = $this->response->withHeader($kCamelCase, $v);
                     }
                 }
 
@@ -1099,11 +1111,11 @@ class App
 
         if ($lateError !== null) {
             echo "\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n";
-
+            $this->callBeforeExit(); // output before forced exit TODO exit here is really needed?
             exit(1);
         }
 
-        echo $data;
+        $this->response->getBody()->write($data);
     }
 
     /**
@@ -1152,5 +1164,23 @@ class App
         }
 
         return $portals;
+    }
+
+    /**
+     * @return void
+     */
+    protected function emitResponse(): void
+    {
+        (new \Laminas\HttpHandlerRunner\Emitter\SapiEmitter())->emit($this->response);
+    }
+
+    /**
+     * Used for PSR-11 implementation
+     *
+     * @return ResponseInterface
+     */
+    protected function getResponse(): ResponseInterface
+    {
+        return $this->response;
     }
 }
