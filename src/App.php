@@ -1179,7 +1179,7 @@ class App
      *
      * @return ResponseInterface
      */
-    protected function getResponse(): ResponseInterface
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }
