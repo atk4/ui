@@ -53,7 +53,8 @@ class JsIntegrationTest extends TestCase
         $this->assertSame('<script>
 $(function() {
   $("#b").hide();
-})</script>', $v->getJs());
+})
+</script>', $v->getJs());
     }
 
     /**
@@ -70,7 +71,8 @@ $(function() {
   $("#b").bind("click",function() {
     $("#b").hide();
   });
-})</script>', $v->getJs());
+})
+</script>', $v->getJs());
     }
 
     /**
@@ -92,6 +94,7 @@ $(function() {
     event.stopPropagation();
     $("#b2").hide();
   });
-})</script>', $bb->getJs());
+})
+</script>', $bb->getJs());
     }
 }

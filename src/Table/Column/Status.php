@@ -48,8 +48,8 @@ class Status extends Table\Column
         return $this->getApp()->getTag(
             'td',
             $extra_tags,
-            [$this->getApp()->getTag('i', ['class' => 'icon {$_' . $field->short_name . '_icon}'], '') .
-            ' {$' . $field->short_name . '}', ]
+            [$this->getApp()->getTag('i', ['class' => 'icon {$_' . $field->short_name . '_icon}'], '')
+                . ' {$' . $field->short_name . '}', ]
         );
     }
 

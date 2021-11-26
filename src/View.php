@@ -1218,9 +1218,7 @@ class View extends AbstractView implements JsExpressionable
 
         $ready = new JsFunction($actions);
 
-        return "<script>\n" .
-               (new Jquery($ready))->jsRender() .
-               '</script>';
+        return '<script>' . "\n" . (new Jquery($ready))->jsRender() . "\n" . '</script>';
     }
 
     // }}}
