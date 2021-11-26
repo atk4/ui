@@ -79,8 +79,8 @@ class Callback extends AbstractView
             try {
                 return $fx(...($args ?? []));
             } catch (\Exception $e) {
-                // wrap exception using a custom Error class to prevent "Callback requested, but never reached"
-                // exception which is hard to understand/locate as thrown from the main context
+                // catch and wrap an exception using a custom Error class to prevent "Callback requested, but never reached"
+                // exception which is hard to understand/locate as thrown from the main app context
                 throw new UnhandledCallbackExceptionError('', 0, $e);
             }
         }
