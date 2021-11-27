@@ -1102,14 +1102,18 @@ class App
             }
 
             foreach ($headersNew as $k => $v) {
-                if ($k === self::HEADER_STATUS_CODE) {
-                    $this->response = $this->response->withStatus($v === (string) (int) $v ? (int) $v : 500);
-                } else {
-                    $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
-                        return strtoupper($matches[0]);
-                    }, $k);
-                    $this->response = $this->response->withHeader($kCamelCase, $v);
+                if (!$isCli) {
+                    if ($k === self::HEADER_STATUS_CODE) {
+                        http_response_code($v === (string) (int) $v ? (int) $v : 500);
+                    } else {
+                        $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                            return strtoupper($matches[0]);
+                        }, $k);
+
+                        header($kCamelCase . ': ' . $v);
+                    }
                 }
+
                 self::$_sentHeaders[$k] = $v;
             }
         }
