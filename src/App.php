@@ -1088,11 +1088,11 @@ class App
             }
         }
 
-        if ($lateError === null && count($headersNew) > 0 && !empty($this->response->getHeaders()) && !$isCli) {
+        if ($lateError === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
             $lateError = 'Headers already sent, more headers cannot be set at this stage.';
         }
 
-        if (empty($this->response->getHeaders()) || $isCli) {
+        if (!headers_sent() || $isCli) {
             if ($lateError !== null) {
                 $headersNew = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500'];
             }
