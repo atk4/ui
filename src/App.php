@@ -19,6 +19,8 @@ use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use Atk4\Ui\Panel\Right;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -159,6 +161,11 @@ class App
 
     public $templateClass = HtmlTemplate::class;
 
+    /** @var ResponseInterface */
+    private $response;
+
+    public $responseClass = Response::class;
+
     /**
      * Constructor.
      *
@@ -177,6 +184,8 @@ class App
             $defaults['title'] = $defaults[0];
             unset($defaults[0]);
         }
+
+        $this->response = Factory::factory([$defaults['responseClass'] ?? $this->responseClass]);
 
         /*
         if (is_array($defaults)) {
@@ -1063,25 +1072,57 @@ class App
      */
     protected function outputResponseUnsafe(string $data, array $headersNew): void
     {
+
+        $isSse = $this->response->getHeaderLine('Content-Type') === 'text/event-stream';
+
+        if (headers_sent() && $isSse) {
+            echo $data;
+            return;
+        }
+
         $isCli = \PHP_SAPI === 'cli'; // for phpunit
 
         if (!headers_sent() || $isCli) {
             foreach ($headersNew as $k => $v) {
                 if (!$isCli) {
                     if ($k === self::HEADER_STATUS_CODE) {
-                        http_response_code($v === (string) (int) $v ? (int) $v : 500);
+                        $this->response = $this->response->withStatus($v === (string) (int) $v ? (int) $v : 500);
                     } else {
                         $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
                             return strtoupper($matches[0]);
                         }, $k);
 
-                        header($kCamelCase . ': ' . $v);
+                        $this->response = $this->response->withHeader($kCamelCase, $v);
                     }
                 }
             }
         }
 
-        echo $data;
+        $this->response->getBody()->write($data);
+
+        $http_line = sprintf(
+            'HTTP/%s %s %s',
+            $this->response->getProtocolVersion(),
+            $this->response->getStatusCode(),
+            $this->response->getReasonPhrase()
+        );
+
+        http_response_code($this->response->getStatusCode());
+
+        foreach ($this->response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header($name . ': ' . $value, false);
+            }
+        }
+
+        $stream = $this->response->getBody();
+        if ($stream->isSeekable()) {
+            $stream->rewind();
+        }
+
+        while (!$stream->eof()) {
+            echo $stream->read(1024);
+        }
     }
 
     /** @var string[] */
@@ -1105,8 +1146,10 @@ class App
         }
 
         $isCli = \PHP_SAPI === 'cli'; // for phpunit
+        $isSse = $this->response->getHeaderLine('Content-Type') === 'text/event-stream';
 
-        if (count($headersNew) > 0 && headers_sent() && !$isCli) {
+
+        if (count($headersNew) > 0 && headers_sent() && !$isCli && !$isSse) {
             throw new LateOutputError('Headers already sent, more headers cannot be set at this stage');
         }
 
@@ -1183,5 +1226,10 @@ class App
         }
 
         return $portals;
+    }
+
+    public function getResponse(): ResponseInterface
+    {
+        return $this->response;
     }
 }
