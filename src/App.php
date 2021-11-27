@@ -13,7 +13,8 @@ use Atk4\Core\InitializerTrait;
 use Atk4\Core\TraitUtil;
 use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Persistence;
-use Atk4\Ui\Exception\ExitApplicationException;
+use Atk4\Ui\Exception\ExitApplicationError;
+use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use Atk4\Ui\Panel\Right;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
@@ -299,7 +300,7 @@ class App
             // set_handler to catch/trap any exception
             set_exception_handler(static function (\Throwable $t): void {});
             // raise exception to be trapped and stop execution
-            throw new ExitApplicationException();
+            throw new ExitApplicationError();
         }
 
         exit;
@@ -310,6 +311,10 @@ class App
      */
     public function caughtException(\Throwable $exception): void
     {
+        while ($exception instanceof UnhandledCallbackExceptionError) {
+            $exception = $exception->getPrevious();
+        }
+
         $this->catch_runaway_callbacks = false;
 
         // just replace layout to avoid any extended App->_construct problems
@@ -584,7 +589,7 @@ class App
             }
 
             $output = $this->html->template->renderToHtml();
-        } catch (ExitApplicationException $e) {
+        } catch (ExitApplicationError $e) {
             $output = '';
             $isExitException = true;
         }
@@ -1042,7 +1047,7 @@ class App
                 if (!$this->run_called) {
                     try {
                         $this->run();
-                    } catch (ExitApplicationException $e) {
+                    } catch (ExitApplicationError $e) {
                         // let the process go and stop on ->callExit below
                     } catch (\Throwable $e) {
                         // process is already in shutdown

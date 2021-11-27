@@ -149,15 +149,15 @@ class JsChain extends JsExpression
      */
     private function _renderArgs($args = [])
     {
-        return '(' .
-            implode(',', array_map(function ($arg) {
+        return '('
+            . implode(',', array_map(function ($arg) {
                 if ($arg instanceof JsExpressionable) {
                     return $arg->jsRender();
                 }
 
                 return $this->_json_encode($arg);
-            }, $args)) .
-            ')';
+            }, $args))
+            . ')';
     }
 
     public function jsRender(): string
