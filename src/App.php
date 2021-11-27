@@ -1100,13 +1100,6 @@ class App
 
         $this->response->getBody()->write($data);
 
-        $http_line = sprintf(
-            'HTTP/%s %s %s',
-            $this->response->getProtocolVersion(),
-            $this->response->getStatusCode(),
-            $this->response->getReasonPhrase()
-        );
-
         http_response_code($this->response->getStatusCode());
 
         foreach ($this->response->getHeaders() as $name => $values) {
