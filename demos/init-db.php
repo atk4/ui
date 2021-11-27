@@ -156,11 +156,11 @@ class Country extends ModelWithPrefixedFields
     {
         $errors = parent::validate($intent);
 
-        if (mb_strlen($this->iso) !== 2) {
+        if (mb_strlen($this->iso ?? '') !== 2) {
             $errors[$this->fieldName()->iso] = 'Must be exactly 2 characters';
         }
 
-        if (mb_strlen($this->iso3) !== 3) {
+        if (mb_strlen($this->iso3 ?? '') !== 3) {
             $errors[$this->fieldName()->iso3] = 'Must be exactly 3 characters';
         }
 
