@@ -14,7 +14,7 @@ use Atk4\Core\TraitUtil;
 use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationError;
-use Atk4\Ui\Exception\LateOutputCliOnlyError;
+use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use Atk4\Ui\Panel\Right;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
@@ -299,6 +299,10 @@ class App
      */
     public function caughtException(\Throwable $exception): void
     {
+        if ($exception instanceof LateOutputError) {
+            $this->outputLateOutputError($exception);
+        }
+
         while ($exception instanceof UnhandledCallbackExceptionError) {
             $exception = $exception->getPrevious();
         }
@@ -1052,40 +1056,16 @@ class App
 
     // RESPONSES
 
-    /** @var string[] */
-    private static $_sentHeaders = [];
-
     /**
-     * Output Response to the client.
+     * This can be overridden for future PSR-7 implementation.
      *
-     * This can be overridden for future PSR-7 implementation
+     * @internal should be called only from self::outputResponse()
      */
-    protected function outputResponse(string $data, array $headers): void
+    protected function outputResponseUnsafe(string $data, array $headersNew): void
     {
-        $this->response_headers = $this->normalizeHeaders($this->response_headers);
-        $headersAll = array_merge($this->response_headers, $this->normalizeHeaders($headers));
-        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
-
         $isCli = \PHP_SAPI === 'cli'; // for phpunit
 
-        $lateError = null;
-        foreach (ob_get_status(true) as $status) {
-            if ($status['buffer_used'] !== 0) {
-                $lateError = 'Unexpected output detected.';
-
-                break;
-            }
-        }
-
-        if ($lateError === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
-            $lateError = 'Headers already sent, more headers cannot be set at this stage.';
-        }
-
         if (!headers_sent() || $isCli) {
-            if ($lateError !== null) {
-                $headersNew = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500'];
-            }
-
             foreach ($headersNew as $k => $v) {
                 if (!$isCli) {
                     if ($k === self::HEADER_STATUS_CODE) {
@@ -1098,22 +1078,63 @@ class App
                         header($kCamelCase . ': ' . $v);
                     }
                 }
-
-                self::$_sentHeaders[$k] = $v;
             }
-        }
-
-        if ($lateError !== null) {
-            if ($isCli) {
-                throw new LateOutputCliOnlyError($lateError);
-            }
-
-            echo "\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n";
-
-            exit(1);
         }
 
         echo $data;
+    }
+
+    /** @var string[] */
+    private static $_sentHeaders = [];
+
+    /**
+     * Output Response to the client.
+     */
+    protected function outputResponse(string $data, array $headers): void
+    {
+        $this->response_headers = $this->normalizeHeaders($this->response_headers);
+        $headersAll = array_merge($this->response_headers, $this->normalizeHeaders($headers));
+        unset($headers);
+        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
+        unset($headersAll);
+
+        foreach (ob_get_status(true) as $status) {
+            if ($status['buffer_used'] !== 0) {
+                throw new LateOutputError('Unexpected output detected');
+            }
+        }
+
+        $isCli = \PHP_SAPI === 'cli'; // for phpunit
+
+        if (count($headersNew) > 0 && headers_sent() && !$isCli) {
+            throw new LateOutputError('Headers already sent, more headers cannot be set at this stage');
+        }
+
+        foreach ($headersNew as $k => $v) {
+            self::$_sentHeaders[$k] = $v;
+        }
+
+        $this->outputResponseUnsafe($data, $headersNew);
+    }
+
+    /**
+     * @return never
+     */
+    protected function outputLateOutputError(LateOutputError $exception): void
+    {
+        $plainTextMessage = "\n" . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!' . "\n";
+
+        $headersAll = $this->normalizeHeaders(['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500']);
+        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
+        unset($headersAll);
+
+        foreach ($headersNew as $k => $v) {
+            self::$_sentHeaders[$k] = $v;
+        }
+
+        $this->outputResponseUnsafe($plainTextMessage, $headersNew);
+
+        exit(1); // should be never reached from phpunit because we set catch_exceptions = false
     }
 
     /**

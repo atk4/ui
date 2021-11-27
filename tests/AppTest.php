@@ -6,12 +6,12 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\App;
-use Atk4\Ui\Exception\LateOutputCliOnlyError;
+use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\HtmlTemplate;
 
 class AppTest extends TestCase
 {
-    protected function getApp()
+    protected function getApp(): App
     {
         return new App([
             'catch_exceptions' => false,
@@ -52,8 +52,8 @@ class AppTest extends TestCase
         try {
             echo $testStr;
 
-            $this->expectException(LateOutputCliOnlyError::class);
-            $this->expectExceptionMessage('Unexpected output detected.');
+            $this->expectException(LateOutputError::class);
+            $this->expectExceptionMessage('Unexpected output detected');
             $app->terminateHtml('');
         } finally {
             $this->assertSame($testStr, ob_get_contents());
