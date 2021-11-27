@@ -163,7 +163,6 @@ class App
     /** @var ResponseInterface */
     private $response;
 
-    /** @var string Seed Response class  */
     public $responseClass = Response::class;
 
     /**
@@ -1171,19 +1170,11 @@ class App
         return $portals;
     }
 
-    /**
-     * @return void
-     */
     protected function emitResponse(): void
     {
         (new \Laminas\HttpHandlerRunner\Emitter\SapiEmitter())->emit($this->response);
     }
 
-    /**
-     * Used for PSR-11 implementation
-     *
-     * @return ResponseInterface
-     */
     public function getResponse(): ResponseInterface
     {
         return $this->response;
