@@ -1102,7 +1102,6 @@ class App
             }
 
             foreach ($headersNew as $k => $v) {
-
                 if ($k === self::HEADER_STATUS_CODE) {
                     $this->response = $this->response->withStatus($v === (string) (int) $v ? (int) $v : 500);
                 } else {
@@ -1123,7 +1122,6 @@ class App
         }
 
         if ($isSSE) {
-
             if (!headers_sent()) {
                 $this->emitResponse();
             }
