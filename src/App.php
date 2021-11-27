@@ -1115,8 +1115,7 @@ class App
         }
 
         if ($lateError !== null) {
-            $this->response->getBody()->write("\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n");
-            $this->emitResponse();
+            echo "\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n";
 
             exit(1);
         }
