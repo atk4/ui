@@ -1116,6 +1116,7 @@ class App
         if ($lateError !== null) {
             $this->response->getBody()->write("\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n");
             $this->emitResponse();
+
             exit(1);
         }
 
@@ -1172,7 +1173,8 @@ class App
 
     protected function emitResponse(): void
     {
-        $http_line = sprintf('HTTP/%s %s %s',
+        $http_line = sprintf(
+            'HTTP/%s %s %s',
             $this->response->getProtocolVersion(),
             $this->response->getStatusCode(),
             $this->response->getReasonPhrase()
@@ -1180,7 +1182,7 @@ class App
         header($http_line, true, $this->response->getStatusCode());
         foreach ($this->response->getHeaders() as $name => $values) {
             foreach ($values as $value) {
-                header("$name: $value", false);
+                header("{$name}: {$value}", false);
             }
         }
         $stream = $this->response->getBody();
