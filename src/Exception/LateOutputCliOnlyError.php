@@ -8,7 +8,7 @@ if (\PHP_SAPI === 'cli') {
     /**
      * @internal
      */
-    final class LateCliOnlyError extends \Error
+    final class LateOutputCliOnlyError extends \Error
     {
     }
 }

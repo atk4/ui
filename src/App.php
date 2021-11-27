@@ -14,7 +14,7 @@ use Atk4\Core\TraitUtil;
 use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationError;
-use Atk4\Ui\Exception\LateCliOnlyError;
+use Atk4\Ui\Exception\LateOutputCliOnlyError;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use Atk4\Ui\Panel\Right;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
@@ -1105,7 +1105,7 @@ class App
 
         if ($lateError !== null) {
             if ($isCli) {
-                throw new LateCliOnlyError($lateError);
+                throw new LateOutputCliOnlyError($lateError);
             }
 
             echo "\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n";
