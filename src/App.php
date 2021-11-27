@@ -1072,11 +1072,11 @@ class App
      */
     protected function outputResponseUnsafe(string $data, array $headersNew): void
     {
-
         $isSse = $this->response->getHeaderLine('Content-Type') === 'text/event-stream';
 
         if (headers_sent() && $isSse) {
             echo $data;
+
             return;
         }
 
@@ -1147,7 +1147,6 @@ class App
 
         $isCli = \PHP_SAPI === 'cli'; // for phpunit
         $isSse = $this->response->getHeaderLine('Content-Type') === 'text/event-stream';
-
 
         if (count($headersNew) > 0 && headers_sent() && !$isCli && !$isSse) {
             throw new LateOutputError('Headers already sent, more headers cannot be set at this stage');
