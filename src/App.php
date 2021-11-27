@@ -280,9 +280,6 @@ class App
             $this->exit_called = true;
             $this->hook(self::HOOK_BEFORE_EXIT);
         }
-
-        // Response - except for SSE - must be emitted only one time
-        $this->emitResponse();
     }
 
     /**
@@ -1098,17 +1095,15 @@ class App
             }
 
             foreach ($headersNew as $k => $v) {
-                if (!$isCli) {
-                    if ($k === self::HEADER_STATUS_CODE) {
-                        $this->response = $this->response->withStatus($v === (string) (int) $v ? (int) $v : 500);
-                    } else {
-                        $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
-                            return strtoupper($matches[0]);
-                        }, $k);
-                        $this->response = $this->response->withHeader($kCamelCase, $v);
-                    }
-                }
 
+                if ($k === self::HEADER_STATUS_CODE) {
+                    $this->response = $this->response->withStatus($v === (string) (int) $v ? (int) $v : 500);
+                } else {
+                    $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                        return strtoupper($matches[0]);
+                    }, $k);
+                    $this->response = $this->response->withHeader($kCamelCase, $v);
+                }
                 self::$_sentHeaders[$k] = $v;
             }
         }
@@ -1180,9 +1175,12 @@ class App
             $this->response->getReasonPhrase()
         );
         header($http_line, true, $this->response->getStatusCode());
+
+        http_response_code($this->response->getStatusCode());
+
         foreach ($this->response->getHeaders() as $name => $values) {
             foreach ($values as $value) {
-                header("{$name}: {$value}", false);
+                header($name . ': ' . $value, false);
             }
         }
         $stream = $this->response->getBody();
@@ -1190,7 +1188,7 @@ class App
             $stream->rewind();
         }
         while (!$stream->eof()) {
-            echo $stream->read(1024 * 8);
+            echo $stream->read(1024);
         }
     }
 
