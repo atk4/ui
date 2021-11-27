@@ -142,9 +142,9 @@ class DemosTest extends TestCase
             $this->setSuperglobalsFromRequest($request);
             $localPath = static::ROOT_DIR . $request->getUri()->getPath();
 
-            $app = $this->createTestingApp();
-
+            ob_start();
             try {
+                $app = $this->createTestingApp();
                 require $localPath;
 
                 if (!$app->run_called) {
@@ -160,9 +160,36 @@ class DemosTest extends TestCase
                 if (!($e instanceof DemosTestExitError)) {
                     throw $e;
                 }
+            } finally {
+                $body = ob_get_clean();
             }
 
-            return new \GuzzleHttp\Promise\FulfilledPromise($app->getResponse());
+            [$statusCode, $headers] = \Closure::bind(function () {
+                $statusCode = 200;
+                $headers = App::$_sentHeaders;
+                if (isset($headers[App::HEADER_STATUS_CODE])) {
+                    $statusCode = $headers[App::HEADER_STATUS_CODE];
+                    unset($headers[App::HEADER_STATUS_CODE]);
+                }
+
+                return [$statusCode, $headers];
+            }, null, App::class)();
+
+            // Attach a response to the easy handle with the parsed headers.
+            $response = new Response(
+                $statusCode,
+                $headers,
+                class_exists(Utils::class) ? Utils::streamFor($body) : \GuzzleHttp\Psr7\stream_for($body), // @phpstan-ignore-line Utils class present since guzzlehttp/psr7 v1.7
+                '1.0'
+            );
+
+            // Rewind the body of the response if possible.
+            $body = $response->getBody();
+            if ($body->isSeekable()) {
+                $body->rewind();
+            }
+
+            return new \GuzzleHttp\Promise\FulfilledPromise($response);
         };
 
         return new Client(['base_uri' => 'http://localhost/', 'handler' => $handler]);
