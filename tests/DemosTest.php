@@ -142,9 +142,9 @@ class DemosTest extends TestCase
             $this->setSuperglobalsFromRequest($request);
             $localPath = static::ROOT_DIR . $request->getUri()->getPath();
 
-            ob_start();
+            $app = $this->createTestingApp();
+
             try {
-                $app = $this->createTestingApp();
                 require $localPath;
 
                 if (!$app->run_called) {
@@ -160,36 +160,9 @@ class DemosTest extends TestCase
                 if (!($e instanceof DemosTestExitError)) {
                     throw $e;
                 }
-            } finally {
-                $body = ob_get_clean();
             }
 
-            [$statusCode, $headers] = \Closure::bind(function () {
-                $statusCode = 200;
-                $headers = App::$_sentHeaders;
-                if (isset($headers[App::HEADER_STATUS_CODE])) {
-                    $statusCode = $headers[App::HEADER_STATUS_CODE];
-                    unset($headers[App::HEADER_STATUS_CODE]);
-                }
-
-                return [$statusCode, $headers];
-            }, null, App::class)();
-
-            // Attach a response to the easy handle with the parsed headers.
-            $response = new Response(
-                $statusCode,
-                $headers,
-                class_exists(Utils::class) ? Utils::streamFor($body) : \GuzzleHttp\Psr7\stream_for($body), // @phpstan-ignore-line Utils class present since guzzlehttp/psr7 v1.7
-                '1.0'
-            );
-
-            // Rewind the body of the response if possible.
-            $body = $response->getBody();
-            if ($body->isSeekable()) {
-                $body->rewind();
-            }
-
-            return new \GuzzleHttp\Promise\FulfilledPromise($response);
+            return new \GuzzleHttp\Promise\FulfilledPromise($app->getResponse());
         };
 
         return new Client(['base_uri' => 'http://localhost/', 'handler' => $handler]);
@@ -198,12 +171,12 @@ class DemosTest extends TestCase
     protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
     {
         try {
-            return $this->getClient()->request(isset($options['form_params']) !== null ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
+            return $this->getClient()->request(isset($options['form_params']) ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
         } catch (\GuzzleHttp\Exception\ServerException $ex) {
             $exFactoryWithFullBody = new class('', $ex->getRequest()) extends \GuzzleHttp\Exception\RequestException {
                 public static function getResponseBodySummary(ResponseInterface $response): string
                 {
-                    return $response->getBody()->getContents();
+                    return (string) $response->getBody();
                 }
             };
 
@@ -283,7 +256,7 @@ class DemosTest extends TestCase
     {
         $response = $this->getResponseFromRequest($uri);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertMatchesRegularExpression($this->regexHtml, (string) $response->getBody(), ' RegExp error on ' . $uri);
     }
 
     public function testResponseError(): void
@@ -316,7 +289,7 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest($uri);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
         $this->assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
-        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertMatchesRegularExpression($this->regexHtml, (string) $response->getBody(), ' RegExp error on ' . $uri);
     }
 
     public function testWizard(): void
@@ -336,11 +309,11 @@ class DemosTest extends TestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
+        $this->assertMatchesRegularExpression($this->regexJson, (string) $response->getBody());
 
         $response = $this->getResponseFromRequest('interactive/wizard.php?atk_admin_wizard=2&name=Country');
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
+        $this->assertMatchesRegularExpression($this->regexHtml, (string) $response->getBody());
     }
 
     /**
@@ -376,7 +349,7 @@ class DemosTest extends TestCase
         if (!($this instanceof DemosHttpNoExitTest)) { // content type is not set when App->call_exit equals to true
             $this->assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
         }
-        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertMatchesRegularExpression($this->regexJson, (string) $response->getBody(), ' RegExp error on ' . $uri);
     }
 
     /**
@@ -410,7 +383,7 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest($uri);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
 
-        $output_rows = preg_split('~\r?\n|\r~', $response->getBody()->getContents());
+        $output_rows = preg_split('~\r?\n|\r~', (string) $response->getBody());
 
         $this->assertGreaterThan(0, count($output_rows), ' Response is empty on ' . $uri);
 
@@ -465,7 +438,7 @@ class DemosTest extends TestCase
     {
         $response = $this->getResponseFromRequest($uri, ['form_params' => $postData]);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertMatchesRegularExpression($this->regexJson, (string) $response->getBody(), ' RegExp error on ' . $uri);
     }
 }
 
