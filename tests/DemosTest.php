@@ -194,7 +194,6 @@ class DemosTest extends TestCase
             // $this->assertSame($response->getHeaders(), $app->getResponse()->getHeaders());
             $this->assertSame((string) $response->getBody(), (string) $app->getResponse()->getBody());
 
-
             return new \GuzzleHttp\Promise\FulfilledPromise($response);
         };
 
