@@ -276,6 +276,12 @@ class App
 
     protected function callBeforeExit(): void
     {
+        // Response - except for SSE - must be emitted only one time
+        // Emit of Sse is called on first output
+        if ($this->response->getHeaderLine('Content-type') !== 'text/event-stream') {
+            $this->emitResponse();
+        }
+
         if (!$this->exit_called) {
             $this->exit_called = true;
             $this->hook(self::HOOK_BEFORE_EXIT);
@@ -1075,6 +1081,7 @@ class App
         $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
 
         $isCli = \PHP_SAPI === 'cli'; // for phpunit
+        $isSSE = ($headersAll['content-type'] ?? '') === 'text/event-stream';
 
         $lateError = null;
         foreach (ob_get_status(true) as $status) {
@@ -1085,7 +1092,7 @@ class App
             }
         }
 
-        if ($lateError === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
+        if ($lateError === null && count($headersNew) > 0 && headers_sent() && !$isCli && !$isSSE) {
             $lateError = 'Headers already sent, more headers cannot be set at this stage.';
         }
 
@@ -1113,6 +1120,17 @@ class App
             $this->emitResponse();
 
             exit(1);
+        }
+
+        if ($isSSE) {
+
+            if (!headers_sent()) {
+                $this->emitResponse();
+            }
+
+            echo $data;
+
+            return;
         }
 
         $this->response->getBody()->write($data);
