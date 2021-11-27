@@ -6,6 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\App;
+use Atk4\Ui\Exception\LateCliOnlyError;
 use Atk4\Ui\HtmlTemplate;
 
 class AppTest extends TestCase
@@ -40,5 +41,21 @@ class AppTest extends TestCase
             get_class($anotherTemplateClass),
             $app->loadTemplate('html.html')
         );
+    }
+
+    public function testUnexpectedOutputLateError(): void
+    {
+        $app = $this->getApp();
+
+        ob_start();
+        try {
+            echo 'test';
+
+            $this->expectException(LateCliOnlyError::class);
+            $this->expectExceptionMessage('Unexpected output detected.');
+            $app->terminateHtml('');
+        } finally {
+            ob_end_clean();
+        }
     }
 }
