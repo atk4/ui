@@ -1114,8 +1114,8 @@ class App
         }
 
         if ($lateError !== null) {
-            echo "\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n";
-            $this->callBeforeExit(); // output before forced exit TODO exit here is really needed?
+            $this->response->getBody()->write("\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n");
+            $this->emitResponse();
             exit(1);
         }
 
