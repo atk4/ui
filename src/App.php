@@ -1172,7 +1172,24 @@ class App
 
     protected function emitResponse(): void
     {
-        (new \Laminas\HttpHandlerRunner\Emitter\SapiEmitter())->emit($this->response);
+        $http_line = sprintf('HTTP/%s %s %s',
+            $this->response->getProtocolVersion(),
+            $this->response->getStatusCode(),
+            $this->response->getReasonPhrase()
+        );
+        header($http_line, true, $this->response->getStatusCode());
+        foreach ($this->response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header("$name: $value", false);
+            }
+        }
+        $stream = $this->response->getBody();
+        if ($stream->isSeekable()) {
+            $stream->rewind();
+        }
+        while (!$stream->eof()) {
+            echo $stream->read(1024 * 8);
+        }
     }
 
     public function getResponse(): ResponseInterface

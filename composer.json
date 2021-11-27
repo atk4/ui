@@ -55,7 +55,6 @@
     "require": {
         "php": ">=7.4 <8.2",
         "atk4/data": "dev-develop",
-        "laminas/laminas-httphandlerrunner": "^2.1",
         "nyholm/psr7": "^1.4"
     },
     "require-release": {
