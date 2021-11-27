@@ -51,7 +51,7 @@ class ExecutorFactoryTest extends TestCase
         $this->app->initLayout([\Atk4\Ui\Layout\Admin::class]);
     }
 
-    protected function getApp()
+    protected function getApp(): App
     {
         return new App([
             'catch_exceptions' => false,
