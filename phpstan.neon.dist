@@ -706,9 +706,6 @@ parameters:
         -
             path: 'src/View.php'
             message: '~^If condition is always true\.$~'
-        -
-            path: 'tests/DemosTest.php'
-            message: '~^Else branch is unreachable because ternary operator condition is always true\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 5
@@ -2074,9 +2071,6 @@ parameters:
         -
             path: 'tests/DemosHttpTest.php'
             message: '~^Property Atk4\\Ui\\Tests\\DemosHttpTest::\$port has no type specified\.$~'
-        -
-            path: 'tests/DemosTest.php'
-            message: '~^Strict comparison using \!\=\= between bool and null will always evaluate to true\.$~'
         -
             path: 'tests/PaginatorTest.php'
             message: '~^Property Atk4\\Ui\\Tests\\PaginatorTest::\$p has no type specified\.$~'
