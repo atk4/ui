@@ -1221,7 +1221,7 @@ class App
             $stream->rewind();
         }
 
-        // for streming response
+        // for streaming response
         if (!$stream->isReadable()) {
             return;
         }
