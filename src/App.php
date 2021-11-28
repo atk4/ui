@@ -1072,9 +1072,9 @@ class App
      */
     protected function outputResponseUnsafe(string $data, array $headersNew): void
     {
-        $isSse = $this->response->getHeaderLine('Content-Type') === 'text/event-stream';
-
-        if (headers_sent() && $isSse) {
+        // if is Sse, break the flow and echo events directly
+        // Check discussion here : https://github.com/atk4/ui/pull/1706
+        if (headers_sent() && $this->response->getHeaderLine('Content-Type') === 'text/event-stream') {
             echo $data;
 
             return;
@@ -1120,6 +1120,12 @@ class App
         }
 
         $isCli = \PHP_SAPI === 'cli'; // for phpunit
+
+        // Sse have multiple phases
+        // Headers - Send Response only with headers.
+        // Browser - Prepare to receive streamed events.
+        // Sending - Subsequent calls will output only structured data.
+        // Check below is done directly on response to check on first call LateOutputError.
         $isSse = $this->response->getHeaderLine('Content-Type') === 'text/event-stream';
 
         if (count($headersNew) > 0 && headers_sent() && !$isCli && !$isSse) {
