@@ -1088,11 +1088,7 @@ class App
                     if ($k === self::HEADER_STATUS_CODE) {
                         $this->response = $this->response->withStatus($v === (string) (int) $v ? (int) $v : 500);
                     } else {
-                        $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
-                            return strtoupper($matches[0]);
-                        }, $k);
-
-                        $this->response = $this->response->withHeader($kCamelCase, $v);
+                        $this->response = $this->response->withHeader($k, $v);
                     }
                 }
             }
@@ -1100,22 +1096,7 @@ class App
 
         $this->response->getBody()->write($data);
 
-        http_response_code($this->response->getStatusCode());
-
-        foreach ($this->response->getHeaders() as $name => $values) {
-            foreach ($values as $value) {
-                header($name . ': ' . $value, false);
-            }
-        }
-
-        $stream = $this->response->getBody();
-        if ($stream->isSeekable()) {
-            $stream->rewind();
-        }
-
-        while (!$stream->eof()) {
-            echo $stream->read(1024);
-        }
+        $this->emitResponse();
     }
 
     /** @var string[] */
@@ -1223,5 +1204,30 @@ class App
     public function getResponse(): ResponseInterface
     {
         return $this->response;
+    }
+
+    protected function emitResponse(): void
+    {
+        http_response_code($this->response->getStatusCode());
+
+        foreach ($this->response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header($name . ': ' . $value, false);
+            }
+        }
+
+        $stream = $this->response->getBody();
+        if ($stream->isSeekable()) {
+            $stream->rewind();
+        }
+
+        // for streming response
+        if (!$stream->isReadable()) {
+            return;
+        }
+
+        while (!$stream->eof()) {
+            echo $stream->read(1024);
+        }
     }
 }
