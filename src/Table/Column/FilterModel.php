@@ -9,6 +9,8 @@ use Atk4\Core\SessionTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Data\Types\Types as CustomTypes;
+use Doctrine\DBAL\Types\Types;
 
 /**
  * Implement a generic filter model for filtering column data.
@@ -54,20 +56,20 @@ class FilterModel extends Model
         $persistence = new Persistence\Array_();
 
         $class = [
-            \Doctrine\DBAL\Types\Types::STRING => FilterModel\TypeString::class,
-            \Doctrine\DBAL\Types\Types::TEXT => FilterModel\TypeString::class,
+            Types::STRING => FilterModel\TypeString::class,
+            Types::TEXT => FilterModel\TypeString::class,
 
-            \Doctrine\DBAL\Types\Types::BOOLEAN => FilterModel\TypeBoolean::class,
-            \Doctrine\DBAL\Types\Types::INTEGER => FilterModel\TypeNumber::class,
-            \Doctrine\DBAL\Types\Types::FLOAT => FilterModel\TypeNumber::class,
-            \Atk4\Data\Types\Types::MONEY => FilterModel\TypeNumber::class,
+            Types::BOOLEAN => FilterModel\TypeBoolean::class,
+            Types::INTEGER => FilterModel\TypeNumber::class,
+            Types::FLOAT => FilterModel\TypeNumber::class,
+            CustomTypes::MONEY => FilterModel\TypeNumber::class,
 
-            \Doctrine\DBAL\Types\Types::DATE_MUTABLE => FilterModel\TypeDate::class,
-            \Doctrine\DBAL\Types\Types::DATE_IMMUTABLE => FilterModel\TypeDate::class,
-            \Doctrine\DBAL\Types\Types::TIME_MUTABLE => FilterModel\TypeTime::class,
-            \Doctrine\DBAL\Types\Types::TIME_IMMUTABLE => FilterModel\TypeTime::class,
-            \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE => FilterModel\TypeDatetime::class,
-            \Doctrine\DBAL\Types\Types::DATETIME_IMMUTABLE => FilterModel\TypeDatetime::class,
+            Types::DATE_MUTABLE => FilterModel\TypeDate::class,
+            Types::DATE_IMMUTABLE => FilterModel\TypeDate::class,
+            Types::TIME_MUTABLE => FilterModel\TypeTime::class,
+            Types::TIME_IMMUTABLE => FilterModel\TypeTime::class,
+            Types::DATETIME_MUTABLE => FilterModel\TypeDatetime::class,
+            Types::DATETIME_IMMUTABLE => FilterModel\TypeDatetime::class,
 
             'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
         ][$field->type ?? 'string'];
