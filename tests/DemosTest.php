@@ -143,8 +143,8 @@ class DemosTest extends TestCase
             $localPath = static::ROOT_DIR . $request->getUri()->getPath();
 
             ob_start();
-            $app = $this->createTestingApp();
             try {
+                $app = $this->createTestingApp();
                 require $localPath;
 
                 if (!$app->run_called) {
