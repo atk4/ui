@@ -1103,6 +1103,7 @@ class App
                 $lateError = new LateOutputError('Unexpected output detected');
                 if ($this->catch_exceptions) {
                     $this->caughtException($lateError);
+                    $this->outputLateOutputError($lateError);
                 }
 
                 throw $lateError;
@@ -1115,6 +1116,7 @@ class App
             $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
             if ($this->catch_exceptions) {
                 $this->caughtException($lateError);
+                $this->outputLateOutputError($lateError);
             }
 
             throw $lateError;
