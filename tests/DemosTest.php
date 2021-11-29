@@ -145,20 +145,22 @@ class DemosTest extends TestCase
             ob_start();
             try {
                 $app = $this->createTestingApp();
-                require $localPath;
+                try {
+                    require $localPath;
 
-                if (!$app->run_called) {
-                    $app->run();
-                }
-            } catch (\Throwable $e) {
-                // session_start() or ini_set() functions can be used only with native HTTP tests
-                // override test expectation here to finish there tests cleanly (TODO better to make the code testable without calling these functions)
-                if ($e instanceof \ErrorException && preg_match('~^(session_start|ini_set)\(\).* headers already sent$~', $e->getMessage())) {
-                    $this->expectExceptionObject($e);
-                }
+                    if (!$app->run_called) {
+                        $app->run();
+                    }
+                } catch (\Throwable $e) {
+                    // session_start() or ini_set() functions can be used only with native HTTP tests
+                    // override test expectation here to finish there tests cleanly (TODO better to make the code testable without calling these functions)
+                    if ($e instanceof \ErrorException && preg_match('~^(session_start|ini_set)\(\).* headers already sent$~', $e->getMessage())) {
+                        $this->expectExceptionObject($e);
+                    }
 
-                if (!($e instanceof DemosTestExitError)) {
-                    throw $e;
+                    if (!($e instanceof DemosTestExitError)) {
+                        throw $e;
+                    }
                 }
             } finally {
                 $body = ob_get_clean();
@@ -189,16 +191,10 @@ class DemosTest extends TestCase
                 $body->rewind();
             }
 
-            $this->assertSame(
-                $response->getStatusCode(),
-                $app->getResponse()->getStatusCode() // @phpstan-ignore-line
-            );
+            $this->assertSame($response->getStatusCode(), $app->getResponse()->getStatusCode());
             // Headers cannot be tested due to $isCli which was added for phpunit output during test (no solution at now)
             // $this->assertSame($response->getHeaders(), $app->getResponse()->getHeaders());
-            $this->assertSame(
-                (string) $response->getBody(),
-                (string) $app->getResponse()->getBody() // @phpstan-ignore-line
-            );
+            $this->assertSame((string) $response->getBody(), (string) $app->getResponse()->getBody());
 
             return new \GuzzleHttp\Promise\FulfilledPromise($response);
         };
