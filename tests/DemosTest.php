@@ -189,10 +189,16 @@ class DemosTest extends TestCase
                 $body->rewind();
             }
 
-            $this->assertSame($response->getStatusCode(), $app->getResponse()->getStatusCode());
+            $this->assertSame(
+                $response->getStatusCode(),
+                $app->getResponse()->getStatusCode() // @phpstan-ignore-line
+            );
             // Headers cannot be tested due to $isCli which was added for phpunit output during test (no solution at now)
             // $this->assertSame($response->getHeaders(), $app->getResponse()->getHeaders());
-            $this->assertSame((string) $response->getBody(), (string) $app->getResponse()->getBody());
+            $this->assertSame(
+                (string) $response->getBody(),
+                (string) $app->getResponse()->getBody() // @phpstan-ignore-line
+            );
 
             return new \GuzzleHttp\Promise\FulfilledPromise($response);
         };
