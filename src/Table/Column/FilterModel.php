@@ -9,6 +9,8 @@ use Atk4\Core\SessionTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Data\Types\Types as CustomTypes;
+use Doctrine\DBAL\Types\Types;
 
 /**
  * Implement a generic filter model for filtering column data.
@@ -52,13 +54,25 @@ class FilterModel extends Model
     public static function factoryType(Field $field): self
     {
         $persistence = new Persistence\Array_();
-        $filterDomain = self::class . '\\Type';
 
-        // check if field as a type and use string as default
-        if (empty($type = $field->type)) {
-            $type = 'string';
-        }
-        $class = $filterDomain . ucfirst($type);
+        $class = [
+            Types::STRING => FilterModel\TypeString::class,
+            Types::TEXT => FilterModel\TypeString::class,
+
+            Types::BOOLEAN => FilterModel\TypeBoolean::class,
+            Types::INTEGER => FilterModel\TypeNumber::class,
+            Types::FLOAT => FilterModel\TypeNumber::class,
+            CustomTypes::MONEY => FilterModel\TypeNumber::class,
+
+            Types::DATE_MUTABLE => FilterModel\TypeDate::class,
+            Types::DATE_IMMUTABLE => FilterModel\TypeDate::class,
+            Types::TIME_MUTABLE => FilterModel\TypeTime::class,
+            Types::TIME_IMMUTABLE => FilterModel\TypeTime::class,
+            Types::DATETIME_MUTABLE => FilterModel\TypeDatetime::class,
+            Types::DATETIME_IMMUTABLE => FilterModel\TypeDatetime::class,
+
+            'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
+        ][$field->type ?? 'string'];
 
         /*
          * You can set your own filter model condition by extending
