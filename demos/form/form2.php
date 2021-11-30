@@ -44,9 +44,9 @@ $formCodes->addControl(Country::hinting()->fieldName()->phonecode, ['width' => '
 
 // form names field group
 $formNames = $form->addGroup(['More Information about you']);
-$formNames->addControl('f_name', ['width' => 'five', 'caption' => 'First Name']);
-$formNames->addControl('m_name', ['width' => 'five', 'caption' => 'Middle Name']);
-$formNames->addControl('l_name', ['width' => 'six', 'caption' => 'Last Name']);
+$formNames->addControl('first_name', ['width' => 'five', 'caption' => 'First Name']);
+$formNames->addControl('middle_name', ['width' => 'five', 'caption' => 'Middle Name']);
+$formNames->addControl('last_name', ['width' => 'six', 'caption' => 'Last Name']);
 
 // form on submit
 $form->onSubmit(function (Form $form) {
@@ -60,11 +60,11 @@ $form->onSubmit(function (Form $form) {
 
     // In-form validation
     $errors = [];
-    if (mb_strlen($form->model->get('f_name')) < 3) {
-        $errors[] = $form->error('f_name', 'too short, ' . $form->model->get('f_name'));
+    if (mb_strlen($form->model->get('first_name')) < 3) {
+        $errors[] = $form->error('first_name', 'too short, ' . $form->model->get('first_name'));
     }
-    if (mb_strlen($form->model->get('l_name')) < 5) {
-        $errors[] = $form->error('l_name', 'too short');
+    if (mb_strlen($form->model->get('last_name')) < 5) {
+        $errors[] = $form->error('last_name', 'too short');
     }
 
     // Model validation. We do it manually because we are not using Model::save() method in demo mode.
