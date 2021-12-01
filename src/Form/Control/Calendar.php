@@ -36,19 +36,19 @@ class Calendar extends Input
         parent::init();
 
         // setup format
-        $format = $this->convertPhpDtFormatToFlatpickr($this->getApp()->ui_persistence->{$this->type . '_format'});
-        $this->options['dateFormat'] = $format;
+        $phpFormat = $this->getApp()->ui_persistence->{$this->type . '_format'};
+        $this->options['dateFormat'] = $this->convertPhpDtFormatToFlatpickr($phpFormat);
 
         if ($this->type === 'datetime' || $this->type === 'time') {
             $this->options['enableTime'] = true;
-            $this->options['time_24hr'] ??= $this->use24hrTimeFormat($this->options['altFormat'] ?? $this->options['dateFormat']);
+            $this->options['time_24hr'] ??= $this->use24hrTimeFormat($phpFormat);
             $this->options['noCalendar'] = ($this->type === 'time');
 
             // Add seconds picker if set
-            $this->options['enableSeconds'] ??= $this->useSeconds($this->options['altFormat'] ?? $this->options['dateFormat']);
+            $this->options['enableSeconds'] ??= $this->useSeconds($phpFormat);
 
             // Allow edit if microseconds is set.
-            $this->options['allowInput'] ??= $this->allowMicroSecondsInput($this->options['altFormat'] ?? $this->options['dateFormat']);
+            $this->options['allowInput'] ??= $this->allowMicroSecondsInput($phpFormat);
         }
 
         // setup locale
@@ -108,9 +108,17 @@ class Calendar extends Input
         return (new Jquery('#' . $this->id . '_input'))->get(0)->_flatpickr;
     }
 
+    private function expandPhpDtFormat(string $phpFormat): string
+    {
+        $phpFormat = str_replace('c', \DateTimeInterface::ISO8601, $phpFormat);
+        $phpFormat = str_replace('r', \DateTimeInterface::RFC2822, $phpFormat);
+
+        return $phpFormat;
+    }
+
     public function convertPhpDtFormatToFlatpickr(string $phpFormat): string
     {
-        $res = $phpFormat;
+        $res = $this->expandPhpDtFormat($phpFormat);
         foreach ([
             '~[aA]~' => 'K',
             '~[s]~' => 'S',
@@ -122,18 +130,18 @@ class Calendar extends Input
         return $res;
     }
 
-    public function use24hrTimeFormat(string $format): bool
+    public function use24hrTimeFormat(string $phpFormat): bool
     {
-        return !preg_match('~[gGh]~', $format);
+        return !preg_match('~[gh]~', $this->expandPhpDtFormat($phpFormat));
     }
 
-    public function useSeconds(string $format): bool
+    public function useSeconds(string $phpFormat): bool
     {
-        return (bool) preg_match('~[S]~', $format);
+        return (bool) preg_match('~[suv]~', $this->expandPhpDtFormat($phpFormat));
     }
 
-    public function allowMicroSecondsInput(string $format): bool
+    public function allowMicroSecondsInput(string $phpFormat): bool
     {
-        return (bool) preg_match('~[u]~', $format);
+        return (bool) preg_match('~[uv]~', $this->expandPhpDtFormat($phpFormat));
     }
 }

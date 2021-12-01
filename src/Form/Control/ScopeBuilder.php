@@ -426,16 +426,16 @@ class ScopeBuilder extends Control
     {
         $calendar = new Calendar();
         $props = $this->atkdDateOptions['flatpickr'] ?? [];
-        $format = $calendar->convertPhpDtFormatToFlatpickr($this->getApp()->ui_persistence->{$field->type . '_format'});
-        $props['altFormat'] = $format;
+        $phpFormat = $this->getApp()->ui_persistence->{$field->type . '_format'};
+        $props['altFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat);
         $props['dateFormat'] = 'Y-m-d';
         $props['altInput'] = true;
 
         if ($field->type === 'datetime' || $field->type === 'time') {
             $props['enableTime'] = true;
-            $props['time_24hr'] = $calendar->use24hrTimeFormat($format);
+            $props['time_24hr'] = $calendar->use24hrTimeFormat($phpFormat);
             $props['noCalendar'] = ($field->type === 'time');
-            $props['enableSeconds'] = $calendar->useSeconds($format);
+            $props['enableSeconds'] = $calendar->useSeconds($phpFormat);
             $props['dateFormat'] = ($field->type === 'datetime') ? 'Y-m-d H:i:S' : 'H:i:S';
         }
 

@@ -505,14 +505,14 @@ class Multiline extends Form\Control
     {
         $calendar = new Calendar();
         $props['config'] = $this->componentProps[self::DATE] ?? [];
-        $format = $calendar->convertPhpDtFormatToFlatpickr($this->getApp()->ui_persistence->{$field->type . '_format'});
-        $props['config']['dateFormat'] = $format;
+        $phpFormat = $this->getApp()->ui_persistence->{$field->type . '_format'};
+        $props['config']['dateFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat);
 
         if ($field->type === 'datetime' || $field->type === 'time') {
             $props['config']['enableTime'] = true;
-            $props['config']['time_24hr'] = $calendar->use24hrTimeFormat($format);
+            $props['config']['time_24hr'] = $calendar->use24hrTimeFormat($phpFormat);
             $props['config']['noCalendar'] = ($field->type === 'time');
-            $props['config']['enableSeconds'] = $calendar->useSeconds($format);
+            $props['config']['enableSeconds'] = $calendar->useSeconds($phpFormat);
         }
 
         return $props;
