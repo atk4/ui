@@ -505,7 +505,7 @@ class Multiline extends Form\Control
     {
         $calendar = new Calendar();
         $props['config'] = $this->componentProps[self::DATE] ?? [];
-        $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$field->type . '_format'});
+        $format = $calendar->convertPhpDtFormatToFlatpickr($this->getApp()->ui_persistence->{$field->type . '_format'});
         $props['config']['dateFormat'] = $format;
 
         if ($field->type === 'datetime' || $field->type === 'time') {

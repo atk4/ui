@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
-use Atk4\Ui\App;
 use Atk4\Ui\Jquery;
-use Atk4\Ui\JsChain;
 use Atk4\Ui\JsExpression;
 
 /**
@@ -33,49 +31,12 @@ class Calendar extends Input
         $this->options[$name] = $value;
     }
 
-    /**
-     * Set first day of week globally.
-     */
-    public static function setFirstDayOfWeek(App $app, int $day)
-    {
-        $app->html->js(true, (new JsExpression('flatpickr.l10ns.default.firstDayOfWeek = [day]', ['day' => $day])));
-    }
-
-    /**
-     * Load flatpickr locale file.
-     * Pass it has an option when adding Calendar input.
-     *  Form\Control\Calendar::requireLocale($app, 'fr');
-     *  $form->getControl('date')->options['locale'] = 'fr';.
-     */
-    public static function requireLocale(App $app, string $locale)
-    {
-        $app->requireJs($app->cdn['flatpickr'] . '/l10n/' . $locale . '.js');
-    }
-
-    /**
-     * Apply locale globally to all flatpickr instance.
-     */
-    public static function setLocale(App $app, string $locale)
-    {
-        self::requireLocale($app, $locale);
-        $app->html->js(true, (new JsChain('flatpickr'))->localize((new JsChain('flatpickr'))->l10ns->{$locale}));
-    }
-
-    /**
-     * Set first day of week for calendar display.
-     * Applied globally to all flatpickr instance.
-     */
-    public static function setDayOfWeek(App $app, int $day)
-    {
-        $app->html->js(true, (new JsExpression('flatpickr.l10ns.default.firstDayOfWeek = [day]', ['day' => $day])));
-    }
-
     protected function init(): void
     {
         parent::init();
 
-        // get format from Persistence\Date.
-        $format = $this->translateFormat($this->getApp()->ui_persistence->{$this->type . '_format'});
+        // setup format
+        $format = $this->convertPhpDtFormatToFlatpickr($this->getApp()->ui_persistence->{$this->type . '_format'});
         $this->options['dateFormat'] = $format;
 
         if ($this->type === 'datetime' || $this->type === 'time') {
@@ -89,6 +50,11 @@ class Calendar extends Input
             // Allow edit if microseconds is set.
             $this->options['allowInput'] ??= $this->allowMicroSecondsInput($this->options['altFormat'] ?? $this->options['dateFormat']);
         }
+
+        // setup locale
+        $this->options['locale'] = [
+            'firstDayOfWeek' => $this->getApp()->ui_persistence->firstDayOfWeek,
+        ];
     }
 
     protected function renderView(): void
@@ -142,12 +108,18 @@ class Calendar extends Input
         return (new Jquery('#' . $this->id . '_input'))->get(0)->_flatpickr;
     }
 
-    public function translateFormat(string $format): string
+    public function convertPhpDtFormatToFlatpickr(string $phpFormat): string
     {
-        // translate from php to flatpickr.
-        $format = preg_replace(['~[aA]~', '~[s]~', '~[g]~'], ['K', 'S', 'G'], $format);
+        $res = $phpFormat;
+        foreach ([
+            '~[aA]~' => 'K',
+            '~[s]~' => 'S',
+            '~[g]~' => 'G',
+        ] as $k => $v) {
+            $res = preg_replace($k, $v, $res);
+        }
 
-        return $format;
+        return $res;
     }
 
     public function use24hrTimeFormat(string $format): bool
