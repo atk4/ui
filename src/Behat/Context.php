@@ -45,7 +45,9 @@ class Context extends RawMinkContext implements BehatContext
     {
         $this->jqueryWait();
         $this->disableAnimations();
-        $this->assertNoException();
+        if ($event->getFeature()->getTitle() !== 'Exception') {
+            $this->assertNoException();
+        }
     }
 
     protected function getFinishedScript(): string

@@ -22,6 +22,3 @@ Feature: JS
 
   When I press button "Callback Test"
   Then Label changes to a number
-
-  When I press button "failure"
-  Then Modal is open with text "Everything is bad"

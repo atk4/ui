@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
@@ -54,7 +55,7 @@ $b->on('click', null, function ($b) {
 
 $b = Button::addTo($app, ['failure']);
 $b->on('click', null, function ($b) {
-    throw new \Atk4\Data\ValidationException(['Everything is bad']);
+    throw new Exception('Everything is bad');
 });
 
 Header::addTo($app, ['Callbacks on HTML element', 'subHeader' => 'Click on label below.']);
