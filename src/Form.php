@@ -304,11 +304,11 @@ class Form extends View
                 }
 
                 return $response;
-            } catch (\Atk4\Data\ValidationException $val) {
+            } catch (\Atk4\Data\ValidationException $e) {
                 $response = [];
-                foreach ($val->errors as $field => $error) {
+                foreach ($e->errors as $field => $error) {
                     if (!$field) {
-                        throw ($val);
+                        throw ($e);
                     }
                     $response[] = $this->error($field, $error);
                 }
