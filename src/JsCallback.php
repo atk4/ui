@@ -102,22 +102,18 @@ class JsCallback extends Callback implements JsExpressionable
         }
 
         parent::set(function () use ($fx) {
-            try {
-                $chain = new Jquery(new JsExpression('this'));
+            $chain = new Jquery(new JsExpression('this'));
 
-                $values = [];
-                foreach ($this->args as $key => $value) {
-                    $values[] = $_POST[$key] ?? null;
-                }
-
-                $response = $fx(...array_merge([$chain], $values));
-
-                $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
-
-                $this->terminateAjax($ajaxec);
-            } catch (\Exception $e) {
-                $this->terminateAjax(null, $this->getApp()->renderExceptionHtml($e), false);
+            $values = [];
+            foreach ($this->args as $key => $value) {
+                $values[] = $_POST[$key] ?? null;
             }
+
+            $response = $fx(...array_merge([$chain], $values));
+
+            $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
+
+            $this->terminateAjax($ajaxec);
         });
 
         return $this;
