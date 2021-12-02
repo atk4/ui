@@ -307,6 +307,9 @@ class Form extends View
             } catch (\Atk4\Data\ValidationException $val) {
                 $response = [];
                 foreach ($val->errors as $field => $error) {
+                    if (!$field) {
+                        throw ($val);
+                    }
                     $response[] = $this->error($field, $error);
                 }
 
