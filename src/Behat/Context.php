@@ -8,6 +8,8 @@ use Atk4\Core\WarnDynamicPropertyTrait;
 use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
+use Behat\Behat\Hook\Scope\StepScope;
+use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Exception;
@@ -22,6 +24,20 @@ class Context extends RawMinkContext implements BehatContext
     public function getSession($name = null): \Behat\Mink\Session
     {
         return $this->getMink()->getSession($name);
+    }
+
+    protected function getScenario(StepScope $event): ScenarioInterface
+    {
+        foreach ($event->getFeature()->getScenarios() as $scenario) {
+            $scenarioSteps = $scenario->getSteps();
+            if (count($scenarioSteps) > 0
+                    && reset($scenarioSteps)->getLine() <= $event->getStep()->getLine()
+                    && end($scenarioSteps)->getLine() >= $event->getStep()->getLine()) {
+                return $scenario;
+            }
+        }
+
+        throw new Exception('Unable to find scenario');
     }
 
     /**
@@ -45,7 +61,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $this->jqueryWait();
         $this->disableAnimations();
-        if ($event->getFeature()->getTitle() !== 'Exception') {
+        if (!str_contains($this->getScenario($event)->getTitle() ?? '', 'exception is displayed')) {
             $this->assertNoException();
         }
     }
