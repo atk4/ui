@@ -576,7 +576,7 @@ class App
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->dangerouslyAppendHtml('HEAD', $this->html->getJs());
+            $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('script', null, $this->html->getJs()));
             $this->is_rendering = false;
 
             if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catch_runaway_callbacks) {
