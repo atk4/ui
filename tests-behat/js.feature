@@ -23,5 +23,6 @@ Feature: JS
   When I press button "Callback Test"
   Then Label changes to a number
 
+Scenario: JsCallback exception is displayed
   When I press button "failure"
-  Then Modal is open with text "Everything is bad"
+  Then Modal is open with text "Atk4\Ui\Exception: Everything is bad"

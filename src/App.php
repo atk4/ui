@@ -529,6 +529,10 @@ class App
         // flatpickr
         $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
         $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');
+        if ($this->ui_persistence->locale !== 'en') {
+            $this->requireJs($this->cdn['flatpickr'] . '/l10n/' . $this->ui_persistence->locale . '.js');
+            $this->html->js(true, new JsExpression('flatpickr.localize(window.flatpickr.l10ns.' . $this->ui_persistence->locale . ')'));
+        }
 
         // Agile UI
         $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
@@ -1115,7 +1119,13 @@ class App
 
         foreach (ob_get_status(true) as $status) {
             if ($status['buffer_used'] !== 0) {
-                throw new LateOutputError('Unexpected output detected');
+                $lateError = new LateOutputError('Unexpected output detected');
+                if ($this->catch_exceptions) {
+                    $this->caughtException($lateError);
+                    $this->outputLateOutputError($lateError);
+                }
+
+                throw $lateError;
             }
         }
 
@@ -1129,7 +1139,13 @@ class App
         $isSse = $this->response->getHeaderLine('Content-Type') === 'text/event-stream';
 
         if (count($headersNew) > 0 && headers_sent() && !$isCli && !$isSse) {
-            throw new LateOutputError('Headers already sent, more headers cannot be set at this stage');
+            $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
+            if ($this->catch_exceptions) {
+                $this->caughtException($lateError);
+                $this->outputLateOutputError($lateError);
+            }
+
+            throw $lateError;
         }
 
         foreach ($headersNew as $k => $v) {
