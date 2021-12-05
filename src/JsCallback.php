@@ -102,26 +102,18 @@ class JsCallback extends Callback implements JsExpressionable
         }
 
         parent::set(function () use ($fx) {
-            try {
-                $chain = new Jquery(new JsExpression('this'));
+            $chain = new Jquery(new JsExpression('this'));
 
-                $values = [];
-                foreach ($this->args as $key => $value) {
-                    $values[] = $_POST[$key] ?? null;
-                }
-
-                $response = $fx(...array_merge([$chain], $values));
-
-                $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
-
-                $this->terminateAjax($ajaxec);
-            } catch (\Atk4\Data\ValidationException $e) {
-                // Validation exceptions will be presented to user in a friendly way
-                $msg = new Message($e->getMessage());
-                $msg->addClass('error');
-
-                $this->terminateAjax(null, $msg->getHtml(), false);
+            $values = [];
+            foreach ($this->args as $key => $value) {
+                $values[] = $_POST[$key] ?? null;
             }
+
+            $response = $fx($chain, ...$values);
+
+            $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
+
+            $this->terminateAjax($ajaxec);
         });
 
         return $this;
