@@ -23,6 +23,9 @@ use Atk4\Ui\Exception;
 class Ui extends Persistence
 {
     /** @var string */
+    public $locale = 'en';
+
+    /** @var string */
     public $currency = '€';
     /** @var int Default decimal count for 'atk4_money' type. */
     public $currency_decimals = 2;
