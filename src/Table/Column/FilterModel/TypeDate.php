@@ -123,7 +123,7 @@ class TypeDate extends Column\FilterModel
 
                 break;
             default:
-                $date = new DateTime($dateModifier);
+                $date = ($dateModifier ? new DateTime($dateModifier) : null);
 
                 break;
         }
