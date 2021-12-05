@@ -306,7 +306,7 @@ class Context extends RawMinkContext implements BehatContext
     public function modalIsOpenWithText(string $text, string $tag = 'div'): void
     {
         $modal = $this->getElementInPage('.modal.visible.active.front');
-        $this->getElementInElement($modal, '//' . $tag . '[text()="' . $text . '"]', 'xpath');
+        $this->getElementInElement($modal, '//' . $tag . '[text()[normalize-space()="' . $text . '"]]', 'xpath');
     }
 
     /**
@@ -348,7 +348,7 @@ class Context extends RawMinkContext implements BehatContext
     public function panelIsOpenWithText(string $text, string $tag = 'div'): void
     {
         $panel = $this->getElementInPage('.atk-right-panel.atk-visible');
-        $this->getElementInElement($panel, '//' . $tag . '[text()="' . $text . '"]', 'xpath');
+        $this->getElementInElement($panel, '//' . $tag . '[text()[normalize-space()="' . $text . '"]]', 'xpath');
     }
 
     /**
