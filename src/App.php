@@ -164,8 +164,6 @@ class App
     /** @var ResponseInterface */
     private $response;
 
-    public $responseClass = Response::class;
-
     /**
      * Constructor.
      *
@@ -185,7 +183,7 @@ class App
             unset($defaults[0]);
         }
 
-        $this->response = Factory::factory([$defaults['responseClass'] ?? $this->responseClass]);
+        $this->response = $defaults['response'] ?? new Response();
 
         /*
         if (is_array($defaults)) {
