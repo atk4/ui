@@ -263,14 +263,14 @@ class DemosTest extends TestCase
 
     public function testResponseError(): void
     {
-        if (self::class === static::class) {
+        if (static::class === self::class) {
             $this->expectException(\Atk4\Core\Exception::class);
             $this->expectExceptionMessage('Property for specified object is not defined');
         }
 
         try {
             $this->getResponseFromRequest('layout/layouts_error.php');
-        } catch(\GuzzleHttp\Exception\ServerException $s) {
+        } catch (\GuzzleHttp\Exception\ServerException $s) {
             $this->assertSame(500, $s->getResponse()->getStatusCode());
             $this->assertMatchesRegularExpression('/Property for specified object is not defined/', (string) $s->getResponse()->getBody());
         }
@@ -446,9 +446,10 @@ class DemosTest extends TestCase
         $this->assertMatchesRegularExpression($this->regexJson, (string) $response->getBody(), ' RegExp error on ' . $uri);
     }
 
+    // Another test on testCallbackError directly in Demo
     public function testCallbackError(): void
     {
-        if (self::class === static::class) {
+        if (static::class === self::class) {
             $this->expectException(Exception::class);
             $this->expectExceptionMessage('Callback requested, but never reached. You may be missing some arguments in request URL.');
         }
@@ -466,7 +467,7 @@ class DemosTest extends TestCase
 
         try {
             $this->getResponseFromRequest($uri, ['form_params' => $data]);
-        } catch(\GuzzleHttp\Exception\ServerException $s) {
+        } catch (\GuzzleHttp\Exception\ServerException $s) {
             $this->assertSame(500, $s->getResponse()->getStatusCode());
             $this->assertMatchesRegularExpression('/Callback requested, but never reached. You may be missing some arguments in request URL./', (string) $s->getResponse()->getBody());
         }
@@ -475,7 +476,7 @@ class DemosTest extends TestCase
     // Another test on LateOutputError directly in Demo
     public function testDemoLateOutputError(): void
     {
-        if (self::class === static::class) {
+        if (static::class === self::class) {
             $this->expectException(LateOutputError::class);
             $this->expectExceptionMessage('Unexpected output detected');
         }
@@ -484,7 +485,7 @@ class DemosTest extends TestCase
 
         try {
             $this->getResponseFromRequest($uri);
-        } catch(\GuzzleHttp\Exception\ServerException $s) {
+        } catch (\GuzzleHttp\Exception\ServerException $s) {
             $this->assertSame(500, $s->getResponse()->getStatusCode());
             $this->assertMatchesRegularExpression('/FATAL UI ERROR: Unexpected output detected/', (string) $s->getResponse()->getBody());
         }
