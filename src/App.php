@@ -435,7 +435,6 @@ class App
             throw new Exception('Content type must be always set');
         }
 
-
         if ($type === 'application/json') {
             if (is_string($output)) {
                 $output = $this->decodeJson($output);
@@ -1118,6 +1117,8 @@ class App
             }
         }
 
+        $isCli = \PHP_SAPI === 'cli'; // for phpunit
+
         // Sse have multiple phases
         // Headers - Send Response only with headers.
         // Browser - Prepare to receive streamed events.
@@ -1125,7 +1126,7 @@ class App
         // Check below is done directly on response to check on first call LateOutputError.
         $isSse = $this->response->getHeaderLine('Content-Type') === 'text/event-stream';
 
-        if (headers_sent() && !$isSse) {
+        if (!$isSse && !$isCli && headers_sent()) {
             $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
             if ($this->catch_exceptions) {
                 $this->caughtException($lateError);
@@ -1139,12 +1140,21 @@ class App
     }
 
     /**
+     * Last chance to output a meaningful response before exit
+     *
      * @return never
      */
     protected function outputLateOutputError(LateOutputError $exception): void
     {
+        // In case of late error for headers, this will be not respected
+        // http response code was already sent implicit
         $this->setResponseStatusCode(500);
-        $this->setResponseHeader('content-type', 'text/plain');
+
+        // In case of late error for headers, they were already sent
+        // so all headers needs to be remove, to avoid throwing error in loop
+        foreach ($this->response->getHeaders() as $name => $value) {
+            $this->setResponseHeader($name, '');
+        }
 
         $this->outputResponseUnsafe("\n" . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!' . "\n");
 

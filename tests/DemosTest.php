@@ -8,10 +8,10 @@ use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Persistence;
 use Atk4\Ui\App;
 use Atk4\Ui\Callback;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Exception\LateOutputError;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -113,18 +113,21 @@ class DemosTest extends TestCase
         $_FILES = [];
         $_COOKIE = [];
         $_SESSION = [];
-
-        \Closure::bind(function () {
-            App::$_sentHeaders = [];
-        }, null, App::class)();
     }
 
     protected function createTestingApp(): App
     {
         $app = new class(['call_exit' => false, 'catch_exceptions' => false, 'always_run' => false]) extends App {
+
+            // use custom exception to stop execution during tests
             public function callExit(): void
             {
                 throw new DemosTestExitError();
+            }
+
+            protected function emitResponse(): void
+            {
+                // no emitting to allow fast unit test
             }
         };
         $app->initLayout([\Atk4\Ui\Layout\Maestro::class]);
@@ -151,52 +154,14 @@ class DemosTest extends TestCase
                     if (!$app->run_called) {
                         $app->run();
                     }
-                } catch (\Throwable $e) {
-                    // session_start() or ini_set() functions can be used only with native HTTP tests
-                    // override test expectation here to finish there tests cleanly (TODO better to make the code testable without calling these functions)
-                    if ($e instanceof \ErrorException && preg_match('~^(session_start|ini_set)\(\).* headers already sent$~', $e->getMessage())) {
-                        $this->expectExceptionObject($e);
-                    }
-
-                    if (!($e instanceof DemosTestExitError)) {
-                        throw $e;
-                    }
+                } catch (DemosTestExitError $e) {
+                    // catch only custom exit exception
                 }
             } finally {
                 $body = ob_get_clean();
             }
 
-            [$statusCode, $headers] = \Closure::bind(function () {
-                $statusCode = 200;
-                $headers = App::$_sentHeaders;
-                if (isset($headers[App::HEADER_STATUS_CODE])) {
-                    $statusCode = $headers[App::HEADER_STATUS_CODE];
-                    unset($headers[App::HEADER_STATUS_CODE]);
-                }
-
-                return [$statusCode, $headers];
-            }, null, App::class)();
-
-            // Attach a response to the easy handle with the parsed headers.
-            $response = new Response(
-                $statusCode,
-                $headers,
-                class_exists(Utils::class) ? Utils::streamFor($body) : \GuzzleHttp\Psr7\stream_for($body), // @phpstan-ignore-line Utils class present since guzzlehttp/psr7 v1.7
-                '1.0'
-            );
-
-            // Rewind the body of the response if possible.
-            $body = $response->getBody();
-            if ($body->isSeekable()) {
-                $body->rewind();
-            }
-
-            $this->assertSame($response->getStatusCode(), $app->getResponse()->getStatusCode());
-            // Headers cannot be tested due to $isCli which was added for phpunit output during test (no solution at now)
-            // $this->assertSame($response->getHeaders(), $app->getResponse()->getHeaders());
-            $this->assertSame((string) $response->getBody(), (string) $app->getResponse()->getBody());
-
-            return new \GuzzleHttp\Promise\FulfilledPromise($response);
+            return new \GuzzleHttp\Promise\FulfilledPromise($app->getResponse());
         };
 
         return new Client(['base_uri' => 'http://localhost/', 'handler' => $handler]);
@@ -473,6 +438,34 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest($uri, ['form_params' => $postData]);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
         $this->assertMatchesRegularExpression($this->regexJson, (string) $response->getBody(), ' RegExp error on ' . $uri);
+    }
+
+    public function testCallbackError(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Callback requested, but never reached. You may be missing some arguments in request URL.');
+
+        $uri = 'obsolete/notify2.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_notify=ajax&' . Callback::URL_QUERY_TARGET . '=callback_trigger_error';
+        $data = [
+            'text'       => 'This text will appear in notification',
+            'icon'       => 'warning sign',
+            'color'      => 'green',
+            'transition' => 'jiggle',
+            'width'      => '25%',
+            'position'   => 'topRight',
+            'attach'     => 'Body',
+        ];
+
+        $this->getResponseFromRequest($uri, ['form_params' => $data]);
+    }
+
+    public function testDemoLateOutputError(): void
+    {
+
+        $this->expectException(LateOutputError::class);
+        $uri = '_unit-test/outputErrors.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_err_unex_content=ajax&' . Callback::URL_QUERY_TARGET . '=m_err_unex_content&__atk_json=1';
+
+        $this->getResponseFromRequest($uri);
     }
 }
 
