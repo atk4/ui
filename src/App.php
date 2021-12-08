@@ -400,10 +400,6 @@ class App
      */
     public function setResponseHeader(string $name, string $value): self
     {
-        $arr = $this->normalizeHeaders([$name => $value]);
-        $value = reset($arr);
-        $name = key($arr);
-
         if ($value !== '') {
             $this->response = $this->response->withHeader($name, $value);
         } else {
@@ -484,7 +480,7 @@ class App
 
         $this->terminate(
             $output,
-            array_merge($this->normalizeHeaders($headers), ['content-type' => 'text/html'])
+            array_merge($headers, ['content-type' => 'text/html'])
         );
     }
 
@@ -499,7 +495,7 @@ class App
 
         $this->terminate(
             $output,
-            array_merge($this->normalizeHeaders($headers), ['content-type' => 'application/json'])
+            array_merge($headers, ['content-type' => 'application/json'])
         );
     }
 
@@ -1170,7 +1166,7 @@ class App
     {
         $this->outputResponse(
             $data,
-            array_merge($this->normalizeHeaders($headers), ['content-type' => 'text/html'])
+            array_merge($headers, ['content-type' => 'text/html'])
         );
     }
 
@@ -1188,7 +1184,7 @@ class App
 
         $this->outputResponse(
             $data,
-            array_merge($this->normalizeHeaders($headers), ['content-type' => 'application/json'])
+            array_merge($headers, ['content-type' => 'application/json'])
         );
     }
 

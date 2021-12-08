@@ -44,7 +44,7 @@ class AppPsr7Test extends TestCase
         $this->assertSame('value3', $app->getResponse()->getHeaderLine('header-test'));
     }
 
-    public function testResponseHeaders2(): void
+    public function testResponseHeadersRespectCase(): void
     {
         $app = $this->getApp();
         $app->setResponseHeader('heAder-test', 'value1');
@@ -59,5 +59,21 @@ class AppPsr7Test extends TestCase
         }
 
         $this->assertSame('value3', $app->getResponse()->getHeaderLine('header-test'));
+    }
+
+    public function testResponseHeadersRespectContentOnTerminate(): void
+    {
+        $app = $this->getApp();
+        $app->setResponseHeader('content-type', 'text/plain');
+
+        try {
+            $app->terminateHtml('', [
+                'Content-type' => 'application/json'
+            ]);
+        } catch (ExitApplicationError $e) {
+
+        }
+
+        $this->assertSame('text/html', $app->getResponse()->getHeaderLine('Content-Type'));
     }
 }
