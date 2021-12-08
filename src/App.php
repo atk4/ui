@@ -390,7 +390,7 @@ class App
      */
     public function setResponseStatusCode(int $statusCode): self
     {
-        $this->setResponseHeader(self::HEADER_STATUS_CODE, (string) $statusCode);
+        $this->response = $this->response->withStatus($statusCode);
 
         return $this;
     }
@@ -405,9 +405,9 @@ class App
         $name = key($arr);
 
         if ($value !== '') {
-            $this->response_headers[$name] = $value;
+            $this->response = $this->response->withHeader($name, $value);
         } else {
-            unset($this->response_headers[$name]);
+            $this->response = $this->response->withoutHeader($name);
         }
 
         return $this;
@@ -425,17 +425,16 @@ class App
      */
     public function terminate($output = '', array $headers = []): void
     {
-        $headers = $this->normalizeHeaders($headers);
-        if (empty($headers['content-type'])) {
-            $this->response_headers = $this->normalizeHeaders($this->response_headers);
-            if (empty($this->response_headers['content-type'])) {
-                throw new Exception('Content type must be always set');
-            }
-
-            $headers['content-type'] = $this->response_headers['content-type'];
+        foreach ($headers as $name => $value) {
+            $this->setResponseHeader($name, $value);
         }
 
-        $type = preg_replace('~;.*~', '', strtolower($headers['content-type'])); // in LC without charset
+        $type = preg_replace('~;.*~', '', strtolower($this->response->getHeaderLine('content-type'))); // in LC without charset
+
+        if (empty($type)) {
+            throw new Exception('Content type must be always set');
+        }
+
 
         if ($type === 'application/json') {
             if (is_string($output)) {
@@ -443,7 +442,7 @@ class App
             }
             $output['portals'] = $this->getRenderedPortals();
 
-            $this->outputResponseJson($output, $headers);
+            $this->outputResponseJson($output, []);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
             // ugly hack for TABS
             // because fomantic ui tab only deal with html and not JSON
@@ -462,11 +461,11 @@ class App
             }
             $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
 
-            $this->outputResponseHtml($output, $headers);
+            $this->outputResponseHtml($output, []);
         } elseif ($type === 'text/html') {
-            $this->outputResponseHtml($output, $headers);
+            $this->outputResponseHtml($output, []);
         } else {
-            $this->outputResponse($output, $headers);
+            $this->outputResponse($output, []);
         }
 
         $this->run_called = true; // prevent shutdown function from triggering.
@@ -830,7 +829,9 @@ class App
      */
     public function redirect($page, bool $permanent = false): void
     {
-        $this->terminateHtml('', ['location' => $this->url($page), self::HEADER_STATUS_CODE => $permanent ? '301' : '302']);
+        $this->setResponseStatusCode($permanent ? 301 : 302);
+        $this->setResponseHeader('location', $this->url($page));
+        $this->terminateHtml('');
     }
 
     /**
@@ -1093,7 +1094,7 @@ class App
      *
      * @internal should be called only from self::outputResponse()
      */
-    protected function outputResponseUnsafe(string $data, array $headersNew): void
+    protected function outputResponseUnsafe(string $data): void
     {
         // if is Sse, break the flow and echo events directly
         // Check discussion here : https://github.com/atk4/ui/pull/1706
@@ -1103,38 +1104,19 @@ class App
             return;
         }
 
-        $isCli = \PHP_SAPI === 'cli'; // for phpunit
-
-        if (!headers_sent() || $isCli) {
-            foreach ($headersNew as $k => $v) {
-                if (!$isCli) {
-                    if ($k === self::HEADER_STATUS_CODE) {
-                        $this->response = $this->response->withStatus($v === (string) (int) $v ? (int) $v : 500);
-                    } else {
-                        $this->response = $this->response->withHeader($k, $v);
-                    }
-                }
-            }
-        }
-
         $this->response->getBody()->write($data);
 
         $this->emitResponse();
     }
-
-    /** @var string[] */
-    private static $_sentHeaders = [];
 
     /**
      * Output Response to the client.
      */
     protected function outputResponse(string $data, array $headers): void
     {
-        $this->response_headers = $this->normalizeHeaders($this->response_headers);
-        $headersAll = array_merge($this->response_headers, $this->normalizeHeaders($headers));
-        unset($headers);
-        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
-        unset($headersAll);
+        foreach ($headers as $name => $value) {
+            $this->setResponseHeader($name, $value);
+        }
 
         foreach (ob_get_status(true) as $status) {
             if ($status['buffer_used'] !== 0) {
@@ -1148,8 +1130,6 @@ class App
             }
         }
 
-        $isCli = \PHP_SAPI === 'cli'; // for phpunit
-
         // Sse have multiple phases
         // Headers - Send Response only with headers.
         // Browser - Prepare to receive streamed events.
@@ -1157,7 +1137,7 @@ class App
         // Check below is done directly on response to check on first call LateOutputError.
         $isSse = $this->response->getHeaderLine('Content-Type') === 'text/event-stream';
 
-        if (count($headersNew) > 0 && headers_sent() && !$isCli && !$isSse) {
+        if (headers_sent() && !$isSse) {
             $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
             if ($this->catch_exceptions) {
                 $this->caughtException($lateError);
@@ -1167,11 +1147,7 @@ class App
             throw $lateError;
         }
 
-        foreach ($headersNew as $k => $v) {
-            self::$_sentHeaders[$k] = $v;
-        }
-
-        $this->outputResponseUnsafe($data, $headersNew);
+        $this->outputResponseUnsafe($data);
     }
 
     /**
@@ -1179,17 +1155,10 @@ class App
      */
     protected function outputLateOutputError(LateOutputError $exception): void
     {
-        $plainTextMessage = "\n" . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!' . "\n";
+        $this->setResponseStatusCode(500);
+        $this->setResponseHeader('content-type', 'text/plain');
 
-        $headersAll = $this->normalizeHeaders(['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500']);
-        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
-        unset($headersAll);
-
-        foreach ($headersNew as $k => $v) {
-            self::$_sentHeaders[$k] = $v;
-        }
-
-        $this->outputResponseUnsafe($plainTextMessage, $headersNew);
+        $this->outputResponseUnsafe("\n" . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!' . "\n");
 
         exit(1); // should be never reached from phpunit because we set catch_exceptions = false
     }
