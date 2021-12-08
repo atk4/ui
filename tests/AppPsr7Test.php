@@ -7,9 +7,7 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\App;
 use Atk4\Ui\Exception\ExitApplicationError;
-use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Layout;
-use Nyholm\Psr7\Stream;
 
 class AppPsr7Test extends TestCase
 {
