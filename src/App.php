@@ -669,19 +669,7 @@ class App
 
     protected function getRequestUrl()
     {
-        if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
-            $request_uri = $_SERVER['HTTP_X_REWRITE_URL'];
-        } elseif (isset($_SERVER['REQUEST_URI'])) { // Apache
-            $request_uri = $_SERVER['REQUEST_URI'];
-        } elseif (isset($_SERVER['ORIG_PATH_INFO'])) { // IIS 5.0, PHP as CGI
-            $request_uri = $_SERVER['ORIG_PATH_INFO'];
-        // This one comes without QUERY string
-        } else {
-            $request_uri = '';
-        }
-        $request_uri = explode('?', $request_uri, 2);
-
-        return $request_uri[0];
+        return $this->request->getUri()->getPath();
     }
 
     /**
