@@ -2086,6 +2086,3 @@ parameters:
         -
             path: 'tests/TableColumnLinkTest.php'
             message: '~^Property Atk4\\Ui\\Tests\\TableColumnLinkTest::\$column has no type specified\.$~'
-        -
-            path: 'src/App.php'
-            message: '~^Property Atk4\\Ui\\App::\$responseClass has no type specified\.$~'
