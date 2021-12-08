@@ -469,7 +469,7 @@ class DemosTest extends TestCase
             $this->getResponseFromRequest($uri, ['form_params' => $data]);
         } catch (\GuzzleHttp\Exception\ServerException $s) {
             $this->assertSame(500, $s->getResponse()->getStatusCode());
-            $this->assertMatchesRegularExpression('/Callback requested, but never reached. You may be missing some arguments in request URL./', (string) $s->getResponse()->getBody());
+            $this->assertStringContainsString('Callback requested, but never reached. You may be missing some arguments in request URL.', (string) $s->getResponse()->getBody());
         }
     }
 
@@ -490,7 +490,7 @@ class DemosTest extends TestCase
         }
 
         //$this->assertSame(500, $response->getStatusCode()); // TODO Need a fix in tests DemoHttpTest|DemosHttpNoExitTest return 200
-        $this->assertMatchesRegularExpression('/FATAL UI ERROR: Unexpected output detected/', (string) $response->getBody());
+        $this->assertStringContainsString('FATAL UI ERROR: Unexpected output detected', (string) $response->getBody());
     }
 }
 
