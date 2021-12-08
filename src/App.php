@@ -164,6 +164,9 @@ class App
     /** @var ResponseInterface */
     private $response;
 
+    /** @var ServerRequestInterface */
+    private $request;
+
     /**
      * Constructor.
      *
@@ -184,13 +187,30 @@ class App
         }
 
         $this->response = $defaults['response'] ?? new Response();
+        if (isset($defaults['response'])) {
+            unset($defaults['response']);
+        }
 
+        $this->request = $defaults['request'] ?? (new \Nyholm\Psr7Server\ServerRequestCreator(
+            new \Nyholm\Psr7\Factory\Psr17Factory(), // ServerRequestFactory
+            new \Nyholm\Psr7\Factory\Psr17Factory(), // UriFactory
+            new \Nyholm\Psr7\Factory\Psr17Factory(), // UploadedFileFactory
+            new \Nyholm\Psr7\Factory\Psr17Factory()  // StreamFactory
+        ))->fromGlobals();
+        if (isset($defaults['request'])) {
+            unset($defaults['request']);
+        }
         /*
         if (is_array($defaults)) {
             throw (new Exception('Constructor requires array argument'))
                 ->addMoreInfo('arg', $defaults);
         }*/
         $this->setDefaults($defaults);
+
+        // added default headers to response
+        foreach($this->response_headers as $name => $value) {
+            $this->setResponseHeader($name, $value);
+        }
         /*
 
         foreach ($defaults as $key => $val) {
