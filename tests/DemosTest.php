@@ -484,11 +484,13 @@ class DemosTest extends TestCase
         $uri = '_unit-test/outputErrors.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_err_unex_content=ajax&' . Callback::URL_QUERY_TARGET . '=m_err_unex_content&__atk_json=1';
 
         try {
-            $this->getResponseFromRequest($uri);
+            $response = $this->getResponseFromRequest($uri);
         } catch (\GuzzleHttp\Exception\ServerException $s) {
-            $this->assertSame(500, $s->getResponse()->getStatusCode());
-            $this->assertMatchesRegularExpression('/FATAL UI ERROR: Unexpected output detected/', (string) $s->getResponse()->getBody());
+            $response = $s->getResponse();
         }
+
+        $this->assertSame(500, $response->getStatusCode());
+        $this->assertMatchesRegularExpression('/FATAL UI ERROR: Unexpected output detected/', (string) $response->getBody());
     }
 }
 
