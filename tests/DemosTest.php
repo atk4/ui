@@ -490,7 +490,8 @@ class DemosTest extends TestCase
         }
 
         //$this->assertSame(500, $response->getStatusCode()); // TODO Need a fix in tests DemoHttpTest|DemosHttpNoExitTest return 200
-        $this->assertStringContainsString('FATAL UI ERROR: Unexpected output detected', (string) $response->getBody());
+        $this->assertStringContainsString('FATAL UI ERROR', (string) $response->getBody());
+        $this->assertStringContainsString('Unexpected output before emitResponse', (string) $response->getBody());
     }
 }
 
