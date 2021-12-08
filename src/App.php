@@ -364,28 +364,6 @@ class App
     }
 
     /**
-     * Normalize HTTP headers to associative array with LC keys.
-     *
-     * @param string[] $headers
-     *
-     * @return string[]
-     */
-    protected function normalizeHeaders(array $headers): array
-    {
-        $res = [];
-        foreach ($headers as $k => $v) {
-            if (is_numeric($k) && ($p = strpos($v, ':')) !== false) {
-                $k = substr($v, 0, $p);
-                $v = substr($v, $p + 1);
-            }
-
-            $res[strtolower(trim($k))] = trim($v);
-        }
-
-        return $res;
-    }
-
-    /**
      * @return $this
      */
     public function setResponseStatusCode(int $statusCode): self
