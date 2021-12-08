@@ -153,8 +153,12 @@ class DemosTest extends TestCase
                     if (!$app->run_called) {
                         $app->run();
                     }
-                } catch (DemosTestExitError $e) {
+                } catch (\Throwable $e) {
                     // catch only custom exit exception
+
+                    if (!($e instanceof DemosTestExitError)) {
+                        throw $e;
+                    }
                 }
             } finally {
                 $body = ob_get_clean();
@@ -259,14 +263,17 @@ class DemosTest extends TestCase
 
     public function testResponseError(): void
     {
-        if (static::class === self::class) { // test is failing, TODO fix
-            $this->assertTrue(true);
-
-            return;
+        if (self::class === static::class) {
+            $this->expectException(\Atk4\Core\Exception::class);
+            $this->expectExceptionMessage('Property for specified object is not defined');
         }
 
-        $this->expectExceptionCode(500);
-        $this->getResponseFromRequest('layout/layouts_error.php');
+        try {
+            $this->getResponseFromRequest('layout/layouts_error.php');
+        } catch(\GuzzleHttp\Exception\ServerException $s) {
+            $this->assertSame(500, $s->getResponse()->getStatusCode());
+            $this->assertMatchesRegularExpression('/Property for specified object is not defined/', (string) $s->getResponse()->getBody());
+        }
     }
 
     public function casesDemoGetProvider(): array
@@ -441,8 +448,10 @@ class DemosTest extends TestCase
 
     public function testCallbackError(): void
     {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Callback requested, but never reached. You may be missing some arguments in request URL.');
+        if (self::class === static::class) {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage('Callback requested, but never reached. You may be missing some arguments in request URL.');
+        }
 
         $uri = 'obsolete/notify2.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_notify=ajax&' . Callback::URL_QUERY_TARGET . '=callback_trigger_error';
         $data = [
@@ -455,16 +464,30 @@ class DemosTest extends TestCase
             'attach' => 'Body',
         ];
 
-        $this->getResponseFromRequest($uri, ['form_params' => $data]);
+        try {
+            $this->getResponseFromRequest($uri, ['form_params' => $data]);
+        } catch(\GuzzleHttp\Exception\ServerException $s) {
+            $this->assertSame(500, $s->getResponse()->getStatusCode());
+            $this->assertMatchesRegularExpression('/Callback requested, but never reached. You may be missing some arguments in request URL./', (string) $s->getResponse()->getBody());
+        }
     }
 
     // Another test on LateOutputError directly in Demo
     public function testDemoLateOutputError(): void
     {
-        $this->expectException(LateOutputError::class);
+        if (self::class === static::class) {
+            $this->expectException(LateOutputError::class);
+            $this->expectExceptionMessage('Unexpected output detected');
+        }
+
         $uri = '_unit-test/outputErrors.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_err_unex_content=ajax&' . Callback::URL_QUERY_TARGET . '=m_err_unex_content&__atk_json=1';
 
-        $this->getResponseFromRequest($uri);
+        try {
+            $this->getResponseFromRequest($uri);
+        } catch(\GuzzleHttp\Exception\ServerException $s) {
+            $this->assertSame(500, $s->getResponse()->getStatusCode());
+            $this->assertMatchesRegularExpression('/FATAL UI ERROR: Unexpected output detected/', (string) $s->getResponse()->getBody());
+        }
     }
 }
 
