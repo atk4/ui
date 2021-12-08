@@ -34,7 +34,6 @@ $modal2->set(function () {
     echo 'Unexpected output before emitResponse';
 });
 
-
 $button = \Atk4\Ui\Button::addTo($app, ['Test LateOutputError : Header already sent']);
 $button->on('click', $modal->show());
 

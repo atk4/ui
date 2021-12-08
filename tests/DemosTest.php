@@ -118,7 +118,6 @@ class DemosTest extends TestCase
     protected function createTestingApp(): App
     {
         $app = new class(['call_exit' => false, 'catch_exceptions' => false, 'always_run' => false]) extends App {
-
             // use custom exception to stop execution during tests
             public function callExit(): void
             {
@@ -447,21 +446,21 @@ class DemosTest extends TestCase
 
         $uri = 'obsolete/notify2.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_notify=ajax&' . Callback::URL_QUERY_TARGET . '=callback_trigger_error';
         $data = [
-            'text'       => 'This text will appear in notification',
-            'icon'       => 'warning sign',
-            'color'      => 'green',
+            'text' => 'This text will appear in notification',
+            'icon' => 'warning sign',
+            'color' => 'green',
             'transition' => 'jiggle',
-            'width'      => '25%',
-            'position'   => 'topRight',
-            'attach'     => 'Body',
+            'width' => '25%',
+            'position' => 'topRight',
+            'attach' => 'Body',
         ];
 
         $this->getResponseFromRequest($uri, ['form_params' => $data]);
     }
 
+    // Another test on LateOutputError directly in Demo
     public function testDemoLateOutputError(): void
     {
-
         $this->expectException(LateOutputError::class);
         $uri = '_unit-test/outputErrors.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_err_unex_content=ajax&' . Callback::URL_QUERY_TARGET . '=m_err_unex_content&__atk_json=1';
 

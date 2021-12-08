@@ -209,7 +209,7 @@ class App
         $this->setDefaults($defaults);
 
         // added default headers to response
-        foreach($this->response_headers as $name => $value) {
+        foreach ($this->response_headers as $name => $value) {
             $this->setResponseHeader($name, $value);
         }
         /*
@@ -1136,7 +1136,7 @@ class App
     }
 
     /**
-     * Last chance to output a meaningful response before exit
+     * Last chance to output a meaningful response before exit.
      *
      * @return never
      */
