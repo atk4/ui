@@ -39,7 +39,7 @@ class AppPsr7Test extends TestCase
         } catch (ExitApplicationError $e) {
         }
 
-        $this->assertSame('value3', $app->getResponse()->getHeaderLine('header-test'));
+        $this->assertSame('value2', $app->getResponse()->getHeaderLine('header-test'));
     }
 
     public function testResponseHeadersRespectContentOnTerminate(): void
