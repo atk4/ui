@@ -209,9 +209,7 @@ class App
         $this->setDefaults($defaults);
 
         // added default headers to response
-        foreach ($this->response_headers as $name => $value) {
-            $this->setResponseHeader($name, $value);
-        }
+        $this->setResponseHeaders($this->response_headers);
         /*
 
         foreach ($defaults as $key => $val) {
@@ -399,9 +397,7 @@ class App
      */
     public function terminate($output = '', array $headers = []): void
     {
-        foreach ($headers as $name => $value) {
-            $this->setResponseHeader($name, $value);
-        }
+        $this->setResponseHeaders($headers);
 
         $type = preg_replace('~;.*~', '', strtolower($this->response->getHeaderLine('content-type'))); // in LC without charset
 
@@ -1075,9 +1071,7 @@ class App
      */
     protected function outputResponse(string $data, array $headers): void
     {
-        foreach ($headers as $name => $value) {
-            $this->setResponseHeader($name, $value);
-        }
+        $this->setResponseHeaders($headers);
 
         foreach (ob_get_status(true) as $status) {
             if ($status['buffer_used'] !== 0) {
@@ -1125,7 +1119,7 @@ class App
         $this->setResponseStatusCode(500);
 
         // In case of late error for headers, they were already sent
-        // so all headers needs to be remove, to avoid throwing error in loop
+        // so all headers needs to be removed, to avoid throwing error in loop
         foreach ($this->response->getHeaders() as $name => $value) {
             $this->setResponseHeader($name, '');
         }
@@ -1210,6 +1204,13 @@ class App
 
         while (!$stream->eof()) {
             echo $stream->read(1024);
+        }
+    }
+
+    protected function setResponseHeaders(array $headers = []): void
+    {
+        foreach ($headers as $name => $value) {
+            $this->setResponseHeader($name, $value);
         }
     }
 }
