@@ -743,7 +743,9 @@ class View extends AbstractView implements JsExpressionable
     {
         $this->renderAll();
 
-        return $this->getJs($forceReturn)
+        $js = $this->getJs($forceReturn);
+
+        return ($js !== '' ? $this->getApp()->getTag('script', null, $js) : '')
                . $this->renderTemplateToHtml();
     }
 
@@ -1199,7 +1201,7 @@ class View extends AbstractView implements JsExpressionable
             }
         }
 
-        if (!$actions) {
+        if (count($actions) === 0) {
             return '';
         }
 
@@ -1218,7 +1220,7 @@ class View extends AbstractView implements JsExpressionable
 
         $ready = new JsFunction($actions);
 
-        return '<script>' . "\n" . (new Jquery($ready))->jsRender() . "\n" . '</script>';
+        return (new Jquery($ready))->jsRender();
     }
 
     // }}}
