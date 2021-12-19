@@ -20,6 +20,7 @@ use Atk4\Ui\Panel\Right;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Nyholm\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -1212,5 +1213,43 @@ class App
         foreach ($headers as $name => $value) {
             $this->setResponseHeader($name, $value);
         }
+    }
+
+    public function getRequest(): RequestInterface
+    {
+        return $this->request;
+    }
+
+    /**
+     * Return $_GET param by key or null if not exists.
+     *
+     * @return mixed|null
+     */
+    public function getRequestQueryParam(string $key)
+    {
+        return $this->request->getQueryParams()[$key] ?? null;
+    }
+
+    public function issetRequestQueryParam(string $key): bool
+    {
+        return isset($this->request->getQueryParams()[$key]);
+    }
+
+    /**
+     * Return whole $_POST data.
+     */
+    public function getRequestFormParams(): array
+    {
+        return $this->request->getParsedBody() ?? [];
+    }
+
+    /**
+     * Return $_POST param by key or null if not exists.
+     *
+     * @return mixed|null
+     */
+    public function getRequestFormParam(string $key)
+    {
+        return $this->request->getParsedBody()[$key] ?? null;
     }
 }
