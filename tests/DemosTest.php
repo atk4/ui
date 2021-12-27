@@ -289,8 +289,8 @@ class DemosTest extends TestCase
     public function testDemosStatusAndHtmlResponse(string $uri): void
     {
         $response = $this->getResponseFromRequest($uri);
-        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
     public function testResponseError(): void
@@ -321,9 +321,9 @@ class DemosTest extends TestCase
     public function testDemoGet(string $uri): void
     {
         $response = $this->getResponseFromRequest($uri);
-        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
-        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
+        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
     public function testWizard(): void
@@ -379,11 +379,11 @@ class DemosTest extends TestCase
         }
 
         $response = $this->getResponseFromRequest($uri);
-        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->assertSame(200, $response->getStatusCode());
         if (!($this instanceof DemosHttpNoExitTest)) { // content type is not set when App->call_exit equals to true
-            $this->assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
+            $this->assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         }
-        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
     }
 
     /**
@@ -415,13 +415,12 @@ class DemosTest extends TestCase
         }
 
         $response = $this->getResponseFromRequest($uri);
-        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->assertSame(200, $response->getStatusCode());
 
         $output_rows = preg_split('~\r?\n|\r~', $response->getBody()->getContents());
 
-        $this->assertGreaterThan(0, count($output_rows), ' Response is empty on ' . $uri);
-
         // check SSE Syntax
+        $this->assertGreaterThan(0, count($output_rows));
         foreach ($output_rows as $index => $sse_line) {
             if (empty($sse_line)) {
                 continue;
@@ -471,8 +470,8 @@ class DemosTest extends TestCase
     public function testDemoAssertJsonResponsePost(string $uri, array $postData): void
     {
         $response = $this->getResponseFromRequest($uri, ['form_params' => $postData]);
-        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
     }
 }
 
