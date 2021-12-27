@@ -295,14 +295,19 @@ class DemosTest extends TestCase
 
     public function testResponseError(): void
     {
-        if (static::class === self::class) { // test is failing, TODO fix
-            $this->assertTrue(true);
-
-            return;
+        if (static::class === self::class) {
+            $this->expectException(\Atk4\Core\Exception::class);
+            $this->expectExceptionMessage('Property for specified object is not defined');
         }
 
-        $this->expectExceptionCode(500);
-        $this->getResponseFromRequest('layout/layouts_error.php');
+        try {
+            $response = $this->getResponseFromRequest('layout/layouts_error.php');
+        } catch (\GuzzleHttp\Exception\ServerException $e) {
+            $response = $e->getResponse();
+        }
+
+        $this->assertSame(500, $response->getStatusCode());
+        $this->assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
     }
 
     public function casesDemoGetProvider(): array
