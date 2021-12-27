@@ -92,7 +92,7 @@ class DemosHttpTest extends DemosTest
         return parent::getPathWithAppVars($path);
     }
 
-    private function getLateOutputErrorUri(string $trigger): string
+    private function getLateOutputErrorPath(string $trigger): string
     {
         return '_unit-test/late-output-error.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . $trigger . '=ajax&'
             . Callback::URL_QUERY_TARGET . '=' . $trigger . '&__atk_json=1';
@@ -100,11 +100,7 @@ class DemosHttpTest extends DemosTest
 
     public function testDemoLateOutputErrorHeadersAlreadySent(): void
     {
-        try {
-            $response = $this->getResponseFromRequest($this->getLateOutputErrorUri('err_headers_already_sent'));
-        } catch (\GuzzleHttp\Exception\ServerException $e) {
-            $response = $e->getResponse();
-        }
+        $response = $this->getResponseFromRequest500($this->getLateOutputErrorPath('err_headers_already_sent'));
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertSame(
@@ -115,11 +111,7 @@ class DemosHttpTest extends DemosTest
 
     public function testDemoLateOutputErrorUnexpectedOutputDetected(): void
     {
-        try {
-            $response = $this->getResponseFromRequest($this->getLateOutputErrorUri('err_unexpected_output_detected'));
-        } catch (\GuzzleHttp\Exception\ServerException $e) {
-            $response = $e->getResponse();
-        }
+        $response = $this->getResponseFromRequest500($this->getLateOutputErrorPath('err_unexpected_output_detected'));
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertSame(

@@ -219,6 +219,23 @@ class DemosTest extends TestCase
         }
     }
 
+    protected function getResponseFromRequest500(string $path, array $options = []): ResponseInterface
+    {
+        try {
+            $response = $this->getResponseFromRequest($path, $options);
+        } catch (\GuzzleHttp\Exception\ServerException $e) {
+            $response = $e->getResponse();
+        } catch (UnhandledCallbackExceptionError $e) {
+            while ($e instanceof UnhandledCallbackExceptionError) {
+                $e = $e->getPrevious();
+            }
+
+            throw $e;
+        }
+
+        return $response;
+    }
+
     protected function getPathWithAppVars(string $path): string
     {
         return 'demos/' . $path;
@@ -287,9 +304,9 @@ class DemosTest extends TestCase
     /**
      * @dataProvider demoFilesProvider
      */
-    public function testDemosStatusAndHtmlResponse(string $uri): void
+    public function testDemosStatusAndHtmlResponse(string $path): void
     {
-        $response = $this->getResponseFromRequest($uri);
+        $response = $this->getResponseFromRequest($path);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
@@ -301,11 +318,7 @@ class DemosTest extends TestCase
             $this->expectExceptionMessage('Property for specified object is not defined');
         }
 
-        try {
-            $response = $this->getResponseFromRequest('layout/layouts_error.php');
-        } catch (\GuzzleHttp\Exception\ServerException $e) {
-            $response = $e->getResponse();
-        }
+        $response = $this->getResponseFromRequest500('layout/layouts_error.php');
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
@@ -324,9 +337,9 @@ class DemosTest extends TestCase
     /**
      * @dataProvider casesDemoGetProvider
      */
-    public function testDemoGet(string $uri): void
+    public function testDemoGet(string $path): void
     {
-        $response = $this->getResponseFromRequest($uri);
+        $response = $this->getResponseFromRequest($path);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
@@ -376,7 +389,7 @@ class DemosTest extends TestCase
     /**
      * @dataProvider jsonResponseProvider
      */
-    public function testDemoAssertJsonResponse(string $uri): void
+    public function testDemoAssertJsonResponse(string $path): void
     {
         if (static::class === self::class) { // test is failing, TODO fix
             $this->assertTrue(true);
@@ -384,7 +397,7 @@ class DemosTest extends TestCase
             return;
         }
 
-        $response = $this->getResponseFromRequest($uri);
+        $response = $this->getResponseFromRequest($path);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
@@ -407,7 +420,7 @@ class DemosTest extends TestCase
     /**
      * @dataProvider sseResponseProvider
      */
-    public function testDemoAssertSseResponse(string $uri): void
+    public function testDemoAssertSseResponse(string $path): void
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
@@ -416,7 +429,7 @@ class DemosTest extends TestCase
             return;
         }
 
-        $response = $this->getResponseFromRequest($uri);
+        $response = $this->getResponseFromRequest($path);
         $this->assertSame(200, $response->getStatusCode());
 
         $output_rows = preg_split('~\r?\n|\r~', $response->getBody()->getContents());
@@ -434,7 +447,7 @@ class DemosTest extends TestCase
             $this->assertSame(
                 $sse_line,
                 $format_match_string,
-                ' Testing SSE response line ' . $index . ' with content ' . $sse_line . ' on ' . $uri
+                ' Testing SSE response line ' . $index . ' with content ' . $sse_line . ' on ' . $path
             );
         }
     }
@@ -469,9 +482,9 @@ class DemosTest extends TestCase
     /**
      * @dataProvider jsonResponsePostProvider
      */
-    public function testDemoAssertJsonResponsePost(string $uri, array $postData): void
+    public function testDemoAssertJsonResponsePost(string $path, array $postData): void
     {
-        $response = $this->getResponseFromRequest($uri, ['form_params' => $postData]);
+        $response = $this->getResponseFromRequest($path, ['form_params' => $postData]);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
     }
@@ -479,23 +492,13 @@ class DemosTest extends TestCase
     /**
      * @dataProvider demoCallbackErrorProvider
      */
-    public function testDemoCallbackError(string $uri, string $expectedExceptionMessage): void
+    public function testDemoCallbackError(string $path, string $expectedExceptionMessage): void
     {
         if (static::class === self::class) {
             $this->expectExceptionMessage($expectedExceptionMessage);
         }
 
-        try {
-            $response = $this->getResponseFromRequest($uri);
-        } catch (\GuzzleHttp\Exception\ServerException $e) {
-            $response = $e->getResponse();
-        } catch (UnhandledCallbackExceptionError $e) {
-            while ($e instanceof UnhandledCallbackExceptionError) {
-                $e = $e->getPrevious();
-            }
-
-            throw $e;
-        }
+        $response = $this->getResponseFromRequest500($path);
 
         $this->assertSame(500, $response->getStatusCode());
         $responseBodyStr = $response->getBody()->getContents();
