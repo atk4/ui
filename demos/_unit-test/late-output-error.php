@@ -14,7 +14,7 @@ $cb->setUrlTrigger('err_headers_already_sent');
 
 $modal = \Atk4\Ui\Modal::addTo($app, ['cb' => $cb]);
 $modal->set(function () {
-    header('x-unmanged-header: test');
+    header('x-unmanaged-header: test');
     flush();
 });
 
