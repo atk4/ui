@@ -458,7 +458,7 @@ class DemosTest extends TestCase
             $this->assertSame(
                 $sse_line,
                 $format_match_string,
-                ' Testing SSE response line ' . $index . ' with content ' . $sse_line . ' on ' . $path
+                'Testing SSE response line ' . $index . ' with content ' . $sse_line
             );
         }
     }
