@@ -203,7 +203,14 @@ class DemosTest extends TestCase
             $exFactoryWithFullBody = new class('', $ex->getRequest()) extends \GuzzleHttp\Exception\RequestException {
                 public static function getResponseBodySummary(ResponseInterface $response): string
                 {
-                    return $response->getBody()->getContents();
+                    $body = $response->getBody();
+                    $res = $body->getContents();
+
+                    if ($body->isSeekable()) {
+                        $body->rewind();
+                    }
+
+                    return $res;
                 }
             };
 
