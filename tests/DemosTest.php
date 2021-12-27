@@ -473,6 +473,25 @@ class DemosTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
     }
+
+    public function testCallbackError(): void
+    {
+        if (static::class === self::class) {
+            $this->expectException(\Atk4\Ui\Exception::class);
+            $this->expectExceptionMessage('Callback requested, but never reached. You may be missing some arguments in request URL.');
+        }
+
+        $uri = 'obsolete/notify2.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_notify=ajax&' . Callback::URL_QUERY_TARGET . '=non_existing_target';
+
+        try {
+            $response = $this->getResponseFromRequest($uri, ['form_params' => ['width' => '25%']]);
+        } catch (\GuzzleHttp\Exception\ServerException $e) {
+            $response = $e->getResponse();
+        }
+
+        $this->assertSame(500, $response->getStatusCode());
+        $this->assertStringContainsString('Callback requested, but never reached. You may be missing some arguments in request URL.', $response->getBody()->getContents());
+    }
 }
 
 class DemosTestExitError extends \Error
