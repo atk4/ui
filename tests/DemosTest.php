@@ -293,7 +293,7 @@ class DemosTest extends TestCase
         $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
-    public function testResponseError(): void
+    public function testDemoResponseError(): void
     {
         if (static::class === self::class) {
             $this->expectException(\Atk4\Core\Exception::class);
@@ -479,7 +479,7 @@ class DemosTest extends TestCase
         $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
     }
 
-    public function testCallbackError(): void
+    public function testDemoCallbackError(): void
     {
         if (static::class === self::class) {
             $this->expectException(\Atk4\Ui\Exception::class);
