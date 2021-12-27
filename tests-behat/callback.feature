@@ -10,7 +10,7 @@ Feature: Callback
     Then I should not see "TestName"
 
   Scenario:
-    Given I am on "_unit-test/callback_2.php"
+    Given I am on "_unit-test/callback-nested.php"
     Then I press button "Load1"
     Then I should see "Loader-1"
     Then I press button "Load2"
