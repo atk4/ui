@@ -380,8 +380,8 @@ class DemosTest extends TestCase
         // loader callback reload
         $files[] = ['_unit-test/reload.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'c_reload=ajax&' . Callback::URL_QUERY_TARGET . '=c_reload'];
         // test catch exceptions
-        $files[] = ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m_cb&__atk_json=1'];
-        $files[] = ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm2_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m2_cb&__atk_json=1'];
+        $files[] = ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m_cb&__atk_json=1', 'Test throw exception!'];
+        $files[] = ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm2_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m2_cb&__atk_json=1', 'Test trigger error!'];
 
         return $files;
     }
@@ -389,18 +389,29 @@ class DemosTest extends TestCase
     /**
      * @dataProvider jsonResponseProvider
      */
-    public function testDemoAssertJsonResponse(string $path): void
+    public function testDemoAssertJsonResponse(string $path, string $expectedExceptionMessage = null): void
     {
-        if (static::class === self::class) { // test is failing, TODO fix
-            $this->assertTrue(true);
+        if (static::class === self::class) {
+            if ($expectedExceptionMessage !== null) {
+                if (str_contains($path, '=m2_cb&')) {
+                    $this->assertTrue(true);
 
-            return;
+                    return;
+                }
+
+                $this->expectExceptionMessage($expectedExceptionMessage);
+            }
         }
 
-        $response = $this->getResponseFromRequest($path);
+        $response = $this->getResponseFromRequest500($path);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
-        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
+        $responseBodyStr = $response->getBody()->getContents();
+        $this->assertMatchesRegularExpression($this->regexJson, $responseBodyStr);
+        $this->assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
+        if ($expectedExceptionMessage !== null) {
+            $this->assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
+        }
     }
 
     /**
