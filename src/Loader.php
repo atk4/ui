@@ -21,7 +21,7 @@ class Loader extends View
     public $shim;
 
     /**
-     * Specify which event will cause Loader to begen fetching it's actual data. In some cases
+     * Specify which event will cause Loader to begin fetching it's actual data. In some cases
      * you would want to wait. You can set a custom JavaScript event name then trigger() it.
      *
      * Default value is `true` which means loading will take place as soon as possible. Setting this
@@ -35,7 +35,7 @@ class Loader extends View
     public $ui = 'ui segment';
 
     /** @var Callback for triggering */
-    protected $cb;
+    public $cb;
 
     /** @var array Url arguments. */
     public $urlArgs = [];

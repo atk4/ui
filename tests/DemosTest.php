@@ -8,6 +8,7 @@ use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Persistence;
 use Atk4\Ui\App;
 use Atk4\Ui\Callback;
+use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -479,23 +480,57 @@ class DemosTest extends TestCase
         $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
     }
 
-    public function testDemoCallbackError(): void
+    /**
+     * @dataProvider demoCallbackErrorProvider
+     */
+    public function testDemoCallbackError(string $uri, string $expectedExceptionMessage): void
     {
         if (static::class === self::class) {
-            $this->expectException(\Atk4\Ui\Exception::class);
-            $this->expectExceptionMessage('Callback requested, but never reached. You may be missing some arguments in request URL.');
+            $this->expectExceptionMessage($expectedExceptionMessage);
         }
 
-        $uri = 'obsolete/notify2.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_notify=ajax&' . Callback::URL_QUERY_TARGET . '=non_existing_target';
-
         try {
-            $response = $this->getResponseFromRequest($uri, ['form_params' => ['width' => '25%']]);
+            $response = $this->getResponseFromRequest($uri);
         } catch (\GuzzleHttp\Exception\ServerException $e) {
             $response = $e->getResponse();
+        } catch (UnhandledCallbackExceptionError $e) {
+            while ($e instanceof UnhandledCallbackExceptionError) {
+                $e = $e->getPrevious();
+            }
+
+            throw $e;
         }
 
         $this->assertSame(500, $response->getStatusCode());
-        $this->assertStringContainsString('Callback requested, but never reached. You may be missing some arguments in request URL.', $response->getBody()->getContents());
+        $responseBodyStr = $response->getBody()->getContents();
+        $this->assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
+        $this->assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
+    }
+
+    public function demoCallbackErrorProvider(): array
+    {
+        return [
+            [
+                '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
+                'Callback requested, but never reached. You may be missing some arguments in request URL.',
+            ],
+            [
+                '_unit-test/callback-nested.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
+                'Callback requested, but never reached. You may be missing some arguments in request URL.',
+            ],
+            [
+                '_unit-test/callback-nested.php?err_main_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_main_loader',
+                'Exception from Main Loader',
+            ],
+            [
+                '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
+                'Exception from Sub Loader',
+            ],
+            [
+                '_unit-test/callback-nested.php?err_sub_loader2&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
+                'Exception II from Sub Loader',
+            ],
+        ];
     }
 }
 

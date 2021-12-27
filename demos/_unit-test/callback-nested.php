@@ -10,6 +10,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Crud;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Header;
 use Atk4\Ui\Loader;
 use Atk4\Ui\UserAction\ExecutorFactory;
@@ -25,26 +26,39 @@ $app->getExecutorFactory()->registerTrigger(
 );
 
 $loader = Loader::addTo($app);
+$loader->cb->setUrlTrigger('trigger_main_loader');
 $loader->loadEvent = false;
 
-$loader->set(function ($p) use ($m) {
-    $loader_1 = Loader::addTo($p);
-    $loader_1->loadEvent = false;
-
+$loader->set(function (Loader $p) use ($m) {
     Header::addTo($p, ['Loader-1', 'size' => 4]);
 
-    $loader_1->set(function ($p) use ($m) {
-        Header::addTo($p, ['Loader-2', 'size' => 4]);
-        $loader_3 = Loader::addTo($p);
+    if (isset($_GET['err_main_loader'])) {
+        throw new Exception('Exception from Main Loader');
+    }
 
-        $loader_3->set(function ($p) use ($m) {
+    $loaderSub = Loader::addTo($p);
+    $loaderSub->cb->setUrlTrigger('trigger_sub_loader');
+    $loaderSub->loadEvent = false;
+
+    $loaderSub->set(function (Loader $p) use ($m) {
+        Header::addTo($p, ['Loader-2', 'size' => 4]);
+
+        if (isset($_GET['err_sub_loader'])) {
+            throw new Exception('Exception from Sub Loader');
+        } elseif (isset($_GET['err_sub_loader2'])) {
+            throw new \Error('Exception II from Sub Loader');
+        }
+
+        $loaderSubSub = Loader::addTo($p);
+
+        $loaderSubSub->set(function (Loader $p) use ($m) {
             Header::addTo($p, ['Loader-3', 'size' => 4]);
 
             $c = Crud::addTo($p, ['ipp' => 4]);
             $c->setModel($m, [$m->fieldName()->name]);
         });
     });
-    \Atk4\Ui\Button::addTo($p, ['Load2'])->js('click', $loader_1->jsLoad());
+    \Atk4\Ui\Button::addTo($p, ['Load2'])->js('click', $loaderSub->jsLoad());
 });
 
 \Atk4\Ui\Button::addTo($app, ['Load1'])->js('click', $loader->jsLoad());
