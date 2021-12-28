@@ -700,9 +700,6 @@ parameters:
         -
             path: 'src/View.php'
             message: '~^If condition is always true\.$~'
-        -
-            path: 'tests/DemosTest.php'
-            message: '~^Else branch is unreachable because ternary operator condition is always true\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 5
@@ -2038,27 +2035,6 @@ parameters:
         -
             path: 'src/Wizard.php'
             message: '~^Method Atk4\\Ui\\Wizard::addFinish\(\) has no return type specified\.$~'
-        -
-            path: 'tests/CallbackTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\CallbackTest::\$var has no type specified\.$~'
-        -
-            path: 'tests/CallbackTest.php'
-            message: '~^Method Atk4\\Ui\\Tests\\CallbackTest::callPull230\(\) has no return type specified\.$~'
-        -
-            path: 'tests/DemosHttpTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\DemosHttpTest::\$_process has no type specified\.$~'
-        -
-            path: 'tests/DemosHttpTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\DemosHttpTest::\$_processSessionDir has no type specified\.$~'
-        -
-            path: 'tests/DemosHttpTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\DemosHttpTest::\$host has no type specified\.$~'
-        -
-            path: 'tests/DemosHttpTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\DemosHttpTest::\$port has no type specified\.$~'
-        -
-            path: 'tests/DemosTest.php'
-            message: '~^Strict comparison using \!\=\= between bool and null will always evaluate to true\.$~'
         -
             path: 'tests/PaginatorTest.php'
             message: '~^Property Atk4\\Ui\\Tests\\PaginatorTest::\$p has no type specified\.$~'

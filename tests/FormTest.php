@@ -27,7 +27,6 @@ class FormTest extends TestCase
         $this->form->setApp(new AppFormTestMock([
             'catch_exceptions' => false,
             'always_run' => false,
-            'catch_runaway_callbacks' => false,
         ]));
         $this->form->invokeInit();
     }
