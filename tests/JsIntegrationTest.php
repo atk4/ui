@@ -50,11 +50,9 @@ class JsIntegrationTest extends TestCase
         $j = $v->js(true)->hide();
         $v->getHtml();
 
-        $this->assertSame('<script>
-$(function() {
+        $this->assertSame('$(function() {
   $("#b").hide();
-})
-</script>', $v->getJs());
+})', $v->getJs());
     }
 
     /**
@@ -66,13 +64,11 @@ $(function() {
         $v->js('click')->hide();
         $v->getHtml();
 
-        $this->assertSame('<script>
-$(function() {
+        $this->assertSame('$(function() {
   $("#b").bind("click",function() {
     $("#b").hide();
   });
-})
-</script>', $v->getJs());
+})', $v->getJs());
     }
 
     /**
@@ -87,14 +83,12 @@ $(function() {
         $b1->on('click', $b2->js()->hide());
         $bb->getHtml();
 
-        $this->assertSame('<script>
-$(function() {
+        $this->assertSame('$(function() {
   $("#b1").on("click",function(event) {
     event.preventDefault();
     event.stopPropagation();
     $("#b2").hide();
   });
-})
-</script>', $bb->getJs());
+})', $bb->getJs());
     }
 }

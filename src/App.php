@@ -127,6 +127,7 @@ class App
 
     /** @var string[] Extra HTTP headers to send on exit. */
     protected $response_headers = [
+        self::HEADER_STATUS_CODE => '200',
         'cache-control' => 'no-store', // disable caching by default
     ];
 
@@ -243,6 +244,7 @@ class App
                 },
                 \E_ALL
             );
+            $this->outputResponseUnsafe('', [self::HEADER_STATUS_CODE => 500]);
         }
 
         // Always run app on shutdown
@@ -573,7 +575,7 @@ class App
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->dangerouslyAppendHtml('HEAD', $this->html->getJs());
+            $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('script', null, $this->html->getJs()));
             $this->is_rendering = false;
 
             if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catch_runaway_callbacks) {

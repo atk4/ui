@@ -1,7 +1,8 @@
 {
     "name": "atk4/ui",
-    "type": "library",
     "description": "Agile UI - Web Component Framework written in PHP",
+    "license": "MIT",
+    "type": "library",
     "keywords": [
         "framework",
         "ui",
@@ -15,9 +16,7 @@
         "grid",
         "crud"
     ],
-    "homepage": "https://github.com/atk4/ui",
     "version": "dev-develop",
-    "license": "MIT",
     "authors": [
         {
             "name": "Romans Malinovskis",
@@ -52,6 +51,7 @@
             "homepage": "https://xsystems.io/"
         }
     ],
+    "homepage": "https://github.com/atk4/ui",
     "require": {
         "php": ">=7.4 <8.2",
         "atk4/data": "dev-develop",
@@ -83,9 +83,8 @@
         "symfony/css-selector": "^4.4.24 || ^5.2.9",
         "symfony/process": "^4.4.30 || ^5.3.7"
     },
-    "config": {
-        "sort-packages": true
-    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Atk4\\Ui\\": "src/"
@@ -96,6 +95,7 @@
             "Atk4\\Ui\\Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "config": {
+        "sort-packages": true
+    }
 }

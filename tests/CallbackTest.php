@@ -225,12 +225,8 @@ class CallbackTest extends TestCase
         $this->assertSame(25, $var);
     }
 
-    public $var;
-
-    public function callPull230()
-    {
-        $this->var = 26;
-    }
+    /** @var int */
+    private $varPull230;
 
     public function testPull230(): void
     {
@@ -238,10 +234,12 @@ class CallbackTest extends TestCase
 
         $this->simulateCallbackTriggering($vp);
 
-        $vp->set(\Closure::fromCallable([$this, 'callPull230']));
+        $vp->set(function () {
+            $this->varPull230 = 26;
+        });
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $this->app->run();
-        $this->assertSame(26, $this->var);
+        $this->assertSame(26, $this->varPull230);
     }
 }

@@ -102,7 +102,7 @@ class ApiService {
                 }
                 if (response && response.atkjs) {
                     // Call evalResponse with proper context, js code and jQuery as $ var.
-                    atk.apiService.evalResponse.call(this, response.atkjs.replace(/<\/?script>/g, ''), jQuery);
+                    atk.apiService.evalResponse.call(this, response.atkjs, jQuery);
                 }
                 if (atk.apiService.afterSuccessCallbacks.length > 0) {
                     const self = this;
