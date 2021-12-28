@@ -15,7 +15,9 @@ use Symfony\Component\Process\Process;
  */
 class DemosHttpTest extends DemosTest
 {
+    /** @var Process|null */
     private static $_process;
+    /** @var string|null */
     private static $_processSessionDir;
 
     /** @var bool set the app->call_exit in demo */
@@ -24,7 +26,9 @@ class DemosHttpTest extends DemosTest
     /** @var bool set the app->catch_exceptions in demo */
     protected $app_catch_exceptions = true;
 
+    /** @var string */
     protected $host = '127.0.0.1';
+    /** @var int */
     protected $port = 9687;
 
     public static function tearDownAfterClass(): void
