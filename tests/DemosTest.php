@@ -219,7 +219,7 @@ class DemosTest extends TestCase
         }
     }
 
-    protected function getResponseFromRequest500(string $path, array $options = []): ResponseInterface
+    protected function getResponseFromRequest5xx(string $path, array $options = []): ResponseInterface
     {
         try {
             $response = $this->getResponseFromRequest($path, $options);
@@ -318,7 +318,7 @@ class DemosTest extends TestCase
             $this->expectExceptionMessage('Property for specified object is not defined');
         }
 
-        $response = $this->getResponseFromRequest500('layout/layouts_error.php');
+        $response = $this->getResponseFromRequest5xx('layout/layouts_error.php');
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
@@ -403,7 +403,7 @@ class DemosTest extends TestCase
             }
         }
 
-        $response = $this->getResponseFromRequest500($path);
+        $response = $this->getResponseFromRequest5xx($path);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         $responseBodyStr = $response->getBody()->getContents();
@@ -509,7 +509,7 @@ class DemosTest extends TestCase
             $this->expectExceptionMessage($expectedExceptionMessage);
         }
 
-        $response = $this->getResponseFromRequest500($path);
+        $response = $this->getResponseFromRequest5xx($path);
 
         $this->assertSame(500, $response->getStatusCode());
         $responseBodyStr = $response->getBody()->getContents();

@@ -100,7 +100,7 @@ class DemosHttpTest extends DemosTest
 
     public function testDemoLateOutputErrorHeadersAlreadySent(): void
     {
-        $response = $this->getResponseFromRequest500($this->getLateOutputErrorPath('err_headers_already_sent'));
+        $response = $this->getResponseFromRequest5xx($this->getLateOutputErrorPath('err_headers_already_sent'));
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertSame(
@@ -111,7 +111,7 @@ class DemosHttpTest extends DemosTest
 
     public function testDemoLateOutputErrorUnexpectedOutputDetected(): void
     {
-        $response = $this->getResponseFromRequest500($this->getLateOutputErrorPath('err_unexpected_output_detected'));
+        $response = $this->getResponseFromRequest5xx($this->getLateOutputErrorPath('err_unexpected_output_detected'));
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertSame(
