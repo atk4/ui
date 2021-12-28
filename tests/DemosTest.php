@@ -199,7 +199,7 @@ class DemosTest extends TestCase
     protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
     {
         try {
-            return $this->getClient()->request(isset($options['form_params']) !== null ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
+            return $this->getClient()->request(isset($options['form_params']) ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
         } catch (\GuzzleHttp\Exception\ServerException $ex) {
             $exFactoryWithFullBody = new class('', $ex->getRequest()) extends \GuzzleHttp\Exception\RequestException {
                 public static function getResponseBodySummary(ResponseInterface $response): string
