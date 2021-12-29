@@ -17,7 +17,7 @@ Header::addTo($app, ['Actions in Crud', 'subHeader' => 'Crud will automatically 
 $files = new FileLock($app->db);
 
 // This action must appear on top of the Crud
-$action = $files->addUserAction(
+$files->addUserAction(
     'import_from_filesystem',
     [
         'caption' => 'Import',

@@ -65,6 +65,9 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
             $id = $_POST['c0'] ?? $_POST['id'] ?? $_POST[$this->action->getModel()->id_field] ?? null;
             if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
                 $this->action = $this->action->getActionForEntity($this->action->getModel()->tryLoad($id));
+            } elseif (!$this->action->isOwnerEntity()
+                    && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)) {
+                $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
             }
 
             if ($errors = $this->_hasAllArguments()) {
