@@ -6,6 +6,7 @@ $finder = PhpCsFixer\Finder::create()
         'cache',
         'build',
         'vendor',
+        'js',
     ]);
 
 return (new PhpCsFixer\Config())
