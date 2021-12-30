@@ -270,7 +270,7 @@ class Card extends View
 
             $executor = $page->add(new $executorClass());
 
-            $action->setEntity($action->getModel()->load($id));
+            $action = $action->getActionForEntity($action->getModel()->load($id));
 
             $executor->setAction($action);
         });

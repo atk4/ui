@@ -114,7 +114,10 @@ class VpExecutor extends View implements JsExecutorInterface
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action->setEntity($this->action->getModel()->tryLoad($id));
+            $this->action = $this->action->getActionForEntity($this->action->getModel()->tryLoad($id));
+        } elseif (!$this->action->isOwnerEntity()
+                && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)) {
+            $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
         }
 
         if ($this->action->fields === true) {

@@ -5,8 +5,8 @@ parameters:
     excludePaths:
         - cache/
         - build/
-        - js/
         - vendor/
+        - js/
 
     # TODO review once we drop PHP 7.x support
     treatPhpDocTypesAsCertain: false
