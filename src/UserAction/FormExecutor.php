@@ -9,13 +9,10 @@ use Atk4\Ui\Form;
 
 class FormExecutor extends BasicExecutor
 {
-    /**
-     * @var Form
-     */
+    /** @var Form */
     public $form;
 
     /**
-     * Initialization.
      * If form model is not set then will use action fields property to set model field.
      * If action fields property is empty then will use all model fields as default.
      *

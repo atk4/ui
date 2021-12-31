@@ -16,23 +16,12 @@ class Radio extends Form\Control
 
     public $defaultTemplate = 'form/control/radio.html';
 
-    /**
-     * Contains a lister that will render individual radio buttons.
-     *
-     * @var Lister
-     */
+    /** @var Lister Contains a lister that will render individual radio buttons. */
     public $lister;
 
-    /**
-     * List of values.
-     *
-     * @var array
-     */
+    /** @var array List of values. */
     public $values = [];
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();

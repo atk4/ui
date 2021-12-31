@@ -36,11 +36,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     protected $sseInProgress = false;
 
-    /**
-     * Stores object JsSse which is used for communication.
-     *
-     * @var JsSse
-     */
+    /** @var JsSse Stores object JsSse which is used for communication. */
     public $sse;
 
     /**

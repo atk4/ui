@@ -18,39 +18,19 @@ namespace Atk4\Ui;
  */
 class Header extends View
 {
-    /**
-     * Set to 1, 2, .. 5 for page-headers or small/medium/large for content headers.
-     *
-     * @var int|string
-     */
+    /** @var int|string Set to 1, 2, .. 5 for page-headers or small/medium/large for content headers. */
     public $size;
 
-    /**
-     * Specify icon that will be included in a header.
-     *
-     * @var string
-     */
+    /** @var string Specify icon that will be included in a header. */
     public $icon;
 
-    /**
-     * Include image with a specified source.
-     *
-     * @var string
-     */
+    /** @var string Include image with a specified source. */
     public $image;
 
-    /**
-     * Will include sub-header.
-     *
-     * @var string
-     */
+    /** @var string Will include sub-header. */
     public $subHeader;
 
-    /**
-     * Specify alignment of the header.
-     *
-     * @var string
-     */
+    /** @var string Specify alignment of the header. */
     public $aligned;
 
     public $ui = 'header';

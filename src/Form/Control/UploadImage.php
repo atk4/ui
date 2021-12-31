@@ -8,11 +8,7 @@ use Atk4\Ui\View;
 
 class UploadImage extends Upload
 {
-    /**
-     * The thumbnail view to add to this input.
-     *
-     * @var View|null
-     */
+    /** @var View|null The thumbnail view to add to this input. */
     public $thumbnail;
 
     /**
@@ -23,11 +19,7 @@ class UploadImage extends Upload
      */
     public $thumnailRegion = 'AfterAfterInput';
 
-    /**
-     * The default thumbnail source.
-     *
-     * @var string
-     */
+    /** @var string The default thumbnail source. */
     public $defaultSrc;
 
     protected function init(): void

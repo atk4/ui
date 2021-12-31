@@ -24,35 +24,20 @@ class Lister extends View
      */
     public $t_row;
 
-    /**
-     * Lister use this part of template in case there are no elements in it.
-     *
-     * @var HtmlTemplate|null
-     */
+    /** @var HtmlTemplate|null Lister use this part of template in case there are no elements in it. */
     public $t_empty;
 
     public $defaultTemplate;
 
-    /**
-     * A dynamic paginator attach to window scroll event.
-     *
-     * @var JsPaginator|null
-     */
+    /** @var JsPaginator|null A dynamic paginator attach to window scroll event. */
     public $jsPaginator;
 
-    /**
-     * The number of item per page for JsPaginator.
-     *
-     * @var int|null
-     */
+    /** @var int|null The number of item per page for JsPaginator. */
     public $ipp;
 
     /** @var Model */
     public $current_row;
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();

@@ -62,32 +62,16 @@ class App
     /** @var Layout */
     public $layout; // the top-most view object
 
-    /**
-     * Set one or more directories where templates should reside.
-     *
-     * @var string|array
-     */
+    /** @var string|array Set one or more directories where templates should reside. */
     public $template_dir;
 
-    /**
-     * Will replace an exception handler with our own, that will output errors nicely.
-     *
-     * @var bool
-     */
+    /** @var bool Will replace an exception handler with our own, that will output errors nicely. */
     public $catch_exceptions = true;
 
-    /**
-     * Will display error if callback wasn't triggered.
-     *
-     * @var bool
-     */
+    /** @var bool Will display error if callback wasn't triggered. */
     public $catch_runaway_callbacks = true;
 
-    /**
-     * Will always run application even if developer didn't explicitly executed run();.
-     *
-     * @var bool
-     */
+    /** @var bool Will always run application even if developer didn't explicitly executed run();. */
     public $always_run = true;
 
     /**
@@ -138,21 +122,13 @@ class App
      */
     protected $url_building_ext = '.php';
 
-    /**
-     * Call exit in place of throw Exception when Application need to exit.
-     *
-     * @var bool
-     */
+    /** @var bool Call exit in place of throw Exception when Application need to exit. */
     public $call_exit = true;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     public $page;
 
-    /**
-     * @var array global sticky arguments
-     */
+    /** @var array global sticky arguments */
     protected $sticky_get_arguments = [
         '__atk_json' => false,
         '__atk_tab' => false,
@@ -161,8 +137,6 @@ class App
     public $templateClass = HtmlTemplate::class;
 
     /**
-     * Constructor.
-     *
      * @param array $defaults
      */
     public function __construct($defaults = [])

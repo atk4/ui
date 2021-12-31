@@ -24,9 +24,6 @@ class VirtualPage extends View
     /** @var string UI container class */
     public $ui = 'container';
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();

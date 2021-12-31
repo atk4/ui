@@ -41,9 +41,6 @@ class Callback extends AbstractView
         throw new Exception('Callback cannot contains children');
     }
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         $this->getApp(); // assert has App

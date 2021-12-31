@@ -6,11 +6,7 @@ namespace Atk4\Ui;
 
 class Paginator extends View
 {
-    /**
-     * Specify how many pages this paginator has in total.
-     *
-     * @var int
-     */
+    /** @var int Specify how many pages this paginator has in total. */
     public $total;
 
     /**
@@ -31,11 +27,7 @@ class Paginator extends View
      */
     public $range = 4;
 
-    /**
-     * Set this if you want GET argument name to look beautifully.
-     *
-     * @var string|null
-     */
+    /** @var string|null Set this if you want GET argument name to look beautifully. */
     public $urlTrigger;
 
     /**

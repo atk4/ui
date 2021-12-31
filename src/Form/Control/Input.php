@@ -42,11 +42,7 @@ class Input extends Form\Control
      */
     public $label;
 
-    /**
-     * Set label that will appear to the right of the input field.
-     *
-     * @var string|object
-     */
+    /** @var string|object Set label that will appear to the right of the input field. */
     public $labelRight;
 
     public $action;

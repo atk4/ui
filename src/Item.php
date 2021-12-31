@@ -9,18 +9,10 @@ namespace Atk4\Ui;
  */
 class Item extends View
 {
-    /**
-     * Specify a label for this menu item.
-     *
-     * @var string
-     */
+    /** @var string Specify a label for this menu item. */
     public $label;
 
-    /**
-     * Specify icon for this menu item.
-     *
-     * @var string
-     */
+    /** @var string Specify icon for this menu item. */
     public $icon;
 
     protected function renderView(): void

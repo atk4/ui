@@ -9,11 +9,7 @@ namespace Atk4\Ui;
  */
 class JsPaginator extends JsCallback
 {
-    /**
-     * The View that trigger scrolling event.
-     *
-     * @var View|null
-     */
+    /** @var View|null The View that trigger scrolling event. */
     public $view;
 
     /**

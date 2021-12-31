@@ -25,11 +25,7 @@ class View extends AbstractView implements JsExpressionable
      */
     public $_js_actions = [];
 
-    /**
-     * Data model.
-     *
-     * @var Model
-     */
+    /** @var Model Data model. */
     public $model;
 
     /**
@@ -49,32 +45,16 @@ class View extends AbstractView implements JsExpressionable
      */
     public $ui = false;
 
-    /**
-     * ID of the element, that's unique and is used in JS operations.
-     *
-     * @var string
-     */
+    /** @var string ID of the element, that's unique and is used in JS operations. */
     public $id;
 
-    /**
-     * List of classes that needs to be added.
-     *
-     * @var array
-     */
+    /** @var array List of classes that needs to be added. */
     public $class = [];
 
-    /**
-     * List of custom CSS attributes.
-     *
-     * @var array
-     */
+    /** @var array List of custom CSS attributes. */
     public $style = [];
 
-    /**
-     * List of custom attributes.
-     *
-     * @var array
-     */
+    /** @var array List of custom attributes. */
     public $attr = [];
 
     /**
@@ -97,18 +77,10 @@ class View extends AbstractView implements JsExpressionable
      */
     public $defaultTemplate = 'element.html';
 
-    /**
-     * Set static contents of this view.
-     *
-     * @var string|false|null
-     */
+    /** @var string|false|null Set static contents of this view. */
     public $content;
 
-    /**
-     * Change this if you want to substitute default "div" for something else.
-     *
-     * @var string
-     */
+    /** @var string Change this if you want to substitute default "div" for something else. */
     public $element;
 
     /** @var ExecutorFactory|null Seed class name */

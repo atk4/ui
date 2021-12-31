@@ -17,11 +17,7 @@ class LoremIpsum extends Text
      */
     public $size = 3;
 
-    /**
-     * Base amount of words per paragraph.
-     *
-     * @var int
-     */
+    /** @var int Base amount of words per paragraph. */
     public $words = 50;
 
     /**
@@ -84,10 +80,7 @@ class LoremIpsum extends Text
     }
 
     /**
-     * Constructor.
-     * Pass array of defaults or simply size property value.
-     *
-     * @param array|int $defaults
+     * @param array|int $defaults pass array of defaults or simply size property value
      */
     public function __construct($defaults = null)
     {

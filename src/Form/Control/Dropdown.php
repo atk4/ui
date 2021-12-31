@@ -28,25 +28,13 @@ class Dropdown extends Input
      */
     public $values = [];
 
-    /**
-     * The string to set as an empty values.
-     *
-     * @var string
-     */
+    /** @var string The string to set as an empty values. */
     public $empty = "\u{00a0}"; // Unicode NBSP
 
-    /**
-     * The html template associate whit this dropdown.
-     *
-     * @var string
-     */
+    /** @var string The html template associate whit this dropdown. */
     public $defaultTemplate = 'form/control/dropdown.html';
 
-    /**
-     * The css class associate with this dropdown.
-     *
-     * @var string
-     */
+    /** @var string The css class associate with this dropdown. */
     public $defaultClass = 'fluid search selection dropdown';
 
     /**
@@ -59,11 +47,7 @@ class Dropdown extends Input
      */
     public $dropIcon;
 
-    /**
-     * Dropdown options as per semantic-ui dropdown options.
-     *
-     * @var array
-     */
+    /** @var array Dropdown options as per semantic-ui dropdown options. */
     public $dropdownOptions = [];
 
     /**
@@ -121,23 +105,12 @@ class Dropdown extends Input
      */
     public $renderRowFunction;
 
-    /**
-     * Subtemplate for a single dropdown item.
-     *
-     * @var object
-     */
+    /** @var object Subtemplate for a single dropdown item. */
     protected $_tItem;
 
-    /**
-     * Subtemplate for an icon for a single dropdown item.
-     *
-     * @var object;
-     */
+    /** @var object; Subtemplate for an icon for a single dropdown item. */
     protected $_tIcon;
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();

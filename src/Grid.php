@@ -18,11 +18,7 @@ class Grid extends View
 {
     use HookTrait;
 
-    /**
-     * Will be initialized to Menu object, however you can set this to false to disable menu.
-     *
-     * @var Menu|false
-     */
+    /** @var Menu|false Will be initialized to Menu object, however you can set this to false to disable menu. */
     public $menu;
 
     /** @var JsSearch */
@@ -40,11 +36,7 @@ class Grid extends View
      */
     public $paginator;
 
-    /**
-     * Number of items per page to display.
-     *
-     * @var int
-     */
+    /** @var int Number of items per page to display. */
     public $ipp = 50;
 
     /**
@@ -79,41 +71,21 @@ class Grid extends View
      */
     public $sortable;
 
-    /**
-     * Set this if you want GET argument name to look beautifully for sorting.
-     *
-     * @var string|null
-     */
+    /** @var string|null Set this if you want GET argument name to look beautifully for sorting. */
     public $sortTrigger;
 
-    /**
-     * Component that actually renders data rows / columns and possibly totals.
-     *
-     * @var Table|false
-     */
+    /** @var Table|false Component that actually renders data rows / columns and possibly totals. */
     public $table;
 
-    /**
-     * The container for table and paginator.
-     *
-     * @var View
-     */
+    /** @var View The container for table and paginator. */
     public $container;
 
     public $defaultTemplate = 'grid.html';
 
-    /**
-     * Defines which Table Decorator to use for ActionButtons.
-     *
-     * @var string
-     */
+    /** @var string Defines which Table Decorator to use for ActionButtons. */
     protected $actionButtonsDecorator = [Table\Column\ActionButtons::class];
 
-    /**
-     * Defines which Table Decorator to use for ActionMenu.
-     *
-     * @var array
-     */
+    /** @var array Defines which Table Decorator to use for ActionMenu. */
     protected $actionMenuDecorator = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
 
     protected function init(): void
