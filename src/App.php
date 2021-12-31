@@ -145,14 +145,10 @@ class App
      */
     public $call_exit = true;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     public $page;
 
-    /**
-     * @var array global sticky arguments
-     */
+    /** @var array global sticky arguments */
     protected $sticky_get_arguments = [
         '__atk_json' => false,
         '__atk_tab' => false,

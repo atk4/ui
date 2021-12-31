@@ -13,14 +13,10 @@ class JsExpression implements JsExpressionable
 {
     use DiContainerTrait;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $template;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $args = [];
 
     public function __construct(string $template = '', array $args = [])

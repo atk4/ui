@@ -15,9 +15,7 @@ use Atk4\Ui\Table;
  */
 class Multiformat extends Table\Column
 {
-    /**
-     * @var \Closure Method to execute which will return array of seeds for decorators
-     */
+    /** @var \Closure Method to execute which will return array of seeds for decorators */
     public $callback;
 
     public function getDataCellHtml(Field $field = null, $extra_tags = [])

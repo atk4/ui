@@ -17,9 +17,7 @@ use Atk4\Ui\Header;
  */
 class ArgumentFormExecutor extends BasicExecutor
 {
-    /**
-     * @var Form
-     */
+    /** @var Form */
     public $form;
 
     /**

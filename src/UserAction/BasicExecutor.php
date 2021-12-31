@@ -19,49 +19,31 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
     /** @const string */
     public const HOOK_AFTER_EXECUTE = self::class . '@afterExecute';
 
-    /**
-     * @var Model\UserAction
-     */
+    /** @var Model\UserAction */
     public $action;
 
-    /**
-     * @var bool display header or not
-     */
+    /** @var bool display header or not */
     public $hasHeader = true;
 
-    /**
-     * @var string header description
-     */
+    /** @var string header description */
     public $description;
 
-    /**
-     * @var string display message when action is disabled
-     */
+    /** @var string display message when action is disabled */
     public $disableMsg = 'Action is disabled and cannot be executed';
 
-    /**
-     * @var Button|array Button that trigger the action. Either as an array seed or object
-     */
+    /** @var Button|array Button that trigger the action. Either as an array seed or object */
     public $executorButton;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $arguments = [];
 
-    /**
-     * @var string display message when missing arguments
-     */
+    /** @var string display message when missing arguments */
     public $missingArgsMsg = 'Insufficient arguments';
 
-    /**
-     * @var array list of validated arguments
-     */
+    /** @var array list of validated arguments */
     protected $validArguments = [];
 
-    /**
-     * @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
-     */
+    /** @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */
     protected $jsSuccess;
 
     public function getAction(): Model\UserAction

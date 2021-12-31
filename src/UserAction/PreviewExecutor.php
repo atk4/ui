@@ -11,9 +11,7 @@ class PreviewExecutor extends BasicExecutor
     /** @var View */
     public $preview;
 
-    /**
-     * @var string can be "console", "text", or "html"
-     */
+    /** @var string can be "console", "text", or "html" */
     public $previewType = 'console';
 
     public function initPreview()

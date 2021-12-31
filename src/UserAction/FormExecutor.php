@@ -9,9 +9,7 @@ use Atk4\Ui\Form;
 
 class FormExecutor extends BasicExecutor
 {
-    /**
-     * @var Form
-     */
+    /** @var Form */
     public $form;
 
     /**

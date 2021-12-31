@@ -16,9 +16,7 @@ use Atk4\Ui\View;
  */
 class Control extends View
 {
-    /**
-     * @var Form to which this field belongs
-     */
+    /** @var Form to which this field belongs */
     public $form;
 
     /** @var EntityFieldPair<Model, Field> */
@@ -27,9 +25,7 @@ class Control extends View
     /** @var string */
     public $controlClass = '';
 
-    /**
-     * @var bool Whether you need this field to be rendered wrap in a form layout or as his
-     */
+    /** @var bool Whether you need this field to be rendered wrap in a form layout or as his */
     public $layoutWrap = true;
 
     /** @var bool rendered or not input label in generic Form\Layout template. */
