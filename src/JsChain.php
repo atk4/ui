@@ -18,11 +18,7 @@ namespace Atk4\Ui;
  */
 class JsChain extends JsExpression
 {
-    /**
-     * Set this to the object of your library. Most libraries prefer '$', although you might want to use 'jQuery' or 'new google.maps.Map';.
-     *
-     * @var string
-     */
+    /** @var string Set this to the object of your library. Most libraries prefer '$', although you might want to use 'jQuery' or 'new google.maps.Map';. */
     public $_library = '$';
 
     /**

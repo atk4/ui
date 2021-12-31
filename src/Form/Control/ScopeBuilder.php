@@ -20,11 +20,7 @@ class ScopeBuilder extends Control
     /** @var bool Do not render label for this input. */
     public $renderLabel = false;
 
-    /**
-     * General or field type specific options.
-     *
-     * @var array
-     */
+    /** @var array General or field type specific options. */
     public $options = [
         'enum' => [
             'limit' => 250,
@@ -40,21 +36,13 @@ class ScopeBuilder extends Control
      */
     public $maxDepth = 5;
 
-    /**
-     * Fields to use for creating the rules.
-     *
-     * @var array
-     */
+    /** @var array Fields to use for creating the rules. */
     public $fields = [];
 
     /** @var HtmlTemplate The template needed for the ScopeBuilder view. */
     public $scopeBuilderTemplate;
 
-    /**
-     * List of delimiters for auto-detection in order of priority.
-     *
-     * @var array
-     */
+    /** @var array List of delimiters for auto-detection in order of priority. */
     public static $listDelimiters = [';', ','];
 
     /**
@@ -79,18 +67,10 @@ class ScopeBuilder extends Control
         'ui' => 'small basic button',
     ];
 
-    /**
-     * The scopebuilder View. Assigned in init().
-     *
-     * @var \Atk4\Ui\View
-     */
+    /** @var \Atk4\Ui\View The scopebuilder View. Assigned in init(). */
     protected $scopeBuilderView;
 
-    /**
-     * Definition of VueQueryBuilder rules.
-     *
-     * @var array
-     */
+    /** @var array Definition of VueQueryBuilder rules. */
     protected $rules = [];
 
     /**
@@ -101,11 +81,7 @@ class ScopeBuilder extends Control
      */
     public $labels = [];
 
-    /**
-     * Default VueQueryBuilder query.
-     *
-     * @var array
-     */
+    /** @var array Default VueQueryBuilder query. */
     protected $query = [];
 
     protected const OPERATOR_TEXT_EQUALS = 'equals';
@@ -217,11 +193,7 @@ class ScopeBuilder extends Control
         ],
     ];
 
-    /**
-     * Definition of rule types.
-     *
-     * @var array
-     */
+    /** @var array Definition of rule types. */
     protected static $ruleTypes = [
         'default' => 'text',
         'text' => [

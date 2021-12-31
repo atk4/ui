@@ -29,11 +29,7 @@ abstract class AbstractView
     use StaticAddToTrait;
     use TrackableTrait;
 
-    /**
-     * Default name of the element.
-     *
-     * @var string
-     */
+    /** @var string Default name of the element. */
     public $defaultName = 'atk';
 
     /**
@@ -46,11 +42,7 @@ abstract class AbstractView
      */
     protected $_add_later = [];
 
-    /**
-     * will be set to true after rendered. This is so that we don't render view twice.
-     *
-     * @var bool
-     */
+    /** @var bool will be set to true after rendered. This is so that we don't render view twice. */
     protected $_rendered = false;
     // }}}
 

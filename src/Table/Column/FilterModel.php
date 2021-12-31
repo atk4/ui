@@ -20,32 +20,16 @@ class FilterModel extends Model
     use NameTrait; // needed for SessionTrait
     use SessionTrait;
 
-    /**
-     * The operator for defining a condition on a field.
-     *
-     * @var Field
-     */
+    /** @var Field The operator for defining a condition on a field. */
     public $op;
 
-    /**
-     * The value for defining a condition on a field.
-     *
-     * @var Field
-     */
+    /** @var Field The value for defining a condition on a field. */
     public $value;
 
-    /**
-     * Determines if this field shouldn't have a value field, and use only op field.
-     *
-     * @var bool
-     */
+    /** @var bool Determines if this field shouldn't have a value field, and use only op field. */
     public $noValueField = false;
 
-    /**
-     * The field where this filter need to query data.
-     *
-     * @var Field
-     */
+    /** @var Field The field where this filter need to query data. */
     public $lookupField;
 
     /**

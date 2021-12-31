@@ -16,18 +16,10 @@ use Atk4\Ui\UserAction\ExecutorInterface;
  */
 class ActionButtons extends Table\Column
 {
-    /**
-     * Stores all the buttons that have been added.
-     *
-     * @var array
-     */
+    /** @var array Stores all the buttons that have been added. */
     public $buttons = [];
 
-    /**
-     * Callbacks as defined in $action->enabled for evaluating row-specific if an action is enabled.
-     *
-     * @var array
-     */
+    /** @var array Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
     protected $callbacks = [];
 
     protected function init(): void

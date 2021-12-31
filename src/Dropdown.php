@@ -10,18 +10,10 @@ class Dropdown extends Lister
 
     public $defaultTemplate = 'dropdown.html';
 
-    /**
-     * Callback when a new value is selected in Dropdown.
-     *
-     * @var JsCallback|null
-     */
+    /** @var JsCallback|null Callback when a new value is selected in Dropdown. */
     public $cb;
 
-    /**
-     * As per Fomantic-ui dropdown options.
-     *
-     * @var array
-     */
+    /** @var array As per Fomantic-ui dropdown options. */
     public $dropdownOptions = [];
 
     protected function init(): void

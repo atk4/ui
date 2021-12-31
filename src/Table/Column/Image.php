@@ -11,11 +11,7 @@ use Atk4\Ui\Table;
  */
 class Image extends Table\Column
 {
-    /**
-     * Overrides custom attributes that will be applied on head, body or foot.
-     *
-     * @var array
-     */
+    /** @var array Overrides custom attributes that will be applied on head, body or foot. */
     public $attr = ['all' => ['class' => ['center aligned single line']]];
 
     /**

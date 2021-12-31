@@ -28,66 +28,30 @@ use Atk4\Ui\Table;
  */
 class ColorRating extends Table\Column
 {
-    /**
-     * Minimum value of the gradient.
-     *
-     * @var float
-     */
+    /** @var float Minimum value of the gradient. */
     public $min;
 
-    /**
-     * Maximum value of the gradient.
-     *
-     * @var float
-     */
+    /** @var float Maximum value of the gradient. */
     public $max;
-    /**
-     * Step to be calculated between colors, must be greater than 1.
-     *
-     * @var int
-     */
+    /** @var int Step to be calculated between colors, must be greater than 1. */
     public $steps = 1;
 
-    /**
-     * Hex colors ['#FF0000','#00FF00'] from red to green.
-     *
-     * @var array
-     */
+    /** @var array Hex colors ['#FF0000','#00FF00'] from red to green. */
     public $colors = ['#FF0000', '#00FF00'];
 
-    /**
-     * Store the generated Hex color based on the number of steps.
-     *
-     * @var array
-     */
+    /** @var array Store the generated Hex color based on the number of steps. */
     protected $gradients = [];
 
-    /**
-     * Number of gradient, used internally.
-     *
-     * @var int
-     */
+    /** @var int Number of gradient, used internally. */
     protected $gradients_count = 0;
 
-    /**
-     * Internally used to avoid calc on every call.
-     *
-     * @var float
-     */
+    /** @var float Internally used to avoid calc on every call. */
     protected $delta;
 
-    /**
-     * Define if values greater than max have no color.
-     *
-     * @var bool
-     */
+    /** @var bool Define if values greater than max have no color. */
     public $more_than_max_no_color = false;
 
-    /**
-     * Define if values lesser than min have no color.
-     *
-     * @var bool
-     */
+    /** @var bool Define if values lesser than min have no color. */
     public $less_than_min_no_color = false;
 
     protected function init(): void

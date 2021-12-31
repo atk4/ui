@@ -17,25 +17,13 @@ use Atk4\Ui\Popup;
  */
 class FilterPopup extends Popup
 {
-    /**
-     * The form associate with this FilterPopup.
-     *
-     * @var Form
-     */
+    /** @var Form The form associate with this FilterPopup. */
     public $form;
 
-    /**
-     * The table field that need filtering.
-     *
-     * @var Field
-     */
+    /** @var Field The table field that need filtering. */
     public $field;
 
-    /**
-     * The view associate with this filter popup that need to be reload.
-     *
-     * @var \Atk4\Ui\View|null
-     */
+    /** @var \Atk4\Ui\View|null The view associate with this filter popup that need to be reload. */
     public $reload;
 
     /**

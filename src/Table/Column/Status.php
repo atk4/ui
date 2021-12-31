@@ -12,11 +12,7 @@ use Atk4\Ui\Table;
  */
 class Status extends Table\Column
 {
-    /**
-     * Describes list of highlited statuses for this Field.
-     *
-     * @var array
-     */
+    /** @var array Describes list of highlited statuses for this Field. */
     public $states = [];
 
     /**

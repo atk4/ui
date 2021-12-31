@@ -63,18 +63,10 @@ class Form extends View
      */
     public $formElement;
 
-    /**
-     * A current layout of a form, needed if you call $form->addControl().
-     *
-     * @var \Atk4\Ui\Form\Layout
-     */
+    /** @var \Atk4\Ui\Form\Layout A current layout of a form, needed if you call Form->addControl(). */
     public $layout;
 
-    /**
-     * List of form controls currently registered with this form.
-     *
-     * @var array<string, Control>
-     */
+    /** @var array<string, Control> List of form controls currently registered with this form. */
     public $controls = [];
 
     public $content = false;
@@ -131,18 +123,10 @@ class Form extends View
      */
     public $controlDisplaySelector = '.field';
 
-    /**
-     * Use this apiConfig variable to pass API settings to Semantic UI in .api().
-     *
-     * @var array
-     */
+    /** @var array Use this apiConfig variable to pass API settings to Semantic UI in .api(). */
     public $apiConfig = [];
 
-    /**
-     * Use this formConfig variable to pass settings to Semantic UI in .from().
-     *
-     * @var array
-     */
+    /** @var array Use this formConfig variable to pass settings to Semantic UI in .from(). */
     public $formConfig = [];
 
     // }}}
@@ -526,11 +510,7 @@ class Form extends View
         return Factory::factory($ControlSeed, $defaults);
     }
 
-    /**
-     * Provides control seeds for most common types.
-     *
-     * @var array Describes how factory converts type to control seed
-     */
+    /** @var array Describes how factory converts type to control seed Provides control seeds for most common types. */
     protected $typeToControl = [
         'boolean' => [Control\Checkbox::class],
         'text' => [Control\Textarea::class],

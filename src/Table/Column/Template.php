@@ -11,11 +11,7 @@ use Atk4\Ui\Table;
  */
 class Template extends Table\Column
 {
-    /**
-     * User-defined template for this Column.
-     *
-     * @var string
-     */
+    /** @var string User-defined template for this Column. */
     public $template;
 
     /**

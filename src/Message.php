@@ -17,25 +17,13 @@ namespace Atk4\Ui;
  */
 class Message extends View
 {
-    /**
-     * Set to info | warning | error | success | positie | negative.
-     *
-     * @var string
-     */
+    /** @var string Set to info | warning | error | success | positie | negative. */
     public $type;
 
-    /**
-     * Contains a text to be included below.
-     *
-     * @var Text|false
-     */
+    /** @var Text|false Contains a text to be included below. */
     public $text;
 
-    /**
-     * Specify icon to be displayed.
-     *
-     * @var string
-     */
+    /** @var string Specify icon to be displayed. */
     public $icon;
 
     public $ui = 'message';

@@ -10,11 +10,7 @@ namespace Atk4\Ui;
 
 class JsSearch extends View
 {
-    /**
-     * The View to reload using this JsSearch.
-     *
-     * @var View
-     */
+    /** @var View The View to reload using this JsSearch. */
     public $reload;
 
     public $args = [];
@@ -27,11 +23,7 @@ class JsSearch extends View
      */
     public $autoQuery = false;
 
-    /**
-     * The input field.
-     *
-     * @var Form\Control\Line
-     */
+    /** @var Form\Control\Line The input field. */
     public $placeHolder = 'Search';
 
     /**

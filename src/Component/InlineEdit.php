@@ -17,18 +17,10 @@ class InlineEdit extends View
 {
     public $defaultTemplate = 'inline-edit.html';
 
-    /**
-     * JsCallback for saving data.
-     *
-     * @var \Atk4\Ui\JsCallback
-     */
+    /** @var \Atk4\Ui\JsCallback JsCallback for saving data. */
     public $cb;
 
-    /**
-     * Input initial value.
-     *
-     * @var mixed
-     */
+    /** @var mixed Input initial value. */
     public $initValue;
 
     /**
@@ -61,11 +53,7 @@ class InlineEdit extends View
      */
     public $saveOnBlur = true;
 
-    /**
-     * Default css for the input div.
-     *
-     * @var string
-     */
+    /** @var string Default css for the input div. */
     public $inputCss = 'ui right icon input';
 
     /**

@@ -6,32 +6,16 @@ namespace Atk4\Ui;
 
 class JsCallback extends Callback implements JsExpressionable
 {
-    /**
-     * Holds information about arguments passed in to the callback.
-     *
-     * @var array
-     */
+    /** @var array Holds information about arguments passed in to the callback. */
     public $args = [];
 
-    /**
-     * Text to display as a confirmation. Set with setConfirm(..).
-     *
-     * @var string
-     */
+    /** @var string Text to display as a confirmation. Set with setConfirm(..). */
     public $confirm;
 
-    /**
-     * Use this apiConfig variable to pass API settings to Semantic UI in .api().
-     *
-     * @var array|null
-     */
+    /** @var array|null Use this apiConfig variable to pass API settings to Semantic UI in .api(). */
     public $apiConfig;
 
-    /**
-     * Include web storage data item (key) value to be include in the request.
-     *
-     * @var string|null
-     */
+    /** @var string|null Include web storage data item (key) value to be include in the request. */
     public $storeName;
 
     /**

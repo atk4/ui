@@ -46,11 +46,7 @@ class Modal extends View
     /** @var string Currently only "json" response type is supported. */
     public $type = 'json';
 
-    /**
-     * Add ability to add css classes to "content" div.
-     *
-     * @var array
-     */
+    /** @var array Add ability to add css classes to "content" div. */
     public $contentCss = ['img', 'content', 'atk-dialog-content'];
 
     /**

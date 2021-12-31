@@ -11,11 +11,7 @@ namespace Atk4\Ui;
  */
 class ProgressBar extends View
 {
-    /**
-     * Contains a text label to display under the bar. Null/false will disable the label.
-     *
-     * @var string|false|null
-     */
+    /** @var string|false|null Contains a text label to display under the bar. Null/false will disable the label. */
     public $label;
 
     public $ui = 'progress';
@@ -30,11 +26,7 @@ class ProgressBar extends View
      */
     public $value = 0;
 
-    /**
-     * Indicates a maximum value of a progress bar.
-     *
-     * @var int
-     */
+    /** @var int Indicates a maximum value of a progress bar. */
     public $max = 100;
 
     public function __construct($value = 0, $label = null, $class = null)
