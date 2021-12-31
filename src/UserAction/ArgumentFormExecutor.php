@@ -20,9 +20,6 @@ class ArgumentFormExecutor extends BasicExecutor
     /** @var Form */
     public $form;
 
-    /**
-     * Initialization.
-     */
     public function initPreview()
     {
         Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?: $this->action->getDescription()]);

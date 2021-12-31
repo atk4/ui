@@ -22,9 +22,6 @@ class Radio extends Form\Control
     /** @var array List of values. */
     public $values = [];
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();

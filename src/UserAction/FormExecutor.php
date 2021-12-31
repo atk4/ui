@@ -13,7 +13,6 @@ class FormExecutor extends BasicExecutor
     public $form;
 
     /**
-     * Initialization.
      * If form model is not set then will use action fields property to set model field.
      * If action fields property is empty then will use all model fields as default.
      *

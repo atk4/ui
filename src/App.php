@@ -137,8 +137,6 @@ class App
     public $templateClass = HtmlTemplate::class;
 
     /**
-     * Constructor.
-     *
      * @param array $defaults
      */
     public function __construct($defaults = [])

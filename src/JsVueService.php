@@ -17,9 +17,6 @@ class JsVueService
     /** @var JsChain The atk vue service to talk too. */
     public $service;
 
-    /**
-     * JsVueService constructor.
-     */
     public function __construct()
     {
         $this->service = new JsChain('atk.vueService');

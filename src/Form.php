@@ -134,8 +134,6 @@ class Form extends View
     // {{{ Base Methods
 
     /**
-     * Constructor.
-     *
      * @param mixed $defaults CSS class or seed array
      *
      * @todo this should also call parent::__construct, but we have to refactor View::__construct method parameters too
@@ -155,9 +153,6 @@ class Form extends View
         $this->setDefaults($defaults);
     }
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();

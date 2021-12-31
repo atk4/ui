@@ -69,9 +69,6 @@ class InlineEdit extends View
      */
     public $formatErrorMsg;
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();

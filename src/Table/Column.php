@@ -50,8 +50,6 @@ class Column
     public $headerActionTag;
 
     /**
-     * Constructor.
-     *
      * @param array $defaults
      */
     public function __construct($defaults = [])

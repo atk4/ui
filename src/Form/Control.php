@@ -69,9 +69,6 @@ class Control extends View
      */
     public $readonly = false;
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();

@@ -106,8 +106,6 @@ class Table extends Lister
     public $hasCollapsingCssActionColumn = true;
 
     /**
-     * Constructor.
-     *
      * @param string|null $class CSS class to add
      */
     public function __construct($class = null)

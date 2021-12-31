@@ -80,10 +80,7 @@ class LoremIpsum extends Text
     }
 
     /**
-     * Constructor.
-     * Pass array of defaults or simply size property value.
-     *
-     * @param array|int $defaults
+     * @param array|int $defaults pass array of defaults or simply size property value
      */
     public function __construct($defaults = null)
     {

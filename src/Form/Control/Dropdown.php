@@ -111,9 +111,6 @@ class Dropdown extends Input
     /** @var object; Subtemplate for an icon for a single dropdown item. */
     protected $_tIcon;
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();

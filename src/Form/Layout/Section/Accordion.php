@@ -16,8 +16,6 @@ class Accordion extends \Atk4\Ui\Accordion
     public $form;
 
     /**
-     * Initialization.
-     *
      * Adds hook which in case of field error expands respective accordion sections.
      */
     protected function init(): void

@@ -38,9 +38,6 @@ class Lister extends View
     /** @var Model */
     public $current_row;
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();
