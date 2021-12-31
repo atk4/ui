@@ -53,7 +53,7 @@ $country = $country->loadAny();
 
 $cardActions = Card::addTo($app, ['useLabel' => true, 'executorFactory' => new $myFactory()]);
 $cardActions->setModel($country);
-foreach ($country->getUserActions() as $action) {
+foreach ($country->getModel()->getUserActions() as $action) {
     $showActions = ['callback', 'preview', 'edit_argument', 'edit_argument_prev', 'edit_iso', 'confirm', 'multi_step'];
     if (in_array($action->short_name, $showActions, true)) {
         $cardActions->addClickAction($action);
