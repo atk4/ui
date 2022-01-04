@@ -890,15 +890,6 @@ parameters:
             path: 'demos/init-db.php'
             message: '~^Property Atk4\\Ui\\Demos\\Stat::\$title has no type specified\.$~'
         -
-            path: 'demos/init-db.php'
-            message: '~^Method Atk4\\Ui\\Demos\\File::importFromFilesystem\(\) has no return type specified\.$~'
-        -
-            path: 'demos/init-db.php'
-            message: '~^Method Atk4\\Ui\\Demos\\File::importFromFilesystem\(\) has parameter \$isSub with no type specified\.$~'
-        -
-            path: 'demos/init-db.php'
-            message: '~^Method Atk4\\Ui\\Demos\\File::importFromFilesystem\(\) has parameter \$path with no type specified\.$~'
-        -
             path: 'demos/interactive/console.php'
             message: '~^Method class@anonymous/demos/interactive/console\.php:\d+::generateReport\(\) has no return type specified\.$~'
         -

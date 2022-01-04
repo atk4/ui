@@ -315,34 +315,47 @@ class File extends ModelWithPrefixedFields
     /**
      * Perform import from filesystem.
      */
-    public function importFromFilesystem($path, $isSub = false)
+    public function importFromFilesystem(string $path, bool $isSub = null): void
     {
-        if (!$isSub) {
-            $path = __DIR__ . '/../' . $path;
+        if ($isSub === null) {
+            if ($this->isEntity()) { // TODO should be not needed once UserAction is for non-entity only
+                $this->getModel()->importFromFilesystem($path);
+
+                return;
+            }
+
+            $this->atomic(function () use ($path) {
+                foreach ($this as $entity) {
+                    $entity->delete();
+                }
+
+                $path = __DIR__ . '/../' . $path;
+
+                $this->importFromFilesystem($path, false);
+            });
+
+            return;
         }
 
-        $dir = new \DirectoryIterator($path);
-        foreach ($dir as $fileinfo) {
-            $name = $fileinfo->getFilename();
-
-            if ($name === '.' || $name[0] === '.') {
+        foreach (new \DirectoryIterator($path) as $fileinfo) {
+            if ($fileinfo->isDot() || in_array($fileinfo->getFilename(), ['.git', 'vendor', 'js'], true)) {
                 continue;
             }
 
-            if ($name === 'src' || $name === 'demos' || $isSub) {
-                $entity = $this->getModel(true)->createEntity();
+            if (in_array($fileinfo->getFilename(), ['demos', 'src', 'tests'], true) || $isSub) {
+                $entity = $this->createEntity();
 
                 /*
                 // Disabling saving file in db
-                $m->save([
+                $entity->save([
                     $this->fieldName()->name => $fileinfo->getFilename(),
                     $this->fieldName()->is_folder => $fileinfo->isDir(),
-                    $this->fieldName()->type => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
+                    $this->fieldName()->type => pathinfo($fileinfo->getFilename(), \PATHINFO_EXTENSION),
                 ]);
                 */
 
                 if ($fileinfo->isDir()) {
-                    $entity->SubFolder->importFromFilesystem($dir->getPath() . '/' . $name, true);
+                    $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
                 }
             }
         }
