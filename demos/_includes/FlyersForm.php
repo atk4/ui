@@ -37,16 +37,16 @@ class FlyersForm extends Form
 
         $this->addControl('country', [
             Form\Control\Lookup::class,
-            'model' => new \Atk4\Ui\Demos\Country($this->getApp()->db),
+            'model' => new Country($this->getApp()->db),
             'dependency' => function (Model $model, $data) {
                 if (isset($data['contains'])) {
-                    $model->addCondition(\Atk4\Ui\Demos\Country::hinting()->fieldName()->name, 'like', '%' . $data['contains'] . '%');
+                    $model->addCondition(Country::hinting()->fieldName()->name, 'like', '%' . $data['contains'] . '%');
                 }
             },
             'search' => [
-                \Atk4\Ui\Demos\Country::hinting()->fieldName()->name,
-                \Atk4\Ui\Demos\Country::hinting()->fieldName()->iso,
-                \Atk4\Ui\Demos\Country::hinting()->fieldName()->iso3,
+                Country::hinting()->fieldName()->name,
+                Country::hinting()->fieldName()->iso,
+                Country::hinting()->fieldName()->iso3,
             ],
             'caption' => 'Destination',
             'placeholder' => 'Select your destination',
