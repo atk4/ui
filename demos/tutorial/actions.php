@@ -166,7 +166,7 @@ $wizard->addStep('More Ways', function ($page) {
         $model->addUserAction('mail', [
             'fields' => ['currency_field'],
             'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'callback' => function() { return 'testing'; },
+            'callback' => function () { return 'testing'; },
             'description' => 'Email testing',
         ]);
         $owner->add('CardDeck')

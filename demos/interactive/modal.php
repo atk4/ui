@@ -131,8 +131,8 @@ foreach ($menuItems as $key => $items) {
 
 $denyApproveModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Deny / Approve actions']);
 \Atk4\Ui\Message::addTo($denyApproveModal)->set('This modal is only closable via the green button');
-$denyApproveModal->addDenyAction('No', new \Atk4\Ui\JsExpression('function(){window.alert("Can\'t do that."); return false;}'));
-$denyApproveModal->addApproveAction('Yes', new \Atk4\Ui\JsExpression('function(){window.alert("You\'re good to go!");}'));
+$denyApproveModal->addDenyAction('No', new \Atk4\Ui\JsExpression('function() { window.alert("Can\'t do that."); return false; }'));
+$denyApproveModal->addApproveAction('Yes', new \Atk4\Ui\JsExpression('function() { window.alert("You\'re good to go!"); }'));
 $denyApproveModal->notClosable();
 
 $menuBar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);

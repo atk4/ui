@@ -301,7 +301,7 @@ $expression argument can be string, JsExpression, array of JsExpressions or even
 
     // callback
     $f2 = $form->addControl('f2');
-    $f2->onChange(function(){return new \Atk4\Ui\JsExpression('console.log("f2 changed")');});
+    $f2->onChange(function () { return new \Atk4\Ui\JsExpression('console.log("f2 changed")'); });
 
     // Calendar form control - wraps in function call with arguments date, text and mode
     $c1 = $form->addControl('c1', new \Atk4\Ui\Form\Control\Calendar(['type' => 'date']));
