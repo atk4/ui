@@ -318,7 +318,7 @@ class File extends ModelWithPrefixedFields
     public function importFromFilesystem(string $path, bool $isSub = null): void
     {
         if ($isSub === null) {
-            if ($this->isEntity()) {
+            if ($this->isEntity()) { // TODO should be not needed once UserAction is for non-entity only
                 $this->getModel()->importFromFilesystem($path);
 
                 return;
