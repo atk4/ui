@@ -133,6 +133,7 @@ trait ModelLockTrait
 class Country extends ModelWithPrefixedFields
 {
     public $table = 'country';
+    public $caption = 'Country';
 
     protected function init(): void
     {
@@ -171,18 +172,6 @@ class Country extends ModelWithPrefixedFields
         }
 
         return $errors;
-    }
-}
-
-class CountryLock extends Country
-{
-    use ModelLockTrait;
-    public $caption = 'Country';
-
-    protected function init(): void
-    {
-        parent::init();
-        $this->lock();
     }
 }
 
@@ -291,6 +280,7 @@ class Percent extends \Atk4\Data\Field
 class File extends ModelWithPrefixedFields
 {
     public $table = 'file';
+    public $caption = 'File';
 
     protected function init(): void
     {
@@ -372,18 +362,6 @@ class Folder extends File
     }
 }
 
-class FileLock extends File
-{
-    use ModelLockTrait;
-    public $caption = 'File';
-
-    protected function init(): void
-    {
-        parent::init();
-        $this->lock();
-    }
-}
-
 /**
  * @property string      $name          @Atk4\Field()
  * @property SubCategory $SubCategories @Atk4\RefMany()
@@ -442,6 +420,7 @@ class SubCategory extends ModelWithPrefixedFields
 class Product extends ModelWithPrefixedFields
 {
     public $table = 'product';
+    public $caption = 'Product';
 
     protected function init(): void
     {
@@ -454,17 +433,5 @@ class Product extends ModelWithPrefixedFields
         $this->hasOne($this->fieldName()->product_sub_category_id, [
             'model' => [SubCategory::class],
         ])->addTitle();
-    }
-}
-
-class ProductLock extends Product
-{
-    use ModelLockTrait;
-    public $caption = 'Product';
-
-    protected function init(): void
-    {
-        parent::init();
-        $this->lock();
     }
 }

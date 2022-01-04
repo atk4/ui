@@ -9,7 +9,7 @@ use Atk4\Data\Model\UserAction;
 
 class DemoActionsUtil
 {
-    public static function setupDemoActions(CountryLock $country): void
+    public static function setupDemoActions(Country $country): void
     {
         $country->addUserAction(
             'callback',

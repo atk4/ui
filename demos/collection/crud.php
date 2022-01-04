@@ -10,7 +10,7 @@ use Atk4\Ui\Form;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$model = new CountryLock($app->db);
+$model = new Country($app->db);
 
 $crud = \Atk4\Ui\Crud::addTo($app, ['ipp' => 10]);
 
@@ -51,7 +51,7 @@ $crud = \Atk4\Ui\Crud::addTo($column, [
     'table' => ['class' => ['red inverted']],
 ]);
 // Condition on the model can be applied on a model
-$model = new CountryLock($app->db);
+$model = new Country($app->db);
 $model->addCondition($model->fieldName()->numcode, '<', 200);
 $model->onHook(\Atk4\Data\Model::HOOK_VALIDATE, function (Country $model, $intent) {
     $err = [];
@@ -65,7 +65,7 @@ $crud->setModel($model);
 
 // Because Crud inherits Grid, you can also define custom actions
 $crud->addModalAction(['icon' => [\Atk4\Ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($crud) {
-    $model = CountryLock::assertInstanceOf($crud->model);
+    $model = Country::assertInstanceOf($crud->model);
     \Atk4\Ui\Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $id . ')']);
 });
 
@@ -93,7 +93,7 @@ $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
     }
 });
 
-$file = new FileLock($app->db);
+$file = new File($app->db);
 $app->getExecutorFactory()->registerExecutor($file->getUserAction('edit'), [$myExecutorClass]);
 
 $crud = \Atk4\Ui\Crud::addTo($column, [

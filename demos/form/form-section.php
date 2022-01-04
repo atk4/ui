@@ -13,7 +13,7 @@ require_once __DIR__ . '/../init-app.php';
     ->link(['form-section-accordion']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$model = new CountryLock($app->db);
+$model = new Country($app->db);
 $model = $model->loadAny();
 
 // Prevent form from saving

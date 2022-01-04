@@ -14,7 +14,7 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$files = new FileLock($app->db);
+$files = new File($app->db);
 
 // Actions can be added easily to the model via the Model::addUserAction($name, $properties) method.
 $action = $files->addUserAction(

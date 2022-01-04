@@ -12,7 +12,7 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$country = new CountryLock($app->db);
+$country = new Country($app->db);
 DemoActionsUtil::setupDemoActions($country);
 
 Header::addTo($app, ['Right Panel', 'subHeader' => 'Content on the fly!']);
