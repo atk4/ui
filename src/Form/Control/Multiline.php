@@ -54,7 +54,7 @@ use Atk4\Ui\View;
  *         foreach ($cols as $col) {
  *             $fieldName = key($col);
  *                 if ($fieldName === 'total') {
- *                     $grand_total = $grand_total + $col[$fieldName];
+ *                     $grand_total += $col[$fieldName];
  *                 }
  *          }
  *     }

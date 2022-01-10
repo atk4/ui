@@ -727,7 +727,7 @@ class Table extends Lister
                         // if name is set, we can wrap things
                         $cell = str_replace('{$' . $name . '}', $cell, $html);
                     } else {
-                        $cell = $cell . ' ' . $html;
+                        $cell .= ' ' . $html;
                     }
                 } else {
                     $cell = $html;

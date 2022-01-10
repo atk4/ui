@@ -38,7 +38,7 @@ $wizard->addStep('Define User Action', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
+        $country = new CountryLock($owner->getApp()->db);
 
         $country->addUserAction('send_message');
     });
@@ -61,7 +61,7 @@ $wizard->addStep('Define User Action', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
+        $country = new CountryLock($owner->getApp()->db);
 
         $country->addUserAction('send_message', function () {
             return 'sent';
@@ -85,7 +85,7 @@ $wizard->addStep('UI Integration', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
+        $country = new CountryLock($owner->getApp()->db);
         $country = $country->loadAny();
 
         \Atk4\Ui\Button::addTo($owner, ['Edit some country'])
@@ -101,7 +101,7 @@ $wizard->addStep('UI Integration', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
+        $country = new CountryLock($owner->getApp()->db);
         $country = $country->loadAny();
 
         $menu = \Atk4\Ui\Menu::addTo($owner);
@@ -166,7 +166,7 @@ $wizard->addStep('More Ways', function ($page) {
         $model->addUserAction('mail', [
             'fields' => ['currency_field'],
             'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'callback' => function() { return 'testing'; },
+            'callback' => function () { return 'testing'; },
             'description' => 'Email testing',
         ]);
         $owner->add('CardDeck')
@@ -189,7 +189,7 @@ $wizard->addStep('Crud integration', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
+        $country = new CountryLock($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
         $country->getUserAction('delete')->enabled = function (Country $m) { return $m->id % 2 === 0; };
         $country->addUserAction('mail', [

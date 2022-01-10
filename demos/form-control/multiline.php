@@ -86,7 +86,7 @@ for ($i = 1; $i < 3; ++$i) {
     $entity->set('country', random_int(1, 100));
     $entity->set('qty', random_int(10, 100));
     $entity->set('box', random_int(1, 10));
-    $total = $total + ($entity->get('qty') * $entity->get('box'));
+    $total += $entity->get('qty') * $entity->get('box');
     $entity->saveAndUnload();
 }
 
@@ -109,7 +109,7 @@ $multiline->onLineChange(function ($rows, Form $form) use ($controlTotal) {
     foreach ($rows as $row => $cols) {
         $qty = $cols['qty'] ?? 0;
         $box = $cols['box'] ?? 0;
-        $total = $total + ($qty * $box);
+        $total += $qty * $box;
     }
 
     return $controlTotal->jsInput()->val($total);

@@ -96,7 +96,7 @@ real-time then display it on the console using color. Console does not support A
 
 Method exec can be executed directly on the $console or inside the callback::
 
-    $console->set(function($console){
+    $console->set(function($console) {
 
         $console->eval();
 
@@ -105,12 +105,11 @@ Method exec can be executed directly on the $console or inside the callback::
 Without call-back, eval will wrap itself into a callback but you can only execute a single command. When using callback
 form, you can execute multiple commands::
 
-    Console::addTo($app)->set(function($c){
+    Console::addTo($app)->set(function($c) {
         $c
             ->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1'])
             ->exec('/sbin/ping', ['-c', '5', '-i', '2', '8.8.8.8'])
-            ->exec('/bin/no-such-command')
-            ;
+            ->exec('/bin/no-such-command');
     });
 
 Method exec() will return `$this` if command was run inside callback and was successful. It will return `false` on error

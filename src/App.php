@@ -178,8 +178,17 @@ class App
             set_error_handler(
                 static function (int $severity, string $msg, string $file, int $line): bool {
                     if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
-                        // allow to supress undefined property warnings
-                        foreach (debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
+                        $isFirstFrame = true;
+                        foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
+                            // allow to suppress any warning outside Atk4
+                            if ($isFirstFrame) {
+                                $isFirstFrame = false;
+                                if (!isset($frame['class']) || !str_starts_with($frame['class'], 'Atk4\\')) {
+                                    return false;
+                                }
+                            }
+
+                            // allow to suppress undefined property warning
                             if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
                                 && $frame['function'] === 'warnPropertyDoesNotExist') {
                                 return false;

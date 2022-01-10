@@ -55,7 +55,7 @@ columnResizer.DEFAULTS = {
         resizeMode: 'overflow',
         draggingClass: 'atk-column-dragging',
         minWidth: 8,
-    // onResize: function(e) {e.path.filter(function(item){return item.querySelector('table')});}
+        // onResize: function(e) { e.path.filter(function(item) { return item.querySelector('table') }); }
     },
     uri: null,
 };

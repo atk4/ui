@@ -248,7 +248,7 @@ The following code will show three buttons and clicking any one will hide it. On
     $buttons->on('click', '.button')->hide();
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function($event){
+    // $('#top-element-id').on('click', '.button', function($event) {
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $(this).hide();
@@ -268,7 +268,7 @@ You can use both actions together. The next example will allow only one button t
     $buttons->on('click', '.button', $b3->js()->hide());
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function($event){
+    // $('#top-element-id').on('click', '.button', function($event) {
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $('#b3-element-id').hide();
@@ -648,7 +648,7 @@ average of 5-10 seconds, so you'd like to user updated about the process. There 
 The most basic approach is::
 
     $button = \Atk4\Ui\Button::addTo($app, ['Process Image']);
-    $button->on('click', function() use($button, $image) {
+    $button->on('click', function () use ($button, $image) {
 
         sleep(1); // $image->resize();
         sleep(1); // $image->findFace();
@@ -677,7 +677,7 @@ This class implements ability for your PHP code to send messages to the browser 
 
     $sse = \Atk4\Ui\JsSse::addTo($app);
 
-    $button->on('click', $sse->set(function() use($sse, $button, $image) {
+    $button->on('click', $sse->set(function () use ($sse, $button, $image) {
 
         $sse->send($button->js()->text('Processing'));
         sleep(1); // $image->resize();
