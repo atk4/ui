@@ -174,7 +174,7 @@ In this case we display a message when any of the control value for 'qty' and 'b
         foreach ($rows as $row => $cols) {
             $qty = $cols['qty'] ?? 0;
             $box = $cols['box'] ?? 0;
-            $total = $qty * $box;
+            $total += $qty * $box;
         }
         return new JsToast('The new Total is '.number_format($total, 2));
     }, ['qty', 'box']);
