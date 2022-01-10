@@ -575,7 +575,7 @@ class ScopeBuilder extends Control
                 break;
             case self::OPERATOR_TEXT_BEGINS_WITH:
             case self::OPERATOR_TEXT_DOESNOT_BEGIN_WITH:
-                $value = $value . '%';
+                $value .= '%';
 
                 break;
             case self::OPERATOR_TEXT_ENDS_WITH:

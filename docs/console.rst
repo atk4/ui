@@ -109,8 +109,7 @@ form, you can execute multiple commands::
         $c
             ->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1'])
             ->exec('/sbin/ping', ['-c', '5', '-i', '2', '8.8.8.8'])
-            ->exec('/bin/no-such-command')
-            ;
+            ->exec('/bin/no-such-command');
     });
 
 Method exec() will return `$this` if command was run inside callback and was successful. It will return `false` on error
