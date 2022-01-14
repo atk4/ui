@@ -16,8 +16,9 @@ require_once __DIR__ . '/../init-app.php';
 $model = new Country($app->db);
 $model = $model->loadAny();
 
-// Prevent form from saving
-$noSave = function (Form $form) {
+$saveAndDumpValues = function (Form $form) {
+    $form->model->save();
+
     return new \Atk4\Ui\JsToast([
         'title' => 'POSTed field values',
         'message' => '<pre>' . $form->getApp()->encodeJson($form->model->get()) . '</pre>',
@@ -46,7 +47,7 @@ $c2->setModel($model, [$model->fieldName()->numcode/*, $model->fieldName()->phon
 
 $form->addControl($model->fieldName()->phonecode);
 
-$form->onSubmit($noSave);
+$form->onSubmit($saveAndDumpValues);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
@@ -68,7 +69,7 @@ $a1->setModel($model, [$model->fieldName()->iso, $model->fieldName()->iso3]);
 $a2 = $accordionLayout->addSection('Section 2');
 $a2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phonecode]);
 
-$form->onSubmit($noSave);
+$form->onSubmit($saveAndDumpValues);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
@@ -90,7 +91,7 @@ $tab1->addGroup('In Group')->setModel($model, [$model->fieldName()->iso, $model-
 $tab2 = $tabsLayout->addTab('Tab 2');
 $tab2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phonecode]);
 
-$form->onSubmit($noSave);
+$form->onSubmit($saveAndDumpValues);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
@@ -115,6 +116,6 @@ $c1->setModel($model, [$model->fieldName()->iso, $model->fieldName()->iso3]);
 $c2 = $colsLayout->addColumn();
 $c2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phonecode]);
 
-$form->onSubmit($noSave);
+$form->onSubmit($saveAndDumpValues);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);

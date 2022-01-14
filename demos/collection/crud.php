@@ -24,13 +24,6 @@ $crud->onFormEdit(function (Form $form) use ($model) {
     $form->js(true, $form->getControl($model->fieldName()->name)->jsInput()->attr('readonly', true));
 });
 
-// callback for both model action edit and add.
-$crud->onFormAddEdit(function (Form $form, $ex) {
-    $form->onSubmit(function (Form $form) use ($ex) {
-        return [$ex->hide(), new \Atk4\Ui\JsToast('Submit all right! This demo does not saved data.')];
-    });
-});
-
 $crud->setModel($model);
 
 $crud->addDecorator($model->title_field, [\Atk4\Ui\Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => 'id']]);

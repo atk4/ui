@@ -20,8 +20,48 @@ try {
 
 // a very basic file that sets up Agile Data to be used in some demonstrations
 
+trait ModelPreventModificationTrait
+{
+    public function atomic(\Closure $fx)
+    {
+        $eRollback = new \Exception('Prevent modification');
+        $res = null;
+        try {
+            parent::atomic(function () use ($fx, $eRollback, &$res) {
+                $res = $fx();
+
+                throw $eRollback;
+            });
+        } catch (\Exception $e) {
+            if ($e !== $eRollback) {
+                throw $e;
+            }
+        }
+
+        return $res;
+    }
+
+    protected function initPreventModification(): void
+    {
+        $this->getUserAction('add')->callback = function (Model $model) {
+            return 'Form Submit! Data are not save in demo mode.';
+        };
+
+        $this->getUserAction('edit')->callback = function (Model $model) {
+            return 'Form Submit! Data are not save in demo mode.';
+        };
+
+        $this->getUserAction('delete')->confirmation = 'Please go ahead. Demo mode does not really delete data.';
+        $this->getUserAction('delete')->callback = function (Model $model) {
+            return 'Only simulating delete when in demo mode.';
+        };
+    }
+}
+
 class ModelWithPrefixedFields extends Model
 {
+    use ModelPreventModificationTrait;
+
     /** @var array<string, string> */
     private static $prefixedFieldNames = [];
 
@@ -89,6 +129,8 @@ class ModelWithPrefixedFields extends Model
         }
 
         parent::init();
+
+        $this->initPreventModification();
     }
 
     public function addField($name, $seed = []): \Atk4\Data\Field
@@ -99,26 +141,6 @@ class ModelWithPrefixedFields extends Model
         ]);
 
         return parent::addField($name, $seed);
-    }
-}
-
-trait ModelLockTrait
-{
-    public function lock(): void
-    {
-        $this->getUserAction('add')->callback = function (Model $model) {
-            return 'Form Submit! Data are not save in demo mode.';
-        };
-        $this->getUserAction('edit')->callback = function (Model $model) {
-            return 'Form Submit! Data are not save in demo mode.';
-        };
-
-        $delete = $this->getUserAction('delete');
-        $delete->confirmation = 'Please go ahead. Demo mode does not really delete data.';
-
-        $delete->callback = function (Model $model) {
-            return 'Only simulating delete when in demo mode.';
-        };
     }
 }
 
@@ -335,14 +357,11 @@ class File extends ModelWithPrefixedFields
             if (in_array($fileinfo->getFilename(), ['demos', 'src', 'tests'], true) || $isSub) {
                 $entity = $this->createEntity();
 
-                /*
-                // Disabling saving file in db
                 $entity->save([
                     $this->fieldName()->name => $fileinfo->getFilename(),
                     $this->fieldName()->is_folder => $fileinfo->isDir(),
                     $this->fieldName()->type => pathinfo($fileinfo->getFilename(), \PATHINFO_EXTENSION),
                 ]);
-                */
 
                 if ($fileinfo->isDir()) {
                     $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
