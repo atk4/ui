@@ -11,7 +11,7 @@ use Atk4\Ui\Message;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$country = new CountryLock($app->db);
+$country = new Country($app->db);
 $entity = $country->tryLoadAny();
 $countryId = $entity->getId();
 

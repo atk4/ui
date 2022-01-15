@@ -18,7 +18,7 @@ $crumb->addCrumb('Breadcrumb Demo', ['breadcrumb']);
 
 $crumb->addCrumb('Countries', []);
 
-$model = new CountryLock($app->db);
+$model = new Country($app->db);
 $model->setLimit(15);
 
 if ($id = $app->stickyGet('country_id')) {

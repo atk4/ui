@@ -14,7 +14,7 @@ require_once __DIR__ . '/../init-app.php';
 
 // Demo for Model action in Grid
 
-$country = new CountryLock($app->db);
+$country = new Country($app->db);
 // Model actions for this file are setup in DemoActionUtil.
 DemoActionsUtil::setupDemoActions($country);
 

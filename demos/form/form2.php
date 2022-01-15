@@ -22,13 +22,13 @@ $form = Form::addTo($app, ['segment']);
 //$form = Form::addTo($app, ['segment', 'buttonSave' => [null, 'Import', 'secondary', 'iconRight' => 'list']]);
 \Atk4\Ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveControls']);
 
-$form->setModel((new CountryLock($app->db))->createEntity(), []);
+$form->setModel((new Country($app->db))->createEntity(), []);
 
 // form basic field group
 $formAddress = $form->addGroup('Basic Country Information');
 $name = $formAddress->addControl(Country::hinting()->fieldName()->name, ['width' => 'sixteen']);
 $name->addAction(['Check Duplicate', 'iconRight' => 'search'])->on('click', function ($jQuery, $name) use ($app, $form) {
-    if ((new CountryLock($app->db))->tryLoadBy(Country::hinting()->fieldName()->name, $name)->isLoaded()) {
+    if ((new Country($app->db))->tryLoadBy(Country::hinting()->fieldName()->name, $name)->isLoaded()) {
         return $form->js()->form('add prompt', Country::hinting()->fieldName()->name, 'This country name is already added.');
     }
 
@@ -50,7 +50,7 @@ $formNames->addControl('last_name', ['width' => 'six', 'caption' => 'Last Name']
 
 // form on submit
 $form->onSubmit(function (Form $form) {
-    $countryEntity = (new CountryLock($form->getApp()->db))->createEntity();
+    $countryEntity = (new Country($form->getApp()->db))->createEntity();
     // Model will have some validation too
     foreach ($form->model->getFields('editable') as $k => $field) {
         if ($countryEntity->hasField($k)) {

@@ -11,8 +11,6 @@ require_once __DIR__ . '/../init-app.php';
 
 /** @var \Atk4\Data\Model $modelClass */
 $modelClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Data\Model {
-    use ModelLockTrait;
-
     public $table = 'test';
 
     public $caption = 'Country';
@@ -24,8 +22,6 @@ $modelClass = AnonymousClassNameCache::get_class(fn () => new class() extends \A
         $this->addField('name');
         $this->addField('code');
         $this->addField('country');
-
-        $this->lock();
     }
 });
 

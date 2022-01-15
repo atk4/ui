@@ -16,7 +16,7 @@ use Atk4\Ui\JsToast;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$m = (new CountryLock($app->db))->setLimit(5);
+$m = (new Country($app->db))->setLimit(5);
 
 $vp = \Atk4\Ui\VirtualPage::addTo($app);
 $vp->cb->triggerOnReload = false;

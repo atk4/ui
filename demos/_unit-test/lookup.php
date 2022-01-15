@@ -12,7 +12,7 @@ use Atk4\Ui\UserAction\ExecutorFactory;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$model = new ProductLock($app->db);
+$model = new Product($app->db);
 $model->addCondition($model->fieldName()->name, '=', 'Mustard');
 
 // use default.

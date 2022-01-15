@@ -55,7 +55,7 @@ $form->getControl('last_name')->hint = 'Please enter your last name.';
 $tab = $tabs->addTab('Custom layout class');
 
 $form = Form::addTo($tab, ['layout' => [Form\Layout\Custom::class, 'defaultTemplate' => __DIR__ . '/templates/form-custom-layout.html']]);
-$form->setModel((new CountryLock($app->db))->loadAny());
+$form->setModel((new Country($app->db))->loadAny());
 
 $form->onSubmit(function (Form $form) {
     return new \Atk4\Ui\JsToast('Saving is disabled');

@@ -14,7 +14,7 @@ use Atk4\Ui\UserAction\BasicExecutor;
 require_once __DIR__ . '/../init-app.php';
 
 $grid = \Atk4\Ui\Grid::addTo($app);
-$model = new CountryLock($app->db);
+$model = new Country($app->db);
 $model->addUserAction('test', function (Model $model) {
     return 'test from ' . $model->getTitle() . ' was successful!';
 });
