@@ -366,6 +366,11 @@ class File extends ModelWithPrefixedFields
                 if ($fileinfo->isDir()) {
                     $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
                 }
+
+                // skip full/slow import for Behat testing
+                if ($_ENV['CI'] ?? null) {
+                    break;
+                }
             }
         }
     }
