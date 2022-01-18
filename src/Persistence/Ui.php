@@ -142,7 +142,7 @@ class Ui extends Persistence
                             ->addMoreInfo('value', $valueStr)
                             ->addMoreInfo('field', $field);
                     }
-                    $value->setTimeZone(new $tz_class(date_default_timezone_get()));
+                    $value->setTimezone(new $tz_class(date_default_timezone_get()));
                 } else {
                     $value = $dt_class::createFromFormat($format, $valueStr);
                     if ($value === false) {
