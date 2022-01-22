@@ -104,9 +104,9 @@ jobs:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
       oracle:
-        image: ghcr.io/mvorisek/docker-oracle-xe-11g
+        image: gvenzl/oracle-xe:18
         env:
-          ORACLE_ALLOW_REMOTE: true
+          ORACLE_PASSWORD: atk4_pass
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -196,18 +196,16 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mssql.cov; fi
 
-      - name: "Run tests: Oracle (only for coverage or cron)"
-        if: env.LOG_COVERAGE || github.event_name == 'schedule'
+      - name: "Run tests: Oracle"
         env:
           DB_DSN: "oci:dbname=oracle/xe"
           DB_USER: system
-          DB_PASSWORD: oracle
+          DB_PASSWORD: atk4_pass
           NLS_LANG: AMERICAN_AMERICA.AL32UTF8
         run: |
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v \
-          || php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-oracle.cov; fi
 
       - name: Upload coverage logs 1/2 (only for latest Phpunit)
@@ -260,9 +258,9 @@ jobs:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
       oracle:
-        image: ghcr.io/mvorisek/docker-oracle-xe-11g
+        image: gvenzl/oracle-xe:18
         env:
-          ORACLE_ALLOW_REMOTE: true
+          ORACLE_PASSWORD: atk4_pass
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -406,13 +404,12 @@ jobs:
         env:
           DB_DSN: "oci:dbname=oracle/xe"
           DB_USER: system
-          DB_PASSWORD: oracle
+          DB_PASSWORD: atk4_pass
           NLS_LANG: AMERICAN_AMERICA.AL32UTF8
         run: |
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
-          vendor/bin/behat -vv --config behat.yml.dist \
-          || vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
 
       - name: Upload coverage logs 1/2 (only for latest Chrome)
         if: env.LOG_COVERAGE
