@@ -339,6 +339,11 @@ class File extends ModelWithPrefixedFields
             $this->atomic(function () use ($path) {
                 foreach ($this as $entity) {
                     $entity->delete();
+
+                    // skip full/slow import for Behat testing
+                    if ($_ENV['CI'] ?? null) {
+                        break;
+                    }
                 }
 
                 $path = __DIR__ . '/../' . $path;
