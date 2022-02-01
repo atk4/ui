@@ -659,9 +659,6 @@ parameters:
             path: 'src/Table.php'
             message: '~^Ternary operator condition is always true\.$~'
         -
-            path: 'src/Table.php'
-            message: '~^Unreachable statement \- code above always terminates\.$~'
-        -
             path: 'src/Table/Column.php'
             message: '~^Negated boolean expression is always false\.$~'
         -
