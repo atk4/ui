@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
+use Atk4\Core\AppScopeTrait;
 use Atk4\Core\NameTrait;
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Ui\App;
 use Atk4\Ui\Exception;
 use Atk4\Ui\SessionTrait;
 
@@ -15,9 +17,17 @@ use Atk4\Ui\SessionTrait;
  */
 class SessionTraitTest extends TestCase
 {
+    /** @var App */
+    protected $app;
+
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->app = new App([
+            'catch_exceptions' => false,
+            'always_run' => false,
+        ]);
 
         session_abort();
         $sessionDir = sys_get_temp_dir() . '/atk4_test__ui__session';
@@ -46,13 +56,13 @@ class SessionTraitTest extends TestCase
     {
         // when try to start session without NameTrait
         $this->expectException(Exception::class);
-        $m = new SessionWithoutNameMock();
-        $m->startSession();
+        $m = new SessionWithoutNameMock($this->app);
+        $m->memorize('test', 'foo');
     }
 
     public function testConstructor(): void
     {
-        $m = new SessionMock();
+        $m = new SessionMock($this->app);
 
         $this->assertFalse(isset($_SESSION));
         $m->startSession();
@@ -66,7 +76,7 @@ class SessionTraitTest extends TestCase
      */
     public function testMemorize(): void
     {
-        $m = new SessionMock();
+        $m = new SessionMock($this->app);
         $m->name = 'test';
 
         // value as string
@@ -90,7 +100,7 @@ class SessionTraitTest extends TestCase
      */
     public function testLearnRecallForget(): void
     {
-        $m = new SessionMock();
+        $m = new SessionMock($this->app);
         $m->name = 'test';
 
         // value as string
@@ -125,12 +135,22 @@ class SessionTraitTest extends TestCase
     }
 }
 
-class SessionMock
+abstract class SessionAbstractMock
+{
+    use SessionTrait;
+    use AppScopeTrait;
+
+    public function __construct(App $app)
+    {
+        $this->setApp($app);
+    }
+}
+
+class SessionMock extends SessionAbstractMock
 {
     use NameTrait;
-    use SessionTrait;
 }
-class SessionWithoutNameMock
+
+class SessionWithoutNameMock extends SessionAbstractMock
 {
-    use SessionTrait;
 }
