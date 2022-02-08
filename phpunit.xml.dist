@@ -13,6 +13,7 @@
     <groups>
         <exclude>
             <group>demos_http</group>
+            <group>require_session</group>
         </exclude>
     </groups>
     <listeners>
