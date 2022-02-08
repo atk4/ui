@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column;
 
+use Atk4\Core\AppScopeTrait;
 use Atk4\Core\NameTrait;
-use Atk4\Core\SessionTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Data\Types\Types as CustomTypes;
+use Atk4\Ui\App;
+use Atk4\Ui\SessionTrait;
 use Doctrine\DBAL\Types\Types;
 
 /**
  * Implement a generic filter model for filtering column data.
  */
-class FilterModel extends Model
+abstract class FilterModel extends Model
 {
+    use AppScopeTrait; // needed for SessionTrait
     use NameTrait; // needed for SessionTrait
     use SessionTrait;
 
@@ -32,13 +35,20 @@ class FilterModel extends Model
     /** @var Field The field where this filter need to query data. */
     public $lookupField;
 
+    public function __construct(App $app, array $defaults = [])
+    {
+        $this->setApp($app);
+
+        $persistence = new Persistence\Array_();
+
+        parent::__construct($persistence, $defaults);
+    }
+
     /**
      * Factory method that will return a FilterModel Type class.
      */
-    public static function factoryType(Field $field): self
+    public static function factoryType(App $app, Field $field): self
     {
-        $persistence = new Persistence\Array_();
-
         $class = [
             Types::STRING => FilterModel\TypeString::class,
             Types::TEXT => FilterModel\TypeString::class,
@@ -69,7 +79,9 @@ class FilterModel extends Model
             $class = $field->filterModel;
         }
 
-        return new $class($persistence, ['lookupField' => $field]);
+        $filterModel = new $class($app, ['lookupField' => $field]);
+
+        return $filterModel;
     }
 
     protected function init(): void
@@ -118,10 +130,7 @@ class FilterModel extends Model
      *
      * @return Model
      */
-    public function setConditionForModel(Model $model)
-    {
-        return $model;
-    }
+    abstract public function setConditionForModel(Model $model);
 
     /**
      * Method that will set Field display condition in a form.

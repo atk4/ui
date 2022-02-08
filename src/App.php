@@ -105,6 +105,9 @@ class App
     /** @var Persistence|Persistence\Sql */
     public $db;
 
+    /** @var App\Session */
+    public $session;
+
     /** @var string[] Extra HTTP headers to send on exit. */
     protected $response_headers = [
         self::HEADER_STATUS_CODE => '200',
@@ -136,39 +139,11 @@ class App
 
     public $templateClass = HtmlTemplate::class;
 
-    /**
-     * @param array $defaults
-     */
-    public function __construct($defaults = [])
+    public function __construct(array $defaults = [])
     {
         $this->setApp($this);
 
-        // Process defaults
-        if (is_string($defaults)) {
-            $defaults = ['title' => $defaults];
-        }
-
-        if (isset($defaults[0])) {
-            $defaults['title'] = $defaults[0];
-            unset($defaults[0]);
-        }
-
-        /*
-        if (is_array($defaults)) {
-            throw (new Exception('Constructor requires array argument'))
-                ->addMoreInfo('arg', $defaults);
-        }*/
         $this->setDefaults($defaults);
-        /*
-
-        foreach ($defaults as $key => $val) {
-            if (is_array($val)) {
-                $this->{$key} = array_merge(is_array($this->{$key} ?? null) ? $this->{$key} : [], $val);
-            } elseif ($val !== null) {
-                $this->{$key} = $val;
-            }
-        }
-         */
 
         $this->setupTemplateDirs();
 
@@ -208,9 +183,12 @@ class App
             $this->setupAlwaysRun();
         }
 
-        // Set up UI persistence
         if ($this->ui_persistence === null) {
             $this->ui_persistence = new UiPersistence();
+        }
+
+        if ($this->session === null) {
+            $this->session = new App\Session();
         }
 
         // setting up default executor factory.
