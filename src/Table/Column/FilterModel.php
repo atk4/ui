@@ -35,13 +35,20 @@ abstract class FilterModel extends Model
     /** @var Field The field where this filter need to query data. */
     public $lookupField;
 
+    public function __construct(App $app = null, array $defaults = [])
+    {
+        $this->setApp($app);
+
+        $persistence = new Persistence\Array_();
+
+        parent::__construct($persistence, $defaults);
+    }
+
     /**
      * Factory method that will return a FilterModel Type class.
      */
     public static function factoryType(App $app, Field $field): self
     {
-        $persistence = new Persistence\Array_();
-
         $class = [
             Types::STRING => FilterModel\TypeString::class,
             Types::TEXT => FilterModel\TypeString::class,
@@ -72,8 +79,7 @@ abstract class FilterModel extends Model
             $class = $field->filterModel;
         }
 
-        $filterModel = new $class($persistence, ['lookupField' => $field]);
-        $filterModel->setApp($app);
+        $filterModel = new $class($app, ['lookupField' => $field]);
 
         return $filterModel;
     }
