@@ -697,9 +697,6 @@ parameters:
         -
             path: 'src/View.php'
             message: '~^If condition is always true\.$~'
-        -
-            path: 'tests/DemosTest.php'
-            message: '~^Else branch is unreachable because ternary operator condition is always true\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 5
