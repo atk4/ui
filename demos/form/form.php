@@ -138,7 +138,7 @@ $tab = $tabs->addTab('Handler Safety');
 $form = Form::addTo($tab);
 $form->addControl('email');
 $form->onSubmit(function (Form $form) {
-    $o = new \StdClass();
+    $o = new \stdClass();
 
     return $o['abc'];
 });
