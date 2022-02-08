@@ -35,7 +35,7 @@ abstract class FilterModel extends Model
     /** @var Field The field where this filter need to query data. */
     public $lookupField;
 
-    public function __construct(App $app = null, array $defaults = [])
+    public function __construct(App $app, array $defaults = [])
     {
         $this->setApp($app);
 
