@@ -227,7 +227,7 @@ class App
                 },
                 \E_ALL
             );
-            $this->outputResponseUnsafe('', [self::HEADER_STATUS_CODE => 500]);
+            http_response_code(500);
         }
 
         // Always run app on shutdown
