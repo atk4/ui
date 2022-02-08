@@ -109,6 +109,9 @@ class App
     /** @var Persistence|Persistence\Sql */
     public $db;
 
+    /** @var App\Session */
+    public $session;
+
     /** @var string[] Extra HTTP headers to send on exit. */
     protected $response_headers = [
         self::HEADER_STATUS_CODE => '200',
@@ -146,56 +149,30 @@ class App
     /** @var ServerRequestInterface */
     private $request;
 
-    /**
-     * @param array $defaults
-     */
-    public function __construct($defaults = [])
+    public function __construct(array $defaults = [])
     {
         $this->setApp($this);
-
-        // Process defaults
-        if (is_string($defaults)) {
-            $defaults = ['title' => $defaults];
-        }
-
-        if (isset($defaults[0])) {
-            $defaults['title'] = $defaults[0];
-            unset($defaults[0]);
-        }
 
         $this->response = $defaults['response'] ?? new Response();
         if (isset($defaults['response'])) {
             unset($defaults['response']);
         }
 
+        $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
         $this->request = $defaults['request'] ?? (new \Nyholm\Psr7Server\ServerRequestCreator(
-            new \Nyholm\Psr7\Factory\Psr17Factory(), // ServerRequestFactory
-            new \Nyholm\Psr7\Factory\Psr17Factory(), // UriFactory
-            new \Nyholm\Psr7\Factory\Psr17Factory(), // UploadedFileFactory
-            new \Nyholm\Psr7\Factory\Psr17Factory()  // StreamFactory
+            $psr17Factory, // ServerRequestFactory
+            $psr17Factory, // UriFactory
+            $psr17Factory, // UploadedFileFactory
+            $psr17Factory  // StreamFactory
         ))->fromGlobals();
         if (isset($defaults['request'])) {
             unset($defaults['request']);
         }
-        /*
-        if (is_array($defaults)) {
-            throw (new Exception('Constructor requires array argument'))
-                ->addMoreInfo('arg', $defaults);
-        }*/
+
         $this->setDefaults($defaults);
 
-        // added default headers to response
+        // add default headers to response
         $this->setResponseHeaders($this->response_headers);
-        /*
-
-        foreach ($defaults as $key => $val) {
-            if (is_array($val)) {
-                $this->{$key} = array_merge(is_array($this->{$key} ?? null) ? $this->{$key} : [], $val);
-            } elseif ($val !== null) {
-                $this->{$key} = $val;
-            }
-        }
-         */
 
         $this->setupTemplateDirs();
 
@@ -235,9 +212,12 @@ class App
             $this->setupAlwaysRun();
         }
 
-        // Set up UI persistence
         if ($this->ui_persistence === null) {
             $this->ui_persistence = new UiPersistence();
+        }
+
+        if ($this->session === null) {
+            $this->session = new App\Session();
         }
 
         // setting up default executor factory.

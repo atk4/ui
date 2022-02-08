@@ -38,10 +38,11 @@ class FilterPopup extends Popup
     protected function init(): void
     {
         parent::init();
+
         $this->setOption('delay', ['hide' => 1500]);
         $this->setHoverable();
 
-        $model = FilterModel::factoryType($this->field);
+        $model = FilterModel::factoryType($this->getApp(), $this->field);
         $model = $model->createEntity();
 
         $this->form = Form::addTo($this)->addClass('');

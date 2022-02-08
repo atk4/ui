@@ -11,7 +11,7 @@ require_once __DIR__ . '/../init-app.php';
 
 \Atk4\Ui\Header::addTo($app, ['Modal View']);
 
-$session = new Session();
+$session = new Session($app);
 // Re-usable component implementing counter
 
 \Atk4\Ui\Header::addTo($app, ['Static Modal Dialog']);

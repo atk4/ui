@@ -11,7 +11,7 @@ use Atk4\Core\Factory;
  */
 class Wizard extends View
 {
-    use \Atk4\Core\SessionTrait;
+    use SessionTrait;
 
     public $defaultTemplate = 'wizard.html';
     public $ui = 'steps';
