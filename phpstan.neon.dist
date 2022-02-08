@@ -212,6 +212,10 @@ parameters:
             path: 'src/Panel/Right.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsExpression::addPanel\(\)\.$~'
         -
+            path: 'src/SessionTrait.php'
+            count: 4
+            message: '~^Access to an undefined property Atk4\\Ui\\Tests\\SessionAbstractMock::\$name\.$~'
+        -
             path: 'src/Table/Column.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setHoverable\(\)\.$~'
         -

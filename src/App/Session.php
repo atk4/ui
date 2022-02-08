@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\App;
 
+use Atk4\Ui\Exception;
+
 class Session
 {
     /** @var string Session container key. */
@@ -71,10 +73,10 @@ class Session
                 $default = $default($key);
             }
 
-            return $this->memorize($key, $default);
+            return $this->memorize($namespace, $key, $default);
         }
 
-        return $this->recall($key);
+        return $this->recall($namespace, $key);
     }
 
     /**

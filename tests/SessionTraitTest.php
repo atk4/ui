@@ -65,9 +65,9 @@ class SessionTraitTest extends TestCase
         $m = new SessionMock($this->app);
 
         $this->assertFalse(isset($_SESSION));
-        $m->startSession();
+        $m->getApp()->session->startSession();
         $this->assertTrue(isset($_SESSION));
-        $m->destroySession();
+        $m->getApp()->session->destroySession();
         $this->assertFalse(isset($_SESSION));
     }
 
@@ -92,7 +92,7 @@ class SessionTraitTest extends TestCase
         $m->memorize('foo', $o);
         $this->assertSame($o, $_SESSION['__atk_session'][$m->name]['foo']);
 
-        $m->destroySession();
+        $m->getApp()->session->destroySession();
     }
 
     /**
@@ -137,8 +137,8 @@ class SessionTraitTest extends TestCase
 
 abstract class SessionAbstractMock
 {
-    use SessionTrait;
     use AppScopeTrait;
+    use SessionTrait;
 
     public function __construct(App $app)
     {
