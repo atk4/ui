@@ -21,9 +21,9 @@ For example, if one of your script need to send an ajax request directly, withou
 to run and evaluate the server response from Atk4\Ui.
 
 ```
-    $.getJSON( "myajax.php", function( resp ) {
-      atk.apiService.atkSuccessTest(resp);
-     });
+    $.getJSON("myajax.php", function(resp) {
+        atk.apiService.atkSuccessTest(resp);
+    });
 
 ```
 
@@ -35,8 +35,8 @@ Another example would be the upload service for file uploading using one of your
       theElement,
       {data: 'value'},
       url,
-      onComplete(){}, // the callback function when upload is complete.
-      onXhr(){}       // the callback function when uploading files is in progress.
+      onComplete() {}, // the callback function when upload is complete.
+      onXhr() {}       // the callback function when uploading files is in progress.
     );
 ```
 

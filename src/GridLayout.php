@@ -36,9 +36,6 @@ class GridLayout extends View
     /** @var string CSS class for columns view */
     public $column_class = '';
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();

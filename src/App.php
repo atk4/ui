@@ -58,7 +58,7 @@ class App
     protected $executorFactory;
 
     /** @var string Version of Agile UI */
-    public $version = '3.1-dev';
+    public $version = '3.2-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -66,32 +66,16 @@ class App
     /** @var Layout */
     public $layout; // the top-most view object
 
-    /**
-     * Set one or more directories where templates should reside.
-     *
-     * @var string|array
-     */
+    /** @var string|array Set one or more directories where templates should reside. */
     public $template_dir;
 
-    /**
-     * Will replace an exception handler with our own, that will output errors nicely.
-     *
-     * @var bool
-     */
+    /** @var bool Will replace an exception handler with our own, that will output errors nicely. */
     public $catch_exceptions = true;
 
-    /**
-     * Will display error if callback wasn't triggered.
-     *
-     * @var bool
-     */
+    /** @var bool Will display error if callback wasn't triggered. */
     public $catch_runaway_callbacks = true;
 
-    /**
-     * Will always run application even if developer didn't explicitly executed run();.
-     *
-     * @var bool
-     */
+    /** @var bool Will always run application even if developer didn't explicitly executed run();. */
     public $always_run = true;
 
     /**
@@ -142,21 +126,13 @@ class App
      */
     protected $url_building_ext = '.php';
 
-    /**
-     * Call exit in place of throw Exception when Application need to exit.
-     *
-     * @var bool
-     */
+    /** @var bool Call exit in place of throw Exception when Application need to exit. */
     public $call_exit = true;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     public $page;
 
-    /**
-     * @var array global sticky arguments
-     */
+    /** @var array global sticky arguments */
     protected $sticky_get_arguments = [
         '__atk_json' => false,
         '__atk_tab' => false,
@@ -171,8 +147,6 @@ class App
     private $request;
 
     /**
-     * Constructor.
-     *
      * @param array $defaults
      */
     public function __construct($defaults = [])
@@ -231,8 +205,17 @@ class App
             set_error_handler(
                 static function (int $severity, string $msg, string $file, int $line): bool {
                     if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
-                        // allow to supress undefined property warnings
-                        foreach (debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
+                        $isFirstFrame = true;
+                        foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
+                            // allow to suppress any warning outside Atk4
+                            if ($isFirstFrame) {
+                                $isFirstFrame = false;
+                                if (!isset($frame['class']) || !str_starts_with($frame['class'], 'Atk4\\')) {
+                                    return false;
+                                }
+                            }
+
+                            // allow to suppress undefined property warning
                             if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
                                 && $frame['function'] === 'warnPropertyDoesNotExist') {
                                 return false;

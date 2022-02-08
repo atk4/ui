@@ -18,18 +18,10 @@ use Atk4\Ui\View;
 
 class ActionMenu extends Table\Column
 {
-    /**
-     * Menu items collections.
-     *
-     * @var array
-     */
+    /** @var array Menu items collections. */
     protected $items = [];
 
-    /**
-     * Callbacks as defined in $action->enabled for evaluating row-specific if an action is enabled.
-     *
-     * @var array
-     */
+    /** @var array Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
     protected $callbacks = [];
 
     /**
@@ -40,25 +32,13 @@ class ActionMenu extends Table\Column
      */
     public $label;
 
-    /**
-     * Dropdown module css class name as per Formantic-ui.
-     *
-     * @var string
-     */
+    /** @var string Dropdown module css class name as per Formantic-ui. */
     public $ui = 'ui small dropdown button';
 
-    /**
-     * The dropdown module option setting as per Fomantic-ui.
-     *
-     * @var array
-     */
+    /** @var array The dropdown module option setting as per Fomantic-ui. */
     public $options = ['action' => 'hide'];
 
-    /**
-     * Button icon to use for display dropdown.
-     *
-     * @var string
-     */
+    /** @var string Button icon to use for display dropdown. */
     public $icon = 'dropdown icon';
 
     protected function init(): void

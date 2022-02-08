@@ -83,7 +83,7 @@ Setting Callback
 Although VirtualPage can work without defining a callback, using one is more reliable and is always recommended::
 
     $vp = \Atk4\Ui\VirtualPage::addTo($layout);
-    $vp->set(function($vp){
+    $vp->set(function($vp) {
         \Atk4\Ui\LoremIpsum::addTo($vp);
     });
 
@@ -101,7 +101,7 @@ To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the foll
     $t = \Atk4\Ui\Tabs::addTo($layout);
 
     \Atk4\Ui\LoremIpsum::addTo($t->addTab('Tab1')); // regular tab
-    $t->addTab('Tab2', function($p){ \Atk4\Ui\LoremIpsum::addTo($p); }); // dynamic tab
+    $t->addTab('Tab2', function($p) { \Atk4\Ui\LoremIpsum::addTo($p); }); // dynamic tab
 
 .. php:method:: getUrl($html_wrapping)
 
@@ -198,7 +198,7 @@ To indicate how custom binding works::
 
     $loader = \Atk4\Ui\Loader::addTo($app, ['loadEvent' => 'kaboom']);
 
-    $loader->set(function($p){
+    $loader->set(function($p) {
         \Atk4\Ui\LoremIpsum::addTo($p);
     });
 

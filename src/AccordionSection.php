@@ -11,18 +11,10 @@ class AccordionSection extends View
 {
     public $defaultTemplate = 'accordion-section.html';
 
-    /**
-     * The accordion item title.
-     *
-     * @var string|null
-     */
+    /** @var string|null The accordion item title. */
     public $title;
 
-    /**
-     * The accordion item virtual page.
-     *
-     * @var VirtualPage|null
-     */
+    /** @var VirtualPage|null The accordion item virtual page. */
     public $virtualPage;
 
     public $icon = 'dropdown';

@@ -47,20 +47,17 @@ class DemoLookup extends \Atk4\Ui\Form\Control\Lookup
             $form->setModel($entity, $this->plus['fields'] ?? null);
 
             $form->onSubmit(function (\Atk4\Ui\Form $form) {
-                // Prevent from saving
-                // $form->model->save();
+                $form->model->save();
 
                 $ret = [
-                    new \Atk4\Ui\JsToast('Form submit!. Demo cannot saved data.'),
+                    new \Atk4\Ui\JsToast('Form submit!. Data are not save in demo mode.'),
                     (new \Atk4\Ui\Jquery('.atk-modal'))->modal('hide'),
                 ];
 
-                if ($row = $this->renderRow($form->model)) {
-                    $chain = new \Atk4\Ui\Jquery('#' . $this->name . '-ac');
-                    $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-
-                    $ret[] = $chain;
-                }
+                $row = $this->renderRow($form->model);
+                $chain = new \Atk4\Ui\Jquery('#' . $this->name . '-ac');
+                $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
+                $ret[] = $chain;
 
                 return $ret;
             });

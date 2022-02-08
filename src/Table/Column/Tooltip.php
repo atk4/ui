@@ -21,14 +21,10 @@ use Atk4\Ui\Table;
  */
 class Tooltip extends Table\Column
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $icon;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $tooltip_field;
 
     protected function init(): void

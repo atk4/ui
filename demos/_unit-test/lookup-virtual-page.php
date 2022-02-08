@@ -16,7 +16,7 @@ use Atk4\Ui\VirtualPage;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$product = new ProductLock($app->db);
+$product = new Product($app->db);
 
 $vp = VirtualPage::addTo($app);
 

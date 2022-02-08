@@ -13,11 +13,7 @@ class ItemsPerPageSelector extends View
     public $defaultTemplate = 'pagelength.html';
     public $ui = ' ';
 
-    /**
-     * Default page length menu items.
-     *
-     * @var array
-     */
+    /** @var array Default page length menu items. */
     public $pageLengthItems = [10, 25, 50, 100];
 
     /**
@@ -28,18 +24,10 @@ class ItemsPerPageSelector extends View
      */
     public $label = 'Items per page:';
 
-    /**
-     * The current number of item per page.
-     *
-     * @var int
-     */
+    /** @var int The current number of item per page. */
     public $currentIpp;
 
-    /**
-     * The callback function.
-     *
-     * @var Callback|null
-     */
+    /** @var Callback|null The callback function. */
     public $cb;
 
     protected function init(): void

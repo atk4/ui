@@ -25,8 +25,6 @@ class Checkbox extends Form\Control
     public $label;
 
     /**
-     * Constructor.
-     *
      * @param string|array $label
      * @param string|array $class
      */
@@ -38,9 +36,6 @@ class Checkbox extends Form\Control
         $this->content = null;
     }
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();

@@ -25,11 +25,7 @@ class TreeItemSelector extends Form\Control
     /** @var HtmlTemplate Template for the item selector view. */
     public $itemSelectorTemplate;
 
-    /**
-     * The tree item selector View.
-     *
-     * @var \Atk4\Ui\View|null
-     */
+    /** @var \Atk4\Ui\View|null The tree item selector View. */
     public $itemSelector;
 
     /**
@@ -40,11 +36,7 @@ class TreeItemSelector extends Form\Control
      */
     public $loaderCssName = 'atk-tree-loader';
 
-    /**
-     * Allow multiple selection or just one.
-     *
-     * @var bool
-     */
+    /** @var bool Allow multiple selection or just one. */
     public $allowMultiple = true;
 
     /**
@@ -65,11 +57,7 @@ class TreeItemSelector extends Form\Control
      */
     public $treeItems = [];
 
-    /**
-     * Callback for onTreeChange.
-     *
-     * @var JsCallback|null
-     */
+    /** @var JsCallback|null Callback for onTreeChange. */
     private $cb;
 
     protected function init(): void

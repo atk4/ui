@@ -6,18 +6,10 @@ namespace Atk4\Ui;
 
 class JsSortable extends JsCallback
 {
-    /**
-     * The html element that contains others element for reordering.
-     *
-     * @var string
-     */
+    /** @var string The html element that contains others element for reordering. */
     public $container = 'tbody';
 
-    /**
-     * The html element inside the container that need reordering.
-     *
-     * @var string
-     */
+    /** @var string The html element inside the container that need reordering. */
     public $draggable = 'tr';
 
     /**
@@ -40,18 +32,10 @@ class JsSortable extends JsCallback
      */
     public $handleClass;
 
-    /**
-     * Whether callback will be fire automatically or not.
-     *
-     * @var bool
-     */
+    /** @var bool Whether callback will be fire automatically or not. */
     public $autoFireCb = true;
 
-    /**
-     * The View that need reordering.
-     *
-     * @var View|null
-     */
+    /** @var View|null The View that need reordering. */
     public $view;
 
     protected function init(): void

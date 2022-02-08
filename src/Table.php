@@ -16,8 +16,9 @@ class Table extends Lister
 
     /**
      * If table is part of Grid or Crud, we want to reload that instead of table.
+     * Usually a Grid or Crud that contains the table.
      *
-     * @var View|null ususally a Grid or Crud view that contains the table
+     * @var View|null
      */
     public $reload;
 
@@ -30,11 +31,7 @@ class Table extends Lister
      */
     public $default_column;
 
-    /**
-     * Contains list of declared columns. Value will always be a column object.
-     *
-     * @var array<int|string, Table\Column|array<int, Table\Column>>
-     */
+    /** @var array<int|string, Table\Column|array<int, Table\Column>> Contains list of declared columns. Value will always be a column object. */
     public $columns = [];
 
     /**
@@ -53,18 +50,10 @@ class Table extends Lister
      */
     public $totals_plan = false;
 
-    /**
-     * Setting this to false will hide header row.
-     *
-     * @var bool
-     */
+    /** @var bool Setting this to false will hide header row. */
     public $header = true;
 
-    /**
-     * Contains list of totals accumulated during the render process.
-     *
-     * @var array
-     */
+    /** @var array Contains list of totals accumulated during the render process. */
     public $totals = [];
 
     /** @var HtmlTemplate Contain the template for the "Head" type row. */
@@ -117,8 +106,6 @@ class Table extends Lister
     public $hasCollapsingCssActionColumn = true;
 
     /**
-     * Constructor.
-     *
      * @param string|null $class CSS class to add
      */
     public function __construct($class = null)
@@ -740,7 +727,7 @@ class Table extends Lister
                         // if name is set, we can wrap things
                         $cell = str_replace('{$' . $name . '}', $cell, $html);
                     } else {
-                        $cell = $cell . ' ' . $html;
+                        $cell .= ' ' . $html;
                     }
                 } else {
                     $cell = $html;

@@ -15,11 +15,7 @@ class JsToast implements JsExpressionable
 {
     use DiContainerTrait;
 
-    /**
-     * Various setting options as per Fomantic ui toast module.
-     *
-     * @var array|string
-     */
+    /** @var array|string Various setting options as per Fomantic ui toast module. */
     public $settings = [];
 
     /** @var string default css class for toast */

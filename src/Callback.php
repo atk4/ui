@@ -16,7 +16,7 @@ use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
  * $button = Button::addTo($layout);
  * $button->set('Click to do something')->link(
  *      Callback::addTo($button)
- *          ->set(function(){
+ *          ->set(function () {
  *              do_something();
  *          })
  *          ->getUrl()
@@ -41,9 +41,6 @@ class Callback extends AbstractView
         throw new Exception('Callback cannot contains children');
     }
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         $this->getApp(); // assert has App

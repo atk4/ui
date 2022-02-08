@@ -15,25 +15,13 @@ class JsConditionalForm implements JsExpressionable
 
     // {{{ Properties
 
-    /**
-     * The form where rules should apply.
-     *
-     * @var Form
-     */
+    /** @var Form The form where rules should apply. */
     public $form;
 
-    /**
-     * The field rules for that form.
-     *
-     * @var array|null
-     */
+    /** @var array|null The field rules for that form. */
     public $fieldRules = [];
 
-    /**
-     * The html class name parent for input.
-     *
-     * @var string
-     */
+    /** @var string The html class name parent for input. */
     public $selector;
 
     // }}}

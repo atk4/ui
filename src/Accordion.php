@@ -16,32 +16,16 @@ class Accordion extends View
 
     public $ui = 'accordion';
 
-    /**
-     * The css class for Fomantic-ui accordion type.
-     *
-     * @var array|string|null
-     */
+    /** @var array|string|null The css class for Fomantic-ui accordion type. */
     public $type;
 
-    /**
-     * Settings as per Fomantic-ui accordion settings.
-     *
-     * @var array
-     */
+    /** @var array Settings as per Fomantic-ui accordion settings. */
     public $settings = [];
 
-    /**
-     * A collection of AccordionSection in this Accordion.
-     *
-     * @var array
-     */
+    /** @var array A collection of AccordionSection in this Accordion. */
     public $sections = [];
 
-    /**
-     * The AccordionSection index number to activate on load.
-     *
-     * @var int
-     */
+    /** @var int The AccordionSection index number to activate on load. */
     public $activeSection = -1;
 
     /**

@@ -18,7 +18,7 @@ use Atk4\Ui\UserAction\ExecutorFactory;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$m = (new CountryLock($app->db))->setLimit(5);
+$m = (new Country($app->db))->setLimit(5);
 $app->getExecutorFactory()->registerTrigger(
     ExecutorFactory::TABLE_BUTTON,
     [Button::class, 'ui' => 'atk-test button', 'icon' => 'pencil'],

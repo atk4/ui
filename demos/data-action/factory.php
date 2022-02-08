@@ -49,7 +49,7 @@ $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends Exe
 // Set new executor factory globally.
 $app->setExecutorFactory(new $myFactory());
 
-$country = new CountryLock($app->db);
+$country = new Country($app->db);
 
 $crud = \Atk4\Ui\Crud::addTo($app, ['ipp' => 5]);
 $crud->setModel($country);

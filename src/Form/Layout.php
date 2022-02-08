@@ -19,11 +19,7 @@ class Layout extends AbstractLayout
     /** @var string Default input template file. */
     public $defaultInputTemplate = 'form/layout/generic-input.html';
 
-    /**
-     * If specified will appear on top of the group. Can be string or Label object.
-     *
-     * @var string
-     */
+    /** @var string If specified will appear on top of the group. Can be string or Label object. */
     public $label;
 
     /**
@@ -34,11 +30,7 @@ class Layout extends AbstractLayout
      */
     public $width;
 
-    /**
-     * Set true if you want fields to appear in-line.
-     *
-     * @var bool
-     */
+    /** @var bool Set true if you want fields to appear in-line. */
     public $inline = false;
 
     /** @var HtmlTemplate Template holding input html. */

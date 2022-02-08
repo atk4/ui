@@ -16,11 +16,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
 {
     use WarnDynamicPropertyTrait;
 
-    /**
-     * Links layout to the form.
-     *
-     * @var \Atk4\Ui\Form
-     */
+    /** @var \Atk4\Ui\Form Links layout to the form. */
     public $form;
 
     /**

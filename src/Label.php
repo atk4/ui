@@ -25,11 +25,7 @@ class Label extends View
      */
     public $iconRight;
 
-    /**
-     * Add "Detail" to label.
-     *
-     * @var string|false|null
-     */
+    /** @var string|false|null Add "Detail" to label. */
     public $detail;
 
     /**

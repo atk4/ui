@@ -18,32 +18,7 @@ namespace Atk4\Ui;
  */
 class JsChain extends JsExpression
 {
-    /**
-     * Name of the include file where this library is implemented.
-     *
-     * @var string
-     */
-    public $_include;
-
-    /**
-     * Default version to use.
-     *
-     * @var string
-     */
-    public $_version;
-
-    /**
-     * Integrity code of default version of this library.
-     *
-     * @var string
-     */
-    public $_integrity;
-
-    /**
-     * Set this to the object of your library. Most libraries prefer '$', although you might want to use 'jQuery' or 'new google.maps.Map';.
-     *
-     * @var string
-     */
+    /** @var string Set this to the object of your library. Most libraries prefer '$', although you might want to use 'jQuery' or 'new google.maps.Map';. */
     public $_library = '$';
 
     /**
@@ -162,10 +137,8 @@ class JsChain extends JsExpression
 
     public function jsRender(): string
     {
-        $ret = '';
-
         // start with constructor
-        $ret .= $this->_library;
+        $ret = $this->_library;
 
         // next perhaps we have arguments
         if ($this->_constructorArgs) {

@@ -28,58 +28,28 @@ class Column
     /** @const string */
     public const HOOK_GET_HEADER_CELL_HTML = self::class . '@getHeaderCellHtml';
 
-    /**
-     * Link back to the table, where column is used.
-     *
-     * @var \Atk4\Ui\Table
-     */
+    /** @var \Atk4\Ui\Table Link back to the table, where column is used. */
     public $table;
 
-    /**
-     * Contains any custom attributes that may be applied on head, body or foot.
-     *
-     * @var array
-     */
+    /** @var array Contains any custom attributes that may be applied on head, body or foot. */
     public $attr = [];
 
-    /**
-     * If set, will override column header value.
-     *
-     * @var string
-     */
+    /** @var string If set, will override column header value. */
     public $caption;
 
-    /**
-     * Is column sortable?
-     *
-     * @var bool
-     */
+    /** @var bool Is column sortable? */
     public $sortable = true;
 
-    /**
-     * The data-column attribute value for Table th tag.
-     *
-     * @var string|null
-     */
+    /** @var string|null The data-column attribute value for Table th tag. */
     public $columnData;
 
-    /**
-     * Include header action tag in rendering or not.
-     *
-     * @var bool
-     */
+    /** @var bool Include header action tag in rendering or not. */
     public $hasHeaderAction = false;
 
-    /**
-     * The tag value required for getTag when using an header action.
-     *
-     * @var array|null
-     */
+    /** @var array|null The tag value required for getTag when using an header action. */
     public $headerActionTag;
 
     /**
-     * Constructor.
-     *
      * @param array $defaults
      */
     public function __construct($defaults = [])
@@ -209,7 +179,7 @@ class Column
         ]);
 
         // will stop grid column from being sorted.
-        $chain->on('click', new JsExpression('function(e){e.stopPropagation();}'));
+        $chain->on('click', new JsExpression('function(e){ e.stopPropagation(); }'));
 
         $this->table->js(true, $chain);
 

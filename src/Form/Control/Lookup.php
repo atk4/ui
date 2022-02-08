@@ -20,25 +20,13 @@ class Lookup extends Input
     public $defaultTemplate = 'form/control/lookup.html';
     public $ui = 'input';
 
-    /**
-     * Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown.
-     *
-     * @var array
-     */
+    /** @var array Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
     public $values = [];
 
-    /**
-     * Object used to capture requests from the browser.
-     *
-     * @var \Atk4\Ui\Callback
-     */
+    /** @var \Atk4\Ui\Callback Object used to capture requests from the browser. */
     public $callback;
 
-    /**
-     * Set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value.
-     *
-     * @var string
-     */
+    /** @var string Set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value. */
     public $empty = "\u{00a0}"; // Unicode NBSP
 
     /**
@@ -73,25 +61,13 @@ class Lookup extends Input
      */
     public $plus = false;
 
-    /**
-     * Sets the max. amount of records that are loaded.
-     *
-     * @var int
-     */
+    /** @var int Sets the max. amount of records that are loaded. */
     public $limit = 100;
 
-    /**
-     * Set custom model field here to use it's value as ID in dropdown instead of default model ID field.
-     *
-     * @var string
-     */
+    /** @var string Set custom model field here to use it's value as ID in dropdown instead of default model ID field. */
     public $id_field;
 
-    /**
-     * Set custom model field here to display it's value in dropdown instead of default model title field.
-     *
-     * @var string
-     */
+    /** @var string Set custom model field here to display it's value in dropdown instead of default model title field. */
     public $title_field;
 
     /**

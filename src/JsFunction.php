@@ -29,8 +29,6 @@ class JsFunction implements JsExpressionable
     public $indent = '  ';
 
     /**
-     * Constructor.
-     *
      * @param array $args
      * @param array $statements
      */

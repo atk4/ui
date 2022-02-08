@@ -48,12 +48,12 @@ $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends Exe
 
 Header::addTo($app, ['Executor Factory set for this Card View only.']);
 
-DemoActionsUtil::setupDemoActions($country = new CountryLock($app->db));
+DemoActionsUtil::setupDemoActions($country = new Country($app->db));
 $country = $country->loadAny();
 
 $cardActions = Card::addTo($app, ['useLabel' => true, 'executorFactory' => new $myFactory()]);
 $cardActions->setModel($country);
-foreach ($country->getUserActions() as $action) {
+foreach ($country->getModel()->getUserActions() as $action) {
     $showActions = ['callback', 'preview', 'edit_argument', 'edit_argument_prev', 'edit_iso', 'confirm', 'multi_step'];
     if (in_array($action->short_name, $showActions, true)) {
         $cardActions->addClickAction($action);
@@ -64,7 +64,7 @@ foreach ($country->getUserActions() as $action) {
 
 Header::addTo($app, ['Card View using global Executor Factory']);
 
-$model = new CountryLock($app->db);
+$model = new Country($app->db);
 $model = $model->loadAny();
 
 $card = Card::addTo($app, ['useLabel' => true]);

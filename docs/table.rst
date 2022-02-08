@@ -159,7 +159,7 @@ of a different class (e.g. 'atk4_money'). Value will be initialized after first 
 used to add columns without field::
 
     $action = $this->addColumn(null, ['Actions']);
-    $actions->addAction('Delete', function() { return 'ok'; });
+    $actions->addAction('Delete', function () { return 'ok'; });
 
 The above code will add a new extra column that will only contain 'delete' icon. When clicked
 it will automatically delete the corresponding record.
@@ -460,7 +460,7 @@ Each table's column width can be resize by dragging the column right border::
 You may specify a callback function to the method. The callback will return a json string containing each
 column name in table with their new width in pixel.::
 
-    $table->resizableColumn(function($j, $w){
+    $table->resizableColumn(function($j, $w) {
         // do something with new column width
         $columnWidths = $this->getApp()->decodeJson($w);
         return;

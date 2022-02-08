@@ -59,18 +59,10 @@ class Link extends Table\Column
     /** @var bool use value as label of the link */
     public $use_label = true;
 
-    /**
-     * set element class.
-     *
-     * @var string|null
-     */
+    /** @var string|null set element class. */
     public $class;
 
-    /**
-     * Use icon as label of the link.
-     *
-     * @var string|null
-     */
+    /** @var string|null Use icon as label of the link. */
     public $icon;
 
     /**
@@ -81,11 +73,7 @@ class Link extends Table\Column
      */
     public $target;
 
-    /**
-     * add download in the tag to force download from the url.
-     *
-     * @var bool
-     */
+    /** @var bool add download in the tag to force download from the url. */
     public $force_download = false;
 
     public function __construct($page = [], $args = [])
