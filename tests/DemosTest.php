@@ -160,7 +160,12 @@ class DemosTest extends TestCase
                     }
                 }
             } finally {
-                $body = ob_get_clean();
+                $this->assertSame('', ob_get_clean());
+            }
+
+            // rewind the body of the response if possible
+            if ($app->getResponse()->getBody()->isSeekable()) {
+                $app->getResponse()->getBody()->rewind();
             }
 
             return new \GuzzleHttp\Promise\FulfilledPromise($app->getResponse());
@@ -281,7 +286,7 @@ class DemosTest extends TestCase
     {
         $response = $this->getResponseFromRequest($path);
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesRegularExpression($this->regexHtml, (string) $response->getBody());
+        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
     public function testDemoResponseError(): void
@@ -294,7 +299,7 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest5xx('layout/layouts_error.php');
 
         $this->assertSame(500, $response->getStatusCode());
-        $this->assertStringContainsString('Property for specified object is not defined', (string) $response->getBody());
+        $this->assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
     }
 
     public function casesDemoGetProvider(): array
@@ -315,7 +320,7 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest($path);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
-        $this->assertMatchesRegularExpression($this->regexHtml, (string) $response->getBody());
+        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
     public function testWizard(): void
@@ -335,11 +340,11 @@ class DemosTest extends TestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesRegularExpression($this->regexJson, (string) $response->getBody());
+        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
 
         $response = $this->getResponseFromRequest('interactive/wizard.php?atk_admin_wizard=2&name=Country');
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesRegularExpression($this->regexHtml, (string) $response->getBody());
+        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
     /**
@@ -379,7 +384,7 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest5xx($path);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
-        $responseBodyStr = (string) $response->getBody();
+        $responseBodyStr = $response->getBody()->getContents();
         $this->assertMatchesRegularExpression($this->regexJson, $responseBodyStr);
         $this->assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
         if ($expectedExceptionMessage !== null) {
@@ -416,7 +421,7 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest($path);
         $this->assertSame(200, $response->getStatusCode());
 
-        $output_rows = preg_split('~\r?\n|\r~', (string) $response->getBody());
+        $output_rows = preg_split('~\r?\n|\r~', $response->getBody()->getContents());
 
         // check SSE Syntax
         $this->assertGreaterThan(0, count($output_rows));
@@ -470,7 +475,7 @@ class DemosTest extends TestCase
     {
         $response = $this->getResponseFromRequest($path, ['form_params' => $postData]);
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesRegularExpression($this->regexJson, (string) $response->getBody());
+        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
     }
 
     /**
@@ -485,7 +490,7 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest5xx($path);
 
         $this->assertSame(500, $response->getStatusCode());
-        $responseBodyStr = (string) $response->getBody();
+        $responseBodyStr = $response->getBody()->getContents();
         $this->assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
         $this->assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
     }
