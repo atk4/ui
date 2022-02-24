@@ -28,7 +28,7 @@ class SessionManager
 
     protected function startSession(bool $readAndCloseImmediately): void
     {
-        $this->isSessionActive();
+        $this->isSessionActive(); // assert session is not disabled
 
         $options = $this->createStartSessionOptions();
         if ($readAndCloseImmediately) {
