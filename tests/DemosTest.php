@@ -154,6 +154,7 @@ class DemosTest extends TestCase
             } catch (\Throwable $e) {
                 // session_start() or ini_set() functions can be used only with native HTTP tests
                 // override test expectation here to finish there tests cleanly (TODO better to make the code testable without calling these functions)
+                // TODO impl. volatile session manager for unit testing
                 if ($e instanceof \ErrorException && preg_match('~^(session_start|ini_set)\(\).* headers already sent$~', $e->getMessage())) {
                     $this->expectExceptionObject($e);
                 }
