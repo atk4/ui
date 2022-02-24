@@ -8,7 +8,7 @@ use Atk4\Core\TraitUtil;
 
 trait SessionTrait
 {
-    private function getSession(): App\Session
+    private function getSessionManager(): App\SessionManager
     {
         // all methods use this method, so we better check NameTrait existence here in one place
         if (!TraitUtil::hasNameTrait($this)) {
@@ -27,7 +27,7 @@ trait SessionTrait
      */
     public function memorize(string $key, $value)
     {
-        return $this->getSession()->memorize($this->name, $key, $value);
+        return $this->getSessionManager()->memorize($this->name, $key, $value);
     }
 
     /**
@@ -39,7 +39,7 @@ trait SessionTrait
      */
     public function learn(string $key, $default = null)
     {
-        return $this->getSession()->learn($this->name, $key, $default);
+        return $this->getSessionManager()->learn($this->name, $key, $default);
     }
 
     /**
@@ -52,7 +52,7 @@ trait SessionTrait
      */
     public function recall(string $key, $default = null)
     {
-        return $this->getSession()->recall($this->name, $key, $default);
+        return $this->getSessionManager()->recall($this->name, $key, $default);
     }
 
     /**
@@ -65,7 +65,7 @@ trait SessionTrait
      */
     public function forget(string $key = null)
     {
-        $this->getSession()->forget($this->name, $key);
+        $this->getSessionManager()->forget($this->name, $key);
 
         return $this;
     }

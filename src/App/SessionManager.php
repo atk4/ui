@@ -6,7 +6,7 @@ namespace Atk4\Ui\App;
 
 use Atk4\Ui\Exception;
 
-class Session
+class SessionManager
 {
     /** @var string Session container key. */
     protected $session_key = '__atk_session';
