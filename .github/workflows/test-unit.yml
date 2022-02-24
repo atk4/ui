@@ -187,7 +187,7 @@ jobs:
 
       - name: "Run tests: MSSQL"
         env:
-          DB_DSN: "sqlsrv:host=mssql;dbname=master"
+          DB_DSN: "sqlsrv:host=mssql;dbname=master;driverOptions[TrustServerCertificate]=1"
           DB_USER: sa
           DB_PASSWORD: atk4_pass
         run: |
@@ -391,7 +391,7 @@ jobs:
       - name: "Run tests: MSSQL (only for coverage or cron)"
         if: env.LOG_COVERAGE || github.event_name == 'schedule'
         env:
-          DB_DSN: "sqlsrv:host=mssql;dbname=master"
+          DB_DSN: "sqlsrv:host=mssql;dbname=master;driverOptions[TrustServerCertificate]=1"
           DB_USER: sa
           DB_PASSWORD: atk4_pass
         run: |
