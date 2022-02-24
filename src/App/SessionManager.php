@@ -9,7 +9,7 @@ use Atk4\Ui\Exception;
 class SessionManager
 {
     /** @var string Session container key. */
-    protected $session_key = '__atk_session';
+    protected $rootNamespace = '__atk_session';
 
     /**
      * Create new session.
@@ -33,7 +33,7 @@ class SessionManager
     /**
      * Destroy existing session.
      */
-    public function destroySession(): void
+    public function closeSession(): void
     {
         if (session_status() === \PHP_SESSION_ACTIVE) {
             session_destroy();
@@ -52,7 +52,7 @@ class SessionManager
     {
         $this->startSession();
 
-        $_SESSION[$this->session_key][$namespace][$key] = $value;
+        $_SESSION[$this->rootNamespace][$namespace][$key] = $value;
 
         return $value;
     }
@@ -68,7 +68,7 @@ class SessionManager
     {
         $this->startSession();
 
-        if (!isset($_SESSION[$this->session_key][$namespace][$key])) {
+        if (!isset($_SESSION[$this->rootNamespace][$namespace][$key])) {
             if ($default instanceof \Closure) {
                 $default = $default($key);
             }
@@ -91,7 +91,7 @@ class SessionManager
     {
         $this->startSession();
 
-        if (!isset($_SESSION[$this->session_key][$namespace][$key])) {
+        if (!isset($_SESSION[$this->rootNamespace][$namespace][$key])) {
             if ($default instanceof \Closure) {
                 $default = $default($key);
             }
@@ -99,7 +99,7 @@ class SessionManager
             return $default;
         }
 
-        return $_SESSION[$this->session_key][$namespace][$key];
+        return $_SESSION[$this->rootNamespace][$namespace][$key];
     }
 
     /**
@@ -113,9 +113,9 @@ class SessionManager
         $this->startSession();
 
         if ($key === null) {
-            unset($_SESSION[$this->session_key][$namespace]);
+            unset($_SESSION[$this->rootNamespace][$namespace]);
         } else {
-            unset($_SESSION[$this->session_key][$namespace][$key]);
+            unset($_SESSION[$this->rootNamespace][$namespace][$key]);
         }
     }
 }

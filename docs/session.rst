@@ -27,7 +27,7 @@ Later when you need the value, you can simply recall it::
 Properties
 ==========
 
-.. php:attr:: session_key
+.. php:attr:: rootNamespace
 
     Internal property to make sure that all session data will be stored in one
     "container" (array key).
@@ -35,13 +35,13 @@ Properties
 Methods
 =======
 
-.. php:method:: startSession($options = [])
+.. php:method:: startSession()
 
     Create new session.
 
-.. php:method:: destroySession()
+.. php:method:: closeSession()
 
-    Destroy existing session.
+    Close existing session.
 
 .. php:method:: memorize($key, $value)
 

@@ -67,7 +67,7 @@ class SessionTraitTest extends TestCase
         $this->assertFalse(isset($_SESSION));
         $m->getApp()->session->startSession();
         $this->assertTrue(isset($_SESSION));
-        $m->getApp()->session->destroySession();
+        $m->getApp()->session->closeSession();
         $this->assertFalse(isset($_SESSION));
     }
 
@@ -92,7 +92,7 @@ class SessionTraitTest extends TestCase
         $m->memorize('foo', $o);
         $this->assertSame($o, $_SESSION['__atk_session'][$m->name]['foo']);
 
-        $m->getApp()->session->destroySession();
+        $m->getApp()->session->closeSession();
     }
 
     /**
