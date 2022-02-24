@@ -19,6 +19,14 @@ trait SessionTrait
     }
 
     /**
+     * @return mixed
+     */
+    public function atomicSession(\Closure $fx, bool $readAndCloseImmediately = false)
+    {
+        return $this->getSessionManager()->atomicSession($fx, $readAndCloseImmediately);
+    }
+
+    /**
      * Remember data in object-relevant session data.
      *
      * @param mixed $value
