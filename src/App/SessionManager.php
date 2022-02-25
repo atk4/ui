@@ -155,7 +155,7 @@ class SessionManager
             }
 
             return $_SESSION[$this->rootNamespace][$namespace][$key];
-        });
+        }, true);
     }
 
     /**
