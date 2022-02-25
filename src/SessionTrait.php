@@ -12,7 +12,7 @@ trait SessionTrait
     {
         // all methods use this method, so we better check NameTrait existence here in one place
         if (!TraitUtil::hasNameTrait($this)) {
-            throw new Exception('Object should have NameTrait applied to use session');
+            throw new Exception('Object must have NameTrait applied to use session');
         }
 
         return $this->getApp()->session;

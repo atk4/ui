@@ -28,12 +28,11 @@ class SessionManager
 
     protected function startSession(bool $readAndCloseImmediately): void
     {
-        $this->isSessionActive(); // assert session is not disabled
-
         $options = $this->createStartSessionOptions();
         if ($readAndCloseImmediately) {
             $options['read_and_close'] = true;
         }
+
         $res = session_start($options);
 
         if (!$res) {
@@ -48,7 +47,6 @@ class SessionManager
         } else {
             $res = session_abort();
         }
-        unset($_SESSION);
 
         if (!$res) {
             throw new Exception('Failed to close a session');
@@ -72,8 +70,12 @@ class SessionManager
         } catch (\Throwable $e) {
             throw $e;
         } finally {
-            if (!$wasActive && !$readAndCloseImmediately) {
-                $this->closeSession($e === null);
+            if (!$wasActive) {
+                if (!$readAndCloseImmediately) {
+                    $this->closeSession($e === null);
+                }
+
+                unset($_SESSION);
             }
         }
     }
