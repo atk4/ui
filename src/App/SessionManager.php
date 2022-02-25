@@ -98,6 +98,11 @@ class SessionManager
         }
     }
 
+    /**
+     * @param bool $found
+     *
+     * @return mixed
+     */
     protected function recallWithCache(string $namespace, string $key, &$found)
     {
         $found = false;
@@ -114,6 +119,8 @@ class SessionManager
 
             return $res;
         }
+
+        return null;
     }
 
     /**
