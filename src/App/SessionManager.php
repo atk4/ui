@@ -69,8 +69,9 @@ class SessionManager
 
         $e = null;
         try {
-            if (!isset($_SESSION[$this->rootNamespace])) {
-                $_SESSION[$this->rootNamespace] = [];
+            self::$readCache = $_SESSION;
+            if (!isset(self::$readCache[$this->rootNamespace])) {
+                self::$readCache[$this->rootNamespace] = [];
             }
 
             $res = $fx();
@@ -95,6 +96,46 @@ class SessionManager
                 unset($_SESSION);
             }
         }
+    }
+
+    protected function recallWithCache(string $namespace, string $key, &$found)
+    {
+        $found = false;
+
+        if (self::$readCache === null) {
+            $this->atomicSession(function (): void {
+            }, true);
+        }
+
+        if (isset(self::$readCache[$this->rootNamespace][$namespace])
+            && array_key_exists($key, self::$readCache[$this->rootNamespace][$namespace])) {
+            $res = self::$readCache[$this->rootNamespace][$namespace][$key];
+            $found = true;
+
+            return $res;
+        }
+    }
+
+    /**
+     * Returns session data for this object. If not previously set, then
+     * $defaultValue is returned.
+     *
+     * @param mixed $defaultValue
+     *
+     * @return mixed Previously memorized data or $defaultValue
+     */
+    public function recall(string $namespace, string $key, $defaultValue = null)
+    {
+        $res = $this->recallWithCache($namespace, $key, $found);
+        if ($found) {
+            return $res;
+        }
+
+        if ($defaultValue instanceof \Closure) {
+            $defaultValue = $defaultValue($key);
+        }
+
+        return $defaultValue;
     }
 
     /**
@@ -122,40 +163,23 @@ class SessionManager
      */
     public function learn(string $namespace, string $key, $defaultValue = null)
     {
-        return $this->atomicSession(function () use ($namespace, $key, $defaultValue) {
-            if (!isset($_SESSION[$this->rootNamespace][$namespace][$key])) {
-                if ($defaultValue instanceof \Closure) {
-                    $defaultValue = $defaultValue($key);
-                }
+        $res = $this->recallWithCache($namespace, $key, $found);
+        if ($found) {
+            return $res;
+        }
 
-                return $this->memorize($namespace, $key, $defaultValue);
+        return $this->atomicSession(function () use ($namespace, $key, $defaultValue) {
+            $res = $this->recallWithCache($namespace, $key, $found);
+            if ($found) {
+                return $res;
             }
 
-            return $this->recall($namespace, $key);
+            if ($defaultValue instanceof \Closure) {
+                $defaultValue = $defaultValue($key);
+            }
+
+            return $this->memorize($namespace, $key, $defaultValue);
         });
-    }
-
-    /**
-     * Returns session data for this object. If not previously set, then
-     * $defaultValue is returned.
-     *
-     * @param mixed $defaultValue
-     *
-     * @return mixed Previously memorized data or $defaultValue
-     */
-    public function recall(string $namespace, string $key, $defaultValue = null)
-    {
-        return $this->atomicSession(function () use ($namespace, $key, $defaultValue) {
-            if (!isset($_SESSION[$this->rootNamespace][$namespace][$key])) {
-                if ($defaultValue instanceof \Closure) {
-                    $defaultValue = $defaultValue($key);
-                }
-
-                return $defaultValue;
-            }
-
-            return $_SESSION[$this->rootNamespace][$namespace][$key];
-        }, true);
     }
 
     /**
