@@ -11,6 +11,9 @@ class SessionManager
     /** @var string Session container key. */
     protected $rootNamespace = '__atk_session';
 
+    /** @var array<string, array<string, array<string, mixed>>>|null */
+    private static $readCache;
+
     protected function isSessionActive(): bool
     {
         $status = session_status();
@@ -66,10 +69,24 @@ class SessionManager
 
         $e = null;
         try {
-            return $fx();
+            if (!isset($_SESSION[$this->rootNamespace])) {
+                $_SESSION[$this->rootNamespace] = [];
+            }
+
+            $res = $fx();
+
+            if (!$readAndCloseImmediately) {
+                self::$readCache = $_SESSION;
+            }
+
+            return $res;
         } catch (\Throwable $e) {
             throw $e;
         } finally {
+            if (!$readAndCloseImmediately && $e !== null) {
+                self::$readCache = null;
+            }
+
             if (!$wasActive) {
                 if (!$readAndCloseImmediately) {
                     $this->closeSession($e === null);
