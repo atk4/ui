@@ -41,33 +41,31 @@ trait SessionTrait
     /**
      * Similar to memorize, but if value for key exist, will return it.
      *
-     * @param mixed $default
+     * @param mixed $defaultValue
      *
-     * @return mixed Previously memorized data or $default
+     * @return mixed Previously memorized data or $defaultValue
      */
-    public function learn(string $key, $default = null)
+    public function learn(string $key, $defaultValue = null)
     {
-        return $this->getSessionManager()->learn($this->name, $key, $default);
+        return $this->getSessionManager()->learn($this->name, $key, $defaultValue);
     }
 
     /**
      * Returns session data for this object. If not previously set, then
-     * $default is returned.
+     * $defaultValue is returned.
      *
-     * @param mixed $default
+     * @param mixed $defaultValue
      *
-     * @return mixed Previously memorized data or $default
+     * @return mixed Previously memorized data or $defaultValue
      */
-    public function recall(string $key, $default = null)
+    public function recall(string $key, $defaultValue = null)
     {
-        return $this->getSessionManager()->recall($this->name, $key, $default);
+        return $this->getSessionManager()->recall($this->name, $key, $defaultValue);
     }
 
     /**
      * Forget session data for $key. If $key is omitted will forget all
      * associated session data.
-     *
-     * @param string $key Optional key of data to forget
      *
      * @return $this
      */
