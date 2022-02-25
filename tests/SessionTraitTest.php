@@ -65,9 +65,9 @@ class SessionTraitTest extends TestCase
         $m = new SessionMock($this->app);
 
         $this->assertFalse(isset($_SESSION));
-        $m->getApp()->session->startSession();
-        $this->assertTrue(isset($_SESSION));
-        $m->getApp()->session->destroySession();
+        $m->atomicSession(function (): void {
+            $this->assertTrue(isset($_SESSION));
+        });
         $this->assertFalse(isset($_SESSION));
     }
 
@@ -81,18 +81,23 @@ class SessionTraitTest extends TestCase
 
         // value as string
         $m->memorize('foo', 'bar');
-        $this->assertSame('bar', $_SESSION['__atk_session'][$m->name]['foo']);
+        $m->atomicSession(function () use ($m): void {
+            $this->assertSame('bar', $_SESSION['__atk_session'][$m->name]['foo']);
+        }, true);
 
         // value as null
         $m->memorize('foo', null);
-        $this->assertNull($_SESSION['__atk_session'][$m->name]['foo']);
+        $m->atomicSession(function () use ($m): void {
+            $this->assertNull($_SESSION['__atk_session'][$m->name]['foo']);
+        }, true);
 
         // value as object
         $o = new \stdClass();
+        $o->foo = 'x';
         $m->memorize('foo', $o);
-        $this->assertSame($o, $_SESSION['__atk_session'][$m->name]['foo']);
-
-        $m->getApp()->session->destroySession();
+        $m->atomicSession(function () use ($m, $o): void {
+            $this->assertSame(serialize($o), serialize($_SESSION['__atk_session'][$m->name]['foo']));
+        }, true);
     }
 
     /**

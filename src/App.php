@@ -105,7 +105,7 @@ class App
     /** @var Persistence|Persistence\Sql */
     public $db;
 
-    /** @var App\Session */
+    /** @var App\SessionManager */
     public $session;
 
     /** @var string[] Extra HTTP headers to send on exit. */
@@ -188,7 +188,7 @@ class App
         }
 
         if ($this->session === null) {
-            $this->session = new App\Session();
+            $this->session = new App\SessionManager();
         }
 
         // setting up default executor factory.
