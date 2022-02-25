@@ -57,27 +57,6 @@ class SessionManager
     }
 
     /**
-     * @param mixed $value
-     */
-    protected function _memorize(string $namespace, string $key, $value): void
-    {
-        $_SESSION[$this->rootNamespace][$namespace][$key] = $value;
-    }
-
-    protected function _forget(string $namespace = null, string $key = null): void
-    {
-        if ($namespace === null) {
-            unset($_SESSION[$this->rootNamespace]);
-        } else {
-            if ($key === null) {
-                unset($_SESSION[$this->rootNamespace][$namespace]);
-            } else {
-                unset($_SESSION[$this->rootNamespace][$namespace][$key]);
-            }
-        }
-    }
-
-    /**
      * @return mixed
      */
     public function atomicSession(\Closure $fx, bool $readAndCloseImmediately = false)
@@ -176,7 +155,7 @@ class SessionManager
     public function memorize(string $namespace, string $key, $value)
     {
         return $this->atomicSession(function () use ($namespace, $key, $value) {
-            $this->_memorize($namespace, $key, $value);
+            $_SESSION[$this->rootNamespace][$namespace][$key] = $value;
 
             return $value;
         });
@@ -217,7 +196,11 @@ class SessionManager
     public function forget(string $namespace, string $key = null): void
     {
         $this->atomicSession(function () use ($namespace, $key) {
-            $this->_forget($namespace, $key);
+            if ($key === null) {
+                unset($_SESSION[$this->rootNamespace][$namespace]);
+            } else {
+                unset($_SESSION[$this->rootNamespace][$namespace][$key]);
+            }
         });
     }
 }
