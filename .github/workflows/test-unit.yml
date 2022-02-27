@@ -203,6 +203,7 @@ jobs:
           DB_PASSWORD: atk4_pass
           NLS_LANG: AMERICAN_AMERICA.AL32UTF8
         run: |
+          /usr/lib/oracle/setup.sh
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
@@ -407,6 +408,7 @@ jobs:
           DB_PASSWORD: atk4_pass
           NLS_LANG: AMERICAN_AMERICA.AL32UTF8
         run: |
+          /usr/lib/oracle/setup.sh
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
