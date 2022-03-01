@@ -251,10 +251,10 @@ class Lookup extends Input
 
         $vp->set(function ($page) {
             $form = \Atk4\Ui\Form::addTo($page);
-
-            $entity = $this->model->createEntity();
-
-            $form->setModel($entity->setOnlyFields($this->plus['fields'] ?? []));
+            
+            $entity = (clone $this->model)->setOnlyFields($this->plus['fields'] ?? null)->createEntity();
+            
+            $form->setModel($entity);
 
             $form->onSubmit(function (\Atk4\Ui\Form $form) {
                 $form->model->save();
