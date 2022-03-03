@@ -29,9 +29,13 @@ class CardTable extends Table
 
         $model->assertIsLoaded();
 
+        if ($columns === null) {
+            $columns = array_keys($model->getFields('visible'));
+        }
+
         $data = [];
         foreach ($model->get() as $key => $value) {
-            if ($columns === null || in_array($key, $columns, true)) {
+            if (in_array($key, $columns, true)) {
                 $data[] = [
                     'id' => $key,
                     'field' => $model->getField($key)->getCaption(),
