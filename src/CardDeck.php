@@ -424,7 +424,7 @@ class CardDeck extends View
         $count = $this->model->executeCountQuery();
         if ($this->paginator) {
             if ($count > 0) {
-                $this->paginator->setTotal((int) ceil((int) $count / $this->ipp));
+                $this->paginator->setTotal((int) ceil($count / $this->ipp));
                 $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
             } else {
                 $this->paginator->destroy();
