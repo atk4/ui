@@ -417,7 +417,7 @@ class CardDeck extends View
      */
     protected function initPaginator()
     {
-        $count = $this->model->action('count')->getOne();
+        $count = (int) $this->model->action('count')->getOne();
         if ($this->paginator) {
             if ($count > 0) {
                 $this->paginator->setTotal((int) ceil($count / $this->ipp));
