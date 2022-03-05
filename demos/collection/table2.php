@@ -53,7 +53,7 @@ $table = \Atk4\Ui\Table::addTo($app);
 $table->setModel($model, ['action']);
 
 // copy of amount through a PHP callback
-$model->addExpression('amount_copy', [function (\Atk4\Data\Model $model) {
+$model->addExpression('amount_copy', ['expr' => function (\Atk4\Data\Model $model) {
     return $model->get('amount');
 }, 'type' => 'atk4_money']);
 
