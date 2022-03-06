@@ -23,7 +23,7 @@ $bb->on('click', $table->js()->reload());
 
 $table->setModel(new SomeData(), []);
 
-$table->addColumn('name', new Table\Column\Link(['table', 'id' => '{$id}']));
+$table->addColumn('name', new Table\Column\Link(['table', 'foo' => 'bar'], ['id' => 'id'], ['target' => '_blank']));
 $table->addColumn('surname', new Table\Column\Template('{$surname}'))->addClass('warning');
 $table->addColumn('title', new Table\Column\Status([
     'positive' => ['Prof.'],
