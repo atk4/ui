@@ -38,14 +38,14 @@ class Flag extends Table\Column
 
     public function getHtmlTags(Model $row, $field)
     {
-        if ($row->hasField($this->code_field)) {
+        //if ($row->hasField($this->code_field)) {
             $code = $row->get($this->code_field);
             $name = $this->name_field ? $row->get($this->name_field) : null;
 
             return [
                 $field->short_name => empty($code) ? '' : $this->getApp()->getTag('i', ['class' => strtolower($code) . ' flag', 'title' => $code . ($name ? ': ' . $name : '')]),
             ];
-        }
+        //}
 
         return [$field->short_name => $field->get($row)];
     }
