@@ -39,7 +39,7 @@ class Flag extends Table\Column
     public function getHtmlTags(Model $row, $field)
     {
         if ($row->hasField($this->code_field)) {
-            $code = $row->get($this->code_field) ?: null;
+            $code = $row->get($this->code_field);
             $name = $this->name_field ? $row->get($this->name_field) : null;
 
             return [
