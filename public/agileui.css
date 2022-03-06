@@ -156,12 +156,10 @@ i.atk-panel-warning.atk-visible {
   width: 260px;
 }
 .atk-table-dropdown {
-  margin-top: -8px;
   float: left;
 }
 .atk-table-dropdown i {
   opacity: 0.3;
-  vertical-align: bottom;
 }
 .atk-table-dropdown i.table-filter-on:after {
   content: '\f150';
