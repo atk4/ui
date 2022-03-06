@@ -102,7 +102,7 @@ field if it's not alrady defined in ``Order::init()``::
     $table = Table::addTo($app);
     $order = new Order($db);
 
-    $order->addExpression('total', '[price]*[amount]')->type = 'atk4_money';
+    $order->addExpression('total', '[price] * [amount]')->type = 'atk4_money';
 
     $table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
 

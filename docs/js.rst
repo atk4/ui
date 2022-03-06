@@ -294,15 +294,15 @@ Because :php:class:`JsChain` will typically wrap all the arguments through
 :php:meth:`JsChain::_json_encode()`, it prevents you from accidentally injecting JavaScript code::
 
     $b = new Button();
-    $b->js(true)->text('2+2');
+    $b->js(true)->text('2 + 2');
 
-This will result in a button having a label `2+2` instead of having a label `4`. To
+This will result in a button having a label `2 + 2` instead of having a label `4`. To
 get around this, you can use JsExpression::
 
     $b = new Button();
-    $b->js(true)->text(new JsExpression('2+2'));
+    $b->js(true)->text(new JsExpression('2 + 2'));
 
-This time `2+2` is no longer escaped and will be used as plain JavaScript code. Another example
+This time `2 + 2` is no longer escaped and will be used as plain JavaScript code. Another example
 shows how you can use global variables::
 
     echo (new Jquery('document'))->find('h1')->hide()->jsRender();
@@ -326,7 +326,7 @@ boxes on the left::
     $h1 = $left_box1->js()->height();
     $h2 = $left_box2->js()->height();
 
-    $sum = new JsExpression('[]+[]', [$h1, $h2]);
+    $sum = new JsExpression('[] + []', [$h1, $h2]);
 
     $right_box_container->js(true)->height( $sum );
 
@@ -340,9 +340,9 @@ The template language for JsExpression is super-simple:
 
 So the following lines are identical::
 
-    $sum = new JsExpression('[]+[]', [$h1, $h2]);
-    $sum = new JsExpression('[0]+[1]', [0 => $h1, 1 => $h2]);
-    $sum = new JsExpression('[a]+[b]', ['a' => $h1, 'b' => $h2]);
+    $sum = new JsExpression('[] + []', [$h1, $h2]);
+    $sum = new JsExpression('[0] + [1]', [0 => $h1, 1 => $h2]);
+    $sum = new JsExpression('[a] + [b]', ['a' => $h1, 'b' => $h2]);
 
 .. important::
 

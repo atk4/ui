@@ -31,7 +31,7 @@ it uses the value from presentation or do some decoration on its own.
 Extending Data Types
 ====================
 
-If you are looking to add a new data type, such as "money+currency" combination, which would
+If you are looking to add a new data type, such as "money + currency" combination, which would
 allow user to specify both the currency and the monetary value, you should start by adding
 support for a new type.
 

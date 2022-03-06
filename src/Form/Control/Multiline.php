@@ -180,7 +180,7 @@ class Multiline extends Form\Control
      * A JsFunction to execute when Multiline add(+) button is clicked.
      * The function is execute after multiline component finish adding a row of fields.
      * The function also receive the row value as an array.
-     * ex: $jsAfterAdd = new JsFunction(['value'],[new JsExpression('console.log(value)')]);.
+     * ex: $jsAfterAdd = new JsFunction(['value'], [new JsExpression('console.log(value)')]);.
      *
      * @var JsFunction
      */
@@ -190,7 +190,7 @@ class Multiline extends Form\Control
      * A JsFunction to execute when Multiline delete button is clicked.
      * The function is execute after multiline component finish deleting rows.
      * The function also receive the row value as an array.
-     * ex: $jsAfterDelete = new JsFunction(['value'],[new JsExpression('console.log(value)')]);.
+     * ex: $jsAfterDelete = new JsFunction(['value'], [new JsExpression('console.log(value)')]);.
      *
      * @var JsFunction
      */

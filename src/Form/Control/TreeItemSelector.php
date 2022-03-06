@@ -46,7 +46,7 @@ class TreeItemSelector extends Form\Control
      *
      * Each item may have it's own children by adding nodes children to it.
      *   $items = [
-     *       ['name' => 'Electronics', 'id' => 'P100', 'nodes' => [['name' => 'Phone', 'id' => 'P100', 'nodes' => [['name' => 'iPhone', 'id' => 502,], ['name' => 'Google Pixels', 'id' => 503]]], ['name' => 'Tv' , 'id' => 501], ['name' => 'Radio' , 'id' => 601]]],
+     *       ['name' => 'Electronics', 'id' => 'P100', 'nodes' => [['name' => 'Phone', 'id' => 'P100', 'nodes' => [['name' => 'iPhone', 'id' => 502], ['name' => 'Google Pixels', 'id' => 503]]], ['name' => 'Tv' , 'id' => 501], ['name' => 'Radio' , 'id' => 601]]],
      *       ['name' => 'Cleaner' , 'id' => 201],
      *       ['name' => 'Appliances' , 'id' => 301]
      *   ];

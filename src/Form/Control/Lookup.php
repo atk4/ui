@@ -89,7 +89,7 @@ class Lookup extends Input
      * form when field value is changes.
      * $form->addControl('field', [\Atk4\Ui\Form\Control\Lookup::class, 'settings' => ['allowReselection' => true,
      *                           'selectOnKeydown' => false,
-     *                           'onChange' => new Atk4\Ui\JsExpression('function(value,t,c) {
+     *                           'onChange' => new Atk4\Ui\JsExpression('function(value, t, c) {
      *                                 if ($(this).data("value") !== value) {
      *                                   $(this).parents(".form").form("submit");
      *                                   $(this).data("value", value);

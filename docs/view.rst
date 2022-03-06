@@ -454,7 +454,7 @@ Agile UI makes it easy to reload any View on the page. Starting with v1.4 you ca
 which will respond with JavaScript Action for reloading the view::
 
     $b1 = Button::addTo($app, ['Click me']);
-    $b2 = Button::addTo($app, ['Rand: '.rand(1,100)]);
+    $b2 = Button::addTo($app, ['Rand: ' . rand(1, 100)]);
 
     $b1->on('click', $b2->jsReload());
 

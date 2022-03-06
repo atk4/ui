@@ -985,7 +985,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * on() method is similar to jQuery on() method.
      *
-     * on(event, [selector,] action)
+     * on(event, [selector, ] action)
      *
      * Method on() also returns a chain, that will correspond affected element.
      * Here are some ways to use on();
