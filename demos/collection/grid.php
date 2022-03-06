@@ -14,7 +14,6 @@ use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
 use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\BasicExecutor;
-use Atk4\Ui\Table;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';

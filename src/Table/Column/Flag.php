@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column;
 
-use Atk4\Ui\Table;
 use Atk4\Data\Model;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Table;
 
 /**
  * Column for formatting country code as flags.
@@ -42,7 +43,7 @@ class Flag extends Table\Column
             $name = $this->name_field ? $row->get($this->name_field) : null;
 
             return [
-                $field->short_name => empty($code) ? '' : $this->getApp()->getTag('i', ['class' => strtolower($code) . ' flag', 'title' => $code . ($name ? ': ' . $name : '')])
+                $field->short_name => empty($code) ? '' : $this->getApp()->getTag('i', ['class' => strtolower($code) . ' flag', 'title' => $code . ($name ? ': ' . $name : '')]),
             ];
         }
 
