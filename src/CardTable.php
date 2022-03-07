@@ -34,30 +34,18 @@ class CardTable extends Table
         }
 
         $data = [];
-        foreach ($model->get() as $key => $value) {
-            if (in_array($key, $columns, true)) {
+        foreach (array_keys($model->get()) as $fieldName) {
+            if (in_array($fieldName, $columns, true)) {
                 $data[] = [
-                    'id' => $key,
-                    'field' => $model->getField($key)->getCaption(),
-                    'value' => $this->getApp()->uiPersistence->typecastSaveField($model->getField($key), $value),
+                    'id' => $fieldName,
+                    'field' => $model->getField($fieldName)->getCaption(),
+                    'value' => new Model\EntityFieldPair($model, $fieldName),
                 ];
             }
         }
 
         $this->_bypass = true;
-        $mm = parent::setSource($data);
-        $this->addDecorator('value', [Table\Column\Multiformat::class, function (Model $row, $field) use ($model) {
-            $field = $model->getField($row->getId());
-            $ret = $this->decoratorFactory(
-                $field,
-                $field->type === 'boolean' ? [Table\Column\Status::class, ['positive' => [true, 'Yes'], 'negative' => [false, 'No']]] : []
-            );
-            if ($ret instanceof Table\Column\Money) {
-                $ret->attr['all']['class'] = ['single line'];
-            }
-
-            return [$ret];
-        }]);
+        parent::setSource($data);
         $this->_bypass = false;
     }
 }
