@@ -96,7 +96,7 @@ class Ui extends Persistence
                     // datetime only - set to persisting timezone
                     if ($field->type === 'datetime') {
                         $value = new \DateTime($value->format('Y-m-d H:i:s.u'), $value->getTimezone());
-                        $value->setTimezone(new \DateTimeZone($field->persist_timezone));
+                        $value->setTimezone(new \DateTimeZone(date_default_timezone_get()));
                     }
                     $value = $value->format($format);
                 }
