@@ -93,10 +93,9 @@ class Ui extends Persistence
                     $formats = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
                     $format = $field->persist_format ?: $formats[$field->type];
 
-                    // datetime only - set to persisting timezone
+                    // datetime only - convert to string using script timezone, and not persistent time zone
                     if ($field->type === 'datetime') {
                         $value = new \DateTime($value->format('Y-m-d H:i:s.u'), $value->getTimezone());
-                        $value->setTimezone(new \DateTimeZone(date_default_timezone_get()));
                     }
                     $value = $value->format($format);
                 }
