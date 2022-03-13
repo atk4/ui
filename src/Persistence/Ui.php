@@ -31,6 +31,8 @@ class Ui extends Persistence
     public $currency_decimals = 2;
 
     /** @var string */
+    public $timezone;
+    /** @var string */
     public $date_format = 'M d, Y';
     /** @var string */
     public $time_format = 'H:i';
@@ -43,6 +45,13 @@ class Ui extends Persistence
     public $yes = 'Yes';
     /** @var string */
     public $no = 'No';
+
+    public function __construct()
+    {
+        if ($this->timezone === null) {
+            $this->timezone = date_default_timezone_get();
+        }
+    }
 
     public function typecastSaveField(Field $field, $value)
     {
@@ -93,10 +102,9 @@ class Ui extends Persistence
                     $formats = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
                     $format = $field->persist_format ?: $formats[$field->type];
 
-                    // datetime only - set to persisting timezone
                     if ($field->type === 'datetime') {
                         $value = new \DateTime($value->format('Y-m-d H:i:s.u'), $value->getTimezone());
-                        $value->setTimezone(new \DateTimeZone($field->persist_timezone));
+                        $value->setTimezone(new \DateTimeZone($this->timezone));
                     }
                     $value = $value->format($format);
                 }
@@ -125,32 +133,24 @@ class Ui extends Persistence
                     return null;
                 }
 
-                $dt_class = \DateTime::class;
-                $tz_class = \DateTimeZone::class;
+                $dtClass = \DateTime::class;
+                $tzClass = \DateTimeZone::class;
 
                 // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
                 $formats = ['date' => '!+' . $this->date_format, 'datetime' => '!+' . $this->datetime_format, 'time' => '!+' . $this->time_format];
                 $format = $field->persist_format ?: $formats[$field->type];
 
-                // datetime only - set from persisting timezone
                 $valueStr = is_object($value) ? $this->_typecastSaveField($field, $value) : $value;
-                if ($field->type === 'datetime') {
-                    $value = $dt_class::createFromFormat($format, $valueStr, new $tz_class($field->persist_timezone));
-                    if ($value === false) {
-                        throw (new Exception('Incorrectly formatted datetime'))
-                            ->addMoreInfo('format', $format)
-                            ->addMoreInfo('value', $valueStr)
-                            ->addMoreInfo('field', $field);
-                    }
-                    $value->setTimezone(new $tz_class(date_default_timezone_get()));
-                } else {
-                    $value = $dt_class::createFromFormat($format, $valueStr);
-                    if ($value === false) {
-                        throw (new Exception('Incorrectly formatted date/time'))
-                            ->addMoreInfo('format', $format)
-                            ->addMoreInfo('value', $valueStr)
-                            ->addMoreInfo('field', $field);
-                    }
+                $isDatetime = $field->type === 'datetime';
+                $value = $dtClass::createFromFormat($format, $valueStr, $isDatetime ? new $tzClass($this->timezone) : null);
+                if ($value === false) {
+                    throw (new Exception('Incorrectly formatted datetime'))
+                        ->addMoreInfo('format', $format)
+                        ->addMoreInfo('value', $valueStr)
+                        ->addMoreInfo('field', $field);
+                }
+                if ($isDatetime) {
+                    $value->setTimezone(new $tzClass(date_default_timezone_get()));
                 }
 
                 $value = parent::_typecastSaveField($field, $value);
