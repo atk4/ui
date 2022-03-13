@@ -65,10 +65,10 @@ class Popup extends View
     public $useCache = false;
 
     /** @var string Min width for a dynamic popup. */
-    public $minWidth; //'120px';
+    public $minWidth; // '120px';
 
     /** @var string Min height for a dynamic popup. */
-    public $minHeight; //'60px';
+    public $minHeight; // '60px';
 
     /**
      * Whether or not the click event triggering popup
@@ -267,7 +267,7 @@ class Popup extends View
         if ($this->minHeight) {
             $this->setStyle('min-height', $this->minHeight);
         }
-        //$this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
+        // $this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
 
         parent::renderView();
     }

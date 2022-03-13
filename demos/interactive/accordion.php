@@ -23,7 +23,7 @@ $b3 = \Atk4\Ui\Button::addTo($bar, ['Toggle Section #3']);
 
 \Atk4\Ui\Header::addTo($app, ['Accordion Sections']);
 
-$accordion = \Atk4\Ui\Accordion::addTo($app, ['type' => ['styled', 'fluid']/*, 'settings' => ['exclusive' => false]*/]);
+$accordion = \Atk4\Ui\Accordion::addTo($app, ['type' => ['styled', 'fluid']/* , 'settings' => ['exclusive' => false] */]);
 
 // static section
 $i1 = $accordion->addSection('Static Text');

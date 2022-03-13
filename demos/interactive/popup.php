@@ -213,9 +213,9 @@ $pop = Popup::addTo($app, [$browse, 'position' => 'bottom left', 'minWidth' => '
     ->setHoverable()
     ->setOption('delay', ['show' => 100, 'hide' => 400]);
 $shelf2 = $itemShelfClass::addTo($pop);
-//$shelf2->linkCart($cart, $cartItem->jsReload());
+// $shelf2->linkCart($cart, $cartItem->jsReload());
 
-//////////////////////////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
 
 $userMenu = \Atk4\Ui\Menu::addTo($menu, ['ui' => false], ['RightMenu'])
     ->addClass('right menu')->removeClass('item');
@@ -248,12 +248,12 @@ $signup->set(function ($pop) {
 
             // refreshes entire page
             return $form->getApp()->jsRedirect(['logged' => $form->model->get('email')]);
-            //return new \Atk4\Ui\JsExpression('alert([])', ['Thank you ' . $form->model->get('email')]);
+            // return new \Atk4\Ui\JsExpression('alert([])', ['Thank you ' . $form->model->get('email')]);
         });
     }
 });
 
-//////////////////////////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
 
 \Atk4\Ui\Header::addTo($app)->set('Specifying trigger');
 

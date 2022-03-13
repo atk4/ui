@@ -72,7 +72,7 @@ class Upload extends Input
     {
         parent::init();
 
-        //$this->inputType = 'hidden';
+        // $this->inputType = 'hidden';
 
         $this->cb = \Atk4\Ui\JsCallback::addTo($this);
 

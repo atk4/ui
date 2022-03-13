@@ -26,7 +26,7 @@ $sendEmailAction = $country->addUserAction('Email', [
     },
 ]);
 
-///////////////////////////////////////////
+// -----------------------------------------------------------------------------
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
@@ -53,7 +53,7 @@ $country->addUserAction('greet', [
 // Set the action property for the Line Form Control.
 Line::addTo($app, ['action' => $country->getUserAction('greet')]);
 
-///////////////////////////////////////////
+// -----------------------------------------------------------------------------
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 

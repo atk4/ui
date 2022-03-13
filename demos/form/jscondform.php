@@ -9,7 +9,8 @@ use Atk4\Ui\Form;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-//////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 \Atk4\Ui\Header::addTo($app, ['Phone', 'size' => 2]);
 
 $formPhone = Form::addTo($app, ['segment']);
@@ -27,7 +28,8 @@ $formPhone->setControlsDisplayRules([
     'phone4' => ['phone3' => ['number', 'minLength[5]'], 'phone2' => ['number', 'minLength[5]'], 'phone1' => ['number', 'minLength[5]']],
 ]);
 
-//////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 \Atk4\Ui\Header::addTo($app, ['Optional subscription', 'size' => 2]);
 
 $formSubscribe = Form::addTo($app, ['segment']);
@@ -50,7 +52,8 @@ $formSubscribe->setControlsDisplayRules([
     'f_gift' => ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
 ]);
 
-//////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 \Atk4\Ui\Header::addTo($app, ['Dog registration', 'size' => 2]);
 
 $formDog = Form::addTo($app, ['segment']);
@@ -66,7 +69,8 @@ $formDog->setControlsDisplayRules([
     'hair_cut' => [['race' => 'contains[poodle]', 'age' => 'integer[1..5]'], ['race' => 'isExactly[bichon]']],
 ]);
 
-//////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 \Atk4\Ui\Header::addTo($app, ['Hide or show group', 'size' => 2]);
 
 $formGroup = Form::addTo($app, ['segment']);
@@ -94,7 +98,8 @@ $groupOther->addControl('favorite_pet', ['width' => 'four']);
 // Show group where 'language' belong when dev is checked.
 $formGroup->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language' => ['dev' => 'checked']]);
 
-//////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 /*
 \Atk4\Ui\Header::addTo($app, ['Hide or show accordion section', 'size' => 2]);
 
