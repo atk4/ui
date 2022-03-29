@@ -135,7 +135,7 @@ It's easy to create your own application styling. Here are some example UI:
 As of version 2.0 - Agile Toolkit offers support for User Actions. Those are easy to define in your Data Model declaration:
 
 ``` php
-$this->addAction('archive', function(Model $m) {
+$this->addAction('archive', function (Model $m) {
     $m->get('is_archived') = true;
     $this->saveAndUnload();
 });
@@ -156,13 +156,13 @@ One of the fundamental features of ATK is Callback - ability to dynamically gene
 $tabs = \Atk4\Ui\Tabs::addTo($app);
 \Atk4\Ui\Message::addTo($tabs->addTab('Intro'), ['Other tabs are loaded dynamically!']);
 
-$tabs->addTab('Users', function($p) use($app) {
+$tabs->addTab('Users', function (\Atk4\Ui\VirtualPage $p) use ($app) {
     // this tab is loaded dynamically, but also contains dynamic component
 
     \Atk4\Ui\Crud::addTo($p)->setModel(new User($app->db));
 });
 
-$tabs->addTab('Settings', function($p) use($app) {
+$tabs->addTab('Settings', function (\Atk4\Ui\VirtualPage $p) use ($app) {
     // second tab contains an AJAX form that stores itself back to DB
 
     $m = new Settings($app->db);

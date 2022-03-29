@@ -40,7 +40,8 @@ $sortable->onReorder(function ($order, $src, $pos, $oldPos) {
 $button = \Atk4\Ui\Button::addTo($app)->set('Get countries order');
 $button->js('click', $sortable->jsGetOrders(['btn' => '1']));
 
-//////////////////////////////////////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 \Atk4\Ui\Header::addTo($app, ['Add Drag n drop to Grid']);
 

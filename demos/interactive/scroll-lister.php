@@ -29,7 +29,7 @@ $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lis
 
 $model = new Country($app->db);
 $lister->setModel($model);
-//$model->addCondition(Country::hinting()->fieldName()->name, 'like', 'A%');
+// $model->addCondition(Country::hinting()->fieldName()->name, 'like', 'A%');
 
 // add dynamic scrolling.
 $lister->addJsPaginator(30, [], $container);

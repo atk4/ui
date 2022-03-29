@@ -11,13 +11,13 @@ require_once __DIR__ . '/../init-app.php';
 
 $form = Form::addTo($app);
 $img = $form->addControl('img', [Form\Control\UploadImage::class, ['defaultSrc' => '../images/default.png', 'placeholder' => 'Click to add an image.']]);
-//$img->set('a_new_token', 'an-img-file-name');
-//$img->setThumbnailSrc('./images/logo.png');
+// $img->set('a_new_token', 'an-img-file-name');
+// $img->setThumbnailSrc('./images/logo.png');
 
 $control = $form->addControl('file', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]]);
 
-//$control->set('a_generated_token', 'a-file-name');
-//$control->set('a_generated_token');
+// $control->set('a_generated_token', 'a-file-name');
+// $control->set('a_generated_token');
 
 $img->onDelete(function ($fileId) use ($img) {
     $img->clearThumbnail('./images/default.png');

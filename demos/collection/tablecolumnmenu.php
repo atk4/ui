@@ -39,7 +39,7 @@ $colTitle->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
     return 'Title item: ' . $item;
 });
 
-////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
 
 \Atk4\Ui\Header::addTo($app, ['Grid column may contains popup or dropdown menu.']);
 

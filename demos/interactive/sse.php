@@ -14,7 +14,7 @@ $bar = \Atk4\Ui\ProgressBar::addTo($app);
 $button = \Atk4\Ui\Button::addTo($app, ['Turn On']);
 $buttonStop = \Atk4\Ui\Button::addTo($app, ['Turn Off']);
 // non-SSE way
-//$button->on('click', $bar->js()->progress(['percent' => 40]));
+// $button->on('click', $bar->js()->progress(['percent' => 40]));
 
 $sse = \Atk4\Ui\JsSse::addTo($app, ['showLoader' => true]);
 

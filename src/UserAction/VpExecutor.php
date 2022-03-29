@@ -160,7 +160,7 @@ class VpExecutor extends View implements JsExecutorInterface
      */
     protected function jsGetExecute($obj, $id): array
     {
-        //@phpstan-ignore-next-line
+        // @phpstan-ignore-next-line
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
