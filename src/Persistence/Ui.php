@@ -29,7 +29,11 @@ class Ui extends Persistence
     public $currency = '€';
     /** @var int Default decimal count for 'atk4_money' type. */
     public $currency_decimals = 2;
-
+    /** @var string Default decimal separator character for 'atk4_money' type. */
+    public $decimal_separator = '.';
+    /** @var string Default thousand digit separator for 'atk4_money' type. */
+    public $thousands_separator = ',';
+    
     /** @var string */
     public $timezone;
     /** @var string */
@@ -91,7 +95,7 @@ class Ui extends Persistence
                 break;
             case 'atk4_money':
                 $value = parent::_typecastLoadField($field, $value);
-                $value = ($this->currency ? $this->currency . ' ' : '') . number_format($value, $this->currency_decimals);
+                $value = ($this->currency ? $this->currency . ' ' : '') . number_format($value, $this->currency_decimals, $this->decimal_separator, $this->thousands_separator);
 
                 break;
             case 'date':
