@@ -56,21 +56,21 @@ $model->onHook(\Atk4\Data\Model::HOOK_VALIDATE, function (Country $model, $inten
 });
 $crud->setModel($model);
 
-$vp = \Atk4\Ui\VirtualPage::addTo($app);
+$vp = \Atk4\Ui\VirtualPage::addTo($crud);
 $vp->set(function($vp) use ($app) {
     
-    $model = new Country($app->db);
-    $entity = $model->load(1);
+    $modelvp = new Country($app->db);
+    $entity = $modelvp->load(1);
         
     \Atk4\Ui\Header::addTo($vp, ['Modal Virtual Page']);
     $button = \Atk4\Ui\Button::addTo($vp, ['Open another Modal']);
     
     $crud2 = \Atk4\Ui\Crud::addTo($vp);
-    $crud2->setModel($model);
+    $crud2->setModel($modelvp);
         
     
     $vp2 = \Atk4\Ui\VirtualPage::addTo($vp);
-    $vp2->set(function($vp2) use ($model, $entity) {
+    $vp2->set(function($vp2) use ($modelvp, $entity) {
         $form =\Atk4\Ui\Form::addTo($vp2);
         $form->setModel($entity);
         
@@ -87,11 +87,11 @@ $vp->set(function($vp) use ($app) {
         
         
         $crud3 = \Atk4\Ui\Crud::addTo($vp2);
-        $crud3->setModel($model);
+        $crud3->setModel($modelvp);
         
     });
     
-    $modalvp2 = new \Atk4\Ui\JsModal('Edit', $vp2->getUrl('cut'), []);
+    $modalvp2 = new \Atk4\Ui\JsModal('Edit', $vp2->getUrl('cut'));
     $button->on('click', $modalvp2);
             
 });
@@ -99,6 +99,41 @@ $vp->set(function($vp) use ($app) {
 $modalvp = new \Atk4\Ui\JsModal('Edit', $vp->getUrl('cut'), []);
 $crud->menu->addItem(['Open Modal', 'icon' => 'plus'],$modalvp);
 
+$crud->addModalAction(['icon'=>'dollar sign'], ['title' => ''], function ($v, $id) use ($crud) {
+    $modelModalAction = new Country($crud->model->persistence);
+    $modelModalAction->addCondition('atk_fp_country__id', $id);
+    
+        $v->add([\Atk4\Ui\Header::class, 'Filtered crud', 'icon' => 'dollar sign']);
+        $crud4 = \Atk4\Ui\Crud::addTo($v);
+        $crud4->setModel($modelModalAction);
+        
+        $vp3 = \Atk4\Ui\VirtualPage::addTo($crud4);
+        $vp3->set(function($vp3) use ($modelModalAction) {
+            $editmodel = (new Country($modelModalAction->persistence))->load(1);
+            
+            $form2 =\Atk4\Ui\Form::addTo($vp3);
+            $form2->setModel($editmodel);
+            
+            $form2->onSubmit(function (Form $form) {
+                $form->model->save();
+                
+                return [
+                    new \Atk4\Ui\JsToast([
+                        'title'   => 'Success',
+                        'message' => 'Changes were saved.'.$form->model->get('atk_fp_country__name'),
+                        'class'   => 'success',
+                    ])];
+            });
+                
+                
+        });
+            unset($modelModalAction);
+        unset($editmodel);
+        
+        $modalvp3 = new \Atk4\Ui\JsModal('Edit', $vp3->getUrl('cut'), ['id' => $id]);
+        $crud4->menu->addItem(['New Modal', 'icon' => 'plus'], $modalvp3);
+        
+});
 
 // Because Crud inherits Grid, you can also define custom actions
 $crud->addModalAction(['icon' => [\Atk4\Ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($crud) {
