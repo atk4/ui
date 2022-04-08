@@ -22,7 +22,7 @@ $mySwitcherClass = AnonymousClassNameCache::get_class(fn () => new class() exten
 
         $buttons->on('click', '.button', new \Atk4\Ui\JsReload($this, [$this->name => (new \Atk4\Ui\Jquery())->data('id')]));
 
-        switch ($this->getApp()->stickyGet($this->name)) {
+        switch ($this->stickyGet($this->name)) {
             case 'yellow':
                 self::addTo(\Atk4\Ui\View::addTo($this, ['ui' => 'yellow segment']));
 

@@ -17,8 +17,8 @@ $barType = \Atk4\Ui\View::addTo($seg, ['ui' => ' basic buttons']);
 
 $msg = \Atk4\Ui\Message::addTo($seg, [
     'This is a title of your message',
-    'type' => $app->stickyGet('type'),
-    'icon' => $app->stickyGet('icon'),
+    'type' => $seg->stickyGet('type'),
+    'icon' => $seg->stickyGet('icon'),
 ]);
 $msg->text->addParagraph('You can add some more text here for your messages');
 

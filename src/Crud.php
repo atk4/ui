@@ -56,7 +56,7 @@ class Crud extends Grid
         parent::init();
 
         if ($sortBy = $this->getSortBy()) {
-            $this->issetApp() ? $this->getApp()->stickyGet($this->name . '_sort') : $this->stickyGet($this->name . '_sort', $sortBy);
+            $this->stickyGet($this->name . '_sort', $sortBy);
         }
     }
 

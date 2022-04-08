@@ -136,6 +136,18 @@ class DemosTest extends TestCase
         return $app;
     }
 
+    protected function assertNoGlobalSticky(App $app): void
+    {
+        $appSticky = array_diff_assoc(
+            \Closure::bind(fn () => $app->sticky_get_arguments, null, App::class)(),
+            ['__atk_json' => false, '__atk_tab' => false, 'APP_CALL_EXIT' => true, 'APP_CATCH_EXCEPTIONS' => true]
+        );
+        if ($appSticky !== []) {
+            throw (new \Atk4\Ui\Exception('Global GET sticky must never be set by any component'))
+                ->addMoreInfo('appSticky', $appSticky);
+        }
+    }
+
     protected function getClient(): Client
     {
         $handler = function (RequestInterface $request) {
@@ -151,6 +163,8 @@ class DemosTest extends TestCase
                 if (!$app->run_called) {
                     $app->run();
                 }
+
+                $this->assertNoGlobalSticky($app);
             } catch (\Throwable $e) {
                 // session_start() or ini_set() functions can be used only with native HTTP tests
                 // override test expectation here to finish there tests cleanly (TODO better to make the code testable without calling these functions)
