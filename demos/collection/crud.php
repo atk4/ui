@@ -56,6 +56,50 @@ $model->onHook(\Atk4\Data\Model::HOOK_VALIDATE, function (Country $model, $inten
 });
 $crud->setModel($model);
 
+$vp = \Atk4\Ui\VirtualPage::addTo($app);
+$vp->set(function($vp) use ($app) {
+    
+    $model = new Country($app->db);
+    $entity = $model->load(1);
+        
+    \Atk4\Ui\Header::addTo($vp, ['Modal Virtual Page']);
+    $button = \Atk4\Ui\Button::addTo($vp, ['Open another Modal']);
+    
+    $crud2 = \Atk4\Ui\Crud::addTo($vp);
+    $crud2->setModel($model);
+        
+    
+    $vp2 = \Atk4\Ui\VirtualPage::addTo($vp);
+    $vp2->set(function($vp2) use ($model, $entity) {
+        $form =\Atk4\Ui\Form::addTo($vp2);
+        $form->setModel($entity);
+        
+        $form->onSubmit(function (Form $form) {
+            $form->model->save();
+            
+            return [
+                new \Atk4\Ui\JsToast([
+                    'title'   => 'Success',
+                    'message' => 'Changes were saved.'.$form->model->get('atk_fp_country__name'),
+                    'class'   => 'success',
+                ])];
+        });
+        
+        
+        $crud3 = \Atk4\Ui\Crud::addTo($vp2);
+        $crud3->setModel($model);
+        
+    });
+    
+    $modalvp2 = new \Atk4\Ui\JsModal('Edit', $vp2->getUrl('cut'), []);
+    $button->on('click', $modalvp2);
+            
+});
+    
+$modalvp = new \Atk4\Ui\JsModal('Edit', $vp->getUrl('cut'), []);
+$crud->menu->addItem(['Open Modal', 'icon' => 'plus'],$modalvp);
+
+
 // Because Crud inherits Grid, you can also define custom actions
 $crud->addModalAction(['icon' => [\Atk4\Ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($crud) {
     $model = Country::assertInstanceOf($crud->model);
