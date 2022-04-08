@@ -26,8 +26,8 @@ RUN npm install -g less clean-css
 COPY js js
 COPY public public
 
-RUN (cd js && npm ci && npm run build)
-RUN (cd public && lessc agileui.less agileui.css)
+RUN cd js && npm ci && npm run build
+RUN cd public && lessc agileui.less agileui.css
 
 ADD composer.json .
 RUN jq 'del(."require-release")|del(."require-dev")' < composer.json > tmp && mv tmp composer.json \
@@ -36,11 +36,10 @@ RUN jq 'del(."require-release")|del(."require-dev")' < composer.json > tmp && mv
 
 RUN echo 'disable_functions = pcntl_exec,exec,passthru,proc_open,shell_exec,system,popen/g' >> "$PHP_INI_DIR/php.ini"
 
-COPY index.php index.php
 COPY src src
 COPY template template
 COPY demos demos
+RUN echo "<?php header('Location: /demos/');" > index.php
 
-COPY demos/db.default.php demos
 RUN php demos/_demo-data/create-db.php
 RUN sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWORD'] ?? null);/g" -i demos/db.default.php
