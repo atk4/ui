@@ -154,7 +154,7 @@ class View extends AbstractView implements JsExpressionable
                 $oldData = $data;
                 $data = [];
                 foreach ($oldData as $k => $row) {
-                    $data[$k + 1000 * 1000 * 1000] = $row; // large offset to prevent accessing wrong data by old key
+                    $data[$k + 1000_000_000] = $row; // large offset to prevent accessing wrong data by old key
                 }
             } else {
                 throw new Exception('Source data contains unsupported zero key');

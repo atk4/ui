@@ -85,14 +85,14 @@ class Context extends RawMinkContext implements BehatContext
         $c = 0;
         while (microtime(true) - $s <= $maxWaitdurationMs / 1000) {
             $this->getSession()->wait($maxWaitdurationMs, $finishedScript);
-            usleep(10000);
+            usleep(10_000);
             if ($this->getSession()->evaluateScript($finishedScript)) {
                 if (++$c >= 2) {
                     return;
                 }
             } else {
                 $c = 0;
-                usleep(20000);
+                usleep(20_000);
             }
         }
 

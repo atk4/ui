@@ -34,7 +34,7 @@ class DemosHttpTest extends DemosTest
     public static function tearDownAfterClass(): void
     {
         // stop the test server
-        usleep(250 * 1000);
+        usleep(250_000);
         self::$_process->stop(1); // TODO we may need to add pcntl_async_signals/pcntl_signal to CoverageUtil.php
         self::$_process = null;
 
@@ -80,7 +80,18 @@ class DemosHttpTest extends DemosTest
         self::$_process = Process::fromShellCommandline('php ' . implode(' ', array_map('escapeshellarg', $cmdArgs)));
         self::$_process->disableOutput();
         self::$_process->start();
-        usleep(250 * 1000);
+
+        // wait until server is ready
+        $ts = microtime(true);
+        while (microtime(true) - $ts < 5) {
+            usleep(20_000);
+            try {
+                $this->getResponseFromRequest('?ping');
+
+                break;
+            } catch (\GuzzleHttp\Exception\ConnectException $e) {
+            }
+        }
     }
 
     protected function getClient(): Client
