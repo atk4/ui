@@ -192,8 +192,10 @@ export default class JsSearch extends atkPlugin {
    * @param options
    */
     doSearch(uri, query, options, cb = function () {}) {
+        const queryKey = this.settings.uri_query_key;
+
         if (query) {
-            options = $.extend(options, { _q: query });
+            options = $.extend(options, { [queryKey]: query });
         }
 
         if (this.settings.useAjax) {
@@ -207,7 +209,7 @@ export default class JsSearch extends atkPlugin {
                 onComplete: cb,
             });
         } else {
-            uri = $.atkRemoveParam(uri, '_q');
+            uri = $.atkRemoveParam(uri, queryKey);
             if (options.__atk_reload) {
                 delete options.__atk_reload;
             }
@@ -220,6 +222,7 @@ export default class JsSearch extends atkPlugin {
 JsSearch.DEFAULTS = {
     uri: null,
     uri_options: {},
+    uri_query_key: null,
     q: null,
     autoQuery: false,
     timeOut: 300,

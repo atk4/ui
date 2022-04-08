@@ -111,7 +111,21 @@ class Grid extends View
             $this->stickyGet($this->paginator->name);
         }
 
-        $this->stickyGet('_q');
+        // TODO dirty way to set stickyGet - add addQuickSearch to find the expected search input component ID and then remove it
+        if ($this->menu !== false) {
+            $appUniqueHashesBackup = $this->getApp()->unique_hashes;
+            $menuElementNameCountsBackup = \Closure::bind(fn () => $this->_element_name_counts, $this->menu, AbstractView::class)();
+            try {
+                $menuRight = $this->menu->addMenuRight(); // @phpstan-ignore-line
+                $menuItemView = View::addTo($menuRight->addItem()->setElement('div'));
+                $quickSearch = JsSearch::addTo($menuItemView);
+                $this->stickyGet($quickSearch->name . '_q');
+                $this->menu->removeElement($menuRight->short_name);
+            } finally {
+                $this->getApp()->unique_hashes = $appUniqueHashesBackup;
+                \Closure::bind(fn () => $this->_element_name_counts = $menuElementNameCountsBackup, $this->menu, AbstractView::class)();
+            }
+        }
     }
 
     protected function initTable(): Table
@@ -314,7 +328,8 @@ class Grid extends View
         $view = View::addTo($this->menu
             ->addMenuRight()->addItem()->setElement('div'));
 
-        $q = trim($this->stickyGet('_q') ?? '');
+        $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
+        $q = trim($this->stickyGet($this->quickSearch->name . '_q') ?? '');
         if ($q !== '') {
             $scope = Model\Scope::createOr();
             foreach ($fields as $field) {
@@ -322,8 +337,7 @@ class Grid extends View
             }
             $this->model->addCondition($scope);
         }
-
-        $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery, 'initValue' => $q]);
+        $this->quickSearch->initValue = $q;
     }
 
     /**
