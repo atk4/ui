@@ -37,7 +37,7 @@ if ($id = $crumb->stickyGet('country_id')) {
     // display list of countries
     $table = \Atk4\Ui\Table::addTo($app);
     $table->setModel($model);
-    $table->addDecorator($model->fieldName()->name, [\Atk4\Ui\Table\Column\Link::class, [], ['country_id' => 'id']]); // TODO not working, there is no ?country_id= in the link
+    $table->addDecorator($model->fieldName()->name, [\Atk4\Ui\Table\Column\Link::class, [], ['country_id' => $model->fieldName()->id]]);
 }
 
 $crumb->popTitle();
