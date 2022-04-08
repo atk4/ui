@@ -46,6 +46,8 @@ class DemosHttpTest extends DemosTest
         }
         rmdir(self::$_processSessionDir);
         self::$_processSessionDir = null;
+
+        parent::tearDownAfterClass();
     }
 
     protected function setUp(): void
@@ -57,6 +59,8 @@ class DemosHttpTest extends DemosTest
 
             $this->setupWebserver();
         }
+
+        parent::setUp();
     }
 
     private function setupWebserver(): void
@@ -83,13 +87,16 @@ class DemosHttpTest extends DemosTest
 
         // wait until server is ready
         $ts = microtime(true);
-        while (microtime(true) - $ts < 5) {
+        while (true) {
             usleep(20_000);
             try {
                 $this->getResponseFromRequest('?ping');
 
                 break;
             } catch (\GuzzleHttp\Exception\ConnectException $e) {
+                if (microtime(true) - $ts > 5) {
+                    throw $e;
+                }
             }
         }
     }
