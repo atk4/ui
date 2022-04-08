@@ -57,6 +57,6 @@ ViewTester::addTo($app);
         'red',
     ],
 ])->set(function ($p) {
-    usleep(500 * 1000);
+    usleep(500_000);
     \Atk4\Ui\LoremIpsum::addTo($p, ['size' => 2]);
 });
