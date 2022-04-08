@@ -13,7 +13,6 @@ use Atk4\Ui\View;
 require_once __DIR__ . '/../init-app.php';
 
 $wizard = \Atk4\Ui\Wizard::addTo($app);
-$app->stickyGet($wizard->name);
 
 $wizard->addStep('Define User Action', function ($page) {
     \Atk4\Ui\Header::addTo($page, ['What are User Actions?']);

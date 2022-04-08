@@ -98,10 +98,10 @@ View::addTo($app, ['ui' => 'divider']);
 
 // PANEL_3
 
-$countryId = $app->stickyGet('id');
 Header::addTo($app, ['UserAction Friendly', 'size' => 4, 'subHeader' => 'Panel can run model action.']);
 
 $panel3 = Right::addTo($app);
+$countryId = $panel3->stickyGet('id');
 $msg = Message::addTo($panel3, ['Run Country model action below.']);
 
 $deck = View::addTo($app, ['ui' => 'cards']);

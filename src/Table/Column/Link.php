@@ -152,9 +152,7 @@ class Link extends Table\Column
                 $key = $val;
             }
 
-            if ($row->hasField($val)) {
-                $p[$key] = $row->get($val);
-            }
+            $p[$key] = $row->get($val);
         }
 
         return ['c_' . $this->short_name => $this->table->url($p)];

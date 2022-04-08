@@ -121,7 +121,7 @@ class CardDeck extends View
             $right = View::addTo($this->menu, ['ui' => 'four wide column']);
             $this->search = $right->add(Factory::factory($this->search, ['context' => '#' . $this->container->name]));
             $this->search->reload = $this->container;
-            $this->query = $this->getApp()->stickyGet($this->search->queryArg);
+            $this->query = $this->stickyGet($this->search->queryArg);
         }
     }
 
