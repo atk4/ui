@@ -22,10 +22,7 @@ class TableColumnColorRatingTest extends TestCase
         $arr = [
             'table' => [
                 1 => [
-                    'id' => 1,
-                    'name' => 'bar',
-                    'ref' => 'ref123',
-                    'rating' => 3,
+                    'id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'rating' => 3,
                 ],
             ],
         ];

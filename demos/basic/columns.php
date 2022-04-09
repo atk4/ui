@@ -23,7 +23,7 @@ $app->addStyle('
 }
 ');
 
-$page = \Atk4\Ui\View::addTo($app, ['id' => 'example']);
+$page = \Atk4\Ui\View::addTo($app, ['name' => 'example']);
 
 \Atk4\Ui\Header::addTo($page, ['Basic Usage']);
 

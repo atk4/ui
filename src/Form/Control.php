@@ -157,7 +157,7 @@ class Control extends View
             $default['stopPropagation'] = $default;
         }
 
-        $this->on('change', '#' . $this->id . '_input', $expr, $default);
+        $this->on('change', '#' . $this->name . '_input', $expr, $default);
     }
 
     /**
@@ -170,7 +170,7 @@ class Control extends View
      */
     public function jsInput($when = null, $action = null)
     {
-        return $this->js($when, $action, '#' . $this->id . '_input');
+        return $this->js($when, $action, '#' . $this->name . '_input');
     }
 
     /**

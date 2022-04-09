@@ -344,7 +344,7 @@ class Lookup extends Input
         return $this->getApp()->getTag('input', array_merge([
             'name' => $this->short_name,
             'type' => 'hidden',
-            'id' => $this->id . '_input',
+            'id' => $this->name . '_input',
             'value' => $this->getValue(),
             'readonly' => $this->readonly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,

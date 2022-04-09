@@ -110,7 +110,7 @@ class Input extends Form\Control
             'name' => $this->short_name,
             'type' => $this->inputType,
             'placeholder' => $this->placeholder,
-            'id' => $this->id . '_input',
+            'id' => $this->name . '_input',
             'value' => $this->getValue(),
             'readonly' => $this->readonly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,

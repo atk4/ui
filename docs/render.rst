@@ -91,7 +91,7 @@ will create its own tree independent from the main one.
 Agile UI sometimes uses the following approach to render element on the outside:
 
 1. Create new instance of $sub_view.
-2. Set $sub_view->id = false;
+2. Set $sub_view->name = false;
 3. Calls $view->add($sub_view);
 4. executes $sub_view->renderHtml()
 

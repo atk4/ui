@@ -203,12 +203,12 @@ If you happen to pass more key/values to the constructor or as second argument
 to add() they will be treated as default values for the properties of that
 specific view::
 
-    $view = View::addTo($app, ['ui' => 'segment', 'id' => 'test-id']);
+    $view = View::addTo($app, ['ui' => 'segment', 'name' => 'test-id']);
 
 For a more IDE-friendly format, however, I recommend to use the following syntax::
 
     $view = View::addTo($app, ['ui' => 'segment']);
-    $view->id = 'test-id';
+    $view->name = 'test-id';
 
 You must be aware of a difference here - passing array to constructor will
 override default property before call to `init()`. Most of the components
@@ -222,7 +222,7 @@ If you are don't specify key for the properties, they will be considered an
 extra class for a view::
 
     $view = View::addTo($app, ['inverted', 'orange', 'ui' => 'segment']);
-    $view->id = 'test-id';
+    $view->name = 'test-id';
 
 You can either specify multiple classes one-by-one or as a single string
 "inverted orange".
@@ -407,9 +407,9 @@ Unique ID tag
 
     ID to be used with the top-most element.
 
-Agile UI will maintain unique ID for all the elements. The tag is set through 'id' property::
+Agile UI will maintain unique ID for all the elements. The tag is set through 'name' property::
 
-    $b = new \Atk4\Ui\Button(['id' => 'my-button3']);
+    $b = new \Atk4\Ui\Button(['name' => 'my-button3']);
     echo $b->render();
 
 Outputs:

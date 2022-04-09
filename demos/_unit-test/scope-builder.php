@@ -40,7 +40,7 @@ $form->addControl('qb', [\Atk4\Ui\Form\Control\ScopeBuilder::class, 'model' => $
 
 $form->onSubmit(function (Form $form) use ($model) {
     $message = $form->model->get('qb')->toWords($model);
-    $view = (new \Atk4\Ui\View(['id' => false]))->addClass('atk-scope-builder-response');
+    $view = (new \Atk4\Ui\View(['name' => false]))->addClass('atk-scope-builder-response');
     $view->invokeInit();
 
     $view->set($message);
