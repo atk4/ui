@@ -181,7 +181,7 @@ $modelRegister->addField('email');
 $modelRegister->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);
 $modelRegister = $modelRegister->createEntity();
 
-$form = Form::addTo($tab, ['segment' => true]);
+$form = Form::addTo($tab, ['class.segment' => true]);
 $form->setModel($modelRegister);
 
 $form->onSubmit(function (Form $form) {

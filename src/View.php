@@ -172,11 +172,12 @@ class View extends AbstractView implements JsExpressionable
      */
     protected function setMissingProperty(string $propertyName, $value): void
     {
-        if (is_bool($value)) {
+        if (is_bool($value) && str_starts_with($propertyName, 'class.')) {
+            $class = substr($propertyName, strlen('class.'));
             if ($value) {
-                $this->addClass($propertyName);
+                $this->addClass($class);
             } else {
-                $this->removeClass($propertyName);
+                $this->removeClass($class);
             }
 
             return;
