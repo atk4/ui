@@ -26,6 +26,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
+use Atk4\Ui\UserAction\ExecutorFactory;
 
 class Card extends View
 {
@@ -285,7 +286,7 @@ class Card extends View
     {
         $defaults = [];
 
-        $btn = $this->addButton($button ?? $this->getExecutorFactory()->createTrigger($action, $this->getExecutorFactory()::CARD_BUTTON));
+        $btn = $this->addButton($button ?? $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::CARD_BUTTON));
 
         // Setting arg for model id. $args[0] is consider to hold a model id, i.e. as a js expression.
         if ($this->model && $this->model->isLoaded() && !isset($args[0])) {

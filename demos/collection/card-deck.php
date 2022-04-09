@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\UserAction\ExecutorFactory;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -24,7 +25,7 @@ $action = $countries->addUserAction('book', [
 ]);
 
 // Create custom button for this action in card.
-$app->getExecutorFactory()->registerTrigger($app->getExecutorFactory()::CARD_BUTTON, [Button::class, null, 'blue', 'icon' => 'plane'], $action);
+$app->getExecutorFactory()->registerTrigger(ExecutorFactory::CARD_BUTTON, [Button::class, null, 'blue', 'icon' => 'plane'], $action);
 
 $action->args = [
     'email' => ['type' => 'string', 'required' => true, 'caption' => 'Please let us know your email address:'],

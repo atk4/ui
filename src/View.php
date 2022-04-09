@@ -45,9 +45,6 @@ class View extends AbstractView implements JsExpressionable
      */
     public $ui = false;
 
-    /** @var string ID of the element, that's unique and is used in JS operations. */
-    public $id;
-
     /** @var array List of classes that needs to be added. */
     public $class = [];
 
@@ -236,10 +233,6 @@ class View extends AbstractView implements JsExpressionable
         $addLater = $this->_add_later;
         $this->_add_later = [];
         parent::init();
-
-        if ($this->id === null) {
-            $this->id = $this->name;
-        }
 
         if ($this->region && !$this->template && !$this->defaultTemplate && $this->issetOwner() && $this->getOwner()->template) {
             $this->template = $this->getOwner()->template->cloneRegion($this->region);
@@ -641,8 +634,8 @@ class View extends AbstractView implements JsExpressionable
             $this->template->tryDel('_ui');
         }
 
-        if ($this->id) {
-            $this->template->trySet('_id', $this->id);
+        if ($this->name) {
+            $this->template->trySet('_id', $this->name);
         }
 
         if ($this->element) {
@@ -1139,7 +1132,7 @@ class View extends AbstractView implements JsExpressionable
     {
         $this->assertIsInitialized();
 
-        return json_encode('#' . $this->id, \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
+        return json_encode('#' . $this->name, \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
     }
 
     /**

@@ -18,7 +18,11 @@ class TableColumnLinkTest extends TestCase
 
     protected function setUp(): void
     {
-        $arr = ['table' => [1 => ['id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'salary' => -123]]];
+        $arr = [
+            'table' => [
+                1 => ['id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'salary' => -123],
+            ],
+        ];
         $db = new Persistence\Array_($arr);
         $m = new \Atk4\Data\Model($db, ['table' => 'table']);
         $m->addField('name');
@@ -259,7 +263,11 @@ class TableColumnLinkTest extends TestCase
     public function testLink10(): void
     {
         // need to reset all to set a nulled value in field name model
-        $arr = ['table' => [1 => ['id' => 1, 'name' => '', 'ref' => 'ref123', 'salary' => -123]]];
+        $arr = [
+            'table' => [
+                1 => ['id' => 1, 'name' => '', 'ref' => 'ref123', 'salary' => -123],
+            ],
+        ];
         $db = new Persistence\Array_($arr);
         $m = new \Atk4\Data\Model($db, ['table' => 'table']);
         $m->addField('name');

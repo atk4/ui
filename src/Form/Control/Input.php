@@ -9,6 +9,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Icon;
 use Atk4\Ui\Label;
+use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\JsCallbackExecutor;
 
 /**
@@ -109,7 +110,7 @@ class Input extends Form\Control
             'name' => $this->short_name,
             'type' => $this->inputType,
             'placeholder' => $this->placeholder,
-            'id' => $this->id . '_input',
+            'id' => $this->name . '_input',
             'value' => $this->getValue(),
             'readonly' => $this->readonly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
@@ -155,7 +156,7 @@ class Input extends Form\Control
         }
         if ($button instanceof UserAction || $button instanceof JsCallbackExecutor) {
             $executor = ($button instanceof UserAction)
-                ? $this->getExecutorFactory()->create($button, $this, $this->getExecutorFactory()::JS_EXECUTOR)
+                ? $this->getExecutorFactory()->create($button, $this, ExecutorFactory::JS_EXECUTOR)
                 : $button;
             $button = $this->add($this->getExecutorFactory()->createTrigger($executor->getAction()), $spot);
             $this->addClass('action');

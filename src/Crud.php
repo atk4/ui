@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
+use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**
  * Implements a more sophisticated and interactive Data-Table component.
@@ -118,7 +119,7 @@ class Crud extends Grid
                 if ($action->enabled) {
                     $executor = $this->initActionExecutor($action);
                     $this->menuItems[$k]['item'] = $this->menu->addItem(
-                        $this->getExecutorFactory()->createTrigger($action, $this->getExecutorFactory()::MENU_ITEM)
+                        $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MENU_ITEM)
                     );
                     $this->menuItems[$k]['executor'] = $executor;
                 }

@@ -198,7 +198,7 @@ class Layout extends AbstractLayout
             // Controls get extra pampering
             $template->dangerouslySetHtml('Input', $element->getHtml());
             $template->trySet('label', $label);
-            $template->trySet('label_for', $element->id . '_input');
+            $template->trySet('label_for', $element->name . '_input');
             $template->set('control_class', $element->getControlClass());
 
             if ($element->entityField->getField()->required) {
@@ -211,7 +211,7 @@ class Layout extends AbstractLayout
 
             if ($element->hint && $template->hasTag('Hint')) {
                 $hint = Factory::factory($this->defaultHint);
-                $hint->id = $element->id . '_hint';
+                $hint->name = $element->name . '_hint';
                 if (is_object($element->hint) || is_array($element->hint)) {
                     $hint->add($element->hint);
                 } else {

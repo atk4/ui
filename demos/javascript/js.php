@@ -19,7 +19,7 @@ $b = Button::addTo($app, ['Hidden Button']);
 $b->js(true)->hide();
 
 // This button hides when clicked
-$b = Button::addTo($app, ['id' => 'b2'])->set('Hide on click Button');
+$b = Button::addTo($app, ['name' => 'b2'])->set('Hide on click Button');
 $b->js('click')->hide();
 
 Button::addTo($app, ['Redirect'])->on('click', null, $app->jsRedirect(['foo' => 'bar']));

@@ -68,7 +68,7 @@ class ActionMenu extends Table\Column
         $name = $this->name . '_action_' . (count($this->items) + 1);
 
         if (!is_object($item)) {
-            $item = Factory::factory([\Atk4\Ui\View::class], ['id' => false, 'ui' => 'item', 'content' => $item]);
+            $item = Factory::factory([\Atk4\Ui\View::class], ['name' => false, 'ui' => 'item', 'content' => $item]);
         }
 
         $this->items[] = $item;

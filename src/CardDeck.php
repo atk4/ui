@@ -10,6 +10,7 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Ui\Component\ItemSearch;
+use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 
 class CardDeck extends View
@@ -327,7 +328,7 @@ class CardDeck extends View
             $defaults['args'] = $args;
         }
 
-        $btn = $this->btns->add($this->getExecutorFactory()->createTrigger($executor->getAction(), $this->getExecutorFactory()::CARD_BUTTON));
+        $btn = $this->btns->add($this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::CARD_BUTTON));
         if ($executor->getAction()->enabled === false) {
             $btn->addClass('disabled');
         }
