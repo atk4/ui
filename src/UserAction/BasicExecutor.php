@@ -58,7 +58,7 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
     {
         $this->action = $action;
         if (!$this->executorButton) {
-            $this->executorButton = $this->getExecutorFactory()->createTrigger($action, $this->getExecutorFactory()::BASIC_BUTTON);
+            $this->executorButton = $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::BASIC_BUTTON);
         }
     }
 
