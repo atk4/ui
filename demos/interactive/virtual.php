@@ -80,7 +80,7 @@ Button::addTo($bar)->set('No title')->on('click', new \Atk4\Ui\JsModal(null, $vi
 View::addTo($app, ['ui' => 'hidden divider']);
 $text = Text::addTo($app);
 $text->addParagraph('Can also be trigger from a js event, like clicking on a table row.');
-$table = \Atk4\Ui\Table::addTo($app, ['celled' => true]);
+$table = \Atk4\Ui\Table::addTo($app, ['class.celled' => true]);
 $table->setModel(new SomeData());
 
 $frame = VirtualPage::addTo($app);
