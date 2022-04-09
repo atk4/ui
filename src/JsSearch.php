@@ -13,6 +13,7 @@ class JsSearch extends View
     /** @var View The View to reload using this JsSearch. */
     public $reload;
 
+    /** @var array */
     public $args = [];
 
     /**
