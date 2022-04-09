@@ -211,7 +211,7 @@ class ApiService {
    * @param response
    */
     onFailure(response) {
-    // if json is returned, it should contains the error within message property
+    // if json is returned, it should contain the error within message property
         if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
             if (Object.prototype.hasOwnProperty.call(response, 'useWindow') && response.useWindow) {
                 atk.apiService.showErrorWindow(response.message);

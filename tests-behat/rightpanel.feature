@@ -14,4 +14,4 @@ Feature: RightPanel
     Then I click first card on page
     And I press button "User Confirmation"
     And I press Modal button "Ok"
-    Then Toast display should contains text "Confirm country"
+    Then Toast display should contain text "Confirm country"

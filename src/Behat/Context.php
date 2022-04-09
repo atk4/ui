@@ -49,7 +49,7 @@ class Context extends RawMinkContext implements BehatContext
             return;
         }
 
-        if (!str_starts_with($event->getStep()->getText(), 'Toast display should contains text ')) {
+        if (!str_starts_with($event->getStep()->getText(), 'Toast display should contain text ')) {
             $this->getSession()->executeScript('jQuery(\'.toast-box > .ui.toast\').toast(\'close\');');
         }
     }
@@ -583,7 +583,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Toast display should contains text :arg1
+     * @Then Toast display should contain text :arg1
      */
     public function toastDisplayShouldContainText(string $text): void
     {
@@ -594,9 +594,9 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^page url should contains \'([^\']*)\'$/
+     * @Then /^page url should contain \'([^\']*)\'$/
      */
-    public function pageUrlShouldContains(string $text): void
+    public function pageUrlShouldContain(string $text): void
     {
         $url = $this->getSession()->getCurrentUrl();
         if (!strpos($url, $text)) {
@@ -615,9 +615,9 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^text in container using \'([^\']*)\' should contains \'([^\']*)\'$/
+     * @Then /^text in container using \'([^\']*)\' should contain \'([^\']*)\'$/
      */
-    public function textInContainerUsingShouldContains(string $selector, string $text): void
+    public function textInContainerUsingShouldContain(string $selector, string $text): void
     {
         if (trim($this->getElementInPage($selector)->getText()) !== $text) {
             throw new Exception('Container with selector: ' . $selector . ' does not contain text: ' . $text);
