@@ -69,7 +69,7 @@ class ApiService {
         let result;
         try {
             if (response.success) {
-                if (response && response.html && response.id) {
+                if (response.html && response.id) {
                     // prevent modal duplication.
                     // apiService.removeModalDuplicate(response.html);
                     const modalIDs = [];
@@ -89,7 +89,7 @@ class ApiService {
                         // throw({message:'Unable to replace element with id: '+ response.id});
                     }
                 }
-                if (response && response.portals) {
+                if (response.portals) {
                     // Create app portal from json response.
                     const portals = Object.keys(response.portals);
                     portals.forEach((portalID) => {
@@ -100,7 +100,7 @@ class ApiService {
                         }
                     });
                 }
-                if (response && response.atkjs) {
+                if (response.atkjs) {
                     // Call evalResponse with proper context, js code and jQuery as $ var.
                     atk.apiService.evalResponse.call(this, response.atkjs, jQuery);
                 }
