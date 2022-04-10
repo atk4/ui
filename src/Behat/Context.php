@@ -360,8 +360,6 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * @Then I hide js modal
-     *
-     * Hide js modal.
      */
     public function iHideJsModal(): void
     {
@@ -472,8 +470,6 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * @Then I select value :arg1 in lookup :arg2
-     *
-     * Select a value in a lookup control.
      */
     public function iSelectValueInLookup(string $value, string $inputName): void
     {
