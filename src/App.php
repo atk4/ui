@@ -205,7 +205,10 @@ class App
      */
     public function registerPortals($portal): void
     {
-        $this->portals[$portal->short_name] = $portal;
+        // TODO in https://github.com/atk4/ui/pull/1771 it has been discovered this method causes DOM code duplication,
+        // for some reasons, it seems even not needed, at least all Unit & Behat tests pass
+        // must be investigated
+        // $this->portals[$portal->short_name] = $portal;
     }
 
     public function setExecutorFactory(ExecutorFactory $factory)
@@ -388,8 +391,8 @@ class App
             foreach ($this->getRenderedPortals() as $key => $modal) {
                 // add modal rendering to output
                 $keys[] = '#' . $key;
-                $output['atkjs'] = $output['atkjs'] . ';' . $modal['js'];
-                $output['html'] = $output['html'] . $modal['html'];
+                $output['atkjs'] .= ';' . $modal['js'];
+                $output['html'] .= $modal['html'];
             }
             if ($keys) {
                 $ids = implode(',', $keys);
