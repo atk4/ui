@@ -27,9 +27,9 @@ abstract class AbstractView
     use InitializerTrait {
         init as private _init;
     }
+    use NameTrait;
     use StaticAddToTrait;
     use TrackableTrait;
-    use NameTrait;
 
     /** @var string Default name of the element. */
     public $defaultName = 'atk';
