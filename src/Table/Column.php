@@ -21,6 +21,7 @@ class Column
     use \Atk4\Core\AppScopeTrait;
     use \Atk4\Core\DiContainerTrait;
     use \Atk4\Core\InitializerTrait;
+    use \Atk4\Core\NameTrait;
     use \Atk4\Core\TrackableTrait;
 
     /** @const string */
