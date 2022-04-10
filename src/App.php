@@ -391,8 +391,8 @@ class App
             foreach ($this->getRenderedPortals() as $key => $modal) {
                 // add modal rendering to output
                 $keys[] = '#' . $key;
-                $output['atkjs'] = $output['atkjs'] . ';' . $modal['js'];
-                $output['html'] = $output['html'] . $modal['html'];
+                $output['atkjs'] .= ';' . $modal['js'];
+                $output['html'] .= $modal['html'];
             }
             if ($keys) {
                 $ids = implode(',', $keys);
