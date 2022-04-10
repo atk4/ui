@@ -64,6 +64,7 @@ class Context extends RawMinkContext implements BehatContext
         if (!str_contains($this->getScenario($event)->getTitle() ?? '', 'exception is displayed')) {
             $this->assertNoException();
         }
+        $this->assertNoInvalidNorDuplicateId();
     }
 
     protected function getFinishedScript(): string
@@ -149,6 +150,44 @@ class Context extends RawMinkContext implements BehatContext
 
                 throw new Exception('Page contains uncaught exception');
             }
+        }
+    }
+
+    protected function assertNoInvalidNorDuplicateId(): void
+    {
+        [$invalidIds, $duplicateIds] = $this->getSession()->evaluateScript(<<<'EOF'
+            return (function () {
+                const idRegex = /^[_a-z][_a-z0-9-]*$/is;
+                const invalidIds = [];
+                const duplicateIds = [];
+                [...(new Set(
+                    $('[id]').map(function () {
+                        return this.id;
+                    })
+                ))].forEach(function (id) {
+                    if (!id.match(idRegex)) {
+                        invalidIds.push(id);
+                    } else {
+                        const elems = $('[id="' + id + '"]');
+                        if (elems.length > 1) {
+                            duplicateIds.push(id);
+                        }
+                    }
+                });
+                return [invalidIds, duplicateIds];
+            })();
+            EOF);
+
+        // TODO hack to pass CI testing, fix these issues and remove the error diffs below asap
+        $invalidIds = array_diff($invalidIds, ['']); // id="" is hardcoded in templates
+        $duplicateIds = array_diff($duplicateIds, ['atk', '_icon', 'atk_icon']); // generated when component is not correctly added to app/layout component tree - should throw, as such name/ID is dangerous to be used
+
+        if (count($invalidIds) > 0) {
+            throw new Exception('Page contains element with invalid ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $invalidIds)));
+        }
+
+        if (count($duplicateIds) > 0) {
+            throw new Exception('Page contains elements with duplicate ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $duplicateIds)));
         }
     }
 
