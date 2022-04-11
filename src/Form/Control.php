@@ -111,7 +111,7 @@ class Control extends View
     protected function renderView(): void
     {
         if ($this->form) {
-            $this->template->trySet('name', $this->short_name);
+            $this->template->trySet('name', $this->shortName);
         }
 
         parent::renderView();

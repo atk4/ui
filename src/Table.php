@@ -242,7 +242,7 @@ class Table extends Lister
         if (!$cols) {
             foreach ($this->model->getFields() as $key => $field) {
                 if (!empty($this->columns[$key])) {
-                    $cols[] = $field->short_name;
+                    $cols[] = $field->shortName;
                 }
             }
         }

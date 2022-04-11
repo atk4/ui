@@ -42,7 +42,7 @@ $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends Exe
 
     protected function getCardButton($action, $type)
     {
-        return [Button::class, 'icon' => $this->actionIcon[$action->short_name]];
+        return [Button::class, 'icon' => $this->actionIcon[$action->shortName]];
     }
 });
 
@@ -55,7 +55,7 @@ $cardActions = Card::addTo($app, ['useLabel' => true, 'executorFactory' => new $
 $cardActions->setModel($country);
 foreach ($country->getModel()->getUserActions() as $action) {
     $showActions = ['callback', 'preview', 'edit_argument', 'edit_argument_prev', 'edit_iso', 'confirm', 'multi_step'];
-    if (in_array($action->short_name, $showActions, true)) {
+    if (in_array($action->shortName, $showActions, true)) {
         $cardActions->addClickAction($action);
     }
 }

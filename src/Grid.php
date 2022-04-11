@@ -114,17 +114,17 @@ class Grid extends View
 
         // TODO dirty way to set stickyGet - add addQuickSearch to find the expected search input component ID and then remove it
         if ($this->menu !== false) {
-            $appUniqueHashesBackup = $this->getApp()->unique_hashes;
-            $menuElementNameCountsBackup = \Closure::bind(fn () => $this->_element_name_counts, $this->menu, AbstractView::class)();
+            $appUniqueHashesBackup = $this->getApp()->uniqueNameHashes;
+            $menuElementNameCountsBackup = \Closure::bind(fn () => $this->_elementNameCounts, $this->menu, AbstractView::class)();
             try {
                 $menuRight = $this->menu->addMenuRight(); // @phpstan-ignore-line
                 $menuItemView = View::addTo($menuRight->addItem()->setElement('div'));
                 $quickSearch = JsSearch::addTo($menuItemView);
                 $this->stickyGet($quickSearch->name . '_q');
-                $this->menu->removeElement($menuRight->short_name);
+                $this->menu->removeElement($menuRight->shortName);
             } finally {
-                $this->getApp()->unique_hashes = $appUniqueHashesBackup;
-                \Closure::bind(fn () => $this->_element_name_counts = $menuElementNameCountsBackup, $this->menu, AbstractView::class)();
+                $this->getApp()->uniqueNameHashes = $appUniqueHashesBackup;
+                \Closure::bind(fn () => $this->_elementNameCounts = $menuElementNameCountsBackup, $this->menu, AbstractView::class)();
             }
         }
     }

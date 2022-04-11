@@ -77,7 +77,7 @@ class CallbackTest extends TestCase
     public function testCallbackTrigger(): void
     {
         $cb = \Atk4\Ui\Callback::addTo($this->app);
-        $this->assertSame($this->app->layout->name . '_' . $cb->short_name, $cb->getUrlTrigger());
+        $this->assertSame($this->app->layout->name . '_' . $cb->shortName, $cb->getUrlTrigger());
 
         $cb = Callback::addTo($this->app, ['urlTrigger' => 'test']);
         $this->assertSame('test', $cb->getUrlTrigger());

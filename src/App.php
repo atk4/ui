@@ -208,7 +208,7 @@ class App
         // TODO in https://github.com/atk4/ui/pull/1771 it has been discovered this method causes DOM code duplication,
         // for some reasons, it seems even not needed, at least all Unit & Behat tests pass
         // must be investigated
-        // $this->portals[$portal->short_name] = $portal;
+        // $this->portals[$portal->shortName] = $portal;
     }
 
     public function setExecutorFactory(ExecutorFactory $factory)

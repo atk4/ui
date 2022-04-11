@@ -20,7 +20,7 @@ class Money extends Table\Column
 
     public function getTagAttributes($position, array $attr = []): array
     {
-        $attr = array_merge_recursive($attr, ['class' => ['{$_' . $this->short_name . '_class}']]);
+        $attr = array_merge_recursive($attr, ['class' => ['{$_' . $this->shortName . '_class}']]);
 
         return parent::getTagAttributes($position, $attr);
     }
@@ -33,7 +33,7 @@ class Money extends Table\Column
 
         return $this->getTag(
             'body',
-            '{$' . $field->short_name . '}',
+            '{$' . $field->shortName . '}',
             $extra_tags
         );
     }
@@ -41,11 +41,11 @@ class Money extends Table\Column
     public function getHtmlTags(Model $row, $field)
     {
         if ($field->get($row) < 0) {
-            return ['_' . $this->short_name . '_class' => 'negative'];
+            return ['_' . $this->shortName . '_class' => 'negative'];
         } elseif (!$this->show_zero_values && (float) $field->get($row) === 0.0) {
-            return ['_' . $this->short_name . '_class' => '', $field->short_name => '-'];
+            return ['_' . $this->shortName . '_class' => '', $field->shortName => '-'];
         }
 
-        return ['_' . $this->short_name . '_class' => ''];
+        return ['_' . $this->shortName . '_class' => ''];
     }
 }

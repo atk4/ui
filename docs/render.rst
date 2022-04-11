@@ -41,7 +41,7 @@ the following actions are performed:
 
  - template is loaded (or cloned from parent's template)
  - $app property is set
- - $short_name property is determined
+ - $shortName property is determined
  - unique $name is assigned.
 
 Many UI components rely on the above to function properly. For example, Grid will look for certain regions in its template

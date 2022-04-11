@@ -126,7 +126,7 @@ class Link extends Table\Column
 
         $label = '';
         if ($this->use_label) {
-            $label = $field ? ('{$' . $field->short_name . '}') : '[Link]';
+            $label = $field ? ('{$' . $field->shortName . '}') : '[Link]';
         }
 
         $class = '';
@@ -134,7 +134,7 @@ class Link extends Table\Column
             $class = ' class="' . $this->class . '" ';
         }
 
-        return '<a href="{$c_' . $this->short_name . '}"' . $external . $class . $download . '>' . $icon . '' . $label . '</a>';
+        return '<a href="{$c_' . $this->shortName . '}"' . $external . $class . $download . '>' . $icon . '' . $label . '</a>';
     }
 
     public function getHtmlTags(Model $row, $field)
@@ -142,7 +142,7 @@ class Link extends Table\Column
         if ($this->url) {
             $rowValues = $this->getApp()->ui_persistence->typecastSaveRow($row, $row->get());
 
-            return ['c_' . $this->short_name => $this->url->set($rowValues)->renderToHtml()];
+            return ['c_' . $this->shortName => $this->url->set($rowValues)->renderToHtml()];
         }
 
         $p = $this->page ?: [];
@@ -155,6 +155,6 @@ class Link extends Table\Column
             $p[$key] = $row->get($val);
         }
 
-        return ['c_' . $this->short_name => $this->table->url($p)];
+        return ['c_' . $this->shortName => $this->table->url($p)];
     }
 }

@@ -298,18 +298,18 @@ class Column
         }
 
         if ($this->table->sortable) {
-            $attr['data-sort'] = $field->short_name;
+            $attr['data-sort'] = $field->shortName;
 
             if ($this->sortable) {
                 $attr['class'] = ['sortable'];
             }
 
             // If table is being sorted by THIS column, set the proper class
-            if ($this->table->sort_by === $field->short_name) {
+            if ($this->table->sort_by === $field->shortName) {
                 $class .= ' sorted ' . $this->table->sort_order;
 
                 if ($this->table->sort_order === 'ascending') {
-                    $attr['data-sort'] = '-' . $field->short_name;
+                    $attr['data-sort'] = '-' . $field->shortName;
                 } elseif ($this->table->sort_order === 'descending') {
                     $attr['data-sort'] = '';
                 }
@@ -371,10 +371,10 @@ class Column
     public function getDataCellTemplate(Field $field = null)
     {
         if ($field) {
-            return '{$' . $field->short_name . '}';
+            return '{$' . $field->shortName . '}';
         }
 
-        return '{_$' . $this->short_name . '}';
+        return '{_$' . $this->shortName . '}';
     }
 
     /**
