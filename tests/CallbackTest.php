@@ -41,7 +41,7 @@ class CallbackTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->app = new AppMock(['always_run' => false, 'catch_exceptions' => false]);
+        $this->app = new AppMock(['alwaysRun' => false, 'catchExceptions' => false]);
         $this->app->initLayout([\Atk4\Ui\Layout\Centered::class]);
     }
 
@@ -77,7 +77,7 @@ class CallbackTest extends TestCase
     public function testCallbackTrigger(): void
     {
         $cb = \Atk4\Ui\Callback::addTo($this->app);
-        $this->assertSame($this->app->layout->name . '_' . $cb->short_name, $cb->getUrlTrigger());
+        $this->assertSame($this->app->layout->name . '_' . $cb->shortName, $cb->getUrlTrigger());
 
         $cb = Callback::addTo($this->app, ['urlTrigger' => 'test']);
         $this->assertSame('test', $cb->getUrlTrigger());

@@ -66,7 +66,7 @@ Even if model not explicitly set (see section below) each form has an underlying
 	// or multiple fields
 	$form->model->set([
 		'name'	=> 'John',
-		'email' => 'some@email.com'
+		'email' => 'some@email.com',
 	]);
 
 Form also relies on a ``\Atk4\Ui\Form::Layout`` class and displays form controls through
@@ -835,7 +835,7 @@ Instead of defining rules for form controls individually you can hide/show entir
 
     $f_group->setGroupDisplayRules([
         'php' => ['dev' => 'checked'],
-        'language' => ['dev' => 'checked']
+        'language' => ['dev' => 'checked'],
     ]);
 
 .. todo:: MOVE THIS TO SEPARATE FILE

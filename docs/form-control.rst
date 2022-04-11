@@ -403,7 +403,7 @@ You can also define an Icon right away::
          'tag' => ['Tag', 'icon' => 'tag icon'],
          'globe' => ['Globe', 'icon' => 'globe icon'],
          'registered' => ['Registered', 'icon' => 'registered icon'],
-         'file' => ['File', 'icon' => 'file icon']
+         'file' => ['File', 'icon' => 'file icon'],
      ].
 
 If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.

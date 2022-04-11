@@ -71,6 +71,6 @@ class KeyValue extends Table\Column
         $key = $field->get($row);
         $value = $values[$key] ?? '';
 
-        return [$field->short_name => $value];
+        return [$field->shortName => $value];
     }
 }

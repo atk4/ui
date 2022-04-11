@@ -47,6 +47,6 @@ class Labels extends Table\Column
 
         $labels = implode('', $labels);
 
-        return [$field->short_name => $labels];
+        return [$field->shortName => $labels];
     }
 }

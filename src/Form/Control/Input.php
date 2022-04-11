@@ -107,7 +107,7 @@ class Input extends Form\Control
     public function getInput()
     {
         return $this->getApp()->getTag('input', array_merge([
-            'name' => $this->short_name,
+            'name' => $this->shortName,
             'type' => $this->inputType,
             'placeholder' => $this->placeholder,
             'id' => $this->name . '_input',

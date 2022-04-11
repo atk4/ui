@@ -64,7 +64,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
 
     protected function _addControl(Control $control, Field $field): Control
     {
-        return $this->add($control, $this->template->hasTag($field->short_name) ? $field->short_name : null);
+        return $this->add($control, $this->template->hasTag($field->shortName) ? $field->shortName : null);
     }
 
     /**
@@ -113,9 +113,9 @@ abstract class AbstractLayout extends \Atk4\Ui\View
             $field = $model->getField($fieldName);
 
             if ($field->isEditable()) {
-                $controls[] = [$field->short_name];
+                $controls[] = [$field->shortName];
             } elseif ($field->isVisible()) {
-                $controls[] = [$field->short_name, ['readonly' => true]];
+                $controls[] = [$field->shortName, ['readonly' => true]];
             }
         }
 

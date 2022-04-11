@@ -17,17 +17,17 @@ if (file_exists(__DIR__ . '/CoverageUtil.php') && !class_exists(\PHPUnit\Framewo
 }
 
 $app = new \Atk4\Ui\App([
-    'call_exit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
-    'catch_exceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
-    'always_run' => (bool) ($_GET['APP_ALWAYS_RUN'] ?? true),
+    'callExit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
+    'catchExceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
+    'alwaysRun' => (bool) ($_GET['APP_ALWAYS_RUN'] ?? true),
 ]);
 $app->title = 'Agile UI Demo v' . $app->version;
 
-if ($app->call_exit !== true) {
+if ($app->callExit !== true) {
     $app->stickyGet('APP_CALL_EXIT');
 }
 
-if ($app->catch_exceptions !== true) {
+if ($app->catchExceptions !== true) {
     $app->stickyGet('APP_CATCH_EXCEPTIONS');
 }
 

@@ -101,10 +101,10 @@ abstract class FilterModel extends Model
      */
     public function afterInit()
     {
-        $this->addField('name', ['default' => $this->lookupField->short_name, 'system' => true]);
+        $this->addField('name', ['default' => $this->lookupField->shortName, 'system' => true]);
 
         // create a name for our filter model to save as session data.
-        $this->name = 'filter_model_' . $this->lookupField->short_name;
+        $this->name = 'filter_model_' . $this->lookupField->shortName;
 
         if ($_GET['atk_clear_filter'] ?? false) {
             $this->forget();

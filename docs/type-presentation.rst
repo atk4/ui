@@ -132,7 +132,7 @@ yet make it available when editing, you could create your own :php:class:`Table\
         public function getHtmlTags(\Atk4\Data\Model $row, $field)
         {
             return [
-                'mask' => substr($field->get(), -4)
+                'mask' => substr($field->get(), -4),
             ];
         }
     }

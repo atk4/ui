@@ -41,7 +41,7 @@ class Layout extends AbstractLayout
 
     protected function _addControl(Control $control, Field $field): Control
     {
-        return $this->add($control, ['desired_name' => $field->short_name]);
+        return $this->add($control, ['desired_name' => $field->shortName]);
     }
 
     protected function init(): void
@@ -222,8 +222,8 @@ class Layout extends AbstractLayout
                 $template->del('Hint');
             }
 
-            if ($this->template->hasTag($element->short_name)) {
-                $this->template->tryDangerouslySetHtml($element->short_name, $template->renderToHtml());
+            if ($this->template->hasTag($element->shortName)) {
+                $this->template->tryDangerouslySetHtml($element->shortName, $template->renderToHtml());
             } else {
                 $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
             }

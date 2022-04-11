@@ -25,8 +25,8 @@ class SessionTraitTest extends TestCase
         parent::setUp();
 
         $this->app = new App([
-            'catch_exceptions' => false,
-            'always_run' => false,
+            'catchExceptions' => false,
+            'alwaysRun' => false,
         ]);
 
         session_abort();

@@ -63,16 +63,16 @@ class App
     public $layout; // the top-most view object
 
     /** @var string|array Set one or more directories where templates should reside. */
-    public $template_dir;
+    public $templateDir;
 
     /** @var bool Will replace an exception handler with our own, that will output errors nicely. */
-    public $catch_exceptions = true;
+    public $catchExceptions = true;
 
     /** @var bool Will display error if callback wasn't triggered. */
-    public $catch_runaway_callbacks = true;
+    public $catchRunawayCallbacks = true;
 
     /** @var bool Will always run application even if developer didn't explicitly executed run();. */
-    public $always_run = true;
+    public $alwaysRun = true;
 
     /**
      * Will be set to true after app->run() is called, which may be done automatically
@@ -80,7 +80,7 @@ class App
      *
      * @var bool
      */
-    public $run_called = false;
+    public $runCalled = false;
 
     /**
      * Will be set to true, when exit is called. Sometimes exit is intercepted by shutdown
@@ -88,10 +88,10 @@ class App
      *
      * @var bool
      */
-    private $exit_called = false;
+    private $exitCalled = false;
 
     /** @var bool */
-    public $is_rendering = false;
+    public $isRendering = false;
 
     /** @var UiPersistence */
     public $ui_persistence;
@@ -109,7 +109,7 @@ class App
     public $session;
 
     /** @var string[] Extra HTTP headers to send on exit. */
-    protected $response_headers = [
+    protected $responseHeaders = [
         self::HEADER_STATUS_CODE => '200',
         'cache-control' => 'no-store', // disable caching by default
     ];
@@ -123,16 +123,16 @@ class App
      * Used only in method App::url
      * Remove and re-add the extension of the file during parsing requests and building urls
      */
-    protected $url_building_ext = '.php';
+    protected $urlBuildingExt = '.php';
 
     /** @var bool Call exit in place of throw Exception when Application need to exit. */
-    public $call_exit = true;
+    public $callExit = true;
 
     /** @var string|null */
     public $page;
 
     /** @var array global sticky arguments */
-    protected $sticky_get_arguments = [
+    protected $stickyGetArguments = [
         '__atk_json' => false,
         '__atk_tab' => false,
     ];
@@ -148,7 +148,7 @@ class App
         $this->setupTemplateDirs();
 
         // Set our exception handler
-        if ($this->catch_exceptions) {
+        if ($this->catchExceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
             set_error_handler(
                 static function (int $severity, string $msg, string $file, int $line): bool {
@@ -179,7 +179,7 @@ class App
         }
 
         // Always run app on shutdown
-        if ($this->always_run) {
+        if ($this->alwaysRun) {
             $this->setupAlwaysRun();
         }
 
@@ -208,7 +208,7 @@ class App
         // TODO in https://github.com/atk4/ui/pull/1771 it has been discovered this method causes DOM code duplication,
         // for some reasons, it seems even not needed, at least all Unit & Behat tests pass
         // must be investigated
-        // $this->portals[$portal->short_name] = $portal;
+        // $this->portals[$portal->shortName] = $portal;
     }
 
     public function setExecutorFactory(ExecutorFactory $factory)
@@ -223,19 +223,19 @@ class App
 
     protected function setupTemplateDirs()
     {
-        if ($this->template_dir === null) {
-            $this->template_dir = [];
-        } elseif (!is_array($this->template_dir)) {
-            $this->template_dir = [$this->template_dir];
+        if ($this->templateDir === null) {
+            $this->templateDir = [];
+        } elseif (!is_array($this->templateDir)) {
+            $this->templateDir = [$this->templateDir];
         }
 
-        $this->template_dir[] = dirname(__DIR__) . '/template';
+        $this->templateDir[] = dirname(__DIR__) . '/template';
     }
 
     protected function callBeforeExit(): void
     {
-        if (!$this->exit_called) {
-            $this->exit_called = true;
+        if (!$this->exitCalled) {
+            $this->exitCalled = true;
             $this->hook(self::HOOK_BEFORE_EXIT);
         }
     }
@@ -247,7 +247,7 @@ class App
     {
         $this->callBeforeExit();
 
-        if (!$this->call_exit) {
+        if (!$this->callExit) {
             // case process is not in shutdown mode
             // App as already done everything
             // App need to stop output
@@ -273,7 +273,7 @@ class App
             $exception = $exception->getPrevious();
         }
 
-        $this->catch_runaway_callbacks = false;
+        $this->catchRunawayCallbacks = false;
 
         // just replace layout to avoid any extended App->_construct problems
         // it will maintain everything as in the original app StickyGet, logger, Events
@@ -343,9 +343,9 @@ class App
         $name = key($arr);
 
         if ($value !== '') {
-            $this->response_headers[$name] = $value;
+            $this->responseHeaders[$name] = $value;
         } else {
-            unset($this->response_headers[$name]);
+            unset($this->responseHeaders[$name]);
         }
 
         return $this;
@@ -365,12 +365,12 @@ class App
     {
         $headers = $this->normalizeHeaders($headers);
         if (empty($headers['content-type'])) {
-            $this->response_headers = $this->normalizeHeaders($this->response_headers);
-            if (empty($this->response_headers['content-type'])) {
+            $this->responseHeaders = $this->normalizeHeaders($this->responseHeaders);
+            if (empty($this->responseHeaders['content-type'])) {
                 throw new Exception('Content type must be always set');
             }
 
-            $headers['content-type'] = $this->response_headers['content-type'];
+            $headers['content-type'] = $this->responseHeaders['content-type'];
         }
 
         $type = preg_replace('~;.*~', '', strtolower($headers['content-type'])); // in LC without charset
@@ -407,7 +407,7 @@ class App
             $this->outputResponse($output, $headers);
         }
 
-        $this->run_called = true; // prevent shutdown function from triggering.
+        $this->runCalled = true; // prevent shutdown function from triggering.
         $this->callExit();
     }
 
@@ -536,16 +536,16 @@ class App
     {
         $isExitException = false;
         try {
-            $this->run_called = true;
+            $this->runCalled = true;
             $this->hook(self::HOOK_BEFORE_RENDER);
-            $this->is_rendering = true;
+            $this->isRendering = true;
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
             $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('script', null, $this->html->getJs()));
-            $this->is_rendering = false;
+            $this->isRendering = false;
 
-            if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catch_runaway_callbacks) {
+            if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catchRunawayCallbacks) {
                 throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
                     ->addMoreInfo('callback', $_GET[Callback::URL_QUERY_TARGET]);
             }
@@ -557,7 +557,7 @@ class App
         }
 
         $this->hook(self::HOOK_BEFORE_OUTPUT);
-        if (!$this->exit_called) { // output already sent by terminate()
+        if (!$this->exitCalled) { // output already sent by terminate()
             if ($this->isJsUrlRequest()) {
                 $this->outputResponseJson($output);
             } else {
@@ -594,7 +594,7 @@ class App
             return $template->loadFromFile($filename);
         }
 
-        $dir = is_array($this->template_dir) ? $this->template_dir : [$this->template_dir];
+        $dir = is_array($this->templateDir) ? $this->templateDir : [$this->templateDir];
         foreach ($dir as $td) {
             if ($t = $template->tryLoadFromFile($td . '/' . $filename)) {
                 return $t;
@@ -603,7 +603,7 @@ class App
 
         throw (new Exception('Cannot find template file'))
             ->addMoreInfo('filename', $filename)
-            ->addMoreInfo('template_dir', $this->template_dir);
+            ->addMoreInfo('templateDir', $this->templateDir);
     }
 
     protected function getRequestUrl()
@@ -628,7 +628,7 @@ class App
      */
     public function stickyGet(string $name, bool $isDeleting = false): ?string
     {
-        $this->sticky_get_arguments[$name] = !$isDeleting;
+        $this->stickyGetArguments[$name] = !$isDeleting;
 
         return $_GET[$name] ?? null;
     }
@@ -638,7 +638,7 @@ class App
      */
     public function stickyForget(string $name)
     {
-        unset($this->sticky_get_arguments[$name]);
+        unset($this->stickyGetArguments[$name]);
     }
 
     /**
@@ -661,7 +661,7 @@ class App
             if (substr($requestUrl, -1, 1) === '/') {
                 $this->page = 'index';
             } else {
-                $this->page = basename($requestUrl, $this->url_building_ext);
+                $this->page = basename($requestUrl, $this->urlBuildingExt);
             }
         }
 
@@ -674,14 +674,14 @@ class App
             $pagePath = $page[0] ?? $this->page; // use current page by default
             unset($page[0]);
             if ($pagePath) {
-                $pagePath .= $this->url_building_ext;
+                $pagePath .= $this->urlBuildingExt;
             }
         }
 
         $args = $extraRequestUriArgs;
 
         // add sticky arguments
-        foreach ($this->sticky_get_arguments as $k => $v) {
+        foreach ($this->stickyGetArguments as $k => $v) {
             if ($v && isset($_GET[$k])) {
                 $args[$k] = $_GET[$k];
             } else {
@@ -1006,7 +1006,7 @@ class App
     {
         register_shutdown_function(
             function () {
-                if (!$this->run_called) {
+                if (!$this->runCalled) {
                     try {
                         $this->run();
                     } catch (ExitApplicationError $e) {
@@ -1062,8 +1062,8 @@ class App
      */
     protected function outputResponse(string $data, array $headers): void
     {
-        $this->response_headers = $this->normalizeHeaders($this->response_headers);
-        $headersAll = array_merge($this->response_headers, $this->normalizeHeaders($headers));
+        $this->responseHeaders = $this->normalizeHeaders($this->responseHeaders);
+        $headersAll = array_merge($this->responseHeaders, $this->normalizeHeaders($headers));
         unset($headers);
         $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
         unset($headersAll);
@@ -1071,7 +1071,7 @@ class App
         foreach (ob_get_status(true) as $status) {
             if ($status['buffer_used'] !== 0) {
                 $lateError = new LateOutputError('Unexpected output detected');
-                if ($this->catch_exceptions) {
+                if ($this->catchExceptions) {
                     $this->caughtException($lateError);
                     $this->outputLateOutputError($lateError);
                 }
@@ -1084,7 +1084,7 @@ class App
 
         if (count($headersNew) > 0 && headers_sent() && !$isCli) {
             $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
-            if ($this->catch_exceptions) {
+            if ($this->catchExceptions) {
                 $this->caughtException($lateError);
                 $this->outputLateOutputError($lateError);
             }
@@ -1116,7 +1116,7 @@ class App
 
         $this->outputResponseUnsafe($plainTextMessage, $headersNew);
 
-        exit(1); // should be never reached from phpunit because we set catch_exceptions = false
+        exit(1); // should be never reached from phpunit because we set catchExceptions = false
     }
 
     /**
