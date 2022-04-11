@@ -212,11 +212,11 @@ Specific field components Props may be applied using the 'ui' field property whe
 
     $this->addField('email', [
         'required' => true,
-        'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'envelope', 'type' => 'email']]]
+        'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'envelope', 'type' => 'email']]],
     ]);
     $this->addField('password', [
         'required' => true,
-        'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'key', 'type' => 'password']]]
+        'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'key', 'type' => 'password']]],
     ]);
 
 Note on Multiline control

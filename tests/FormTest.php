@@ -25,8 +25,8 @@ class FormTest extends TestCase
 
         $this->form = new \Atk4\Ui\Form();
         $this->form->setApp(new AppFormTestMock([
-            'catch_exceptions' => false,
-            'always_run' => false,
+            'catchExceptions' => false,
+            'alwaysRun' => false,
         ]));
         $this->form->invokeInit();
     }

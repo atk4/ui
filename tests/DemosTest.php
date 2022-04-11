@@ -66,7 +66,7 @@ class DemosTest extends TestCase
             self::$_db = $app->db;
 
             // prevent $app to run on shutdown
-            $app->run_called = true;
+            $app->runCalled = true;
         }
     }
 
@@ -122,7 +122,7 @@ class DemosTest extends TestCase
 
     protected function createTestingApp(): App
     {
-        $app = new class(['call_exit' => false, 'catch_exceptions' => false, 'always_run' => false]) extends App {
+        $app = new class(['callExit' => false, 'catchExceptions' => false, 'alwaysRun' => false]) extends App {
             public function callExit(): void
             {
                 throw new DemosTestExitError();
@@ -139,7 +139,7 @@ class DemosTest extends TestCase
     protected function assertNoGlobalSticky(App $app): void
     {
         $appSticky = array_diff_assoc(
-            \Closure::bind(fn () => $app->sticky_get_arguments, null, App::class)(),
+            \Closure::bind(fn () => $app->stickyGetArguments, null, App::class)(),
             ['__atk_json' => false, '__atk_tab' => false, 'APP_CALL_EXIT' => true, 'APP_CATCH_EXCEPTIONS' => true]
         );
         if ($appSticky !== []) {
@@ -160,7 +160,7 @@ class DemosTest extends TestCase
                 $app = $this->createTestingApp();
                 require $localPath;
 
-                if (!$app->run_called) {
+                if (!$app->runCalled) {
                     $app->run();
                 }
 

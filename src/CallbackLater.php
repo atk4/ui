@@ -25,7 +25,7 @@ class CallbackLater extends Callback
     {
         $this->getApp(); // assert has App
 
-        if ($this->getApp()->is_rendering) {
+        if ($this->getApp()->isRendering) {
             return parent::set($fx, $args);
         }
 

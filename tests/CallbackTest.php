@@ -41,7 +41,7 @@ class CallbackTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->app = new AppMock(['always_run' => false, 'catch_exceptions' => false]);
+        $this->app = new AppMock(['alwaysRun' => false, 'catchExceptions' => false]);
         $this->app->initLayout([\Atk4\Ui\Layout\Centered::class]);
     }
 

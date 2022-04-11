@@ -14,8 +14,8 @@ class AppTest extends TestCase
     protected function getApp(): App
     {
         return new App([
-            'catch_exceptions' => false,
-            'always_run' => false,
+            'catchExceptions' => false,
+            'alwaysRun' => false,
         ]);
     }
 
