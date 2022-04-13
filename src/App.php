@@ -44,10 +44,10 @@ class App
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
         'atk' => 'https://raw.githack.com/atk4/ui/develop/public',
-        'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
+        'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8',
-        'flatpickr' => 'https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.6',
+        'flatpickr' => 'https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11',
     ];
 
     /** @var ExecutorFactory App wide executor factory object for Model user action. */
