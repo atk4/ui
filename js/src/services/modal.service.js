@@ -65,6 +65,11 @@ class ModalService {
                 method: 'GET',
                 obj: $content,
                 onComplete: function (response, content) {
+                    const modelsContainer = $('.ui.dimmer.modals.page')[0];
+                    $($.parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
+                        $(modelsContainer).find('#' + e.id).remove();
+                    });
+
                     const result = content.html(response.html);
                     if (!result.length) {
                         response.success = false;
