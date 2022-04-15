@@ -474,11 +474,11 @@ class App
     public function initIncludes()
     {
         // jQuery
-        $this->requireJs($this->cdn['jquery'] . '/jquery.js');
+        $this->requireJs($this->cdn['jquery'] . '/jquery.min.js');
 
         // Semantic UI
-        $this->requireJs($this->cdn['semantic-ui'] . '/semantic.js');
-        $this->requireCss($this->cdn['semantic-ui'] . '/semantic.css');
+        $this->requireJs($this->cdn['semantic-ui'] . '/semantic.min.js');
+        $this->requireCss($this->cdn['semantic-ui'] . '/semantic.min.css');
 
         // Serialize Object
         $this->requireJs($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
@@ -492,7 +492,7 @@ class App
         }
 
         // Agile UI
-        $this->requireJs($this->cdn['atk'] . '/atkjs-ui.js');
+        $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
         $this->requireCss($this->cdn['atk'] . '/agileui.css');
 
         // Set js bundle dynamic loading path.

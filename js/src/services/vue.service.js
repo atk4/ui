@@ -3,9 +3,6 @@ import SuiVue from 'semantic-ui-vue';
 import atkClickOutside from '../directives/click-outside.directive';
 import { focus } from '../directives/commons.directive';
 
-Vue.config.productionTip = false;
-Vue.config.devtools = false;
-
 Vue.use(SuiVue);
 
 Vue.component('flat-picker', () => import('vue-flatpickr-component'));
