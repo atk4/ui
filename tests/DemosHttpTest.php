@@ -108,7 +108,7 @@ class DemosHttpTest extends DemosTest
 
     protected function getPathWithAppVars(string $path): string
     {
-        $path .= strpos($path, '?') === false ? '?' : '&';
+        $path .= !str_contains($path, '?') ? '?' : '&';
         $path .= 'APP_CALL_EXIT=' . ((int) $this->appCallExit) . '&APP_CATCH_EXCEPTIONS=' . ((int) $this->appCatchExceptions);
 
         return parent::getPathWithAppVars($path);

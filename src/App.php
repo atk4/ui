@@ -590,7 +590,7 @@ class App
         $template = new $this->templateClass();
         $template->setApp($this);
 
-        if (in_array($filename[0], ['.', '/', '\\'], true) || strpos($filename, ':\\') !== false) {
+        if (in_array($filename[0], ['.', '/', '\\'], true) || str_contains($filename, ':\\')) {
             return $template->loadFromFile($filename);
         }
 

@@ -5,7 +5,7 @@ Feature: Crud
     Given I am on "_unit-test/crud.php"
 
   Scenario: add
-    Then I press menu button "Add Country" using class "atk-grid-menu"
+    Then I press menu button "Add Country" using selector "atk-grid-menu"
     Then I fill in "atk_fp_country__name" with "Test"
     Then I fill in "atk_fp_country__iso" with "TT"
     Then I fill in "atk_fp_country__iso3" with "TTT"

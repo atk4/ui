@@ -13,7 +13,7 @@ Feature: Lookup
 
   Scenario: Testing lookup in VirtualPage
     Given I am on "_unit-test/lookup-virtual-page.php"
-    Then I press menu button "Add Category" using class "atk-grid-menu"
+    Then I press menu button "Add Category" using selector "atk-grid-menu"
     Then I select value "Beverages" in lookup "category"
     Then I press Modal button "Save"
     Then Toast display should contain text "Beverages"
