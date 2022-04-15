@@ -29,7 +29,7 @@ const packageVersion = require('./package.json').version;
 
 module.exports = (env) => {
     // determine which mode
-    const isProduction = env.production;
+    const isProduction = false;
     const srcDir = path.resolve(__dirname, './src');
     const publicDir = path.resolve(__dirname, '../public');
     const libraryName = 'atk';

@@ -6,3 +6,6 @@
 !/atkjs-ui.min.js
 !/vendors.min.js
 !/atk-vue-*.min.js
+!/atkjs-ui.js
+!/vendors.js
+!/atk-vue-*.js
