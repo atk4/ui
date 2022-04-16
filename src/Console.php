@@ -14,7 +14,6 @@ use Atk4\Core\TraitUtil;
 class Console extends View implements \Psr\Log\LoggerInterface
 {
     public $ui = 'inverted black segment';
-    public $element = 'pre';
 
     /**
      * Specify which event will trigger this console. Set to 'false'
@@ -94,8 +93,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 $this->getApp()->logger = $this;
             }
 
-            ob_start(function ($content) {
-                if ($this->_output_bypass) {
+            ob_start(function (string $content) {
+                if ($this->_output_bypass || $content === '' /* needed as self::output() adds NL */) {
                     return $content;
                 }
 
@@ -112,8 +111,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             try {
                 $fx($this);
             } catch (\Throwable $e) {
-                $this->output('');
-                $this->outputHtml('<div class="ui segment" style="white-space: normal; font-family: Lato,\'Helvetica Neue\',Arial,Helvetica,sans-serif;">{0}</div>', [$this->getApp()->renderExceptionHtml($e)]);
+                $this->outputHtmlWithoutPre('<div class="ui segment">{0}</div>', [$this->getApp()->renderExceptionHtml($e)]);
             }
 
             if ($this->issetApp()) {
@@ -140,39 +138,83 @@ class Console extends View implements \Psr\Log\LoggerInterface
         return $this->sse;
     }
 
+    private function escapeOutputHtml(string $message): string
+    {
+        $res = htmlspecialchars($message);
+
+        // fix new lines for display and copy paste, testcase:
+        // $genFx = function (array $values, int $maxLength, array $prev = null) use (&$genFx) {
+        //     $res = [];
+        //     foreach ($prev ?? [''] as $p) {
+        //         foreach ($values as $v) {
+        //             $res[] = $p . $v;
+        //         }
+        //     }
+        //
+        //     if (--$maxLength > 0) {
+        //         $res = array_merge($res, $genFx($values, $maxLength, $res));
+        //     }
+        //
+        //     if ($prev === null) {
+        //         array_unshift($res, '');
+        //     }
+        //
+        //     return $res;
+        // };
+        // $testCases = $genFx([' ', "\t", "\n", 'x'], 5);
+        //
+        // foreach ($testCases as $testCase) {
+        //     $this->output('--------' . str_replace([' ', "\t", "\n", 'x'], [' sp', ' tab', ' nl', ' x'], $testCase));
+        //     $this->output($testCase);
+        // }
+        // $this->output('--------');
+        $res = preg_replace('~\r\n?|\n~s', "\n", $res);
+        $res = preg_replace('~^$|(?<!^)(\n+)$~s', "$1\n", $res);
+
+        return $res;
+    }
+
     /**
      * Output a single line to the console.
      *
-     * @param string $message
-     *
      * @return $this
      */
-    public function output($message, array $context = [])
+    public function output(string $message, array $context = [])
     {
-        $this->outputHtml(htmlspecialchars($message), $context);
+        $this->outputHtml($this->escapeOutputHtml($message), $context);
 
         return $this;
     }
 
     /**
-     * Output un-escaped HTML line. Use this to send HTML.
-     *
-     * @todo Use $message as template and fill values from $context in there.
+     * Output unescaped HTML to the console.
      *
      * @return $this
      */
     public function outputHtml(string $message, array $context = [])
     {
-        $message = preg_replace_callback('~{([\w]+)}~', function ($match) use ($context) {
-            if (isset($context[$match[1]])) {
-                return $context[$match[1]];
+        $this->outputHtmlWithoutPre('<div style="font-family: monospace; white-space: pre;">' . $message . '</div>', $context);
+
+        return $this;
+    }
+
+    /**
+     * Output unescaped HTML to the console without wrapping in <pre>.
+     *
+     * @return $this
+     */
+    protected function outputHtmlWithoutPre(string $message, array $context = [])
+    {
+        $message = preg_replace_callback('~{([\w]+)}~', function ($matches) use ($context) {
+            if (isset($context[$matches[1]])) {
+                return $context[$matches[1]];
             }
 
-            return '{' . $match[1] . '}'; // don't change the original message
+            return $matches[0];
         }, $message);
 
         $this->_output_bypass = true;
-        $this->sse->send($this->js()->append($message . '<br/>'));
+        $this->sse->send($this->js()->append($message));
         $this->_output_bypass = false;
 
         return $this;
@@ -366,96 +408,54 @@ class Console extends View implements \Psr\Log\LoggerInterface
         return $this;
     }
 
-    // Methods below implements \Psr\Log\LoggerInterface
+    // methods below implements \Psr\Log\LoggerInterface
 
-    /**
-     * System is unusable.
-     *
-     * @param string $message
-     */
-    public function emergency($message, array $context = [])
+    public function emergency($message, array $context = []): void
     {
-        $this->outputHtml('<font color="pink">' . htmlspecialchars($message) . '</font>', $context);
+        $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
+    }
+
+    public function alert($message, array $context = []): void
+    {
+        $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
+    }
+
+    public function critical($message, array $context = []): void
+    {
+        $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
+    }
+
+    public function error($message, array $context = []): void
+    {
+        $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
+    }
+
+    public function warning($message, array $context = []): void
+    {
+        $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
+    }
+
+    public function notice($message, array $context = []): void
+    {
+        $this->outputHtml('<font color="yellow">' . $this->escapeOutputHtml($message) . '</font>', $context);
+    }
+
+    public function info($message, array $context = []): void
+    {
+        $this->outputHtml('<font color="gray">' . $this->escapeOutputHtml($message) . '</font>', $context);
+    }
+
+    public function debug($message, array $context = []): void
+    {
+        $this->outputHtml('<font color="cyan">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
     /**
-     * Action must be taken immediately.
+     * @param 'emergency'|'alert'|'critical'|'error'|'warning'|'notice'|'info'|'debug' $level
      *
-     * @param string $message
+     * @phpstan-ignore-next-line
      */
-    public function alert($message, array $context = [])
-    {
-        $this->outputHtml('<font color="pink">' . htmlspecialchars($message) . '</font>', $context);
-    }
-
-    /**
-     * Critical conditions.
-     *
-     * @param string $message
-     */
-    public function critical($message, array $context = [])
-    {
-        $this->outputHtml('<font color="pink">' . htmlspecialchars($message) . '</font>', $context);
-    }
-
-    /**
-     * Runtime errors that do not require immediate action but should typically
-     * be logged and monitored.
-     *
-     * @param string $message
-     */
-    public function error($message, array $context = [])
-    {
-        $this->outputHtml('<font color="pink">' . htmlspecialchars($message) . '</font>', $context);
-    }
-
-    /**
-     * Exceptional occurrences that are not errors.
-     *
-     * @param string $message
-     */
-    public function warning($message, array $context = [])
-    {
-        $this->outputHtml('<font color="pink">' . htmlspecialchars($message) . '</font>', $context);
-    }
-
-    /**
-     * Normal but significant events.
-     *
-     * @param string $message
-     */
-    public function notice($message, array $context = [])
-    {
-        $this->outputHtml('<font color="yellow">' . htmlspecialchars($message) . '</font>', $context);
-    }
-
-    /**
-     * Interesting events.
-     *
-     * @param string $message
-     */
-    public function info($message, array $context = [])
-    {
-        $this->outputHtml('<font color="gray">' . htmlspecialchars($message) . '</font>', $context);
-    }
-
-    /**
-     * Detailed debug information.
-     *
-     * @param string $message
-     */
-    public function debug($message, array $context = [])
-    {
-        $this->outputHtml('<font color="cyan">' . htmlspecialchars($message) . '</font>', $context);
-    }
-
-    /**
-     * Logs with an arbitrary level.
-     *
-     * @param mixed  $level
-     * @param string $message
-     */
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, array $context = []): void
     {
         $this->{$level}($message, $context);
     }
