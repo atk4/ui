@@ -21,9 +21,9 @@ class Context extends RawMinkContext implements BehatContext
     /** @var string|null Temporary store button id when press. Used in js callback test. */
     protected $buttonId;
 
-    public function getSession($name = null): \Behat\Mink\Session
+    public function getSession($name = null): MinkSession
     {
-        return $this->getMink()->getSession($name);
+        return new MinkSession($this->getMink()->getSession($name));
     }
 
     protected function getScenario(StepScope $event): ScenarioInterface
