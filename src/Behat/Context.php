@@ -582,8 +582,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $expectedText = $this->findElement(null, $selector)->getText();
         $input = $this->findElement(null, 'input[name="' . $inputName . '"]');
-
-        if (preg_replace('~\s*~', '', $expectedText) !== preg_replace('~\s*~', '', $input->getValue())) {
+        if ($expectedText !== $input->getValue()) {
             throw new Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expectedText);
         }
     }
@@ -668,11 +667,11 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^text in container using selector "([^\"]*)" should contain \'([^\']*)\'$/
+     * @Then /^I check if text in "([^"]*)" match text "([^"]*)"/
      */
     public function textInContainerUsingShouldContain(string $selector, string $text): void
     {
-        if (trim($this->findElement(null, $selector)->getText()) !== $text) {
+        if ($this->findElement(null, $selector)->getText() !== $text) {
             throw new Exception('Container with selector: ' . $selector . ' does not contain text: ' . $text);
         }
     }

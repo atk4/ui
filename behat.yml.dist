@@ -22,4 +22,4 @@ default:
                     - '--headless'
                     - '--disable-dev-shm-usage'
                     - '--disable-gpu'
-                    - '--window-size=1920,1200'
+                    - '--window-size=1280,720'

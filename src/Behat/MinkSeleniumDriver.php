@@ -31,13 +31,13 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
         }
     }
 
-//    public function getText($xpath)
-//    {
-//        $text = $this->executeJsOnXpath($xpath, 'return {{ELEMENT}}.innerText;');
-//        $text = trim(preg_replace('~\s+~s', ' ', $text));
-//
-//        return $text;
-//    }
+    public function getText($xpath)
+    {
+        $text = $this->executeJsOnXpath($xpath, 'return {{ELEMENT}}.innerText;');
+        $text = trim(preg_replace('~\s+~s', ' ', $text));
+
+        return $text;
+    }
 
     protected function createMinkElementFromWebDriverElement(Element $element): NodeElement
     {

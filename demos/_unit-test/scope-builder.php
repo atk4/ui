@@ -56,7 +56,7 @@ $expectedWord = <<<'EOF'
     EOF;
 
 $statModelForHinting = new Stat($app->db);
-$expectedInput = <<<"EOF"
+$expectedInput = json_encode(json_decode(<<<"EOF"
     {
       "logicalOperator": "AND",
       "children": [
@@ -145,7 +145,7 @@ $expectedInput = <<<"EOF"
         }
       ]
     }
-    EOF;
+    EOF, true));
 
 Header::addTo($app, ['Word:']);
 View::addTo($app, ['element' => 'p', 'content' => $expectedWord])->addClass('atk-expected-word-result');
