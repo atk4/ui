@@ -127,7 +127,7 @@ Here is the code with comments::
         public $social = null;
         public $icon = null;
         public $defaultTemplate = null;
-        // public $defaultTemplate = __DIR__.'../templates/socialadd.html';
+        // public $defaultTemplate = __DIR__ . '../templates/socialadd.html';
 
         function init(): void {
             parent::init();
@@ -148,7 +148,7 @@ Here is the code with comments::
             if (!$this->template) {
                 // TODO: Place template into file and set defaultTemplate instead
                 $this->template = new \Atk4\Ui\Template(
-    '<{_element}button{/} class="ui '.$this->social.' button" {$attributes}>
+    '<{_element}button{/} class="ui ' . $this->social . ' button" {$attributes}>
       <i class="large icons">
         {$Icon}
         <i class="inverted corner add icon"></i>

@@ -119,7 +119,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', string $selector = null): self
     {
         if (!$this->actionInitialized) {
-            throw new Exception('Action must be set prior to assign trigger.');
+            throw new Exception('Action must be set prior to assign trigger');
         }
 
         if ($this->steps) {
@@ -145,7 +145,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     public function jsExecute(array $urlArgs = []): array
     {
         if (!$this->actionInitialized) {
-            throw new Exception('Action must be set prior to assign trigger.');
+            throw new Exception('Action must be set prior to assign trigger');
         }
 
         $urlArgs['step'] = $this->step;

@@ -240,7 +240,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             $read = $pipes;
             $j1 = $j2 = null;
             if (stream_select($read, $j1, $j2, 2) === false) {
-                throw new Exception('stream_select() returned false.');
+                throw new Exception('Unexpected stream_select() result');
             }
 
             $stat = proc_get_status($proc);

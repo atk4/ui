@@ -85,7 +85,7 @@ class JsFunction implements JsExpressionable
             if ($statement instanceof JsExpressionable) {
                 $statement = $statement->jsRender();
             } else {
-                throw (new Exception('Incorrect statement for JsFunction.'))
+                throw (new Exception('Incorrect statement for JsFunction'))
                     ->addMoreInfo('statement', $statement);
             }
 

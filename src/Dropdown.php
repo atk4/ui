@@ -32,7 +32,7 @@ class Dropdown extends Lister
      *      $dropdown = Dropdown::addTo($menu, ['menu', 'dropdownOptions' => ['on' => 'hover']]);
      *      $dropdown->setModel($menuItems);
      *      $dropdown->onChange(function($item) {
-     *          return 'New selected item: '.$item;
+     *          return 'New selected item: ' . $item;
      *      });.
      *
      * @param \Closure $fx handler where new selected Item value is passed too

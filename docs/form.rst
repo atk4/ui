@@ -44,7 +44,7 @@ directly in PHP::
     $form->onSubmit(function(Form $form) {
         // implement subscribe here
 
-        return "Subscribed ".$form->model->get('email')." to newsletter.";
+        return "Subscribed " . $form->model->get('email') . " to newsletter.";
     });
 
 Form is a composite component and it relies on other components to render parts
@@ -329,7 +329,7 @@ for you. Here is an example with date::
     $form->addControl('date2', [\Atk4\Ui\Form\Control\Calendar::class, 'type' => 'date']);
 
     $form->onSubmit(function(Form $form) {
-        echo 'date1 = '.print_r($form->model->get('date1'), true).' and date2 = '.print_r($form->model->get('date2'), true);
+        echo 'date1 = ' . print_r($form->model->get('date1'), true) . ' and date2 = ' . print_r($form->model->get('date2'), true);
     });
 
 Field ``date1`` is defined inside a :php:class:`ProxyModel` as a date field and will

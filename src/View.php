@@ -929,7 +929,7 @@ class View extends AbstractView implements JsExpressionable
         $type = $useSession ? 'session' : 'local';
 
         if (!$name = $this->name) {
-            throw new Exception('View property name needs to be set.');
+            throw new Exception('View property name needs to be set');
         }
 
         return (new JsChain('atk.dataService'))->clearData($name, $type);
@@ -953,7 +953,7 @@ class View extends AbstractView implements JsExpressionable
         $type = $useSession ? 'session' : 'local';
 
         if (!$name = $this->name) {
-            throw new Exception('View property name needs to be set.');
+            throw new Exception('View property name needs to be set');
         }
 
         return (new JsChain('atk.dataService'))->addJsonData($name, json_encode($data, \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR), $type);

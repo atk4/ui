@@ -143,7 +143,7 @@ Dropdown Menus
 Menus will show item selection and will trigger a callback when user selects one of them::
 
     $some_column->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
-        return 'Title item: '.$item;
+        return 'Title item: ' . $item;
     });
 
 
@@ -268,7 +268,7 @@ Moreover you may pass $action argument as a PHP callback.
 Triggers a modal dialog when you click on the button. See description on :php:meth:`Atk4\\Ui\\Grid::addModalAction()`::
 
     $action->addAction(['Say HI'], function ($j, $id) use ($g) {
-        return 'Loaded "'.$g->model->load($id)->get('name').'" from ID='.$id;
+        return 'Loaded "' . $g->model->load($id)->get('name') . '" from ID=' . $id;
     });
 
 Note that in this case ID is automatically passed to your call-back.

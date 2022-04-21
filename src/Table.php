@@ -235,7 +235,7 @@ class Table extends Lister
     public function setFilterColumn($cols = null)
     {
         if (!$this->model) {
-            throw new Exception('Model need to be defined in order to use column filtering.');
+            throw new Exception('Model need to be defined in order to use column filtering');
         }
 
         // set filter to all column when null.

@@ -210,9 +210,9 @@ class Upload extends Input
         if ($this->cb->canTerminate()) {
             $uploadActionRaw = $_POST['f_upload_action'] ?? null;
             if (!$this->hasUploadCb && ($uploadActionRaw === self::UPLOAD_ACTION)) {
-                throw new Exception('Missing onUpload callback.');
+                throw new Exception('Missing onUpload callback');
             } elseif (!$this->hasDeleteCb && ($uploadActionRaw === self::DELETE_ACTION)) {
-                throw new Exception('Missing onDelete callback.');
+                throw new Exception('Missing onDelete callback');
             }
         }
 

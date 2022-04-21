@@ -80,7 +80,7 @@ class DemosTest extends TestCase
             if (!isset(self::$_failedParentTests[$this->getName()])) {
                 self::$_failedParentTests[$this->getName()] = $this->getStatus();
             } else {
-                $this->markTestIncomplete('Test failed, but non-HTTP test failed too. Fix it first.');
+                $this->markTestIncomplete('Test failed, but non-HTTP test failed too, fix it first');
             }
         }
 

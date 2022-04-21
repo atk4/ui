@@ -784,7 +784,7 @@ class App
     /**
      * Construct HTML tag with supplied attributes.
      *
-     * $html = getTag('img/', ['src' => 'foo.gif','border' => 0]);
+     * $html = getTag('img/', ['src' => 'foo.gif', 'border' => 0]);
      * // "<img src="foo.gif" border="0"/>"
      *
      *
@@ -823,16 +823,16 @@ class App
      * --> </th>
      *
      * 8. using $value will add value inside tag. It will also encode value.
-     * getTag('a', ['href' => 'foo.html'] ,'click here >>');
+     * getTag('a', ['href' => 'foo.html'], 'click here >>');
      * --> <a href="foo.html">click here &gt;&gt;</a>
      *
      * 9. you may skip attribute argument.
-     * getTag('b','text in bold');
+     * getTag('b', 'text in bold');
      * --> <b>text in bold</b>
      *
      * 10. pass array as 3rd parameter to nest tags. Each element can be either string (inserted as-is) or
      * array (passed to getTag recursively)
-     * getTag('a', ['href' => 'foo.html'], [['b','click here'], ' for fun']);
+     * getTag('a', ['href' => 'foo.html'], [['b', 'click here'], ' for fun']);
      * --> <a href="foo.html"><b>click here</b> for fun</a>
      *
      * 11. extended example:

@@ -157,7 +157,7 @@ class ExecutorFactory
         // required a specific executor type.
         if ($requiredType) {
             if (!($this->executorSeed[$requiredType] ?? null)) {
-                throw (new Exception('Required executor type is not set. Register it via the registerTypeExecutor method.'))
+                throw (new Exception('Required executor type is not set'))
                     ->addMoreInfo('type', $requiredType);
             }
             $seed = $this->executorSeed[$requiredType];

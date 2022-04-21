@@ -48,7 +48,7 @@ class VirtualPage extends View
     public function set($fx = null, $args = [])
     {
         if (!$fx instanceof \Closure) {
-            throw new Exception('Virtual page requires a Closure.');
+            throw new Exception('Virtual page requires a Closure');
         }
 
         $this->cb->set($fx, array_merge([$this], $args));
