@@ -18,9 +18,6 @@ class Context extends RawMinkContext implements BehatContext
 {
     use WarnDynamicPropertyTrait;
 
-    /** @var string|null Temporary store button id when press. Used in js callback test. */
-    protected $buttonId;
-
     public function getSession($name = null): MinkSession
     {
         return new MinkSession($this->getMink()->getSession($name));
@@ -157,7 +154,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         [$invalidIds, $duplicateIds] = $this->getSession()->evaluateScript(<<<'EOF'
             return (function () {
-                const idRegex = /^[_a-z][_a-z0-9-]*$/is;
+                const idRegex = /^[a-z_][0-9a-z_\-]*$/is;
                 const invalidIds = [];
                 const duplicateIds = [];
                 [...(new Set(
@@ -196,8 +193,21 @@ class Context extends RawMinkContext implements BehatContext
      */
     protected function parseSelector(string $selector): array
     {
-        if (preg_match('~^xpath\((.+)\)$~is', $selector, $matches)) {
-            return ['xpath', $matches[1]];
+        if (preg_match('~^xpath\((.+)\)$~s', $selector, $matches)) {
+            // add support for standard CSS class selector
+            $xpath = preg_replace_callback(
+                '~\'(?:[^\']+|\'\')*\'\K|"(?:[^"]+|"")*"\K|(?<=\w)\.([\w\-]+)~s',
+                function ($matches) {
+                    if ($matches[0] === '') {
+                        return '';
+                    }
+
+                    return '[contains(concat(\' \', normalize-space(@class), \' \'), \' ' . $matches[1] . ' \')]';
+                },
+                $matches[1]
+            );
+
+            return ['xpath', $xpath];
         }
 
         return ['css', $selector];
@@ -248,8 +258,6 @@ class Context extends RawMinkContext implements BehatContext
     public function iPressButton(string $btnLabel): void
     {
         $button = $this->findElement(null, 'xpath(//div[text()="' . $btnLabel . '"])');
-        // store button id.
-        $this->buttonId = $button->getAttribute('id');
         // fix "is out of bounds of viewport width and height" for Firefox
         $button->focus();
         $button->click();
@@ -258,9 +266,9 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then I press menu button :arg1 using selector :selector
      */
-    public function iPressMenuButtonUsingClass(string $btnLabel, string $selector): void
+    public function iPressMenuButton(string $btnLabel, string $selector): void
     {
-        $menu = $this->findElement(null, '.ui.menu.' . $selector);
+        $menu = $this->findElement(null, $selector);
         $link = $this->findElement($menu, 'xpath(//a[text()="' . $btnLabel . '"])');
         $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
     }
@@ -281,18 +289,6 @@ class Context extends RawMinkContext implements BehatContext
         $element = $this->findElement(null, 'xpath(//div[text()="' . $text . '"])');
         if (!str_contains($element->getAttribute('style'), 'display: none')) {
             throw new Exception('Element with text "' . $text . '" must be invisible');
-        }
-    }
-
-    /**
-     * @Then Label changes to a number
-     */
-    public function labelChangesToNumber(): void
-    {
-        $element = $this->getSession()->getPage()->findById($this->buttonId);
-        $value = trim($element->getHtml());
-        if (!is_numeric($value)) {
-            throw new Exception('Label must be numeric on button: ' . $this->buttonId . ' : ' . $value);
         }
     }
 
@@ -669,10 +665,20 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then /^I check if text in "([^"]*)" match text "([^"]*)"/
      */
-    public function textInContainerUsingShouldContain(string $selector, string $text): void
+    public function textInContainerShouldMatch(string $selector, string $text): void
     {
         if ($this->findElement(null, $selector)->getText() !== $text) {
-            throw new Exception('Container with selector: ' . $selector . ' does not contain text: ' . $text);
+            throw new Exception('Container with selector: ' . $selector . ' does not match text: ' . $text);
+        }
+    }
+
+    /**
+     * @Then /^I check if text in "([^"]*)" match regex "([^"]*)"/
+     */
+    public function textInContainerShouldMatchRegex(string $selector, string $regex): void
+    {
+        if (!preg_match($regex, $this->findElement(null, $selector)->getText())) {
+            throw new Exception('Container with selector: ' . $selector . ' does not match regex: ' . $regex);
         }
     }
 

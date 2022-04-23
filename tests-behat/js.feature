@@ -20,8 +20,9 @@ Feature: JS
     Then I don't see button "C"
     Then I don't see button "Hide button C"
 
+    When I check if text in "xpath(//div.ui.button[8])" match text "Callback Test"
     When I press button "Callback Test"
-    Then Label changes to a number
+    When I check if text in "xpath(//div.ui.button[8])" match regex "~^\d+$~"
 
   Scenario: JsCallback exception is displayed
     When I press button "failure"
