@@ -232,10 +232,6 @@ class Context extends RawMinkContext implements BehatContext
     protected function findElement(?NodeElement $context, string $selector): NodeElement
     {
         $elements = $this->findElements($context, $selector);
-        if (count($elements) > 1) {
-//            throw new Exception('More than one element found in ' . ($context === null ? 'page' : 'element')
-//                . ' using selector: ' . $selector);
-        }
 
         return $elements[0];
     }
