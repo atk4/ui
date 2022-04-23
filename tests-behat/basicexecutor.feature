@@ -3,12 +3,12 @@ Feature: Executor
 
   Scenario: basic
     Given I am on "data-action/actions.php"
-    And I press button "Import"
+    When I press button "Import"
     Then Toast display should contain text "Done!"
 
   Scenario: form
     Given I am on "data-action/actions.php"
-    And I press button "Run Import"
+    When I press button "Run Import"
     Then I should see "Must not be empty"
     Then I fill in "path" with "."
     Then I press button "Run Import"
@@ -16,5 +16,5 @@ Feature: Executor
 
   Scenario: preview
     Given I am on "data-action/actions.php"
-    And I press button "Confirm"
+    When I press button "Confirm"
     Then Toast display should contain text "Confirm!"

@@ -17,7 +17,7 @@ Feature: ScopeBuilder
     # '5e550ea8' = substr(md5('is_commercial'), 0, 8)
     Then bool rule "atk_fp_stat__5e550ea8" has value "No"
     Then I check if input value for "qb" match text in "p.atk-expected-input-result"
-    And I press button "Save"
+    When I press button "Save"
     # TODO uncomment once "Object serialization is not supported" is fixed
     # Then I check if text in "p.atk-expected-word-result" match text in ".atk-scope-builder-response"
 

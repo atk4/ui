@@ -171,7 +171,7 @@ class JsCallback extends Callback implements JsExpressionable
         } elseif ($response instanceof JsExpressionable) {
             $action = $response;
         } else {
-            throw (new Exception('Incorrect callback. Response must be of type JsExpressionable, View, or String.'))
+            throw (new Exception('Incorrect callback, response must be of type JsExpressionable, View, or String'))
                 ->addMoreInfo('r', $response);
         }
 

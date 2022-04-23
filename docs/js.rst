@@ -492,7 +492,7 @@ some feedback to the user. JsNotify can display a bar on top of the screen for s
             } else {
                 return [
                     $modal->hide(),
-                    new \Atk4\Ui\JsNotify('Thank you '.$form->model->get('name')),
+                    new \Atk4\Ui\JsNotify('Thank you ' . $form->model->get('name')),
                 ];
             }
         });

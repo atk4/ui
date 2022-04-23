@@ -66,21 +66,17 @@ class ApiService {
    * @param element
    */
     onSuccess(response, element) {
-        let result;
         try {
             if (response.success) {
                 if (response.html && response.id) {
                     // prevent modal duplication.
                     // apiService.removeModalDuplicate(response.html);
-                    const modalIDs = [];
-                    $(response.html).find('.ui.modal[id]').each((i, e) => {
-                        modalIDs.push('#' + $(e).attr('id'));
+                    const modelsContainer = $('.ui.dimmer.modals.page')[0];
+                    $($.parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
+                        $(modelsContainer).find('#' + e.id).remove();
                     });
 
-                    if (modalIDs.length) {
-                        $('.ui.dimmer.modals.page').find(modalIDs.join(', ')).remove();
-                    }
-                    result = $('#' + response.id).replaceWith(response.html);
+                    const result = $('#' + response.id).replaceWith(response.html);
                     if (!result.length) {
                         // TODO Find a better solution for long term.
                         // Need a way to gracefully abort server request.

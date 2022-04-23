@@ -5,7 +5,7 @@ Feature: Callback
     Given I am on "_unit-test/callback.php"
     Then I press button "First"
     Then I should see "TestName"
-    And I press Modal button "Save"
+    When I press Modal button "Save"
     Then Toast display should contain text "Save"
     Then I should not see "TestName"
 
@@ -17,7 +17,7 @@ Feature: Callback
     Then I should see "Loader-2"
     Then I should see "Loader-3"
     Then I click paginator page "2"
-    Then I click first element using class ".ui.atk-test.button"
+    Then I click using selector "xpath((//div.ui.atk-test.button)[1])"
     Then Modal is open with text "Edit Country"
     Then I press Modal button "Save"
     Then Toast display should contain text "Form Submit"

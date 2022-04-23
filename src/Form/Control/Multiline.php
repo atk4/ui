@@ -68,7 +68,7 @@ use Atk4\Ui\View;
  *
  * $form = Form::addTo($app);
  * $ml = $form->addControl('ml', [Form\Control\Multiline::class]);
- * $ml->setModel($user, ['name','is_vip']);
+ * $ml->setModel($user, ['name', 'is_vip']);
  *
  * $form->onSubmit(function(Form $form) use ($ml) {
  *     $ml->saveRows();
@@ -656,7 +656,7 @@ class Multiline extends Form\Control
     protected function renderView(): void
     {
         if (!$this->getModel()) {
-            throw new Exception('Multiline field needs to have it\'s model setup.');
+            throw new Exception('Multiline field needs to have it\'s model setup');
         }
 
         $this->renderCallback->set(function () {

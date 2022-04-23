@@ -44,10 +44,10 @@ class App
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
         'atk' => 'https://raw.githack.com/atk4/ui/develop/public',
-        'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
+        'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8',
-        'flatpickr' => 'https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.6',
+        'flatpickr' => 'https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11',
     ];
 
     /** @var ExecutorFactory App wide executor factory object for Model user action. */
@@ -590,7 +590,7 @@ class App
         $template = new $this->templateClass();
         $template->setApp($this);
 
-        if (in_array($filename[0], ['.', '/', '\\'], true) || strpos($filename, ':\\') !== false) {
+        if (in_array($filename[0], ['.', '/', '\\'], true) || str_contains($filename, ':\\')) {
             return $template->loadFromFile($filename);
         }
 
@@ -784,7 +784,7 @@ class App
     /**
      * Construct HTML tag with supplied attributes.
      *
-     * $html = getTag('img/', ['src' => 'foo.gif','border' => 0]);
+     * $html = getTag('img/', ['src' => 'foo.gif', 'border' => 0]);
      * // "<img src="foo.gif" border="0"/>"
      *
      *
@@ -823,16 +823,16 @@ class App
      * --> </th>
      *
      * 8. using $value will add value inside tag. It will also encode value.
-     * getTag('a', ['href' => 'foo.html'] ,'click here >>');
+     * getTag('a', ['href' => 'foo.html'], 'click here >>');
      * --> <a href="foo.html">click here &gt;&gt;</a>
      *
      * 9. you may skip attribute argument.
-     * getTag('b','text in bold');
+     * getTag('b', 'text in bold');
      * --> <b>text in bold</b>
      *
      * 10. pass array as 3rd parameter to nest tags. Each element can be either string (inserted as-is) or
      * array (passed to getTag recursively)
-     * getTag('a', ['href' => 'foo.html'], [['b','click here'], ' for fun']);
+     * getTag('a', ['href' => 'foo.html'], [['b', 'click here'], ' for fun']);
      * --> <a href="foo.html"><b>click here</b> for fun</a>
      *
      * 11. extended example:

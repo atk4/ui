@@ -1,10 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Behat test for ScopeBuilder
- * Test query output by ScopeBuilder into model scope definition.
- */
 
 namespace Atk4\Ui\Demos;
 

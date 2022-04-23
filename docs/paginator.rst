@@ -35,7 +35,7 @@ to display current page BEFORE the paginator on your page::
     LoremIpsum::addTo($page); // some content here
 
     $p = Paginator::addTo($page);
-    $h->set('Page '.$p->page.' from '.$p->total);
+    $h->set('Page ' . $p->page . ' from ' . $p->total);
 
 Remember that values of 'page' and 'total' are integers, so you may need to do type-casting::
 
