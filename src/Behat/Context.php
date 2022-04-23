@@ -305,19 +305,12 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I click first card on page
+     * @Then I click using selector :selector
      */
-    public function iClickFirstCardOnPage(): void
+    public function iClickUsingSelector(string $selector): void
     {
-        $this->getSession()->executeScript('$(".atk-card")[0].click()');
-    }
-
-    /**
-     * @Then I click first element using selector :selector
-     */
-    public function iClickFirstElementUsingClass(string $selector): void
-    {
-        $this->getSession()->executeScript('$("' . $selector . '")[0].click()');
+        $element = $this->findElement(null, $selector);
+        $this->getSession()->executeScript('$(arguments[0]).click()', [$element]);
     }
 
     /**
@@ -326,15 +319,6 @@ class Context extends RawMinkContext implements BehatContext
     public function iClickPaginatorPage(string $pageNumber): void
     {
         $this->getSession()->executeScript('$("a.item[data-page=' . $pageNumber . ']").click()');
-    }
-
-    /**
-     * @Then I click icon using selector :selector
-     */
-    public function iClickIconUsingCss(string $selector): void
-    {
-        $icon = $this->findElement(null, $selector);
-        $icon->click();
     }
 
     // }}}
@@ -371,6 +355,14 @@ class Context extends RawMinkContext implements BehatContext
         $modal = $this->findElement(null, '.modal.visible.active.front');
         $field = $modal->find('named', ['field', $fieldName]);
         $field->setValue($value);
+    }
+
+    /**
+     * @Then I click close modal
+     */
+    public function iClickCloseModal(): void
+    {
+        $this->getSession()->executeScript('$(".modal.visible.active.front > i.icon.close")[0].click()');
     }
 
     /**

@@ -1,10 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Behat test for ScopeBuilder
- * Test Model condition rendering into ScopeBuilder component.
- */
 
 namespace Atk4\Ui\Demos;
 

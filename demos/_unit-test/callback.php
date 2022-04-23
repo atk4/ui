@@ -1,10 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Behat testing.
- * Test for triggerOnReload = false for Callback.
- */
 
 namespace Atk4\Ui\Demos;
 

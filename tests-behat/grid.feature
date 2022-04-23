@@ -8,7 +8,7 @@ Feature: Grid
     Then I press button "Test"
     Then Toast display should contain text "United Kingdom"
     # click search remove icon
-    Then I click icon using selector "i.atk-remove-icon"
+    Then I click using selector "i.atk-remove-icon"
     Then I should not see "United Kingdom"
 
   Scenario: search no ajax
