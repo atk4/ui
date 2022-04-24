@@ -114,32 +114,30 @@ class DemosHttpTest extends DemosTest
         return parent::getPathWithAppVars($path);
     }
 
-    private function getLateOutputErrorPath(string $trigger): string
+    /**
+     * @dataProvider demoLateOutputErrorProvider
+     */
+    public function testDemoLateOutputError(string $urlTrigger, string $expectedOutput): void
     {
-        return '_unit-test/late-output-error.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . $trigger . '=ajax&'
-            . Callback::URL_QUERY_TARGET . '=' . $trigger . '&__atk_json=1';
-    }
+        $path = '_unit-test/late-output-error.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . $urlTrigger . '=ajax&'
+            . Callback::URL_QUERY_TARGET . '=' . $urlTrigger . '&__atk_json=1';
 
-    public function testDemoLateOutputErrorHeadersAlreadySent(): void
-    {
-        $response = $this->getResponseFromRequest5xx($this->getLateOutputErrorPath('err_headers_already_sent'));
+        $response = $this->getResponseFromRequest5xx($path);
 
         $this->assertSame(500, $response->getStatusCode());
-        $this->assertSame(
-            "\n" . '!! FATAL UI ERROR: Headers already sent, more headers cannot be set at this stage !!' . "\n",
-            $response->getBody()->getContents()
-        );
+        $this->assertSame($expectedOutput, $response->getBody()->getContents());
     }
 
-    public function testDemoLateOutputErrorUnexpectedOutputDetected(): void
+    public function demoLateOutputErrorProvider(): array
     {
-        $response = $this->getResponseFromRequest5xx($this->getLateOutputErrorPath('err_unexpected_output_detected'));
+        $hOutput = "\n" . '!! FATAL UI ERROR: Headers already sent, more headers cannot be set at this stage !!' . "\n";
+        $oOutput = 'unmanaged output' . "\n" . '!! FATAL UI ERROR: Unexpected output detected !!' . "\n";
 
-        $this->assertSame(500, $response->getStatusCode());
-        $this->assertSame(
-            'unmanaged output'
-                . "\n" . '!! FATAL UI ERROR: Unexpected output detected !!' . "\n",
-            $response->getBody()->getContents()
-        );
+        return [
+            ['err_headers_already_sent_2', $hOutput],
+            ['err_unexpected_output_detected_2', $oOutput],
+            ['err_headers_already_sent_1', $hOutput],
+            ['err_unexpected_output_detected_1', $oOutput],
+        ];
     }
 }

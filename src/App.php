@@ -407,7 +407,7 @@ class App
             $this->outputResponse($output, $headers);
         }
 
-        $this->runCalled = true; // prevent shutdown function from triggering.
+        $this->runCalled = true; // prevent shutdown function from triggering
         $this->callExit();
     }
 
@@ -1115,6 +1115,8 @@ class App
         }
 
         $this->outputResponseUnsafe($plainTextMessage, $headersNew);
+
+        $this->runCalled = true; // prevent shutdown function from triggering
 
         exit(1); // should be never reached from phpunit because we set catchExceptions = false
     }
