@@ -319,6 +319,20 @@ class Context extends RawMinkContext implements BehatContext
 
     // }}}
 
+    /**
+     * @When I select file input :arg1 with :arg2 as :arg3
+     */
+    public function iSelectFile(string $selector, string $fileContent, string $fileName): void
+    {
+        $element = $this->findElement(null, $selector);
+        $this->getSession()->executeScript(<<<'EOF'
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(new File([new Uint8Array(arguments[1])], arguments[2]));
+            arguments[0].files = dataTransfer.files;
+            $(arguments[0]).trigger('change');
+            EOF, [$element, array_map('ord', str_split($fileContent)), $fileName]);
+    }
+
     // {{{ modal
 
     /**

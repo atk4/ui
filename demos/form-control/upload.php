@@ -62,15 +62,24 @@ $control->onDelete(function ($fileId) {
     ]);
 });
 
-$control->onUpload(function ($files) use ($form, $control) {
-    if ($files === 'error') {
+$control->onUpload(function ($postFile) use ($form, $control) {
+    if ($postFile['error'] !== 0) {
         return $form->error('file', 'Error uploading file.');
     }
     $control->setFileId('a_token');
 
+    $tmpFilePath = sys_get_temp_dir() . '/atk4-ui-upload-'
+        . hash('sha256', random_bytes(64) . microtime(true) . $postFile['tmp_name']) . '.bin';
+    try {
+        move_uploaded_file($postFile['tmp_name'], $tmpFilePath);
+        $data = file_get_contents($tmpFilePath);
+    } finally {
+        @unlink($tmpFilePath);
+    }
+
     return new \Atk4\Ui\JsToast([
         'title' => 'Upload success',
-        'message' => 'File is uploaded!',
+        'message' => 'File is uploaded! (name: ' . $postFile['name'] . ', md5: ' . md5($data) . ')',
         'class' => 'success',
     ]);
 });
