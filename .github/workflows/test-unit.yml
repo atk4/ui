@@ -286,43 +286,51 @@ jobs:
 
       - name: Install JS dependencies (only for Slow)
         if: matrix.type == 'Chrome Slow'
+        # remove git config --global --add safe.directory once https://github.com/actions/checkout/issues/766 is fixed
         run: |
+          mv public public.orig
+          mkdir public public/external
+          cp public.orig/.gitignore public
+          cp public.orig/agileui.less public
+          cp public.orig/logo.png public
+          cp public.orig/external/.gitignore public/external
+          cp public.orig/external/package.json public/external
+          cp public.orig/external/package-lock.json public/external
+          cp public.orig/external/postinstall.js public/external
           npm install --loglevel=error -g pug-cli less less-plugin-clean-css uglify-js
           (cd js && npm ci --loglevel=error)
+          (cd / && git config --global --add safe.directory "$GITHUB_WORKSPACE")
+          (cd public/external && npm ci --loglevel=error && git clean -dxfq .)
 
       - name: Lint JS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
-          (cd js && npm run lint)
+          (cd js && npm run lint ../public/external)
 
-      - name: Build/diff HTML files (only for Slow)
+      - name: Compile HTML files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
-          for f in $(find template demos -name '*.pug' -o -name '*.html'); do
-            fpug=${f/.[a-z]*/.pug}
-            fhtml=${fpug/.pug/.html}
-            mv "$fhtml" "$fhtml.orig"
-            pug --silent --pretty "$fpug"
-            diff "$fhtml.orig" "$fhtml"
-            rm "$fhtml.orig"
-          done
+          cp -r template template.orig
+          find template -not -type d -not -name '*.pug' -delete
+          (cd template && pug --silent --pretty .)
 
-      - name: Build/diff CSS files (only for Slow)
+      - name: Compile CSS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
-          mv public/agileui.css public/agileui.css.orig
           # prod: lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
           lessc public/agileui.less public/agileui.css
-          diff public/agileui.css.orig public/agileui.css
-          rm public/agileui.css.orig
 
-      - name: Build/diff JS files (only for Slow)
+      - name: Compile JS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
-          cp -r public public.orig && rm public/*.js
           (cd js && npm run build)
-          diff -qr public.orig public
-          rm -r public.orig
+
+      - name: Diff compiled files (only for Slow)
+        if: matrix.type == 'Chrome Slow'
+        run: |
+          diff -ru public.orig public
+          diff -ru template.orig template
+          rm -r public.orig template.orig
 
       - name: Install PHP dependencies
         run: |
