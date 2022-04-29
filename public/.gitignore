@@ -1,8 +1,9 @@
-*
+/*
 !/.gitignore
 !/agileui.less
-!/logo.png
 !/agileui.css
+!/logo.png
 !/atkjs-ui.min.js
 !/vendors.min.js
 !/atk-vue-*.min.js
+!/external/
