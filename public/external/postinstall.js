@@ -3,7 +3,7 @@ const path = require('path');
 
 const walkFilesSync = function (f, callback) {
     if (fs.lstatSync(f).isDirectory()) {
-        return fs.readdirSync(f).flatMap(f2 => walkFilesSync(path.join(f, f2), callback));
+        return fs.readdirSync(f).flatMap((f2) => walkFilesSync(path.join(f, f2), callback));
     }
 
     return [callback(f)];
@@ -18,8 +18,8 @@ const updateFileSync = function (f, callback) {
 };
 
 // normalize EOL of text files
-walkFilesSync(__dirname, function (f) {
-    updateFileSync(f, function (data) {
+walkFilesSync(__dirname, (f) => {
+    updateFileSync(f, (data) => {
         if (data.includes('\0') || f.match(/\.min\./)) {
             return;
         }
