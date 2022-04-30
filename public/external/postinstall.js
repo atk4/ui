@@ -47,17 +47,18 @@ walkFilesSync(__dirname, (f) => {
                 return m;
             }
 
-            const map = {
+            const pathMap = {
                 'https://twemoji.maxcdn.com/v/latest/svg/': path.join(__dirname, 'node_modules/twemoji/assets/svg/'),
             };
 
-            const mapKeys = Object.keys(map);
-            for (let i = 0; i < mapKeys.length; i++) {
-                const k = mapKeys[i];
+            const pathMapKeys = Object.keys(pathMap);
+            for (let i = 0; i < pathMapKeys.length; i++) {
+                const k = pathMapKeys[i];
                 if (m2.startsWith(k)) {
                     const kRel = m2.substring(k.length);
-                    const pathLocal = path.join(map[k], kRel);
+                    const pathLocal = path.join(pathMap[k], kRel);
                     const pathRel = path.relative(path.dirname(f), pathLocal);
+
                     return m1 + pathRel.replaceAll('\\', '/') + m3;
                 }
             }
