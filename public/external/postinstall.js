@@ -1,4 +1,5 @@
 const fs = require('fs');
+const https = require('https');
 const path = require('path');
 
 const walkFilesSync = function (f, callback) {
@@ -17,6 +18,19 @@ const updateFileSync = function (f, callback) {
     }
 };
 
+// download Fomantic-UI license
+// remove once https://github.com/fomantic/Fomantic-UI/issues/2356 is fixed and v2.9.0 is released
+https.get(
+    'https://raw.githubusercontent.com/fomantic/Fomantic-UI/2.8.8/LICENSE.md',
+    (response) => response.pipe(fs.createWriteStream(path.join(__dirname, 'node_modules/fomantic-ui-css/LICENSE.md')))
+);
+
+// copy non-minified JS to make it available from the same directory as the minified version
+fs.copyFileSync(
+    path.join(__dirname, 'node_modules/form-serializer/jquery.serialize-object.js'),
+    path.join(__dirname, 'node_modules/form-serializer/dist/jquery.serialize-object.js'),
+);
+
 // normalize EOL of text files
 walkFilesSync(__dirname, (f) => {
     updateFileSync(f, (data) => {
@@ -32,8 +46,3 @@ walkFilesSync(__dirname, (f) => {
         return data;
     });
 });
-
-fs.copyFileSync(
-    path.join(__dirname, 'node_modules/form-serializer/jquery.serialize-object.js'),
-    path.join(__dirname, 'node_modules/form-serializer/dist/jquery.serialize-object.js'),
-);
