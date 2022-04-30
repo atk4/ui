@@ -53,7 +53,11 @@ class App
     /** @var ExecutorFactory App wide executor factory object for Model user action. */
     protected $executorFactory;
 
-    /** @var string Version of Agile UI */
+    /**
+     * @var string Version of Agile UI
+     *
+     * @TODO remove, no longer needed for CDN versioning as we bundle them all
+     */
     public $version = '3.2-dev';
 
     /** @var string Name of application */
@@ -493,7 +497,7 @@ class App
 
         // Agile UI
         $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
-        $this->requireCss($this->cdn['atk'] . '/agileui.css');
+        $this->requireCss($this->cdn['atk'] . '/agileui.min.css');
 
         // Set js bundle dynamic loading path.
         $this->html->template->tryDangerouslySetHtml(

@@ -317,8 +317,7 @@ jobs:
       - name: Compile CSS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
-          # prod: lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
-          lessc public/agileui.less public/agileui.css
+          lessc public/agileui.less public/agileui.min.css --clean-css="--s1 --advanced" --source-map
 
       - name: Compile JS files (only for Slow)
         if: matrix.type == 'Chrome Slow'

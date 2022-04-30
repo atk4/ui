@@ -1,7 +1,8 @@
 /*
 !/.gitignore
 !/agileui.less
-!/agileui.css
+!/agileui.min.css
+!/agileui.min.css.map
 !/logo.png
 !/atkjs-ui.min.js
 !/vendors.min.js
