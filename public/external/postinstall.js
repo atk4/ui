@@ -96,6 +96,40 @@ walkFilesSync(path.join(__dirname, 'node_modules/fomantic-ui-css'), (f) => {
     });
 });
 
+// replace absolute URLs with relative paths
+walkFilesSync(__dirname, (f) => {
+    updateFileSync(f, (data) => {
+        if (data.includes('\0') || !f.endsWith('.css')) {
+            return;
+        }
+
+        data = data.replace(new RegExp(cssUrlPattern, 'g'), (m, m1, m2, m3) => {
+            if (!m2.startsWith('https://') && (!m2.startsWith('/') || m2.startsWith('//:'))) {
+                return m;
+            }
+
+            const map = {
+                'https://twemoji.maxcdn.com/v/latest/svg/': path.join(__dirname, 'node_modules/twemoji/assets/svg/'),
+            };
+
+            const mapKeys = Object.keys(map);
+            for (let i = 0; i < mapKeys.length; i++) {
+                const k = mapKeys[i];
+                if (m2.startsWith(k)) {
+                    const kRel = m2.substring(k.length);
+                    const pathLocal = path.join(map[k], kRel);
+                    const pathRel = path.relative(path.dirname(f), pathLocal);
+                    return m1 + pathRel.replaceAll('\\', '/') + m3;
+                }
+            }
+
+            throw new Error('URL "' + m2 + '" has no local file mapping');
+        });
+
+        return data;
+    });
+});
+
 // normalize EOL of text files
 walkFilesSync(__dirname, (f) => {
     updateFileSync(f, (data) => {
