@@ -5,9 +5,9 @@
 !/agileui.min.css.map
 !/logo.png
 !/atkjs-ui.min.js
-!/atkjs-ui.min.js.map
+# TODO not working with minified files !/atkjs-ui.min.js.map
 !/vendors.min.js
-!/vendors.min.js.map
+#!/vendors.min.js.map
 !/atk-vue-*.min.js
-!/atk-vue-*.min.js.map
+#!/atk-vue-*.min.js.map
 !/external/
