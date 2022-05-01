@@ -46,6 +46,67 @@ https.get(
 
 const cssUrlPattern = '((?<!\\w)url\\([\'"]?(?!data:))((?:[^(){}\\\\\'"]|\\\\.)*)([\'"]?\\))';
 
+// use native font stack in Fomantic UI
+// remove once https://github.com/fomantic/Fomantic-UI/issues/2355 is implemented and released
+walkFilesSync(path.join(__dirname, 'fomantic-ui-css'), (f) => {
+    updateFileSync(f, (data) => {
+        if (!f.endsWith('.css')) {
+            return;
+        }
+
+        data = data.replace(new RegExp('@import ' + cssUrlPattern + ';?', 'g'), (m, m1, m2, m3) => {
+            if (m2.startsWith('https://fonts.googleapis.com/css2?family=Lato:')) {
+                return '';
+            }
+
+            return m;
+        });
+
+        data = data.replace(/(font-family: *)([^{};]*)(;?)/g, (m, m1, m2, m3) => {
+            // based on https://github.com/twbs/bootstrap/blob/v5.1.3/scss/_variables.scss#L577
+            const fontFamilySansSerif = [
+                'system-ui',
+                '-apple-system',
+                '\'Segoe UI\'',
+                'Roboto',
+                '\'Helvetica Neue\'',
+                'Arial',
+                '\'Noto Sans\'',
+                '\'Liberation Sans\'',
+                'sans-serif',
+                '\'Apple Color Emoji\'',
+                '\'Segoe UI Emoji\'',
+                '\'Segoe UI Symbol\'',
+                '\'Noto Color Emoji\'',
+            ].join(f.match(/\.min\./) ? ',' : ', ');
+            // based on https://github.com/twbs/bootstrap/blob/v5.1.3/scss/_variables.scss#L578
+            const fontFamilySansMonospace = [
+                'SFMono-Regular',
+                'Menlo',
+                'Monaco',
+                'Consolas',
+                '\'Liberation Mono\'',
+                '\'Courier New\'',
+                'monospace',
+            ].join(f.match(/\.min\./) ? ',' : ', ');
+
+            if (m2.match(/(?<!\w)Lato(?!\w)/i)) {
+                return m1 + fontFamilySansSerif + m3;
+            }
+            if (m2.match(/(?<!\w)monospace(?!\w)/i)) {
+                return m1 + fontFamilySansMonospace + m3;
+            }
+            if (m2 === 'inherit' || !m2.includes(',') || m2 === fontFamilySansSerif) {
+                return m;
+            }
+
+            throw new Error('Font-family "' + m2 + '" has no mapping');
+        });
+
+        return data;
+    });
+});
+
 // remove links to fonts with format other than woff2 from Fomantic-UI
 walkFilesSync(path.join(__dirname, 'fomantic-ui-css'), (f) => {
     updateFileSync(f, (data) => {
@@ -82,10 +143,6 @@ walkFilesSync(__dirname, (f) => {
         }
 
         data = data.replace(new RegExp(cssUrlPattern, 'g'), (m, m1, m2, m3) => {
-            if (m2.startsWith('https://fonts.googleapis.com/css2?family=Lato:')) {
-                return m;
-            }
-
             let pathRel = null;
             if (m2.startsWith('http://') || m2.startsWith('https://') || m2.startsWith('//')) {
                 const pathMap = {
