@@ -14,18 +14,8 @@ cache
 *.cache
 *.cache.*
 
-/public/jquery
-/public/semantic
 /demos/db.php
 /demos/_demo-data/db.sqlite
 /demos/_demo-data/db.sqlite-journal
 /phpunit.xml
 /behat.yml
-
-package-lock.json
-!/js/package-lock.json
-
-/config.codekit
-*.bak
-*.codekit3
-yarn.lock
