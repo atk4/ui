@@ -286,7 +286,6 @@ jobs:
 
       - name: Install JS dependencies (only for Slow)
         if: matrix.type == 'Chrome Slow'
-        # remove git config --global --add safe.directory once https://github.com/actions/checkout/issues/766 is fixed
         run: |
           mv public public.orig
           mkdir public public/external
@@ -299,7 +298,6 @@ jobs:
           cp public.orig/external/postinstall.js public/external
           npm install --loglevel=error -g pug-cli less less-plugin-clean-css uglify-js
           (cd js && npm ci --loglevel=error)
-          (cd / && git config --global --add safe.directory "$GITHUB_WORKSPACE")
           (cd public/external && npm ci --loglevel=error && git clean -dxfq .)
 
       - name: Lint JS files (only for Slow)
