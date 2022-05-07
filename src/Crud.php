@@ -150,7 +150,7 @@ class Crud extends Grid
         if ($executor instanceof UserAction\ModalExecutor) {
             foreach ($this->onActions as $onAction) {
                 $executor->onHook(UserAction\ModalExecutor::HOOK_STEP, function ($ex, $step, $form) use ($onAction, $action) {
-                    $key = key($onAction);
+                    $key = array_key_first($onAction);
                     if ($key === $action->shortName && $step === 'fields') {
                         return $onAction[$key]($form, $ex);
                     }

@@ -344,7 +344,7 @@ class App
     {
         $arr = $this->normalizeHeaders([$name => $value]);
         $value = reset($arr);
-        $name = key($arr);
+        $name = array_key_first($arr);
 
         if ($value !== '') {
             $this->responseHeaders[$name] = $value;
