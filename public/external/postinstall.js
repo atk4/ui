@@ -103,6 +103,16 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui-css'), (f) => {
             throw new Error('Font-family "' + m2 + '" has no mapping');
         });
 
+        // change bold (700) font weight to 600 to match the original Lato font weight better
+        // see https://github.com/fomantic/Fomantic-UI/pull/2359#discussion_r867457881 discussion
+        data = data.replace(/(font-weight: *)([^{};]*)(;?)/g, (m, m1, m2, m3) => {
+            if (m2 === 'bold' || m2 === '700') {
+                return m1 + '600' + m3;
+            }
+
+            return m;
+        });
+
         return data;
     });
 });
