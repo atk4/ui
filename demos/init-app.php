@@ -72,10 +72,6 @@ try {
 [$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
 $demosUrl = $rootUrl . 'demos/';
 
-if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
-    $app->cdn['atk'] = $rootUrl . 'public';
-}
-
 // allow custom layout override
 $app->initLayout([!isset($_GET['layout']) ? \Atk4\Ui\Layout\Maestro::class : $app->stickyGet('layout')]);
 

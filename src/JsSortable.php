@@ -44,7 +44,7 @@ class JsSortable extends JsCallback
         if (!$this->view) {
             $this->view = $this->getOwner();
         }
-        $this->getApp()->requireJs('https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.5/lib/draggable.bundle.js');
+        $this->getApp()->requireJs('https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.12/lib/draggable.bundle.js');
 
         $this->view->js(true)->atkJsSortable([
             'uri' => $this->getJsUrl(),

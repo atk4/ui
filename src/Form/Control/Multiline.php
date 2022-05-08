@@ -52,11 +52,11 @@ use Atk4\Ui\View;
  *     $grand_total = 0;
  *     foreach ($rows as $row => $cols) {
  *         foreach ($cols as $col) {
- *             $fieldName = key($col);
- *                 if ($fieldName === 'total') {
- *                     $grand_total += $col[$fieldName];
- *                 }
- *          }
+ *             $fieldName = array_key_first($col);
+ *             if ($fieldName === 'total') {
+ *                 $grand_total += $col[$fieldName];
+ *             }
+ *         }
  *     }
  *
  *   return $form->js(true, null, 'input[name="grand_total"]')->val(number_format($grand_total, 2));

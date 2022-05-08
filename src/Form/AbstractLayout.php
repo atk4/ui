@@ -41,10 +41,8 @@ abstract class AbstractLayout extends \Atk4\Ui\View
             if (!$this->form->model->hasField($name)) {
                 $field = $this->form->model->getModel()->addField($name, $field);
             } else {
-                $existingField = $this->form->model->getField($name);
-
                 if (is_array($field)) {
-                    $field = $existingField->setDefaults($field);
+                    $field = $this->form->model->getField($name)->setDefaults($field);
                 } else {
                     throw (new Exception('Duplicate field'))
                         ->addMoreInfo('name', $name);
