@@ -12,7 +12,7 @@ require_once __DIR__ . '/../init-app.php';
 $form = Form::addTo($app);
 $img = $form->addControl('img', [Form\Control\UploadImage::class, ['defaultSrc' => '../images/default.png', 'placeholder' => 'Click to add an image.']]);
 // $img->set('a_new_token', 'an-img-file-name');
-// $img->setThumbnailSrc('./images/logo.png');
+// $img->setThumbnailSrc($app->cdn['atk'] . '/logo.png');
 
 $control = $form->addControl('file', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]]);
 
@@ -34,7 +34,7 @@ $img->onUpload(function ($postFile) use ($form, $img) {
         return $form->error('img', 'Error uploading image.');
     }
 
-    $img->setThumbnailSrc('./images/logo.png');
+    $img->setThumbnailSrc($img->getApp()->cdn['atk'] . '/logo.png');
     $img->set('123456', $postFile['name'] . ' (token: 123456)');
 
     // Do file processing here...

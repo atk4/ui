@@ -64,7 +64,7 @@ Image
 
 Image cannot be specified at the same time with the icon, but you can use PNG/GIF/JPG image on your label::
 
-    $img = 'https://raw.githubusercontent.com/atk4/ui/2.0.4/public/logo.png';
+    $img = $app->cdn['atk'] . '/logo.png';
     Label::addTo($app, ['Coded in PHP', 'image' => $img]);
 
 Detail

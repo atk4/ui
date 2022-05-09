@@ -613,7 +613,7 @@ The tag {$_id} is automatically replaced with a unique name by a View.
 There are more templates which are being substituted:
 
 - {page}logout{/} - will be replaced with relative URL to the page
-- {public}images/logo.png{/} - will replace with URL to a public asset
+- {public}logo.png{/} - will replace with URL to a public asset
 - {css}css/file.css{/} - will replace with URL link to a CSS file
 - {js}jquery.validator.js{/} - will replace with URL to JavaScript file
 
