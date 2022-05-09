@@ -497,6 +497,20 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
+     * @When I select file input :arg1 with :arg2 as :arg3
+     */
+    public function iSelectFile(string $inputName, string $fileContent, string $fileName): void
+    {
+        $element = $this->findElement(null, 'xpath(//input[@name="' . $inputName . '" and @type="hidden"]/following-sibling::input[@type="file"])');
+        $this->getSession()->executeScript(<<<'EOF'
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(new File([new Uint8Array(arguments[1])], arguments[2]));
+            arguments[0].files = dataTransfer.files;
+            $(arguments[0]).trigger('change');
+            EOF, [$element, array_map('ord', str_split($fileContent)), $fileName]);
+    }
+
+    /**
      * Generic ScopeBuilder rule with select operator and input value.
      *
      * @Then /^rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
