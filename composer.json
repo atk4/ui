@@ -54,7 +54,9 @@
     "homepage": "https://github.com/atk4/ui",
     "require": {
         "php": ">=7.4 <8.2",
-        "atk4/data": "dev-develop"
+        "atk4/data": "dev-develop",
+        "symfony/filesystem": "^4.4 || ^5.3",
+        "symfony/http-foundation": "^4.4 || ^5.3"
     },
     "require-release": {
         "php": ">=7.4 <8.2",
