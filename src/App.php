@@ -618,15 +618,19 @@ class App
 
     public function createRequestPathFromLocalPath(string $localPath): string
     {
-        if (\PHP_SAPI === 'cli') { // for phpunit
-            $requestUrlPath = '/';
-            $requestLocalPath = \Closure::bind(function () {
-                return dirname((new \Atk4\Core\ExceptionRenderer\Html(new \Exception()))->getVendorDirectory());
-            }, null, \Atk4\Core\ExceptionRenderer\Html::class)();
-        } else {
-            $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-            $requestUrlPath = $request->getBasePath();
-            $requestLocalPath = $request->server->get('SCRIPT_FILENAME');
+        static $requestUrlPath = null;
+        static $requestLocalPath = null;
+        if ($requestUrlPath === null) {
+            if (\PHP_SAPI === 'cli') { // for phpunit
+                $requestUrlPath = '/';
+                $requestLocalPath = \Closure::bind(function () {
+                    return dirname((new \Atk4\Core\ExceptionRenderer\Html(new \Exception()))->getVendorDirectory());
+                }, null, \Atk4\Core\ExceptionRenderer\Html::class)();
+            } else {
+                $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+                $requestUrlPath = $request->getBasePath();
+                $requestLocalPath = $request->server->get('SCRIPT_FILENAME');
+            }
         }
         $fs = new \Symfony\Component\Filesystem\Filesystem();
         $localPathRelative = $fs->makePathRelative($localPath, dirname($requestLocalPath));
