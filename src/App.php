@@ -151,6 +151,12 @@ class App
 
         $this->setupTemplateDirs();
 
+        foreach ($this->cdn as $k => $v) {
+            if (str_starts_with($v, '/') && !str_starts_with($v, '//')) {
+                $this->cdn[$k] = $this->createRequestPathFromLocalPath(__DIR__ . '/..' . $v);
+            }
+        }
+
         // Set our exception handler
         if ($this->catchExceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
@@ -610,7 +616,7 @@ class App
             ->addMoreInfo('templateDir', $this->templateDir);
     }
 
-    protected function getRequestUrl()
+    protected function getRequestUrl(): string
     {
         if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
             $request_uri = $_SERVER['HTTP_X_REWRITE_URL'];
@@ -625,6 +631,33 @@ class App
         $request_uri = explode('?', $request_uri, 2);
 
         return $request_uri[0];
+    }
+
+    protected function createRequestPathFromLocalPath(string $localPath): string
+    {
+        static $requestUrlPath = null;
+        static $requestLocalPath = null;
+        if ($requestUrlPath === null) {
+            if (\PHP_SAPI === 'cli') { // for phpunit
+                $requestUrlPath = '/';
+                $requestLocalPath = \Closure::bind(function () {
+                    return dirname((new \Atk4\Core\ExceptionRenderer\Html(new \Exception()))->getVendorDirectory());
+                }, null, \Atk4\Core\ExceptionRenderer\Html::class)();
+            } else {
+                $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+                $requestUrlPath = $request->getBasePath();
+                $requestLocalPath = $request->server->get('SCRIPT_FILENAME');
+            }
+        }
+        $fs = new \Symfony\Component\Filesystem\Filesystem();
+        $localPathRelative = $fs->makePathRelative($localPath, dirname($requestLocalPath));
+        $res = '/' . $fs->makePathRelative($requestUrlPath . '/' . $localPathRelative, '/');
+        // fix https://github.com/symfony/symfony/pull/40051
+        if (str_ends_with($res, '/') && !str_ends_with($localPath, '/')) {
+            $res = substr($res, 0, -1);
+        }
+
+        return $res;
     }
 
     /**
