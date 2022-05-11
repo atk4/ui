@@ -616,7 +616,24 @@ class App
             ->addMoreInfo('templateDir', $this->templateDir);
     }
 
-    public function createRequestPathFromLocalPath(string $localPath): string
+    protected function getRequestUrl(): string
+    {
+        if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
+            $request_uri = $_SERVER['HTTP_X_REWRITE_URL'];
+        } elseif (isset($_SERVER['REQUEST_URI'])) { // Apache
+            $request_uri = $_SERVER['REQUEST_URI'];
+        } elseif (isset($_SERVER['ORIG_PATH_INFO'])) { // IIS 5.0, PHP as CGI
+            $request_uri = $_SERVER['ORIG_PATH_INFO'];
+        // This one comes without QUERY string
+        } else {
+            $request_uri = '';
+        }
+        $request_uri = explode('?', $request_uri, 2);
+
+        return $request_uri[0];
+    }
+
+    protected function createRequestPathFromLocalPath(string $localPath): string
     {
         static $requestUrlPath = null;
         static $requestLocalPath = null;
@@ -641,23 +658,6 @@ class App
         }
 
         return $res;
-    }
-
-    protected function getRequestUrl(): string
-    {
-        if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
-            $request_uri = $_SERVER['HTTP_X_REWRITE_URL'];
-        } elseif (isset($_SERVER['REQUEST_URI'])) { // Apache
-            $request_uri = $_SERVER['REQUEST_URI'];
-        } elseif (isset($_SERVER['ORIG_PATH_INFO'])) { // IIS 5.0, PHP as CGI
-            $request_uri = $_SERVER['ORIG_PATH_INFO'];
-        // This one comes without QUERY string
-        } else {
-            $request_uri = '';
-        }
-        $request_uri = explode('?', $request_uri, 2);
-
-        return $request_uri[0];
     }
 
     /**
