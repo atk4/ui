@@ -994,9 +994,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\App::run\(\) has no return type specified\.$~'
         -
             path: 'src/App.php'
-            message: '~^Method Atk4\\Ui\\App::getRequestUrl\(\) has no return type specified\.$~'
-        -
-            path: 'src/App.php'
             message: '~^Method Atk4\\Ui\\App::stickyForget\(\) has no return type specified\.$~'
         -
             path: 'src/App.php'
