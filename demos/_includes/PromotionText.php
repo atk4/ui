@@ -28,14 +28,14 @@ class PromotionText extends \Atk4\Ui\View
                 HTML
         );
 
-        $gl = \Atk4\Ui\GridLayout::addTo($this, [null, 'stackable divided', 'columns' => 4]);
-        \Atk4\Ui\Button::addTo($gl, ['Explore UI components', 'primary basic fluid', 'iconRight' => 'right arrow'], ['r1c1'])
+        $gl = \Atk4\Ui\GridLayout::addTo($this, ['class.stackable divided' => true, 'columns' => 4]);
+        \Atk4\Ui\Button::addTo($gl, ['Explore UI components', 'class.primary basic fluid' => true, 'iconRight' => 'right arrow'], ['r1c1'])
             ->link('https://github.com/atk4/ui/#bundled-and-planned-components');
-        \Atk4\Ui\Button::addTo($gl, ['Try out interactive features', 'primary basic fluid', 'iconRight' => 'right arrow'], ['r1c2'])
+        \Atk4\Ui\Button::addTo($gl, ['Try out interactive features', 'class.primary basic fluid' => true, 'iconRight' => 'right arrow'], ['r1c2'])
             ->link(['interactive/tabs']);
-        \Atk4\Ui\Button::addTo($gl, ['Dive into Agile Data', 'primary basic fluid', 'iconRight' => 'right arrow'], ['r1c3'])
+        \Atk4\Ui\Button::addTo($gl, ['Dive into Agile Data', 'class.primary basic fluid' => true, 'iconRight' => 'right arrow'], ['r1c3'])
             ->link('https://git.io/ad');
-        \Atk4\Ui\Button::addTo($gl, ['More ATK Add-ons', 'primary basic fluid', 'iconRight' => 'right arrow'], ['r1c4'])
+        \Atk4\Ui\Button::addTo($gl, ['More ATK Add-ons', 'class.primary basic fluid' => true, 'iconRight' => 'right arrow'], ['r1c4'])
             ->link('https://github.com/atk4/ui/#add-ons-and-integrations');
 
         \Atk4\Ui\View::addTo($this, ['ui' => 'divider']);

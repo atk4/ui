@@ -37,6 +37,8 @@ class Link extends Table\Column
      * $url = $app->url(['example', 'type' => '123']);
      *
      * In addition to abpove "args" refer to values picked up from a current row.
+     *
+     * @var string|array
      */
     public $page;
 
@@ -53,6 +55,8 @@ class Link extends Table\Column
      *
      * You can also pass non-key arguments ['id', 'title'] and they will be added up
      * as ?id=4&title=John%20Smith
+     *
+     * @var array
      */
     public $args = [];
 
@@ -76,6 +80,9 @@ class Link extends Table\Column
     /** @var bool add download in the tag to force download from the url. */
     public $force_download = false;
 
+    /**
+     * @param string|array $page
+     */
     public function __construct($page = [], array $args = [], array $defaults = [])
     {
         if (is_array($page)) {

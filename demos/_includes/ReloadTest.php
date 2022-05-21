@@ -10,7 +10,7 @@ class ReloadTest extends \Atk4\Ui\View
     {
         parent::init();
 
-        $label = \Atk4\Ui\Label::addTo($this, ['Testing...', 'detail' => '', 'red']);
+        $label = \Atk4\Ui\Label::addTo($this, ['Testing...', 'detail' => '', 'class.red' => true]);
         $reload = new \Atk4\Ui\JsReload($this, [$this->name => 'ok']);
 
         if (isset($_GET[$this->name])) {

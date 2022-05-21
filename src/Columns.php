@@ -39,7 +39,7 @@ class Columns extends View
             $defaults = [$defaults];
         }
 
-        $size = $defaults[0];
+        $size = $defaults[0] ?? null;
         unset($defaults[0]);
 
         $column = Factory::factory([\Atk4\Ui\View::class], $defaults);

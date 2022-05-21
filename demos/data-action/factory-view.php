@@ -13,7 +13,7 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-Button::addTo($app, ['Executor Factory in App instance', 'small left floated basic blue', 'icon' => 'left arrow'])
+Button::addTo($app, ['Executor Factory in App instance', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['factory']);
 View::addTo($app, ['ui' => 'ui clearing divider']);
 

@@ -318,7 +318,7 @@ class Card extends View
             $this->addExtraContent(new View([$extra, 'ui' => 'ui basic fitted segment']));
         } else {
             foreach ($fields as $field) {
-                $this->addExtraContent(new View([$model->get($field), 'ui basic fitted segment']));
+                $this->addExtraContent(new View([$model->get($field), 'class.ui basic fitted segment' => true]));
             }
         }
     }

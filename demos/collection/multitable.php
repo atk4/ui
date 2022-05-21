@@ -55,7 +55,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
 
             $pushModel = $pushModel->ref($ref);
 
-            $table = \Atk4\Ui\Table::addTo($this->addColumn(), ['header' => false, 'very basic selectable'])->addStyle('cursor', 'pointer');
+            $table = \Atk4\Ui\Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
             $table->setModel($pushModel->setLimit(10), [$pushModel->title_field]);
 
             if ($selections) {
@@ -79,11 +79,11 @@ $model->setOrder([$model->fieldName()->is_folder => 'desc', $model->fieldName()-
 
 $vp = \Atk4\Ui\VirtualPage::addTo($app)->set(function (\Atk4\Ui\VirtualPage $vp) use ($model) {
     $model->importFromFilesystem('.');
-    \Atk4\Ui\Button::addTo($vp, ['Import Complete', 'big green fluid'])->link('multitable.php');
+    \Atk4\Ui\Button::addTo($vp, ['Import Complete', 'class.big green fluid' => true])->link('multitable.php');
     $vp->js(true)->closest('.modal')->find('.header')->remove();
 });
 
-\Atk4\Ui\Button::addTo($app, ['Re-Import From Filesystem', 'top attached'])->on('click', new \Atk4\Ui\JsModal('Now importing ... ', $vp));
+\Atk4\Ui\Button::addTo($app, ['Re-Import From Filesystem', 'class.top attached' => true])->on('click', new \Atk4\Ui\JsModal('Now importing ... ', $vp));
 
 $finderClass::addTo($app, ['bottom attached'])
     ->addClass('top attached segment')

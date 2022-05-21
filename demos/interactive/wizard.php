@@ -51,7 +51,7 @@ $wizard->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon'
     $columns = \Atk4\Ui\Columns::addTo($wizard);
 
     $grid = \Atk4\Ui\Grid::addTo($columns->addColumn(), ['paginator' => false, 'menu' => false]);
-    \Atk4\Ui\Message::addTo($columns->addColumn(), ['Information', 'info'])->text
+    \Atk4\Ui\Message::addTo($columns->addColumn(), ['Information', 'type' => 'info'])->text
         ->addParagraph('Selecting which model you would like to import into your DSN. If corresponding table already exist, we might add extra fields into it. No tables, columns or rows will be deleted.');
 
     $grid->setSource(['Country', 'Stat']);
@@ -92,5 +92,5 @@ $wizard->addStep(['Migration', 'description' => 'Create or update table', 'icon'
 // because you shouldn't be able to navigate wizard back without restarting it.
 // Only one finish can be added.
 $wizard->addFinish(function (Wizard $wizard) {
-    \Atk4\Ui\Header::addTo($wizard, ['You are DONE', 'huge centered']);
+    \Atk4\Ui\Header::addTo($wizard, ['You are DONE', 'class.huge centered' => true]);
 });

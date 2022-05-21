@@ -14,7 +14,7 @@ $menu->addItem(\Atk4\Ui\Layout\Centered::class);
 $menu->addItem(\Atk4\Ui\Layout\Admin::class);
 
 $menuRight = $layout->menuRight;
-$menuRight->addItem(['Warning', 'red', 'icon' => 'red warning']);
+$menuRight->addItem(['Warning', 'class.red' => true, 'icon' => 'red warning']);
 $menuUser = $menuRight->addMenu('John Smith');
 $menuUser->addItem('Profile');
 $menuUser->addDivider();

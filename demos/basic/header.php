@@ -14,7 +14,7 @@ $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'segment']);
 \Atk4\Ui\Header::addTo($seg, ['H2 Header', 'size' => 2]);
 \Atk4\Ui\Header::addTo($seg, ['H3 Header', 'size' => 3]);
 \Atk4\Ui\Header::addTo($seg, ['H4 Header', 'size' => 4]);
-\Atk4\Ui\Header::addTo($seg, ['H5 Header', 'size' => 5, 'dividing']);
+\Atk4\Ui\Header::addTo($seg, ['H5 Header', 'size' => 5, 'class.dividing' => true]);
 \Atk4\Ui\View::addTo($seg, ['element' => 'P'])->set('This is a following paragraph of text');
 
 \Atk4\Ui\Header::addTo($seg, ['H1', 'size' => 1, 'subHeader' => 'H1 subheader']);
@@ -27,7 +27,7 @@ $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'segment']);
 \Atk4\Ui\Header::addTo($seg, ['Small Header', 'size' => 'small']);
 \Atk4\Ui\Header::addTo($seg, ['Tiny Header', 'size' => 'tiny']);
 
-\Atk4\Ui\Header::addTo($seg, ['Sub Header', 'sub']);
+\Atk4\Ui\Header::addTo($seg, ['Sub Header', 'class.sub' => true]);
 
 $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'segment']);
 \Atk4\Ui\Header::addTo($seg, ['Header with icon', 'icon' => 'settings']);

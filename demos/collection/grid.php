@@ -30,7 +30,7 @@ if ($grid->stickyGet('no-ajax')) {
 
 $grid->menu->addItem(['Add Country', 'icon' => 'add square'], new \Atk4\Ui\JsExpression('alert(123)'));
 $grid->menu->addItem(['Re-Import', 'icon' => 'power'], new \Atk4\Ui\JsReload($grid));
-$grid->menu->addItem(['Delete All', 'icon' => 'trash', 'red active']);
+$grid->menu->addItem(['Delete All', 'icon' => 'trash', 'class.red active' => true]);
 
 $grid->addColumn(null, [\Atk4\Ui\Table\Column\Template::class, 'hello<b>world</b>']);
 

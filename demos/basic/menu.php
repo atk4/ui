@@ -22,7 +22,7 @@ $dropdown->onChange(function ($itemId) {
 
 $submenu = $menu->addMenu('Sub-menu');
 $submenu->addItem('one', 'one.php');
-$submenu->addItem(['two', 'label' => 'VIP', 'disabled']);
+$submenu->addItem(['two', 'label' => 'VIP', 'class.disabled' => true]);
 
 $submenu = $submenu->addMenu('Sub-menu');
 $submenu->addItem('one');

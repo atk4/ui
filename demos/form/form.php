@@ -157,7 +157,7 @@ $form->onSubmit(function (Form $form) {
     return 'somehow it did not crash';
 });
 
-\Atk4\Ui\Button::addTo($form, ['Modal Test', 'secondary'])->on('click', \Atk4\Ui\Modal::addTo($form)
+\Atk4\Ui\Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', \Atk4\Ui\Modal::addTo($form)
     ->set(function ($p) {
         $form = Form::addTo($p);
         $form->addControl('email');

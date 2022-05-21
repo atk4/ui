@@ -90,7 +90,7 @@ $tab = $tabs->addTab('composer update', function ($tab) {
     $message = \Atk4\Ui\Message::addTo($tab, ['This demo may not work', 'type' => 'warning']);
     $message->text->addParagraph('This demo requires you to have "bash" and "composer" installed and may display error if the process running PHP does not have write access to the "vendor" folder and "composer.*".');
 
-    $button = \Atk4\Ui\Button::addTo($message, ['I understand, proceed anyway', 'primary big']);
+    $button = \Atk4\Ui\Button::addTo($message, ['I understand, proceed anyway', 'class.primary big' => true]);
 
     $console = \Atk4\Ui\Console::addTo($tab, ['event' => false]);
     $console->exec('bash', ['-c', 'cd ../..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"']);

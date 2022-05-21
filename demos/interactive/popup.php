@@ -181,7 +181,7 @@ $cart->destroy();
 
 // Label now can be added referencing Cart's items. Init() was colled when I added it into app, so the
 // item property is populated.
-$cartOutterLabel = \Atk4\Ui\Label::addTo($cartItem, [count($cart->items), 'floating red ']);
+$cartOutterLabel = \Atk4\Ui\Label::addTo($cartItem, [count($cart->items), 'class.floating red' => true]);
 if (!$cart->items) {
     $cartOutterLabel->addStyle('display', 'none');
 }
@@ -195,7 +195,7 @@ $cartPopup->set(function ($popup) use ($cart) {
 
     $cartInnerLabel->detail = count($cart->items);
     \Atk4\Ui\Item::addTo($popup)->setElement('hr');
-    \Atk4\Ui\Button::addTo($popup, ['Checkout', 'primary small']);
+    \Atk4\Ui\Button::addTo($popup, ['Checkout', 'class.primary small' => true]);
 });
 
 // Add item shelf below menu and link it with the cart
@@ -231,7 +231,7 @@ $signup->set(function ($pop) {
     // contetn of the popup will be different depending on this condition.
     if (isset($_GET['logged'])) {
         \Atk4\Ui\Message::addTo($pop, ['You are already logged in as ' . $_GET['logged']]);
-        \Atk4\Ui\Button::addTo($pop, ['Logout', 'primary', 'icon' => 'sign out'])
+        \Atk4\Ui\Button::addTo($pop, ['Logout', 'class.primary' => true, 'icon' => 'sign out'])
             ->link($pop->getApp()->url());
     } else {
         $form = Form::addTo($pop);
@@ -257,7 +257,7 @@ $signup->set(function ($pop) {
 
 \Atk4\Ui\Header::addTo($app)->set('Specifying trigger');
 
-$button = \Atk4\Ui\Button::addTo($app, ['Click Me', 'primary']);
+$button = \Atk4\Ui\Button::addTo($app, ['Click Me', 'class.primary' => true]);
 
 $buttonPopup = Popup::addTo($app, [$button]);
 
