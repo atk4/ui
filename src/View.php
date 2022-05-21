@@ -91,9 +91,6 @@ class View extends AbstractView implements JsExpressionable
     public function __construct($label = [])
     {
         if (func_num_args() > 1) { // prevent bad usage
-            var_dump(func_get_args());
-            debug_print_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
-
             throw new \Error('Too many method arguments');
         }
 
