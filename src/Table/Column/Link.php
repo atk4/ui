@@ -76,16 +76,18 @@ class Link extends Table\Column
     /** @var bool add download in the tag to force download from the url. */
     public $force_download = false;
 
-    public function __construct($page = [], $args = [], $defaults = [])
+    public function __construct($page = [], array $args = [], array $defaults = [])
     {
         if (is_array($page)) {
             $page = ['page' => $page];
         } elseif (is_string($page)) {
             $page = ['url' => $page];
         }
+
         if ($args) {
             $page['args'] = $args;
         }
+
         parent::__construct(array_replace($defaults, $page));
     }
 
