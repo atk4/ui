@@ -79,7 +79,7 @@ $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
             \Atk4\Ui\Grid::addTo($right, ['menu' => false, 'ipp' => 5])
                 ->setModel(File::assertInstanceOf($this->getAction()->getModel())->SubFolder);
         } else {
-            \Atk4\Ui\Message::addTo($right, ['Not a folder', 'warning']);
+            \Atk4\Ui\Message::addTo($right, ['Not a folder', 'type' => 'warning']);
         }
 
         return $result;

@@ -65,7 +65,7 @@ Even if model not explicitly set (see section below) each form has an underlying
 
 	// or multiple fields
 	$form->model->set([
-		'name'	=> 'John',
+		'name' => 'John',
 		'email' => 'some@email.com',
 	]);
 
@@ -810,7 +810,7 @@ Hiding / Showing group of field
 Instead of defining rules for form controls individually you can hide/show entire group::
 
     $f_group = Form::addTo($app, ['class.segment' => true]);
-    Label::addTo($f_group, ['Work on form group too.', 'top attached'], ['AboveControls']);
+    Label::addTo($f_group, ['Work on form group too.', 'class.top attached' => true], ['AboveControls']);
 
     $g_basic = $f_group->addGroup(['Basic Information']);
     $g_basic->addControl('first_name', ['width' => 'eight']);

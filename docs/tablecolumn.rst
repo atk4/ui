@@ -194,7 +194,10 @@ If your column "status" can be one of the following "pending", "declined", "arch
 to use different icons and colors to emphasise status::
 
 
-    $states = [ 'positive' => ['paid', 'archived'], 'negative' => ['declined'] ];
+    $states = [
+        'positive' => ['paid', 'archived'],
+        'negative' => ['declined'],
+    ];
 
     $table->addColumn('status', new \Atk4\Ui\Table\Column\Status($states));
 

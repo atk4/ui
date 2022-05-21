@@ -54,7 +54,7 @@ which is described below. You can also provide first argument to addStep as a se
 You may also specify a single Finish callback, which will be used when wizard is complete::
 
     $wizard->addFinish(function ($wizard) {
-        Header::addTo($wizard, ['You are DONE', 'huge centered']);
+        Header::addTo($wizard, ['You are DONE', 'class.huge centered' => true]);
     });
 
 Properties

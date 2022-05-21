@@ -57,7 +57,7 @@ For more information about seeds, merging seeds, factories and namespaces, see h
 
 The most important points of a seed such as this one::
 
-    $seed = [Button::class, 'hello', 'big red', 'icon' => ['book', 'red']];
+    $seed = [Button::class, 'hello', 'class.big red' => true, 'icon' => ['book', 'red']];
 
 are:
 
@@ -71,13 +71,13 @@ Alternative ways to use Seed
 Some constructors may accept array as the first argument. It is also treated as a seed
 but without class (because class is already set)::
 
-    $button = new Button(['hello', 'big red', 'icon' => ['book', 'red']]);
+    $button = new Button(['hello', 'class.big red' => true, 'icon' => ['book', 'class.red' => true]]);
 
 It is alternatively possible to pass object as index 0 of the seed. In this case
 constructor is already invoked, so passing numeric values is not possible, but
 you still can pass some property values::
 
-    $seed = [new Button('hello', 'big red'), 'icon' => ['book', 'red']];
+    $seed = [new Button('hello', 'class.big red' => true), 'icon' => ['book', 'class.red' => true]];
 
 Additional cases
 ----------------

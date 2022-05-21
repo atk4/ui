@@ -159,7 +159,7 @@ Loader needs to occupy some space.
 By default it will display a white segment with 7em height, but you can specify any other view thorugh $shim
 property::
 
-    $loader = \Atk4\Ui\Loader::addTo($app, ['shim' => ['Message', 'Please wait until we load LoremIpsum...', 'red']]);
+    $loader = \Atk4\Ui\Loader::addTo($app, ['shim' => [\Atk4\Ui\Message::class, 'Please wait until we load LoremIpsum...', 'class.red' => true]]);
     $loader->set(function($p) {
 
         // Simulate slow-loading component

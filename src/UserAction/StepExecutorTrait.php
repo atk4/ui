@@ -470,7 +470,7 @@ trait StepExecutorTrait
         } catch (ValidationException $e) {
             throw $e;
         } catch (\Throwable $e) {
-            $msg = new Message('Error executing ' . $this->action->caption, 'red');
+            $msg = new Message(['Error executing ' . $this->action->caption, 'type' => 'error', 'class.red' => true]);
             $msg->invokeInit();
             $msg->text->content = $this->getApp()->renderExceptionHtml($e);
 

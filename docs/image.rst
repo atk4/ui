@@ -26,5 +26,5 @@ Specify classes
 You can pass additional classes to an image::
 
     $img = $app->cdn['atk'] . '/logo.png';
-    $icon = Image::addTo($app, [$img, 'disabled']);
+    $icon = Image::addTo($app, [$img, 'class.disabled' => true]);
 

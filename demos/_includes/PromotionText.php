@@ -40,7 +40,7 @@ class PromotionText extends \Atk4\Ui\View
 
         \Atk4\Ui\View::addTo($this, ['ui' => 'divider']);
 
-        \Atk4\Ui\Message::addTo($this, ['Cool fact!', 'info', 'icon' => 'book'])->text
+        \Atk4\Ui\Message::addTo($this, ['Cool fact!', 'type' => 'info', 'icon' => 'book'])->text
             ->addParagraph('This entire demo is coded in Agile Toolkit and takes up less than 300 lines of very simple code!');
     }
 }
