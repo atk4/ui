@@ -185,7 +185,7 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
         $modelRegister = new \Atk4\Data\Model(new Persistence\Array_());
         $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
-        $form = \Atk4\Ui\Form::addTo($modal, ['segment' => true]);
+        $form = \Atk4\Ui\Form::addTo($modal, ['class.segment' => true]);
         $form->setModel($modelRegister->createEntity());
 
         $form->onSubmit(function (\Atk4\Ui\Form $form) use ($nextAction, $session) {

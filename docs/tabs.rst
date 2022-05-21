@@ -66,7 +66,7 @@ Note that tab contents are refreshed including any values you put on the form::
         $m_register = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_($a));
         $m_register->addField('name', ['caption' => 'Please enter your name (John)']);
 
-        $form = Form::addTo($tab, ['segment' => true]);
+        $form = Form::addTo($tab, ['class.segment' => true]);
         $form->setModel($m_register);
         $form->onSubmit(function (Form $form) {
             if ($form->model->get('name') !== 'John') {
