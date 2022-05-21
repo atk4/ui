@@ -60,11 +60,7 @@ class KeyValue extends Table\Column
     {
         $values = $field->values;
 
-        if (!is_array($values)) {
-            throw new Exception('KeyValues Column need values in field definition');
-        }
-
-        if (count($values) === 0) {
+        if (!is_array($values) || count($values) === 0) {
             throw new Exception('KeyValues Column values must have elements');
         }
 
