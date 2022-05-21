@@ -60,7 +60,7 @@ class Wizard extends View
 
         // add buttons
         if ($this->currentStep) {
-            $this->buttonPrev = Button::addTo($this, ['Back', 'basic'], ['Left']);
+            $this->buttonPrev = Button::addTo($this, ['Back', 'class.basic' => true], ['Left']);
             $this->buttonPrev->link($this->getUrl($this->currentStep - 1));
         }
 

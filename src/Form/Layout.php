@@ -74,7 +74,7 @@ class Layout extends AbstractLayout
      */
     public function addHeader($label)
     {
-        \Atk4\Ui\Header::addTo($this, [$label, 'dividing', 'element' => 'h4']);
+        \Atk4\Ui\Header::addTo($this, [$label, 'class.dividing' => true, 'element' => 'h4']);
 
         return $this;
     }
