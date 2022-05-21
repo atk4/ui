@@ -17,6 +17,7 @@ class Session
 
     public function __construct(App $app)
     {
+        $this->name = 'demo';
         $this->setApp($app);
     }
 }

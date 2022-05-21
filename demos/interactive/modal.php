@@ -186,7 +186,7 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
         $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
         $form = \Atk4\Ui\Form::addTo($modal, ['segment' => true]);
-        $form->setModel($modelRegister);
+        $form->setModel($modelRegister->createEntity());
 
         $form->onSubmit(function (\Atk4\Ui\Form $form) use ($nextAction, $session) {
             if ($form->model->get('name') !== 'John') {
