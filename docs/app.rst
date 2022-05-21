@@ -92,8 +92,8 @@ active. (See :ref:`system_pattern`)::
             // Make sure user is valid
             if (!$this->user->isLoaded()) {
                 $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
-                Message::addTo($this, ['Login Required', 'error']);
-                Button::addTo($this, ['Login', 'primary'])->link('index.php');
+                Message::addTo($this, ['Login Required', 'type' => 'error']);
+                Button::addTo($this, ['Login', 'class.primary' => true])->link('index.php');
                 exit;
             }
 

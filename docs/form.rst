@@ -771,7 +771,7 @@ Here is a more advanced example::
 
     $f_sub = Form::addTo($app);
     $f_sub->addControl('name');
-    $f_sub->addControl('subscribe', [\Atk4\Ui\Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'toggle']);
+    $f_sub->addControl('subscribe', [\Atk4\Ui\Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'class.toggle' => true]);
     $f_sub->addControl('email');
     $f_sub->addControl('gender', [\Atk4\Ui\Form\Control\Radio::class], ['enum' => ['Female', 'Male']])->set('Female');
     $f_sub->addControl('m_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);

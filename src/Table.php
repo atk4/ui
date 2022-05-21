@@ -107,6 +107,10 @@ class Table extends Lister
 
     public function __construct(array $defaults = [])
     {
+        if (func_num_args() > 1) { // prevent bad usage
+            throw new \Error('Too many method arguments');
+        }
+
         parent::__construct($defaults); // TODO remove once parent::__construct() accepts only array
     }
 

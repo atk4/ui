@@ -14,7 +14,7 @@ require_once __DIR__ . '/../init-app.php';
 \Atk4\Ui\Header::addTo($app, ['Phone', 'size' => 2]);
 
 $formPhone = Form::addTo($app, ['class.segment' => true]);
-\Atk4\Ui\Label::addTo($formPhone, ['Add other phone field input. Note: phone1 required a number of at least 5 char.', 'top attached'], ['AboveControls']);
+\Atk4\Ui\Label::addTo($formPhone, ['Add other phone field input. Note: phone1 required a number of at least 5 char.', 'class.top attached' => true], ['AboveControls']);
 
 $formPhone->addControl('phone1');
 $formPhone->addControl('phone2');
@@ -36,7 +36,7 @@ $formSubscribe = Form::addTo($app, ['class.segment' => true]);
 \Atk4\Ui\Label::addTo($formSubscribe, ['Click on subscribe and add email to receive your gift.', 'top attached'], ['AboveControls']);
 
 $formSubscribe->addControl('name');
-$formSubscribe->addControl('subscribe', [Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'toggle']);
+$formSubscribe->addControl('subscribe', [Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'class.toggle' => true]);
 $formSubscribe->addControl('email');
 $formSubscribe->addControl('gender', [Form\Control\Radio::class], ['enum' => ['Female', 'Male']])->set('Female');
 $formSubscribe->addControl('m_gift', [Form\Control\Dropdown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);

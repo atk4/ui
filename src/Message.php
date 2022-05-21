@@ -17,7 +17,7 @@ namespace Atk4\Ui;
  */
 class Message extends View
 {
-    /** @var string Set to info | warning | error | success | positie | negative. */
+    /** @var string Set to info | warning | error | success | positive | negative. */
     public $type;
 
     /** @var Text|false Contains a text to be included below. */

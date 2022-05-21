@@ -52,6 +52,10 @@ class Column
 
     public function __construct(array $defaults = [])
     {
+        if (func_num_args() > 1) { // prevent bad usage
+            throw new \Error('Too many method arguments');
+        }
+
         $this->setDefaults($defaults);
     }
 

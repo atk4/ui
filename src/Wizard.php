@@ -64,8 +64,8 @@ class Wizard extends View
             $this->buttonPrev->link($this->getUrl($this->currentStep - 1));
         }
 
-        $this->buttonNext = Button::addTo($this, ['Next', 'primary'], ['Right']);
-        $this->buttonFinish = Button::addTo($this, ['Finish', 'primary'], ['Right']);
+        $this->buttonNext = Button::addTo($this, ['Next', 'class.primary' => true], ['Right']);
+        $this->buttonFinish = Button::addTo($this, ['Finish', 'class.primary' => true], ['Right']);
 
         $this->buttonNext->link($this->getUrl($this->currentStep + 1));
     }

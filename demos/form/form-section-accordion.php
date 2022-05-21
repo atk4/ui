@@ -58,7 +58,7 @@ $section2 = $sublayoutAccordion->addSection('Delivery address');
 $section2->addControl('delivery_address', []);
 
 // Terms field
-$form->addControl('term', [Form\Control\Checkbox::class, 'caption' => 'Accept terms and conditions', null, 'slider']);
+$form->addControl('term', [Form\Control\Checkbox::class, 'caption' => 'Accept terms and conditions', 'class.slider' => true]);
 
 $accordionLayout->activate($contactSection);
 
