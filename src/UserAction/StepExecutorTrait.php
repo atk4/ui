@@ -350,7 +350,7 @@ trait StepExecutorTrait
     {
         $this->btns = (new View())->addStyle(['min-height' => '24px']);
         $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
-        $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);
+        $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'class.blue' => true]);
         $this->execActionBtn = $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MODAL_BUTTON);
         $this->btns->add($this->execActionBtn);
 
@@ -470,7 +470,7 @@ trait StepExecutorTrait
         } catch (ValidationException $e) {
             throw $e;
         } catch (\Throwable $e) {
-            $msg = new Message('Error executing ' . $this->action->caption, 'red');
+            $msg = new Message(['Error executing ' . $this->action->caption, 'type' => 'error', 'class.red' => true]);
             $msg->invokeInit();
             $msg->text->content = $this->getApp()->renderExceptionHtml($e);
 

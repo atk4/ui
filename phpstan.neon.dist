@@ -1875,18 +1875,6 @@ parameters:
             path: 'src/Table/Column/KeyValue.php'
             message: '~^Property Atk4\\Ui\\Table\\Column\\KeyValue::\$values has no type specified\.$~'
         -
-            path: 'src/Table/Column/Link.php'
-            message: '~^Property Atk4\\Ui\\Table\\Column\\Link::\$page has no type specified\.$~'
-        -
-            path: 'src/Table/Column/Link.php'
-            message: '~^Property Atk4\\Ui\\Table\\Column\\Link::\$args has no type specified\.$~'
-        -
-            path: 'src/Table/Column/Link.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\Link::__construct\(\) has parameter \$args with no type specified\.$~'
-        -
-            path: 'src/Table/Column/Link.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\Link::__construct\(\) has parameter \$page with no type specified\.$~'
-        -
             path: 'src/Table/Column/Money.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\Money::getTagAttributes\(\) has parameter \$position with no type specified\.$~'
         -

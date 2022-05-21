@@ -217,7 +217,7 @@ As a final note in this section - you can re-use column objects multiple times::
     $table->addColumn($c_gap);
     $table->setModel(new Order($db), ['name', 'price', 'amount']);
     $table->addColumn($c_gap);
-    $table->addColumns(['total','status'])
+    $table->addColumns(['total', 'status'])
     $table->addColumn($c_gap);
 
 This will result in 3 gap columns rendered to the left, middle and right of your Table.

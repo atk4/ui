@@ -92,8 +92,8 @@ active. (See :ref:`system_pattern`)::
             // Make sure user is valid
             if (!$this->user->isLoaded()) {
                 $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
-                Message::addTo($this, ['Login Required', 'error']);
-                Button::addTo($this, ['Login', 'primary'])->link('index.php');
+                Message::addTo($this, ['Login Required', 'type' => 'error']);
+                Button::addTo($this, ['Login', 'class.primary' => true])->link('index.php');
                 exit;
             }
 
@@ -423,7 +423,7 @@ Populating the left menu object is simply a matter of adding the right menu item
 
 This is the top menu of the admin layout. You can add other item to the top menu using::
 
-    Button::addTo($layout->menu->addItem(), ['View Source', 'teal', 'icon' => 'github'])
+    Button::addTo($layout->menu->addItem(), ['View Source', 'class.teal' => true, 'icon' => 'github'])
         ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\JsExpression('document.location=[];', [$url . $f]));
 
 .. php:attr:: menuRight

@@ -19,7 +19,7 @@ if (isset($_GET['name'])) {
     \Atk4\Ui\Label::addTo($frame, ['Name:', 'detail' => $_GET['name'], 'black'])->link($frame->url());
 
     // app still generates URL without localized sticky
-    \Atk4\Ui\Label::addTo($frame, ['Reset', 'iconRight' => 'close', 'black'])->link($app->url());
+    \Atk4\Ui\Label::addTo($frame, ['Reset', 'iconRight' => 'close', 'class.black' => true])->link($app->url());
     \Atk4\Ui\View::addTo($frame, ['ui' => 'hidden divider']);
 
     // nested interractive elemetns will respect lockal sticky get

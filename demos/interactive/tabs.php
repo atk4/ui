@@ -41,12 +41,12 @@ $tabs->addTab('Modal popup', function ($tab) {
 
 // dynamic tab
 $tabs->addTab('Dynamic Form', function ($tab) {
-    \Atk4\Ui\Message::addTo($tab, ['It takes 2 seconds for this tab to load', 'warning']);
+    \Atk4\Ui\Message::addTo($tab, ['It takes 2 seconds for this tab to load', 'type' => 'warning']);
     sleep(2);
     $modelRegister = new \Atk4\Data\Model(new Persistence\Array_());
     $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
-    $form = \Atk4\Ui\Form::addTo($tab, ['segment' => true]);
+    $form = \Atk4\Ui\Form::addTo($tab, ['class.segment' => true]);
     $form->setModel($modelRegister->createEntity());
     $form->onSubmit(function (\Atk4\Ui\Form $form) {
         if ($form->model->get('name') !== 'John') {

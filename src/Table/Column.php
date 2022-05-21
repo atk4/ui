@@ -50,11 +50,12 @@ class Column
     /** @var array|null The tag value required for getTag when using an header action. */
     public $headerActionTag;
 
-    /**
-     * @param array $defaults
-     */
-    public function __construct($defaults = [])
+    public function __construct(array $defaults = [])
     {
+        if (func_num_args() > 1) { // prevent bad usage
+            throw new \Error('Too many method arguments');
+        }
+
         $this->setDefaults($defaults);
     }
 

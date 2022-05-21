@@ -65,7 +65,7 @@ class FilterPopup extends Popup
             return new jsReload($this->reload);
         });
 
-        \Atk4\Ui\Button::addTo($this->form, ['Clear', 'clear '])->on('click', function ($f) use ($model) {
+        \Atk4\Ui\Button::addTo($this->form, ['Clear', 'class.clear' => true])->on('click', function ($f) use ($model) {
             $model->clearData();
 
             return [

@@ -62,7 +62,7 @@ Here you can also specify seed for the image::
     Header::addTo($seg, [
         'Center-aligned header',
         'aligned' => 'center',
-        'image' => [$img, 'disabled'],
+        'image' => [$img, 'class.disabled' => true],
         'subHeader' => 'header with image',
     ]);
 

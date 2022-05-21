@@ -9,7 +9,7 @@ use Atk4\Ui\Form;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Nested accordions', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\Atk4\Ui\Button::addTo($app, ['Nested accordions', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['accordion-nested']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'clearing divider']);
 

@@ -157,7 +157,7 @@ $form->onSubmit(function (Form $form) {
     return 'somehow it did not crash';
 });
 
-\Atk4\Ui\Button::addTo($form, ['Modal Test', 'secondary'])->on('click', \Atk4\Ui\Modal::addTo($form)
+\Atk4\Ui\Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', \Atk4\Ui\Modal::addTo($form)
     ->set(function ($p) {
         $form = Form::addTo($p);
         $form->addControl('email');
@@ -201,7 +201,7 @@ $tab = $tabs->addTab('Layout Control');
 
 \Atk4\Ui\Header::addTo($tab, ['Shows example of grouping and multiple errors']);
 
-$form = Form::addTo($tab, ['segment']);
+$form = Form::addTo($tab, ['class.segment' => true]);
 $form->setModel((new \Atk4\Data\Model())->createEntity());
 
 $form->addHeader('Example fields added one-by-one');

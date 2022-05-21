@@ -228,7 +228,7 @@ Here are few ways to specify `icon` to an Input::
 
     // Type-hinting friendly
     $line = new \Atk4\Ui\Form\Control\Line();
-    $line->icon='search';
+    $line->icon = 'search';
     $page->add($line);
 
     // using class factory
@@ -239,13 +239,13 @@ be automatically substituted with `new Icon($icon)`. If you wish to be more spec
 and pass some arguments to the icon, there are two options::
 
     // compact
-    $line->icon=['search', 'big'];
+    $line->icon = ['search', 'class.big' => true];
 
     // Type-hinting friendly
     $line->icon = new Icon('search');
     $line->icon->addClass('big');
 
-To see how Icon interprets `new Icon(['search', 'big'])`, refer to :php:class:`Icon`.
+To see how Icon interprets `new Icon(['search', 'class.big' => true])`, refer to :php:class:`Icon`.
 
 .. note::
 

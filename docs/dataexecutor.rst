@@ -233,8 +233,8 @@ Example of changing button for Card, Crud and Modal executor globally within you
     {
         protected static $actionTriggerSeed = [
             self::MODAL_BUTTON => [
-                'edit' => [Button::class, 'Save', 'green'],
-                'add' => [Button::class, 'Save', 'green'],
+                'edit' => [Button::class, 'Save', 'class.green' => true],
+                'add' => [Button::class, 'Save', 'class.green' => true],
             ],
             self::TABLE_BUTTON => [
                 'edit' => [Button::class, null, 'icon' => 'pencil'],

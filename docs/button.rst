@@ -37,11 +37,11 @@ Button Icon
 
 Property $icon will place icon on your button and can be specified in one of the following two ways::
 
-    $button = Button::addTo($app, ['Like', 'blue', 'icon' => 'thumbs up']);
+    $button = Button::addTo($app, ['Like', 'class.blue' => true, 'icon' => 'thumbs up']);
 
     // or
 
-    $button = Button::addTo($app, ['Like', 'blue', 'icon' => new Icon('thumbs up')]);
+    $button = Button::addTo($app, ['Like', 'class.blue' => true, 'icon' => new Icon('thumbs up')]);
 
 or if you prefer initializing objects::
 
@@ -120,7 +120,7 @@ Knowledge of the Fomantic UI button (https://fomantic-ui.com/elements/button.htm
 in creating more complex buttons::
 
     $forks = new Button(['labeled' => true]); // Button, not Buttons!
-    Icon::addTo(Button::addTo($forks, ['Forks', 'blue']), ['fork']);
-    Label::addTo($forks, ['1,048', 'basic blue left pointing']);
+    Icon::addTo(Button::addTo($forks, ['Forks', 'class.blue' => true]), ['fork']);
+    Label::addTo($forks, ['1,048', 'class.basic blue left pointing' => true]);
     $app->add($forks);
 

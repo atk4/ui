@@ -35,7 +35,7 @@ $c = \Atk4\Ui\Columns::addTo($page);
 \Atk4\Ui\Header::addTo($page, ['Specifying widths, using rows or automatic flow']);
 
 // highlight class will show cells as boxes, even though they contain nothing
-$c = \Atk4\Ui\Columns::addTo($page, [null, 'highlight']);
+$c = \Atk4\Ui\Columns::addTo($page, ['class.highlight' => true]);
 $c->addColumn(3);
 $c->addColumn(5);
 $c->addColumn(2);
@@ -54,12 +54,12 @@ $r->addColumn();
 $c = \Atk4\Ui\Columns::addTo($page, ['internally celled']);
 
 $r = $c->addRow();
-\Atk4\Ui\Icon::addTo($r->addColumn([2, 'right aligned']), ['huge home']);
+\Atk4\Ui\Icon::addTo($r->addColumn([2, 'class.right aligned' => true]), ['huge home']);
 \Atk4\Ui\LoremIpsum::addTo($r->addColumn(12), [1]);
 \Atk4\Ui\Icon::addTo($r->addColumn(2), ['huge trash']);
 
 $r = $c->addRow();
-\Atk4\Ui\Icon::addTo($r->addColumn([2, 'right aligned']), ['huge home']);
+\Atk4\Ui\Icon::addTo($r->addColumn([2, 'class.right aligned' => true]), ['huge home']);
 \Atk4\Ui\LoremIpsum::addTo($r->addColumn(12), [1]);
 \Atk4\Ui\Icon::addTo($r->addColumn(2), ['huge trash']);
 
@@ -83,5 +83,5 @@ $boxClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk
 });
 
 $c = \Atk4\Ui\Columns::addTo($page, ['width' => 4]);
-$boxClass::addTo($c->addColumn(), [null, 'red']);
-$boxClass::addTo($c->addColumn([null, null, 'right floated']), [null, 'blue']);
+$boxClass::addTo($c->addColumn(), ['class.red' => true]);
+$boxClass::addTo($c->addColumn(['class.right floated' => true]), ['class.blue' => true]);

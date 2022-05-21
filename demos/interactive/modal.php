@@ -149,7 +149,7 @@ $stepModal->setOption('observeChanges', true);
 
 // Add buttons to modal for next and previous actions.
 $action = new \Atk4\Ui\View(['ui' => 'buttons']);
-$prevAction = new \Atk4\Ui\Button(['Prev', 'labeled', 'icon' => 'left arrow']);
+$prevAction = new \Atk4\Ui\Button(['Prev', 'class.labeled' => true, 'icon' => 'left arrow']);
 $nextAction = new \Atk4\Ui\Button(['Next', 'iconRight' => 'right arrow']);
 
 $action->add($prevAction);
@@ -185,8 +185,8 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
         $modelRegister = new \Atk4\Data\Model(new Persistence\Array_());
         $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
-        $form = \Atk4\Ui\Form::addTo($modal, ['segment' => true]);
-        $form->setModel($modelRegister);
+        $form = \Atk4\Ui\Form::addTo($modal, ['class.segment' => true]);
+        $form->setModel($modelRegister->createEntity());
 
         $form->onSubmit(function (\Atk4\Ui\Form $form) use ($nextAction, $session) {
             if ($form->model->get('name') !== 'John') {

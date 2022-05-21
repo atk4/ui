@@ -57,7 +57,7 @@ $model->onHook(\Atk4\Data\Model::HOOK_VALIDATE, function (Country $model, $inten
 $crud->setModel($model);
 
 // Because Crud inherits Grid, you can also define custom actions
-$crud->addModalAction(['icon' => [\Atk4\Ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($crud) {
+$crud->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($crud) {
     $model = Country::assertInstanceOf($crud->model);
     \Atk4\Ui\Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $id . ')']);
 });
@@ -79,7 +79,7 @@ $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
             \Atk4\Ui\Grid::addTo($right, ['menu' => false, 'ipp' => 5])
                 ->setModel(File::assertInstanceOf($this->getAction()->getModel())->SubFolder);
         } else {
-            \Atk4\Ui\Message::addTo($right, ['Not a folder', 'warning']);
+            \Atk4\Ui\Message::addTo($right, ['Not a folder', 'type' => 'warning']);
         }
 
         return $result;

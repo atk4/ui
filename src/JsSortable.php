@@ -26,7 +26,7 @@ class JsSortable extends JsCallback
 
     /**
      * The css class name of the handle element for dragging purpose.
-     *   if null, the entire element become the dragging handle.
+     * If null, the entire element become the dragging handle.
      *
      * @var string|null
      */

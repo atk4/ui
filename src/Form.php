@@ -27,8 +27,6 @@ class Form extends View
     /** @const string Executed when self::loadPost() method is called. */
     public const HOOK_LOAD_POST = self::class . '@loadPost';
 
-    // {{{ Properties
-
     public $ui = 'form';
     public $defaultTemplate = 'form.html';
 
@@ -77,7 +75,7 @@ class Form extends View
      *
      * @var Button|array|false Button object, seed or false to not show button at all
      */
-    public $buttonSave = [Button::class, 'Save', 'primary'];
+    public $buttonSave = [Button::class, 'Save', 'class.primary' => true];
 
     /**
      * When form is submitted successfully, this template is used by method
@@ -129,29 +127,7 @@ class Form extends View
     /** @var array Use this formConfig variable to pass settings to Semantic UI in .from(). */
     public $formConfig = [];
 
-    // }}}
-
     // {{{ Base Methods
-
-    /**
-     * @param mixed $defaults CSS class or seed array
-     *
-     * @todo this should also call parent::__construct, but we have to refactor View::__construct method parameters too
-     */
-    public function __construct($defaults = [])
-    {
-        if (!is_array($defaults)) {
-            $defaults = [$defaults];
-        }
-
-        // CSS class
-        if (array_key_exists(0, $defaults)) {
-            $this->addClass($defaults[0]);
-            unset($defaults[0]);
-        }
-
-        $this->setDefaults($defaults);
-    }
 
     protected function init(): void
     {

@@ -31,23 +31,23 @@ columns. This seem like a limitation of Fomantic UI::
 
     $c = Columns::addTo($page, ['width' => 4]);
     Box::addTo($c->addColumn(), ['red']);
-    Box::addTo($c->addColumn([null, 'right floated']), ['blue']);
+    Box::addTo($c->addColumn(['class.right floated' => true]), ['blue']);
 
 Rows
 ----
 
 When you add columns for a total width which is more than permitted, columns will stack below and form a second
-row. To improve and controll the flow of rows better, you can specify addRow()::
+row. To improve and control the flow of rows better, you can specify addRow()::
 
-    $c = Columns::addTo($page, ['internally celled']);
+    $c = Columns::addTo($page, ['class.internally celled' => true]);
 
     $r = $c->addRow();
-    Icon::addTo($r->addColumn([2, 'right aligned']), ['huge home']);
+    Icon::addTo($r->addColumn([2, 'class.right aligned' => true]), ['huge home']);
     LoremIpsum::addTo($r->addColumn(12), [1]);
     Icon::addTo($r->addColumn(2), ['huge trash']);
 
     $r = $c->addRow();
-    Icon::addTo($r->addColumn([2, 'right aligned']), ['huge home']);
+    Icon::addTo($r->addColumn([2, 'class.right aligned' => true]), ['huge home']);
     LoremIpsum::addTo($r->addColumn(12), [1]);
     Icon::addTo($r->addColumn(2), ['huge trash']);
 

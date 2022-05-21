@@ -106,16 +106,6 @@ class Table extends Lister
     public $hasCollapsingCssActionColumn = true;
 
     /**
-     * @param string|null $class CSS class to add
-     */
-    public function __construct($class = null)
-    {
-        if ($class) {
-            $this->addClass($class);
-        }
-    }
-
-    /**
      * initChunks method will create one column object that will be used to render
      * all columns in the table unless you have specified a different
      * column object.

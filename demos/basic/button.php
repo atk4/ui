@@ -26,17 +26,17 @@ $app->add($b1);
 $b1->link(['index']);
 
 \Atk4\Ui\Header::addTo($app, ['Properties', 'size' => 2]);
-Button::addTo($app, ['Primary button', 'primary']);
-Button::addTo($app, ['Load', 'labeled', 'icon' => 'pause']);
+Button::addTo($app, ['Primary button', 'class.primary' => true]);
+Button::addTo($app, ['Load', 'class.labeled' => true, 'icon' => 'pause']);
 Button::addTo($app, ['Next', 'iconRight' => 'right arrow']);
-Button::addTo($app, [null, 'circular', 'icon' => 'settings']);
+Button::addTo($app, ['class.circular' => true, 'icon' => 'settings']);
 
 \Atk4\Ui\Header::addTo($app, ['Big Button', 'size' => 2]);
-Button::addTo($app, ['Click me', 'big primary', 'icon' => 'check']);
+Button::addTo($app, ['Click me', 'class.big primary' => true, 'icon' => 'check']);
 
 \Atk4\Ui\Header::addTo($app, ['Button Intent', 'size' => 2]);
-Button::addTo($app, ['Yes', 'positive basic']);
-Button::addTo($app, ['No', 'negative basic']);
+Button::addTo($app, ['Yes', 'class.positive basic' => true]);
+Button::addTo($app, ['No', 'class.negative basic' => true]);
 
 \Atk4\Ui\Header::addTo($app, ['Combining Buttons', 'size' => 2]);
 
@@ -59,9 +59,9 @@ Button::addTo($bar, ['icon' => 'upload', 'class.disabled' => true]);
 $forkButtonClass = AnonymousClassNameCache::get_class(fn () => new class(0) /* need 0 argument here for constructor */ extends Button {
     public function __construct($n)
     {
-        Icon::addTo(Button::addTo($this, ['Forks', 'blue']), ['fork']);
-        Label::addTo($this, [number_format($n), 'basic blue left pointing']);
-        parent::__construct(null, 'labeled');
+        Icon::addTo(Button::addTo($this, ['Forks', 'class.blue' => true]), ['fork']);
+        Label::addTo($this, [number_format($n), 'class.basic blue left pointing' => true]);
+        parent::__construct(['class.labeled' => true]);
     }
 });
 
@@ -73,11 +73,11 @@ $app->add($forkButton);
 $view = \Atk4\Ui\View::addTo($app, ['template' => new HtmlTemplate('Hello, {$tag1}, my name is {$tag2}')]);
 
 Button::addTo($view, ['World'], ['tag1']);
-Button::addTo($view, ['Agile UI', 'blue'], ['tag2']);
+Button::addTo($view, ['Agile UI', 'class.blue' => true], ['tag2']);
 
 \Atk4\Ui\Header::addTo($app, ['Attaching', 'size' => 2]);
 
-Button::addTo($app, ['Previous', 'top attached']);
-\Atk4\Ui\Table::addTo($app, ['attached', 'header' => false])
+Button::addTo($app, ['Previous', 'class.top attached' => true]);
+\Atk4\Ui\Table::addTo($app, ['class.attached' => true, 'header' => false])
     ->setSource(['One', 'Two', 'Three', 'Four']);
-Button::addTo($app, ['Next', 'bottom attached']);
+Button::addTo($app, ['Next', 'class.bottom attached' => true]);
