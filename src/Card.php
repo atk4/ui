@@ -190,7 +190,7 @@ class Card extends View
 
         $this->setDataId($this->model->getId());
 
-        View::addTo($this->getSection(), [$model->getTitle(), ['class' => 'header']]);
+        View::addTo($this->getSection(), [$model->getTitle(), 'class.header' => true]);
         $this->getSection()->addFields($model, $fields, $this->useLabel, $this->useTable);
     }
 
@@ -240,7 +240,7 @@ class Card extends View
     {
         $section = CardSection::addToWithCl($this, [$this->cardSection, 'card' => $this], ['Section']);
         if ($title) {
-            View::addTo($section, [$title, ['class' => 'header']]);
+            View::addTo($section, [$title, 'class.header' => true]);
         }
 
         if ($model && $fields) {
