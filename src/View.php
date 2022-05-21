@@ -90,19 +90,16 @@ class View extends AbstractView implements JsExpressionable
      */
     public function __construct($label = [])
     {
+        if (func_num_args() > 1) { // prevent bad usage
+            throw new \Error('Too many method arguments');
+        }
+
         $defaults = is_array($label) ? $label : [$label];
         unset($label);
 
         if (array_key_exists(0, $defaults)) {
             $defaults['content'] = $defaults[0];
             unset($defaults[0]);
-        }
-
-        // @TODO func_num_args() > 1!!!!
-        if (func_num_args() > 2 || count(array_filter($defaults, 'is_int', \ARRAY_FILTER_USE_KEY)) > 0) { // prevent bad usage
-            var_dump(func_get_args());
-
-            throw new \Error('Too many method arguments');
         }
 
         $this->setDefaults($defaults);
