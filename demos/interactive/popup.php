@@ -178,6 +178,7 @@ $cart = $cartClass::addTo($app);
 // If i add unset($cart) afterwards, garbage collector will trigger destructor. Instead I'm passing $cart
 // into the callback and making it part of the pop-up render tree.
 $cart->destroy();
+$cart->setApp($app);
 
 // Label now can be added referencing Cart's items. Init() was colled when I added it into app, so the
 // item property is populated.
