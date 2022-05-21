@@ -391,21 +391,8 @@ class View extends AbstractView implements JsExpressionable
      */
     public function addClass($class)
     {
-        if (is_array($class)) {
-            $class = implode(' ', $class);
-        }
-
-        if (!$this->class) {
-            $this->class = [];
-        }
-
-        if (is_string($this->class)) {
-            throw (new Exception('Property $class should always be array'))
-                ->addMoreInfo('object', $this)
-                ->addMoreInfo('class', $this->class);
-        }
-
-        $this->class = array_merge($this->class, explode(' ', $class));
+        $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
+        $this->class = array_merge($this->class, $classArr);
 
         return $this;
     }
@@ -413,18 +400,14 @@ class View extends AbstractView implements JsExpressionable
     /**
      * Remove one or several CSS classes from the element.
      *
-     * @param array|string $class CSS class name or array of class names
+     * @param string|array $class CSS class name or array of class names
      *
      * @return $this
      */
     public function removeClass($class)
     {
-        if (is_array($class)) {
-            $class = implode(' ', $class);
-        }
-
-        $class = explode(' ', $class);
-        $this->class = array_diff($this->class, $class);
+        $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
+        $this->class = array_diff($this->class, $classArr);
 
         return $this;
     }
