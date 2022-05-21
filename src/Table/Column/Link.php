@@ -98,18 +98,6 @@ class Link extends Table\Column
         parent::__construct(array_replace($defaults, $page));
     }
 
-    public function setDefaults(array $properties, bool $passively = false)
-    {
-        if (isset($properties[0])) {
-            $this->page = array_shift($properties);
-        }
-        if (isset($properties[0])) {
-            $this->args = array_shift($properties);
-        }
-
-        return parent::setDefaults($properties);
-    }
-
     protected function init(): void
     {
         parent::init();
