@@ -105,14 +105,9 @@ class Table extends Lister
      */
     public $hasCollapsingCssActionColumn = true;
 
-    /**
-     * @param string|null $class CSS class to add
-     */
-    public function __construct($class = null)
+    public function __construct(array $defaults = [])
     {
-        if ($class) {
-            $this->addClass($class);
-        }
+        parent::__construct($defaults); // TODO remove once parent::__construct() accepts only array
     }
 
     /**
