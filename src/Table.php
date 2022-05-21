@@ -105,15 +105,6 @@ class Table extends Lister
      */
     public $hasCollapsingCssActionColumn = true;
 
-    public function __construct(array $defaults = [])
-    {
-        if (func_num_args() > 1) { // prevent bad usage
-            throw new \Error('Too many method arguments');
-        }
-
-        parent::__construct($defaults); // TODO remove once parent::__construct() accepts only array
-    }
-
     /**
      * initChunks method will create one column object that will be used to render
      * all columns in the table unless you have specified a different

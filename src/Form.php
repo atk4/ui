@@ -27,8 +27,6 @@ class Form extends View
     /** @const string Executed when self::loadPost() method is called. */
     public const HOOK_LOAD_POST = self::class . '@loadPost';
 
-    // {{{ Properties
-
     public $ui = 'form';
     public $defaultTemplate = 'form.html';
 
@@ -129,18 +127,7 @@ class Form extends View
     /** @var array Use this formConfig variable to pass settings to Semantic UI in .from(). */
     public $formConfig = [];
 
-    // }}}
-
     // {{{ Base Methods
-
-    public function __construct(array $defaults = [])
-    {
-        if (func_num_args() > 1) { // prevent bad usage
-            throw new \Error('Too many method arguments');
-        }
-
-        parent::__construct($defaults); // TODO remove once parent::__construct() accepts only array
-    }
 
     protected function init(): void
     {
