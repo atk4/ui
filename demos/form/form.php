@@ -201,7 +201,7 @@ $tab = $tabs->addTab('Layout Control');
 
 \Atk4\Ui\Header::addTo($tab, ['Shows example of grouping and multiple errors']);
 
-$form = Form::addTo($tab, ['segment']);
+$form = Form::addTo($tab, ['class.segment' => true]);
 $form->setModel((new \Atk4\Data\Model())->createEntity());
 
 $form->addHeader('Example fields added one-by-one');

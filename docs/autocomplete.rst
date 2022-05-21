@@ -67,7 +67,7 @@ In 1.6 we have introduced Lookup form control, which is identical to AutoComplet
 use of Filters::
 
 
-    $form = \Atk4\Ui\Form::addTo($app, ['segment']);
+    $form = \Atk4\Ui\Form::addTo($app, ['class.segment' => true]);
     \Atk4\Ui\Label::addTo($form, ['Add city', 'top attached'], ['AboveControls']);
 
     $l = $form->addControl('city',[\Atk4\Ui\Form\Control\Lookup::class]);

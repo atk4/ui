@@ -718,7 +718,7 @@ Fomantic UI Modifiers
 There are many other classes Fomantic UI allow you to use on a form. The next code will produce
 form inside a segment (outline) and will make form controls appear smaller::
 
-    $form = new \Atk4\Ui\Form(['small segment']));
+    $form = new \Atk4\Ui\Form(['class.small segment' => true]));
 
 For further styling see documentation on :php:class:`View`.
 
@@ -809,7 +809,7 @@ Hiding / Showing group of field
 
 Instead of defining rules for form controls individually you can hide/show entire group::
 
-    $f_group = Form::addTo($app, ['segment']);
+    $f_group = Form::addTo($app, ['class.segment' => true]);
     Label::addTo($f_group, ['Work on form group too.', 'top attached'], ['AboveControls']);
 
     $g_basic = $f_group->addGroup(['Basic Information']);

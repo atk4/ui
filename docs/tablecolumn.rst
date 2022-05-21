@@ -116,7 +116,7 @@ is responsible for rendering of the TH box. If you are adding column manually, :
 will return it. When using model, use :php:meth:`Atk4\\Ui\\Table::getColumnDecorators`::
 
 
-    $table = Table::addTo($app, ['celled' => true]);
+    $table = Table::addTo($app, ['class.celled' => true]);
     $table->setModel(new Country($app->db));
 
     $name_column = $table->getColumnDecorators('name');
@@ -127,7 +127,7 @@ will return it. When using model, use :php:meth:`Atk4\\Ui\\Table::getColumnDecor
 You may also use :php:meth:`Atk4\\Ui\\Popup::set` method to dynamically load the content::
 
 
-    $table = Table::addTo($app, ['celled' => true]);
+    $table = Table::addTo($app, ['class.celled' => true]);
     $table->setModel(new Country($app->db));
 
     $name_column = $table->getColumnDecorators('name');

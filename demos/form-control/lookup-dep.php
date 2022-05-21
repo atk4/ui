@@ -11,7 +11,7 @@ require_once __DIR__ . '/../init-app.php';
 
 \Atk4\Ui\Header::addTo($app, ['Lookup dependency']);
 
-$form = Form::addTo($app, ['segment']);
+$form = Form::addTo($app, ['class.segment' => true]);
 \Atk4\Ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveControls']);
 
 $form->addControl('starts_with', [
@@ -52,7 +52,7 @@ $form->onSubmit(function (Form $form) {
 
 \Atk4\Ui\Header::addTo($app, ['Lookup multiple values']);
 
-$form = Form::addTo($app, ['segment']);
+$form = Form::addTo($app, ['class.segment' => true]);
 \Atk4\Ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveControls']);
 
 $form->addControl('ends_with', [

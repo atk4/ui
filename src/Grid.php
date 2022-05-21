@@ -132,7 +132,7 @@ class Grid extends View
     protected function initTable(): Table
     {
         /** @var Table */
-        $table = $this->container->add(Factory::factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
+        $table = $this->container->add(Factory::factory([Table::class, 'class.very compact very basic striped single line' => true, 'reload' => $this->container], $this->table), 'Table');
 
         return $table;
     }

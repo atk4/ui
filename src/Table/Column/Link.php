@@ -17,7 +17,7 @@ use Atk4\Ui\Table;
  * or
  *   new Link(['order', 'id' ]);
  * or
- *   new Link([['order', 'x' => $myval], 'id' ]);.
+ *   new Link([['order', 'x' => $myval], 'id']);.
  */
 class Link extends Table\Column
 {

@@ -16,7 +16,7 @@ Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 
     ->setModel(new Country($app->db));
 
 // create form
-$form = Form::addTo($app, ['segment']);
+$form = Form::addTo($app, ['class.segment' => true]);
 \Atk4\Ui\Label::addTo($form, ['Lookup countries', 'top attached'], ['AboveControls']);
 
 $model = new \Atk4\Data\Model($app->db, ['table' => 'test']);

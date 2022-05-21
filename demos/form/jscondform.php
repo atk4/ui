@@ -13,7 +13,7 @@ require_once __DIR__ . '/../init-app.php';
 
 \Atk4\Ui\Header::addTo($app, ['Phone', 'size' => 2]);
 
-$formPhone = Form::addTo($app, ['segment']);
+$formPhone = Form::addTo($app, ['class.segment' => true]);
 \Atk4\Ui\Label::addTo($formPhone, ['Add other phone field input. Note: phone1 required a number of at least 5 char.', 'top attached'], ['AboveControls']);
 
 $formPhone->addControl('phone1');
@@ -32,7 +32,7 @@ $formPhone->setControlsDisplayRules([
 
 \Atk4\Ui\Header::addTo($app, ['Optional subscription', 'size' => 2]);
 
-$formSubscribe = Form::addTo($app, ['segment']);
+$formSubscribe = Form::addTo($app, ['class.segment' => true]);
 \Atk4\Ui\Label::addTo($formSubscribe, ['Click on subscribe and add email to receive your gift.', 'top attached'], ['AboveControls']);
 
 $formSubscribe->addControl('name');
@@ -56,7 +56,7 @@ $formSubscribe->setControlsDisplayRules([
 
 \Atk4\Ui\Header::addTo($app, ['Dog registration', 'size' => 2]);
 
-$formDog = Form::addTo($app, ['segment']);
+$formDog = Form::addTo($app, ['class.segment' => true]);
 \Atk4\Ui\Label::addTo($formDog, ['You can select type of hair cut only with race that contains "poodle" AND age no more than 5 year OR your dog race equals "bichon".', 'top attached'], ['AboveControls']);
 $formDog->addControl('race', [Form\Control\Line::class]);
 $formDog->addControl('age');
@@ -73,7 +73,7 @@ $formDog->setControlsDisplayRules([
 
 \Atk4\Ui\Header::addTo($app, ['Hide or show group', 'size' => 2]);
 
-$formGroup = Form::addTo($app, ['segment']);
+$formGroup = Form::addTo($app, ['class.segment' => true]);
 \Atk4\Ui\Label::addTo($formGroup, ['Work on form group too.', 'top attached'], ['AboveControls']);
 
 $groupBasic = $formGroup->addGroup(['Basic Information']);
@@ -103,7 +103,7 @@ $formGroup->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language' => [
 /*
 \Atk4\Ui\Header::addTo($app, ['Hide or show accordion section', 'size' => 2]);
 
-$f_acc = Form::addTo($app, ['segment']);
+$f_acc = Form::addTo($app, ['class.segment' => true]);
 \Atk4\Ui\Label::addTo($f_acc, ['Work on section layouts too.', 'top attached'], ['AboveControls']);
 
 // Accordion

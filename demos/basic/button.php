@@ -78,6 +78,6 @@ Button::addTo($view, ['Agile UI', 'blue'], ['tag2']);
 \Atk4\Ui\Header::addTo($app, ['Attaching', 'size' => 2]);
 
 Button::addTo($app, ['Previous', 'top attached']);
-\Atk4\Ui\Table::addTo($app, ['attached', 'header' => false])
+\Atk4\Ui\Table::addTo($app, ['class.attached' => true, 'header' => false])
     ->setSource(['One', 'Two', 'Three', 'Four']);
 Button::addTo($app, ['Next', 'bottom attached']);

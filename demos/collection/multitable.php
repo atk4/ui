@@ -21,7 +21,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
         $this->addClass('internally celled');
 
         // lets add our first table here
-        $table = \Atk4\Ui\Table::addTo($this->addColumn(), ['header' => false, 'very basic selectable'])->addStyle('cursor', 'pointer');
+        $table = \Atk4\Ui\Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
         $table->setModel($model, [$model->title_field]);
 
         $selections = explode(',', $_GET[$this->name] ?? '');
