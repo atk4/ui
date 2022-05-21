@@ -64,9 +64,6 @@ class Card extends View
     /** @var View|null The button Container for Button */
     public $btnContainer;
 
-    /** @var string Table css class */
-    // public $tableClass = 'ui fixed small';
-
     /** @var bool Display model field as table inside card holder content */
     public $useTable = false;
 

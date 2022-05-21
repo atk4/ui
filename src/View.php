@@ -86,16 +86,12 @@ class View extends AbstractView implements JsExpressionable
     // {{{ Setting Things up
 
     /**
-     * May accept properties of a class, but if property is not defined, it will
-     * be used as a HTML class instead.
-     *
      * @param array|string $label
      * @param array|string $class
      */
     public function __construct($label = null, $class = null)
     {
         if (is_array($label)) {
-            // backwards mode
             $defaults = $label;
             if (isset($defaults[0])) {
                 $label = $defaults[0];
