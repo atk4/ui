@@ -29,12 +29,12 @@ $submenu->addItem('one');
 $submenu->addItem('two');
 
 $menu = \Atk4\Ui\Menu::addTo($app, ['vertical pointing']);
-$menu->addItem(['Inbox', 'label' => ['123', 'teal left pointing']]);
+$menu->addItem(['Inbox', 'label' => ['123', 'class.teal left pointing' => true]]);
 $menu->addItem('Spam');
 \Atk4\Ui\Form\Control\Input::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
 
 $menu = \Atk4\Ui\Menu::addTo($app, ['secondary vertical pointing']);
-$menu->addItem(['Inbox', 'label' => ['123', 'teal left pointing']]);
+$menu->addItem(['Inbox', 'label' => ['123', 'class.teal left pointing' => true]]);
 $menu->addItem('Spam');
 \Atk4\Ui\Form\Control\Input::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
 $menu = \Atk4\Ui\Menu::addTo($app, ['vertical']);

@@ -44,4 +44,4 @@ $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'segment']);
 \Atk4\Ui\Header::addTo($seg, ['Center-aligned', 'aligned' => 'center', 'image' => $img, 'subHeader' => 'header with image']);
 
 $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'segment']);
-\Atk4\Ui\Header::addTo($seg, ['Center-aligned', 'aligned' => 'center', 'image' => [$img, 'disabled'], 'subHeader' => 'header with image']);
+\Atk4\Ui\Header::addTo($seg, ['Center-aligned', 'aligned' => 'center', 'image' => [$img, 'class.disabled' => true], 'subHeader' => 'header with image']);

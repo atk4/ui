@@ -43,7 +43,7 @@ $grid->addActionButton('Say HI', function ($j, $id) use ($grid) {
     return 'Loaded "' . $model->load($id)->name . '" from ID=' . $id;
 });
 
-$grid->addModalAction(['icon' => [\Atk4\Ui\Icon::class, 'external']], 'Modal Test', function ($p, $id) {
+$grid->addModalAction(['icon' => 'external'], 'Modal Test', function ($p, $id) {
     \Atk4\Ui\Message::addTo($p, ['Clicked on ID=' . $id]);
 });
 

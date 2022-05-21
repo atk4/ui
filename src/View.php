@@ -87,33 +87,25 @@ class View extends AbstractView implements JsExpressionable
 
     /**
      * @param array|string $label
-     * @param array|string $class
      */
-    public function __construct($label = null, $class = null)
+    public function __construct($label = [])
     {
-        if (is_array($label)) {
-            $defaults = $label;
-            if (isset($defaults[0])) {
-                $label = $defaults[0];
-                unset($defaults[0]);
-            } else {
-                $label = null;
-            }
+        $defaults = is_array($label) ? $label : [$label];
+        unset($label);
 
-            if (isset($defaults[1])) {
-                $class = $defaults[1];
-                unset($defaults[1]);
-            }
-            $this->setDefaults($defaults);
+        if (array_key_exists(0, $defaults)) {
+            $defaults['content'] = $defaults[0];
+            unset($defaults[0]);
         }
 
-        if ($label !== null) {
-            $this->content = $label;
+        // @TODO func_num_args() > 1!!!!
+        if (func_num_args() > 2 || count(array_filter($defaults, 'is_int', \ARRAY_FILTER_USE_KEY)) > 0) { // prevent bad usage
+            var_dump(func_get_args());
+
+            throw new \Error('Too many method arguments');
         }
 
-        if ($class) {
-            $this->addClass($class);
-        }
+        $this->setDefaults($defaults);
     }
 
     /**

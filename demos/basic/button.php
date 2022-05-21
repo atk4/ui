@@ -61,7 +61,7 @@ $forkButtonClass = AnonymousClassNameCache::get_class(fn () => new class(0) /* n
     {
         Icon::addTo(Button::addTo($this, ['Forks', 'blue']), ['fork']);
         Label::addTo($this, [number_format($n), 'basic blue left pointing']);
-        parent::__construct(null, 'labeled');
+        parent::__construct(['class.labeled' => true]);
     }
 });
 
