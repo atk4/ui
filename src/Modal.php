@@ -20,8 +20,8 @@ namespace Atk4\Ui;
  *
  * Modal can use semantic-ui predefine method onApprove or onDeny by passing
  * a jsAction to Modal::addDenyAction or Modal::addApproveAction method. It will not close until the jsAction return true.
- *  $modal->addDenyAction('No', new \Atk4\Ui\JsExpression('function(){window.alert("Can\'t do that."); return false;}'));
- *  $modal->addApproveAction('Yes', new \Atk4\Ui\JsExpression('function(){window.alert("You\'re good to go!");}'));
+ *  $modal->addDenyAction('No', new \Atk4\Ui\JsExpression('function(){ window.alert("Can\'t do that."); return false; }'));
+ *  $modal->addApproveAction('Yes', new \Atk4\Ui\JsExpression('function(){ window.alert("You\'re good to go!"); }'));
  *
  * You may also prevent modal from closing via the esc or dimmed area click using $modal->notClosable().
  *
@@ -36,9 +36,13 @@ class Modal extends View
     public $loading_label = 'Loading...';
     public $headerCss = 'header';
     public $ui = 'modal';
-    public $fx = [];
+    /** @var \Closure|null */
+    public $fx;
+    /** @var CallbackLater|null */
     public $cb;
+    /** @var View|null */
     public $cb_view;
+    /** @var array */
     public $args = [];
     /** @var array */
     public $options = [];
@@ -46,11 +50,7 @@ class Modal extends View
     /** @var string Currently only "json" response type is supported. */
     public $type = 'json';
 
-    /**
-     * Add ability to add css classes to "content" div.
-     *
-     * @var array
-     */
+    /** @var array Add ability to add css classes to "content" div. */
     public $contentCss = ['img', 'content', 'atk-dialog-content'];
 
     /**
@@ -84,7 +84,7 @@ class Modal extends View
             throw new Exception('Only one argument is needed by Modal::set()');
         }
 
-        $this->fx = [$fx];
+        $this->fx = $fx;
         $this->enableCallback();
 
         return $this;
@@ -105,7 +105,7 @@ class Modal extends View
         }
 
         $this->cb->set(function () {
-            $this->fx[0]($this->cb_view);
+            ($this->fx)($this->cb_view);
             $this->cb->terminateJson($this->cb_view);
         });
     }
@@ -305,7 +305,7 @@ class Modal extends View
             $this->template->trySet('contentCss', implode(' ', $this->contentCss));
         }
 
-        if (!empty($this->fx)) {
+        if ($this->fx !== null) {
             $data['uri'] = $this->cb->getJsUrl();
         }
 

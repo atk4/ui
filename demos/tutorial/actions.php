@@ -13,7 +13,6 @@ use Atk4\Ui\View;
 require_once __DIR__ . '/../init-app.php';
 
 $wizard = \Atk4\Ui\Wizard::addTo($app);
-$app->stickyGet($wizard->name);
 
 $wizard->addStep('Define User Action', function ($page) {
     \Atk4\Ui\Header::addTo($page, ['What are User Actions?']);
@@ -38,7 +37,7 @@ $wizard->addStep('Define User Action', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
+        $country = new Country($owner->getApp()->db);
 
         $country->addUserAction('send_message');
     });
@@ -61,7 +60,7 @@ $wizard->addStep('Define User Action', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
+        $country = new Country($owner->getApp()->db);
 
         $country->addUserAction('send_message', function () {
             return 'sent';
@@ -85,7 +84,7 @@ $wizard->addStep('UI Integration', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
+        $country = new Country($owner->getApp()->db);
         $country = $country->loadAny();
 
         \Atk4\Ui\Button::addTo($owner, ['Edit some country'])
@@ -101,7 +100,7 @@ $wizard->addStep('UI Integration', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
+        $country = new Country($owner->getApp()->db);
         $country = $country->loadAny();
 
         $menu = \Atk4\Ui\Menu::addTo($owner);
@@ -166,7 +165,7 @@ $wizard->addStep('More Ways', function ($page) {
         $model->addUserAction('mail', [
             'fields' => ['currency_field'],
             'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'callback' => function() { return 'testing'; },
+            'callback' => function () { return 'testing'; },
             'description' => 'Email testing',
         ]);
         $owner->add('CardDeck')
@@ -189,7 +188,7 @@ $wizard->addStep('Crud integration', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $country = new \Atk4\Ui\Demos\CountryLock($owner->getApp()->db);
+        $country = new Country($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
         $country->getUserAction('delete')->enabled = function (Country $m) { return $m->id % 2 === 0; };
         $country->addUserAction('mail', [
@@ -205,12 +204,13 @@ $wizard->addStep('Crud integration', function ($page) {
             [Button::class, null, 'icon' => 'blue mail'],
             $country->getUserAction('mail')
         );
-        \Atk4\Ui\Crud::addTo($owner, ['ipp' => 5])->setModel($country, [$country->fieldName()->name, $country->fieldName()->iso]);
+        \Atk4\Ui\Crud::addTo($owner, ['ipp' => 5])
+            ->setModel($country, [$country->fieldName()->name, $country->fieldName()->iso]);
     });
 });
 
 $wizard->addFinish(function ($page) use ($wizard) {
     PromotionText::addTo($page);
-    \Atk4\Ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon' => 'left arrow'], ['Left'])
+    \Atk4\Ui\Button::addTo($wizard, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
         ->link('/demos/index.php');
 });

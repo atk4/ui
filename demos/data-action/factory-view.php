@@ -13,7 +13,7 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-Button::addTo($app, ['Executor Factory in App instance', 'small left floated basic blue', 'icon' => 'left arrow'])
+Button::addTo($app, ['Executor Factory in App instance', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['factory']);
 View::addTo($app, ['ui' => 'ui clearing divider']);
 
@@ -42,29 +42,29 @@ $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends Exe
 
     protected function getCardButton($action, $type)
     {
-        return [Button::class, 'icon' => $this->actionIcon[$action->short_name]];
+        return [Button::class, 'icon' => $this->actionIcon[$action->shortName]];
     }
 });
 
 Header::addTo($app, ['Executor Factory set for this Card View only.']);
 
-DemoActionsUtil::setupDemoActions($country = new CountryLock($app->db));
+DemoActionsUtil::setupDemoActions($country = new Country($app->db));
 $country = $country->loadAny();
 
 $cardActions = Card::addTo($app, ['useLabel' => true, 'executorFactory' => new $myFactory()]);
 $cardActions->setModel($country);
-foreach ($country->getUserActions() as $action) {
+foreach ($country->getModel()->getUserActions() as $action) {
     $showActions = ['callback', 'preview', 'edit_argument', 'edit_argument_prev', 'edit_iso', 'confirm', 'multi_step'];
-    if (in_array($action->short_name, $showActions, true)) {
+    if (in_array($action->shortName, $showActions, true)) {
         $cardActions->addClickAction($action);
     }
 }
 
-////////////////////////
+// -----------------------------------------------------------------------------
 
 Header::addTo($app, ['Card View using global Executor Factory']);
 
-$model = new CountryLock($app->db);
+$model = new Country($app->db);
 $model = $model->loadAny();
 
 $card = Card::addTo($app, ['useLabel' => true]);

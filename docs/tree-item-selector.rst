@@ -28,14 +28,14 @@ the treeItems array and that nodes key is not empty. Below is a sample of a grou
             'nodes' => [
                 [
                     'name' => 'tv',
-                    'id' => '100'
+                    'id' => '100',
                 ],
                 [
                     'name' => 'radio',
-                    'id' => '100'
+                    'id' => '100',
                 ],
-            ]
-        ]
+            ],
+        ],
     ]
 
 .. php:attr:: allowMultiple
@@ -63,15 +63,15 @@ Adding a TreeItemSelector form control to a Form::
                         [
                             'name' => 'Google Pixels',
                             'id' => 503,
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 ['name' => 'Tv' , 'id' => 501, 'nodes' => []],
-                ['name' => 'Radio' , 'id' => 601, 'nodes' => []]
-            ]
+                ['name' => 'Radio' , 'id' => 601, 'nodes' => []],
+            ],
         ],
         ['name' => 'Cleaner' , 'id' => 201, 'nodes' => []],
-        ['name' => 'Appliances' , 'id' => 301, 'nodes' => []]
+        ['name' => 'Appliances' , 'id' => 301, 'nodes' => []],
     ];
 
 

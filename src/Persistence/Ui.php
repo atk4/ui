@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Atk4\Ui\Persistence;
 
 use Atk4\Data\Field;
+use Atk4\Data\Field\PasswordField;
 use Atk4\Data\Model;
+use Atk4\Data\Persistence;
 use Atk4\Ui\Exception;
 
 /**
@@ -18,8 +20,11 @@ use Atk4\Ui\Exception;
  *
  * You may want to localize some of the output.
  */
-class Ui extends \Atk4\Data\Persistence
+class Ui extends Persistence
 {
+    /** @var string */
+    public $locale = 'en';
+
     /** @var string */
     public $currency = '€';
     /** @var int Default decimal count for 'atk4_money' type. */
@@ -137,7 +142,7 @@ class Ui extends \Atk4\Data\Persistence
                             ->addMoreInfo('value', $valueStr)
                             ->addMoreInfo('field', $field);
                     }
-                    $value->setTimeZone(new $tz_class(date_default_timezone_get()));
+                    $value->setTimezone(new $tz_class(date_default_timezone_get()));
                 } else {
                     $value = $dt_class::createFromFormat($format, $valueStr);
                     if ($value === false) {
@@ -166,6 +171,10 @@ class Ui extends \Atk4\Data\Persistence
 
         // typecast using DBAL types
         $value = parent::_typecastLoadField($field, $value);
+
+        if ($value !== null && $field instanceof PasswordField && !$field->hashPasswordIsHashed($value)) {
+            $value = $field->hashPassword($value);
+        }
 
         return $value;
     }

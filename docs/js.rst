@@ -46,7 +46,7 @@ There are other ways to generate an action, such as using :php:meth:`JsExpressio
 Finally, actions can be used inside other actions::
 
     $action = new JsExpression('alert([])', [
-        $view->js()->text()
+        $view->js()->text(),
     ]);
 
     // will produce alert($('#button-id').text());
@@ -55,7 +55,7 @@ or::
 
     $action = $view->js()->text(new JsExpression('[] + []', [
         5,
-        10
+        10,
     ]));
 
 All of the above examples will produce a valid "Action" object that can be used further.
@@ -248,7 +248,7 @@ The following code will show three buttons and clicking any one will hide it. On
     $buttons->on('click', '.button')->hide();
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function($event){
+    // $('#top-element-id').on('click', '.button', function($event) {
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $(this).hide();
@@ -268,7 +268,7 @@ You can use both actions together. The next example will allow only one button t
     $buttons->on('click', '.button', $b3->js()->hide());
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function($event){
+    // $('#top-element-id').on('click', '.button', function($event) {
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $('#b3-element-id').hide();
@@ -287,22 +287,22 @@ Sometimes you want to execute action by calling a global JavaScript method. For 
 and other cases you can use JsExpression::
 
     $action = new JsExpression('alert([])', [
-        $view->js()->text()
+        $view->js()->text(),
     ]);
 
 Because :php:class:`JsChain` will typically wrap all the arguments through
 :php:meth:`JsChain::_json_encode()`, it prevents you from accidentally injecting JavaScript code::
 
     $b = new Button();
-    $b->js(true)->text('2+2');
+    $b->js(true)->text('2 + 2');
 
-This will result in a button having a label `2+2` instead of having a label `4`. To
+This will result in a button having a label `2 + 2` instead of having a label `4`. To
 get around this, you can use JsExpression::
 
     $b = new Button();
-    $b->js(true)->text(new JsExpression('2+2'));
+    $b->js(true)->text(new JsExpression('2 + 2'));
 
-This time `2+2` is no longer escaped and will be used as plain JavaScript code. Another example
+This time `2 + 2` is no longer escaped and will be used as plain JavaScript code. Another example
 shows how you can use global variables::
 
     echo (new Jquery('document'))->find('h1')->hide()->jsRender();
@@ -326,7 +326,7 @@ boxes on the left::
     $h1 = $left_box1->js()->height();
     $h2 = $left_box2->js()->height();
 
-    $sum = new JsExpression('[]+[]', [$h1, $h2]);
+    $sum = new JsExpression('[] + []', [$h1, $h2]);
 
     $right_box_container->js(true)->height( $sum );
 
@@ -340,9 +340,9 @@ The template language for JsExpression is super-simple:
 
 So the following lines are identical::
 
-    $sum = new JsExpression('[]+[]', [$h1, $h2]);
-    $sum = new JsExpression('[0]+[1]', [0 => $h1, 1 => $h2]);
-    $sum = new JsExpression('[a]+[b]', ['a' => $h1, 'b' => $h2]);
+    $sum = new JsExpression('[] + []', [$h1, $h2]);
+    $sum = new JsExpression('[0] + [1]', [0 => $h1, 1 => $h2]);
+    $sum = new JsExpression('[a] + [b]', ['a' => $h1, 'b' => $h2]);
 
 .. important::
 
@@ -385,7 +385,7 @@ This will map into the following JavaScript code:
 .. code-block:: js
 
     $('#right_container_id').height(mySum([
-        $('#left_box1').height(), $('#left_box2').height(), $('#left_box3').height() // etc
+        $('#left_box1').height(), $('#left_box2').height(), $('#left_box3').height(), // etc
     ]));
 
 You can further simplify JavaScript code yourself, but keep the JavaScript logic inside the `.js` files
@@ -492,7 +492,7 @@ some feedback to the user. JsNotify can display a bar on top of the screen for s
             } else {
                 return [
                     $modal->hide(),
-                    new \Atk4\Ui\JsNotify('Thank you '.$form->model->get('name'))
+                    new \Atk4\Ui\JsNotify('Thank you ' . $form->model->get('name')),
                 ];
             }
         });
@@ -648,7 +648,7 @@ average of 5-10 seconds, so you'd like to user updated about the process. There 
 The most basic approach is::
 
     $button = \Atk4\Ui\Button::addTo($app, ['Process Image']);
-    $button->on('click', function() use($button, $image) {
+    $button->on('click', function () use ($button, $image) {
 
         sleep(1); // $image->resize();
         sleep(1); // $image->findFace();
@@ -677,7 +677,7 @@ This class implements ability for your PHP code to send messages to the browser 
 
     $sse = \Atk4\Ui\JsSse::addTo($app);
 
-    $button->on('click', $sse->set(function() use($sse, $button, $image) {
+    $button->on('click', $sse->set(function () use ($sse, $button, $image) {
 
         $sse->send($button->js()->text('Processing'));
         sleep(1); // $image->resize();

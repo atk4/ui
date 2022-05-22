@@ -14,10 +14,10 @@ Header::addTo($app, ['Actions in Crud', 'subHeader' => 'Crud will automatically 
 
 // Actions can be added easily to the model
 
-$files = new FileLock($app->db);
+$files = new File($app->db);
 
 // This action must appear on top of the Crud
-$action = $files->addUserAction(
+$files->addUserAction(
     'import_from_filesystem',
     [
         'caption' => 'Import',
@@ -37,4 +37,5 @@ $files->addUserAction('download', function (Model $model) {
     return 'File has been download!';
 });
 
-\Atk4\Ui\Crud::addTo($app, ['ipp' => 10])->setModel($files);
+\Atk4\Ui\Crud::addTo($app, ['ipp' => 10])
+    ->setModel($files);

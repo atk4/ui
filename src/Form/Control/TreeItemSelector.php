@@ -25,11 +25,7 @@ class TreeItemSelector extends Form\Control
     /** @var HtmlTemplate Template for the item selector view. */
     public $itemSelectorTemplate;
 
-    /**
-     * The tree item selector View.
-     *
-     * @var \Atk4\Ui\View|null
-     */
+    /** @var \Atk4\Ui\View|null The tree item selector View. */
     public $itemSelector;
 
     /**
@@ -40,11 +36,7 @@ class TreeItemSelector extends Form\Control
      */
     public $loaderCssName = 'atk-tree-loader';
 
-    /**
-     * Allow multiple selection or just one.
-     *
-     * @var bool
-     */
+    /** @var bool Allow multiple selection or just one. */
     public $allowMultiple = true;
 
     /**
@@ -54,9 +46,16 @@ class TreeItemSelector extends Form\Control
      *
      * Each item may have it's own children by adding nodes children to it.
      *   $items = [
-     *       ['name' => 'Electronics', 'id' => 'P100', 'nodes' => [['name' => 'Phone', 'id' => 'P100', 'nodes' => [['name' => 'iPhone', 'id' => 502,], ['name' => 'Google Pixels', 'id' => 503]]], ['name' => 'Tv' , 'id' => 501], ['name' => 'Radio' , 'id' => 601]]],
+     *       ['name' => 'Electronics', 'id' => 'P100', 'nodes' => [
+     *           ['name' => 'Phone', 'id' => 'P100', 'nodes' => [
+     *               ['name' => 'iPhone', 'id' => 502],
+     *               ['name' => 'Google Pixels', 'id' => 503],
+     *           ]],
+     *           ['name' => 'Tv' , 'id' => 501],
+     *           ['name' => 'Radio' , 'id' => 601],
+     *       ]],
      *       ['name' => 'Cleaner' , 'id' => 201],
-     *       ['name' => 'Appliances' , 'id' => 301]
+     *       ['name' => 'Appliances' , 'id' => 301],
      *   ];
      *
      * When adding nodes array into an item, it will automatically be treated as a group unless empty.
@@ -65,11 +64,7 @@ class TreeItemSelector extends Form\Control
      */
     public $treeItems = [];
 
-    /**
-     * Callback for onTreeChange.
-     *
-     * @var JsCallback|null
-     */
+    /** @var JsCallback|null Callback for onTreeChange. */
     private $cb;
 
     protected function init(): void
@@ -126,7 +121,7 @@ class TreeItemSelector extends Form\Control
     public function getInput()
     {
         return $this->getApp()->getTag('input', [
-            'name' => $this->short_name,
+            'name' => $this->shortName,
             'type' => 'hidden',
             'value' => $this->getValue(),
             'readonly' => true,
@@ -149,7 +144,7 @@ class TreeItemSelector extends Form\Control
             [
                 'item' => ['id' => 'atk-root', 'nodes' => $this->treeItems],
                 'values' => [], // need empty for Vue reactivity.
-                'field' => $this->short_name,
+                'field' => $this->shortName,
                 'options' => [
                     'mode' => $this->allowMultiple ? 'multiple' : 'single',
                     'url' => $this->cb ? $this->cb->getJsUrl() : null,

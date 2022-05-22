@@ -174,7 +174,7 @@ In this case we display a message when any of the control value for 'qty' and 'b
         foreach ($rows as $row => $cols) {
             $qty = $cols['qty'] ?? 0;
             $box = $cols['box'] ?? 0;
-            $total = $total + ($qty * $box);
+            $total += $qty * $box;
         }
         return new JsToast('The new Total is '.number_format($total, 2));
     }, ['qty', 'box']);
@@ -212,11 +212,11 @@ Specific field components Props may be applied using the 'ui' field property whe
 
     $this->addField('email', [
         'required' => true,
-        'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'envelope', 'type' => 'email']]]
+        'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'envelope', 'type' => 'email']]],
     ]);
     $this->addField('password', [
         'required' => true,
-        'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'key', 'type' => 'password']]]
+        'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'key', 'type' => 'password']]],
     ]);
 
 Note on Multiline control

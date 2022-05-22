@@ -66,21 +66,17 @@ class ApiService {
    * @param element
    */
     onSuccess(response, element) {
-        let result;
         try {
             if (response.success) {
-                if (response && response.html && response.id) {
+                if (response.html && response.id) {
                     // prevent modal duplication.
                     // apiService.removeModalDuplicate(response.html);
-                    const modalIDs = [];
-                    $(response.html).find('.ui.modal[id]').each((i, e) => {
-                        modalIDs.push('#' + $(e).attr('id'));
+                    const modelsContainer = $('.ui.dimmer.modals.page')[0];
+                    $($.parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
+                        $(modelsContainer).find('#' + e.id).remove();
                     });
 
-                    if (modalIDs.length) {
-                        $('.ui.dimmer.modals.page').find(modalIDs.join(', ')).remove();
-                    }
-                    result = $('#' + response.id).replaceWith(response.html);
+                    const result = $('#' + response.id).replaceWith(response.html);
                     if (!result.length) {
                         // TODO Find a better solution for long term.
                         // Need a way to gracefully abort server request.
@@ -89,7 +85,7 @@ class ApiService {
                         // throw({message:'Unable to replace element with id: '+ response.id});
                     }
                 }
-                if (response && response.portals) {
+                if (response.portals) {
                     // Create app portal from json response.
                     const portals = Object.keys(response.portals);
                     portals.forEach((portalID) => {
@@ -100,9 +96,9 @@ class ApiService {
                         }
                     });
                 }
-                if (response && response.atkjs) {
+                if (response.atkjs) {
                     // Call evalResponse with proper context, js code and jQuery as $ var.
-                    atk.apiService.evalResponse.call(this, response.atkjs.replace(/<\/?script>/g, ''), jQuery);
+                    atk.apiService.evalResponse.call(this, response.atkjs, jQuery);
                 }
                 if (atk.apiService.afterSuccessCallbacks.length > 0) {
                     const self = this;
@@ -211,7 +207,7 @@ class ApiService {
    * @param response
    */
     onFailure(response) {
-    // if json is returned, it should contains the error within message property
+    // if json is returned, it should contain the error within message property
         if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
             if (Object.prototype.hasOwnProperty.call(response, 'useWindow') && response.useWindow) {
                 atk.apiService.showErrorWindow(response.message);

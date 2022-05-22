@@ -14,9 +14,9 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['icon' => 'pencil']);
         $html = $v->render();
-        $this->assertNotNull($v->icon->id);
+        $this->assertNotNull($v->icon->name);
 
-        $this->assertNotSame($v->id, $v->icon->id);
+        $this->assertNotSame($v->name, $v->icon->name);
     }
 
     public function testIdIntegrity2(): void
@@ -26,7 +26,7 @@ class JsIntegrationTest extends TestCase
         $b2 = Button::addTo($v);
         $html = $v->render();
 
-        $this->assertNotSame($b1->id, $b2->id);
+        $this->assertNotSame($b1->name, $b2->name);
     }
 
     /**
@@ -34,7 +34,7 @@ class JsIntegrationTest extends TestCase
      */
     public function testBasicChain1(): void
     {
-        $v = new Button(['id' => 'b']);
+        $v = new Button(['name' => 'b']);
         $j = $v->js()->hide();
         $v->render();
 
@@ -46,14 +46,13 @@ class JsIntegrationTest extends TestCase
      */
     public function testBasicChain2(): void
     {
-        $v = new Button(['id' => 'b']);
+        $v = new Button(['name' => 'b']);
         $j = $v->js(true)->hide();
         $v->getHtml();
 
-        $this->assertSame('<script>
-$(function() {
+        $this->assertSame('$(function() {
   $("#b").hide();
-})</script>', $v->getJs());
+})', $v->getJs());
     }
 
     /**
@@ -61,16 +60,15 @@ $(function() {
      */
     public function testBasicChain3(): void
     {
-        $v = new Button(['id' => 'b']);
+        $v = new Button(['name' => 'b']);
         $v->js('click')->hide();
         $v->getHtml();
 
-        $this->assertSame('<script>
-$(function() {
+        $this->assertSame('$(function() {
   $("#b").bind("click",function() {
     $("#b").hide();
   });
-})</script>', $v->getJs());
+})', $v->getJs());
     }
 
     /**
@@ -79,19 +77,18 @@ $(function() {
     public function testBasicChain4(): void
     {
         $bb = new View(['ui' => 'buttons']);
-        $b1 = Button::addTo($bb, ['id' => 'b1']);
-        $b2 = Button::addTo($bb, ['id' => 'b2']);
+        $b1 = Button::addTo($bb, ['name' => 'b1']);
+        $b2 = Button::addTo($bb, ['name' => 'b2']);
 
         $b1->on('click', $b2->js()->hide());
         $bb->getHtml();
 
-        $this->assertSame('<script>
-$(function() {
+        $this->assertSame('$(function() {
   $("#b1").on("click",function(event) {
     event.preventDefault();
     event.stopPropagation();
     $("#b2").hide();
   });
-})</script>', $bb->getJs());
+})', $bb->getJs());
     }
 }

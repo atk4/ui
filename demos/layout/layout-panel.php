@@ -12,7 +12,7 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$country = new CountryLock($app->db);
+$country = new Country($app->db);
 DemoActionsUtil::setupDemoActions($country);
 
 Header::addTo($app, ['Right Panel', 'subHeader' => 'Content on the fly!']);
@@ -98,10 +98,10 @@ View::addTo($app, ['ui' => 'divider']);
 
 // PANEL_3
 
-$countryId = $app->stickyGet('id');
 Header::addTo($app, ['UserAction Friendly', 'size' => 4, 'subHeader' => 'Panel can run model action.']);
 
 $panel3 = Right::addTo($app);
+$countryId = $panel3->stickyGet('id');
 $msg = Message::addTo($panel3, ['Run Country model action below.']);
 
 $deck = View::addTo($app, ['ui' => 'cards']);

@@ -6,32 +6,16 @@ namespace Atk4\Ui;
 
 class JsCallback extends Callback implements JsExpressionable
 {
-    /**
-     * Holds information about arguments passed in to the callback.
-     *
-     * @var array
-     */
+    /** @var array Holds information about arguments passed in to the callback. */
     public $args = [];
 
-    /**
-     * Text to display as a confirmation. Set with setConfirm(..).
-     *
-     * @var string
-     */
+    /** @var string Text to display as a confirmation. Set with setConfirm(..). */
     public $confirm;
 
-    /**
-     * Use this apiConfig variable to pass API settings to Semantic UI in .api().
-     *
-     * @var array|null
-     */
+    /** @var array|null Use this apiConfig variable to pass API settings to Semantic UI in .api(). */
     public $apiConfig;
 
-    /**
-     * Include web storage data item (key) value to be include in the request.
-     *
-     * @var string|null
-     */
+    /** @var string|null Include web storage data item (key) value to be include in the request. */
     public $storeName;
 
     /**
@@ -102,26 +86,18 @@ class JsCallback extends Callback implements JsExpressionable
         }
 
         parent::set(function () use ($fx) {
-            try {
-                $chain = new Jquery(new JsExpression('this'));
+            $chain = new Jquery(new JsExpression('this'));
 
-                $values = [];
-                foreach ($this->args as $key => $value) {
-                    $values[] = $_POST[$key] ?? null;
-                }
-
-                $response = $fx(...array_merge([$chain], $values));
-
-                $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
-
-                $this->terminateAjax($ajaxec);
-            } catch (\Atk4\Data\ValidationException $e) {
-                // Validation exceptions will be presented to user in a friendly way
-                $msg = new Message($e->getMessage());
-                $msg->addClass('error');
-
-                $this->terminateAjax(null, $msg->getHtml(), false);
+            $values = [];
+            foreach ($this->args as $key => $value) {
+                $values[] = $_POST[$key] ?? null;
             }
+
+            $response = $fx($chain, ...$values);
+
+            $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
+
+            $this->terminateAjax($ajaxec);
         });
 
         return $this;
@@ -195,7 +171,7 @@ class JsCallback extends Callback implements JsExpressionable
         } elseif ($response instanceof JsExpressionable) {
             $action = $response;
         } else {
-            throw (new Exception('Incorrect callback. Response must be of type JsExpressionable, View, or String.'))
+            throw (new Exception('Incorrect callback, response must be of type JsExpressionable, View, or String'))
                 ->addMoreInfo('r', $response);
         }
 
@@ -210,7 +186,7 @@ class JsCallback extends Callback implements JsExpressionable
         if ($response instanceof Modal) {
             $html = $response->getHtml();
         } else {
-            $modal = new Modal(['id' => false]);
+            $modal = new Modal(['name' => false]);
             $modal->add($response);
             $html = $modal->getHtml();
         }

@@ -17,14 +17,14 @@ $buttons = [
 ];
 
 // layout
-\Atk4\Ui\Text::addTo(\Atk4\Ui\View::addTo($app, ['red' => true,  'ui' => 'segment']))
+\Atk4\Ui\Text::addTo(\Atk4\Ui\View::addTo($app, ['class.red' => true,  'ui' => 'segment']))
     ->addParagraph('Layouts can be used to wrap your UI elements into HTML / Boilerplate');
 
 // toolbar
 $tb = \Atk4\Ui\View::addTo($app);
 
 // iframe
-$i = \Atk4\Ui\View::addTo($app, ['green' => true, 'ui' => 'segment'])->setElement('iframe')->setStyle(['width' => '100%', 'height' => '500px']);
+$i = \Atk4\Ui\View::addTo($app, ['class.green' => true, 'ui' => 'segment'])->setElement('iframe')->setStyle(['width' => '100%', 'height' => '500px']);
 
 // add buttons in toolbar
 foreach ($buttons as $k => $args) {

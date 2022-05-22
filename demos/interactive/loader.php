@@ -7,7 +7,7 @@ namespace Atk4\Ui\Demos;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Loader Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\Atk4\Ui\Button::addTo($app, ['Loader Examples - Page 2', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['loader2']);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'clearing divider']);
@@ -16,7 +16,7 @@ require_once __DIR__ . '/../init-app.php';
 ViewTester::addTo($app);
 
 // Example 1 - Basic usage of a Loader.
-\Atk4\Ui\Loader::addTo($app)->set(function ($p) {
+\Atk4\Ui\Loader::addTo($app)->set(function (\Atk4\Ui\Loader $p) {
     // set your time expensive function here.
     sleep(1);
     \Atk4\Ui\Header::addTo($p, ['Loader #1']);
@@ -37,15 +37,15 @@ ViewTester::addTo($app);
         \Atk4\Ui\LoremIpsum::addTo(\Atk4\Ui\View::addTo($p, ['ui' => $_GET['color'] . ' segment']), ['size' => 1]);
 
         // don't forget to make your own argument sticky so that Components can communicate with themselves:
-        $p->getApp()->stickyGet('color');
+        $p->stickyGet('color');
         ViewTester::addTo($p);
 
         // This loader takes 2s to load because it needs to go through 2 sleep statements.
     });
 
     // button may contain load event.
-    \Atk4\Ui\Button::addTo($p, ['Load Segment Manually (2s)', 'red'])->js('click', $loader->jsLoad(['color' => 'red']));
-    \Atk4\Ui\Button::addTo($p, ['Load Segment Manually (2s)', 'blue'])->js('click', $loader->jsLoad(['color' => 'blue']));
+    \Atk4\Ui\Button::addTo($p, ['Load Segment Manually (2s)', 'class.red' => true])->js('click', $loader->jsLoad(['color' => 'red']));
+    \Atk4\Ui\Button::addTo($p, ['Load Segment Manually (2s)', 'class.blue' => true])->js('click', $loader->jsLoad(['color' => 'blue']));
 });
 
 // Example 2 - Loader with custom body.
@@ -54,9 +54,9 @@ ViewTester::addTo($app);
     'shim' => [   // shim is displayed while content is leaded
         \Atk4\Ui\Message::class,
         'Generating LoremIpsum, please wait...',
-        'red',
+        'class.red' => true,
     ],
 ])->set(function ($p) {
-    usleep(500 * 1000);
+    usleep(500_000);
     \Atk4\Ui\LoremIpsum::addTo($p, ['size' => 2]);
 });

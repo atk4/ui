@@ -41,7 +41,7 @@ class CallbackTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->app = new AppMock(['always_run' => false, 'catch_exceptions' => false]);
+        $this->app = new AppMock(['alwaysRun' => false, 'catchExceptions' => false]);
         $this->app->initLayout([\Atk4\Ui\Layout\Centered::class]);
     }
 
@@ -77,7 +77,7 @@ class CallbackTest extends TestCase
     public function testCallbackTrigger(): void
     {
         $cb = \Atk4\Ui\Callback::addTo($this->app);
-        $this->assertSame($this->app->layout->name . '_' . $cb->short_name, $cb->getUrlTrigger());
+        $this->assertSame($this->app->layout->name . '_' . $cb->shortName, $cb->getUrlTrigger());
 
         $cb = Callback::addTo($this->app, ['urlTrigger' => 'test']);
         $this->assertSame('test', $cb->getUrlTrigger());
@@ -93,7 +93,7 @@ class CallbackTest extends TestCase
         $this->simulateCallbackTriggering($cb);
 
         $expectedUrlCbApp = '?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=callback&' . Callback::URL_QUERY_TARGET . '=aa';
-        $expectedUrlCb = '?' . /*Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=1&' .*/ Callback::URL_QUERY_TRIGGER_PREFIX . 'bb=callback&' . Callback::URL_QUERY_TARGET . '=bb';
+        $expectedUrlCb = '?' . /* Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=1&' . */ Callback::URL_QUERY_TRIGGER_PREFIX . 'bb=callback&' . Callback::URL_QUERY_TARGET . '=bb';
         $this->assertSame($expectedUrlCbApp, $cbApp->getUrl());
         $this->assertSame($expectedUrlCb, $cb->getUrl());
 
@@ -225,12 +225,8 @@ class CallbackTest extends TestCase
         $this->assertSame(25, $var);
     }
 
-    public $var;
-
-    public function callPull230()
-    {
-        $this->var = 26;
-    }
+    /** @var int */
+    private $varPull230;
 
     public function testPull230(): void
     {
@@ -238,10 +234,12 @@ class CallbackTest extends TestCase
 
         $this->simulateCallbackTriggering($vp);
 
-        $vp->set(\Closure::fromCallable([$this, 'callPull230']));
+        $vp->set(function () {
+            $this->varPull230 = 26;
+        });
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $this->app->run();
-        $this->assertSame(26, $this->var);
+        $this->assertSame(26, $this->varPull230);
     }
 }

@@ -96,7 +96,10 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action->setEntity($this->action->getModel()->tryLoad($id));
+            $this->action = $this->action->getActionForEntity($this->action->getModel()->tryLoad($id));
+        } elseif (!$this->action->isOwnerEntity()
+                && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)) {
+            $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
         }
 
         if ($this->action->fields === true) {
@@ -116,7 +119,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', string $selector = null): self
     {
         if (!$this->actionInitialized) {
-            throw new Exception('Action must be set prior to assign trigger.');
+            throw new Exception('Action must be set prior to assign trigger');
         }
 
         if ($this->steps) {
@@ -142,7 +145,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     public function jsExecute(array $urlArgs = []): array
     {
         if (!$this->actionInitialized) {
-            throw new Exception('Action must be set prior to assign trigger.');
+            throw new Exception('Action must be set prior to assign trigger');
         }
 
         $urlArgs['step'] = $this->step;
@@ -158,7 +161,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      */
     protected function jsGetExecute($obj, $id): array
     {
-        //@phpstan-ignore-next-line
+        // @phpstan-ignore-next-line
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;

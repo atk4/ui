@@ -13,7 +13,7 @@ $mySwitcherClass = AnonymousClassNameCache::get_class(fn () => new class() exten
     {
         parent::init();
 
-        \Atk4\Ui\Header::addTo($this, ['My name is ' . $this->name, 'red']);
+        \Atk4\Ui\Header::addTo($this, ['My name is ' . $this->name, 'class.red' => true]);
 
         $buttons = \Atk4\Ui\View::addTo($this, ['ui' => 'basic buttons']);
         \Atk4\Ui\Button::addTo($buttons, ['Yellow'])->setAttr('data-id', 'yellow');
@@ -22,7 +22,7 @@ $mySwitcherClass = AnonymousClassNameCache::get_class(fn () => new class() exten
 
         $buttons->on('click', '.button', new \Atk4\Ui\JsReload($this, [$this->name => (new \Atk4\Ui\Jquery())->data('id')]));
 
-        switch ($this->getApp()->stickyGet($this->name)) {
+        switch ($this->stickyGet($this->name)) {
             case 'yellow':
                 self::addTo(\Atk4\Ui\View::addTo($this, ['ui' => 'yellow segment']));
 

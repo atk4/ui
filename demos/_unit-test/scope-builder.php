@@ -1,10 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Behat test for ScopeBuilder
- * Test Model condition rendering into ScopeBuilder component.
- */
 
 namespace Atk4\Ui\Demos;
 
@@ -40,7 +36,7 @@ $form->addControl('qb', [\Atk4\Ui\Form\Control\ScopeBuilder::class, 'model' => $
 
 $form->onSubmit(function (Form $form) use ($model) {
     $message = $form->model->get('qb')->toWords($model);
-    $view = (new \Atk4\Ui\View(['id' => false]))->addClass('atk-scope-builder-response');
+    $view = (new \Atk4\Ui\View(['name' => false]))->addClass('atk-scope-builder-response');
     $view->invokeInit();
 
     $view->set($message);
@@ -56,7 +52,7 @@ $expectedWord = <<<'EOF'
     EOF;
 
 $statModelForHinting = new Stat($app->db);
-$expectedInput = <<<"EOF"
+$expectedInput = json_encode(json_decode(<<<"EOF"
     {
       "logicalOperator": "AND",
       "children": [
@@ -145,7 +141,7 @@ $expectedInput = <<<"EOF"
         }
       ]
     }
-    EOF;
+    EOF, true));
 
 Header::addTo($app, ['Word:']);
 View::addTo($app, ['element' => 'p', 'content' => $expectedWord])->addClass('atk-expected-word-result');

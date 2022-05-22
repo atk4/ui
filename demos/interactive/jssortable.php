@@ -23,8 +23,9 @@ $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lis
     $row = Country::assertInstanceOf($lister->current_row);
     $row->iso = mb_strtolower($row->iso);
 });
-$lister->setModel(new Country($app->db))
-    ->setLimit(20);
+$model = new Country($app->db);
+$model->setLimit(20);
+$lister->setModel($model);
 
 $sortable = \Atk4\Ui\JsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
@@ -39,7 +40,8 @@ $sortable->onReorder(function ($order, $src, $pos, $oldPos) {
 $button = \Atk4\Ui\Button::addTo($app)->set('Get countries order');
 $button->js('click', $sortable->jsGetOrders(['btn' => '1']));
 
-//////////////////////////////////////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 \Atk4\Ui\Header::addTo($app, ['Add Drag n drop to Grid']);
 

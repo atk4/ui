@@ -13,11 +13,7 @@ use Atk4\Ui\View;
 class Upload extends Input
 {
     public $inputType = 'hidden';
-    /**
-     * The action button to open file browser dialog.
-     *
-     * @var View
-     */
+    /** @var View The action button to open file browser dialog. */
     public $action;
 
     /**
@@ -41,18 +37,10 @@ class Upload extends Input
      */
     public $hasFocusEnable = false;
 
-    /**
-     * The input default template.
-     *
-     * @var string
-     */
+    /** @var string The input default template. */
     public $defaultTemplate = 'form/control/upload.html';
 
-    /**
-     * Callback is use for onUpload or onDelete.
-     *
-     * @var \Atk4\Ui\JsCallback
-     */
+    /** @var \Atk4\Ui\JsCallback Callback is use for onUpload or onDelete. */
     public $cb;
 
     /**
@@ -71,11 +59,7 @@ class Upload extends Input
      */
     public $accept = [];
 
-    /**
-     * Whether cb has been define or not.
-     *
-     * @var bool
-     */
+    /** @var bool Whether cb has been defined or not. */
     public $hasUploadCb = false;
     public $hasDeleteCb = false;
 
@@ -88,12 +72,12 @@ class Upload extends Input
     {
         parent::init();
 
-        //$this->inputType = 'hidden';
+        // $this->inputType = 'hidden';
 
         $this->cb = \Atk4\Ui\JsCallback::addTo($this);
 
         if (!$this->action) {
-            $this->action = new \Atk4\Ui\Button(['icon' => 'upload', 'disabled' => ($this->disabled || $this->readonly)]);
+            $this->action = new \Atk4\Ui\Button(['icon' => 'upload', 'class.disabled' => ($this->disabled || $this->readonly)]);
         }
     }
 
@@ -226,9 +210,9 @@ class Upload extends Input
         if ($this->cb->canTerminate()) {
             $uploadActionRaw = $_POST['f_upload_action'] ?? null;
             if (!$this->hasUploadCb && ($uploadActionRaw === self::UPLOAD_ACTION)) {
-                throw new Exception('Missing onUpload callback.');
+                throw new Exception('Missing onUpload callback');
             } elseif (!$this->hasDeleteCb && ($uploadActionRaw === self::DELETE_ACTION)) {
-                throw new Exception('Missing onDelete callback.');
+                throw new Exception('Missing onDelete callback');
             }
         }
 

@@ -10,24 +10,17 @@ use Atk4\Ui\Button;
 use Atk4\Ui\JsChain;
 use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\ExecutorInterface;
+use Atk4\Ui\View;
 
 /**
  * Formatting action buttons column.
  */
 class ActionButtons extends Table\Column
 {
-    /**
-     * Stores all the buttons that have been added.
-     *
-     * @var array
-     */
+    /** @var array Stores all the buttons that have been added. */
     public $buttons = [];
 
-    /**
-     * Callbacks as defined in $action->enabled for evaluating row-specific if an action is enabled.
-     *
-     * @var array
-     */
+    /** @var array Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
     protected $callbacks = [];
 
     protected function init(): void
@@ -41,10 +34,10 @@ class ActionButtons extends Table\Column
      *
      * Returns button object
      *
-     * @param \Atk4\Ui\View|string               $button
+     * @param View|string                        $button
      * @param JsChain|\Closure|ExecutorInterface $action
      *
-     * @return \Atk4\Ui\View
+     * @return View
      */
     public function addButton($button, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
@@ -55,7 +48,7 @@ class ActionButtons extends Table\Column
                 $button = [1 => $button];
             }
 
-            $button = Factory::factory([\Atk4\Ui\Button::class], Factory::mergeSeeds($button, ['id' => false]));
+            $button = Factory::factory([Button::class], Factory::mergeSeeds($button, ['name' => false]));
         }
 
         if ($isDisabled === true) {
@@ -79,12 +72,12 @@ class ActionButtons extends Table\Column
      * Adds a new button which will open a modal dialog and dynamically
      * load contents through $callback. Will pass a virtual page.
      *
-     * @param \Atk4\Ui\View|string $button
-     * @param string|array         $defaults modal title or modal defaults array
-     * @param \Atk4\Ui\View        $owner
-     * @param array                $args
+     * @param View|string  $button
+     * @param string|array $defaults modal title or modal defaults array
+     * @param View         $owner
+     * @param array        $args
      *
-     * @return \Atk4\Ui\View
+     * @return View
      */
     public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [])
     {
@@ -98,8 +91,8 @@ class ActionButtons extends Table\Column
 
         $modal->observeChanges(); // adds scrollbar if needed
 
-        $modal->set(function ($t) use ($callback) {
-            $callback($t, $this->getApp()->stickyGet($this->name));
+        $modal->set(function (View $t) use ($callback) {
+            $callback($t, $t->stickyGet($this->name));
         });
 
         return $this->addButton($button, $modal->show(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)));

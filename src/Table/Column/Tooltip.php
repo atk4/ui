@@ -21,14 +21,10 @@ use Atk4\Ui\Table;
  */
 class Tooltip extends Table\Column
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $icon;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $tooltip_field;
 
     protected function init(): void
@@ -52,18 +48,18 @@ class Tooltip extends Table\Column
 
         $attr = $this->getTagAttributes('body');
 
-        $extra_tags = array_merge_recursive($attr, $extra_tags, ['class' => '{$_' . $field->short_name . '_tooltip}']);
+        $extra_tags = array_merge_recursive($attr, $extra_tags, ['class' => '{$_' . $field->shortName . '_tooltip}']);
 
         if (is_array($extra_tags['class'] ?? null)) {
             $extra_tags['class'] = implode(' ', $extra_tags['class']);
         }
 
         return $this->getApp()->getTag('td', $extra_tags, [
-            ' {$' . $field->short_name . '}' . $this->getApp()->getTag('span', [
-                'class' => 'ui icon link {$_' . $field->short_name . '_data_visible_class}',
-                'data-tooltip' => '{$_' . $field->short_name . '_data_tooltip}',
+            ' {$' . $field->shortName . '}' . $this->getApp()->getTag('span', [
+                'class' => 'ui icon link {$_' . $field->shortName . '_data_visible_class}',
+                'data-tooltip' => '{$_' . $field->shortName . '_data_tooltip}',
             ], [
-                ['i', ['class' => 'ui icon {$_' . $field->short_name . '_icon}']],
+                ['i', ['class' => 'ui icon {$_' . $field->shortName . '_icon}']],
             ]),
         ]);
     }
@@ -75,16 +71,16 @@ class Tooltip extends Table\Column
 
         if ($tooltip === null || $tooltip === '') {
             return [
-                '_' . $field->short_name . '_data_visible_class' => 'transition hidden',
-                '_' . $field->short_name . '_data_tooltip' => '',
-                '_' . $field->short_name . '_icon' => '',
+                '_' . $field->shortName . '_data_visible_class' => 'transition hidden',
+                '_' . $field->shortName . '_data_tooltip' => '',
+                '_' . $field->shortName . '_icon' => '',
             ];
         }
 
         return [
-            '_' . $field->short_name . '_data_visible_class' => '',
-            '_' . $field->short_name . '_data_tooltip' => $tooltip,
-            '_' . $field->short_name . '_icon' => $this->icon,
+            '_' . $field->shortName . '_data_visible_class' => '',
+            '_' . $field->shortName . '_data_tooltip' => $tooltip,
+            '_' . $field->shortName . '_icon' => $this->icon,
         ];
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
+
 /**
  * Add this object to your render tree and it will expose a unique URL which, when
  * executed directly will perform a PHP callback that you set().
@@ -14,7 +16,7 @@ namespace Atk4\Ui;
  * $button = Button::addTo($layout);
  * $button->set('Click to do something')->link(
  *      Callback::addTo($button)
- *          ->set(function(){
+ *          ->set(function () {
  *              do_something();
  *          })
  *          ->getUrl()
@@ -39,9 +41,6 @@ class Callback extends AbstractView
         throw new Exception('Callback cannot contains children');
     }
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         $this->getApp(); // assert has App
@@ -77,8 +76,9 @@ class Callback extends AbstractView
             try {
                 return $fx(...($args ?? []));
             } catch (\Exception $e) {
-                // prevent "Callback requested, but never reached" error
-                throw new \Error('Unexpected callback exception', 0, $e);
+                // catch and wrap an exception using a custom Error class to prevent "Callback requested, but never reached"
+                // exception which is hard to understand/locate as thrown from the main app context
+                throw new UnhandledCallbackExceptionError('', 0, $e);
             }
         }
     }

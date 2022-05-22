@@ -15,8 +15,8 @@ PHP callback::
     $button = new Button();
 
     // clicking button generates random number every time
-    $button->on('click', function($action){
-        return $action->text(rand(1,100));
+    $button->on('click', function($action) {
+        return $action->text(rand(1, 100));
     });
 
 This creates call-back route transparently which is triggered automatically during the 'click' event.
@@ -58,7 +58,7 @@ I have assigned generated URL to the label, so that if you click it, your browse
 callback URL triggering a special action. We haven't set that action yet, so I'll do it next with
 :php:meth::`Callback::set()`::
 
-    $cb->set(function() use($app) {
+    $cb->set(function () use ($app) {
         $app->terminate('in callback');
     });
 
@@ -92,7 +92,7 @@ returns any value, the set() will return it too::
     $label->detail = $cb->getUrl();
     $label->link($cb->getUrl());
 
-    if($cb->set(function(){ return true; })) {
+    if($cb->set(function () { return true; })) {
         $label->addClass('red');
     }
 
@@ -111,7 +111,7 @@ the label regardless of the callback function::
     $label->detail = $cb->getUrl();
     $label->link($cb->getUrl());
 
-    $cb->set(function(){ echo 123; });
+    $cb->set(function () { echo 123; });
 
     if ($cb->triggered) {
         $label->addClass('red');
@@ -144,8 +144,8 @@ the $label->detail is assigned at the very end, yet callback is able to access t
     $label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
     $cb = \Atk4\Ui\CallbackLater::addTo($label);
 
-    $cb->set(function() use($app, $label) {
-        $app->terminate('Label detail is '.$label->detail);
+    $cb->set(function () use ($app, $label) {
+        $app->terminate('Label detail is ' . $label->detail);
     });
 
     $label->detail = $cb->getUrl();
@@ -196,7 +196,7 @@ use JsCallback class now::
     $label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
     $cb = \Atk4\Ui\JsCallback::addTo($label);
 
-    $cb->set(function() {
+    $cb->set(function () {
         return 'ok';
     });
 
@@ -218,7 +218,7 @@ To fully use jsAction above, here is a modified code::
     $label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
     $cb = \Atk4\Ui\JsCallback::addTo($label);
 
-    $cb->set(function() {
+    $cb->set(function () {
         return 'ok';
     });
 
@@ -229,7 +229,7 @@ Now, that is pretty long. For your convenience, there is a shorter mechanism::
 
     $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 
-    $label->on('click', function() {
+    $label->on('click', function () {
         return 'ok';
     });
 
@@ -248,7 +248,7 @@ If you set `confirm` property action will ask for user's confirmation before sen
 
     $cb->confirm = 'sure?';
 
-    $cb->set(function() {
+    $cb->set(function () {
         return 'ok';
     });
 
@@ -260,7 +260,7 @@ property::
 
     $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 
-    $label->on('click', function() {
+    $label->on('click', function () {
         return 'ok';
     }, ['confirm' => 'sure?']);
 
@@ -275,8 +275,8 @@ will send browser screen width back to the callback::
     $label = \Atk4\Ui\Label::addTo($app);
     $cb = \Atk4\Ui\JsCallback::addTo($label);
 
-    $cb->set(function($j, $arg1){
-        return 'width is '.$arg1;
+    $cb->set(function($j, $arg1) {
+        return 'width is ' . $arg1;
     }, [new \Atk4\Ui\JsExpression( '$(window).width()' )]);
 
     $label->detail = $cb->getUrl();
@@ -289,7 +289,7 @@ also supports argument passing::
     $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 
     $label->on('click', function($j, $arg1) {
-        return 'width is '.$arg1;
+        return 'width is ' . $arg1;
     }, ['confirm' => 'sure?', 'args' => [new \Atk4\Ui\JsExpression( '$(window).width()' )]]);
 
 If you do not need to specify confirm, you can actually pass arguments in a key-less array too::
@@ -297,7 +297,7 @@ If you do not need to specify confirm, you can actually pass arguments in a key-
     $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 
     $label->on('click', function($j, $arg1) {
-        return 'width is '.$arg1;
+        return 'width is ' . $arg1;
     }, [new \Atk4\Ui\JsExpression( '$(window).width()' )]);
 
 
@@ -308,7 +308,7 @@ You might have noticed that JsCallback now passes first argument ($j) which so f
 jQuery chain for the element which received the event. We can change the response to do something with this element.
 Instead of `return` use::
 
-    $j->text('width is '.$arg1);
+    $j->text('width is ' . $arg1);
 
 Now instead of showing an alert box, label content will be changed to display window width.
 

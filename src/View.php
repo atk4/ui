@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Data\Model;
-use Atk4\Data\Persistence\Static_;
+use Atk4\Data\Persistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**
@@ -25,11 +25,7 @@ class View extends AbstractView implements JsExpressionable
      */
     public $_js_actions = [];
 
-    /**
-     * Data model.
-     *
-     * @var Model
-     */
+    /** @var Model Data model. */
     public $model;
 
     /**
@@ -49,32 +45,13 @@ class View extends AbstractView implements JsExpressionable
      */
     public $ui = false;
 
-    /**
-     * ID of the element, that's unique and is used in JS operations.
-     *
-     * @var string
-     */
-    public $id;
-
-    /**
-     * List of classes that needs to be added.
-     *
-     * @var array
-     */
+    /** @var array List of classes that needs to be added. */
     public $class = [];
 
-    /**
-     * List of custom CSS attributes.
-     *
-     * @var array
-     */
+    /** @var array List of custom CSS attributes. */
     public $style = [];
 
-    /**
-     * List of custom attributes.
-     *
-     * @var array
-     */
+    /** @var array List of custom attributes. */
     public $attr = [];
 
     /**
@@ -97,18 +74,10 @@ class View extends AbstractView implements JsExpressionable
      */
     public $defaultTemplate = 'element.html';
 
-    /**
-     * Set static contents of this view.
-     *
-     * @var string|false|null
-     */
+    /** @var string|false|null Set static contents of this view. */
     public $content;
 
-    /**
-     * Change this if you want to substitute default "div" for something else.
-     *
-     * @var string
-     */
+    /** @var string Change this if you want to substitute default "div" for something else. */
     public $element;
 
     /** @var ExecutorFactory|null Seed class name */
@@ -117,38 +86,23 @@ class View extends AbstractView implements JsExpressionable
     // {{{ Setting Things up
 
     /**
-     * May accept properties of a class, but if property is not defined, it will
-     * be used as a HTML class instead.
-     *
      * @param array|string $label
-     * @param array|string $class
      */
-    public function __construct($label = null, $class = null)
+    public function __construct($label = [])
     {
-        if (is_array($label)) {
-            // backwards mode
-            $defaults = $label;
-            if (isset($defaults[0])) {
-                $label = $defaults[0];
-                unset($defaults[0]);
-            } else {
-                $label = null;
-            }
-
-            if (isset($defaults[1])) {
-                $class = $defaults[1];
-                unset($defaults[1]);
-            }
-            $this->setDefaults($defaults);
+        if (func_num_args() > 1) { // prevent bad usage
+            throw new \Error('Too many method arguments');
         }
 
-        if ($label !== null) {
-            $this->content = $label;
+        $defaults = is_array($label) ? $label : [$label];
+        unset($label);
+
+        if (array_key_exists(0, $defaults)) {
+            $defaults['content'] = $defaults[0];
+            unset($defaults[0]);
         }
 
-        if ($class) {
-            $this->addClass($class);
-        }
+        $this->setDefaults($defaults);
     }
 
     /**
@@ -157,14 +111,14 @@ class View extends AbstractView implements JsExpressionable
      *
      * Do not try to create your own "Model" implementation, instead you must be looking for
      * your own "Persistence" implementation.
-     *
-     * @return Model
      */
-    public function setModel(Model $model)
+    public function setModel(Model $model): void
     {
-        $this->model = $model;
+        if ($this->model !== null && $this->model !== $model) {
+            throw new Exception('Different model already set');
+        }
 
-        return $model;
+        $this->model = $model;
     }
 
     /**
@@ -189,7 +143,8 @@ class View extends AbstractView implements JsExpressionable
             }
         }
 
-        $this->setModel(new Model(new Static_($data)), $fields); // @phpstan-ignore-line
+        $this->setModel(new Model(new Persistence\Static_($data)), $fields); // @phpstan-ignore-line
+        $this->model->getField($this->model->id_field)->type = null; // TODO probably unwanted
 
         return $this->model;
     }
@@ -199,11 +154,12 @@ class View extends AbstractView implements JsExpressionable
      */
     protected function setMissingProperty(string $propertyName, $value): void
     {
-        if (is_bool($value)) {
+        if (is_bool($value) && str_starts_with($propertyName, 'class.')) {
+            $class = substr($propertyName, strlen('class.'));
             if ($value) {
-                $this->addClass($propertyName);
+                $this->addClass($class);
             } else {
-                $this->removeClass($propertyName);
+                $this->removeClass($class);
             }
 
             return;
@@ -260,13 +216,9 @@ class View extends AbstractView implements JsExpressionable
      */
     protected function init(): void
     {
-        $addLater = $this->_add_later;
-        $this->_add_later = [];
+        $addLater = $this->_addLater;
+        $this->_addLater = [];
         parent::init();
-
-        if ($this->id === null) {
-            $this->id = $this->name;
-        }
 
         if ($this->region && !$this->template && !$this->defaultTemplate && $this->issetOwner() && $this->getOwner()->template) {
             $this->template = $this->getOwner()->template->cloneRegion($this->region);
@@ -323,7 +275,7 @@ class View extends AbstractView implements JsExpressionable
         }
 
         if (!$this->issetApp()) {
-            $this->_add_later[] = [$object, $region];
+            $this->_addLater[] = [$object, $region];
 
             return $object;
         }
@@ -436,21 +388,8 @@ class View extends AbstractView implements JsExpressionable
      */
     public function addClass($class)
     {
-        if (is_array($class)) {
-            $class = implode(' ', $class);
-        }
-
-        if (!$this->class) {
-            $this->class = [];
-        }
-
-        if (is_string($this->class)) {
-            throw (new Exception('Property $class should always be array'))
-                ->addMoreInfo('object', $this)
-                ->addMoreInfo('class', $this->class);
-        }
-
-        $this->class = array_merge($this->class, explode(' ', $class));
+        $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
+        $this->class = array_merge($this->class, $classArr);
 
         return $this;
     }
@@ -458,18 +397,14 @@ class View extends AbstractView implements JsExpressionable
     /**
      * Remove one or several CSS classes from the element.
      *
-     * @param array|string $class CSS class name or array of class names
+     * @param string|array $class CSS class name or array of class names
      *
      * @return $this
      */
     public function removeClass($class)
     {
-        if (is_array($class)) {
-            $class = implode(' ', $class);
-        }
-
-        $class = explode(' ', $class);
-        $this->class = array_diff($this->class, $class);
+        $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
+        $this->class = array_diff($this->class, $classArr);
 
         return $this;
     }
@@ -668,8 +603,8 @@ class View extends AbstractView implements JsExpressionable
             $this->template->tryDel('_ui');
         }
 
-        if ($this->id) {
-            $this->template->trySet('_id', $this->id);
+        if ($this->name) {
+            $this->template->trySet('_id', $this->name);
         }
 
         if ($this->element) {
@@ -714,7 +649,7 @@ class View extends AbstractView implements JsExpressionable
      */
     public function renderAll(): void
     {
-        if (!$this->_initialized) {
+        if (!$this->isInitialized()) {
             $this->invokeInit();
         }
 
@@ -742,7 +677,9 @@ class View extends AbstractView implements JsExpressionable
     {
         $this->renderAll();
 
-        return $this->getJs($forceReturn)
+        $js = $this->getJs($forceReturn);
+
+        return ($js !== '' ? $this->getApp()->getTag('script', null, $js) : '')
                . $this->renderTemplateToHtml();
     }
 
@@ -960,7 +897,7 @@ class View extends AbstractView implements JsExpressionable
         $type = $useSession ? 'session' : 'local';
 
         if (!$name = $this->name) {
-            throw new Exception('View property name needs to be set.');
+            throw new Exception('View property name needs to be set');
         }
 
         return (new JsChain('atk.dataService'))->clearData($name, $type);
@@ -984,7 +921,7 @@ class View extends AbstractView implements JsExpressionable
         $type = $useSession ? 'session' : 'local';
 
         if (!$name = $this->name) {
-            throw new Exception('View property name needs to be set.');
+            throw new Exception('View property name needs to be set');
         }
 
         return (new JsChain('atk.dataService'))->addJsonData($name, json_encode($data, \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR), $type);
@@ -1010,7 +947,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * on() method is similar to jQuery on() method.
      *
-     * on(event, [selector,] action)
+     * on(event, [selector, ] action)
      *
      * Method on() also returns a chain, that will correspond affected element.
      * Here are some ways to use on();
@@ -1162,11 +1099,9 @@ class View extends AbstractView implements JsExpressionable
      */
     public function jsRender(): string
     {
-        if (!$this->_initialized) {
-            throw new Exception('Render tree must be initialized before materializing JsChains.');
-        }
+        $this->assertIsInitialized();
 
-        return json_encode('#' . $this->id, \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
+        return json_encode('#' . $this->name, \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -1200,7 +1135,7 @@ class View extends AbstractView implements JsExpressionable
             }
         }
 
-        if (!$actions) {
+        if (count($actions) === 0) {
             return '';
         }
 
@@ -1219,9 +1154,7 @@ class View extends AbstractView implements JsExpressionable
 
         $ready = new JsFunction($actions);
 
-        return "<script>\n" .
-               (new Jquery($ready))->jsRender() .
-               '</script>';
+        return (new Jquery($ready))->jsRender();
     }
 
     // }}}

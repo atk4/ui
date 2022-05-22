@@ -7,7 +7,7 @@ namespace Atk4\Ui\Demos;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Card Model', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\Atk4\Ui\Button::addTo($app, ['Card Model', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['card-action']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 

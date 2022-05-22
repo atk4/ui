@@ -24,23 +24,18 @@ class Checkbox extends Form\Control
      */
     public $label;
 
-    /**
-     * Constructor.
-     *
-     * @param string|array $label
-     * @param string|array $class
-     */
-    public function __construct($label = null, $class = null)
+    public function __construct($label = [])
     {
-        parent::__construct($label, $class);
+        if (func_num_args() > 1) { // prevent bad usage
+            throw new \Error('Too many method arguments');
+        }
+
+        parent::__construct($label);
 
         $this->label = $this->content;
         $this->content = null;
     }
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();

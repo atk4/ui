@@ -9,15 +9,16 @@ use Atk4\Ui\Form;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Accordion in Form', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\Atk4\Ui\Button::addTo($app, ['Accordion in Form', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['form-section-accordion']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$model = new CountryLock($app->db);
+$model = new Country($app->db);
 $model = $model->loadAny();
 
-// Prevent form from saving
-$noSave = function (Form $form) {
+$saveAndDumpValues = function (Form $form) {
+    $form->model->save();
+
     return new \Atk4\Ui\JsToast([
         'title' => 'POSTed field values',
         'message' => '<pre>' . $form->getApp()->encodeJson($form->model->get()) . '</pre>',
@@ -26,7 +27,7 @@ $noSave = function (Form $form) {
     ]);
 };
 
-////////////////////////////////
+// -----------------------------------------------------------------------------
 
 $form = Form::addTo($app);
 $form->setModel($model, []);
@@ -42,15 +43,15 @@ $c1 = $colsLayout->addColumn();
 $c1->setModel($model, [$model->fieldName()->iso, $model->fieldName()->iso3]);
 
 $c2 = $colsLayout->addColumn();
-$c2->setModel($model, [$model->fieldName()->numcode/*, $model->fieldName()->phonecode*/]);
+$c2->setModel($model, [$model->fieldName()->numcode/* , $model->fieldName()->phonecode */]);
 
 $form->addControl($model->fieldName()->phonecode);
 
-$form->onSubmit($noSave);
+$form->onSubmit($saveAndDumpValues);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
-////////////////////////////////
+// -----------------------------------------------------------------------------
 
 $form = Form::addTo($app);
 $form->setModel($model, []);
@@ -68,11 +69,11 @@ $a1->setModel($model, [$model->fieldName()->iso, $model->fieldName()->iso3]);
 $a2 = $accordionLayout->addSection('Section 2');
 $a2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phonecode]);
 
-$form->onSubmit($noSave);
+$form->onSubmit($saveAndDumpValues);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
-////////////////////////////////
+// -----------------------------------------------------------------------------
 
 $form = Form::addTo($app);
 $form->setModel($model, []);
@@ -90,11 +91,11 @@ $tab1->addGroup('In Group')->setModel($model, [$model->fieldName()->iso, $model-
 $tab2 = $tabsLayout->addTab('Tab 2');
 $tab2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phonecode]);
 
-$form->onSubmit($noSave);
+$form->onSubmit($saveAndDumpValues);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
-/////////////////////////////////////////
+// -----------------------------------------------------------------------------
 
 \Atk4\Ui\Header::addTo($app, ['Color in form']);
 
@@ -115,6 +116,6 @@ $c1->setModel($model, [$model->fieldName()->iso, $model->fieldName()->iso3]);
 $c2 = $colsLayout->addColumn();
 $c2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phonecode]);
 
-$form->onSubmit($noSave);
+$form->onSubmit($saveAndDumpValues);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);

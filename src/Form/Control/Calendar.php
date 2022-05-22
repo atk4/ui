@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
-use Atk4\Ui\App;
 use Atk4\Ui\Jquery;
-use Atk4\Ui\JsChain;
 use Atk4\Ui\JsExpression;
 
 /**
@@ -33,62 +31,30 @@ class Calendar extends Input
         $this->options[$name] = $value;
     }
 
-    /**
-     * Set first day of week globally.
-     */
-    public static function setFirstDayOfWeek(App $app, int $day)
-    {
-        $app->html->js(true, (new JsExpression('flatpickr.l10ns.default.firstDayOfWeek = [day]', ['day' => $day])));
-    }
-
-    /**
-     * Load flatpickr locale file.
-     * Pass it has an option when adding Calendar input.
-     *  Form\Control\Calendar::requireLocale($app, 'fr');
-     *  $form->getControl('date')->options['locale'] = 'fr';.
-     */
-    public static function requireLocale(App $app, string $locale)
-    {
-        $app->requireJs($app->cdn['flatpickr'] . '/l10n/' . $locale . '.js');
-    }
-
-    /**
-     * Apply locale globally to all flatpickr instance.
-     */
-    public static function setLocale(App $app, string $locale)
-    {
-        self::requireLocale($app, $locale);
-        $app->html->js(true, (new JsChain('flatpickr'))->localize((new JsChain('flatpickr'))->l10ns->{$locale}));
-    }
-
-    /**
-     * Set first day of week for calendar display.
-     * Applied globally to all flatpickr instance.
-     */
-    public static function setDayOfWeek(App $app, int $day)
-    {
-        $app->html->js(true, (new JsExpression('flatpickr.l10ns.default.firstDayOfWeek = [day]', ['day' => $day])));
-    }
-
     protected function init(): void
     {
         parent::init();
 
-        // get format from Persistence\Date.
-        $format = $this->translateFormat($this->getApp()->ui_persistence->{$this->type . '_format'});
-        $this->options['dateFormat'] = $format;
+        // setup format
+        $phpFormat = $this->getApp()->ui_persistence->{$this->type . '_format'};
+        $this->options['dateFormat'] = $this->convertPhpDtFormatToFlatpickr($phpFormat);
 
         if ($this->type === 'datetime' || $this->type === 'time') {
             $this->options['enableTime'] = true;
-            $this->options['time_24hr'] ??= $this->use24hrTimeFormat($this->options['altFormat'] ?? $this->options['dateFormat']);
+            $this->options['time_24hr'] ??= $this->use24hrTimeFormat($phpFormat);
             $this->options['noCalendar'] = ($this->type === 'time');
 
             // Add seconds picker if set
-            $this->options['enableSeconds'] ??= $this->useSeconds($this->options['altFormat'] ?? $this->options['dateFormat']);
+            $this->options['enableSeconds'] ??= $this->useSeconds($phpFormat);
 
             // Allow edit if microseconds is set.
-            $this->options['allowInput'] ??= $this->allowMicroSecondsInput($this->options['altFormat'] ?? $this->options['dateFormat']);
+            $this->options['allowInput'] ??= $this->allowMicroSecondsInput($phpFormat);
         }
+
+        // setup locale
+        $this->options['locale'] = [
+            'firstDayOfWeek' => $this->getApp()->ui_persistence->firstDayOfWeek,
+        ];
     }
 
     protected function renderView(): void
@@ -139,29 +105,43 @@ class Calendar extends Input
      */
     public function getJsInstance(): JsExpression
     {
-        return (new Jquery('#' . $this->id . '_input'))->get(0)->_flatpickr;
+        return (new Jquery('#' . $this->name . '_input'))->get(0)->_flatpickr;
     }
 
-    public function translateFormat(string $format): string
+    private function expandPhpDtFormat(string $phpFormat): string
     {
-        // translate from php to flatpickr.
-        $format = preg_replace(['~[aA]~', '~[s]~', '~[g]~'], ['K', 'S', 'G'], $format);
+        $phpFormat = str_replace('c', \DateTimeInterface::ISO8601, $phpFormat);
+        $phpFormat = str_replace('r', \DateTimeInterface::RFC2822, $phpFormat);
 
-        return $format;
+        return $phpFormat;
     }
 
-    public function use24hrTimeFormat(string $format): bool
+    public function convertPhpDtFormatToFlatpickr(string $phpFormat): string
     {
-        return !preg_match('~[gGh]~', $format);
+        $res = $this->expandPhpDtFormat($phpFormat);
+        foreach ([
+            '~[aA]~' => 'K',
+            '~[s]~' => 'S',
+            '~[g]~' => 'G',
+        ] as $k => $v) {
+            $res = preg_replace($k, $v, $res);
+        }
+
+        return $res;
     }
 
-    public function useSeconds(string $format): bool
+    public function use24hrTimeFormat(string $phpFormat): bool
     {
-        return (bool) preg_match('~[S]~', $format);
+        return !preg_match('~[gh]~', $this->expandPhpDtFormat($phpFormat));
     }
 
-    public function allowMicroSecondsInput(string $format): bool
+    public function useSeconds(string $phpFormat): bool
     {
-        return (bool) preg_match('~[u]~', $format);
+        return (bool) preg_match('~[suv]~', $this->expandPhpDtFormat($phpFormat));
+    }
+
+    public function allowMicroSecondsInput(string $phpFormat): bool
+    {
+        return (bool) preg_match('~[uv]~', $this->expandPhpDtFormat($phpFormat));
     }
 }

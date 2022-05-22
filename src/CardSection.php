@@ -50,9 +50,7 @@ class CardSection extends View
      */
     public function addFields(Model $model, array $fields, bool $useLabel = false, bool $useTable = false)
     {
-        if (!$model->loaded()) {
-            throw new Exception('Model need to be loaded.');
-        }
+        $model->assertIsLoaded();
 
         if ($useTable) {
             $this->addTableSection($model, $fields);

@@ -14,8 +14,8 @@ class JsTest extends TestCase
 {
     public function testBasicExpressions(): void
     {
-        $this->assertSame('2+2', (new JsExpression('2+2'))->jsRender());
-        $this->assertSame('3+4', (new JsExpression('[]+[]', [3, 4]))->jsRender());
+        $this->assertSame('2 + 2', (new JsExpression('2 + 2'))->jsRender());
+        $this->assertSame('3 + 4', (new JsExpression('[] + []', [3, 4]))->jsRender());
     }
 
     public function testNumbers(): void
@@ -64,14 +64,14 @@ class JsTest extends TestCase
     public function testNestedExpressions(): void
     {
         $this->assertSame(
-            '10-(2+3)',
+            '10-(2 + 3)',
             (
                 new JsExpression(
                     '[]-[]',
                     [
                         10,
                         new JsExpression(
-                            '[a]+[b]',
+                            '[a] + [b]',
                             ['a' => 2, 'b' => 3]
                         ),
                     ]

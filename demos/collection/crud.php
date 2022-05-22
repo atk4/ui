@@ -10,7 +10,7 @@ use Atk4\Ui\Form;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$model = new CountryLock($app->db);
+$model = new Country($app->db);
 
 $crud = \Atk4\Ui\Crud::addTo($app, ['ipp' => 10]);
 
@@ -24,16 +24,9 @@ $crud->onFormEdit(function (Form $form) use ($model) {
     $form->js(true, $form->getControl($model->fieldName()->name)->jsInput()->attr('readonly', true));
 });
 
-// callback for both model action edit and add.
-$crud->onFormAddEdit(function (Form $form, $ex) {
-    $form->onSubmit(function (Form $form) use ($ex) {
-        return [$ex->hide(), new \Atk4\Ui\JsToast('Submit all right! This demo does not saved data.')];
-    });
-});
-
 $crud->setModel($model);
 
-$crud->addDecorator($model->title_field, [\Atk4\Ui\Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => 'id']]);
+$crud->addDecorator($model->title_field, [\Atk4\Ui\Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => $model->fieldName()->id]]);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
@@ -51,7 +44,7 @@ $crud = \Atk4\Ui\Crud::addTo($column, [
     'table' => ['class' => ['red inverted']],
 ]);
 // Condition on the model can be applied on a model
-$model = new CountryLock($app->db);
+$model = new Country($app->db);
 $model->addCondition($model->fieldName()->numcode, '<', 200);
 $model->onHook(\Atk4\Data\Model::HOOK_VALIDATE, function (Country $model, $intent) {
     $err = [];
@@ -64,8 +57,8 @@ $model->onHook(\Atk4\Data\Model::HOOK_VALIDATE, function (Country $model, $inten
 $crud->setModel($model);
 
 // Because Crud inherits Grid, you can also define custom actions
-$crud->addModalAction(['icon' => [\Atk4\Ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($crud) {
-    $model = CountryLock::assertInstanceOf($crud->model);
+$crud->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($crud) {
+    $model = Country::assertInstanceOf($crud->model);
     \Atk4\Ui\Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $id . ')']);
 });
 
@@ -86,14 +79,14 @@ $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
             \Atk4\Ui\Grid::addTo($right, ['menu' => false, 'ipp' => 5])
                 ->setModel(File::assertInstanceOf($this->getAction()->getModel())->SubFolder);
         } else {
-            \Atk4\Ui\Message::addTo($right, ['Not a folder', 'warning']);
+            \Atk4\Ui\Message::addTo($right, ['Not a folder', 'type' => 'warning']);
         }
 
         return $result;
     }
 });
 
-$file = new FileLock($app->db);
+$file = new File($app->db);
 $app->getExecutorFactory()->registerExecutor($file->getUserAction('edit'), [$myExecutorClass]);
 
 $crud = \Atk4\Ui\Crud::addTo($column, [
@@ -103,4 +96,5 @@ $crud = \Atk4\Ui\Crud::addTo($column, [
 $crud->menu->addItem(['Rescan', 'icon' => 'recycle']);
 
 // Condition on the model can be applied after setting the model
-$crud->setModel($file)->addCondition($file->fieldName()->parent_folder_id, null);
+$crud->setModel($file);
+$file->addCondition($file->fieldName()->parent_folder_id, null);

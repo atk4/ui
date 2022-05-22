@@ -34,9 +34,9 @@ https://fomantic-ui.com/elements/icon.html
 
 You can also use States, Variations by passing classes to your button::
 
-    Button::addTo($app, ['Click Me', 'red', 'icon' => 'flipped big question']);
+    Button::addTo($app, ['Click Me', 'class.red' => true, 'icon' => 'flipped big question']);
 
-    Label::addTo($app, ['Battery Low', 'green', 'icon' => 'battery low']);
+    Label::addTo($app, ['Battery Low', 'class.green' => true, 'icon' => 'battery low']);
 
 .. _icon_other_comp:
 
@@ -47,15 +47,15 @@ You can use icon on the following components: :php:class:`Button`, :php:class:`L
 :php:class:`Message`, :php:class:`Menu` and possibly some others. Here are some examples::
 
 
-    Header::addTo($app, ['Header', 'red', 'icon' => 'flipped question']);
-    Button::addTo($app, ['Button', 'red', 'icon' => 'flipped question']);
+    Header::addTo($app, ['Header', 'class.red' => true, 'icon' => 'flipped question']);
+    Button::addTo($app, ['Button', 'class.red' => true, 'icon' => 'flipped question']);
 
     $menu = Menu::addTo($app);
     $menu->addItem(['Menu Item', 'icon' => 'flipped question']);
     $sub_menu = $menu->addMenu(['Sub-menu', 'icon' => 'flipped question']);
     $sub_menu->addItem(['Sub Item', 'icon' => 'flipped question']);
 
-    Label::addTo($app, ['Label', 'right ribbon red', 'icon' => 'flipped question']);
+    Label::addTo($app, ['Label', 'class.right ribbon red' => true, 'icon' => 'flipped question']);
 
 
 
@@ -95,7 +95,7 @@ Composing
 
 Composing offers you another way to deal with Group icons::
 
-    $no_users = new \Atk4\Ui\View([null, 'huge icons', 'element' => 'i']);
+    $no_users = new \Atk4\Ui\View(['class.huge icons' => true, 'element' => 'i']);
     Icon::addTo($no_users, ['big red dont']);
     Icon::addTo($no_users, ['black user icon']);
 
@@ -127,7 +127,7 @@ Here is the code with comments::
         public $social = null;
         public $icon = null;
         public $defaultTemplate = null;
-        // public $defaultTemplate = __DIR__.'../templates/socialadd.html';
+        // public $defaultTemplate = __DIR__ . '../templates/socialadd.html';
 
         function init(): void {
             parent::init();
@@ -148,7 +148,7 @@ Here is the code with comments::
             if (!$this->template) {
                 // TODO: Place template into file and set defaultTemplate instead
                 $this->template = new \Atk4\Ui\Template(
-    '<{_element}button{/} class="ui '.$this->social.' button" {$attributes}>
+    '<{_element}button{/} class="ui ' . $this->social . ' button" {$attributes}>
       <i class="large icons">
         {$Icon}
         <i class="inverted corner add icon"></i>

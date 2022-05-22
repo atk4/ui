@@ -6,9 +6,8 @@ import 'draggable';
 
 /**
  * Make elements inside a container draggable and sortable.
- *  Use shopify/Draggable library: https://github.com/Shopify/draggable.
- *  draggable.js is external to this bundle, so it need to be load from cdn.
- *    $app->requireJs('https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.5/lib/draggable.bundle.js');
+ *  Use shopify/Draggable library https://github.com/Shopify/draggable,
+ *  draggable.js is external to this bundle, so it need to be load from CDN.
  *
  *  After reordering, callback is sent to server with post information:
  *    order => contains the order of data-{label} as a comma delimited string;
@@ -118,7 +117,7 @@ JsSortable.DEFAULTS = {
     draggable: 'tr',
     dataLabel: 'id',
     handleClass: null,
-    mirrorCss: '.draggable-mirror {background: #fff!important;margin-left: 1%;opacity: 0.9;}',
-    overCss: '.draggable--over { background: yellow !important; opacity: 0.5;}',
+    mirrorCss: '.draggable-mirror {background: #fff!important;margin-left: 1%;opacity: 0.9; }',
+    overCss: '.draggable--over { background: yellow !important; opacity: 0.5; }',
     autoFireCb: true,
 };

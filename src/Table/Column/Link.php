@@ -17,7 +17,7 @@ use Atk4\Ui\Table;
  * or
  *   new Link(['order', 'id' ]);
  * or
- *   new Link([['order', 'x' => $myval], 'id' ]);.
+ *   new Link([['order', 'x' => $myval], 'id']);.
  */
 class Link extends Table\Column
 {
@@ -37,6 +37,8 @@ class Link extends Table\Column
      * $url = $app->url(['example', 'type' => '123']);
      *
      * In addition to abpove "args" refer to values picked up from a current row.
+     *
+     * @var string|array
      */
     public $page;
 
@@ -53,24 +55,18 @@ class Link extends Table\Column
      *
      * You can also pass non-key arguments ['id', 'title'] and they will be added up
      * as ?id=4&title=John%20Smith
+     *
+     * @var array
      */
     public $args = [];
 
     /** @var bool use value as label of the link */
     public $use_label = true;
 
-    /**
-     * set element class.
-     *
-     * @var string|null
-     */
+    /** @var string|null set element class. */
     public $class;
 
-    /**
-     * Use icon as label of the link.
-     *
-     * @var string|null
-     */
+    /** @var string|null Use icon as label of the link. */
     public $icon;
 
     /**
@@ -81,36 +77,25 @@ class Link extends Table\Column
      */
     public $target;
 
-    /**
-     * add download in the tag to force download from the url.
-     *
-     * @var bool
-     */
+    /** @var bool add download in the tag to force download from the url. */
     public $force_download = false;
 
-    public function __construct($page = [], $args = [])
+    /**
+     * @param string|array $page
+     */
+    public function __construct($page = [], array $args = [], array $defaults = [])
     {
         if (is_array($page)) {
             $page = ['page' => $page];
         } elseif (is_string($page)) {
             $page = ['url' => $page];
         }
+
         if ($args) {
             $page['args'] = $args;
         }
-        parent::__construct($page);
-    }
 
-    public function setDefaults(array $properties, bool $passively = false)
-    {
-        if (isset($properties[0])) {
-            $this->page = array_shift($properties);
-        }
-        if (isset($properties[0])) {
-            $this->args = array_shift($properties);
-        }
-
-        return parent::setDefaults($properties);
+        parent::__construct(array_replace($defaults, $page));
     }
 
     protected function init(): void
@@ -138,7 +123,7 @@ class Link extends Table\Column
 
         $label = '';
         if ($this->use_label) {
-            $label = $field ? ('{$' . $field->short_name . '}') : '[Link]';
+            $label = $field ? ('{$' . $field->shortName . '}') : '[Link]';
         }
 
         $class = '';
@@ -146,7 +131,7 @@ class Link extends Table\Column
             $class = ' class="' . $this->class . '" ';
         }
 
-        return '<a href="{$c_' . $this->short_name . '}"' . $external . $class . $download . '>' . $icon . '' . $label . '</a>';
+        return '<a href="{$c_' . $this->shortName . '}"' . $external . $class . $download . '>' . $icon . '' . $label . '</a>';
     }
 
     public function getHtmlTags(Model $row, $field)
@@ -154,7 +139,7 @@ class Link extends Table\Column
         if ($this->url) {
             $rowValues = $this->getApp()->ui_persistence->typecastSaveRow($row, $row->get());
 
-            return ['c_' . $this->short_name => $this->url->set($rowValues)->renderToHtml()];
+            return ['c_' . $this->shortName => $this->url->set($rowValues)->renderToHtml()];
         }
 
         $p = $this->page ?: [];
@@ -164,11 +149,9 @@ class Link extends Table\Column
                 $key = $val;
             }
 
-            if ($row->hasField($val)) {
-                $p[$key] = $row->get($val);
-            }
+            $p[$key] = $row->get($val);
         }
 
-        return ['c_' . $this->short_name => $this->table->url($p)];
+        return ['c_' . $this->shortName => $this->table->url($p)];
     }
 }

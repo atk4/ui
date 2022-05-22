@@ -20,7 +20,8 @@ require_once __DIR__ . '/../init-app.php';
 
 /** @var \Atk4\Ui\Lister $cartClass */
 $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\Lister {
-    use \Atk4\Core\SessionTrait;
+    use \Atk4\Ui\SessionTrait;
+
     public $items = [];
 
     public $defaultTemplate = 'lister.html';
@@ -177,10 +178,11 @@ $cart = $cartClass::addTo($app);
 // If i add unset($cart) afterwards, garbage collector will trigger destructor. Instead I'm passing $cart
 // into the callback and making it part of the pop-up render tree.
 $cart->destroy();
+$cart->setApp($app);
 
 // Label now can be added referencing Cart's items. Init() was colled when I added it into app, so the
 // item property is populated.
-$cartOutterLabel = \Atk4\Ui\Label::addTo($cartItem, [count($cart->items), 'floating red ']);
+$cartOutterLabel = \Atk4\Ui\Label::addTo($cartItem, [count($cart->items), 'class.floating red' => true]);
 if (!$cart->items) {
     $cartOutterLabel->addStyle('display', 'none');
 }
@@ -194,7 +196,7 @@ $cartPopup->set(function ($popup) use ($cart) {
 
     $cartInnerLabel->detail = count($cart->items);
     \Atk4\Ui\Item::addTo($popup)->setElement('hr');
-    \Atk4\Ui\Button::addTo($popup, ['Checkout', 'primary small']);
+    \Atk4\Ui\Button::addTo($popup, ['Checkout', 'class.primary small' => true]);
 });
 
 // Add item shelf below menu and link it with the cart
@@ -212,9 +214,9 @@ $pop = Popup::addTo($app, [$browse, 'position' => 'bottom left', 'minWidth' => '
     ->setHoverable()
     ->setOption('delay', ['show' => 100, 'hide' => 400]);
 $shelf2 = $itemShelfClass::addTo($pop);
-//$shelf2->linkCart($cart, $cartItem->jsReload());
+// $shelf2->linkCart($cart, $cartItem->jsReload());
 
-//////////////////////////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
 
 $userMenu = \Atk4\Ui\Menu::addTo($menu, ['ui' => false], ['RightMenu'])
     ->addClass('right menu')->removeClass('item');
@@ -230,7 +232,7 @@ $signup->set(function ($pop) {
     // contetn of the popup will be different depending on this condition.
     if (isset($_GET['logged'])) {
         \Atk4\Ui\Message::addTo($pop, ['You are already logged in as ' . $_GET['logged']]);
-        \Atk4\Ui\Button::addTo($pop, ['Logout', 'primary', 'icon' => 'sign out'])
+        \Atk4\Ui\Button::addTo($pop, ['Logout', 'class.primary' => true, 'icon' => 'sign out'])
             ->link($pop->getApp()->url());
     } else {
         $form = Form::addTo($pop);
@@ -247,16 +249,16 @@ $signup->set(function ($pop) {
 
             // refreshes entire page
             return $form->getApp()->jsRedirect(['logged' => $form->model->get('email')]);
-            //return new \Atk4\Ui\JsExpression('alert([])', ['Thank you ' . $form->model->get('email')]);
+            // return new \Atk4\Ui\JsExpression('alert([])', ['Thank you ' . $form->model->get('email')]);
         });
     }
 });
 
-//////////////////////////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
 
 \Atk4\Ui\Header::addTo($app)->set('Specifying trigger');
 
-$button = \Atk4\Ui\Button::addTo($app, ['Click Me', 'primary']);
+$button = \Atk4\Ui\Button::addTo($app, ['Click Me', 'class.primary' => true]);
 
 $buttonPopup = Popup::addTo($app, [$button]);
 
@@ -271,4 +273,4 @@ View::addTo($inputPopup)->set('You can use this field to search data.');
 $button = \Atk4\Ui\Button::addTo($app, [null, 'icon' => 'volume down']);
 $buttonPopup = Popup::addTo($app, [$button, 'triggerOn' => 'hover'])->setHoverable();
 
-Form\Control\Checkbox::addTo($buttonPopup, ['Just On/Off', 'slider'])->on('change', $button->js()->find('.icon')->toggleClass('up down'));
+Form\Control\Checkbox::addTo($buttonPopup, ['Just On/Off', 'class.slider' => true])->on('change', $button->js()->find('.icon')->toggleClass('up down'));

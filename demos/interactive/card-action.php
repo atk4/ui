@@ -10,7 +10,7 @@ use Atk4\Ui\Button;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Card', 'small left floated basic blue', 'icon' => 'left arrow'])
+\Atk4\Ui\Button::addTo($app, ['Card', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['card']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
@@ -25,7 +25,7 @@ $c->setModel($stat, [$stat->fieldName()->client_name, $stat->fieldName()->descri
 $c->addSection('Project: ', $stat, [$stat->fieldName()->start_date, $stat->fieldName()->finish_date], true);
 
 $country = $stat->client_country_iso;
-$notify = $country->addUserAction('Notify', [
+$notify = $country->getModel()->addUserAction('Notify', [
     'args' => [
         'note' => ['type' => 'string', 'required' => true],
     ],

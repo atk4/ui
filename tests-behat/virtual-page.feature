@@ -3,7 +3,7 @@ Feature: VirtualPage
   Scenario:
     Given I am on "interactive/virtual.php"
     Then I click link 'More info on Car'
-    Then text in container using '.__atk-behat-test-car' should contains 'Car'
+    Then I check if text in ".__atk-behat-test-car" match text "Car"
     Then I press button "Open Lorem Ipsum"
     Then Modal is open with text 'This is yet another modal'
 
@@ -15,16 +15,16 @@ Feature: VirtualPage
   Scenario:
     Given I am on "interactive/virtual.php"
     Then I click link 'Inside current layout'
-    Then text in container using '.__atk-behat-test-content' should contains 'Contents of your pop-up here'
+    Then I check if text in ".__atk-behat-test-content" match text "Contents of your pop-up here"
 
   Scenario:
     Given I am on "_unit-test/virtual-page.php"
     Then I click link 'Open First'
-    Then text in container using '.__atk-behat-test-first' should contains 'First Level Page'
+    Then I check if text in ".__atk-behat-test-first" match text "First Level Page"
     Then I click link 'Open Second'
-    Then text in container using '.__atk-behat-test-second' should contains 'Second Level Page'
+    Then I check if text in ".__atk-behat-test-second" match text "Second Level Page"
     Then I click link 'Open Third'
-    Then text in container using '.__atk-behat-test-third' should contains 'Third Level Page'
+    Then I check if text in ".__atk-behat-test-third" match text "Third Level Page"
     Then I select value "Beverages" in lookup "category"
     Then I press button "Save"
-    Then Toast display should contains text 'Beverages'
+    Then Toast display should contain text 'Beverages'

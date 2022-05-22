@@ -13,32 +13,14 @@ class JsConditionalForm implements JsExpressionable
 {
     use DiContainerTrait;
 
-    // {{{ Properties
-
-    /**
-     * The form where rules should apply.
-     *
-     * @var Form
-     */
+    /** @var Form The form where rules should apply. */
     public $form;
 
-    /**
-     * The field rules for that form.
-     *
-     * @var array|null
-     */
+    /** @var array|null The field rules for that form. */
     public $fieldRules = [];
 
-    /**
-     * The html class name parent for input.
-     *
-     * @var string
-     */
+    /** @var string The html class name parent for input. */
     public $selector;
-
-    // }}}
-
-    // {{{ Base Methods
 
     public function __construct(Form $form, $rules = null, $selector = '.field')
     {
@@ -67,6 +49,4 @@ class JsConditionalForm implements JsExpressionable
 
         return $chain->jsRender();
     }
-
-    // }}}
 }

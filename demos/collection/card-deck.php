@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\UserAction\ExecutorFactory;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -13,9 +14,9 @@ require_once __DIR__ . '/../init-app.php';
 Header::addTo($app, ['Card Deck', 'size' => 1, 'subHeader' => 'Card can be display in a deck, also using model action.']);
 
 $countries = new Country($app->db);
-$countries->addCalculatedField('Cost', function (Country $country) {
+$countries->addCalculatedField('Cost', ['expr' => function (Country $country) {
     return '$ ' . number_format(random_int(500, 1500));
-});
+}]);
 
 $action = $countries->addUserAction('book', [
     'callback' => function (Country $country, $email, $city) {
@@ -24,7 +25,7 @@ $action = $countries->addUserAction('book', [
 ]);
 
 // Create custom button for this action in card.
-$app->getExecutorFactory()->registerTrigger($app->getExecutorFactory()::CARD_BUTTON, [Button::class, null, 'blue', 'icon' => 'plane'], $action);
+$app->getExecutorFactory()->registerTrigger(ExecutorFactory::CARD_BUTTON, [Button::class, 'class.blue' => true, 'icon' => 'plane'], $action);
 
 $action->args = [
     'email' => ['type' => 'string', 'required' => true, 'caption' => 'Please let us know your email address:'],

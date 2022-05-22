@@ -12,11 +12,12 @@ require_once __DIR__ . '/../init-app.php';
 // create header
 \Atk4\Ui\Header::addTo($app, ['Lookup Input']);
 
-Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])->setModel(new Country($app->db));
+Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])
+    ->setModel(new Country($app->db));
 
 // create form
-$form = Form::addTo($app, ['segment']);
-\Atk4\Ui\Label::addTo($form, ['Lookup countries', 'top attached'], ['AboveControls']);
+$form = Form::addTo($app, ['class.segment' => true]);
+\Atk4\Ui\Label::addTo($form, ['Lookup countries', 'class.top attached' => true], ['AboveControls']);
 
 $model = new \Atk4\Data\Model($app->db, ['table' => 'test']);
 
@@ -55,15 +56,16 @@ $form->onSubmit(function (Form $form) {
 \Atk4\Ui\Header::addTo($app, ['Lookup input using label']);
 
 // from seed
-Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])->setModel(new Country($app->db));
+Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])
+    ->setModel(new Country($app->db));
 
 // through constructor
-Form\Control\Lookup::addTo($app, ['placeholder' => 'Weight', 'labelRight' => new \Atk4\Ui\Label(['kg', 'basic'])]);
-Form\Control\Lookup::addTo($app, ['label' => '$', 'labelRight' => new \Atk4\Ui\Label(['.00', 'basic'])]);
+Form\Control\Lookup::addTo($app, ['placeholder' => 'Weight', 'labelRight' => new \Atk4\Ui\Label(['kg', 'class.basic' => true])]);
+Form\Control\Lookup::addTo($app, ['label' => '$', 'labelRight' => new \Atk4\Ui\Label(['.00', 'class.basic' => true])]);
 
 Form\Control\Lookup::addTo($app, [
     'iconLeft' => 'tags',
-    'labelRight' => new \Atk4\Ui\Label(['Add Tag', 'tag']),
+    'labelRight' => new \Atk4\Ui\Label(['Add Tag', 'class.tag' => true]),
 ]);
 
 // left/right corner is not supported, but here is work-around:

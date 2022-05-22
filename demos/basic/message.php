@@ -7,7 +7,7 @@ namespace Atk4\Ui\Demos;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
+$img = $app->cdn['atk'] . '/logo.png';
 
 \Atk4\Ui\Header::addTo($app, ['Message Types']);
 
@@ -17,8 +17,8 @@ $barType = \Atk4\Ui\View::addTo($seg, ['ui' => ' basic buttons']);
 
 $msg = \Atk4\Ui\Message::addTo($seg, [
     'This is a title of your message',
-    'type' => $app->stickyGet('type'),
-    'icon' => $app->stickyGet('icon'),
+    'type' => $seg->stickyGet('type'),
+    'icon' => $seg->stickyGet('icon'),
 ]);
 $msg->text->addParagraph('You can add some more text here for your messages');
 

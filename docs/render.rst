@@ -41,7 +41,7 @@ the following actions are performed:
 
  - template is loaded (or cloned from parent's template)
  - $app property is set
- - $short_name property is determined
+ - $shortName property is determined
  - unique $name is assigned.
 
 Many UI components rely on the above to function properly. For example, Grid will look for certain regions in its template
@@ -91,7 +91,7 @@ will create its own tree independent from the main one.
 Agile UI sometimes uses the following approach to render element on the outside:
 
 1. Create new instance of $sub_view.
-2. Set $sub_view->id = false;
+2. Set $sub_view->name = false;
 3. Calls $view->add($sub_view);
 4. executes $sub_view->renderHtml()
 
@@ -124,7 +124,7 @@ name. Ultimately, you can create a View that uses it's name to store some inform
             parent::init();
 
             if ($_GET[$this->name]) {
-                \Atk4\Ui\Label::addTo($this, ['Secret info is', 'big red', 'detail' => $_GET[$this->name]]);
+                \Atk4\Ui\Label::addTo($this, ['Secret info is', 'class.big red' => true, 'detail' => $_GET[$this->name]]);
             }
 
             \Atk4\Ui\Button::addTo($this, ['Send info to ourselves'])

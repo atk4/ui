@@ -12,7 +12,7 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-Button::addTo($app, ['Executor Factory in View Instance', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+Button::addTo($app, ['Executor Factory in View Instance', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['factory-view']);
 View::addTo($app, ['ui' => 'ui clearing divider']);
 
@@ -49,7 +49,7 @@ $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends Exe
 // Set new executor factory globally.
 $app->setExecutorFactory(new $myFactory());
 
-$country = new CountryLock($app->db);
+$country = new Country($app->db);
 
 $crud = \Atk4\Ui\Crud::addTo($app, ['ipp' => 5]);
 $crud->setModel($country);

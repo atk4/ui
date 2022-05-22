@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
+use Atk4\Ui\Callback;
 use GuzzleHttp\Client;
 use Symfony\Component\Process\Process;
 
@@ -14,22 +15,26 @@ use Symfony\Component\Process\Process;
  */
 class DemosHttpTest extends DemosTest
 {
+    /** @var Process|null */
     private static $_process;
+    /** @var string|null */
     private static $_processSessionDir;
 
-    /** @var bool set the app->call_exit in demo */
-    protected $app_call_exit = true;
+    /** @var bool set the app->callExit in demo */
+    protected $appCallExit = true;
 
-    /** @var bool set the app->catch_exceptions in demo */
-    protected $app_catch_exceptions = true;
+    /** @var bool set the app->catchExceptions in demo */
+    protected $appCatchExceptions = true;
 
+    /** @var string */
     protected $host = '127.0.0.1';
+    /** @var int */
     protected $port = 9687;
 
     public static function tearDownAfterClass(): void
     {
         // stop the test server
-        usleep(250 * 1000);
+        usleep(250_000);
         self::$_process->stop(1); // TODO we may need to add pcntl_async_signals/pcntl_signal to CoverageUtil.php
         self::$_process = null;
 
@@ -41,6 +46,8 @@ class DemosHttpTest extends DemosTest
         }
         rmdir(self::$_processSessionDir);
         self::$_processSessionDir = null;
+
+        parent::tearDownAfterClass();
     }
 
     protected function setUp(): void
@@ -52,6 +59,8 @@ class DemosHttpTest extends DemosTest
 
             $this->setupWebserver();
         }
+
+        parent::setUp();
     }
 
     private function setupWebserver(): void
@@ -75,7 +84,21 @@ class DemosHttpTest extends DemosTest
         self::$_process = Process::fromShellCommandline('php ' . implode(' ', array_map('escapeshellarg', $cmdArgs)));
         self::$_process->disableOutput();
         self::$_process->start();
-        usleep(250 * 1000);
+
+        // wait until server is ready
+        $ts = microtime(true);
+        while (true) {
+            usleep(20_000);
+            try {
+                $this->getResponseFromRequest('?ping');
+
+                break;
+            } catch (\GuzzleHttp\Exception\ConnectException $e) {
+                if (microtime(true) - $ts > 5) {
+                    throw $e;
+                }
+            }
+        }
     }
 
     protected function getClient(): Client
@@ -85,9 +108,36 @@ class DemosHttpTest extends DemosTest
 
     protected function getPathWithAppVars(string $path): string
     {
-        $path .= strpos($path, '?') === false ? '?' : '&';
-        $path .= 'APP_CALL_EXIT=' . ((int) $this->app_call_exit) . '&APP_CATCH_EXCEPTIONS=' . ((int) $this->app_catch_exceptions);
+        $path .= !str_contains($path, '?') ? '?' : '&';
+        $path .= 'APP_CALL_EXIT=' . ((int) $this->appCallExit) . '&APP_CATCH_EXCEPTIONS=' . ((int) $this->appCatchExceptions);
 
         return parent::getPathWithAppVars($path);
+    }
+
+    /**
+     * @dataProvider demoLateOutputErrorProvider
+     */
+    public function testDemoLateOutputError(string $urlTrigger, string $expectedOutput): void
+    {
+        $path = '_unit-test/late-output-error.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . $urlTrigger . '=ajax&'
+            . Callback::URL_QUERY_TARGET . '=' . $urlTrigger . '&__atk_json=1';
+
+        $response = $this->getResponseFromRequest5xx($path);
+
+        $this->assertSame(500, $response->getStatusCode());
+        $this->assertSame($expectedOutput, $response->getBody()->getContents());
+    }
+
+    public function demoLateOutputErrorProvider(): array
+    {
+        $hOutput = "\n" . '!! FATAL UI ERROR: Headers already sent, more headers cannot be set at this stage !!' . "\n";
+        $oOutput = 'unmanaged output' . "\n" . '!! FATAL UI ERROR: Unexpected output detected !!' . "\n";
+
+        return [
+            ['err_headers_already_sent_2', $hOutput],
+            ['err_unexpected_output_detected_2', $oOutput],
+            ['err_headers_already_sent_1', $hOutput],
+            ['err_unexpected_output_detected_1', $oOutput],
+        ];
     }
 }

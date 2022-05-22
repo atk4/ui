@@ -24,9 +24,6 @@ class VirtualPage extends View
     /** @var string UI container class */
     public $ui = 'container';
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();
@@ -51,7 +48,7 @@ class VirtualPage extends View
     public function set($fx = null, $args = [])
     {
         if (!$fx instanceof \Closure) {
-            throw new Exception('Virtual page requires a Closure.');
+            throw new Exception('Virtual page requires a Closure');
         }
 
         $this->cb->set($fx, array_merge([$this], $args));
@@ -110,7 +107,7 @@ class VirtualPage extends View
             if ($mode === 'popup') {
                 $this->getApp()->html->template->set('title', $this->getApp()->title);
                 $this->getApp()->html->template->dangerouslySetHtml('Content', parent::getHtml());
-                $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getJs());
+                $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getApp()->getTag('script', null, $this->getJs()));
 
                 $this->getApp()->terminateHtml($this->getApp()->html->template);
             }
@@ -142,7 +139,7 @@ class VirtualPage extends View
 
         $this->getApp()->html->template->dangerouslySetHtml('Content', $this->getApp()->layout->template->renderToHtml());
 
-        $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getApp()->layout->getJs());
+        $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getApp()->getTag('script', null, $this->getApp()->layout->getJs()));
 
         $this->getApp()->terminateHtml($this->getApp()->html->template);
     }

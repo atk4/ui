@@ -11,13 +11,13 @@ require_once __DIR__ . '/../init-app.php';
 
 $form = Form::addTo($app);
 $img = $form->addControl('img', [Form\Control\UploadImage::class, ['defaultSrc' => '../images/default.png', 'placeholder' => 'Click to add an image.']]);
-//$img->set('a_new_token', 'an-img-file-name');
-//$img->setThumbnailSrc('./images/logo.png');
+// $img->set('a_new_token', 'an-img-file-name');
+// $img->setThumbnailSrc($app->cdn['atk'] . '/logo.png');
 
 $control = $form->addControl('file', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]]);
 
-//$control->set('a_generated_token', 'a-file-name');
-//$control->set('a_generated_token');
+// $control->set('a_generated_token', 'a-file-name');
+// $control->set('a_generated_token');
 
 $img->onDelete(function ($fileId) use ($img) {
     $img->clearThumbnail('./images/default.png');
@@ -34,7 +34,7 @@ $img->onUpload(function ($postFile) use ($form, $img) {
         return $form->error('img', 'Error uploading image.');
     }
 
-    $img->setThumbnailSrc('./images/logo.png');
+    $img->setThumbnailSrc($img->getApp()->cdn['atk'] . '/logo.png');
     $img->set('123456', $postFile['name'] . ' (token: 123456)');
 
     // Do file processing here...
@@ -62,15 +62,24 @@ $control->onDelete(function ($fileId) {
     ]);
 });
 
-$control->onUpload(function ($files) use ($form, $control) {
-    if ($files === 'error') {
+$control->onUpload(function ($postFile) use ($form, $control) {
+    if ($postFile['error'] !== 0) {
         return $form->error('file', 'Error uploading file.');
     }
     $control->setFileId('a_token');
 
+    $tmpFilePath = sys_get_temp_dir() . '/atk4-ui-upload-'
+        . hash('sha256', random_bytes(64) . microtime(true) . $postFile['tmp_name']) . '.bin';
+    try {
+        move_uploaded_file($postFile['tmp_name'], $tmpFilePath);
+        $data = file_get_contents($tmpFilePath);
+    } finally {
+        @unlink($tmpFilePath);
+    }
+
     return new \Atk4\Ui\JsToast([
         'title' => 'Upload success',
-        'message' => 'File is uploaded!',
+        'message' => 'File is uploaded! (name: ' . $postFile['name'] . ', md5: ' . md5($data) . ')',
         'class' => 'success',
     ]);
 });

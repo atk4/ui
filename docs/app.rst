@@ -35,7 +35,7 @@ Using App for Injecting Dependencies
 Since App class becomes available for all objects and components of Agile Toolkit, you may add
 properties into the App class::
 
-    $app->db = new \Atk4\Ui\Persistence_SQL($dsn);
+    $app->db = new \Atk4\Data\Persistence\Sql($dsn);
 
     // later anywhere in the code:
 
@@ -70,7 +70,7 @@ active. (See :ref:`system_pattern`)::
             parent::__construct('Warehouse App v0.4');
 
             // My App class will establish database connection
-            $this->db = new \Atk4\Data\Persistence_SQL($_CLEARDB_DATABASE_URL['DSN']);
+            $this->db = new \Atk4\Data\Persistence\Sql($_CLEARDB_DATABASE_URL['DSN']);
             $this->db->setApp($this);
 
             // My App class provides access to a currently logged user and currently selected system.
@@ -90,10 +90,10 @@ active. (See :ref:`system_pattern`)::
             }
 
             // Make sure user is valid
-            if(!$this->user->loaded()) {
+            if (!$this->user->isLoaded()) {
                 $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
-                Message::addTo($this, ['Login Required', 'error']);
-                Button::addTo($this, ['Login', 'primary'])->link('index.php');
+                Message::addTo($this, ['Login Required', 'type' => 'error']);
+                Button::addTo($this, ['Login', 'class.primary' => true])->link('index.php');
                 exit;
             }
 
@@ -133,9 +133,9 @@ Clean-up and simplification
 ---------------------------
 
 .. php:method:: run()
-.. php:attr:: run_called
-.. php:attr:: is_rendering
-.. php:attr:: always_run
+.. php:attr:: runCalled
+.. php:attr:: isRendering
+.. php:attr:: alwaysRun
 
 App also does certain actions to simplify handling of the application. For instance, App class will
 render itself automatically at the end of the application, so you can safely add objects into the `App`
@@ -146,7 +146,7 @@ without actually triggering a global execution process::
     // Next line is optional
     $app->run();
 
-If you do not want the application to automatically execute `run()` you can either set `$always_run` to false
+If you do not want the application to automatically execute `run()` you can either set `$alwaysRun` to false
 or use :php:meth:`terminate()` to the app with desired output.
 
 Exception handling
@@ -171,17 +171,13 @@ that implements tighter integration with the host application or full-stack fram
 
 Method to include additional JavaScript file in page::
 
-    $app->requireJs('https://code.jquery.com/jquery-3.1.1.js');
-    $app->requireJs('https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.7.4/semantic.min.js');
-
-Using of CDN servers is always better than storing external libraries locally.
-Most of the time CDN servers are faster (cached) and more reliable.
+    $app->requireJs('https://example.com/file.min.js');
 
 .. php:method:: requireCss($url)
 
 Method to include additional CSS style sheet in page::
 
-    $app->requireCss('//fomantic-ui.com/dist/semantic.css');
+    $app->requireCss('https://example.com/file.min.css');
 
 .. php:method:: initIncludes()
 
@@ -252,7 +248,7 @@ so well.  Example::
     }
 
     Button::addTo($app, ['Increase age'])
-        ->on('click', $app->jsRedirect(['age' => $_GET['age']+1]));
+        ->on('click', $app->jsRedirect(['age' => $_GET['age'] + 1]));
 
 No much magic in these methods.
 
@@ -287,7 +283,7 @@ You can also use this method to output debug data. Here is comparison to var_dum
 Execution state
 ---------------
 
-.. php:attr:: is_rendering
+.. php:attr:: isRendering
 
 Will be true if the application is currently rendering recursively through the Render Tree.
 
@@ -337,7 +333,7 @@ and the following hooks are available:
  - beforeExit
 
 Hook beforeExit is called just when application is about to be terminated. If you are
-using :php:attr:`App::$always_run` = true, then this hook is guaranteed to execute always
+using :php:attr:`App::$alwaysRun` = true, then this hook is guaranteed to execute always
 after output was sent. ATK will avoid calling this hook multiple times.
 
 .. note:: beforeOutput and beforeRender are not executed if $app->terminate() is called, even
@@ -427,8 +423,8 @@ Populating the left menu object is simply a matter of adding the right menu item
 
 This is the top menu of the admin layout. You can add other item to the top menu using::
 
-    Button::addTo($layout->menu->addItem(), ['View Source', 'teal', 'icon' => 'github'])
-        ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\JsExpression('document.location=[];', [$url.$f]));
+    Button::addTo($layout->menu->addItem(), ['View Source', 'class.teal' => true, 'icon' => 'github'])
+        ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\JsExpression('document.location=[];', [$url . $f]));
 
 .. php:attr:: menuRight
 

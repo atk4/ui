@@ -31,7 +31,7 @@ it uses the value from presentation or do some decoration on its own.
 Extending Data Types
 ====================
 
-If you are looking to add a new data type, such as "money+currency" combination, which would
+If you are looking to add a new data type, such as "money + currency" combination, which would
 allow user to specify both the currency and the monetary value, you should start by adding
 support for a new type.
 
@@ -132,7 +132,7 @@ yet make it available when editing, you could create your own :php:class:`Table\
         public function getHtmlTags(\Atk4\Data\Model $row, $field)
         {
             return [
-                'mask' => substr($field->get(), -4)
+                'mask' => substr($field->get(), -4),
             ];
         }
     }
@@ -145,9 +145,9 @@ Display credit card number with spaces
 --------------------------------------
 If we always have to display card numbers with spaces, e.g. "1234 1234 1234 1234" but have
 the database store them without spaces, then this is a data formatting task best done by
-extending :php:class:`Persistence\\Ui`::
+extending :php:class:`Persistence\Ui`::
 
-    class MyPersistence extends \Atk4\Ui\Persistence\Ui
+    class MyPersistence extends Persistence\Ui
     {
 
         protected function _typecastSaveField(\Atk4\Data\Field $field, $value)

@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
+use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**
  * Implements a more sophisticated and interactive Data-Table component.
@@ -56,7 +57,7 @@ class Crud extends Grid
         parent::init();
 
         if ($sortBy = $this->getSortBy()) {
-            $this->issetApp() ? $this->getApp()->stickyGet($this->name . '_sort') : $this->stickyGet($this->name . '_sort', $sortBy);
+            $this->stickyGet($this->name . '_sort', $sortBy);
         }
     }
 
@@ -84,10 +85,8 @@ class Crud extends Grid
      * Sets data model of Crud.
      *
      * @param array<int, string>|null $fields
-     *
-     * @return Model
      */
-    public function setModel(Model $model, array $fields = null)
+    public function setModel(Model $model, array $fields = null): void
     {
         $model->assertIsModel();
 
@@ -120,15 +119,13 @@ class Crud extends Grid
                 if ($action->enabled) {
                     $executor = $this->initActionExecutor($action);
                     $this->menuItems[$k]['item'] = $this->menu->addItem(
-                        $this->getExecutorFactory()->createTrigger($action, $this->getExecutorFactory()::MENU_ITEM)
+                        $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MENU_ITEM)
                     );
                     $this->menuItems[$k]['executor'] = $executor;
                 }
             }
             $this->setItemsAction();
         }
-
-        return $this->model;
     }
 
     /**
@@ -153,8 +150,8 @@ class Crud extends Grid
         if ($executor instanceof UserAction\ModalExecutor) {
             foreach ($this->onActions as $onAction) {
                 $executor->onHook(UserAction\ModalExecutor::HOOK_STEP, function ($ex, $step, $form) use ($onAction, $action) {
-                    $key = key($onAction);
-                    if ($key === $action->short_name && $step === 'fields') {
+                    $key = array_key_first($onAction);
+                    if ($key === $action->shortName && $step === 'fields') {
                         return $onAction[$key]($form, $ex);
                     }
                 });
@@ -252,12 +249,12 @@ class Crud extends Grid
     protected function getExecutor(Model\UserAction $action)
     {
         // prioritize Crud addFields over action->fields for Model add action.
-        if ($action->short_name === 'add' && $this->addFields) {
+        if ($action->shortName === 'add' && $this->addFields) {
             $action->fields = $this->addFields;
         }
 
         // prioritize Crud editFields over action->fields for Model edit action.
-        if ($action->short_name === 'edit' && $this->editFields) {
+        if ($action->shortName === 'edit' && $this->editFields) {
             $action->fields = $this->editFields;
         }
 

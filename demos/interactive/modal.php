@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Persistence;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 \Atk4\Ui\Header::addTo($app, ['Modal View']);
 
-$session = new Session();
+$session = new Session($app);
 // Re-usable component implementing counter
 
 \Atk4\Ui\Header::addTo($app, ['Static Modal Dialog']);
@@ -129,8 +131,8 @@ foreach ($menuItems as $key => $items) {
 
 $denyApproveModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Deny / Approve actions']);
 \Atk4\Ui\Message::addTo($denyApproveModal)->set('This modal is only closable via the green button');
-$denyApproveModal->addDenyAction('No', new \Atk4\Ui\JsExpression('function(){window.alert("Can\'t do that."); return false;}'));
-$denyApproveModal->addApproveAction('Yes', new \Atk4\Ui\JsExpression('function(){window.alert("You\'re good to go!");}'));
+$denyApproveModal->addDenyAction('No', new \Atk4\Ui\JsExpression('function() { window.alert("Can\'t do that."); return false; }'));
+$denyApproveModal->addApproveAction('Yes', new \Atk4\Ui\JsExpression('function() { window.alert("You\'re good to go!"); }'));
 $denyApproveModal->notClosable();
 
 $menuBar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
@@ -147,7 +149,7 @@ $stepModal->setOption('observeChanges', true);
 
 // Add buttons to modal for next and previous actions.
 $action = new \Atk4\Ui\View(['ui' => 'buttons']);
-$prevAction = new \Atk4\Ui\Button(['Prev', 'labeled', 'icon' => 'left arrow']);
+$prevAction = new \Atk4\Ui\Button(['Prev', 'class.labeled' => true, 'icon' => 'left arrow']);
 $nextAction = new \Atk4\Ui\Button(['Next', 'iconRight' => 'right arrow']);
 
 $action->add($prevAction);
@@ -180,11 +182,11 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
         $modal->js(true, $prevAction->js()->addClass('disabled'));
         $modal->js(true, $nextAction->js(true)->removeClass('disabled'));
     } elseif ($page === 2) {
-        $modelRegister = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_());
+        $modelRegister = new \Atk4\Data\Model(new Persistence\Array_());
         $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
-        $form = \Atk4\Ui\Form::addTo($modal, ['segment' => true]);
-        $form->setModel($modelRegister);
+        $form = \Atk4\Ui\Form::addTo($modal, ['class.segment' => true]);
+        $form->setModel($modelRegister->createEntity());
 
         $form->onSubmit(function (\Atk4\Ui\Form $form) use ($nextAction, $session) {
             if ($form->model->get('name') !== 'John') {

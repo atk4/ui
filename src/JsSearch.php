@@ -10,13 +10,10 @@ namespace Atk4\Ui;
 
 class JsSearch extends View
 {
-    /**
-     * The View to reload using this JsSearch.
-     *
-     * @var View
-     */
+    /** @var View The View to reload using this JsSearch. */
     public $reload;
 
+    /** @var array */
     public $args = [];
 
     /**
@@ -27,11 +24,7 @@ class JsSearch extends View
      */
     public $autoQuery = false;
 
-    /**
-     * The input field.
-     *
-     * @var Form\Control\Line
-     */
+    /** @var Form\Control\Line The input field. */
     public $placeHolder = 'Search';
 
     /**
@@ -74,7 +67,7 @@ class JsSearch extends View
     {
         parent::init();
 
-        //$this->input = Form\Control\Line::addTo($this, ['iconLeft' => 'filter',  'action' => new Button(['icon' => 'search', 'ui' => 'button atk-action'])]);
+        // $this->input = Form\Control\Line::addTo($this, ['iconLeft' => 'filter',  'action' => new Button(['icon' => 'search', 'ui' => 'button atk-action'])]);
     }
 
     protected function renderView(): void
@@ -95,6 +88,7 @@ class JsSearch extends View
         $this->js(true)->atkJsSearch([
             'uri' => $this->reload->jsUrl(),
             'uri_options' => array_merge(['__atk_reload' => $this->reload->name], $this->args),
+            'uri_query_key' => $this->name . '_q',
             'autoQuery' => $this->autoQuery,
             'q' => $this->initValue,
             'useAjax' => $this->useAjax,

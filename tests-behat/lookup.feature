@@ -9,14 +9,14 @@ Feature: Lookup
     # '6f3c91cf' = substr(md5('product_sub_category'), 0, 8)
     Then I select value "Yogourt" in lookup "atk_fp_product__6f3c91cf_id"
     Then I press modal button "Save"
-    Then Toast display should contains text 'Dairy - Yogourt'
+    Then Toast display should contain text 'Dairy - Yogourt'
 
   Scenario: Testing lookup in VirtualPage
     Given I am on "_unit-test/lookup-virtual-page.php"
-    Then I press menu button "Add Category" using class "atk-grid-menu"
+    Then I press menu button "Add Category" using selector ".ui.menu.atk-grid-menu"
     Then I select value "Beverages" in lookup "category"
     Then I press Modal button "Save"
-    Then Toast display should contains text "Beverages"
+    Then Toast display should contain text "Beverages"
 
   Scenario: Testing lookup add
     Given I am on "form-control/lookup.php"
@@ -28,4 +28,4 @@ Feature: Lookup
     # '50ce262c' = substr(md5('phonecode'), 0, 8)
     When I fill in "atk_fp_country__50ce262c" with "8"
     Then I press Modal button "Save"
-    Then Toast display should contains text "Form submit!"
+    Then Toast display should contain text "Form submit!"

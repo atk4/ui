@@ -13,7 +13,9 @@ use Atk4\Core\InitializerTrait;
 use Atk4\Core\TraitUtil;
 use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Persistence;
-use Atk4\Ui\Exception\ExitApplicationException;
+use Atk4\Ui\Exception\ExitApplicationError;
+use Atk4\Ui\Exception\LateOutputError;
+use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use Atk4\Ui\Panel\Right;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
@@ -41,18 +43,22 @@ class App
 
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
-        'atk' => 'https://raw.githack.com/atk4/ui/develop/public',
-        'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
-        'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.8',
-        'flatpickr' => 'https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.6',
+        'atk' => '/public',
+        'jquery' => '/public/external/jquery/dist',
+        'serialize-object' => '/public/external/form-serializer/dist',
+        'semantic-ui' => '/public/external/fomantic-ui-css',
+        'flatpickr' => '/public/external/flatpickr/dist',
     ];
 
     /** @var ExecutorFactory App wide executor factory object for Model user action. */
     protected $executorFactory;
 
-    /** @var string Version of Agile UI */
-    public $version = '3.1-dev';
+    /**
+     * @var string Version of Agile UI
+     *
+     * @TODO remove, no longer needed for CDN versioning as we bundle them all
+     */
+    public $version = '3.2-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -60,33 +66,17 @@ class App
     /** @var Layout */
     public $layout; // the top-most view object
 
-    /**
-     * Set one or more directories where templates should reside.
-     *
-     * @var string|array
-     */
-    public $template_dir;
+    /** @var string|array Set one or more directories where templates should reside. */
+    public $templateDir;
 
-    /**
-     * Will replace an exception handler with our own, that will output errors nicely.
-     *
-     * @var bool
-     */
-    public $catch_exceptions = true;
+    /** @var bool Will replace an exception handler with our own, that will output errors nicely. */
+    public $catchExceptions = true;
 
-    /**
-     * Will display error if callback wasn't triggered.
-     *
-     * @var bool
-     */
-    public $catch_runaway_callbacks = true;
+    /** @var bool Will display error if callback wasn't triggered. */
+    public $catchRunawayCallbacks = true;
 
-    /**
-     * Will always run application even if developer didn't explicitly executed run();.
-     *
-     * @var bool
-     */
-    public $always_run = true;
+    /** @var bool Will always run application even if developer didn't explicitly executed run();. */
+    public $alwaysRun = true;
 
     /**
      * Will be set to true after app->run() is called, which may be done automatically
@@ -94,7 +84,7 @@ class App
      *
      * @var bool
      */
-    public $run_called = false;
+    public $runCalled = false;
 
     /**
      * Will be set to true, when exit is called. Sometimes exit is intercepted by shutdown
@@ -102,15 +92,15 @@ class App
      *
      * @var bool
      */
-    private $exit_called = false;
+    private $exitCalled = false;
 
     /** @var bool */
-    public $is_rendering = false;
+    public $isRendering = false;
 
     /** @var UiPersistence */
     public $ui_persistence;
 
-    /** @var View For internal use */
+    /** @var View|null For internal use */
     public $html;
 
     /** @var LoggerInterface|null Target for objects with DebugTrait */
@@ -119,8 +109,12 @@ class App
     /** @var Persistence|Persistence\Sql */
     public $db;
 
+    /** @var App\SessionManager */
+    public $session;
+
     /** @var string[] Extra HTTP headers to send on exit. */
-    protected $response_headers = [
+    protected $responseHeaders = [
+        self::HEADER_STATUS_CODE => '200',
         'cache-control' => 'no-store', // disable caching by default
     ];
 
@@ -133,76 +127,53 @@ class App
      * Used only in method App::url
      * Remove and re-add the extension of the file during parsing requests and building urls
      */
-    protected $url_building_ext = '.php';
+    protected $urlBuildingExt = '.php';
 
-    /**
-     * Call exit in place of throw Exception when Application need to exit.
-     *
-     * @var bool
-     */
-    public $call_exit = true;
+    /** @var bool Call exit in place of throw Exception when Application need to exit. */
+    public $callExit = true;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     public $page;
 
-    /**
-     * @var array global sticky arguments
-     */
-    protected $sticky_get_arguments = [
+    /** @var array global sticky arguments */
+    protected $stickyGetArguments = [
         '__atk_json' => false,
         '__atk_tab' => false,
     ];
 
     public $templateClass = HtmlTemplate::class;
 
-    /**
-     * Constructor.
-     *
-     * @param array $defaults
-     */
-    public function __construct($defaults = [])
+    public function __construct(array $defaults = [])
     {
         $this->setApp($this);
 
-        // Process defaults
-        if (is_string($defaults)) {
-            $defaults = ['title' => $defaults];
-        }
-
-        if (isset($defaults[0])) {
-            $defaults['title'] = $defaults[0];
-            unset($defaults[0]);
-        }
-
-        /*
-        if (is_array($defaults)) {
-            throw (new Exception('Constructor requires array argument'))
-                ->addMoreInfo('arg', $defaults);
-        }*/
         $this->setDefaults($defaults);
-        /*
-
-        foreach ($defaults as $key => $val) {
-            if (is_array($val)) {
-                $this->{$key} = array_merge(is_array($this->{$key} ?? null) ? $this->{$key} : [], $val);
-            } elseif ($val !== null) {
-                $this->{$key} = $val;
-            }
-        }
-         */
 
         $this->setupTemplateDirs();
 
+        foreach ($this->cdn as $k => $v) {
+            if (str_starts_with($v, '/') && !str_starts_with($v, '//')) {
+                $this->cdn[$k] = $this->createRequestPathFromLocalPath(__DIR__ . '/..' . $v);
+            }
+        }
+
         // Set our exception handler
-        if ($this->catch_exceptions) {
+        if ($this->catchExceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
             set_error_handler(
                 static function (int $severity, string $msg, string $file, int $line): bool {
                     if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
-                        // allow to supress undefined property warnings
-                        foreach (debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
+                        $isFirstFrame = true;
+                        foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
+                            // allow to suppress any warning outside Atk4
+                            if ($isFirstFrame) {
+                                $isFirstFrame = false;
+                                if (!isset($frame['class']) || !str_starts_with($frame['class'], 'Atk4\\')) {
+                                    return false;
+                                }
+                            }
+
+                            // allow to suppress undefined property warning
                             if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
                                 && $frame['function'] === 'warnPropertyDoesNotExist') {
                                 return false;
@@ -214,16 +185,20 @@ class App
                 },
                 \E_ALL
             );
+            $this->outputResponseUnsafe('', [self::HEADER_STATUS_CODE => 500]);
         }
 
         // Always run app on shutdown
-        if ($this->always_run) {
+        if ($this->alwaysRun) {
             $this->setupAlwaysRun();
         }
 
-        // Set up UI persistence
         if ($this->ui_persistence === null) {
             $this->ui_persistence = new UiPersistence();
+        }
+
+        if ($this->session === null) {
+            $this->session = new App\SessionManager();
         }
 
         // setting up default executor factory.
@@ -240,7 +215,10 @@ class App
      */
     public function registerPortals($portal): void
     {
-        $this->portals[$portal->short_name] = $portal;
+        // TODO in https://github.com/atk4/ui/pull/1771 it has been discovered this method causes DOM code duplication,
+        // for some reasons, it seems even not needed, at least all Unit & Behat tests pass
+        // must be investigated
+        // $this->portals[$portal->shortName] = $portal;
     }
 
     public function setExecutorFactory(ExecutorFactory $factory)
@@ -255,19 +233,19 @@ class App
 
     protected function setupTemplateDirs()
     {
-        if ($this->template_dir === null) {
-            $this->template_dir = [];
-        } elseif (!is_array($this->template_dir)) {
-            $this->template_dir = [$this->template_dir];
+        if ($this->templateDir === null) {
+            $this->templateDir = [];
+        } elseif (!is_array($this->templateDir)) {
+            $this->templateDir = [$this->templateDir];
         }
 
-        $this->template_dir[] = dirname(__DIR__) . '/template';
+        $this->templateDir[] = dirname(__DIR__) . '/template';
     }
 
     protected function callBeforeExit(): void
     {
-        if (!$this->exit_called) {
-            $this->exit_called = true;
+        if (!$this->exitCalled) {
+            $this->exitCalled = true;
             $this->hook(self::HOOK_BEFORE_EXIT);
         }
     }
@@ -279,14 +257,14 @@ class App
     {
         $this->callBeforeExit();
 
-        if (!$this->call_exit) {
+        if (!$this->callExit) {
             // case process is not in shutdown mode
             // App as already done everything
             // App need to stop output
             // set_handler to catch/trap any exception
             set_exception_handler(static function (\Throwable $t): void {});
             // raise exception to be trapped and stop execution
-            throw new ExitApplicationException();
+            throw new ExitApplicationError();
         }
 
         exit;
@@ -297,7 +275,15 @@ class App
      */
     public function caughtException(\Throwable $exception): void
     {
-        $this->catch_runaway_callbacks = false;
+        if ($exception instanceof LateOutputError) {
+            $this->outputLateOutputError($exception);
+        }
+
+        while ($exception instanceof UnhandledCallbackExceptionError) {
+            $exception = $exception->getPrevious();
+        }
+
+        $this->catchRunawayCallbacks = false;
 
         // just replace layout to avoid any extended App->_construct problems
         // it will maintain everything as in the original app StickyGet, logger, Events
@@ -364,12 +350,12 @@ class App
     {
         $arr = $this->normalizeHeaders([$name => $value]);
         $value = reset($arr);
-        $name = key($arr);
+        $name = array_key_first($arr);
 
         if ($value !== '') {
-            $this->response_headers[$name] = $value;
+            $this->responseHeaders[$name] = $value;
         } else {
-            unset($this->response_headers[$name]);
+            unset($this->responseHeaders[$name]);
         }
 
         return $this;
@@ -389,12 +375,12 @@ class App
     {
         $headers = $this->normalizeHeaders($headers);
         if (empty($headers['content-type'])) {
-            $this->response_headers = $this->normalizeHeaders($this->response_headers);
-            if (empty($this->response_headers['content-type'])) {
+            $this->responseHeaders = $this->normalizeHeaders($this->responseHeaders);
+            if (empty($this->responseHeaders['content-type'])) {
                 throw new Exception('Content type must be always set');
             }
 
-            $headers['content-type'] = $this->response_headers['content-type'];
+            $headers['content-type'] = $this->responseHeaders['content-type'];
         }
 
         $type = preg_replace('~;.*~', '', strtolower($headers['content-type'])); // in LC without charset
@@ -415,8 +401,8 @@ class App
             foreach ($this->getRenderedPortals() as $key => $modal) {
                 // add modal rendering to output
                 $keys[] = '#' . $key;
-                $output['atkjs'] = $output['atkjs'] . ';' . $modal['js'];
-                $output['html'] = $output['html'] . $modal['html'];
+                $output['atkjs'] .= ';' . $modal['js'];
+                $output['html'] .= $modal['html'];
             }
             if ($keys) {
                 $ids = implode(',', $keys);
@@ -431,7 +417,7 @@ class App
             $this->outputResponse($output, $headers);
         }
 
-        $this->run_called = true; // prevent shutdown function from triggering.
+        $this->runCalled = true; // prevent shutdown function from triggering
         $this->callExit();
     }
 
@@ -510,10 +496,14 @@ class App
         // flatpickr
         $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
         $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');
+        if ($this->ui_persistence->locale !== 'en') {
+            $this->requireJs($this->cdn['flatpickr'] . '/l10n/' . $this->ui_persistence->locale . '.js');
+            $this->html->js(true, new JsExpression('flatpickr.localize(window.flatpickr.l10ns.' . $this->ui_persistence->locale . ')'));
+        }
 
         // Agile UI
         $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
-        $this->requireCss($this->cdn['atk'] . '/agileui.css');
+        $this->requireCss($this->cdn['atk'] . '/agileui.min.css');
 
         // Set js bundle dynamic loading path.
         $this->html->template->tryDangerouslySetHtml(
@@ -556,28 +546,28 @@ class App
     {
         $isExitException = false;
         try {
-            $this->run_called = true;
+            $this->runCalled = true;
             $this->hook(self::HOOK_BEFORE_RENDER);
-            $this->is_rendering = true;
+            $this->isRendering = true;
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->dangerouslyAppendHtml('HEAD', $this->html->getJs());
-            $this->is_rendering = false;
+            $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('script', null, $this->html->getJs()));
+            $this->isRendering = false;
 
-            if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catch_runaway_callbacks) {
+            if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catchRunawayCallbacks) {
                 throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
                     ->addMoreInfo('callback', $_GET[Callback::URL_QUERY_TARGET]);
             }
 
             $output = $this->html->template->renderToHtml();
-        } catch (ExitApplicationException $e) {
+        } catch (ExitApplicationError $e) {
             $output = '';
             $isExitException = true;
         }
 
         $this->hook(self::HOOK_BEFORE_OUTPUT);
-        if (!$this->exit_called) { // output already sent by terminate()
+        if (!$this->exitCalled) { // output already sent by terminate()
             if ($this->isJsUrlRequest()) {
                 $this->outputResponseJson($output);
             } else {
@@ -610,11 +600,11 @@ class App
         $template = new $this->templateClass();
         $template->setApp($this);
 
-        if (in_array($filename[0], ['.', '/', '\\'], true) || strpos($filename, ':\\') !== false) {
+        if (in_array($filename[0], ['.', '/', '\\'], true) || str_contains($filename, ':\\')) {
             return $template->loadFromFile($filename);
         }
 
-        $dir = is_array($this->template_dir) ? $this->template_dir : [$this->template_dir];
+        $dir = is_array($this->templateDir) ? $this->templateDir : [$this->templateDir];
         foreach ($dir as $td) {
             if ($t = $template->tryLoadFromFile($td . '/' . $filename)) {
                 return $t;
@@ -623,10 +613,10 @@ class App
 
         throw (new Exception('Cannot find template file'))
             ->addMoreInfo('filename', $filename)
-            ->addMoreInfo('template_dir', $this->template_dir);
+            ->addMoreInfo('templateDir', $this->templateDir);
     }
 
-    protected function getRequestUrl()
+    protected function getRequestUrl(): string
     {
         if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
             $request_uri = $_SERVER['HTTP_X_REWRITE_URL'];
@@ -643,12 +633,39 @@ class App
         return $request_uri[0];
     }
 
+    protected function createRequestPathFromLocalPath(string $localPath): string
+    {
+        static $requestUrlPath = null;
+        static $requestLocalPath = null;
+        if ($requestUrlPath === null) {
+            if (\PHP_SAPI === 'cli') { // for phpunit
+                $requestUrlPath = '/';
+                $requestLocalPath = \Closure::bind(function () {
+                    return dirname((new \Atk4\Core\ExceptionRenderer\Html(new \Exception()))->getVendorDirectory());
+                }, null, \Atk4\Core\ExceptionRenderer\Html::class)();
+            } else {
+                $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+                $requestUrlPath = $request->getBasePath();
+                $requestLocalPath = $request->server->get('SCRIPT_FILENAME');
+            }
+        }
+        $fs = new \Symfony\Component\Filesystem\Filesystem();
+        $localPathRelative = $fs->makePathRelative($localPath, dirname($requestLocalPath));
+        $res = '/' . $fs->makePathRelative($requestUrlPath . '/' . $localPathRelative, '/');
+        // fix https://github.com/symfony/symfony/pull/40051
+        if (str_ends_with($res, '/') && !str_ends_with($localPath, '/')) {
+            $res = substr($res, 0, -1);
+        }
+
+        return $res;
+    }
+
     /**
      * Make current get argument with specified name automatically appended to all generated URLs.
      */
     public function stickyGet(string $name, bool $isDeleting = false): ?string
     {
-        $this->sticky_get_arguments[$name] = !$isDeleting;
+        $this->stickyGetArguments[$name] = !$isDeleting;
 
         return $_GET[$name] ?? null;
     }
@@ -658,7 +675,7 @@ class App
      */
     public function stickyForget(string $name)
     {
-        unset($this->sticky_get_arguments[$name]);
+        unset($this->stickyGetArguments[$name]);
     }
 
     /**
@@ -681,7 +698,7 @@ class App
             if (substr($requestUrl, -1, 1) === '/') {
                 $this->page = 'index';
             } else {
-                $this->page = basename($requestUrl, $this->url_building_ext);
+                $this->page = basename($requestUrl, $this->urlBuildingExt);
             }
         }
 
@@ -694,14 +711,14 @@ class App
             $pagePath = $page[0] ?? $this->page; // use current page by default
             unset($page[0]);
             if ($pagePath) {
-                $pagePath .= $this->url_building_ext;
+                $pagePath .= $this->urlBuildingExt;
             }
         }
 
         $args = $extraRequestUriArgs;
 
         // add sticky arguments
-        foreach ($this->sticky_get_arguments as $k => $v) {
+        foreach ($this->stickyGetArguments as $k => $v) {
             if ($v && isset($_GET[$k])) {
                 $args[$k] = $_GET[$k];
             } else {
@@ -804,7 +821,7 @@ class App
     /**
      * Construct HTML tag with supplied attributes.
      *
-     * $html = getTag('img/', ['src' => 'foo.gif','border' => 0]);
+     * $html = getTag('img/', ['src' => 'foo.gif', 'border' => 0]);
      * // "<img src="foo.gif" border="0"/>"
      *
      *
@@ -843,16 +860,16 @@ class App
      * --> </th>
      *
      * 8. using $value will add value inside tag. It will also encode value.
-     * getTag('a', ['href' => 'foo.html'] ,'click here >>');
+     * getTag('a', ['href' => 'foo.html'], 'click here >>');
      * --> <a href="foo.html">click here &gt;&gt;</a>
      *
      * 9. you may skip attribute argument.
-     * getTag('b','text in bold');
+     * getTag('b', 'text in bold');
      * --> <b>text in bold</b>
      *
      * 10. pass array as 3rd parameter to nest tags. Each element can be either string (inserted as-is) or
      * array (passed to getTag recursively)
-     * getTag('a', ['href' => 'foo.html'], [['b','click here'], ' for fun']);
+     * getTag('a', ['href' => 'foo.html'], [['b', 'click here'], ' for fun']);
      * --> <a href="foo.html"><b>click here</b> for fun</a>
      *
      * 11. extended example:
@@ -1026,10 +1043,10 @@ class App
     {
         register_shutdown_function(
             function () {
-                if (!$this->run_called) {
+                if (!$this->runCalled) {
                     try {
                         $this->run();
-                    } catch (ExitApplicationException $e) {
+                    } catch (ExitApplicationError $e) {
                         // let the process go and stop on ->callExit below
                     } catch (\Throwable $e) {
                         // process is already in shutdown
@@ -1046,40 +1063,16 @@ class App
 
     // RESPONSES
 
-    /** @var string[] */
-    private static $_sentHeaders = [];
-
     /**
-     * Output Response to the client.
+     * This can be overridden for future PSR-7 implementation.
      *
-     * This can be overridden for future PSR-7 implementation
+     * @internal should be called only from self::outputResponse()
      */
-    protected function outputResponse(string $data, array $headers): void
+    protected function outputResponseUnsafe(string $data, array $headersNew): void
     {
-        $this->response_headers = $this->normalizeHeaders($this->response_headers);
-        $headersAll = array_merge($this->response_headers, $this->normalizeHeaders($headers));
-        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
-
         $isCli = \PHP_SAPI === 'cli'; // for phpunit
 
-        $lateError = null;
-        foreach (ob_get_status(true) as $status) {
-            if ($status['buffer_used'] !== 0 && !$isCli) {
-                $lateError = 'Unexpected output detected.';
-
-                break;
-            }
-        }
-
-        if ($lateError === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
-            $lateError = 'Headers already sent, more headers cannot be set at this stage.';
-        }
-
         if (!headers_sent() || $isCli) {
-            if ($lateError !== null) {
-                $headersNew = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500'];
-            }
-
             foreach ($headersNew as $k => $v) {
                 if (!$isCli) {
                     if ($k === self::HEADER_STATUS_CODE) {
@@ -1092,18 +1085,77 @@ class App
                         header($kCamelCase . ': ' . $v);
                     }
                 }
-
-                self::$_sentHeaders[$k] = $v;
             }
         }
 
-        if ($lateError !== null) {
-            echo "\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n";
+        echo $data;
+    }
 
-            exit(1);
+    /** @var string[] */
+    private static $_sentHeaders = [];
+
+    /**
+     * Output Response to the client.
+     */
+    protected function outputResponse(string $data, array $headers): void
+    {
+        $this->responseHeaders = $this->normalizeHeaders($this->responseHeaders);
+        $headersAll = array_merge($this->responseHeaders, $this->normalizeHeaders($headers));
+        unset($headers);
+        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
+        unset($headersAll);
+
+        foreach (ob_get_status(true) as $status) {
+            if ($status['buffer_used'] !== 0) {
+                $lateError = new LateOutputError('Unexpected output detected');
+                if ($this->catchExceptions) {
+                    $this->caughtException($lateError);
+                    $this->outputLateOutputError($lateError);
+                }
+
+                throw $lateError;
+            }
         }
 
-        echo $data;
+        $isCli = \PHP_SAPI === 'cli'; // for phpunit
+
+        if (count($headersNew) > 0 && headers_sent() && !$isCli) {
+            $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
+            if ($this->catchExceptions) {
+                $this->caughtException($lateError);
+                $this->outputLateOutputError($lateError);
+            }
+
+            throw $lateError;
+        }
+
+        foreach ($headersNew as $k => $v) {
+            self::$_sentHeaders[$k] = $v;
+        }
+
+        $this->outputResponseUnsafe($data, $headersNew);
+    }
+
+    /**
+     * @return never
+     */
+    protected function outputLateOutputError(LateOutputError $exception): void
+    {
+        $plainTextMessage = "\n" . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!' . "\n";
+
+        $headersAll = $this->normalizeHeaders(['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500']);
+        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
+        unset($headersAll);
+
+        foreach ($headersNew as $k => $v) {
+            self::$_sentHeaders[$k] = $v;
+        }
+
+        $this->outputResponseUnsafe($plainTextMessage, $headersNew);
+
+        $this->runCalled = true; // prevent shutdown function from triggering
+
+        exit(1); // should be never reached from phpunit because we set catchExceptions = false
     }
 
     /**

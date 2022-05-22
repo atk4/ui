@@ -20,11 +20,7 @@ class ScopeBuilder extends Control
     /** @var bool Do not render label for this input. */
     public $renderLabel = false;
 
-    /**
-     * General or field type specific options.
-     *
-     * @var array
-     */
+    /** @var array General or field type specific options. */
     public $options = [
         'enum' => [
             'limit' => 250,
@@ -40,21 +36,13 @@ class ScopeBuilder extends Control
      */
     public $maxDepth = 5;
 
-    /**
-     * Fields to use for creating the rules.
-     *
-     * @var array
-     */
+    /** @var array Fields to use for creating the rules. */
     public $fields = [];
 
     /** @var HtmlTemplate The template needed for the ScopeBuilder view. */
     public $scopeBuilderTemplate;
 
-    /**
-     * List of delimiters for auto-detection in order of priority.
-     *
-     * @var array
-     */
+    /** @var array List of delimiters for auto-detection in order of priority. */
     public static $listDelimiters = [';', ','];
 
     /**
@@ -79,18 +67,10 @@ class ScopeBuilder extends Control
         'ui' => 'small basic button',
     ];
 
-    /**
-     * The scopebuilder View. Assigned in init().
-     *
-     * @var \Atk4\Ui\View
-     */
+    /** @var \Atk4\Ui\View The scopebuilder View. Assigned in init(). */
     protected $scopeBuilderView;
 
-    /**
-     * Definition of VueQueryBuilder rules.
-     *
-     * @var array
-     */
+    /** @var array Definition of VueQueryBuilder rules. */
     protected $rules = [];
 
     /**
@@ -101,11 +81,7 @@ class ScopeBuilder extends Control
      */
     public $labels = [];
 
-    /**
-     * Default VueQueryBuilder query.
-     *
-     * @var array
-     */
+    /** @var array Default VueQueryBuilder query. */
     protected $query = [];
 
     protected const OPERATOR_TEXT_EQUALS = 'equals';
@@ -217,11 +193,7 @@ class ScopeBuilder extends Control
         ],
     ];
 
-    /**
-     * Definition of rule types.
-     *
-     * @var array
-     */
+    /** @var array Definition of rule types. */
     protected static $ruleTypes = [
         'default' => 'text',
         'text' => [
@@ -334,18 +306,14 @@ class ScopeBuilder extends Control
 
     /**
      * Set the model to build scope for.
-     *
-     * @return Model
      */
-    public function setModel(Model $model)
+    public function setModel(Model $model): void
     {
-        $model = parent::setModel($model);
+        parent::setModel($model);
 
         $this->initVueLookupCallback();
 
         $this->buildQuery($model);
-
-        return $model;
     }
 
     /**
@@ -390,7 +358,7 @@ class ScopeBuilder extends Control
         }
 
         $rule = $this->getRule($type, array_merge([
-            'id' => $field->short_name,
+            'id' => $field->shortName,
             'label' => $field->getCaption(),
             'options' => $this->options[strtolower((string) $type)] ?? [],
         ], $field->ui['scopebuilder'] ?? []), $field);
@@ -414,7 +382,7 @@ class ScopeBuilder extends Control
 
         if ($field->getReference() !== null) {
             $props['url'] = $this->dataCb->getUrl();
-            $props['reference'] = $field->short_name;
+            $props['reference'] = $field->shortName;
             $props['search'] = true;
         }
 
@@ -430,16 +398,16 @@ class ScopeBuilder extends Control
     {
         $calendar = new Calendar();
         $props = $this->atkdDateOptions['flatpickr'] ?? [];
-        $format = $calendar->translateFormat($this->getApp()->ui_persistence->{$field->type . '_format'});
-        $props['altFormat'] = $format;
+        $phpFormat = $this->getApp()->ui_persistence->{$field->type . '_format'};
+        $props['altFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat);
         $props['dateFormat'] = 'Y-m-d';
         $props['altInput'] = true;
 
         if ($field->type === 'datetime' || $field->type === 'time') {
             $props['enableTime'] = true;
-            $props['time_24hr'] = $calendar->use24hrTimeFormat($format);
+            $props['time_24hr'] = $calendar->use24hrTimeFormat($phpFormat);
             $props['noCalendar'] = ($field->type === 'time');
-            $props['enableSeconds'] = $calendar->useSeconds($format);
+            $props['enableSeconds'] = $calendar->useSeconds($phpFormat);
             $props['dateFormat'] = ($field->type === 'datetime') ? 'Y-m-d H:i:S' : 'H:i:S';
         }
 
@@ -466,7 +434,7 @@ class ScopeBuilder extends Control
             // add rules on all fields of the referenced model
             foreach ($theirModel->getFields() as $theirField) {
                 $theirField->ui['scopebuilder'] = [
-                    'id' => $reference->link . '/' . $theirField->short_name,
+                    'id' => $reference->link . '/' . $theirField->shortName,
                     'label' => $field->getCaption() . ' is set to record where ' . $theirField->getCaption(),
                 ];
 
@@ -554,7 +522,7 @@ class ScopeBuilder extends Control
                     'rules' => $this->rules,
                     'maxDepth' => $this->maxDepth,
                     'query' => $this->query,
-                    'name' => $this->short_name,
+                    'name' => $this->shortName,
                     'labels' => $this->labels ?: null,
                     'form' => $this->form->formElement->name,
                     'debug' => $this->options['debug'] ?? false,
@@ -607,7 +575,7 @@ class ScopeBuilder extends Control
                 break;
             case self::OPERATOR_TEXT_BEGINS_WITH:
             case self::OPERATOR_TEXT_DOESNOT_BEGIN_WITH:
-                $value = $value . '%';
+                $value .= '%';
 
                 break;
             case self::OPERATOR_TEXT_ENDS_WITH:
@@ -675,7 +643,7 @@ class ScopeBuilder extends Control
         if (is_string($condition->key)) {
             $rule = $condition->key;
         } elseif ($condition->key instanceof Field) {
-            $rule = $condition->key->short_name;
+            $rule = $condition->key->shortName;
         } else {
             throw new Exception('Unsupported scope key: ' . gettype($condition->key));
         }
@@ -746,7 +714,7 @@ class ScopeBuilder extends Control
                 $model = $reference->refModel($condField->getOwner());
                 $fieldName = $reference->getTheirFieldName();
                 $rec = $model->tryLoadBy($fieldName, $value);
-                if ($rec->loaded()) {
+                if ($rec->isLoaded()) {
                     $option = [
                         'key' => $value,
                         'text' => $rec->get($model->title_field),

@@ -23,22 +23,22 @@ class Checkbox extends Table\Column
      */
     public function jsChecked()
     {
-        return new JsExpression(' $(' . $this->table->jsRender() . ').find(\'.checked.' . $this->class . '\').closest(\'tr\').map(function(){ ' .
-            'return $(this).data(\'id\');}).get().join(\',\')');
+        return new JsExpression(' $(' . $this->table->jsRender() . ').find(\'.checked.' . $this->class . '\').closest(\'tr\').map(function(){ '
+            . 'return $(this).data(\'id\'); }).get().join(\',\')');
     }
 
     protected function init(): void
     {
         parent::init();
         if (!$this->class) {
-            $this->class = 'cb_' . $this->short_name;
+            $this->class = 'cb_' . $this->shortName;
         }
     }
 
     public function getHeaderCellHtml(Field $field = null, $value = null)
     {
         if (isset($field)) {
-            throw (new Exception('Checkbox must be placed in an empty column. Don\'t specify any field.'))
+            throw (new Exception('Checkbox must be placed in an empty column, don\'t specify any field'))
                 ->addMoreInfo('field', $field);
         }
         $this->table->js(true)->find('.' . $this->class)->checkbox();

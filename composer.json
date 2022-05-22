@@ -1,7 +1,8 @@
 {
     "name": "atk4/ui",
-    "type": "library",
     "description": "Agile UI - Web Component Framework written in PHP",
+    "license": "MIT",
+    "type": "library",
     "keywords": [
         "framework",
         "ui",
@@ -15,9 +16,7 @@
         "grid",
         "crud"
     ],
-    "homepage": "https://github.com/atk4/ui",
     "version": "dev-develop",
-    "license": "MIT",
     "authors": [
         {
             "name": "Romans Malinovskis",
@@ -52,35 +51,42 @@
             "homepage": "https://xsystems.io/"
         }
     ],
+    "homepage": "https://github.com/atk4/ui",
     "require": {
         "php": ">=7.4 <8.2",
-        "atk4/data": "dev-develop"
+        "atk4/data": "dev-develop",
+        "symfony/filesystem": "^4.4 || ^5.3",
+        "symfony/http-foundation": "^4.4 || ^5.3"
     },
     "require-release": {
         "php": ">=7.4 <8.2",
-        "atk4/data": "~3.1.0"
+        "atk4/data": "~3.2.0"
     },
     "require-dev": {
-        "behat/behat": "^3.9",
-        "behat/mink": "^1.9",
         "behat/mink-extension": "^2.3.1",
         "behat/mink-selenium2-driver": "^1.5",
         "ergebnis/composer-normalize": "^2.13",
         "friendsofphp/php-cs-fixer": "^3.0",
         "fzaninotto/faker": "^1.6",
         "guzzlehttp/guzzle": "^6.3",
-        "instaclick/php-webdriver": "^1.4.7",
         "johnkary/phpunit-speedtrap": "^3.3",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.0",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpunit/phpunit": "^9.5.5",
-        "symfony/console": "^4.4.30 || ^5.3.7",
-        "symfony/css-selector": "^4.4.24 || ^5.2.9",
         "symfony/process": "^4.4.30 || ^5.3.7"
     },
-    "config": {
-        "sort-packages": true
+    "conflict": {
+        "behat/behat": "<3.9",
+        "behat/mink": "<1.9",
+        "instaclick/php-webdriver": "<1.4.13",
+        "symfony/console": "<4.4.30 || >=5 <5.3.7",
+        "symfony/css-selector": "<4.4.24 || >=5 <5.2.9",
+        "symfony/filesystem": "<4.4.30 || >=5 <5.3.7",
+        "symfony/http-foundation": "<4.4.30 || >=5 <5.3.7"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Atk4\\Ui\\": "src/"
@@ -91,6 +97,11 @@
             "Atk4\\Ui\\Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "phpstan/extension-installer": true
+        },
+        "sort-packages": true
+    }
 }

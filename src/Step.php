@@ -11,39 +11,19 @@ class Step extends View
 {
     public $defaultTemplate;
 
-    /**
-     * Title to display in the step.
-     *
-     * @var string
-     */
+    /** @var string Title to display in the step. */
     public $title;
 
-    /**
-     * Description to show in the step under the title.
-     *
-     * @var string
-     */
+    /** @var string Description to show in the step under the title. */
     public $description;
 
-    /**
-     * Link back to the wizard object.
-     *
-     * @var Wizard
-     */
+    /** @var Wizard Link back to the wizard object. */
     public $wizard;
 
-    /**
-     * Icon appears to the left of the title in the step. You can disable icons for entire wizard.
-     *
-     * @var string
-     */
+    /** @var string Icon appears to the left of the title in the step. You can disable icons for entire wizard. */
     public $icon;
 
-    /**
-     * Will be automatically assigned 0, 1, 2, etc,.
-     *
-     * @var int
-     */
+    /** @var int Will be automatically assigned 0, 1, 2, etc,. */
     public $sequence;
 
     public function __construct($title)

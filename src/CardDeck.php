@@ -10,6 +10,7 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Ui\Component\ItemSearch;
+use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 
 class CardDeck extends View
@@ -121,7 +122,7 @@ class CardDeck extends View
             $right = View::addTo($this->menu, ['ui' => 'four wide column']);
             $this->search = $right->add(Factory::factory($this->search, ['context' => '#' . $this->container->name]));
             $this->search->reload = $this->container;
-            $this->query = $this->getApp()->stickyGet($this->search->queryArg);
+            $this->query = $this->stickyGet($this->search->queryArg);
         }
     }
 
@@ -136,15 +137,13 @@ class CardDeck extends View
 
     /**
      * @param array<int, string>|null $fields
-     *
-     * @return Model
      */
-    public function setModel(Model $model, array $fields = null, array $extra = null)
+    public function setModel(Model $model, array $fields = null, array $extra = null): void
     {
         parent::setModel($model);
 
         if ($this->search !== false) {
-            $this->model = $this->search->setModelCondition($this->model);
+            $this->search->setModelCondition($this->model);
         }
 
         if ($count = $this->initPaginator()) {
@@ -174,8 +173,6 @@ class CardDeck extends View
                 $this->menuActions[$k]['executor'] = $executor;
             }
         }
-
-        return $this->model;
     }
 
     /**
@@ -231,7 +228,7 @@ class CardDeck extends View
         } elseif (is_array($return) || $return instanceof JsExpressionable) {
             return $return;
         } elseif ($return instanceof Model) {
-            $msg = $return->loaded() ? $this->saveMsg : ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
+            $msg = $return->isLoaded() ? $this->saveMsg : ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
 
             return $this->jsModelReturn($action, $msg);
         }
@@ -259,7 +256,7 @@ class CardDeck extends View
     protected function jsModelReturn(Model\UserAction $action = null, string $msg = 'Done!'): array
     {
         $js[] = $this->getNotifier($msg, $action);
-        if ($action->getModel()->loaded() && $card = $this->findCard($action->getModel())) {
+        if ($action->getModel()->isLoaded() && $card = $this->findCard($action->getModel())) {
             $js[] = $card->jsReload($this->getReloadArgs());
         } else {
             $js[] = $this->container->jsReload($this->getReloadArgs());
@@ -330,7 +327,7 @@ class CardDeck extends View
             $defaults['args'] = $args;
         }
 
-        $btn = $this->btns->add($this->getExecutorFactory()->createTrigger($executor->getAction(), $this->getExecutorFactory()::CARD_BUTTON));
+        $btn = $this->btns->add($this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::CARD_BUTTON));
         if ($executor->getAction()->enabled === false) {
             $btn->addClass('disabled');
         }
@@ -420,7 +417,7 @@ class CardDeck extends View
      */
     protected function initPaginator()
     {
-        $count = $this->model->action('count')->getOne();
+        $count = (int) $this->model->action('count')->getOne();
         if ($this->paginator) {
             if ($count > 0) {
                 $this->paginator->setTotal((int) ceil($count / $this->ipp));

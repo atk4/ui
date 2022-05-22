@@ -13,18 +13,10 @@ class Button extends View
 
     public $ui = 'button';
 
-    /**
-     * Icon that will appear on the button (left).
-     *
-     * @var string|array|Icon
-     */
+    /** @var string|array|Icon Icon that will appear on the button (left). */
     public $icon;
 
-    /**
-     * Additional icon that can appear on the right of the button.
-     *
-     * @var string|array|Icon
-     */
+    /** @var string|array|Icon Additional icon that can appear on the right of the button. */
     public $iconRight;
 
     protected function renderView(): void

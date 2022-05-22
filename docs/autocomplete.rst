@@ -31,7 +31,8 @@ form where you can enter new record details.
 The form save will re-use the model of your auto-complete, so be sure to set() defaults and
 addCondition()s::
 
-    $form->addControl('test', [\Atk4\Ui\Form\Control\AutoComplete::class, 'plus' => true])->setModel(new Country($db));
+    $form->addControl('test', [\Atk4\Ui\Form\Control\AutoComplete::class, 'plus' => true])
+        ->setModel(new Country($db));
 
 Specifying in Model
 -------------------
@@ -50,12 +51,12 @@ You can do much more with AutoComplete form control by passing dropdown settings
         'settings' => [
             'allowReselection' => true,
             'selectOnKeydown' => false,
-            'onChange' => new \Atk4\Ui\JsExpression('function(value,t,c){
+            'onChange' => new \Atk4\Ui\JsExpression('function(value, t, c) {
                   if ($(this).data("value") !== value) {
                   $(this).parents(".form").form("submit");
                   $(this).data("value", value);
                 }}'),
-        ]
+        ],
     ])->setModel(new Country($db));
 
 
@@ -66,8 +67,8 @@ In 1.6 we have introduced Lookup form control, which is identical to AutoComplet
 use of Filters::
 
 
-    $form = \Atk4\Ui\Form::addTo($app, ['segment']);
-    \Atk4\Ui\Label::addTo($form, ['Add city', 'top attached'], ['AboveControls']);
+    $form = \Atk4\Ui\Form::addTo($app, ['class.segment' => true]);
+    \Atk4\Ui\Label::addTo($form, ['Add city', 'class.top attached' => true], ['AboveControls']);
 
     $l = $form->addControl('city',[\Atk4\Ui\Form\Control\Lookup::class]);
 

@@ -25,6 +25,6 @@ Specify classes
 
 You can pass additional classes to an image::
 
-    $img = 'https://raw.githubusercontent.com/atk4/ui/2.0.4/public/logo.png';
-    $icon = Image::addTo($app, [$img, 'disabled']);
+    $img = $app->cdn['atk'] . '/logo.png';
+    $icon = Image::addTo($app, [$img, 'class.disabled' => true]);
 

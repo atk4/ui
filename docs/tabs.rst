@@ -63,14 +63,14 @@ Note that tab contents are refreshed including any values you put on the form::
 
     // dynamic tab
     $t->addTab('Dynamic Form', function ($tab) {
-        $m_register = new \Atk4\Data\Model(new \Atk4\Data\Persistence_Array($a));
+        $m_register = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_($a));
         $m_register->addField('name', ['caption' => 'Please enter your name (John)']);
 
-        $form = Form::addTo($tab, ['segment' => true]);
+        $form = Form::addTo($tab, ['class.segment' => true]);
         $form->setModel($m_register);
         $form->onSubmit(function (Form $form) {
             if ($form->model->get('name') !== 'John') {
-                return $form->error('name', 'Your name is not John! It is "'.$form->model->get('name').'". It should be John. Pleeease!');
+                return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
             }
         });
     });

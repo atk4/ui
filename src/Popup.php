@@ -27,18 +27,10 @@ class Popup extends View
      */
     public $triggerBy;
 
-    /**
-     * Js event that trigger the popup.
-     *
-     * @var string
-     */
+    /** @var string Js event that trigger the popup. */
     public $triggerOn;
 
-    /**
-     * Default position of the popup in relation to target element.
-     *
-     * @var string
-     */
+    /** @var string Default position of the popup in relation to target element. */
     public $position = 'top left';
 
     /**
@@ -49,18 +41,10 @@ class Popup extends View
      */
     public $target = false;
 
-    /**
-     * Popup options as defined in semantic-ui popup module.
-     *
-     * @var array
-     */
+    /** @var array Popup options as defined in semantic-ui popup module. */
     public $popOptions = [];
 
-    /**
-     * The callback use to generate dynamic content.
-     *
-     * @var Callback|null
-     */
+    /** @var Callback|null The callback use to generate dynamic content. */
     public $cb;
 
     /**
@@ -80,19 +64,11 @@ class Popup extends View
      */
     public $useCache = false;
 
-    /**
-     * Min width for a dynamic popup.
-     *
-     * @var string
-     */
-    public $minWidth; //'120px';
+    /** @var string Min width for a dynamic popup. */
+    public $minWidth; // '120px';
 
-    /**
-     * Min height for a dynamic popup.
-     *
-     * @var string
-     */
-    public $minHeight; //'60px';
+    /** @var string Min height for a dynamic popup. */
+    public $minHeight; // '60px';
 
     /**
      * Whether or not the click event triggering popup
@@ -267,7 +243,7 @@ class Popup extends View
         $chain = new Jquery($name);
         $chain->popup($this->popOptions);
         if ($this->stopClickEvent) {
-            $chain->on('click', new JsExpression('function(e){e.stopPropagation();}'));
+            $chain->on('click', new JsExpression('function(e){ e.stopPropagation(); }'));
         }
 
         return $chain;
@@ -291,7 +267,7 @@ class Popup extends View
         if ($this->minHeight) {
             $this->setStyle('min-height', $this->minHeight);
         }
-        //$this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
+        // $this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
 
         parent::renderView();
     }

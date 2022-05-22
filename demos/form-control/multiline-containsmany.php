@@ -22,7 +22,7 @@ if (!class_exists(Client::class)) {
             parent::init();
 
             $this->addField('name');
-            $this->containsMany('accounts' /* TODO "Accounts" was here, but tests are failing for PostgreSQL, different casing should be supported */ , ['model' => [Account::class]]);
+            $this->containsMany('accounts', ['model' => [Account::class]]);
         }
     }
 

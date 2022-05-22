@@ -4,61 +4,69 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column;
 
+use Atk4\Core\AppScopeTrait;
 use Atk4\Core\NameTrait;
-use Atk4\Core\SessionTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Data\Types\Types as CustomTypes;
+use Atk4\Ui\App;
+use Atk4\Ui\SessionTrait;
+use Doctrine\DBAL\Types\Types;
 
 /**
  * Implement a generic filter model for filtering column data.
  */
-class FilterModel extends Model
+abstract class FilterModel extends Model
 {
+    use AppScopeTrait; // needed for SessionTrait
     use NameTrait; // needed for SessionTrait
     use SessionTrait;
 
-    /**
-     * The operator for defining a condition on a field.
-     *
-     * @var Field
-     */
+    /** @var Field The operator for defining a condition on a field. */
     public $op;
 
-    /**
-     * The value for defining a condition on a field.
-     *
-     * @var Field
-     */
+    /** @var Field The value for defining a condition on a field. */
     public $value;
 
-    /**
-     * Determines if this field shouldn't have a value field, and use only op field.
-     *
-     * @var bool
-     */
+    /** @var bool Determines if this field shouldn't have a value field, and use only op field. */
     public $noValueField = false;
 
-    /**
-     * The field where this filter need to query data.
-     *
-     * @var Field
-     */
+    /** @var Field The field where this filter need to query data. */
     public $lookupField;
+
+    public function __construct(App $app, array $defaults = [])
+    {
+        $this->setApp($app);
+
+        $persistence = new Persistence\Array_();
+
+        parent::__construct($persistence, $defaults);
+    }
 
     /**
      * Factory method that will return a FilterModel Type class.
      */
-    public static function factoryType(Field $field): self
+    public static function factoryType(App $app, Field $field): self
     {
-        $persistence = new Persistence\Array_();
-        $filterDomain = self::class . '\\Type';
+        $class = [
+            Types::STRING => FilterModel\TypeString::class,
+            Types::TEXT => FilterModel\TypeString::class,
 
-        // check if field as a type and use string as default
-        if (empty($type = $field->type)) {
-            $type = 'string';
-        }
-        $class = $filterDomain . ucfirst($type);
+            Types::BOOLEAN => FilterModel\TypeBoolean::class,
+            Types::INTEGER => FilterModel\TypeNumber::class,
+            Types::FLOAT => FilterModel\TypeNumber::class,
+            CustomTypes::MONEY => FilterModel\TypeNumber::class,
+
+            Types::DATE_MUTABLE => FilterModel\TypeDate::class,
+            Types::DATE_IMMUTABLE => FilterModel\TypeDate::class,
+            Types::TIME_MUTABLE => FilterModel\TypeTime::class,
+            Types::TIME_IMMUTABLE => FilterModel\TypeTime::class,
+            Types::DATETIME_MUTABLE => FilterModel\TypeDatetime::class,
+            Types::DATETIME_IMMUTABLE => FilterModel\TypeDatetime::class,
+
+            'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
+        ][$field->type ?? 'string'];
 
         /*
          * You can set your own filter model condition by extending
@@ -71,7 +79,9 @@ class FilterModel extends Model
             $class = $field->filterModel;
         }
 
-        return new $class($persistence, ['lookupField' => $field]);
+        $filterModel = new $class($app, ['lookupField' => $field]);
+
+        return $filterModel;
     }
 
     protected function init(): void
@@ -91,10 +101,10 @@ class FilterModel extends Model
      */
     public function afterInit()
     {
-        $this->addField('name', ['default' => $this->lookupField->short_name, 'system' => true]);
+        $this->addField('name', ['default' => $this->lookupField->shortName, 'system' => true]);
 
         // create a name for our filter model to save as session data.
-        $this->name = 'filter_model_' . $this->lookupField->short_name;
+        $this->name = 'filter_model_' . $this->lookupField->shortName;
 
         if ($_GET['atk_clear_filter'] ?? false) {
             $this->forget();
@@ -120,10 +130,7 @@ class FilterModel extends Model
      *
      * @return Model
      */
-    public function setConditionForModel(Model $model)
-    {
-        return $model;
-    }
+    abstract public function setConditionForModel(Model $model);
 
     /**
      * Method that will set Field display condition in a form.

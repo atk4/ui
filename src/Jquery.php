@@ -77,9 +77,6 @@ namespace Atk4\Ui;
  */
 class Jquery extends JsChain
 {
-    public $_include = 'jquery.min.js';
-    public $_version = '3.1.1';
-    public $_integrity = 'sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=';
     public $_library = '$';
 
     /**

@@ -120,7 +120,7 @@ clarifications::
     $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 
     // Connect to database and place a fully-interactive Crud
-    $db = new \Atk4\Data\Persistence_SQL($dsn);
+    $db = new \Atk4\Data\Persistence\Sql($dsn);
     \Atk4\Ui\Crud::addTo($app)
         ->setModel(new Offer($db));
 
@@ -142,7 +142,7 @@ Through the course of this example, We are performing several core actions:
   - `$db` this is a database persistence object. It may be a Database which is
     either SQL or NoSQL but can also be RestAPI, a cache, or a pseudo-persistence.
 
-    We used Persistence_SQL class, which takes advantage of a standard-compliant
+    We used `Persistence\Sql` class, which takes advantage of a standard-compliant
     database server to speed up aggregation, multi-table, and multi-record operations.
 
     For a :ref:`component` the Persistence class provides data storage abstraction
@@ -206,7 +206,7 @@ flexibility. The next example adds a "Cancel" button to a form::
 
     $button = \Atk4\Ui\Button::addTo($form, [
         'Cancel',
-        'icon' => new \Atk4\Ui\Icon('pencil')
+        'icon' => new \Atk4\Ui\Icon('pencil'),
     ])->link('dashboard.php');
 
 :php:class:`Button` and :php:class:`Icon` are some of the most basic components in

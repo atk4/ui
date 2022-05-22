@@ -26,6 +26,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
+use Atk4\Ui\UserAction\ExecutorFactory;
 
 class Card extends View
 {
@@ -62,9 +63,6 @@ class Card extends View
 
     /** @var View|null The button Container for Button */
     public $btnContainer;
-
-    /** @var string Table css class */
-    // public $tableClass = 'ui fixed small';
 
     /** @var bool Display model field as table inside card holder content */
     public $useTable = false;
@@ -179,18 +177,12 @@ class Card extends View
      * to the main section of this card.
      *
      * @param array<int, string>|null $fields
-     *
-     * @return \Atk4\Data\Model
      */
-    public function setModel(Model $model, array $fields = null)
+    public function setModel(Model $model, array $fields = null): void
     {
-        if (!$model->loaded()) {
-            throw new Exception('Model need to be loaded.');
-        }
+        $model->assertIsLoaded();
 
-        if (!$this->model) {
-            $model = parent::setModel($model);
-        }
+        parent::setModel($model);
 
         if ($fields === null) {
             $fields = array_keys($this->model->getFields(['editable', 'visible']));
@@ -198,10 +190,8 @@ class Card extends View
 
         $this->setDataId($this->model->getId());
 
-        View::addTo($this->getSection(), [$model->getTitle(), ['class' => 'header']]);
+        View::addTo($this->getSection(), [$model->getTitle(), 'class.header' => true]);
         $this->getSection()->addFields($model, $fields, $this->useLabel, $this->useTable);
-
-        return $model;
     }
 
     /**
@@ -250,7 +240,7 @@ class Card extends View
     {
         $section = CardSection::addToWithCl($this, [$this->cardSection, 'card' => $this], ['Section']);
         if ($title) {
-            View::addTo($section, [$title, ['class' => 'header']]);
+            View::addTo($section, [$title, 'class.header' => true]);
         }
 
         if ($model && $fields) {
@@ -278,7 +268,7 @@ class Card extends View
 
             $executor = $page->add(new $executorClass());
 
-            $action->setEntity($action->getModel()->load($id));
+            $action = $action->getActionForEntity($action->getModel()->load($id));
 
             $executor->setAction($action);
         });
@@ -293,10 +283,10 @@ class Card extends View
     {
         $defaults = [];
 
-        $btn = $this->addButton($button ?? $this->getExecutorFactory()->createTrigger($action, $this->getExecutorFactory()::CARD_BUTTON));
+        $btn = $this->addButton($button ?? $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::CARD_BUTTON));
 
         // Setting arg for model id. $args[0] is consider to hold a model id, i.e. as a js expression.
-        if ($this->model && $this->model->loaded() && !isset($args[0])) {
+        if ($this->model && $this->model->isLoaded() && !isset($args[0])) {
             $defaults[] = $this->model->getId();
         }
 
@@ -328,7 +318,7 @@ class Card extends View
             $this->addExtraContent(new View([$extra, 'ui' => 'ui basic fitted segment']));
         } else {
             foreach ($fields as $field) {
-                $this->addExtraContent(new View([$model->get($field), 'ui basic fitted segment']));
+                $this->addExtraContent(new View([$model->get($field), 'class.ui basic fitted segment' => true]));
             }
         }
     }

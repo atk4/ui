@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\Factory;
+use Atk4\Data\Exception;
 use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
 use Atk4\Data\Persistence\Array_;
@@ -377,8 +378,8 @@ trait StepExecutorTrait
     {
         $this->btns = (new View())->addStyle(['min-height' => '24px']);
         $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
-        $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);
-        $this->execActionBtn = $this->getExecutorFactory()->createTrigger($action, $this->getExecutorFactory()::MODAL_BUTTON);
+        $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'class.blue' => true]);
+        $this->execActionBtn = $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MODAL_BUTTON);
         $this->btns->add($this->execActionBtn);
 
         return $this->btns;
@@ -497,7 +498,7 @@ trait StepExecutorTrait
         } catch (ValidationException $e) {
             throw $e;
         } catch (\Throwable $e) {
-            $msg = new Message('Error executing ' . $this->action->caption, 'red');
+            $msg = new Message(['Error executing ' . $this->action->caption, 'type' => 'error', 'class.red' => true]);
             $msg->invokeInit();
             $msg->text->content = $this->getApp()->renderExceptionHtml($e);
 

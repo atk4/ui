@@ -27,8 +27,6 @@ class Form extends View
     /** @const string Executed when self::loadPost() method is called. */
     public const HOOK_LOAD_POST = self::class . '@loadPost';
 
-    // {{{ Properties
-
     public $ui = 'form';
     public $defaultTemplate = 'form.html';
 
@@ -63,18 +61,10 @@ class Form extends View
      */
     public $formElement;
 
-    /**
-     * A current layout of a form, needed if you call $form->addControl().
-     *
-     * @var \Atk4\Ui\Form\Layout
-     */
+    /** @var \Atk4\Ui\Form\Layout A current layout of a form, needed if you call Form->addControl(). */
     public $layout;
 
-    /**
-     * List of form controls currently registered with this form.
-     *
-     * @var array<string, Control>
-     */
+    /** @var array<string, Control> List of form controls currently registered with this form. */
     public $controls = [];
 
     public $content = false;
@@ -85,7 +75,7 @@ class Form extends View
      *
      * @var Button|array|false Button object, seed or false to not show button at all
      */
-    public $buttonSave = [Button::class, 'Save', 'primary'];
+    public $buttonSave = [Button::class, 'Save', 'class.primary' => true];
 
     /**
      * When form is submitted successfully, this template is used by method
@@ -131,54 +121,19 @@ class Form extends View
      */
     public $controlDisplaySelector = '.field';
 
-    /**
-     * Use this apiConfig variable to pass API settings to Semantic UI in .api().
-     *
-     * @var array
-     */
+    /** @var array Use this apiConfig variable to pass API settings to Semantic UI in .api(). */
     public $apiConfig = [];
 
-    /**
-     * Use this formConfig variable to pass settings to Semantic UI in .from().
-     *
-     * @var array
-     */
+    /** @var array Use this formConfig variable to pass settings to Semantic UI in .from(). */
     public $formConfig = [];
-
-    // }}}
 
     // {{{ Base Methods
 
-    /**
-     * Constructor.
-     *
-     * @param mixed $defaults CSS class or seed array
-     *
-     * @todo this should also call parent::__construct, but we have to refactor View::__construct method parameters too
-     */
-    public function __construct($defaults = [])
-    {
-        if (!is_array($defaults)) {
-            $defaults = [$defaults];
-        }
-
-        // CSS class
-        if (array_key_exists(0, $defaults)) {
-            $this->addClass($defaults[0]);
-            unset($defaults[0]);
-        }
-
-        $this->setDefaults($defaults);
-    }
-
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();
 
-        $this->formElement = View::addTo($this, ['element' => 'form', 'short_name' => 'form'], ['FormElementOnly']);
+        $this->formElement = View::addTo($this, ['element' => 'form', 'shortName' => 'form'], ['FormElementOnly']);
 
         // Initialize layout, so when you call addControl / setModel next time, form will know
         // where to add your fields.
@@ -265,19 +220,15 @@ class Form extends View
      * will be added.
      *
      * @param array<int, string>|null $fields
-     *
-     * @return \Atk4\Data\Model
      */
-    public function setModel(Model $model, array $fields = null)
+    public function setModel(Model $model, array $fields = null): void
     {
         $model->assertIsEntity();
 
         // Model is set for the form and also for the current layout
         try {
-            $model = parent::setModel($model);
+            parent::setModel($model);
             $this->layout->setModel($model, $fields);
-
-            return $model;
         } catch (Exception $e) {
             throw $e->addMoreInfo('model', $model);
         }
@@ -308,9 +259,9 @@ class Form extends View
                 }
 
                 return $response;
-            } catch (\Atk4\Data\ValidationException $val) {
+            } catch (\Atk4\Data\ValidationException $e) {
                 $response = [];
-                foreach ($val->errors as $field => $error) {
+                foreach ($e->errors as $field => $error) {
                     $response[] = $this->error($field, $error);
                 }
 
@@ -423,7 +374,7 @@ class Form extends View
     /**
      * Add header into the form, which appears as a separator.
      *
-     * @param string $title
+     * @param string|array $title
      *
      * @return Form\Layout
      */
@@ -523,18 +474,14 @@ class Form extends View
 
         $defaults = [
             'form' => $this,
-            'entityField' => new EntityFieldPair($this->model, $field->short_name),
-            'short_name' => $field->short_name,
+            'entityField' => new EntityFieldPair($this->model, $field->shortName),
+            'shortName' => $field->shortName,
         ];
 
         return Factory::factory($ControlSeed, $defaults);
     }
 
-    /**
-     * Provides control seeds for most common types.
-     *
-     * @var array Describes how factory converts type to control seed
-     */
+    /** @var array Describes how factory converts type to control seed Provides control seeds for most common types. */
     protected $typeToControl = [
         'boolean' => [Control\Checkbox::class],
         'text' => [Control\Textarea::class],

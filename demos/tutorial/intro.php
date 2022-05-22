@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsToast;
@@ -140,7 +141,7 @@ $wizard->addStep('Business Model', function ($page) {
         */
         session_start();
 
-        $model = new \Atk4\Ui\Demos\DemoInvoice(new \Atk4\Data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
+        $model = new DemoInvoice(new Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
         $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function (Model $model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
@@ -150,7 +151,7 @@ $wizard->addStep('Business Model', function ($page) {
         $model = $model->tryLoad(1);
         $form->setModel($model);
 
-        if (!$model->loaded()) {
+        if (!$model->isLoaded()) {
             // set default data
             $model->setMulti([
                 'id' => 1,
@@ -202,15 +203,16 @@ $wizard->addStep('Persistence', function ($page) {
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         session_start();
 
-        $model = new \Atk4\Ui\Demos\DemoInvoice(new \Atk4\Data\Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
+        $model = new DemoInvoice(new Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
         $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function (Model $model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
 
         Header::addTo($owner, ['Record display in Card View using model data.']);
         $model = $model->tryLoad(1);
-        if ($model->loaded()) {
-            \Atk4\Ui\Card::addTo($owner, ['useLabel' => true])->setModel($model);
+        if ($model->isLoaded()) {
+            \Atk4\Ui\Card::addTo($owner, ['useLabel' => true])
+                ->setModel($model);
         } else {
             Message::addTo($owner, ['Empty record.']);
         }
@@ -227,6 +229,6 @@ $wizard->addStep('Persistence', function ($page) {
 
 $wizard->addFinish(function ($page) use ($wizard) {
     PromotionText::addTo($page);
-    \Atk4\Ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon' => 'left arrow'], ['Left'])
+    \Atk4\Ui\Button::addTo($wizard, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
         ->link('/demos/index.php');
 });

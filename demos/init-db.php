@@ -20,8 +20,48 @@ try {
 
 // a very basic file that sets up Agile Data to be used in some demonstrations
 
+trait ModelPreventModificationTrait
+{
+    public function atomic(\Closure $fx)
+    {
+        $eRollback = new \Exception('Prevent modification');
+        $res = null;
+        try {
+            parent::atomic(function () use ($fx, $eRollback, &$res) {
+                $res = $fx();
+
+                throw $eRollback;
+            });
+        } catch (\Exception $e) {
+            if ($e !== $eRollback) {
+                throw $e;
+            }
+        }
+
+        return $res;
+    }
+
+    protected function initPreventModification(): void
+    {
+        $this->getUserAction('add')->callback = function (Model $model) {
+            return 'Form Submit! Data are not save in demo mode.';
+        };
+
+        $this->getUserAction('edit')->callback = function (Model $model) {
+            return 'Form Submit! Data are not save in demo mode.';
+        };
+
+        $this->getUserAction('delete')->confirmation = 'Please go ahead. Demo mode does not really delete data.';
+        $this->getUserAction('delete')->callback = function (Model $model) {
+            return 'Only simulating delete when in demo mode.';
+        };
+    }
+}
+
 class ModelWithPrefixedFields extends Model
 {
+    use ModelPreventModificationTrait;
+
     /** @var array<string, string> */
     private static $prefixedFieldNames = [];
 
@@ -89,6 +129,8 @@ class ModelWithPrefixedFields extends Model
         }
 
         parent::init();
+
+        $this->initPreventModification();
     }
 
     public function addField($name, $seed = []): \Atk4\Data\Field
@@ -99,26 +141,6 @@ class ModelWithPrefixedFields extends Model
         ]);
 
         return parent::addField($name, $seed);
-    }
-}
-
-trait ModelLockTrait
-{
-    public function lock(): void
-    {
-        $this->getUserAction('add')->callback = function (Model $model) {
-            return 'Form Submit! Data are not save in demo mode.';
-        };
-        $this->getUserAction('edit')->callback = function (Model $model) {
-            return 'Form Submit! Data are not save in demo mode.';
-        };
-
-        $delete = $this->getUserAction('delete');
-        $delete->confirmation = 'Please go ahead. Demo mode does not really delete data.';
-
-        $delete->callback = function (Model $model) {
-            return 'Only simulating delete when in demo mode.';
-        };
     }
 }
 
@@ -133,6 +155,7 @@ trait ModelLockTrait
 class Country extends ModelWithPrefixedFields
 {
     public $table = 'country';
+    public $caption = 'Country';
 
     protected function init(): void
     {
@@ -156,33 +179,21 @@ class Country extends ModelWithPrefixedFields
     {
         $errors = parent::validate($intent);
 
-        if (mb_strlen($this->iso) !== 2) {
+        if (mb_strlen($this->iso ?? '') !== 2) {
             $errors[$this->fieldName()->iso] = 'Must be exactly 2 characters';
         }
 
-        if (mb_strlen($this->iso3) !== 3) {
+        if (mb_strlen($this->iso3 ?? '') !== 3) {
             $errors[$this->fieldName()->iso3] = 'Must be exactly 3 characters';
         }
 
         // look if name is unique
         $c = $this->getModel()->tryLoadBy($this->fieldName()->name, $this->name);
-        if ($c->loaded() && $c->getId() !== $this->getId()) {
+        if ($c->isLoaded() && $c->getId() !== $this->getId()) {
             $errors[$this->fieldName()->name] = 'Country name must be unique';
         }
 
         return $errors;
-    }
-}
-
-class CountryLock extends Country
-{
-    use ModelLockTrait;
-    public $caption = 'Country';
-
-    protected function init(): void
-    {
-        parent::init();
-        $this->lock();
     }
 }
 
@@ -291,6 +302,7 @@ class Percent extends \Atk4\Data\Field
 class File extends ModelWithPrefixedFields
 {
     public $table = 'file';
+    public $caption = 'File';
 
     protected function init(): void
     {
@@ -315,34 +327,54 @@ class File extends ModelWithPrefixedFields
     /**
      * Perform import from filesystem.
      */
-    public function importFromFilesystem($path, $isSub = false)
+    public function importFromFilesystem(string $path, bool $isSub = null): void
     {
-        if (!$isSub) {
-            $path = __DIR__ . '/../' . $path;
+        if ($isSub === null) {
+            if ($this->isEntity()) { // TODO should be not needed once UserAction is for non-entity only
+                $this->getModel()->importFromFilesystem($path);
+
+                return;
+            }
+
+            $this->atomic(function () use ($path) {
+                foreach ($this as $entity) {
+                    $entity->delete();
+
+                    // skip full/slow import for Behat testing
+                    if ($_ENV['CI'] ?? null) {
+                        break;
+                    }
+                }
+
+                $path = __DIR__ . '/../' . $path;
+
+                $this->importFromFilesystem($path, false);
+            });
+
+            return;
         }
 
-        $dir = new \DirectoryIterator($path);
-        foreach ($dir as $fileinfo) {
-            $name = $fileinfo->getFilename();
-
-            if ($name === '.' || $name[0] === '.') {
+        foreach (new \DirectoryIterator($path) as $fileinfo) {
+            if ($fileinfo->isDot() || in_array($fileinfo->getFilename(), ['.git', 'vendor', 'js'], true)) {
                 continue;
             }
 
-            if ($name === 'src' || $name === 'demos' || $isSub) {
-                $entity = $this->getModel(true)->createEntity();
+            if (in_array($fileinfo->getFilename(), ['demos', 'src', 'tests'], true) || $isSub) {
+                $entity = $this->createEntity();
 
-                /*
-                // Disabling saving file in db
-                $m->save([
+                $entity->save([
                     $this->fieldName()->name => $fileinfo->getFilename(),
                     $this->fieldName()->is_folder => $fileinfo->isDir(),
-                    $this->fieldName()->type => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
+                    $this->fieldName()->type => pathinfo($fileinfo->getFilename(), \PATHINFO_EXTENSION),
                 ]);
-                */
 
                 if ($fileinfo->isDir()) {
-                    $entity->SubFolder->importFromFilesystem($dir->getPath() . '/' . $name, true);
+                    $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
+                }
+
+                // skip full/slow import for Behat testing
+                if ($_ENV['CI'] ?? null) {
+                    break;
                 }
             }
         }
@@ -356,18 +388,6 @@ class Folder extends File
         parent::init();
 
         $this->addCondition($this->fieldName()->is_folder, true);
-    }
-}
-
-class FileLock extends File
-{
-    use ModelLockTrait;
-    public $caption = 'File';
-
-    protected function init(): void
-    {
-        parent::init();
-        $this->lock();
     }
 }
 
@@ -429,6 +449,7 @@ class SubCategory extends ModelWithPrefixedFields
 class Product extends ModelWithPrefixedFields
 {
     public $table = 'product';
+    public $caption = 'Product';
 
     protected function init(): void
     {
@@ -441,17 +462,5 @@ class Product extends ModelWithPrefixedFields
         $this->hasOne($this->fieldName()->product_sub_category_id, [
             'model' => [SubCategory::class],
         ])->addTitle();
-    }
-}
-
-class ProductLock extends Product
-{
-    use ModelLockTrait;
-    public $caption = 'Product';
-
-    protected function init(): void
-    {
-        parent::init();
-        $this->lock();
     }
 }

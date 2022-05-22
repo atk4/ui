@@ -64,7 +64,7 @@ Image
 
 Image cannot be specified at the same time with the icon, but you can use PNG/GIF/JPG image on your label::
 
-    $img = 'https://raw.githubusercontent.com/atk4/ui/2.0.4/public/logo.png';
+    $img = $app->cdn['atk'] . '/logo.png';
     Label::addTo($app, ['Coded in PHP', 'image' => $img]);
 
 Detail
@@ -80,9 +80,9 @@ Groups
 Label can be part of the group, but you would need to either use custom HTML template or
 composition::
 
-    $group = View::addTo($app, [false, 'blue tag', 'ui' => 'labels']);
+    $group = View::addTo($app, [false, 'class.blue tag' => true, 'ui' => 'labels']);
     Label::addTo($group, ['$9.99']);
-    Label::addTo($group, ['$19.99', 'red tag']);
+    Label::addTo($group, ['$19.99', 'class.red tag' => true]);
     Label::addTo($group, ['$24.99']);
 
 Combining classes
@@ -96,10 +96,10 @@ Based on Fomantic UI documentation, you can add more classes to your labels::
     $col = View::addTo($c, ['ui' => 'raised segment']);
 
     // attach label to the top of left column
-    Label::addTo($col, ['Left Column', 'top attached', 'icon' => 'book']);
+    Label::addTo($col, ['Left Column', 'class.top attached' => true, 'icon' => 'book']);
 
     // ribbon around left column
-    Label::addTo($col, ['Lorem', 'red ribbon', 'icon' => 'cut']);
+    Label::addTo($col, ['Lorem', 'class.red ribbon' => true, 'icon' => 'cut']);
 
     // add some content inside column
     LoremIpsum::addTo($col, ['size' => 1]);
@@ -108,13 +108,13 @@ Based on Fomantic UI documentation, you can add more classes to your labels::
     $col = View::addTo($c, ['ui' => 'raised segment']);
 
     // attach label to the top of right column
-    Label::addTo($col, ['Right Column', 'top attached', 'icon' => 'book']);
+    Label::addTo($col, ['Right Column', 'class.top attached' => true, 'icon' => 'book']);
 
     // some content
     LoremIpsum::addTo($col, ['size' => 1]);
 
     // right bottom corner label
-    Label::addTo($col, ['Ipsum', 'orange bottom right attached', 'icon' => 'cut']);
+    Label::addTo($col, ['Ipsum', 'class.orange bottom right attached' => true, 'icon' => 'cut']);
 
 Added labels into Table
 =======================

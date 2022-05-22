@@ -28,25 +28,13 @@ class Dropdown extends Input
      */
     public $values = [];
 
-    /**
-     * The string to set as an empty values.
-     *
-     * @var string
-     */
+    /** @var string The string to set as an empty values. */
     public $empty = "\u{00a0}"; // Unicode NBSP
 
-    /**
-     * The html template associate whit this dropdown.
-     *
-     * @var string
-     */
+    /** @var string The html template associate whit this dropdown. */
     public $defaultTemplate = 'form/control/dropdown.html';
 
-    /**
-     * The css class associate with this dropdown.
-     *
-     * @var string
-     */
+    /** @var string The css class associate with this dropdown. */
     public $defaultClass = 'fluid search selection dropdown';
 
     /**
@@ -59,11 +47,7 @@ class Dropdown extends Input
      */
     public $dropIcon;
 
-    /**
-     * Dropdown options as per semantic-ui dropdown options.
-     *
-     * @var array
-     */
+    /** @var array Dropdown options as per semantic-ui dropdown options. */
     public $dropdownOptions = [];
 
     /**
@@ -104,7 +88,7 @@ class Dropdown extends Input
      * function(Model $row) {
      *     return [
      *         'value' => $row->getId(),
-     *         'title' => $row->getTitle().' ('.$row->get('title2').')',
+     *         'title' => $row->getTitle() . ' (' . $row->get('title2') . ')',
      *     ];
      * }
      *
@@ -113,7 +97,7 @@ class Dropdown extends Input
      *     return [
      *        'value' => $key,
      *        'title' => mb_strtoupper($value),
-     *        'icon' => strpos('Month', $value) !== false ? 'calendar' : '',
+     *        'icon' => str_contains($value, 'Month') ? 'calendar' : '',
      *     ];
      * }
      *
@@ -121,23 +105,12 @@ class Dropdown extends Input
      */
     public $renderRowFunction;
 
-    /**
-     * Subtemplate for a single dropdown item.
-     *
-     * @var object
-     */
+    /** @var object Subtemplate for a single dropdown item. */
     protected $_tItem;
 
-    /**
-     * Subtemplate for an icon for a single dropdown item.
-     *
-     * @var object;
-     */
+    /** @var object; Subtemplate for an icon for a single dropdown item. */
     protected $_tIcon;
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();
@@ -159,9 +132,9 @@ class Dropdown extends Input
     public function getInput()
     {
         return $this->getApp()->getTag('input', array_merge([
-            'name' => $this->short_name,
+            'name' => $this->shortName,
             'type' => $this->inputType,
-            'id' => $this->id . '_input',
+            'id' => $this->name . '_input',
             'value' => $this->getValue(),
             'readonly' => $this->readonly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
@@ -254,7 +227,7 @@ class Dropdown extends Input
                 }
             } else {
                 // for standard model rendering, only load id and title field
-                $this->model->only_fields = [$this->model->title_field, $this->model->id_field];
+                $this->model->setOnlyFields([$this->model->title_field, $this->model->id_field]);
                 $this->_renderItemsForModel();
             }
         } else {
@@ -274,7 +247,7 @@ class Dropdown extends Input
     protected function renderView(): void
     {
         if ($this->isMultiple) {
-            $this->defaultClass = $this->defaultClass . ' multiple';
+            $this->defaultClass .= ' multiple';
         }
 
         $this->addClass($this->defaultClass);

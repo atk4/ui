@@ -16,11 +16,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
 {
     use WarnDynamicPropertyTrait;
 
-    /**
-     * Links layout to the form.
-     *
-     * @var \Atk4\Ui\Form
-     */
+    /** @var \Atk4\Ui\Form Links layout to the form. */
     public $form;
 
     /**
@@ -45,10 +41,8 @@ abstract class AbstractLayout extends \Atk4\Ui\View
             if (!$this->form->model->hasField($name)) {
                 $field = $this->form->model->getModel()->addField($name, $field);
             } else {
-                $existingField = $this->form->model->getField($name);
-
                 if (is_array($field)) {
-                    $field = $existingField->setDefaults($field);
+                    $field = $this->form->model->getField($name)->setDefaults($field);
                 } else {
                     throw (new Exception('Duplicate field'))
                         ->addMoreInfo('name', $name);
@@ -68,7 +62,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
 
     protected function _addControl(Control $control, Field $field): Control
     {
-        return $this->add($control, $this->template->hasTag($field->short_name) ? $field->short_name : null);
+        return $this->add($control, $this->template->hasTag($field->shortName) ? $field->shortName : null);
     }
 
     /**
@@ -100,10 +94,8 @@ abstract class AbstractLayout extends \Atk4\Ui\View
      * Sets form model and adds form controls.
      *
      * @param array<int, string>|null $fields
-     *
-     * @return \Atk4\Data\Model
      */
-    public function setModel(Model $model, array $fields = null)
+    public function setModel(Model $model, array $fields = null): void
     {
         $model->assertIsEntity();
 
@@ -119,9 +111,9 @@ abstract class AbstractLayout extends \Atk4\Ui\View
             $field = $model->getField($fieldName);
 
             if ($field->isEditable()) {
-                $controls[] = [$field->short_name];
+                $controls[] = [$field->shortName];
             } elseif ($field->isVisible()) {
-                $controls[] = [$field->short_name, ['readonly' => true]];
+                $controls[] = [$field->shortName, ['readonly' => true]];
             }
         }
 
@@ -131,8 +123,6 @@ abstract class AbstractLayout extends \Atk4\Ui\View
             throw (new Exception('Incorrect value for $fields'))
                 ->addMoreInfo('controls', $controls);
         }
-
-        return $model;
     }
 
     /**

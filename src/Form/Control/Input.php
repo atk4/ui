@@ -9,6 +9,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Icon;
 use Atk4\Ui\Label;
+use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\JsCallbackExecutor;
 
 /**
@@ -42,11 +43,7 @@ class Input extends Form\Control
      */
     public $label;
 
-    /**
-     * Set label that will appear to the right of the input field.
-     *
-     * @var string|object
-     */
+    /** @var string|object Set label that will appear to the right of the input field. */
     public $labelRight;
 
     public $action;
@@ -110,10 +107,10 @@ class Input extends Form\Control
     public function getInput()
     {
         return $this->getApp()->getTag('input', array_merge([
-            'name' => $this->short_name,
+            'name' => $this->shortName,
             'type' => $this->inputType,
             'placeholder' => $this->placeholder,
-            'id' => $this->id . '_input',
+            'id' => $this->name . '_input',
             'value' => $this->getValue(),
             'readonly' => $this->readonly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
@@ -159,7 +156,7 @@ class Input extends Form\Control
         }
         if ($button instanceof UserAction || $button instanceof JsCallbackExecutor) {
             $executor = ($button instanceof UserAction)
-                ? $this->getExecutorFactory()->create($button, $this, $this->getExecutorFactory()::JS_EXECUTOR)
+                ? $this->getExecutorFactory()->create($button, $this, ExecutorFactory::JS_EXECUTOR)
                 : $button;
             $button = $this->add($this->getExecutorFactory()->createTrigger($executor->getAction()), $spot);
             $this->addClass('action');
@@ -171,7 +168,7 @@ class Input extends Form\Control
                 $button->on('click', $executor);
             }
         }
-        if (!$button->_initialized) {
+        if (!$button->isInitialized()) {
             $this->add($button, $spot);
             $this->addClass('action');
         }

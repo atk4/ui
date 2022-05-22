@@ -63,7 +63,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     {
         // Add buttons to modal for next and previous.
         $btns = (new View())->addStyle(['min-height' => '24px']);
-        $this->ok = Button::addTo($btns, ['Ok', 'blue']);
+        $this->ok = Button::addTo($btns, ['Ok', 'class.blue' => true]);
         $this->cancel = Button::addTo($btns, ['Cancel']);
         $this->add($btns, 'actions');
         $this->showActions = true;
@@ -79,7 +79,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     public function jsExecute(array $urlArgs = []): array
     {
         if (!$this->actionInitialized) {
-            throw new Exception('Action must be set prior to assign trigger.');
+            throw new Exception('Action must be set prior to assign trigger');
         }
 
         return [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])];
@@ -116,7 +116,10 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action->setEntity($this->action->getModel()->tryLoad($id));
+            $this->action = $this->action->getActionForEntity($this->action->getModel()->tryLoad($id));
+        } elseif (!$this->action->isOwnerEntity()
+                && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)) {
+            $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
         }
 
         $this->loader->set(function ($modal) {

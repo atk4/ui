@@ -19,11 +19,7 @@ class Layout extends AbstractLayout
     /** @var string Default input template file. */
     public $defaultInputTemplate = 'form/layout/generic-input.html';
 
-    /**
-     * If specified will appear on top of the group. Can be string or Label object.
-     *
-     * @var string
-     */
+    /** @var string If specified will appear on top of the group. Can be string or Label object. */
     public $label;
 
     /**
@@ -34,11 +30,7 @@ class Layout extends AbstractLayout
      */
     public $width;
 
-    /**
-     * Set true if you want fields to appear in-line.
-     *
-     * @var bool
-     */
+    /** @var bool Set true if you want fields to appear in-line. */
     public $inline = false;
 
     /** @var HtmlTemplate Template holding input html. */
@@ -49,7 +41,7 @@ class Layout extends AbstractLayout
 
     protected function _addControl(Control $control, Field $field): Control
     {
-        return $this->add($control, ['desired_name' => $field->short_name]);
+        return $this->add($control, ['desired_name' => $field->shortName]);
     }
 
     protected function init(): void
@@ -76,13 +68,13 @@ class Layout extends AbstractLayout
     /**
      * Adds Header in form layout.
      *
-     * @param string $label
+     * @param string|array $label
      *
      * @return $this
      */
     public function addHeader($label)
     {
-        \Atk4\Ui\Header::addTo($this, [$label, 'dividing', 'element' => 'h4']);
+        \Atk4\Ui\Header::addTo($this, [$label, 'class.dividing' => true, 'element' => 'h4']);
 
         return $this;
     }
@@ -206,7 +198,7 @@ class Layout extends AbstractLayout
             // Controls get extra pampering
             $template->dangerouslySetHtml('Input', $element->getHtml());
             $template->trySet('label', $label);
-            $template->trySet('label_for', $element->id . '_input');
+            $template->trySet('label_for', $element->name . '_input');
             $template->set('control_class', $element->getControlClass());
 
             if ($element->entityField->getField()->required) {
@@ -219,7 +211,7 @@ class Layout extends AbstractLayout
 
             if ($element->hint && $template->hasTag('Hint')) {
                 $hint = Factory::factory($this->defaultHint);
-                $hint->id = $element->id . '_hint';
+                $hint->name = $element->name . '_hint';
                 if (is_object($element->hint) || is_array($element->hint)) {
                     $hint->add($element->hint);
                 } else {
@@ -230,8 +222,8 @@ class Layout extends AbstractLayout
                 $template->del('Hint');
             }
 
-            if ($this->template->hasTag($element->short_name)) {
-                $this->template->tryDangerouslySetHtml($element->short_name, $template->renderToHtml());
+            if ($this->template->hasTag($element->shortName)) {
+                $this->template->tryDangerouslySetHtml($element->shortName, $template->renderToHtml());
             } else {
                 $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
             }

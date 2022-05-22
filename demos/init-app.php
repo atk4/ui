@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Persistence;
+
 date_default_timezone_set('UTC');
 
 require_once __DIR__ . '/init-autoloader.php';
@@ -15,17 +17,17 @@ if (file_exists(__DIR__ . '/CoverageUtil.php') && !class_exists(\PHPUnit\Framewo
 }
 
 $app = new \Atk4\Ui\App([
-    'call_exit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
-    'catch_exceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
-    'always_run' => (bool) ($_GET['APP_ALWAYS_RUN'] ?? true),
+    'callExit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
+    'catchExceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
+    'alwaysRun' => (bool) ($_GET['APP_ALWAYS_RUN'] ?? true),
 ]);
 $app->title = 'Agile UI Demo v' . $app->version;
 
-if ($app->call_exit !== true) {
+if ($app->callExit !== true) {
     $app->stickyGet('APP_CALL_EXIT');
 }
 
-if ($app->catch_exceptions !== true) {
+if ($app->catchExceptions !== true) {
     $app->stickyGet('APP_CATCH_EXCEPTIONS');
 }
 
@@ -59,7 +61,7 @@ final class AnonymousClassNameCache
 }
 
 try {
-    /** @var \Atk4\Data\Persistence\Sql $db */
+    /** @var Persistence\Sql $db */
     require_once __DIR__ . '/init-db.php';
     $app->db = $db;
     unset($db);
@@ -70,12 +72,8 @@ try {
 [$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
 $demosUrl = $rootUrl . 'demos/';
 
-if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
-    $app->cdn['atk'] = $rootUrl . 'public';
-}
-
 // allow custom layout override
-$app->initLayout([$app->stickyGet('layout') ?? \Atk4\Ui\Layout\Maestro::class]);
+$app->initLayout([!isset($_GET['layout']) ? \Atk4\Ui\Layout\Maestro::class : $app->stickyGet('layout')]);
 
 $layout = $app->layout;
 if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {
@@ -179,7 +177,7 @@ if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {
     $layout->addMenuItem('Recursive Views', [$path . 'recursive'], $menu);
 
     // view demo source page on Github
-    \Atk4\Ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'teal', 'icon' => 'github'])
+    \Atk4\Ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'class.teal' => true, 'icon' => 'github'])
         ->on('click', $app->jsRedirect('https://github.com/atk4/ui/blob/develop/' . $relUrl, true));
 }
 unset($layout, $rootUrl, $relUrl, $demosUrl, $path, $menu);

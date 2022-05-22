@@ -8,8 +8,11 @@ use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Persistence;
 use Atk4\Ui\App;
 use Atk4\Ui\Callback;
+use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -63,7 +66,7 @@ class DemosTest extends TestCase
             self::$_db = $app->db;
 
             // prevent $app to run on shutdown
-            $app->run_called = true;
+            $app->runCalled = true;
         }
     }
 
@@ -77,7 +80,7 @@ class DemosTest extends TestCase
             if (!isset(self::$_failedParentTests[$this->getName()])) {
                 self::$_failedParentTests[$this->getName()] = $this->getStatus();
             } else {
-                $this->markTestIncomplete('Test failed, but non-HTTP test failed too. Fix it first.');
+                $this->markTestIncomplete('Test failed, but non-HTTP test failed too, fix it first');
             }
         }
 
@@ -119,7 +122,7 @@ class DemosTest extends TestCase
 
     protected function createTestingApp(): App
     {
-        $app = new class(['call_exit' => false, 'catch_exceptions' => false, 'always_run' => false]) extends App {
+        $app = new class(['callExit' => false, 'catchExceptions' => false, 'alwaysRun' => false]) extends App {
             public function callExit(): void
             {
                 throw new DemosTestExitError();
@@ -131,6 +134,18 @@ class DemosTest extends TestCase
         $app->db = clone self::$_db;
 
         return $app;
+    }
+
+    protected function assertNoGlobalSticky(App $app): void
+    {
+        $appSticky = array_diff_assoc(
+            \Closure::bind(fn () => $app->stickyGetArguments, null, App::class)(),
+            ['__atk_json' => false, '__atk_tab' => false, 'APP_CALL_EXIT' => true, 'APP_CATCH_EXCEPTIONS' => true]
+        );
+        if ($appSticky !== []) {
+            throw (new \Atk4\Ui\Exception('Global GET sticky must never be set by any component'))
+                ->addMoreInfo('appSticky', $appSticky);
+        }
     }
 
     protected function getClient(): Client
@@ -145,12 +160,15 @@ class DemosTest extends TestCase
                 $app = $this->createTestingApp();
                 require $localPath;
 
-                if (!$app->run_called) {
+                if (!$app->runCalled) {
                     $app->run();
                 }
+
+                $this->assertNoGlobalSticky($app);
             } catch (\Throwable $e) {
                 // session_start() or ini_set() functions can be used only with native HTTP tests
                 // override test expectation here to finish there tests cleanly (TODO better to make the code testable without calling these functions)
+                // TODO impl. volatile session manager for unit testing
                 if ($e instanceof \ErrorException && preg_match('~^(session_start|ini_set)\(\).* headers already sent$~', $e->getMessage())) {
                     $this->expectExceptionObject($e);
                 }
@@ -174,10 +192,10 @@ class DemosTest extends TestCase
             }, null, App::class)();
 
             // Attach a response to the easy handle with the parsed headers.
-            $response = new \GuzzleHttp\Psr7\Response(
+            $response = new Response(
                 $statusCode,
                 $headers,
-                \GuzzleHttp\Psr7\stream_for($body),
+                class_exists(Utils::class) ? Utils::streamFor($body) : \GuzzleHttp\Psr7\stream_for($body), // @phpstan-ignore-line Utils class present since guzzlehttp/psr7 v1.7
                 '1.0'
             );
 
@@ -196,17 +214,41 @@ class DemosTest extends TestCase
     protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
     {
         try {
-            return $this->getClient()->request(isset($options['form_params']) !== null ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
+            return $this->getClient()->request(isset($options['form_params']) ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
         } catch (\GuzzleHttp\Exception\ServerException $ex) {
             $exFactoryWithFullBody = new class('', $ex->getRequest()) extends \GuzzleHttp\Exception\RequestException {
                 public static function getResponseBodySummary(ResponseInterface $response): string
                 {
-                    return $response->getBody()->getContents();
+                    $body = $response->getBody();
+                    $res = $body->getContents();
+
+                    if ($body->isSeekable()) {
+                        $body->rewind();
+                    }
+
+                    return $res;
                 }
             };
 
             throw $exFactoryWithFullBody->create($ex->getRequest(), $ex->getResponse());
         }
+    }
+
+    protected function getResponseFromRequest5xx(string $path, array $options = []): ResponseInterface
+    {
+        try {
+            $response = $this->getResponseFromRequest($path, $options);
+        } catch (\GuzzleHttp\Exception\ServerException $e) {
+            $response = $e->getResponse();
+        } catch (UnhandledCallbackExceptionError $e) {
+            while ($e instanceof UnhandledCallbackExceptionError) {
+                $e = $e->getPrevious();
+            }
+
+            throw $e;
+        }
+
+        return $response;
     }
 
     protected function getPathWithAppVars(string $path): string
@@ -277,23 +319,24 @@ class DemosTest extends TestCase
     /**
      * @dataProvider demoFilesProvider
      */
-    public function testDemosStatusAndHtmlResponse(string $uri): void
+    public function testDemosStatusAndHtmlResponse(string $path): void
     {
-        $response = $this->getResponseFromRequest($uri);
-        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $response = $this->getResponseFromRequest($path);
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
-    public function testResponseError(): void
+    public function testDemoResponseError(): void
     {
-        if (static::class === self::class) { // test is failing, TODO fix
-            $this->assertTrue(true);
-
-            return;
+        if (static::class === self::class) {
+            $this->expectException(\Atk4\Core\Exception::class);
+            $this->expectExceptionMessage('Property for specified object is not defined');
         }
 
-        $this->expectExceptionCode(500);
-        $this->getResponseFromRequest('layout/layouts_error.php');
+        $response = $this->getResponseFromRequest5xx('layout/layouts_error.php');
+
+        $this->assertSame(500, $response->getStatusCode());
+        $this->assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
     }
 
     public function casesDemoGetProvider(): array
@@ -309,12 +352,12 @@ class DemosTest extends TestCase
     /**
      * @dataProvider casesDemoGetProvider
      */
-    public function testDemoGet(string $uri): void
+    public function testDemoGet(string $path): void
     {
-        $response = $this->getResponseFromRequest($uri);
-        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
-        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $response = $this->getResponseFromRequest($path);
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
+        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
     public function testWizard(): void
@@ -352,8 +395,8 @@ class DemosTest extends TestCase
         // loader callback reload
         $files[] = ['_unit-test/reload.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'c_reload=ajax&' . Callback::URL_QUERY_TARGET . '=c_reload'];
         // test catch exceptions
-        $files[] = ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m_cb&__atk_json=1'];
-        $files[] = ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm2_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m2_cb&__atk_json=1'];
+        $files[] = ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m_cb&__atk_json=1', 'Test throw exception!'];
+        $files[] = ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm2_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m2_cb&__atk_json=1', 'Test trigger error!'];
 
         return $files;
     }
@@ -361,20 +404,29 @@ class DemosTest extends TestCase
     /**
      * @dataProvider jsonResponseProvider
      */
-    public function testDemoAssertJsonResponse(string $uri): void
+    public function testDemoAssertJsonResponse(string $path, string $expectedExceptionMessage = null): void
     {
-        if (static::class === self::class) { // test is failing, TODO fix
-            $this->assertTrue(true);
+        if (static::class === self::class) {
+            if ($expectedExceptionMessage !== null) {
+                if (str_contains($path, '=m2_cb&')) {
+                    $this->assertTrue(true);
 
-            return;
+                    return;
+                }
+
+                $this->expectExceptionMessage($expectedExceptionMessage);
+            }
         }
 
-        $response = $this->getResponseFromRequest($uri);
-        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        if (!($this instanceof DemosHttpNoExitTest)) { // content type is not set when App->call_exit equals to true
-            $this->assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
+        $response = $this->getResponseFromRequest5xx($path);
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
+        $responseBodyStr = $response->getBody()->getContents();
+        $this->assertMatchesRegularExpression($this->regexJson, $responseBodyStr);
+        $this->assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
+        if ($expectedExceptionMessage !== null) {
+            $this->assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
         }
-        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
     /**
@@ -385,10 +437,8 @@ class DemosTest extends TestCase
         $files = [];
         $files[] = ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
         $files[] = ['_unit-test/console.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
-        if (!($this instanceof DemosHttpNoExitTest)) { // ignore content type mismatch when App->call_exit equals to true
-            $files[] = ['_unit-test/console_run.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
-            $files[] = ['_unit-test/console_exec.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
-        }
+        $files[] = ['_unit-test/console_run.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
+        $files[] = ['_unit-test/console_exec.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
 
         return $files;
     }
@@ -396,7 +446,7 @@ class DemosTest extends TestCase
     /**
      * @dataProvider sseResponseProvider
      */
-    public function testDemoAssertSseResponse(string $uri): void
+    public function testDemoAssertSseResponse(string $path): void
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
@@ -405,14 +455,13 @@ class DemosTest extends TestCase
             return;
         }
 
-        $response = $this->getResponseFromRequest($uri);
-        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        $response = $this->getResponseFromRequest($path);
+        $this->assertSame(200, $response->getStatusCode());
 
         $output_rows = preg_split('~\r?\n|\r~', $response->getBody()->getContents());
 
-        $this->assertGreaterThan(0, count($output_rows), ' Response is empty on ' . $uri);
-
         // check SSE Syntax
+        $this->assertGreaterThan(0, count($output_rows));
         foreach ($output_rows as $index => $sse_line) {
             if (empty($sse_line)) {
                 continue;
@@ -424,7 +473,7 @@ class DemosTest extends TestCase
             $this->assertSame(
                 $sse_line,
                 $format_match_string,
-                ' Testing SSE response line ' . $index . ' with content ' . $sse_line . ' on ' . $uri
+                'Testing SSE response line ' . $index . ' with content ' . $sse_line
             );
         }
     }
@@ -459,11 +508,54 @@ class DemosTest extends TestCase
     /**
      * @dataProvider jsonResponsePostProvider
      */
-    public function testDemoAssertJsonResponsePost(string $uri, array $postData): void
+    public function testDemoAssertJsonResponsePost(string $path, array $postData): void
     {
-        $response = $this->getResponseFromRequest($uri, ['form_params' => $postData]);
-        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $response = $this->getResponseFromRequest($path, ['form_params' => $postData]);
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
+    }
+
+    /**
+     * @dataProvider demoCallbackErrorProvider
+     */
+    public function testDemoCallbackError(string $path, string $expectedExceptionMessage): void
+    {
+        if (static::class === self::class) {
+            $this->expectExceptionMessage($expectedExceptionMessage);
+        }
+
+        $response = $this->getResponseFromRequest5xx($path);
+
+        $this->assertSame(500, $response->getStatusCode());
+        $responseBodyStr = $response->getBody()->getContents();
+        $this->assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
+        $this->assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
+    }
+
+    public function demoCallbackErrorProvider(): array
+    {
+        return [
+            [
+                '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
+                'Callback requested, but never reached. You may be missing some arguments in request URL.',
+            ],
+            [
+                '_unit-test/callback-nested.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
+                'Callback requested, but never reached. You may be missing some arguments in request URL.',
+            ],
+            [
+                '_unit-test/callback-nested.php?err_main_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_main_loader',
+                'Exception from Main Loader',
+            ],
+            [
+                '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
+                'Exception from Sub Loader',
+            ],
+            [
+                '_unit-test/callback-nested.php?err_sub_loader2&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
+                'Exception II from Sub Loader',
+            ],
+        ];
     }
 }
 

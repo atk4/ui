@@ -44,7 +44,7 @@ directly in PHP::
     $form->onSubmit(function(Form $form) {
         // implement subscribe here
 
-        return "Subscribed ".$form->model->get('email')." to newsletter.";
+        return "Subscribed " . $form->model->get('email') . " to newsletter.";
     });
 
 Form is a composite component and it relies on other components to render parts
@@ -65,8 +65,8 @@ Even if model not explicitly set (see section below) each form has an underlying
 
 	// or multiple fields
 	$form->model->set([
-		'name'	=> 'John',
-		'email' => 'some@email.com'
+		'name' => 'John',
+		'email' => 'some@email.com',
 	]);
 
 Form also relies on a ``\Atk4\Ui\Form::Layout`` class and displays form controls through
@@ -329,7 +329,7 @@ for you. Here is an example with date::
     $form->addControl('date2', [\Atk4\Ui\Form\Control\Calendar::class, 'type' => 'date']);
 
     $form->onSubmit(function(Form $form) {
-        echo 'date1 = '.print_r($form->model->get('date1'), true).' and date2 = '.print_r($form->model->get('date2'), true);
+        echo 'date1 = ' . print_r($form->model->get('date1'), true) . ' and date2 = ' . print_r($form->model->get('date2'), true);
     });
 
 Field ``date1`` is defined inside a :php:class:`ProxyModel` as a date field and will
@@ -436,7 +436,7 @@ POST data to submit itself and will re-use the query string, so you can also saf
 use any GET arguments for passing record $id. You may also perform model load after
 record association. This gives the benefit of not loading any other fields, unless
 they're marked as System (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$system),
-see https://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields#Model::onlyFields::
+see https://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields#Model::setOnlyFields::
 
     $form = Form::addTo($app);
     $form->setModel((new User($db))->load($current_user), ['email', 'name']);
@@ -718,7 +718,7 @@ Fomantic UI Modifiers
 There are many other classes Fomantic UI allow you to use on a form. The next code will produce
 form inside a segment (outline) and will make form controls appear smaller::
 
-    $form = new \Atk4\Ui\Form(['small segment']));
+    $form = new \Atk4\Ui\Form(['class.small segment' => true]));
 
 For further styling see documentation on :php:class:`View`.
 
@@ -771,7 +771,7 @@ Here is a more advanced example::
 
     $f_sub = Form::addTo($app);
     $f_sub->addControl('name');
-    $f_sub->addControl('subscribe', [\Atk4\Ui\Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'toggle']);
+    $f_sub->addControl('subscribe', [\Atk4\Ui\Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'class.toggle' => true]);
     $f_sub->addControl('email');
     $f_sub->addControl('gender', [\Atk4\Ui\Form\Control\Radio::class], ['enum' => ['Female', 'Male']])->set('Female');
     $f_sub->addControl('m_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
@@ -809,8 +809,8 @@ Hiding / Showing group of field
 
 Instead of defining rules for form controls individually you can hide/show entire group::
 
-    $f_group = Form::addTo($app, ['segment']);
-    Label::addTo($f_group, ['Work on form group too.', 'top attached'], ['AboveControls']);
+    $f_group = Form::addTo($app, ['class.segment' => true]);
+    Label::addTo($f_group, ['Work on form group too.', 'class.top attached' => true], ['AboveControls']);
 
     $g_basic = $f_group->addGroup(['Basic Information']);
     $g_basic->addControl('first_name', ['width' => 'eight']);
@@ -835,7 +835,7 @@ Instead of defining rules for form controls individually you can hide/show entir
 
     $f_group->setGroupDisplayRules([
         'php' => ['dev' => 'checked'],
-        'language' => ['dev' => 'checked']
+        'language' => ['dev' => 'checked'],
     ]);
 
 .. todo:: MOVE THIS TO SEPARATE FILE

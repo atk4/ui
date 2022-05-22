@@ -29,7 +29,7 @@ Specify size and sub-header content::
     Header::addTo($seg, [
         'H1 header',
         'size' => 1,
-        'subHeader' => 'H1 subheader'
+        'subHeader' => 'H1 subheader',
     ]);
 
     // or
@@ -37,7 +37,7 @@ Specify size and sub-header content::
     Header::addTo($seg, [
         'Small header',
         'size' => 'small',
-        'subHeader' => 'small subheader'
+        'subHeader' => 'small subheader',
     ]);
 
 Icon and Image
@@ -53,16 +53,16 @@ Header may specify icon or image::
     Header::addTo($seg, [
         'Header with icon',
         'icon' => 'settings',
-        'subHeader' => 'and with sub-header'
+        'subHeader' => 'and with sub-header',
     ]);
 
 Here you can also specify seed for the image::
 
-    $img = 'https://raw.githubusercontent.com/atk4/ui/2.0.4/public/logo.png';
+    $img = $app->cdn['atk'] . '/logo.png';
     Header::addTo($seg, [
         'Center-aligned header',
         'aligned' => 'center',
-        'image' => [$img, 'disabled'],
-        'subHeader' => 'header with image'
+        'image' => [$img, 'class.disabled' => true],
+        'subHeader' => 'header with image',
     ]);
 

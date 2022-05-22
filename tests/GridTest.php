@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
+use Atk4\Data\Persistence;
 use Atk4\Ui\Table;
 
 class GridTest extends \Atk4\Core\Phpunit\TestCase
@@ -19,7 +20,7 @@ class GridTest extends \Atk4\Core\Phpunit\TestCase
             1 => ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'],
             2 => ['id' => 2, 'email' => 'test@yahoo.com', 'password' => 'secret'],
         ];
-        $this->m = new MyModel(new \Atk4\Data\Persistence\Array_($a));
+        $this->m = new MyModel(new Persistence\Array_($a));
     }
 
     public function test1(): void
@@ -61,9 +62,9 @@ class GridTest extends \Atk4\Core\Phpunit\TestCase
         $t->setModel($this->m, ['email']);
         $del = $t->addColumn(null, [Table\Column\Delete::class]);
 
-        $this->assertSame('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="' . $del->short_name . '"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHtml());
+        $this->assertSame('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="' . $del->shortName . '"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHtml());
         $this->assertSame(
-            '<tr data-id="1"><td>test@test.com</td><td><a href="#" title="Delete test@test.com?" class="' . $del->short_name . '"><i class="ui red trash icon"></i>Delete</a></td></tr>',
+            '<tr data-id="1"><td>test@test.com</td><td><a href="#" title="Delete test@test.com?" class="' . $del->shortName . '"><i class="ui red trash icon"></i>Delete</a></td></tr>',
             $this->extractTableRow($t)
         );
     }

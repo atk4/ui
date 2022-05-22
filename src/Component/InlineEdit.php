@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Component;
 
+use Atk4\Data\Model;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Exception;
 use Atk4\Ui\JsToast;
@@ -16,18 +17,10 @@ class InlineEdit extends View
 {
     public $defaultTemplate = 'inline-edit.html';
 
-    /**
-     * JsCallback for saving data.
-     *
-     * @var \Atk4\Ui\JsCallback
-     */
+    /** @var \Atk4\Ui\JsCallback JsCallback for saving data. */
     public $cb;
 
-    /**
-     * Input initial value.
-     *
-     * @var mixed
-     */
+    /** @var mixed Input initial value. */
     public $initValue;
 
     /**
@@ -60,11 +53,7 @@ class InlineEdit extends View
      */
     public $saveOnBlur = true;
 
-    /**
-     * Default css for the input div.
-     *
-     * @var string
-     */
+    /** @var string Default css for the input div. */
     public $inputCss = 'ui right icon input';
 
     /**
@@ -80,9 +69,6 @@ class InlineEdit extends View
      */
     public $formatErrorMsg;
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();
@@ -100,14 +86,13 @@ class InlineEdit extends View
 
     /**
      * Set Model of this View.
-     *
-     * @return \Atk4\Data\Model
      */
-    public function setModel(\Atk4\Data\Model $model)
+    public function setModel(Model $model): void
     {
         parent::setModel($model);
+
         $this->fieldName = $this->fieldName ?: $this->model->title_field;
-        if ($this->autoSave && $this->model->loaded()) {
+        if ($this->autoSave && $this->model->isLoaded()) {
             $value = $_POST['value'] ?? null;
             $this->cb->set(function () use ($value) {
                 try {
@@ -124,8 +109,6 @@ class InlineEdit extends View
                 }
             });
         }
-
-        return $this->model;
     }
 
     /**
@@ -192,7 +175,7 @@ class InlineEdit extends View
             throw new Exception('Only string or number field can be edited inline. Field Type = ' . $type);
         }
 
-        if ($this->model && $this->model->loaded()) {
+        if ($this->model && $this->model->isLoaded()) {
             $initValue = $this->model->get($this->fieldName);
         } else {
             $initValue = $this->initValue;

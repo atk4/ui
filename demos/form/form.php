@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
 
 /** @var \Atk4\Ui\App $app */
@@ -22,7 +23,8 @@ require_once __DIR__ . '/../init-app.php';
  */
 $tabs = \Atk4\Ui\Tabs::addTo($app);
 
-////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 $tab = $tabs->addTab('Basic Use');
 
 \Atk4\Ui\Header::addTo($tab, ['Very simple form']);
@@ -75,7 +77,8 @@ $form->onSubmit(function (Form $form) {
     return $view;
 });
 
-////////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 $tab = $tabs->addTab('Handler Output');
 
 \Atk4\Ui\Header::addTo($tab, ['Form can respond with manually generated error']);
@@ -129,7 +132,8 @@ $form->onSubmit(function (Form $form) use ($control) {
     return $control->jsInput()->val('random is ' . random_int(1, 100));
 });
 
-/////////////////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 $tab = $tabs->addTab('Handler Safety');
 
 \Atk4\Ui\Header::addTo($tab, ['Form handles errors', 'size' => 2]);
@@ -137,7 +141,7 @@ $tab = $tabs->addTab('Handler Safety');
 $form = Form::addTo($tab);
 $form->addControl('email');
 $form->onSubmit(function (Form $form) {
-    $o = new \StdClass();
+    $o = new \stdClass();
 
     return $o['abc'];
 });
@@ -153,7 +157,7 @@ $form->onSubmit(function (Form $form) {
     return 'somehow it did not crash';
 });
 
-\Atk4\Ui\Button::addTo($form, ['Modal Test', 'secondary'])->on('click', \Atk4\Ui\Modal::addTo($form)
+\Atk4\Ui\Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', \Atk4\Ui\Modal::addTo($form)
     ->set(function ($p) {
         $form = Form::addTo($p);
         $form->addControl('email');
@@ -165,18 +169,19 @@ $form->onSubmit(function (Form $form) {
         });
     })->show());
 
-/////////////////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 $tab = $tabs->addTab('Complex Examples');
 
 \Atk4\Ui\Header::addTo($tab, ['Conditional response']);
 
-$modelRegister = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_());
+$modelRegister = new \Atk4\Data\Model(new Persistence\Array_());
 $modelRegister->addField('name');
 $modelRegister->addField('email');
 $modelRegister->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);
 $modelRegister = $modelRegister->createEntity();
 
-$form = Form::addTo($tab, ['segment' => true]);
+$form = Form::addTo($tab, ['class.segment' => true]);
 $form->setModel($modelRegister);
 
 $form->onSubmit(function (Form $form) {
@@ -190,12 +195,13 @@ $form->onSubmit(function (Form $form) {
     ];
 });
 
-////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 $tab = $tabs->addTab('Layout Control');
 
 \Atk4\Ui\Header::addTo($tab, ['Shows example of grouping and multiple errors']);
 
-$form = Form::addTo($tab, ['segment']);
+$form = Form::addTo($tab, ['class.segment' => true]);
 $form->setModel((new \Atk4\Data\Model())->createEntity());
 
 $form->addHeader('Example fields added one-by-one');

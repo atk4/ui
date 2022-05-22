@@ -83,7 +83,7 @@ into multiple Tabs or detach form control groups or even create nested layouts::
     $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
     $form_page->addControl('age', new \Atk4\Ui\Form\Control\Line());
 
-    $form->onSubmit(function(Form $form) { return $form->model->get('name').' has age '.$form->model->get('age'); });
+    $form->onSubmit(function(Form $form) { return $form->model->get('name') . ' has age ' . $form->model->get('age'); });
 
 This is further explained in documentation for :php:class:`Atk4\\Ui\\Form\\Layout` class,
 however if you do plan on adding your own form control types, it's important that you extend it
@@ -228,7 +228,7 @@ Here are few ways to specify `icon` to an Input::
 
     // Type-hinting friendly
     $line = new \Atk4\Ui\Form\Control\Line();
-    $line->icon='search';
+    $line->icon = 'search';
     $page->add($line);
 
     // using class factory
@@ -239,13 +239,13 @@ be automatically substituted with `new Icon($icon)`. If you wish to be more spec
 and pass some arguments to the icon, there are two options::
 
     // compact
-    $line->icon=['search', 'big'];
+    $line->icon = ['search', 'class.big' => true];
 
     // Type-hinting friendly
     $line->icon = new Icon('search');
     $line->icon->addClass('big');
 
-To see how Icon interprets `new Icon(['search', 'big'])`, refer to :php:class:`Icon`.
+To see how Icon interprets `new Icon(['search', 'class.big' => true])`, refer to :php:class:`Icon`.
 
 .. note::
 
@@ -301,7 +301,7 @@ $expression argument can be string, JsExpression, array of JsExpressions or even
 
     // callback
     $f2 = $form->addControl('f2');
-    $f2->onChange(function(){return new \Atk4\Ui\JsExpression('console.log("f2 changed")');});
+    $f2->onChange(function () { return new \Atk4\Ui\JsExpression('console.log("f2 changed")'); });
 
     // Calendar form control - wraps in function call with arguments date, text and mode
     $c1 = $form->addControl('c1', new \Atk4\Ui\Form\Control\Calendar(['type' => 'date']));
@@ -336,7 +336,7 @@ This function is called with each model record and needs to return an array::
     $dropdown->renderRowFunction = function($record) {
         return [
             'value' => $record->id_field,
-            'title' => $record->getTitle().' ('.$record->get('subtitle').')',
+            'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
         ];
     }
 
@@ -345,7 +345,7 @@ You can also use this function to add an Icon to a record::
     $dropdown->renderRowFunction = function($record) {
         return [
             'value' => $record->id_field,
-            'title' => $record->getTitle().' ('.$record->get('subtitle').')',
+            'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
             'icon' => $record->get('value') > 100 ? 'money' : 'coins',
         ];
     }
@@ -403,7 +403,7 @@ You can also define an Icon right away::
          'tag' => ['Tag', 'icon' => 'tag icon'],
          'globe' => ['Globe', 'icon' => 'globe icon'],
          'registered' => ['Registered', 'icon' => 'registered icon'],
-         'file' => ['File', 'icon' => 'file icon']
+         'file' => ['File', 'icon' => 'file icon'],
      ].
 
 If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.

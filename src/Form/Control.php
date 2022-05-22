@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form;
 
+use Atk4\Data\Field;
+use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
@@ -14,22 +16,16 @@ use Atk4\Ui\View;
  */
 class Control extends View
 {
-    /**
-     * @var Form to which this field belongs
-     */
+    /** @var Form to which this field belongs */
     public $form;
 
-    /**
-     * @var EntityFieldPair
-     */
+    /** @var EntityFieldPair<Model, Field> */
     public $entityField;
 
     /** @var string */
     public $controlClass = '';
 
-    /**
-     * @var bool Whether you need this field to be rendered wrap in a form layout or as his
-     */
+    /** @var bool Whether you need this field to be rendered wrap in a form layout or as his */
     public $layoutWrap = true;
 
     /** @var bool rendered or not input label in generic Form\Layout template. */
@@ -73,9 +69,6 @@ class Control extends View
      */
     public $readonly = false;
 
-    /**
-     * Initialization.
-     */
     protected function init(): void
     {
         parent::init();
@@ -118,7 +111,7 @@ class Control extends View
     protected function renderView(): void
     {
         if ($this->form) {
-            $this->template->trySet('name', $this->short_name);
+            $this->template->trySet('name', $this->shortName);
         }
 
         parent::renderView();
@@ -164,7 +157,7 @@ class Control extends View
             $default['stopPropagation'] = $default;
         }
 
-        $this->on('change', '#' . $this->id . '_input', $expr, $default);
+        $this->on('change', '#' . $this->name . '_input', $expr, $default);
     }
 
     /**
@@ -177,7 +170,7 @@ class Control extends View
      */
     public function jsInput($when = null, $action = null)
     {
-        return $this->js($when, $action, '#' . $this->id . '_input');
+        return $this->js($when, $action, '#' . $this->name . '_input');
     }
 
     /**

@@ -6,11 +6,7 @@ namespace Atk4\Ui;
 
 class Paginator extends View
 {
-    /**
-     * Specify how many pages this paginator has in total.
-     *
-     * @var int
-     */
+    /** @var int Specify how many pages this paginator has in total. */
     public $total;
 
     /**
@@ -22,7 +18,7 @@ class Paginator extends View
     public $page;
 
     /**
-     * When there are more than $range*2+1 items, then current page will be surrounded by $range pages
+     * When there are more than ($range * 2 + 1) items, then current page will be surrounded by $range pages
      * followed by spacer ..., for example if range=2, then.
      *
      * 1, ..., 5, 6, *7*, 8, 9, ..., 34
@@ -31,11 +27,7 @@ class Paginator extends View
      */
     public $range = 4;
 
-    /**
-     * Set this if you want GET argument name to look beautifully.
-     *
-     * @var string|null
-     */
+    /** @var string|null Set this if you want GET argument name to look beautifully. */
     public $urlTrigger;
 
     /**

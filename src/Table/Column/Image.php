@@ -11,11 +11,7 @@ use Atk4\Ui\Table;
  */
 class Image extends Table\Column
 {
-    /**
-     * Overrides custom attributes that will be applied on head, body or foot.
-     *
-     * @var array
-     */
+    /** @var array Overrides custom attributes that will be applied on head, body or foot. */
     public $attr = ['all' => ['class' => ['center aligned single line']]];
 
     /**
@@ -25,7 +21,7 @@ class Image extends Table\Column
      */
     public function getDataCellTemplate(\Atk4\Data\Field $field = null)
     {
-        $caption = $field ? $field->getCaption() : $this->short_name;
+        $caption = $field ? $field->getCaption() : $this->shortName;
 
         return '<img src="' . parent::getDataCellTemplate($field) . '" alt="' . $caption . '" border="0" />';
     }

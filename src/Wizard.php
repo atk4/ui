@@ -11,7 +11,7 @@ use Atk4\Core\Factory;
  */
 class Wizard extends View
 {
-    use \Atk4\Core\SessionTrait;
+    use SessionTrait;
 
     public $defaultTemplate = 'wizard.html';
     public $ui = 'steps';
@@ -60,12 +60,12 @@ class Wizard extends View
 
         // add buttons
         if ($this->currentStep) {
-            $this->buttonPrev = Button::addTo($this, ['Back', 'basic'], ['Left']);
+            $this->buttonPrev = Button::addTo($this, ['Back', 'class.basic' => true], ['Left']);
             $this->buttonPrev->link($this->getUrl($this->currentStep - 1));
         }
 
-        $this->buttonNext = Button::addTo($this, ['Next', 'primary'], ['Right']);
-        $this->buttonFinish = Button::addTo($this, ['Finish', 'primary'], ['Right']);
+        $this->buttonNext = Button::addTo($this, ['Next', 'class.primary' => true], ['Right']);
+        $this->buttonFinish = Button::addTo($this, ['Finish', 'class.primary' => true], ['Right']);
 
         $this->buttonNext->link($this->getUrl($this->currentStep + 1));
     }

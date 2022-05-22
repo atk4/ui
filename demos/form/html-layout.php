@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
 use Atk4\Ui\GridLayout;
 use Atk4\Ui\Header;
@@ -23,7 +24,8 @@ $form = FlyersForm::addTo($tab, [
     'layout' => [Form\Layout::class, ['defaultTemplate' => __DIR__ . '/templates/flyers-form-layout.html']],
 ]);
 
-////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 $tab = $tabs->addTab('Template samples');
 
 $gridLayout = GridLayout::addTo($tab, ['rows' => 1, 'columns' => 2])->addClass('internally celled');
@@ -32,7 +34,7 @@ $right = View::addTo($gridLayout, [], ['r1c1']);
 Header::addTo($right, ['Button on right']);
 
 $form = Form::addTo($right, ['layout' => [Form\Layout::class, 'defaultTemplate' => __DIR__ . '/templates/form-button-right.html']]);
-$form->setModel((new Flyers(new \Atk4\Data\Persistence\Array_()))->tryLoadAny());
+$form->setModel((new Flyers(new Persistence\Array_()))->tryLoadAny());
 $form->getControl('last_name')->hint = 'Please enter your last name.';
 
 $left = View::addTo($gridLayout, [], ['r1c2']);
@@ -47,14 +49,15 @@ $form = Form::addTo($left, [
         ],
     ],
 ]);
-$form->setModel((new Flyers(new \Atk4\Data\Persistence\Array_()))->tryLoadAny());
+$form->setModel((new Flyers(new Persistence\Array_()))->tryLoadAny());
 $form->getControl('last_name')->hint = 'Please enter your last name.';
 
-////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 $tab = $tabs->addTab('Custom layout class');
 
 $form = Form::addTo($tab, ['layout' => [Form\Layout\Custom::class, 'defaultTemplate' => __DIR__ . '/templates/form-custom-layout.html']]);
-$form->setModel((new \Atk4\Ui\Demos\CountryLock($app->db))->loadAny());
+$form->setModel((new Country($app->db))->loadAny());
 
 $form->onSubmit(function (Form $form) {
     return new \Atk4\Ui\JsToast('Saving is disabled');

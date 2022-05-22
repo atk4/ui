@@ -401,11 +401,11 @@ You can use the following code to manipulate the template above::
     $recipient = $template->cloneRegion('Recipient');
 
     // Set data to each sub-template separately
-    $sender    ->set($sender_data);
-    $recipient ->set($recipient_data);
+    $sender->set($sender_data);
+    $recipient->set($recipient_data);
 
     // render sub-templates, insert into master template
-    $template->dangerouslySetHtml('Sender',    $sender   ->renderToHtml());
+    $template->dangerouslySetHtml('Sender',    $sender->renderToHtml());
     $template->dangerouslySetHtml('Recipient', $recipient->renderToHtml());
 
     // get final result
@@ -418,8 +418,8 @@ Same thing using Agile Toolkit Views::
     $sender    = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender',    'Sender');
     $recipient = \Atk4\Ui\View::addTo($envelope, [], [null], 'Recipient', 'Recipient');
 
-    $sender    ->tempalte->set($sender_data);
-    $recipient ->tempalte->set($recipient_data);
+    $sender->template->set($sender_data);
+    $recipient->template->set($recipient_data);
 
 We do not need to manually render anything in this scenario. Also the
 template of $sender and $recipient objects will be appropriately cloned
@@ -505,7 +505,7 @@ clone region with such a name from parent's template. This can be used
 by your "menu" implementation, which will clone parent's template's tag
 instead to hook into some specific template::
 
-    function defaultTemplate(){
+    function defaultTemplate() {
         return ['greeting']; // uses templates/greeting.html
     }
 
@@ -613,7 +613,7 @@ The tag {$_id} is automatically replaced with a unique name by a View.
 There are more templates which are being substituted:
 
 - {page}logout{/} - will be replaced with relative URL to the page
-- {public}images/logo.png{/} - will replace with URL to a public asset
+- {public}logo.png{/} - will replace with URL to a public asset
 - {css}css/file.css{/} - will replace with URL link to a CSS file
 - {js}jquery.validator.js{/} - will replace with URL to JavaScript file
 

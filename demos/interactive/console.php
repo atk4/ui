@@ -60,7 +60,7 @@ $tab = $tabs->addTab('exec() single', function ($tab) {
         'Command execution',
         'subHeader' => 'it is easy to run server-side commands and stream output through console',
     ]);
-    $message = \Atk4\Ui\Message::addTo($tab, ['This demo may not work', 'warning']);
+    $message = \Atk4\Ui\Message::addTo($tab, ['This demo may not work', 'type' => 'warning']);
     $message->text->addParagraph('This demo requires Linux OS and will display error otherwise.');
     \Atk4\Ui\Console::addTo($tab)->exec('/bin/pwd');
 });
@@ -71,7 +71,7 @@ $tab = $tabs->addTab('exec() chain', function ($tab) {
         'Command execution',
         'subHeader' => 'it is easy to run server-side commands and stream output through console',
     ]);
-    $message = \Atk4\Ui\Message::addTo($tab, ['This demo may not work', 'warning']);
+    $message = \Atk4\Ui\Message::addTo($tab, ['This demo may not work', 'type' => 'warning']);
     $message->text->addParagraph('This demo requires Linux OS and will display error otherwise.');
     \Atk4\Ui\Console::addTo($tab)->set(function ($console) {
         $console->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1']);
@@ -87,10 +87,10 @@ $tab = $tabs->addTab('composer update', function ($tab) {
         'subHeader' => 'it is easy to run server-side commands and stream output through console',
     ]);
 
-    $message = \Atk4\Ui\Message::addTo($tab, ['This demo may not work', 'warning']);
+    $message = \Atk4\Ui\Message::addTo($tab, ['This demo may not work', 'type' => 'warning']);
     $message->text->addParagraph('This demo requires you to have "bash" and "composer" installed and may display error if the process running PHP does not have write access to the "vendor" folder and "composer.*".');
 
-    $button = \Atk4\Ui\Button::addTo($message, ['I understand, proceed anyway', 'primary big']);
+    $button = \Atk4\Ui\Button::addTo($message, ['I understand, proceed anyway', 'class.primary big' => true]);
 
     $console = \Atk4\Ui\Console::addTo($tab, ['event' => false]);
     $console->exec('bash', ['-c', 'cd ../..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"']);

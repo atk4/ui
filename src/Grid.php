@@ -9,6 +9,7 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Table\Column\ActionButtons;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
+use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 
 /**
@@ -18,11 +19,7 @@ class Grid extends View
 {
     use HookTrait;
 
-    /**
-     * Will be initialized to Menu object, however you can set this to false to disable menu.
-     *
-     * @var Menu|false
-     */
+    /** @var Menu|false Will be initialized to Menu object, however you can set this to false to disable menu. */
     public $menu;
 
     /** @var JsSearch */
@@ -40,11 +37,7 @@ class Grid extends View
      */
     public $paginator;
 
-    /**
-     * Number of items per page to display.
-     *
-     * @var int
-     */
+    /** @var int Number of items per page to display. */
     public $ipp = 50;
 
     /**
@@ -79,41 +72,21 @@ class Grid extends View
      */
     public $sortable;
 
-    /**
-     * Set this if you want GET argument name to look beautifully for sorting.
-     *
-     * @var string|null
-     */
+    /** @var string|null Set this if you want GET argument name to look beautifully for sorting. */
     public $sortTrigger;
 
-    /**
-     * Component that actually renders data rows / columns and possibly totals.
-     *
-     * @var Table|false
-     */
+    /** @var Table|false Component that actually renders data rows / columns and possibly totals. */
     public $table;
 
-    /**
-     * The container for table and paginator.
-     *
-     * @var View
-     */
+    /** @var View The container for table and paginator. */
     public $container;
 
     public $defaultTemplate = 'grid.html';
 
-    /**
-     * Defines which Table Decorator to use for ActionButtons.
-     *
-     * @var string
-     */
+    /** @var string Defines which Table Decorator to use for ActionButtons. */
     protected $actionButtonsDecorator = [Table\Column\ActionButtons::class];
 
-    /**
-     * Defines which Table Decorator to use for ActionMenu.
-     *
-     * @var array
-     */
+    /** @var array Defines which Table Decorator to use for ActionMenu. */
     protected $actionMenuDecorator = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
 
     protected function init(): void
@@ -136,16 +109,30 @@ class Grid extends View
         if ($this->paginator !== false) {
             $seg = View::addTo($this->container, [], ['Paginator'])->addStyle('text-align', 'center');
             $this->paginator = $seg->add(Factory::factory([Paginator::class, 'reload' => $this->container], $this->paginator));
-            $this->issetApp() ? $this->getApp()->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
+            $this->stickyGet($this->paginator->name);
         }
 
-        $this->issetApp() ? $this->getApp()->stickyGet('_q') : $this->stickyGet('_q');
+        // TODO dirty way to set stickyGet - add addQuickSearch to find the expected search input component ID and then remove it
+        if ($this->menu !== false) {
+            $appUniqueHashesBackup = $this->getApp()->uniqueNameHashes;
+            $menuElementNameCountsBackup = \Closure::bind(fn () => $this->_elementNameCounts, $this->menu, AbstractView::class)();
+            try {
+                $menuRight = $this->menu->addMenuRight(); // @phpstan-ignore-line
+                $menuItemView = View::addTo($menuRight->addItem()->setElement('div'));
+                $quickSearch = JsSearch::addTo($menuItemView);
+                $this->stickyGet($quickSearch->name . '_q');
+                $this->menu->removeElement($menuRight->shortName);
+            } finally {
+                $this->getApp()->uniqueNameHashes = $appUniqueHashesBackup;
+                \Closure::bind(fn () => $this->_elementNameCounts = $menuElementNameCountsBackup, $this->menu, AbstractView::class)();
+            }
+        }
     }
 
     protected function initTable(): Table
     {
         /** @var Table */
-        $table = $this->container->add(Factory::factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
+        $table = $this->container->add(Factory::factory([Table::class, 'class.very compact very basic striped single line' => true, 'reload' => $this->container], $this->table), 'Table');
 
         return $table;
     }
@@ -342,7 +329,8 @@ class Grid extends View
         $view = View::addTo($this->menu
             ->addMenuRight()->addItem()->setElement('div'));
 
-        $q = trim($this->stickyGet('_q') ?? '');
+        $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
+        $q = trim($this->stickyGet($this->quickSearch->name . '_q') ?? '');
         if ($q !== '') {
             $scope = Model\Scope::createOr();
             foreach ($fields as $field) {
@@ -350,8 +338,7 @@ class Grid extends View
             }
             $this->model->addCondition($scope);
         }
-
-        $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery, 'initValue' => $q]);
+        $this->quickSearch->initValue = $q;
     }
 
     /**
@@ -387,7 +374,7 @@ class Grid extends View
      */
     public function addExecutorButton(UserAction\ExecutorInterface $executor, Button $button = null)
     {
-        $btn = $button ? $this->add($button) : $this->getExecutorFactory()->createTrigger($executor->getAction(), $this->getExecutorFactory()::TABLE_BUTTON);
+        $btn = $button ? $this->add($button) : $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_BUTTON);
         $confirmation = $executor->getAction()->getConfirmation() ?: '';
         $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
 
@@ -418,7 +405,7 @@ class Grid extends View
 
     public function addExecutorMenuItem(ExecutorInterface $executor)
     {
-        $item = $this->getExecutorFactory()->createTrigger($executor->getAction(), $this->getExecutorFactory()::TABLE_MENU_ITEM);
+        $item = $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_MENU_ITEM);
         // ConfirmationExecutor take care of showing the user confirmation, thus make it empty.
         $confirmation = !$executor instanceof ConfirmationExecutor ? ($executor->getAction()->getConfirmation() ?: '') : '';
         $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
@@ -454,7 +441,7 @@ class Grid extends View
     public function addActionMenuFromModel(string $appliesTo = null)
     {
         if (!$this->model) {
-            throw new Exception('Model not set, set it prior to add item.');
+            throw new Exception('Model not set, set it prior to add item');
         }
 
         foreach ($this->model->getUserActions($appliesTo) as $action) {
@@ -611,18 +598,16 @@ class Grid extends View
      * columns at all.
      *
      * @param array<int, string>|null $columns
-     *
-     * @return \Atk4\Data\Model
      */
-    public function setModel(Model $model, array $columns = null)
+    public function setModel(Model $model, array $columns = null): void
     {
-        $this->model = $this->table->setModel($model, $columns);
+        $this->table->setModel($model, $columns);
+
+        parent::setModel($model);
 
         if ($this->searchFieldNames) {
             $this->addQuickSearch($this->searchFieldNames, true);
         }
-
-        return $this->model;
     }
 
     /**
@@ -662,7 +647,7 @@ class Grid extends View
      */
     private function setModelLimitFromPaginator()
     {
-        $this->paginator->setTotal((int) ceil($this->model->action('count')->getOne() / $this->ipp));
+        $this->paginator->setTotal((int) ceil((int) $this->model->action('count')->getOne() / $this->ipp));
         $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
     }
 

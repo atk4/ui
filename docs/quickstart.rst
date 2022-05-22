@@ -113,7 +113,7 @@ with it::
 
     <?php
     session_start();
-    $s = new \Atk4\Data\Persistence_Array($_SESSION);
+    $s = new \Atk4\Data\Persistence\Array_($_SESSION);
 
 If you're establishing a database connection that should be used throughout your whole application and in many classes,
 you can define it in the $app->db class::
@@ -122,12 +122,12 @@ you can define it in the $app->db class::
     use Atk4\Data\Persistence;
     use Atk4\Ui\App;
 
-    $db = Persistence::connect(DB_URI,DB_USR, DB_PWD);
+    $db = Persistence::connect(DB_URI, DB_USR, DB_PWD);
 
     $app = new App([
-    "title" => "Erp v." . ERP_VER,
-    "db" => $db,
-    "call_exit" => false
+        "title" => "Erp v." . ERP_VER,
+        "db" => $db,
+        "callExit" => false,
     ]);
 
 Data Model
@@ -138,16 +138,16 @@ single ToDo item::
 
 
     class ToDoItem extends \Atk4\Data\Model {
-        public $table = 'todo_item';               // 6
+        public $table = 'todo_item';                 // 6
         function init(): void {
             parent::init();
 
             $this->addField('name', ['caption' => 'Task Name', 'required' => true]);
-                                                   // 7
+                                                     // 7
             $this->addField('due', [
               'type' => 'date',                      // 8
               'caption' => 'Due Date',
-              'default' => new \DateTime('+1 week')  // 9
+              'default' => new \DateTime('+1 week'), // 9
             ]);
         }
     }
@@ -183,7 +183,7 @@ Class App use `DiContainerTrait` which allow us to inject dependency directly in
     $app = new App([
         "title" => "Your application title",
         "db" => $db,
-        "logger" => $logger
+        "logger" => $logger,
     ]);
 
 
@@ -242,13 +242,13 @@ As mentioned before, UI Components in Agile Toolkit are often interchangeable, y
 another. In our example replace right column (label 17) with the following code::
 
     $grid = \Atk4\Ui\Crud::addTo($col->addColumn(), ['paginator' => false, // 18
-        'canCreate' => false, 'canDelete' => false                  // 19
+        'canCreate' => false, 'canDelete' => false,             // 19
     ]);
     $grid->setModel(new ToDoItem($s));
 
     $grid->menu->addItem('Complete Selected',                   // 20
         new \Atk4\Ui\JsReload($grid->table, [                   // 21
-            'delete' => $grid->addSelection()->jsChecked()        // 22
+            'delete' => $grid->addSelection()->jsChecked(),     // 22
         ])
     );
 

@@ -102,7 +102,7 @@ field if it's not alrady defined in ``Order::init()``::
     $table = Table::addTo($app);
     $order = new Order($db);
 
-    $order->addExpression('total', '[price]*[amount]')->type = 'atk4_money';
+    $order->addExpression('total', '[price] * [amount]')->type = 'atk4_money';
 
     $table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
 
@@ -122,7 +122,7 @@ specify the caption, you can use code like this::
     $order->addExpression('total', [
         '[price]*[amount]',
         'type' => 'atk4_money',
-        'caption' => 'Total Price'
+        'caption' => 'Total Price',
     ]);
 
     $table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
@@ -159,7 +159,7 @@ of a different class (e.g. 'atk4_money'). Value will be initialized after first 
 used to add columns without field::
 
     $action = $this->addColumn(null, ['Actions']);
-    $actions->addAction('Delete', function() { return 'ok'; });
+    $actions->addAction('Delete', function () { return 'ok'; });
 
 The above code will add a new extra column that will only contain 'delete' icon. When clicked
 it will automatically delete the corresponding record.
@@ -217,7 +217,7 @@ As a final note in this section - you can re-use column objects multiple times::
     $table->addColumn($c_gap);
     $table->setModel(new Order($db), ['name', 'price', 'amount']);
     $table->addColumn($c_gap);
-    $table->addColumns(['total','status'])
+    $table->addColumns(['total', 'status'])
     $table->addColumn($c_gap);
 
 This will result in 3 gap columns rendered to the left, middle and right of your Table.
@@ -268,10 +268,10 @@ The tag will override model value. Here is example usage of :php:meth:`Table\\Co
 
         function getHtmlTags(\Atk4\Data\Model $row)
         {
-            return ['_expired' =>
-                $row->get('date') < new \DateTime() ?
-                '<td class="danger">EXPIRED</td>' :
-                '<td></td>'
+            return [
+                '_expired' => $row->get('date') < new \DateTime()
+                                  ? '<td class="danger">EXPIRED</td>'
+                                  : '<td></td>',
             ];
         }
     }
@@ -298,7 +298,7 @@ of issues from your Github repository::
 
 
     // Show contents of dropbox
-    $github = \Atk4\Github\Persistence_Issues($github_api_config);
+    $github = \Atk4\Github\IssuePersistence($github_api_config);
     $issues = new \Atk4\Github\Model\Issue($github);
 
     Table::addTo($app)->setModel($issues);
@@ -353,7 +353,7 @@ is also responsible for setting class of the column, labeling the column and som
 nicer especially inside a table.
 
 .. important:: Decorating is not formatting. If we talk "date", then in order to display it to
-    the user, date must be in a proper format. Formatting of data is done by Persistence_UI and
+    the user, date must be in a proper format. Formatting of data is done by `Persistence\Ui` and
     is not limited to the table columns. Decorators may add an icon, change cell style, align cell
     or hide overflowing text to make table output look better.
 
@@ -460,7 +460,7 @@ Each table's column width can be resize by dragging the column right border::
 You may specify a callback function to the method. The callback will return a json string containing each
 column name in table with their new width in pixel.::
 
-    $table->resizableColumn(function($j, $w){
+    $table->resizableColumn(function($j, $w) {
         // do something with new column width
         $columnWidths = $this->getApp()->decodeJson($w);
         return;

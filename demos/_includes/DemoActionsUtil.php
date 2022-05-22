@@ -41,7 +41,7 @@ class ArgModel extends Model
 
 class DemoActionsUtil
 {
-    public static function setupDemoActions(CountryLock $country): void
+    public static function setupDemoActions(Country $country): void
     {
         $country->addUserAction(
             'callback',
@@ -118,7 +118,7 @@ class DemoActionsUtil
             [
                 'caption' => 'Edit ISO3',
                 'description' => function (UserAction $action) {
-                    return 'Edit ISO3 for country: ' . $action->getEntity()->getTitle();
+                    return 'Edit ISO3 for country: ' /* TODO . $action->getEntity()->getTitle() */;
                 },
                 'fields' => [$country->fieldName()->iso3],
                 'callback' => function () {

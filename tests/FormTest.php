@@ -25,9 +25,8 @@ class FormTest extends TestCase
 
         $this->form = new \Atk4\Ui\Form();
         $this->form->setApp(new AppFormTestMock([
-            'catch_exceptions' => false,
-            'always_run' => false,
-            'catch_runaway_callbacks' => false,
+            'catchExceptions' => false,
+            'alwaysRun' => false,
         ]));
         $this->form->invokeInit();
     }
@@ -119,26 +118,28 @@ class FormTest extends TestCase
 
     public function assertFormControlError(string $field, string $error): void
     {
+        $n = preg_match_all('~form\("add prompt","([^"]*)","([^"]*)"\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
+        $this->assertGreaterThan(0, $n);
         $matched = false;
-
-        preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function ($matches) use ($error, $field, &$matched) {
+        foreach ($matchesAll as $matches) {
             if ($matches[1] === $field) {
-                $this->assertStringContainsString($error, $matches[2], 'Regarding control ' . $field . ' error message');
-
                 $matched = true;
+                $this->assertStringContainsString($error, $matches[2], 'Regarding control ' . $field . ' error message');
             }
-        }, $this->formError);
+        }
 
         $this->assertTrue($matched, 'Form control ' . $field . ' did not produce error');
     }
 
     public function assertFromControlNoErrors(string $field): void
     {
-        preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function ($matches) use ($field) {
+        $n = preg_match_all('~form\("add prompt","([^"]*)","([^"]*)"\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
+        $this->assertGreaterThan(0, $n);
+        foreach ($matchesAll as $matches) {
             if ($matches[1] === $field) {
                 $this->fail('Form control ' . $field . ' unexpected error: ' . $matches[2]);
             }
-        }, $this->formError);
+        }
     }
 
     public function testSubmitError(): void

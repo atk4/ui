@@ -7,14 +7,14 @@ namespace Atk4\Ui\Demos;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$img = 'https://raw.githubusercontent.com/atk4/ui/2.0.4/public/logo.png';
+$img = $app->cdn['atk'] . '/logo.png';
 
 $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'segment']);
 \Atk4\Ui\Header::addTo($seg, ['H1 Header', 'size' => 1]);
 \Atk4\Ui\Header::addTo($seg, ['H2 Header', 'size' => 2]);
 \Atk4\Ui\Header::addTo($seg, ['H3 Header', 'size' => 3]);
 \Atk4\Ui\Header::addTo($seg, ['H4 Header', 'size' => 4]);
-\Atk4\Ui\Header::addTo($seg, ['H5 Header', 'size' => 5, 'dividing']);
+\Atk4\Ui\Header::addTo($seg, ['H5 Header', 'size' => 5, 'class.dividing' => true]);
 \Atk4\Ui\View::addTo($seg, ['element' => 'P'])->set('This is a following paragraph of text');
 
 \Atk4\Ui\Header::addTo($seg, ['H1', 'size' => 1, 'subHeader' => 'H1 subheader']);
@@ -27,7 +27,7 @@ $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'segment']);
 \Atk4\Ui\Header::addTo($seg, ['Small Header', 'size' => 'small']);
 \Atk4\Ui\Header::addTo($seg, ['Tiny Header', 'size' => 'tiny']);
 
-\Atk4\Ui\Header::addTo($seg, ['Sub Header', 'sub']);
+\Atk4\Ui\Header::addTo($seg, ['Sub Header', 'class.sub' => true]);
 
 $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'segment']);
 \Atk4\Ui\Header::addTo($seg, ['Header with icon', 'icon' => 'settings']);
@@ -44,4 +44,4 @@ $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'segment']);
 \Atk4\Ui\Header::addTo($seg, ['Center-aligned', 'aligned' => 'center', 'image' => $img, 'subHeader' => 'header with image']);
 
 $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'segment']);
-\Atk4\Ui\Header::addTo($seg, ['Center-aligned', 'aligned' => 'center', 'image' => [$img, 'disabled'], 'subHeader' => 'header with image']);
+\Atk4\Ui\Header::addTo($seg, ['Center-aligned', 'aligned' => 'center', 'image' => [$img, 'class.disabled' => true], 'subHeader' => 'header with image']);

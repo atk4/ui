@@ -42,7 +42,7 @@ class VpExecutor extends View implements JsExecutorInterface
     public $stepListItems = ['args' => 'Fill argument(s)', 'fields' => 'Edit Record(s)', 'preview' => 'Preview', 'final' => 'Complete'];
 
     /** @var array */
-    public $cancelBtnSeed = [Button::class, ['Cancel', 'small left floated basic blue', 'icon' => 'left arrow']];
+    public $cancelBtnSeed = [Button::class, ['Cancel', 'class.small left floated basic blue' => true, 'icon' => 'left arrow']];
 
     protected function init(): void
     {
@@ -114,7 +114,10 @@ class VpExecutor extends View implements JsExecutorInterface
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action->setEntity($this->action->getModel()->tryLoad($id));
+            $this->action = $this->action->getActionForEntity($this->action->getModel()->tryLoad($id));
+        } elseif (!$this->action->isOwnerEntity()
+                && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)) {
+            $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
         }
 
         if ($this->action->fields === true) {
@@ -157,7 +160,7 @@ class VpExecutor extends View implements JsExecutorInterface
      */
     protected function jsGetExecute($obj, $id): array
     {
-        //@phpstan-ignore-next-line
+        // @phpstan-ignore-next-line
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;

@@ -14,7 +14,7 @@ use Atk4\Ui\UserAction\BasicExecutor;
 require_once __DIR__ . '/../init-app.php';
 
 $grid = \Atk4\Ui\Grid::addTo($app);
-$model = new CountryLock($app->db);
+$model = new Country($app->db);
 $model->addUserAction('test', function (Model $model) {
     return 'test from ' . $model->getTitle() . ' was successful!';
 });
@@ -24,13 +24,13 @@ $grid->setModel($model);
 // Adding Quicksearch on Name field using auto query.
 $grid->addQuickSearch([$model->fieldName()->name], true);
 
-if ($app->stickyGet('no-ajax')) {
+if ($grid->stickyGet('no-ajax')) {
     $grid->quickSearch->useAjax = false;
 }
 
 $grid->menu->addItem(['Add Country', 'icon' => 'add square'], new \Atk4\Ui\JsExpression('alert(123)'));
 $grid->menu->addItem(['Re-Import', 'icon' => 'power'], new \Atk4\Ui\JsReload($grid));
-$grid->menu->addItem(['Delete All', 'icon' => 'trash', 'red active']);
+$grid->menu->addItem(['Delete All', 'icon' => 'trash', 'class.red active' => true]);
 
 $grid->addColumn(null, [\Atk4\Ui\Table\Column\Template::class, 'hello<b>world</b>']);
 
@@ -43,7 +43,7 @@ $grid->addActionButton('Say HI', function ($j, $id) use ($grid) {
     return 'Loaded "' . $model->load($id)->name . '" from ID=' . $id;
 });
 
-$grid->addModalAction(['icon' => [\Atk4\Ui\Icon::class, 'external']], 'Modal Test', function ($p, $id) {
+$grid->addModalAction(['icon' => 'external'], 'Modal Test', function ($p, $id) {
     \Atk4\Ui\Message::addTo($p, ['Clicked on ID=' . $id]);
 });
 
@@ -55,7 +55,8 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
         new JsToast('Simulating delete in demo mode.'),
     ];
 });
-$grid->addExecutorButton($deleteExecutor, new Button(['icon' => 'times circle outline']));
+// TODO button is added not only to the table rows, but also below the table!
+// $grid->addExecutorButton($deleteExecutor, new Button(['icon' => 'times circle outline']));
 
 $sel = $grid->addSelection();
 $grid->menu->addItem('show selection')->on('click', new \Atk4\Ui\JsExpression(

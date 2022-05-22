@@ -8,6 +8,7 @@ use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\App;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsFunction;
@@ -19,25 +20,13 @@ class Lookup extends Input
     public $defaultTemplate = 'form/control/lookup.html';
     public $ui = 'input';
 
-    /**
-     * Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown.
-     *
-     * @var array
-     */
+    /** @var array Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
     public $values = [];
 
-    /**
-     * Object used to capture requests from the browser.
-     *
-     * @var \Atk4\Ui\Callback
-     */
+    /** @var \Atk4\Ui\Callback Object used to capture requests from the browser. */
     public $callback;
 
-    /**
-     * Set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value.
-     *
-     * @var string
-     */
+    /** @var string Set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value. */
     public $empty = "\u{00a0}"; // Unicode NBSP
 
     /**
@@ -72,25 +61,13 @@ class Lookup extends Input
      */
     public $plus = false;
 
-    /**
-     * Sets the max. amount of records that are loaded.
-     *
-     * @var int
-     */
+    /** @var int Sets the max. amount of records that are loaded. */
     public $limit = 100;
 
-    /**
-     * Set custom model field here to use it's value as ID in dropdown instead of default model ID field.
-     *
-     * @var string
-     */
+    /** @var string Set custom model field here to use it's value as ID in dropdown instead of default model ID field. */
     public $id_field;
 
-    /**
-     * Set custom model field here to display it's value in dropdown instead of default model title field.
-     *
-     * @var string
-     */
+    /** @var string Set custom model field here to display it's value in dropdown instead of default model title field. */
     public $title_field;
 
     /**
@@ -112,7 +89,7 @@ class Lookup extends Input
      * form when field value is changes.
      * $form->addControl('field', [\Atk4\Ui\Form\Control\Lookup::class, 'settings' => ['allowReselection' => true,
      *                           'selectOnKeydown' => false,
-     *                           'onChange' => new Atk4\Ui\JsExpression('function(value,t,c) {
+     *                           'onChange' => new Atk4\Ui\JsExpression('function(value, t, c) {
      *                                 if ($(this).data("value") !== value) {
      *                                   $(this).parents(".form").form("submit");
      *                                   $(this).data("value", value);
@@ -190,7 +167,7 @@ class Lookup extends Input
     public function getData($limit = true): array
     {
         if (!$this->model) {
-            return [['value' => '-1', 'title' => 'Model must be set for Lookup']];
+            throw new Exception('Model must be set for Lookup');
         }
 
         $this->applyLimit($limit);
@@ -262,7 +239,7 @@ class Lookup extends Input
             $buttonSeed = ['content' => $buttonSeed];
         }
 
-        $defaultSeed = [\Atk4\Ui\Button::class, 'disabled' => ($this->disabled || $this->readonly)];
+        $defaultSeed = [\Atk4\Ui\Button::class, 'class.disabled' => ($this->disabled || $this->readonly)];
 
         $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
 
@@ -275,9 +252,9 @@ class Lookup extends Input
         $vp->set(function ($page) {
             $form = \Atk4\Ui\Form::addTo($page);
 
-            $entity = $this->model->createEntity();
+            $entity = (clone $this->model)->setOnlyFields($this->plus['fields'] ?? null)->createEntity();
 
-            $form->setModel($entity->onlyFields($this->plus['fields'] ?? []));
+            $form->setModel($entity);
 
             $form->onSubmit(function (\Atk4\Ui\Form $form) {
                 $form->model->save();
@@ -365,9 +342,9 @@ class Lookup extends Input
     public function getInput()
     {
         return $this->getApp()->getTag('input', array_merge([
-            'name' => $this->short_name,
+            'name' => $this->shortName,
             'type' => 'hidden',
-            'id' => $this->id . '_input',
+            'id' => $this->name . '_input',
             'value' => $this->getValue(),
             'readonly' => $this->readonly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
@@ -439,7 +416,7 @@ class Lookup extends Input
 
             $this->model = $this->model->tryLoadBy($id_field, $this->entityField->get());
 
-            if ($this->model->loaded()) {
+            if ($this->model->isLoaded()) {
                 $row = $this->renderRow($this->model);
 
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
@@ -453,11 +430,6 @@ class Lookup extends Input
         parent::renderView();
     }
 
-    /**
-     * Convert value to expected comma separated list before setting it.
-     *
-     * {@inheritdoc}
-     */
     public function set($value = null, $junk = null)
     {
         $value = implode(',', (array) $value);

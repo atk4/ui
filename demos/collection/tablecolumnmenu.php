@@ -11,7 +11,7 @@ require_once __DIR__ . '/../init-app.php';
 
 // Better Popup positionning when Popup are inside a container.
 $container = \Atk4\Ui\View::addTo($app, ['ui' => 'vertical segment']);
-$table = \Atk4\Ui\Table::addTo($container, ['celled' => true]);
+$table = \Atk4\Ui\Table::addTo($container, ['class.celled' => true]);
 $table->setModel(new SomeData(), []);
 
 // will add popup to this column.
@@ -39,7 +39,7 @@ $colTitle->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
     return 'Title item: ' . $item;
 });
 
-////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
 
 \Atk4\Ui\Header::addTo($app, ['Grid column may contains popup or dropdown menu.']);
 

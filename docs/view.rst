@@ -19,8 +19,8 @@ Agile UI is a component framework, which follows a software patterns known as
 
 View object is recursive. You can take one view and add another View inside of it::
 
-    $v = new \Atk4\Ui\View(['ui' => 'segment', 'inverted']);
-    Button::addTo($v, ['Orange', 'inverted orange']);
+    $v = new \Atk4\Ui\View(['ui' => 'segment', 'class.inverted' => true]);
+    Button::addTo($v, ['Orange', 'class.inverted orange' => true]);
 
 The above code will produce the following HTML block:
 
@@ -72,9 +72,9 @@ in any way you wish, before they will actuallized.
 In the next example I'll be creating 3 views, but it at the time their __constructor
 is executed it will be impossible to determine each view's position inside render tree::
 
-    $middle = new \Atk4\Ui\View(['ui' => 'segment', 'red']);
+    $middle = new \Atk4\Ui\View(['ui' => 'segment', 'class.red' => true]);
     $top = new \Atk4\Ui\View(['ui' => 'segments']);
-    $bottom = new \Atk4\Ui\Button(['Hello World', 'orange']);
+    $bottom = new \Atk4\Ui\Button(['Hello World', 'class.orange' => true]);
 
     // not arranged into render-tree yet
 
@@ -96,18 +96,18 @@ App class first and then continue with Layout initialization::
     $app = new \Atk4\Ui\App('My App');
     $top = $app->initLayout(new \Atk4\Ui\View(['ui' => 'segments']));
 
-    $middle = View::addTo($top, ['ui' => 'segment', 'red']);
+    $middle = View::addTo($top, ['ui' => 'segment', 'class.red' => true]);
 
-    $bottom = Button::addTo($middle, ['Hello World', 'orange']);
+    $bottom = Button::addTo($middle, ['Hello World', 'class.orange' => true]);
 
 Finally, if you prefer a more consise code, you can also use the following format::
 
     $app = new \Atk4\Ui\App('My App');
     $top = $app->initLayout([\Atk4\Ui\View::class, 'ui' => 'segments']);
 
-    $middle = View::addTo($top, ['ui' => 'segment', 'red']);
+    $middle = View::addTo($top, ['ui' => 'segment', 'class.red' => true]);
 
-    $bottom = Button::addTo($middle, ['Hello World', 'orange']);
+    $bottom = Button::addTo($middle, ['Hello World', 'class.orange' => true]);
 
 The rest of documentation will use this concise code to keep things readable, however if
 you value type-hinting of your IDE, you can keep using "new" keyword. I must also
@@ -149,7 +149,7 @@ Integration with Agile Data
 If you have used Agile Data, you should be familiar with a concept of creating
 Models::
 
-    $db = new \Atk4\Data\Persistence_SQL::connect($dsn);
+    $db = new \Atk4\Data\Persistence\Sql($dsn);
 
     $client = new Client($db);  // extends \Atk4\Data\Model();
 
@@ -161,7 +161,7 @@ so that those Views would be able to interact with your persistence directly::
 In most environments, however, your application will rely on a primary Database, which
 can be set through your $app class::
 
-    $app->db = new \Atk4\Data\Persistence_SQL::connect($dsn);
+    $app->db = new \Atk4\Data\Persistence\Sql($dsn);
 
     // next, anywhere in a view
     $client = new Client($this->getApp()->db);
@@ -169,7 +169,7 @@ can be set through your $app class::
 
 Or if you prefer a more consise code::
 
-    $app->db = new \Atk4\Data\Persistence_SQL::connect($dsn);
+    $app->db = new \Atk4\Data\Persistence\Sql($dsn);
 
     // next, anywhere in a view
     $form->setModel('Client');
@@ -203,12 +203,12 @@ If you happen to pass more key/values to the constructor or as second argument
 to add() they will be treated as default values for the properties of that
 specific view::
 
-    $view = View::addTo($app, ['ui' => 'segment', 'id' => 'test-id']);
+    $view = View::addTo($app, ['ui' => 'segment', 'name' => 'test-id']);
 
 For a more IDE-friendly format, however, I recommend to use the following syntax::
 
     $view = View::addTo($app, ['ui' => 'segment']);
-    $view->id = 'test-id';
+    $view->name = 'test-id';
 
 You must be aware of a difference here - passing array to constructor will
 override default property before call to `init()`. Most of the components
@@ -221,8 +221,8 @@ which syntax you are using.
 If you are don't specify key for the properties, they will be considered an
 extra class for a view::
 
-    $view = View::addTo($app, ['inverted', 'orange', 'ui' => 'segment']);
-    $view->id = 'test-id';
+    $view = View::addTo($app, ['inverted', 'class.orange' => true, 'ui' => 'segment']);
+    $view->name = 'test-id';
 
 You can either specify multiple classes one-by-one or as a single string
 "inverted orange".
@@ -350,7 +350,7 @@ You should specify defaultTemplate using relative path to your project root or, 
 relative to a current file::
 
     // in Add-on
-    View::addTo($app, ['defaultTemplate' => __DIR__.'/../templates/mytpl.httml']);
+    View::addTo($app, ['defaultTemplate' => __DIR__ . '/../templates/mytpl.httml']);
 
 Agile UI does not currently provide advanced search path for templates, by default the
 template is loaded from folder `vendor/atk4/ui/template`. To change this
@@ -407,9 +407,9 @@ Unique ID tag
 
     ID to be used with the top-most element.
 
-Agile UI will maintain unique ID for all the elements. The tag is set through 'id' property::
+Agile UI will maintain unique ID for all the elements. The tag is set through 'name' property::
 
-    $b = new \Atk4\Ui\Button(['id' => 'my-button3']);
+    $b = new \Atk4\Ui\Button(['name' => 'my-button3']);
     echo $b->render();
 
 Outputs:
@@ -454,7 +454,7 @@ Agile UI makes it easy to reload any View on the page. Starting with v1.4 you ca
 which will respond with JavaScript Action for reloading the view::
 
     $b1 = Button::addTo($app, ['Click me']);
-    $b2 = Button::addTo($app, ['Rand: '.rand(1,100)]);
+    $b2 = Button::addTo($app, ['Rand: ' . rand(1, 100)]);
 
     $b1->on('click', $b2->jsReload());
 

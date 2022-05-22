@@ -6,6 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
+use Atk4\Ui\Persistence\Post as PostPersistence;
 
 class PostTest extends TestCase
 {
@@ -26,7 +27,7 @@ class PostTest extends TestCase
      */
     public function testPost(): void
     {
-        $p = new \Atk4\Ui\Persistence\Post();
+        $p = new PostPersistence();
 
         $m = $this->model;
         $m->addField('id');

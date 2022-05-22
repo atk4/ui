@@ -21,18 +21,10 @@ class Columns extends View
      */
     public $width;
 
-    /**
-     * Sum of all column widths added so far.
-     *
-     * @var int
-     */
+    /** @var int Sum of all column widths added so far. */
     protected $calculated_width = 0;
 
-    /**
-     * Allows Grid to calculate widths automatically.
-     *
-     * @var array
-     */
+    /** @var array Allows Grid to calculate widths automatically. */
     public $sizes = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
         'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', ];
 
@@ -47,7 +39,7 @@ class Columns extends View
             $defaults = [$defaults];
         }
 
-        $size = $defaults[0];
+        $size = $defaults[0] ?? null;
         unset($defaults[0]);
 
         $column = Factory::factory([\Atk4\Ui\View::class], $defaults);

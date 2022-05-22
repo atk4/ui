@@ -9,11 +9,12 @@ use Atk4\Ui\Form;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-//////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 \Atk4\Ui\Header::addTo($app, ['Phone', 'size' => 2]);
 
-$formPhone = Form::addTo($app, ['segment']);
-\Atk4\Ui\Label::addTo($formPhone, ['Add other phone field input. Note: phone1 required a number of at least 5 char.', 'top attached'], ['AboveControls']);
+$formPhone = Form::addTo($app, ['class.segment' => true]);
+\Atk4\Ui\Label::addTo($formPhone, ['Add other phone field input. Note: phone1 required a number of at least 5 char.', 'class.top attached' => true], ['AboveControls']);
 
 $formPhone->addControl('phone1');
 $formPhone->addControl('phone2');
@@ -27,14 +28,15 @@ $formPhone->setControlsDisplayRules([
     'phone4' => ['phone3' => ['number', 'minLength[5]'], 'phone2' => ['number', 'minLength[5]'], 'phone1' => ['number', 'minLength[5]']],
 ]);
 
-//////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 \Atk4\Ui\Header::addTo($app, ['Optional subscription', 'size' => 2]);
 
-$formSubscribe = Form::addTo($app, ['segment']);
-\Atk4\Ui\Label::addTo($formSubscribe, ['Click on subscribe and add email to receive your gift.', 'top attached'], ['AboveControls']);
+$formSubscribe = Form::addTo($app, ['class.segment' => true]);
+\Atk4\Ui\Label::addTo($formSubscribe, ['Click on subscribe and add email to receive your gift.', 'class.top attached' => true], ['AboveControls']);
 
 $formSubscribe->addControl('name');
-$formSubscribe->addControl('subscribe', [Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'toggle']);
+$formSubscribe->addControl('subscribe', [Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'class.toggle' => true]);
 $formSubscribe->addControl('email');
 $formSubscribe->addControl('gender', [Form\Control\Radio::class], ['enum' => ['Female', 'Male']])->set('Female');
 $formSubscribe->addControl('m_gift', [Form\Control\Dropdown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
@@ -50,11 +52,12 @@ $formSubscribe->setControlsDisplayRules([
     'f_gift' => ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
 ]);
 
-//////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 \Atk4\Ui\Header::addTo($app, ['Dog registration', 'size' => 2]);
 
-$formDog = Form::addTo($app, ['segment']);
-\Atk4\Ui\Label::addTo($formDog, ['You can select type of hair cut only with race that contains "poodle" AND age no more than 5 year OR your dog race equals "bichon".', 'top attached'], ['AboveControls']);
+$formDog = Form::addTo($app, ['class.segment' => true]);
+\Atk4\Ui\Label::addTo($formDog, ['You can select type of hair cut only with race that contains "poodle" AND age no more than 5 year OR your dog race equals "bichon".', 'class.top attached' => true], ['AboveControls']);
 $formDog->addControl('race', [Form\Control\Line::class]);
 $formDog->addControl('age');
 $formDog->addControl('hair_cut', [Form\Control\Dropdown::class, 'values' => ['Short', 'Long']]);
@@ -66,11 +69,12 @@ $formDog->setControlsDisplayRules([
     'hair_cut' => [['race' => 'contains[poodle]', 'age' => 'integer[1..5]'], ['race' => 'isExactly[bichon]']],
 ]);
 
-//////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 \Atk4\Ui\Header::addTo($app, ['Hide or show group', 'size' => 2]);
 
-$formGroup = Form::addTo($app, ['segment']);
-\Atk4\Ui\Label::addTo($formGroup, ['Work on form group too.', 'top attached'], ['AboveControls']);
+$formGroup = Form::addTo($app, ['class.segment' => true]);
+\Atk4\Ui\Label::addTo($formGroup, ['Work on form group too.', 'class.top attached' => true], ['AboveControls']);
 
 $groupBasic = $formGroup->addGroup(['Basic Information']);
 $groupBasic->addControl('first_name', ['width' => 'eight']);
@@ -94,12 +98,13 @@ $groupOther->addControl('favorite_pet', ['width' => 'four']);
 // Show group where 'language' belong when dev is checked.
 $formGroup->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language' => ['dev' => 'checked']]);
 
-//////////////////////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 /*
 \Atk4\Ui\Header::addTo($app, ['Hide or show accordion section', 'size' => 2]);
 
-$f_acc = Form::addTo($app, ['segment']);
-\Atk4\Ui\Label::addTo($f_acc, ['Work on section layouts too.', 'top attached'], ['AboveControls']);
+$f_acc = Form::addTo($app, ['class.segment' => true]);
+\Atk4\Ui\Label::addTo($f_acc, ['Work on section layouts too.', 'class.top attached' => true], ['AboveControls']);
 
 // Accordion
 $accordion_layout = $f_acc->layout->addSubLayout([Form\Layout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);

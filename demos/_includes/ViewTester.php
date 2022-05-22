@@ -14,7 +14,7 @@ class ViewTester extends \Atk4\Ui\View
     {
         parent::init();
 
-        $label = \Atk4\Ui\Label::addTo($this, ['CallBack', 'detail' => 'fail', 'red']);
+        $label = \Atk4\Ui\Label::addTo($this, ['CallBack', 'detail' => 'fail', 'class.red' => true]);
         $reload = new \Atk4\Ui\JsReload($this, [$this->name => 'ok']);
 
         if (isset($_GET[$this->name])) {

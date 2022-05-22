@@ -19,11 +19,7 @@ class Centered extends Layout
 
     public $defaultTemplate = 'layout/centered.html';
 
-    /**
-     * @see \Atk4\Ui\App::$cdn
-     *
-     * @var string|null
-     */
+    /** @var string|null @see \Atk4\Ui\App::$cdn */
     public $image;
     public $image_alt = 'Logo';
 
@@ -31,13 +27,9 @@ class Centered extends Layout
     {
         parent::init();
 
-        // If image is still unset load it when layout is initialized from the App
+        // if image is still unset load it when layout is initialized from the App
         if ($this->image === null && $this->issetApp()) {
-            if (isset($this->getApp()->cdn['layout-logo'])) {
-                $this->image = $this->getApp()->cdn['layout-logo'];
-            } else {
-                $this->image = $this->getApp()->cdn['atk'] . '/logo.png';
-            }
+            $this->image = $this->getApp()->cdn['atk'] . '/logo.png';
         }
 
         // set application's title

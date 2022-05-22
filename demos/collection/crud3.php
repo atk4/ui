@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Persistence;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 /** @var \Atk4\Data\Model $modelClass */
 $modelClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Data\Model {
-    use ModelLockTrait;
-
     public $table = 'test';
 
     public $caption = 'Country';
@@ -22,8 +22,6 @@ $modelClass = AnonymousClassNameCache::get_class(fn () => new class() extends \A
         $this->addField('name');
         $this->addField('code');
         $this->addField('country');
-
-        $this->lock();
     }
 });
 
@@ -39,7 +37,7 @@ $data = ['test' => [
     8 => ['id' => 8, 'name' => 'ABC2', 'code' => 18, 'country' => 'Russia'],
     9 => ['id' => 9, 'name' => 'ABC1', 'code' => 19, 'country' => 'Latvia'],
 ]];
-$p = new \Atk4\Data\Persistence\Array_($data);
+$p = new Persistence\Array_($data);
 $model = new $modelClass($p);
 
 // add Crud

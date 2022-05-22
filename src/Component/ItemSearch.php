@@ -13,25 +13,13 @@ use Atk4\Ui\View;
  */
 class ItemSearch extends View
 {
-    /**
-     * View to be reload that contains data to be filtered.
-     *
-     * @var View|string the atk4 View to be reload or a jquery id selector string
-     */
+    /** @var View|string the atk4 View to be reload or a jquery id selector string View to be reload that contains data to be filtered. */
     public $reload;
 
-    /**
-     * The initial query.
-     *
-     * @var string
-     */
+    /** @var string The initial query. */
     public $q;
 
-    /**
-     * The css for the input field.
-     *
-     * @var string
-     */
+    /** @var string The css for the input field. */
     public $inputCss = 'ui input right icon transparent';
 
     /**
@@ -81,13 +69,11 @@ class ItemSearch extends View
     /**
      * Set model condition base on search request.
      */
-    public function setModelCondition(Model $model): Model
+    public function setModelCondition(Model $model): void
     {
         if ($q = $this->getQuery()) {
             $model->addCondition($model->title_field, 'like', '%' . $q . '%');
         }
-
-        return $model;
     }
 
     protected function renderView(): void

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
 
 class FlyersForm extends Form
@@ -36,23 +37,23 @@ class FlyersForm extends Form
 
         $this->addControl('country', [
             Form\Control\Lookup::class,
-            'model' => new \Atk4\Ui\Demos\Country($this->getApp()->db),
+            'model' => new Country($this->getApp()->db),
             'dependency' => function (Model $model, $data) {
                 if (isset($data['contains'])) {
-                    $model->addCondition(\Atk4\Ui\Demos\Country::hinting()->fieldName()->name, 'like', '%' . $data['contains'] . '%');
+                    $model->addCondition(Country::hinting()->fieldName()->name, 'like', '%' . $data['contains'] . '%');
                 }
             },
             'search' => [
-                \Atk4\Ui\Demos\Country::hinting()->fieldName()->name,
-                \Atk4\Ui\Demos\Country::hinting()->fieldName()->iso,
-                \Atk4\Ui\Demos\Country::hinting()->fieldName()->iso3,
+                Country::hinting()->fieldName()->name,
+                Country::hinting()->fieldName()->iso,
+                Country::hinting()->fieldName()->iso3,
             ],
             'caption' => 'Destination',
             'placeholder' => 'Select your destination',
         ], ['required' => true]);
 
         $ml = $this->addControl('multi', [Form\Control\Multiline::class, 'rowLimit' => 4, 'addOnTab' => true, 'caption' => 'Additional passengers:', 'renderLabel' => false]);
-        $ml->setModel(new Flyers(new \Atk4\Data\Persistence\Array_($this->flyers)));
+        $ml->setModel(new Flyers(new Persistence\Array_($this->flyers)));
 
         $cards = $this->addControl('cards', [Form\Control\TreeItemSelector::class, 'treeItems' => $this->cards, 'caption' => 'Flyers program:'], ['type' => 'json']);
         $cards->set([]);

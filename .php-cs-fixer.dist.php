@@ -6,6 +6,7 @@ $finder = PhpCsFixer\Finder::create()
         'cache',
         'build',
         'vendor',
+        'js',
     ]);
 
 return (new PhpCsFixer\Config())
@@ -25,7 +26,7 @@ return (new PhpCsFixer\Config())
         'phpdoc_types' => [
             // keep enabled, but without "alias" group to not fix
             // "Callback" to "callback" in phpdoc
-            'groups' => ['simple', 'meta']
+            'groups' => ['simple', 'meta'],
         ],
         'phpdoc_types_order' => [
             'null_adjustment' => 'always_last',

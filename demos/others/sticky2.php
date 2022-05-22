@@ -10,16 +10,16 @@ require_once __DIR__ . '/../init-app.php';
 // This demo shows a local impact of a sticky parameters.
 
 if (isset($_GET['name'])) {
-    // IMPORTANT: because this is an optional frame, I have to specify it's unique short_name explicitly, othrewise
+    // IMPORTANT: because this is an optional frame, I have to specify it's unique shortName explicitly, othrewise
     // the name for a second frame will be affected by presence of GET['name'] parameter
-    $frame = \Atk4\Ui\View::addTo($app, ['ui' => 'red segment', 'short_name' => 'fr1']);
+    $frame = \Atk4\Ui\View::addTo($app, ['ui' => 'red segment', 'shortName' => 'fr1']);
     $frame->stickyGet('name');
 
     // frame will generate URL with sticky parameter
     \Atk4\Ui\Label::addTo($frame, ['Name:', 'detail' => $_GET['name'], 'black'])->link($frame->url());
 
     // app still generates URL without localized sticky
-    \Atk4\Ui\Label::addTo($frame, ['Reset', 'iconRight' => 'close', 'black'])->link($app->url());
+    \Atk4\Ui\Label::addTo($frame, ['Reset', 'iconRight' => 'close', 'class.black' => true])->link($app->url());
     \Atk4\Ui\View::addTo($frame, ['ui' => 'hidden divider']);
 
     // nested interractive elemetns will respect lockal sticky get

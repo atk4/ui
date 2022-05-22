@@ -10,18 +10,10 @@ class Dropdown extends Lister
 
     public $defaultTemplate = 'dropdown.html';
 
-    /**
-     * Callback when a new value is selected in Dropdown.
-     *
-     * @var JsCallback|null
-     */
+    /** @var JsCallback|null Callback when a new value is selected in Dropdown. */
     public $cb;
 
-    /**
-     * As per Fomantic-ui dropdown options.
-     *
-     * @var array
-     */
+    /** @var array As per Fomantic-ui dropdown options. */
     public $dropdownOptions = [];
 
     protected function init(): void
@@ -40,7 +32,7 @@ class Dropdown extends Lister
      *      $dropdown = Dropdown::addTo($menu, ['menu', 'dropdownOptions' => ['on' => 'hover']]);
      *      $dropdown->setModel($menuItems);
      *      $dropdown->onChange(function($item) {
-     *          return 'New selected item: '.$item;
+     *          return 'New selected item: ' . $item;
      *      });.
      *
      * @param \Closure $fx handler where new selected Item value is passed too

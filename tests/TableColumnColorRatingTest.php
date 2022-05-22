@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Data\Persistence;
 use Atk4\Ui\Table;
 
 class TableColumnColorRatingTest extends TestCase
@@ -21,14 +22,11 @@ class TableColumnColorRatingTest extends TestCase
         $arr = [
             'table' => [
                 1 => [
-                    'id' => 1,
-                    'name' => 'bar',
-                    'ref' => 'ref123',
-                    'rating' => 3,
+                    'id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'rating' => 3,
                 ],
             ],
         ];
-        $db = new \Atk4\Data\Persistence\Array_($arr);
+        $db = new Persistence\Array_($arr);
         $m = new \Atk4\Data\Model($db, ['table' => 'table']);
         $m->addField('name');
         $m->addField('ref');
