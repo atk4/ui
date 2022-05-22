@@ -192,11 +192,7 @@ trait StepExecutorTrait
         $form->onSubmit(function (Form $form) {
             $form->model->save();
             // collect arguments
-            $argValues = [];
-            foreach ($form->model->getFields('editable') as $k => $field) {
-                $argValues[$k] = $form->model->get($k);
-            }
-            $this->setActionData('args', $argValues);
+            $this->setActionDataFromModel('args', $form->model, array_keys($form->model->getFields('editable')));
 
             return $this->jsStepSubmit($this->step);
         });
@@ -218,8 +214,7 @@ trait StepExecutorTrait
         if (!$form->hookHasCallbacks(Form::HOOK_SUBMIT)) {
             $form->onSubmit(function (Form $form) {
                 // collect fields defined in Model\UserAction
-                $fields = array_intersect_key($form->model->get(), array_flip($this->action->fields));
-                $this->setActionData('fields', $fields);
+                $this->setActionDataFromModel('fields', $form->model, $this->action->fields);
 
                 return $this->jsStepSubmit($this->step);
             });
@@ -515,6 +510,18 @@ trait StepExecutorTrait
         foreach ($values as $k => $value) {
             $this->actionData[$step][$k] = $value;
         }
+    }
+
+    /**
+     * @param array<string> $fields
+     */
+    private function setActionDataFromModel(string $step, Model $model, array $fields): void
+    {
+        $data = [];
+        foreach ($fields as $k) {
+            $data[$k] = $model->get($k);
+        }
+        $this->actionData[$step] = $data;
     }
 
     /**

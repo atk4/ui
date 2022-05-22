@@ -58,19 +58,17 @@ class JsFunction implements JsExpressionable
     public function jsRender(): string
     {
         $pre = '';
-
         if ($this->preventDefault) {
             $this->fx_args = ['event'];
             $pre .= "\n" . $this->indent . '  event.preventDefault();';
         }
-
         if ($this->stopPropagation) {
             $this->fx_args = ['event'];
             $pre .= "\n" . $this->indent . '  event.stopPropagation();';
         }
 
-        $output = 'function(' . implode(',', $this->fx_args) . ') {';
-        $output .= $pre;
+        $output = 'function(' . implode(',', $this->fx_args) . ') {'
+            . $pre;
         foreach ($this->fx_statements as $statement) {
             if (!$statement) {
                 // null passed

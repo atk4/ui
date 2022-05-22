@@ -103,7 +103,9 @@ class DemoActionsUtil
             [
                 'caption' => 'Argument/Preview',
                 'description' => 'Ask for argument "Age" and display preview prior to execute',
-                'args' => ['age' => ['type' => 'integer', 'required' => true]],
+                'args' => [
+                    'age' => ['type' => 'integer', 'required' => true],
+                ],
                 'preview' => function (Country $model, int $age) {
                     return 'You age is: ' . $age;
                 },
@@ -132,7 +134,9 @@ class DemoActionsUtil
             [
                 'caption' => 'Exception',
                 'description' => 'Throw an exception when executing an action',
-                'args' => ['age' => ['type' => 'integer']],
+                'args' => [
+                    'age' => ['type' => 'integer'],
+                ],
                 'preview' => function () {
                     return 'Be careful with this action.';
                 },
