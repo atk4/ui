@@ -505,13 +505,6 @@ trait StepExecutorTrait
         return $this->actionData[$step] ?? [];
     }
 
-    protected function setActionData(string $step, array $values): void
-    {
-        foreach ($values as $k => $value) {
-            $this->actionData[$step][$k] = $value;
-        }
-    }
-
     /**
      * @param array<string> $fields
      */
