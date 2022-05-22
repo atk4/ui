@@ -6,13 +6,11 @@ namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
-use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Loader;
 use Atk4\Ui\Panel\Right;
 use Atk4\Ui\View;
-use Atk4\Ui\VirtualPage;
 
 /**
  * A Step Action Executor that use a VirtualPage.
