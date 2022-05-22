@@ -102,6 +102,7 @@ trait StepExecutorTrait
         foreach ($fields as $k => $val) {
             $form->getControl($k)->set($val);
         }
+
         $this->hook(self::HOOK_STEP, [$step, $form]);
 
         return $form;
@@ -158,16 +159,16 @@ trait StepExecutorTrait
             }
         }
 
-        // set args value if available.
+        // set args value if available
         $this->setFormField($form, $this->getActionData('args'), $this->step);
 
-        // setup exec, next and prev button handler for this step.
+        // setup exec, next and prev button handler for this step
         $this->jsSetSubmitBtn($page, $form, $this->step);
         $this->jsSetPrevHandler($page, $this->step);
 
         $form->onSubmit(function (Form $form) {
-            // collect arguments.
-            $this->actionData['args'] = $form->model->get();
+            // collect arguments
+            $this->setActionDataFromModel('args', $form->model, array_keys($form->model->getFields()));
 
             return $this->jsStepSubmit($this->step);
         });
@@ -179,20 +180,17 @@ trait StepExecutorTrait
         $form = $this->addFormTo($page);
 
         $form->setModel($this->action->getEntity(), $this->action->fields);
-        // set Fields value if set from another step.
+        // set Fields value if set from another step
         $this->setFormField($form, $this->getActionData('fields'), $this->step);
 
-        // setup exec, next and prev button handler for this step.
+        // setup exec, next and prev button handler for this step
         $this->jsSetSubmitBtn($page, $form, $this->step);
         $this->jsSetPrevHandler($page, $this->step);
 
         if (!$form->hookHasCallbacks(Form::HOOK_SUBMIT)) {
             $form->onSubmit(function (Form $form) {
-                // collect fields.
-                $form_fields = $form->model->get();
-                foreach ($this->action->fields as $field) {
-                    $this->actionData['fields'][$field] = $form_fields[$field];
-                }
+                // collect fields defined in Model\UserAction
+                $this->setActionDataFromModel('fields', $form->model, $this->action->fields);
 
                 return $this->jsStepSubmit($this->step);
             });
@@ -216,7 +214,7 @@ trait StepExecutorTrait
             $page->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([$chain])));
         }
 
-        // setup executor button to perform action.
+        // setup executor button to perform action
         $page->js(
             true,
             $this->execActionBtn->js()->on(
@@ -371,7 +369,7 @@ trait StepExecutorTrait
             $view->js(true, $this->jsSetExecState($step));
         }
 
-        // reset button handler.
+        // reset button handler
         $view->js(true, $this->execActionBtn->js(true)->off());
         $view->js(true, $this->nextStepBtn->js(true)->off());
         $view->js(true, $this->prevStepBtn->js(true)->off());
@@ -452,11 +450,11 @@ trait StepExecutorTrait
     {
         try {
             if ($this->isLastStep($step)) {
-                // collect argument and execute action.
+                // collect argument and execute action
                 $return = $this->action->execute(...$this->getActionArgs($this->getActionData('args')));
                 $js = $this->jsGetExecute($return, $this->action->getEntity()->getId());
             } else {
-                // store data and setup reload.
+                // store data and setup reload
                 $js = [
                     $this->loader->jsAddStoreData($this->actionData, true),
                     $this->loader->jsLoad([
@@ -481,6 +479,18 @@ trait StepExecutorTrait
     protected function getActionData(string $step): array
     {
         return $this->actionData[$step] ?? [];
+    }
+
+    /**
+     * @param array<string> $fields
+     */
+    private function setActionDataFromModel(string $step, Model $model, array $fields): void
+    {
+        $data = [];
+        foreach ($fields as $k) {
+            $data[$k] = $model->get($k);
+        }
+        $this->actionData[$step] = $data;
     }
 
     /**

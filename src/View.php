@@ -132,11 +132,11 @@ class View extends AbstractView implements JsExpressionable
     {
         // ID with zero value is not supported (at least in MySQL replaces it with next AI value)
         if (isset($data[0])) {
-            if ($data === array_values($data)) {
+            if (array_is_list($data)) {
                 $oldData = $data;
                 $data = [];
                 foreach ($oldData as $k => $row) {
-                    $data[$k + 1000_000_000] = $row; // large offset to prevent accessing wrong data by old key
+                    $data[$k + 1_000_000_000] = $row; // large offset to prevent accessing wrong data by old key
                 }
             } else {
                 throw new Exception('Source data contains unsupported zero key');
