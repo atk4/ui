@@ -121,7 +121,7 @@ trait StepExecutorTrait
         if (array_key_exists('__atk_model', $args)) {
             /** @var Model $argsModel */
             $argsModel = Factory::factory($args['__atk_model']);
-            // if seed is supplied, we need to initialize.
+            // if seed is supplied, we need to initialize
             if (!$argsModel->isInitialized()) {
                 $argsModel->invokeInit();
             }
@@ -136,7 +136,7 @@ trait StepExecutorTrait
         }
 
         $this->cloneArgs = [];
-        // set userAction args using model field.
+        // set userAction args using model field
         foreach ($argsModel->getFields('editable') as $k => $field) {
             $this->cloneArgs[$k] = $field->shortName;
         }
@@ -182,16 +182,16 @@ trait StepExecutorTrait
 
         $form->setModel($model->createEntity());
 
-        // set args value if available.
+        // set args value if available
         $this->setFormField($form, $this->getActionData('args'), $this->step);
 
-        // setup exec, next and prev button handler for this step.
+        // setup exec, next and prev button handler for this step
         $this->jsSetSubmitBtn($page, $form, $this->step);
         $this->jsSetPrevHandler($page, $this->step);
 
         $form->onSubmit(function (Form $form) {
             $form->model->save();
-            // collect arguments.
+            // collect arguments
             $argValues = [];
             foreach ($form->model->getFields('editable') as $k => $field) {
                 $argValues[$k] = $form->model->get($k);
@@ -208,16 +208,16 @@ trait StepExecutorTrait
         $form = $this->addFormTo($page);
 
         $form->setModel($this->action->getEntity(), $this->action->fields);
-        // set Fields value if set from another step.
+        // set Fields value if set from another step
         $this->setFormField($form, $this->getActionData('fields'), $this->step);
 
-        // setup exec, next and prev button handler for this step.
+        // setup exec, next and prev button handler for this step
         $this->jsSetSubmitBtn($page, $form, $this->step);
         $this->jsSetPrevHandler($page, $this->step);
 
         if (!$form->hookHasCallbacks(Form::HOOK_SUBMIT)) {
             $form->onSubmit(function (Form $form) {
-                // collect fields define in Model\UserAction.
+                // collect fields defined in Model\UserAction
                 $fields = array_intersect_key($form->model->get(), array_flip($this->action->fields));
                 $this->setActionData('fields', $fields);
 
@@ -243,7 +243,7 @@ trait StepExecutorTrait
             $page->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([$chain])));
         }
 
-        // setup executor button to perform action.
+        // setup executor button to perform action
         $page->js(
             true,
             $this->execActionBtn->js()->on(
@@ -398,7 +398,7 @@ trait StepExecutorTrait
             $view->js(true, $this->jsSetExecState($step));
         }
 
-        // reset button handler.
+        // reset button handler
         $view->js(true, $this->execActionBtn->js(true)->off());
         $view->js(true, $this->nextStepBtn->js(true)->off());
         $view->js(true, $this->prevStepBtn->js(true)->off());
@@ -479,11 +479,11 @@ trait StepExecutorTrait
     {
         try {
             if ($this->isLastStep($step)) {
-                // collect argument and execute action.
+                // collect argument and execute action
                 $return = $this->action->execute(...$this->getActionArgs($this->getActionData('args')));
                 $js = $this->jsGetExecute($return, $this->action->getEntity()->getId());
             } else {
-                // store data and setup reload.
+                // store data and setup reload
                 $js = [
                     $this->loader->jsAddStoreData($this->actionData, true),
                     $this->loader->jsLoad([
