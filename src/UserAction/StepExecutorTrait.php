@@ -123,7 +123,7 @@ trait StepExecutorTrait
             /** @var Model $argsModel */
             $argsModel = Factory::factory($args['__atk_model']);
             // if seed is supplied, we need to initialize.
-            if (!$argsModel->_initialized) {
+            if (!$argsModel->isInitialized()) {
                 $argsModel->invokeInit();
             }
 
@@ -139,7 +139,7 @@ trait StepExecutorTrait
         $this->cloneArgs = [];
         // set userAction args using model field.
         foreach ($argsModel->getFields('editable') as $k => $field) {
-            $this->cloneArgs[$k] = $field->short_name;
+            $this->cloneArgs[$k] = $field->shortName;
         }
 
         return $argsModel;
