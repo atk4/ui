@@ -159,6 +159,9 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\UserAction\\JsExecutorInterface::stickyGet\(\)\.$~'
         -
             path: 'src/Form.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::addButton\(\)\.$~'
+        -
+            path: 'src/Form.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsChain::preventFormLeave\(\)\.$~'
         -
             path: 'src/Form/Control/Calendar.php'
@@ -531,18 +534,6 @@ parameters:
             path: 'src/Console.php'
             message: '~^Negated boolean expression is always false\.$~'
         -
-            path: 'src/Form.php'
-            message: '~^Call to function is_array\(\) with Atk4\\Ui\\Form\\Layout will always evaluate to false\.$~'
-        -
-            path: 'src/Form.php'
-            message: '~^Call to function is_string\(\) with Atk4\\Ui\\Form\\Layout will always evaluate to false\.$~'
-        -
-            path: 'src/Form.php'
-            message: '~^Result of \|\| is always false\.$~'
-        -
-            path: 'src/Form.php'
-            message: '~^Else branch is unreachable because previous condition is always true\.$~'
-        -
             path: 'src/Form/AbstractLayout.php'
             message: '~^Else branch is unreachable because previous condition is always true\.$~'
         -
@@ -755,9 +746,6 @@ parameters:
         -
             path: 'src/Card.php'
             message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
-        -
-            path: 'src/Form.php'
-            message: '~^Parameter #2 \$value of method Atk4\\Ui\\View::setAttr\(\) expects string\|null, int given\.$~'
         -
             path: 'src/Form/Layout/Section.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
@@ -1148,9 +1136,6 @@ parameters:
         -
             path: 'src/Form.php'
             message: '~^Method Atk4\\Ui\\Form::initLayout\(\) has no return type specified\.$~'
-        -
-            path: 'src/Form.php'
-            message: '~^Call to function is_object\(\) with Atk4\\Ui\\Form\\Layout will always evaluate to true\.$~'
         -
             path: 'src/Form.php'
             message: '~^Method Atk4\\Ui\\Form::loadPost\(\) has no return type specified\.$~'
