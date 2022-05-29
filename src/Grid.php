@@ -518,7 +518,7 @@ class Grid extends View
      *
      * @param string|array|View $button
      * @param string            $title
-     * @param \Closure          $callback function($page) {...
+     * @param \Closure          $callback function ($page) {...
      * @param array             $args     extra url argument for callback
      *
      * @return object

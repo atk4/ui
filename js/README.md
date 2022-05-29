@@ -21,7 +21,7 @@ For example, if one of your script need to send an ajax request directly, withou
 to run and evaluate the server response from Atk4\Ui.
 
 ```
-    $.getJSON("myajax.php", function(resp) {
+    $.getJSON("myajax.php", function (resp) {
         atk.apiService.atkSuccessTest(resp);
     });
 
@@ -47,7 +47,7 @@ The atk global object may be used as a quick way of registering a jQuery plugin 
 Let's create a new jQuery plugin that will change every selected dom element text color to green.
 
 ```
-    atk.registerPlugin('Greenify', function(el) {
+    atk.registerPlugin('Greenify', function (el) {
         $(el).css("color", "green");
     })
 ```

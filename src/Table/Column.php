@@ -162,7 +162,7 @@ class Column
 
         $cb = Column\JsHeader::addTo($this->table);
 
-        $function = 'function(value, text, item){
+        $function = 'function(value, text, item) {
                             if (value === undefined || value === \'\' || value === null) return;
                             $(this)
                             .api({
@@ -181,7 +181,7 @@ class Column
         ]);
 
         // will stop grid column from being sorted.
-        $chain->on('click', new JsExpression('function(e){ e.stopPropagation(); }'));
+        $chain->on('click', new JsExpression('function(e) { e.stopPropagation(); }'));
 
         $this->table->js(true, $chain);
 
