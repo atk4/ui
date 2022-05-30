@@ -15,7 +15,7 @@ PHP callback::
     $button = new Button();
 
     // clicking button generates random number every time
-    $button->on('click', function($action) {
+    $button->on('click', function ($action) {
         return $action->text(rand(1, 100));
     });
 
@@ -275,7 +275,7 @@ will send browser screen width back to the callback::
     $label = \Atk4\Ui\Label::addTo($app);
     $cb = \Atk4\Ui\JsCallback::addTo($label);
 
-    $cb->set(function($j, $arg1) {
+    $cb->set(function ($j, $arg1) {
         return 'width is ' . $arg1;
     }, [new \Atk4\Ui\JsExpression( '$(window).width()' )]);
 
@@ -288,7 +288,7 @@ also supports argument passing::
 
     $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 
-    $label->on('click', function($j, $arg1) {
+    $label->on('click', function ($j, $arg1) {
         return 'width is ' . $arg1;
     }, ['confirm' => 'sure?', 'args' => [new \Atk4\Ui\JsExpression( '$(window).width()' )]]);
 
@@ -296,7 +296,7 @@ If you do not need to specify confirm, you can actually pass arguments in a key-
 
     $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 
-    $label->on('click', function($j, $arg1) {
+    $label->on('click', function ($j, $arg1) {
         return 'width is ' . $arg1;
     }, [new \Atk4\Ui\JsExpression( '$(window).width()' )]);
 

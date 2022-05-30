@@ -83,7 +83,7 @@ into multiple Tabs or detach form control groups or even create nested layouts::
     $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
     $form_page->addControl('age', new \Atk4\Ui\Form\Control\Line());
 
-    $form->onSubmit(function(Form $form) { return $form->model->get('name') . ' has age ' . $form->model->get('age'); });
+    $form->onSubmit(function (Form $form) { return $form->model->get('name') . ' has age ' . $form->model->get('age'); });
 
 This is further explained in documentation for :php:class:`Atk4\\Ui\\Form\\Layout` class,
 however if you do plan on adding your own form control types, it's important that you extend it
@@ -333,7 +333,7 @@ As default, Dropdown will use the `$model->id_field` as value, and `$model->titl
 If you want to customize how a record is displayed and/or add an icon, Dropdown has the :php:meth:`Form::renderRowFunction()` to do this.
 This function is called with each model record and needs to return an array::
 
-    $dropdown->renderRowFunction = function($record) {
+    $dropdown->renderRowFunction = function ($record) {
         return [
             'value' => $record->id_field,
             'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
@@ -342,7 +342,7 @@ This function is called with each model record and needs to return an array::
 
 You can also use this function to add an Icon to a record::
 
-    $dropdown->renderRowFunction = function($record) {
+    $dropdown->renderRowFunction = function ($record) {
         return [
             'value' => $record->id_field,
             'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
@@ -374,7 +374,7 @@ If you'd like to even further adjust How each item is displayed (e.g. complex HT
 
 With the according renderRowFunction::
 
-    function(Model $record) {
+    function (Model $record) {
         return [
             'value' => $record->getId(),
             'title' => $record->getTitle,
@@ -409,7 +409,7 @@ You can also define an Icon right away::
 If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.
 If you use it, use the second parameter as well, its the array key::
 
-    function($row, $key) {
+    function ($row, $key) {
         return [
             'value' => $key,
             'title' => strtoupper($row),

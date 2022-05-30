@@ -29,7 +29,7 @@ use Atk4\Ui\View;
  * $ml = $form->addControl('ml', ['Multiline::class']);
  * $ml->setReferenceModel('Items', null, ['item', 'cat', 'qty', 'price', 'total']);
  *
- * $form->onSubmit(function(Form $form) use ($ml) {
+ * $form->onSubmit(function (Form $form) use ($ml) {
  *     // Save Form model and then Multiline model
  *     $form->model->save(); // Saving Invoice record.
  *     $ml->saveRows(); // Saving invoice items record related to invoice.
@@ -48,7 +48,7 @@ use Atk4\Ui\View;
  * You can use the returned data to update other related areas of the form.
  * For example, ypdating Grand Total field of all invoice items.
  *
- * $ml->onChange(function($rows) use ($form) {
+ * $ml->onChange(function ($rows) use ($form) {
  *     $grand_total = 0;
  *     foreach ($rows as $row => $cols) {
  *         foreach ($cols as $col) {
@@ -70,7 +70,7 @@ use Atk4\Ui\View;
  * $ml = $form->addControl('ml', [Form\Control\Multiline::class]);
  * $ml->setModel($user, ['name', 'is_vip']);
  *
- * $form->onSubmit(function(Form $form) use ($ml) {
+ * $form->onSubmit(function (Form $form) use ($ml) {
  *     $ml->saveRows();
  *     return new JsToast('Saved!');
  * });

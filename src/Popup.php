@@ -243,7 +243,7 @@ class Popup extends View
         $chain = new Jquery($name);
         $chain->popup($this->popOptions);
         if ($this->stopClickEvent) {
-            $chain->on('click', new JsExpression('function(e){ e.stopPropagation(); }'));
+            $chain->on('click', new JsExpression('function(e) { e.stopPropagation(); }'));
         }
 
         return $chain;

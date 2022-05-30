@@ -331,7 +331,7 @@ class Table extends Lister
      * The callback param function will receive two parameter, a jQuery chain object and a json string containing all table columns
      * name and size. To retrieve columns width, simply json decode the $widths param in your callback function.
      * ex:
-     *  $table->resizableColumn(function($j, $w){
+     *  $table->resizableColumn(function ($j, $w) {
      *       // do somethings with columns width
      *       $columns = $this->getApp()->decodeJson($w);
      *   });

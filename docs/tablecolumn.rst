@@ -131,7 +131,7 @@ You may also use :php:meth:`Atk4\\Ui\\Popup::set` method to dynamically load the
     $table->setModel(new Country($app->db));
 
     $name_column = $table->getColumnDecorators('name');
-    $name_column[0]->addPopup()->set(function($p) {
+    $name_column[0]->addPopup()->set(function ($p) {
         HelloWorld::addTo($p);
     });
 
@@ -302,7 +302,7 @@ Multiformat
 Sometimes your formatting may change depending on value. For example you may want to place link
 only on certain rows. For this you can use an `\\Atk4\Ui\\Table\\Column\\Multiformat` decorator::
 
-    $table->addColumn('amount', [\Atk4\Ui\Table\Column\Multiformat::class, function(Model $model) {
+    $table->addColumn('amount', [\Atk4\Ui\Table\Column\Multiformat::class, function (Model $model) {
         if ($model->get('is_invoiced') > 0) {
             return [\Atk4\Ui\Table\Column\Money::class, [\Atk4\Ui\Table\Column\Link::class, 'invoice', ['invoice_id' => 'id']]];
         } elseif (abs($model->get('is_refunded')) < 50) {

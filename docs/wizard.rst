@@ -100,7 +100,7 @@ on your wizard::
 
     $wizard->buttonNext->icon = 'person';
 
-    $wizard->addStep('Step 3', function($wizard) {
+    $wizard->addStep('Step 3', function ($wizard) {
         $wizard->buttonNext->icon = 'book';
     });
 

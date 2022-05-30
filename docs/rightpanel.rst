@@ -46,7 +46,7 @@ Initializing a panel with onOpen callback::
     $btn->js(true)->data('btn', '1');
     $btn->on('click', $panel_1->jsOpen(['btn'], 'orange'));
 
-    $panel_1->onOpen(function($p) {
+    $panel_1->onOpen(function ($p) {
         $btn_number = $_GET['btn'] ?? null;
         $text =  'You loaded panel content using button #' . $btn_number;
         Message::addTo($p, ['Panel 1', 'text' => $text]);

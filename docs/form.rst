@@ -41,7 +41,7 @@ It only takes 2 PHP lines to create a fully working form::
 The form component can be further tweaked by setting a custom call-back handler
 directly in PHP::
 
-    $form->onSubmit(function(Form $form) {
+    $form->onSubmit(function (Form $form) {
         // implement subscribe here
 
         return "Subscribed " . $form->model->get('email') . " to newsletter.";
@@ -302,7 +302,7 @@ example displays a registration form for a User::
     $form->addControl('accept_terms', [], ['type' => 'boolean']);
 
     // submit event
-    $form->onSubmit(function(Form $form) {
+    $form->onSubmit(function (Form $form) {
         if ($form->model->get('password') != $form->model->get('password_verify')) {
             return $form->error('password_verify', 'Passwords do not match');
         }
@@ -328,7 +328,7 @@ for you. Here is an example with date::
     $form->addControl('date1', [], ['type' => 'date']);
     $form->addControl('date2', [\Atk4\Ui\Form\Control\Calendar::class, 'type' => 'date']);
 
-    $form->onSubmit(function(Form $form) {
+    $form->onSubmit(function (Form $form) {
         echo 'date1 = ' . print_r($form->model->get('date1'), true) . ' and date2 = ' . print_r($form->model->get('date2'), true);
     });
 
@@ -549,7 +549,7 @@ To continue with the example, a new Person record can be added into the database
 but only if they have also accepted terms and conditions. An onSubmit handler
 that would perform the check can be defined displaying error or success messages::
 
-    $form->onSubmit(function(Form $form) {
+    $form->onSubmit(function (Form $form) {
         if (!$form->model->get('terms')) {
             return $form->error('terms', 'You must accept terms and conditions');
         }
@@ -564,7 +564,7 @@ Callback function can return one or multiple JavaScript actions. Methods such as
 Here is a code that can be used to output multiple errors at once. Errors were intentionally not grouped
 with a message about failure to accept of terms and conditions::
 
-    $form->onSubmit(function(Form $form) {
+    $form->onSubmit(function (Form $form) {
         $errors = [];
 
         if (!$form->model->get('name')) {

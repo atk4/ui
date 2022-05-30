@@ -68,7 +68,7 @@ class Dropdown extends Input
      * Use additional 'icon' element to add an icon to this row.
      *
      * Example 1 with Model: Title in Uppercase
-     * function(Model $row) {
+     * function (Model $row) {
      *     return [
      *         'value' => $row->getId(),
      *         'title' => mb_strtoupper($row->getTitle()),
@@ -76,7 +76,7 @@ class Dropdown extends Input
      *  }
      *
      * Example 2 with Model: Add an icon
-     * function(Model $row) {
+     * function (Model $row) {
      *     return [
      *         'value' => $row->getId(),
      *         'title' => $row->getTitle(),
@@ -85,7 +85,7 @@ class Dropdown extends Input
      * }
      *
      * Example 3 with Model: Combine Title from model fields
-     * function(Model $row) {
+     * function (Model $row) {
      *     return [
      *         'value' => $row->getId(),
      *         'title' => $row->getTitle() . ' (' . $row->get('title2') . ')',
@@ -93,7 +93,7 @@ class Dropdown extends Input
      * }
      *
      * Example 4 with $values property Array:
-     * function($value, $key) {
+     * function ($value, $key) {
      *     return [
      *        'value' => $key,
      *        'title' => mb_strtoupper($value),

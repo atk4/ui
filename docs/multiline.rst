@@ -115,7 +115,7 @@ If you want to edit them along with the user, Multiline need to be set up accord
     $ml->setReferenceModel('Emails');
 
     // set up saving of Email on Form submit
-    $user_form->onSubmit(function(Form $form) use ($ml) {
+    $user_form->onSubmit(function (Form $form) use ($ml) {
         $form->model->save();
         // save emails record related to current user.
         $ml->saveRows();

@@ -248,7 +248,7 @@ The following code will show three buttons and clicking any one will hide it. On
     $buttons->on('click', '.button')->hide();
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function($event) {
+    // $('#top-element-id').on('click', '.button', function(event) {
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $(this).hide();
@@ -268,7 +268,7 @@ You can use both actions together. The next example will allow only one button t
     $buttons->on('click', '.button', $b3->js()->hide());
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function($event) {
+    // $('#top-element-id').on('click', '.button', function(event) {
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $('#b3-element-id').hide();
@@ -363,7 +363,7 @@ Create a file `test.js` containing:
 
     function mySum(arr) {
         return arr.reduce(function(a, b) {
-            return a+b;
+            return a + b;
         }, 0);
     }
 
@@ -535,7 +535,7 @@ other view::
 
     $form->setModel($m_book);
 
-    $form->onSubmit(function(Form $form) use($table) {
+    $form->onSubmit(function (Form $form) use ($table) {
         $form->model->save();
         return new \Atk4\Ui\JsReload($table);
     });
@@ -576,7 +576,7 @@ The following will **not** work::
     $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
     $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
 
-    $form->onSubmit(function(Form $form) use($table) {
+    $form->onSubmit(function (Form $form) use ($table) {
       $form->model->save();
       return [
         $table->jsReload(),
@@ -600,7 +600,7 @@ Table needs to be first! The following works::
     $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
     $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
 
-    $form->onSubmit(function(Form $form) use($table) {
+    $form->onSubmit(function (Form $form) use ($table) {
       $form->model->save();
       return [
         $table->jsReload(),
@@ -617,10 +617,10 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
     $table->setModel($model);
 
     $vp = \Atk4\Ui\VirtualPage::addTo($app);
-    $vp->set(function($p) use ($table, $model) {
+    $vp->set(function ($p) use ($table, $model) {
         $form = \Atk4\Ui\Form::addTo($p);
         $form->setModel(clone $model);
-        $form->onSubmit(function(Form $form) use($table) {
+        $form->onSubmit(function (Form $form) use ($table) {
             $form->model->save();
             return [
                 $table->jsReload(),

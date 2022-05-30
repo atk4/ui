@@ -81,15 +81,14 @@ class ItemsPerPageSelector extends View
             $menuItems[] = ['name' => $item, 'value' => $item];
         }
         // set semantic-ui dropdown onChange function.
-        $function = 'function(value, text, item){
+        $function = 'function(value, text, item) {
                             if (value === undefined || value === \'\' || value === null) return;
                             $(this)
                             .api({
                                 on:\'now\',
                                 url:\'' . $this->cb->getUrl() . '\',
                                 data:{ipp:value}
-                                }
-                            );
+                            });
                      }';
 
         $this->js(true)->dropdown([

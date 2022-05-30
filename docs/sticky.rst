@@ -13,8 +13,8 @@ There is one problem, however. What if View (and the callbacks too) are created 
 
 The next code creates Loader area which will display a console. Result is - nested callback::
 
-    Loader::addTo($app)->set(function($page) {
-        Console::addTo($page)->set(function($console) {
+    Loader::addTo($app)->set(function ($page) {
+        Console::addTo($page)->set(function ($console) {
             $console->output('success!');
         });
     });
@@ -26,8 +26,8 @@ Sticky GET is a better approach. It works like this::
 
     $app->stickyGet('client_id');
 
-    Loader::addTo($app)->set(function($page) {
-        Console::addTo($page)->set(function($console) {
+    Loader::addTo($app)->set(function ($page) {
+        Console::addTo($page)->set(function ($console) {
             $console->output('client_id = !'. $_GET['client_id']);
         });
     });
@@ -71,7 +71,7 @@ Consider this code::
     $b1 = \Atk4\Ui\Button::addTo($app);
     $b1->set($b1->url());
 
-    Loader::addTo($app)->set(function($page) {
+    Loader::addTo($app)->set(function ($page) {
         $b2 = \Atk4\Ui\Button::addTo($page);
         $b2->set($b2->url());
     });

@@ -762,7 +762,7 @@ class View extends AbstractView implements JsExpressionable
      * $img->on('mouseenter', $a);    // binds previously defined chain to event on
      *                                // event of $img.
      *
-     * Produced code: $('#img_id').on('mouseenter', function(ev){ ev.preventDefault();
+     * Produced code: $('#img_id').on('mouseenter', function (ev){ ev.preventDefault();
      *    $('#view1').hide(); });
      *
      * 3. $button->on('click',$form->js()->submit());
@@ -962,7 +962,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * Finally, it's also possible to use PHP closure as an action:
      *
-     * $view->on('click', 'a', function($js, $data){
+     * $view->on('click', 'a', function ($js, $data){
      *   if (!$data['clickable']) {
      *      return new JsExpression('alert([])', ['This record is not clickable'])
      *   }
