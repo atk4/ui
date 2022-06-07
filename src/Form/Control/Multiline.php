@@ -344,7 +344,7 @@ class Multiline extends Form\Control
         $currentIds = array_column($model->export(), $model->idField);
 
         foreach ($this->rowData as $row) {
-            $entity = $model->tryLoad($row[$model->idField] ?? null);
+            $entity = $row[$model->idField] !== null ? $model->load($row[$model->idField]) : $model->createEntity();
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
                     continue;
