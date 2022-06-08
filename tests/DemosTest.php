@@ -89,6 +89,8 @@ class DemosTest extends TestCase
 
     protected function setSuperglobalsFromRequest(RequestInterface $request): void
     {
+        $this->resetSuperglobals();
+
         $_SERVER = [
             'REQUEST_METHOD' => $request->getMethod(),
             'HTTP_HOST' => $request->getUri()->getHost(),
@@ -110,14 +112,19 @@ class DemosTest extends TestCase
             $_POST[$k] = $v;
         }
 
-        $_REQUEST = [];
-        $_FILES = [];
-        $_COOKIE = [];
-        $_SESSION = [];
-
         \Closure::bind(function () {
             App::$_sentHeaders = [];
         }, null, App::class)();
+    }
+
+    protected function resetSuperglobals(): void
+    {
+        unset($_SERVER);
+        unset($_GET);
+        unset($_POST);
+        unset($_FILES);
+        unset($_COOKIE);
+        unset($_SESSION);
     }
 
     protected function createTestingApp(): App
@@ -152,8 +159,8 @@ class DemosTest extends TestCase
     {
         $handler = function (RequestInterface $request) {
             // emulate request
-            $this->setSuperglobalsFromRequest($request);
             $localPath = static::ROOT_DIR . $request->getUri()->getPath();
+            $this->setSuperglobalsFromRequest($request);
 
             ob_start();
             try {
@@ -178,6 +185,7 @@ class DemosTest extends TestCase
                 }
             } finally {
                 $body = ob_get_clean();
+                $this->resetSuperglobals();
             }
 
             [$statusCode, $headers] = \Closure::bind(function () {

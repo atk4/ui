@@ -22,6 +22,11 @@ class PostTest extends TestCase
         $this->model->addField('is_married', ['type' => 'boolean']);
     }
 
+    protected function tearDown(): void
+    {
+        unset($_POST);
+    }
+
     /**
      * Test loading from POST persistence, some type mapping applies.
      */
