@@ -399,16 +399,17 @@ class ScopeBuilder extends Control
         $calendar = new Calendar();
         $props = $this->atkdDateOptions['flatpickr'] ?? [];
         $phpFormat = $this->getApp()->ui_persistence->{$field->type . '_format'};
-        $props['altFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat);
+        $props['altFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat); // why altFormat format?
         $props['dateFormat'] = 'Y-m-d';
         $props['altInput'] = true;
 
         if ($field->type === 'datetime' || $field->type === 'time') {
             $props['enableTime'] = true;
-            $props['time_24hr'] = $calendar->use24hrTimeFormat($phpFormat);
-            $props['noCalendar'] = ($field->type === 'time');
-            $props['enableSeconds'] = $calendar->useSeconds($phpFormat);
-            $props['dateFormat'] = ($field->type === 'datetime') ? 'Y-m-d H:i:S' : 'H:i:S';
+            $props['time_24hr'] = $calendar->isDtFormatWith24hrTime($phpFormat);
+            $props['noCalendar'] = $field->type === 'time';
+            $props['enableSeconds'] = $calendar->isDtFormatWithSeconds($phpFormat);
+            $props['allowInput'] = $calendar->isDtFormatWithMicroseconds($phpFormat);
+            $props['dateFormat'] = $field->type === 'datetime' ? 'Y-m-d H:i:S' : 'H:i:S';
         }
 
         $props['useDefault'] = $this->atkdDateOptions['useDefault'];

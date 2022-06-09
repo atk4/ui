@@ -510,9 +510,10 @@ class Multiline extends Form\Control
 
         if ($field->type === 'datetime' || $field->type === 'time') {
             $props['config']['enableTime'] = true;
-            $props['config']['time_24hr'] = $calendar->use24hrTimeFormat($phpFormat);
-            $props['config']['noCalendar'] = ($field->type === 'time');
-            $props['config']['enableSeconds'] = $calendar->useSeconds($phpFormat);
+            $props['config']['time_24hr'] = $calendar->isDtFormatWith24hrTime($phpFormat);
+            $props['config']['noCalendar'] = $field->type === 'time';
+            $props['config']['enableSeconds'] = $calendar->isDtFormatWithSeconds($phpFormat);
+            $props['config']['allowInput'] = $calendar->isDtFormatWithMicroseconds($phpFormat);
         }
 
         return $props;

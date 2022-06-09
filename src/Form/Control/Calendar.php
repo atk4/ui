@@ -41,14 +41,10 @@ class Calendar extends Input
 
         if ($this->type === 'datetime' || $this->type === 'time') {
             $this->options['enableTime'] = true;
-            $this->options['time_24hr'] ??= $this->use24hrTimeFormat($phpFormat);
+            $this->options['time_24hr'] ??= $this->isDtFormatWith24hrTime($phpFormat);
             $this->options['noCalendar'] = ($this->type === 'time');
-
-            // Add seconds picker if set
-            $this->options['enableSeconds'] ??= $this->useSeconds($phpFormat);
-
-            // Allow edit if microseconds is set.
-            $this->options['allowInput'] ??= $this->allowMicroSecondsInput($phpFormat);
+            $this->options['enableSeconds'] ??= $this->isDtFormatWithSeconds($phpFormat);
+            $this->options['allowInput'] ??= $this->isDtFormatWithMicroseconds($phpFormat);
         }
 
         // setup locale
@@ -130,17 +126,17 @@ class Calendar extends Input
         return $res;
     }
 
-    public function use24hrTimeFormat(string $phpFormat): bool
+    public function isDtFormatWith24hrTime(string $phpFormat): bool
     {
         return !preg_match('~[gh]~', $this->expandPhpDtFormat($phpFormat));
     }
 
-    public function useSeconds(string $phpFormat): bool
+    public function isDtFormatWithSeconds(string $phpFormat): bool
     {
         return (bool) preg_match('~[suv]~', $this->expandPhpDtFormat($phpFormat));
     }
 
-    public function allowMicroSecondsInput(string $phpFormat): bool
+    public function isDtFormatWithMicroseconds(string $phpFormat): bool
     {
         return (bool) preg_match('~[uv]~', $this->expandPhpDtFormat($phpFormat));
     }
