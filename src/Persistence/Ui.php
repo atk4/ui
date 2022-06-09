@@ -137,7 +137,7 @@ class Ui extends Persistence
                 $tzClass = \DateTimeZone::class;
 
                 // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
-                $formats = ['date' => '!+' . $this->date_format, 'datetime' => '!+' . $this->datetime_format, 'time' => '!+' . $this->time_format];
+                $formats = ['date' => '!' . $this->date_format, 'datetime' => '!' . $this->datetime_format, 'time' => '!' . $this->time_format];
                 $format = $field->persist_format ?: $formats[$field->type];
 
                 $valueStr = is_object($value) ? $this->_typecastSaveField($field, $value) : $value;
