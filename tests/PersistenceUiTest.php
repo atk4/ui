@@ -29,7 +29,7 @@ class PersistenceUiTest extends TestCase
         $this->assertSame($expectedUiValue, $uiValue);
         $readPhpValue = $p->typecastLoadField($field, $uiValue);
         if ($readPhpValue instanceof \DateTimeInterface) {
-            $this->assertEquals($phpValue, $readPhpValue);
+            $this->{'assertEquals'}($phpValue, $readPhpValue);
         } else {
             $this->assertSame($phpValue, $readPhpValue);
         }
@@ -47,7 +47,7 @@ class PersistenceUiTest extends TestCase
         yield [[], ['type' => 'boolean'], true, 'Yes'];
 
         foreach (['UTC', 'Europe/Prague', 'Pacific/Honolulu', 'Australia/Sydney'] as $tz) {
-            $defaultTz = (new \DateTime())->getTimeZone()->getName();
+            $defaultTz = (new \DateTime())->getTimezone()->getName();
             $evalDate = '$ new DateTime(\'2022-1-2 00:00\', new DateTimeZone(\'' . $defaultTz . '\'))';
             $evalTime = '$ new DateTime(\'1970-1-1 10:20\', new DateTimeZone(\'' . $defaultTz . '\'))';
             $evalDatetime = '$ new DateTime(\'2022-1-2 10:20:30\', new DateTimeZone(\'' . $tz . '\'))';
