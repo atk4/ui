@@ -130,10 +130,12 @@ class Ui extends Persistence
 
         switch ($field->type) {
             case 'boolean':
-                if (mb_strtolower($value) === mb_strtolower($this->yes)) {
-                    $value = '1';
-                } elseif (mb_strtolower($value) === mb_strtolower($this->no)) {
-                    $value = '0';
+                if (is_string($value)) {
+                    if (mb_strtolower($value) === mb_strtolower($this->yes)) {
+                        $value = '1';
+                    } elseif (mb_strtolower($value) === mb_strtolower($this->no)) {
+                        $value = '0';
+                    }
                 }
 
                 break;
