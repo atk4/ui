@@ -99,8 +99,11 @@ class Ui extends Persistence
             case 'time':
                 $value = parent::_typecastLoadField($field, $value);
                 if ($value instanceof \DateTimeInterface) {
-                    $formats = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
-                    $format = $field->persist_format ?: $formats[$field->type];
+                    $format = [
+                        'date' => $this->date_format,
+                        'datetime' => $this->datetime_format,
+                        'time' => $this->time_format,
+                    ][$field->type];
 
                     if ($field->type === 'datetime') {
                         $value = new \DateTime($value->format('Y-m-d H:i:s.u'), $value->getTimezone());
@@ -143,8 +146,11 @@ class Ui extends Persistence
 
                 $dtClass = \DateTime::class;
                 $tzClass = \DateTimeZone::class;
-                $formats = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
-                $format = $field->persist_format ?: $formats[$field->type];
+                $format = [
+                    'date' => $this->date_format,
+                    'datetime' => $this->datetime_format,
+                    'time' => $this->time_format,
+                ][$field->type];
 
                 $valueStr = is_object($value) ? $this->_typecastSaveField($field, $value) : $value;
                 $isDatetime = $field->type === 'datetime';

@@ -47,10 +47,9 @@ class PersistenceUiTest extends TestCase
         yield [[], ['type' => 'boolean'], true, 'Yes'];
 
         foreach (['UTC', 'Europe/Prague', 'Pacific/Honolulu', 'Australia/Sydney'] as $tz) {
-            $defaultTz = (new \DateTime())->getTimezone()->getName();
-            $evalDate = '$ new DateTime(\'2022-1-2 00:00\', new DateTimeZone(\'' . $defaultTz . '\'))';
-            $evalTime = '$ new DateTime(\'1970-1-1 10:20\', new DateTimeZone(\'' . $defaultTz . '\'))';
-            $evalDatetime = '$ new DateTime(\'2022-1-2 10:20:30\', new DateTimeZone(\'' . $tz . '\'))';
+            $evalDate = '$ new DateTime(\'2022-1-2 UTC\')';
+            $evalTime = '$ new DateTime(\'1970-1-1 10:20 UTC\')';
+            $evalDatetime = '$ new DateTime(\'2022-1-2 10:20:30 ' . $tz . '\')';
 
             yield [['timezone' => $tz], ['type' => 'date'], $evalDate, 'Jan 02, 2022'];
             yield [['timezone' => $tz], ['type' => 'time'], $evalTime, '10:20'];
