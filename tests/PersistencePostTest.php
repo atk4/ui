@@ -8,7 +8,7 @@ use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 use Atk4\Ui\Persistence\Post as PostPersistence;
 
-class PostTest extends TestCase
+class PersistencePostTest extends TestCase
 {
     /** @var Model */
     public $model;

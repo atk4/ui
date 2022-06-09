@@ -38,7 +38,7 @@ class Ui extends Persistence
     public $time_format = 'H:i';
     /** @var string */
     public $datetime_format = 'M d, Y H:i:s';
-    /** @var int Calendar input first day of week. 0 = sunday. */
+    /** @var int Calendar input first day of week, 0 = Sunday, 1 = Munday. */
     public $firstDayOfWeek = 0;
 
     /** @var string */
@@ -126,6 +126,14 @@ class Ui extends Persistence
         }
 
         switch ($field->type) {
+            case 'boolean':
+                if (mb_strtolower($value) === mb_strtolower($this->yes)) {
+                    $value = '1';
+                } elseif (mb_strtolower($value) === mb_strtolower($this->no)) {
+                    $value = '0';
+                }
+
+                break;
             case 'date':
             case 'datetime':
             case 'time':
@@ -135,14 +143,12 @@ class Ui extends Persistence
 
                 $dtClass = \DateTime::class;
                 $tzClass = \DateTimeZone::class;
-
-                // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
-                $formats = ['date' => '!' . $this->date_format, 'datetime' => '!' . $this->datetime_format, 'time' => '!' . $this->time_format];
+                $formats = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
                 $format = $field->persist_format ?: $formats[$field->type];
 
                 $valueStr = is_object($value) ? $this->_typecastSaveField($field, $value) : $value;
                 $isDatetime = $field->type === 'datetime';
-                $value = $dtClass::createFromFormat($format, $valueStr, $isDatetime ? new $tzClass($this->timezone) : null);
+                $value = $dtClass::createFromFormat('!' . $format, $valueStr, $isDatetime ? new $tzClass($this->timezone) : null);
                 if ($value === false) {
                     throw (new Exception('Incorrectly formatted datetime'))
                         ->addMoreInfo('format', $format)
