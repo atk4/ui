@@ -97,8 +97,9 @@ class Ui extends Persistence
             case 'date':
             case 'datetime':
             case 'time':
+                /** @var \DateTimeInterface|null */
                 $value = parent::_typecastLoadField($field, $value);
-                if ($value instanceof \DateTimeInterface) {
+                if ($value !== null) {
                     $format = [
                         'date' => $this->date_format,
                         'datetime' => $this->datetime_format,
@@ -154,16 +155,15 @@ class Ui extends Persistence
                     'time' => $this->time_format,
                 ][$field->type];
 
-                $valueStr = is_object($value) ? $this->_typecastSaveField($field, $value) : $value;
-                $isDatetime = $field->type === 'datetime';
-                $value = $dtClass::createFromFormat('!' . $format, $valueStr, $isDatetime ? new $tzClass($this->timezone) : null);
+                $valueOrig = $value;
+                $value = $dtClass::createFromFormat('!' . $format, $value, $field->type === 'datetime' ? new $tzClass($this->timezone) : null);
                 if ($value === false) {
                     throw (new Exception('Incorrectly formatted datetime'))
                         ->addMoreInfo('format', $format)
-                        ->addMoreInfo('value', $valueStr)
+                        ->addMoreInfo('value', $valueOrig)
                         ->addMoreInfo('field', $field);
                 }
-                if ($isDatetime) {
+                if ($field->type === 'datetime') {
                     $value->setTimezone(new $tzClass(date_default_timezone_get()));
                 }
 
