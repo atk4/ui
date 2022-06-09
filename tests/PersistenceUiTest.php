@@ -21,8 +21,8 @@ class PersistenceUiTest extends TestCase
         $p = (new UiPersistence())->setDefaults($persistenceSeed);
         $field = (new Field())->setDefaults($fieldSeed);
 
-        if (is_string($phpValue) && str_starts_with($phpValue, '$ ')) {
-            $phpValue = eval('return ' . substr($phpValue, 2) . ';');
+        if (is_string($phpValue) && preg_match('~^\$ new DateTime\(\'(.+)\'\)$~s', $phpValue, $matches)) {
+            $phpValue = new \DateTime($matches[1]);
         }
 
         $uiValue = $p->typecastSaveField($field, $phpValue);
