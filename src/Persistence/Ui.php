@@ -38,7 +38,7 @@ class Ui extends Persistence
     public $time_format = 'H:i';
     /** @var string */
     public $datetime_format = 'M d, Y H:i:s';
-    /** @var int Calendar input first day of week, 0 = Sunday, 1 = Munday. */
+    /** @var int Calendar input first day of week, 0 = Sunday, 1 = Monday. */
     public $firstDayOfWeek = 0;
 
     /** @var string */
