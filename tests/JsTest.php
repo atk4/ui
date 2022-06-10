@@ -24,7 +24,8 @@ class JsTest extends TestCase
             $this->markTestIncomplete('Test is not supported on 32bit php');
         }
 
-        $longStr = str_repeat('"a":10,"b":9007199254740992,x="\"c\":10,\"d\":9007199254740992,"', 10 * 1000);
+        $longStrBase = '"a":10,"b":9007199254740992,x="\"c\":10,\"d\":9007199254740992,"';
+        $longStr = str_repeat($longStrBase, intdiv(isset($_ENV['CI']) && ($_ENV['GITHUB_EVENT_NAME'] ?? null) === 'cron' ? 5_000_000 : 500_000, strlen($longStrBase)));
         foreach ([
             ['10', '"10"'],
             [10, '10'],

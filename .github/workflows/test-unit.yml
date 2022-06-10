@@ -24,7 +24,7 @@ jobs:
             type: 'StaticAnalysis'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Configure PHP
         run: |
@@ -62,6 +62,8 @@ jobs:
         run: |
           if [ "$(find demos/ -name '*.php' -print0 | xargs -0 grep -L "namespace Atk4\\\\Ui\\\\Demos[;\\\\]" | tee /dev/fd/2)" ]; then echo 'All demos/ files must have namespace declared' && (exit 1); fi
           vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --verbose
+          composer config --unset version && composer config --unset require-release
+          composer validate --strict --no-check-lock && composer normalize --dry-run --no-check-lock
 
       - name: Run Static Analysis (only for StaticAnalysis)
         if: matrix.type == 'StaticAnalysis'
@@ -109,7 +111,7 @@ jobs:
           ORACLE_PASSWORD: atk4_pass
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Configure PHP
         run: |
@@ -269,7 +271,7 @@ jobs:
           ORACLE_PASSWORD: atk4_pass
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Configure PHP
         run: |

@@ -8,7 +8,7 @@ use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 use Atk4\Ui\Persistence\Post as PostPersistence;
 
-class PostTest extends TestCase
+class PersistencePostTest extends TestCase
 {
     /** @var Model */
     public $model;
@@ -20,6 +20,11 @@ class PostTest extends TestCase
         $this->model->addField('name');
         $this->model->addField('surname', ['default' => 'Smith']);
         $this->model->addField('is_married', ['type' => 'boolean']);
+    }
+
+    protected function tearDown(): void
+    {
+        unset($_POST);
     }
 
     /**
