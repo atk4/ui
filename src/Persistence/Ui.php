@@ -25,15 +25,15 @@ class Ui extends Persistence
     /** @var string */
     public $locale = 'en';
 
-    /** @var string */
+    /** @var string Currency symbol for 'atk4_money' type. */
     public $currency = '€';
-    /** @var int Default decimal count for 'atk4_money' type. */
+    /** @var int Number of decimal digits for 'atk4_money' type. */
     public $currency_decimals = 2;
-    /** @var string Default decimal separator character for 'atk4_money' type. */
-    public $decimal_separator = '.';
-    /** @var string Default thousand digit separator for 'atk4_money' type. */
-    public $thousands_separator = ',';
-    
+    /** @var string Decimal point separator for 'atk4_money' type. */
+    public $currency_decimal_separator = '.';
+    /** @var string Thousands separator for 'atk4_money' type. */
+    public $currency_thousands_separator = "\u{00a0}"; // Unicode NBSP
+
     /** @var string */
     public $timezone;
     /** @var string */
@@ -95,7 +95,8 @@ class Ui extends Persistence
                 break;
             case 'atk4_money':
                 $value = parent::_typecastLoadField($field, $value);
-                $value = ($this->currency ? $this->currency . ' ' : '') . number_format($value, $this->currency_decimals, $this->decimal_separator, $this->thousands_separator);
+                $value = ($this->currency ? $this->currency . "\u{00a0}" /* Unicode NBSP */ : '')
+                    . number_format($value, $this->currency_decimals, $this->currency_decimal_separator, $this->currency_thousands_separator);
 
                 break;
             case 'date':

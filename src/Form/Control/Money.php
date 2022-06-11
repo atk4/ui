@@ -17,7 +17,7 @@ class Money extends Input
             return;
         }
 
-        return number_format($v, $this->getApp()->ui_persistence->currency_decimals, $this->getApp()->ui_persistence->decimal_separator, $this->getApp()->ui_persistence->thousands_separator);
+        return number_format($v, $this->getApp()->ui_persistence->currency_decimals, $this->getApp()->ui_persistence->currency_decimal_separator, $this->getApp()->ui_persistence->currency_thousands_separator);
     }
 
     protected function renderView(): void
