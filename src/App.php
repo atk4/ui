@@ -880,43 +880,13 @@ class App
      * ]);
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
-     * @param string|array $tag
      * @param string|array $attr
      * @param string|array $value
      */
-    public function getTag($tag = null, $attr = null, $value = null): string
+    public function getTag(string $tag = null, $attr = null, $value = null): string
     {
         if ($tag === null) {
             $tag = 'div';
-        } elseif (is_array($tag)) {
-            $tmp = $tag;
-
-            if (isset($tmp[0])) {
-                $tag = $tmp[0];
-
-                if (is_array($tag)) {
-                    // OH a bunch of tags
-                    $output = '';
-                    foreach ($tmp as $subtag) {
-                        $output .= $this->getTag($subtag);
-                    }
-
-                    return $output;
-                }
-
-                unset($tmp[0]);
-            } else {
-                $tag = 'div';
-            }
-
-            if (isset($tmp[1])) {
-                $value = $tmp[1];
-                unset($tmp[1]);
-            } else {
-                $value = null;
-            }
-
-            $attr = $tmp;
         }
 
         $tag = strtolower($tag);
