@@ -153,7 +153,7 @@ class ColorRating extends Table\Column
         return parent::getTagAttributes($position, $attr);
     }
 
-    public function getDataCellHtml(Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(Field $field = null, array $extra_tags = []): string
     {
         if ($field === null) {
             throw new Exception('ColorRating can be used only with model field');

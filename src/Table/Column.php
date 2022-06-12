@@ -345,11 +345,8 @@ class Column
      * you should use $this->table->onHook('beforeRow' or 'afterRow', ...);
      *
      * @param Field $field
-     * @param array $extra_tags
-     *
-     * @return string
      */
-    public function getDataCellHtml(Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(Field $field = null, array $extra_tags = []): string
     {
         return $this->getTag('body', [$this->getDataCellTemplate($field)], $extra_tags);
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column;
 
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Table;
 
@@ -27,7 +28,7 @@ class Status extends Table\Column
         $this->states = $states;
     }
 
-    public function getDataCellHtml(\Atk4\Data\Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(Field $field = null, array $extra_tags = []): string
     {
         if ($field === null) {
             throw new \Atk4\Ui\Exception('Status can be used only with model field');
