@@ -660,17 +660,8 @@ parameters:
             path: 'src/UserAction/BasicExecutor.php'
             message: '~^Negated boolean expression is always false\.$~'
         -
-            path: 'src/UserAction/BasicExecutor.php'
-            message: '~^Instanceof between Atk4\\Ui\\JsExpressionable and Closure will always evaluate to false\.$~'
-        -
-            path: 'src/UserAction/ConfirmationExecutor.php'
-            message: '~^Instanceof between Atk4\\Ui\\JsExpressionable and Closure will always evaluate to false\.$~'
-        -
             path: 'src/UserAction/FormExecutor.php'
             message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/UserAction/JsCallbackExecutor.php'
-            message: '~^Instanceof between Atk4\\Ui\\JsExpressionable and Closure will always evaluate to false\.$~'
         -
             path: 'src/View.php'
             message: '~^Negated boolean expression is always false\.$~'
