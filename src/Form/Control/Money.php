@@ -12,8 +12,9 @@ class Money extends Input
     public function getValue()
     {
         $res = parent::getValue();
+        $res = str_replace("\u{00a0}" /* Unicode NBSP */, ' ', $res);
 
-        return $res === null ? null : trim(str_replace($this->getApp()->ui_persistence->currency, '', $res), ' ' . "\u{00a0}" /* Unicode NBSP */);
+        return trim(str_replace($this->getApp()->ui_persistence->currency, '', $res ?? null));
     }
 
     protected function renderView(): void
