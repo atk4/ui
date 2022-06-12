@@ -32,7 +32,7 @@ class Ui extends Persistence
     /** @var string Decimal point separator for 'atk4_money' type. */
     public $currency_decimal_separator = '.';
     /** @var string Thousands separator for 'atk4_money' type. */
-    public $currency_thousands_separator = "\u{00a0}"; // Unicode NBSP
+    public $currency_thousands_separator = ' ';
 
     /** @var string */
     public $timezone;
@@ -95,8 +95,10 @@ class Ui extends Persistence
                 break;
             case 'atk4_money':
                 $value = parent::_typecastLoadField($field, $value);
-                $value = ($this->currency ? $this->currency . "\u{00a0}" /* Unicode NBSP */ : '')
-                    . number_format($value, $this->currency_decimals, $this->currency_decimal_separator, $this->currency_thousands_separator);
+                $valueDecimals = strlen(preg_replace('~^[^.]$|^.+\.|0+$~s', '', number_format($value, 12, '.', '')));
+                $value = ($this->currency ? $this->currency . ' ' : '')
+                    . number_format($value, max($this->currency_decimals, $valueDecimals), $this->currency_decimal_separator, $this->currency_thousands_separator);
+                $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */, $value);
 
                 break;
             case 'date':
@@ -142,6 +144,27 @@ class Ui extends Persistence
                     } elseif (mb_strtolower($value) === mb_strtolower($this->no)) {
                         $value = '0';
                     }
+                }
+
+                break;
+            case 'atk4_money':
+                if (is_string($value)) {
+                    $value = str_replace([' ', "\u{00a0}" /* Unicode NBSP */, '_', $this->currency, '$', '€'], '', $value);
+                    $dSep = $this->currency_decimal_separator;
+                    $tSeps = array_filter(
+                        array_unique([$dSep, $this->currency_thousands_separator, '.', ',']),
+                        fn ($sep) => strpos($value, $sep) !== false
+                    );
+                    usort($tSeps, fn ($sepA, $sepB) => strrpos($value, $sepB) <=> strrpos($value, $sepA));
+                    foreach ($tSeps as $tSep) {
+                        if ($tSep === $dSep || strlen($value) - strrpos($value, $tSep) !== 4) {
+                            $dSep = $tSep;
+
+                            break;
+                        }
+                    }
+                    $value = str_replace(array_diff($tSeps, [$dSep]), '', $value);
+                    $value = str_replace($dSep, '.', $value);
                 }
 
                 break;
