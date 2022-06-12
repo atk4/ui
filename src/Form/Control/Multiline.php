@@ -59,7 +59,7 @@ use Atk4\Ui\View;
  *         }
  *     }
  *
- *   return $form->js(true, null, 'input[name="grand_total"]')->val(number_format($grand_total, 2));
+ *   return $form->js(true, null, 'input[name="grand_total"]')->val($app->ui_persistence->typecastSaveField(new Field(['type' => 'atk4_money']), $grand_total));
  * }, ['qty', 'price']);
  *
  * Finally, it's also possible to use Multiline for quickly adding records to a
