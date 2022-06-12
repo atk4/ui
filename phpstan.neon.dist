@@ -1083,12 +1083,6 @@ parameters:
             path: 'src/Columns.php'
             message: '~^Method Atk4\\Ui\\Columns::addRow\(\) has no return type specified\.$~'
         -
-            path: 'src/Component/InlineEdit.php'
-            message: '~^Instanceof between Closure and Closure will always evaluate to true\.$~'
-        -
-            path: 'src/Component/InlineEdit.php'
-            message: '~^Method Atk4\\Ui\\Component\\InlineEdit::onChange\(\) has no return type specified\.$~'
-        -
             path: 'src/Console.php'
             message: '~^Property Atk4\\Ui\\Console::\$last_exit_code has no type specified\.$~'
         -
@@ -1119,18 +1113,6 @@ parameters:
             path: 'src/Crud.php'
             message: '~^Method Atk4\\Ui\\Crud::setItemsAction\(\) has no return type specified\.$~'
         -
-            path: 'src/Crud.php'
-            message: '~^Method Atk4\\Ui\\Crud::onFormEdit\(\) has no return type specified\.$~'
-        -
-            path: 'src/Crud.php'
-            message: '~^Method Atk4\\Ui\\Crud::onFormAdd\(\) has no return type specified\.$~'
-        -
-            path: 'src/Crud.php'
-            message: '~^Method Atk4\\Ui\\Crud::onFormAddEdit\(\) has no return type specified\.$~'
-        -
-            path: 'src/Dropdown.php'
-            message: '~^Method Atk4\\Ui\\Dropdown::onChange\(\) has no return type specified\.$~'
-        -
             path: 'src/Form.php'
             message: '~^Method Atk4\\Ui\\Form::initLayout\(\) has no return type specified\.$~'
         -
@@ -1145,9 +1127,6 @@ parameters:
         -
             path: 'src/Form/Control.php'
             message: '~^Property Atk4\\Ui\\Form\\Control::\$width has no type specified\.$~'
-        -
-            path: 'src/Form/Control.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control::onChange\(\) has no return type specified\.$~'
         -
             path: 'src/Form/Control.php'
             message: '~^Method Atk4\\Ui\\Form\\Control::jsInput\(\) has parameter \$action with no type specified\.$~'
@@ -1169,9 +1148,6 @@ parameters:
         -
             path: 'src/Form/Control/Calendar.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Calendar::setOption\(\) has parameter \$value with no type specified\.$~'
-        -
-            path: 'src/Form/Control/Calendar.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Calendar::onChange\(\) has no return type specified\.$~'
         -
             path: 'src/Form/Control/Checkbox.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Checkbox::jsChecked\(\) has parameter \$action with no type specified\.$~'
@@ -1263,9 +1239,6 @@ parameters:
             path: 'src/Form/Control/Password.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\Password::\$inputType has no type specified\.$~'
         -
-            path: 'src/Form/Control/Radio.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Radio::onChange\(\) has no return type specified\.$~'
-        -
             path: 'src/Form/Control/ScopeBuilder.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\ScopeBuilder::\$atkLookupOptions has no type specified\.$~'
         -
@@ -1316,12 +1289,6 @@ parameters:
         -
             path: 'src/Form/Control/Upload.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Upload::addJsAction\(\) has parameter \$action with no type specified\.$~'
-        -
-            path: 'src/Form/Control/Upload.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Upload::onUpload\(\) has no return type specified\.$~'
-        -
-            path: 'src/Form/Control/Upload.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Upload::onDelete\(\) has no return type specified\.$~'
         -
             path: 'src/Form/Control/UploadImage.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\UploadImage::setThumbnailSrc\(\) has no return type specified\.$~'
@@ -1422,9 +1389,6 @@ parameters:
             path: 'src/ItemsPerPageSelector.php'
             message: '~^Method Atk4\\Ui\\ItemsPerPageSelector::jsSetLabel\(\) has parameter \$ipp with no type specified\.$~'
         -
-            path: 'src/ItemsPerPageSelector.php'
-            message: '~^Method Atk4\\Ui\\ItemsPerPageSelector::onPageLengthSelect\(\) has no return type specified\.$~'
-        -
             path: 'src/JsCallback.php'
             message: '~^Method Atk4\\Ui\\JsCallback::setConfirm\(\) has no return type specified\.$~'
         -
@@ -1494,9 +1458,6 @@ parameters:
             path: 'src/JsNotify.php'
             message: '~^Method Atk4\\Ui\\JsNotify::attachTo\(\) has parameter \$to with no type specified\.$~'
         -
-            path: 'src/JsPaginator.php'
-            message: '~^Method Atk4\\Ui\\JsPaginator::onScroll\(\) has no return type specified\.$~'
-        -
             path: 'src/JsReload.php'
             message: '~^Property Atk4\\Ui\\JsReload::\$includeStorage has no type specified\.$~'
         -
@@ -1526,9 +1487,6 @@ parameters:
         -
             path: 'src/JsSearch.php'
             message: '~^Property Atk4\\Ui\\JsSearch::\$btnStyle has no type specified\.$~'
-        -
-            path: 'src/JsSortable.php'
-            message: '~^Method Atk4\\Ui\\JsSortable::onReorder\(\) has no return type specified\.$~'
         -
             path: 'src/JsSse.php'
             message: '~^Method Atk4\\Ui\\JsSse::send\(\) has no return type specified\.$~'
@@ -1719,9 +1677,6 @@ parameters:
             path: 'src/Panel/Right.php'
             message: '~^Method Atk4\\Ui\\Panel\\Right::addConfirmation\(\) has no return type specified\.$~'
         -
-            path: 'src/Panel/Right.php'
-            message: '~^Method Atk4\\Ui\\Panel\\Right::onOpen\(\) has no return type specified\.$~'
-        -
             path: 'src/Popup.php'
             message: '~^Method Atk4\\Ui\\Popup::__construct\(\) has parameter \$triggerBy with no type specified\.$~'
         -
@@ -1818,12 +1773,6 @@ parameters:
             path: 'src/Table/Column/DragHandler.php'
             message: '~^Property Atk4\\Ui\\Table\\Column\\DragHandler::\$class has no type specified\.$~'
         -
-            path: 'src/Table/Column/DragHandler.php'
-            message: '~^Property Atk4\\Ui\\Table\\Column\\DragHandler::\$tag has no type specified\.$~'
-        -
-            path: 'src/Table/Column/DragHandler.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\DragHandler::onReorder\(\) has no return type specified\.$~'
-        -
             path: 'src/Table/Column/FilterModel.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel::afterInit\(\) has no return type specified\.$~'
         -
@@ -1844,9 +1793,6 @@ parameters:
         -
             path: 'src/Table/Column/FilterPopup.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterPopup::setFilterCondition\(\) has parameter \$tableModel with no type specified\.$~'
-        -
-            path: 'src/Table/Column/JsHeader.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\JsHeader::onSelectItem\(\) has no return type specified\.$~'
         -
             path: 'src/Table/Column/KeyValue.php'
             message: '~^Property Atk4\\Ui\\Table\\Column\\KeyValue::\$values has no type specified\.$~'

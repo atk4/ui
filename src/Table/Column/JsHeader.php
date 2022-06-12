@@ -14,7 +14,7 @@ class JsHeader extends JsCallback
     /**
      * Function to call when header menu item is select.
      */
-    public function onSelectItem(\Closure $fx)
+    public function onSelectItem(\Closure $fx): void
     {
         $this->set(function () use ($fx) {
             return $fx($_GET['id'] ?? null, $_GET['item'] ?? null);

@@ -144,7 +144,7 @@ class Upload extends Input
     /**
      * Call when user is uploading a file.
      */
-    public function onUpload(\Closure $fx)
+    public function onUpload(\Closure $fx): void
     {
         $this->hasUploadCb = true;
         if (($_POST['f_upload_action'] ?? null) === self::UPLOAD_ACTION) {
@@ -186,7 +186,7 @@ class Upload extends Input
     /**
      * Call when user is removing an already upload file.
      */
-    public function onDelete(\Closure $fx)
+    public function onDelete(\Closure $fx): void
     {
         $this->hasDeleteCb = true;
         if (($_POST['f_upload_action'] ?? null) === self::DELETE_ACTION) {

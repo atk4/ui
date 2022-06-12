@@ -30,7 +30,7 @@ class DragHandler extends Table\Column
     /**
      * Callback when table has been reorder using handle.
      */
-    public function onReorder(\Closure $fx)
+    public function onReorder(\Closure $fx): void
     {
         $this->cb->onReorder($fx);
     }

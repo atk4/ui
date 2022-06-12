@@ -80,7 +80,7 @@ class Calendar extends Input
      * @param string|JsExpression|array $expr
      * @param array|bool                $default
      */
-    public function onChange($expr, $default = [])
+    public function onChange($expr, $default = []): void
     {
         if (is_string($expr)) {
             $expr = new \Atk4\Ui\JsExpression($expr);

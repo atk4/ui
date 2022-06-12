@@ -146,7 +146,7 @@ class Control extends View
      * @param string|\Atk4\Ui\JsExpression|array|\Closure $expr
      * @param array|bool                                  $default
      */
-    public function onChange($expr, $default = [])
+    public function onChange($expr, $default = []): void
     {
         if (is_string($expr)) {
             $expr = new \Atk4\Ui\JsExpression($expr);
