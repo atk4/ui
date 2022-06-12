@@ -130,11 +130,9 @@ class InlineEdit extends View
     /**
      * On success notifier.
      *
-     * @param string $message
-     *
      * @return \Atk4\Ui\JsToast
      */
-    public function jsSuccess($message)
+    public function jsSuccess(string $message)
     {
         return new JsToast([
             'title' => 'Success',

@@ -474,9 +474,6 @@ parameters:
             path: 'src/Text.php'
             message: '~^Property Atk4\\Ui\\Text::\$defaultTemplate \(string\) does not accept default value of type false\.$~'
         -
-            path: 'src/UserAction/JsCallbackExecutor.php'
-            message: '~^Property Atk4\\Ui\\UserAction\\JsCallbackExecutor::\$jsSuccess \(Atk4\\Ui\\JsExpressionable\) does not accept array\|Closure\.$~'
-        -
             path: 'src/View.php'
             message: '~^Parameter #1 \$object \(Atk4\\Ui\\View\) of method Atk4\\Ui\\View::add\(\) should be contravariant with parameter \$object \(Atk4\\Ui\\AbstractView\) of method Atk4\\Ui\\AbstractView::add\(\)$~'
         -
