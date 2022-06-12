@@ -576,9 +576,6 @@ parameters:
             path: 'src/Form/Control/Lookup.php'
             message: '~^Left side of && is always true\.$~'
         -
-            path: 'src/Form/Control/Money.php'
-            message: '~^Ternary operator condition is always true\.$~'
-        -
             path: 'src/Form/Control/Multiline.php'
             message: '~^Negated boolean expression is always false\.$~'
         -
