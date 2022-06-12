@@ -18,7 +18,7 @@ class Money extends Table\Column
     // overrides
     public $attr = ['all' => ['class' => ['right aligned single line']]];
 
-    public function getTagAttributes($position, array $attr = []): array
+    public function getTagAttributes(string $position, array $attr = []): array
     {
         $attr = array_merge_recursive($attr, ['class' => ['{$_' . $this->shortName . '_class}']]);
 

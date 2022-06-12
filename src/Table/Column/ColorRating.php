@@ -145,7 +145,7 @@ class ColorRating extends Table\Column
         }
     }
 
-    public function getTagAttributes($position, array $attr = []): array
+    public function getTagAttributes(string $position, array $attr = []): array
     {
         $attr['style'] ??= '';
         $attr['style'] .= '{$_' . $this->shortName . '_color_rating}';

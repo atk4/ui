@@ -1782,9 +1782,6 @@ parameters:
             path: 'src/Table/Column.php'
             message: '~^Method Atk4\\Ui\\Table\\Column::setHeaderDropdown\(\) has parameter \$items with no type specified\.$~'
         -
-            path: 'src/Table/Column.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column::getTagAttributes\(\) has parameter \$position with no type specified\.$~'
-        -
             path: 'src/Table/Column/ActionButtons.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\ActionButtons::addButton\(\) has parameter \$isDisabled with no type specified\.$~'
         -
@@ -1814,9 +1811,6 @@ parameters:
         -
             path: 'src/Table/Column/ColorRating.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::createGradientSingle\(\) has parameter \$steps with no type specified\.$~'
-        -
-            path: 'src/Table/Column/ColorRating.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::getTagAttributes\(\) has parameter \$position with no type specified\.$~'
         -
             path: 'src/Table/Column/ColorRating.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::getColorFromValue\(\) has no return type specified\.$~'
@@ -1856,9 +1850,6 @@ parameters:
         -
             path: 'src/Table/Column/KeyValue.php'
             message: '~^Property Atk4\\Ui\\Table\\Column\\KeyValue::\$values has no type specified\.$~'
-        -
-            path: 'src/Table/Column/Money.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\Money::getTagAttributes\(\) has parameter \$position with no type specified\.$~'
         -
             path: 'src/Table/Column/Multiformat.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\Multiformat::__construct\(\) has parameter \$callback with no type specified\.$~'

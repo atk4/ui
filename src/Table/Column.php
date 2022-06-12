@@ -225,7 +225,7 @@ class Column
         return $this;
     }
 
-    public function getTagAttributes($position, array $attr = []): array
+    public function getTagAttributes(string $position, array $attr = []): array
     {
         // "all" applies on all positions
         // $position is for specific position classes
@@ -246,7 +246,7 @@ class Column
      * @param string|array $value    either html or array defining HTML structure, see App::getTag help
      * @param array        $attr     extra attributes to apply on the tag
      */
-    public function getTag($position, $value, $attr = []): string
+    public function getTag(string $position, $value, $attr = []): string
     {
         $attr = $this->getTagAttributes($position, $attr);
 

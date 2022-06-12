@@ -12,6 +12,7 @@ use Atk4\Ui\Table;
 class DragHandler extends Table\Column
 {
     public $class;
+    /** @var string */
     public $tag = 'i';
     /** @var \Atk4\Ui\JsCallback */
     public $cb;

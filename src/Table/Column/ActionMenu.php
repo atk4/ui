@@ -46,7 +46,7 @@ class ActionMenu extends Table\Column
         parent::init();
     }
 
-    public function getTag($position, $value, $attr = []): string
+    public function getTag(string $position, $value, $attr = []): string
     {
         if ($this->table->hasCollapsingCssActionColumn && $position === 'body') {
             $attr['class'][] = 'collapsing';
