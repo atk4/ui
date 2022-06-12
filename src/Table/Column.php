@@ -225,7 +225,7 @@ class Column
         return $this;
     }
 
-    public function getTagAttributes($position, array $attr = []): array
+    public function getTagAttributes(string $position, array $attr = []): array
     {
         // "all" applies on all positions
         // $position is for specific position classes
@@ -246,7 +246,7 @@ class Column
      * @param string|array $value    either html or array defining HTML structure, see App::getTag help
      * @param array        $attr     extra attributes to apply on the tag
      */
-    public function getTag($position, $value, $attr = []): string
+    public function getTag(string $position, $value, $attr = []): string
     {
         $attr = $this->getTagAttributes($position, $attr);
 
@@ -345,11 +345,8 @@ class Column
      * you should use $this->table->onHook('beforeRow' or 'afterRow', ...);
      *
      * @param Field $field
-     * @param array $extra_tags
-     *
-     * @return string
      */
-    public function getDataCellHtml(Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(Field $field = null, array $extra_tags = []): string
     {
         return $this->getTag('body', [$this->getDataCellTemplate($field)], $extra_tags);
     }

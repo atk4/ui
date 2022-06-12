@@ -40,7 +40,7 @@ class Tooltip extends Table\Column
         }
     }
 
-    public function getDataCellHtml(Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(Field $field = null, array $extra_tags = []): string
     {
         if ($field === null) {
             throw new Exception('Tooltip can be used only with model field');

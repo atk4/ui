@@ -32,7 +32,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /** @var Model\UserAction The model user action */
     public $action;
 
-    /** @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
     public function getAction(): Model\UserAction
@@ -86,20 +86,6 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 
             return $js;
         }, $args);
-
-        return $this;
-    }
-
-    /**
-     * Set jsSuccess property.
-     *
-     * @param array|\Closure $fx
-     *
-     * @return $this
-     */
-    public function setJsSuccess($fx)
-    {
-        $this->jsSuccess = $fx;
 
         return $this;
     }

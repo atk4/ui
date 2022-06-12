@@ -11,13 +11,10 @@ class Money extends Input
 {
     public function getValue()
     {
-        $v = $this->entityField ? $this->entityField->get() : ($this->content ?: null);
+        $res = parent::getValue() ?? null;
+        $res = str_replace("\u{00a0}" /* Unicode NBSP */, ' ', $res);
 
-        if ($v === null) {
-            return;
-        }
-
-        return number_format($v, $this->getApp()->ui_persistence->currency_decimals);
+        return trim(str_replace($this->getApp()->ui_persistence->currency, '', $res));
     }
 
     protected function renderView(): void

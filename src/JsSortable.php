@@ -60,7 +60,7 @@ class JsSortable extends JsCallback
     /**
      * Callback when container has been reorder.
      */
-    public function onReorder(\Closure $fx)
+    public function onReorder(\Closure $fx): void
     {
         $this->set(function () use ($fx) {
             $sortOrders = explode(',', $_POST['order'] ?? '');

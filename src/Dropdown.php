@@ -37,7 +37,7 @@ class Dropdown extends Lister
      *
      * @param \Closure $fx handler where new selected Item value is passed too
      */
-    public function onChange(\Closure $fx)
+    public function onChange(\Closure $fx): void
     {
         // setting dropdown option for using callback url.
         $this->dropdownOptions['onChange'] = new JsFunction(['value', 'name', 't'], [

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column;
 
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Table;
 
@@ -18,14 +19,14 @@ class Money extends Table\Column
     // overrides
     public $attr = ['all' => ['class' => ['right aligned single line']]];
 
-    public function getTagAttributes($position, array $attr = []): array
+    public function getTagAttributes(string $position, array $attr = []): array
     {
         $attr = array_merge_recursive($attr, ['class' => ['{$_' . $this->shortName . '_class}']]);
 
         return parent::getTagAttributes($position, $attr);
     }
 
-    public function getDataCellHtml(\Atk4\Data\Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(Field $field = null, array $extra_tags = []): string
     {
         if (!isset($field)) {
             throw new \Atk4\Ui\Exception('Money column requires a field');

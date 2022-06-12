@@ -537,15 +537,13 @@ class Table extends Lister
      * rows, pointer will be used and rows will be highlighted as you hover.
      *
      * @param JsChain|\Closure|JsExpressionable $action Code to execute
-     *
-     * @return Jquery
      */
-    public function onRowClick($action)
+    public function onRowClick($action): void
     {
         $this->addClass('selectable');
         $this->js(true)->find('tbody')->css('cursor', 'pointer');
 
-        return $this->on('click', 'tbody>tr', $action);
+        $this->on('click', 'tbody>tr', $action);
     }
 
     /**

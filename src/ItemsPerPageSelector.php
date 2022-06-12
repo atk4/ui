@@ -61,7 +61,7 @@ class ItemsPerPageSelector extends View
      * The callback should return a View to be reload after an item
      * has been select.
      */
-    public function onPageLengthSelect(\Closure $fx)
+    public function onPageLengthSelect(\Closure $fx): void
     {
         $this->cb->set(function () use ($fx) {
             $ipp = isset($_GET['ipp']) ? (int) $_GET['ipp'] : null;

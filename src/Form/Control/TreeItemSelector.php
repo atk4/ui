@@ -84,10 +84,8 @@ class TreeItemSelector extends Form\Control
      * Provide a function to be execute when clicking an item in tree selector.
      * The executing function will receive an array with item state in it
      * when allowMultiple is true or a single value when false.
-     *
-     * @return $this
      */
-    public function onItem(\Closure $fx)
+    public function onItem(\Closure $fx): void
     {
         $this->cb = JsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
             $value = $this->getApp()->decodeJson($data);
@@ -97,8 +95,6 @@ class TreeItemSelector extends Form\Control
 
             return $fx($value);
         }, ['data' => 'value']);
-
-        return $this;
     }
 
     /**

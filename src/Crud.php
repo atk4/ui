@@ -301,7 +301,7 @@ class Crud extends Grid
      * Set callback for edit action in Crud.
      * Callback function will receive the Edit Form and Executor as param.
      */
-    public function onFormEdit(\Closure $fx)
+    public function onFormEdit(\Closure $fx): void
     {
         $this->setOnActions('edit', $fx);
     }
@@ -310,7 +310,7 @@ class Crud extends Grid
      * Set callback for add action in Crud.
      * Callback function will receive the Add Form and Executor as param.
      */
-    public function onFormAdd(\Closure $fx)
+    public function onFormAdd(\Closure $fx): void
     {
         $this->setOnActions('add', $fx);
     }
@@ -319,7 +319,7 @@ class Crud extends Grid
      * Set callback for both edit and add action form.
      * Callback function will receive Forms and Executor as param.
      */
-    public function onFormAddEdit(\Closure $fx)
+    public function onFormAddEdit(\Closure $fx): void
     {
         $this->onFormEdit($fx);
         $this->onFormAdd($fx);

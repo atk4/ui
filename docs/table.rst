@@ -261,7 +261,7 @@ The tag will override model value. Here is example usage of :php:meth:`Table\\Co
 
 
     class ExpiredColumn extends \Atk4\Ui\Table\Column
-        public function getDataCellHtml()
+        public function getDataCellHtml(): string
         {
             return '{$_expired}';
         }
