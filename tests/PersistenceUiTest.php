@@ -72,5 +72,14 @@ class PersistenceUiTest extends TestCase
         yield [[], ['type' => 'atk4_money'], 1000.0, $fixSpaceToNbspFx('€ 1 000.00')];
         yield [['currency_thousands_separator' => ','], ['type' => 'atk4_money'], 1000.0, $fixSpaceToNbspFx('€ 1,000.00')];
         yield [['currency_decimal_separator' => ',', 'currency_thousands_separator' => '.'], ['type' => 'atk4_money'], 1000.0, $fixSpaceToNbspFx('€ 1.000,00')];
+
+        yield [[], [], null, null];
+        yield [[], ['type' => 'string'], null, null];
+        yield [[], ['type' => 'integer'], null, null];
+        yield [[], ['type' => 'float'], null, null];
+        yield [[], ['type' => 'date'], null, null];
+        yield [[], ['type' => 'time'], null, null];
+        yield [[], ['type' => 'datetime'], null, null];
+        yield [[], ['type' => 'atk4_money'], null, null];
     }
 }
