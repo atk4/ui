@@ -783,7 +783,7 @@ class Multiline extends Form\Control
         }
 
         if (!empty($dummyFields)) {
-            $dummyModel = new Model($model->persistence, ['table' => $model->table]);
+            $dummyModel = new Model($model->getPersistence(), ['table' => $model->table]);
             foreach ($dummyFields as $field) {
                 $dummyModel->addExpression($field['name'], ['expr' => $field['expr'], 'type' => $model->getField($field['name'])->type]);
             }

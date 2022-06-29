@@ -316,7 +316,7 @@ class File extends ModelWithPrefixedFields
             'model' => [self::class],
             'their_field' => self::hinting()->fieldName()->parent_folder_id,
         ])
-            ->addField($this->fieldName()->count, ['aggregate' => 'count', 'field' => $this->persistence->expr($this, '*')]);
+            ->addField($this->fieldName()->count, ['aggregate' => 'count', 'field' => $this->getPersistence()->expr($this, '*')]);
 
         $this->hasOne($this->fieldName()->parent_folder_id, [
             'model' => [Folder::class],
