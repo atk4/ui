@@ -39,7 +39,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
 
         while ($selections && $id = array_shift($selections)) {
             $path[] = $id;
-            $pushModel = new $model($model->persistence);
+            $pushModel = new $model($model->getPersistence());
             $pushModel = $pushModel->tryLoad($id);
             if (!$pushModel->isLoaded()) {
                 break;

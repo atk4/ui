@@ -35,8 +35,7 @@ class PersistencePostTest extends TestCase
         $p = new PostPersistence();
 
         $m = $this->model;
-        $m->addField('id');
-        $m->persistence = $p;
+        $m->setPersistence($p);
 
         $m = $m->load(0);
         $m->set('surname', 'DefSurname');
