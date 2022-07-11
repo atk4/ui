@@ -320,7 +320,7 @@ class Lookup extends Input
      */
     protected function applyDependencyConditions()
     {
-        if (!($this->dependency instanceof \Closure)) {
+        if (!$this->dependency instanceof \Closure) {
             return;
         }
 
