@@ -128,18 +128,18 @@ class ColorRating extends Table\Column
         $ToRgb['g'] = hexdec(substr($hexTo, 2, 2));
         $ToRgb['b'] = hexdec(substr($hexTo, 4, 2));
 
-        $StepRgb['r'] = ($FromRgb['r'] - $ToRgb['r']) / ($steps);
-        $StepRgb['g'] = ($FromRgb['g'] - $ToRgb['g']) / ($steps);
-        $StepRgb['b'] = ($FromRgb['b'] - $ToRgb['b']) / ($steps);
+        $StepRgb['r'] = ($FromRgb['r'] - $ToRgb['r']) / $steps;
+        $StepRgb['g'] = ($FromRgb['g'] - $ToRgb['g']) / $steps;
+        $StepRgb['b'] = ($FromRgb['b'] - $ToRgb['b']) / $steps;
 
         for ($i = 0; $i <= $steps; ++$i) {
             $Rgb['r'] = floor($FromRgb['r'] - ($StepRgb['r'] * $i));
             $Rgb['g'] = floor($FromRgb['g'] - ($StepRgb['g'] * $i));
             $Rgb['b'] = floor($FromRgb['b'] - ($StepRgb['b'] * $i));
 
-            $HexRgb['r'] = sprintf('%02x', ($Rgb['r']));
-            $HexRgb['g'] = sprintf('%02x', ($Rgb['g']));
-            $HexRgb['b'] = sprintf('%02x', ($Rgb['b']));
+            $HexRgb['r'] = sprintf('%02x', $Rgb['r']);
+            $HexRgb['g'] = sprintf('%02x', $Rgb['g']);
+            $HexRgb['b'] = sprintf('%02x', $Rgb['b']);
 
             $gradients[] = '#' . implode('', $HexRgb);
         }

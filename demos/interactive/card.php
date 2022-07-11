@@ -19,7 +19,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $card = \Atk4\Ui\Card::addTo($app);
 
-$card->addContent((new \Atk4\Ui\Header(['Meet Kristy', 'subHeader' => 'Friends'])));
+$card->addContent(new \Atk4\Ui\Header(['Meet Kristy', 'subHeader' => 'Friends']));
 
 $card->addDescription('Kristy is a friend of Mully.');
 $card->addImage('../images/kristy.png');
@@ -68,6 +68,6 @@ $cardStat->addButton(new \Atk4\Ui\Button(['Email Client']));
 
 $card = \Atk4\Ui\Card::addTo($app)->addClass('horizontal centered');
 
-$card->addContent((new \Atk4\Ui\Header(['Meet Kristy', 'subHeader' => 'Friends'])));
+$card->addContent(new \Atk4\Ui\Header(['Meet Kristy', 'subHeader' => 'Friends']));
 $card->addDescription('Kristy is a friend of Mully.');
 $card->addImage('../images/kristy.png');

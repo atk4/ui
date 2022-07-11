@@ -36,16 +36,20 @@ $table->addColumn('logo_url', [Table\Column\Image::class, 'caption' => 'Our Logo
 
 $table->onHook(Table\Column::HOOK_GET_HTML_TAGS, function ($table, \Atk4\Data\Model $row) {
     switch ($row->getId()) {
-        case 1: $color = 'yellow';
+        case 1:
+            $color = 'yellow';
 
-break;
-        case 2: $color = 'grey';
+            break;
+        case 2:
+            $color = 'grey';
 
-break;
-        case 3: $color = 'brown';
+            break;
+        case 3:
+            $color = 'brown';
 
-break;
-        default: $color = '';
+            break;
+        default:
+            $color = '';
     }
     if ($color) {
         return [

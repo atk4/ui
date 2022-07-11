@@ -180,7 +180,7 @@ class DemosTest extends TestCase
                     $this->expectExceptionObject($e);
                 }
 
-                if (!($e instanceof DemosTestExitError)) {
+                if (!$e instanceof DemosTestExitError) {
                     throw $e;
                 }
             } finally {

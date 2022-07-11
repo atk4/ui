@@ -79,6 +79,7 @@
     "conflict": {
         "behat/behat": "<3.9",
         "behat/mink": "<1.9",
+        "friendsofphp/php-cs-fixer": "^3.9",
         "instaclick/php-webdriver": "<1.4.13",
         "symfony/console": "<4.4.30 || >=5 <5.3.7",
         "symfony/css-selector": "<4.4.24 || >=5 <5.2.9",

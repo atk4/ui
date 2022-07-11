@@ -25,7 +25,7 @@ $notifierClass = AnonymousClassNameCache::get_class(fn () => new class() extends
     }
 });
 
- // Notification type form
+// Notification type form
 $head = \Atk4\Ui\Header::addTo($app, ['Notification Types']);
 
 $form = \Atk4\Ui\Form::addTo($app, ['class.segment' => true]);

@@ -136,7 +136,7 @@ class Popup extends View
      */
     public function set($fx = null, $ignore = null)
     {
-        if (!($fx instanceof \Closure)) {
+        if (!$fx instanceof \Closure) {
             throw new Exception('Need to pass a function to Popup::set()');
         } elseif (func_num_args() > 1) {
             throw new Exception('Only one argument is needed by Popup::set()');

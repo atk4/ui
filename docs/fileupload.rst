@@ -37,10 +37,6 @@ Upload control has the following properties:
 An array of string containing the file type accepted by the form control, default is empty.
 Example would be: `['application/pdf', 'images/*']`.
 
-.. php:attr:: hasFocusEnable
-
-Whether file open dialog will show by clicking the control input, default to true.
-
 .. php:attr:: action
 
 The button view to use for displaying the file open dialog. A default action button is used if omitted.
