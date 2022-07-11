@@ -155,7 +155,8 @@ extending :php:class:`Persistence\Ui`::
             switch ($field->type) {
                 case 'card':
                     $parts = str_split($value, 4);
-                    return join(' ', $parts);
+
+                    return implode(' ', $parts);
             }
             return parent::_typecastSaveField($field, $value);
         }
