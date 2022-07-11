@@ -26,17 +26,6 @@ class Upload extends Input
      */
     public $fileId;
 
-    /**
-     * Whether you need to open file browser dialog using input focus or not.
-     * default to true.
-     *
-     * @var bool
-     * @obsolete
-     * hasFocusEnable has been disable in js plugin and this property will be removed.
-     * Upload field is only using click handler now.
-     */
-    public $hasFocusEnable = false;
-
     /** @var string The input default template. */
     public $defaultTemplate = 'form/control/upload.html';
 
@@ -231,7 +220,6 @@ class Upload extends Input
             'uri' => $this->cb->getJsUrl(),
             'action' => $this->action->name,
             'file' => ['id' => $this->fileId ?: $this->entityField->get(), 'name' => $this->getInputValue()],
-            'hasFocus' => $this->hasFocusEnable,
             'submit' => ($this->form->buttonSave) ? $this->form->buttonSave->name : null,
         ]);
     }
