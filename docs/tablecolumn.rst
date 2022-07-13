@@ -252,17 +252,17 @@ If you want to have label above the action column, then::
 
     $action = $table->addColumn(null, [Table\Column\ActionButtons::class, 'caption' => 'User Actions']);
 
-.. php:method:: addAction($button, $action, $confirm = false)
+.. php:method:: addButton($button, $action, $confirm = false)
 
 Adds another button into "Actions" column which will perform a certain JavaScript action when clicked.
-See also :php:meth:`Atk4\\Ui\\Grid::addAction()`::
+See also :php:meth:`Atk4\\Ui\\Grid::addActionButton()`::
 
-    $button = $action->addAction('Reload Table', $table->jsReload());
+    $button = $action->addButton('Reload Table', $table->jsReload());
 
 Normally you would also want to pass the ID of the row which was clicked. You can use :php:meth:`Atk4\\Ui\\Table:jsRow()`
 and jQuery's data() method to reference it::
 
-    $button = $action->addAction('Reload Table', $table->jsReload(['clicked' => $table->jsRow()->data('id')]));
+    $button = $action->addButton('Reload Table', $table->jsReload(['clicked' => $table->jsRow()->data('id')]));
 
 Moreover you may pass $action argument as a PHP callback.
 
@@ -270,7 +270,7 @@ Moreover you may pass $action argument as a PHP callback.
 
 Triggers a modal dialog when you click on the button. See description on :php:meth:`Atk4\\Ui\\Grid::addModalAction()`::
 
-    $action->addAction(['Say HI'], function ($j, $id) use ($g) {
+    $action->addButton(['Say HI'], function ($j, $id) use ($g) {
         return 'Loaded "' . $g->model->load($id)->get('name') . '" from ID=' . $id;
     });
 
