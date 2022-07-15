@@ -28,7 +28,7 @@ $form->setModel((new Country($app->db))->createEntity(), []);
 $formAddress = $form->addGroup('Basic Country Information');
 $name = $formAddress->addControl(Country::hinting()->fieldName()->name, ['width' => 'sixteen']);
 $name->addAction(['Check Duplicate', 'iconRight' => 'search'])->on('click', function ($jQuery, $name) use ($app, $form) {
-    if ((new Country($app->db))->tryLoadBy(Country::hinting()->fieldName()->name, $name)->isLoaded()) {
+    if ((new Country($app->db))->tryLoadBy(Country::hinting()->fieldName()->name, $name) !== null) {
         return $form->js()->form('add prompt', Country::hinting()->fieldName()->name, 'This country name is already added.');
     }
 

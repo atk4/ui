@@ -647,7 +647,7 @@ class Grid extends View
      */
     private function setModelLimitFromPaginator()
     {
-        $this->paginator->setTotal((int) ceil((int) $this->model->action('count')->getOne() / $this->ipp));
+        $this->paginator->setTotal((int) ceil($this->model->executeCountQuery() / $this->ipp));
         $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
     }
 
