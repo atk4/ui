@@ -305,7 +305,7 @@ $expression argument can be string, JsExpression, array of JsExpressions or even
 
     // Calendar form control - wraps in function call with arguments date, text and mode
     $c1 = $form->addControl('c1', new \Atk4\Ui\Form\Control\Calendar(['type' => 'date']));
-    $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
+    $c1->onChange('console.log("c1 changed: " + date + ", " + text + ", " + mode)');
 
 
 Dropdown
