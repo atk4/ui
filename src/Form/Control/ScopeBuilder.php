@@ -351,7 +351,7 @@ class ScopeBuilder extends Control
     {
         if ($field->enum || $field->values) {
             $type = 'enum';
-        } elseif ($field->getReference() !== null) {
+        } elseif ($field->hasReference()) {
             $type = 'lookup';
         } else {
             $type = $field->type;
@@ -380,7 +380,7 @@ class ScopeBuilder extends Control
             $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
         }
 
-        if ($field->getReference() !== null) {
+        if ($field->hasReference()) {
             $props['url'] = $this->dataCb->getUrl();
             $props['reference'] = $field->shortName;
             $props['search'] = true;
@@ -422,8 +422,9 @@ class ScopeBuilder extends Control
      */
     protected function addReferenceRules(Field $field): self
     {
-        $reference = $field->getReference();
-        if ($reference !== null) {
+        if ($field->hasReference()) {
+            $reference = $field->getReference();
+
             // add the number of records rule
             $this->rules[] = $this->getRule('numeric', [
                 'id' => $reference->link . '/#',
@@ -483,7 +484,7 @@ class ScopeBuilder extends Control
         }
         if ($field->values && is_array($field->values)) {
             $items = array_chunk($field->values, $limit, true)[0];
-        } elseif ($field->getReference()) {
+        } elseif ($field->hasReference()) {
             $model = $field->getReference()->refModel($this->model);
             $model->setLimit($limit);
 

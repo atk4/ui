@@ -206,7 +206,7 @@ class Ui extends Persistence
                 throw new Exception('Object serialization is not supported');
         }
 
-        if ($field->getReference() !== null) {
+        if ($field->hasReference()) {
             if (empty($value)) {
                 return null;
             }
