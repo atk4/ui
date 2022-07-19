@@ -284,7 +284,7 @@ class Multiline extends Form\Control
         if ($this->entityField->getField()->type === 'json') {
             $jsonValues = $this->getApp()->ui_persistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
         } else {
-            // set data according to hasMany ref. or using model.
+            // set data according to HasMany relation or using model.
             $model = $this->getModel();
             $rows = [];
             foreach ($model as $row) {

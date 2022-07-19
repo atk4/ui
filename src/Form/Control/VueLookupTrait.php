@@ -33,14 +33,14 @@ trait VueLookupTrait
         $query = $_GET['atk_vlookup_q'] ?? null;
         $data = [];
         if ($fieldName) {
-            $ref = $this->getModel()->getField($fieldName)->getReference();
-            $model = $ref->refModel($this->model);
-            $refFieldName = $ref->getTheirFieldName();
+            $reference = $this->getModel()->getField($fieldName)->getReference();
+            $model = $reference->refModel($this->model);
+            $referenceFieldName = $reference->getTheirFieldName();
             if (!empty($query)) {
                 $model->addCondition($model->title_field, 'like', '%' . $query . '%');
             }
             foreach ($model as $row) {
-                $data[] = ['key' => $row->get($refFieldName), 'text' => $row->getTitle(), 'value' => $row->get($refFieldName)];
+                $data[] = ['key' => $row->get($referenceFieldName), 'text' => $row->getTitle(), 'value' => $row->get($referenceFieldName)];
             }
         }
 

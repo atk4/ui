@@ -49,7 +49,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
                 $route[] = $ref; // repeat last route
             }
 
-            if (!$pushModel->hasRef($ref)) {
+            if (!$pushModel->hasReference($ref)) {
                 break; // no such route
             }
 
