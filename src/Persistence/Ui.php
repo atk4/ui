@@ -199,8 +199,9 @@ class Ui extends Persistence
                 $value = parent::_typecastSaveField($field, $value);
 
                 break;
-            // SECURTIY: Do not unserialize any user input
-            // https://github.com/search?q=unserialize+repo%3Adoctrine%2Fdbal+path%3A%2Fsrc%2FTypes
+                // <-- reindent once https://github.com/FriendsOfPHP/PHP-CS-Fixer/pull/6490 is merged
+                // SECURTIY: Do not unserialize any user input
+                // https://github.com/search?q=unserialize+repo%3Adoctrine%2Fdbal+path%3A%2Fsrc%2FTypes
             case 'object':
             case 'array':
                 throw new Exception('Object serialization is not supported');
