@@ -284,7 +284,7 @@ class Multiline extends Form\Control
         if ($this->entityField->getField()->type === 'json') {
             $jsonValues = $this->getApp()->ui_persistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
         } else {
-            // set data according to hasMany ref. or using model.
+            // set data according to HasMany relation or using model.
             $model = $this->getModel();
             $rows = [];
             foreach ($model as $row) {
@@ -549,7 +549,7 @@ class Multiline extends Form\Control
             $props['config']['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
         }
 
-        if ($field->getReference() !== null) {
+        if ($field->hasReference()) {
             $props['config']['url'] = $this->dataCb->getUrl();
             $props['config']['reference'] = $field->shortName;
             $props['config']['search'] = true;
@@ -602,7 +602,7 @@ class Multiline extends Form\Control
             $component = $this->fieldMapToComponent['date'];
         } elseif ($field->type === 'text') {
             $component = $this->fieldMapToComponent['textarea'];
-        } elseif ($field->getReference() !== null) {
+        } elseif ($field->hasReference()) {
             $component = $this->fieldMapToComponent['lookup'];
         } else {
             $component = $this->fieldMapToComponent['default'];
@@ -626,7 +626,7 @@ class Multiline extends Form\Control
         }
         if ($field->values && is_array($field->values)) {
             $items = array_chunk($field->values, $limit, true)[0];
-        } elseif ($field->getReference() !== null) {
+        } elseif ($field->hasReference()) {
             $model = $field->getReference()->refModel($this->model);
             $model->setLimit($limit);
 
