@@ -19,7 +19,10 @@ class Control extends View
     /** @var Form to which this field belongs */
     public $form;
 
-    /** @var EntityFieldPair<Model, Field> */
+    /**
+     * @var EntityFieldPair
+     * @phpstan-var EntityFieldPair<Model, Field>
+     */
     public $entityField;
 
     /** @var string */
