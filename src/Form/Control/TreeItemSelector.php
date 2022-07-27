@@ -22,7 +22,7 @@ use Atk4\Ui\JsCallback;
 
 class TreeItemSelector extends Form\Control
 {
-    /** @var HtmlTemplate Template for the item selector view. */
+    /** @var HtmlTemplate|null Template for the item selector view. */
     public $itemSelectorTemplate;
 
     /** @var \Atk4\Ui\View|null The tree item selector View. */

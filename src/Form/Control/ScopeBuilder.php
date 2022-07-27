@@ -39,7 +39,7 @@ class ScopeBuilder extends Control
     /** @var array Fields to use for creating the rules. */
     public $fields = [];
 
-    /** @var HtmlTemplate The template needed for the ScopeBuilder view. */
+    /** @var HtmlTemplate|null The template needed for the ScopeBuilder view. */
     public $scopeBuilderTemplate;
 
     /** @var array List of delimiters for auto-detection in order of priority. */

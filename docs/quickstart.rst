@@ -38,9 +38,9 @@ Open a new file `index.php` and enter the following code::
     require_once __DIR__ . '/vendor/autoload.php'; // 2
 
     $app = new \Atk4\Ui\App('My First App');       // 3
-    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);                  // 4
+    $app->initLayout([\Atk4\Ui\Layout\Centered::class]); // 4
 
-    \Atk4\Ui\HelloWorld::addTo($app);                       // 5
+    \Atk4\Ui\HelloWorld::addTo($app);                    // 5
 
 .. rubric:: Clarifications
 
@@ -193,18 +193,18 @@ Form and Crud Components
 
 Next we need to add Components that are capable of manipulating the data::
 
-    $col = \Atk4\Ui\Columns::addTo($app, ['divided']);               // 10
-    $col_reload = new \Atk4\Ui\JsReload($col);              // 11
+    $col = \Atk4\Ui\Columns::addTo($app, ['divided']);        // 10
+    $col_reload = new \Atk4\Ui\JsReload($col);                // 11
 
-    $form = \Atk4\Ui\Form::addTo($col->addColumn());                 // 12
-    $form->setModel(new ToDoItem($s));                      // 13
-    $form->onSubmit(function (Form $form) use ($col_reload) {      // 14
-        $form->model->save();                               // 15
+    $form = \Atk4\Ui\Form::addTo($col->addColumn());          // 12
+    $form->setModel(new ToDoItem($s));                        // 13
+    $form->onSubmit(function (Form $form) use ($col_reload) { // 14
+        $form->model->save();                                 // 15
 
-        return $col_reload;                                 // 16
+        return $col_reload;                                   // 16
     });
 
-    \Atk4\Ui\Table::addTo($col->addColumn())                // 17
+    \Atk4\Ui\Table::addTo($col->addColumn())                  // 17
         ->setModel(new ToDoItem($s));
 
 .. rubric:: Clarifications

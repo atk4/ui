@@ -79,7 +79,7 @@ class Multiline extends Form\Control
 {
     use VueLookupTrait;
 
-    /** @var HtmlTemplate The template needed for the multiline view. */
+    /** @var HtmlTemplate|null The template needed for the multiline view. */
     public $multiLineTemplate;
 
     /** @var View The multiline View. Assigned in init(). */
@@ -143,7 +143,7 @@ class Multiline extends Form\Control
     /** @var JsCallback */
     private $renderCallback;
 
-    /** @var \Closure Function to execute when field change or row is delete. */
+    /** @var \Closure|null Function to execute when field change or row is delete. */
     protected $onChangeFunction;
 
     /** @var array Set fields that will trigger onChange function. */

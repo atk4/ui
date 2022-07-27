@@ -319,7 +319,7 @@ parameters:
             message: '~^Property Atk4\\Ui\\CardDeck::\$cardHolder \(Atk4\\Ui\\View\) does not accept default value of type array<int\|string, string>\.$~'
         -
             path: 'src/CardDeck.php'
-            message: '~^Property Atk4\\Ui\\CardDeck::\$paginator \(Atk4\\Ui\\Paginator\|null\) does not accept default value of type array<int, string>\.$~'
+            message: '~^Property Atk4\\Ui\\CardDeck::\$paginator \(Atk4\\Ui\\Paginator\|false\|null\) does not accept default value of type array\{''Atk4\\\\Ui\\\\Paginator''\}\.$~'
         -
             path: 'src/CardDeck.php'
             message: '~^Property Atk4\\Ui\\CardDeck::\$container \(Atk4\\Ui\\View\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
@@ -328,25 +328,19 @@ parameters:
             message: '~^Property Atk4\\Ui\\CardDeck::\$cardHolder \(Atk4\\Ui\\View\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/CardDeck.php'
-            message: '~^Property Atk4\\Ui\\CardDeck::\$menu \(array\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Property Atk4\\Ui\\CardDeck::\$menu \(array\|false\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/CardDeck.php'
-            message: '~^Property Atk4\\Ui\\CardDeck::\$search \(array\|Atk4\\Ui\\Component\\ItemSearch\) does not accept Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Property Atk4\\Ui\\CardDeck::\$search \(array\|Atk4\\Ui\\Component\\ItemSearch\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/CardDeck.php'
-            message: '~^Property Atk4\\Ui\\CardDeck::\$paginator \(Atk4\\Ui\\Paginator\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
-        -
-            path: 'src/Columns.php'
-            message: '~^Property Atk4\\Ui\\Columns::\$calculated_width \(int\) does not accept false\.$~'
+            message: '~^Property Atk4\\Ui\\CardDeck::\$paginator \(Atk4\\Ui\\Paginator\|false\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Console.php'
             message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Console::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Console.php'
             message: '~^Parameter #2 \$event \(bool\|string\) of method Atk4\\Ui\\Console::set\(\) should be contravariant with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
-        -
-            path: 'src/Console.php'
-            message: '~^Property Atk4\\Ui\\JsSse::\$echoFunction \(Closure\) does not accept false\.$~'
         -
             path: 'src/Form.php'
             message: '~^Property Atk4\\Ui\\Form::\$layout \(Atk4\\Ui\\Form\\Layout\) does not accept array<int, string>\.$~'
@@ -412,7 +406,7 @@ parameters:
             message: '~^Property Atk4\\Ui\\Grid::\$paginator \(Atk4\\Ui\\Paginator\|false\) does not accept null\.$~'
         -
             path: 'src/Grid.php'
-            message: '~^Property Atk4\\Ui\\Grid::\$actionButtons \(Atk4\\Ui\\Table\\Column\\ActionButtons\) does not accept Atk4\\Ui\\Table\\Column\.$~'
+            message: '~^Property Atk4\\Ui\\Grid::\$actionButtons \(Atk4\\Ui\\Table\\Column\\ActionButtons\|null\) does not accept Atk4\\Ui\\Table\\Column\.$~'
         -
             path: 'src/Grid.php'
             message: '~^Property Atk4\\Ui\\Grid::\$selection \(Atk4\\Ui\\Table\\Column\\Checkbox\) does not accept Atk4\\Ui\\Table\\Column\.$~'
@@ -430,7 +424,7 @@ parameters:
             message: '~^Property Atk4\\Ui\\Header::\$subHeader \(string\) does not accept \$this\(Atk4\\Ui\\Header\)\.$~'
         -
             path: 'src/JsSearch.php'
-            message: '~^Property Atk4\\Ui\\JsSearch::\$placeHolder \(Atk4\\Ui\\Form\\Control\\Line\) does not accept default value of type string\.$~'
+            message: '~^Property Atk4\\Ui\\JsSearch::\$placeHolder \(Atk4\\Ui\\Form\\Control\\Line\|null\) does not accept default value of type string\.$~'
         -
             path: 'src/Label.php'
             message: '~^Property Atk4\\Ui\\Label::\$detail \(string\|false\|null\) does not accept \$this\(Atk4\\Ui\\Label\)\.$~'
@@ -454,25 +448,16 @@ parameters:
             message: '~^Method Atk4\\Ui\\Panel\\Right::getDynamicContent\(\) should return Atk4\\Ui\\Panel\\LoadableContent but returns Atk4\\Ui\\View\|null\.$~'
         -
             path: 'src/Panel/Right.php'
-            message: '~^Property Atk4\\Ui\\Panel\\Right::\$closeModal \(Atk4\\Ui\\Modal\) does not accept Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Property Atk4\\Ui\\Panel\\Right::\$closeModal \(Atk4\\Ui\\Modal\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Popup.php'
             message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Popup::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
-        -
-            path: 'src/Table.php'
-            message: '~^Property Atk4\\Ui\\Table::\$totals_plan \(bool\) does not accept array\.$~'
-        -
-            path: 'src/Table.php'
-            message: '~^Argument of an invalid type bool supplied for foreach, only iterables are supported\.$~'
-        -
-            path: 'src/Table.php'
-            message: '~^Cannot access offset int\|string on bool\.$~'
         -
             path: 'src/Table/Column/FilterModel/TypeEnum.php'
             message: '~^Property Atk4\\Ui\\Table\\Column\\FilterModel::\$op \(Atk4\\Data\\Field\) does not accept null\.$~'
         -
             path: 'src/Text.php'
-            message: '~^Property Atk4\\Ui\\Text::\$defaultTemplate \(string\) does not accept default value of type false\.$~'
+            message: '~^Property Atk4\\Ui\\Text::\$defaultTemplate \(string\|null\) does not accept default value of type false\.$~'
         -
             path: 'src/View.php'
             message: '~^Parameter #1 \$object \(Atk4\\Ui\\View\) of method Atk4\\Ui\\View::add\(\) should be contravariant with parameter \$object \(Atk4\\Ui\\AbstractView\) of method Atk4\\Ui\\AbstractView::add\(\)$~'
@@ -491,192 +476,6 @@ parameters:
         -
             path: 'src/Wizard.php'
             message: '~^Method Atk4\\Ui\\Wizard::jsNext\(\) should return string but returns Atk4\\Ui\\JsExpression\.$~'
-
-        # TODO these rules are generated, this ignores should be fixed in the code
-        # for level = 4
-        -
-            path: 'demos/_includes/DemoLookup.php'
-            message: '~^If condition is always true\.$~'
-        -
-            path: 'demos/collection/multitable.php'
-            message: '~^Ternary operator condition is always false\.$~'
-        -
-            path: 'demos/collection/multitable.php'
-            message: '~^Left side of && is always true\.$~'
-        -
-            path: 'demos/collection/multitable.php'
-            message: '~^If condition is always true\.$~'
-        -
-            path: 'demos/collection/multitable.php'
-            message: '~^Ternary operator condition is always true\.$~'
-        -
-            path: 'demos/form/form.php'
-            message: '~^Unreachable statement \- code above always terminates\.$~'
-        -
-            path: 'src/App.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Card.php'
-            message: '~^Left side of && is always true\.$~'
-        -
-            path: 'src/CardDeck.php'
-            message: '~^Else branch is unreachable because ternary operator condition is always true\.$~'
-        -
-            path: 'src/CardDeck.php'
-            message: '~^Result of \|\| is always true\.$~'
-        -
-            path: 'src/Component/InlineEdit.php'
-            message: '~^Left side of && is always true\.$~'
-        -
-            path: 'src/Console.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Form/AbstractLayout.php'
-            message: '~^Else branch is unreachable because previous condition is always true\.$~'
-        -
-            path: 'src/Form/Control.php'
-            message: '~^Left side of && is always true\.$~'
-        -
-            path: 'src/Form/Control.php'
-            message: '~^Right side of && is always true\.$~'
-        -
-            path: 'src/Form/Control.php'
-            message: '~^If condition is always true\.$~'
-        -
-            path: 'src/Form/Control.php'
-            message: '~^Unreachable statement \- code above always terminates\.$~'
-        -
-            path: 'src/Form/Control/Checkbox.php'
-            message: '~^If condition is always true\.$~'
-        -
-            path: 'src/Form/Control/Checkbox.php'
-            message: '~^Ternary operator condition is always true\.$~'
-        -
-            path: 'src/Form/Control/Dropdown.php'
-            message: '~^If condition is always true\.$~'
-        -
-            path: 'src/Form/Control/Dropdown.php'
-            message: '~^Unreachable statement \- code above always terminates\.$~'
-        -
-            path: 'src/Form/Control/DropdownCascade.php'
-            message: '~^Ternary operator condition is always true\.$~'
-        -
-            path: 'src/Form/Control/Lookup.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Form/Control/Lookup.php'
-            message: '~^If condition is always true\.$~'
-        -
-            path: 'src/Form/Control/Lookup.php'
-            message: '~^Elseif condition is always true\.$~'
-        -
-            path: 'src/Form/Control/Lookup.php'
-            message: '~^Left side of && is always true\.$~'
-        -
-            path: 'src/Form/Control/Multiline.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Form/Control/Multiline.php'
-            message: '~^Ternary operator condition is always true\.$~'
-        -
-            path: 'src/Form/Control/Radio.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Form/Control/Radio.php'
-            message: '~^Ternary operator condition is always true\.$~'
-        -
-            path: 'src/Form/Control/ScopeBuilder.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Form/Control/ScopeBuilder.php'
-            message: '~^If condition is always true\.$~'
-        -
-            path: 'src/Form/Control/ScopeBuilder.php'
-            message: '~^Left side of && is always true\.$~'
-        -
-            path: 'src/Form/Control/TreeItemSelector.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Form/Control/Upload.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Form/Control/Upload.php'
-            message: '~^Ternary operator condition is always true\.$~'
-        -
-            path: 'src/Form/Layout.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Form/Layout/Custom.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/JsReload.php'
-            message: '~^Ternary operator condition is always true\.$~'
-        -
-            path: 'src/JsSearch.php'
-            message: '~^If condition is always true\.$~'
-        -
-            path: 'src/JsSse.php'
-            message: '~^If condition is always true\.$~'
-        -
-            path: 'src/JsSse.php'
-            message: '~^Unreachable statement \- code above always terminates\.$~'
-        -
-            path: 'src/Lister.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Loader.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Message.php'
-            message: '~^If condition is always true\.$~'
-        -
-            path: 'src/Paginator.php'
-            message: '~^If condition is always true\.$~'
-        -
-            path: 'src/Panel/Right.php'
-            message: '~^Ternary operator condition is always true\.$~'
-        -
-            path: 'src/Step.php'
-            message: '~^Strict comparison using \=\=\= between string and false will always evaluate to false\.$~'
-        -
-            path: 'src/Table.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Table.php'
-            message: '~^Ternary operator condition is always true\.$~'
-        -
-            path: 'src/Table/Column.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Table/Column/Multiformat.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/Table/Column/NoValue.php'
-            message: '~^Strict comparison using \=\=\= between mixed and null will always evaluate to false\.$~'
-        -
-            path: 'src/UserAction/BasicExecutor.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/UserAction/FormExecutor.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/View.php'
-            message: '~^Negated boolean expression is always false\.$~'
-        -
-            path: 'src/View.php'
-            message: '~^Result of && is always false\.$~'
-        -
-            path: 'src/View.php'
-            message: '~^Right side of && is always true\.$~'
-        -
-            path: 'src/View.php'
-            message: '~^Left side of && is always true\.$~'
-        -
-            path: 'src/View.php'
-            message: '~^If condition is always true\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 5
@@ -833,9 +632,6 @@ parameters:
         -
             path: 'demos/collection/multitable.php'
             message: '~^Property class@anonymous/demos/collection/multitable\.php:\d+::\$route has no type specified\.$~'
-        -
-            path: 'demos/collection/multitable.php'
-            message: '~^Method class@anonymous/demos/collection/multitable\.php:\d+::setModel\(\) has parameter \$route with no type specified\.$~'
         -
             path: 'demos/data-action/factory-view.php'
             message: '~^Property class@anonymous/demos/data\-action/factory\-view\.php:\d+::\$actionIcon has no type specified\.$~'
@@ -1009,16 +805,7 @@ parameters:
             message: '~^Method Atk4\\Ui\\Card::addExtraFields\(\) has no return type specified\.$~'
         -
             path: 'src/CardDeck.php'
-            message: '~^Strict comparison using \!\=\= between array\|null and false will always evaluate to true\.$~'
-        -
-            path: 'src/CardDeck.php'
-            message: '~^Strict comparison using \!\=\= between Atk4\\Ui\\Paginator\|null and false will always evaluate to true\.$~'
-        -
-            path: 'src/CardDeck.php'
             message: '~^Method Atk4\\Ui\\CardDeck::addMenuBar\(\) has no return type specified\.$~'
-        -
-            path: 'src/CardDeck.php'
-            message: '~^Strict comparison using \!\=\= between array\|Atk4\\Ui\\Component\\ItemSearch and false will always evaluate to true\.$~'
         -
             path: 'src/CardDeck.php'
             message: '~^Method Atk4\\Ui\\CardDeck::addPaginator\(\) has no return type specified\.$~'
@@ -1066,9 +853,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Columns::addColumn\(\) has no return type specified\.$~'
         -
             path: 'src/Columns.php'
-            message: '~^Strict comparison using \!\=\= between int and false will always evaluate to true\.$~'
-        -
-            path: 'src/Columns.php'
             message: '~^Method Atk4\\Ui\\Columns::addRow\(\) has no return type specified\.$~'
         -
             path: 'src/Console.php'
@@ -1109,9 +893,6 @@ parameters:
         -
             path: 'src/Form.php'
             message: '~^Method Atk4\\Ui\\Form::ajaxSubmit\(\) has no return type specified\.$~'
-        -
-            path: 'src/Form/AbstractLayout.php'
-            message: '~^Call to function is_array\(\) with array<int, array\{0: string, 1\?: array\{readonly: true\}\}> will always evaluate to true\.$~'
         -
             path: 'src/Form/Control.php'
             message: '~^Property Atk4\\Ui\\Form\\Control::\$width has no type specified\.$~'
@@ -1208,9 +989,6 @@ parameters:
         -
             path: 'src/Form/Control/Lookup.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Lookup::applyDependencyConditions\(\) has no return type specified\.$~'
-        -
-            path: 'src/Form/Control/Lookup.php'
-            message: '~^Instanceof between Closure and Closure will always evaluate to true\.$~'
         -
             path: 'src/Form/Control/Lookup.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Lookup::initDropdown\(\) has no return type specified\.$~'
@@ -1333,9 +1111,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Grid::setIpp\(\) has no return type specified\.$~'
         -
             path: 'src/Grid.php'
-            message: '~^Instanceof between Atk4\\Ui\\JsSearch and Atk4\\Ui\\JsSearch will always evaluate to true\.$~'
-        -
-            path: 'src/Grid.php'
             message: '~^Method Atk4\\Ui\\Grid::addQuickSearch\(\) has no return type specified\.$~'
         -
             path: 'src/Grid.php'
@@ -1446,24 +1221,6 @@ parameters:
             path: 'src/JsNotify.php'
             message: '~^Method Atk4\\Ui\\JsNotify::attachTo\(\) has parameter \$to with no type specified\.$~'
         -
-            path: 'src/JsReload.php'
-            message: '~^Property Atk4\\Ui\\JsReload::\$includeStorage has no type specified\.$~'
-        -
-            path: 'src/JsReload.php'
-            message: '~^Method Atk4\\Ui\\JsReload::__construct\(\) has parameter \$afterSuccess with no type specified\.$~'
-        -
-            path: 'src/JsReload.php'
-            message: '~^Method Atk4\\Ui\\JsReload::__construct\(\) has parameter \$apiConfig with no type specified\.$~'
-        -
-            path: 'src/JsReload.php'
-            message: '~^Method Atk4\\Ui\\JsReload::__construct\(\) has parameter \$args with no type specified\.$~'
-        -
-            path: 'src/JsReload.php'
-            message: '~^Method Atk4\\Ui\\JsReload::__construct\(\) has parameter \$includeStorage with no type specified\.$~'
-        -
-            path: 'src/JsReload.php'
-            message: '~^Method Atk4\\Ui\\JsReload::__construct\(\) has parameter \$view with no type specified\.$~'
-        -
             path: 'src/JsSearch.php'
             message: '~^Property Atk4\\Ui\\JsSearch::\$filterIcon has no type specified\.$~'
         -
@@ -1472,9 +1229,6 @@ parameters:
         -
             path: 'src/JsSearch.php'
             message: '~^Property Atk4\\Ui\\JsSearch::\$btnRemoveIcon has no type specified\.$~'
-        -
-            path: 'src/JsSearch.php'
-            message: '~^Property Atk4\\Ui\\JsSearch::\$btnStyle has no type specified\.$~'
         -
             path: 'src/JsSse.php'
             message: '~^Method Atk4\\Ui\\JsSse::send\(\) has no return type specified\.$~'
@@ -1690,9 +1444,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Table::initChunks\(\) has no return type specified\.$~'
         -
             path: 'src/Table.php'
-            message: '~^Call to function is_string\(\) with string will always evaluate to true\.$~'
-        -
-            path: 'src/Table.php'
             message: '~^Method Atk4\\Ui\\Table::setFilterColumn\(\) has no return type specified\.$~'
         -
             path: 'src/Table.php'
@@ -1784,9 +1535,6 @@ parameters:
         -
             path: 'src/Table/Column/KeyValue.php'
             message: '~^Property Atk4\\Ui\\Table\\Column\\KeyValue::\$values has no type specified\.$~'
-        -
-            path: 'src/Table/Column/Multiformat.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\Multiformat::__construct\(\) has parameter \$callback with no type specified\.$~'
         -
             path: 'src/Tabs.php'
             message: '~^Method Atk4\\Ui\\Tabs::addTabUrl\(\) has no return type specified\.$~'
@@ -1892,9 +1640,6 @@ parameters:
         -
             path: 'src/UserAction/PreviewExecutor.php'
             message: '~^Method Atk4\\Ui\\UserAction\\PreviewExecutor::executePreview\(\) has no return type specified\.$~'
-        -
-            path: 'src/View.php'
-            message: '~^Call to function is_string\(\) with string will always evaluate to true\.$~'
         -
             path: 'src/View.php'
             message: '~^Instanceof between Atk4\\Ui\\View and Atk4\\Ui\\View will always evaluate to true\.$~'

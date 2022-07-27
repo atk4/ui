@@ -16,12 +16,12 @@ use Atk4\Ui\View;
  */
 class Control extends View
 {
-    /** @var Form to which this field belongs */
+    /** @var Form|null to which this field belongs */
     public $form;
 
     /**
-     * @var EntityFieldPair
-     * @phpstan-var EntityFieldPair<Model, Field>
+     * @var EntityFieldPair|null
+     * @phpstan-var EntityFieldPair<Model, Field>|null
      */
     public $entityField;
 

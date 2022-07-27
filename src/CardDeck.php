@@ -41,16 +41,16 @@ class CardDeck extends View
     /** @var View The view containing Cards. */
     public $cardHolder = [View::class, 'ui' => 'cards'];
 
-    /** @var Paginator|null The paginator view. */
+    /** @var Paginator|false|null The paginator view. */
     public $paginator = [Paginator::class];
 
     /** @var int The number of cards to be displayed per page. */
     public $ipp = 9;
 
-    /** @var array|null A menu seed for displaying button inside. */
+    /** @var array|false|null A menu seed for displaying button inside. */
     public $menu = [View::class, 'ui' => 'stackable grid'];
 
-    /** @var array|ItemSearch */
+    /** @var array|false|ItemSearch */
     public $search = [ItemSearch::class, 'ui' => 'ui compact basic segment'];
 
     /** @var View|null A view container for buttons. Added into menu when menu is set. */

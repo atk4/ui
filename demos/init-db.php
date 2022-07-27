@@ -288,7 +288,7 @@ class Stat extends ModelWithPrefixedFields
 
 class Percent extends \Atk4\Data\Field
 {
-    public $type = 'float'; // will need to be able to affect rendering and storage
+    public $type = 'float';
 }
 
 /**

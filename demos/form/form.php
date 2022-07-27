@@ -154,7 +154,7 @@ $form->onSubmit(function (Form $form) {
     throw (new \Atk4\Core\Exception('testing'))
         ->addMoreInfo('arg1', 'val1');
 
-    return 'somehow it did not crash';
+    // return 'somehow it did not crash';
 });
 
 \Atk4\Ui\Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', \Atk4\Ui\Modal::addTo($form)
@@ -165,7 +165,7 @@ $form->onSubmit(function (Form $form) {
             throw (new \Atk4\Core\Exception('testing'))
                 ->addMoreInfo('arg1', 'val1');
 
-            return 'somehow it did not crash';
+            // return 'somehow it did not crash';
         });
     })->show());
 

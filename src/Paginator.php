@@ -34,7 +34,7 @@ class Paginator extends View
      * If specified, must be instance of a view which will be reloaded on click.
      * Otherwise will use link to current page.
      *
-     * @var View
+     * @var View|null
      */
     public $reload;
 

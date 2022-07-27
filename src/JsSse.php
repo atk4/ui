@@ -28,7 +28,7 @@ class JsSse extends JsCallback
     /** @var bool Keep execution alive or not if connection is close by user. False mean that execution will stop on user aborted. */
     public $keepAlive = false;
 
-    /** @var \Closure custom function for outputting (instead of echo) */
+    /** @var \Closure|null custom function for outputting (instead of echo) */
     public $echoFunction;
 
     protected function init(): void

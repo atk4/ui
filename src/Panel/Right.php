@@ -23,7 +23,7 @@ class Right extends View implements Loadable
 {
     public $defaultTemplate = 'panel/right.html';
 
-    /** @var Modal */
+    /** @var Modal|null */
     public $closeModal;
     /** @var array Confirmation Modal default */
     public $defaultModal = [Modal::class, 'class' => ['mini']];

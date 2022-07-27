@@ -27,7 +27,7 @@ class Table extends Lister
      * when you pass it to addColumn(). If you omit the argument, then a column of a type Table\Column
      * will be used.
      *
-     * @var Table\Column
+     * @var Table\Column|null
      */
     public $default_column;
 
@@ -46,7 +46,7 @@ class Table extends Lister
      * Determines a strategy on how totals will be calculated. Do not touch those fields
      * direcly, instead use addTotals().
      *
-     * @var bool
+     * @var array|false
      */
     public $totals_plan = false;
 
@@ -56,7 +56,7 @@ class Table extends Lister
     /** @var array Contains list of totals accumulated during the render process. */
     public $totals = [];
 
-    /** @var HtmlTemplate Contain the template for the "Head" type row. */
+    /** @var HtmlTemplate|null Contain the template for the "Head" type row. */
     public $t_head;
 
     /** @var HtmlTemplate */
@@ -196,9 +196,6 @@ class Table extends Lister
 
         if ($name === null) {
             $this->columns[] = $columnDecorator;
-        } elseif (!is_string($name)) {
-            throw (new Exception('Name must be a string'))
-                ->addMoreInfo('name', $name);
         } elseif (isset($this->columns[$name])) {
             throw (new Exception('Table already has column with $name. Try using addDecorator()'))
                 ->addMoreInfo('name', $name);
@@ -313,7 +310,7 @@ class Table extends Lister
             $seed,
             $field->ui['table'] ?? null,
             $this->typeToDecorator[$field->type] ?? null,
-            [$this->default_column ? $this->default_column : Table\Column::class]
+            [$this->default_column ?? Table\Column::class]
         );
 
         return $this->_addUnchecked(Table\Column::fromSeed($seed, ['table' => $this]));
