@@ -117,12 +117,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
             }
         }
 
-        if (is_array($controls)) {
-            $this->addControls($controls);
-        } else {
-            throw (new Exception('Incorrect value for $fields'))
-                ->addMoreInfo('controls', $controls);
-        }
+        $this->addControls($controls);
     }
 
     /**

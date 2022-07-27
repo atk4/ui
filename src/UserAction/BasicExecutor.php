@@ -19,7 +19,7 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
     /** @const string */
     public const HOOK_AFTER_EXECUTE = self::class . '@afterExecute';
 
-    /** @var Model\UserAction */
+    /** @var Model\UserAction|null */
     public $action;
 
     /** @var bool display header or not */

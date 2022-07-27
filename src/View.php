@@ -25,14 +25,14 @@ class View extends AbstractView implements JsExpressionable
      */
     public $_js_actions = [];
 
-    /** @var Model Data model. */
+    /** @var Model|null */
     public $model;
 
     /**
      * Name of the region in the parent's template where this object
      * will output itself.
      *
-     * @var string
+     * @var string|null
      */
     public $region;
 
@@ -60,7 +60,7 @@ class View extends AbstractView implements JsExpressionable
      * a new Template will be generated during init() based on the
      * value of $defaultTemplate.
      *
-     * @var HtmlTemplate
+     * @var HtmlTemplate|null
      */
     public $template;
 
@@ -70,7 +70,7 @@ class View extends AbstractView implements JsExpressionable
      * If you specify a string, then it will be considered a filename
      * from which to load the $template.
      *
-     * @var string
+     * @var string|null
      */
     public $defaultTemplate = 'element.html';
 

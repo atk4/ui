@@ -14,7 +14,7 @@ require_once __DIR__ . '/../init-app.php';
 $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\Columns {
     public $route = [];
 
-    public function setModel(Model $model, $route = []): void
+    public function setModel(Model $model, array $route = []): void
     {
         parent::setModel($model);
 
@@ -30,18 +30,22 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
             $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
         }
 
+        $makeJsReloadFx = function (array $path): \Atk4\Ui\JsReload {
+            return new \Atk4\Ui\JsReload($this, [$this->name => new \Atk4\Ui\JsExpression('[] + []', [
+                count($path) > 0 ? implode(',', $path) . ',' : '',
+                new \Atk4\Ui\JsExpression('$(this).data("id")'),
+            ])]);
+        };
+
         $path = [];
-        $jsReload = new \Atk4\Ui\JsReload($this, [$this->name => new \Atk4\Ui\JsExpression('[] + []', [
-            $path ? (implode(',', $path) . ',') : '',
-            new \Atk4\Ui\JsExpression('$(this).data("id")'),
-        ])]);
+        $jsReload = $makeJsReloadFx($path);
         $table->on('click', 'tr', $jsReload);
 
-        while ($selections && $id = array_shift($selections)) {
+        while ($id = array_shift($selections)) {
             $path[] = $id;
             $pushModel = new $model($model->getPersistence());
             $pushModel = $pushModel->tryLoad($id);
-            if (!$pushModel->isLoaded()) {
+            if ($pushModel === null) {
                 break;
             }
             $ref = array_shift($route);
@@ -62,10 +66,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
                 $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
             }
 
-            $jsReload = new \Atk4\Ui\JsReload($this, [$this->name => new \Atk4\Ui\JsExpression('[] + []', [
-                $path ? (implode(',', $path) . ',') : '',
-                new \Atk4\Ui\JsExpression('$(this).data("id")'),
-            ])]);
+            $jsReload = $makeJsReloadFx($path);
             $table->on('click', 'tr', $jsReload);
         }
     }

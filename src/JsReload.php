@@ -16,7 +16,7 @@ class JsReload implements JsExpressionable
     /** @var View Specifies which view to reload. Use constructor to set. */
     public $view;
 
-    /** @var JsExpression A Js function to execute after reload is complete and onSuccess is execute. */
+    /** @var JsExpression|null A Js function to execute after reload is complete and onSuccess is execute. */
     public $afterSuccess;
 
     /**
@@ -35,9 +35,10 @@ class JsReload implements JsExpressionable
      */
     public $apiConfig = [];
 
+    /** @var bool */
     public $includeStorage = false;
 
-    public function __construct($view, $args = [], $afterSuccess = null, $apiConfig = [], $includeStorage = false)
+    public function __construct(View $view, array $args = [], JsExpression $afterSuccess = null, array $apiConfig = [], bool $includeStorage = false)
     {
         $this->view = $view;
         $this->args = $args;

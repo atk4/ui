@@ -63,8 +63,8 @@ class App
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
 
-    /** @var Layout */
-    public $layout; // the top-most view object
+    /** @var Layout the top-most view object */
+    public $layout;
 
     /** @var string|array Set one or more directories where templates should reside. */
     public $templateDir;
@@ -531,9 +531,9 @@ class App
      */
     public function add($seed, $region = null): AbstractView
     {
-        if (!$this->layout) {
+        if (!$this->layout) { // @phpstan-ignore-line
             throw (new Exception('App layout is missing'))
-                ->addSolution('If you use $app->add() you should first call $app->initLayout()');
+                ->addSolution('If you use $app->add() you should call $app->initLayout() first');
         }
 
         return $this->layout->add($seed, $region);

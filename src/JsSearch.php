@@ -24,7 +24,7 @@ class JsSearch extends View
      */
     public $autoQuery = false;
 
-    /** @var Form\Control\Line The input field. */
+    /** @var Form\Control\Line|null The input field. */
     public $placeHolder = 'Search';
 
     /**
@@ -61,6 +61,7 @@ class JsSearch extends View
     public $filterIcon = 'filter';
     public $btnSearchIcon = 'search';
     public $btnRemoveIcon = 'red remove';
+    /** @var string|null */
     public $btnStyle;
 
     protected function init(): void

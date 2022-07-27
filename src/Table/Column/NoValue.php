@@ -36,7 +36,7 @@ class NoValue extends Table\Column
     {
         $actualValue = $field->get($row);
 
-        if (empty($actualValue) || $actualValue === null) {
+        if ($actualValue === null || $actualValue === '') {
             return [$field->shortName => $this->no_value];
         }
 

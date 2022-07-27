@@ -20,7 +20,7 @@ class Message extends View
     /** @var 'info'|'warning'|'success'|'error'|null */
     public $type;
 
-    /** @var Text|false Contains a text to be included below. */
+    /** @var Text|false|null Contains a text to be included below. */
     public $text;
 
     /** @var string Specify icon to be displayed. */

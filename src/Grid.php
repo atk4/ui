@@ -22,7 +22,7 @@ class Grid extends View
     /** @var Menu|false Will be initialized to Menu object, however you can set this to false to disable menu. */
     public $menu;
 
-    /** @var JsSearch */
+    /** @var JsSearch|null */
     public $quickSearch;
 
     /** @var array Field names to search for in Model. It will automatically add quicksearch component to grid if set. */
@@ -44,7 +44,7 @@ class Grid extends View
      * Calling addActionButton will add a new column inside $table, and will be re-used
      * for next addActionButton().
      *
-     * @var Table\Column\ActionButtons
+     * @var Table\Column\ActionButtons|null
      */
     public $actionButtons;
 
@@ -52,7 +52,7 @@ class Grid extends View
      * Calling addAction will add a new column inside $table with dropdown menu,
      * and will be re-used for next addActionMenuItem().
      *
-     * @var Table\Column
+     * @var Table\Column|null
      */
     public $actionMenu;
 
@@ -383,11 +383,11 @@ class Grid extends View
 
     private function getActionButtons(): ActionButtons
     {
-        if (!$this->actionButtons) {
+        if ($this->actionButtons === null) {
             $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
         }
 
-        return $this->actionButtons;
+        return $this->actionButtons; // @phpstan-ignore-line
     }
 
     /**
@@ -525,11 +525,7 @@ class Grid extends View
      */
     public function addModalAction($button, $title, \Closure $callback, $args = [])
     {
-        if (!$this->actionButtons) {
-            $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
-        }
-
-        return $this->actionButtons->addModal($button, $title, $callback, $this, $args);
+        return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args);
     }
 
     /**

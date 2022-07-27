@@ -9,7 +9,7 @@ namespace Atk4\Ui\Demos;
  */
 class Counter extends \Atk4\Ui\Form\Control\Line
 {
-    public $content = '20'; // default
+    public $content = '20';
 
     protected function init(): void
     {

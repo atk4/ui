@@ -6,7 +6,6 @@ namespace Atk4\Ui\Table;
 
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\Popup;
@@ -268,12 +267,6 @@ class Column
      */
     public function getHeaderCellHtml(Field $field = null, $value = null)
     {
-        if (!$this->table) {
-            throw (new Exception('How $table could not be set??'))
-                ->addMoreInfo('field', $field)
-                ->addMoreInfo('value', $value);
-        }
-
         if ($tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value])) {
             return reset($tags);
         }

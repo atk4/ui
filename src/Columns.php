@@ -21,7 +21,7 @@ class Columns extends View
      */
     public $width;
 
-    /** @var int Sum of all column widths added so far. */
+    /** @var int|false Sum of all column widths added so far. */
     protected $calculated_width = 0;
 
     /** @var array Allows Grid to calculate widths automatically. */

@@ -11,7 +11,7 @@ use Atk4\Ui\Callback;
 
 trait VueLookupTrait
 {
-    /** @var Callback */
+    /** @var Callback|null */
     public $dataCb;
 
     public function initVueLookupCallback(): void
