@@ -15,14 +15,14 @@ class MyTestModel extends Model
         parent::init();
 
         $this->addField('regular_field');
-        $this->addField('just_for_data', ['never_persist' => true]);
-        $this->addField('no_persist_but_show_in_ui', ['never_persist' => true, 'ui' => ['editable' => true]]);
+        $this->addField('just_for_data', ['neverPersist' => true]);
+        $this->addField('no_persist_but_show_in_ui', ['neverPersist' => true, 'ui' => ['editable' => true]]);
     }
 }
 
 /**
  * Test is designed to verify that field which is explicitly editable should appear and be editable
- * even if 'never_persist' is set to true.
+ * even if 'neverPersist' is set to true.
  */
 class ForFieldUiTest extends TestCase
 {

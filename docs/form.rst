@@ -104,7 +104,7 @@ The basic 2-line syntax will extract all the required logic from the Model inclu
  - Field typecasting will be invoked such as for converting dates
  - Reference fields (https://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as Dropdown
  - Booleans are displayed as checkboxes but stored as defined by the model field
- - Mandatory and Required fields will have form controls visually highlighted (https://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$mandatory)
+ - Not-nullable and Required fields will have form controls visually highlighted (https://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$nullable)
  - Validation will be performed and errors will appear on the form (NEED LINK)
  - Unless you specify a submission handler, form will save the model ``User`` into ``$db`` on successful submission.
 
@@ -254,7 +254,7 @@ There are 3 ways to define Data form control using 'string', 'json' or 'object':
     $form->addControl('gender', [], ['enum' => ['Female', 'Male']]);
 
     class MyBoolean extends \Atk4\Data\Field {
-        public $type = 'boolean';
+        public ?string $type = 'boolean';
         public $enum = ['N', 'Y'];
     }
     $form->addControl('test2', [], new MyBoolean());
@@ -279,7 +279,7 @@ addControl into Form with Existing Model
 ----------------------------------------
 
 If your form is using a model and you add an additional control, then the underlying model field will be created but it will
-be set as "never_persist" (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$never_persist).
+be set as "neverPersist" (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$neverPersist).
 
 This is to make sure that data from custom form controls wouldn't go directly into the database. Next
 example displays a registration form for a User::
@@ -424,7 +424,7 @@ it's always nicer to load values for the database. Given a ``User`` model this i
 you can create a form to change profile of a currently logged user::
 
     $user = new User($db);
-    $user->getControl('password')->never_persist = true; // ignore password field
+    $user->getControl('password')->neverPersist = true; // ignore password field
     $user = $user->load($current_user);
 
     // Display all fields (except password) and values
@@ -442,7 +442,7 @@ see https://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields
     $form->setModel((new User($db))->load($current_user), ['email', 'name']);
 
 As before, field ``password`` will not be loaded from the database, but this time
-using onlyFields restriction rather then `never_persist`.
+using onlyFields restriction rather then `neverPersist`.
 
 Validating
 ----------
@@ -722,14 +722,14 @@ form inside a segment (outline) and will make form controls appear smaller::
 
 For further styling see documentation on :php:class:`View`.
 
-Mandatory and Required Fields
+Not-Nullable and Required Fields
 =============================
 
-ATK Data has two field flags - "mandatory" and "required". Because ATK Data works with PHP
+ATK Data has two field flags - "nullable" and "required". Because ATK Data works with PHP
 values, the values are defined like this:
 
- - mandatory = value of the field must not be null.
- - required = value of the field must not be empty. (see is_empty())
+ - nullable = value of the field can be null.
+ - required = value of the field must not be empty (see `empty()`), null is empty too.
 
 Form changes things slightly, because it does not allow user to enter NULL values. For
 example - string (or unspecified type) fields will contain empty string if are not
@@ -739,7 +739,7 @@ When working with other types such as numeric values and dates - empty string is
 a valid number (or date) and therefore will be converted to NULL.
 
 So in most cases you'd want "required=true" flag set on your ATK Data fields. For
-numeric field, if zero must be a permitted entry, use "mandatory=true" instead.
+numeric field, if zero must be a permitted entry, use "nullable=false" instead.
 
 
 Conditional Form

@@ -60,17 +60,17 @@ class Ui extends Persistence
     public function typecastSaveField(Field $field, $value)
     {
         // relax empty checks for UI render for not yet set values
+        $fieldNullableOrig = $field->nullable;
         $fieldRequiredOrig = $field->required;
-        $fieldMandatoryOrig = $field->mandatory;
         if (in_array($value, [null, false, 0, 0.0, ''], true)) {
+            $field->nullable = true;
             $field->required = false;
-            $field->mandatory = false;
         }
         try {
             return parent::typecastSaveField($field, $value);
         } finally {
+            $field->nullable = $fieldNullableOrig;
             $field->required = $fieldRequiredOrig;
-            $field->mandatory = $fieldMandatoryOrig;
         }
     }
 

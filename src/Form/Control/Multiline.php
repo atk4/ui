@@ -320,7 +320,7 @@ class Multiline extends Form\Control
                 try {
                     $field = $entity->getField($fieldName);
                     // Save field value only if the field was editable
-                    if (!$field->read_only) {
+                    if (!$field->readOnly) {
                         $entity->set($fieldName, $value);
                     }
                 } catch (\Atk4\Core\Exception $e) {
@@ -430,9 +430,9 @@ class Multiline extends Form\Control
     /**
      * Set hasMany reference model to use with multiline.
      *
-     * Note: When using setReferenceModel you might need to set this corresponding field to never_persist to true.
+     * Note: When using setReferenceModel you might need to set this corresponding field to neverPersist to true.
      * Otherwise, form will try to save 'multiline' field value as an array when form is save.
-     * $multiline = $form->addControl('multiline', [Multiline::class], ['never_persist' => true])
+     * $multiline = $form->addControl('multiline', [Multiline::class], ['neverPersist' => true])
      */
     public function setReferenceModel(string $refModelName, Model $modelEntity = null, array $fieldNames = []): void
     {

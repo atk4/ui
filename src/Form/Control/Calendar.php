@@ -15,7 +15,7 @@ class Calendar extends Input
     /**
      * Set this to 'date', 'time', 'datetime'.
      */
-    public $type = 'date';
+    public string $type = 'date';
 
     /**
      * Any other options you'd like to pass to flatpickr JS.

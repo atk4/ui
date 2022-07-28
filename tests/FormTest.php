@@ -153,15 +153,15 @@ class FormTest extends TestCase
 
         $m->addField('opt1', ['values' => $options]);
         $m->addField('opt2', ['values' => $options]);
-        $m->addField('opt3', ['values' => $options, 'required' => true]);
-        $m->addField('opt3_z', ['values' => $options, 'required' => true]);
-        $m->addField('opt4', ['values' => $options, 'mandatory' => true]);
-        $m->addField('opt4_z', ['values' => $options, 'mandatory' => true]);
+        $m->addField('opt3', ['values' => $options, 'nullable' => false]);
+        $m->addField('opt3_z', ['values' => $options, 'nullable' => false]);
+        $m->addField('opt4', ['values' => $options, 'required' => true]);
+        $m->addField('opt4_z', ['values' => $options, 'required' => true]);
 
         $m = $m->createEntity();
         $this->form->setModel($m);
 
-        $this->assertSubmitError(['opt1' => '2', 'opt3' => '', 'opt3_z' => '0', 'opt4_z' => '0'], function ($error) {
+        $this->assertSubmitError(['opt1' => '2', 'opt3_z' => '0', 'opt4' => '', 'opt4_z' => '0'], function ($error) {
             // dropdown validates to make sure option is proper
             $this->assertFormControlError('opt1', 'not one of the allowed values');
 
@@ -169,10 +169,10 @@ class FormTest extends TestCase
             $this->assertFromControlNoErrors('opt2');
 
             // dropdown insists for value to be there
-            $this->assertFormControlError('opt3', 'Must not be empty');
-            $this->assertFormControlError('opt3_z', 'Must not be empty');
-            $this->assertFormControlError('opt4', 'Must not be null');
-            $this->assertFromControlNoErrors('opt4_z');
+            $this->assertFormControlError('opt3', 'Must not be null');
+            $this->assertFromControlNoErrors('opt3_z');
+            $this->assertFormControlError('opt4', 'Must not be empty');
+            $this->assertFormControlError('opt4_z', 'Must not be empty');
         });
     }
 }
