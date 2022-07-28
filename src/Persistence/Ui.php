@@ -131,11 +131,6 @@ class Ui extends Persistence
      */
     protected function _typecastLoadField(Field $field, $value)
     {
-        // always normalize string EOL
-        if (is_string($value)) {
-            $value = preg_replace('~\r?\n|\r~', "\n", $value);
-        }
-
         switch ($field->type) {
             case 'boolean':
                 if (is_string($value)) {
@@ -207,14 +202,13 @@ class Ui extends Persistence
                 throw new Exception('Object serialization is not supported');
         }
 
-        if ($field->hasReference()) {
-            if (empty($value)) {
-                return null;
-            }
-        }
-
-        // typecast using DBAL types
+        // typecast using DBAL type and normalize
         $value = parent::_typecastLoadField($field, $value);
+        $value = (new Field(['type' => $field->type]))->normalize($value);
+
+        if ($field->hasReference() && $value === '') {
+            return null;
+        }
 
         if ($value !== null && $field instanceof PasswordField && !$field->hashPasswordIsHashed($value)) {
             $value = $field->hashPassword($value);
