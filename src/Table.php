@@ -160,8 +160,7 @@ class Table extends Lister
             $field = null;
         } elseif (!$this->model->hasField($name)) {
             $field = $this->model->addField($name, $field);
-
-            $field->never_persist = true;
+            $field->neverPersist = true;
         } else {
             $existingField = $this->model->getField($name);
 

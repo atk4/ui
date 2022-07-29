@@ -40,10 +40,15 @@ class PersistenceUiTest extends TestCase
     public function providerTypecast(): iterable
     {
         yield [[], [], '1', '1'];
+        yield [[], [], '0', '0'];
         yield [[], ['type' => 'string'], '1', '1'];
+        yield [[], ['type' => 'string'], '0', '0'];
+        yield [[], ['type' => 'text'], "\n0\n\n0", "\n0\n\n0"];
         yield [[], ['type' => 'integer'], 1, '1'];
+        yield [[], ['type' => 'integer'], 0, '0'];
         yield [[], ['type' => 'integer'], -10000, '-10000'];
         yield [[], ['type' => 'float'], 1.0, '1'];
+        yield [[], ['type' => 'float'], 0.0, '0'];
         yield [[], ['type' => 'float'], -10000.0, '-10000'];
         yield [[], ['type' => 'float'], 1.100123, '1.100123'];
         yield [[], ['type' => 'boolean'], false, 'No'];
@@ -64,6 +69,7 @@ class PersistenceUiTest extends TestCase
 
         $fixSpaceToNbspFx = fn (string $v) => str_replace(' ', "\u{00a0}", $v);
         yield [[], ['type' => 'atk4_money'], 1.0, $fixSpaceToNbspFx('€ 1.00')];
+        yield [[], ['type' => 'atk4_money'], 0.0, $fixSpaceToNbspFx('€ 0.00')];
         yield [['currency' => ''], ['type' => 'atk4_money'], 1.0, $fixSpaceToNbspFx('1.00')];
         yield [['currency' => '$'], ['type' => 'atk4_money'], 1.0, $fixSpaceToNbspFx('$ 1.00')];
         yield [[], ['type' => 'atk4_money'], 1.1023, $fixSpaceToNbspFx('€ 1.1023')];
@@ -75,7 +81,7 @@ class PersistenceUiTest extends TestCase
         yield [['currency_thousands_separator' => ','], ['type' => 'atk4_money'], 1000.0, $fixSpaceToNbspFx('€ 1,000.00')];
         yield [['currency_decimal_separator' => ',', 'currency_thousands_separator' => '.'], ['type' => 'atk4_money'], 1000.0, $fixSpaceToNbspFx('€ 1.000,00')];
 
-        foreach (['string', 'integer', 'float', 'boolean', 'date', 'time', 'datetime', 'atk4_money'] as $type) {
+        foreach (['string', 'text', 'integer', 'float', 'boolean', 'date', 'time', 'datetime', 'atk4_money'] as $type) {
             yield [[], ['type' => $type], null, null];
         }
     }

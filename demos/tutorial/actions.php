@@ -125,7 +125,7 @@ $wizard->addStep('Arguments', function ($page) {
         $model->addUserAction('greet', [
             'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
             'args' => [
-                'age' => [
+                'name' => [
                     'type' => 'string',
                 ],
             ],
@@ -142,7 +142,7 @@ $wizard->addStep('Arguments', function ($page) {
                     'required' => true,
                 ],
             ],
-            'callback' => function (Model $model, $age) {
+            'callback' => function (Model $model, int $age) {
                 return 'Age is ' . $age;
             },
         ]);

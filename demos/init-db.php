@@ -252,7 +252,7 @@ class Stat extends ModelWithPrefixedFields
 
         $this->addField($this->fieldName()->is_commercial, ['type' => 'boolean']);
         $this->addField($this->fieldName()->currency, ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
-        $this->addField($this->fieldName()->currency_symbol, ['never_persist' => true]);
+        $this->addField($this->fieldName()->currency_symbol, ['neverPersist' => true]);
         $this->onHook(Model::HOOK_AFTER_LOAD, function (self $model) {
             /* implementation for "intl"
             $locale = 'en-UK';
@@ -288,7 +288,7 @@ class Stat extends ModelWithPrefixedFields
 
 class Percent extends \Atk4\Data\Field
 {
-    public $type = 'float';
+    public ?string $type = 'float';
 }
 
 /**

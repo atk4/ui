@@ -53,10 +53,10 @@ $values = [0 => 'noob', 1 => 'pro', 2 => 'dev'];
 $form->addControl('description', [Form\Control\Textarea::class])->set(0);
 $form->addControl('no_description', [Form\Control\Textarea::class])->set(null);
 $form->addControl('status_optional', [Form\Control\Dropdown::class, 'values' => $values]);
+$form->addControl('status_string_not-nullable', [Form\Control\Dropdown::class], ['type' => 'string', 'values' => $values, 'nullable' => false]);
+$form->addControl('status_integer_not-nullable', [Form\Control\Dropdown::class], ['type' => 'integer', 'values' => $values, 'nullable' => false]);
 $form->addControl('status_string_required', [Form\Control\Dropdown::class], ['type' => 'string', 'values' => $values, 'required' => true]);
 $form->addControl('status_integer_required', [Form\Control\Dropdown::class], ['type' => 'integer', 'values' => $values, 'required' => true]);
-$form->addControl('status_string_mandatory', [Form\Control\Dropdown::class], ['type' => 'string', 'values' => $values, 'mandatory' => true]);
-$form->addControl('status_integer_mandatory', [Form\Control\Dropdown::class], ['type' => 'integer', 'values' => $values, 'mandatory' => true]);
 
 $form->onSubmit(function (Form $form) use ($app) {
     return new \Atk4\Ui\JsToast($app->encodeJson($form->model->get()));
@@ -178,7 +178,7 @@ $tab = $tabs->addTab('Complex Examples');
 $modelRegister = new \Atk4\Data\Model(new Persistence\Array_());
 $modelRegister->addField('name');
 $modelRegister->addField('email');
-$modelRegister->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);
+$modelRegister->addField('is_accept_terms', ['type' => 'boolean', 'nullable' => false]);
 $modelRegister = $modelRegister->createEntity();
 
 $form = Form::addTo($tab, ['class.segment' => true]);

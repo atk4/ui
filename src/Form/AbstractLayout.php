@@ -105,7 +105,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
             $fields = $this->getModelFields($model);
         }
 
-        // prepare array of controls - check if fields are editable or read_only/disabled
+        // prepare array of controls - check if fields are editable or readOnly/disabled
         $controls = [];
         foreach ($fields as $fieldName) {
             $field = $model->getField($fieldName);

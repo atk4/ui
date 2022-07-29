@@ -29,7 +29,7 @@ class Control extends View
     public $controlClass = '';
 
     /** @var bool Whether you need this field to be rendered wrap in a form layout or as his */
-    public $layoutWrap = true;
+    public bool $layoutWrap = true;
 
     /** @var bool rendered or not input label in generic Form\Layout template. */
     public $renderLabel = true;

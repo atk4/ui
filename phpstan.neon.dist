@@ -904,9 +904,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Form\\Control::jsInput\(\) has parameter \$when with no type specified\.$~'
         -
             path: 'src/Form/Control/Calendar.php'
-            message: '~^Property Atk4\\Ui\\Form\\Control\\Calendar::\$type has no type specified\.$~'
-        -
-            path: 'src/Form/Control/Calendar.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\Calendar::\$options has no type specified\.$~'
         -
             path: 'src/Form/Control/Calendar.php'
@@ -944,12 +941,6 @@ parameters:
         -
             path: 'src/Form/Control/Dropdown.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_addCallBackRow\(\) has parameter \$row with no type specified\.$~'
-        -
-            path: 'src/Form/Control/Hidden.php'
-            message: '~^Property Atk4\\Ui\\Form\\Control\\Hidden::\$inputType has no type specified\.$~'
-        -
-            path: 'src/Form/Control/Input.php'
-            message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$inputType has no type specified\.$~'
         -
             path: 'src/Form/Control/Input.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$placeholder has no type specified\.$~'
@@ -1002,9 +993,6 @@ parameters:
             path: 'src/Form/Control/Multiline.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Multiline::valuePropsBinding\(\) has no return type specified\.$~'
         -
-            path: 'src/Form/Control/Password.php'
-            message: '~^Property Atk4\\Ui\\Form\\Control\\Password::\$inputType has no type specified\.$~'
-        -
             path: 'src/Form/Control/ScopeBuilder.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\ScopeBuilder::\$atkLookupOptions has no type specified\.$~'
         -
@@ -1031,9 +1019,6 @@ parameters:
         -
             path: 'src/Form/Control/TreeItemSelector.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\TreeItemSelector::getValue\(\) has no return type specified\.$~'
-        -
-            path: 'src/Form/Control/Upload.php'
-            message: '~^Property Atk4\\Ui\\Form\\Control\\Upload::\$inputType has no type specified\.$~'
         -
             path: 'src/Form/Control/Upload.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\Upload::\$hasDeleteCb has no type specified\.$~'
