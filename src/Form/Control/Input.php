@@ -19,7 +19,7 @@ class Input extends Form\Control
 {
     public $ui = 'input';
 
-    public $inputType = 'text';
+    public string $inputType = 'text';
 
     public $placeholder = '';
 

@@ -9,5 +9,5 @@ namespace Atk4\Ui\Form\Control;
  */
 class Password extends Line
 {
-    public $inputType = 'password';
+    public string $inputType = 'password';
 }

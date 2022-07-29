@@ -12,7 +12,8 @@ use Atk4\Ui\View;
  */
 class Upload extends Input
 {
-    public $inputType = 'hidden';
+    public string $inputType = 'hidden';
+
     /** @var View|null The action button to open file browser dialog. */
     public $action;
 
