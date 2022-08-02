@@ -14,7 +14,7 @@ use Atk4\Ui\HtmlTemplate;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Header::addTo($app, ['Disabled and read only form controls (normal / readOnly / disabled)']);
+\Atk4\Ui\Header::addTo($app, ['Disabled and read only form controls (normal / read only / disabled)']);
 
 $form = Form::addTo($app);
 
