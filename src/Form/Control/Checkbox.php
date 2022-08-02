@@ -66,8 +66,8 @@ class Checkbox extends Form\Control
         // We don't want this displayed, because it can only affect "checked" status anyway
         $this->content = null;
 
-        // take care of readonly status
-        if ($this->readonly) {
+        // take care of readOnly status
+        if ($this->readOnly) {
             $this->addClass('read-only');
         }
 

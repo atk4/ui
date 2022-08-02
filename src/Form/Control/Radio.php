@@ -40,13 +40,13 @@ class Radio extends Form\Control
 
         $this->lister->setModel($this->model);
 
-        // take care of readonly and disabled statuses
+        // take care of readOnly and disabled statuses
         if ($this->disabled) {
             $this->addClass('disabled');
         }
 
         $this->lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) use ($value) {
-            if ($this->readonly) {
+            if ($this->readOnly) {
                 $lister->t_row->set('disabled', $value !== (string) $lister->model->getId() ? 'disabled="disabled"' : '');
             } elseif ($this->disabled) {
                 $lister->t_row->set('disabled', 'disabled="disabled"');

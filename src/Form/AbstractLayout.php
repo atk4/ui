@@ -113,7 +113,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
             if ($field->isEditable()) {
                 $controls[] = [$field->shortName];
             } elseif ($field->isVisible()) {
-                $controls[] = [$field->shortName, ['readonly' => true]];
+                $controls[] = [$field->shortName, ['readOnly' => true]];
             }
         }
 

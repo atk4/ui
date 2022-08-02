@@ -27,7 +27,7 @@ class Textarea extends Input
                 'rows' => $this->rows,
                 'placeholder' => $this->placeholder,
                 'id' => $this->name . '_input',
-                'readonly' => $this->readonly ? 'readonly' : false,
+                'readOnly' => $this->readOnly ? 'readonly' : false,
                 'disabled' => $this->disabled ? 'disabled' : false,
             ], $this->inputAttr),
             (string) $this->getValue() // need to cast to string to avoid null values which break html markup

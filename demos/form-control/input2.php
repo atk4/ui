@@ -14,24 +14,24 @@ use Atk4\Ui\HtmlTemplate;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Header::addTo($app, ['Disabled and read only form controls (normal / readonly / disabled)']);
+\Atk4\Ui\Header::addTo($app, ['Disabled and read only form controls (normal / readOnly / disabled)']);
 
 $form = Form::addTo($app);
 
 // Test all kinds of input fields
 $group = $form->addGroup('Line');
 $group->addControl('line_norm')->set('editable');
-$group->addControl('line_read', ['readonly' => true])->set('read only');
+$group->addControl('line_read', ['readOnly' => true])->set('read only');
 $group->addControl('line_disb', ['disabled' => true])->set('disabled');
 
 $group = $form->addGroup('Text Area');
 $group->addControl('text_norm', [Form\Control\Textarea::class])->set('editable');
-$group->addControl('text_read', [Form\Control\Textarea::class, 'readonly' => true])->set('read only');
+$group->addControl('text_read', [Form\Control\Textarea::class, 'readOnly' => true])->set('read only');
 $group->addControl('text_disb', [Form\Control\Textarea::class, 'disabled' => true])->set('disabled');
 
 $group = $form->addGroup('Checkbox');
 $group->addControl('c_norm', [Form\Control\Checkbox::class], ['type' => 'boolean'])->set(true);
-$group->addControl('c_read', [Form\Control\Checkbox::class, 'readonly' => true], ['type' => 'boolean'])->set(true); // allows to change value
+$group->addControl('c_read', [Form\Control\Checkbox::class, 'readOnly' => true], ['type' => 'boolean'])->set(true); // allows to change value
 $group->addControl('c_disb', [Form\Control\Checkbox::class, 'disabled' => true], ['type' => 'boolean'])->set(true); // input is not disabled
 
 $group = $form->addGroup('Dropdown');
@@ -42,13 +42,13 @@ $values = [
     'file' => ['File', 'icon' => 'file icon'],
 ];
 $group->addControl('d_norm', [Form\Control\Dropdown::class, 'values' => $values, 'width' => 'three'])->set('globe');
-$group->addControl('d_read', [Form\Control\Dropdown::class, 'values' => $values, 'readonly' => true, 'width' => 'three'])->set('globe'); // allows to change value
+$group->addControl('d_read', [Form\Control\Dropdown::class, 'values' => $values, 'readOnly' => true, 'width' => 'three'])->set('globe'); // allows to change value
 $group->addControl('d_disb', [Form\Control\Dropdown::class, 'values' => $values, 'disabled' => true, 'width' => 'three'])->set('globe'); // css disabled, but can focus with Tab and change value
 
 $group = $form->addGroup('Radio');
 
 $group->addControl('radio_norm', [Form\Control\Radio::class], ['enum' => ['one', 'two', 'three']])->set('two');
-$group->addControl('radio_read', [Form\Control\Radio::class, 'readonly' => true], ['enum' => ['one', 'two', 'three']])->set('two');
+$group->addControl('radio_read', [Form\Control\Radio::class, 'readOnly' => true], ['enum' => ['one', 'two', 'three']])->set('two');
 $group->addControl('radio_disb', [Form\Control\Radio::class, 'disabled' => true], ['enum' => ['one', 'two', 'three']])->set('two');
 
 $group = $form->addGroup('File upload');
@@ -62,7 +62,7 @@ $control = $group->addControl('file_norm', [Form\Control\Upload::class, ['accept
 $control->onDelete($onDelete);
 $control->onUpload($onUpload);
 
-$control = $group->addControl('file_read', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'readonly' => true]])->set('readonly', 'readonly.jpg');
+$control = $group->addControl('file_read', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'readOnly' => true]])->set('readonly', 'readonly.jpg');
 $control->onDelete($onDelete);
 $control->onUpload($onUpload);
 
@@ -84,7 +84,7 @@ $group->addControl('Lookup_read', [
     Form\Control\Lookup::class,
     'model' => new Country($app->db),
     'plus' => true,
-    'readonly' => true,
+    'readOnly' => true,
 ])->set($model->loadAny()->getId());
 
 $group->addControl('Lookup_disb', [
@@ -97,7 +97,7 @@ $group->addControl('Lookup_disb', [
 $group = $form->addGroup('Calendar');
 
 $group->addControl('date_norm', [Form\Control\Calendar::class, 'type' => 'date'])->set(new \DateTime());
-$group->addControl('date_read', [Form\Control\Calendar::class, 'type' => 'date', 'readonly' => true])->set(new \DateTime());
+$group->addControl('date_read', [Form\Control\Calendar::class, 'type' => 'date', 'readOnly' => true])->set(new \DateTime());
 $group->addControl('date_disb', [Form\Control\Calendar::class, 'type' => 'date', 'disabled' => true])->set(new \DateTime());
 
 $form->onSubmit(function (Form $form) {

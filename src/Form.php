@@ -503,7 +503,7 @@ class Form extends View
         foreach ($this->controls as $k => $control) {
             try {
                 // save field value only if field was editable in form at all
-                if (!$control->readonly && !$control->disabled) {
+                if (!$control->readOnly && !$control->disabled) {
                     $control->set($this->getApp()->ui_persistence->typecastLoadField($control->entityField->getField(), $_POST[$k] ?? null));
                 }
             } catch (\Exception $e) {

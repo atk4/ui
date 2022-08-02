@@ -70,7 +70,7 @@ class Control extends View
      *
      * @var bool
      */
-    public $readonly = false;
+    public $readOnly = false;
 
     protected function init(): void
     {

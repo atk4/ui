@@ -136,7 +136,7 @@ class Dropdown extends Input
             'type' => $this->inputType,
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readonly' => $this->readonly ? 'readonly' : false,
+            'readOnly' => $this->readOnly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
         ], $this->inputAttr));
     }
@@ -252,7 +252,7 @@ class Dropdown extends Input
 
         $this->addClass($this->defaultClass);
 
-        if ($this->readonly || $this->disabled) {
+        if ($this->readOnly || $this->disabled) {
             $this->setDropdownOption('showOnFocus', false);
             $this->setDropdownOption('allowTab', false);
             $this->removeClass('search');
@@ -265,7 +265,7 @@ class Dropdown extends Input
             $this->addClass('disabled');
         }
 
-        if ($this->readonly) {
+        if ($this->readOnly) {
             $this->setDropdownOption('allowTab', false);
             $this->setDropdownOption('onShow', new JsFunction([new JsExpression('return false')]));
         }

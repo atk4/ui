@@ -239,7 +239,7 @@ class Lookup extends Input
             $buttonSeed = ['content' => $buttonSeed];
         }
 
-        $defaultSeed = [\Atk4\Ui\Button::class, 'class.disabled' => ($this->disabled || $this->readonly)];
+        $defaultSeed = [\Atk4\Ui\Button::class, 'class.disabled' => ($this->disabled || $this->readOnly)];
 
         $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
 
@@ -346,7 +346,7 @@ class Lookup extends Input
             'type' => 'hidden',
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readonly' => $this->readonly ? 'readonly' : false,
+            'readOnly' => $this->readOnly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
         ], $this->inputAttr));
     }
@@ -393,7 +393,7 @@ class Lookup extends Input
             $this->template->set('disabled', 'disabled');
         }
 
-        if ($this->readonly) {
+        if ($this->readOnly) {
             $this->settings['showOnFocus'] = false;
             $this->settings['allowTab'] = false;
             $this->settings['apiSettings'] = null;
