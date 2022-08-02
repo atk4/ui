@@ -62,7 +62,7 @@ class Control extends View
      *
      * @var bool
      */
-    public $disabled = false;
+    public bool $disabled = false;
 
     /**
      * Is input field read only?
@@ -70,7 +70,7 @@ class Control extends View
      *
      * @var bool
      */
-    public $readOnly = false;
+    public bool $readOnly = false;
 
     protected function init(): void
     {
