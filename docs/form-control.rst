@@ -125,7 +125,7 @@ or you can inject a view with a custom template::
 Read only and disabled form controls
 ------------------------------------
 
-.. php:attr:: readonly
+.. php:attr:: readOnly
 
 Read only form controls can be seen in form, can be focused and will be submitted, but we don't allow to
 change their value.
