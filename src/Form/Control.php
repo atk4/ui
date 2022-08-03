@@ -59,18 +59,14 @@ class Control extends View
     /**
      * Is input field disabled?
      * Disabled input fields are not editable and will not be submitted.
-     *
-     * @var bool
      */
-    public $disabled = false;
+    public bool $disabled = false;
 
     /**
      * Is input field read only?
      * Read only input fields are not editable, but will be submitted.
-     *
-     * @var bool
      */
-    public $readonly = false;
+    public bool $readOnly = false;
 
     protected function init(): void
     {

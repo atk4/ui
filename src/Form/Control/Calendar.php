@@ -55,7 +55,7 @@ class Calendar extends Input
 
     protected function renderView(): void
     {
-        if ($this->readonly) {
+        if ($this->readOnly) {
             $this->options['clickOpens'] = false;
         }
 

@@ -50,9 +50,6 @@ class Checkbox extends Form\Control
         }
     }
 
-    /**
-     * Render view.
-     */
     protected function renderView(): void
     {
         if ($this->label) {
@@ -66,12 +63,10 @@ class Checkbox extends Form\Control
         // We don't want this displayed, because it can only affect "checked" status anyway
         $this->content = null;
 
-        // take care of readonly status
-        if ($this->readonly) {
+        if ($this->readOnly) {
             $this->addClass('read-only');
         }
 
-        // take care of disabled status
         if ($this->disabled) {
             $this->addClass('disabled');
             $this->template->set('disabled', 'disabled="disabled"');

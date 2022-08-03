@@ -29,7 +29,7 @@ class DemoLookup extends \Atk4\Ui\Form\Control\Lookup
 
         $buttonSeed = is_string($buttonSeed) ? ['content' => $buttonSeed] : $buttonSeed;
 
-        $defaultSeed = [\Atk4\Ui\Button::class, 'class.disabled' => ($this->disabled || $this->readonly)];
+        $defaultSeed = [\Atk4\Ui\Button::class, 'class.disabled' => ($this->disabled || $this->readOnly)];
 
         $this->action = Factory::factory(array_merge($defaultSeed, (array) $buttonSeed));
 
