@@ -40,7 +40,6 @@ class Radio extends Form\Control
 
         $this->lister->setModel($this->model);
 
-        // take care of readOnly and disabled statuses
         if ($this->disabled) {
             $this->addClass('disabled');
         }

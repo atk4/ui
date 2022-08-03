@@ -346,7 +346,7 @@ class Lookup extends Input
             'type' => 'hidden',
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readOnly' => $this->readOnly ? 'readonly' : false,
+            'readonly' => $this->readOnly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
         ], $this->inputAttr));
     }

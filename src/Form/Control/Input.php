@@ -112,7 +112,7 @@ class Input extends Form\Control
             'placeholder' => $this->placeholder,
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readOnly' => $this->readOnly ? 'readonly' : false,
+            'readonly' => $this->readOnly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
         ], $this->inputAttr));
     }

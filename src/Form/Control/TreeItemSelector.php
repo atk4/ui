@@ -120,7 +120,7 @@ class TreeItemSelector extends Form\Control
             'name' => $this->shortName,
             'type' => 'hidden',
             'value' => $this->getValue(),
-            'readOnly' => true,
+            'readonly' => true,
         ]);
     }
 
