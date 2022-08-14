@@ -226,15 +226,15 @@ Table sorting
 =============
 
 .. php:attr:: sortable
-.. php:attr:: sort_by
-.. php:attr:: sort_order
+.. php:attr:: sortBy
+.. php:attr:: sortDirection
 
 Table does not support an interractive sorting on it's own, (but :php:class:`Grid` does), however
-you can designade columns to display headers as if table were sorted::
+you can designate columns to display headers as if table were sorted::
 
     $table->sortable = true;
-    $table->sort_by = 'name';
-    $table->sort_order = 'ascending';
+    $table->sortBy = 'name';
+    $table->sortDirection = 'asc';
 
 This will highlight the column "name" header and will also display a sorting indicator as per sort
 order.

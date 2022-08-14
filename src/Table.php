@@ -85,15 +85,14 @@ class Table extends Lister
      *
      * @var string
      */
-    public $sort_by;
+    public $sortBy;
 
     /**
-     * When $sortable is true, and $sort_by is set, you can set this to
-     * "ascending" or "descending".
+     * When $sortable is true, and $sortBy is set, you can set order direction.
      *
-     * @var string
+     * @var 'asc'|'desc'|null
      */
-    public $sort_order;
+    public $sortDirection;
 
     /**
      * Make action columns in table use

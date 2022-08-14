@@ -299,12 +299,12 @@ class Column
             }
 
             // If table is being sorted by THIS column, set the proper class
-            if ($this->table->sort_by === $field->shortName) {
-                $class .= ' sorted ' . $this->table->sort_order;
+            if ($this->table->sortBy === $field->shortName) {
+                $class .= ' sorted ' . ['asc' => 'ascending', 'desc' => 'descending'][$this->table->sortDirection];
 
-                if ($this->table->sort_order === 'ascending') {
-                    $attr['data-sort'] = '-' . $field->shortName;
-                } elseif ($this->table->sort_order === 'descending') {
+                if ($this->table->sortDirection === 'asc') {
+                    $attr['data-sort'] = '-' . $attr['data-sort'];
+                } elseif ($this->table->sortDirection === 'desc') {
                     $attr['data-sort'] = '';
                 }
             }
