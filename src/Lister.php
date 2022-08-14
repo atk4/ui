@@ -99,7 +99,7 @@ class Lister extends View
             $jsonArr = $this->renderToJsonArr(true, $scrollRegion);
 
             // if there will be no more pages, then replace message=Success to let JS know that there are no more records
-            if ($this->_rendered_rows_count < $ipp) {
+            if ($this->_renderedRowsCount < $ipp) {
                 $jsonArr['message'] = 'Done'; // Done status means - no more requests from JS side
             }
 
@@ -111,7 +111,7 @@ class Lister extends View
     }
 
     /** @var int This will count how many rows are rendered. Needed for JsPaginator for example. */
-    protected $_rendered_rows_count = 0;
+    protected $_renderedRowsCount = 0;
 
     protected function renderView(): void
     {
@@ -130,7 +130,7 @@ class Lister extends View
         $this->tRow->trySet('_id', $this->name);
 
         // Iterate data rows
-        $this->_rendered_rows_count = 0;
+        $this->_renderedRowsCount = 0;
 
         // TODO we should not iterate using $this->model variable,
         // then also backup/tryfinally would be not needed
@@ -145,14 +145,14 @@ class Lister extends View
 
                 $this->renderRow();
 
-                ++$this->_rendered_rows_count;
+                ++$this->_renderedRowsCount;
             }
         } finally {
             $this->model = $modelBackup;
         }
 
         // empty message
-        if (!$this->_rendered_rows_count) {
+        if ($this->_renderedRowsCount === 0) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
                 $empty = $this->tEmpty !== null ? $this->tEmpty->renderToHtml() : '';
                 if ($this->template->hasTag('rows')) {
@@ -164,7 +164,7 @@ class Lister extends View
         }
 
         // stop JsPaginator if there are no more records to fetch
-        if ($this->jsPaginator && ($this->_rendered_rows_count < $this->ipp)) {
+        if ($this->jsPaginator && ($this->_renderedRowsCount < $this->ipp)) {
             $this->jsPaginator->jsIdle();
         }
 

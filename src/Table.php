@@ -441,7 +441,7 @@ class Table extends Lister
         $this->tRow->setApp($this->getApp());
 
         // Iterate data rows
-        $this->_rendered_rows_count = 0;
+        $this->_renderedRowsCount = 0;
 
         // TODO we should not iterate using $this->model variable,
         // then also backup/tryfinally would be not needed
@@ -460,7 +460,7 @@ class Table extends Lister
 
                 $this->renderRow();
 
-                ++$this->_rendered_rows_count;
+                ++$this->_renderedRowsCount;
 
                 if ($this->hook(self::HOOK_AFTER_ROW) === false) {
                     continue;
@@ -471,7 +471,7 @@ class Table extends Lister
         }
 
         // Add totals rows or empty message
-        if (!$this->_rendered_rows_count) {
+        if ($this->_renderedRowsCount === 0) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
                 $this->template->dangerouslyAppendHtml('Body', $this->tEmpty->renderToHtml());
             }
@@ -481,7 +481,7 @@ class Table extends Lister
         }
 
         // stop JsPaginator if there are no more records to fetch
-        if ($this->jsPaginator && ($this->_rendered_rows_count < $this->ipp)) {
+        if ($this->jsPaginator && ($this->_renderedRowsCount < $this->ipp)) {
             $this->jsPaginator->jsIdle();
         }
 
