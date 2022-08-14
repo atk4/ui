@@ -489,7 +489,7 @@ class ScopeBuilder extends Control
             $model->setLimit($limit);
 
             foreach ($model as $item) {
-                $items[$item->get($field->getReference()->getTheirFieldName())] = $item->get($model->title_field);
+                $items[$item->get($field->getReference()->getTheirFieldName())] = $item->get($model->titleField);
             }
         }
 
@@ -719,7 +719,7 @@ class ScopeBuilder extends Control
                 if ($rec->isLoaded()) {
                     $option = [
                         'key' => $value,
-                        'text' => $rec->get($model->title_field),
+                        'text' => $rec->get($model->titleField),
                         'value' => $value,
                     ];
                 }

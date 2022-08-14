@@ -65,7 +65,7 @@ class CardSection extends View
     private function addSectionFields(Model $model, array $fields, bool $useLabel = false)
     {
         foreach ($fields as $field) {
-            if ($model->title_field === $field) {
+            if ($model->titleField === $field) {
                 continue;
             }
             $label = $model->getField($field)->getCaption();

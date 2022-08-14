@@ -313,7 +313,7 @@ class Multiline extends Form\Control
         foreach ($rows as $cols) {
             $rowId = $this->getMlRowId($cols);
             foreach ($cols as $fieldName => $value) {
-                if ($fieldName === '__atkml' || $fieldName === $entity->id_field) {
+                if ($fieldName === '__atkml' || $fieldName === $entity->idField) {
                     continue;
                 }
 
@@ -341,10 +341,10 @@ class Multiline extends Form\Control
         $model = $this->getModel();
 
         // collects existing ids.
-        $currentIds = array_column($model->export(), $model->id_field);
+        $currentIds = array_column($model->export(), $model->idField);
 
         foreach ($this->rowData as $row) {
-            $entity = $model->tryLoad($row[$model->id_field] ?? null);
+            $entity = $model->tryLoad($row[$model->idField] ?? null);
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
                     continue;
@@ -420,7 +420,7 @@ class Multiline extends Form\Control
         if ($fieldNames === null) {
             $fieldNames = array_keys($model->getFields('not system'));
         }
-        $this->rowFields = array_merge([$model->id_field], $fieldNames);
+        $this->rowFields = array_merge([$model->idField], $fieldNames);
 
         foreach ($this->rowFields as $fieldName) {
             $this->fieldDefs[] = $this->getFieldDef($model->getField($fieldName));
@@ -572,7 +572,7 @@ class Multiline extends Form\Control
         if ($rec->isLoaded()) {
             $option = [
                 'key' => $value,
-                'text' => $rec->get($model->title_field),
+                'text' => $rec->get($model->titleField),
                 'value' => $value,
             ];
             foreach ($this->fieldDefs as $key => $component) {
@@ -631,7 +631,7 @@ class Multiline extends Form\Control
             $model->setLimit($limit);
 
             foreach ($model as $item) {
-                $items[$item->get($field->getReference()->getTheirFieldName())] = $item->get($model->title_field);
+                $items[$item->get($field->getReference()->getTheirFieldName())] = $item->get($model->titleField);
             }
         }
 
@@ -723,7 +723,7 @@ class Multiline extends Form\Control
         $values = [];
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['name'];
-            if ($fieldName === $model->id_field) {
+            if ($fieldName === $model->idField) {
                 continue;
             }
             $field = $model->getField($fieldName);
@@ -746,7 +746,7 @@ class Multiline extends Form\Control
     {
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['name'];
-            if ($fieldName === $model->id_field) {
+            if ($fieldName === $model->idField) {
                 continue;
             }
 
@@ -788,7 +788,7 @@ class Multiline extends Form\Control
                 $dummyModel->addExpression($field['name'], ['expr' => $field['expr'], 'type' => $model->getField($field['name'])->type]);
             }
             $values = $dummyModel->tryLoadAny()->get();
-            unset($values[$model->id_field]);
+            unset($values[$model->idField]);
 
             foreach ($values as $f => $value) {
                 if ($value) {

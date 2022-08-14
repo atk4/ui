@@ -26,7 +26,7 @@ $crud->onFormEdit(function (Form $form) use ($model) {
 
 $crud->setModel($model);
 
-$crud->addDecorator($model->title_field, [\Atk4\Ui\Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => $model->fieldName()->id]]);
+$crud->addDecorator($model->titleField, [\Atk4\Ui\Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => $model->fieldName()->id]]);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 

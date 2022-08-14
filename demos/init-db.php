@@ -120,12 +120,12 @@ class ModelWithPrefixedFields extends Model
 
     protected function init(): void
     {
-        if ($this->id_field === 'id') {
-            $this->id_field = $this->prefixFieldName($this->id_field);
+        if ($this->idField === 'id') {
+            $this->idField = $this->prefixFieldName($this->idField);
         }
 
-        if ($this->title_field === 'name') {
-            $this->title_field = $this->prefixFieldName($this->title_field);
+        if ($this->titleField === 'name') {
+            $this->titleField = $this->prefixFieldName($this->titleField);
         }
 
         parent::init();
@@ -235,14 +235,14 @@ class Stat extends ModelWithPrefixedFields
 
         $this->addField($this->fieldName()->project_name, ['type' => 'string']);
         $this->addField($this->fieldName()->project_code, ['type' => 'string']);
-        $this->title_field = $this->fieldName()->project_name;
+        $this->titleField = $this->fieldName()->project_name;
         $this->addField($this->fieldName()->description, ['type' => 'text']);
         $this->addField($this->fieldName()->client_name, ['type' => 'string']);
         $this->addField($this->fieldName()->client_address, ['type' => 'text', 'ui' => ['form' => [Form\Control\Textarea::class, 'rows' => 4]]]);
 
         $this->hasOne($this->fieldName()->client_country_iso, [
             'model' => [Country::class],
-            'their_field' => Country::hinting()->fieldName()->iso,
+            'theirField' => Country::hinting()->fieldName()->iso,
             'type' => 'string',
             'ui' => [
                 'form' => [Form\Control\Line::class],
@@ -314,7 +314,7 @@ class File extends ModelWithPrefixedFields
 
         $this->hasMany($this->fieldName()->SubFolder, [
             'model' => [self::class],
-            'their_field' => self::hinting()->fieldName()->parent_folder_id,
+            'theirField' => self::hinting()->fieldName()->parent_folder_id,
         ])
             ->addField($this->fieldName()->count, ['aggregate' => 'count', 'field' => $this->getPersistence()->expr($this, '*')]);
 
@@ -407,11 +407,11 @@ class Category extends ModelWithPrefixedFields
 
         $this->hasMany($this->fieldName()->SubCategories, [
             'model' => [SubCategory::class],
-            'their_field' => SubCategory::hinting()->fieldName()->product_category_id,
+            'theirField' => SubCategory::hinting()->fieldName()->product_category_id,
         ]);
         $this->hasMany($this->fieldName()->Products, [
             'model' => [Product::class],
-            'their_field' => Product::hinting()->fieldName()->product_category_id,
+            'theirField' => Product::hinting()->fieldName()->product_category_id,
         ]);
     }
 }
@@ -435,7 +435,7 @@ class SubCategory extends ModelWithPrefixedFields
         ]);
         $this->hasMany($this->fieldName()->Products, [
             'model' => [Product::class],
-            'their_field' => Product::hinting()->fieldName()->product_sub_category_id,
+            'theirField' => Product::hinting()->fieldName()->product_sub_category_id,
         ]);
     }
 }

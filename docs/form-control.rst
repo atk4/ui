@@ -329,13 +329,13 @@ To render a model field as Dropdown, use the ui property of the field::
     $model->addField('someField', ['ui' => ['form' => [\Atk4\Ui\Form\Control\Dropdown::class]]]);
 
 ..  Customizing how a Model's records are displayed in Dropdown
-As default, Dropdown will use the `$model->id_field` as value, and `$model->title_field` as title for each menu item.
+As default, Dropdown will use the `$model->idField` as value, and `$model->titleField` as title for each menu item.
 If you want to customize how a record is displayed and/or add an icon, Dropdown has the :php:meth:`Form::renderRowFunction()` to do this.
 This function is called with each model record and needs to return an array::
 
     $dropdown->renderRowFunction = function ($record) {
         return [
-            'value' => $record->id_field,
+            'value' => $record->idField,
             'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
         ];
     }
@@ -344,7 +344,7 @@ You can also use this function to add an Icon to a record::
 
     $dropdown->renderRowFunction = function ($record) {
         return [
-            'value' => $record->id_field,
+            'value' => $record->idField,
             'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
             'icon' => $record->get('value') > 100 ? 'money' : 'coins',
         ];

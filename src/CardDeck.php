@@ -281,7 +281,7 @@ class CardDeck extends View
     protected function findCard(Model $model)
     {
         $mapResults = function ($a) use ($model) {
-            return $a[$model->id_field];
+            return $a[$model->idField];
         };
         $deck = [];
         foreach ($this->cardHolder->elements as $v => $element) {
@@ -290,7 +290,7 @@ class CardDeck extends View
             }
         }
 
-        if (in_array($model->getId(), array_map($mapResults, $model->export([$model->id_field])), true)) {
+        if (in_array($model->getId(), array_map($mapResults, $model->export([$model->idField])), true)) {
             // might be in result set but not in deck, for example when adding a card.
             return $deck[$model->getId()] ?? null;
         }

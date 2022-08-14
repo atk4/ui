@@ -91,7 +91,7 @@ class InlineEdit extends View
     {
         parent::setModel($model);
 
-        $this->fieldName = $this->fieldName ?: $this->model->title_field;
+        $this->fieldName = $this->fieldName ?: $this->model->titleField;
         if ($this->autoSave && $this->model->isLoaded()) {
             $value = $_POST['value'] ?? null;
             $this->cb->set(function () use ($value) {

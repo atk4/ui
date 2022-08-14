@@ -37,7 +37,7 @@ trait VueLookupTrait
             $model = $reference->refModel($this->model);
             $referenceFieldName = $reference->getTheirFieldName();
             if (!empty($query)) {
-                $model->addCondition($model->title_field, 'like', '%' . $query . '%');
+                $model->addCondition($model->titleField, 'like', '%' . $query . '%');
             }
             foreach ($model as $row) {
                 $data[] = ['key' => $row->get($referenceFieldName), 'text' => $row->getTitle(), 'value' => $row->get($referenceFieldName)];

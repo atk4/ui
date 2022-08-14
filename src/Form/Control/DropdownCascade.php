@@ -86,7 +86,7 @@ class DropdownCascade extends Dropdown
                 $res = ($this->renderRowFunction)($row, $k);
                 $values[] = ['value' => $res['value'], 'text' => $row->get('name'), 'name' => $res['title']];
             } else {
-                $values[] = ['value' => $row->getId(), 'text' => $row->get($model->title_field), 'name' => $row->get($model->title_field)];
+                $values[] = ['value' => $row->getId(), 'text' => $row->get($model->titleField), 'name' => $row->get($model->titleField)];
             }
         }
 

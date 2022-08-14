@@ -128,7 +128,7 @@ $wizard->addStep('Business Model', function ($page) {
         /* Showing Class definition.
         class DemoInvoice extends \Atk4\Data\Model
         {
-            public $title_field = 'reference';
+            public $titleField = 'reference';
 
             protected function init(): void
             {

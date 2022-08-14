@@ -18,7 +18,7 @@ declare(strict_types=1);
  *
  * Multiple model can be used to display various content on each card section.
  * When using model or models, the first model that get set via setModel method
- * will have it's id_field set as data-id html attribute for the card. Thus making
+ * will have it's idField set as data-id html attribute for the card. Thus making
  * the id available via javascript (new Jquery())->data('id')
  */
 

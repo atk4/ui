@@ -319,7 +319,7 @@ class Grid extends View
         }
 
         if (!$fields) {
-            $fields = [$this->model->title_field];
+            $fields = [$this->model->titleField];
         }
 
         if (!$this->menu) {

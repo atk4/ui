@@ -227,7 +227,7 @@ class Dropdown extends Input
                 }
             } else {
                 // for standard model rendering, only load id and title field
-                $this->model->setOnlyFields([$this->model->title_field, $this->model->id_field]);
+                $this->model->setOnlyFields([$this->model->titleField, $this->model->idField]);
                 $this->_renderItemsForModel();
             }
         } else {

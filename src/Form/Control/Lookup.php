@@ -65,10 +65,10 @@ class Lookup extends Input
     public $limit = 100;
 
     /** @var string Set custom model field here to use it's value as ID in dropdown instead of default model ID field. */
-    public $id_field;
+    public $idField;
 
     /** @var string Set custom model field here to display it's value in dropdown instead of default model title field. */
-    public $title_field;
+    public $titleField;
 
     /**
      * Semantic UI uses cache to remember choices. For dynamic sites this may be dangerous, so
@@ -208,12 +208,12 @@ class Lookup extends Input
      */
     public static function defaultRenderRow($field, Model $row, $key = null)
     {
-        $id_field = $field->id_field ?: $row->id_field;
-        $title_field = $field->title_field ?: $row->title_field;
+        $idField = $field->idField ?: $row->idField;
+        $titleField = $field->titleField ?: $row->titleField;
 
         return [
-            'value' => $row->get($id_field),
-            'title' => $row->get($title_field),
+            'value' => $row->get($idField),
+            'title' => $row->get($titleField),
         ];
     }
 
@@ -309,9 +309,9 @@ class Lookup extends Input
             }
             $this->model->addCondition($scope);
         } else {
-            $title_field = $this->title_field ?: $this->model->title_field;
+            $titleField = $this->titleField ?: $this->model->titleField;
 
-            $this->model->addCondition($title_field, 'like', '%' . $_GET['q'] . '%');
+            $this->model->addCondition($titleField, 'like', '%' . $_GET['q'] . '%');
         }
     }
 
@@ -412,9 +412,9 @@ class Lookup extends Input
         $this->initDropdown($chain);
 
         if ($this->entityField && $this->entityField->get()) {
-            $id_field = $this->id_field ?: $this->model->id_field;
+            $idField = $this->idField ?: $this->model->idField;
 
-            $this->model = $this->model->tryLoadBy($id_field, $this->entityField->get());
+            $this->model = $this->model->tryLoadBy($idField, $this->entityField->get());
 
             if ($this->model->isLoaded()) {
                 $row = $this->renderRow($this->model);
