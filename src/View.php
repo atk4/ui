@@ -754,25 +754,23 @@ class View extends AbstractView implements JsExpressionable
      *
      * 1. Calling with arguments:
      *
-     * $view->js();                   // technically does nothing
-     * $a = $view->js()->hide();      // creates chain for hiding $view but does not
-     *                                // bind to event yet.
+     * $view->js(); // technically does nothing
+     * $a = $view->js()->hide(); // creates chain for hiding $view but does not bind to event yet.
      *
      * 2. Binding existing chains
-     * $img->on('mouseenter', $a);    // binds previously defined chain to event on
-     *                                // event of $img.
+     * $img->on('mouseenter', $a); // binds previously defined chain to event on event of $img.
      *
-     * Produced code: $('#img_id').on('mouseenter', function (ev){ ev.preventDefault();
-     *    $('#view1').hide(); });
+     * Produced code: $('#img_id').on('mouseenter', function (ev) {
+     *     ev.preventDefault();
+     *     $('#view1').hide();
+     * });
      *
-     * 3. $button->on('click',$form->js()->submit());
-     *                                // clicking button will result in form submit
+     * 3. $button->on('click', $form->js()->submit()); // clicking button will result in form submit
      *
      * 4. $view->js(true)->find('.current')->text($text);
      *
      * Will convert calls to jQuery chain into JavaScript string:
-     *  $('#view').find('.current').text('abc');    // The $text will be json-encoded
-     *                                              // to avoid JS injection.
+     *  $('#view').find('.current').text('abc'); // The $text will be json-encoded to avoid JS injection.
      *
      * Documentation:
      *
@@ -952,13 +950,11 @@ class View extends AbstractView implements JsExpressionable
      * Method on() also returns a chain, that will correspond affected element.
      * Here are some ways to use on();
      *
+     * // clicking on button will make the $view disappear
      * $button->on('click', $view->js()->hide());
      *
-     *   // clicking on button will make the $view dissapear
-     *
+     * // clicking on <a class="clickable"> will make it's parent disappear
      * $view->on('click', 'a[data=clickable]')->parent()->hide();
-     *
-     *   // clicking on <a class="clickable"> will make it's parent dissapear
      *
      * Finally, it's also possible to use PHP closure as an action:
      *

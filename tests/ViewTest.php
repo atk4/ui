@@ -30,7 +30,7 @@ class ViewTest extends TestCase
         $v->set('foo');
 
         $a = $v->render();
-        \Atk4\Ui\View::addTo($v);  // this should fail. No adding after rendering.
+        \Atk4\Ui\View::addTo($v); // this should fail. No adding after rendering.
         $b = $v->render();
         $this->assertSame($a, $b);
     }

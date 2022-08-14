@@ -50,8 +50,8 @@ ViewTester::addTo($app);
 
 // Example 2 - Loader with custom body.
 \Atk4\Ui\Loader::addTo($app, [
-    'ui' => '',   // this will prevent "loading spinner" from showing
-    'shim' => [   // shim is displayed while content is leaded
+    'ui' => '', // this will prevent "loading spinner" from showing
+    'shim' => [ // shim is displayed while content is leaded
         \Atk4\Ui\Message::class,
         'Generating LoremIpsum, please wait...',
         'class.red' => true,

@@ -644,7 +644,7 @@ and where you can setup specific width for each field.
 
 My next example will add multiple controls on the same line::
 
-    $form->setModel(new User($db), []);  // will not populate any form controls automatically
+    $form->setModel(new User($db), []); // will not populate any form controls automatically
 
     $form->addControls(['name', 'surname']);
 

@@ -14,7 +14,7 @@ namespace Atk4\Ui;
  *
  * Alternatively set content headers. Those will emphasize the text in the context of the section.
  *
- * $h = new Header(['size' => 'large']);  // make large header <div class="ui large header">..</div>
+ * $h = new Header(['size' => 'large']); // make large header <div class="ui large header">..</div>
  */
 class Header extends View
 {

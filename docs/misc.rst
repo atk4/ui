@@ -24,7 +24,7 @@ By default width is equally divided by columns. You may specify a custom width e
 
     $c = Columns::addTo($page);
     LoremIpsum::addTo($c->addColumn(6), [1]);
-    LoremIpsum::addTo($c->addColumn(10), [2]);  // wider column, more filler
+    LoremIpsum::addTo($c->addColumn(10), [2]); // wider column, more filler
 
 You can specify how many columns are expected in a grid, but if you do you can't specify widths of individual
 columns. This seem like a limitation of Fomantic UI::

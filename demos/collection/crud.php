@@ -39,7 +39,7 @@ $crud = \Atk4\Ui\Crud::addTo($column, [
     'displayFields' => [$model->fieldName()->name], // field to display in Crud
     'editFields' => [$model->fieldName()->name, $model->fieldName()->iso, $model->fieldName()->iso3], // field to display on 'edit' action
     'ipp' => 5,
-    'paginator' => ['range' => 2, 'class' => ['blue inverted']],  // reduce range on the paginator
+    'paginator' => ['range' => 2, 'class' => ['blue inverted']], // reduce range on the paginator
     'menu' => ['class' => ['green inverted']],
     'table' => ['class' => ['red inverted']],
 ]);

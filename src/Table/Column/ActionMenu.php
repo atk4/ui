@@ -97,7 +97,7 @@ class ActionMenu extends Table\Column
             array_merge(
                 $this->options,
                 [
-                    'direction' => 'auto',  // direction need to be auto.
+                    'direction' => 'auto', // direction need to be auto.
                     'transition' => 'none', // no transition.
                     'onShow' => (new JsChain('atk.tableDropdown.onShow')),
                     'onHide' => (new JsChain('atk.tableDropdown.onHide')),

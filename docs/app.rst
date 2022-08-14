@@ -275,7 +275,7 @@ call-back is triggered and need to respond with some JSON.
 
 You can also use this method to output debug data. Here is comparison to var_dump::
 
-    // var_dump($my_var);  // does not stop execution, draws UI anyway
+    // var_dump($my_var); // does not stop execution, draws UI anyway
 
     $this->getApp()->terminate(var_export($my_var)); // stops execution.
 
@@ -351,8 +351,8 @@ Having composition of multiple components will allow them to share the app objec
 
     $grid = new \Atk4\Ui\Grid();
     $grid->setModel($user);
-    $grid->addPaginator();          // initialize and populate paginator
-    $grid->addButton('Test');       // initialize and populate toolbar
+    $grid->addPaginator(); // initialize and populate paginator
+    $grid->addButton('Test'); // initialize and populate toolbar
 
     echo $grid->render();
 

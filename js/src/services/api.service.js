@@ -129,9 +129,9 @@ class ApiService {
    *
    * ex: $app->terminateJson(['success' => true, 'data' => $data]);
    *
-   * @param url        // the url to fetch data
-   * @param settings   // the Semantic api settings object.
-   * @param el         // the element to apply Semantic Ui context.
+   * @param url      the url to fetch data
+   * @param settings the Semantic api settings object.
+   * @param el       the element to apply Semantic Ui context.
    *
    * @returns {Promise<any>}
    */
