@@ -72,7 +72,7 @@ class GridTest extends \Atk4\Core\Phpunit\TestCase
 
 class MyModel extends \Atk4\Data\Model
 {
-    public $titleField = 'email';
+    public ?string $titleField = 'email';
 
     protected function init(): void
     {
