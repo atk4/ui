@@ -20,7 +20,7 @@ class Html extends Table\Column
      *
      * @param Field $field
      */
-    public function getDataCellHtml(Field $field = null, array $extra_tags = []): string
+    public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         return '{$_' . $field->shortName . '}';
     }

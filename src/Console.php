@@ -249,7 +249,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     /**
      * Executes command passing along escaped arguments.
      *
-     * Will also stream stdout / stderr as the comand executes.
+     * Will also stream stdout / stderr as the command executes.
      * once command terminates method will return the exit code.
      *
      * This method can be executed from inside callback or

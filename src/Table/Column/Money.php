@@ -26,7 +26,7 @@ class Money extends Table\Column
         return parent::getTagAttributes($position, $attr);
     }
 
-    public function getDataCellHtml(Field $field = null, array $extra_tags = []): string
+    public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         if (!isset($field)) {
             throw new \Atk4\Ui\Exception('Money column requires a field');
@@ -35,7 +35,7 @@ class Money extends Table\Column
         return $this->getTag(
             'body',
             '{$' . $field->shortName . '}',
-            $extra_tags
+            $attr
         );
     }
 

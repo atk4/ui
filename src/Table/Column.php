@@ -339,9 +339,9 @@ class Column
      *
      * @param Field $field
      */
-    public function getDataCellHtml(Field $field = null, array $extra_tags = []): string
+    public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
-        return $this->getTag('body', [$this->getDataCellTemplate($field)], $extra_tags);
+        return $this->getTag('body', [$this->getDataCellTemplate($field)], $attr);
     }
 
     /**
