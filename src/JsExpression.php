@@ -57,9 +57,9 @@ class JsExpression implements JsExpressionable
                 if (is_object($value) && $value instanceof JsExpressionable) {
                     $value = '(' . $value->jsRender() . ')';
                 } elseif (is_object($value)) {
-                    $value = $this->_json_encode($value->toString());
+                    $value = $this->_jsonEncode($value->toString());
                 } else {
-                    $value = $this->_json_encode($value);
+                    $value = $this->_jsonEncode($value);
                 }
 
                 return $value;
@@ -73,8 +73,10 @@ class JsExpression implements JsExpressionable
     /**
      * Provides replacement for json_encode() that will respect JsExpressionable objects
      * and call jsRender() for them instead of escaping.
+     *
+     * @param mixed $arg
      */
-    protected function _json_encode($arg): string
+    protected function _jsonEncode($arg): string
     {
         /*
          * This function is very similar to json_encode, however it will traverse array
@@ -96,8 +98,8 @@ class JsExpression implements JsExpressionable
             $assoc = $arg !== array_values($arg);
 
             foreach ($arg as $key => $value) {
-                $value = $this->_json_encode($value);
-                $key = $this->_json_encode($key);
+                $value = $this->_jsonEncode($value);
+                $key = $this->_jsonEncode($key);
                 if (!$assoc) {
                     $array[] = $value;
                 } else {

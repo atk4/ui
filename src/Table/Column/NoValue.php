@@ -15,8 +15,6 @@ use Atk4\Ui\Table;
  * when we display values we have holes
  * with NoValue decorator we can show a display value for column null value
  *
- * @usage   :
- *
  * $this->addField('field', [
  *  [...]
  *  'ui' => [

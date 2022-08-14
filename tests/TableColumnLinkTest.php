@@ -287,7 +287,7 @@ class TableColumnLinkTest extends TestCase
 
     public function testLink11(): void
     {
-        $this->table->addDecorator('name', [Table\Column\Tooltip::class, ['tooltip_field' => 'ref']]);
+        $this->table->addDecorator('name', [Table\Column\Tooltip::class, ['tooltipField' => 'ref']]);
 
         $this->assertSame(
             '<tr data-id="1"><td class=""> bar<span class="ui icon link " data-tooltip="ref123"><i class="ui icon info circle"></span></td><td>ref123</td></tr>',

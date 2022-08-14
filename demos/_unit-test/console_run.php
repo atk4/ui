@@ -13,7 +13,7 @@ require_once __DIR__ . '/../init-app.php';
 $testRunClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\View {
     use \Atk4\Core\DebugTrait;
 
-    public function test()
+    public function test(): int
     {
         $this->log('info', 'Console will automatically pick up output from all DebugTrait objects');
         $this->debug('debug');

@@ -205,9 +205,9 @@ class Modal extends View
      *
      * @return $this
      */
-    public function transition($transition_type)
+    public function transition($transitionType)
     {
-        $this->settings('transition', $transition_type);
+        $this->settings('transition', $transitionType);
 
         return $this;
     }
@@ -227,9 +227,9 @@ class Modal extends View
     /**
      * Add modal settings.
      */
-    public function settings($setting_option, $value)
+    public function settings($settingOption, $value)
     {
-        $this->options['setting'][$setting_option] = $value;
+        $this->options['setting'][$settingOption] = $value;
     }
 
     /**

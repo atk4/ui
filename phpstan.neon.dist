@@ -618,9 +618,6 @@ parameters:
             path: 'demos/_includes/FakerPersistence.php'
             message: '~^Method Atk4\\Ui\\Demos\\FakerPersistence::export\(\) has parameter \$fields with no type specified\.$~'
         -
-            path: 'demos/_unit-test/console_run.php'
-            message: '~^Method class@anonymous/demos/_unit\-test/console_run\.php:\d+::test\(\) has no return type specified\.$~'
-        -
             path: 'demos/basic/button.php'
             message: '~^Method class@anonymous/demos/basic/button\.php:\d+::__construct\(\) has parameter \$n with no type specified\.$~'
         -
@@ -1137,9 +1134,6 @@ parameters:
             path: 'src/JsConditionalForm.php'
             message: '~^Method Atk4\\Ui\\JsConditionalForm::setRules\(\) has no return type specified\.$~'
         -
-            path: 'src/JsExpression.php'
-            message: '~^Method Atk4\\Ui\\JsExpression::_json_encode\(\) has parameter \$arg with no type specified\.$~'
-        -
             path: 'src/JsModal.php'
             message: '~^Method Atk4\\Ui\\JsModal::__construct\(\) has parameter \$url with no type specified\.$~'
         -
@@ -1348,7 +1342,7 @@ parameters:
             message: '~^Method Atk4\\Ui\\Modal::setOptions\(\) has parameter \$options with no type specified\.$~'
         -
             path: 'src/Modal.php'
-            message: '~^Method Atk4\\Ui\\Modal::transition\(\) has parameter \$transition_type with no type specified\.$~'
+            message: '~^Method Atk4\\Ui\\Modal::transition\(\) has parameter \$transitionType with no type specified\.$~'
         -
             path: 'src/Modal.php'
             message: '~^Method Atk4\\Ui\\Modal::duration\(\) has parameter \$time with no type specified\.$~'
@@ -1357,7 +1351,7 @@ parameters:
             message: '~^Method Atk4\\Ui\\Modal::settings\(\) has no return type specified\.$~'
         -
             path: 'src/Modal.php'
-            message: '~^Method Atk4\\Ui\\Modal::settings\(\) has parameter \$setting_option with no type specified\.$~'
+            message: '~^Method Atk4\\Ui\\Modal::settings\(\) has parameter \$settingOption with no type specified\.$~'
         -
             path: 'src/Modal.php'
             message: '~^Method Atk4\\Ui\\Modal::settings\(\) has parameter \$value with no type specified\.$~'

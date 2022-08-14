@@ -13,11 +13,10 @@ use Atk4\Ui\Table;
  * Class Tooltip.
  *
  * column to add a little icon to show on hover a text
- * text is taken by the Row Model in $tooltip_field
+ * text is taken by the Row Model in $tooltipField
  *
- * @usage   : $crud->addDecorator('paid_date',  new \Atk4\Ui\Table\Column\Tooltip('note'));
- *
- * @usage   : $crud->addDecorator('paid_date',  new \Atk4\Ui\Table\Column\Tooltip('note','error red'));
+ * $crud->addDecorator('paid_date',  new \Atk4\Ui\Table\Column\Tooltip('note'));
+ * $crud->addDecorator('paid_date',  new \Atk4\Ui\Table\Column\Tooltip('note','error red'));
  */
 class Tooltip extends Table\Column
 {
@@ -25,7 +24,7 @@ class Tooltip extends Table\Column
     public $icon;
 
     /** @var string */
-    public $tooltip_field;
+    public $tooltipField;
 
     protected function init(): void
     {
@@ -35,7 +34,7 @@ class Tooltip extends Table\Column
             $this->icon = 'info circle';
         }
 
-        if (!$this->tooltip_field) {
+        if (!$this->tooltipField) {
             throw new Exception('Tooltip field must be defined');
         }
     }
@@ -67,7 +66,7 @@ class Tooltip extends Table\Column
     public function getHtmlTags(Model $row, $field)
     {
         // @TODO remove popup tooltip when null
-        $tooltip = $row->get($this->tooltip_field);
+        $tooltip = $row->get($this->tooltipField);
 
         if ($tooltip === null || $tooltip === '') {
             return [
