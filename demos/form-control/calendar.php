@@ -17,22 +17,22 @@ $layout = GridLayout::addTo($app, ['rows' => 1, 'columns' => 2]);
 
 $form = Form::addTo($layout, [], ['r1c1']);
 
-$app->uip->date_format = 'Y-m-d';
+$app->uip->dateFormat = 'Y-m-d';
 $form->addControl('date_y_m_d', [Form\Control\Calendar::class, 'type' => 'date', 'caption' => 'Date (Y-m-d)'])
     ->set(new \DateTime());
 
-$app->uip->time_format = 'G:i A';
+$app->uip->timeFormat = 'G:i A';
 $form->addControl('time_g_i_a', [Form\Control\Calendar::class, 'type' => 'time', 'caption' => 'Time using am/pm'])
     ->set(new \DateTime());
 
-$app->uip->time_format = 'H:i:s';
+$app->uip->timeFormat = 'H:i:s';
 $form->addControl('time_h_i_s', [Form\Control\Calendar::class, 'type' => 'time', 'caption' => 'Time using 24 hrs with seconds picker'])
     ->set(new \DateTime());
 
 $form->addControl('datetime', [Form\Control\Calendar::class, 'type' => 'datetime', 'caption' => 'Datetime (M d, Y H:i:s)'])
     ->set(new \DateTime());
 
-$app->uip->date_format = 'F d, Y';
+$app->uip->dateFormat = 'F d, Y';
 $form->addControl('date_f_d_y', [
     Form\Control\Calendar::class,
     'type' => 'date',
@@ -40,7 +40,7 @@ $form->addControl('date_f_d_y', [
     'options' => ['allowInput' => true],
 ])->set(new \DateTime());
 
-$app->uip->date_format = 'Y-m-d';
+$app->uip->dateFormat = 'Y-m-d';
 $form->addControl('date_js_format', [
     Form\Control\Calendar::class,
     'type' => 'date',

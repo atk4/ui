@@ -222,7 +222,7 @@ class TableColumnLinkTest extends TestCase
 
     public function testLink6(): void
     {
-        $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'force_download' => true]);
+        $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'forceDownload' => true]);
 
         $this->assertSame(
             '<tr data-id="1"><td><a href="example.php?test=1" download="true" >bar</a></td><td>ref123</td></tr>',
@@ -252,7 +252,7 @@ class TableColumnLinkTest extends TestCase
 
     public function testLink9(): void
     {
-        $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'use_label' => false]);
+        $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'useLabel' => false]);
 
         $this->assertSame(
             '<tr data-id="1"><td><a href="example.php?test=1"></a></td><td>ref123</td></tr>',
@@ -277,7 +277,7 @@ class TableColumnLinkTest extends TestCase
         $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref']);
 
-        $this->table->addDecorator('name', [Table\Column\NoValue::class, ['no_value' => ' --- ']]);
+        $this->table->addDecorator('name', [Table\Column\NoValue::class, ['noValue' => ' --- ']]);
 
         $this->assertSame(
             '<tr data-id="1"><td> --- </td><td>ref123</td></tr>',

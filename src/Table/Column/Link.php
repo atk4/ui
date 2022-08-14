@@ -61,7 +61,7 @@ class Link extends Table\Column
     public $args = [];
 
     /** @var bool use value as label of the link */
-    public $use_label = true;
+    public $useLabel = true;
 
     /** @var string|null set element class. */
     public $class;
@@ -78,7 +78,7 @@ class Link extends Table\Column
     public $target;
 
     /** @var bool add download in the tag to force download from the url. */
-    public $force_download = false;
+    public $forceDownload = false;
 
     /**
      * @param string|array $page
@@ -112,7 +112,7 @@ class Link extends Table\Column
 
     public function getDataCellTemplate(\Atk4\Data\Field $field = null)
     {
-        $download = $this->force_download ? ' download="true" ' : '';
+        $download = $this->forceDownload ? ' download="true" ' : '';
         $external = $this->target ? ' target="' . $this->target . '" ' : '';
 
         $icon = '';
@@ -122,7 +122,7 @@ class Link extends Table\Column
         }
 
         $label = '';
-        if ($this->use_label) {
+        if ($this->useLabel) {
             $label = $field ? ('{$' . $field->shortName . '}') : '[Link]';
         }
 

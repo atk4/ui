@@ -28,14 +28,14 @@ use Atk4\Ui\Table;
 class NoValue extends Table\Column
 {
     /** @var string */
-    public $no_value = ' --- ';
+    public $noValue = ' --- ';
 
     public function getHtmlTags(Model $row, $field)
     {
         $actualValue = $field->get($row);
 
         if ($actualValue === null || $actualValue === '') {
-            return [$field->shortName => $this->no_value];
+            return [$field->shortName => $this->noValue];
         }
 
         return parent::getHtmlTags($row, $field);

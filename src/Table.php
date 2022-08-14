@@ -9,7 +9,6 @@ use Atk4\Data\Model;
 
 class Table extends Lister
 {
-    // Overrides
     public $defaultTemplate = 'table.html';
     public $ui = 'table';
     public $content = false;
@@ -48,7 +47,7 @@ class Table extends Lister
      *
      * @var array|false
      */
-    public $totals_plan = false;
+    public $totalsPlan = false;
 
     /** @var bool Setting this to false will hide header row. */
     public $header = true;
@@ -390,7 +389,7 @@ class Table extends Lister
      */
     public function addTotals($plan = [])
     {
-        $this->totals_plan = $plan;
+        $this->totalsPlan = $plan;
     }
 
     /**
@@ -454,7 +453,7 @@ class Table extends Lister
                     continue;
                 }
 
-                if ($this->totals_plan) {
+                if ($this->totalsPlan) {
                     $this->updateTotals();
                 }
 
@@ -475,7 +474,7 @@ class Table extends Lister
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
                 $this->template->dangerouslyAppendHtml('Body', $this->tEmpty->renderToHtml());
             }
-        } elseif ($this->totals_plan) {
+        } elseif ($this->totalsPlan) {
             $this->tTotals->dangerouslySetHtml('cells', $this->getTotalsRowHtml());
             $this->template->dangerouslyAppendHtml('Foot', $this->tTotals->renderToHtml());
         }
@@ -571,7 +570,7 @@ class Table extends Lister
      */
     public function updateTotals()
     {
-        foreach ($this->totals_plan as $key => $val) {
+        foreach ($this->totalsPlan as $key => $val) {
             // if value is array, then we treat it as built-in or closure aggregate method
             if (is_array($val)) {
                 $f = $val[0]; // shortcut
@@ -654,14 +653,14 @@ class Table extends Lister
         $output = [];
         foreach ($this->columns as $name => $column) {
             // if no totals plan, then show dash, but keep column formatting
-            if (!isset($this->totals_plan[$name])) {
+            if (!isset($this->totalsPlan[$name])) {
                 $output[] = $column->getTag('foot', '-');
 
                 continue;
             }
 
             // if totals plan is set as array, then show formatted value
-            if (is_array($this->totals_plan[$name])) {
+            if (is_array($this->totalsPlan[$name])) {
                 // todo - format
                 $field = $this->model->getField($name);
                 $output[] = $column->getTotalsCellHtml($field, $this->totals[$name]);
@@ -670,7 +669,7 @@ class Table extends Lister
             }
 
             // otherwise just show it, for example, "Totals:" cell
-            $output[] = $column->getTag('foot', $this->totals_plan[$name]);
+            $output[] = $column->getTag('foot', $this->totalsPlan[$name]);
         }
 
         return implode('', $output);

@@ -35,7 +35,7 @@ $modelColorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
                 'table' => [
                     Table\Column\NoValue::class,
                     [
-                        'no_value' => ' no value ',
+                        'noValue' => ' no value ',
                     ],
                 ],
             ],

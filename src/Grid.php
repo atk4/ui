@@ -101,7 +101,7 @@ class Grid extends View
 
         // if menu not disabled ot not already assigned as existing object
         if ($this->menu !== false && !is_object($this->menu)) {
-            $this->menu = $this->add(Factory::factory([Menu::class, 'activate_on_click' => false], $this->menu), 'Menu');
+            $this->menu = $this->add(Factory::factory([Menu::class, 'activateOnClick' => false], $this->menu), 'Menu');
         }
 
         $this->table = $this->initTable();

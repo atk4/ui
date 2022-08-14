@@ -1312,9 +1312,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Loader::jsLoad\(\) has parameter \$storeName with no type specified\.$~'
         -
             path: 'src/Modal.php'
-            message: '~^Property Atk4\\Ui\\Modal::\$loading_label has no type specified\.$~'
-        -
-            path: 'src/Modal.php'
             message: '~^Property Atk4\\Ui\\Modal::\$headerCss has no type specified\.$~'
         -
             path: 'src/Modal.php'
