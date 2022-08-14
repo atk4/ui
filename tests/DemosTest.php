@@ -466,11 +466,11 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest($path);
         $this->assertSame(200, $response->getStatusCode());
 
-        $output_rows = preg_split('~\r?\n|\r~', $response->getBody()->getContents());
+        $outputRows = preg_split('~\r?\n|\r~', $response->getBody()->getContents());
 
         // check SSE Syntax
-        $this->assertGreaterThan(0, count($output_rows));
-        foreach ($output_rows as $index => $sse_line) {
+        $this->assertGreaterThan(0, count($outputRows));
+        foreach ($outputRows as $index => $sse_line) {
             if (empty($sse_line)) {
                 continue;
             }

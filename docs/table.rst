@@ -144,7 +144,7 @@ If the value of the field can be displayed by :php:class:`Table\\Column` then :p
 respord with object of this class. Since the default column does not contain any customization,
 then to save memory Table will re-use the same objects for all generic fields.
 
-.. php:attr:: default_column
+.. php:attr:: defaultColumn
 
 Protected property that will contain "generic" column that will be used to format all
 columns, unless a different column type is specified or the Field type will require a use
@@ -331,14 +331,14 @@ During the render process (see :php:meth:`View::renderView`) Table will perform 
 3. Iterate through rows
     3.1 Current row data is accessible through $table->model property.
     3.2 Update Totals if :php:meth:`Table::addTotals` was used.
-    3.3 Insert row values into :php:attr:`Table::t_row`
+    3.3 Insert row values into :php:attr:`Table::tRow`
         3.3.1 Template relies on :ref:`ui_persistence` for formatting values
     3.4 Collect HTML tags from 'getHtmlTags' hook.
     3.5 Collect getHtmlTags() from columns objects
-    3.6 Inject HTML into :php:attr:`Table::t_row` template
+    3.6 Inject HTML into :php:attr:`Table::tRow` template
     3.7 Render and append row template to Table Body ({$Body})
     3.8 Clear HTML tag values from template.
-4. If no rows were displayed, then "empty message" will be shown (see :php:attr:`Table::t_empty`).
+4. If no rows were displayed, then "empty message" will be shown (see :php:attr:`Table::tEmpty`).
 5. If :php:meth:`addTotals` was used, append totals row to table footer.
 
 Dealing with Multiple decorators

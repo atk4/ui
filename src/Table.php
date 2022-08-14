@@ -29,7 +29,7 @@ class Table extends Lister
      *
      * @var Table\Column|null
      */
-    public $default_column;
+    public $defaultColumn;
 
     /** @var array<int|string, Table\Column|array<int, Table\Column>> Contains list of declared columns. Value will always be a column object. */
     public $columns = [];
@@ -57,19 +57,19 @@ class Table extends Lister
     public $totals = [];
 
     /** @var HtmlTemplate|null Contain the template for the "Head" type row. */
-    public $t_head;
+    public $tHead;
 
     /** @var HtmlTemplate */
-    public $t_row_master;
+    public $tRowMaster;
 
     /** @var HtmlTemplate Contain the template for the "Body" type row. */
-    public $t_row;
+    public $tRow;
 
     /** @var HtmlTemplate Contain the template for the "Foot" type row. */
-    public $t_totals;
+    public $tTotals;
 
     /** @var HtmlTemplate Contains the output to show if table contains no rows. */
-    public $t_empty;
+    public $tEmpty;
 
     /**
      * Set this if you want table to appear as sortable. This does not add any
@@ -112,11 +112,11 @@ class Table extends Lister
      */
     public function initChunks()
     {
-        if (!$this->t_head) {
-            $this->t_head = $this->template->cloneRegion('Head');
-            $this->t_row_master = $this->template->cloneRegion('Row');
-            $this->t_totals = $this->template->cloneRegion('Totals');
-            $this->t_empty = $this->template->cloneRegion('Empty');
+        if (!$this->tHead) {
+            $this->tHead = $this->template->cloneRegion('Head');
+            $this->tRowMaster = $this->template->cloneRegion('Row');
+            $this->tTotals = $this->template->cloneRegion('Totals');
+            $this->tEmpty = $this->template->cloneRegion('Empty');
 
             $this->template->del('Head');
             $this->template->del('Body');
@@ -309,7 +309,7 @@ class Table extends Lister
             $seed,
             $field->ui['table'] ?? null,
             $this->typeToDecorator[$field->type] ?? null,
-            [$this->default_column ?? Table\Column::class]
+            [$this->defaultColumn ?? Table\Column::class]
         );
 
         return $this->_addUnchecked(Table\Column::fromSeed($seed, ['table' => $this]));
@@ -431,15 +431,15 @@ class Table extends Lister
 
         // Generate Header Row
         if ($this->header) {
-            $this->t_head->dangerouslySetHtml('cells', $this->getHeaderRowHtml());
-            $this->template->dangerouslySetHtml('Head', $this->t_head->renderToHtml());
+            $this->tHead->dangerouslySetHtml('cells', $this->getHeaderRowHtml());
+            $this->template->dangerouslySetHtml('Head', $this->tHead->renderToHtml());
         }
 
         // Generate template for data row
-        $this->t_row_master->dangerouslySetHtml('cells', $this->getDataRowHtml());
-        $this->t_row_master->set('_id', '{$_id}');
-        $this->t_row = new HtmlTemplate($this->t_row_master->renderToHtml());
-        $this->t_row->setApp($this->getApp());
+        $this->tRowMaster->dangerouslySetHtml('cells', $this->getDataRowHtml());
+        $this->tRowMaster->set('_id', '{$_id}');
+        $this->tRow = new HtmlTemplate($this->tRowMaster->renderToHtml());
+        $this->tRow->setApp($this->getApp());
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
@@ -474,11 +474,11 @@ class Table extends Lister
         // Add totals rows or empty message
         if (!$this->_rendered_rows_count) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
-                $this->template->dangerouslyAppendHtml('Body', $this->t_empty->renderToHtml());
+                $this->template->dangerouslyAppendHtml('Body', $this->tEmpty->renderToHtml());
             }
         } elseif ($this->totals_plan) {
-            $this->t_totals->dangerouslySetHtml('cells', $this->getTotalsRowHtml());
-            $this->template->dangerouslyAppendHtml('Foot', $this->t_totals->renderToHtml());
+            $this->tTotals->dangerouslySetHtml('cells', $this->getTotalsRowHtml());
+            $this->template->dangerouslyAppendHtml('Foot', $this->tTotals->renderToHtml());
         }
 
         // stop JsPaginator if there are no more records to fetch
@@ -495,7 +495,7 @@ class Table extends Lister
      */
     public function renderRow()
     {
-        $this->t_row->set($this->model);
+        $this->tRow->set($this->model);
 
         if ($this->useHtmlTags) {
             // Prepare row-specific HTML tags.
@@ -518,12 +518,12 @@ class Table extends Lister
             }
 
             // Render row and add to body
-            $this->t_row->dangerouslySetHtml($html_tags);
-            $this->t_row->set('_id', $this->model->getId());
-            $this->template->dangerouslyAppendHtml('Body', $this->t_row->renderToHtml());
-            $this->t_row->del(array_keys($html_tags));
+            $this->tRow->dangerouslySetHtml($html_tags);
+            $this->tRow->set('_id', $this->model->getId());
+            $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
+            $this->tRow->del(array_keys($html_tags));
         } else {
-            $this->template->dangerouslyAppendHtml('Body', $this->t_row->renderToHtml());
+            $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
         }
     }
 
