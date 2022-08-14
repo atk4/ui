@@ -95,7 +95,7 @@ class Input extends Form\Control
     public function getValue()
     {
         return $this->entityField !== null
-                    ? $this->getApp()->uip->typecastSaveField($this->entityField->getField(), $this->entityField->get())
+                    ? $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get())
                     : ($this->content ?? '');
     }
 

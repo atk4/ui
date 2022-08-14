@@ -17,8 +17,8 @@ require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
 
-$dateFormat = $app->uip->dateFormat;
-$timeFormat = $app->uip->timeFormat;
+$dateFormat = $app->uiPersistence->dateFormat;
+$timeFormat = $app->uiPersistence->timeFormat;
 
 /** @var Model $inventoryItemClass */
 $inventoryItemClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {

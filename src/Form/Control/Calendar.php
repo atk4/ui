@@ -36,7 +36,7 @@ class Calendar extends Input
         parent::init();
 
         // setup format
-        $phpFormat = $this->getApp()->uip->{$this->type . 'Format'};
+        $phpFormat = $this->getApp()->uiPersistence->{$this->type . 'Format'};
         $this->options['dateFormat'] = $this->convertPhpDtFormatToFlatpickr($phpFormat);
 
         if ($this->type === 'datetime' || $this->type === 'time') {
@@ -49,7 +49,7 @@ class Calendar extends Input
 
         // setup locale
         $this->options['locale'] = [
-            'firstDayOfWeek' => $this->getApp()->uip->firstDayOfWeek,
+            'firstDayOfWeek' => $this->getApp()->uiPersistence->firstDayOfWeek,
         ];
     }
 

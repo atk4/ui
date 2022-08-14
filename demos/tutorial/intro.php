@@ -141,7 +141,7 @@ $wizard->addStep('Business Model', function ($page) {
         */
         session_start();
 
-        $model = new DemoInvoice(new Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->uip->dateFormat]);
+        $model = new DemoInvoice(new Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->uiPersistence->dateFormat]);
         $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function (Model $model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
@@ -203,7 +203,7 @@ $wizard->addStep('Persistence', function ($page) {
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         session_start();
 
-        $model = new DemoInvoice(new Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->uip->dateFormat]);
+        $model = new DemoInvoice(new Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->uiPersistence->dateFormat]);
         $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function (Model $model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });

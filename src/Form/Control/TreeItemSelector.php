@@ -126,7 +126,7 @@ class TreeItemSelector extends Form\Control
 
     public function getValue()
     {
-        return $this->getApp()->uip->typecastSaveField($this->entityField->getField(), $this->entityField->get());
+        return $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get());
     }
 
     protected function renderView(): void

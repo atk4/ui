@@ -59,7 +59,7 @@ use Atk4\Ui\View;
  *         }
  *     }
  *
- *   return $form->js(true, null, 'input[name="grand_total"]')->val($app->uip->typecastSaveField(new Field(['type' => 'atk4_money']), $grand_total));
+ *   return $form->js(true, null, 'input[name="grand_total"]')->val($app->uiPersistence->typecastSaveField(new Field(['type' => 'atk4_money']), $grand_total));
  * }, ['qty', 'price']);
  *
  * Finally, it's also possible to use Multiline for quickly adding records to a
@@ -256,7 +256,7 @@ class Multiline extends Form\Control
                 if ($fieldName === '__atkml') {
                     $dataRows[$k][$fieldName] = $value;
                 } else {
-                    $dataRows[$k][$fieldName] = $this->getApp()->uip->typecastLoadField($this->getModel()->getField($fieldName), $value);
+                    $dataRows[$k][$fieldName] = $this->getApp()->uiPersistence->typecastLoadField($this->getModel()->getField($fieldName), $value);
                 }
             }
         }
@@ -282,7 +282,7 @@ class Multiline extends Form\Control
     public function getValue(): string
     {
         if ($this->entityField->getField()->type === 'json') {
-            $jsonValues = $this->getApp()->uip->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
+            $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
         } else {
             // set data according to HasMany relation or using model.
             $model = $this->getModel();
@@ -291,7 +291,7 @@ class Multiline extends Form\Control
                 $cols = [];
                 foreach ($this->rowFields as $fieldName) {
                     $field = $model->getField($fieldName);
-                    $value = $this->getApp()->uip->typecastSaveField($field, $row->get($field->shortName));
+                    $value = $this->getApp()->uiPersistence->typecastSaveField($field, $row->get($field->shortName));
                     $cols[$fieldName] = $value;
                 }
                 $rows[] = $cols;
@@ -460,7 +460,7 @@ class Multiline extends Form\Control
             'definition' => $this->getComponentDefinition($field),
             'cellProps' => $this->getSuiTableCellProps($field),
             'caption' => $field->getCaption(),
-            'default' => $this->getApp()->uip->typecastSaveField($field, $field->default),
+            'default' => $this->getApp()->uiPersistence->typecastSaveField($field, $field->default),
             'isExpr' => @isset($field->expr),
             'isEditable' => $field->isEditable(),
             'isHidden' => $field->isHidden(),
@@ -505,7 +505,7 @@ class Multiline extends Form\Control
     {
         $calendar = new Calendar();
         $props['config'] = $this->componentProps[self::DATE] ?? [];
-        $phpFormat = $this->getApp()->uip->{$field->type . 'Format'};
+        $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
         $props['config']['dateFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat);
 
         if ($field->type === 'datetime' || $field->type === 'time') {
@@ -729,7 +729,7 @@ class Multiline extends Form\Control
             $field = $model->getField($fieldName);
             if ($field instanceof CallbackField) {
                 $value = ($field->expr)($model);
-                $values[$fieldName] = $this->getApp()->uip->typecastSaveField($field, $value);
+                $values[$fieldName] = $this->getApp()->uiPersistence->typecastSaveField($field, $value);
             }
         }
 
@@ -752,7 +752,7 @@ class Multiline extends Form\Control
 
             $field = $model->getField($fieldName);
 
-            $value = $this->getApp()->uip->typecastLoadField($field, $_POST[$fieldName] ?? null);
+            $value = $this->getApp()->uiPersistence->typecastLoadField($field, $_POST[$fieldName] ?? null);
             if ($field->isEditable()) {
                 try {
                     $model->set($fieldName, $value);
@@ -793,7 +793,7 @@ class Multiline extends Form\Control
             foreach ($values as $f => $value) {
                 if ($value) {
                     $field = $model->getField($f);
-                    $formatValues[$f] = $this->getApp()->uip->typecastSaveField($field, $value);
+                    $formatValues[$f] = $this->getApp()->uiPersistence->typecastSaveField($field, $value);
                 }
             }
         }

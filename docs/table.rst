@@ -110,7 +110,7 @@ The type of the Model Field determines the way how value is presented in the tab
 value to be 'atk4_money' which makes column align values to the right, format it with 2 decimal signs
 and possibly add a currency sign.
 
-To learn about value formatting, read documentation on :ref:`uip`.
+To learn about value formatting, read documentation on :ref:`uiPersistence`.
 
 Table object does not contain any information about your fields (such as captions) but instead it will
 consult your Model for the necessary field information. If you are willing to define the type but also
@@ -332,7 +332,7 @@ During the render process (see :php:meth:`View::renderView`) Table will perform 
     3.1 Current row data is accessible through $table->model property.
     3.2 Update Totals if :php:meth:`Table::addTotals` was used.
     3.3 Insert row values into :php:attr:`Table::tRow`
-        3.3.1 Template relies on :ref:`uip` for formatting values
+        3.3.1 Template relies on :ref:`uiPersistence` for formatting values
     3.4 Collect HTML tags from 'getHtmlTags' hook.
     3.5 Collect getHtmlTags() from columns objects
     3.6 Inject HTML into :php:attr:`Table::tRow` template

@@ -38,7 +38,7 @@ support for a new type.
 In the below steps, the #1 and #2 are a minimum to achieve. #3 and #4 will improve experience
 of your integration.
 
- 1. Extend UI persistence and use your class in `$app->uip`.
+ 1. Extend UI persistence and use your class in `$app->uiPersistence`.
 
   You need to define how to output your data as well as read it.
 
@@ -175,7 +175,7 @@ extending :php:class:`Persistence\Ui`::
     {
         public function __construct($defaults = [])
         {
-            $this->uip = new MyPersistence()
+            $this->uiPersistence = new MyPersistence()
 
             parent::__construct($defaults);
         }

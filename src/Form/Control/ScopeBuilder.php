@@ -398,7 +398,7 @@ class ScopeBuilder extends Control
     {
         $calendar = new Calendar();
         $props = $this->atkdDateOptions['flatpickr'] ?? [];
-        $phpFormat = $this->getApp()->uip->{$field->type . 'Format'};
+        $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
         $props['altFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat); // why altFormat format?
         $props['dateFormat'] = 'Y-m-d';
         $props['altInput'] = true;

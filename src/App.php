@@ -97,8 +97,8 @@ class App
     /** @var bool */
     public $isRendering = false;
 
-    /** @var UI Persistence */
-    public $uip;
+    /** @var UiPersistence */
+    public $uiPersistence;
 
     /** @var View|null For internal use */
     public $html;
@@ -193,8 +193,8 @@ class App
             $this->setupAlwaysRun();
         }
 
-        if ($this->uip === null) {
-            $this->uip = new UiPersistence();
+        if ($this->uiPersistence === null) {
+            $this->uiPersistence = new UiPersistence();
         }
 
         if ($this->session === null) {
@@ -496,9 +496,9 @@ class App
         // flatpickr
         $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
         $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');
-        if ($this->uip->locale !== 'en') {
-            $this->requireJs($this->cdn['flatpickr'] . '/l10n/' . $this->uip->locale . '.js');
-            $this->html->js(true, new JsExpression('flatpickr.localize(window.flatpickr.l10ns.' . $this->uip->locale . ')'));
+        if ($this->uiPersistence->locale !== 'en') {
+            $this->requireJs($this->cdn['flatpickr'] . '/l10n/' . $this->uiPersistence->locale . '.js');
+            $this->html->js(true, new JsExpression('flatpickr.localize(window.flatpickr.l10ns.' . $this->uiPersistence->locale . ')'));
         }
 
         // Agile UI
