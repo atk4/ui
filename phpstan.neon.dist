@@ -850,9 +850,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Columns::addRow\(\) has no return type specified\.$~'
         -
             path: 'src/Console.php'
-            message: '~^Property Atk4\\Ui\\Console::\$last_exit_code has no type specified\.$~'
-        -
-            path: 'src/Console.php'
             message: '~^Method Atk4\\Ui\\Console::exec\(\) has no return type specified\.$~'
         -
             path: 'src/Console.php'
@@ -860,9 +857,6 @@ parameters:
         -
             path: 'src/Console.php'
             message: '~^Method Atk4\\Ui\\Console::exec\(\) has parameter \$exec with no type specified\.$~'
-        -
-            path: 'src/Console.php'
-            message: '~^Method Atk4\\Ui\\Console::execRaw\(\) has no return type specified\.$~'
         -
             path: 'src/Console.php'
             message: '~^Method Atk4\\Ui\\Console::execRaw\(\) has parameter \$args with no type specified\.$~'

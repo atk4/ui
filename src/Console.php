@@ -44,7 +44,10 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * @var bool
      */
-    public $_output_bypass = false;
+    protected $_outputBypass = false;
+
+    /** @var int|null */
+    public $lastExitCode;
 
     /**
      * Set a callback method which will be executed with the output sent back to the terminal.
@@ -94,7 +97,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }
 
             ob_start(function (string $content) {
-                if ($this->_output_bypass || $content === '' /* needed as self::output() adds NL */) {
+                if ($this->_outputBypass || $content === '' /* needed as self::output() adds NL */) {
                     return $content;
                 }
 
@@ -213,9 +216,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
             return $matches[0];
         }, $message);
 
-        $this->_output_bypass = true;
+        $this->_outputBypass = true;
         $this->sse->send($this->js()->append($message));
-        $this->_output_bypass = false;
+        $this->_outputBypass = false;
 
         return $this;
     }
@@ -236,14 +239,12 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function send($js)
     {
-        $this->_output_bypass = true;
+        $this->_outputBypass = true;
         $this->sse->send($js);
-        $this->_output_bypass = false;
+        $this->_outputBypass = false;
 
         return $this;
     }
-
-    public $last_exit_code;
 
     /**
      * Executes command passing along escaped arguments.
@@ -267,7 +268,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
                 $this->exec($exec, $args);
 
-                $this->output('--[ Exit code: ' . $this->last_exit_code . ' ]------------');
+                $this->output('--[ Exit code: ' . $this->lastExitCode . ' ]------------');
             });
 
             return;
@@ -308,11 +309,14 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }
         }
 
-        $this->last_exit_code = $stat['exitcode']; // @phpstan-ignore-line
+        $this->lastExitCode = $stat['exitcode'];
 
-        return $this->last_exit_code ? false : $this;
+        return $this->lastExitCode ? false : $this;
     }
 
+    /**
+     * @return array{resource, non-empty-array}
+     */
     protected function execRaw($exec, $args = [])
     {
         // Escape arguments

@@ -85,7 +85,7 @@ Executing Commands
 
 .. php:method:: exec($cmd, $args);
 
-.. php:argument:: last_exit_code
+.. php:argument:: lastExitCode
 
 To execute a command, use::
 
@@ -113,7 +113,7 @@ form, you can execute multiple commands::
     });
 
 Method exec() will return `$this` if command was run inside callback and was successful. It will return `false` on error
-and will return `null` if called outside of callback. You may also refer to ::php:attr:`Console::last_exit_code` which
+and will return `null` if called outside of callback. You may also refer to ::php:attr:`Console::lastExitCode` which
 contains exit code of the last command.
 
 Normally it's safe to chain `exec` which ensures that execution will stack. Should any command fail, the subsequent
