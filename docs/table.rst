@@ -280,7 +280,7 @@ Your column now can be added to any table::
 
     $table->addColumn(new ExpiredColumn());
 
-IMPORTANT: HTML injection will work unless :php:attr:`Table::use_html_tags` property is disabled (for performance).
+IMPORTANT: HTML injection will work unless :php:attr:`Table::useHtmlTags` property is disabled (for performance).
 
 Table Data Handling
 ===================

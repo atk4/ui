@@ -139,7 +139,7 @@ yet make it available when editing, you could create your own :php:class:`Table\
 
 If you are wondering, why I'm not overriding by providing HTML tag equal to the field name,
 it's because this technique is unreliable due to ability to exclude HTML tags with
-:php:attr:`Table::$use_html_tags`.
+:php:attr:`Table::$useHtmlTags`.
 
 Display credit card number with spaces
 --------------------------------------

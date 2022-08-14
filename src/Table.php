@@ -40,7 +40,7 @@ class Table extends Lister
      *
      * @var bool
      */
-    public $use_html_tags = true;
+    public $useHtmlTags = true;
 
     /**
      * Determines a strategy on how totals will be calculated. Do not touch those fields
@@ -497,7 +497,7 @@ class Table extends Lister
     {
         $this->t_row->set($this->model);
 
-        if ($this->use_html_tags) {
+        if ($this->useHtmlTags) {
             // Prepare row-specific HTML tags.
             $html_tags = [];
 
