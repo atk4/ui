@@ -10,16 +10,18 @@ class Demo extends \Atk4\Ui\Columns
     public $right;
     public static $isInitialized = false;
     public $highlightDefaultStyle = 'dark';
-    public $left_width = 8;
-    public $right_width = 8;
+    /** @var int */
+    public $leftWidth = 8;
+    /** @var int */
+    public $rightWidth = 8;
 
     protected function init(): void
     {
         parent::init();
         $this->addClass('celled');
 
-        $this->left = $this->addColumn($this->left_width);
-        $this->right = $this->addColumn($this->right_width);
+        $this->left = $this->addColumn($this->leftWidth);
+        $this->right = $this->addColumn($this->rightWidth);
     }
 
     protected function extractCodeFromClosure(\Closure $fx): string

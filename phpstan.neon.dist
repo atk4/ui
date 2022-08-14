@@ -589,12 +589,6 @@ parameters:
             message: '~^Property Atk4\\Ui\\Demos\\Demo::\$highlightDefaultStyle has no type specified\.$~'
         -
             path: 'demos/_includes/Demo.php'
-            message: '~^Property Atk4\\Ui\\Demos\\Demo::\$left_width has no type specified\.$~'
-        -
-            path: 'demos/_includes/Demo.php'
-            message: '~^Property Atk4\\Ui\\Demos\\Demo::\$right_width has no type specified\.$~'
-        -
-            path: 'demos/_includes/Demo.php'
             message: '~^Method Atk4\\Ui\\Demos\\Demo::setCodeAndCall\(\) has no return type specified\.$~'
         -
             path: 'demos/_includes/Demo.php'
