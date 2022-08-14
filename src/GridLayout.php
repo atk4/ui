@@ -34,13 +34,13 @@ class GridLayout extends View
     public $defaultTemplate = 'grid-layout.html';
 
     /** @var string CSS class for columns view */
-    public $column_class = '';
+    public $columnClass = '';
 
     protected function init(): void
     {
         parent::init();
 
-        $this->template->set('column_class', $this->column_class);
+        $this->template->set('columnClass', $this->columnClass);
 
         // extract template parts
         $this->tWrap = clone $this->template;
