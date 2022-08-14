@@ -18,12 +18,9 @@ class View extends AbstractView implements JsExpressionable
      * When you call render() this will be populated with JavaScript
      * chains.
      *
-     * @internal must remain public so that child views could interact
-     * with parent's $js
-     *
-     * @var array
+     * @internal
      */
-    public $_js_actions = [];
+    protected array $_jsActions = [];
 
     /** @var Model|null */
     public $model;
@@ -633,8 +630,8 @@ class View extends AbstractView implements JsExpressionable
 
             $this->template->dangerouslyAppendHtml($view->region, $view->getHtml());
 
-            if ($view->_js_actions) {
-                $this->_js_actions = array_merge_recursive($this->_js_actions, $view->_js_actions);
+            if ($view->_jsActions) {
+                $this->_jsActions = array_merge_recursive($this->_jsActions, $view->_jsActions);
             }
         }
 
@@ -788,10 +785,10 @@ class View extends AbstractView implements JsExpressionable
 
         // Substitute $when to make it better work as a array key
         if ($when === true) {
-            $this->_js_actions[$when][] = $chain;
+            $this->_jsActions[$when][] = $chain;
 
             if ($action) {
-                $this->_js_actions[$when][] = $action;
+                $this->_jsActions[$when][] = $action;
             }
 
             return $chain;
@@ -805,7 +802,7 @@ class View extends AbstractView implements JsExpressionable
         $action = (new Jquery($this))
             ->bind($when, new JsFunction([$chain, $action]));
 
-        $this->_js_actions[$when][] = $action;
+        $this->_jsActions[$when][] = $action;
 
         return $chain;
     }
@@ -848,7 +845,7 @@ class View extends AbstractView implements JsExpressionable
             $chain = (new JsVueService())->createAtkVue($selector, $component, $initData);
         }
 
-        $this->_js_actions[true][] = $chain;
+        $this->_jsActions[true][] = $chain;
 
         return $this;
     }
@@ -1107,7 +1104,7 @@ class View extends AbstractView implements JsExpressionable
     {
         $actions = [];
 
-        foreach ($this->_js_actions as $eventActions) {
+        foreach ($this->_jsActions as $eventActions) {
             foreach ($eventActions as $action) {
                 $actions[] = $action->jsRender();
             }
@@ -1125,7 +1122,7 @@ class View extends AbstractView implements JsExpressionable
     {
         $actions = [];
 
-        foreach ($this->_js_actions as $eventActions) {
+        foreach ($this->_jsActions as $eventActions) {
             foreach ($eventActions as $action) {
                 $actions[] = $action;
             }

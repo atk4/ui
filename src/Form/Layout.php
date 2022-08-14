@@ -231,8 +231,8 @@ class Layout extends AbstractLayout
 
         // Now collect JS from everywhere
         foreach ($this->elements as $element) {
-            if ($element->_js_actions) {
-                $this->_js_actions = array_merge_recursive($this->_js_actions, $element->_js_actions);
+            if ($element->_jsActions) {
+                $this->_jsActions = array_merge_recursive($this->_jsActions, $element->_jsActions);
             }
         }
     }
