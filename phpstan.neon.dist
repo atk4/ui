@@ -569,9 +569,6 @@ parameters:
         -
             path: 'src/UserAction/ModalExecutor.php'
             message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, mixed> given\.$~'
-        -
-            path: 'tests/JsTest.php'
-            message: '~^Parameter #1 \$args of class Atk4\\Ui\\JsFunction constructor expects array, null given\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 6
