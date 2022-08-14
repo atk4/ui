@@ -123,7 +123,7 @@ class Lookup extends Input
         parent::init();
 
         $this->template->set([
-            'input_id' => $this->name . '-ac',
+            'inputId' => $this->name . '-ac',
             'placeholder' => $this->placeholder,
         ]);
 

@@ -68,7 +68,7 @@ class Header extends View
         }
 
         if (!$this->icon && !$this->elements) {
-            $this->template->del('has_content');
+            $this->template->del('hasContent');
             $this->template->set('title', $this->content);
             $this->content = false;
         }

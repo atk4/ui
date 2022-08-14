@@ -37,7 +37,7 @@ class Step extends View
         $this->template->set('description', $this->description);
 
         if ($this->icon === false) {
-            $this->template->del('has_icon');
+            $this->template->del('hasIcon');
         } else {
             $this->template->set('icon', $this->icon);
         }
