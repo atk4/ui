@@ -47,7 +47,7 @@ class ImportModelWithPrefixedFields extends Model
     public function addField(string $name, $seed = []): \Atk4\Data\Field
     {
         if ($name === 'id') {
-            $this->id_field = $this->prefixFieldName($name);
+            $this->idField = $this->prefixFieldName($name);
         }
 
         $seed = \Atk4\Core\Factory::mergeSeeds($seed, [
