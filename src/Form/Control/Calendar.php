@@ -36,7 +36,7 @@ class Calendar extends Input
         parent::init();
 
         // setup format
-        $phpFormat = $this->getApp()->uip->{$this->type . '_format'};
+        $phpFormat = $this->getApp()->uip->{$this->type . 'Format'};
         $this->options['dateFormat'] = $this->convertPhpDtFormatToFlatpickr($phpFormat);
 
         if ($this->type === 'datetime' || $this->type === 'time') {
