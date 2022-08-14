@@ -49,7 +49,7 @@ $search = \Atk4\Ui\Component\ItemSearch::addTo($view, ['ui' => 'ui compact segme
 $lister_container = \Atk4\Ui\View::addTo($view, ['template' => $lister_template]);
 $lister = \Atk4\Ui\Lister::addTo($lister_container, [], ['List']);
 $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
-    $row = Country::assertInstanceOf($lister->current_row);
+    $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 
     ++$lister->ipp;

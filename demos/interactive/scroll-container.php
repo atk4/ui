@@ -27,7 +27,7 @@ $listerContainer = \Atk4\Ui\View::addTo($scrollContainer, ['template' => new Htm
 
 $lister = \Atk4\Ui\Lister::addTo($listerContainer, [], ['List']);
 $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
-    $row = Country::assertInstanceOf($lister->current_row);
+    $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 });
 $lister->setModel(new Country($app->db));

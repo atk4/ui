@@ -23,7 +23,7 @@ $view = \Atk4\Ui\View::addTo($container, ['template' => new HtmlTemplate('
 
 $lister = \Atk4\Ui\Lister::addTo($view, [], ['List']);
 $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
-    $row = Country::assertInstanceOf($lister->current_row);
+    $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 });
 

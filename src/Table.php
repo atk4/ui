@@ -450,7 +450,7 @@ class Table extends Lister
         $modelBackup = $this->model;
         try {
             foreach ($this->model as $this->model) {
-                $this->current_row = $this->model;
+                $this->currentRow = $this->model;
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
                 }
