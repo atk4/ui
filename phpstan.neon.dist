@@ -1266,9 +1266,6 @@ parameters:
             path: 'src/Layout/Admin.php'
             message: '~^Method Atk4\\Ui\\Layout\\Admin::addMenuItem\(\) has parameter \$name with no type specified\.$~'
         -
-            path: 'src/Layout/Centered.php'
-            message: '~^Property Atk4\\Ui\\Layout\\Centered::\$image_alt has no type specified\.$~'
-        -
             path: 'src/Layout/Column.php'
             message: '~^Property Atk4\\Ui\\Layout\\Column::\$menu has no type specified\.$~'
         -
