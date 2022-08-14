@@ -101,7 +101,7 @@ class Grid extends View
 
         // if menu not disabled ot not already assigned as existing object
         if ($this->menu !== false && !is_object($this->menu)) {
-            $this->menu = $this->add(Factory::factory([Menu::class, 'activate_on_click' => false], $this->menu), 'Menu');
+            $this->menu = $this->add(Factory::factory([Menu::class, 'activateOnClick' => false], $this->menu), 'Menu');
         }
 
         $this->table = $this->initTable();
@@ -319,7 +319,7 @@ class Grid extends View
         }
 
         if (!$fields) {
-            $fields = [$this->model->title_field];
+            $fields = [$this->model->titleField];
         }
 
         if (!$this->menu) {
@@ -575,8 +575,8 @@ class Grid extends View
 
         if ($sortBy && isset($this->table->columns[$sortBy]) && $this->model->hasField($sortBy)) {
             $this->model->setOrder($sortBy, $isDesc ? 'desc' : 'asc');
-            $this->table->sort_by = $sortBy;
-            $this->table->sort_order = $isDesc ? 'descending' : 'ascending';
+            $this->table->sortBy = $sortBy;
+            $this->table->sortDirection = $isDesc ? 'desc' : 'asc';
         }
 
         $this->table->on(

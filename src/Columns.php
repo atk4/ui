@@ -22,7 +22,7 @@ class Columns extends View
     public $width;
 
     /** @var int|false Sum of all column widths added so far. */
-    protected $calculated_width = 0;
+    protected $calculatedWidth = 0;
 
     /** @var array Allows Grid to calculate widths automatically. */
     public $sizes = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
@@ -47,9 +47,9 @@ class Columns extends View
 
         if ($size && isset($this->sizes[$size])) {
             $column->addClass($this->sizes[$size] . ' wide');
-            $this->calculated_width = false;
-        } elseif ($this->calculated_width !== false) {
-            ++$this->calculated_width;
+            $this->calculatedWidth = false;
+        } elseif ($this->calculatedWidth !== false) {
+            ++$this->calculatedWidth;
         }
         $column->addClass('column');
 
@@ -69,7 +69,7 @@ class Columns extends View
 
     protected function renderView(): void
     {
-        $width = $this->width ?: $this->calculated_width;
+        $width = $this->width ?: $this->calculatedWidth;
         if ($this->content) {
             $this->addClass($this->content);
             $this->content = null;

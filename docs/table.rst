@@ -110,7 +110,7 @@ The type of the Model Field determines the way how value is presented in the tab
 value to be 'atk4_money' which makes column align values to the right, format it with 2 decimal signs
 and possibly add a currency sign.
 
-To learn about value formatting, read documentation on :ref:`ui_persistence`.
+To learn about value formatting, read documentation on :ref:`uiPersistence`.
 
 Table object does not contain any information about your fields (such as captions) but instead it will
 consult your Model for the necessary field information. If you are willing to define the type but also
@@ -144,7 +144,7 @@ If the value of the field can be displayed by :php:class:`Table\\Column` then :p
 respord with object of this class. Since the default column does not contain any customization,
 then to save memory Table will re-use the same objects for all generic fields.
 
-.. php:attr:: default_column
+.. php:attr:: defaultColumn
 
 Protected property that will contain "generic" column that will be used to format all
 columns, unless a different column type is specified or the Field type will require a use
@@ -226,15 +226,15 @@ Table sorting
 =============
 
 .. php:attr:: sortable
-.. php:attr:: sort_by
-.. php:attr:: sort_order
+.. php:attr:: sortBy
+.. php:attr:: sortDirection
 
 Table does not support an interractive sorting on it's own, (but :php:class:`Grid` does), however
-you can designade columns to display headers as if table were sorted::
+you can designate columns to display headers as if table were sorted::
 
     $table->sortable = true;
-    $table->sort_by = 'name';
-    $table->sort_order = 'ascending';
+    $table->sortBy = 'name';
+    $table->sortDirection = 'asc';
 
 This will highlight the column "name" header and will also display a sorting indicator as per sort
 order.
@@ -280,7 +280,7 @@ Your column now can be added to any table::
 
     $table->addColumn(new ExpiredColumn());
 
-IMPORTANT: HTML injection will work unless :php:attr:`Table::use_html_tags` property is disabled (for performance).
+IMPORTANT: HTML injection will work unless :php:attr:`Table::useHtmlTags` property is disabled (for performance).
 
 Table Data Handling
 ===================
@@ -331,14 +331,14 @@ During the render process (see :php:meth:`View::renderView`) Table will perform 
 3. Iterate through rows
     3.1 Current row data is accessible through $table->model property.
     3.2 Update Totals if :php:meth:`Table::addTotals` was used.
-    3.3 Insert row values into :php:attr:`Table::t_row`
-        3.3.1 Template relies on :ref:`ui_persistence` for formatting values
+    3.3 Insert row values into :php:attr:`Table::tRow`
+        3.3.1 Template relies on :ref:`uiPersistence` for formatting values
     3.4 Collect HTML tags from 'getHtmlTags' hook.
     3.5 Collect getHtmlTags() from columns objects
-    3.6 Inject HTML into :php:attr:`Table::t_row` template
+    3.6 Inject HTML into :php:attr:`Table::tRow` template
     3.7 Render and append row template to Table Body ({$Body})
     3.8 Clear HTML tag values from template.
-4. If no rows were displayed, then "empty message" will be shown (see :php:attr:`Table::t_empty`).
+4. If no rows were displayed, then "empty message" will be shown (see :php:attr:`Table::tEmpty`).
 5. If :php:meth:`addTotals` was used, append totals row to table footer.
 
 Dealing with Multiple decorators

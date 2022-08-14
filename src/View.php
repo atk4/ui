@@ -18,12 +18,9 @@ class View extends AbstractView implements JsExpressionable
      * When you call render() this will be populated with JavaScript
      * chains.
      *
-     * @internal must remain public so that child views could interact
-     * with parent's $js
-     *
-     * @var array
+     * @internal
      */
-    public $_js_actions = [];
+    protected array $_jsActions = [];
 
     /** @var Model|null */
     public $model;
@@ -144,7 +141,7 @@ class View extends AbstractView implements JsExpressionable
         }
 
         $this->setModel(new Model(new Persistence\Static_($data)), $fields); // @phpstan-ignore-line
-        $this->model->getField($this->model->id_field)->type = null; // TODO probably unwanted
+        $this->model->getField($this->model->idField)->type = null; // TODO probably unwanted
 
         return $this->model;
     }
@@ -633,8 +630,8 @@ class View extends AbstractView implements JsExpressionable
 
             $this->template->dangerouslyAppendHtml($view->region, $view->getHtml());
 
-            if ($view->_js_actions) {
-                $this->_js_actions = array_merge_recursive($this->_js_actions, $view->_js_actions);
+            if ($view->_jsActions) {
+                $this->_jsActions = array_merge_recursive($this->_jsActions, $view->_jsActions);
             }
         }
 
@@ -754,25 +751,23 @@ class View extends AbstractView implements JsExpressionable
      *
      * 1. Calling with arguments:
      *
-     * $view->js();                   // technically does nothing
-     * $a = $view->js()->hide();      // creates chain for hiding $view but does not
-     *                                // bind to event yet.
+     * $view->js(); // technically does nothing
+     * $a = $view->js()->hide(); // creates chain for hiding $view but does not bind to event yet.
      *
      * 2. Binding existing chains
-     * $img->on('mouseenter', $a);    // binds previously defined chain to event on
-     *                                // event of $img.
+     * $img->on('mouseenter', $a); // binds previously defined chain to event on event of $img.
      *
-     * Produced code: $('#img_id').on('mouseenter', function (ev){ ev.preventDefault();
-     *    $('#view1').hide(); });
+     * Produced code: $('#img_id').on('mouseenter', function (ev) {
+     *     ev.preventDefault();
+     *     $('#view1').hide();
+     * });
      *
-     * 3. $button->on('click',$form->js()->submit());
-     *                                // clicking button will result in form submit
+     * 3. $button->on('click', $form->js()->submit()); // clicking button will result in form submit
      *
      * 4. $view->js(true)->find('.current')->text($text);
      *
      * Will convert calls to jQuery chain into JavaScript string:
-     *  $('#view').find('.current').text('abc');    // The $text will be json-encoded
-     *                                              // to avoid JS injection.
+     *  $('#view').find('.current').text('abc'); // The $text will be json-encoded to avoid JS injection.
      *
      * Documentation:
      *
@@ -790,10 +785,10 @@ class View extends AbstractView implements JsExpressionable
 
         // Substitute $when to make it better work as a array key
         if ($when === true) {
-            $this->_js_actions[$when][] = $chain;
+            $this->_jsActions[$when][] = $chain;
 
             if ($action) {
-                $this->_js_actions[$when][] = $action;
+                $this->_jsActions[$when][] = $action;
             }
 
             return $chain;
@@ -807,7 +802,7 @@ class View extends AbstractView implements JsExpressionable
         $action = (new Jquery($this))
             ->bind($when, new JsFunction([$chain, $action]));
 
-        $this->_js_actions[$when][] = $action;
+        $this->_jsActions[$when][] = $action;
 
         return $chain;
     }
@@ -850,7 +845,7 @@ class View extends AbstractView implements JsExpressionable
             $chain = (new JsVueService())->createAtkVue($selector, $component, $initData);
         }
 
-        $this->_js_actions[true][] = $chain;
+        $this->_jsActions[true][] = $chain;
 
         return $this;
     }
@@ -952,13 +947,11 @@ class View extends AbstractView implements JsExpressionable
      * Method on() also returns a chain, that will correspond affected element.
      * Here are some ways to use on();
      *
+     * // clicking on button will make the $view disappear
      * $button->on('click', $view->js()->hide());
      *
-     *   // clicking on button will make the $view dissapear
-     *
+     * // clicking on <a class="clickable"> will make it's parent disappear
      * $view->on('click', 'a[data=clickable]')->parent()->hide();
-     *
-     *   // clicking on <a class="clickable"> will make it's parent dissapear
      *
      * Finally, it's also possible to use PHP closure as an action:
      *
@@ -1111,7 +1104,7 @@ class View extends AbstractView implements JsExpressionable
     {
         $actions = [];
 
-        foreach ($this->_js_actions as $eventActions) {
+        foreach ($this->_jsActions as $eventActions) {
             foreach ($eventActions as $action) {
                 $actions[] = $action->jsRender();
             }
@@ -1129,7 +1122,7 @@ class View extends AbstractView implements JsExpressionable
     {
         $actions = [];
 
-        foreach ($this->_js_actions as $eventActions) {
+        foreach ($this->_jsActions as $eventActions) {
             foreach ($eventActions as $action) {
                 $actions[] = $action;
             }

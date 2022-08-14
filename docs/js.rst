@@ -192,9 +192,9 @@ will output:
     It's considered very bad practice to use jsRender to output JavaScript manually. Agile UI takes care of
     JavaScript binding and also decides which actions should be available while creating actions for your chain.
 
-.. php:method:: _json_encode
+.. php:method:: _jsonEncode
 
-    JsChain will map all the other methods into JS counterparts while encoding all the arguments using `_json_encode()`.
+    JsChain will map all the other methods into JS counterparts while encoding all the arguments using `_jsonEncode()`.
     Although similar to the standard `json_encode()` function, this method recognizes :php:interface:`JsExpressionable`
     objects and will substitute them with the result of :php:meth:`JsExpressionable::jsRender`. The result will
     not be escaped and any object implementing :php:interface:`JsExpressionable` interface is responsible
@@ -291,7 +291,7 @@ and other cases you can use JsExpression::
     ]);
 
 Because :php:class:`JsChain` will typically wrap all the arguments through
-:php:meth:`JsChain::_json_encode()`, it prevents you from accidentally injecting JavaScript code::
+:php:meth:`JsChain::_jsonEncode()`, it prevents you from accidentally injecting JavaScript code::
 
     $b = new Button();
     $b->js(true)->text('2 + 2');

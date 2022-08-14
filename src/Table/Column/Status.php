@@ -28,23 +28,23 @@ class Status extends Table\Column
         $this->states = $states;
     }
 
-    public function getDataCellHtml(Field $field = null, array $extra_tags = []): string
+    public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         if ($field === null) {
             throw new \Atk4\Ui\Exception('Status can be used only with model field');
         }
 
-        $attr = $this->getTagAttributes('body');
+        $bodyAttr = $this->getTagAttributes('body');
 
-        $extra_tags = array_merge_recursive($attr, $extra_tags, ['class' => '{$_' . $field->shortName . '_status}']);
+        $attr = array_merge_recursive($bodyAttr, $attr, ['class' => '{$_' . $field->shortName . '_status}']);
 
-        if (is_array($extra_tags['class'] ?? null)) {
-            $extra_tags['class'] = implode(' ', $extra_tags['class']);
+        if (is_array($attr['class'] ?? null)) {
+            $attr['class'] = implode(' ', $attr['class']);
         }
 
         return $this->getApp()->getTag(
             'td',
-            $extra_tags,
+            $attr,
             [$this->getApp()->getTag('i', ['class' => 'icon {$_' . $field->shortName . '_icon}'], '')
                 . ' {$' . $field->shortName . '}', ]
         );

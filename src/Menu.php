@@ -18,7 +18,7 @@ class Menu extends View
      *
      * @var bool
      */
-    public $activate_on_click = true;
+    public $activateOnClick = true;
 
     public $defaultTemplate = 'menu.html';
 
@@ -29,7 +29,7 @@ class Menu extends View
      *
      * @var bool
      */
-    public $in_dropdown = false;
+    public $inDropdown = false;
 
     /**
      * $seed can also be name here.
@@ -89,7 +89,7 @@ class Menu extends View
      */
     public function addMenu($name)
     {
-        $subMenu = (self::class)::addTo($this, ['defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'in_dropdown' => true]);
+        $subMenu = (self::class)::addTo($this, ['defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'inDropdown' => true]);
 
         $name = (array) $name;
 
@@ -103,7 +103,7 @@ class Menu extends View
             Icon::addTo($subMenu, [$name['icon']], ['Icon'])->removeClass('item');
         }
 
-        if (!$this->in_dropdown) {
+        if (!$this->inDropdown) {
             $subMenu->js(true)->dropdown(['on' => 'hover', 'action' => 'hide']);
         }
 
@@ -181,7 +181,7 @@ class Menu extends View
 
     protected function renderView(): void
     {
-        if ($this->activate_on_click && $this->ui === 'menu') {
+        if ($this->activateOnClick && $this->ui === 'menu') {
             // Semantic UI need some JS magic
             $this->on('click', 'a.item', $this->js()->find('.active')->removeClass('active'), ['preventDefault' => false, 'stopPropagation' => false]);
             $this->on('click', 'a.item', null, ['preventDefault' => false, 'stopPropagation' => false])->addClass('active');

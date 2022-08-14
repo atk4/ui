@@ -569,9 +569,6 @@ parameters:
         -
             path: 'src/UserAction/ModalExecutor.php'
             message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, mixed> given\.$~'
-        -
-            path: 'tests/JsTest.php'
-            message: '~^Parameter #1 \$args of class Atk4\\Ui\\JsFunction constructor expects array, null given\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 6
@@ -587,12 +584,6 @@ parameters:
         -
             path: 'demos/_includes/Demo.php'
             message: '~^Property Atk4\\Ui\\Demos\\Demo::\$highlightDefaultStyle has no type specified\.$~'
-        -
-            path: 'demos/_includes/Demo.php'
-            message: '~^Property Atk4\\Ui\\Demos\\Demo::\$left_width has no type specified\.$~'
-        -
-            path: 'demos/_includes/Demo.php'
-            message: '~^Property Atk4\\Ui\\Demos\\Demo::\$right_width has no type specified\.$~'
         -
             path: 'demos/_includes/Demo.php'
             message: '~^Method Atk4\\Ui\\Demos\\Demo::setCodeAndCall\(\) has no return type specified\.$~'
@@ -623,9 +614,6 @@ parameters:
         -
             path: 'demos/_includes/FakerPersistence.php'
             message: '~^Method Atk4\\Ui\\Demos\\FakerPersistence::export\(\) has parameter \$fields with no type specified\.$~'
-        -
-            path: 'demos/_unit-test/console_run.php'
-            message: '~^Method class@anonymous/demos/_unit\-test/console_run\.php:\d+::test\(\) has no return type specified\.$~'
         -
             path: 'demos/basic/button.php'
             message: '~^Method class@anonymous/demos/basic/button\.php:\d+::__construct\(\) has parameter \$n with no type specified\.$~'
@@ -856,9 +844,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Columns::addRow\(\) has no return type specified\.$~'
         -
             path: 'src/Console.php'
-            message: '~^Property Atk4\\Ui\\Console::\$last_exit_code has no type specified\.$~'
-        -
-            path: 'src/Console.php'
             message: '~^Method Atk4\\Ui\\Console::exec\(\) has no return type specified\.$~'
         -
             path: 'src/Console.php'
@@ -866,9 +851,6 @@ parameters:
         -
             path: 'src/Console.php'
             message: '~^Method Atk4\\Ui\\Console::exec\(\) has parameter \$exec with no type specified\.$~'
-        -
-            path: 'src/Console.php'
-            message: '~^Method Atk4\\Ui\\Console::execRaw\(\) has no return type specified\.$~'
         -
             path: 'src/Console.php'
             message: '~^Method Atk4\\Ui\\Console::execRaw\(\) has parameter \$args with no type specified\.$~'
@@ -1149,9 +1131,6 @@ parameters:
             path: 'src/JsConditionalForm.php'
             message: '~^Method Atk4\\Ui\\JsConditionalForm::setRules\(\) has no return type specified\.$~'
         -
-            path: 'src/JsExpression.php'
-            message: '~^Method Atk4\\Ui\\JsExpression::_json_encode\(\) has parameter \$arg with no type specified\.$~'
-        -
             path: 'src/JsModal.php'
             message: '~^Method Atk4\\Ui\\JsModal::__construct\(\) has parameter \$url with no type specified\.$~'
         -
@@ -1284,9 +1263,6 @@ parameters:
             path: 'src/Layout/Admin.php'
             message: '~^Method Atk4\\Ui\\Layout\\Admin::addMenuItem\(\) has parameter \$name with no type specified\.$~'
         -
-            path: 'src/Layout/Centered.php'
-            message: '~^Property Atk4\\Ui\\Layout\\Centered::\$image_alt has no type specified\.$~'
-        -
             path: 'src/Layout/Column.php'
             message: '~^Property Atk4\\Ui\\Layout\\Column::\$menu has no type specified\.$~'
         -
@@ -1336,9 +1312,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Loader::jsLoad\(\) has parameter \$storeName with no type specified\.$~'
         -
             path: 'src/Modal.php'
-            message: '~^Property Atk4\\Ui\\Modal::\$loading_label has no type specified\.$~'
-        -
-            path: 'src/Modal.php'
             message: '~^Property Atk4\\Ui\\Modal::\$headerCss has no type specified\.$~'
         -
             path: 'src/Modal.php'
@@ -1360,7 +1333,7 @@ parameters:
             message: '~^Method Atk4\\Ui\\Modal::setOptions\(\) has parameter \$options with no type specified\.$~'
         -
             path: 'src/Modal.php'
-            message: '~^Method Atk4\\Ui\\Modal::transition\(\) has parameter \$transition_type with no type specified\.$~'
+            message: '~^Method Atk4\\Ui\\Modal::transition\(\) has parameter \$transitionType with no type specified\.$~'
         -
             path: 'src/Modal.php'
             message: '~^Method Atk4\\Ui\\Modal::duration\(\) has parameter \$time with no type specified\.$~'
@@ -1369,7 +1342,7 @@ parameters:
             message: '~^Method Atk4\\Ui\\Modal::settings\(\) has no return type specified\.$~'
         -
             path: 'src/Modal.php'
-            message: '~^Method Atk4\\Ui\\Modal::settings\(\) has parameter \$setting_option with no type specified\.$~'
+            message: '~^Method Atk4\\Ui\\Modal::settings\(\) has parameter \$settingOption with no type specified\.$~'
         -
             path: 'src/Modal.php'
             message: '~^Method Atk4\\Ui\\Modal::settings\(\) has parameter \$value with no type specified\.$~'

@@ -93,11 +93,11 @@ Finally, Lister permits you not to use {rows} and {row} tags if entire region ca
 Tweaking the output
 ===================
 
-Output is formatted using the standard :ref:`ui_persistence` routine, but you can also fine-tune the content
+Output is formatted using the standard :ref:`uiPersistence` routine, but you can also fine-tune the content
 of your tags like this::
 
     $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
-        $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
+        $lister->currentRow->set('iso', mb_strtolower($lister->currentRow->get('iso')));
     });
 
 Model vs Static Source
@@ -116,7 +116,7 @@ Special template tags
 Your {row} tempalte may contain few special tags:
 
  - {$_id} - will be set to ID of the record (regardless of how your id field is called)
- - {$_title} - will be set to the title of your record (see $model->$title_field)
+ - {$_title} - will be set to the title of your record (see $model->$titleField)
  - {$_href} - will point to current page but with ?id=123 extra GET argument.
 
 

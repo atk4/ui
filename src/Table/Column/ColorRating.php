@@ -42,17 +42,14 @@ class ColorRating extends Table\Column
     /** @var array Store the generated Hex color based on the number of steps. */
     protected $gradients = [];
 
-    /** @var int Number of gradient, used internally. */
-    protected $gradients_count = 0;
-
     /** @var float Internally used to avoid calc on every call. */
     protected $delta;
 
-    /** @var bool Define if values greater than max have no color. */
-    public $more_than_max_no_color = false;
-
     /** @var bool Define if values lesser than min have no color. */
-    public $less_than_min_no_color = false;
+    public $lessThanMinNoColor = false;
+
+    /** @var bool Define if values greater than max have no color. */
+    public $moreThanMaxNoColor = false;
 
     protected function init(): void
     {
@@ -86,9 +83,6 @@ class ColorRating extends Table\Column
 
         // create gradients
         $this->createGradients();
-
-        // count one time the gradients and reuse
-        $this->gradients_count = count($this->gradients) - 1;
     }
 
     private function createGradients()
@@ -153,13 +147,13 @@ class ColorRating extends Table\Column
         return parent::getTagAttributes($position, $attr);
     }
 
-    public function getDataCellHtml(Field $field = null, array $extra_tags = []): string
+    public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         if ($field === null) {
             throw new Exception('ColorRating can be used only with model field');
         }
 
-        return $this->getTag('body', '{$' . $field->shortName . '}', $extra_tags);
+        return $this->getTag('body', '{$' . $field->shortName . '}', $attr);
     }
 
     public function getHtmlTags(Model $row, $field)
@@ -183,18 +177,19 @@ class ColorRating extends Table\Column
     private function getColorFromValue(float $value)
     {
         if ($value <= $this->min) {
-            return $this->less_than_min_no_color ? null : $this->gradients[0];
+            return $this->lessThanMinNoColor ? null : $this->gradients[0];
         }
 
         if ($value >= $this->max) {
-            return $this->more_than_max_no_color ? null : end($this->gradients);
+            return $this->moreThanMaxNoColor ? null : end($this->gradients);
         }
 
+        $gradientsCount = count($this->gradients) - 1;
         $refValue = ($value - $this->min) / $this->delta;
-        $refIndex = $this->gradients_count * $refValue;
+        $refIndex = $gradientsCount * $refValue;
 
-        $index = floor($refIndex);
+        $index = (int) floor($refIndex);
 
-        return $this->gradients[(int) $index];
+        return $this->gradients[$index];
     }
 }

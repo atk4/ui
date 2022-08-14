@@ -198,15 +198,15 @@ class Layout extends AbstractLayout
             // Controls get extra pampering
             $template->dangerouslySetHtml('Input', $element->getHtml());
             $template->trySet('label', $label);
-            $template->trySet('label_for', $element->name . '_input');
-            $template->set('control_class', $element->getControlClass());
+            $template->trySet('labelFor', $element->name . '_input');
+            $template->set('controlClass', $element->getControlClass());
 
             if ($element->entityField->getField()->required) {
-                $template->append('control_class', 'required ');
+                $template->append('controlClass', 'required ');
             }
 
             if (isset($element->width)) {
-                $template->append('control_class', $element->width . ' wide ');
+                $template->append('controlClass', $element->width . ' wide ');
             }
 
             if ($element->hint && $template->hasTag('Hint')) {
@@ -231,8 +231,8 @@ class Layout extends AbstractLayout
 
         // Now collect JS from everywhere
         foreach ($this->elements as $element) {
-            if ($element->_js_actions) {
-                $this->_js_actions = array_merge_recursive($this->_js_actions, $element->_js_actions);
+            if ($element->_jsActions) {
+                $this->_jsActions = array_merge_recursive($this->_jsActions, $element->_jsActions);
             }
         }
     }

@@ -22,7 +22,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
 
         // lets add our first table here
         $table = \Atk4\Ui\Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
-        $table->setModel($model, [$model->title_field]);
+        $table->setModel($model, [$model->titleField]);
 
         $selections = explode(',', $_GET[$this->name] ?? '');
 
@@ -60,7 +60,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
             $pushModel = $pushModel->ref($ref);
 
             $table = \Atk4\Ui\Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
-            $table->setModel($pushModel->setLimit(10), [$pushModel->title_field]);
+            $table->setModel($pushModel->setLimit(10), [$pushModel->titleField]);
 
             if ($selections) {
                 $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');

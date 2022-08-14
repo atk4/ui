@@ -35,8 +35,8 @@ use Atk4\Ui\Menu;
  */
 class Admin extends Layout implements NavigableInterface
 {
-    public $menuLeft;  // vertical menu
-    public $menu;      // horizontal menu
+    public $menuLeft; // vertical menu
+    public $menu; // horizontal menu
     public $menuRight; // vertical pull-down
 
     public $burger = true; // burger menu item

@@ -37,7 +37,7 @@ Once template is initialized you can `renderToHtml()` it any-time to get string
 
     $t->set('mytag', 'Agile UI');
 
-    echo $t->renderToHtml();  // "Hello, Agile UI".
+    echo $t->renderToHtml(); // "Hello, Agile UI".
 
 Tags may also be self-closing::
 
@@ -394,7 +394,7 @@ Let's assume you have the following template in ``template/envelope.html``::
 You can use the following code to manipulate the template above::
 
     $template = GiTemplate::addTo($this);
-    $template->loadFromFile('envelope');        // templates/envelope.html
+    $template->loadFromFile('envelope'); // templates/envelope.html
 
     // Split into multiple objects for processing
     $sender    = $template->cloneRegion('Sender');

@@ -76,8 +76,8 @@ class Upload extends Input
      *  - fileId will be the file id sent with onDelete callback.
      *  - fileName is the field value display to user.
      *
-     * @param string      $fileId   // Field id for onDelete Callback
-     * @param string|null $fileName // Field name display to user
+     * @param string      $fileId   Field id for onDelete Callback
+     * @param string|null $fileName Field name display to user
      *
      * @return $this
      */

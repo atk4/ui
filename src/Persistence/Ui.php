@@ -12,7 +12,7 @@ use Atk4\Ui\Exception;
 
 /**
  * This class is used for typecasting model types to the values that will be presented to the user. App will
- * always initialize this persistence in $app->ui_persistence and this object will be used by various
+ * always initialize this persistence in $app->uiPersistence and this object will be used by various
  * UI elements to output data to the user.
  *
  * Overriding and extending this class is a great place where you can tweak how various data-types are displayed
@@ -28,20 +28,20 @@ class Ui extends Persistence
     /** @var string Currency symbol for 'atk4_money' type. */
     public $currency = '€';
     /** @var int Number of decimal digits for 'atk4_money' type. */
-    public $currency_decimals = 2;
+    public $currencyDecimals = 2;
     /** @var string Decimal point separator for 'atk4_money' type. */
-    public $currency_decimal_separator = '.';
+    public $currencyDecimalSeparator = '.';
     /** @var string Thousands separator for 'atk4_money' type. */
-    public $currency_thousands_separator = ' ';
+    public $currencyThousandsSeparator = ' ';
 
     /** @var string */
     public $timezone;
     /** @var string */
-    public $date_format = 'M d, Y';
+    public $dateFormat = 'M d, Y';
     /** @var string */
-    public $time_format = 'H:i';
+    public $timeFormat = 'H:i';
     /** @var string */
-    public $datetime_format = 'M d, Y H:i:s';
+    public $datetimeFormat = 'M d, Y H:i:s';
     /** @var int Calendar input first day of week, 0 = Sunday, 1 = Monday. */
     public $firstDayOfWeek = 0;
 
@@ -97,7 +97,7 @@ class Ui extends Persistence
                 $value = parent::_typecastLoadField($field, $value);
                 $valueDecimals = strlen(preg_replace('~^[^.]$|^.+\.|0+$~s', '', number_format($value, max(0, 11 - (int) log10($value)), '.', '')));
                 $value = ($this->currency ? $this->currency . ' ' : '')
-                    . number_format($value, max($this->currency_decimals, $valueDecimals), $this->currency_decimal_separator, $this->currency_thousands_separator);
+                    . number_format($value, max($this->currencyDecimals, $valueDecimals), $this->currencyDecimalSeparator, $this->currencyThousandsSeparator);
                 $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */, $value);
 
                 break;
@@ -108,9 +108,9 @@ class Ui extends Persistence
                 $value = parent::_typecastLoadField($field, $value);
                 if ($value !== null) {
                     $format = [
-                        'date' => $this->date_format,
-                        'datetime' => $this->datetime_format,
-                        'time' => $this->time_format,
+                        'date' => $this->dateFormat,
+                        'datetime' => $this->datetimeFormat,
+                        'time' => $this->timeFormat,
                     ][$field->type];
 
                     if ($field->type === 'datetime') {
@@ -145,9 +145,9 @@ class Ui extends Persistence
             case 'atk4_money':
                 if (is_string($value)) {
                     $value = str_replace([' ', "\u{00a0}" /* Unicode NBSP */, '_', $this->currency, '$', '€'], '', $value);
-                    $dSep = $this->currency_decimal_separator;
+                    $dSep = $this->currencyDecimalSeparator;
                     $tSeps = array_filter(
-                        array_unique([$dSep, $this->currency_thousands_separator, '.', ',']),
+                        array_unique([$dSep, $this->currencyThousandsSeparator, '.', ',']),
                         fn ($sep) => strpos($value, $sep) !== false
                     );
                     usort($tSeps, fn ($sepA, $sepB) => strrpos($value, $sepB) <=> strrpos($value, $sepA));
@@ -173,9 +173,9 @@ class Ui extends Persistence
                 $dtClass = \DateTime::class;
                 $tzClass = \DateTimeZone::class;
                 $format = [
-                    'date' => $this->date_format,
-                    'datetime' => $this->datetime_format,
-                    'time' => $this->time_format,
+                    'date' => $this->dateFormat,
+                    'datetime' => $this->datetimeFormat,
+                    'time' => $this->timeFormat,
                 ][$field->type];
 
                 $valueOrig = $value;

@@ -78,7 +78,7 @@ class JsSearch extends View
         }
 
         if ($this->btnStyle) {
-            $this->template->trySet('button_style', $this->btnStyle);
+            $this->template->trySet('buttonStyle', $this->btnStyle);
         }
 
         $this->template->set('Button', $this->button);

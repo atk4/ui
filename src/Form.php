@@ -306,17 +306,17 @@ class Form extends View
      * Causes form to generate success message.
      *
      * @param View|string $success     Success message or a View to display in modal
-     * @param string      $sub_header  Sub-header
+     * @param string      $subHeader   Sub-header
      * @param bool        $useTemplate Backward compatibility
      *
      * @return JsChain
      */
-    public function success($success = 'Success', $sub_header = null, $useTemplate = true)
+    public function success($success = 'Success', $subHeader = null, $useTemplate = true)
     {
         $response = null;
         // by using this hook you can overwrite default behavior of this method
         if ($this->hookHasCallbacks(self::HOOK_DISPLAY_SUCCESS)) {
-            return $this->hook(self::HOOK_DISPLAY_SUCCESS, [$success, $sub_header]);
+            return $this->hook(self::HOOK_DISPLAY_SUCCESS, [$success, $subHeader]);
         }
 
         if ($success instanceof View) {
@@ -325,8 +325,8 @@ class Form extends View
             $response = $this->getApp()->loadTemplate($this->successTemplate);
             $response->set('header', $success);
 
-            if ($sub_header) {
-                $response->set('message', $sub_header);
+            if ($subHeader) {
+                $response->set('message', $subHeader);
             } else {
                 $response->del('p');
             }
@@ -336,7 +336,7 @@ class Form extends View
             $response = new Message([$success, 'type' => 'success', 'icon' => 'check']);
             $response->setApp($this->getApp());
             $response->invokeInit();
-            $response->text->addParagraph($sub_header);
+            $response->text->addParagraph($subHeader);
         }
 
         return $response;
@@ -504,7 +504,7 @@ class Form extends View
             try {
                 // save field value only if field was editable in form at all
                 if (!$control->readOnly && !$control->disabled) {
-                    $control->set($this->getApp()->ui_persistence->typecastLoadField($control->entityField->getField(), $_POST[$k] ?? null));
+                    $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $_POST[$k] ?? null));
                 }
             } catch (\Exception $e) {
                 $messages = [];

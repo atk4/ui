@@ -43,34 +43,34 @@ class FormTest extends TestCase
         $this->assertInstanceOf(Form\Control::class, $f->layout->getControl('test'));
     }
 
-    public function assertSubmit(array $post_data, \Closure $submit = null, \Closure $check_expected_error = null): void
+    public function assertSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
     {
         $wasSubmitCalled = false;
-        $_POST = $post_data;
+        $_POST = $postData;
         try {
             // trigger callback
             $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . 'atk_submit'] = 'ajax';
             $_GET[Callback::URL_QUERY_TARGET] = 'atk_submit';
 
-            $this->form->onSubmit(function (Form $form) use (&$wasSubmitCalled, $submit): void {
+            $this->form->onSubmit(function (Form $form) use (&$wasSubmitCalled, $submitFx): void {
                 $wasSubmitCalled = true;
-                if ($submit) {
-                    $submit($form->model);
+                if ($submitFx !== null) {
+                    $submitFx($form->model);
                 }
             });
 
             $this->form->render();
             $res = $this->form->getApp()->output;
 
-            if ($check_expected_error) {
+            if ($checkExpectedErrorsFx !== null) {
                 $this->assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');
                 $this->assertNotSame('', $res['atkjs']); // will output useful error
                 $this->formError = $res['atkjs'];
 
-                $check_expected_error($res['atkjs']);
+                $checkExpectedErrorsFx($res['atkjs']);
             } else {
                 $this->assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
-                $this->assertSame('', $res['atkjs']); // will output useful error
+                $this->assertSame('', $res['atkjs']);
             }
 
             $this->form = null; // we shouldn't submit form twice!
@@ -114,9 +114,9 @@ class FormTest extends TestCase
         });
     }
 
-    public function assertSubmitError(array $post, \Closure $error_callback): void
+    public function assertSubmitError(array $post, \Closure $checkExpectedErrorsFx): void
     {
-        $this->assertSubmit($post, null, $error_callback);
+        $this->assertSubmit($post, null, $checkExpectedErrorsFx);
     }
 
     public function assertFormControlError(string $field, string $error): void

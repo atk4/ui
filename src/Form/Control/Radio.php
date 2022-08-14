@@ -27,7 +27,7 @@ class Radio extends Form\Control
         parent::init();
 
         $this->lister = Lister::addTo($this, [], ['Radio']);
-        $this->lister->t_row->set('_name', $this->shortName);
+        $this->lister->tRow->set('_name', $this->shortName);
     }
 
     protected function renderView(): void
@@ -46,12 +46,12 @@ class Radio extends Form\Control
 
         $this->lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) use ($value) {
             if ($this->readOnly) {
-                $lister->t_row->set('disabled', $value !== (string) $lister->model->getId() ? 'disabled="disabled"' : '');
+                $lister->tRow->set('disabled', $value !== (string) $lister->model->getId() ? 'disabled="disabled"' : '');
             } elseif ($this->disabled) {
-                $lister->t_row->set('disabled', 'disabled="disabled"');
+                $lister->tRow->set('disabled', 'disabled="disabled"');
             }
 
-            $lister->t_row->set('checked', $value === (string) $lister->model->getId() ? 'checked' : '');
+            $lister->tRow->set('checked', $value === (string) $lister->model->getId() ? 'checked' : '');
         });
 
         parent::renderView();

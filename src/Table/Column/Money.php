@@ -13,11 +13,10 @@ use Atk4\Ui\Table;
  */
 class Money extends Table\Column
 {
-    /** @var bool Should we show zero values in cells? */
-    public $show_zero_values = true;
-
-    // overrides
     public $attr = ['all' => ['class' => ['right aligned single line']]];
+
+    /** @var bool Should we show zero values in cells? */
+    public $showZeroValues = true;
 
     public function getTagAttributes(string $position, array $attr = []): array
     {
@@ -26,7 +25,7 @@ class Money extends Table\Column
         return parent::getTagAttributes($position, $attr);
     }
 
-    public function getDataCellHtml(Field $field = null, array $extra_tags = []): string
+    public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         if (!isset($field)) {
             throw new \Atk4\Ui\Exception('Money column requires a field');
@@ -35,7 +34,7 @@ class Money extends Table\Column
         return $this->getTag(
             'body',
             '{$' . $field->shortName . '}',
-            $extra_tags
+            $attr
         );
     }
 
@@ -43,7 +42,7 @@ class Money extends Table\Column
     {
         if ($field->get($row) < 0) {
             return ['_' . $this->shortName . '_class' => 'negative'];
-        } elseif (!$this->show_zero_values && (float) $field->get($row) === 0.0) {
+        } elseif (!$this->showZeroValues && (float) $field->get($row) === 0.0) {
             return ['_' . $this->shortName . '_class' => '', $field->shortName => '-'];
         }
 

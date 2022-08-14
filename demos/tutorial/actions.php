@@ -160,7 +160,7 @@ $wizard->addStep('Arguments', function ($page) {
 
 /*
 $wizard->addStep('More Ways', function ($page) {
-    Demo::addTo($page, ['left_width' => 5, 'right_width' => 11])->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page, ['leftWidth' => 5, 'rightWidth' => 11])->setCodeAndCall(function (View $owner) {
         $model = new Stat($owner->getApp()->db);
         $model->addUserAction('mail', [
             'fields' => ['currency_field'],

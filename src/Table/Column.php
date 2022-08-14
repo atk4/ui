@@ -299,12 +299,12 @@ class Column
             }
 
             // If table is being sorted by THIS column, set the proper class
-            if ($this->table->sort_by === $field->shortName) {
-                $class .= ' sorted ' . $this->table->sort_order;
+            if ($this->table->sortBy === $field->shortName) {
+                $class .= ' sorted ' . ['asc' => 'ascending', 'desc' => 'descending'][$this->table->sortDirection];
 
-                if ($this->table->sort_order === 'ascending') {
-                    $attr['data-sort'] = '-' . $field->shortName;
-                } elseif ($this->table->sort_order === 'descending') {
+                if ($this->table->sortDirection === 'asc') {
+                    $attr['data-sort'] = '-' . $attr['data-sort'];
+                } elseif ($this->table->sortDirection === 'desc') {
                     $attr['data-sort'] = '';
                 }
             }
@@ -322,7 +322,7 @@ class Column
      */
     public function getTotalsCellHtml(Field $field, $value)
     {
-        return $this->getTag('foot', $this->getApp()->ui_persistence->typecastSaveField($field, $value));
+        return $this->getTag('foot', $this->getApp()->uiPersistence->typecastSaveField($field, $value));
     }
 
     /**
@@ -339,9 +339,9 @@ class Column
      *
      * @param Field $field
      */
-    public function getDataCellHtml(Field $field = null, array $extra_tags = []): string
+    public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
-        return $this->getTag('body', [$this->getDataCellTemplate($field)], $extra_tags);
+        return $this->getTag('body', [$this->getDataCellTemplate($field)], $attr);
     }
 
     /**

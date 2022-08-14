@@ -146,15 +146,15 @@ Create a new file in "public_html/projectfolder" and name it "init.php".
 In this file we load up our app (later) and load the database configuration::
 
   <?php
-  $rootdir = "../";    // the public_html directory
-  require_once $rootdir . "../config/db.php";  // contains database configuration outside the public_html directory
+  $rootdir = "../"; // the public_html directory
+  require_once $rootdir . "../config/db.php"; // contains database configuration outside the public_html directory
 
 Load Composer autoload.php (which loads up atk4) in init.php
 ------------------------------------------------------------
 
 ::
 
-  require_once $rootdir . "vendor/autoload.php";   // loads up atk4 and our project files from Composer
+  require_once $rootdir . "vendor/autoload.php"; // loads up atk4 and our project files from Composer
 
 Initialize the app class in init.php
 ------------------------------------
@@ -162,7 +162,7 @@ Initialize the app class in init.php
 ::
 
   $app = new \Atk4\Ui\App('Welcome to my first app'); // initialization of our app
-  $app->db = $db;   // defines our database for reuse in other classes
+  $app->db = $db; // defines our database for reuse in other classes
 
 Create index.php and admin.php
 ------------------------------

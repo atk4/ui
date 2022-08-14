@@ -33,7 +33,8 @@ class Modal extends View
 
     /** @var string|null Set null for no title */
     public $title;
-    public $loading_label = 'Loading...';
+    /** @var string */
+    public $loadingLabel = 'Loading...';
     public $headerCss = 'header';
     public $ui = 'modal';
     /** @var \Closure|null */
@@ -41,7 +42,7 @@ class Modal extends View
     /** @var CallbackLater|null */
     public $cb;
     /** @var View|null */
-    public $cb_view;
+    public $cbView;
     /** @var array */
     public $args = [];
     /** @var array */
@@ -93,20 +94,20 @@ class Modal extends View
     /**
      * Add View to be loaded in this modal and
      * attach CallbackLater to it.
-     * The cb_view only will be loaded dynamically within modal
+     * The cbView only will be loaded dynamically within modal
      * div.atk-content.
      */
     public function enableCallback()
     {
-        $this->cb_view = View::addTo($this);
-        $this->cb_view->stickyGet('__atk_m', $this->name);
+        $this->cbView = View::addTo($this);
+        $this->cbView->stickyGet('__atk_m', $this->name);
         if (!$this->cb) {
-            $this->cb = CallbackLater::addTo($this->cb_view);
+            $this->cb = CallbackLater::addTo($this->cbView);
         }
 
         $this->cb->set(function () {
-            ($this->fx)($this->cb_view);
-            $this->cb->terminateJson($this->cb_view);
+            ($this->fx)($this->cbView);
+            $this->cb->terminateJson($this->cbView);
         });
     }
 
@@ -205,9 +206,9 @@ class Modal extends View
      *
      * @return $this
      */
-    public function transition($transition_type)
+    public function transition($transitionType)
     {
-        $this->settings('transition', $transition_type);
+        $this->settings('transition', $transitionType);
 
         return $this;
     }
@@ -227,9 +228,9 @@ class Modal extends View
     /**
      * Add modal settings.
      */
-    public function settings($setting_option, $value)
+    public function settings($settingOption, $value)
     {
-        $this->options['setting'][$setting_option] = $value;
+        $this->options['setting'][$settingOption] = $value;
     }
 
     /**
@@ -294,7 +295,7 @@ class Modal extends View
     protected function renderView(): void
     {
         $data['type'] = $this->type;
-        $data['label'] = $this->loading_label;
+        $data['label'] = $this->loadingLabel;
 
         if (!empty($this->title)) {
             $this->template->trySet('title', $this->title);

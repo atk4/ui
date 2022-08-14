@@ -130,7 +130,7 @@ class JsChain extends JsExpression
                     return $arg->jsRender();
                 }
 
-                return $this->_json_encode($arg);
+                return $this->_jsonEncode($arg);
             }, $args))
             . ')';
     }

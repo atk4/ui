@@ -9,7 +9,6 @@ use Atk4\Data\Model;
 
 class Table extends Lister
 {
-    // Overrides
     public $defaultTemplate = 'table.html';
     public $ui = 'table';
     public $content = false;
@@ -29,7 +28,7 @@ class Table extends Lister
      *
      * @var Table\Column|null
      */
-    public $default_column;
+    public $defaultColumn;
 
     /** @var array<int|string, Table\Column|array<int, Table\Column>> Contains list of declared columns. Value will always be a column object. */
     public $columns = [];
@@ -40,7 +39,7 @@ class Table extends Lister
      *
      * @var bool
      */
-    public $use_html_tags = true;
+    public $useHtmlTags = true;
 
     /**
      * Determines a strategy on how totals will be calculated. Do not touch those fields
@@ -48,7 +47,7 @@ class Table extends Lister
      *
      * @var array|false
      */
-    public $totals_plan = false;
+    public $totalsPlan = false;
 
     /** @var bool Setting this to false will hide header row. */
     public $header = true;
@@ -57,19 +56,19 @@ class Table extends Lister
     public $totals = [];
 
     /** @var HtmlTemplate|null Contain the template for the "Head" type row. */
-    public $t_head;
+    public $tHead;
 
     /** @var HtmlTemplate */
-    public $t_row_master;
+    public $tRowMaster;
 
     /** @var HtmlTemplate Contain the template for the "Body" type row. */
-    public $t_row;
+    public $tRow;
 
     /** @var HtmlTemplate Contain the template for the "Foot" type row. */
-    public $t_totals;
+    public $tTotals;
 
     /** @var HtmlTemplate Contains the output to show if table contains no rows. */
-    public $t_empty;
+    public $tEmpty;
 
     /**
      * Set this if you want table to appear as sortable. This does not add any
@@ -85,15 +84,14 @@ class Table extends Lister
      *
      * @var string
      */
-    public $sort_by;
+    public $sortBy;
 
     /**
-     * When $sortable is true, and $sort_by is set, you can set this to
-     * "ascending" or "descending".
+     * When $sortable is true, and $sortBy is set, you can set order direction.
      *
-     * @var string
+     * @var 'asc'|'desc'|null
      */
-    public $sort_order;
+    public $sortDirection;
 
     /**
      * Make action columns in table use
@@ -112,11 +110,11 @@ class Table extends Lister
      */
     public function initChunks()
     {
-        if (!$this->t_head) {
-            $this->t_head = $this->template->cloneRegion('Head');
-            $this->t_row_master = $this->template->cloneRegion('Row');
-            $this->t_totals = $this->template->cloneRegion('Totals');
-            $this->t_empty = $this->template->cloneRegion('Empty');
+        if (!$this->tHead) {
+            $this->tHead = $this->template->cloneRegion('Head');
+            $this->tRowMaster = $this->template->cloneRegion('Row');
+            $this->tTotals = $this->template->cloneRegion('Totals');
+            $this->tEmpty = $this->template->cloneRegion('Empty');
 
             $this->template->del('Head');
             $this->template->del('Body');
@@ -309,7 +307,7 @@ class Table extends Lister
             $seed,
             $field->ui['table'] ?? null,
             $this->typeToDecorator[$field->type] ?? null,
-            [$this->default_column ?? Table\Column::class]
+            [$this->defaultColumn ?? Table\Column::class]
         );
 
         return $this->_addUnchecked(Table\Column::fromSeed($seed, ['table' => $this]));
@@ -391,7 +389,7 @@ class Table extends Lister
      */
     public function addTotals($plan = [])
     {
-        $this->totals_plan = $plan;
+        $this->totalsPlan = $plan;
     }
 
     /**
@@ -431,18 +429,18 @@ class Table extends Lister
 
         // Generate Header Row
         if ($this->header) {
-            $this->t_head->dangerouslySetHtml('cells', $this->getHeaderRowHtml());
-            $this->template->dangerouslySetHtml('Head', $this->t_head->renderToHtml());
+            $this->tHead->dangerouslySetHtml('cells', $this->getHeaderRowHtml());
+            $this->template->dangerouslySetHtml('Head', $this->tHead->renderToHtml());
         }
 
         // Generate template for data row
-        $this->t_row_master->dangerouslySetHtml('cells', $this->getDataRowHtml());
-        $this->t_row_master->set('_id', '{$_id}');
-        $this->t_row = new HtmlTemplate($this->t_row_master->renderToHtml());
-        $this->t_row->setApp($this->getApp());
+        $this->tRowMaster->dangerouslySetHtml('cells', $this->getDataRowHtml());
+        $this->tRowMaster->set('_id', '{$_id}');
+        $this->tRow = new HtmlTemplate($this->tRowMaster->renderToHtml());
+        $this->tRow->setApp($this->getApp());
 
         // Iterate data rows
-        $this->_rendered_rows_count = 0;
+        $this->_renderedRowsCount = 0;
 
         // TODO we should not iterate using $this->model variable,
         // then also backup/tryfinally would be not needed
@@ -450,18 +448,18 @@ class Table extends Lister
         $modelBackup = $this->model;
         try {
             foreach ($this->model as $this->model) {
-                $this->current_row = $this->model;
+                $this->currentRow = $this->model;
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
                 }
 
-                if ($this->totals_plan) {
+                if ($this->totalsPlan) {
                     $this->updateTotals();
                 }
 
                 $this->renderRow();
 
-                ++$this->_rendered_rows_count;
+                ++$this->_renderedRowsCount;
 
                 if ($this->hook(self::HOOK_AFTER_ROW) === false) {
                     continue;
@@ -472,17 +470,17 @@ class Table extends Lister
         }
 
         // Add totals rows or empty message
-        if (!$this->_rendered_rows_count) {
+        if ($this->_renderedRowsCount === 0) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
-                $this->template->dangerouslyAppendHtml('Body', $this->t_empty->renderToHtml());
+                $this->template->dangerouslyAppendHtml('Body', $this->tEmpty->renderToHtml());
             }
-        } elseif ($this->totals_plan) {
-            $this->t_totals->dangerouslySetHtml('cells', $this->getTotalsRowHtml());
-            $this->template->dangerouslyAppendHtml('Foot', $this->t_totals->renderToHtml());
+        } elseif ($this->totalsPlan) {
+            $this->tTotals->dangerouslySetHtml('cells', $this->getTotalsRowHtml());
+            $this->template->dangerouslyAppendHtml('Foot', $this->tTotals->renderToHtml());
         }
 
         // stop JsPaginator if there are no more records to fetch
-        if ($this->jsPaginator && ($this->_rendered_rows_count < $this->ipp)) {
+        if ($this->jsPaginator && ($this->_renderedRowsCount < $this->ipp)) {
             $this->jsPaginator->jsIdle();
         }
 
@@ -495,9 +493,9 @@ class Table extends Lister
      */
     public function renderRow()
     {
-        $this->t_row->set($this->model);
+        $this->tRow->set($this->model);
 
-        if ($this->use_html_tags) {
+        if ($this->useHtmlTags) {
             // Prepare row-specific HTML tags.
             $html_tags = [];
 
@@ -518,12 +516,12 @@ class Table extends Lister
             }
 
             // Render row and add to body
-            $this->t_row->dangerouslySetHtml($html_tags);
-            $this->t_row->set('_id', $this->model->getId());
-            $this->template->dangerouslyAppendHtml('Body', $this->t_row->renderToHtml());
-            $this->t_row->del(array_keys($html_tags));
+            $this->tRow->dangerouslySetHtml($html_tags);
+            $this->tRow->set('_id', $this->model->getId());
+            $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
+            $this->tRow->del(array_keys($html_tags));
         } else {
-            $this->template->dangerouslyAppendHtml('Body', $this->t_row->renderToHtml());
+            $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
         }
     }
 
@@ -572,7 +570,7 @@ class Table extends Lister
      */
     public function updateTotals()
     {
-        foreach ($this->totals_plan as $key => $val) {
+        foreach ($this->totalsPlan as $key => $val) {
             // if value is array, then we treat it as built-in or closure aggregate method
             if (is_array($val)) {
                 $f = $val[0]; // shortcut
@@ -655,14 +653,14 @@ class Table extends Lister
         $output = [];
         foreach ($this->columns as $name => $column) {
             // if no totals plan, then show dash, but keep column formatting
-            if (!isset($this->totals_plan[$name])) {
+            if (!isset($this->totalsPlan[$name])) {
                 $output[] = $column->getTag('foot', '-');
 
                 continue;
             }
 
             // if totals plan is set as array, then show formatted value
-            if (is_array($this->totals_plan[$name])) {
+            if (is_array($this->totalsPlan[$name])) {
                 // todo - format
                 $field = $this->model->getField($name);
                 $output[] = $column->getTotalsCellHtml($field, $this->totals[$name]);
@@ -671,7 +669,7 @@ class Table extends Lister
             }
 
             // otherwise just show it, for example, "Totals:" cell
-            $output[] = $column->getTag('foot', $this->totals_plan[$name]);
+            $output[] = $column->getTag('foot', $this->totalsPlan[$name]);
         }
 
         return implode('', $output);

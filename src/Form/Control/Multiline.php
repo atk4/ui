@@ -59,7 +59,7 @@ use Atk4\Ui\View;
  *         }
  *     }
  *
- *   return $form->js(true, null, 'input[name="grand_total"]')->val($app->ui_persistence->typecastSaveField(new Field(['type' => 'atk4_money']), $grand_total));
+ *   return $form->js(true, null, 'input[name="grand_total"]')->val($app->uiPersistence->typecastSaveField(new Field(['type' => 'atk4_money']), $grand_total));
  * }, ['qty', 'price']);
  *
  * Finally, it's also possible to use Multiline for quickly adding records to a
@@ -256,7 +256,7 @@ class Multiline extends Form\Control
                 if ($fieldName === '__atkml') {
                     $dataRows[$k][$fieldName] = $value;
                 } else {
-                    $dataRows[$k][$fieldName] = $this->getApp()->ui_persistence->typecastLoadField($this->getModel()->getField($fieldName), $value);
+                    $dataRows[$k][$fieldName] = $this->getApp()->uiPersistence->typecastLoadField($this->getModel()->getField($fieldName), $value);
                 }
             }
         }
@@ -282,7 +282,7 @@ class Multiline extends Form\Control
     public function getValue(): string
     {
         if ($this->entityField->getField()->type === 'json') {
-            $jsonValues = $this->getApp()->ui_persistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
+            $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
         } else {
             // set data according to HasMany relation or using model.
             $model = $this->getModel();
@@ -291,7 +291,7 @@ class Multiline extends Form\Control
                 $cols = [];
                 foreach ($this->rowFields as $fieldName) {
                     $field = $model->getField($fieldName);
-                    $value = $this->getApp()->ui_persistence->typecastSaveField($field, $row->get($field->shortName));
+                    $value = $this->getApp()->uiPersistence->typecastSaveField($field, $row->get($field->shortName));
                     $cols[$fieldName] = $value;
                 }
                 $rows[] = $cols;
@@ -313,7 +313,7 @@ class Multiline extends Form\Control
         foreach ($rows as $cols) {
             $rowId = $this->getMlRowId($cols);
             foreach ($cols as $fieldName => $value) {
-                if ($fieldName === '__atkml' || $fieldName === $entity->id_field) {
+                if ($fieldName === '__atkml' || $fieldName === $entity->idField) {
                     continue;
                 }
 
@@ -341,10 +341,10 @@ class Multiline extends Form\Control
         $model = $this->getModel();
 
         // collects existing ids.
-        $currentIds = array_column($model->export(), $model->id_field);
+        $currentIds = array_column($model->export(), $model->idField);
 
         foreach ($this->rowData as $row) {
-            $entity = $model->tryLoad($row[$model->id_field] ?? null);
+            $entity = $model->tryLoad($row[$model->idField] ?? null);
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
                     continue;
@@ -420,7 +420,7 @@ class Multiline extends Form\Control
         if ($fieldNames === null) {
             $fieldNames = array_keys($model->getFields('not system'));
         }
-        $this->rowFields = array_merge([$model->id_field], $fieldNames);
+        $this->rowFields = array_merge([$model->idField], $fieldNames);
 
         foreach ($this->rowFields as $fieldName) {
             $this->fieldDefs[] = $this->getFieldDef($model->getField($fieldName));
@@ -460,7 +460,7 @@ class Multiline extends Form\Control
             'definition' => $this->getComponentDefinition($field),
             'cellProps' => $this->getSuiTableCellProps($field),
             'caption' => $field->getCaption(),
-            'default' => $this->getApp()->ui_persistence->typecastSaveField($field, $field->default),
+            'default' => $this->getApp()->uiPersistence->typecastSaveField($field, $field->default),
             'isExpr' => @isset($field->expr),
             'isEditable' => $field->isEditable(),
             'isHidden' => $field->isHidden(),
@@ -505,7 +505,7 @@ class Multiline extends Form\Control
     {
         $calendar = new Calendar();
         $props['config'] = $this->componentProps[self::DATE] ?? [];
-        $phpFormat = $this->getApp()->ui_persistence->{$field->type . '_format'};
+        $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
         $props['config']['dateFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat);
 
         if ($field->type === 'datetime' || $field->type === 'time') {
@@ -572,7 +572,7 @@ class Multiline extends Form\Control
         if ($rec->isLoaded()) {
             $option = [
                 'key' => $value,
-                'text' => $rec->get($model->title_field),
+                'text' => $rec->get($model->titleField),
                 'value' => $value,
             ];
             foreach ($this->fieldDefs as $key => $component) {
@@ -631,7 +631,7 @@ class Multiline extends Form\Control
             $model->setLimit($limit);
 
             foreach ($model as $item) {
-                $items[$item->get($field->getReference()->getTheirFieldName())] = $item->get($model->title_field);
+                $items[$item->get($field->getReference()->getTheirFieldName())] = $item->get($model->titleField);
             }
         }
 
@@ -723,13 +723,13 @@ class Multiline extends Form\Control
         $values = [];
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['name'];
-            if ($fieldName === $model->id_field) {
+            if ($fieldName === $model->idField) {
                 continue;
             }
             $field = $model->getField($fieldName);
             if ($field instanceof CallbackField) {
                 $value = ($field->expr)($model);
-                $values[$fieldName] = $this->getApp()->ui_persistence->typecastSaveField($field, $value);
+                $values[$fieldName] = $this->getApp()->uiPersistence->typecastSaveField($field, $value);
             }
         }
 
@@ -746,13 +746,13 @@ class Multiline extends Form\Control
     {
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['name'];
-            if ($fieldName === $model->id_field) {
+            if ($fieldName === $model->idField) {
                 continue;
             }
 
             $field = $model->getField($fieldName);
 
-            $value = $this->getApp()->ui_persistence->typecastLoadField($field, $_POST[$fieldName] ?? null);
+            $value = $this->getApp()->uiPersistence->typecastLoadField($field, $_POST[$fieldName] ?? null);
             if ($field->isEditable()) {
                 try {
                     $model->set($fieldName, $value);
@@ -788,12 +788,12 @@ class Multiline extends Form\Control
                 $dummyModel->addExpression($field['name'], ['expr' => $field['expr'], 'type' => $model->getField($field['name'])->type]);
             }
             $values = $dummyModel->tryLoadAny()->get();
-            unset($values[$model->id_field]);
+            unset($values[$model->idField]);
 
             foreach ($values as $f => $value) {
                 if ($value) {
                     $field = $model->getField($f);
-                    $formatValues[$f] = $this->getApp()->ui_persistence->typecastSaveField($field, $value);
+                    $formatValues[$f] = $this->getApp()->uiPersistence->typecastSaveField($field, $value);
                 }
             }
         }

@@ -118,7 +118,7 @@ class JsTest extends TestCase
         $b2 = new Jquery('.box2');
 
         $doc = new Jquery(new JsExpression('document'));
-        $fx = $doc->ready(new JsFunction(null, [
+        $fx = $doc->ready(new JsFunction([], [
             $b1->height($b2->height()),
         ]));
 

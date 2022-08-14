@@ -17,7 +17,7 @@ class Multiformat extends Table\Column
     /** @var \Closure Method to execute which will return array of seeds for decorators */
     public $callback;
 
-    public function getDataCellHtml(Field $field = null, array $extra_tags = []): string
+    public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         return '{$c_' . $this->shortName . '}';
     }

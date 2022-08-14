@@ -38,7 +38,7 @@ support for a new type.
 In the below steps, the #1 and #2 are a minimum to achieve. #3 and #4 will improve experience
 of your integration.
 
- 1. Extend UI persistence and use your class in `$app->ui_persistence`.
+ 1. Extend UI persistence and use your class in `$app->uiPersistence`.
 
   You need to define how to output your data as well as read it.
 
@@ -139,7 +139,7 @@ yet make it available when editing, you could create your own :php:class:`Table\
 
 If you are wondering, why I'm not overriding by providing HTML tag equal to the field name,
 it's because this technique is unreliable due to ability to exclude HTML tags with
-:php:attr:`Table::$use_html_tags`.
+:php:attr:`Table::$useHtmlTags`.
 
 Display credit card number with spaces
 --------------------------------------
@@ -175,7 +175,7 @@ extending :php:class:`Persistence\Ui`::
     {
         public function __construct($defaults = [])
         {
-            $this->ui_persistence = new MyPersistence()
+            $this->uiPersistence = new MyPersistence()
 
             parent::__construct($defaults);
         }

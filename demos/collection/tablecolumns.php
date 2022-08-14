@@ -22,7 +22,7 @@ $modelColorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
                 'table' => [
                     Table\Column\Tooltip::class,
                     [
-                        'tooltip_field' => 'note',
+                        'tooltipField' => 'note',
                         'icon' => 'info circle blue',
                     ],
                 ],
@@ -35,7 +35,7 @@ $modelColorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
                 'table' => [
                     Table\Column\NoValue::class,
                     [
-                        'no_value' => ' no value ',
+                        'noValue' => ' no value ',
                     ],
                 ],
             ],

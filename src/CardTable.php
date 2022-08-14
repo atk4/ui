@@ -39,7 +39,7 @@ class CardTable extends Table
                 $data[] = [
                     'id' => $key,
                     'field' => $model->getField($key)->getCaption(),
-                    'value' => $this->getApp()->ui_persistence->typecastSaveField($model->getField($key), $value),
+                    'value' => $this->getApp()->uiPersistence->typecastSaveField($model->getField($key), $value),
                 ];
             }
         }

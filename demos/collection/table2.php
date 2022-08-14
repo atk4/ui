@@ -31,9 +31,9 @@ $table->template->dangerouslyAppendHtml('Body', '<tr class="center aligned"><td 
 
 // Hook can be used to display data before row. You can also inject and format extra rows.
 $table->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (Table $table) {
-    if ($table->current_row->getId() === 2) {
-        $table->template->dangerouslyAppendHtml('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->current_row->get('action') . ')</th></tr>');
-    } elseif ($table->current_row->get('action') === 'Tax') {
+    if ($table->currentRow->getId() === 2) {
+        $table->template->dangerouslyAppendHtml('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->currentRow->get('action') . ')</th></tr>');
+    } elseif ($table->currentRow->get('action') === 'Tax') {
         // renders current row
         $table->renderRow();
 

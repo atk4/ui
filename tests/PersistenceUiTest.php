@@ -62,9 +62,9 @@ class PersistenceUiTest extends TestCase
             yield [['timezone' => $tz], ['type' => 'date'], $evalDate, 'Jan 02, 2022'];
             yield [['timezone' => $tz], ['type' => 'time'], $evalTime, '10:20'];
             yield [['timezone' => $tz], ['type' => 'datetime'], $evalDatetime, 'Jan 02, 2022 10:20:30'];
-            yield [['timezone' => $tz, 'date_format' => 'j.n.Y'], ['type' => 'date'], $evalDate, '2.1.2022'];
-            yield [['timezone' => $tz, 'time_format' => 'g:i:s A'], ['type' => 'time'], $evalTime, '10:20:00 AM'];
-            yield [['timezone' => $tz, 'datetime_format' => 'j.n.Y g:i:s A'], ['type' => 'datetime'], $evalDatetime, '2.1.2022 10:20:30 AM'];
+            yield [['timezone' => $tz, 'dateFormat' => 'j.n.Y'], ['type' => 'date'], $evalDate, '2.1.2022'];
+            yield [['timezone' => $tz, 'timeFormat' => 'g:i:s A'], ['type' => 'time'], $evalTime, '10:20:00 AM'];
+            yield [['timezone' => $tz, 'datetimeFormat' => 'j.n.Y g:i:s A'], ['type' => 'datetime'], $evalDatetime, '2.1.2022 10:20:30 AM'];
         }
 
         $fixSpaceToNbspFx = fn (string $v) => str_replace(' ', "\u{00a0}", $v);
@@ -73,13 +73,13 @@ class PersistenceUiTest extends TestCase
         yield [['currency' => ''], ['type' => 'atk4_money'], 1.0, $fixSpaceToNbspFx('1.00')];
         yield [['currency' => '$'], ['type' => 'atk4_money'], 1.0, $fixSpaceToNbspFx('$ 1.00')];
         yield [[], ['type' => 'atk4_money'], 1.1023, $fixSpaceToNbspFx('€ 1.1023')];
-        yield [['currency_decimals' => 4], ['type' => 'atk4_money'], 1.102, $fixSpaceToNbspFx('€ 1.1020')];
+        yield [['currencyDecimals' => 4], ['type' => 'atk4_money'], 1.102, $fixSpaceToNbspFx('€ 1.1020')];
         yield [[], ['type' => 'atk4_money'], 1234056789.1, $fixSpaceToNbspFx('€ 1 234 056 789.10')];
         yield [[], ['type' => 'atk4_money'], 234056789.101, $fixSpaceToNbspFx('€ 234 056 789.101')];
-        yield [['currency_decimal_separator' => ','], ['type' => 'atk4_money'], 1.0, $fixSpaceToNbspFx('€ 1,00')];
+        yield [['currencyDecimalSeparator' => ','], ['type' => 'atk4_money'], 1.0, $fixSpaceToNbspFx('€ 1,00')];
         yield [[], ['type' => 'atk4_money'], 1000.0, $fixSpaceToNbspFx('€ 1 000.00')];
-        yield [['currency_thousands_separator' => ','], ['type' => 'atk4_money'], 1000.0, $fixSpaceToNbspFx('€ 1,000.00')];
-        yield [['currency_decimal_separator' => ',', 'currency_thousands_separator' => '.'], ['type' => 'atk4_money'], 1000.0, $fixSpaceToNbspFx('€ 1.000,00')];
+        yield [['currencyThousandsSeparator' => ','], ['type' => 'atk4_money'], 1000.0, $fixSpaceToNbspFx('€ 1,000.00')];
+        yield [['currencyDecimalSeparator' => ',', 'currencyThousandsSeparator' => '.'], ['type' => 'atk4_money'], 1000.0, $fixSpaceToNbspFx('€ 1.000,00')];
 
         foreach (['string', 'text', 'integer', 'float', 'boolean', 'date', 'time', 'datetime', 'atk4_money'] as $type) {
             yield [[], ['type' => $type], null, null];
