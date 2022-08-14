@@ -28,11 +28,7 @@ class JsFunction implements JsExpressionable
     /** @var string */
     public $indent = '  ';
 
-    /**
-     * @param array $args
-     * @param array $statements
-     */
-    public function __construct($args = [], $statements = null)
+    public function __construct(array $args = [], array $statements = null)
     {
         if ($statements === null) {
             $statements = $args;
