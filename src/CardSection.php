@@ -69,7 +69,7 @@ class CardSection extends View
                 continue;
             }
             $label = $model->getField($field)->getCaption();
-            $value = $this->issetApp() ? $this->getApp()->ui_persistence->typecastSaveField($model->getField($field), $model->get($field)) : $model->get($field);
+            $value = $this->issetApp() ? $this->getApp()->uip->typecastSaveField($model->getField($field), $model->get($field)) : $model->get($field);
             if ($useLabel) {
                 $value = $label . $this->glue . $value;
             }

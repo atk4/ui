@@ -176,7 +176,7 @@ In this case we display a message when any of the control value for 'qty' and 'b
             $box = $cols['box'] ?? 0;
             $total += $qty * $box;
         }
-        return new JsToast('The new Total is ' . $app->ui_persistence->typecastSaveField(new Field(['type' => 'atk4_money']), $total));
+        return new JsToast('The new Total is ' . $app->uip->typecastSaveField(new Field(['type' => 'atk4_money']), $total));
     }, ['qty', 'box']);
 
 

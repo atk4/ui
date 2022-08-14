@@ -93,7 +93,7 @@ Finally, Lister permits you not to use {rows} and {row} tags if entire region ca
 Tweaking the output
 ===================
 
-Output is formatted using the standard :ref:`ui_persistence` routine, but you can also fine-tune the content
+Output is formatted using the standard :ref:`uip` routine, but you can also fine-tune the content
 of your tags like this::
 
     $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {

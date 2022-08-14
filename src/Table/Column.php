@@ -322,7 +322,7 @@ class Column
      */
     public function getTotalsCellHtml(Field $field, $value)
     {
-        return $this->getTag('foot', $this->getApp()->ui_persistence->typecastSaveField($field, $value));
+        return $this->getTag('foot', $this->getApp()->uip->typecastSaveField($field, $value));
     }
 
     /**

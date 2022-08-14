@@ -18,13 +18,13 @@ class Money extends Input
 
         $res = str_replace("\u{00a0}" /* Unicode NBSP */, ' ', $res);
 
-        return trim(str_replace($this->getApp()->ui_persistence->currency, '', $res));
+        return trim(str_replace($this->getApp()->uip->currency, '', $res));
     }
 
     protected function renderView(): void
     {
         if ($this->label === null) {
-            $this->label = $this->getApp()->ui_persistence->currency;
+            $this->label = $this->getApp()->uip->currency;
         }
 
         parent::renderView();

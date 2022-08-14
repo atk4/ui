@@ -96,7 +96,7 @@ class InlineEdit extends View
             $value = $_POST['value'] ?? null;
             $this->cb->set(function () use ($value) {
                 try {
-                    $this->model->set($this->fieldName, $this->getApp()->ui_persistence->typecastLoadField($this->model->getField($this->fieldName), $value));
+                    $this->model->set($this->fieldName, $this->getApp()->uip->typecastLoadField($this->model->getField($this->fieldName), $value));
                     $this->model->save();
 
                     return $this->jsSuccess('Update successfully');
@@ -120,7 +120,7 @@ class InlineEdit extends View
     public function onChange(\Closure $fx): void
     {
         if (!$this->autoSave) {
-            $value = $this->getApp()->ui_persistence->typecastLoadField($this->model->getField($this->fieldName), $_POST['value'] ?? null);
+            $value = $this->getApp()->uip->typecastLoadField($this->model->getField($this->fieldName), $_POST['value'] ?? null);
             $this->cb->set(function () use ($fx, $value) {
                 return $fx($value);
             });
