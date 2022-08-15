@@ -384,7 +384,7 @@ With the according renderRowFunction::
         ];
     }
 
-Of course, the tags `value`, `title`, `icon`, `someOtherField` and `SomeOtherField2` need to be set in my_dropdown.html.
+Of course, the tags `value`, `title`, `icon`, `someOtherField` and `someOtherField2` need to be set in my_dropdown.html.
 
 
 Usage with $values property

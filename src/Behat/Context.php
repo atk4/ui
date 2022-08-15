@@ -28,8 +28,9 @@ class Context extends RawMinkContext implements BehatContext
         foreach ($event->getFeature()->getScenarios() as $scenario) {
             $scenarioSteps = $scenario->getSteps();
             if (count($scenarioSteps) > 0
-                    && reset($scenarioSteps)->getLine() <= $event->getStep()->getLine()
-                    && end($scenarioSteps)->getLine() >= $event->getStep()->getLine()) {
+                && reset($scenarioSteps)->getLine() <= $event->getStep()->getLine()
+                && end($scenarioSteps)->getLine() >= $event->getStep()->getLine()
+            ) {
                 return $scenario;
             }
         }
