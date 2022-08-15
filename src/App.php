@@ -56,9 +56,9 @@ class App
     /**
      * @var string Version of Agile UI
      *
-     * @TODO remove, no longer needed for CDN versioning as we bundle them all
+     * @TODO remove, no longer needed for CDN versioning as we bundle all resources
      */
-    public $version = '3.2-dev';
+    public $version = '4.0-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
