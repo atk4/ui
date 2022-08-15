@@ -389,7 +389,7 @@ This will initialize two new views inside the app::
     $app->html
     $app->layout
 
-The first view is a HTML boilerplate - containing HEAD / BODY tags but not the body
+The first view is a HTML boilerplate - containing head / body tags but not the body
 contents. It is a standard html5 doctype template.
 
 The layout will be selected based on your choice - Layout\Centered, Layout\Admin etc. This will
