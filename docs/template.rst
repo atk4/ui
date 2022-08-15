@@ -617,13 +617,6 @@ There are more templates which are being substituted:
 - {css}css/file.css{/} - will replace with URL link to a CSS file
 - {js}jquery.validator.js{/} - will replace with URL to JavaScript file
 
-Avoid using the next two tags, which are obsolete:
-
-- {$atk_path} - will insert URL leading to atk4 public folder
-- {$base_path} - will insert URL leading to public folder of the project
-
-.. todo:: base_path might be pointing to a base folder and not public
-
 
 Application (API) has a function :php:`App_Web::setTags` which is called for
 every view in the system. It's used to resolve "template" and "page"
