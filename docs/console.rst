@@ -27,15 +27,10 @@ After adding a console to your :ref:`render_tree`, you just need to set a call-b
 
     $console = Console::addTo($app);
     $console->set(function ($console) {
-
         // This will be executed through SSE request
-
         $console->output('hello');
-
         echo 'world'; // also will be redirected to console
-
         sleep(2);
-
         $console->send(new \Atk4\Ui\JsExpression('alert([])', ['The wait is over']));
     });
 
@@ -97,9 +92,7 @@ real-time then display it on the console using color. Console does not support A
 Method exec can be executed directly on the $console or inside the callback::
 
     $console->set(function ($console) {
-
         $console->eval();
-
     });
 
 Without call-back, eval will wrap itself into a callback but you can only execute a single command. When using callback

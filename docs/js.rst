@@ -649,14 +649,12 @@ The most basic approach is::
 
     $button = \Atk4\Ui\Button::addTo($app, ['Process Image']);
     $button->on('click', function () use ($button, $image) {
-
         sleep(1); // $image->resize();
         sleep(1); // $image->findFace();
         sleep(1); // $image->watermark();
         sleep(1); // $image->createThumbnails();
 
         return $button->js()->text('Success')->addClass('disabled');
-
     });
 
 However, it would be nice if the user was aware of the progress of your process, which is when `Server Sent Event (JsSse)`_
@@ -678,7 +676,6 @@ This class implements ability for your PHP code to send messages to the browser 
     $sse = \Atk4\Ui\JsSse::addTo($app);
 
     $button->on('click', $sse->set(function () use ($sse, $button, $image) {
-
         $sse->send($button->js()->text('Processing'));
         sleep(1); // $image->resize();
 
@@ -692,7 +689,6 @@ This class implements ability for your PHP code to send messages to the browser 
         sleep(1); // $image->createThumbnails();
 
         return $button->js()->text('Success')->addClass('disabled');
-
     }));
 
 The JsSse component plays a crucial role in some high-level components such as :php:class:`Console` and :php:class:`ProgressBar`.

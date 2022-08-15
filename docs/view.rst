@@ -374,7 +374,6 @@ Here is a best practice for using custom template::
             parent::renderView();
             $this->template->set('title', $this->title);
         }
-
     }
 
 As soon as the view becomes part of a render-tree, the Template object will also be allocated.

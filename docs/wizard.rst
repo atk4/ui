@@ -32,12 +32,10 @@ Start by creating Wizard inside your render tree::
 Next add as many steps as you need specifying title and a PHP callback code for each::
 
     $wizard->addStep('Welcome', function ($wizard) {
-
         Message::addTo($wizard, ['Welcome to wizard demonstration'])->text
             ->addParagraph('Use button "Next" to advance')
             ->addParagraph('You can specify your existing database connection string which will be used
             to create a table for model of your choice');
-
     });
 
 Your callback will also receive `$wizard` as the first argument. Method addStep returns :php:class:`Step`,

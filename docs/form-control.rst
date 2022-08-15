@@ -353,7 +353,6 @@ You can also use this function to add an Icon to a record::
 If you'd like to even further adjust How each item is displayed (e.g. complex HTML and more model fields), you can extend the Dropdown class and create your own template with the complex HTML::
 
     class MyDropdown extends \Atk4\Ui\Dropdown {
-
         public $defaultTemplate = 'my_dropdown.html';
 
         /*
