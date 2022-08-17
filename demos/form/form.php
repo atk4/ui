@@ -27,6 +27,19 @@ $tabs = \Atk4\Ui\Tabs::addTo($app);
 
 $tab = $tabs->addTab('Basic Use');
 
+\Atk4\Ui\Header::addTo($tab, ['Test form for null/zero']);
+\Atk4\Ui\Header::addTo($tab, ['Set Product category to empty and press save.']);
+
+$form = Form::addTo($tab);
+$form->setModel(($productmodel = new Product($app->db))->loadAny(), [$productmodel->fieldName()->name, $productmodel->fieldName()->product_category_id]);
+$form->addControl($productmodel->fieldName()->product_sub_category_id, [\Atk4\Ui\Form\Control\Dropdown::class]);
+
+$form->onSubmit(function (Form $form) {
+    // implement subscribe here
+
+    return $form->success('The lookup control in Product Category wrongly stores product_category_id to ' . $form->model->get($form->model->fieldName()->product_category_id) . ' instead of null. However the Product Sub Category DROPDOWN control correctly stores it as '.($form->model->get($form->model->fieldName()->product_sub_category_id) == null ? 'NULL' : $form->model->get($form->model->fieldName()->product_sub_category_id)));
+});
+
 \Atk4\Ui\Header::addTo($tab, ['Very simple form']);
 
 $form = Form::addTo($tab);
