@@ -41,9 +41,11 @@
                     const arg = unsplitArg.split('=');
                     // eslint-disable-next-line prefer-destructuring
                     obj[arg[0]] = arg[1];
+
                     return obj;
                 }, {});
         }
+
         return {};
     };
 
@@ -84,6 +86,7 @@
         if (newParams.length > 0) {
             return urlBase + '?' + newParams.join('&');
         }
+
         return urlBase;
     };
 }(jQuery));

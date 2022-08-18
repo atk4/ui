@@ -64,6 +64,7 @@ export default {
             } else if (this.isSelected(this.id)) {
                 state = 'on';
             }
+
             return state;
         },
         getIcon: function () {
@@ -92,6 +93,7 @@ export default {
             } else {
                 values.push(initValues);
             }
+
             return values;
         },
         /**
@@ -107,10 +109,12 @@ export default {
                 if (nodes[i].nodes && nodes[i].nodes.length > 0) {
                     if (!this.hasAllFill(nodes[i].nodes)) {
                         state = false;
+
                         break;
                     }
                 } else if (this.values.findIndex((id) => id === nodes[i].id) === -1) {
                     state = false;
+
                     break;
                 }
             }
@@ -130,14 +134,17 @@ export default {
                 if (nodes[i].nodes && nodes[i].nodes.length > 0) {
                     if (this.hasSomeFill(nodes[i].nodes)) {
                         state = true;
+
                         break;
                     }
                 }
                 if (this.values.findIndex((id) => id === nodes[i].id) > -1) {
                     state = true;
+
                     break;
                 }
             }
+
             return state;
         },
         /**
@@ -157,9 +164,11 @@ export default {
             switch (options.mode) {
             case 'single':
                 this.handleSingleSelect();
+
                 break;
             case 'multiple':
                 this.handleMultipleSelect();
+
                 break;
             default:
             }
@@ -194,6 +203,7 @@ export default {
                     ids.push(node.id);
                 }
             });
+
             return ids;
         },
         remove: function (values, value) {

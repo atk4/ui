@@ -172,6 +172,7 @@ class Context extends RawMinkContext implements BehatContext
                         }
                     }
                 });
+
                 return [invalidIds, duplicateIds];
             })();
             EOF);

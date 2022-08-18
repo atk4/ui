@@ -15,6 +15,7 @@ class ApiService {
             this.instance = this;
             this.afterSuccessCallbacks = [];
         }
+
         return this.instance;
     }
 
@@ -183,6 +184,7 @@ class ApiService {
         if (response.success) {
             return true;
         }
+
         return false;
     }
 
@@ -241,6 +243,7 @@ class ApiService {
             allowMultiple: false,
             onHide: function () {
                 m.children().remove();
+
                 return true;
             },
         })

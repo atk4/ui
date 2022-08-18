@@ -17,6 +17,7 @@ class ModalService {
             this.modals = [];
             ModalService.instance = this;
         }
+
         return ModalService.instance;
     }
 

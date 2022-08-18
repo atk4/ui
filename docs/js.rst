@@ -537,6 +537,7 @@ other view::
 
     $form->onSubmit(function (Form $form) use ($table) {
         $form->model->save();
+
         return new \Atk4\Ui\JsReload($table);
     });
 
@@ -624,6 +625,7 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
         $form->setModel(clone $model);
         $form->onSubmit(function (Form $form) use ($table) {
             $form->model->save();
+
             return [
                 $table->jsReload(),
                 $form->success('ok'),

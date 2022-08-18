@@ -11,6 +11,7 @@ class PopupService {
         if (!PopupService.instance) {
             PopupService.instance = this;
         }
+
         return PopupService.instance;
     }
 

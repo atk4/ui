@@ -20,6 +20,7 @@ export default class sidenav extends atkPlugin {
             if (this.urlMatchLocation(this.$el[0].href)) {
                 this.$el.addClass(this.settings.menuItemActiveClass);
             }
+
             return;
         }
         // html element for display or hiding menu items. Usually a div containning an icon.
@@ -50,6 +51,7 @@ export default class sidenav extends atkPlugin {
                 $(el).addClass(this.settings.menuItemActiveClass);
             }
         });
+
         return hasBase;
     }
 

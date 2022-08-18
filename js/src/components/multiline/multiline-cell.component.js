@@ -39,6 +39,7 @@ export default {
             if (this.getComponent() === 'atk-multiline-readonly') {
                 return { readOnlyValue: this.fieldValue };
             }
+
             return this.cellData.definition.componentProps;
         },
         onInput: function (value) {
@@ -56,6 +57,7 @@ export default {
             if (this.type === 'boolean') {
                 r = value.target.checked;
             }
+
             return r;
         },
     },

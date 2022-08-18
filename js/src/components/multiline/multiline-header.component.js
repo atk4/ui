@@ -36,6 +36,7 @@ export default {
                 case 'integer':
                 case 'number':
                     align = 'right';
+
                     break;
                 default:
                 }
@@ -48,6 +49,7 @@ export default {
             this.columns.forEach((field) => {
                 count = field.isVisible ? count + 1 : count;
             });
+
             return count;
         },
         hasError: function () {
@@ -66,6 +68,7 @@ export default {
                     }
                 }
             }
+
             return null;
         },
     },

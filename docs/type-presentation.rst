@@ -157,6 +157,7 @@ extending :php:class:`Persistence\Ui`::
 
                     return implode(' ', $parts);
             }
+
             return parent::_typecastSaveField($field, $value);
         }
 
@@ -166,6 +167,7 @@ extending :php:class:`Persistence\Ui`::
                 case 'card':
                     return str_replace(' ', '', $value);
             }
+
             return parent::_typecastLoadField($field, $value);
         }
     }

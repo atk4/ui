@@ -102,6 +102,7 @@ export default class fileUpload extends atkPlugin {
                 this.bar.progress('reset');
                 this.bar.hide('fade');
             }, 1000);
+
             break;
         case 'upload':
             this.action.html(this.actionContent);
@@ -109,6 +110,7 @@ export default class fileUpload extends atkPlugin {
             this.fileInput.val('');
             this.hiddenInput.val('');
             this.$el.data().fileId = null;
+
             break;
         default:
         }
@@ -147,6 +149,7 @@ export default class fileUpload extends atkPlugin {
                     this.bar.progress('set percent', parseInt(percentComplete * 100, 10));
                 }
             }, false);
+
             return xhr;
         };
 

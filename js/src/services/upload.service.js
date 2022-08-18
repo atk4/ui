@@ -13,6 +13,7 @@ class UploadService {
         if (!UploadService.instance) {
             UploadService.instance = this;
         }
+
         return UploadService.instance;
     }
 

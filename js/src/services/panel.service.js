@@ -20,6 +20,7 @@ class PanelService {
                 currentParams: null, // url argument of the current panel.
             };
         }
+
         return this.instance;
     }
 
@@ -162,6 +163,7 @@ class PanelService {
             // Args must be defined as data-attributeName in the triggered element.
             const args = params.reloadArgs.reduce((obj, item) => {
                 obj[item] = params.triggered.data(item);
+
                 return obj;
             }, {});
             // add url argument if pass to panel
@@ -345,6 +347,7 @@ class PanelService {
         if (el && triggerElement) {
             isSame = (el.length === triggerElement.length && el.length === el.filter(triggerElement).length);
         }
+
         return isSame;
     }
 

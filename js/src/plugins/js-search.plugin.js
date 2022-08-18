@@ -90,6 +90,7 @@ export default class JsSearch extends atkPlugin {
                 this.setButtonState(false);
                 this.setFilterState(false);
                 this.textInput.val('');
+
                 return false;
             }
         });

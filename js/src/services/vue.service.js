@@ -71,6 +71,7 @@ class VueService {
             };
             VueService.instance = this;
         }
+
         return VueService.instance;
     }
 

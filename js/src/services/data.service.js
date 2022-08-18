@@ -13,6 +13,7 @@ class DataService {
             this.hasStorage = this.storageAvailable('localStorage') && this.storageAvailable('sessionStorage');
             this.storage = { session: sessionStorage, local: localStorage };
         }
+
         return this.instance;
     }
 
@@ -29,6 +30,7 @@ class DataService {
             const x = '__storage_test__';
             storage.setItem(x, x);
             storage.removeItem(x);
+
             return true;
         } catch (e) {
             return e instanceof DOMException && (
@@ -56,8 +58,10 @@ class DataService {
             JSON.parse(str);
         } catch (e) {
             console.error('Invalid json string.');
+
             return false;
         }
+
         return true;
     }
 
@@ -90,6 +94,7 @@ class DataService {
         if (this.hasStorage) {
             value = this.storage[type].getItem(item);
         }
+
         return value;
     }
 

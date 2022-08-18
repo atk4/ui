@@ -23,11 +23,13 @@ class FormService {
                         if (event) {
                             event.returnValue = message;
                         }
+
                         return message;
                     }
                 });
             };
         }
+
         return this.instance;
     }
 
@@ -47,6 +49,7 @@ class FormService {
      */
     onSuccess() {
         atk.formService.clearDirtyForm($(this).attr('id'));
+
         return true;
     }
 
@@ -106,13 +109,16 @@ class FormService {
             const $field = this.getField(form, fieldName);
             if (!$field) {
                 console.error('You are validating a field that does not exist: ', fieldName);
+
                 return false;
             }
             const value = this.getFieldValue($field);
             const ancillary = this.getAncillaryValue(rule);
+
             return ruleFunction.call($field, value, ancillary);
         }
         console.error('this rule does not exist: ' + this.getRuleName(rule));
+
         return false;
     }
 
@@ -120,6 +126,7 @@ class FormService {
         if (typeof rule === 'string') {
             return { type: rule, value: null };
         }
+
         return rule;
     }
 
@@ -135,6 +142,7 @@ class FormService {
         } if ($container.length === 0) {
             return null;
         }
+
         return $container;
     }
 
@@ -148,6 +156,7 @@ class FormService {
         if (form.find('[name="' + identifier + '[]"]').length > 0) {
             return form.find('[name="' + identifier + '[]"]');
         }
+
         return false;
     }
 
@@ -159,6 +168,7 @@ class FormService {
         } else {
             value = $field.val();
         }
+
         return value;
     }
 
@@ -171,6 +181,7 @@ class FormService {
         if (!rule.value && !this.isBracketedRule(rule)) {
             return false;
         }
+
         return (rule.value === undefined || rule.value === null)
             ? rule.type.match(this.formSettings.regExp.bracket)[1] + ''
             : rule.value;
@@ -180,6 +191,7 @@ class FormService {
         if (this.isBracketedRule(rule)) {
             return rule.type.replace(rule.type.match(this.formSettings.regExp.bracket)[0], '');
         }
+
         return rule.type;
     }
 

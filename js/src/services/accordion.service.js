@@ -9,6 +9,7 @@ class AccordionService {
         if (!this.instance) {
             this.instance = this;
         }
+
         return this.instance;
     }
 

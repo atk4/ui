@@ -86,6 +86,7 @@ export default class conditionalForm extends atkPlugin {
             } else {
                 temp.push(tempRule);
             }
+
             return { inputName: ruleKey, rules: temp, state: false };
         });
 

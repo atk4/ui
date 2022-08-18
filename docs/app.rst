@@ -81,6 +81,7 @@ active. (See :ref:`system_pattern`)::
             // App class may be used for pages that do not require authentication
             if (!$auth) {
                 $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
+
                 return;
             }
 

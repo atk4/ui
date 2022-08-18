@@ -314,6 +314,7 @@ example displays a registration form for a User::
         }
 
         $form->model->save(); // will only store email / password
+
         return $form->success('Thank you. Check your email now');
     });
 

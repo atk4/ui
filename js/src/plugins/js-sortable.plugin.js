@@ -102,6 +102,7 @@ export default class JsSortable extends atkPlugin {
         } else {
             url = this.settings.uri;
         }
+
         return url;
     }
 

@@ -40,6 +40,7 @@ export default {
             if (rowId in this.errors) {
                 return this.errors[rowId];
             }
+
             return null;
         },
     },
