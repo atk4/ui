@@ -118,7 +118,7 @@ JsSortable.DEFAULTS = {
     draggable: 'tr',
     dataLabel: 'id',
     handleClass: null,
-    mirrorCss: '.draggable-mirror {background: #fff!important;margin-left: 1%;opacity: 0.9; }',
+    mirrorCss: '.draggable-mirror {background: #fff!important; margin-left: 1%; opacity: 0.9; }',
     overCss: '.draggable--over { background: yellow !important; opacity: 0.5; }',
     autoFireCb: true,
 };
