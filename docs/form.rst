@@ -285,7 +285,7 @@ This is to make sure that data from custom form controls wouldn't go directly in
 example displays a registration form for a User::
 
     class User extends \Atk4\Data\Model
-{
+    {
         public $table = 'user';
 
         protected function init(): void {
