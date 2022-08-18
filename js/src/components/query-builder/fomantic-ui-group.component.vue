@@ -1,5 +1,5 @@
 <template>
-    <div class="vqb-group ui fluid card" :class="[labels.spaceRule , 'depth-' + depth.toString()]">
+    <div class="vqb-group ui fluid card" :class="[labels.spaceRule, 'depth-' + depth.toString()]">
         <div class="vbq-group-heading content" :class="'depth-' + depth.toString()">
             <div class="ui grid">
                 <div class="fourteen wide column">

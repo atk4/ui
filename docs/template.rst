@@ -404,7 +404,7 @@ You can use the following code to manipulate the template above::
     $recipient->set($recipient_data);
 
     // render sub-templates, insert into master template
-    $template->dangerouslySetHtml('Sender',    $sender->renderToHtml());
+    $template->dangerouslySetHtml('Sender', $sender->renderToHtml());
     $template->dangerouslySetHtml('Recipient', $recipient->renderToHtml());
 
     // get final result
@@ -414,7 +414,7 @@ Same thing using Agile Toolkit Views::
 
     $envelope = \Atk4\Ui\View::addTo($this, [], [null], null, ['envelope']);
 
-    $sender    = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender',    'Sender');
+    $sender    = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender', 'Sender');
     $recipient = \Atk4\Ui\View::addTo($envelope, [], [null], 'Recipient', 'Recipient');
 
     $sender->template->set($sender_data);

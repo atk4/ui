@@ -94,7 +94,7 @@ class Paginator extends View
      *
      * [ '[', '...', 10, 11, 12 ]
      *
-     * Array will contain '[', ']', denoting "first" , "last" items, '...' for the spacer and any
+     * Array will contain '[', ']', denoting "first", "last" items, '...' for the spacer and any
      * other integer value for a regular page link.
      *
      * @return array

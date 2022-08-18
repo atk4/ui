@@ -66,12 +66,12 @@ Adding a TreeItemSelector form control to a Form::
                         ],
                     ],
                 ],
-                ['name' => 'Tv' , 'id' => 501, 'nodes' => []],
-                ['name' => 'Radio' , 'id' => 601, 'nodes' => []],
+                ['name' => 'Tv', 'id' => 501, 'nodes' => []],
+                ['name' => 'Radio', 'id' => 601, 'nodes' => []],
             ],
         ],
-        ['name' => 'Cleaner' , 'id' => 201, 'nodes' => []],
-        ['name' => 'Appliances' , 'id' => 301, 'nodes' => []],
+        ['name' => 'Cleaner', 'id' => 201, 'nodes' => []],
+        ['name' => 'Appliances', 'id' => 301, 'nodes' => []],
     ];
 
 

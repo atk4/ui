@@ -100,7 +100,7 @@ class Column
     {
         $this->hasHeaderAction = true;
 
-        $this->headerActionTag = ['div',  ['class' => 'atk-table-dropdown'],
+        $this->headerActionTag = ['div', ['class' => 'atk-table-dropdown'],
             [
                 ['i', ['id' => $id, 'class' => $class . ' icon'], ''],
             ],
@@ -112,7 +112,7 @@ class Column
      */
     public function setHeaderPopupIcon($icon)
     {
-        $this->headerActionTag = ['div',  ['class' => 'atk-table-dropdown'],
+        $this->headerActionTag = ['div', ['class' => 'atk-table-dropdown'],
             [
                 ['i', ['id' => $this->name . '_ac', 'class' => $icon . ' icon'], ''],
             ],
@@ -150,7 +150,7 @@ class Column
     {
         $this->hasHeaderAction = true;
         $id = $this->name . '_ac';
-        $this->headerActionTag = ['div',  ['class' => 'atk-table-dropdown'],
+        $this->headerActionTag = ['div', ['class' => 'atk-table-dropdown'],
             [
                 [
                     'div', ['id' => $id, 'class' => 'ui top left pointing dropdown', 'data-menu-id' => $menuId],

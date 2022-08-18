@@ -4,7 +4,7 @@ export default {
     name: 'atk-multiline-body',
     template: `
     <sui-table-body>
-      <atk-multiline-row v-for="(row , idx) in rows" :key="row.__atkml"
+      <atk-multiline-row v-for="(row, idx) in rows" :key="row.__atkml"
       @onTabLastColumn="onTabLastColumn(idx)"
       :fields="fields"
       :rowId="row.__atkml"
