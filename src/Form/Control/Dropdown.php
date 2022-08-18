@@ -215,7 +215,7 @@ class Dropdown extends Input
         // add selection only if no value is required and Dropdown has no multiple selections enabled
         if ($this->entityField !== null && !$this->entityField->getField()->required && !$this->isMultiple) {
             $this->_tItem->set('value', '');
-            $this->_tItem->set('title', $this->empty || is_numeric($this->empty) ? (string) $this->empty : '');
+            $this->_tItem->set('title', $this->empty);
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
         }
 

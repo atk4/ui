@@ -182,7 +182,7 @@ class Lookup extends Input
         }
 
         if (!$this->multiple && $this->empty) {
-            array_unshift($data, ['value' => '', 'title' => (string) $this->empty]);
+            array_unshift($data, ['value' => '', 'title' => $this->empty]);
         }
 
         return $data;
