@@ -65,7 +65,7 @@ $lister->setModel($model);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
-//CREATING CUSTOM VUE USING EXTERNAL COMPONENT
+// CREATING CUSTOM VUE USING EXTERNAL COMPONENT
 
 \Atk4\Ui\Header::addTo($app, ['External Component', 'subHeader' => 'Creating component using an external component definition.']);
 
