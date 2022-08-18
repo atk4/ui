@@ -87,6 +87,7 @@ abstract class FilterModel extends Model
     protected function init(): void
     {
         parent::init();
+
         $this->op = $this->addField('op', ['ui' => ['caption' => '']]);
 
         if (!$this->noValueField) {

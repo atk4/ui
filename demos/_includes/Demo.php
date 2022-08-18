@@ -18,6 +18,7 @@ class Demo extends \Atk4\Ui\Columns
     protected function init(): void
     {
         parent::init();
+
         $this->addClass('celled');
 
         $this->left = $this->addColumn($this->leftWidth);

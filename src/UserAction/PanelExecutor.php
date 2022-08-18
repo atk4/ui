@@ -42,6 +42,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
     protected function init(): void
     {
         parent::init();
+
         $this->initExecutor();
     }
 

@@ -41,6 +41,7 @@ class JsSortable extends JsCallback
     protected function init(): void
     {
         parent::init();
+
         if (!$this->view) {
             $this->view = $this->getOwner();
         }

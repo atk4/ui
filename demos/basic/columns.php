@@ -72,6 +72,7 @@ $boxClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk
     protected function init(): void
     {
         parent::init();
+
         \Atk4\Ui\Table::addTo($this, ['header' => false])
             ->setSource(['One', 'Two', 'Three', 'Four']);
     }

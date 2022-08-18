@@ -39,6 +39,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     protected function init(): void
     {
         parent::init();
+
         $this->initExecutor();
     }
 

@@ -96,6 +96,7 @@ class LoremIpsum extends Text
     protected function init(): void
     {
         parent::init();
+
         for ($x = 0; $x < $this->size; ++$x) {
             $this->addParagraph($this->generateLorem($this->words * $this->size));
         }

@@ -490,6 +490,7 @@ Example use of Model's validate() method::
         protected function init(): void
         {
             parent::init();
+
             $this->addField('name', ['required' => true]);
             $this->addField('surname');
             $this->addField('gender', ['enum' => ['M', 'F']]);

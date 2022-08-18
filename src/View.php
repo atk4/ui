@@ -215,6 +215,7 @@ class View extends AbstractView implements JsExpressionable
     {
         $addLater = $this->_addLater;
         $this->_addLater = [];
+
         parent::init();
 
         if ($this->region && !$this->template && !$this->defaultTemplate && $this->issetOwner() && $this->getOwner()->template) {

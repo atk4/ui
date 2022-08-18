@@ -65,6 +65,7 @@ class Modal extends View
     protected function init(): void
     {
         parent::init();
+
         $this->getApp()->registerPortals($this);
     }
 

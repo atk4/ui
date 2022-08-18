@@ -148,6 +148,7 @@ Lets use the example of demos/multiline.php::
         protected function init(): void
         {
             parent::init();
+
             $this->addField('item', ['required' => true, 'default' => 'item']);
             $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
             $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);

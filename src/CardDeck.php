@@ -94,6 +94,7 @@ class CardDeck extends View
     protected function init(): void
     {
         parent::init();
+
         $this->container = $this->add($this->container);
 
         if ($this->menu !== false) {

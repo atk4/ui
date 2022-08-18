@@ -88,6 +88,7 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
     protected function init(): void
     {
         parent::init();
+
         $this->addField('name', ['required' => true]);
         $this->addField('surname', ['ui' => ['placeholder' => 'e.g. Smith']]);
         $this->addField('gender', ['enum' => ['M', 'F']]);

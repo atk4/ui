@@ -92,6 +92,7 @@ class Grid extends View
     protected function init(): void
     {
         parent::init();
+
         $this->container = View::addTo($this, ['template' => $this->template->cloneRegion('Container')]);
         $this->template->del('Container');
 

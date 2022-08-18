@@ -282,7 +282,7 @@ class Dropdown extends Input
         parent::renderView();
     }
 
-    // Sets the dropdown items to the template if a model is used
+    // sets the dropdown items to the template if a model is used
     protected function _renderItemsForModel()
     {
         foreach ($this->model as $key => $row) {

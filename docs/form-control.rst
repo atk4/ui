@@ -153,6 +153,7 @@ The most common use-case in large application is the use with Models. You would 
         protected function init(): void
         {
             parent::init();
+
             $this->addField('name', ['actual' => 'nicename', 'required' => true, 'type' => 'string']);
             $this->addField('sys_name', ['actual' => 'name', 'system' => true]);
 
