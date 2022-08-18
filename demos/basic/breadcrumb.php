@@ -7,9 +7,6 @@ namespace Atk4\Ui\Demos;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/**
- * Demonstrates how to use Breadcrumb.
- */
 $crumb = \Atk4\Ui\Breadcrumb::addTo($app);
 $crumb->addCrumb('UI Demo', ['index']);
 $crumb->addCrumb('Breadcrumb Demo', ['breadcrumb']);

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-/**
- * Testing Columns.
- */
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -65,9 +62,7 @@ $r = $c->addRow();
 
 \Atk4\Ui\Header::addTo($page, ['Add elements into columns and using classes']);
 
-/**
- * Example box component with some content, good for putting into columns.
- */
+// Example box component with some content, good for putting into columns.
 
 /** @var \Atk4\Ui\View $boxClass */
 $boxClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\View {

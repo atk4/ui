@@ -10,7 +10,7 @@ use Atk4\Ui\Form;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/**
+/*
  * Apart from demonstrating the form, this example uses an alternative way of rendering the layouts.
  * Here we don't create application object explicitly, instead we use our custom template
  * with a generic layout.

@@ -1,9 +1,8 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Test for Lookup inside VirtualPage.
- */
+
+// Test for Lookup inside VirtualPage.
 
 namespace Atk4\Ui\Demos;
 

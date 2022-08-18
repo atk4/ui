@@ -9,9 +9,6 @@ use Atk4\Ui\Wizard;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/**
- * Demonstrates how to use a wizard.
- */
 $wizard = Wizard::addTo($app, ['urlTrigger' => 'demo_wizard']);
 // First step will automatcally be active when you open page first. It
 // will contain the 'Next' button with a link.

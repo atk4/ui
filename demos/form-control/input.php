@@ -6,9 +6,6 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 
-/**
- * Testing fields.
- */
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 

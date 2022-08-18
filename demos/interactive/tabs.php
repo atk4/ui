@@ -6,10 +6,6 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
 
-/**
- * Demonstrates how to use tabs.
- */
-
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
