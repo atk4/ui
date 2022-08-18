@@ -100,15 +100,15 @@ clarifications::
 
     // Define your data structure
     class Offer extends \Atk4\Data\Model {
-
         public $table = 'offer';
 
-        function init(): void {
+        protected function init(): void {
             parent::init();
 
             // Persistence may not have structure, so we define here
             $this->addField('domain_name');
-            $this->addFields(['contact_email', 'contact_phone']);
+            $this->addField('contact_email');
+            $this->addField('contact_phone');
             $this->addField('date', ['type' => 'date']);
             $this->addField('offer', ['type' => 'atk4_money']);
             $this->addField('is_accepted', ['type' => 'boolean']);

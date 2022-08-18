@@ -16,6 +16,7 @@ export default class reloadView extends atkPlugin {
     main() {
         if (!this.settings.uri) {
             console.error('Trying to reload view without url.');
+
             return;
         }
 

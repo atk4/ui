@@ -50,7 +50,7 @@ class CardTable extends Table
             $field = $model->getField($row->getId());
             $ret = $this->decoratorFactory(
                 $field,
-                $field->type === 'boolean' ? [Table\Column\Status::class,  ['positive' => [true, 'Yes'], 'negative' => [false, 'No']]] : []
+                $field->type === 'boolean' ? [Table\Column\Status::class, ['positive' => [true, 'Yes'], 'negative' => [false, 'No']]] : []
             );
             if ($ret instanceof Table\Column\Money) {
                 $ret->attr['all']['class'] = ['single line'];

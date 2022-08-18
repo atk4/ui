@@ -301,7 +301,7 @@ class Dropdown extends Input
             $this->_tItem->set('value', (string) $key);
             if (is_array($val)) {
                 if (array_key_exists('icon', $val)) {
-                    $this->_tIcon->set('icon', $val['icon']);
+                    $this->_tIcon->set('iconClass', $val['icon']);
                     $this->_tItem->dangerouslySetHtml('Icon', $this->_tIcon->renderToHtml());
                 } else {
                     $this->_tItem->del('Icon');
@@ -328,11 +328,10 @@ class Dropdown extends Input
 
         // Icon
         $this->_tItem->del('Icon');
-        if (isset($res['icon'])
-        && $res['icon']) {
+        if (isset($res['icon']) && $res['icon']) {
             // compatibility with how $values property works on icons: 'icon'
             // is defined in there
-            $this->_tIcon->set('icon', 'icon ' . $res['icon']);
+            $this->_tIcon->set('iconClass', 'icon ' . $res['icon']);
             $this->_tItem->dangerouslyAppendHtml('Icon', $this->_tIcon->renderToHtml());
         }
 

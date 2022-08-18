@@ -149,7 +149,6 @@ extending :php:class:`Persistence\Ui`::
 
     class MyPersistence extends Persistence\Ui
     {
-
         protected function _typecastSaveField(\Atk4\Data\Field $field, $value)
         {
             switch ($field->type) {
@@ -158,6 +157,7 @@ extending :php:class:`Persistence\Ui`::
 
                     return implode(' ', $parts);
             }
+
             return parent::_typecastSaveField($field, $value);
         }
 
@@ -167,6 +167,7 @@ extending :php:class:`Persistence\Ui`::
                 case 'card':
                     return str_replace(' ', '', $value);
             }
+
             return parent::_typecastLoadField($field, $value);
         }
     }
@@ -179,7 +180,6 @@ extending :php:class:`Persistence\Ui`::
 
             parent::__construct($defaults);
         }
-
     }
 
 Now your 'card' type will work system-wide.

@@ -18,10 +18,10 @@ export default class columnResizer extends atkPlugin {
     }
 
     /**
-   * Send widths to server via callback uri.
-   *
-   * @param widths an Array of objects, each containing the column name and their size in pixels [{column: 'name', size: '135px'}]
-   */
+     * Send widths to server via callback uri.
+     *
+     * @param widths an Array of objects, each containing the column name and their size in pixels [{column: 'name', size: '135px'}]
+     */
     sendWidths(widths) {
         this.$el.api({
             on: 'now',
@@ -32,11 +32,11 @@ export default class columnResizer extends atkPlugin {
     }
 
     /**
-   * On resize callback when user finish dragging column for resizing.
-   * Calling this method via callback need to bind "this" set to this plugin.
-   *
-   * @param e  the event.
-   */
+     * On resize callback when user finish dragging column for resizing.
+     * Calling this method via callback need to bind "this" set to this plugin.
+     *
+     * @param e  the event.
+     */
     onResize(e) {
         const columns = this.$el.find('th');
 

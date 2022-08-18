@@ -27,7 +27,7 @@ The above code will produce the following HTML block:
 .. code-block:: html
 
     <div class="ui inverted segment">
-      <button class="ui inverted orange button">Orange</button>
+        <button class="ui inverted orange button">Orange</button>
     </div>
 
 All of the views combined form a ``Render Tree``. In order to get the HTML output
@@ -320,7 +320,7 @@ You should override this method when necessary and don't forget to execute paren
     protected function renderView(): void
     {
         if (str_len($this->info) > 100) {
-             $this->addClass('tiny');
+            $this->addClass('tiny');
         }
 
         parent::renderView();
@@ -374,7 +374,6 @@ Here is a best practice for using custom template::
             parent::renderView();
             $this->template->set('title', $this->title);
         }
-
     }
 
 As soon as the view becomes part of a render-tree, the Template object will also be allocated.

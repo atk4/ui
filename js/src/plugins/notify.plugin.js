@@ -125,6 +125,7 @@ export default class notify extends atkPlugin {
                 'max-height': '1%',
             },
         };
+
         return positions[position];
     }
 }

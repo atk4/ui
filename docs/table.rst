@@ -159,7 +159,9 @@ of a different class (e.g. 'atk4_money'). Value will be initialized after first 
 used to add columns without field::
 
     $action = $this->addColumn(null, [Table\Column\ActionButtons::class]);
-    $action->addButton('Delete', function () { return 'ok'; });
+    $action->addButton('Delete', function () {
+        return 'ok';
+    });
 
 The above code will add a new extra column that will only contain 'delete' icon. When clicked
 it will automatically delete the corresponding record.
@@ -183,10 +185,9 @@ the "total" column value (as above) but using PHP math instead of doing it insid
     $order = new Order($db);
 
     $table->setModel($order, ['name', 'price', 'amount', 'status']);
-    $table->addColumn('total', new \Atk4\Data\Field\Calculated(
-        function (Model $row) {
-            return $row->get('price') * $row->get('amount');
-        }));
+    $table->addColumn('total', new \Atk4\Data\Field\Calculated(function (Model $row) {
+        return $row->get('price') * $row->get('amount');
+    }));
 
 If you execute this code, you'll notice that the "total" column is now displayed last. If you
 wish to position it before status, you can use the final format of addColumn()::
@@ -195,10 +196,9 @@ wish to position it before status, you can use the final format of addColumn()::
     $order = new Order($db);
 
     $table->setModel($order, ['name', 'price', 'amount']);
-    $table->addColumn('total', new \Atk4\Data\Field\Calculated(
-        function (Model $row) {
-            return $row->get('price') * $row->get('amount');
-        }));
+    $table->addColumn('total', new \Atk4\Data\Field\Calculated(function (Model $row) {
+        return $row->get('price') * $row->get('amount');
+    }));
     $table->addColumn('status');
 
 This way we don't populate the column through setModel() and instead populate it manually later
@@ -266,12 +266,12 @@ The tag will override model value. Here is example usage of :php:meth:`Table\\Co
             return '{$_expired}';
         }
 
-        function getHtmlTags(\Atk4\Data\Model $row)
+        public function getHtmlTags(\Atk4\Data\Model $row)
         {
             return [
                 '_expired' => $row->get('date') < new \DateTime()
-                                  ? '<td class="danger">EXPIRED</td>'
-                                  : '<td></td>',
+                    ? '<td class="danger">EXPIRED</td>'
+                    : '<td></td>',
             ];
         }
     }
@@ -463,7 +463,6 @@ column name in table with their new width in pixel.::
     $table->resizableColumn(function ($j, $w) {
         // do something with new column width
         $columnWidths = $this->getApp()->decodeJson($w);
-        return;
     }, [200,300,100,100,100]);
 
 Note that you may specify an array of integer representing the initial width value in pixel for each column in your table.

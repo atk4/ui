@@ -7,6 +7,7 @@ export default class ajaxec extends atkPlugin {
     main() {
         if (!this.settings.uri) {
             console.error('Trying to execute callback without url.');
+
             return;
         }
 

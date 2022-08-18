@@ -66,7 +66,7 @@ active. (See :ref:`system_pattern`)::
         public $user;
         public $company;
 
-        function __construct($auth = true) {
+        public function __construct($auth = true) {
             parent::__construct('Warehouse App v0.4');
 
             // My App class will establish database connection
@@ -81,6 +81,7 @@ active. (See :ref:`system_pattern`)::
             // App class may be used for pages that do not require authentication
             if (!$auth) {
                 $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
+
                 return;
             }
 
@@ -389,7 +390,7 @@ This will initialize two new views inside the app::
     $app->html
     $app->layout
 
-The first view is a HTML boilerplate - containing HEAD / BODY tags but not the body
+The first view is a HTML boilerplate - containing head / body tags but not the body
 contents. It is a standard html5 doctype template.
 
 The layout will be selected based on your choice - Layout\Centered, Layout\Admin etc. This will

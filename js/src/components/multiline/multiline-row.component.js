@@ -57,6 +57,7 @@ export default {
                     return 'error';
                 }
             }
+
             return null;
         },
         getColumnWidth: function (column) {

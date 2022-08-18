@@ -83,7 +83,7 @@ Lets say a User can have many email addresses, but you want to store them in a s
         }
     }
 
-     /**
+    /**
      * User model
      */
     class User extends \Atk4\Data\Model
@@ -176,6 +176,7 @@ In this case we display a message when any of the control value for 'qty' and 'b
             $box = $cols['box'] ?? 0;
             $total += $qty * $box;
         }
+
         return new JsToast('The new Total is ' . $app->uiPersistence->typecastSaveField(new Field(['type' => 'atk4_money']), $total));
     }, ['qty', 'box']);
 

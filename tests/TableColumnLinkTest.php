@@ -297,7 +297,6 @@ class TableColumnLinkTest extends TestCase
 
     /*
     function testLink1() {
-
         // Simplest way to integrate
         $this->table->addColumn('name', new Table\Column\Link());
 
@@ -306,5 +305,5 @@ class TableColumnLinkTest extends TestCase
             $this->table->getDataRowHtml()
         );
     }
-     */
+    */
 }

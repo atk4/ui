@@ -204,10 +204,6 @@ class HtmlTemplate
      */
     public function set($tag, $value = null): self
     {
-        if (func_num_args() > 2) { // remove in v2.5
-            throw new \Error('3rd param $encode is no longer supported, use dangerouslySetHtml method instead');
-        }
-
         $this->_setOrAppend($tag, $value, true, false);
 
         return $this;
@@ -222,10 +218,6 @@ class HtmlTemplate
      */
     public function trySet($tag, $value = null): self
     {
-        if (func_num_args() > 2) { // remove in v2.5
-            throw new \Error('3rd param $encode is no longer supported, use tryDangerouslySetHtml method instead');
-        }
-
         $this->_setOrAppend($tag, $value, true, false, false);
 
         return $this;
@@ -267,10 +259,6 @@ class HtmlTemplate
      */
     public function append($tag, $value): self
     {
-        if (func_num_args() > 2) { // remove in v2.5
-            throw new \Error('3rd param $encode is no longer supported, use dangerouslyAppendHtml method instead');
-        }
-
         $this->_setOrAppend($tag, $value, true, true);
 
         return $this;
@@ -285,10 +273,6 @@ class HtmlTemplate
      */
     public function tryAppend($tag, $value): self
     {
-        if (func_num_args() > 2) { // remove in v2.5
-            throw new \Error('3rd param $encode is no longer supported, use tryDangerouslyAppendHtml method instead');
-        }
-
         $this->_setOrAppend($tag, $value, true, true, false);
 
         return $this;

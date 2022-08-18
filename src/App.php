@@ -56,9 +56,9 @@ class App
     /**
      * @var string Version of Agile UI
      *
-     * @TODO remove, no longer needed for CDN versioning as we bundle them all
+     * @TODO remove, no longer needed for CDN versioning as we bundle all resources
      */
-    public $version = '3.2-dev';
+    public $version = '4.0-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -520,7 +520,7 @@ class App
      */
     public function addStyle($style)
     {
-        $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('style', $style));
+        $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('style', $style));
     }
 
     /**
@@ -552,7 +552,7 @@ class App
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('script', null, $this->html->getJs()));
+            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', null, $this->html->getJs()));
             $this->isRendering = false;
 
             if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catchRunawayCallbacks) {
@@ -779,7 +779,7 @@ class App
      */
     public function requireJs($url, $isAsync = false, $isDefer = false)
     {
-        $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '') . "\n");
+        $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '') . "\n");
 
         return $this;
     }
@@ -793,7 +793,7 @@ class App
      */
     public function requireCss($url)
     {
-        $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]) . "\n");
+        $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]) . "\n");
 
         return $this;
     }

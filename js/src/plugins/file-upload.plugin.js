@@ -17,8 +17,8 @@ export default class fileUpload extends atkPlugin {
     }
 
     /**
-   * Setup field initial state.
-   */
+     * Setup field initial state.
+     */
     setInitialState() {
     // Set progress bar.
         this.bar.progress({
@@ -38,11 +38,11 @@ export default class fileUpload extends atkPlugin {
     }
 
     /**
-   * Update input value.
-   *
-   * @param fileId
-   * @param fileName
-   */
+     * Update input value.
+     *
+     * @param fileId
+     * @param fileName
+     */
     updateField(fileId, fileName) {
         this.$el.data().fileId = fileId;
         this.hiddenInput.val(fileId);
@@ -55,8 +55,8 @@ export default class fileUpload extends atkPlugin {
     }
 
     /**
-   * Add event handler to input element.
-   */
+     * Add event handler to input element.
+     */
     setEventHandler() {
         this.textInput.on('click', (e) => {
             if (!e.target.value) {
@@ -91,9 +91,9 @@ export default class fileUpload extends atkPlugin {
     }
 
     /**
-   * Set the action button html content.
-   * Set the input text content.
-   */
+     * Set the action button html content.
+     * Set the input text content.
+     */
     setState(mode) {
         switch (mode) {
         case 'delete':
@@ -102,6 +102,7 @@ export default class fileUpload extends atkPlugin {
                 this.bar.progress('reset');
                 this.bar.hide('fade');
             }, 1000);
+
             break;
         case 'upload':
             this.action.html(this.actionContent);
@@ -109,16 +110,17 @@ export default class fileUpload extends atkPlugin {
             this.fileInput.val('');
             this.hiddenInput.val('');
             this.$el.data().fileId = null;
+
             break;
         default:
         }
     }
 
     /**
-   * Do the actual file uploading process.
-   *
-   * @param file the FileList object.
-   */
+     * Do the actual file uploading process.
+     *
+     * @param file the FileList object.
+     */
     doFileUpload(file) {
         // if submit button id is set, then disable submit
         // during upload.
@@ -147,6 +149,7 @@ export default class fileUpload extends atkPlugin {
                     this.bar.progress('set percent', parseInt(percentComplete * 100, 10));
                 }
             }, false);
+
             return xhr;
         };
 
@@ -162,10 +165,10 @@ export default class fileUpload extends atkPlugin {
     }
 
     /**
-   * Callback server for file delete.
-   *
-   * @param fileId
-   */
+     * Callback server for file delete.
+     *
+     * @param fileId
+     */
     doFileDelete(fileId) {
         this.$el.api({
             on: 'now',
@@ -182,10 +185,10 @@ export default class fileUpload extends atkPlugin {
     }
 
     /**
-   * Return the html content for erase action button.
-   *
-   * @returns {string}
-   */
+     * Return the html content for erase action button.
+     *
+     * @returns {string}
+     */
     getEraseContent() {
         return '<i class="red remove icon" style=""></i>';
     }

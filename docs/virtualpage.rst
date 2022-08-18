@@ -101,7 +101,9 @@ To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the foll
     $t = \Atk4\Ui\Tabs::addTo($layout);
 
     \Atk4\Ui\LoremIpsum::addTo($t->addTab('Tab1')); // regular tab
-    $t->addTab('Tab2', function ($p) { \Atk4\Ui\LoremIpsum::addTo($p); }); // dynamic tab
+    $t->addTab('Tab2', function ($p) { // dynamic tab
+        \Atk4\Ui\LoremIpsum::addTo($p);
+    });
 
 .. php:method:: getUrl($html_wrapping)
 
@@ -143,11 +145,9 @@ while a spinner is shown to a user::
 
     $loader = \Atk4\Ui\Loader::addTo($app);
     $loader->set(function ($p) {
-
         // Simulate slow-loading component
         sleep(2);
         \Atk4\Ui\LoremIpsum::addTo($p);
-
     });
 
 
@@ -161,11 +161,9 @@ property::
 
     $loader = \Atk4\Ui\Loader::addTo($app, ['shim' => [\Atk4\Ui\Message::class, 'Please wait until we load LoremIpsum...', 'class.red' => true]]);
     $loader->set(function ($p) {
-
         // Simulate slow-loading component
         sleep(2);
         \Atk4\Ui\LoremIpsum::addTo($p);
-
     });
 
 
@@ -253,7 +251,6 @@ You cannotify user about this progress through a simple code::
 
     $loader = \Atk4\Ui\Loader::addTo($app, ['progressBar' => true]);
     $loader->set(function ($p) {
-
         // Simulate slow-loading component
         sleep(1);
         $p->setProgress(0.25);
@@ -264,7 +261,6 @@ You cannotify user about this progress through a simple code::
         sleep(1);
 
         \Atk4\Ui\LoremIpsum::addTo($p);
-
     });
 
 By setting progressBar to true, Loader component will use SSE (`Server Sent Events <https://www.w3schools.com/html/html5_serversentevents.asp>`_)

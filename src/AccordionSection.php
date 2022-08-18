@@ -30,7 +30,7 @@ class AccordionSection extends View
         }
 
         if ($this->virtualPage) {
-            $this->template->set('item_id', $this->virtualPage->name);
+            $this->template->set('itemId', $this->virtualPage->name);
             $this->template->set('path', $this->virtualPage->getJsUrl('cut'));
         }
     }

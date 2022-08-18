@@ -92,7 +92,7 @@ returns any value, the set() will return it too::
     $label->detail = $cb->getUrl();
     $label->link($cb->getUrl());
 
-    if($cb->set(function () { return true; })) {
+    if ($cb->set(function () { return true; })) {
         $label->addClass('red');
     }
 
@@ -111,7 +111,9 @@ the label regardless of the callback function::
     $label->detail = $cb->getUrl();
     $label->link($cb->getUrl());
 
-    $cb->set(function () { echo 123; });
+    $cb->set(function () {
+        echo 123;
+    });
 
     if ($cb->triggered) {
         $label->addClass('red');

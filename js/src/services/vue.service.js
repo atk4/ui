@@ -71,17 +71,18 @@ class VueService {
             };
             VueService.instance = this;
         }
+
         return VueService.instance;
     }
 
     /**
-   * Created a Vue component and add it to the vues array.
-   * For Root component (App) to be aware that it's children component is
-   * mounted, you need to use @hook:mounted="setReady"
-   * @param name
-   * @param component
-   * @param data
-   */
+     * Created a Vue component and add it to the vues array.
+     * For Root component (App) to be aware that it's children component is
+     * mounted, you need to use @hook:mounted="setReady"
+     * @param name
+     * @param component
+     * @param data
+     */
     createAtkVue(id, component, data) {
         this.registerComponent({
             ids: [id],
@@ -97,12 +98,12 @@ class VueService {
     }
 
     /**
-   * Create a Vue instance from an external src component definition.
-   *
-   * @param name
-   * @param component
-   * @param data
-   */
+     * Create a Vue instance from an external src component definition.
+     *
+     * @param name
+     * @param component
+     * @param data
+     */
     createVue(id, componentName, component, data) {
         this.registerComponent({
             ids: [id],
@@ -132,8 +133,8 @@ class VueService {
     }
 
     /**
-   * Register components within Vue.
-   */
+     * Register components within Vue.
+     */
     useComponent(component) {
         if (window[component]) {
             Vue.use(window[component]);
@@ -143,10 +144,10 @@ class VueService {
     }
 
     /**
-   * Return Vue.
-   *
-   * @returns {Vue | VueConstructor}
-   */
+     * Return Vue.
+     *
+     * @returns {Vue | VueConstructor}
+     */
     getVue() {
         return Vue;
     }

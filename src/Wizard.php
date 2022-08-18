@@ -37,9 +37,9 @@ class Wizard extends View
 
     /**
      * Icon that will be used on all steps by default.
-     *  - 'empty' , since no such icon exists, no visible icon will be used unless step is completed
+     *  - 'empty', since no such icon exists, no visible icon will be used unless step is completed
      *  - 'square outline', use this (or any other) Semantic UI icon by default
-     *  - false,  disables icons alltogether (or using checkboxes for completed steps).
+     *  - false, disables icons alltogether (or using checkboxes for completed steps).
      *
      * @var string|false
      */

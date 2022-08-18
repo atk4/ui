@@ -11,7 +11,7 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/**
+/*
  * Example implementation of a dynamic view which support session.
  *
  * Cart will memorize and restore its items into session. Cart will also
@@ -79,7 +79,7 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends \At
     }
 });
 
-/**
+/*
  * Implementation of a generic item shelf. Shows selection of products and allow to bind click event.
  *
  * Method linkCart allow you to link ItemShelf with Cart. Clicking on a shelf item will place that

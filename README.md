@@ -98,8 +98,10 @@ $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 ATK Data allows you to set up relations between models:
 
 ``` php
-class User extends Model {
-    function init(): void {
+class User extends Model
+{
+    protected function init(): void
+    {
         parent::init();
 
         $this->addField('name');
@@ -199,10 +201,12 @@ $app = new \Atk4\Ui\App('My App');
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/yourdb');
 
-class User extends \Atk4\Data\Model {
+class User extends \Atk4\Data\Model
+{
     public $table = 'user';
 
-    function init(): void {
+    protected function init(): void
+    {
         parent::init();
 
         $this->addField('name');

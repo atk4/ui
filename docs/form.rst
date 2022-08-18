@@ -60,14 +60,14 @@ or you can tweak it when you create form like this::
 To set the default values in the form controls you can use the model property of the form.
 Even if model not explicitly set (see section below) each form has an underlying model which is automatically generated::
 
-	// single field
-	$form->model->set('email', 'some@email.com');
+    // single field
+    $form->model->set('email', 'some@email.com');
 
-	// or multiple fields
-	$form->model->set([
-		'name' => 'John',
-		'email' => 'some@email.com',
-	]);
+    // or multiple fields
+    $form->model->set([
+        'name' => 'John',
+        'email' => 'some@email.com',
+    ]);
 
 Form also relies on a ``\Atk4\Ui\Form::Layout`` class and displays form controls through
 decorators defined at ``\Atk4\Ui\Form::Control``. See dedicated documentation for:
@@ -77,9 +77,9 @@ decorators defined at ``\Atk4\Ui\Form::Control``. See dedicated documentation fo
 
 To tweak the UI properties of an form control input use ``setInputAttr()`` (and not the surrounding <div> as ``setAttr()`` would do). Here is how to set the HTML "maxlength" attribute on the generated input field::
 
-	$form = \Atk4\Ui\Form::addTo($this);
-	$form->setModel($model);
-	$form->getControl('name')->setInputAttr('maxlength', 20);
+    $form = \Atk4\Ui\Form::addTo($this);
+    $form->setModel($model);
+    $form->getControl('name')->setInputAttr('maxlength', 20);
 
 The rest of this chapter will focus on Form mechanics, such as submission,
 integration with front-end, integration with Model, error handling etc.
@@ -284,9 +284,11 @@ be set as "neverPersist" (https://agile-data.readthedocs.io/en/develop/fields.ht
 This is to make sure that data from custom form controls wouldn't go directly into the database. Next
 example displays a registration form for a User::
 
-    class User extends \Atk4\Data\Model {
+    class User extends \Atk4\Data\Model
+    {
         public $table = 'user';
-        function init(): void {
+
+        protected function init(): void {
             parent::init();
 
             $this->addField('email');
@@ -312,6 +314,7 @@ example displays a registration form for a User::
         }
 
         $form->model->save(); // will only store email / password
+
         return $form->success('Thank you. Check your email now');
     });
 
@@ -357,7 +360,7 @@ You can specify ``'ui' => ['form' => $decorator_seed]`` when defining your model
     class User extends \Atk4\Data\Model {
         public $table = 'user';
 
-        function init(): void {
+        protected function init(): void {
             parent::init();
 
             $this->addField('email');
@@ -783,10 +786,10 @@ Here is a more advanced example::
     // Show f_gift when gender = 'female' and subscribe is checked.
 
     $f_sub->setControlsDisplayRules([
-       'email' => ['subscribe' => 'checked'],
-       'gender' => ['subscribe' => 'checked'],
-       'm_gift' => ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
-       'f_gift' => ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
+        'email' => ['subscribe' => 'checked'],
+        'gender' => ['subscribe' => 'checked'],
+        'm_gift' => ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
+        'f_gift' => ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
     ]);
 
 You may also define multiple conditions for the form control to be visible if you wrap them inside and array::

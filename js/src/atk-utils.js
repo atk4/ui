@@ -12,6 +12,7 @@ import lodashDebounce from 'lodash/debounce';
 const atkOptions = (function () {
     const options = {
     };
+
     return {
         set: (name, value) => { options[name] = value; },
         get: (name) => options[name],
@@ -28,6 +29,7 @@ const atkOptions = (function () {
  */
 const atkEventBus = (function () {
     const eventBus = mitt();
+
     return {
         emit: (event, payload) => eventBus.emit(event, payload),
         on: (event, ref) => eventBus.on(event, ref),
@@ -61,6 +63,7 @@ const atkUtils = (function () {
                     if (dateString.match(/^[0-9]{4}[/\-.][0-9]{2}[/\-.][0-9]{2}$/)) {
                         dateString += ' 00:00:00';
                     }
+
                     return dateString;
                 },
             };

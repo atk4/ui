@@ -6,9 +6,6 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 
-/**
- * Testing fields.
- */
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -71,16 +68,16 @@ Form\Control\Line::addTo($app, ['actionLeft' => new \Atk4\Ui\Button([
     'Checkout', 'class.teal' => true, 'icon' => 'cart',
 ])]);
 
-Form\Control\Line::addTo($app, ['iconLeft' => 'search',  'action' => 'Search']);
+Form\Control\Line::addTo($app, ['iconLeft' => 'search', 'action' => 'Search']);
 
 $dd = new \Atk4\Ui\DropdownButton(['This Page', 'class.basic' => true]);
 $dd->setSource(['This Organisation', 'Entire Site']);
-Form\Control\Line::addTo($app, ['iconLeft' => 'search',  'action' => $dd]);
+Form\Control\Line::addTo($app, ['iconLeft' => 'search', 'action' => $dd]);
 
 // double actions are not supported but you can add them yourself
 $dd = new \Atk4\Ui\Dropdown(['Articles', 'class.compact selection' => true]);
 $dd->setSource(['All', 'Services', 'Products']);
-\Atk4\Ui\Button::addTo(Form\Control\Line::addTo($app, ['iconLeft' => 'search',  'action' => $dd]), ['Search'], ['AfterAfterInput']);
+\Atk4\Ui\Button::addTo(Form\Control\Line::addTo($app, ['iconLeft' => 'search', 'action' => $dd]), ['Search'], ['AfterAfterInput']);
 
 Form\Control\Line::addTo($app, ['action' => new \Atk4\Ui\Button([
     'Copy', 'class.teal' => true, 'iconRight' => 'copy',

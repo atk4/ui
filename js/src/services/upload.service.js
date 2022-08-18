@@ -13,22 +13,23 @@ class UploadService {
         if (!UploadService.instance) {
             UploadService.instance = this;
         }
+
         return UploadService.instance;
     }
 
     /**
-   *  Will upload a FileList object to server.
-   *  Each file in FileList will be include in formData as
-   *  'file-(number)' param, except for the first one which will
-   *  be set to 'file' only.
-   *
-   * @param files         A FileList object.
-   * @param el            the jQuery element to attach to semantic api.
-   * @param data          Extra data to pass with files.
-   * @param uploadUrl     the url that handle upload.
-   * @param completeCb    the callback for semantic-ui api.onComplete.
-   * @param xhrCb         the xhr function to pass to server.
-   */
+     *  Will upload a FileList object to server.
+     *  Each file in FileList will be include in formData as
+     *  'file-(number)' param, except for the first one which will
+     *  be set to 'file' only.
+     *
+     * @param files         A FileList object.
+     * @param el            the jQuery element to attach to semantic api.
+     * @param data          Extra data to pass with files.
+     * @param uploadUrl     the url that handle upload.
+     * @param completeCb    the callback for semantic-ui api.onComplete.
+     * @param xhrCb         the xhr function to pass to server.
+     */
     uploadFiles(files, element,
         data = [],
         uploadUrl,

@@ -23,18 +23,20 @@ class FormService {
                         if (event) {
                             event.returnValue = message;
                         }
+
                         return message;
                     }
                 });
             };
         }
+
         return this.instance;
     }
 
     /**
-   * Setup semantic-ui form callback with this service.
-   * @param settings
-   */
+     * Setup semantic-ui form callback with this service.
+     * @param settings
+     */
     setService(settings) {
         settings.rules.isVisible = this.isVisible;
         settings.rules.notEmpty = settings.rules.empty;
@@ -43,19 +45,20 @@ class FormService {
     }
 
     /**
-   * Form onSuccess handler when submit.
-   */
+     * Form onSuccess handler when submit.
+     */
     onSuccess() {
         atk.formService.clearDirtyForm($(this).attr('id'));
+
         return true;
     }
 
     /**
-   * Set form in order to detect
-   * input changed before leaving page.
-   *
-   * @param id
-   */
+     * Set form in order to detect
+     * input changed before leaving page.
+     *
+     * @param id
+     */
     preventFormLeave(id) {
         const $form = $('#' + id);
         $form.data('__atkCheckDirty', true);
@@ -66,11 +69,11 @@ class FormService {
     }
 
     /**
-   * Clear Form from being dirty.
-   * Use this function if you define your own onSuccess handler.
-   *
-   * @param id
-   */
+     * Clear Form from being dirty.
+     * Use this function if you define your own onSuccess handler.
+     *
+     * @param id
+     */
     clearDirtyForm(id) {
         const forms = this.prevents.filter(($form) => $form.attr('id') === id);
         forms.forEach(($form) => {
@@ -79,10 +82,10 @@ class FormService {
     }
 
     /**
-   * Visibility rule.
-   *
-   * @returns {boolean | jQuery}
-   */
+     * Visibility rule.
+     *
+     * @returns {boolean | jQuery}
+     */
     isVisible() {
         return $(this).is(':visible');
     }
@@ -92,13 +95,13 @@ class FormService {
     }
 
     /**
-   * Validate a field using our own or semantic-ui validation rule function.
-   *
-   * @param form  Form containing the field.
-   * @param fieldName Name of field
-   * @param rule  Rule to apply test.
-   * @returns {*|boolean}
-   */
+     * Validate a field using our own or semantic-ui validation rule function.
+     *
+     * @param form  Form containing the field.
+     * @param fieldName Name of field
+     * @param rule  Rule to apply test.
+     * @returns {*|boolean}
+     */
     validateField(form, fieldName, rule) {
         rule = this.normalizeRule(rule);
         const ruleFunction = this.getRuleFunction(this.getRuleName(rule));
@@ -106,13 +109,16 @@ class FormService {
             const $field = this.getField(form, fieldName);
             if (!$field) {
                 console.error('You are validating a field that does not exist: ', fieldName);
+
                 return false;
             }
             const value = this.getFieldValue($field);
             const ancillary = this.getAncillaryValue(rule);
+
             return ruleFunction.call($field, value, ancillary);
         }
         console.error('this rule does not exist: ' + this.getRuleName(rule));
+
         return false;
     }
 
@@ -120,6 +126,7 @@ class FormService {
         if (typeof rule === 'string') {
             return { type: rule, value: null };
         }
+
         return rule;
     }
 
@@ -135,6 +142,7 @@ class FormService {
         } if ($container.length === 0) {
             return null;
         }
+
         return $container;
     }
 
@@ -148,6 +156,7 @@ class FormService {
         if (form.find('[name="' + identifier + '[]"]').length > 0) {
             return form.find('[name="' + identifier + '[]"]');
         }
+
         return false;
     }
 
@@ -159,6 +168,7 @@ class FormService {
         } else {
             value = $field.val();
         }
+
         return value;
     }
 
@@ -171,6 +181,7 @@ class FormService {
         if (!rule.value && !this.isBracketedRule(rule)) {
             return false;
         }
+
         return (rule.value === undefined || rule.value === null)
             ? rule.type.match(this.formSettings.regExp.bracket)[1] + ''
             : rule.value;
@@ -180,6 +191,7 @@ class FormService {
         if (this.isBracketedRule(rule)) {
             return rule.type.replace(rule.type.match(this.formSettings.regExp.bracket)[0], '');
         }
+
         return rule.type;
     }
 

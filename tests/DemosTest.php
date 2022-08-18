@@ -321,7 +321,7 @@ class DemosTest extends TestCase
             }
         }
 
-        return array_map(function (string $v) { return [$v]; }, $files);
+        return array_map(fn (string $v) => [$v], $files);
     }
 
     /**

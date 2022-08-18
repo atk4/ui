@@ -67,17 +67,17 @@ export default class JsSortable extends atkPlugin {
     }
 
     /**
-   * Will send current element order via callback.
-   *
-   * @param params Extra arguments to add to uri.
-   */
+     * Will send current element order via callback.
+     *
+     * @param params Extra arguments to add to uri.
+     */
     getSortOrders(params) {
         this.sendSortOrders(params);
     }
 
     /**
-   * Send orders to server via JsCallback.
-   */
+     * Send orders to server via JsCallback.
+     */
     sendSortOrders(params) {
         const url = this.buildUrl(params);
         if (url) {
@@ -102,6 +102,7 @@ export default class JsSortable extends atkPlugin {
         } else {
             url = this.settings.uri;
         }
+
         return url;
     }
 
@@ -117,7 +118,7 @@ JsSortable.DEFAULTS = {
     draggable: 'tr',
     dataLabel: 'id',
     handleClass: null,
-    mirrorCss: '.draggable-mirror {background: #fff!important;margin-left: 1%;opacity: 0.9; }',
+    mirrorCss: '.draggable-mirror {background: #fff!important; margin-left: 1%; opacity: 0.9; }',
     overCss: '.draggable--over { background: yellow !important; opacity: 0.5; }',
     autoFireCb: true,
 };

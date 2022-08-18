@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 
-/**
- * Demonstrates how to use fields with form.
- */
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 

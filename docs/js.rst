@@ -472,8 +472,8 @@ JsNotify
 Dynamic notifier used to display operation status::
 
     \Atk4\Ui\Button::addTo($app, ['Test'])->on(
-      'click',
-      (new \Atk4\Ui\JsNotify('Not yet implemented'))->setColor('red')
+        'click',
+        (new \Atk4\Ui\JsNotify('Not yet implemented'))->setColor('red')
     );
 
 A typical use case would be to provide visual feedback of an action after used performs operation inside
@@ -537,6 +537,7 @@ other view::
 
     $form->onSubmit(function (Form $form) use ($table) {
         $form->model->save();
+
         return new \Atk4\Ui\JsReload($table);
     });
 
@@ -577,11 +578,12 @@ The following will **not** work::
     $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
 
     $form->onSubmit(function (Form $form) use ($table) {
-      $form->model->save();
-      return [
-        $table->jsReload(),
-        $form->success('ok'),
-      ];
+        $form->model->save();
+
+        return [
+            $table->jsReload(),
+            $form->success('ok'),
+        ];
     });
 
 Table needs to be first! The following works::
@@ -601,11 +603,12 @@ Table needs to be first! The following works::
     $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
 
     $form->onSubmit(function (Form $form) use ($table) {
-      $form->model->save();
-      return [
-        $table->jsReload(),
-        $form->success('ok'),
-      ];
+        $form->model->save();
+
+        return [
+            $table->jsReload(),
+            $form->success('ok'),
+        ];
     });
 
 The first will not work because of how the render tree is called and because VirtualPage is special.
@@ -622,6 +625,7 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
         $form->setModel(clone $model);
         $form->onSubmit(function (Form $form) use ($table) {
             $form->model->save();
+
             return [
                 $table->jsReload(),
                 $form->success('ok'),
@@ -649,14 +653,12 @@ The most basic approach is::
 
     $button = \Atk4\Ui\Button::addTo($app, ['Process Image']);
     $button->on('click', function () use ($button, $image) {
-
         sleep(1); // $image->resize();
         sleep(1); // $image->findFace();
         sleep(1); // $image->watermark();
         sleep(1); // $image->createThumbnails();
 
         return $button->js()->text('Success')->addClass('disabled');
-
     });
 
 However, it would be nice if the user was aware of the progress of your process, which is when `Server Sent Event (JsSse)`_
@@ -678,7 +680,6 @@ This class implements ability for your PHP code to send messages to the browser 
     $sse = \Atk4\Ui\JsSse::addTo($app);
 
     $button->on('click', $sse->set(function () use ($sse, $button, $image) {
-
         $sse->send($button->js()->text('Processing'));
         sleep(1); // $image->resize();
 
@@ -692,7 +693,6 @@ This class implements ability for your PHP code to send messages to the browser 
         sleep(1); // $image->createThumbnails();
 
         return $button->js()->text('Success')->addClass('disabled');
-
     }));
 
 The JsSse component plays a crucial role in some high-level components such as :php:class:`Console` and :php:class:`ProgressBar`.

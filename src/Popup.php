@@ -95,8 +95,7 @@ class Popup extends View
     {
         parent::init();
 
-        if (
-            $this->getOwner() instanceof Item
+        if ($this->getOwner() instanceof Item
             || $this->getOwner() instanceof Menu
             || $this->getOwner() instanceof Dropdown
             || $this->getOwner() instanceof Button
@@ -105,8 +104,7 @@ class Popup extends View
                 ->addMoreInfo('owner', $this->getOwner());
         }
 
-        if (
-            ($this->triggerBy instanceof Item
+        if (($this->triggerBy instanceof Item
             || $this->triggerBy instanceof Menu
             || $this->triggerBy instanceof Dropdown) && $this->triggerOn === null
         ) {

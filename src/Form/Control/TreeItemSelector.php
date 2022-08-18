@@ -51,11 +51,11 @@ class TreeItemSelector extends Form\Control
      *               ['name' => 'iPhone', 'id' => 502],
      *               ['name' => 'Google Pixels', 'id' => 503],
      *           ]],
-     *           ['name' => 'Tv' , 'id' => 501],
-     *           ['name' => 'Radio' , 'id' => 601],
+     *           ['name' => 'Tv', 'id' => 501],
+     *           ['name' => 'Radio', 'id' => 601],
      *       ]],
-     *       ['name' => 'Cleaner' , 'id' => 201],
-     *       ['name' => 'Appliances' , 'id' => 301],
+     *       ['name' => 'Cleaner', 'id' => 201],
+     *       ['name' => 'Appliances', 'id' => 301],
      *   ];
      *
      * When adding nodes array into an item, it will automatically be treated as a group unless empty.

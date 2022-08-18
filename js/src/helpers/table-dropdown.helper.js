@@ -17,17 +17,17 @@ function showTableDropdown() {
     const hasFloating = $that.hasClass('floating');
 
     /**
-   * Check if menu fit below button.
-   *
-   * @returns {boolean}
-   */
+     * Check if menu fit below button.
+     *
+     * @returns {boolean}
+     */
     function canFitBelow() {
         return $menu.outerHeight() < $(window).height() - $that[0].getBoundingClientRect().bottom;
     }
 
     /**
-   * Set menu style for displaying at right position.
-   */
+     * Set menu style for displaying at right position.
+     */
     function setCssPosition() {
     // console.log(position.top, $that.scrollTop());
         let top = 0;
