@@ -228,6 +228,7 @@ class Form extends View
         // Model is set for the form and also for the current layout
         try {
             parent::setModel($model);
+
             $this->layout->setModel($model, $fields);
         } catch (Exception $e) {
             throw $e->addMoreInfo('model', $model);
