@@ -43,8 +43,8 @@ export default class serverEvent extends atkPlugin {
     }
 
     /**
-   * To close ServerEvent.
-   */
+     * To close ServerEvent.
+     */
     stop() {
         this.source.close();
         if (this.settings.showLoader) {

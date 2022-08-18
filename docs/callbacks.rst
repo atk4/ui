@@ -92,7 +92,7 @@ returns any value, the set() will return it too::
     $label->detail = $cb->getUrl();
     $label->link($cb->getUrl());
 
-    if($cb->set(function () { return true; })) {
+    if ($cb->set(function () { return true; })) {
         $label->addClass('red');
     }
 

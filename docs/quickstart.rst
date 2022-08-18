@@ -140,15 +140,15 @@ single ToDo item::
     class ToDoItem extends \Atk4\Data\Model {
         public $table = 'todo_item';
 
-        function init(): void {
+        protected function init(): void {
             parent::init();
 
             $this->addField('name', ['caption' => 'Task Name', 'required' => true]);
 
             $this->addField('due', [
-              'type' => 'date',
-              'caption' => 'Due Date',
-              'default' => new \DateTime('+1 week'),
+                'type' => 'date',
+                'caption' => 'Due Date',
+                'default' => new \DateTime('+1 week'),
             ]);
         }
     }

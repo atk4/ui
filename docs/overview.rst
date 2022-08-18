@@ -102,7 +102,7 @@ clarifications::
     class Offer extends \Atk4\Data\Model {
         public $table = 'offer';
 
-        function init(): void {
+        protected function init(): void {
             parent::init();
 
             // Persistence may not have structure, so we define here

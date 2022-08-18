@@ -66,7 +66,7 @@ active. (See :ref:`system_pattern`)::
         public $user;
         public $company;
 
-        function __construct($auth = true) {
+        public function __construct($auth = true) {
             parent::__construct('Warehouse App v0.4');
 
             // My App class will establish database connection

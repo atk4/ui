@@ -183,10 +183,9 @@ the "total" column value (as above) but using PHP math instead of doing it insid
     $order = new Order($db);
 
     $table->setModel($order, ['name', 'price', 'amount', 'status']);
-    $table->addColumn('total', new \Atk4\Data\Field\Calculated(
-        function (Model $row) {
-            return $row->get('price') * $row->get('amount');
-        }));
+    $table->addColumn('total', new \Atk4\Data\Field\Calculated(function (Model $row) {
+        return $row->get('price') * $row->get('amount');
+    }));
 
 If you execute this code, you'll notice that the "total" column is now displayed last. If you
 wish to position it before status, you can use the final format of addColumn()::
@@ -195,10 +194,9 @@ wish to position it before status, you can use the final format of addColumn()::
     $order = new Order($db);
 
     $table->setModel($order, ['name', 'price', 'amount']);
-    $table->addColumn('total', new \Atk4\Data\Field\Calculated(
-        function (Model $row) {
-            return $row->get('price') * $row->get('amount');
-        }));
+    $table->addColumn('total', new \Atk4\Data\Field\Calculated(function (Model $row) {
+        return $row->get('price') * $row->get('amount');
+    }));
     $table->addColumn('status');
 
 This way we don't populate the column through setModel() and instead populate it manually later
@@ -266,12 +264,12 @@ The tag will override model value. Here is example usage of :php:meth:`Table\\Co
             return '{$_expired}';
         }
 
-        function getHtmlTags(\Atk4\Data\Model $row)
+        public function getHtmlTags(\Atk4\Data\Model $row)
         {
             return [
                 '_expired' => $row->get('date') < new \DateTime()
-                                  ? '<td class="danger">EXPIRED</td>'
-                                  : '<td></td>',
+                    ? '<td class="danger">EXPIRED</td>'
+                    : '<td></td>',
             ];
         }
     }

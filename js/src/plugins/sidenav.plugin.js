@@ -36,11 +36,11 @@ export default class sidenav extends atkPlugin {
     }
 
     /**
-   * Check if the url correspond to one of our menu items.
-   * if so, then add the menuItemActiveCSS class and return true.
-   *
-   * @returns {boolean}
-   */
+     * Check if the url correspond to one of our menu items.
+     * if so, then add the menuItemActiveCSS class and return true.
+     *
+     * @returns {boolean}
+     */
     hasBase() {
         let hasBase = false;
         this.menu.find('a').each((idx, el) => {
@@ -54,11 +54,11 @@ export default class sidenav extends atkPlugin {
     }
 
     /**
-   * Check if an url match with current window location.
-   * @param refUrl
-   *
-   * @return bool
-   */
+     * Check if an url match with current window location.
+     * @param refUrl
+     *
+     * @return bool
+     */
     urlMatchLocation(refUrl) {
         const url = new URL(refUrl);
         if (url.pathname === window.location.pathname) {
@@ -73,28 +73,28 @@ export default class sidenav extends atkPlugin {
     }
 
     /**
-   * Check if menu container for menu items contains the css visible class name.
-   * Usually means that the menu items in a group are being display by css rule.
-   *
-   * @returns {*}
-   */
+     * Check if menu container for menu items contains the css visible class name.
+     * Usually means that the menu items in a group are being display by css rule.
+     *
+     * @returns {*}
+     */
     isMenuOn() {
         return this.menu.hasClass(this.settings.visibleCssClass);
     }
 
     /**
-   * Set class icon for the toggler element.
-   *
-   * @param selector
-   */
+     * Set class icon for the toggler element.
+     *
+     * @param selector
+     */
     setTogglerIcon(selector) {
         this.toggler.find(selector).attr('class', this.isMenuOn() ? this.settings.icon.off : this.settings.icon.on);
     }
 
     /**
-   * Add click handler for menu group
-   * and toggler element.
-   */
+     * Add click handler for menu group
+     * and toggler element.
+     */
     addClickHandler() {
         this.$el.find(this.settings.menuGroupTitleSelector).on('click', (e) => {
             e.stopPropagation();

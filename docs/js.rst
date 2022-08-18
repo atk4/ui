@@ -472,8 +472,8 @@ JsNotify
 Dynamic notifier used to display operation status::
 
     \Atk4\Ui\Button::addTo($app, ['Test'])->on(
-      'click',
-      (new \Atk4\Ui\JsNotify('Not yet implemented'))->setColor('red')
+        'click',
+        (new \Atk4\Ui\JsNotify('Not yet implemented'))->setColor('red')
     );
 
 A typical use case would be to provide visual feedback of an action after used performs operation inside
@@ -577,11 +577,12 @@ The following will **not** work::
     $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
 
     $form->onSubmit(function (Form $form) use ($table) {
-      $form->model->save();
-      return [
-        $table->jsReload(),
-        $form->success('ok'),
-      ];
+        $form->model->save();
+
+        return [
+            $table->jsReload(),
+            $form->success('ok'),
+        ];
     });
 
 Table needs to be first! The following works::
@@ -601,11 +602,12 @@ Table needs to be first! The following works::
     $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
 
     $form->onSubmit(function (Form $form) use ($table) {
-      $form->model->save();
-      return [
-        $table->jsReload(),
-        $form->success('ok'),
-      ];
+        $form->model->save();
+
+        return [
+            $table->jsReload(),
+            $form->success('ok'),
+        ];
     });
 
 The first will not work because of how the render tree is called and because VirtualPage is special.

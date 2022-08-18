@@ -83,7 +83,7 @@ Lets say a User can have many email addresses, but you want to store them in a s
         }
     }
 
-     /**
+    /**
      * User model
      */
     class User extends \Atk4\Data\Model

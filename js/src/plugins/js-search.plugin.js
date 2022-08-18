@@ -23,8 +23,8 @@ export default class JsSearch extends atkPlugin {
     }
 
     /**
-   * Set input field event handler.
-   */
+     * Set input field event handler.
+     */
     setInputAction() {
         if (this.settings.autoQuery) {
             this.onAutoQueryAction();
@@ -34,8 +34,8 @@ export default class JsSearch extends atkPlugin {
     }
 
     /**
-   * Query server on each keystroke after proper timeout.
-   */
+     * Query server on each keystroke after proper timeout.
+     */
     onAutoQueryAction() {
         this.textInput.on('keyup', atk.debounce((e) => {
             const options = $.extend({}, this.urlArgs, this.settings.uri_options);
@@ -56,8 +56,8 @@ export default class JsSearch extends atkPlugin {
     }
 
     /**
-   * Query server after pressing Enter.
-   */
+     * Query server after pressing Enter.
+     */
     onEnterAction() {
         this.textInput.on('keyup', (e) => {
             const options = $.extend({}, this.urlArgs, this.settings.uri_options);
@@ -81,9 +81,9 @@ export default class JsSearch extends atkPlugin {
     }
 
     /**
-   * When Search has the focus and the Escape key is pressed, clear Search text.
-   * When Search text is already empty the event will bubble up normally.
-   */
+     * When Search has the focus and the Escape key is pressed, clear Search text.
+     * When Search text is already empty the event will bubble up normally.
+     */
     onEscapeKeyAction() {
         this.textInput.keydown((e) => {
             if (this.textInput.val() !== '' && e.key === 'Escape') {
@@ -96,8 +96,8 @@ export default class JsSearch extends atkPlugin {
     }
 
     /**
-   * Set Search button event handler.
-   */
+     * Set Search button event handler.
+     */
     setSearchAction() {
         this.searchAction.on('click', (e) => {
             const options = $.extend({}, this.urlArgs, this.settings.uri_options);
@@ -120,24 +120,24 @@ export default class JsSearch extends atkPlugin {
     }
 
     /**
-   * Add argument to url for sorting purpose.
-   *
-   * @Deprecated Use setUrlArgs instead.
-   *
-   * @param name
-   * @param sortBy
-   */
+     * Add argument to url for sorting purpose.
+     *
+     * @Deprecated Use setUrlArgs instead.
+     *
+     * @param name
+     * @param sortBy
+     */
     setSortArgs(name, sortBy) {
         this.setUrlArgs(name, sortBy);
     }
 
     /**
-   * Allow to set filter initial input.
-   * Mostly use on page load
-   * when input need to be set to reflect a search state.
-   *
-   * @param text || The text input value.
-   */
+     * Allow to set filter initial input.
+     * Mostly use on page load
+     * when input need to be set to reflect a search state.
+     *
+     * @param text || The text input value.
+     */
     setFilter(text) {
         this.textInput.val(text);
         this.setButtonState(true);
@@ -146,20 +146,20 @@ export default class JsSearch extends atkPlugin {
     }
 
     /**
-   * More generic way to set url argument.
-   *
-   * @param arg
-   * @param value
-   */
+     * More generic way to set url argument.
+     *
+     * @param arg
+     * @param value
+     */
     setUrlArgs(arg, value) {
         this.urlArgs = Object.assign(this.urlArgs, { [arg]: value });
     }
 
     /**
-   * Set Filter icon state.
-   *
-   * @param isOn
-   */
+     * Set Filter icon state.
+     *
+     * @param isOn
+     */
     setFilterState(isOn) {
         if (isOn) {
             this.leftIcon.show();
@@ -170,10 +170,10 @@ export default class JsSearch extends atkPlugin {
     }
 
     /**
-   * Set search button state.
-   *
-   * @param isOn
-   */
+     * Set search button state.
+     *
+     * @param isOn
+     */
     setButtonState(isOn) {
         if (isOn) {
             this.searchIcon.hide();
@@ -186,11 +186,11 @@ export default class JsSearch extends atkPlugin {
     }
 
     /**
-   * Send request to server using the search query.
-   *
-   * @param uri
-   * @param options
-   */
+     * Send request to server using the search query.
+     *
+     * @param uri
+     * @param options
+     */
     doSearch(uri, query, options, cb = function () {}) {
         const queryKey = this.settings.uri_query_key;
 

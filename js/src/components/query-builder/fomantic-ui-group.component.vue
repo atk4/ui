@@ -72,8 +72,8 @@ export default {
     },
     methods: {
         /**
-       * Add a new rule via Dropdown item.
-       */
+         * Add a new rule via Dropdown item.
+         */
         addNewRule: function (ruleId) {
             // eslint-disable-next-line prefer-destructuring
             this.selectedRule = this.rules.filter((rule) => rule.id === ruleId)[0];
@@ -84,10 +84,10 @@ export default {
     },
     computed: {
         /**
-       * Map rules to SUI Dropdown.
-       *
-       * @returns {*}
-       */
+         * Map rules to SUI Dropdown.
+         *
+         * @returns {*}
+         */
         dropdownRules: function () {
             return this.rules.map((rule) => ({
                 key: rule.id,

@@ -67,17 +67,17 @@ export default class JsSortable extends atkPlugin {
     }
 
     /**
-   * Will send current element order via callback.
-   *
-   * @param params Extra arguments to add to uri.
-   */
+     * Will send current element order via callback.
+     *
+     * @param params Extra arguments to add to uri.
+     */
     getSortOrders(params) {
         this.sendSortOrders(params);
     }
 
     /**
-   * Send orders to server via JsCallback.
-   */
+     * Send orders to server via JsCallback.
+     */
     sendSortOrders(params) {
         const url = this.buildUrl(params);
         if (url) {

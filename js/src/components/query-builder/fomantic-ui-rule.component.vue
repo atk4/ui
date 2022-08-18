@@ -116,12 +116,12 @@ export default {
     },
     methods: {
         /**
-       * Check if an input can be display in regards to:
-       * it's operator and then it's type.
-       *
-       * @param type
-       * @returns {boolean|*}
-       */
+         * Check if an input can be display in regards to:
+         * it's operator and then it's type.
+         *
+         * @param type
+         * @returns {boolean|*}
+         */
         canDisplay: function (type) {
             if (this.labels.hiddenOperator.includes(this.query.operator)) {
                 return false;

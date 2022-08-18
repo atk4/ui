@@ -70,7 +70,7 @@ Sticky GET
 Agile UI implements advanced approach allowing any View object that you add into Render Tree to
 declare "sticky GET arguments". Here is example::
 
-    if(isset($_GET['message'])) {
+    if (isset($_GET['message'])) {
         Message::addTo($app)->set($_GET['message']);
     }
 
@@ -82,7 +82,7 @@ we use :php:class:`Console` instead, which must display an interactive data stre
 
 In Agile UI you can request that some $_GET arguments are preserved and included into callback urls::
 
-    if($this->getApp()->stickyGet('message')) {
+    if ($this->getApp()->stickyGet('message')) {
         Message::addTo($app)->set($_GET['message']);
     }
 

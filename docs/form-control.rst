@@ -57,10 +57,10 @@ If you execute this exmple, you'll notice that Feld now has a label, it uses ful
 page and the following HTML is now produced::
 
     <div class="field">
-      <label for="atk_admin_form_generic_name_input">Name</label>
-      <div id="atk_admin_form_generic_name" class="ui input" style="">
-        <input name="name" type="text" placeholder="" id="atk_admin_form_generic_name_input" value="">
-      </div>
+        <label for="atk_admin_form_generic_name_input">Name</label>
+        <div id="atk_admin_form_generic_name" class="ui input" style="">
+            <input name="name" type="text" placeholder="" id="atk_admin_form_generic_name_input" value="">
+        </div>
     </div>
 
 The markup that surronds the button which includes Label and formatting is produced by
@@ -352,7 +352,8 @@ You can also use this function to add an Icon to a record::
 
 If you'd like to even further adjust How each item is displayed (e.g. complex HTML and more model fields), you can extend the Dropdown class and create your own template with the complex HTML::
 
-    class MyDropdown extends \Atk4\Ui\Dropdown {
+    class MyDropdown extends \Atk4\Ui\Dropdown
+    {
         public $defaultTemplate = 'my_dropdown.html';
 
         /*
@@ -367,8 +368,8 @@ If you'd like to even further adjust How each item is displayed (e.g. complex HT
             $this->_tItem->set('someOtherField2', $res['someOtherField2]);
             // add item to template
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->render());
-       }
-   }
+        }
+    }
 
 
 With the according renderRowFunction::
@@ -398,12 +399,12 @@ If not used with a model, you can define the Dropdown values in $values array. T
 
 You can also define an Icon right away::
 
-     $dropdown->values = [
-         'tag' => ['Tag', 'icon' => 'tag icon'],
-         'globe' => ['Globe', 'icon' => 'globe icon'],
-         'registered' => ['Registered', 'icon' => 'registered icon'],
-         'file' => ['File', 'icon' => 'file icon'],
-     ].
+    $dropdown->values = [
+        'tag' => ['Tag', 'icon' => 'tag icon'],
+        'globe' => ['Globe', 'icon' => 'globe icon'],
+        'registered' => ['Registered', 'icon' => 'registered icon'],
+        'file' => ['File', 'icon' => 'file icon'],
+    ];
 
 If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.
 If you use it, use the second parameter as well, its the array key::

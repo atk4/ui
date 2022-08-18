@@ -23,11 +23,11 @@ class PopupService {
     }
 
     /**
-   * OnShow callback when a popup is trigger.
-   * Will check if popup need to be setup dynamically using a callback.
-   *
-   * @param $module
-   */
+     * OnShow callback when a popup is trigger.
+     * Will check if popup need to be setup dynamically using a callback.
+     *
+     * @param $module
+     */
     onShow($module) {
         const $popup = this;
         const data = $popup.data();
@@ -58,23 +58,23 @@ class PopupService {
     }
 
     /**
-   * Call when hidding.
-   */
+     * Call when hidding.
+     */
     onHide() {}
 
     onVisible() {}
 
     /**
-   * Only call when popup are created from metadata
-   * and trigger action is fired.
-   */
+     * Only call when popup are created from metadata
+     * and trigger action is fired.
+     */
     onCreate() {
     // console.log('onCreate');
     }
 
     /**
-   * Only call if onCreate was called.
-   */
+     * Only call if onCreate was called.
+     */
     onRemove() {
     // console.log('onRemvoe');
     }

@@ -13,9 +13,9 @@ class AccordionService {
     }
 
     /**
-   * Setup semantic-ui accordion for this service.
-   * @param settings
-   */
+     * Setup semantic-ui accordion for this service.
+     * @param settings
+     */
     setService(settings) {
         settings.onOpening = this.onOpening;
     }

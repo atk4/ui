@@ -32,9 +32,9 @@ class FormService {
     }
 
     /**
-   * Setup semantic-ui form callback with this service.
-   * @param settings
-   */
+     * Setup semantic-ui form callback with this service.
+     * @param settings
+     */
     setService(settings) {
         settings.rules.isVisible = this.isVisible;
         settings.rules.notEmpty = settings.rules.empty;
@@ -43,19 +43,19 @@ class FormService {
     }
 
     /**
-   * Form onSuccess handler when submit.
-   */
+     * Form onSuccess handler when submit.
+     */
     onSuccess() {
         atk.formService.clearDirtyForm($(this).attr('id'));
         return true;
     }
 
     /**
-   * Set form in order to detect
-   * input changed before leaving page.
-   *
-   * @param id
-   */
+     * Set form in order to detect
+     * input changed before leaving page.
+     *
+     * @param id
+     */
     preventFormLeave(id) {
         const $form = $('#' + id);
         $form.data('__atkCheckDirty', true);
@@ -66,11 +66,11 @@ class FormService {
     }
 
     /**
-   * Clear Form from being dirty.
-   * Use this function if you define your own onSuccess handler.
-   *
-   * @param id
-   */
+     * Clear Form from being dirty.
+     * Use this function if you define your own onSuccess handler.
+     *
+     * @param id
+     */
     clearDirtyForm(id) {
         const forms = this.prevents.filter(($form) => $form.attr('id') === id);
         forms.forEach(($form) => {
@@ -79,10 +79,10 @@ class FormService {
     }
 
     /**
-   * Visibility rule.
-   *
-   * @returns {boolean | jQuery}
-   */
+     * Visibility rule.
+     *
+     * @returns {boolean | jQuery}
+     */
     isVisible() {
         return $(this).is(':visible');
     }
@@ -92,13 +92,13 @@ class FormService {
     }
 
     /**
-   * Validate a field using our own or semantic-ui validation rule function.
-   *
-   * @param form  Form containing the field.
-   * @param fieldName Name of field
-   * @param rule  Rule to apply test.
-   * @returns {*|boolean}
-   */
+     * Validate a field using our own or semantic-ui validation rule function.
+     *
+     * @param form  Form containing the field.
+     * @param fieldName Name of field
+     * @param rule  Rule to apply test.
+     * @returns {*|boolean}
+     */
     validateField(form, fieldName, rule) {
         rule = this.normalizeRule(rule);
         const ruleFunction = this.getRuleFunction(this.getRuleName(rule));

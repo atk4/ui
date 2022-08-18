@@ -166,14 +166,13 @@ same way as empty tag. (``{$elephant}``)
 
 Region — typically a multiple lines HTML and text between opening and
 closing tag which can contain a nested tags. Regions are typically named
-with CamelCase, while other tags are named using ``snake_case``::
+with PascalCase, while other tags are named using ``snake_case``::
 
     some text before
     {ElephantBlock}
-      Hello, {$name}.
+        Hello, {$name}.
 
-      by {sender}John Smith{/}
-
+        by {sender}John Smith{/}
     {/ElephantBlock}
     some text after
 
@@ -377,17 +376,17 @@ Let's assume you have the following template in ``template/envelope.html``::
 
     <div class="sender">
     {Sender}
-      {$name},
-      Address: {$street}
-               {$city} {$zip}
+        {$name},
+        Address: {$street}
+                 {$city} {$zip}
     {/Sender}
     </div>
 
     <div class="recipient">
     {Recipient}
-      {$name},
-      Address: {$street}
-               {$city} {$zip}
+        {$name},
+        Address: {$street}
+                 {$city} {$zip}
     {/Recipient}
     </div>
 
@@ -505,7 +504,7 @@ clone region with such a name from parent's template. This can be used
 by your "menu" implementation, which will clone parent's template's tag
 instead to hook into some specific template::
 
-    function defaultTemplate() {
+    public function defaultTemplate() {
         return ['greeting']; // uses templates/greeting.html
     }
 
@@ -596,9 +595,9 @@ other projects developed using Agile Toolkit.
 Naming of tags
 --------------
 
-Tags use two type of naming - CamelCase and underscore\_lowercase. Tags
+Tags use two type of naming - PascalCase and underscore\_lowercase. Tags
 are case sensitive. The larger regions which are typically used for
-cloning or by adding new objects into it are named with CamelCase.
+cloning or by adding new objects into it are named with PascalCase.
 Examples would be: "Menu", "Content" and "Recipient". The lowercase and
 underscore is used for short variables which would be inserted into
 template directly such as "name" or "zip".
@@ -644,18 +643,18 @@ under ``$template->template`::
 
     // template property:
     array (
-      0 => 'Hello ',
-      'subject#0' => array (
-        0 => 'world',
-      ),
-      1 => '!!',
+        0 => 'Hello ',
+        'subject#0' => array (
+            0 => 'world',
+        ),
+        1 => '!!',
     )
 
 Property tags would contain::
 
     array (
-      'subject#0' => array( &array ),
-      'subject#1' => array( &array )
+        'subject#0' => array( &array ),
+        'subject#1' => array( &array )
     )
 
 As a result each tag will be stored under it's actual name and the name with

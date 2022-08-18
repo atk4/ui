@@ -43,11 +43,11 @@ export default {
     },
     methods: {
         /**
-       * Return default label and option.
-       *
-       * @param labels
-       * @returns {any}
-       */
+         * Return default label and option.
+         *
+         * @param labels
+         * @returns {any}
+         */
         getLabels: function (labels) {
             labels = labels || {};
 

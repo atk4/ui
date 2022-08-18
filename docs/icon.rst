@@ -66,8 +66,8 @@ Fomantic UI support icon groups. The best way to implement is to supply :php:cla
 icon::
 
     Icon::addTo($app, ['template' => new \Atk4\Ui\Template('<i class="huge icons">
-      <i class="big thin circle icon"></i>
-      <i class="user icon"></i>
+        <i class="big thin circle icon"></i>
+        <i class="user icon"></i>
     </i>'), false]);
 
 However there are several other options you can use when working with your custom HTML. This is not
@@ -76,8 +76,8 @@ exclusive to Icon, but I'm adding a few examples here, just for your convenience
 Let's start with a View that contains your custom HTML loaded from file or embedded like this::
 
     $view = View::addTo($app, ['template' => new \Atk4\Ui\Template('<div>Hello my {Icon}<i class="huge icons">
-      <i class="big thin circle icon"></i>
-      <i class="{Content}user{/} icon"></i>
+        <i class="big thin circle icon"></i>
+        <i class="{Content}user{/} icon"></i>
     </i>{/}, It is me</div>')]);
 
 Looking at the template it has a region `{Icon}..{/}`. Try by executing the code above, and you'll see
@@ -129,7 +129,7 @@ Here is the code with comments::
         public $defaultTemplate = null;
         // public $defaultTemplate = __DIR__ . '../templates/socialadd.html';
 
-        function init(): void {
+        protected function init(): void {
             parent::init();
 
             if (is_null($this->social)) {
@@ -149,11 +149,11 @@ Here is the code with comments::
                 // TODO: Place template into file and set defaultTemplate instead
                 $this->template = new \Atk4\Ui\Template(
     '<{_element}button{/} class="ui ' . $this->social . ' button" {$attributes}>
-      <i class="large icons">
-        {$Icon}
-        <i class="inverted corner add icon"></i>
-      </i>
-      {$Content}
+        <i class="large icons">
+            {$Icon}
+            <i class="inverted corner add icon"></i>
+        </i>
+       {$Content}
     </{_element}button{/}>');
             }
 
