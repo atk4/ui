@@ -159,7 +159,9 @@ of a different class (e.g. 'atk4_money'). Value will be initialized after first 
 used to add columns without field::
 
     $action = $this->addColumn(null, [Table\Column\ActionButtons::class]);
-    $action->addButton('Delete', function () { return 'ok'; });
+    $action->addButton('Delete', function () {
+        return 'ok';
+    });
 
 The above code will add a new extra column that will only contain 'delete' icon. When clicked
 it will automatically delete the corresponding record.

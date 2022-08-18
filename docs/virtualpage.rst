@@ -101,7 +101,9 @@ To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the foll
     $t = \Atk4\Ui\Tabs::addTo($layout);
 
     \Atk4\Ui\LoremIpsum::addTo($t->addTab('Tab1')); // regular tab
-    $t->addTab('Tab2', function ($p) { \Atk4\Ui\LoremIpsum::addTo($p); }); // dynamic tab
+    $t->addTab('Tab2', function ($p) { // dynamic tab
+        \Atk4\Ui\LoremIpsum::addTo($p);
+    });
 
 .. php:method:: getUrl($html_wrapping)
 

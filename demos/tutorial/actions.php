@@ -165,7 +165,9 @@ $wizard->addStep('More Ways', function ($page) {
         $model->addUserAction('mail', [
             'fields' => ['currency_field'],
             'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'callback' => function () { return 'testing'; },
+            'callback' => function () {
+ *              return 'testing';
+ *          },
             'description' => 'Email testing',
         ]);
         $owner->add('CardDeck')
@@ -190,11 +192,17 @@ $wizard->addStep('Crud integration', function ($page) {
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $country = new Country($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
-        $country->getUserAction('delete')->enabled = function (Country $m) { return $m->id % 2 === 0; };
+        $country->getUserAction('delete')->enabled = function (Country $m) {
+            return $m->id % 2 === 0;
+        };
         $country->addUserAction('mail', [
             'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'preview' => function (Model $model) { return 'here is email preview for ' . $model->get('name'); },
-            'callback' => function (Model $model) { return 'email sent to ' . $model->get('name'); },
+            'preview' => function (Model $model) {
+                return 'here is email preview for ' . $model->get('name');
+            },
+            'callback' => function (Model $model) {
+                return 'email sent to ' . $model->get('name');
+            },
             'description' => 'Email testing',
         ]);
 

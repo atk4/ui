@@ -157,7 +157,9 @@ for implementing PHP call-backs. They follow the pattern:
 
 Once the concept is established, it can even be used on a higher level, for example::
 
-    $button->on('click', function () { return 'clicked button'; });
+    $button->on('click', function () {
+        return 'clicked button';
+    });
 
 .. toctree::
     :maxdepth: 4

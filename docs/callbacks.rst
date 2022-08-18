@@ -111,7 +111,9 @@ the label regardless of the callback function::
     $label->detail = $cb->getUrl();
     $label->link($cb->getUrl());
 
-    $cb->set(function () { echo 123; });
+    $cb->set(function () {
+        echo 123;
+    });
 
     if ($cb->triggered) {
         $label->addClass('red');

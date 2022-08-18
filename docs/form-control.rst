@@ -83,7 +83,9 @@ into multiple Tabs or detach form control groups or even create nested layouts::
     $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
     $form_page->addControl('age', new \Atk4\Ui\Form\Control\Line());
 
-    $form->onSubmit(function (Form $form) { return $form->model->get('name') . ' has age ' . $form->model->get('age'); });
+    $form->onSubmit(function (Form $form) {
+        return $form->model->get('name') . ' has age ' . $form->model->get('age');
+    });
 
 This is further explained in documentation for :php:class:`Atk4\\Ui\\Form\\Layout` class,
 however if you do plan on adding your own form control types, it's important that you extend it
@@ -301,7 +303,9 @@ $expression argument can be string, JsExpression, array of JsExpressions or even
 
     // callback
     $f2 = $form->addControl('f2');
-    $f2->onChange(function () { return new \Atk4\Ui\JsExpression('console.log("f2 changed")'); });
+    $f2->onChange(function () {
+        return new \Atk4\Ui\JsExpression('console.log("f2 changed")');
+    });
 
     // Calendar form control - wraps in function call with arguments date, text and mode
     $c1 = $form->addControl('c1', new \Atk4\Ui\Form\Control\Calendar(['type' => 'date']));
