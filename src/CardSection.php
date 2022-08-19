@@ -22,6 +22,7 @@ class CardSection extends View
     protected function init(): void
     {
         parent::init();
+
         $this->addClass('content');
     }
 

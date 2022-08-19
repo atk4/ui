@@ -160,6 +160,7 @@ class Country extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name, ['actual' => 'atk_afp_country__nicename', 'required' => true, 'type' => 'string']);
         $this->addField($this->fieldName()->sys_name, ['actual' => 'atk_afp_country__name', 'system' => true]);
 
@@ -307,6 +308,7 @@ class File extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name);
 
         $this->addField($this->fieldName()->type, ['caption' => 'MIME Type']);
@@ -403,6 +405,7 @@ class Category extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name);
 
         $this->hasMany($this->fieldName()->SubCategories, [
@@ -428,6 +431,7 @@ class SubCategory extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name);
 
         $this->hasOne($this->fieldName()->product_category_id, [
@@ -454,6 +458,7 @@ class Product extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name);
         $this->addField($this->fieldName()->brand);
         $this->hasOne($this->fieldName()->product_category_id, [

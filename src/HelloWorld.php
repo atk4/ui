@@ -12,6 +12,7 @@ class HelloWorld extends View
     protected function init(): void
     {
         parent::init();
+
         $this->set('Content', 'Hello World');
     }
 }

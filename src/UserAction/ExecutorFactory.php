@@ -258,7 +258,9 @@ class ExecutorFactory
         return 'Add' . ($action->getModel()->caption ? ' ' . $action->getModel()->caption : '');
     }
 
-    // Generate id for a model user action.
+    /**
+     * Generate id for a model user action.
+     */
     protected function getModelId(UserAction $action): string
     {
         return strtolower(str_replace(' ', '_', $action->getModel()->getModelCaption()));

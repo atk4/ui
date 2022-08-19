@@ -215,7 +215,7 @@ class Dropdown extends Input
         // add selection only if no value is required and Dropdown has no multiple selections enabled
         if ($this->entityField !== null && !$this->entityField->getField()->required && !$this->isMultiple) {
             $this->_tItem->set('value', '');
-            $this->_tItem->set('title', $this->empty || is_numeric($this->empty) ? (string) $this->empty : '');
+            $this->_tItem->set('title', $this->empty);
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
         }
 
@@ -282,7 +282,7 @@ class Dropdown extends Input
         parent::renderView();
     }
 
-    // Sets the dropdown items to the template if a model is used
+    // sets the dropdown items to the template if a model is used
     protected function _renderItemsForModel()
     {
         foreach ($this->model as $key => $row) {

@@ -47,6 +47,7 @@ class VpExecutor extends View implements JsExecutorInterface
     protected function init(): void
     {
         parent::init();
+
         $this->initExecutor();
     }
 

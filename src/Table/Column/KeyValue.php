@@ -46,11 +46,6 @@ class KeyValue extends Table\Column
 {
     public $values = [];
 
-    protected function init(): void
-    {
-        parent::init();
-    }
-
     /**
      * @param Field|null $field
      *

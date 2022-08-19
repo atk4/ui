@@ -30,6 +30,7 @@ class Checkbox extends Table\Column
     protected function init(): void
     {
         parent::init();
+
         if (!$this->class) {
             $this->class = 'cb_' . $this->shortName;
         }

@@ -58,6 +58,7 @@ class Right extends View implements Loadable
     protected function init(): void
     {
         parent::init();
+
         if ($this->dynamic) {
             $this->addDynamicContent(Factory::factory($this->dynamic));
         }

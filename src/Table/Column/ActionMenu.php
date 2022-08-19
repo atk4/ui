@@ -41,11 +41,6 @@ class ActionMenu extends Table\Column
     /** @var string Button icon to use for display dropdown. */
     public $icon = 'dropdown icon';
 
-    protected function init(): void
-    {
-        parent::init();
-    }
-
     public function getTag(string $position, $value, $attr = []): string
     {
         if ($this->table->hasCollapsingCssActionColumn && $position === 'body') {

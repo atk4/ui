@@ -26,6 +26,7 @@ class ActionButtons extends Table\Column
     protected function init(): void
     {
         parent::init();
+
         $this->addClass('right aligned');
     }
 

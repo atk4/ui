@@ -18,6 +18,7 @@ class Content extends View implements LoadableContent
     protected function init(): void
     {
         parent::init();
+
         $this->addClass('atk-panel-content');
         $this->setCb(new Callback());
     }
