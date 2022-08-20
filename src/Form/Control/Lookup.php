@@ -414,15 +414,10 @@ class Lookup extends Input
         if ($this->entityField && $this->entityField->get()) {
             $idField = $this->idField ?: $this->model->idField;
 
-            $this->model = $this->model->tryLoadBy($idField, $this->entityField->get());
+            $this->model = $this->model->loadBy($idField, $this->entityField->get());
 
-            if ($this->model->isLoaded()) {
-                $row = $this->renderRow($this->model);
-
-                $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-            } else {
-                $this->entityField->setNull();
-            }
+            $row = $this->renderRow($this->model);
+            $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
         }
 
         $this->js(true, $chain);
