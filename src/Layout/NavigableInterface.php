@@ -22,7 +22,9 @@ interface NavigableInterface
      * Add items to left menu.
      * Will place item in a group if supply.
      *
-     * @param JsExpressionable $action
+     * @param string|array                  $name
+     * @param string|array|JsExpressionable $action
+     * @param Menu                          $group
      */
     public function addMenuItem($name, $action = null, $group = null): Item;
 }

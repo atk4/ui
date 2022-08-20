@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-/**
- * Place menu.
- */
+use Atk4\Data\Model;
+
 class Menu extends View
 {
     public $ui = 'menu';
 
     /**
-     * if you set this to false, then upon clicking on the item, it won't
+     * If you set this to false, then upon clicking on the item, it won't
      * be highlighted as "active". This is useful if you have action on your
      * menu and page does not actually reload.
      *
@@ -23,7 +22,7 @@ class Menu extends View
     public $defaultTemplate = 'menu.html';
 
     /**
-     * will be set to true, when Menu is used as a part of a dropdown.
+     * Will be set to true, when Menu is used as a part of a dropdown.
      *
      * @internal
      *
@@ -34,8 +33,8 @@ class Menu extends View
     /**
      * $seed can also be name here.
      *
-     * @param string|array|Item             $item
-     * @param string|array|Model\UserAction $action
+     * @param string|array|Item                              $item
+     * @param string|array|JsExpressionable|Model\UserAction $action
      *
      * @return Item
      */
