@@ -79,7 +79,7 @@ class DropdownCascade extends Dropdown
             return [['value' => '', 'text' => $this->empty, 'name' => $this->empty]];
         }
 
-        $model = $this->cascadeFrom->model->tryLoad($id)->ref($this->reference);
+        $model = $this->cascadeFrom->model->load($id)->ref($this->reference);
         $values = [];
         foreach ($model as $k => $row) {
             if ($this->renderRowFunction) {

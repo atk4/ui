@@ -112,7 +112,7 @@ $tab = $tabs->addTab('Use after form submit', function ($tab) {
 
     $console = \Atk4\Ui\Console::addTo($tab, ['event' => false]);
     $console->set(function ($console) {
-        $model = $_SESSION['data'];
+        $model = $_SESSION['atk4_ui_console_demo'];
         $console->output('Executing process...');
         $console->info(var_export($model->get(), true));
         sleep(1);
@@ -123,7 +123,7 @@ $tab = $tabs->addTab('Use after form submit', function ($tab) {
     $console->js(true)->hide();
 
     $form->onSubmit(function (\Atk4\Ui\Form $form) use ($console) {
-        $_SESSION['data'] = $form->model; // only option is to store model in session here in demo
+        $_SESSION['atk4_ui_console_demo'] = $form->model; // only option is to store model in session here in demo
 
         return [
             $console->js()->show(),

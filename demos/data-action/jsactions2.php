@@ -12,7 +12,7 @@ use Atk4\Ui\Message;
 require_once __DIR__ . '/../init-app.php';
 
 $country = new Country($app->db);
-$entity = $country->tryLoadAny();
+$entity = $country->loadAny();
 $countryId = $entity->getId();
 
 // Model actions for this file are setup in DemoActionUtil.

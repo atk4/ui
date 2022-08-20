@@ -604,9 +604,10 @@ class App
             return $template->loadFromFile($filename);
         }
 
-        $dir = is_array($this->templateDir) ? $this->templateDir : [$this->templateDir];
-        foreach ($dir as $td) {
-            if ($t = $template->tryLoadFromFile($td . '/' . $filename)) {
+        $dirs = is_array($this->templateDir) ? $this->templateDir : [$this->templateDir];
+        foreach ($dirs as $dir) {
+            $t = $template->tryLoadFromFile($dir . '/' . $filename);
+            if ($t !== false) {
                 return $t;
             }
         }

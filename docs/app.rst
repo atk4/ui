@@ -74,8 +74,6 @@ active. (See :ref:`system_pattern`)::
             $this->db->setApp($this);
 
             // My App class provides access to a currently logged user and currently selected system.
-            $this->user = new User($this->db);
-            $this->company = new Company($this->db);
             session_start();
 
             // App class may be used for pages that do not require authentication
@@ -85,13 +83,14 @@ active. (See :ref:`system_pattern`)::
                 return;
             }
 
-            // Load User from database based on session data
+            // Load user from database based on session data
             if (isset($_SESSION['user_id'])) {
-                $this->user = $this->user->tryLoad($_SESSION['user_id']);
+                $user = new User($this->db);
+                $this->user = $user->tryLoad($_SESSION['user_id']);
             }
 
             // Make sure user is valid
-            if (!$this->user->isLoaded()) {
+            if ($this->user === null) {
                 $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
                 Message::addTo($this, ['Login Required', 'type' => 'error']);
                 Button::addTo($this, ['Login', 'class.primary' => true])->link('index.php');

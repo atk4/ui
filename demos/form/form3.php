@@ -27,13 +27,8 @@ $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'raised segment']);
     ->on('click', new JsReload($seg, ['m' => 'stat']));
 
 $form = Form::addTo($seg, ['layout' => [Form\Layout\Columns::class]]);
-$form->setModel((
-    isset($_GET['m']) ? (
-        $_GET['m'] === 'country' ? new Country($app->db) : (
-            $_GET['m'] === 'file' ? new File($app->db) : new Stat($app->db)
-        )
-    ) : new Stat($app->db)
-)->tryLoadAny());
+$modelClass = ['country' => Country::class, 'file' => File::class][$_GET['m'] ?? ''] ?? Stat::class;
+$form->setModel((new $modelClass($app->db))->loadAny());
 
 $form->onSubmit(function (Form $form) {
     $errors = [];

@@ -44,7 +44,8 @@ $form->onSubmit(function (Form $form) {
         . '; '
         . $form->model->ref('country2')->get(Country::hinting()->fieldName()->name)
         . '; '
-        . (new Country($form->getApp()->db))->tryLoad($form->model->get('country3'))->get(Country::hinting()->fieldName()->name);
+        . (new Country($form->getApp()->db))->load($form->model->get('country3'))
+            ->get(Country::hinting()->fieldName()->name);
 
     $view = new \Atk4\Ui\Message('Select:'); // need in behat test.
     $view->invokeInit();

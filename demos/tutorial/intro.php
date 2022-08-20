@@ -141,25 +141,26 @@ $wizard->addStep('Business Model', function ($page) {
         */
         session_start();
 
-        $model = new DemoInvoice(new Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->uiPersistence->dateFormat]);
+        $model = new DemoInvoice(new Persistence\Array_($_SESSION['atk4_ui_intro_demo'] ?? []), ['dateFormat' => $owner->getApp()->uiPersistence->dateFormat]);
         $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function (Model $model) {
-            $_SESSION['x'][$model->getId()] = $model->get();
+            $_SESSION['atk4_ui_intro_demo'][$model->getId()] = (clone $model->getModel())->addCondition($model->idField, $model->getId())->export(null, null, false)[$model->getId()];
         });
 
         Header::addTo($owner, ['Set invoice data:']);
         $form = \Atk4\Ui\Form::addTo($owner);
-        $model = $model->tryLoad(1);
-        $form->setModel($model);
 
-        if (!$model->isLoaded()) {
+        $entity = $model->tryLoad(1);
+        if ($entity === null) {
             // set default data
-            $model->setMulti([
+            $entity = $model->createEntity();
+            $entity->setMulti([
                 'id' => 1,
                 'reference' => 'Inv-' . random_int(1000, 9999),
                 'date' => new \DateTime(),
             ]);
-            $model->save();
+            $entity->save();
         }
+        $form->setModel($entity);
 
         $form->onSubmit(function (Form $form) {
             $form->model->save();
@@ -203,14 +204,14 @@ $wizard->addStep('Persistence', function ($page) {
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         session_start();
 
-        $model = new DemoInvoice(new Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->uiPersistence->dateFormat]);
+        $model = new DemoInvoice(new Persistence\Array_($_SESSION['atk4_ui_intro_demo'] ?? []), ['dateFormat' => $owner->getApp()->uiPersistence->dateFormat]);
         $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function (Model $model) {
-            $_SESSION['x'][$model->getId()] = $model->get();
+            $_SESSION['atk4_ui_intro_demo'][$model->getId()] = (clone $model->getModel())->addCondition($model->idField, $model->getId())->export(null, null, false)[$model->getId()];
         });
 
         Header::addTo($owner, ['Record display in Card View using model data.']);
         $model = $model->tryLoad(1);
-        if ($model->isLoaded()) {
+        if ($model !== null) {
             \Atk4\Ui\Card::addTo($owner, ['useLabel' => true])
                 ->setModel($model);
         } else {
@@ -230,5 +231,5 @@ $wizard->addStep('Persistence', function ($page) {
 $wizard->addFinish(function ($page) use ($wizard) {
     PromotionText::addTo($page);
     \Atk4\Ui\Button::addTo($wizard, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
-        ->link('/demos/index.php');
+        ->link('../');
 });

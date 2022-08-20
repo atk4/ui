@@ -344,7 +344,7 @@ class Multiline extends Form\Control
         $currentIds = array_column($model->export(), $model->idField);
 
         foreach ($this->rowData as $row) {
-            $entity = $model->tryLoad($row[$model->idField] ?? null);
+            $entity = $row[$model->idField] !== null ? $model->load($row[$model->idField]) : $model->createEntity();
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
                     continue;
@@ -568,11 +568,11 @@ class Multiline extends Form\Control
     public function setLookupOptionValue(Field $field, string $value)
     {
         $model = $field->getReference()->refModel($this->model);
-        $rec = $model->tryLoadBy($field->getReference()->getTheirFieldName(), $value);
-        if ($rec->isLoaded()) {
+        $entity = $model->tryLoadBy($field->getReference()->getTheirFieldName(), $value);
+        if ($entity !== null) {
             $option = [
                 'key' => $value,
-                'text' => $rec->get($model->titleField),
+                'text' => $entity->get($model->titleField),
                 'value' => $value,
             ];
             foreach ($this->fieldDefs as $key => $component) {
@@ -787,7 +787,7 @@ class Multiline extends Form\Control
             foreach ($dummyFields as $field) {
                 $dummyModel->addExpression($field['name'], ['expr' => $field['expr'], 'type' => $model->getField($field['name'])->type]);
             }
-            $values = $dummyModel->tryLoadAny()->get();
+            $values = $dummyModel->loadAny()->get();
             unset($values[$model->idField]);
 
             foreach ($values as $f => $value) {

@@ -62,14 +62,14 @@ $wizard->addStep('Define User Action', function ($page) {
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $country = new Country($owner->getApp()->db);
 
-        $country->addUserAction('send_message', function () {
-            return 'sent';
+        $country->addUserAction('send_message', function (Country $entity) {
+            return 'sent to ' . $entity->get($entity->fieldName()->name);
         });
-        $country = $country->tryLoadAny();
+        $country = $country->loadAny();
 
         $card = \Atk4\Ui\Card::addTo($owner);
         $card->setModel($country, [$country->fieldName()->iso]);
-        $card->addClickAction($country->getUserAction('send_message'));
+        $card->addClickAction($country->getModel()->getUserAction('send_message'));
     });
 });
 
