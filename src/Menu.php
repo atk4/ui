@@ -50,19 +50,10 @@ class Menu extends View
         $item = $this->add($item)->setElement('a');
 
         if (is_string($action) || is_array($action)) {
-            $action = $this->url($action);
-        }
-
-        if (is_string($action)) {
-            $item->setAttr('href', $action);
-        }
-
-        if ($action instanceof JsExpressionable) {
-            $item->js('click', $action);
-        }
-
-        if ($action instanceof UserAction\ExecutorInterface) {
-            $item->on('click', $action);
+            $url = $this->url($action);
+            $item->setAttr('href', $url);
+        } else {
+            $item->on('click', null, $action);
         }
 
         return $item;
