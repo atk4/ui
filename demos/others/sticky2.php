@@ -16,7 +16,7 @@ if (isset($_GET['name'])) {
     $frame->stickyGet('name');
 
     // frame will generate URL with sticky parameter
-    \Atk4\Ui\Label::addTo($frame, ['Name:', 'detail' => $_GET['name'], 'black'])->link($frame->url());
+    \Atk4\Ui\Label::addTo($frame, ['Name:', 'detail' => $_GET['name'], 'class.black' => true])->link($frame->url());
 
     // app still generates URL without localized sticky
     \Atk4\Ui\Label::addTo($frame, ['Reset', 'iconRight' => 'close', 'class.black' => true])->link($app->url());
