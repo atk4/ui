@@ -65,7 +65,7 @@ $wizard->addStep('Define User Action', function ($page) {
         $country->addUserAction('send_message', function () {
             return 'sent';
         });
-        $country = $country->tryLoadAny();
+        $country = $country->loadAny();
 
         $card = \Atk4\Ui\Card::addTo($owner);
         $card->setModel($country, [$country->fieldName()->iso]);

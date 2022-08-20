@@ -43,7 +43,6 @@ class DemoLookup extends \Atk4\Ui\Form\Control\Lookup
             $form = \Atk4\Ui\Form::addTo($page);
 
             $entity = $this->model->createEntity();
-
             $form->setModel($entity, $this->plus['fields'] ?? null);
 
             $form->onSubmit(function (\Atk4\Ui\Form $form) {
