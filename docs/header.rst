@@ -58,7 +58,7 @@ Header may specify icon or image::
 
 Here you can also specify seed for the image::
 
-    $img = 'https://raw.githubusercontent.com/atk4/ui/2.0.4/public/logo.png';
+    $img = $app->cdn['atk'] . '/logo.png';
     Header::addTo($seg, [
         'Center-aligned header',
         'aligned' => 'center',

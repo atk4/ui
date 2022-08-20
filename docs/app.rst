@@ -171,17 +171,13 @@ that implements tighter integration with the host application or full-stack fram
 
 Method to include additional JavaScript file in page::
 
-    $app->requireJs('https://code.jquery.com/jquery-3.1.1.js');
-    $app->requireJs('https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.7.4/semantic.min.js');
-
-Using of CDN servers is always better than storing external libraries locally.
-Most of the time CDN servers are faster (cached) and more reliable.
+    $app->requireJs('https://example.com/file.min.js');
 
 .. php:method:: requireCss($url)
 
 Method to include additional CSS style sheet in page::
 
-    $app->requireCss('//fomantic-ui.com/dist/semantic.css');
+    $app->requireCss('https://example.com/file.min.css');
 
 .. php:method:: initIncludes()
 

@@ -7,7 +7,7 @@ namespace Atk4\Ui\Demos;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$img = 'https://raw.githubusercontent.com/atk4/ui/2.0.4/public/logo.png';
+$img = $app->cdn['atk'] . '/logo.png';
 
 $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'segment']);
 \Atk4\Ui\Header::addTo($seg, ['H1 Header', 'size' => 1]);
