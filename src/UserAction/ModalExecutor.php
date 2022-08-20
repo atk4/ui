@@ -128,11 +128,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             // use modal for stepping action.
             $urlArgs['step'] = $this->step;
             if ($this->action->enabled) {
-                if ($selector) {
-                    $view->on($when, $selector, [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])]);
-                } else {
-                    $view->on($when, [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])]);
-                }
+                $view->on($when, $selector, [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])]);
             } else {
                 $view->addClass('disabled');
             }
