@@ -68,7 +68,7 @@ class Dropdown extends Input
      * Use additional 'icon' element to add an icon to this row.
      *
      * Example 1 with Model: Title in Uppercase
-     * function(Model $row) {
+     * function (Model $row) {
      *     return [
      *         'value' => $row->getId(),
      *         'title' => mb_strtoupper($row->getTitle()),
@@ -76,7 +76,7 @@ class Dropdown extends Input
      *  }
      *
      * Example 2 with Model: Add an icon
-     * function(Model $row) {
+     * function (Model $row) {
      *     return [
      *         'value' => $row->getId(),
      *         'title' => $row->getTitle(),
@@ -85,7 +85,7 @@ class Dropdown extends Input
      * }
      *
      * Example 3 with Model: Combine Title from model fields
-     * function(Model $row) {
+     * function (Model $row) {
      *     return [
      *         'value' => $row->getId(),
      *         'title' => $row->getTitle() . ' (' . $row->get('title2') . ')',
@@ -93,7 +93,7 @@ class Dropdown extends Input
      * }
      *
      * Example 4 with $values property Array:
-     * function($value, $key) {
+     * function ($value, $key) {
      *     return [
      *        'value' => $key,
      *        'title' => mb_strtoupper($value),
@@ -136,7 +136,7 @@ class Dropdown extends Input
             'type' => $this->inputType,
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readonly' => $this->readonly ? 'readonly' : false,
+            'readonly' => $this->readOnly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
         ], $this->inputAttr));
     }
@@ -215,7 +215,7 @@ class Dropdown extends Input
         // add selection only if no value is required and Dropdown has no multiple selections enabled
         if ($this->entityField !== null && !$this->entityField->getField()->required && !$this->isMultiple) {
             $this->_tItem->set('value', '');
-            $this->_tItem->set('title', $this->empty || is_numeric($this->empty) ? (string) $this->empty : '');
+            $this->_tItem->set('title', $this->empty);
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
         }
 
@@ -227,7 +227,7 @@ class Dropdown extends Input
                 }
             } else {
                 // for standard model rendering, only load id and title field
-                $this->model->setOnlyFields([$this->model->title_field, $this->model->id_field]);
+                $this->model->setOnlyFields([$this->model->titleField, $this->model->idField]);
                 $this->_renderItemsForModel();
             }
         } else {
@@ -252,7 +252,7 @@ class Dropdown extends Input
 
         $this->addClass($this->defaultClass);
 
-        if ($this->readonly || $this->disabled) {
+        if ($this->readOnly || $this->disabled) {
             $this->setDropdownOption('showOnFocus', false);
             $this->setDropdownOption('allowTab', false);
             $this->removeClass('search');
@@ -265,7 +265,7 @@ class Dropdown extends Input
             $this->addClass('disabled');
         }
 
-        if ($this->readonly) {
+        if ($this->readOnly) {
             $this->setDropdownOption('allowTab', false);
             $this->setDropdownOption('onShow', new JsFunction([new JsExpression('return false')]));
         }
@@ -282,7 +282,7 @@ class Dropdown extends Input
         parent::renderView();
     }
 
-    // Sets the dropdown items to the template if a model is used
+    // sets the dropdown items to the template if a model is used
     protected function _renderItemsForModel()
     {
         foreach ($this->model as $key => $row) {
@@ -301,7 +301,7 @@ class Dropdown extends Input
             $this->_tItem->set('value', (string) $key);
             if (is_array($val)) {
                 if (array_key_exists('icon', $val)) {
-                    $this->_tIcon->set('icon', $val['icon']);
+                    $this->_tIcon->set('iconClass', $val['icon']);
                     $this->_tItem->dangerouslySetHtml('Icon', $this->_tIcon->renderToHtml());
                 } else {
                     $this->_tItem->del('Icon');
@@ -328,11 +328,10 @@ class Dropdown extends Input
 
         // Icon
         $this->_tItem->del('Icon');
-        if (isset($res['icon'])
-        && $res['icon']) {
+        if (isset($res['icon']) && $res['icon']) {
             // compatibility with how $values property works on icons: 'icon'
             // is defined in there
-            $this->_tIcon->set('icon', 'icon ' . $res['icon']);
+            $this->_tIcon->set('iconClass', 'icon ' . $res['icon']);
             $this->_tItem->dangerouslyAppendHtml('Icon', $this->_tIcon->renderToHtml());
         }
 

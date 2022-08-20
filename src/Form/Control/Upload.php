@@ -12,8 +12,9 @@ use Atk4\Ui\View;
  */
 class Upload extends Input
 {
-    public $inputType = 'hidden';
-    /** @var View The action button to open file browser dialog. */
+    public string $inputType = 'hidden';
+
+    /** @var View|null The action button to open file browser dialog. */
     public $action;
 
     /**
@@ -25,17 +26,6 @@ class Upload extends Input
      * @var string
      */
     public $fileId;
-
-    /**
-     * Whether you need to open file browser dialog using input focus or not.
-     * default to true.
-     *
-     * @var bool
-     * @obsolete
-     * hasFocusEnable has been disable in js plugin and this property will be removed.
-     * Upload field is only using click handler now.
-     */
-    public $hasFocusEnable = false;
 
     /** @var string The input default template. */
     public $defaultTemplate = 'form/control/upload.html';
@@ -77,7 +67,7 @@ class Upload extends Input
         $this->cb = \Atk4\Ui\JsCallback::addTo($this);
 
         if (!$this->action) {
-            $this->action = new \Atk4\Ui\Button(['icon' => 'upload', 'class.disabled' => ($this->disabled || $this->readonly)]);
+            $this->action = new \Atk4\Ui\Button(['icon' => 'upload', 'class.disabled' => ($this->disabled || $this->readOnly)]);
         }
     }
 
@@ -86,8 +76,8 @@ class Upload extends Input
      *  - fileId will be the file id sent with onDelete callback.
      *  - fileName is the field value display to user.
      *
-     * @param string      $fileId   // Field id for onDelete Callback
-     * @param string|null $fileName // Field name display to user
+     * @param string      $fileId   Field id for onDelete Callback
+     * @param string|null $fileName Field name display to user
      *
      * @return $this
      */
@@ -144,7 +134,7 @@ class Upload extends Input
     /**
      * Call when user is uploading a file.
      */
-    public function onUpload(\Closure $fx)
+    public function onUpload(\Closure $fx): void
     {
         $this->hasUploadCb = true;
         if (($_POST['f_upload_action'] ?? null) === self::UPLOAD_ACTION) {
@@ -186,7 +176,7 @@ class Upload extends Input
     /**
      * Call when user is removing an already upload file.
      */
-    public function onDelete(\Closure $fx)
+    public function onDelete(\Closure $fx): void
     {
         $this->hasDeleteCb = true;
         if (($_POST['f_upload_action'] ?? null) === self::DELETE_ACTION) {
@@ -231,7 +221,6 @@ class Upload extends Input
             'uri' => $this->cb->getJsUrl(),
             'action' => $this->action->name,
             'file' => ['id' => $this->fileId ?: $this->entityField->get(), 'name' => $this->getInputValue()],
-            'hasFocus' => $this->hasFocusEnable,
             'submit' => ($this->form->buttonSave) ? $this->form->buttonSave->name : null,
         ]);
     }

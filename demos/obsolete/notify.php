@@ -7,7 +7,7 @@ namespace Atk4\Ui\Demos;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Notify Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\Atk4\Ui\Button::addTo($app, ['Notify Examples - Page 2', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['notify2']);
 
 \Atk4\Ui\Button::addTo($app, ['Test'])->on('click', (new \Atk4\Ui\JsNotify('Not yet implemented'))->setColor('red'));

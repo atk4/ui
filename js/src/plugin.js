@@ -52,7 +52,7 @@ function plugin(name, className, shortHand = false) {
 
     // register plugin to jQuery fn prototype.
     $.fn[pluginName] = function (option = {}, args = []) {
-        // Check if we are calling a plugin specific function: $(element).plugin('function',[arg1, arg2]);
+        // Check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
         if (typeof option === 'string') {
             if (this.data(dataName) && typeof this.data(dataName)[option] === 'function') {
                 return this.data(dataName).call(option, args);

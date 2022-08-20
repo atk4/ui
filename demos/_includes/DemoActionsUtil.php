@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
+use Atk4\Ui\Form\Control\Dropdown;
 
 class DemoActionsUtil
 {
@@ -15,7 +16,7 @@ class DemoActionsUtil
             'callback',
             [
                 'description' => 'Callback',
-                'callback' => function (Model $model) {
+                'callback' => function (Country $model) {
                     return 'callback execute using country ' . $model->getTitle();
                 },
             ]
@@ -25,10 +26,10 @@ class DemoActionsUtil
             'preview',
             [
                 'description' => 'Display Preview prior to run the action',
-                'preview' => function (Model $model) {
+                'preview' => function (Country $model) {
                     return 'Previewing country ' . $model->getTitle();
                 },
-                'callback' => function (Model $model) {
+                'callback' => function (Country $model) {
                     return 'Done previewing ' . $model->getTitle();
                 },
             ]
@@ -54,7 +55,7 @@ class DemoActionsUtil
                 'args' => [
                     'age' => ['type' => 'integer', 'required' => true],
                 ],
-                'callback' => function (Model $model, $age) {
+                'callback' => function (Country $model, int $age) {
                     if ($age < 18) {
                         $text = 'Sorry not old enough to visit ' . $model->getTitle();
                     } else {
@@ -71,8 +72,10 @@ class DemoActionsUtil
             [
                 'caption' => 'Argument/Preview',
                 'description' => 'Ask for argument "Age" and display preview prior to execute',
-                'args' => ['age' => ['type' => 'integer', 'required' => true]],
-                'preview' => function (Model $model, $age) {
+                'args' => [
+                    'age' => ['type' => 'integer', 'required' => true],
+                ],
+                'preview' => function (Country $model, int $age) {
                     return 'You age is: ' . $age;
                 },
                 'callback' => function (Model $model, $age) {
@@ -100,7 +103,9 @@ class DemoActionsUtil
             [
                 'caption' => 'Exception',
                 'description' => 'Throw an exception when executing an action',
-                'args' => ['age' => ['type' => 'integer']],
+                'args' => [
+                    'age' => ['type' => 'integer'],
+                ],
                 'preview' => function () {
                     return 'Be careful with this action.';
                 },
@@ -115,10 +120,12 @@ class DemoActionsUtil
             [
                 'caption' => 'User Confirmation',
                 'description' => 'Confirm the action using a ConfirmationExecutor',
-                'confirmation' => function ($a) {
-                    return 'Are you sure you want to perform this action on: <b>' . $a->getEntity()->getTitle() . ' (' . $a->getEntity()->iso3 . ')</b>';
+                'confirmation' => function (UserAction $a) {
+                    $iso3 = $a->getEntity()->get(Country::hinting()->fieldName()->iso3);
+
+                    return 'Are you sure you want to perform this action on: <b>' . $a->getEntity()->getTitle() . ' (' . $iso3 . ')</b>';
                 },
-                'callback' => function (Model $model) {
+                'callback' => function (Country $model) {
                     return 'Confirm country ' . $model->getTitle();
                 },
             ]
@@ -132,15 +139,24 @@ class DemoActionsUtil
                 'args' => [
                     'age' => ['type' => 'integer', 'required' => true],
                     'city' => [],
-                    'gender' => ['type' => 'string', /* TODO 'values' => ['m' => 'Male', 'f' => 'Female'], */ 'required' => true, 'default' => 'm'],
+                    'gender' => [
+                        'type' => 'string',
+                        'required' => true,
+                        'default' => 'm',
+                        'ui' => [
+                            'form' => [
+                                Dropdown::class, 'values' => ['m' => 'Male', 'f' => 'Female'],
+                            ],
+                        ],
+                    ],
                 ],
                 'fields' => [$country->fieldName()->iso3],
-                'callback' => function (Model $model, $age, $city, $gender) {
+                'callback' => function (Country $model, int $age, string $city, string $gender) {
                     $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
 
                     return 'Thank you ' . $n . ' at age ' . $age;
                 },
-                'preview' => function (Model $model, $age, $city, $gender) {
+                'preview' => function (Country $model, int $age, string $city, string $gender) {
                     return 'Gender = ' . $gender . ' / Age = ' . $age;
                 },
             ]

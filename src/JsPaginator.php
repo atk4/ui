@@ -81,7 +81,7 @@ class JsPaginator extends JsCallback
     /**
      * Callback when container has been scroll to bottom.
      */
-    public function onScroll(\Closure $fx)
+    public function onScroll(\Closure $fx): void
     {
         $page = $this->getPage();
         $this->set(function () use ($fx, $page) {

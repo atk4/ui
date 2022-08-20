@@ -38,7 +38,7 @@ class Delete extends Table\Column
 
         return $this->getApp()->getTag(
             'a',
-            ['href' => '#', 'title' => 'Delete {$' . $this->table->model->title_field . '}?', 'class' => $this->shortName],
+            ['href' => '#', 'title' => 'Delete {$' . $this->table->model->titleField . '}?', 'class' => $this->shortName],
             [
                 ['i', ['class' => 'ui red trash icon'], ''],
                 'Delete',

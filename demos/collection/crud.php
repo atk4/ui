@@ -26,7 +26,7 @@ $crud->onFormEdit(function (Form $form) use ($model) {
 
 $crud->setModel($model);
 
-$crud->addDecorator($model->title_field, [\Atk4\Ui\Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => $model->fieldName()->id]]);
+$crud->addDecorator($model->titleField, [\Atk4\Ui\Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => $model->fieldName()->id]]);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
@@ -39,7 +39,7 @@ $crud = \Atk4\Ui\Crud::addTo($column, [
     'displayFields' => [$model->fieldName()->name], // field to display in Crud
     'editFields' => [$model->fieldName()->name, $model->fieldName()->iso, $model->fieldName()->iso3], // field to display on 'edit' action
     'ipp' => 5,
-    'paginator' => ['range' => 2, 'class' => ['blue inverted']],  // reduce range on the paginator
+    'paginator' => ['range' => 2, 'class' => ['blue inverted']], // reduce range on the paginator
     'menu' => ['class' => ['green inverted']],
     'table' => ['class' => ['red inverted']],
 ]);
@@ -57,7 +57,7 @@ $model->onHook(\Atk4\Data\Model::HOOK_VALIDATE, function (Country $model, $inten
 $crud->setModel($model);
 
 // Because Crud inherits Grid, you can also define custom actions
-$crud->addModalAction(['icon' => [\Atk4\Ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($crud) {
+$crud->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($crud) {
     $model = Country::assertInstanceOf($crud->model);
     \Atk4\Ui\Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $id . ')']);
 });
@@ -79,7 +79,7 @@ $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
             \Atk4\Ui\Grid::addTo($right, ['menu' => false, 'ipp' => 5])
                 ->setModel(File::assertInstanceOf($this->getAction()->getModel())->SubFolder);
         } else {
-            \Atk4\Ui\Message::addTo($right, ['Not a folder', 'warning']);
+            \Atk4\Ui\Message::addTo($right, ['Not a folder', 'type' => 'warning']);
         }
 
         return $result;

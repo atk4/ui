@@ -9,7 +9,7 @@ use Atk4\Ui\Form;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Form Sections', 'small left floated basic blue', 'icon' => 'left arrow'])
+\Atk4\Ui\Button::addTo($app, ['Form Sections', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['form-section']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
@@ -58,7 +58,7 @@ $section2 = $sublayoutAccordion->addSection('Delivery address');
 $section2->addControl('delivery_address', []);
 
 // Terms field
-$form->addControl('term', [Form\Control\Checkbox::class, 'caption' => 'Accept terms and conditions', null, 'slider']);
+$form->addControl('term', [Form\Control\Checkbox::class, 'caption' => 'Accept terms and conditions', 'class.slider' => true]);
 
 $accordionLayout->activate($contactSection);
 

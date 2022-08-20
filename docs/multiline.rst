@@ -83,7 +83,7 @@ Lets say a User can have many email addresses, but you want to store them in a s
         }
     }
 
-     /**
+    /**
      * User model
      */
     class User extends \Atk4\Data\Model
@@ -115,7 +115,7 @@ If you want to edit them along with the user, Multiline need to be set up accord
     $ml->setReferenceModel('Emails');
 
     // set up saving of Email on Form submit
-    $user_form->onSubmit(function(Form $form) use ($ml) {
+    $user_form->onSubmit(function (Form $form) use ($ml) {
         $form->model->save();
         // save emails record related to current user.
         $ml->saveRows();
@@ -148,6 +148,7 @@ Lets use the example of demos/multiline.php::
         protected function init(): void
         {
             parent::init();
+
             $this->addField('item', ['required' => true, 'default' => 'item']);
             $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
             $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
@@ -176,7 +177,8 @@ In this case we display a message when any of the control value for 'qty' and 'b
             $box = $cols['box'] ?? 0;
             $total += $qty * $box;
         }
-        return new JsToast('The new Total is '.number_format($total, 2));
+
+        return new JsToast('The new Total is ' . $app->uiPersistence->typecastSaveField(new Field(['type' => 'atk4_money']), $total));
     }, ['qty', 'box']);
 
 

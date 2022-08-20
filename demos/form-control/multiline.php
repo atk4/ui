@@ -17,8 +17,8 @@ require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
 
-$dateFormat = $app->ui_persistence->date_format;
-$timeFormat = $app->ui_persistence->time_format;
+$dateFormat = $app->uiPersistence->dateFormat;
+$timeFormat = $app->uiPersistence->timeFormat;
 
 /** @var Model $inventoryItemClass */
 $inventoryItemClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
@@ -101,7 +101,7 @@ $multiline->setModel($inventory);
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section\Columns::class]);
 $sublayout->addColumn(12);
 $column = $sublayout->addColumn(4);
-$controlTotal = $column->addControl('total', ['readonly' => true])->set($total);
+$controlTotal = $column->addControl('total', ['readOnly' => true])->set($total);
 
 // Update total when qty and box value in any row has changed.
 $multiline->onLineChange(function ($rows, Form $form) use ($controlTotal) {

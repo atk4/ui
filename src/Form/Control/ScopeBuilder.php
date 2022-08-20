@@ -39,7 +39,7 @@ class ScopeBuilder extends Control
     /** @var array Fields to use for creating the rules. */
     public $fields = [];
 
-    /** @var HtmlTemplate The template needed for the ScopeBuilder view. */
+    /** @var HtmlTemplate|null The template needed for the ScopeBuilder view. */
     public $scopeBuilderTemplate;
 
     /** @var array List of delimiters for auto-detection in order of priority. */
@@ -351,7 +351,7 @@ class ScopeBuilder extends Control
     {
         if ($field->enum || $field->values) {
             $type = 'enum';
-        } elseif ($field->getReference() !== null) {
+        } elseif ($field->hasReference()) {
             $type = 'lookup';
         } else {
             $type = $field->type;
@@ -380,7 +380,7 @@ class ScopeBuilder extends Control
             $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
         }
 
-        if ($field->getReference() !== null) {
+        if ($field->hasReference()) {
             $props['url'] = $this->dataCb->getUrl();
             $props['reference'] = $field->shortName;
             $props['search'] = true;
@@ -398,17 +398,18 @@ class ScopeBuilder extends Control
     {
         $calendar = new Calendar();
         $props = $this->atkdDateOptions['flatpickr'] ?? [];
-        $phpFormat = $this->getApp()->ui_persistence->{$field->type . '_format'};
-        $props['altFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat);
+        $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
+        $props['altFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat); // why altFormat format?
         $props['dateFormat'] = 'Y-m-d';
         $props['altInput'] = true;
 
         if ($field->type === 'datetime' || $field->type === 'time') {
             $props['enableTime'] = true;
-            $props['time_24hr'] = $calendar->use24hrTimeFormat($phpFormat);
-            $props['noCalendar'] = ($field->type === 'time');
-            $props['enableSeconds'] = $calendar->useSeconds($phpFormat);
-            $props['dateFormat'] = ($field->type === 'datetime') ? 'Y-m-d H:i:S' : 'H:i:S';
+            $props['time_24hr'] = $calendar->isDtFormatWith24hrTime($phpFormat);
+            $props['noCalendar'] = $field->type === 'time';
+            $props['enableSeconds'] = $calendar->isDtFormatWithSeconds($phpFormat);
+            $props['allowInput'] = $calendar->isDtFormatWithMicroseconds($phpFormat);
+            $props['dateFormat'] = $field->type === 'datetime' ? 'Y-m-d H:i:S' : 'H:i:S';
         }
 
         $props['useDefault'] = $this->atkdDateOptions['useDefault'];
@@ -421,8 +422,9 @@ class ScopeBuilder extends Control
      */
     protected function addReferenceRules(Field $field): self
     {
-        $reference = $field->getReference();
-        if ($reference !== null) {
+        if ($field->hasReference()) {
+            $reference = $field->getReference();
+
             // add the number of records rule
             $this->rules[] = $this->getRule('numeric', [
                 'id' => $reference->link . '/#',
@@ -482,12 +484,12 @@ class ScopeBuilder extends Control
         }
         if ($field->values && is_array($field->values)) {
             $items = array_chunk($field->values, $limit, true)[0];
-        } elseif ($field->getReference()) {
+        } elseif ($field->hasReference()) {
             $model = $field->getReference()->refModel($this->model);
             $model->setLimit($limit);
 
             foreach ($model as $item) {
-                $items[$item->get($field->getReference()->getTheirFieldName())] = $item->get($model->title_field);
+                $items[$item->get($field->getReference()->getTheirFieldName())] = $item->get($model->titleField);
             }
         }
 
@@ -717,7 +719,7 @@ class ScopeBuilder extends Control
                 if ($rec->isLoaded()) {
                     $option = [
                         'key' => $value,
-                        'text' => $rec->get($model->title_field),
+                        'text' => $rec->get($model->titleField),
                         'value' => $value,
                     ];
                 }

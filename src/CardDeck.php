@@ -41,16 +41,16 @@ class CardDeck extends View
     /** @var View The view containing Cards. */
     public $cardHolder = [View::class, 'ui' => 'cards'];
 
-    /** @var Paginator|null The paginator view. */
+    /** @var Paginator|false|null The paginator view. */
     public $paginator = [Paginator::class];
 
     /** @var int The number of cards to be displayed per page. */
     public $ipp = 9;
 
-    /** @var array|null A menu seed for displaying button inside. */
+    /** @var array|false|null A menu seed for displaying button inside. */
     public $menu = [View::class, 'ui' => 'stackable grid'];
 
-    /** @var array|ItemSearch */
+    /** @var array|false|ItemSearch */
     public $search = [ItemSearch::class, 'ui' => 'ui compact basic segment'];
 
     /** @var View|null A view container for buttons. Added into menu when menu is set. */
@@ -94,6 +94,7 @@ class CardDeck extends View
     protected function init(): void
     {
         parent::init();
+
         $this->container = $this->add($this->container);
 
         if ($this->menu !== false) {
@@ -155,7 +156,6 @@ class CardDeck extends View
                 }
                 if ($this->useAction) {
                     if ($singleActions = $this->getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD)) {
-                        $args = $this->getReloadArgs();
                         foreach ($singleActions as $action) {
                             $c->addClickAction($action, null, $this->getReloadArgs());
                         }
@@ -282,7 +282,7 @@ class CardDeck extends View
     protected function findCard(Model $model)
     {
         $mapResults = function ($a) use ($model) {
-            return $a[$model->id_field];
+            return $a[$model->idField];
         };
         $deck = [];
         foreach ($this->cardHolder->elements as $v => $element) {
@@ -291,7 +291,7 @@ class CardDeck extends View
             }
         }
 
-        if (in_array($model->getId(), array_map($mapResults, $model->export([$model->id_field])), true)) {
+        if (in_array($model->getId(), array_map($mapResults, $model->export([$model->idField])), true)) {
             // might be in result set but not in deck, for example when adding a card.
             return $deck[$model->getId()] ?? null;
         }
@@ -418,7 +418,7 @@ class CardDeck extends View
      */
     protected function initPaginator()
     {
-        $count = (int) $this->model->action('count')->getOne();
+        $count = $this->model->executeCountQuery();
         if ($this->paginator) {
             if ($count > 0) {
                 $this->paginator->setTotal((int) ceil($count / $this->ipp));

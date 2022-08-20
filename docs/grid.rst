@@ -106,10 +106,10 @@ Actions
 
 .. php:attr:: actions
 
-.. php:method:: addAction($button, $action, $confirm = false)
+.. php:method:: addActionButton($button, $action, $confirm = false)
 
 :php:class:`Table` supports use of :php:class:`Table\\Column\\\Actions`, which allows to display button for each row.
-Calling addAction() provides a useful short-cut for creating column-based actions.
+Calling addActionButton() provides a useful short-cut for creating column-based actions.
 
 $button can be either a string (for a button label) or something like `['icon' => 'book']`.
 
@@ -124,8 +124,7 @@ See :php:meth:`Table\\Column\\\Actions::addAction`
 Similar to addAction, but when clicking a button, will open a modal dialog and execute $callback
 to populate a content::
 
-    $grid->addModalAction('Details', 'Additional Details', function($p, $id) use ($grid) {
-
+    $grid->addModalAction('Details', 'Additional Details', function ($p, $id) use ($grid) {
         // $id of the record which was clicked
         // $grid->model = $grid->model->load($id);
 

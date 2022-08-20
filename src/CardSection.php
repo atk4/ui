@@ -22,6 +22,7 @@ class CardSection extends View
     protected function init(): void
     {
         parent::init();
+
         $this->addClass('content');
     }
 
@@ -65,11 +66,11 @@ class CardSection extends View
     private function addSectionFields(Model $model, array $fields, bool $useLabel = false)
     {
         foreach ($fields as $field) {
-            if ($model->title_field === $field) {
+            if ($model->titleField === $field) {
                 continue;
             }
             $label = $model->getField($field)->getCaption();
-            $value = $this->issetApp() ? $this->getApp()->ui_persistence->typecastSaveField($model->getField($field), $model->get($field)) : $model->get($field);
+            $value = $this->issetApp() ? $this->getApp()->uiPersistence->typecastSaveField($model->getField($field), $model->get($field)) : $model->get($field);
             if ($useLabel) {
                 $value = $label . $this->glue . $value;
             }

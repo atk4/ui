@@ -26,16 +26,11 @@ Basic Usage
 After adding a console to your :ref:`render_tree`, you just need to set a call-back::
 
     $console = Console::addTo($app);
-    $console->set(function($console) {
-
+    $console->set(function ($console) {
         // This will be executed through SSE request
-
         $console->output('hello');
-
         echo 'world'; // also will be redirected to console
-
         sleep(2);
-
         $console->send(new \Atk4\Ui\JsExpression('alert([])', ['The wait is over']));
     });
 
@@ -66,7 +61,7 @@ This will display console to the user and will even output information from insi
 
     use \Atk4\Core\DebugTrait();
 
-    function generateReport($pages) {
+    public function generateReport($pages) {
         $this->info('converting report to PDF');
 
         // slow stuff
@@ -85,7 +80,7 @@ Executing Commands
 
 .. php:method:: exec($cmd, $args);
 
-.. php:argument:: last_exit_code
+.. php:argument:: lastExitCode
 
 To execute a command, use::
 
@@ -96,16 +91,14 @@ real-time then display it on the console using color. Console does not support A
 
 Method exec can be executed directly on the $console or inside the callback::
 
-    $console->set(function($console) {
-
+    $console->set(function ($console) {
         $console->eval();
-
     });
 
 Without call-back, eval will wrap itself into a callback but you can only execute a single command. When using callback
 form, you can execute multiple commands::
 
-    Console::addTo($app)->set(function($c) {
+    Console::addTo($app)->set(function ($c) {
         $c
             ->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1'])
             ->exec('/sbin/ping', ['-c', '5', '-i', '2', '8.8.8.8'])
@@ -113,7 +106,7 @@ form, you can execute multiple commands::
     });
 
 Method exec() will return `$this` if command was run inside callback and was successful. It will return `false` on error
-and will return `null` if called outside of callback. You may also refer to ::php:attr:`Console::last_exit_code` which
+and will return `null` if called outside of callback. You may also refer to ::php:attr:`Console::lastExitCode` which
 contains exit code of the last command.
 
 Normally it's safe to chain `exec` which ensures that execution will stack. Should any command fail, the subsequent

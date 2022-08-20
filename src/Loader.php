@@ -44,11 +44,11 @@ class Loader extends View
     {
         parent::init();
 
-        if (!$this->shim) {
+        if (!$this->shim) { // @phpstan-ignore-line
             $this->shim = [View::class, 'class' => ['padded segment'], 'style' => ['min-height' => '7em']];
         }
 
-        if (!$this->cb) {
+        if (!$this->cb) { // @phpstan-ignore-line
             $this->cb = Callback::addTo($this);
         }
     }
@@ -73,7 +73,7 @@ class Loader extends View
      */
     public function set($fx = null, $ignore = null)
     {
-        if (!($fx instanceof \Closure)) {
+        if (!$fx instanceof \Closure) {
             throw new Exception('Need to pass a function to Loader::set()');
         } elseif (func_num_args() > 1) {
             throw new Exception('Only one argument is needed by Loader::set()');

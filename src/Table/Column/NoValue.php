@@ -15,8 +15,6 @@ use Atk4\Ui\Table;
  * when we display values we have holes
  * with NoValue decorator we can show a display value for column null value
  *
- * @usage   :
- *
  * $this->addField('field', [
  *  [...]
  *  'ui' => [
@@ -30,14 +28,14 @@ use Atk4\Ui\Table;
 class NoValue extends Table\Column
 {
     /** @var string */
-    public $no_value = ' --- ';
+    public $noValue = ' --- ';
 
     public function getHtmlTags(Model $row, $field)
     {
         $actualValue = $field->get($row);
 
-        if (empty($actualValue) || $actualValue === null) {
-            return [$field->shortName => $this->no_value];
+        if ($actualValue === null || $actualValue === '') {
+            return [$field->shortName => $this->noValue];
         }
 
         return parent::getHtmlTags($row, $field);

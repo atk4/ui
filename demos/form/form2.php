@@ -16,11 +16,11 @@ require_once __DIR__ . '/../init-app.php';
 \Atk4\Ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);
 
 // create form
-$form = Form::addTo($app, ['segment']);
-// $form = Form::addTo($app, ['segment', 'buttonSave' => false]);
-// $form = Form::addTo($app, ['segment', 'buttonSave' => new \Atk4\Ui\Button(['Import', 'secondary', 'iconRight' => 'list'])]);
-// $form = Form::addTo($app, ['segment', 'buttonSave' => [null, 'Import', 'secondary', 'iconRight' => 'list']]);
-\Atk4\Ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveControls']);
+$form = Form::addTo($app, ['class.segment' => true]);
+// $form = Form::addTo($app, ['class.segment' => true, 'buttonSave' => false]);
+// $form = Form::addTo($app, ['class.segment' => true, 'buttonSave' => new \Atk4\Ui\Button(['Import', 'class.secondary' => true, 'iconRight' => 'list'])]);
+// $form = Form::addTo($app, ['class.segment' => true, 'buttonSave' => [null, 'Import', 'class.secondary' => true, 'iconRight' => 'list']]);
+\Atk4\Ui\Label::addTo($form, ['Input new country information here', 'class.top attached' => true], ['AboveControls']);
 
 $form->setModel((new Country($app->db))->createEntity(), []);
 
@@ -28,7 +28,7 @@ $form->setModel((new Country($app->db))->createEntity(), []);
 $formAddress = $form->addGroup('Basic Country Information');
 $name = $formAddress->addControl(Country::hinting()->fieldName()->name, ['width' => 'sixteen']);
 $name->addAction(['Check Duplicate', 'iconRight' => 'search'])->on('click', function ($jQuery, $name) use ($app, $form) {
-    if ((new Country($app->db))->tryLoadBy(Country::hinting()->fieldName()->name, $name)->isLoaded()) {
+    if ((new Country($app->db))->tryLoadBy(Country::hinting()->fieldName()->name, $name) !== null) {
         return $form->js()->form('add prompt', Country::hinting()->fieldName()->name, 'This country name is already added.');
     }
 
@@ -88,6 +88,7 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
     protected function init(): void
     {
         parent::init();
+
         $this->addField('name', ['required' => true]);
         $this->addField('surname', ['ui' => ['placeholder' => 'e.g. Smith']]);
         $this->addField('gender', ['enum' => ['M', 'F']]);

@@ -52,6 +52,7 @@ class HtmlTemplateTest extends TestCase
     public function testGetTagRefNotFoundException(): void
     {
         $t = new HtmlTemplate('{foo}hello{/}');
+
         $this->expectException(Exception::class);
         $t->getTagTree('bar');
     }
@@ -59,6 +60,7 @@ class HtmlTemplateTest extends TestCase
     public function testLoadFromFileNonExistentFileException(): void
     {
         $t = new HtmlTemplate();
+
         $this->expectException(Exception::class);
         $t->loadFromFile(__DIR__ . '/bad_template_file');
     }
@@ -80,6 +82,7 @@ class HtmlTemplateTest extends TestCase
     public function testSetBadTypeException(): void
     {
         $t = new HtmlTemplate('{foo}hello{/} guys');
+
         $this->expectException(Exception::class);
         $t->set('foo', new \stdClass()); // @phpstan-ignore-line
     }

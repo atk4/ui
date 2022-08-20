@@ -72,10 +72,11 @@ class InlineEdit extends View
     protected function init(): void
     {
         parent::init();
+
         $this->cb = \Atk4\Ui\JsCallback::addTo($this);
 
         // Set default validation error handler.
-        if (!$this->formatErrorMsg || !($this->formatErrorMsg instanceof \Closure)) {
+        if (!$this->formatErrorMsg) {
             $this->formatErrorMsg = function ($e, $value) {
                 $caption = $this->model->getField($this->fieldName)->getCaption();
 
@@ -91,12 +92,12 @@ class InlineEdit extends View
     {
         parent::setModel($model);
 
-        $this->fieldName = $this->fieldName ?: $this->model->title_field;
+        $this->fieldName = $this->fieldName ?: $this->model->titleField;
         if ($this->autoSave && $this->model->isLoaded()) {
             $value = $_POST['value'] ?? null;
             $this->cb->set(function () use ($value) {
                 try {
-                    $this->model->set($this->fieldName, $this->getApp()->ui_persistence->typecastLoadField($this->model->getField($this->fieldName), $value));
+                    $this->model->set($this->fieldName, $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($this->fieldName), $value));
                     $this->model->save();
 
                     return $this->jsSuccess('Update successfully');
@@ -117,10 +118,10 @@ class InlineEdit extends View
      * The function will receive one param:
      *  value: the new input value.
      */
-    public function onChange(\Closure $fx)
+    public function onChange(\Closure $fx): void
     {
         if (!$this->autoSave) {
-            $value = $this->getApp()->ui_persistence->typecastLoadField($this->model->getField($this->fieldName), $_POST['value'] ?? null);
+            $value = $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($this->fieldName), $_POST['value'] ?? null);
             $this->cb->set(function () use ($fx, $value) {
                 return $fx($value);
             });
@@ -130,11 +131,9 @@ class InlineEdit extends View
     /**
      * On success notifier.
      *
-     * @param string $message
-     *
      * @return \Atk4\Ui\JsToast
      */
-    public function jsSuccess($message)
+    public function jsSuccess(string $message)
     {
         return new JsToast([
             'title' => 'Success',

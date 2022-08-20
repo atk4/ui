@@ -19,10 +19,8 @@ class Html extends Table\Column
      * Replace parent method.
      *
      * @param Field $field
-     *
-     * @return string
      */
-    public function getDataCellHtml(Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         return '{$_' . $field->shortName . '}';
     }

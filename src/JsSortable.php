@@ -26,7 +26,7 @@ class JsSortable extends JsCallback
 
     /**
      * The css class name of the handle element for dragging purpose.
-     *   if null, the entire element become the dragging handle.
+     * If null, the entire element become the dragging handle.
      *
      * @var string|null
      */
@@ -41,6 +41,7 @@ class JsSortable extends JsCallback
     protected function init(): void
     {
         parent::init();
+
         if (!$this->view) {
             $this->view = $this->getOwner();
         }
@@ -60,7 +61,7 @@ class JsSortable extends JsCallback
     /**
      * Callback when container has been reorder.
      */
-    public function onReorder(\Closure $fx)
+    public function onReorder(\Closure $fx): void
     {
         $this->set(function () use ($fx) {
             $sortOrders = explode(',', $_POST['order'] ?? '');

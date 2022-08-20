@@ -7,7 +7,7 @@ namespace Atk4\Ui\Demos;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Loader Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\Atk4\Ui\Button::addTo($app, ['Loader Examples - Page 2', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['loader2']);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'clearing divider']);
@@ -44,17 +44,17 @@ ViewTester::addTo($app);
     });
 
     // button may contain load event.
-    \Atk4\Ui\Button::addTo($p, ['Load Segment Manually (2s)', 'red'])->js('click', $loader->jsLoad(['color' => 'red']));
-    \Atk4\Ui\Button::addTo($p, ['Load Segment Manually (2s)', 'blue'])->js('click', $loader->jsLoad(['color' => 'blue']));
+    \Atk4\Ui\Button::addTo($p, ['Load Segment Manually (2s)', 'class.red' => true])->js('click', $loader->jsLoad(['color' => 'red']));
+    \Atk4\Ui\Button::addTo($p, ['Load Segment Manually (2s)', 'class.blue' => true])->js('click', $loader->jsLoad(['color' => 'blue']));
 });
 
 // Example 2 - Loader with custom body.
 \Atk4\Ui\Loader::addTo($app, [
-    'ui' => '',   // this will prevent "loading spinner" from showing
-    'shim' => [   // shim is displayed while content is leaded
+    'ui' => '', // this will prevent "loading spinner" from showing
+    'shim' => [ // shim is displayed while content is leaded
         \Atk4\Ui\Message::class,
         'Generating LoremIpsum, please wait...',
-        'red',
+        'class.red' => true,
     ],
 ])->set(function ($p) {
     usleep(500_000);

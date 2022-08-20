@@ -12,7 +12,7 @@ use Atk4\Ui\Exception;
 
 /**
  * This class is used for typecasting model types to the values that will be presented to the user. App will
- * always initialize this persistence in $app->ui_persistence and this object will be used by various
+ * always initialize this persistence in $app->uiPersistence and this object will be used by various
  * UI elements to output data to the user.
  *
  * Overriding and extending this class is a great place where you can tweak how various data-types are displayed
@@ -25,18 +25,24 @@ class Ui extends Persistence
     /** @var string */
     public $locale = 'en';
 
-    /** @var string */
+    /** @var string Currency symbol for 'atk4_money' type. */
     public $currency = '€';
-    /** @var int Default decimal count for 'atk4_money' type. */
-    public $currency_decimals = 2;
+    /** @var int Number of decimal digits for 'atk4_money' type. */
+    public $currencyDecimals = 2;
+    /** @var string Decimal point separator for 'atk4_money' type. */
+    public $currencyDecimalSeparator = '.';
+    /** @var string Thousands separator for 'atk4_money' type. */
+    public $currencyThousandsSeparator = ' ';
 
     /** @var string */
-    public $date_format = 'M d, Y';
+    public $timezone;
     /** @var string */
-    public $time_format = 'H:i';
+    public $dateFormat = 'M d, Y';
     /** @var string */
-    public $datetime_format = 'M d, Y H:i:s';
-    /** @var int Calendar input first day of week. 0 = sunday. */
+    public $timeFormat = 'H:i';
+    /** @var string */
+    public $datetimeFormat = 'M d, Y H:i:s';
+    /** @var int Calendar input first day of week, 0 = Sunday, 1 = Monday. */
     public $firstDayOfWeek = 0;
 
     /** @var string */
@@ -44,20 +50,27 @@ class Ui extends Persistence
     /** @var string */
     public $no = 'No';
 
+    public function __construct()
+    {
+        if ($this->timezone === null) {
+            $this->timezone = date_default_timezone_get();
+        }
+    }
+
     public function typecastSaveField(Field $field, $value)
     {
         // relax empty checks for UI render for not yet set values
+        $fieldNullableOrig = $field->nullable;
         $fieldRequiredOrig = $field->required;
-        $fieldMandatoryOrig = $field->mandatory;
         if (in_array($value, [null, false, 0, 0.0, ''], true)) {
+            $field->nullable = true;
             $field->required = false;
-            $field->mandatory = false;
         }
         try {
             return parent::typecastSaveField($field, $value);
         } finally {
+            $field->nullable = $fieldNullableOrig;
             $field->required = $fieldRequiredOrig;
-            $field->mandatory = $fieldMandatoryOrig;
         }
     }
 
@@ -82,21 +95,27 @@ class Ui extends Persistence
                 break;
             case 'atk4_money':
                 $value = parent::_typecastLoadField($field, $value);
-                $value = ($this->currency ? $this->currency . ' ' : '') . number_format($value, $this->currency_decimals);
+                $valueDecimals = strlen(preg_replace('~^[^.]$|^.+\.|0+$~s', '', number_format($value, max(0, 11 - (int) log10($value)), '.', '')));
+                $value = ($this->currency ? $this->currency . ' ' : '')
+                    . number_format($value, max($this->currencyDecimals, $valueDecimals), $this->currencyDecimalSeparator, $this->currencyThousandsSeparator);
+                $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */, $value);
 
                 break;
             case 'date':
             case 'datetime':
             case 'time':
+                /** @var \DateTimeInterface|null */
                 $value = parent::_typecastLoadField($field, $value);
-                if ($value instanceof \DateTimeInterface) {
-                    $formats = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
-                    $format = $field->persist_format ?: $formats[$field->type];
+                if ($value !== null) {
+                    $format = [
+                        'date' => $this->dateFormat,
+                        'datetime' => $this->datetimeFormat,
+                        'time' => $this->timeFormat,
+                    ][$field->type];
 
-                    // datetime only - set to persisting timezone
                     if ($field->type === 'datetime') {
                         $value = new \DateTime($value->format('Y-m-d H:i:s.u'), $value->getTimezone());
-                        $value->setTimezone(new \DateTimeZone($field->persist_timezone));
+                        $value->setTimezone(new \DateTimeZone($this->timezone));
                     }
                     $value = $value->format($format);
                 }
@@ -112,12 +131,38 @@ class Ui extends Persistence
      */
     protected function _typecastLoadField(Field $field, $value)
     {
-        // always normalize string EOL
-        if (is_string($value)) {
-            $value = preg_replace('~\r?\n|\r~', "\n", $value);
-        }
-
         switch ($field->type) {
+            case 'boolean':
+                if (is_string($value)) {
+                    if (mb_strtolower($value) === mb_strtolower($this->yes)) {
+                        $value = '1';
+                    } elseif (mb_strtolower($value) === mb_strtolower($this->no)) {
+                        $value = '0';
+                    }
+                }
+
+                break;
+            case 'atk4_money':
+                if (is_string($value)) {
+                    $value = str_replace([' ', "\u{00a0}" /* Unicode NBSP */, '_', $this->currency, '$', '€'], '', $value);
+                    $dSep = $this->currencyDecimalSeparator;
+                    $tSeps = array_filter(
+                        array_unique([$dSep, $this->currencyThousandsSeparator, '.', ',']),
+                        fn ($sep) => strpos($value, $sep) !== false
+                    );
+                    usort($tSeps, fn ($sepA, $sepB) => strrpos($value, $sepB) <=> strrpos($value, $sepA));
+                    foreach ($tSeps as $tSep) {
+                        if ($tSep === $dSep || strlen($value) - strrpos($value, $tSep) !== 4) {
+                            $dSep = $tSep;
+
+                            break;
+                        }
+                    }
+                    $value = str_replace(array_diff($tSeps, [$dSep]), '', $value);
+                    $value = str_replace($dSep, '.', $value);
+                }
+
+                break;
             case 'date':
             case 'datetime':
             case 'time':
@@ -125,52 +170,45 @@ class Ui extends Persistence
                     return null;
                 }
 
-                $dt_class = \DateTime::class;
-                $tz_class = \DateTimeZone::class;
+                $dtClass = \DateTime::class;
+                $tzClass = \DateTimeZone::class;
+                $format = [
+                    'date' => $this->dateFormat,
+                    'datetime' => $this->datetimeFormat,
+                    'time' => $this->timeFormat,
+                ][$field->type];
 
-                // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
-                $formats = ['date' => '!+' . $this->date_format, 'datetime' => '!+' . $this->datetime_format, 'time' => '!+' . $this->time_format];
-                $format = $field->persist_format ?: $formats[$field->type];
+                $valueOrig = $value;
+                $value = $dtClass::createFromFormat('!' . $format, $value, $field->type === 'datetime' ? new $tzClass($this->timezone) : null);
+                if ($value === false) {
+                    throw (new Exception('Incorrectly formatted datetime'))
+                        ->addMoreInfo('format', $format)
+                        ->addMoreInfo('value', $valueOrig)
+                        ->addMoreInfo('field', $field);
+                }
 
-                // datetime only - set from persisting timezone
-                $valueStr = is_object($value) ? $this->_typecastSaveField($field, $value) : $value;
                 if ($field->type === 'datetime') {
-                    $value = $dt_class::createFromFormat($format, $valueStr, new $tz_class($field->persist_timezone));
-                    if ($value === false) {
-                        throw (new Exception('Incorrectly formatted datetime'))
-                            ->addMoreInfo('format', $format)
-                            ->addMoreInfo('value', $valueStr)
-                            ->addMoreInfo('field', $field);
-                    }
-                    $value->setTimezone(new $tz_class(date_default_timezone_get()));
-                } else {
-                    $value = $dt_class::createFromFormat($format, $valueStr);
-                    if ($value === false) {
-                        throw (new Exception('Incorrectly formatted date/time'))
-                            ->addMoreInfo('format', $format)
-                            ->addMoreInfo('value', $valueStr)
-                            ->addMoreInfo('field', $field);
-                    }
+                    $value->setTimezone(new $tzClass(date_default_timezone_get()));
                 }
 
                 $value = parent::_typecastSaveField($field, $value);
 
                 break;
-            // SECURTIY: Do not unserialize any user input
-            // https://github.com/search?q=unserialize+repo%3Adoctrine%2Fdbal+path%3A%2Fsrc%2FTypes
+                // <-- reindent once https://github.com/FriendsOfPHP/PHP-CS-Fixer/pull/6490 is merged
+                // SECURTIY: Do not unserialize any user input
+                // https://github.com/search?q=unserialize+repo%3Adoctrine%2Fdbal+path%3A%2Fsrc%2FTypes
             case 'object':
             case 'array':
                 throw new Exception('Object serialization is not supported');
         }
 
-        if ($field->getReference() !== null) {
-            if (empty($value)) {
-                return null;
-            }
-        }
-
-        // typecast using DBAL types
+        // typecast using DBAL type and normalize
         $value = parent::_typecastLoadField($field, $value);
+        $value = (new Field(['type' => $field->type]))->normalize($value);
+
+        if ($field->hasReference() && $value === '') {
+            return null;
+        }
 
         if ($value !== null && $field instanceof PasswordField && !$field->hashPasswordIsHashed($value)) {
             $value = $field->hashPassword($value);

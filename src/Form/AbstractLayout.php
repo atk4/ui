@@ -105,7 +105,7 @@ abstract class AbstractLayout extends \Atk4\Ui\View
             $fields = $this->getModelFields($model);
         }
 
-        // prepare array of controls - check if fields are editable or read_only/disabled
+        // prepare array of controls - check if fields are editable or read-only/disabled
         $controls = [];
         foreach ($fields as $fieldName) {
             $field = $model->getField($fieldName);
@@ -113,16 +113,11 @@ abstract class AbstractLayout extends \Atk4\Ui\View
             if ($field->isEditable()) {
                 $controls[] = [$field->shortName];
             } elseif ($field->isVisible()) {
-                $controls[] = [$field->shortName, ['readonly' => true]];
+                $controls[] = [$field->shortName, ['readOnly' => true]];
             }
         }
 
-        if (is_array($controls)) {
-            $this->addControls($controls);
-        } else {
-            throw (new Exception('Incorrect value for $fields'))
-                ->addMoreInfo('controls', $controls);
-        }
+        $this->addControls($controls);
     }
 
     /**

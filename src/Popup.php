@@ -95,8 +95,7 @@ class Popup extends View
     {
         parent::init();
 
-        if (
-            $this->getOwner() instanceof Item
+        if ($this->getOwner() instanceof Item
             || $this->getOwner() instanceof Menu
             || $this->getOwner() instanceof Dropdown
             || $this->getOwner() instanceof Button
@@ -105,8 +104,7 @@ class Popup extends View
                 ->addMoreInfo('owner', $this->getOwner());
         }
 
-        if (
-            ($this->triggerBy instanceof Item
+        if (($this->triggerBy instanceof Item
             || $this->triggerBy instanceof Menu
             || $this->triggerBy instanceof Dropdown) && $this->triggerOn === null
         ) {
@@ -136,7 +134,7 @@ class Popup extends View
      */
     public function set($fx = null, $ignore = null)
     {
-        if (!($fx instanceof \Closure)) {
+        if (!$fx instanceof \Closure) {
             throw new Exception('Need to pass a function to Popup::set()');
         } elseif (func_num_args() > 1) {
             throw new Exception('Only one argument is needed by Popup::set()');
@@ -243,7 +241,7 @@ class Popup extends View
         $chain = new Jquery($name);
         $chain->popup($this->popOptions);
         if ($this->stopClickEvent) {
-            $chain->on('click', new JsExpression('function(e){ e.stopPropagation(); }'));
+            $chain->on('click', new JsExpression('function(e) { e.stopPropagation(); }'));
         }
 
         return $chain;

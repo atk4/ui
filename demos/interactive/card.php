@@ -7,19 +7,19 @@ namespace Atk4\Ui\Demos;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Card Model', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\Atk4\Ui\Button::addTo($app, ['Card Model', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['card-action']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
 \Atk4\Ui\Header::addTo($app, ['Card.', 'size' => 1, 'subHeader' => 'Component based on Fomantic-Ui Card view.']);
 
-// *** Simple Card **/
+// Simple Card
 
 \Atk4\Ui\Header::addTo($app, ['Card can be defined manually.', 'size' => 3]);
 
 $card = \Atk4\Ui\Card::addTo($app);
 
-$card->addContent((new \Atk4\Ui\Header(['Meet Kristy', 'subHeader' => 'Friends'])));
+$card->addContent(new \Atk4\Ui\Header(['Meet Kristy', 'subHeader' => 'Friends']));
 
 $card->addDescription('Kristy is a friend of Mully.');
 $card->addImage('../images/kristy.png');
@@ -29,7 +29,7 @@ $card->addButton(new \Atk4\Ui\Button(['Email']));
 
 $card->addExtraContent(new \Atk4\Ui\View(['Copyright notice: Image from Semantic-UI (Fomantic-UI)', 'element' => 'span']));
 
-// *** Simple Card **/
+// Simple Card
 
 $card = \Atk4\Ui\Card::addTo($app);
 $content = new \Atk4\Ui\View(['class' => ['content']]);
@@ -40,7 +40,7 @@ $header = \Atk4\Ui\Header::addTo($content, ['Kristy']);
 $card->addContent($content);
 $card->addDescription('Friend of Bob');
 
-// **** Card with Table and Label***/
+// Card with Table and Label
 
 \Atk4\Ui\Header::addTo($app, ['Card can display model label in a table or in line.', 'size' => 3]);
 
@@ -62,12 +62,12 @@ $cardStat->setModel($stat, [$stat->fieldName()->project_name, $stat->fieldName()
 
 $cardStat->addButton(new \Atk4\Ui\Button(['Email Client']));
 
-// **** Card display horizontally ***/
+// Card display horizontally
 
 \Atk4\Ui\Header::addTo($app, ['Card can be display horizontally and/or centered.', 'size' => 3]);
 
 $card = \Atk4\Ui\Card::addTo($app)->addClass('horizontal centered');
 
-$card->addContent((new \Atk4\Ui\Header(['Meet Kristy', 'subHeader' => 'Friends'])));
+$card->addContent(new \Atk4\Ui\Header(['Meet Kristy', 'subHeader' => 'Friends']));
 $card->addDescription('Kristy is a friend of Mully.');
 $card->addImage('../images/kristy.png');

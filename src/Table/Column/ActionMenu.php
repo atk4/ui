@@ -41,12 +41,7 @@ class ActionMenu extends Table\Column
     /** @var string Button icon to use for display dropdown. */
     public $icon = 'dropdown icon';
 
-    protected function init(): void
-    {
-        parent::init();
-    }
-
-    public function getTag($position, $value, $attr = []): string
+    public function getTag(string $position, $value, $attr = []): string
     {
         if ($this->table->hasCollapsingCssActionColumn && $position === 'body') {
             $attr['class'][] = 'collapsing';
@@ -97,7 +92,7 @@ class ActionMenu extends Table\Column
             array_merge(
                 $this->options,
                 [
-                    'direction' => 'auto',  // direction need to be auto.
+                    'direction' => 'auto', // direction need to be auto.
                     'transition' => 'none', // no transition.
                     'onShow' => (new JsChain('atk.tableDropdown.onShow')),
                     'onHide' => (new JsChain('atk.tableDropdown.onHide')),
@@ -120,12 +115,11 @@ class ActionMenu extends Table\Column
             $output .= $item->getHtml();
         }
 
-        $s = '<div class="' . $this->ui . ' atk-action-menu">';
-        $s .= '<div class="text">' . $this->label . '</div>';
-        $s .= $this->icon ? '<i class="' . $this->icon . '"></i>' : '';
-        $s .= '<div class="menu">';
-        $s .= $output;
-        $s .= '</div></div>';
+        $s = '<div class="' . $this->ui . ' atk-action-menu">'
+            . '<div class="text">' . $this->label . '</div>'
+            . ($this->icon ? '<i class="' . $this->icon . '"></i>' : '')
+            . '<div class="menu">' . $output . '</div>'
+            . '</div>';
 
         return $s;
     }

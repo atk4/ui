@@ -18,7 +18,7 @@ use Atk4\Ui\View;
  *
  * Usage:
  * When use with View::on method, then JsCallbackExecutor executor is automatically create.
- *  $btn->on('click', $model->getUserAction('delete') , [4, 'confirm' => 'This will delete record with id 4. Are you sure?']);
+ *  $btn->on('click', $model->getUserAction('delete'), [4, 'confirm' => 'This will delete record with id 4. Are you sure?']);
  *
  * Manual setup.
  * $action = $model->getUserAction('delete')
@@ -32,7 +32,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /** @var Model\UserAction The model user action */
     public $action;
 
-    /** @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
     public function getAction(): Model\UserAction
@@ -59,8 +59,8 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     public function executeModelAction(array $args = [])
     {
         $this->set(function ($j) {
-            // may be id is passed as 'id' or model->id_field within $post args.
-            $id = $_POST['c0'] ?? $_POST['id'] ?? $_POST[$this->action->getModel()->id_field] ?? null;
+            // may be id is passed as 'id' or model->idField within $post args.
+            $id = $_POST['c0'] ?? $_POST['id'] ?? $_POST[$this->action->getModel()->idField] ?? null;
             if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
                 $this->action = $this->action->getActionForEntity($this->action->getModel()->tryLoad($id));
             } elseif (!$this->action->isOwnerEntity()
@@ -86,20 +86,6 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 
             return $js;
         }, $args);
-
-        return $this;
-    }
-
-    /**
-     * Set jsSuccess property.
-     *
-     * @param array|\Closure $fx
-     *
-     * @return $this
-     */
-    public function setJsSuccess($fx)
-    {
-        $this->jsSuccess = $fx;
 
         return $this;
     }

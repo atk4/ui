@@ -54,9 +54,10 @@ class SessionTraitTest extends TestCase
 
     public function testException1(): void
     {
+        $m = new SessionWithoutNameMock($this->app);
+
         // when try to start session without NameTrait
         $this->expectException(Exception::class);
-        $m = new SessionWithoutNameMock($this->app);
         $m->memorize('test', 'foo');
     }
 

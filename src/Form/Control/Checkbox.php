@@ -24,13 +24,13 @@ class Checkbox extends Form\Control
      */
     public $label;
 
-    /**
-     * @param string|array $label
-     * @param string|array $class
-     */
-    public function __construct($label = null, $class = null)
+    public function __construct($label = [])
     {
-        parent::__construct($label, $class);
+        if (func_num_args() > 1) { // prevent bad usage
+            throw new \Error('Too many method arguments');
+        }
+
+        parent::__construct($label);
 
         $this->label = $this->content;
         $this->content = null;
@@ -50,9 +50,6 @@ class Checkbox extends Form\Control
         }
     }
 
-    /**
-     * Render view.
-     */
     protected function renderView(): void
     {
         if ($this->label) {
@@ -66,12 +63,10 @@ class Checkbox extends Form\Control
         // We don't want this displayed, because it can only affect "checked" status anyway
         $this->content = null;
 
-        // take care of readonly status
-        if ($this->readonly) {
+        if ($this->readOnly) {
             $this->addClass('read-only');
         }
 
-        // take care of disabled status
         if ($this->disabled) {
             $this->addClass('disabled');
             $this->template->set('disabled', 'disabled="disabled"');

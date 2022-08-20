@@ -31,18 +31,18 @@ class Dropdown extends Lister
      * ex:
      *      $dropdown = Dropdown::addTo($menu, ['menu', 'dropdownOptions' => ['on' => 'hover']]);
      *      $dropdown->setModel($menuItems);
-     *      $dropdown->onChange(function($item) {
+     *      $dropdown->onChange(function ($item) {
      *          return 'New selected item: ' . $item;
      *      });.
      *
      * @param \Closure $fx handler where new selected Item value is passed too
      */
-    public function onChange(\Closure $fx)
+    public function onChange(\Closure $fx): void
     {
         // setting dropdown option for using callback url.
         $this->dropdownOptions['onChange'] = new JsFunction(['value', 'name', 't'], [
             new JsExpression(
-                "if($(this).data('currentValue') != value){\$(this).atkAjaxec({uri:[uri], uri_options:{item:value}});$(this).data('currentValue', value)}",
+                "if ($(this).data('currentValue') != value) { $(this).atkAjaxec({ uri: [uri], uri_options: { item:value } }); $(this).data('currentValue', value); }",
                 ['uri' => $this->cb->getJsUrl()]
             ), ]);
 

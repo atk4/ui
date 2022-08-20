@@ -29,7 +29,7 @@ class DropdownCascade extends Dropdown
         }
 
         $cascadeFromValue = isset($_POST[$this->cascadeFrom->name])
-            ? $this->getApp()->ui_persistence->typecastLoadField($this->cascadeFrom->entityField->getField(), $_POST[$this->cascadeFrom->name])
+            ? $this->getApp()->uiPersistence->typecastLoadField($this->cascadeFrom->entityField->getField(), $_POST[$this->cascadeFrom->name])
             : $this->cascadeFrom->entityField->get();
 
         $this->model = $this->cascadeFrom->model ? $this->cascadeFrom->model->ref($this->reference) : null;
@@ -86,7 +86,7 @@ class DropdownCascade extends Dropdown
                 $res = ($this->renderRowFunction)($row, $k);
                 $values[] = ['value' => $res['value'], 'text' => $row->get('name'), 'name' => $res['title']];
             } else {
-                $values[] = ['value' => $row->getId(), 'text' => $row->get($model->title_field), 'name' => $row->get($model->title_field)];
+                $values[] = ['value' => $row->getId(), 'text' => $row->get($model->titleField), 'name' => $row->get($model->titleField)];
             }
         }
 

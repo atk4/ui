@@ -27,8 +27,6 @@ class Form extends View
     /** @const string Executed when self::loadPost() method is called. */
     public const HOOK_LOAD_POST = self::class . '@loadPost';
 
-    // {{{ Properties
-
     public $ui = 'form';
     public $defaultTemplate = 'form.html';
 
@@ -77,7 +75,7 @@ class Form extends View
      *
      * @var Button|array|false Button object, seed or false to not show button at all
      */
-    public $buttonSave = [Button::class, 'Save', 'primary'];
+    public $buttonSave = [Button::class, 'Save', 'class.primary' => true];
 
     /**
      * When form is submitted successfully, this template is used by method
@@ -129,29 +127,7 @@ class Form extends View
     /** @var array Use this formConfig variable to pass settings to Semantic UI in .from(). */
     public $formConfig = [];
 
-    // }}}
-
     // {{{ Base Methods
-
-    /**
-     * @param mixed $defaults CSS class or seed array
-     *
-     * @todo this should also call parent::__construct, but we have to refactor View::__construct method parameters too
-     */
-    public function __construct($defaults = [])
-    {
-        if (!is_array($defaults)) {
-            $defaults = [$defaults];
-        }
-
-        // CSS class
-        if (array_key_exists(0, $defaults)) {
-            $this->addClass($defaults[0]);
-            unset($defaults[0]);
-        }
-
-        $this->setDefaults($defaults);
-    }
 
     protected function init(): void
     {
@@ -252,6 +228,7 @@ class Form extends View
         // Model is set for the form and also for the current layout
         try {
             parent::setModel($model);
+
             $this->layout->setModel($model, $fields);
         } catch (Exception $e) {
             throw $e->addMoreInfo('model', $model);
@@ -330,17 +307,17 @@ class Form extends View
      * Causes form to generate success message.
      *
      * @param View|string $success     Success message or a View to display in modal
-     * @param string      $sub_header  Sub-header
+     * @param string      $subHeader   Sub-header
      * @param bool        $useTemplate Backward compatibility
      *
      * @return JsChain
      */
-    public function success($success = 'Success', $sub_header = null, $useTemplate = true)
+    public function success($success = 'Success', $subHeader = null, $useTemplate = true)
     {
         $response = null;
         // by using this hook you can overwrite default behavior of this method
         if ($this->hookHasCallbacks(self::HOOK_DISPLAY_SUCCESS)) {
-            return $this->hook(self::HOOK_DISPLAY_SUCCESS, [$success, $sub_header]);
+            return $this->hook(self::HOOK_DISPLAY_SUCCESS, [$success, $subHeader]);
         }
 
         if ($success instanceof View) {
@@ -349,8 +326,8 @@ class Form extends View
             $response = $this->getApp()->loadTemplate($this->successTemplate);
             $response->set('header', $success);
 
-            if ($sub_header) {
-                $response->set('message', $sub_header);
+            if ($subHeader) {
+                $response->set('message', $subHeader);
             } else {
                 $response->del('p');
             }
@@ -360,7 +337,7 @@ class Form extends View
             $response = new Message([$success, 'type' => 'success', 'icon' => 'check']);
             $response->setApp($this->getApp());
             $response->invokeInit();
-            $response->text->addParagraph($sub_header);
+            $response->text->addParagraph($subHeader);
         }
 
         return $response;
@@ -467,7 +444,7 @@ class Form extends View
 
         $fallbackSeed = [Control\Line::class];
 
-        if ($field->type === 'json' && $field->getReference() !== null) {
+        if ($field->type === 'json' && $field->hasReference()) {
             $limit = ($field->getReference() instanceof ContainsMany) ? 0 : 1;
             $model = $field->getReference()->refModel($this->model);
             $fallbackSeed = [Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
@@ -476,7 +453,7 @@ class Form extends View
                 $fallbackSeed = [Control\Dropdown::class, 'values' => array_combine($field->enum, $field->enum)];
             } elseif ($field->values) {
                 $fallbackSeed = [Control\Dropdown::class, 'values' => $field->values];
-            } elseif ($field->getReference() !== null) {
+            } elseif ($field->hasReference()) {
                 $fallbackSeed = [Control\Lookup::class, 'model' => $field->getReference()->refModel($this->model)];
             }
         }
@@ -527,8 +504,8 @@ class Form extends View
         foreach ($this->controls as $k => $control) {
             try {
                 // save field value only if field was editable in form at all
-                if (!$control->readonly && !$control->disabled) {
-                    $control->set($this->getApp()->ui_persistence->typecastLoadField($control->entityField->getField(), $_POST[$k] ?? null));
+                if (!$control->readOnly && !$control->disabled) {
+                    $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $_POST[$k] ?? null));
                 }
             } catch (\Exception $e) {
                 $messages = [];

@@ -41,7 +41,7 @@ It only takes 2 PHP lines to create a fully working form::
 The form component can be further tweaked by setting a custom call-back handler
 directly in PHP::
 
-    $form->onSubmit(function(Form $form) {
+    $form->onSubmit(function (Form $form) {
         // implement subscribe here
 
         return "Subscribed " . $form->model->get('email') . " to newsletter.";
@@ -60,14 +60,14 @@ or you can tweak it when you create form like this::
 To set the default values in the form controls you can use the model property of the form.
 Even if model not explicitly set (see section below) each form has an underlying model which is automatically generated::
 
-	// single field
-	$form->model->set('email', 'some@email.com');
+    // single field
+    $form->model->set('email', 'some@email.com');
 
-	// or multiple fields
-	$form->model->set([
-		'name'	=> 'John',
-		'email' => 'some@email.com',
-	]);
+    // or multiple fields
+    $form->model->set([
+        'name' => 'John',
+        'email' => 'some@email.com',
+    ]);
 
 Form also relies on a ``\Atk4\Ui\Form::Layout`` class and displays form controls through
 decorators defined at ``\Atk4\Ui\Form::Control``. See dedicated documentation for:
@@ -77,9 +77,9 @@ decorators defined at ``\Atk4\Ui\Form::Control``. See dedicated documentation fo
 
 To tweak the UI properties of an form control input use ``setInputAttr()`` (and not the surrounding <div> as ``setAttr()`` would do). Here is how to set the HTML "maxlength" attribute on the generated input field::
 
-	$form = \Atk4\Ui\Form::addTo($this);
-	$form->setModel($model);
-	$form->getControl('name')->setInputAttr('maxlength', 20);
+    $form = \Atk4\Ui\Form::addTo($this);
+    $form->setModel($model);
+    $form->getControl('name')->setInputAttr('maxlength', 20);
 
 The rest of this chapter will focus on Form mechanics, such as submission,
 integration with front-end, integration with Model, error handling etc.
@@ -104,7 +104,7 @@ The basic 2-line syntax will extract all the required logic from the Model inclu
  - Field typecasting will be invoked such as for converting dates
  - Reference fields (https://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as Dropdown
  - Booleans are displayed as checkboxes but stored as defined by the model field
- - Mandatory and Required fields will have form controls visually highlighted (https://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$mandatory)
+ - Not-nullable and Required fields will have form controls visually highlighted (https://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$nullable)
  - Validation will be performed and errors will appear on the form (NEED LINK)
  - Unless you specify a submission handler, form will save the model ``User`` into ``$db`` on successful submission.
 
@@ -254,7 +254,7 @@ There are 3 ways to define Data form control using 'string', 'json' or 'object':
     $form->addControl('gender', [], ['enum' => ['Female', 'Male']]);
 
     class MyBoolean extends \Atk4\Data\Field {
-        public $type = 'boolean';
+        public ?string $type = 'boolean';
         public $enum = ['N', 'Y'];
     }
     $form->addControl('test2', [], new MyBoolean());
@@ -279,14 +279,16 @@ addControl into Form with Existing Model
 ----------------------------------------
 
 If your form is using a model and you add an additional control, then the underlying model field will be created but it will
-be set as "never_persist" (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$never_persist).
+be set as "neverPersist" (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$neverPersist).
 
 This is to make sure that data from custom form controls wouldn't go directly into the database. Next
 example displays a registration form for a User::
 
-    class User extends \Atk4\Data\Model {
+    class User extends \Atk4\Data\Model
+    {
         public $table = 'user';
-        function init(): void {
+
+        protected function init(): void {
             parent::init();
 
             $this->addField('email');
@@ -302,7 +304,7 @@ example displays a registration form for a User::
     $form->addControl('accept_terms', [], ['type' => 'boolean']);
 
     // submit event
-    $form->onSubmit(function(Form $form) {
+    $form->onSubmit(function (Form $form) {
         if ($form->model->get('password') != $form->model->get('password_verify')) {
             return $form->error('password_verify', 'Passwords do not match');
         }
@@ -312,6 +314,7 @@ example displays a registration form for a User::
         }
 
         $form->model->save(); // will only store email / password
+
         return $form->success('Thank you. Check your email now');
     });
 
@@ -328,7 +331,7 @@ for you. Here is an example with date::
     $form->addControl('date1', [], ['type' => 'date']);
     $form->addControl('date2', [\Atk4\Ui\Form\Control\Calendar::class, 'type' => 'date']);
 
-    $form->onSubmit(function(Form $form) {
+    $form->onSubmit(function (Form $form) {
         echo 'date1 = ' . print_r($form->model->get('date1'), true) . ' and date2 = ' . print_r($form->model->get('date2'), true);
     });
 
@@ -357,7 +360,7 @@ You can specify ``'ui' => ['form' => $decorator_seed]`` when defining your model
     class User extends \Atk4\Data\Model {
         public $table = 'user';
 
-        function init(): void {
+        protected function init(): void {
             parent::init();
 
             $this->addField('email');
@@ -424,7 +427,7 @@ it's always nicer to load values for the database. Given a ``User`` model this i
 you can create a form to change profile of a currently logged user::
 
     $user = new User($db);
-    $user->getControl('password')->never_persist = true; // ignore password field
+    $user->getControl('password')->neverPersist = true; // ignore password field
     $user = $user->load($current_user);
 
     // Display all fields (except password) and values
@@ -442,7 +445,7 @@ see https://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields
     $form->setModel((new User($db))->load($current_user), ['email', 'name']);
 
 As before, field ``password`` will not be loaded from the database, but this time
-using onlyFields restriction rather then `never_persist`.
+using onlyFields restriction rather then `neverPersist`.
 
 Validating
 ----------
@@ -487,6 +490,7 @@ Example use of Model's validate() method::
         protected function init(): void
         {
             parent::init();
+
             $this->addField('name', ['required' => true]);
             $this->addField('surname');
             $this->addField('gender', ['enum' => ['M', 'F']]);
@@ -549,7 +553,7 @@ To continue with the example, a new Person record can be added into the database
 but only if they have also accepted terms and conditions. An onSubmit handler
 that would perform the check can be defined displaying error or success messages::
 
-    $form->onSubmit(function(Form $form) {
+    $form->onSubmit(function (Form $form) {
         if (!$form->model->get('terms')) {
             return $form->error('terms', 'You must accept terms and conditions');
         }
@@ -564,7 +568,7 @@ Callback function can return one or multiple JavaScript actions. Methods such as
 Here is a code that can be used to output multiple errors at once. Errors were intentionally not grouped
 with a message about failure to accept of terms and conditions::
 
-    $form->onSubmit(function(Form $form) {
+    $form->onSubmit(function (Form $form) {
         $errors = [];
 
         if (!$form->model->get('name')) {
@@ -644,7 +648,7 @@ and where you can setup specific width for each field.
 
 My next example will add multiple controls on the same line::
 
-    $form->setModel(new User($db), []);  // will not populate any form controls automatically
+    $form->setModel(new User($db), []); // will not populate any form controls automatically
 
     $form->addControls(['name', 'surname']);
 
@@ -718,18 +722,18 @@ Fomantic UI Modifiers
 There are many other classes Fomantic UI allow you to use on a form. The next code will produce
 form inside a segment (outline) and will make form controls appear smaller::
 
-    $form = new \Atk4\Ui\Form(['small segment']));
+    $form = new \Atk4\Ui\Form(['class.small segment' => true]));
 
 For further styling see documentation on :php:class:`View`.
 
-Mandatory and Required Fields
+Not-Nullable and Required Fields
 =============================
 
-ATK Data has two field flags - "mandatory" and "required". Because ATK Data works with PHP
+ATK Data has two field flags - "nullable" and "required". Because ATK Data works with PHP
 values, the values are defined like this:
 
- - mandatory = value of the field must not be null.
- - required = value of the field must not be empty. (see is_empty())
+ - nullable = value of the field can be null.
+ - required = value of the field must not be empty (see `empty()`), null is empty too.
 
 Form changes things slightly, because it does not allow user to enter NULL values. For
 example - string (or unspecified type) fields will contain empty string if are not
@@ -739,7 +743,7 @@ When working with other types such as numeric values and dates - empty string is
 a valid number (or date) and therefore will be converted to NULL.
 
 So in most cases you'd want "required=true" flag set on your ATK Data fields. For
-numeric field, if zero must be a permitted entry, use "mandatory=true" instead.
+numeric field, if zero must be a permitted entry, use "nullable=false" instead.
 
 
 Conditional Form
@@ -771,7 +775,7 @@ Here is a more advanced example::
 
     $f_sub = Form::addTo($app);
     $f_sub->addControl('name');
-    $f_sub->addControl('subscribe', [\Atk4\Ui\Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'toggle']);
+    $f_sub->addControl('subscribe', [\Atk4\Ui\Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'class.toggle' => true]);
     $f_sub->addControl('email');
     $f_sub->addControl('gender', [\Atk4\Ui\Form\Control\Radio::class], ['enum' => ['Female', 'Male']])->set('Female');
     $f_sub->addControl('m_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
@@ -783,10 +787,10 @@ Here is a more advanced example::
     // Show f_gift when gender = 'female' and subscribe is checked.
 
     $f_sub->setControlsDisplayRules([
-       'email' => ['subscribe' => 'checked'],
-       'gender' => ['subscribe' => 'checked'],
-       'm_gift' => ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
-       'f_gift' => ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
+        'email' => ['subscribe' => 'checked'],
+        'gender' => ['subscribe' => 'checked'],
+        'm_gift' => ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
+        'f_gift' => ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
     ]);
 
 You may also define multiple conditions for the form control to be visible if you wrap them inside and array::
@@ -809,8 +813,8 @@ Hiding / Showing group of field
 
 Instead of defining rules for form controls individually you can hide/show entire group::
 
-    $f_group = Form::addTo($app, ['segment']);
-    Label::addTo($f_group, ['Work on form group too.', 'top attached'], ['AboveControls']);
+    $f_group = Form::addTo($app, ['class.segment' => true]);
+    Label::addTo($f_group, ['Work on form group too.', 'class.top attached' => true], ['AboveControls']);
 
     $g_basic = $f_group->addGroup(['Basic Information']);
     $g_basic->addControl('first_name', ['width' => 'eight']);

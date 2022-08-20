@@ -66,7 +66,7 @@ active. (See :ref:`system_pattern`)::
         public $user;
         public $company;
 
-        function __construct($auth = true) {
+        public function __construct($auth = true) {
             parent::__construct('Warehouse App v0.4');
 
             // My App class will establish database connection
@@ -81,6 +81,7 @@ active. (See :ref:`system_pattern`)::
             // App class may be used for pages that do not require authentication
             if (!$auth) {
                 $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
+
                 return;
             }
 
@@ -92,8 +93,8 @@ active. (See :ref:`system_pattern`)::
             // Make sure user is valid
             if (!$this->user->isLoaded()) {
                 $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
-                Message::addTo($this, ['Login Required', 'error']);
-                Button::addTo($this, ['Login', 'primary'])->link('index.php');
+                Message::addTo($this, ['Login Required', 'type' => 'error']);
+                Button::addTo($this, ['Login', 'class.primary' => true])->link('index.php');
                 exit;
             }
 
@@ -275,7 +276,7 @@ call-back is triggered and need to respond with some JSON.
 
 You can also use this method to output debug data. Here is comparison to var_dump::
 
-    // var_dump($my_var);  // does not stop execution, draws UI anyway
+    // var_dump($my_var); // does not stop execution, draws UI anyway
 
     $this->getApp()->terminate(var_export($my_var)); // stops execution.
 
@@ -351,8 +352,8 @@ Having composition of multiple components will allow them to share the app objec
 
     $grid = new \Atk4\Ui\Grid();
     $grid->setModel($user);
-    $grid->addPaginator();          // initialize and populate paginator
-    $grid->addButton('Test');       // initialize and populate toolbar
+    $grid->addPaginator(); // initialize and populate paginator
+    $grid->addButton('Test'); // initialize and populate toolbar
 
     echo $grid->render();
 
@@ -389,7 +390,7 @@ This will initialize two new views inside the app::
     $app->html
     $app->layout
 
-The first view is a HTML boilerplate - containing HEAD / BODY tags but not the body
+The first view is a HTML boilerplate - containing head / body tags but not the body
 contents. It is a standard html5 doctype template.
 
 The layout will be selected based on your choice - Layout\Centered, Layout\Admin etc. This will
@@ -423,7 +424,7 @@ Populating the left menu object is simply a matter of adding the right menu item
 
 This is the top menu of the admin layout. You can add other item to the top menu using::
 
-    Button::addTo($layout->menu->addItem(), ['View Source', 'teal', 'icon' => 'github'])
+    Button::addTo($layout->menu->addItem(), ['View Source', 'class.teal' => true, 'icon' => 'github'])
         ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\JsExpression('document.location=[];', [$url . $f]));
 
 .. php:attr:: menuRight

@@ -34,7 +34,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     public $loaderUi = 'ui basic segment';
     /** @var array|View|null Loader shim object or seed. */
     public $loaderShim;
-    /** @var JsExpressionable */
+    /** @var JsExpressionable|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
     /** @var string css class for modal size. */
@@ -52,6 +52,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     protected function init(): void
     {
         parent::init();
+
         $this->observeChanges();
         $this->addClass($this->size);
     }
@@ -63,7 +64,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     {
         // Add buttons to modal for next and previous.
         $btns = (new View())->addStyle(['min-height' => '24px']);
-        $this->ok = Button::addTo($btns, ['Ok', 'blue']);
+        $this->ok = Button::addTo($btns, ['Ok', 'class.blue' => true]);
         $this->cancel = Button::addTo($btns, ['Cancel']);
         $this->add($btns, 'actions');
         $this->showActions = true;

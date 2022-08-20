@@ -87,6 +87,8 @@ class DemosTest extends TestCase
 
     protected function setSuperglobalsFromRequest(RequestInterface $request): void
     {
+        $this->resetSuperglobals();
+
         $_SERVER = [
             'REQUEST_METHOD' => $request->getMethod(),
             'HTTP_HOST' => $request->getUri()->getHost(),
@@ -107,11 +109,16 @@ class DemosTest extends TestCase
         foreach ($queryArr as $k => $v) {
             $_POST[$k] = $v;
         }
+    }
 
-        $_REQUEST = [];
-        $_FILES = [];
-        $_COOKIE = [];
-        $_SESSION = [];
+    protected function resetSuperglobals(): void
+    {
+        unset($_SERVER);
+        unset($_GET);
+        unset($_POST);
+        unset($_FILES);
+        unset($_COOKIE);
+        unset($_SESSION);
     }
 
     protected function createTestingApp(): App
@@ -152,8 +159,8 @@ class DemosTest extends TestCase
     {
         $handler = function (RequestInterface $request) {
             // emulate request
-            $this->setSuperglobalsFromRequest($request);
             $localPath = static::ROOT_DIR . $request->getUri()->getPath();
+            $this->setSuperglobalsFromRequest($request);
 
             ob_start();
             try {
@@ -161,20 +168,21 @@ class DemosTest extends TestCase
                 try {
                     require $localPath;
 
-                if (!$app->runCalled) {
-                    $app->run();
-                }
+                    if (!$app->runCalled) {
+                        $app->run();
+                    }
 
-                $this->assertNoGlobalSticky($app);
-            } catch (\Throwable $e) {
+                    $this->assertNoGlobalSticky($app);
+                } catch (\Throwable $e) {
                     // catch only custom exit exception
 
-                    if (!($e instanceof DemosTestExitError)) {
+                    if (!$e instanceof DemosTestExitError) {
                         throw $e;
                     }
                 }
             } finally {
                 $this->assertSame('', ob_get_clean());
+                $this->resetSuperglobals();
             }
 
             // rewind the body of the response if possible
@@ -290,7 +298,7 @@ class DemosTest extends TestCase
             }
         }
 
-        return array_map(function (string $v) { return [$v]; }, $files);
+        return array_map(fn (string $v) => [$v], $files);
     }
 
     /**
@@ -435,11 +443,11 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest($path);
         $this->assertSame(200, $response->getStatusCode());
 
-        $output_rows = preg_split('~\r?\n|\r~', $response->getBody()->getContents());
+        $outputRows = preg_split('~\r?\n|\r~', $response->getBody()->getContents());
 
         // check SSE Syntax
-        $this->assertGreaterThan(0, count($output_rows));
-        foreach ($output_rows as $index => $sse_line) {
+        $this->assertGreaterThan(0, count($outputRows));
+        foreach ($outputRows as $index => $sse_line) {
             if (empty($sse_line)) {
                 continue;
             }

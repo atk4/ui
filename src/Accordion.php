@@ -16,7 +16,7 @@ class Accordion extends View
 
     public $ui = 'accordion';
 
-    /** @var array|string|null The css class for Fomantic-ui accordion type. */
+    /** @var array|string|null The CSS class for Fomantic-ui accordion type. */
     public $type;
 
     /** @var array Settings as per Fomantic-ui accordion settings. */

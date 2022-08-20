@@ -128,7 +128,7 @@ $wizard->addStep('Business Model', function ($page) {
         /* Showing Class definition.
         class DemoInvoice extends \Atk4\Data\Model
         {
-            public $title_field = 'reference';
+            public ?string $titleField = 'reference';
 
             protected function init(): void
             {
@@ -141,7 +141,7 @@ $wizard->addStep('Business Model', function ($page) {
         */
         session_start();
 
-        $model = new DemoInvoice(new Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
+        $model = new DemoInvoice(new Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->uiPersistence->dateFormat]);
         $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function (Model $model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
@@ -203,7 +203,7 @@ $wizard->addStep('Persistence', function ($page) {
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         session_start();
 
-        $model = new DemoInvoice(new Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->ui_persistence->date_format]);
+        $model = new DemoInvoice(new Persistence\Array_($_SESSION['x'] ?? []), ['dateFormat' => $owner->getApp()->uiPersistence->dateFormat]);
         $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function (Model $model) {
             $_SESSION['x'][$model->getId()] = $model->get();
         });
@@ -229,6 +229,6 @@ $wizard->addStep('Persistence', function ($page) {
 
 $wizard->addFinish(function ($page) use ($wizard) {
     PromotionText::addTo($page);
-    \Atk4\Ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon' => 'left arrow'], ['Left'])
+    \Atk4\Ui\Button::addTo($wizard, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
         ->link('/demos/index.php');
 });

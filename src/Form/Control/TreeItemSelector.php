@@ -22,7 +22,7 @@ use Atk4\Ui\JsCallback;
 
 class TreeItemSelector extends Form\Control
 {
-    /** @var HtmlTemplate Template for the item selector view. */
+    /** @var HtmlTemplate|null Template for the item selector view. */
     public $itemSelectorTemplate;
 
     /** @var \Atk4\Ui\View|null The tree item selector View. */
@@ -51,11 +51,11 @@ class TreeItemSelector extends Form\Control
      *               ['name' => 'iPhone', 'id' => 502],
      *               ['name' => 'Google Pixels', 'id' => 503],
      *           ]],
-     *           ['name' => 'Tv' , 'id' => 501],
-     *           ['name' => 'Radio' , 'id' => 601],
+     *           ['name' => 'Tv', 'id' => 501],
+     *           ['name' => 'Radio', 'id' => 601],
      *       ]],
-     *       ['name' => 'Cleaner' , 'id' => 201],
-     *       ['name' => 'Appliances' , 'id' => 301],
+     *       ['name' => 'Cleaner', 'id' => 201],
+     *       ['name' => 'Appliances', 'id' => 301],
      *   ];
      *
      * When adding nodes array into an item, it will automatically be treated as a group unless empty.
@@ -84,10 +84,8 @@ class TreeItemSelector extends Form\Control
      * Provide a function to be execute when clicking an item in tree selector.
      * The executing function will receive an array with item state in it
      * when allowMultiple is true or a single value when false.
-     *
-     * @return $this
      */
-    public function onItem(\Closure $fx)
+    public function onItem(\Closure $fx): void
     {
         $this->cb = JsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
             $value = $this->getApp()->decodeJson($data);
@@ -97,8 +95,6 @@ class TreeItemSelector extends Form\Control
 
             return $fx($value);
         }, ['data' => 'value']);
-
-        return $this;
     }
 
     /**
@@ -130,7 +126,7 @@ class TreeItemSelector extends Form\Control
 
     public function getValue()
     {
-        return $this->getApp()->ui_persistence->typecastSaveField($this->entityField->getField(), $this->entityField->get());
+        return $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get());
     }
 
     protected function renderView(): void

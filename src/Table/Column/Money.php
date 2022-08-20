@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column;
 
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Table;
 
@@ -12,20 +13,19 @@ use Atk4\Ui\Table;
  */
 class Money extends Table\Column
 {
-    /** @var bool Should we show zero values in cells? */
-    public $show_zero_values = true;
-
-    // overrides
     public $attr = ['all' => ['class' => ['right aligned single line']]];
 
-    public function getTagAttributes($position, array $attr = []): array
+    /** @var bool Should we show zero values in cells? */
+    public $showZeroValues = true;
+
+    public function getTagAttributes(string $position, array $attr = []): array
     {
         $attr = array_merge_recursive($attr, ['class' => ['{$_' . $this->shortName . '_class}']]);
 
         return parent::getTagAttributes($position, $attr);
     }
 
-    public function getDataCellHtml(\Atk4\Data\Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         if (!isset($field)) {
             throw new \Atk4\Ui\Exception('Money column requires a field');
@@ -34,7 +34,7 @@ class Money extends Table\Column
         return $this->getTag(
             'body',
             '{$' . $field->shortName . '}',
-            $extra_tags
+            $attr
         );
     }
 
@@ -42,7 +42,7 @@ class Money extends Table\Column
     {
         if ($field->get($row) < 0) {
             return ['_' . $this->shortName . '_class' => 'negative'];
-        } elseif (!$this->show_zero_values && (float) $field->get($row) === 0.0) {
+        } elseif (!$this->showZeroValues && (float) $field->get($row) === 0.0) {
             return ['_' . $this->shortName . '_class' => '', $field->shortName => '-'];
         }
 

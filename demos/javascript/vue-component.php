@@ -12,7 +12,7 @@ require_once __DIR__ . '/../init-app.php';
 \Atk4\Ui\Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
-// ****** Inline Edit *****************************
+// Inline Edit
 
 $model = new Country($app->db);
 $model = $model->loadAny();
@@ -34,7 +34,7 @@ $inline_edit->onChange(function ($value) {
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
-// ****** ITEM SEARCH *****************************
+// ITEM SEARCH
 
 $subHeader = 'Searching will reload the list of countries below with matching result.';
 \Atk4\Ui\Header::addTo($app, ['Search using a Vue component', 'subHeader' => $subHeader]);
@@ -49,12 +49,12 @@ $search = \Atk4\Ui\Component\ItemSearch::addTo($view, ['ui' => 'ui compact segme
 $lister_container = \Atk4\Ui\View::addTo($view, ['template' => $lister_template]);
 $lister = \Atk4\Ui\Lister::addTo($lister_container, [], ['List']);
 $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
-    $row = Country::assertInstanceOf($lister->current_row);
+    $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 
     ++$lister->ipp;
     if ($lister->ipp === $lister->model->limit[0]) {
-        $lister->t_row->dangerouslySetHtml('end', '<div class="ui circular basic label"> ...</div>');
+        $lister->tRow->dangerouslySetHtml('end', '<div class="ui circular basic label"> ...</div>');
     }
 });
 
@@ -65,7 +65,8 @@ $lister->setModel($model);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
-// ****** CREATING CUSTOM VUE USING EXTERNAL COMPONENT *****************************
+// CREATING CUSTOM VUE USING EXTERNAL COMPONENT
+
 \Atk4\Ui\Header::addTo($app, ['External Component', 'subHeader' => 'Creating component using an external component definition.']);
 
 // same as $app->requireJs('https://unpkg.com/vue-clock2@1.1.5/dist/vue-clock.min.js');

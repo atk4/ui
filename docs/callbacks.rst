@@ -15,7 +15,7 @@ PHP callback::
     $button = new Button();
 
     // clicking button generates random number every time
-    $button->on('click', function($action) {
+    $button->on('click', function ($action) {
         return $action->text(rand(1, 100));
     });
 
@@ -92,7 +92,7 @@ returns any value, the set() will return it too::
     $label->detail = $cb->getUrl();
     $label->link($cb->getUrl());
 
-    if($cb->set(function () { return true; })) {
+    if ($cb->set(function () { return true; })) {
         $label->addClass('red');
     }
 
@@ -111,7 +111,9 @@ the label regardless of the callback function::
     $label->detail = $cb->getUrl();
     $label->link($cb->getUrl());
 
-    $cb->set(function () { echo 123; });
+    $cb->set(function () {
+        echo 123;
+    });
 
     if ($cb->triggered) {
         $label->addClass('red');
@@ -205,7 +207,7 @@ use JsCallback class now::
 
 When you trigger callback, you'll see the output::
 
-    {"success":true,"message":"Success","eval":"alert(\"ok\")"}
+    {"success":true, "message":"Success", "eval":"alert(\"ok\")"}
 
 This is how JsCallback renders actions and sends them back to the browser. In order to retrieve and execute actions,
 you'll need a JavaScript routine. Luckily JsCallback also implements JsExpressionable, so it, in itself is an action.
@@ -275,7 +277,7 @@ will send browser screen width back to the callback::
     $label = \Atk4\Ui\Label::addTo($app);
     $cb = \Atk4\Ui\JsCallback::addTo($label);
 
-    $cb->set(function($j, $arg1) {
+    $cb->set(function ($j, $arg1) {
         return 'width is ' . $arg1;
     }, [new \Atk4\Ui\JsExpression( '$(window).width()' )]);
 
@@ -288,7 +290,7 @@ also supports argument passing::
 
     $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 
-    $label->on('click', function($j, $arg1) {
+    $label->on('click', function ($j, $arg1) {
         return 'width is ' . $arg1;
     }, ['confirm' => 'sure?', 'args' => [new \Atk4\Ui\JsExpression( '$(window).width()' )]]);
 
@@ -296,7 +298,7 @@ If you do not need to specify confirm, you can actually pass arguments in a key-
 
     $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 
-    $label->on('click', function($j, $arg1) {
+    $label->on('click', function ($j, $arg1) {
         return 'width is ' . $arg1;
     }, [new \Atk4\Ui\JsExpression( '$(window).width()' )]);
 

@@ -23,12 +23,12 @@ Implements basic image::
 
 Although typically you would want to specify what type of message is that::
 
-    $message = new \Atk4\Ui\Message(['Warning Message Title', 'warning']);
+    $message = new \Atk4\Ui\Message(['Warning Message Title', 'type' => 'warning']);
     $app->add($message);
 
 Here is the alternative syntax::
 
-    $message = Message::addTo($app, ['Warning Message Title', 'warning']);
+    $message = Message::addTo($app, ['Warning Message Title', 'type' => 'warning']);
 
 Adding message text
 ===================
@@ -53,7 +53,7 @@ You can specify icon also::
 
     $message = Message::addTo($app, [
         'Battery low',
-        'red',
+        'class.red' => true,
         'icon' => 'battery low',
     ])->text->addParagraph('Your battery is getting low. Re-charge your Web App');
 

@@ -47,11 +47,11 @@ class ExecutorFactoryTest extends TestCase
     {
         $p = new Persistence\Array_();
         $this->model = new TestModel($p);
-        $this->app = $this->getApp();
+        $this->app = $this->createApp();
         $this->app->initLayout([\Atk4\Ui\Layout\Admin::class]);
     }
 
-    protected function getApp(): App
+    protected function createApp(): App
     {
         return new App([
             'catchExceptions' => false,

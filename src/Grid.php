@@ -22,7 +22,7 @@ class Grid extends View
     /** @var Menu|false Will be initialized to Menu object, however you can set this to false to disable menu. */
     public $menu;
 
-    /** @var JsSearch */
+    /** @var JsSearch|null */
     public $quickSearch;
 
     /** @var array Field names to search for in Model. It will automatically add quicksearch component to grid if set. */
@@ -44,7 +44,7 @@ class Grid extends View
      * Calling addActionButton will add a new column inside $table, and will be re-used
      * for next addActionButton().
      *
-     * @var Table\Column\ActionButtons
+     * @var Table\Column\ActionButtons|null
      */
     public $actionButtons;
 
@@ -52,7 +52,7 @@ class Grid extends View
      * Calling addAction will add a new column inside $table with dropdown menu,
      * and will be re-used for next addActionMenuItem().
      *
-     * @var Table\Column
+     * @var Table\Column|null
      */
     public $actionMenu;
 
@@ -92,6 +92,7 @@ class Grid extends View
     protected function init(): void
     {
         parent::init();
+
         $this->container = View::addTo($this, ['template' => $this->template->cloneRegion('Container')]);
         $this->template->del('Container');
 
@@ -101,7 +102,7 @@ class Grid extends View
 
         // if menu not disabled ot not already assigned as existing object
         if ($this->menu !== false && !is_object($this->menu)) {
-            $this->menu = $this->add(Factory::factory([Menu::class, 'activate_on_click' => false], $this->menu), 'Menu');
+            $this->menu = $this->add(Factory::factory([Menu::class, 'activateOnClick' => false], $this->menu), 'Menu');
         }
 
         $this->table = $this->initTable();
@@ -132,7 +133,7 @@ class Grid extends View
     protected function initTable(): Table
     {
         /** @var Table */
-        $table = $this->container->add(Factory::factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
+        $table = $this->container->add(Factory::factory([Table::class, 'class.very compact very basic striped single line' => true, 'reload' => $this->container], $this->table), 'Table');
 
         return $table;
     }
@@ -319,7 +320,7 @@ class Grid extends View
         }
 
         if (!$fields) {
-            $fields = [$this->model->title_field];
+            $fields = [$this->model->titleField];
         }
 
         if (!$this->menu) {
@@ -383,11 +384,11 @@ class Grid extends View
 
     private function getActionButtons(): ActionButtons
     {
-        if (!$this->actionButtons) {
+        if ($this->actionButtons === null) {
             $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
         }
 
-        return $this->actionButtons;
+        return $this->actionButtons; // @phpstan-ignore-line
     }
 
     /**
@@ -518,18 +519,14 @@ class Grid extends View
      *
      * @param string|array|View $button
      * @param string            $title
-     * @param \Closure          $callback function($page) {...
+     * @param \Closure          $callback function ($page) {...
      * @param array             $args     extra url argument for callback
      *
      * @return object
      */
     public function addModalAction($button, $title, \Closure $callback, $args = [])
     {
-        if (!$this->actionButtons) {
-            $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
-        }
-
-        return $this->actionButtons->addModal($button, $title, $callback, $this, $args);
+        return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args);
     }
 
     /**
@@ -579,8 +576,8 @@ class Grid extends View
 
         if ($sortBy && isset($this->table->columns[$sortBy]) && $this->model->hasField($sortBy)) {
             $this->model->setOrder($sortBy, $isDesc ? 'desc' : 'asc');
-            $this->table->sort_by = $sortBy;
-            $this->table->sort_order = $isDesc ? 'descending' : 'ascending';
+            $this->table->sortBy = $sortBy;
+            $this->table->sortDirection = $isDesc ? 'desc' : 'asc';
         }
 
         $this->table->on(
@@ -647,7 +644,7 @@ class Grid extends View
      */
     private function setModelLimitFromPaginator()
     {
-        $this->paginator->setTotal((int) ceil((int) $this->model->action('count')->getOne() / $this->ipp));
+        $this->paginator->setTotal((int) ceil($this->model->executeCountQuery() / $this->ipp));
         $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
     }
 

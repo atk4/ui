@@ -20,7 +20,7 @@ class Step extends View
     /** @var Wizard Link back to the wizard object. */
     public $wizard;
 
-    /** @var string Icon appears to the left of the title in the step. You can disable icons for entire wizard. */
+    /** @var string|false Icon appears to the left of the title in the step. You can disable icons for entire wizard. */
     public $icon;
 
     /** @var int Will be automatically assigned 0, 1, 2, etc,. */
@@ -37,7 +37,7 @@ class Step extends View
         $this->template->set('description', $this->description);
 
         if ($this->icon === false) {
-            $this->template->del('has_icon');
+            $this->template->del('hasIcon');
         } else {
             $this->template->set('icon', $this->icon);
         }

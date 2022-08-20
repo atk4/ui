@@ -41,14 +41,14 @@ $form = Form::addTo($app);
 $control = $form->addControl('tree', [Form\Control\TreeItemSelector::class, 'treeItems' => $items, 'caption' => 'Multiple selection:'], ['type' => 'json']);
 $control->set([201, 301, 503]);
 
-// $control->onItem(function($value) use ($app) {
+// $control->onItem(function ($value) use ($app) {
 //    return new \Atk4\Ui\JsToast($app->encodeJson($value));
 // });
 
 $control = $form->addControl('tree1', [Form\Control\TreeItemSelector::class, 'treeItems' => $items, 'allowMultiple' => false, 'caption' => 'Single selection:']);
 $control->set(502);
 
-// $control->onItem(function($tree) {
+// $control->onItem(function ($tree) {
 //    return new JsToast('Received 1');
 // });
 

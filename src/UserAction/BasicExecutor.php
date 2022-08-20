@@ -19,7 +19,7 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
     /** @const string */
     public const HOOK_AFTER_EXECUTE = self::class . '@afterExecute';
 
-    /** @var Model\UserAction */
+    /** @var Model\UserAction|null */
     public $action;
 
     /** @var bool display header or not */
@@ -43,7 +43,7 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
     /** @var array list of validated arguments */
     protected $validArguments = [];
 
-    /** @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */
     protected $jsSuccess;
 
     public function getAction(): Model\UserAction

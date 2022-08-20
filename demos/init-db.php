@@ -120,12 +120,12 @@ class ModelWithPrefixedFields extends Model
 
     protected function init(): void
     {
-        if ($this->id_field === 'id') {
-            $this->id_field = $this->prefixFieldName($this->id_field);
+        if ($this->idField === 'id') {
+            $this->idField = $this->prefixFieldName($this->idField);
         }
 
-        if ($this->title_field === 'name') {
-            $this->title_field = $this->prefixFieldName($this->title_field);
+        if ($this->titleField === 'name') {
+            $this->titleField = $this->prefixFieldName($this->titleField);
         }
 
         parent::init();
@@ -160,6 +160,7 @@ class Country extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name, ['actual' => 'atk_afp_country__nicename', 'required' => true, 'type' => 'string']);
         $this->addField($this->fieldName()->sys_name, ['actual' => 'atk_afp_country__name', 'system' => true]);
 
@@ -189,7 +190,7 @@ class Country extends ModelWithPrefixedFields
 
         // look if name is unique
         $c = $this->getModel()->tryLoadBy($this->fieldName()->name, $this->name);
-        if ($c->isLoaded() && $c->getId() !== $this->getId()) {
+        if ($c !== null && $c->getId() !== $this->getId()) {
             $errors[$this->fieldName()->name] = 'Country name must be unique';
         }
 
@@ -235,14 +236,14 @@ class Stat extends ModelWithPrefixedFields
 
         $this->addField($this->fieldName()->project_name, ['type' => 'string']);
         $this->addField($this->fieldName()->project_code, ['type' => 'string']);
-        $this->title_field = $this->fieldName()->project_name;
+        $this->titleField = $this->fieldName()->project_name;
         $this->addField($this->fieldName()->description, ['type' => 'text']);
         $this->addField($this->fieldName()->client_name, ['type' => 'string']);
         $this->addField($this->fieldName()->client_address, ['type' => 'text', 'ui' => ['form' => [Form\Control\Textarea::class, 'rows' => 4]]]);
 
         $this->hasOne($this->fieldName()->client_country_iso, [
             'model' => [Country::class],
-            'their_field' => Country::hinting()->fieldName()->iso,
+            'theirField' => Country::hinting()->fieldName()->iso,
             'type' => 'string',
             'ui' => [
                 'form' => [Form\Control\Line::class],
@@ -252,7 +253,7 @@ class Stat extends ModelWithPrefixedFields
 
         $this->addField($this->fieldName()->is_commercial, ['type' => 'boolean']);
         $this->addField($this->fieldName()->currency, ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
-        $this->addField($this->fieldName()->currency_symbol, ['never_persist' => true]);
+        $this->addField($this->fieldName()->currency_symbol, ['neverPersist' => true]);
         $this->onHook(Model::HOOK_AFTER_LOAD, function (self $model) {
             /* implementation for "intl"
             $locale = 'en-UK';
@@ -288,7 +289,7 @@ class Stat extends ModelWithPrefixedFields
 
 class Percent extends \Atk4\Data\Field
 {
-    public $type = 'float'; // will need to be able to affect rendering and storage
+    public ?string $type = 'float';
 }
 
 /**
@@ -307,6 +308,7 @@ class File extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name);
 
         $this->addField($this->fieldName()->type, ['caption' => 'MIME Type']);
@@ -314,9 +316,9 @@ class File extends ModelWithPrefixedFields
 
         $this->hasMany($this->fieldName()->SubFolder, [
             'model' => [self::class],
-            'their_field' => self::hinting()->fieldName()->parent_folder_id,
+            'theirField' => self::hinting()->fieldName()->parent_folder_id,
         ])
-            ->addField($this->fieldName()->count, ['aggregate' => 'count', 'field' => $this->persistence->expr($this, '*')]);
+            ->addField($this->fieldName()->count, ['aggregate' => 'count', 'field' => $this->getPersistence()->expr($this, '*')]);
 
         $this->hasOne($this->fieldName()->parent_folder_id, [
             'model' => [Folder::class],
@@ -403,15 +405,16 @@ class Category extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name);
 
         $this->hasMany($this->fieldName()->SubCategories, [
             'model' => [SubCategory::class],
-            'their_field' => SubCategory::hinting()->fieldName()->product_category_id,
+            'theirField' => SubCategory::hinting()->fieldName()->product_category_id,
         ]);
         $this->hasMany($this->fieldName()->Products, [
             'model' => [Product::class],
-            'their_field' => Product::hinting()->fieldName()->product_category_id,
+            'theirField' => Product::hinting()->fieldName()->product_category_id,
         ]);
     }
 }
@@ -428,6 +431,7 @@ class SubCategory extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name);
 
         $this->hasOne($this->fieldName()->product_category_id, [
@@ -435,7 +439,7 @@ class SubCategory extends ModelWithPrefixedFields
         ]);
         $this->hasMany($this->fieldName()->Products, [
             'model' => [Product::class],
-            'their_field' => Product::hinting()->fieldName()->product_sub_category_id,
+            'theirField' => Product::hinting()->fieldName()->product_sub_category_id,
         ]);
     }
 }
@@ -454,6 +458,7 @@ class Product extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name);
         $this->addField($this->fieldName()->brand);
         $this->hasOne($this->fieldName()->product_category_id, [

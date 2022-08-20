@@ -21,7 +21,8 @@
     </listeners>
     <coverage>
         <include>
-            <directory suffix=".php">src</directory>
+            <directory>src</directory>
+            <directory>tests</directory>
         </include>
         <report>
             <php outputFile="coverage/phpunit.cov" />

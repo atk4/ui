@@ -6,7 +6,6 @@ namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use Atk4\Ui\Exception;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Table;
 
@@ -18,23 +17,18 @@ class Multiformat extends Table\Column
     /** @var \Closure Method to execute which will return array of seeds for decorators */
     public $callback;
 
-    public function getDataCellHtml(Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         return '{$c_' . $this->shortName . '}';
     }
 
-    public function __construct($callback)
+    public function __construct(\Closure $callback)
     {
         $this->callback = $callback;
     }
 
     public function getHtmlTags(Model $row, $field)
     {
-        if (!$this->callback) {
-            throw (new Exception('Must specify a callback for column'))
-                ->addMoreInfo('column', $this);
-        }
-
         $decorators = ($this->callback)($row, $field);
         if (is_string($decorators)) {
             $decorators = [[$decorators]];

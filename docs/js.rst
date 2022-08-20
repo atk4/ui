@@ -192,9 +192,9 @@ will output:
     It's considered very bad practice to use jsRender to output JavaScript manually. Agile UI takes care of
     JavaScript binding and also decides which actions should be available while creating actions for your chain.
 
-.. php:method:: _json_encode
+.. php:method:: _jsonEncode
 
-    JsChain will map all the other methods into JS counterparts while encoding all the arguments using `_json_encode()`.
+    JsChain will map all the other methods into JS counterparts while encoding all the arguments using `_jsonEncode()`.
     Although similar to the standard `json_encode()` function, this method recognizes :php:interface:`JsExpressionable`
     objects and will substitute them with the result of :php:meth:`JsExpressionable::jsRender`. The result will
     not be escaped and any object implementing :php:interface:`JsExpressionable` interface is responsible
@@ -248,7 +248,7 @@ The following code will show three buttons and clicking any one will hide it. On
     $buttons->on('click', '.button')->hide();
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function($event) {
+    // $('#top-element-id').on('click', '.button', function(event) {
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $(this).hide();
@@ -268,7 +268,7 @@ You can use both actions together. The next example will allow only one button t
     $buttons->on('click', '.button', $b3->js()->hide());
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function($event) {
+    // $('#top-element-id').on('click', '.button', function(event) {
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $('#b3-element-id').hide();
@@ -291,7 +291,7 @@ and other cases you can use JsExpression::
     ]);
 
 Because :php:class:`JsChain` will typically wrap all the arguments through
-:php:meth:`JsChain::_json_encode()`, it prevents you from accidentally injecting JavaScript code::
+:php:meth:`JsChain::_jsonEncode()`, it prevents you from accidentally injecting JavaScript code::
 
     $b = new Button();
     $b->js(true)->text('2 + 2');
@@ -363,7 +363,7 @@ Create a file `test.js` containing:
 
     function mySum(arr) {
         return arr.reduce(function(a, b) {
-            return a+b;
+            return a + b;
         }, 0);
     }
 
@@ -472,8 +472,8 @@ JsNotify
 Dynamic notifier used to display operation status::
 
     \Atk4\Ui\Button::addTo($app, ['Test'])->on(
-      'click',
-      (new \Atk4\Ui\JsNotify('Not yet implemented'))->setColor('red')
+        'click',
+        (new \Atk4\Ui\JsNotify('Not yet implemented'))->setColor('red')
     );
 
 A typical use case would be to provide visual feedback of an action after used performs operation inside
@@ -535,8 +535,9 @@ other view::
 
     $form->setModel($m_book);
 
-    $form->onSubmit(function(Form $form) use($table) {
+    $form->onSubmit(function (Form $form) use ($table) {
         $form->model->save();
+
         return new \Atk4\Ui\JsReload($table);
     });
 
@@ -576,12 +577,13 @@ The following will **not** work::
     $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
     $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
 
-    $form->onSubmit(function(Form $form) use($table) {
-      $form->model->save();
-      return [
-        $table->jsReload(),
-        $form->success('ok'),
-      ];
+    $form->onSubmit(function (Form $form) use ($table) {
+        $form->model->save();
+
+        return [
+            $table->jsReload(),
+            $form->success('ok'),
+        ];
     });
 
 Table needs to be first! The following works::
@@ -600,12 +602,13 @@ Table needs to be first! The following works::
     $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
     $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
 
-    $form->onSubmit(function(Form $form) use($table) {
-      $form->model->save();
-      return [
-        $table->jsReload(),
-        $form->success('ok'),
-      ];
+    $form->onSubmit(function (Form $form) use ($table) {
+        $form->model->save();
+
+        return [
+            $table->jsReload(),
+            $form->success('ok'),
+        ];
     });
 
 The first will not work because of how the render tree is called and because VirtualPage is special.
@@ -617,11 +620,12 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
     $table->setModel($model);
 
     $vp = \Atk4\Ui\VirtualPage::addTo($app);
-    $vp->set(function($p) use ($table, $model) {
+    $vp->set(function ($p) use ($table, $model) {
         $form = \Atk4\Ui\Form::addTo($p);
         $form->setModel(clone $model);
-        $form->onSubmit(function(Form $form) use($table) {
+        $form->onSubmit(function (Form $form) use ($table) {
             $form->model->save();
+
             return [
                 $table->jsReload(),
                 $form->success('ok'),
@@ -649,14 +653,12 @@ The most basic approach is::
 
     $button = \Atk4\Ui\Button::addTo($app, ['Process Image']);
     $button->on('click', function () use ($button, $image) {
-
         sleep(1); // $image->resize();
         sleep(1); // $image->findFace();
         sleep(1); // $image->watermark();
         sleep(1); // $image->createThumbnails();
 
         return $button->js()->text('Success')->addClass('disabled');
-
     });
 
 However, it would be nice if the user was aware of the progress of your process, which is when `Server Sent Event (JsSse)`_
@@ -678,7 +680,6 @@ This class implements ability for your PHP code to send messages to the browser 
     $sse = \Atk4\Ui\JsSse::addTo($app);
 
     $button->on('click', $sse->set(function () use ($sse, $button, $image) {
-
         $sse->send($button->js()->text('Processing'));
         sleep(1); // $image->resize();
 
@@ -692,7 +693,6 @@ This class implements ability for your PHP code to send messages to the browser 
         sleep(1); // $image->createThumbnails();
 
         return $button->js()->text('Success')->addClass('disabled');
-
     }));
 
 The JsSse component plays a crucial role in some high-level components such as :php:class:`Console` and :php:class:`ProgressBar`.

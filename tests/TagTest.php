@@ -28,13 +28,13 @@ class TagTest extends TestCase
 
     public function testEscaping(): void
     {
-        $this->assertTagRender('<div foo="he&quot;llo">', [['foo' => 'he"llo']]);
+        $this->assertTagRender('<div foo="he&quot;llo">', [null, ['foo' => 'he"llo']]);
         $this->assertTagRender('<b>bold text &gt;&gt;</b>', ['b', 'bold text >>']);
     }
 
     public function testElementSubstitution(): void
     {
-        $this->assertTagRender('<a foo="hello">', [['a', 'foo' => 'hello']]);
+        $this->assertTagRender('<a foo="hello">', ['a', ['foo' => 'hello']]);
         $this->assertTagRender('<a>link</a>', ['b', ['a'], 'link']);
         $this->assertTagRender('<a/>', ['b/', ['a']]);
         $this->assertTagRender('</b>', ['/b']);

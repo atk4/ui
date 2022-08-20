@@ -42,11 +42,12 @@ class VpExecutor extends View implements JsExecutorInterface
     public $stepListItems = ['args' => 'Fill argument(s)', 'fields' => 'Edit Record(s)', 'preview' => 'Preview', 'final' => 'Complete'];
 
     /** @var array */
-    public $cancelBtnSeed = [Button::class, ['Cancel', 'small left floated basic blue', 'icon' => 'left arrow']];
+    public $cancelBtnSeed = [Button::class, ['Cancel', 'class.small left floated basic blue' => true, 'icon' => 'left arrow']];
 
     protected function init(): void
     {
         parent::init();
+
         $this->initExecutor();
     }
 
@@ -160,7 +161,6 @@ class VpExecutor extends View implements JsExecutorInterface
      */
     protected function jsGetExecute($obj, $id): array
     {
-        // @phpstan-ignore-next-line
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;

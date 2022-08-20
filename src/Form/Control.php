@@ -16,17 +16,20 @@ use Atk4\Ui\View;
  */
 class Control extends View
 {
-    /** @var Form to which this field belongs */
+    /** @var Form|null to which this field belongs */
     public $form;
 
-    /** @var EntityFieldPair<Model, Field> */
+    /**
+     * @var EntityFieldPair|null
+     * @phpstan-var EntityFieldPair<Model, Field>|null
+     */
     public $entityField;
 
     /** @var string */
     public $controlClass = '';
 
     /** @var bool Whether you need this field to be rendered wrap in a form layout or as his */
-    public $layoutWrap = true;
+    public bool $layoutWrap = true;
 
     /** @var bool rendered or not input label in generic Form\Layout template. */
     public $renderLabel = true;
@@ -56,18 +59,14 @@ class Control extends View
     /**
      * Is input field disabled?
      * Disabled input fields are not editable and will not be submitted.
-     *
-     * @var bool
      */
-    public $disabled = false;
+    public bool $disabled = false;
 
     /**
      * Is input field read only?
      * Read only input fields are not editable, but will be submitted.
-     *
-     * @var bool
      */
-    public $readonly = false;
+    public bool $readOnly = false;
 
     protected function init(): void
     {
@@ -146,7 +145,7 @@ class Control extends View
      * @param string|\Atk4\Ui\JsExpression|array|\Closure $expr
      * @param array|bool                                  $default
      */
-    public function onChange($expr, $default = [])
+    public function onChange($expr, $default = []): void
     {
         if (is_string($expr)) {
             $expr = new \Atk4\Ui\JsExpression($expr);

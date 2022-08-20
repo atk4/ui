@@ -208,16 +208,16 @@ class ExecutorFactory
             case self::MODAL_BUTTON:
                 $seed = [Button::class, $this->getActionCaption($action, $type)];
                 if ($type === self::MODAL_BUTTON || $type === self::CARD_BUTTON) {
-                    $seed[] = static::BUTTON_PRIMARY_COLOR;
+                    $seed['class.' . static::BUTTON_PRIMARY_COLOR] = true;
                 }
 
                 break;
             case self::MENU_ITEM:
-                $seed = [Item::class, $this->getActionCaption($action, $type), ['class' => 'item']];
+                $seed = [Item::class, $this->getActionCaption($action, $type), 'class.item' => true];
 
                 break;
             case self::TABLE_MENU_ITEM:
-                $seed = [Item::class, $this->getActionCaption($action, $type), 'name' => false, ['class' => 'item']];
+                $seed = [Item::class, $this->getActionCaption($action, $type), 'name' => false, 'class.item' => true];
 
                 break;
             default:
@@ -258,7 +258,9 @@ class ExecutorFactory
         return 'Add' . ($action->getModel()->caption ? ' ' . $action->getModel()->caption : '');
     }
 
-    // Generate id for a model user action.
+    /**
+     * Generate id for a model user action.
+     */
     protected function getModelId(UserAction $action): string
     {
         return strtolower(str_replace(' ', '_', $action->getModel()->getModelCaption()));

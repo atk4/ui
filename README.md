@@ -98,8 +98,10 @@ $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 ATK Data allows you to set up relations between models:
 
 ``` php
-class User extends Model {
-    function init(): void {
+class User extends Model
+{
+    protected function init(): void
+    {
         parent::init();
 
         $this->addField('name');
@@ -134,7 +136,7 @@ It's easy to create your own application styling. Here are some example UI:
 As of version 2.0 - Agile Toolkit offers support for User Actions. Those are easy to define in your Data Model declaration:
 
 ``` php
-$this->addAction('archive', function (Model $m) {
+$this->addUserAction('archive', function (Model $m) {
     $m->set('is_archived', true);
     $this->saveAndUnload();
 });
@@ -199,10 +201,12 @@ $app = new \Atk4\Ui\App('My App');
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/yourdb');
 
-class User extends \Atk4\Data\Model {
+class User extends \Atk4\Data\Model
+{
     public $table = 'user';
 
-    function init(): void {
+    protected function init(): void
+    {
         parent::init();
 
         $this->addField('name');

@@ -10,6 +10,8 @@ namespace Atk4\Ui\Form\Control;
 class Hidden extends Input
 {
     public $ui = '';
-    public $layoutWrap = false;
-    public $inputType = 'hidden';
+
+    public bool $layoutWrap = false;
+
+    public string $inputType = 'hidden';
 }

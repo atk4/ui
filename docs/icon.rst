@@ -34,9 +34,9 @@ https://fomantic-ui.com/elements/icon.html
 
 You can also use States, Variations by passing classes to your button::
 
-    Button::addTo($app, ['Click Me', 'red', 'icon' => 'flipped big question']);
+    Button::addTo($app, ['Click Me', 'class.red' => true, 'icon' => 'flipped big question']);
 
-    Label::addTo($app, ['Battery Low', 'green', 'icon' => 'battery low']);
+    Label::addTo($app, ['Battery Low', 'class.green' => true, 'icon' => 'battery low']);
 
 .. _icon_other_comp:
 
@@ -47,15 +47,15 @@ You can use icon on the following components: :php:class:`Button`, :php:class:`L
 :php:class:`Message`, :php:class:`Menu` and possibly some others. Here are some examples::
 
 
-    Header::addTo($app, ['Header', 'red', 'icon' => 'flipped question']);
-    Button::addTo($app, ['Button', 'red', 'icon' => 'flipped question']);
+    Header::addTo($app, ['Header', 'class.red' => true, 'icon' => 'flipped question']);
+    Button::addTo($app, ['Button', 'class.red' => true, 'icon' => 'flipped question']);
 
     $menu = Menu::addTo($app);
     $menu->addItem(['Menu Item', 'icon' => 'flipped question']);
     $sub_menu = $menu->addMenu(['Sub-menu', 'icon' => 'flipped question']);
     $sub_menu->addItem(['Sub Item', 'icon' => 'flipped question']);
 
-    Label::addTo($app, ['Label', 'right ribbon red', 'icon' => 'flipped question']);
+    Label::addTo($app, ['Label', 'class.right ribbon red' => true, 'icon' => 'flipped question']);
 
 
 
@@ -66,8 +66,8 @@ Fomantic UI support icon groups. The best way to implement is to supply :php:cla
 icon::
 
     Icon::addTo($app, ['template' => new \Atk4\Ui\Template('<i class="huge icons">
-      <i class="big thin circle icon"></i>
-      <i class="user icon"></i>
+        <i class="big thin circle icon"></i>
+        <i class="user icon"></i>
     </i>'), false]);
 
 However there are several other options you can use when working with your custom HTML. This is not
@@ -76,8 +76,8 @@ exclusive to Icon, but I'm adding a few examples here, just for your convenience
 Let's start with a View that contains your custom HTML loaded from file or embedded like this::
 
     $view = View::addTo($app, ['template' => new \Atk4\Ui\Template('<div>Hello my {Icon}<i class="huge icons">
-      <i class="big thin circle icon"></i>
-      <i class="{Content}user{/} icon"></i>
+        <i class="big thin circle icon"></i>
+        <i class="{Content}user{/} icon"></i>
     </i>{/}, It is me</div>')]);
 
 Looking at the template it has a region `{Icon}..{/}`. Try by executing the code above, and you'll see
@@ -95,7 +95,7 @@ Composing
 
 Composing offers you another way to deal with Group icons::
 
-    $no_users = new \Atk4\Ui\View([null, 'huge icons', 'element' => 'i']);
+    $no_users = new \Atk4\Ui\View(['class.huge icons' => true, 'element' => 'i']);
     Icon::addTo($no_users, ['big red dont']);
     Icon::addTo($no_users, ['black user icon']);
 
@@ -129,7 +129,7 @@ Here is the code with comments::
         public $defaultTemplate = null;
         // public $defaultTemplate = __DIR__ . '../templates/socialadd.html';
 
-        function init(): void {
+        protected function init(): void {
             parent::init();
 
             if (is_null($this->social)) {
@@ -149,11 +149,11 @@ Here is the code with comments::
                 // TODO: Place template into file and set defaultTemplate instead
                 $this->template = new \Atk4\Ui\Template(
     '<{_element}button{/} class="ui ' . $this->social . ' button" {$attributes}>
-      <i class="large icons">
-        {$Icon}
-        <i class="inverted corner add icon"></i>
-      </i>
-      {$Content}
+        <i class="large icons">
+            {$Icon}
+            <i class="inverted corner add icon"></i>
+        </i>
+       {$Content}
     </{_element}button{/}>');
             }
 

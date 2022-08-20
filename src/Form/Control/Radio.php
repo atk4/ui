@@ -27,7 +27,7 @@ class Radio extends Form\Control
         parent::init();
 
         $this->lister = Lister::addTo($this, [], ['Radio']);
-        $this->lister->t_row->set('_name', $this->shortName);
+        $this->lister->tRow->set('_name', $this->shortName);
     }
 
     protected function renderView(): void
@@ -40,19 +40,18 @@ class Radio extends Form\Control
 
         $this->lister->setModel($this->model);
 
-        // take care of readonly and disabled statuses
         if ($this->disabled) {
             $this->addClass('disabled');
         }
 
         $this->lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) use ($value) {
-            if ($this->readonly) {
-                $lister->t_row->set('disabled', $value !== (string) $lister->model->getId() ? 'disabled="disabled"' : '');
+            if ($this->readOnly) {
+                $lister->tRow->set('disabled', $value !== (string) $lister->model->getId() ? 'disabled="disabled"' : '');
             } elseif ($this->disabled) {
-                $lister->t_row->set('disabled', 'disabled="disabled"');
+                $lister->tRow->set('disabled', 'disabled="disabled"');
             }
 
-            $lister->t_row->set('checked', $value === (string) $lister->model->getId() ? 'checked' : '');
+            $lister->tRow->set('checked', $value === (string) $lister->model->getId() ? 'checked' : '');
         });
 
         parent::renderView();
@@ -73,7 +72,7 @@ class Radio extends Form\Control
      * @param string|\Atk4\Ui\JsExpression|array|\Closure $expr
      * @param array|bool                                  $default
      */
-    public function onChange($expr, $default = [])
+    public function onChange($expr, $default = []): void
     {
         if (is_string($expr)) {
             $expr = new \Atk4\Ui\JsExpression($expr);

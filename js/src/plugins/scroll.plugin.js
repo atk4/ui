@@ -62,8 +62,8 @@ export default class scroll extends atkPlugin {
     }
 
     /**
-   * Add fix table header.
-   */
+     * Add fix table header.
+     */
     setTableHeader() {
         if (this.$el.parent().length > 0) {
             let $tableCopy = null;
@@ -85,19 +85,19 @@ export default class scroll extends atkPlugin {
     }
 
     /**
-   * Bind scrolling event to an element.
-   *
-   * @param $el
-   */
+     * Bind scrolling event to an element.
+     *
+     * @param $el
+     */
     bindScrollEvent($el) {
         $el.on('scroll', this.observe.bind(this));
     }
 
     /**
-   * Check if scrolling require adding content.
-   *
-   * @param e // event
-   */
+     * Check if scrolling require adding content.
+     *
+     * @param e // event
+     */
     observe(e) {
         const borderTopWidth = parseInt(this.$el.css('borderTopWidth'), 10);
         const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth;
@@ -116,35 +116,36 @@ export default class scroll extends atkPlugin {
     }
 
     /**
-   * Check if container element has vertical scrollbar.
-   *
-   * @return bool
-   */
+     * Check if container element has vertical scrollbar.
+     *
+     * @return bool
+     */
     hasScrollbar() {
         const innerHeight = this.isWindow ? Math.ceil(this.$el.height()) : Math.ceil(this.$inner.height());
         const scrollHeight = Math.ceil(this.$scroll.height());
+
         return innerHeight > scrollHeight;
     }
 
     /**
-   * Set Next page to be loaded.
-   *
-   * @param page
-   */
+     * Set Next page to be loaded.
+     *
+     * @param page
+     */
     setNextPage(page) {
         this.nextPage = page;
     }
 
     /**
-   * Put scroll in idle mode.
-   */
+     * Put scroll in idle mode.
+     */
     idle() {
         this.isWaiting = true;
     }
 
     /**
-   * Ask server for more content.
-   */
+     * Ask server for more content.
+     */
     loadContent() {
         if (!this.settings.options.stateContext) {
             this.addLoader();
@@ -162,13 +163,13 @@ export default class scroll extends atkPlugin {
     }
 
     /**
-   * Use response to append content to element and setup next content to be load.
-   * Set response.id to null in order for apiService.onSuccess to bypass
-   * replacing html content. Js return from server response will still be execute.
-   *
-   * @param response
-   * @param element
-   */
+     * Use response to append content to element and setup next content to be load.
+     * Set response.id to null in order for apiService.onSuccess to bypass
+     * replacing html content. Js return from server response will still be execute.
+     *
+     * @param response
+     * @param element
+     */
     onComplete(response, element) {
         this.removeLoader();
         if (response.success) {
@@ -198,8 +199,8 @@ export default class scroll extends atkPlugin {
     }
 
     /**
-   * Add loader.
-   */
+     * Add loader.
+     */
     addLoader() {
         const $parent = this.$inner.parent().hasClass('atk-overflow-auto') ? this.$inner.parent().parent() : this.$inner.parent();
         // eslint-disable-next-line
@@ -207,8 +208,8 @@ export default class scroll extends atkPlugin {
     }
 
     /**
-   * Remove loader.
-   */
+     * Remove loader.
+     */
     removeLoader() {
         $('#atkScrollLoader').remove();
     }

@@ -18,7 +18,7 @@ declare(strict_types=1);
  *
  * Multiple model can be used to display various content on each card section.
  * When using model or models, the first model that get set via setModel method
- * will have it's id_field set as data-id html attribute for the card. Thus making
+ * will have it's idField set as data-id html attribute for the card. Thus making
  * the id available via javascript (new Jquery())->data('id')
  */
 
@@ -63,9 +63,6 @@ class Card extends View
 
     /** @var View|null The button Container for Button */
     public $btnContainer;
-
-    /** @var string Table css class */
-    // public $tableClass = 'ui fixed small';
 
     /** @var bool Display model field as table inside card holder content */
     public $useTable = false;
@@ -193,7 +190,7 @@ class Card extends View
 
         $this->setDataId($this->model->getId());
 
-        View::addTo($this->getSection(), [$model->getTitle(), ['class' => 'header']]);
+        View::addTo($this->getSection(), [$model->getTitle(), 'class.header' => true]);
         $this->getSection()->addFields($model, $fields, $this->useLabel, $this->useTable);
     }
 
@@ -243,7 +240,7 @@ class Card extends View
     {
         $section = CardSection::addToWithCl($this, [$this->cardSection, 'card' => $this], ['Section']);
         if ($title) {
-            View::addTo($section, [$title, ['class' => 'header']]);
+            View::addTo($section, [$title, 'class.header' => true]);
         }
 
         if ($model && $fields) {
@@ -321,7 +318,7 @@ class Card extends View
             $this->addExtraContent(new View([$extra, 'ui' => 'ui basic fitted segment']));
         } else {
             foreach ($fields as $field) {
-                $this->addExtraContent(new View([$model->get($field), 'ui basic fitted segment']));
+                $this->addExtraContent(new View([$model->get($field), 'class.ui basic fitted segment' => true]));
             }
         }
     }

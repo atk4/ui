@@ -37,11 +37,11 @@ class TypeTime extends Column\FilterModel
                     $d1 = $filter['value'];
                     $d2 = $filter['range'];
                     if ($d2 >= $d1) {
-                        $value = $model->persistence->typecastSaveField($model->getField($filter['name']), $d1);
-                        $value2 = $model->persistence->typecastSaveField($model->getField($filter['name']), $d2);
+                        $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
+                        $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
                     } else {
-                        $value = $model->persistence->typecastSaveField($model->getField($filter['name']), $d2);
-                        $value2 = $model->persistence->typecastSaveField($model->getField($filter['name']), $d1);
+                        $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
+                        $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
                     }
                     $model->addCondition($model->expr('[field] between [value] and [value2]', ['field' => $model->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
 

@@ -35,11 +35,11 @@ use Atk4\Ui\Menu;
  */
 class Admin extends Layout implements NavigableInterface
 {
-    public $menuLeft;    // vertical menu
-    public $menu;        // horizontal menu
-    public $menuRight;   // vertical pull-down
+    public $menuLeft; // vertical menu
+    public $menu; // horizontal menu
+    public $menuRight; // vertical pull-down
 
-    public $burger = true;      // burger menu item
+    public $burger = true; // burger menu item
 
     /** @var bool Whether or not left Menu is visible on Page load. */
     public $isMenuLeftVisible = true;

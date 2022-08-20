@@ -19,7 +19,7 @@ class Input extends Form\Control
 {
     public $ui = 'input';
 
-    public $inputType = 'text';
+    public string $inputType = 'text';
 
     public $placeholder = '';
 
@@ -95,7 +95,7 @@ class Input extends Form\Control
     public function getValue()
     {
         return $this->entityField !== null
-                    ? $this->getApp()->ui_persistence->typecastSaveField($this->entityField->getField(), $this->entityField->get())
+                    ? $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get())
                     : ($this->content ?? '');
     }
 
@@ -112,7 +112,7 @@ class Input extends Form\Control
             'placeholder' => $this->placeholder,
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readonly' => $this->readonly ? 'readonly' : false,
+            'readonly' => $this->readOnly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
         ], $this->inputAttr));
     }

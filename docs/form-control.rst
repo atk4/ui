@@ -57,10 +57,10 @@ If you execute this exmple, you'll notice that Feld now has a label, it uses ful
 page and the following HTML is now produced::
 
     <div class="field">
-      <label for="atk_admin_form_generic_name_input">Name</label>
-      <div id="atk_admin_form_generic_name" class="ui input" style="">
-        <input name="name" type="text" placeholder="" id="atk_admin_form_generic_name_input" value="">
-      </div>
+        <label for="atk_admin_form_generic_name_input">Name</label>
+        <div id="atk_admin_form_generic_name" class="ui input" style="">
+            <input name="name" type="text" placeholder="" id="atk_admin_form_generic_name_input" value="">
+        </div>
     </div>
 
 The markup that surronds the button which includes Label and formatting is produced by
@@ -83,7 +83,9 @@ into multiple Tabs or detach form control groups or even create nested layouts::
     $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
     $form_page->addControl('age', new \Atk4\Ui\Form\Control\Line());
 
-    $form->onSubmit(function(Form $form) { return $form->model->get('name') . ' has age ' . $form->model->get('age'); });
+    $form->onSubmit(function (Form $form) {
+        return $form->model->get('name') . ' has age ' . $form->model->get('age');
+    });
 
 This is further explained in documentation for :php:class:`Atk4\\Ui\\Form\\Layout` class,
 however if you do plan on adding your own form control types, it's important that you extend it
@@ -125,7 +127,7 @@ or you can inject a view with a custom template::
 Read only and disabled form controls
 ------------------------------------
 
-.. php:attr:: readonly
+.. php:attr:: readOnly
 
 Read only form controls can be seen in form, can be focused and will be submitted, but we don't allow to
 change their value.
@@ -151,6 +153,7 @@ The most common use-case in large application is the use with Models. You would 
         protected function init(): void
         {
             parent::init();
+
             $this->addField('name', ['actual' => 'nicename', 'required' => true, 'type' => 'string']);
             $this->addField('sys_name', ['actual' => 'name', 'system' => true]);
 
@@ -228,7 +231,7 @@ Here are few ways to specify `icon` to an Input::
 
     // Type-hinting friendly
     $line = new \Atk4\Ui\Form\Control\Line();
-    $line->icon='search';
+    $line->icon = 'search';
     $page->add($line);
 
     // using class factory
@@ -239,13 +242,13 @@ be automatically substituted with `new Icon($icon)`. If you wish to be more spec
 and pass some arguments to the icon, there are two options::
 
     // compact
-    $line->icon=['search', 'big'];
+    $line->icon = ['search', 'class.big' => true];
 
     // Type-hinting friendly
     $line->icon = new Icon('search');
     $line->icon->addClass('big');
 
-To see how Icon interprets `new Icon(['search', 'big'])`, refer to :php:class:`Icon`.
+To see how Icon interprets `new Icon(['search', 'class.big' => true])`, refer to :php:class:`Icon`.
 
 .. note::
 
@@ -301,11 +304,13 @@ $expression argument can be string, JsExpression, array of JsExpressions or even
 
     // callback
     $f2 = $form->addControl('f2');
-    $f2->onChange(function () { return new \Atk4\Ui\JsExpression('console.log("f2 changed")'); });
+    $f2->onChange(function () {
+        return new \Atk4\Ui\JsExpression('console.log("f2 changed")');
+    });
 
     // Calendar form control - wraps in function call with arguments date, text and mode
     $c1 = $form->addControl('c1', new \Atk4\Ui\Form\Control\Calendar(['type' => 'date']));
-    $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
+    $c1->onChange('console.log("c1 changed: " + date + ", " + text + ", " + mode)');
 
 
 Dropdown
@@ -329,22 +334,22 @@ To render a model field as Dropdown, use the ui property of the field::
     $model->addField('someField', ['ui' => ['form' => [\Atk4\Ui\Form\Control\Dropdown::class]]]);
 
 ..  Customizing how a Model's records are displayed in Dropdown
-As default, Dropdown will use the `$model->id_field` as value, and `$model->title_field` as title for each menu item.
+As default, Dropdown will use the `$model->idField` as value, and `$model->titleField` as title for each menu item.
 If you want to customize how a record is displayed and/or add an icon, Dropdown has the :php:meth:`Form::renderRowFunction()` to do this.
 This function is called with each model record and needs to return an array::
 
-    $dropdown->renderRowFunction = function($record) {
+    $dropdown->renderRowFunction = function ($record) {
         return [
-            'value' => $record->id_field,
+            'value' => $record->idField,
             'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
         ];
     }
 
 You can also use this function to add an Icon to a record::
 
-    $dropdown->renderRowFunction = function($record) {
+    $dropdown->renderRowFunction = function ($record) {
         return [
-            'value' => $record->id_field,
+            'value' => $record->idField,
             'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
             'icon' => $record->get('value') > 100 ? 'money' : 'coins',
         ];
@@ -352,8 +357,8 @@ You can also use this function to add an Icon to a record::
 
 If you'd like to even further adjust How each item is displayed (e.g. complex HTML and more model fields), you can extend the Dropdown class and create your own template with the complex HTML::
 
-    class MyDropdown extends \Atk4\Ui\Dropdown {
-
+    class MyDropdown extends \Atk4\Ui\Dropdown
+    {
         public $defaultTemplate = 'my_dropdown.html';
 
         /*
@@ -368,13 +373,13 @@ If you'd like to even further adjust How each item is displayed (e.g. complex HT
             $this->_tItem->set('someOtherField2', $res['someOtherField2]);
             // add item to template
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->render());
-       }
-   }
+        }
+    }
 
 
 With the according renderRowFunction::
 
-    function(Model $record) {
+    function (Model $record) {
         return [
             'value' => $record->getId(),
             'title' => $record->getTitle,
@@ -384,7 +389,7 @@ With the according renderRowFunction::
         ];
     }
 
-Of course, the tags `value`, `title`, `icon`, `someOtherField` and `SomeOtherField2` need to be set in my_dropdown.html.
+Of course, the tags `value`, `title`, `icon`, `someOtherField` and `someOtherField2` need to be set in my_dropdown.html.
 
 
 Usage with $values property
@@ -399,17 +404,17 @@ If not used with a model, you can define the Dropdown values in $values array. T
 
 You can also define an Icon right away::
 
-     $dropdown->values = [
-         'tag' => ['Tag', 'icon' => 'tag icon'],
-         'globe' => ['Globe', 'icon' => 'globe icon'],
-         'registered' => ['Registered', 'icon' => 'registered icon'],
-         'file' => ['File', 'icon' => 'file icon'],
-     ].
+    $dropdown->values = [
+        'tag' => ['Tag', 'icon' => 'tag icon'],
+        'globe' => ['Globe', 'icon' => 'globe icon'],
+        'registered' => ['Registered', 'icon' => 'registered icon'],
+        'file' => ['File', 'icon' => 'file icon'],
+    ];
 
 If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.
 If you use it, use the second parameter as well, its the array key::
 
-    function($row, $key) {
+    function ($row, $key) {
         return [
             'value' => $key,
             'title' => strtoupper($row),

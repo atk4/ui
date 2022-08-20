@@ -15,28 +15,29 @@ class ApiService {
             this.instance = this;
             this.afterSuccessCallbacks = [];
         }
+
         return this.instance;
     }
 
     /**
-   * Execute js code.
-   * This function should be call using .call() by
-   * passing proper context for 'this'.
-   * ex: apiService.evalResponse.call(this, code, jQuery)
-   * By passig the jQuery reference, $ var use by code that need to be eval
-   * will work just fine, even if $ is not assign globally.
-   *
-   * @param code // javascript to be eval.
-   * @param $ // reference to jQuery.
-   */
+     * Execute js code.
+     * This function should be call using .call() by
+     * passing proper context for 'this'.
+     * ex: apiService.evalResponse.call(this, code, jQuery)
+     * By passig the jQuery reference, $ var use by code that need to be eval
+     * will work just fine, even if $ is not assign globally.
+     *
+     * @param code // javascript to be eval.
+     * @param $ // reference to jQuery.
+     */
     evalResponse(code, $) { // eslint-disable-line
         eval(code); // eslint-disable-line
     }
 
     /**
-   * Setup semantic-ui api callback with this service.
-   * @param settings
-   */
+     * Setup semantic-ui api callback with this service.
+     * @param settings
+     */
     setService(settings) {
     // settings.onResponse = this.handleResponse;
         settings.successTest = this.successTest;
@@ -50,21 +51,21 @@ class ApiService {
     }
 
     /**
-   * Handle a server response success
-   * If successTest return true, then this function is call;
-   * Within this function "this" is place in proper context
-   * and allow us to properly eval the response.
-   * Furthermore, the dom element responsible of the api call is returned if needed.
-   *
-   * Change in response object property from eval to atkjs.
-   * Under certain circumstance, response.eval was run and execute prior to onSuccess eval,
-   * thus causing some code to be running twice.
-   * To avoid conflict, property name in response was change from eval to atkjs.
-   * Which mean response.atkjs now contains code to be eval.
-   *
-   * @param response
-   * @param element
-   */
+     * Handle a server response success
+     * If successTest return true, then this function is call;
+     * Within this function "this" is place in proper context
+     * and allow us to properly eval the response.
+     * Furthermore, the dom element responsible of the api call is returned if needed.
+     *
+     * Change in response object property from eval to atkjs.
+     * Under certain circumstance, response.eval was run and execute prior to onSuccess eval,
+     * thus causing some code to be running twice.
+     * To avoid conflict, property name in response was change from eval to atkjs.
+     * Which mean response.atkjs now contains code to be eval.
+     *
+     * @param response
+     * @param element
+     */
     onSuccess(response, element) {
         try {
             if (response.success) {
@@ -118,23 +119,23 @@ class ApiService {
     }
 
     /**
-   * Will wrap semantic ui api call into a Promise.
-   * Can be used to retrieve json data from the server.
-   * Using this will bypass regular successTest i.e. any
-   * atkjs (javascript) return from server will not be evaluated.
-   *
-   * Make sure to control the server output when using
-   * this function. It must at least return {success: true} in order for
-   * the Promise to resolve properly, will reject otherwise.
-   *
-   * ex: $app->terminateJson(['success' => true, 'data' => $data]);
-   *
-   * @param url        // the url to fetch data
-   * @param settings   // the Semantic api settings object.
-   * @param el         // the element to apply Semantic Ui context.
-   *
-   * @returns {Promise<any>}
-   */
+     * Will wrap semantic ui api call into a Promise.
+     * Can be used to retrieve json data from the server.
+     * Using this will bypass regular successTest i.e. any
+     * atkjs (javascript) return from server will not be evaluated.
+     *
+     * Make sure to control the server output when using
+     * this function. It must at least return {success: true} in order for
+     * the Promise to resolve properly, will reject otherwise.
+     *
+     * ex: $app->terminateJson(['success' => true, 'data' => $data]);
+     *
+     * @param url      the url to fetch data
+     * @param settings the Semantic api settings object.
+     * @param el       the element to apply Semantic Ui context.
+     *
+     * @returns {Promise<any>}
+     */
     suiFetch(url, settings = {}, el = 'body') {
         const $el = $(el);
         const apiSettings = Object.assign(settings);
@@ -162,37 +163,38 @@ class ApiService {
     }
 
     /**
-   * Accumulate callbacks function to run after onSuccess.
-   * Callback is a string containing code to be eval.
-   *
-   * @param callback
-   */
+     * Accumulate callbacks function to run after onSuccess.
+     * Callback is a string containing code to be eval.
+     *
+     * @param callback
+     */
     onAfterSuccess(callback) {
         this.afterSuccessCallbacks.push(callback);
     }
 
     /**
-   * Check server response and clear api.data object.
-   *  - return true will call onSuccess
-   *  - return false will call onFailure
-   * @param response
-   * @returns {boolean}
-   */
+     * Check server response and clear api.data object.
+     *  - return true will call onSuccess
+     *  - return false will call onFailure
+     * @param response
+     * @returns {boolean}
+     */
     successTest(response) {
         this.data = {};
         if (response.success) {
             return true;
         }
+
         return false;
     }
 
     /**
-   * Make our own ajax request test if need to.
-   * if a plugin must call $.ajax or $.getJson directly instead of semantic-ui api,
-   * we could send the json response to this.
-   * @param response
-   * @param content
-   */
+     * Make our own ajax request test if need to.
+     * if a plugin must call $.ajax or $.getJson directly instead of semantic-ui api,
+     * we could send the json response to this.
+     * @param response
+     * @param content
+     */
     atkSuccessTest(response, content = null) {
         if (response.success) {
             this.onSuccess(response, content);
@@ -202,10 +204,10 @@ class ApiService {
     }
 
     /**
-   * Handle a server response failure.
-   *
-   * @param response
-   */
+     * Handle a server response failure.
+     *
+     * @param response
+     */
     onFailure(response) {
     // if json is returned, it should contain the error within message property
         if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
@@ -226,9 +228,9 @@ class ApiService {
     }
 
     /**
-   * Display App error in a semantic-ui modal.
-   * @param errorMsg
-   */
+     * Display App error in a semantic-ui modal.
+     * @param errorMsg
+     */
     showErrorModal(errorMsg) {
     // catch application error and display them in a new modal window.
         const m = $('<div>')
@@ -241,6 +243,7 @@ class ApiService {
             allowMultiple: false,
             onHide: function () {
                 m.children().remove();
+
                 return true;
             },
         })
@@ -249,9 +252,9 @@ class ApiService {
     }
 
     /**
-   * Display App error in a separate window.
-   * @param errorMsg
-   */
+     * Display App error in a separate window.
+     * @param errorMsg
+     */
     showErrorWindow(errorMsg) {
         const error = $('<div class="atk-exception">')
             .css({

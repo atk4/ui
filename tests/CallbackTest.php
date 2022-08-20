@@ -47,8 +47,8 @@ class CallbackTest extends TestCase
 
     protected function tearDown(): void
     {
-        $_GET = [];
-        $_POST = [];
+        unset($_GET);
+        unset($_POST);
     }
 
     /**

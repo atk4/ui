@@ -177,7 +177,7 @@ if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {
     $layout->addMenuItem('Recursive Views', [$path . 'recursive'], $menu);
 
     // view demo source page on Github
-    \Atk4\Ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'teal', 'icon' => 'github'])
+    \Atk4\Ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'class.teal' => true, 'icon' => 'github'])
         ->on('click', $app->jsRedirect('https://github.com/atk4/ui/blob/develop/' . $relUrl, true));
 }
 unset($layout, $rootUrl, $relUrl, $demosUrl, $path, $menu);

@@ -18,12 +18,12 @@ Form\Control\Checkbox::addTo($app, ['Make my profile visible']);
 Form\Control\Checkbox::addTo($app, ['Make my profile visible ticked'])->set(true);
 
 View::addTo($app, ['ui' => 'divider']);
-Form\Control\Checkbox::addTo($app, ['Accept terms and conditions', 'slider']);
+Form\Control\Checkbox::addTo($app, ['Accept terms and conditions', 'class.slider' => true]);
 
 View::addTo($app, ['ui' => 'divider']);
-Form\Control\Checkbox::addTo($app, ['Subscribe to weekly newsletter', 'toggle']);
+Form\Control\Checkbox::addTo($app, ['Subscribe to weekly newsletter', 'class.toggle' => true]);
 View::addTo($app, ['ui' => 'divider']);
-Form\Control\Checkbox::addTo($app, ['Look for the clues', 'disabled toggle'])->set(true);
+Form\Control\Checkbox::addTo($app, ['Look for the clues', 'class.disabled toggle' => true])->set(true);
 
 View::addTo($app, ['ui' => 'divider']);
 Form\Control\Checkbox::addTo($app, ['Custom setting?'])->js(true)->checkbox('set indeterminate');

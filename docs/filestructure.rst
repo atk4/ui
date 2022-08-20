@@ -75,16 +75,16 @@ Composer configuration
 Configure your composer.json to load the atk4 AND your project folder.
 Your composer.json could look like this::
 
-  {
-    "require":{
-      "atk4/ui": "*"
-    },
-    "autoload": {
-      "psr-4": {
-          "MyProject\\": "projectfolder/"
-      }
+    {
+        "require":{
+            "atk4/ui": "*"
+        },
+        "autoload": {
+            "psr-4": {
+                "MyProject\\": "projectfolder/"
+            }
+        }
     }
-  }
 
 
 What does that mean?
@@ -134,8 +134,8 @@ Create db.php for database
 We initialize a reusable database connection in db.php through a mysql persistence.
 Create a file called "db.php" in the directory "config"::
 
-  <?php
-  $db = \Atk4\Data\Persistence::connect("mysql://localhost/#myexampledatabase", "#username", "#password");
+    <?php
+    $db = \Atk4\Data\Persistence::connect("mysql://localhost/#myexampledatabase", "#username", "#password");
 
 Please remember to use a database that still exists.
 
@@ -145,41 +145,41 @@ Create init.php, index.php and / or admin.php files
 Create a new file in "public_html/projectfolder" and name it "init.php".
 In this file we load up our app (later) and load the database configuration::
 
-  <?php
-  $rootdir = "../";    // the public_html directory
-  require_once $rootdir . "../config/db.php";  // contains database configuration outside the public_html directory
+    <?php
+    $rootdir = "../"; // the public_html directory
+    require_once $rootdir . "../config/db.php"; // contains database configuration outside the public_html directory
 
 Load Composer autoload.php (which loads up atk4) in init.php
 ------------------------------------------------------------
 
 ::
 
-  require_once $rootdir . "vendor/autoload.php";   // loads up atk4 and our project files from Composer
+    require_once $rootdir . "vendor/autoload.php"; // loads up atk4 and our project files from Composer
 
 Initialize the app class in init.php
 ------------------------------------
 
 ::
 
-  $app = new \Atk4\Ui\App('Welcome to my first app'); // initialization of our app
-  $app->db = $db;   // defines our database for reuse in other classes
+    $app = new \Atk4\Ui\App('Welcome to my first app'); // initialization of our app
+    $app->db = $db; // defines our database for reuse in other classes
 
 Create index.php and admin.php
 ------------------------------
 
 If you want to write an app with a backend, create a file called "admin.php"::
 
-  <?php
-  $rootdir = "../";
-  require_once __DIR__ . "init.php";
-  $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
+    <?php
+    $rootdir = "../";
+    require_once __DIR__ . "init.php";
+    $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 
 If you want to write an app with a frontend, create a file called "index.php"::
 
-  <?php
-  $rootdir = "../";
-  require_once __DIR__ . "init.php";
-  $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+    <?php
+    $rootdir = "../";
+    require_once __DIR__ . "init.php";
+    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
 
 Create your own classes
@@ -199,16 +199,18 @@ the directory "projectfolder".
 
 Open the created file "View1.php" in your editor and add the following lines::
 
-  <?php
-  namespace MyProject\Views;
+    <?php
+    namespace MyProject\Views;
 
-  class View1 extends \Atk4\Data\View {
-      function init(): void {
-          parent::init();
+    class View1 extends \Atk4\Data\View
+    {
+        protected function init(): void
+        {
+            parent::init();
 
-          $text = \Atk4\Ui\Text::addTo($this->getApp(), ['here goes some text']);
-      }
-  }
+            $text = \Atk4\Ui\Text::addTo($this->getApp(), ['here goes some text']);
+        }
+    }
 
 "namespace MyProject\\Views;" defines the namespace to use. It reflects the folder structure of the app.
 The file located in "projectfolder/Views/View1.php" becomes "MyProject\\Views\\View1" in the namespace.
@@ -226,10 +228,10 @@ To use our class in our app, we have to include it into our app. This can be don
 
 Please add the following lines into your index.php::
 
-  \MyProject\Views\View1::addTo($app);
+    \MyProject\Views\View1::addTo($app);
 
 or if you have added at the beginning of your index.php "use MyProject\\Views\\View1;" you can write::
 
-  View1::addTo($app);
+    View1::addTo($app);
 
 See also :ref:`using-namespaces` on this topic...

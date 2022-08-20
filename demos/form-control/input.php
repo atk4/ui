@@ -6,9 +6,6 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 
-/**
- * Testing fields.
- */
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -38,12 +35,12 @@ Form\Control\Line::addTo($app, [
     'labelRight' => $dd,
 ]);
 
-Form\Control\Line::addTo($app, ['placeholder' => 'Weight', 'labelRight' => new \Atk4\Ui\Label(['kg', 'basic'])]);
-Form\Control\Line::addTo($app, ['label' => '$', 'labelRight' => new \Atk4\Ui\Label(['.00', 'basic'])]);
+Form\Control\Line::addTo($app, ['placeholder' => 'Weight', 'labelRight' => new \Atk4\Ui\Label(['kg', 'class.basic' => true])]);
+Form\Control\Line::addTo($app, ['label' => '$', 'labelRight' => new \Atk4\Ui\Label(['.00', 'class.basic' => true])]);
 
 Form\Control\Line::addTo($app, [
     'iconLeft' => 'tags',
-    'labelRight' => new \Atk4\Ui\Label(['Add Tag', 'tag']),
+    'labelRight' => new \Atk4\Ui\Label(['Add Tag', 'class.tag' => true]),
 ]);
 
 // left/right corner is not supported, but here is work-around:
@@ -68,22 +65,22 @@ Form\Control\Line::addTo($app, [
 Form\Control\Line::addTo($app, ['action' => 'Search']);
 
 Form\Control\Line::addTo($app, ['actionLeft' => new \Atk4\Ui\Button([
-    'Checkout', 'icon' => 'cart', 'teal',
+    'Checkout', 'class.teal' => true, 'icon' => 'cart',
 ])]);
 
-Form\Control\Line::addTo($app, ['iconLeft' => 'search',  'action' => 'Search']);
+Form\Control\Line::addTo($app, ['iconLeft' => 'search', 'action' => 'Search']);
 
-$dd = new \Atk4\Ui\DropdownButton(['This Page', 'basic']);
+$dd = new \Atk4\Ui\DropdownButton(['This Page', 'class.basic' => true]);
 $dd->setSource(['This Organisation', 'Entire Site']);
-Form\Control\Line::addTo($app, ['iconLeft' => 'search',  'action' => $dd]);
+Form\Control\Line::addTo($app, ['iconLeft' => 'search', 'action' => $dd]);
 
 // double actions are not supported but you can add them yourself
-$dd = new \Atk4\Ui\Dropdown(['Articles', 'compact selection']);
+$dd = new \Atk4\Ui\Dropdown(['Articles', 'class.compact selection' => true]);
 $dd->setSource(['All', 'Services', 'Products']);
-\Atk4\Ui\Button::addTo(Form\Control\Line::addTo($app, ['iconLeft' => 'search',  'action' => $dd]), ['Search'], ['AfterAfterInput']);
+\Atk4\Ui\Button::addTo(Form\Control\Line::addTo($app, ['iconLeft' => 'search', 'action' => $dd]), ['Search'], ['AfterAfterInput']);
 
 Form\Control\Line::addTo($app, ['action' => new \Atk4\Ui\Button([
-    'Copy', 'iconRight' => 'copy', 'teal',
+    'Copy', 'class.teal' => true, 'iconRight' => 'copy',
 ])]);
 
 Form\Control\Line::addTo($app, ['action' => new \Atk4\Ui\Button([

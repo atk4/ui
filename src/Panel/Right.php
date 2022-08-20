@@ -23,7 +23,7 @@ class Right extends View implements Loadable
 {
     public $defaultTemplate = 'panel/right.html';
 
-    /** @var Modal */
+    /** @var Modal|null */
     public $closeModal;
     /** @var array Confirmation Modal default */
     public $defaultModal = [Modal::class, 'class' => ['mini']];
@@ -58,6 +58,7 @@ class Right extends View implements Loadable
     protected function init(): void
     {
         parent::init();
+
         if ($this->dynamic) {
             $this->addDynamicContent(Factory::factory($this->dynamic));
         }
@@ -150,7 +151,7 @@ class Right extends View implements Loadable
      * Callback to execute when panel open if dynamic content is set.
      * Differ the callback execution to the FlyoutContent.
      */
-    public function onOpen(\Closure $callback)
+    public function onOpen(\Closure $callback): void
     {
         $this->getDynamicContent()->onLoad($callback);
     }

@@ -116,7 +116,7 @@ is responsible for rendering of the TH box. If you are adding column manually, :
 will return it. When using model, use :php:meth:`Atk4\\Ui\\Table::getColumnDecorators`::
 
 
-    $table = Table::addTo($app, ['celled' => true]);
+    $table = Table::addTo($app, ['class.celled' => true]);
     $table->setModel(new Country($app->db));
 
     $name_column = $table->getColumnDecorators('name');
@@ -127,11 +127,11 @@ will return it. When using model, use :php:meth:`Atk4\\Ui\\Table::getColumnDecor
 You may also use :php:meth:`Atk4\\Ui\\Popup::set` method to dynamically load the content::
 
 
-    $table = Table::addTo($app, ['celled' => true]);
+    $table = Table::addTo($app, ['class.celled' => true]);
     $table->setModel(new Country($app->db));
 
     $name_column = $table->getColumnDecorators('name');
-    $name_column[0]->addPopup()->set(function($p) {
+    $name_column[0]->addPopup()->set(function ($p) {
         HelloWorld::addTo($p);
     });
 
@@ -180,7 +180,7 @@ Money
 Helps decorating monetary values. Will align value to the right and if value is less than zero will also
 use red text (td class "negative" for Fomantic ui). The money cells are not wrapped.
 
-For the actual number formatting, see :ref:`ui_persistence`
+For the actual number formatting, see :ref:`uiPersistence`
 
 Status
 ------
@@ -194,7 +194,10 @@ If your column "status" can be one of the following "pending", "declined", "arch
 to use different icons and colors to emphasise status::
 
 
-    $states = [ 'positive' => ['paid', 'archived'], 'negative' => ['declined'] ];
+    $states = [
+        'positive' => ['paid', 'archived'],
+        'negative' => ['declined'],
+    ];
 
     $table->addColumn('status', new \Atk4\Ui\Table\Column\Status($states));
 
@@ -249,17 +252,17 @@ If you want to have label above the action column, then::
 
     $action = $table->addColumn(null, [Table\Column\ActionButtons::class, 'caption' => 'User Actions']);
 
-.. php:method:: addAction($button, $action, $confirm = false)
+.. php:method:: addButton($button, $action, $confirm = false)
 
 Adds another button into "Actions" column which will perform a certain JavaScript action when clicked.
-See also :php:meth:`Atk4\\Ui\\Grid::addAction()`::
+See also :php:meth:`Atk4\\Ui\\Grid::addActionButton()`::
 
-    $button = $action->addAction('Reload Table', $table->jsReload());
+    $button = $action->addButton('Reload Table', $table->jsReload());
 
 Normally you would also want to pass the ID of the row which was clicked. You can use :php:meth:`Atk4\\Ui\\Table:jsRow()`
 and jQuery's data() method to reference it::
 
-    $button = $action->addAction('Reload Table', $table->jsReload(['clicked' => $table->jsRow()->data('id')]));
+    $button = $action->addButton('Reload Table', $table->jsReload(['clicked' => $table->jsRow()->data('id')]));
 
 Moreover you may pass $action argument as a PHP callback.
 
@@ -267,7 +270,7 @@ Moreover you may pass $action argument as a PHP callback.
 
 Triggers a modal dialog when you click on the button. See description on :php:meth:`Atk4\\Ui\\Grid::addModalAction()`::
 
-    $action->addAction(['Say HI'], function ($j, $id) use ($g) {
+    $action->addButton(['Say HI'], function ($j, $id) use ($g) {
         return 'Loaded "' . $g->model->load($id)->get('name') . '" from ID=' . $id;
     });
 
@@ -299,7 +302,7 @@ Multiformat
 Sometimes your formatting may change depending on value. For example you may want to place link
 only on certain rows. For this you can use an `\\Atk4\Ui\\Table\\Column\\Multiformat` decorator::
 
-    $table->addColumn('amount', [\Atk4\Ui\Table\Column\Multiformat::class, function(Model $model) {
+    $table->addColumn('amount', [\Atk4\Ui\Table\Column\Multiformat::class, function (Model $model) {
         if ($model->get('is_invoiced') > 0) {
             return [\Atk4\Ui\Table\Column\Money::class, [\Atk4\Ui\Table\Column\Link::class, 'invoice', ['invoice_id' => 'id']]];
         } elseif (abs($model->get('is_refunded')) < 50) {

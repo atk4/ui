@@ -10,7 +10,7 @@ use Atk4\Ui\Form;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/**
+/*
  * Apart from demonstrating the form, this example uses an alternative way of rendering the layouts.
  * Here we don't create application object explicitly, instead we use our custom template
  * with a generic layout.
@@ -53,10 +53,10 @@ $values = [0 => 'noob', 1 => 'pro', 2 => 'dev'];
 $form->addControl('description', [Form\Control\Textarea::class])->set(0);
 $form->addControl('no_description', [Form\Control\Textarea::class])->set(null);
 $form->addControl('status_optional', [Form\Control\Dropdown::class, 'values' => $values]);
+$form->addControl('status_string_not-nullable', [Form\Control\Dropdown::class], ['type' => 'string', 'values' => $values, 'nullable' => false]);
+$form->addControl('status_integer_not-nullable', [Form\Control\Dropdown::class], ['type' => 'integer', 'values' => $values, 'nullable' => false]);
 $form->addControl('status_string_required', [Form\Control\Dropdown::class], ['type' => 'string', 'values' => $values, 'required' => true]);
 $form->addControl('status_integer_required', [Form\Control\Dropdown::class], ['type' => 'integer', 'values' => $values, 'required' => true]);
-$form->addControl('status_string_mandatory', [Form\Control\Dropdown::class], ['type' => 'string', 'values' => $values, 'mandatory' => true]);
-$form->addControl('status_integer_mandatory', [Form\Control\Dropdown::class], ['type' => 'integer', 'values' => $values, 'mandatory' => true]);
 
 $form->onSubmit(function (Form $form) use ($app) {
     return new \Atk4\Ui\JsToast($app->encodeJson($form->model->get()));
@@ -154,10 +154,10 @@ $form->onSubmit(function (Form $form) {
     throw (new \Atk4\Core\Exception('testing'))
         ->addMoreInfo('arg1', 'val1');
 
-    return 'somehow it did not crash';
+    // return 'somehow it did not crash';
 });
 
-\Atk4\Ui\Button::addTo($form, ['Modal Test', 'secondary'])->on('click', \Atk4\Ui\Modal::addTo($form)
+\Atk4\Ui\Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', \Atk4\Ui\Modal::addTo($form)
     ->set(function ($p) {
         $form = Form::addTo($p);
         $form->addControl('email');
@@ -165,7 +165,7 @@ $form->onSubmit(function (Form $form) {
             throw (new \Atk4\Core\Exception('testing'))
                 ->addMoreInfo('arg1', 'val1');
 
-            return 'somehow it did not crash';
+            // return 'somehow it did not crash';
         });
     })->show());
 
@@ -178,7 +178,7 @@ $tab = $tabs->addTab('Complex Examples');
 $modelRegister = new \Atk4\Data\Model(new Persistence\Array_());
 $modelRegister->addField('name');
 $modelRegister->addField('email');
-$modelRegister->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);
+$modelRegister->addField('is_accept_terms', ['type' => 'boolean', 'nullable' => false]);
 $modelRegister = $modelRegister->createEntity();
 
 $form = Form::addTo($tab, ['class.segment' => true]);
@@ -201,7 +201,7 @@ $tab = $tabs->addTab('Layout Control');
 
 \Atk4\Ui\Header::addTo($tab, ['Shows example of grouping and multiple errors']);
 
-$form = Form::addTo($tab, ['segment']);
+$form = Form::addTo($tab, ['class.segment' => true]);
 $form->setModel((new \Atk4\Data\Model())->createEntity());
 
 $form->addHeader('Example fields added one-by-one');

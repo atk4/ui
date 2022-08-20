@@ -6,7 +6,6 @@ namespace Atk4\Ui\Table;
 
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\Popup;
@@ -50,11 +49,12 @@ class Column
     /** @var array|null The tag value required for getTag when using an header action. */
     public $headerActionTag;
 
-    /**
-     * @param array $defaults
-     */
-    public function __construct($defaults = [])
+    public function __construct(array $defaults = [])
     {
+        if (func_num_args() > 1) { // prevent bad usage
+            throw new \Error('Too many method arguments');
+        }
+
         $this->setDefaults($defaults);
     }
 
@@ -100,7 +100,7 @@ class Column
     {
         $this->hasHeaderAction = true;
 
-        $this->headerActionTag = ['div',  ['class' => 'atk-table-dropdown'],
+        $this->headerActionTag = ['div', ['class' => 'atk-table-dropdown'],
             [
                 ['i', ['id' => $id, 'class' => $class . ' icon'], ''],
             ],
@@ -112,7 +112,7 @@ class Column
      */
     public function setHeaderPopupIcon($icon)
     {
-        $this->headerActionTag = ['div',  ['class' => 'atk-table-dropdown'],
+        $this->headerActionTag = ['div', ['class' => 'atk-table-dropdown'],
             [
                 ['i', ['id' => $this->name . '_ac', 'class' => $icon . ' icon'], ''],
             ],
@@ -150,7 +150,7 @@ class Column
     {
         $this->hasHeaderAction = true;
         $id = $this->name . '_ac';
-        $this->headerActionTag = ['div',  ['class' => 'atk-table-dropdown'],
+        $this->headerActionTag = ['div', ['class' => 'atk-table-dropdown'],
             [
                 [
                     'div', ['id' => $id, 'class' => 'ui top left pointing dropdown', 'data-menu-id' => $menuId],
@@ -161,7 +161,7 @@ class Column
 
         $cb = Column\JsHeader::addTo($this->table);
 
-        $function = 'function(value, text, item){
+        $function = 'function(value, text, item) {
                             if (value === undefined || value === \'\' || value === null) return;
                             $(this)
                             .api({
@@ -180,7 +180,7 @@ class Column
         ]);
 
         // will stop grid column from being sorted.
-        $chain->on('click', new JsExpression('function(e){ e.stopPropagation(); }'));
+        $chain->on('click', new JsExpression('function(e) { e.stopPropagation(); }'));
 
         $this->table->js(true, $chain);
 
@@ -224,7 +224,7 @@ class Column
         return $this;
     }
 
-    public function getTagAttributes($position, array $attr = []): array
+    public function getTagAttributes(string $position, array $attr = []): array
     {
         // "all" applies on all positions
         // $position is for specific position classes
@@ -245,7 +245,7 @@ class Column
      * @param string|array $value    either html or array defining HTML structure, see App::getTag help
      * @param array        $attr     extra attributes to apply on the tag
      */
-    public function getTag($position, $value, $attr = []): string
+    public function getTag(string $position, $value, $attr = []): string
     {
         $attr = $this->getTagAttributes($position, $attr);
 
@@ -267,12 +267,6 @@ class Column
      */
     public function getHeaderCellHtml(Field $field = null, $value = null)
     {
-        if (!$this->table) {
-            throw (new Exception('How $table could not be set??'))
-                ->addMoreInfo('field', $field)
-                ->addMoreInfo('value', $value);
-        }
-
         if ($tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value])) {
             return reset($tags);
         }
@@ -305,12 +299,12 @@ class Column
             }
 
             // If table is being sorted by THIS column, set the proper class
-            if ($this->table->sort_by === $field->shortName) {
-                $class .= ' sorted ' . $this->table->sort_order;
+            if ($this->table->sortBy === $field->shortName) {
+                $class .= ' sorted ' . ['asc' => 'ascending', 'desc' => 'descending'][$this->table->sortDirection];
 
-                if ($this->table->sort_order === 'ascending') {
-                    $attr['data-sort'] = '-' . $field->shortName;
-                } elseif ($this->table->sort_order === 'descending') {
+                if ($this->table->sortDirection === 'asc') {
+                    $attr['data-sort'] = '-' . $attr['data-sort'];
+                } elseif ($this->table->sortDirection === 'desc') {
                     $attr['data-sort'] = '';
                 }
             }
@@ -328,7 +322,7 @@ class Column
      */
     public function getTotalsCellHtml(Field $field, $value)
     {
-        return $this->getTag('foot', $this->getApp()->ui_persistence->typecastSaveField($field, $value));
+        return $this->getTag('foot', $this->getApp()->uiPersistence->typecastSaveField($field, $value));
     }
 
     /**
@@ -344,13 +338,10 @@ class Column
      * you should use $this->table->onHook('beforeRow' or 'afterRow', ...);
      *
      * @param Field $field
-     * @param array $extra_tags
-     *
-     * @return string
      */
-    public function getDataCellHtml(Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
-        return $this->getTag('body', [$this->getDataCellTemplate($field)], $extra_tags);
+        return $this->getTag('body', [$this->getDataCellTemplate($field)], $attr);
     }
 
     /**

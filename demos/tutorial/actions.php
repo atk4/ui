@@ -125,7 +125,7 @@ $wizard->addStep('Arguments', function ($page) {
         $model->addUserAction('greet', [
             'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
             'args' => [
-                'age' => [
+                'name' => [
                     'type' => 'string',
                 ],
             ],
@@ -142,7 +142,7 @@ $wizard->addStep('Arguments', function ($page) {
                     'required' => true,
                 ],
             ],
-            'callback' => function (Model $model, $age) {
+            'callback' => function (Model $model, int $age) {
                 return 'Age is ' . $age;
             },
         ]);
@@ -160,12 +160,14 @@ $wizard->addStep('Arguments', function ($page) {
 
 /*
 $wizard->addStep('More Ways', function ($page) {
-    Demo::addTo($page, ['left_width' => 5, 'right_width' => 11])->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page, ['leftWidth' => 5, 'rightWidth' => 11])->setCodeAndCall(function (View $owner) {
         $model = new Stat($owner->getApp()->db);
         $model->addUserAction('mail', [
             'fields' => ['currency_field'],
             'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'callback' => function () { return 'testing'; },
+            'callback' => function () {
+ *              return 'testing';
+ *          },
             'description' => 'Email testing',
         ]);
         $owner->add('CardDeck')
@@ -190,11 +192,17 @@ $wizard->addStep('Crud integration', function ($page) {
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $country = new Country($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
-        $country->getUserAction('delete')->enabled = function (Country $m) { return $m->id % 2 === 0; };
+        $country->getUserAction('delete')->enabled = function (Country $m) {
+            return $m->id % 2 === 0;
+        };
         $country->addUserAction('mail', [
             'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'preview' => function (Model $model) { return 'here is email preview for ' . $model->get('name'); },
-            'callback' => function (Model $model) { return 'email sent to ' . $model->get('name'); },
+            'preview' => function (Model $model) {
+                return 'here is email preview for ' . $model->get('name');
+            },
+            'callback' => function (Model $model) {
+                return 'email sent to ' . $model->get('name');
+            },
             'description' => 'Email testing',
         ]);
 
@@ -211,6 +219,6 @@ $wizard->addStep('Crud integration', function ($page) {
 
 $wizard->addFinish(function ($page) use ($wizard) {
     PromotionText::addTo($page);
-    \Atk4\Ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon' => 'left arrow'], ['Left'])
+    \Atk4\Ui\Button::addTo($wizard, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
         ->link('/demos/index.php');
 });

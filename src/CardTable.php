@@ -39,7 +39,7 @@ class CardTable extends Table
                 $data[] = [
                     'id' => $key,
                     'field' => $model->getField($key)->getCaption(),
-                    'value' => $this->getApp()->ui_persistence->typecastSaveField($model->getField($key), $value),
+                    'value' => $this->getApp()->uiPersistence->typecastSaveField($model->getField($key), $value),
                 ];
             }
         }
@@ -50,7 +50,7 @@ class CardTable extends Table
             $field = $model->getField($row->getId());
             $ret = $this->decoratorFactory(
                 $field,
-                $field->type === 'boolean' ? [Table\Column\Status::class,  ['positive' => [true, 'Yes'], 'negative' => [false, 'No']]] : []
+                $field->type === 'boolean' ? [Table\Column\Status::class, ['positive' => [true, 'Yes'], 'negative' => [false, 'No']]] : []
             );
             if ($ret instanceof Table\Column\Money) {
                 $ret->attr['all']['class'] = ['single line'];

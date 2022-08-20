@@ -86,6 +86,7 @@ export default class conditionalForm extends atkPlugin {
             } else {
                 temp.push(tempRule);
             }
+
             return { inputName: ruleKey, rules: temp, state: false };
         });
 
@@ -94,10 +95,10 @@ export default class conditionalForm extends atkPlugin {
     }
 
     /**
-   * Field change handler.
-   *
-   * @param e
-   */
+     * Field change handler.
+     *
+     * @param e
+     */
     onInputChange(e) {
     // check rule when inputs has changed.
         e.data.resetInputStatus();
@@ -106,10 +107,10 @@ export default class conditionalForm extends atkPlugin {
     }
 
     /**
-   * Check each validation rule and apply proper visibility state to the
-   * input where rules apply.
-   *
-   */
+     * Check each validation rule and apply proper visibility state to the
+     * input where rules apply.
+     *
+     */
     applyRules() {
         this.inputs.forEach((input, idx) => {
             input.rules.forEach((rules) => {
@@ -132,8 +133,8 @@ export default class conditionalForm extends atkPlugin {
     }
 
     /**
-   * Set all input state visibility to false.
-   */
+     * Set all input state visibility to false.
+     */
     resetInputStatus() {
         this.inputs.forEach((input) => {
             input.state = false;
@@ -141,8 +142,8 @@ export default class conditionalForm extends atkPlugin {
     }
 
     /**
-   * Set fields visibility according to their state.
-   */
+     * Set fields visibility according to their state.
+     */
     setInputsState() {
         this.inputs.forEach((input) => {
             const $input = formService.getField(this.$el, input.inputName);

@@ -24,7 +24,7 @@ class JsSearch extends View
      */
     public $autoQuery = false;
 
-    /** @var Form\Control\Line The input field. */
+    /** @var Form\Control\Line|null The input field. */
     public $placeHolder = 'Search';
 
     /**
@@ -61,13 +61,14 @@ class JsSearch extends View
     public $filterIcon = 'filter';
     public $btnSearchIcon = 'search';
     public $btnRemoveIcon = 'red remove';
+    /** @var string|null */
     public $btnStyle;
 
     protected function init(): void
     {
         parent::init();
 
-        // $this->input = Form\Control\Line::addTo($this, ['iconLeft' => 'filter',  'action' => new Button(['icon' => 'search', 'ui' => 'button atk-action'])]);
+        // $this->input = Form\Control\Line::addTo($this, ['iconLeft' => 'filter', 'action' => new Button(['icon' => 'search', 'ui' => 'button atk-action'])]);
     }
 
     protected function renderView(): void
@@ -77,7 +78,7 @@ class JsSearch extends View
         }
 
         if ($this->btnStyle) {
-            $this->template->trySet('button_style', $this->btnStyle);
+            $this->template->trySet('buttonStyle', $this->btnStyle);
         }
 
         $this->template->set('Button', $this->button);

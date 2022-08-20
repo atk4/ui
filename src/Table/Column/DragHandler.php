@@ -12,6 +12,7 @@ use Atk4\Ui\Table;
 class DragHandler extends Table\Column
 {
     public $class;
+    /** @var string */
     public $tag = 'i';
     /** @var \Atk4\Ui\JsCallback */
     public $cb;
@@ -29,7 +30,7 @@ class DragHandler extends Table\Column
     /**
      * Callback when table has been reorder using handle.
      */
-    public function onReorder(\Closure $fx)
+    public function onReorder(\Closure $fx): void
     {
         $this->cb->onReorder($fx);
     }

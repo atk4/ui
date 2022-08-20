@@ -35,7 +35,7 @@ $form->onSubmit(function (Form $form) use ($app) {
 
 $form = Form::addTo($demo->left);
 
-// standard with model: use id_field as Value, title_field as Title for each Dropdown option
+// standard with model: use idField as Value, titleField as Title for each Dropdown option
 $form->addControl(
     'withModel',
     [

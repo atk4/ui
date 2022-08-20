@@ -60,15 +60,15 @@ class App
     /**
      * @var string Version of Agile UI
      *
-     * @TODO remove, no longer needed for CDN versioning as we bundle them all
+     * @TODO remove, no longer needed for CDN versioning as we bundle all resources
      */
-    public $version = '3.2-dev';
+    public $version = '4.0-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
 
-    /** @var Layout */
-    public $layout; // the top-most view object
+    /** @var Layout the top-most view object */
+    public $layout;
 
     /** @var string|array Set one or more directories where templates should reside. */
     public $templateDir;
@@ -102,7 +102,7 @@ class App
     public $isRendering = false;
 
     /** @var UiPersistence */
-    public $ui_persistence;
+    public $uiPersistence;
 
     /** @var View|null For internal use */
     public $html;
@@ -222,8 +222,8 @@ class App
             $this->setupAlwaysRun();
         }
 
-        if ($this->ui_persistence === null) {
-            $this->ui_persistence = new UiPersistence();
+        if ($this->uiPersistence === null) {
+            $this->uiPersistence = new UiPersistence();
         }
 
         if ($this->session === null) {
@@ -495,9 +495,9 @@ class App
         // flatpickr
         $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
         $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');
-        if ($this->ui_persistence->locale !== 'en') {
-            $this->requireJs($this->cdn['flatpickr'] . '/l10n/' . $this->ui_persistence->locale . '.js');
-            $this->html->js(true, new JsExpression('flatpickr.localize(window.flatpickr.l10ns.' . $this->ui_persistence->locale . ')'));
+        if ($this->uiPersistence->locale !== 'en') {
+            $this->requireJs($this->cdn['flatpickr'] . '/l10n/' . $this->uiPersistence->locale . '.js');
+            $this->html->js(true, new JsExpression('flatpickr.localize(window.flatpickr.l10ns.' . $this->uiPersistence->locale . ')'));
         }
 
         // Agile UI
@@ -519,7 +519,7 @@ class App
      */
     public function addStyle($style)
     {
-        $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('style', $style));
+        $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('style', $style));
     }
 
     /**
@@ -530,9 +530,9 @@ class App
      */
     public function add($seed, $region = null): AbstractView
     {
-        if (!$this->layout) {
+        if (!$this->layout) { // @phpstan-ignore-line
             throw (new Exception('App layout is missing'))
-                ->addSolution('If you use $app->add() you should first call $app->initLayout()');
+                ->addSolution('If you use $app->add() you should call $app->initLayout() first');
         }
 
         return $this->layout->add($seed, $region);
@@ -551,7 +551,7 @@ class App
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('script', null, $this->html->getJs()));
+            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', null, $this->html->getJs()));
             $this->isRendering = false;
 
             if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catchRunawayCallbacks) {
@@ -766,7 +766,7 @@ class App
      */
     public function requireJs($url, $isAsync = false, $isDefer = false)
     {
-        $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '') . "\n");
+        $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '') . "\n");
 
         return $this;
     }
@@ -780,7 +780,7 @@ class App
      */
     public function requireCss($url)
     {
-        $this->html->template->dangerouslyAppendHtml('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]) . "\n");
+        $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]) . "\n");
 
         return $this;
     }
@@ -869,43 +869,13 @@ class App
      * ]);
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
-     * @param string|array $tag
      * @param string|array $attr
      * @param string|array $value
      */
-    public function getTag($tag = null, $attr = null, $value = null): string
+    public function getTag(string $tag = null, $attr = null, $value = null): string
     {
         if ($tag === null) {
             $tag = 'div';
-        } elseif (is_array($tag)) {
-            $tmp = $tag;
-
-            if (isset($tmp[0])) {
-                $tag = $tmp[0];
-
-                if (is_array($tag)) {
-                    // OH a bunch of tags
-                    $output = '';
-                    foreach ($tmp as $subtag) {
-                        $output .= $this->getTag($subtag);
-                    }
-
-                    return $output;
-                }
-
-                unset($tmp[0]);
-            } else {
-                $tag = 'div';
-            }
-
-            if (isset($tmp[1])) {
-                $value = $tmp[1];
-                unset($tmp[1]);
-            } else {
-                $value = null;
-            }
-
-            $attr = $tmp;
         }
 
         $tag = strtolower($tag);

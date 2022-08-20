@@ -76,7 +76,7 @@ class TableColumnColorRatingTest extends TestCase
                     '#FFFF00',
                     '#00FF00',
                 ],
-                'more_than_max_no_color' => true,
+                'moreThanMaxNoColor' => true,
             ],
         ]);
 
@@ -126,7 +126,7 @@ class TableColumnColorRatingTest extends TestCase
                     '#FFFF00',
                     '#00FF00',
                 ],
-                'less_than_min_no_color' => true,
+                'lessThanMinNoColor' => true,
             ],
         ]);
 

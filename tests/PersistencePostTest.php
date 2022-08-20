@@ -8,7 +8,7 @@ use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 use Atk4\Ui\Persistence\Post as PostPersistence;
 
-class PostTest extends TestCase
+class PersistencePostTest extends TestCase
 {
     /** @var Model */
     public $model;
@@ -22,6 +22,11 @@ class PostTest extends TestCase
         $this->model->addField('is_married', ['type' => 'boolean']);
     }
 
+    protected function tearDown(): void
+    {
+        unset($_POST);
+    }
+
     /**
      * Test loading from POST persistence, some type mapping applies.
      */
@@ -30,8 +35,7 @@ class PostTest extends TestCase
         $p = new PostPersistence();
 
         $m = $this->model;
-        $m->addField('id');
-        $m->persistence = $p;
+        $m->setPersistence($p);
 
         $m = $m->load(0);
         $m->set('surname', 'DefSurname');

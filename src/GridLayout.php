@@ -19,11 +19,11 @@ class GridLayout extends View
     ];
 
     /** @var HtmlTemplate */
-    protected $t_wrap;
+    protected $tWrap;
     /** @var HtmlTemplate */
-    protected $t_row;
+    protected $tRow;
     /** @var HtmlTemplate */
-    protected $t_col;
+    protected $tCol;
     /** @var HtmlTemplate */
     public $template;
 
@@ -34,22 +34,22 @@ class GridLayout extends View
     public $defaultTemplate = 'grid-layout.html';
 
     /** @var string CSS class for columns view */
-    public $column_class = '';
+    public $columnClass = '';
 
     protected function init(): void
     {
         parent::init();
 
-        $this->template->set('column_class', $this->column_class);
+        $this->template->set('columnClass', $this->columnClass);
 
         // extract template parts
-        $this->t_wrap = clone $this->template;
-        $this->t_row = $this->template->cloneRegion('row');
-        $this->t_col = $this->template->cloneRegion('column');
+        $this->tWrap = clone $this->template;
+        $this->tRow = $this->template->cloneRegion('row');
+        $this->tCol = $this->template->cloneRegion('column');
 
         // clean them
-        $this->t_row->del('column');
-        $this->t_wrap->del('rows');
+        $this->tRow->del('column');
+        $this->tWrap->del('rows');
 
         // Will need to manipulate template a little
         $this->buildTemplate();
@@ -60,22 +60,22 @@ class GridLayout extends View
      */
     protected function buildTemplate()
     {
-        $this->t_wrap->del('rows');
-        $this->t_wrap->dangerouslyAppendHtml('rows', '{rows}');
+        $this->tWrap->del('rows');
+        $this->tWrap->dangerouslyAppendHtml('rows', '{rows}');
 
         for ($row = 1; $row <= $this->rows; ++$row) {
-            $this->t_row->del('column');
+            $this->tRow->del('column');
 
             for ($col = 1; $col <= $this->columns; ++$col) {
-                $this->t_col->set('Content', '{$r' . $row . 'c' . $col . '}');
+                $this->tCol->set('Content', '{$r' . $row . 'c' . $col . '}');
 
-                $this->t_row->dangerouslyAppendHtml('column', $this->t_col->renderToHtml());
+                $this->tRow->dangerouslyAppendHtml('column', $this->tCol->renderToHtml());
             }
 
-            $this->t_wrap->dangerouslyAppendHtml('rows', $this->t_row->renderToHtml());
+            $this->tWrap->dangerouslyAppendHtml('rows', $this->tRow->renderToHtml());
         }
-        $this->t_wrap->dangerouslyAppendHtml('rows', '{/rows}');
-        $tmp = new HtmlTemplate($this->t_wrap->renderToHtml());
+        $this->tWrap->dangerouslyAppendHtml('rows', '{/rows}');
+        $tmp = new HtmlTemplate($this->tWrap->renderToHtml());
 
         // TODO replace later, the only use of direct template tree manipulation
         $t = $this->template;

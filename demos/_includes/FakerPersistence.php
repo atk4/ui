@@ -41,7 +41,7 @@ class FakerPersistence extends Persistence
             foreach ($fields as $field) {
                 $type = $field;
 
-                if ($field === $model->id_field) {
+                if ($field === $model->idField) {
                     $row[$field] = $i + 1;
 
                     continue;

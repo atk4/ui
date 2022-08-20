@@ -61,7 +61,7 @@ class ItemsPerPageSelector extends View
      * The callback should return a View to be reload after an item
      * has been select.
      */
-    public function onPageLengthSelect(\Closure $fx)
+    public function onPageLengthSelect(\Closure $fx): void
     {
         $this->cb->set(function () use ($fx) {
             $ipp = isset($_GET['ipp']) ? (int) $_GET['ipp'] : null;
@@ -81,15 +81,14 @@ class ItemsPerPageSelector extends View
             $menuItems[] = ['name' => $item, 'value' => $item];
         }
         // set semantic-ui dropdown onChange function.
-        $function = 'function(value, text, item){
+        $function = 'function(value, text, item) {
                             if (value === undefined || value === \'\' || value === null) return;
                             $(this)
                             .api({
                                 on:\'now\',
                                 url:\'' . $this->cb->getUrl() . '\',
                                 data:{ipp:value}
-                                }
-                            );
+                            });
                      }';
 
         $this->js(true)->dropdown([

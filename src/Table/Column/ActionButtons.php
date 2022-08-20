@@ -26,6 +26,7 @@ class ActionButtons extends Table\Column
     protected function init(): void
     {
         parent::init();
+
         $this->addClass('right aligned');
     }
 
@@ -98,7 +99,7 @@ class ActionButtons extends Table\Column
         return $this->addButton($button, $modal->show(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)));
     }
 
-    public function getTag($position, $value, $attr = []): string
+    public function getTag(string $position, $value, $attr = []): string
     {
         if ($this->table->hasCollapsingCssActionColumn && $position === 'body') {
             $attr['class'][] = 'collapsing';

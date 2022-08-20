@@ -91,6 +91,7 @@ export default {
         flashError: function (count = 4) {
             if (count === 0) {
                 this.hasError = false;
+
                 return;
             }
             this.hasError = !this.hasError;

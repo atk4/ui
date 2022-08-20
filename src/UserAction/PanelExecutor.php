@@ -6,13 +6,11 @@ namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
-use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Loader;
 use Atk4\Ui\Panel\Right;
 use Atk4\Ui\View;
-use Atk4\Ui\VirtualPage;
 
 /**
  * A Step Action Executor that use a VirtualPage.
@@ -44,6 +42,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
     protected function init(): void
     {
         parent::init();
+
         $this->initExecutor();
     }
 
@@ -149,7 +148,6 @@ class PanelExecutor extends Right implements JsExecutorInterface
      */
     protected function jsGetExecute($obj, $id): array
     {
-        // @phpstan-ignore-next-line
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;

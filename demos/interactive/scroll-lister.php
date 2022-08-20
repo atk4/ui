@@ -9,7 +9,7 @@ use Atk4\Ui\HtmlTemplate;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Dynamic scroll in Table', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\Atk4\Ui\Button::addTo($app, ['Dynamic scroll in Table', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['scroll-table']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
@@ -23,7 +23,7 @@ $view = \Atk4\Ui\View::addTo($container, ['template' => new HtmlTemplate('
 
 $lister = \Atk4\Ui\Lister::addTo($view, [], ['List']);
 $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
-    $row = Country::assertInstanceOf($lister->current_row);
+    $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 });
 

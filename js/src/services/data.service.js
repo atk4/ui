@@ -13,15 +13,16 @@ class DataService {
             this.hasStorage = this.storageAvailable('localStorage') && this.storageAvailable('sessionStorage');
             this.storage = { session: sessionStorage, local: localStorage };
         }
+
         return this.instance;
     }
 
     /**
-   * Check if storage is available.
-   *
-   * @param type
-   * @returns {boolean|boolean|*}
-   */
+     * Check if storage is available.
+     *
+     * @param type
+     * @returns {boolean|boolean|*}
+     */
     storageAvailable(type) {
         let storage;
         try {
@@ -29,6 +30,7 @@ class DataService {
             const x = '__storage_test__';
             storage.setItem(x, x);
             storage.removeItem(x);
+
             return true;
         } catch (e) {
             return e instanceof DOMException && (
@@ -47,29 +49,31 @@ class DataService {
     }
 
     /**
-   * Check for valid json string.
-   * @param str
-   * @returns {boolean}
-   */
+     * Check for valid json string.
+     * @param str
+     * @returns {boolean}
+     */
     isJsonString(str) {
         try {
             JSON.parse(str);
         } catch (e) {
             console.error('Invalid json string.');
+
             return false;
         }
+
         return true;
     }
 
     /**
-   * Set Item data value to local or web storage.
-   * The item is the key associated with the data value in web or local storage.
-   * Will add item value or replace it if already exist.
-   *
-   * @param item
-   * @param value
-   * @param type
-   */
+     * Set Item data value to local or web storage.
+     * The item is the key associated with the data value in web or local storage.
+     * Will add item value or replace it if already exist.
+     *
+     * @param item
+     * @param value
+     * @param type
+     */
     setData(item, value, type = 'local') {
         if (this.hasStorage) {
             this.storage[type].setItem(item, value);
@@ -79,26 +83,27 @@ class DataService {
     }
 
     /**
-   * Get data value using an item as key.
-   *
-   * @param item
-   * @param type
-   * @returns {null}
-   */
+     * Get data value using an item as key.
+     *
+     * @param item
+     * @param type
+     * @returns {null}
+     */
     getData(item, type = 'local') {
         let value = null;
         if (this.hasStorage) {
             value = this.storage[type].getItem(item);
         }
+
         return value;
     }
 
     /**
-   * Clear associated data using item as key.
-   *
-   * @param item
-   * @param type
-   */
+     * Clear associated data using item as key.
+     *
+     * @param item
+     * @param type
+     */
     clearData(item, type = 'local') {
         if (this.hasStorage) {
             this.storage[type].removeItem(item);
@@ -106,11 +111,11 @@ class DataService {
     }
 
     /**
-   * Return store data for an item or empty object.
-   *
-   * @param item
-   * @returns {{session: *, local: *}}
-   */
+     * Return store data for an item or empty object.
+     *
+     * @param item
+     * @returns {{session: *, local: *}}
+     */
     getStoreData(name) {
         const store = {};
         if (name) {
@@ -128,13 +133,13 @@ class DataService {
     }
 
     /**
-   * Similar to set data but make sure that value is
-   * a valid json string prior to set data.
-   *
-   * @param item
-   * @param value
-   * @param type
-   */
+     * Similar to set data but make sure that value is
+     * a valid json string prior to set data.
+     *
+     * @param item
+     * @param value
+     * @param type
+     */
     setJsonData(item, value, type = 'local') {
         if (!this.isJsonString(value)) {
             return;
@@ -143,14 +148,14 @@ class DataService {
     }
 
     /**
-   * Will either create or merge with existing data.
-   * Merging is done with Object assign, prioritizing new value.
-   * Previous data, if exist, and value must be a valid json string.
-   *
-   * @param item
-   * @param value
-   * @param type
-   */
+     * Will either create or merge with existing data.
+     * Merging is done with Object assign, prioritizing new value.
+     * Previous data, if exist, and value must be a valid json string.
+     *
+     * @param item
+     * @param value
+     * @param type
+     */
     addJsonData(item, value, type = 'local') {
         const previous = this.getData(item, type);
         if (!this.isJsonString(value) || !this.isJsonString(previous)) {

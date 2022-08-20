@@ -46,9 +46,6 @@ abstract class AbstractView
 
     /** @var bool will be set to true after rendered. This is so that we don't render view twice. */
     protected $_rendered = false;
-    // }}}
-
-    // {{{ Default init() method and add() logic
 
     /**
      * For the absence of the application, we would add a very

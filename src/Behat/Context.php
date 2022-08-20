@@ -28,8 +28,9 @@ class Context extends RawMinkContext implements BehatContext
         foreach ($event->getFeature()->getScenarios() as $scenario) {
             $scenarioSteps = $scenario->getSteps();
             if (count($scenarioSteps) > 0
-                    && reset($scenarioSteps)->getLine() <= $event->getStep()->getLine()
-                    && end($scenarioSteps)->getLine() >= $event->getStep()->getLine()) {
+                && reset($scenarioSteps)->getLine() <= $event->getStep()->getLine()
+                && end($scenarioSteps)->getLine() >= $event->getStep()->getLine()
+            ) {
                 return $scenario;
             }
         }
@@ -171,6 +172,7 @@ class Context extends RawMinkContext implements BehatContext
                         }
                     }
                 });
+
                 return [invalidIds, duplicateIds];
             })();
             EOF);
@@ -196,7 +198,7 @@ class Context extends RawMinkContext implements BehatContext
         if (preg_match('~^xpath\((.+)\)$~s', $selector, $matches)) {
             // add support for standard CSS class selector
             $xpath = preg_replace_callback(
-                '~\'(?:[^\']+|\'\')*\'\K|"(?:[^"]+|"")*"\K|(?<=\w)\.([\w\-]+)~s',
+                '~\'(?:[^\']+|\'\')*+\'\K|"(?:[^"]+|"")*+"\K|(?<=\w)\.([\w\-]+)~s',
                 function ($matches) {
                     if ($matches[0] === '') {
                         return '';
