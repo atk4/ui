@@ -186,7 +186,7 @@ class JsCallback extends Callback implements JsExpressionable
         if ($response instanceof Modal) {
             $html = $response->getHtml();
         } else {
-            $modal = new Modal(['id' => false]);
+            $modal = new Modal(['name' => false]);
             $modal->add($response);
             $html = $modal->getHtml();
         }

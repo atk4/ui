@@ -15,7 +15,7 @@ if ($id = $_GET['id'] ?? null) {
 
 $bb = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
 
-$table = \Atk4\Ui\Table::addTo($app, ['celled' => true]);
+$table = \Atk4\Ui\Table::addTo($app, ['class.celled' => true]);
 \Atk4\Ui\Button::addTo($bb, ['Refresh Table', 'icon' => 'refresh'])
     ->on('click', new \Atk4\Ui\JsReload($table));
 
@@ -23,7 +23,7 @@ $bb->on('click', $table->js()->reload());
 
 $table->setModel(new SomeData(), []);
 
-$table->addColumn('name', new Table\Column\Link(['table', 'id' => '{$id}']));
+$table->addColumn('name', new Table\Column\Link(['table', 'foo' => 'bar'], ['person_id' => 'id'], ['target' => '_blank']));
 $table->addColumn('surname', new Table\Column\Template('{$surname}'))->addClass('warning');
 $table->addColumn('title', new Table\Column\Status([
     'positive' => ['Prof.'],
@@ -66,7 +66,7 @@ $myArray = [
 $table = \Atk4\Ui\Table::addTo($app);
 $table->setSource($myArray, ['name']);
 
-//$table->addColumn('name');
+// $table->addColumn('name');
 $table->addColumn('surname', [Table\Column\Link::class, 'url' => 'table.php?id={$surname}']);
 $table->addColumn('birthdate', null, ['type' => 'date']);
 $table->addColumn('cv', [Table\Column\Html::class]);

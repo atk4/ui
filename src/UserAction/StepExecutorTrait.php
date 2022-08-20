@@ -351,7 +351,7 @@ trait StepExecutorTrait
         $this->btns = (new View())->addStyle(['min-height' => '24px']);
         $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
         $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);
-        $this->execActionBtn = $this->getExecutorFactory()->createTrigger($action, $this->getExecutorFactory()::MODAL_BUTTON);
+        $this->execActionBtn = $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MODAL_BUTTON);
         $this->btns->add($this->execActionBtn);
 
         return $this->btns;

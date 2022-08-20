@@ -49,7 +49,7 @@ class Context extends RawMinkContext implements BehatContext
             return;
         }
 
-        if (!str_starts_with($event->getStep()->getText(), 'Toast display should contains text ')) {
+        if (!str_starts_with($event->getStep()->getText(), 'Toast display should contain text ')) {
             $this->getSession()->executeScript('jQuery(\'.toast-box > .ui.toast\').toast(\'close\');');
         }
     }
@@ -64,6 +64,7 @@ class Context extends RawMinkContext implements BehatContext
         if (!str_contains($this->getScenario($event)->getTitle() ?? '', 'exception is displayed')) {
             $this->assertNoException();
         }
+        $this->assertNoInvalidNorDuplicateId();
     }
 
     protected function getFinishedScript(): string
@@ -85,14 +86,14 @@ class Context extends RawMinkContext implements BehatContext
         $c = 0;
         while (microtime(true) - $s <= $maxWaitdurationMs / 1000) {
             $this->getSession()->wait($maxWaitdurationMs, $finishedScript);
-            usleep(10000);
+            usleep(10_000);
             if ($this->getSession()->evaluateScript($finishedScript)) {
                 if (++$c >= 2) {
                     return;
                 }
             } else {
                 $c = 0;
-                usleep(20000);
+                usleep(20_000);
             }
         }
 
@@ -149,6 +150,44 @@ class Context extends RawMinkContext implements BehatContext
 
                 throw new Exception('Page contains uncaught exception');
             }
+        }
+    }
+
+    protected function assertNoInvalidNorDuplicateId(): void
+    {
+        [$invalidIds, $duplicateIds] = $this->getSession()->evaluateScript(<<<'EOF'
+            return (function () {
+                const idRegex = /^[_a-z][_a-z0-9-]*$/is;
+                const invalidIds = [];
+                const duplicateIds = [];
+                [...(new Set(
+                    $('[id]').map(function () {
+                        return this.id;
+                    })
+                ))].forEach(function (id) {
+                    if (!id.match(idRegex)) {
+                        invalidIds.push(id);
+                    } else {
+                        const elems = $('[id="' + id + '"]');
+                        if (elems.length > 1) {
+                            duplicateIds.push(id);
+                        }
+                    }
+                });
+                return [invalidIds, duplicateIds];
+            })();
+            EOF);
+
+        // TODO hack to pass CI testing, fix these issues and remove the error diffs below asap
+        $invalidIds = array_diff($invalidIds, ['']); // id="" is hardcoded in templates
+        $duplicateIds = array_diff($duplicateIds, ['atk', '_icon', 'atk_icon']); // generated when component is not correctly added to app/layout component tree - should throw, as such name/ID is dangerous to be used
+
+        if (count($invalidIds) > 0) {
+            throw new Exception('Page contains element with invalid ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $invalidIds)));
+        }
+
+        if (count($duplicateIds) > 0) {
+            throw new Exception('Page contains elements with duplicate ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $duplicateIds)));
         }
     }
 
@@ -321,8 +360,6 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * @Then I hide js modal
-     *
-     * Hide js modal.
      */
     public function iHideJsModal(): void
     {
@@ -433,8 +470,6 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * @Then I select value :arg1 in lookup :arg2
-     *
-     * Select a value in a lookup control.
      */
     public function iSelectValueInLookup(string $value, string $inputName): void
     {
@@ -583,7 +618,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Toast display should contains text :arg1
+     * @Then Toast display should contain text :arg1
      */
     public function toastDisplayShouldContainText(string $text): void
     {
@@ -594,9 +629,9 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^page url should contains \'([^\']*)\'$/
+     * @Then /^page url should contain \'([^\']*)\'$/
      */
-    public function pageUrlShouldContains(string $text): void
+    public function pageUrlShouldContain(string $text): void
     {
         $url = $this->getSession()->getCurrentUrl();
         if (!strpos($url, $text)) {
@@ -615,9 +650,9 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^text in container using \'([^\']*)\' should contains \'([^\']*)\'$/
+     * @Then /^text in container using \'([^\']*)\' should contain \'([^\']*)\'$/
      */
-    public function textInContainerUsingShouldContains(string $selector, string $text): void
+    public function textInContainerUsingShouldContain(string $selector, string $text): void
     {
         if (trim($this->getElementInPage($selector)->getText()) !== $text) {
             throw new Exception('Container with selector: ' . $selector . ' does not contain text: ' . $text);

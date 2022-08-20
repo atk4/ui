@@ -1537,9 +1537,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\JsReload::__construct\(\) has parameter \$view with no type specified\.$~'
         -
             path: 'src/JsSearch.php'
-            message: '~^Property Atk4\\Ui\\JsSearch::\$args has no type specified\.$~'
-        -
-            path: 'src/JsSearch.php'
             message: '~^Property Atk4\\Ui\\JsSearch::\$filterIcon has no type specified\.$~'
         -
             path: 'src/JsSearch.php'
@@ -1679,18 +1676,6 @@ parameters:
         -
             path: 'src/Modal.php'
             message: '~^Property Atk4\\Ui\\Modal::\$headerCss has no type specified\.$~'
-        -
-            path: 'src/Modal.php'
-            message: '~^Property Atk4\\Ui\\Modal::\$fx has no type specified\.$~'
-        -
-            path: 'src/Modal.php'
-            message: '~^Property Atk4\\Ui\\Modal::\$cb has no type specified\.$~'
-        -
-            path: 'src/Modal.php'
-            message: '~^Property Atk4\\Ui\\Modal::\$cb_view has no type specified\.$~'
-        -
-            path: 'src/Modal.php'
-            message: '~^Property Atk4\\Ui\\Modal::\$args has no type specified\.$~'
         -
             path: 'src/Modal.php'
             message: '~^Method Atk4\\Ui\\Modal::enableCallback\(\) has no return type specified\.$~'

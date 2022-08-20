@@ -6,7 +6,7 @@ Feature: Callback
     Then I press button "First"
     Then I should see "TestName"
     And I press Modal button "Save"
-    Then Toast display should contains text "Save"
+    Then Toast display should contain text "Save"
     Then I should not see "TestName"
 
   Scenario:
@@ -20,4 +20,4 @@ Feature: Callback
     Then I click first element using class ".ui.atk-test.button"
     Then Modal is open with text "Edit Country"
     Then I press Modal button "Save"
-    Then Toast display should contains text "Form Submit"
+    Then Toast display should contain text "Form Submit"

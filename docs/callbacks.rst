@@ -16,7 +16,7 @@ PHP callback::
 
     // clicking button generates random number every time
     $button->on('click', function($action) {
-        return $action->text(rand(1,100));
+        return $action->text(rand(1, 100));
     });
 
 This creates call-back route transparently which is triggered automatically during the 'click' event.

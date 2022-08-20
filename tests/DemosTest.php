@@ -136,6 +136,18 @@ class DemosTest extends TestCase
         return $app;
     }
 
+    protected function assertNoGlobalSticky(App $app): void
+    {
+        $appSticky = array_diff_assoc(
+            \Closure::bind(fn () => $app->sticky_get_arguments, null, App::class)(),
+            ['__atk_json' => false, '__atk_tab' => false, 'APP_CALL_EXIT' => true, 'APP_CATCH_EXCEPTIONS' => true]
+        );
+        if ($appSticky !== []) {
+            throw (new \Atk4\Ui\Exception('Global GET sticky must never be set by any component'))
+                ->addMoreInfo('appSticky', $appSticky);
+        }
+    }
+
     protected function getClient(): Client
     {
         $handler = function (RequestInterface $request) {
@@ -149,10 +161,12 @@ class DemosTest extends TestCase
                 try {
                     require $localPath;
 
-                    if (!$app->run_called) {
-                        $app->run();
-                    }
-                } catch (\Throwable $e) {
+                if (!$app->run_called) {
+                    $app->run();
+                }
+
+                $this->assertNoGlobalSticky($app);
+            } catch (\Throwable $e) {
                     // catch only custom exit exception
 
                     if (!($e instanceof DemosTestExitError)) {

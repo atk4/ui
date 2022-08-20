@@ -24,7 +24,7 @@ $grid->setModel($model);
 // Adding Quicksearch on Name field using auto query.
 $grid->addQuickSearch([$model->fieldName()->name], true);
 
-if ($app->stickyGet('no-ajax')) {
+if ($grid->stickyGet('no-ajax')) {
     $grid->quickSearch->useAjax = false;
 }
 
@@ -55,7 +55,8 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
         new JsToast('Simulating delete in demo mode.'),
     ];
 });
-$grid->addExecutorButton($deleteExecutor, new Button(['icon' => 'times circle outline']));
+// TODO button is added not only to the table rows, but also below the table!
+// $grid->addExecutorButton($deleteExecutor, new Button(['icon' => 'times circle outline']));
 
 $sel = $grid->addSelection();
 $grid->menu->addItem('show selection')->on('click', new \Atk4\Ui\JsExpression(

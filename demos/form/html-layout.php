@@ -24,7 +24,8 @@ $form = FlyersForm::addTo($tab, [
     'layout' => [Form\Layout::class, ['defaultTemplate' => __DIR__ . '/templates/flyers-form-layout.html']],
 ]);
 
-////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 $tab = $tabs->addTab('Template samples');
 
 $gridLayout = GridLayout::addTo($tab, ['rows' => 1, 'columns' => 2])->addClass('internally celled');
@@ -51,7 +52,8 @@ $form = Form::addTo($left, [
 $form->setModel((new Flyers(new Persistence\Array_()))->tryLoadAny());
 $form->getControl('last_name')->hint = 'Please enter your last name.';
 
-////////////////////////////////////////
+// -----------------------------------------------------------------------------
+
 $tab = $tabs->addTab('Custom layout class');
 
 $form = Form::addTo($tab, ['layout' => [Form\Layout\Custom::class, 'defaultTemplate' => __DIR__ . '/templates/form-custom-layout.html']]);

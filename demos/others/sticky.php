@@ -63,3 +63,7 @@ Button::addTo($app, [$app->url('other')]);
 Button::addTo($app, [$app->url(['other', 'b' => 2])]);
 Button::addTo($app, [$app->url('http://yahoo.com/')]);
 Button::addTo($app, [$app->url('http://yahoo.com/?q=abc')]);
+
+// unset app/global sticky
+$app->stickyForget('xx');
+$app->stickyForget('c');

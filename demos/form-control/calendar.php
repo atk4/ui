@@ -51,19 +51,19 @@ $form->addControl('date_js_format', [
 ])->set(new \DateTime());
 
 // TODO "date" type does not support ranges
-//$form->addControl('date_range', [
+// $form->addControl('date_range', [
 //    Form\Control\Calendar::class,
 //    'type' => 'date',
 //    'caption' => 'Range mode',
 //    'options' => ['mode' => 'range'],
-//])->set(date('Y-m-d') . ' to ' . date('Y-m-d', strtotime('+1 Week')));
+// ])->set(date('Y-m-d') . ' to ' . date('Y-m-d', strtotime('+1 Week')));
 //
-//$form->addControl('date_multi', [
+// $form->addControl('date_multi', [
 //    Form\Control\Calendar::class,
 //    'type' => 'date',
 //    'caption' => 'Multiple mode',
 //    'options' => ['mode' => 'multiple'],
-//])->set(date('Y-m-d') . ', ' . date('Y-m-d', strtotime('+1 Day')) . ', ' . date('Y-m-d', strtotime('+2 Day')));
+// ])->set(date('Y-m-d') . ', ' . date('Y-m-d', strtotime('+1 Day')) . ', ' . date('Y-m-d', strtotime('+2 Day')));
 
 $control = $form->addControl('date_action', [
     Form\Control\Calendar::class,

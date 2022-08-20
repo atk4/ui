@@ -45,9 +45,6 @@ class View extends AbstractView implements JsExpressionable
      */
     public $ui = false;
 
-    /** @var string ID of the element, that's unique and is used in JS operations. */
-    public $id;
-
     /** @var array List of classes that needs to be added. */
     public $class = [];
 
@@ -154,7 +151,7 @@ class View extends AbstractView implements JsExpressionable
                 $oldData = $data;
                 $data = [];
                 foreach ($oldData as $k => $row) {
-                    $data[$k + 1000 * 1000 * 1000] = $row; // large offset to prevent accessing wrong data by old key
+                    $data[$k + 1000_000_000] = $row; // large offset to prevent accessing wrong data by old key
                 }
             } else {
                 throw new Exception('Source data contains unsupported zero key');
@@ -172,11 +169,12 @@ class View extends AbstractView implements JsExpressionable
      */
     protected function setMissingProperty(string $propertyName, $value): void
     {
-        if (is_bool($value)) {
+        if (is_bool($value) && str_starts_with($propertyName, 'class.')) {
+            $class = substr($propertyName, strlen('class.'));
             if ($value) {
-                $this->addClass($propertyName);
+                $this->addClass($class);
             } else {
-                $this->removeClass($propertyName);
+                $this->removeClass($class);
             }
 
             return;
@@ -236,10 +234,6 @@ class View extends AbstractView implements JsExpressionable
         $addLater = $this->_add_later;
         $this->_add_later = [];
         parent::init();
-
-        if ($this->id === null) {
-            $this->id = $this->name;
-        }
 
         if ($this->region && !$this->template && !$this->defaultTemplate && $this->issetOwner() && $this->getOwner()->template) {
             $this->template = $this->getOwner()->template->cloneRegion($this->region);
@@ -641,8 +635,8 @@ class View extends AbstractView implements JsExpressionable
             $this->template->tryDel('_ui');
         }
 
-        if ($this->id) {
-            $this->template->trySet('_id', $this->id);
+        if ($this->name) {
+            $this->template->trySet('_id', $this->name);
         }
 
         if ($this->element) {
@@ -985,7 +979,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * on() method is similar to jQuery on() method.
      *
-     * on(event, [selector,] action)
+     * on(event, [selector, ] action)
      *
      * Method on() also returns a chain, that will correspond affected element.
      * Here are some ways to use on();
@@ -1139,7 +1133,7 @@ class View extends AbstractView implements JsExpressionable
     {
         $this->assertIsInitialized();
 
-        return json_encode('#' . $this->id, \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
+        return json_encode('#' . $this->name, \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
     }
 
     /**

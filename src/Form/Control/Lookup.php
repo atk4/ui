@@ -89,7 +89,7 @@ class Lookup extends Input
      * form when field value is changes.
      * $form->addControl('field', [\Atk4\Ui\Form\Control\Lookup::class, 'settings' => ['allowReselection' => true,
      *                           'selectOnKeydown' => false,
-     *                           'onChange' => new Atk4\Ui\JsExpression('function(value,t,c) {
+     *                           'onChange' => new Atk4\Ui\JsExpression('function(value, t, c) {
      *                                 if ($(this).data("value") !== value) {
      *                                   $(this).parents(".form").form("submit");
      *                                   $(this).data("value", value);
@@ -239,7 +239,7 @@ class Lookup extends Input
             $buttonSeed = ['content' => $buttonSeed];
         }
 
-        $defaultSeed = [\Atk4\Ui\Button::class, 'disabled' => ($this->disabled || $this->readonly)];
+        $defaultSeed = [\Atk4\Ui\Button::class, 'class.disabled' => ($this->disabled || $this->readonly)];
 
         $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
 
@@ -252,9 +252,9 @@ class Lookup extends Input
         $vp->set(function ($page) {
             $form = \Atk4\Ui\Form::addTo($page);
 
-            $entity = $this->model->createEntity();
+            $entity = (clone $this->model)->setOnlyFields($this->plus['fields'] ?? null)->createEntity();
 
-            $form->setModel($entity->setOnlyFields($this->plus['fields'] ?? []));
+            $form->setModel($entity);
 
             $form->onSubmit(function (\Atk4\Ui\Form $form) {
                 $form->model->save();
@@ -344,7 +344,7 @@ class Lookup extends Input
         return $this->getApp()->getTag('input', array_merge([
             'name' => $this->short_name,
             'type' => 'hidden',
-            'id' => $this->id . '_input',
+            'id' => $this->name . '_input',
             'value' => $this->getValue(),
             'readonly' => $this->readonly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,

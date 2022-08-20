@@ -50,7 +50,7 @@ You can configure Paginator through properties.
 .. php:attr:: range
 
 Reasonable values for $range would be 2 to 5, depending on how big you want your paganiator to appear. Provided
-that you have enough pages, user should see $range*2+1 bars.
+that you have enough pages, user should see ($range * 2 + 1) bars.
 
 .. php:method:: getPaginatorItems
 

@@ -76,7 +76,7 @@ class Link extends Table\Column
     /** @var bool add download in the tag to force download from the url. */
     public $force_download = false;
 
-    public function __construct($page = [], $args = [])
+    public function __construct($page = [], $args = [], $defaults = [])
     {
         if (is_array($page)) {
             $page = ['page' => $page];
@@ -86,7 +86,7 @@ class Link extends Table\Column
         if ($args) {
             $page['args'] = $args;
         }
-        parent::__construct($page);
+        parent::__construct(array_replace($defaults, $page));
     }
 
     public function setDefaults(array $properties, bool $passively = false)
@@ -152,9 +152,7 @@ class Link extends Table\Column
                 $key = $val;
             }
 
-            if ($row->hasField($val)) {
-                $p[$key] = $row->get($val);
-            }
+            $p[$key] = $row->get($val);
         }
 
         return ['c_' . $this->short_name => $this->table->url($p)];

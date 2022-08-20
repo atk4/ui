@@ -86,7 +86,7 @@ class DemoActionsUtil
             [
                 'caption' => 'Edit ISO3',
                 'description' => function (UserAction $action) {
-                    return 'Edit ISO3 for country: ' /* TODO . $action->getEntity()->getTitle()*/;
+                    return 'Edit ISO3 for country: ' /* TODO . $action->getEntity()->getTitle() */;
                 },
                 'fields' => [$country->fieldName()->iso3],
                 'callback' => function () {
@@ -132,7 +132,7 @@ class DemoActionsUtil
                 'args' => [
                     'age' => ['type' => 'integer', 'required' => true],
                     'city' => [],
-                    'gender' => ['type' => 'string', /* TODO 'values' => ['m' => 'Male', 'f' => 'Female'],*/ 'required' => true, 'default' => 'm'],
+                    'gender' => ['type' => 'string', /* TODO 'values' => ['m' => 'Male', 'f' => 'Female'], */ 'required' => true, 'default' => 'm'],
                 ],
                 'fields' => [$country->fieldName()->iso3],
                 'callback' => function (Model $model, $age, $city, $gender) {

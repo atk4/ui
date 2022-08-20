@@ -10,6 +10,7 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Ui\Component\ItemSearch;
+use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 
 class CardDeck extends View
@@ -121,7 +122,7 @@ class CardDeck extends View
             $right = View::addTo($this->menu, ['ui' => 'four wide column']);
             $this->search = $right->add(Factory::factory($this->search, ['context' => '#' . $this->container->name]));
             $this->search->reload = $this->container;
-            $this->query = $this->getApp()->stickyGet($this->search->queryArg);
+            $this->query = $this->stickyGet($this->search->queryArg);
         }
     }
 
@@ -327,7 +328,7 @@ class CardDeck extends View
             $defaults['args'] = $args;
         }
 
-        $btn = $this->btns->add($this->getExecutorFactory()->createTrigger($executor->getAction(), $this->getExecutorFactory()::CARD_BUTTON));
+        $btn = $this->btns->add($this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::CARD_BUTTON));
         if ($executor->getAction()->enabled === false) {
             $btn->addClass('disabled');
         }
@@ -417,7 +418,7 @@ class CardDeck extends View
      */
     protected function initPaginator()
     {
-        $count = $this->model->action('count')->getOne();
+        $count = (int) $this->model->action('count')->getOne();
         if ($this->paginator) {
             if ($count > 0) {
                 $this->paginator->setTotal((int) ceil($count / $this->ipp));

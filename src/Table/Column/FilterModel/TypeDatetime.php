@@ -78,7 +78,7 @@ class TypeDatetime extends Column\FilterModel
                     break;
                 case 'within':
                     $d1 = $this->getDatetime($filter['value'])->setTime(0, 0, 0);
-                    $d2 = $this->getDatetime($filter['range'])->setTime(23, 59, 59, 999999);
+                    $d2 = $this->getDatetime($filter['range'])->setTime(23, 59, 59, 999_999);
                     if ($d2 >= $d1) {
                         $value = $model->persistence->typecastSaveField($model->getField($filter['name']), $d1);
                         $value2 = $model->persistence->typecastSaveField($model->getField($filter['name']), $d2);
@@ -92,7 +92,7 @@ class TypeDatetime extends Column\FilterModel
                 case '!=':
                 case '=':
                     $d1 = clone $this->getDatetime($filter['value'])->setTime(0, 0, 0);
-                    $d2 = $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999999);
+                    $d2 = $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999_999);
                     if ($d2 >= $d1) {
                         $value = $model->persistence->typecastSaveField($model->getField($filter['name']), $d1);
                         $value2 = $model->persistence->typecastSaveField($model->getField($filter['name']), $d2);
@@ -106,7 +106,7 @@ class TypeDatetime extends Column\FilterModel
                     break;
                 case '>':
                 case '<=':
-                    $model->addCondition($filter['name'], $filter['op'], $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999999));
+                    $model->addCondition($filter['name'], $filter['op'], $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999_999));
 
                     break;
                 case '<':

@@ -31,7 +31,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
         }
 
         $path = [];
-        $jsReload = new \Atk4\Ui\JsReload($this, [$this->name => new \Atk4\Ui\JsExpression('[]+[]', [
+        $jsReload = new \Atk4\Ui\JsReload($this, [$this->name => new \Atk4\Ui\JsExpression('[] + []', [
             $path ? (implode(',', $path) . ',') : '',
             new \Atk4\Ui\JsExpression('$(this).data("id")'),
         ])]);
@@ -62,7 +62,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
                 $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
             }
 
-            $jsReload = new \Atk4\Ui\JsReload($this, [$this->name => new \Atk4\Ui\JsExpression('[]+[]', [
+            $jsReload = new \Atk4\Ui\JsReload($this, [$this->name => new \Atk4\Ui\JsExpression('[] + []', [
                 $path ? (implode(',', $path) . ',') : '',
                 new \Atk4\Ui\JsExpression('$(this).data("id")'),
             ])]);

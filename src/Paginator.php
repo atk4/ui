@@ -18,7 +18,7 @@ class Paginator extends View
     public $page;
 
     /**
-     * When there are more than $range*2+1 items, then current page will be surrounded by $range pages
+     * When there are more than ($range * 2 + 1) items, then current page will be surrounded by $range pages
      * followed by spacer ..., for example if range=2, then.
      *
      * 1, ..., 5, 6, *7*, 8, 9, ..., 34

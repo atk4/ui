@@ -9,6 +9,7 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Table\Column\ActionButtons;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
+use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 
 /**
@@ -108,10 +109,24 @@ class Grid extends View
         if ($this->paginator !== false) {
             $seg = View::addTo($this->container, [], ['Paginator'])->addStyle('text-align', 'center');
             $this->paginator = $seg->add(Factory::factory([Paginator::class, 'reload' => $this->container], $this->paginator));
-            $this->issetApp() ? $this->getApp()->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
+            $this->stickyGet($this->paginator->name);
         }
 
-        $this->issetApp() ? $this->getApp()->stickyGet('_q') : $this->stickyGet('_q');
+        // TODO dirty way to set stickyGet - add addQuickSearch to find the expected search input component ID and then remove it
+        if ($this->menu !== false) {
+            $appUniqueHashesBackup = $this->getApp()->unique_hashes;
+            $menuElementNameCountsBackup = \Closure::bind(fn () => $this->_element_name_counts, $this->menu, AbstractView::class)();
+            try {
+                $menuRight = $this->menu->addMenuRight(); // @phpstan-ignore-line
+                $menuItemView = View::addTo($menuRight->addItem()->setElement('div'));
+                $quickSearch = JsSearch::addTo($menuItemView);
+                $this->stickyGet($quickSearch->name . '_q');
+                $this->menu->removeElement($menuRight->short_name);
+            } finally {
+                $this->getApp()->unique_hashes = $appUniqueHashesBackup;
+                \Closure::bind(fn () => $this->_element_name_counts = $menuElementNameCountsBackup, $this->menu, AbstractView::class)();
+            }
+        }
     }
 
     protected function initTable(): Table
@@ -314,7 +329,8 @@ class Grid extends View
         $view = View::addTo($this->menu
             ->addMenuRight()->addItem()->setElement('div'));
 
-        $q = trim($this->stickyGet('_q') ?? '');
+        $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
+        $q = trim($this->stickyGet($this->quickSearch->name . '_q') ?? '');
         if ($q !== '') {
             $scope = Model\Scope::createOr();
             foreach ($fields as $field) {
@@ -322,8 +338,7 @@ class Grid extends View
             }
             $this->model->addCondition($scope);
         }
-
-        $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery, 'initValue' => $q]);
+        $this->quickSearch->initValue = $q;
     }
 
     /**
@@ -359,7 +374,7 @@ class Grid extends View
      */
     public function addExecutorButton(UserAction\ExecutorInterface $executor, Button $button = null)
     {
-        $btn = $button ? $this->add($button) : $this->getExecutorFactory()->createTrigger($executor->getAction(), $this->getExecutorFactory()::TABLE_BUTTON);
+        $btn = $button ? $this->add($button) : $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_BUTTON);
         $confirmation = $executor->getAction()->getConfirmation() ?: '';
         $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
 
@@ -390,7 +405,7 @@ class Grid extends View
 
     public function addExecutorMenuItem(ExecutorInterface $executor)
     {
-        $item = $this->getExecutorFactory()->createTrigger($executor->getAction(), $this->getExecutorFactory()::TABLE_MENU_ITEM);
+        $item = $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_MENU_ITEM);
         // ConfirmationExecutor take care of showing the user confirmation, thus make it empty.
         $confirmation = !$executor instanceof ConfirmationExecutor ? ($executor->getAction()->getConfirmation() ?: '') : '';
         $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
@@ -632,7 +647,7 @@ class Grid extends View
      */
     private function setModelLimitFromPaginator()
     {
-        $this->paginator->setTotal((int) ceil($this->model->action('count')->getOne() / $this->ipp));
+        $this->paginator->setTotal((int) ceil((int) $this->model->action('count')->getOne() / $this->ipp));
         $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
     }
 

@@ -27,7 +27,7 @@ $saveAndDumpValues = function (Form $form) {
     ]);
 };
 
-////////////////////////////////
+// -----------------------------------------------------------------------------
 
 $form = Form::addTo($app);
 $form->setModel($model, []);
@@ -43,7 +43,7 @@ $c1 = $colsLayout->addColumn();
 $c1->setModel($model, [$model->fieldName()->iso, $model->fieldName()->iso3]);
 
 $c2 = $colsLayout->addColumn();
-$c2->setModel($model, [$model->fieldName()->numcode/*, $model->fieldName()->phonecode*/]);
+$c2->setModel($model, [$model->fieldName()->numcode/* , $model->fieldName()->phonecode */]);
 
 $form->addControl($model->fieldName()->phonecode);
 
@@ -51,7 +51,7 @@ $form->onSubmit($saveAndDumpValues);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
-////////////////////////////////
+// -----------------------------------------------------------------------------
 
 $form = Form::addTo($app);
 $form->setModel($model, []);
@@ -73,7 +73,7 @@ $form->onSubmit($saveAndDumpValues);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
-////////////////////////////////
+// -----------------------------------------------------------------------------
 
 $form = Form::addTo($app);
 $form->setModel($model, []);
@@ -95,7 +95,7 @@ $form->onSubmit($saveAndDumpValues);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
-/////////////////////////////////////////
+// -----------------------------------------------------------------------------
 
 \Atk4\Ui\Header::addTo($app, ['Color in form']);
 

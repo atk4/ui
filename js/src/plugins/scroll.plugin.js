@@ -171,7 +171,7 @@ export default class scroll extends atkPlugin {
    */
     onComplete(response, element) {
         this.removeLoader();
-        if (response && response.success) {
+        if (response.success) {
             if (response.html) {
                 // Done - no more pages
                 if (response.message === 'Done') {

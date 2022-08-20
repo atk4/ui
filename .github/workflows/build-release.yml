@@ -64,7 +64,7 @@ jobs:
       - name: Compile JS and CSS files for CDN
         run: |
           (cd js && npm run build)
-          sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'https://raw.githack.com/atk4/ui/${{ steps.target.outputs.version_name }}/public',~" src/App.php
+          sed -i "s~'https://raw.githack.com/atk4/ui/develop/public.*~'https://rawcdn.githack.com/atk4/ui/${{ steps.target.outputs.version_name }}/public',~" src/App.php
 
           lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
           echo '!/agileui.css.map' >> public/.gitignore

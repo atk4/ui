@@ -105,7 +105,7 @@ class Calendar extends Input
      */
     public function getJsInstance(): JsExpression
     {
-        return (new Jquery('#' . $this->id . '_input'))->get(0)->_flatpickr;
+        return (new Jquery('#' . $this->name . '_input'))->get(0)->_flatpickr;
     }
 
     private function expandPhpDtFormat(string $phpFormat): string

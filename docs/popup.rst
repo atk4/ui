@@ -20,7 +20,7 @@ Popup can also operate with dynamic content::
 
     $button = Button::addTo($app, ['Click me']);
     Popup::addTo($app, [$button])
-        ->set('hello world with rand='.rand(1,100));
+        ->set('hello world with rand='.rand(1, 100));
 
 Pop-up should be added into a viewport which will define boundaries of a pop-up, but it will
 be positioned relative to the $button. Popup remains invisible until it's triggered by event of $button.
@@ -41,7 +41,7 @@ Like many other Views of ATK, popup is an interractive element. It can load it's
     $item = $menu->addItem('HoverMe');
     Popup::addTo($app, [$item])->set(function($popup) {
         Text::addTo($popup)->set('Appears when you hover a menu item');
-        Label::addTo($popup, ['Random value', 'detail' => rand(1,100)]);
+        Label::addTo($popup, ['Random value', 'detail' => rand(1, 100)]);
     });
 
 Demo: https://ui.agiletoolkit.org/demos/popup.php

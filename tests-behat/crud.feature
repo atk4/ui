@@ -13,7 +13,7 @@ Feature: Crud
     # '50ce262c' = substr(md5('phonecode'), 0, 8)
     Then I fill in "atk_fp_country__50ce262c" with "1"
     Then I press Modal button "Save"
-    Then Toast display should contains text "Form Submit"
+    Then Toast display should contain text "Form Submit"
 
   Scenario: search
     Then I search grid for "united kingdom"
@@ -23,7 +23,7 @@ Feature: Crud
     Then I press button "Edit"
     Then Modal is open with text "Edit Country"
     Then I press Modal button "Save"
-    Then Toast display should contains text "Form Submit"
+    Then Toast display should contain text "Form Submit"
     # make sure search query stick
     Then I should see "United Kingdom"
 

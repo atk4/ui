@@ -60,7 +60,7 @@ foreach ($country->getModel()->getUserActions() as $action) {
     }
 }
 
-////////////////////////
+// -----------------------------------------------------------------------------
 
 Header::addTo($app, ['Card View using global Executor Factory']);
 

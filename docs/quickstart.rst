@@ -122,7 +122,7 @@ you can define it in the $app->db class::
     use Atk4\Data\Persistence;
     use Atk4\Ui\App;
 
-    $db = Persistence::connect(DB_URI,DB_USR, DB_PWD);
+    $db = Persistence::connect(DB_URI, DB_USR, DB_PWD);
 
     $app = new App([
     "title" => "Erp v." . ERP_VER,

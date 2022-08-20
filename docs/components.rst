@@ -63,7 +63,7 @@ just as you would add any other component, yet they will send additional request
 other code. Here is how interractive components will typically communicate:
 
 1. request by browser is made.
-2. :php:class:`App` asks :php:class:`Console` to render HTML+JavaScript.
+2. :php:class:`App` asks :php:class:`Console` to render HTML + JavaScript.
 3. JavaScript invokes AJAX request using a :php:class:`Callback` URL.
 4. Callback invokes user-defined PHP code, which will generate some :php:meth:`Console::output()`.
 5. Response is encoded and

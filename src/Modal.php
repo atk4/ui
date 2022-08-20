@@ -36,9 +36,13 @@ class Modal extends View
     public $loading_label = 'Loading...';
     public $headerCss = 'header';
     public $ui = 'modal';
-    public $fx = [];
+    /** @var \Closure|null */
+    public $fx;
+    /** @var CallbackLater|null */
     public $cb;
+    /** @var View|null */
     public $cb_view;
+    /** @var array */
     public $args = [];
     /** @var array */
     public $options = [];
@@ -80,7 +84,7 @@ class Modal extends View
             throw new Exception('Only one argument is needed by Modal::set()');
         }
 
-        $this->fx = [$fx];
+        $this->fx = $fx;
         $this->enableCallback();
 
         return $this;
@@ -101,7 +105,7 @@ class Modal extends View
         }
 
         $this->cb->set(function () {
-            $this->fx[0]($this->cb_view);
+            ($this->fx)($this->cb_view);
             $this->cb->terminateJson($this->cb_view);
         });
     }
@@ -301,7 +305,7 @@ class Modal extends View
             $this->template->trySet('contentCss', implode(' ', $this->contentCss));
         }
 
-        if (!empty($this->fx)) {
+        if ($this->fx !== null) {
             $data['uri'] = $this->cb->getJsUrl();
         }
 

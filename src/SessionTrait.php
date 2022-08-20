@@ -8,14 +8,22 @@ use Atk4\Core\TraitUtil;
 
 trait SessionTrait
 {
-    private function getSession(): App\Session
+    private function getSessionManager(): App\SessionManager
     {
         // all methods use this method, so we better check NameTrait existence here in one place
         if (!TraitUtil::hasNameTrait($this)) {
-            throw new Exception('Object should have NameTrait applied to use session');
+            throw new Exception('Object must have NameTrait applied to use session');
         }
 
         return $this->getApp()->session;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function atomicSession(\Closure $fx, bool $readAndCloseImmediately = false)
+    {
+        return $this->getSessionManager()->atomicSession($fx, $readAndCloseImmediately);
     }
 
     /**
@@ -27,45 +35,43 @@ trait SessionTrait
      */
     public function memorize(string $key, $value)
     {
-        return $this->getSession()->memorize($this->name, $key, $value);
+        return $this->getSessionManager()->memorize($this->name, $key, $value);
     }
 
     /**
      * Similar to memorize, but if value for key exist, will return it.
      *
-     * @param mixed $default
+     * @param mixed $defaultValue
      *
-     * @return mixed Previously memorized data or $default
+     * @return mixed Previously memorized data or $defaultValue
      */
-    public function learn(string $key, $default = null)
+    public function learn(string $key, $defaultValue = null)
     {
-        return $this->getSession()->learn($this->name, $key, $default);
+        return $this->getSessionManager()->learn($this->name, $key, $defaultValue);
     }
 
     /**
      * Returns session data for this object. If not previously set, then
-     * $default is returned.
+     * $defaultValue is returned.
      *
-     * @param mixed $default
+     * @param mixed $defaultValue
      *
-     * @return mixed Previously memorized data or $default
+     * @return mixed Previously memorized data or $defaultValue
      */
-    public function recall(string $key, $default = null)
+    public function recall(string $key, $defaultValue = null)
     {
-        return $this->getSession()->recall($this->name, $key, $default);
+        return $this->getSessionManager()->recall($this->name, $key, $defaultValue);
     }
 
     /**
      * Forget session data for $key. If $key is omitted will forget all
      * associated session data.
      *
-     * @param string $key Optional key of data to forget
-     *
      * @return $this
      */
     public function forget(string $key = null)
     {
-        $this->getSession()->forget($this->name, $key);
+        $this->getSessionManager()->forget($this->name, $key);
 
         return $this;
     }

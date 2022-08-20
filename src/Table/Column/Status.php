@@ -20,7 +20,7 @@ class Status extends Table\Column
      *
      *  [ 'positive' => ['Paid', 'Archived'], 'negative' => ['Overdue'] ]
      *
-     * @param array $states List of status => [value,value,value]
+     * @param array $states List of status => [value, value, value]
      */
     public function __construct($states)
     {

@@ -61,7 +61,6 @@ $app = new \Atk4\Ui\App();
 $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
 $form = \Atk4\Ui\Form::addTo($app);
-
 $form->addField('email');
 $form->onSubmit(function (Form $form) {
     // implement subscribe here
@@ -93,7 +92,8 @@ $app = new \Atk4\Ui\App('hello world');
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 
-\Atk4\Ui\Crud::addTo($app)->setModel(new User($app->db));
+\Atk4\Ui\Crud::addTo($app)
+    ->setModel(new User($app->db));
 ```
 
 ATK Data allows you to set up relations between models:
@@ -104,7 +104,7 @@ class User extends Model {
         parent::init();
 
         $this->addField('name');
-        $this->addField('gender', ['enum' => 'female','male','other']);
+        $this->addField('gender', ['enum' => 'female', 'male', 'other']);
         $this->hasMany('Purchases', ['model' => [Purchase::class]]);
     }
 }
@@ -117,10 +117,10 @@ use \Atk4\Mastercrud\MasterCrud;
 
 // set up $app here
 
-$master_crud = MasterCrud::addTo($app);
-$master_crud->setModel(new User($app->db), [
-    'Purchases' => []
-]);
+$master_crud = MasterCrud::addTo($app)
+    ->setModel(new User($app->db), [
+        'Purchases' => [],
+    ]);
 
 ```
 
@@ -135,8 +135,8 @@ It's easy to create your own application styling. Here are some example UI:
 As of version 2.0 - Agile Toolkit offers support for User Actions. Those are easy to define in your Data Model declaration:
 
 ``` php
-$this->addAction('archive', function(Model $m) {
-    $m->get('is_archived') = true;
+$this->addAction('archive', function (Model $m) {
+    $m->set('is_archived', true);
     $this->saveAndUnload();
 });
 ```
@@ -156,18 +156,20 @@ One of the fundamental features of ATK is Callback - ability to dynamically gene
 $tabs = \Atk4\Ui\Tabs::addTo($app);
 \Atk4\Ui\Message::addTo($tabs->addTab('Intro'), ['Other tabs are loaded dynamically!']);
 
-$tabs->addTab('Users', function($p) use($app) {
+$tabs->addTab('Users', function (\Atk4\Ui\VirtualPage $p) use ($app) {
     // this tab is loaded dynamically, but also contains dynamic component
 
-    \Atk4\Ui\Crud::addTo($p)->setModel(new User($app->db));
+    \Atk4\Ui\Crud::addTo($p)
+        ->setModel(new User($app->db));
 });
 
-$tabs->addTab('Settings', function($p) use($app) {
+$tabs->addTab('Settings', function (\Atk4\Ui\VirtualPage $p) use ($app) {
     // second tab contains an AJAX form that stores itself back to DB
 
     $m = new Settings($app->db);
     $m = $m->load(2);
-    \Atk4\Ui\Form::addTo($p)->setModel($m);
+    \Atk4\Ui\Form::addTo($p)
+        ->setModel($m);
 });
 ```
 
@@ -210,7 +212,8 @@ class User extends \Atk4\Data\Model {
     }
 }
 
-\Atk4\Ui\Crud::addTo($app)->setModel(new User($app->db));
+\Atk4\Ui\Crud::addTo($app)
+    ->setModel(new User($app->db));
 ```
 
 The result is here:
@@ -221,7 +224,7 @@ The result is here:
 
 Agile UI comes with many built-in components:
 
-_All components can be view using the [demos](ui.agiletoolkit.org/demos) application._
+_All components can be view using the [demos](https://ui.agiletoolkit.org/demos/) application._
 
 | Component                                                    | Description                                                  | Introduced |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------- |

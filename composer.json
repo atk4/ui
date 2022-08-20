@@ -96,6 +96,10 @@
         }
     },
     "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "phpstan/extension-installer": true
+        },
         "sort-packages": true
     }
 }

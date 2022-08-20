@@ -49,7 +49,7 @@ Button::addTo($bar, ['Shuffle', 'icon' => 'shuffle']);
 $bar = \Atk4\Ui\View::addTo($app, ['ui' => 'big blue buttons']);
 Button::addTo($bar, ['icon' => 'file']);
 Button::addTo($bar, ['icon' => 'yellow save']);
-Button::addTo($bar, ['icon' => 'upload', 'disabled' => true]);
+Button::addTo($bar, ['icon' => 'upload', 'class.disabled' => true]);
 
 \Atk4\Ui\Header::addTo($app, ['Forks Button Component', 'size' => 2]);
 
