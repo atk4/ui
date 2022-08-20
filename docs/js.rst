@@ -46,7 +46,7 @@ There are other ways to generate an action, such as using :php:meth:`JsExpressio
 Finally, actions can be used inside other actions::
 
     $action = new JsExpression('alert([])', [
-        $view->js()->text()
+        $view->js()->text(),
     ]);
 
     // will produce alert($('#button-id').text());
@@ -55,7 +55,7 @@ or::
 
     $action = $view->js()->text(new JsExpression('[] + []', [
         5,
-        10
+        10,
     ]));
 
 All of the above examples will produce a valid "Action" object that can be used further.
@@ -287,7 +287,7 @@ Sometimes you want to execute action by calling a global JavaScript method. For 
 and other cases you can use JsExpression::
 
     $action = new JsExpression('alert([])', [
-        $view->js()->text()
+        $view->js()->text(),
     ]);
 
 Because :php:class:`JsChain` will typically wrap all the arguments through
@@ -385,7 +385,7 @@ This will map into the following JavaScript code:
 .. code-block:: js
 
     $('#right_container_id').height(mySum([
-        $('#left_box1').height(), $('#left_box2').height(), $('#left_box3').height() // etc
+        $('#left_box1').height(), $('#left_box2').height(), $('#left_box3').height(), // etc
     ]));
 
 You can further simplify JavaScript code yourself, but keep the JavaScript logic inside the `.js` files
@@ -492,7 +492,7 @@ some feedback to the user. JsNotify can display a bar on top of the screen for s
             } else {
                 return [
                     $modal->hide(),
-                    new \Atk4\Ui\JsNotify('Thank you '.$form->model->get('name'))
+                    new \Atk4\Ui\JsNotify('Thank you ' . $form->model->get('name')),
                 ];
             }
         });

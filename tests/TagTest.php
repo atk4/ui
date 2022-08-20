@@ -10,7 +10,7 @@ class TagTest extends TestCase
 {
     public function getApp(): \Atk4\Ui\App
     {
-        return new \Atk4\Ui\App(['catch_exceptions' => false, 'always_run' => false]);
+        return new \Atk4\Ui\App(['catchExceptions' => false, 'alwaysRun' => false]);
     }
 
     public function assertTagRender(string $html, array $args): void

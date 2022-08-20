@@ -83,7 +83,7 @@ into multiple Tabs or detach form control groups or even create nested layouts::
     $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
     $form_page->addControl('age', new \Atk4\Ui\Form\Control\Line());
 
-    $form->onSubmit(function(Form $form) { return $form->model->get('name').' has age '.$form->model->get('age'); });
+    $form->onSubmit(function(Form $form) { return $form->model->get('name') . ' has age ' . $form->model->get('age'); });
 
 This is further explained in documentation for :php:class:`Atk4\\Ui\\Form\\Layout` class,
 however if you do plan on adding your own form control types, it's important that you extend it
@@ -336,7 +336,7 @@ This function is called with each model record and needs to return an array::
     $dropdown->renderRowFunction = function($record) {
         return [
             'value' => $record->id_field,
-            'title' => $record->getTitle().' ('.$record->get('subtitle').')',
+            'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
         ];
     }
 
@@ -345,7 +345,7 @@ You can also use this function to add an Icon to a record::
     $dropdown->renderRowFunction = function($record) {
         return [
             'value' => $record->id_field,
-            'title' => $record->getTitle().' ('.$record->get('subtitle').')',
+            'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
             'icon' => $record->get('value') > 100 ? 'money' : 'coins',
         ];
     }
@@ -403,7 +403,7 @@ You can also define an Icon right away::
          'tag' => ['Tag', 'icon' => 'tag icon'],
          'globe' => ['Globe', 'icon' => 'globe icon'],
          'registered' => ['Registered', 'icon' => 'registered icon'],
-         'file' => ['File', 'icon' => 'file icon']
+         'file' => ['File', 'icon' => 'file icon'],
      ].
 
 If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.

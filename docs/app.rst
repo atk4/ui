@@ -133,9 +133,9 @@ Clean-up and simplification
 ---------------------------
 
 .. php:method:: run()
-.. php:attr:: run_called
-.. php:attr:: is_rendering
-.. php:attr:: always_run
+.. php:attr:: runCalled
+.. php:attr:: isRendering
+.. php:attr:: alwaysRun
 
 App also does certain actions to simplify handling of the application. For instance, App class will
 render itself automatically at the end of the application, so you can safely add objects into the `App`
@@ -146,7 +146,7 @@ without actually triggering a global execution process::
     // Next line is optional
     $app->run();
 
-If you do not want the application to automatically execute `run()` you can either set `$always_run` to false
+If you do not want the application to automatically execute `run()` you can either set `$alwaysRun` to false
 or use :php:meth:`terminate()` to the app with desired output.
 
 Exception handling
@@ -287,7 +287,7 @@ You can also use this method to output debug data. Here is comparison to var_dum
 Execution state
 ---------------
 
-.. php:attr:: is_rendering
+.. php:attr:: isRendering
 
 Will be true if the application is currently rendering recursively through the Render Tree.
 
@@ -337,7 +337,7 @@ and the following hooks are available:
  - beforeExit
 
 Hook beforeExit is called just when application is about to be terminated. If you are
-using :php:attr:`App::$always_run` = true, then this hook is guaranteed to execute always
+using :php:attr:`App::$alwaysRun` = true, then this hook is guaranteed to execute always
 after output was sent. ATK will avoid calling this hook multiple times.
 
 .. note:: beforeOutput and beforeRender are not executed if $app->terminate() is called, even
@@ -428,7 +428,7 @@ Populating the left menu object is simply a matter of adding the right menu item
 This is the top menu of the admin layout. You can add other item to the top menu using::
 
     Button::addTo($layout->menu->addItem(), ['View Source', 'teal', 'icon' => 'github'])
-        ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\JsExpression('document.location=[];', [$url.$f]));
+        ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\JsExpression('document.location=[];', [$url . $f]));
 
 .. php:attr:: menuRight
 

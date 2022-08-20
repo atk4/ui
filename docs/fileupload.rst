@@ -86,7 +86,7 @@ Example showing the onUpload callback on the UploadImage field::
 
         // Do file processing here...
 
-        $img->setThumbnailSrc('./images/'.$file_name);
+        $img->setThumbnailSrc('./images/' . $file_name);
         $img->setFileId('123456');
 
         // can also return a notifier.
@@ -98,7 +98,7 @@ The fileId is set to file name by default if omitted::
 
     $form->onSubmit(function (Form $form) {
         // implement submission here
-        return $form->success('Thanks for submitting file: '.$form->model->get('img'));
+        return $form->success('Thanks for submitting file: ' . $form->model->get('img'));
     });
 
 onDelete
@@ -121,7 +121,7 @@ Example showing the onDelete callback on the UploadImage field::
         // reset thumbanil
         $img->clearThumbnail('./images/default.png');
 
-        return new \Atk4\Ui\JsNotify(['content' => $fileId.' has been removed!', 'color' => 'green']);
+        return new \Atk4\Ui\JsNotify(['content' => $fileId . ' has been removed!', 'color' => 'green']);
     });
 
 

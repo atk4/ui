@@ -22,7 +22,7 @@ class Textarea extends Input
         return $this->getApp()->getTag(
             'textarea',
             array_merge([
-                'name' => $this->short_name,
+                'name' => $this->shortName,
                 'type' => $this->inputType,
                 'rows' => $this->rows,
                 'placeholder' => $this->placeholder,

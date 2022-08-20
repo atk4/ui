@@ -13,7 +13,7 @@ class AppPsr7Test extends TestCase
 {
     protected function getApp(): App
     {
-        $app = new class(['catch_exceptions' => false, 'always_run' => false, 'call_exit' => false]) extends App {
+        $app = new class(['catchExceptions' => false, 'alwaysRun' => false, 'callExit' => false]) extends App {
             protected function emitResponse(): void
             {
                 // no emit

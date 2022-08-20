@@ -122,7 +122,7 @@ specify the caption, you can use code like this::
     $order->addExpression('total', [
         '[price]*[amount]',
         'type' => 'atk4_money',
-        'caption' => 'Total Price'
+        'caption' => 'Total Price',
     ]);
 
     $table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
@@ -268,10 +268,10 @@ The tag will override model value. Here is example usage of :php:meth:`Table\\Co
 
         function getHtmlTags(\Atk4\Data\Model $row)
         {
-            return ['_expired' =>
-                $row->get('date') < new \DateTime() ?
-                '<td class="danger">EXPIRED</td>' :
-                '<td></td>'
+            return [
+                '_expired' => $row->get('date') < new \DateTime()
+                                  ? '<td class="danger">EXPIRED</td>'
+                                  : '<td></td>',
             ];
         }
     }

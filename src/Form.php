@@ -157,7 +157,7 @@ class Form extends View
     {
         parent::init();
 
-        $this->formElement = View::addTo($this, ['element' => 'form', 'short_name' => 'form'], ['FormElementOnly']);
+        $this->formElement = View::addTo($this, ['element' => 'form', 'shortName' => 'form'], ['FormElementOnly']);
 
         // Initialize layout, so when you call addControl / setModel next time, form will know
         // where to add your fields.
@@ -498,8 +498,8 @@ class Form extends View
 
         $defaults = [
             'form' => $this,
-            'entityField' => new EntityFieldPair($this->model, $field->short_name),
-            'short_name' => $field->short_name,
+            'entityField' => new EntityFieldPair($this->model, $field->shortName),
+            'shortName' => $field->shortName,
         ];
 
         return Factory::factory($ControlSeed, $defaults);

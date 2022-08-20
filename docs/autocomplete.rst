@@ -56,7 +56,7 @@ You can do much more with AutoComplete form control by passing dropdown settings
                   $(this).parents(".form").form("submit");
                   $(this).data("value", value);
                 }}'),
-        ]
+        ],
     ])->setModel(new Country($db));
 
 

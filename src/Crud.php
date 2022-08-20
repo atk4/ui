@@ -151,7 +151,7 @@ class Crud extends Grid
             foreach ($this->onActions as $onAction) {
                 $executor->onHook(UserAction\ModalExecutor::HOOK_STEP, function ($ex, $step, $form) use ($onAction, $action) {
                     $key = key($onAction);
-                    if ($key === $action->short_name && $step === 'fields') {
+                    if ($key === $action->shortName && $step === 'fields') {
                         return $onAction[$key]($form, $ex);
                     }
                 });
@@ -249,12 +249,12 @@ class Crud extends Grid
     protected function getExecutor(Model\UserAction $action)
     {
         // prioritize Crud addFields over action->fields for Model add action.
-        if ($action->short_name === 'add' && $this->addFields) {
+        if ($action->shortName === 'add' && $this->addFields) {
             $action->fields = $this->addFields;
         }
 
         // prioritize Crud editFields over action->fields for Model edit action.
-        if ($action->short_name === 'edit' && $this->editFields) {
+        if ($action->shortName === 'edit' && $this->editFields) {
             $action->fields = $this->editFields;
         }
 

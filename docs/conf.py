@@ -30,7 +30,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
-    'sphinxcontrib.phpdomain'
+    'sphinxcontrib.phpdomain',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -232,7 +232,7 @@ latex_elements = {
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'agile-data', u'Agile UI Documentation',
-     [u'Agile Toolkit'], 1)
+     [u'Agile Toolkit'], 1),
 ]
 
 # If true, show URL addresses after external links.

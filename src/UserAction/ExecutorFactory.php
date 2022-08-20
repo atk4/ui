@@ -94,7 +94,7 @@ class ExecutorFactory
      */
     public function registerExecutor(UserAction $action, $seed)
     {
-        $this->executorSeed[$this->getModelId($action)][$action->short_name] = $seed;
+        $this->executorSeed[$this->getModelId($action)][$action->shortName] = $seed;
     }
 
     /**
@@ -106,9 +106,9 @@ class ExecutorFactory
     public function registerTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false)
     {
         if ($isSpecific) {
-            $this->triggerSeed[$type][$this->getModelId($action)][$action->short_name] = $seed;
+            $this->triggerSeed[$type][$this->getModelId($action)][$action->shortName] = $seed;
         } else {
-            $this->triggerSeed[$type][$action->short_name] = $seed;
+            $this->triggerSeed[$type][$action->shortName] = $seed;
         }
     }
 
@@ -126,11 +126,11 @@ class ExecutorFactory
     public function registerCaption(UserAction $action, string $caption, bool $isSpecific = false, string $type = null)
     {
         if ($isSpecific) {
-            $this->triggerCaption[$this->getModelId($action)][$action->short_name] = $caption;
+            $this->triggerCaption[$this->getModelId($action)][$action->shortName] = $caption;
         } elseif ($type) {
-            $this->triggerCaption[$type][$action->short_name] = $caption;
+            $this->triggerCaption[$type][$action->shortName] = $caption;
         } else {
-            $this->triggerCaption[$action->short_name] = $caption;
+            $this->triggerCaption[$action->shortName] = $caption;
         }
     }
 
@@ -157,12 +157,12 @@ class ExecutorFactory
         // required a specific executor type.
         if ($requiredType) {
             if (!($this->executorSeed[$requiredType] ?? null)) {
-                throw (new Exception('Required executor type is not set. Register it via the registerTypeExecutor method.'))
+                throw (new Exception('Required executor type is not set'))
                     ->addMoreInfo('type', $requiredType);
             }
             $seed = $this->executorSeed[$requiredType];
         // check if executor is register for this model/action.
-        } elseif ($seed = $this->executorSeed[$this->getModelId($action)][$action->short_name] ?? null) {
+        } elseif ($seed = $this->executorSeed[$this->getModelId($action)][$action->shortName] ?? null) {
         } else {
             // if no type is register, determine executor to use base on action properties.
             if (is_callable($action->confirmation)) {
@@ -186,8 +186,8 @@ class ExecutorFactory
     protected function createActionTrigger(UserAction $action, string $type = null): View
     {
         $viewType = array_merge(['default' => [$this, 'getDefaultTrigger']], $this->triggerSeed[$type] ?? []);
-        if ($seed = $viewType[$this->getModelId($action)][$action->short_name] ?? null) {
-        } elseif ($seed = $viewType[$action->short_name] ?? null) {
+        if ($seed = $viewType[$this->getModelId($action)][$action->shortName] ?? null) {
+        } elseif ($seed = $viewType[$action->shortName] ?? null) {
         } else {
             $seed = $viewType['default'];
         }
@@ -232,9 +232,9 @@ class ExecutorFactory
      */
     protected function getActionCaption(UserAction $action, string $type = null): string
     {
-        if ($caption = $this->triggerCaption[$type][$action->short_name] ?? null) {
-        } elseif ($caption = $this->triggerCaption[$this->getModelId($action)][$action->short_name] ?? null) {
-        } elseif ($caption = $this->triggerCaption[$action->short_name] ?? null) {
+        if ($caption = $this->triggerCaption[$type][$action->shortName] ?? null) {
+        } elseif ($caption = $this->triggerCaption[$this->getModelId($action)][$action->shortName] ?? null) {
+        } elseif ($caption = $this->triggerCaption[$action->shortName] ?? null) {
         } else {
             $caption = $action->getCaption();
         }

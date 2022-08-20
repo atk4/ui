@@ -68,7 +68,7 @@ use Atk4\Ui\View;
  *
  * $form = Form::addTo($app);
  * $ml = $form->addControl('ml', [Form\Control\Multiline::class]);
- * $ml->setModel($user, ['name','is_vip']);
+ * $ml->setModel($user, ['name', 'is_vip']);
  *
  * $form->onSubmit(function(Form $form) use ($ml) {
  *     $ml->saveRows();
@@ -210,22 +210,22 @@ class Multiline extends Form\Control
 
         // load the data associated with this input and validate it.
         $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
-            $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($_POST[$this->short_name]));
+            $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($_POST[$this->shortName]));
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
                 if ($this->rowErrors) {
-                    throw new ValidationException([$this->short_name => 'multiline error']);
+                    throw new ValidationException([$this->shortName => 'multiline error']);
                 }
             }
 
             // remove __atml id from array field.
-            if ($this->form->model->getField($this->short_name)->type === 'json') {
+            if ($this->form->model->getField($this->shortName)->type === 'json') {
                 $rows = [];
                 foreach ($this->rowData as $key => $cols) {
                     unset($cols['__atkml']);
                     $rows[] = $cols;
                 }
-                $postRawData[$this->short_name] = json_encode($rows);
+                $postRawData[$this->shortName] = json_encode($rows);
             }
         });
 
@@ -233,7 +233,7 @@ class Multiline extends Form\Control
         $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
             // When errors are coming from this Multiline field, then notify Multiline component about them.
             // Otherwise use normal field error.
-            if ($fieldName === $this->short_name) {
+            if ($fieldName === $this->shortName) {
                 // multiline.js component listen to 'multiline-rows-error' event.
                 $jsError = [$this->jsEmitEvent($this->multiLine->name . '-multiline-rows-error', ['errors' => $this->rowErrors])];
             } else {
@@ -291,7 +291,7 @@ class Multiline extends Form\Control
                 $cols = [];
                 foreach ($this->rowFields as $fieldName) {
                     $field = $model->getField($fieldName);
-                    $value = $this->getApp()->ui_persistence->typecastSaveField($field, $row->get($field->short_name));
+                    $value = $this->getApp()->ui_persistence->typecastSaveField($field, $row->get($field->shortName));
                     $cols[$fieldName] = $value;
                 }
                 $rows[] = $cols;
@@ -456,7 +456,7 @@ class Multiline extends Form\Control
     public function getFieldDef(Field $field): array
     {
         return [
-            'name' => $field->short_name,
+            'name' => $field->shortName,
             'definition' => $this->getComponentDefinition($field),
             'cellProps' => $this->getSuiTableCellProps($field),
             'caption' => $field->getCaption(),
@@ -550,13 +550,13 @@ class Multiline extends Form\Control
 
         if ($field->getReference() !== null) {
             $props['config']['url'] = $this->dataCb->getUrl();
-            $props['config']['reference'] = $field->short_name;
+            $props['config']['reference'] = $field->shortName;
             $props['config']['search'] = true;
         }
 
         $props['config']['placeholder'] ??= 'Select ' . $field->getCaption();
 
-        $this->valuePropsBinding[$field->short_name] = [__CLASS__, 'setLookupOptionValue'];
+        $this->valuePropsBinding[$field->shortName] = [__CLASS__, 'setLookupOptionValue'];
 
         return $props;
     }
@@ -575,7 +575,7 @@ class Multiline extends Form\Control
                 'value' => $value,
             ];
             foreach ($this->fieldDefs as $key => $component) {
-                if ($component['name'] === $field->short_name) {
+                if ($component['name'] === $field->shortName) {
                     $this->fieldDefs[$key]['definition']['componentProps']['optionalValue'] =
                         isset($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'])
                         ? array_merge($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'], [$option])
@@ -656,7 +656,7 @@ class Multiline extends Form\Control
     protected function renderView(): void
     {
         if (!$this->getModel()) {
-            throw new Exception('Multiline field needs to have it\'s model setup.');
+            throw new Exception('Multiline field needs to have it\'s model setup');
         }
 
         $this->renderCallback->set(function () {
@@ -674,7 +674,7 @@ class Multiline extends Form\Control
                 'data' => [
                     'formName' => $this->form->formElement->name,
                     'inputValue' => $inputValue,
-                    'inputName' => $this->short_name,
+                    'inputName' => $this->shortName,
                     'fields' => $this->fieldDefs,
                     'url' => $this->renderCallback->getJsUrl(),
                     'eventFields' => $this->eventFields,
@@ -776,7 +776,7 @@ class Multiline extends Form\Control
 
         foreach ($this->getExpressionFields($model) as $k => $field) {
             if (!is_callable($field->expr)) {
-                $dummyFields[$k]['name'] = $field->short_name;
+                $dummyFields[$k]['name'] = $field->shortName;
                 $dummyFields[$k]['expr'] = $this->getDummyExpression($field, $model);
             }
         }
@@ -810,7 +810,7 @@ class Multiline extends Form\Control
     {
         $fields = [];
         foreach ($model->getFields() as $field) {
-            if (!$field instanceof SqlExpressionField || !in_array($field->short_name, $this->rowFields, true)) {
+            if (!$field instanceof SqlExpressionField || !in_array($field->shortName, $this->rowFields, true)) {
                 continue;
             }
 

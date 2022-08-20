@@ -206,7 +206,7 @@ flexibility. The next example adds a "Cancel" button to a form::
 
     $button = \Atk4\Ui\Button::addTo($form, [
         'Cancel',
-        'icon' => new \Atk4\Ui\Icon('pencil')
+        'icon' => new \Atk4\Ui\Icon('pencil'),
     ])->link('dashboard.php');
 
 :php:class:`Button` and :php:class:`Icon` are some of the most basic components in

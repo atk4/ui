@@ -42,7 +42,7 @@ abstract class AbstractView
      *
      * @var array
      */
-    protected $_add_later = [];
+    protected $_addLater = [];
 
     /** @var bool will be set to true after rendered. This is so that we don't render view twice. */
     protected $_rendered = false;
@@ -57,9 +57,9 @@ abstract class AbstractView
     protected function initDefaultApp()
     {
         $this->setApp(new App([
-            'catch_exceptions' => false,
-            'always_run' => false,
-            'catch_runaway_callbacks' => false,
+            'catchExceptions' => false,
+            'alwaysRun' => false,
+            'catchRunawayCallbacks' => false,
         ]));
         $this->getApp()->invokeInit();
     }
@@ -81,10 +81,10 @@ abstract class AbstractView
         $this->_init();
 
         // add default objects
-        foreach ($this->_add_later as [$object, $args]) {
+        foreach ($this->_addLater as [$object, $args]) {
             $this->add($object, $args);
         }
-        $this->_add_later = [];
+        $this->_addLater = [];
     }
 
     /**
@@ -101,7 +101,7 @@ abstract class AbstractView
         }
 
         if (!$this->issetApp()) {
-            $this->_add_later[] = [$object, $args];
+            $this->_addLater[] = [$object, $args];
 
             return $object;
         }

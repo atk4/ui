@@ -20,11 +20,11 @@ class DemosHttpTest extends DemosTest
     /** @var string|null */
     private static $_processSessionDir;
 
-    /** @var bool set the app->call_exit in demo */
-    protected $app_call_exit = true;
+    /** @var bool set the app->callExit in demo */
+    protected $appCallExit = true;
 
-    /** @var bool set the app->catch_exceptions in demo */
-    protected $app_catch_exceptions = true;
+    /** @var bool set the app->catchExceptions in demo */
+    protected $appCatchExceptions = true;
 
     /** @var string */
     protected $host = '127.0.0.1';
@@ -108,8 +108,8 @@ class DemosHttpTest extends DemosTest
 
     protected function getPathWithAppVars(string $path): string
     {
-        $path .= strpos($path, '?') === false ? '?' : '&';
-        $path .= 'APP_CALL_EXIT=' . ((int) $this->app_call_exit) . '&APP_CATCH_EXCEPTIONS=' . ((int) $this->app_catch_exceptions);
+        $path .= !str_contains($path, '?') ? '?' : '&';
+        $path .= 'APP_CALL_EXIT=' . ((int) $this->appCallExit) . '&APP_CATCH_EXCEPTIONS=' . ((int) $this->appCatchExceptions);
 
         return parent::getPathWithAppVars($path);
     }

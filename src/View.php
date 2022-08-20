@@ -231,8 +231,8 @@ class View extends AbstractView implements JsExpressionable
      */
     protected function init(): void
     {
-        $addLater = $this->_add_later;
-        $this->_add_later = [];
+        $addLater = $this->_addLater;
+        $this->_addLater = [];
         parent::init();
 
         if ($this->region && !$this->template && !$this->defaultTemplate && $this->issetOwner() && $this->getOwner()->template) {
@@ -290,7 +290,7 @@ class View extends AbstractView implements JsExpressionable
         }
 
         if (!$this->issetApp()) {
-            $this->_add_later[] = [$object, $region];
+            $this->_addLater[] = [$object, $region];
 
             return $object;
         }
@@ -929,7 +929,7 @@ class View extends AbstractView implements JsExpressionable
         $type = $useSession ? 'session' : 'local';
 
         if (!$name = $this->name) {
-            throw new Exception('View property name needs to be set.');
+            throw new Exception('View property name needs to be set');
         }
 
         return (new JsChain('atk.dataService'))->clearData($name, $type);
@@ -953,7 +953,7 @@ class View extends AbstractView implements JsExpressionable
         $type = $useSession ? 'session' : 'local';
 
         if (!$name = $this->name) {
-            throw new Exception('View property name needs to be set.');
+            throw new Exception('View property name needs to be set');
         }
 
         return (new JsChain('atk.dataService'))->addJsonData($name, json_encode($data, \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR), $type);

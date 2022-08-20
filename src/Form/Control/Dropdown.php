@@ -88,7 +88,7 @@ class Dropdown extends Input
      * function(Model $row) {
      *     return [
      *         'value' => $row->getId(),
-     *         'title' => $row->getTitle().' ('.$row->get('title2').')',
+     *         'title' => $row->getTitle() . ' (' . $row->get('title2') . ')',
      *     ];
      * }
      *
@@ -97,7 +97,7 @@ class Dropdown extends Input
      *     return [
      *        'value' => $key,
      *        'title' => mb_strtoupper($value),
-     *        'icon' => strpos('Month', $value) !== false ? 'calendar' : '',
+     *        'icon' => str_contains($value, 'Month') ? 'calendar' : '',
      *     ];
      * }
      *
@@ -132,7 +132,7 @@ class Dropdown extends Input
     public function getInput()
     {
         return $this->getApp()->getTag('input', array_merge([
-            'name' => $this->short_name,
+            'name' => $this->shortName,
             'type' => $this->inputType,
             'id' => $this->name . '_input',
             'value' => $this->getValue(),

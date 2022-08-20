@@ -79,7 +79,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     public function jsExecute(array $urlArgs = []): array
     {
         if (!$this->actionInitialized) {
-            throw new Exception('Action must be set prior to assign trigger.');
+            throw new Exception('Action must be set prior to assign trigger');
         }
 
         return [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])];

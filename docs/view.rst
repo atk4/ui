@@ -350,7 +350,7 @@ You should specify defaultTemplate using relative path to your project root or, 
 relative to a current file::
 
     // in Add-on
-    View::addTo($app, ['defaultTemplate' => __DIR__.'/../templates/mytpl.httml']);
+    View::addTo($app, ['defaultTemplate' => __DIR__ . '/../templates/mytpl.httml']);
 
 Agile UI does not currently provide advanced search path for templates, by default the
 template is loaded from folder `vendor/atk4/ui/template`. To change this

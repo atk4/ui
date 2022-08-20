@@ -21,48 +21,48 @@ $output = function (?\DateTime $dt, string $format) {
 \Atk4\Ui\Header::addTo($app, ['Testing flatpickr using Behat']);
 $form = Form::addTo($app);
 $c = $form->addControl('field', [], ['type' => 'date']);
-$form->buttonSave->set($c->short_name);
+$form->buttonSave->set($c->shortName);
 
 $form->onSubmit(function (Form $form) use ($output, $c, $app) {
-    return $output($form->model->get($c->short_name), $app->ui_persistence->date_format);
+    return $output($form->model->get($c->shortName), $app->ui_persistence->date_format);
 });
 
 View::addTo($app, ['ui' => 'hidden divider']);
 $app->ui_persistence->date_format = 'Y-m-d';
 $form = Form::addTo($app);
 $c = $form->addControl('date_ymd', [Form\Control\Calendar::class, 'type' => 'date']);
-$form->buttonSave->set($c->short_name);
+$form->buttonSave->set($c->shortName);
 
 $form->onSubmit(function (Form $form) use ($output, $c, $app) {
-    return $output($form->model->get($c->short_name), $app->ui_persistence->date_format);
+    return $output($form->model->get($c->shortName), $app->ui_persistence->date_format);
 });
 
 View::addTo($app, ['ui' => 'hidden divider']);
 $app->ui_persistence->time_format = 'H:i:s';
 $form = Form::addTo($app);
 $c = $form->addControl('time_24hr', [Form\Control\Calendar::class, 'type' => 'time']);
-$form->buttonSave->set($c->short_name);
+$form->buttonSave->set($c->shortName);
 
 $form->onSubmit(function (Form $form) use ($output, $c, $app) {
-    return $output($form->model->get($c->short_name), $app->ui_persistence->time_format);
+    return $output($form->model->get($c->shortName), $app->ui_persistence->time_format);
 });
 
 View::addTo($app, ['ui' => 'hidden divider']);
 $app->ui_persistence->time_format = 'G:i A';
 $form = Form::addTo($app);
 $c = $form->addControl('time_am', [Form\Control\Calendar::class, 'type' => 'time']);
-$form->buttonSave->set($c->short_name);
+$form->buttonSave->set($c->shortName);
 
 $form->onSubmit(function (Form $form) use ($output, $c, $app) {
-    return $output($form->model->get($c->short_name), $app->ui_persistence->time_format);
+    return $output($form->model->get($c->shortName), $app->ui_persistence->time_format);
 });
 
 View::addTo($app, ['ui' => 'hidden divider']);
 $app->ui_persistence->datetime_format = 'Y-m-d (H:i:s)';
 $form = Form::addTo($app);
 $c = $form->addControl('datetime', [Form\Control\Calendar::class, 'type' => 'datetime']);
-$form->buttonSave->set($c->short_name);
+$form->buttonSave->set($c->shortName);
 
 $form->onSubmit(function (Form $form) use ($output, $c, $app) {
-    return $output($form->model->get($c->short_name), $app->ui_persistence->datetime_format);
+    return $output($form->model->get($c->shortName), $app->ui_persistence->datetime_format);
 });
