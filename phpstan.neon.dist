@@ -486,17 +486,11 @@ parameters:
             path: 'demos/collection/grid.php'
             message: '~^Parameter #1 \$name of method Atk4\\Ui\\Grid::addColumn\(\) expects string, null given\.$~'
         -
-            path: 'demos/data-action/jsactions2.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
-        -
             path: 'demos/data-action/jsactionsgrid.php'
             message: '~^Parameter #1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View, string given\.$~'
         -
             path: 'demos/form-control/input2.php'
             message: '~^Parameter #1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
-        -
-            path: 'demos/interactive/sse.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, Atk4\\Ui\\Jquery> given\.$~'
         -
             path: 'demos/interactive/virtual.php'
             message: '~^Parameter #1 \$title of class Atk4\\Ui\\JsModal constructor expects string, null given\.$~'
@@ -504,20 +498,8 @@ parameters:
             path: 'demos/javascript/reloading.php'
             message: '~^Parameter #1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
         -
-            path: 'demos/layout/layout-panel.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, mixed> given\.$~'
-        -
-            path: 'demos/layout/layout-panel.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
-        -
-            path: 'demos/tutorial/actions.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
-        -
             path: 'src/Card.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, \$this\(Atk4\\Ui\\Card\)\|string> given\.$~'
-        -
-            path: 'src/Card.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
         -
             path: 'src/Form/Layout/Section.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
@@ -540,9 +522,6 @@ parameters:
             path: 'src/JsSearch.php'
             message: '~^Parameter #2 \$value of method Atk4\\Ui\\HtmlTemplate::trySet\(\) expects string\|null, Atk4\\Ui\\Form\\Control\\Line given\.$~'
         -
-            path: 'src/Layout/Admin.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, Atk4\\Ui\\Jquery> given\.$~'
-        -
             path: 'src/Menu.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, array<int, string>\|string> given\.$~'
         -
@@ -551,9 +530,6 @@ parameters:
         -
             path: 'src/Panel/Right.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\AbstractView::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, string> given\.$~'
-        -
-            path: 'src/UserAction/ModalExecutor.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, mixed> given\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 6
