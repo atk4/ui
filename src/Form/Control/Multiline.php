@@ -787,7 +787,7 @@ class Multiline extends Form\Control
             foreach ($dummyFields as $field) {
                 $dummyModel->addExpression($field['name'], ['expr' => $field['expr'], 'type' => $model->getField($field['name'])->type]);
             }
-            $values = $dummyModel->tryLoadAny()->get();
+            $values = $dummyModel->loadAny()->get();
             unset($values[$model->idField]);
 
             foreach ($values as $f => $value) {
