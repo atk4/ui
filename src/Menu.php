@@ -34,8 +34,8 @@ class Menu extends View
     /**
      * $seed can also be name here.
      *
-     * @param string|array|Item $item
-     * @param string|array      $action
+     * @param string|array|Item             $item
+     * @param string|array|Model\UserAction $action
      *
      * @return Item
      */

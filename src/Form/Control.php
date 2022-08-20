@@ -9,6 +9,7 @@ use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
+use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\View;
 
 /**
@@ -164,6 +165,8 @@ class Control extends View
      * to target the "input" element.
      *
      * $field->jsInput(true)->val(123);
+     *
+     * @param JsExpressionable $action
      *
      * @return \Atk4\Ui\Jquery
      */

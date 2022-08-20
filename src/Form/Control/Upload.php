@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Exception;
+use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\View;
 
 /**
@@ -53,6 +54,7 @@ class Upload extends Input
     public $hasUploadCb = false;
     public $hasDeleteCb = false;
 
+    /** @var JsExpressionable[] */
     public $jsActions = [];
 
     public const UPLOAD_ACTION = 'upload';
@@ -120,15 +122,13 @@ class Upload extends Input
     }
 
     /**
-     * Add a js action to be return to server on callback.
+     * Add a JS action to be return to server on callback.
+     *
+     * @param JsExpressionable $action
      */
     public function addJsAction($action)
     {
-        if (is_array($action)) {
-            $this->jsActions = array_merge($action, $this->jsActions);
-        } else {
-            $this->jsActions[] = $action;
-        }
+        $this->jsActions[] = $action;
     }
 
     /**
@@ -163,9 +163,9 @@ class Upload extends Input
                 $this->addJsAction($fx(...$postFiles));
 
                 if (count($postFiles) > 0 && reset($postFiles)['error'] === 0) {
-                    $this->addJsAction([
-                        $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
-                    ]);
+                    $this->addJsAction(
+                        $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()])
+                    );
                 }
 
                 return $this->jsActions;
