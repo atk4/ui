@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\View;
+use Atk4\Ui\JsSse;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -20,7 +21,7 @@ $buttonStop = Button::addTo($app, ['Turn Off']);
 // non-SSE way
 // $button->on('click', $bar->js()->progress(['percent' => 40]));
 
-$sse = \Atk4\Ui\JsSse::addTo($app, ['showLoader' => true]);
+$sse = JsSse::addTo($app, ['showLoader' => true]);
 
 $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
     $sse->send($button->js()->addClass('disabled'));
@@ -46,7 +47,7 @@ $buttonStop->on('click', [$button->js()->atkServerEvent('stop'), $button->js()->
 View::addTo($app, ['ui' => 'divider']);
 Header::addTo($app, ['SSE operation with user confirmation']);
 
-$sse = \Atk4\Ui\JsSse::addTo($app);
+$sse = JsSse::addTo($app);
 $button = Button::addTo($app, ['Click me to change my text']);
 
 $button->on('click', $sse->set(function ($jsChain) use ($sse, $button) {
