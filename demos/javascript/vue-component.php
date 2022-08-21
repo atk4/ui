@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
-use Atk4\Ui\Component\InlineEdit;
-use Atk4\Ui\Component\ItemSearch;
+use Atk4\Ui\VueComponent\InlineEdit;
+use Atk4\Ui\VueComponent\ItemSearch;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Lister;
