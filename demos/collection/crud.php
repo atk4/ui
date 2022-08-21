@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Crud;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Table;
@@ -14,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $model = new Country($app->db);
 
-$crud = \Atk4\Ui\Crud::addTo($app, ['ipp' => 10]);
+$crud = Crud::addTo($app, ['ipp' => 10]);
 
 // callback for model action add form.
 $crud->onFormAdd(function (Form $form, $t) use ($model) {
@@ -37,7 +38,7 @@ $column = $columns->addColumn();
 
 // Crud can operate with various fields
 Header::addTo($column, ['Configured Crud']);
-$crud = \Atk4\Ui\Crud::addTo($column, [
+$crud = Crud::addTo($column, [
     'displayFields' => [$model->fieldName()->name], // field to display in Crud
     'editFields' => [$model->fieldName()->name, $model->fieldName()->iso, $model->fieldName()->iso3], // field to display on 'edit' action
     'ipp' => 5,
@@ -91,7 +92,7 @@ $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
 $file = new File($app->db);
 $app->getExecutorFactory()->registerExecutor($file->getUserAction('edit'), [$myExecutorClass]);
 
-$crud = \Atk4\Ui\Crud::addTo($column, [
+$crud = Crud::addTo($column, [
     'ipp' => 5,
 ]);
 

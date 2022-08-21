@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
+use Atk4\Ui\Crud;
 use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
@@ -43,5 +44,5 @@ $model = new $modelClass($p);
 
 // add Crud
 Header::addTo($app, ['Crud with Array Persistence']);
-$c = \Atk4\Ui\Crud::addTo($app, ['ipp' => 5]);
+$c = Crud::addTo($app, ['ipp' => 5]);
 $c->setModel($model);

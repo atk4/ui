@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\Crud;
 use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
@@ -34,5 +35,5 @@ $files->addUserAction('download', function (Model $model) {
     return 'File has been download!';
 });
 
-\Atk4\Ui\Crud::addTo($app, ['ipp' => 10])
+Crud::addTo($app, ['ipp' => 10])
     ->setModel($files);

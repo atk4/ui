@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Crud;
 use Atk4\Ui\Header;
 use Atk4\Ui\View;
 
@@ -20,7 +21,7 @@ Header::addTo($app, ['Dynamic scroll in Grid with fixed column headers']);
 $c = \Atk4\Ui\Columns::addTo($app);
 
 $c1 = $c->addColumn();
-$g1 = \Atk4\Ui\Crud::addTo($c1);
+$g1 = Crud::addTo($c1);
 $m1 = new Country($app->db);
 $g1->setModel($m1);
 $g1->addQuickSearch([Country::hinting()->fieldName()->name, Country::hinting()->fieldName()->iso]);

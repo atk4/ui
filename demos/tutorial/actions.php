@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
+use Atk4\Ui\Crud;
 use Atk4\Ui\Header;
 use Atk4\Ui\Text;
 use Atk4\Ui\UserAction\ExecutorFactory;
@@ -214,7 +215,7 @@ $wizard->addStep('Crud integration', function ($page) {
             [Button::class, null, 'icon' => 'blue mail'],
             $country->getUserAction('mail')
         );
-        \Atk4\Ui\Crud::addTo($owner, ['ipp' => 5])
+        Crud::addTo($owner, ['ipp' => 5])
             ->setModel($country, [$country->fieldName()->name, $country->fieldName()->iso]);
     });
 });
