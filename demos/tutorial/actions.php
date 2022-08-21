@@ -9,6 +9,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Menu;
 use Atk4\Ui\Text;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\View;
@@ -107,7 +108,7 @@ $wizard->addStep('UI Integration', function ($page) {
         $country = new Country($owner->getApp()->db);
         $country = $country->loadAny();
 
-        $menu = \Atk4\Ui\Menu::addTo($owner);
+        $menu = Menu::addTo($owner);
         $menu->addItem('Hello');
         $menu->addItem('World', $country->getUserAction('edit'));
     });

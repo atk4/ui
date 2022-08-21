@@ -6,10 +6,10 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Console;
 use Atk4\Ui\Form;
+use Atk4\Ui\Grid;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
 use Atk4\Ui\Table;
-use Atk4\Ui\Grid;
 use Atk4\Ui\Wizard;
 
 /** @var \Atk4\Ui\App $app */

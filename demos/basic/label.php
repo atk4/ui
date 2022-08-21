@@ -8,6 +8,7 @@ use Atk4\Ui\Header;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\Label;
 use Atk4\Ui\LoremIpsum;
+use Atk4\Ui\Menu;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -31,7 +32,7 @@ $val = isset($_GET['toggle']) && $_GET['toggle'];
 $toggle = Label::addTo($app, ['icon' => 'toggle ' . ($val ? 'on' : 'off')])->set('Value: ' . $val);
 $toggle->on('click', new JsReload($toggle, ['toggle' => $val ? null : 1]));
 
-$menu = \Atk4\Ui\Menu::addTo($app);
+$menu = Menu::addTo($app);
 Label::addTo($menu->addItem('Inbox'), ['20', 'class.floating red' => true]);
 Label::addTo($menu->addMenu('Others')->addItem('Draft'), ['10', 'class.floating blue' => true]);
 

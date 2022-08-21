@@ -10,6 +10,7 @@ use Atk4\Ui\Header;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\Label;
 use Atk4\Ui\Lister;
+use Atk4\Ui\Menu;
 use Atk4\Ui\Message;
 use Atk4\Ui\Popup;
 use Atk4\Ui\View;
@@ -144,7 +145,7 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
 });
 
 Header::addTo($app)->set('Menu popup');
-$menu = \Atk4\Ui\Menu::addTo($app);
+$menu = Menu::addTo($app);
 
 // You may add popup on top of menu items or dropdowns. Dropdowns have a slightly different
 // look, with that triangle on the right. You don't have to add pop-up right away, it can be
@@ -224,7 +225,7 @@ $shelf2 = $itemShelfClass::addTo($pop);
 
 // -----------------------------------------------------------------------------
 
-$userMenu = \Atk4\Ui\Menu::addTo($menu, ['ui' => false], ['RightMenu'])
+$userMenu = Menu::addTo($menu, ['ui' => false], ['RightMenu'])
     ->addClass('right menu')->removeClass('item');
 $rightMenu = $userMenu->addMenu(['', 'icon' => 'user']);
 

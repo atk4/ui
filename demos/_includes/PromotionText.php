@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\GridLayout;
 use Atk4\Ui\Message;
 use Atk4\Ui\Text;
-use Atk4\Ui\GridLayout;
 use Atk4\Ui\View;
 
 class PromotionText extends View

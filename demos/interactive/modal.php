@@ -11,6 +11,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\LoremIpsum;
+use Atk4\Ui\Menu;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Text;
@@ -119,7 +120,7 @@ Message::addTo($transitionModal)->set('A lot of animated transition available');
 $transitionModal->duration(1000);
 
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
-$main = \Atk4\Ui\Menu::addTo($menuBar);
+$main = Menu::addTo($menuBar);
 $transitionMenu = $main->addMenu('Select Transition');
 
 foreach ($menuItems as $key => $items) {

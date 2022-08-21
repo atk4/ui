@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Grid;
 use Atk4\Ui\Header;
 use Atk4\Ui\Table;
-use Atk4\Ui\Grid;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
 

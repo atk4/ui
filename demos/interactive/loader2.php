@@ -6,8 +6,8 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
-use Atk4\Ui\Text;
 use Atk4\Ui\Grid;
+use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
