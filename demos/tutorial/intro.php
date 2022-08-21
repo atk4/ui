@@ -128,7 +128,7 @@ $wizard->addStep('Business Model', function ($page) {
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         /* Showing Class definition.
-        class DemoInvoice extends \Atk4\Data\Model
+        class DemoInvoice extends Model
         {
             public ?string $titleField = 'reference';
 
@@ -144,7 +144,7 @@ $wizard->addStep('Business Model', function ($page) {
         session_start();
 
         $model = new DemoInvoice(new Persistence\Array_($_SESSION['atk4_ui_intro_demo'] ?? []), ['dateFormat' => $owner->getApp()->uiPersistence->dateFormat]);
-        $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function (Model $model) {
+        $model->onHook(Model::HOOK_AFTER_SAVE, function (Model $model) {
             $_SESSION['atk4_ui_intro_demo'][$model->getId()] = (clone $model->getModel())->addCondition($model->idField, $model->getId())->export(null, null, false)[$model->getId()];
         });
 
@@ -207,7 +207,7 @@ $wizard->addStep('Persistence', function ($page) {
         session_start();
 
         $model = new DemoInvoice(new Persistence\Array_($_SESSION['atk4_ui_intro_demo'] ?? []), ['dateFormat' => $owner->getApp()->uiPersistence->dateFormat]);
-        $model->onHook(\Atk4\Data\Model::HOOK_AFTER_SAVE, function (Model $model) {
+        $model->onHook(Model::HOOK_AFTER_SAVE, function (Model $model) {
             $_SESSION['atk4_ui_intro_demo'][$model->getId()] = (clone $model->getModel())->addCondition($model->idField, $model->getId())->export(null, null, false)[$model->getId()];
         });
 

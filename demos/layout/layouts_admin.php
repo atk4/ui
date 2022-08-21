@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
@@ -39,7 +40,7 @@ $layout->template->set('Footer', 'ATK is awesome');
 Header::addTo($layout, ['Basic Form Example']);
 
 $form = \Atk4\Ui\Form::addTo($layout, ['class.segment' => true]);
-$form->setModel((new \Atk4\Data\Model())->createEntity());
+$form->setModel((new Model())->createEntity());
 
 $formGroup = $form->addGroup('Name');
 $formGroup->addControl('first_name', ['width' => 'eight']);

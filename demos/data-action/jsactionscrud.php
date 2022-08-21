@@ -28,7 +28,7 @@ $files->addUserAction('import_from_filesystem', [
     'args' => [
         'path' => ['type' => 'string', 'required' => true],
     ],
-    'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+    'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORDS,
 ]);
 
 $files->addUserAction('download', function (Model $model) {

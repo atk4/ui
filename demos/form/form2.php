@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
@@ -80,8 +81,8 @@ $form->onSubmit(function (Form $form) {
     return new JsToast($countryEntity->getUserAction('add')->execute());
 });
 
-/** @var \Atk4\Data\Model $personClass */
-$personClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Data\Model {
+/** @var Model $personClass */
+$personClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
     public $table = 'person';
 
     protected function init(): void

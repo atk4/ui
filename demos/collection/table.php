@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\JsToast;
@@ -38,7 +39,7 @@ $table->addColumn('date');
 $table->addColumn('salary', new Table\Column\Money());
 $table->addColumn('logo_url', [Table\Column\Image::class, 'caption' => 'Our Logo']);
 
-$table->onHook(Table\Column::HOOK_GET_HTML_TAGS, function ($table, \Atk4\Data\Model $row) {
+$table->onHook(Table\Column::HOOK_GET_HTML_TAGS, function ($table, Model $row) {
     switch ($row->getId()) {
         case 1:
             $color = 'yellow';

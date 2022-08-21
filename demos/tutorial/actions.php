@@ -123,10 +123,10 @@ $wizard->addStep('Arguments', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $model = new \Atk4\Data\Model($owner->getApp()->db, ['table' => 'test']);
+        $model = new Model($owner->getApp()->db, ['table' => 'test']);
 
         $model->addUserAction('greet', [
-            'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+            'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORDS,
             'args' => [
                 'name' => [
                     'type' => 'string',
@@ -138,7 +138,7 @@ $wizard->addStep('Arguments', function ($page) {
         ]);
 
         $model->addUserAction('ask_age', [
-            'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+            'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORDS,
             'args' => [
                 'age' => [
                     'type' => 'integer',
@@ -167,7 +167,7 @@ $wizard->addStep('More Ways', function ($page) {
         $model = new Stat($owner->getApp()->db);
         $model->addUserAction('mail', [
             'fields' => ['currency_field'],
-            'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
+            'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
             'callback' => function () {
  *              return 'testing';
  *          },
@@ -199,7 +199,7 @@ $wizard->addStep('Crud integration', function ($page) {
             return $m->id % 2 === 0;
         };
         $country->addUserAction('mail', [
-            'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
+            'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
             'preview' => function (Model $model) {
                 return 'here is email preview for ' . $model->get('name');
             },

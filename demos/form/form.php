@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
-use Atk4\Ui\Modal;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
+use Atk4\Ui\Modal;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -180,7 +181,7 @@ $tab = $tabs->addTab('Complex Examples');
 
 Header::addTo($tab, ['Conditional response']);
 
-$modelRegister = new \Atk4\Data\Model(new Persistence\Array_());
+$modelRegister = new Model(new Persistence\Array_());
 $modelRegister->addField('name');
 $modelRegister->addField('email');
 $modelRegister->addField('is_accept_terms', ['type' => 'boolean', 'nullable' => false]);
@@ -207,7 +208,7 @@ $tab = $tabs->addTab('Layout Control');
 Header::addTo($tab, ['Shows example of grouping and multiple errors']);
 
 $form = Form::addTo($tab, ['class.segment' => true]);
-$form->setModel((new \Atk4\Data\Model())->createEntity());
+$form->setModel((new Model())->createEntity());
 
 $form->addHeader('Example fields added one-by-one');
 $form->addControl('name');

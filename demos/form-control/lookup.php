@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
-use Atk4\Ui\Modal;
 use Atk4\Ui\Label;
 use Atk4\Ui\Message;
+use Atk4\Ui\Modal;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -24,7 +25,7 @@ Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 
 $form = Form::addTo($app, ['class.segment' => true]);
 Label::addTo($form, ['Lookup countries', 'class.top attached' => true], ['AboveControls']);
 
-$model = new \Atk4\Data\Model($app->db, ['table' => 'test']);
+$model = new Model($app->db, ['table' => 'test']);
 
 // Without Lookup
 $model->hasOne('country1', ['model' => [Country::class]]);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
 use Atk4\Ui\JsToast;
@@ -41,7 +42,7 @@ $form->addControl('six', new Form\Control\Checkbox(['caption' => 'Caption3']));
 
 $form->onSubmit($formSubmit);
 
-$model = new \Atk4\Data\Model(new Persistence\Array_());
+$model = new Model(new Persistence\Array_());
 
 // model field uses regular line form control by default
 $model->addField('one');

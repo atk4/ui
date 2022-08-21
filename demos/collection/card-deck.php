@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\UserAction\ExecutorFactory;
@@ -36,7 +37,7 @@ $infoAction = $countries->addUserAction('request_info', [
     'callback' => function (Country $country, $email) {
         return 'Your request for information was sent to email: ' . $email;
     },
-    'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+    'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORDS,
 ]);
 
 $infoAction->args = [

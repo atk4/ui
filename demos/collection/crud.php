@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
@@ -50,7 +51,7 @@ $crud = Crud::addTo($column, [
 // Condition on the model can be applied on a model
 $model = new Country($app->db);
 $model->addCondition($model->fieldName()->numcode, '<', 200);
-$model->onHook(\Atk4\Data\Model::HOOK_VALIDATE, function (Country $model, $intent) {
+$model->onHook(Model::HOOK_VALIDATE, function (Country $model, $intent) {
     $err = [];
     if ($model->numcode >= 200) {
         $err[$model->fieldName()->numcode] = 'Should be less than 200';

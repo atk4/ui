@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
-use Atk4\Ui\Modal;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
+use Atk4\Ui\Modal;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
@@ -189,7 +190,7 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
         $modal->js(true, $prevAction->js()->addClass('disabled'));
         $modal->js(true, $nextAction->js(true)->removeClass('disabled'));
     } elseif ($page === 2) {
-        $modelRegister = new \Atk4\Data\Model(new Persistence\Array_());
+        $modelRegister = new Model(new Persistence\Array_());
         $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
         $form = \Atk4\Ui\Form::addTo($modal, ['class.segment' => true]);
