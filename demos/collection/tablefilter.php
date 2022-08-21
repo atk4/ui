@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\View;
+use Atk4\Ui\Grid;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -12,7 +13,7 @@ require_once __DIR__ . '/../init-app.php';
 // For popup positioning to work correctly, table need to be inside a view segment.
 $view = View::addTo($app, ['ui' => 'basic segment']);
 // Important: menu class added for Behat testing.
-$grid = \Atk4\Ui\Grid::addTo($view, ['menu' => ['class' => ['atk-grid-menu']]]);
+$grid = Grid::addTo($view, ['menu' => ['class' => ['atk-grid-menu']]]);
 
 $model = new Country($app->db);
 $model->addExpression('is_uk', [

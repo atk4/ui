@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Grid;
 use Atk4\Ui\Header;
 use Atk4\Ui\View;
 
@@ -19,7 +20,7 @@ View::addTo($app, ['ui' => 'ui clearing divider']);
 
 Header::addTo($app, ['Dynamic scroll in Grid']);
 
-$grid = \Atk4\Ui\Grid::addTo($app, ['menu' => false]);
+$grid = Grid::addTo($app, ['menu' => false]);
 $model = new Country($app->db);
 $grid->setModel($model);
 

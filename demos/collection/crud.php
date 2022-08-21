@@ -8,6 +8,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Grid;
 use Atk4\Ui\Message;
 use Atk4\Ui\Table;
 use Atk4\Ui\View;
@@ -81,7 +82,7 @@ $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
         $result = parent::addFormTo($left);
 
         if ($this->action->getEntity()->get(File::hinting()->fieldName()->is_folder)) {
-            \Atk4\Ui\Grid::addTo($right, ['menu' => false, 'ipp' => 5])
+            Grid::addTo($right, ['menu' => false, 'ipp' => 5])
                 ->setModel(File::assertInstanceOf($this->getAction()->getModel())->SubFolder);
         } else {
             Message::addTo($right, ['Not a folder', 'type' => 'warning']);

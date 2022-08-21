@@ -8,6 +8,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpression;
+use Atk4\Ui\Grid;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
@@ -17,7 +18,7 @@ use Atk4\Ui\UserAction\BasicExecutor;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$grid = \Atk4\Ui\Grid::addTo($app);
+$grid = Grid::addTo($app);
 $model = new Country($app->db);
 $model->addUserAction('test', function (Model $model) {
     return 'test from ' . $model->getTitle() . ' was successful!';

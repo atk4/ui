@@ -9,6 +9,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
 use Atk4\Ui\Table;
+use Atk4\Ui\Grid;
 use Atk4\Ui\Wizard;
 
 /** @var \Atk4\Ui\App $app */
@@ -52,7 +53,7 @@ $wizard->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon'
 
     $columns = \Atk4\Ui\Columns::addTo($wizard);
 
-    $grid = \Atk4\Ui\Grid::addTo($columns->addColumn(), ['paginator' => false, 'menu' => false]);
+    $grid = Grid::addTo($columns->addColumn(), ['paginator' => false, 'menu' => false]);
     Message::addTo($columns->addColumn(), ['Information', 'type' => 'info'])->text
         ->addParagraph('Selecting which model you would like to import into your DSN. If corresponding table already exist, we might add extra fields into it. No tables, columns or rows will be deleted.');
 

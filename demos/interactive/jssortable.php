@@ -8,6 +8,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\JsToast;
+use Atk4\Ui\Grid;
 use Atk4\Ui\Lister;
 use Atk4\Ui\View;
 
@@ -50,7 +51,7 @@ $button->js('click', $sortable->jsGetOrders(['btn' => '1']));
 View::addTo($app, ['ui' => 'divider']);
 Header::addTo($app, ['Add Drag n drop to Grid']);
 
-$grid = \Atk4\Ui\Grid::addTo($app, ['paginator' => false]);
+$grid = Grid::addTo($app, ['paginator' => false]);
 $grid->setModel((new Country($app->db))->setLimit(6));
 
 $dragHandler = $grid->addDragHandler();

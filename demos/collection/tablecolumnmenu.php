@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Header;
 use Atk4\Ui\Table;
+use Atk4\Ui\Grid;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
@@ -49,7 +50,7 @@ $colTitle->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
 Header::addTo($app, ['Grid column may contains popup or dropdown menu.']);
 
 // Table in Grid are already inside a container.
-$grid = \Atk4\Ui\Grid::addTo($app);
+$grid = Grid::addTo($app);
 $grid->setModel(new Country($app->db));
 $grid->ipp = 5;
 
