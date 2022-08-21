@@ -260,7 +260,6 @@ class Column
      * Provided with a field definition (from a model) will return a header
      * cell, fully formatted to be included in a Table. (<th>).
      *
-     * @param Field $field
      * @param mixed $value
      *
      * @return string
@@ -336,8 +335,6 @@ class Column
      *
      * This method will be executed only once per table rendering, if you need to format data manually,
      * you should use $this->table->onHook('beforeRow' or 'afterRow', ...);
-     *
-     * @param Field $field
      */
     public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
@@ -354,8 +351,6 @@ class Column
      * by another template returned by getDataCellTemplate when multiple formatters are
      * applied to the same column. The first one to be applied is executed first, then
      * a subsequent ones are executed.
-     *
-     * @param Field $field
      *
      * @return string
      */
