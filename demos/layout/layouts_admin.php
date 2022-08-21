@@ -7,15 +7,16 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Layout;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$layout = \Atk4\Ui\Layout\Admin::addTo($app);
+$layout = Layout\Admin::addTo($app);
 
 $menu = $layout->menu->addMenu(['Layouts', 'icon' => 'puzzle']);
-$menu->addItem(\Atk4\Ui\Layout\Centered::class);
-$menu->addItem(\Atk4\Ui\Layout\Admin::class);
+$menu->addItem(Layout\Centered::class);
+$menu->addItem(Layout\Admin::class);
 
 $menuRight = $layout->menuRight;
 $menuRight->addItem(['Warning', 'class.red' => true, 'icon' => 'red warning']);

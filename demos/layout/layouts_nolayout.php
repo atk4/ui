@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Layout;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Text;
 
@@ -15,6 +16,6 @@ $a = new LoremIpsum();
 $text = $a->generateLorem(150);
 
 $app->html = null;
-$app->initLayout([\Atk4\Ui\Layout::class]);
+$app->initLayout([Layout::class]);
 
 Text::addTo($app->layout)->addParagraph($text);

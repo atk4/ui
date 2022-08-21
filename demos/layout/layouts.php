@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Layout;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
@@ -15,7 +16,7 @@ require_once __DIR__ . '/../init-app.php';
 $buttons = [
     ['page' => ['layouts_nolayout'], 'title' => 'HTML without layout'],
     ['page' => ['layouts_manual'], 'title' => 'Manual layout'],
-    ['page' => ['../basic/header', 'layout' => \Atk4\Ui\Layout\Centered::class], 'title' => 'Centered layout'],
+    ['page' => ['../basic/header', 'layout' => Layout\Centered::class], 'title' => 'Centered layout'],
     ['page' => ['layouts_admin'], 'title' => 'Admin Layout'],
     ['page' => ['layouts_error'], 'title' => 'Exception Error'],
 ];

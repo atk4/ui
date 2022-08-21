@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
+use Atk4\Ui\Layout;
 
 date_default_timezone_set('UTC');
 
@@ -74,10 +75,10 @@ try {
 $demosUrl = $rootUrl . 'demos/';
 
 // allow custom layout override
-$app->initLayout([!isset($_GET['layout']) ? \Atk4\Ui\Layout\Maestro::class : $app->stickyGet('layout')]);
+$app->initLayout([!isset($_GET['layout']) ? Layout\Maestro::class : $app->stickyGet('layout')]);
 
 $layout = $app->layout;
-if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {
+if ($layout instanceof Layout\NavigableInterface) {
     $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], [$demosUrl . 'index']);
 
     $path = $demosUrl . 'layout/';
