@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Columns;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\JsModal;
@@ -76,7 +77,7 @@ $vp = VirtualPage::addTo($app)->set(function ($page) use ($planeTemplate) {
 Button::addTo($app, ['Show $plane in a dialog', 'icon' => 'clone'])->on('click', new JsModal('Plane Box', $vp));
 
 Header::addTo($app, ['All components extend View (even paginator)']);
-$columns = \Atk4\Ui\Columns::addTo($app);
+$columns = Columns::addTo($app);
 
 Button::addTo($columns->addColumn(), ['Button'])->addClass('green');
 Header::addTo($columns->addColumn(), ['Header'])->addClass('green');

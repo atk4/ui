@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
+use Atk4\Ui\Columns;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsModal;
@@ -18,7 +19,7 @@ require_once __DIR__ . '/../init-app.php';
 
 // Re-usable component implementing counter
 
-$finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\Columns {
+$finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends Columns {
     public $route = [];
 
     public function setModel(Model $model, array $route = []): void

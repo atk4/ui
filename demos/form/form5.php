@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\Columns;
 use Atk4\Ui\Form;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\View;
@@ -22,7 +23,7 @@ $formSubmit = function ($f) use ($app) {
     return new JsToast($app->encodeJson($f->model->get()));
 };
 
-$cc = \Atk4\Ui\Columns::addTo($app);
+$cc = Columns::addTo($app);
 $form = Form::addTo($cc->addColumn());
 
 // adding field without model creates a regular line

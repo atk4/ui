@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\Columns;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Form;
 use Atk4\Ui\Grid;
@@ -36,7 +37,7 @@ $crud->addDecorator($model->titleField, [Table\Column\Link::class, ['test' => fa
 
 View::addTo($app, ['ui' => 'divider']);
 
-$columns = \Atk4\Ui\Columns::addTo($app);
+$columns = Columns::addTo($app);
 $column = $columns->addColumn();
 
 // Crud can operate with various fields
@@ -75,7 +76,7 @@ Header::addTo($column, ['Customizations']);
 $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\UserAction\ModalExecutor {
     public function addFormTo(View $view): Form
     {
-        $columns = \Atk4\Ui\Columns::addTo($view);
+        $columns = Columns::addTo($view);
         $left = $columns->addColumn();
         $right = $columns->addColumn();
 

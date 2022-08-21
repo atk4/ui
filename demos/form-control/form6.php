@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Columns;
 use Atk4\Ui\Form;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\View;
@@ -16,7 +17,7 @@ View::addTo($app, [
     'ui' => 'ignored warning message',
 ]);
 
-$cc = \Atk4\Ui\Columns::addTo($app);
+$cc = Columns::addTo($app);
 $form = Form::addTo($cc->addColumn());
 
 $form->addControl('one', [], ['enum' => ['female', 'male']])->set('male');

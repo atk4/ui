@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Columns;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsExpression;
@@ -102,7 +103,7 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
         parent::init();
 
         $v = View::addTo($this, ['ui' => 'fluid']);
-        $cols = \Atk4\Ui\Columns::addTo($v, ['ui' => 'relaxed divided grid']);
+        $cols = Columns::addTo($v, ['ui' => 'relaxed divided grid']);
 
         $c1 = $cols->addColumn();
         Header::addTo($c1, ['size' => 'small'])->set('Snacks');

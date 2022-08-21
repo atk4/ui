@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Columns;
 use Atk4\Ui\Form;
 use Atk4\Ui\Grid;
 use Atk4\Ui\Text;
@@ -17,7 +18,7 @@ Button::addTo($app, ['Loader Example - page 1', 'class.small left floated basic 
     ->link(['loader']);
 View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$c = \Atk4\Ui\Columns::addTo($app);
+$c = Columns::addTo($app);
 
 $grid = Grid::addTo($c->addColumn(), ['ipp' => 10, 'menu' => false]);
 $grid->setModel(new Country($app->db), [Country::hinting()->fieldName()->name]);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Columns;
 use Atk4\Ui\Console;
 use Atk4\Ui\Form;
 use Atk4\Ui\Grid;
@@ -51,7 +52,7 @@ $wizard->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon'
         $wizard->getApp()->redirect($wizard->urlNext());
     }
 
-    $columns = \Atk4\Ui\Columns::addTo($wizard);
+    $columns = Columns::addTo($wizard);
 
     $grid = Grid::addTo($columns->addColumn(), ['paginator' => false, 'menu' => false]);
     Message::addTo($columns->addColumn(), ['Information', 'type' => 'info'])->text

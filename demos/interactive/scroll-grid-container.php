@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Columns;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Grid;
 use Atk4\Ui\Header;
@@ -19,7 +20,7 @@ View::addTo($app, ['ui' => 'ui clearing divider']);
 
 Header::addTo($app, ['Dynamic scroll in Grid with fixed column headers']);
 
-$c = \Atk4\Ui\Columns::addTo($app);
+$c = Columns::addTo($app);
 
 $c1 = $c->addColumn();
 $g1 = Crud::addTo($c1);

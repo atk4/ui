@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Columns;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\Label;
@@ -43,7 +44,7 @@ Label::addTo($seg, ['$9.99']);
 Label::addTo($seg, ['$19.99']);
 Label::addTo($seg, ['$24.99']);
 
-$columns = \Atk4\Ui\Columns::addTo($app);
+$columns = Columns::addTo($app);
 
 $c = $columns->addColumn();
 $seg = View::addTo($c, ['ui' => 'raised segment']);
