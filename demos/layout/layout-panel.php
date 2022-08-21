@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Card;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsReload;
@@ -113,7 +114,7 @@ $deck = View::addTo($app, ['ui' => 'cards']);
 $country->setLimit(3);
 
 foreach ($country as $ct) {
-    $c = \Atk4\Ui\Card::addTo($deck, ['useLabel' => true])->addStyle('cursor', 'pointer');
+    $c = Card::addTo($deck, ['useLabel' => true])->addStyle('cursor', 'pointer');
     $c->setModel($ct);
     $c->on('click', $panel3->jsOpen([], ['id'], 'orange'));
 }

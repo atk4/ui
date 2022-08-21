@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
+use Atk4\Ui\Card;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsToast;
@@ -214,7 +215,7 @@ $wizard->addStep('Persistence', function ($page) {
         Header::addTo($owner, ['Record display in Card View using model data.']);
         $model = $model->tryLoad(1);
         if ($model !== null) {
-            \Atk4\Ui\Card::addTo($owner, ['useLabel' => true])
+            Card::addTo($owner, ['useLabel' => true])
                 ->setModel($model);
         } else {
             Message::addTo($owner, ['Empty record.']);

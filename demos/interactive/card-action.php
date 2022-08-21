@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
+use Atk4\Ui\Card;
 use Atk4\Ui\Header;
 use Atk4\Ui\View;
 
@@ -21,7 +22,7 @@ Header::addTo($app, ['Models', 'size' => 1, 'subHeader' => 'Card may display inf
 $stat = new Stat($app->db);
 $stat = $stat->loadAny();
 
-$c = \Atk4\Ui\Card::addTo($app);
+$c = Card::addTo($app);
 $c->setModel($stat, [$stat->fieldName()->client_name, $stat->fieldName()->description]);
 
 $c->addSection('Project: ', $stat, [$stat->fieldName()->start_date, $stat->fieldName()->finish_date], true);

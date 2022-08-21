@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model\UserAction;
+use Atk4\Ui\Card;
 use Atk4\Ui\Form\Control\Line;
 use Atk4\Ui\Header;
 use Atk4\Ui\View;
@@ -65,7 +66,7 @@ Header::addTo($app, [
 ]);
 
 // Card component.
-$card = \Atk4\Ui\Card::addTo($app);
+$card = Card::addTo($app);
 $content = new View(['class' => ['content']]);
 $img = \Atk4\Ui\Image::addTo($content, ['../images/kristy.png']);
 $img->addClass('right floated mini ui image');

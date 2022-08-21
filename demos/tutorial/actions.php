@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
+use Atk4\Ui\Card;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
@@ -72,7 +73,7 @@ $wizard->addStep('Define User Action', function ($page) {
         });
         $country = $country->loadAny();
 
-        $card = \Atk4\Ui\Card::addTo($owner);
+        $card = Card::addTo($owner);
         $card->setModel($country, [$country->fieldName()->iso]);
         $card->addClickAction($country->getModel()->getUserAction('send_message'));
     });

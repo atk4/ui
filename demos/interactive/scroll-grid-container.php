@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Card;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Grid;
@@ -30,7 +31,7 @@ $g1->addQuickSearch([Country::hinting()->fieldName()->name, Country::hinting()->
 
 // demo for additional action buttons in Crud + JsPaginator
 $g1->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($g1) {
-    \Atk4\Ui\Card::addTo($p)->setModel($g1->model->load($id));
+    Card::addTo($p)->setModel($g1->model->load($id));
 });
 $g1->addActionButton('red', function ($js) {
     return $js->closest('tr')->css('color', 'red');

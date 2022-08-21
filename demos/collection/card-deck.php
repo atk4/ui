@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
+use Atk4\Ui\CardDeck;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\UserAction\ExecutorFactory;
@@ -46,6 +47,6 @@ $infoAction->args = [
     'country' => ['required' => true, 'ui' => ['form' => [Form\Control\Lookup::class, 'model' => new Country($app->db), 'placeholder' => 'Please select a country.']]],
 ];
 
-$deck = \Atk4\Ui\CardDeck::addTo($app, ['noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book']]);
+$deck = CardDeck::addTo($app, ['noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book']]);
 
 $deck->setModel($countries, ['Cost'], [$countries->fieldName()->iso, $countries->fieldName()->iso3]);
