@@ -85,7 +85,7 @@ abstract class AbstractView
     }
 
     /**
-     * @return ($object is View ? View : AbstractView)
+     * @return ($object is View ? View : self)
      */
     public function add(self $object, array $args = []): self
     {

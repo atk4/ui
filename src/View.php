@@ -258,7 +258,7 @@ class View extends AbstractView implements JsExpressionable
      * @param AbstractView      $object
      * @param string|array|null $region
      *
-     * @return ($object is View ? View : AbstractView)
+     * @return ($object is self ? self : AbstractView)
      */
     public function add($object, $region = null): AbstractView
     {
@@ -771,7 +771,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * @param string|bool|null $when     Event when chain will be executed
      * @param JsExpressionable $action   JavaScript action
-     * @param string|View|null $selector If you wish to override jQuery($selector)
+     * @param string|self|null $selector If you wish to override jQuery($selector)
      *
      * @return Jquery
      */
@@ -825,7 +825,7 @@ class View extends AbstractView implements JsExpressionable
      *                                              of the vue component instance created via the vueService.
      * @param string|null      $componentDefinition The name of the js var holding a component definition object.
      *                                              This var must be defined and accessible in window object. window['var_name']
-     * @param string|View|null $selector            the selector for creating the base root object in Vue
+     * @param string|self|null $selector            the selector for creating the base root object in Vue
      *
      * @return $this
      */
