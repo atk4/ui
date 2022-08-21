@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Form;
 use Mvorisek\Atk4\Hintable\Data\HintablePropertyDef;
@@ -133,7 +134,7 @@ class ModelWithPrefixedFields extends Model
         $this->initPreventModification();
     }
 
-    public function addField($name, $seed = []): \Atk4\Data\Field
+    public function addField($name, $seed = []): Field
     {
         $seed = \Atk4\Core\Factory::mergeSeeds($seed, [
             'actual' => $this->prefixFieldName($name, true),
@@ -287,7 +288,7 @@ class Stat extends ModelWithPrefixedFields
     }
 }
 
-class Percent extends \Atk4\Data\Field
+class Percent extends Field
 {
     public ?string $type = 'float';
 }
