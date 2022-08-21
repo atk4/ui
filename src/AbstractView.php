@@ -87,7 +87,7 @@ abstract class AbstractView
     /**
      * @return ($object is View ? View : AbstractView)
      */
-    public function add(AbstractView $object, array $args = []): self
+    public function add(self $object, array $args = []): self
     {
         if (func_num_args() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');
