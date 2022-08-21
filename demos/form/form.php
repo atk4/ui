@@ -8,6 +8,7 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Modal;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
 
@@ -122,7 +123,7 @@ $form->onSubmit(function (Form $form) {
     $view->invokeInit();
     $view->text->addParagraph('some text ' . random_int(1, 100));
 
-    $modal = new \Atk4\Ui\Modal(['title' => 'Something happen', 'ui' => 'ui modal tiny']);
+    $modal = new Modal(['title' => 'Something happen', 'ui' => 'ui modal tiny']);
     $modal->add($view);
 
     return $modal;
@@ -161,7 +162,7 @@ $form->onSubmit(function (Form $form) {
     // return 'somehow it did not crash';
 });
 
-Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', \Atk4\Ui\Modal::addTo($form)
+Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', Modal::addTo($form)
     ->set(function ($p) {
         $form = Form::addTo($p);
         $form->addControl('email');

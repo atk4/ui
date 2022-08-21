@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Modal;
 use Atk4\Ui\Label;
 use Atk4\Ui\Message;
 
@@ -84,7 +85,7 @@ Form\Control\Lookup::addTo($app, [
 
 Header::addTo($app, ['Lookup input inside modal']);
 
-$modal = \Atk4\Ui\Modal::addTo($app)->set(function ($p) {
+$modal = Modal::addTo($app)->set(function ($p) {
     $a = Form\Control\Lookup::addTo($p, ['placeholder' => 'Search country', 'label' => 'Country: ']);
     $a->setModel(new Country($p->getApp()->db));
 });

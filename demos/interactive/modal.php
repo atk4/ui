@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\Modal;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
 use Atk4\Ui\Text;
@@ -24,15 +25,15 @@ Header::addTo($app, ['Static Modal Dialog']);
 
 $bar = View::addTo($app, ['ui' => 'buttons']);
 
-$modal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Add a name']);
+$modal = Modal::addTo($app, ['title' => 'Add a name']);
 LoremIpsum::addTo($modal);
 Button::addTo($modal, ['Hide'])->on('click', $modal->hide());
 
-$noTitle = \Atk4\Ui\Modal::addTo($app, ['title' => false]);
+$noTitle = Modal::addTo($app, ['title' => false]);
 LoremIpsum::addTo($noTitle);
 Button::addTo($noTitle, ['Hide'])->on('click', $noTitle->hide());
 
-$scrolling = \Atk4\Ui\Modal::addTo($app, ['title' => 'Long Content that Scrolls inside Modal']);
+$scrolling = Modal::addTo($app, ['title' => 'Long Content that Scrolls inside Modal']);
 $scrolling->addScrolling();
 LoremIpsum::addTo($scrolling);
 LoremIpsum::addTo($scrolling);
@@ -47,7 +48,7 @@ Button::addTo($bar, ['Scrolling Content'])->on('click', $scrolling->show());
 
 // REGULAR
 
-$simpleModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Simple modal']);
+$simpleModal = Modal::addTo($app, ['title' => 'Simple modal']);
 Message::addTo($simpleModal)->set('Modal message here.');
 ViewTester::addTo($simpleModal);
 
@@ -60,12 +61,12 @@ $button->on('click', $simpleModal->show());
 Header::addTo($app, ['Three levels of Modal loading dynamic content via callback']);
 
 // vp1Modal will be render into page but hide until $vp1Modal->show() is activate.
-$vp1Modal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Lorem Ipsum load dynamically']);
+$vp1Modal = Modal::addTo($app, ['title' => 'Lorem Ipsum load dynamically']);
 
 // vp2Modal will be render into page but hide until $vp1Modal->show() is activate.
-$vp2Modal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Text message load dynamically'])->addClass('small');
+$vp2Modal = Modal::addTo($app, ['title' => 'Text message load dynamically'])->addClass('small');
 
-$vp3Modal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
+$vp3Modal = Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
 $vp3Modal->set(function ($modal) {
     Text::addTo($modal)->set('This is yet another modal');
     LoremIpsum::addTo($modal, ['size' => 2]);
@@ -110,7 +111,7 @@ $menuItems = [
 
 Header::addTo($app, ['Modal Animation']);
 
-$transitionModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Animated modal']);
+$transitionModal = Modal::addTo($app, ['title' => 'Animated modal']);
 Message::addTo($transitionModal)->set('A lot of animated transition available');
 $transitionModal->duration(1000);
 
@@ -135,7 +136,7 @@ foreach ($menuItems as $key => $items) {
 
 Header::addTo($app, ['Modal Options']);
 
-$denyApproveModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Deny / Approve actions']);
+$denyApproveModal = Modal::addTo($app, ['title' => 'Deny / Approve actions']);
 Message::addTo($denyApproveModal)->set('This modal is only closable via the green button');
 $denyApproveModal->addDenyAction('No', new \Atk4\Ui\JsExpression('function() { window.alert("Can\'t do that."); return false; }'));
 $denyApproveModal->addApproveAction('Yes', new \Atk4\Ui\JsExpression('function() { window.alert("You\'re good to go!"); }'));
@@ -150,7 +151,7 @@ $button->on('click', $denyApproveModal->show());
 Header::addTo($app, ['Multiple page modal']);
 
 // Add modal to layout.
-$stepModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Multi step actions']);
+$stepModal = Modal::addTo($app, ['title' => 'Multi step actions']);
 $stepModal->setOption('observeChanges', true);
 
 // Add buttons to modal for next and previous actions.
