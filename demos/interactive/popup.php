@@ -8,6 +8,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\Label;
 use Atk4\Ui\Lister;
@@ -141,7 +142,7 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
             $cart->addItem($b);
 
             return $jsAction;
-        }, [(new \Atk4\Ui\Jquery())->text()]);
+        }, [(new Jquery())->text()]);
     }
 });
 
@@ -213,7 +214,7 @@ $shelf->linkCart($cart, [
     $cartOutterLabel->jsReload(),
 
     // also will hide current item from the shelf
-    (new \Atk4\Ui\Jquery())->hide(),
+    (new Jquery())->hide(),
 ]);
 
 // label placed on top of menu item, not in the popup

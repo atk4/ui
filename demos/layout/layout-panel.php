@@ -8,6 +8,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Card;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Icon;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
@@ -75,7 +76,7 @@ View::addTo($app, ['ui' => 'divider']);
 Header::addTo($app, ['Closing option', 'size' => 4, 'subHeader' => 'Panel can prevent from closing.']);
 
 $panel2 = Right::addTo($app, ['hasClickAway' => false]);
-$icon = \Atk4\Ui\Icon::addTo($app, ['big cog'])->addStyle('cursor', 'pointer');
+$icon = Icon::addTo($app, ['big cog'])->addStyle('cursor', 'pointer');
 $icon->on('click', $panel2->jsOpen());
 $panel2->addConfirmation('Changes will be lost. Are you sure?');
 

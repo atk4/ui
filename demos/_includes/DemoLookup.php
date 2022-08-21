@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Core\Factory;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
+use Atk4\Ui\Jquery;
 use Atk4\Ui\JsModal;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\VirtualPage;
@@ -50,11 +51,11 @@ class DemoLookup extends Form\Control\Lookup
 
                 $ret = [
                     new JsToast('Form submit!. Data are not save in demo mode.'),
-                    (new \Atk4\Ui\Jquery('.atk-modal'))->modal('hide'),
+                    (new Jquery('.atk-modal'))->modal('hide'),
                 ];
 
                 $row = $this->renderRow($form->model);
-                $chain = new \Atk4\Ui\Jquery('#' . $this->name . '-ac');
+                $chain = new Jquery('#' . $this->name . '-ac');
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
                 $ret[] = $chain;
 

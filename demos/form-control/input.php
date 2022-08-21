@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Icon;
 use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
@@ -49,7 +50,7 @@ Form\Control\Line::addTo($app, [
 // left/right corner is not supported, but here is work-around:
 $label = new Label();
 $label->addClass('left corner');
-\Atk4\Ui\Icon::addTo($label, ['asterisk']);
+Icon::addTo($label, ['asterisk']);
 
 Form\Control\Line::addTo($app, [
     'label' => $label,
@@ -57,7 +58,7 @@ Form\Control\Line::addTo($app, [
 
 $label = new Label();
 $label->addClass('corner');
-\Atk4\Ui\Icon::addTo($label, ['asterisk']);
+Icon::addTo($label, ['asterisk']);
 
 Form\Control\Line::addTo($app, [
     'label' => $label,

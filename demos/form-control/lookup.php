@@ -8,6 +8,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Icon;
 use Atk4\Ui\Label;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
@@ -78,7 +79,7 @@ Form\Control\Lookup::addTo($app, [
 // left/right corner is not supported, but here is work-around:
 $label = new Label();
 $label->addClass('left corner');
-\Atk4\Ui\Icon::addTo($label, ['asterisk']);
+Icon::addTo($label, ['asterisk']);
 
 Form\Control\Lookup::addTo($app, [
     'label' => $label,

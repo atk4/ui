@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\Jquery;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\View;
 
@@ -25,7 +26,7 @@ $mySwitcherClass = AnonymousClassNameCache::get_class(fn () => new class() exten
         Button::addTo($buttons, ['Blue'])->setAttr('data-id', 'blue');
         Button::addTo($buttons, ['Button'])->setAttr('data-id', 'button');
 
-        $buttons->on('click', '.button', new JsReload($this, [$this->name => (new \Atk4\Ui\Jquery())->data('id')]));
+        $buttons->on('click', '.button', new JsReload($this, [$this->name => (new Jquery())->data('id')]));
 
         switch ($this->stickyGet($this->name)) {
             case 'yellow':
