@@ -854,7 +854,7 @@ class Multiline extends Form\Control
      * Return a value according to field used in expression and the expression type.
      * If field used in expression is null, the default value is returned.
      *
-     * @return int|mixed|string
+     * @return string
      */
     private function getValueForExpression(Field $exprField, string $fieldName, Model $model)
     {
@@ -862,7 +862,7 @@ class Multiline extends Form\Control
             case 'integer':
             case 'float':
             case 'atk4_money':
-                // value is 0 or the field value.
+                // value is 0 or the field value
                 $value = (string) $model->get($fieldName) ?: 0;
 
                 break;

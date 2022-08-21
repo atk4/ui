@@ -543,10 +543,8 @@ class Grid extends View
 
     /**
      * Get sortBy value from url parameter.
-     *
-     * @return string|null
      */
-    public function getSortBy()
+    public function getSortBy(): ?string
     {
         return $_GET[$this->sortTrigger] ?? null;
     }

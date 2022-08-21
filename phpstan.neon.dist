@@ -137,12 +137,6 @@ parameters:
             path: 'src/Card.php'
             message: '~^Call to an undefined method Atk4\\Ui\\View::setAction\(\)\.$~'
         -
-            path: 'src/Card.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\View::addFields\(\)\.$~'
-        -
-            path: 'src/Card.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\View::addDescription\(\)\.$~'
-        -
             path: 'src/CardDeck.php'
             message: '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$reload\.$~'
         -
@@ -289,13 +283,7 @@ parameters:
             message: '~^Property Atk4\\Ui\\App::\$layout \(Atk4\\Ui\\Layout\) does not accept Atk4\\Ui\\View\.$~'
         -
             path: 'src/Card.php'
-            message: '~^Property Atk4\\Ui\\Card::\$section \(Atk4\\Ui\\CardSection\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
-        -
-            path: 'src/Card.php'
-            message: '~^Method Atk4\\Ui\\Card::getSection\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'
-        -
-            path: 'src/Card.php'
-            message: '~^Method Atk4\\Ui\\Card::addButton\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Method Atk4\\Ui\\Card::addButton\(\) should return Atk4\\Ui\\View\ but returns Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/CardDeck.php'
             message: '~^Property Atk4\\Ui\\CardDeck::\$container \(Atk4\\Ui\\View\|null\) does not accept default value of type array<int\|string, string>\.$~'
@@ -473,9 +461,6 @@ parameters:
         -
             path: 'demos/javascript/reloading.php'
             message: '~^Parameter #1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
-        -
-            path: 'src/Card.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, \$this\(Atk4\\Ui\\Card\)\|string> given\.$~'
         -
             path: 'src/Form/Layout/Section.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, mixed> given\.$~'

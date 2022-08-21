@@ -105,12 +105,12 @@ class Card extends View
     /**
      * Get main section of this card.
      *
-     * @return CardSection|View|null
+     * @return CardSection
      */
     public function getSection()
     {
         if (!$this->section) {
-            $this->section = $this->add([$this->cardSection, 'card' => $this]);
+            $this->section = CardSection::addToWithCl($this, [$this->cardSection, 'card' => $this]);
         }
 
         return $this->section;
@@ -119,7 +119,7 @@ class Card extends View
     /**
      * Get the image container of this card.
      *
-     * @return View|null
+     * @return View
      */
     public function getImageContainer()
     {
@@ -133,7 +133,7 @@ class Card extends View
     /**
      * Get the ExtraContainer of this card.
      *
-     * @return View|null
+     * @return View
      */
     public function getExtraContainer()
     {
@@ -147,7 +147,7 @@ class Card extends View
     /**
      * Get the button container of this card.
      *
-     * @return View|null
+     * @return View
      */
     public function getButtonContainer()
     {
@@ -161,7 +161,7 @@ class Card extends View
     /**
      * Add Content to card.
      *
-     * @return View|null
+     * @return View
      */
     public function addContent(View $view)
     {
@@ -326,7 +326,7 @@ class Card extends View
      *
      * @param string|View $description
      *
-     * @return View|string|null the description to add
+     * @return View
      */
     public function addDescription($description)
     {
@@ -349,7 +349,7 @@ class Card extends View
      *
      * @param string|Image $img
      *
-     * @return View|null
+     * @return View
      */
     public function addImage($img)
     {
@@ -365,9 +365,9 @@ class Card extends View
     /**
      * Add button to card.
      *
-     * @param Button $button a Button
+     * @param Button|array $button
      *
-     * @return View|null
+     * @return View
      */
     public function addButton($button)
     {
@@ -392,7 +392,7 @@ class Card extends View
     /**
      * Add a series of buttons to this card.
      *
-     * @return View|null
+     * @return View
      */
     public function addButtons(array $buttons)
     {

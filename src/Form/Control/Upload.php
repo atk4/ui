@@ -109,7 +109,7 @@ class Upload extends Input
     /**
      * Get input field value.
      *
-     * @return array|false|mixed|string|null
+     * @return mixed
      */
     public function getInputValue()
     {

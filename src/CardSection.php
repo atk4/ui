@@ -31,15 +31,15 @@ class CardSection extends View
      *
      * @param string|View $description
      *
-     * @return View|string|null the description to add
+     * @return View
      */
     public function addDescription($description)
     {
         $view = null;
 
-        if (is_scalar($description)) {
+        if (is_string($description)) {
             $view = View::addTo($this, [$description, 'class' => ['description']]);
-        } elseif ($description instanceof View) {
+        } else {
             $view = $this->add($description)->addClass('description');
         }
 
