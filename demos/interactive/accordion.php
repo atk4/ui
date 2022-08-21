@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Accordion;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
@@ -28,7 +29,7 @@ $b3 = Button::addTo($bar, ['Toggle Section #3']);
 
 Header::addTo($app, ['Accordion Sections']);
 
-$accordion = \Atk4\Ui\Accordion::addTo($app, ['type' => ['styled', 'fluid']/* , 'settings' => ['exclusive' => false] */]);
+$accordion = Accordion::addTo($app, ['type' => ['styled', 'fluid']/* , 'settings' => ['exclusive' => false] */]);
 
 // static section
 $i1 = $accordion->addSection('Static Text');

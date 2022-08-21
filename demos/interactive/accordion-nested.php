@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Accordion;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
@@ -23,7 +24,7 @@ View::addTo($app, ['ui' => 'clearing divider']);
 Header::addTo($app, ['Nested accordions']);
 
 $addAccordionFunc = function ($view, $maxDepth = 2, $level = 0) use (&$addAccordionFunc) {
-    $accordion = \Atk4\Ui\Accordion::addTo($view, ['type' => ['styled', 'fluid']]);
+    $accordion = Accordion::addTo($view, ['type' => ['styled', 'fluid']]);
 
     // static section
     $i1 = $accordion->addSection('Static Text');
