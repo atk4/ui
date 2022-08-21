@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
-use Atk4\Ui\Exception;
 use Atk4\Data\Model\UserAction;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Form\Control\Dropdown;
 
 class DemoActionsUtil

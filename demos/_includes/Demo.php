@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-use Atk4\Ui\Exception;
-use Atk4\Ui\View;
 use Atk4\Ui\Columns;
+use Atk4\Ui\Exception;
 use Atk4\Ui\JsChain;
+use Atk4\Ui\View;
 
 class Demo extends Columns
 {
