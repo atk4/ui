@@ -244,11 +244,9 @@ class Lookup extends Input
         }
 
         $defaultSeed = [Button::class, 'class.disabled' => ($this->disabled || $this->readOnly)];
-
         $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
 
         $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
-
         $vp->set(function ($page) {
             $form = Form::addTo($page);
 
@@ -275,7 +273,6 @@ class Lookup extends Input
         });
 
         $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
-
         $this->action->js('click', new JsModal($caption, $vp));
     }
 

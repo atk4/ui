@@ -140,7 +140,7 @@ class Table extends Lister
      *
      * @param string|null              $name            Data model field name
      * @param array|string|object|null $columnDecorator
-     * @param array|object|null        $field
+     * @param array|Field|null         $field
      *
      * @return Table\Column
      */
@@ -152,7 +152,7 @@ class Table extends Lister
             $this->model = new \Atk4\Ui\Misc\ProxyModel();
         }
 
-        // This code should be vaugely consistent with Form\Layout::addControl()
+        // This code should be vaugely consistent with Form\AbstractLayout::addControl()
 
         if ($name === null) {
             // table column without respective field in model
@@ -247,17 +247,17 @@ class Table extends Lister
     /**
      * Add column Decorator.
      *
-     * @param string $name Column name
-     * @param mixed  $seed Defaults to pass to Factory::factory() when decorator is initialized
+     * @param Table\Column|array $seed
      *
      * @return Table\Column
      */
     public function addDecorator(string $name, $seed)
     {
-        if (!$this->columns[$name]) {
+        if (!isset($this->columns[$name])) {
             throw (new Exception('No such column, cannot decorate'))
                 ->addMoreInfo('name', $name);
         }
+
         $decorator = $this->_addUnchecked(Table\Column::fromSeed($seed, ['table' => $this]));
 
         if (!is_array($this->columns[$name])) {

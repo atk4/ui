@@ -365,21 +365,21 @@ class Card extends View
     /**
      * Add button to card.
      *
-     * @param Button|array $button
+     * @param Button|array $seed
      *
      * @return View
      */
-    public function addButton($button)
+    public function addButton($seed)
     {
         if ($this->hasFluidButton && $this->btnCount > 0) {
             $this->getButtonContainer()->removeClass($this->words[$this->btnCount]);
         }
 
-        if (!is_object($button)) {
-            $button = Factory::factory([Button::class], $button);
+        if (!is_object($seed)) {
+            $seed = Factory::factory([Button::class], $seed);
         }
 
-        $btn = $this->getButtonContainer()->add($button);
+        $btn = $this->getButtonContainer()->add($seed);
         ++$this->btnCount;
 
         if ($this->hasFluidButton && $this->btnCount > 0) {

@@ -22,6 +22,11 @@ abstract class AbstractLayout extends View
     /** @var Form Links layout to the form. */
     public $form;
 
+    protected function _addControl(Control $control, Field $field): Control
+    {
+        return $this->add($control, $this->template->hasTag($field->shortName) ? $field->shortName : null);
+    }
+
     /**
      * Places element inside a layout somewhere. Should be called
      * through $form->addControl().
@@ -61,11 +66,6 @@ abstract class AbstractLayout extends View
         }
 
         return $this->_addControl($control, $field);
-    }
-
-    protected function _addControl(Control $control, Field $field): Control
-    {
-        return $this->add($control, $this->template->hasTag($field->shortName) ? $field->shortName : null);
     }
 
     /**
@@ -135,7 +135,7 @@ abstract class AbstractLayout extends View
     /**
      * Adds Button into form layout.
      *
-     * @param Button|array|string $seed
+     * @param Button|array $seed
      *
      * @return Button
      */

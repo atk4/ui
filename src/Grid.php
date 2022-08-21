@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Table\Column\ActionButtons;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
@@ -160,11 +161,11 @@ class Grid extends View
      *
      * @param string                   $name            Data model field name
      * @param array|string|object|null $columnDecorator
-     * @param array|string|object|null $field
+     * @param array|Field|null         $field
      *
      * @return Table\Column
      */
-    public function addColumn($name, $columnDecorator = null, $field = null)
+    public function addColumn(string $name, $columnDecorator = null, $field = null)
     {
         return $this->table->addColumn($name, $columnDecorator, $field);
     }
@@ -172,28 +173,27 @@ class Grid extends View
     /**
      * Add additional decorator for existing column.
      *
-     * @param string             $name      Column name
-     * @param Table\Column|array $decorator Seed or object of the decorator
+     * @param Table\Column|array $seed
+     *
+     * @return Table\Column
      */
-    public function addDecorator($name, $decorator)
+    public function addDecorator(string $name, $seed)
     {
-        return $this->table->addDecorator($name, $decorator);
+        return $this->table->addDecorator($name, $seed);
     }
 
     /**
      * Add a new buton to the Grid Menu with a given text.
      *
-     * WARNING: needs to be reviewed!
-     *
-     * @param mixed $text
+     * @param string $label
      */
-    public function addButton($text)
+    public function addButton($label)
     {
         if (!$this->menu) {
             throw new Exception('Unable to add Button without Menu');
         }
 
-        return Button::addTo($this->menu->addItem(), [$text]);
+        return Button::addTo($this->menu->addItem(), [$label]);
     }
 
     /**

@@ -20,14 +20,21 @@ class DemoLookup extends Form\Control\Lookup
             return;
         }
 
-        $this->plus = is_bool($this->plus) ? 'Add New' : $this->plus;
-        $this->plus = is_string($this->plus) ? ['button' => $this->plus] : $this->plus;
+        if ($this->plus === true) {
+            $this->plus = 'Add New';
+        }
+
+        if (is_string($this->plus)) {
+            $this->plus = ['button' => $this->plus];
+        }
 
         $buttonSeed = $this->plus['button'] ?? [];
-        $buttonSeed = is_string($buttonSeed) ? ['content' => $buttonSeed] : $buttonSeed;
+        if (is_string($buttonSeed)) {
+            $buttonSeed = ['content' => $buttonSeed];
+        }
 
         $defaultSeed = [Button::class, 'class.disabled' => ($this->disabled || $this->readOnly)];
-        $this->action = Factory::factory(array_merge($defaultSeed, (array) $buttonSeed));
+        $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
 
         $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
         $vp->set(function ($page) {
@@ -54,7 +61,6 @@ class DemoLookup extends Form\Control\Lookup
         });
 
         $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
-
         $this->action->js('click', new JsModal($caption, $vp));
     }
 }

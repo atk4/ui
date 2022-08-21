@@ -59,7 +59,7 @@ class Layout extends AbstractLayout
     /**
      * Adds Button.
      *
-     * @param Button|array|string $seed
+     * @param Button|array $seed
      *
      * @return Button
      */

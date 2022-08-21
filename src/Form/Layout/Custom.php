@@ -29,7 +29,7 @@ class Custom extends AbstractLayout
     /**
      * Adds Button into {$Buttons}.
      *
-     * @param Button|array|string $seed
+     * @param Button|array $seed
      *
      * @return Button
      */

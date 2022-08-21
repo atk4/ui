@@ -37,7 +37,7 @@ class ActionButtons extends Table\Column
      *
      * Returns button object
      *
-     * @param View|string                        $button
+     * @param string|array|View                  $button
      * @param JsChain|\Closure|ExecutorInterface $action
      *
      * @return View
@@ -75,10 +75,10 @@ class ActionButtons extends Table\Column
      * Adds a new button which will open a modal dialog and dynamically
      * load contents through $callback. Will pass a virtual page.
      *
-     * @param View|string  $button
-     * @param string|array $defaults modal title or modal defaults array
-     * @param View         $owner
-     * @param array        $args
+     * @param string|array|View $button
+     * @param string|array      $defaults modal title or modal defaults array
+     * @param View              $owner
+     * @param array             $args
      *
      * @return View
      */

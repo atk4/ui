@@ -943,9 +943,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Grid::setActionMenuDecorator\(\) has parameter \$seed with no type specified\.$~'
         -
             path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::addDecorator\(\) has no return type specified\.$~'
-        -
-            path: 'src/Grid.php'
             message: '~^Method Atk4\\Ui\\Grid::addButton\(\) has no return type specified\.$~'
         -
             path: 'src/Grid.php'
