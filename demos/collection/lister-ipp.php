@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\ItemsPerPageSelector;
 use Atk4\Ui\Lister;
 use Atk4\Ui\View;
 
@@ -77,7 +78,7 @@ $model = new Country($app->db);
 $model->setLimit(12);
 $lister->setModel($model);
 
-$ipp = \Atk4\Ui\ItemsPerPageSelector::addTo($view, ['label' => 'Select how many countries:', 'pageLengthItems' => [12, 24, 36]], ['Content']);
+$ipp = ItemsPerPageSelector::addTo($view, ['label' => 'Select how many countries:', 'pageLengthItems' => [12, 24, 36]], ['Content']);
 
 $ipp->onPageLengthSelect(function ($ipp) use ($model, $container) {
     $model->setLimit($ipp);

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Component\InlineEdit;
+use Atk4\Ui\Component\ItemSearch;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Lister;
@@ -25,7 +27,7 @@ $model = $model->loadAny();
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
 Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
 
-$inline_edit = \Atk4\Ui\Component\InlineEdit::addTo($app);
+$inline_edit = InlineEdit::addTo($app);
 $inline_edit->fieldName = $model->fieldName()->name;
 $inline_edit->setModel($model);
 
@@ -50,7 +52,7 @@ $lister_template = new HtmlTemplate('<div id="{$_id}">{List}<div class="ui icon 
 
 $view = View::addTo($app);
 
-$search = \Atk4\Ui\Component\ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
+$search = ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
 $lister_container = View::addTo($view, ['template' => $lister_template]);
 $lister = Lister::addTo($lister_container, [], ['List']);
 $lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {

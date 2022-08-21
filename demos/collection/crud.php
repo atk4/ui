@@ -12,6 +12,7 @@ use Atk4\Ui\Grid;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
 use Atk4\Ui\Table;
+use Atk4\Ui\UserAction\ModalExecutor;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -72,8 +73,8 @@ $crud->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($cr
 $column = $columns->addColumn();
 Header::addTo($column, ['Customizations']);
 
-/** @var \Atk4\Ui\UserAction\ModalExecutor $myExecutorClass */
-$myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\UserAction\ModalExecutor {
+/** @var ModalExecutor $myExecutorClass */
+$myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() extends ModalExecutor {
     public function addFormTo(View $view): Form
     {
         $columns = Columns::addTo($view);

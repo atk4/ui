@@ -8,6 +8,7 @@ use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
+use Atk4\Ui\HelloWorld;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
@@ -19,7 +20,7 @@ require_once __DIR__ . '/../init-app.php';
 $tabs = Tabs::addTo($app);
 
 // static tab
-\Atk4\Ui\HelloWorld::addTo($tabs->addTab('Hello'));
+HelloWorld::addTo($tabs->addTab('Hello'));
 $tab = $tabs->addTab('Static Tab');
 Message::addTo($tab, ['Content of this tab will refresh only if you reload entire page']);
 LoremIpsum::addTo($tab);
