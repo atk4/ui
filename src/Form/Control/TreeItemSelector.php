@@ -1,6 +1,14 @@
 <?php
 
 declare(strict_types=1);
+
+namespace Atk4\Ui\Form\Control;
+
+use Atk4\Ui\Form;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\JsCallback;
+use Atk4\Ui\View;
+
 /**
  * Display items in a hierarchical (tree) view structure.
  *
@@ -13,14 +21,6 @@ declare(strict_types=1);
  *
  * see demos/tree-item-selector.php to see how tree items are build.
  */
-
-namespace Atk4\Ui\Form\Control;
-
-use Atk4\Ui\Form;
-use Atk4\Ui\HtmlTemplate;
-use Atk4\Ui\JsCallback;
-use Atk4\Ui\View;
-
 class TreeItemSelector extends Form\Control
 {
     /** @var HtmlTemplate|null Template for the item selector view. */

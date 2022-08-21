@@ -1,15 +1,15 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Shortcut handler for calling method of
- * the atk javascript vue service.
- */
 
 namespace Atk4\Ui;
 
 use Atk4\Core\WarnDynamicPropertyTrait;
 
+/**
+ * Shortcut handler for calling method of
+ * the atk javascript vue service.
+ */
 class JsVueService
 {
     use WarnDynamicPropertyTrait;

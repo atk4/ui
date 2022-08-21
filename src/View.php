@@ -28,10 +28,8 @@ class View extends AbstractView implements JsExpressionable
     /**
      * Name of the region in the parent's template where this object
      * will output itself.
-     *
-     * @var string|null
      */
-    public $region;
+    public ?string $region = null;
 
     /**
      * Enables UI keyword for Semantic UI indicating that this is a
@@ -257,8 +255,10 @@ class View extends AbstractView implements JsExpressionable
      * In addition to adding a child object, sets up it's template
      * and associate it's output with the region in our template.
      *
-     * @param View              $object
+     * @param AbstractView      $object
      * @param string|array|null $region
+     *
+     * @return ($object is View ? View : AbstractView)
      */
     public function add($object, $region = null): AbstractView
     {
@@ -283,16 +283,11 @@ class View extends AbstractView implements JsExpressionable
             $region = $args['region'] ?? null;
             unset($args['region']);
         } else {
-            $args = null;
+            $args = [];
         }
 
         // set region
         if ($region !== null) {
-            if (!is_string($region)) {
-                throw (new Exception('Region must be a string'))
-                    ->addMoreInfo('region_type', gettype($region));
-            }
-
             $object->setDefaults(['region' => $region]);
         }
 

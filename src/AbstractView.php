@@ -40,18 +40,18 @@ abstract class AbstractView
      * initialized by calling init() or adding into App or another initialized View,
      * then add() will be re-invoked with the contents of this array.
      *
-     * @var array
+     * @var array<int, array{self, array}>
      */
     protected $_addLater = [];
 
-    /** @var bool will be set to true after rendered. This is so that we don't render view twice. */
-    protected $_rendered = false;
+    /** Will be set to true after rendered. This is so that we don't render view twice. */
+    protected bool $_rendered = false;
 
     /**
      * For the absence of the application, we would add a very
      * simple one.
      */
-    protected function initDefaultApp()
+    protected function initDefaultApp(): void
     {
         $this->setApp(new App([
             'catchExceptions' => false,
@@ -85,12 +85,10 @@ abstract class AbstractView
     }
 
     /**
-     * @param AbstractView $object
+     * @return ($object is View ? View : AbstractView)
      */
-    public function add($object, $args = null): self
+    public function add(AbstractView $object, array $args = []): self
     {
-        (self::class)::assertInstanceOf($object);
-
         if (func_num_args() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');
         } elseif ($this->_rendered) {

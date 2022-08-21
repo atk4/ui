@@ -1,12 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * An Admin layout with enhance left menu.
- * This layout use jQuery plugin atk-sidenav.plugin.js
- *  Default value for this plugin is set for Maestro layout using maestro-sidenav.html template.
- *  Note that it is possible to change these default value if another template is use.
- */
 
 namespace Atk4\Ui\Layout;
 
@@ -14,6 +8,12 @@ use Atk4\Ui\Item;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\Menu;
 
+/**
+ * An Admin layout with enhanced left menu.
+ * This layout use jQuery plugin atk-sidenav.plugin.js
+ *  Default value for this plugin is set for Maestro layout using maestro-sidenav.html template.
+ *  Note that it is possible to change these default value if another template is use.
+ */
 class Maestro extends Admin
 {
     public $menuTemplate = 'layout/maestro-sidenav.html';

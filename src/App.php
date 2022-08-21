@@ -222,7 +222,7 @@ class App
         // $this->portals[$portal->shortName] = $portal;
     }
 
-    public function setExecutorFactory(ExecutorFactory $factory)
+    public function setExecutorFactory(ExecutorFactory $factory): void
     {
         $this->executorFactory = $factory;
     }
@@ -232,7 +232,7 @@ class App
         return $this->executorFactory;
     }
 
-    protected function setupTemplateDirs()
+    protected function setupTemplateDirs(): void
     {
         if ($this->templateDir === null) {
             $this->templateDir = [];
@@ -482,7 +482,7 @@ class App
     /**
      * Initialize JS and CSS includes.
      */
-    public function initIncludes()
+    public function initIncludes(): void
     {
         // jQuery
         $this->requireJs($this->cdn['jquery'] . '/jquery.min.js');
@@ -519,7 +519,7 @@ class App
      *
      * @param string $style CSS rules, like ".foo { background: red }".
      */
-    public function addStyle($style)
+    public function addStyle($style): void
     {
         $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('style', $style));
     }
@@ -527,23 +527,25 @@ class App
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
-     * @param View|string|array $seed   New object to add
+     * @param AbstractView      $object
      * @param string|array|null $region
+     *
+     * @return ($object is View ? View : AbstractView)
      */
-    public function add($seed, $region = null): AbstractView
+    public function add($object, $region = null): AbstractView
     {
         if (!$this->layout) { // @phpstan-ignore-line
             throw (new Exception('App layout is missing'))
-                ->addSolution('If you use $app->add() you should call $app->initLayout() first');
+                ->addSolution('$app->initLayout() must be called first');
         }
 
-        return $this->layout->add($seed, $region);
+        return $this->layout->add($object, $region);
     }
 
     /**
      * Runs app and echo rendered template.
      */
-    public function run()
+    public function run(): void
     {
         $isExitException = false;
         try {
@@ -675,7 +677,7 @@ class App
     /**
      * Remove sticky GET which was set by stickyGet.
      */
-    public function stickyForget(string $name)
+    public function stickyForget(string $name): void
     {
         unset($this->stickyGetArguments[$name]);
     }
@@ -966,6 +968,9 @@ class App
         return htmlentities($val);
     }
 
+    /**
+     * @return mixed
+     */
     public function decodeJson(string $json)
     {
         $data = json_decode($json, true, 512, \JSON_BIGINT_AS_STRING | \JSON_THROW_ON_ERROR);
@@ -973,6 +978,9 @@ class App
         return $data;
     }
 
+    /**
+     * @param mixed $data
+     */
     public function encodeJson($data, bool $forceObject = false): string
     {
         $options = \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT;

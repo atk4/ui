@@ -1,9 +1,14 @@
 <?php
 
 declare(strict_types=1);
+
+namespace Atk4\Ui;
+
+use Atk4\Core\Factory;
+use Atk4\Data\Model;
+use Atk4\Ui\UserAction\ExecutorFactory;
+
 /**
- * A Card container.
- *
  * Card can contain arbitrary information.
  *
  * Card contains one main CardSection for adding content
@@ -21,13 +26,6 @@ declare(strict_types=1);
  * will have it's idField set as data-id html attribute for the card. Thus making
  * the id available via javascript (new Jquery())->data('id')
  */
-
-namespace Atk4\Ui;
-
-use Atk4\Core\Factory;
-use Atk4\Data\Model;
-use Atk4\Ui\UserAction\ExecutorFactory;
-
 class Card extends View
 {
     public $ui = 'card atk-card';
@@ -281,9 +279,9 @@ class Card extends View
      */
     public function addClickAction(Model\UserAction $action, Button $button = null, array $args = [], string $confirm = null): self
     {
-        $defaults = [];
-
         $btn = $this->addButton($button ?? $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::CARD_BUTTON));
+
+        $defaults = [];
 
         // Setting arg for model id. $args[0] is consider to hold a model id, i.e. as a js expression.
         if ($this->model && $this->model->isLoaded() && !isset($args[0])) {
