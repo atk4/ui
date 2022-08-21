@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
-use Atk4\Ui\VueComponent\InlineEdit;
-use Atk4\Ui\VueComponent\ItemSearch;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Lister;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
+use Atk4\Ui\VueComponent\InlineEdit;
+use Atk4\Ui\VueComponent\ItemSearch;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
