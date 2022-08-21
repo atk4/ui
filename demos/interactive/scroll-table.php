@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\Table;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -19,7 +20,7 @@ View::addTo($app, ['ui' => 'ui clearing divider']);
 
 Header::addTo($app, ['Dynamic scroll in Table']);
 
-$table = \Atk4\Ui\Table::addTo($app);
+$table = Table::addTo($app);
 
 $model = new Country($app->db);
 $table->setModel($model);

@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Table;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -27,7 +28,7 @@ $crud->onFormEdit(function (Form $form) use ($model) {
 
 $crud->setModel($model);
 
-$crud->addDecorator($model->titleField, [\Atk4\Ui\Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => $model->fieldName()->id]]);
+$crud->addDecorator($model->titleField, [Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => $model->fieldName()->id]]);
 
 View::addTo($app, ['ui' => 'divider']);
 

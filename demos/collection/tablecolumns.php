@@ -130,5 +130,5 @@ foreach (range(1, 10) as $id) {
     ]);
 }
 
-$table = \Atk4\Ui\Table::addTo($app);
+$table = Table::addTo($app);
 $table->setModel($model);

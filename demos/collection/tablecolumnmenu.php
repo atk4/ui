@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Header;
+use Atk4\Ui\Table;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
@@ -15,7 +16,7 @@ Header::addTo($app, ['Table column may contains popup or dropdown menu.']);
 
 // Better Popup positionning when Popup are inside a container.
 $container = View::addTo($app, ['ui' => 'vertical segment']);
-$table = \Atk4\Ui\Table::addTo($container, ['class.celled' => true]);
+$table = Table::addTo($container, ['class.celled' => true]);
 $table->setModel(new SomeData(), []);
 
 // will add popup to this column.
@@ -27,7 +28,7 @@ $colSurname = $table->addColumn('surname');
 $colTitle = $table->addColumn('title');
 
 $table->addColumn('date');
-$table->addColumn('salary', new \Atk4\Ui\Table\Column\Money());
+$table->addColumn('salary', new Table\Column\Money());
 
 // regular popup setup
 Text::addTo($colName->addPopup())->set('Name popup');

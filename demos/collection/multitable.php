@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\Table;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -23,7 +24,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
         $this->addClass('internally celled');
 
         // lets add our first table here
-        $table = \Atk4\Ui\Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
+        $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
         $table->setModel($model, [$model->titleField]);
 
         $selections = explode(',', $_GET[$this->name] ?? '');
@@ -61,7 +62,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
 
             $pushModel = $pushModel->ref($ref);
 
-            $table = \Atk4\Ui\Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
+            $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
             $table->setModel($pushModel->setLimit(10), [$pushModel->titleField]);
 
             if ($selections) {

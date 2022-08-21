@@ -18,7 +18,7 @@ if ($id = $_GET['id'] ?? null) {
 
 $bb = View::addTo($app, ['ui' => 'buttons']);
 
-$table = \Atk4\Ui\Table::addTo($app, ['class.celled' => true]);
+$table = Table::addTo($app, ['class.celled' => true]);
 Button::addTo($bb, ['Refresh Table', 'icon' => 'refresh'])
     ->on('click', new \Atk4\Ui\JsReload($table));
 
@@ -70,7 +70,7 @@ $myArray = [
     ['name' => 'Brett', 'surname' => 'Bird', 'birthdate' => '1988-12-20', 'cv' => null],
 ];
 
-$table = \Atk4\Ui\Table::addTo($app);
+$table = Table::addTo($app);
 $table->setSource($myArray, ['name']);
 
 // $table->addColumn('name');

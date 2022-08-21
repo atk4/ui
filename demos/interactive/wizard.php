@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Header;
+use Atk4\Ui\Table;
 use Atk4\Ui\Wizard;
 
 /** @var \Atk4\Ui\App $app */
@@ -55,9 +56,9 @@ $wizard->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon'
     $grid->setSource(['Country', 'Stat']);
 
     // should work after url() fix
-    $grid->addDecorator('name', [\Atk4\Ui\Table\Column\Link::class, [], ['name']]);
+    $grid->addDecorator('name', [Table\Column\Link::class, [], ['name']]);
 
-    // $t->addDecorator('name', [\Atk4\Ui\Table\Column\Link::class, [$wizard->stepCallback->name => $wizard->currentStep], ['name']]);
+    // $t->addDecorator('name', [Table\Column\Link::class, [$wizard->stepCallback->name => $wizard->currentStep], ['name']]);
 
     $wizard->buttonNext->addClass('disabled');
 });

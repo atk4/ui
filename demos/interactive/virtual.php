@@ -9,6 +9,7 @@ use Atk4\Ui\Header;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
+use Atk4\Ui\Table;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
 use Atk4\Ui\VirtualPage;
@@ -80,7 +81,7 @@ Button::addTo($bar)->set('No title')->on('click', new \Atk4\Ui\JsModal(null, $vi
 View::addTo($app, ['ui' => 'hidden divider']);
 $text = Text::addTo($app);
 $text->addParagraph('Can also be trigger from a js event, like clicking on a table row.');
-$table = \Atk4\Ui\Table::addTo($app, ['class.celled' => true]);
+$table = Table::addTo($app, ['class.celled' => true]);
 $table->setModel(new SomeData());
 
 $frame = VirtualPage::addTo($app);

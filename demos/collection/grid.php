@@ -8,6 +8,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsToast;
+use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\BasicExecutor;
 
 /** @var \Atk4\Ui\App $app */
@@ -32,7 +33,7 @@ $grid->menu->addItem(['Add Country', 'icon' => 'add square'], new \Atk4\Ui\JsExp
 $grid->menu->addItem(['Re-Import', 'icon' => 'power'], new \Atk4\Ui\JsReload($grid));
 $grid->menu->addItem(['Delete All', 'icon' => 'trash', 'class.red active' => true]);
 
-$grid->addColumn(null, [\Atk4\Ui\Table\Column\Template::class, 'hello<b>world</b>']);
+$grid->addColumn(null, [Table\Column\Template::class, 'hello<b>world</b>']);
 
 // Creating a button for executing model test user action.
 $grid->addExecutorButton($grid->getExecutorFactory()->create($model->getUserAction('test'), $grid));

@@ -22,7 +22,7 @@ $model->getField('amount')->type = 'atk4_money';
 
 Header::addTo($app, ['Table with various headers', 'subHeader' => 'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon' => 'table']);
 
-$table = \Atk4\Ui\Table::addTo($app);
+$table = Table::addTo($app);
 $table->setModel($model, ['action']);
 $table->addColumn('amount', [Table\Column\Money::class]);
 
@@ -50,7 +50,7 @@ $table->addTotals(['action' => 'Totals:', 'amount' => ['sum']]);
 
 Header::addTo($app, ['Columns with multiple formats', 'subHeader' => 'Single column can use logic to swap out formatters', 'icon' => 'table']);
 
-$table = \Atk4\Ui\Table::addTo($app);
+$table = Table::addTo($app);
 $table->setModel($model, ['action']);
 
 // copy of amount through a PHP callback
@@ -82,6 +82,6 @@ $table->addColumn('amount_copy', [Table\Column\Multiformat::class, function ($a,
 
 Header::addTo($app, ['Table with resizable columns', 'subHeader' => 'Just drag column header to resize', 'icon' => 'table']);
 
-$table = \Atk4\Ui\Table::addTo($app);
+$table = Table::addTo($app);
 $table->setModel($model);
 $table->addClass('celled')->resizableColumn();

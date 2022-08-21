@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\Label;
+use Atk4\Ui\Table;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -40,9 +41,9 @@ if (isset($_GET['name'])) {
     });
 }
 
-$t = \Atk4\Ui\Table::addTo($app);
+$t = Table::addTo($app);
 $t->setSource(['Red', 'Green', 'Blue']);
-$t->addDecorator('name', [\Atk4\Ui\Table\Column\Link::class, [], ['name']]);
+$t->addDecorator('name', [Table\Column\Link::class, [], ['name']]);
 
 $frame = View::addTo($app, ['ui' => 'green segment']);
 Button::addTo($frame, ['does not inherit sticky get'])->on('click', function () use ($app) {
