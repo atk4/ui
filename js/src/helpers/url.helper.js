@@ -1,5 +1,5 @@
 /**
- *  Url helper jQuery functions.
+ * Url helper jQuery functions.
  *
  * - AddParams - Pass an url with an object and object key=value pair will be
  *   added to the url as get parameter.

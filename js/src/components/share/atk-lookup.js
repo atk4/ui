@@ -54,8 +54,8 @@ export default {
             this.$emit('onChange', value);
         },
         /**
-     * Receive user input text for search.
-     */
+         * Receive user input text for search.
+         */
         onFiltered: function (inputValue) {
             if (inputValue) {
                 this.isLoading = true;
@@ -71,8 +71,8 @@ export default {
             }, 300).call(this);
         },
         /**
-     * Fetch new data from server.
-     */
+         * Fetch new data from server.
+         */
         fetchItems: async function (q) {
             try {
                 const data = { atk_vlookup_q: q, atk_vlookup_field: this.field };

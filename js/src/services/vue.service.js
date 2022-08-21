@@ -119,8 +119,8 @@ class VueService {
     }
 
     /*
-    *  Add component to vues container.
-    *  Group ids that are using the same component.
+     * Add component to vues container.
+     * Group ids that are using the same component.
      */
     registerComponent(component) {
         // check if that component is already registered
@@ -153,8 +153,8 @@ class VueService {
     }
 
     /*
-    * Mark a component as loaded.
-    */
+     * Mark a component as loaded.
+     */
     markComponentLoaded(name) {
         this.vues.forEach((component) => {
             if (component.name === name) {

@@ -553,8 +553,6 @@ class ScopeBuilder extends Control
                 break;
             default:
                 $scope = Scope::createAnd();
-
-                break;
         }
 
         return $scope;
@@ -594,8 +592,6 @@ class ScopeBuilder extends Control
             case self::OPERATOR_NOT_IN:
                 $value = explode(self::detectDelimiter($value), (string) $value);
 
-                break;
-            default:
                 break;
         }
 

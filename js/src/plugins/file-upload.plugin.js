@@ -96,23 +96,22 @@ export default class fileUpload extends atkPlugin {
      */
     setState(mode) {
         switch (mode) {
-        case 'delete':
-            this.action.html(this.getEraseContent);
-            setTimeout(() => {
-                this.bar.progress('reset');
-                this.bar.hide('fade');
-            }, 1000);
+            case 'delete':
+                this.action.html(this.getEraseContent);
+                setTimeout(() => {
+                    this.bar.progress('reset');
+                    this.bar.hide('fade');
+                }, 1000);
 
-            break;
-        case 'upload':
-            this.action.html(this.actionContent);
-            this.textInput.val('');
-            this.fileInput.val('');
-            this.hiddenInput.val('');
-            this.$el.data().fileId = null;
+                break;
+            case 'upload':
+                this.action.html(this.actionContent);
+                this.textInput.val('');
+                this.fileInput.val('');
+                this.hiddenInput.val('');
+                this.$el.data().fileId = null;
 
-            break;
-        default:
+                break;
         }
     }
 

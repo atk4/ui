@@ -149,8 +149,6 @@ class TypeDatetime extends Column\FilterModel
                 break;
             default:
                 $date = $dateModifier ? new DateTime($dateModifier) : null;
-
-                break;
         }
 
         return $date;

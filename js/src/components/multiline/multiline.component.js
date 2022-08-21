@@ -159,14 +159,14 @@ export default {
             }
         },
         /**
-        * Update Multi-line Form input with all rowData values
-        * as json string.
-        */
+         * Update Multi-line Form input with all rowData values
+         * as json string.
+         */
         updateInputValue: function () {
             this.value = JSON.stringify(this.rowData);
         },
         /**
-        * Build rowData from json string.
+         * Build rowData from json string.
          */
         buildRowData: function (jsonValue) {
             const rows = atk.utils.json().tryParse(jsonValue, []);

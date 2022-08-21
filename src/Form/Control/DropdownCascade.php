@@ -94,8 +94,8 @@ class DropdownCascade extends Dropdown
     }
 
     /**
-     *  Will mark current value as selected from a list
-     *  of possible values.
+     * Will mark current value as selected from a list
+     * of possible values.
      *
      * @param string|int $value the current field value
      */
