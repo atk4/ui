@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Core\Factory;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
+use Atk4\Ui\JsModal;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\VirtualPage;
 
@@ -63,6 +64,6 @@ class DemoLookup extends Form\Control\Lookup
 
         $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
 
-        $this->action->js('click', new \Atk4\Ui\JsModal($caption, $vp));
+        $this->action->js('click', new JsModal($caption, $vp));
     }
 }

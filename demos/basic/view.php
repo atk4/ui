@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\JsModal;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\Label;
 use Atk4\Ui\Message;
@@ -72,7 +73,7 @@ $vp = VirtualPage::addTo($app)->set(function ($page) use ($planeTemplate) {
     Label::addTo($page, ['Plane ID: ', 'class.bottom attached' => true, 'detail' => $plane->name]);
 });
 
-Button::addTo($app, ['Show $plane in a dialog', 'icon' => 'clone'])->on('click', new \Atk4\Ui\JsModal('Plane Box', $vp));
+Button::addTo($app, ['Show $plane in a dialog', 'icon' => 'clone'])->on('click', new JsModal('Plane Box', $vp));
 
 Header::addTo($app, ['All components extend View (even paginator)']);
 $columns = \Atk4\Ui\Columns::addTo($app);

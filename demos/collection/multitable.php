@@ -8,6 +8,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsExpression;
+use Atk4\Ui\JsModal;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\Table;
 use Atk4\Ui\VirtualPage;
@@ -90,7 +91,7 @@ $vp = VirtualPage::addTo($app)->set(function (VirtualPage $vp) use ($model) {
     $vp->js(true)->closest('.modal')->find('.header')->remove();
 });
 
-Button::addTo($app, ['Re-Import From Filesystem', 'class.top attached' => true])->on('click', new \Atk4\Ui\JsModal('Now importing ... ', $vp));
+Button::addTo($app, ['Re-Import From Filesystem', 'class.top attached' => true])->on('click', new JsModal('Now importing ... ', $vp));
 
 $finderClass::addTo($app, ['bottom attached'])
     ->addClass('top attached segment')
