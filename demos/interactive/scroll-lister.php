@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Lister;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -24,8 +25,8 @@ $view = View::addTo($container, ['template' => new HtmlTemplate('
 {List}<div class="ui segment" style="height: 60px"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{/}
 {$Content}')]);
 
-$lister = \Atk4\Ui\Lister::addTo($view, [], ['List']);
-$lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
+$lister = Lister::addTo($view, [], ['List']);
+$lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
     $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 });

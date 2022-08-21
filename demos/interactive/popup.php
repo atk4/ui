@@ -8,6 +8,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Label;
+use Atk4\Ui\Lister;
 use Atk4\Ui\Message;
 use Atk4\Ui\Popup;
 use Atk4\Ui\View;
@@ -22,8 +23,8 @@ require_once __DIR__ . '/../init-app.php';
  * render the items.
  */
 
-/** @var \Atk4\Ui\Lister $cartClass */
-$cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\Lister {
+/** @var Lister $cartClass */
+$cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lister {
     use \Atk4\Ui\SessionTrait;
 
     public $items = [];

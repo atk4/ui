@@ -8,6 +8,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\JsToast;
+use Atk4\Ui\Lister;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -22,8 +23,8 @@ $view = View::addTo($app, ['template' => new HtmlTemplate(
     </div>'
 )]);
 
-$lister = \Atk4\Ui\Lister::addTo($view, [], ['List']);
-$lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
+$lister = Lister::addTo($view, [], ['List']);
+$lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
     $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 });

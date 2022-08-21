@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
 use Atk4\Ui\Header;
+use Atk4\Ui\Lister;
 use Atk4\Ui\Table;
 
 /** @var \Atk4\Ui\App $app */
@@ -31,7 +32,7 @@ $table->template->dangerouslyAppendHtml('SubHead', '<tr class="center aligned"><
 $table->template->dangerouslyAppendHtml('Body', '<tr class="center aligned"><td colspan=2>This is part of body, goes before other rows</td></tr>');
 
 // Hook can be used to display data before row. You can also inject and format extra rows.
-$table->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (Table $table) {
+$table->onHook(Lister::HOOK_BEFORE_ROW, function (Table $table) {
     if ($table->currentRow->getId() === 2) {
         $table->template->dangerouslyAppendHtml('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->currentRow->get('action') . ')</th></tr>');
     } elseif ($table->currentRow->get('action') === 'Tax') {

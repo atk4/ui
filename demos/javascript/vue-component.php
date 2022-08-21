@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Lister;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
@@ -51,8 +52,8 @@ $view = View::addTo($app);
 
 $search = \Atk4\Ui\Component\ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
 $lister_container = View::addTo($view, ['template' => $lister_template]);
-$lister = \Atk4\Ui\Lister::addTo($lister_container, [], ['List']);
-$lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
+$lister = Lister::addTo($lister_container, [], ['List']);
+$lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
     $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 
