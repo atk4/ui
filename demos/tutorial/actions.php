@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\Text;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\View;
 
@@ -18,7 +19,7 @@ $wizard = \Atk4\Ui\Wizard::addTo($app);
 $wizard->addStep('Define User Action', function ($page) {
     Header::addTo($page, ['What are User Actions?']);
 
-    $t = \Atk4\Ui\Text::addTo($page);
+    $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Since the early version ATK UI was about building generic UI capable of automatically read information about
@@ -43,7 +44,7 @@ $wizard->addStep('Define User Action', function ($page) {
         $country->addUserAction('send_message');
     });
 
-    $t = \Atk4\Ui\Text::addTo($page);
+    $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Once defied - actions will be visualised in the Form, Grid, Crud and CardDeck. Additionally add-ons will recognise
@@ -75,7 +76,7 @@ $wizard->addStep('Define User Action', function ($page) {
 });
 
 $wizard->addStep('UI Integration', function ($page) {
-    $t = \Atk4\Ui\Text::addTo($page);
+    $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Agile UI introduces a new set of views called "User Action Executors". Their job is to recognise all that meta-information
@@ -92,7 +93,7 @@ $wizard->addStep('UI Integration', function ($page) {
             ->on('click', $country->getUserAction('edit'));
     });
 
-    $t = \Atk4\Ui\Text::addTo($page);
+    $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             It is not only the button, but any view can have "User Action" passed as a second step of the on() call. Here the user action
@@ -111,7 +112,7 @@ $wizard->addStep('UI Integration', function ($page) {
 });
 
 $wizard->addStep('Arguments', function ($page) {
-    $t = \Atk4\Ui\Text::addTo($page);
+    $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Next demo defines an user action that requires arguments. You can specify arguments when the user action is invoked, but if not
@@ -181,7 +182,7 @@ $wizard->addStep('More Ways', function ($page) {
 */
 
 $wizard->addStep('Crud integration', function ($page) {
-    $t = \Atk4\Ui\Text::addTo($page);
+    $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Compared to 1.x versions Crud implementation has became much more lightweight, however you retain all the same

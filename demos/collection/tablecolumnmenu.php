@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Header;
+use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -29,12 +30,12 @@ $table->addColumn('date');
 $table->addColumn('salary', new \Atk4\Ui\Table\Column\Money());
 
 // regular popup setup
-\Atk4\Ui\Text::addTo($colName->addPopup())->set('Name popup');
+Text::addTo($colName->addPopup())->set('Name popup');
 
 // dynamic popup setup
 // This popup will add content using the callback function.
 $colSurname->addPopup()->set(function ($pop) {
-    \Atk4\Ui\Text::addTo($pop)->set('This popup is loaded dynamically');
+    Text::addTo($pop)->set('This popup is loaded dynamically');
 });
 
 // Another dropdown menu.
@@ -58,4 +59,4 @@ $grid->addDropdown(Country::hinting()->fieldName()->name, ['Rename', 'Delete'], 
 
 // Adding a popup view to the column 'iso'
 $pop = $grid->addPopup(Country::hinting()->fieldName()->iso);
-\Atk4\Ui\Text::addTo($pop)->set('Grid column popup');
+Text::addTo($pop)->set('Grid column popup');

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
 class PromotionText extends View
@@ -13,7 +14,7 @@ class PromotionText extends View
     {
         parent::init();
 
-        $t = \Atk4\Ui\Text::addTo($this);
+        $t = Text::addTo($this);
         $t->addParagraph(
             <<< 'EOF'
                 Agile Toolkit base package includes:

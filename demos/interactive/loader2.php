@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -19,7 +20,7 @@ $c = \Atk4\Ui\Columns::addTo($app);
 $grid = \Atk4\Ui\Grid::addTo($c->addColumn(), ['ipp' => 10, 'menu' => false]);
 $grid->setModel(new Country($app->db), [Country::hinting()->fieldName()->name]);
 
-$countryLoader = \Atk4\Ui\Loader::addTo($c->addColumn(), ['loadEvent' => false, 'shim' => [\Atk4\Ui\Text::class, 'Select country on your left']]);
+$countryLoader = \Atk4\Ui\Loader::addTo($c->addColumn(), ['loadEvent' => false, 'shim' => [Text::class, 'Select country on your left']]);
 
 $grid->table->onRowClick($countryLoader->jsLoad(['id' => $grid->table->jsRow()->data('id')]));
 

@@ -9,6 +9,7 @@ use Atk4\Ui\Header;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
 use Atk4\Ui\Panel\Right;
+use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -43,7 +44,7 @@ $btn->js(true)->data('btn', '2');
 $btn->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
 
 $view = View::addTo($app, ['ui' => 'segment']);
-$text = \Atk4\Ui\Text::addTo($view);
+$text = Text::addTo($view);
 $text->set($_GET['txt'] ?? 'Not Complete');
 
 $panel1->onOpen(function ($p) use ($view) {
@@ -77,7 +78,7 @@ $panel2->addConfirmation('Changes will be lost. Are you sure?');
 
 $msg = Message::addTo($panel2, ['Prevent close.']);
 
-$txt = \Atk4\Ui\Text::addTo($msg);
+$txt = Text::addTo($msg);
 $txt->addParagraph('This panel can only be closed via it\'s close icon at top right.');
 $txt->addParagraph('Try to change dropdown value and close without saving!');
 

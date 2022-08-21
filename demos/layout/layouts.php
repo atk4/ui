@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -20,7 +21,7 @@ $buttons = [
 ];
 
 // layout
-\Atk4\Ui\Text::addTo(View::addTo($app, ['class.red' => true, 'ui' => 'segment']))
+Text::addTo(View::addTo($app, ['class.red' => true, 'ui' => 'segment']))
     ->addParagraph('Layouts can be used to wrap your UI elements into HTML / Boilerplate');
 
 // toolbar

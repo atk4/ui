@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -64,7 +65,7 @@ $vp2Modal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Text message load dynamical
 
 $vp3Modal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
 $vp3Modal->set(function ($modal) {
-    \Atk4\Ui\Text::addTo($modal)->set('This is yet another modal');
+    Text::addTo($modal)->set('This is yet another modal');
     \Atk4\Ui\LoremIpsum::addTo($modal, ['size' => 2]);
 });
 

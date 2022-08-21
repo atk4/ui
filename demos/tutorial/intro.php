@@ -11,6 +11,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
+use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -19,7 +20,7 @@ require_once __DIR__ . '/../init-app.php';
 $wizard = \Atk4\Ui\Wizard::addTo($app);
 
 $wizard->addStep('User Interface', function ($page) {
-    $t = \Atk4\Ui\Text::addTo($page);
+    $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Agile Toolkit is a "Low Code Framework" written in PHP. It is designed to simplify all aspects of web application creation:
@@ -66,7 +67,7 @@ $wizard->addStep('User Interface', function ($page) {
 });
 
 $wizard->addStep('Interactivity', function ($page) {
-    $t = \Atk4\Ui\Text::addTo($page);
+    $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             PHP is a server-side language. That prompted us to implement server-side UI actions. They are very easy to define -
@@ -81,7 +82,7 @@ $wizard->addStep('Interactivity', function ($page) {
         });
     });
 
-    $t = \Atk4\Ui\Text::addTo($page);
+    $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             A component of Agile Toolkit (callback) enables seamless communication between the frontend components (which are often
@@ -92,7 +93,7 @@ $wizard->addStep('Interactivity', function ($page) {
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $seg = View::addTo($owner, ['ui' => 'segment']);
 
-        \Atk4\Ui\Text::addTo($seg)->set('Number of buttons: ');
+        Text::addTo($seg)->set('Number of buttons: ');
 
         $paginator = \Atk4\Ui\Paginator::addTo($seg, [
             'total' => 5,
@@ -107,7 +108,7 @@ $wizard->addStep('Interactivity', function ($page) {
         }
     });
 
-    $t = \Atk4\Ui\Text::addTo($page);
+    $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             This demo also shows you how to create composite views. The '$seg' above contains text, paginator, divider and some
@@ -117,7 +118,7 @@ $wizard->addStep('Interactivity', function ($page) {
 });
 
 $wizard->addStep('Business Model', function ($page) {
-    $t = \Atk4\Ui\Text::addTo($page);
+    $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             One major benefit of Server Side Rendered applications is ability to directly interact with data. In other applications
@@ -172,7 +173,7 @@ $wizard->addStep('Business Model', function ($page) {
         View::addTo($owner, ['ui' => 'divider']);
     });
 
-    $t = \Atk4\Ui\Text::addTo($page);
+    $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             This code shows you a combination of 3 objects:
@@ -195,7 +196,7 @@ $wizard->addStep('Business Model', function ($page) {
 });
 
 $wizard->addStep('Persistence', function ($page) {
-    $t = \Atk4\Ui\Text::addTo($page);
+    $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Once your model is defined, it can be re-used later with any generic view:
@@ -220,7 +221,7 @@ $wizard->addStep('Persistence', function ($page) {
         }
     });
 
-    $t = \Atk4\Ui\Text::addTo($page);
+    $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
             Re-use of your Business Model code, generic and interactive views and principles of composition and a simple PHP
