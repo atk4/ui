@@ -480,23 +480,11 @@ parameters:
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 5
         -
-            path: 'demos/_unit-test/lookup-virtual-page.php'
-            message: '~^Parameter #2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsModal given\.$~'
-        -
             path: 'demos/basic/view.php'
             message: '~^Parameter #2 \$value of method Atk4\\Ui\\HtmlTemplate::set\(\) expects string\|null, int<100, 999> given\.$~'
         -
             path: 'demos/collection/grid.php'
-            message: '~^Parameter #2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsExpression given\.$~'
-        -
-            path: 'demos/collection/grid.php'
-            message: '~^Parameter #2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsReload given\.$~'
-        -
-            path: 'demos/collection/grid.php'
             message: '~^Parameter #1 \$name of method Atk4\\Ui\\Grid::addColumn\(\) expects string, null given\.$~'
-        -
-            path: 'demos/data-action/jsactions2.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
         -
             path: 'demos/data-action/jsactionsgrid.php'
             message: '~^Parameter #1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View, string given\.$~'
@@ -504,32 +492,14 @@ parameters:
             path: 'demos/form-control/input2.php'
             message: '~^Parameter #1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
         -
-            path: 'demos/interactive/sse.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, Atk4\\Ui\\Jquery> given\.$~'
-        -
             path: 'demos/interactive/virtual.php'
             message: '~^Parameter #1 \$title of class Atk4\\Ui\\JsModal constructor expects string, null given\.$~'
         -
             path: 'demos/javascript/reloading.php'
             message: '~^Parameter #1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
         -
-            path: 'demos/layout/layout-panel.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, mixed> given\.$~'
-        -
-            path: 'demos/layout/layout-panel.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
-        -
-            path: 'demos/tutorial/actions.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
-        -
-            path: 'demos/tutorial/actions.php'
-            message: '~^Parameter #2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
-        -
             path: 'src/Card.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, \$this\(Atk4\\Ui\\Card\)\|string> given\.$~'
-        -
-            path: 'src/Card.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, Atk4\\Data\\Model\\UserAction given\.$~'
         -
             path: 'src/Form/Layout/Section.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
@@ -547,16 +517,10 @@ parameters:
             message: '~^Parameter #2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Paginator given\.$~'
         -
             path: 'src/Grid.php'
-            message: '~^Parameter #2 \$action of method Atk4\\Ui\\Menu::addItem\(\) expects array\|string\|null, Atk4\\Ui\\JsReload given\.$~'
-        -
-            path: 'src/Grid.php'
             message: '~^Parameter #1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View, Atk4\\Data\\Model\\UserAction given\.$~'
         -
             path: 'src/JsSearch.php'
             message: '~^Parameter #2 \$value of method Atk4\\Ui\\HtmlTemplate::trySet\(\) expects string\|null, Atk4\\Ui\\Form\\Control\\Line given\.$~'
-        -
-            path: 'src/Layout/Admin.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, Atk4\\Ui\\Jquery> given\.$~'
         -
             path: 'src/Menu.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, array<int, string>\|string> given\.$~'
@@ -566,9 +530,6 @@ parameters:
         -
             path: 'src/Panel/Right.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\AbstractView::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, string> given\.$~'
-        -
-            path: 'src/UserAction/ModalExecutor.php'
-            message: '~^Parameter #2 \$selector of method Atk4\\Ui\\View::on\(\) expects Atk4\\Ui\\JsExpressionable\|string\|null, array<int, mixed> given\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 6
@@ -802,9 +763,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\CardDeck::applyReload\(\) has no return type specified\.$~'
         -
             path: 'src/CardDeck.php'
-            message: '~^Method Atk4\\Ui\\CardDeck::jsExecute\(\) has parameter \$action with no type specified\.$~'
-        -
-            path: 'src/CardDeck.php'
             message: '~^Method Atk4\\Ui\\CardDeck::jsExecute\(\) has parameter \$return with no type specified\.$~'
         -
             path: 'src/CardDeck.php'
@@ -878,9 +836,6 @@ parameters:
         -
             path: 'src/Form/Control.php'
             message: '~^Property Atk4\\Ui\\Form\\Control::\$width has no type specified\.$~'
-        -
-            path: 'src/Form/Control.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control::jsInput\(\) has parameter \$action with no type specified\.$~'
         -
             path: 'src/Form/Control.php'
             message: '~^Method Atk4\\Ui\\Form\\Control::jsInput\(\) has parameter \$when with no type specified\.$~'
@@ -1006,9 +961,6 @@ parameters:
             message: '~^Property Atk4\\Ui\\Form\\Control\\Upload::\$hasDeleteCb has no type specified\.$~'
         -
             path: 'src/Form/Control/Upload.php'
-            message: '~^Property Atk4\\Ui\\Form\\Control\\Upload::\$jsActions has no type specified\.$~'
-        -
-            path: 'src/Form/Control/Upload.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Upload::setInput\(\) has parameter \$junk with no type specified\.$~'
         -
             path: 'src/Form/Control/Upload.php'
@@ -1019,9 +971,6 @@ parameters:
         -
             path: 'src/Form/Control/Upload.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Upload::addJsAction\(\) has no return type specified\.$~'
-        -
-            path: 'src/Form/Control/Upload.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Upload::addJsAction\(\) has parameter \$action with no type specified\.$~'
         -
             path: 'src/Form/Control/UploadImage.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\UploadImage::setThumbnailSrc\(\) has no return type specified\.$~'
@@ -1198,12 +1147,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\JsSse::send\(\) has no return type specified\.$~'
         -
             path: 'src/JsSse.php'
-            message: '~^Method Atk4\\Ui\\JsSse::send\(\) has parameter \$action with no type specified\.$~'
-        -
-            path: 'src/JsSse.php'
-            message: '~^Method Atk4\\Ui\\JsSse::send\(\) has parameter \$success with no type specified\.$~'
-        -
-            path: 'src/JsSse.php'
             message: '~^Method Atk4\\Ui\\JsSse::sendEvent\(\) has no return type specified\.$~'
         -
             path: 'src/JsSse.php'
@@ -1254,15 +1197,6 @@ parameters:
             path: 'src/Layout/Admin.php'
             message: '~^Method Atk4\\Ui\\Layout\\Admin::addMenuGroup\(\) has parameter \$seed with no type specified\.$~'
         -
-            path: 'src/Layout/Admin.php'
-            message: '~^Method Atk4\\Ui\\Layout\\Admin::addMenuItem\(\) has parameter \$action with no type specified\.$~'
-        -
-            path: 'src/Layout/Admin.php'
-            message: '~^Method Atk4\\Ui\\Layout\\Admin::addMenuItem\(\) has parameter \$group with no type specified\.$~'
-        -
-            path: 'src/Layout/Admin.php'
-            message: '~^Method Atk4\\Ui\\Layout\\Admin::addMenuItem\(\) has parameter \$name with no type specified\.$~'
-        -
             path: 'src/Layout/Column.php'
             message: '~^Property Atk4\\Ui\\Layout\\Column::\$menu has no type specified\.$~'
         -
@@ -1278,26 +1212,8 @@ parameters:
             path: 'src/Layout/Maestro.php'
             message: '~^Method Atk4\\Ui\\Layout\\Maestro::addMenuGroup\(\) has parameter \$seed with no type specified\.$~'
         -
-            path: 'src/Layout/Maestro.php'
-            message: '~^Method Atk4\\Ui\\Layout\\Maestro::addMenuItem\(\) has parameter \$action with no type specified\.$~'
-        -
-            path: 'src/Layout/Maestro.php'
-            message: '~^Method Atk4\\Ui\\Layout\\Maestro::addMenuItem\(\) has parameter \$group with no type specified\.$~'
-        -
-            path: 'src/Layout/Maestro.php'
-            message: '~^Method Atk4\\Ui\\Layout\\Maestro::addMenuItem\(\) has parameter \$name with no type specified\.$~'
-        -
             path: 'src/Layout/NavigableInterface.php'
             message: '~^Method Atk4\\Ui\\Layout\\NavigableInterface::addMenuGroup\(\) has parameter \$seed with no type specified\.$~'
-        -
-            path: 'src/Layout/NavigableInterface.php'
-            message: '~^Method Atk4\\Ui\\Layout\\NavigableInterface::addMenuItem\(\) has parameter \$action with no type specified\.$~'
-        -
-            path: 'src/Layout/NavigableInterface.php'
-            message: '~^Method Atk4\\Ui\\Layout\\NavigableInterface::addMenuItem\(\) has parameter \$group with no type specified\.$~'
-        -
-            path: 'src/Layout/NavigableInterface.php'
-            message: '~^Method Atk4\\Ui\\Layout\\NavigableInterface::addMenuItem\(\) has parameter \$name with no type specified\.$~'
         -
             path: 'src/Lister.php'
             message: '~^Method Atk4\\Ui\\Lister::initChunks\(\) has no return type specified\.$~'

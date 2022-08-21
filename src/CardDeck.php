@@ -222,7 +222,7 @@ class CardDeck extends View
      *
      * @return array|object
      */
-    protected function jsExecute($return, $action)
+    protected function jsExecute($return, Model\UserAction $action = null)
     {
         if (is_string($return)) {
             return $this->getNotifier($return, $action);
