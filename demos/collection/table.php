@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\JsToast;
 use Atk4\Ui\Table;
 use Atk4\Ui\View;
 
@@ -12,7 +13,7 @@ use Atk4\Ui\View;
 require_once __DIR__ . '/../init-app.php';
 
 if ($id = $_GET['id'] ?? null) {
-    $app->layout->js(true, new \Atk4\Ui\JsToast('Details link is in simulation mode.'));
+    $app->layout->js(true, new JsToast('Details link is in simulation mode.'));
 }
 
 $bb = View::addTo($app, ['ui' => 'buttons']);

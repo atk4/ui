@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\JsToast;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -22,7 +23,7 @@ $model = $model->loadAny();
 $saveAndDumpValues = function (Form $form) {
     $form->model->save();
 
-    return new \Atk4\Ui\JsToast([
+    return new JsToast([
         'title' => 'POSTed field values',
         'message' => '<pre>' . $form->getApp()->encodeJson($form->model->get()) . '</pre>',
         'class' => 'success',

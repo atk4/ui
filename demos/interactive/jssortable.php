@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\JsToast;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -34,10 +35,10 @@ $sortable = \Atk4\Ui\JsSortable::addTo($view, ['container' => 'ul', 'draggable' 
 
 $sortable->onReorder(function ($order, $src, $pos, $oldPos) {
     if ($_GET['btn'] ?? null) {
-        return new \Atk4\Ui\JsToast(implode(' - ', $order));
+        return new JsToast(implode(' - ', $order));
     }
 
-    return new \Atk4\Ui\JsToast($src . ' moved from position ' . $oldPos . ' to ' . $pos);
+    return new JsToast($src . ' moved from position ' . $oldPos . ' to ' . $pos);
 });
 
 $button = Button::addTo($app)->set('Get countries order');
@@ -53,5 +54,5 @@ $grid->setModel((new Country($app->db))->setLimit(6));
 
 $dragHandler = $grid->addDragHandler();
 $dragHandler->onReorder(function ($order) {
-    return new \Atk4\Ui\JsToast('New order: ' . implode(' - ', $order));
+    return new JsToast('New order: ' . implode(' - ', $order));
 });

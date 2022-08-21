@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\JsToast;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -34,7 +35,7 @@ $form->addControl('test_checked', [Form\Control\Checkbox::class])->set(1);
 $form->addControl('also_checked', ['caption' => 'Hello World'], ['type' => 'boolean'])->set(true);
 
 $form->onSubmit(function (Form $form) use ($app) {
-    return new \Atk4\Ui\JsToast($app->encodeJson($form->model->get()));
+    return new JsToast($app->encodeJson($form->model->get()));
 });
 
 View::addTo($app, ['ui' => 'divider']);

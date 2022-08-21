@@ -8,6 +8,7 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\JsToast;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -61,7 +62,7 @@ $form->addControl('status_string_required', [Form\Control\Dropdown::class], ['ty
 $form->addControl('status_integer_required', [Form\Control\Dropdown::class], ['type' => 'integer', 'values' => $values, 'required' => true]);
 
 $form->onSubmit(function (Form $form) use ($app) {
-    return new \Atk4\Ui\JsToast($app->encodeJson($form->model->get()));
+    return new JsToast($app->encodeJson($form->model->get()));
 });
 
 Header::addTo($tab, ['Comparing Field type vs Form control class']);

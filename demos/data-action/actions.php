@@ -8,6 +8,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Header;
+use Atk4\Ui\JsToast;
 use Atk4\Ui\UserAction;
 use Atk4\Ui\View;
 
@@ -61,7 +62,7 @@ $executor = UserAction\JsCallbackExecutor::addTo($rightColumn);
 $executor->setAction($action->getActionForEntity($files->createEntity()));
 // Setting user response after model action get execute.
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($t, $m) {
-    return new \Atk4\Ui\JsToast('Files imported');
+    return new JsToast('Files imported');
 });
 $executor->executeModelAction(['path' => '.']);
 
@@ -75,7 +76,7 @@ $executor->ui = 'segment';
 $executor->description = 'Execute Import action using "BasicExecutor" with argument "path" equal to "."';
 $executor->setArguments(['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x) {
-    return new \Atk4\Ui\JsToast('Done!');
+    return new JsToast('Done!');
 });
 
 View::addTo($rightColumn, ['ui' => 'hidden divider']);
@@ -88,7 +89,7 @@ $executor->previewType = 'console';
 $executor->description = 'Displays preview in console prior to executing';
 $executor->setArguments(['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \Atk4\Ui\JsToast('Confirm!');
+    return new JsToast('Confirm!');
 });
 
 Header::addTo($leftColumn, ['FormExecutor']);
@@ -98,7 +99,7 @@ $executor->ui = 'segment';
 $executor->description = 'Only fields set in $action[field] array will be added in form.';
 $executor->setArguments(['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \Atk4\Ui\JsToast('Confirm! ' . $x->action->getEntity()->name);
+    return new JsToast('Confirm! ' . $x->action->getEntity()->name);
 });
 
 View::addTo($leftColumn, ['ui' => 'hidden divider']);
@@ -109,5 +110,5 @@ $executor->setAction($action->getActionForEntity($files->createEntity()));
 $executor->description = 'ArgumentFormExecutor will ask user about arguments set in actions.';
 $executor->ui = 'segment';
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \Atk4\Ui\JsToast('Imported!');
+    return new JsToast('Imported!');
 });

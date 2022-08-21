@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
 use Atk4\Ui\Panel\Right;
 use Atk4\Ui\View;
@@ -89,7 +90,7 @@ $panel2->onOpen(function ($p) {
 
     $form->onSubmit(function (\Atk4\Ui\Form $form) use ($p) {
         return [
-            new \Atk4\Ui\JsToast('Saved, closing panel.'),
+            new JsToast('Saved, closing panel.'),
             $p->getOwner()->jsDisplayWarning(false),
             $p->getOwner()->jsClose(),
         ];

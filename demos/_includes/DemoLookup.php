@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Core\Factory;
 use Atk4\Ui\Button;
+use Atk4\Ui\JsToast;
 
 /**
  * Setup file - do not test.
@@ -45,7 +46,7 @@ class DemoLookup extends \Atk4\Ui\Form\Control\Lookup
                 $form->model->save();
 
                 $ret = [
-                    new \Atk4\Ui\JsToast('Form submit!. Data are not save in demo mode.'),
+                    new JsToast('Form submit!. Data are not save in demo mode.'),
                     (new \Atk4\Ui\Jquery('.atk-modal'))->modal('hide'),
                 ];
 
