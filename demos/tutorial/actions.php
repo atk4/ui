@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Crud;
+use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Text;
 use Atk4\Ui\UserAction\ExecutorFactory;
@@ -150,7 +151,7 @@ $wizard->addStep('Arguments', function ($page) {
             },
         ]);
 
-        \Atk4\Ui\Form\Control\Line::addTo($owner, [
+        Form\Control\Line::addTo($owner, [
             'action' => $model->getUserAction('greet'),
         ]);
 

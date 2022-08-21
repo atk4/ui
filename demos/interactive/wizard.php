@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
 use Atk4\Ui\Table;
@@ -27,12 +28,12 @@ $wizard->addStep('Welcome', function (Wizard $wizard) {
 // to return any action from form's onSubmit callback. You may also use memorize()
 // to store wizard-specific variables
 $wizard->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database Connection String'], function (Wizard $wizard) {
-    $form = \Atk4\Ui\Form::addTo($wizard);
+    $form = Form::addTo($wizard);
     // IMPORTANT - needed for php_unit Wizard test.
     $form->cb->setUrlTrigger('w_form_submit');
 
     $form->addControl('dsn', ['caption' => 'Connect DSN'], ['required' => true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
-    $form->onSubmit(function (\Atk4\Ui\Form $form) use ($wizard) {
+    $form->onSubmit(function (Form $form) use ($wizard) {
         $wizard->memorize('dsn', $form->model->get('dsn'));
 
         return $wizard->jsNext();

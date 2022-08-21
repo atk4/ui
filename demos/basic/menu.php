@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\View;
 
@@ -31,12 +32,12 @@ $submenu->addItem('two');
 $menu = \Atk4\Ui\Menu::addTo($app, ['vertical pointing']);
 $menu->addItem(['Inbox', 'label' => ['123', 'class.teal left pointing' => true]]);
 $menu->addItem('Spam');
-\Atk4\Ui\Form\Control\Input::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
+Form\Control\Input::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
 
 $menu = \Atk4\Ui\Menu::addTo($app, ['secondary vertical pointing']);
 $menu->addItem(['Inbox', 'label' => ['123', 'class.teal left pointing' => true]]);
 $menu->addItem('Spam');
-\Atk4\Ui\Form\Control\Input::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
+Form\Control\Input::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
 $menu = \Atk4\Ui\Menu::addTo($app, ['vertical']);
 $group = $menu->addGroup('Products');
 $group->addItem('Enterprise');

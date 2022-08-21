@@ -18,7 +18,7 @@ View::addTo($app, ['ui' => 'ui clearing divider']);
 
 $form = Form::addTo($app);
 
-$sublayout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section::class]);
+$sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
 Header::addTo($sublayout, ['Please fill all form sections!', 'size' => 4]);
 

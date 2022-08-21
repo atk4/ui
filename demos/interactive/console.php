@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
@@ -112,7 +113,7 @@ $tab = $tabs->addTab('Use after form submit', function ($tab) {
 
     session_start();
 
-    $form = \Atk4\Ui\Form::addTo($tab);
+    $form = Form::addTo($tab);
     $form->addControls([['foo'], ['bar']]);
 
     $console = \Atk4\Ui\Console::addTo($tab, ['event' => false]);
@@ -127,7 +128,7 @@ $tab = $tabs->addTab('Use after form submit', function ($tab) {
     });
     $console->js(true)->hide();
 
-    $form->onSubmit(function (\Atk4\Ui\Form $form) use ($console) {
+    $form->onSubmit(function (Form $form) use ($console) {
         $_SESSION['atk4_ui_console_demo'] = $form->model; // only option is to store model in session here in demo
 
         return [

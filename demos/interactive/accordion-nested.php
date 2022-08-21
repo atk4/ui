@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
@@ -44,9 +45,9 @@ $addAccordionFunc = function ($view, $maxDepth = 2, $level = 0) use (&$addAccord
     // dynamic section - form view
     $i3 = $accordion->addSection('Dynamic Form', function ($v) use ($addAccordionFunc, $maxDepth, $level) {
         Message::addTo($v, ['Loading a form dynamically.', 'ui' => 'tiny message']);
-        $form = \Atk4\Ui\Form::addTo($v);
+        $form = Form::addTo($v);
         $form->addControl('Email');
-        $form->onSubmit(function (\Atk4\Ui\Form $form) {
+        $form->onSubmit(function (Form $form) {
             return $form->success('Subscribed ' . $form->model->get('Email') . ' to newsletter.');
         });
 

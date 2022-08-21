@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
+use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\LoremIpsum;
@@ -79,9 +80,9 @@ $vp1Modal->set(function ($modal) use ($vp2Modal) {
     ViewTester::addTo($modal);
     View::addTo($modal, ['Showing lorem ipsum']); // need in behat test.
     LoremIpsum::addTo($modal, ['size' => 2]);
-    $form = \Atk4\Ui\Form::addTo($modal);
+    $form = Form::addTo($modal);
     $form->addControl('color', [], ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
-    $form->onSubmit(function (\Atk4\Ui\Form $form) use ($vp2Modal) {
+    $form->onSubmit(function (Form $form) use ($vp2Modal) {
         return $vp2Modal->show(['color' => $form->model->get('color')]);
     });
 });
@@ -194,10 +195,10 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
         $modelRegister = new Model(new Persistence\Array_());
         $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
-        $form = \Atk4\Ui\Form::addTo($modal, ['class.segment' => true]);
+        $form = Form::addTo($modal, ['class.segment' => true]);
         $form->setModel($modelRegister->createEntity());
 
-        $form->onSubmit(function (\Atk4\Ui\Form $form) use ($nextAction, $session) {
+        $form->onSubmit(function (Form $form) use ($nextAction, $session) {
             if ($form->model->get('name') !== 'John') {
                 return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
             }

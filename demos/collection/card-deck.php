@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
+use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\UserAction\ExecutorFactory;
 
@@ -42,7 +43,7 @@ $infoAction = $countries->addUserAction('request_info', [
 
 $infoAction->args = [
     'email' => ['type' => 'string', 'required' => true, 'caption' => 'Please let us know your email address:'],
-    'country' => ['required' => true, 'ui' => ['form' => [\Atk4\Ui\Form\Control\Lookup::class, 'model' => new Country($app->db), 'placeholder' => 'Please select a country.']]],
+    'country' => ['required' => true, 'ui' => ['form' => [Form\Control\Lookup::class, 'model' => new Country($app->db), 'placeholder' => 'Please select a country.']]],
 ];
 
 $deck = \Atk4\Ui\CardDeck::addTo($app, ['noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book']]);

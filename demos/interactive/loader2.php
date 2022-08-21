@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Form;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
@@ -25,5 +26,5 @@ $countryLoader = \Atk4\Ui\Loader::addTo($c->addColumn(), ['loadEvent' => false, 
 $grid->table->onRowClick($countryLoader->jsLoad(['id' => $grid->table->jsRow()->data('id')]));
 
 $countryLoader->set(function ($p) {
-    \Atk4\Ui\Form::addTo($p)->setModel((new Country($p->getApp()->db))->load($_GET['id']));
+    Form::addTo($p)->setModel((new Country($p->getApp()->db))->load($_GET['id']));
 });

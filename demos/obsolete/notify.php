@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Form;
 use Atk4\Ui\Modal;
 
 /** @var \Atk4\Ui\App $app */
@@ -18,10 +19,10 @@ Button::addTo($app, ['Test'])->on('click', (new \Atk4\Ui\JsNotify('Not yet imple
 $modal = Modal::addTo($app, ['Modal Title']);
 
 $modal->set(function ($p) use ($modal) {
-    $form = \Atk4\Ui\Form::addTo($p);
+    $form = Form::addTo($p);
     $form->addControl('name', [], ['caption' => 'Add your name']);
 
-    $form->onSubmit(function (\Atk4\Ui\Form $form) use ($modal) {
+    $form->onSubmit(function (Form $form) use ($modal) {
         if (empty($form->model->get('name'))) {
             return $form->error('name', 'Please add a name!');
         }

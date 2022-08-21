@@ -6,13 +6,14 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Core\Factory;
 use Atk4\Ui\Button;
+use Atk4\Ui\Form;
 use Atk4\Ui\JsToast;
 
 /**
  * Setup file - do not test.
  * Lookup that cannot saved data.
  */
-class DemoLookup extends \Atk4\Ui\Form\Control\Lookup
+class DemoLookup extends Form\Control\Lookup
 {
     /**
      * Add button for new record.
@@ -37,12 +38,12 @@ class DemoLookup extends \Atk4\Ui\Form\Control\Lookup
 
         $vp = \Atk4\Ui\VirtualPage::addTo($this->form ?? $this->getOwner());
         $vp->set(function ($page) {
-            $form = \Atk4\Ui\Form::addTo($page);
+            $form = Form::addTo($page);
 
             $entity = $this->model->createEntity();
             $form->setModel($entity, $this->plus['fields'] ?? null);
 
-            $form->onSubmit(function (\Atk4\Ui\Form $form) {
+            $form->onSubmit(function (Form $form) {
                 $form->model->save();
 
                 $ret = [

@@ -149,7 +149,7 @@ $wizard->addStep('Business Model', function ($page) {
         });
 
         Header::addTo($owner, ['Set invoice data:']);
-        $form = \Atk4\Ui\Form::addTo($owner);
+        $form = Form::addTo($owner);
 
         $entity = $model->tryLoad(1);
         if ($entity === null) {

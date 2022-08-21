@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\JsToast;
@@ -84,13 +85,13 @@ $txt->addParagraph('This panel can only be closed via it\'s close icon at top ri
 $txt->addParagraph('Try to change dropdown value and close without saving!');
 
 $panel2->onOpen(function ($p) {
-    $form = \Atk4\Ui\Form::addTo($p);
+    $form = Form::addTo($p);
     $form->addHeader('Settings');
-    $form->addControl('name', [\Atk4\Ui\Form\Control\Dropdown::class, 'values' => ['1' => 'Option 1', '2' => 'Option 2']])
+    $form->addControl('name', [Form\Control\Dropdown::class, 'values' => ['1' => 'Option 1', '2' => 'Option 2']])
         ->set('1')
         ->onChange($p->getOwner()->jsDisplayWarning(true));
 
-    $form->onSubmit(function (\Atk4\Ui\Form $form) use ($p) {
+    $form->onSubmit(function (Form $form) use ($p) {
         return [
             new JsToast('Saved, closing panel.'),
             $p->getOwner()->jsDisplayWarning(false),

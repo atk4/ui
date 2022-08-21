@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
+use Atk4\Ui\Form;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
@@ -47,9 +48,9 @@ $tabs->addTab('Dynamic Form', function ($tab) {
     $modelRegister = new Model(new Persistence\Array_());
     $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
-    $form = \Atk4\Ui\Form::addTo($tab, ['class.segment' => true]);
+    $form = Form::addTo($tab, ['class.segment' => true]);
     $form->setModel($modelRegister->createEntity());
-    $form->onSubmit(function (\Atk4\Ui\Form $form) {
+    $form->onSubmit(function (Form $form) {
         if ($form->model->get('name') !== 'John') {
             return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
         }

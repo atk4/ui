@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsReload;
@@ -52,5 +53,5 @@ $v = View::addTo($app, ['ui' => 'segment'])->set($_GET['val'] ?? 'No value');
 Button::addTo($app, ['Set value to "hello"'])->js('click', new JsReload($v, ['val' => 'hello']));
 Button::addTo($app, ['Set value to "world"'])->js('click', new JsReload($v, ['val' => 'world']));
 
-$val = \Atk4\Ui\Form\Control\Line::addTo($app, ['']);
+$val = Form\Control\Line::addTo($app, ['']);
 $val->addAction('Set Custom Value')->js('click', new JsReload($v, ['val' => $val->jsInput()->val()], $val->jsInput()->focus()));
