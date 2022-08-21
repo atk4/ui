@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Header;
+use Atk4\Ui\Message;
 use Atk4\Ui\Table;
 use Atk4\Ui\Wizard;
 
@@ -15,7 +16,7 @@ $wizard = Wizard::addTo($app, ['urlTrigger' => 'demo_wizard']);
 // First step will automatcally be active when you open page first. It
 // will contain the 'Next' button with a link.
 $wizard->addStep('Welcome', function (Wizard $wizard) {
-    \Atk4\Ui\Message::addTo($wizard, ['Welcome to wizard demonstration'])->text
+    Message::addTo($wizard, ['Welcome to wizard demonstration'])->text
         ->addParagraph('Use button "Next" to advance')
         ->addParagraph('You can specify your existing database connection string which will be used
         to create a table for model of your choice');
@@ -50,7 +51,7 @@ $wizard->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon'
     $columns = \Atk4\Ui\Columns::addTo($wizard);
 
     $grid = \Atk4\Ui\Grid::addTo($columns->addColumn(), ['paginator' => false, 'menu' => false]);
-    \Atk4\Ui\Message::addTo($columns->addColumn(), ['Information', 'type' => 'info'])->text
+    Message::addTo($columns->addColumn(), ['Information', 'type' => 'info'])->text
         ->addParagraph('Selecting which model you would like to import into your DSN. If corresponding table already exist, we might add extra fields into it. No tables, columns or rows will be deleted.');
 
     $grid->setSource(['Country', 'Stat']);

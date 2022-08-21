@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Message;
 use Atk4\Ui\Text;
 
 /** @var \Atk4\Ui\App $app */
@@ -28,7 +29,7 @@ $form->addControl('product_id', [Form\Control\DropdownCascade::class, 'cascadeFr
 $form->onSubmit(function (Form $form) use ($app) {
     $message = $app->encodeJson($form->model->get());
 
-    $view = new \Atk4\Ui\Message('Values: ');
+    $view = new Message('Values: ');
     $view->invokeInit();
     $view->text->addParagraph($message);
 
@@ -102,7 +103,7 @@ $form->addControl('multi', [
 $form->onSubmit(function (Form $form) use ($app) {
     $message = $app->encodeJson($form->model->get());
 
-    $view = new \Atk4\Ui\Message('Values: ');
+    $view = new Message('Values: ');
     $view->invokeInit();
     $view->text->addParagraph($message);
 

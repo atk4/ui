@@ -9,6 +9,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsToast;
+use Atk4\Ui\Message;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -73,7 +74,7 @@ $form->buttonSave->set('Compare Date');
 
 $form->onSubmit(function (Form $form) {
     $message = 'field = ' . print_r($form->model->get('field'), true) . '; <br> control = ' . print_r($form->model->get('control'), true);
-    $view = new \Atk4\Ui\Message('Date field vs control:');
+    $view = new Message('Date field vs control:');
     $view->invokeInit();
     $view->text->addHtml($message);
 
@@ -105,7 +106,7 @@ $form = Form::addTo($tab);
 $form->addControl('email3');
 $form->buttonSave->set('Save3');
 $form->onSubmit(function (Form $form) {
-    $view = new \Atk4\Ui\Message('some header');
+    $view = new Message('some header');
     $view->invokeInit();
     $view->text->addParagraph('some text ' . random_int(1, 100));
 
@@ -117,7 +118,7 @@ $form = Form::addTo($tab);
 $form->addControl('email4');
 $form->buttonSave->set('Save4');
 $form->onSubmit(function (Form $form) {
-    $view = new \Atk4\Ui\Message('some header');
+    $view = new Message('some header');
     $view->invokeInit();
     $view->text->addParagraph('some text ' . random_int(1, 100));
 

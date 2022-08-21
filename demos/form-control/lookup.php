@@ -8,6 +8,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Label;
+use Atk4\Ui\Message;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -50,7 +51,7 @@ $form->onSubmit(function (Form $form) {
         . (new Country($form->getApp()->db))->load($form->model->get('country3'))
             ->get(Country::hinting()->fieldName()->name);
 
-    $view = new \Atk4\Ui\Message('Select:'); // need in behat test.
+    $view = new Message('Select:'); // need in behat test.
     $view->invokeInit();
     $view->text->addParagraph($str);
 

@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Message;
 use Atk4\Ui\Table;
 use Atk4\Ui\View;
 
@@ -62,7 +63,7 @@ $crud->setModel($model);
 // Because Crud inherits Grid, you can also define custom actions
 $crud->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($crud) {
     $model = Country::assertInstanceOf($crud->model);
-    \Atk4\Ui\Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $id . ')']);
+    Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $id . ')']);
 });
 
 $column = $columns->addColumn();
@@ -82,7 +83,7 @@ $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
             \Atk4\Ui\Grid::addTo($right, ['menu' => false, 'ipp' => 5])
                 ->setModel(File::assertInstanceOf($this->getAction()->getModel())->SubFolder);
         } else {
-            \Atk4\Ui\Message::addTo($right, ['Not a folder', 'type' => 'warning']);
+            Message::addTo($right, ['Not a folder', 'type' => 'warning']);
         }
 
         return $result;

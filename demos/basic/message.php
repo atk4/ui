@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsReload;
+use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -20,7 +21,7 @@ $seg = View::addTo($app, ['ui' => 'raised segment']);
 
 $barType = View::addTo($seg, ['ui' => ' basic buttons']);
 
-$msg = \Atk4\Ui\Message::addTo($seg, [
+$msg = Message::addTo($seg, [
     'This is a title of your message',
     'type' => $seg->stickyGet('type'),
     'icon' => $seg->stickyGet('icon'),

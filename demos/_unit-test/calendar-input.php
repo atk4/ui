@@ -6,13 +6,14 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $output = function (?\DateTime $dt, string $format) {
-    $view = new \Atk4\Ui\Message();
+    $view = new Message();
     $view->invokeInit();
     $view->text->addHtml($dt === null ? 'empty' : $dt->format($format));
 

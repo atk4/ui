@@ -9,6 +9,7 @@ use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\Label;
+use Atk4\Ui\Message;
 use Atk4\Ui\Table;
 use Atk4\Ui\View;
 
@@ -78,7 +79,7 @@ $columns = \Atk4\Ui\Columns::addTo($app);
 Button::addTo($columns->addColumn(), ['Button'])->addClass('green');
 Header::addTo($columns->addColumn(), ['Header'])->addClass('green');
 Label::addTo($columns->addColumn(), ['Label'])->addClass('green');
-\Atk4\Ui\Message::addTo($columns->addColumn(), ['Message'])->addClass('green');
+Message::addTo($columns->addColumn(), ['Message'])->addClass('green');
 \Atk4\Ui\Paginator::addTo($columns->addColumn(), ['total' => 3, 'reload' => $columns])->addClass('green');
 
 Header::addTo($app, ['Can have a custom render logic']);

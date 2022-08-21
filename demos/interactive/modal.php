@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\Message;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
@@ -46,7 +47,7 @@ Button::addTo($bar, ['Scrolling Content'])->on('click', $scrolling->show());
 // REGULAR
 
 $simpleModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Simple modal']);
-\Atk4\Ui\Message::addTo($simpleModal)->set('Modal message here.');
+Message::addTo($simpleModal)->set('Modal message here.');
 ViewTester::addTo($simpleModal);
 
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
@@ -84,7 +85,7 @@ $vp1Modal->set(function ($modal) use ($vp2Modal) {
 // When $vp2Modal->show() is activate, it will dynamically add this content to it.
 $vp2Modal->set(function ($modal) use ($vp3Modal) {
     ViewTester::addTo($modal);
-    \Atk4\Ui\Message::addTo($modal, ['Message', $_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
+    Message::addTo($modal, ['Message', $_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
     Button::addTo($modal)->set('Third modal')->on('click', $vp3Modal->show());
 });
 
@@ -109,7 +110,7 @@ $menuItems = [
 Header::addTo($app, ['Modal Animation']);
 
 $transitionModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Animated modal']);
-\Atk4\Ui\Message::addTo($transitionModal)->set('A lot of animated transition available');
+Message::addTo($transitionModal)->set('A lot of animated transition available');
 $transitionModal->duration(1000);
 
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
@@ -134,7 +135,7 @@ foreach ($menuItems as $key => $items) {
 Header::addTo($app, ['Modal Options']);
 
 $denyApproveModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Deny / Approve actions']);
-\Atk4\Ui\Message::addTo($denyApproveModal)->set('This modal is only closable via the green button');
+Message::addTo($denyApproveModal)->set('This modal is only closable via the green button');
 $denyApproveModal->addDenyAction('No', new \Atk4\Ui\JsExpression('function() { window.alert("Can\'t do that."); return false; }'));
 $denyApproveModal->addApproveAction('Yes', new \Atk4\Ui\JsExpression('function() { window.alert("You\'re good to go!"); }'));
 $denyApproveModal->notClosable();
@@ -179,7 +180,7 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
     }
     $session->memorize('page', $page);
     if ($page === 1) {
-        \Atk4\Ui\Message::addTo($modal)->set('Thanks for choosing us. We will be asking some questions along the way.');
+        Message::addTo($modal)->set('Thanks for choosing us. We will be asking some questions along the way.');
         $session->memorize('success', true);
         $modal->js(true, $prevAction->js(true)->show());
         $modal->js(true, $nextAction->js(true)->show());
@@ -208,7 +209,7 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
         $modal->js(true, $nextAction->js(true)->addClass('disabled'));
     } elseif ($page === 3) {
         $name = $session->recall('name');
-        \Atk4\Ui\Message::addTo($modal)->set("Thank you {$name} for visiting us! We will be in touch");
+        Message::addTo($modal)->set("Thank you {$name} for visiting us! We will be in touch");
         $session->memorize('success', true);
         $modal->js(true, $prevAction->js(true)->hide());
         $modal->js(true, $nextAction->js(true)->hide());

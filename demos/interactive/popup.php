@@ -8,6 +8,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Label;
+use Atk4\Ui\Message;
 use Atk4\Ui\Popup;
 use Atk4\Ui\View;
 
@@ -234,7 +235,7 @@ $signup->stickyGet('logged');
 $signup->set(function ($pop) {
     // contetn of the popup will be different depending on this condition.
     if (isset($_GET['logged'])) {
-        \Atk4\Ui\Message::addTo($pop, ['You are already logged in as ' . $_GET['logged']]);
+        Message::addTo($pop, ['You are already logged in as ' . $_GET['logged']]);
         Button::addTo($pop, ['Logout', 'class.primary' => true, 'icon' => 'sign out'])
             ->link($pop->getApp()->url());
     } else {

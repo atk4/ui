@@ -9,6 +9,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\JsToast;
+use Atk4\Ui\Message;
 use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\BasicExecutor;
 
@@ -46,7 +47,7 @@ $grid->addActionButton('Say HI', function ($j, $id) use ($grid) {
 });
 
 $grid->addModalAction(['icon' => 'external'], 'Modal Test', function ($p, $id) {
-    \Atk4\Ui\Message::addTo($p, ['Clicked on ID=' . $id]);
+    Message::addTo($p, ['Clicked on ID=' . $id]);
 });
 
 // Creating an executor for delete action.

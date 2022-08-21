@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsToast;
+use Atk4\Ui\Message;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -59,7 +60,7 @@ $form->onSubmit(function (Form $form) use ($app) {
         'single' => $form->model->get('tree1'),
     ];
 
-    $view = new \Atk4\Ui\Message('Items: ');
+    $view = new Message('Items: ');
     $view->invokeInit();
     $view->text->addParagraph($app->encodeJson($response));
 

@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -30,18 +31,18 @@ $accordion = \Atk4\Ui\Accordion::addTo($app, ['type' => ['styled', 'fluid']/* , 
 
 // static section
 $i1 = $accordion->addSection('Static Text');
-\Atk4\Ui\Message::addTo($i1, ['This content is added on page loaded', 'ui' => 'tiny message']);
+Message::addTo($i1, ['This content is added on page loaded', 'ui' => 'tiny message']);
 \Atk4\Ui\LoremIpsum::addTo($i1, ['size' => 1]);
 
 // dynamic section - simple view
 $i2 = $accordion->addSection('Dynamic Text', function ($v) {
-    \Atk4\Ui\Message::addTo($v, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
+    Message::addTo($v, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
     \Atk4\Ui\LoremIpsum::addTo($v, ['size' => 2]);
 });
 
 // dynamic section - form view
 $i3 = $accordion->addSection('Dynamic Form', function ($v) {
-    \Atk4\Ui\Message::addTo($v, ['Loading a form dynamically.', 'ui' => 'tiny message']);
+    Message::addTo($v, ['Loading a form dynamically.', 'ui' => 'tiny message']);
     $form = Form::addTo($v);
     $form->addControl('Email');
     $form->onSubmit(function (Form $form) {

@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -28,7 +29,7 @@ $inline_edit->fieldName = $model->fieldName()->name;
 $inline_edit->setModel($model);
 
 $inline_edit->onChange(function ($value) {
-    $view = new \Atk4\Ui\Message();
+    $view = new Message();
     $view->invokeInit();
     $view->text->addParagraph('new value: ' . $value);
 

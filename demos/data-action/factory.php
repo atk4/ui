@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\CardDeck;
 use Atk4\Ui\Crud;
+use Atk4\Ui\Message;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\View;
 
@@ -17,7 +18,7 @@ Button::addTo($app, ['Executor Factory in View Instance', 'class.small right flo
     ->link(['factory-view']);
 View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$msg = \Atk4\Ui\Message::addTo($app, [
+$msg = Message::addTo($app, [
     'Customizing action trigger by Overriding Executor Factory',
 ]);
 $msg->text->addParagraph('');
