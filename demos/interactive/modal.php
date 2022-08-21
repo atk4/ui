@@ -8,6 +8,7 @@ use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\JsExpression;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
@@ -139,8 +140,8 @@ Header::addTo($app, ['Modal Options']);
 
 $denyApproveModal = Modal::addTo($app, ['title' => 'Deny / Approve actions']);
 Message::addTo($denyApproveModal)->set('This modal is only closable via the green button');
-$denyApproveModal->addDenyAction('No', new \Atk4\Ui\JsExpression('function() { window.alert("Can\'t do that."); return false; }'));
-$denyApproveModal->addApproveAction('Yes', new \Atk4\Ui\JsExpression('function() { window.alert("You\'re good to go!"); }'));
+$denyApproveModal->addDenyAction('No', new JsExpression('function() { window.alert("Can\'t do that."); return false; }'));
+$denyApproveModal->addApproveAction('Yes', new JsExpression('function() { window.alert("You\'re good to go!"); }'));
 $denyApproveModal->notClosable();
 
 $menuBar = View::addTo($app, ['ui' => 'buttons']);

@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\JsExpression;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -108,7 +109,7 @@ $control = Form\Control\Line::addTo($app);
 $control->set('hello world');
 
 $button = $control->addAction('check value');
-$button->on('click', new \Atk4\Ui\JsExpression('alert("field value is: "+[])', [$control->jsInput()->val()]));
+$button->on('click', new JsExpression('alert("field value is: "+[])', [$control->jsInput()->val()]));
 
 Header::addTo($app, ['Line in a Form']);
 $form = Form::addTo($app);
@@ -154,10 +155,10 @@ $c2 = $group->addControl('c2', new Form\Control\Calendar(['type' => 'date']));
 $c3 = $group->addControl('c3', new Form\Control\Calendar(['type' => 'date']));
 
 $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
-$c2->onChange(new \Atk4\Ui\JsExpression('console.log("c2 changed: "+date+","+text+","+mode)'));
+$c2->onChange(new JsExpression('console.log("c2 changed: "+date+","+text+","+mode)'));
 $c3->onChange([
-    new \Atk4\Ui\JsExpression('console.log("c3 changed: "+date+","+text+","+mode)'),
-    new \Atk4\Ui\JsExpression('console.log("c3 really changed: "+date+","+text+","+mode)'),
+    new JsExpression('console.log("c3 changed: "+date+","+text+","+mode)'),
+    new JsExpression('console.log("c3 really changed: "+date+","+text+","+mode)'),
 ]);
 
 $group = $form->addGroup('Line');
@@ -167,13 +168,13 @@ $f3 = $group->addControl('f3');
 $f4 = $group->addControl('f4');
 
 $f1->onChange('console.log("f1 changed")');
-$f2->onChange(new \Atk4\Ui\JsExpression('console.log("f2 changed")'));
+$f2->onChange(new JsExpression('console.log("f2 changed")'));
 $f3->onChange([
-    new \Atk4\Ui\JsExpression('console.log("f3 changed")'),
-    new \Atk4\Ui\JsExpression('console.log("f3 really changed")'),
+    new JsExpression('console.log("f3 changed")'),
+    new JsExpression('console.log("f3 really changed")'),
 ]);
 $f4->onChange(function () {
-    return new \Atk4\Ui\JsExpression('console.log("f4 changed")');
+    return new JsExpression('console.log("f4 changed")');
 });
 
 $group = $form->addGroup('CheckBox');

@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Header;
+use Atk4\Ui\JsExpression;
 use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
@@ -65,4 +66,4 @@ $label = Label::addTo($app->layout, ['Test']);
 
 $label->on('click', null, function ($j, $arg1) {
     return 'width is ' . $arg1;
-}, [new \Atk4\Ui\JsExpression('$(window).width()')]);
+}, [new JsExpression('$(window).width()')]);

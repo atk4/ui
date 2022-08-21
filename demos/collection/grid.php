@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Jquery;
+use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
@@ -31,7 +32,7 @@ if ($grid->stickyGet('no-ajax')) {
     $grid->quickSearch->useAjax = false;
 }
 
-$grid->menu->addItem(['Add Country', 'icon' => 'add square'], new \Atk4\Ui\JsExpression('alert(123)'));
+$grid->menu->addItem(['Add Country', 'icon' => 'add square'], new JsExpression('alert(123)'));
 $grid->menu->addItem(['Re-Import', 'icon' => 'power'], new JsReload($grid));
 $grid->menu->addItem(['Delete All', 'icon' => 'trash', 'class.red active' => true]);
 
@@ -62,7 +63,7 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
 // $grid->addExecutorButton($deleteExecutor, new Button(['icon' => 'times circle outline']));
 
 $sel = $grid->addSelection();
-$grid->menu->addItem('show selection')->on('click', new \Atk4\Ui\JsExpression(
+$grid->menu->addItem('show selection')->on('click', new JsExpression(
     'alert("Selected: "+[])',
     [$sel->jsChecked()]
 ));

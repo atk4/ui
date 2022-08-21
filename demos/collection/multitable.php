@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\Table;
 
@@ -35,9 +36,9 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
         }
 
         $makeJsReloadFx = function (array $path): JsReload {
-            return new JsReload($this, [$this->name => new \Atk4\Ui\JsExpression('[] + []', [
+            return new JsReload($this, [$this->name => new JsExpression('[] + []', [
                 count($path) > 0 ? implode(',', $path) . ',' : '',
-                new \Atk4\Ui\JsExpression('$(this).data("id")'),
+                new JsExpression('$(this).data("id")'),
             ])]);
         };
 

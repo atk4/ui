@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\View;
 
@@ -15,7 +16,7 @@ require_once __DIR__ . '/../init-app.php';
 // Test 1 - Basic reloading
 Header::addTo($app, ['Button reloading segment']);
 $v = View::addTo($app, ['ui' => 'segment'])->set((string) random_int(1, 100));
-Button::addTo($app, ['Reload random number'])->js('click', new JsReload($v, [], new \Atk4\Ui\JsExpression('console.log("Output with afterSuccess");')));
+Button::addTo($app, ['Reload random number'])->js('click', new JsReload($v, [], new JsExpression('console.log("Output with afterSuccess");')));
 
 // Test 2 - Reloading self
 Header::addTo($app, ['JS-actions will be re-applied']);
@@ -27,7 +28,7 @@ Header::addTo($app, ['No duplicate JS bindings']);
 $b3 = Button::addTo($app, ['Reload other button']);
 $b4 = Button::addTo($app, ['Add one dot']);
 
-$b4->js('click', $b4->js()->text(new \Atk4\Ui\JsExpression('[]+"."', [$b4->js()->text()])));
+$b4->js('click', $b4->js()->text(new JsExpression('[]+"."', [$b4->js()->text()])));
 $b3->js('click', new JsReload($b4));
 
 // Test 3 - avoid duplicate
