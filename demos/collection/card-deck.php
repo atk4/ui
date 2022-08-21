@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Button;
+use Atk4\Ui\CardDeck;
+use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\UserAction\ExecutorFactory;
 
@@ -36,14 +39,14 @@ $infoAction = $countries->addUserAction('request_info', [
     'callback' => function (Country $country, $email) {
         return 'Your request for information was sent to email: ' . $email;
     },
-    'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+    'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORDS,
 ]);
 
 $infoAction->args = [
     'email' => ['type' => 'string', 'required' => true, 'caption' => 'Please let us know your email address:'],
-    'country' => ['required' => true, 'ui' => ['form' => [\Atk4\Ui\Form\Control\Lookup::class, 'model' => new Country($app->db), 'placeholder' => 'Please select a country.']]],
+    'country' => ['required' => true, 'ui' => ['form' => [Form\Control\Lookup::class, 'model' => new Country($app->db), 'placeholder' => 'Please select a country.']]],
 ];
 
-$deck = \Atk4\Ui\CardDeck::addTo($app, ['noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book']]);
+$deck = CardDeck::addTo($app, ['noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book']]);
 
 $deck->setModel($countries, ['Cost'], [$countries->fieldName()->iso, $countries->fieldName()->iso3]);

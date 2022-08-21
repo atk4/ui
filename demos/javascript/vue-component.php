@@ -4,13 +4,20 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
+use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Lister;
+use Atk4\Ui\Message;
+use Atk4\Ui\View;
+use Atk4\Ui\VueComponent\InlineEdit;
+use Atk4\Ui\VueComponent\ItemSearch;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
-\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
+View::addTo($app, ['ui' => 'divider']);
 
 // Inline Edit
 
@@ -18,37 +25,37 @@ $model = new Country($app->db);
 $model = $model->loadAny();
 
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
-\Atk4\Ui\Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
+Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
 
-$inline_edit = \Atk4\Ui\Component\InlineEdit::addTo($app);
+$inline_edit = InlineEdit::addTo($app);
 $inline_edit->fieldName = $model->fieldName()->name;
 $inline_edit->setModel($model);
 
 $inline_edit->onChange(function ($value) {
-    $view = new \Atk4\Ui\Message();
+    $view = new Message();
     $view->invokeInit();
     $view->text->addParagraph('new value: ' . $value);
 
     return $view;
 });
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+View::addTo($app, ['ui' => 'divider']);
 
 // ITEM SEARCH
 
 $subHeader = 'Searching will reload the list of countries below with matching result.';
-\Atk4\Ui\Header::addTo($app, ['Search using a Vue component', 'subHeader' => $subHeader]);
+Header::addTo($app, ['Search using a Vue component', 'subHeader' => $subHeader]);
 
 $model = new Country($app->db);
 
 $lister_template = new HtmlTemplate('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{$end}{/}</div>');
 
-$view = \Atk4\Ui\View::addTo($app);
+$view = View::addTo($app);
 
-$search = \Atk4\Ui\Component\ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
-$lister_container = \Atk4\Ui\View::addTo($view, ['template' => $lister_template]);
-$lister = \Atk4\Ui\Lister::addTo($lister_container, [], ['List']);
-$lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
+$search = ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
+$lister_container = View::addTo($view, ['template' => $lister_template]);
+$lister = Lister::addTo($lister_container, [], ['List']);
+$lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
     $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 
@@ -63,11 +70,11 @@ $search->setModelCondition($model);
 $model->setLimit(50);
 $lister->setModel($model);
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+View::addTo($app, ['ui' => 'divider']);
 
 // CREATING CUSTOM VUE USING EXTERNAL COMPONENT
 
-\Atk4\Ui\Header::addTo($app, ['External Component', 'subHeader' => 'Creating component using an external component definition.']);
+Header::addTo($app, ['External Component', 'subHeader' => 'Creating component using an external component definition.']);
 
 // same as $app->requireJs('https://unpkg.com/vue-clock2@1.1.5/dist/vue-clock.min.js');
 // for Behat testing without internet access
@@ -129,7 +136,7 @@ $clock_script = <<<'EOF'
     EOF;
 
 // Creating the clock view and injecting js.
-$clock = \Atk4\Ui\View::addTo($app, ['template' => $clock_template]);
+$clock = View::addTo($app, ['template' => $clock_template]);
 $clock->template->tryDangerouslySetHtml('script', $clock_script);
 
 // passing some style to my-clock component.
@@ -142,6 +149,6 @@ $clock_style = [
 // creating vue using an external definition.
 $clock->vue('my-clock', ['clock' => $clock_style], 'myClock');
 
-$btn = \Atk4\Ui\Button::addTo($app, ['Change Style']);
+$btn = Button::addTo($app, ['Change Style']);
 $btn->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));
-\Atk4\Ui\View::addTo($app, ['element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);
+View::addTo($app, ['element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);

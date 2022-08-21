@@ -10,13 +10,11 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Table;
 
 /**
- * Class Tooltip.
- *
  * column to add a little icon to show on hover a text
- * text is taken by the Row Model in $tooltipField
+ * text is taken by the Row Model in $tooltipField.
  *
- * $crud->addDecorator('paid_date', new \Atk4\Ui\Table\Column\Tooltip('note'));
- * $crud->addDecorator('paid_date', new \Atk4\Ui\Table\Column\Tooltip('note','error red'));
+ * $crud->addDecorator('paid_date', new Table\Column\Tooltip('note'));
+ * $crud->addDecorator('paid_date', new Table\Column\Tooltip('note','error red'));
  */
 class Tooltip extends Table\Column
 {

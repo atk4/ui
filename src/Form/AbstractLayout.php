@@ -7,16 +7,19 @@ namespace Atk4\Ui\Form;
 use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Form;
+use Atk4\Ui\View;
 
 /**
  * Custom Layout for a form (user-defined HTML).
  */
-abstract class AbstractLayout extends \Atk4\Ui\View
+abstract class AbstractLayout extends View
 {
     use WarnDynamicPropertyTrait;
 
-    /** @var \Atk4\Ui\Form Links layout to the form. */
+    /** @var Form Links layout to the form. */
     public $form;
 
     /**
@@ -132,9 +135,9 @@ abstract class AbstractLayout extends \Atk4\Ui\View
     /**
      * Adds Button into form layout.
      *
-     * @param \Atk4\Ui\Button|array|string $seed
+     * @param Button|array|string $seed
      *
-     * @return \Atk4\Ui\Button
+     * @return Button
      */
     abstract public function addButton($seed);
 }

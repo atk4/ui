@@ -4,32 +4,40 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Accordion;
+use Atk4\Ui\Button;
+use Atk4\Ui\Form;
+use Atk4\Ui\Header;
+use Atk4\Ui\LoremIpsum;
+use Atk4\Ui\Message;
+use Atk4\Ui\View;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 /*
-\Atk4\Ui\Button::addTo($app, ['View Form input split in Accordion section', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
+Button::addTo($app, ['View Form input split in Accordion section', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['accordion-in-form']);
-\Atk4\Ui\View::addTo($app, ['ui' => 'clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 */
 
-\Atk4\Ui\Header::addTo($app, ['Nested accordions']);
+Header::addTo($app, ['Nested accordions']);
 
 $addAccordionFunc = function ($view, $maxDepth = 2, $level = 0) use (&$addAccordionFunc) {
-    $accordion = \Atk4\Ui\Accordion::addTo($view, ['type' => ['styled', 'fluid']]);
+    $accordion = Accordion::addTo($view, ['type' => ['styled', 'fluid']]);
 
     // static section
     $i1 = $accordion->addSection('Static Text');
-    \Atk4\Ui\Message::addTo($i1, ['This content is added on page loaded', 'ui' => 'tiny message']);
-    \Atk4\Ui\LoremIpsum::addTo($i1, ['size' => 1]);
+    Message::addTo($i1, ['This content is added on page loaded', 'ui' => 'tiny message']);
+    LoremIpsum::addTo($i1, ['size' => 1]);
     if ($level < $maxDepth) {
         $addAccordionFunc($i1, $maxDepth, $level + 1);
     }
 
     // dynamic section - simple view
     $i2 = $accordion->addSection('Dynamic Text', function ($v) use ($addAccordionFunc, $maxDepth, $level) {
-        \Atk4\Ui\Message::addTo($v, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
-        \Atk4\Ui\LoremIpsum::addTo($v, ['size' => 2]);
+        Message::addTo($v, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
+        LoremIpsum::addTo($v, ['size' => 2]);
         if ($level < $maxDepth) {
             $addAccordionFunc($v, $maxDepth, $level + 1);
         }
@@ -37,10 +45,10 @@ $addAccordionFunc = function ($view, $maxDepth = 2, $level = 0) use (&$addAccord
 
     // dynamic section - form view
     $i3 = $accordion->addSection('Dynamic Form', function ($v) use ($addAccordionFunc, $maxDepth, $level) {
-        \Atk4\Ui\Message::addTo($v, ['Loading a form dynamically.', 'ui' => 'tiny message']);
-        $form = \Atk4\Ui\Form::addTo($v);
+        Message::addTo($v, ['Loading a form dynamically.', 'ui' => 'tiny message']);
+        $form = Form::addTo($v);
         $form->addControl('Email');
-        $form->onSubmit(function (\Atk4\Ui\Form $form) {
+        $form->onSubmit(function (Form $form) {
             return $form->success('Subscribed ' . $form->model->get('Email') . ' to newsletter.');
         });
 

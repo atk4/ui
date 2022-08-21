@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model\UserAction;
+use Atk4\Ui\Card;
 use Atk4\Ui\Form\Control\Line;
-use Atk4\Ui\UserAction\JsCallbackExecutor;
+use Atk4\Ui\Header;
+use Atk4\Ui\Image;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Header::addTo($app, [
+Header::addTo($app, [
     'Extensions to ATK Data Actions',
     'subHeader' => 'Model action can be trigger in various ways.',
 ]);
@@ -28,9 +31,9 @@ $sendEmailAction = $country->addUserAction('Email', [
 
 // -----------------------------------------------------------------------------
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'ui clearing divider']);
 
-\Atk4\Ui\Header::addTo($app, [
+Header::addTo($app, [
     'Using Input button',
     'size' => 4,
     'subHeader' => 'Action can be triggered via a button attached to an input. The data action argument value is set to the input value.',
@@ -55,20 +58,20 @@ Line::addTo($app, ['action' => $country->getUserAction('greet')]);
 
 // -----------------------------------------------------------------------------
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'ui clearing divider']);
 
-\Atk4\Ui\Header::addTo($app, [
+Header::addTo($app, [
     'Using buttons in a Card component',
     'size' => 4,
     'subHeader' => 'Easily trigger a data action using a Card component.',
 ]);
 
 // Card component.
-$card = \Atk4\Ui\Card::addTo($app);
-$content = new \Atk4\Ui\View(['class' => ['content']]);
-$img = \Atk4\Ui\Image::addTo($content, ['../images/kristy.png']);
+$card = Card::addTo($app);
+$content = new View(['class' => ['content']]);
+$img = Image::addTo($content, ['../images/kristy.png']);
 $img->addClass('right floated mini ui image');
-\Atk4\Ui\Header::addTo($content, ['Kristy']);
+Header::addTo($content, ['Kristy']);
 
 $card->addContent($content);
 $card->addDescription('Kristy is a friend of Mully.');

@@ -7,6 +7,7 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\Form;
 
 class MyTestModel extends Model
 {
@@ -42,7 +43,7 @@ class ForFieldUiTest extends TestCase
 
     public function testRegularField(): void
     {
-        $f = new \Atk4\Ui\Form();
+        $f = new Form();
         $f->invokeInit();
         $f->setModel($this->m->createEntity());
         $this->assertFalse($f->getControl('regular_field')->readOnly);
@@ -50,7 +51,7 @@ class ForFieldUiTest extends TestCase
 
     public function testJustDataField(): void
     {
-        $f = new \Atk4\Ui\Form();
+        $f = new Form();
         $f->invokeInit();
         $f->setModel($this->m->createEntity(), ['just_for_data']);
         $this->assertTrue($f->getControl('just_for_data')->readOnly);
@@ -58,7 +59,7 @@ class ForFieldUiTest extends TestCase
 
     public function testShowInUi(): void
     {
-        $f = new \Atk4\Ui\Form();
+        $f = new Form();
         $f->invokeInit();
         $f->setModel($this->m->createEntity());
         $this->assertFalse($f->getControl('no_persist_but_show_in_ui')->readOnly);

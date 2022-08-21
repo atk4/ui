@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Core\Factory;
+use Atk4\Ui\Button;
+use Atk4\Ui\Form;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsModal;
+use Atk4\Ui\JsToast;
+use Atk4\Ui\VirtualPage;
 
-/**
- * Setup file - do not test.
- * Lookup that cannot saved data.
- */
-class DemoLookup extends \Atk4\Ui\Form\Control\Lookup
+class DemoLookup extends Form\Control\Lookup
 {
-    /**
-     * Add button for new record.
-     */
     protected function initQuickNewRecord()
     {
         if (!$this->plus) {
@@ -29,32 +28,27 @@ class DemoLookup extends \Atk4\Ui\Form\Control\Lookup
 
         $buttonSeed = is_string($buttonSeed) ? ['content' => $buttonSeed] : $buttonSeed;
 
-        $defaultSeed = [\Atk4\Ui\Button::class, 'class.disabled' => ($this->disabled || $this->readOnly)];
+        $defaultSeed = [Button::class, 'class.disabled' => ($this->disabled || $this->readOnly)];
 
         $this->action = Factory::factory(array_merge($defaultSeed, (array) $buttonSeed));
 
-        if ($this->form) {
-            $vp = \Atk4\Ui\VirtualPage::addTo($this->form);
-        } else {
-            $vp = \Atk4\Ui\VirtualPage::addTo($this->getOwner());
-        }
-
+        $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
         $vp->set(function ($page) {
-            $form = \Atk4\Ui\Form::addTo($page);
+            $form = Form::addTo($page);
 
             $entity = $this->model->createEntity();
             $form->setModel($entity, $this->plus['fields'] ?? null);
 
-            $form->onSubmit(function (\Atk4\Ui\Form $form) {
+            $form->onSubmit(function (Form $form) {
                 $form->model->save();
 
                 $ret = [
-                    new \Atk4\Ui\JsToast('Form submit!. Data are not save in demo mode.'),
-                    (new \Atk4\Ui\Jquery('.atk-modal'))->modal('hide'),
+                    new JsToast('Form submit!. Data are not save in demo mode.'),
+                    (new Jquery('.atk-modal'))->modal('hide'),
                 ];
 
                 $row = $this->renderRow($form->model);
-                $chain = new \Atk4\Ui\Jquery('#' . $this->name . '-ac');
+                $chain = new Jquery('#' . $this->name . '-ac');
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
                 $ret[] = $chain;
 
@@ -64,6 +58,6 @@ class DemoLookup extends \Atk4\Ui\Form\Control\Lookup
 
         $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
 
-        $this->action->js('click', new \Atk4\Ui\JsModal($caption, $vp));
+        $this->action->js('click', new JsModal($caption, $vp));
     }
 }

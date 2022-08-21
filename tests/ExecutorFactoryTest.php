@@ -10,6 +10,7 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Item;
+use Atk4\Ui\Layout;
 use Atk4\Ui\UserAction\BasicExecutor;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\JsCallbackExecutor;
@@ -48,7 +49,7 @@ class ExecutorFactoryTest extends TestCase
         $p = new Persistence\Array_();
         $this->model = new TestModel($p);
         $this->app = $this->createApp();
-        $this->app->initLayout([\Atk4\Ui\Layout\Admin::class]);
+        $this->app->initLayout([Layout\Admin::class]);
     }
 
     protected function createApp(): App

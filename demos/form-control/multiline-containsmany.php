@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Crud;
 use Atk4\Ui\Form\Control\Multiline;
 
 /** @var \Atk4\Ui\App $app */
@@ -52,4 +53,4 @@ if (!class_exists(Client::class)) {
     }
 }
 
-\Atk4\Ui\Crud::addTo($app)->setModel(new Client($app->db));
+Crud::addTo($app)->setModel(new Client($app->db));

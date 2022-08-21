@@ -11,6 +11,7 @@ use Atk4\Ui\Form\Control\Multiline;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsFunction;
+use Atk4\Ui\JsToast;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -121,5 +122,5 @@ $multiline->jsAfterDelete = new JsFunction(['value'], [new JsExpression('console
 $form->onSubmit(function (Form $form) use ($multiline) {
     $rows = $multiline->saveRows()->getModel()->export();
 
-    return new \Atk4\Ui\JsToast($form->getApp()->encodeJson(array_values($rows)));
+    return new JsToast($form->getApp()->encodeJson(array_values($rows)));
 });

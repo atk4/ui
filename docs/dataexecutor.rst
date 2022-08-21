@@ -102,18 +102,15 @@ return specific record information to be display to user prior to execute the ac
 
 Here is an example of an user action returning specific record information in the confirmation message::
 
-        $country->addUserAction(
-            'delete_country',
-            [
-                'caption' => 'Delete',
-                'description' => 'Delete Country',
-                'ui' => ['executor' => [\Atk4\Ui\UserAction\ConfirmationExecutor::class]],
-                'confirmation' => function ($action) {
-                    return 'Are you sure you want to delete this country: $action->getModel()->getTitle();
-                },
-                'callback' => 'delete',
-            ]
-        );
+        $country->addUserAction('delete_country', [
+            'caption' => 'Delete',
+            'description' => 'Delete Country',
+            'ui' => ['executor' => [\Atk4\Ui\UserAction\ConfirmationExecutor::class]],
+            'confirmation' => function ($action) {
+                return 'Are you sure you want to delete this country: $action->getModel()->getTitle();
+            },
+            'callback' => 'delete',
+        ]);
 
 The modal title default is set from the UserAction::getDescription() method but can be override using the
 Modal::$title property.

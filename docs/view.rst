@@ -151,7 +151,7 @@ Models::
 
     $db = new \Atk4\Data\Persistence\Sql($dsn);
 
-    $client = new Client($db); // extends \Atk4\Data\Model();
+    $client = new Client($db); // extends \Atk4\Data\Model
 
 Once you have a model, you can associate it with a View such as Form or Grid
 so that those Views would be able to interact with your persistence directly::

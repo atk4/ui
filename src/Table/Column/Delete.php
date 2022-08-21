@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column;
 
+use Atk4\Data\Field;
 use Atk4\Ui\CallbackLater;
+use Atk4\Ui\Jquery;
 use Atk4\Ui\Table;
 
 /**
@@ -29,9 +31,9 @@ class Delete extends Table\Column
         });
     }
 
-    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
+    public function getDataCellTemplate(Field $field = null)
     {
-        $this->table->on('click', 'a.' . $this->shortName, null, ['confirm' => (new \Atk4\Ui\Jquery())->attr('title')])->atkAjaxec([
+        $this->table->on('click', 'a.' . $this->shortName, null, ['confirm' => (new Jquery())->attr('title')])->atkAjaxec([
             'uri' => $this->vp->getJsUrl(),
             'uri_options' => [$this->name => $this->table->jsRow()->data('id')],
         ]);

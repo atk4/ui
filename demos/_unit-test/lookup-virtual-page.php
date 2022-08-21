@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-// Test for Lookup inside VirtualPage.
-
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;

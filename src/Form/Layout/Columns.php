@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Layout;
 
 use Atk4\Data\Model;
+use Atk4\Ui\Columns as UiColumns;
 use Atk4\Ui\Form;
+use Atk4\Ui\View;
 
 /**
  * Layout that automatically arranges itself into multiple columns.
@@ -59,7 +61,7 @@ class Columns extends Form\Layout
             $this->form->addClass($size);
         }
 
-        $c = \Atk4\Ui\Columns::addTo($this);
+        $c = UiColumns::addTo($this);
 
         $chunks = array_chunk($fields, (int) ceil($cnt / $col));
         foreach ($chunks as $chunk) {
@@ -68,6 +70,6 @@ class Columns extends Form\Layout
                 ->setModel($model, $chunk);
         }
 
-        \Atk4\Ui\View::addTo($this, ['ui' => 'clearing hidden divider']);
+        View::addTo($this, ['ui' => 'clearing hidden divider']);
     }
 }

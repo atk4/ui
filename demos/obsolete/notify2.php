@@ -4,11 +4,17 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
+use Atk4\Ui\Form;
+use Atk4\Ui\Header;
+use Atk4\Ui\JsNotify;
+use Atk4\Ui\Label;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/** @var \Atk4\Data\Model $notifierClass */
-$notifierClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Data\Model {
+/** @var Model $notifierClass */
+$notifierClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
     public $table = 'notifier';
 
     protected function init(): void
@@ -26,13 +32,13 @@ $notifierClass = AnonymousClassNameCache::get_class(fn () => new class() extends
 });
 
 // Notification type form
-$head = \Atk4\Ui\Header::addTo($app, ['Notification Types']);
+$head = Header::addTo($app, ['Notification Types']);
 
-$form = \Atk4\Ui\Form::addTo($app, ['class.segment' => true]);
+$form = Form::addTo($app, ['class.segment' => true]);
 // Unit test only.
 $form->cb->setUrlTrigger('test_notify');
 
-\Atk4\Ui\Label::addTo($form, ['Some of notification options that can be set.', 'class.top attached' => true], ['AboveControls']);
+Label::addTo($form, ['Some of notification options that can be set.', 'class.top attached' => true], ['AboveControls']);
 $form->buttonSave->set('Show');
 $form->setModel((new $notifierClass($app->db))->createEntity(), []);
 
@@ -49,8 +55,8 @@ $formGroup2 = $form->addGroup(['Set Position and Attach to:']);
 $formGroup2->addControl('position', ['width' => 'four']);
 $formGroup2->addControl('attach', ['width' => 'four']);
 
-$form->onSubmit(function (\Atk4\Ui\Form $form) {
-    $notifier = new \Atk4\Ui\JsNotify();
+$form->onSubmit(function (Form $form) {
+    $notifier = new JsNotify();
     $notifier->setColor($form->model->get('color'))
         ->setPosition($form->model->get('position'))
         ->setWidth(rtrim($form->model->get('width'), '%'))

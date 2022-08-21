@@ -7,13 +7,15 @@ namespace Atk4\Ui\Table;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Jquery;
+use Atk4\Ui\JsCallback;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\Popup;
+use Atk4\Ui\Table;
 
 /**
  * Implements Column helper for table.
  *
- * @method \Atk4\Ui\Table getOwner()
+ * @method Table getOwner()
  */
 class Column
 {
@@ -28,7 +30,7 @@ class Column
     /** @const string */
     public const HOOK_GET_HEADER_CELL_HTML = self::class . '@getHeaderCellHtml';
 
-    /** @var \Atk4\Ui\Table Link back to the table, where column is used. */
+    /** @var Table Link back to the table, where column is used. */
     public $table;
 
     /** @var array Contains any custom attributes that may be applied on head, body or foot. */
@@ -144,20 +146,18 @@ class Column
      * This method return a callback where you can detect
      * menu item change via $cb->onMenuItem($item) function.
      *
-     * @return \Atk4\Ui\JsCallback
+     * @return JsCallback
      */
     public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null)
     {
         $this->hasHeaderAction = true;
         $id = $this->name . '_ac';
-        $this->headerActionTag = ['div', ['class' => 'atk-table-dropdown'],
+        $this->headerActionTag = ['div', ['class' => 'atk-table-dropdown'], [
             [
-                [
-                    'div', ['id' => $id, 'class' => 'ui top left pointing dropdown', 'data-menu-id' => $menuId],
-                    [['i', ['class' => $icon . ' icon'], '']],
-                ],
+                'div', ['id' => $id, 'class' => 'ui top left pointing dropdown', 'data-menu-id' => $menuId],
+                [['i', ['class' => $icon . ' icon'], '']],
             ],
-        ];
+        ]];
 
         $cb = Column\JsHeader::addTo($this->table);
 
@@ -260,7 +260,6 @@ class Column
      * Provided with a field definition (from a model) will return a header
      * cell, fully formatted to be included in a Table. (<th>).
      *
-     * @param Field $field
      * @param mixed $value
      *
      * @return string
@@ -336,8 +335,6 @@ class Column
      *
      * This method will be executed only once per table rendering, if you need to format data manually,
      * you should use $this->table->onHook('beforeRow' or 'afterRow', ...);
-     *
-     * @param Field $field
      */
     public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
@@ -354,8 +351,6 @@ class Column
      * by another template returned by getDataCellTemplate when multiple formatters are
      * applied to the same column. The first one to be applied is executed first, then
      * a subsequent ones are executed.
-     *
-     * @param Field $field
      *
      * @return string
      */

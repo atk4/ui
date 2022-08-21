@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\UserAction;
 
+use Atk4\Ui\Button;
+use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
 class PreviewExecutor extends BasicExecutor
@@ -17,7 +19,7 @@ class PreviewExecutor extends BasicExecutor
     public function initPreview()
     {
         if (!$this->hasAllArguments()) {
-            \Atk4\Ui\Message::addTo($this, ['type' => 'error', $this->missingArgsMsg]);
+            Message::addTo($this, ['type' => 'error', $this->missingArgsMsg]);
 
             return;
         }
@@ -42,7 +44,7 @@ class PreviewExecutor extends BasicExecutor
                 break;
         }
 
-        \Atk4\Ui\Button::addToWithCl($this, $this->executorButton)->on('click', function () {
+        Button::addToWithCl($this, $this->executorButton)->on('click', function () {
             return $this->executeModelAction();
         });
     }

@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\Crud;
+use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/** @var \Atk4\Data\Model $modelClass */
-$modelClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Data\Model {
+/** @var Model $modelClass */
+$modelClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
     public $table = 'test';
 
     public $caption = 'Country';
@@ -41,6 +44,6 @@ $p = new Persistence\Array_($data);
 $model = new $modelClass($p);
 
 // add Crud
-\Atk4\Ui\Header::addTo($app, ['Crud with Array Persistence']);
-$c = \Atk4\Ui\Crud::addTo($app, ['ipp' => 5]);
+Header::addTo($app, ['Crud with Array Persistence']);
+$c = Crud::addTo($app, ['ipp' => 5]);
 $c->setModel($model);

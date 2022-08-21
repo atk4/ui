@@ -1,23 +1,24 @@
 <?php
 
 declare(strict_types=1);
-/**
- * A Simple inline editable text Vue component.
- */
 
-namespace Atk4\Ui\Component;
+namespace Atk4\Ui\VueComponent;
 
 use Atk4\Data\Model;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Exception;
+use Atk4\Ui\JsCallback;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\View;
 
+/**
+ * A Simple inline editable text Vue component.
+ */
 class InlineEdit extends View
 {
     public $defaultTemplate = 'inline-edit.html';
 
-    /** @var \Atk4\Ui\JsCallback JsCallback for saving data. */
+    /** @var JsCallback JsCallback for saving data. */
     public $cb;
 
     /** @var mixed Input initial value. */
@@ -73,7 +74,7 @@ class InlineEdit extends View
     {
         parent::init();
 
-        $this->cb = \Atk4\Ui\JsCallback::addTo($this);
+        $this->cb = JsCallback::addTo($this);
 
         // Set default validation error handler.
         if (!$this->formatErrorMsg) {
@@ -131,7 +132,7 @@ class InlineEdit extends View
     /**
      * On success notifier.
      *
-     * @return \Atk4\Ui\JsToast
+     * @return JsToast
      */
     public function jsSuccess(string $message)
     {
@@ -147,7 +148,7 @@ class InlineEdit extends View
      *
      * @param string $message
      *
-     * @return \Atk4\Ui\JsToast
+     * @return JsToast
      */
     public function jsError($message)
     {

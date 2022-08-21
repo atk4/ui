@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
+use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\Popup;
+use Atk4\Ui\View;
 
 /**
  * Implement a filterPopup in a table column.
@@ -23,7 +25,7 @@ class FilterPopup extends Popup
     /** @var Field The table field that need filtering. */
     public $field;
 
-    /** @var \Atk4\Ui\View|null The view associate with this filter popup that need to be reload. */
+    /** @var View|null The view associate with this filter popup that need to be reload. */
     public $reload;
 
     /**
@@ -65,15 +67,16 @@ class FilterPopup extends Popup
             return new jsReload($this->reload);
         });
 
-        \Atk4\Ui\Button::addTo($this->form, ['Clear', 'class.clear' => true])->on('click', function ($f) use ($model) {
-            $model->clearData();
+        Button::addTo($this->form, ['Clear', 'class.clear' => true])
+            ->on('click', function ($f) use ($model) {
+                $model->clearData();
 
-            return [
-                $this->form->js(null, null, $this->form->formElement)->form('reset'),
-                new JsReload($this->reload),
-                (new Jquery($this->colTrigger))->trigger('click'),
-            ];
-        });
+                return [
+                    $this->form->js(null, null, $this->form->formElement)->form('reset'),
+                    new JsReload($this->reload),
+                    (new Jquery($this->colTrigger))->trigger('click'),
+                ];
+            });
     }
 
     /**

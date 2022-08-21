@@ -4,22 +4,30 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
+use Atk4\Ui\Columns;
+use Atk4\Ui\Form;
+use Atk4\Ui\Grid;
+use Atk4\Ui\Loader;
+use Atk4\Ui\Text;
+use Atk4\Ui\View;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Loader Example - page 1', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
+Button::addTo($app, ['Loader Example - page 1', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['loader']);
-\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$c = \Atk4\Ui\Columns::addTo($app);
+$c = Columns::addTo($app);
 
-$grid = \Atk4\Ui\Grid::addTo($c->addColumn(), ['ipp' => 10, 'menu' => false]);
+$grid = Grid::addTo($c->addColumn(), ['ipp' => 10, 'menu' => false]);
 $grid->setModel(new Country($app->db), [Country::hinting()->fieldName()->name]);
 
-$countryLoader = \Atk4\Ui\Loader::addTo($c->addColumn(), ['loadEvent' => false, 'shim' => [\Atk4\Ui\Text::class, 'Select country on your left']]);
+$countryLoader = Loader::addTo($c->addColumn(), ['loadEvent' => false, 'shim' => [Text::class, 'Select country on your left']]);
 
 $grid->table->onRowClick($countryLoader->jsLoad(['id' => $grid->table->jsRow()->data('id')]));
 
 $countryLoader->set(function ($p) {
-    \Atk4\Ui\Form::addTo($p)->setModel((new Country($p->getApp()->db))->load($_GET['id']));
+    Form::addTo($p)->setModel((new Country($p->getApp()->db))->load($_GET['id']));
 });

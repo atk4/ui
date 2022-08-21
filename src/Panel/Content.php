@@ -1,15 +1,15 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Slide Panel Content.
- */
 
 namespace Atk4\Ui\Panel;
 
 use Atk4\Ui\Callback;
 use Atk4\Ui\View;
 
+/**
+ * Slide Panel Content.
+ */
 class Content extends View implements LoadableContent
 {
     public $defaultTemplate = 'panel/content.html';

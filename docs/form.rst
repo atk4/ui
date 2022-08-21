@@ -516,10 +516,7 @@ We can now populate form controls based around the data fields defined in the mo
 
 This should display a following form::
 
-    $form->addControl(
-        'terms',
-        ['type' => 'boolean', 'ui' => ['caption' => 'Accept Terms and Conditions']]
-    );
+    $form->addControl('terms', ['type' => 'boolean', 'ui' => ['caption' => 'Accept Terms and Conditions']]);
 
 Form Submit Handling
 --------------------

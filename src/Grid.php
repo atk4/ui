@@ -349,7 +349,7 @@ class Grid extends View
      * @param JsExpression|null $afterSuccess
      * @param array             $apiConfig
      *
-     * @return \Atk4\Ui\JsReload
+     * @return JsReload
      */
     public function jsReload($args = [], $afterSuccess = null, $apiConfig = [])
     {
@@ -463,7 +463,7 @@ class Grid extends View
         if (!$this->menu) {
             throw new Exception('Unable to add Filter Column without Menu');
         }
-        $this->menu->addItem(['Clear Filters'], new \Atk4\Ui\JsReload($this->table->reload, ['atk_clear_filter' => 1]));
+        $this->menu->addItem(['Clear Filters'], new JsReload($this->table->reload, ['atk_clear_filter' => 1]));
         $this->table->setFilterColumn($names);
 
         return $this;

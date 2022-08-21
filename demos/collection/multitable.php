@@ -5,13 +5,21 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\Button;
+use Atk4\Ui\Columns;
+use Atk4\Ui\Header;
+use Atk4\Ui\JsExpression;
+use Atk4\Ui\JsModal;
+use Atk4\Ui\JsReload;
+use Atk4\Ui\Table;
+use Atk4\Ui\VirtualPage;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // Re-usable component implementing counter
 
-$finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\Columns {
+$finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends Columns {
     public $route = [];
 
     public function setModel(Model $model, array $route = []): void
@@ -21,7 +29,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
         $this->addClass('internally celled');
 
         // lets add our first table here
-        $table = \Atk4\Ui\Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
+        $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
         $table->setModel($model, [$model->titleField]);
 
         $selections = explode(',', $_GET[$this->name] ?? '');
@@ -30,10 +38,10 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
             $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
         }
 
-        $makeJsReloadFx = function (array $path): \Atk4\Ui\JsReload {
-            return new \Atk4\Ui\JsReload($this, [$this->name => new \Atk4\Ui\JsExpression('[] + []', [
+        $makeJsReloadFx = function (array $path): JsReload {
+            return new JsReload($this, [$this->name => new JsExpression('[] + []', [
                 count($path) > 0 ? implode(',', $path) . ',' : '',
-                new \Atk4\Ui\JsExpression('$(this).data("id")'),
+                new JsExpression('$(this).data("id")'),
             ])]);
         };
 
@@ -59,7 +67,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends \
 
             $pushModel = $pushModel->ref($ref);
 
-            $table = \Atk4\Ui\Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
+            $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
             $table->setModel($pushModel->setLimit(10), [$pushModel->titleField]);
 
             if ($selections) {
@@ -76,15 +84,15 @@ $model = new File($app->db);
 $model->addCondition($model->fieldName()->parent_folder_id, null);
 $model->setOrder([$model->fieldName()->is_folder => 'desc', $model->fieldName()->name]);
 
-\Atk4\Ui\Header::addTo($app, ['File Finder', 'subHeader' => 'Component built around Table, Columns and JsReload']);
+Header::addTo($app, ['File Finder', 'subHeader' => 'Component built around Table, Columns and JsReload']);
 
-$vp = \Atk4\Ui\VirtualPage::addTo($app)->set(function (\Atk4\Ui\VirtualPage $vp) use ($model) {
+$vp = VirtualPage::addTo($app)->set(function (VirtualPage $vp) use ($model) {
     $model->importFromFilesystem('.');
-    \Atk4\Ui\Button::addTo($vp, ['Import Complete', 'class.big green fluid' => true])->link('multitable.php');
+    Button::addTo($vp, ['Import Complete', 'class.big green fluid' => true])->link('multitable.php');
     $vp->js(true)->closest('.modal')->find('.header')->remove();
 });
 
-\Atk4\Ui\Button::addTo($app, ['Re-Import From Filesystem', 'class.top attached' => true])->on('click', new \Atk4\Ui\JsModal('Now importing ... ', $vp));
+Button::addTo($app, ['Re-Import From Filesystem', 'class.top attached' => true])->on('click', new JsModal('Now importing ... ', $vp));
 
 $finderClass::addTo($app, ['bottom attached'])
     ->addClass('top attached segment')

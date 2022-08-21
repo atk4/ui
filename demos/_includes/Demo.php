@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-class Demo extends \Atk4\Ui\Columns
+use Atk4\Ui\Columns;
+use Atk4\Ui\Exception;
+use Atk4\Ui\JsChain;
+use Atk4\Ui\View;
+
+class Demo extends Columns
 {
     public $left;
     public $right;
@@ -29,7 +34,7 @@ class Demo extends \Atk4\Ui\Columns
     {
         $funcRefl = new \ReflectionFunction($fx);
         if ($funcRefl->getEndLine() === $funcRefl->getStartLine()) {
-            throw new \Atk4\Ui\Exception('Closure body to extract must be on separate lines');
+            throw new Exception('Closure body to extract must be on separate lines');
         }
 
         $codeArr = array_slice(
@@ -52,7 +57,7 @@ class Demo extends \Atk4\Ui\Columns
         $code = $this->extractCodeFromClosure($fx);
 
         $this->highLightCode();
-        \Atk4\Ui\View::addTo(\Atk4\Ui\View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])->addClass($lang)->set($code);
+        View::addTo(View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])->addClass($lang)->set($code);
 
         $fx($this->right);
     }
@@ -62,7 +67,7 @@ class Demo extends \Atk4\Ui\Columns
         if (!self::$isInitialized) {
             $this->getApp()->requireCss('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.16.2/styles/' . $this->highlightDefaultStyle . '.min.css');
             $this->getApp()->requireJs('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.16.2/highlight.min.js');
-            $this->js(true, (new \Atk4\Ui\JsChain('hljs'))->initHighlighting());
+            $this->js(true, (new JsChain('hljs'))->initHighlighting());
             self::$isInitialized = true;
         }
     }

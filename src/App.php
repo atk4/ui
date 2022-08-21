@@ -7,6 +7,7 @@ namespace Atk4\Ui;
 use Atk4\Core\AppScopeTrait;
 use Atk4\Core\DiContainerTrait;
 use Atk4\Core\DynamicMethodTrait;
+use Atk4\Core\ExceptionRenderer;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Core\InitializerTrait;
@@ -642,8 +643,8 @@ class App
             if (\PHP_SAPI === 'cli') { // for phpunit
                 $requestUrlPath = '/';
                 $requestLocalPath = \Closure::bind(function () {
-                    return dirname((new \Atk4\Core\ExceptionRenderer\Html(new \Exception()))->getVendorDirectory());
-                }, null, \Atk4\Core\ExceptionRenderer\Html::class)();
+                    return dirname((new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory());
+                }, null, ExceptionRenderer\Html::class)();
             } else {
                 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
                 $requestUrlPath = $request->getBasePath();
@@ -999,15 +1000,15 @@ class App
      * Return exception message using HTML block and Semantic UI formatting. It's your job
      * to put it inside boilerplate HTML and output, e.g:.
      *
-     *   $app = new \Atk4\Ui\App();
-     *   $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+     *   $app = new App();
+     *   $app->initLayout([Layout\Centered::class]);
      *   $app->layout->template->dangerouslySetHtml('Content', $e->getHtml());
      *   $app->run();
      *   $app->callBeforeExit();
      */
     public function renderExceptionHtml(\Throwable $exception): string
     {
-        return (string) new \Atk4\Core\ExceptionRenderer\Html($exception);
+        return (string) new ExceptionRenderer\Html($exception);
     }
 
     protected function setupAlwaysRun(): void

@@ -4,30 +4,35 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
+use Atk4\Ui\Form;
+use Atk4\Ui\JsNotify;
+use Atk4\Ui\Modal;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Notify Examples - Page 2', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
+Button::addTo($app, ['Notify Examples - Page 2', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['notify2']);
 
-\Atk4\Ui\Button::addTo($app, ['Test'])->on('click', (new \Atk4\Ui\JsNotify('Not yet implemented'))->setColor('red'));
+Button::addTo($app, ['Test'])->on('click', (new JsNotify('Not yet implemented'))->setColor('red'));
 
-$modal = \Atk4\Ui\Modal::addTo($app, ['Modal Title']);
+$modal = Modal::addTo($app, ['Modal Title']);
 
 $modal->set(function ($p) use ($modal) {
-    $form = \Atk4\Ui\Form::addTo($p);
+    $form = Form::addTo($p);
     $form->addControl('name', [], ['caption' => 'Add your name']);
 
-    $form->onSubmit(function (\Atk4\Ui\Form $form) use ($modal) {
+    $form->onSubmit(function (Form $form) use ($modal) {
         if (empty($form->model->get('name'))) {
             return $form->error('name', 'Please add a name!');
         }
 
         return [
             $modal->hide(),
-            new \Atk4\Ui\JsNotify('Thank you ' . $form->model->get('name')),
+            new JsNotify('Thank you ' . $form->model->get('name')),
         ];
     });
 });
 
-\Atk4\Ui\Button::addTo($app, ['Open Modal'])->on('click', $modal->show());
+Button::addTo($app, ['Open Modal'])->on('click', $modal->show());

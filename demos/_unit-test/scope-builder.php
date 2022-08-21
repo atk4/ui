@@ -30,13 +30,13 @@ $model->addCondition($budget);
 $model->scope()->add($scope);
 $model->scope()->add($orScope);
 
-$form = \Atk4\Ui\Form::addTo($app);
+$form = Form::addTo($app);
 
-$form->addControl('qb', [\Atk4\Ui\Form\Control\ScopeBuilder::class, 'model' => $model], ['type' => 'object']);
+$form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model], ['type' => 'object']);
 
 $form->onSubmit(function (Form $form) use ($model) {
     $message = $form->model->get('qb')->toWords($model);
-    $view = (new \Atk4\Ui\View(['name' => false]))->addClass('atk-scope-builder-response');
+    $view = (new View(['name' => false]))->addClass('atk-scope-builder-response');
     $view->invokeInit();
 
     $view->set($message);

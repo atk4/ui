@@ -6,11 +6,15 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\AbstractView;
+use Atk4\Ui\App;
 use Atk4\Ui\Callback;
+use Atk4\Ui\CallbackLater;
+use Atk4\Ui\Layout;
+use Atk4\Ui\View;
 use Atk4\Ui\VirtualPage;
 use Mvorisek\Atk4\Hintable\Phpstan\PhpstanUtil;
 
-class AppMock extends \Atk4\Ui\App
+class AppMock extends App
 {
     /** @var bool */
     public $terminated = false;
@@ -36,13 +40,13 @@ class CallbackTest extends TestCase
     /** @var string */
     private $htmlDoctypeRegex = '~^<!DOCTYPE~';
 
-    /** @var \Atk4\Ui\App */
+    /** @var App */
     public $app;
 
     protected function setUp(): void
     {
         $this->app = new AppMock(['alwaysRun' => false, 'catchExceptions' => false]);
-        $this->app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+        $this->app->initLayout([Layout\Centered::class]);
     }
 
     protected function tearDown(): void
@@ -61,7 +65,7 @@ class CallbackTest extends TestCase
 
     public function testCallback(): void
     {
-        $cb = \Atk4\Ui\Callback::addTo($this->app);
+        $cb = Callback::addTo($this->app);
 
         $this->simulateCallbackTriggering($cb);
 
@@ -76,7 +80,7 @@ class CallbackTest extends TestCase
 
     public function testCallbackTrigger(): void
     {
-        $cb = \Atk4\Ui\Callback::addTo($this->app);
+        $cb = Callback::addTo($this->app);
         $this->assertSame($this->app->layout->name . '_' . $cb->shortName, $cb->getUrlTrigger());
 
         $cb = Callback::addTo($this->app, ['urlTrigger' => 'test']);
@@ -85,9 +89,9 @@ class CallbackTest extends TestCase
 
     public function testViewUrlCallback(): void
     {
-        $cbApp = \Atk4\Ui\Callback::addTo($this->app, ['urlTrigger' => 'aa']);
-        $v1 = \Atk4\Ui\View::addTo($this->app);
-        $cb = \Atk4\Ui\Callback::addTo($v1, ['urlTrigger' => 'bb']);
+        $cbApp = Callback::addTo($this->app, ['urlTrigger' => 'aa']);
+        $v1 = View::addTo($this->app);
+        $cb = Callback::addTo($v1, ['urlTrigger' => 'bb']);
 
         $this->simulateCallbackTriggering($cbApp);
         $this->simulateCallbackTriggering($cb);
@@ -105,12 +109,12 @@ class CallbackTest extends TestCase
 
         $var = null;
         $cb->set(function ($x) use (&$var, $v1) {
-            $v3 = \Atk4\Ui\View::addTo($v1);
+            $v3 = View::addTo($v1);
             $this->assertSame('test.php', $v3->url(['test']));
             $var = $x;
         }, [34]);
 
-        $v2 = \Atk4\Ui\View::addTo($v1);
+        $v2 = View::addTo($v1);
         $v2->stickyGet('g1', '1');
 
         $this->assertSame(34, $var);
@@ -119,7 +123,7 @@ class CallbackTest extends TestCase
 
     public function testCallbackNotFiring(): void
     {
-        $cb = \Atk4\Ui\Callback::addTo($this->app);
+        $cb = Callback::addTo($this->app);
 
         // do NOT simulate triggering in this test
 
@@ -133,7 +137,7 @@ class CallbackTest extends TestCase
 
     public function testCallbackLater(): void
     {
-        $cb = \Atk4\Ui\CallbackLater::addTo($this->app);
+        $cb = CallbackLater::addTo($this->app);
 
         $this->simulateCallbackTriggering($cb);
 
@@ -152,13 +156,13 @@ class CallbackTest extends TestCase
 
     public function testCallbackLaterNested(): void
     {
-        $cb = \Atk4\Ui\CallbackLater::addTo($this->app);
+        $cb = CallbackLater::addTo($this->app);
 
         $this->simulateCallbackTriggering($cb);
 
         $var = null;
         $cb->set(function ($x) use (&$var) {
-            $cb2 = \Atk4\Ui\CallbackLater::addTo($this->app);
+            $cb2 = CallbackLater::addTo($this->app);
 
             $this->simulateCallbackTriggering($cb2);
 
@@ -177,7 +181,7 @@ class CallbackTest extends TestCase
 
     public function testCallbackLaterNotFiring(): void
     {
-        $cb = \Atk4\Ui\CallbackLater::addTo($this->app);
+        $cb = CallbackLater::addTo($this->app);
 
         // don't simulate triggering
         $var = null;

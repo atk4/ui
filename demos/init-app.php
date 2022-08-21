@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
+use Atk4\Ui\Button;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Layout;
 
 date_default_timezone_set('UTC');
 
@@ -66,17 +69,17 @@ try {
     $app->db = $db;
     unset($db);
 } catch (\Throwable $e) {
-    throw new \Atk4\Ui\Exception('Database error: ' . $e->getMessage());
+    throw new Exception('Database error: ' . $e->getMessage());
 }
 
 [$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
 $demosUrl = $rootUrl . 'demos/';
 
 // allow custom layout override
-$app->initLayout([!isset($_GET['layout']) ? \Atk4\Ui\Layout\Maestro::class : $app->stickyGet('layout')]);
+$app->initLayout([!isset($_GET['layout']) ? Layout\Maestro::class : $app->stickyGet('layout')]);
 
 $layout = $app->layout;
-if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {
+if ($layout instanceof Layout\NavigableInterface) {
     $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], [$demosUrl . 'index']);
 
     $path = $demosUrl . 'layout/';
@@ -177,7 +180,7 @@ if ($layout instanceof \Atk4\Ui\Layout\NavigableInterface) {
     $layout->addMenuItem('Recursive Views', [$path . 'recursive'], $menu);
 
     // view demo source page on Github
-    \Atk4\Ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'class.teal' => true, 'icon' => 'github'])
+    Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'class.teal' => true, 'icon' => 'github'])
         ->on('click', $app->jsRedirect('https://github.com/atk4/ui/blob/develop/' . $relUrl, true));
 }
 unset($layout, $rootUrl, $relUrl, $demosUrl, $path, $menu);
