@@ -1,14 +1,14 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Display a card section within a Card View.
- */
 
 namespace Atk4\Ui;
 
 use Atk4\Data\Model;
 
+/**
+ * Display a card section within a Card View.
+ */
 class CardSection extends View
 {
     public $card;

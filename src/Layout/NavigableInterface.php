@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Interface for a Layout using a navigable side menu.
- */
 
 namespace Atk4\Ui\Layout;
 

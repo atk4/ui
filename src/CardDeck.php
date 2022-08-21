@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * A collection of Card set from a model.
- */
 
 namespace Atk4\Ui;
 
@@ -13,6 +10,9 @@ use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\VueComponent\ItemSearch;
 
+/**
+ * A collection of Card set from a model.
+ */
 class CardDeck extends View
 {
     public $ui = '';
@@ -318,7 +318,7 @@ class CardDeck extends View
     }
 
     /**
-     * Add button for executong Model user action in deck main menu.
+     * Add button for executing Model user action in deck main menu.
      */
     protected function addExecutorMenuButton(ExecutorInterface $executor): AbstractView
     {

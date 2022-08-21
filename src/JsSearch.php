@@ -1,13 +1,13 @@
 <?php
 
 declare(strict_types=1);
+
+namespace Atk4\Ui;
+
 /**
  * A Search input field that will reload View
  * using the view->url with a _q arguments attach to url.
  */
-
-namespace Atk4\Ui;
-
 class JsSearch extends View
 {
     /** @var View The View to reload using this JsSearch. */

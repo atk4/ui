@@ -32,6 +32,9 @@ parameters:
             path: 'demos/_includes/Demo.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsChain::initHighlighting\(\)\.$~'
         -
+            path: 'demos/collection/grid.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\UserAction\\ExecutorInterface::onHook\(\)\.$~'
+        -
             path: 'demos/collection/multitable.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Jquery::remove\(\)\.$~'
         -
@@ -132,7 +135,7 @@ parameters:
             message: '~^Method Atk4\\Ui\\CallbackLater::set\(\) should return mixed but return statement is missing\.$~'
         -
             path: 'src/Card.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setAction\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\View::setAction\(\)\.$~'
         -
             path: 'src/Card.php'
             message: '~^Call to an undefined method Atk4\\Ui\\View::addFields\(\)\.$~'
@@ -147,13 +150,16 @@ parameters:
             message: '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$queryArg\.$~'
         -
             path: 'src/CardDeck.php'
+            message: '~^Access to an undefined property Atk4\\Ui\\UserAction\\ExecutorInterface::\$jsSuccess\.$~'
+        -
+            path: 'src/CardDeck.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::addClass\(\)\.$~'
         -
             path: 'src/CardDeck.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::on\(\)\.$~'
         -
-            path: 'src/CardSection.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::addClass\(\)\.$~'
+            path: 'src/CardDeck.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\UserAction\\ExecutorInterface::onHook\(\)\.$~'
         -
             path: 'src/Crud.php'
             message: '~^Call to an undefined method Atk4\\Ui\\UserAction\\JsExecutorInterface::stickyGet\(\)\.$~'
@@ -169,9 +175,6 @@ parameters:
         -
             path: 'src/Form/Control/Checkbox.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Jquery::\$checked\.$~'
-        -
-            path: 'src/Form/Control/Input.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::on\(\)\.$~'
         -
             path: 'src/Form/Layout/Section/Accordion.php'
             message: '~^Call to an undefined method Atk4\\Ui\\View::jsOpen\(\)\.$~'
@@ -255,9 +258,6 @@ parameters:
             path: 'src/TabsSubview.php'
             message: '~^Access to an undefined property Atk4\\Ui\\View::\$activeTabName\.$~'
         -
-            path: 'src/UserAction/ExecutorFactory.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setAction\(\)\.$~'
-        -
             path: 'src/View.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsChain::emit\(\)\.$~'
         -
@@ -286,22 +286,13 @@ parameters:
             message: '~^Property Atk4\\Ui\\Label::\$detail \(string\|false\|null\) does not accept int<0, max>\.$~'
         -
             path: 'src/App.php'
-            message: '~^Property Atk4\\Ui\\App::\$layout \(Atk4\\Ui\\Layout\) does not accept Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Property Atk4\\Ui\\App::\$layout \(Atk4\\Ui\\Layout\) does not accept Atk4\\Ui\\View\.$~'
         -
             path: 'src/Card.php'
             message: '~^Property Atk4\\Ui\\Card::\$section \(Atk4\\Ui\\CardSection\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Card.php'
             message: '~^Method Atk4\\Ui\\Card::getSection\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'
-        -
-            path: 'src/Card.php'
-            message: '~^Method Atk4\\Ui\\Card::addContent\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'
-        -
-            path: 'src/Card.php'
-            message: '~^Method Atk4\\Ui\\Card::addExtraContent\(\) should return Atk4\\Ui\\View but returns Atk4\\Ui\\AbstractView\.$~'
-        -
-            path: 'src/Card.php'
-            message: '~^Method Atk4\\Ui\\Card::addImage\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Card.php'
             message: '~^Method Atk4\\Ui\\Card::addButton\(\) should return Atk4\\Ui\\View\|null but returns Atk4\\Ui\\AbstractView\.$~'
@@ -317,9 +308,6 @@ parameters:
         -
             path: 'src/CardDeck.php'
             message: '~^Property Atk4\\Ui\\CardDeck::\$container \(Atk4\\Ui\\View\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
-        -
-            path: 'src/CardDeck.php'
-            message: '~^Property Atk4\\Ui\\CardDeck::\$cardHolder \(Atk4\\Ui\\View\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/CardDeck.php'
             message: '~^Property Atk4\\Ui\\CardDeck::\$menu \(array\|false\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
@@ -343,7 +331,7 @@ parameters:
             message: '~^Property Atk4\\Ui\\Form::\$layout \(Atk4\\Ui\\Form\\Layout\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Form/AbstractLayout.php'
-            message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) should return Atk4\\Ui\\Form\\Control but returns Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) should return Atk4\\Ui\\Form\\Control but returns Atk4\\Ui\\View\.$~'
         -
             path: 'src/Form/Control.php'
             message: '~^Cannot access offset ''preventDefault'' on bool\.$~'
@@ -364,7 +352,7 @@ parameters:
             message: '~^Method Atk4\\Ui\\Form\\Layout::addButton\(\) should return Atk4\\Ui\\Button but returns Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Form/Layout.php'
-            message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) should return Atk4\\Ui\\Form\\Control but returns Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) should return Atk4\\Ui\\Form\\Control but returns Atk4\\Ui\\View\.$~'
         -
             path: 'src/Form/Layout.php'
             message: '~^Method Atk4\\Ui\\Form\\Layout::addSubLayout\(\) should return static\(Atk4\\Ui\\Form\\Layout\) but returns Atk4\\Ui\\AbstractView\.$~'
@@ -453,12 +441,6 @@ parameters:
             path: 'src/Text.php'
             message: '~^Property Atk4\\Ui\\Text::\$defaultTemplate \(string\|null\) does not accept default value of type false\.$~'
         -
-            path: 'src/View.php'
-            message: '~^Parameter #1 \$object \(Atk4\\Ui\\View\) of method Atk4\\Ui\\View::add\(\) should be contravariant with parameter \$object \(Atk4\\Ui\\AbstractView\) of method Atk4\\Ui\\AbstractView::add\(\)$~'
-        -
-            path: 'src/View.php'
-            message: '~^Parameter #2 \$region \(array\|string\|null\) of method Atk4\\Ui\\View::add\(\) should be contravariant with parameter \$args \(mixed\) of method Atk4\\Ui\\AbstractView::add\(\)$~'
-        -
             path: 'src/VirtualPage.php'
             message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
@@ -493,16 +475,16 @@ parameters:
             message: '~^Parameter #1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
         -
             path: 'src/Card.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, \$this\(Atk4\\Ui\\Card\)\|string> given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, \$this\(Atk4\\Ui\\Card\)\|string> given\.$~'
         -
             path: 'src/Form/Layout/Section.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, mixed> given\.$~'
         -
             path: 'src/Form/Layout/Section/Accordion.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, mixed> given\.$~'
         -
             path: 'src/Form/Layout/Section/Tabs.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, mixed> given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, mixed> given\.$~'
         -
             path: 'src/Grid.php'
             message: '~^Parameter #2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Table\|false given\.$~'
@@ -517,13 +499,13 @@ parameters:
             message: '~^Parameter #2 \$value of method Atk4\\Ui\\HtmlTemplate::trySet\(\) expects string\|null, Atk4\\Ui\\Form\\Control\\Line given\.$~'
         -
             path: 'src/Menu.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, array<int\|string, array<int, string>\|string> given\.$~'
-        -
-            path: 'src/Panel/Content.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\Callback given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, array<int, string>\|string> given\.$~'
         -
             path: 'src/Panel/Right.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\AbstractView::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, string> given\.$~'
+        -
+            path: 'src/Panel/Right.php'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\App::add\(\) expects Atk4\\Ui\\AbstractView, array given\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 6
@@ -627,12 +609,6 @@ parameters:
             path: 'demos/interactive/popup.php'
             message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::linkCart\(\) has parameter \$jsAction with no type specified\.$~'
         -
-            path: 'src/AbstractView.php'
-            message: '~^Method Atk4\\Ui\\AbstractView::initDefaultApp\(\) has no return type specified\.$~'
-        -
-            path: 'src/AbstractView.php'
-            message: '~^Method Atk4\\Ui\\AbstractView::add\(\) has parameter \$args with no type specified\.$~'
-        -
             path: 'src/Accordion.php'
             message: '~^Method Atk4\\Ui\\Accordion::activate\(\) has no return type specified\.$~'
         -
@@ -682,34 +658,10 @@ parameters:
             message: '~^Property Atk4\\Ui\\App::\$templateClass has no type specified\.$~'
         -
             path: 'src/App.php'
-            message: '~^Method Atk4\\Ui\\App::setExecutorFactory\(\) has no return type specified\.$~'
-        -
-            path: 'src/App.php'
-            message: '~^Method Atk4\\Ui\\App::setupTemplateDirs\(\) has no return type specified\.$~'
-        -
-            path: 'src/App.php'
             message: '~^Method Atk4\\Ui\\App::terminateHtml\(\) has parameter \$output with no type specified\.$~'
         -
             path: 'src/App.php'
             message: '~^Method Atk4\\Ui\\App::terminateJson\(\) has parameter \$output with no type specified\.$~'
-        -
-            path: 'src/App.php'
-            message: '~^Method Atk4\\Ui\\App::initIncludes\(\) has no return type specified\.$~'
-        -
-            path: 'src/App.php'
-            message: '~^Method Atk4\\Ui\\App::addStyle\(\) has no return type specified\.$~'
-        -
-            path: 'src/App.php'
-            message: '~^Method Atk4\\Ui\\App::run\(\) has no return type specified\.$~'
-        -
-            path: 'src/App.php'
-            message: '~^Method Atk4\\Ui\\App::stickyForget\(\) has no return type specified\.$~'
-        -
-            path: 'src/App.php'
-            message: '~^Method Atk4\\Ui\\App::decodeJson\(\) has no return type specified\.$~'
-        -
-            path: 'src/App.php'
-            message: '~^Method Atk4\\Ui\\App::encodeJson\(\) has parameter \$data with no type specified\.$~'
         -
             path: 'src/Breadcrumb.php'
             message: '~^Method Atk4\\Ui\\Breadcrumb::addCrumb\(\) has no return type specified\.$~'
@@ -719,9 +671,6 @@ parameters:
         -
             path: 'src/Callback.php'
             message: '~^Method Atk4\\Ui\\Callback::setUrlTrigger\(\) has no return type specified\.$~'
-        -
-            path: 'src/Callback.php'
-            message: '~^Method Atk4\\Ui\\Callback::add\(\) has parameter \$args with no type specified\.$~'
         -
             path: 'src/Card.php'
             message: '~^Method Atk4\\Ui\\Card::setDataId\(\) has no return type specified\.$~'
@@ -1454,27 +1403,6 @@ parameters:
         -
             path: 'src/UserAction/ConfirmationExecutor.php'
             message: '~^Method Atk4\\Ui\\UserAction\\ConfirmationExecutor::_jsSequencer\(\) has no return type specified\.$~'
-        -
-            path: 'src/UserAction/ExecutorFactory.php'
-            message: '~^Property Atk4\\Ui\\UserAction\\ExecutorFactory::\$executorSeed has no type specified\.$~'
-        -
-            path: 'src/UserAction/ExecutorFactory.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\ExecutorFactory::registerTypeExecutor\(\) has no return type specified\.$~'
-        -
-            path: 'src/UserAction/ExecutorFactory.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\ExecutorFactory::registerTypeExecutor\(\) has parameter \$seed with no type specified\.$~'
-        -
-            path: 'src/UserAction/ExecutorFactory.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\ExecutorFactory::registerExecutor\(\) has no return type specified\.$~'
-        -
-            path: 'src/UserAction/ExecutorFactory.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\ExecutorFactory::registerTrigger\(\) has no return type specified\.$~'
-        -
-            path: 'src/UserAction/ExecutorFactory.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\ExecutorFactory::useTriggerDefault\(\) has no return type specified\.$~'
-        -
-            path: 'src/UserAction/ExecutorFactory.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\ExecutorFactory::registerCaption\(\) has no return type specified\.$~'
         -
             path: 'src/UserAction/ExecutorInterface.php'
             message: '~^Method Atk4\\Ui\\UserAction\\ExecutorInterface::setAction\(\) has no return type specified\.$~'

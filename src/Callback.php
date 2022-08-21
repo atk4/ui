@@ -36,7 +36,7 @@ class Callback extends AbstractView
     /** @var bool Allow this callback to trigger during a reload. */
     public $triggerOnReload = true;
 
-    public function add($object, $args = null): AbstractView
+    public function add(AbstractView $object, array $args = []): AbstractView
     {
         throw new Exception('Callback cannot contains children');
     }

@@ -21,15 +21,12 @@ class DemoLookup extends Form\Control\Lookup
         }
 
         $this->plus = is_bool($this->plus) ? 'Add New' : $this->plus;
-
         $this->plus = is_string($this->plus) ? ['button' => $this->plus] : $this->plus;
 
         $buttonSeed = $this->plus['button'] ?? [];
-
         $buttonSeed = is_string($buttonSeed) ? ['content' => $buttonSeed] : $buttonSeed;
 
         $defaultSeed = [Button::class, 'class.disabled' => ($this->disabled || $this->readOnly)];
-
         $this->action = Factory::factory(array_merge($defaultSeed, (array) $buttonSeed));
 
         $vp = VirtualPage::addTo($this->form ?? $this->getOwner());

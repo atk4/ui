@@ -1,17 +1,17 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Dropdown form control that will based it's list value
- * according to another input value.
- * Also possible to cascade value from another cascade field.
- */
 
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Form;
 
+/**
+ * Dropdown form control that will based it's list value
+ * according to another input value.
+ * Also possible to cascade value from another cascade field.
+ */
 class DropdownCascade extends Dropdown
 {
     /** @var string|Form\Control The form control to use for setting this dropdown list values from. */
