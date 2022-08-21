@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Card;
 use Atk4\Ui\Header;
+use Atk4\Ui\Image;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -38,7 +39,7 @@ $card->addExtraContent(new View(['Copyright notice: Image from Semantic-UI (Foma
 
 $card = Card::addTo($app);
 $content = new View(['class' => ['content']]);
-$img = \Atk4\Ui\Image::addTo($content, ['../images/kristy.png']);
+$img = Image::addTo($content, ['../images/kristy.png']);
 $img->addClass('right floated mini ui image');
 $header = Header::addTo($content, ['Kristy']);
 

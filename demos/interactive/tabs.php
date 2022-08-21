@@ -11,11 +11,12 @@ use Atk4\Ui\Form;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
+use Atk4\Ui\Tabs;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$tabs = \Atk4\Ui\Tabs::addTo($app);
+$tabs = Tabs::addTo($app);
 
 // static tab
 \Atk4\Ui\HelloWorld::addTo($tabs->addTab('Hello'));

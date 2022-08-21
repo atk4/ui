@@ -8,6 +8,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\JsExpression;
+use Atk4\Ui\Tabs;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -132,7 +133,7 @@ $form->onSubmit(function (Form $form) {
 Header::addTo($app, ['Multiple Form Layouts']);
 
 $form = Form::addTo($app);
-$tabs = \Atk4\Ui\Tabs::addTo($form, [], ['AboveControls']);
+$tabs = Tabs::addTo($form, [], ['AboveControls']);
 View::addTo($form, ['ui' => 'divider'], ['AboveControls']);
 
 $formPage = Form\Layout::addTo($tabs->addTab('Basic Info'), ['form' => $form]);

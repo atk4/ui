@@ -12,6 +12,7 @@ use Atk4\Ui\Header;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
+use Atk4\Ui\Tabs;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -27,7 +28,7 @@ require_once __DIR__ . '/../init-app.php';
  * This approach will also prevent your application from registering shutdown handler or catching error,
  * so we will need to do a bit of work about that too.
  */
-$tabs = \Atk4\Ui\Tabs::addTo($app);
+$tabs = Tabs::addTo($app);
 
 // -----------------------------------------------------------------------------
 

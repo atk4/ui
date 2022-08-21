@@ -9,6 +9,7 @@ use Atk4\Ui\Console;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
+use Atk4\Ui\Tabs;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -34,7 +35,7 @@ $testRunClass = AnonymousClassNameCache::get_class(fn () => new class() extends 
     }
 });
 
-$tabs = \Atk4\Ui\Tabs::addTo($app);
+$tabs = Tabs::addTo($app);
 
 $tab = $tabs->addTab('set()');
 Header::addTo($tab, [
