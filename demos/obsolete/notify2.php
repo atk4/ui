@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
 use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
@@ -28,7 +29,7 @@ $notifierClass = AnonymousClassNameCache::get_class(fn () => new class() extends
 });
 
 // Notification type form
-$head = \Atk4\Ui\Header::addTo($app, ['Notification Types']);
+$head = Header::addTo($app, ['Notification Types']);
 
 $form = \Atk4\Ui\Form::addTo($app, ['class.segment' => true]);
 // Unit test only.

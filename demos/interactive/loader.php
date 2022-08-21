@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -19,7 +21,7 @@ ViewTester::addTo($app);
 \Atk4\Ui\Loader::addTo($app)->set(function (\Atk4\Ui\Loader $p) {
     // set your time expensive function here.
     sleep(1);
-    \Atk4\Ui\Header::addTo($p, ['Loader #1']);
+    Header::addTo($p, ['Loader #1']);
     \Atk4\Ui\LoremIpsum::addTo($p, ['size' => 1]);
 
     // Any dynamic views can perform call-backs just fine
@@ -33,7 +35,7 @@ ViewTester::addTo($app);
     $loader->set(function ($p) {
         // You may pass arguments to the loader, in this case it's "color"
         sleep(1);
-        \Atk4\Ui\Header::addTo($p, ['Loader #1b - ' . $_GET['color']]);
+        Header::addTo($p, ['Loader #1b - ' . $_GET['color']]);
         \Atk4\Ui\LoremIpsum::addTo(\Atk4\Ui\View::addTo($p, ['ui' => $_GET['color'] . ' segment']), ['size' => 1]);
 
         // don't forget to make your own argument sticky so that Components can communicate with themselves:

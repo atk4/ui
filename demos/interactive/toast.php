@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Header::addTo($app, ['Toast']);
+Header::addTo($app, ['Toast']);
 
 $btn = \Atk4\Ui\Button::addTo($app)->set('Minimal');
 
@@ -20,7 +22,7 @@ $btn->on('click', new \Atk4\Ui\JsToast([
     'message' => 'See I have a title',
 ]));
 
-\Atk4\Ui\Header::addTo($app, ['Using class name']);
+Header::addTo($app, ['Using class name']);
 
 $btn = \Atk4\Ui\Button::addTo($app)->set('Success');
 $btn->on('click', new \Atk4\Ui\JsToast([
@@ -43,7 +45,7 @@ $btn->on('click', new \Atk4\Ui\JsToast([
     'class' => 'warning',
 ]));
 
-\Atk4\Ui\Header::addTo($app, ['Using different position']);
+Header::addTo($app, ['Using different position']);
 
 $btn = \Atk4\Ui\Button::addTo($app)->set('Bottom Right');
 $btn->on('click', new \Atk4\Ui\JsToast([
@@ -59,7 +61,7 @@ $btn->on('click', new \Atk4\Ui\JsToast([
     'position' => 'top center',
 ]));
 
-\Atk4\Ui\Header::addTo($app, ['Other Options']);
+Header::addTo($app, ['Other Options']);
 
 $btn = \Atk4\Ui\Button::addTo($app)->set('5 seconds');
 $btn->on('click', new \Atk4\Ui\JsToast([

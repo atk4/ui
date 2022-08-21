@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 
 /** @var \Atk4\Ui\App $app */
@@ -43,7 +44,7 @@ $button->js('click', $sortable->jsGetOrders(['btn' => '1']));
 // -----------------------------------------------------------------------------
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
-\Atk4\Ui\Header::addTo($app, ['Add Drag n drop to Grid']);
+Header::addTo($app, ['Add Drag n drop to Grid']);
 
 $grid = \Atk4\Ui\Grid::addTo($app, ['paginator' => false]);
 $grid->setModel((new Country($app->db))->setLimit(6));

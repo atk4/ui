@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Header::addTo($app, ['SSE with ProgressBar']);
+Header::addTo($app, ['SSE with ProgressBar']);
 
 $bar = \Atk4\Ui\ProgressBar::addTo($app);
 
@@ -40,7 +42,7 @@ $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
 $buttonStop->on('click', [$button->js()->atkServerEvent('stop'), $button->js()->removeClass('disabled')]);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
-\Atk4\Ui\Header::addTo($app, ['SSE operation with user confirmation']);
+Header::addTo($app, ['SSE operation with user confirmation']);
 
 $sse = \Atk4\Ui\JsSse::addTo($app);
 $button = \Atk4\Ui\Button::addTo($app, ['Click me to change my text']);

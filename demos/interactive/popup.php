@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\Header;
+use Atk4\Ui\Label;
 use Atk4\Ui\Popup;
 use Atk4\Ui\View;
-use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -99,7 +100,7 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
         $cols = \Atk4\Ui\Columns::addTo($v, ['ui' => 'relaxed divided grid']);
 
         $c1 = $cols->addColumn();
-        \Atk4\Ui\Header::addTo($c1, ['size' => 'small'])->set('Snacks');
+        Header::addTo($c1, ['size' => 'small'])->set('Snacks');
         $l1 = View::addTo($c1, ['ui' => 'list']);
         \Atk4\Ui\Item::addTo($l1, ['content' => 'Crisps', 'ui' => 'item'])->setElement('a');
         \Atk4\Ui\Item::addTo($l1, ['content' => 'Pork Scratchings', 'ui' => 'item'])->setElement('a');
@@ -107,7 +108,7 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
         \Atk4\Ui\Item::addTo($l1, ['content' => 'Sweets', 'ui' => 'item'])->setElement('a');
 
         $c2 = $cols->addColumn();
-        \Atk4\Ui\Header::addTo($c2, ['size' => 'small'])->set('Drinks');
+        Header::addTo($c2, ['size' => 'small'])->set('Drinks');
         $l2 = View::addTo($c2, ['ui' => 'list']);
         \Atk4\Ui\Item::addTo($l2, ['content' => 'Fizzy Drink', 'ui' => 'item'])->setElement('a');
         \Atk4\Ui\Item::addTo($l2, ['content' => 'Hot Latte', 'ui' => 'item'])->setElement('a');
@@ -115,7 +116,7 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
         \Atk4\Ui\Item::addTo($l2, ['content' => 'Apple Juice', 'ui' => 'item'])->setElement('a');
 
         $c3 = $cols->addColumn();
-        \Atk4\Ui\Header::addTo($c3, ['size' => 'small'])->set('Mains');
+        Header::addTo($c3, ['size' => 'small'])->set('Mains');
         $l3 = View::addTo($c3, ['ui' => 'list']);
         \Atk4\Ui\Item::addTo($l3, ['content' => 'Chicken Tikka', 'ui' => 'item'])->setElement('a');
         \Atk4\Ui\Item::addTo($l3, ['content' => 'Green Curry', 'ui' => 'item'])->setElement('a');
@@ -138,7 +139,7 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
     }
 });
 
-\Atk4\Ui\Header::addTo($app)->set('Menu popup');
+Header::addTo($app)->set('Menu popup');
 $menu = \Atk4\Ui\Menu::addTo($app);
 
 // You may add popup on top of menu items or dropdowns. Dropdowns have a slightly different
@@ -257,13 +258,13 @@ $signup->set(function ($pop) {
 
 // -----------------------------------------------------------------------------
 
-\Atk4\Ui\Header::addTo($app)->set('Specifying trigger');
+Header::addTo($app)->set('Specifying trigger');
 
 $button = \Atk4\Ui\Button::addTo($app, ['Click Me', 'class.primary' => true]);
 
 $buttonPopup = Popup::addTo($app, [$button]);
 
-\Atk4\Ui\Header::addTo($buttonPopup)->set('Using click events');
+Header::addTo($buttonPopup)->set('Using click events');
 View::addTo($buttonPopup)->set('Adding popup into button activates on click by default. Clicked popups will close if you click away.');
 
 $input = Form\Control\Line::addTo($app, ['placeholder' => 'Search users', 'icon' => 'circular search link']);

@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\Header;
 use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // create header
-\Atk4\Ui\Header::addTo($app, ['Lookup Input']);
+Header::addTo($app, ['Lookup Input']);
 
 Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])
     ->setModel(new Country($app->db));
@@ -55,7 +56,7 @@ $form->onSubmit(function (Form $form) {
     return $view;
 });
 
-\Atk4\Ui\Header::addTo($app, ['Lookup input using label']);
+Header::addTo($app, ['Lookup input using label']);
 
 // from seed
 Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])
@@ -79,7 +80,7 @@ Form\Control\Lookup::addTo($app, [
     'label' => $label,
 ])->addClass('left corner');
 
-\Atk4\Ui\Header::addTo($app, ['Lookup input inside modal']);
+Header::addTo($app, ['Lookup input inside modal']);
 
 $modal = \Atk4\Ui\Modal::addTo($app)->set(function ($p) {
     $a = Form\Control\Lookup::addTo($p, ['placeholder' => 'Search country', 'label' => 'Country: ']);

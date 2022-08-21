@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\Header;
 use Atk4\Ui\JsToast;
 
 /** @var \Atk4\Ui\App $app */
@@ -35,7 +36,7 @@ $items = [
     ['name' => 'Appliances', 'id' => 301, 'nodes' => []],
 ];
 
-\Atk4\Ui\Header::addTo($app, ['Tree item selector']);
+Header::addTo($app, ['Tree item selector']);
 
 $form = Form::addTo($app);
 $control = $form->addControl('tree', [Form\Control\TreeItemSelector::class, 'treeItems' => $items, 'caption' => 'Multiple selection:'], ['type' => 'json']);

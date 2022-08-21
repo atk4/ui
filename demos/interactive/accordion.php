@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -13,7 +14,7 @@ require_once __DIR__ . '/../init-app.php';
     ->link(['accordion-nested']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'clearing divider']);
 
-\Atk4\Ui\Header::addTo($app, ['Accordion\'s section can be control programmatically.']);
+Header::addTo($app, ['Accordion\'s section can be control programmatically.']);
 
 // toggle menu
 $bar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
@@ -21,7 +22,7 @@ $b1 = \Atk4\Ui\Button::addTo($bar, ['Toggle Section #1']);
 $b2 = \Atk4\Ui\Button::addTo($bar, ['Toggle Section #2']);
 $b3 = \Atk4\Ui\Button::addTo($bar, ['Toggle Section #3']);
 
-\Atk4\Ui\Header::addTo($app, ['Accordion Sections']);
+Header::addTo($app, ['Accordion Sections']);
 
 $accordion = \Atk4\Ui\Accordion::addTo($app, ['type' => ['styled', 'fluid']/* , 'settings' => ['exclusive' => false] */]);
 

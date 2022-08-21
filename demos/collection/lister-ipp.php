@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php'; // default lister
 
-\Atk4\Ui\Header::addTo($app)->set('Default lister');
+Header::addTo($app)->set('Default lister');
 \Atk4\Ui\Lister::addTo($app, ['defaultTemplate' => 'lister.html'])->setSource([
     ['icon' => 'map marker', 'title' => 'Krolewskie Jadlo', 'descr' => 'An excellent polish restaurant, quick delivery and hearty, filling meals'],
     ['icon' => 'map marker', 'title' => 'Xian Famous Foods', 'descr' => 'A taste of Shaanxi\'s delicious culinary traditions, with delights like spicy cold noodles and lamb burgers.'],
@@ -35,7 +36,7 @@ $lister->setModel($model);
 \Atk4\Ui\View::addTo($app, ['ui' => 'clearing divider']);
 
 // empty lister with default template
-\Atk4\Ui\Header::addTo($app)->set('Empty default lister');
+Header::addTo($app)->set('Empty default lister');
 \Atk4\Ui\Lister::addTo($app, ['defaultTemplate' => 'lister.html'])->setSource([]);
 \Atk4\Ui\View::addTo($app, ['ui' => 'clearing divider']);
 
@@ -55,7 +56,7 @@ $model->addCondition(Country::hinting()->fieldName()->id, -1); // no such record
 $lister->setModel($model);
 
 \Atk4\Ui\View::addTo($app, ['ui' => 'clearing divider']);
-\Atk4\Ui\Header::addTo($app, ['Item per page', 'subHeader' => 'Lister can display a certain amount of items']);
+Header::addTo($app, ['Item per page', 'subHeader' => 'Lister can display a certain amount of items']);
 
 $container = \Atk4\Ui\View::addTo($app);
 

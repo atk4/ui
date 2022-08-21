@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
 use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
@@ -46,7 +47,7 @@ $frame = \Atk4\Ui\View::addTo($app, ['ui' => 'green segment']);
     return new \Atk4\Ui\JsNotify('$_GET = ' . $app->encodeJson($_GET));
 });
 
-\Atk4\Ui\Header::addTo($app, ['Use of View::url()']);
+Header::addTo($app, ['Use of View::url()']);
 
 $b1 = \Atk4\Ui\Button::addTo($app);
 $b1->set($b1->url());

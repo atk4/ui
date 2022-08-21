@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
+use Atk4\Ui\Header;
 use Atk4\Ui\Table;
 
 /** @var \Atk4\Ui\App $app */
@@ -110,7 +111,7 @@ $keyValueString = [
     'four',
 ];
 
-\Atk4\Ui\Header::addTo($app, ['Table column', 'subHeader' => 'Table column decorator can be set from your model.']);
+Header::addTo($app, ['Table column', 'subHeader' => 'Table column decorator can be set from your model.']);
 
 $model = new $modelColorClass(new Persistence\Static_([]));
 

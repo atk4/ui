@@ -8,8 +8,8 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
 use Atk4\Ui\GridLayout;
 use Atk4\Ui\Header;
-use Atk4\Ui\Tabs;
 use Atk4\Ui\Label;
+use Atk4\Ui\Tabs;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */

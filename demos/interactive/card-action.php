@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
+use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -14,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
     ->link(['card']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-\Atk4\Ui\Header::addTo($app, ['Models', 'size' => 1, 'subHeader' => 'Card may display information from many models.']);
+Header::addTo($app, ['Models', 'size' => 1, 'subHeader' => 'Card may display information from many models.']);
 
 $stat = new Stat($app->db);
 $stat = $stat->loadAny();

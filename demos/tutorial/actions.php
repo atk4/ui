@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
+use Atk4\Ui\Header;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\View;
 
@@ -15,7 +16,7 @@ require_once __DIR__ . '/../init-app.php';
 $wizard = \Atk4\Ui\Wizard::addTo($app);
 
 $wizard->addStep('Define User Action', function ($page) {
-    \Atk4\Ui\Header::addTo($page, ['What are User Actions?']);
+    Header::addTo($page, ['What are User Actions?']);
 
     $t = \Atk4\Ui\Text::addTo($page);
     $t->addParagraph(

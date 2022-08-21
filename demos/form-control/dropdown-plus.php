@@ -6,14 +6,15 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Form;
+use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $demo = Demo::addTo($app);
 
-\Atk4\Ui\Header::addTo($demo->left, ['Dropdown sample:']);
-\Atk4\Ui\Header::addTo($demo->right, ['Cascading Dropdown']);
+Header::addTo($demo->left, ['Dropdown sample:']);
+Header::addTo($demo->right, ['Cascading Dropdown']);
 
 $txt = \Atk4\Ui\Text::addTo($demo->right);
 $txt->addParagraph('Dropdown may also be used in a cascade manner.');

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Header::addTo($app, ['Table column may contains popup or dropdown menu.']);
+Header::addTo($app, ['Table column may contains popup or dropdown menu.']);
 
 // Better Popup positionning when Popup are inside a container.
 $container = \Atk4\Ui\View::addTo($app, ['ui' => 'vertical segment']);
@@ -41,7 +43,7 @@ $colTitle->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
 
 // -----------------------------------------------------------------------------
 
-\Atk4\Ui\Header::addTo($app, ['Grid column may contains popup or dropdown menu.']);
+Header::addTo($app, ['Grid column may contains popup or dropdown menu.']);
 
 // Table in Grid are already inside a container.
 $grid = \Atk4\Ui\Grid::addTo($app);

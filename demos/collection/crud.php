@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -33,7 +34,7 @@ $columns = \Atk4\Ui\Columns::addTo($app);
 $column = $columns->addColumn();
 
 // Crud can operate with various fields
-\Atk4\Ui\Header::addTo($column, ['Configured Crud']);
+Header::addTo($column, ['Configured Crud']);
 $crud = \Atk4\Ui\Crud::addTo($column, [
     'displayFields' => [$model->fieldName()->name], // field to display in Crud
     'editFields' => [$model->fieldName()->name, $model->fieldName()->iso, $model->fieldName()->iso3], // field to display on 'edit' action
@@ -62,7 +63,7 @@ $crud->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($cr
 });
 
 $column = $columns->addColumn();
-\Atk4\Ui\Header::addTo($column, ['Customizations']);
+Header::addTo($column, ['Customizations']);
 
 /** @var \Atk4\Ui\UserAction\ModalExecutor $myExecutorClass */
 $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\UserAction\ModalExecutor {

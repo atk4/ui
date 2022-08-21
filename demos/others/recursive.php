@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -13,7 +15,7 @@ $mySwitcherClass = AnonymousClassNameCache::get_class(fn () => new class() exten
     {
         parent::init();
 
-        \Atk4\Ui\Header::addTo($this, ['My name is ' . $this->name, 'class.red' => true]);
+        Header::addTo($this, ['My name is ' . $this->name, 'class.red' => true]);
 
         $buttons = \Atk4\Ui\View::addTo($this, ['ui' => 'basic buttons']);
         \Atk4\Ui\Button::addTo($buttons, ['Yellow'])->setAttr('data-id', 'yellow');

@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
+use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Header::addTo($app, ['Modal View']);
+Header::addTo($app, ['Modal View']);
 
 $session = new Session($app);
 // Re-usable component implementing counter
 
-\Atk4\Ui\Header::addTo($app, ['Static Modal Dialog']);
+Header::addTo($app, ['Static Modal Dialog']);
 
 $bar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
 
@@ -51,7 +52,7 @@ $button->on('click', $simpleModal->show());
 
 // DYNAMIC
 
-\Atk4\Ui\Header::addTo($app, ['Three levels of Modal loading dynamic content via callback']);
+Header::addTo($app, ['Three levels of Modal loading dynamic content via callback']);
 
 // vp1Modal will be render into page but hide until $vp1Modal->show() is activate.
 $vp1Modal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Lorem Ipsum load dynamically']);
@@ -102,7 +103,7 @@ $menuItems = [
     'static' => ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce'],
 ];
 
-\Atk4\Ui\Header::addTo($app, ['Modal Animation']);
+Header::addTo($app, ['Modal Animation']);
 
 $transitionModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Animated modal']);
 \Atk4\Ui\Message::addTo($transitionModal)->set('A lot of animated transition available');
@@ -127,7 +128,7 @@ foreach ($menuItems as $key => $items) {
 
 // DENY APPROVE
 
-\Atk4\Ui\Header::addTo($app, ['Modal Options']);
+Header::addTo($app, ['Modal Options']);
 
 $denyApproveModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Deny / Approve actions']);
 \Atk4\Ui\Message::addTo($denyApproveModal)->set('This modal is only closable via the green button');
@@ -141,7 +142,7 @@ $button->on('click', $denyApproveModal->show());
 
 // MULTI STEP
 
-\Atk4\Ui\Header::addTo($app, ['Multiple page modal']);
+Header::addTo($app, ['Multiple page modal']);
 
 // Add modal to layout.
 $stepModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Multi step actions']);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
+use Atk4\Ui\Header;
 use Atk4\Ui\Table;
 
 /** @var \Atk4\Ui\App $app */
@@ -19,7 +20,7 @@ $data = [
 $model = new \Atk4\Data\Model(new Persistence\Static_($data));
 $model->getField('amount')->type = 'atk4_money';
 
-\Atk4\Ui\Header::addTo($app, ['Table with various headers', 'subHeader' => 'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon' => 'table']);
+Header::addTo($app, ['Table with various headers', 'subHeader' => 'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon' => 'table']);
 
 $table = \Atk4\Ui\Table::addTo($app);
 $table->setModel($model, ['action']);
@@ -47,7 +48,7 @@ $table->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (Table $table) {
 $table->template->dangerouslyAppendHtml('Foot', '<tr class="center aligned"><td colspan=2>This will appear above totals</th></tr>');
 $table->addTotals(['action' => 'Totals:', 'amount' => ['sum']]);
 
-\Atk4\Ui\Header::addTo($app, ['Columns with multiple formats', 'subHeader' => 'Single column can use logic to swap out formatters', 'icon' => 'table']);
+Header::addTo($app, ['Columns with multiple formats', 'subHeader' => 'Single column can use logic to swap out formatters', 'icon' => 'table']);
 
 $table = \Atk4\Ui\Table::addTo($app);
 $table->setModel($model, ['action']);
@@ -79,7 +80,7 @@ $table->addColumn('amount_copy', [Table\Column\Multiformat::class, function ($a,
     return Table\Column\Money::class;
 }, 'attr' => ['all' => ['class' => ['right aligned singel line']]]]);
 
-\Atk4\Ui\Header::addTo($app, ['Table with resizable columns', 'subHeader' => 'Just drag column header to resize', 'icon' => 'table']);
+Header::addTo($app, ['Table with resizable columns', 'subHeader' => 'Just drag column header to resize', 'icon' => 'table']);
 
 $table = \Atk4\Ui\Table::addTo($app);
 $table->setModel($model);

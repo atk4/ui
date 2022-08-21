@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -34,7 +36,7 @@ $layout->menuLeft->addItem(['Settings', 'icon' => 'cogs']);
 
 $layout->template->set('Footer', 'ATK is awesome');
 
-\Atk4\Ui\Header::addTo($layout, ['Basic Form Example']);
+Header::addTo($layout, ['Basic Form Example']);
 
 $form = \Atk4\Ui\Form::addTo($layout, ['class.segment' => true]);
 $form->setModel((new \Atk4\Data\Model())->createEntity());

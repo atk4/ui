@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Header::addTo($app, ['Disabled and read only form controls (normal / read only / disabled)']);
+Header::addTo($app, ['Disabled and read only form controls (normal / read only / disabled)']);
 
 $form = Form::addTo($app);
 
@@ -99,7 +100,7 @@ $group->addControl('date_disb', [Form\Control\Calendar::class, 'type' => 'date',
 $form->onSubmit(function (Form $form) {
 });
 
-\Atk4\Ui\Header::addTo($app, ['Stand Alone Line']);
+Header::addTo($app, ['Stand Alone Line']);
 // you can pass values to button
 $control = Form\Control\Line::addTo($app);
 
@@ -108,7 +109,7 @@ $control->set('hello world');
 $button = $control->addAction('check value');
 $button->on('click', new \Atk4\Ui\JsExpression('alert("field value is: "+[])', [$control->jsInput()->val()]));
 
-\Atk4\Ui\Header::addTo($app, ['Line in a Form']);
+Header::addTo($app, ['Line in a Form']);
 $form = Form::addTo($app);
 
 $control = $form->addControl('Title', [], ['values' => ['Mr', 'Mrs', 'Miss'], 'ui' => ['hint' => 'select one']]);
@@ -126,7 +127,7 @@ $form->onSubmit(function (Form $form) {
     return $form->model->get('name');
 });
 
-\Atk4\Ui\Header::addTo($app, ['Multiple Form Layouts']);
+Header::addTo($app, ['Multiple Form Layouts']);
 
 $form = Form::addTo($app);
 $tabs = \Atk4\Ui\Tabs::addTo($form, [], ['AboveControls']);
@@ -142,7 +143,7 @@ $form->onSubmit(function (Form $form) {
     return $form->model->get('name') . ' has age ' . $form->model->get('age');
 });
 
-\Atk4\Ui\Header::addTo($app, ['onChange event', 'subHeader' => 'see in browser console']);
+Header::addTo($app, ['onChange event', 'subHeader' => 'see in browser console']);
 
 $form = Form::addTo($app);
 
@@ -200,7 +201,7 @@ $r1 = $group->addControl('r1', new Form\Control\Radio([
 ]));
 $r1->onChange('console.log("radio changed")');
 
-\Atk4\Ui\Header::addTo($app, ['Line ends of Textarea']);
+Header::addTo($app, ['Line ends of Textarea']);
 
 $form = Form::addTo($app);
 $group = $form->addGroup('Without model');

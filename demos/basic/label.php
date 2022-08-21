@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
 use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
@@ -11,7 +12,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $img = $app->cdn['atk'] . '/logo.png';
 
-\Atk4\Ui\Header::addTo($app, ['Labels']);
+Header::addTo($app, ['Labels']);
 Label::addTo($app, ['Hot!']);
 Label::addTo($app, ['23', 'icon' => 'mail']);
 Label::addTo($app, ['new', 'iconRight' => 'delete']);
@@ -19,7 +20,7 @@ Label::addTo($app, ['new', 'iconRight' => 'delete']);
 Label::addTo($app, ['Coded in PHP', 'image' => $img]);
 Label::addTo($app, ['Number of lines', 'detail' => '33']);
 
-\Atk4\Ui\Header::addTo($app, ['Combinations and Interraction']);
+Header::addTo($app, ['Combinations and Interraction']);
 $del = Label::addTo($app, ['Zoe', 'image' => 'https://semantic-ui.com/images/avatar/small/ade.jpg', 'iconRight' => 'delete']);
 $del->on('click', '.delete', $del->js()->fadeOut());
 
@@ -32,7 +33,7 @@ Label::addTo($menu->addItem('Inbox'), ['20', 'class.floating red' => true]);
 Label::addTo($menu->addMenu('Others')->addItem('Draft'), ['10', 'class.floating blue' => true]);
 
 $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'segment']);
-\Atk4\Ui\Header::addTo($seg, ['Label Group']);
+Header::addTo($seg, ['Label Group']);
 $labels = \Atk4\Ui\View::addTo($seg, [false, 'class.tag' => true, 'ui' => 'labels']);
 Label::addTo($seg, ['$9.99']);
 Label::addTo($seg, ['$19.99']);

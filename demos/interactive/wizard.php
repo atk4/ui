@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
 use Atk4\Ui\Wizard;
 
 /** @var \Atk4\Ui\App $app */
@@ -89,5 +90,5 @@ $wizard->addStep(['Migration', 'description' => 'Create or update table', 'icon'
 // because you shouldn't be able to navigate wizard back without restarting it.
 // Only one finish can be added.
 $wizard->addFinish(function (Wizard $wizard) {
-    \Atk4\Ui\Header::addTo($wizard, ['You are DONE', 'class.huge centered' => true]);
+    Header::addTo($wizard, ['You are DONE', 'class.huge centered' => true]);
 });

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
+Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
 
 // Inline Edit
@@ -18,7 +19,7 @@ $model = new Country($app->db);
 $model = $model->loadAny();
 
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
-\Atk4\Ui\Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
+Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
 
 $inline_edit = \Atk4\Ui\Component\InlineEdit::addTo($app);
 $inline_edit->fieldName = $model->fieldName()->name;
@@ -37,7 +38,7 @@ $inline_edit->onChange(function ($value) {
 // ITEM SEARCH
 
 $subHeader = 'Searching will reload the list of countries below with matching result.';
-\Atk4\Ui\Header::addTo($app, ['Search using a Vue component', 'subHeader' => $subHeader]);
+Header::addTo($app, ['Search using a Vue component', 'subHeader' => $subHeader]);
 
 $model = new Country($app->db);
 
@@ -67,7 +68,7 @@ $lister->setModel($model);
 
 // CREATING CUSTOM VUE USING EXTERNAL COMPONENT
 
-\Atk4\Ui\Header::addTo($app, ['External Component', 'subHeader' => 'Creating component using an external component definition.']);
+Header::addTo($app, ['External Component', 'subHeader' => 'Creating component using an external component definition.']);
 
 // same as $app->requireJs('https://unpkg.com/vue-clock2@1.1.5/dist/vue-clock.min.js');
 // for Behat testing without internet access

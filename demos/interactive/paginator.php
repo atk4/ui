@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
 use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // Paginator which tracks its own position
-\Atk4\Ui\Header::addTo($app, ['Paginator tracks its own position']);
+Header::addTo($app, ['Paginator tracks its own position']);
 \Atk4\Ui\Paginator::addTo($app, ['total' => 40, 'urlTrigger' => 'page']);
 
 // Dynamically reloading paginator
-\Atk4\Ui\Header::addTo($app, ['Dynamic reloading']);
+Header::addTo($app, ['Dynamic reloading']);
 $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'blue segment']);
 $label = Label::addTo($seg);
 $bb = \Atk4\Ui\Paginator::addTo($seg, ['total' => 50, 'range' => 2, 'reload' => $seg]);
@@ -22,7 +23,7 @@ $label->addClass('blue ribbon');
 $label->set('Current page: ' . $bb->page);
 
 // Multiple dependent Paginators
-\Atk4\Ui\Header::addTo($app, ['Local Sticky Usage']);
+Header::addTo($app, ['Local Sticky Usage']);
 $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'blue segment']);
 
 $month = $seg->stickyGet('month') ?: 1;

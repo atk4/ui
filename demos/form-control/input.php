@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\Header;
 use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Header::addTo($app, ['Types', 'size' => 2]);
+Header::addTo($app, ['Types', 'size' => 2]);
 
 Form\Control\Line::addTo($app)->setDefaults(['placeholder' => 'Search']);
 Form\Control\Line::addTo($app, ['placeholder' => 'Search', 'loading' => true]);
@@ -18,13 +19,13 @@ Form\Control\Line::addTo($app, ['placeholder' => 'Search', 'loading' => 'left'])
 Form\Control\Line::addTo($app, ['placeholder' => 'Search', 'icon' => 'search', 'class.disabled' => true]);
 Form\Control\Line::addTo($app, ['placeholder' => 'Search', 'class.error' => true]);
 
-\Atk4\Ui\Header::addTo($app, ['Icon Variations', 'size' => 2]);
+Header::addTo($app, ['Icon Variations', 'size' => 2]);
 
 Form\Control\Line::addTo($app, ['placeholder' => 'Search users', 'class.left' => true, 'icon' => 'users']);
 Form\Control\Line::addTo($app, ['placeholder' => 'Search users', 'icon' => 'circular search link']);
 Form\Control\Line::addTo($app, ['placeholder' => 'Search users', 'icon' => 'inverted circular search link']);
 
-\Atk4\Ui\Header::addTo($app, ['Labels', 'size' => 2]);
+Header::addTo($app, ['Labels', 'size' => 2]);
 
 Form\Control\Line::addTo($app, ['placeholder' => 'Search users', 'label' => 'http://']);
 
@@ -61,7 +62,7 @@ Form\Control\Line::addTo($app, [
     'label' => $label,
 ])->addClass('corner');
 
-\Atk4\Ui\Header::addTo($app, ['Actions', 'size' => 2]);
+Header::addTo($app, ['Actions', 'size' => 2]);
 
 Form\Control\Line::addTo($app, ['action' => 'Search']);
 
@@ -88,14 +89,14 @@ Form\Control\Line::addTo($app, ['action' => new \Atk4\Ui\Button([
     'icon' => 'search',
 ])]);
 
-\Atk4\Ui\Header::addTo($app, ['Modifiers', 'size' => 2]);
+Header::addTo($app, ['Modifiers', 'size' => 2]);
 
 Form\Control\Line::addTo($app, ['icon' => 'search', 'class.transparent' => true, 'placeholder' => 'transparent']);
 Form\Control\Line::addTo($app, ['icon' => 'search', 'class.fluid' => true, 'placeholder' => 'fluid']);
 
 Form\Control\Line::addTo($app, ['icon' => 'search', 'class.mini' => true, 'placeholder' => 'mini']);
 
-\Atk4\Ui\Header::addTo($app, ['Custom HTML attributes for <input> tag', 'size' => 2]);
+Header::addTo($app, ['Custom HTML attributes for <input> tag', 'size' => 2]);
 $l = Form\Control\Line::addTo($app, ['placeholder' => 'maxlength attribute set to 10']);
 $l->setInputAttr('maxlength', '10');
 $l = Form\Control\Line::addTo($app, ['class.fluid' => true, 'placeholder' => 'overwrite existing attribute (type="number")']);

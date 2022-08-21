@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -17,7 +18,7 @@ $form = Form::addTo($app);
 
 $sublayout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section::class]);
 
-\Atk4\Ui\Header::addTo($sublayout, ['Please fill all form sections!', 'size' => 4]);
+Header::addTo($sublayout, ['Please fill all form sections!', 'size' => 4]);
 
 $sublayout->addControl('company_name');
 

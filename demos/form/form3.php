@@ -6,14 +6,13 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Form;
+use Atk4\Ui\Header;
 use Atk4\Ui\JsReload;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-// Testing form.
-
-\Atk4\Ui\Header::addTo($app, ['Form automatically decided how many columns to use']);
+Header::addTo($app, ['Form automatically decided how many columns to use']);
 
 $buttons = \Atk4\Ui\View::addTo($app, ['ui' => 'green basic buttons']);
 

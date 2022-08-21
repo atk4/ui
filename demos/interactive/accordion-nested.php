@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Header;
+use Atk4\Ui\View;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 /*
 \Atk4\Ui\Button::addTo($app, ['View Form input split in Accordion section', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['accordion-in-form']);
-\Atk4\Ui\View::addTo($app, ['ui' => 'clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 */
 
-\Atk4\Ui\Header::addTo($app, ['Nested accordions']);
+Header::addTo($app, ['Nested accordions']);
 
 $addAccordionFunc = function ($view, $maxDepth = 2, $level = 0) use (&$addAccordionFunc) {
     $accordion = \Atk4\Ui\Accordion::addTo($view, ['type' => ['styled', 'fluid']]);

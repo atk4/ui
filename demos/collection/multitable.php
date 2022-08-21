@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -76,7 +77,7 @@ $model = new File($app->db);
 $model->addCondition($model->fieldName()->parent_folder_id, null);
 $model->setOrder([$model->fieldName()->is_folder => 'desc', $model->fieldName()->name]);
 
-\Atk4\Ui\Header::addTo($app, ['File Finder', 'subHeader' => 'Component built around Table, Columns and JsReload']);
+Header::addTo($app, ['File Finder', 'subHeader' => 'Component built around Table, Columns and JsReload']);
 
 $vp = \Atk4\Ui\VirtualPage::addTo($app)->set(function (\Atk4\Ui\VirtualPage $vp) use ($model) {
     $model->importFromFilesystem('.');
