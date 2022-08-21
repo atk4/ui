@@ -9,8 +9,6 @@ use Atk4\Data\Model;
 use Atk4\Ui\Table;
 
 /**
- * Class Labels.
- *
  * Take the field value as string in CSV format or array of IDs and transforms into SemanticUI labels.
  * If model field values property is set, then will use titles instead of IDs as label text.
  *

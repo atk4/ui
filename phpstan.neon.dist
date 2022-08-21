@@ -1429,9 +1429,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\UserAction\\BasicExecutor::setArguments\(\) has no return type specified\.$~'
         -
             path: 'src/UserAction/BasicExecutor.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\BasicExecutor::hasAllArguments\(\) has no return type specified\.$~'
-        -
-            path: 'src/UserAction/BasicExecutor.php'
             message: '~^Method Atk4\\Ui\\UserAction\\BasicExecutor::initPreview\(\) has no return type specified\.$~'
         -
             path: 'src/UserAction/BasicExecutor.php'
@@ -1505,9 +1502,6 @@ parameters:
         -
             path: 'src/UserAction/JsCallbackExecutor.php'
             message: '~^Method Atk4\\Ui\\UserAction\\JsCallbackExecutor::executeModelAction\(\) has no return type specified\.$~'
-        -
-            path: 'src/UserAction/JsCallbackExecutor.php'
-            message: '~^Method Atk4\\Ui\\UserAction\\JsCallbackExecutor::_hasAllArguments\(\) has no return type specified\.$~'
         -
             path: 'src/UserAction/PreviewExecutor.php'
             message: '~^Method Atk4\\Ui\\UserAction\\PreviewExecutor::initPreview\(\) has no return type specified\.$~'

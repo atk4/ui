@@ -13,6 +13,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\JsFunction;
+use Atk4\Ui\Loader;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
@@ -27,7 +28,7 @@ trait StepExecutorTrait
     /** @var string current step. */
     protected $step;
 
-    /** @var \Atk4\Ui\Loader The Loader that will execute all action step. */
+    /** @var Loader The Loader that will execute all action step. */
     protected $loader;
 
     /** @var string */

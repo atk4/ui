@@ -6,8 +6,11 @@ namespace Atk4\Ui\Form;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
+use Atk4\Ui\Button;
+use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Label;
+use Atk4\Ui\View;
 
 /**
  * Provides generic layout for a form.
@@ -56,13 +59,13 @@ class Layout extends AbstractLayout
     /**
      * Adds Button.
      *
-     * @param \Atk4\Ui\Button|array|string $seed
+     * @param Button|array|string $seed
      *
-     * @return \Atk4\Ui\Button
+     * @return Button
      */
     public function addButton($seed)
     {
-        return $this->add(Factory::mergeSeeds([\Atk4\Ui\Button::class], $seed), 'Buttons');
+        return $this->add(Factory::mergeSeeds([Button::class], $seed), 'Buttons');
     }
 
     /**
@@ -74,7 +77,7 @@ class Layout extends AbstractLayout
      */
     public function addHeader($label)
     {
-        \Atk4\Ui\Header::addTo($this, [$label, 'class.dividing' => true, 'element' => 'h4']);
+        Header::addTo($this, [$label, 'class.dividing' => true, 'element' => 'h4']);
 
         return $this;
     }
@@ -113,12 +116,12 @@ class Layout extends AbstractLayout
     public function addSubLayout($seed = [self::class], $addDivider = true)
     {
         $v = $this->add(Factory::factory($seed, ['form' => $this->form]));
-        if ($v instanceof \Atk4\Ui\Form\Layout\Section) {
+        if ($v instanceof Layout\Section) {
             $v = $v->addSection();
         }
 
         if ($addDivider) {
-            \Atk4\Ui\View::addTo($this, ['ui' => 'hidden divider']);
+            View::addTo($this, ['ui' => 'hidden divider']);
         }
 
         return $v;
@@ -138,7 +141,7 @@ class Layout extends AbstractLayout
 
         foreach ($this->elements as $element) {
             // Buttons go under Button section
-            if ($element instanceof \Atk4\Ui\Button) {
+            if ($element instanceof Button) {
                 $this->template->dangerouslyAppendHtml('Buttons', $element->getHtml());
 
                 continue;

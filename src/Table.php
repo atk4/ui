@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 
 class Table extends Lister
@@ -296,12 +297,11 @@ class Table extends Lister
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
      *
-     * @param \Atk4\Data\Field $field Data model field
-     * @param mixed            $seed  Defaults to pass to Factory::factory() when decorator is initialized
+     * @param mixed $seed Defaults to pass to Factory::factory() when decorator is initialized
      *
      * @return Table\Column
      */
-    public function decoratorFactory(\Atk4\Data\Field $field, $seed = [])
+    public function decoratorFactory(Field $field, $seed = [])
     {
         $seed = Factory::mergeSeeds(
             $seed,
@@ -573,7 +573,7 @@ class Table extends Lister
         foreach ($this->totalsPlan as $key => $val) {
             // if value is array, then we treat it as built-in or closure aggregate method
             if (is_array($val)) {
-                $f = $val[0]; // shortcut
+                $f = $val[0];
 
                 // initial value is always 0
                 if (!isset($this->totals[$key])) {
@@ -583,7 +583,7 @@ class Table extends Lister
                 // closure support
                 // arguments - current value, key, \Atk4\Ui\Table object
                 if ($f instanceof \Closure) {
-                    $this->totals[$key] += ($f($this->model->get($key), $key, $this) ?: 0);
+                    $this->totals[$key] += ($f($this->model->get($key), $key, $this) ?? 0);
                 } elseif (is_string($f)) { // built-in methods
                     switch ($f) {
                         case 'sum':

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column;
 
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Table;
@@ -110,7 +111,7 @@ class Link extends Table\Column
         }
     }
 
-    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
+    public function getDataCellTemplate(Field $field = null)
     {
         $download = $this->forceDownload ? ' download="true" ' : '';
         $external = $this->target ? ' target="' . $this->target . '" ' : '';

@@ -9,8 +9,6 @@ use Atk4\Data\Model;
 use Atk4\Ui\Table;
 
 /**
- * Class HTML.
- *
  * Use this decorator if you have HTML code that you just want to put into the table cell.
  */
 class Html extends Table\Column

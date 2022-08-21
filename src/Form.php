@@ -9,6 +9,7 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Data\Reference\ContainsMany;
+use Atk4\Data\ValidationException;
 use Atk4\Ui\Form\Control;
 
 /**
@@ -260,7 +261,7 @@ class Form extends View
                 }
 
                 return $response;
-            } catch (\Atk4\Data\ValidationException $e) {
+            } catch (ValidationException $e) {
                 $response = [];
                 foreach ($e->errors as $field => $error) {
                     $response[] = $this->error($field, $error);
@@ -518,7 +519,7 @@ class Form extends View
         }
 
         if (count($errors) > 0) {
-            throw new \Atk4\Data\ValidationException($errors);
+            throw new ValidationException($errors);
         }
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Layout;
 
 use Atk4\Core\Factory;
+use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form\AbstractLayout;
 
@@ -28,12 +29,12 @@ class Custom extends AbstractLayout
     /**
      * Adds Button into {$Buttons}.
      *
-     * @param \Atk4\Ui\Button|array|string $seed
+     * @param Button|array|string $seed
      *
-     * @return \Atk4\Ui\Button
+     * @return Button
      */
     public function addButton($seed)
     {
-        return $this->add(Factory::mergeSeeds([\Atk4\Ui\Button::class], $seed), 'Buttons');
+        return $this->add(Factory::mergeSeeds([Button::class], $seed), 'Buttons');
     }
 }
