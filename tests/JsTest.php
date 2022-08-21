@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Ui\App;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsChain;
 use Atk4\Ui\JsExpression;
@@ -44,8 +45,8 @@ class JsTest extends TestCase
             $this->assertSame($expected, (new JsExpression('[]', [$in]))->jsRender());
 
             // test JSON renderer in App too
-            // test extensively because of (possibly fragile) custom regex impl
-            $app = (new \ReflectionClass(\Atk4\Ui\App::class))->newInstanceWithoutConstructor();
+            // test extensively because of complex custom regex impl
+            $app = (new \ReflectionClass(App::class))->newInstanceWithoutConstructor();
             $expectedRaw = json_decode($expected);
             foreach ([
                 [$expectedRaw, $in], // direct value

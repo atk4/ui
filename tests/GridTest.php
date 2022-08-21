@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
+use Atk4\Core\Phpunit\TestCase;
+use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Table;
 
-class GridTest extends \Atk4\Core\Phpunit\TestCase
+class GridTest extends TestCase
 {
     use Concerns\HandlesTable;
 
@@ -70,7 +72,7 @@ class GridTest extends \Atk4\Core\Phpunit\TestCase
     }
 }
 
-class MyModel extends \Atk4\Data\Model
+class MyModel extends Model
 {
     public ?string $titleField = 'email';
 

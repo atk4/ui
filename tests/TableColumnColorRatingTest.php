@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Table;
 
 class TableColumnColorRatingTest extends TestCase
@@ -25,11 +27,11 @@ class TableColumnColorRatingTest extends TestCase
             ],
         ];
         $db = new Persistence\Array_($arr);
-        $m = new \Atk4\Data\Model($db, ['table' => 'table']);
+        $m = new Model($db, ['table' => 'table']);
         $m->addField('name');
         $m->addField('ref');
         $m->addField('rating');
-        $this->table = new \Atk4\Ui\Table();
+        $this->table = new Table();
         $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref', 'rating']);
     }
@@ -124,8 +126,7 @@ class TableColumnColorRatingTest extends TestCase
 
     public function testExceptionMinGreaterThanMax(): void
     {
-        $this->expectException(\Atk4\Ui\Exception::class);
-
+        $this->expectException(Exception::class);
         $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 3,
             'max' => 1,
@@ -140,8 +141,7 @@ class TableColumnColorRatingTest extends TestCase
 
     public function testExceptionMinEqualsMax(): void
     {
-        $this->expectException(\Atk4\Ui\Exception::class);
-
+        $this->expectException(Exception::class);
         $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 3,
             'max' => 3,
@@ -156,8 +156,7 @@ class TableColumnColorRatingTest extends TestCase
 
     public function testExceptionZeroSteps(): void
     {
-        $this->expectException(\Atk4\Ui\Exception::class);
-
+        $this->expectException(Exception::class);
         $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 1,
             'max' => 3,
@@ -172,8 +171,7 @@ class TableColumnColorRatingTest extends TestCase
 
     public function testExceptionLessThan2ColorsDefined(): void
     {
-        $this->expectException(\Atk4\Ui\Exception::class);
-
+        $this->expectException(Exception::class);
         $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 1,
             'max' => 3,

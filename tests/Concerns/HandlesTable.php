@@ -9,16 +9,10 @@ use Atk4\Ui\Table;
 trait HandlesTable
 {
     /**
-     * Extract only <tr> out from an \Atk4\Ui\Table given the <tr> data-id attribute value.
-     *
-     * @param string $rowDataId
-     *
-     * @return string
+     * Extract only <tr> out from a Table given the <tr> data-id attribute value.
      */
-    protected function extractTableRow(Table $table, $rowDataId = '1')
+    protected function extractTableRow(Table $table, string $rowDataId = '1'): string
     {
-        $matches = [];
-
         preg_match('/<.*data-id="' . $rowDataId . '".*/m', $table->render(), $matches);
 
         return preg_replace('~\r?\n|\r~', '', $matches[0]);

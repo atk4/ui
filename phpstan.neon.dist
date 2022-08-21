@@ -1525,12 +1525,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\Wizard::addFinish\(\) has no return type specified\.$~'
         -
             path: 'tests/PaginatorTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\PaginatorTest::\$p has no type specified\.$~'
-        -
-            path: 'tests/PaginatorTest.php'
-            message: '~^Method Atk4\\Ui\\Tests\\PaginatorTest::addDataProvider\(\) has no return type specified\.$~'
-        -
-            path: 'tests/PaginatorTest.php'
             message: '~^Method Atk4\\Ui\\Tests\\PaginatorTest::testPaginator\(\) has parameter \$expected with no type specified\.$~'
         -
             path: 'tests/PaginatorTest.php'
