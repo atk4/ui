@@ -44,7 +44,7 @@ class Columns extends View
         $size = $defaults[0] ?? null;
         unset($defaults[0]);
 
-        $column = Factory::factory([\Atk4\Ui\View::class], $defaults);
+        $column = Factory::factory([View::class], $defaults);
         $this->add($column);
 
         if ($size && isset($this->sizes[$size])) {

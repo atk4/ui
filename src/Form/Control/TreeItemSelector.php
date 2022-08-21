@@ -19,13 +19,14 @@ namespace Atk4\Ui\Form\Control;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\JsCallback;
+use Atk4\Ui\View;
 
 class TreeItemSelector extends Form\Control
 {
     /** @var HtmlTemplate|null Template for the item selector view. */
     public $itemSelectorTemplate;
 
-    /** @var \Atk4\Ui\View|null The tree item selector View. */
+    /** @var View|null The tree item selector View. */
     public $itemSelector;
 
     /**
@@ -77,7 +78,7 @@ class TreeItemSelector extends Form\Control
             $this->itemSelectorTemplate = new HtmlTemplate('<div id="{$_id}" class="ui list" style="margin-left: 16px"><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
-        $this->itemSelector = \Atk4\Ui\View::addTo($this, ['template' => $this->itemSelectorTemplate]);
+        $this->itemSelector = View::addTo($this, ['template' => $this->itemSelectorTemplate]);
     }
 
     /**

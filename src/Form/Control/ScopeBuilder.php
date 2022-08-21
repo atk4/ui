@@ -12,6 +12,7 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Form\Control;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\View;
 
 class ScopeBuilder extends Control
 {
@@ -67,7 +68,7 @@ class ScopeBuilder extends Control
         'ui' => 'small basic button',
     ];
 
-    /** @var \Atk4\Ui\View The scopebuilder View. Assigned in init(). */
+    /** @var View The scopebuilder View. Assigned in init(). */
     protected $scopeBuilderView;
 
     /** @var array Definition of VueQueryBuilder rules. */
@@ -289,10 +290,10 @@ class ScopeBuilder extends Control
             $this->scopeBuilderTemplate = new HtmlTemplate('<div id="{$_id}" class="ui"><atk-query-builder v-bind="initData"></atk-query-builder></div>');
         }
 
-        $this->scopeBuilderView = \Atk4\Ui\View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
+        $this->scopeBuilderView = View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
 
         if ($this->form) {
-            $this->form->onHook(\Atk4\Ui\Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
+            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
                 $key = $this->entityField->getFieldName();
                 $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
             });

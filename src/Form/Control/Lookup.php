@@ -8,22 +8,26 @@ use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\App;
+use Atk4\Ui\Button;
+use Atk4\Ui\Callback;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Form;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsFunction;
+use Atk4\Ui\JsModal;
+use Atk4\Ui\VirtualPage;
 
 class Lookup extends Input
 {
     use HookTrait;
 
     public $defaultTemplate = 'form/control/lookup.html';
-    public $ui = 'input';
 
     /** @var array Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
     public $values = [];
 
-    /** @var \Atk4\Ui\Callback Object used to capture requests from the browser. */
+    /** @var Callback Object used to capture requests from the browser. */
     public $callback;
 
     /** @var string Set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value. */
@@ -87,7 +91,7 @@ class Lookup extends Input
      *
      * For example, using this setting will automatically submit
      * form when field value is changes.
-     * $form->addControl('field', [\Atk4\Ui\Form\Control\Lookup::class, 'settings' => ['allowReselection' => true,
+     * $form->addControl('field', [Form\Control\Lookup::class, 'settings' => ['allowReselection' => true,
      *                           'selectOnKeydown' => false,
      *                           'onChange' => new Atk4\Ui\JsExpression('function(value, t, c) {
      *                                 if ($(this).data("value") !== value) {
@@ -131,7 +135,7 @@ class Lookup extends Input
 
         $this->settings['forceSelection'] = false;
 
-        $this->callback = \Atk4\Ui\Callback::addTo($this);
+        $this->callback = Callback::addTo($this);
 
         $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () {
             $this->callback->set(\Closure::fromCallable([$this, 'outputApiResponse']));
@@ -239,24 +243,20 @@ class Lookup extends Input
             $buttonSeed = ['content' => $buttonSeed];
         }
 
-        $defaultSeed = [\Atk4\Ui\Button::class, 'class.disabled' => ($this->disabled || $this->readOnly)];
+        $defaultSeed = [Button::class, 'class.disabled' => ($this->disabled || $this->readOnly)];
 
         $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
 
-        if ($this->form) {
-            $vp = \Atk4\Ui\VirtualPage::addTo($this->form);
-        } else {
-            $vp = \Atk4\Ui\VirtualPage::addTo($this->getOwner());
-        }
+        $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
 
         $vp->set(function ($page) {
-            $form = \Atk4\Ui\Form::addTo($page);
+            $form = Form::addTo($page);
 
             $entity = (clone $this->model)->setOnlyFields($this->plus['fields'] ?? null)->createEntity();
 
             $form->setModel($entity);
 
-            $form->onSubmit(function (\Atk4\Ui\Form $form) {
+            $form->onSubmit(function (Form $form) {
                 $form->model->save();
 
                 $ret = [
@@ -276,7 +276,7 @@ class Lookup extends Input
 
         $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
 
-        $this->action->js('click', new \Atk4\Ui\JsModal($caption, $vp));
+        $this->action->js('click', new JsModal($caption, $vp));
     }
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Core\Exception as CoreException;
 use Atk4\Data\Field;
 use Atk4\Data\Field\CallbackField;
 use Atk4\Data\Field\SqlExpressionField;
@@ -33,7 +34,7 @@ use Atk4\Ui\View;
  *     // Save Form model and then Multiline model
  *     $form->model->save(); // Saving Invoice record.
  *     $ml->saveRows(); // Saving invoice items record related to invoice.
- *     return new \Atk4\Ui\JsToast('Saved!');
+ *     return new JsToast('Saved!');
  * });
  *
  * If Multiline's model contains expressions, these will be evaluated on the fly
@@ -323,7 +324,7 @@ class Multiline extends Form\Control
                     if (!$field->readOnly) {
                         $entity->set($fieldName, $value);
                     }
-                } catch (\Atk4\Core\Exception $e) {
+                } catch (CoreException $e) {
                     $rowErrors[$rowId][] = ['name' => $fieldName, 'msg' => $e->getMessage()];
                 }
             }

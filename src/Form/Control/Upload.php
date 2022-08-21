@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
+use Atk4\Ui\JsCallback;
 use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\View;
 
@@ -31,7 +33,7 @@ class Upload extends Input
     /** @var string The input default template. */
     public $defaultTemplate = 'form/control/upload.html';
 
-    /** @var \Atk4\Ui\JsCallback Callback is use for onUpload or onDelete. */
+    /** @var JsCallback Callback is use for onUpload or onDelete. */
     public $cb;
 
     /**
@@ -64,12 +66,10 @@ class Upload extends Input
     {
         parent::init();
 
-        // $this->inputType = 'hidden';
-
-        $this->cb = \Atk4\Ui\JsCallback::addTo($this);
+        $this->cb = JsCallback::addTo($this);
 
         if (!$this->action) {
-            $this->action = new \Atk4\Ui\Button(['icon' => 'upload', 'class.disabled' => ($this->disabled || $this->readOnly)]);
+            $this->action = new Button(['icon' => 'upload', 'class.disabled' => ($this->disabled || $this->readOnly)]);
         }
     }
 

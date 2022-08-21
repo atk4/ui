@@ -62,7 +62,7 @@ class Form extends View
      */
     public $formElement;
 
-    /** @var \Atk4\Ui\Form\Layout A current layout of a form, needed if you call Form->addControl(). */
+    /** @var Form\Layout A current layout of a form, needed if you call Form->addControl(). */
     public $layout;
 
     /** @var array<string, Control> List of form controls currently registered with this form. */

@@ -9,10 +9,10 @@ use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
+use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\View;
-use Atk4\Ui\Jquery;
 
 /**
  * Provides generic functionality for a form control.
@@ -146,7 +146,7 @@ class Control extends View
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
      * @param string|JsExpression|array|\Closure $expr
-     * @param array|bool                                  $default
+     * @param array|bool                         $default
      */
     public function onChange($expr, $default = []): void
     {

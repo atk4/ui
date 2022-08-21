@@ -581,7 +581,7 @@ class Table extends Lister
                 }
 
                 // closure support
-                // arguments - current value, key, \Atk4\Ui\Table object
+                // arguments - current value, key, Table object
                 if ($f instanceof \Closure) {
                     $this->totals[$key] += ($f($this->model->get($key), $key, $this) ?? 0);
                 } elseif (is_string($f)) { // built-in methods
