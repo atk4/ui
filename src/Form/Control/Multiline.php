@@ -669,26 +669,23 @@ class Multiline extends Form\Control
         $inputValue = $this->getValue();
         $this->valuePropsBinding($inputValue);
 
-        $this->multiLine->vue(
-            'atk-multiline',
-            [
-                'data' => [
-                    'formName' => $this->form->formElement->name,
-                    'inputValue' => $inputValue,
-                    'inputName' => $this->shortName,
-                    'fields' => $this->fieldDefs,
-                    'url' => $this->renderCallback->getJsUrl(),
-                    'eventFields' => $this->eventFields,
-                    'hasChangeCb' => $this->onChangeFunction ? true : false,
-                    'tableProps' => $this->tableProps,
-                    'rowLimit' => $this->rowLimit,
-                    'caption' => $this->caption,
-                    'afterAdd' => $this->jsAfterAdd,
-                    'afterDelete' => $this->jsAfterDelete,
-                    'addOnTab' => $this->addOnTab,
-                ],
-            ]
-        );
+        $this->multiLine->vue('atk-multiline', [
+            'data' => [
+                'formName' => $this->form->formElement->name,
+                'inputValue' => $inputValue,
+                'inputName' => $this->shortName,
+                'fields' => $this->fieldDefs,
+                'url' => $this->renderCallback->getJsUrl(),
+                'eventFields' => $this->eventFields,
+                'hasChangeCb' => $this->onChangeFunction ? true : false,
+                'tableProps' => $this->tableProps,
+                'rowLimit' => $this->rowLimit,
+                'caption' => $this->caption,
+                'afterAdd' => $this->jsAfterAdd,
+                'afterDelete' => $this->jsAfterDelete,
+                'addOnTab' => $this->addOnTab,
+            ],
+        ]);
     }
 
     /**

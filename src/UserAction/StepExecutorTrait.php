@@ -217,21 +217,16 @@ trait StepExecutorTrait
         // setup executor button to perform action
         $page->js(
             true,
-            $this->execActionBtn->js()->on(
-                'click',
-                new JsFunction(
+            $this->execActionBtn->js()->on('click', new JsFunction([
+                $this->loader->jsLoad(
                     [
-                        $this->loader->jsLoad(
-                            [
-                                'step' => 'final',
-                                $this->name => $this->action->getEntity()->getId(),
-                            ],
-                            ['method' => 'post'],
-                            $this->loader->name
-                        ),
-                    ]
-                )
-            )
+                        'step' => 'final',
+                        $this->name => $this->action->getEntity()->getId(),
+                    ],
+                    ['method' => 'post'],
+                    $this->loader->name
+                ),
+            ]))
         );
 
         $text = $this->getActionPreview();

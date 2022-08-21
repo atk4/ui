@@ -17,21 +17,18 @@ Header::addTo($app, ['Actions in Crud', 'subHeader' => 'Crud will automatically 
 $files = new File($app->db);
 
 // This action must appear on top of the Crud
-$files->addUserAction(
-    'import_from_filesystem',
-    [
-        'caption' => 'Import',
-        'callback' => 'importFromFilesystem',
-        'description' => 'Import file using path:',
-        'preview' => function (Model $model, $path) {
-            return 'Execute Import using path: "' . $path . '"';
-        },
-        'args' => [
-            'path' => ['type' => 'string', 'required' => true],
-        ],
-        'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
-    ]
-);
+$files->addUserAction('import_from_filesystem', [
+    'caption' => 'Import',
+    'callback' => 'importFromFilesystem',
+    'description' => 'Import file using path:',
+    'preview' => function (Model $model, $path) {
+        return 'Execute Import using path: "' . $path . '"';
+    },
+    'args' => [
+        'path' => ['type' => 'string', 'required' => true],
+    ],
+    'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+]);
 
 $files->addUserAction('download', function (Model $model) {
     return 'File has been download!';

@@ -150,14 +150,12 @@ class Column
     {
         $this->hasHeaderAction = true;
         $id = $this->name . '_ac';
-        $this->headerActionTag = ['div', ['class' => 'atk-table-dropdown'],
+        $this->headerActionTag = ['div', ['class' => 'atk-table-dropdown'], [
             [
-                [
-                    'div', ['id' => $id, 'class' => 'ui top left pointing dropdown', 'data-menu-id' => $menuId],
-                    [['i', ['class' => $icon . ' icon'], '']],
-                ],
+                'div', ['id' => $id, 'class' => 'ui top left pointing dropdown', 'data-menu-id' => $menuId],
+                [['i', ['class' => $icon . ' icon'], '']],
             ],
-        ];
+        ]];
 
         $cb = Column\JsHeader::addTo($this->table);
 

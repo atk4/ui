@@ -66,18 +66,10 @@ class JsTest extends TestCase
     {
         $this->assertSame(
             '10-(2 + 3)',
-            (
-                new JsExpression(
-                    '[]-[]',
-                    [
-                        10,
-                        new JsExpression(
-                            '[a] + [b]',
-                            ['a' => 2, 'b' => 3]
-                        ),
-                    ]
-                )
-            )->jsRender()
+            (new JsExpression(
+                '[]-[]',
+                [10, new JsExpression('[a] + [b]', ['a' => 2, 'b' => 3])]
+            ))->jsRender()
         );
     }
 

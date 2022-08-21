@@ -10,21 +10,17 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Table;
 
 /**
- * Class ColorRating
- * Can be defined like this :
- * [
- * ColorRating::class,
- *      [
- *      'min' => 1,
- *      'max' => 3,
- *      'steps' => 3,
- *      'colors' => [
- *          '#FF0000',
- *          '#FFFF00',
- *          '#00FF00'
- *      ]
- *   ]
- * ].
+ * Class ColorRating can be defined like this:
+ * [ColorRating::class, [
+ *     'min' => 1,
+ *     'max' => 3,
+ *     'steps' => 3,
+ *     'colors' => [
+ *         '#FF0000',
+ *         '#FFFF00',
+ *         '#00FF00'
+ *     ]
+ * ]].
  */
 class ColorRating extends Table\Column
 {

@@ -135,18 +135,15 @@ class TreeItemSelector extends Form\Control
 
         $this->itemSelector->template->tryDangerouslySetHtml('Input', $this->getInput());
 
-        $this->itemSelector->vue(
-            'atk-tree-item-selector',
-            [
-                'item' => ['id' => 'atk-root', 'nodes' => $this->treeItems],
-                'values' => [], // need empty for Vue reactivity.
-                'field' => $this->shortName,
-                'options' => [
-                    'mode' => $this->allowMultiple ? 'multiple' : 'single',
-                    'url' => $this->cb ? $this->cb->getJsUrl() : null,
-                    'loader' => $this->loaderCssName,
-                ],
-            ]
-        );
+        $this->itemSelector->vue('atk-tree-item-selector', [
+            'item' => ['id' => 'atk-root', 'nodes' => $this->treeItems],
+            'values' => [], // need empty for Vue reactivity.
+            'field' => $this->shortName,
+            'options' => [
+                'mode' => $this->allowMultiple ? 'multiple' : 'single',
+                'url' => $this->cb ? $this->cb->getJsUrl() : null,
+                'loader' => $this->loaderCssName,
+            ],
+        ]);
     }
 }

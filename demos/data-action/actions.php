@@ -17,31 +17,28 @@ require_once __DIR__ . '/../init-app.php';
 $files = new File($app->db);
 
 // Actions can be added easily to the model via the Model::addUserAction($name, $properties) method.
-$action = $files->addUserAction(
-    'import_from_filesystem',
-    [
-        // Which fields may be edited for the action. Default to all fields.
-        // ModalExecutor for example, will only display fields set in this array.
-        'fields' => [$files->fieldName()->name],
-        // callback function to call in model when action execute.
-        // Can use a closure function or model method.
-        'callback' => 'importFromFilesystem',
-        // Some Ui action executor will use this property for displaying text in button.
-        // Can be override by some Ui executor description property.
-        'description' => 'Import file in a specify path.',
-        // Display information prior to execute the action.
-        // ModalExecutor or PreviewExecutor will display preview.
-        'preview' => function (Model $model, $path) {
-            return 'Execute Import using path: "' . $path . '"';
-        },
-        // Argument needed to run the callback action method.
-        // Some ui executor will ask for arguments prior to run the action, like the ModalExecutor.
-        'args' => [
-            'path' => ['type' => 'string', 'required' => true],
-        ],
-        'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
-    ]
-);
+$action = $files->addUserAction('import_from_filesystem', [
+    // Which fields may be edited for the action. Default to all fields.
+    // ModalExecutor for example, will only display fields set in this array.
+    'fields' => [$files->fieldName()->name],
+    // callback function to call in model when action execute.
+    // Can use a closure function or model method.
+    'callback' => 'importFromFilesystem',
+    // Some Ui action executor will use this property for displaying text in button.
+    // Can be override by some Ui executor description property.
+    'description' => 'Import file in a specify path.',
+    // Display information prior to execute the action.
+    // ModalExecutor or PreviewExecutor will display preview.
+    'preview' => function (Model $model, $path) {
+        return 'Execute Import using path: "' . $path . '"';
+    },
+    // Argument needed to run the callback action method.
+    // Some ui executor will ask for arguments prior to run the action, like the ModalExecutor.
+    'args' => [
+        'path' => ['type' => 'string', 'required' => true],
+    ],
+    'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+]);
 
 Header::addTo($app, [
     'Extensions to ATK Data Actions',

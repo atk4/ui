@@ -517,20 +517,17 @@ class ScopeBuilder extends Control
     {
         parent::renderView();
 
-        $this->scopeBuilderView->vue(
-            'atk-query-builder',
-            [
-                'data' => [
-                    'rules' => $this->rules,
-                    'maxDepth' => $this->maxDepth,
-                    'query' => $this->query,
-                    'name' => $this->shortName,
-                    'labels' => $this->labels ?: null,
-                    'form' => $this->form->formElement->name,
-                    'debug' => $this->options['debug'] ?? false,
-                ],
-            ]
-        );
+        $this->scopeBuilderView->vue('atk-query-builder', [
+            'data' => [
+                'rules' => $this->rules,
+                'maxDepth' => $this->maxDepth,
+                'query' => $this->query,
+                'name' => $this->shortName,
+                'labels' => $this->labels ?: null,
+                'form' => $this->form->formElement->name,
+                'debug' => $this->options['debug'] ?? false,
+            ],
+        ]);
     }
 
     /**

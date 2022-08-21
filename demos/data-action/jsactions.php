@@ -6,7 +6,6 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Form\Control\Line;
-use Atk4\Ui\UserAction\JsCallbackExecutor;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';

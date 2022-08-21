@@ -25,8 +25,10 @@ class Columns extends View
     protected $calculatedWidth = 0;
 
     /** @var array Allows Grid to calculate widths automatically. */
-    public $sizes = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
-        'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', ];
+    public $sizes = [
+        '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
+        'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
+    ];
 
     /**
      * Add new vertical column.
