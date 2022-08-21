@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
+
 /**
  * Invoice class for tutorial intro.
  */
-class DemoInvoice extends \Atk4\Data\Model
+class DemoInvoice extends Model
 {
     public $dateFormat;
 

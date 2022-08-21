@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-class ReloadTest extends \Atk4\Ui\View
+use Atk4\Ui\View;
+
+class ReloadTest extends View
 {
     protected function init(): void
     {

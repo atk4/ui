@@ -33,12 +33,7 @@ class DemoLookup extends \Atk4\Ui\Form\Control\Lookup
 
         $this->action = Factory::factory(array_merge($defaultSeed, (array) $buttonSeed));
 
-        if ($this->form) {
-            $vp = \Atk4\Ui\VirtualPage::addTo($this->form);
-        } else {
-            $vp = \Atk4\Ui\VirtualPage::addTo($this->getOwner());
-        }
-
+        $vp = \Atk4\Ui\VirtualPage::addTo($this->form ?? $this->getOwner());
         $vp->set(function ($page) {
             $form = \Atk4\Ui\Form::addTo($page);
 

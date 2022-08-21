@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\View;
+
 class Demo extends \Atk4\Ui\Columns
 {
     public $left;
@@ -52,7 +54,7 @@ class Demo extends \Atk4\Ui\Columns
         $code = $this->extractCodeFromClosure($fx);
 
         $this->highLightCode();
-        \Atk4\Ui\View::addTo(\Atk4\Ui\View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])->addClass($lang)->set($code);
+        View::addTo(View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])->addClass($lang)->set($code);
 
         $fx($this->right);
     }

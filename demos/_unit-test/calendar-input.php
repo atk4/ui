@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\Header;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -18,7 +19,7 @@ $output = function (?\DateTime $dt, string $format) {
     return $view;
 };
 
-\Atk4\Ui\Header::addTo($app, ['Testing flatpickr using Behat']);
+Header::addTo($app, ['Testing flatpickr using Behat']);
 $form = Form::addTo($app);
 $c = $form->addControl('field', [], ['type' => 'date']);
 $form->buttonSave->set($c->shortName);
