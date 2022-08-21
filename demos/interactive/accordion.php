@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
@@ -32,12 +33,12 @@ $accordion = \Atk4\Ui\Accordion::addTo($app, ['type' => ['styled', 'fluid']/* , 
 // static section
 $i1 = $accordion->addSection('Static Text');
 Message::addTo($i1, ['This content is added on page loaded', 'ui' => 'tiny message']);
-\Atk4\Ui\LoremIpsum::addTo($i1, ['size' => 1]);
+LoremIpsum::addTo($i1, ['size' => 1]);
 
 // dynamic section - simple view
 $i2 = $accordion->addSection('Dynamic Text', function ($v) {
     Message::addTo($v, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
-    \Atk4\Ui\LoremIpsum::addTo($v, ['size' => 2]);
+    LoremIpsum::addTo($v, ['size' => 2]);
 });
 
 // dynamic section - form view

@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
@@ -25,7 +26,7 @@ ViewTester::addTo($app);
     // set your time expensive function here.
     sleep(1);
     Header::addTo($p, ['Loader #1']);
-    \Atk4\Ui\LoremIpsum::addTo($p, ['size' => 1]);
+    LoremIpsum::addTo($p, ['size' => 1]);
 
     // Any dynamic views can perform call-backs just fine
     ViewTester::addTo($p);
@@ -39,7 +40,7 @@ ViewTester::addTo($app);
         // You may pass arguments to the loader, in this case it's "color"
         sleep(1);
         Header::addTo($p, ['Loader #1b - ' . $_GET['color']]);
-        \Atk4\Ui\LoremIpsum::addTo(View::addTo($p, ['ui' => $_GET['color'] . ' segment']), ['size' => 1]);
+        LoremIpsum::addTo(View::addTo($p, ['ui' => $_GET['color'] . ' segment']), ['size' => 1]);
 
         // don't forget to make your own argument sticky so that Components can communicate with themselves:
         $p->stickyGet('color');
@@ -63,5 +64,5 @@ ViewTester::addTo($app);
     ],
 ])->set(function ($p) {
     usleep(500_000);
-    \Atk4\Ui\LoremIpsum::addTo($p, ['size' => 2]);
+    LoremIpsum::addTo($p, ['size' => 2]);
 });

@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
@@ -24,18 +25,18 @@ Header::addTo($app, ['Static Modal Dialog']);
 $bar = View::addTo($app, ['ui' => 'buttons']);
 
 $modal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Add a name']);
-\Atk4\Ui\LoremIpsum::addTo($modal);
+LoremIpsum::addTo($modal);
 Button::addTo($modal, ['Hide'])->on('click', $modal->hide());
 
 $noTitle = \Atk4\Ui\Modal::addTo($app, ['title' => false]);
-\Atk4\Ui\LoremIpsum::addTo($noTitle);
+LoremIpsum::addTo($noTitle);
 Button::addTo($noTitle, ['Hide'])->on('click', $noTitle->hide());
 
 $scrolling = \Atk4\Ui\Modal::addTo($app, ['title' => 'Long Content that Scrolls inside Modal']);
 $scrolling->addScrolling();
-\Atk4\Ui\LoremIpsum::addTo($scrolling);
-\Atk4\Ui\LoremIpsum::addTo($scrolling);
-\Atk4\Ui\LoremIpsum::addTo($scrolling);
+LoremIpsum::addTo($scrolling);
+LoremIpsum::addTo($scrolling);
+LoremIpsum::addTo($scrolling);
 Button::addTo($scrolling, ['Hide'])->on('click', $scrolling->hide());
 
 Button::addTo($bar, ['Show'])->on('click', $modal->show());
@@ -67,14 +68,14 @@ $vp2Modal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Text message load dynamical
 $vp3Modal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
 $vp3Modal->set(function ($modal) {
     Text::addTo($modal)->set('This is yet another modal');
-    \Atk4\Ui\LoremIpsum::addTo($modal, ['size' => 2]);
+    LoremIpsum::addTo($modal, ['size' => 2]);
 });
 
 // When $vp1Modal->show() is activate, it will dynamically add this content to it.
 $vp1Modal->set(function ($modal) use ($vp2Modal) {
     ViewTester::addTo($modal);
     View::addTo($modal, ['Showing lorem ipsum']); // need in behat test.
-    \Atk4\Ui\LoremIpsum::addTo($modal, ['size' => 2]);
+    LoremIpsum::addTo($modal, ['size' => 2]);
     $form = \Atk4\Ui\Form::addTo($modal);
     $form->addControl('color', [], ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
     $form->onSubmit(function (\Atk4\Ui\Form $form) use ($vp2Modal) {

@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\Label;
+use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -47,10 +48,10 @@ $c = $columns->addColumn();
 $seg = View::addTo($c, ['ui' => 'raised segment']);
 Label::addTo($seg, ['Left Column', 'class.top attached' => true, 'icon' => 'book']);
 Label::addTo($seg, ['Lorem', 'class.red ribbon' => true, 'icon' => 'cut']);
-\Atk4\Ui\LoremIpsum::addTo($seg, ['size' => 1]);
+LoremIpsum::addTo($seg, ['size' => 1]);
 
 $c = $columns->addColumn();
 $seg = View::addTo($c, ['ui' => 'raised segment']);
 Label::addTo($seg, ['Right Column', 'class.top attached' => true, 'icon' => 'book']);
-\Atk4\Ui\LoremIpsum::addTo($seg, ['size' => 1]);
+LoremIpsum::addTo($seg, ['size' => 1]);
 Label::addTo($seg, ['Ipsum', 'class.orange bottom right attached' => true, 'icon' => 'cut']);

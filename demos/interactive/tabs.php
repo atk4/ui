@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
+use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
 
 /** @var \Atk4\Ui\App $app */
@@ -17,7 +18,7 @@ $tabs = \Atk4\Ui\Tabs::addTo($app);
 \Atk4\Ui\HelloWorld::addTo($tabs->addTab('Hello'));
 $tab = $tabs->addTab('Static Tab');
 Message::addTo($tab, ['Content of this tab will refresh only if you reload entire page']);
-\Atk4\Ui\LoremIpsum::addTo($tab);
+LoremIpsum::addTo($tab);
 
 // set the default active tab
 $tabs->addTab('Default Active Tab', function ($tab) {
@@ -27,13 +28,13 @@ $tabs->addTab('Default Active Tab', function ($tab) {
 // dynamic tab
 $tabs->addTab('Dynamic Lorem Ipsum', function ($tab) {
     Message::addTo($tab, ['Every time you come to this tab, you will see a different text']);
-    \Atk4\Ui\LoremIpsum::addTo($tab, ['size' => (int) ($_GET['size'] ?? 1)]);
+    LoremIpsum::addTo($tab, ['size' => (int) ($_GET['size'] ?? 1)]);
 }, ['apiSettings' => ['data' => ['size' => random_int(1, 4)]]]);
 
 // modal tab
 $tabs->addTab('Modal popup', function ($tab) {
     Button::addTo($tab, ['Load Lorem'])->on('click', \Atk4\Ui\Modal::addTo($tab)->set(function ($p) {
-        \Atk4\Ui\LoremIpsum::addTo($p, ['size' => 2]);
+        LoremIpsum::addTo($p, ['size' => 2]);
     })->show());
 });
 
