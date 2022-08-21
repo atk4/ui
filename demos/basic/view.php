@@ -12,6 +12,7 @@ use Atk4\Ui\JsModal;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\Label;
 use Atk4\Ui\Message;
+use Atk4\Ui\Paginator;
 use Atk4\Ui\Table;
 use Atk4\Ui\View;
 use Atk4\Ui\VirtualPage;
@@ -83,7 +84,7 @@ Button::addTo($columns->addColumn(), ['Button'])->addClass('green');
 Header::addTo($columns->addColumn(), ['Header'])->addClass('green');
 Label::addTo($columns->addColumn(), ['Label'])->addClass('green');
 Message::addTo($columns->addColumn(), ['Message'])->addClass('green');
-\Atk4\Ui\Paginator::addTo($columns->addColumn(), ['total' => 3, 'reload' => $columns])->addClass('green');
+Paginator::addTo($columns->addColumn(), ['total' => 3, 'reload' => $columns])->addClass('green');
 
 Header::addTo($app, ['Can have a custom render logic']);
 Table::addTo($app)->addClass('green')->setSource(['One', 'Two', 'Three']);

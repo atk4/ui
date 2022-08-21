@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Header;
 use Atk4\Ui\Label;
+use Atk4\Ui\Paginator;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -13,13 +14,13 @@ require_once __DIR__ . '/../init-app.php';
 
 // Paginator which tracks its own position
 Header::addTo($app, ['Paginator tracks its own position']);
-\Atk4\Ui\Paginator::addTo($app, ['total' => 40, 'urlTrigger' => 'page']);
+Paginator::addTo($app, ['total' => 40, 'urlTrigger' => 'page']);
 
 // Dynamically reloading paginator
 Header::addTo($app, ['Dynamic reloading']);
 $seg = View::addTo($app, ['ui' => 'blue segment']);
 $label = Label::addTo($seg);
-$bb = \Atk4\Ui\Paginator::addTo($seg, ['total' => 50, 'range' => 2, 'reload' => $seg]);
+$bb = Paginator::addTo($seg, ['total' => 50, 'range' => 2, 'reload' => $seg]);
 $label->addClass('blue ribbon');
 $label->set('Current page: ' . $bb->page);
 
@@ -31,9 +32,9 @@ $month = $seg->stickyGet('month') ?: 1;
 $day = $seg->stickyGet('day') ?: 1;
 
 // we intentionally left 31 days here and do not calculate number of days in particular month to keep example simple
-$monthPaginator = \Atk4\Ui\Paginator::addTo($seg, ['total' => 12, 'range' => 3, 'urlTrigger' => 'month']);
+$monthPaginator = Paginator::addTo($seg, ['total' => 12, 'range' => 3, 'urlTrigger' => 'month']);
 View::addTo($seg, ['ui' => 'hidden divider']);
-$dayPaginator = \Atk4\Ui\Paginator::addTo($seg, ['total' => 31, 'range' => 3, 'urlTrigger' => 'day']);
+$dayPaginator = Paginator::addTo($seg, ['total' => 31, 'range' => 3, 'urlTrigger' => 'day']);
 View::addTo($seg, ['ui' => 'hidden divider']);
 
 $label = Label::addTo($seg);

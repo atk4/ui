@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\Loader;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
@@ -22,7 +23,7 @@ View::addTo($app, ['ui' => 'clearing divider']);
 ViewTester::addTo($app);
 
 // Example 1 - Basic usage of a Loader.
-\Atk4\Ui\Loader::addTo($app)->set(function (\Atk4\Ui\Loader $p) {
+Loader::addTo($app)->set(function (Loader $p) {
     // set your time expensive function here.
     sleep(1);
     Header::addTo($p, ['Loader #1']);
@@ -32,7 +33,7 @@ ViewTester::addTo($app);
     ViewTester::addTo($p);
 
     // Loader may be inside another loader, works fine.
-    $loader = \Atk4\Ui\Loader::addTo($p);
+    $loader = Loader::addTo($p);
 
     // use loadEvent to prevent manual loading or even specify custom trigger event
     $loader->loadEvent = false;
@@ -55,7 +56,7 @@ ViewTester::addTo($app);
 });
 
 // Example 2 - Loader with custom body.
-\Atk4\Ui\Loader::addTo($app, [
+Loader::addTo($app, [
     'ui' => '', // this will prevent "loading spinner" from showing
     'shim' => [ // shim is displayed while content is leaded
         Message::class,

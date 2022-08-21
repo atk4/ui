@@ -12,6 +12,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
+use Atk4\Ui\Paginator;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
@@ -96,7 +97,7 @@ $wizard->addStep('Interactivity', function ($page) {
 
         Text::addTo($seg)->set('Number of buttons: ');
 
-        $paginator = \Atk4\Ui\Paginator::addTo($seg, [
+        $paginator = Paginator::addTo($seg, [
             'total' => 5,
             'reload' => $seg,
             'urlTrigger' => 'count',
