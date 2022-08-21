@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\View;
+use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -51,7 +52,7 @@ $plane = \Atk4\Ui\View::addTo($app, ['template' => $planeTemplate]);
 \Atk4\Ui\View::addTo($app, ['ui' => 'segment', 'class.raised' => true, 'element' => 'pre'])->set($plane->render());
 
 \Atk4\Ui\Header::addTo($app, ['Has a unique global identifier']);
-\Atk4\Ui\Label::addTo($app, ['Plane ID: ', 'detail' => $plane->name]);
+Label::addTo($app, ['Plane ID: ', 'detail' => $plane->name]);
 
 \Atk4\Ui\Header::addTo($app, ['Can interract with JavaScript actions']);
 \Atk4\Ui\Button::addTo($app, ['Hide plane', 'icon' => 'down arrow'])->on('click', $plane->js()->hide());
@@ -62,7 +63,7 @@ $plane = \Atk4\Ui\View::addTo($app, ['template' => $planeTemplate]);
 \Atk4\Ui\Header::addTo($app, ['Can be on a Virtual Page']);
 $vp = \Atk4\Ui\VirtualPage::addTo($app)->set(function ($page) use ($planeTemplate) {
     $plane = View::addTo($page, ['template' => $planeTemplate]);
-    \Atk4\Ui\Label::addTo($page, ['Plane ID: ', 'class.bottom attached' => true, 'detail' => $plane->name]);
+    Label::addTo($page, ['Plane ID: ', 'class.bottom attached' => true, 'detail' => $plane->name]);
 });
 
 \Atk4\Ui\Button::addTo($app, ['Show $plane in a dialog', 'icon' => 'clone'])->on('click', new \Atk4\Ui\JsModal('Plane Box', $vp));
@@ -72,7 +73,7 @@ $columns = \Atk4\Ui\Columns::addTo($app);
 
 \Atk4\Ui\Button::addTo($columns->addColumn(), ['Button'])->addClass('green');
 \Atk4\Ui\Header::addTo($columns->addColumn(), ['Header'])->addClass('green');
-\Atk4\Ui\Label::addTo($columns->addColumn(), ['Label'])->addClass('green');
+Label::addTo($columns->addColumn(), ['Label'])->addClass('green');
 \Atk4\Ui\Message::addTo($columns->addColumn(), ['Message'])->addClass('green');
 \Atk4\Ui\Paginator::addTo($columns->addColumn(), ['total' => 3, 'reload' => $columns])->addClass('green');
 

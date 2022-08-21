@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Header;
+use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -60,7 +61,7 @@ $b->on('click', null, function ($b) {
 
 Header::addTo($app, ['Callbacks on HTML element', 'subHeader' => 'Click on label below.']);
 
-$label = \Atk4\Ui\Label::addTo($app->layout, ['Test']);
+$label = Label::addTo($app->layout, ['Test']);
 
 $label->on('click', null, function ($j, $arg1) {
     return 'width is ' . $arg1;

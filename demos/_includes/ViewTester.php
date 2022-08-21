@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\View;
+use Atk4\Ui\Label;
 
 /**
  * This view is designed to verify various things about it's positioning, e.g.
@@ -17,7 +18,7 @@ class ViewTester extends View
     {
         parent::init();
 
-        $label = \Atk4\Ui\Label::addTo($this, ['CallBack', 'detail' => 'fail', 'class.red' => true]);
+        $label = Label::addTo($this, ['CallBack', 'detail' => 'fail', 'class.red' => true]);
         $reload = new \Atk4\Ui\JsReload($this, [$this->name => 'ok']);
 
         if (isset($_GET[$this->name])) {

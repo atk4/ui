@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Label;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -14,7 +16,7 @@ require_once __DIR__ . '/../init-app.php';
 // Dynamically reloading paginator
 \Atk4\Ui\Header::addTo($app, ['Dynamic reloading']);
 $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'blue segment']);
-$label = \Atk4\Ui\Label::addTo($seg);
+$label = Label::addTo($seg);
 $bb = \Atk4\Ui\Paginator::addTo($seg, ['total' => 50, 'range' => 2, 'reload' => $seg]);
 $label->addClass('blue ribbon');
 $label->set('Current page: ' . $bb->page);
@@ -32,6 +34,6 @@ $monthPaginator = \Atk4\Ui\Paginator::addTo($seg, ['total' => 12, 'range' => 3, 
 $dayPaginator = \Atk4\Ui\Paginator::addTo($seg, ['total' => 31, 'range' => 3, 'urlTrigger' => 'day']);
 \Atk4\Ui\View::addTo($seg, ['ui' => 'hidden divider']);
 
-$label = \Atk4\Ui\Label::addTo($seg);
+$label = Label::addTo($seg);
 $label->addClass('orange');
 $label->set('Month: ' . $month . ' and Day: ' . $day);

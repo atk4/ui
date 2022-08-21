@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -35,16 +36,16 @@ Form\Control\Line::addTo($app, [
     'labelRight' => $dd,
 ]);
 
-Form\Control\Line::addTo($app, ['placeholder' => 'Weight', 'labelRight' => new \Atk4\Ui\Label(['kg', 'class.basic' => true])]);
-Form\Control\Line::addTo($app, ['label' => '$', 'labelRight' => new \Atk4\Ui\Label(['.00', 'class.basic' => true])]);
+Form\Control\Line::addTo($app, ['placeholder' => 'Weight', 'labelRight' => new Label(['kg', 'class.basic' => true])]);
+Form\Control\Line::addTo($app, ['label' => '$', 'labelRight' => new Label(['.00', 'class.basic' => true])]);
 
 Form\Control\Line::addTo($app, [
     'iconLeft' => 'tags',
-    'labelRight' => new \Atk4\Ui\Label(['Add Tag', 'class.tag' => true]),
+    'labelRight' => new Label(['Add Tag', 'class.tag' => true]),
 ]);
 
 // left/right corner is not supported, but here is work-around:
-$label = new \Atk4\Ui\Label();
+$label = new Label();
 $label->addClass('left corner');
 \Atk4\Ui\Icon::addTo($label, ['asterisk']);
 
@@ -52,7 +53,7 @@ Form\Control\Line::addTo($app, [
     'label' => $label,
 ])->addClass('left corner');
 
-$label = new \Atk4\Ui\Label();
+$label = new Label();
 $label->addClass('corner');
 \Atk4\Ui\Icon::addTo($label, ['asterisk']);
 

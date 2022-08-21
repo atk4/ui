@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Label;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -16,10 +18,10 @@ if (isset($_GET['name'])) {
     $frame->stickyGet('name');
 
     // frame will generate URL with sticky parameter
-    \Atk4\Ui\Label::addTo($frame, ['Name:', 'detail' => $_GET['name'], 'class.black' => true])->link($frame->url());
+    Label::addTo($frame, ['Name:', 'detail' => $_GET['name'], 'class.black' => true])->link($frame->url());
 
     // app still generates URL without localized sticky
-    \Atk4\Ui\Label::addTo($frame, ['Reset', 'iconRight' => 'close', 'class.black' => true])->link($app->url());
+    Label::addTo($frame, ['Reset', 'iconRight' => 'close', 'class.black' => true])->link($app->url());
     \Atk4\Ui\View::addTo($frame, ['ui' => 'hidden divider']);
 
     // nested interractive elemetns will respect lockal sticky get

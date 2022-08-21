@@ -6,11 +6,10 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\JsToast;
+use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
-
-// Testing form.
 
 // create header
 \Atk4\Ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);
@@ -20,7 +19,7 @@ $form = Form::addTo($app, ['class.segment' => true]);
 // $form = Form::addTo($app, ['class.segment' => true, 'buttonSave' => false]);
 // $form = Form::addTo($app, ['class.segment' => true, 'buttonSave' => new \Atk4\Ui\Button(['Import', 'class.secondary' => true, 'iconRight' => 'list'])]);
 // $form = Form::addTo($app, ['class.segment' => true, 'buttonSave' => [null, 'Import', 'class.secondary' => true, 'iconRight' => 'list']]);
-\Atk4\Ui\Label::addTo($form, ['Input new country information here', 'class.top attached' => true], ['AboveControls']);
+Label::addTo($form, ['Input new country information here', 'class.top attached' => true], ['AboveControls']);
 
 $form->setModel((new Country($app->db))->createEntity(), []);
 
@@ -78,8 +77,6 @@ $form->onSubmit(function (Form $form) {
 
     return new JsToast($countryEntity->getUserAction('add')->execute());
 });
-
-// ======
 
 /** @var \Atk4\Data\Model $personClass */
 $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Data\Model {

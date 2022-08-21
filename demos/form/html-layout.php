@@ -9,6 +9,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\GridLayout;
 use Atk4\Ui\Header;
 use Atk4\Ui\Tabs;
+use Atk4\Ui\Label;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -45,7 +46,7 @@ $form = Form::addTo($left, [
         Form\Layout::class,
         [
             'defaultInputTemplate' => __DIR__ . '/templates/input.html',
-            'defaultHint' => [\Atk4\Ui\Label::class, 'class' => ['pointing', 'below']],
+            'defaultHint' => [Label::class, 'class' => ['pointing', 'below']],
         ],
     ],
 ]);

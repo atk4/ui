@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Form;
 use Atk4\Ui\Popup;
 use Atk4\Ui\View;
+use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -182,13 +183,13 @@ $cart->setApp($app);
 
 // Label now can be added referencing Cart's items. Init() was colled when I added it into app, so the
 // item property is populated.
-$cartOutterLabel = \Atk4\Ui\Label::addTo($cartItem, [count($cart->items), 'class.floating red' => true]);
+$cartOutterLabel = Label::addTo($cartItem, [count($cart->items), 'class.floating red' => true]);
 if (!$cart->items) {
     $cartOutterLabel->addStyle('display', 'none');
 }
 
 $cartPopup->set(function ($popup) use ($cart) {
-    $cartInnerLabel = \Atk4\Ui\Label::addTo($popup, ['Number of items:']);
+    $cartInnerLabel = Label::addTo($popup, ['Number of items:']);
 
     // cart is already initialized, so init() is not called again. However, cart will be rendered
     // as a child of a pop-up now.

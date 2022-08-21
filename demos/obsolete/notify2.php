@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Label;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -32,7 +34,7 @@ $form = \Atk4\Ui\Form::addTo($app, ['class.segment' => true]);
 // Unit test only.
 $form->cb->setUrlTrigger('test_notify');
 
-\Atk4\Ui\Label::addTo($form, ['Some of notification options that can be set.', 'class.top attached' => true], ['AboveControls']);
+Label::addTo($form, ['Some of notification options that can be set.', 'class.top attached' => true], ['AboveControls']);
 $form->buttonSave->set('Show');
 $form->setModel((new $notifierClass($app->db))->createEntity(), []);
 

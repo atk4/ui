@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -14,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 \Atk4\Ui\Header::addTo($app, ['Phone', 'size' => 2]);
 
 $formPhone = Form::addTo($app, ['class.segment' => true]);
-\Atk4\Ui\Label::addTo($formPhone, ['Add other phone field input. Note: phone1 required a number of at least 5 char.', 'class.top attached' => true], ['AboveControls']);
+Label::addTo($formPhone, ['Add other phone field input. Note: phone1 required a number of at least 5 char.', 'class.top attached' => true], ['AboveControls']);
 
 $formPhone->addControl('phone1');
 $formPhone->addControl('phone2');
@@ -33,7 +34,7 @@ $formPhone->setControlsDisplayRules([
 \Atk4\Ui\Header::addTo($app, ['Optional subscription', 'size' => 2]);
 
 $formSubscribe = Form::addTo($app, ['class.segment' => true]);
-\Atk4\Ui\Label::addTo($formSubscribe, ['Click on subscribe and add email to receive your gift.', 'class.top attached' => true], ['AboveControls']);
+Label::addTo($formSubscribe, ['Click on subscribe and add email to receive your gift.', 'class.top attached' => true], ['AboveControls']);
 
 $formSubscribe->addControl('name');
 $formSubscribe->addControl('subscribe', [Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'class.toggle' => true]);
@@ -57,7 +58,7 @@ $formSubscribe->setControlsDisplayRules([
 \Atk4\Ui\Header::addTo($app, ['Dog registration', 'size' => 2]);
 
 $formDog = Form::addTo($app, ['class.segment' => true]);
-\Atk4\Ui\Label::addTo($formDog, ['You can select type of hair cut only with race that contains "poodle" AND age no more than 5 year OR your dog race equals "bichon".', 'class.top attached' => true], ['AboveControls']);
+Label::addTo($formDog, ['You can select type of hair cut only with race that contains "poodle" AND age no more than 5 year OR your dog race equals "bichon".', 'class.top attached' => true], ['AboveControls']);
 $formDog->addControl('race', [Form\Control\Line::class]);
 $formDog->addControl('age');
 $formDog->addControl('hair_cut', [Form\Control\Dropdown::class, 'values' => ['Short', 'Long']]);
@@ -74,7 +75,7 @@ $formDog->setControlsDisplayRules([
 \Atk4\Ui\Header::addTo($app, ['Hide or show group', 'size' => 2]);
 
 $formGroup = Form::addTo($app, ['class.segment' => true]);
-\Atk4\Ui\Label::addTo($formGroup, ['Work on form group too.', 'class.top attached' => true], ['AboveControls']);
+Label::addTo($formGroup, ['Work on form group too.', 'class.top attached' => true], ['AboveControls']);
 
 $groupBasic = $formGroup->addGroup(['Basic Information']);
 $groupBasic->addControl('first_name', ['width' => 'eight']);
@@ -104,7 +105,7 @@ $formGroup->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language' => [
 \Atk4\Ui\Header::addTo($app, ['Hide or show accordion section', 'size' => 2]);
 
 $f_acc = Form::addTo($app, ['class.segment' => true]);
-\Atk4\Ui\Label::addTo($f_acc, ['Work on section layouts too.', 'class.top attached' => true], ['AboveControls']);
+Label::addTo($f_acc, ['Work on section layouts too.', 'class.top attached' => true], ['AboveControls']);
 
 // Accordion
 $accordion_layout = $f_acc->layout->addSubLayout([Form\Layout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
