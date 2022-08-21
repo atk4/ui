@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Card Model', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
+Button::addTo($app, ['Card Model', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['card-action']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
@@ -26,8 +27,8 @@ $card->addContent(new Header(['Meet Kristy', 'subHeader' => 'Friends']));
 $card->addDescription('Kristy is a friend of Mully.');
 $card->addImage('../images/kristy.png');
 
-$card->addButton(new \Atk4\Ui\Button(['Join']));
-$card->addButton(new \Atk4\Ui\Button(['Email']));
+$card->addButton(new Button(['Join']));
+$card->addButton(new Button(['Email']));
 
 $card->addExtraContent(new \Atk4\Ui\View(['Copyright notice: Image from Semantic-UI (Fomantic-UI)', 'element' => 'span']));
 
@@ -53,14 +54,14 @@ $cardStat->addContent(new Header(['Project Info']));
 $stat = (new Stat($app->db))->loadAny();
 $cardStat->setModel($stat, [$stat->fieldName()->project_name, $stat->fieldName()->project_code, $stat->fieldName()->client_name, $stat->fieldName()->start_date]);
 
-$btn = $cardStat->addButton(new \Atk4\Ui\Button(['Email Client']));
+$btn = $cardStat->addButton(new Button(['Email Client']));
 
 $cardStat = \Atk4\Ui\Card::addTo($deck, ['useLabel' => true]);
 $cardStat->addContent(new Header(['Project Info']));
 $stat = (new Stat($app->db))->loadAny();
 $cardStat->setModel($stat, [$stat->fieldName()->project_name, $stat->fieldName()->project_code, $stat->fieldName()->client_name, $stat->fieldName()->start_date]);
 
-$cardStat->addButton(new \Atk4\Ui\Button(['Email Client']));
+$cardStat->addButton(new Button(['Email Client']));
 
 // Card display horizontally
 

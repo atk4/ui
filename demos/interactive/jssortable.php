@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 
@@ -38,7 +39,7 @@ $sortable->onReorder(function ($order, $src, $pos, $oldPos) {
     return new \Atk4\Ui\JsToast($src . ' moved from position ' . $oldPos . ' to ' . $pos);
 });
 
-$button = \Atk4\Ui\Button::addTo($app)->set('Get countries order');
+$button = Button::addTo($app)->set('Get countries order');
 $button->js('click', $sortable->jsGetOrders(['btn' => '1']));
 
 // -----------------------------------------------------------------------------

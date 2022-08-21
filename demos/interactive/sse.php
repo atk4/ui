@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
@@ -13,8 +14,8 @@ Header::addTo($app, ['SSE with ProgressBar']);
 
 $bar = \Atk4\Ui\ProgressBar::addTo($app);
 
-$button = \Atk4\Ui\Button::addTo($app, ['Turn On']);
-$buttonStop = \Atk4\Ui\Button::addTo($app, ['Turn Off']);
+$button = Button::addTo($app, ['Turn On']);
+$buttonStop = Button::addTo($app, ['Turn Off']);
 // non-SSE way
 // $button->on('click', $bar->js()->progress(['percent' => 40]));
 
@@ -45,7 +46,7 @@ $buttonStop->on('click', [$button->js()->atkServerEvent('stop'), $button->js()->
 Header::addTo($app, ['SSE operation with user confirmation']);
 
 $sse = \Atk4\Ui\JsSse::addTo($app);
-$button = \Atk4\Ui\Button::addTo($app, ['Click me to change my text']);
+$button = Button::addTo($app, ['Click me to change my text']);
 
 $button->on('click', $sse->set(function ($jsChain) use ($sse, $button) {
     $sse->send($button->js()->text('Please wait for 2 seconds...'));

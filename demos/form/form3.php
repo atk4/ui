@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsReload;
@@ -18,11 +19,11 @@ $buttons = \Atk4\Ui\View::addTo($app, ['ui' => 'green basic buttons']);
 
 $seg = \Atk4\Ui\View::addTo($app, ['ui' => 'raised segment']);
 
-\Atk4\Ui\Button::addTo($buttons, ['Use Country Model', 'icon' => 'arrow down'])
+Button::addTo($buttons, ['Use Country Model', 'icon' => 'arrow down'])
     ->on('click', new JsReload($seg, ['m' => 'country']));
-\Atk4\Ui\Button::addTo($buttons, ['Use File Model', 'icon' => 'arrow down'])
+Button::addTo($buttons, ['Use File Model', 'icon' => 'arrow down'])
     ->on('click', new JsReload($seg, ['m' => 'file']));
-\Atk4\Ui\Button::addTo($buttons, ['Use Stat Model', 'icon' => 'arrow down'])
+Button::addTo($buttons, ['Use Stat Model', 'icon' => 'arrow down'])
     ->on('click', new JsReload($seg, ['m' => 'stat']));
 
 $form = Form::addTo($seg, ['layout' => [Form\Layout\Columns::class]]);

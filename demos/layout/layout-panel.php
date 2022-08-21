@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
 use Atk4\Ui\Panel\Right;
@@ -22,7 +23,7 @@ Header::addTo($app, ['Right Panel', 'subHeader' => 'Content on the fly!']);
 Header::addTo($app, ['Static', 'size' => 4, 'subHeader' => 'Panel may have static content only.']);
 $panel = Right::addTo($app, ['dynamic' => []]);
 Message::addTo($panel, ['This panel contains only static content.']);
-$btn = \Atk4\Ui\Button::addTo($app, ['Open Static']);
+$btn = Button::addTo($app, ['Open Static']);
 $btn->on('click', $panel->jsOpen());
 View::addTo($app, ['ui' => 'divider']);
 
@@ -32,11 +33,11 @@ Header::addTo($app, ['Dynamic', 'size' => 4, 'subHeader' => 'Panel can load cont
 $panel1 = Right::addTo($app);
 
 Message::addTo($panel1, ['This panel will load content dynamically below according to button select on the right.']);
-$btn = \Atk4\Ui\Button::addTo($app, ['Button 1']);
+$btn = Button::addTo($app, ['Button 1']);
 $btn->js(true)->data('btn', '1');
 $btn->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
 
-$btn = \Atk4\Ui\Button::addTo($app, ['Button 2']);
+$btn = Button::addTo($app, ['Button 2']);
 $btn->js(true)->data('btn', '2');
 $btn->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
 
@@ -51,11 +52,11 @@ $panel1->onOpen(function ($p) use ($view) {
     $panelText = 'You loaded panel content using button #' . $buttonNumber;
     Message::addTo($panel, ['Panel 1', 'text' => $panelText]);
 
-    $reloadPanelButton = \Atk4\Ui\Button::addTo($panel, ['Reload Myself']);
+    $reloadPanelButton = Button::addTo($panel, ['Reload Myself']);
     $reloadPanelButton->on('click', new \Atk4\Ui\JsReload($panel));
 
     View::addTo($panel, ['ui' => 'divider']);
-    $panelButton = \Atk4\Ui\Button::addTo($panel, ['Complete']);
+    $panelButton = Button::addTo($panel, ['Complete']);
     $panelButton->on('click', [
         $p->getOwner()->jsClose(),
         new \Atk4\Ui\JsReload($view, ['txt' => 'Complete using button #' . $buttonNumber]),
@@ -118,7 +119,7 @@ $panel3->onOpen(function ($p) use ($country, $countryId) {
     Header::addTo($seg, [$country->load($countryId)->getTitle()]);
     $buttons = View::addTo($seg, ['ui' => 'vertical basic buttons']);
     foreach ($country->getUserActions() as $action) {
-        $button = \Atk4\Ui\Button::addTo($buttons, [$action->getCaption()]);
+        $button = Button::addTo($buttons, [$action->getCaption()]);
         $button->on('click', $action, ['args' => ['id' => $countryId]]);
     }
 });

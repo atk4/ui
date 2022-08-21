@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Table;
 
 /** @var \Atk4\Ui\App $app */
@@ -16,7 +17,7 @@ if ($id = $_GET['id'] ?? null) {
 $bb = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
 
 $table = \Atk4\Ui\Table::addTo($app, ['class.celled' => true]);
-\Atk4\Ui\Button::addTo($bb, ['Refresh Table', 'icon' => 'refresh'])
+Button::addTo($bb, ['Refresh Table', 'icon' => 'refresh'])
     ->on('click', new \Atk4\Ui\JsReload($table));
 
 $bb->on('click', $table->js()->reload());

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
+use Atk4\Ui\Button;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -30,7 +31,7 @@ $tabs->addTab('Dynamic Lorem Ipsum', function ($tab) {
 
 // modal tab
 $tabs->addTab('Modal popup', function ($tab) {
-    \Atk4\Ui\Button::addTo($tab, ['Load Lorem'])->on('click', \Atk4\Ui\Modal::addTo($tab)->set(function ($p) {
+    Button::addTo($tab, ['Load Lorem'])->on('click', \Atk4\Ui\Modal::addTo($tab)->set(function ($p) {
         \Atk4\Ui\LoremIpsum::addTo($p, ['size' => 2]);
     })->show());
 });

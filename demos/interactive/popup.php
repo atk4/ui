@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Label;
@@ -198,7 +199,7 @@ $cartPopup->set(function ($popup) use ($cart) {
 
     $cartInnerLabel->detail = count($cart->items);
     \Atk4\Ui\Item::addTo($popup)->setElement('hr');
-    \Atk4\Ui\Button::addTo($popup, ['Checkout', 'class.primary small' => true]);
+    Button::addTo($popup, ['Checkout', 'class.primary small' => true]);
 });
 
 // Add item shelf below menu and link it with the cart
@@ -234,7 +235,7 @@ $signup->set(function ($pop) {
     // contetn of the popup will be different depending on this condition.
     if (isset($_GET['logged'])) {
         \Atk4\Ui\Message::addTo($pop, ['You are already logged in as ' . $_GET['logged']]);
-        \Atk4\Ui\Button::addTo($pop, ['Logout', 'class.primary' => true, 'icon' => 'sign out'])
+        Button::addTo($pop, ['Logout', 'class.primary' => true, 'icon' => 'sign out'])
             ->link($pop->getApp()->url());
     } else {
         $form = Form::addTo($pop);
@@ -260,7 +261,7 @@ $signup->set(function ($pop) {
 
 Header::addTo($app)->set('Specifying trigger');
 
-$button = \Atk4\Ui\Button::addTo($app, ['Click Me', 'class.primary' => true]);
+$button = Button::addTo($app, ['Click Me', 'class.primary' => true]);
 
 $buttonPopup = Popup::addTo($app, [$button]);
 
@@ -272,7 +273,7 @@ $input = Form\Control\Line::addTo($app, ['placeholder' => 'Search users', 'icon'
 $inputPopup = Popup::addTo($app, [$input, 'triggerOn' => 'focus']);
 View::addTo($inputPopup)->set('You can use this field to search data.');
 
-$button = \Atk4\Ui\Button::addTo($app, [null, 'icon' => 'volume down']);
+$button = Button::addTo($app, [null, 'icon' => 'volume down']);
 $buttonPopup = Popup::addTo($app, [$button, 'triggerOn' => 'hover'])->setHoverable();
 
 Form\Control\Checkbox::addTo($buttonPopup, ['Just On/Off', 'class.slider' => true])->on('change', $button->js()->find('.icon')->toggleClass('up down'));

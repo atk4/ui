@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Form Sections', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
+Button::addTo($app, ['Form Sections', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['form-section']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 

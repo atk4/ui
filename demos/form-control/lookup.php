@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Label;
@@ -86,4 +87,4 @@ $modal = \Atk4\Ui\Modal::addTo($app)->set(function ($p) {
     $a = Form\Control\Lookup::addTo($p, ['placeholder' => 'Search country', 'label' => 'Country: ']);
     $a->setModel(new Country($p->getApp()->db));
 });
-\Atk4\Ui\Button::addTo($app, ['Open Lookup on a Modal window'])->on('click', $modal->show());
+Button::addTo($app, ['Open Lookup on a Modal window'])->on('click', $modal->show());

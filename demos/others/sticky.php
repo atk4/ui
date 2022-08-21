@@ -15,8 +15,8 @@ require_once __DIR__ . '/../init-app.php';
     'ui' => 'ignored info message',
 ]);
 
-/** @var \Atk4\Ui\Button $myButtonClass */
-$myButtonClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\Button {
+/** @var Button $myButtonClass */
+$myButtonClass = AnonymousClassNameCache::get_class(fn () => new class() extends Button {
     protected function renderView(): void
     {
         $this->link($this->content);

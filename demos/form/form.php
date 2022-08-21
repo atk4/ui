@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
+use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 
@@ -158,7 +159,7 @@ $form->onSubmit(function (Form $form) {
     // return 'somehow it did not crash';
 });
 
-\Atk4\Ui\Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', \Atk4\Ui\Modal::addTo($form)
+Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', \Atk4\Ui\Modal::addTo($form)
     ->set(function ($p) {
         $form = Form::addTo($p);
         $form->addControl('email');

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
@@ -18,9 +19,9 @@ $mySwitcherClass = AnonymousClassNameCache::get_class(fn () => new class() exten
         Header::addTo($this, ['My name is ' . $this->name, 'class.red' => true]);
 
         $buttons = \Atk4\Ui\View::addTo($this, ['ui' => 'basic buttons']);
-        \Atk4\Ui\Button::addTo($buttons, ['Yellow'])->setAttr('data-id', 'yellow');
-        \Atk4\Ui\Button::addTo($buttons, ['Blue'])->setAttr('data-id', 'blue');
-        \Atk4\Ui\Button::addTo($buttons, ['Button'])->setAttr('data-id', 'button');
+        Button::addTo($buttons, ['Yellow'])->setAttr('data-id', 'yellow');
+        Button::addTo($buttons, ['Blue'])->setAttr('data-id', 'blue');
+        Button::addTo($buttons, ['Button'])->setAttr('data-id', 'button');
 
         $buttons->on('click', '.button', new \Atk4\Ui\JsReload($this, [$this->name => (new \Atk4\Ui\Jquery())->data('id')]));
 
@@ -34,7 +35,7 @@ $mySwitcherClass = AnonymousClassNameCache::get_class(fn () => new class() exten
 
                 break;
             case 'button':
-                \Atk4\Ui\Button::addTo(\Atk4\Ui\View::addTo($this, ['ui' => 'green segment']), ['Refresh page'])->link([]);
+                Button::addTo(\Atk4\Ui\View::addTo($this, ['ui' => 'green segment']), ['Refresh page'])->link([]);
 
                 break;
         }

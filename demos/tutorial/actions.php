@@ -88,7 +88,7 @@ $wizard->addStep('UI Integration', function ($page) {
         $country = new Country($owner->getApp()->db);
         $country = $country->loadAny();
 
-        \Atk4\Ui\Button::addTo($owner, ['Edit some country'])
+        Button::addTo($owner, ['Edit some country'])
             ->on('click', $country->getUserAction('edit'));
     });
 
@@ -154,7 +154,7 @@ $wizard->addStep('Arguments', function ($page) {
 
         \Atk4\Ui\View::addTo($owner, ['ui' => 'divider']);
 
-        \Atk4\Ui\Button::addTo($owner, ['Ask Age'])
+        Button::addTo($owner, ['Ask Age'])
             ->on('click', $model->getUserAction('ask_age'));
     });
 });
@@ -220,6 +220,6 @@ $wizard->addStep('Crud integration', function ($page) {
 
 $wizard->addFinish(function ($page) use ($wizard) {
     PromotionText::addTo($page);
-    \Atk4\Ui\Button::addTo($wizard, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
+    Button::addTo($wizard, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
         ->link('/demos/index.php');
 });

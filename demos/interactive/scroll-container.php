@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Dynamic scroll in Table', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
+Button::addTo($app, ['Dynamic scroll in Table', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['scroll-table']);
-\Atk4\Ui\Button::addTo($app, ['Dynamic scroll in Grid', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
+Button::addTo($app, ['Dynamic scroll in Grid', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['scroll-grid']);
 \Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 

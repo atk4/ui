@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Label;
@@ -66,7 +67,7 @@ Header::addTo($app, ['Actions', 'size' => 2]);
 
 Form\Control\Line::addTo($app, ['action' => 'Search']);
 
-Form\Control\Line::addTo($app, ['actionLeft' => new \Atk4\Ui\Button([
+Form\Control\Line::addTo($app, ['actionLeft' => new Button([
     'Checkout', 'class.teal' => true, 'icon' => 'cart',
 ])]);
 
@@ -79,13 +80,13 @@ Form\Control\Line::addTo($app, ['iconLeft' => 'search', 'action' => $dd]);
 // double actions are not supported but you can add them yourself
 $dd = new \Atk4\Ui\Dropdown(['Articles', 'class.compact selection' => true]);
 $dd->setSource(['All', 'Services', 'Products']);
-\Atk4\Ui\Button::addTo(Form\Control\Line::addTo($app, ['iconLeft' => 'search', 'action' => $dd]), ['Search'], ['AfterAfterInput']);
+Button::addTo(Form\Control\Line::addTo($app, ['iconLeft' => 'search', 'action' => $dd]), ['Search'], ['AfterAfterInput']);
 
-Form\Control\Line::addTo($app, ['action' => new \Atk4\Ui\Button([
+Form\Control\Line::addTo($app, ['action' => new Button([
     'Copy', 'class.teal' => true, 'iconRight' => 'copy',
 ])]);
 
-Form\Control\Line::addTo($app, ['action' => new \Atk4\Ui\Button([
+Form\Control\Line::addTo($app, ['action' => new Button([
     'icon' => 'search',
 ])]);
 

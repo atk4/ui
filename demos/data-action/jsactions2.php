@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
 
@@ -36,7 +37,7 @@ $buttons = \Atk4\Ui\View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2'
 
 // Create a button for every action in Country model.
 foreach ($country->getUserActions() as $action) {
-    $b = \Atk4\Ui\Button::addTo($buttons, [$action->getCaption()]);
+    $b = Button::addTo($buttons, [$action->getCaption()]);
     // Assign action to button using current model id as url arguments.
     $b->on('click', $action, ['args' => ['id' => $countryId]]);
 }

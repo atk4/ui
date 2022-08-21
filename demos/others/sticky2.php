@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\Label;
 
@@ -26,7 +27,7 @@ if (isset($_GET['name'])) {
     \Atk4\Ui\View::addTo($frame, ['ui' => 'hidden divider']);
 
     // nested interractive elemetns will respect lockal sticky get
-    \Atk4\Ui\Button::addTo($frame, ['Triggering callback here will inherit color'])->on('click', function () {
+    Button::addTo($frame, ['Triggering callback here will inherit color'])->on('click', function () {
         return new \Atk4\Ui\JsNotify('Color was = ' . $_GET['name']);
     });
 
@@ -43,21 +44,21 @@ $t->setSource(['Red', 'Green', 'Blue']);
 $t->addDecorator('name', [\Atk4\Ui\Table\Column\Link::class, [], ['name']]);
 
 $frame = \Atk4\Ui\View::addTo($app, ['ui' => 'green segment']);
-\Atk4\Ui\Button::addTo($frame, ['does not inherit sticky get'])->on('click', function () use ($app) {
+Button::addTo($frame, ['does not inherit sticky get'])->on('click', function () use ($app) {
     return new \Atk4\Ui\JsNotify('$_GET = ' . $app->encodeJson($_GET));
 });
 
 Header::addTo($app, ['Use of View::url()']);
 
-$b1 = \Atk4\Ui\Button::addTo($app);
+$b1 = Button::addTo($app);
 $b1->set($b1->url());
 
 \Atk4\Ui\Loader::addTo($app)->set(function ($page) use ($b1) {
-    $b2 = \Atk4\Ui\Button::addTo($page);
+    $b2 = Button::addTo($page);
     $b2->set($b2->url());
 
     $b2->on('click', new \Atk4\Ui\JsReload($b1));
 });
 
-$b3 = \Atk4\Ui\Button::addTo($app);
+$b3 = Button::addTo($app);
 $b3->set($b3->url());

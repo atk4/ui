@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Notify Examples - Page 2', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
+Button::addTo($app, ['Notify Examples - Page 2', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['notify2']);
 
-\Atk4\Ui\Button::addTo($app, ['Test'])->on('click', (new \Atk4\Ui\JsNotify('Not yet implemented'))->setColor('red'));
+Button::addTo($app, ['Test'])->on('click', (new \Atk4\Ui\JsNotify('Not yet implemented'))->setColor('red'));
 
 $modal = \Atk4\Ui\Modal::addTo($app, ['Modal Title']);
 
@@ -30,4 +32,4 @@ $modal->set(function ($p) use ($modal) {
     });
 });
 
-\Atk4\Ui\Button::addTo($app, ['Open Modal'])->on('click', $modal->show());
+Button::addTo($app, ['Open Modal'])->on('click', $modal->show());

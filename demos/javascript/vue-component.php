@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 
@@ -143,6 +144,6 @@ $clock_style = [
 // creating vue using an external definition.
 $clock->vue('my-clock', ['clock' => $clock_style], 'myClock');
 
-$btn = \Atk4\Ui\Button::addTo($app, ['Change Style']);
+$btn = Button::addTo($app, ['Change Style']);
 $btn->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));
 \Atk4\Ui\View::addTo($app, ['element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);

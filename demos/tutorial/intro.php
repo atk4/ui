@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsToast;
@@ -60,7 +61,7 @@ $wizard->addStep('User Interface', function ($page) {
     $t->addParagraph('It all has started with a "Button" though:');
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        \Atk4\Ui\Button::addTo($owner, ['Hello from the button!']);
+        Button::addTo($owner, ['Hello from the button!']);
     });
 });
 
@@ -74,7 +75,7 @@ $wizard->addStep('Interactivity', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $button = \Atk4\Ui\Button::addTo($owner, ['Click for the greeting!']);
+        $button = Button::addTo($owner, ['Click for the greeting!']);
         $button->on('click', function () {
             return 'Hello World!';
         });
@@ -102,7 +103,7 @@ $wizard->addStep('Interactivity', function ($page) {
         \Atk4\Ui\View::addTo($seg, ['ui' => 'divider']);
 
         for ($i = 1; $i <= ($_GET['count'] ?? 1); ++$i) {
-            \Atk4\Ui\Button::addTo($seg, [$i]);
+            Button::addTo($seg, [$i]);
         }
     });
 
@@ -230,6 +231,6 @@ $wizard->addStep('Persistence', function ($page) {
 
 $wizard->addFinish(function ($page) use ($wizard) {
     PromotionText::addTo($page);
-    \Atk4\Ui\Button::addTo($wizard, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
+    Button::addTo($wizard, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
         ->link('../');
 });

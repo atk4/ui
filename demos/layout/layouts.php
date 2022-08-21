@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -28,7 +30,7 @@ $i = \Atk4\Ui\View::addTo($app, ['class.green' => true, 'ui' => 'segment'])->set
 
 // add buttons in toolbar
 foreach ($buttons as $k => $args) {
-    \Atk4\Ui\Button::addTo($tb)
+    Button::addTo($tb)
         ->set([$args['title'], 'iconRight' => 'down arrow'])
         ->js('click', $i->js()->attr('src', $app->url($args['page'])));
 }

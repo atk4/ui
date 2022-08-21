@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
+use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
@@ -21,22 +22,22 @@ $bar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
 
 $modal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Add a name']);
 \Atk4\Ui\LoremIpsum::addTo($modal);
-\Atk4\Ui\Button::addTo($modal, ['Hide'])->on('click', $modal->hide());
+Button::addTo($modal, ['Hide'])->on('click', $modal->hide());
 
 $noTitle = \Atk4\Ui\Modal::addTo($app, ['title' => false]);
 \Atk4\Ui\LoremIpsum::addTo($noTitle);
-\Atk4\Ui\Button::addTo($noTitle, ['Hide'])->on('click', $noTitle->hide());
+Button::addTo($noTitle, ['Hide'])->on('click', $noTitle->hide());
 
 $scrolling = \Atk4\Ui\Modal::addTo($app, ['title' => 'Long Content that Scrolls inside Modal']);
 $scrolling->addScrolling();
 \Atk4\Ui\LoremIpsum::addTo($scrolling);
 \Atk4\Ui\LoremIpsum::addTo($scrolling);
 \Atk4\Ui\LoremIpsum::addTo($scrolling);
-\Atk4\Ui\Button::addTo($scrolling, ['Hide'])->on('click', $scrolling->hide());
+Button::addTo($scrolling, ['Hide'])->on('click', $scrolling->hide());
 
-\Atk4\Ui\Button::addTo($bar, ['Show'])->on('click', $modal->show());
-\Atk4\Ui\Button::addTo($bar, ['No Title'])->on('click', $noTitle->show());
-\Atk4\Ui\Button::addTo($bar, ['Scrolling Content'])->on('click', $scrolling->show());
+Button::addTo($bar, ['Show'])->on('click', $modal->show());
+Button::addTo($bar, ['No Title'])->on('click', $noTitle->show());
+Button::addTo($bar, ['Scrolling Content'])->on('click', $scrolling->show());
 
 // Modal demos.
 
@@ -47,7 +48,7 @@ $simpleModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Simple modal']);
 ViewTester::addTo($simpleModal);
 
 $menuBar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
-$button = \Atk4\Ui\Button::addTo($menuBar)->set('Show Modal');
+$button = Button::addTo($menuBar)->set('Show Modal');
 $button->on('click', $simpleModal->show());
 
 // DYNAMIC
@@ -82,11 +83,11 @@ $vp1Modal->set(function ($modal) use ($vp2Modal) {
 $vp2Modal->set(function ($modal) use ($vp3Modal) {
     ViewTester::addTo($modal);
     \Atk4\Ui\Message::addTo($modal, ['Message', $_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
-    \Atk4\Ui\Button::addTo($modal)->set('Third modal')->on('click', $vp3Modal->show());
+    Button::addTo($modal)->set('Third modal')->on('click', $vp3Modal->show());
 });
 
 $bar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
-$button = \Atk4\Ui\Button::addTo($bar)->set('Open Lorem Ipsum');
+$button = Button::addTo($bar)->set('Open Lorem Ipsum');
 $button->on('click', $vp1Modal->show());
 
 // ANIMATION
@@ -137,7 +138,7 @@ $denyApproveModal->addApproveAction('Yes', new \Atk4\Ui\JsExpression('function()
 $denyApproveModal->notClosable();
 
 $menuBar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
-$button = \Atk4\Ui\Button::addTo($menuBar)->set('Show Deny/Approve');
+$button = Button::addTo($menuBar)->set('Show Deny/Approve');
 $button->on('click', $denyApproveModal->show());
 
 // MULTI STEP
@@ -150,8 +151,8 @@ $stepModal->setOption('observeChanges', true);
 
 // Add buttons to modal for next and previous actions.
 $action = new \Atk4\Ui\View(['ui' => 'buttons']);
-$prevAction = new \Atk4\Ui\Button(['Prev', 'class.labeled' => true, 'icon' => 'left arrow']);
-$nextAction = new \Atk4\Ui\Button(['Next', 'iconRight' => 'right arrow']);
+$prevAction = new Button(['Prev', 'class.labeled' => true, 'icon' => 'left arrow']);
+$nextAction = new Button(['Next', 'iconRight' => 'right arrow']);
 
 $action->add($prevAction);
 $action->add($nextAction);
@@ -225,5 +226,5 @@ $prevAction->on('click', $stepModal->js()->atkReloadView(
 
 // Bind display modal to page display button.
 $menuBar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
-$button = \Atk4\Ui\Button::addTo($menuBar)->set('Multi Step Modal');
+$button = Button::addTo($menuBar)->set('Multi Step Modal');
 $button->on('click', $stepModal->show());

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Label;
@@ -33,7 +34,7 @@ $bb = \Atk4\Ui\View::addTo($app, ['ui' => 'large blue buttons']);
 $bb->on('click', '.button')->transition('fly up');
 
 foreach (str_split('Click me!!') as $letter) {
-    \Atk4\Ui\Button::addTo($bb, [$letter]);
+    Button::addTo($bb, [$letter]);
 }
 
 Header::addTo($app, ['View load HTML from string or file']);
@@ -56,10 +57,10 @@ Header::addTo($app, ['Has a unique global identifier']);
 Label::addTo($app, ['Plane ID: ', 'detail' => $plane->name]);
 
 Header::addTo($app, ['Can interract with JavaScript actions']);
-\Atk4\Ui\Button::addTo($app, ['Hide plane', 'icon' => 'down arrow'])->on('click', $plane->js()->hide());
-\Atk4\Ui\Button::addTo($app, ['Show plane', 'icon' => 'up arrow'])->on('click', $plane->js()->show());
-\Atk4\Ui\Button::addTo($app, ['Jiggle plane', 'icon' => 'expand'])->on('click', $plane->js()->transition('jiggle'));
-\Atk4\Ui\Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])->on('click', new \Atk4\Ui\JsReload($plane));
+Button::addTo($app, ['Hide plane', 'icon' => 'down arrow'])->on('click', $plane->js()->hide());
+Button::addTo($app, ['Show plane', 'icon' => 'up arrow'])->on('click', $plane->js()->show());
+Button::addTo($app, ['Jiggle plane', 'icon' => 'expand'])->on('click', $plane->js()->transition('jiggle'));
+Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])->on('click', new \Atk4\Ui\JsReload($plane));
 
 Header::addTo($app, ['Can be on a Virtual Page']);
 $vp = \Atk4\Ui\VirtualPage::addTo($app)->set(function ($page) use ($planeTemplate) {
@@ -67,12 +68,12 @@ $vp = \Atk4\Ui\VirtualPage::addTo($app)->set(function ($page) use ($planeTemplat
     Label::addTo($page, ['Plane ID: ', 'class.bottom attached' => true, 'detail' => $plane->name]);
 });
 
-\Atk4\Ui\Button::addTo($app, ['Show $plane in a dialog', 'icon' => 'clone'])->on('click', new \Atk4\Ui\JsModal('Plane Box', $vp));
+Button::addTo($app, ['Show $plane in a dialog', 'icon' => 'clone'])->on('click', new \Atk4\Ui\JsModal('Plane Box', $vp));
 
 Header::addTo($app, ['All components extend View (even paginator)']);
 $columns = \Atk4\Ui\Columns::addTo($app);
 
-\Atk4\Ui\Button::addTo($columns->addColumn(), ['Button'])->addClass('green');
+Button::addTo($columns->addColumn(), ['Button'])->addClass('green');
 Header::addTo($columns->addColumn(), ['Header'])->addClass('green');
 Label::addTo($columns->addColumn(), ['Label'])->addClass('green');
 \Atk4\Ui\Message::addTo($columns->addColumn(), ['Message'])->addClass('green');

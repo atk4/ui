@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\View;
 
@@ -11,7 +12,7 @@ use Atk4\Ui\View;
 require_once __DIR__ . '/../init-app.php';
 
 /*
-\Atk4\Ui\Button::addTo($app, ['View Form input split in Accordion section', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
+Button::addTo($app, ['View Form input split in Accordion section', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['accordion-in-form']);
 View::addTo($app, ['ui' => 'clearing divider']);
 */

@@ -65,7 +65,7 @@ $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($t, $m
 });
 $executor->executeModelAction(['path' => '.']);
 
-$btn = \Atk4\Ui\Button::addTo($rightColumn, ['Import File']);
+$btn = Button::addTo($rightColumn, ['Import File']);
 $btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);
 
 Header::addTo($rightColumn, ['BasicExecutor']);

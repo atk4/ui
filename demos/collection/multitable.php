@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
@@ -81,11 +82,11 @@ Header::addTo($app, ['File Finder', 'subHeader' => 'Component built around Table
 
 $vp = \Atk4\Ui\VirtualPage::addTo($app)->set(function (\Atk4\Ui\VirtualPage $vp) use ($model) {
     $model->importFromFilesystem('.');
-    \Atk4\Ui\Button::addTo($vp, ['Import Complete', 'class.big green fluid' => true])->link('multitable.php');
+    Button::addTo($vp, ['Import Complete', 'class.big green fluid' => true])->link('multitable.php');
     $vp->js(true)->closest('.modal')->find('.header')->remove();
 });
 
-\Atk4\Ui\Button::addTo($app, ['Re-Import From Filesystem', 'class.top attached' => true])->on('click', new \Atk4\Ui\JsModal('Now importing ... ', $vp));
+Button::addTo($app, ['Re-Import From Filesystem', 'class.top attached' => true])->on('click', new \Atk4\Ui\JsModal('Now importing ... ', $vp));
 
 $finderClass::addTo($app, ['bottom attached'])
     ->addClass('top attached segment')
