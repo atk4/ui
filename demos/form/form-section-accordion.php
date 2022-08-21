@@ -4,20 +4,23 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
 use Atk4\Ui\Form;
+use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Form Sections', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
+Button::addTo($app, ['Form Sections', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['form-section']);
-\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'ui clearing divider']);
 
 $form = Form::addTo($app);
 
-$sublayout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section::class]);
+$sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
-\Atk4\Ui\Header::addTo($sublayout, ['Please fill all form sections!', 'size' => 4]);
+Header::addTo($sublayout, ['Please fill all form sections!', 'size' => 4]);
 
 $sublayout->addControl('company_name');
 

@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
+use Atk4\Ui\JsToast;
 
 class FlyersForm extends Form
 {
@@ -59,7 +60,7 @@ class FlyersForm extends Form
         $cards->set([]);
 
         $this->onSubmit(function (Form $form) {
-            return new \Atk4\Ui\JsToast('Thank you!');
+            return new JsToast('Thank you!');
         });
     }
 }

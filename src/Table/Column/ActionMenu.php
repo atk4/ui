@@ -1,14 +1,11 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Table column action menu.
- * Will create a dropdown menu within table column.
- */
 
 namespace Atk4\Ui\Table\Column;
 
 use Atk4\Core\Factory;
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsChain;
@@ -16,6 +13,10 @@ use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\View;
 
+/**
+ * Table column action menu.
+ * Will create a dropdown menu within table column.
+ */
 class ActionMenu extends Table\Column
 {
     /** @var array Menu items collections. */
@@ -63,7 +64,7 @@ class ActionMenu extends Table\Column
         $name = $this->name . '_action_' . (count($this->items) + 1);
 
         if (!is_object($item)) {
-            $item = Factory::factory([\Atk4\Ui\View::class], ['name' => false, 'ui' => 'item', 'content' => $item]);
+            $item = Factory::factory([View::class], ['name' => false, 'ui' => 'item', 'content' => $item]);
         }
 
         $this->items[] = $item;
@@ -86,7 +87,7 @@ class ActionMenu extends Table\Column
         return $item;
     }
 
-    public function getHeaderCellHtml(\Atk4\Data\Field $field = null, $value = null)
+    public function getHeaderCellHtml(Field $field = null, $value = null)
     {
         $this->table->js(true)->find('.atk-action-menu')->dropdown(
             array_merge(
@@ -103,7 +104,7 @@ class ActionMenu extends Table\Column
         return parent::getHeaderCellHtml($field, $value);
     }
 
-    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
+    public function getDataCellTemplate(Field $field = null)
     {
         if (!$this->items) {
             return '';

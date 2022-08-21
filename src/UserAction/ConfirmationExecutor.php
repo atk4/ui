@@ -117,9 +117,10 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->tryLoad($id));
+            $this->action = $this->action->getActionForEntity($this->action->getModel()->load($id));
         } elseif (!$this->action->isOwnerEntity()
-                && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)) {
+            && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)
+        ) {
             $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
         }
 
@@ -153,32 +154,22 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
         $modal->js(
             true,
-            $this->ok->js()->on(
-                'click',
-                new JsFunction(
+            $this->ok->js()->on('click', new JsFunction([
+                $this->loader->jsLoad(
                     [
-                        $this->loader->jsLoad(
-                            [
-                                'step' => 'exec',
-                                $this->name => $this->action->getEntity()->getId(),
-                            ],
-                            ['method' => 'post']
-                        ),
-                    ]
-                )
-            )
+                        'step' => 'exec',
+                        $this->name => $this->action->getEntity()->getId(),
+                    ],
+                    ['method' => 'post']
+                ),
+            ]))
         );
 
         $modal->js(
             true,
-            $this->cancel->js()->on(
-                'click',
-                new JsFunction(
-                    [
-                        $this->hide(),
-                    ]
-                )
-            )
+            $this->cancel->js()->on('click', new JsFunction([
+                $this->hide(),
+            ]))
         );
     }
 

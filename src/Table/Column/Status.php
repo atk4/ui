@@ -6,6 +6,7 @@ namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Table;
 
 /**
@@ -31,7 +32,7 @@ class Status extends Table\Column
     public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         if ($field === null) {
-            throw new \Atk4\Ui\Exception('Status can be used only with model field');
+            throw new Exception('Status can be used only with model field');
         }
 
         $bodyAttr = $this->getTagAttributes('body');

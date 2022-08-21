@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Core\Factory;
+use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Mvorisek\Atk4\Hintable\Data\HintablePropertyDef;
 
@@ -14,7 +17,7 @@ try {
         : __DIR__ . '/db.default.php';
 } catch (\PDOException $e) {
     // do not show $e unless you can secure DSN!
-    throw (new \Atk4\Ui\Exception('This demo requires access to the database. See "demos/init-db.php"'))
+    throw (new Exception('This demo requires access to the database. See "demos/init-db.php"'))
         ->addMoreInfo('PDO error', $e->getMessage());
 }
 
@@ -133,9 +136,9 @@ class ModelWithPrefixedFields extends Model
         $this->initPreventModification();
     }
 
-    public function addField($name, $seed = []): \Atk4\Data\Field
+    public function addField(string $name, $seed = []): Field
     {
-        $seed = \Atk4\Core\Factory::mergeSeeds($seed, [
+        $seed = Factory::mergeSeeds($seed, [
             'actual' => $this->prefixFieldName($name, true),
             'caption' => $this->readableCaption($this->unprefixFieldName($name)),
         ]);
@@ -176,7 +179,7 @@ class Country extends ModelWithPrefixedFields
         });
     }
 
-    public function validate($intent = null): array
+    public function validate(string $intent = null): array
     {
         $errors = parent::validate($intent);
 
@@ -287,7 +290,7 @@ class Stat extends ModelWithPrefixedFields
     }
 }
 
-class Percent extends \Atk4\Data\Field
+class Percent extends Field
 {
     public ?string $type = 'float';
 }

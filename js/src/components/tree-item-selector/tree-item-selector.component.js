@@ -76,8 +76,8 @@ export default {
             return this.values.filter((val) => val === id).length > 0;
         },
         /**
-     * Get input initial data.
-     */
+         * Get input initial data.
+         */
         getInitData: function () {
             // check if input containing data is set and initialized.
             if (!this.getRootData().item.isInitialized) {
@@ -97,11 +97,11 @@ export default {
             return values;
         },
         /**
-     * Check if all children nodes are on.
-     *
-     * @param nodes
-     * @returns {boolean}
-     */
+         * Check if all children nodes are on.
+         *
+         * @param nodes
+         * @returns {boolean}
+         */
         hasAllFill: function (nodes) {
             let state = true;
             for (let i = 0; i < nodes.length; i++) {
@@ -122,11 +122,11 @@ export default {
             return state;
         },
         /**
-     * Check if some children nodes are on.
-     *
-     * @param nodes
-     * @returns {boolean}
-     */
+         * Check if some children nodes are on.
+         *
+         * @param nodes
+         * @returns {boolean}
+         */
         hasSomeFill: function (nodes) {
             let state = false;
             for (let i = 0; i < nodes.length; i++) {
@@ -148,37 +148,36 @@ export default {
             return state;
         },
         /**
-     * Fire when arrow are click in order to show or hide children.
-     */
+         * Fire when arrow are click in order to show or hide children.
+         */
         onToggleShow: function () {
             if (this.isParent) {
                 this.open = !this.open;
             }
         },
         /**
-     * Fire when checkbox is click.
-     *
-     */
+         * Fire when checkbox is click.
+         *
+         */
         onToggleSelect: function () {
             const { options } = this.getRootData();
             switch (options.mode) {
-            case 'single':
-                this.handleSingleSelect();
+                case 'single':
+                    this.handleSingleSelect();
 
-                break;
-            case 'multiple':
-                this.handleMultipleSelect();
+                    break;
+                case 'multiple':
+                    this.handleMultipleSelect();
 
-                break;
-            default:
+                    break;
             }
         },
         /**
-     * Merge array and remove duplicate.
-     *
-     * @param arrays
-     * @returns {*[]}
-     */
+         * Merge array and remove duplicate.
+         *
+         * @param arrays
+         * @returns {*[]}
+         */
         mergeArrays: function (...arrays) {
             let jointArray = [];
 
@@ -189,12 +188,12 @@ export default {
             return [...new Set([...jointArray])];
         },
         /**
-     * Get all id from all chidren node.
-     *
-     * @param nodes
-     * @param ids
-     * @returns {Array}
-     */
+         * Get all id from all chidren node.
+         *
+         * @param nodes
+         * @param ids
+         * @returns {Array}
+         */
         collectAllChildren: function (nodes, ids = []) {
             nodes.forEach((node) => {
                 if (node.nodes && node.nodes.length > 0) {
@@ -210,8 +209,8 @@ export default {
             return values.filter((val) => val !== value);
         },
         /**
-     * Handle a selection when in single mode.
-     */
+         * Handle a selection when in single mode.
+         */
         handleSingleSelect: function () {
             if (this.state === 'off' && !this.isParent) {
                 this.getRootData().values = [this.item.id];
@@ -225,8 +224,8 @@ export default {
             }
         },
         /**
-     * Handle a selection when in multiple mode.
-     */
+         * Handle a selection when in multiple mode.
+         */
         handleMultipleSelect: function () {
             let values;
             if (this.isParent) {
@@ -256,25 +255,25 @@ export default {
             }
         },
         /**
-     * Set input field with current mapped  model value.
-     *
-     * @param data
-     */
+         * Set input field with current mapped  model value.
+         *
+         * @param data
+         */
         setInput: function (value) {
             // console.log('set input');
             this.getInputElement().value = value;
         },
         /**
-     * Get input element set for this Item Selector.
-     *
-     * @returns {HTMLElement}
-     */
+         * Get input element set for this Item Selector.
+         *
+         * @returns {HTMLElement}
+         */
         getInputElement: function () {
             return document.getElementsByName(this.getRootData().field)[0];
         },
         /**
-     * Send data using callback url.
-     */
+         * Send data using callback url.
+         */
         postValue: function () {
             jQuery(this.$el).parents('.' + this.getRootData().options.loader).api({
                 on: 'now',

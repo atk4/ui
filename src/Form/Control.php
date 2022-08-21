@@ -9,6 +9,9 @@ use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsExpression;
+use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\View;
 
 /**
@@ -52,7 +55,7 @@ class Control extends View
      * Placed as a pointing label below the field. This only works when Form\Control appears in a form. You can also
      * set this to object, such as \Atk4\Ui\Text otherwise HTML characters are escaped.
      *
-     * @var string|\Atk4\Ui\View|array
+     * @var string|View|array
      */
     public $hint;
 
@@ -139,16 +142,16 @@ class Control extends View
      *
      * Examples:
      * $control->onChange('console.log("changed")');
-     * $control->onChange(new \Atk4\Ui\JsExpression('console.log("changed")'));
+     * $control->onChange(new JsExpression('console.log("changed")'));
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
-     * @param string|\Atk4\Ui\JsExpression|array|\Closure $expr
-     * @param array|bool                                  $default
+     * @param string|JsExpression|array|\Closure $expr
+     * @param array|bool                         $default
      */
     public function onChange($expr, $default = []): void
     {
         if (is_string($expr)) {
-            $expr = new \Atk4\Ui\JsExpression($expr);
+            $expr = new JsExpression($expr);
         }
 
         if (is_bool($default)) {
@@ -165,7 +168,9 @@ class Control extends View
      *
      * $field->jsInput(true)->val(123);
      *
-     * @return \Atk4\Ui\Jquery
+     * @param JsExpressionable $action
+     *
+     * @return Jquery
      */
     public function jsInput($when = null, $action = null)
     {

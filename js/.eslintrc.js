@@ -21,7 +21,7 @@ module.exports = {
         flatpickr: true,
     },
     rules: {
-        indent: ['error', 4],
+        indent: ['error', 4, { SwitchCase: 1 }],
         'object-shorthand': ['error', 'never'],
         'func-names': ['error', 'never'],
         'no-param-reassign': 'off',
@@ -30,6 +30,7 @@ module.exports = {
         'no-plusplus': 'off',
         'consistent-return': 'off',
         'no-nested-ternary': 'off',
+        'default-case': 'off',
         'import/prefer-default-export': 'off',
         'no-console': ['error', { allow: ['warn', 'error'] }],
         'no-underscore-dangle': ['error', { allow: ['__atkml', '__atkml_action', '__atk_reload'] }],

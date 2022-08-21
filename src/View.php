@@ -967,16 +967,16 @@ class View extends AbstractView implements JsExpressionable
      *
      * @see http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string                            $event    JavaScript event
-     * @param string|View|JsExpressionable|null $selector Optional jQuery-style selector
-     * @param mixed                             $action   code to execute
-     * @param array                             $defaults Options
+     * @param string $event JavaScript event
+     * @param ($action is null|array ? string|JsExpressionable|\Closure|array|UserAction\ExecutorInterface|Model\UserAction : string|array) $selector Optional jQuery-style selector
+     * @param string|JsExpressionable|\Closure|array|UserAction\ExecutorInterface|Model\UserAction|null $action   code to execute
+     * @param array                                                                                     $defaults Options
      *
      * @return Jquery
      */
-    public function on($event, $selector = null, $action = null, $defaults = null)
+    public function on(string $event, $selector = null, $action = null, array $defaults = null)
     {
-        $event_stmts = [];
+        $eventStatements = [];
 
         $cb = null;
         $actions = [];
@@ -1005,8 +1005,8 @@ class View extends AbstractView implements JsExpressionable
         }
 
         // set event stmts to use preventDefault and/or stopPropagation
-        $event_stmts['preventDefault'] = $defaults['preventDefault'] ?? true;
-        $event_stmts['stopPropagation'] = $defaults['stopPropagation'] ?? true;
+        $eventStatements['preventDefault'] = $defaults['preventDefault'] ?? true;
+        $eventStatements['stopPropagation'] = $defaults['stopPropagation'] ?? true;
 
         // Dealing with callback action.
         if ($action instanceof \Closure || (is_array($action) && ($action[0] ?? null) instanceof \Closure)) {
@@ -1067,17 +1067,17 @@ class View extends AbstractView implements JsExpressionable
 
         // Do we need confirm action.
         if ($defaults['confirm'] ?? null) {
-            array_unshift($event_stmts, new JsExpression('$.atkConfirm({message:[confirm], onApprove: [action], options: {button:{ok:[ok], cancel:[cancel]}}, context:this})', [
+            array_unshift($eventStatements, new JsExpression('$.atkConfirm({ message: [confirm], onApprove: [action], options: { button: {ok: [ok], cancel: [cancel] } }, context: this })', [
                 'confirm' => $defaults['confirm'],
                 'action' => new JsFunction($actions),
                 'ok' => $defaults['ok'] ?? 'Ok',
                 'cancel' => $defaults['cancel'] ?? 'Cancel',
             ]));
         } else {
-            $event_stmts = array_merge($event_stmts, $actions);
+            $eventStatements = array_merge($eventStatements, $actions);
         }
 
-        $event_function = new JsFunction($event_stmts);
+        $event_function = new JsFunction($eventStatements);
 
         if ($selector) {
             $this->js(true)->on($event, $selector, $event_function);

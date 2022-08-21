@@ -19,7 +19,7 @@ class Centered extends Layout
 
     public $defaultTemplate = 'layout/centered.html';
 
-    /** @var string|null @see \Atk4\Ui\App::$cdn */
+    /** @var string|null @see App::$cdn */
     public $image;
     /** @var string */
     public $imageAlt = 'Logo';

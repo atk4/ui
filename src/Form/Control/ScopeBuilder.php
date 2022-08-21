@@ -12,6 +12,7 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Form\Control;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\View;
 
 class ScopeBuilder extends Control
 {
@@ -67,7 +68,7 @@ class ScopeBuilder extends Control
         'ui' => 'small basic button',
     ];
 
-    /** @var \Atk4\Ui\View The scopebuilder View. Assigned in init(). */
+    /** @var View The scopebuilder View. Assigned in init(). */
     protected $scopeBuilderView;
 
     /** @var array Definition of VueQueryBuilder rules. */
@@ -289,10 +290,10 @@ class ScopeBuilder extends Control
             $this->scopeBuilderTemplate = new HtmlTemplate('<div id="{$_id}" class="ui"><atk-query-builder v-bind="initData"></atk-query-builder></div>');
         }
 
-        $this->scopeBuilderView = \Atk4\Ui\View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
+        $this->scopeBuilderView = View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
 
         if ($this->form) {
-            $this->form->onHook(\Atk4\Ui\Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
+            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
                 $key = $this->entityField->getFieldName();
                 $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
             });
@@ -517,20 +518,17 @@ class ScopeBuilder extends Control
     {
         parent::renderView();
 
-        $this->scopeBuilderView->vue(
-            'atk-query-builder',
-            [
-                'data' => [
-                    'rules' => $this->rules,
-                    'maxDepth' => $this->maxDepth,
-                    'query' => $this->query,
-                    'name' => $this->shortName,
-                    'labels' => $this->labels ?: null,
-                    'form' => $this->form->formElement->name,
-                    'debug' => $this->options['debug'] ?? false,
-                ],
-            ]
-        );
+        $this->scopeBuilderView->vue('atk-query-builder', [
+            'data' => [
+                'rules' => $this->rules,
+                'maxDepth' => $this->maxDepth,
+                'query' => $this->query,
+                'name' => $this->shortName,
+                'labels' => $this->labels ?: null,
+                'form' => $this->form->formElement->name,
+                'debug' => $this->options['debug'] ?? false,
+            ],
+        ]);
     }
 
     /**
@@ -553,8 +551,6 @@ class ScopeBuilder extends Control
                 break;
             default:
                 $scope = Scope::createAnd();
-
-                break;
         }
 
         return $scope;
@@ -594,8 +590,6 @@ class ScopeBuilder extends Control
             case self::OPERATOR_NOT_IN:
                 $value = explode(self::detectDelimiter($value), (string) $value);
 
-                break;
-            default:
                 break;
         }
 
@@ -715,11 +709,11 @@ class ScopeBuilder extends Control
                 $reference = $condField->getReference();
                 $model = $reference->refModel($condField->getOwner());
                 $fieldName = $reference->getTheirFieldName();
-                $rec = $model->tryLoadBy($fieldName, $value);
-                if ($rec->isLoaded()) {
+                $entity = $model->tryLoadBy($fieldName, $value);
+                if ($entity !== null) {
                     $option = [
                         'key' => $value,
-                        'text' => $rec->get($model->titleField),
+                        'text' => $entity->get($model->titleField),
                         'value' => $value,
                     ];
                 }

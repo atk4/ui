@@ -57,9 +57,11 @@ class JsSse extends JsCallback
     }
 
     /**
-     * Sending an sse action.
+     * Sending an SSE action.
+     *
+     * @param JsExpressionable $action
      */
-    public function send($action, $success = true)
+    public function send($action, bool $success = true)
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
@@ -70,7 +72,7 @@ class JsSse extends JsCallback
     /**
      * @return never
      */
-    public function terminateAjax($ajaxec, $msg = null, $success = true): void
+    public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
     {
         if ($this->browserSupport) {
             if ($ajaxec) {

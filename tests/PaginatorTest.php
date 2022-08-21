@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Ui\Paginator;
 
 class PaginatorTest extends TestCase
 {
-    public $p;
-
-    public function addDataProvider()
+    public function addDataProvider(): array
     {
         return [
-            // cur, range, total, expected output
             [1, 1, 1, [1]],
             [1, 4, 1, [1]],
             [1, 1, 2, [1, 2]],
@@ -40,7 +38,7 @@ class PaginatorTest extends TestCase
      */
     public function testPaginator($page, $range, $total, $expected): void
     {
-        $p = new \Atk4\Ui\Paginator(['page' => $page, 'range' => $range, 'total' => $total]);
+        $p = new Paginator(['page' => $page, 'range' => $range, 'total' => $total]);
         $this->assertSame($expected, $p->getPaginatorItems());
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Table\Column\FilterModel;
 
 use Atk4\Data\Model;
+use Atk4\Ui\Form;
 use Atk4\Ui\Table\Column;
 
 class TypeNumber extends Column\FilterModel
@@ -24,8 +25,8 @@ class TypeNumber extends Column\FilterModel
         ];
         $this->op->default = '=';
 
-        $this->value->ui['form'] = [\Atk4\Ui\Form\Control\Line::class, 'inputType' => 'number'];
-        $this->addField('range', ['ui' => ['caption' => '', 'form' => [\Atk4\Ui\Form\Control\Line::class, 'inputType' => 'number']]]);
+        $this->value->ui['form'] = [Form\Control\Line::class, 'inputType' => 'number'];
+        $this->addField('range', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class, 'inputType' => 'number']]]);
     }
 
     public function setConditionForModel(Model $model)

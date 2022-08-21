@@ -10,36 +10,32 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Table;
 
 /**
- * Class KeyValue.
- *
- * if field have values without a relation
- * like a status or a coded state of a process
- * Ex :
- * Machine state :
+ * If field have values without a relation like a status or a coded state of a process, example:
+ * Machine state:
  *  0 => off
  *  1 => powerup
  *  2 => on
  *  3 => resetting
- *  4 => error
+ *  4 => error.
  *
  * we don't need a table to define this, cause are defined in project
  *
  * using KeyValue Column you can show this values without using DB Relations
- * need to be defined in field like this :
+ * need to be defined in field like this:
  *
  * $this->addField('course_payment_status', [
- *  'caption' => __('Payment Status'),
- *  'default' => 0,
- *  'values' => [
- *      0 => __('not invoiceable'),
- *      1 => __('ready to invoice'),
- *      2 => __('invoiced'),
- *      3 => __('paid'),
- *  ],
- *  'ui' => [
- *      'form' => [\Atk4\Ui\Form\Control\Dropdown::class],
- *      'table' => ['KeyValue'],
- *  ],
+ *    'caption' => __('Payment Status'),
+ *    'default' => 0,
+ *    'values' => [
+ *        0 => __('not invoiceable'),
+ *        1 => __('ready to invoice'),
+ *        2 => __('invoiced'),
+ *        3 => __('paid'),
+ *    ],
+ *    'ui' => [
+ *        'form' => [Form\Control\Dropdown::class],
+ *        'table' => ['KeyValue'],
+ *    ],
  * ]);
  */
 class KeyValue extends Table\Column

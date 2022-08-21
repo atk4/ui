@@ -13,6 +13,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\JsFunction;
+use Atk4\Ui\Loader;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
@@ -27,7 +28,7 @@ trait StepExecutorTrait
     /** @var string current step. */
     protected $step;
 
-    /** @var \Atk4\Ui\Loader The Loader that will execute all action step. */
+    /** @var Loader The Loader that will execute all action step. */
     protected $loader;
 
     /** @var string */
@@ -217,21 +218,16 @@ trait StepExecutorTrait
         // setup executor button to perform action
         $page->js(
             true,
-            $this->execActionBtn->js()->on(
-                'click',
-                new JsFunction(
+            $this->execActionBtn->js()->on('click', new JsFunction([
+                $this->loader->jsLoad(
                     [
-                        $this->loader->jsLoad(
-                            [
-                                'step' => 'final',
-                                $this->name => $this->action->getEntity()->getId(),
-                            ],
-                            ['method' => 'post'],
-                            $this->loader->name
-                        ),
-                    ]
-                )
-            )
+                        'step' => 'final',
+                        $this->name => $this->action->getEntity()->getId(),
+                    ],
+                    ['method' => 'post'],
+                    $this->loader->name
+                ),
+            ]))
         );
 
         $text = $this->getActionPreview();

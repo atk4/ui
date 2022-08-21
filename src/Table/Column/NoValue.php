@@ -8,21 +8,17 @@ use Atk4\Data\Model;
 use Atk4\Ui\Table;
 
 /**
- * Class NoValue.
- *
- * sometime we need null values in db
- *
- * when we display values we have holes
- * with NoValue decorator we can show a display value for column null value
+ * Sometime we need null values in DB. When we display values we have holes
+ * with NoValue decorator we can show a display value for column null value.
  *
  * $this->addField('field', [
- *  [...]
- *  'ui' => [
- *          [...]
- *          'table' => [
- *              'NoValue', ' if empty display this value '
- *          ]
- *      ]
+ *     [...]
+ *     'ui' => [
+ *         [...],
+ *         'table' => [
+ *             'NoValue', ' if empty display this value '
+ *         ],
+ *     ],
  * ]);
  */
 class NoValue extends Table\Column

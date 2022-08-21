@@ -6,6 +6,7 @@ namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Table;
 
 /**
@@ -27,8 +28,8 @@ class Money extends Table\Column
 
     public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
-        if (!isset($field)) {
-            throw new \Atk4\Ui\Exception('Money column requires a field');
+        if ($field === null) {
+            throw new Exception('Money column requires a field');
         }
 
         return $this->getTag(

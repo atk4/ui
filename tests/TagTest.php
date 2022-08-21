@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Ui\App;
 
 class TagTest extends TestCase
 {
-    public function getApp(): \Atk4\Ui\App
+    public function getApp(): App
     {
-        return new \Atk4\Ui\App(['catchExceptions' => false, 'alwaysRun' => false]);
+        return new App(['catchExceptions' => false, 'alwaysRun' => false]);
     }
 
     public function assertTagRender(string $html, array $args): void

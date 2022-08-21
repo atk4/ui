@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Table\Column\FilterModel;
 
 use Atk4\Data\Model;
+use Atk4\Ui\Form;
 use Atk4\Ui\Table\Column;
 use DateTime;
 
@@ -60,7 +61,7 @@ class TypeDate extends Column\FilterModel
         $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);
 
         // The integer field to generate a date when x day selector is used.
-        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [\Atk4\Ui\Form\Control\Line::class, 'inputType' => 'number']]]);
+        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class, 'inputType' => 'number']]]);
     }
 
     public function setConditionForModel(Model $model)
@@ -124,8 +125,6 @@ class TypeDate extends Column\FilterModel
                 break;
             default:
                 $date = $dateModifier ? new DateTime($dateModifier) : null;
-
-                break;
         }
 
         return $date;

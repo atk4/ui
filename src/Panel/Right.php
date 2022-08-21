@@ -1,6 +1,17 @@
 <?php
 
 declare(strict_types=1);
+
+namespace Atk4\Ui\Panel;
+
+use Atk4\Core\Factory;
+use Atk4\Ui\Button;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsChain;
+use Atk4\Ui\JsExpression;
+use Atk4\Ui\Modal;
+use Atk4\Ui\View;
+
 /**
  * Right Panel implementation.
  * Opening, closing and loading Panel content is manage
@@ -9,16 +20,6 @@ declare(strict_types=1);
  * Content is loaded via a LoadableContent View.
  * This view must implement a callback for content to be add via the callback function.
  */
-
-namespace Atk4\Ui\Panel;
-
-use Atk4\Core\Factory;
-use Atk4\Ui\Button;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\Modal;
-use Atk4\Ui\View;
-
 class Right extends View implements Loadable
 {
     public $defaultTemplate = 'panel/right.html';
@@ -87,7 +88,7 @@ class Right extends View implements Loadable
      */
     public function service(): JsExpression
     {
-        return new \Atk4\Ui\JsChain('atk.panelService');
+        return new JsChain('atk.panelService');
     }
 
     /**

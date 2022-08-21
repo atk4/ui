@@ -18,10 +18,10 @@ class UploadService {
     }
 
     /**
-     *  Will upload a FileList object to server.
-     *  Each file in FileList will be include in formData as
-     *  'file-(number)' param, except for the first one which will
-     *  be set to 'file' only.
+     * Will upload a FileList object to server.
+     * Each file in FileList will be include in formData as
+     * 'file-(number)' param, except for the first one which will
+     * be set to 'file' only.
      *
      * @param files         A FileList object.
      * @param el            the jQuery element to attach to semantic api.

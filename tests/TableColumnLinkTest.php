@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Table;
 
@@ -24,11 +25,11 @@ class TableColumnLinkTest extends TestCase
             ],
         ];
         $db = new Persistence\Array_($arr);
-        $m = new \Atk4\Data\Model($db, ['table' => 'table']);
+        $m = new Model($db, ['table' => 'table']);
         $m->addField('name');
         $m->addField('ref');
         $m->addField('salary');
-        $this->table = new \Atk4\Ui\Table();
+        $this->table = new Table();
         $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref']);
     }
@@ -269,11 +270,11 @@ class TableColumnLinkTest extends TestCase
             ],
         ];
         $db = new Persistence\Array_($arr);
-        $m = new \Atk4\Data\Model($db, ['table' => 'table']);
+        $m = new Model($db, ['table' => 'table']);
         $m->addField('name');
         $m->addField('ref');
         $m->addField('salary');
-        $this->table = new \Atk4\Ui\Table();
+        $this->table = new Table();
         $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref']);
 

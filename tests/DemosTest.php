@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
+use Atk4\Core\Exception as CoreException;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Persistence;
 use Atk4\Ui\App;
 use Atk4\Ui\Callback;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
+use Atk4\Ui\Layout;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
@@ -58,7 +61,7 @@ class DemosTest extends TestCase
             $initVars = array_diff_key(get_defined_vars(), $initVars + ['initVars' => true]);
 
             if (array_keys($initVars) !== ['app']) {
-                throw new \Atk4\Ui\Exception('Demos init must setup only $app variable');
+                throw new Exception('Demos init must setup only $app variable');
             }
 
             self::$_db = $app->db;
@@ -135,7 +138,7 @@ class DemosTest extends TestCase
                 // no emitting to allow fast unit test
             }
         };
-        $app->initLayout([\Atk4\Ui\Layout\Maestro::class]);
+        $app->initLayout([Layout\Maestro::class]);
 
         // clone DB (mainly because all Models remains attached now, TODO can be removed once they are GCed)
         $app->db = clone self::$_db;
@@ -150,7 +153,7 @@ class DemosTest extends TestCase
             ['__atk_json' => false, '__atk_tab' => false, 'APP_CALL_EXIT' => true, 'APP_CATCH_EXCEPTIONS' => true]
         );
         if ($appSticky !== []) {
-            throw (new \Atk4\Ui\Exception('Global GET sticky must never be set by any component'))
+            throw (new Exception('Global GET sticky must never be set by any component'))
                 ->addMoreInfo('appSticky', $appSticky);
         }
     }
@@ -314,7 +317,7 @@ class DemosTest extends TestCase
     public function testDemoResponseError(): void
     {
         if (static::class === self::class) {
-            $this->expectException(\Atk4\Core\Exception::class);
+            $this->expectException(CoreException::class);
             $this->expectExceptionMessage('Property for specified object is not defined');
         }
 

@@ -23,7 +23,7 @@ class FormTest extends TestCase
     {
         parent::setUp();
 
-        $this->form = new \Atk4\Ui\Form();
+        $this->form = new Form();
         $this->form->setApp(new AppFormTestMock([
             'catchExceptions' => false,
             'alwaysRun' => false,

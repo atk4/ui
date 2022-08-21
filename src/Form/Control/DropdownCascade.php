@@ -79,7 +79,7 @@ class DropdownCascade extends Dropdown
             return [['value' => '', 'text' => $this->empty, 'name' => $this->empty]];
         }
 
-        $model = $this->cascadeFrom->model->tryLoad($id)->ref($this->reference);
+        $model = $this->cascadeFrom->model->load($id)->ref($this->reference);
         $values = [];
         foreach ($model as $k => $row) {
             if ($this->renderRowFunction) {
@@ -94,8 +94,8 @@ class DropdownCascade extends Dropdown
     }
 
     /**
-     *  Will mark current value as selected from a list
-     *  of possible values.
+     * Will mark current value as selected from a list
+     * of possible values.
      *
      * @param string|int $value the current field value
      */

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Core\Exception as CoreException;
 use Atk4\Data\Field;
 use Atk4\Data\Field\CallbackField;
 use Atk4\Data\Field\SqlExpressionField;
@@ -33,7 +34,7 @@ use Atk4\Ui\View;
  *     // Save Form model and then Multiline model
  *     $form->model->save(); // Saving Invoice record.
  *     $ml->saveRows(); // Saving invoice items record related to invoice.
- *     return new \Atk4\Ui\JsToast('Saved!');
+ *     return new JsToast('Saved!');
  * });
  *
  * If Multiline's model contains expressions, these will be evaluated on the fly
@@ -323,7 +324,7 @@ class Multiline extends Form\Control
                     if (!$field->readOnly) {
                         $entity->set($fieldName, $value);
                     }
-                } catch (\Atk4\Core\Exception $e) {
+                } catch (CoreException $e) {
                     $rowErrors[$rowId][] = ['name' => $fieldName, 'msg' => $e->getMessage()];
                 }
             }
@@ -344,7 +345,7 @@ class Multiline extends Form\Control
         $currentIds = array_column($model->export(), $model->idField);
 
         foreach ($this->rowData as $row) {
-            $entity = $model->tryLoad($row[$model->idField] ?? null);
+            $entity = $row[$model->idField] !== null ? $model->load($row[$model->idField]) : $model->createEntity();
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
                     continue;
@@ -568,11 +569,11 @@ class Multiline extends Form\Control
     public function setLookupOptionValue(Field $field, string $value)
     {
         $model = $field->getReference()->refModel($this->model);
-        $rec = $model->tryLoadBy($field->getReference()->getTheirFieldName(), $value);
-        if ($rec->isLoaded()) {
+        $entity = $model->tryLoadBy($field->getReference()->getTheirFieldName(), $value);
+        if ($entity !== null) {
             $option = [
                 'key' => $value,
-                'text' => $rec->get($model->titleField),
+                'text' => $entity->get($model->titleField),
                 'value' => $value,
             ];
             foreach ($this->fieldDefs as $key => $component) {
@@ -669,26 +670,23 @@ class Multiline extends Form\Control
         $inputValue = $this->getValue();
         $this->valuePropsBinding($inputValue);
 
-        $this->multiLine->vue(
-            'atk-multiline',
-            [
-                'data' => [
-                    'formName' => $this->form->formElement->name,
-                    'inputValue' => $inputValue,
-                    'inputName' => $this->shortName,
-                    'fields' => $this->fieldDefs,
-                    'url' => $this->renderCallback->getJsUrl(),
-                    'eventFields' => $this->eventFields,
-                    'hasChangeCb' => $this->onChangeFunction ? true : false,
-                    'tableProps' => $this->tableProps,
-                    'rowLimit' => $this->rowLimit,
-                    'caption' => $this->caption,
-                    'afterAdd' => $this->jsAfterAdd,
-                    'afterDelete' => $this->jsAfterDelete,
-                    'addOnTab' => $this->addOnTab,
-                ],
-            ]
-        );
+        $this->multiLine->vue('atk-multiline', [
+            'data' => [
+                'formName' => $this->form->formElement->name,
+                'inputValue' => $inputValue,
+                'inputName' => $this->shortName,
+                'fields' => $this->fieldDefs,
+                'url' => $this->renderCallback->getJsUrl(),
+                'eventFields' => $this->eventFields,
+                'hasChangeCb' => $this->onChangeFunction ? true : false,
+                'tableProps' => $this->tableProps,
+                'rowLimit' => $this->rowLimit,
+                'caption' => $this->caption,
+                'afterAdd' => $this->jsAfterAdd,
+                'afterDelete' => $this->jsAfterDelete,
+                'addOnTab' => $this->addOnTab,
+            ],
+        ]);
     }
 
     /**
@@ -787,7 +785,7 @@ class Multiline extends Form\Control
             foreach ($dummyFields as $field) {
                 $dummyModel->addExpression($field['name'], ['expr' => $field['expr'], 'type' => $model->getField($field['name'])->type]);
             }
-            $values = $dummyModel->tryLoadAny()->get();
+            $values = $dummyModel->loadAny()->get();
             unset($values[$model->idField]);
 
             foreach ($values as $f => $value) {
@@ -864,7 +862,7 @@ class Multiline extends Form\Control
             case 'integer':
             case 'float':
             case 'atk4_money':
-                // Value is 0 or the field value.
+                // value is 0 or the field value.
                 $value = (string) $model->get($fieldName) ?: 0;
 
                 break;

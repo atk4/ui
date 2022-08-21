@@ -8,11 +8,13 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Header;
 use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
+use Atk4\Ui\View;
 
-class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
+class BasicExecutor extends View implements ExecutorInterface
 {
     use HookTrait;
 
@@ -93,7 +95,7 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
     /**
      * Check if all argument values have been provided.
      */
-    public function hasAllArguments()
+    public function hasAllArguments(): bool
     {
         foreach ($this->action->args as $key => $val) {
             if (!isset($this->arguments[$key])) {
@@ -115,7 +117,7 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
 
         $this->addHeader();
 
-        \Atk4\Ui\Button::addToWithCl($this, $this->executorButton)->on('click', function () {
+        Button::addToWithCl($this, $this->executorButton)->on('click', function () {
             return $this->executeModelAction();
         });
     }
@@ -148,7 +150,7 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
     public function addHeader()
     {
         if ($this->hasHeader) {
-            \Atk4\Ui\Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?: $this->action->getDescription()]);
+            Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?: $this->action->getDescription()]);
         }
     }
 }

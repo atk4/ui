@@ -6,6 +6,7 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpression;
+use Atk4\Ui\JsFunction;
 
 /**
  * Date/Time picker attached to a form control.
@@ -72,7 +73,7 @@ class Calendar extends Input
      *
      * Examples:
      * $control->onChange('console.log(date, text, mode)');
-     * $control->onChange(new \Atk4\Ui\JsExpression('console.log(date, text, mode)'));
+     * $control->onChange(new JsExpression('console.log(date, text, mode)'));
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
      * Note: Unlike Control::onChange() method, flatpickr onChange options does not use $default settings.
@@ -83,14 +84,14 @@ class Calendar extends Input
     public function onChange($expr, $default = []): void
     {
         if (is_string($expr)) {
-            $expr = new \Atk4\Ui\JsExpression($expr);
+            $expr = new JsExpression($expr);
         }
         if (!is_array($expr)) {
             $expr = [$expr];
         }
 
         // flatpickr on change event
-        $this->options['onChange'] = new \Atk4\Ui\JsFunction(['date', 'text', 'mode'], $expr);
+        $this->options['onChange'] = new JsFunction(['date', 'text', 'mode'], $expr);
     }
 
     /**

@@ -32,13 +32,12 @@ export default {
             let align = 'left';
             if (!column.isEditable) {
                 switch (column.type) {
-                case 'money':
-                case 'integer':
-                case 'number':
-                    align = 'right';
+                    case 'money':
+                    case 'integer':
+                    case 'number':
+                        align = 'right';
 
-                    break;
-                default:
+                        break;
                 }
             }
 

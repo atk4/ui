@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Atk4\Ui\Table\Column;
 
 use Atk4\Core\Factory;
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\JsChain;
+use Atk4\Ui\Modal;
 use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\View;
@@ -88,7 +90,7 @@ class ActionButtons extends Table\Column
             $defaults = ['title' => $defaults];
         }
 
-        $modal = \Atk4\Ui\Modal::addTo($owner, $defaults);
+        $modal = Modal::addTo($owner, $defaults);
 
         $modal->observeChanges(); // adds scrollbar if needed
 
@@ -108,9 +110,9 @@ class ActionButtons extends Table\Column
         return parent::getTag($position, $value, $attr);
     }
 
-    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
+    public function getDataCellTemplate(Field $field = null)
     {
-        if (!$this->buttons) {
+        if (count($this->buttons) === 0) {
             return '';
         }
 

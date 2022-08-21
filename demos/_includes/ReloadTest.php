@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-class ReloadTest extends \Atk4\Ui\View
+use Atk4\Ui\JsReload;
+use Atk4\Ui\Label;
+use Atk4\Ui\View;
+
+class ReloadTest extends View
 {
     protected function init(): void
     {
         parent::init();
 
-        $label = \Atk4\Ui\Label::addTo($this, ['Testing...', 'detail' => '', 'class.red' => true]);
-        $reload = new \Atk4\Ui\JsReload($this, [$this->name => 'ok']);
+        $label = Label::addTo($this, ['Testing...', 'detail' => '', 'class.red' => true]);
+        $reload = new JsReload($this, [$this->name => 'ok']);
 
         if (isset($_GET[$this->name])) {
             $label->class[] = 'green';

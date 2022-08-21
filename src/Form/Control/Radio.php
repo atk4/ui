@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\JsExpression;
 use Atk4\Ui\Lister;
 
 /**
@@ -66,16 +67,16 @@ class Radio extends Form\Control
      *
      * Examples:
      * $control->onChange('console.log("changed")');
-     * $control->onChange(new \Atk4\Ui\JsExpression('console.log("changed")'));
+     * $control->onChange(new JsExpression('console.log("changed")'));
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
-     * @param string|\Atk4\Ui\JsExpression|array|\Closure $expr
-     * @param array|bool                                  $default
+     * @param string|JsExpression|array|\Closure $expr
+     * @param array|bool                         $default
      */
     public function onChange($expr, $default = []): void
     {
         if (is_string($expr)) {
-            $expr = new \Atk4\Ui\JsExpression($expr);
+            $expr = new JsExpression($expr);
         }
 
         if (is_bool($default)) {

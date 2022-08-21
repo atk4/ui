@@ -9,9 +9,9 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
-use Atk4\Ui\Component\ItemSearch;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
+use Atk4\Ui\VueComponent\ItemSearch;
 
 class CardDeck extends View
 {
@@ -222,7 +222,7 @@ class CardDeck extends View
      *
      * @return array|object
      */
-    protected function jsExecute($return, $action)
+    protected function jsExecute($return, Model\UserAction $action = null)
     {
         if (is_string($return)) {
             return $this->getNotifier($return, $action);

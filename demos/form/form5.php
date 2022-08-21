@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\Columns;
 use Atk4\Ui\Form;
 use Atk4\Ui\JsToast;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\View::addTo($app, [
+View::addTo($app, [
     'Forms below focus on Data integration and automated layouts',
     'ui' => 'ignored warning message',
 ]);
@@ -20,7 +23,7 @@ $formSubmit = function ($f) use ($app) {
     return new JsToast($app->encodeJson($f->model->get()));
 };
 
-$cc = \Atk4\Ui\Columns::addTo($app);
+$cc = Columns::addTo($app);
 $form = Form::addTo($cc->addColumn());
 
 // adding field without model creates a regular line
@@ -40,7 +43,7 @@ $form->addControl('six', new Form\Control\Checkbox(['caption' => 'Caption3']));
 
 $form->onSubmit($formSubmit);
 
-$model = new \Atk4\Data\Model(new Persistence\Array_());
+$model = new Model(new Persistence\Array_());
 
 // model field uses regular line form control by default
 $model->addField('one');

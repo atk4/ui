@@ -4,14 +4,20 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Dropdown as UiDropdown;
+use Atk4\Ui\Form;
+use Atk4\Ui\Header;
+use Atk4\Ui\Menu;
+use Atk4\Ui\View;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$menu = \Atk4\Ui\Menu::addTo($app);
+$menu = Menu::addTo($app);
 $menu->addItem('foo', 'foo.php');
 $menu->addItem('bar');
 $menu->addItem('baz');
-$dropdown = \Atk4\Ui\Dropdown::addTo($menu, ['With Callback', 'dropdownOptions' => ['on' => 'hover']]);
+$dropdown = UiDropdown::addTo($menu, ['With Callback', 'dropdownOptions' => ['on' => 'hover']]);
 $dropdown->setSource(['a', 'b', 'c']);
 $dropdown->onChange(function ($itemId) {
     return 'New seleced item id: ' . $itemId;
@@ -25,16 +31,16 @@ $submenu = $submenu->addMenu('Sub-menu');
 $submenu->addItem('one');
 $submenu->addItem('two');
 
-$menu = \Atk4\Ui\Menu::addTo($app, ['vertical pointing']);
+$menu = Menu::addTo($app, ['vertical pointing']);
 $menu->addItem(['Inbox', 'label' => ['123', 'class.teal left pointing' => true]]);
 $menu->addItem('Spam');
-\Atk4\Ui\Form\Control\Input::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
+Form\Control\Input::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
 
-$menu = \Atk4\Ui\Menu::addTo($app, ['secondary vertical pointing']);
+$menu = Menu::addTo($app, ['secondary vertical pointing']);
 $menu->addItem(['Inbox', 'label' => ['123', 'class.teal left pointing' => true]]);
 $menu->addItem('Spam');
-\Atk4\Ui\Form\Control\Input::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
-$menu = \Atk4\Ui\Menu::addTo($app, ['vertical']);
+Form\Control\Input::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
+$menu = Menu::addTo($app, ['vertical']);
 $group = $menu->addGroup('Products');
 $group->addItem('Enterprise');
 $group->addItem('Consumer');
@@ -43,10 +49,10 @@ $group = $menu->addGroup('Hosting');
 $group->addItem('Shared');
 $group->addItem('Dedicated');
 
-$menu = \Atk4\Ui\Menu::addTo($app, ['vertical']);
+$menu = Menu::addTo($app, ['vertical']);
 $i = $menu->addItem();
-\Atk4\Ui\Header::addTo($i, ['size' => 4])->set('Promotions');
-\Atk4\Ui\View::addTo($i, ['element' => 'P'])->set('Check out our promotions');
+Header::addTo($i, ['size' => 4])->set('Promotions');
+View::addTo($i, ['element' => 'P'])->set('Check out our promotions');
 
 // menu without any item should not show
-\Atk4\Ui\Menu::addTo($app);
+Menu::addTo($app);

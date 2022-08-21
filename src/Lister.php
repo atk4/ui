@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 
 class Lister extends View
 {
-    use \Atk4\Core\HookTrait;
+    use HookTrait;
 
     /** @const string */
     public const HOOK_BEFORE_ROW = self::class . '@beforeRow';

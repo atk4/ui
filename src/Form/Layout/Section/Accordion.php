@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Layout\Section;
 
+use Atk4\Ui\Accordion as UiAccordion;
 use Atk4\Ui\AccordionSection;
 use Atk4\Ui\Form;
 
 /**
  * Represents form controls in accordion.
  */
-class Accordion extends \Atk4\Ui\Accordion
+class Accordion extends UiAccordion
 {
-    public $formLayout = \Atk4\Ui\Form\Layout::class;
+    public $formLayout = Form\Layout::class;
     public $form;
 
     /**
@@ -22,7 +23,7 @@ class Accordion extends \Atk4\Ui\Accordion
     {
         parent::init();
 
-        $this->form->onHook(\Atk4\Ui\Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
+        $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
             // default behavior
             $jsError = [$form->js()->form('add prompt', $fieldName, $str)];
 
@@ -42,7 +43,7 @@ class Accordion extends \Atk4\Ui\Accordion
      * @param string $title
      * @param string $icon
      *
-     * @return \Atk4\Ui\Form\Layout
+     * @return Form\Layout
      */
     public function addSection($title, \Closure $callback = null, $icon = 'dropdown')
     {
@@ -60,7 +61,7 @@ class Accordion extends \Atk4\Ui\Accordion
      */
     public function getSectionIdx($section)
     {
-        if ($section instanceof \Atk4\Ui\AccordionSection) {
+        if ($section instanceof AccordionSection) {
             return parent::getSectionIdx($section);
         }
 

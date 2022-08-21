@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Columns;
 use Atk4\Ui\Form;
 use Atk4\Ui\JsToast;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\View::addTo($app, [
+View::addTo($app, [
     'Forms below demonstrate how to work with multi-value selectors',
     'ui' => 'ignored warning message',
 ]);
 
-$cc = \Atk4\Ui\Columns::addTo($app);
+$cc = Columns::addTo($app);
 $form = Form::addTo($cc->addColumn());
 
 $form->addControl('one', [], ['enum' => ['female', 'male']])->set('male');
