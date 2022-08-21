@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -15,17 +16,17 @@ Button::addTo($app, ['Dynamic scroll in Table', 'class.small left floated basic 
     ->link(['scroll-table']);
 Button::addTo($app, ['Dynamic scroll in Grid', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['scroll-grid']);
-\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'ui clearing divider']);
 
 Header::addTo($app, ['Dynamic scroll in Container']);
 
-$view = \Atk4\Ui\View::addTo($app)->addClass('ui basic segment atk-scroller');
+$view = View::addTo($app)->addClass('ui basic segment atk-scroller');
 
-$scrollContainer = \Atk4\Ui\View::addTo($view)->addClass('ui segment')->addStyle(['max-height' => '400px', 'overflow-y' => 'scroll']);
+$scrollContainer = View::addTo($view)->addClass('ui segment')->addStyle(['max-height' => '400px', 'overflow-y' => 'scroll']);
 
 $listerTemplate = '<div id="{$_id}">{List}<div id="{$_id}" class="ui segment" style="height: 60px"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</div>{/}{$Content}</div>';
 
-$listerContainer = \Atk4\Ui\View::addTo($scrollContainer, ['template' => new HtmlTemplate($listerTemplate)]);
+$listerContainer = View::addTo($scrollContainer, ['template' => new HtmlTemplate($listerTemplate)]);
 
 $lister = \Atk4\Ui\Lister::addTo($listerContainer, [], ['List']);
 $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {

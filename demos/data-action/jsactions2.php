@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
+use Atk4\Ui\View;
 
 // Demo for Model action
 
@@ -26,14 +27,14 @@ $msg = Message::addTo($app, ['Notes', 'type' => 'info']);
 $msg->text->addParagraph('When passing an action to a button event, Ui will determine what executor is required base on the action properties.');
 $msg->text->addParagraph('If action require arguments, fields and/or preview, then a ModalExecutor will be use.');
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'ui clearing divider']);
 
 $gl = \Atk4\Ui\GridLayout::addTo($app, ['rows' => 1, 'columns' => 2]);
 $c = \Atk4\Ui\Card::addTo($gl, ['useLabel' => true], ['r1c1']);
 $c->addContent(new Header(['Using country: ']));
 $c->setModel($entity, [$country->fieldName()->iso, $country->fieldName()->iso3, $country->fieldName()->phonecode]);
 
-$buttons = \Atk4\Ui\View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
+$buttons = View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
 
 // Create a button for every action in Country model.
 foreach ($country->getUserActions() as $action) {

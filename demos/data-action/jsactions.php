@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Form\Control\Line;
 use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -28,7 +29,7 @@ $sendEmailAction = $country->addUserAction('Email', [
 
 // -----------------------------------------------------------------------------
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'ui clearing divider']);
 
 Header::addTo($app, [
     'Using Input button',
@@ -55,7 +56,7 @@ Line::addTo($app, ['action' => $country->getUserAction('greet')]);
 
 // -----------------------------------------------------------------------------
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'ui clearing divider']);
 
 Header::addTo($app, [
     'Using buttons in a Card component',
@@ -65,7 +66,7 @@ Header::addTo($app, [
 
 // Card component.
 $card = \Atk4\Ui\Card::addTo($app);
-$content = new \Atk4\Ui\View(['class' => ['content']]);
+$content = new View(['class' => ['content']]);
 $img = \Atk4\Ui\Image::addTo($content, ['../images/kristy.png']);
 $img->addClass('right floated mini ui image');
 Header::addTo($content, ['Kristy']);

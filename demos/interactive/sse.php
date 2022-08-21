@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -42,7 +43,7 @@ $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
 
 $buttonStop->on('click', [$button->js()->atkServerEvent('stop'), $button->js()->removeClass('disabled')]);
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+View::addTo($app, ['ui' => 'divider']);
 Header::addTo($app, ['SSE operation with user confirmation']);
 
 $sse = \Atk4\Ui\JsSse::addTo($app);

@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Table;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -14,7 +15,7 @@ if ($id = $_GET['id'] ?? null) {
     $app->layout->js(true, new \Atk4\Ui\JsToast('Details link is in simulation mode.'));
 }
 
-$bb = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
+$bb = View::addTo($app, ['ui' => 'buttons']);
 
 $table = \Atk4\Ui\Table::addTo($app, ['class.celled' => true]);
 Button::addTo($bb, ['Refresh Table', 'icon' => 'refresh'])

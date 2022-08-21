@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -18,7 +19,7 @@ $session = new Session($app);
 
 Header::addTo($app, ['Static Modal Dialog']);
 
-$bar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
+$bar = View::addTo($app, ['ui' => 'buttons']);
 
 $modal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Add a name']);
 \Atk4\Ui\LoremIpsum::addTo($modal);
@@ -47,7 +48,7 @@ $simpleModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Simple modal']);
 \Atk4\Ui\Message::addTo($simpleModal)->set('Modal message here.');
 ViewTester::addTo($simpleModal);
 
-$menuBar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
+$menuBar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($menuBar)->set('Show Modal');
 $button->on('click', $simpleModal->show());
 
@@ -70,7 +71,7 @@ $vp3Modal->set(function ($modal) {
 // When $vp1Modal->show() is activate, it will dynamically add this content to it.
 $vp1Modal->set(function ($modal) use ($vp2Modal) {
     ViewTester::addTo($modal);
-    \Atk4\Ui\View::addTo($modal, ['Showing lorem ipsum']); // need in behat test.
+    View::addTo($modal, ['Showing lorem ipsum']); // need in behat test.
     \Atk4\Ui\LoremIpsum::addTo($modal, ['size' => 2]);
     $form = \Atk4\Ui\Form::addTo($modal);
     $form->addControl('color', [], ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
@@ -86,7 +87,7 @@ $vp2Modal->set(function ($modal) use ($vp3Modal) {
     Button::addTo($modal)->set('Third modal')->on('click', $vp3Modal->show());
 });
 
-$bar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
+$bar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($bar)->set('Open Lorem Ipsum');
 $button->on('click', $vp1Modal->show());
 
@@ -110,7 +111,7 @@ $transitionModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Animated modal']);
 \Atk4\Ui\Message::addTo($transitionModal)->set('A lot of animated transition available');
 $transitionModal->duration(1000);
 
-$menuBar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
+$menuBar = View::addTo($app, ['ui' => 'buttons']);
 $main = \Atk4\Ui\Menu::addTo($menuBar);
 $transitionMenu = $main->addMenu('Select Transition');
 
@@ -137,7 +138,7 @@ $denyApproveModal->addDenyAction('No', new \Atk4\Ui\JsExpression('function() { w
 $denyApproveModal->addApproveAction('Yes', new \Atk4\Ui\JsExpression('function() { window.alert("You\'re good to go!"); }'));
 $denyApproveModal->notClosable();
 
-$menuBar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
+$menuBar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($menuBar)->set('Show Deny/Approve');
 $button->on('click', $denyApproveModal->show());
 
@@ -150,7 +151,7 @@ $stepModal = \Atk4\Ui\Modal::addTo($app, ['title' => 'Multi step actions']);
 $stepModal->setOption('observeChanges', true);
 
 // Add buttons to modal for next and previous actions.
-$action = new \Atk4\Ui\View(['ui' => 'buttons']);
+$action = new View(['ui' => 'buttons']);
 $prevAction = new Button(['Prev', 'class.labeled' => true, 'icon' => 'left arrow']);
 $nextAction = new Button(['Next', 'iconRight' => 'right arrow']);
 
@@ -225,6 +226,6 @@ $prevAction->on('click', $stepModal->js()->atkReloadView(
 ));
 
 // Bind display modal to page display button.
-$menuBar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
+$menuBar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($menuBar)->set('Multi Step Modal');
 $button->on('click', $stepModal->show());

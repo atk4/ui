@@ -6,12 +6,13 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/** @var \Atk4\Ui\View $testRunClass */
-$testRunClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\View {
+/** @var View $testRunClass */
+$testRunClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
     use \Atk4\Core\DebugTrait;
 
     public function generateReport()

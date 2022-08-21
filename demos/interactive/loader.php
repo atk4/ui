@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -13,7 +14,7 @@ require_once __DIR__ . '/../init-app.php';
 Button::addTo($app, ['Loader Examples - Page 2', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['loader2']);
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 // ViewTester will perform callback to self.
 ViewTester::addTo($app);
@@ -37,7 +38,7 @@ ViewTester::addTo($app);
         // You may pass arguments to the loader, in this case it's "color"
         sleep(1);
         Header::addTo($p, ['Loader #1b - ' . $_GET['color']]);
-        \Atk4\Ui\LoremIpsum::addTo(\Atk4\Ui\View::addTo($p, ['ui' => $_GET['color'] . ' segment']), ['size' => 1]);
+        \Atk4\Ui\LoremIpsum::addTo(View::addTo($p, ['ui' => $_GET['color'] . ' segment']), ['size' => 1]);
 
         // don't forget to make your own argument sticky so that Components can communicate with themselves:
         $p->stickyGet('color');

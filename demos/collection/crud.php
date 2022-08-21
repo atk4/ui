@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -28,7 +29,7 @@ $crud->setModel($model);
 
 $crud->addDecorator($model->titleField, [\Atk4\Ui\Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => $model->fieldName()->id]]);
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+View::addTo($app, ['ui' => 'divider']);
 
 $columns = \Atk4\Ui\Columns::addTo($app);
 $column = $columns->addColumn();
@@ -67,7 +68,7 @@ Header::addTo($column, ['Customizations']);
 
 /** @var \Atk4\Ui\UserAction\ModalExecutor $myExecutorClass */
 $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\UserAction\ModalExecutor {
-    public function addFormTo(\Atk4\Ui\View $view): Form
+    public function addFormTo(View $view): Form
     {
         $columns = \Atk4\Ui\Columns::addTo($view);
         $left = $columns->addColumn();

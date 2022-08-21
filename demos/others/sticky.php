@@ -6,11 +6,12 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\View::addTo($app, [
+View::addTo($app, [
     'Sticky GET allows us to preserve some GET arguments',
     'ui' => 'ignored info message',
 ]);

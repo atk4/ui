@@ -152,7 +152,7 @@ $wizard->addStep('Arguments', function ($page) {
             'action' => $model->getUserAction('greet'),
         ]);
 
-        \Atk4\Ui\View::addTo($owner, ['ui' => 'divider']);
+        View::addTo($owner, ['ui' => 'divider']);
 
         Button::addTo($owner, ['Ask Age'])
             ->on('click', $model->getUserAction('ask_age'));

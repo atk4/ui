@@ -7,12 +7,13 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
-\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+View::addTo($app, ['ui' => 'divider']);
 
 // Inline Edit
 
@@ -34,7 +35,7 @@ $inline_edit->onChange(function ($value) {
     return $view;
 });
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+View::addTo($app, ['ui' => 'divider']);
 
 // ITEM SEARCH
 
@@ -45,10 +46,10 @@ $model = new Country($app->db);
 
 $lister_template = new HtmlTemplate('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{$end}{/}</div>');
 
-$view = \Atk4\Ui\View::addTo($app);
+$view = View::addTo($app);
 
 $search = \Atk4\Ui\Component\ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
-$lister_container = \Atk4\Ui\View::addTo($view, ['template' => $lister_template]);
+$lister_container = View::addTo($view, ['template' => $lister_template]);
 $lister = \Atk4\Ui\Lister::addTo($lister_container, [], ['List']);
 $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
     $row = Country::assertInstanceOf($lister->currentRow);
@@ -65,7 +66,7 @@ $search->setModelCondition($model);
 $model->setLimit(50);
 $lister->setModel($model);
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+View::addTo($app, ['ui' => 'divider']);
 
 // CREATING CUSTOM VUE USING EXTERNAL COMPONENT
 
@@ -131,7 +132,7 @@ $clock_script = <<<'EOF'
     EOF;
 
 // Creating the clock view and injecting js.
-$clock = \Atk4\Ui\View::addTo($app, ['template' => $clock_template]);
+$clock = View::addTo($app, ['template' => $clock_template]);
 $clock->template->tryDangerouslySetHtml('script', $clock_script);
 
 // passing some style to my-clock component.
@@ -146,4 +147,4 @@ $clock->vue('my-clock', ['clock' => $clock_style], 'myClock');
 
 $btn = Button::addTo($app, ['Change Style']);
 $btn->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));
-\Atk4\Ui\View::addTo($app, ['element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);
+View::addTo($app, ['element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);

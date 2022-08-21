@@ -9,15 +9,16 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsReload;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Form automatically decided how many columns to use']);
 
-$buttons = \Atk4\Ui\View::addTo($app, ['ui' => 'green basic buttons']);
+$buttons = View::addTo($app, ['ui' => 'green basic buttons']);
 
-$seg = \Atk4\Ui\View::addTo($app, ['ui' => 'raised segment']);
+$seg = View::addTo($app, ['ui' => 'raised segment']);
 
 Button::addTo($buttons, ['Use Country Model', 'icon' => 'arrow down'])
     ->on('click', new JsReload($seg, ['m' => 'country']));

@@ -6,13 +6,14 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Card Model', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['card-action']);
-\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'ui clearing divider']);
 
 Header::addTo($app, ['Card.', 'size' => 1, 'subHeader' => 'Component based on Fomantic-Ui Card view.']);
 
@@ -30,12 +31,12 @@ $card->addImage('../images/kristy.png');
 $card->addButton(new Button(['Join']));
 $card->addButton(new Button(['Email']));
 
-$card->addExtraContent(new \Atk4\Ui\View(['Copyright notice: Image from Semantic-UI (Fomantic-UI)', 'element' => 'span']));
+$card->addExtraContent(new View(['Copyright notice: Image from Semantic-UI (Fomantic-UI)', 'element' => 'span']));
 
 // Simple Card
 
 $card = \Atk4\Ui\Card::addTo($app);
-$content = new \Atk4\Ui\View(['class' => ['content']]);
+$content = new View(['class' => ['content']]);
 $img = \Atk4\Ui\Image::addTo($content, ['../images/kristy.png']);
 $img->addClass('right floated mini ui image');
 $header = Header::addTo($content, ['Kristy']);
@@ -47,7 +48,7 @@ $card->addDescription('Friend of Bob');
 
 Header::addTo($app, ['Card can display model label in a table or in line.', 'size' => 3]);
 
-$deck = \Atk4\Ui\View::addTo($app, ['ui' => 'cards']);
+$deck = View::addTo($app, ['ui' => 'cards']);
 
 $cardStat = \Atk4\Ui\Card::addTo($deck, ['useTable' => true]);
 $cardStat->addContent(new Header(['Project Info']));

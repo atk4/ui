@@ -16,21 +16,21 @@ require_once __DIR__ . '/../init-app.php';
 $img = $app->cdn['atk'] . '/logo.png';
 
 Header::addTo($app, ['Default view has no styling']);
-\Atk4\Ui\View::addTo($app)->set('just a <div> element');
+View::addTo($app)->set('just a <div> element');
 
 Header::addTo($app, ['View can specify CSS class']);
-\Atk4\Ui\View::addTo($app, ['ui' => 'segment', 'class.raised' => true])->set('Segment');
+View::addTo($app, ['ui' => 'segment', 'class.raised' => true])->set('Segment');
 
 Header::addTo($app, ['View can contain stuff']);
-Header::addTo(\Atk4\Ui\View::addTo($app, ['ui' => 'segment'])
+Header::addTo(View::addTo($app, ['ui' => 'segment'])
     ->addClass('inverted red circular'), ['Buy', 'class.inverted' => true, 'subHeader' => '$' . (random_int(100, 1000) / 100)]);
 
 Header::addTo($app, ['View can use JavaScript']);
-\Atk4\Ui\View::addTo($app, ['ui' => 'heart rating'])
+View::addTo($app, ['ui' => 'heart rating'])
     ->js(true)->rating(['maxRating' => 5, 'initialRating' => random_int(1, 5)]);
 
 Header::addTo($app, ['View can have events']);
-$bb = \Atk4\Ui\View::addTo($app, ['ui' => 'large blue buttons']);
+$bb = View::addTo($app, ['ui' => 'large blue buttons']);
 $bb->on('click', '.button')->transition('fly up');
 
 foreach (str_split('Click me!!') as $letter) {
@@ -48,10 +48,10 @@ $planeTemplate = new HtmlTemplate('<div id="{$_id}" class="ui statistic">
   </div>');
 $planeTemplate->set('num', random_int(100, 999));
 
-$plane = \Atk4\Ui\View::addTo($app, ['template' => $planeTemplate]);
+$plane = View::addTo($app, ['template' => $planeTemplate]);
 
 Header::addTo($app, ['Can be rendered into HTML']);
-\Atk4\Ui\View::addTo($app, ['ui' => 'segment', 'class.raised' => true, 'element' => 'pre'])->set($plane->render());
+View::addTo($app, ['ui' => 'segment', 'class.raised' => true, 'element' => 'pre'])->set($plane->render());
 
 Header::addTo($app, ['Has a unique global identifier']);
 Label::addTo($app, ['Plane ID: ', 'detail' => $plane->name]);

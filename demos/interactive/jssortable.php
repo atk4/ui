@@ -7,11 +7,12 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$view = \Atk4\Ui\View::addTo($app, ['template' => new HtmlTemplate(
+$view = View::addTo($app, ['template' => new HtmlTemplate(
     '<div class="ui header">Click and drag country to reorder</div>
     <div id="{$_id}" style="cursor: pointer">
         <ul>
@@ -44,7 +45,7 @@ $button->js('click', $sortable->jsGetOrders(['btn' => '1']));
 
 // -----------------------------------------------------------------------------
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+View::addTo($app, ['ui' => 'divider']);
 Header::addTo($app, ['Add Drag n drop to Grid']);
 
 $grid = \Atk4\Ui\Grid::addTo($app, ['paginator' => false]);

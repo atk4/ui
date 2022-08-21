@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\Label;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -16,7 +17,7 @@ require_once __DIR__ . '/../init-app.php';
 if (isset($_GET['name'])) {
     // IMPORTANT: because this is an optional frame, I have to specify it's unique shortName explicitly, othrewise
     // the name for a second frame will be affected by presence of GET['name'] parameter
-    $frame = \Atk4\Ui\View::addTo($app, ['ui' => 'red segment', 'shortName' => 'fr1']);
+    $frame = View::addTo($app, ['ui' => 'red segment', 'shortName' => 'fr1']);
     $frame->stickyGet('name');
 
     // frame will generate URL with sticky parameter
@@ -24,7 +25,7 @@ if (isset($_GET['name'])) {
 
     // app still generates URL without localized sticky
     Label::addTo($frame, ['Reset', 'iconRight' => 'close', 'class.black' => true])->link($app->url());
-    \Atk4\Ui\View::addTo($frame, ['ui' => 'hidden divider']);
+    View::addTo($frame, ['ui' => 'hidden divider']);
 
     // nested interractive elemetns will respect lockal sticky get
     Button::addTo($frame, ['Triggering callback here will inherit color'])->on('click', function () {
@@ -43,7 +44,7 @@ $t = \Atk4\Ui\Table::addTo($app);
 $t->setSource(['Red', 'Green', 'Blue']);
 $t->addDecorator('name', [\Atk4\Ui\Table\Column\Link::class, [], ['name']]);
 
-$frame = \Atk4\Ui\View::addTo($app, ['ui' => 'green segment']);
+$frame = View::addTo($app, ['ui' => 'green segment']);
 Button::addTo($frame, ['does not inherit sticky get'])->on('click', function () use ($app) {
     return new \Atk4\Ui\JsNotify('$_GET = ' . $app->encodeJson($_GET));
 });

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -48,7 +49,7 @@ $group->addItem('Dedicated');
 $menu = \Atk4\Ui\Menu::addTo($app, ['vertical']);
 $i = $menu->addItem();
 Header::addTo($i, ['size' => 4])->set('Promotions');
-\Atk4\Ui\View::addTo($i, ['element' => 'P'])->set('Check out our promotions');
+View::addTo($i, ['element' => 'P'])->set('Check out our promotions');
 
 // menu without any item should not show
 \Atk4\Ui\Menu::addTo($app);

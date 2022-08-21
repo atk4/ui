@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -12,7 +13,7 @@ require_once __DIR__ . '/../init-app.php';
 Header::addTo($app, ['Table column may contains popup or dropdown menu.']);
 
 // Better Popup positionning when Popup are inside a container.
-$container = \Atk4\Ui\View::addTo($app, ['ui' => 'vertical segment']);
+$container = View::addTo($app, ['ui' => 'vertical segment']);
 $table = \Atk4\Ui\Table::addTo($container, ['class.celled' => true]);
 $table->setModel(new SomeData(), []);
 

@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -118,7 +119,7 @@ $control = $form->addControl('name', [Form\Control\Line::class, 'hint' => 'this 
 $control->set('value in a form');
 
 $control = $form->addControl('surname', new Form\Control\Line([
-    'hint' => [\Atk4\Ui\View::class, 'template' => new HtmlTemplate(
+    'hint' => [View::class, 'template' => new HtmlTemplate(
         'Click <a href="http://example.com/" target="_blank">here</a>'
     )],
 ]));
@@ -131,7 +132,7 @@ Header::addTo($app, ['Multiple Form Layouts']);
 
 $form = Form::addTo($app);
 $tabs = \Atk4\Ui\Tabs::addTo($form, [], ['AboveControls']);
-\Atk4\Ui\View::addTo($form, ['ui' => 'divider'], ['AboveControls']);
+View::addTo($form, ['ui' => 'divider'], ['AboveControls']);
 
 $formPage = Form\Layout::addTo($tabs->addTab('Basic Info'), ['form' => $form]);
 $formPage->addControl('name', new Form\Control\Line());

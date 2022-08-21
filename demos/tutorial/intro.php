@@ -90,7 +90,7 @@ $wizard->addStep('Interactivity', function ($page) {
     );
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
-        $seg = \Atk4\Ui\View::addTo($owner, ['ui' => 'segment']);
+        $seg = View::addTo($owner, ['ui' => 'segment']);
 
         \Atk4\Ui\Text::addTo($seg)->set('Number of buttons: ');
 
@@ -100,7 +100,7 @@ $wizard->addStep('Interactivity', function ($page) {
             'urlTrigger' => 'count',
         ]);
 
-        \Atk4\Ui\View::addTo($seg, ['ui' => 'divider']);
+        View::addTo($seg, ['ui' => 'divider']);
 
         for ($i = 1; $i <= ($_GET['count'] ?? 1); ++$i) {
             Button::addTo($seg, [$i]);
@@ -169,7 +169,7 @@ $wizard->addStep('Business Model', function ($page) {
             return new JsToast('Saved!');
         });
 
-        \Atk4\Ui\View::addTo($owner, ['ui' => 'divider']);
+        View::addTo($owner, ['ui' => 'divider']);
     });
 
     $t = \Atk4\Ui\Text::addTo($page);

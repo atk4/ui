@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -14,9 +15,9 @@ $img = $app->cdn['atk'] . '/logo.png';
 
 Header::addTo($app, ['Message Types']);
 
-$seg = \Atk4\Ui\View::addTo($app, ['ui' => 'raised segment']);
+$seg = View::addTo($app, ['ui' => 'raised segment']);
 
-$barType = \Atk4\Ui\View::addTo($seg, ['ui' => ' basic buttons']);
+$barType = View::addTo($seg, ['ui' => ' basic buttons']);
 
 $msg = \Atk4\Ui\Message::addTo($seg, [
     'This is a title of your message',
@@ -31,7 +32,7 @@ Button::addTo($barType, ['error']);
 Button::addTo($barType, ['info']);
 Button::addTo($barType, ['warning']);
 
-$barIcon = \Atk4\Ui\View::addTo($seg, ['ui' => ' basic buttons']);
+$barIcon = View::addTo($seg, ['ui' => ' basic buttons']);
 $barIcon->on('click', '.button', new \Atk4\Ui\JsReload($seg, ['icon' => (new \Atk4\Ui\Jquery())->find('i')->attr('class')]));
 Button::addTo($barIcon, ['icon' => 'book']);
 Button::addTo($barIcon, ['icon' => 'check circle outline']);

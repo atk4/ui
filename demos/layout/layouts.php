@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -19,14 +20,14 @@ $buttons = [
 ];
 
 // layout
-\Atk4\Ui\Text::addTo(\Atk4\Ui\View::addTo($app, ['class.red' => true, 'ui' => 'segment']))
+\Atk4\Ui\Text::addTo(View::addTo($app, ['class.red' => true, 'ui' => 'segment']))
     ->addParagraph('Layouts can be used to wrap your UI elements into HTML / Boilerplate');
 
 // toolbar
-$tb = \Atk4\Ui\View::addTo($app);
+$tb = View::addTo($app);
 
 // iframe
-$i = \Atk4\Ui\View::addTo($app, ['class.green' => true, 'ui' => 'segment'])->setElement('iframe')->setStyle(['width' => '100%', 'height' => '500px']);
+$i = View::addTo($app, ['class.green' => true, 'ui' => 'segment'])->setElement('iframe')->setStyle(['width' => '100%', 'height' => '500px']);
 
 // add buttons in toolbar
 foreach ($buttons as $k => $args) {

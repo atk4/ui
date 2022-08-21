@@ -7,18 +7,19 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Nested accordions', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['accordion-nested']);
-\Atk4\Ui\View::addTo($app, ['ui' => 'clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 Header::addTo($app, ['Accordion\'s section can be control programmatically.']);
 
 // toggle menu
-$bar = \Atk4\Ui\View::addTo($app, ['ui' => 'buttons']);
+$bar = View::addTo($app, ['ui' => 'buttons']);
 $b1 = Button::addTo($bar, ['Toggle Section #1']);
 $b2 = Button::addTo($bar, ['Toggle Section #2']);
 $b3 = Button::addTo($bar, ['Toggle Section #3']);

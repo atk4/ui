@@ -7,13 +7,14 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Accordion in Form', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['form-section-accordion']);
-\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'ui clearing divider']);
 
 $model = new Country($app->db);
 $model = $model->loadAny();
@@ -51,7 +52,7 @@ $form->addControl($model->fieldName()->phonecode);
 
 $form->onSubmit($saveAndDumpValues);
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+View::addTo($app, ['ui' => 'divider']);
 
 // -----------------------------------------------------------------------------
 
@@ -73,7 +74,7 @@ $a2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phonec
 
 $form->onSubmit($saveAndDumpValues);
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+View::addTo($app, ['ui' => 'divider']);
 
 // -----------------------------------------------------------------------------
 
@@ -95,7 +96,7 @@ $tab2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phon
 
 $form->onSubmit($saveAndDumpValues);
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+View::addTo($app, ['ui' => 'divider']);
 
 // -----------------------------------------------------------------------------
 
@@ -120,4 +121,4 @@ $c2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phonec
 
 $form->onSubmit($saveAndDumpValues);
 
-\Atk4\Ui\View::addTo($app, ['ui' => 'divider']);
+View::addTo($app, ['ui' => 'divider']);
