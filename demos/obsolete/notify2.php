@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\JsNotify;
 use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
@@ -55,7 +56,7 @@ $formGroup2->addControl('position', ['width' => 'four']);
 $formGroup2->addControl('attach', ['width' => 'four']);
 
 $form->onSubmit(function (Form $form) {
-    $notifier = new \Atk4\Ui\JsNotify();
+    $notifier = new JsNotify();
     $notifier->setColor($form->model->get('color'))
         ->setPosition($form->model->get('position'))
         ->setWidth(rtrim($form->model->get('width'), '%'))

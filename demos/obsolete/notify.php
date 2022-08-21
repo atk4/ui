@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
+use Atk4\Ui\JsNotify;
 use Atk4\Ui\Modal;
 
 /** @var \Atk4\Ui\App $app */
@@ -14,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 Button::addTo($app, ['Notify Examples - Page 2', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['notify2']);
 
-Button::addTo($app, ['Test'])->on('click', (new \Atk4\Ui\JsNotify('Not yet implemented'))->setColor('red'));
+Button::addTo($app, ['Test'])->on('click', (new JsNotify('Not yet implemented'))->setColor('red'));
 
 $modal = Modal::addTo($app, ['Modal Title']);
 
@@ -29,7 +30,7 @@ $modal->set(function ($p) use ($modal) {
 
         return [
             $modal->hide(),
-            new \Atk4\Ui\JsNotify('Thank you ' . $form->model->get('name')),
+            new JsNotify('Thank you ' . $form->model->get('name')),
         ];
     });
 });

@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Console;
 use Atk4\Ui\Header;
+use Atk4\Ui\JsNotify;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\Label;
 use Atk4\Ui\Loader;
@@ -33,7 +34,7 @@ if (isset($_GET['name'])) {
 
     // nested interractive elemetns will respect lockal sticky get
     Button::addTo($frame, ['Triggering callback here will inherit color'])->on('click', function () {
-        return new \Atk4\Ui\JsNotify('Color was = ' . $_GET['name']);
+        return new JsNotify('Color was = ' . $_GET['name']);
     });
 
     // Next we have loader, which will dynamically load console which will dynamically output "success" message.
@@ -50,7 +51,7 @@ $t->addDecorator('name', [Table\Column\Link::class, [], ['name']]);
 
 $frame = View::addTo($app, ['ui' => 'green segment']);
 Button::addTo($frame, ['does not inherit sticky get'])->on('click', function () use ($app) {
-    return new \Atk4\Ui\JsNotify('$_GET = ' . $app->encodeJson($_GET));
+    return new JsNotify('$_GET = ' . $app->encodeJson($_GET));
 });
 
 Header::addTo($app, ['Use of View::url()']);
