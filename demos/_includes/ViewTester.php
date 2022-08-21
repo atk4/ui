@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\JsExpression;
+use Atk4\Ui\JsReload;
 use Atk4\Ui\Label;
 use Atk4\Ui\View;
 
@@ -19,7 +20,7 @@ class ViewTester extends View
         parent::init();
 
         $label = Label::addTo($this, ['CallBack', 'detail' => 'fail', 'class.red' => true]);
-        $reload = new \Atk4\Ui\JsReload($this, [$this->name => 'ok']);
+        $reload = new JsReload($this, [$this->name => 'ok']);
 
         if (isset($_GET[$this->name])) {
             $label->class[] = 'green';

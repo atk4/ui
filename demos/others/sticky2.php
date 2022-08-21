@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\JsReload;
 use Atk4\Ui\Label;
 use Atk4\Ui\Table;
 use Atk4\Ui\View;
@@ -59,7 +60,7 @@ $b1->set($b1->url());
     $b2 = Button::addTo($page);
     $b2->set($b2->url());
 
-    $b2->on('click', new \Atk4\Ui\JsReload($b1));
+    $b2->on('click', new JsReload($b1));
 });
 
 $b3 = Button::addTo($app);

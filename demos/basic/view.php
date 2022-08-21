@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\JsReload;
 use Atk4\Ui\Label;
 use Atk4\Ui\Table;
 use Atk4\Ui\View;
@@ -61,7 +62,7 @@ Header::addTo($app, ['Can interract with JavaScript actions']);
 Button::addTo($app, ['Hide plane', 'icon' => 'down arrow'])->on('click', $plane->js()->hide());
 Button::addTo($app, ['Show plane', 'icon' => 'up arrow'])->on('click', $plane->js()->show());
 Button::addTo($app, ['Jiggle plane', 'icon' => 'expand'])->on('click', $plane->js()->transition('jiggle'));
-Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])->on('click', new \Atk4\Ui\JsReload($plane));
+Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])->on('click', new JsReload($plane));
 
 Header::addTo($app, ['Can be on a Virtual Page']);
 $vp = \Atk4\Ui\VirtualPage::addTo($app)->set(function ($page) use ($planeTemplate) {

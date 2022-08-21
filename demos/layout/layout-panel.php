@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\JsReload;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
 use Atk4\Ui\Panel\Right;
@@ -55,13 +56,13 @@ $panel1->onOpen(function ($p) use ($view) {
     Message::addTo($panel, ['Panel 1', 'text' => $panelText]);
 
     $reloadPanelButton = Button::addTo($panel, ['Reload Myself']);
-    $reloadPanelButton->on('click', new \Atk4\Ui\JsReload($panel));
+    $reloadPanelButton->on('click', new JsReload($panel));
 
     View::addTo($panel, ['ui' => 'divider']);
     $panelButton = Button::addTo($panel, ['Complete']);
     $panelButton->on('click', [
         $p->getOwner()->jsClose(),
-        new \Atk4\Ui\JsReload($view, ['txt' => 'Complete using button #' . $buttonNumber]),
+        new JsReload($view, ['txt' => 'Complete using button #' . $buttonNumber]),
     ]);
 });
 

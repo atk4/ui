@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Header;
+use Atk4\Ui\JsReload;
 use Atk4\Ui\Label;
 use Atk4\Ui\View;
 
@@ -27,7 +28,7 @@ $del->on('click', '.delete', $del->js()->fadeOut());
 
 $val = isset($_GET['toggle']) && $_GET['toggle'];
 $toggle = Label::addTo($app, ['icon' => 'toggle ' . ($val ? 'on' : 'off')])->set('Value: ' . $val);
-$toggle->on('click', new \Atk4\Ui\JsReload($toggle, ['toggle' => $val ? null : 1]));
+$toggle->on('click', new JsReload($toggle, ['toggle' => $val ? null : 1]));
 
 $menu = \Atk4\Ui\Menu::addTo($app);
 Label::addTo($menu->addItem('Inbox'), ['20', 'class.floating red' => true]);

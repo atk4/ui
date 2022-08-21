@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\JsReload;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Table;
 use Atk4\Ui\View;
@@ -20,7 +21,7 @@ $bb = View::addTo($app, ['ui' => 'buttons']);
 
 $table = Table::addTo($app, ['class.celled' => true]);
 Button::addTo($bb, ['Refresh Table', 'icon' => 'refresh'])
-    ->on('click', new \Atk4\Ui\JsReload($table));
+    ->on('click', new JsReload($table));
 
 $bb->on('click', $table->js()->reload());
 
