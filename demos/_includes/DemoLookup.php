@@ -12,15 +12,8 @@ use Atk4\Ui\JsModal;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\VirtualPage;
 
-/**
- * Setup file - do not test.
- * Lookup that cannot saved data.
- */
 class DemoLookup extends Form\Control\Lookup
 {
-    /**
-     * Add button for new record.
-     */
     protected function initQuickNewRecord()
     {
         if (!$this->plus) {

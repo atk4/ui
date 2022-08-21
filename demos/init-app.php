@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Layout;
 
 date_default_timezone_set('UTC');
@@ -68,7 +69,7 @@ try {
     $app->db = $db;
     unset($db);
 } catch (\Throwable $e) {
-    throw new \Atk4\Ui\Exception('Database error: ' . $e->getMessage());
+    throw new Exception('Database error: ' . $e->getMessage());
 }
 
 [$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);

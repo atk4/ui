@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Dropdown as UiDropdown;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Icon;
@@ -32,7 +33,7 @@ Header::addTo($app, ['Labels', 'size' => 2]);
 Form\Control\Line::addTo($app, ['placeholder' => 'Search users', 'label' => 'http://']);
 
 // dropdown example
-$dd = new \Atk4\Ui\Dropdown('.com');
+$dd = new UiDropdown('.com');
 $dd->setSource(['.com', '.net', '.org']);
 Form\Control\Line::addTo($app, [
     'placeholder' => 'Find Domain',
@@ -74,12 +75,12 @@ Form\Control\Line::addTo($app, ['actionLeft' => new Button([
 
 Form\Control\Line::addTo($app, ['iconLeft' => 'search', 'action' => 'Search']);
 
-$dd = new \Atk4\Ui\DropdownButton(['This Page', 'class.basic' => true]);
+$dd = new UiDropdown(['This Page', 'class.basic' => true]);
 $dd->setSource(['This Organisation', 'Entire Site']);
 Form\Control\Line::addTo($app, ['iconLeft' => 'search', 'action' => $dd]);
 
 // double actions are not supported but you can add them yourself
-$dd = new \Atk4\Ui\Dropdown(['Articles', 'class.compact selection' => true]);
+$dd = new UiDropdown(['Articles', 'class.compact selection' => true]);
 $dd->setSource(['All', 'Services', 'Products']);
 Button::addTo(Form\Control\Line::addTo($app, ['iconLeft' => 'search', 'action' => $dd]), ['Search'], ['AfterAfterInput']);
 

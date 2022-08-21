@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * LoadableContent interface.
- */
 
 namespace Atk4\Ui\Panel;
 

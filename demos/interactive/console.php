@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Core\Exception as CoreException;
 use Atk4\Ui\Button;
 use Atk4\Ui\Console;
 use Atk4\Ui\Form;
@@ -50,7 +51,7 @@ Console::addTo($tab)->set(function ($console) {
     sleep(1);
     echo 'direct output is captured';
 
-    throw new \Atk4\Core\Exception('BOOM - exceptions are caught');
+    throw new CoreException('BOOM - exceptions are caught');
 });
 
 $tab = $tabs->addTab('runMethod()', function ($tab) use ($testRunClass) {

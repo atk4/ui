@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Core\Exception as CoreException;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
@@ -158,7 +159,7 @@ Header::addTo($tab, ['Form shows Agile exceptions', 'size' => 2]);
 $form = Form::addTo($tab);
 $form->addControl('email');
 $form->onSubmit(function (Form $form) {
-    throw (new \Atk4\Core\Exception('testing'))
+    throw (new CoreException('testing'))
         ->addMoreInfo('arg1', 'val1');
 
     // return 'somehow it did not crash';
@@ -169,7 +170,7 @@ Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', Mod
         $form = Form::addTo($p);
         $form->addControl('email');
         $form->onSubmit(function (Form $form) {
-            throw (new \Atk4\Core\Exception('testing'))
+            throw (new CoreException('testing'))
                 ->addMoreInfo('arg1', 'val1');
 
             // return 'somehow it did not crash';

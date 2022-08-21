@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Core\Exception as CoreException;
 use Atk4\Ui\Console;
 use Atk4\Ui\JsSse;
 
@@ -20,5 +21,5 @@ $console->set(function ($console) {
     $console->output('Now trying something dangerous..');
     echo 'direct output is captured';
 
-    throw new \Atk4\Core\Exception('BOOM - exceptions are caught');
+    throw new CoreException('BOOM - exceptions are caught');
 });

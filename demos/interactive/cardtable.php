@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\CardTable;
 use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */

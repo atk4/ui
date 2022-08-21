@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * A Simple inline editable text Vue component.
- */
 
 namespace Atk4\Ui\Component;
 
@@ -14,6 +11,9 @@ use Atk4\Ui\JsCallback;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\View;
 
+/**
+ * A Simple inline editable text Vue component.
+ */
 class InlineEdit extends View
 {
     public $defaultTemplate = 'inline-edit.html';

@@ -1,14 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Right Panel implementation.
- * Opening, closing and loading Panel content is manage
- * via the js panel service.
- *
- * Content is loaded via a LoadableContent View.
- * This view must implement a callback for content to be add via the callback function.
- */
 
 namespace Atk4\Ui\Panel;
 
@@ -20,6 +12,14 @@ use Atk4\Ui\JsExpression;
 use Atk4\Ui\Modal;
 use Atk4\Ui\View;
 
+/**
+ * Right Panel implementation.
+ * Opening, closing and loading Panel content is manage
+ * via the js panel service.
+ *
+ * Content is loaded via a LoadableContent View.
+ * This view must implement a callback for content to be add via the callback function.
+ */
 class Right extends View implements Loadable
 {
     public $defaultTemplate = 'panel/right.html';
