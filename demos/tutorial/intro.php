@@ -15,11 +15,12 @@ use Atk4\Ui\Message;
 use Atk4\Ui\Paginator;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
+use Atk4\Ui\Wizard;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$wizard = \Atk4\Ui\Wizard::addTo($app);
+$wizard = Wizard::addTo($app);
 
 $wizard->addStep('User Interface', function ($page) {
     $t = Text::addTo($page);

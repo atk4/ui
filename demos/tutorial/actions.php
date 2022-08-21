@@ -14,11 +14,12 @@ use Atk4\Ui\Menu;
 use Atk4\Ui\Text;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\View;
+use Atk4\Ui\Wizard;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$wizard = \Atk4\Ui\Wizard::addTo($app);
+$wizard = Wizard::addTo($app);
 
 $wizard->addStep('Define User Action', function ($page) {
     Header::addTo($page, ['What are User Actions?']);
