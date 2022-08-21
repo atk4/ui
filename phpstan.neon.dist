@@ -325,7 +325,7 @@ parameters:
             message: '~^Property Atk4\\Ui\\CardDeck::\$menu \(array\|false\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/CardDeck.php'
-            message: '~^Property Atk4\\Ui\\CardDeck::\$search \(array\|Atk4\\Ui\\Component\\ItemSearch\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Property Atk4\\Ui\\CardDeck::\$search \(array\|Atk4\\Ui\\VueComponent\\ItemSearch\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/CardDeck.php'
             message: '~^Property Atk4\\Ui\\CardDeck::\$paginator \(Atk4\\Ui\\Paginator\|false\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
