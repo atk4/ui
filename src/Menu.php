@@ -51,7 +51,7 @@ class Menu extends View
         if (is_string($action) || is_array($action)) {
             $url = $this->url($action);
             $item->setAttr('href', $url);
-        } else {
+        } elseif ($action) {
             $item->on('click', null, $action);
         }
 
