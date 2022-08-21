@@ -10,6 +10,7 @@ use Atk4\Ui\Header;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\Table;
+use Atk4\Ui\VirtualPage;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -83,7 +84,7 @@ $model->setOrder([$model->fieldName()->is_folder => 'desc', $model->fieldName()-
 
 Header::addTo($app, ['File Finder', 'subHeader' => 'Component built around Table, Columns and JsReload']);
 
-$vp = \Atk4\Ui\VirtualPage::addTo($app)->set(function (\Atk4\Ui\VirtualPage $vp) use ($model) {
+$vp = VirtualPage::addTo($app)->set(function (VirtualPage $vp) use ($model) {
     $model->importFromFilesystem('.');
     Button::addTo($vp, ['Import Complete', 'class.big green fluid' => true])->link('multitable.php');
     $vp->js(true)->closest('.modal')->find('.header')->remove();

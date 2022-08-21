@@ -12,6 +12,7 @@ use Atk4\Ui\Label;
 use Atk4\Ui\Message;
 use Atk4\Ui\Table;
 use Atk4\Ui\View;
+use Atk4\Ui\VirtualPage;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -66,7 +67,7 @@ Button::addTo($app, ['Jiggle plane', 'icon' => 'expand'])->on('click', $plane->j
 Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])->on('click', new JsReload($plane));
 
 Header::addTo($app, ['Can be on a Virtual Page']);
-$vp = \Atk4\Ui\VirtualPage::addTo($app)->set(function ($page) use ($planeTemplate) {
+$vp = VirtualPage::addTo($app)->set(function ($page) use ($planeTemplate) {
     $plane = View::addTo($page, ['template' => $planeTemplate]);
     Label::addTo($page, ['Plane ID: ', 'class.bottom attached' => true, 'detail' => $plane->name]);
 });

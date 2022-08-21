@@ -8,6 +8,7 @@ use Atk4\Core\Factory;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\JsToast;
+use Atk4\Ui\VirtualPage;
 
 /**
  * Setup file - do not test.
@@ -36,7 +37,7 @@ class DemoLookup extends Form\Control\Lookup
 
         $this->action = Factory::factory(array_merge($defaultSeed, (array) $buttonSeed));
 
-        $vp = \Atk4\Ui\VirtualPage::addTo($this->form ?? $this->getOwner());
+        $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
         $vp->set(function ($page) {
             $form = Form::addTo($page);
 
