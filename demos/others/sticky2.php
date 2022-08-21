@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
+use Atk4\Ui\Console;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\Label;
@@ -36,7 +37,7 @@ if (isset($_GET['name'])) {
 
     // Next we have loader, which will dynamically load console which will dynamically output "success" message.
     \Atk4\Ui\Loader::addTo($frame)->set(function ($page) {
-        \Atk4\Ui\Console::addTo($page)->set(function ($console) {
+        Console::addTo($page)->set(function ($console) {
             $console->output('success!, color is still ' . $_GET['name']);
         });
     });

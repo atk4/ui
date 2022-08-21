@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Console;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
@@ -69,7 +70,7 @@ $wizard->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon'
 // and enable them as you see fit. Use handy js method to trigger advancement to
 // the next step.
 $wizard->addStep(['Migration', 'description' => 'Create or update table', 'icon' => 'database'], function (Wizard $wizard) {
-    $console = \Atk4\Ui\Console::addTo($wizard);
+    $console = Console::addTo($wizard);
     $wizard->buttonFinish->addClass('disabled');
 
     $console->set(function ($console) use ($wizard) {
