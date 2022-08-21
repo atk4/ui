@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Message;
 use Atk4\Ui\Text;
+use Atk4\Ui\GridLayout;
 use Atk4\Ui\View;
 
 class PromotionText extends View
@@ -33,7 +34,7 @@ class PromotionText extends View
                 HTML
         );
 
-        $gl = \Atk4\Ui\GridLayout::addTo($this, ['class.stackable divided' => true, 'columns' => 4]);
+        $gl = GridLayout::addTo($this, ['class.stackable divided' => true, 'columns' => 4]);
         Button::addTo($gl, ['Explore UI components', 'class.primary basic fluid' => true, 'iconRight' => 'right arrow'], ['r1c1'])
             ->link('https://github.com/atk4/ui/#bundled-and-planned-components');
         Button::addTo($gl, ['Try out interactive features', 'class.primary basic fluid' => true, 'iconRight' => 'right arrow'], ['r1c2'])

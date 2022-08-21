@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
+use Atk4\Ui\GridLayout;
 use Atk4\Ui\View;
 
 // Demo for Model action
@@ -29,7 +30,7 @@ $msg->text->addParagraph('If action require arguments, fields and/or preview, th
 
 View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$gl = \Atk4\Ui\GridLayout::addTo($app, ['rows' => 1, 'columns' => 2]);
+$gl = GridLayout::addTo($app, ['rows' => 1, 'columns' => 2]);
 $c = \Atk4\Ui\Card::addTo($gl, ['useLabel' => true], ['r1c1']);
 $c->addContent(new Header(['Using country: ']));
 $c->setModel($entity, [$country->fieldName()->iso, $country->fieldName()->iso3, $country->fieldName()->phonecode]);
