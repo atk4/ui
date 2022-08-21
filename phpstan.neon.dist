@@ -282,12 +282,6 @@ parameters:
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 3
         -
-            path: 'demos/form/form2.php'
-            message: '~^Parameter #1 \$intent \(string\) of method class@anonymous/demos/form/form2\.php:\d+::validate\(\) should be contravariant with parameter \$intent \(string\|null\) of method Atk4\\Data\\Model::validate\(\)$~'
-        -
-            path: 'demos/init-db.php'
-            message: '~^Parameter #1 \$intent \(string\) of method Atk4\\Ui\\Demos\\Country::validate\(\) should be contravariant with parameter \$intent \(string\|null\) of method Atk4\\Data\\Model::validate\(\)$~'
-        -
             path: 'demos/interactive/popup.php'
             message: '~^Property Atk4\\Ui\\Label::\$detail \(string\|false\|null\) does not accept int<0, max>\.$~'
         -
@@ -602,9 +596,6 @@ parameters:
         -
             path: 'demos/form-control/multiline.php'
             message: '~^Property class@anonymous/demos/form\-control/multiline\.php:\d+::\$countryPersistence has no type specified\.$~'
-        -
-            path: 'demos/init-db.php'
-            message: '~^Method Atk4\\Ui\\Demos\\ModelWithPrefixedFields::addField\(\) has parameter \$name with no type specified\.$~'
         -
             path: 'demos/init-db.php'
             message: '~^Property Atk4\\Ui\\Demos\\Stat::\$title has no type specified\.$~'

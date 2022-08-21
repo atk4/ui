@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Core\DebugTrait;
 use Atk4\Core\Exception as CoreException;
 use Atk4\Ui\Button;
 use Atk4\Ui\Console;
@@ -18,7 +19,7 @@ require_once __DIR__ . '/../init-app.php';
 
 /** @var View $testRunClass */
 $testRunClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
-    use \Atk4\Core\DebugTrait;
+    use DebugTrait;
 
     public function generateReport()
     {

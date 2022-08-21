@@ -96,9 +96,9 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends M
         $this->hasOne('country_dropdown_id', ['model' => [Country::class], 'ui' => ['form' => new Form\Control\Dropdown()]]); // this works slow
     }
 
-    public function validate($intent = null): array
+    public function validate(string $intent = null): array
     {
-        $errors = parent::validate();
+        $errors = parent::validate($intent);
 
         if ($this->get('name') === $this->get('surname')) {
             $errors['surname'] = 'Your surname cannot be same as the name';

@@ -53,7 +53,7 @@ $crud = Crud::addTo($column, [
 // Condition on the model can be applied on a model
 $model = new Country($app->db);
 $model->addCondition($model->fieldName()->numcode, '<', 200);
-$model->onHook(Model::HOOK_VALIDATE, function (Country $model, $intent) {
+$model->onHook(Model::HOOK_VALIDATE, function (Country $model, ?string $intent) {
     $err = [];
     if ($model->numcode >= 200) {
         $err[$model->fieldName()->numcode] = 'Should be less than 200';
