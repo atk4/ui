@@ -171,7 +171,7 @@ class Layout extends AbstractLayout
 
             // Anything but controls or explicitly defined controls get inserted directly
             if (!$element instanceof Control || !$element->layoutWrap) {
-                $this->template->dangerouslyAppendHtml('Content', $element->getHtml());
+                $this->template->dangerouslyAppendHtml('Content', $element->getHtml()); // @phpstan-ignore-line
 
                 continue;
             }
@@ -234,7 +234,7 @@ class Layout extends AbstractLayout
 
         // Now collect JS from everywhere
         foreach ($this->elements as $element) {
-            if ($element->_jsActions) {
+            if ($element->_jsActions) { // @phpstan-ignore-line
                 $this->_jsActions = array_merge_recursive($this->_jsActions, $element->_jsActions);
             }
         }

@@ -530,7 +530,7 @@ class View extends AbstractView implements JsExpressionable
      */
     protected function _getStickyArgs(): array
     {
-        if ($this->issetOwner() && $this->getOwner() instanceof self) { // @phpstan-ignore-line
+        if ($this->issetOwner()) {
             $stickyArgs = array_merge($this->getOwner()->_getStickyArgs(), $this->stickyArgs);
         } else {
             $stickyArgs = $this->stickyArgs;
@@ -616,7 +616,7 @@ class View extends AbstractView implements JsExpressionable
     protected function recursiveRender(): void
     {
         foreach ($this->elements as $view) {
-            if (!$view instanceof self) { // @phpstan-ignore-line
+            if (!$view instanceof self) {
                 continue;
             }
 

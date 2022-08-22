@@ -645,9 +645,6 @@ parameters:
             path: 'src/Breadcrumb.php'
             message: '~^Method Atk4\\Ui\\Breadcrumb::addCrumbReverse\(\) has no return type specified\.$~'
         -
-            path: 'src/Callback.php'
-            message: '~^Method Atk4\\Ui\\Callback::setUrlTrigger\(\) has no return type specified\.$~'
-        -
             path: 'src/Card.php'
             message: '~^Method Atk4\\Ui\\Card::setDataId\(\) has no return type specified\.$~'
         -
@@ -791,9 +788,6 @@ parameters:
         -
             path: 'src/Form/Control/Input.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$width has no type specified\.$~'
-        -
-            path: 'src/Form/Control/Lookup.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Lookup::getCallbackUrl\(\) has no return type specified\.$~'
         -
             path: 'src/Form/Control/Lookup.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Lookup::initQuickNewRecord\(\) has no return type specified\.$~'

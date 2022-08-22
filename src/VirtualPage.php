@@ -121,7 +121,7 @@ class VirtualPage extends View
 
         // Remove all elements from inside the Content
         foreach ($this->getApp()->layout->elements as $key => $view) {
-            if ($view instanceof View && $view->region === 'Content') { // @phpstan-ignore-line
+            if ($view instanceof View && $view->region === 'Content') {
                 unset($this->getApp()->layout->elements[$key]);
             }
         }

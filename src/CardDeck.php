@@ -17,7 +17,7 @@ class CardDeck extends View
 {
     public $ui = '';
 
-    /** @var string Card type inside this deck. */
+    /** @var class-string<View> Card type inside this deck. */
     public $card = Card::class;
 
     /** @var string default template file. */
@@ -285,7 +285,7 @@ class CardDeck extends View
             return $a[$model->idField];
         };
         $deck = [];
-        foreach ($this->cardHolder->elements as $v => $element) {
+        foreach ($this->cardHolder->elements as $element) {
             if ($element instanceof $this->card) {
                 $deck[$element->model->getId()] = $element;
             }
