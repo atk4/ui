@@ -41,7 +41,7 @@ class Tabs extends View
      * page/url when activated.
      *
      * @param string|TabsTab $name
-     * @param string|array   $url      URL to open inside a tab
+     * @param string|array   $url  URL to open inside a tab
      */
     public function addTabUrl($name, $url, array $settings = [])
     {

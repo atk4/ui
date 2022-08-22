@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Layout\Section;
 
 use Atk4\Ui\Form;
-use Atk4\Ui\TabsTab;
 use Atk4\Ui\Tabs as UiTabs;
+use Atk4\Ui\TabsTab;
 
 /**
  * Represents form controls in tabs.

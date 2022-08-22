@@ -19,6 +19,20 @@ class LoremIpsum extends Text
     public int $words = 50;
 
     /**
+     * @param array|int $defaults
+     */
+    public function __construct($defaults = [])
+    {
+        if (is_scalar($defaults)) {
+            $this->size = $defaults;
+
+            return;
+        }
+
+        parent::__construct($defaults);
+    }
+
+    /**
      * Returns string of LoremIpsum text.
      *
      * @return string "Lorem Ipsum" text
@@ -73,17 +87,6 @@ class LoremIpsum extends Text
         }
 
         return $lorem;
-    }
-
-    public function __construct($defaults = null)
-    {
-        if (is_scalar($defaults) && $defaults) {
-            $this->size = $defaults;
-
-            return;
-        }
-
-        parent::__construct($defaults);
     }
 
     protected function init(): void
