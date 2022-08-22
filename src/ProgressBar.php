@@ -29,7 +29,10 @@ class ProgressBar extends View
     /** @var int Indicates a maximum value of a progress bar. */
     public $max = 100;
 
-    public function __construct($value = 0, $label = [])
+    /**
+     * @param array|string $label
+     */
+    public function __construct(int $value = 0, $label = [])
     {
         $this->value = $value;
 

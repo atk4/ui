@@ -63,17 +63,21 @@ namespace Atk4\Ui;
  * @method Jquery form(...$args)
  * @method Jquery visibility(...$args)
  *
- * For Atk4UI:
+ * For atk4/ui JS (defined in js/src/plugin.js):
  * @method Jquery atkAjaxec(...$args)
  * @method Jquery atkColumnResizer(...$args)
  * @method Jquery atkConditionalForm(...$args)
+ * @method Jquery atkConfirm(...$args)
+ * @method Jquery atkCreateModal(...$args)
  * @method Jquery atkFileUpload(...$args)
  * @method Jquery atkJsSearch(...$args)
  * @method Jquery atkJsSortable(...$args)
+ * @method Jquery atkNotify(...$args)
  * @method Jquery atkReloadView(...$args)
  * @method Jquery atkScroll(...$args)
  * @method Jquery atkServerEvent(...$args)
  * @method Jquery atkSidenav(...$args)
+ * @method Jquery atkSpinner(...$args)
  */
 class Jquery extends JsChain
 {

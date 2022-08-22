@@ -8,10 +8,16 @@ class JsNotify implements JsExpressionable
 {
     use \Atk4\Core\DiContainerTrait;
 
-    public $options = [];
+    public array $options = [];
+
+    /** @var View|null */
     public $attachTo;
 
-    public function __construct($options = null, $attachTo = null)
+    /**
+     * @param string|array $options
+     * @param View         $attachTo
+     */
+    public function __construct($options = null, View $attachTo = null)
     {
         if (is_array($options)) {
             $this->setDefaults($options);
@@ -137,11 +143,11 @@ class JsNotify implements JsExpressionable
     /**
      * Set the opacity of the notifier.
      *
-     * @param float $opacity Range from 0 to 1
+     * @param float $opacity Range from 0.0 to 1.0
      *
      * @return $this
      */
-    public function setOpacity($opacity)
+    public function setOpacity(float $opacity)
     {
         $this->options['opacity'] = $opacity;
 
@@ -152,16 +158,12 @@ class JsNotify implements JsExpressionable
      * Attach this notifier to a view object.
      *  - position and width of notifier will be relative to this view object.
      *
-     * note: notifier is attach to 'body' element by default.
+     * Note: notifier is attach to 'body' element by default.
      *
      * @return $this
      */
-    public function attachTo($to)
+    public function attachTo(View $to)
     {
-        if (!$to instanceof View) {
-            throw new Exception('You need to attach notifier to a view!');
-        }
-
         $this->attachTo = $to;
 
         return $this;
@@ -172,7 +174,7 @@ class JsNotify implements JsExpressionable
         if ($this->attachTo) {
             $final = $this->attachTo->js();
         } else {
-            $final = new JsChain();
+            $final = new Jquery();
         }
 
         $final->atkNotify($this->options);

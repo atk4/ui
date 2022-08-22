@@ -23,6 +23,9 @@ class WizardStep extends View
     /** @var int Will be automatically assigned 0, 1, 2, etc,. */
     public $sequence;
 
+    /**
+     * @param string $title
+     */
     public function __construct($title)
     {
         $this->title = $title;

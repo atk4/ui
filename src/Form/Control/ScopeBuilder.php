@@ -21,8 +21,7 @@ class ScopeBuilder extends Control
     /** @var bool Do not render label for this input. */
     public $renderLabel = false;
 
-    /** @var array General or field type specific options. */
-    public $options = [
+    public array $options = [
         'enum' => [
             'limit' => 250,
         ],
@@ -48,15 +47,10 @@ class ScopeBuilder extends Control
 
     /**
      * The date, time or datetime options:
-     *     Any of flatpickr options;
-     *    'flatpickr' => [].
-     *
-     *     When true, will init date, time or datetime to current.
-     *    'useDefault'
-     *
-     * @var array
+     * 'flatpickr' - any of flatpickr options
+     * 'useDefault' - when true, will init date, time or datetime to current.
      */
-    public $atkdDateOptions = [
+    public array $atkdDateOptions = [
         'useDefault' => false,
         'flatpickr' => [],
     ];
@@ -64,7 +58,7 @@ class ScopeBuilder extends Control
     /**
      * atk-lookup and semantic-ui dropdown options.
      */
-    public $atkLookupOptions = [
+    public array $atkLookupOptions = [
         'ui' => 'small basic button',
     ];
 

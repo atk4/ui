@@ -82,6 +82,9 @@ class Popup extends View
      */
     public $stopClickEvent = false;
 
+    /**
+     * @param View|array|null $triggerBy
+     */
     public function __construct($triggerBy = null)
     {
         if (is_object($triggerBy)) {
