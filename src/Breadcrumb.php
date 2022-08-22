@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-/**
- * Implements a more sophisticated and interactive Data-Table component.
- */
 class Breadcrumb extends Lister
 {
     /** @var array */

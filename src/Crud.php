@@ -8,9 +8,6 @@ use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Ui\UserAction\ExecutorFactory;
 
-/**
- * Implements a more sophisticated and interactive Data-Table component.
- */
 class Crud extends Grid
 {
     /** @var array of fields to display in Grid */
@@ -61,10 +58,7 @@ class Crud extends Grid
         }
     }
 
-    /**
-     * Apply ordering to the current model as per the sort parameters.
-     */
-    public function applySort()
+    public function applySort(): void
     {
         parent::applySort();
 
@@ -81,11 +75,6 @@ class Crud extends Grid
         }
     }
 
-    /**
-     * Sets data model of Crud.
-     *
-     * @param array<int, string>|null $fields
-     */
     public function setModel(Model $model, array $fields = null): void
     {
         $model->assertIsModel();
@@ -221,7 +210,7 @@ class Crud extends Grid
      *
      * @param string|null $msg the message to display
      *
-     * @return object
+     * @return JsExpressionable
      */
     protected function getNotifier(string $msg = null)
     {
@@ -236,7 +225,7 @@ class Crud extends Grid
     /**
      * Setup js for firing menu action.
      */
-    protected function setItemsAction()
+    protected function setItemsAction(): void
     {
         foreach ($this->menuItems as $k => $item) {
             $this->container->js(true, $item['item']->on('click.atk_crud_item', $item['executor']));

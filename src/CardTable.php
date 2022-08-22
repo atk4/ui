@@ -14,7 +14,7 @@ use Atk4\Data\Model;
  */
 class CardTable extends Table
 {
-    protected $_bypass = false;
+    protected bool $_bypass = false;
 
     /**
      * @param array<int, string>|null $columns

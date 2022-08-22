@@ -30,7 +30,7 @@ class JsIntegrationTest extends TestCase
     }
 
     /**
-     * make sure that chain is crated correctly.
+     * Make sure that chain is crated correctly.
      */
     public function testBasicChain1(): void
     {

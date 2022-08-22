@@ -525,7 +525,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * hasOne reference or enum type rule for ScopeBuilder.
+     * HasOne reference or enum type rule for ScopeBuilder.
      *
      * @Then /^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */
@@ -537,7 +537,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * hasOne select or enum type rule for ScopeBuilder.
+     * HasOne select or enum type rule for ScopeBuilder.
      *
      * @Then /^select rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
      */

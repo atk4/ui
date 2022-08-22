@@ -12,9 +12,6 @@ use Atk4\Data\Reference\ContainsMany;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Form\Control;
 
-/**
- * Implements a form.
- */
 class Form extends View
 {
     use \Atk4\Core\HookTrait;
@@ -108,10 +105,8 @@ class Form extends View
      *  Show "target' if 'source1' is not empty AND is a number
      *      OR
      *  Show 'target' if 'source1' is exactly 5.
-     *
-     * @var array
      */
-    public $controlDisplayRules = [];
+    public array $controlDisplayRules = [];
 
     /**
      * Default css selector for JsConditionalForm.
@@ -147,14 +142,14 @@ class Form extends View
     }
 
     /**
-     * initialize form layout. You can inject custom layout
+     * Initialize form layout. You can inject custom layout
      * if you 'layout' => .. to constructor.
      */
-    protected function initLayout()
+    protected function initLayout(): void
     {
         // TODO simplify
         if ($this->layout === null) {
-            $this->layout = [Form\Layout::class];
+            $this->layout = [Form\Layout::class]; // @phpstan-ignore-line
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
@@ -499,7 +494,7 @@ class Form extends View
     /**
      * Looks inside the POST of the request and loads it into a current model.
      */
-    protected function loadPost()
+    protected function loadPost(): void
     {
         $this->hook(self::HOOK_LOAD_POST, [&$_POST]);
 
@@ -583,7 +578,7 @@ class Form extends View
     /**
      * Does ajax submit.
      */
-    public function ajaxSubmit()
+    public function ajaxSubmit(): void
     {
         $this->js(true)->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
 

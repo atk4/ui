@@ -551,9 +551,6 @@ parameters:
             path: 'src/CardSection.php'
             message: '~^Method Atk4\\Ui\\CardSection::addTableSection\(\) has no return type specified\.$~'
         -
-            path: 'src/CardTable.php'
-            message: '~^Property Atk4\\Ui\\CardTable::\$_bypass has no type specified\.$~'
-        -
             path: 'src/Columns.php'
             message: '~^Method Atk4\\Ui\\Columns::addColumn\(\) has no return type specified\.$~'
         -
@@ -584,9 +581,6 @@ parameters:
             path: 'src/Form/Control/Input.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$actionLeft has no type specified\.$~'
         -
-            path: 'src/Form/Control/Input.php'
-            message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$width has no type specified\.$~'
-        -
             path: 'src/Form/Control/Lookup.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Lookup::applyLimit\(\) has parameter \$limit with no type specified\.$~'
         -
@@ -607,63 +601,6 @@ parameters:
         -
             path: 'src/Form/Control/TreeItemSelector.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\TreeItemSelector::setTreeItems\(\) has parameter \$treeItems with no type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::setActionDecorator\(\) has no return type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::setActionDecorator\(\) has parameter \$seed with no type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::setActionMenuDecorator\(\) has no return type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::setActionMenuDecorator\(\) has parameter \$seed with no type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::addButton\(\) has no return type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::setIpp\(\) has no return type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::addQuickSearch\(\) has no return type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::addActionButton\(\) has parameter \$isDisabled with no type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::addExecutorButton\(\) has no return type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::addActionMenuItem\(\) has parameter \$action with no type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::addExecutorMenuItem\(\) has no return type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::getActionMenu\(\) has no return type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::addActionMenuItems\(\) has no return type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::addActionMenuFromModel\(\) has no return type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::addDropdown\(\) has no return type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::addUserAction\(\) has no return type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::applySort\(\) has no return type specified\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Method Atk4\\Ui\\Grid::setModelLimitFromPaginator\(\) has no return type specified\.$~'
-        -
-            path: 'src/GridLayout.php'
-            message: '~^Method Atk4\\Ui\\GridLayout::buildTemplate\(\) has no return type specified\.$~'
         -
             path: 'src/ItemsPerPageSelector.php'
             message: '~^Method Atk4\\Ui\\ItemsPerPageSelector::jsSetLabel\(\) has parameter \$ipp with no type specified\.$~'
@@ -757,15 +694,6 @@ parameters:
         -
             path: 'src/Popup.php'
             message: '~^Method Atk4\\Ui\\Popup::setOptions\(\) has parameter \$options with no type specified\.$~'
-        -
-            path: 'src/Table.php'
-            message: '~^Method Atk4\\Ui\\Table::setFilterColumn\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table.php'
-            message: '~^Method Atk4\\Ui\\Table::addTotals\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table.php'
-            message: '~^Method Atk4\\Ui\\Table::updateTotals\(\) has no return type specified\.$~'
         -
             path: 'src/Table/Column.php'
             message: '~^Method Atk4\\Ui\\Table\\Column::setHeaderPopup\(\) has no return type specified\.$~'

@@ -56,7 +56,7 @@ class Input extends Form\Control
     public $width;
 
     /**
-     * here additional attributes directly for the <input> tag can be added:
+     * Additional attributes directly for the <input> tag can be added:
      * ['attribute_name' => 'attribute_value'], e.g.
      * ['autocomplete' => 'new-password'].
      *

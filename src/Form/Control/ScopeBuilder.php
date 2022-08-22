@@ -56,7 +56,7 @@ class ScopeBuilder extends Control
     ];
 
     /**
-     * atk-lookup and semantic-ui dropdown options.
+     * Atk-lookup and semantic-ui dropdown options.
      */
     public array $atkLookupOptions = [
         'ui' => 'small basic button',
@@ -687,7 +687,7 @@ class ScopeBuilder extends Control
     }
 
     /**
-     * return extra value option associate with certain inputType or null otherwise.
+     * Return extra value option associate with certain inputType or null otherwise.
      */
     protected static function getOption(string $type, string $value, Condition $condition): ?array
     {

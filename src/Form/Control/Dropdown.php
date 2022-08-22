@@ -124,11 +124,6 @@ class Dropdown extends Input
         $this->_tItem->del('Icon');
     }
 
-    /**
-     * returns <input .../> tag.
-     *
-     * @return string
-     */
     public function getInput()
     {
         return $this->getApp()->getTag('input', array_merge([

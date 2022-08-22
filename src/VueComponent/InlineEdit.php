@@ -114,7 +114,6 @@ class InlineEdit extends View
     }
 
     /**
-     * onChange handler.
      * You may supply your own function to handle update.
      * The function will receive one param:
      *  value: the new input value.

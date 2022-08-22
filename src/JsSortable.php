@@ -74,7 +74,7 @@ class JsSortable extends JsCallback
     }
 
     /**
-     * return js action to retrieve order.
+     * Return js action to retrieve order.
      *
      * @param array|null $uriOptions
      *

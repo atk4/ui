@@ -254,7 +254,7 @@ class CardDeck extends View
     }
 
     /**
-     * js expression return when action afterHook executor return a Model.
+     * Js expression return when action afterHook executor return a Model.
      */
     protected function jsModelReturn(Model\UserAction $action = null, string $msg = 'Done!'): array
     {

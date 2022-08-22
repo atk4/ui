@@ -9,8 +9,7 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**
- * Implements a most core view, which all of the other components descend
- * form.
+ * Base view of all other UI components.
  */
 class View extends AbstractView implements JsExpressionable
 {

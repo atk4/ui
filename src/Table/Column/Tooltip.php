@@ -10,7 +10,7 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Table;
 
 /**
- * column to add a little icon to show on hover a text
+ * Column to add a little icon to show on hover a text
  * text is taken by the Row Model in $tooltipField.
  *
  * $crud->addDecorator('paid_date', new Table\Column\Tooltip('note'));

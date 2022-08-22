@@ -61,7 +61,7 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
     }
 
     /**
-     * adding an item into the cart.
+     * Add an item into the cart.
      */
     public function addItem($item)
     {
@@ -70,7 +70,7 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
     }
 
     /**
-     * remove item form the cart with specified index.
+     * Remove item form the cart with specified index.
      */
     public function removeItem($no)
     {
@@ -79,7 +79,7 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
     }
 
     /**
-     * renders as a regular lister, but source is the items.
+     * Renders as a regular lister, but source is the items.
      */
     protected function renderView(): void
     {

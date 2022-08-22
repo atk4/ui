@@ -71,7 +71,7 @@ class Link extends Table\Column
     public $icon;
 
     /**
-     * set html5 target attribute in tag
+     * Set html5 target attribute in tag
      * possible values : _blank | _parent | _self | _top | frame#name.
      *
      * @var string!null

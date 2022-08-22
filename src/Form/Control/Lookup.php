@@ -333,9 +333,6 @@ class Lookup extends Input
         ($this->dependency)($this->model, $data);
     }
 
-    /**
-     * returns <input .../> tag.
-     */
     public function getInput()
     {
         return $this->getApp()->getTag('input', array_merge([

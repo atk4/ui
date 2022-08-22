@@ -96,9 +96,8 @@ class Table extends Lister
     public $hasCollapsingCssActionColumn = true;
 
     /**
-     * initChunks method will create one column object that will be used to render
-     * all columns in the table unless you have specified a different
-     * column object.
+     * Create one column object that will be used to render all columns
+     * in the table unless you have specified a different column object.
      */
     protected function initChunks(): void
     {
@@ -191,7 +190,7 @@ class Table extends Lister
      *
      * @param array $cols an array with colomns name that need filtering
      */
-    public function setFilterColumn($cols = null)
+    public function setFilterColumn($cols = null): void
     {
         if (!$this->model) {
             throw new Exception('Model need to be defined in order to use column filtering');
@@ -362,7 +361,7 @@ class Table extends Lister
      *
      * @param array $plan
      */
-    public function addTotals($plan = [])
+    public function addTotals($plan = []): void
     {
         $this->totalsPlan = $plan;
     }
@@ -543,7 +542,7 @@ class Table extends Lister
     /**
      * Executed for each row if "totals" are enabled to add up values.
      */
-    public function updateTotals()
+    public function updateTotals(): void
     {
         foreach ($this->totalsPlan as $key => $val) {
             // if value is array, then we treat it as built-in or closure aggregate method

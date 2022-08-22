@@ -13,9 +13,6 @@ use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 
-/**
- * Implements a more sophisticated and interactive Data-Table component.
- */
 class Grid extends View
 {
     use HookTrait;
@@ -554,7 +551,7 @@ class Grid extends View
     /**
      * Apply ordering to the current model as per the sort parameters.
      */
-    public function applySort()
+    public function applySort(): void
     {
         if ($this->sortable === false) {
             return;

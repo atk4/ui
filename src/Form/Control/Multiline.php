@@ -383,7 +383,7 @@ class Multiline extends Form\Control
     }
 
     /**
-     * for javascript use - changing this method may brake JS functionality.
+     * For javascript use - changing this method may brake JS functionality.
      *
      * Finds and returns Multiline row id.
      */

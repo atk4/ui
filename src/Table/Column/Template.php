@@ -16,7 +16,7 @@ class Template extends Table\Column
     public $template;
 
     /**
-     * call new Table\Column\Template('{$name} {$surname}');.
+     * Call new Table\Column\Template('{$name} {$surname}');.
      *
      * @param string $template Template with {$tags}
      */
