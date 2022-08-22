@@ -1053,9 +1053,6 @@ parameters:
             path: 'src/Lister.php'
             message: '~^Method Atk4\\Ui\\Lister::initChunks\(\) has no return type specified\.$~'
         -
-            path: 'src/Lister.php'
-            message: '~^Method Atk4\\Ui\\Lister::renderRow\(\) has no return type specified\.$~'
-        -
             path: 'src/Loader.php'
             message: '~^Method Atk4\\Ui\\Loader::jsLoad\(\) has parameter \$apiConfig with no type specified\.$~'
         -
@@ -1107,18 +1104,6 @@ parameters:
             path: 'src/Modal.php'
             message: '~^Method Atk4\\Ui\\Modal::addButtonAction\(\) has parameter \$button with no type specified\.$~'
         -
-            path: 'src/Paginator.php'
-            message: '~^Method Atk4\\Ui\\Paginator::setTotal\(\) has no return type specified\.$~'
-        -
-            path: 'src/Paginator.php'
-            message: '~^Method Atk4\\Ui\\Paginator::addReloadArgs\(\) has no return type specified\.$~'
-        -
-            path: 'src/Paginator.php'
-            message: '~^Method Atk4\\Ui\\Paginator::renderItem\(\) has no return type specified\.$~'
-        -
-            path: 'src/Panel/Content.php'
-            message: '~^Property Atk4\\Ui\\Panel\\Content::\$cb has no type specified\.$~'
-        -
             path: 'src/Panel/Loadable.php'
             message: '~^Method Atk4\\Ui\\Panel\\Loadable::addDynamicContent\(\) has no return type specified\.$~'
         -
@@ -1151,9 +1136,6 @@ parameters:
         -
             path: 'src/Table.php'
             message: '~^Method Atk4\\Ui\\Table::addTotals\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table.php'
-            message: '~^Method Atk4\\Ui\\Table::renderRow\(\) has no return type specified\.$~'
         -
             path: 'src/Table.php'
             message: '~^Method Atk4\\Ui\\Table::updateTotals\(\) has no return type specified\.$~'
@@ -1236,17 +1218,11 @@ parameters:
             path: 'src/Table/Column/KeyValue.php'
             message: '~^Property Atk4\\Ui\\Table\\Column\\KeyValue::\$values has no type specified\.$~'
         -
-            path: 'src/Tabs.php'
-            message: '~^Method Atk4\\Ui\\Tabs::addTabUrl\(\) has no return type specified\.$~'
-        -
             path: 'src/TabsSubview.php'
             message: '~^Property Atk4\\Ui\\TabsSubview::\$dataTabName has no type specified\.$~'
         -
             path: 'src/TabsSubview.php'
             message: '~^Method Atk4\\Ui\\TabsSubview::setActive\(\) has no return type specified\.$~'
-        -
-            path: 'src/Text.php'
-            message: '~^Method Atk4\\Ui\\Text::render\(\) has parameter \$forceReturn with no type specified\.$~'
         -
             path: 'src/UserAction/ArgumentFormExecutor.php'
             message: '~^Method Atk4\\Ui\\UserAction\\ArgumentFormExecutor::initPreview\(\) has no return type specified\.$~'
@@ -1303,9 +1279,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\UserAction\\JsCallbackExecutor::setAction\(\) has no return type specified\.$~'
         -
             path: 'src/UserAction/JsCallbackExecutor.php'
-            message: '~^Instanceof between Atk4\\Ui\\View and Atk4\\Ui\\View will always evaluate to true\.$~'
-        -
-            path: 'src/UserAction/JsCallbackExecutor.php'
             message: '~^Method Atk4\\Ui\\UserAction\\JsCallbackExecutor::executeModelAction\(\) has no return type specified\.$~'
         -
             path: 'src/UserAction/JsCallbackExecutor.php'
@@ -1316,12 +1289,6 @@ parameters:
         -
             path: 'src/UserAction/PreviewExecutor.php'
             message: '~^Method Atk4\\Ui\\UserAction\\PreviewExecutor::executePreview\(\) has no return type specified\.$~'
-        -
-            path: 'src/View.php'
-            message: '~^Instanceof between Atk4\\Ui\\View and Atk4\\Ui\\View will always evaluate to true\.$~'
-        -
-            path: 'src/VirtualPage.php'
-            message: '~^Instanceof between Atk4\\Ui\\View and Atk4\\Ui\\View will always evaluate to true\.$~'
         -
             path: 'src/Wizard.php'
             message: '~^Method Atk4\\Ui\\Wizard::addFinish\(\) has no return type specified\.$~'

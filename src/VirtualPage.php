@@ -67,12 +67,8 @@ class VirtualPage extends View
     /**
      * Returns URL which you can load directly in the browser location, open in a new tab,
      * new window or inside iframe. This URL will contain HTML for a new page.
-     *
-     * @param string $mode
-     *
-     * @return string
      */
-    public function getUrl($mode = 'callback')
+    public function getUrl(string $mode = 'callback'): string
     {
         return $this->cb->getUrl($mode);
     }
@@ -80,12 +76,8 @@ class VirtualPage extends View
     /**
      * Return URL that is designed to be loaded from inside JavaScript and contain JSON code.
      * This is useful for dynamically loaded Modal, Tabs or Loader.
-     *
-     * @param string $mode
-     *
-     * @return string
      */
-    public function getJsUrl($mode = 'callback')
+    public function getJsUrl(string $mode = 'callback'): string
     {
         return $this->cb->getJsUrl($mode);
     }
@@ -129,7 +121,7 @@ class VirtualPage extends View
 
         // Remove all elements from inside the Content
         foreach ($this->getApp()->layout->elements as $key => $view) {
-            if ($view instanceof View && $view->region === 'Content') {
+            if ($view instanceof View && $view->region === 'Content') { // @phpstan-ignore-line
                 unset($this->getApp()->layout->elements[$key]);
             }
         }

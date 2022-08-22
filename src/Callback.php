@@ -50,7 +50,7 @@ class Callback extends AbstractView
         $this->setUrlTrigger($this->urlTrigger);
     }
 
-    public function setUrlTrigger(string $trigger = null)
+    public function setUrlTrigger(string $trigger = null): void
     {
         $this->urlTrigger = $trigger ?: $this->name;
 

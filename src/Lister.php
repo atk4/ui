@@ -176,7 +176,7 @@ class Lister extends View
      * Render individual row. Override this method if you want to do more
      * decoration.
      */
-    public function renderRow()
+    public function renderRow(): void
     {
         $this->tRow->trySet($this->currentRow);
 

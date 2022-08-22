@@ -145,7 +145,7 @@ class Lookup extends Input
     /**
      * Returns URL which would respond with first 50 matching records.
      */
-    protected function getCallbackUrl()
+    protected function getCallbackUrl(): string
     {
         return $this->callback->getJsUrl();
     }

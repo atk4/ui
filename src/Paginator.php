@@ -6,26 +6,25 @@ namespace Atk4\Ui;
 
 class Paginator extends View
 {
+    public $ui = 'pagination menu';
+    public $defaultTemplate = 'paginator.html';
+
     /** @var int Specify how many pages this paginator has in total. */
     public $total;
 
     /**
      * Override what is the current page. If not set, Paginator will look inside
      * $_GET[$this->name]. If page > total, then page = total.
-     *
-     * @var int
      */
-    public $page;
+    public ?int $page = null;
 
     /**
      * When there are more than ($range * 2 + 1) items, then current page will be surrounded by $range pages
      * followed by spacer ..., for example if range=2, then.
      *
      * 1, ..., 5, 6, *7*, 8, 9, ..., 34
-     *
-     * @var int
      */
-    public $range = 4;
+    public int $range = 4;
 
     /** @var string|null Set this if you want GET argument name to look beautifully. */
     public $urlTrigger;
@@ -41,17 +40,9 @@ class Paginator extends View
     /**
      * Add extra parameter to the reload view
      * as JsReload uri_options.
-     *
-     * @var array
      */
-    public $reloadArgs = [];
+    public array $reloadArgs = [];
 
-    public $ui = 'pagination menu';
-    public $defaultTemplate = 'paginator.html';
-
-    /**
-     * Initializing.
-     */
     protected function init(): void
     {
         parent::init();
@@ -68,7 +59,7 @@ class Paginator extends View
     /**
      * Set total number of pages.
      */
-    public function setTotal(int $total)
+    public function setTotal(int $total): void
     {
         $this->total = $total < 1 ? 1 : $total;
 
@@ -96,10 +87,8 @@ class Paginator extends View
      *
      * Array will contain '[', ']', denoting "first", "last" items, '...' for the spacer and any
      * other integer value for a regular page link.
-     *
-     * @return array
      */
-    public function getPaginatorItems()
+    public function getPaginatorItems(): array
     {
         if ($this->page < 1) {
             $this->page = 1;
@@ -154,10 +143,8 @@ class Paginator extends View
      * Return URL for displaying a certain page.
      *
      * @param int|string $page
-     *
-     * @return string
      */
-    protected function getPageUrl($page)
+    protected function getPageUrl($page): string
     {
         return $this->url([$this->urlTrigger => $page]);
     }
@@ -168,7 +155,7 @@ class Paginator extends View
      *
      * @param array $args
      */
-    public function addReloadArgs($args)
+    public function addReloadArgs($args): void
     {
         $this->reloadArgs = array_merge($this->reloadArgs, $args);
     }
@@ -179,7 +166,7 @@ class Paginator extends View
      * @param HtmlTemplate $t
      * @param int|string   $page
      */
-    public function renderItem($t, $page = null)
+    public function renderItem($t, $page = null): void
     {
         if ($page) {
             $t->trySet('page', (string) $page);

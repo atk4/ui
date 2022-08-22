@@ -507,10 +507,8 @@ class View extends AbstractView implements JsExpressionable
      * $this->invokeInit().
      *
      * @param array $page
-     *
-     * @return string
      */
-    public function jsUrl($page = [])
+    public function jsUrl($page = []): string
     {
         return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
     }
@@ -521,10 +519,8 @@ class View extends AbstractView implements JsExpressionable
      * $this->invokeInit().
      *
      * @param string|array $page URL as string or array with page name as first element and other GET arguments
-     *
-     * @return string
      */
-    public function url($page = [])
+    public function url($page = []): string
     {
         return $this->getApp()->url($page, false, $this->_getStickyArgs());
     }
@@ -534,7 +530,7 @@ class View extends AbstractView implements JsExpressionable
      */
     protected function _getStickyArgs(): array
     {
-        if ($this->issetOwner() && $this->getOwner() instanceof self) {
+        if ($this->issetOwner() && $this->getOwner() instanceof self) { // @phpstan-ignore-line
             $stickyArgs = array_merge($this->getOwner()->_getStickyArgs(), $this->stickyArgs);
         } else {
             $stickyArgs = $this->stickyArgs;
@@ -620,7 +616,7 @@ class View extends AbstractView implements JsExpressionable
     protected function recursiveRender(): void
     {
         foreach ($this->elements as $view) {
-            if (!$view instanceof self) {
+            if (!$view instanceof self) { // @phpstan-ignore-line
                 continue;
             }
 

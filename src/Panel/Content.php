@@ -13,6 +13,8 @@ use Atk4\Ui\View;
 class Content extends View implements LoadableContent
 {
     public $defaultTemplate = 'panel/content.html';
+
+    /** @var Callback */
     public $cb;
 
     protected function init(): void
@@ -36,7 +38,7 @@ class Content extends View implements LoadableContent
      */
     public function setCb(Callback $cb): void
     {
-        $this->cb = $this->add($cb);
+        $this->cb = $this->add($cb); // @phpstan-ignore-line
     }
 
     /**

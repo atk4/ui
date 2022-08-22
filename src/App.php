@@ -688,10 +688,8 @@ class App
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
      * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
      * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
-     *
-     * @return string
      */
-    public function url($page = [], $needRequestUri = false, $extraRequestUriArgs = [])
+    public function url($page = [], $needRequestUri = false, $extraRequestUriArgs = []): string
     {
         if ($needRequestUri) {
             $page = $_SERVER['REQUEST_URI'];
@@ -753,10 +751,8 @@ class App
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
      * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
      * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
-     *
-     * @return string
      */
-    public function jsUrl($page = [], $needRequestUri = false, $extraRequestUriArgs = [])
+    public function jsUrl($page = [], $needRequestUri = false, $extraRequestUriArgs = []): string
     {
         // append to the end but allow override
         $extraRequestUriArgs = array_merge($extraRequestUriArgs, ['__atk_json' => 1], $extraRequestUriArgs);

@@ -43,7 +43,7 @@ class Tabs extends View
      * @param string|TabsTab $name
      * @param string|array   $url  URL to open inside a tab
      */
-    public function addTabUrl($name, $url, array $settings = [])
+    public function addTabUrl($name, $url, array $settings = []): void
     {
         $item = $this->addTabMenuItem($name, $settings);
         $this->addSubView($item->name);
