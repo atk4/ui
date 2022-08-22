@@ -457,13 +457,13 @@ parameters:
             message: '~^Parameter #1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
         -
             path: 'src/Form/Layout/Section.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, mixed> given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, Atk4\\Ui\\Form\|class-string<Atk4\\Ui\\Form\\Layout>> given\.$~'
         -
             path: 'src/Form/Layout/Section/Accordion.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, mixed> given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, Atk4\\Ui\\Form\|class-string<Atk4\\Ui\\Form\\Layout>> given\.$~'
         -
             path: 'src/Form/Layout/Section/Tabs.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, mixed> given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, Atk4\\Ui\\Form\|class-string<Atk4\\Ui\\Form\\Layout>> given\.$~'
         -
             path: 'src/Grid.php'
             message: '~^Parameter #2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Table\|false given\.$~'
@@ -899,30 +899,6 @@ parameters:
         -
             path: 'src/Form/Control/UploadImage.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\UploadImage::clearThumbnail\(\) has parameter \$defaultThumbnail with no type specified\.$~'
-        -
-            path: 'src/Form/Layout/Section.php'
-            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section::\$formLayout has no type specified\.$~'
-        -
-            path: 'src/Form/Layout/Section.php'
-            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section::\$form has no type specified\.$~'
-        -
-            path: 'src/Form/Layout/Section/Accordion.php'
-            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section\\Accordion::\$formLayout has no type specified\.$~'
-        -
-            path: 'src/Form/Layout/Section/Accordion.php'
-            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section\\Accordion::\$form has no type specified\.$~'
-        -
-            path: 'src/Form/Layout/Section/Columns.php'
-            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section\\Columns::\$formLayout has no type specified\.$~'
-        -
-            path: 'src/Form/Layout/Section/Columns.php'
-            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section\\Columns::\$form has no type specified\.$~'
-        -
-            path: 'src/Form/Layout/Section/Tabs.php'
-            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section\\Tabs::\$formLayout has no type specified\.$~'
-        -
-            path: 'src/Form/Layout/Section/Tabs.php'
-            message: '~^Property Atk4\\Ui\\Form\\Layout\\Section\\Tabs::\$form has no type specified\.$~'
         -
             path: 'src/Grid.php'
             message: '~^Method Atk4\\Ui\\Grid::setActionDecorator\(\) has no return type specified\.$~'

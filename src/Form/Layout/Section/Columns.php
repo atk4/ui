@@ -12,8 +12,10 @@ use Atk4\Ui\Form;
  */
 class Columns extends UiColumns
 {
+    /** @var class-string<Form\Layout> */
     public $formLayout = Form\Layout::class;
-    public $form;
+
+    public Form $form;
 
     /**
      * Add new vertical column.

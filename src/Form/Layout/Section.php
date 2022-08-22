@@ -12,8 +12,10 @@ use Atk4\Ui\View;
  */
 class Section extends View
 {
+    /** @var class-string<Form\Layout> */
     public $formLayout = Form\Layout::class;
-    public $form;
+
+    public Form $form;
 
     /**
      * Adds sub-layout in existing layout.

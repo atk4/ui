@@ -13,8 +13,10 @@ use Atk4\Ui\Form;
  */
 class Accordion extends UiAccordion
 {
+    /** @var class-string<Form\Layout> */
     public $formLayout = Form\Layout::class;
-    public $form;
+
+    public Form $form;
 
     /**
      * Adds hook which in case of field error expands respective accordion sections.

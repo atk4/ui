@@ -19,8 +19,8 @@ abstract class AbstractLayout extends View
 {
     use WarnDynamicPropertyTrait;
 
-    /** @var Form Links layout to the form. */
-    public $form;
+    /** Links layout to owner Form. */
+    public Form $form;
 
     protected function _addControl(Control $control, Field $field): Control
     {

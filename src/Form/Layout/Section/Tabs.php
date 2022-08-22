@@ -13,8 +13,10 @@ use Atk4\Ui\TabsTab;
  */
 class Tabs extends UiTabs
 {
+    /** @var class-string<Form\Layout> */
     public $formLayout = Form\Layout::class;
-    public $form;
+
+    public Form $form;
 
     /**
      * @param string|TabsTab $name
