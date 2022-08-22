@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 /**
- * One Tab of Tabs widget.
- *
  * @method Tabs getOwner()
  */
-class Tab extends MenuItem
+class TabsTab extends MenuItem
 {
     /** @var string */
     public $path;

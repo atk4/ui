@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-/**
- * One Sub view of Tabs widget.
- */
 class TabsSubview extends View
 {
     public $class = ['ui tab'];

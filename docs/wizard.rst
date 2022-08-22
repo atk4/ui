@@ -38,7 +38,7 @@ Next add as many steps as you need specifying title and a PHP callback code for 
             to create a table for model of your choice');
     });
 
-Your callback will also receive `$wizard` as the first argument. Method addStep returns :php:class:`Step`,
+Your callback will also receive `$wizard` as the first argument. Method addStep returns :php:class:`WizardStep`,
 which is described below. You can also provide first argument to addStep as a seed or an object::
 
     $wizard->addStep([
@@ -122,10 +122,10 @@ If you wish to to go to specific step, you can use `$wizard->stepCallback->getUr
 
 Finally you can get url of the current step with `$wizard->url()` (see :php:meth:`View::url`)
 
-Step
+WizardStep
 ====
 
-.. php:class:: Step
+.. php:class:: WizardStep
 
 .. php:attr:: title
 

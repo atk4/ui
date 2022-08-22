@@ -6,9 +6,6 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 
-/**
- * Wizard widget.
- */
 class Wizard extends View
 {
     use SessionTrait;
@@ -78,14 +75,14 @@ class Wizard extends View
     /**
      * Adds step to the wizard.
      *
-     * @param mixed $name Name of tab or Tab object
+     * @param string|array|WizardStep $name
      *
-     * @return View
+     * @return WizardStep
      */
     public function addStep($name, \Closure $fx)
     {
         $step = Factory::factory([
-            Step::class,
+            WizardStep::class,
             'wizard' => $this,
             'template' => clone $this->stepTemplate,
             'sequence' => count($this->steps),
