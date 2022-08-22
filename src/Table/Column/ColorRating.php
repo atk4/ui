@@ -152,7 +152,7 @@ class ColorRating extends Table\Column
         return $this->getTag('body', '{$' . $field->shortName . '}', $attr);
     }
 
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field)
     {
         $value = $field->get($row);
         if ($value === null) {

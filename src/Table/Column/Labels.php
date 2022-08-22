@@ -19,12 +19,7 @@ class Labels extends Table\Column
     /** @var array|null Allowed values, prioritized over ->values */
     public $values;
 
-    /**
-     * @param Field|null $field
-     *
-     * @return array
-     */
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field)
     {
         $values = $this->values ?? $field->values;
 

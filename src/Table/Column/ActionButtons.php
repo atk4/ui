@@ -125,7 +125,7 @@ class ActionButtons extends Table\Column
         return '<div class="ui buttons">' . $output . '</div>';
     }
 
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field)
     {
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {

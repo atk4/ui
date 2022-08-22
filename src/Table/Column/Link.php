@@ -135,7 +135,7 @@ class Link extends Table\Column
         return '<a href="{$c_' . $this->shortName . '}"' . $external . $class . $download . '>' . $icon . '' . $label . '</a>';
     }
 
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field)
     {
         if ($this->url) {
             $rowValues = $this->getApp()->uiPersistence->typecastSaveRow($row, $row->get());

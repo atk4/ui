@@ -367,12 +367,9 @@ class Column
      * Return associative array of tags to be filled with pre-rendered HTML on
      * a column-basis. Will not be invoked if html-output is turned off for the table.
      *
-     * @param Model      $row   link to row data
-     * @param Field|null $field field being rendered
-     *
      * @return array associative array with tags and their HTML values
      */
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field)
     {
         return [];
     }

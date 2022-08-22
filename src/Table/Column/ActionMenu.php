@@ -125,7 +125,7 @@ class ActionMenu extends Table\Column
         return $s;
     }
 
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field)
     {
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {

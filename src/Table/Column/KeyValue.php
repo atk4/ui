@@ -42,12 +42,7 @@ class KeyValue extends Table\Column
 {
     public $values = [];
 
-    /**
-     * @param Field|null $field
-     *
-     * @return array
-     */
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field)
     {
         $values = $field->values;
 

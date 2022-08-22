@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column;
 
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Table;
 
@@ -26,7 +27,7 @@ class NoValue extends Table\Column
     /** @var string */
     public $noValue = ' --- ';
 
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field)
     {
         $actualValue = $field->get($row);
 
