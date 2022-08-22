@@ -68,10 +68,9 @@ abstract class FilterModel extends Model
             'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
         ][$field->type ?? 'string'];
 
-        /*
-         * You can set your own filter model condition by extending
-         * Field class and setting your filter model class.
-         */
+        // You can set your own filter model condition by extending
+        // Field class and setting your filter model class.
+        // TODO remove in favor of some Field::ui config
         if (!@empty($field->filterModel)) {
             if ($field->filterModel instanceof self) {
                 return $field->filterModel;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Data\Model;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\JsFunction;
@@ -15,18 +16,17 @@ class Dropdown extends Input
 {
     /**
      * Values need for the dropdown.
-     *  Note: Now possible to display icon with value in dropdown by passing the
-     *        icon class with your values.
+     * Note: Now possible to display icon with value in dropdown by passing the icon class with your values.
      * ex: 'values' => [
-     *          'tag' => ['Tag', 'icon' => 'tag icon'],
-     *          'globe' => ['Globe', 'icon' => 'globe icon'],
-     *          'registered' => ['Registered', 'icon' => 'registered icon'],
-     *          'file' => ['File', 'icon' => 'file icon']
-     *          ].
+     *         'tag' => ['Tag', 'icon' => 'tag icon'],
+     *         'globe' => ['Globe', 'icon' => 'globe icon'],
+     *         'registered' => ['Registered', 'icon' => 'registered icon'],
+     *         'file' => ['File', 'icon' => 'file icon'],
+     *     ].
      *
-     * @var array
+     * @var array<int|string, mixed>
      */
-    public $values = [];
+    public array $values;
 
     /** @var string The string to set as an empty values. */
     public $empty = "\u{00a0}"; // Unicode NBSP
@@ -184,7 +184,7 @@ class Dropdown extends Input
      * @param string $option
      * @param mixed  $value
      */
-    public function setDropdownOption($option, $value)
+    public function setDropdownOption($option, $value): void
     {
         $this->dropdownOptions[$option] = $value;
     }
@@ -194,7 +194,7 @@ class Dropdown extends Input
      *
      * @param array $options
      */
-    public function setDropdownOptions($options)
+    public function setDropdownOptions($options): void
     {
         $this->dropdownOptions = array_merge($this->dropdownOptions, $options);
     }
@@ -317,11 +317,14 @@ class Dropdown extends Input
         }
     }
 
-    /*
-     * used when a custom callback is defined for row rendering. Sets
-     * values to row tempalte and appends it to main template
+    /**
+     * Used when a custom callback is defined for row rendering. Sets
+     * values to row tempalte and appends it to main template.
+     *
+     * @param Model|mixed                $row
+     * @param int|string|int             $key
      */
-    protected function _addCallBackRow($row, $key = null)
+    protected function _addCallBackRow($row, $key = null): void
     {
         $res = ($this->renderRowFunction)($row, $key);
         $this->_tItem->set('value', (string) $res['value']);

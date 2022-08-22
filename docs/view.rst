@@ -364,7 +364,8 @@ will output itself. By default 'Content'.
 
 Here is a best practice for using custom template::
 
-    class MyView extends View {
+    class MyView extends View
+    {
         public $template = 'custom.html';
 
         public $title = 'Default Title';

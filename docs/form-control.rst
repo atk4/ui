@@ -361,11 +361,12 @@ If you'd like to even further adjust How each item is displayed (e.g. complex HT
     {
         public $defaultTemplate = 'my_dropdown.html';
 
-        /*
+        /**
          * used when a custom callback is defined for row rendering. Sets
          * values to item template and appends it to main template
          */
-        protected function _addCallBackRow($row, $key = null) {
+        protected function _addCallBackRow($row, $key = null)
+        {
             $res = ($this->renderRowFunction)($row, $key);
             $this->_tItem->set('value', (string) $res['value']);
             $this->_tItem->set('title', $res['title']);

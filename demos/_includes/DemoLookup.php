@@ -14,7 +14,7 @@ use Atk4\Ui\VirtualPage;
 
 class DemoLookup extends Form\Control\Lookup
 {
-    protected function initQuickNewRecord()
+    protected function initQuickNewRecord(): void
     {
         if (!$this->plus) {
             return;

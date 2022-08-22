@@ -633,7 +633,7 @@ class Multiline extends Form\Control
     /**
      * Apply Props to component that require props based on field value.
      */
-    protected function valuePropsBinding(string $values)
+    protected function valuePropsBinding(string $values): void
     {
         $fieldValues = $this->getApp()->decodeJson($values);
 

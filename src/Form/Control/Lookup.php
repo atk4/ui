@@ -224,7 +224,7 @@ class Lookup extends Input
     /**
      * Add button for new record.
      */
-    protected function initQuickNewRecord()
+    protected function initQuickNewRecord(): void
     {
         if (!$this->plus) {
             return;
@@ -279,7 +279,7 @@ class Lookup extends Input
     /**
      * Apply limit to model.
      */
-    protected function applyLimit($limit = true)
+    protected function applyLimit($limit = true): void
     {
         if (!$limit) {
             return;
@@ -291,7 +291,7 @@ class Lookup extends Input
     /**
      * Apply conditions to model based on search string.
      */
-    protected function applySearchConditions()
+    protected function applySearchConditions(): void
     {
         if (empty($_GET['q'])) {
             return;
@@ -315,7 +315,7 @@ class Lookup extends Input
     /**
      * Apply conditions to model based on dependency.
      */
-    protected function applyDependencyConditions()
+    protected function applyDependencyConditions(): void
     {
         if (!$this->dependency instanceof \Closure) {
             return;
@@ -367,7 +367,7 @@ class Lookup extends Input
      *
      * @param Jquery $chain
      */
-    protected function initDropdown($chain)
+    protected function initDropdown($chain): void
     {
         $settings = array_merge([
             'fields' => ['name' => 'title'],

@@ -119,8 +119,10 @@ your application, then any object you add into your app will have a unique `name
 The other property of the name is that it's also "permanent". Refreshing the page guarantees your object to have the same
 name. Ultimately, you can create a View that uses it's name to store some information::
 
-    class MyView extends View {
-        protected function init(): void {
+    class MyView extends View
+    {
+        protected function init(): void
+        {
             parent::init();
 
             if ($_GET[$this->name]) {

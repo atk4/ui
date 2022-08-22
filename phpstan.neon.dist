@@ -455,33 +455,6 @@ parameters:
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 6
         -
-            path: 'demos/_includes/Demo.php'
-            message: '~^Property Atk4\\Ui\\Demos\\Demo::\$left has no type specified\.$~'
-        -
-            path: 'demos/_includes/Demo.php'
-            message: '~^Property Atk4\\Ui\\Demos\\Demo::\$right has no type specified\.$~'
-        -
-            path: 'demos/_includes/Demo.php'
-            message: '~^Property Atk4\\Ui\\Demos\\Demo::\$isInitialized has no type specified\.$~'
-        -
-            path: 'demos/_includes/Demo.php'
-            message: '~^Property Atk4\\Ui\\Demos\\Demo::\$highlightDefaultStyle has no type specified\.$~'
-        -
-            path: 'demos/_includes/Demo.php'
-            message: '~^Method Atk4\\Ui\\Demos\\Demo::setCodeAndCall\(\) has no return type specified\.$~'
-        -
-            path: 'demos/_includes/Demo.php'
-            message: '~^Method Atk4\\Ui\\Demos\\Demo::setCodeAndCall\(\) has parameter \$lang with no type specified\.$~'
-        -
-            path: 'demos/_includes/Demo.php'
-            message: '~^Method Atk4\\Ui\\Demos\\Demo::highLightCode\(\) has no return type specified\.$~'
-        -
-            path: 'demos/_includes/DemoLookup.php'
-            message: '~^Method Atk4\\Ui\\Demos\\DemoLookup::initQuickNewRecord\(\) has no return type specified\.$~'
-        -
-            path: 'demos/interactive/console.php'
-            message: '~^Method class@anonymous/demos/interactive/console\.php:\d+::generateReport\(\) has no return type specified\.$~'
-        -
             path: 'demos/interactive/popup.php'
             message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::addItem\(\) has no return type specified\.$~'
         -
@@ -552,9 +525,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\CardDeck::applyReload\(\) has no return type specified\.$~'
         -
             path: 'src/CardDeck.php'
-            message: '~^Method Atk4\\Ui\\CardDeck::jsExecute\(\) has parameter \$return with no type specified\.$~'
-        -
-            path: 'src/CardDeck.php'
             message: '~^Method Atk4\\Ui\\CardDeck::addMenuButton\(\) has parameter \$args with no type specified\.$~'
         -
             path: 'src/CardDeck.php'
@@ -590,26 +560,11 @@ parameters:
             path: 'src/Columns.php'
             message: '~^Method Atk4\\Ui\\Columns::addRow\(\) has no return type specified\.$~'
         -
-            path: 'src/Crud.php'
-            message: '~^Method Atk4\\Ui\\Crud::jsExecute\(\) has parameter \$return with no type specified\.$~'
-        -
-            path: 'src/Form/Control/Calendar.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Calendar::setOption\(\) has parameter \$name with no type specified\.$~'
-        -
-            path: 'src/Form/Control/Calendar.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Calendar::setOption\(\) has parameter \$value with no type specified\.$~'
-        -
             path: 'src/Form/Control/Checkbox.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Checkbox::jsChecked\(\) has parameter \$action with no type specified\.$~'
         -
             path: 'src/Form/Control/Checkbox.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Checkbox::jsChecked\(\) has parameter \$when with no type specified\.$~'
-        -
-            path: 'src/Form/Control/Dropdown.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_addCallBackRow\(\) has parameter \$key with no type specified\.$~'
-        -
-            path: 'src/Form/Control/Dropdown.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_addCallBackRow\(\) has parameter \$row with no type specified\.$~'
         -
             path: 'src/Form/Control/Input.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$placeholder has no type specified\.$~'

@@ -174,7 +174,8 @@ Type may also be registered per specific model user action via this method::
 
 For example, you need a custom executor to be create when using a specific model user action::
 
-    class MySpecialFormExecutor extends \Atk4\Ui\UserAction\ModalExecutor {
+    class MySpecialFormExecutor extends \Atk4\Ui\UserAction\ModalExecutor
+    {
         public function addFormTo(\Atk4\Ui\View $view): \Atk4\Ui\Form
         {
             $myView = MySpecialView::addTo($view);
