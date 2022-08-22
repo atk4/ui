@@ -309,19 +309,17 @@ only on certain rows. For this you can use an `\\Atk4\Ui\\Table\\Column\\Multifo
             return [[\Atk4\Ui\Table\Column\Template::class, 'Amount was <b>refunded</b>']];
         }
 
-        return \Atk4\Ui\Table\Column\Money::class;
+        return [[\Atk4\Ui\Table\Column\Money::class]];
     }]);
 
 You supply a callback to the Multiformat decorator, which will then be used to determine
 the actual set of decorators to be used on a given row. The example above will look at various
 fields of your models and will conditionally add Link on top of Money formatting.
 
-Your callback can return things in varous ways:
+The callback must return array of seeds like:
 
- - return array of seeds: [[\Atk4\Ui\Table\Column\Link::class], \Atk4\Ui\Table\Column\Money::class];
- - if string or object is returned it is wrapped inside array automatically
+    [[\Atk4\Ui\Table\Column\Link::class], \Atk4\Ui\Table\Column\Money::class]
 
 Multiple decorators will be created and merged.
 
 .. note:: If you are operating with large tables, code your own decorator, which would be more CPU-efficient.
-

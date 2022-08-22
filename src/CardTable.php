@@ -56,7 +56,7 @@ class CardTable extends Table
                 $ret->attr['all']['class'] = ['single line'];
             }
 
-            return $ret;
+            return [$ret];
         }]);
         $this->_bypass = false;
     }
