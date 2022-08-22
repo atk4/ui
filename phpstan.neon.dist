@@ -128,12 +128,6 @@ parameters:
             path: 'demos/interactive/wizard.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$placeholder\.$~'
         -
-            path: 'src/Callback.php'
-            message: '~^Method Atk4\\Ui\\Callback::set\(\) should return mixed but return statement is missing\.$~'
-        -
-            path: 'src/CallbackLater.php'
-            message: '~^Method Atk4\\Ui\\CallbackLater::set\(\) should return mixed but return statement is missing\.$~'
-        -
             path: 'src/Card.php'
             message: '~^Call to an undefined method Atk4\\Ui\\View::setAction\(\)\.$~'
         -
@@ -263,9 +257,6 @@ parameters:
         -
             path: 'src/View.php'
             message: '~^Call to an undefined method Atk4\\Ui\\App::getViewJS\(\)\.$~'
-        -
-            path: 'tests/JsTest.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::getTextInRange\(\)\.$~'
 
         # TODO fix contravariance for View::set() method
         -
@@ -410,18 +401,6 @@ parameters:
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 5
         -
-            path: 'demos/basic/view.php'
-            message: '~^Parameter #2 \$value of method Atk4\\Ui\\HtmlTemplate::set\(\) expects string\|null, int<100, 999> given\.$~'
-        -
-            path: 'demos/data-action/jsactionsgrid.php'
-            message: '~^Parameter #1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View, string given\.$~'
-        -
-            path: 'demos/form-control/input2.php'
-            message: '~^Parameter #1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
-        -
-            path: 'demos/javascript/reloading.php'
-            message: '~^Parameter #1 \$defaults of method Atk4\\Ui\\Form\\Control\\Input::addAction\(\) expects array, string given\.$~'
-        -
             path: 'src/Form/Layout/Section.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, Atk4\\Ui\\Form\|class-string<Atk4\\Ui\\Form\\Layout>> given\.$~'
         -
@@ -430,12 +409,6 @@ parameters:
         -
             path: 'src/Form/Layout/Section/Tabs.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, Atk4\\Ui\\Form\|class-string<Atk4\\Ui\\Form\\Layout>> given\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Parameter #2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Table\|false given\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Parameter #2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Paginator given\.$~'
         -
             path: 'src/Grid.php'
             message: '~^Parameter #1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View, Atk4\\Data\\Model\\UserAction given\.$~'
@@ -455,38 +428,8 @@ parameters:
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 6
         -
-            path: 'demos/interactive/popup.php'
-            message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::addItem\(\) has no return type specified\.$~'
-        -
-            path: 'demos/interactive/popup.php'
-            message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::addItem\(\) has parameter \$item with no type specified\.$~'
-        -
-            path: 'demos/interactive/popup.php'
-            message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::removeItem\(\) has no return type specified\.$~'
-        -
-            path: 'demos/interactive/popup.php'
-            message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::removeItem\(\) has parameter \$no with no type specified\.$~'
-        -
-            path: 'demos/interactive/popup.php'
-            message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::linkCart\(\) has no return type specified\.$~'
-        -
-            path: 'demos/interactive/popup.php'
-            message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::linkCart\(\) has parameter \$cart with no type specified\.$~'
-        -
-            path: 'demos/interactive/popup.php'
-            message: '~^Method class@anonymous/demos/interactive/popup\.php:\d+::linkCart\(\) has parameter \$jsAction with no type specified\.$~'
-        -
             path: 'src/AccordionSection.php'
             message: '~^Property Atk4\\Ui\\AccordionSection::\$icon has no type specified\.$~'
-        -
-            path: 'src/App.php'
-            message: '~^Property Atk4\\Ui\\App::\$templateClass has no type specified\.$~'
-        -
-            path: 'src/App.php'
-            message: '~^Method Atk4\\Ui\\App::terminateHtml\(\) has parameter \$output with no type specified\.$~'
-        -
-            path: 'src/App.php'
-            message: '~^Method Atk4\\Ui\\App::terminateJson\(\) has parameter \$output with no type specified\.$~'
         -
             path: 'src/Breadcrumb.php'
             message: '~^Method Atk4\\Ui\\Breadcrumb::addCrumb\(\) has no return type specified\.$~'
@@ -531,13 +474,7 @@ parameters:
             message: '~^Method Atk4\\Ui\\CardDeck::initPaginator\(\) has no return type specified\.$~'
         -
             path: 'src/CardSection.php'
-            message: '~^Property Atk4\\Ui\\CardSection::\$card has no type specified\.$~'
-        -
-            path: 'src/CardSection.php'
             message: '~^Property Atk4\\Ui\\CardSection::\$useTableField has no type specified\.$~'
-        -
-            path: 'src/CardSection.php'
-            message: '~^Property Atk4\\Ui\\CardSection::\$glue has no type specified\.$~'
         -
             path: 'src/CardSection.php'
             message: '~^Property Atk4\\Ui\\CardSection::\$tableClass has no type specified\.$~'
@@ -564,16 +501,10 @@ parameters:
             message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$placeholder has no type specified\.$~'
         -
             path: 'src/Form/Control/Input.php'
-            message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$icon has no type specified\.$~'
-        -
-            path: 'src/Form/Control/Input.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$iconLeft has no type specified\.$~'
         -
             path: 'src/Form/Control/Input.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$loading has no type specified\.$~'
-        -
-            path: 'src/Form/Control/Input.php'
-            message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$action has no type specified\.$~'
         -
             path: 'src/Form/Control/Input.php'
             message: '~^Property Atk4\\Ui\\Form\\Control\\Input::\$actionLeft has no type specified\.$~'
@@ -601,9 +532,6 @@ parameters:
         -
             path: 'src/ItemsPerPageSelector.php'
             message: '~^Method Atk4\\Ui\\ItemsPerPageSelector::jsSetLabel\(\) has parameter \$ipp with no type specified\.$~'
-        -
-            path: 'src/JsCallback.php'
-            message: '~^Method Atk4\\Ui\\JsCallback::setConfirm\(\) has no return type specified\.$~'
         -
             path: 'src/JsConditionalForm.php'
             message: '~^Method Atk4\\Ui\\JsConditionalForm::setRules\(\) has no return type specified\.$~'
@@ -650,27 +578,6 @@ parameters:
             path: 'src/Layout/NavigableInterface.php'
             message: '~^Method Atk4\\Ui\\Layout\\NavigableInterface::addMenuGroup\(\) has parameter \$seed with no type specified\.$~'
         -
-            path: 'src/Modal.php'
-            message: '~^Property Atk4\\Ui\\Modal::\$headerCss has no type specified\.$~'
-        -
-            path: 'src/Modal.php'
-            message: '~^Method Atk4\\Ui\\Modal::enableCallback\(\) has no return type specified\.$~'
-        -
-            path: 'src/Modal.php'
-            message: '~^Method Atk4\\Ui\\Modal::addContentCss\(\) has no return type specified\.$~'
-        -
-            path: 'src/Modal.php'
-            message: '~^Method Atk4\\Ui\\Modal::addContentCss\(\) has parameter \$class with no type specified\.$~'
-        -
-            path: 'src/Modal.php'
-            message: '~^Method Atk4\\Ui\\Modal::addDenyAction\(\) has parameter \$label with no type specified\.$~'
-        -
-            path: 'src/Modal.php'
-            message: '~^Method Atk4\\Ui\\Modal::addApproveAction\(\) has parameter \$label with no type specified\.$~'
-        -
-            path: 'src/Modal.php'
-            message: '~^Method Atk4\\Ui\\Modal::addButtonAction\(\) has parameter \$button with no type specified\.$~'
-        -
             path: 'src/Panel/Loadable.php'
             message: '~^Method Atk4\\Ui\\Panel\\Loadable::addDynamicContent\(\) has no return type specified\.$~'
         -
@@ -679,84 +586,6 @@ parameters:
         -
             path: 'src/Panel/Right.php'
             message: '~^Method Atk4\\Ui\\Panel\\Right::addConfirmation\(\) has no return type specified\.$~'
-        -
-            path: 'src/Popup.php'
-            message: '~^Method Atk4\\Ui\\Popup::setTriggerBy\(\) has parameter \$trigger with no type specified\.$~'
-        -
-            path: 'src/Popup.php'
-            message: '~^Method Atk4\\Ui\\Popup::setOption\(\) has parameter \$name with no type specified\.$~'
-        -
-            path: 'src/Popup.php'
-            message: '~^Method Atk4\\Ui\\Popup::setOption\(\) has parameter \$option with no type specified\.$~'
-        -
-            path: 'src/Popup.php'
-            message: '~^Method Atk4\\Ui\\Popup::setOptions\(\) has parameter \$options with no type specified\.$~'
-        -
-            path: 'src/Table/Column.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column::setHeaderPopup\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column::setHeaderPopup\(\) has parameter \$id with no type specified\.$~'
-        -
-            path: 'src/Table/Column.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column::setHeaderPopupIcon\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column::setHeaderPopupIcon\(\) has parameter \$icon with no type specified\.$~'
-        -
-            path: 'src/Table/Column.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column::addDropdown\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column::setHeaderDropdown\(\) has parameter \$items with no type specified\.$~'
-        -
-            path: 'src/Table/Column/ActionMenu.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\ActionMenu::addActionMenuItem\(\) has parameter \$isDisabled with no type specified\.$~'
-        -
-            path: 'src/Table/Column/Checkbox.php'
-            message: '~^Property Atk4\\Ui\\Table\\Column\\Checkbox::\$class has no type specified\.$~'
-        -
-            path: 'src/Table/Column/Checkbox.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\Checkbox::jsChecked\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/ColorRating.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::createGradients\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/ColorRating.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::createGradientSingle\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/ColorRating.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::createGradientSingle\(\) has parameter \$gradients with no type specified\.$~'
-        -
-            path: 'src/Table/Column/ColorRating.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::createGradientSingle\(\) has parameter \$hexFrom with no type specified\.$~'
-        -
-            path: 'src/Table/Column/ColorRating.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::createGradientSingle\(\) has parameter \$hexTo with no type specified\.$~'
-        -
-            path: 'src/Table/Column/ColorRating.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::createGradientSingle\(\) has parameter \$steps with no type specified\.$~'
-        -
-            path: 'src/Table/Column/ColorRating.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\ColorRating::getColorFromValue\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/DragHandler.php'
-            message: '~^Property Atk4\\Ui\\Table\\Column\\DragHandler::\$class has no type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel::afterInit\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterPopup.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterPopup::setFilterCondition\(\) has parameter \$tableModel with no type specified\.$~'
-        -
-            path: 'src/Table/Column/KeyValue.php'
-            message: '~^Property Atk4\\Ui\\Table\\Column\\KeyValue::\$values has no type specified\.$~'
-        -
-            path: 'src/TabsSubview.php'
-            message: '~^Property Atk4\\Ui\\TabsSubview::\$dataTabName has no type specified\.$~'
-        -
-            path: 'src/TabsSubview.php'
-            message: '~^Method Atk4\\Ui\\TabsSubview::setActive\(\) has no return type specified\.$~'
         -
             path: 'src/UserAction/ArgumentFormExecutor.php'
             message: '~^Method Atk4\\Ui\\UserAction\\ArgumentFormExecutor::initPreview\(\) has no return type specified\.$~'
@@ -826,30 +655,3 @@ parameters:
         -
             path: 'src/Wizard.php'
             message: '~^Method Atk4\\Ui\\Wizard::addFinish\(\) has no return type specified\.$~'
-        -
-            path: 'tests/PaginatorTest.php'
-            message: '~^Method Atk4\\Ui\\Tests\\PaginatorTest::testPaginator\(\) has parameter \$expected with no type specified\.$~'
-        -
-            path: 'tests/PaginatorTest.php'
-            message: '~^Method Atk4\\Ui\\Tests\\PaginatorTest::testPaginator\(\) has parameter \$page with no type specified\.$~'
-        -
-            path: 'tests/PaginatorTest.php'
-            message: '~^Method Atk4\\Ui\\Tests\\PaginatorTest::testPaginator\(\) has parameter \$range with no type specified\.$~'
-        -
-            path: 'tests/PaginatorTest.php'
-            message: '~^Method Atk4\\Ui\\Tests\\PaginatorTest::testPaginator\(\) has parameter \$total with no type specified\.$~'
-        -
-            path: 'tests/TableColumnColorRatingTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\TableColumnColorRatingTest::\$db has no type specified\.$~'
-        -
-            path: 'tests/TableColumnColorRatingTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\TableColumnColorRatingTest::\$column has no type specified\.$~'
-        -
-            path: 'tests/TableColumnLinkTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\TableColumnLinkTest::\$db has no type specified\.$~'
-        -
-            path: 'tests/TableColumnLinkTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\TableColumnLinkTest::\$table has no type specified\.$~'
-        -
-            path: 'tests/TableColumnLinkTest.php'
-            message: '~^Property Atk4\\Ui\\Tests\\TableColumnLinkTest::\$column has no type specified\.$~'
