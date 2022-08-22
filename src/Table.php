@@ -138,8 +138,8 @@ class Table extends Lister
      * If you don't want table column to be associated with model field, then
      * pass $name parameter as null.
      *
-     * @param string|null                             $name            Data model field name
-     * @param array|Table\Column                      $columnDecorator
+     * @param string|null        $name            Data model field name
+     * @param array|Table\Column $columnDecorator
      * @param ($name is null ? array{} : array|Field) $field
      *
      * @return Table\Column
