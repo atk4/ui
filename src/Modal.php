@@ -151,7 +151,7 @@ class Modal extends View
      * Set modal option.
      *
      * @param string $option
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return $this
      */
@@ -237,7 +237,7 @@ class Modal extends View
      * Add modal settings.
      *
      * @param string $settingOption
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return $this
      */

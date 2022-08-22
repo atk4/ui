@@ -26,8 +26,11 @@ class Calendar extends Input
 
     /**
      * Set flatpickr option.
+     *
+     * @param string $name
+     * @param mixed  $value
      */
-    public function setOption($name, $value)
+    public function setOption($name, $value): void
     {
         $this->options[$name] = $value;
     }
@@ -65,22 +68,6 @@ class Calendar extends Input
         parent::renderView();
     }
 
-    /**
-     * Shorthand method for on('change') event.
-     * Some input fields, like Calendar, could call this differently.
-     *
-     * If $expr is string or JsExpression, then it will execute it instantly.
-     *
-     * Examples:
-     * $control->onChange('console.log(date, text, mode)');
-     * $control->onChange(new JsExpression('console.log(date, text, mode)'));
-     * $control->onChange('$(this).parents(".form").form("submit")');
-     *
-     * Note: Unlike Control::onChange() method, flatpickr onChange options does not use $default settings.
-     *
-     * @param string|JsExpression|array $expr
-     * @param array|bool                $default
-     */
     public function onChange($expr, $default = []): void
     {
         if (is_string($expr)) {

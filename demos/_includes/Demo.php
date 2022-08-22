@@ -11,10 +11,17 @@ use Atk4\Ui\View;
 
 class Demo extends Columns
 {
+    /** @var View */
     public $left;
+    /** @var View */
     public $right;
+
+    /** @var bool */
     public static $isInitialized = false;
+
+    /** @var string */
     public $highlightDefaultStyle = 'dark';
+
     /** @var int */
     public $leftWidth = 8;
     /** @var int */
@@ -52,7 +59,7 @@ class Demo extends Columns
         }, $codeArr));
     }
 
-    public function setCodeAndCall(\Closure $fx, $lang = 'php')
+    public function setCodeAndCall(\Closure $fx, string $lang = 'php'): void
     {
         $code = $this->extractCodeFromClosure($fx);
 
@@ -62,7 +69,7 @@ class Demo extends Columns
         $fx($this->right);
     }
 
-    public function highLightCode()
+    public function highLightCode(): void
     {
         if (!self::$isInitialized) {
             $this->getApp()->requireCss('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.16.2/styles/' . $this->highlightDefaultStyle . '.min.css');

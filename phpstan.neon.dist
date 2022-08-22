@@ -552,9 +552,6 @@ parameters:
             message: '~^Method Atk4\\Ui\\CardSection::addTableSection\(\) has no return type specified\.$~'
         -
             path: 'src/Columns.php'
-            message: '~^Method Atk4\\Ui\\Columns::addColumn\(\) has no return type specified\.$~'
-        -
-            path: 'src/Columns.php'
             message: '~^Method Atk4\\Ui\\Columns::addRow\(\) has no return type specified\.$~'
         -
             path: 'src/Form/Control/Checkbox.php'

@@ -361,8 +361,8 @@ class Grid extends View
      * Adds a new button into the action column on the right. For Crud this
      * column will already contain "delete" and "edit" buttons.
      *
-     * @param string|array|View         $button Label text, object or seed for the Button
-     * @param JsExpressionable|\Closure $action JavaScript action or callback
+     * @param string|array|View         $button     Label text, object or seed for the Button
+     * @param JsExpressionable|\Closure $action     JavaScript action or callback
      * @param bool                      $isDisabled
      *
      * @return View

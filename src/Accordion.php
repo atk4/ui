@@ -59,32 +59,59 @@ class Accordion extends View
      *
      * @param AccordionSection $section the section to activate
      */
-    public function activate($section)
+    public function activate($section): void
     {
         $this->activeSection = $this->getSectionIdx($section);
     }
 
-    // JS Behavior wrapper functions.
+    /**
+     * @param bool $when
+     *
+     * @return JsChain
+     */
     public function jsRefresh($when = null)
     {
         return $this->jsBehavior('refresh', [], $when);
     }
 
+    /**
+     * @param AccordionSection $section
+     * @param bool             $when
+     *
+     * @return JsChain
+     */
     public function jsOpen($section, $when = null)
     {
         return $this->jsBehavior('open', [$this->getSectionIdx($section)], $when);
     }
 
+    /**
+     * @param bool $when
+     *
+     * @return JsChain
+     */
     public function jsCloseOthers($when = null)
     {
         return $this->jsBehavior('close others', [], $when);
     }
 
+    /**
+     * @param AccordionSection $section
+     * @param bool             $when
+     *
+     * @return JsChain
+     */
     public function jsClose($section, $when = null)
     {
         return $this->jsBehavior('close', [$this->getSectionIdx($section)], $when);
     }
 
+    /**
+     * @param AccordionSection $section
+     * @param bool             $when
+     *
+     * @return JsChain
+     */
     public function jsToggle($section, $when = null)
     {
         return $this->jsBehavior('toggle', [$this->getSectionIdx($section)], $when);
@@ -97,9 +124,9 @@ class Accordion extends View
      * $accordion->jsBehavior('toggle', 1).
      *
      * @param string $behavior the name of the behavior for the module
-     * @param bool   $when     when this js action is render
+     * @param bool   $when
      *
-     * @return mixed
+     * @return JsChain
      */
     public function jsBehavior($behavior, array $args, $when = null)
     {

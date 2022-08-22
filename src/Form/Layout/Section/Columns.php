@@ -28,6 +28,6 @@ class Columns extends UiColumns
     {
         $column = parent::addColumn($defaults);
 
-        return $column->add([$this->formLayout, 'form' => $this->form]);
+        return $column->add([$this->formLayout, 'form' => $this->form]); // @phpstan-ignore-line
     }
 }
