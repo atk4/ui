@@ -144,13 +144,6 @@ If the value of the field can be displayed by :php:class:`Table\\Column` then :p
 respord with object of this class. Since the default column does not contain any customization,
 then to save memory Table will re-use the same objects for all generic fields.
 
-.. php:attr:: defaultColumn
-
-Protected property that will contain "generic" column that will be used to format all
-columns, unless a different column type is specified or the Field type will require a use
-of a different class (e.g. 'atk4_money'). Value will be initialized after first call to
-:php:meth:`Table::addColumn`
-
 .. php:attr:: columns
 
     Contains array of defined columns.

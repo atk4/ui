@@ -22,15 +22,6 @@ class Table extends Lister
      */
     public $reload;
 
-    /**
-     * Column objects can service multiple columns. You can use it for your advantage by re-using the object
-     * when you pass it to addColumn(). If you omit the argument, then a column of a type Table\Column
-     * will be used.
-     *
-     * @var Table\Column|null
-     */
-    public $defaultColumn;
-
     /** @var array<int|string, Table\Column|array<int, Table\Column>> Contains list of declared columns. Value will always be a column object. */
     public $columns = [];
 
@@ -294,7 +285,7 @@ class Table extends Lister
             $seed,
             $field->ui['table'] ?? null,
             $this->typeToDecorator[$field->type] ?? null,
-            [$this->defaultColumn ?? Table\Column::class]
+            [Table\Column::class]
         );
 
         return $this->_addUnchecked(Table\Column::fromSeed($seed, ['table' => $this]));
