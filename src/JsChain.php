@@ -96,9 +96,7 @@ class JsChain extends JsExpression
     {
         $this->_chain[] = $property;
 
-        $res = $this; // TODO & before __get is needed for atk4/core PR 329, remove once PHP 8.1 support is dropped
-
-        return $res;
+        return $this;
     }
 
     /**
