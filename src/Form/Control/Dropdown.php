@@ -241,9 +241,6 @@ class Dropdown extends Input
         }
     }
 
-    /**
-     * Renders view.
-     */
     protected function renderView(): void
     {
         if ($this->isMultiple) {

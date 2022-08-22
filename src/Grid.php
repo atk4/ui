@@ -659,9 +659,6 @@ class Grid extends View
         parent::renderView();
     }
 
-    /**
-     * Recursively renders view.
-     */
     protected function recursiveRender(): void
     {
         // bind with paginator

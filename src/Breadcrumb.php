@@ -60,9 +60,6 @@ class Breadcrumb extends Lister
         array_unshift($this->path, ['section' => $section, 'link' => $link]);
     }
 
-    /**
-     * Renders view.
-     */
     protected function renderView(): void
     {
         $this->setSource($this->path);
