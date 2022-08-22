@@ -49,7 +49,7 @@ class Lister extends View
     /**
      * From the current template will extract {row} into $this->tRowMaster and {empty} into $this->tEmpty.
      */
-    public function initChunks()
+    protected function initChunks(): void
     {
         if (!$this->template) {
             throw new Exception('Lister does not have default template. Either supply your own HTML or use "defaultTemplate" => "lister.html"');

@@ -257,7 +257,7 @@ class Multiline extends Form\Control
                 if ($fieldName === '__atkml') {
                     $dataRows[$k][$fieldName] = $value;
                 } else {
-                    $dataRows[$k][$fieldName] = $this->getApp()->uiPersistence->typecastLoadField($this->getModel()->getField($fieldName), $value);
+                    $dataRows[$k][$fieldName] = $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($fieldName), $value);
                 }
             }
         }
@@ -286,12 +286,11 @@ class Multiline extends Form\Control
             $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
         } else {
             // set data according to HasMany relation or using model.
-            $model = $this->getModel();
             $rows = [];
-            foreach ($model as $row) {
+            foreach ($this->model as $row) {
                 $cols = [];
                 foreach ($this->rowFields as $fieldName) {
-                    $field = $model->getField($fieldName);
+                    $field = $this->model->getField($fieldName);
                     $value = $this->getApp()->uiPersistence->typecastSaveField($field, $row->get($field->shortName));
                     $cols[$fieldName] = $value;
                 }
@@ -309,7 +308,7 @@ class Multiline extends Form\Control
     public function validate(array $rows): array
     {
         $rowErrors = [];
-        $entity = $this->getModel()->createEntity();
+        $entity = $this->model->createEntity();
 
         foreach ($rows as $cols) {
             $rowId = $this->getMlRowId($cols);
@@ -334,12 +333,9 @@ class Multiline extends Form\Control
         return $rowErrors;
     }
 
-    /**
-     * Save rows.
-     */
     public function saveRows(): self
     {
-        $model = $this->getModel();
+        $model = $this->model;
 
         // collects existing ids.
         $currentIds = array_column($model->export(), $model->idField);
@@ -403,11 +399,6 @@ class Multiline extends Form\Control
         }
 
         return $rowId;
-    }
-
-    public function getModel(): ?Model
-    {
-        return $this->model;
     }
 
     /**
@@ -566,7 +557,7 @@ class Multiline extends Form\Control
     /**
      * Lookup Props set based on field value.
      */
-    public function setLookupOptionValue(Field $field, string $value)
+    public function setLookupOptionValue(Field $field, string $value): void
     {
         $model = $field->getReference()->refModel($this->model);
         $entity = $model->tryLoadBy($field->getReference()->getTheirFieldName(), $value);
@@ -649,7 +640,7 @@ class Multiline extends Form\Control
         foreach ($fieldValues as $rows) {
             foreach ($rows as $fieldName => $value) {
                 if (array_key_exists($fieldName, $this->valuePropsBinding)) {
-                    call_user_func($this->valuePropsBinding[$fieldName], $this->getModel()->getField($fieldName), $value);
+                    call_user_func($this->valuePropsBinding[$fieldName], $this->model->getField($fieldName), $value);
                 }
             }
         }
@@ -657,9 +648,7 @@ class Multiline extends Form\Control
 
     protected function renderView(): void
     {
-        if (!$this->getModel()) {
-            throw new Exception('Multiline field needs to have it\'s model setup');
-        }
+        $this->model->assertIsModel();
 
         $this->renderCallback->set(function () {
             $this->outputJson();
@@ -699,7 +688,7 @@ class Multiline extends Form\Control
     {
         switch ($_POST['__atkml_action'] ?? null) {
             case 'update-row':
-                $model = $this->setDummyModelValue($this->getModel()->createEntity());
+                $model = $this->setDummyModelValue($this->model->createEntity());
                 $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
                 $this->getApp()->terminateJson(['success' => true, 'message' => 'Success', 'expressions' => $expressionValues]);
                 // no break - expression above always terminate
@@ -780,7 +769,7 @@ class Multiline extends Form\Control
             }
         }
 
-        if (!empty($dummyFields)) {
+        if ($dummyFields !== []) {
             $dummyModel = new Model($model->getPersistence(), ['table' => $model->table]);
             foreach ($dummyFields as $field) {
                 $dummyModel->addExpression($field['name'], ['expr' => $field['expr'], 'type' => $model->getField($field['name'])->type]);

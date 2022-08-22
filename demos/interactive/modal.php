@@ -124,7 +124,7 @@ $main = Menu::addTo($menuBar);
 $transitionMenu = $main->addMenu('Select Transition');
 
 foreach ($menuItems as $key => $items) {
-    if (!empty($items)) {
+    if ($items !== []) {
         $sm = $transitionMenu->addMenu($key);
         foreach ($items as $item) {
             $smi = $sm->addItem($item);

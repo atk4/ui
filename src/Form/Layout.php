@@ -22,7 +22,7 @@ class Layout extends AbstractLayout
     /** @var string Default input template file. */
     public $defaultInputTemplate = 'form/layout/generic-input.html';
 
-    /** @var string If specified will appear on top of the group. Can be string or Label object. */
+    /** @var string|null If specified will appear on top of the group. Can be string or Label object. */
     public $label;
 
     /**

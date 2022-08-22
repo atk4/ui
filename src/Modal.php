@@ -125,14 +125,12 @@ class Modal extends View
      * Will trigger modal to be show on page.
      * ex: $button->on('click', $modal->show());.
      *
-     * @param array $args
-     *
-     * @return mixed
+     * @return JsChain
      */
-    public function show($args = [])
+    public function show(array $args = [])
     {
         $js_chain = $this->js();
-        if (!empty($args)) {
+        if ($args !== []) {
             $js_chain->data(['args' => $args]);
         }
 
@@ -142,7 +140,7 @@ class Modal extends View
     /**
      * Hide modal from page.
      *
-     * @return mixed
+     * @return JsChain
      */
     public function hide()
     {
@@ -151,6 +149,9 @@ class Modal extends View
 
     /**
      * Set modal option.
+     *
+     * @param string $option
+     * @param mixed $value
      *
      * @return $this
      */
@@ -163,6 +164,8 @@ class Modal extends View
 
     /**
      * Set modal options passing an array.
+     *
+     * @param array<string, mixed> $options
      *
      * @return $this
      */
@@ -205,6 +208,8 @@ class Modal extends View
     /**
      * Set modal transition.
      *
+     * @param string $transitionType
+     *
      * @return $this
      */
     public function transition($transitionType)
@@ -217,6 +222,8 @@ class Modal extends View
     /**
      * Set modal transition duration.
      *
+     * @param float|int $time
+     *
      * @return $this
      */
     public function duration($time)
@@ -228,10 +235,17 @@ class Modal extends View
 
     /**
      * Add modal settings.
+     *
+     * @param string $settingOption
+     * @param mixed $value
+     *
+     * @return $this
      */
     public function settings($settingOption, $value)
     {
         $this->options['setting'][$settingOption] = $value;
+
+        return $this;
     }
 
     /**

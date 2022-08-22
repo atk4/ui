@@ -100,7 +100,7 @@ class Table extends Lister
      * all columns in the table unless you have specified a different
      * column object.
      */
-    public function initChunks()
+    protected function initChunks(): void
     {
         if (!$this->tHead) {
             $this->tHead = $this->template->cloneRegion('Head');
@@ -265,7 +265,10 @@ class Table extends Lister
         return is_array($this->columns[$name]) ? $this->columns[$name][0] : $this->columns[$name];
     }
 
-    protected $typeToDecorator = [
+    /**
+     * @var array<string, array>
+     */
+    protected array $typeToDecorator = [
         'atk4_money' => [Table\Column\Money::class],
         'text' => [Table\Column\Text::class],
         'boolean' => [Table\Column\Status::class, ['positive' => [true], 'negative' => [false]]],

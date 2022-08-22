@@ -86,7 +86,7 @@ class Right extends View implements Loadable
     /**
      * Return js expression in order to retrieve panelService.
      */
-    public function service(): JsExpression
+    public function service(): JsChain
     {
         return new JsChain('atk.panelService');
     }

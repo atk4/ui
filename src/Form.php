@@ -152,13 +152,13 @@ class Form extends View
      */
     protected function initLayout()
     {
+        // TODO simplify
         if ($this->layout === null) {
             $this->layout = [Form\Layout::class];
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
-            $this->layout = Factory::factory($this->layout, ['form' => $this]);
-            $this->layout = $this->add($this->layout);
+            $this->layout = $this->add(Factory::factory($this->layout, ['form' => $this])); // @phpstan-ignore-line
         } elseif (is_object($this->layout)) {
             $this->layout->form = $this;
             $this->add($this->layout);
@@ -483,8 +483,10 @@ class Form extends View
         return Factory::factory($ControlSeed, $defaults);
     }
 
-    /** @var array Describes how factory converts type to control seed Provides control seeds for most common types. */
-    protected $typeToControl = [
+    /**
+     * @var array<string, array>
+     */
+    protected array $typeToControl = [
         'boolean' => [Control\Checkbox::class],
         'text' => [Control\Textarea::class],
         'string' => [Control\Line::class],

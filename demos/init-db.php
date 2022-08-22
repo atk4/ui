@@ -231,7 +231,6 @@ class Country extends ModelWithPrefixedFields
 class Stat extends ModelWithPrefixedFields
 {
     public $table = 'stat';
-    public $title = 'Project Stat';
 
     protected function init(): void
     {

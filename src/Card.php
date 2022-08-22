@@ -288,7 +288,7 @@ class Card extends View
             $defaults[] = $this->model->getId();
         }
 
-        if (!empty($args)) {
+        if ($args !== []) {
             $defaults['args'] = $args;
         }
 

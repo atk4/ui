@@ -61,7 +61,7 @@ class JsSse extends JsCallback
      *
      * @param JsExpressionable $action
      */
-    public function send($action, bool $success = true)
+    public function send($action, bool $success = true): void
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
@@ -93,7 +93,7 @@ class JsSse extends JsCallback
     /**
      * Output a SSE Event.
      */
-    public function sendEvent($id, $data, $eventName)
+    public function sendEvent(string $id, string $data, string $eventName = null): void
     {
         $this->sendBlock($id, $data, $eventName);
     }
@@ -127,7 +127,7 @@ class JsSse extends JsCallback
     /**
      * Send a SSE data block.
      */
-    public function sendBlock(string $id, string $data, string $name = null): void
+    public function sendBlock(string $id, string $data, string $eventName = null): void
     {
         if (connection_aborted()) {
             $this->hook(self::HOOK_ABORTED);
@@ -139,8 +139,8 @@ class JsSse extends JsCallback
         }
 
         $this->output('id: ' . $id . "\n");
-        if ($name !== null) {
-            $this->output('event: ' . $name . "\n");
+        if ($eventName !== null) {
+            $this->output('event: ' . $eventName . "\n");
         }
         $this->output($this->wrapData($data) . "\n");
         $this->flush();
@@ -160,7 +160,7 @@ class JsSse extends JsCallback
      * Initialise this sse.
      * It will ignore user abort by default.
      */
-    protected function initSse()
+    protected function initSse(): void
     {
         @set_time_limit(0); // disable time limit
         ignore_user_abort(true);

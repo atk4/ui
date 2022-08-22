@@ -38,7 +38,7 @@ class Checkbox extends Table\Column
 
     public function getHeaderCellHtml(Field $field = null, $value = null)
     {
-        if (isset($field)) {
+        if ($field !== null) {
             throw (new Exception('Checkbox must be placed in an empty column, don\'t specify any field'))
                 ->addMoreInfo('field', $field);
         }

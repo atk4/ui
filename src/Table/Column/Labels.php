@@ -33,7 +33,7 @@ class Labels extends Table\Column
             // if field values is set, then use titles instead of IDs
             $id = $values[$id] ?? $id;
 
-            if (!empty($id)) {
+            if ($id !== '') {
                 $labels[] = $this->getApp()->getTag('div', ['class' => 'ui label'], $id);
             }
         }

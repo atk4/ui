@@ -19,10 +19,10 @@ class JsNotify implements JsExpressionable
      */
     public function __construct($options = null, View $attachTo = null)
     {
-        if (is_array($options)) {
+        if (is_string($options)) {
+            $this->setContent($options);
+        } elseif (is_array($options)) {
             $this->setDefaults($options);
-        } elseif (is_string($options)) {
-            $this->setDefaults(['content' => $options]);
         }
 
         if ($attachTo) {
@@ -33,6 +33,8 @@ class JsNotify implements JsExpressionable
     /**
      * Set notify message.
      *
+     * @param string $msg
+     *
      * @return $this
      */
     public function setMessage($msg)
@@ -41,15 +43,9 @@ class JsNotify implements JsExpressionable
     }
 
     /**
-     * Set notifier option by specifying option name.
-     */
-    public function setMissingProperty(string $propertyName, $value): void
-    {
-        $this->options[$propertyName] = $value;
-    }
-
-    /**
      * Set notifier content.
+     *
+     * @param string $content
      *
      * @return $this
      */
@@ -64,6 +60,8 @@ class JsNotify implements JsExpressionable
      * Set notifier color.
      *  - any colors define in semantic-ui can be used.
      *
+     * @param string $color
+     *
      * @return $this
      */
     public function setColor($color)
@@ -75,6 +73,8 @@ class JsNotify implements JsExpressionable
 
     /**
      * Add an icon to the notifier.
+     *
+     * @param string $icon
      *
      * @return $this
      */
@@ -88,6 +88,9 @@ class JsNotify implements JsExpressionable
     /**
      * Set open and close transition for the notifier.
      *   - any transition define in semantic ui can be used.
+     *
+     * @param string      $openTransition
+     * @param string|null $closeTransition
      *
      * @return $this
      */
@@ -107,6 +110,8 @@ class JsNotify implements JsExpressionable
      *  - if you set duration to 0, then notification
      *    will stay forever until close by user.
      *
+     * @param float|int $duration
+     *
      * @return $this
      */
     public function setDuration($duration)
@@ -119,6 +124,8 @@ class JsNotify implements JsExpressionable
     /**
      * Set notifier position within the body of the page or within the attach element.
      *
+     * @param string $position
+     *
      * @return $this
      */
     public function setPosition($position)
@@ -130,6 +137,8 @@ class JsNotify implements JsExpressionable
 
     /**
      * Set the width percentage of the notifier within the body or attached to element.
+     *
+     * @param string $width
      *
      * @return $this
      */

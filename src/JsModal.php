@@ -10,7 +10,7 @@ namespace Atk4\Ui;
 class JsModal extends JsExpression
 {
     /**
-     * @param string             $title when empty, header will be removed in modal
+     * @param string|null        $title when empty, header will be removed in modal
      * @param string|VirtualPage $url
      */
     public function __construct($title, $url, array $args = [], string $dataType = 'json')
@@ -48,6 +48,9 @@ class JsModal extends JsExpression
      *       Note: Default to 'image' for backward compatibility.
      *
      * You can set option individually or supply an array.
+     *
+     * @param string|array $options
+     * @param mixed        $value
      *
      * @return $this
      */

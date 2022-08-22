@@ -469,22 +469,18 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest($path);
         $this->assertSame(200, $response->getStatusCode());
 
-        $outputRows = preg_split('~\r?\n|\r~', $response->getBody()->getContents());
+        $outputLines = preg_split('~\r?\n|\r~', $response->getBody()->getContents(), -1, \PREG_SPLIT_NO_EMPTY);
 
         // check SSE Syntax
-        $this->assertGreaterThan(0, count($outputRows));
-        foreach ($outputRows as $index => $sse_line) {
-            if (empty($sse_line)) {
-                continue;
-            }
-
-            preg_match_all($this->regexSse, $sse_line, $matchesAll);
+        $this->assertGreaterThan(0, count($outputLines));
+        foreach ($outputLines as $index => $line) {
+            preg_match_all($this->regexSse, $line, $matchesAll);
             $format_match_string = implode('', $matchesAll[0] ?? ['error']);
 
             $this->assertSame(
-                $sse_line,
+                $line,
                 $format_match_string,
-                'Testing SSE response line ' . $index . ' with content ' . $sse_line
+                'Testing SSE response line ' . $index . ' with content ' . $line
             );
         }
     }

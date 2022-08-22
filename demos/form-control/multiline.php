@@ -18,13 +18,9 @@ require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
 
-$dateFormat = $app->uiPersistence->dateFormat;
-$timeFormat = $app->uiPersistence->timeFormat;
-
 /** @var Model $inventoryItemClass */
 $inventoryItemClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
-    public $dateFormat;
-    public $timeFormat;
+    /** @var Persistence */
     public $countryPersistence;
 
     protected function init(): void
@@ -74,7 +70,7 @@ $inventoryItemClass = AnonymousClassNameCache::get_class(fn () => new class() ex
     }
 });
 
-$inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => $dateFormat, 'timeFormat' => $timeFormat, 'countryPersistence' => $app->db]);
+$inventory = new $inventoryItemClass(new Persistence\Array_(), ['countryPersistence' => $app->db]);
 
 // Populate some data.
 $total = 0;
@@ -120,7 +116,7 @@ $multiline->jsAfterAdd = new JsFunction(['value'], [new JsExpression('console.lo
 $multiline->jsAfterDelete = new JsFunction(['value'], [new JsExpression('console.log(value)')]);
 
 $form->onSubmit(function (Form $form) use ($multiline) {
-    $rows = $multiline->saveRows()->getModel()->export();
+    $rows = $multiline->saveRows()->model->export();
 
     return new JsToast($form->getApp()->encodeJson(array_values($rows)));
 });

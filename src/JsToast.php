@@ -40,6 +40,8 @@ class JsToast implements JsExpressionable
 
     /**
      * Set message to display in Toast.
+     *
+     * @param string $msg
      */
     public function setMessage($msg): self
     {

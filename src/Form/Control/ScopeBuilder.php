@@ -294,11 +294,6 @@ class ScopeBuilder extends Control
         }
     }
 
-    public function getModel()
-    {
-        return $this->model;
-    }
-
     /**
      * Set the model to build scope for.
      */
@@ -314,7 +309,7 @@ class ScopeBuilder extends Control
     /**
      * Build query from model scope.
      */
-    protected function buildQuery(Model $model)
+    protected function buildQuery(Model $model): void
     {
         $this->fields = $this->fields ?: array_keys($model->getFields());
 

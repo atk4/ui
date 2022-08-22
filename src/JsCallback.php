@@ -122,7 +122,7 @@ class JsCallback extends Callback implements JsExpressionable
      * Provided with a $response from callbacks convert it into a JavaScript code.
      *
      * @param array|JsExpressionable $response response from callbacks,
-     * @param JsExpressionable       $chain
+     * @param JsChain                $chain
      */
     public function getAjaxec($response, $chain = null): string
     {

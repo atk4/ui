@@ -469,7 +469,7 @@ By default Table will include ID for each row: `<tr data-id="123">`. The followi
 demonstrates how various standard column types are relying on this property::
 
     $table->on('click', 'td', new JsExpression(
-        'document.location=page.php?id=[]',
+        'document.location = "page.php?id=" + []',
         [(new Jquery())->closest('tr')->data('id')]
     ));
 

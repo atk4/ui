@@ -34,7 +34,7 @@ require_once __DIR__ . '/../init-app.php';
 $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lister {
     use SessionTrait;
 
-    public $items = [];
+    public array $items = [];
 
     public $defaultTemplate = 'lister.html';
 
@@ -206,7 +206,7 @@ $cartPopup->set(function ($popup) use ($cart) {
     // as a child of a pop-up now.
     $cart = $popup->add($cart);
 
-    $cartInnerLabel->detail = count($cart->items);
+    $cartInnerLabel->detail = (string) count($cart->items);
     MenuItem::addTo($popup)->setElement('hr');
     Button::addTo($popup, ['Checkout', 'class.primary small' => true]);
 });

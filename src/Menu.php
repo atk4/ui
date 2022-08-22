@@ -85,7 +85,7 @@ class Menu extends View
 
         $label = $name['title'] ?? $name['text'] ?? $name['name'] ?? $name[0] ?? null;
 
-        if (isset($label)) {
+        if ($label !== null) {
             $subMenu->set('label', $label);
         }
 
@@ -115,7 +115,7 @@ class Menu extends View
 
         $title = $name['title'] ?? $name['text'] ?? $name['name'] ?? $name[0] ?? null;
 
-        if (isset($title)) {
+        if ($title !== null) {
             $group->set('title', $title);
         }
 

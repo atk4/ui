@@ -10,9 +10,6 @@ use Atk4\Ui\JsCallback;
 use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\View;
 
-/**
- * Class Upload.
- */
 class Upload extends Input
 {
     public string $inputType = 'hidden';
@@ -52,9 +49,10 @@ class Upload extends Input
      */
     public $accept = [];
 
-    /** @var bool Whether cb has been defined or not. */
-    public $hasUploadCb = false;
-    public $hasDeleteCb = false;
+    /** Whether callback has been defined or not. */
+    public bool $hasUploadCb = false;
+    /** Whether callback has been defined or not. */
+    public bool $hasDeleteCb = false;
 
     /** @var JsExpressionable[] */
     public $jsActions = [];
@@ -97,13 +95,13 @@ class Upload extends Input
     /**
      * Set input field value.
      *
-     * @param mixed $value the field input value
+     * @param mixed $value
      *
      * @return $this
      */
-    public function setInput($value, $junk = null)
+    public function setInput($value)
     {
-        return parent::set($value, $junk);
+        return parent::set($value, null);
     }
 
     /**
@@ -116,7 +114,10 @@ class Upload extends Input
         return $this->entityField ? $this->entityField->get() : $this->content;
     }
 
-    public function setFileId($id)
+    /**
+     * @param string $id
+     */
+    public function setFileId($id): void
     {
         $this->fileId = $id;
     }
@@ -126,7 +127,7 @@ class Upload extends Input
      *
      * @param JsExpressionable $action
      */
-    public function addJsAction($action)
+    public function addJsAction($action): void
     {
         $this->jsActions[] = $action;
     }

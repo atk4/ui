@@ -150,9 +150,9 @@ class Wizard extends View
     }
 
     /**
-     * Get URL to previous step. Will respect stickyGET.
+     * Generate a js that will navigate to next step URL.
      *
-     * @return string URL to previous step
+     * @return JsExpression
      */
     public function jsNext()
     {

@@ -60,7 +60,7 @@ class FormTest extends TestCase
             });
 
             $this->form->render();
-            $res = $this->form->getApp()->output;
+            $res = AppFormTestMock::assertInstanceOf($this->form->getApp())->output;
 
             if ($checkExpectedErrorsFx !== null) {
                 $this->assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');

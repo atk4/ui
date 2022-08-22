@@ -80,7 +80,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             throw new Exception('Please specify the $callback argument');
         }
 
-        if (isset($event)) {
+        if ($event !== null) {
             $this->event = $event;
         }
 
