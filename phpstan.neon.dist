@@ -746,21 +746,6 @@ parameters:
             path: 'src/Table/Column/FilterModel.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel::afterInit\(\) has no return type specified\.$~'
         -
-            path: 'src/Table/Column/FilterModel.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel::getFormDisplayRules\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeDate.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeDate::getFormDisplayRules\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeDatetime.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeDatetime::getFormDisplayRules\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeNumber.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeNumber::getFormDisplayRules\(\) has no return type specified\.$~'
-        -
-            path: 'src/Table/Column/FilterModel/TypeTime.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\FilterModel\\TypeTime::getFormDisplayRules\(\) has no return type specified\.$~'
-        -
             path: 'src/Table/Column/FilterPopup.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\FilterPopup::setFilterCondition\(\) has parameter \$tableModel with no type specified\.$~'
         -

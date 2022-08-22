@@ -137,8 +137,9 @@ abstract class FilterModel extends Model
      * If form filter need to have a field display at certain condition, then
      * override this method in your FilterModel\TypeModel.
      */
-    public function getFormDisplayRules()
+    public function getFormDisplayRules(): array
     {
+        return [];
     }
 
     /**

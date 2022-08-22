@@ -130,7 +130,7 @@ class TypeDate extends Column\FilterModel
         return $date;
     }
 
-    public function getFormDisplayRules()
+    public function getFormDisplayRules(): array
     {
         return [
             'range' => ['op' => 'isExactly[within]'],

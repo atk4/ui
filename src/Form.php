@@ -523,7 +523,7 @@ class Form extends View
     protected function renderView(): void
     {
         $this->ajaxSubmit();
-        if (!empty($this->controlDisplayRules)) {
+        if ($this->controlDisplayRules !== []) {
             $this->js(true, new JsConditionalForm($this, $this->controlDisplayRules, $this->controlDisplaySelector));
         }
 
