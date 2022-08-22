@@ -37,6 +37,7 @@ class Control extends View
     /** @var bool rendered or not input label in generic Form\Layout template. */
     public $renderLabel = true;
 
+    /** @var string */
     public $width;
 
     /**
@@ -175,13 +176,5 @@ class Control extends View
     public function jsInput($when = null, $action = null)
     {
         return $this->js($when, $action, '#' . $this->name . '_input');
-    }
-
-    /**
-     * @return string
-     */
-    public function getControlClass()
-    {
-        return $this->controlClass;
     }
 }

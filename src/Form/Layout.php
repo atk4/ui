@@ -202,13 +202,13 @@ class Layout extends AbstractLayout
             $template->dangerouslySetHtml('Input', $element->getHtml());
             $template->trySet('label', $label);
             $template->trySet('labelFor', $element->name . '_input');
-            $template->set('controlClass', $element->getControlClass());
+            $template->set('controlClass', $element->controlClass);
 
             if ($element->entityField->getField()->required) {
                 $template->append('controlClass', 'required ');
             }
 
-            if (isset($element->width)) {
+            if ($element->width) {
                 $template->append('controlClass', $element->width . ' wide ');
             }
 

@@ -220,6 +220,8 @@ class CardDeck extends View
      * Return proper js statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      *
+     * @param string|array|JsExpressionable|Model|null $return
+     *
      * @return array|object
      */
     protected function jsExecute($return, Model\UserAction $action = null)

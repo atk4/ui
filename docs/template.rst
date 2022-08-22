@@ -436,7 +436,7 @@ Other operations with tags
 
     Empties contents of tag within a template.
 
-.. php:method:: isSet(tag)
+.. php:method:: hasTag(tag)
 
     Returns ``true`` if tag exists in a template.
 
