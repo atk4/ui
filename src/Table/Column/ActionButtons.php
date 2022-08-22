@@ -39,6 +39,7 @@ class ActionButtons extends Table\Column
      *
      * @param string|array|View                  $button
      * @param JsChain|\Closure|ExecutorInterface $action
+     * @param bool|\Closure                      $isDisabled
      *
      * @return View
      */

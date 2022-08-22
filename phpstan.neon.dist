@@ -713,9 +713,6 @@ parameters:
             path: 'src/Table/Column.php'
             message: '~^Method Atk4\\Ui\\Table\\Column::setHeaderDropdown\(\) has parameter \$items with no type specified\.$~'
         -
-            path: 'src/Table/Column/ActionButtons.php'
-            message: '~^Method Atk4\\Ui\\Table\\Column\\ActionButtons::addButton\(\) has parameter \$isDisabled with no type specified\.$~'
-        -
             path: 'src/Table/Column/ActionMenu.php'
             message: '~^Method Atk4\\Ui\\Table\\Column\\ActionMenu::addActionMenuItem\(\) has parameter \$isDisabled with no type specified\.$~'
         -

@@ -57,7 +57,7 @@ class ActionMenu extends Table\Column
      * @param View|string                           $item
      * @param \Closure|Model|ExecutorInterface|null $action
      *
-     * @return object|string
+     * @return View
      */
     public function addActionMenuItem($item, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
