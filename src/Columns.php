@@ -7,7 +7,7 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 
 /**
- * Imprements vertically distributed columns based on CSS Grid system.
+ * Vertically distributed columns based on CSS Grid system.
  */
 class Columns extends View
 {
