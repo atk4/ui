@@ -49,17 +49,13 @@ abstract class AbstractLayout extends View
             if (!$this->form->model->hasField($name)) {
                 $field = $this->form->model->getModel()->addField($name, $field);
             } else {
-                if (is_array($field)) {
-                    $field = $this->form->model->getField($name)->setDefaults($field);
-                } else {
-                    throw (new Exception('Duplicate field'))
-                        ->addMoreInfo('name', $name);
-                }
+                $field = $this->form->model->getField($name)
+                    ->setDefaults($field);
             }
 
             $control = $this->form->controlFactory($field, $control);
         } catch (\Exception $e) {
-            throw (new Exception('Unable to add form control', 0, $e))
+            throw (new Exception('Unable to create form control', 0, $e))
                 ->addMoreInfo('name', $name)
                 ->addMoreInfo('control', $control)
                 ->addMoreInfo('field', $field);

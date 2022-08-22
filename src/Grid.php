@@ -84,7 +84,7 @@ class Grid extends View
 
     public $defaultTemplate = 'grid.html';
 
-    /** @var string Defines which Table Decorator to use for ActionButtons. */
+    /** @var array Defines which Table Decorator to use for ActionButtons. */
     protected $actionButtonsDecorator = [Table\Column\ActionButtons::class];
 
     /** @var array Defines which Table Decorator to use for ActionMenu. */
@@ -159,13 +159,13 @@ class Grid extends View
      * Add new column to grid. If column with this name already exists,
      * an. Simply calls Table::addColumn(), so check that method out.
      *
-     * @param string                   $name            Data model field name
-     * @param array|string|object|null $columnDecorator
-     * @param array|Field|null         $field
+     * @param string|null                             $name            Data model field name
+     * @param array|Table\Column                      $columnDecorator
+     * @param ($name is null ? array{} : array|Field) $field
      *
      * @return Table\Column
      */
-    public function addColumn(string $name, $columnDecorator = null, $field = null)
+    public function addColumn(?string $name, $columnDecorator = [], $field = [])
     {
         return $this->table->addColumn($name, $columnDecorator, $field);
     }
@@ -173,7 +173,7 @@ class Grid extends View
     /**
      * Add additional decorator for existing column.
      *
-     * @param Table\Column|array $seed
+     * @param array|Table\Column $seed
      *
      * @return Table\Column
      */
@@ -481,8 +481,10 @@ class Grid extends View
     public function addDropdown($columnName, $items, \Closure $fx, $icon = 'caret square down', $menuId = null)
     {
         if (!isset($this->table->columns[$columnName])) {
-            throw new Exception('The column where you want to add dropdown does not exist: ' . $columnName);
+            throw (new Exception('Column does not exist'))
+                ->addMoreInfo('name', $columnName);
         }
+
         $column = $this->table->columns[$columnName];
 
         if (!$menuId) {

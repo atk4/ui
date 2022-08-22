@@ -138,65 +138,48 @@ class Table extends Lister
      * If you don't want table column to be associated with model field, then
      * pass $name parameter as null.
      *
-     * @param string|null              $name            Data model field name
-     * @param array|string|object|null $columnDecorator
-     * @param array|Field|null         $field
+     * @param string|null                             $name            Data model field name
+     * @param array|Table\Column                      $columnDecorator
+     * @param ($name is null ? array{} : array|Field) $field
      *
      * @return Table\Column
      */
-    public function addColumn(?string $name, $columnDecorator = null, $field = null)
+    public function addColumn(?string $name, $columnDecorator = [], $field = [])
     {
         $this->assertIsInitialized();
+
+        if ($name !== null && isset($this->columns[$name])) {
+            throw (new Exception('Column already exists'))
+                ->addMoreInfo('name', $name);
+        }
 
         if (!$this->model) {
             $this->model = new \Atk4\Ui\Misc\ProxyModel();
         }
+        $this->model->assertIsModel();
 
-        // This code should be vaugely consistent with Form\AbstractLayout::addControl()
+        // should be vaugely consistent with Form\AbstractLayout::addControl()
 
         if ($name === null) {
-            // table column without respective field in model
             $field = null;
         } elseif (!$this->model->hasField($name)) {
             $field = $this->model->addField($name, $field);
             $field->neverPersist = true;
         } else {
-            $existingField = $this->model->getField($name);
-
-            if (is_array($field)) {
-                $field = $existingField->setDefaults($field);
-            } elseif (is_object($field)) {
-                throw (new Exception('Duplicate field'))
-                    ->addMoreInfo('name', $name);
-            } else {
-                $field = $existingField;
-            }
+            $field = $this->model->getField($name)
+                ->setDefaults($field);
         }
 
-        // TODO simplify to single $this->decoratorFactory call
         if ($field === null) {
             // column is not associated with any model field
+            // TODO simplify to single $this->decoratorFactory call
             $columnDecorator = $this->_addUnchecked(Table\Column::fromSeed($columnDecorator, ['table' => $this]));
-        } elseif (is_array($columnDecorator) || is_string($columnDecorator)) {
-            $columnDecorator = $this->decoratorFactory($field, array_merge(['columnData' => $name], is_string($columnDecorator) ? [$columnDecorator] : $columnDecorator));
-        } elseif (!$columnDecorator) {
-            $columnDecorator = $this->decoratorFactory($field, ['columnData' => $name]);
-        } elseif ($columnDecorator instanceof Table\Column) {
-            $columnDecorator->table = $this;
-            if (!$columnDecorator->columnData) {
-                $columnDecorator->columnData = $name;
-            }
-            $this->_addUnchecked($columnDecorator);
         } else {
-            throw (new Exception('Value of $columnDecorator argument is incorrect'))
-                ->addMoreInfo('columnDecorator', $columnDecorator);
+            $columnDecorator = $this->decoratorFactory($field, Factory::mergeSeeds($columnDecorator, ['columnData' => $name]));
         }
 
         if ($name === null) {
             $this->columns[] = $columnDecorator;
-        } elseif (isset($this->columns[$name])) {
-            throw (new Exception('Table already has column with $name. Try using addDecorator()'))
-                ->addMoreInfo('name', $name);
         } else {
             $this->columns[$name] = $columnDecorator;
         }
@@ -247,14 +230,14 @@ class Table extends Lister
     /**
      * Add column Decorator.
      *
-     * @param Table\Column|array $seed
+     * @param array|Table\Column $seed
      *
      * @return Table\Column
      */
     public function addDecorator(string $name, $seed)
     {
         if (!isset($this->columns[$name])) {
-            throw (new Exception('No such column, cannot decorate'))
+            throw (new Exception('Column does not exist'))
                 ->addMoreInfo('name', $name);
         }
 
@@ -270,8 +253,6 @@ class Table extends Lister
 
     /**
      * Return array of column decorators for particular column.
-     *
-     * @param string $name Column name
      */
     public function getColumnDecorators(string $name): array
     {
@@ -293,11 +274,17 @@ class Table extends Lister
         return is_array($this->columns[$name]) ? $this->columns[$name][0] : $this->columns[$name];
     }
 
+    protected $typeToDecorator = [
+        'atk4_money' => [Table\Column\Money::class],
+        'text' => [Table\Column\Text::class],
+        'boolean' => [Table\Column\Status::class, ['positive' => [true], 'negative' => [false]]],
+    ];
+
     /**
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
      *
-     * @param mixed $seed Defaults to pass to Factory::factory() when decorator is initialized
+     * @param array|Table\Column $seed
      *
      * @return Table\Column
      */
@@ -312,12 +299,6 @@ class Table extends Lister
 
         return $this->_addUnchecked(Table\Column::fromSeed($seed, ['table' => $this]));
     }
-
-    protected $typeToDecorator = [
-        'atk4_money' => [Table\Column\Money::class],
-        'text' => [Table\Column\Text::class],
-        'boolean' => [Table\Column\Status::class, ['positive' => [true], 'negative' => [false]]],
-    ];
 
     /**
      * Make columns resizable by dragging column header.

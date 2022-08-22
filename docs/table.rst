@@ -67,7 +67,7 @@ Adding Columns
 
 .. php:method:: setModel(\Atk4\Data\Model $model, $fields = null)
 
-.. php:method:: addColumn($name, $columnDecorator = null, $field = null)
+.. php:method:: addColumn($name, $columnDecorator = [], $field = null)
 
 To change the order or explicitly specify which field columns must appear, if you pass list of those
 fields as second argument to setModel::

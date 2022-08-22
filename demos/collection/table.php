@@ -77,7 +77,7 @@ $table->setSource($myArray, ['name']);
 
 // $table->addColumn('name');
 $table->addColumn('surname', [Table\Column\Link::class, 'url' => 'table.php?id={$surname}']);
-$table->addColumn('birthdate', null, ['type' => 'date']);
+$table->addColumn('birthdate', [], ['type' => 'date']);
 $table->addColumn('cv', [Table\Column\Html::class]);
 
 $table->getColumnDecorators('name')[0]->addClass('disabled');
