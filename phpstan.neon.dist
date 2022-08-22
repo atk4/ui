@@ -717,21 +717,6 @@ parameters:
             path: 'src/Columns.php'
             message: '~^Method Atk4\\Ui\\Columns::addRow\(\) has no return type specified\.$~'
         -
-            path: 'src/Console.php'
-            message: '~^Method Atk4\\Ui\\Console::exec\(\) has no return type specified\.$~'
-        -
-            path: 'src/Console.php'
-            message: '~^Method Atk4\\Ui\\Console::exec\(\) has parameter \$args with no type specified\.$~'
-        -
-            path: 'src/Console.php'
-            message: '~^Method Atk4\\Ui\\Console::exec\(\) has parameter \$exec with no type specified\.$~'
-        -
-            path: 'src/Console.php'
-            message: '~^Method Atk4\\Ui\\Console::execRaw\(\) has parameter \$args with no type specified\.$~'
-        -
-            path: 'src/Console.php'
-            message: '~^Method Atk4\\Ui\\Console::execRaw\(\) has parameter \$exec with no type specified\.$~'
-        -
             path: 'src/Crud.php'
             message: '~^Method Atk4\\Ui\\Crud::applySort\(\) has no return type specified\.$~'
         -
@@ -776,12 +761,6 @@ parameters:
         -
             path: 'src/Form/Control/Dropdown.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::setDropdownOptions\(\) has no return type specified\.$~'
-        -
-            path: 'src/Form/Control/Dropdown.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_renderItemsForModel\(\) has no return type specified\.$~'
-        -
-            path: 'src/Form/Control/Dropdown.php'
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_renderItemsForValues\(\) has no return type specified\.$~'
         -
             path: 'src/Form/Control/Dropdown.php'
             message: '~^Method Atk4\\Ui\\Form\\Control\\Dropdown::_addCallBackRow\(\) has no return type specified\.$~'

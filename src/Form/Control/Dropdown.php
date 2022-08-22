@@ -279,8 +279,10 @@ class Dropdown extends Input
         parent::renderView();
     }
 
-    // sets the dropdown items to the template if a model is used
-    protected function _renderItemsForModel()
+    /**
+     * Sets the dropdown items to the template if a model is used.
+     */
+    protected function _renderItemsForModel(): void
     {
         foreach ($this->model as $key => $row) {
             $title = $row->getTitle();
@@ -291,8 +293,10 @@ class Dropdown extends Input
         }
     }
 
-    // sets the dropdown items from $this->values array
-    protected function _renderItemsForValues()
+    /**
+     * Sets the dropdown items from $this->values array.
+     */
+    protected function _renderItemsForValues(): void
     {
         foreach ($this->values as $key => $val) {
             $this->_tItem->set('value', (string) $key);

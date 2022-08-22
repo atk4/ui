@@ -64,7 +64,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * This intercepts default application logging for the duration of the process.
      *
      * If you are using runCommand, then server command will be executed with it's output
-     * (STDOUT and STDERR) redirected to the console.
+     * (stdout and stderr) redirected to the console.
      *
      * While inside a callback you may execute runCommand or setModel multiple times.
      *
@@ -259,22 +259,25 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * All arguments are escaped.
      */
-    public function exec($exec, $args = [])
+    public function exec(string $command, array $args = []): ?bool
     {
         if (!$this->sseInProgress) {
-            $this->set(function () use ($exec, $args) {
-                $a = $args ? (' with ' . count($args) . ' arguments') : '';
-                $this->output('--[ Executing ' . $exec . $a . ' ]--------------');
+            $this->set(function () use ($command, $args) {
+                $this->output(
+                    '--[ Executing ' . $command
+                    . ($args ? ' with ' . count($args) . ' arguments' : '')
+                    . ' ]--------------'
+                );
 
-                $this->exec($exec, $args);
+                $this->exec($command, $args);
 
                 $this->output('--[ Exit code: ' . $this->lastExitCode . ' ]------------');
             });
 
-            return;
+            return null;
         }
 
-        [$proc, $pipes] = $this->execRaw($exec, $args);
+        [$proc, $pipes] = $this->execRaw($command, $args);
 
         stream_set_blocking($pipes[1], false);
         stream_set_blocking($pipes[2], false);
@@ -299,11 +302,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
                     continue;
                 }
 
-                if ($f === $pipes[2]) {
-                    // STDERR
+                if ($f === $pipes[2]) { // stderr
                     $this->warning($data);
-                } else {
-                    // STDOUT
+                } else { // stdout
                     $this->output($data);
                 }
             }
@@ -311,30 +312,23 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
         $this->lastExitCode = $stat['exitcode'];
 
-        return $this->lastExitCode ? false : $this;
+        return $this->lastExitCode ? false : true;
     }
 
     /**
      * @return array{resource, non-empty-array}
      */
-    protected function execRaw($exec, $args = [])
+    protected function execRaw(string $command, array $args = [])
     {
-        // Escape arguments
-        foreach ($args as $key => $val) {
-            if (!is_scalar($val)) {
-                throw (new Exception('Arguments must be scalar'))
-                    ->addMoreInfo('arg', $val);
-            }
-            $args[$key] = escapeshellarg($val);
-        }
+        $command = escapeshellcmd($command);
+        $args = array_map(fn ($v) => escapeshellarg($v), $args);
 
-        $exec = escapeshellcmd($exec);
         $spec = [1 => ['pipe', 'w'], 2 => ['pipe', 'w']]; // we want stdout and stderr
         $pipes = null;
-        $proc = proc_open($exec . ' ' . implode(' ', $args), $spec, $pipes);
+        $proc = proc_open($command . ' ' . implode(' ', $args), $spec, $pipes);
         if (!is_resource($proc)) {
             throw (new Exception('Command failed to execute'))
-                ->addMoreInfo('exec', $exec)
+                ->addMoreInfo('command', $command)
                 ->addMoreInfo('args', $args);
         }
 
