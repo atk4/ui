@@ -10,7 +10,7 @@ use Atk4\Data\Model\UserAction;
 use Atk4\Ui\AbstractView;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
-use Atk4\Ui\Item;
+use Atk4\Ui\MenuItem;
 use Atk4\Ui\View;
 
 class ExecutorFactory
@@ -140,7 +140,7 @@ class ExecutorFactory
     }
 
     /**
-     * @return ($type is self::MENU_ITEM ? Item : ($type is self::TABLE_MENU_ITEM ? Item : Button))
+     * @return ($type is self::MENU_ITEM ? MenuItem : ($type is self::TABLE_MENU_ITEM ? MenuItem : Button))
      */
     public function createTrigger(UserAction $action, string $type = null): View
     {
@@ -217,11 +217,11 @@ class ExecutorFactory
 
                 break;
             case self::MENU_ITEM:
-                $seed = [Item::class, $this->getActionCaption($action, $type), 'class.item' => true];
+                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'class.item' => true];
 
                 break;
             case self::TABLE_MENU_ITEM:
-                $seed = [Item::class, $this->getActionCaption($action, $type), 'name' => false, 'class.item' => true];
+                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'name' => false, 'class.item' => true];
 
                 break;
             default:
@@ -251,7 +251,7 @@ class ExecutorFactory
      */
     protected function getAddMenuItem(UserAction $action): array
     {
-        return [Item::class, $this->getAddActionCaption($action), 'icon' => 'plus'];
+        return [MenuItem::class, $this->getAddActionCaption($action), 'icon' => 'plus'];
     }
 
     /**

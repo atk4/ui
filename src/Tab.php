@@ -9,7 +9,7 @@ namespace Atk4\Ui;
  *
  * @method Tabs getOwner()
  */
-class Tab extends Item
+class Tab extends MenuItem
 {
     /** @var string */
     public $path;
@@ -36,7 +36,6 @@ class Tab extends Item
      */
     protected function renderView(): void
     {
-        // Must setting for Fomantic-Ui tab since 2.8.5
         $this->settings = array_merge($this->settings, ['autoTabActivation' => false]);
 
         if ($this->path) {

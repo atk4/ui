@@ -9,12 +9,12 @@ use Atk4\Ui\Columns;
 use Atk4\Ui\Dropdown as UiDropdown;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
-use Atk4\Ui\Item as UiItem;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\Label;
 use Atk4\Ui\Lister;
 use Atk4\Ui\Menu;
+use Atk4\Ui\MenuItem;
 use Atk4\Ui\Message;
 use Atk4\Ui\Popup;
 use Atk4\Ui\SessionTrait;
@@ -112,25 +112,25 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
         $c1 = $cols->addColumn();
         Header::addTo($c1, ['size' => 'small'])->set('Snacks');
         $l1 = View::addTo($c1, ['ui' => 'list']);
-        UiItem::addTo($l1, ['content' => 'Crisps', 'ui' => 'item'])->setElement('a');
-        UiItem::addTo($l1, ['content' => 'Pork Scratchings', 'ui' => 'item'])->setElement('a');
-        UiItem::addTo($l1, ['content' => 'Candies', 'ui' => 'item'])->setElement('a');
-        UiItem::addTo($l1, ['content' => 'Sweets', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l1, ['content' => 'Crisps', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l1, ['content' => 'Pork Scratchings', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l1, ['content' => 'Candies', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l1, ['content' => 'Sweets', 'ui' => 'item'])->setElement('a');
 
         $c2 = $cols->addColumn();
         Header::addTo($c2, ['size' => 'small'])->set('Drinks');
         $l2 = View::addTo($c2, ['ui' => 'list']);
-        UiItem::addTo($l2, ['content' => 'Fizzy Drink', 'ui' => 'item'])->setElement('a');
-        UiItem::addTo($l2, ['content' => 'Hot Latte', 'ui' => 'item'])->setElement('a');
-        UiItem::addTo($l2, ['content' => 'Water', 'ui' => 'item'])->setElement('a');
-        UiItem::addTo($l2, ['content' => 'Apple Juice', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l2, ['content' => 'Fizzy Drink', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l2, ['content' => 'Hot Latte', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l2, ['content' => 'Water', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l2, ['content' => 'Apple Juice', 'ui' => 'item'])->setElement('a');
 
         $c3 = $cols->addColumn();
         Header::addTo($c3, ['size' => 'small'])->set('Mains');
         $l3 = View::addTo($c3, ['ui' => 'list']);
-        UiItem::addTo($l3, ['content' => 'Chicken Tikka', 'ui' => 'item'])->setElement('a');
-        UiItem::addTo($l3, ['content' => 'Green Curry', 'ui' => 'item'])->setElement('a');
-        UiItem::addTo($l3, ['content' => 'Pastries', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l3, ['content' => 'Chicken Tikka', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l3, ['content' => 'Green Curry', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l3, ['content' => 'Pastries', 'ui' => 'item'])->setElement('a');
     }
 
     /**
@@ -207,7 +207,7 @@ $cartPopup->set(function ($popup) use ($cart) {
     $cart = $popup->add($cart);
 
     $cartInnerLabel->detail = count($cart->items);
-    UiItem::addTo($popup)->setElement('hr');
+    MenuItem::addTo($popup)->setElement('hr');
     Button::addTo($popup, ['Checkout', 'class.primary small' => true]);
 });
 

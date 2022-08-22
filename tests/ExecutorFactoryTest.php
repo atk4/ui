@@ -9,8 +9,8 @@ use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\App;
 use Atk4\Ui\Button;
-use Atk4\Ui\Item;
 use Atk4\Ui\Layout;
+use Atk4\Ui\MenuItem;
 use Atk4\Ui\UserAction\BasicExecutor;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\JsCallbackExecutor;
@@ -98,11 +98,11 @@ class ExecutorFactoryTest extends TestCase
         $this->assertNull($tableButton->content);
         $this->assertSame($tableButton->icon, 'edit');
 
-        $addMenuItem = Item::assertInstanceOf($factory->createTrigger($addAction, $factory::MENU_ITEM));
+        $addMenuItem = MenuItem::assertInstanceOf($factory->createTrigger($addAction, $factory::MENU_ITEM));
         $this->assertSame($addMenuItem->content, 'Add Test');
         $this->assertSame($addMenuItem->icon, 'plus');
 
-        $tableMenuItem = Item::assertInstanceOf($factory->createTrigger($editAction, $factory::TABLE_MENU_ITEM));
+        $tableMenuItem = MenuItem::assertInstanceOf($factory->createTrigger($editAction, $factory::TABLE_MENU_ITEM));
         $this->assertSame($factory->getCaption($editAction, $factory::TABLE_MENU_ITEM), $tableMenuItem->content);
     }
 
@@ -124,8 +124,8 @@ class ExecutorFactoryTest extends TestCase
         });
         $specialEditAction = (new $specialClass($p))->getUserAction('edit');
 
-        $factory->registerTrigger($factory::MENU_ITEM, [Item::class, 'edit_item', 'icon' => 'pencil'], $editAction);
-        $editItem = Item::assertInstanceOf($factory->createTrigger($editAction, $factory::MENU_ITEM));
+        $factory->registerTrigger($factory::MENU_ITEM, [MenuItem::class, 'edit_item', 'icon' => 'pencil'], $editAction);
+        $editItem = MenuItem::assertInstanceOf($factory->createTrigger($editAction, $factory::MENU_ITEM));
 
         $this->assertSame('edit_item', $editItem->content);
         $this->assertSame('pencil', $editItem->icon);

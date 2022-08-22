@@ -33,17 +33,17 @@ class Menu extends View
     /**
      * $seed can also be name here.
      *
-     * @param string|array|Item                              $item
+     * @param string|array|MenuItem                          $item
      * @param string|array|JsExpressionable|Model\UserAction $action
      *
-     * @return Item
+     * @return MenuItem
      */
     public function addItem($item = null, $action = null)
     {
         if (!is_object($item)) {
             $item = (array) $item;
 
-            array_unshift($item, Item::class);
+            array_unshift($item, MenuItem::class);
         }
 
         $item = $this->add($item)->setElement('a');
@@ -63,11 +63,11 @@ class Menu extends View
      *
      * @param string $name
      *
-     * @return Item
+     * @return MenuItem
      */
     public function addHeader($name)
     {
-        return Item::addTo($this, [$name])->addClass('header');
+        return MenuItem::addTo($this, [$name])->addClass('header');
     }
 
     /**

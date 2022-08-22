@@ -6,10 +6,10 @@ namespace Atk4\Ui\Layout;
 
 use Atk4\Ui\Header;
 use Atk4\Ui\Icon;
-use Atk4\Ui\Item;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\Layout;
 use Atk4\Ui\Menu;
+use Atk4\Ui\MenuItem;
 
 /**
  * Implements a classic 100% width admin layout.
@@ -78,18 +78,12 @@ class Admin extends Layout implements NavigableInterface
         $this->template->trySet('version', $this->getApp()->version);
     }
 
-    /**
-     * Add a group to left menu.
-     */
     public function addMenuGroup($seed): Menu
     {
         return $this->menuLeft->addGroup($seed);
     }
 
-    /**
-     * Add items to left menu.
-     */
-    public function addMenuItem($name, $action = null, $group = null): Item
+    public function addMenuItem($name, $action = null, $group = null): MenuItem
     {
         if ($group) {
             return $group->addItem($name, $action);

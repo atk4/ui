@@ -26,7 +26,7 @@ Pop-up should be added into a viewport which will define boundaries of a pop-up,
 be positioned relative to the $button. Popup remains invisible until it's triggered by event of $button.
 
 If second argument in the :ref:`seed` is of class :php:class:`Button`, :php:class:`Menu`,
-:php:class:`Item` or :php:class:`Dropdown` (note - NOT Form\Control!), pop-up will also bind itself
+:php:class:`MenuItem` or :php:class:`Dropdown` (note - NOT Form\Control!), pop-up will also bind itself
 to that element. The above example will automatically bind "click" event of a button to open a pop-up.
 
 When added into a menu, pop-up will appear on hover::
