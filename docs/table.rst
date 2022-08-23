@@ -259,7 +259,7 @@ The tag will override model value. Here is example usage of :php:meth:`Table\\Co
             return '{$_expired}';
         }
 
-        public function getHtmlTags(\Atk4\Data\Model $row, ?\Atk4\Data\Field $field)
+        public function getHtmlTags(\Atk4\Data\Model $row, ?\Atk4\Data\Field $field): array
         {
             return [
                 '_expired' => $field->get($row) < new \DateTime()

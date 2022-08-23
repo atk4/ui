@@ -56,6 +56,7 @@ class ActionMenu extends Table\Column
      *
      * @param View|string                           $item
      * @param \Closure|Model|ExecutorInterface|null $action
+     * @param bool|\Closure                         $isDisabled
      *
      * @return View
      */
@@ -87,7 +88,7 @@ class ActionMenu extends Table\Column
         return $item;
     }
 
-    public function getHeaderCellHtml(Field $field = null, $value = null)
+    public function getHeaderCellHtml(Field $field = null, $value = null): string
     {
         $this->table->js(true)->find('.atk-action-menu')->dropdown(
             array_merge(
@@ -104,7 +105,7 @@ class ActionMenu extends Table\Column
         return parent::getHeaderCellHtml($field, $value);
     }
 
-    public function getDataCellTemplate(Field $field = null)
+    public function getDataCellTemplate(Field $field = null): string
     {
         if (!$this->items) {
             return '';
@@ -125,7 +126,7 @@ class ActionMenu extends Table\Column
         return $s;
     }
 
-    public function getHtmlTags(Model $row, ?Field $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {

@@ -27,7 +27,7 @@ class Multiformat extends Table\Column
         $this->callback = $callback;
     }
 
-    public function getHtmlTags(Model $row, ?Field $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         $decorators = ($this->callback)($row, $field);
         // we need to smartly wrap things up

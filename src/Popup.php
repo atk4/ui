@@ -164,7 +164,7 @@ class Popup extends View
     }
 
     /**
-     * Set triggerBy.
+     * @param View|string $trigger
      *
      * @return $this
      */
@@ -204,9 +204,11 @@ class Popup extends View
     /**
      * Set a popup options as defined in semantic-ui popup module.
      *
+     * @param mixed $option
+     *
      * @return $this
      */
-    public function setOption($name, $option)
+    public function setOption(string $name, $option)
     {
         $this->popOptions[$name] = $option;
 
@@ -218,7 +220,7 @@ class Popup extends View
      *
      * @return $this
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
         $this->popOptions = array_merge($this->popOptions, $options);
 

@@ -111,7 +111,7 @@ class Link extends Table\Column
         }
     }
 
-    public function getDataCellTemplate(Field $field = null)
+    public function getDataCellTemplate(Field $field = null): string
     {
         $download = $this->forceDownload ? ' download="true" ' : '';
         $external = $this->target ? ' target="' . $this->target . '" ' : '';
@@ -135,7 +135,7 @@ class Link extends Table\Column
         return '<a href="{$c_' . $this->shortName . '}"' . $external . $class . $download . '>' . $icon . '' . $label . '</a>';
     }
 
-    public function getHtmlTags(Model $row, ?Field $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         if ($this->url) {
             $rowValues = $this->getApp()->uiPersistence->typecastSaveRow($row, $row->get());

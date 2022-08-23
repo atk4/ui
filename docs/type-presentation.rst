@@ -124,12 +124,12 @@ yet make it available when editing, you could create your own :php:class:`Table\
 
     class Masker extends \Atk4\Ui\Table\Column
     {
-        public function getDataCellTemplate(\Atk4\Data\Field $field = null)
+        public function getDataCellTemplate(\Atk4\Data\Field $field = null): string
         {
             return '**** **** **** {$mask}';
         }
 
-        public function getHtmlTags(\Atk4\Data\Model $row, ?\Atk4\Data\Field $field)
+        public function getHtmlTags(\Atk4\Data\Model $row, ?\Atk4\Data\Field $field): array
         {
             return [
                 'mask' => substr($field->get($row), -4),

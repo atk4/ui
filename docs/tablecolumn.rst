@@ -44,17 +44,17 @@ but first we need to look at the generic column and understand it's base capabil
 A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
 when constructing HTML:
 
-.. php:method:: getHeaderCellHtml(\Atk4\Data\Field $field)
+.. php:method:: getHeaderCellHtml(\Atk4\Data\Field $field): string
 
 Must respond with HTML for the header cell (`<th>`) and an appropriate caption. If necessary
 will include "sorting" icons or any other controls that go in the header of the table.
 
-.. php:method:: getTotalsCellHtml(\Atk4\Data\Field $field, $value)
+.. php:method:: getTotalsCellHtml(\Atk4\Data\Field $field, $value): string
 
 Provided with the field and the value, format the cell for the footer "totals" row. Table
 can rely on various strategies for calculating totals. See :php:meth:`Table::addTotals`.
 
-.. php:method:: getDataCellHtml(\Atk4\Data\Field $field)
+.. php:method:: getDataCellHtml(\Atk4\Data\Field $field): string
 
 Provided with a field, this method will respond with HTML **template**. In order to keep
 performance of Web Application at the maximum, Table will execute getDataCellHtml for all the

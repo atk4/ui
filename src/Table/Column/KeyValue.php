@@ -41,7 +41,7 @@ class KeyValue extends Table\Column
 {
     public array $values;
 
-    public function getHtmlTags(Model $row, ?Field $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         $key = $field->get($row);
         $value = $field->values[$key] ?? '';

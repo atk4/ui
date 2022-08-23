@@ -35,6 +35,7 @@ class Modal extends View
     public $title;
     /** @var string */
     public $loadingLabel = 'Loading...';
+    /** @var string */
     public $headerCss = 'header';
     public $ui = 'modal';
     /** @var \Closure|null */

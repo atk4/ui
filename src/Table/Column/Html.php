@@ -18,7 +18,7 @@ class Html extends Table\Column
         return '{$_' . $field->shortName . '}';
     }
 
-    public function getHtmlTags(Model $row, ?Field $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         return ['_' . $field->shortName => '<td>' . $row->get($field->shortName) . '</td>'];
     }

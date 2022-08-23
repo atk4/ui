@@ -51,7 +51,7 @@ class Status extends Table\Column
         );
     }
 
-    public function getHtmlTags(Model $row, ?Field $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         $cl = '';
 

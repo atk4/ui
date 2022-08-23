@@ -113,7 +113,7 @@ class ActionButtons extends Table\Column
         return parent::getTag($position, $value, $attr);
     }
 
-    public function getDataCellTemplate(Field $field = null)
+    public function getDataCellTemplate(Field $field = null): string
     {
         if (count($this->buttons) === 0) {
             return '';
@@ -128,7 +128,7 @@ class ActionButtons extends Table\Column
         return '<div class="ui buttons">' . $output . '</div>';
     }
 
-    public function getHtmlTags(Model $row, ?Field $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {
