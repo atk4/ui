@@ -70,7 +70,7 @@ class Tabs extends View
             ->setElement('a')
             ->setAttr('data-tab', $tab->name);
 
-        if (empty($this->activeTabName)) {
+        if (!$this->activeTabName) {
             $this->activeTabName = $tab->name;
         }
 

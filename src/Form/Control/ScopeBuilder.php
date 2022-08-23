@@ -10,11 +10,10 @@ use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
-use Atk4\Ui\Form\Control;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\View;
 
-class ScopeBuilder extends Control
+class ScopeBuilder extends Form\Control
 {
     use VueLookupTrait;
 
@@ -311,7 +310,9 @@ class ScopeBuilder extends Control
      */
     protected function buildQuery(Model $model): void
     {
-        $this->fields = $this->fields ?: array_keys($model->getFields());
+        if (!$this->fields) {
+            $this->fields = array_keys($model->getFields());
+        }
 
         foreach ($this->fields as $fieldName) {
             $field = $model->getField($fieldName);
@@ -670,7 +671,7 @@ class ScopeBuilder extends Control
                     Condition::OPERATOR_EQUALS => Condition::OPERATOR_IN,
                     Condition::OPERATOR_DOESNOT_EQUAL => Condition::OPERATOR_NOT_IN,
                 ];
-                $value = implode(',', $value);
+                $value = implode(', ', $value);
                 $operator = $map[$operator] ?? Condition::OPERATOR_NOT_IN;
             }
 

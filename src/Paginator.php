@@ -9,8 +9,8 @@ class Paginator extends View
     public $ui = 'pagination menu';
     public $defaultTemplate = 'paginator.html';
 
-    /** @var int Specify how many pages this paginator has in total. */
-    public $total;
+    /** Specify how many pages this paginator has in total. */
+    public int $total;
 
     /**
      * Override what is the current page. If not set, Paginator will look inside

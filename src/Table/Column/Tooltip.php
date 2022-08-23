@@ -14,7 +14,7 @@ use Atk4\Ui\Table;
  * text is taken by the Row Model in $tooltipField.
  *
  * $crud->addDecorator('paid_date', new Table\Column\Tooltip('note'));
- * $crud->addDecorator('paid_date', new Table\Column\Tooltip('note','error red'));
+ * $crud->addDecorator('paid_date', new Table\Column\Tooltip('note', 'error red'));
  */
 class Tooltip extends Table\Column
 {

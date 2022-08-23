@@ -207,8 +207,8 @@ class Upload extends Input
             }
         }
 
-        if (!empty($this->accept)) {
-            $this->template->trySet('accept', implode(',', $this->accept));
+        if ($this->accept !== []) {
+            $this->template->trySet('accept', implode(', ', $this->accept));
         }
         if ($this->multiple) {
             $this->template->trySet('multiple', 'multiple');

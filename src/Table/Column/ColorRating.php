@@ -32,7 +32,7 @@ class ColorRating extends Table\Column
     /** @var int Step to be calculated between colors, must be greater than 1. */
     public $steps = 1;
 
-    /** @var array Hex colors ['#FF0000','#00FF00'] from red to green. */
+    /** @var array Hex colors ['#FF0000', '#00FF00'] from red to green. */
     public $colors = ['#FF0000', '#00FF00'];
 
     /** @var array Store the generated Hex color based on the number of steps. */

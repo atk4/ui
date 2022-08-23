@@ -123,7 +123,7 @@ class JsChain extends JsExpression
     private function _renderArgs($args = [])
     {
         return '('
-            . implode(',', array_map(function ($arg) {
+            . implode(', ', array_map(function ($arg) {
                 if ($arg instanceof JsExpressionable) {
                     return $arg->jsRender();
                 }

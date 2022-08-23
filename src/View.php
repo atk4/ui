@@ -577,10 +577,10 @@ class View extends AbstractView implements JsExpressionable
             array_walk(
                 $style,
                 function (&$item, $key) {
-                    $item = $key . ':' . $item;
+                    $item = $key . ': ' . $item;
                 }
             );
-            $this->template->append('style', implode(';', $style));
+            $this->template->append('style', implode('; ', $style) . ';');
         }
 
         if ($this->ui) {
@@ -1101,7 +1101,7 @@ class View extends AbstractView implements JsExpressionable
             }
         }
 
-        return implode(';', $actions);
+        return implode('; ', $actions);
     }
 
     /**

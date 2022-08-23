@@ -70,7 +70,7 @@ class JsCallback extends Callback implements JsExpressionable
      *
      * @param string $text
      */
-    public function setConfirm($text = 'Are you sure?')
+    public function setConfirm($text = 'Are you sure?'): void
     {
         $this->confirm = $text;
     }

@@ -17,7 +17,6 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationError;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
-use Atk4\Ui\Panel\Right;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Psr\Log\LoggerInterface;
@@ -212,7 +211,7 @@ class App
      * within specific location. This will keep track
      * of them when terminating app using json.
      *
-     * @param Modal|Right $portal
+     * @param Modal|Panel\Right $portal
      */
     public function registerPortals($portal): void
     {
@@ -402,11 +401,11 @@ class App
             foreach ($this->getRenderedPortals() as $key => $modal) {
                 // add modal rendering to output
                 $keys[] = '#' . $key;
-                $output['atkjs'] .= ';' . $modal['js'];
+                $output['atkjs'] .= '; ' . $modal['js'];
                 $output['html'] .= $modal['html'];
             }
             if ($keys) {
-                $ids = implode(',', $keys);
+                $ids = implode(', ', $keys);
                 $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . $ids . '\').remove();';
             }
             $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];

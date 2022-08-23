@@ -7,12 +7,12 @@ namespace Atk4\Ui\Form\Layout;
 use Atk4\Core\Factory;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
-use Atk4\Ui\Form\AbstractLayout;
+use Atk4\Ui\Form;
 
 /**
  * Custom Layout for a form (user-defined HTML).
  */
-class Custom extends AbstractLayout
+class Custom extends Form\AbstractLayout
 {
     /** @var string */
     public $defaultTemplate;

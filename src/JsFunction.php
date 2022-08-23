@@ -26,7 +26,7 @@ class JsFunction implements JsExpressionable
     public $stopPropagation = false;
 
     /** @var string */
-    public $indent = '  ';
+    public $indent = '    ';
 
     public function __construct(array $args = [], array $statements = null)
     {
@@ -51,14 +51,14 @@ class JsFunction implements JsExpressionable
         $pre = '';
         if ($this->preventDefault) {
             $this->fxArgs = ['event'];
-            $pre .= "\n" . $this->indent . '  event.preventDefault();';
+            $pre .= "\n" . $this->indent . '    event.preventDefault();';
         }
         if ($this->stopPropagation) {
             $this->fxArgs = ['event'];
-            $pre .= "\n" . $this->indent . '  event.stopPropagation();';
+            $pre .= "\n" . $this->indent . '    event.stopPropagation();';
         }
 
-        $output = 'function(' . implode(',', $this->fxArgs) . ') {'
+        $output = 'function(' . implode(', ', $this->fxArgs) . ') {'
             . $pre;
         foreach ($this->fxStatements as $statement) {
             if (!$statement) {
@@ -78,7 +78,7 @@ class JsFunction implements JsExpressionable
                     ->addMoreInfo('statement', $statement);
             }
 
-            $output .= "\n" . $this->indent . '  ' . $statement . (!preg_match('~[;}]\s*$~', $statement) ? ';' : '');
+            $output .= "\n" . $this->indent . '    ' . $statement . (!preg_match('~[;}]\s*$~', $statement) ? ';' : '');
         }
 
         $output .= "\n" . $this->indent . '}';

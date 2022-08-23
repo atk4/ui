@@ -9,6 +9,8 @@ use Atk4\Ui\View;
 
 /**
  * Slide Panel Content.
+ *
+ * @method Right getOwner()
  */
 class Content extends View implements LoadableContent
 {

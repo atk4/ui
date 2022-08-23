@@ -6,7 +6,6 @@ namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Table;
 
 /**
@@ -40,18 +39,12 @@ use Atk4\Ui\Table;
  */
 class KeyValue extends Table\Column
 {
-    public $values = [];
+    public array $values;
 
     public function getHtmlTags(Model $row, ?Field $field)
     {
-        $values = $field->values;
-
-        if (!is_array($values) || count($values) === 0) {
-            throw new Exception('KeyValues Column values must have elements');
-        }
-
         $key = $field->get($row);
-        $value = $values[$key] ?? '';
+        $value = $field->values[$key] ?? '';
 
         return [$field->shortName => $value];
     }

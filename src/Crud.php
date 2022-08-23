@@ -25,14 +25,14 @@ class Crud extends Grid
     /** @var bool|null should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
 
-    /** @var array Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
-    private $menuItems = [];
+    /** Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
+    private array $menuItems = [];
 
-    /** @var array Model single scope action to include in table action column. Will include all single scope actions if empty. */
-    public $singleScopeActions = [];
+    /** Model single scope action to include in table action column. Will include all single scope actions if empty. */
+    public array $singleScopeActions = [];
 
-    /** @var array Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
-    public $noRecordScopeActions = [];
+    /** Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
+    public array $noRecordScopeActions = [];
 
     /** @var string Message to display when record is add or edit successfully. */
     public $saveMsg = 'Record has been saved!';
@@ -62,7 +62,7 @@ class Crud extends Grid
     {
         parent::applySort();
 
-        if ($this->getSortBy() && !empty($this->menuItems)) {
+        if ($this->getSortBy() && $this->menuItems !== []) {
             foreach ($this->menuItems as $item) {
                 // Remove previous click handler and attach new one using sort argument.
                 $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
@@ -273,11 +273,11 @@ class Crud extends Grid
     private function _getModelActions(string $appliesTo): array
     {
         $actions = [];
-        if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && !empty($this->singleScopeActions)) {
+        if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
             foreach ($this->singleScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }
-        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && !empty($this->noRecordScopeActions)) {
+        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
             foreach ($this->noRecordScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }

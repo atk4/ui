@@ -8,7 +8,6 @@ use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
-use Atk4\Ui\VueComponent\ItemSearch;
 
 /**
  * A collection of Card set from a model.
@@ -50,8 +49,8 @@ class CardDeck extends View
     /** @var array|false|null A menu seed for displaying button inside. */
     public $menu = [View::class, 'ui' => 'stackable grid'];
 
-    /** @var array|false|ItemSearch */
-    public $search = [ItemSearch::class, 'ui' => 'ui compact basic segment'];
+    /** @var array|false|VueComponent\ItemSearch */
+    public $search = [VueComponent\ItemSearch::class, 'ui' => 'ui compact basic segment'];
 
     /** @var View|null A view container for buttons. Added into menu when menu is set. */
     private $btns;
@@ -62,11 +61,11 @@ class CardDeck extends View
     /** @var array Default notifier to perform when model action is successful * */
     public $notifyDefault = [JsToast::class, 'settings' => ['displayTime' => 5000]];
 
-    /** @var array Model single scope action to include in table action column. Will include all single scope actions if empty. */
-    public $singleScopeActions = [];
+    /** Model single scope action to include in table action column. Will include all single scope actions if empty. */
+    public array $singleScopeActions = [];
 
-    /** @var array Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
-    public $noRecordScopeActions = [];
+    /** Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
+    public array $noRecordScopeActions = [];
 
     /** @var string Message to display when record is add or edit successfully. */
     public $saveMsg = 'Record has been saved!';
@@ -400,11 +399,11 @@ class CardDeck extends View
     private function getModelActions(string $appliesTo): array
     {
         $actions = [];
-        if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && !empty($this->singleScopeActions)) {
+        if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
             foreach ($this->singleScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }
-        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && !empty($this->noRecordScopeActions)) {
+        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
             foreach ($this->noRecordScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }

@@ -8,7 +8,6 @@ use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use Atk4\Ui\Table\Column\ActionButtons;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
@@ -386,7 +385,7 @@ class Grid extends View
         return $this->getActionButtons()->addButton($btn, $executor, $confirmation, $disabled);
     }
 
-    private function getActionButtons(): ActionButtons
+    private function getActionButtons(): Table\Column\ActionButtons
     {
         if ($this->actionButtons === null) {
             $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);

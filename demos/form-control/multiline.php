@@ -7,7 +7,6 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
-use Atk4\Ui\Form\Control\Multiline;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsFunction;
@@ -30,42 +29,42 @@ $inventoryItemClass = AnonymousClassNameCache::get_class(fn () => new class() ex
         $this->addField('item', [
             'required' => true,
             'default' => 'item',
-            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
+            'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->addField('inv_date', [
             'default' => new \DateTime(),
             'type' => 'date',
-            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
+            'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->addField('inv_time', [
             'default' => new \DateTime(),
             'type' => 'time',
-            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
+            'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->hasOne('country', [
             'model' => new Country($this->countryPersistence),
-            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 3]]],
+            'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 3]]],
         ]);
         $this->addField('qty', [
             'type' => 'integer',
             'caption' => 'Qty / Box',
             'default' => 1,
             'required' => true,
-            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
+            'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->addField('box', [
             'type' => 'integer',
             'caption' => '# of Boxes',
             'default' => 1,
             'required' => true,
-            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
+            'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->addExpression('total', [
             'expr' => function (Model $row) {
                 return $row->get('qty') * $row->get('box');
             },
             'type' => 'integer',
-            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 1, 'class' => 'blue']]],
+            'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 1, 'class' => 'blue']]],
         ]);
     }
 });
@@ -90,8 +89,8 @@ for ($i = 1; $i < 3; ++$i) {
 $form = Form::addTo($app);
 
 // Add multiline field and set model.
-/** @var Multiline */
-$multiline = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
+/** @var Form\Control\Multiline */
+$multiline = $form->addControl('ml', [Form\Control\Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
 $multiline->setModel($inventory);
 
 // Add total field.

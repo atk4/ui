@@ -13,9 +13,8 @@ class TableColumnLinkTest extends TestCase
 {
     use Concerns\HandlesTable;
 
-    public $db;
+    /** @var Table */
     public $table;
-    public $column;
 
     protected function setUp(): void
     {
@@ -106,7 +105,6 @@ class TableColumnLinkTest extends TestCase
 
     public function testTemplateStacking(): void
     {
-        // Simplest way to integrate
         $this->table->addDecorator('name', new Table\Column\Template('<b>{$name}</b>'));
         $this->table->addDecorator('name', new Table\Column\Template('<u>{$name}</u>'));
 
@@ -123,7 +121,6 @@ class TableColumnLinkTest extends TestCase
 
     public function testRender1(): void
     {
-        // Simplest way to integrate
         $this->table->addDecorator('name', new Table\Column\Template('<b>{$name}</b>'));
         $this->table->addDecorator('name', new Table\Column\Template('<u>{$name}</u>'));
 
@@ -135,7 +132,6 @@ class TableColumnLinkTest extends TestCase
 
     public function testRender1a(): void
     {
-        // Simplest way to integrate
         $this->table->addColumn(null, [Table\Column\Template::class, 'hello<b>world</b>']);
 
         $this->assertSame(
@@ -263,20 +259,7 @@ class TableColumnLinkTest extends TestCase
 
     public function testLink10(): void
     {
-        // need to reset all to set a nulled value in field name model
-        $arr = [
-            'table' => [
-                1 => ['id' => 1, 'name' => '', 'ref' => 'ref123', 'salary' => -123],
-            ],
-        ];
-        $db = new Persistence\Array_($arr);
-        $m = new Model($db, ['table' => 'table']);
-        $m->addField('name');
-        $m->addField('ref');
-        $m->addField('salary');
-        $this->table = new Table();
-        $this->table->invokeInit();
-        $this->table->setModel($m, ['name', 'ref']);
+        $this->table->model->load(1)->save(['name' => '']);
 
         $this->table->addDecorator('name', [Table\Column\NoValue::class, ['noValue' => ' --- ']]);
 
@@ -295,16 +278,4 @@ class TableColumnLinkTest extends TestCase
             $this->extractTableRow($this->table)
         );
     }
-
-    /*
-    function testLink1() {
-        // Simplest way to integrate
-        $this->table->addColumn('name', new Table\Column\Link());
-
-        $this->assertEquals(
-            '<td><u><b>{$name}</b></u></td><td>{$ref}</td>',
-            $this->table->getDataRowHtml()
-        );
-    }
-    */
 }

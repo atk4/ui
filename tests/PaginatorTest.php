@@ -36,7 +36,7 @@ class PaginatorTest extends TestCase
     /**
      * @dataProvider addDataProvider
      */
-    public function testPaginator($page, $range, $total, $expected): void
+    public function testPaginator(int $page, int $range, int $total, array $expected): void
     {
         $p = new Paginator(['page' => $page, 'range' => $range, 'total' => $total]);
         $this->assertSame($expected, $p->getPaginatorItems());

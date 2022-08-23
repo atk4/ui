@@ -312,7 +312,7 @@ class Modal extends View
         $data['type'] = $this->type;
         $data['label'] = $this->loadingLabel;
 
-        if (!empty($this->title)) {
+        if ($this->title) {
             $this->template->trySet('title', $this->title);
             $this->template->trySet('headerCss', $this->headerCss);
         }
@@ -347,7 +347,7 @@ class Modal extends View
             $this->template->trySet('close', 'icon close');
         }
 
-        if (!empty($this->args)) {
+        if ($this->args) {
             $data['args'] = $this->args;
         }
         $this->js(true)->data($data);

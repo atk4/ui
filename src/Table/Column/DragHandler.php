@@ -14,6 +14,7 @@ use Atk4\Ui\Table;
  */
 class DragHandler extends Table\Column
 {
+    /** @var string */
     public $class;
     /** @var string */
     public $tag = 'i';

@@ -42,7 +42,7 @@ class JsIntegrationTest extends TestCase
     }
 
     /**
-     * make sure that onReady chains are included in output.
+     * Make sure that onReady chains are included in output.
      */
     public function testBasicChain2(): void
     {
@@ -51,12 +51,12 @@ class JsIntegrationTest extends TestCase
         $v->getHtml();
 
         $this->assertSame('$(function() {
-  $("#b").hide();
+    $("#b").hide();
 })', $v->getJs());
     }
 
     /**
-     * make sure that js('event') chains are included in output with appropriate callback.
+     * Make sure that js('event') chains are included in output with appropriate callback.
      */
     public function testBasicChain3(): void
     {
@@ -65,14 +65,14 @@ class JsIntegrationTest extends TestCase
         $v->getHtml();
 
         $this->assertSame('$(function() {
-  $("#b").bind("click",function() {
-    $("#b").hide();
-  });
+    $("#b").bind("click", function() {
+        $("#b").hide();
+    });
 })', $v->getJs());
     }
 
     /**
-     * make sure that on('event', js) chains are included in output.
+     * Make sure that on('event', js) chains are included in output.
      */
     public function testBasicChain4(): void
     {
@@ -84,11 +84,11 @@ class JsIntegrationTest extends TestCase
         $bb->getHtml();
 
         $this->assertSame('$(function() {
-  $("#b1").on("click",function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    $("#b2").hide();
-  });
+    $("#b1").on("click", function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        $("#b2").hide();
+    });
 })', $bb->getJs());
     }
 }

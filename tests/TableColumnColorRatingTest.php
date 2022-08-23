@@ -14,10 +14,8 @@ class TableColumnColorRatingTest extends TestCase
 {
     use Concerns\HandlesTable;
 
-    public $db;
     /** @var Table */
     public $table;
-    public $column;
 
     protected function setUp(): void
     {

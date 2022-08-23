@@ -154,7 +154,7 @@ class Menu extends View
     public function getHtml()
     {
         // if menu don't have a single element or content, then destroy it
-        if (empty($this->elements) && !$this->content) {
+        if ($this->elements === [] && !$this->content) {
             $this->destroy();
 
             return '';

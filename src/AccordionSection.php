@@ -6,6 +6,8 @@ namespace Atk4\Ui;
 
 /**
  * An accordion item in Accordion.
+ *
+ * @method Accordion getOwner()
  */
 class AccordionSection extends View
 {

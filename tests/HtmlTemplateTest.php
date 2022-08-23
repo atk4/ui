@@ -7,7 +7,6 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Exception;
 use Atk4\Ui\HtmlTemplate;
-use Atk4\Ui\HtmlTemplate\TagTree;
 
 class HtmlTemplateTest extends TestCase
 {
@@ -20,7 +19,7 @@ class HtmlTemplateTest extends TestCase
         // TODO test if all tag trees are reachable
     }
 
-    protected function assertSameTagTree(string $expectedTemplateStr, TagTree $tagTree): void
+    protected function assertSameTagTree(string $expectedTemplateStr, HtmlTemplate\TagTree $tagTree): void
     {
         $this->assertSameTemplate(
             $expectedTemplateStr,

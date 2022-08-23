@@ -421,7 +421,7 @@ class Lookup extends Input
 
     public function set($value = null, $junk = null)
     {
-        $value = implode(',', (array) $value);
+        $value = implode(', ', (array) $value);
 
         return parent::set($value, $junk);
     }

@@ -22,18 +22,14 @@ class JsReload implements JsExpressionable
     /**
      * If defined, they will be added at the end of your URL.
      * Value in ARG can be either string or JsExpressionable.
-     *
-     * @var array
      */
-    public $args = [];
+    public array $args = [];
 
     /**
      * Semantic-ui api settings.
      * ex: ['loadingDuration' => 1000].
-     *
-     * @var array
      */
-    public $apiConfig = [];
+    public array $apiConfig = [];
 
     /** @var bool */
     public $includeStorage = false;
@@ -53,9 +49,9 @@ class JsReload implements JsExpressionable
             ->atkReloadView(
                 [
                     'uri' => $this->view->jsUrl(['__atk_reload' => $this->view->name]),
-                    'uri_options' => !empty($this->args) ? $this->args : null,
+                    'uri_options' => $this->args !== [] ? $this->args : null,
                     'afterSuccess' => $this->afterSuccess ? $this->afterSuccess->jsRender() : null,
-                    'apiConfig' => !empty($this->apiConfig) ? $this->apiConfig : null,
+                    'apiConfig' => $this->apiConfig !== [] ? $this->apiConfig : null,
                     'storeName' => $this->includeStorage ? $this->view->name : null,
                 ]
             );

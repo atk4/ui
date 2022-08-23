@@ -97,9 +97,9 @@ abstract class FilterModel extends Model
     }
 
     /**
-     * Perform further initialisation.
+     * Perform further initialization.
      */
-    public function afterInit()
+    public function afterInit(): void
     {
         $this->addField('name', ['default' => $this->lookupField->shortName, 'system' => true]);
 

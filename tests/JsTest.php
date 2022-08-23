@@ -77,15 +77,15 @@ class JsTest extends TestCase
     public function testChain1(): void
     {
         $c = new JsChain('$myInput');
-        $c->getTextInRange('start', 'end');
-        $this->assertSame('$myInput.getTextInRange("start","end")', $c->jsRender());
+        $c->getTextInRange('start', 'end'); // @phpstan-ignore-line
+        $this->assertSame('$myInput.getTextInRange("start", "end")', $c->jsRender());
     }
 
     public function testChain2(): void
     {
         $c = new JsChain('$myInput');
-        $c->getTextInRange(new JsExpression('getStart()'), 'end');
-        $this->assertSame('$myInput.getTextInRange(getStart(),"end")', $c->jsRender());
+        $c->getTextInRange(new JsExpression('getStart()'), 'end'); // @phpstan-ignore-line
+        $this->assertSame('$myInput.getTextInRange(getStart(), "end")', $c->jsRender());
     }
 
     public function testJquery(): void
@@ -116,7 +116,7 @@ class JsTest extends TestCase
         ]));
 
         $this->assertSame('$(document).ready(function() {
-    $(".box1").height($(".box2").height());
-  })', $fx->jsRender());
+        $(".box1").height($(".box2").height());
+    })', $fx->jsRender());
     }
 }

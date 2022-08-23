@@ -146,7 +146,7 @@ class Dropdown extends Input
     public function getValue()
     {
         return $this->entityField !== null
-            ? (is_array($this->entityField->get()) ? implode(',', $this->entityField->get()) : $this->entityField->get())
+            ? (is_array($this->entityField->get()) ? implode(', ', $this->entityField->get()) : $this->entityField->get())
             : parent::getValue();
     }
 
