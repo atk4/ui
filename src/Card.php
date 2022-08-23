@@ -194,8 +194,10 @@ class Card extends View
 
     /**
      * Set data-id attribute of this card.
+     *
+     * @param string $id
      */
-    public function setDataId($id)
+    public function setDataId($id): void
     {
         $this->template->trySet('dataId', $id);
     }
@@ -203,7 +205,7 @@ class Card extends View
     /**
      * Add actions from various model.
      */
-    public function addModelsActions(array $models)
+    public function addModelsActions(array $models): void
     {
         foreach ($models as $model) {
             $this->addModelActions($model);
@@ -213,7 +215,7 @@ class Card extends View
     /**
      * Add action from Model.
      */
-    public function addModelActions(Model $model)
+    public function addModelActions(Model $model): void
     {
         if ($singleActions = $model->getUserActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD)) {
             $this->setModel($model);
@@ -253,8 +255,9 @@ class Card extends View
      * Add action executor to card.
      *
      * @param class-string<View&UserAction\ExecutorInterface> $executorClass
+     * @param Button|array                                    $button
      */
-    public function addAction(Model\UserAction $action, $executorClass, $button = null)
+    public function addAction(Model\UserAction $action, $executorClass, $button = null): void
     {
         if (!$button) {
             $button = new Button([$action->caption]);
@@ -304,7 +307,7 @@ class Card extends View
     /**
      * Set extra content using model field.
      */
-    public function addExtraFields(Model $model, array $fields, string $glue = null)
+    public function addExtraFields(Model $model, array $fields, string $glue = null): void
     {
         // display extra field in line.
         if ($glue) {

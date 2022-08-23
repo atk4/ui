@@ -18,19 +18,21 @@ use Atk4\Ui\UserAction\JsCallbackExecutor;
 class Input extends Form\Control
 {
     public $ui = 'input';
+    public $defaultTemplate = 'form/control/input.html';
 
     public string $inputType = 'text';
 
+    /** @var string */
     public $placeholder = '';
 
-    public $defaultTemplate = 'form/control/input.html';
-
+    /** @var Icon|string|null */
     public $icon;
 
+    /** @var Icon|string|null */
     public $iconLeft;
 
     /**
-     * Specify left / right. If you use "true" will default to the right side.
+     * @var bool|'left'|'right' Specify left / right. If you use "true" will default to the right side.
      */
     public $loading;
 
@@ -46,8 +48,10 @@ class Input extends Form\Control
     /** @var string|object Set label that will appear to the right of the input field. */
     public $labelRight;
 
+    /** @var Button|array|null */
     public $action;
 
+    /** @var Button|array|null */
     public $actionLeft;
 
     /**
@@ -144,8 +148,8 @@ class Input extends Form\Control
     /**
      * Used only from renderView().
      *
-     * @param string|object $button Button class or object
-     * @param string        $spot   Template spot
+     * @param string|array|object $button Button class or object
+     * @param string              $spot   Template spot
      *
      * @return Button
      */

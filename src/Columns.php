@@ -65,6 +65,8 @@ class Columns extends View
      * which will default to 16.
      *
      * @param int $width
+     *
+     * @return self
      */
     public function addRow($width = null)
     {

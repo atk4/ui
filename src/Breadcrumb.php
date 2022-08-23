@@ -23,6 +23,8 @@ class Breadcrumb extends Lister
      *
      * @param string       $section Title of link
      * @param string|array $link    Link itself
+     *
+     * @return $this
      */
     public function addCrumb($section = null, $link = null)
     {
@@ -30,6 +32,8 @@ class Breadcrumb extends Lister
             $link = $this->url($link);
         }
         $this->path[] = ['section' => $section, 'link' => $link, 'divider' => $this->dividerClass];
+
+        return $this;
     }
 
     /**
@@ -51,10 +55,14 @@ class Breadcrumb extends Lister
      *
      * @param string       $section Title of link
      * @param string|array $link    Link itself
+     *
+     * @return $this
      */
     public function addCrumbReverse($section = null, $link = null)
     {
         array_unshift($this->path, ['section' => $section, 'link' => $link]);
+
+        return $this;
     }
 
     protected function renderView(): void

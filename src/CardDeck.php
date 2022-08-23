@@ -111,7 +111,7 @@ class CardDeck extends View
     /**
      * Add menu bar view to CardDeck.
      */
-    protected function addMenuBar()
+    protected function addMenuBar(): void
     {
         $this->menu = $this->add(Factory::factory($this->menu), 'Menu');
 
@@ -129,7 +129,7 @@ class CardDeck extends View
     /**
      * Add Paginator view to card deck.
      */
-    protected function addPaginator()
+    protected function addPaginator(): void
     {
         $seg = View::addTo($this->container, ['ui' => 'basic segment'])->addStyle('text-align', 'center');
         $this->paginator = $seg->add(Factory::factory($this->paginator, ['reload' => $this->container]));
@@ -179,7 +179,7 @@ class CardDeck extends View
      * Reset Menu button js event when reloading occur in order
      * to have their arguments always in sync after container reload.
      */
-    protected function applyReload()
+    protected function applyReload(): void
     {
         foreach ($this->menuActions as $menuAction) {
             $ex = $menuAction['executor'];
@@ -348,7 +348,7 @@ class CardDeck extends View
      *
      * @return mixed
      */
-    public function addMenuButton($button, $callback = null, $confirm = null, bool $isDisabled = false, $args = null)
+    public function addMenuButton($button, $callback = null, $confirm = null, bool $isDisabled = false, array $args = null)
     {
         $defaults = [];
 
@@ -417,7 +417,7 @@ class CardDeck extends View
     /**
      * Will set model limit according to paginator value.
      */
-    protected function initPaginator()
+    protected function initPaginator(): int
     {
         $count = $this->model->executeCountQuery();
         if ($this->paginator) {

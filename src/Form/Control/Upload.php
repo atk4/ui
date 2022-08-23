@@ -14,7 +14,7 @@ class Upload extends Input
 {
     public string $inputType = 'hidden';
 
-    /** @var View|null The action button to open file browser dialog. */
+    /** @var Button|array|null The action button to open file browser dialog. */
     public $action;
 
     /**

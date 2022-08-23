@@ -19,6 +19,7 @@ class AccordionSection extends View
     /** @var VirtualPage|null The accordion item virtual page. */
     public $virtualPage;
 
+    /** @var string */
     public $icon = 'dropdown';
 
     protected function renderView(): void

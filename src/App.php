@@ -141,6 +141,7 @@ class App
         '__atk_tab' => false,
     ];
 
+    /** @var class-string */
     public $templateClass = HtmlTemplate::class;
 
     public function __construct(array $defaults = [])
@@ -422,6 +423,8 @@ class App
     }
 
     /**
+     * @param string|array|View|HtmlTemplate $output
+     *
      * @return never
      */
     public function terminateHtml($output, array $headers = []): void
@@ -439,6 +442,8 @@ class App
     }
 
     /**
+     * @param string|array|View $output
+     *
      * @return never
      */
     public function terminateJson($output, array $headers = []): void

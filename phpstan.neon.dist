@@ -117,6 +117,9 @@ parameters:
             path: 'demos/interactive/popup.php'
             message: '~^Call to an undefined method Atk4\\Ui\\View::linkCart\(\)\.$~'
         -
+            path: 'demos/interactive/popup.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\View::addItem\(\)\.$~'
+        -
             path: 'demos/interactive/tabs.php'
             message: '~^Call to an undefined method Atk4\\Ui\\View::setActive\(\)\.$~'
         -
@@ -422,3 +425,6 @@ parameters:
         -
             path: 'src/Panel/Right.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\App::add\(\) expects Atk4\\Ui\\AbstractView, array given\.$~'
+        -
+            path: 'src/Popup.php'
+            message: '~^Parameter #1 \$view of method Atk4\\Ui\\Callback::terminateJson\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\AbstractView given\.$~'

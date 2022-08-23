@@ -11,6 +11,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpression;
+use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\Label;
 use Atk4\Ui\Lister;
 use Atk4\Ui\Menu;
@@ -62,8 +63,10 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
 
     /**
      * Add an item into the cart.
+     *
+     * @param string $item
      */
-    public function addItem($item)
+    public function addItem($item): void
     {
         $this->items[] = $item;
         $this->memorize('items', $this->items);
@@ -71,10 +74,12 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
 
     /**
      * Remove item form the cart with specified index.
+     *
+     * @param string $index
      */
-    public function removeItem($no)
+    public function removeItem($index): void
     {
-        unset($this->items[$no]);
+        unset($this->items[$index]);
         $this->memorize('items', $this->items);
     }
 
@@ -138,10 +143,12 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
      * cart is updated.
      *
      * Also - you can supply jsAction to execute when this happens.
+     *
+     * @param JsExpressionable|array $jsAction
      */
-    public function linkCart($cart, $jsAction = null)
+    public function linkCart(View $cart, $jsAction = null): void
     {
-        $this->on('click', '.item', function ($a, $b) use ($cart, $jsAction) {
+        $this->on('click', '.item', function (Jquery $a, string $b) use ($cart, $jsAction) {
             $cart->addItem($b);
 
             return $jsAction;

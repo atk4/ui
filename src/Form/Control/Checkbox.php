@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Form;
+use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\Jquery;
 
 /**
@@ -81,6 +82,9 @@ class Checkbox extends Form\Control
 
     /**
      * Will return jQuery expression to get checkbox checked state.
+     *
+     * @param string|bool|null $when
+     * @param JsExpressionable $action
      *
      * @return Jquery
      */
