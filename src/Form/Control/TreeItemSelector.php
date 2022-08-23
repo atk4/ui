@@ -99,11 +99,9 @@ class TreeItemSelector extends Form\Control
     }
 
     /**
-     * Set the items.
-     *
      * @return $this
      */
-    public function setTreeItems($treeItems)
+    public function setTreeItems(array $treeItems)
     {
         $this->treeItems = $treeItems;
 

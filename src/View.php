@@ -265,7 +265,7 @@ class View extends AbstractView implements JsExpressionable
             throw new \Error('Too many method arguments');
         }
 
-        if (!is_object($object)) {
+        if (!is_object($object)) { // @phpstan-ignore-line
             // for BC do not throw
             // later consider to accept strictly objects only
             $object = AbstractView::addToWithCl($this, $object, [], true);

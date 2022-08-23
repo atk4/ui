@@ -317,8 +317,6 @@ class Table extends Lister
             $cb = JsCallback::addTo($this);
             $cb->set($fx, ['widths' => 'widths']);
             $options['uri'] = $cb->getJsUrl();
-        } elseif (is_array($fx)) {
-            $widths = $fx;
         }
 
         if ($widths) {

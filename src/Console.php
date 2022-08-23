@@ -356,7 +356,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * for the $user_model automatically, but for any nested objects you would have
      * to pass on the property.
      *
-     * @param object|string $object
+     * @param object|class-string $object
      *
      * @return $this
      */
@@ -393,13 +393,10 @@ class Console extends View implements \Psr\Log\LoggerInterface
                     $object->debug = $debugBak; // @phpstan-ignore-line
                 }
             }
-        } elseif (is_string($object)) {
+        } else {
             $this->output('--[ Executing ' . $object . '::' . $method . ' ]--------------');
 
             $result = $object::{$method}(...$args);
-        } else {
-            throw (new Exception('Incorrect value for an object'))
-                ->addMoreInfo('object', $object);
         }
         $this->output('--[ Result: ' . $this->getApp()->encodeJson($result) . ' ]------------');
 

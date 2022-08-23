@@ -40,9 +40,6 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         return $this->action;
     }
 
-    /**
-     * Set action to be execute.
-     */
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
@@ -94,7 +91,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /**
      * Check if all argument values have been provided.
      */
-    private function _hasAllArguments()
+    private function _hasAllArguments(): array
     {
         $errors = [];
         foreach ($this->action->args as $key => $val) {

@@ -278,14 +278,14 @@ class Lookup extends Input
 
     /**
      * Apply limit to model.
+     *
+     * @param int|bool $limit
      */
     protected function applyLimit($limit = true): void
     {
-        if (!$limit) {
-            return;
+        if ($limit !== false) {
+            $this->model->setLimit($limit === true ? $this->limit : $limit);
         }
-
-        $this->model->setLimit(is_numeric($limit) ? $limit : $this->limit);
     }
 
     /**

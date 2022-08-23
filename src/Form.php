@@ -372,12 +372,10 @@ class Form extends View
      * Add header into the form, which appears as a separator.
      *
      * @param string|array $title
-     *
-     * @return Form\Layout
      */
-    public function addHeader($title = null)
+    public function addHeader($title = null): void
     {
-        return $this->layout->addHeader($title);
+        $this->layout->addHeader($title);
     }
 
     /**

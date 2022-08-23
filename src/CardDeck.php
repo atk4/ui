@@ -342,7 +342,7 @@ class CardDeck extends View
     /**
      * Add button to menu bar on top of deck card.
      *
-     * @param Button|string                  $button   a button object, a model action or a string representing a model action
+     * @param Button|string|array            $button   a button object, a model action or a string representing a model action
      * @param JsExpressionable|\Closure|null $callback an model action, js expression or callback function
      * @param string|array                   $confirm  A confirmation string or View::on method defaults when passed has an array,
      *

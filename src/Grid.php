@@ -398,7 +398,7 @@ class Grid extends View
      * Similar to addAction. Will add Button that when click will display
      * a Dropdown menu.
      *
-     * @param View          $view
+     * @param View|string   $view
      * @param \Closure|null $action
      *
      * @return View

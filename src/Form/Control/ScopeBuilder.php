@@ -345,13 +345,13 @@ class ScopeBuilder extends Form\Control
         } elseif ($field->hasReference()) {
             $type = 'lookup';
         } else {
-            $type = $field->type;
+            $type = $field->type ?? 'string';
         }
 
         $rule = $this->getRule($type, array_merge([
             'id' => $field->shortName,
             'label' => $field->getCaption(),
-            'options' => $this->options[strtolower((string) $type)] ?? [],
+            'options' => $this->options[$type] ?? [],
         ], $field->ui['scopebuilder'] ?? []), $field);
 
         $this->rules[] = $rule;
@@ -438,9 +438,9 @@ class ScopeBuilder extends Form\Control
         return $this;
     }
 
-    protected function getRule($type, array $defaults = [], Field $field = null): array
+    protected function getRule(string $type, array $defaults = [], Field $field = null): array
     {
-        $rule = self::$ruleTypes[strtolower((string) $type)] ?? self::$ruleTypes['default'];
+        $rule = self::$ruleTypes[$type] ?? self::$ruleTypes['default'];
 
         // when $rule is an alias
         if (is_string($rule)) {
@@ -467,14 +467,15 @@ class ScopeBuilder extends Form\Control
      * Return an array of items id and name for a field.
      * Return field enum, values or reference values.
      */
-    protected function getFieldItems(Field $field, int $limit = 250): array
+    protected function getFieldItems(Field $field, ?int $limit = 250): array
     {
         $items = [];
         if ($field->enum) {
-            $items = array_chunk(array_combine($field->enum, $field->enum), $limit, true)[0];
+            $items = array_slice($field->enum, 0, $limit);
+            $items = array_combine($items, $items);
         }
         if ($field->values && is_array($field->values)) {
-            $items = array_chunk($field->values, $limit, true)[0];
+            $items = array_slice($field->values, 0, $limit, true);
         } elseif ($field->hasReference()) {
             $model = $field->getReference()->refModel($this->model);
             $model->setLimit($limit);
@@ -490,7 +491,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Returns the choices array for Select field rule.
      */
-    protected function getChoices(Field $field, $options = []): array
+    protected function getChoices(Field $field, array $options = []): array
     {
         $choices = $this->getFieldItems($field, $options['limit'] ?? 250);
 
@@ -593,7 +594,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts Scope or Condition to VueQueryBuilder query array.
      */
-    public static function scopeToQuery(Scope\AbstractScope $scope, $inputsMap = []): array
+    public static function scopeToQuery(Scope\AbstractScope $scope, array $inputsMap = []): array
     {
         $query = [];
         if ($scope instanceof Scope\Condition) {
@@ -624,7 +625,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts a Condition to VueQueryBuilder query array.
      */
-    public static function conditionToQuery(Scope\Condition $condition, $inputsMap = []): array
+    public static function conditionToQuery(Scope\Condition $condition, array $inputsMap = []): array
     {
         if (is_string($condition->key)) {
             $rule = $condition->key;

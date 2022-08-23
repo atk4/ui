@@ -109,7 +109,7 @@ class Wizard extends View
      * Adds an extra screen to show user when he goes beyond last step.
      * There won't be "back" button on this step anymore.
      */
-    public function addFinish(\Closure $fx)
+    public function addFinish(\Closure $fx): void
     {
         if (count($this->steps) === $this->currentStep + 1) {
             $this->buttonFinish->link($this->getUrl(count($this->steps)));

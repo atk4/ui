@@ -35,11 +35,15 @@ use Atk4\Ui\MenuItem;
  */
 class Admin extends Layout implements NavigableInterface
 {
-    public $menuLeft; // vertical menu
-    public $menu; // horizontal menu
-    public $menuRight; // vertical pull-down
+    /** @var Menu Top horizontal menu */
+    public $menu;
+    /** @var Menu|null Left vertical menu */
+    public $menuLeft;
+    /** @var Menu Right vertical menu pull-down */
+    public $menuRight;
 
-    public $burger = true; // burger menu item
+    /** @var MenuItem */
+    public $burger;
 
     /** @var bool Whether or not left Menu is visible on Page load. */
     public $isMenuLeftVisible = true;
@@ -94,14 +98,12 @@ class Admin extends Layout implements NavigableInterface
 
     protected function renderView(): void
     {
-        if ($this->menuLeft) {
-            if (count($this->menuLeft->elements) === 0) {
-                // no items were added, so lets add dashboard
-                $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], ['index']);
-            }
-            if (!$this->isMenuLeftVisible) {
-                $this->template->tryDel('CssVisibility');
-            }
+        if (count($this->menuLeft->elements) === 0) {
+            // no items were added, so lets add dashboard
+            $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], ['index']);
+        }
+        if (!$this->isMenuLeftVisible) {
+            $this->template->tryDel('CssVisibility');
         }
 
         parent::renderView();

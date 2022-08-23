@@ -3,13 +3,8 @@ parameters:
     paths:
         - ./
     excludePaths:
-        - cache/
-        - build/
         - vendor/
         - js/
-
-    # TODO review once we drop PHP 7.x support
-    treatPhpDocTypesAsCertain: false
 
     # some extra rules
     checkAlwaysTrueCheckTypeFunctionCall: true
@@ -163,6 +158,9 @@ parameters:
         -
             path: 'src/Form/Control/Checkbox.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Jquery::\$checked\.$~'
+        -
+            path: 'src/Form/Layout/Section/Accordion.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\View::jsOpen\(\)\.$~'
         -
             path: 'src/JsVueService.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsChain::createAtkVue\(\)\.$~'
@@ -405,7 +403,13 @@ parameters:
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, Atk4\\Ui\\Form\|class-string<Atk4\\Ui\\Form\\Layout>> given\.$~'
         -
             path: 'src/Grid.php'
-            message: '~^Parameter #1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View, Atk4\\Data\\Model\\UserAction given\.$~'
+            message: '~^Parameter #1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View\|string, Atk4\\Data\\Model\\UserAction given\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Parameter #2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Paginator given\.$~'
+        -
+            path: 'src/Grid.php'
+            message: '~^Parameter #2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Table\|false given\.$~'
         -
             path: 'src/JsSearch.php'
             message: '~^Parameter #2 \$value of method Atk4\\Ui\\HtmlTemplate::trySet\(\) expects string\|null, Atk4\\Ui\\Form\\Control\\Line given\.$~'

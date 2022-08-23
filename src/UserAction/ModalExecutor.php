@@ -60,7 +60,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      * to make sure that view id is properly set for loader and button
      * js action to run properly.
      */
-    public function afterActionInit(Model\UserAction $action): void
+    protected function afterActionInit(Model\UserAction $action): void
     {
         $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
@@ -68,12 +68,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 
-    /**
-     * Will associate executor with the action.
-     *
-     * @return ModalExecutor
-     */
-    public function setAction(Model\UserAction $action): View
+    public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
         $this->afterActionInit($action);

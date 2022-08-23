@@ -74,16 +74,13 @@ class VpExecutor extends View implements JsExecutorInterface
      * to make sure that view id is properly set for loader and button
      * js action to run properly.
      */
-    public function afterActionInit(Model\UserAction $action): void
+    protected function afterActionInit(Model\UserAction $action): void
     {
         $this->loader = Loader::addTo($this->vp, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 
-    /**
-     * Will associate executor with the action.
-     */
-    public function setAction(Model\UserAction $action): self
+    public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
         $this->afterActionInit($action);

@@ -99,7 +99,7 @@ class Modal extends View
      * The cbView only will be loaded dynamically within modal
      * div.atk-content.
      */
-    public function enableCallback()
+    public function enableCallback(): void
     {
         $this->cbView = View::addTo($this);
         $this->cbView->stickyGet('__atk_m', $this->name);
@@ -115,8 +115,10 @@ class Modal extends View
 
     /**
      * Add CSS classes to "content" div.
+     *
+     * @param string|array $class
      */
-    public function addContentCss($class)
+    public function addContentCss($class): void
     {
         $this->contentCss = array_merge($this->contentCss, is_string($class) ? [$class] : $class);
     }
@@ -252,6 +254,7 @@ class Modal extends View
     /**
      * Add a deny action to modal.
      *
+     * @param string           $label
      * @param JsExpressionable $jsAction javascript action that will run when deny is click
      *
      * @return $this
@@ -269,6 +272,7 @@ class Modal extends View
     /**
      * Add an approve action button to modal.
      *
+     * @param string           $label
      * @param JsExpressionable $jsAction javascript action that will run when deny is click
      *
      * @return $this
@@ -285,6 +289,8 @@ class Modal extends View
 
     /**
      * Add an action button to modal.
+     *
+     * @param View $button
      *
      * @return $this
      */

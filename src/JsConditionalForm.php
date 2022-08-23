@@ -34,7 +34,7 @@ class JsConditionalForm implements JsExpressionable
      *
      * @param array $rules
      */
-    public function setRules($rules)
+    public function setRules($rules): void
     {
         $this->fieldRules = $rules;
     }

@@ -610,14 +610,15 @@ class Multiline extends Form\Control
     /**
      * Return array of possible items set for a select or lookup field.
      */
-    protected function getFieldItems(Field $field, $limit = 10): array
+    protected function getFieldItems(Field $field, ?int $limit = 10): array
     {
         $items = [];
         if ($field->enum) {
-            $items = array_chunk(array_combine($field->enum, $field->enum), $limit, true)[0];
+            $items = array_slice($field->enum, 0, $limit);
+            $items = array_combine($items, $items);
         }
         if ($field->values && is_array($field->values)) {
-            $items = array_chunk($field->values, $limit, true)[0];
+            $items = array_slice($field->values, 0, $limit, true);
         } elseif ($field->hasReference()) {
             $model = $field->getReference()->refModel($this->model);
             $model->setLimit($limit);

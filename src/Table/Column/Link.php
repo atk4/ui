@@ -88,7 +88,7 @@ class Link extends Table\Column
     {
         if (is_array($page)) {
             $page = ['page' => $page];
-        } elseif (is_string($page)) {
+        } else {
             $page = ['url' => $page];
         }
 

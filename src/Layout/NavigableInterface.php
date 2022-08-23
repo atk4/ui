@@ -12,6 +12,8 @@ interface NavigableInterface
 {
     /**
      * Add a group to left menu.
+     *
+     * @param array $seed
      */
     public function addMenuGroup($seed): Menu;
 

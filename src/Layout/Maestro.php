@@ -16,6 +16,7 @@ use Atk4\Ui\MenuItem;
  */
 class Maestro extends Admin
 {
+    /** @var string */
     public $menuTemplate = 'layout/maestro-sidenav.html';
 
     public function addMenuGroup($seed): Menu

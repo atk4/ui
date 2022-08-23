@@ -241,16 +241,10 @@ class Input extends Form\Control
     /**
      * Adds new action button.
      *
-     * @param array $defaults
-     *
      * @return Button
      */
-    public function addAction($defaults = [])
+    public function addAction(array $defaults = [])
     {
-        if (!is_array($defaults)) {
-            $defaults = [$defaults];
-        }
-
         $this->action = Button::addTo($this, [$defaults], ['AfterInput']);
         $this->addClass('action');
 

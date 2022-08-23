@@ -58,8 +58,11 @@ class JsSearch extends View
 
     /** @var string ui css classes */
     public $button = 'ui mini transparent basic button';
+    /** @var string */
     public $filterIcon = 'filter';
+    /** @var string */
     public $btnSearchIcon = 'search';
+    /** @var string */
     public $btnRemoveIcon = 'red remove';
     /** @var string|null */
     public $btnStyle;
