@@ -8,6 +8,9 @@ use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Ui\Exception;
 use Atk4\Ui\HtmlTemplate;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class TagTree
 {
     use WarnDynamicPropertyTrait;

@@ -10,6 +10,9 @@ use Atk4\Data\Model;
 use Atk4\Ui\HtmlTemplate\TagTree;
 use Atk4\Ui\HtmlTemplate\Value as HtmlValue;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class HtmlTemplate
 {
     use AppScopeTrait;

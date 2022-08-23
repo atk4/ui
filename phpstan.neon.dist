@@ -19,8 +19,6 @@ parameters:
     checkMissingIterableValueType: false # TODO
 
     ignoreErrors:
-        - '~^Unsafe usage of new static\(\)\.$~'
-
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
         -
