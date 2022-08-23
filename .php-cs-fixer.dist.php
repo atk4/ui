@@ -2,10 +2,7 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->in([__DIR__])
-    ->exclude([
-        'vendor',
-        'js',
-    ]);
+    ->exclude(['vendor', 'js']);
 
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
