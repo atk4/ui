@@ -8,7 +8,6 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\JsExpressionable;
-use Atk4\Ui\View;
 
 class Upload extends Input
 {
