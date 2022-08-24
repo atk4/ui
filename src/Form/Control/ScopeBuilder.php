@@ -10,19 +10,17 @@ use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
-use Atk4\Ui\Form\Control;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\View;
 
-class ScopeBuilder extends Control
+class ScopeBuilder extends Form\Control
 {
     use VueLookupTrait;
 
     /** @var bool Do not render label for this input. */
     public $renderLabel = false;
 
-    /** @var array General or field type specific options. */
-    public $options = [
+    public array $options = [
         'enum' => [
             'limit' => 250,
         ],
@@ -48,23 +46,18 @@ class ScopeBuilder extends Control
 
     /**
      * The date, time or datetime options:
-     *     Any of flatpickr options;
-     *    'flatpickr' => [].
-     *
-     *     When true, will init date, time or datetime to current.
-     *    'useDefault'
-     *
-     * @var array
+     * 'flatpickr' - any of flatpickr options
+     * 'useDefault' - when true, will init date, time or datetime to current.
      */
-    public $atkdDateOptions = [
+    public array $atkdDateOptions = [
         'useDefault' => false,
         'flatpickr' => [],
     ];
 
     /**
-     * atk-lookup and semantic-ui dropdown options.
+     * Atk-lookup and semantic-ui dropdown options.
      */
-    public $atkLookupOptions = [
+    public array $atkLookupOptions = [
         'ui' => 'small basic button',
     ];
 
@@ -300,11 +293,6 @@ class ScopeBuilder extends Control
         }
     }
 
-    public function getModel()
-    {
-        return $this->model;
-    }
-
     /**
      * Set the model to build scope for.
      */
@@ -320,9 +308,11 @@ class ScopeBuilder extends Control
     /**
      * Build query from model scope.
      */
-    protected function buildQuery(Model $model)
+    protected function buildQuery(Model $model): void
     {
-        $this->fields = $this->fields ?: array_keys($model->getFields());
+        if (!$this->fields) {
+            $this->fields = array_keys($model->getFields());
+        }
 
         foreach ($this->fields as $fieldName) {
             $field = $model->getField($fieldName);
@@ -355,13 +345,13 @@ class ScopeBuilder extends Control
         } elseif ($field->hasReference()) {
             $type = 'lookup';
         } else {
-            $type = $field->type;
+            $type = $field->type ?? 'string';
         }
 
         $rule = $this->getRule($type, array_merge([
             'id' => $field->shortName,
             'label' => $field->getCaption(),
-            'options' => $this->options[strtolower((string) $type)] ?? [],
+            'options' => $this->options[$type] ?? [],
         ], $field->ui['scopebuilder'] ?? []), $field);
 
         $this->rules[] = $rule;
@@ -448,9 +438,9 @@ class ScopeBuilder extends Control
         return $this;
     }
 
-    protected function getRule($type, array $defaults = [], Field $field = null): array
+    protected function getRule(string $type, array $defaults = [], Field $field = null): array
     {
-        $rule = self::$ruleTypes[strtolower((string) $type)] ?? self::$ruleTypes['default'];
+        $rule = self::$ruleTypes[$type] ?? self::$ruleTypes['default'];
 
         // when $rule is an alias
         if (is_string($rule)) {
@@ -477,14 +467,15 @@ class ScopeBuilder extends Control
      * Return an array of items id and name for a field.
      * Return field enum, values or reference values.
      */
-    protected function getFieldItems(Field $field, int $limit = 250): array
+    protected function getFieldItems(Field $field, ?int $limit = 250): array
     {
         $items = [];
         if ($field->enum) {
-            $items = array_chunk(array_combine($field->enum, $field->enum), $limit, true)[0];
+            $items = array_slice($field->enum, 0, $limit);
+            $items = array_combine($items, $items);
         }
         if ($field->values && is_array($field->values)) {
-            $items = array_chunk($field->values, $limit, true)[0];
+            $items = array_slice($field->values, 0, $limit, true);
         } elseif ($field->hasReference()) {
             $model = $field->getReference()->refModel($this->model);
             $model->setLimit($limit);
@@ -500,7 +491,7 @@ class ScopeBuilder extends Control
     /**
      * Returns the choices array for Select field rule.
      */
-    protected function getChoices(Field $field, $options = []): array
+    protected function getChoices(Field $field, array $options = []): array
     {
         $choices = $this->getFieldItems($field, $options['limit'] ?? 250);
 
@@ -603,7 +594,7 @@ class ScopeBuilder extends Control
     /**
      * Converts Scope or Condition to VueQueryBuilder query array.
      */
-    public static function scopeToQuery(Scope\AbstractScope $scope, $inputsMap = []): array
+    public static function scopeToQuery(Scope\AbstractScope $scope, array $inputsMap = []): array
     {
         $query = [];
         if ($scope instanceof Scope\Condition) {
@@ -634,7 +625,7 @@ class ScopeBuilder extends Control
     /**
      * Converts a Condition to VueQueryBuilder query array.
      */
-    public static function conditionToQuery(Scope\Condition $condition, $inputsMap = []): array
+    public static function conditionToQuery(Scope\Condition $condition, array $inputsMap = []): array
     {
         if (is_string($condition->key)) {
             $rule = $condition->key;
@@ -681,7 +672,7 @@ class ScopeBuilder extends Control
                     Condition::OPERATOR_EQUALS => Condition::OPERATOR_IN,
                     Condition::OPERATOR_DOESNOT_EQUAL => Condition::OPERATOR_NOT_IN,
                 ];
-                $value = implode(',', $value);
+                $value = implode(', ', $value);
                 $operator = $map[$operator] ?? Condition::OPERATOR_NOT_IN;
             }
 
@@ -698,7 +689,7 @@ class ScopeBuilder extends Control
     }
 
     /**
-     * return extra value option associate with certain inputType or null otherwise.
+     * Return extra value option associate with certain inputType or null otherwise.
      */
     protected static function getOption(string $type, string $value, Condition $condition): ?array
     {

@@ -121,18 +121,6 @@ export default class JsSearch extends atkPlugin {
     }
 
     /**
-     * Add argument to url for sorting purpose.
-     *
-     * @Deprecated Use setUrlArgs instead.
-     *
-     * @param name
-     * @param sortBy
-     */
-    setSortArgs(name, sortBy) {
-        this.setUrlArgs(name, sortBy);
-    }
-
-    /**
      * Allow to set filter initial input.
      * Mostly use on page load
      * when input need to be set to reflect a search state.

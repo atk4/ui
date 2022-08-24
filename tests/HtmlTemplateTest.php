@@ -7,20 +7,19 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Exception;
 use Atk4\Ui\HtmlTemplate;
-use Atk4\Ui\HtmlTemplate\TagTree;
 
 class HtmlTemplateTest extends TestCase
 {
     protected function assertSameTemplate(string $expectedTemplateStr, HtmlTemplate $template): void
     {
         $expectedTemplate = new HtmlTemplate($expectedTemplateStr);
-        $this->assertSame($expectedTemplate->toLoadableString(), $template->toLoadableString());
-        $this->assertSame($expectedTemplate->renderToHtml(), $template->renderToHtml());
+        static::assertSame($expectedTemplate->toLoadableString(), $template->toLoadableString());
+        static::assertSame($expectedTemplate->renderToHtml(), $template->renderToHtml());
 
         // TODO test if all tag trees are reachable
     }
 
-    protected function assertSameTagTree(string $expectedTemplateStr, TagTree $tagTree): void
+    protected function assertSameTagTree(string $expectedTemplateStr, HtmlTemplate\TagTree $tagTree): void
     {
         $this->assertSameTemplate(
             $expectedTemplateStr,
@@ -68,15 +67,15 @@ class HtmlTemplateTest extends TestCase
     public function testTryLoadFromFileNonExistentFileException(): void
     {
         $t = new HtmlTemplate();
-        $this->assertFalse($t->tryLoadFromFile(__DIR__ . 'bad_template_file'));
+        static::assertFalse($t->tryLoadFromFile(__DIR__ . 'bad_template_file'));
     }
 
     public function testHasTag(): void
     {
         $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        $this->assertTrue($t->hasTag('foo'));
-        $this->assertTrue($t->hasTag(['foo', 'bar']));
-        $this->assertFalse($t->hasTag(['foo', 'bar', 'non_existent_tag']));
+        static::assertTrue($t->hasTag('foo'));
+        static::assertTrue($t->hasTag(['foo', 'bar']));
+        static::assertFalse($t->hasTag(['foo', 'bar', 'non_existent_tag']));
     }
 
     public function testSetBadTypeException(): void
@@ -142,7 +141,7 @@ class HtmlTemplateTest extends TestCase
     public function testRenderRegion(): void
     {
         $t = new HtmlTemplate('{foo}hello{/} guys');
-        $this->assertSame('hello', $t->renderToHtml('foo'));
+        static::assertSame('hello', $t->renderToHtml('foo'));
     }
 
     public function testParseDollarTags(): void

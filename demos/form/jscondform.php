@@ -145,12 +145,12 @@ $accordion_layout->activate($adr_section);
 // Show group where 'language' belong when dev is checked.
 $f_acc->setGroupDisplayRules(
     // rules
-    ['addr2' => ['custom_shipping' => 'checked']]
+    ['addr2' => ['custom_shipping' => 'checked']],
 
     // JS selector of container
-    // , '.atk-form-group' // this will hide group
-    // , '.content' // this will hide content of 2nd accordion section
-    , $ship_section->getOwner() // this way we set selector to accordion section title block - so what? we still can't do anything about it
+    // '.atk-form-group' // this will hide group
+    // '.content' // this will hide content of 2nd accordion section
+    $ship_section->getOwner() // this way we set selector to accordion section title block - so what? we still can't do anything about it
     // // BUT there is no way how to show/hide all accordion section including title and content
 );
 */

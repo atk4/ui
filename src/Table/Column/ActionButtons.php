@@ -37,8 +37,9 @@ class ActionButtons extends Table\Column
      *
      * Returns button object
      *
-     * @param View|string                        $button
+     * @param string|array|View                  $button
      * @param JsChain|\Closure|ExecutorInterface $action
+     * @param bool|\Closure                      $isDisabled
      *
      * @return View
      */
@@ -75,16 +76,18 @@ class ActionButtons extends Table\Column
      * Adds a new button which will open a modal dialog and dynamically
      * load contents through $callback. Will pass a virtual page.
      *
-     * @param View|string  $button
-     * @param string|array $defaults modal title or modal defaults array
-     * @param View         $owner
-     * @param array        $args
+     * @param string|array|View $button
+     * @param string|array      $defaults modal title or modal defaults array
+     * @param View              $owner
+     * @param array             $args
      *
      * @return View
      */
     public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [])
     {
-        $owner = $owner ?: $this->getOwner()->getOwner();
+        if ($owner === null) {
+            $owner = $this->getOwner()->getOwner();
+        }
 
         if (is_string($defaults)) {
             $defaults = ['title' => $defaults];
@@ -110,7 +113,7 @@ class ActionButtons extends Table\Column
         return parent::getTag($position, $value, $attr);
     }
 
-    public function getDataCellTemplate(Field $field = null)
+    public function getDataCellTemplate(Field $field = null): string
     {
         if (count($this->buttons) === 0) {
             return '';
@@ -125,7 +128,7 @@ class ActionButtons extends Table\Column
         return '<div class="ui buttons">' . $output . '</div>';
     }
 
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {

@@ -35,7 +35,7 @@ trait HandlesTable
     }
 
     /**
-     * return column template style name.
+     * Return column template style name.
      */
     protected function getColumnStyle(Table\Column $column): string
     {

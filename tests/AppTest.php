@@ -23,7 +23,7 @@ class AppTest extends TestCase
     {
         $app = $this->createApp();
 
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             HtmlTemplate::class,
             $app->loadTemplate('html.html')
         );
@@ -37,7 +37,7 @@ class AppTest extends TestCase
         $app = $this->createApp();
         $app->templateClass = get_class($anotherTemplateClass);
 
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             get_class($anotherTemplateClass),
             $app->loadTemplate('html.html')
         );
@@ -56,7 +56,7 @@ class AppTest extends TestCase
             $this->expectExceptionMessage('Unexpected output detected');
             $app->terminateHtml('');
         } finally {
-            $this->assertSame($testStr, ob_get_contents());
+            static::assertSame($testStr, ob_get_contents());
             ob_end_clean();
         }
     }

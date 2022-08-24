@@ -12,9 +12,6 @@ use Atk4\Data\Reference\ContainsMany;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Form\Control;
 
-/**
- * Implements a form.
- */
 class Form extends View
 {
     use \Atk4\Core\HookTrait;
@@ -108,10 +105,8 @@ class Form extends View
      *  Show "target' if 'source1' is not empty AND is a number
      *      OR
      *  Show 'target' if 'source1' is exactly 5.
-     *
-     * @var array
      */
-    public $controlDisplayRules = [];
+    public array $controlDisplayRules = [];
 
     /**
      * Default css selector for JsConditionalForm.
@@ -147,18 +142,18 @@ class Form extends View
     }
 
     /**
-     * initialize form layout. You can inject custom layout
+     * Initialize form layout. You can inject custom layout
      * if you 'layout' => .. to constructor.
      */
-    protected function initLayout()
+    protected function initLayout(): void
     {
+        // TODO simplify
         if ($this->layout === null) {
-            $this->layout = [Form\Layout::class];
+            $this->layout = [Form\Layout::class]; // @phpstan-ignore-line
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
-            $this->layout = Factory::factory($this->layout, ['form' => $this]);
-            $this->layout = $this->add($this->layout);
+            $this->layout = $this->add(Factory::factory($this->layout, ['form' => $this])); // @phpstan-ignore-line
         } elseif (is_object($this->layout)) {
             $this->layout->form = $this;
             $this->add($this->layout);
@@ -377,12 +372,10 @@ class Form extends View
      * Add header into the form, which appears as a separator.
      *
      * @param string|array $title
-     *
-     * @return Form\Layout
      */
-    public function addHeader($title = null)
+    public function addHeader($title = null): void
     {
-        return $this->layout->addHeader($title);
+        $this->layout->addHeader($title);
     }
 
     /**
@@ -483,8 +476,10 @@ class Form extends View
         return Factory::factory($ControlSeed, $defaults);
     }
 
-    /** @var array Describes how factory converts type to control seed Provides control seeds for most common types. */
-    protected $typeToControl = [
+    /**
+     * @var array<string, array>
+     */
+    protected array $typeToControl = [
         'boolean' => [Control\Checkbox::class],
         'text' => [Control\Textarea::class],
         'string' => [Control\Line::class],
@@ -497,7 +492,7 @@ class Form extends View
     /**
      * Looks inside the POST of the request and loads it into a current model.
      */
-    protected function loadPost()
+    protected function loadPost(): void
     {
         $this->hook(self::HOOK_LOAD_POST, [&$_POST]);
 
@@ -526,7 +521,7 @@ class Form extends View
     protected function renderView(): void
     {
         $this->ajaxSubmit();
-        if (!empty($this->controlDisplayRules)) {
+        if ($this->controlDisplayRules !== []) {
             $this->js(true, new JsConditionalForm($this, $this->controlDisplayRules, $this->controlDisplaySelector));
         }
 
@@ -581,7 +576,7 @@ class Form extends View
     /**
      * Does ajax submit.
      */
-    public function ajaxSubmit()
+    public function ajaxSubmit(): void
     {
         $this->js(true)->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
 

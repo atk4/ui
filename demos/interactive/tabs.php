@@ -59,4 +59,4 @@ $tabs->addTab('Dynamic Form', function ($tab) {
     });
 });
 
-$tabs->addTabUrl('Any other page', 'https://example.com/');
+$tabs->addTabUrl('Any other page', './');

@@ -10,6 +10,9 @@ use Atk4\Data\Model;
 use Atk4\Ui\HtmlTemplate\TagTree;
 use Atk4\Ui\HtmlTemplate\Value as HtmlValue;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class HtmlTemplate
 {
     use AppScopeTrait;
@@ -157,7 +160,7 @@ class HtmlTemplate
                 ->addMoreInfo('value', $value);
         }
 
-        if (!is_scalar($value) && $value !== null) {
+        if (!is_scalar($value) && $value !== null) { // @phpstan-ignore-line
             throw (new Exception('Value must be scalar'))
                 ->addMoreInfo('tag', $tag)
                 ->addMoreInfo('value', $value);

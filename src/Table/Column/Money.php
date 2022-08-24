@@ -39,7 +39,7 @@ class Money extends Table\Column
         );
     }
 
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         if ($field->get($row) < 0) {
             return ['_' . $this->shortName . '_class' => 'negative'];

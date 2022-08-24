@@ -8,7 +8,6 @@ use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
-use Atk4\Ui\VueComponent\ItemSearch;
 
 /**
  * A collection of Card set from a model.
@@ -17,7 +16,7 @@ class CardDeck extends View
 {
     public $ui = '';
 
-    /** @var string Card type inside this deck. */
+    /** @var class-string<View> Card type inside this deck. */
     public $card = Card::class;
 
     /** @var string default template file. */
@@ -50,8 +49,8 @@ class CardDeck extends View
     /** @var array|false|null A menu seed for displaying button inside. */
     public $menu = [View::class, 'ui' => 'stackable grid'];
 
-    /** @var array|false|ItemSearch */
-    public $search = [ItemSearch::class, 'ui' => 'ui compact basic segment'];
+    /** @var array|false|VueComponent\ItemSearch */
+    public $search = [VueComponent\ItemSearch::class, 'ui' => 'ui compact basic segment'];
 
     /** @var View|null A view container for buttons. Added into menu when menu is set. */
     private $btns;
@@ -62,11 +61,11 @@ class CardDeck extends View
     /** @var array Default notifier to perform when model action is successful * */
     public $notifyDefault = [JsToast::class, 'settings' => ['displayTime' => 5000]];
 
-    /** @var array Model single scope action to include in table action column. Will include all single scope actions if empty. */
-    public $singleScopeActions = [];
+    /** Model single scope action to include in table action column. Will include all single scope actions if empty. */
+    public array $singleScopeActions = [];
 
-    /** @var array Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
-    public $noRecordScopeActions = [];
+    /** Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
+    public array $noRecordScopeActions = [];
 
     /** @var string Message to display when record is add or edit successfully. */
     public $saveMsg = 'Record has been saved!';
@@ -112,7 +111,7 @@ class CardDeck extends View
     /**
      * Add menu bar view to CardDeck.
      */
-    protected function addMenuBar()
+    protected function addMenuBar(): void
     {
         $this->menu = $this->add(Factory::factory($this->menu), 'Menu');
 
@@ -130,7 +129,7 @@ class CardDeck extends View
     /**
      * Add Paginator view to card deck.
      */
-    protected function addPaginator()
+    protected function addPaginator(): void
     {
         $seg = View::addTo($this->container, ['ui' => 'basic segment'])->addStyle('text-align', 'center');
         $this->paginator = $seg->add(Factory::factory($this->paginator, ['reload' => $this->container]));
@@ -180,7 +179,7 @@ class CardDeck extends View
      * Reset Menu button js event when reloading occur in order
      * to have their arguments always in sync after container reload.
      */
-    protected function applyReload()
+    protected function applyReload(): void
     {
         foreach ($this->menuActions as $menuAction) {
             $ex = $menuAction['executor'];
@@ -220,6 +219,8 @@ class CardDeck extends View
      * Return proper js statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      *
+     * @param string|array|JsExpressionable|Model|null $return
+     *
      * @return array|object
      */
     protected function jsExecute($return, Model\UserAction $action = null)
@@ -252,7 +253,7 @@ class CardDeck extends View
     }
 
     /**
-     * js expression return when action afterHook executor return a Model.
+     * Js expression return when action afterHook executor return a Model.
      */
     protected function jsModelReturn(Model\UserAction $action = null, string $msg = 'Done!'): array
     {
@@ -285,7 +286,7 @@ class CardDeck extends View
             return $a[$model->idField];
         };
         $deck = [];
-        foreach ($this->cardHolder->elements as $v => $element) {
+        foreach ($this->cardHolder->elements as $element) {
             if ($element instanceof $this->card) {
                 $deck[$element->model->getId()] = $element;
             }
@@ -341,13 +342,13 @@ class CardDeck extends View
     /**
      * Add button to menu bar on top of deck card.
      *
-     * @param Button|string                  $button   a button object, a model action or a string representing a model action
+     * @param Button|string|array            $button   a button object, a model action or a string representing a model action
      * @param JsExpressionable|\Closure|null $callback an model action, js expression or callback function
      * @param string|array                   $confirm  A confirmation string or View::on method defaults when passed has an array,
      *
      * @return mixed
      */
-    public function addMenuButton($button, $callback = null, $confirm = null, bool $isDisabled = false, $args = null)
+    public function addMenuButton($button, $callback = null, $confirm = null, bool $isDisabled = false, array $args = null)
     {
         $defaults = [];
 
@@ -398,11 +399,11 @@ class CardDeck extends View
     private function getModelActions(string $appliesTo): array
     {
         $actions = [];
-        if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && !empty($this->singleScopeActions)) {
+        if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
             foreach ($this->singleScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }
-        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && !empty($this->noRecordScopeActions)) {
+        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
             foreach ($this->noRecordScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }
@@ -416,7 +417,7 @@ class CardDeck extends View
     /**
      * Will set model limit according to paginator value.
      */
-    protected function initPaginator()
+    protected function initPaginator(): int
     {
         $count = $this->model->executeCountQuery();
         if ($this->paginator) {

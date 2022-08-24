@@ -9,8 +9,7 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**
- * Implements a most core view, which all of the other components descend
- * form.
+ * Base view of all other UI components.
  */
 class View extends AbstractView implements JsExpressionable
 {
@@ -266,7 +265,7 @@ class View extends AbstractView implements JsExpressionable
             throw new \Error('Too many method arguments');
         }
 
-        if (!is_object($object)) {
+        if (!is_object($object)) { // @phpstan-ignore-line
             // for BC do not throw
             // later consider to accept strictly objects only
             $object = AbstractView::addToWithCl($this, $object, [], true);
@@ -507,10 +506,8 @@ class View extends AbstractView implements JsExpressionable
      * $this->invokeInit().
      *
      * @param array $page
-     *
-     * @return string
      */
-    public function jsUrl($page = [])
+    public function jsUrl($page = []): string
     {
         return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
     }
@@ -521,10 +518,8 @@ class View extends AbstractView implements JsExpressionable
      * $this->invokeInit().
      *
      * @param string|array $page URL as string or array with page name as first element and other GET arguments
-     *
-     * @return string
      */
-    public function url($page = [])
+    public function url($page = []): string
     {
         return $this->getApp()->url($page, false, $this->_getStickyArgs());
     }
@@ -534,7 +529,7 @@ class View extends AbstractView implements JsExpressionable
      */
     protected function _getStickyArgs(): array
     {
-        if ($this->issetOwner() && $this->getOwner() instanceof self) {
+        if ($this->issetOwner()) {
             $stickyArgs = array_merge($this->getOwner()->_getStickyArgs(), $this->stickyArgs);
         } else {
             $stickyArgs = $this->stickyArgs;
@@ -582,10 +577,10 @@ class View extends AbstractView implements JsExpressionable
             array_walk(
                 $style,
                 function (&$item, $key) {
-                    $item = $key . ':' . $item;
+                    $item = $key . ': ' . $item;
                 }
             );
-            $this->template->append('style', implode(';', $style));
+            $this->template->append('style', implode('; ', $style) . ';');
         }
 
         if ($this->ui) {
@@ -1106,7 +1101,7 @@ class View extends AbstractView implements JsExpressionable
             }
         }
 
-        return implode(';', $actions);
+        return implode('; ', $actions);
     }
 
     /**

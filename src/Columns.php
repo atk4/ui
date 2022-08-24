@@ -7,7 +7,7 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 
 /**
- * Imprements vertically distributed columns based on CSS Grid system.
+ * Vertically distributed columns based on CSS Grid system.
  */
 class Columns extends View
 {
@@ -34,6 +34,8 @@ class Columns extends View
      * Add new vertical column.
      *
      * @param int|array $defaults specify width (1..16) or relative to $width
+     *
+     * @return View
      */
     public function addColumn($defaults = null)
     {
@@ -63,6 +65,8 @@ class Columns extends View
      * which will default to 16.
      *
      * @param int $width
+     *
+     * @return self
      */
     public function addRow($width = null)
     {

@@ -99,11 +99,9 @@ class TreeItemSelector extends Form\Control
     }
 
     /**
-     * Set the items.
-     *
      * @return $this
      */
-    public function setTreeItems($treeItems)
+    public function setTreeItems(array $treeItems)
     {
         $this->treeItems = $treeItems;
 
@@ -111,7 +109,7 @@ class TreeItemSelector extends Form\Control
     }
 
     /**
-     * Input field.
+     * Returns <input .../> tag.
      *
      * @return string
      */
@@ -125,6 +123,9 @@ class TreeItemSelector extends Form\Control
         ]);
     }
 
+    /**
+     * @return string|null
+     */
     public function getValue()
     {
         return $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get());

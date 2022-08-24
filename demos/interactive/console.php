@@ -21,6 +21,9 @@ require_once __DIR__ . '/../init-app.php';
 $testRunClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
     use DebugTrait;
 
+    /**
+     * @return mixed
+     */
     public function generateReport()
     {
         $this->log('info', 'Console will automatically pick up output from all DebugTrait objects');

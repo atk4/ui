@@ -66,7 +66,8 @@ active. (See :ref:`system_pattern`)::
         public $user;
         public $company;
 
-        public function __construct($auth = true) {
+        public function __construct(bool $auth = true)
+        {
             parent::__construct('Warehouse App v0.4');
 
             // My App class will establish database connection
@@ -424,7 +425,7 @@ Populating the left menu object is simply a matter of adding the right menu item
 This is the top menu of the admin layout. You can add other item to the top menu using::
 
     Button::addTo($layout->menu->addItem(), ['View Source', 'class.teal' => true, 'icon' => 'github'])
-        ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\JsExpression('document.location=[];', [$url . $f]));
+        ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\JsExpression('document.location = [];', [$url . $f]));
 
 .. php:attr:: menuRight
 

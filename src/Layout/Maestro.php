@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Layout;
 
-use Atk4\Ui\Item;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\Menu;
+use Atk4\Ui\MenuItem;
 
 /**
  * An Admin layout with enhanced left menu.
@@ -16,6 +16,7 @@ use Atk4\Ui\Menu;
  */
 class Maestro extends Admin
 {
+    /** @var string */
     public $menuTemplate = 'layout/maestro-sidenav.html';
 
     public function addMenuGroup($seed): Menu
@@ -26,7 +27,7 @@ class Maestro extends Admin
         return $gr;
     }
 
-    public function addMenuItem($name, $action = null, $group = null): Item
+    public function addMenuItem($name, $action = null, $group = null): MenuItem
     {
         $i = parent::addMenuItem($name, $action, $group);
         if (!$group) {

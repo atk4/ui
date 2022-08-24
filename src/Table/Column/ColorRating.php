@@ -32,7 +32,7 @@ class ColorRating extends Table\Column
     /** @var int Step to be calculated between colors, must be greater than 1. */
     public $steps = 1;
 
-    /** @var array Hex colors ['#FF0000','#00FF00'] from red to green. */
+    /** @var array Hex colors ['#FF0000', '#00FF00'] from red to green. */
     public $colors = ['#FF0000', '#00FF00'];
 
     /** @var array Store the generated Hex color based on the number of steps. */
@@ -56,7 +56,6 @@ class ColorRating extends Table\Column
         $this->max = (float) $this->max;
         $this->delta = $this->max - $this->min;
 
-        // Preconditions : min - max
         if ($this->min > $this->max) {
             throw new Exception('Min must be lower than Max');
         }
@@ -65,23 +64,18 @@ class ColorRating extends Table\Column
             throw new Exception('Min and Max must be different');
         }
 
-        // Preconditions : step
         if ($this->steps === 0) {
             throw new Exception('Step must be at least 1');
         }
 
-        // Preconditions : colors
         if (count($this->colors) < 2) {
             throw new Exception('Colors must be more than 1');
         }
 
-        // ALL OK
-
-        // create gradients
         $this->createGradients();
     }
 
-    private function createGradients()
+    private function createGradients(): void
     {
         $colorFrom = '';
 
@@ -105,7 +99,7 @@ class ColorRating extends Table\Column
         }
     }
 
-    private function createGradientSingle(&$gradients, $hexFrom, $hexTo, $steps)
+    private function createGradientSingle(array &$gradients, string $hexFrom, string $hexTo, int $steps): void
     {
         $hexFrom = trim($hexFrom, '#');
         $hexTo = trim($hexTo, '#');
@@ -152,7 +146,7 @@ class ColorRating extends Table\Column
         return $this->getTag('body', '{$' . $field->shortName . '}', $attr);
     }
 
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         $value = $field->get($row);
         if ($value === null) {
@@ -170,7 +164,7 @@ class ColorRating extends Table\Column
         ];
     }
 
-    private function getColorFromValue(float $value)
+    private function getColorFromValue(float $value): ?string
     {
         if ($value <= $this->min) {
             return $this->lessThanMinNoColor ? null : $this->gradients[0];

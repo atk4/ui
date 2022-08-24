@@ -39,8 +39,8 @@ class FormTest extends TestCase
         $f = $this->form;
         $f->addControl('test');
 
-        $this->assertInstanceOf(Form\Control::class, $f->getControl('test'));
-        $this->assertInstanceOf(Form\Control::class, $f->layout->getControl('test'));
+        static::assertInstanceOf(Form\Control::class, $f->getControl('test'));
+        static::assertInstanceOf(Form\Control::class, $f->layout->getControl('test'));
     }
 
     public function assertSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
@@ -60,17 +60,17 @@ class FormTest extends TestCase
             });
 
             $this->form->render();
-            $res = $this->form->getApp()->output;
+            $res = AppFormTestMock::assertInstanceOf($this->form->getApp())->output;
 
             if ($checkExpectedErrorsFx !== null) {
-                $this->assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');
-                $this->assertNotSame('', $res['atkjs']); // will output useful error
+                static::assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');
+                static::assertNotSame('', $res['atkjs']); // will output useful error
                 $this->formError = $res['atkjs'];
 
                 $checkExpectedErrorsFx($res['atkjs']);
             } else {
-                $this->assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
-                $this->assertSame('', $res['atkjs']);
+                static::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
+                static::assertSame('', $res['atkjs']);
             }
 
             $this->form = null; // we shouldn't submit form twice!
@@ -92,17 +92,17 @@ class FormTest extends TestCase
         $m = $m->createEntity();
         $f->setModel($m, ['name', 'email']);
 
-        $this->assertSame('John', $f->model->get('name'));
+        static::assertSame('John', $f->model->get('name'));
 
         // fake some POST data
         $this->assertSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], function (Model $m) {
             // field has default, but form didn't send value back
-            $this->assertNull($m->get('name'));
+            static::assertNull($m->get('name'));
 
-            $this->assertSame('john@yahoo.com', $m->get('email'));
+            static::assertSame('john@yahoo.com', $m->get('email'));
 
             // security check, unspecified field must not be changed
-            $this->assertFalse($m->get('is_admin'));
+            static::assertFalse($m->get('is_admin'));
         });
     }
 
@@ -110,7 +110,7 @@ class FormTest extends TestCase
     {
         $this->form->addControl('Textarea');
         $this->assertSubmit(['Textarea' => '0'], function (Model $m) {
-            $this->assertSame('0', $m->get('Textarea'));
+            static::assertSame('0', $m->get('Textarea'));
         });
     }
 
@@ -121,26 +121,26 @@ class FormTest extends TestCase
 
     public function assertFormControlError(string $field, string $error): void
     {
-        $n = preg_match_all('~form\("add prompt","([^"]*)","([^"]*)"\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
-        $this->assertGreaterThan(0, $n);
+        $n = preg_match_all('~form\("add prompt", "([^"]*)", "([^"]*)"\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
+        static::assertGreaterThan(0, $n);
         $matched = false;
         foreach ($matchesAll as $matches) {
             if ($matches[1] === $field) {
                 $matched = true;
-                $this->assertStringContainsString($error, $matches[2], 'Regarding control ' . $field . ' error message');
+                static::assertStringContainsString($error, $matches[2], 'Regarding control ' . $field . ' error message');
             }
         }
 
-        $this->assertTrue($matched, 'Form control ' . $field . ' did not produce error');
+        static::assertTrue($matched, 'Form control ' . $field . ' did not produce error');
     }
 
     public function assertFromControlNoErrors(string $field): void
     {
-        $n = preg_match_all('~form\("add prompt","([^"]*)","([^"]*)"\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
-        $this->assertGreaterThan(0, $n);
+        $n = preg_match_all('~form\("add prompt", "([^"]*)", "([^"]*)"\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
+        static::assertGreaterThan(0, $n);
         foreach ($matchesAll as $matches) {
             if ($matches[1] === $field) {
-                $this->fail('Form control ' . $field . ' unexpected error: ' . $matches[2]);
+                static::fail('Form control ' . $field . ' unexpected error: ' . $matches[2]);
             }
         }
     }

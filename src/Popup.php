@@ -82,6 +82,9 @@ class Popup extends View
      */
     public $stopClickEvent = false;
 
+    /**
+     * @param View|array|null $triggerBy
+     */
     public function __construct($triggerBy = null)
     {
         if (is_object($triggerBy)) {
@@ -95,17 +98,17 @@ class Popup extends View
     {
         parent::init();
 
-        if ($this->getOwner() instanceof Item
-            || $this->getOwner() instanceof Menu
+        if ($this->getOwner() instanceof Menu
+            || $this->getOwner() instanceof MenuItem
             || $this->getOwner() instanceof Dropdown
             || $this->getOwner() instanceof Button
         ) {
-            throw (new Exception('Although it may be tempting to add pop-up into Button/Menu/Item, this may cause some random issues. Add elsewhere and use "triggerBy"'))
+            throw (new Exception('Although it may be tempting to add pop-up into Button/Menu/MenuItem, this may cause some random issues. Add elsewhere and use "triggerBy"'))
                 ->addMoreInfo('owner', $this->getOwner());
         }
 
-        if (($this->triggerBy instanceof Item
-            || $this->triggerBy instanceof Menu
+        if (($this->triggerBy instanceof Menu
+            || $this->triggerBy instanceof MenuItem
             || $this->triggerBy instanceof Dropdown) && $this->triggerOn === null
         ) {
             $this->triggerOn = 'hover';
@@ -161,7 +164,7 @@ class Popup extends View
     }
 
     /**
-     * Set triggerBy.
+     * @param View|string $trigger
      *
      * @return $this
      */
@@ -201,9 +204,11 @@ class Popup extends View
     /**
      * Set a popup options as defined in semantic-ui popup module.
      *
+     * @param mixed $option
+     *
      * @return $this
      */
-    public function setOption($name, $option)
+    public function setOption(string $name, $option)
     {
         $this->popOptions[$name] = $option;
 
@@ -215,7 +220,7 @@ class Popup extends View
      *
      * @return $this
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
         $this->popOptions = array_merge($this->popOptions, $options);
 

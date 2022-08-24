@@ -50,7 +50,7 @@ class Callback extends AbstractView
         $this->setUrlTrigger($this->urlTrigger);
     }
 
-    public function setUrlTrigger(string $trigger = null)
+    public function setUrlTrigger(string $trigger = null): void
     {
         $this->urlTrigger = $trigger ?: $this->name;
 
@@ -81,12 +81,14 @@ class Callback extends AbstractView
                 throw new UnhandledCallbackExceptionError('', 0, $e);
             }
         }
+
+        return null;
     }
 
     /**
      * Terminate this callback by rendering the given view.
      */
-    public function terminateJson(AbstractView $view): void
+    public function terminateJson(View $view): void
     {
         if ($this->canTerminate()) {
             $this->getApp()->terminateJson($view);

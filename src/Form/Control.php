@@ -37,6 +37,7 @@ class Control extends View
     /** @var bool rendered or not input label in generic Form\Layout template. */
     public $renderLabel = true;
 
+    /** @var string */
     public $width;
 
     /**
@@ -146,20 +147,19 @@ class Control extends View
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
      * @param string|JsExpression|array|\Closure $expr
-     * @param array|bool                         $default
+     * @param array|bool                         $defaults
      */
-    public function onChange($expr, $default = []): void
+    public function onChange($expr, $defaults = []): void
     {
         if (is_string($expr)) {
             $expr = new JsExpression($expr);
         }
 
-        if (is_bool($default)) {
-            $default['preventDefault'] = $default;
-            $default['stopPropagation'] = $default;
+        if (is_bool($defaults)) {
+            $defaults = $defaults ? [] : ['preventDefault' => false, 'stopPropagation' => false];
         }
 
-        $this->on('change', '#' . $this->name . '_input', $expr, $default);
+        $this->on('change', '#' . $this->name . '_input', $expr, $defaults);
     }
 
     /**
@@ -168,6 +168,7 @@ class Control extends View
      *
      * $field->jsInput(true)->val(123);
      *
+     * @param string|bool|null $when
      * @param JsExpressionable $action
      *
      * @return Jquery
@@ -175,13 +176,5 @@ class Control extends View
     public function jsInput($when = null, $action = null)
     {
         return $this->js($when, $action, '#' . $this->name . '_input');
-    }
-
-    /**
-     * @return string
-     */
-    public function getControlClass()
-    {
-        return $this->controlClass;
     }
 }

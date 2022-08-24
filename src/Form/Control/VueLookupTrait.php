@@ -30,7 +30,7 @@ trait VueLookupTrait
         $query = $_GET['atk_vlookup_q'] ?? null;
         $data = [];
         if ($fieldName) {
-            $reference = $this->getModel()->getField($fieldName)->getReference();
+            $reference = $this->model->getField($fieldName)->getReference();
             $model = $reference->refModel($this->model);
             $referenceFieldName = $reference->getTheirFieldName();
             if (!empty($query)) {

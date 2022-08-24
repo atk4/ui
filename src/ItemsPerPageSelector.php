@@ -47,16 +47,6 @@ class ItemsPerPageSelector extends View
     }
 
     /**
-     * Set label using js action.
-     *
-     * @return Jquery
-     */
-    public function jsSetLabel($ipp)
-    {
-        return $this->js(true)->html($ipp);
-    }
-
-    /**
      * Run callback when an item is select via dropdown menu.
      * The callback should return a View to be reload after an item
      * has been select.

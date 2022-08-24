@@ -7,7 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Exception;
-use Atk4\Ui\Form\Control\Dropdown;
+use Atk4\Ui\Form;
 
 class DemoActionsUtil
 {
@@ -120,7 +120,7 @@ class DemoActionsUtil
                     'default' => 'm',
                     'ui' => [
                         'form' => [
-                            Dropdown::class, 'values' => ['m' => 'Male', 'f' => 'Female'],
+                            Form\Control\Dropdown::class, 'values' => ['m' => 'Male', 'f' => 'Female'],
                         ],
                     ],
                 ],

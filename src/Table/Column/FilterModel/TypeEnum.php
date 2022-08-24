@@ -37,7 +37,7 @@ class TypeEnum extends Column\FilterModel
                     $values[] = $key;
                 }
             }
-            if (!empty($values)) {
+            if ($values !== []) {
                 $model->addCondition($filter['name'], 'in', $values);
             }
         }

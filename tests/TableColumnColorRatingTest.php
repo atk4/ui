@@ -14,10 +14,8 @@ class TableColumnColorRatingTest extends TestCase
 {
     use Concerns\HandlesTable;
 
-    public $db;
     /** @var Table */
     public $table;
-    public $column;
 
     protected function setUp(): void
     {
@@ -49,12 +47,12 @@ class TableColumnColorRatingTest extends TestCase
             ],
         ]]);
 
-        $this->assertSame(
+        static::assertSame(
             '<td>{$name}</td><td>{$ref}</td><td style="{$' . $this->getColumnStyle($rating) . '}">{$rating}</td>',
             $this->table->getDataRowHtml()
         );
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="background-color:#00ff00;">3</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -74,7 +72,7 @@ class TableColumnColorRatingTest extends TestCase
             'moreThanMaxNoColor' => true,
         ]]);
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="">3</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -93,12 +91,12 @@ class TableColumnColorRatingTest extends TestCase
             ],
         ]]);
 
-        $this->assertSame(
+        static::assertSame(
             '<td>{$name}</td><td>{$ref}</td><td style="{$' . $this->getColumnStyle($rating) . '}">{$rating}</td>',
             $this->table->getDataRowHtml()
         );
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="background-color:#ff0000;">3</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -118,7 +116,7 @@ class TableColumnColorRatingTest extends TestCase
             'lessThanMinNoColor' => true,
         ]]);
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="">3</td></tr>',
             $this->extractTableRow($this->table)
         );

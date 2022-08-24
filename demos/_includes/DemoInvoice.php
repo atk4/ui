@@ -11,8 +11,6 @@ use Atk4\Data\Model;
  */
 class DemoInvoice extends Model
 {
-    public $dateFormat;
-
     public ?string $titleField = 'reference';
 
     protected function init(): void

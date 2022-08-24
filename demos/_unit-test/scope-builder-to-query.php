@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-use Atk4\Ui\Form\Control\ScopeBuilder;
+use Atk4\Ui\Form;
 use Atk4\Ui\Grid;
 
 /** @var \Atk4\Ui\App $app */
@@ -33,7 +33,7 @@ $q = [
         ],
     ],
 ];
-$scope = ScopeBuilder::queryToScope($q);
+$scope = Form\Control\ScopeBuilder::queryToScope($q);
 
 $product = new Product($app->db);
 

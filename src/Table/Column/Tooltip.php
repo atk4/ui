@@ -10,11 +10,11 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Table;
 
 /**
- * column to add a little icon to show on hover a text
+ * Column to add a little icon to show on hover a text
  * text is taken by the Row Model in $tooltipField.
  *
  * $crud->addDecorator('paid_date', new Table\Column\Tooltip('note'));
- * $crud->addDecorator('paid_date', new Table\Column\Tooltip('note','error red'));
+ * $crud->addDecorator('paid_date', new Table\Column\Tooltip('note', 'error red'));
  */
 class Tooltip extends Table\Column
 {
@@ -61,7 +61,7 @@ class Tooltip extends Table\Column
         ]);
     }
 
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         // @TODO remove popup tooltip when null
         $tooltip = $row->get($this->tooltipField);

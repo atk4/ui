@@ -19,12 +19,7 @@ class Labels extends Table\Column
     /** @var array|null Allowed values, prioritized over ->values */
     public $values;
 
-    /**
-     * @param Field|null $field
-     *
-     * @return array
-     */
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         $values = $this->values ?? $field->values;
 
@@ -38,7 +33,7 @@ class Labels extends Table\Column
             // if field values is set, then use titles instead of IDs
             $id = $values[$id] ?? $id;
 
-            if (!empty($id)) {
+            if ($id !== '') {
                 $labels[] = $this->getApp()->getTag('div', ['class' => 'ui label'], $id);
             }
         }

@@ -26,8 +26,8 @@ class TableTest extends TestCase
 
         // multiple ways to add column which doesn't exist in model
         $t->addColumn('five', new Table\Column\Link('test.php?id=1'));
-        $t->addColumn('seven', [Table\Column\Link::class, ['id' => 3]]);
-        $t->addColumn('eight', Table\Column\Link::class);
+        $t->addColumn('seven', [Table\Column\Link::class]);
+        $t->addColumn('eight', [Table\Column\Link::class, ['id' => 3]]);
         $t->addColumn('nine');
 
         $t->render();

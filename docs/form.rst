@@ -253,7 +253,8 @@ There are 3 ways to define Data form control using 'string', 'json' or 'object':
     $form->addControl('accept_terms', [\Atk4\Ui\Form\Control\Checkbox::class], 'Accept Terms & Conditions');
     $form->addControl('gender', [], ['enum' => ['Female', 'Male']]);
 
-    class MyBoolean extends \Atk4\Data\Field {
+    class MyBoolean extends \Atk4\Data\Field
+    {
         public ?string $type = 'boolean';
         public $enum = ['N', 'Y'];
     }
@@ -288,7 +289,8 @@ example displays a registration form for a User::
     {
         public $table = 'user';
 
-        protected function init(): void {
+        protected function init(): void
+        {
             parent::init();
 
             $this->addField('email');
@@ -357,10 +359,12 @@ This is where ``$field->ui`` comes in (https://agile-data.readthedocs.io/en/deve
 
 You can specify ``'ui' => ['form' => $decorator_seed]`` when defining your model field inside your Model::
 
-    class User extends \Atk4\Data\Model {
+    class User extends \Atk4\Data\Model
+    {
         public $table = 'user';
 
-        protected function init(): void {
+        protected function init(): void
+        {
             parent::init();
 
             $this->addField('email');

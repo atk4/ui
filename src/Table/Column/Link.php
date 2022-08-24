@@ -71,7 +71,7 @@ class Link extends Table\Column
     public $icon;
 
     /**
-     * set html5 target attribute in tag
+     * Set html5 target attribute in tag
      * possible values : _blank | _parent | _self | _top | frame#name.
      *
      * @var string!null
@@ -88,7 +88,7 @@ class Link extends Table\Column
     {
         if (is_array($page)) {
             $page = ['page' => $page];
-        } elseif (is_string($page)) {
+        } else {
             $page = ['url' => $page];
         }
 
@@ -111,7 +111,7 @@ class Link extends Table\Column
         }
     }
 
-    public function getDataCellTemplate(Field $field = null)
+    public function getDataCellTemplate(Field $field = null): string
     {
         $download = $this->forceDownload ? ' download="true" ' : '';
         $external = $this->target ? ' target="' . $this->target . '" ' : '';
@@ -135,7 +135,7 @@ class Link extends Table\Column
         return '<a href="{$c_' . $this->shortName . '}"' . $external . $class . $download . '>' . $icon . '' . $label . '</a>';
     }
 
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         if ($this->url) {
             $rowValues = $this->getApp()->uiPersistence->typecastSaveRow($row, $row->get());

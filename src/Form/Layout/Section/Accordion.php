@@ -13,8 +13,10 @@ use Atk4\Ui\Form;
  */
 class Accordion extends UiAccordion
 {
+    /** @var class-string<Form\Layout> */
     public $formLayout = Form\Layout::class;
-    public $form;
+
+    public Form $form;
 
     /**
      * Adds hook which in case of field error expands respective accordion sections.
@@ -50,21 +52,5 @@ class Accordion extends UiAccordion
         $section = parent::addSection($title, $callback, $icon);
 
         return $section->add([$this->formLayout, 'form' => $this->form]);
-    }
-
-    /**
-     * Return a section index.
-     *
-     * @param AccordionSection $section
-     *
-     * @return int
-     */
-    public function getSectionIdx($section)
-    {
-        if ($section instanceof AccordionSection) {
-            return parent::getSectionIdx($section);
-        }
-
-        return parent::getSectionIdx($section->getOwner());
     }
 }

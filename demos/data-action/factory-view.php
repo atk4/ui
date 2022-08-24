@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Card;
 use Atk4\Ui\Header;
@@ -21,7 +22,7 @@ View::addTo($app, ['ui' => 'ui clearing divider']);
 $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends ExecutorFactory {
     public const BUTTON_PRIMARY_COLOR = 'green';
 
-    protected $actionIcon = [
+    protected array $actionIcon = [
         'callback' => 'sync',
         'preview' => 'eye',
         'edit_argument' => 'user edit',
@@ -40,7 +41,10 @@ $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends Exe
         );
     }
 
-    protected function getCardButton($action, $type)
+    /**
+     * @return array
+     */
+    protected function getCardButton(Model\UserAction $action)
     {
         return [Button::class, 'icon' => $this->actionIcon[$action->shortName]];
     }

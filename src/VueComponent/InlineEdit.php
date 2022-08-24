@@ -86,14 +86,14 @@ class InlineEdit extends View
         }
     }
 
-    /**
-     * Set Model of this View.
-     */
     public function setModel(Model $model): void
     {
         parent::setModel($model);
 
-        $this->fieldName = $this->fieldName ?: $this->model->titleField;
+        if ($this->fieldName === null) {
+            $this->fieldName = $this->model->titleField;
+        }
+
         if ($this->autoSave && $this->model->isLoaded()) {
             $value = $_POST['value'] ?? null;
             $this->cb->set(function () use ($value) {
@@ -114,7 +114,6 @@ class InlineEdit extends View
     }
 
     /**
-     * onChange handler.
      * You may supply your own function to handle update.
      * The function will receive one param:
      *  value: the new input value.

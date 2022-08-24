@@ -22,7 +22,7 @@ class JsConditionalForm implements JsExpressionable
     /** @var string The html class name parent for input. */
     public $selector;
 
-    public function __construct(Form $form, $rules = null, $selector = '.field')
+    public function __construct(Form $form, array $rules = null, string $selector = '.field')
     {
         $this->form = $form;
         $this->fieldRules = $rules;
@@ -34,7 +34,7 @@ class JsConditionalForm implements JsExpressionable
      *
      * @param array $rules
      */
-    public function setRules($rules)
+    public function setRules($rules): void
     {
         $this->fieldRules = $rules;
     }

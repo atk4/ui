@@ -124,8 +124,8 @@ class DemosHttpTest extends DemosTest
 
         $response = $this->getResponseFromRequest5xx($path);
 
-        $this->assertSame(500, $response->getStatusCode());
-        $this->assertSame($expectedOutput, $response->getBody()->getContents());
+        static::assertSame(500, $response->getStatusCode());
+        static::assertSame($expectedOutput, $response->getBody()->getContents());
     }
 
     public function demoLateOutputErrorProvider(): array

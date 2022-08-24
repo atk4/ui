@@ -17,7 +17,6 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationError;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
-use Atk4\Ui\Panel\Right;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Psr\Log\LoggerInterface;
@@ -142,6 +141,7 @@ class App
         '__atk_tab' => false,
     ];
 
+    /** @var class-string */
     public $templateClass = HtmlTemplate::class;
 
     public function __construct(array $defaults = [])
@@ -212,7 +212,7 @@ class App
      * within specific location. This will keep track
      * of them when terminating app using json.
      *
-     * @param Modal|Right $portal
+     * @param Modal|Panel\Right $portal
      */
     public function registerPortals($portal): void
     {
@@ -402,11 +402,11 @@ class App
             foreach ($this->getRenderedPortals() as $key => $modal) {
                 // add modal rendering to output
                 $keys[] = '#' . $key;
-                $output['atkjs'] .= ';' . $modal['js'];
+                $output['atkjs'] .= '; ' . $modal['js'];
                 $output['html'] .= $modal['html'];
             }
             if ($keys) {
-                $ids = implode(',', $keys);
+                $ids = implode(', ', $keys);
                 $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . $ids . '\').remove();';
             }
             $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
@@ -423,6 +423,8 @@ class App
     }
 
     /**
+     * @param string|array|View|HtmlTemplate $output
+     *
      * @return never
      */
     public function terminateHtml($output, array $headers = []): void
@@ -440,6 +442,8 @@ class App
     }
 
     /**
+     * @param string|array|View $output
+     *
      * @return never
      */
     public function terminateJson($output, array $headers = []): void
@@ -472,7 +476,7 @@ class App
             $this->html->invokeInit();
         }
 
-        $this->layout = $this->html->add($layout);
+        $this->layout = $this->html->add($layout); // @phpstan-ignore-line
 
         $this->initIncludes();
 
@@ -688,10 +692,8 @@ class App
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
      * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
      * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
-     *
-     * @return string
      */
-    public function url($page = [], $needRequestUri = false, $extraRequestUriArgs = [])
+    public function url($page = [], $needRequestUri = false, $extraRequestUriArgs = []): string
     {
         if ($needRequestUri) {
             $page = $_SERVER['REQUEST_URI'];
@@ -753,10 +755,8 @@ class App
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
      * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
      * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
-     *
-     * @return string
      */
-    public function jsUrl($page = [], $needRequestUri = false, $extraRequestUriArgs = [])
+    public function jsUrl($page = [], $needRequestUri = false, $extraRequestUriArgs = []): string
     {
         // append to the end but allow override
         $extraRequestUriArgs = array_merge($extraRequestUriArgs, ['__atk_json' => 1], $extraRequestUriArgs);

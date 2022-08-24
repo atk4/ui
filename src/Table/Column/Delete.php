@@ -31,7 +31,7 @@ class Delete extends Table\Column
         });
     }
 
-    public function getDataCellTemplate(Field $field = null)
+    public function getDataCellTemplate(Field $field = null): string
     {
         $this->table->on('click', 'a.' . $this->shortName, null, ['confirm' => (new Jquery())->attr('title')])->atkAjaxec([
             'uri' => $this->vp->getJsUrl(),

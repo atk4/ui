@@ -137,10 +137,12 @@ We need a class `Task` which describes `data model <https://agile-data.readthedo
 single ToDo item::
 
 
-    class ToDoItem extends \Atk4\Data\Model {
+    class ToDoItem extends \Atk4\Data\Model
+    {
         public $table = 'todo_item';
 
-        protected function init(): void {
+        protected function init(): void
+        {
             parent::init();
 
             $this->addField('name', ['caption' => 'Task Name', 'required' => true]);

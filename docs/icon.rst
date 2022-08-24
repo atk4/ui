@@ -123,13 +123,14 @@ Here is the code with comments::
      * For convenience use this with link(), which will automatically open a new window
      * too.
      */
-    class SocialAdd extends \Atk4\Ui\View {
+    class SocialAdd extends \Atk4\Ui\View
+    {
         public $social = null;
         public $icon = null;
-        public $defaultTemplate = null;
-        // public $defaultTemplate = __DIR__ . '../templates/socialadd.html';
+        public $defaultTemplate = null; // __DIR__ . '../templates/socialadd.html'
 
-        protected function init(): void {
+        protected function init(): void
+        {
             parent::init();
 
             if (is_null($this->social)) {

@@ -113,7 +113,7 @@ Since Lister is non-interactive, you can also set a static source for your liste
 Special template tags
 =====================
 
-Your {row} tempalte may contain few special tags:
+Your {row} template may contain few special tags:
 
  - {$_id} - will be set to ID of the record (regardless of how your id field is called)
  - {$_title} - will be set to the title of your record (see $model->$titleField)

@@ -152,7 +152,7 @@ class VueService {
         return Vue;
     }
 
-    /*
+    /**
      * Mark a component as loaded.
      */
     markComponentLoaded(name) {

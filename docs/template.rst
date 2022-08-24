@@ -436,7 +436,7 @@ Other operations with tags
 
     Empties contents of tag within a template.
 
-.. php:method:: isSet(tag)
+.. php:method:: hasTag(tag)
 
     Returns ``true`` if tag exists in a template.
 
@@ -504,7 +504,8 @@ clone region with such a name from parent's template. This can be used
 by your "menu" implementation, which will clone parent's template's tag
 instead to hook into some specific template::
 
-    public function defaultTemplate() {
+    public function defaultTemplate()
+    {
         return ['greeting']; // uses templates/greeting.html
     }
 

@@ -54,4 +54,4 @@ Button::addTo($app, ['Set value to "hello"'])->js('click', new JsReload($v, ['va
 Button::addTo($app, ['Set value to "world"'])->js('click', new JsReload($v, ['val' => 'world']));
 
 $val = Form\Control\Line::addTo($app, ['']);
-$val->addAction('Set Custom Value')->js('click', new JsReload($v, ['val' => $val->jsInput()->val()], $val->jsInput()->focus()));
+$val->addAction(['Set Custom Value'])->js('click', new JsReload($v, ['val' => $val->jsInput()->val()], $val->jsInput()->focus()));

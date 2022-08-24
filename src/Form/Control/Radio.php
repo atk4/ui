@@ -58,32 +58,16 @@ class Radio extends Form\Control
         parent::renderView();
     }
 
-    /**
-     * Shorthand method for on('change') event.
-     * Some input fields, like Calendar, could call this differently.
-     *
-     * If $expr is string or JsExpression, then it will execute it instantly.
-     * If $expr is callback method, then it'll make additional request to webserver.
-     *
-     * Examples:
-     * $control->onChange('console.log("changed")');
-     * $control->onChange(new JsExpression('console.log("changed")'));
-     * $control->onChange('$(this).parents(".form").form("submit")');
-     *
-     * @param string|JsExpression|array|\Closure $expr
-     * @param array|bool                         $default
-     */
-    public function onChange($expr, $default = []): void
+    public function onChange($expr, $defaults = []): void
     {
         if (is_string($expr)) {
             $expr = new JsExpression($expr);
         }
 
-        if (is_bool($default)) {
-            $default['preventDefault'] = $default;
-            $default['stopPropagation'] = $default;
+        if (is_bool($defaults)) {
+            $defaults = $defaults ? [] : ['preventDefault' => false, 'stopPropagation' => false];
         }
 
-        $this->on('change', 'input', $expr, $default);
+        $this->on('change', 'input', $expr, $defaults);
     }
 }
