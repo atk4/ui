@@ -97,12 +97,12 @@ class FormTest extends TestCase
         // fake some POST data
         $this->assertSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], function (Model $m) {
             // field has default, but form didn't send value back
-            $this->assertNull($m->get('name'));
+            static::assertNull($m->get('name'));
 
-            $this->assertSame('john@yahoo.com', $m->get('email'));
+            static::assertSame('john@yahoo.com', $m->get('email'));
 
             // security check, unspecified field must not be changed
-            $this->assertFalse($m->get('is_admin'));
+            static::assertFalse($m->get('is_admin'));
         });
     }
 
@@ -110,7 +110,7 @@ class FormTest extends TestCase
     {
         $this->form->addControl('Textarea');
         $this->assertSubmit(['Textarea' => '0'], function (Model $m) {
-            $this->assertSame('0', $m->get('Textarea'));
+            static::assertSame('0', $m->get('Textarea'));
         });
     }
 
