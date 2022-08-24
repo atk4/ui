@@ -35,9 +35,9 @@ class TableColumnLinkTest extends TestCase
 
     public function testgetDataRowHtml(): void
     {
-        $this->assertSame('<td>{$name}</td><td>{$ref}</td>', $this->table->getDataRowHtml());
+        static::assertSame('<td>{$name}</td><td>{$ref}</td>', $this->table->getDataRowHtml());
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -47,9 +47,9 @@ class TableColumnLinkTest extends TestCase
     {
         $this->table->addDecorator('name', new Table\Column\Template('<b>{$name}</b>'));
 
-        $this->assertSame('<td><b>{$name}</b></td><td>{$ref}</td>', $this->table->getDataRowHtml());
+        static::assertSame('<td><b>{$name}</b></td><td>{$ref}</td>', $this->table->getDataRowHtml());
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td><b>bar</b></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -59,12 +59,12 @@ class TableColumnLinkTest extends TestCase
     {
         $salary = $this->table->addColumn('salary', new Table\Column\Money());
 
-        $this->assertSame(
+        static::assertSame(
             '<td>{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary) . '} right aligned single line">{$salary}</td>',
             $this->table->getDataRowHtml()
         );
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td class="negative right aligned single line">-123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -75,12 +75,12 @@ class TableColumnLinkTest extends TestCase
         $salary = $this->table->addColumn('salary', new Table\Column\Money());
         $this->table->addDecorator('salary', new Table\Column\Template('<b>{$salary}</b>'));
 
-        $this->assertSame(
+        static::assertSame(
             '<td>{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary) . '} right aligned single line"><b>{$salary}</b></td>',
             $this->table->getDataRowHtml()
         );
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td class="negative right aligned single line"><b>-123</b></td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -92,12 +92,12 @@ class TableColumnLinkTest extends TestCase
         $salary_2 = $this->table->addColumn('salary', new Table\Column\Money());
         $this->table->addDecorator('salary', new Table\Column\Template('<b>{$salary}</b>'));
 
-        $this->assertSame(
+        static::assertSame(
             '<td class="{$' . $this->getColumnClass($salary_1) . '} right aligned single line">{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary_2) . '} right aligned single line"><b>{$salary}</b></td>',
             $this->table->getDataRowHtml()
         );
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td class=" right aligned single line">bar</td><td>ref123</td><td class="negative right aligned single line"><b>-123</b></td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -108,12 +108,12 @@ class TableColumnLinkTest extends TestCase
         $this->table->addDecorator('name', new Table\Column\Template('<b>{$name}</b>'));
         $this->table->addDecorator('name', new Table\Column\Template('<u>{$name}</u>'));
 
-        $this->assertSame(
+        static::assertSame(
             '<td><u><b>{$name}</b></u></td><td>{$ref}</td>',
             $this->table->getDataRowHtml()
         );
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td><u><b>bar</b></u></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -124,7 +124,7 @@ class TableColumnLinkTest extends TestCase
         $this->table->addDecorator('name', new Table\Column\Template('<b>{$name}</b>'));
         $this->table->addDecorator('name', new Table\Column\Template('<u>{$name}</u>'));
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td><u><b>bar</b></u></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -134,12 +134,12 @@ class TableColumnLinkTest extends TestCase
     {
         $this->table->addColumn(null, [Table\Column\Template::class, 'hello<b>world</b>']);
 
-        $this->assertSame(
+        static::assertSame(
             '<td>{$name}</td><td>{$ref}</td><td>hello<b>world</b></td>',
             $this->table->getDataRowHtml()
         );
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td>hello<b>world</b></td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -149,12 +149,12 @@ class TableColumnLinkTest extends TestCase
     {
         $link = $this->table->addDecorator('name', new Table\Column\Link('example.php?id={$id}'));
 
-        $this->assertSame(
+        static::assertSame(
             '<td><a href="{$' . $this->getColumnRef($link) . '}">{$name}</a></td><td>{$ref}</td>',
             $this->table->getDataRowHtml()
         );
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -164,12 +164,12 @@ class TableColumnLinkTest extends TestCase
     {
         $link = $this->table->addDecorator('name', [Table\Column\Link::class, 'url' => 'example.php?id={$id}']);
 
-        $this->assertSame(
+        static::assertSame(
             '<td><a href="{$' . $this->getColumnRef($link) . '}">{$name}</a></td><td>{$ref}</td>',
             $this->table->getDataRowHtml()
         );
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -181,7 +181,7 @@ class TableColumnLinkTest extends TestCase
 
         // url is properly encoded
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td><a href="example.php?id=%7B%24id%7D">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -191,7 +191,7 @@ class TableColumnLinkTest extends TestCase
     {
         $this->table->addDecorator('name', new Table\Column\Link(['example'], ['id']));
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -201,7 +201,7 @@ class TableColumnLinkTest extends TestCase
     {
         $this->table->addDecorator('name', new Table\Column\Link(['example'], ['test' => 'id']));
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td><a href="example.php?test=1">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -211,7 +211,7 @@ class TableColumnLinkTest extends TestCase
     {
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id']]);
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td><a href="example.php?test=1">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -221,7 +221,7 @@ class TableColumnLinkTest extends TestCase
     {
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'forceDownload' => true]);
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td><a href="example.php?test=1" download="true" >bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -231,7 +231,7 @@ class TableColumnLinkTest extends TestCase
     {
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'target' => '_blank']);
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td><a href="example.php?test=1" target="_blank" >bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -241,7 +241,7 @@ class TableColumnLinkTest extends TestCase
     {
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'icon' => 'info']);
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td><a href="example.php?test=1"><i class="icon info"></i>bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -251,7 +251,7 @@ class TableColumnLinkTest extends TestCase
     {
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'useLabel' => false]);
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td><a href="example.php?test=1"></a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -263,7 +263,7 @@ class TableColumnLinkTest extends TestCase
 
         $this->table->addDecorator('name', [Table\Column\NoValue::class, ['noValue' => ' --- ']]);
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td> --- </td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -273,7 +273,7 @@ class TableColumnLinkTest extends TestCase
     {
         $this->table->addDecorator('name', [Table\Column\Tooltip::class, ['tooltipField' => 'ref']]);
 
-        $this->assertSame(
+        static::assertSame(
             '<tr data-id="1"><td class=""> bar<span class="ui icon link " data-tooltip="ref123"><i class="ui icon info circle"></span></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );

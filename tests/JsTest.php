@@ -15,14 +15,14 @@ class JsTest extends TestCase
 {
     public function testBasicExpressions(): void
     {
-        $this->assertSame('2 + 2', (new JsExpression('2 + 2'))->jsRender());
-        $this->assertSame('3 + 4', (new JsExpression('[] + []', [3, 4]))->jsRender());
+        static::assertSame('2 + 2', (new JsExpression('2 + 2'))->jsRender());
+        static::assertSame('3 + 4', (new JsExpression('[] + []', [3, 4]))->jsRender());
     }
 
     public function testNumbers(): void
     {
         if (\PHP_INT_SIZE === 4) {
-            $this->markTestIncomplete('Test is not supported on 32bit php');
+            static::markTestIncomplete('Test is not supported on 32bit php');
         }
 
         $longStrBase = '"a":10,"b":9007199254740992,x="\"c\":10,\"d\":9007199254740992,"';
@@ -42,7 +42,7 @@ class JsTest extends TestCase
                 json_encode($longStr),
             ],
         ] as [$in, $expected]) {
-            $this->assertSame($expected, (new JsExpression('[]', [$in]))->jsRender());
+            static::assertSame($expected, (new JsExpression('[]', [$in]))->jsRender());
 
             // test JSON renderer in App too
             // test extensively because of complex custom regex impl
@@ -54,18 +54,18 @@ class JsTest extends TestCase
                 [[$expectedRaw], [$in]], // as value in JSON array
                 [['x' => $expectedRaw], ['x' => $in]], // as value in JSON object
             ] as [$expectedData, $inData]) {
-                $this->assertSame(json_encode($expectedData), preg_replace('~\s+~', '', $app->encodeJson($inData)));
+                static::assertSame(json_encode($expectedData), preg_replace('~\s+~', '', $app->encodeJson($inData)));
 
                 // do not change any numbers to string in JSON/JS strings
                 $inDataJson = json_encode($inData);
-                $this->assertSame(json_encode(['x' => $inDataJson]), preg_replace('~\s+~', '', $app->encodeJson(['x' => $inDataJson])));
+                static::assertSame(json_encode(['x' => $inDataJson]), preg_replace('~\s+~', '', $app->encodeJson(['x' => $inDataJson])));
             }
         }
     }
 
     public function testNestedExpressions(): void
     {
-        $this->assertSame(
+        static::assertSame(
             '10-(2 + 3)',
             (new JsExpression(
                 '[]-[]',
@@ -78,14 +78,14 @@ class JsTest extends TestCase
     {
         $c = new JsChain('$myInput');
         $c->getTextInRange('start', 'end'); // @phpstan-ignore-line
-        $this->assertSame('$myInput.getTextInRange("start", "end")', $c->jsRender());
+        static::assertSame('$myInput.getTextInRange("start", "end")', $c->jsRender());
     }
 
     public function testChain2(): void
     {
         $c = new JsChain('$myInput');
         $c->getTextInRange(new JsExpression('getStart()'), 'end'); // @phpstan-ignore-line
-        $this->assertSame('$myInput.getTextInRange(getStart(), "end")', $c->jsRender());
+        static::assertSame('$myInput.getTextInRange(getStart(), "end")', $c->jsRender());
     }
 
     public function testJquery(): void
@@ -93,7 +93,7 @@ class JsTest extends TestCase
         $c = new Jquery('.mytag');
         $c->find('li')->first()->hide();
 
-        $this->assertSame('$(".mytag").find("li").first().hide()', $c->jsRender());
+        static::assertSame('$(".mytag").find("li").first().hide()', $c->jsRender());
     }
 
     public function testArgs(): void
@@ -101,7 +101,7 @@ class JsTest extends TestCase
         $c = new Jquery('.mytag');
         $c->val((new Jquery('.othertag'))->val());
 
-        $this->assertSame('$(".mytag").val($(".othertag").val())', $c->jsRender());
+        static::assertSame('$(".mytag").val($(".othertag").val())', $c->jsRender());
     }
 
     public function testComplex1(): void
@@ -115,7 +115,7 @@ class JsTest extends TestCase
             $b1->height($b2->height()),
         ]));
 
-        $this->assertSame('$(document).ready(function() {
+        static::assertSame('$(document).ready(function() {
         $(".box1").height($(".box2").height());
     })', $fx->jsRender());
     }

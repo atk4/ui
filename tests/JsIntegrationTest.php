@@ -14,9 +14,9 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['icon' => 'pencil']);
         $html = $v->render();
-        $this->assertNotNull($v->icon->name);
+        static::assertNotNull($v->icon->name);
 
-        $this->assertNotSame($v->name, $v->icon->name);
+        static::assertNotSame($v->name, $v->icon->name);
     }
 
     public function testIdIntegrity2(): void
@@ -26,7 +26,7 @@ class JsIntegrationTest extends TestCase
         $b2 = Button::addTo($v);
         $html = $v->render();
 
-        $this->assertNotSame($b1->name, $b2->name);
+        static::assertNotSame($b1->name, $b2->name);
     }
 
     /**
@@ -38,7 +38,7 @@ class JsIntegrationTest extends TestCase
         $j = $v->js()->hide();
         $v->render();
 
-        $this->assertSame('$("#b").hide()', $j->jsRender());
+        static::assertSame('$("#b").hide()', $j->jsRender());
     }
 
     /**
@@ -50,7 +50,7 @@ class JsIntegrationTest extends TestCase
         $j = $v->js(true)->hide();
         $v->getHtml();
 
-        $this->assertSame('$(function() {
+        static::assertSame('$(function() {
     $("#b").hide();
 })', $v->getJs());
     }
@@ -64,7 +64,7 @@ class JsIntegrationTest extends TestCase
         $v->js('click')->hide();
         $v->getHtml();
 
-        $this->assertSame('$(function() {
+        static::assertSame('$(function() {
     $("#b").bind("click", function() {
         $("#b").hide();
     });
@@ -83,7 +83,7 @@ class JsIntegrationTest extends TestCase
         $b1->on('click', $b2->js()->hide());
         $bb->getHtml();
 
-        $this->assertSame('$(function() {
+        static::assertSame('$(function() {
     $("#b1").on("click", function(event) {
         event.preventDefault();
         event.stopPropagation();

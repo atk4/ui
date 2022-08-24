@@ -83,7 +83,7 @@ class DemosTest extends TestCase
             if (!isset(self::$_failedParentTests[$this->getName()])) {
                 self::$_failedParentTests[$this->getName()] = $this->getStatus();
             } else {
-                $this->markTestIncomplete('Test failed, but non-HTTP test failed too, fix it first');
+                static::markTestIncomplete('Test failed, but non-HTTP test failed too, fix it first');
             }
         }
 
@@ -333,8 +333,8 @@ class DemosTest extends TestCase
     public function testDemosStatusAndHtmlResponse(string $path): void
     {
         $response = $this->getResponseFromRequest($path);
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
+        static::assertSame(200, $response->getStatusCode());
+        static::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
     public function testDemoResponseError(): void
@@ -346,8 +346,8 @@ class DemosTest extends TestCase
 
         $response = $this->getResponseFromRequest5xx('layout/layouts_error.php');
 
-        $this->assertSame(500, $response->getStatusCode());
-        $this->assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
+        static::assertSame(500, $response->getStatusCode());
+        static::assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
     }
 
     public function casesDemoGetProvider(): array
@@ -366,16 +366,16 @@ class DemosTest extends TestCase
     public function testDemoGet(string $path): void
     {
         $response = $this->getResponseFromRequest($path);
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
-        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
+        static::assertSame(200, $response->getStatusCode());
+        static::assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
+        static::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
     public function testWizard(): void
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
-            $this->assertTrue(true);
+            static::assertTrue(true);
 
             return;
         }
@@ -387,12 +387,12 @@ class DemosTest extends TestCase
             ]]
         );
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
+        static::assertSame(200, $response->getStatusCode());
+        static::assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
 
         $response = $this->getResponseFromRequest('interactive/wizard.php?atk_admin_wizard=2&name=Country');
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
+        static::assertSame(200, $response->getStatusCode());
+        static::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
     /**
@@ -420,7 +420,7 @@ class DemosTest extends TestCase
         if (static::class === self::class) {
             if ($expectedExceptionMessage !== null) {
                 if (str_contains($path, '=m2_cb&')) {
-                    $this->assertTrue(true);
+                    static::assertTrue(true);
 
                     return;
                 }
@@ -430,13 +430,13 @@ class DemosTest extends TestCase
         }
 
         $response = $this->getResponseFromRequest5xx($path);
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
+        static::assertSame(200, $response->getStatusCode());
+        static::assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         $responseBodyStr = $response->getBody()->getContents();
-        $this->assertMatchesRegularExpression($this->regexJson, $responseBodyStr);
-        $this->assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
+        static::assertMatchesRegularExpression($this->regexJson, $responseBodyStr);
+        static::assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
         if ($expectedExceptionMessage !== null) {
-            $this->assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
+            static::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
         }
     }
 
@@ -461,23 +461,23 @@ class DemosTest extends TestCase
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
-            $this->assertTrue(true);
+            static::assertTrue(true);
 
             return;
         }
 
         $response = $this->getResponseFromRequest($path);
-        $this->assertSame(200, $response->getStatusCode());
+        static::assertSame(200, $response->getStatusCode());
 
         $outputLines = preg_split('~\r?\n|\r~', $response->getBody()->getContents(), -1, \PREG_SPLIT_NO_EMPTY);
 
         // check SSE Syntax
-        $this->assertGreaterThan(0, count($outputLines));
+        static::assertGreaterThan(0, count($outputLines));
         foreach ($outputLines as $index => $line) {
             preg_match_all($this->regexSse, $line, $matchesAll);
             $format_match_string = implode('', $matchesAll[0] ?? ['error']);
 
-            $this->assertSame(
+            static::assertSame(
                 $line,
                 $format_match_string,
                 'Testing SSE response line ' . $index . ' with content ' . $line
@@ -518,8 +518,8 @@ class DemosTest extends TestCase
     public function testDemoAssertJsonResponsePost(string $path, array $postData): void
     {
         $response = $this->getResponseFromRequest($path, ['form_params' => $postData]);
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
+        static::assertSame(200, $response->getStatusCode());
+        static::assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
     }
 
     /**
@@ -533,10 +533,10 @@ class DemosTest extends TestCase
 
         $response = $this->getResponseFromRequest5xx($path);
 
-        $this->assertSame(500, $response->getStatusCode());
+        static::assertSame(500, $response->getStatusCode());
         $responseBodyStr = $response->getBody()->getContents();
-        $this->assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
-        $this->assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
+        static::assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
+        static::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
     }
 
     public function demoCallbackErrorProvider(): array

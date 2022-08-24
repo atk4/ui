@@ -40,8 +40,8 @@ class PersistencePostTest extends TestCase
         $m = $m->load(0);
         $m->set('surname', 'DefSurname');
 
-        $this->assertSame('John', $m->get('name'));
-        $this->assertTrue($m->get('is_married'));
-        $this->assertSame('DefSurname', $m->get('surname'));
+        static::assertSame('John', $m->get('name'));
+        static::assertTrue($m->get('is_married'));
+        static::assertSame('DefSurname', $m->get('surname'));
     }
 }

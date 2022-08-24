@@ -17,7 +17,7 @@ class TagTest extends TestCase
     public function assertTagRender(string $html, array $args): void
     {
         $app = $this->getApp();
-        $this->assertSame($html, $app->getTag(...$args));
+        static::assertSame($html, $app->getTag(...$args));
     }
 
     public function testBasic(): void
@@ -74,7 +74,7 @@ class TagTest extends TestCase
 
         // this way it doesn't work, because $value of getTag is always encoded if it is a string
         $app = $this->getApp();
-        $this->assertSame(
+        static::assertSame(
             '<a href="hello">click <i>italic</i> text</a>',
             $app->getTag('a', ['href' => 'hello'], ['click ', ['i', 'italic'], ' text'])
         );
