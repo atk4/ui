@@ -10,7 +10,7 @@ use Atk4\Ui\HtmlTemplate;
 
 class HtmlTemplateTest extends TestCase
 {
-    protected function assertSameTemplate(string $expectedTemplateStr, HtmlTemplate $template): void
+    protected static function assertSameTemplate(string $expectedTemplateStr, HtmlTemplate $template): void
     {
         $expectedTemplate = new HtmlTemplate($expectedTemplateStr);
         static::assertSame($expectedTemplate->toLoadableString(), $template->toLoadableString());
@@ -19,9 +19,9 @@ class HtmlTemplateTest extends TestCase
         // TODO test if all tag trees are reachable
     }
 
-    protected function assertSameTagTree(string $expectedTemplateStr, HtmlTemplate\TagTree $tagTree): void
+    protected static function assertSameTagTree(string $expectedTemplateStr, HtmlTemplate\TagTree $tagTree): void
     {
-        $this->assertSameTemplate(
+        static::assertSameTemplate(
             $expectedTemplateStr,
             $tagTree->getParentTemplate()->cloneRegion($tagTree->getTag())
         );
@@ -32,20 +32,20 @@ class HtmlTemplateTest extends TestCase
         $t = new HtmlTemplate('hello, {foo}world{/}');
         $t->set('foo', 'bar');
 
-        $this->assertSameTemplate('hello, {foo}bar{/}', $t);
+        static::assertSameTemplate('hello, {foo}bar{/}', $t);
     }
 
     public function testGetTagTree(): void
     {
         $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        $this->assertSameTagTree('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}', $t->getTagTree('_top'));
+        static::assertSameTagTree('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}', $t->getTagTree('_top'));
 
         $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $tagTreeFoo = $t->getTagTree('foo');
-        $this->assertSameTagTree('hello', $tagTreeFoo);
+        static::assertSameTagTree('hello', $tagTreeFoo);
 
         $tagTreeFoo->getChildren()[0]->set('good bye');
-        $this->assertSameTemplate('{foo}good bye{/}, cruel {bar}world{/}. {foo}good bye{/}', /* not possible with dual renderer $t */ $tagTreeFoo->getParentTemplate());
+        static::assertSameTemplate('{foo}good bye{/}, cruel {bar}world{/}. {foo}good bye{/}', /* not possible with dual renderer $t */ $tagTreeFoo->getParentTemplate());
     }
 
     public function testGetTagRefNotFoundException(): void
@@ -92,37 +92,37 @@ class HtmlTemplateTest extends TestCase
 
         // del tests
         $t->del('foo');
-        $this->assertSameTemplate('{$foo} guys', $t);
+        static::assertSameTemplate('{$foo} guys', $t);
         $t->tryDel('non_existent_tag');
-        $this->assertSameTemplate('{$foo} guys', $t);
+        static::assertSameTemplate('{$foo} guys', $t);
 
         // set tests
         $t->set('foo', 'Hello');
-        $this->assertSameTemplate('{foo}Hello{/} guys', $t);
+        static::assertSameTemplate('{foo}Hello{/} guys', $t);
         $t->set('foo', 'Hi');
-        $this->assertSameTemplate('{foo}Hi{/} guys', $t);
+        static::assertSameTemplate('{foo}Hi{/} guys', $t);
         $t->dangerouslySetHtml('foo', '<b>Hi</b>');
-        $this->assertSameTemplate('{foo}<b>Hi</b>{/} guys', $t);
+        static::assertSameTemplate('{foo}<b>Hi</b>{/} guys', $t);
         $t->trySet('non_existent_tag', 'ignore this');
-        $this->assertSameTemplate('{foo}<b>Hi</b>{/} guys', $t);
+        static::assertSameTemplate('{foo}<b>Hi</b>{/} guys', $t);
         $t->tryDangerouslySetHtml('non_existent_tag', '<b>ignore</b> this');
-        $this->assertSameTemplate('{foo}<b>Hi</b>{/} guys', $t);
+        static::assertSameTemplate('{foo}<b>Hi</b>{/} guys', $t);
 
         // append tests
         $t->set('foo', 'Hi');
-        $this->assertSameTemplate('{foo}Hi{/} guys', $t);
+        static::assertSameTemplate('{foo}Hi{/} guys', $t);
         $t->append('foo', ' and');
-        $this->assertSameTemplate('{foo}Hi and{/} guys', $t);
+        static::assertSameTemplate('{foo}Hi and{/} guys', $t);
         $t->dangerouslyAppendHtml('foo', ' <b>welcome</b> my');
-        $this->assertSameTemplate('{foo}Hi and <b>welcome</b> my{/} guys', $t);
+        static::assertSameTemplate('{foo}Hi and <b>welcome</b> my{/} guys', $t);
         $t->tryAppend('foo', ' dear');
-        $this->assertSameTemplate('{foo}Hi and <b>welcome</b> my dear{/} guys', $t);
+        static::assertSameTemplate('{foo}Hi and <b>welcome</b> my dear{/} guys', $t);
         $t->tryAppend('non_existent_tag', 'ignore this');
-        $this->assertSameTemplate('{foo}Hi and <b>welcome</b> my dear{/} guys', $t);
+        static::assertSameTemplate('{foo}Hi and <b>welcome</b> my dear{/} guys', $t);
         $t->tryDangerouslyAppendHtml('foo', ' and <b>smart</b>');
-        $this->assertSameTemplate('{foo}Hi and <b>welcome</b> my dear and <b>smart</b>{/} guys', $t);
+        static::assertSameTemplate('{foo}Hi and <b>welcome</b> my dear and <b>smart</b>{/} guys', $t);
         $t->tryDangerouslyAppendHtml('non_existent_tag', '<b>ignore</b> this');
-        $this->assertSameTemplate('{foo}Hi and <b>welcome</b> my dear and <b>smart</b>{/} guys', $t);
+        static::assertSameTemplate('{foo}Hi and <b>welcome</b> my dear and <b>smart</b>{/} guys', $t);
     }
 
     public function testClone(): void
@@ -130,12 +130,12 @@ class HtmlTemplateTest extends TestCase
         $t = new HtmlTemplate('{foo}{inner}hello{/}{/} guys');
 
         $topClone1 = clone $t;
-        $this->assertSameTemplate('{foo}{inner}hello{/}{/} guys', $topClone1);
+        static::assertSameTemplate('{foo}{inner}hello{/}{/} guys', $topClone1);
         $topClone2 = $t->cloneRegion('_top');
-        $this->assertSameTemplate('{foo}{inner}hello{/}{/} guys', $topClone2);
-        $this->assertSameTemplate('{inner}hello{/}', $t->cloneRegion('foo'));
-        $this->assertSameTemplate('{inner}hello{/}', $topClone1->cloneRegion('foo'));
-        $this->assertSameTemplate('{inner}hello{/}', $topClone2->cloneRegion('foo'));
+        static::assertSameTemplate('{foo}{inner}hello{/}{/} guys', $topClone2);
+        static::assertSameTemplate('{inner}hello{/}', $t->cloneRegion('foo'));
+        static::assertSameTemplate('{inner}hello{/}', $topClone1->cloneRegion('foo'));
+        static::assertSameTemplate('{inner}hello{/}', $topClone2->cloneRegion('foo'));
     }
 
     public function testRenderRegion(): void
@@ -151,6 +151,6 @@ class HtmlTemplateTest extends TestCase
             'foo' => 'Hello',
             'bar' => 'welcome',
         ]);
-        $this->assertSameTemplate('{foo}Hello{/} guys and {bar}welcome{/} here', $t);
+        static::assertSameTemplate('{foo}Hello{/} guys and {bar}welcome{/} here', $t);
     }
 }
