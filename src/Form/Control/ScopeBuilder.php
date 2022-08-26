@@ -288,7 +288,7 @@ class ScopeBuilder extends Form\Control
         if ($this->form) {
             $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
                 $key = $this->entityField->getFieldName();
-                $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
+                $postRawData[$key] = static::queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
             });
         }
     }
@@ -332,7 +332,7 @@ class ScopeBuilder extends Form\Control
             $scope = $model->scope();
         }
 
-        $this->query = $this->scopeToQuery($scope, $inputsMap)['query'];
+        $this->query = static::scopeToQuery($scope, $inputsMap)['query'];
     }
 
     /**
@@ -440,7 +440,7 @@ class ScopeBuilder extends Form\Control
 
     protected function getRule(string $type, array $defaults = [], Field $field = null): array
     {
-        $rule = self::$ruleTypes[$type] ?? self::$ruleTypes['default'];
+        $rule = static::$ruleTypes[$type] ?? static::$ruleTypes['default'];
 
         // when $rule is an alias
         if (is_string($rule)) {
@@ -532,12 +532,12 @@ class ScopeBuilder extends Form\Control
 
         switch ($type) {
             case 'query-builder-group':
-                $components = array_map([static::class, 'queryToScope'], (array) $query['children']);
+                $components = array_map(fn ($v) => static::queryToScope($v), $query['children']);
                 $scope = new Scope($components, $query['logicalOperator']);
 
                 break;
             case 'query-builder-rule':
-                $scope = self::queryToCondition($query);
+                $scope = static::queryToCondition($query);
 
                 break;
             default:
@@ -579,12 +579,12 @@ class ScopeBuilder extends Form\Control
                 break;
             case self::OPERATOR_IN:
             case self::OPERATOR_NOT_IN:
-                $value = explode(self::detectDelimiter($value), (string) $value);
+                $value = explode(static::detectDelimiter($value), (string) $value);
 
                 break;
         }
 
-        $operatorsMap = array_merge(...array_values(self::$operatorsMap));
+        $operatorsMap = array_merge(...array_values(static::$operatorsMap));
 
         $operator = $operator ? ($operatorsMap[strtolower($operator)] ?? '=') : null;
 
@@ -600,14 +600,14 @@ class ScopeBuilder extends Form\Control
         if ($scope instanceof Scope\Condition) {
             $query = [
                 'type' => 'query-builder-rule',
-                'query' => self::conditionToQuery($scope, $inputsMap),
+                'query' => static::conditionToQuery($scope, $inputsMap),
             ];
         }
 
         if ($scope instanceof Scope) {
             $children = [];
             foreach ($scope->getNestedConditions() as $nestedCondition) {
-                $children[] = self::scopeToQuery($nestedCondition, $inputsMap);
+                $children[] = static::scopeToQuery($nestedCondition, $inputsMap);
             }
 
             $query = [
@@ -676,7 +676,7 @@ class ScopeBuilder extends Form\Control
                 $operator = $map[$operator] ?? Condition::OPERATOR_NOT_IN;
             }
 
-            $operatorsMap = array_merge(self::$operatorsMap[$inputType] ?? [], self::$operatorsMap['text']);
+            $operatorsMap = array_merge(static::$operatorsMap[$inputType] ?? [], static::$operatorsMap['text']);
             $operator = array_search(strtoupper($operator), $operatorsMap, true) ?: self::OPERATOR_EQUALS;
         }
 
@@ -684,7 +684,7 @@ class ScopeBuilder extends Form\Control
             'rule' => $rule,
             'operator' => $operator,
             'value' => $value,
-            'option' => self::getOption($inputType, $value, $condition),
+            'option' => static::getOption($inputType, $value, $condition),
         ];
     }
 
@@ -726,12 +726,12 @@ class ScopeBuilder extends Form\Control
     public static function detectDelimiter($value)
     {
         $matches = [];
-        foreach (self::$listDelimiters as $delimiter) {
+        foreach (static::$listDelimiters as $delimiter) {
             $matches[$delimiter] = substr_count((string) $value, $delimiter);
         }
 
         $max = array_keys($matches, max($matches), true);
 
-        return reset($max) ?: reset(self::$listDelimiters);
+        return reset($max) ?: reset(static::$listDelimiters);
     }
 }

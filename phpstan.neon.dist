@@ -10,8 +10,6 @@ parameters:
         - js/
 
     ignoreErrors:
-        - '~^Unsafe usage of new static\(\)\.$~'
-
         - '~^(Property .+ has|Method .+\(\) (has parameter \$.+ with|return type has)) no value type specified in iterable type .+\.~'
 
         # relax strict rules
