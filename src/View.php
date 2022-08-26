@@ -602,7 +602,7 @@ class View extends AbstractView implements JsExpressionable
         if ($this->attr) {
             $tmp = [];
             foreach ($this->attr as $attr => $val) {
-                $tmp[] = $attr . '="' . $this->getApp()->encodeAttribute($val) . '"';
+                $tmp[] = $attr . '="' . $this->getApp()->encodeHtmlAttribute((string) $val) . '"';
             }
             $this->template->dangerouslySetHtml('attributes', implode(' ', $tmp));
         }

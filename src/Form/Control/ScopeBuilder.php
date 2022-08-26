@@ -718,20 +718,17 @@ class ScopeBuilder extends Form\Control
     /**
      * Auto-detects a string delimiter based on list of predefined values in ScopeBuilder::$listDelimiters in order of priority.
      *
-     * @param string $value
-     *
-     * @return string
      * @phpstan-return non-empty-string
      */
-    public static function detectDelimiter($value)
+    public static function detectDelimiter(string $value): string
     {
         $matches = [];
         foreach (static::$listDelimiters as $delimiter) {
-            $matches[$delimiter] = substr_count((string) $value, $delimiter);
+            $matches[$delimiter] = substr_count($value, $delimiter);
         }
 
         $max = array_keys($matches, max($matches), true);
 
-        return reset($max) ?: reset(static::$listDelimiters);
+        return $max !== [] ? reset($max) : reset(static::$listDelimiters);
     }
 }

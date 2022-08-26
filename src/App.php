@@ -941,7 +941,7 @@ class App
             } elseif ($key === 0) {
                 $tag = $val;
             } else {
-                $tmp[] = $key . '="' . $this->encodeAttribute($val) . '"';
+                $tmp[] = $key . '="' . $this->encodeHtmlAttribute((string) $val) . '"';
             }
         }
 
@@ -950,14 +950,10 @@ class App
 
     /**
      * Encodes string - removes HTML special chars.
-     *
-     * @param string $val
-     *
-     * @return string
      */
-    public function encodeAttribute($val)
+    public function encodeHtmlAttribute(string $val): string
     {
-        return htmlspecialchars((string) $val);
+        return htmlspecialchars($val);
     }
 
     /**

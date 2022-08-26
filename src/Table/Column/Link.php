@@ -74,7 +74,7 @@ class Link extends Table\Column
      * Set html5 target attribute in tag
      * possible values : _blank | _parent | _self | _top | frame#name.
      *
-     * @var string!null
+     * @var string|null
      */
     public $target;
 
