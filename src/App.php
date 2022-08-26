@@ -375,9 +375,9 @@ class App
     public function terminate($output = '', array $headers = []): void
     {
         $headers = $this->normalizeHeaders($headers);
-        if (empty($headers['content-type'])) {
+        if (!isset($headers['content-type'])) {
             $this->responseHeaders = $this->normalizeHeaders($this->responseHeaders);
-            if (empty($this->responseHeaders['content-type'])) {
+            if (!isset($this->responseHeaders['content-type'])) {
                 throw new Exception('Content type must be always set');
             }
 

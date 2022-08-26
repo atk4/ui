@@ -71,7 +71,7 @@ abstract class FilterModel extends Model
         // You can set your own filter model condition by extending
         // Field class and setting your filter model class.
         // TODO remove in favor of some Field::ui config
-        if (!@empty($field->filterModel)) {
+        if (@$field->filterModel) { // @phpstan-ignore-line
             if ($field->filterModel instanceof self) {
                 return $field->filterModel;
             }

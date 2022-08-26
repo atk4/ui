@@ -22,7 +22,7 @@ class Upload extends Input
      * If not set, will default to file name.
      * file id is also sent with onDelete Callback.
      *
-     * @var string
+     * @var string|null
      */
     public $fileId;
 
@@ -220,7 +220,7 @@ class Upload extends Input
         $this->js(true)->atkFileUpload([
             'uri' => $this->cb->getJsUrl(),
             'action' => $this->action->name,
-            'file' => ['id' => $this->fileId ?: $this->entityField->get(), 'name' => $this->getInputValue()],
+            'file' => ['id' => $this->fileId ?? $this->entityField->get(), 'name' => $this->getInputValue()],
             'submit' => ($this->form->buttonSave) ? $this->form->buttonSave->name : null,
         ]);
     }

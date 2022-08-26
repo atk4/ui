@@ -338,7 +338,7 @@ As default, Dropdown will use the `$model->idField` as value, and `$model->title
 If you want to customize how a record is displayed and/or add an icon, Dropdown has the :php:meth:`Form::renderRowFunction()` to do this.
 This function is called with each model record and needs to return an array::
 
-    $dropdown->renderRowFunction = function ($record) {
+    $dropdown->renderRowFunction = function (Model $record) {
         return [
             'value' => $record->idField,
             'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
@@ -347,7 +347,7 @@ This function is called with each model record and needs to return an array::
 
 You can also use this function to add an Icon to a record::
 
-    $dropdown->renderRowFunction = function ($record) {
+    $dropdown->renderRowFunction = function (Model $record) {
         return [
             'value' => $record->idField,
             'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',

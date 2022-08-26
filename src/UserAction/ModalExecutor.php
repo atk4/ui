@@ -161,8 +161,8 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
         return [
             $this->hide(),
-            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) ?:
-            $success ?: new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
+            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : ''))),
             $this->loader->jsClearStoreData(true),
         ];
     }

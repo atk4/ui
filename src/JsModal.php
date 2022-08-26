@@ -21,7 +21,7 @@ class JsModal extends JsExpression
 
         parent::__construct('$(this).atkCreateModal([arg])', ['arg' => ['uri' => $url, 'title' => $title, 'data_type' => $dataType, 'uri_options' => $args]]);
 
-        if (empty($title)) {
+        if (!$title) {
             $this->removeHeader();
         }
     }
@@ -50,15 +50,15 @@ class JsModal extends JsExpression
      * You can set option individually or supply an array.
      *
      * @param string|array $options
-     * @param mixed        $value
+     * @param ($options is array ? never : mixed) $value
      *
      * @return $this
      */
     public function setOption($options, $value = null)
     {
         if (is_array($options)) {
-            foreach ($options as $key => $value) {
-                $this->args['arg'][$key] = $value;
+            foreach ($options as $k => $v) {
+                $this->args['arg'][$k] = $v;
             }
         } else {
             $this->args['arg'][$options] = $value;

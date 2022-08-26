@@ -89,7 +89,7 @@ class Menu extends View
             $subMenu->set('label', $label);
         }
 
-        if (!empty($name['icon'])) {
+        if (isset($name['icon'])) {
             Icon::addTo($subMenu, [$name['icon']], ['Icon'])->removeClass('item');
         }
 
@@ -119,7 +119,7 @@ class Menu extends View
             $group->set('title', $title);
         }
 
-        if (!empty($name['icon'])) {
+        if (isset($name['icon'])) {
             Icon::addTo($group, [$name['icon']], ['Icon'])->removeClass('item');
         }
 

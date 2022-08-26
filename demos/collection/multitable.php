@@ -34,7 +34,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
 
         $selections = explode(',', $_GET[$this->name] ?? '');
 
-        if (!empty($selections[0])) {
+        if ($selections[0]) {
             $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
         }
 

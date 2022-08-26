@@ -68,10 +68,10 @@ class Lookup extends Input
     /** @var int Sets the max. amount of records that are loaded. */
     public $limit = 100;
 
-    /** @var string Set custom model field here to use it's value as ID in dropdown instead of default model ID field. */
+    /** @var string|null Set custom model field here to use it's value as ID in dropdown instead of default model ID field. */
     public $idField;
 
-    /** @var string Set custom model field here to display it's value in dropdown instead of default model title field. */
+    /** @var string|null Set custom model field here to display it's value in dropdown instead of default model title field. */
     public $titleField;
 
     /**
@@ -138,7 +138,7 @@ class Lookup extends Input
         $this->callback = Callback::addTo($this);
 
         $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () {
-            $this->callback->set(\Closure::fromCallable([$this, 'outputApiResponse']));
+            $this->callback->set(fn () => $this->outputApiResponse());
         });
     }
 
@@ -205,15 +205,14 @@ class Lookup extends Input
     /**
      * Default callback for generating data row.
      *
-     * @param Lookup $field
      * @param string $key
      *
      * @return string[]
      */
-    public static function defaultRenderRow($field, Model $row, $key = null)
+    public static function defaultRenderRow(self $control, Model $row, $key = null)
     {
-        $idField = $field->idField ?: $row->idField;
-        $titleField = $field->titleField ?: $row->titleField;
+        $idField = $control->idField ?? $row->idField;
+        $titleField = $control->titleField ?? $row->titleField;
 
         return [
             'value' => $row->get($idField),
@@ -293,7 +292,7 @@ class Lookup extends Input
      */
     protected function applySearchConditions(): void
     {
-        if (empty($_GET['q'])) {
+        if (($_GET['q'] ?? '') === '') {
             return;
         }
 
@@ -306,7 +305,7 @@ class Lookup extends Input
             }
             $this->model->addCondition($scope);
         } else {
-            $titleField = $this->titleField ?: $this->model->titleField;
+            $titleField = $this->titleField ?? $this->model->titleField;
 
             $this->model->addCondition($titleField, 'like', '%' . $_GET['q'] . '%');
         }
@@ -406,7 +405,7 @@ class Lookup extends Input
         $this->initDropdown($chain);
 
         if ($this->entityField && $this->entityField->get()) {
-            $idField = $this->idField ?: $this->model->idField;
+            $idField = $this->idField ?? $this->model->idField;
 
             $this->model = $this->model->loadBy($idField, $this->entityField->get());
 

@@ -48,7 +48,7 @@ class Control extends View
      *
      * Caption is usually specified by a model.
      *
-     * @var string
+     * @var string|null
      */
     public $caption;
 

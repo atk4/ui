@@ -180,7 +180,7 @@ class InlineEdit extends View
             $initValue = $this->initValue;
         }
 
-        $fieldName = $this->fieldName ?: 'name';
+        $fieldName = $this->fieldName ?? 'name';
 
         $this->vue('atk-inline-edit', [
             'initValue' => $initValue,

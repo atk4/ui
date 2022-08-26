@@ -199,7 +199,7 @@ class Table extends Lister
         // set filter to all column when null.
         if (!$cols) {
             foreach ($this->model->getFields() as $key => $field) {
-                if (!empty($this->columns[$key])) {
+                if (isset($this->columns[$key])) {
                     $cols[] = $field->shortName;
                 }
             }

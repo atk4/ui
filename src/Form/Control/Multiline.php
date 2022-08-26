@@ -453,7 +453,7 @@ class Multiline extends Form\Control
             'cellProps' => $this->getSuiTableCellProps($field),
             'caption' => $field->getCaption(),
             'default' => $this->getApp()->uiPersistence->typecastSaveField($field, $field->default),
-            'isExpr' => @isset($field->expr),
+            'isExpr' => @isset($field->expr), // @phpstan-ignore-line
             'isEditable' => $field->isEditable(),
             'isHidden' => $field->isHidden(),
             'isVisible' => $field->isVisible(),
@@ -496,6 +496,7 @@ class Multiline extends Form\Control
     protected function getDatePickerProps(Field $field): array
     {
         $calendar = new Calendar();
+        $props = [];
         $props['config'] = $this->componentProps[self::DATE] ?? [];
         $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
         $props['config']['dateFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat);
@@ -535,6 +536,7 @@ class Multiline extends Form\Control
     protected function getLookupProps(Field $field): array
     {
         // set any of sui-dropdown props via this property. Will be applied globally.
+        $props = [];
         $props['config'] = $this->componentProps[self::LOOKUP] ?? [];
         $items = $this->getFieldItems($field, 10);
         foreach ($items as $value => $text) {
@@ -852,8 +854,7 @@ class Multiline extends Form\Control
             case 'integer':
             case 'float':
             case 'atk4_money':
-                // value is 0 or the field value
-                $value = (string) $model->get($fieldName) ?: 0;
+                $value = (string) ($model->get($fieldName) ?? 0);
 
                 break;
             default:

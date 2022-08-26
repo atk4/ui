@@ -55,12 +55,11 @@ $formGroup->addControl('zip', ['width' => 'four']);
 
 $form->onSubmit(function (Form $form) {
     $errors = [];
-
     foreach (['first_name', 'last_name', 'address'] as $field) {
         if (!$form->model->get($field)) {
             $errors[] = $form->error($field, 'Field ' . $field . ' is mandatory');
         }
     }
 
-    return $errors ?: $form->success('No more errors', 'so we have saved everything into the database');
+    return $errors !== [] ? $errors : $form->success('No more errors', 'so we have saved everything into the database');
 });

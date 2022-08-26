@@ -88,10 +88,10 @@ class Popup extends View
     public function __construct($triggerBy = null)
     {
         if (is_object($triggerBy)) {
-            $this->triggerBy = $triggerBy;
-        } else {
-            parent::__construct($triggerBy);
+            $triggerBy = ['triggerBy' => $triggerBy];
         }
+
+        parent::__construct($triggerBy);
     }
 
     protected function init(): void

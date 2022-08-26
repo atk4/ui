@@ -43,5 +43,5 @@ $form->onSubmit(function (Form $form) {
         }
     }
 
-    return $errors ?: 'No fields were changed';
+    return $errors !== [] ? $errors : 'No fields were changed';
 });

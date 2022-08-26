@@ -25,7 +25,7 @@ class Delete extends Table\Column
         $this->vp->set(function () {
             $this->table->model->load($_POST[$this->name])->delete();
 
-            $reload = $this->table->reload ?: $this->table;
+            $reload = $this->table->reload ?? $this->table;
 
             $this->table->getApp()->terminateJson($reload);
         });

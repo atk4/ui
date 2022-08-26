@@ -232,7 +232,6 @@ $group->addControl('last_name', ['width' => 'five']);
 
 $form->onSubmit(function (Form $form) {
     $errors = [];
-
     foreach ($form->model->getFields() as $name => $ff) {
         if ($name === 'id') {
             continue;
@@ -243,5 +242,5 @@ $form->onSubmit(function (Form $form) {
         }
     }
 
-    return $errors ?: $form->success('No more errors', 'so we have saved everything into the database');
+    return $errors !== [] ? $errors : $form->success('No more errors', 'so we have saved everything into the database');
 });

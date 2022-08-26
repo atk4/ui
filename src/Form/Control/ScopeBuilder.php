@@ -30,19 +30,17 @@ class ScopeBuilder extends Form\Control
      * Max depth of nested conditions allowed.
      * Corresponds to VueQueryBulder maxDepth.
      * Maximum support by js component is 10.
-     *
-     * @var int
      */
-    public $maxDepth = 5;
+    public int $maxDepth = 5;
 
-    /** @var array Fields to use for creating the rules. */
-    public $fields = [];
+    /** Fields to use for creating the rules. */
+    public array $fields = [];
 
     /** @var HtmlTemplate|null The template needed for the ScopeBuilder view. */
     public $scopeBuilderTemplate;
 
-    /** @var array List of delimiters for auto-detection in order of priority. */
-    public static $listDelimiters = [';', ','];
+    /** List of delimiters for auto-detection in order of priority. */
+    public static array $listDelimiters = [';', ','];
 
     /**
      * The date, time or datetime options:
@@ -54,9 +52,7 @@ class ScopeBuilder extends Form\Control
         'flatpickr' => [],
     ];
 
-    /**
-     * Atk-lookup and semantic-ui dropdown options.
-     */
+    /** Atk-lookup and semantic-ui dropdown options. */
     public array $atkLookupOptions = [
         'ui' => 'small basic button',
     ];
@@ -64,19 +60,17 @@ class ScopeBuilder extends Form\Control
     /** @var View The scopebuilder View. Assigned in init(). */
     protected $scopeBuilderView;
 
-    /** @var array Definition of VueQueryBuilder rules. */
-    protected $rules = [];
+    /** Definition of VueQueryBuilder rules. */
+    protected array $rules = [];
 
     /**
      * Set Labels for Vue-Query-Builder
      * see https://dabernathy89.github.io/vue-query-builder/configuration.html#labels.
-     *
-     * @var array
      */
-    public $labels = [];
+    public array $labels = [];
 
-    /** @var array Default VueQueryBuilder query. */
-    protected $query = [];
+    /** Default VueQueryBuilder query. */
+    protected array $query = [];
 
     protected const OPERATOR_TEXT_EQUALS = 'equals';
     protected const OPERATOR_TEXT_DOESNOT_EQUAL = 'does not equal';
@@ -143,9 +137,9 @@ class ScopeBuilder extends Form\Control
      *
      * Operator map supports also inputType specific operators in sub maps
      *
-     * @var array
+     * @var array<string, array<string, string>>
      */
-    protected static $operatorsMap = [
+    protected static array $operatorsMap = [
         'number' => [
             self::OPERATOR_SIGN_EQUALS => Condition::OPERATOR_EQUALS,
             self::OPERATOR_SIGN_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
@@ -187,8 +181,8 @@ class ScopeBuilder extends Form\Control
         ],
     ];
 
-    /** @var array Definition of rule types. */
-    protected static $ruleTypes = [
+    /** @var array<string, string|array<string, mixed>> Definition of rule types. */
+    protected static array $ruleTypes = [
         'default' => 'text',
         'text' => [
             'type' => 'text',
@@ -515,7 +509,7 @@ class ScopeBuilder extends Form\Control
                 'maxDepth' => $this->maxDepth,
                 'query' => $this->query,
                 'name' => $this->shortName,
-                'labels' => $this->labels ?: null,
+                'labels' => $this->labels !== [] ? $this->labels : null, // TODO do we need to really pass null for empty array?
                 'form' => $this->form->formElement->name,
                 'debug' => $this->options['debug'] ?? false,
             ],
@@ -677,7 +671,8 @@ class ScopeBuilder extends Form\Control
             }
 
             $operatorsMap = array_merge(static::$operatorsMap[$inputType] ?? [], static::$operatorsMap['text']);
-            $operator = array_search(strtoupper($operator), $operatorsMap, true) ?: self::OPERATOR_EQUALS;
+            $operatorKey = array_search(strtoupper($operator), $operatorsMap, true);
+            $operator = $operatorKey !== false ? $operatorKey : self::OPERATOR_EQUALS;
         }
 
         return [

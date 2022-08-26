@@ -316,6 +316,7 @@ class Modal extends View
 
     protected function renderView(): void
     {
+        $data = [];
         $data['type'] = $this->type;
         $data['label'] = $this->loadingLabel;
 

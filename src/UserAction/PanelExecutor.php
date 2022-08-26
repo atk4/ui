@@ -152,8 +152,8 @@ class PanelExecutor extends Right implements JsExecutorInterface
 
         return [
             $this->jsClose(),
-            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) ?:
-                $success ?: new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
+            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : ''))),
             $this->loader->jsClearStoreData(true),
         ];
     }

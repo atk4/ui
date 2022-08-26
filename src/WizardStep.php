@@ -28,7 +28,7 @@ class WizardStep extends View
      */
     public function __construct($title)
     {
-        $this->title = $title;
+        parent::__construct(['title' => $title]);
     }
 
     protected function renderView(): void

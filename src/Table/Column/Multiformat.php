@@ -24,6 +24,8 @@ class Multiformat extends Table\Column
 
     public function __construct(\Closure $callback)
     {
+        parent::__construct();
+
         $this->callback = $callback;
     }
 

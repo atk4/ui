@@ -52,7 +52,7 @@ class Callback extends AbstractView
 
     public function setUrlTrigger(string $trigger = null): void
     {
-        $this->urlTrigger = $trigger ?: $this->name;
+        $this->urlTrigger = $trigger ?? $this->name;
 
         $this->getOwner()->stickyGet(self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger);
     }
@@ -124,7 +124,7 @@ class Callback extends AbstractView
      */
     public function canTrigger(): bool
     {
-        return $this->triggerOnReload || empty($_GET['__atk_reload']);
+        return $this->triggerOnReload || !isset($_GET['__atk_reload']);
     }
 
     /**
