@@ -1,3 +1,6 @@
+includes:
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+
 parameters:
     level: 6
     paths:
@@ -6,19 +9,15 @@ parameters:
         - vendor/
         - js/
 
-    # some extra rules
-    checkAlwaysTrueCheckTypeFunctionCall: true
-    checkAlwaysTrueInstanceof: true
-    checkAlwaysTrueStrictComparison: true
-    checkExplicitMixedMissingReturn: true
-    checkFunctionNameCase: true
-    # TODO checkMissingClosureNativeReturnTypehintRule: true
-    reportMaybesInMethodSignatures: true
-    reportStaticMethodSignatures: true
-    checkTooWideReturnTypesInProtectedAndPublicMethods: true
-    checkMissingIterableValueType: false # TODO
-
     ignoreErrors:
+        - '~^Unsafe usage of new static\(\)\.$~'
+
+        - '~^(Property .+ has|Method .+\(\) (has parameter \$.+ with|return type has)) no value type specified in iterable type .+\.~'
+
+        # relax strict rules
+        - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
+        - '~^Variable (static )?(property access|method call) on .+\.~'
+
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
         -
