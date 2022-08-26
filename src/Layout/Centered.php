@@ -43,6 +43,7 @@ class Centered extends Layout
         if ($this->image) {
             $this->template->tryDangerouslySetHtml('HeaderImage', '<img class="ui image" src="' . $this->image . '" alt="' . $this->imageAlt . '" />');
         }
+
         parent::renderView();
     }
 }

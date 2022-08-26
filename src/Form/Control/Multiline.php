@@ -407,6 +407,7 @@ class Multiline extends Form\Control
     public function setModel(Model $model, array $fieldNames = null): void
     {
         parent::setModel($model);
+
         $this->initVueLookupCallback();
 
         if ($fieldNames === null) {

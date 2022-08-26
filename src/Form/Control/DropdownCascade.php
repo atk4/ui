@@ -121,6 +121,7 @@ class DropdownCascade extends Dropdown
     {
         // multiple selection is not supported
         $this->isMultiple = false;
+
         parent::renderView();
     }
 }

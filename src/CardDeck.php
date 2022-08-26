@@ -391,6 +391,7 @@ class CardDeck extends View
         if ($this->container->name === ($_GET['__atk_reload'] ?? null)) {
             $this->applyReload();
         }
+
         parent::renderView();
     }
 
