@@ -61,7 +61,8 @@ This will display console to the user and will even output information from insi
 
     use \Atk4\Core\DebugTrait();
 
-    public function generateReport($pages) {
+    public function generateReport($pages)
+    {
         $this->info('converting report to PDF');
 
         // slow stuff

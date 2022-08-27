@@ -34,8 +34,8 @@ class GridTest extends TestCase
         $t->addColumn('email');
         $t->addColumn(null, new Table\Column\Template('password={$password}'));
 
-        $this->assertSame('<td>{$email}</td><td>password={$password}</td>', $t->getDataRowHtml());
-        $this->assertSame(
+        static::assertSame('<td>{$email}</td><td>password={$password}</td>', $t->getDataRowHtml());
+        static::assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>password=abc123</td></tr>',
             $this->extractTableRow($t)
         );
@@ -50,8 +50,8 @@ class GridTest extends TestCase
         $t->addColumn('email');
         $t->addColumn('password', [Table\Column\Password::class]);
 
-        $this->assertSame('<td>{$email}</td><td>***</td>', $t->getDataRowHtml());
-        $this->assertSame(
+        static::assertSame('<td>{$email}</td><td>***</td>', $t->getDataRowHtml());
+        static::assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>***</td></tr>',
             $this->extractTableRow($t)
         );
@@ -64,8 +64,8 @@ class GridTest extends TestCase
         $t->setModel($this->m, ['email']);
         $del = $t->addColumn(null, [Table\Column\Delete::class]);
 
-        $this->assertSame('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="' . $del->shortName . '"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHtml());
-        $this->assertSame(
+        static::assertSame('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="' . $del->shortName . '"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHtml());
+        static::assertSame(
             '<tr data-id="1"><td>test@test.com</td><td><a href="#" title="Delete test@test.com?" class="' . $del->shortName . '"><i class="ui red trash icon"></i>Delete</a></td></tr>',
             $this->extractTableRow($t)
         );

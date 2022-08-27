@@ -42,7 +42,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
     /** @var string|null */
     private $step;
-    private $actionInitialized = false;
 
     /** @var Button Ok button */
     private $ok;
@@ -60,7 +59,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Properly set element id for this modal.
      */
-    public function afterActionInit(Model\UserAction $action)
+    protected function afterActionInit(Model\UserAction $action): void
     {
         // Add buttons to modal for next and previous.
         $btns = (new View())->addStyle(['min-height' => '24px']);
@@ -79,7 +78,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
      */
     public function jsExecute(array $urlArgs = []): array
     {
-        if (!$this->actionInitialized) {
+        if (!$this->action) {
             throw new Exception('Action must be set prior to assign trigger');
         }
 
@@ -91,12 +90,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         return $this->action;
     }
 
-    /**
-     * Will associate executor with the action.
-     *
-     * @return ConfirmationExecutor
-     */
-    public function setAction(Model\UserAction $action): Modal
+    public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
         $this->afterActionInit($action);
@@ -104,7 +98,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->title ??= $action->getDescription();
         $this->step = $this->stickyGet('step');
 
-        $this->actionInitialized = true;
         $this->jsSetBtnState($this);
 
         return $this;
@@ -113,7 +106,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Perform this action steps.
      */
-    public function executeModelAction()
+    public function executeModelAction(): void
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
@@ -137,9 +130,8 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Reset button state.
      */
-    protected function jsSetBtnState(View $view)
+    protected function jsSetBtnState(View $view): void
     {
-        // reset button handler.
         $view->js(true, $this->ok->js(true)->off());
         $view->js(true, $this->cancel->js(true)->off());
     }
@@ -148,7 +140,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
      * Set modal for displaying confirmation message.
      * Also apply proper javascript to each button.
      */
-    public function doConfirmation(View $modal)
+    public function doConfirmation(View $modal): void
     {
         $this->addConfirmation($modal);
 
@@ -176,7 +168,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Add confirmation message to modal.
      */
-    protected function addConfirmation(View $view)
+    protected function addConfirmation(View $view): void
     {
         Text::addTo($view)->set($this->action->getConfirmation());
     }
@@ -184,7 +176,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Execute action when all step are completed.
      */
-    protected function doFinal(View $modal)
+    protected function doFinal(View $modal): void
     {
         $return = $this->action->execute([]);
 
@@ -193,6 +185,9 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
     /**
      * Return proper js statement when action execute.
+     *
+     * @param mixed      $obj
+     * @param string|int $id
      */
     protected function jsGetExecute($obj, $id): array
     {
@@ -204,7 +199,8 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             $this->hide(),
             $this->ok->js(true)->off(),
             $this->cancel->js(true)->off(),
-            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) ?: $success ?: new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
+            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : ''))),
         ];
     }
 
@@ -213,7 +209,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
      *
      * @param array|JsExpressionable $js
      */
-    private function _jsSequencer(View $view, $js)
+    private function _jsSequencer(View $view, $js): void
     {
         if (is_array($js)) {
             foreach ($js as $jq) {

@@ -60,10 +60,11 @@ Header::addTo($app, ['Forks Button Component', 'size' => 2]);
 
 /** @var Button $forkButtonClass */
 $forkButtonClass = AnonymousClassNameCache::get_class(fn () => new class(0) /* need 0 argument here for constructor */ extends Button {
-    public function __construct($n)
+    public function __construct(int $n)
     {
         Icon::addTo(Button::addTo($this, ['Forks', 'class.blue' => true]), ['fork']);
         Label::addTo($this, [number_format($n), 'class.basic blue left pointing' => true]);
+
         parent::__construct(['class.labeled' => true]);
     }
 });

@@ -18,7 +18,7 @@ class VirtualPage extends View
     /** @var Callback */
     public $cb;
 
-    /** @var string specify custom callback trigger for the URL (see Callback::$urlTrigger) */
+    /** @var string|null specify custom callback trigger for the URL (see Callback::$urlTrigger) */
     protected $urlTrigger;
 
     /** @var string UI container class */
@@ -28,7 +28,7 @@ class VirtualPage extends View
     {
         parent::init();
 
-        $this->cb = Callback::addTo($this, ['urlTrigger' => $this->urlTrigger ?: $this->name]);
+        $this->cb = Callback::addTo($this, ['urlTrigger' => $this->urlTrigger ?? $this->name]);
         unset($this->{'urlTrigger'});
     }
 
@@ -67,25 +67,17 @@ class VirtualPage extends View
     /**
      * Returns URL which you can load directly in the browser location, open in a new tab,
      * new window or inside iframe. This URL will contain HTML for a new page.
-     *
-     * @param string $mode
-     *
-     * @return string
      */
-    public function getUrl($mode = 'callback')
+    public function getUrl(string $mode = 'callback'): string
     {
         return $this->cb->getUrl($mode);
     }
 
     /**
      * Return URL that is designed to be loaded from inside JavaScript and contain JSON code.
-     * This is useful for dynamically loaded Modal, Tab or Loader.
-     *
-     * @param string $mode
-     *
-     * @return string
+     * This is useful for dynamically loaded Modal, Tabs or Loader.
      */
-    public function getJsUrl($mode = 'callback')
+    public function getJsUrl(string $mode = 'callback'): string
     {
         return $this->cb->getJsUrl($mode);
     }

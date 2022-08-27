@@ -20,7 +20,7 @@ require_once __DIR__ . '/../init-app.php';
 // Re-usable component implementing counter
 
 $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends Columns {
-    public $route = [];
+    public array $route = [];
 
     public function setModel(Model $model, array $route = []): void
     {
@@ -34,7 +34,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
 
         $selections = explode(',', $_GET[$this->name] ?? '');
 
-        if (!empty($selections[0])) {
+        if ($selections[0]) {
             $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
         }
 

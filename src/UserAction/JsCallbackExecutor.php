@@ -40,13 +40,10 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         return $this->action;
     }
 
-    /**
-     * Set action to be execute.
-     */
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
-        if (!$this->action->enabled && $this->getOwner() instanceof View) {
+        if (!$this->action->enabled && $this->getOwner() instanceof View) { // @phpstan-ignore-line
             $this->getOwner()->addClass('disabled');
         }
 
@@ -82,7 +79,8 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
                     ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $return)
                     : $this->jsSuccess;
 
-                $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) ?: $success ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
+                $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) // @phpstan-ignore-line
+                    ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : '')));
             }
 
             return $js;
@@ -94,7 +92,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /**
      * Check if all argument values have been provided.
      */
-    private function _hasAllArguments()
+    private function _hasAllArguments(): array
     {
         $errors = [];
         foreach ($this->action->args as $key => $val) {

@@ -10,19 +10,17 @@ use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
-use Atk4\Ui\Form\Control;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\View;
 
-class ScopeBuilder extends Control
+class ScopeBuilder extends Form\Control
 {
     use VueLookupTrait;
 
     /** @var bool Do not render label for this input. */
     public $renderLabel = false;
 
-    /** @var array General or field type specific options. */
-    public $options = [
+    public array $options = [
         'enum' => [
             'limit' => 250,
         ],
@@ -32,58 +30,47 @@ class ScopeBuilder extends Control
      * Max depth of nested conditions allowed.
      * Corresponds to VueQueryBulder maxDepth.
      * Maximum support by js component is 10.
-     *
-     * @var int
      */
-    public $maxDepth = 5;
+    public int $maxDepth = 5;
 
-    /** @var array Fields to use for creating the rules. */
-    public $fields = [];
+    /** Fields to use for creating the rules. */
+    public array $fields = [];
 
     /** @var HtmlTemplate|null The template needed for the ScopeBuilder view. */
     public $scopeBuilderTemplate;
 
-    /** @var array List of delimiters for auto-detection in order of priority. */
-    public static $listDelimiters = [';', ','];
+    /** List of delimiters for auto-detection in order of priority. */
+    public static array $listDelimiters = [';', ','];
 
     /**
      * The date, time or datetime options:
-     *     Any of flatpickr options;
-     *    'flatpickr' => [].
-     *
-     *     When true, will init date, time or datetime to current.
-     *    'useDefault'
-     *
-     * @var array
+     * 'flatpickr' - any of flatpickr options
+     * 'useDefault' - when true, will init date, time or datetime to current.
      */
-    public $atkdDateOptions = [
+    public array $atkdDateOptions = [
         'useDefault' => false,
         'flatpickr' => [],
     ];
 
-    /**
-     * atk-lookup and semantic-ui dropdown options.
-     */
-    public $atkLookupOptions = [
+    /** Atk-lookup and semantic-ui dropdown options. */
+    public array $atkLookupOptions = [
         'ui' => 'small basic button',
     ];
 
     /** @var View The scopebuilder View. Assigned in init(). */
     protected $scopeBuilderView;
 
-    /** @var array Definition of VueQueryBuilder rules. */
-    protected $rules = [];
+    /** Definition of VueQueryBuilder rules. */
+    protected array $rules = [];
 
     /**
      * Set Labels for Vue-Query-Builder
      * see https://dabernathy89.github.io/vue-query-builder/configuration.html#labels.
-     *
-     * @var array
      */
-    public $labels = [];
+    public array $labels = [];
 
-    /** @var array Default VueQueryBuilder query. */
-    protected $query = [];
+    /** Default VueQueryBuilder query. */
+    protected array $query = [];
 
     protected const OPERATOR_TEXT_EQUALS = 'equals';
     protected const OPERATOR_TEXT_DOESNOT_EQUAL = 'does not equal';
@@ -150,9 +137,9 @@ class ScopeBuilder extends Control
      *
      * Operator map supports also inputType specific operators in sub maps
      *
-     * @var array
+     * @var array<string, array<string, string>>
      */
-    protected static $operatorsMap = [
+    protected static array $operatorsMap = [
         'number' => [
             self::OPERATOR_SIGN_EQUALS => Condition::OPERATOR_EQUALS,
             self::OPERATOR_SIGN_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
@@ -194,8 +181,8 @@ class ScopeBuilder extends Control
         ],
     ];
 
-    /** @var array Definition of rule types. */
-    protected static $ruleTypes = [
+    /** @var array<string, string|array<string, mixed>> Definition of rule types. */
+    protected static array $ruleTypes = [
         'default' => 'text',
         'text' => [
             'type' => 'text',
@@ -295,14 +282,9 @@ class ScopeBuilder extends Control
         if ($this->form) {
             $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
                 $key = $this->entityField->getFieldName();
-                $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
+                $postRawData[$key] = static::queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
             });
         }
-    }
-
-    public function getModel()
-    {
-        return $this->model;
     }
 
     /**
@@ -320,9 +302,11 @@ class ScopeBuilder extends Control
     /**
      * Build query from model scope.
      */
-    protected function buildQuery(Model $model)
+    protected function buildQuery(Model $model): void
     {
-        $this->fields = $this->fields ?: array_keys($model->getFields());
+        if (!$this->fields) {
+            $this->fields = array_keys($model->getFields());
+        }
 
         foreach ($this->fields as $fieldName) {
             $field = $model->getField($fieldName);
@@ -342,7 +326,7 @@ class ScopeBuilder extends Control
             $scope = $model->scope();
         }
 
-        $this->query = $this->scopeToQuery($scope, $inputsMap)['query'];
+        $this->query = static::scopeToQuery($scope, $inputsMap)['query'];
     }
 
     /**
@@ -355,13 +339,13 @@ class ScopeBuilder extends Control
         } elseif ($field->hasReference()) {
             $type = 'lookup';
         } else {
-            $type = $field->type;
+            $type = $field->type ?? 'string';
         }
 
         $rule = $this->getRule($type, array_merge([
             'id' => $field->shortName,
             'label' => $field->getCaption(),
-            'options' => $this->options[strtolower((string) $type)] ?? [],
+            'options' => $this->options[$type] ?? [],
         ], $field->ui['scopebuilder'] ?? []), $field);
 
         $this->rules[] = $rule;
@@ -448,9 +432,9 @@ class ScopeBuilder extends Control
         return $this;
     }
 
-    protected function getRule($type, array $defaults = [], Field $field = null): array
+    protected function getRule(string $type, array $defaults = [], Field $field = null): array
     {
-        $rule = self::$ruleTypes[strtolower((string) $type)] ?? self::$ruleTypes['default'];
+        $rule = static::$ruleTypes[$type] ?? static::$ruleTypes['default'];
 
         // when $rule is an alias
         if (is_string($rule)) {
@@ -477,14 +461,15 @@ class ScopeBuilder extends Control
      * Return an array of items id and name for a field.
      * Return field enum, values or reference values.
      */
-    protected function getFieldItems(Field $field, int $limit = 250): array
+    protected function getFieldItems(Field $field, ?int $limit = 250): array
     {
         $items = [];
         if ($field->enum) {
-            $items = array_chunk(array_combine($field->enum, $field->enum), $limit, true)[0];
+            $items = array_slice($field->enum, 0, $limit);
+            $items = array_combine($items, $items);
         }
         if ($field->values && is_array($field->values)) {
-            $items = array_chunk($field->values, $limit, true)[0];
+            $items = array_slice($field->values, 0, $limit, true);
         } elseif ($field->hasReference()) {
             $model = $field->getReference()->refModel($this->model);
             $model->setLimit($limit);
@@ -500,7 +485,7 @@ class ScopeBuilder extends Control
     /**
      * Returns the choices array for Select field rule.
      */
-    protected function getChoices(Field $field, $options = []): array
+    protected function getChoices(Field $field, array $options = []): array
     {
         $choices = $this->getFieldItems($field, $options['limit'] ?? 250);
 
@@ -524,7 +509,7 @@ class ScopeBuilder extends Control
                 'maxDepth' => $this->maxDepth,
                 'query' => $this->query,
                 'name' => $this->shortName,
-                'labels' => $this->labels ?: null,
+                'labels' => $this->labels !== [] ? $this->labels : null, // TODO do we need to really pass null for empty array?
                 'form' => $this->form->formElement->name,
                 'debug' => $this->options['debug'] ?? false,
             ],
@@ -541,12 +526,12 @@ class ScopeBuilder extends Control
 
         switch ($type) {
             case 'query-builder-group':
-                $components = array_map([static::class, 'queryToScope'], (array) $query['children']);
+                $components = array_map(fn ($v) => static::queryToScope($v), $query['children']);
                 $scope = new Scope($components, $query['logicalOperator']);
 
                 break;
             case 'query-builder-rule':
-                $scope = self::queryToCondition($query);
+                $scope = static::queryToCondition($query);
 
                 break;
             default:
@@ -588,12 +573,12 @@ class ScopeBuilder extends Control
                 break;
             case self::OPERATOR_IN:
             case self::OPERATOR_NOT_IN:
-                $value = explode(self::detectDelimiter($value), (string) $value);
+                $value = explode(static::detectDelimiter($value), (string) $value);
 
                 break;
         }
 
-        $operatorsMap = array_merge(...array_values(self::$operatorsMap));
+        $operatorsMap = array_merge(...array_values(static::$operatorsMap));
 
         $operator = $operator ? ($operatorsMap[strtolower($operator)] ?? '=') : null;
 
@@ -603,20 +588,20 @@ class ScopeBuilder extends Control
     /**
      * Converts Scope or Condition to VueQueryBuilder query array.
      */
-    public static function scopeToQuery(Scope\AbstractScope $scope, $inputsMap = []): array
+    public static function scopeToQuery(Scope\AbstractScope $scope, array $inputsMap = []): array
     {
         $query = [];
         if ($scope instanceof Scope\Condition) {
             $query = [
                 'type' => 'query-builder-rule',
-                'query' => self::conditionToQuery($scope, $inputsMap),
+                'query' => static::conditionToQuery($scope, $inputsMap),
             ];
         }
 
         if ($scope instanceof Scope) {
             $children = [];
             foreach ($scope->getNestedConditions() as $nestedCondition) {
-                $children[] = self::scopeToQuery($nestedCondition, $inputsMap);
+                $children[] = static::scopeToQuery($nestedCondition, $inputsMap);
             }
 
             $query = [
@@ -634,7 +619,7 @@ class ScopeBuilder extends Control
     /**
      * Converts a Condition to VueQueryBuilder query array.
      */
-    public static function conditionToQuery(Scope\Condition $condition, $inputsMap = []): array
+    public static function conditionToQuery(Scope\Condition $condition, array $inputsMap = []): array
     {
         if (is_string($condition->key)) {
             $rule = $condition->key;
@@ -681,24 +666,25 @@ class ScopeBuilder extends Control
                     Condition::OPERATOR_EQUALS => Condition::OPERATOR_IN,
                     Condition::OPERATOR_DOESNOT_EQUAL => Condition::OPERATOR_NOT_IN,
                 ];
-                $value = implode(',', $value);
+                $value = implode(', ', $value);
                 $operator = $map[$operator] ?? Condition::OPERATOR_NOT_IN;
             }
 
-            $operatorsMap = array_merge(self::$operatorsMap[$inputType] ?? [], self::$operatorsMap['text']);
-            $operator = array_search(strtoupper($operator), $operatorsMap, true) ?: self::OPERATOR_EQUALS;
+            $operatorsMap = array_merge(static::$operatorsMap[$inputType] ?? [], static::$operatorsMap['text']);
+            $operatorKey = array_search(strtoupper($operator), $operatorsMap, true);
+            $operator = $operatorKey !== false ? $operatorKey : self::OPERATOR_EQUALS;
         }
 
         return [
             'rule' => $rule,
             'operator' => $operator,
             'value' => $value,
-            'option' => self::getOption($inputType, $value, $condition),
+            'option' => static::getOption($inputType, $value, $condition),
         ];
     }
 
     /**
-     * return extra value option associate with certain inputType or null otherwise.
+     * Return extra value option associate with certain inputType or null otherwise.
      */
     protected static function getOption(string $type, string $value, Condition $condition): ?array
     {
@@ -727,20 +713,17 @@ class ScopeBuilder extends Control
     /**
      * Auto-detects a string delimiter based on list of predefined values in ScopeBuilder::$listDelimiters in order of priority.
      *
-     * @param string $value
-     *
-     * @return string
      * @phpstan-return non-empty-string
      */
-    public static function detectDelimiter($value)
+    public static function detectDelimiter(string $value): string
     {
         $matches = [];
-        foreach (self::$listDelimiters as $delimiter) {
-            $matches[$delimiter] = substr_count((string) $value, $delimiter);
+        foreach (static::$listDelimiters as $delimiter) {
+            $matches[$delimiter] = substr_count($value, $delimiter);
         }
 
         $max = array_keys($matches, max($matches), true);
 
-        return reset($max) ?: reset(self::$listDelimiters);
+        return $max !== [] ? reset($max) : reset(static::$listDelimiters);
     }
 }

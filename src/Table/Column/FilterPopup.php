@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
+use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Jquery;
@@ -84,7 +85,7 @@ class FilterPopup extends Popup
      */
     public function isFilterOn(): bool
     {
-        return !empty($this->recallData());
+        return ($this->recallData() ?? '') !== '';
     }
 
     /**
@@ -100,9 +101,9 @@ class FilterPopup extends Popup
     /**
      * Set filter condition base on the field Type model use in this FilterPopup.
      *
-     * @return mixed
+     * @return Model
      */
-    public function setFilterCondition($tableModel)
+    public function setFilterCondition(Model $tableModel)
     {
         return $this->form->model->setConditionForModel($tableModel);
     }

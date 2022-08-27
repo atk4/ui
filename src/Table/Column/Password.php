@@ -14,7 +14,7 @@ class Password extends Table\Column
 {
     public $sortable = false;
 
-    public function getDataCellTemplate(Field $field = null)
+    public function getDataCellTemplate(Field $field = null): string
     {
         return '***';
     }

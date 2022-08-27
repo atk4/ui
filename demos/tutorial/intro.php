@@ -146,7 +146,7 @@ $wizard->addStep('Business Model', function ($page) {
         */
         session_start();
 
-        $model = new DemoInvoice(new Persistence\Array_($_SESSION['atk4_ui_intro_demo'] ?? []), ['dateFormat' => $owner->getApp()->uiPersistence->dateFormat]);
+        $model = new DemoInvoice(new Persistence\Array_($_SESSION['atk4_ui_intro_demo'] ?? []));
         $model->onHook(Model::HOOK_AFTER_SAVE, function (Model $model) {
             $_SESSION['atk4_ui_intro_demo'][$model->getId()] = (clone $model->getModel())->addCondition($model->idField, $model->getId())->export(null, null, false)[$model->getId()];
         });
@@ -209,7 +209,7 @@ $wizard->addStep('Persistence', function ($page) {
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         session_start();
 
-        $model = new DemoInvoice(new Persistence\Array_($_SESSION['atk4_ui_intro_demo'] ?? []), ['dateFormat' => $owner->getApp()->uiPersistence->dateFormat]);
+        $model = new DemoInvoice(new Persistence\Array_($_SESSION['atk4_ui_intro_demo'] ?? []));
         $model->onHook(Model::HOOK_AFTER_SAVE, function (Model $model) {
             $_SESSION['atk4_ui_intro_demo'][$model->getId()] = (clone $model->getModel())->addCondition($model->idField, $model->getId())->export(null, null, false)[$model->getId()];
         });

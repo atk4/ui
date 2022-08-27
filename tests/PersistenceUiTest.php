@@ -26,15 +26,15 @@ class PersistenceUiTest extends TestCase
         }
 
         $uiValue = $p->typecastSaveField($field, $phpValue);
-        $this->assertSame($expectedUiValue, $uiValue);
+        static::assertSame($expectedUiValue, $uiValue);
         $readPhpValue = $p->typecastLoadField($field, $uiValue);
         if ($readPhpValue instanceof \DateTimeInterface) {
             $this->{'assertEquals'}($phpValue, $readPhpValue);
         } else {
-            $this->assertSame($phpValue, $readPhpValue);
+            static::assertSame($phpValue, $readPhpValue);
         }
         $uiValue = $p->typecastSaveField($field, $readPhpValue);
-        $this->assertSame($expectedUiValue, $uiValue);
+        static::assertSame($expectedUiValue, $uiValue);
     }
 
     public function providerTypecast(): iterable

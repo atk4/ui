@@ -35,6 +35,7 @@ class Modal extends View
     public $title;
     /** @var string */
     public $loadingLabel = 'Loading...';
+    /** @var string */
     public $headerCss = 'header';
     public $ui = 'modal';
     /** @var \Closure|null */
@@ -55,7 +56,7 @@ class Modal extends View
     public $contentCss = ['img', 'content', 'atk-dialog-content'];
 
     /**
-     * if true, the <div class="actions"> at the bottom of the modal is
+     * If true, the <div class="actions"> at the bottom of the modal is
      * shown. Automatically set to true if any actions are added.
      *
      * @var bool
@@ -98,7 +99,7 @@ class Modal extends View
      * The cbView only will be loaded dynamically within modal
      * div.atk-content.
      */
-    public function enableCallback()
+    public function enableCallback(): void
     {
         $this->cbView = View::addTo($this);
         $this->cbView->stickyGet('__atk_m', $this->name);
@@ -114,8 +115,10 @@ class Modal extends View
 
     /**
      * Add CSS classes to "content" div.
+     *
+     * @param string|array $class
      */
-    public function addContentCss($class)
+    public function addContentCss($class): void
     {
         $this->contentCss = array_merge($this->contentCss, is_string($class) ? [$class] : $class);
     }
@@ -125,14 +128,12 @@ class Modal extends View
      * Will trigger modal to be show on page.
      * ex: $button->on('click', $modal->show());.
      *
-     * @param array $args
-     *
-     * @return mixed
+     * @return JsChain
      */
-    public function show($args = [])
+    public function show(array $args = [])
     {
         $js_chain = $this->js();
-        if (!empty($args)) {
+        if ($args !== []) {
             $js_chain->data(['args' => $args]);
         }
 
@@ -142,7 +143,7 @@ class Modal extends View
     /**
      * Hide modal from page.
      *
-     * @return mixed
+     * @return JsChain
      */
     public function hide()
     {
@@ -151,6 +152,9 @@ class Modal extends View
 
     /**
      * Set modal option.
+     *
+     * @param string $option
+     * @param mixed  $value
      *
      * @return $this
      */
@@ -163,6 +167,8 @@ class Modal extends View
 
     /**
      * Set modal options passing an array.
+     *
+     * @param array<string, mixed> $options
      *
      * @return $this
      */
@@ -205,6 +211,8 @@ class Modal extends View
     /**
      * Set modal transition.
      *
+     * @param string $transitionType
+     *
      * @return $this
      */
     public function transition($transitionType)
@@ -217,6 +225,8 @@ class Modal extends View
     /**
      * Set modal transition duration.
      *
+     * @param float|int $time
+     *
      * @return $this
      */
     public function duration($time)
@@ -228,15 +238,23 @@ class Modal extends View
 
     /**
      * Add modal settings.
+     *
+     * @param string $settingOption
+     * @param mixed  $value
+     *
+     * @return $this
      */
     public function settings($settingOption, $value)
     {
         $this->options['setting'][$settingOption] = $value;
+
+        return $this;
     }
 
     /**
      * Add a deny action to modal.
      *
+     * @param string           $label
      * @param JsExpressionable $jsAction javascript action that will run when deny is click
      *
      * @return $this
@@ -254,6 +272,7 @@ class Modal extends View
     /**
      * Add an approve action button to modal.
      *
+     * @param string           $label
      * @param JsExpressionable $jsAction javascript action that will run when deny is click
      *
      * @return $this
@@ -270,6 +289,8 @@ class Modal extends View
 
     /**
      * Add an action button to modal.
+     *
+     * @param View $button
      *
      * @return $this
      */
@@ -295,10 +316,11 @@ class Modal extends View
 
     protected function renderView(): void
     {
+        $data = [];
         $data['type'] = $this->type;
         $data['label'] = $this->loadingLabel;
 
-        if (!empty($this->title)) {
+        if ($this->title) {
             $this->template->trySet('title', $this->title);
             $this->template->trySet('headerCss', $this->headerCss);
         }
@@ -333,7 +355,7 @@ class Modal extends View
             $this->template->trySet('close', 'icon close');
         }
 
-        if (!empty($this->args)) {
+        if ($this->args) {
             $data['args'] = $this->args;
         }
         $this->js(true)->data($data);

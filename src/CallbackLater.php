@@ -15,11 +15,6 @@ class CallbackLater extends Callback
     /**
      * Executes user-specified action before rendering or if App is
      * already in rendering state, then before output.
-     *
-     * @param \Closure $fx
-     * @param array    $args
-     *
-     * @return mixed
      */
     public function set($fx = null, $args = null)
     {
@@ -32,5 +27,7 @@ class CallbackLater extends Callback
         $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () use ($fx, $args) {
             return parent::set($fx, $args);
         });
+
+        return null;
     }
 }

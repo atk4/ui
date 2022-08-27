@@ -14,7 +14,7 @@ use Atk4\Data\Model;
  */
 class CardTable extends Table
 {
-    protected $_bypass = false;
+    protected bool $_bypass = false;
 
     /**
      * @param array<int, string>|null $columns
@@ -56,7 +56,7 @@ class CardTable extends Table
                 $ret->attr['all']['class'] = ['single line'];
             }
 
-            return $ret;
+            return [$ret];
         }]);
         $this->_bypass = false;
     }

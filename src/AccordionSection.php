@@ -6,6 +6,8 @@ namespace Atk4\Ui;
 
 /**
  * An accordion item in Accordion.
+ *
+ * @method Accordion getOwner()
  */
 class AccordionSection extends View
 {
@@ -17,6 +19,7 @@ class AccordionSection extends View
     /** @var VirtualPage|null The accordion item virtual page. */
     public $virtualPage;
 
+    /** @var string */
     public $icon = 'dropdown';
 
     protected function renderView(): void

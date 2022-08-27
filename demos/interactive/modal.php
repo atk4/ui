@@ -124,7 +124,7 @@ $main = Menu::addTo($menuBar);
 $transitionMenu = $main->addMenu('Select Transition');
 
 foreach ($menuItems as $key => $items) {
-    if (!empty($items)) {
+    if ($items !== []) {
         $sm = $transitionMenu->addMenu($key);
         foreach ($items as $item) {
             $smi = $sm->addItem($item);
@@ -206,6 +206,8 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
 
             $session->memorize('success', true);
             $session->memorize('name', $form->model->get('name'));
+
+            $js = [];
             $js[] = $form->success('Thank you, ' . $form->model->get('name') . ' you can go on!');
             $js[] = $nextAction->js()->removeClass('disabled');
 

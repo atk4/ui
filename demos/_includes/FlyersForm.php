@@ -11,9 +11,9 @@ use Atk4\Ui\JsToast;
 
 class FlyersForm extends Form
 {
-    public $flyers = [];
+    public array $flyers = [];
 
-    public $cards = [
+    public array $cards = [
         ['name' => 'Frequent Flyer Program', 'id' => 1, 'nodes' => []],
         ['name' => 'World Class', 'id' => 2, 'nodes' => []],
         ['name' => 'Around the world', 'id' => 3, 'nodes' => []],

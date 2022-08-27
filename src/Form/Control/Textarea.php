@@ -12,11 +12,6 @@ class Textarea extends Input
     /** @var int Text area vertical size */
     public $rows = 2;
 
-    /**
-     * returns <input .../> tag.
-     *
-     * @return string
-     */
     public function getInput()
     {
         return $this->getApp()->getTag(

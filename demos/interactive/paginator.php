@@ -28,8 +28,8 @@ $label->set('Current page: ' . $bb->page);
 Header::addTo($app, ['Local Sticky Usage']);
 $seg = View::addTo($app, ['ui' => 'blue segment']);
 
-$month = $seg->stickyGet('month') ?: 1;
-$day = $seg->stickyGet('day') ?: 1;
+$month = $seg->stickyGet('month') ?? 1;
+$day = $seg->stickyGet('day') ?? 1;
 
 // we intentionally left 31 days here and do not calculate number of days in particular month to keep example simple
 $monthPaginator = Paginator::addTo($seg, ['total' => 12, 'range' => 3, 'urlTrigger' => 'month']);

@@ -10,13 +10,9 @@ use Atk4\Data\Model\UserAction;
 use Atk4\Ui\AbstractView;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
-use Atk4\Ui\Item;
+use Atk4\Ui\MenuItem;
 use Atk4\Ui\View;
 
-/**
- * Class ExecutorFactory
- * Executor utility.
- */
 class ExecutorFactory
 {
     use WarnDynamicPropertyTrait;
@@ -24,6 +20,7 @@ class ExecutorFactory
     public const JS_EXECUTOR = self::class . '@jsExecutorSeed';
     public const STEP_EXECUTOR = self::class . '@stepExecutorSeed';
     public const CONFIRMATION_EXECUTOR = self::class . '@confirmationExecutorClass';
+
     public const BASIC_BUTTON = self::class . '@basicButton';
     public const MODAL_BUTTON = self::class . '@modalExecutorButton';
     public const TABLE_BUTTON = self::class . '@tableButton';
@@ -37,6 +34,8 @@ class ExecutorFactory
      * Store basic type of executor to use for create method.
      * Basic type can be changed or added globally via the registerTypeExecutor method.
      * A specific model/action executor may be set via the registerExecutor method.
+     *
+     * @var array<string, array>
      */
     protected $executorSeed = [
         self::JS_EXECUTOR => [JsCallbackExecutor::class],
@@ -52,7 +51,7 @@ class ExecutorFactory
      * Can be set to a callable method in order
      * to customize the return caption further more.
      *
-     * @var array[callable]|string
+     * @var array<string, string|array<string, string>>
      */
     protected $triggerCaption = [
         self::MODAL_BUTTON => [
@@ -67,7 +66,7 @@ class ExecutorFactory
      * They can be store per either view type or
      * model/action name.
      *
-     * @var array[]|View|callable
+     * @var array<string, array|View>
      */
     protected $triggerSeed = [
         self::TABLE_BUTTON => [
@@ -82,17 +81,15 @@ class ExecutorFactory
     /**
      * Register an executor for basic type.
      */
-    public function registerTypeExecutor(string $type, $seed)
+    public function registerTypeExecutor(string $type, array $seed): void
     {
         $this->executorSeed[$type] = $seed;
     }
 
     /**
      * Register an executor instance for a specific model User action.
-     *
-     * @param array|ExecutorInterface $seed
      */
-    public function registerExecutor(UserAction $action, $seed)
+    public function registerExecutor(UserAction $action, array $seed): void
     {
         $this->executorSeed[$this->getModelId($action)][$action->shortName] = $seed;
     }
@@ -103,7 +100,7 @@ class ExecutorFactory
      *
      * @param array|View $seed
      */
-    public function registerTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false)
+    public function registerTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false): void
     {
         if ($isSpecific) {
             $this->triggerSeed[$type][$this->getModelId($action)][$action->shortName] = $seed;
@@ -115,7 +112,7 @@ class ExecutorFactory
     /**
      * Set an action trigger type to use it's default seed.
      */
-    public function useTriggerDefault(string $type)
+    public function useTriggerDefault(string $type): void
     {
         $this->triggerSeed[$type] = [];
     }
@@ -123,7 +120,7 @@ class ExecutorFactory
     /**
      * Register a trigger caption.
      */
-    public function registerCaption(UserAction $action, string $caption, bool $isSpecific = false, string $type = null)
+    public function registerCaption(UserAction $action, string $caption, bool $isSpecific = false, string $type = null): void
     {
         if ($isSpecific) {
             $this->triggerCaption[$this->getModelId($action)][$action->shortName] = $caption;
@@ -134,14 +131,20 @@ class ExecutorFactory
         }
     }
 
-    public function create(UserAction $action, View $owner, string $requiredType = null): object
+    /**
+     * @return AbstractView&ExecutorInterface
+     */
+    public function create(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
     {
         return $this->createExecutor($action, $owner, $requiredType);
     }
 
-    public function createTrigger(UserAction $action, string $type = null): object
+    /**
+     * @return ($type is self::MENU_ITEM ? MenuItem : ($type is self::TABLE_MENU_ITEM ? MenuItem : Button))
+     */
+    public function createTrigger(UserAction $action, string $type = null): View
     {
-        return $this->createActionTrigger($action, $type);
+        return $this->createActionTrigger($action, $type); // @phpstan-ignore-line
     }
 
     public function getCaption(UserAction $action, string $type = null): string
@@ -150,9 +153,9 @@ class ExecutorFactory
     }
 
     /**
-     * Create proper executor based on action properties.
+     * @return AbstractView&ExecutorInterface
      */
-    protected function createExecutor(UserAction $action, View $owner, string $requiredType = null): AbstractView
+    protected function createExecutor(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
     {
         // required a specific executor type.
         if ($requiredType) {
@@ -174,6 +177,7 @@ class ExecutorFactory
             }
         }
 
+        /** @var AbstractView&ExecutorInterface */
         $executor = $owner->add(Factory::factory($seed));
         $executor->setAction($action);
 
@@ -213,11 +217,11 @@ class ExecutorFactory
 
                 break;
             case self::MENU_ITEM:
-                $seed = [Item::class, $this->getActionCaption($action, $type), 'class.item' => true];
+                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'class.item' => true];
 
                 break;
             case self::TABLE_MENU_ITEM:
-                $seed = [Item::class, $this->getActionCaption($action, $type), 'name' => false, 'class.item' => true];
+                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'name' => false, 'class.item' => true];
 
                 break;
             default:
@@ -247,7 +251,7 @@ class ExecutorFactory
      */
     protected function getAddMenuItem(UserAction $action): array
     {
-        return [Item::class, $this->getAddActionCaption($action), 'icon' => 'plus'];
+        return [MenuItem::class, $this->getAddActionCaption($action), 'icon' => 'plus'];
     }
 
     /**

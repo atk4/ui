@@ -7,7 +7,6 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
-use Atk4\Ui\Form\Control\Multiline;
 use Atk4\Ui\Header;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsFunction;
@@ -18,13 +17,9 @@ require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
 
-$dateFormat = $app->uiPersistence->dateFormat;
-$timeFormat = $app->uiPersistence->timeFormat;
-
 /** @var Model $inventoryItemClass */
 $inventoryItemClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
-    public $dateFormat;
-    public $timeFormat;
+    /** @var Persistence */
     public $countryPersistence;
 
     protected function init(): void
@@ -34,47 +29,47 @@ $inventoryItemClass = AnonymousClassNameCache::get_class(fn () => new class() ex
         $this->addField('item', [
             'required' => true,
             'default' => 'item',
-            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
+            'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->addField('inv_date', [
             'default' => new \DateTime(),
             'type' => 'date',
-            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
+            'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->addField('inv_time', [
             'default' => new \DateTime(),
             'type' => 'time',
-            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
+            'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->hasOne('country', [
             'model' => new Country($this->countryPersistence),
-            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 3]]],
+            'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 3]]],
         ]);
         $this->addField('qty', [
             'type' => 'integer',
             'caption' => 'Qty / Box',
             'default' => 1,
             'required' => true,
-            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
+            'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->addField('box', [
             'type' => 'integer',
             'caption' => '# of Boxes',
             'default' => 1,
             'required' => true,
-            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 2]]],
+            'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]],
         ]);
         $this->addExpression('total', [
             'expr' => function (Model $row) {
                 return $row->get('qty') * $row->get('box');
             },
             'type' => 'integer',
-            'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 1, 'class' => 'blue']]],
+            'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 1, 'class' => 'blue']]],
         ]);
     }
 });
 
-$inventory = new $inventoryItemClass(new Persistence\Array_(), ['dateFormat' => $dateFormat, 'timeFormat' => $timeFormat, 'countryPersistence' => $app->db]);
+$inventory = new $inventoryItemClass(new Persistence\Array_(), ['countryPersistence' => $app->db]);
 
 // Populate some data.
 $total = 0;
@@ -94,8 +89,8 @@ for ($i = 1; $i < 3; ++$i) {
 $form = Form::addTo($app);
 
 // Add multiline field and set model.
-/** @var Multiline */
-$multiline = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
+/** @var Form\Control\Multiline */
+$multiline = $form->addControl('ml', [Form\Control\Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
 $multiline->setModel($inventory);
 
 // Add total field.
@@ -120,7 +115,7 @@ $multiline->jsAfterAdd = new JsFunction(['value'], [new JsExpression('console.lo
 $multiline->jsAfterDelete = new JsFunction(['value'], [new JsExpression('console.log(value)')]);
 
 $form->onSubmit(function (Form $form) use ($multiline) {
-    $rows = $multiline->saveRows()->getModel()->export();
+    $rows = $multiline->saveRows()->model->export();
 
     return new JsToast($form->getApp()->encodeJson(array_values($rows)));
 });

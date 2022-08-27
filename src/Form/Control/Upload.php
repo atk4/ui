@@ -8,16 +8,12 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\JsExpressionable;
-use Atk4\Ui\View;
 
-/**
- * Class Upload.
- */
 class Upload extends Input
 {
     public string $inputType = 'hidden';
 
-    /** @var View|null The action button to open file browser dialog. */
+    /** @var Button|array|null The action button to open file browser dialog. */
     public $action;
 
     /**
@@ -26,7 +22,7 @@ class Upload extends Input
      * If not set, will default to file name.
      * file id is also sent with onDelete Callback.
      *
-     * @var string
+     * @var string|null
      */
     public $fileId;
 
@@ -52,11 +48,12 @@ class Upload extends Input
      */
     public $accept = [];
 
-    /** @var bool Whether cb has been defined or not. */
-    public $hasUploadCb = false;
-    public $hasDeleteCb = false;
+    /** Whether callback has been defined or not. */
+    public bool $hasUploadCb = false;
+    /** Whether callback has been defined or not. */
+    public bool $hasDeleteCb = false;
 
-    /** @var JsExpressionable[] */
+    /** @var array<int, JsExpressionable> */
     public $jsActions = [];
 
     public const UPLOAD_ACTION = 'upload';
@@ -97,26 +94,29 @@ class Upload extends Input
     /**
      * Set input field value.
      *
-     * @param mixed $value the field input value
+     * @param mixed $value
      *
      * @return $this
      */
-    public function setInput($value, $junk = null)
+    public function setInput($value)
     {
-        return parent::set($value, $junk);
+        return parent::set($value, null);
     }
 
     /**
      * Get input field value.
      *
-     * @return array|false|mixed|string|null
+     * @return mixed
      */
     public function getInputValue()
     {
         return $this->entityField ? $this->entityField->get() : $this->content;
     }
 
-    public function setFileId($id)
+    /**
+     * @param string $id
+     */
+    public function setFileId($id): void
     {
         $this->fileId = $id;
     }
@@ -126,7 +126,7 @@ class Upload extends Input
      *
      * @param JsExpressionable $action
      */
-    public function addJsAction($action)
+    public function addJsAction($action): void
     {
         $this->jsActions[] = $action;
     }
@@ -206,8 +206,8 @@ class Upload extends Input
             }
         }
 
-        if (!empty($this->accept)) {
-            $this->template->trySet('accept', implode(',', $this->accept));
+        if ($this->accept !== []) {
+            $this->template->trySet('accept', implode(', ', $this->accept));
         }
         if ($this->multiple) {
             $this->template->trySet('multiple', 'multiple');
@@ -220,7 +220,7 @@ class Upload extends Input
         $this->js(true)->atkFileUpload([
             'uri' => $this->cb->getJsUrl(),
             'action' => $this->action->name,
-            'file' => ['id' => $this->fileId ?: $this->entityField->get(), 'name' => $this->getInputValue()],
+            'file' => ['id' => $this->fileId ?? $this->entityField->get(), 'name' => $this->getInputValue()],
             'submit' => ($this->form->buttonSave) ? $this->form->buttonSave->name : null,
         ]);
     }

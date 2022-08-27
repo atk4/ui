@@ -22,7 +22,7 @@ class Layout extends AbstractLayout
     /** @var string Default input template file. */
     public $defaultInputTemplate = 'form/layout/generic-input.html';
 
-    /** @var string If specified will appear on top of the group. Can be string or Label object. */
+    /** @var string|null If specified will appear on top of the group. Can be string or Label object. */
     public $label;
 
     /**
@@ -59,7 +59,7 @@ class Layout extends AbstractLayout
     /**
      * Adds Button.
      *
-     * @param Button|array|string $seed
+     * @param Button|array $seed
      *
      * @return Button
      */
@@ -171,13 +171,13 @@ class Layout extends AbstractLayout
 
             // Anything but controls or explicitly defined controls get inserted directly
             if (!$element instanceof Control || !$element->layoutWrap) {
-                $this->template->dangerouslyAppendHtml('Content', $element->getHtml());
+                $this->template->dangerouslyAppendHtml('Content', $element->getHtml()); // @phpstan-ignore-line
 
                 continue;
             }
 
             $template = $element->renderLabel ? $labeledControl : $noLabelControl;
-            $label = $element->caption ?: $element->entityField->getField()->getCaption();
+            $label = $element->caption ?? $element->entityField->getField()->getCaption();
 
             // Anything but form controls gets inserted directly
             if ($element instanceof Control\Checkbox) {
@@ -202,13 +202,13 @@ class Layout extends AbstractLayout
             $template->dangerouslySetHtml('Input', $element->getHtml());
             $template->trySet('label', $label);
             $template->trySet('labelFor', $element->name . '_input');
-            $template->set('controlClass', $element->getControlClass());
+            $template->set('controlClass', $element->controlClass);
 
             if ($element->entityField->getField()->required) {
                 $template->append('controlClass', 'required ');
             }
 
-            if (isset($element->width)) {
+            if ($element->width) {
                 $template->append('controlClass', $element->width . ' wide ');
             }
 
@@ -234,7 +234,7 @@ class Layout extends AbstractLayout
 
         // Now collect JS from everywhere
         foreach ($this->elements as $element) {
-            if ($element->_jsActions) {
+            if ($element->_jsActions) { // @phpstan-ignore-line
                 $this->_jsActions = array_merge_recursive($this->_jsActions, $element->_jsActions);
             }
         }

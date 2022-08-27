@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Crud;
-use Atk4\Ui\Form\Control\Multiline;
+use Atk4\Ui\Form;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -37,17 +37,17 @@ if (!class_exists(Client::class)) {
 
             $this->addField('email', [
                 'required' => true,
-                'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'envelope', 'type' => 'email']]],
+                'ui' => ['multiline' => [Form\Control\Multiline::INPUT => ['icon' => 'envelope', 'type' => 'email']]],
             ]);
             $this->addField('password', [
                 'required' => true,
-                'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'key', 'type' => 'password']]],
+                'ui' => ['multiline' => [Form\Control\Multiline::INPUT => ['icon' => 'key', 'type' => 'password']]],
             ]);
             $this->addField('site', ['required' => true]);
             $this->addField('type', [
                 'default' => 'user',
                 'values' => ['user' => 'Regular User', 'admin' => 'System Admin'],
-                'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 'four']]],
+                'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 'four']]],
             ]);
         }
     }

@@ -67,7 +67,7 @@ Adding Columns
 
 .. php:method:: setModel(\Atk4\Data\Model $model, $fields = null)
 
-.. php:method:: addColumn($name, $columnDecorator = null, $field = null)
+.. php:method:: addColumn($name, $columnDecorator = [], $field = null)
 
 To change the order or explicitly specify which field columns must appear, if you pass list of those
 fields as second argument to setModel::
@@ -143,13 +143,6 @@ display values of specific model Field.
 If the value of the field can be displayed by :php:class:`Table\\Column` then :php:class:`Table` will
 respord with object of this class. Since the default column does not contain any customization,
 then to save memory Table will re-use the same objects for all generic fields.
-
-.. php:attr:: defaultColumn
-
-Protected property that will contain "generic" column that will be used to format all
-columns, unless a different column type is specified or the Field type will require a use
-of a different class (e.g. 'atk4_money'). Value will be initialized after first call to
-:php:meth:`Table::addColumn`
 
 .. php:attr:: columns
 
@@ -266,10 +259,10 @@ The tag will override model value. Here is example usage of :php:meth:`Table\\Co
             return '{$_expired}';
         }
 
-        public function getHtmlTags(\Atk4\Data\Model $row)
+        public function getHtmlTags(\Atk4\Data\Model $row, ?\Atk4\Data\Field $field): array
         {
             return [
-                '_expired' => $row->get('date') < new \DateTime()
+                '_expired' => $field->get($row) < new \DateTime()
                     ? '<td class="danger">EXPIRED</td>'
                     : '<td></td>',
             ];
@@ -476,7 +469,7 @@ By default Table will include ID for each row: `<tr data-id="123">`. The followi
 demonstrates how various standard column types are relying on this property::
 
     $table->on('click', 'td', new JsExpression(
-        'document.location=page.php?id=[]',
+        'document.location = "page.php?id=" + []',
         [(new Jquery())->closest('tr')->data('id')]
     ));
 

@@ -68,11 +68,10 @@ abstract class FilterModel extends Model
             'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
         ][$field->type ?? 'string'];
 
-        /*
-         * You can set your own filter model condition by extending
-         * Field class and setting your filter model class.
-         */
-        if (!@empty($field->filterModel)) {
+        // You can set your own filter model condition by extending
+        // Field class and setting your filter model class.
+        // TODO remove in favor of some Field::ui config
+        if (@$field->filterModel) { // @phpstan-ignore-line
             if ($field->filterModel instanceof self) {
                 return $field->filterModel;
             }
@@ -98,9 +97,9 @@ abstract class FilterModel extends Model
     }
 
     /**
-     * Perform further initialisation.
+     * Perform further initialization.
      */
-    public function afterInit()
+    public function afterInit(): void
     {
         $this->addField('name', ['default' => $this->lookupField->shortName, 'system' => true]);
 
@@ -138,8 +137,9 @@ abstract class FilterModel extends Model
      * If form filter need to have a field display at certain condition, then
      * override this method in your FilterModel\TypeModel.
      */
-    public function getFormDisplayRules()
+    public function getFormDisplayRules(): array
     {
+        return [];
     }
 
     /**

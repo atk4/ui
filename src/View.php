@@ -9,8 +9,7 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**
- * Implements a most core view, which all of the other components descend
- * form.
+ * Base view of all other UI components.
  */
 class View extends AbstractView implements JsExpressionable
 {
@@ -28,10 +27,8 @@ class View extends AbstractView implements JsExpressionable
     /**
      * Name of the region in the parent's template where this object
      * will output itself.
-     *
-     * @var string|null
      */
-    public $region;
+    public ?string $region = null;
 
     /**
      * Enables UI keyword for Semantic UI indicating that this is a
@@ -257,8 +254,10 @@ class View extends AbstractView implements JsExpressionable
      * In addition to adding a child object, sets up it's template
      * and associate it's output with the region in our template.
      *
-     * @param View              $object
+     * @param AbstractView      $object
      * @param string|array|null $region
+     *
+     * @return ($object is self ? self : AbstractView)
      */
     public function add($object, $region = null): AbstractView
     {
@@ -266,7 +265,7 @@ class View extends AbstractView implements JsExpressionable
             throw new \Error('Too many method arguments');
         }
 
-        if (!is_object($object)) {
+        if (!is_object($object)) { // @phpstan-ignore-line
             // for BC do not throw
             // later consider to accept strictly objects only
             $object = AbstractView::addToWithCl($this, $object, [], true);
@@ -283,16 +282,11 @@ class View extends AbstractView implements JsExpressionable
             $region = $args['region'] ?? null;
             unset($args['region']);
         } else {
-            $args = null;
+            $args = [];
         }
 
         // set region
         if ($region !== null) {
-            if (!is_string($region)) {
-                throw (new Exception('Region must be a string'))
-                    ->addMoreInfo('region_type', gettype($region));
-            }
-
             $object->setDefaults(['region' => $region]);
         }
 
@@ -503,7 +497,7 @@ class View extends AbstractView implements JsExpressionable
 
     // {{{ Sticky URLs
 
-    /** @var string[] stickyGet arguments */
+    /** @var array<string, string> stickyGet arguments */
     public $stickyArgs = [];
 
     /**
@@ -512,10 +506,8 @@ class View extends AbstractView implements JsExpressionable
      * $this->invokeInit().
      *
      * @param array $page
-     *
-     * @return string
      */
-    public function jsUrl($page = [])
+    public function jsUrl($page = []): string
     {
         return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
     }
@@ -526,10 +518,8 @@ class View extends AbstractView implements JsExpressionable
      * $this->invokeInit().
      *
      * @param string|array $page URL as string or array with page name as first element and other GET arguments
-     *
-     * @return string
      */
-    public function url($page = [])
+    public function url($page = []): string
     {
         return $this->getApp()->url($page, false, $this->_getStickyArgs());
     }
@@ -539,7 +529,7 @@ class View extends AbstractView implements JsExpressionable
      */
     protected function _getStickyArgs(): array
     {
-        if ($this->issetOwner() && $this->getOwner() instanceof self) {
+        if ($this->issetOwner()) {
             $stickyArgs = array_merge($this->getOwner()->_getStickyArgs(), $this->stickyArgs);
         } else {
             $stickyArgs = $this->stickyArgs;
@@ -587,10 +577,10 @@ class View extends AbstractView implements JsExpressionable
             array_walk(
                 $style,
                 function (&$item, $key) {
-                    $item = $key . ':' . $item;
+                    $item = $key . ': ' . $item;
                 }
             );
-            $this->template->append('style', implode(';', $style));
+            $this->template->append('style', implode('; ', $style) . ';');
         }
 
         if ($this->ui) {
@@ -612,7 +602,7 @@ class View extends AbstractView implements JsExpressionable
         if ($this->attr) {
             $tmp = [];
             foreach ($this->attr as $attr => $val) {
-                $tmp[] = $attr . '="' . $this->getApp()->encodeAttribute($val) . '"';
+                $tmp[] = $attr . '="' . $this->getApp()->encodeHtmlAttribute((string) $val) . '"';
             }
             $this->template->dangerouslySetHtml('attributes', implode(' ', $tmp));
         }
@@ -776,13 +766,13 @@ class View extends AbstractView implements JsExpressionable
      *
      * @param string|bool|null $when     Event when chain will be executed
      * @param JsExpressionable $action   JavaScript action
-     * @param string|View|null $selector If you wish to override jQuery($selector)
+     * @param string|self|null $selector If you wish to override jQuery($selector)
      *
      * @return Jquery
      */
     public function js($when = null, $action = null, $selector = null)
     {
-        $chain = new Jquery($selector ?: $this);
+        $chain = new Jquery($selector ?? $this);
 
         // Substitute $when to make it better work as a array key
         if ($when === true) {
@@ -830,7 +820,7 @@ class View extends AbstractView implements JsExpressionable
      *                                              of the vue component instance created via the vueService.
      * @param string|null      $componentDefinition The name of the js var holding a component definition object.
      *                                              This var must be defined and accessible in window object. window['var_name']
-     * @param string|View|null $selector            the selector for creating the base root object in Vue
+     * @param string|self|null $selector            the selector for creating the base root object in Vue
      *
      * @return $this
      */
@@ -877,6 +867,7 @@ class View extends AbstractView implements JsExpressionable
      */
     public function jsGetStoreData()
     {
+        $data = [];
         $data['local'] = json_decode($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null', true, 512, \JSON_THROW_ON_ERROR);
         $data['session'] = json_decode($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null', true, 512, \JSON_THROW_ON_ERROR);
 
@@ -1111,7 +1102,7 @@ class View extends AbstractView implements JsExpressionable
             }
         }
 
-        return implode(';', $actions);
+        return implode('; ', $actions);
     }
 
     /**

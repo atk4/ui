@@ -16,7 +16,7 @@ class PreviewExecutor extends BasicExecutor
     /** @var string can be "console", "text", or "html" */
     public $previewType = 'console';
 
-    public function initPreview()
+    public function initPreview(): void
     {
         if (!$this->hasAllArguments()) {
             Message::addTo($this, ['type' => 'error', $this->missingArgsMsg]);
@@ -49,6 +49,9 @@ class PreviewExecutor extends BasicExecutor
         });
     }
 
+    /**
+     * @return mixed
+     */
     public function executePreview()
     {
         $args = [];

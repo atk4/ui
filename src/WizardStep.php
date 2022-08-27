@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-/**
- * One step of the wizard.
- */
-class Step extends View
+class WizardStep extends View
 {
     public $defaultTemplate;
 
@@ -26,9 +23,12 @@ class Step extends View
     /** @var int Will be automatically assigned 0, 1, 2, etc,. */
     public $sequence;
 
+    /**
+     * @param string $title
+     */
     public function __construct($title)
     {
-        $this->title = $title;
+        parent::__construct(['title' => $title]);
     }
 
     protected function renderView(): void

@@ -36,7 +36,7 @@ class Column
     /** @var array Contains any custom attributes that may be applied on head, body or foot. */
     public $attr = [];
 
-    /** @var string If set, will override column header value. */
+    /** @var string|null If set, will override column header value. */
     public $caption;
 
     /** @var bool Is column sortable? */
@@ -72,7 +72,7 @@ class Column
     {
         $id = $this->name . '_ac';
 
-        $popup = $this->table->getOwner()->add($popup ?: [Popup::class])->setHoverable();
+        $popup = $this->table->getOwner()->add($popup ?? [Popup::class])->setHoverable();
 
         $this->setHeaderPopup($icon, $id);
 
@@ -97,8 +97,9 @@ class Column
      * Setup popup header action.
      *
      * @param string $class the css class for filter icon
+     * @param string $id
      */
-    public function setHeaderPopup($class, $id)
+    public function setHeaderPopup($class, $id): void
     {
         $this->hasHeaderAction = true;
 
@@ -111,8 +112,10 @@ class Column
 
     /**
      * Set header popup icon.
+     *
+     * @param string $icon
      */
-    public function setHeaderPopupIcon($icon)
+    public function setHeaderPopupIcon($icon): void
     {
         $this->headerActionTag = ['div', ['class' => 'atk-table-dropdown'],
             [
@@ -127,7 +130,7 @@ class Column
      * @param string      $icon
      * @param string|null $menuId the menu name
      */
-    public function addDropdown(array $items, \Closure $fx, $icon = 'caret square down', $menuId = null)
+    public function addDropdown(array $items, \Closure $fx, $icon = 'caret square down', $menuId = null): void
     {
         $menuItems = [];
         foreach ($items as $key => $item) {
@@ -145,6 +148,8 @@ class Column
      * Setup dropdown header action.
      * This method return a callback where you can detect
      * menu item change via $cb->onMenuItem($item) function.
+     *
+     * @param array $items
      *
      * @return JsCallback
      */
@@ -261,21 +266,19 @@ class Column
      * cell, fully formatted to be included in a Table. (<th>).
      *
      * @param mixed $value
-     *
-     * @return string
      */
-    public function getHeaderCellHtml(Field $field = null, $value = null)
+    public function getHeaderCellHtml(Field $field = null, $value = null): string
     {
         if ($tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value])) {
             return reset($tags);
         }
 
         if ($field === null) {
-            return $this->getTag('head', $this->caption ?: '', $this->table->sortable ? ['class' => ['disabled']] : []);
+            return $this->getTag('head', $this->caption ?? '', $this->table->sortable ? ['class' => ['disabled']] : []);
         }
 
         // if $this->caption is empty, header caption will be overriden by linked field definition
-        $caption = $this->caption ?: $field->getCaption();
+        $caption = $this->caption ?? $field->getCaption();
 
         $attr = [
             'data-column' => $this->columnData,
@@ -316,10 +319,8 @@ class Column
      * Return HTML for a total value of a specific field.
      *
      * @param mixed $value
-     *
-     * @return string
      */
-    public function getTotalsCellHtml(Field $field, $value)
+    public function getTotalsCellHtml(Field $field, $value): string
     {
         return $this->getTag('foot', $this->getApp()->uiPersistence->typecastSaveField($field, $value));
     }
@@ -351,10 +352,8 @@ class Column
      * by another template returned by getDataCellTemplate when multiple formatters are
      * applied to the same column. The first one to be applied is executed first, then
      * a subsequent ones are executed.
-     *
-     * @return string
      */
-    public function getDataCellTemplate(Field $field = null)
+    public function getDataCellTemplate(Field $field = null): string
     {
         if ($field) {
             return '{$' . $field->shortName . '}';
@@ -367,12 +366,9 @@ class Column
      * Return associative array of tags to be filled with pre-rendered HTML on
      * a column-basis. Will not be invoked if html-output is turned off for the table.
      *
-     * @param Model      $row   link to row data
-     * @param Field|null $field field being rendered
-     *
-     * @return array associative array with tags and their HTML values
+     * @return array<string, string>
      */
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         return [];
     }

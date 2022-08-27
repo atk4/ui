@@ -67,10 +67,10 @@ $table->addDecorator('amount', [Table\Column\Template::class, 'Refunded: {$amoun
 // column which uses selective format depending on condition
 $table->addColumn('amount_copy', [Table\Column\Multiformat::class, function ($a, $b) {
     if ($a->get('amount_copy') > 0) {
-        // Two formatters together
+        // two formatters together
         return [[Table\Column\Link::class], [Table\Column\Money::class]];
     } elseif (abs($a->get('amount_copy')) < 50) {
-        // One formatter, but inject template and some attributes
+        // one formatter, but inject template and some attributes
         return [[
             Table\Column\Template::class,
             'too <b>little</b> to <u>matter</u>',
@@ -78,8 +78,8 @@ $table->addColumn('amount_copy', [Table\Column\Multiformat::class, function ($a,
         ]];
     }
 
-    // Short way is to simply return seed
-    return Table\Column\Money::class;
+    // one formatter
+    return [[Table\Column\Money::class]];
 }, 'attr' => ['all' => ['class' => ['right aligned singel line']]]]);
 
 Header::addTo($app, ['Table with resizable columns', 'subHeader' => 'Just drag column header to resize', 'icon' => 'table']);

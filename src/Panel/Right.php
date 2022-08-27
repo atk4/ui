@@ -70,7 +70,7 @@ class Right extends View implements Loadable
     /**
      * Set the dynamic content of this view.
      */
-    public function addDynamicContent(LoadableContent $content)
+    public function addDynamicContent(LoadableContent $content): void
     {
         $this->dynamicContent = Content::addTo($this, [], ['LoadContent']);
     }
@@ -86,7 +86,7 @@ class Right extends View implements Loadable
     /**
      * Return js expression in order to retrieve panelService.
      */
-    public function service(): JsExpression
+    public function service(): JsChain
     {
         return new JsChain('atk.panelService');
     }
@@ -131,7 +131,7 @@ class Right extends View implements Loadable
      * js flyoutService will prevent closing of Flyout if a confirmation modal
      * is attached to it and flyoutService detect that the current open flyoutContent has warning on.
      */
-    public function addConfirmation(string $msg, string $title = 'Closing panel!', string $okBtn = null, string $cancelBtn = null)
+    public function addConfirmation(string $msg, string $title = 'Closing panel!', string $okBtn = null, string $cancelBtn = null): void
     {
         if (!$okBtn) {
             $okBtn = (new Button(['Ok']))->addClass('ok');

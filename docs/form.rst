@@ -253,7 +253,8 @@ There are 3 ways to define Data form control using 'string', 'json' or 'object':
     $form->addControl('accept_terms', [\Atk4\Ui\Form\Control\Checkbox::class], 'Accept Terms & Conditions');
     $form->addControl('gender', [], ['enum' => ['Female', 'Male']]);
 
-    class MyBoolean extends \Atk4\Data\Field {
+    class MyBoolean extends \Atk4\Data\Field
+    {
         public ?string $type = 'boolean';
         public $enum = ['N', 'Y'];
     }
@@ -288,7 +289,8 @@ example displays a registration form for a User::
     {
         public $table = 'user';
 
-        protected function init(): void {
+        protected function init(): void
+        {
             parent::init();
 
             $this->addField('email');
@@ -357,10 +359,12 @@ This is where ``$field->ui`` comes in (https://agile-data.readthedocs.io/en/deve
 
 You can specify ``'ui' => ['form' => $decorator_seed]`` when defining your model field inside your Model::
 
-    class User extends \Atk4\Data\Model {
+    class User extends \Atk4\Data\Model
+    {
         public $table = 'user';
 
-        protected function init(): void {
+        protected function init(): void
+        {
             parent::init();
 
             $this->addField('email');
@@ -730,7 +734,7 @@ ATK Data has two field flags - "nullable" and "required". Because ATK Data works
 values, the values are defined like this:
 
  - nullable = value of the field can be null.
- - required = value of the field must not be empty (see `empty()`), null is empty too.
+ - required = value of the field must not be empty/false/zero, null is empty too.
 
 Form changes things slightly, because it does not allow user to enter NULL values. For
 example - string (or unspecified type) fields will contain empty string if are not

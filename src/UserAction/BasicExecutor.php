@@ -27,7 +27,7 @@ class BasicExecutor extends View implements ExecutorInterface
     /** @var bool display header or not */
     public $hasHeader = true;
 
-    /** @var string header description */
+    /** @var string|null header description */
     public $description;
 
     /** @var string display message when action is disabled */
@@ -53,21 +53,20 @@ class BasicExecutor extends View implements ExecutorInterface
         return $this->action;
     }
 
-    /**
-     * Associate executor with action.
-     */
-    public function setAction(Model\UserAction $action): void
+    public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
         if (!$this->executorButton) {
             $this->executorButton = $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::BASIC_BUTTON);
         }
+
+        return $this;
     }
 
     /**
      * Provide values for named arguments.
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         // TODO: implement mechanism for validating arguments based on definition
 
@@ -106,7 +105,7 @@ class BasicExecutor extends View implements ExecutorInterface
         return true;
     }
 
-    protected function initPreview()
+    protected function initPreview(): void
     {
         // lets make sure that all arguments are supplied
         if (!$this->hasAllArguments()) {
@@ -141,16 +140,17 @@ class BasicExecutor extends View implements ExecutorInterface
             ? ($this->jsSuccess)($this, $this->action->getModel())
             : $this->jsSuccess;
 
-        return ($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) ?: $success) ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
+        return $this->hook(self::HOOK_AFTER_EXECUTE, [$return]) // @phpstan-ignore-line
+            ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : '')));
     }
 
     /**
      * Will add header if set.
      */
-    public function addHeader()
+    public function addHeader(): void
     {
         if ($this->hasHeader) {
-            Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?: $this->action->getDescription()]);
+            Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?? $this->action->getDescription()]);
         }
     }
 }

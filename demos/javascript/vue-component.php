@@ -10,8 +10,7 @@ use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Lister;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
-use Atk4\Ui\VueComponent\InlineEdit;
-use Atk4\Ui\VueComponent\ItemSearch;
+use Atk4\Ui\VueComponent;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -27,7 +26,7 @@ $model = $model->loadAny();
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
 Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
 
-$inline_edit = InlineEdit::addTo($app);
+$inline_edit = VueComponent\InlineEdit::addTo($app);
 $inline_edit->fieldName = $model->fieldName()->name;
 $inline_edit->setModel($model);
 
@@ -52,7 +51,7 @@ $lister_template = new HtmlTemplate('<div id="{$_id}">{List}<div class="ui icon 
 
 $view = View::addTo($app);
 
-$search = ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
+$search = VueComponent\ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
 $lister_container = View::addTo($view, ['template' => $lister_template]);
 $lister = Lister::addTo($lister_container, [], ['List']);
 $lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {

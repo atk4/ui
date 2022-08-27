@@ -26,6 +26,8 @@ class Status extends Table\Column
      */
     public function __construct($states)
     {
+        parent::__construct();
+
         $this->states = $states;
     }
 
@@ -51,7 +53,7 @@ class Status extends Table\Column
         );
     }
 
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         $cl = '';
 

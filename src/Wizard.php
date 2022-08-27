@@ -6,9 +6,6 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 
-/**
- * Wizard widget.
- */
 class Wizard extends View
 {
     use SessionTrait;
@@ -78,14 +75,14 @@ class Wizard extends View
     /**
      * Adds step to the wizard.
      *
-     * @param mixed $name Name of tab or Tab object
+     * @param string|array|WizardStep $name
      *
-     * @return View
+     * @return WizardStep
      */
     public function addStep($name, \Closure $fx)
     {
         $step = Factory::factory([
-            Step::class,
+            WizardStep::class,
             'wizard' => $this,
             'template' => clone $this->stepTemplate,
             'sequence' => count($this->steps),
@@ -112,7 +109,7 @@ class Wizard extends View
      * Adds an extra screen to show user when he goes beyond last step.
      * There won't be "back" button on this step anymore.
      */
-    public function addFinish(\Closure $fx)
+    public function addFinish(\Closure $fx): void
     {
         if (count($this->steps) === $this->currentStep + 1) {
             $this->buttonFinish->link($this->getUrl(count($this->steps)));
@@ -153,9 +150,9 @@ class Wizard extends View
     }
 
     /**
-     * Get URL to previous step. Will respect stickyGET.
+     * Generate a js that will navigate to next step URL.
      *
-     * @return string URL to previous step
+     * @return JsExpression
      */
     public function jsNext()
     {

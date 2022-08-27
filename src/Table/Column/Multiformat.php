@@ -24,20 +24,14 @@ class Multiformat extends Table\Column
 
     public function __construct(\Closure $callback)
     {
+        parent::__construct();
+
         $this->callback = $callback;
     }
 
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         $decorators = ($this->callback)($row, $field);
-        if (is_string($decorators)) {
-            $decorators = [[$decorators]];
-        }
-
-        if (is_object($decorators)) {
-            $decorators = [$decorators];
-        }
-
         // we need to smartly wrap things up
         $name = $field->shortName;
         $cell = null;
@@ -48,6 +42,7 @@ class Multiformat extends Table\Column
             if (!is_object($c)) {
                 $c = $this->getOwner()->decoratorFactory($field, $c);
             }
+            $c = Table\Column::assertInstanceOf($c);
 
             if (--$cnt) {
                 $html = $c->getDataCellTemplate($field);
@@ -67,9 +62,7 @@ class Multiformat extends Table\Column
             } else {
                 $cell = $html;
             }
-            if (!method_exists($c, 'getHtmlTags')) {
-                continue;
-            }
+
             $html_tags = array_merge($c->getHtmlTags($row, $field), $html_tags);
         }
 

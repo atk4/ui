@@ -17,7 +17,6 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationError;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
-use Atk4\Ui\Panel\Right;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Nyholm\Psr7\Response;
@@ -117,13 +116,13 @@ class App
     /** @var App\SessionManager */
     public $session;
 
-    /** @var string[] Extra HTTP headers to send on exit. */
-    protected $responseHeaders = [
+    /** @var array<string, string> Extra HTTP headers to send on exit. */
+    protected array $responseHeaders = [
         self::HEADER_STATUS_CODE => '200',
         'cache-control' => 'no-store', // disable caching by default
     ];
 
-    /** @var View[] Modal view that need to be rendered using json output. */
+    /** @var array<string, View> Modal view that need to be rendered using json output. */
     private $portals = [];
 
     /**
@@ -141,11 +140,12 @@ class App
     public $page;
 
     /** @var array global sticky arguments */
-    protected $stickyGetArguments = [
+    protected array $stickyGetArguments = [
         '__atk_json' => false,
         '__atk_tab' => false,
     ];
 
+    /** @var class-string */
     public $templateClass = HtmlTemplate::class;
 
     /** @var ResponseInterface */
@@ -249,17 +249,17 @@ class App
      * within specific location. This will keep track
      * of them when terminating app using json.
      *
-     * @param Modal|Right $portal
+     * @param Modal|Panel\Right $portal
      */
     public function registerPortals($portal): void
     {
         // TODO in https://github.com/atk4/ui/pull/1771 it has been discovered this method causes DOM code duplication,
         // for some reasons, it seems even not needed, at least all Unit & Behat tests pass
         // must be investigated
-        // $this->portals[$portal->shortName] = $portal;
+        // $this->portals[$portal->name] = $portal;
     }
 
-    public function setExecutorFactory(ExecutorFactory $factory)
+    public function setExecutorFactory(ExecutorFactory $factory): void
     {
         $this->executorFactory = $factory;
     }
@@ -269,7 +269,7 @@ class App
         return $this->executorFactory;
     }
 
-    protected function setupTemplateDirs()
+    protected function setupTemplateDirs(): void
     {
         if ($this->templateDir === null) {
             $this->templateDir = [];
@@ -378,8 +378,8 @@ class App
      * directly, instead call it form Callback, JsCallback or similar
      * other classes.
      *
-     * @param string|array $output  Array type is supported only for JSON response
-     * @param string[]     $headers content-type header must be always set or consider using App::terminateHtml() or App::terminateJson() methods
+     * @param string|array          $output  Array type is supported only for JSON response
+     * @param array<string, string> $headers content-type header must be always set or consider using App::terminateHtml() or App::terminateJson() methods
      *
      * @return never
      */
@@ -388,8 +388,7 @@ class App
         $this->setResponseHeaders($headers);
 
         $type = preg_replace('~;.*~', '', strtolower($this->response->getHeaderLine('content-type'))); // in LC without charset
-
-        if (empty($type)) {
+        if ($type === '') {
             throw new Exception('Content type must be always set');
         }
 
@@ -409,11 +408,11 @@ class App
             foreach ($this->getRenderedPortals() as $key => $modal) {
                 // add modal rendering to output
                 $keys[] = '#' . $key;
-                $output['atkjs'] .= ';' . $modal['js'];
+                $output['atkjs'] .= '; ' . $modal['js'];
                 $output['html'] .= $modal['html'];
             }
             if ($keys) {
-                $ids = implode(',', $keys);
+                $ids = implode(', ', $keys);
                 $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . $ids . '\').remove();';
             }
             $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
@@ -430,6 +429,8 @@ class App
     }
 
     /**
+     * @param string|array|View|HtmlTemplate $output
+     *
      * @return never
      */
     public function terminateHtml($output, array $headers = []): void
@@ -447,6 +448,8 @@ class App
     }
 
     /**
+     * @param string|array|View $output
+     *
      * @return never
      */
     public function terminateJson($output, array $headers = []): void
@@ -479,7 +482,7 @@ class App
             $this->html->invokeInit();
         }
 
-        $this->layout = $this->html->add($layout);
+        $this->layout = $this->html->add($layout); // @phpstan-ignore-line
 
         $this->initIncludes();
 
@@ -489,7 +492,7 @@ class App
     /**
      * Initialize JS and CSS includes.
      */
-    public function initIncludes()
+    public function initIncludes(): void
     {
         // jQuery
         $this->requireJs($this->cdn['jquery'] . '/jquery.min.js');
@@ -526,7 +529,7 @@ class App
      *
      * @param string $style CSS rules, like ".foo { background: red }".
      */
-    public function addStyle($style)
+    public function addStyle($style): void
     {
         $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('style', $style));
     }
@@ -534,23 +537,25 @@ class App
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
-     * @param View|string|array $seed   New object to add
+     * @param AbstractView      $object
      * @param string|array|null $region
+     *
+     * @return ($object is View ? View : AbstractView)
      */
-    public function add($seed, $region = null): AbstractView
+    public function add($object, $region = null): AbstractView
     {
         if (!$this->layout) { // @phpstan-ignore-line
             throw (new Exception('App layout is missing'))
-                ->addSolution('If you use $app->add() you should call $app->initLayout() first');
+                ->addSolution('$app->initLayout() must be called first');
         }
 
-        return $this->layout->add($seed, $region);
+        return $this->layout->add($object, $region);
     }
 
     /**
      * Runs app and echo rendered template.
      */
-    public function run()
+    public function run(): void
     {
         $isExitException = false;
         try {
@@ -670,7 +675,7 @@ class App
     /**
      * Remove sticky GET which was set by stickyGet.
      */
-    public function stickyForget(string $name)
+    public function stickyForget(string $name): void
     {
         unset($this->stickyGetArguments[$name]);
     }
@@ -681,10 +686,8 @@ class App
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
      * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
      * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
-     *
-     * @return string
      */
-    public function url($page = [], $needRequestUri = false, $extraRequestUriArgs = [])
+    public function url($page = [], $needRequestUri = false, $extraRequestUriArgs = []): string
     {
         if ($needRequestUri) {
             $page = $_SERVER['REQUEST_URI'];
@@ -746,10 +749,8 @@ class App
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
      * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
      * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
-     *
-     * @return string
      */
-    public function jsUrl($page = [], $needRequestUri = false, $extraRequestUriArgs = [])
+    public function jsUrl($page = [], $needRequestUri = false, $extraRequestUriArgs = []): string
     {
         // append to the end but allow override
         $extraRequestUriArgs = array_merge($extraRequestUriArgs, ['__atk_json' => 1], $extraRequestUriArgs);
@@ -936,7 +937,7 @@ class App
             } elseif ($key === 0) {
                 $tag = $val;
             } else {
-                $tmp[] = $key . '="' . $this->encodeAttribute($val) . '"';
+                $tmp[] = $key . '="' . $this->encodeHtmlAttribute((string) $val) . '"';
             }
         }
 
@@ -945,14 +946,10 @@ class App
 
     /**
      * Encodes string - removes HTML special chars.
-     *
-     * @param string $val
-     *
-     * @return string
      */
-    public function encodeAttribute($val)
+    public function encodeHtmlAttribute(string $val): string
     {
-        return htmlspecialchars((string) $val);
+        return htmlspecialchars($val);
     }
 
     /**
@@ -963,6 +960,9 @@ class App
         return htmlentities($val);
     }
 
+    /**
+     * @return mixed
+     */
     public function decodeJson(string $json)
     {
         $data = json_decode($json, true, 512, \JSON_BIGINT_AS_STRING | \JSON_THROW_ON_ERROR);
@@ -970,6 +970,9 @@ class App
         return $data;
     }
 
+    /**
+     * @param mixed $data
+     */
     public function encodeJson($data, bool $forceObject = false): string
     {
         $options = \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT;
@@ -1054,6 +1057,8 @@ class App
 
     /**
      * Output Response to the client.
+     *
+     * @param array<string, string> $headers
      */
     protected function outputResponse(string $data, array $headers): void
     {
@@ -1120,7 +1125,7 @@ class App
     /**
      * Output HTML response to the client.
      *
-     * @param string[] $headers
+     * @param array<string, string> $headers
      */
     private function outputResponseHtml(string $data, array $headers = []): void
     {
@@ -1133,8 +1138,8 @@ class App
     /**
      * Output JSON response to the client.
      *
-     * @param string|array $data
-     * @param string[]     $headers
+     * @param string|array          $data
+     * @param array<string, string> $headers
      */
     private function outputResponseJson($data, array $headers = []): void
     {

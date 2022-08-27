@@ -25,13 +25,13 @@ class Delete extends Table\Column
         $this->vp->set(function () {
             $this->table->model->load($_POST[$this->name])->delete();
 
-            $reload = $this->table->reload ?: $this->table;
+            $reload = $this->table->reload ?? $this->table;
 
             $this->table->getApp()->terminateJson($reload);
         });
     }
 
-    public function getDataCellTemplate(Field $field = null)
+    public function getDataCellTemplate(Field $field = null): string
     {
         $this->table->on('click', 'a.' . $this->shortName, null, ['confirm' => (new Jquery())->attr('title')])->atkAjaxec([
             'uri' => $this->vp->getJsUrl(),

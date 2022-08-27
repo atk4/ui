@@ -1,13 +1,13 @@
 <?php
 
 declare(strict_types=1);
+
+namespace Atk4\Ui;
+
 /**
  * A Search input field that will reload View
  * using the view->url with a _q arguments attach to url.
  */
-
-namespace Atk4\Ui;
-
 class JsSearch extends View
 {
     /** @var View The View to reload using this JsSearch. */
@@ -58,8 +58,11 @@ class JsSearch extends View
 
     /** @var string ui css classes */
     public $button = 'ui mini transparent basic button';
+    /** @var string */
     public $filterIcon = 'filter';
+    /** @var string */
     public $btnSearchIcon = 'search';
+    /** @var string */
     public $btnRemoveIcon = 'red remove';
     /** @var string|null */
     public $btnStyle;

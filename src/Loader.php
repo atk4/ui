@@ -106,16 +106,16 @@ class Loader extends View
     /**
      * Return a js action that will trigger the loader to start.
      *
-     * @param array $args
+     * @param string $storeName
      *
      * @return mixed
      */
-    public function jsLoad($args = [], $apiConfig = [], $storeName = null)
+    public function jsLoad(array $args = [], array $apiConfig = [], $storeName = null)
     {
         return $this->js()->atkReloadView([
             'uri' => $this->cb->getUrl(),
             'uri_options' => $args,
-            'apiConfig' => !empty($apiConfig) ? $apiConfig : null,
+            'apiConfig' => $apiConfig !== [] ? $apiConfig : null,
             'storeName' => $storeName ? $storeName : null,
         ]);
     }

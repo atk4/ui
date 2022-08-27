@@ -8,9 +8,6 @@ use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Ui\UserAction\ExecutorFactory;
 
-/**
- * Implements a more sophisticated and interactive Data-Table component.
- */
 class Crud extends Grid
 {
     /** @var array of fields to display in Grid */
@@ -28,14 +25,14 @@ class Crud extends Grid
     /** @var bool|null should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
 
-    /** @var array Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
-    private $menuItems = [];
+    /** Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
+    private array $menuItems = [];
 
-    /** @var array Model single scope action to include in table action column. Will include all single scope actions if empty. */
-    public $singleScopeActions = [];
+    /** Model single scope action to include in table action column. Will include all single scope actions if empty. */
+    public array $singleScopeActions = [];
 
-    /** @var array Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
-    public $noRecordScopeActions = [];
+    /** Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
+    public array $noRecordScopeActions = [];
 
     /** @var string Message to display when record is add or edit successfully. */
     public $saveMsg = 'Record has been saved!';
@@ -61,14 +58,11 @@ class Crud extends Grid
         }
     }
 
-    /**
-     * Apply ordering to the current model as per the sort parameters.
-     */
-    public function applySort()
+    public function applySort(): void
     {
         parent::applySort();
 
-        if ($this->getSortBy() && !empty($this->menuItems)) {
+        if ($this->getSortBy() && $this->menuItems !== []) {
             foreach ($this->menuItems as $item) {
                 // Remove previous click handler and attach new one using sort argument.
                 $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
@@ -81,11 +75,6 @@ class Crud extends Grid
         }
     }
 
-    /**
-     * Sets data model of Crud.
-     *
-     * @param array<int, string>|null $fields
-     */
     public function setModel(Model $model, array $fields = null): void
     {
         $model->assertIsModel();
@@ -164,6 +153,8 @@ class Crud extends Grid
     /**
      * Return proper js statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
+     *
+     * @param string|null $return
      */
     protected function jsExecute($return, Model\UserAction $action): array
     {
@@ -219,7 +210,7 @@ class Crud extends Grid
      *
      * @param string|null $msg the message to display
      *
-     * @return object
+     * @return JsExpressionable
      */
     protected function getNotifier(string $msg = null)
     {
@@ -234,7 +225,7 @@ class Crud extends Grid
     /**
      * Setup js for firing menu action.
      */
-    protected function setItemsAction()
+    protected function setItemsAction(): void
     {
         foreach ($this->menuItems as $k => $item) {
             $this->container->js(true, $item['item']->on('click.atk_crud_item', $item['executor']));
@@ -268,6 +259,7 @@ class Crud extends Grid
      */
     private function _getReloadArgs()
     {
+        $args = [];
         $args[$this->name . '_sort'] = $this->getSortBy();
         if ($this->paginator) {
             $args[$this->paginator->name] = $this->paginator->getCurrentPage();
@@ -282,11 +274,11 @@ class Crud extends Grid
     private function _getModelActions(string $appliesTo): array
     {
         $actions = [];
-        if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && !empty($this->singleScopeActions)) {
+        if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
             foreach ($this->singleScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }
-        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && !empty($this->noRecordScopeActions)) {
+        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
             foreach ($this->noRecordScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }

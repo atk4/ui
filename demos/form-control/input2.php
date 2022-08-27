@@ -109,7 +109,7 @@ $control = Form\Control\Line::addTo($app);
 
 $control->set('hello world');
 
-$button = $control->addAction('check value');
+$button = $control->addAction(['check value']);
 $button->on('click', new JsExpression('alert("field value is: "+[])', [$control->jsInput()->val()]));
 
 Header::addTo($app, ['Line in a Form']);

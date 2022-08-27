@@ -6,7 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Card;
-use Atk4\Ui\Form\Control\Line;
+use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Image;
 use Atk4\Ui\View;
@@ -54,7 +54,7 @@ $country->addUserAction('greet', [
 ]);
 
 // Set the action property for the Line Form Control.
-Line::addTo($app, ['action' => $country->getUserAction('greet')]);
+Form\Control\Line::addTo($app, ['action' => $country->getUserAction('greet')]);
 
 // -----------------------------------------------------------------------------
 

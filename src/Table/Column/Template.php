@@ -16,23 +16,16 @@ class Template extends Table\Column
     public $template;
 
     /**
-     * call new Table\Column\Template('{$name} {$surname}');.
-     *
-     * @param string $template Template with {$tags}
+     * Call new Table\Column\Template('{$name} {$surname}');.
      */
-    public function __construct($template)
+    public function __construct(string $template)
     {
+        parent::__construct();
+
         $this->template = $template;
-        /*
-        if (is_array($template) && isset($template[0])) {
-            $this->template = $template[0];
-        } elseif (is_string($template)) {
-            $this->template = $template;
-        }
-         */
     }
 
-    public function getDataCellTemplate(Field $field = null)
+    public function getDataCellTemplate(Field $field = null): string
     {
         return $this->template;
     }

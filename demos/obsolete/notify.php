@@ -24,7 +24,7 @@ $modal->set(function ($p) use ($modal) {
     $form->addControl('name', [], ['caption' => 'Add your name']);
 
     $form->onSubmit(function (Form $form) use ($modal) {
-        if (empty($form->model->get('name'))) {
+        if (!$form->model->get('name')) {
             return $form->error('name', 'Please add a name!');
         }
 

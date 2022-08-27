@@ -103,14 +103,14 @@ class JsExpression implements JsExpressionable
                 if (!$assoc) {
                     $array[] = $value;
                 } else {
-                    $array[] = $key . ':' . $value;
+                    $array[] = $key . ': ' . $value;
                 }
             }
 
             if ($assoc) {
-                $string = '{' . implode(',', $array) . '}';
+                $string = '{' . implode(', ', $array) . '}';
             } else {
-                $string = '[' . implode(',', $array) . ']';
+                $string = '[' . implode(', ', $array) . ']';
             }
         } elseif (is_string($arg)) {
             $string = json_encode($arg, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);

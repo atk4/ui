@@ -14,9 +14,9 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['icon' => 'pencil']);
         $html = $v->render();
-        $this->assertNotNull($v->icon->name);
+        static::assertNotNull($v->icon->name);
 
-        $this->assertNotSame($v->name, $v->icon->name);
+        static::assertNotSame($v->name, $v->icon->name);
     }
 
     public function testIdIntegrity2(): void
@@ -26,11 +26,11 @@ class JsIntegrationTest extends TestCase
         $b2 = Button::addTo($v);
         $html = $v->render();
 
-        $this->assertNotSame($b1->name, $b2->name);
+        static::assertNotSame($b1->name, $b2->name);
     }
 
     /**
-     * make sure that chain is crated correctly.
+     * Make sure that chain is crated correctly.
      */
     public function testBasicChain1(): void
     {
@@ -38,11 +38,11 @@ class JsIntegrationTest extends TestCase
         $j = $v->js()->hide();
         $v->render();
 
-        $this->assertSame('$("#b").hide()', $j->jsRender());
+        static::assertSame('$("#b").hide()', $j->jsRender());
     }
 
     /**
-     * make sure that onReady chains are included in output.
+     * Make sure that onReady chains are included in output.
      */
     public function testBasicChain2(): void
     {
@@ -50,13 +50,13 @@ class JsIntegrationTest extends TestCase
         $j = $v->js(true)->hide();
         $v->getHtml();
 
-        $this->assertSame('$(function() {
-  $("#b").hide();
+        static::assertSame('$(function() {
+    $("#b").hide();
 })', $v->getJs());
     }
 
     /**
-     * make sure that js('event') chains are included in output with appropriate callback.
+     * Make sure that js('event') chains are included in output with appropriate callback.
      */
     public function testBasicChain3(): void
     {
@@ -64,15 +64,15 @@ class JsIntegrationTest extends TestCase
         $v->js('click')->hide();
         $v->getHtml();
 
-        $this->assertSame('$(function() {
-  $("#b").bind("click",function() {
-    $("#b").hide();
-  });
+        static::assertSame('$(function() {
+    $("#b").bind("click", function() {
+        $("#b").hide();
+    });
 })', $v->getJs());
     }
 
     /**
-     * make sure that on('event', js) chains are included in output.
+     * Make sure that on('event', js) chains are included in output.
      */
     public function testBasicChain4(): void
     {
@@ -83,12 +83,12 @@ class JsIntegrationTest extends TestCase
         $b1->on('click', $b2->js()->hide());
         $bb->getHtml();
 
-        $this->assertSame('$(function() {
-  $("#b1").on("click",function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    $("#b2").hide();
-  });
+        static::assertSame('$(function() {
+    $("#b1").on("click", function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        $("#b2").hide();
+    });
 })', $bb->getJs());
     }
 }

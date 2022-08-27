@@ -163,18 +163,19 @@ Changing or adding Executor type
 
 Existing executor type can be change or added globally for all your user model actions via this method::
 
-    ExecutorFactory::registerTypeExecutor(string $type, $seed)
+    ExecutorFactory::registerTypeExecutor(string $type, array $seed): void
 
 This will set a type to your own executor class. For example, a custom executor class can be set as a MODAL_EXECUTOR type
 and all model user action that use this type will be execute using this custom executor instance.
 
 Type may also be registered per specific model user action via this method::
 
-    ExecutorFactory::registerExecutor(UserAction $action, array $seed)
+    ExecutorFactory::registerExecutor(UserAction $action, array $seed): void
 
 For example, you need a custom executor to be create when using a specific model user action::
 
-    class MySpecialFormExecutor extends \Atk4\Ui\UserAction\ModalExecutor {
+    class MySpecialFormExecutor extends \Atk4\Ui\UserAction\ModalExecutor
+    {
         public function addFormTo(\Atk4\Ui\View $view): \Atk4\Ui\Form
         {
             $myView = MySpecialView::addTo($view);
@@ -204,7 +205,7 @@ is returned.
 
 As per execucor type, it is also possible to add or change already register type via the registerTrigger method::
 
-    ExecutorFactory::registerTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false)
+    ExecutorFactory::registerTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false): void
 
 Again, the type can be apply globally to all action using the same name or specifically for a certain model/action.
 

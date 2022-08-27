@@ -53,7 +53,7 @@ $planeTemplate = new HtmlTemplate('<div id="{$_id}" class="ui statistic">
       Flights
     </div>
   </div>');
-$planeTemplate->set('num', random_int(100, 999));
+$planeTemplate->set('num', (string) random_int(100, 999));
 
 $plane = View::addTo($app, ['template' => $planeTemplate]);
 

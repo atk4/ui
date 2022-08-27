@@ -14,7 +14,7 @@ namespace Atk4\Ui;
  *
  * IMPORTANT: all methods in this class are pre-pended with '_', to avoid clashes with js-mapping.
  *
- *  @method Jquery redirect(...$args)
+ * @method Jquery redirect(...$args)
  */
 class JsChain extends JsExpression
 {
@@ -59,6 +59,8 @@ class JsChain extends JsExpression
      */
     public function __construct($library = null)
     {
+        parent::__construct();
+
         if ($library) {
             $this->_library = $library;
         }
@@ -96,9 +98,7 @@ class JsChain extends JsExpression
     {
         $this->_chain[] = $property;
 
-        $res = $this; // TODO & before __get is needed for atk4/core PR 329, remove once PHP 8.1 support is dropped
-
-        return $res;
+        return $this;
     }
 
     /**
@@ -125,7 +125,7 @@ class JsChain extends JsExpression
     private function _renderArgs($args = [])
     {
         return '('
-            . implode(',', array_map(function ($arg) {
+            . implode(', ', array_map(function ($arg) {
                 if ($arg instanceof JsExpressionable) {
                     return $arg->jsRender();
                 }

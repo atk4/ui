@@ -18,7 +18,7 @@ class FormExecutor extends BasicExecutor
      *
      * If model is already supply in form, then editable fields must match action fields property.
      */
-    public function initPreview()
+    public function initPreview(): void
     {
         $this->addHeader();
 

@@ -6,9 +6,6 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 
-/**
- * Tabs widget.
- */
 class Tabs extends View
 {
     public $defaultTemplate = 'tabs.html';
@@ -18,15 +15,12 @@ class Tabs extends View
     public $activeTabName;
 
     /**
-     * Adds tab in tabs widget.
-     *
-     * @param string|Tab $name     Name of tab or Tab object
-     * @param \Closure   $callback Callback action or URL (or array with url + parameters)
-     * @param array      $settings Tab setting
+     * @param string|TabsTab $name
+     * @param \Closure       $callback Callback action or URL (or array with url + parameters)
      *
      * @return View
      */
-    public function addTab($name, \Closure $callback = null, $settings = [])
+    public function addTab($name, \Closure $callback = null, array $settings = [])
     {
         $item = $this->addTabMenuItem($name, $settings);
         $sub = $this->addSubView($item->name);
@@ -46,11 +40,10 @@ class Tabs extends View
      * Adds dynamic tab in tabs widget which will load a separate
      * page/url when activated.
      *
-     * @param string|Tab   $name     Name of tab or Tab object
-     * @param string|array $url      URL to open inside a tab
-     * @param array        $settings Tab setting
+     * @param string|TabsTab $name
+     * @param string|array   $url  URL to open inside a tab
      */
-    public function addTabUrl($name, $url, $settings = [])
+    public function addTabUrl($name, $url, array $settings = []): void
     {
         $item = $this->addTabMenuItem($name, $settings);
         $this->addSubView($item->name);
@@ -61,24 +54,23 @@ class Tabs extends View
     /**
      * Add a tab menu item.
      *
-     * @param string|Tab $name     name of tab or Tab object
-     * @param array      $settings Tab settings
+     * @param string|TabsTab $name
      *
-     * @return Tab|View tab menu item view
+     * @return TabsTab|View tab menu item view
      */
-    protected function addTabMenuItem($name, $settings)
+    protected function addTabMenuItem($name, array $settings)
     {
         if (is_object($name)) {
             $tab = $name;
         } else {
-            $tab = new Tab($name);
+            $tab = new TabsTab($name);
         }
 
         $tab = $this->add(Factory::mergeSeeds(['class' => ['item'], 'settings' => $settings], $tab), 'Menu')
             ->setElement('a')
             ->setAttr('data-tab', $tab->name);
 
-        if (empty($this->activeTabName)) {
+        if (!$this->activeTabName) {
             $this->activeTabName = $tab->name;
         }
 

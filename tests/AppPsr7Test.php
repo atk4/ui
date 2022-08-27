@@ -36,7 +36,7 @@ class AppPsr7Test extends TestCase
         } catch (ExitApplicationError $e) {
         }
 
-        $this->assertSame('value2', $app->getResponse()->getHeaderLine('header-test'));
+        static::assertSame('value2', $app->getResponse()->getHeaderLine('header-test'));
     }
 
     public function testResponseHeadersRespectContentOnTerminate(): void
@@ -49,6 +49,6 @@ class AppPsr7Test extends TestCase
         } catch (ExitApplicationError $e) {
         }
 
-        $this->assertSame('text/html', $app->getResponse()->getHeaderLine('Content-Type'));
+        static::assertSame('text/html', $app->getResponse()->getHeaderLine('Content-Type'));
     }
 }

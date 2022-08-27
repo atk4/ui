@@ -17,7 +17,7 @@ class ViewTest extends TestCase
 
         $a = $v->render();
         $b = $v->render();
-        $this->assertSame($a, $b);
+        static::assertSame($a, $b);
     }
 
     public function testAddAfterRender(): void

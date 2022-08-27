@@ -99,10 +99,12 @@ clarifications::
     require_once __DIR__ . '/vendor/autoload.php';
 
     // Define your data structure
-    class Offer extends \Atk4\Data\Model {
+    class Offer extends \Atk4\Data\Model
+    {
         public $table = 'offer';
 
-        protected function init(): void {
+        protected function init(): void
+        {
             parent::init();
 
             // Persistence may not have structure, so we define here

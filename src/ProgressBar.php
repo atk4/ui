@@ -29,7 +29,10 @@ class ProgressBar extends View
     /** @var int Indicates a maximum value of a progress bar. */
     public $max = 100;
 
-    public function __construct($value = 0, $label = [])
+    /**
+     * @param array|string $label
+     */
+    public function __construct(int $value = 0, $label = [])
     {
         $this->value = $value;
 
@@ -56,12 +59,10 @@ class ProgressBar extends View
     /**
      * Return js action for setting value (client-side).
      *
-     * @param int $value new value
-     *
      * @return JsExpressionable
      */
-    public function jsValue($value)
+    public function jsValue(int $value)
     {
-        return $this->js()->progress(['percent' => (int) $value]);
+        return $this->js()->progress(['percent' => $value]);
     }
 }
