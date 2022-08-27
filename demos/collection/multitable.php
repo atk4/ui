@@ -66,7 +66,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
             }
 
             $pushModel = $pushModel->ref($ref);
-            $pushModel->setOrder([$model->fieldName()->is_folder => 'desc', $model->fieldName()->name]);
+            $pushModel->setOrder([File::hinting()->fieldName()->is_folder => 'desc', File::hinting()->fieldName()->name]);
 
             $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
             $table->setModel($pushModel->setLimit(10), [$pushModel->titleField]);
