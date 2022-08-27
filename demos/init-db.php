@@ -363,23 +363,21 @@ class File extends ModelWithPrefixedFields
                 continue;
             }
 
-            if (in_array($fileinfo->getFilename(), ['demos', 'src', 'tests'], true) || $isSub) {
-                $entity = $this->createEntity();
+            $entity = $this->createEntity();
 
-                $entity->save([
-                    $this->fieldName()->name => $fileinfo->getFilename(),
-                    $this->fieldName()->is_folder => $fileinfo->isDir(),
-                    $this->fieldName()->type => pathinfo($fileinfo->getFilename(), \PATHINFO_EXTENSION),
-                ]);
+            $entity->save([
+                $this->fieldName()->name => $fileinfo->getFilename(),
+                $this->fieldName()->is_folder => $fileinfo->isDir(),
+                $this->fieldName()->type => pathinfo($fileinfo->getFilename(), \PATHINFO_EXTENSION),
+            ]);
 
-                if ($fileinfo->isDir()) {
-                    $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
-                }
+            if ($fileinfo->isDir()) {
+                $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
+            }
 
-                // skip full/slow import for Behat testing
-                if ($_ENV['CI'] ?? null) {
-                    break;
-                }
+            // skip full/slow import for Behat testing
+            if ($_ENV['CI'] ?? null) {
+                break;
             }
         }
     }
