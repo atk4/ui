@@ -16,7 +16,7 @@ trait VueLookupTrait
         if (!$this->dataCb) {
             $this->dataCb = Callback::addTo($this);
         }
-        $this->dataCb->set(\Closure::fromCallable([$this, 'outputApiResponse']));
+        $this->dataCb->set(fn () => $this->outputApiResponse());
     }
 
     /**
@@ -27,13 +27,13 @@ trait VueLookupTrait
     public function outputApiResponse()
     {
         $fieldName = $_GET['atk_vlookup_field'] ?? null;
-        $query = $_GET['atk_vlookup_q'] ?? null;
+        $query = $_GET['atk_vlookup_q'] ?? '';
         $data = [];
         if ($fieldName) {
             $reference = $this->model->getField($fieldName)->getReference();
             $model = $reference->refModel($this->model);
             $referenceFieldName = $reference->getTheirFieldName();
-            if (!empty($query)) {
+            if ($query !== '') {
                 $model->addCondition($model->titleField, 'like', '%' . $query . '%');
             }
             foreach ($model as $row) {

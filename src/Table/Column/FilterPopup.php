@@ -85,7 +85,7 @@ class FilterPopup extends Popup
      */
     public function isFilterOn(): bool
     {
-        return !empty($this->recallData());
+        return ($this->recallData() ?? '') !== '';
     }
 
     /**

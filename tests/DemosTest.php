@@ -241,7 +241,7 @@ class DemosTest extends TestCase
                 }
             };
 
-            throw $exFactoryWithFullBody->create($ex->getRequest(), $ex->getResponse());
+            throw $exFactoryWithFullBody::create($ex->getRequest(), $ex->getResponse());
         }
     }
 

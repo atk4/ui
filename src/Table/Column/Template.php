@@ -17,11 +17,11 @@ class Template extends Table\Column
 
     /**
      * Call new Table\Column\Template('{$name} {$surname}');.
-     *
-     * @param string $template Template with {$tags}
      */
-    public function __construct($template)
+    public function __construct(string $template)
     {
+        parent::__construct();
+
         $this->template = $template;
     }
 

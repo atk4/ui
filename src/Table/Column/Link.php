@@ -39,7 +39,7 @@ class Link extends Table\Column
      *
      * In addition to abpove "args" refer to values picked up from a current row.
      *
-     * @var string|array
+     * @var string|array|null
      */
     public $page;
 
@@ -74,7 +74,7 @@ class Link extends Table\Column
      * Set html5 target attribute in tag
      * possible values : _blank | _parent | _self | _top | frame#name.
      *
-     * @var string!null
+     * @var string|null
      */
     public $target;
 
@@ -143,7 +143,7 @@ class Link extends Table\Column
             return ['c_' . $this->shortName => $this->url->set($rowValues)->renderToHtml()];
         }
 
-        $p = $this->page ?: [];
+        $p = $this->page ?? [];
 
         foreach ($this->args as $key => $val) {
             if (is_numeric($key)) {

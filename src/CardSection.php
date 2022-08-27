@@ -17,7 +17,7 @@ class CardSection extends View
     /** @var string */
     public $glue = ': ';
 
-    /** @var string[] */
+    /** @var array<int, string> */
     public $tableClass = ['ui', 'fixed', 'small'];
 
     protected function init(): void

@@ -26,6 +26,8 @@ class Status extends Table\Column
      */
     public function __construct($states)
     {
+        parent::__construct();
+
         $this->states = $states;
     }
 

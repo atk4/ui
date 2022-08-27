@@ -47,7 +47,7 @@ class Paginator extends View
     {
         parent::init();
 
-        if (!$this->urlTrigger) {
+        if ($this->urlTrigger === null) {
             $this->urlTrigger = $this->name;
         }
 

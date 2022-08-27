@@ -38,9 +38,6 @@ class ColorRating extends Table\Column
     /** @var array Store the generated Hex color based on the number of steps. */
     protected $gradients = [];
 
-    /** @var float Internally used to avoid calc on every call. */
-    protected $delta;
-
     /** @var bool Define if values lesser than min have no color. */
     public $lessThanMinNoColor = false;
 
@@ -51,17 +48,8 @@ class ColorRating extends Table\Column
     {
         parent::init();
 
-        // cast type of properties
-        $this->min = (float) $this->min;
-        $this->max = (float) $this->max;
-        $this->delta = $this->max - $this->min;
-
-        if ($this->min > $this->max) {
+        if ($this->min >= $this->max) {
             throw new Exception('Min must be lower than Max');
-        }
-
-        if ($this->min === $this->max) {
-            throw new Exception('Min and Max must be different');
         }
 
         if ($this->steps === 0) {
@@ -104,28 +92,38 @@ class ColorRating extends Table\Column
         $hexFrom = trim($hexFrom, '#');
         $hexTo = trim($hexTo, '#');
 
-        $FromRgb['r'] = hexdec(substr($hexFrom, 0, 2));
-        $FromRgb['g'] = hexdec(substr($hexFrom, 2, 2));
-        $FromRgb['b'] = hexdec(substr($hexFrom, 4, 2));
+        $fromRgb = [
+            'r' => hexdec(substr($hexFrom, 0, 2)),
+            'g' => hexdec(substr($hexFrom, 2, 2)),
+            'b' => hexdec(substr($hexFrom, 4, 2)),
+        ];
 
-        $ToRgb['r'] = hexdec(substr($hexTo, 0, 2));
-        $ToRgb['g'] = hexdec(substr($hexTo, 2, 2));
-        $ToRgb['b'] = hexdec(substr($hexTo, 4, 2));
+        $toRgb = [
+            'r' => hexdec(substr($hexTo, 0, 2)),
+            'g' => hexdec(substr($hexTo, 2, 2)),
+            'b' => hexdec(substr($hexTo, 4, 2)),
+        ];
 
-        $StepRgb['r'] = ($FromRgb['r'] - $ToRgb['r']) / $steps;
-        $StepRgb['g'] = ($FromRgb['g'] - $ToRgb['g']) / $steps;
-        $StepRgb['b'] = ($FromRgb['b'] - $ToRgb['b']) / $steps;
+        $stepRgb = [
+            'r' => ($fromRgb['r'] - $toRgb['r']) / $steps,
+            'g' => ($fromRgb['g'] - $toRgb['g']) / $steps,
+            'b' => ($fromRgb['b'] - $toRgb['b']) / $steps,
+        ];
 
         for ($i = 0; $i <= $steps; ++$i) {
-            $Rgb['r'] = floor($FromRgb['r'] - ($StepRgb['r'] * $i));
-            $Rgb['g'] = floor($FromRgb['g'] - ($StepRgb['g'] * $i));
-            $Rgb['b'] = floor($FromRgb['b'] - ($StepRgb['b'] * $i));
+            $rgb = [
+                'r' => floor($fromRgb['r'] - $stepRgb['r'] * $i),
+                'g' => floor($fromRgb['g'] - $stepRgb['g'] * $i),
+                'b' => floor($fromRgb['b'] - $stepRgb['b'] * $i),
+            ];
 
-            $HexRgb['r'] = sprintf('%02x', $Rgb['r']);
-            $HexRgb['g'] = sprintf('%02x', $Rgb['g']);
-            $HexRgb['b'] = sprintf('%02x', $Rgb['b']);
+            $hexRgb = [
+                'r' => sprintf('%02x', $rgb['r']),
+                'g' => sprintf('%02x', $rgb['g']),
+                'b' => sprintf('%02x', $rgb['b']),
+            ];
 
-            $gradients[] = '#' . implode('', $HexRgb);
+            $gradients[] = '#' . implode('', $hexRgb);
         }
     }
 
@@ -175,7 +173,7 @@ class ColorRating extends Table\Column
         }
 
         $gradientsCount = count($this->gradients) - 1;
-        $refValue = ($value - $this->min) / $this->delta;
+        $refValue = ($value - $this->min) / ($this->max - $this->min);
         $refIndex = $gradientsCount * $refValue;
 
         $index = (int) floor($refIndex);

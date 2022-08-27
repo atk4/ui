@@ -22,7 +22,7 @@ use Atk4\Ui\View;
  */
 trait StepExecutorTrait
 {
-    /** @var string[] The steps need to complete the action. */
+    /** @var array<int, string> The steps need to complete the action. */
     protected $steps;
 
     /** @var string current step. */
@@ -67,7 +67,7 @@ trait StepExecutorTrait
     /** @var string can be "console", "text", or "html". Determine how preview step will display information. */
     public $previewType = 'html';
 
-    /** @var array[] View seed for displaying title for each step. */
+    /** @var array<string, array<mixed>> View seed for displaying title for each step. */
     protected $stepTitle = ['args' => [], 'fields' => [], 'preview' => []];
 
     /** @var string */

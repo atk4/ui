@@ -18,7 +18,7 @@ class VirtualPage extends View
     /** @var Callback */
     public $cb;
 
-    /** @var string specify custom callback trigger for the URL (see Callback::$urlTrigger) */
+    /** @var string|null specify custom callback trigger for the URL (see Callback::$urlTrigger) */
     protected $urlTrigger;
 
     /** @var string UI container class */
@@ -28,7 +28,7 @@ class VirtualPage extends View
     {
         parent::init();
 
-        $this->cb = Callback::addTo($this, ['urlTrigger' => $this->urlTrigger ?: $this->name]);
+        $this->cb = Callback::addTo($this, ['urlTrigger' => $this->urlTrigger ?? $this->name]);
         unset($this->{'urlTrigger'});
     }
 

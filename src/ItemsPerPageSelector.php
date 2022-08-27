@@ -85,6 +85,7 @@ class ItemsPerPageSelector extends View
             'values' => $menuItems,
             'onChange' => new JsExpression($function),
         ]);
+
         parent::renderView();
     }
 }

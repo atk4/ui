@@ -77,7 +77,7 @@ class DemosHttpTest extends DemosTest
             '-t', static::ROOT_DIR,
             '-d', 'session.save_path=' . self::$_processSessionDir,
         ];
-        if (!empty(ini_get('open_basedir'))) {
+        if (ini_get('open_basedir') !== '') {
             $cmdArgs[] = '-d';
             $cmdArgs[] = 'open_basedir=' . ini_get('open_basedir');
         }

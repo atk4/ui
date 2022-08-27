@@ -36,7 +36,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
     /** @var View */
     public $stepList;
 
-    /** @var string[] */
+    /** @var array<string, string> */
     public $stepListItems = ['args' => 'Fill argument(s)', 'fields' => 'Edit Record(s)', 'preview' => 'Preview', 'final' => 'Complete'];
 
     protected function init(): void
@@ -152,8 +152,8 @@ class PanelExecutor extends Right implements JsExecutorInterface
 
         return [
             $this->jsClose(),
-            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) ?:
-                $success ?: new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
+            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : ''))),
             $this->loader->jsClearStoreData(true),
         ];
     }

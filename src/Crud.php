@@ -259,6 +259,7 @@ class Crud extends Grid
      */
     private function _getReloadArgs()
     {
+        $args = [];
         $args[$this->name . '_sort'] = $this->getSortBy();
         if ($this->paginator) {
             $args[$this->paginator->name] = $this->paginator->getCurrentPage();

@@ -38,7 +38,7 @@ class VpExecutor extends View implements JsExecutorInterface
     /** @var View */
     public $stepList;
 
-    /** @var string[] */
+    /** @var array<string, string> */
     public $stepListItems = ['args' => 'Fill argument(s)', 'fields' => 'Edit Record(s)', 'preview' => 'Preview', 'final' => 'Complete'];
 
     /** @var array */
@@ -164,8 +164,8 @@ class VpExecutor extends View implements JsExecutorInterface
             : $this->jsSuccess;
 
         return [
-            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) ?:
-                $success ?: new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
+            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : ''))),
             $this->loader->jsClearStoreData(true),
             (new JsChain('atk.utils'))->redirect($this->url()),
         ];

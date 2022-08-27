@@ -59,6 +59,8 @@ class JsChain extends JsExpression
      */
     public function __construct($library = null)
     {
+        parent::__construct();
+
         if ($library) {
             $this->_library = $library;
         }

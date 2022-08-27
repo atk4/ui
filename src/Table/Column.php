@@ -36,7 +36,7 @@ class Column
     /** @var array Contains any custom attributes that may be applied on head, body or foot. */
     public $attr = [];
 
-    /** @var string If set, will override column header value. */
+    /** @var string|null If set, will override column header value. */
     public $caption;
 
     /** @var bool Is column sortable? */
@@ -274,11 +274,11 @@ class Column
         }
 
         if ($field === null) {
-            return $this->getTag('head', $this->caption ?: '', $this->table->sortable ? ['class' => ['disabled']] : []);
+            return $this->getTag('head', $this->caption ?? '', $this->table->sortable ? ['class' => ['disabled']] : []);
         }
 
         // if $this->caption is empty, header caption will be overriden by linked field definition
-        $caption = $this->caption ?: $field->getCaption();
+        $caption = $this->caption ?? $field->getCaption();
 
         $attr = [
             'data-column' => $this->columnData,

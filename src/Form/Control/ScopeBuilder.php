@@ -30,19 +30,17 @@ class ScopeBuilder extends Form\Control
      * Max depth of nested conditions allowed.
      * Corresponds to VueQueryBulder maxDepth.
      * Maximum support by js component is 10.
-     *
-     * @var int
      */
-    public $maxDepth = 5;
+    public int $maxDepth = 5;
 
-    /** @var array Fields to use for creating the rules. */
-    public $fields = [];
+    /** Fields to use for creating the rules. */
+    public array $fields = [];
 
     /** @var HtmlTemplate|null The template needed for the ScopeBuilder view. */
     public $scopeBuilderTemplate;
 
-    /** @var array List of delimiters for auto-detection in order of priority. */
-    public static $listDelimiters = [';', ','];
+    /** List of delimiters for auto-detection in order of priority. */
+    public static array $listDelimiters = [';', ','];
 
     /**
      * The date, time or datetime options:
@@ -54,9 +52,7 @@ class ScopeBuilder extends Form\Control
         'flatpickr' => [],
     ];
 
-    /**
-     * Atk-lookup and semantic-ui dropdown options.
-     */
+    /** Atk-lookup and semantic-ui dropdown options. */
     public array $atkLookupOptions = [
         'ui' => 'small basic button',
     ];
@@ -64,19 +60,17 @@ class ScopeBuilder extends Form\Control
     /** @var View The scopebuilder View. Assigned in init(). */
     protected $scopeBuilderView;
 
-    /** @var array Definition of VueQueryBuilder rules. */
-    protected $rules = [];
+    /** Definition of VueQueryBuilder rules. */
+    protected array $rules = [];
 
     /**
      * Set Labels for Vue-Query-Builder
      * see https://dabernathy89.github.io/vue-query-builder/configuration.html#labels.
-     *
-     * @var array
      */
-    public $labels = [];
+    public array $labels = [];
 
-    /** @var array Default VueQueryBuilder query. */
-    protected $query = [];
+    /** Default VueQueryBuilder query. */
+    protected array $query = [];
 
     protected const OPERATOR_TEXT_EQUALS = 'equals';
     protected const OPERATOR_TEXT_DOESNOT_EQUAL = 'does not equal';
@@ -143,9 +137,9 @@ class ScopeBuilder extends Form\Control
      *
      * Operator map supports also inputType specific operators in sub maps
      *
-     * @var array
+     * @var array<string, array<string, string>>
      */
-    protected static $operatorsMap = [
+    protected static array $operatorsMap = [
         'number' => [
             self::OPERATOR_SIGN_EQUALS => Condition::OPERATOR_EQUALS,
             self::OPERATOR_SIGN_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
@@ -187,8 +181,8 @@ class ScopeBuilder extends Form\Control
         ],
     ];
 
-    /** @var array Definition of rule types. */
-    protected static $ruleTypes = [
+    /** @var array<string, string|array<string, mixed>> Definition of rule types. */
+    protected static array $ruleTypes = [
         'default' => 'text',
         'text' => [
             'type' => 'text',
@@ -288,7 +282,7 @@ class ScopeBuilder extends Form\Control
         if ($this->form) {
             $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
                 $key = $this->entityField->getFieldName();
-                $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
+                $postRawData[$key] = static::queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
             });
         }
     }
@@ -332,7 +326,7 @@ class ScopeBuilder extends Form\Control
             $scope = $model->scope();
         }
 
-        $this->query = $this->scopeToQuery($scope, $inputsMap)['query'];
+        $this->query = static::scopeToQuery($scope, $inputsMap)['query'];
     }
 
     /**
@@ -440,7 +434,7 @@ class ScopeBuilder extends Form\Control
 
     protected function getRule(string $type, array $defaults = [], Field $field = null): array
     {
-        $rule = self::$ruleTypes[$type] ?? self::$ruleTypes['default'];
+        $rule = static::$ruleTypes[$type] ?? static::$ruleTypes['default'];
 
         // when $rule is an alias
         if (is_string($rule)) {
@@ -515,7 +509,7 @@ class ScopeBuilder extends Form\Control
                 'maxDepth' => $this->maxDepth,
                 'query' => $this->query,
                 'name' => $this->shortName,
-                'labels' => $this->labels ?: null,
+                'labels' => $this->labels !== [] ? $this->labels : null, // TODO do we need to really pass null for empty array?
                 'form' => $this->form->formElement->name,
                 'debug' => $this->options['debug'] ?? false,
             ],
@@ -532,12 +526,12 @@ class ScopeBuilder extends Form\Control
 
         switch ($type) {
             case 'query-builder-group':
-                $components = array_map([static::class, 'queryToScope'], (array) $query['children']);
+                $components = array_map(fn ($v) => static::queryToScope($v), $query['children']);
                 $scope = new Scope($components, $query['logicalOperator']);
 
                 break;
             case 'query-builder-rule':
-                $scope = self::queryToCondition($query);
+                $scope = static::queryToCondition($query);
 
                 break;
             default:
@@ -579,12 +573,12 @@ class ScopeBuilder extends Form\Control
                 break;
             case self::OPERATOR_IN:
             case self::OPERATOR_NOT_IN:
-                $value = explode(self::detectDelimiter($value), (string) $value);
+                $value = explode(static::detectDelimiter($value), (string) $value);
 
                 break;
         }
 
-        $operatorsMap = array_merge(...array_values(self::$operatorsMap));
+        $operatorsMap = array_merge(...array_values(static::$operatorsMap));
 
         $operator = $operator ? ($operatorsMap[strtolower($operator)] ?? '=') : null;
 
@@ -600,14 +594,14 @@ class ScopeBuilder extends Form\Control
         if ($scope instanceof Scope\Condition) {
             $query = [
                 'type' => 'query-builder-rule',
-                'query' => self::conditionToQuery($scope, $inputsMap),
+                'query' => static::conditionToQuery($scope, $inputsMap),
             ];
         }
 
         if ($scope instanceof Scope) {
             $children = [];
             foreach ($scope->getNestedConditions() as $nestedCondition) {
-                $children[] = self::scopeToQuery($nestedCondition, $inputsMap);
+                $children[] = static::scopeToQuery($nestedCondition, $inputsMap);
             }
 
             $query = [
@@ -676,15 +670,16 @@ class ScopeBuilder extends Form\Control
                 $operator = $map[$operator] ?? Condition::OPERATOR_NOT_IN;
             }
 
-            $operatorsMap = array_merge(self::$operatorsMap[$inputType] ?? [], self::$operatorsMap['text']);
-            $operator = array_search(strtoupper($operator), $operatorsMap, true) ?: self::OPERATOR_EQUALS;
+            $operatorsMap = array_merge(static::$operatorsMap[$inputType] ?? [], static::$operatorsMap['text']);
+            $operatorKey = array_search(strtoupper($operator), $operatorsMap, true);
+            $operator = $operatorKey !== false ? $operatorKey : self::OPERATOR_EQUALS;
         }
 
         return [
             'rule' => $rule,
             'operator' => $operator,
             'value' => $value,
-            'option' => self::getOption($inputType, $value, $condition),
+            'option' => static::getOption($inputType, $value, $condition),
         ];
     }
 
@@ -718,20 +713,17 @@ class ScopeBuilder extends Form\Control
     /**
      * Auto-detects a string delimiter based on list of predefined values in ScopeBuilder::$listDelimiters in order of priority.
      *
-     * @param string $value
-     *
-     * @return string
      * @phpstan-return non-empty-string
      */
-    public static function detectDelimiter($value)
+    public static function detectDelimiter(string $value): string
     {
         $matches = [];
-        foreach (self::$listDelimiters as $delimiter) {
-            $matches[$delimiter] = substr_count((string) $value, $delimiter);
+        foreach (static::$listDelimiters as $delimiter) {
+            $matches[$delimiter] = substr_count($value, $delimiter);
         }
 
         $max = array_keys($matches, max($matches), true);
 
-        return reset($max) ?: reset(self::$listDelimiters);
+        return $max !== [] ? reset($max) : reset(static::$listDelimiters);
     }
 }

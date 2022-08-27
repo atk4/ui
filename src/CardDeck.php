@@ -257,6 +257,7 @@ class CardDeck extends View
      */
     protected function jsModelReturn(Model\UserAction $action = null, string $msg = 'Done!'): array
     {
+        $js = [];
         $js[] = $this->getNotifier($msg, $action);
         if ($action->getModel()->isLoaded() && $card = $this->findCard($action->getModel())) {
             $js[] = $card->jsReload($this->getReloadArgs());
@@ -390,6 +391,7 @@ class CardDeck extends View
         if ($this->container->name === ($_GET['__atk_reload'] ?? null)) {
             $this->applyReload();
         }
+
         parent::renderView();
     }
 

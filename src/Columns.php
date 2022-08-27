@@ -17,7 +17,7 @@ class Columns extends View
      * Explicitly specify the width of all columns. Normally that's 16, but
      * semantic-ui allows you to override with 5 => "ui five column grid".
      *
-     * @var int
+     * @var int|null
      */
     public $width;
 
@@ -75,7 +75,7 @@ class Columns extends View
 
     protected function renderView(): void
     {
-        $width = $this->width ?: $this->calculatedWidth;
+        $width = $this->width ?? $this->calculatedWidth;
         if ($this->content) {
             $this->addClass($this->content);
             $this->content = null;

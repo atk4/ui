@@ -497,7 +497,7 @@ class View extends AbstractView implements JsExpressionable
 
     // {{{ Sticky URLs
 
-    /** @var string[] stickyGet arguments */
+    /** @var array<string, string> stickyGet arguments */
     public $stickyArgs = [];
 
     /**
@@ -602,7 +602,7 @@ class View extends AbstractView implements JsExpressionable
         if ($this->attr) {
             $tmp = [];
             foreach ($this->attr as $attr => $val) {
-                $tmp[] = $attr . '="' . $this->getApp()->encodeAttribute($val) . '"';
+                $tmp[] = $attr . '="' . $this->getApp()->encodeHtmlAttribute((string) $val) . '"';
             }
             $this->template->dangerouslySetHtml('attributes', implode(' ', $tmp));
         }
@@ -772,7 +772,7 @@ class View extends AbstractView implements JsExpressionable
      */
     public function js($when = null, $action = null, $selector = null)
     {
-        $chain = new Jquery($selector ?: $this);
+        $chain = new Jquery($selector ?? $this);
 
         // Substitute $when to make it better work as a array key
         if ($when === true) {
@@ -867,6 +867,7 @@ class View extends AbstractView implements JsExpressionable
      */
     public function jsGetStoreData()
     {
+        $data = [];
         $data['local'] = json_decode($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null', true, 512, \JSON_THROW_ON_ERROR);
         $data['session'] = json_decode($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null', true, 512, \JSON_THROW_ON_ERROR);
 

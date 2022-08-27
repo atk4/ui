@@ -206,6 +206,8 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
 
             $session->memorize('success', true);
             $session->memorize('name', $form->model->get('name'));
+
+            $js = [];
             $js[] = $form->success('Thank you, ' . $form->model->get('name') . ' you can go on!');
             $js[] = $nextAction->js()->removeClass('disabled');
 

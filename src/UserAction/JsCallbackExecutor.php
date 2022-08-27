@@ -79,7 +79,8 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
                     ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $return)
                     : $this->jsSuccess;
 
-                $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) ?: $success ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
+                $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) // @phpstan-ignore-line
+                    ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : '')));
             }
 
             return $js;

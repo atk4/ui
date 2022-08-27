@@ -199,7 +199,7 @@ class Table extends Lister
         // set filter to all column when null.
         if (!$cols) {
             foreach ($this->model->getFields() as $key => $field) {
-                if (!empty($this->columns[$key])) {
+                if (isset($this->columns[$key])) {
                     $cols[] = $field->shortName;
                 }
             }
@@ -304,9 +304,9 @@ class Table extends Lister
      *       $columns = $this->getApp()->decodeJson($w);
      *   });
      *
-     * @param \Closure $fx             a callback function with columns widths as parameter
-     * @param int[]    $widths         ex: [100, 200, 300, 100]
-     * @param array    $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
+     * @param \Closure        $fx             a callback function with columns widths as parameter
+     * @param array<int, int> $widths         ex: [100, 200, 300, 100]
+     * @param array           $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
      *
      * @return $this
      */

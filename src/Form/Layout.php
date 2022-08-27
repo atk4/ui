@@ -177,7 +177,7 @@ class Layout extends AbstractLayout
             }
 
             $template = $element->renderLabel ? $labeledControl : $noLabelControl;
-            $label = $element->caption ?: $element->entityField->getField()->getCaption();
+            $label = $element->caption ?? $element->entityField->getField()->getCaption();
 
             // Anything but form controls gets inserted directly
             if ($element instanceof Control\Checkbox) {

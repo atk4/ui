@@ -27,7 +27,7 @@ class BasicExecutor extends View implements ExecutorInterface
     /** @var bool display header or not */
     public $hasHeader = true;
 
-    /** @var string header description */
+    /** @var string|null header description */
     public $description;
 
     /** @var string display message when action is disabled */
@@ -140,7 +140,8 @@ class BasicExecutor extends View implements ExecutorInterface
             ? ($this->jsSuccess)($this, $this->action->getModel())
             : $this->jsSuccess;
 
-        return ($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) ?: $success) ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
+        return $this->hook(self::HOOK_AFTER_EXECUTE, [$return]) // @phpstan-ignore-line
+            ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : '')));
     }
 
     /**
@@ -149,7 +150,7 @@ class BasicExecutor extends View implements ExecutorInterface
     public function addHeader(): void
     {
         if ($this->hasHeader) {
-            Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?: $this->action->getDescription()]);
+            Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?? $this->action->getDescription()]);
         }
     }
 }
