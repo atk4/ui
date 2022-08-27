@@ -66,6 +66,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
             }
 
             $pushModel = $pushModel->ref($ref);
+            $pushModel->setOrder([$model->fieldName()->is_folder => 'desc', $model->fieldName()->name]);
 
             $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
             $table->setModel($pushModel->setLimit(10), [$pushModel->titleField]);
@@ -96,4 +97,4 @@ Button::addTo($app, ['Re-Import From Filesystem', 'class.top attached' => true])
 
 $finderClass::addTo($app, ['bottom attached'])
     ->addClass('top attached segment')
-    ->setModel($model->setLimit(5), [$model->fieldName()->SubFolder]);
+    ->setModel($model->setLimit(10), [$model->fieldName()->SubFolder]);
