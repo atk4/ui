@@ -112,13 +112,13 @@ class App
     /** @var App\SessionManager */
     public $session;
 
-    /** @var string[] Extra HTTP headers to send on exit. */
-    protected $responseHeaders = [
+    /** @var array<string, string> Extra HTTP headers to send on exit. */
+    protected array $responseHeaders = [
         self::HEADER_STATUS_CODE => '200',
         'cache-control' => 'no-store', // disable caching by default
     ];
 
-    /** @var View[] Modal view that need to be rendered using json output. */
+    /** @var array<string, View> Modal view that need to be rendered using json output. */
     private $portals = [];
 
     /**
@@ -136,7 +136,7 @@ class App
     public $page;
 
     /** @var array global sticky arguments */
-    protected $stickyGetArguments = [
+    protected array $stickyGetArguments = [
         '__atk_json' => false,
         '__atk_tab' => false,
     ];
@@ -186,7 +186,7 @@ class App
                 },
                 \E_ALL
             );
-            $this->outputResponseUnsafe('', [self::HEADER_STATUS_CODE => 500]);
+            $this->outputResponseUnsafe('', [self::HEADER_STATUS_CODE => '500']);
         }
 
         // Always run app on shutdown
@@ -219,7 +219,7 @@ class App
         // TODO in https://github.com/atk4/ui/pull/1771 it has been discovered this method causes DOM code duplication,
         // for some reasons, it seems even not needed, at least all Unit & Behat tests pass
         // must be investigated
-        // $this->portals[$portal->shortName] = $portal;
+        // $this->portals[$portal->name] = $portal;
     }
 
     public function setExecutorFactory(ExecutorFactory $factory): void
@@ -315,9 +315,9 @@ class App
     /**
      * Normalize HTTP headers to associative array with LC keys.
      *
-     * @param string[] $headers
+     * @param array<string, string> $headers
      *
-     * @return string[]
+     * @return array<string, string>
      */
     protected function normalizeHeaders(array $headers): array
     {
@@ -367,8 +367,8 @@ class App
      * directly, instead call it form Callback, JsCallback or similar
      * other classes.
      *
-     * @param string|array $output  Array type is supported only for JSON response
-     * @param string[]     $headers content-type header must be always set or consider using App::terminateHtml() or App::terminateJson() methods
+     * @param string|array          $output  Array type is supported only for JSON response
+     * @param array<string, string> $headers content-type header must be always set or consider using App::terminateHtml() or App::terminateJson() methods
      *
      * @return never
      */
@@ -1042,6 +1042,8 @@ class App
     /**
      * This can be overridden for future PSR-7 implementation.
      *
+     * @param array<string, string> $headersNew
+     *
      * @internal should be called only from self::outputResponse()
      */
     protected function outputResponseUnsafe(string $data, array $headersNew): void
@@ -1067,11 +1069,13 @@ class App
         echo $data;
     }
 
-    /** @var string[] */
-    private static $_sentHeaders = [];
+    /** @var array<string, string> */
+    private static array $_sentHeaders = [];
 
     /**
      * Output Response to the client.
+     *
+     * @param array<string, string> $headers
      */
     protected function outputResponse(string $data, array $headers): void
     {
@@ -1137,7 +1141,7 @@ class App
     /**
      * Output HTML response to the client.
      *
-     * @param string[] $headers
+     * @param array<string, string> $headers
      */
     private function outputResponseHtml(string $data, array $headers = []): void
     {
@@ -1150,8 +1154,8 @@ class App
     /**
      * Output JSON response to the client.
      *
-     * @param string|array $data
-     * @param string[]     $headers
+     * @param string|array          $data
+     * @param array<string, string> $headers
      */
     private function outputResponseJson($data, array $headers = []): void
     {

@@ -304,9 +304,9 @@ class Table extends Lister
      *       $columns = $this->getApp()->decodeJson($w);
      *   });
      *
-     * @param \Closure $fx             a callback function with columns widths as parameter
-     * @param int[]    $widths         ex: [100, 200, 300, 100]
-     * @param array    $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
+     * @param \Closure        $fx             a callback function with columns widths as parameter
+     * @param array<int, int> $widths         ex: [100, 200, 300, 100]
+     * @param array           $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
      *
      * @return $this
      */

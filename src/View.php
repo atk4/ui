@@ -497,7 +497,7 @@ class View extends AbstractView implements JsExpressionable
 
     // {{{ Sticky URLs
 
-    /** @var string[] stickyGet arguments */
+    /** @var array<string, string> stickyGet arguments */
     public $stickyArgs = [];
 
     /**

@@ -167,6 +167,8 @@ class Lookup extends Input
      * Generate Lookup data.
      *
      * @param int|bool $limit
+     *
+     * @return array{value: mixed, title: mixed}
      */
     public function getData($limit = true): array
     {
@@ -207,7 +209,7 @@ class Lookup extends Input
      *
      * @param string $key
      *
-     * @return string[]
+     * @return array{value: mixed, title: mixed}
      */
     public static function defaultRenderRow(self $control, Model $row, $key = null)
     {

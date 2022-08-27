@@ -107,7 +107,7 @@ class Multiline extends Form\Control
     /** @var array sui-table component props */
     public $tableProps = [];
 
-    /** @var array[] Set Vue component to use per field type. */
+    /** @var array<string, array{component: string, componentProps: mixed}> Set Vue component to use per field type. */
     protected $fieldMapToComponent = [
         'default' => [
             'component' => self::INPUT,

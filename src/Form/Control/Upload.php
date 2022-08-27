@@ -53,7 +53,7 @@ class Upload extends Input
     /** Whether callback has been defined or not. */
     public bool $hasDeleteCb = false;
 
-    /** @var JsExpressionable[] */
+    /** @var array<int, JsExpressionable> */
     public $jsActions = [];
 
     public const UPLOAD_ACTION = 'upload';
