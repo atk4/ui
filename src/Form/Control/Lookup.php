@@ -168,7 +168,7 @@ class Lookup extends Input
      *
      * @param int|bool $limit
      *
-     * @return array{value: mixed, title: mixed}
+     * @return array<int, array{value: mixed, title: mixed}>
      */
     public function getData($limit = true): array
     {
@@ -196,6 +196,8 @@ class Lookup extends Input
 
     /**
      * Renders the Lookup row depending on properties set.
+     *
+     * @return array{value: mixed, title: mixed}
      */
     public function renderRow(Model $row): array
     {
@@ -262,12 +264,10 @@ class Lookup extends Input
                     (new Jquery('.atk-modal'))->modal('hide'),
                 ];
 
-                if ($row = $this->renderRow($form->model)) {
-                    $chain = new Jquery('#' . $this->name . '-ac');
-                    $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-
-                    $ret[] = $chain;
-                }
+                $row = $this->renderRow($form->model);
+                $chain = new Jquery('#' . $this->name . '-ac');
+                $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
+                $ret[] = $chain;
 
                 return $ret;
             });
