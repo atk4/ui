@@ -258,7 +258,14 @@ class Form extends View
                 return $response;
             } catch (ValidationException $e) {
                 $response = [];
+                $openFirstSectionOnError = false;
+
                 foreach ($e->errors as $field => $error) {
+                    if (!$openFirstSectionOnError && $this->getControl($field)->getOwner()->getOwner() instanceof \Atk4\Ui\AccordionSection) {
+                        $response[] = $this->getControl($field)->getOwner()->getOwner()->getOwner()->jsOpen($this->getControl($field)->getOwner()->getOwner());
+                        $openFirstSectionOnError = true;
+                    }
+
                     $response[] = $this->error($field, $error);
                 }
 
