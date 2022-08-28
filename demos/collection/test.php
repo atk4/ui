@@ -18,7 +18,7 @@ $m->addField('flag', [
             [
                 'code_field' => $m->fieldName()->iso,
                 'name_field' => $m->fieldName()->name,
-            ]
+            ],
         ],
     ],
 ]);
