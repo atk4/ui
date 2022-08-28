@@ -502,8 +502,8 @@ class Table extends Lister
      * click outside of the body. Additionally when you move cursor over the
      * rows, pointer will be used and rows will be highlighted as you hover.
      *
-     * @param JsChain|\Closure|JsExpressionable $action Code to execute
-     * @param string[] An array of css class to exclude from row click
+     * @param JsChain|\Closure|JsExpressionable $action          Code to execute
+     * @param array<int, string>                $excludeSelector CSS classes to exclude from row click
      */
     public function onRowClick($action, array $excludeSelector = []): void
     {
