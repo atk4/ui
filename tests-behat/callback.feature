@@ -20,8 +20,3 @@ Feature: Callback
     Then Modal is open with text "Edit Country"
     Then I press Modal button "Save"
     Then Toast display should contain text 'Country action "edit" with "Andorra" entity was executed.'
-
-  Scenario:
-    Given I am on "_unit-test/callback_url.php"
-    Then I click link "callback"
-    Then I check if text in "p.atk-expected" match text in "p.atk-result"
