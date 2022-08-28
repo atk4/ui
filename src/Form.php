@@ -261,12 +261,14 @@ class Form extends View
                 $openFirstSectionOnError = false;
 
                 foreach ($e->errors as $field => $error) {
+                    $response[] = $this->error($field, $error);
+
+                    // If field inside Accordion section does not validate, open first AccordionSection
                     if (!$openFirstSectionOnError && $this->getControl($field)->getOwner()->getOwner() instanceof \Atk4\Ui\AccordionSection) {
                         $response[] = $this->getControl($field)->getOwner()->getOwner()->getOwner()->jsOpen($this->getControl($field)->getOwner()->getOwner());
                         $openFirstSectionOnError = true;
                     }
 
-                    $response[] = $this->error($field, $error);
                 }
 
                 return $response;
