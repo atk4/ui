@@ -61,7 +61,7 @@ class JsReload implements JsExpressionable
     #[\Override]
     public function jsRender(): string
     {
-        ini_set('output_buffering', (string) (1024 * 1024));
+        /*ini_set('output_buffering', (string) (1024 * 1024));
         ob_start();
         $this->dumpRenderTree($this->view);
         // test URL: /demos/interactive/modal.php?__atk_m=atk_layout_maestro_modal_5&__atk_cbtarget=atk_layout_maestro_modal_5_view_callbacklater&__atk_cb_atk_layout_maestro_modal_5_view_callbacklater=ajax&__atk_json=1
@@ -71,7 +71,7 @@ class JsReload implements JsExpressionable
         echo 'expected: string(166) "modal.php?__atk_m=atk_layout_maestro_modal_5&__atk_cb_atk_layout_maestro_modal_5_view_callbacklater=ajax&__atk_reload=atk_layout_maestro_modal_5_view_demos_viewtester"' . "\n";
         ob_end_flush();
 
-        exit;
+        exit;*/
 
         $jsFinal = (new Jquery($this->view))
             ->atkReloadView(
