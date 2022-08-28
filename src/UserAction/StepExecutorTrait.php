@@ -110,27 +110,23 @@ trait StepExecutorTrait
     protected function runSteps(): void
     {
         $this->loader->set(function (Loader $p) {
-            try {
-                switch ($this->step) {
-                    case 'args':
-                        $this->doArgs($p);
+            switch ($this->step) {
+                case 'args':
+                    $this->doArgs($p);
 
-                        break;
-                    case 'fields':
-                        $this->doFields($p);
+                    break;
+                case 'fields':
+                    $this->doFields($p);
 
-                        break;
-                    case 'preview':
-                        $this->doPreview($p);
+                    break;
+                case 'preview':
+                    $this->doPreview($p);
 
-                        break;
-                    case 'final':
-                        $this->doFinal($p);
+                    break;
+                case 'final':
+                    $this->doFinal($p);
 
-                        break;
-                }
-            } catch (\Exception $e) {
-                $this->handleException($e, $p, $this->step);
+                    break;
             }
         });
     }
@@ -514,21 +510,5 @@ trait StepExecutorTrait
         }
 
         return $args;
-    }
-
-    protected function handleException(\Throwable $exception, View $view, string $step): void
-    {
-        $msg = Message::addTo($view, ['Error:', 'type' => 'error']);
-        $msg->text->addHtml($this->getApp()->renderExceptionHtml($exception));
-        $view->js(true, $this->nextStepBtn->js()->addClass('disabled'));
-        if (!$this->isFirstStep($step)) {
-            $this->jsSetPrevHandler($view, $step);
-        }
-        if ($this->isLastStep($step)) {
-            $view->js(true, $this->execActionBtn->js()->addClass('disabled'));
-        }
-        if ($step === 'final') {
-            $this->jsSetPrevHandler($view, $this->steps[count($this->steps) - 1]);
-        }
     }
 }
