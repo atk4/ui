@@ -590,7 +590,7 @@ class App
             $this->html->invokeInit();
         }
 
-        $this->layout = $this->html->add($layout); // @phpstan-ignore assign.propertyType
+        $this->layout = $this->html->add($layout);
 
         $this->initIncludes();
 

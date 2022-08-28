@@ -1,0 +1,31 @@
+services:
+    # move to atk4/core later (or at least atk4/data)
+    -
+        factory: Mvorisek\Atk4\Hintable\Phpstan\SeedDmrtExtension(Atk4\Core\Factory, factory, 0)
+        tags:
+            - phpstan.broker.dynamicStaticMethodReturnTypeExtension
+
+    -
+        factory: Mvorisek\Atk4\Hintable\Phpstan\SeedDmrtExtension(Atk4\Ui\AbstractView, add, 0)
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
+    -
+        factory: Mvorisek\Atk4\Hintable\Phpstan\SeedDmrtExtension(Atk4\Ui\Columns, addColumn, 0)
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
+    -
+        factory: Mvorisek\Atk4\Hintable\Phpstan\SeedDmrtExtension(Atk4\Ui\Form, addControl, 1)
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
+    -
+        factory: Mvorisek\Atk4\Hintable\Phpstan\SeedDmrtExtension(Atk4\Ui\Form, controlFactory, 1)
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
+    -
+        factory: Mvorisek\Atk4\Hintable\Phpstan\SeedDmrtExtension(Atk4\Ui\Grid, addColumn, 1)
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
+    -
+        factory: Mvorisek\Atk4\Hintable\Phpstan\SeedDmrtExtension(Atk4\Ui\Table, addColumn, 1)
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
