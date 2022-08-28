@@ -463,7 +463,7 @@ class App
             $this->html->invokeInit();
         }
 
-        $this->layout = $this->html->add($layout); // @phpstan-ignore-line
+        $this->layout = $this->html->add($layout);
 
         $this->initIncludes();
 

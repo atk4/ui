@@ -120,7 +120,7 @@ class Grid extends View
             $appUniqueHashesBackup = $this->getApp()->uniqueNameHashes;
             $menuElementNameCountsBackup = \Closure::bind(fn () => $this->_elementNameCounts, $this->menu, AbstractView::class)();
             try {
-                $menuRight = $this->menu->addMenuRight(); // @phpstan-ignore-line
+                $menuRight = $this->menu->addMenuRight();
                 $menuItemView = View::addTo($menuRight->addItem()->setElement('div'));
                 $quickSearch = JsSearch::addTo($menuItemView);
                 $this->stickyGet($quickSearch->name . '_q');

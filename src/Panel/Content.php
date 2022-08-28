@@ -40,7 +40,7 @@ class Content extends View implements LoadableContent
      */
     public function setCb(Callback $cb): void
     {
-        $this->cb = $this->add($cb); // @phpstan-ignore-line
+        $this->cb = $this->add($cb);
     }
 
     /**
