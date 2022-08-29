@@ -210,7 +210,7 @@ class Upload extends Input
             $this->template->trySet('accept', implode(', ', $this->accept));
         }
         if ($this->multiple) {
-            $this->template->trySet('multiple', 'multiple');
+            $this->template->trySet('multiple', 'multiple="multiple"');
         }
 
         if ($this->placeholder) {

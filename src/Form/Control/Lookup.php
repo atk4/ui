@@ -341,8 +341,8 @@ class Lookup extends Input
             'type' => 'hidden',
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readonly' => $this->readOnly ? 'readonly' : false,
-            'disabled' => $this->disabled ? 'disabled' : false,
+            'readonly' => $this->readOnly,
+            'disabled' => $this->disabled,
         ], $this->inputAttr));
     }
 
@@ -378,14 +378,14 @@ class Lookup extends Input
     protected function renderView(): void
     {
         if ($this->multiple) {
-            $this->template->set('multiple', 'multiple');
+            $this->template->set('multiple', 'multiple="multiple"');
         }
 
         if ($this->disabled) {
             $this->settings['showOnFocus'] = false;
             $this->settings['allowTab'] = false;
 
-            $this->template->set('disabled', 'disabled');
+            $this->template->set('disabled', 'disabled="disabled"');
         }
 
         if ($this->readOnly) {
@@ -393,7 +393,7 @@ class Lookup extends Input
             $this->settings['allowTab'] = false;
             $this->settings['apiSettings'] = null;
             $this->settings['onShow'] = new JsFunction([new JsExpression('return false')]);
-            $this->template->set('readonly', 'readonly');
+            $this->template->set('readonly', 'readonly="readonly"');
         }
 
         if ($this->dependency) {
