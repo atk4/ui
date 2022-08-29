@@ -246,7 +246,7 @@ class Lookup extends Input
             $buttonSeed = ['content' => $buttonSeed];
         }
 
-        $defaultSeed = [Button::class, 'class.disabled' => ($this->disabled || $this->readOnly)];
+        $defaultSeed = [Button::class, 'class.disabled' => $this->disabled || $this->readOnly];
         $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
 
         $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
