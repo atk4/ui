@@ -268,7 +268,6 @@ class Form extends View
                         $response[] = $this->getControl($field)->getOwner()->getOwner()->getOwner()->jsOpen($this->getControl($field)->getOwner()->getOwner());
                         $openFirstSectionOnError = true;
                     }
-
                 }
 
                 return $response;
