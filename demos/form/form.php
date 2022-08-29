@@ -38,7 +38,6 @@ $tab = $tabs->addTab('Basic Use');
 Header::addTo($tab, ['Very simple form']);
 
 $form = Form::addTo($tab);
-
 $form->addControl('email');
 $form->onSubmit(function (Form $form) {
     // implement subscribe here
@@ -57,7 +56,7 @@ $group->addControl('name');
 $group->addControl('surname');
 $group->addControl('gender', [Form\Control\Dropdown::class, 'values' => ['Female', 'Male']]);
 
-$accordionLayout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section\Accordion::class]);
+$accordionLayout = $form->layout->addSubLayout([Form\Layout\Section\Accordion::class]);
 $details = $accordionLayout->addSection('Validating Field in Accordion');
 
 // testing 0 value

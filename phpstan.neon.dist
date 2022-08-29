@@ -88,6 +88,9 @@ parameters:
             path: 'demos/form/form.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsChain::checkbox\(\)\.$~'
         -
+            path: 'demos/form/form.php'
+            message: '~^Call to an undefined method Atk4\Ui\Form\Layout::addSection\(\)\.$~'
+        -
             path: 'demos/form/form2.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::addAction\(\)\.$~'
         -
