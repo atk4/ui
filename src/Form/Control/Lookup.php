@@ -4,37 +4,35 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
-use Atk4\Core\Factory;
-use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
+use Atk4\Data\Persistence\Sql\Query;
 use Atk4\Ui\Button;
-use Atk4\Ui\CallbackLater;
+use Atk4\Ui\Callback;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
-use Atk4\Ui\Js\Jquery;
-use Atk4\Ui\Js\JsBlock;
-use Atk4\Ui\Js\JsExpression;
-use Atk4\Ui\Js\JsExpressionable;
-use Atk4\Ui\Js\JsFunction;
-use Atk4\Ui\Js\JsModal;
-use Atk4\Ui\Js\JsToast;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsExpression;
+use Atk4\Ui\JsFunction;
+use Atk4\Ui\JsModal;
 use Atk4\Ui\VirtualPage;
 
 class Lookup extends Input
 {
-    use HookTrait;
+    public $defaultTemplate = 'formfield/autocomplete.html';
 
-    public $defaultTemplate = 'form/control/lookup.html';
-
-    public string $inputType = 'hidden';
-
-    /** @var array Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
-    public $values = [];
-
-    /** @var CallbackLater Object used to capture requests from the browser. */
+    /**
+     * Object used to capture requests from the browser.
+     *
+     * @var Callback
+     */
     public $callback;
 
-    /** @var string Set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value. */
-    public $empty = "\u{00a0}"; // Unicode NBSP
+    /**
+     * Set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value.
+     *
+     * @var string
+     */
+    public $empty = '...';
 
     /**
      * Either set this to array of fields which must be searched (e.g. "name", "surname"), or define this
@@ -42,21 +40,9 @@ class Lookup extends Input
      *
      * If left null, then search will be performed on a model's title field
      *
-     * @var list<string>|\Closure(Model, string): void|null
+     * @var array|\Closure|null
      */
     public $search;
-
-    /**
-     * If a dependency callback is declared Lookup collects the current (dirty) form values
-     * and passes them on to the dependency callback so conditions on the field model can be applied.
-     * This allows for generating different option lists depending on dirty form values
-     * E.g if we have a dropdown field 'country' we can add to the form an Lookup field 'state'
-     * with dependency
-     * Then model of the 'state' field can be limited to states of the currently selected 'country'.
-     *
-     * @var \Closure(Model, array<string, mixed>): void|null
-     */
-    public $dependency;
 
     /**
      * Set this to create right-aligned button for adding a new a new record.
@@ -64,17 +50,30 @@ class Lookup extends Input
      * true = will use "Add new" label
      * string = will use your string
      *
-     * @var bool|string|array|null
+     * @var bool|string|null
      */
     public $plus = false;
 
-    /** @var int Sets the max. amount of records that are loaded. */
-    public $limit = 100;
+    /**
+     * Sets the max. amount of records that are loaded. The default 10
+     * displays nicely in UI.
+     *
+     * @var int
+     */
+    public $limit = 10;
 
-    /** @var string|null Set custom model field here to use it's value as ID in dropdown instead of default model ID field. */
+    /**
+     * Set custom model field here to use it's value as ID in dropdown instead of default model ID field.
+     *
+     * @var string|null
+     */
     public $idField;
 
-    /** @var string|null Set custom model field here to display it's value in dropdown instead of default model title field. */
+    /**
+     * Set custom model field here to display it's value in dropdown instead of default model title field.
+     *
+     * @var string|null
+     */
     public $titleField;
 
     /**
@@ -83,285 +82,357 @@ class Lookup extends Input
      *
      * Use this apiConfig variable to pass API settings to Fomantic-UI in .dropdown()
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    public $apiConfig = ['cache' => false];
+    public array $apiConfig = [];
 
     /**
      * Fomantic-UI dropdown module settings.
      * Use this setting to configure various dropdown module settings
-     * to use with Lookup.
+     * to use with Autocomplete.
      *
      * For example, using this setting will automatically submit
      * form when field value is changes.
-     * $form->addControl('field', [Form\Control\Lookup::class, 'settings' => [
-     *     'allowReselection' => true,
-     *     'selectOnKeydown' => false,
-     *     'onChange' => new JsExpression('function (value, t, c) {
-     *         if ($(this).data("value") !== value) {
-     *             $(this).parents(\'.form\').form(\'submit\');
-     *             $(this).data(\'value\', value);
-     *         }
-     *     }'),
-     * ]]);
+     * $form->addField('field', [
+     *     'AutoComplete',
+     *     'settings' => [
+     *         'allowReselection' => true,
+     *         'selectOnKeydown' => false,
+     *         'onChange' => new JsExpression('function(value, t, c) {
+     *             if ($(this).data("value") !== value) {
+     *                 $(this).parents(".form").form("submit");
+     *                 $(this).data("value", value);
+     *             }
+     *         }'),
+     *     ]
+     * ]);
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    public $settings = [];
+    public array $settings = [];
 
     /**
-     * Define callback for generating the row data
-     * If left empty default callback Lookup::defaultRenderRow is used.
+     * Default options for Autocomplete Fomantic-UI component.
      *
-     * @var \Closure($this, Model): array{value: mixed, title: mixed}|null
+     * @return array<string, mixed>
      */
-    public $renderRowFunction;
+    public static function getDefaultAutocompleteSettings(): array
+    {
+        $options = array_merge(Dropdown::getDefaultDropdownSettings(true), [
+            'fields' => [
+                'name' => 'title',
+                'value' => 'value',
+                'text' => 'title',
+                'disabled' => 'disabled',
+            ],
+            'minCharacters' => 0,
+            'filterRemoteData' => false,
+            'saveRemoteData' => false,
+
+            // it seems this does not work for JSON, so escaped on server side 'preserveHTML' => false, // default = true
+            // sortSelect => true, // default = false
+        ]);
+
+        return $options;
+    }
 
     /**
-     * Whether or not to accept multiple value.
-     *   Multiple values are sent using a string with comma as value delimiter.
-     *   ex: 'value1,value2,value3'.
-     *
-     * @var bool
+     * @return array<string, mixed>
      */
-    public $multiple = false;
+    public static function getDefaultAutocompleteApiConfig(): array
+    {
+        $apiConfig = [
+            'method' => 'POST',
+            // 'beforeXHR' => new JsFunction(['xhr'], [new JsExpression('xhr.setRequestHeader(\'Content-Type\', \'application/json; charset=UTF-8\');')]),
+            'beforeSend' => new JsFunction(['settings'], [new JsExpression('var refCondValues = { }; var formFields = $(this).closest(\'.form\').serializeArray(); $.each(formFields, function(i, formField) { if ($.inArray(formField.name, [ref_condition_field_names]) !== -1) { refCondValues[formField.name] = formField.value;} }); settings.data = {\'autocomplete_query\': settings.urlData.query, \'autocomplete_ref_condition_values\': JSON.stringify(refCondValues)}; return settings;')]),
+            'successTest' => new JsFunction(['response'], [new JsExpression('return response.success || false;')]),
+            'onFailure' => new JsFunction(['response', 'elem'], [new JsExpression('elem.dropdown(\'set error\', \'API error\'); elem.dropdown(\'setup menu\', { \'values\': { } }); elem.dropdown(\'add message\', \'API error: Invalid response\'); elem.dropdown(\'show\');')]),
+            'onError' => new JsFunction(['errorMessage', 'elem'], [new JsExpression('elem.dropdown(\'set error\', \'API error\'); elem.dropdown(\'setup menu\', { \'values\': { } }); elem.dropdown(\'add message\', \'API error: \' + errorMessage); elem.dropdown(\'show\');')]),
+            'cache' => false,
+        ];
+
+        return $apiConfig;
+    }
 
     protected function init(): void
     {
         parent::init();
 
-        $this->template->set([
-            'placeholder' => $this->placeholder,
-        ]);
+        $this->template->set('input_id', $this->name . '-ac');
+        $this->template->set('place_holder', $this->placeholder);
 
-        $this->initQuickNewRecord();
+        if ($this->plus) {
+            $this->action = Button::addTo($this, [is_string($this->plus) ? $this->plus : 'Add new', 'disabled' => $this->disabled || $this->readOnly]);
+        }
+        // var_dump($this->model->get());
+        $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
 
-        $this->callback = CallbackLater::addTo($this);
-        $this->callback->set(function () {
-            $this->outputApiResponse();
+        $vp->set(function ($p) {
+            $f = Form::addTo($p);
+            $f->setModel($this->model);
+
+            $f->onSubmit(function ($f) {
+                $id = $f->model->save()->getId();
+
+                $modalChain = new Jquery('.atk-modal');
+                $modalChain->modal('hide');
+                $acChain = new Jquery('#' . $this->name . '-ac');
+                $acChain->dropdown('set value', $id)->dropdown('set text', $f->model->getTitle());
+
+                return [
+                    $modalChain,
+                    $acChain,
+                ];
+            });
         });
-    }
+        if ($this->action) {
+            $this->action->js('click', new JsModal('Adding New Record', $vp));
+        }
 
-    /**
-     * @param bool|string      $when
-     * @param JsExpressionable $action
-     *
-     * @return Jquery
-     */
-    protected function jsDropdown($when = false, $action = null): JsExpressionable
-    {
-        return $this->js($when, $action, 'div.ui.dropdown:has(> #' . $this->name . '_input)');
+        $this->apiConfig = static::getDefaultAutocompleteApiConfig();
+        $this->settings = static::getDefaultAutocompleteSettings();
     }
 
     /**
      * Returns URL which would respond with first 50 matching records.
      */
-    protected function getCallbackUrl(): string
+    public function getCallbackUrl(): string
     {
         return $this->callback->getJsUrl();
     }
 
     /**
-     * Generate API response.
-     *
      * @return never
      */
-    public function outputApiResponse(): void
+    public function processAutocompleteRequest(): void
     {
-        $this->getApp()->terminateJson([
+        header('Cache-Control: no-cache'); // make sure the response is not cached
+
+        $postQuery = $_POST['autocomplete_query'] ?? null;
+        if ($postQuery === null) {
+            throw new Exception('No autocomplete query');
+        }
+
+        $postLimit = $_POST['autocomplete_limit'] ?? null;
+        if ($postLimit !== null) {
+            if ((string) (int) $postLimit !== (string) $postLimit || $postLimit < 0 || $postLimit > 1000) {
+                throw new Exception('Invalid autocomplete limit');
+            }
+            $limit = (int) $postLimit;
+        } else {
+            $limit = $this->limit;
+        }
+        unset($postLimit);
+
+        $postRefCondValues = $_POST['autocomplete_ref_condition_values'] ?? null;
+        if ($postRefCondValues !== null) {
+            $refCondValues = json_decode($postRefCondValues, true, 512, \JSON_BIGINT_AS_STRING);
+        } else {
+            $refCondValues = [];
+        }
+        unset($postRefCondValues);
+
+        $autocompleteItems = $this->getAutocompleteItems($postQuery, $refCondValues, $limit + 1);
+        $isLimited = false;
+        if (count($autocompleteItems) > $limit) {
+            $isLimited = true;
+            $autocompleteItems = array_slice($autocompleteItems, 0, $limit);
+        }
+
+        if ((!$this->entityField || !$this->entityField->getField()->required) && $this->empty) {
+            $autocompleteItems[] = $this->getAutocompleteEmptyItem();
+        }
+
+        if ($isLimited) {
+            $autocompleteItems[] = ['value' => '', 'title' => 'Only first ' . $limit . ' results are shown. Please type longer query.', 'disabled' => true];
+        }
+
+        $response = [
             'success' => true,
-            'results' => $this->getData(),
+            'results' => array_map(static function ($item) {
+                $item['title'] = /* \Mvorisek\Utils\Text::escapeHtml */ $item['title'];
+
+                return $item;
+            }, $autocompleteItems),
+            'resultsLimited' => $isLimited,
+        ];
+
+        header('Content-Type: application/json; charset=UTF-8');
+        $this->getApp()->terminate(json_encode($response));
+    }
+
+    /**
+     * @return array<int, array{value: string, title: string}>
+     */
+    public function getAutocompleteItems(string $searchQuery, array $refCondValues, int $limit): array
+    {
+        if (!$this->model) {
+            throw new Exception('Form field model is not configured');
+        }
+
+        /** @var Query $q */
+        $q = $this->model->getPersistence()->dsql(); // @phpstan-ignore-line
+        $topAndExpr = $q->andExpr();
+        $isWhereSetFunc = static function (Query $query) {
+            return isset($query->args['where']) && count($query->args['where']) > 0;
+        };
+        $addWhereCondFunc = function (Query $query, string $fieldName, $cond, $value = null, bool $allowTypecast = true) {
+            if (func_num_args() === 3) {
+                $value = $cond;
+                $cond = '<=>';
+            }
+
+            // based on Persistence\Sql::initQueryConditions() method
+            $field = $this->model->getElement($fieldName);
+            if ($allowTypecast) {
+                $value = $this->model->getPersistence()->typecastSaveField($field, $value);
+            } else {
+                if ($value !== null) {
+                    $value = (string) $value;
+                }
+            }
+            $query->where($field, $cond, $value);
+        };
+
+        // set ref conditions
+        if ($this->entityField && isset($this->entityField->getField()->refConditions)) { // @phpstan-ignore-line TODO "refConditions"
+            $orExpr = $q->orExpr();
+            foreach ($this->entityField->getField()->refConditions as $refCond) {
+                $refCondFieldNames = [];
+                foreach ($refCond['fields'] as $fName) {
+                    $refCondFieldNames[$fName] = (string) $fName;
+                }
+
+                $andExpr = $q->andExpr();
+                foreach ($refCondFieldNames as $refCondFieldName) {
+                    $refCondValue = $refCondValues[$refCondFieldName];
+                    $addWhereCondFunc($andExpr, $refCondFieldName, $refCondValue);
+                }
+                if ($isWhereSetFunc($andExpr)) {
+                    $orExpr->where($andExpr);
+                }
+            }
+            if ($isWhereSetFunc($orExpr)) {
+                $topAndExpr->where($orExpr);
+            }
+        }
+
+        $titleField = $this->titleField ?? $this->model->titleField;
+
+        // add query conditions
+        $searchQuery = trim(/* \Mvorisek\Utils\Text::cleanString */ $searchQuery/* , false */);
+        if ($searchQuery !== '') {
+            if ($this->search instanceof \Closure) {
+                ($this->search)($topAndExpr, $searchQuery, $titleField);
+            } elseif ($this->search && is_array($this->search)) {
+                $orExpr = $q->orExpr();
+                foreach ($this->search as $field) {
+                    $addWhereCondFunc($orExpr, $field, 'like', '%' . $searchQuery . '%', false);
+                }
+                if ($isWhereSetFunc($orExpr)) {
+                    $topAndExpr->where($orExpr);
+                }
+            } else {
+                $addWhereCondFunc($topAndExpr, $titleField, 'like', '%' . $searchQuery . '%', false);
+            }
+        }
+
+        // clone model and set the builded where condition
+        $model = clone $this->model;
+        if ($isWhereSetFunc($topAndExpr)) {
+            $model->addCondition($topAndExpr);
+        }
+
+        // set limit
+        $model->setLimit($limit);
+        $model->setOrder($titleField);
+
+        // get items
+        $items = [];
+        foreach ($model as $row) {
+            $items[] = $this->getAutocompleteItemFromModel($row);
+        }
+
+        return $items;
+    }
+
+    public function getInput()
+    {
+        return $this->getApp()->getTag('input', [
+            'name' => $this->shortName,
+            'type' => 'hidden',
+            'id' => $this->name . '_input',
+            'value' => $this->getValue(),
+            'readonly' => $this->readOnly ? 'readonly' : false,
+            'disabled' => $this->disabled ? 'disabled' : false,
         ]);
     }
 
     /**
-     * Generate Lookup data.
+     * Set Fomantic-UI Api settings to use with dropdown.
      *
-     * @param int|bool $limit
+     * @param array $config
      *
-     * @return array<int, array{value: mixed, title: mixed}>
+     * @return $this
      */
-    public function getData($limit = true): array
+    public function setApiConfig($config)
     {
-        $this->applyLimit($limit);
+        $this->apiConfig = array_merge($this->apiConfig, $config);
 
-        $this->applySearchConditions();
-
-        $this->applyDependencyConditions();
-
-        $data = [];
-        foreach ($this->model as $row) {
-            $data[] = $this->renderRow($row);
-        }
-
-        if (!$this->multiple && $this->empty) {
-            array_unshift($data, ['value' => '', 'title' => $this->empty]);
-        }
-
-        return $data;
+        return $this;
     }
 
     /**
-     * Renders the Lookup row depending on properties set.
-     *
-     * @return array{value: mixed, title: mixed}
-     */
-    public function renderRow(Model $row): array
-    {
-        if ($this->renderRowFunction !== null) {
-            return ($this->renderRowFunction)($this, $row);
-        }
-
-        return $this->defaultRenderRow($row);
-    }
-
-    /**
-     * Default callback for generating data row.
-     *
-     * @param string $key
-     *
-     * @return array{value: mixed, title: mixed}
-     */
-    public function defaultRenderRow(Model $row, $key = null)
-    {
-        $idField = $this->idField ?? $row->idField;
-        $titleField = $this->titleField ?? $row->titleField;
-
-        return ['value' => $row->get($idField), 'title' => $row->get($titleField)];
-    }
-
-    /**
-     * Add button for new record.
-     */
-    protected function initQuickNewRecord(): void
-    {
-        if (!$this->plus) {
-            return;
-        }
-
-        if ($this->plus === true) {
-            $this->plus = 'Add New';
-        }
-
-        if (is_string($this->plus)) {
-            $this->plus = ['button' => $this->plus];
-        }
-
-        $buttonSeed = $this->plus['button'] ?? [];
-        if (is_string($buttonSeed)) {
-            $buttonSeed = ['content' => $buttonSeed];
-        }
-
-        $defaultSeed = [Button::class, 'class.disabled' => $this->disabled || $this->readOnly];
-        $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
-
-        $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
-        $vp->set(function (VirtualPage $p) {
-            $form = Form::addTo($p);
-
-            $entity = $this->model->createEntity();
-            $form->setModel($entity, $this->plus['fields'] ?? null);
-
-            $form->onSubmit(function (Form $form) {
-                $msg = $form->model->getUserAction('add')->execute();
-
-                $res = new JsBlock();
-                if (is_string($msg)) {
-                    $res->addStatement(new JsToast($msg));
-                }
-                $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
-
-                $row = $this->renderRow($form->model);
-                $chain = $this->jsDropdown();
-                $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-                $res->addStatement($chain);
-
-                return $res;
-            });
-        });
-
-        $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
-        $this->action->on('click', new JsModal($caption, $vp));
-    }
-
-    /**
-     * Apply limit to model.
-     *
-     * @param int|bool $limit
-     */
-    protected function applyLimit($limit = true): void
-    {
-        if ($limit !== false) {
-            $this->model->setLimit($limit === true ? $this->limit : $limit);
-        }
-    }
-
-    /**
-     * Apply conditions to model based on search string.
-     */
-    protected function applySearchConditions(): void
-    {
-        $query = $_GET['q'] ?? '';
-        if ($query === '') {
-            return;
-        }
-
-        if ($this->search instanceof \Closure) {
-            ($this->search)($this->model, $query);
-        } elseif (is_array($this->search)) {
-            $scope = Model\Scope::createOr();
-            foreach ($this->search as $field) {
-                $scope->addCondition($field, 'like', '%' . $query . '%');
-            }
-            $this->model->addCondition($scope);
-        } else {
-            $titleField = $this->titleField ?? $this->model->titleField;
-
-            $this->model->addCondition($titleField, 'like', '%' . $query . '%');
-        }
-    }
-
-    /**
-     * Apply conditions to model based on dependency.
-     */
-    protected function applyDependencyConditions(): void
-    {
-        if (!$this->dependency instanceof \Closure) {
-            return;
-        }
-
-        $data = [];
-        if (isset($_GET['form'])) {
-            parse_str($_GET['form'], $data);
-        } elseif ($this->form) {
-            $data = $this->form->model->get();
-        } else {
-            return;
-        }
-
-        ($this->dependency)($this->model, $data);
-    }
-
-    /**
-     * Override this method if you want to add more logic to the initialization of the auto-complete field.
+     * Override this method if you want to add more logic to the initialization of the
+     * auto-complete field.
      *
      * @param Jquery $chain
      */
     protected function initDropdown($chain): void
     {
+        if (!$this->model) {
+            throw new Exception('Form field model is not configured');
+        }
+
+        $defaultOptions = [];
+        $value = $this->getValue();
+        if ($value !== '') {
+            $this->model->tryLoad($value);
+            $defaultOptions[] = array_merge($this->getAutocompleteItemFromModel($this->model), ['selected' => true]);
+        } elseif ($this->empty) {
+            $defaultOptions[] = array_merge($this->getAutocompleteEmptyItem(), ['selected' => true]);
+        }
+
+        // set ref conditions fields names, values for this fields will be send with the autocomplete query request
+        $refCondFieldNames = [];
+        if ($this->entityField && isset($this->entityField->getField()->refConditions)) { // @phpstan-ignore-line TODO "refConditions"
+            foreach ($this->entityField->getField()->refConditions as $refCond) {
+                foreach ($refCond['fields'] as $fName) {
+                    $refCondFieldNames[(string) $fName] = (string) $fName;
+                }
+            }
+        }
+        $this->apiConfig['beforeSend']->fx_statements[0]->args = [
+            'ref_condition_field_names' => array_values($refCondFieldNames), ];
+
         $settings = array_merge([
-            'fields' => ['name' => 'title'],
-            'apiSettings' => array_merge(['url' => $this->getCallbackUrl() . '&q={query}'], $this->apiConfig),
+            'apiSettings' => array_merge(['url' => $this->getCallbackUrl()], $this->apiConfig),
+            'values' => $defaultOptions,
         ], $this->settings);
 
         $chain->dropdown($settings);
     }
 
-    protected function renderView(): void
+    public function renderView(): void
     {
-        if ($this->multiple) {
-            $this->template->dangerouslySetHtml('multipleClass', 'multiple');
+        if ($this->icon || $this->iconLeft) { // our css fixes are currently not compatible with icons on either side
+            throw (new Exception('Cannot use icon or iconLeft for dropdown'))
+                ->addMoreInfo('icon', $this->icon)
+                ->addMoreInfo('iconLeft', $this->iconLeft);
         }
+
+        $this->callback = Callback::addTo($this);
+        $this->callback->set(fn () => $this->processAutocompleteRequest());
 
         if ($this->disabled) {
             $this->template->set('disabledClass', 'disabled');
@@ -371,30 +442,73 @@ class Lookup extends Input
             $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
 
             $this->settings['apiSettings'] = null;
-            $this->settings['onShow'] = new JsFunction([], [new JsExpression('return false')]);
+            $this->settings['onShow'] = new JsFunction([new JsExpression('return false')]);
+            $this->template->set('readonly', 'readonly');
         }
 
-        if ($this->dependency) {
-            $this->apiConfig['data'] = array_merge([
-                'form' => new JsFunction([], [new JsExpression('return []', [$this->form->formElement->js()->serialize()])]),
-            ], $this->apiConfig['data'] ?? []);
-        }
-
-        $chain = $this->jsDropdown();
+        $chain = new Jquery('#' . $this->name . '-ac');
 
         $this->initDropdown($chain);
 
+        // fix: remove search term on outfocus event if dropdown is closed (user changed the search term,
+        //      but data was not loaded yet - menu not shown yet), needed with forceSelection = false (default since Fomantic-UI v2.9.0)
+        $chain->focusout( // @phpstan-ignore-line TODO add function to Jquery
+            new jsFunction([new JsExpression('if (!$(this).dropdown(\'is visible\')) { $(this).dropdown(\'remove searchTerm\'); }')])
+        );
+
         if ($this->entityField && $this->entityField->get()) {
             $idField = $this->idField ?? $this->model->idField;
+            $titleField = $this->titleField ?? $this->model->titleField;
 
-            $this->model = $this->model->loadBy($idField, $this->entityField->get());
+            $this->model->tryLoadBy($idField, $this->entityField->get());
 
-            $row = $this->renderRow($this->model);
-            $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
+            if (!$this->model->isLoaded()) {
+                $this->entityField->set(null);
+            } else {
+                // IMPORTANT: always convert data to string, otherwise numbers can be rounded by JS
+                $chain->dropdown('set value', (string) $this->model[$idField])
+                    ->dropdown('set text', (string) $this->model[$titleField]);
+                $this->js(true, $chain);
+            }
         }
 
         $this->js(true, $chain);
 
         parent::renderView();
+    }
+
+    /**
+     * @return array{value: string, title: string}
+     */
+    public function getAutocompleteItemFromModel(Model $model): array
+    {
+        if (!$model->isLoaded()) {
+            throw new Exception('Form field model is not loaded');
+        }
+
+        $idField = $this->idField ?? $this->model->idField;
+        $titleField = $this->titleField ?? $this->model->titleField;
+
+        $value = $model->get($idField);
+        if ($titleField !== $idField && $model->hasElement($titleField)) {
+            $title = $model->get($titleField);
+        } else {
+            try {
+                $title = strtoupper(/* \Mvorisek\Kelly\Model::encodeID */ $value);
+            } catch (\Exception $e) {
+                $title = $value;
+            }
+        }
+        $item = ['value' => (string) $value, 'title' => (string) $title];
+
+        return $item;
+    }
+
+    /**
+     * @return array{value: string, title: string}
+     */
+    public function getAutocompleteEmptyItem(): array
+    {
+        return ['value' => '', 'title' => $this->empty];
     }
 }
