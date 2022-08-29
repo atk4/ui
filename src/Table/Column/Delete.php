@@ -38,13 +38,13 @@ class Delete extends Table\Column
             'uri_options' => [$this->name => $this->table->jsRow()->data('id')],
         ]);
 
-        return $this->getApp()->getTag(
-            'a',
-            ['href' => '#', 'title' => 'Delete {$' . $this->table->model->titleField . '}?', 'class' => $this->shortName],
-            [
-                ['i', ['class' => 'ui red trash icon'], ''],
-                'Delete',
-            ]
-        );
+        return $this->getApp()->getTag('a', [
+            'href' => '#',
+            'title' => 'Delete {$' . $this->table->model->titleField . '}?',
+            'class' => $this->shortName,
+        ], [
+            ['i', ['class' => 'ui red trash icon'], ''],
+            'Delete',
+        ]);
     }
 }
