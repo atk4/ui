@@ -66,7 +66,7 @@ class Upload extends Input
         $this->cb = JsCallback::addTo($this);
 
         if (!$this->action) {
-            $this->action = new Button(['icon' => 'upload', 'class.disabled' => ($this->disabled || $this->readOnly)]);
+            $this->action = new Button(['icon' => 'upload', 'class.disabled' => $this->disabled || $this->readOnly]);
         }
     }
 
@@ -207,8 +207,13 @@ class Upload extends Input
         }
 
         if ($this->accept !== []) {
-            $this->template->trySet('accept', implode(', ', $this->accept));
+            $this->template->set('accept', implode(', ', $this->accept));
         }
+
+        if ($this->disabled || $this->readOnly) {
+            $this->template->set('disabled', 'disabled="disabled"');
+        }
+
         if ($this->multiple) {
             $this->template->trySet('multiple', 'multiple="multiple"');
         }
