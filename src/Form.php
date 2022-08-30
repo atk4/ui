@@ -532,13 +532,12 @@ class Form extends View
     {
         $output = parent::renderTemplateToHtml($region);
 
-        return $this->fixFormInRenderedHtml($output);
+        return $this->fixOwningFormAttrInRenderedHtml($output);
     }
 
-    public function fixFormInRenderedHtml(string $html): string
+    public function fixOwningFormAttrInRenderedHtml(string $html): string
     {
-        $innerFormTags = ['button', 'fieldset', 'input', 'label',
-            'output', 'select', 'textarea', ];
+        $innerFormTags = ['button', 'fieldset', 'input', 'label', 'output', 'select', 'textarea'];
 
         return preg_replace('~<(' . implode('|', $innerFormTags) . ')(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $html);
     }
