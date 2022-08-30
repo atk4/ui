@@ -81,21 +81,16 @@ class App
     /**
      * Will be set to true after app->run() is called, which may be done automatically
      * on exit.
-     *
-     * @var bool
      */
-    public $runCalled = false;
+    public bool $runCalled = false;
 
     /**
      * Will be set to true, when exit is called. Sometimes exit is intercepted by shutdown
      * handler and we don't want to execute 'beforeExit' multiple times.
-     *
-     * @var bool
      */
-    private $exitCalled = false;
+    private bool $exitCalled = false;
 
-    /** @var bool */
-    public $isRendering = false;
+    public bool $isRendering = false;
 
     /** @var UiPersistence */
     public $uiPersistence;
