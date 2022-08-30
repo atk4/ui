@@ -77,7 +77,7 @@
                     </div>
                     <div class="right aligned three wide column">
                         <!-- Remove rule button -->
-                        <i :class="labels.removeRule" @click="remove" class="atk-qb-remove"></i>
+                        <i :class="labels.removeRuleClass" @click="remove" class="atk-qb-remove"></i>
                     </div>
                 </div>
             </div>

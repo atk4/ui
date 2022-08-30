@@ -36,10 +36,10 @@ $group->addControl('c_disb', [Form\Control\Checkbox::class, 'disabled' => true],
 
 $group = $form->addGroup('Dropdown');
 $values = [
-    'tag' => ['Tag', 'icon' => 'tag icon'],
-    'globe' => ['Globe', 'icon' => 'globe icon'],
-    'registered' => ['Registered', 'icon' => 'registered icon'],
-    'file' => ['File', 'icon' => 'file icon'],
+    'tag' => ['Tag', 'icon' => 'tag'],
+    'globe' => ['Globe', 'icon' => 'globe'],
+    'registered' => ['Registered', 'icon' => 'registered'],
+    'file' => ['File', 'icon' => 'file'],
 ];
 $group->addControl('d_norm', [Form\Control\Dropdown::class, 'values' => $values, 'width' => 'three'])->set('globe');
 $group->addControl('d_read', [Form\Control\Dropdown::class, 'values' => $values, 'readOnly' => true, 'width' => 'three'])->set('globe'); // allows to change value
@@ -185,10 +185,10 @@ $b1->onChange('console.log("b1 changed")');
 $group = $form->addGroup(['Dropdown', 'width' => 'three']);
 $d1 = $group->addControl('d1', new Form\Control\Dropdown([
     'values' => [
-        'tag' => ['Tag', 'icon' => 'tag icon'],
-        'globe' => ['Globe', 'icon' => 'globe icon'],
-        'registered' => ['Registered', 'icon' => 'registered icon'],
-        'file' => ['File', 'icon' => 'file icon'],
+        'tag' => ['Tag', 'icon' => 'tag'],
+        'globe' => ['Globe', 'icon' => 'globe'],
+        'registered' => ['Registered', 'icon' => 'registered'],
+        'file' => ['File', 'icon' => 'file'],
     ],
 ]));
 $d1->onChange('console.log("Dropdown changed")');

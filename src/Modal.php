@@ -352,7 +352,7 @@ class Modal extends View
         }
 
         if (!isset($this->options['modal_option']['closable']) || $this->options['modal_option']['closable']) {
-            $this->template->trySet('close', 'icon close');
+            $this->template->trySet('closeIcon', 'close');
         }
 
         if ($this->args) {

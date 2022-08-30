@@ -24,14 +24,14 @@ export default {
             nodes: this.item.nodes,
             icons: {
                 single: {
-                    on: 'circle icon',
-                    off: 'circle outline icon',
-                    indeterminate: 'dot circle outline icon',
+                    on: 'circle',
+                    off: 'circle outline',
+                    indeterminate: 'dot circle outline',
                 },
                 multiple: {
-                    on: 'check square outline icon',
-                    off: 'square outline icon',
-                    indeterminate: 'minus square outline icon',
+                    on: 'check square outline',
+                    off: 'square outline',
+                    indeterminate: 'minus square outline',
                 },
             },
         };
@@ -55,7 +55,7 @@ export default {
             return (this.nodes && this.nodes.length > 0);
         },
         toggleIcon: function () {
-            return this.isParent ? this.open ? 'caret down icon' : 'caret right icon' : null;
+            return this.isParent ? (this.open ? 'caret down' : 'caret right') + ' icon' : null;
         },
         state: function () {
             let state = 'off';
@@ -68,7 +68,7 @@ export default {
             return state;
         },
         getIcon: function () {
-            return this.icons[this.getRootData().options.mode][this.state];
+            return this.icons[this.getRootData().options.mode][this.state] + ' icon';
         },
     },
     methods: {

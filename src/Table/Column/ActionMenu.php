@@ -40,7 +40,7 @@ class ActionMenu extends Table\Column
     public $options = ['action' => 'hide'];
 
     /** @var string Button icon to use for display dropdown. */
-    public $icon = 'dropdown icon';
+    public $icon = 'dropdown';
 
     public function getTag(string $position, $value, $attr = []): string
     {
@@ -119,7 +119,7 @@ class ActionMenu extends Table\Column
 
         $s = '<div class="' . $this->ui . ' atk-action-menu">'
             . '<div class="text">' . $this->label . '</div>'
-            . ($this->icon ? '<i class="' . $this->icon . '"></i>' : '')
+            . ($this->icon ? '<i class="' . $this->icon . ' icon"></i>' : '')
             . '<div class="menu">' . $output . '</div>'
             . '</div>';
 

@@ -51,10 +51,10 @@ class Right extends View implements Loadable
     public $warningTrigger = 'atk-visible';
 
     /** @var string the warning icon class */
-    public $warningIcon = 'icon exclamation circle';
+    public $warningIcon = 'exclamation circle';
 
     /** @var string the close icon class */
-    public $closeIcon = 'icon times';
+    public $closeIcon = 'times';
 
     protected function init(): void
     {
