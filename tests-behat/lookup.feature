@@ -1,5 +1,4 @@
 Feature: Lookup
-  Testing Lookup control
 
   Scenario: Testing lookup in modal
     Given I am on "_unit-test/lookup.php"

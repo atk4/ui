@@ -1,5 +1,4 @@
 Feature: ScopeBuilder
-  Testing scope builder
 
   Scenario: test ScopeBuilder rendering of model scope
     Given I am on "_unit-test/scope-builder.php"

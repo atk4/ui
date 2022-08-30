@@ -1,5 +1,4 @@
 Feature: Card
-  Testing card with model action
 
   Scenario:
     Given I am on "interactive/card-action.php"

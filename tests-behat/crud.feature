@@ -1,5 +1,4 @@
 Feature: Crud
-  Testing crud add, edit, delete using search
 
   Scenario:
     Given I am on "_unit-test/crud.php"

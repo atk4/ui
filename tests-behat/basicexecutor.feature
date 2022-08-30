@@ -1,5 +1,4 @@
-Feature: Executor
-  Testing basic action executor
+Feature: Basic Executor
 
   Scenario: basic
     Given I am on "data-action/actions.php"
