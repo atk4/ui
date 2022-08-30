@@ -31,14 +31,11 @@ class DemosTest extends TestCase
     /** @const string */
     protected const DEMOS_DIR = self::ROOT_DIR . '/demos';
 
-    /** @var array */
-    private static $_serverSuperglobalBackup;
+    private static array $_serverSuperglobalBackup;
 
-    /** @var Persistence Initialized DB connection */
-    private static $_db;
+    private static ?Persistence $_db = null;
 
-    /** @var array */
-    private static $_failedParentTests = [];
+    private static array $_failedParentTests = [];
 
     public static function setUpBeforeClass(): void
     {
