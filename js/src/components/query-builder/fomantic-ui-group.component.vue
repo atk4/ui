@@ -51,7 +51,7 @@
             </div>
         </div>
         <div class="vbq-group-body content">
-            <query-builder-children v-bind="$props"/>
+            <query-builder-children v-bind="$props" />
         </div>
     </div>
 </template>

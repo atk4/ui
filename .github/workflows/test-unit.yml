@@ -167,8 +167,8 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mysql.cov; fi
 
-      - name: "Run tests: MariaDB"
-        if: success() || failure()
+      - name: "Run tests: MariaDB (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -179,8 +179,8 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mariadb.cov; fi
 
-      - name: "Run tests: PostgreSQL"
-        if: success() || failure()
+      - name: "Run tests: PostgreSQL (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "pgsql:host=postgres;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -191,8 +191,8 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-postgres.cov; fi
 
-      - name: "Run tests: MSSQL"
-        if: success() || failure()
+      - name: "Run tests: MSSQL (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "sqlsrv:host=mssql;dbname=master;driverOptions[TrustServerCertificate]=1"
           DB_USER: sa
@@ -203,8 +203,8 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mssql.cov; fi
 
-      - name: "Run tests: Oracle"
-        if: success() || failure()
+      - name: "Run tests: Oracle (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "oci:dbname=oracle/xe"
           DB_USER: system
@@ -379,8 +379,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MariaDB (only for coverage or cron)"
-        if: (success() || failure()) && (env.LOG_COVERAGE || github.event_name == 'schedule')
+      - name: "Run tests: MariaDB (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -390,8 +390,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: PostgreSQL (only for coverage or cron)"
-        if: (success() || failure()) && (env.LOG_COVERAGE || github.event_name == 'schedule')
+      - name: "Run tests: PostgreSQL (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "pgsql:host=postgres;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -401,8 +401,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MSSQL (only for coverage or cron)"
-        if: (success() || failure()) && (env.LOG_COVERAGE || github.event_name == 'schedule')
+      - name: "Run tests: MSSQL (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "sqlsrv:host=mssql;dbname=master;driverOptions[TrustServerCertificate]=1"
           DB_USER: sa
@@ -412,8 +412,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: Oracle (only for coverage or cron)"
-        if: (success() || failure()) && (env.LOG_COVERAGE || github.event_name == 'schedule')
+      - name: "Run tests: Oracle (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "oci:dbname=oracle/xe"
           DB_USER: system

@@ -14,7 +14,7 @@ import atkPlugin from './atk.plugin';
 export default class confirm extends atkPlugin {
     main() {
         let context = this;
-        const $m = $('<div class="ui modal"/>')
+        const $m = $('<div class="ui modal" />')
             .appendTo('body')
             .html(this.getDialogHtml(this.settings.message));
 

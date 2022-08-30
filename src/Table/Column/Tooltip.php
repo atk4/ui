@@ -52,12 +52,13 @@ class Tooltip extends Table\Column
         }
 
         return $this->getApp()->getTag('td', $attr, [
-            ' {$' . $field->shortName . '}' . $this->getApp()->getTag('span', [
-                'class' => 'ui icon link {$_' . $field->shortName . '_data_visible_class}',
-                'data-tooltip' => '{$_' . $field->shortName . '_data_tooltip}',
-            ], [
-                ['i', ['class' => 'ui icon {$_' . $field->shortName . '_icon}']],
-            ]),
+            ' {$' . $field->shortName . '}'
+                . $this->getApp()->getTag('span', [
+                    'class' => 'ui icon link {$_' . $field->shortName . '_data_visible_class}',
+                    'data-tooltip' => '{$_' . $field->shortName . '_data_tooltip}',
+                ], [
+                    ['i', ['class' => 'ui icon {$_' . $field->shortName . '_icon}']],
+                ]),
         ]);
     }
 

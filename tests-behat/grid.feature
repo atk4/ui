@@ -1,5 +1,4 @@
 Feature: Grid
-  Testing grid search
 
   Scenario: search
     Given I am on "collection/grid.php"

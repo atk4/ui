@@ -1,5 +1,4 @@
 Feature: Form
-  Testing forms
 
   Scenario: test form response
     Given I am on "form/form.php"

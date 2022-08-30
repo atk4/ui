@@ -41,7 +41,7 @@ You can set default value and interact with a form control using JavaScript::
 When used stand-alone, Form\Controls will produce a basic HTML (I have omitted id=)::
 
     <div class="ui  input">
-        <input name="line" type="text" placeholder="" value="hello world"/>
+        <input name="line" type="text" placeholder="" value="hello world" />
     </div>
 
 
