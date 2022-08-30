@@ -16,7 +16,6 @@ class Textarea extends Input
     {
         return $this->getApp()->getTag('textarea', array_merge([
             'name' => $this->shortName,
-            'type' => $this->inputType,
             'rows' => $this->rows,
             'placeholder' => $this->placeholder,
             'id' => $this->name . '_input',
