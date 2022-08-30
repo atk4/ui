@@ -114,7 +114,7 @@ class Upload extends Input
     }
 
     /**
-     * @param string $id
+     * @param string|null $id
      */
     public function setFileId($id): void
     {
