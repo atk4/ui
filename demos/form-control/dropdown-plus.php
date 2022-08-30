@@ -89,7 +89,7 @@ $form->addControl('icon', [
     Form\Control\Dropdown::class,
     'caption' => 'Using icon',
     'empty' => 'Choose an icon',
-    'values' => ['tag' => ['Tag', 'icon' => 'tag icon'], 'globe' => ['Globe', 'icon' => 'globe icon'], 'registered' => ['Registered', 'icon' => 'registered icon'], 'file' => ['File', 'icon' => 'file icon']],
+    'values' => ['tag' => ['Tag', 'icon' => 'tag'], 'globe' => ['Globe', 'icon' => 'globe'], 'registered' => ['Registered', 'icon' => 'registered'], 'file' => ['File', 'icon' => 'file']],
 ]);
 
 $form->addControl('multi', [

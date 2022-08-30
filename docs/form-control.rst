@@ -406,10 +406,10 @@ If not used with a model, you can define the Dropdown values in $values array. T
 You can also define an Icon right away::
 
     $dropdown->values = [
-        'tag' => ['Tag', 'icon' => 'tag icon'],
-        'globe' => ['Globe', 'icon' => 'globe icon'],
-        'registered' => ['Registered', 'icon' => 'registered icon'],
-        'file' => ['File', 'icon' => 'file icon'],
+        'tag' => ['Tag', 'icon' => 'tag'],
+        'globe' => ['Globe', 'icon' => 'globe'],
+        'registered' => ['Registered', 'icon' => 'registered'],
+        'file' => ['File', 'icon' => 'file'],
     ];
 
 If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.

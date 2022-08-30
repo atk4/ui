@@ -97,7 +97,7 @@ Composing offers you another way to deal with Group icons::
 
     $no_users = new \Atk4\Ui\View(['class.huge icons' => true, 'element' => 'i']);
     Icon::addTo($no_users, ['big red dont']);
-    Icon::addTo($no_users, ['black user icon']);
+    Icon::addTo($no_users, ['black user']);
 
     $app->add($no_users);
 

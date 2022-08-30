@@ -58,9 +58,9 @@ export default {
                     { id: 'OR', label: 'Or' },
                 ],
                 addRule: 'Add Rule',
-                removeRule: 'small icon times',
+                removeRuleClass: 'small icon times',
                 addGroup: 'Add Group',
-                removeGroup: 'small icon times',
+                removeGroupClass: 'small icon times',
                 textInputPlaceholder: 'value',
                 spaceRule: 'fitted', // can be fitted, compact or padded.
                 hiddenOperator: ['is empty', 'is not empty'], // a list of operators that when select, will hide user input.
