@@ -386,6 +386,7 @@ class Lookup extends Input
             $this->settings['allowTab'] = false;
 
             $this->template->set('disabled', 'disabled="disabled"');
+            $this->template->set('disabledClass', 'disabled');
         }
 
         if ($this->readOnly) {
