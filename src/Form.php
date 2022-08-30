@@ -537,7 +537,7 @@ class Form extends View
 
     public function fixOwningFormAttrInRenderedHtml(string $html): string
     {
-        $innerFormTags = ['button', 'fieldset', 'input', 'label', 'output', 'select', 'textarea'];
+        $innerFormTags = ['button', 'fieldset', 'input', 'output', 'select', 'textarea'];
 
         return preg_replace('~<(' . implode('|', $innerFormTags) . ')(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $html);
     }
