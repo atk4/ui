@@ -19,8 +19,7 @@ Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader'
 
 /** @var Model $inventoryItemClass */
 $inventoryItemClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
-    /** @var Persistence */
-    public $countryPersistence;
+    public Persistence $countryPersistence;
 
     protected function init(): void
     {
