@@ -537,7 +537,7 @@ class Form extends View
 
     public function fixFormInRenderedHtml(string $html): string
     {
-        $innerFormTags = ['button', 'datalist', 'fieldset', 'input', 'keygen', 'label', 'legend',
+        $innerFormTags = ['button', 'fieldset', 'input', 'keygen', 'label', 'legend',
             'meter', 'optgroup', 'option', 'output', 'progress', 'select', 'textarea', ];
 
         return preg_replace('~<(' . implode('|', $innerFormTags) . ')(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $html);
