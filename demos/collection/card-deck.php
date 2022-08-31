@@ -47,6 +47,6 @@ $infoAction->args = [
     'country' => ['required' => true, 'ui' => ['form' => [Form\Control\Lookup::class, 'model' => new Country($app->db), 'placeholder' => 'Please select a country.']]],
 ];
 
-$deck = CardDeck::addTo($app, ['noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book']]);
+$deck = CardDeck::addTo($app);
 
 $deck->setModel($countries, ['Cost'], [$countries->fieldName()->iso, $countries->fieldName()->iso3]);
