@@ -223,26 +223,26 @@ class CardDeck extends View
      *
      * @return array|object
      */
-    protected function jsExecute($return, Model\UserAction $action = null)
+    protected function jsExecute($return, Model\UserAction $action)
     {
         if (is_string($return)) {
-            return $this->getNotifier($return, $action);
+            return $this->getNotifier($action, $return);
         } elseif (is_array($return) || $return instanceof JsExpressionable) {
             return $return;
         } elseif ($return instanceof Model) {
             $msg = $return->isLoaded() ? $this->saveMsg : ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
 
-            return $this->jsModelReturn($action, $return, $msg);
+            return $this->jsModelReturn($action, $msg);
         }
 
-        return $this->getNotifier($this->defaultMsg, $action);
+        return $this->getNotifier($action, $this->defaultMsg);
     }
 
     /**
      * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
      */
-    protected function getNotifier(string $msg = null, Model\UserAction $action = null): object
+    protected function getNotifier(Model\UserAction $action, string $msg = null): object
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {
@@ -255,11 +255,11 @@ class CardDeck extends View
     /**
      * Js expression return when action afterHook executor return a Model.
      */
-    protected function jsModelReturn(Model\UserAction $action = null, Model $entity, string $msg = 'Done!'): array
+    protected function jsModelReturn(Model\UserAction $action, string $msg = 'Done!'): array
     {
         $js = [];
-        $js[] = $this->getNotifier($msg, $action);
-        if ($entity->isLoaded() && $card = $this->findCard($entity)) { // $action->getModel() was here, see https://github.com/atk4/ui/pull/1845
+        $js[] = $this->getNotifier($action, $msg);
+        if ($action->getEntity()->isLoaded() && $card = $this->findCard($action->getEntity())) {
             $js[] = $card->jsReload($this->getReloadArgs());
         } else {
             $js[] = $this->container->jsReload($this->getReloadArgs());
