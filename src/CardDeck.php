@@ -255,11 +255,11 @@ class CardDeck extends View
     /**
      * Js expression return when action afterHook executor return a Model.
      */
-    protected function jsModelReturn(Model\UserAction $action = null, Model $returnEntity, string $msg = 'Done!'): array
+    protected function jsModelReturn(Model\UserAction $action = null, Model $entity, string $msg = 'Done!'): array
     {
         $js = [];
         $js[] = $this->getNotifier($msg, $action);
-        if ($returnEntity->isLoaded() && $card = $this->findCard($returnEntity)) {
+        if ($entity->isLoaded() && $card = $this->findCard($entity)) {
             $js[] = $card->jsReload($this->getReloadArgs());
         } else {
             $js[] = $this->container->jsReload($this->getReloadArgs());
