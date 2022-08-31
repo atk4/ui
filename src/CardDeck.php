@@ -232,7 +232,7 @@ class CardDeck extends View
         } elseif ($return instanceof Model) {
             $msg = $return->isLoaded() ? $this->saveMsg : ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
 
-            return $this->jsModelReturn($action, $msg);
+            return $this->jsModelReturn($action, $return, $msg);
         }
 
         return $this->getNotifier($this->defaultMsg, $action);
@@ -255,11 +255,11 @@ class CardDeck extends View
     /**
      * Js expression return when action afterHook executor return a Model.
      */
-    protected function jsModelReturn(Model\UserAction $action = null, string $msg = 'Done!'): array
+    protected function jsModelReturn(Model\UserAction $action = null, Model $returnEntity, string $msg = 'Done!'): array
     {
         $js = [];
         $js[] = $this->getNotifier($msg, $action);
-        if ($action->getModel()->isLoaded() && $card = $this->findCard($action->getModel())) {
+        if ($returnEntity->isLoaded() && $card = $this->findCard($returnEntity)) {
             $js[] = $card->jsReload($this->getReloadArgs());
         } else {
             $js[] = $this->container->jsReload($this->getReloadArgs());
@@ -281,10 +281,10 @@ class CardDeck extends View
      *
      * @return mixed
      */
-    protected function findCard(Model $model)
+    protected function findCard(Model $entity)
     {
-        $mapResults = function ($a) use ($model) {
-            return $a[$model->idField];
+        $mapResults = function ($a) use ($entity) {
+            return $a[$entity->idField];
         };
         $deck = [];
         foreach ($this->cardHolder->elements as $element) {
@@ -293,9 +293,9 @@ class CardDeck extends View
             }
         }
 
-        if (in_array($model->getId(), array_map($mapResults, $model->export([$model->idField])), true)) {
+        if (in_array($entity->getId(), array_map($mapResults, $entity->getModel()->export([$entity->idField])), true)) {
             // might be in result set but not in deck, for example when adding a card.
-            return $deck[$model->getId()] ?? null;
+            return $deck[$entity->getId()] ?? null;
         }
 
         return null;
