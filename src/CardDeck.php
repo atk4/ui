@@ -230,6 +230,10 @@ class CardDeck extends View
         } elseif (is_array($return) || $return instanceof JsExpressionable) {
             return $return;
         } elseif ($return instanceof Model) {
+            if ($return->isEntity() && !$action->isOwnerEntity()) {
+                $action = $action->getActionForEntity($return);
+            }
+
             $msg = $return->isLoaded() ? $this->saveMsg : ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
 
             return $this->jsModelReturn($action, $msg);
