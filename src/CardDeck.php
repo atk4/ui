@@ -283,9 +283,6 @@ class CardDeck extends View
      */
     protected function findCard(Model $entity)
     {
-        $mapResults = function ($a) use ($entity) {
-            return $a[$entity->idField];
-        };
         $deck = [];
         foreach ($this->cardHolder->elements as $element) {
             if ($element instanceof $this->card) {
@@ -293,7 +290,7 @@ class CardDeck extends View
             }
         }
 
-        if (in_array($entity->getId(), array_map($mapResults, $entity->getModel()->export([$entity->idField])), true)) {
+        if ($entity->getModel()->tryLoad($entity->getId()) !== null) {
             // might be in result set but not in deck, for example when adding a card.
             return $deck[$entity->getId()] ?? null;
         }
