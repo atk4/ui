@@ -48,10 +48,14 @@ trait ModelPreventModificationTrait
     {
         $originalCallback = $action->callback;
         $action->callback = function (Model $model, ...$args) use ($action, $originalCallback, $outputCallback) {
+            if ($model->isEntity()) {
+                $action = $action->getActionForEntity($model);
+            }
+
             $callbackBackup = $action->callback;
             try {
                 $action->callback = $originalCallback;
-                $action->execute($model, ...$args);
+                $action->execute(...$args);
             } finally {
                 $action->callback = $callbackBackup;
             }
