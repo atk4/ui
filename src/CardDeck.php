@@ -259,7 +259,7 @@ class CardDeck extends View
     {
         $js = [];
         $js[] = $this->getNotifier($msg, $action);
-        if ($entity->isLoaded() && $card = $this->findCard($entity)) {
+        if ($entity->isLoaded() && $card = $this->findCard($entity)) { // $action->getModel() was here, see https://github.com/atk4/ui/pull/1845
             $js[] = $card->jsReload($this->getReloadArgs());
         } else {
             $js[] = $this->container->jsReload($this->getReloadArgs());
