@@ -230,7 +230,7 @@ class CardDeck extends View
         } elseif (is_array($return) || $return instanceof JsExpressionable) {
             return $return;
         } elseif ($return instanceof Model) {
-            if ($return->isEntity() && !$action->isOwnerEntity()) {
+            if ($return->isEntity()) {
                 $action = $action->getActionForEntity($return);
             }
 
