@@ -133,7 +133,7 @@ class ModelWithPrefixedFields extends Model
 
         parent::init();
 
-        //$this->initPreventModification();
+        $this->initPreventModification();
     }
 
     public function addField(string $name, $seed = []): Field
