@@ -884,7 +884,7 @@ class App
 
         if ($value !== null) {
             $result = [];
-            foreach ((array) $value as $v) {
+            foreach (is_scalar($value) ? [$value] : $value as $v) {
                 if (is_array($v)) {
                     $result[] = $this->getTag(...$v);
                 } elseif (in_array($tag, ['script', 'style'], true)) {
