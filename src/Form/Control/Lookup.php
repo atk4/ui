@@ -420,11 +420,4 @@ class Lookup extends Input
 
         parent::renderView();
     }
-
-    public function set($value = null, $junk = null)
-    {
-        $value = implode(', ', (array) $value);
-
-        return parent::set($value, $junk);
-    }
 }
