@@ -505,12 +505,15 @@ class Table extends Lister
      * @param JsChain|\Closure|JsExpressionable $action          Code to execute
      * @param array<int, string>                $excludeSelector CSS classes to exclude from row click
      */
-    public function onRowClick($action, array $excludeSelector = []): void
+    public function onRowClick($action): void
     {
         $this->addClass('selectable');
         $this->js(true)->find('tbody')->css('cursor', 'pointer');
 
-        $this->on('click', 'tbody tr td' . ($excludeSelector ? ':not(' . implode(',', $excludeSelector) . ')' : ''), $action);
+        /* Do not trigger row click event if click stems from row content
+         like checkboxes, or links, marked as atk4-norowclick
+         */
+        $this->on('click', 'tbody tr td:not(atk4-norowclick)', $action);
     }
 
     /**
