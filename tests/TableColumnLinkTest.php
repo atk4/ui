@@ -155,7 +155,7 @@ class TableColumnLinkTest extends TestCase
         );
 
         static::assertSame(
-            '<tr data-id="1"><td><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td class="atk4-norowclick"><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -170,7 +170,7 @@ class TableColumnLinkTest extends TestCase
         );
 
         static::assertSame(
-            '<tr data-id="1"><td><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td class="atk4-norowclick"><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
