@@ -35,9 +35,10 @@ class CoverageUtil
         $filter = new Filter();
 
         $phpunitCoverageConfig = simplexml_load_file($phpunitConfigDir . '/phpunit.xml.dist')->coverage;
-        foreach ($phpunitCoverageConfig->include->directory as $path) {
-            $filter->includeDirectory($phpunitConfigDir . '/' . $path);
-        }
+
+        $filter->includeDirectory(__DIR__ . '/../../src');
+        $filter->includeDirectory(__DIR__ . '/../../tests');
+
         foreach ($phpunitCoverageConfig->exclude->directory as $path) {
             $filter->excludeDirectory($phpunitConfigDir . '/' . $path);
         }
