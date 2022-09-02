@@ -498,10 +498,6 @@ class Table extends Lister
     }
 
     /**
-     * Same as on('click', 'tr', $action), but will also make sure you can't
-     * click outside of the body. Additionally, when you move cursor over the
-     * rows, pointer will be used and rows will be highlighted as you hover.
-     *
      * @param JsChain|\Closure|JsExpressionable $action Code to execute
      */
     public function onRowClick($action): void
@@ -514,7 +510,7 @@ class Table extends Lister
          */
         $this->js(true)->find('a, .checkbox, .atk4-norowclick')->on(
             'click',
-            new JsExpression('function(event) { event.stopPropagation() }')
+            new JsFunction(['event'], [new JsExpression('event.stopPropagation()')])
         );
 
         $this->on('click', 'tbody>tr', $action);
