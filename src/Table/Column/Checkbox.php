@@ -37,7 +37,6 @@ class Checkbox extends Table\Column
         if (!$this->class) {
             $this->class = 'cb_' . $this->shortName;
         }
-
     }
 
     public function getHeaderCellHtml(Field $field = null, $value = null): string
