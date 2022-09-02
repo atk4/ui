@@ -58,7 +58,7 @@ class Checkbox extends Form\Control
         }
 
         if ($this->entityField ? $this->entityField->get() : $this->content) {
-            $this->template->set('checked', 'checked');
+            $this->template->set('checked', 'checked="checked"');
         }
 
         // We don't want this displayed, because it can only affect "checked" status anyway

@@ -24,10 +24,10 @@ class Labels extends Table\Column
         $values = $this->values ?? $field->values;
 
         $v = $field->get($row);
-        $v = is_string($v) ? explode(',', $v) : $v;
+        $v = explode(',', $v);
 
         $labels = [];
-        foreach ((array) $v as $id) {
+        foreach ($v as $id) {
             $id = trim($id);
 
             // if field values is set, then use titles instead of IDs

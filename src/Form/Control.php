@@ -128,7 +128,7 @@ class Control extends View
         /** @var Form|null $form */
         $form = $this->getClosestOwner($this, Form::class);
 
-        return $form !== null ? $form->fixFormInRenderedHtml($output) : $output;
+        return $form !== null ? $form->fixOwningFormAttrInRenderedHtml($output) : $output;
     }
 
     /**

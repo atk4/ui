@@ -18,10 +18,10 @@ class Dropdown extends Input
      * Values need for the dropdown.
      * Note: Now possible to display icon with value in dropdown by passing the icon class with your values.
      * ex: 'values' => [
-     *         'tag' => ['Tag', 'icon' => 'tag icon'],
-     *         'globe' => ['Globe', 'icon' => 'globe icon'],
-     *         'registered' => ['Registered', 'icon' => 'registered icon'],
-     *         'file' => ['File', 'icon' => 'file icon'],
+     *         'tag' => ['Tag', 'icon' => 'tag'],
+     *         'globe' => ['Globe', 'icon' => 'globe'],
+     *         'registered' => ['Registered', 'icon' => 'registered'],
+     *         'file' => ['File', 'icon' => 'file'],
      *     ].
      *
      * @var array<int|string, mixed>
@@ -39,7 +39,7 @@ class Dropdown extends Input
 
     /**
      * The icon to display at the dropdown menu.
-     *  The template default is set to: 'dropdown icon'.
+     *  The template default is set to: 'dropdown'.
      *  Note: dropdown icon is show on the right side of the menu
      *  while other icon are usually display on the left side.
      *
@@ -131,8 +131,8 @@ class Dropdown extends Input
             'type' => $this->inputType,
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readonly' => $this->readOnly ? 'readonly' : false,
-            'disabled' => $this->disabled ? 'disabled' : false,
+            'readonly' => $this->readOnly,
+            'disabled' => $this->disabled,
         ], $this->inputAttr));
     }
 
@@ -297,7 +297,7 @@ class Dropdown extends Input
             $this->_tItem->set('value', (string) $key);
             if (is_array($val)) {
                 if (array_key_exists('icon', $val)) {
-                    $this->_tIcon->set('iconClass', $val['icon']);
+                    $this->_tIcon->set('iconClass', $val['icon'] . ' icon');
                     $this->_tItem->dangerouslySetHtml('Icon', $this->_tIcon->renderToHtml());
                 } else {
                     $this->_tItem->del('Icon');

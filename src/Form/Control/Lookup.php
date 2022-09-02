@@ -246,7 +246,7 @@ class Lookup extends Input
             $buttonSeed = ['content' => $buttonSeed];
         }
 
-        $defaultSeed = [Button::class, 'class.disabled' => ($this->disabled || $this->readOnly)];
+        $defaultSeed = [Button::class, 'class.disabled' => $this->disabled || $this->readOnly];
         $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
 
         $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
@@ -341,8 +341,8 @@ class Lookup extends Input
             'type' => 'hidden',
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readonly' => $this->readOnly ? 'readonly' : false,
-            'disabled' => $this->disabled ? 'disabled' : false,
+            'readonly' => $this->readOnly,
+            'disabled' => $this->disabled,
         ], $this->inputAttr));
     }
 
@@ -378,14 +378,15 @@ class Lookup extends Input
     protected function renderView(): void
     {
         if ($this->multiple) {
-            $this->template->set('multiple', 'multiple');
+            $this->template->set('multiple', 'multiple="multiple"');
         }
 
         if ($this->disabled) {
             $this->settings['showOnFocus'] = false;
             $this->settings['allowTab'] = false;
 
-            $this->template->set('disabled', 'disabled');
+            $this->template->set('disabled', 'disabled="disabled"');
+            $this->template->set('disabledClass', 'disabled');
         }
 
         if ($this->readOnly) {
@@ -393,7 +394,7 @@ class Lookup extends Input
             $this->settings['allowTab'] = false;
             $this->settings['apiSettings'] = null;
             $this->settings['onShow'] = new JsFunction([new JsExpression('return false')]);
-            $this->template->set('readonly', 'readonly');
+            $this->template->set('readonly', 'readonly="readonly"');
         }
 
         if ($this->dependency) {
@@ -418,12 +419,5 @@ class Lookup extends Input
         $this->js(true, $chain);
 
         parent::renderView();
-    }
-
-    public function set($value = null, $junk = null)
-    {
-        $value = implode(', ', (array) $value);
-
-        return parent::set($value, $junk);
     }
 }

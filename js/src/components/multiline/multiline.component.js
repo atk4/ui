@@ -13,7 +13,7 @@ export default {
                   <atk-multiline-body @onTabLastRow="onTabLastRow" :fieldDefs="fieldData" :rowData="rowData" :deletables="getDeletables" :errors="errors"></atk-multiline-body>
                   <sui-table-footer>
                     <sui-table-row>
-                        <sui-table-header-cell/>
+                        <sui-table-header-cell />
                         <sui-table-header-cell :colspan="getSpan" textAlign="right">
                         <div is="sui-button-group">
                          <sui-button size="small" @click.stop.prevent="onAdd" type="button" icon="plus" ref="addBtn" :disabled="isLimitReached"></sui-button>

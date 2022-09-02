@@ -23,7 +23,7 @@ const template = `
             v-model="value"
             @keyup="onKeyup"
             @focus="onFocus"
-            @blur="onBlur"/><i class="icon"></i>
+            @blur="onBlur" /><i class="icon"></i>
       </div>`;
 
 export default {

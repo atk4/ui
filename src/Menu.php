@@ -41,7 +41,9 @@ class Menu extends View
     public function addItem($item = null, $action = null)
     {
         if (!is_object($item)) {
-            $item = (array) $item;
+            if (!is_array($item)) {
+                $item = [$item];
+            }
 
             array_unshift($item, MenuItem::class);
         }
@@ -81,7 +83,9 @@ class Menu extends View
     {
         $subMenu = (self::class)::addTo($this, ['defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'inDropdown' => true]);
 
-        $name = (array) $name;
+        if (!is_array($name)) {
+            $name = [$name];
+        }
 
         $label = $name['title'] ?? $name['text'] ?? $name['name'] ?? $name[0] ?? null;
 
@@ -111,7 +115,9 @@ class Menu extends View
     {
         $group = (self::class)::addTo($this, ['defaultTemplate' => $template, 'ui' => false]);
 
-        $name = (array) $name;
+        if (!is_array($name)) {
+            $name = [$name];
+        }
 
         $title = $name['title'] ?? $name['text'] ?? $name['name'] ?? $name[0] ?? null;
 

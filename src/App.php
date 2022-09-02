@@ -81,21 +81,16 @@ class App
     /**
      * Will be set to true after app->run() is called, which may be done automatically
      * on exit.
-     *
-     * @var bool
      */
-    public $runCalled = false;
+    public bool $runCalled = false;
 
     /**
      * Will be set to true, when exit is called. Sometimes exit is intercepted by shutdown
      * handler and we don't want to execute 'beforeExit' multiple times.
-     *
-     * @var bool
      */
-    private $exitCalled = false;
+    private bool $exitCalled = false;
 
-    /** @var bool */
-    public $isRendering = false;
+    public bool $isRendering = false;
 
     /** @var UiPersistence */
     public $uiPersistence;
@@ -525,7 +520,7 @@ class App
      */
     public function addStyle($style): void
     {
-        $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('style', $style));
+        $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('style', [], $style));
     }
 
     /**
@@ -559,7 +554,7 @@ class App
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', null, $this->html->getJs()));
+            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], $this->html->getJs()));
             $this->isRendering = false;
 
             if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catchRunawayCallbacks) {
@@ -825,87 +820,71 @@ class App
     /**
      * Construct HTML tag with supplied attributes.
      *
-     * $html = getTag('img/', ['src' => 'foo.gif', 'border' => 0]);
-     * // "<img src="foo.gif" border="0"/>"
+     * $html = getTag('img/', ['src' => 'foo.gif', 'border' => 0])
+     * --> "<img src="foo.gif" border="0" />"
      *
      *
      * The following rules are respected:
      *
      * 1. all array key => val elements appear as attributes with value escaped.
-     * getTag('div/', ['data' => 'he"llo']);
-     * --> <div data="he\"llo"/>
+     * getTag('div/', ['data' => 'he"llo'])
+     * --> <div data="he\"llo" />
      *
      * 2. boolean value true will add attribute without value
-     * getTag('td', ['nowrap' => true]);
-     * --> <td nowrap>
+     * getTag('td', ['nowrap' => true])
+     * --> <td nowrap="nowrap">
      *
-     * 3. null and false value will ignore the attribute
-     * getTag('img', ['src' => false]);
+     * 3. false value will ignore the attribute
+     * getTag('img', ['src' => false])
      * --> <img>
      *
      * 4. passing key 0 => "val" will re-define the element itself
-     * getTag('img', ['input', 'type' => 'picture']);
+     * getTag('img', ['input', 'type' => 'picture'])
      * --> <input type="picture" src="foo.gif">
      *
      * 5. use '/' at end of tag to close it.
-     * getTag('img/', ['src' => 'foo.gif']);
-     * --> <img src="foo.gif"/>
+     * getTag('img/', ['src' => 'foo.gif'])
+     * --> <img src="foo.gif" />
      *
      * 6. if main tag is self-closing, overriding it keeps it self-closing
-     * getTag('img/', ['input', 'type' => 'picture']);
-     * --> <input type="picture" src="foo.gif"/>
+     * getTag('img/', ['input', 'type' => 'picture'])
+     * --> <input type="picture" src="foo.gif" />
      *
      * 7. simple way to close tag. Any attributes to closing tags are ignored
-     * getTag('/td');
+     * getTag('/td')
      * --> </td>
      *
      * 7b. except for 0 => 'newtag'
-     * getTag('/td', ['th', 'align' => 'left']);
+     * getTag('/td', ['th', 'align' => 'left'])
      * --> </th>
      *
      * 8. using $value will add value inside tag. It will also encode value.
-     * getTag('a', ['href' => 'foo.html'], 'click here >>');
+     * getTag('a', ['href' => 'foo.html'], 'click here >>')
      * --> <a href="foo.html">click here &gt;&gt;</a>
      *
-     * 9. you may skip attribute argument.
-     * getTag('b', 'text in bold');
-     * --> <b>text in bold</b>
-     *
-     * 10. pass array as 3rd parameter to nest tags. Each element can be either string (inserted as-is) or
+     * 9. pass array as 3rd parameter to nest tags. Each element can be either string (inserted as-is) or
      * array (passed to getTag recursively)
-     * getTag('a', ['href' => 'foo.html'], [['b', 'click here'], ' for fun']);
+     * getTag('a', ['href' => 'foo.html'], [['b', 'click here'], ' for fun'])
      * --> <a href="foo.html"><b>click here</b> for fun</a>
      *
-     * 11. extended example:
+     * 10. extended example:
      * getTag('a', ['href' => 'hello'], [
      *    ['b', 'class' => 'red', [
      *        ['i', 'class' => 'blue', 'welcome']
      *    ]]
-     * ]);
+     * ])
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
-     * @param string|array $attr
-     * @param string|array $value
+     * @param array<0|string, string|bool>                                                                              $attr
+     * @param string|array<int, array{0?: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
      */
-    public function getTag(string $tag = null, $attr = null, $value = null): string
+    public function getTag(string $tag = null, array $attr = [], $value = null): string
     {
-        if ($tag === null) {
-            $tag = 'div';
-        }
-
-        $tag = strtolower($tag);
-
-        if ($tag[0] === '<') {
-            return $tag;
-        }
-        if (is_string($attr)) {
-            $value = $attr;
-            $attr = null;
-        }
+        $tag = strtolower($tag === null ? 'div' : $tag);
 
         if ($value !== null) {
             $result = [];
-            foreach ((array) $value as $v) {
+            foreach (is_scalar($value) ? [$value] : $value as $v) {
                 if (is_array($v)) {
                     $result[] = $this->getTag(...$v);
                 } elseif (in_array($tag, ['script', 'style'], true)) {
@@ -917,35 +896,39 @@ class App
                     $result[] = $this->encodeHtml($v);
                 }
             }
+
             $value = implode('', $result);
         }
 
-        if (!$attr) {
-            return '<' . $tag . '>' . ($value !== null ? $value . '</' . $tag . '>' : '');
-        }
         $tmp = [];
-        if (substr($tag, -1) === '/') {
-            $tag = substr($tag, 0, -1);
-            $postfix = '/';
-        } elseif (substr($tag, 0, 1) === '/') {
+        foreach ($attr as $key => $val) {
+            if ($key === 0 || $val === false) {
+                continue;
+            }
+
+            if ($val === true) {
+                $val = $key;
+            }
+
+            $val = (string) $val; // @phpstan-ignore-line
+            $tmp[] = $key . '="' . $this->encodeHtmlAttribute($val) . '"';
+        }
+
+        if (substr($tag, 0, 1) === '/') {
             return '</' . ($attr[0] ?? substr($tag, 1)) . '>';
+        } elseif (substr($tag, -1) === '/') {
+            $tag = substr($tag, 0, -1);
+            $postfix = ' /';
         } else {
             $postfix = '';
         }
-        foreach ($attr as $key => $val) {
-            if ($val === false) {
-                continue;
-            }
-            if ($val === true) {
-                $tmp[] = $key;
-            } elseif ($key === 0) {
-                $tag = $val;
-            } else {
-                $tmp[] = $key . '="' . $this->encodeHtmlAttribute((string) $val) . '"';
-            }
+
+        if (isset($attr[0])) {
+            $tag = $attr[0];
         }
 
-        return '<' . $tag . ($tmp ? (' ' . implode(' ', $tmp)) : '') . $postfix . '>' . ($value !== null ? $value . '</' . $tag . '>' : '');
+        return '<' . $tag . ($tmp !== [] ? ' ' . implode(' ', $tmp) : '') . $postfix . '>'
+            . ($value !== null ? $value . '</' . $tag . '>' : '');
     }
 
     /**

@@ -44,20 +44,40 @@ trait ModelPreventModificationTrait
         return $res;
     }
 
+    protected function wrapUserActionCallbackPreventModification(Model\UserAction $action, \Closure $outputCallback): void
+    {
+        $originalCallback = $action->callback;
+        $action->callback = function (Model $model, ...$args) use ($action, $originalCallback, $outputCallback) {
+            if ($model->isEntity()) {
+                $action = $action->getActionForEntity($model);
+            }
+
+            $callbackBackup = $action->callback;
+            try {
+                $action->callback = $originalCallback;
+                $action->execute(...$args);
+            } finally {
+                $action->callback = $callbackBackup;
+            }
+
+            return $outputCallback($model, ...$args);
+        };
+    }
+
     protected function initPreventModification(): void
     {
-        $this->getUserAction('add')->callback = function (Model $model) {
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), function (Model $model) {
             return 'Form Submit! Data are not save in demo mode.';
-        };
+        });
 
-        $this->getUserAction('edit')->callback = function (Model $model) {
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), function (Model $model) {
             return 'Form Submit! Data are not save in demo mode.';
-        };
+        });
 
         $this->getUserAction('delete')->confirmation = 'Please go ahead. Demo mode does not really delete data.';
-        $this->getUserAction('delete')->callback = function (Model $model) {
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), function (Model $model) {
             return 'Only simulating delete when in demo mode.';
-        };
+        });
     }
 }
 
