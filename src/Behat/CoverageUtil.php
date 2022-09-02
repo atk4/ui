@@ -37,8 +37,7 @@ class CoverageUtil
         $phpunitCoverageConfig = simplexml_load_file($phpunitConfigDir . '/phpunit.xml.dist')->coverage;
 
         $filter->includeDirectory(__DIR__ . '/../../src');
-        // tests/ dir was not included before 1840 PR, reproduce the issue
-        // $filter->includeDirectory(__DIR__ . '/../../tests');
+        $filter->includeDirectory(__DIR__ . '/../../tests');
 
         foreach ($phpunitCoverageConfig->exclude->directory as $path) {
             $filter->excludeDirectory($phpunitConfigDir . '/' . $path);
