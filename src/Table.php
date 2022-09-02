@@ -512,7 +512,7 @@ class Table extends Lister
         /* Do not trigger row click event if click stems from row content
          like checkboxes, or links, marked as atk4-norowclick
          */
-        $this->js(true)->find('.atk4-norowclick')->on(
+        $this->js(true)->find('a, checkbox, .atk4-norowclick')->on(
             'click',
             new JsExpression('function(event) { event.stopPropagation() }')
         );
