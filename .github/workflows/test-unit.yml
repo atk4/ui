@@ -189,6 +189,13 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-oracle.cov; fi
 
+      - name: Upload artifacts
+        if: env.LOG_COVERAGE
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact_unit
+          path: coverage
+
       - name: Upload coverage logs 1/2 (only for latest Phpunit)
         if: env.LOG_COVERAGE
         run: |
@@ -201,6 +208,13 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage/merged.xml
+
+      - name: Upload artifacts
+        if: env.LOG_COVERAGE
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact_unit_merged
+          path: coverage
 
   behat-test:
     name: Behat
@@ -365,6 +379,13 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
+      - name: Upload artifacts
+        if: env.LOG_COVERAGE
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact_behat
+          path: coverage
+
       - name: Upload coverage logs 1/2 (only for latest Chrome)
         if: env.LOG_COVERAGE
         run: |
@@ -377,3 +398,10 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage/merged.xml
+
+      - name: Upload artifacts
+        if: env.LOG_COVERAGE
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact_behat_merged
+          path: coverage
