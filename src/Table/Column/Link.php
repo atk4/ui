@@ -109,7 +109,6 @@ class Link extends Table\Column
         if (is_string($this->page)) {
             $this->page = [$this->page];
         }
-
         $this->addClass('atk4-norowclick');
     }
 
