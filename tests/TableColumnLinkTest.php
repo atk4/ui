@@ -150,12 +150,12 @@ class TableColumnLinkTest extends TestCase
         $link = $this->table->addDecorator('name', new Table\Column\Link('example.php?id={$id}'));
 
         static::assertSame(
-            '<td class="atk4-norowclick"><a href="{$' . $this->getColumnRef($link) . '}">{$name}</a></td><td>{$ref}</td>',
+            '<td><a href="{$' . $this->getColumnRef($link) . '}">{$name}</a></td><td>{$ref}</td>',
             $this->table->getDataRowHtml()
         );
 
         static::assertSame(
-            '<tr data-id="1"><td class="atk4-norowclick"><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -165,12 +165,12 @@ class TableColumnLinkTest extends TestCase
         $link = $this->table->addDecorator('name', [Table\Column\Link::class, 'url' => 'example.php?id={$id}']);
 
         static::assertSame(
-            '<td class="atk4-norowclick"><a href="{$' . $this->getColumnRef($link) . '}">{$name}</a></td><td>{$ref}</td>',
+            '<td><a href="{$' . $this->getColumnRef($link) . '}">{$name}</a></td><td>{$ref}</td>',
             $this->table->getDataRowHtml()
         );
 
         static::assertSame(
-            '<tr data-id="1"><td class="atk4-norowclick"><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -182,7 +182,7 @@ class TableColumnLinkTest extends TestCase
         // url is properly encoded
 
         static::assertSame(
-            '<tr data-id="1"><td class="atk4-norowclick"><a href="example.php?id=%7B%24id%7D">bar</a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td><a href="example.php?id=%7B%24id%7D">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -192,7 +192,7 @@ class TableColumnLinkTest extends TestCase
         $this->table->addDecorator('name', new Table\Column\Link(['example'], ['id']));
 
         static::assertSame(
-            '<tr data-id="1"><td class="atk4-norowclick"><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -202,7 +202,7 @@ class TableColumnLinkTest extends TestCase
         $this->table->addDecorator('name', new Table\Column\Link(['example'], ['test' => 'id']));
 
         static::assertSame(
-            '<tr data-id="1"><td class="atk4-norowclick"><a href="example.php?test=1">bar</a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td><a href="example.php?test=1">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -212,7 +212,7 @@ class TableColumnLinkTest extends TestCase
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id']]);
 
         static::assertSame(
-            '<tr data-id="1"><td class="atk4-norowclick"><a href="example.php?test=1">bar</a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td><a href="example.php?test=1">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -222,7 +222,7 @@ class TableColumnLinkTest extends TestCase
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'forceDownload' => true]);
 
         static::assertSame(
-            '<tr data-id="1"><td class="atk4-norowclick"><a href="example.php?test=1" download="true" >bar</a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td><a href="example.php?test=1" download="true" >bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -232,7 +232,7 @@ class TableColumnLinkTest extends TestCase
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'target' => '_blank']);
 
         static::assertSame(
-            '<tr data-id="1"><td class="atk4-norowclick"><a href="example.php?test=1" target="_blank" >bar</a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td><a href="example.php?test=1" target="_blank" >bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -242,7 +242,7 @@ class TableColumnLinkTest extends TestCase
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'icon' => 'info']);
 
         static::assertSame(
-            '<tr data-id="1"><td class="atk4-norowclick"><a href="example.php?test=1"><i class="icon info"></i>bar</a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td><a href="example.php?test=1"><i class="icon info"></i>bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -252,7 +252,7 @@ class TableColumnLinkTest extends TestCase
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'useLabel' => false]);
 
         static::assertSame(
-            '<tr data-id="1"><td class="atk4-norowclick"><a href="example.php?test=1"></a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td><a href="example.php?test=1"></a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
