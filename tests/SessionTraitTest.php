@@ -13,6 +13,7 @@ use Atk4\Ui\SessionTrait;
 
 /**
  * @group require_session
+ *
  * @runTestsInSeparateProcesses
  */
 class SessionTraitTest extends TestCase
