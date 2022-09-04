@@ -57,7 +57,7 @@ $group->addControl('surname');
 $group->addControl('gender', [Form\Control\Dropdown::class, 'values' => ['Female', 'Male']]);
 
 // testing 0 value
-$values = [0 => 'noob', 1 => 'pro', 2 => 'dev'];
+$values = ['noob', 'pro', 'dev'];
 $form->addControl('description', [Form\Control\Textarea::class])->set(0);
 $form->addControl('no_description', [Form\Control\Textarea::class])->set(null);
 $form->addControl('status_optional', [Form\Control\Dropdown::class, 'values' => $values]);

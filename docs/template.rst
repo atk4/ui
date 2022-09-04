@@ -396,7 +396,7 @@ You can use the following code to manipulate the template above::
     $template->loadFromFile('envelope'); // templates/envelope.html
 
     // Split into multiple objects for processing
-    $sender    = $template->cloneRegion('Sender');
+    $sender = $template->cloneRegion('Sender');
     $recipient = $template->cloneRegion('Recipient');
 
     // Set data to each sub-template separately
@@ -414,7 +414,7 @@ Same thing using Agile Toolkit Views::
 
     $envelope = \Atk4\Ui\View::addTo($this, [], [null], null, ['envelope']);
 
-    $sender    = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender', 'Sender');
+    $sender = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender', 'Sender');
     $recipient = \Atk4\Ui\View::addTo($envelope, [], [null], 'Recipient', 'Recipient');
 
     $sender->template->set($sender_data);
@@ -644,9 +644,9 @@ under ``$template->template`::
 
     // template property:
     array (
-        0 => 'Hello ',
+        'Hello ',
         'subject#0' => array (
-            0 => 'world',
+            'world',
         ),
         1 => '!!',
     )
