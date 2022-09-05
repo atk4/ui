@@ -191,7 +191,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @return array{0: 'css'|'xpath', 1: string}
+     * @return array{'css'|'xpath', string}
      */
     protected function parseSelector(string $selector): array
     {

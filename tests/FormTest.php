@@ -149,7 +149,7 @@ class FormTest extends TestCase
     {
         $m = new Model();
 
-        $options = ['0' => 'yes please', '1' => 'woot'];
+        $options = ['yes please', 'woot'];
 
         $m->addField('opt1', ['values' => $options]);
         $m->addField('opt2', ['values' => $options]);

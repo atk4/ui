@@ -256,7 +256,7 @@ There are 3 ways to define Data form control using 'string', 'json' or 'object':
     class MyBoolean extends \Atk4\Data\Field
     {
         public ?string $type = 'boolean';
-        public $enum = ['N', 'Y'];
+        public ?array $enum = ['N', 'Y'];
     }
     $form->addControl('test2', [], new MyBoolean());
 
