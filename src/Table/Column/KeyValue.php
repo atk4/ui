@@ -26,10 +26,10 @@ use Atk4\Ui\Table;
  *    'caption' => __('Payment Status'),
  *    'default' => 0,
  *    'values' => [
- *        0 => __('not invoiceable'),
- *        1 => __('ready to invoice'),
- *        2 => __('invoiced'),
- *        3 => __('paid'),
+ *        __('not invoiceable'),
+ *        __('ready to invoice'),
+ *        __('invoiced'),
+ *        __('paid'),
  *    ],
  *    'ui' => [
  *        'form' => [Form\Control\Dropdown::class],
