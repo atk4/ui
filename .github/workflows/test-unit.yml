@@ -73,6 +73,7 @@ jobs:
 
   unit-test:
     name: Unit
+    if: false
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/mvorisek/image-php:${{ matrix.php }}
@@ -218,7 +219,6 @@ jobs:
 
   behat-test:
     name: Behat
-    if: false
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/mvorisek/image-php:${{ matrix.php }}-selenium
