@@ -498,6 +498,10 @@ class Table extends Lister
     }
 
     /**
+     * Same as on('click', 'tr', $action), but will also make sure you can't
+     * click outside of the body. Additionally, when you move cursor over the
+     * rows, pointer will be used and rows will be highlighted as you hover.
+     *
      * @param JsChain|\Closure|JsExpressionable $action Code to execute
      */
     public function onRowClick($action): void
