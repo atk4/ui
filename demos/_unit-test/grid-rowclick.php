@@ -29,5 +29,5 @@ $grid->addSelection();
 // TODO emulate for all tests automatically in our Atk4\Ui\Behat\Context
 $grid->table->js(true)->find('a')->on(
     'click',
-    new JsFunction([], [new JsExpression('window.location.href = \'#test\'; event.preventDefault();')])
+    new JsFunction(['event'], [new JsExpression('window.location.href = \'#test\'; event.preventDefault();')])
 );
