@@ -505,9 +505,7 @@ class Table extends Lister
         $this->addClass('selectable');
         $this->js(true)->find('tbody')->css('cursor', 'pointer');
 
-        /* Do not trigger row click event if click stems from row content
-         like checkboxes, or links, marked as atk4-norowclick
-         */
+        // do not bubble row click event if click stems from row content like checkboxes
         $this->js(true)->find('a, .checkbox, .atk4-norowclick')->on(
             'click',
             new JsFunction(['event'], [new JsExpression('event.stopPropagation()')])
