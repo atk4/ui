@@ -18,13 +18,16 @@ $grid = Grid::addTo($app, ['name' => 'grid']);
 $grid->setModel($model);
 
 $grid->addDecorator($model->fieldName()->name, [Table\Column\Link::class, 'url' => 'xxx']);
-$grid->table->js(true)->find('a')->on(
-    'click',
-    new JsFunction([], [new JsExpression('window.location.href = \'#test\'; return false;')])
-);
 
 $grid->table->onRowClick(function () {
     return new JsToast(['message' => 'Clicked on row']);
 });
 
 $grid->addSelection();
+
+// emulate navigate for <a> for Behat
+// TODO emulate for all tests automatically in our Atk4\Ui\Behat\Context
+$grid->table->js(true)->find('a')->on(
+    'click',
+    new JsFunction([], [new JsExpression('window.location.href = \'#test\'; event.preventDefault();')])
+);
