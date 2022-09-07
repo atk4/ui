@@ -69,11 +69,5 @@ $grid->menu->addItem('show selection')->on('click', new JsExpression(
     [$sel->jsChecked()]
 ));
 
-$grid->addDecorator($model->titleField, [Table\Column\Link::class, 'url' => 'https://hmpg.net']);
-
-$grid->table->onRowClick(function () {
-    return new JsToast(['message' => 'Clicked on row']);
-});
-
 // Setting ipp with an array will add an ItemPerPageSelector to paginator.
 $grid->setIpp([10, 25, 50, 100]);

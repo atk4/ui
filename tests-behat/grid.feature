@@ -15,3 +15,7 @@ Feature: Grid
     Then I search grid for "kingdom"
     Then page url should contain '_q=kingdom'
     Then I should see "United Kingdom"
+
+  Scenario: Checkbox click event must not bubble to row click
+    Given I am on "_unit-test/grid-rowclick.php#no_reload"
+    Then page url should contain '/_unit-test/grid-rowclick.php#no_reload'
