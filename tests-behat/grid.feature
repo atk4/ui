@@ -17,9 +17,11 @@ Feature: Grid
     Then I should see "United Kingdom"
 
   Scenario: Checkbox click event must not bubble to row click
-    Given I am on "_unit-test/grid-rowclick.php#xxx"
+    Given I am on "_unit-test/grid-rowclick.php"
     When I click using selector "xpath(//div[@id='grid']//tr[2]//td[2])"
     Then Toast display should contain text "Clicked on row"
     When I click using selector "xpath(//div[@id='grid']//tr[2]//div.ui.checkbox)"
+    Then No toast should be displayed
     When I click using selector "xpath(//div[@id='grid']//tr[2]//a)"
+    Then No toast should be displayed
     Then page url should contain '/_unit-test/grid-rowclick.php#test'
