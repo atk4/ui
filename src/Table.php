@@ -510,7 +510,7 @@ class Table extends Lister
         $this->js(true)->find('tbody')->css('cursor', 'pointer');
 
         // do not bubble row click event if click stems from row content like checkboxes
-        $this->js(true)->find('a, .checkbox, .atk4-norowclick')->on(
+        $this->js(true)->find('a, button, input, select, textarea, .atk4-norowclick')->on(
             'click',
             new JsFunction(['event'], [new JsExpression('event.stopPropagation()')])
         );

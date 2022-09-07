@@ -17,5 +17,9 @@ Feature: Grid
     Then I should see "United Kingdom"
 
   Scenario: Checkbox click event must not bubble to row click
-    Given I am on "_unit-test/grid-rowclick.php#no_reload"
-    Then page url should contain '/_unit-test/grid-rowclick.php#no_reload'
+    Given I am on "_unit-test/grid-rowclick.php#xxx"
+    When I click using selector "xpath(//div[@id='grid']//tr[2]//td[2])"
+    Then Toast display should contain text "Clicked on row"
+    When I click using selector "xpath(//div[@id='grid']//tr[2]//input[@type='checkbox'])"
+    When I click using selector "xpath(//div[@id='grid']//tr[2]//a)"
+    Then page url should contain '/_unit-test/grid-rowclick.php#test'
