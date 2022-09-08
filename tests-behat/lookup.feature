@@ -4,8 +4,8 @@ Feature: Lookup
     Given I am on "_unit-test/lookup.php"
     Then I press button "Edit"
     Then I select value "Dairy" in lookup "atk_fp_product__product_category_id"
-    # '6f3c91cf' = substr(md5('product_sub_category'), 0, 8)
-    Then I select value "Yogourt" in lookup "atk_fp_product__6f3c91cf_id"
+    # '6f3c91cf51e02fd5' = substr(md5('product_sub_category'), 0, 16)
+    Then I select value "Yogourt" in lookup "atk_fp_product__6f3c91cf51e02fd5_id"
     Then I press modal button "Save"
     Then Toast display should contain text 'Dairy - Yogourt'
 
