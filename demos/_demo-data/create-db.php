@@ -24,8 +24,8 @@ class ImportModelWithPrefixedFields extends Model
     private function prefixFieldName(string $fieldName, bool $forActualName = false): string
     {
         $tableShort = $this->table;
-        if (strlen($tableShort) > 8) {
-            $tableShort = substr(md5($tableShort), 0, 8);
+        if (strlen($tableShort) > 16) {
+            $tableShort = substr(md5($tableShort), 0, 16);
         }
 
         $fieldShort = $fieldName;
@@ -34,8 +34,8 @@ class ImportModelWithPrefixedFields extends Model
             $fieldShort = substr($fieldShort, 0, -strlen('_id'));
             $fieldWithIdSuffix = true;
         }
-        if (strlen($fieldShort) > 8) {
-            $fieldShort = substr(md5($fieldShort), 0, 8);
+        if (strlen($fieldShort) > 16) {
+            $fieldShort = substr(md5($fieldShort), 0, 16);
         }
         if ($fieldWithIdSuffix) {
             $fieldShort .= '_id';
