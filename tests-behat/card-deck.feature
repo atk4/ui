@@ -28,4 +28,5 @@ Feature: CardDeck
   Scenario: delete
     Then I press button "Delete"
     Then I press Modal button "Ok"
-    # TODO Then I should not see "United Kingdom"
+    # TODO https://github.com/atk4/ui/issues/1848
+    # Then I should not see "United Kingdom"
