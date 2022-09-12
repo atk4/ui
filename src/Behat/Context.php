@@ -24,6 +24,21 @@ class Context extends RawMinkContext implements BehatContext
         return new MinkSession($this->getMink()->getSession($name));
     }
 
+    public function assertSession($session = null): WebAssert
+    {
+        if (!$session instanceof Session) {
+            $session = $this->getSession($session);
+        }
+
+        return new class($session) extends WebAssert {
+            protected function cleanUrl($url)
+            {
+                // fix https://github.com/minkphp/Mink/issues/656
+                return $url;
+            }
+        };
+    }
+
     protected function getScenario(StepScope $event): ScenarioInterface
     {
         foreach ($event->getFeature()->getScenarios() as $scenario) {
@@ -702,12 +717,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $pattern = $this->unquoteStepArgument($pattern);
 
-        (new class($this->getSession()) extends WebAssert {
-            protected function cleanUrl($url)
-            {
-                return $url;
-            }
-        })->addressMatches($pattern);
+        $this->assertSession()->addressMatches($pattern);
     }
 
     /**
