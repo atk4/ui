@@ -29,7 +29,7 @@ Feature: Grid
     Then I should see "Clicked Action Modal: Albania"
     Then I hide js modal
     When I click using selector "xpath(//div[@id='grid']//tr[2]//div.ui.dropdown[div[text()='Actions...']])"
-    # TODO Then No toast should be displayed
+    Then No toast should be displayed
     When I click using selector "xpath(//div[@id='grid']//tr[2]//div.ui.dropdown[div[text()='Actions...']]//div.menu/div[text()='Action MenuItem'])"
     Then Toast display should contain text "Clicked Action MenuItem"
     Then PATCH MINK the url should match "~_unit-test/grid-rowclick.php$~"
