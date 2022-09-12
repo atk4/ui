@@ -659,17 +659,6 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^page url should contain \'([^\']*)\'$/
-     */
-    public function pageUrlShouldContain(string $text): void
-    {
-        $url = $this->getSession()->getCurrentUrl();
-        if (!str_contains($url, $text)) {
-            throw new Exception('Text : "' . $text . '" not found in ' . $url);
-        }
-    }
-
-    /**
      * @Then /^I check if text in "([^"]*)" match text in "([^"]*)"/
      */
     public function compareElementText(string $compareSelector, string $compareToSelector): void

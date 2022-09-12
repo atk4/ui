@@ -13,7 +13,7 @@ Feature: Grid
   Scenario: search no ajax
     Given I am on "collection/grid.php?no-ajax=1"
     Then I search grid for "kingdom"
-    Then page url should contain '_q=kingdom'
+    Then the url should match "_q=kingdom"
     Then I should see "United Kingdom"
 
   Scenario: Checkbox click event must not bubble to row click
@@ -24,4 +24,4 @@ Feature: Grid
     Then No toast should be displayed
     When I click using selector "xpath(//div[@id='grid']//tr[2]//a)"
     Then No toast should be displayed
-    Then page url should contain '/_unit-test/grid-rowclick.php#test'
+    Then the url should match "_unit-test/grid-rowclick.php#test"
