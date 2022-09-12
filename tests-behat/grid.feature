@@ -13,7 +13,7 @@ Feature: Grid
   Scenario: search no ajax
     Given I am on "collection/grid.php?no-ajax=1"
     Then I search grid for "kingdom"
-    Then the url should match "_q=kingdom"
+    Then PATCH MINK the url should match "~_q=kingdom~"
     Then I should see "United Kingdom"
 
   Scenario: Checkbox click event must not bubble to row click
@@ -22,6 +22,7 @@ Feature: Grid
     Then Toast display should contain text "Clicked on row"
     When I click using selector "xpath(//div[@id='grid']//tr[2]//div.ui.checkbox)"
     Then No toast should be displayed
+    Then PATCH MINK the url should match "~_unit-test/grid-rowclick.php$~"
     When I click using selector "xpath(//div[@id='grid']//tr[2]//a)"
     Then No toast should be displayed
-    Then the url should match "_unit-test/grid-rowclick.php#test"
+    Then PATCH MINK the url should match "~_unit-test/grid-rowclick.php#test~"

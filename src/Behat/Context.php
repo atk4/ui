@@ -241,6 +241,14 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
+     * Copied from https://github.com/Behat/MinkExtension/blob/v2.2/src/Behat/MinkExtension/Context/MinkContext.php#L567
+     */
+    protected function fixStepArgument(string $argument): string
+    {
+        return str_replace('\\"', '"', $argument);
+    }
+
+    /**
      * Sleep for a certain time in ms.
      *
      * @Then I wait :arg1 ms
@@ -656,6 +664,16 @@ class Context extends RawMinkContext implements BehatContext
         if (count($toasts) > 0) {
             throw new Exception('Toast is displayed: "' . $this->findElement(reset($toasts), '.content')->getText() . '"');
         }
+    }
+
+    /**
+     * Remove once https://github.com/Behat/MinkExtension/pull/386 is merged and released.
+     *
+     * @Then /^PATCH MINK the (?i)url(?-i) should match "(?P<pattern>(?:[^"]|\\")*)"$/
+     */
+    public function assertUrlRegExp($pattern)
+    {
+        $this->assertSession()->addressMatches($this->fixStepArgument($pattern));
     }
 
     /**
