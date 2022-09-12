@@ -24,13 +24,9 @@ class Context extends RawMinkContext implements BehatContext
         return new MinkSession($this->getMink()->getSession($name));
     }
 
-    public function assertSession($session = null): WebAssert
+    public function assertSession($name = null): WebAssert
     {
-        if (!$session instanceof Session) {
-            $session = $this->getSession($session);
-        }
-
-        return new class($session) extends WebAssert {
+        return new class($this->getSession($name)) extends WebAssert {
             protected function cleanUrl($url)
             {
                 // fix https://github.com/minkphp/Mink/issues/656
@@ -713,7 +709,7 @@ class Context extends RawMinkContext implements BehatContext
      *
      * @Then /^PATCH MINK the (?i)url(?-i) should match "(?P<pattern>(?:[^"]|\\")*)"$/
      */
-    public function assertUrlRegExp($pattern)
+    public function assertUrlRegExp(string $pattern): void
     {
         $pattern = $this->unquoteStepArgument($pattern);
 
