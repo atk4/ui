@@ -8,6 +8,7 @@ use Atk4\Ui\Grid;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsFunction;
 use Atk4\Ui\JsToast;
+use Atk4\Ui\Message;
 use Atk4\Ui\Table;
 
 /** @var \Atk4\Ui\App $app */
@@ -18,6 +19,18 @@ $grid = Grid::addTo($app, ['name' => 'grid']);
 $grid->setModel($model);
 
 $grid->addDecorator($model->fieldName()->name, [Table\Column\Link::class, 'url' => 'xxx']);
+
+$grid->addActionButton('Action Button', function () {
+    return new JsToast(['message' => 'Clicked Action Button']);
+});
+
+$grid->addActionMenuItem('Action MenuItem', function () {
+    return new JsToast(['message' => 'Clicked Action MenuItem']);
+});
+
+$grid->addModalAction('Action Modal', 'Details', function ($p, $id) use ($model) {
+    Message::addTo($p, ['Clicked Action Modal: ' . $model->load($id)->name]);
+});
 
 $grid->table->onRowClick(function () {
     return new JsToast(['message' => 'Clicked on row']);

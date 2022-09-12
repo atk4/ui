@@ -22,6 +22,16 @@ Feature: Grid
     Then Toast display should contain text "Clicked on row"
     When I click using selector "xpath(//div[@id='grid']//tr[2]//div.ui.checkbox)"
     Then No toast should be displayed
+    When I click using selector "xpath(//div[@id='grid']//tr[2]//div.ui.button[text()='Action Button'])"
+    Then Toast display should contain text "Clicked Action Button"
+    When I click using selector "xpath(//div[@id='grid']//tr[2]//div.ui.button[text()='Action Modal'])"
+    Then No toast should be displayed
+    Then I should see "Clicked Action Modal: Albania"
+    Then I hide js modal
+    When I click using selector "xpath(//div[@id='grid']//tr[2]//div.ui.dropdown[div[text()='Actions...']])"
+    # TODO Then No toast should be displayed
+    When I click using selector "xpath(//div[@id='grid']//tr[2]//div.ui.dropdown[div[text()='Actions...']]//div.menu/div[text()='Action MenuItem'])"
+    Then Toast display should contain text "Clicked Action MenuItem"
     Then PATCH MINK the url should match "~_unit-test/grid-rowclick.php$~"
     When I click using selector "xpath(//div[@id='grid']//tr[2]//a)"
     Then No toast should be displayed
