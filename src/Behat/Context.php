@@ -9,6 +9,7 @@ use Behat\Behat\Context\Context as BehatContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\Behat\Hook\Scope\StepScope;
+use Behat\Mink\WebAssert;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\RawMinkContext;
@@ -667,13 +668,19 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * Remove once https://github.com/Behat/MinkExtension/pull/386 is merged and released.
+     * Remove once https://github.com/Behat/MinkExtension/pull/386 and
+     * https://github.com/minkphp/Mink/issues/656 are fixed and released.
      *
      * @Then /^PATCH MINK the (?i)url(?-i) should match "(?P<pattern>(?:[^"]|\\")*)"$/
      */
     public function assertUrlRegExp($pattern)
     {
-        $this->assertSession()->addressMatches($this->fixStepArgument($pattern));
+        (new class ($this->getSession()) extends WebAssert {
+            protected function cleanUrl($url)
+            {
+                return $url;
+            }
+        })->addressMatches($this->fixStepArgument($pattern));
     }
 
     /**
