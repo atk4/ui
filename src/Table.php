@@ -521,7 +521,7 @@ class Table extends Lister
                 elem = elem.parentElement;
             }
             JS);
-        $this->on('click', 'tbody > tr', $preventBubblingJs);
+        $this->on('click', 'tbody > tr', $preventBubblingJs, ['preventDefault' => false]);
 
         $this->on('click', 'tbody > tr', $action);
     }
