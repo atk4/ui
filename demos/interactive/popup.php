@@ -87,9 +87,10 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
      */
     protected function renderView(): void
     {
-        // memorize items
+        // fix https://github.com/atk4/ui/issues/1862
+        $itemsReindexed = array_combine(range(1, count($this->items)), $this->items);
 
-        $this->setSource($this->items);
+        $this->setSource($itemsReindexed);
 
         parent::renderView();
     }
