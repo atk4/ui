@@ -510,12 +510,20 @@ class Table extends Lister
         $this->js(true)->find('tbody')->css('cursor', 'pointer');
 
         // do not bubble row click event if click stems from row content like checkboxes
-        $this->js(true)->find('a, .ui.button, .ui.input, .ui.checkbox, .ui.dropdown, .atk4-norowclick')->on(
-            'click',
-            new JsFunction(['event'], [new JsExpression('event.stopPropagation()')])
-        );
+        // TODO one ->on() call would be better, but we need a method to convert Closure $action into JsExpression first
+        $preventBubblingJs = new JsExpression(<<<'JS'
+            let elem = event.target;
+            while (elem !== null && elem !== event.currentTarget) {
+                if (elem.tagName === 'A' || elem.classList.contains('atk4-norowclick')
+                    || (elem.classList.contains('ui') && ['button', 'input', 'checkbox', 'dropdown'].some(v => elem.classList.contains(v)))) {
+                    event.stopImmediatePropagation();
+                }
+                elem = elem.parentElement;
+            }
+            JS);
+        $this->on('click', 'tbody > tr', $preventBubblingJs, ['preventDefault' => false]);
 
-        $this->on('click', 'tbody>tr', $action);
+        $this->on('click', 'tbody > tr', $action);
     }
 
     /**
