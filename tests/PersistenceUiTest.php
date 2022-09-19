@@ -12,11 +12,12 @@ class PersistenceUiTest extends TestCase
 {
     /**
      * @param mixed $phpValue
-     * @param mixed $expectedUiValue
+     * @param mixed $uiValue
      *
-     * @dataProvider providerTypecast
+     * @dataProvider providerTypecastBidirectional
+     * @dataProvider providerTypecastLoadOnly
      */
-    public function testTypecast(array $persistenceSeed, array $fieldSeed, $phpValue, $expectedUiValue): void
+    public function testTypecast(array $persistenceSeed, array $fieldSeed, $phpValue, $uiValue, bool $isUiValueNormalized = true): void
     {
         $p = (new UiPersistence())->setDefaults($persistenceSeed);
         $field = (new Field())->setDefaults($fieldSeed);
@@ -25,19 +26,27 @@ class PersistenceUiTest extends TestCase
             $phpValue = new \DateTime($matches[1]);
         }
 
-        $uiValue = $p->typecastSaveField($field, $phpValue);
-        static::assertSame($expectedUiValue, $uiValue);
+        if ($isUiValueNormalized) {
+            $savedUiValue = $p->typecastSaveField($field, $phpValue);
+            static::assertSame($uiValue, $savedUiValue);
+        }
+
         $readPhpValue = $p->typecastLoadField($field, $uiValue);
         if ($readPhpValue instanceof \DateTimeInterface) {
             $this->{'assertEquals'}($phpValue, $readPhpValue);
         } else {
             static::assertSame($phpValue, $readPhpValue);
         }
-        $uiValue = $p->typecastSaveField($field, $readPhpValue);
-        static::assertSame($expectedUiValue, $uiValue);
+
+        $savedUiValue = $p->typecastSaveField($field, $readPhpValue);
+        if ($isUiValueNormalized) {
+            static::assertSame($uiValue, $savedUiValue);
+        } else {
+            $this->testTypecast($persistenceSeed, $fieldSeed, $phpValue, $savedUiValue);
+        }
     }
 
-    public function providerTypecast(): iterable
+    public function providerTypecastBidirectional(): iterable
     {
         yield [[], [], '1', '1'];
         yield [[], [], '0', '0'];
@@ -87,5 +96,25 @@ class PersistenceUiTest extends TestCase
         foreach (['string', 'text', 'integer', 'float', 'boolean', 'date', 'time', 'datetime', 'atk4_money'] as $type) {
             yield [[], ['type' => $type], null, null];
         }
+    }
+
+    public function providerTypecastLoadOnly(): iterable
+    {
+        foreach (['integer', 'float', 'boolean', 'date', 'time', 'datetime', 'atk4_money'] as $type) {
+            yield [[], ['type' => $type], null, '', false];
+        }
+
+        yield [[], ['type' => 'string'], '', '', false];
+        yield [[], ['type' => 'text'], '', '', false];
+        yield [[], ['type' => 'string'], '', ' ', false];
+        yield [[], ['type' => 'string'], '', " \r\r\n ", false];
+        yield [[], ['type' => 'string', 'nullable' => false], '', '', false];
+        yield [[], ['type' => 'string', 'nullable' => false], '', ' ', false];
+        yield [[], ['type' => 'string', 'nullable' => false], '', " \n ", false];
+        yield [[], ['type' => 'text', 'required' => true], '', '', false];
+        yield [[], ['type' => 'text'], "\n0", "\n0", false];
+        yield [[], ['type' => 'text'], "\n0", "\r0", false];
+        yield [[], ['type' => 'text'], "\n0", "\r\n0", false];
+        yield [[], ['type' => 'text', 'nullable' => false], '', '', false];
     }
 }
