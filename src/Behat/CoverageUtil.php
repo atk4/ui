@@ -35,15 +35,20 @@ class CoverageUtil
         $filter = new Filter();
 
         $phpunitCoverageConfig = simplexml_load_file($phpunitConfigDir . '/phpunit.xml.dist')->coverage;
-
-        $filter->includeDirectory(__DIR__ . '/../../src');
-        $filter->includeDirectory(__DIR__ . '/../../tests');
-
+        foreach ($phpunitCoverageConfig->include->directory as $path) {
+            $filter->includeDirectory($phpunitConfigDir . '/' . $path);
+        }
         foreach ($phpunitCoverageConfig->exclude->directory as $path) {
             $filter->excludeDirectory($phpunitConfigDir . '/' . $path);
         }
 
         static::start($filter);
+
+        // fix https://github.com/sebastianbergmann/php-code-coverage/issues/942
+        // https://github.com/sebastianbergmann/php-code-coverage/pull/939
+        foreach ($filter->files() as $path) {
+            opcache_compile_file($path);
+        }
     }
 
     public static function saveData(string $outputDir): void
