@@ -227,7 +227,7 @@ $pop = Popup::addTo($app, [$browse, 'position' => 'bottom left', 'minWidth' => '
     ->setHoverable()
     ->setOption('delay', ['show' => 100, 'hide' => 400]);
 $shelf2 = $itemShelfClass::addTo($pop);
-// $shelf2->linkCart($cart, $cartItem->jsReload());
+$shelf2->linkCart($cart, $cartItem->jsReload());
 
 // -----------------------------------------------------------------------------
 
