@@ -137,8 +137,8 @@ if ($layout instanceof Layout\NavigableInterface) {
     $layout->addMenuItem(['Column Filters'], [$path . 'tablefilter'], $menu);
     $layout->addMenuItem('Grid - Table+Bar+Search+Paginator', [$path . 'grid'], $menu);
     $layout->addMenuItem('Crud - Full editing solution', [$path . 'crud'], $menu);
-    $layout->addMenuItem(['Crud with Array Persistence'], [$path . 'crud3'], $menu);
-    $layout->addMenuItem('Card Deck', [$path . 'card-deck'], $menu);
+    $layout->addMenuItem(['Crud - /w Array Persistence'], [$path . 'crud3'], $menu);
+    $layout->addMenuItem('Card Deck - /w custom actions', [$path . 'card-deck'], $menu);
     $layout->addMenuItem(['Lister'], [$path . 'lister-ipp'], $menu);
     $layout->addMenuItem(['Table column decorator from model'], [$path . 'tablecolumns'], $menu);
 

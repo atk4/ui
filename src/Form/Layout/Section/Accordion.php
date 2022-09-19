@@ -53,4 +53,16 @@ class Accordion extends UiAccordion
 
         return $section->add([$this->formLayout, 'form' => $this->form]);
     }
+
+    /**
+     * @param AccordionSection|Form\Layout $section
+     */
+    public function getSectionIdx($section)
+    {
+        if (!$section instanceof AccordionSection) {
+            $section = AccordionSection::assertInstanceOf($section->getOwner());
+        }
+
+        return parent::getSectionIdx($section);
+    }
 }

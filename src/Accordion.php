@@ -136,11 +136,9 @@ class Accordion extends View
     /**
      * Return the index of an accordion section in collection.
      *
-     * @param AccordionSection $section
-     *
      * @return int
      */
-    public function getSectionIdx($section)
+    public function getSectionIdx(AccordionSection $section)
     {
         $idx = -1;
         foreach ($this->sections as $key => $accordion_section) {

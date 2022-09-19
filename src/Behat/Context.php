@@ -47,7 +47,9 @@ class Context extends RawMinkContext implements BehatContext
             return;
         }
 
-        if (!str_starts_with($event->getStep()->getText(), 'Toast display should contain text ')) {
+        if (!str_starts_with($event->getStep()->getText(), 'Toast display should contain text ')
+            && $event->getStep()->getText() !== 'No toast should be displayed'
+        ) {
             $this->getSession()->executeScript('jQuery(\'.toast-box > .ui.toast\').toast(\'close\');');
         }
     }
@@ -191,7 +193,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @return array{0: 'css'|'xpath', 1: string}
+     * @return array{'css'|'xpath', string}
      */
     protected function parseSelector(string $selector): array
     {
@@ -639,9 +641,20 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function toastDisplayShouldContainText(string $text): void
     {
-        $toast = $this->findElement(null, '.ui.toast-container');
-        if (!str_contains($this->findElement($toast, '.content')->getText(), $text)) {
+        $toastContainer = $this->findElement(null, '.ui.toast-container');
+        if (!str_contains($this->findElement($toastContainer, '.content')->getText(), $text)) {
             throw new Exception('Cannot find text: "' . $text . '" in toast');
+        }
+    }
+
+    /**
+     * @Then No toast should be displayed
+     */
+    public function noToastShouldBeDisplayed(): void
+    {
+        $toasts = $this->getSession()->getPage()->findAll('css', '.ui.toast-container .toast-box');
+        if (count($toasts) > 0) {
+            throw new Exception('Toast is displayed: "' . $this->findElement(reset($toasts), '.content')->getText() . '"');
         }
     }
 

@@ -475,7 +475,7 @@ class ScopeBuilder extends Form\Control
             $model->setLimit($limit);
 
             foreach ($model as $item) {
-                $items[$item->get($field->getReference()->getTheirFieldName())] = $item->get($model->titleField);
+                $items[$item->get($field->getReference()->getTheirFieldName($model))] = $item->get($model->titleField);
             }
         }
 
@@ -694,7 +694,7 @@ class ScopeBuilder extends Form\Control
                 $condField = $condition->getModel()->getField($condition->key);
                 $reference = $condField->getReference();
                 $model = $reference->refModel($condField->getOwner());
-                $fieldName = $reference->getTheirFieldName();
+                $fieldName = $reference->getTheirFieldName($model);
                 $entity = $model->tryLoadBy($fieldName, $value);
                 if ($entity !== null) {
                     $option = [

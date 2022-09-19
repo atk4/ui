@@ -341,7 +341,7 @@ The template language for JsExpression is super-simple:
 So the following lines are identical::
 
     $sum = new JsExpression('[] + []', [$h1, $h2]);
-    $sum = new JsExpression('[0] + [1]', [0 => $h1, 1 => $h2]);
+    $sum = new JsExpression('[0] + [1]', [$h1, $h2]);
     $sum = new JsExpression('[a] + [b]', ['a' => $h1, 'b' => $h2]);
 
 .. important::

@@ -509,6 +509,12 @@ class Table extends Lister
         $this->addClass('selectable');
         $this->js(true)->find('tbody')->css('cursor', 'pointer');
 
+        // do not bubble row click event if click stems from row content like checkboxes
+        $this->js(true)->find('a, .ui.button, .ui.input, .ui.checkbox, .ui.dropdown, .atk4-norowclick')->on(
+            'click',
+            new JsFunction(['event'], [new JsExpression('event.stopPropagation()')])
+        );
+
         $this->on('click', 'tbody>tr', $action);
     }
 
