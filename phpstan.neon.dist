@@ -160,9 +160,6 @@ parameters:
             path: 'src/Form/Control/Checkbox.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Jquery::\$checked\.$~'
         -
-            path: 'src/Form/Layout/Section/Accordion.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\View::jsOpen\(\)\.$~'
-        -
             path: 'src/JsVueService.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsChain::createAtkVue\(\)\.$~'
         -
