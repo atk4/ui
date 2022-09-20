@@ -306,7 +306,7 @@ class View extends AbstractView implements JsExpressionable
      */
     public function getClosestOwner(self $object, string $class): ?self
     {
-        if ($object->issetOwner()) {
+        if (!$object->issetOwner()) {
             return null;
         }
 
