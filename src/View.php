@@ -297,9 +297,7 @@ class View extends AbstractView implements JsExpressionable
     }
 
     /**
-     * Get objects closest owner which is instance of particular class.
-     *
-     * If there are no such owner (or grand-owner etc.) object, then return null.
+     * Get closest owner which is instance of particular class.
      *
      * @template T of View
      *
