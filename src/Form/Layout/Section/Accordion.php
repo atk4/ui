@@ -30,7 +30,7 @@ class Accordion extends UiAccordion
             $jsError = [$form->js()->form('add prompt', $fieldName, $str)];
 
             // if a form control is part of an accordion section, it will open that section.
-            $section = $form->getClosestOwner($form->getControl($fieldName), AccordionSection::class);
+            $section = $form->getControl($fieldName)->getClosestOwner(AccordionSection::class);
             if ($section) {
                 $jsError[] = $section->getOwner()->jsOpen($section);
             }

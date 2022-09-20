@@ -125,8 +125,7 @@ class Control extends View
     {
         $output = parent::renderTemplateToHtml($region);
 
-        /** @var Form|null $form */
-        $form = $this->getClosestOwner($this, Form::class);
+        $form = $this->getClosestOwner(Form::class);
 
         return $form !== null ? $form->fixOwningFormAttrInRenderedHtml($output) : $output;
     }

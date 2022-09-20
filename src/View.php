@@ -299,22 +299,25 @@ class View extends AbstractView implements JsExpressionable
     /**
      * Get objects closest owner which is instance of particular class.
      *
-     * If there are no such owner (or grand-owner etc.) object, then return.
+     * If there are no such owner (or grand-owner etc.) object, then return null.
      *
-     * Note: this is internal method, but should be public because other objects
-     *       should be able to call it.
+     * @template T of View
+     *
+     * @param class-string<T> $class
+     *
+     * @phpstan-return T|null
      */
-    public function getClosestOwner(self $object, string $class): ?self
+    public function getClosestOwner(string $class): ?self
     {
-        if (!$object->issetOwner()) {
+        if (!$this->issetOwner()) {
             return null;
         }
 
-        if ($object->getOwner() instanceof $class) {
-            return $object->getOwner();
+        if ($this->getOwner() instanceof $class) {
+            return $this->getOwner();
         }
 
-        return $this->getClosestOwner($object->getOwner(), $class);
+        return $this->getOwner()->getClosestOwner($class);
     }
 
     // }}}

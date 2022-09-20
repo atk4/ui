@@ -159,7 +159,7 @@ class Accordion extends View
 
         // initialize top accordion only, otherwise nested accordion won't work
         // https://github.com/fomantic/Fomantic-UI/issues/254
-        if ($this->getClosestOwner($this, AccordionSection::class) === null) {
+        if ($this->getClosestOwner(AccordionSection::class) === null) {
             $this->js(true)->accordion($this->settings);
         }
 
