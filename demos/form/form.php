@@ -56,13 +56,16 @@ $group->addControl('name');
 $group->addControl('surname');
 $group->addControl('gender', [Form\Control\Dropdown::class, 'values' => ['Female', 'Male']]);
 
+$accordionLayout = $form->layout->addSubLayout([Form\Layout\Section\Accordion::class]);
+$details = $accordionLayout->addSection('Validating Field in Accordion');
+
 // testing 0 value
 $values = ['noob', 'pro', 'dev'];
 $form->addControl('description', [Form\Control\Textarea::class])->set(0);
 $form->addControl('no_description', [Form\Control\Textarea::class])->set(null);
 $form->addControl('status_optional', [Form\Control\Dropdown::class, 'values' => $values]);
-$form->addControl('status_string_not-nullable', [Form\Control\Dropdown::class], ['type' => 'string', 'values' => $values, 'nullable' => false]);
-$form->addControl('status_integer_not-nullable', [Form\Control\Dropdown::class], ['type' => 'integer', 'values' => $values, 'nullable' => false]);
+$details->addControl('status_string_not-nullable', [Form\Control\Dropdown::class], ['type' => 'string', 'values' => $values, 'nullable' => false]);
+$details->addControl('status_integer_not-nullable', [Form\Control\Dropdown::class], ['type' => 'integer', 'values' => $values, 'nullable' => false]);
 $form->addControl('status_string_required', [Form\Control\Dropdown::class], ['type' => 'string', 'values' => $values, 'required' => true]);
 $form->addControl('status_integer_required', [Form\Control\Dropdown::class], ['type' => 'integer', 'values' => $values, 'required' => true]);
 

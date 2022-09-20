@@ -22,11 +22,16 @@ class AccordionSection extends View
     /** @var string */
     public $icon = 'dropdown';
 
+    /** @var string */
+    public $warningIcon = 'exclamation circle';
+
     protected function renderView(): void
     {
         parent::renderView();
 
         $this->template->set('icon', $this->icon);
+
+        $this->template->set('warningIcon', $this->warningIcon);
 
         if ($this->title) {
             $this->template->set('title', $this->title);

@@ -260,6 +260,11 @@ class Form extends View
                 $response = [];
                 foreach ($e->errors as $field => $error) {
                     $response[] = $this->error($field, $error);
+
+                    // If field inside Accordion section does not validate, open first AccordionSection
+                    if ($this->getControl($field)->getOwner()->getOwner() instanceof \Atk4\Ui\AccordionSection) {
+                        $response[] = $this->getControl($field)->getOwner()->getOwner()->getOwner()->js(true)->find('i.icon.atk-panel-warning.exclamation.circle')->addClass('atk-visible');
+                    }
                 }
 
                 return $response;
