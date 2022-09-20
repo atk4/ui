@@ -45,7 +45,6 @@ class Accordion extends View
         // if there is callback action, then use VirtualPage
         if ($callback) {
             $section->virtualPage = VirtualPage::addTo($section, ['ui' => '']);
-            $section->virtualPage->stickyGet('__atk-dyn-section', '1');
             $section->virtualPage->set($callback);
         }
 
@@ -152,22 +151,15 @@ class Accordion extends View
         return $idx;
     }
 
-    /**
-     * Check if accordion section is dynamic.
-     */
-    public function isDynamicSection(): bool
-    {
-        return isset($_GET['__atk-dyn-section']);
-    }
-
     protected function renderView(): void
     {
         if ($this->type) {
             $this->addClass($this->type);
         }
 
-        // Only set Accordion in Top container. Otherwise Nested accordion won't work.
-        if ($this->getClosestOwner($this, AccordionSection::class) === null && !$this->isDynamicSection()) {
+        // initialize top accordion only, otherwise nested accordion won't work
+        // https://github.com/fomantic/Fomantic-UI/issues/254
+        if ($this->getClosestOwner($this, AccordionSection::class) === null) {
             $this->js(true)->accordion($this->settings);
         }
 
