@@ -5,25 +5,17 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Accordion;
-use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
-use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/*
-Button::addTo($app, ['View Form input split in Accordion section', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
-    ->link(['accordion-in-form']);
-View::addTo($app, ['ui' => 'clearing divider']);
-*/
-
 Header::addTo($app, ['Nested accordions']);
 
-$addAccordionFunc = function ($view, $maxDepth = 2, $level = 0) use (&$addAccordionFunc) {
+$addAccordionFunc = function ($view, $maxDepth, $level = 0) use (&$addAccordionFunc) {
     $accordion = Accordion::addTo($view, ['type' => ['styled', 'fluid']]);
 
     // static section
@@ -61,4 +53,4 @@ $addAccordionFunc = function ($view, $maxDepth = 2, $level = 0) use (&$addAccord
 };
 
 // add accordion structure
-$addAccordionFunc($app);
+$addAccordionFunc($app, 2);
