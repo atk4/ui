@@ -30,27 +30,24 @@ $addAccordionFunc = function ($view, $maxDepth, $level = 0) use (&$addAccordionF
     $i2 = $accordion->addSection('Dynamic Text', function ($v) use ($addAccordionFunc, $maxDepth, $level) {
         Message::addTo($v, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
         LoremIpsum::addTo($v, ['size' => 2]);
-        if ($level < $maxDepth) {
-            $addAccordionFunc($v, $maxDepth, $level + 1);
-        }
+
+        $addAccordionFunc($v, $maxDepth, $level + 1);
     });
 
     // dynamic section - form view
     $i3 = $accordion->addSection('Dynamic Form', function ($v) use ($addAccordionFunc, $maxDepth, $level) {
         Message::addTo($v, ['Loading a form dynamically.', 'ui' => 'tiny message']);
         $form = Form::addTo($v);
-        $form->addControl('Email');
+        $form->addControl('email');
         $form->onSubmit(function (Form $form) {
-            return $form->success('Subscribed ' . $form->model->get('Email') . ' to newsletter.');
+            return $form->success('Subscribed ' . $form->model->get('email') . ' to newsletter.');
         });
 
-        if ($level < $maxDepth) {
-            $addAccordionFunc($v, $maxDepth, $level + 1);
-        }
+        $addAccordionFunc($v, $maxDepth, $level + 1);
     });
 
     return $accordion;
 };
 
 // add accordion structure
-$addAccordionFunc($app, 2);
+$addAccordionFunc($app, 4);
