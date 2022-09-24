@@ -5,25 +5,17 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Accordion;
-use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
-use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/*
-Button::addTo($app, ['View Form input split in Accordion section', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
-    ->link(['accordion-in-form']);
-View::addTo($app, ['ui' => 'clearing divider']);
-*/
-
 Header::addTo($app, ['Nested accordions']);
 
-$addAccordionFunc = function ($view, $maxDepth = 2, $level = 0) use (&$addAccordionFunc) {
+$addAccordionFunc = function ($view, $maxDepth, $level = 0) use (&$addAccordionFunc) {
     $accordion = Accordion::addTo($view, ['type' => ['styled', 'fluid']]);
 
     // static section
@@ -38,27 +30,24 @@ $addAccordionFunc = function ($view, $maxDepth = 2, $level = 0) use (&$addAccord
     $i2 = $accordion->addSection('Dynamic Text', function ($v) use ($addAccordionFunc, $maxDepth, $level) {
         Message::addTo($v, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
         LoremIpsum::addTo($v, ['size' => 2]);
-        if ($level < $maxDepth) {
-            $addAccordionFunc($v, $maxDepth, $level + 1);
-        }
+
+        $addAccordionFunc($v, $maxDepth, $level + 1);
     });
 
     // dynamic section - form view
     $i3 = $accordion->addSection('Dynamic Form', function ($v) use ($addAccordionFunc, $maxDepth, $level) {
         Message::addTo($v, ['Loading a form dynamically.', 'ui' => 'tiny message']);
         $form = Form::addTo($v);
-        $form->addControl('Email');
+        $form->addControl('email');
         $form->onSubmit(function (Form $form) {
-            return $form->success('Subscribed ' . $form->model->get('Email') . ' to newsletter.');
+            return $form->success('Subscribed ' . $form->model->get('email') . ' to newsletter.');
         });
 
-        if ($level < $maxDepth) {
-            $addAccordionFunc($v, $maxDepth, $level + 1);
-        }
+        $addAccordionFunc($v, $maxDepth, $level + 1);
     });
 
     return $accordion;
 };
 
 // add accordion structure
-$addAccordionFunc($app);
+$addAccordionFunc($app, 4);

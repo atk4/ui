@@ -107,17 +107,15 @@ class Popup extends View
                 ->addMoreInfo('owner', $this->getOwner());
         }
 
-        if (($this->triggerBy instanceof Menu
-            || $this->triggerBy instanceof MenuItem
-            || $this->triggerBy instanceof Dropdown) && $this->triggerOn === null
-        ) {
-            $this->triggerOn = 'hover';
-        }
-
-        if (
-            $this->triggerBy instanceof Button && $this->triggerOn === null
-        ) {
-            $this->triggerOn = 'click';
+        if ($this->triggerOn === null) {
+            if ($this->triggerBy instanceof Menu
+                || $this->triggerBy instanceof MenuItem
+                || $this->triggerBy instanceof Dropdown
+            ) {
+                $this->triggerOn = 'hover';
+            } elseif ($this->triggerBy instanceof Button) {
+                $this->triggerOn = 'click';
+            }
         }
 
         $this->popOptions = array_merge($this->popOptions, [
