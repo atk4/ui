@@ -56,3 +56,14 @@ Feature: Crud
     Then input "atk_fp_product__name" value should start with "Cola"
     When I press Modal button "Save"
     Then I click close modal
+
+  Scenario: edit /w array persistence (strict comparison)
+    Given I am on "collection/crud3.php"
+    Then I click using selector "xpath(//table//tr[3]//i.icon.edit)"
+    Then Modal is open with text "Edit Country"
+    Then I press Modal button "Save"
+    Then Toast display should contain text "Record has been saved!"
+
+  Scenario: delete /w array persistence (strict comparison)
+    Then I click using selector "xpath(//table//tr[3]//i.icon.trash)"
+    Then Toast display should contain text "Record has been deleted!"

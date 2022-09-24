@@ -110,7 +110,7 @@ class VpExecutor extends View implements JsExecutorInterface
      */
     public function executeModelAction(): void
     {
-        $id = $this->stickyGet($this->name);
+        $id = $this->getApp()->uiPersistence->typecastLoadField($this->action->getModel()->getField($this->action->getModel()->idField), $this->stickyGet($this->name));
         if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
             $this->action = $this->action->getActionForEntity($this->action->getModel()->load($id));
         } elseif (!$this->action->isOwnerEntity()
