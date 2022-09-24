@@ -17,9 +17,6 @@ use Atk4\Ui\Loader;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
-/**
- * Common property/method for step executor.
- */
 trait StepExecutorTrait
 {
     /** @var array<int, string> The steps need to complete the action. */

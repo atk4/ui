@@ -31,6 +31,7 @@ use Atk4\Ui\View;
  */
 class ModalExecutor extends Modal implements JsExecutorInterface
 {
+    use CommonExecutorTrait;
     use HookTrait;
     use StepExecutorTrait;
 
@@ -91,18 +92,8 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      */
     public function executeModelAction(): void
     {
-        $id = $this->getApp()->uiPersistence->typecastLoadField($this->action->getModel()->getField($this->action->getModel()->idField), $this->stickyGet($this->name));
-        if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->load($id));
-        } elseif (!$this->action->isOwnerEntity()
-            && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)
-        ) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
-        }
+        $this->action = $this->executeModelActionLoad($this->action);
 
-        if ($this->action->fields === true) {
-            $this->action->fields = array_keys($this->action->getModel()->getFields('editable'));
-        }
         // Add buttons to modal for next and previous.
         $this->addButtonAction($this->createButtonBar($this->action));
         $this->jsSetBtnState($this->loader, $this->step);

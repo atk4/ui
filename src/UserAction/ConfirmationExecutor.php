@@ -22,6 +22,7 @@ use Atk4\Ui\View;
  */
 class ConfirmationExecutor extends Modal implements JsExecutorInterface
 {
+    use CommonExecutorTrait;
     use HookTrait;
 
     /** @var Model\UserAction|null Action to execute */
@@ -108,14 +109,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
      */
     public function executeModelAction(): void
     {
-        $id = $this->getApp()->uiPersistence->typecastLoadField($this->action->getModel()->getField($this->action->getModel()->idField), $this->stickyGet($this->name));
-        if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->load($id));
-        } elseif (!$this->action->isOwnerEntity()
-            && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)
-        ) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
-        }
+        $this->action = $this->executeModelActionLoad($this->action);
 
         $this->loader->set(function ($modal) {
             $this->jsSetBtnState($modal);
