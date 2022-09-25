@@ -29,6 +29,7 @@ namespace Atk4\Ui;
  */
 class Modal extends View
 {
+    public $ui = 'modal';
     public $defaultTemplate = 'modal.html';
 
     /** @var string|null Set null for no title */
@@ -37,7 +38,6 @@ class Modal extends View
     public $loadingLabel = 'Loading...';
     /** @var string */
     public $headerCss = 'header';
-    public $ui = 'modal';
     /** @var \Closure|null */
     public $fx;
     /** @var CallbackLater|null */

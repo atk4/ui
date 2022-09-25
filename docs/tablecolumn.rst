@@ -270,7 +270,7 @@ Moreover you may pass $action argument as a PHP callback.
 
 Triggers a modal dialog when you click on the button. See description on :php:meth:`Atk4\\Ui\\Grid::addModalAction()`::
 
-    $action->addButton(['Say HI'], function ($j, $id) use ($g) {
+    $action->addButton(['Say HI'], function (Jquery $j, $id) use ($g) {
         return 'Loaded "' . $g->model->load($id)->get('name') . '" from ID=' . $id;
     });
 

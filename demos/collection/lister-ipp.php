@@ -80,7 +80,7 @@ $lister->setModel($model);
 
 $ipp = ItemsPerPageSelector::addTo($view, ['label' => 'Select how many countries:', 'pageLengthItems' => [12, 24, 36]], ['Content']);
 
-$ipp->onPageLengthSelect(function ($ipp) use ($model, $container) {
+$ipp->onPageLengthSelect(function (int $ipp) use ($model, $container) {
     $model->setLimit($ipp);
 
     return $container;

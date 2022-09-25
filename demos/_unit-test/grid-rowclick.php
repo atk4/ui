@@ -10,6 +10,7 @@ use Atk4\Ui\JsFunction;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
 use Atk4\Ui\Table;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -28,7 +29,7 @@ $grid->addActionMenuItem('Action MenuItem', function () {
     return new JsToast(['message' => 'Clicked Action MenuItem']);
 });
 
-$grid->addModalAction('Action Modal', 'Details', function ($p, $id) use ($model) {
+$grid->addModalAction('Action Modal', 'Details', function (View $p, $id) use ($model) {
     Message::addTo($p, ['Clicked Action Modal: ' . $model->load($id)->name]);
 });
 

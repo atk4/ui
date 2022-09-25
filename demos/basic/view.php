@@ -70,9 +70,9 @@ Button::addTo($app, ['Jiggle plane', 'icon' => 'expand'])->on('click', $plane->j
 Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])->on('click', new JsReload($plane));
 
 Header::addTo($app, ['Can be on a Virtual Page']);
-$vp = VirtualPage::addTo($app)->set(function ($page) use ($planeTemplate) {
-    $plane = View::addTo($page, ['template' => $planeTemplate]);
-    Label::addTo($page, ['Plane ID: ', 'class.bottom attached' => true, 'detail' => $plane->name]);
+$vp = VirtualPage::addTo($app)->set(function (VirtualPage $vp) use ($planeTemplate) {
+    $plane = View::addTo($vp, ['template' => $planeTemplate]);
+    Label::addTo($vp, ['Plane ID: ', 'class.bottom attached' => true, 'detail' => $plane->name]);
 });
 
 Button::addTo($app, ['Show $plane in a dialog', 'icon' => 'clone'])->on('click', new JsModal('Plane Box', $vp));

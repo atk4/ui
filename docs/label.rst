@@ -122,7 +122,7 @@ Added labels into Table
 You can even use label inside a table, but because table renders itself by repeating periodically, then
 the following code is needed::
 
-    $table->onHook(\Atk4\Ui\Table\Column::HOOK_GET_HTML_TAGS, function ($table, Model $row) {
+    $table->onHook(\Atk4\Ui\Table\Column::HOOK_GET_HTML_TAGS, function (Table $table, Model $row) {
         if ($row->getId() == 1) {
             return [
                 'name' => $table->getApp()->getTag('div', ['class' => 'ui ribbon label'], $row->get('name')),

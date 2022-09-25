@@ -37,8 +37,8 @@ class DemoLookup extends Form\Control\Lookup
         $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
 
         $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
-        $vp->set(function ($page) {
-            $form = Form::addTo($page);
+        $vp->set(function (VirtualPage $vp) {
+            $form = Form::addTo($vp);
 
             $entity = $this->model->createEntity();
             $form->setModel($entity, $this->plus['fields'] ?? null);

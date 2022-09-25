@@ -31,7 +31,7 @@ class Dropdown extends Lister
      * ex:
      *      $dropdown = Dropdown::addTo($menu, ['menu', 'dropdownOptions' => ['on' => 'hover']]);
      *      $dropdown->setModel($menuItems);
-     *      $dropdown->onChange(function ($item) {
+     *      $dropdown->onChange(function (string $item) {
      *          return 'New selected item: ' . $item;
      *      });.
      *
@@ -42,11 +42,11 @@ class Dropdown extends Lister
         // setting dropdown option for using callback url.
         $this->dropdownOptions['onChange'] = new JsFunction(['value', 'name', 't'], [
             new JsExpression(
-                "if ($(this).data('currentValue') != value) { $(this).atkAjaxec({ uri: [uri], uri_options: { item:value } }); $(this).data('currentValue', value); }",
+                "if ($(this).data('currentValue') != value) { $(this).atkAjaxec({ uri: [uri], uri_options: { item: value } }); $(this).data('currentValue', value); }",
                 ['uri' => $this->cb->getJsUrl()]
             ), ]);
 
-        $this->cb->set(function ($j, $value) use ($fx) {
+        $this->cb->set(function (Jquery $j, string $value) use ($fx) {
             return $fx($value);
         }, ['item' => 'value']);
     }

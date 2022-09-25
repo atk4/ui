@@ -124,7 +124,7 @@ See :php:meth:`Table\\Column\\\Actions::addAction`
 Similar to addAction, but when clicking a button, will open a modal dialog and execute $callback
 to populate a content::
 
-    $grid->addModalAction('Details', 'Additional Details', function ($p, $id) use ($grid) {
+    $grid->addModalAction('Details', 'Additional Details', function (View $p, $id) use ($grid) {
         // $id of the record which was clicked
         // $grid->model = $grid->model->load($id);
 
