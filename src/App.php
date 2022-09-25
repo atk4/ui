@@ -46,7 +46,7 @@ class App
         'atk' => '/public',
         'jquery' => '/public/external/jquery/dist',
         'serialize-object' => '/public/external/form-serializer/dist',
-        'semantic-ui' => '/public/external/fomantic-ui-css',
+        'semantic-ui' => '/public/external/fomantic-ui/dist',
         'flatpickr' => '/public/external/flatpickr/dist',
     ];
 

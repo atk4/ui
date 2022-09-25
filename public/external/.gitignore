@@ -16,21 +16,23 @@
 # seems not needed... !/flatpickr/dist/plugins/*
 # seems not needed... !/flatpickr/dist/themes/*
 
-!/fomantic-ui-css/LICENS*
-!/fomantic-ui-css/*.css
-!/fomantic-ui-css/*.js
-!/fomantic-ui-css/themes/
-/fomantic-ui-css/themes/*
-!/fomantic-ui-css/themes/default/
-/fomantic-ui-css/themes/default/*
-!/fomantic-ui-css/themes/default/assets/
-/fomantic-ui-css/themes/default/assets/*
-!/fomantic-ui-css/themes/default/assets/fonts/
-/fomantic-ui-css/themes/default/assets/fonts/*
-!/fomantic-ui-css/themes/default/assets/fonts/*.woff2
-!/fomantic-ui-css/themes/default/assets/images/
-/fomantic-ui-css/themes/default/assets/images/*
-!/fomantic-ui-css/themes/default/assets/images/flags.png
+!/fomantic-ui/LICENS*
+!/fomantic-ui/dist/
+/fomantic-ui/dist/*
+!/fomantic-ui/dist/*.css
+!/fomantic-ui/dist/*.js
+!/fomantic-ui/dist/themes/
+/fomantic-ui/dist/themes/*
+!/fomantic-ui/dist/themes/default/
+/fomantic-ui/dist/themes/default/*
+!/fomantic-ui/dist/themes/default/assets/
+/fomantic-ui/dist/themes/default/assets/*
+!/fomantic-ui/dist/themes/default/assets/fonts/
+/fomantic-ui/dist/themes/default/assets/fonts/*
+!/fomantic-ui/dist/themes/default/assets/fonts/*.woff2
+!/fomantic-ui/dist/themes/default/assets/images/
+/fomantic-ui/dist/themes/default/assets/images/*
+!/fomantic-ui/dist/themes/default/assets/images/flags.png
 
 !/form-serializer/LICENS*
 !/form-serializer/dist/
