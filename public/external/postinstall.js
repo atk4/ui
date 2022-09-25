@@ -1,5 +1,4 @@
 const fs = require('fs');
-const https = require('https');
 const path = require('path');
 
 const walkFilesSync = function (f, callback) {
@@ -37,18 +36,11 @@ if (fs.existsSync(path.join(__dirname, 'form-serializer/jquery.serialize-object.
     );
 }
 
-// download Fomantic-UI license
-// remove once https://github.com/fomantic/Fomantic-UI/issues/2356 is fixed and v2.9.0 is released
-https.get(
-    'https://raw.githubusercontent.com/fomantic/Fomantic-UI/2.8.8/LICENSE.md',
-    (response) => response.pipe(fs.createWriteStream(path.join(__dirname, 'fomantic-ui-css/LICENSE.md'))),
-);
-
 const cssUrlPattern = '((?<!\\w)url\\([\'"]?(?!data:))((?:[^(){}\\\\\'"]|\\\\.)*)([\'"]?\\))';
 
 // use native font stack in Fomantic UI
 // remove once https://github.com/fomantic/Fomantic-UI/issues/2355 is implemented and released
-walkFilesSync(path.join(__dirname, 'fomantic-ui-css'), (f) => {
+walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
     updateFileSync(f, (data) => {
         if (!f.endsWith('.css')) {
             return;
@@ -118,7 +110,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui-css'), (f) => {
 });
 
 // remove links to fonts with format other than woff2 from Fomantic-UI
-walkFilesSync(path.join(__dirname, 'fomantic-ui-css'), (f) => {
+walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
     updateFileSync(f, (data) => {
         if (!f.endsWith('.css')) {
             return;
@@ -133,7 +125,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui-css'), (f) => {
 
 // remove twemoji images from Fomantic-UI, reduce total size by about 3500 files and 25 MB
 // wait until https://github.com/fomantic/Fomantic-UI/issues/2363 is implemented or pack all images in one phar
-walkFilesSync(path.join(__dirname, 'fomantic-ui-css'), (f) => {
+walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
     updateFileSync(f, (data) => {
         if (!f.endsWith('.css')) {
             return;
@@ -148,7 +140,11 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui-css'), (f) => {
 // replace absolute URLs with relative paths
 walkFilesSync(__dirname, (f) => {
     updateFileSync(f, (data) => {
-        if (!f.endsWith('.css')) {
+        if (!f.endsWith('.css')
+            || f.startsWith(path.join(__dirname, 'gulp-concat-css/'))
+            || f.startsWith(path.join(__dirname, 'less/'))
+            || f.startsWith(path.join(__dirname, 'rtlcss/'))
+        ) {
             return;
         }
 
@@ -172,7 +168,7 @@ walkFilesSync(__dirname, (f) => {
                 }
 
                 if (pathRel === null) {
-                    throw new Error('URL "' + m2 + '" has no local file mapping');
+                    throw new Error('URL "' + m2 + '" linked from "' + f + '"  has no local file mapping');
                 }
             } else {
                 pathRel = m2;
