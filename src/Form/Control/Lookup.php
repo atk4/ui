@@ -133,8 +133,6 @@ class Lookup extends Input
 
         $this->initQuickNewRecord();
 
-        $this->settings['forceSelection'] = false;
-
         $this->callback = Callback::addTo($this);
 
         $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () {
