@@ -6,6 +6,7 @@ namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
+use Atk4\Ui\Jquery;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\JsToast;
@@ -55,7 +56,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
      */
     public function executeModelAction(array $args = [])
     {
-        $this->set(function ($j) {
+        $this->set(function (Jquery $j) {
             // may be id is passed as 'id' or model->idField within $post args.
             $id = $this->getApp()->uiPersistence->typecastLoadField(
                 $this->action->getModel()->getField($this->action->getModel()->idField),

@@ -577,7 +577,7 @@ class View extends AbstractView implements JsExpressionable
             $style = $this->style;
             array_walk(
                 $style,
-                function (&$item, $key) {
+                function (string &$item, string $key) {
                     $item = $key . ': ' . $item;
                 }
             );

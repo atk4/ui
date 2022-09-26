@@ -99,7 +99,7 @@ $column = $sublayout->addColumn(4);
 $controlTotal = $column->addControl('total', ['readOnly' => true])->set($total);
 
 // Update total when qty and box value in any row has changed.
-$multiline->onLineChange(function ($rows, Form $form) use ($controlTotal) {
+$multiline->onLineChange(function (array $rows, Form $form) use ($controlTotal) {
     $total = 0;
     foreach ($rows as $row => $cols) {
         $qty = $cols['qty'] ?? 0;

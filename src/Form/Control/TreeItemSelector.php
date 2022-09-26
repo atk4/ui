@@ -6,6 +6,7 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Jquery;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
 
@@ -88,7 +89,7 @@ class TreeItemSelector extends Form\Control
      */
     public function onItem(\Closure $fx): void
     {
-        $this->cb = JsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
+        $this->cb = JsCallback::addTo($this)->set(function (Jquery $j, $data) use ($fx) {
             $value = $this->getApp()->decodeJson($data);
             if (!$this->allowMultiple) {
                 $value = $value[0];

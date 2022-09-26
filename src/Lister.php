@@ -92,7 +92,7 @@ class Lister extends View
         $this->model->setLimit($ipp);
 
         // add onScroll callback
-        $this->jsPaginator->onScroll(function ($p) use ($ipp, $scrollRegion) {
+        $this->jsPaginator->onScroll(function (int $p) use ($ipp, $scrollRegion) {
             // set/overwrite model limit
             $this->model->setLimit($ipp, ($p - 1) * $ipp);
 

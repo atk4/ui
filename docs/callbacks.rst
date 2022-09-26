@@ -277,7 +277,7 @@ will send browser screen width back to the callback::
     $label = \Atk4\Ui\Label::addTo($app);
     $cb = \Atk4\Ui\JsCallback::addTo($label);
 
-    $cb->set(function ($j, $arg1) {
+    $cb->set(function (\Atk4\Ui\Jquery $j, $arg1) {
         return 'width is ' . $arg1;
     }, [new \Atk4\Ui\JsExpression( '$(window).width()' )]);
 

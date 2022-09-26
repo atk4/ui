@@ -45,7 +45,7 @@ which is described below. You can also provide first argument to addStep as a se
         'Set DSN',
         'icon' => 'configure',
         'description' => 'Database Connection String',
-    ], function ($p) {
+    ], function (Wizard $p) {
         // some code here
     });
 
