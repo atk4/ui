@@ -206,7 +206,7 @@ if (!$cart->items) {
     $cartOutterLabel->addStyle('display', 'none');
 }
 
-$cartPopup->set(function ($popup) use ($cart) {
+$cartPopup->set(function (View $popup) use ($cart) {
     $cartInnerLabel = Label::addTo($popup, ['Number of items:']);
 
     // cart is already initialized, so init() is not called again. However, cart will be rendered
@@ -247,7 +247,7 @@ $signup = Popup::addTo($app, [$rightMenu, 'position' => 'bottom right'])->setHov
 
 // This popup will be dynamically loaded.
 $signup->stickyGet('logged');
-$signup->set(function ($pop) {
+$signup->set(function (View $pop) {
     // contetn of the popup will be different depending on this condition.
     if (isset($_GET['logged'])) {
         Message::addTo($pop, ['You are already logged in as ' . $_GET['logged']]);

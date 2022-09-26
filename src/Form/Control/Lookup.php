@@ -248,8 +248,8 @@ class Lookup extends Input
         $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
 
         $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
-        $vp->set(function ($page) {
-            $form = Form::addTo($page);
+        $vp->set(function (VirtualPage $p) {
+            $form = Form::addTo($p);
 
             $entity = (clone $this->model)->setOnlyFields($this->plus['fields'] ?? null)->createEntity();
 

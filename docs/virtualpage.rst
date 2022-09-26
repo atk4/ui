@@ -83,7 +83,7 @@ Setting Callback
 Although VirtualPage can work without defining a callback, using one is more reliable and is always recommended::
 
     $vp = \Atk4\Ui\VirtualPage::addTo($layout);
-    $vp->set(function ($vp) {
+    $vp->set(function (\Atk4\Ui\VirtualPage $vp) {
         \Atk4\Ui\LoremIpsum::addTo($vp);
     });
 

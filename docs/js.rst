@@ -620,7 +620,7 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
     $table->setModel($model);
 
     $vp = \Atk4\Ui\VirtualPage::addTo($app);
-    $vp->set(function ($p) use ($table, $model) {
+    $vp->set(function (\Atk4\Ui\VirtualPage $p) use ($table, $model) {
         $form = \Atk4\Ui\Form::addTo($p);
         $form->setModel(clone $model);
         $form->onSubmit(function (Form $form) use ($table) {

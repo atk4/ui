@@ -86,8 +86,8 @@ $table = Table::addTo($app, ['class.celled' => true]);
 $table->setModel(new SomeData());
 
 $frame = VirtualPage::addTo($app);
-$frame->set(function ($frame) {
-    Header::addTo($frame, ['Clicked row with ID = ' . ($_GET['id'] ?? '')]);
+$frame->set(function (VirtualPage $p) {
+    Header::addTo($p, ['Clicked row with ID = ' . ($_GET['id'] ?? '')]);
 });
 
 $table->onRowClick(new JsModal('Row Clicked', $frame, ['id' => $table->jsRow()->data('id')]));

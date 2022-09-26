@@ -131,7 +131,7 @@ You may also use :php:meth:`Atk4\\Ui\\Popup::set` method to dynamically load the
     $table->setModel(new Country($app->db));
 
     $name_column = $table->getColumnDecorators('name');
-    $name_column[0]->addPopup()->set(function ($p) {
+    $name_column[0]->addPopup()->set(function (View $p) {
         HelloWorld::addTo($p);
     });
 
