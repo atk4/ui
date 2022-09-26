@@ -7,6 +7,7 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Ui\UserAction\ExecutorFactory;
+use Atk4\Ui\UserAction\ExecutorInterface;
 
 class Crud extends Grid
 {
