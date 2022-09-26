@@ -39,7 +39,7 @@ if (isset($_GET['name'])) {
 
     // Next we have loader, which will dynamically load console which will dynamically output "success" message.
     Loader::addTo($frame)->set(function (Loader $p) {
-        Console::addTo($p)->set(function ($console) {
+        Console::addTo($p)->set(function (Console $console) {
             $console->output('success!, color is still ' . $_GET['name']);
         });
     });

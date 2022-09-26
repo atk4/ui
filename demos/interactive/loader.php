@@ -63,7 +63,7 @@ Loader::addTo($app, [
         'Generating LoremIpsum, please wait...',
         'class.red' => true,
     ],
-])->set(function ($p) {
+])->set(function (Loader $p) {
     usleep(500_000);
     LoremIpsum::addTo($p, ['size' => 2]);
 });

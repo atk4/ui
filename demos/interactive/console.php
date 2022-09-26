@@ -49,7 +49,7 @@ Header::addTo($tab, [
     'Console output streaming',
     'subHeader' => 'any output your PHP script produces through console is displayed to user in real-time',
 ]);
-Console::addTo($tab)->set(function ($console) {
+Console::addTo($tab)->set(function (Console $console) {
     $console->output('Executing test process...');
     sleep(1);
     $console->output('Now trying something dangerous..');
@@ -87,7 +87,7 @@ $tab = $tabs->addTab('exec() chain', function (VirtualPage $vp) {
     ]);
     $message = Message::addTo($vp, ['This demo may not work', 'type' => 'warning']);
     $message->text->addParagraph('This demo requires Linux OS and will display error otherwise.');
-    Console::addTo($vp)->set(function ($console) {
+    Console::addTo($vp)->set(function (Console $console) {
         $console->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1']);
         $console->exec('/sbin/ping', ['-c', '5', '-i', '2', '8.8.8.8']);
         $console->exec('/bin/no-such-command');
@@ -125,7 +125,7 @@ $tab = $tabs->addTab('Use after form submit', function (VirtualPage $vp) {
     $form->addControls([['foo'], ['bar']]);
 
     $console = Console::addTo($vp, ['event' => false]);
-    $console->set(function ($console) {
+    $console->set(function (Console $console) {
         $model = $_SESSION['atk4_ui_console_demo'];
         $console->output('Executing process...');
         $console->info(var_export($model->get(), true));
