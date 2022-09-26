@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
-use Atk4\Ui\JsCallback;
 use Atk4\Ui\JsSortable;
 use Atk4\Ui\Table;
 
@@ -18,7 +17,7 @@ class DragHandler extends Table\Column
     public $class;
     /** @var string */
     public $tag = 'i';
-    /** @var JsCallback */
+    /** @var JsSortable */
     public $cb;
 
     protected function init(): void

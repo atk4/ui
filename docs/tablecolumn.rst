@@ -99,7 +99,7 @@ The simplest way to use Menus and Popups is through a wrappers: :php:meth:`Atk4\
 
     // OR
 
-    $grid->addDropdown('name', ['Sort A-Z', 'Sort by Relevance'], function ($item) {
+    $grid->addDropdown('name', ['Sort A-Z', 'Sort by Relevance'], function (string $item) {
         return $item;
     });
 
@@ -119,8 +119,8 @@ will return it. When using model, use :php:meth:`Atk4\\Ui\\Table::getColumnDecor
     $table = Table::addTo($app, ['class.celled' => true]);
     $table->setModel(new Country($app->db));
 
-    $name_column = $table->getColumnDecorators('name');
-    LoremIpsum::addTo($name_column[0]->addPopup());
+    $nameColumn = $table->getColumnDecorators('name');
+    LoremIpsum::addTo($nameColumn[0]->addPopup());
 
 .. important:: If content of a pop-up is too large, it may not be possible to display it on-screen. Watch for warning.
 
@@ -130,8 +130,8 @@ You may also use :php:meth:`Atk4\\Ui\\Popup::set` method to dynamically load the
     $table = Table::addTo($app, ['class.celled' => true]);
     $table->setModel(new Country($app->db));
 
-    $name_column = $table->getColumnDecorators('name');
-    $name_column[0]->addPopup()->set(function (View $p) {
+    $nameColumn = $table->getColumnDecorators('name');
+    $nameColumn[0]->addPopup()->set(function (View $p) {
         HelloWorld::addTo($p);
     });
 
@@ -142,7 +142,7 @@ Dropdown Menus
 
 Menus will show item selection and will trigger a callback when user selects one of them::
 
-    $some_column->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
+    $someColumn->addDropdown(['Change', 'Reorder', 'Update'], function (string $item) {
         return 'Title item: ' . $item;
     });
 
