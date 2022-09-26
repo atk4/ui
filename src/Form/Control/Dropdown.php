@@ -92,7 +92,7 @@ class Dropdown extends Input
      * }
      *
      * Example 4 with $values property Array:
-     * function ($value, $key) {
+     * function (string $value, $key) {
      *     return [
      *        'value' => $key,
      *        'title' => mb_strtoupper($value),

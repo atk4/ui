@@ -415,10 +415,10 @@ You can also define an Icon right away::
 If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.
 If you use it, use the second parameter as well, its the array key::
 
-    function ($row, $key) {
+    function (string $value, $key) {
         return [
             'value' => $key,
-            'title' => strtoupper($row),
+            'title' => strtoupper($value),
         ];
     }
 
