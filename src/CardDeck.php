@@ -203,11 +203,11 @@ class CardDeck extends View
     {
         $executor = $this->getExecutorFactory()->create($action, $this);
         if ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $executor->jsSuccess = function ($x, $m, $id, $return) use ($action) {
+            $executor->jsSuccess = function (ExecutorInterface $ex, Model $m, $id, $return) use ($action) {
                 return $this->jsExecute($return, $action);
             };
         } else {
-            $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($ex, $return, $id) use ($action) {
+            $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function (ExecutorInterface $ex, $return, $id) use ($action) {
                 return $this->jsExecute($return, $action);
             });
         }

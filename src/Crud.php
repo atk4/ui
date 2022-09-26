@@ -132,13 +132,13 @@ class Crud extends Grid
     protected function initActionExecutor(Model\UserAction $action)
     {
         $executor = $this->getExecutor($action);
-        $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($ex, $return, $id) use ($action) {
+        $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function (ExecutorInterface $ex, $return, $id) use ($action) {
             return $this->jsExecute($return, $action);
         });
 
         if ($executor instanceof UserAction\ModalExecutor) {
             foreach ($this->onActions as $onAction) {
-                $executor->onHook(UserAction\ModalExecutor::HOOK_STEP, function ($ex, $step, $form) use ($onAction, $action) {
+                $executor->onHook(UserAction\ModalExecutor::HOOK_STEP, function (UserAction\ModalExecutor $ex, string $step, Form $form) use ($onAction, $action) {
                     $key = array_key_first($onAction);
                     if ($key === $action->shortName && $step === 'fields') {
                         return $onAction[$key]($form, $ex);
