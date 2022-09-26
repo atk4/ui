@@ -61,7 +61,7 @@ $executor = UserAction\JsCallbackExecutor::addTo($rightColumn);
 // Passing Model action to executor and action argument via url.
 $executor->setAction($action->getActionForEntity($files->createEntity()));
 // Setting user response after model action get execute.
-$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($t, $m) {
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
     return new JsToast('Files imported');
 });
 $executor->executeModelAction(['path' => '.']);
@@ -75,7 +75,7 @@ $executor->setAction($action->getActionForEntity($files->createEntity()));
 $executor->ui = 'segment';
 $executor->description = 'Execute Import action using "BasicExecutor" with argument "path" equal to "."';
 $executor->setArguments(['path' => '.']);
-$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x) {
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
     return new JsToast('Done!');
 });
 
@@ -88,7 +88,7 @@ $executor->ui = 'segment';
 $executor->previewType = 'console';
 $executor->description = 'Displays preview in console prior to executing';
 $executor->setArguments(['path' => '.']);
-$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
     return new JsToast('Confirm!');
 });
 
@@ -98,8 +98,8 @@ $executor->setAction($action->getActionForEntity($files->createEntity()));
 $executor->ui = 'segment';
 $executor->description = 'Only fields set in $action[field] array will be added in form.';
 $executor->setArguments(['path' => '.']);
-$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new JsToast('Confirm! ' . $x->action->getEntity()->name);
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function (UserAction\FormExecutor $executor) {
+    return new JsToast('Confirm! ' . $executor->action->getEntity()->name);
 });
 
 View::addTo($leftColumn, ['ui' => 'hidden divider']);
@@ -109,6 +109,6 @@ $executor = UserAction\ArgumentFormExecutor::addTo($leftColumn, ['executorButton
 $executor->setAction($action->getActionForEntity($files->createEntity()));
 $executor->description = 'ArgumentFormExecutor will ask user about arguments set in actions.';
 $executor->ui = 'segment';
-$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
     return new JsToast('Imported!');
 });

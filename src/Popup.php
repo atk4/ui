@@ -57,18 +57,17 @@ class Popup extends View
 
     /**
      * Whether or not dynamic content is cache.
-     * If cache is on, will retrieve content only the first time
-     * popup is requrired.
+     * If cache is on, will retrieve content only the first time popup is required.
      *
      * @var bool
      */
     public $useCache = false;
 
     /** @var string Min width for a dynamic popup. */
-    public $minWidth; // '120px';
+    public $minWidth;
 
     /** @var string Min height for a dynamic popup. */
-    public $minHeight; // '60px';
+    public $minHeight;
 
     /**
      * Whether or not the click event triggering popup
@@ -144,11 +143,11 @@ class Popup extends View
         $this->cb = Callback::addTo($this);
 
         if (!$this->minWidth) {
-            $this->minWidth = '120px';
+            $this->minWidth = '80px';
         }
 
         if (!$this->minHeight) {
-            $this->minHeight = '60px';
+            $this->minHeight = '45px';
         }
 
         // create content view to pass to callback.
@@ -268,7 +267,6 @@ class Popup extends View
         if ($this->minHeight) {
             $this->setStyle('min-height', $this->minHeight);
         }
-        // $this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
 
         parent::renderView();
     }

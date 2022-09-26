@@ -12,6 +12,7 @@ use Atk4\Ui\Icon;
 use Atk4\Ui\Label;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -87,7 +88,7 @@ Form\Control\Lookup::addTo($app, [
 
 Header::addTo($app, ['Lookup input inside modal']);
 
-$modal = Modal::addTo($app)->set(function ($p) {
+$modal = Modal::addTo($app)->set(function (View $p) {
     $a = Form\Control\Lookup::addTo($p, ['placeholder' => 'Search country', 'label' => 'Country: ']);
     $a->setModel(new Country($p->getApp()->db));
 });
