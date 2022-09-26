@@ -39,15 +39,15 @@ if (fs.existsSync(path.join(__dirname, 'form-serializer/jquery.serialize-object.
 const cssUrlPattern = '((?<!\\w)url\\([\'"]?(?!data:))((?:[^(){}\\\\\'"]|\\\\.)*)([\'"]?\\))';
 
 // use native font stack in Fomantic UI
-// remove once https://github.com/fomantic/Fomantic-UI/issues/2355 is implemented and released
+// https://github.com/fomantic/Fomantic-UI/issues/2355
 walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
     updateFileSync(f, (data) => {
         if (!f.endsWith('.css')) {
             return;
         }
 
-        data = data.replace(new RegExp('@import ' + cssUrlPattern + ';?', 'g'), (m, m1, m2, m3) => {
-            if (m2.startsWith('https://fonts.googleapis.com/css2?family=Lato:')) {
+        data = data.replace(new RegExp('\\s*@font-face\\s*\\{[^{}]*' + cssUrlPattern + '[^{}]+\\}', 'g'), (m, m1, m2, m3) => {
+            if (m2.includes('/assets/fonts/Lato')) {
                 return '';
             }
 
@@ -131,7 +131,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
             return;
         }
 
-        data = data.replace(/\s*((?<!\w)em\[data-emoji=[^[\]{}\\]+\]:before,?\s*)+\{[^{}]*background-image:[^{}]+\}/g, '');
+        data = data.replace(/\s*((?<!\w)em\[data-emoji=[^[\]{}\\]+\]::before,?\s*)+\{[^{}]*background-image:[^{}]+\}/g, '');
 
         return data;
     });
