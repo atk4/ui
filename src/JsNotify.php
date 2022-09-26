@@ -58,7 +58,7 @@ class JsNotify implements JsExpressionable
 
     /**
      * Set notifier color.
-     *  - any colors define in semantic-ui can be used.
+     *  - any colors define in Fomantic-UI can be used.
      *
      * @param string $color
      *
@@ -87,7 +87,7 @@ class JsNotify implements JsExpressionable
 
     /**
      * Set open and close transition for the notifier.
-     *   - any transition define in semantic ui can be used.
+     *   - any transition define in Fomantic-UI can be used.
      *
      * @param string      $openTransition
      * @param string|null $closeTransition

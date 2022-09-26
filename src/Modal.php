@@ -14,21 +14,22 @@ namespace Atk4\Ui;
  *  Message::addTo($modal, ['title' => 'Welcome to Agile Toolkit'])->text('Your text here');
  *
  * Modal can add content dynamically via CallbackLater.
- *  $modal->set(function ($modal) {
- *     Form::addTo($modal);
+ *  $modal->set(function (View $p) {
+ *     Form::addTo($p);
  *  });
  *
- * Modal can use semantic-ui predefine method onApprove or onDeny by passing
+ * Modal can use Fomantic-UI predefine method onApprove or onDeny by passing
  * a jsAction to Modal::addDenyAction or Modal::addApproveAction method. It will not close until the jsAction return true.
  *  $modal->addDenyAction('No', new JsExpression('function() { window.alert("Can\'t do that."); return false; }'));
  *  $modal->addApproveAction('Yes', new JsExpression('function() { window.alert("You\'re good to go!"); }'));
  *
  * You may also prevent modal from closing via the esc or dimmed area click using $modal->notClosable().
  *
- * Some helper methods are also available to set: transition time, transition type or modal settings from semantic-ui.
+ * Some helper methods are also available to set: transition time, transition type or modal settings from Fomantic-UI.
  */
 class Modal extends View
 {
+    public $ui = 'modal';
     public $defaultTemplate = 'modal.html';
 
     /** @var string|null Set null for no title */
@@ -37,7 +38,6 @@ class Modal extends View
     public $loadingLabel = 'Loading...';
     /** @var string */
     public $headerCss = 'header';
-    public $ui = 'modal';
     /** @var \Closure|null */
     public $fx;
     /** @var CallbackLater|null */

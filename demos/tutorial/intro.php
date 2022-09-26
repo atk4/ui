@@ -22,7 +22,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $wizard = Wizard::addTo($app);
 
-$wizard->addStep('User Interface', function ($page) {
+$wizard->addStep('User Interface', function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -69,7 +69,7 @@ $wizard->addStep('User Interface', function ($page) {
     });
 });
 
-$wizard->addStep('Interactivity', function ($page) {
+$wizard->addStep('Interactivity', function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -120,7 +120,7 @@ $wizard->addStep('Interactivity', function ($page) {
     );
 });
 
-$wizard->addStep('Business Model', function ($page) {
+$wizard->addStep('Business Model', function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -198,7 +198,7 @@ $wizard->addStep('Business Model', function ($page) {
     );
 });
 
-$wizard->addStep('Persistence', function ($page) {
+$wizard->addStep('Persistence', function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -233,8 +233,8 @@ $wizard->addStep('Persistence', function ($page) {
     );
 });
 
-$wizard->addFinish(function ($page) use ($wizard) {
+$wizard->addFinish(function (Wizard $page) {
     PromotionText::addTo($page);
-    Button::addTo($wizard, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
+    Button::addTo($page, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
         ->link('../');
 });

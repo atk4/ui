@@ -8,7 +8,7 @@ Menu
 .. php:namespace:: Atk4\Ui
 .. php:class:: Menu
 
-Menu implements horizontal or vertical multi-level menu by using Fomantic UI's 'menu'.
+Menu implements horizontal or vertical multi-level menu by using Fomantic-UI 'menu'.
 
 Using Menu
 ==========

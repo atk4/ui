@@ -26,7 +26,7 @@ class JsReload implements JsExpressionable
     public array $args = [];
 
     /**
-     * Semantic-ui api settings.
+     * Fomantic-UI api settings.
      * ex: ['loadingDuration' => 1000].
      */
     public array $apiConfig = [];

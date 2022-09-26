@@ -20,6 +20,7 @@ use Atk4\Ui\VirtualPage;
  */
 class VpExecutor extends View implements JsExecutorInterface
 {
+    use CommonExecutorTrait;
     use HookTrait;
     use StepExecutorTrait;
 
@@ -110,20 +111,9 @@ class VpExecutor extends View implements JsExecutorInterface
      */
     public function executeModelAction(): void
     {
-        $id = $this->stickyGet($this->name);
-        if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->load($id));
-        } elseif (!$this->action->isOwnerEntity()
-            && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)
-        ) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
-        }
+        $this->action = $this->executeModelActionLoad($this->action);
 
-        if ($this->action->fields === true) {
-            $this->action->fields = array_keys($this->action->getModel()->getFields('editable'));
-        }
-
-        $this->vp->set(function ($vPage) {
+        $this->vp->set(function () {
             $this->jsSetBtnState($this->loader, $this->step);
             $this->jsSetListState($this->loader, $this->step);
             $this->runSteps();

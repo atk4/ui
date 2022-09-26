@@ -62,7 +62,7 @@ You can use icon on the following components: :php:class:`Button`, :php:class:`L
 Groups
 ======
 
-Fomantic UI support icon groups. The best way to implement is to supply :php:class:`Template` to an
+Fomantic-UI support icon groups. The best way to implement is to supply :php:class:`Template` to an
 icon::
 
     Icon::addTo($app, ['template' => new \Atk4\Ui\Template('<i class="huge icons">

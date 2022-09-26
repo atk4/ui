@@ -49,7 +49,7 @@ use Atk4\Ui\View;
  * You can use the returned data to update other related areas of the form.
  * For example, ypdating Grand Total field of all invoice items.
  *
- * $ml->onChange(function ($rows) use ($form) {
+ * $ml->onChange(function (array $rows) use ($form) {
  *     $grand_total = 0;
  *     foreach ($rows as $row => $cols) {
  *         foreach ($cols as $col) {
@@ -210,7 +210,7 @@ class Multiline extends Form\Control
         $this->renderCallback = JsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
-        $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
+        $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
             $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($_POST[$this->shortName]));
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);

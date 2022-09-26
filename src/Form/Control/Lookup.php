@@ -75,17 +75,17 @@ class Lookup extends Input
     public $titleField;
 
     /**
-     * Semantic UI uses cache to remember choices. For dynamic sites this may be dangerous, so
+     * Fomantic-UI uses cache to remember choices. For dynamic sites this may be dangerous, so
      * it's disabled by default. To switch cache on, set 'cache' => 'local'.
      *
-     * Use this apiConfig variable to pass API settings to Semantic UI in .dropdown()
+     * Use this apiConfig variable to pass API settings to Fomantic-UI in .dropdown()
      *
      * @var array
      */
     public $apiConfig = ['cache' => false];
 
     /**
-     * Semantic UI dropdown module settings.
+     * Fomantic-UI dropdown module settings.
      * Use this setting to configure various dropdown module settings
      * to use with Lookup.
      *
@@ -132,8 +132,6 @@ class Lookup extends Input
         ]);
 
         $this->initQuickNewRecord();
-
-        $this->settings['forceSelection'] = false;
 
         $this->callback = Callback::addTo($this);
 
@@ -250,8 +248,8 @@ class Lookup extends Input
         $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
 
         $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
-        $vp->set(function ($page) {
-            $form = Form::addTo($page);
+        $vp->set(function (VirtualPage $p) {
+            $form = Form::addTo($p);
 
             $entity = (clone $this->model)->setOnlyFields($this->plus['fields'] ?? null)->createEntity();
 
@@ -347,7 +345,7 @@ class Lookup extends Input
     }
 
     /**
-     * Set Semantic-ui Api settings to use with dropdown.
+     * Set Fomantic-UI Api settings to use with dropdown.
      *
      * @param array $config
      *

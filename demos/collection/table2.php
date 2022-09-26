@@ -65,11 +65,11 @@ $table->addColumn('amount', [Table\Column\Money::class]);
 $table->addDecorator('amount', [Table\Column\Template::class, 'Refunded: {$amount}']);
 
 // column which uses selective format depending on condition
-$table->addColumn('amount_copy', [Table\Column\Multiformat::class, function ($a, $b) {
-    if ($a->get('amount_copy') > 0) {
+$table->addColumn('amount_copy', [Table\Column\Multiformat::class, function (Model $row) {
+    if ($row->get('amount_copy') > 0) {
         // two formatters together
         return [[Table\Column\Link::class], [Table\Column\Money::class]];
-    } elseif (abs($a->get('amount_copy')) < 50) {
+    } elseif (abs($row->get('amount_copy')) < 50) {
         // one formatter, but inject template and some attributes
         return [[
             Table\Column\Template::class,

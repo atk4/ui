@@ -49,11 +49,11 @@ When adding an Upload or UploadImage field to a form, onUpload and onDelete call
 
     $img = $form->addControl('img', [\Atk4\Ui\Form\Control\UploadImage::class, ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
 
-    $img->onUpload(function ($postFile) {
+    $img->onUpload(function (array $postFile) {
         // callback action here...
     });
 
-    $img->onDelete(function ($fileId) {
+    $img->onDelete(function (string $fileId) {
         // callback action here...
     });
 
@@ -75,7 +75,7 @@ The onUpload callback function is a good place to:
 
 Example showing the onUpload callback on the UploadImage field::
 
-    $img->onUpload(function ($postFile) use ($form, $img) {
+    $img->onUpload(function (array $postFile) use ($form, $img) {
         if ($postFile['error'] !== 0) {
             return $form->error('img', 'Error uploading image.');
         }
@@ -113,7 +113,7 @@ The onDelete callback function is a good place to:
 
 Example showing the onDelete callback on the UploadImage field::
 
-    $img->onDelete(function ($fileId) use ($img) {
+    $img->onDelete(function (string $fileId) use ($img) {
         // reset thumbanil
         $img->clearThumbnail('./images/default.png');
 

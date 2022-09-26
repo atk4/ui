@@ -415,12 +415,12 @@ Modal
 .. php:method:: setOption()
 .. php:method:: setOptions()
 
-This class allows you to open modal dialogs and close them easily. It's based around Fomantic UI
+This class allows you to open modal dialogs and close them easily. It's based around Fomantic-UI
 `.modal(), <https://fomantic-ui.com/modules/modal.html>`_ but integrates PHP callback for dynamically
 producing content of your dialog::
 
     $modal = \Atk4\Ui\Modal::addTo($app, ['Modal Title']);
-    $modal->set(function ($p) use ($modal) {
+    $modal->set(function (View $p) use ($modal) {
         \Atk4\Ui\LoremIpsum::addTo($p);
         \Atk4\Ui\Button::addTo($p, ['Hide'])->on('click', $modal->hide());
     });
@@ -438,7 +438,7 @@ Modal will render as a HTML `<div>` block but will be hidden. Alternatively you 
 The second way is more convenient for creating static content, such as Terms of Service.
 
 You can customize the CSS classes of both header and content section of the modal using the properties `headerCss`
-or `contentCss` or use the method `addContentCss()`. See the Fomantic UI modal documentation for further information.
+or `contentCss` or use the method `addContentCss()`. See the Fomantic-UI modal documentation for further information.
 
 JsModal
 -------
@@ -482,7 +482,7 @@ some feedback to the user. JsNotify can display a bar on top of the screen for s
 
     $modal = \Atk4\Ui\Modal::addTo($app, ['Modal Title']);
 
-    $modal->set(function ($p) use ($modal) {
+    $modal->set(function (View $p) use ($modal) {
         $form = \Atk4\Ui\Form::addTo($p);
         $form->addControl('name', [], ['caption' => 'Add your name']);
 
@@ -620,7 +620,7 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
     $table->setModel($model);
 
     $vp = \Atk4\Ui\VirtualPage::addTo($app);
-    $vp->set(function ($p) use ($table, $model) {
+    $vp->set(function (\Atk4\Ui\VirtualPage $p) use ($table, $model) {
         $form = \Atk4\Ui\Form::addTo($p);
         $form->setModel(clone $model);
         $form->onSubmit(function (Form $form) use ($table) {

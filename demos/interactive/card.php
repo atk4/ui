@@ -17,7 +17,7 @@ Button::addTo($app, ['Card Model', 'class.small right floated basic blue' => tru
     ->link(['card-action']);
 View::addTo($app, ['ui' => 'ui clearing divider']);
 
-Header::addTo($app, ['Card.', 'size' => 1, 'subHeader' => 'Component based on Fomantic-Ui Card view.']);
+Header::addTo($app, ['Card.', 'size' => 1, 'subHeader' => 'Component based on Fomantic-UI Card view.']);
 
 // Simple Card
 
@@ -33,7 +33,7 @@ $card->addImage('../images/kristy.png');
 $card->addButton(new Button(['Join']));
 $card->addButton(new Button(['Email']));
 
-$card->addExtraContent(new View(['Copyright notice: Image from Semantic-UI (Fomantic-UI)', 'element' => 'span']));
+$card->addExtraContent(new View(['Copyright notice: Image from Fomantic-UI', 'element' => 'span']));
 
 // Simple Card
 

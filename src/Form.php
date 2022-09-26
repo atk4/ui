@@ -117,10 +117,10 @@ class Form extends View
      */
     public $controlDisplaySelector = '.field';
 
-    /** @var array Use this apiConfig variable to pass API settings to Semantic UI in .api(). */
+    /** @var array Use this apiConfig variable to pass API settings to Fomantic-UI in .api(). */
     public $apiConfig = [];
 
-    /** @var array Use this formConfig variable to pass settings to Semantic UI in .from(). */
+    /** @var array Use this formConfig variable to pass settings to Fomantic-UI in .from(). */
     public $formConfig = [];
 
     // {{{ Base Methods
@@ -541,8 +541,8 @@ class Form extends View
     }
 
     /**
-     * Set Semantic-ui Api settings to use with form. A complete list is here:
-     * https://semantic-ui.com/behaviors/api.html#/settings.
+     * Set Fomantic-UI Api settings to use with form. A complete list is here:
+     * https://fomantic-ui.com/behaviors/api.html#/settings .
      *
      * @param array $config
      *
@@ -556,7 +556,7 @@ class Form extends View
     }
 
     /**
-     * Set Semantic-ui From settings to use with form. A complete list is here:
+     * Set Fomantic-UI Form settings to use with form. A complete list is here:
      * https://fomantic-ui.com/behaviors/form.html#/settings.
      *
      * @param array $config

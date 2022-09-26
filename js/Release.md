@@ -30,8 +30,8 @@
 ### version 1.19.0 (2020-12-18)
 
 - Multiline component
-  - add support for Lookup;
-  - refactor entire component;
+  - add support for Lookup
+  - refactor entire component
 
 ### version 1.18.0 (2020-11-25)
 
@@ -39,9 +39,9 @@
 
 ### version 1.17.0 (2020-11-10)
 
-- atk-date-picker use vue-flatpickr-component instead of v-date-picker;
-- enable time and datetime in query builder;
-- enable time and datetime in multiline;
+- atk-date-picker use vue-flatpickr-component instead of v-date-picker
+- enable time and datetime in query builder
+- enable time and datetime in multiline
 
 ### version 1.16.4 (2020-11-09)
 
@@ -53,7 +53,7 @@
 
 - create atk-date-picker vue component.
 - Update query-builder
-    - allow date picker customization;
+    - allow date picker customization
 
 - add atk-date-picker to multiline component.
 
@@ -75,7 +75,7 @@
 ### version 1.15.4 (2020-09-08)
 
 - add atk eventBus for listening and publishing event.
-    - replace deprecated Vue eventBus;
+    - replace deprecated Vue eventBus
 - create atk-utils file for options and eventBus.
 - remove Vue component deprecated inline-template in v3.
 
@@ -88,7 +88,7 @@
  - Fix issue with Querybuilder date.
    - https://github.com/atk4/ui/issues/1420
  - Package
-    - update package dependencies to latest release;
+    - update package dependencies to latest release
         - note: css-loader v4 now require style-loader
 
   PR: https://github.com/atk4/ui/pull/1430
@@ -99,8 +99,8 @@
     - fix issue (1406) when using Control or Command click on a link (https://github.com/atk4/ui/issues/1406 )
 
  - Package
-    - update package dependencies to latest release;
-    - fix eslint;
+    - update package dependencies to latest release
+    - fix eslint
 
 ### version 1.15.1 (2020-08-19)
  - URL query parameter for Upload plugin/control was renamed from "action" to "f_upload_action"
@@ -111,7 +111,7 @@
  - configure webpack in order to load and bundle .vue file.
     - now use terser plugin instead of uglify js for minimizing js.
  - add query builder component for ScopeBuilder form field
-   - extends Vue Query Builder default to work with Fomantic ui.
+   - extends Vue Query Builder default to work with Fomantic-UI.
 
 ### version 1.14.3 (2020-07-13)
  - Update dependencies.
@@ -121,7 +121,7 @@
 
 ### version 1.14.1 (2020-04-25)
 
-- add stop function to server-event.plugin;
+- add stop function to server-event.plugin.
     You can now explicitly stop event.
     Add option to close event on window beforeUnload
 
@@ -180,7 +180,7 @@
 ### version 1.12.0 (2019-11-06)
 
 - add table-dropdown-helper.js
-    Utlity to dipslay Fomantic ui drodown as a table column.
+    Utility to dipslay Fomantic-UI dropdown as a table column.
 
 ### version 1.11.0 (2019-10-24)
 
@@ -188,10 +188,10 @@
     Enable usage of web storage: local or session.
 - Update atk.reloadView jQuery plugin.
     Can include web storage in api request,
-    Possible to set specific Fomantic api settings
+    Possible to set specific Fomantic-UI api settings
 - Update atk.ajaxExec jQuery plugin.
     Can include web storage in api request,
-    Possible to set specific Fomantic api settings
+    Possible to set specific Fomantic-UI api settings
 
 - Update url.helpers
 
@@ -226,7 +226,7 @@ the last column and last row.
 
 ### version 1.7.0
 
-- New atkConfirm plugin. Will display a user confirmaton dialog using fomantic ui modal.
+- New atkConfirm plugin. Will display a user confirmaton dialog using Fomantic-UI modal.
 
 ### version 1.6.8
 
@@ -266,9 +266,8 @@ the last column and last row.
 
 ### version 1.6.4
 
- - Add directives to Vue component;
- - Allow uses of Semantic Ui Vue;
- - Update packages version;
+ - Add directives to Vue component
+ - Update packages version
  - Configure babel in order to use Async - Await
  - New suiFetch() method for server callback in api service.
 
@@ -278,28 +277,28 @@ the last column and last row.
 
 ### version 1.6.2
 
- - Refactored js file name;
- - add Vue js service for creating Vue component;
+ - Refactored js file name
+ - add Vue js service for creating Vue component
  - Add some vue component:
-    - inline-edit;
-    - item-search;
+    - inline-edit
+    - item-search
 
 ### version 1.6.1
 
-- fix/notify plugin for fomantic v.2.7.2
+- fix/notify plugin for Fomantic-UI v.2.7.2
   This version require notify element to have transition hidden set.
 
 ### version 1.6.0
 
 Maintenance release.
- - upgrade webpack to verson 4 (4.26.1);
- - upgrade babel to version 7;
- - upgrade eslint to version 5;
- - remove unneccessary dependencies;
- - add package-lock file for newer npm release;
- - update webpack configuration to newer version;
- - remove old babel preset env dependency;
- - remove all vulnerabilities issue on npm install;
+ - upgrade webpack to verson 4 (4.26.1)
+ - upgrade babel to version 7
+ - upgrade eslint to version 5
+ - remove unneccessary dependencies
+ - add package-lock file for newer npm release
+ - update webpack configuration to newer version
+ - remove old babel preset env dependency
+ - remove all vulnerabilities issue on npm install
 
 ### version 1.5.0
 
@@ -307,7 +306,7 @@ Maintenance release.
 
 ### version 1.4.1
 
- - Modify reloadView plugin in order to accept semantic-ui api settings.
+ - Modify reloadView plugin in order to accept Fomantic-UI api settings.
 
 ### version 1.4.0
 
@@ -341,7 +340,7 @@ Maintenance release.
 
 #### Changes in ModalService
   - Set top modal position value to 'absolute'
-    - this fix semantic.ui 2.3.2 modal positioning problem.
+    - this fix modal positioning problem.
   - Add esc key handler to document while modal are in service.
     - this allow to close all open modal window using esc key one after the others.
 #### Changes in createModal
@@ -391,7 +390,7 @@ Maintenance release.
 
 ### version 1.0.1
 
-- add new function for exporting package version number;
+- add new function for exporting package version number:
   ```
     atk.version()
   ```

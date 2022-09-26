@@ -5,8 +5,8 @@ import formService from '../services/form.service';
 
 /**
  * Show or hide input field base on other input field condition.
- * Support all semantic-ui form validation rule.
- * Note on rule. FormService also add two more rule to semantic-ui existing ones:
+ * Support all Fomantic-UI form validation rule.
+ * Note on rule. FormService also add two more rule to Fomantic-UI existing ones:
  *    - notEmpty;
  *    - isVisible;
  *    - isEqual[number] for number comparaison.
@@ -47,7 +47,7 @@ import formService from '../services/form.service';
  *      ]);
  *   Can be phrase this way: Display 'ext' if phone is a number AND phone has at least 7 char.
  *
- *   See semantic-ui validation rule for more details: https://semantic-ui.com/behaviors/form.html#validation-rules
+ *   See Fomantic-UI validation rule for more details: https://fomantic-ui.com/behaviors/form.html#validation-rules
  */
 export default class conditionalForm extends atkPlugin {
     main() {

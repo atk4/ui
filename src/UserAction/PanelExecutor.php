@@ -17,6 +17,7 @@ use Atk4\Ui\View;
  */
 class PanelExecutor extends Right implements JsExecutorInterface
 {
+    use CommonExecutorTrait;
     use HookTrait;
     use StepExecutorTrait;
 
@@ -99,18 +100,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
      */
     public function executeModelAction(): void
     {
-        $id = $this->stickyGet($this->name);
-        if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->load($id));
-        } elseif (!$this->action->isOwnerEntity()
-            && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)
-        ) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
-        }
-
-        if ($this->action->fields === true) {
-            $this->action->fields = array_keys($this->action->getModel()->getFields('editable'));
-        }
+        $this->action = $this->executeModelActionLoad($this->action);
 
         $this->jsSetBtnState($this->loader, $this->step);
         $this->jsSetListState($this->loader, $this->step);

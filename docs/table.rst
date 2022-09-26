@@ -453,7 +453,7 @@ Each table's column width can be resize by dragging the column right border::
 You may specify a callback function to the method. The callback will return a json string containing each
 column name in table with their new width in pixel.::
 
-    $table->resizableColumn(function ($j, $w) {
+    $table->resizableColumn(function (Jquery $j, string $w) {
         // do something with new column width
         $columnWidths = $this->getApp()->decodeJson($w);
     }, [200,300,100,100,100]);

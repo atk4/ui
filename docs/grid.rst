@@ -34,14 +34,14 @@ Adding Menu Items
 
 .. php:method: addButton($label)
 
-Grid top-bar which contains QuickSearch is implemented using Fomantic UI "ui menu". With that
+Grid top-bar which contains QuickSearch is implemented using Fomantic-UI "ui menu". With that
 you can add additional items and use all features of a regular :php:class:`Menu`::
 
     $sub = $grid->menu->addMenu('Drop-down');
     $sub->addItem('Test123');
 
 For compatibility grid supports addition of the buttons to the menu, but there are several
-Fomantic UI limitations that wouldn't allow to format buttons nicely::
+Fomantic-UI limitations that wouldn't allow to format buttons nicely::
 
     $grid->addButton('Hello');
 
@@ -124,7 +124,7 @@ See :php:meth:`Table\\Column\\\Actions::addAction`
 Similar to addAction, but when clicking a button, will open a modal dialog and execute $callback
 to populate a content::
 
-    $grid->addModalAction('Details', 'Additional Details', function ($p, $id) use ($grid) {
+    $grid->addModalAction('Details', 'Additional Details', function (View $p, $id) use ($grid) {
         // $id of the record which was clicked
         // $grid->model = $grid->model->load($id);
 

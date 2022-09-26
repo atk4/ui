@@ -13,8 +13,8 @@ There is one problem, however. What if View (and the callbacks too) are created 
 
 The next code creates Loader area which will display a console. Result is - nested callback::
 
-    Loader::addTo($app)->set(function ($page) {
-        Console::addTo($page)->set(function ($console) {
+    Loader::addTo($app)->set(function (Loader $p) {
+        Console::addTo($p)->set(function (Console $console) {
             $console->output('success!');
         });
     });
@@ -26,8 +26,8 @@ Sticky GET is a better approach. It works like this::
 
     $app->stickyGet('client_id');
 
-    Loader::addTo($app)->set(function ($page) {
-        Console::addTo($page)->set(function ($console) {
+    Loader::addTo($app)->set(function (Loader $p) {
+        Console::addTo($p)->set(function (Console $console) {
             $console->output('client_id = !'. $_GET['client_id']);
         });
     });
@@ -49,13 +49,13 @@ when Loader wishes to load content dynamically, it must pass extra _GET paramete
 the SAME get argument to trigger a callback for the Loader, otherwise Console wouldn't be
 initialized at all.
 
-Loader sets a local stickyGet on the $page before it's passed inside your function::
+Loader sets a local stickyGet on the $p before it's passed inside your function::
 
-    $page->stickyGet($trigger_get_name);
+    $p->stickyGet($trigger_get_name);
 
-This way - all the views added into this page will carry an extra get argument::
+This way - all the views added into this $p will carry an extra get argument::
 
-    $page->url(); // includes "$trigger_get_name=callback"
+    $p->url(); // includes "$trigger_get_name=callback"
 
 If you call `$app->url()` it will contain `client_id` but won't contain the callbacks triggers.
 
@@ -71,8 +71,8 @@ Consider this code::
     $b1 = \Atk4\Ui\Button::addTo($app);
     $b1->set($b1->url());
 
-    Loader::addTo($app)->set(function ($page) {
-        $b2 = \Atk4\Ui\Button::addTo($page);
+    Loader::addTo($app)->set(function (Loader $p) {
+        $b2 = \Atk4\Ui\Button::addTo($p);
         $b2->set($b2->url());
     });
 

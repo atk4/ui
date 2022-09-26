@@ -10,6 +10,7 @@ use Atk4\Ui\Columns;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Grid;
 use Atk4\Ui\Header;
+use Atk4\Ui\Jquery;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -30,10 +31,10 @@ $g1->setModel($m1);
 $g1->addQuickSearch([Country::hinting()->fieldName()->name, Country::hinting()->fieldName()->iso]);
 
 // demo for additional action buttons in Crud + JsPaginator
-$g1->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($g1) {
+$g1->addModalAction(['icon' => 'cogs'], 'Details', function (View $p, $id) use ($g1) {
     Card::addTo($p)->setModel($g1->model->load($id));
 });
-$g1->addActionButton('red', function ($js) {
+$g1->addActionButton('red', function (Jquery $js) {
     return $js->closest('tr')->css('color', 'red');
 });
 // THIS SHOULD GO AFTER YOU CALL Grid::addActionButton() !!!

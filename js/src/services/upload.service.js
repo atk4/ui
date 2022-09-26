@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 /**
  * Singleton class
- * Allow to upload files to server via semantic-ui api.
+ * Allow to upload files to server via Fomantic-UI api.
  */
 class UploadService {
     static getInstance() {
@@ -24,10 +24,10 @@ class UploadService {
      * be set to 'file' only.
      *
      * @param files         A FileList object.
-     * @param el            the jQuery element to attach to semantic api.
+     * @param el            the jQuery element to attach to Fomantic-UI api.
      * @param data          Extra data to pass with files.
      * @param uploadUrl     the url that handle upload.
-     * @param completeCb    the callback for semantic-ui api.onComplete.
+     * @param completeCb    the callback for Fomantic-UI api.onComplete.
      * @param xhrCb         the xhr function to pass to server.
      */
     uploadFiles(files, element,

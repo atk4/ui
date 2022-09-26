@@ -115,7 +115,7 @@ class Context extends RawMinkContext implements BehatContext
     protected function disableAnimations(): void
     {
         // disable all CSS/jQuery animations/transitions
-        $toCssFx = function ($selector, $cssPairs) {
+        $toCssFx = function (string $selector, array $cssPairs): string {
             $css = [];
             foreach ($cssPairs as $k => $v) {
                 foreach ([$k, '-moz-' . $k, '-webkit-' . $k] as $k2) {
@@ -501,7 +501,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSelectValueInLookup(string $value, string $inputName): void
     {
-        // get dropdown item from semantic ui which is direct parent of input html element
+        // get dropdown item from Fomantic-UI which is direct parent of input html element
         $lookupElem = $this->findElement(null, 'xpath(//input[@name="' . $inputName . '"]/parent::div)');
 
         // open dropdown and wait till fully opened (just a click is not triggering it)

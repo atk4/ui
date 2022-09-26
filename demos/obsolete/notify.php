@@ -8,6 +8,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\JsNotify;
 use Atk4\Ui\Modal;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -19,7 +20,7 @@ Button::addTo($app, ['Test'])->on('click', (new JsNotify('Not yet implemented'))
 
 $modal = Modal::addTo($app, ['Modal Title']);
 
-$modal->set(function ($p) use ($modal) {
+$modal->set(function (View $p) use ($modal) {
     $form = Form::addTo($p);
     $form->addControl('name', [], ['caption' => 'Add your name']);
 

@@ -8,14 +8,14 @@ use Atk4\Core\DiContainerTrait;
 
 /**
  * Class JsToast
- * Generate a Fomantic-ui toast module command in js.
+ * Generate a Fomantic-UI toast module command in js.
  *  $('body').toast({options}).
  */
 class JsToast implements JsExpressionable
 {
     use DiContainerTrait;
 
-    /** @var array Various setting options as per Fomantic ui toast module. */
+    /** @var array Various setting options as per Fomantic-UI toast module. */
     public array $settings = [];
 
     /** @var string default css class for toast */

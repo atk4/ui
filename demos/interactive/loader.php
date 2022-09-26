@@ -37,7 +37,7 @@ Loader::addTo($app)->set(function (Loader $p) {
 
     // use loadEvent to prevent manual loading or even specify custom trigger event
     $loader->loadEvent = false;
-    $loader->set(function ($p) {
+    $loader->set(function (Loader $p) {
         // You may pass arguments to the loader, in this case it's "color"
         sleep(1);
         Header::addTo($p, ['Loader #1b - ' . $_GET['color']]);
@@ -63,7 +63,7 @@ Loader::addTo($app, [
         'Generating LoremIpsum, please wait...',
         'class.red' => true,
     ],
-])->set(function ($p) {
+])->set(function (Loader $p) {
     usleep(500_000);
     LoremIpsum::addTo($p, ['size' => 2]);
 });

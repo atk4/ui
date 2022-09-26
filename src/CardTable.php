@@ -10,7 +10,7 @@ use Atk4\Data\Model;
  * Card class displays a single record data.
  *
  * IMPORTANT: Although the purpose of the "Card" component will remain the same, we do plan to
- * improve implementation of a card to to use https://semantic-ui.com/views/card.html.
+ * improve implementation of a card to to use https://fomantic-ui.com/views/card.html .
  */
 class CardTable extends Table
 {
@@ -46,7 +46,7 @@ class CardTable extends Table
 
         $this->_bypass = true;
         $mm = parent::setSource($data);
-        $this->addDecorator('value', [Table\Column\Multiformat::class, function (Model $row, $field) use ($model) {
+        $this->addDecorator('value', [Table\Column\Multiformat::class, function (Model $row) use ($model) {
             $field = $model->getField($row->getId());
             $ret = $this->decoratorFactory(
                 $field,

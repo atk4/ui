@@ -170,7 +170,7 @@ You can return a single JsExpressionable or an array of JsExpressionables which 
 
 In this case we display a message when any of the control value for 'qty' and 'box' are changed::
 
-    $multiline->onLineChange(function ($rows, Form $form) {
+    $multiline->onLineChange(function (array $rows, Form $form) {
         $total = 0;
         foreach ($rows as $row => $cols) {
             $qty = $cols['qty'] ?? 0;

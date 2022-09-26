@@ -22,7 +22,7 @@ $notifierClass = AnonymousClassNameCache::get_class(fn () => new class() extends
         parent::init();
 
         $this->addField('text', ['default' => 'This text will appear in notification', 'caption' => 'type any text']);
-        $this->addField('icon', ['default' => 'warning sign', 'caption' => 'Use semantic-ui icon name']);
+        $this->addField('icon', ['default' => 'warning sign', 'caption' => 'Use Fomantic-UI icon name']);
         $this->addField('color', ['enum' => ['green', 'red', 'orange', 'yellow', 'teal', 'blue', 'violet', 'purple', 'pink', 'brown'], 'default' => 'green', 'caption' => 'Select color:']);
         $this->addField('transition', ['enum' => ['scale', 'fade', 'jiggle', 'flash'], 'default' => 'jiggle', 'caption' => 'Select transition:']);
         $this->addField('width', ['enum' => ['25%', '50%', '75%', '100%'], 'default' => '25%', 'caption' => 'Select width:']);

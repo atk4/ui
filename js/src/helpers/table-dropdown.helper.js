@@ -2,7 +2,7 @@ import throttle from 'lodash/throttle';
 import $ from 'jquery';
 
 /**
- * Simple helper to help displaying Fomantic-ui Dropdown within an atk table.
+ * Simple helper to help displaying Fomantic-UI Dropdown within an atk table.
  * Because atk table use overflow: scroll, Dropdown is not
  * display on top of table.
  *

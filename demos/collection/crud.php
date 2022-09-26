@@ -65,7 +65,7 @@ $model->onHook(Model::HOOK_VALIDATE, function (Country $model, ?string $intent) 
 $crud->setModel($model);
 
 // Because Crud inherits Grid, you can also define custom actions
-$crud->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($crud) {
+$crud->addModalAction(['icon' => 'cogs'], 'Details', function (View $p, $id) use ($crud) {
     $model = Country::assertInstanceOf($crud->model);
     Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $id . ')']);
 });

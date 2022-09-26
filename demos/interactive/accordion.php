@@ -11,6 +11,7 @@ use Atk4\Ui\Header;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
+use Atk4\Ui\VirtualPage;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -37,15 +38,15 @@ Message::addTo($i1, ['This content is added on page loaded', 'ui' => 'tiny messa
 LoremIpsum::addTo($i1, ['size' => 1]);
 
 // dynamic section - simple view
-$i2 = $accordion->addSection('Dynamic Text', function ($v) {
-    Message::addTo($v, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
-    LoremIpsum::addTo($v, ['size' => 2]);
+$i2 = $accordion->addSection('Dynamic Text', function (VirtualPage $vp) {
+    Message::addTo($vp, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
+    LoremIpsum::addTo($vp, ['size' => 2]);
 });
 
 // dynamic section - form view
-$i3 = $accordion->addSection('Dynamic Form', function ($v) {
-    Message::addTo($v, ['Loading a form dynamically.', 'ui' => 'tiny message']);
-    $form = Form::addTo($v);
+$i3 = $accordion->addSection('Dynamic Form', function (VirtualPage $vp) {
+    Message::addTo($vp, ['Loading a form dynamically.', 'ui' => 'tiny message']);
+    $form = Form::addTo($vp);
     $form->addControl('Email');
     $form->onSubmit(function (Form $form) {
         return $form->success('Subscribed ' . $form->model->get('Email') . ' to newsletter.');

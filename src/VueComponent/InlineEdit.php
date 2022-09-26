@@ -78,7 +78,7 @@ class InlineEdit extends View
 
         // Set default validation error handler.
         if (!$this->formatErrorMsg) {
-            $this->formatErrorMsg = function ($e, $value) {
+            $this->formatErrorMsg = function (ValidationException $e, string $value) {
                 $caption = $this->model->getField($this->fieldName)->getCaption();
 
                 return $caption . ' - ' . $e->getMessage() . '. <br>Trying to set this value: "' . $value . '"';

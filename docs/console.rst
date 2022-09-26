@@ -26,7 +26,7 @@ Basic Usage
 After adding a console to your :ref:`render_tree`, you just need to set a call-back::
 
     $console = Console::addTo($app);
-    $console->set(function ($console) {
+    $console->set(function (Console $console) {
         // This will be executed through SSE request
         $console->output('hello');
         echo 'world'; // also will be redirected to console
@@ -92,14 +92,14 @@ real-time then display it on the console using color. Console does not support A
 
 Method exec can be executed directly on the $console or inside the callback::
 
-    $console->set(function ($console) {
+    $console->set(function (Console $console) {
         $console->eval();
     });
 
 Without call-back, eval will wrap itself into a callback but you can only execute a single command. When using callback
 form, you can execute multiple commands::
 
-    Console::addTo($app)->set(function ($c) {
+    Console::addTo($app)->set(function (Console $c) {
         $c
             ->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1'])
             ->exec('/sbin/ping', ['-c', '5', '-i', '2', '8.8.8.8'])

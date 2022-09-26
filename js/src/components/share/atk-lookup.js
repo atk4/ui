@@ -1,5 +1,5 @@
 /**
- * Wrapper for Semantic Ui dropdown component into a lookup component.
+ * Wrapper for Fomantic-UI dropdown component into a lookup component.
  *
  * Props
  *  config :

@@ -106,7 +106,7 @@ Here is an example of an user action returning specific record information in th
             'caption' => 'Delete',
             'description' => 'Delete Country',
             'ui' => ['executor' => [\Atk4\Ui\UserAction\ConfirmationExecutor::class]],
-            'confirmation' => function ($action) {
+            'confirmation' => function (Model\UserAction $action) {
                 return 'Are you sure you want to delete this country: $action->getModel()->getTitle();
             },
             'callback' => 'delete',

@@ -46,7 +46,7 @@ class Dropdown extends Input
      */
     public $dropIcon;
 
-    /** @var array Dropdown options as per semantic-ui dropdown options. */
+    /** @var array Dropdown options as per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
 
     /**
@@ -92,7 +92,7 @@ class Dropdown extends Input
      * }
      *
      * Example 4 with $values property Array:
-     * function ($value, $key) {
+     * function (string $value, $key) {
      *     return [
      *        'value' => $key,
      *        'title' => mb_strtoupper($value),

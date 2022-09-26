@@ -14,6 +14,7 @@ use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Tabs;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -166,7 +167,7 @@ $form->onSubmit(function (Form $form) {
 });
 
 Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', Modal::addTo($form)
-    ->set(function ($p) {
+    ->set(function (View $p) {
         $form = Form::addTo($p);
         $form->addControl('email');
         $form->onSubmit(function (Form $form) {

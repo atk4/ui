@@ -14,6 +14,7 @@ use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
 use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\BasicExecutor;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -42,13 +43,13 @@ $grid->addColumn(null, [Table\Column\Template::class, 'hello<b>world</b>']);
 // Creating a button for executing model test user action.
 $grid->addExecutorButton($grid->getExecutorFactory()->create($model->getUserAction('test'), $grid));
 
-$grid->addActionButton('Say HI', function ($j, $id) use ($grid) {
+$grid->addActionButton('Say HI', function (Jquery $j, $id) use ($grid) {
     $model = Country::assertInstanceOf($grid->model);
 
     return 'Loaded "' . $model->load($id)->name . '" from ID=' . $id;
 });
 
-$grid->addModalAction(['icon' => 'external'], 'Modal Test', function ($p, $id) {
+$grid->addModalAction(['icon' => 'external'], 'Modal Test', function (View $p, $id) {
     Message::addTo($p, ['Clicked on ID=' . $id]);
 });
 
