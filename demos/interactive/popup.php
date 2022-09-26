@@ -211,7 +211,7 @@ $cartPopup->set(function (View $popup) use ($cart) {
 
     // cart is already initialized, so init() is not called again. However, cart will be rendered
     // as a child of a pop-up now.
-    $cart = $popup->add($cart);
+    $popup->add($cart);
 
     $cartInnerLabel->detail = (string) count($cart->items);
     MenuItem::addTo($popup)->setElement('hr');
