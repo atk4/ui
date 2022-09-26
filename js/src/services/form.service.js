@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 /**
  * Singleton class
- * Handle Semantic-ui form functionality throughout the app.
+ * Handle Fomantic-UI form functionality throughout the app.
  */
 
 class FormService {
@@ -34,7 +34,7 @@ class FormService {
     }
 
     /**
-     * Setup semantic-ui form callback with this service.
+     * Setup Fomantic-UI form callback with this service.
      * @param settings
      */
     setService(settings) {
@@ -95,7 +95,7 @@ class FormService {
     }
 
     /**
-     * Validate a field using our own or semantic-ui validation rule function.
+     * Validate a field using our own or Fomantic-UI validation rule function.
      *
      * @param form  Form containing the field.
      * @param fieldName Name of field

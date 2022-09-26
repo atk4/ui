@@ -52,7 +52,7 @@ class ScopeBuilder extends Form\Control
         'flatpickr' => [],
     ];
 
-    /** Atk-lookup and semantic-ui dropdown options. */
+    /** Atk-lookup and Fomantic-UI dropdown options. */
     public array $atkLookupOptions = [
         'ui' => 'small basic button',
     ];

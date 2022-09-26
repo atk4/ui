@@ -16,10 +16,10 @@ class Accordion extends View
 
     public $ui = 'accordion';
 
-    /** @var array|string|null The CSS class for Fomantic-ui accordion type. */
+    /** @var array|string|null The CSS class for Fomantic-UI accordion type. */
     public $type;
 
-    /** @var array Settings as per Fomantic-ui accordion settings. */
+    /** @var array Settings as per Fomantic-UI accordion settings. */
     public $settings = [];
 
     /** @var array A collection of AccordionSection in this Accordion. */
@@ -118,7 +118,7 @@ class Accordion extends View
 
     /**
      * Return an accordion js behavior command
-     * as in Semantic-ui behavior for Accordion module.
+     * as in Fomantic-UI behavior for Accordion module.
      * Ex: toggle an accordion from it's index value.
      * $accordion->jsBehavior('toggle', 1).
      *

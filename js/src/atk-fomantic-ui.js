@@ -8,7 +8,7 @@ import formService from './services/form.service';
 import popupService from './services/popup.service';
 import accordionService from './services/accordion.service';
 
-// setup app service for semantic-ui
+// setup app service for Fomantic-UI
 apiService.setService($.fn.api.settings);
 modalService.setModals($.fn.modal.settings);
 formService.setService($.fn.form.settings);

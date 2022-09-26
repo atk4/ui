@@ -305,7 +305,7 @@ jobs:
           cp public.orig/external/postinstall.js public/external
           npm install --loglevel=error -g pug-cli less less-plugin-clean-css uglify-js
           (cd js && npm ci --loglevel=error)
-          # uncomment and remove line below once Fomantic UI 2.9.0 is released (cd public/external && npm ci --loglevel=error && git clean -dxfq .)
+          # uncomment and remove line below once Fomantic-UI 2.9.0 is released (cd public/external && npm ci --loglevel=error && git clean -dxfq .)
           (cd public/external && npm ci --ignore-scripts --loglevel=error && npm run postinstall && git clean -dxfq .)
 
       - name: Lint JS files (only for Slow)

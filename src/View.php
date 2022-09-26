@@ -31,7 +31,7 @@ class View extends AbstractView implements JsExpressionable
     public ?string $region = null;
 
     /**
-     * Enables UI keyword for Semantic UI indicating that this is a
+     * Enables UI keyword for Fomantic-UI indicating that this is a
      * UI element. If you set this variable value to string, it will
      * be appended at the end of the element class.
      *
@@ -562,9 +562,9 @@ class View extends AbstractView implements JsExpressionable
     /**
      * View-specific rendering stuff. Feel free to replace this method with
      * your own. View::renderView contains some logic that integrates with
-     * semanticUI.
+     * Fomantic-UI.
      *
-     * NOTE: maybe in the future, SemanticUI-related stuff needs to go into
+     * NOTE: maybe in the future, Fomantic-UI related stuff needs to go into
      * a separate class.
      */
     protected function renderView(): void

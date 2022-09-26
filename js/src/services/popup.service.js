@@ -1,6 +1,6 @@
 /**
  * Singleton class
- * This is default setup for semantic-ui Popup.
+ * This is default setup for Fomantic-UI Popup.
  */
 class PopupService {
     static getInstance() {

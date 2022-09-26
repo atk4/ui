@@ -453,7 +453,7 @@ You should be able to find 3rd party Layout implementations that may even be com
 some custom templates and views. The concept of a "Theme" in Agile UI consists of
 offering of the following 3 things:
 
- - custom CSS build from Fomantic UI
+ - custom CSS build from Fomantic-UI
  - custom Layout(s) along with documentation
  - additional or tweaked Views
 

@@ -15,7 +15,7 @@ class Columns extends View
 
     /**
      * Explicitly specify the width of all columns. Normally that's 16, but
-     * semantic-ui allows you to override with 5 => "ui five column grid".
+     * Fomantic-UI allows you to override with 5 => "ui five column grid".
      *
      * @var int|null
      */

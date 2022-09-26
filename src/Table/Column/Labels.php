@@ -9,7 +9,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Table;
 
 /**
- * Take the field value as string in CSV format or array of IDs and transforms into SemanticUI labels.
+ * Take the field value as string in CSV format or array of IDs and transforms into Fomantic-UI labels.
  * If model field values property is set, then will use titles instead of IDs as label text.
  *
  * from => label1,label2 | to => div.ui.label[label1] div.ui.label[label2]

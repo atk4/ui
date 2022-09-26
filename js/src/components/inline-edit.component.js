@@ -7,9 +7,9 @@ import $ from 'jquery';
  *
  * Properties need for this component are:
  *
- * context: string, a jQuery selector where the 'loading' class will be apply by semantic-ui;
+ * context: string, a jQuery selector where the 'loading' class will be apply by Fomantic-UI:
  *          - default to the requesting element.
- * url:     string, the url to call;
+ * url:     string, the url to call.
  * value:  array, array of value to send to server.
  *
  */

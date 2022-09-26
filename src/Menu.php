@@ -172,7 +172,7 @@ class Menu extends View
     protected function renderView(): void
     {
         if ($this->activateOnClick && $this->ui === 'menu') {
-            // Semantic UI need some JS magic
+            // Fomantic-UI need some JS magic
             $this->on('click', 'a.item', $this->js()->find('.active')->removeClass('active'), ['preventDefault' => false, 'stopPropagation' => false]);
             $this->on('click', 'a.item', null, ['preventDefault' => false, 'stopPropagation' => false])->addClass('active');
         }

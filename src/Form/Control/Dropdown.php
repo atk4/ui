@@ -46,7 +46,7 @@ class Dropdown extends Input
      */
     public $dropIcon;
 
-    /** @var array Dropdown options as per semantic-ui dropdown options. */
+    /** @var array Dropdown options as per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
 
     /**

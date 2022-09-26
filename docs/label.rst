@@ -88,7 +88,7 @@ composition::
 Combining classes
 =================
 
-Based on Fomantic UI documentation, you can add more classes to your labels::
+Based on Fomantic-UI documentation, you can add more classes to your labels::
 
     $columns = Columns::addTo($app);
 

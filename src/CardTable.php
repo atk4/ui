@@ -10,7 +10,7 @@ use Atk4\Data\Model;
  * Card class displays a single record data.
  *
  * IMPORTANT: Although the purpose of the "Card" component will remain the same, we do plan to
- * improve implementation of a card to to use https://semantic-ui.com/views/card.html.
+ * improve implementation of a card to to use https://fomantic-ui.com/views/card.html .
  */
 class CardTable extends Table
 {

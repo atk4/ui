@@ -46,7 +46,7 @@ class App
         'atk' => '/public',
         'jquery' => '/public/external/jquery/dist',
         'serialize-object' => '/public/external/form-serializer/dist',
-        'semantic-ui' => '/public/external/fomantic-ui/dist',
+        'fomantic-ui' => '/public/external/fomantic-ui/dist',
         'flatpickr' => '/public/external/flatpickr/dist',
     ];
 
@@ -390,7 +390,7 @@ class App
             $this->outputResponseJson($output, $headers);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
             // ugly hack for TABS
-            // because fomantic ui tab only deal with html and not JSON
+            // because Fomantic-UI tab only deal with html and not JSON
             // we need to hack output to include app modal.
             $keys = null;
             $remove_function = '';
@@ -486,9 +486,9 @@ class App
         // jQuery
         $this->requireJs($this->cdn['jquery'] . '/jquery.min.js');
 
-        // Semantic UI
-        $this->requireJs($this->cdn['semantic-ui'] . '/semantic.min.js');
-        $this->requireCss($this->cdn['semantic-ui'] . '/semantic.min.css');
+        // Fomantic-UI
+        $this->requireJs($this->cdn['fomantic-ui'] . '/semantic.min.js');
+        $this->requireCss($this->cdn['fomantic-ui'] . '/semantic.min.css');
 
         // Serialize Object
         $this->requireJs($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
@@ -984,7 +984,7 @@ class App
     }
 
     /**
-     * Return exception message using HTML block and Semantic UI formatting. It's your job
+     * Return exception message using HTML block and Fomantic-UI formatting. It's your job
      * to put it inside boilerplate HTML and output, e.g:.
      *
      *   $app = new App();

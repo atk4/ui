@@ -501,7 +501,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSelectValueInLookup(string $value, string $inputName): void
     {
-        // get dropdown item from semantic ui which is direct parent of input html element
+        // get dropdown item from Fomantic-UI which is direct parent of input html element
         $lookupElem = $this->findElement(null, 'xpath(//input[@name="' . $inputName . '"]/parent::div)');
 
         // open dropdown and wait till fully opened (just a click is not triggering it)

@@ -41,7 +41,7 @@ class Popup extends View
      */
     public $target = false;
 
-    /** @var array Popup options as defined in semantic-ui popup module. */
+    /** @var array Popup options as defined in Fomantic-UI popup module. */
     public $popOptions = [];
 
     /** @var Callback|null The callback use to generate dynamic content. */
@@ -199,7 +199,7 @@ class Popup extends View
     }
 
     /**
-     * Set a popup options as defined in semantic-ui popup module.
+     * Set a popup options as defined in Fomantic-UI popup module.
      *
      * @param mixed $option
      *

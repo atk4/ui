@@ -178,7 +178,7 @@ Money
 .. php:class:: Table\\Column\\Money
 
 Helps decorating monetary values. Will align value to the right and if value is less than zero will also
-use red text (td class "negative" for Fomantic ui). The money cells are not wrapped.
+use red text (td class "negative" for Fomantic-UI). The money cells are not wrapped.
 
 For the actual number formatting, see :ref:`uiPersistence`
 

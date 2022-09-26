@@ -55,7 +55,7 @@ class Input extends Form\Control
     public $actionLeft;
 
     /**
-     * Specify width for semantic UI grid. For "four wide" use 'four'.
+     * Specify width for Fomantic-UI grid. For "four wide" use 'four'.
      */
     public $width;
 

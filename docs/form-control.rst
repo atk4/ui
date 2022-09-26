@@ -93,7 +93,7 @@ properly:
 
  - Generic (abstract, extends View) - Use this if form control is NOT based on `<input>`
  - Input (abstract, extends Generic) - Easiest since it alrady implements `<input>` and various
-   ways to attach button to the input with markup of Fomantic UI form control.
+   ways to attach button to the input with markup of Fomantic-UI form control.
 
 Hints
 -----
@@ -101,7 +101,7 @@ Hints
 .. php:attr:: hint
 
 When Form Control appears in a Form, then you can specify a Hint also. It appears below the form control and
-although it intends to be "extra info" or "extra help" due to current limitation of Fomantic UI
+although it intends to be "extra info" or "extra help" due to current limitation of Fomantic-UI
 the only way we can display hint is using a gray bubble. In the future version of Agile UI we
 will update to use a more suitable form control.
 
@@ -318,7 +318,7 @@ Dropdown
 
 .. php:class:: Dropdown
 
-Dropdown uses Fomantic UI Dropdown (https://fomantic-ui.com/modules/dropdown.html). A Dropdown can be used in two ways:
+Dropdown uses Fomantic-UI Dropdown (https://fomantic-ui.com/modules/dropdown.html). A Dropdown can be used in two ways:
 1) Set a Model to $model property. The Dropdown will render all records of the model that matchs the model's conditions.
 2) You can define $values property to create custom Dropdown items.
 
@@ -437,7 +437,7 @@ Whether or not this dropdown requires a value. When set to true, $empty is shown
 
 .. php:attr:: dropdownOptions
 
-Here you can pass an array of Fomantic UI dropdown options (https://fomantic-ui.com/modules/dropdown.html#/settings) e.g. ::
+Here you can pass an array of Fomantic-UI dropdown options (https://fomantic-ui.com/modules/dropdown.html#/settings) e.g. ::
 
     $dropdown = new Dropdown(['dropdownOptions' => [
         'selectOnKeydown' => false,

@@ -33,9 +33,9 @@ $virtualPageButton->link('virtual.php');
 $virtualPage->ui = 'grey inverted segment';
 
 $modal = Modal::addTo($virtualPage);
-$modal->set(function ($modal) {
-    Text::addTo($modal)->set('This is yet another modal');
-    LoremIpsum::addTo($modal, ['size' => 2]);
+$modal->set(function (View $p) {
+    Text::addTo($p)->set('This is yet another modal');
+    LoremIpsum::addTo($p, ['size' => 2]);
 });
 $button = Button::addTo($virtualPage)->set('Open Lorem Ipsum');
 $button->on('click', $modal->show());

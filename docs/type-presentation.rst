@@ -85,7 +85,7 @@ Selecting the decorator is done in the following order:
     Both **models** (Data) as well as some **views** (UI: form) use fields. They are not the same.
     Notably, Model field `ui` property contains flags like editable, visible and hidden,
     which do have some impact on rendering, whereas UI field `ui` property (not used here)
-    designates the Fomantic UI element to use.
+    designates the Fomantic-UI element to use.
 
 Examples
 ========

@@ -23,7 +23,7 @@ export default class createModal extends atkPlugin {
             label: options.label,
         });
 
-        // call semantic-ui modal
+        // call Fomantic-UI modal
         $m.modal(options.modal).modal('show');
         $m.addClass(this.settings.modalCss);
     }

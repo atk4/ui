@@ -4,13 +4,13 @@ import $ from 'jquery';
  * Vue component
  * Will allow user to send data query request to server.
  * Request should filter the data and reload the data view.
- * The request is send using semantic-ui api.
+ * The request is send using Fomantic-UI api.
  *
  * Properties need for this component are:
  *
- * context: string, a jQuery selector where the 'loading' class will be apply by semantic-ui;
+ * context: string, a jQuery selector where the 'loading' class will be apply by Fomantic-UI:
  *          - default to this component.
- * url:     string, the url to call;
+ * url:     string, the url to call.
  * q:       string, the initial string for the query. Useful if this search is part of the relaod.
  * reload:  string, an Id selector for jQuery, '#' is append automatically.
  *

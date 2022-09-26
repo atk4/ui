@@ -3,7 +3,7 @@ import atkPlugin from './atk.plugin';
 import apiService from '../services/api.service';
 
 /**
- * Reload a view using Fomantic-ui API.
+ * Reload a view using Fomantic-UI API.
  * Prefer method is GET.
  *
  * You can include WebStorage value within the request

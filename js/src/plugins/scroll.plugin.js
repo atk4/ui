@@ -9,7 +9,7 @@ import atkPlugin from './atk.plugin';
  *  initialPage: 1      The initial page load when calling this plugin.
  *  appendTo: null      The html element where new content should be append to.
  *  allowJsEval: false  Whether or not javascript send in server response should be evaluate.
- *  stateContext: null  A jQuery selector, where you would like fomantic-ui, to apply the stateContext to during the api call.
+ *  stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call.
  *                        if null, then a default loader will be apply to the bottom of the $inner element.
  */
 
