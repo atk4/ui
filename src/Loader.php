@@ -59,9 +59,9 @@ class Loader extends View
      * The loader view is pass as an argument to the loader callback function.
      * This allow to easily update the loader view content within the callback.
      *  $l1 = Loader::addTo($layout);
-     *  $l1->set(function ($loader_view) {
+     *  $l1->set(function (Loader $p) {
      *    do_long_processing_action();
-     *    $loader_view->set('new content');
+     *    $p->set('new content');
      *  });
      *
      * Or

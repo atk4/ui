@@ -108,28 +108,28 @@ trait StepExecutorTrait
 
     protected function runSteps(): void
     {
-        $this->loader->set(function ($page) {
+        $this->loader->set(function (Loader $p) {
             try {
                 switch ($this->step) {
                     case 'args':
-                        $this->doArgs($page);
+                        $this->doArgs($p);
 
                         break;
                     case 'fields':
-                        $this->doFields($page);
+                        $this->doFields($p);
 
                         break;
                     case 'preview':
-                        $this->doPreview($page);
+                        $this->doPreview($p);
 
                         break;
                     case 'final':
-                        $this->doFinal($page);
+                        $this->doFinal($p);
 
                         break;
                 }
             } catch (\Exception $e) {
-                $this->handleException($e, $page, $this->step);
+                $this->handleException($e, $p, $this->step);
             }
         });
     }

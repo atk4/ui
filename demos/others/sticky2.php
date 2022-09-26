@@ -38,8 +38,8 @@ if (isset($_GET['name'])) {
     });
 
     // Next we have loader, which will dynamically load console which will dynamically output "success" message.
-    Loader::addTo($frame)->set(function ($page) {
-        Console::addTo($page)->set(function ($console) {
+    Loader::addTo($frame)->set(function (Loader $p) {
+        Console::addTo($p)->set(function ($console) {
             $console->output('success!, color is still ' . $_GET['name']);
         });
     });
@@ -59,8 +59,8 @@ Header::addTo($app, ['Use of View::url()']);
 $b1 = Button::addTo($app);
 $b1->set($b1->url());
 
-Loader::addTo($app)->set(function ($page) use ($b1) {
-    $b2 = Button::addTo($page);
+Loader::addTo($app)->set(function (Loader $p) use ($b1) {
+    $b2 = Button::addTo($p);
     $b2->set($b2->url());
 
     $b2->on('click', new JsReload($b1));

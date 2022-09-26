@@ -28,6 +28,6 @@ $countryLoader = Loader::addTo($c->addColumn(), ['loadEvent' => false, 'shim' =>
 
 $grid->table->onRowClick($countryLoader->jsLoad(['id' => $grid->table->jsRow()->data('id')]));
 
-$countryLoader->set(function ($p) {
+$countryLoader->set(function (Loader $p) {
     Form::addTo($p)->setModel((new Country($p->getApp()->db))->load($_GET['id']));
 });

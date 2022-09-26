@@ -31,7 +31,7 @@ Start by creating Wizard inside your render tree::
 
 Next add as many steps as you need specifying title and a PHP callback code for each::
 
-    $wizard->addStep('Welcome', function ($wizard) {
+    $wizard->addStep('Welcome', function (Wizard $wizard) {
         Message::addTo($wizard, ['Welcome to wizard demonstration'])->text
             ->addParagraph('Use button "Next" to advance')
             ->addParagraph('You can specify your existing database connection string which will be used
@@ -51,7 +51,7 @@ which is described below. You can also provide first argument to addStep as a se
 
 You may also specify a single Finish callback, which will be used when wizard is complete::
 
-    $wizard->addFinish(function ($wizard) {
+    $wizard->addFinish(function (Wizard $wizard) {
         Header::addTo($wizard, ['You are DONE', 'class.huge centered' => true]);
     });
 
@@ -98,7 +98,7 @@ on your wizard::
 
     $wizard->buttonNext->icon = 'person';
 
-    $wizard->addStep('Step 3', function ($wizard) {
+    $wizard->addStep('Step 3', function (Wizard $wizard) {
         $wizard->buttonNext->icon = 'book';
     });
 

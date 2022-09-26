@@ -23,6 +23,6 @@ $b->on('click', new JsReload($v));
 $cb = Callback::addTo($app);
 $cb->setUrlTrigger('c_reload');
 
-Loader::addTo($app, ['cb' => $cb])->set(function (Loader $page) {
-    $v = View::addTo($page, ['ui' => 'segment'])->set('loaded');
+Loader::addTo($app, ['cb' => $cb])->set(function (Loader $p) {
+    $v = View::addTo($p, ['ui' => 'segment'])->set('loaded');
 });

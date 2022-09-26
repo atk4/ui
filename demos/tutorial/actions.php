@@ -21,7 +21,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $wizard = Wizard::addTo($app);
 
-$wizard->addStep('Define User Action', function ($page) {
+$wizard->addStep('Define User Action', function (Wizard $page) {
     Header::addTo($page, ['What are User Actions?']);
 
     $t = Text::addTo($page);
@@ -80,7 +80,7 @@ $wizard->addStep('Define User Action', function ($page) {
     });
 });
 
-$wizard->addStep('UI Integration', function ($page) {
+$wizard->addStep('UI Integration', function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -116,7 +116,7 @@ $wizard->addStep('UI Integration', function ($page) {
     });
 });
 
-$wizard->addStep('Arguments', function ($page) {
+$wizard->addStep('Arguments', function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -166,15 +166,15 @@ $wizard->addStep('Arguments', function ($page) {
 });
 
 /*
-$wizard->addStep('More Ways', function ($page) {
+$wizard->addStep('More Ways', function (Wizard $page) {
     Demo::addTo($page, ['leftWidth' => 5, 'rightWidth' => 11])->setCodeAndCall(function (View $owner) {
         $model = new Stat($owner->getApp()->db);
         $model->addUserAction('mail', [
             'fields' => ['currency_field'],
             'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
             'callback' => function () {
- *              return 'testing';
- *          },
+                return 'testing';
+            },
             'description' => 'Email testing',
         ]);
         $owner->add('CardDeck')
@@ -186,7 +186,7 @@ $wizard->addStep('More Ways', function ($page) {
 });
 */
 
-$wizard->addStep('Crud integration', function ($page) {
+$wizard->addStep('Crud integration', function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
@@ -224,8 +224,8 @@ $wizard->addStep('Crud integration', function ($page) {
     });
 });
 
-$wizard->addFinish(function ($page) use ($wizard) {
+$wizard->addFinish(function (Wizard $page) {
     PromotionText::addTo($page);
-    Button::addTo($wizard, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
+    Button::addTo($page, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
         ->link('/demos/index.php');
 });
