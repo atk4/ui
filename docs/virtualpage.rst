@@ -28,7 +28,7 @@ To help you understand when to use VirtualPage here is the example:
 This pattern is very easy to implement and is used by many components to transparently provide dynamic functionality.
 Next is an example where :php:class:`Tabs` has support for call-back for generating dynamic content for the tab::
 
-    $tabs->addTab('Dynamic Tab Content', function ($vp) {
+    $tabs->addTab('Dynamic Tab Content', function (VirtualPage $vp) {
         \Atk4\Ui\LoremIpsum::addTo($vp);
     });
 
@@ -98,10 +98,10 @@ also makes it possible for VirtualPage to be embedded into any :ref:`component` 
 
 To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the following code::
 
-    $t = \Atk4\Ui\Tabs::addTo($layout);
+    $tabs = \Atk4\Ui\Tabs::addTo($layout);
 
-    \Atk4\Ui\LoremIpsum::addTo($t->addTab('Tab1')); // regular tab
-    $t->addTab('Tab2', function ($p) { // dynamic tab
+    \Atk4\Ui\LoremIpsum::addTo($tabs->addTab('Tab1')); // regular tab
+    $tabs->addTab('Tab2', function (VirtualPage $p) { // dynamic tab
         \Atk4\Ui\LoremIpsum::addTo($p);
     });
 
