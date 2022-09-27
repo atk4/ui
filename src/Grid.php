@@ -510,9 +510,9 @@ class Grid extends View
      *
      * @return View
      */
-    public function addModalAction($button, $title, \Closure $callback, $args = [], $confirmMsg = '', $isDisabled = false)
+    public function addModalAction($button, $title, \Closure $callback, $args = [], $isDisabled = false)
     {
-        return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args, $confirmMsg, $isDisabled);
+        return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args, $isDisabled);
     }
 
     /**
