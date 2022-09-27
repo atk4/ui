@@ -86,7 +86,7 @@ class ActionButtons extends Table\Column
      *
      * @return View
      */
-    public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [])
+    public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [], $confirmMsg = '', $isDisabled = false)
     {
         if ($owner === null) { // TODO explicit owner should not be needed
             $owner = $this->getOwner()->getOwner();
@@ -102,7 +102,7 @@ class ActionButtons extends Table\Column
             $callback($t, $t->stickyGet($this->name));
         });
 
-        return $this->addButton($button, $modal->jsShow(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)));
+        return $this->addButton($button, $modal->jsShow(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)), $confirmMsg, $isDisabled);
     }
 
     #[\Override]
