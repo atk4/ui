@@ -144,6 +144,7 @@ if ($layout instanceof Layout\NavigableInterface) {
 
     $path = $demosUrl . 'data-action/';
     $menu = $layout->addMenuGroup(['Data Action Executor', 'icon' => 'wrench']);
+    $layout->addMenuItem(['User Actions Tutorial'], [$path . 'actions-tutorial'], $menu);
     $layout->addMenuItem(['Executor Examples'], [$path . 'actions'], $menu);
     $layout->addMenuItem(['Assign action to event'], [$path . 'jsactions'], $menu);
     $layout->addMenuItem(['Assign action to button (Modal)'], [$path . 'jsactions2'], $menu);

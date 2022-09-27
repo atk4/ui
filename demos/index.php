@@ -26,4 +26,4 @@ $t = Text::addTo(View::addTo($app, [false, 'class.green' => true, 'ui' => 'segme
 $t->addParagraph('In this version of Agile Toolkit we introduce "User Actions"!');
 
 Button::addTo($app, ['Learn about User Actions', 'class.huge basic primary fluid' => true, 'iconRight' => 'right arrow'])
-    ->link('tutorial/actions.php');
+    ->link('data-action/actions-tutorial.php');
