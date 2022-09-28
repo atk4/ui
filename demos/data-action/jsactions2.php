@@ -44,8 +44,8 @@ $c->setModel($entity, [$country->fieldName()->iso, $country->fieldName()->iso3, 
 $buttons = View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
 
 // a specific executor for a specific action can be registered using ExecutorFactory::registerExecutor()
-$buttons->getApp()->getExecutorFactory()->registerTypeExecutor(
-    ExecutorFactory::STEP_EXECUTOR,
+$buttons->getApp()->getExecutorFactory()->registerExecutor(
+    $country->getUserAction('edit'),
     [get_class(new class() extends ModalExecutor {
         protected function addFormTo(View $view): Form
         {
