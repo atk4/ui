@@ -158,14 +158,6 @@ class App
             unset($defaults['response']);
         }
 
-        // TODO remove this before PSR7 PR merge, fix tests to pass /wo this develop merge hack
-        global $_GET;
-        $_GET ??= []; // @phpstan-ignore-line
-        global $_COOKIE;
-        $_COOKIE ??= []; // @phpstan-ignore-line
-        global $_FILES;
-        $_FILES ??= []; // @phpstan-ignore-line
-
         $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
         $this->request = $defaults['request'] ?? (new \Nyholm\Psr7Server\ServerRequestCreator(
             $psr17Factory, // ServerRequestFactory
@@ -176,6 +168,15 @@ class App
         if (isset($defaults['request'])) {
             unset($defaults['request']);
         }
+
+        // unset request global variables, request data must be accessed thru App::getRequest()
+        // or related methods like App::getRequestQueryParam()
+        unset($_SERVER);
+        unset($_GET);
+        unset($_POST);
+        unset($_FILES);
+        unset($_COOKIE);
+        unset($_SESSION);
 
         $this->setDefaults($defaults);
 
