@@ -1,5 +1,4 @@
 Feature: Tab
-  Testing Tab
 
   Scenario:
     Given I am on "interactive/tabs.php"

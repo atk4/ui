@@ -31,7 +31,7 @@ class ItemSearch extends View
     public $inputTimeOut = 250;
 
     /**
-     * The jquery selector where you need to add the semantic-ui 'loading' class.
+     * The jquery selector where you need to add the Fomantic-UI 'loading' class.
      * Default to reload selector.
      *
      * @var View

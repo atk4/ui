@@ -46,12 +46,12 @@
                     </div>
                 </div>
                 <div class="two wide right aligned column">
-                    <i v-if="depth > 1" class="atk-qb-remove" :class="labels.removeGroup" @click="remove"></i>
+                    <i v-if="depth > 1" class="atk-qb-remove" :class="labels.removeGroupClass" @click="remove"></i>
                 </div>
             </div>
         </div>
         <div class="vbq-group-body content">
-            <query-builder-children v-bind="$props"/>
+            <query-builder-children v-bind="$props" />
         </div>
     </div>
 </template>

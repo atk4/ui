@@ -139,7 +139,7 @@ class Column
 
         $cb = $this->setHeaderDropdown($menuItems, $icon, $menuId);
 
-        $cb->onSelectItem(function ($menu, $item) use ($fx) {
+        $cb->onSelectItem(function (string $menu, string $item) use ($fx) {
             return $fx($item, $menu);
         });
     }
@@ -250,7 +250,7 @@ class Column
      * @param string|array $value    either html or array defining HTML structure, see App::getTag help
      * @param array        $attr     extra attributes to apply on the tag
      */
-    public function getTag(string $position, $value, $attr = []): string
+    public function getTag(string $position, $value, array $attr = []): string
     {
         $attr = $this->getTagAttributes($position, $attr);
 

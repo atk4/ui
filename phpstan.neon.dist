@@ -160,9 +160,6 @@ parameters:
             path: 'src/Form/Control/Checkbox.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Jquery::\$checked\.$~'
         -
-            path: 'src/Form/Layout/Section/Accordion.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\View::jsOpen\(\)\.$~'
-        -
             path: 'src/JsVueService.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsChain::createAtkVue\(\)\.$~'
         -
@@ -208,9 +205,6 @@ parameters:
         -
             path: 'src/Table/Column.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsCallback::onSelectItem\(\)\.$~'
-        -
-            path: 'src/Table/Column/DragHandler.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsCallback::onReorder\(\)\.$~'
         -
             path: 'src/Table/Column/FilterModel/TypeDate.php'
             message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'

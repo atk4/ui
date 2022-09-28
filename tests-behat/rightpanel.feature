@@ -1,5 +1,4 @@
 Feature: RightPanel
-  Testing RightPanel
 
   Scenario: PanelReload
     Given I am on "layout/layout-panel.php"

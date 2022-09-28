@@ -2,9 +2,9 @@ import $ from 'jquery';
 
 /**
  * Singleton class
- * This is default setup for semantic-ui modal.
+ * This is default setup for Fomantic-UI modal.
  * Allow to manage uri pass to our modal and dynamically update content from this uri
- * using the semantic api function.
+ * using the Fomantic-UI api function.
  * Also keep track of how many modal are use by the app.
  */
 class ModalService {
@@ -105,7 +105,7 @@ class ModalService {
         this.setCloseTriggerEventInModals();
         this.hideShowCloseIcon();
 
-        // temp fix while semantic modal positioning is not fixed.
+        // temp fix while Fomantic-UI modal positioning is not fixed.
         // hide other modals.
         if (this.modals.length > 1) {
             modal.css('position', 'absolute');
@@ -133,7 +133,7 @@ class ModalService {
         this.setCloseTriggerEventInModals();
         this.hideShowCloseIcon();
 
-        // temp fix while semantic modal positioning is not fixed.
+        // temp fix while Fomantic-UI modal positioning is not fixed.
         // show last modals.
         if (this.modals.length > 0) {
             modal.css('position', '');

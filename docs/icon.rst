@@ -62,7 +62,7 @@ You can use icon on the following components: :php:class:`Button`, :php:class:`L
 Groups
 ======
 
-Fomantic UI support icon groups. The best way to implement is to supply :php:class:`Template` to an
+Fomantic-UI support icon groups. The best way to implement is to supply :php:class:`Template` to an
 icon::
 
     Icon::addTo($app, ['template' => new \Atk4\Ui\Template('<i class="huge icons">
@@ -97,7 +97,7 @@ Composing offers you another way to deal with Group icons::
 
     $no_users = new \Atk4\Ui\View(['class.huge icons' => true, 'element' => 'i']);
     Icon::addTo($no_users, ['big red dont']);
-    Icon::addTo($no_users, ['black user icon']);
+    Icon::addTo($no_users, ['black user']);
 
     $app->add($no_users);
 

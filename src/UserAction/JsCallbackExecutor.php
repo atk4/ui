@@ -6,6 +6,7 @@ namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
+use Atk4\Ui\Jquery;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\JsToast;
@@ -55,9 +56,12 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
      */
     public function executeModelAction(array $args = [])
     {
-        $this->set(function ($j) {
+        $this->set(function (Jquery $j) {
             // may be id is passed as 'id' or model->idField within $post args.
-            $id = $_POST['c0'] ?? $_POST['id'] ?? $_POST[$this->action->getModel()->idField] ?? null;
+            $id = $this->getApp()->uiPersistence->typecastLoadField(
+                $this->action->getModel()->getField($this->action->getModel()->idField),
+                $_POST['c0'] ?? $_POST['id'] ?? $_POST[$this->action->getModel()->idField] ?? null
+            );
             if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
                 $this->action = $this->action->getActionForEntity($this->action->getModel()->load($id));
             } elseif (!$this->action->isOwnerEntity()

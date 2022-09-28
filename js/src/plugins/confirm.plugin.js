@@ -2,19 +2,19 @@ import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 
 /**
- * A Fomantic UI Modal dialog for confirming an action.
+ * A Fomantic-UI Modal dialog for confirming an action.
  *
  * Will execute onApprove function when user click ok button;
  * Will execute onDeny function when user click cancel button.
  *
- * Fomantic UI modal option can be pass using modalOptions object.
+ * Fomantic-UI modal option can be pass using modalOptions object.
  * Setting onApprove and onDeny function within modalOptions object will override
  * onApprove and onDeny current setting.
  */
 export default class confirm extends atkPlugin {
     main() {
         let context = this;
-        const $m = $('<div class="ui modal"/>')
+        const $m = $('<div class="ui modal" />')
             .appendTo('body')
             .html(this.getDialogHtml(this.settings.message));
 

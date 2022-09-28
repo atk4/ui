@@ -36,7 +36,7 @@ $lister->setModel($model);
 
 $sortable = JsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
-$sortable->onReorder(function ($order, $src, $pos, $oldPos) {
+$sortable->onReorder(function (array $order, string $src, int $pos, int $oldPos) {
     if ($_GET['btn'] ?? null) {
         return new JsToast(implode(' - ', $order));
     }
@@ -56,6 +56,6 @@ $grid = Grid::addTo($app, ['paginator' => false]);
 $grid->setModel((new Country($app->db))->setLimit(6));
 
 $dragHandler = $grid->addDragHandler();
-$dragHandler->onReorder(function ($order) {
+$dragHandler->onReorder(function (array $order) {
     return new JsToast('New order: ' . implode(' - ', $order));
 });

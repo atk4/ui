@@ -203,11 +203,11 @@ class CardDeck extends View
     {
         $executor = $this->getExecutorFactory()->create($action, $this);
         if ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $executor->jsSuccess = function ($x, $m, $id, $return) use ($action) {
+            $executor->jsSuccess = function (ExecutorInterface $ex, Model $m, $id, $return) use ($action) {
                 return $this->jsExecute($return, $action);
             };
         } else {
-            $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($ex, $return, $id) use ($action) {
+            $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function (ExecutorInterface $ex, $return, $id) use ($action) {
                 return $this->jsExecute($return, $action);
             });
         }
@@ -223,26 +223,30 @@ class CardDeck extends View
      *
      * @return array|object
      */
-    protected function jsExecute($return, Model\UserAction $action = null)
+    protected function jsExecute($return, Model\UserAction $action)
     {
         if (is_string($return)) {
-            return $this->getNotifier($return, $action);
+            return $this->getNotifier($action, $return);
         } elseif (is_array($return) || $return instanceof JsExpressionable) {
             return $return;
         } elseif ($return instanceof Model) {
+            if ($return->isEntity()) {
+                $action = $action->getActionForEntity($return);
+            }
+
             $msg = $return->isLoaded() ? $this->saveMsg : ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
 
             return $this->jsModelReturn($action, $msg);
         }
 
-        return $this->getNotifier($this->defaultMsg, $action);
+        return $this->getNotifier($action, $this->defaultMsg);
     }
 
     /**
      * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
      */
-    protected function getNotifier(string $msg = null, Model\UserAction $action = null): object
+    protected function getNotifier(Model\UserAction $action, string $msg = null): object
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {
@@ -255,11 +259,11 @@ class CardDeck extends View
     /**
      * Js expression return when action afterHook executor return a Model.
      */
-    protected function jsModelReturn(Model\UserAction $action = null, string $msg = 'Done!'): array
+    protected function jsModelReturn(Model\UserAction $action, string $msg = 'Done!'): array
     {
         $js = [];
-        $js[] = $this->getNotifier($msg, $action);
-        if ($action->getModel()->isLoaded() && $card = $this->findCard($action->getModel())) {
+        $js[] = $this->getNotifier($action, $msg);
+        if ($action->getEntity()->isLoaded() && $card = $this->findCard($action->getEntity())) {
             $js[] = $card->jsReload($this->getReloadArgs());
         } else {
             $js[] = $this->container->jsReload($this->getReloadArgs());
@@ -281,11 +285,8 @@ class CardDeck extends View
      *
      * @return mixed
      */
-    protected function findCard(Model $model)
+    protected function findCard(Model $entity)
     {
-        $mapResults = function ($a) use ($model) {
-            return $a[$model->idField];
-        };
         $deck = [];
         foreach ($this->cardHolder->elements as $element) {
             if ($element instanceof $this->card) {
@@ -293,9 +294,9 @@ class CardDeck extends View
             }
         }
 
-        if (in_array($model->getId(), array_map($mapResults, $model->export([$model->idField])), true)) {
+        if ($entity->getModel()->tryLoad($entity->getId()) !== null) {
             // might be in result set but not in deck, for example when adding a card.
-            return $deck[$model->getId()] ?? null;
+            return $deck[$entity->getId()] ?? null;
         }
 
         return null;

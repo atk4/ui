@@ -1,5 +1,4 @@
 Feature: Calendar
-  Testing flatpickr calendar input
 
   Scenario:
     Given I am on "_unit-test/calendar-input.php"

@@ -39,12 +39,12 @@ Like many other Views of ATK, popup is an interractive element. It can load it's
 
     $menu = Menu::addTo($app);
     $item = $menu->addItem('HoverMe');
-    Popup::addTo($app, [$item])->set(function ($popup) {
-        Text::addTo($popup)->set('Appears when you hover a menu item');
-        Label::addTo($popup, ['Random value', 'detail' => rand(1, 100)]);
+    Popup::addTo($app, [$item])->set(function (View $p) {
+        Text::addTo($p)->set('Appears when you hover a menu item');
+        Label::addTo($p, ['Random value', 'detail' => rand(1, 100)]);
     });
 
 Demo: https://ui.agiletoolkit.org/demos/popup.php
 
-Fomantic UI: https://fomantic-ui.com/modules/popup.html
+Fomantic-UI: https://fomantic-ui.com/modules/popup.html
 

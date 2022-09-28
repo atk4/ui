@@ -8,6 +8,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Jquery;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Label;
 
@@ -29,7 +30,7 @@ $form->setModel((new Country($app->db))->createEntity(), []);
 // form basic field group
 $formAddress = $form->addGroup('Basic Country Information');
 $name = $formAddress->addControl(Country::hinting()->fieldName()->name, ['width' => 'sixteen']);
-$name->addAction(['Check Duplicate', 'iconRight' => 'search'])->on('click', function ($jQuery, $name) use ($app, $form) {
+$name->addAction(['Check Duplicate', 'iconRight' => 'search'])->on('click', function (Jquery $jquery, string $name) use ($app, $form) {
     if ((new Country($app->db))->tryLoadBy(Country::hinting()->fieldName()->name, $name) !== null) {
         return $form->js()->form('add prompt', Country::hinting()->fieldName()->name, 'This country name is already added.');
     }
@@ -111,6 +112,6 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends M
 $form = Form::addTo($app)->addClass('segment');
 $form->setModel((new $personClass($app->db))->createEntity());
 
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (Form $form) {
     return new JsToast('Form saved!');
 });

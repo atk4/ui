@@ -70,7 +70,7 @@ class ItemsPerPageSelector extends View
         foreach ($this->pageLengthItems as $key => $item) {
             $menuItems[] = ['name' => $item, 'value' => $item];
         }
-        // set semantic-ui dropdown onChange function.
+        // set Fomantic-UI dropdown onChange function.
         $function = 'function(value, text, item) {
                             if (value === undefined || value === \'\' || value === null) return;
                             $(this)

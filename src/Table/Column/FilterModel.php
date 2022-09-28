@@ -65,17 +65,18 @@ abstract class FilterModel extends Model
             Types::DATETIME_MUTABLE => FilterModel\TypeDatetime::class,
             Types::DATETIME_IMMUTABLE => FilterModel\TypeDatetime::class,
 
+            Types::JSON => FilterModel\TypeString::class,
+            Types::OBJECT => FilterModel\TypeString::class,
+
             'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
         ][$field->type ?? 'string'];
 
-        // You can set your own filter model condition by extending
-        // Field class and setting your filter model class.
-        // TODO remove in favor of some Field::ui config
-        if (@$field->filterModel) { // @phpstan-ignore-line
-            if ($field->filterModel instanceof self) {
-                return $field->filterModel;
+        // You can set your own filter model class.
+        if (isset($field->ui['filterModel'])) {
+            if ($field->ui['filterModel'] instanceof self) {
+                return $field->ui['filterModel'];
             }
-            $class = $field->filterModel;
+            $class = $field->ui['filterModel'];
         }
 
         $filterModel = new $class($app, ['lookupField' => $field]);

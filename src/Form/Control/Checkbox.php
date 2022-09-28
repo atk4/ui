@@ -45,7 +45,7 @@ class Checkbox extends Form\Control
         // not ticked. We assume they are ticked and sent boolean "false" as a
         // workaround. Otherwise send boolean "true".
         if ($this->form) {
-            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
+            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
                 $postRawData[$this->entityField->getFieldName()] = isset($postRawData[$this->entityField->getFieldName()]);
             });
         }
@@ -58,7 +58,7 @@ class Checkbox extends Form\Control
         }
 
         if ($this->entityField ? $this->entityField->get() : $this->content) {
-            $this->template->set('checked', 'checked');
+            $this->template->set('checked', 'checked="checked"');
         }
 
         // We don't want this displayed, because it can only affect "checked" status anyway

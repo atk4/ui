@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Header;
+use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\Label;
 
@@ -46,17 +47,17 @@ Header::addTo($app, ['Callbacks']);
 
 // On button click reload it and change it's title
 $b = Button::addTo($app, ['Callback Test']);
-$b->on('click', null, function ($b) {
-    return $b->text(random_int(1, 20));
+$b->on('click', null, function (Jquery $j) {
+    return $j->text(random_int(1, 20));
 });
 
 $b = Button::addTo($app, ['success']);
-$b->on('click', null, function ($b) {
+$b->on('click', null, function (Jquery $j) {
     return 'success';
 });
 
 $b = Button::addTo($app, ['failure']);
-$b->on('click', null, function ($b) {
+$b->on('click', null, function (Jquery $j) {
     throw new Exception('Everything is bad');
 });
 
@@ -64,6 +65,6 @@ Header::addTo($app, ['Callbacks on HTML element', 'subHeader' => 'Click on label
 
 $label = Label::addTo($app->layout, ['Test']);
 
-$label->on('click', null, function ($j, $arg1) {
+$label->on('click', null, function (Jquery $j, $arg1) {
     return 'width is ' . $arg1;
 }, [new JsExpression('$(window).width()')]);

@@ -41,7 +41,7 @@ class Popup extends View
      */
     public $target = false;
 
-    /** @var array Popup options as defined in semantic-ui popup module. */
+    /** @var array Popup options as defined in Fomantic-UI popup module. */
     public $popOptions = [];
 
     /** @var Callback|null The callback use to generate dynamic content. */
@@ -57,18 +57,17 @@ class Popup extends View
 
     /**
      * Whether or not dynamic content is cache.
-     * If cache is on, will retrieve content only the first time
-     * popup is requrired.
+     * If cache is on, will retrieve content only the first time popup is required.
      *
      * @var bool
      */
     public $useCache = false;
 
     /** @var string Min width for a dynamic popup. */
-    public $minWidth; // '120px';
+    public $minWidth;
 
     /** @var string Min height for a dynamic popup. */
-    public $minHeight; // '60px';
+    public $minHeight;
 
     /**
      * Whether or not the click event triggering popup
@@ -107,17 +106,15 @@ class Popup extends View
                 ->addMoreInfo('owner', $this->getOwner());
         }
 
-        if (($this->triggerBy instanceof Menu
-            || $this->triggerBy instanceof MenuItem
-            || $this->triggerBy instanceof Dropdown) && $this->triggerOn === null
-        ) {
-            $this->triggerOn = 'hover';
-        }
-
-        if (
-            $this->triggerBy instanceof Button && $this->triggerOn === null
-        ) {
-            $this->triggerOn = 'click';
+        if ($this->triggerOn === null) {
+            if ($this->triggerBy instanceof Menu
+                || $this->triggerBy instanceof MenuItem
+                || $this->triggerBy instanceof Dropdown
+            ) {
+                $this->triggerOn = 'hover';
+            } elseif ($this->triggerBy instanceof Button) {
+                $this->triggerOn = 'click';
+            }
         }
 
         $this->popOptions = array_merge($this->popOptions, [
@@ -146,11 +143,11 @@ class Popup extends View
         $this->cb = Callback::addTo($this);
 
         if (!$this->minWidth) {
-            $this->minWidth = '120px';
+            $this->minWidth = '80px';
         }
 
         if (!$this->minHeight) {
-            $this->minHeight = '60px';
+            $this->minHeight = '45px';
         }
 
         // create content view to pass to callback.
@@ -202,7 +199,7 @@ class Popup extends View
     }
 
     /**
-     * Set a popup options as defined in semantic-ui popup module.
+     * Set a popup options as defined in Fomantic-UI popup module.
      *
      * @param mixed $option
      *
@@ -270,7 +267,6 @@ class Popup extends View
         if ($this->minHeight) {
             $this->setStyle('min-height', $this->minHeight);
         }
-        // $this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
 
         parent::renderView();
     }

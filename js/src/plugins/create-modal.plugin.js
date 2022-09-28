@@ -9,7 +9,7 @@ export default class createModal extends atkPlugin {
             options.uri_options = {};
         }
         // create modal and add it to the DOM
-        const $m = $('<div class="atk-modal ui modal"/>')
+        const $m = $('<div class="atk-modal ui modal" />')
             .appendTo('body')
             .html(this.getDialogHtml(options.title));
 
@@ -23,7 +23,7 @@ export default class createModal extends atkPlugin {
             label: options.label,
         });
 
-        // call semantic-ui modal
+        // call Fomantic-UI modal
         $m.modal(options.modal).modal('show');
         $m.addClass(this.settings.modalCss);
     }

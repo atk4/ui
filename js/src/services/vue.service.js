@@ -1,9 +1,9 @@
 import Vue from 'vue';
-import SuiVue from 'semantic-ui-vue';
+import SemanticUiVue from 'semantic-ui-vue';
 import atkClickOutside from '../directives/click-outside.directive';
 import { focus } from '../directives/commons.directive';
 
-Vue.use(SuiVue);
+Vue.use(SemanticUiVue);
 
 Vue.component('flat-picker', () => import('vue-flatpickr-component'));
 

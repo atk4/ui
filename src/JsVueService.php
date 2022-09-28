@@ -46,7 +46,7 @@ class JsVueService
     /**
      * Make Vue aware of externally loaded components.
      * The component name must be accessible in javascript using the window namespace.
-     * ex: window['SemanticUIVue'].
+     * ex: window['xxx'].
      */
     public function useComponent(string $component): JsChain
     {

@@ -17,9 +17,9 @@ $product = new Product($app->db);
 
 $vp = VirtualPage::addTo($app);
 
-$vp->set(function ($page) {
-    $form = Form::addTo($page);
-    $form->addControl('category', [Form\Control\Lookup::class, 'model' => new Category($page->getApp()->db)]);
+$vp->set(function (VirtualPage $vp) {
+    $form = Form::addTo($vp);
+    $form->addControl('category', [Form\Control\Lookup::class, 'model' => new Category($vp->getApp()->db)]);
     $form->onSubmit(function (Form $form) {
         $category = $form->getControl('category')->model->load($form->model->get('category'));
 

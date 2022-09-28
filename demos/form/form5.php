@@ -19,8 +19,8 @@ View::addTo($app, [
     'ui' => 'ignored warning message',
 ]);
 
-$formSubmit = function ($f) use ($app) {
-    return new JsToast($app->encodeJson($f->model->get()));
+$formSubmit = function (Form $form) use ($app) {
+    return new JsToast($app->encodeJson($form->model->get()));
 };
 
 $cc = Columns::addTo($app);

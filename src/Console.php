@@ -102,7 +102,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 }
 
                 $output = '';
-                $this->sse->echoFunction = function ($str) use (&$output) {
+                $this->sse->echoFunction = function (string $str) use (&$output) {
                     $output .= $str;
                 };
                 $this->output($content);

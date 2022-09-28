@@ -299,7 +299,7 @@ class Table extends Lister
      * The callback param function will receive two parameter, a jQuery chain object and a json string containing all table columns
      * name and size. To retrieve columns width, simply json decode the $widths param in your callback function.
      * ex:
-     *  $table->resizableColumn(function ($j, $w) {
+     *  $table->resizableColumn(function (Jquery $j, string $w) {
      *       // do somethings with columns width
      *       $columns = $this->getApp()->decodeJson($w);
      *   });
@@ -509,7 +509,21 @@ class Table extends Lister
         $this->addClass('selectable');
         $this->js(true)->find('tbody')->css('cursor', 'pointer');
 
-        $this->on('click', 'tbody>tr', $action);
+        // do not bubble row click event if click stems from row content like checkboxes
+        // TODO one ->on() call would be better, but we need a method to convert Closure $action into JsExpression first
+        $preventBubblingJs = new JsExpression(<<<'JS'
+            let elem = event.target;
+            while (elem !== null && elem !== event.currentTarget) {
+                if (elem.tagName === 'A' || elem.classList.contains('atk4-norowclick')
+                    || (elem.classList.contains('ui') && ['button', 'input', 'checkbox', 'dropdown'].some(v => elem.classList.contains(v)))) {
+                    event.stopImmediatePropagation();
+                }
+                elem = elem.parentElement;
+            }
+            JS);
+        $this->on('click', 'tbody > tr', $preventBubblingJs, ['preventDefault' => false]);
+
+        $this->on('click', 'tbody > tr', $action);
     }
 
     /**

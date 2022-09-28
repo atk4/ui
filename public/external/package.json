@@ -3,7 +3,7 @@
     "private": true,
     "dependencies": {
         "flatpickr": "^4.6.11",
-        "fomantic-ui-css": "^2.8.8",
+        "fomantic-ui": "^2.8.8",
         "form-serializer": "^2.5.0",
         "jquery": "^3.6.0",
         "twemoji": "https://github.com/twitter/twemoji/archive/refs/tags/v14.0.2.tar.gz"

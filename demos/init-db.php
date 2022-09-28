@@ -44,20 +44,40 @@ trait ModelPreventModificationTrait
         return $res;
     }
 
+    protected function wrapUserActionCallbackPreventModification(Model\UserAction $action, \Closure $outputCallback): void
+    {
+        $originalCallback = $action->callback;
+        $action->callback = function (Model $model, ...$args) use ($action, $originalCallback, $outputCallback) {
+            if ($model->isEntity()) {
+                $action = $action->getActionForEntity($model);
+            }
+
+            $callbackBackup = $action->callback;
+            try {
+                $action->callback = $originalCallback;
+                $action->execute(...$args);
+            } finally {
+                $action->callback = $callbackBackup;
+            }
+
+            return $outputCallback($model, ...$args);
+        };
+    }
+
     protected function initPreventModification(): void
     {
-        $this->getUserAction('add')->callback = function (Model $model) {
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), function (Model $model) {
             return 'Form Submit! Data are not save in demo mode.';
-        };
+        });
 
-        $this->getUserAction('edit')->callback = function (Model $model) {
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), function (Model $model) {
             return 'Form Submit! Data are not save in demo mode.';
-        };
+        });
 
         $this->getUserAction('delete')->confirmation = 'Please go ahead. Demo mode does not really delete data.';
-        $this->getUserAction('delete')->callback = function (Model $model) {
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), function (Model $model) {
             return 'Only simulating delete when in demo mode.';
-        };
+        });
     }
 }
 
@@ -71,8 +91,8 @@ class ModelWithPrefixedFields extends Model
     private function prefixFieldName(string $fieldName, bool $forActualName = false): string
     {
         $tableShort = $this->table;
-        if (strlen($tableShort) > 8) {
-            $tableShort = substr(md5($tableShort), 0, 8);
+        if (strlen($tableShort) > 16) {
+            $tableShort = substr(md5($tableShort), 0, 16);
         }
 
         if ($forActualName) {
@@ -85,8 +105,8 @@ class ModelWithPrefixedFields extends Model
             $fieldShort = substr($fieldShort, 0, -strlen('_id'));
             $fieldWithIdSuffix = true;
         }
-        if (strlen($fieldShort) > 8) {
-            $fieldShort = substr(md5($fieldShort), 0, 8);
+        if (strlen($fieldShort) > 16) {
+            $fieldShort = substr(md5($fieldShort), 0, 16);
         }
         if ($fieldWithIdSuffix) {
             $fieldShort .= '_id';
@@ -363,23 +383,21 @@ class File extends ModelWithPrefixedFields
                 continue;
             }
 
-            if (in_array($fileinfo->getFilename(), ['demos', 'src', 'tests'], true) || $isSub) {
-                $entity = $this->createEntity();
+            $entity = $this->createEntity();
 
-                $entity->save([
-                    $this->fieldName()->name => $fileinfo->getFilename(),
-                    $this->fieldName()->is_folder => $fileinfo->isDir(),
-                    $this->fieldName()->type => pathinfo($fileinfo->getFilename(), \PATHINFO_EXTENSION),
-                ]);
+            $entity->save([
+                $this->fieldName()->name => $fileinfo->getFilename(),
+                $this->fieldName()->is_folder => $fileinfo->isDir(),
+                $this->fieldName()->type => pathinfo($fileinfo->getFilename(), \PATHINFO_EXTENSION),
+            ]);
 
-                if ($fileinfo->isDir()) {
-                    $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
-                }
+            if ($fileinfo->isDir()) {
+                $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
+            }
 
-                // skip full/slow import for Behat testing
-                if ($_ENV['CI'] ?? null) {
-                    break;
-                }
+            // skip full/slow import for Behat testing
+            if ($_ENV['CI'] ?? null) {
+                break;
             }
         }
     }

@@ -11,6 +11,7 @@ use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\Behat\Hook\Scope\StepScope;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Mink\Element\NodeElement;
+use Behat\Mink\WebAssert;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Exception;
 
@@ -21,6 +22,17 @@ class Context extends RawMinkContext implements BehatContext
     public function getSession($name = null): MinkSession
     {
         return new MinkSession($this->getMink()->getSession($name));
+    }
+
+    public function assertSession($name = null): WebAssert
+    {
+        return new class($this->getSession($name)) extends WebAssert {
+            protected function cleanUrl($url)
+            {
+                // fix https://github.com/minkphp/Mink/issues/656
+                return $url;
+            }
+        };
     }
 
     protected function getScenario(StepScope $event): ScenarioInterface
@@ -47,7 +59,9 @@ class Context extends RawMinkContext implements BehatContext
             return;
         }
 
-        if (!str_starts_with($event->getStep()->getText(), 'Toast display should contain text ')) {
+        if (!str_starts_with($event->getStep()->getText(), 'Toast display should contain text ')
+            && $event->getStep()->getText() !== 'No toast should be displayed'
+        ) {
             $this->getSession()->executeScript('jQuery(\'.toast-box > .ui.toast\').toast(\'close\');');
         }
     }
@@ -101,7 +115,7 @@ class Context extends RawMinkContext implements BehatContext
     protected function disableAnimations(): void
     {
         // disable all CSS/jQuery animations/transitions
-        $toCssFx = function ($selector, $cssPairs) {
+        $toCssFx = function (string $selector, array $cssPairs): string {
             $css = [];
             foreach ($cssPairs as $k => $v) {
                 foreach ([$k, '-moz-' . $k, '-webkit-' . $k] as $k2) {
@@ -191,7 +205,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @return array{0: 'css'|'xpath', 1: string}
+     * @return array{'css'|'xpath', string}
      */
     protected function parseSelector(string $selector): array
     {
@@ -236,6 +250,12 @@ class Context extends RawMinkContext implements BehatContext
         $elements = $this->findElements($context, $selector);
 
         return $elements[0];
+    }
+
+    protected function unquoteStepArgument(string $argument): string
+    {
+        // copied from https://github.com/Behat/MinkExtension/blob/v2.2/src/Behat/MinkExtension/Context/MinkContext.php#L567
+        return str_replace('\\"', '"', $argument);
     }
 
     /**
@@ -448,6 +468,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function inputValueShouldStartWith(string $inputName, string $text): void
     {
+        $inputName = $this->unquoteStepArgument($inputName);
+        $text = $this->unquoteStepArgument($text);
+
         $field = $this->assertSession()->fieldExists($inputName);
 
         if (!str_starts_with($field->getValue(), $text)) {
@@ -478,7 +501,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSelectValueInLookup(string $value, string $inputName): void
     {
-        // get dropdown item from semantic ui which is direct parent of input html element
+        // get dropdown item from Fomantic-UI which is direct parent of input html element
         $lookupElem = $this->findElement(null, 'xpath(//input[@name="' . $inputName . '"]/parent::div)');
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
@@ -519,6 +542,10 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function scopeBuilderRule(string $name, string $operator, string $value): void
     {
+        $name = $this->unquoteStepArgument($name);
+        $operator = $this->unquoteStepArgument($operator);
+        $value = $this->unquoteStepArgument($value);
+
         $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
         $this->assertInputValue($rule, $value);
@@ -531,6 +558,10 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function scopeBuilderReferenceRule(string $name, string $operator, string $value): void
     {
+        $name = $this->unquoteStepArgument($name);
+        $operator = $this->unquoteStepArgument($operator);
+        $value = $this->unquoteStepArgument($value);
+
         $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
         $this->assertDropdownValue($rule, $value, '.vqb-rule-input .active.item');
@@ -543,6 +574,10 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function scopeBuilderSelectRule(string $name, string $operator, string $value): void
     {
+        $name = $this->unquoteStepArgument($name);
+        $operator = $this->unquoteStepArgument($operator);
+        $value = $this->unquoteStepArgument($value);
+
         $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
         $this->assertSelectedValue($rule, $value, '.vqb-rule-input select');
@@ -555,6 +590,10 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function scopeBuilderDateRule(string $name, string $operator, string $value): void
     {
+        $name = $this->unquoteStepArgument($name);
+        $operator = $this->unquoteStepArgument($operator);
+        $value = $this->unquoteStepArgument($value);
+
         $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
         $this->assertInputValue($rule, $value, 'input.form-control');
@@ -567,6 +606,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function scopeBuilderBoolRule(string $name, string $value): void
     {
+        $name = $this->unquoteStepArgument($name);
+        $value = $this->unquoteStepArgument($value);
+
         $this->getScopeBuilderRuleElem($name);
         $idx = ($value === 'Yes') ? 0 : 1;
         $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="' . $name . '"]\').find(\'input\')[' . $idx . '].checked');
@@ -580,6 +622,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function compareInputValueToElementText(string $inputName, string $selector): void
     {
+        $inputName = $this->unquoteStepArgument($inputName);
+        $selector = $this->unquoteStepArgument($selector);
+
         $expectedText = $this->findElement(null, $selector)->getText();
         $input = $this->findElement(null, 'input[name="' . $inputName . '"]');
         if ($expectedText !== $input->getValue()) {
@@ -616,6 +661,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function containerShouldHaveNumberOfItem(string $selector, int $numberOfitems): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+
         $items = $this->getSession()->getPage()->findAll('css', $selector);
         $count = 0;
         foreach ($items as $el => $item) {
@@ -639,21 +686,34 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function toastDisplayShouldContainText(string $text): void
     {
-        $toast = $this->findElement(null, '.ui.toast-container');
-        if (!str_contains($this->findElement($toast, '.content')->getText(), $text)) {
+        $toastContainer = $this->findElement(null, '.ui.toast-container');
+        if (!str_contains($this->findElement($toastContainer, '.content')->getText(), $text)) {
             throw new Exception('Cannot find text: "' . $text . '" in toast');
         }
     }
 
     /**
-     * @Then /^page url should contain \'([^\']*)\'$/
+     * @Then No toast should be displayed
      */
-    public function pageUrlShouldContain(string $text): void
+    public function noToastShouldBeDisplayed(): void
     {
-        $url = $this->getSession()->getCurrentUrl();
-        if (!str_contains($url, $text)) {
-            throw new Exception('Text : "' . $text . '" not found in ' . $url);
+        $toasts = $this->getSession()->getPage()->findAll('css', '.ui.toast-container .toast-box');
+        if (count($toasts) > 0) {
+            throw new Exception('Toast is displayed: "' . $this->findElement(reset($toasts), '.content')->getText() . '"');
         }
+    }
+
+    /**
+     * Remove once https://github.com/Behat/MinkExtension/pull/386 and
+     * https://github.com/minkphp/Mink/issues/656 are fixed and released.
+     *
+     * @Then /^PATCH MINK the (?i)url(?-i) should match "(?P<pattern>(?:[^"]|\\")*)"$/
+     */
+    public function assertUrlRegExp(string $pattern): void
+    {
+        $pattern = $this->unquoteStepArgument($pattern);
+
+        $this->assertSession()->addressMatches($pattern);
     }
 
     /**
@@ -661,6 +721,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function compareElementText(string $compareSelector, string $compareToSelector): void
     {
+        $compareSelector = $this->unquoteStepArgument($compareSelector);
+        $compareToSelector = $this->unquoteStepArgument($compareToSelector);
+
         if ($this->findElement(null, $compareSelector)->getText() !== $this->findElement(null, $compareToSelector)->getText()) {
             throw new Exception('Text does not match between: ' . $compareSelector . ' and ' . $compareToSelector);
         }
@@ -671,6 +734,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function textInContainerShouldMatch(string $selector, string $text): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+        $text = $this->unquoteStepArgument($text);
+
         if ($this->findElement(null, $selector)->getText() !== $text) {
             throw new Exception('Container with selector: ' . $selector . ' does not match text: ' . $text);
         }
@@ -681,6 +747,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function textInContainerShouldMatchRegex(string $selector, string $regex): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+        $regex = $this->unquoteStepArgument($regex);
+
         if (!preg_match($regex, $this->findElement(null, $selector)->getText())) {
             throw new Exception('Container with selector: ' . $selector . ' does not match regex: ' . $regex);
         }

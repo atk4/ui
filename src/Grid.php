@@ -236,7 +236,7 @@ class Grid extends View
             $pageLength->stickyGet($this->sortTrigger, $sortBy);
         }
 
-        $pageLength->onPageLengthSelect(function ($ipp) {
+        $pageLength->onPageLengthSelect(function (int $ipp) {
             $this->ipp = $ipp;
             $this->setModelLimitFromPaginator();
             // add ipp to quicksearch
@@ -507,8 +507,8 @@ class Grid extends View
             $menuId = $columnName;
         }
 
-        $column->addDropdown($items, function ($item) use ($fx) {
-            return $fx([$item]);
+        $column->addDropdown($items, function (string $item) use ($fx) {
+            return $fx($item);
         }, $icon, $menuId);
     }
 
@@ -537,7 +537,7 @@ class Grid extends View
      *
      * @param string|array|View $button
      * @param string            $title
-     * @param \Closure          $callback function ($page) {...
+     * @param \Closure          $callback function (View $page) {...
      * @param array             $args     extra url argument for callback
      *
      * @return View

@@ -31,7 +31,7 @@ class View extends AbstractView implements JsExpressionable
     public ?string $region = null;
 
     /**
-     * Enables UI keyword for Semantic UI indicating that this is a
+     * Enables UI keyword for Fomantic-UI indicating that this is a
      * UI element. If you set this variable value to string, it will
      * be appended at the end of the element class.
      *
@@ -297,24 +297,25 @@ class View extends AbstractView implements JsExpressionable
     }
 
     /**
-     * Get objects closest owner which is instance of particular class.
+     * Get closest owner which is instance of particular class.
      *
-     * If there are no such owner (or grand-owner etc.) object, then return.
+     * @template T of View
      *
-     * Note: this is internal method, but should be public because other objects
-     *       should be able to call it.
+     * @param class-string<T> $class
+     *
+     * @phpstan-return T|null
      */
-    public function getClosestOwner(self $object, string $class): ?self
+    public function getClosestOwner(string $class): ?self
     {
-        if ($object->issetOwner()) {
+        if (!$this->issetOwner()) {
             return null;
         }
 
-        if ($object->getOwner() instanceof $class) {
-            return $object->getOwner();
+        if ($this->getOwner() instanceof $class) {
+            return $this->getOwner();
         }
 
-        return $this->getClosestOwner($object->getOwner(), $class);
+        return $this->getOwner()->getClosestOwner($class);
     }
 
     // }}}
@@ -561,9 +562,9 @@ class View extends AbstractView implements JsExpressionable
     /**
      * View-specific rendering stuff. Feel free to replace this method with
      * your own. View::renderView contains some logic that integrates with
-     * semanticUI.
+     * Fomantic-UI.
      *
-     * NOTE: maybe in the future, SemanticUI-related stuff needs to go into
+     * NOTE: maybe in the future, Fomantic-UI related stuff needs to go into
      * a separate class.
      */
     protected function renderView(): void
@@ -576,7 +577,7 @@ class View extends AbstractView implements JsExpressionable
             $style = $this->style;
             array_walk(
                 $style,
-                function (&$item, $key) {
+                function (string &$item, string $key) {
                     $item = $key . ': ' . $item;
                 }
             );
@@ -667,7 +668,7 @@ class View extends AbstractView implements JsExpressionable
 
         $js = $this->getJs($forceReturn);
 
-        return ($js !== '' ? $this->getApp()->getTag('script', null, $js) : '')
+        return ($js !== '' ? $this->getApp()->getTag('script', [], $js) : '')
                . $this->renderTemplateToHtml();
     }
 
@@ -947,7 +948,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * Finally, it's also possible to use PHP closure as an action:
      *
-     * $view->on('click', 'a', function ($js, $data){
+     * $view->on('click', 'a', function (Jquery $js, $data){
      *   if (!$data['clickable']) {
      *      return new JsExpression('alert([])', ['This record is not clickable'])
      *   }

@@ -1,5 +1,5 @@
 import 'core-js/stable';
-import atkSemantic from 'atk-semantic-ui';
+import atkFomantic from 'atk-fomantic-ui';
 import date from 'locutus/php/datetime/date';
 import { tableDropdown } from './helpers/table-dropdown.helper';
 import { plugin } from './plugin';
@@ -16,7 +16,7 @@ import popupService from './services/popup.service';
 __webpack_public_path__ = window.__atkBundlePublicPath === undefined ? '/public/' :  window.__atkBundlePublicPath + '/';
 /* eslint-enable */
 
-const atk = { ...atkSemantic };
+const atk = { ...atkFomantic };
 
 // add version function to atk.
 atk.version = () => _ATKVERSION_;

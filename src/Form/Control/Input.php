@@ -55,7 +55,7 @@ class Input extends Form\Control
     public $actionLeft;
 
     /**
-     * Specify width for semantic UI grid. For "four wide" use 'four'.
+     * Specify width for Fomantic-UI grid. For "four wide" use 'four'.
      */
     public $width;
 
@@ -104,7 +104,7 @@ class Input extends Form\Control
     }
 
     /**
-     * Returns <input .../> tag.
+     * Returns <input ... /> tag.
      *
      * @return string
      */
@@ -116,8 +116,8 @@ class Input extends Form\Control
             'placeholder' => $this->placeholder,
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readonly' => $this->readOnly ? 'readonly' : false,
-            'disabled' => $this->disabled ? 'disabled' : false,
+            'readonly' => $this->readOnly,
+            'disabled' => $this->disabled,
         ], $this->inputAttr));
     }
 

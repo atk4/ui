@@ -149,7 +149,7 @@ class FormTest extends TestCase
     {
         $m = new Model();
 
-        $options = ['0' => 'yes please', '1' => 'woot'];
+        $options = ['yes please', 'woot'];
 
         $m->addField('opt1', ['values' => $options]);
         $m->addField('opt2', ['values' => $options]);
@@ -161,7 +161,7 @@ class FormTest extends TestCase
         $m = $m->createEntity();
         $this->form->setModel($m);
 
-        $this->assertSubmitError(['opt1' => '2', 'opt3_z' => '0', 'opt4' => '', 'opt4_z' => '0'], function ($error) {
+        $this->assertSubmitError(['opt1' => '2', 'opt3_z' => '0', 'opt4' => '', 'opt4_z' => '0'], function (string $formError) {
             // dropdown validates to make sure option is proper
             $this->assertFormControlError('opt1', 'not one of the allowed values');
 

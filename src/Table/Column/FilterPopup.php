@@ -69,7 +69,7 @@ class FilterPopup extends Popup
         });
 
         Button::addTo($this->form, ['Clear', 'class.clear' => true])
-            ->on('click', function ($f) use ($model) {
+            ->on('click', function (Jquery $j) use ($model) {
                 $model->clearData();
 
                 return [

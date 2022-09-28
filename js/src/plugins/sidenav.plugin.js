@@ -90,7 +90,7 @@ export default class sidenav extends atkPlugin {
      * @param selector
      */
     setTogglerIcon(selector) {
-        this.toggler.find(selector).attr('class', this.isMenuOn() ? this.settings.icon.off : this.settings.icon.on);
+        this.toggler.find(selector).attr('class', (this.isMenuOn() ? this.settings.icon.off : this.settings.icon.on) + ' icon');
     }
 
     /**
@@ -123,7 +123,7 @@ sidenav.DEFAULTS = {
     firstItemSelector: 'a', // the selector for the first menu item in a group, where click will be trigger.
     icon: {
         selector: 'i',
-        on: 'icon caret right',
-        off: 'icon caret down',
+        on: 'caret right',
+        off: 'caret down',
     },
 };

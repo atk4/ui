@@ -33,12 +33,12 @@ class DemoLookup extends Form\Control\Lookup
             $buttonSeed = ['content' => $buttonSeed];
         }
 
-        $defaultSeed = [Button::class, 'class.disabled' => ($this->disabled || $this->readOnly)];
+        $defaultSeed = [Button::class, 'class.disabled' => $this->disabled || $this->readOnly];
         $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
 
         $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
-        $vp->set(function ($page) {
-            $form = Form::addTo($page);
+        $vp->set(function (VirtualPage $vp) {
+            $form = Form::addTo($vp);
 
             $entity = $this->model->createEntity();
             $form->setModel($entity, $this->plus['fields'] ?? null);

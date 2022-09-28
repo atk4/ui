@@ -52,7 +52,7 @@ class Radio extends Form\Control
                 $lister->tRow->set('disabled', 'disabled="disabled"');
             }
 
-            $lister->tRow->set('checked', $value === (string) $lister->model->getId() ? 'checked' : '');
+            $lister->tRow->set('checked', $value === (string) $lister->model->getId() ? 'checked="checked"' : '');
         });
 
         parent::renderView();

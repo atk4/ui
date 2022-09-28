@@ -13,6 +13,7 @@ use Atk4\Ui\SessionTrait;
 
 /**
  * @group require_session
+ *
  * @runTestsInSeparateProcesses
  */
 class SessionTraitTest extends TestCase
@@ -120,7 +121,7 @@ class SessionTraitTest extends TestCase
         static::assertSame('undefined', $m->recall('foo', 'undefined'));
 
         // value as callback
-        $m->learn('foo', function ($key) {
+        $m->learn('foo', function (string $key) {
             return $key . '_bar';
         });
         static::assertSame('foo_bar', $m->recall('foo'));
@@ -128,7 +129,7 @@ class SessionTraitTest extends TestCase
         $m->learn('foo_2', 'another');
         static::assertSame('another', $m->recall('foo_2'));
 
-        $v = $m->recall('foo_3', function ($key) {
+        $v = $m->recall('foo_3', function (string $key) {
             return $key . '_bar';
         });
         static::assertSame('foo_3_bar', $v);

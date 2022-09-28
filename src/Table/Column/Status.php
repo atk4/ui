@@ -45,12 +45,9 @@ class Status extends Table\Column
             $attr['class'] = implode(' ', $attr['class']);
         }
 
-        return $this->getApp()->getTag(
-            'td',
-            $attr,
-            [$this->getApp()->getTag('i', ['class' => 'icon {$_' . $field->shortName . '_icon}'], '')
-                . ' {$' . $field->shortName . '}', ]
-        );
+        return $this->getApp()->getTag('td', $attr, [
+            $this->getApp()->getTag('i', ['class' => 'icon {$_' . $field->shortName . '_icon}'], '') . ' {$' . $field->shortName . '}',
+        ]);
     }
 
     public function getHtmlTags(Model $row, ?Field $field): array

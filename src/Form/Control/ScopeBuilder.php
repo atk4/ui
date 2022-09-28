@@ -52,7 +52,7 @@ class ScopeBuilder extends Form\Control
         'flatpickr' => [],
     ];
 
-    /** Atk-lookup and semantic-ui dropdown options. */
+    /** Atk-lookup and Fomantic-UI dropdown options. */
     public array $atkLookupOptions = [
         'ui' => 'small basic button',
     ];
@@ -280,7 +280,7 @@ class ScopeBuilder extends Form\Control
         $this->scopeBuilderView = View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
 
         if ($this->form) {
-            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
+            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
                 $key = $this->entityField->getFieldName();
                 $postRawData[$key] = static::queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
             });
@@ -475,7 +475,7 @@ class ScopeBuilder extends Form\Control
             $model->setLimit($limit);
 
             foreach ($model as $item) {
-                $items[$item->get($field->getReference()->getTheirFieldName())] = $item->get($model->titleField);
+                $items[$item->get($field->getReference()->getTheirFieldName($model))] = $item->get($model->titleField);
             }
         }
 
@@ -694,7 +694,7 @@ class ScopeBuilder extends Form\Control
                 $condField = $condition->getModel()->getField($condition->key);
                 $reference = $condField->getReference();
                 $model = $reference->refModel($condField->getOwner());
-                $fieldName = $reference->getTheirFieldName();
+                $fieldName = $reference->getTheirFieldName($model);
                 $entity = $model->tryLoadBy($fieldName, $value);
                 if ($entity !== null) {
                     $option = [

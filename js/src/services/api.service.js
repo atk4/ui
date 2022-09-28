@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 /**
  * Singleton class
- * Handle Semantic-ui api functionality throughout the app.
+ * Handle Fomantic-UI api functionality throughout the app.
  */
 
 class ApiService {
@@ -35,7 +35,7 @@ class ApiService {
     }
 
     /**
-     * Setup semantic-ui api callback with this service.
+     * Setup Fomantic-UI api callback with this service.
      * @param settings
      */
     setService(settings) {
@@ -119,7 +119,7 @@ class ApiService {
     }
 
     /**
-     * Will wrap semantic ui api call into a Promise.
+     * Will wrap Fomantic-UI api call into a Promise.
      * Can be used to retrieve json data from the server.
      * Using this will bypass regular successTest i.e. any
      * atkjs (javascript) return from server will not be evaluated.
@@ -131,8 +131,8 @@ class ApiService {
      * ex: $app->terminateJson(['success' => true, 'data' => $data]);
      *
      * @param url      the url to fetch data
-     * @param settings the Semantic api settings object.
-     * @param el       the element to apply Semantic Ui context.
+     * @param settings the Fomantic-UI api settings object.
+     * @param el       the element to apply Fomantic-UI context.
      *
      * @returns {Promise<any>}
      */
@@ -190,7 +190,7 @@ class ApiService {
 
     /**
      * Make our own ajax request test if need to.
-     * if a plugin must call $.ajax or $.getJson directly instead of semantic-ui api,
+     * if a plugin must call $.ajax or $.getJson directly instead of Fomantic-UI api,
      * we could send the json response to this.
      * @param response
      * @param content
@@ -228,7 +228,7 @@ class ApiService {
     }
 
     /**
-     * Display App error in a semantic-ui modal.
+     * Display App error in a Fomantic-UI modal.
      * @param errorMsg
      */
     showErrorModal(errorMsg) {

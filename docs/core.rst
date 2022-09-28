@@ -178,7 +178,7 @@ exist to enhance other Components with dynamically loadable content. Here is exa
     $tabs = Tabs::addTo($app);
     LoremIpsum::addTo($tabs->addTab('First tab is static'));
 
-    $tabs->addTab('Second tab is dynamic', function ($vp) {
+    $tabs->addTab('Second tab is dynamic', function (VirtualPage $vp) {
         LoremIpsum::addTo($vp);
     });
 

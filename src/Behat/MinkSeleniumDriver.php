@@ -180,7 +180,7 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
             if ($result) {
                 break;
             }
-            usleep(10000);
+            usleep(10_000);
         } while (microtime(true) < $end);
 
         return (bool) $result;

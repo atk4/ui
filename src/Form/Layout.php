@@ -27,7 +27,7 @@ class Layout extends AbstractLayout
 
     /**
      * Specify width of a group in numerical word e.g. 'width' => 'two' as per
-     * Semantic UI grid system.
+     * Fomantic-UI grid system.
      *
      * @var string
      */

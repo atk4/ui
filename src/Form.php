@@ -117,10 +117,10 @@ class Form extends View
      */
     public $controlDisplaySelector = '.field';
 
-    /** @var array Use this apiConfig variable to pass API settings to Semantic UI in .api(). */
+    /** @var array Use this apiConfig variable to pass API settings to Fomantic-UI in .api(). */
     public $apiConfig = [];
 
-    /** @var array Use this formConfig variable to pass settings to Semantic UI in .from(). */
+    /** @var array Use this formConfig variable to pass settings to Fomantic-UI in .from(). */
     public $formConfig = [];
 
     // {{{ Base Methods
@@ -532,20 +532,17 @@ class Form extends View
     {
         $output = parent::renderTemplateToHtml($region);
 
-        return $this->fixFormInRenderedHtml($output);
+        return $this->fixOwningFormAttrInRenderedHtml($output);
     }
 
-    public function fixFormInRenderedHtml(string $html): string
+    public function fixOwningFormAttrInRenderedHtml(string $html): string
     {
-        $innerFormTags = ['button', 'datalist', 'fieldset', 'input', 'keygen', 'label', 'legend',
-            'meter', 'optgroup', 'option', 'output', 'progress', 'select', 'textarea', ];
-
-        return preg_replace('~<(' . implode('|', $innerFormTags) . ')(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $html);
+        return preg_replace('~<(button|fieldset|input|output|select|textarea)(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $html);
     }
 
     /**
-     * Set Semantic-ui Api settings to use with form. A complete list is here:
-     * https://semantic-ui.com/behaviors/api.html#/settings.
+     * Set Fomantic-UI Api settings to use with form. A complete list is here:
+     * https://fomantic-ui.com/behaviors/api.html#/settings .
      *
      * @param array $config
      *
@@ -559,7 +556,7 @@ class Form extends View
     }
 
     /**
-     * Set Semantic-ui From settings to use with form. A complete list is here:
+     * Set Fomantic-UI Form settings to use with form. A complete list is here:
      * https://fomantic-ui.com/behaviors/form.html#/settings.
      *
      * @param array $config

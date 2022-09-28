@@ -140,5 +140,5 @@ you can specify it explicitly::
 
     Lister::addTo($app, ['defaultTemplate' => 'lister.html']);
 
-This should display a list nicely formatted by Fomantic UI, with header, links, icons and description area.
+This should display a list nicely formatted by Fomantic-UI, with header, links, icons and description area.
 
