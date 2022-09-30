@@ -7,11 +7,10 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Card;
-use Atk4\Ui\Form;
+use Atk4\Ui\Example;
 use Atk4\Ui\GridLayout;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
-use Atk4\Ui\UserAction\ModalExecutor;
 use Atk4\Ui\View;
 
 // Demo for Model action
@@ -19,7 +18,24 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
+require_once __DIR__ . '/../../src/Example/Inc.php';
+
 $country = new Country($app->db);
+
+// replace default edit UA with custom UA /w ui property
+$country->_removeFromCollection('edit', 'userActions');
+// workaround seeding /w a different UA class, Model::addUserAction does not support seed class
+$country->_addIntoCollection('edit', Example\CustomUserAction::fromSeed([
+    Example\CustomUserAction::class,
+    'fields' => true,
+    'modifier' => Model\UserAction::MODIFIER_UPDATE,
+    'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
+    'callback' => 'save',
+    'ui' => [
+        'executor' => [],
+    ],
+]), 'userActions');
+
 $entity = $country->loadAny();
 $countryId = $entity->getId();
 
@@ -41,34 +57,10 @@ $c->setModel($entity, [$country->fieldName()->iso, $country->fieldName()->iso3, 
 
 $buttons = View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
 
-class CustomForm extends Form
-{
-    protected function init(): void
-    {
-        parent::init();
-
-        // demo - allow custom modal form executor to be recognized easily
-        $this->style['padding'] = '10px';
-        $this->style['background-color'] = '#ccf';
-    }
-
-    public function addControl(string $name, $control = [], $field = []): Form\Control
-    {
-        // demo - handle self::addControl() calls
-        // the calls are made by StepExecutorTrait::doArgs(), the result is is unused there,
-        // but you should create the form controls and place/add them via custom logic to desired places/layouts
-        return $this->layout->addControl($name, $control, $field);
-    }
-}
-
-class CustomModalExecutor extends ModalExecutor
-{
-}
-
 // a specific executor for a specific action can be registered using ExecutorFactory::registerExecutor()
 $buttons->getApp()->getExecutorFactory()->registerExecutor(
     $country->getUserAction('edit'),
-    [CustomModalExecutor::class, 'formSeed' => [CustomForm::class]]
+    [Example\CustomModalExecutor::class, 'formSeed' => [Example\CustomForm::class]]
 );
 
 // Create a button for every action in Country model.
