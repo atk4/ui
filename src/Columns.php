@@ -37,7 +37,7 @@ class Columns extends View
      *
      * @return View
      */
-    public function addColumn($defaults = null)
+    public function addColumn($defaults = [])
     {
         if (!is_array($defaults)) {
             $defaults = [$defaults];
@@ -46,8 +46,7 @@ class Columns extends View
         $size = $defaults[0] ?? null;
         unset($defaults[0]);
 
-        $column = Factory::factory([View::class], $defaults);
-        $this->add($column);
+        $column = View::addTo($this, $defaults);
 
         if ($size && isset($this->sizes[$size])) {
             $column->addClass($this->sizes[$size] . ' wide');

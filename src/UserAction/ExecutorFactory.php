@@ -28,6 +28,7 @@ class ExecutorFactory
     public const MENU_ITEM = self::class . '@menuItem';
     public const TABLE_MENU_ITEM = self::class . '@tableMenuItem';
 
+    // TODO this should be not a constant, as all constants should be final
     public const BUTTON_PRIMARY_COLOR = 'primary';
 
     /**
