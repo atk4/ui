@@ -49,7 +49,7 @@ class CustomExecutorFactory extends ExecutorFactory
         }
 
         if ($action instanceof CustomUserAction) {
-            $seed = Factory::mergeSeeds($seed, $action->ui['executor'] ?? []);
+            $seed = Factory::mergeSeeds($action->ui['executor'] ?? [], $seed);
         }
 
         /** @var AbstractView&ExecutorInterface */

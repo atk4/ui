@@ -11,6 +11,8 @@ use Atk4\Ui\Example;
 use Atk4\Ui\GridLayout;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
+use Atk4\Ui\UserAction\ExecutorFactory;
+use Atk4\Ui\UserAction\PanelExecutor;
 use Atk4\Ui\View;
 
 // Demo for Model action
@@ -38,6 +40,7 @@ $country->addUserAction('edit', [
 
 // replace ExecutorFactory with custom factory /w ui['executor'] seed support
 $app->setExecutorFactory(new Example\CustomExecutorFactory());
+$app->getExecutorFactory()->registerTypeExecutor(ExecutorFactory::STEP_EXECUTOR, [PanelExecutor::class]);
 
 $entity = $country->loadAny();
 $countryId = $entity->getId();
