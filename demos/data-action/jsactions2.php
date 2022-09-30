@@ -25,8 +25,8 @@ $country = new Country($app->db);
 // replace default edit UA with custom UA /w ui property
 $country->_removeFromCollection('edit', 'userActions');
 // workaround seeding /w a different UA class, Model::addUserAction does not support seed class
-$country->_addIntoCollection('edit', Example\CustomUserAction::fromSeed([
-    Example\CustomUserAction::class,
+\Closure::bind(fn () => $country->_defaultSeedUserAction[0] = Example\CustomUserAction::class, null, Model::class)();
+$country->addUserAction('edit', [
     'fields' => true,
     'modifier' => Model\UserAction::MODIFIER_UPDATE,
     'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
@@ -34,7 +34,7 @@ $country->_addIntoCollection('edit', Example\CustomUserAction::fromSeed([
     'ui' => [
         'executor' => [],
     ],
-]), 'userActions');
+]);
 
 $entity = $country->loadAny();
 $countryId = $entity->getId();
