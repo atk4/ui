@@ -23,7 +23,7 @@ require_once __DIR__ . '/../../src/Example/Inc.php';
 $country = new Country($app->db);
 
 // replace default edit UA with custom UA /w ui property
-$country->_removeFromCollection('edit', 'userActions');
+$country->removeUserAction('edit');
 // workaround seeding /w a different UA class, Model::addUserAction does not support seed class
 \Closure::bind(fn () => $country->_defaultSeedUserAction[0] = Example\CustomUserAction::class, null, Model::class)();
 $country->addUserAction('edit', [
