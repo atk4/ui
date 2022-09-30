@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Example;
 
+use Atk4\Core\Factory;
 use Atk4\Data\Model;
+use Atk4\Ui\AbstractView;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
+use Atk4\Ui\UserAction\ExecutorFactory;
+use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\UserAction\ModalExecutor;
+use Atk4\Ui\View;
 
 class Inc
 {
@@ -16,6 +22,42 @@ class CustomUserAction extends Model\UserAction
 {
     /** @var array<string, mixed> */
     public $ui;
+}
+
+class CustomExecutorFactory extends ExecutorFactory
+{
+    protected function createExecutor(Model\UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
+    {
+        // required a specific executor type.
+        if ($requiredType) {
+            if (!($this->executorSeed[$requiredType] ?? null)) {
+                throw (new Exception('Required executor type is not set'))
+                    ->addMoreInfo('type', $requiredType);
+            }
+            $seed = $this->executorSeed[$requiredType];
+        // check if executor is register for this model/action.
+        } elseif ($seed = $this->executorSeed[$this->getModelId($action)][$action->shortName] ?? null) {
+        } else {
+            // if no type is register, determine executor to use base on action properties.
+            if (is_callable($action->confirmation)) {
+                $seed = $this->executorSeed[self::CONFIRMATION_EXECUTOR];
+            } else {
+                $seed = (!$action->args && !$action->fields && !$action->preview)
+                        ? $this->executorSeed[self::JS_EXECUTOR]
+                        : $this->executorSeed[self::STEP_EXECUTOR];
+            }
+        }
+
+        if ($action instanceof CustomUserAction) {
+            $seed = Factory::mergeSeeds($seed, $action->ui['executor'] ?? []);
+        }
+
+        /** @var AbstractView&ExecutorInterface */
+        $executor = $owner->add(Factory::factory($seed));
+        $executor->setAction($action);
+
+        return $executor;
+    }
 }
 
 class CustomForm extends Form

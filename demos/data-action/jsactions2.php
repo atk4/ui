@@ -32,9 +32,12 @@ $country->addUserAction('edit', [
     'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
     'callback' => 'save',
     'ui' => [
-        'executor' => [],
+        'executor' => [Example\CustomModalExecutor::class, 'formSeed' => [Example\CustomForm::class]],
     ],
 ]);
+
+// replace ExecutorFactory with custom factory /w ui['executor'] seed support
+$app->setExecutorFactory(new Example\CustomExecutorFactory());
 
 $entity = $country->loadAny();
 $countryId = $entity->getId();
@@ -56,12 +59,6 @@ $c->addContent(new Header(['Using country: ']));
 $c->setModel($entity, [$country->fieldName()->iso, $country->fieldName()->iso3, $country->fieldName()->phonecode]);
 
 $buttons = View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
-
-// a specific executor for a specific action can be registered using ExecutorFactory::registerExecutor()
-$buttons->getApp()->getExecutorFactory()->registerExecutor(
-    $country->getUserAction('edit'),
-    [Example\CustomModalExecutor::class, 'formSeed' => [Example\CustomForm::class]]
-);
 
 // Create a button for every action in Country model.
 foreach ($country->getUserActions() as $action) {
