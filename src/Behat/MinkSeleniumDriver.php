@@ -43,7 +43,7 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
     {
         // WebDriver element contains only a temporary ID assigned by Selenium,
         // to create a Mink element we must build a xpath for it first
-        $script = <<<'JS'
+        $script = <<<'EOF'
             var buildXpathFromElement;
             buildXpathFromElement = function (element) {
                 var tagNameLc = element.tagName.toLowerCase();
@@ -72,7 +72,7 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
             };
 
             return buildXpathFromElement(arguments[0]);
-            JS;
+            EOF;
         $xpath = $this->getWebDriverSession()->execute([
             'script' => $script,
             'args' => [$element],
