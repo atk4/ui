@@ -42,6 +42,7 @@ class App
         'jquery' => '/public/external/jquery/dist',
         'fomantic-ui' => '/public/external/fomantic-ui/dist',
         'flatpickr' => '/public/external/flatpickr/dist',
+        'chart.js' => '/public/external/chart.js/dist', // for atk4/chart
     ];
 
     /** @var ExecutorFactory App wide executor factory object for Model user action. */

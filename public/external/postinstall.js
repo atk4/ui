@@ -141,6 +141,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
 walkFilesSync(__dirname, (f) => {
     updateFileSync(f, (data) => {
         if (!f.endsWith('.css')
+            || f.startsWith(path.join(__dirname, 'chart.js/dist/docs/'))
             || f.startsWith(path.join(__dirname, 'gulp-concat-css/'))
             || f.startsWith(path.join(__dirname, 'less/'))
             || f.startsWith(path.join(__dirname, 'rtlcss/'))

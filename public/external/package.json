@@ -3,6 +3,7 @@
     "private": true,
     "dependencies": {
         "@shopify/draggable": "^1.0.0-beta.12",
+        "chart.js": "^3.9.1",
         "flatpickr": "^4.6.11",
         "fomantic-ui": "^2.8.8",
         "form-serializer": "^2.5.0",
