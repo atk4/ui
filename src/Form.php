@@ -355,20 +355,6 @@ class Form extends View
     }
 
     /**
-     * @param array<int, array> $controls
-     *
-     * @return $this
-     */
-    public function addControls(array $controls)
-    {
-        foreach ($controls as $control) {
-            $this->addControl(...$control);
-        }
-
-        return $this;
-    }
-
-    /**
      * Add header into the form, which appears as a separator.
      *
      * @param string|array $title
