@@ -105,6 +105,36 @@ $form->addControl('multi', [
     'values' => ['default' => 'Default', 'option1' => 'Option 1', 'option2' => 'Option 2'],
 ]);
 
+$htmlValues = ['default' => 'default <a>', 's' => 'simple', 'foo <b>' => 'bar <b>'];
+
+$form->addControl('html_single', [
+    Form\Control\Dropdown::class,
+    'caption' => 'HTML single',
+    'values' => $htmlValues,
+]);
+
+$form->addControl('html_single2', [
+    Form\Control\Dropdown::class,
+    'caption' => 'HTML single allow addition',
+    'values' => $htmlValues,
+    'dropdownOptions' => ['allowAdditions' => true],
+]);
+
+$form->addControl('html_multi', [
+    Form\Control\Dropdown::class,
+    'caption' => 'HTML multiple',
+    'isMultiple' => true,
+    'values' => $htmlValues,
+]);
+
+$form->addControl('html_multi2', [
+    Form\Control\Dropdown::class,
+    'caption' => 'HTML multiple allow addition',
+    'isMultiple' => true,
+    'values' => $htmlValues,
+    'dropdownOptions' => ['allowAdditions' => true],
+]);
+
 $form->onSubmit(static function (Form $form) use ($app) {
     $message = $app->encodeJson($form->model->get());
 
