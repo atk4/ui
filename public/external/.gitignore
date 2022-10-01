@@ -3,6 +3,13 @@
 !/*/
 /*/*
 
+!/@shopify/draggable/
+/@shopify/draggable/*
+!/@shopify/draggable/LICENS*
+!/@shopify/draggable/lib/
+/@shopify/draggable/lib/*
+!/@shopify/draggable/lib/draggable.bundle.js
+
 !/flatpickr/LICENS*
 !/flatpickr/dist/
 /flatpickr/dist/*
