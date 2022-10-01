@@ -39,16 +39,22 @@ class DemosTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
+        parent::setUpBeforeClass();
+
         self::$_serverSuperglobalBackup = $_SERVER;
     }
 
     public static function tearDownAfterClass(): void
     {
         $_SERVER = self::$_serverSuperglobalBackup;
+
+        parent::tearDownAfterClass();
     }
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         if (self::$_db === null) {
             // load demos config
             $initVars = get_defined_vars();

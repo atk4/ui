@@ -52,6 +52,8 @@ class DemosHttpTest extends DemosTest
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         if (self::$_process === null) {
             if (\PHP_SAPI !== 'cli') {
                 throw new \Error('Builtin webserver can be started only from CLI');
@@ -59,8 +61,6 @@ class DemosHttpTest extends DemosTest
 
             $this->setupWebserver();
         }
-
-        parent::setUp();
     }
 
     private function setupWebserver(): void

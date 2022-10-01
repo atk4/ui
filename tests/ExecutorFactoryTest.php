@@ -46,6 +46,8 @@ class ExecutorFactoryTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $p = new Persistence\Array_();
         $this->model = new TestModel($p);
         $this->app = $this->createApp();

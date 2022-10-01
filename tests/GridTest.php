@@ -18,6 +18,8 @@ class GridTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $a = [
             1 => ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'],
             2 => ['id' => 2, 'email' => 'test@yahoo.com', 'password' => 'secret'],
