@@ -41,7 +41,6 @@ class App
         'atk' => '/public',
         'jquery' => '/public/external/jquery/dist',
         'fomantic-ui' => '/public/external/fomantic-ui/dist',
-        'serialize-object' => '/public/external/form-serializer/dist',
         'flatpickr' => '/public/external/flatpickr/dist',
     ];
 
@@ -486,7 +485,7 @@ class App
         $this->requireCss($this->cdn['fomantic-ui'] . '/semantic.min.css');
 
         // Serialize Object
-        $this->requireJs($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
+        $this->requireJs($this->cdn['atk'] . '/external/form-serializer/dist/jquery.serialize-object.min.js');
 
         // flatpickr
         $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
