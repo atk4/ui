@@ -389,19 +389,6 @@ class Form extends View
         return $this->layout->getControl($name)->js()->find('input');
     }
 
-    /**
-     * Returns JS Chain that targets INPUT of a specified element. This method is handy
-     * if you wish to set a value to a certain field.
-     *
-     * @param string $name Name of control
-     *
-     * @return JsChain
-     */
-    public function jsControl($name)
-    {
-        return $this->layout->getControl($name)->js();
-    }
-
     // }}}
 
     // {{{ Internals

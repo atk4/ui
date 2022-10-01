@@ -420,7 +420,7 @@ it's always nicer to load values for the database. Given a ``User`` model this i
 you can create a form to change profile of a currently logged user::
 
     $user = new User($db);
-    $user->getControl('password')->neverPersist = true; // ignore password field
+    $user->getField('password')->neverPersist = true; // ignore password field
     $user = $user->load($current_user);
 
     // Display all fields (except password) and values
