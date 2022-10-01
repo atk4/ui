@@ -31,14 +31,9 @@ class App
         init as private _init;
     }
 
-    /** @const string */
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
-    /** @const string */
     public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
-    /** @const string not used, make it public if needed or drop it */
-    private const HOOK_BEFORE_OUTPUT = self::class . '@beforeOutput';
 
-    /** @const string */
     protected const HEADER_STATUS_CODE = 'atk4-status-code';
 
     /** @var array|false Location where to load JS/CSS files */
@@ -568,7 +563,6 @@ class App
             $isExitException = true;
         }
 
-        $this->hook(self::HOOK_BEFORE_OUTPUT);
         if (!$this->exitCalled) { // output already sent by terminate()
             if ($this->isJsUrlRequest()) {
                 $this->outputResponseJson($output);

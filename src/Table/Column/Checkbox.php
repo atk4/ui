@@ -26,7 +26,7 @@ class Checkbox extends Table\Column
      */
     public function jsChecked()
     {
-        return new JsExpression(' $(' . $this->table->jsRender() . ').find(\'.checked.' . $this->class . '\').closest(\'tr\').map(function() { '
+        return new JsExpression('$(' . $this->table->jsRender() . ').find(\'.checked.' . $this->class . '\').closest(\'tr\').map(function() { '
             . 'return $(this).data(\'id\'); }).get().join(\',\')');
     }
 

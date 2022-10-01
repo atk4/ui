@@ -28,7 +28,8 @@ class ExecutorFactory
     public const MENU_ITEM = self::class . '@menuItem';
     public const TABLE_MENU_ITEM = self::class . '@tableMenuItem';
 
-    public const BUTTON_PRIMARY_COLOR = 'primary';
+    /** @var string */
+    public $buttonPrimaryColor = 'primary';
 
     /**
      * Store basic type of executor to use for create method.
@@ -212,7 +213,7 @@ class ExecutorFactory
             case self::MODAL_BUTTON:
                 $seed = [Button::class, $this->getActionCaption($action, $type)];
                 if ($type === self::MODAL_BUTTON || $type === self::CARD_BUTTON) {
-                    $seed['class.' . static::BUTTON_PRIMARY_COLOR] = true;
+                    $seed['class.' . $this->buttonPrimaryColor] = true;
                 }
 
                 break;

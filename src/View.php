@@ -9,24 +9,21 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**
- * Base view of all other UI components.
+ * Base view of all UI components.
  */
 class View extends AbstractView implements JsExpressionable
 {
     /**
-     * When you call render() this will be populated with JavaScript
-     * chains.
+     * When you call render() this will be populated with JavaScript chains.
      *
      * @internal
      */
     protected array $_jsActions = [];
 
-    /** @var Model|null */
-    public $model;
+    public ?Model $model = null;
 
     /**
-     * Name of the region in the parent's template where this object
-     * will output itself.
+     * Name of the region in the parent's template where this object will output itself.
      */
     public ?string $region = null;
 
@@ -39,14 +36,14 @@ class View extends AbstractView implements JsExpressionable
      */
     public $ui = false;
 
-    /** @var array List of classes that needs to be added. */
-    public $class = [];
+    /** List of classes that needs to be added. */
+    public array $class = [];
 
-    /** @var array List of custom CSS attributes. */
-    public $style = [];
+    /** List of custom CSS attributes. */
+    public array $style = [];
 
-    /** @var array List of custom attributes. */
-    public $attr = [];
+    /** List of custom attributes. */
+    public array $attr = [];
 
     /**
      * Template object, that, for most Views will be rendered to
@@ -74,7 +71,7 @@ class View extends AbstractView implements JsExpressionable
     /** @var string Change this if you want to substitute default "div" for something else. */
     public $element;
 
-    /** @var ExecutorFactory|null Seed class name */
+    /** @var ExecutorFactory|null */
     protected $executorFactory;
 
     // {{{ Setting Things up
@@ -765,36 +762,29 @@ class View extends AbstractView implements JsExpressionable
      *
      * @see http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string|bool|null $when     Event when chain will be executed
+     * @param bool|string      $when     Event when chain will be executed
      * @param JsExpressionable $action   JavaScript action
      * @param string|self|null $selector If you wish to override jQuery($selector)
      *
      * @return Jquery
      */
-    public function js($when = null, $action = null, $selector = null)
+    public function js($when = false, $action = null, $selector = null)
     {
         $chain = new Jquery($selector ?? $this);
 
-        // Substitute $when to make it better work as a array key
         if ($when === true) {
             $this->_jsActions[$when][] = $chain;
 
             if ($action) {
                 $this->_jsActions[$when][] = $action;
             }
+        } elseif ($when !== false) {
+            // binding on a specific event
+            $action = (new Jquery($this))
+                ->bind($when, new JsFunction([$chain, $action]));
 
-            return $chain;
+            $this->_jsActions[$when][] = $action;
         }
-
-        if ($when === false || $when === null) {
-            return $chain;
-        }
-
-        // next - binding on a specific event
-        $action = (new Jquery($this))
-            ->bind($when, new JsFunction([$chain, $action]));
-
-        $this->_jsActions[$when][] = $action;
 
         return $chain;
     }

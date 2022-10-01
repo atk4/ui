@@ -74,10 +74,7 @@ events can be triggered by the user or by other JavaScript code. There are sever
 
 To execute actions instantly on page load, use `true` as first argument to :php:meth:`View::js()`::
 
-    $view->js(
-        true,
-        new JsExpression('alert([])', ['Hello world'])
-    );
+    $view->js(true, new JsExpression('alert([])', ['Hello world']));
 
 You can also combine both forms::
 

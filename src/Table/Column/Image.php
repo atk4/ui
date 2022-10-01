@@ -12,8 +12,7 @@ use Atk4\Ui\Table;
  */
 class Image extends Table\Column
 {
-    /** @var array Overrides custom attributes that will be applied on head, body or foot. */
-    public $attr = ['all' => ['class' => ['center aligned single line']]];
+    public array $attr = ['all' => ['class' => ['center aligned single line']]];
 
     public function getDataCellTemplate(Field $field = null): string
     {

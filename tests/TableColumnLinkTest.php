@@ -11,7 +11,7 @@ use Atk4\Ui\Table;
 
 class TableColumnLinkTest extends TestCase
 {
-    use Concerns\HandlesTable;
+    use TableTestTrait;
 
     /** @var Table */
     public $table;

@@ -9,9 +9,6 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 
-/**
- * Custom Layout for a form (user-defined HTML).
- */
 class Custom extends Form\AbstractLayout
 {
     /** @var string */

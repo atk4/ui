@@ -21,7 +21,6 @@ class PanelExecutor extends Right implements JsExecutorInterface
     use HookTrait;
     use StepExecutorTrait;
 
-    /** @const string */
     public const HOOK_STEP = self::class . '@onStep';
 
     /** @var array No need for dynamic content. It is manage with step loader. */

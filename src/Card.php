@@ -203,31 +203,20 @@ class Card extends View
     }
 
     /**
-     * Add actions from various model.
-     */
-    public function addModelsActions(array $models): void
-    {
-        foreach ($models as $model) {
-            $this->addModelActions($model);
-        }
-    }
-
-    /**
      * Add action from Model.
      */
     public function addModelActions(Model $model): void
     {
-        if ($singleActions = $model->getUserActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD)) {
-            $this->setModel($model);
-            foreach ($singleActions as $action) {
-                $this->addAction($action, $this->executor);
-            }
+        $this->setModel($model);
+
+        $actions = $model->getUserActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD);
+        foreach ($actions as $action) {
+            $this->addAction($action, $this->executor);
         }
 
-        if ($noRecordAction = $model->getUserActions(Model\UserAction::APPLIES_TO_NO_RECORDS)) {
-            foreach ($noRecordAction as $action) {
-                $this->addAction($action, $this->executor);
-            }
+        $actions = $model->getUserActions(Model\UserAction::APPLIES_TO_NO_RECORDS);
+        foreach ($actions as $action) {
+            $this->addAction($action, $this->executor);
         }
     }
 
@@ -390,19 +379,5 @@ class Card extends View
         }
 
         return $btn;
-    }
-
-    /**
-     * Add a series of buttons to this card.
-     *
-     * @return View
-     */
-    public function addButtons(array $buttons)
-    {
-        foreach ($buttons as $btn) {
-            $btn = $this->addButton($btn);
-        }
-
-        return $this->getButtonContainer();
     }
 }

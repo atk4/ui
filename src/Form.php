@@ -16,13 +16,13 @@ class Form extends View
 {
     use \Atk4\Core\HookTrait;
 
-    /** @const string Executed when form is submitted */
+    /** Executed when form is submitted */
     public const HOOK_SUBMIT = self::class . '@submit';
-    /** @const string Executed when form is submitted */
+    /** Executed when form is submitted */
     public const HOOK_DISPLAY_ERROR = self::class . '@displayError';
-    /** @const string Executed when form is submitted */
+    /** Executed when form is submitted */
     public const HOOK_DISPLAY_SUCCESS = self::class . '@displaySuccess';
-    /** @const string Executed when self::loadPost() method is called. */
+    /** Executed when self::loadPost() method is called. */
     public const HOOK_LOAD_POST = self::class . '@loadPost';
 
     public $ui = 'form';
@@ -169,7 +169,7 @@ class Form extends View
         if ($this->buttonSave) {
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
-            $this->buttonSave->on('click', $this->js(null, null, $this->formElement)->form('submit'));
+            $this->buttonSave->on('click', $this->js(false, null, $this->formElement)->form('submit'));
             $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13){ $([name]).form("submit"); }', ['name' => '#' . $this->formElement->name]));
         }
     }
@@ -355,20 +355,6 @@ class Form extends View
     }
 
     /**
-     * @param array<int, array> $controls
-     *
-     * @return $this
-     */
-    public function addControls(array $controls)
-    {
-        foreach ($controls as $control) {
-            $this->addControl(...$control);
-        }
-
-        return $this;
-    }
-
-    /**
      * Add header into the form, which appears as a separator.
      *
      * @param string|array $title
@@ -396,24 +382,11 @@ class Form extends View
      *
      * @param string $name Name of control
      *
-     * @return JsChain
+     * @return Jquery
      */
     public function jsInput($name)
     {
         return $this->layout->getControl($name)->js()->find('input');
-    }
-
-    /**
-     * Returns JS Chain that targets INPUT of a specified element. This method is handy
-     * if you wish to set a value to a certain field.
-     *
-     * @param string $name Name of control
-     *
-     * @return JsChain
-     */
-    public function jsControl($name)
-    {
-        return $this->layout->getControl($name)->js();
     }
 
     // }}}

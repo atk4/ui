@@ -18,7 +18,6 @@ class BasicExecutor extends View implements ExecutorInterface
 {
     use HookTrait;
 
-    /** @const string */
     public const HOOK_AFTER_EXECUTE = self::class . '@afterExecute';
 
     /** @var Model\UserAction|null */

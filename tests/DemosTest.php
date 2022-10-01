@@ -26,9 +26,7 @@ use Psr\Http\Message\ResponseInterface;
  */
 class DemosTest extends TestCase
 {
-    /** @const string */
     protected const ROOT_DIR = __DIR__ . '/..';
-    /** @const string */
     protected const DEMOS_DIR = self::ROOT_DIR . '/demos';
 
     private static array $_serverSuperglobalBackup;

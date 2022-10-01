@@ -11,9 +11,7 @@ class Lister extends View
 {
     use HookTrait;
 
-    /** @const string */
     public const HOOK_BEFORE_ROW = self::class . '@beforeRow';
-    /** @const string */
     public const HOOK_AFTER_ROW = self::class . '@afterRow';
 
     /**

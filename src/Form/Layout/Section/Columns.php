@@ -24,7 +24,7 @@ class Columns extends UiColumns
      *
      * @return Form\Layout
      */
-    public function addColumn($defaults = null)
+    public function addColumn($defaults = [])
     {
         $column = parent::addColumn($defaults);
 

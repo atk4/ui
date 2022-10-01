@@ -80,12 +80,12 @@ class Checkbox extends Form\Control
     /**
      * Will return jQuery expression to get checkbox checked state.
      *
-     * @param string|bool|null $when
+     * @param bool|string      $when
      * @param JsExpressionable $action
      *
      * @return Jquery
      */
-    public function jsChecked($when = null, $action = null)
+    public function jsChecked($when = false, $action = null)
     {
         return $this->jsInput($when, $action)->get(0)->checked;
     }
