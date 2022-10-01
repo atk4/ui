@@ -380,18 +380,4 @@ class Card extends View
 
         return $btn;
     }
-
-    /**
-     * Add a series of buttons to this card.
-     *
-     * @return View
-     */
-    public function addButtons(array $buttons)
-    {
-        foreach ($buttons as $btn) {
-            $btn = $this->addButton($btn);
-        }
-
-        return $this->getButtonContainer();
-    }
 }
