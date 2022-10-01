@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-use Atk4\Core\Factory;
-
 /**
  * Vertically distributed columns based on CSS Grid system.
  */
