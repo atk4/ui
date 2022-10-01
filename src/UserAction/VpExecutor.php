@@ -24,7 +24,6 @@ class VpExecutor extends View implements JsExecutorInterface
     use HookTrait;
     use StepExecutorTrait;
 
-    /** @const string */
     public const HOOK_STEP = self::class . '@onStep';
 
     /** @var VirtualPage */

@@ -25,9 +25,7 @@ class Column
     use \Atk4\Core\NameTrait;
     use \Atk4\Core\TrackableTrait;
 
-    /** @const string */
     public const HOOK_GET_HTML_TAGS = self::class . '@getHtmlTags';
-    /** @const string */
     public const HOOK_GET_HEADER_CELL_HTML = self::class . '@getHeaderCellHtml';
 
     /** @var Table Link back to the table, where column is used. */

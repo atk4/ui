@@ -16,13 +16,13 @@ class Form extends View
 {
     use \Atk4\Core\HookTrait;
 
-    /** @const string Executed when form is submitted */
+    /** Executed when form is submitted */
     public const HOOK_SUBMIT = self::class . '@submit';
-    /** @const string Executed when form is submitted */
+    /** Executed when form is submitted */
     public const HOOK_DISPLAY_ERROR = self::class . '@displayError';
-    /** @const string Executed when form is submitted */
+    /** Executed when form is submitted */
     public const HOOK_DISPLAY_SUCCESS = self::class . '@displaySuccess';
-    /** @const string Executed when self::loadPost() method is called. */
+    /** Executed when self::loadPost() method is called. */
     public const HOOK_LOAD_POST = self::class . '@loadPost';
 
     public $ui = 'form';
