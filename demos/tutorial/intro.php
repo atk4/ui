@@ -25,12 +25,12 @@ $wizard = Wizard::addTo($app);
 $wizard->addStep('User Interface', function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(
-        <<< 'EOF'
+        <<<'EOF'
             Agile Toolkit is a "Low Code Framework" written in PHP. It is designed to simplify all aspects of web application creation:
             EOF
     );
     $t->addHtml(
-        <<< 'HTML'
+        <<<'HTML'
             <ul>
                 <li>No front-end coding necessary (like JavaScript)</li>
                 <li>No Database coding required (like SQL)</li>
@@ -44,7 +44,7 @@ $wizard->addStep('User Interface', function (Wizard $page) {
     $t->addParagraph('Your ATK code instead takes a more declarative approach. You work with things like:');
 
     $t->addHtml(
-        <<< 'HTML'
+        <<<'HTML'
             <ul>
                 <li>Models and fields</li>
                 <li>Model User actions</li>
@@ -56,7 +56,7 @@ $wizard->addStep('User Interface', function (Wizard $page) {
     );
 
     $t->addParagraph(
-        <<< 'EOF'
+        <<<'EOF'
             Since 2017 our collection of built-in widgets, add-ons have grown significantly and today Agile Toolkit is a mature
             and production ready framework.
             EOF
@@ -72,7 +72,7 @@ $wizard->addStep('User Interface', function (Wizard $page) {
 $wizard->addStep('Interactivity', function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(
-        <<< 'EOF'
+        <<<'EOF'
             PHP is a server-side language. That prompted us to implement server-side UI actions. They are very easy to define -
             no need to create any routes or custom routines, simply define a PHP closure like this:
             EOF
@@ -87,7 +87,7 @@ $wizard->addStep('Interactivity', function (Wizard $page) {
 
     $t = Text::addTo($page);
     $t->addParagraph(
-        <<< 'EOF'
+        <<<'EOF'
             A component of Agile Toolkit (callback) enables seamless communication between the frontend components (which are often
             written in VueJS) and the backend. We also support seamless reloading of any UI widget:
             EOF
@@ -113,7 +113,7 @@ $wizard->addStep('Interactivity', function (Wizard $page) {
 
     $t = Text::addTo($page);
     $t->addParagraph(
-        <<< 'EOF'
+        <<<'EOF'
             This demo also shows you how to create composite views. The '$seg' above contains text, paginator, divider and some
             buttons. Interestingly, Paginator view also consists of buttons and Agile Toolkit renders everything reliably.
             EOF
@@ -123,7 +123,7 @@ $wizard->addStep('Interactivity', function (Wizard $page) {
 $wizard->addStep('Business Model', function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(
-        <<< 'EOF'
+        <<<'EOF'
             One major benefit of Server Side Rendered applications is ability to directly interact with data. In other applications
             you may need to manually process data but in Agile Toolkit we use data mapping framework.
             EOF
@@ -178,7 +178,7 @@ $wizard->addStep('Business Model', function (Wizard $page) {
 
     $t = Text::addTo($page);
     $t->addParagraph(
-        <<< 'EOF'
+        <<<'EOF'
             This code shows you a combination of 3 objects:
             EOF
     );
@@ -192,7 +192,7 @@ $wizard->addStep('Business Model', function (Wizard $page) {
             HTML
     );
     $t->addParagraph(
-        <<< 'EOF'
+        <<<'EOF'
             All three are combined by "setModel()" function and that is consistent throughout all the views.
             EOF
     );
@@ -201,7 +201,7 @@ $wizard->addStep('Business Model', function (Wizard $page) {
 $wizard->addStep('Persistence', function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(
-        <<< 'EOF'
+        <<<'EOF'
             Once your model is defined, it can be re-used later with any generic view:
             EOF
     );
@@ -226,7 +226,7 @@ $wizard->addStep('Persistence', function (Wizard $page) {
 
     $t = Text::addTo($page);
     $t->addParagraph(
-        <<< 'EOF'
+        <<<'EOF'
             Re-use of your Business Model code, generic and interactive views and principles of composition and a simple PHP
             code offers a most efficient way of constructing Web Applications.
             EOF
