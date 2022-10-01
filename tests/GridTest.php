@@ -11,7 +11,7 @@ use Atk4\Ui\Table;
 
 class GridTest extends TestCase
 {
-    use Concerns\HandlesTable;
+    use Concerns\HandlesTableTrait;
 
     /** @var MyModel */
     public $m;

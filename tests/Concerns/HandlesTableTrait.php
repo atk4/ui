@@ -6,7 +6,7 @@ namespace Atk4\Ui\Tests\Concerns;
 
 use Atk4\Ui\Table;
 
-trait HandlesTable
+trait HandlesTableTrait
 {
     /**
      * Extract only <tr> out from a Table given the <tr> data-id attribute value.

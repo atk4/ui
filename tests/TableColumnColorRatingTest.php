@@ -12,7 +12,7 @@ use Atk4\Ui\Table;
 
 class TableColumnColorRatingTest extends TestCase
 {
-    use Concerns\HandlesTable;
+    use Concerns\HandlesTableTrait;
 
     /** @var Table */
     public $table;
