@@ -40,9 +40,9 @@ class App
     public $cdn = [
         'atk' => '/public',
         'jquery' => '/public/external/jquery/dist',
-        'serialize-object' => '/public/external/form-serializer/dist',
         'fomantic-ui' => '/public/external/fomantic-ui/dist',
         'flatpickr' => '/public/external/flatpickr/dist',
+        'chart.js' => '/public/external/chart.js/dist', // for atk4/chart
     ];
 
     /** @var ExecutorFactory App wide executor factory object for Model user action. */
@@ -486,7 +486,7 @@ class App
         $this->requireCss($this->cdn['fomantic-ui'] . '/semantic.min.css');
 
         // Serialize Object
-        $this->requireJs($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
+        $this->requireJs($this->cdn['atk'] . '/external/form-serializer/dist/jquery.serialize-object.min.js');
 
         // flatpickr
         $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
