@@ -13,7 +13,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\View;
 
 /**
- * Custom Layout for a form (user-defined HTML).
+ * Custom Layout for a form.
  */
 abstract class AbstractLayout extends View
 {
@@ -108,8 +108,7 @@ abstract class AbstractLayout extends View
     }
 
     /**
-     * Return Field decorator associated with
-     * the form's field.
+     * Return Field decorator associated with the form's field.
      */
     public function getControl(string $name): Control
     {
