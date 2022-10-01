@@ -203,16 +203,6 @@ class Card extends View
     }
 
     /**
-     * Add actions from various model.
-     */
-    public function addModelsActions(array $models): void
-    {
-        foreach ($models as $model) {
-            $this->addModelActions($model);
-        }
-    }
-
-    /**
      * Add action from Model.
      */
     public function addModelActions(Model $model): void
