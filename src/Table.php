@@ -511,7 +511,7 @@ class Table extends Lister
 
         // do not bubble row click event if click stems from row content like checkboxes
         // TODO one ->on() call would be better, but we need a method to convert Closure $action into JsExpression first
-        $preventBubblingJs = new JsExpression(<<<'JS'
+        $preventBubblingJs = new JsExpression(<<<'EOF'
             let elem = event.target;
             while (elem !== null && elem !== event.currentTarget) {
                 if (elem.tagName === 'A' || elem.classList.contains('atk4-norowclick')
@@ -520,7 +520,7 @@ class Table extends Lister
                 }
                 elem = elem.parentElement;
             }
-            JS);
+            EOF);
         $this->on('click', 'tbody > tr', $preventBubblingJs, ['preventDefault' => false]);
 
         $this->on('click', 'tbody > tr', $action);

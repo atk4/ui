@@ -17,22 +17,18 @@ class PromotionText extends View
         parent::init();
 
         $t = Text::addTo($this);
-        $t->addParagraph(
-            <<<'EOF'
-                Agile Toolkit base package includes:
-                EOF
-        );
+        $t->addParagraph(<<<'EOF'
+            Agile Toolkit base package includes:
+            EOF);
 
-        $t->addHtml(
-            <<<'HTML'
-                <ul>
-                <li>Over 40 ready-to-use and nicely styled UI components</li>
-                <li>Over 10 ways to build interraction</li>
-                <li>Over 10 configurable field types, relations, aggregation and much more</li>
-                <li>Over 5 SQL and some NoSQL vendors fully supported</li>
-                </ul>
-                HTML
-        );
+        $t->addHtml(<<<'EOF'
+            <ul>
+            <li>Over 40 ready-to-use and nicely styled UI components</li>
+            <li>Over 10 ways to build interraction</li>
+            <li>Over 10 configurable field types, relations, aggregation and much more</li>
+            <li>Over 5 SQL and some NoSQL vendors fully supported</li>
+            </ul>
+            EOF);
 
         $gl = GridLayout::addTo($this, ['class.stackable divided' => true, 'columns' => 4]);
         Button::addTo($gl, ['Explore UI components', 'class.primary basic fluid' => true, 'iconRight' => 'right arrow'], ['r1c1'])
