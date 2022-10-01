@@ -8,9 +8,6 @@ use Atk4\Ui\Form;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpressionable;
 
-/**
- * Input element for a form control.
- */
 class Checkbox extends Form\Control
 {
     public $ui = 'checkbox';

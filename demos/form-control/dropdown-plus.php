@@ -48,7 +48,7 @@ $form->addControl('withModel', [
 // custom callback: alter title
 $form->addControl('withModel2', [
     Form\Control\Dropdown::class,
-    'caption' => 'Dropdown with data from Model',
+    'caption' => 'Dropdown with data from Model and custom render',
     'model' => (new Country($app->db))->setLimit(25),
     'renderRowFunction' => function (Country $row) {
         return [
@@ -61,7 +61,7 @@ $form->addControl('withModel2', [
 // custom callback: add icon
 $form->addControl('withModel3', [
     Form\Control\Dropdown::class,
-    'caption' => 'Dropdown with data from Model',
+    'caption' => 'Dropdown with data from Model and custom render with icon',
     'model' => (new File($app->db))->setLimit(25),
     'renderRowFunction' => function (File $row) {
         return [
@@ -89,7 +89,12 @@ $form->addControl('icon', [
     Form\Control\Dropdown::class,
     'caption' => 'Using icon',
     'empty' => 'Choose an icon',
-    'values' => ['tag' => ['Tag', 'icon' => 'tag'], 'globe' => ['Globe', 'icon' => 'globe'], 'registered' => ['Registered', 'icon' => 'registered'], 'file' => ['File', 'icon' => 'file']],
+    'values' => [
+        'tag' => ['Tag', 'icon' => 'tag'],
+        'globe' => ['Globe', 'icon' => 'globe'],
+        'registered' => ['Registered', 'icon' => 'registered'],
+        'file' => ['File', 'icon' => 'file'],
+    ],
 ]);
 
 $form->addControl('multi', [

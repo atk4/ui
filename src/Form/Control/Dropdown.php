@@ -8,9 +8,6 @@ use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\JsFunction;
 
-/**
- * Input element for a form control.
- */
 class Dropdown extends Input
 {
     /**
