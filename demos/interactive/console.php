@@ -122,7 +122,10 @@ $tab = $tabs->addTab('Use after form submit', function (VirtualPage $vp) {
     session_start();
 
     $form = Form::addTo($vp);
-    $form->addControls([['foo'], ['bar']]);
+    $form->addControls([
+        ['foo'],
+        ['bar'],
+    ]);
 
     $console = Console::addTo($vp, ['event' => false]);
     $console->set(function (Console $console) {

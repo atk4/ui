@@ -183,7 +183,7 @@ Similar to :php:meth:`Form::addControl()`, but allows to add multiple form contr
 
     $form = Form::addTo($app);
     $form->addControls([
-        'email',
+        ['email'],
         ['gender', [\Atk4\Ui\Form\Control\Dropdown::class, 'values' => ['Female', 'Male']]],
         ['terms', null, ['type' => 'boolean', 'caption' => 'Agree to Terms & Conditions']],
     ]);
@@ -651,10 +651,18 @@ My next example will add multiple controls on the same line::
 
     $form->setModel(new User($db), []); // will not populate any form controls automatically
 
-    $form->addControls(['name', 'surname']);
+    $form->addControls([
+        ['name'],
+        ['surname'],
+    ]);
 
     $group = $form->addGroup('Address');
-    $group->addControls(['address', 'city', 'country']); // grouped form controls, will appear on the same line
+    // grouped form controls, will appear on the same line
+    $group->addControls([
+        ['address'],
+        ['city'],
+        ['country'],
+    ]);
 
 By default grouped form controls will appear with fixed width. To distribute space you can either specify
 proportions manually::
@@ -666,7 +674,10 @@ proportions manually::
 or you can divide space equally between form controls. Header is also omitted for this group::
 
     $group = $form->addGroup(['width' => 'two']);
-    $group->addControls(['city', 'country']);
+    $group->addControls([
+        ['city'],
+        ['country'],
+    ]);
 
 You can also use in-line form groups. Controls in such a group will display header on the left and
 the error messages appearing on the right from the control::
