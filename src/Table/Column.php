@@ -33,8 +33,8 @@ class Column
     /** @var Table Link back to the table, where column is used. */
     public $table;
 
-    /** @var array Contains any custom attributes that may be applied on head, body or foot. */
-    public $attr = [];
+    /** Contains any custom attributes that may be applied on head, body or foot. */
+    public array $attr = [];
 
     /** @var string|null If set, will override column header value. */
     public $caption;

@@ -11,5 +11,5 @@ use Atk4\Ui\Table;
  */
 class Text extends Table\Column
 {
-    public $attr = ['all' => ['class' => ['atk-cell-expanded']]];
+    public array $attr = ['all' => ['class' => ['atk-cell-expanded']]];
 }

@@ -14,19 +14,16 @@ use Atk4\Ui\UserAction\ExecutorFactory;
 class View extends AbstractView implements JsExpressionable
 {
     /**
-     * When you call render() this will be populated with JavaScript
-     * chains.
+     * When you call render() this will be populated with JavaScript chains.
      *
      * @internal
      */
     protected array $_jsActions = [];
 
-    /** @var Model|null */
-    public $model;
+    public ?Model $model = null;
 
     /**
-     * Name of the region in the parent's template where this object
-     * will output itself.
+     * Name of the region in the parent's template where this object will output itself.
      */
     public ?string $region = null;
 
@@ -39,14 +36,14 @@ class View extends AbstractView implements JsExpressionable
      */
     public $ui = false;
 
-    /** @var array List of classes that needs to be added. */
-    public $class = [];
+    /** List of classes that needs to be added. */
+    public array $class = [];
 
-    /** @var array List of custom CSS attributes. */
-    public $style = [];
+    /** List of custom CSS attributes. */
+    public array $style = [];
 
-    /** @var array List of custom attributes. */
-    public $attr = [];
+    /** List of custom attributes. */
+    public array $attr = [];
 
     /**
      * Template object, that, for most Views will be rendered to
@@ -74,7 +71,7 @@ class View extends AbstractView implements JsExpressionable
     /** @var string Change this if you want to substitute default "div" for something else. */
     public $element;
 
-    /** @var ExecutorFactory|null Seed class name */
+    /** @var ExecutorFactory|null */
     protected $executorFactory;
 
     // {{{ Setting Things up
