@@ -11,12 +11,12 @@
 !/@shopify/draggable/LICENS*
 !/@shopify/draggable/lib/
 /@shopify/draggable/lib/*
-!/@shopify/draggable/lib/draggable.bundle.js
+!/@shopify/draggable/lib/*.bundle.js
 
 !/chart.js/LICENS*
 !/chart.js/dist/
 /chart.js/dist/*
-!/chart.js/dist/chart.min.js
+!/chart.js/dist/*.min.js
 
 !/flatpickr/LICENS*
 !/flatpickr/dist/
