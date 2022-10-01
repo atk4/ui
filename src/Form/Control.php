@@ -168,12 +168,12 @@ class Control extends View
      *
      * $field->jsInput(true)->val(123);
      *
-     * @param string|bool|null $when
+     * @param bool|string      $when
      * @param JsExpressionable $action
      *
      * @return Jquery
      */
-    public function jsInput($when = null, $action = null)
+    public function jsInput($when = false, $action = null)
     {
         return $this->js($when, $action, '#' . $this->name . '_input');
     }
