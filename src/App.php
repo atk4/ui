@@ -40,8 +40,8 @@ class App
     public $cdn = [
         'atk' => '/public',
         'jquery' => '/public/external/jquery/dist',
-        'serialize-object' => '/public/external/form-serializer/dist',
         'fomantic-ui' => '/public/external/fomantic-ui/dist',
+        'serialize-object' => '/public/external/form-serializer/dist',
         'flatpickr' => '/public/external/flatpickr/dist',
     ];
 
