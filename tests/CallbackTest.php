@@ -45,6 +45,8 @@ class CallbackTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->app = new AppMock(['alwaysRun' => false, 'catchExceptions' => false]);
         $this->app->initLayout([Layout\Centered::class]);
     }
@@ -53,6 +55,8 @@ class CallbackTest extends TestCase
     {
         unset($_GET);
         unset($_POST);
+
+        parent::tearDown();
     }
 
     /**

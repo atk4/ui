@@ -32,6 +32,8 @@ class ForFieldUiTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $p = new Persistence\Array_();
         $this->m = new MyTestModel($p);
     }

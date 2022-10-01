@@ -932,7 +932,7 @@ class App
     }
 
     /**
-     * Encodes string - removes HTML special chars.
+     * Encodes string - convert special chars to HTML entities.
      */
     public function encodeHtmlAttribute(string $val): string
     {
@@ -940,7 +940,7 @@ class App
     }
 
     /**
-     * Encodes string - removes HTML entities.
+     * Encodes string - convert all applicable chars to HTML entities.
      */
     public function encodeHtml(string $val): string
     {

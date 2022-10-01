@@ -18,6 +18,8 @@ class TableColumnLinkTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $arr = [
             'table' => [
                 1 => ['id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'salary' => -123],
