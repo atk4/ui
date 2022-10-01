@@ -382,7 +382,7 @@ class Form extends View
      *
      * @param string $name Name of control
      *
-     * @return JsChain
+     * @return Jquery
      */
     public function jsInput($name)
     {
