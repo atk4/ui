@@ -8,6 +8,7 @@ use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 use Atk4\Ui\App;
 use Atk4\Ui\Callback;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Mvorisek\Atk4\Hintable\Phpstan\PhpstanUtil;
 
@@ -140,7 +141,7 @@ class FormTest extends TestCase
         static::assertGreaterThan(0, $n);
         foreach ($matchesAll as $matches) {
             if ($matches[1] === $field) {
-                static::fail('Form control ' . $field . ' unexpected error: ' . $matches[2]);
+                throw new Exception('Form control ' . $field . ' unexpected error: ' . $matches[2]);
             }
         }
     }
