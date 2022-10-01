@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui\Tests\Concerns;
+namespace Atk4\Ui\Tests;
 
 use Atk4\Ui\Table;
 
-trait HandlesTableTrait
+trait TableTestTrait
 {
     /**
      * Extract only <tr> out from a Table given the <tr> data-id attribute value.
