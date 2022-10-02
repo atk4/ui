@@ -456,9 +456,9 @@ class Form extends View
         'boolean' => [Control\Checkbox::class],
         'text' => [Control\Textarea::class],
         'string' => [Control\Line::class],
-        'datetime' => [Control\Calendar::class, ['type' => 'datetime']],
-        'date' => [Control\Calendar::class, ['type' => 'date']],
-        'time' => [Control\Calendar::class, ['type' => 'time']],
+        'datetime' => [Control\Calendar::class, 'type' => 'datetime'],
+        'date' => [Control\Calendar::class, 'type' => 'date'],
+        'time' => [Control\Calendar::class, 'type' => 'time'],
         'atk4_money' => [Control\Money::class],
     ];
 
