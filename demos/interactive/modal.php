@@ -156,7 +156,6 @@ Header::addTo($app, ['Multiple page modal']);
 
 // Add modal to layout.
 $stepModal = Modal::addTo($app, ['title' => 'Multi step actions']);
-$stepModal->setOption('observeChanges', true);
 
 // Add buttons to modal for next and previous actions.
 $action = new View(['ui' => 'buttons']);

@@ -47,7 +47,11 @@ class Modal extends View
     /** @var array */
     public $args = [];
     /** @var array */
-    public $options = [];
+    public $options = [
+        // any change in modal DOM should automatically refresh cached positions
+        // allow modal window to add scrolling when content is added after modal is created
+        'observeChanges' => true,
+    ];
 
     /** @var string Currently only "json" response type is supported. */
     public $type = 'json';
@@ -179,19 +183,6 @@ class Modal extends View
         } else {
             $this->options['modal_option'] = $options;
         }
-
-        return $this;
-    }
-
-    /**
-     * Whether any change in modal DOM should automatically refresh cached positions.
-     * Allow modal window to add scrolling when adding content dynamically after modal creation.
-     *
-     * @return $this
-     */
-    public function observeChanges()
-    {
-        $this->setOptions(['observeChanges' => true]);
 
         return $this;
     }
