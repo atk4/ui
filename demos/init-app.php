@@ -80,10 +80,10 @@ try {
 $demosUrl = $rootUrl . 'demos/';
 
 // allow custom layout override
-$app->initLayout([!isset($_GET['layout']) ? Layout\Maestro::class : $app->stickyGet('layout')]);
+$app->initLayout([!isset($_GET['layout']) ? Layout::class : $app->stickyGet('layout')]);
 
 $layout = $app->layout;
-if ($layout instanceof Layout\NavigableInterface) {
+if (false && $layout instanceof Layout\NavigableInterface) { // @phpstan-ignore-line
     $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], [$demosUrl . 'index']);
 
     $path = $demosUrl . 'layout/';

@@ -479,32 +479,18 @@ class App
     public function initIncludes(): void
     {
         // jQuery
-        $this->requireJs($this->cdn['jquery'] . '/jquery.min.js');
+        $this->requireJs($this->cdn['jquery'] . '/jquery.js');
 
         // Fomantic-UI
-        $this->requireJs($this->cdn['fomantic-ui'] . '/semantic.min.js');
-        $this->requireCss($this->cdn['fomantic-ui'] . '/semantic.min.css');
+        $this->requireJs($this->cdn['fomantic-ui'] . '/semantic.js');
+        $this->requireCss($this->cdn['fomantic-ui'] . '/semantic.css');
 
         // Serialize Object
         $this->requireJs($this->cdn['atk'] . '/external/form-serializer/dist/jquery.serialize-object.min.js');
 
-        // flatpickr
-        $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
-        $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');
-        if ($this->uiPersistence->locale !== 'en') {
-            $this->requireJs($this->cdn['flatpickr'] . '/l10n/' . $this->uiPersistence->locale . '.js');
-            $this->html->js(true, new JsExpression('flatpickr.localize(window.flatpickr.l10ns.' . $this->uiPersistence->locale . ')'));
-        }
-
         // Agile UI
         $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
         $this->requireCss($this->cdn['atk'] . '/agileui.min.css');
-
-        // Set js bundle dynamic loading path.
-        $this->html->template->tryDangerouslySetHtml(
-            'InitJsBundle',
-            (new JsExpression('window.__atkBundlePublicPath = [];', [$this->cdn['atk']]))->jsRender()
-        );
     }
 
     /**

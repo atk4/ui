@@ -135,9 +135,6 @@ class Form extends View
         // where to add your fields.
         $this->initLayout();
 
-        // set css loader for this form
-        $this->setApiConfig(['stateContext' => '#' . $this->name]);
-
         $this->cb = JsCallback::addTo($this, [], [['desired_name' => 'submit']]);
     }
 
@@ -162,15 +159,11 @@ class Form extends View
                 ->addMoreInfo('layout', $this->layout);
         }
 
-        // allow to submit by pressing an enter key when child control is focused
-        $this->on('submit', new JsExpression('if (event.target === this) { $([name]).form("submit"); }', ['name' => '#' . $this->formElement->name]));
-
         // Add save button in layout
         if ($this->buttonSave) {
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
             $this->buttonSave->on('click', $this->js(false, null, $this->formElement)->form('submit'));
-            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13){ $([name]).form("submit"); }', ['name' => '#' . $this->formElement->name]));
         }
     }
 
@@ -552,8 +545,6 @@ class Form extends View
 
         $this->js(true, null, $this->formElement)
             ->api(array_merge(['url' => $this->cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig));
-
-        $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new JsExpression('$(this).attr("name")')));
 
         if (!$this->canLeave) {
             $this->js(true, (new JsChain('atk.formService'))->preventFormLeave($this->name));

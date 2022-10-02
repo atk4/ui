@@ -242,8 +242,8 @@ jobs:
         include:
           - php: 'latest'
             type: 'Firefox'
-          - php: 'latest'
-            type: 'Chrome Slow'
+          #- php: 'latest'
+          #  type: 'Chrome Slow'
     env:
       LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == '8.0' && matrix.type == 'Chrome' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
     services:
