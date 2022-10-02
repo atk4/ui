@@ -313,11 +313,7 @@ class Modal extends View
         }
 
         // call modal creation first
-        if (isset($this->options['modal_option'])) {
-            $this->js(true)->modal($this->options['modal_option']);
-        } else {
-            $this->js(true)->modal();
-        }
+        $this->js(true)->modal($this->options['modal_option']);
 
         // add setting if available.
         if (isset($this->options['setting'])) {
