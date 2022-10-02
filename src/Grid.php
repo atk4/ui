@@ -440,16 +440,6 @@ class Grid extends View
     }
 
     /**
-     * Add action menu item using an array.
-     */
-    public function addActionMenuItems(array $actions = []): void
-    {
-        foreach ($actions as $action) {
-            $this->addActionMenuItem($action);
-        }
-    }
-
-    /**
      * Add action menu items using Model.
      * You may specify the scope of actions to be added.
      *

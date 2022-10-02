@@ -8,10 +8,10 @@ use Atk4\Ui\Button;
 use Atk4\Ui\CallbackLater;
 use Atk4\Ui\Modal;
 
+// test Exception and Error throw
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
-
-// JUST TO TEST Exceptions and Error throws
 
 $cb = CallbackLater::addTo($app);
 $cb->setUrlTrigger('m_cb');

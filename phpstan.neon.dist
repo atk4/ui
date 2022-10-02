@@ -82,12 +82,6 @@ parameters:
             path: 'demos/form/form-section.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::addTab\(\)\.$~'
         -
-            path: 'demos/form/form.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::val\(\)\.$~'
-        -
-            path: 'demos/form/form.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::checkbox\(\)\.$~'
-        -
             path: 'demos/form/form2.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::addAction\(\)\.$~'
         -
@@ -311,7 +305,7 @@ parameters:
             message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) should return Atk4\\Ui\\Form\\Control but returns Atk4\\Ui\\View\.$~'
         -
             path: 'src/Form/Layout.php'
-            message: '~^Method Atk4\\Ui\\Form\\Layout::addSubLayout\(\) should return static\(Atk4\\Ui\\Form\\Layout\) but returns Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Method Atk4\\Ui\\Form\\Layout::addSubLayout\(\) should return Atk4\\Ui\\Form\\Layout but returns Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Form/Layout/Custom.php'
             message: '~^Method Atk4\\Ui\\Form\\Layout\\Custom::addButton\(\) should return Atk4\\Ui\\Button but returns Atk4\\Ui\\AbstractView\.$~'

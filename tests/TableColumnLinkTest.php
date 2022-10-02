@@ -11,13 +11,15 @@ use Atk4\Ui\Table;
 
 class TableColumnLinkTest extends TestCase
 {
-    use Concerns\HandlesTable;
+    use TableTestTrait;
 
     /** @var Table */
     public $table;
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $arr = [
             'table' => [
                 1 => ['id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'salary' => -123],

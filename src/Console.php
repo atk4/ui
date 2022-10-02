@@ -16,7 +16,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     public $ui = 'inverted black segment';
 
     /**
-     * Specify which event will trigger this console. Set to 'false'
+     * Specify which event will trigger this console. Set to false
      * to disable automatic triggering if you need to trigger it
      * manually.
      *
@@ -80,9 +80,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             throw new Exception('Please specify the $callback argument');
         }
 
-        if ($event !== null) {
-            $this->event = $event;
-        }
+        $this->event = $event ?? false;
 
         if (!$this->sse) {
             $this->sse = JsSse::addTo($this);
@@ -143,7 +141,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
     private function escapeOutputHtml(string $message): string
     {
-        $res = htmlspecialchars($message);
+        $res = $this->getApp()->encodeHtmlAttribute($message);
 
         // fix new lines for display and copy paste, testcase:
         // $genFx = function (array $values, int $maxLength, array $prev = null) use (&$genFx) {

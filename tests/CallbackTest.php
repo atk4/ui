@@ -12,22 +12,11 @@ use Atk4\Ui\CallbackLater;
 use Atk4\Ui\Layout;
 use Atk4\Ui\View;
 use Atk4\Ui\VirtualPage;
-use Mvorisek\Atk4\Hintable\Phpstan\PhpstanUtil;
 
 class AppMock extends App
 {
-    /** @var bool */
-    public $terminated = false;
-
-    public function terminate($output = '', array $headers = []): void
-    {
-        $this->terminated = true;
-
-        PhpstanUtil::fakeNeverReturn();
-    }
-
     /**
-     * Overrided to allow multiple App::run() calls, prevent sending headers when headers are already sent.
+     * Overriden to allow multiple App::run() calls, prevent sending headers when headers are already sent.
      */
     protected function outputResponse(string $data, array $headers): void
     {
@@ -45,6 +34,8 @@ class CallbackTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->app = new AppMock(['alwaysRun' => false, 'catchExceptions' => false]);
         $this->app->initLayout([Layout\Centered::class]);
     }
@@ -53,6 +44,8 @@ class CallbackTest extends TestCase
     {
         unset($_GET);
         unset($_POST);
+
+        parent::tearDown();
     }
 
     /**

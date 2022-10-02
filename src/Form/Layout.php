@@ -111,7 +111,7 @@ class Layout extends AbstractLayout
      * @param mixed $seed
      * @param bool  $addDivider Should we add divider after this section
      *
-     * @return static
+     * @return self
      */
     public function addSubLayout($seed = [self::class], $addDivider = true)
     {

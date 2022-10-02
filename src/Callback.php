@@ -24,10 +24,7 @@ use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
  */
 class Callback extends AbstractView
 {
-    /** @const string */
     public const URL_QUERY_TRIGGER_PREFIX = '__atk_cb_';
-
-    /** @const string */
     public const URL_QUERY_TARGET = '__atk_cbtarget';
 
     /** @var string Specify a custom GET trigger. */

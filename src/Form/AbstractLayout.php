@@ -13,7 +13,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\View;
 
 /**
- * Custom Layout for a form (user-defined HTML).
+ * Custom Layout for a form.
  */
 abstract class AbstractLayout extends View
 {
@@ -65,20 +65,6 @@ abstract class AbstractLayout extends View
     }
 
     /**
-     * @param array<int, array> $controls
-     *
-     * @return $this
-     */
-    public function addControls(array $controls)
-    {
-        foreach ($controls as $control) {
-            $this->addControl(...$control);
-        }
-
-        return $this;
-    }
-
-    /**
      * Returns array of names of fields to automatically include them in form.
      * This includes all editable or visible fields of the model.
      *
@@ -104,24 +90,25 @@ abstract class AbstractLayout extends View
             $fields = $this->getModelFields($model);
         }
 
-        // prepare array of controls - check if fields are editable or read-only/disabled
-        $controls = [];
+        // add controls - check if fields are editable or read-only/disabled
         foreach ($fields as $fieldName) {
             $field = $model->getField($fieldName);
 
+            $controlSeed = null;
             if ($field->isEditable()) {
-                $controls[] = [$field->shortName];
+                $controlSeed = [];
             } elseif ($field->isVisible()) {
-                $controls[] = [$field->shortName, ['readOnly' => true]];
+                $controlSeed = ['readOnly' => true];
+            }
+
+            if ($controlSeed !== null) {
+                $this->addControl($field->shortName, $controlSeed);
             }
         }
-
-        $this->addControls($controls);
     }
 
     /**
-     * Return Field decorator associated with
-     * the form's field.
+     * Return Field decorator associated with the form's field.
      */
     public function getControl(string $name): Control
     {

@@ -42,7 +42,7 @@ abstract class AbstractView
      *
      * @var array<int, array{self, array}>
      */
-    protected $_addLater = [];
+    protected array $_addLater = [];
 
     /** Will be set to true after rendered. This is so that we don't render view twice. */
     protected bool $_rendered = false;

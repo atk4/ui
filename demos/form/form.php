@@ -200,7 +200,7 @@ $form->onSubmit(function (Form $form) {
 
     return [
         $form->jsInput('email')->val('john@gmail.com'),
-        $form->jsControl('is_accept_terms')->checkbox('set checked'),
+        $form->getControl('is_accept_terms')->js()->checkbox('set checked'),
     ];
 });
 

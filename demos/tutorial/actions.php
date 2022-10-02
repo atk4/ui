@@ -25,23 +25,19 @@ $wizard->addStep('Define User Action', function (Wizard $page) {
     Header::addTo($page, ['What are User Actions?']);
 
     $t = Text::addTo($page);
-    $t->addParagraph(
-        <<< 'EOF'
-            Since the early version ATK UI was about building generic UI capable of automatically read information about
-            model Fields and visualising them correctly. Version 2.0 introduces support for "Actions" which can be declared
-            in Data layer and can use generic UI for visualising and triggering. Models of Agile Data has always supported 3
-            basic actions: "save" (for new and existing records) and "delete". Historically any other interaction required
-            tinkering with UI layer. Now ATK implements a generic support for arbitrary actions and then re-implements
-            "save", "delete" and "add" on top.
-            EOF
-    );
+    $t->addParagraph(<<<'EOF'
+        Since the early version ATK UI was about building generic UI capable of automatically read information about
+        model Fields and visualising them correctly. Version 2.0 introduces support for "Actions" which can be declared
+        in Data layer and can use generic UI for visualising and triggering. Models of Agile Data has always supported 3
+        basic actions: "save" (for new and existing records) and "delete". Historically any other interaction required
+        tinkering with UI layer. Now ATK implements a generic support for arbitrary actions and then re-implements
+        "save", "delete" and "add" on top.
+        EOF);
 
-    $t->addParagraph(
-        <<< 'EOF'
-            This enables developer to easily add more actions in the Data layers and have the rest of ATK recognise
-            and respect those actions. Actions can be added into the model just like you are adding fields:
-            EOF
-    );
+    $t->addParagraph(<<<'EOF'
+        This enables developer to easily add more actions in the Data layers and have the rest of ATK recognise
+        and respect those actions. Actions can be added into the model just like you are adding fields:
+        EOF);
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $country = new Country($owner->getApp()->db);
@@ -50,21 +46,17 @@ $wizard->addStep('Define User Action', function (Wizard $page) {
     });
 
     $t = Text::addTo($page);
-    $t->addParagraph(
-        <<< 'EOF'
-            Once defied - actions will be visualised in the Form, Grid, Crud and CardDeck. Additionally add-ons will recognise
-            your actions - for example 'Login' add-on introduces ACL system capable of enabling/disabling fields or actions
-            on per-user basis.
-            EOF
-    );
+    $t->addParagraph(<<<'EOF'
+        Once defied - actions will be visualised in the Form, Grid, Crud and CardDeck. Additionally add-ons will recognise
+        your actions - for example 'Login' add-on introduces ACL system capable of enabling/disabling fields or actions
+        on per-user basis.
+        EOF);
 
-    $t->addParagraph(
-        <<< 'EOF'
-            Any actions you define will automatically appear in the UI. This is consistent with your field definitions. You can
-            also "disable" or mark actions as "system". When action is executed, the response will appear to the user as a
-            toast message, but this can also be customised.
-            EOF
-    );
+    $t->addParagraph(<<<'EOF'
+        Any actions you define will automatically appear in the UI. This is consistent with your field definitions. You can
+        also "disable" or mark actions as "system". When action is executed, the response will appear to the user as a
+        toast message, but this can also be customised.
+        EOF);
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $country = new Country($owner->getApp()->db);
@@ -82,13 +74,11 @@ $wizard->addStep('Define User Action', function (Wizard $page) {
 
 $wizard->addStep('UI Integration', function (Wizard $page) {
     $t = Text::addTo($page);
-    $t->addParagraph(
-        <<< 'EOF'
-            Agile UI introduces a new set of views called "User Action Executors". Their job is to recognise all that meta-information
-            that you have specified for the user action and requesting it from the user. "edit" user action is defined for models by default
-            and you can trigger it on button-click with a very simple code:
-            EOF
-    );
+    $t->addParagraph(<<<'EOF'
+        Agile UI introduces a new set of views called "User Action Executors". Their job is to recognise all that meta-information
+        that you have specified for the user action and requesting it from the user. "edit" user action is defined for models by default
+        and you can trigger it on button-click with a very simple code:
+        EOF);
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $country = new Country($owner->getApp()->db);
@@ -99,12 +89,10 @@ $wizard->addStep('UI Integration', function (Wizard $page) {
     });
 
     $t = Text::addTo($page);
-    $t->addParagraph(
-        <<< 'EOF'
-            It is not only the button, but any view can have "User Action" passed as a second step of the on() call. Here the user action
-            is executed when you click on "World" menu item:
-            EOF
-    );
+    $t->addParagraph(<<<'EOF'
+        It is not only the button, but any view can have "User Action" passed as a second step of the on() call. Here the user action
+        is executed when you click on "World" menu item:
+        EOF);
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $country = new Country($owner->getApp()->db);
@@ -118,13 +106,11 @@ $wizard->addStep('UI Integration', function (Wizard $page) {
 
 $wizard->addStep('Arguments', function (Wizard $page) {
     $t = Text::addTo($page);
-    $t->addParagraph(
-        <<< 'EOF'
-            Next demo defines an user action that requires arguments. You can specify arguments when the user action is invoked, but if not
-            defined - user will be asked to supply an argument. User action will automatically validate argument types and it uses
-            same type system as fields.
-            EOF
-    );
+    $t->addParagraph(<<<'EOF'
+        Next demo defines an user action that requires arguments. You can specify arguments when the user action is invoked, but if not
+        defined - user will be asked to supply an argument. User action will automatically validate argument types and it uses
+        same type system as fields.
+        EOF);
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $model = new Model($owner->getApp()->db, ['table' => 'test']);
@@ -188,13 +174,11 @@ $wizard->addStep('More Ways', function (Wizard $page) {
 
 $wizard->addStep('Crud integration', function (Wizard $page) {
     $t = Text::addTo($page);
-    $t->addParagraph(
-        <<< 'EOF'
-            Compared to 1.x versions Crud implementation has became much more lightweight, however you retain all the same
-            functionality and more. Next example shows how you can disable user action (add) entirely, or on per-row basis (delete)
-            and how you could add your own action with a custom trigger button and even a preview.
-            EOF
-    );
+    $t->addParagraph(<<<'EOF'
+        Compared to 1.x versions Crud implementation has became much more lightweight, however you retain all the same
+        functionality and more. Next example shows how you can disable user action (add) entirely, or on per-row basis (delete)
+        and how you could add your own action with a custom trigger button and even a preview.
+        EOF);
 
     Demo::addTo($page)->setCodeAndCall(function (View $owner) {
         $country = new Country($owner->getApp()->db);

@@ -18,7 +18,6 @@ class HtmlTemplate
     use AppScopeTrait;
     use WarnDynamicPropertyTrait;
 
-    /** @const string */
     public const TOP_TAG = '_top';
 
     /** @var array<string, string|false> */

@@ -68,7 +68,7 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsRefresh($when = null)
+    public function jsRefresh($when = false)
     {
         return $this->jsBehavior('refresh', [], $when);
     }
@@ -79,7 +79,7 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsOpen($section, $when = null)
+    public function jsOpen($section, $when = false)
     {
         return $this->jsBehavior('open', [$this->getSectionIdx($section)], $when);
     }
@@ -89,7 +89,7 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsCloseOthers($when = null)
+    public function jsCloseOthers($when = false)
     {
         return $this->jsBehavior('close others', [], $when);
     }
@@ -100,7 +100,7 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsClose($section, $when = null)
+    public function jsClose($section, $when = false)
     {
         return $this->jsBehavior('close', [$this->getSectionIdx($section)], $when);
     }
@@ -111,7 +111,7 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsToggle($section, $when = null)
+    public function jsToggle($section, $when = false)
     {
         return $this->jsBehavior('toggle', [$this->getSectionIdx($section)], $when);
     }
@@ -127,7 +127,7 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsBehavior($behavior, array $args, $when = null)
+    public function jsBehavior($behavior, array $args, $when = false)
     {
         return $this->js($when)->accordion($behavior, ...$args);
     }

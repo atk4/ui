@@ -8,9 +8,6 @@ use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsExpressionable;
 use Atk4\Ui\JsFunction;
 
-/**
- * Input element for a form control.
- */
 class Dropdown extends Input
 {
     /**
@@ -315,8 +312,8 @@ class Dropdown extends Input
      * Used when a custom callback is defined for row rendering. Sets
      * values to row template and appends it to main template.
      *
-     * @param mixed          $row
-     * @param int|string|int $key
+     * @param mixed      $row
+     * @param int|string $key
      */
     protected function _addCallBackRow($row, $key = null): void
     {

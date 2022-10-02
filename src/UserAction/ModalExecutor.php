@@ -35,7 +35,6 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     use HookTrait;
     use StepExecutorTrait;
 
-    /** @const string */
     public const HOOK_STEP = self::class . '@onStep';
 
     protected function init(): void

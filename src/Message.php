@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 /**
- * Class implements Messages (a visual box).
- *
- * Specify type = info | warning | error | success
- *
  * Message::addTo($page, [
- *  'type' => 'error',
- *  'text' => 'Unable to save your document',
- *  ])
- *  ->text->addParagraph('')
+ *     'type' => 'error',
+ *     'text' => 'Unable to save your document',
+ * ])
+ * ->text->addParagraph('').
  */
 class Message extends View
 {

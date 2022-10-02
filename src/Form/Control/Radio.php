@@ -8,9 +8,6 @@ use Atk4\Ui\Form;
 use Atk4\Ui\JsExpression;
 use Atk4\Ui\Lister;
 
-/**
- * Input element for a form control.
- */
 class Radio extends Form\Control
 {
     public $ui = false;

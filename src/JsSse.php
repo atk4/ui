@@ -13,8 +13,8 @@ class JsSse extends JsCallback
 {
     use HookTrait;
 
-    /** @const string Executed when user aborted, or disconnect browser, when using this SSE. */
-    public const HOOK_ABORTED = self::class . '@connection_aborted';
+    /** Executed when user aborted, or disconnect browser, when using this SSE. */
+    public const HOOK_ABORTED = self::class . '@connectionAborted';
 
     /** @var bool Allows us to fall-back to standard functionality of JsCallback if browser does not support SSE. */
     public $browserSupport = false;

@@ -24,9 +24,7 @@ use Psr\Http\Message\ResponseInterface;
  */
 class DemosTest extends TestCase
 {
-    /** @const string */
     protected const ROOT_DIR = __DIR__ . '/..';
-    /** @const string */
     protected const DEMOS_DIR = self::ROOT_DIR . '/demos';
 
     private static array $_serverSuperglobalBackup;
@@ -37,16 +35,22 @@ class DemosTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
+        parent::setUpBeforeClass();
+
         self::$_serverSuperglobalBackup = $_SERVER;
     }
 
     public static function tearDownAfterClass(): void
     {
         $_SERVER = self::$_serverSuperglobalBackup;
+
+        parent::tearDownAfterClass();
     }
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         if (self::$_db === null) {
             // load demos config
             $initVars = get_defined_vars();

@@ -35,23 +35,18 @@ class App
         init as private _init;
     }
 
-    /** @const string */
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
-    /** @const string */
     public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
-    /** @const string not used, make it public if needed or drop it */
-    private const HOOK_BEFORE_OUTPUT = self::class . '@beforeOutput';
 
-    /** @const string */
     protected const HEADER_STATUS_CODE = 'atk4-status-code';
 
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
         'atk' => '/public',
         'jquery' => '/public/external/jquery/dist',
-        'serialize-object' => '/public/external/form-serializer/dist',
         'fomantic-ui' => '/public/external/fomantic-ui/dist',
         'flatpickr' => '/public/external/flatpickr/dist',
+        'chart.js' => '/public/external/chart.js/dist', // for atk4/chart
     ];
 
     /** @var ExecutorFactory App wide executor factory object for Model user action. */
@@ -498,7 +493,7 @@ class App
         $this->requireCss($this->cdn['fomantic-ui'] . '/semantic.min.css');
 
         // Serialize Object
-        $this->requireJs($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
+        $this->requireJs($this->cdn['atk'] . '/external/form-serializer/dist/jquery.serialize-object.min.js');
 
         // flatpickr
         $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
@@ -575,7 +570,6 @@ class App
             $isExitException = true;
         }
 
-        $this->hook(self::HOOK_BEFORE_OUTPUT);
         if (!$this->exitCalled) { // output already sent by terminate()
             if ($this->isJsUrlRequest()) {
                 $this->outputResponseJson($output);
@@ -929,7 +923,7 @@ class App
     }
 
     /**
-     * Encodes string - removes HTML special chars.
+     * Encodes string - convert special chars to HTML entities.
      */
     public function encodeHtmlAttribute(string $val): string
     {
@@ -937,7 +931,7 @@ class App
     }
 
     /**
-     * Encodes string - removes HTML entities.
+     * Encodes string - convert all applicable chars to HTML entities.
      */
     public function encodeHtml(string $val): string
     {

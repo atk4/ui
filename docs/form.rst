@@ -177,17 +177,6 @@ Form control does not have to be added directly into the form. You can use a sep
     $myview = View::addTo($form, ['defaultTemplate' => './mytemplate.html']);
     Form\Control\Dropdown::addTo($myview, ['form' => $form]);
 
-.. php:method:: addControls($fields)
-
-Similar to :php:meth:`Form::addControl()`, but allows to add multiple form controls in one method call::
-
-    $form = Form::addTo($app);
-    $form->addControls([
-        'email',
-        ['gender', [\Atk4\Ui\Form\Control\Dropdown::class, 'values' => ['Female', 'Male']]],
-        ['terms', null, ['type' => 'boolean', 'caption' => 'Agree to Terms & Conditions']],
-    ]);
-
 Adding new controls
 -------------------
 
@@ -431,7 +420,7 @@ it's always nicer to load values for the database. Given a ``User`` model this i
 you can create a form to change profile of a currently logged user::
 
     $user = new User($db);
-    $user->getControl('password')->neverPersist = true; // ignore password field
+    $user->getField('password')->neverPersist = true; // ignore password field
     $user = $user->load($current_user);
 
     // Display all fields (except password) and values
@@ -651,10 +640,14 @@ My next example will add multiple controls on the same line::
 
     $form->setModel(new User($db), []); // will not populate any form controls automatically
 
-    $form->addControls(['name', 'surname']);
+    $group = $form->addGroup('Customer');
+    $group->addControl('name');
+    $group->addControl('surname');
 
     $group = $form->addGroup('Address');
-    $group->addControls(['address', 'city', 'country']); // grouped form controls, will appear on the same line
+    $group->addControl('street');
+    $group->addControl('city');
+    $group->addControl('country');
 
 By default grouped form controls will appear with fixed width. To distribute space you can either specify
 proportions manually::
@@ -666,7 +659,8 @@ proportions manually::
 or you can divide space equally between form controls. Header is also omitted for this group::
 
     $group = $form->addGroup(['width' => 'two']);
-    $group->addControls(['city', 'country']);
+    $group->addControl('city');
+    $group->addControl('country');
 
 You can also use in-line form groups. Controls in such a group will display header on the left and
 the error messages appearing on the right from the control::
