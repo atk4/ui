@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 /**
- * Class implements Headers.
- *
  * Set size to 1, 2, 3, 4 or 5 if you are looking for Page Header. The size is not affected by
  * header placement on the page. Specify number to constructor like this:
  *

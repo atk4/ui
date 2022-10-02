@@ -10,7 +10,7 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Table;
 
 /**
- * Class ColorRating can be defined like this:
+ * Example seed:
  * [ColorRating::class, [
  *     'min' => 1,
  *     'max' => 3,

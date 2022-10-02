@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 /**
- * Class implements Loader, which is a View that will dynamically render it's content.
+ * Dynamically render it's content.
  * To provide content for a loader, use set() callback.
  */
 class Loader extends View
