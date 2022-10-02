@@ -431,10 +431,6 @@ There's a bunch of settings to influence Dropdown behaviour.
 
 Define a string for the empty option (no selection). Standard is non-breaking space symbol.
 
-.. php:attr:: isValueRequired
-
-Whether or not this dropdown requires a value. When set to true, $empty is shown on page load but is not selectable once a value has been chosen.
-
 .. php:attr:: dropdownOptions
 
 Here you can pass an array of Fomantic-UI dropdown options (https://fomantic-ui.com/modules/dropdown.html#/settings) e.g. ::
