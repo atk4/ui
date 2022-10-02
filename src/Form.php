@@ -346,12 +346,12 @@ class Form extends View
     /**
      * Add form control into current layout. If no layout, create one. If no model, create blank one.
      *
-     * @param array|Control $control
-     * @param array|Field   $field
+     * @param array<mixed>|Control $control
+     * @param array<mixed>         $fieldSeed
      */
-    public function addControl(string $name, $control = [], $field = []): Control
+    public function addControl(string $name, $control = [], array $fieldSeed = []): Control
     {
-        return $this->layout->addControl($name, $control, $field);
+        return $this->layout->addControl($name, $control, $fieldSeed);
     }
 
     /**
@@ -403,7 +403,7 @@ class Form extends View
      * 3. $f->type is converted into seed and evaluated
      * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
      *
-     * @param array $ControlSeed
+     * @param array<string, mixed> $ControlSeed
      */
     public function controlFactory(Field $field, $ControlSeed = []): Control
     {
