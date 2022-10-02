@@ -91,7 +91,8 @@ class Lookup extends Input
      *
      * For example, using this setting will automatically submit
      * form when field value is changes.
-     * $form->addControl('field', [Form\Control\Lookup::class, 'settings' => ['allowReselection' => true,
+     * $form->addControl('field', [Form\Control\Lookup::class, 'settings' => [
+     *     'allowReselection' => true,
      *     'selectOnKeydown' => false,
      *     'onChange' => new JsExpression('function(value, t, c) {
      *         if ($(this).data("value") !== value) {
