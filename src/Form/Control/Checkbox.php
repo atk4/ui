@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsExpressionable;
@@ -36,6 +37,12 @@ class Checkbox extends Form\Control
 
     protected function init(): void
     {
+        // TODO exception should be generalized for type acceptable for any form control
+        if ($this->entityField && $this->entityField->getField()->type !== 'boolean') {
+            throw (new Exception('Checkbox form control requires field with boolean type'))
+                ->addMoreInfo('type', $this->entityField->getField()->type);
+        }
+
         parent::init();
 
         // checkboxes are annoying because they don't send value when they are
