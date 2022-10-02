@@ -48,7 +48,7 @@ abstract class AbstractLayout extends View
         if (is_a($controlClass, Control\Checkbox::class, true)) {
             $field['type'] = 'boolean';
         } elseif (is_a($controlClass, Control\Calendar::class, true)) {
-            $calendarType = is_object($control) ? $control->type : ($control['type'] ?? null);
+            $calendarType = $control instanceof Control\Calendar ? $control->type : ($control['type'] ?? null);
             if ($calendarType !== null) {
                 $field['type'] = $calendarType;
             }
