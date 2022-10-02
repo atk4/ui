@@ -9,7 +9,7 @@ namespace Atk4\Ui;
  *     'type' => 'error',
  *     'text' => 'Unable to save your document',
  * ])
- * ->text->addParagraph('')
+ * ->text->addParagraph('').
  */
 class Message extends View
 {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 /**
- * $bar = ProgressBar::addTo($app, [10, 'label' => 'Processing files']);
+ * $bar = ProgressBar::addTo($app, [10, 'label' => 'Processing files']);.
  */
 class ProgressBar extends View
 {
