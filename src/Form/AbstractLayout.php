@@ -42,7 +42,9 @@ abstract class AbstractLayout extends View
         $this->form->model->assertIsEntity();
 
         // TODO this class should not refer to any specific form control
-        $controlClass = is_object($control) ? get_class($control) : ($control[0] ?? null);
+        $controlClass = is_object($control)
+            ? get_class($control)
+            : ($control[0] ?? (($field['ui'] ?? [])['form'][0] ?? null));
         if (is_a($controlClass, Control\Checkbox::class, true)) {
             $field['type'] = 'boolean';
         } elseif (is_a($controlClass, Control\Calendar::class, true)) {
