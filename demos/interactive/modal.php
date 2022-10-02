@@ -117,7 +117,7 @@ Header::addTo($app, ['Modal Animation']);
 
 $transitionModal = Modal::addTo($app, ['title' => 'Animated modal']);
 Message::addTo($transitionModal)->set('A lot of animated transition available');
-$transitionModal->duration(1000);
+$transitionModal->setOption('duration', 1000);
 
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
 $main = Menu::addTo($menuBar);

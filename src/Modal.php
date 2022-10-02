@@ -24,8 +24,6 @@ namespace Atk4\Ui;
  *  $modal->addApproveAction('Yes', new JsExpression('function() { window.alert("You\'re good to go!"); }'));
  *
  * You may also prevent modal from closing via the esc or dimmed area click using $modal->notClosable().
- *
- * Some helper methods are also available to set: transition time, transition type or modal settings from Fomantic-UI.
  */
 class Modal extends View
 {
@@ -184,49 +182,6 @@ class Modal extends View
     }
 
     /**
-     * Set modal transition.
-     *
-     * @param string $transitionType
-     *
-     * @return $this
-     */
-    public function transition($transitionType)
-    {
-        $this->settings('transition', $transitionType);
-
-        return $this;
-    }
-
-    /**
-     * Set modal transition duration.
-     *
-     * @param float|int $time
-     *
-     * @return $this
-     */
-    public function duration($time)
-    {
-        $this->settings('duration', $time);
-
-        return $this;
-    }
-
-    /**
-     * Add modal settings.
-     *
-     * @param string $settingOption
-     * @param mixed  $value
-     *
-     * @return $this
-     */
-    public function settings($settingOption, $value)
-    {
-        $this->options['setting'][$settingOption] = $value;
-
-        return $this;
-    }
-
-    /**
      * Add a deny action to modal.
      *
      * @param string           $label
@@ -312,15 +267,7 @@ class Modal extends View
             $this->template->del('ActionContainer');
         }
 
-        // call modal creation first
         $this->js(true)->modal($this->options['modal_option']);
-
-        // add setting if available.
-        if (isset($this->options['setting'])) {
-            foreach ($this->options['setting'] as $key => $value) {
-                $this->js(true)->modal('setting', $key, $value);
-            }
-        }
 
         if (!isset($this->options['modal_option']['closable']) || $this->options['modal_option']['closable']) {
             $this->template->trySet('closeIcon', 'close');
