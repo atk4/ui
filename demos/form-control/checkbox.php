@@ -37,8 +37,3 @@ $form->addControl('also_checked', ['caption' => 'Hello World'], ['type' => 'bool
 $form->onSubmit(function (Form $form) use ($app) {
     return new JsToast($app->encodeJson($form->model->get()));
 });
-
-View::addTo($app, ['ui' => 'divider']);
-$c = new Form\Control\Checkbox('Selected checkbox by default');
-$c->set(true);
-$app->add($c);
