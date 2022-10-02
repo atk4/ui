@@ -37,6 +37,7 @@ class Checkbox extends Form\Control
 
     protected function init(): void
     {
+        // TODO exception should be generalized for type acceptable for any form control
         if ($this->entityField && $this->entityField->getField()->type !== 'boolean') {
             throw (new Exception('Checkbox form control requires field with boolean type'))
                 ->addMoreInfo('type', $this->entityField->getField()->type);
