@@ -27,7 +27,7 @@ use Atk4\Ui\View;
  * $form->setModel($invoice, []);
  *
  * // Add Multiline form control and set model for Invoice items.
- * $ml = $form->addControl('ml', ['Multiline::class']);
+ * $ml = $form->addControl('ml', [Multiline::class]);
  * $ml->setReferenceModel('Items', null, ['item', 'cat', 'qty', 'price', 'total']);
  *
  * $form->onSubmit(function (Form $form) use ($ml) {
