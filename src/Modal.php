@@ -46,11 +46,9 @@ class Modal extends View
     public $args = [];
     /** @var array */
     public $options = [
-        'modal_option' => [
-            // any change in modal DOM should automatically refresh cached positions
-            // allow modal window to add scrolling when content is added after modal is created
-            'observeChanges' => true,
-        ],
+        // any change in modal DOM should automatically refresh cached positions
+        // allow modal window to add scrolling when content is added after modal is created
+        'observeChanges' => true,
     ];
 
     /** @var string Currently only "json" response type is supported. */
@@ -164,7 +162,7 @@ class Modal extends View
      */
     public function setOption($option, $value)
     {
-        $this->options['modal_option'][$option] = $value;
+        $this->options[$option] = $value;
 
         return $this;
     }
@@ -194,7 +192,7 @@ class Modal extends View
         $button = new Button();
         $button->set($label)->addClass('red cancel');
         $this->addButtonAction($button);
-        $this->options['modal_option']['onDeny'] = $jsAction;
+        $this->options['onDeny'] = $jsAction;
 
         return $this;
     }
@@ -212,7 +210,7 @@ class Modal extends View
         $b = new Button();
         $b->set($label)->addClass('green ok');
         $this->addButtonAction($b);
-        $this->options['modal_option']['onApprove'] = $jsAction;
+        $this->options['onApprove'] = $jsAction;
 
         return $this;
     }
@@ -239,7 +237,7 @@ class Modal extends View
      */
     public function notClosable()
     {
-        $this->options['modal_option']['closable'] = false;
+        $this->options['closable'] = false;
 
         return $this;
     }
@@ -267,9 +265,9 @@ class Modal extends View
             $this->template->del('ActionContainer');
         }
 
-        $this->js(true)->modal($this->options['modal_option']);
+        $this->js(true)->modal($this->options);
 
-        if (!isset($this->options['modal_option']['closable']) || $this->options['modal_option']['closable']) {
+        if (!isset($this->options['closable']) || $this->options['closable']) {
             $this->template->trySet('closeIcon', 'close');
         }
 
