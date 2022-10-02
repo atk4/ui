@@ -35,11 +35,17 @@ class CoverageUtil
         $filter = new Filter();
 
         $phpunitCoverageConfig = simplexml_load_file($phpunitConfigDir . '/phpunit.xml.dist')->coverage;
-        foreach ($phpunitCoverageConfig->include->directory as $path) {
+        foreach ($phpunitCoverageConfig->include->directory ?? [] as $path) {
             $filter->includeDirectory($phpunitConfigDir . '/' . $path);
         }
-        foreach ($phpunitCoverageConfig->exclude->directory as $path) {
+        foreach ($phpunitCoverageConfig->include->file ?? [] as $path) {
+            $filter->includeFile($phpunitConfigDir . '/' . $path);
+        }
+        foreach ($phpunitCoverageConfig->exclude->directory ?? [] as $path) {
             $filter->excludeDirectory($phpunitConfigDir . '/' . $path);
+        }
+        foreach ($phpunitCoverageConfig->exclude->file ?? [] as $path) {
+            $filter->excludeFile($phpunitConfigDir . '/' . $path);
         }
 
         static::start($filter);
