@@ -48,9 +48,11 @@ class Modal extends View
     public $args = [];
     /** @var array */
     public $options = [
-        // any change in modal DOM should automatically refresh cached positions
-        // allow modal window to add scrolling when content is added after modal is created
-        'observeChanges' => true,
+        'modal_option' => [
+            // any change in modal DOM should automatically refresh cached positions
+            // allow modal window to add scrolling when content is added after modal is created
+            'observeChanges' => true,
+        ],
     ];
 
     /** @var string Currently only "json" response type is supported. */
@@ -165,24 +167,6 @@ class Modal extends View
     public function setOption($option, $value)
     {
         $this->options['modal_option'][$option] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Set modal options passing an array.
-     *
-     * @param array<string, mixed> $options
-     *
-     * @return $this
-     */
-    public function setOptions($options)
-    {
-        if (isset($this->options['modal_option'])) {
-            $this->options['modal_option'] = array_merge($this->options['modal_option'], $options);
-        } else {
-            $this->options['modal_option'] = $options;
-        }
 
         return $this;
     }

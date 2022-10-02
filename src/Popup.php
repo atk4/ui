@@ -213,18 +213,6 @@ class Popup extends View
     }
 
     /**
-     * Setting options using using an array.
-     *
-     * @return $this
-     */
-    public function setOptions(array $options)
-    {
-        $this->popOptions = array_merge($this->popOptions, $options);
-
-        return $this;
-    }
-
-    /**
      * Return js action need to display popup.
      * When a grid is reloading, this method can be call
      * in order to display the popup once again.
