@@ -25,7 +25,7 @@ class JsFunction implements JsExpressionable
     /** @var bool add stopPropagation(event) to generated method */
     public $stopPropagation = false;
 
-    /** @var string */
+    /** @var string Indent of target code (not one indent level) */
     public $indent = '    ';
 
     public function __construct(array $args = [], array $statements = null)
