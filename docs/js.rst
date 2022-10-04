@@ -410,7 +410,6 @@ Modal
 .. php:method:: addContentCss()
 .. php:method:: addScrolling()
 .. php:method:: setOption()
-.. php:method:: setOptions()
 
 This class allows you to open modal dialogs and close them easily. It's based around Fomantic-UI
 `.modal(), <https://fomantic-ui.com/modules/modal.html>`_ but integrates PHP callback for dynamically

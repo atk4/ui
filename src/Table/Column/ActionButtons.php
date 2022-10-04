@@ -95,8 +95,6 @@ class ActionButtons extends Table\Column
 
         $modal = Modal::addTo($owner, $defaults);
 
-        $modal->observeChanges(); // adds scrollbar if needed
-
         $modal->set(function (View $t) use ($callback) {
             $callback($t, $t->stickyGet($this->name));
         });

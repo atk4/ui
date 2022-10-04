@@ -24,8 +24,6 @@ namespace Atk4\Ui;
  *  $modal->addApproveAction('Yes', new JsExpression('function() { window.alert("You\'re good to go!"); }'));
  *
  * You may also prevent modal from closing via the esc or dimmed area click using $modal->notClosable().
- *
- * Some helper methods are also available to set: transition time, transition type or modal settings from Fomantic-UI.
  */
 class Modal extends View
 {
@@ -47,7 +45,11 @@ class Modal extends View
     /** @var array */
     public $args = [];
     /** @var array */
-    public $options = [];
+    public $options = [
+        // any change in modal DOM should automatically refresh cached positions
+        // allow modal window to add scrolling when content is added after modal is created
+        'observeChanges' => true,
+    ];
 
     /** @var string Currently only "json" response type is supported. */
     public $type = 'json';
@@ -160,38 +162,7 @@ class Modal extends View
      */
     public function setOption($option, $value)
     {
-        $this->options['modal_option'][$option] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Set modal options passing an array.
-     *
-     * @param array<string, mixed> $options
-     *
-     * @return $this
-     */
-    public function setOptions($options)
-    {
-        if (isset($this->options['modal_option'])) {
-            $this->options['modal_option'] = array_merge($this->options['modal_option'], $options);
-        } else {
-            $this->options['modal_option'] = $options;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Whether any change in modal DOM should automatically refresh cached positions.
-     * Allow modal window to add scrolling when adding content dynamically after modal creation.
-     *
-     * @return $this
-     */
-    public function observeChanges()
-    {
-        $this->setOptions(['observeChanges' => true]);
+        $this->options[$option] = $value;
 
         return $this;
     }
@@ -209,49 +180,6 @@ class Modal extends View
     }
 
     /**
-     * Set modal transition.
-     *
-     * @param string $transitionType
-     *
-     * @return $this
-     */
-    public function transition($transitionType)
-    {
-        $this->settings('transition', $transitionType);
-
-        return $this;
-    }
-
-    /**
-     * Set modal transition duration.
-     *
-     * @param float|int $time
-     *
-     * @return $this
-     */
-    public function duration($time)
-    {
-        $this->settings('duration', $time);
-
-        return $this;
-    }
-
-    /**
-     * Add modal settings.
-     *
-     * @param string $settingOption
-     * @param mixed  $value
-     *
-     * @return $this
-     */
-    public function settings($settingOption, $value)
-    {
-        $this->options['setting'][$settingOption] = $value;
-
-        return $this;
-    }
-
-    /**
      * Add a deny action to modal.
      *
      * @param string           $label
@@ -264,7 +192,7 @@ class Modal extends View
         $button = new Button();
         $button->set($label)->addClass('red cancel');
         $this->addButtonAction($button);
-        $this->options['modal_option']['onDeny'] = $jsAction;
+        $this->options['onDeny'] = $jsAction;
 
         return $this;
     }
@@ -282,7 +210,7 @@ class Modal extends View
         $b = new Button();
         $b->set($label)->addClass('green ok');
         $this->addButtonAction($b);
-        $this->options['modal_option']['onApprove'] = $jsAction;
+        $this->options['onApprove'] = $jsAction;
 
         return $this;
     }
@@ -309,7 +237,7 @@ class Modal extends View
      */
     public function notClosable()
     {
-        $this->options['modal_option']['closable'] = false;
+        $this->options['closable'] = false;
 
         return $this;
     }
@@ -337,21 +265,9 @@ class Modal extends View
             $this->template->del('ActionContainer');
         }
 
-        // call modal creation first
-        if (isset($this->options['modal_option'])) {
-            $this->js(true)->modal($this->options['modal_option']);
-        } else {
-            $this->js(true)->modal();
-        }
+        $this->js(true)->modal($this->options);
 
-        // add setting if available.
-        if (isset($this->options['setting'])) {
-            foreach ($this->options['setting'] as $key => $value) {
-                $this->js(true)->modal('setting', $key, $value);
-            }
-        }
-
-        if (!isset($this->options['modal_option']['closable']) || $this->options['modal_option']['closable']) {
+        if (!isset($this->options['closable']) || $this->options['closable']) {
             $this->template->trySet('closeIcon', 'close');
         }
 

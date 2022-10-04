@@ -53,7 +53,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     {
         parent::init();
 
-        $this->observeChanges();
         $this->addClass($this->size);
     }
 

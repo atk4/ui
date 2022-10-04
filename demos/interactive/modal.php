@@ -117,7 +117,7 @@ Header::addTo($app, ['Modal Animation']);
 
 $transitionModal = Modal::addTo($app, ['title' => 'Animated modal']);
 Message::addTo($transitionModal)->set('A lot of animated transition available');
-$transitionModal->duration(1000);
+$transitionModal->setOption('duration', 1000);
 
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
 $main = Menu::addTo($menuBar);
@@ -156,7 +156,6 @@ Header::addTo($app, ['Multiple page modal']);
 
 // Add modal to layout.
 $stepModal = Modal::addTo($app, ['title' => 'Multi step actions']);
-$stepModal->setOption('observeChanges', true);
 
 // Add buttons to modal for next and previous actions.
 $action = new View(['ui' => 'buttons']);
