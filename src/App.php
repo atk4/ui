@@ -876,11 +876,24 @@ class App
     {
         $tag = strtolower($tag === null ? 'div' : $tag);
 
+        $isOpeningTag = true;
+        $isClosingTag = false;
+        if (substr($tag, 0, 1) === '/') {
+            $tag = substr($tag, 1);
+            $isOpeningTag = false;
+            $isClosingTag = true;
+        } elseif (substr($tag, -1) === '/') {
+            $tag = substr($tag, 0, -1);
+            $isClosingTag = true;
+        }
+
         if (isset($attr[0])) {
-            if (substr($tag, 0, 1) === '/') {
-                $tag = '/' . $attr[0];
-            } elseif (substr($tag, -1) === '/') {
-                $tag = $attr[0] . '/';
+            if ($isClosingTag) {
+                if ($isOpeningTag) {
+                    $tag = $attr[0] . '/';
+                } else {
+                    $tag = '/' . $attr[0];
+                }
             } else {
                 $tag = $attr[0];
             }
@@ -921,16 +934,11 @@ class App
             $tmp[] = $key . '="' . $this->encodeHtmlAttribute($val) . '"';
         }
 
-        if (substr($tag, 0, 1) === '/') {
-            return '</' . substr($tag, 1) . '>';
-        } elseif (substr($tag, -1) === '/') {
-            $tag = substr($tag, 0, -1);
-            $postfix = ' /';
-        } else {
-            $postfix = '';
+        if ($isClosingTag && !$isOpeningTag) {
+            return '</' . $tag . '>';
         }
 
-        return '<' . $tag . ($tmp !== [] ? ' ' . implode(' ', $tmp) : '') . $postfix . '>'
+        return '<' . $tag . ($tmp !== [] ? ' ' . implode(' ', $tmp) : '') . ($isClosingTag ? ' /' : '') . '>'
             . ($value !== null ? $value . '</' . $tag . '>' : '');
     }
 
