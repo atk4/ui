@@ -20,12 +20,9 @@
  *
  * @type {webpack}
  */
-const webpack = require('webpack');
 const path = require('path');
-// VUe file loader.
 const { VueLoaderPlugin } = require('vue-loader');
 const TerserPlugin = require('terser-webpack-plugin');
-const packageVersion = require('./package.json').version;
 
 module.exports = (env) => {
     // determine which mode
@@ -111,9 +108,6 @@ module.exports = (env) => {
             ],
         },
         plugins: [
-            new webpack.DefinePlugin({
-                _ATKVERSION_: JSON.stringify(packageVersion),
-            }),
             new VueLoaderPlugin(),
         ],
     };
