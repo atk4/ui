@@ -78,11 +78,11 @@ class TagTest extends TestCase
 
     public function testEtagoEscape(): void
     {
-        $v = 'foo <b>bar</b> <script>x = \'<style></style>\';</script> <style></script>';
+        $v = 'foo <b>bar</b> <script>x = \'<style></style>\';"</script>" <style></script>';
 
-        static::assertTagRender('<script>foo <b>bar</b> <script>x = \'<style></style>\';<\/script> <style><\/script></script>', ['script', [], $v]);
-        static::assertTagRender('<style>foo <b>bar</b> <script>x = \'<style><\/style>\';</script> <style></script></style>', ['style', [], $v]);
-        static::assertTagRender('<b>foo &lt;b&gt;bar&lt;/b&gt; &lt;script&gt;x = \'&lt;style&gt;&lt;/style&gt;\';&lt;/script&gt; &lt;style&gt;&lt;/script&gt;</b>', ['b', [], $v]);
+        static::assertTagRender('<script>foo <b>bar</b> <script>x = \'<style></style>\';"<\/script>" <style><\/script></script>', ['script', [], $v]);
+        static::assertTagRender('<style>foo <b>bar</b> <script>x = \'<style><\/style>\';"</script>" <style></script></style>', ['style', [], $v]);
+        static::assertTagRender('<b>foo &lt;b&gt;bar&lt;/b&gt; &lt;script&gt;x = &#039;&lt;style&gt;&lt;/style&gt;&#039;;&quot;&lt;/script&gt;&quot; &lt;style&gt;&lt;/script&gt;</b>', ['b', [], $v]);
     }
 
     public function testVoidTag(): void

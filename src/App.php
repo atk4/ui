@@ -975,6 +975,10 @@ class App
      */
     public function encodeHtml(string $val): string
     {
+        if (\PHP_VERSION_ID < 80100) {
+            return htmlentities($val, \ENT_QUOTES | \ENT_SUBSTITUTE | \ENT_HTML401);
+        }
+
         return htmlentities($val);
     }
 
