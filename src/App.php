@@ -951,7 +951,7 @@ class App
             }
 
             $val = (string) $val;
-            $tmp[] = $key . '="' . $this->encodeHtmlAttribute($val) . '"';
+            $tmp[] = $key . '="' . $this->encodeHtml($val) . '"';
         }
 
         if ($isClosing && !$isOpening) {
@@ -963,23 +963,11 @@ class App
     }
 
     /**
-     * Encodes string - convert special chars to HTML entities.
-     */
-    public function encodeHtmlAttribute(string $val): string
-    {
-        return htmlspecialchars($val);
-    }
-
-    /**
      * Encodes string - convert all applicable chars to HTML entities.
      */
-    public function encodeHtml(string $val): string
+    public function encodeHtml(string $value): string
     {
-        if (\PHP_VERSION_ID < 80100) {
-            return htmlentities($val, \ENT_QUOTES | \ENT_SUBSTITUTE | \ENT_HTML401);
-        }
-
-        return htmlentities($val);
+        return htmlspecialchars($value, \ENT_HTML5 | \ENT_QUOTES | \ENT_SUBSTITUTE, 'UTF-8');
     }
 
     /**

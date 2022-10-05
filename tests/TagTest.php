@@ -82,7 +82,7 @@ class TagTest extends TestCase
 
         static::assertTagRender('<script>foo <b>bar</b> <script>x = \'<style></style>\';"<\/script>" <style><\/script></script>', ['script', [], $v]);
         static::assertTagRender('<style>foo <b>bar</b> <script>x = \'<style><\/style>\';"</script>" <style></script></style>', ['style', [], $v]);
-        static::assertTagRender('<b>foo &lt;b&gt;bar&lt;/b&gt; &lt;script&gt;x = &#039;&lt;style&gt;&lt;/style&gt;&#039;;&quot;&lt;/script&gt;&quot; &lt;style&gt;&lt;/script&gt;</b>', ['b', [], $v]);
+        static::assertTagRender('<b>foo &lt;b&gt;bar&lt;/b&gt; &lt;script&gt;x = &apos;&lt;style&gt;&lt;/style&gt;&apos;;&quot;&lt;/script&gt;&quot; &lt;style&gt;&lt;/script&gt;</b>', ['b', [], $v]);
     }
 
     public function testVoidTag(): void
