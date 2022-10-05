@@ -596,7 +596,7 @@ class App
         $template = new $this->templateClass();
         $template->setApp($this);
 
-        if (in_array($filename[0], ['.', '/', '\\'], true) || str_contains($filename, ':\\')) {
+        if ((['.' => true, '/' => true, '\\' => true][substr($filename, 0, 1)] ?? false) || str_contains($filename, ':\\')) {
             return $template->loadFromFile($filename);
         }
 
@@ -881,7 +881,7 @@ class App
             foreach (is_scalar($value) ? [$value] : $value as $v) {
                 if (is_array($v)) {
                     $result[] = $this->getTag(...$v);
-                } elseif (in_array($tag, ['script', 'style'], true)) {
+                } elseif (['script' => true, 'style' => true][$tag] ?? false) {
                     // see https://mathiasbynens.be/notes/etago
                     $result[] = preg_replace('~(?<=<)(?=/\s*' . preg_quote($tag, '~') . '|!--)~', '\\\\', $v);
                 } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behaviour, only directly passed strings were escaped
