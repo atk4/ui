@@ -335,7 +335,7 @@ class Lookup extends Input
 
     public function getInput()
     {
-        return $this->getApp()->getTag('input', array_merge([
+        return $this->getApp()->getTag('input/', array_merge([
             'name' => $this->shortName,
             'type' => 'hidden',
             'id' => $this->name . '_input',

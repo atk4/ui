@@ -116,7 +116,7 @@ class TreeItemSelector extends Form\Control
      */
     public function getInput()
     {
-        return $this->getApp()->getTag('input', [
+        return $this->getApp()->getTag('input/', [
             'name' => $this->shortName,
             'type' => 'hidden',
             'value' => $this->getValue(),

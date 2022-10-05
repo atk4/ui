@@ -122,7 +122,7 @@ class Dropdown extends Input
 
     public function getInput()
     {
-        return $this->getApp()->getTag('input', array_merge([
+        return $this->getApp()->getTag('input/', array_merge([
             'name' => $this->shortName,
             'type' => $this->inputType,
             'id' => $this->name . '_input',

@@ -811,38 +811,47 @@ class App
         return new JsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
     }
 
+    protected function isVoidTag(string $tag): bool
+    {
+        return [
+            'area' => true, 'base' => true, 'br' => true, 'col' => true, 'embed' => true,
+            'hr' => true, 'img' => true, 'input' => true, 'link' => true, 'meta' => true,
+            'param' => true, 'source' => true, 'track' => true, 'wbr' => true,
+        ][strtolower($tag)] ?? false;
+    }
+
     /**
      * Construct HTML tag with supplied attributes.
      *
      * $html = getTag('img/', ['src' => 'foo.gif', 'border' => 0])
-     * --> "<img src="foo.gif" border="0" />"
+     * --> "<img src="foo.gif" border="0">"
      *
      *
      * The following rules are respected:
      *
      * 1. all array key => val elements appear as attributes with value escaped.
-     * getTag('div/', ['data' => 'he"llo'])
-     * --> <div data="he\"llo" />
+     * getTag('input/', ['value' => 'he"llo'])
+     * --> <input value="he\"llo">
      *
-     * 2. boolean value true will add attribute without value
+     * 2. true value will add attribute without value
      * getTag('td', ['nowrap' => true])
      * --> <td nowrap="nowrap">
      *
      * 3. false value will ignore the attribute
-     * getTag('img', ['src' => false])
+     * getTag('img/', ['src' => false])
      * --> <img>
      *
      * 4. passing key 0 => "val" will re-define the element itself
-     * getTag('img', ['input', 'type' => 'picture'])
-     * --> <input type="picture" src="foo.gif">
+     * getTag('div', ['a', 'href' => 'picture'])
+     * --> <a href="picture">
      *
-     * 5. use '/' at end of tag to close it.
+     * 5. use '/' at end of tag to self-close it (self closing slash is not rendered because of HTML5 void tag)
      * getTag('img/', ['src' => 'foo.gif'])
-     * --> <img src="foo.gif" />
+     * --> <img src="foo.gif">
      *
      * 6. if main tag is self-closing, overriding it keeps it self-closing
      * getTag('img/', ['input', 'type' => 'picture'])
-     * --> <input type="picture" src="foo.gif" />
+     * --> <input type="picture">
      *
      * 7. simple way to close tag. Any attributes to closing tags are ignored
      * getTag('/td')
@@ -875,21 +884,32 @@ class App
     public function getTag(string $tag = null, array $attr = [], $value = null): string
     {
         $tag = strtolower($tag === null ? 'div' : $tag);
+        $tagOrig = $tag;
 
-        $isOpeningTag = true;
-        $isClosingTag = false;
+        $isOpening = true;
+        $isClosing = false;
         if (substr($tag, 0, 1) === '/') {
             $tag = substr($tag, 1);
-            $isOpeningTag = false;
-            $isClosingTag = true;
+            $isOpening = false;
+            $isClosing = true;
         } elseif (substr($tag, -1) === '/') {
             $tag = substr($tag, 0, -1);
-            $isClosingTag = true;
+            $isClosing = true;
+        }
+
+        $isVoid = $this->isVoidTag($tag);
+        if ($isVoid
+            ? $isOpening && !$isClosing || !$isOpening || $value !== null
+            : $isOpening && $isClosing
+        ) {
+            throw (new Exception('Wrong void tag usage'))
+                ->addMoreInfo('tag', $tagOrig)
+                ->addMoreInfo('isVoid', $isVoid);
         }
 
         if (isset($attr[0])) {
-            if ($isClosingTag) {
-                if ($isOpeningTag) {
+            if ($isClosing) {
+                if ($isOpening) {
                     $tag = $attr[0] . '/';
                 } else {
                     $tag = '/' . $attr[0];
@@ -930,15 +950,15 @@ class App
                 $val = $key;
             }
 
-            $val = (string) $val; // @phpstan-ignore-line
+            $val = (string) $val;
             $tmp[] = $key . '="' . $this->encodeHtmlAttribute($val) . '"';
         }
 
-        if ($isClosingTag && !$isOpeningTag) {
+        if ($isClosing && !$isOpening) {
             return '</' . $tag . '>';
         }
 
-        return '<' . $tag . ($tmp !== [] ? ' ' . implode(' ', $tmp) : '') . ($isClosingTag ? ' /' : '') . '>'
+        return '<' . $tag . ($tmp !== [] ? ' ' . implode(' ', $tmp) : '') . ($isClosing && !$isVoid ? ' /' : '') . '>'
             . ($value !== null ? $value . '</' . $tag . '>' : '');
     }
 

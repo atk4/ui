@@ -6,6 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\App;
+use Atk4\Ui\Exception;
 
 class TagTest extends TestCase
 {
@@ -33,7 +34,7 @@ class TagTest extends TestCase
     {
         static::assertTagRender('<a foo="hello">', ['a', ['foo' => 'hello']]);
         static::assertTagRender('<a>link</a>', ['b', ['a'], 'link']);
-        static::assertTagRender('<a />', ['b/', ['a']]);
+        static::assertTagRender('<hr>', ['br/', ['hr']]);
         static::assertTagRender('</b>', ['/b']);
         static::assertTagRender('</a>', ['/b', ['a']]);
         static::assertTagRender('</a>', ['/b', ['foo' => 'bar', 'a']]);
@@ -73,5 +74,49 @@ class TagTest extends TestCase
             '<a href="hello">click <i>italic</i> text</a>',
             ['a', ['href' => 'hello'], ['click ', ['i', [], 'italic'], ' text']]
         );
+    }
+
+    public function testEtagoEscape(): void
+    {
+        $v = 'foo <b>bar</b> <script>x = \'<style></style>\';</script> <style></script>';
+
+        static::assertTagRender('<script>foo <b>bar</b> <script>x = \'<style></style>\';<\/script> <style><\/script></script>', ['script', [], $v]);
+        static::assertTagRender('<style>foo <b>bar</b> <script>x = \'<style><\/style>\';</script> <style></script></style>', ['style', [], $v]);
+        static::assertTagRender('<b>foo &lt;b&gt;bar&lt;/b&gt; &lt;script&gt;x = \'&lt;style&gt;&lt;/style&gt;\';&lt;/script&gt; &lt;style&gt;&lt;/script&gt;</b>', ['b', [], $v]);
+    }
+
+    public function testVoidTag(): void
+    {
+        static::assertTagRender('<br>', ['br/']);
+        static::assertTagRender('<input>', ['input/', [], null]);
+        static::assertTagRender('</textarea>', ['/textarea']);
+    }
+
+    public function testNotSelfClosingVoidTagException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('void tag');
+        static::assertTagRender('', ['br']);
+    }
+
+    public function testClosingVoidTagException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('void tag');
+        static::assertTagRender('', ['/br']);
+    }
+
+    public function testSelfClosingNonVoidTagException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('void tag');
+        static::assertTagRender('', ['div/']);
+    }
+
+    public function testVoidTagWithValueException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('void tag');
+        static::assertTagRender('', ['br/', [], '']);
     }
 }
