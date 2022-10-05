@@ -141,8 +141,8 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
 
     public function executeScript($script, array $args = []): void
     {
-        if (preg_match('/^function[\s\(]/', $script)) {
-            $script = preg_replace('/;$/', '', $script);
+        if (preg_match('~^function[\s\(]~', $script)) {
+            $script = preg_replace('~;$~', '', $script);
             $script = '(' . $script . ')';
         }
 

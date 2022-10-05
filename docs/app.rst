@@ -207,7 +207,6 @@ Utilities by App
 App provides various utilities that are used by other components.
 
 .. php:method:: getTag()
-.. php:method:: encodeHtmlAttribute()
 .. php:method:: encodeHtml()
 
 Apart from basic utility, App class provides several mechanisms that are helpful for components.

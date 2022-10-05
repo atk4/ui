@@ -107,7 +107,7 @@ export default class JsSortable extends atkPlugin {
     }
 
     injectStyles(style) {
-        $('head').append('<style type="text/css">' + style + '</style>');
+        $('head').append('<style>' + style + '</style>');
     }
 }
 

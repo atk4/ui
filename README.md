@@ -1,4 +1,4 @@
-# Agile UI - User Interface framework for Agile Toolkit
+# Agile UI - Low-code PHP Framework for Web Apps
 
 [Agile Toolkit](https://agiletoolkit.org/) is a Low Code framework written in PHP. Agile UI implement server side rendering engine and over 50 UI generic components for interacting with your Data Model.
 
@@ -37,11 +37,7 @@ high-level projects developed entirely on Agile Toolkit.
 
 ### Who uses Agile Toolkit?
 
-Companies use Agile Toolkit to implement admin interface and in some cases even user-facing interface.
-
- - www.linkedfinance.com
- - www.sortmybooks.com
- - If you have a project built with Agile Toolkit - add it here!
+Many companies use Agile Toolkit to implement admin interface and in some cases even user-facing interface.
 
 ### How does it work?
 
@@ -264,7 +260,6 @@ Add-ons:
 -   [User Authentication and ACL](https://github.com/atk4/login) - User Log-in, Registration and Access Control for Agile UI
 -   [Charts add-on](https://github.com/atk4/chart) - Modern looking and free charts with [chartJS](https://www.chartjs.org/)
 -   [Audit for Models](https://github.com/atk4/audit) - Record all DB operations with Undo/Redo support for Agile Data
--   [Data for Reports](https://github.com/atk4/report) - Implement data aggregation and union models for Agile Data
 
 Integrations:
 

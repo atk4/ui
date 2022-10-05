@@ -141,7 +141,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
     private function escapeOutputHtml(string $message): string
     {
-        $res = $this->getApp()->encodeHtmlAttribute($message);
+        $res = $this->getApp()->encodeHtml($message);
 
         // fix new lines for display and copy paste, testcase:
         // $genFx = function (array $values, int $maxLength, array $prev = null) use (&$genFx) {
