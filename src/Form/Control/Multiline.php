@@ -826,7 +826,7 @@ class Multiline extends Form\Control
         $expr = $exprField->expr;
         $matches = [];
 
-        preg_match_all('/\[[a-z0-9_]*\]|{[a-z0-9_]*}/i', $expr, $matches);
+        preg_match_all('~\[[a-z0-9_]*\]|{[a-z0-9_]*}~i', $expr, $matches);
 
         foreach ($matches[0] as $match) {
             $fieldName = substr($match, 1, -1);
