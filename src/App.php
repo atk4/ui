@@ -876,6 +876,19 @@ class App
     {
         $tag = strtolower($tag === null ? 'div' : $tag);
 
+        if (isset($attr[0])) {
+            if (substr($tag, 0, 1) === '/') {
+                $tag = '/' . $attr[0];
+            } elseif (substr($tag, -1) === '/') {
+                $tag = $attr[0] . '/';
+            } else {
+                $tag = $attr[0];
+            }
+            unset($attr[0]);
+
+            return $this->getTag($tag, $attr, $value);
+        }
+
         if ($value !== null) {
             $result = [];
             foreach (is_scalar($value) ? [$value] : $value as $v) {
@@ -896,7 +909,7 @@ class App
 
         $tmp = [];
         foreach ($attr as $key => $val) {
-            if ($key === 0 || $val === false) {
+            if ($val === false) {
                 continue;
             }
 
@@ -909,16 +922,12 @@ class App
         }
 
         if (substr($tag, 0, 1) === '/') {
-            return '</' . ($attr[0] ?? substr($tag, 1)) . '>';
+            return '</' . substr($tag, 1) . '>';
         } elseif (substr($tag, -1) === '/') {
             $tag = substr($tag, 0, -1);
             $postfix = ' /';
         } else {
             $postfix = '';
-        }
-
-        if (isset($attr[0])) {
-            $tag = $attr[0];
         }
 
         return '<' . $tag . ($tmp !== [] ? ' ' . implode(' ', $tmp) : '') . $postfix . '>'
