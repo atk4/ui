@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <input :form="form" :name="name" type="hidden" :value="value">
+        <input :form="form" :name="name" type="hidden" :value="value" />
         <vue-query-builder :rules="rules" v-model="query" :maxDepth="maxDepth" :labels="labels">
             <template v-slot:default="slotProps">
                 <query-builder-group v-bind="slotProps" :query.sync="query" />

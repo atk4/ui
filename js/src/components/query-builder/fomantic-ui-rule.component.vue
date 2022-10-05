@@ -33,7 +33,7 @@
                                                 v-model="query.value"
                                                 :type="rule.inputType"
                                                 :placeholder="labels.textInputPlaceholder"
-                                        >
+                                        />
                                     </div>
                                 </template>
                                 <!-- Checkbox or Radio input -->

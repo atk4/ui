@@ -13,7 +13,7 @@ export default {
     name: 'atk-multiline-row',
     template: `
     <sui-table-row :verticalAlign="'middle'">
-        <sui-table-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDelete" v-model="toDelete"></input></sui-table-cell>
+        <sui-table-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDelete" v-model="toDelete" /></sui-table-cell>
         <sui-table-cell  @keydown.tab="onTab(idx)" v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" v-bind="column.cellProps" :style="{overflow: 'visible'}" v-if="column.isVisible">
          <atk-multiline-cell
            :cellData="column"
