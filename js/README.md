@@ -5,13 +5,6 @@ jQuery plugin needed for Atk4\Ui and also provide app wide services for Fomantic
 
 The package also export some functions via the atk global object.
 
-### Getting package version
-
-Calling this function in your custom js script or in console will output the package version number.
-```
-    atk.version();
-```
-
 ### Services
 
 All services are export via the atk global object. You can access them via atk.serviceName.

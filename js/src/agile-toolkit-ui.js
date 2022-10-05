@@ -12,14 +12,12 @@ import vueService from './services/vue.service';
 import popupService from './services/popup.service';
 
 /* eslint-disable */
-/* global _ATKVERSION_:true, __webpack_public_path__:true */
+/* global __webpack_public_path__:true */
 __webpack_public_path__ = window.__atkBundlePublicPath === undefined ? '/public/' :  window.__atkBundlePublicPath + '/';
 /* eslint-enable */
 
 const atk = { ...atkFomantic };
 
-// add version function to atk.
-atk.version = () => _ATKVERSION_;
 atk.options = atkOptions;
 atk.eventBus = atkEventBus;
 atk.utils = atkUtils;
