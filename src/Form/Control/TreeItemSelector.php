@@ -110,7 +110,7 @@ class TreeItemSelector extends Form\Control
     }
 
     /**
-     * Returns <input ... /> tag.
+     * Returns <input ...> tag.
      *
      * @return string
      */

@@ -10,7 +10,7 @@ export default {
         <sui-table-headerCell :colspan="getVisibleColumns()">{{caption}}</sui-table-headerCell>
        </sui-table-row>
         <sui-table-row :verticalAlign="'top'">
-        <sui-table-header-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDeleteAll" :checked.prop="isChecked" :indeterminate.prop="isIndeterminate" ref="check" /></sui-table-header-cell>
+        <sui-table-header-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDeleteAll" :checked.prop="isChecked" :indeterminate.prop="isIndeterminate" ref="check"></sui-table-header-cell>
         <sui-table-header-cell v-for="(column, idx) in columns" :key="idx" v-if="column.isVisible" :textAlign="getTextAlign(column)">
          <div>{{column.caption}}</div>
          <div :style="{position: 'absolute', top: '-22px'}" v-if="false"><sui-label pointing="below" basic color="red" v-if="getErrorMsg(column)">{{getErrorMsg(column)}}</sui-label></div>

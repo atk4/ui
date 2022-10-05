@@ -318,7 +318,7 @@ jobs:
         run: |
           cp -r template template.orig
           find template -not -type d -not -name '*.pug' -delete
-          (cd template && pug --silent --pretty .)
+          (cd template && pug --doctype html --pretty --silent .)
 
       - name: Compile CSS files (only for Slow)
         if: matrix.type == 'Chrome Slow'

@@ -104,7 +104,7 @@ class Input extends Form\Control
     }
 
     /**
-     * Returns <input ... /> tag.
+     * Returns <input ...> tag.
      *
      * @return string
      */

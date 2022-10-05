@@ -41,7 +41,7 @@ You can set default value and interact with a form control using JavaScript::
 When used stand-alone, Form\Controls will produce a basic HTML (I have omitted id=)::
 
     <div class="ui  input">
-        <input name="line" type="text" placeholder="" value="hello world" />
+        <input name="line" type="text" placeholder="" value="hello world">
     </div>
 
 
@@ -59,7 +59,7 @@ page and the following HTML is now produced::
     <div class="field">
         <label for="atk_admin_form_generic_name_input">Name</label>
         <div id="atk_admin_form_generic_name" class="ui input" style="">
-            <input name="name" type="text" placeholder="" id="atk_admin_form_generic_name_input" value="" />
+            <input name="name" type="text" placeholder="" id="atk_admin_form_generic_name_input" value="">
         </div>
     </div>
 

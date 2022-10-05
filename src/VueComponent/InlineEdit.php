@@ -81,7 +81,7 @@ class InlineEdit extends View
             $this->formatErrorMsg = function (ValidationException $e, string $value) {
                 $caption = $this->model->getField($this->fieldName)->getCaption();
 
-                return $caption . ' - ' . $e->getMessage() . '. <br />Trying to set this value: "' . $value . '"';
+                return $caption . ' - ' . $e->getMessage() . '. <br>Trying to set this value: "' . $value . '"';
             };
         }
     }

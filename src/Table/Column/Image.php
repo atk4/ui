@@ -18,6 +18,6 @@ class Image extends Table\Column
     {
         $caption = $field ? $field->getCaption() : $this->shortName;
 
-        return '<img src="' . parent::getDataCellTemplate($field) . '" alt="' . $caption . '" border="0" />';
+        return '<img src="' . parent::getDataCellTemplate($field) . '" alt="' . $caption . '" border="0">';
     }
 }

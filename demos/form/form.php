@@ -78,7 +78,7 @@ $form->addControl('control', [Form\Control\Calendar::class, 'type' => 'date', 'c
 $form->buttonSave->set('Compare Date');
 
 $form->onSubmit(function (Form $form) {
-    $message = 'field = ' . print_r($form->model->get('field'), true) . '; <br /> control = ' . print_r($form->model->get('control'), true);
+    $message = 'field = ' . print_r($form->model->get('field'), true) . '; <br> control = ' . print_r($form->model->get('control'), true);
     $view = new Message('Date field vs control:');
     $view->invokeInit();
     $view->text->addHtml($message);
