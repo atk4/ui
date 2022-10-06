@@ -183,18 +183,26 @@ class FormTest extends TestCase
         $m = $m->createEntity();
         $this->form->setModel($m, ['foo']);
 
+        $submitReached = false;
+        $catchReached = false;
         try {
-            $this->assertSubmit(['foo' => 'x'], function (Model $model) {
-                $model->set('bar', null);
-            });
+            try {
+                $this->assertSubmit(['foo' => 'x'], function (Model $model) use (&$submitReached) {
+                    $submitReached = true;
+                    $model->set('bar', null);
+                });
+            } catch (UnhandledCallbackExceptionError $e) {
+                $catchReached = true;
+                static::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore-line
 
-            static::assertFalse(true);
-        } catch (UnhandledCallbackExceptionError $e) {
-            $this->expectException(ValidationException::class);
-            $this->expectExceptionMessage('Must not be null');
-            static::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName);
+                $this->expectException(ValidationException::class);
+                $this->expectExceptionMessage('Must not be null');
 
-            throw $e->getPrevious();
+                throw $e->getPrevious();
+            }
+        } finally {
+            static::assertTrue($submitReached);
+            static::assertTrue($catchReached);
         }
     }
 }
