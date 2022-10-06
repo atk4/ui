@@ -116,7 +116,6 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
             return;
         }
 
-        data = data.replace(new RegExp('src:\\s*(?=[^{};,]+\\.eot(?!\\w))' + cssUrlPattern + ';\\s*', 'g'), '');
         data = data.replace(new RegExp('(src:\\s*(?!\\s))[^{};]*((?=[^{};,]+\\.woff2(?!\\w))' + cssUrlPattern + ')[^{};]*(;)', 'g'), '$1$2 format(\'woff2\')$6');
 
         return data;
