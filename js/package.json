@@ -4,7 +4,7 @@
     "description": "Agile Toolkit Javascript library.",
     "main": "../public/atkjs-ui.js",
     "scripts": {
-        "build": "webpack --env production && webpack --env development",
+        "build": "webpack --env development && rm ../public/*.js.map && webpack --env production",
         "dev": "webpack --progress --watch --env development",
         "profile": "webpack --env production --profile --json > profile/atkjs-bundle-profile.json",
         "analyze-profile": "webpack-bundle-analyzer profile/atkjs-bundle-profile.json",

@@ -328,7 +328,6 @@ jobs:
         if: matrix.type == 'Chrome Slow'
         run: |
           (cd js && npm run build)
-          rm public/*.js.map
 
       - name: Diff compiled files (only for Slow)
         if: matrix.type == 'Chrome Slow'
