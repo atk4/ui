@@ -16,7 +16,8 @@
 !/chart.js/LICENS*
 !/chart.js/dist/
 /chart.js/dist/*
-!/chart.js/dist/*.min.js
+!/chart.js/dist/*.js
+/chart.js/dist/*.esm.js
 
 !/flatpickr/LICENS*
 !/flatpickr/dist/

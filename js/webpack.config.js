@@ -8,7 +8,6 @@
  *
  * Using Development
  *  - set webpack config mode to development
- *  - devtools will use source-map under atk name;
  *
  * Using Production
  *  - set webpack config mode to production
@@ -41,7 +40,7 @@ module.exports = (env) => {
     return {
         entry: { [filename]: srcDir + '/agile-toolkit-ui.js' },
         mode: isProduction ? 'production' : 'development',
-        devtool: isProduction ? false : 'source-map',
+        devtool: isProduction ? 'source-map' : false,
         performance: isProduction ? prodPerformance : {},
         output: {
             path: publicDir,
@@ -56,7 +55,7 @@ module.exports = (env) => {
                 cacheGroups: {
                     vendor: {
                         test: /[\\/]node_modules[\\/]/,
-                        name: 'vendors',
+                        name: 'atk-vendor',
                     },
                 },
             },
