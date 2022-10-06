@@ -8,15 +8,6 @@
  * http://opensource.org/licenses/MIT
  *
  */
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Site
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -502,15 +493,6 @@ $.extend($.expr[ ":" ], {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Form Validation
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -2578,15 +2560,6 @@ $.fn.form.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Accordion
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -3203,15 +3176,6 @@ $.extend( $.easing, {
 })( jQuery, window, document );
 
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Calendar
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -5094,15 +5058,6 @@ $.fn.calendar.settings = {
 
 })(jQuery, window, document);
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Checkbox
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -5978,15 +5933,6 @@ $.fn.checkbox.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Dimmer
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -6744,15 +6690,6 @@ $.fn.dimmer.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Dropdown
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -11100,15 +11037,6 @@ $.fn.dropdown.settings.templates = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Embed
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -11814,15 +11742,6 @@ $.fn.embed.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Flyout
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -13344,15 +13263,6 @@ $.fn.flyout.settings.templates = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Modal
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -14900,15 +14810,6 @@ $.fn.modal.settings.templates = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Nag
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -15459,15 +15360,6 @@ $.extend( $.easing, {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Popup
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -16995,15 +16887,6 @@ $.fn.popup.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Progress
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -18032,15 +17915,6 @@ $.fn.progress.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Slider
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ( $, window, document, undefined ) {
 
@@ -19386,15 +19260,6 @@ $.fn.slider.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Rating
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -19945,15 +19810,6 @@ $.fn.rating.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Search
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -21540,15 +21396,6 @@ $.extend($.easing, {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Shape
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -22389,15 +22236,6 @@ $.fn.shape.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Sidebar
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -23523,15 +23361,6 @@ $.fn.sidebar.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Sticky
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -24474,15 +24303,6 @@ $.fn.sticky.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Tab
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -25494,15 +25314,6 @@ $.fn.tab.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Toast
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -26421,15 +26232,6 @@ $.extend( $.easing, {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Transition
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -27536,15 +27338,6 @@ $.fn.transition.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - API
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -28773,15 +28566,6 @@ $.api.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - State
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 
@@ -29485,15 +29269,6 @@ $.fn.state.settings = {
 
 })( jQuery, window, document );
 
-/*!
- * # Fomantic-UI 2.9.0-beta.320+c4b3a74 - Visibility
- * http://github.com/fomantic/Fomantic-UI/
- *
- *
- * Released under the MIT license
- * http://opensource.org/licenses/MIT
- *
- */
 
 ;(function ($, window, document, undefined) {
 

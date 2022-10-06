@@ -38,7 +38,7 @@ if (fs.existsSync(path.join(__dirname, 'form-serializer/jquery.serialize-object.
 
 const cssUrlPattern = '((?<!\\w)url\\([\'"]?(?!data:))((?:[^(){}\\\\\'"]|\\\\.)*)([\'"]?\\))';
 
-// use native font stack in Fomantic UI
+// use native font stack in Fomantic-UI
 // https://github.com/fomantic/Fomantic-UI/issues/2355
 walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
     updateFileSync(f, (data) => {
@@ -186,6 +186,20 @@ walkFilesSync(__dirname, (f) => {
 
             return m1 + pathRel + m3;
         });
+
+        return data;
+    });
+});
+
+// remove repeated Fomantic-UI version comments for easier diff
+// https://github.com/fomantic/Fomantic-UI/issues/2468
+walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
+    updateFileSync(f, (data) => {
+        if (!f.endsWith('.css') && !f.endsWith('.js')) {
+            return;
+        }
+
+        data = data.replace(/(?<!^)\/\*!(?:(?!\/\*).)*# Fomantic-UI \d+\.\d+\.(?:(?!\/\*).)*MIT license(?:(?!\/\*).)*\*\/\n?/gs, '');
 
         return data;
     });
