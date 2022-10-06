@@ -6,9 +6,11 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
+use Atk4\Data\ValidationException;
 use Atk4\Ui\App;
 use Atk4\Ui\Callback;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use Atk4\Ui\Form;
 use Mvorisek\Atk4\Hintable\Phpstan\PhpstanUtil;
 
@@ -115,11 +117,6 @@ class FormTest extends TestCase
         });
     }
 
-    public function assertSubmitError(array $post, \Closure $checkExpectedErrorsFx): void
-    {
-        $this->assertSubmit($post, null, $checkExpectedErrorsFx);
-    }
-
     public function assertFormControlError(string $field, string $error): void
     {
         $n = preg_match_all('~form\("add prompt", "([^"]*)", "([^"]*)"\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
@@ -162,7 +159,7 @@ class FormTest extends TestCase
         $m = $m->createEntity();
         $this->form->setModel($m);
 
-        $this->assertSubmitError(['opt1' => '2', 'opt3_z' => '0', 'opt4' => '', 'opt4_z' => '0'], function (string $formError) {
+        $this->assertSubmit(['opt1' => '2', 'opt3_z' => '0', 'opt4' => '', 'opt4_z' => '0'], null, function (string $formError) {
             // dropdown validates to make sure option is proper
             $this->assertFormControlError('opt1', 'not one of the allowed values');
 
@@ -175,6 +172,38 @@ class FormTest extends TestCase
             $this->assertFormControlError('opt4', 'Must not be empty');
             $this->assertFormControlError('opt4_z', 'Must not be empty');
         });
+    }
+
+    public function testSubmitNonFormFieldError(): void
+    {
+        $m = new Model();
+        $m->addField('foo', ['nullable' => false]);
+        $m->addField('bar', ['nullable' => false]);
+
+        $m = $m->createEntity();
+        $this->form->setModel($m, ['foo']);
+
+        $submitReached = false;
+        $catchReached = false;
+        try {
+            try {
+                $this->assertSubmit(['foo' => 'x'], function (Model $model) use (&$submitReached) {
+                    $submitReached = true;
+                    $model->set('bar', null);
+                });
+            } catch (UnhandledCallbackExceptionError $e) {
+                $catchReached = true;
+                static::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore-line
+
+                $this->expectException(ValidationException::class);
+                $this->expectExceptionMessage('Must not be null');
+
+                throw $e->getPrevious();
+            }
+        } finally {
+            static::assertTrue($submitReached);
+            static::assertTrue($catchReached);
+        }
     }
 }
 

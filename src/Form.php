@@ -259,6 +259,10 @@ class Form extends View
             } catch (ValidationException $e) {
                 $response = [];
                 foreach ($e->errors as $field => $error) {
+                    if (!isset($this->controls[$field])) {
+                        throw $e;
+                    }
+
                     $response[] = $this->error($field, $error);
                 }
 

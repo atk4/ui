@@ -48,16 +48,13 @@ $form->addControl('country3', [
 ]);
 
 $form->onSubmit(function (Form $form) {
-    $str = $form->model->ref('country1')->get(Country::hinting()->fieldName()->name)
-        . '; '
-        . $form->model->ref('country2')->get(Country::hinting()->fieldName()->name)
-        . '; '
-        . (new Country($form->getApp()->db))->load($form->model->get('country3'))
-            ->get(Country::hinting()->fieldName()->name);
-
     $view = new Message('Select:'); // need in behat test.
     $view->invokeInit();
-    $view->text->addParagraph($str);
+    $view->text->addParagraph($form->model->ref('country1')->get(Country::hinting()->fieldName()->name) ?? 'null');
+    $view->text->addParagraph($form->model->ref('country2')->get(Country::hinting()->fieldName()->name) ?? 'null');
+    $view->text->addParagraph($form->model->get('country3') !== '' // related with https://github.com/atk4/ui/pull/1805
+        ? (new Country($form->getApp()->db))->load($form->model->get('country3'))->get(Country::hinting()->fieldName()->name)
+        : 'null');
 
     return $view;
 });
