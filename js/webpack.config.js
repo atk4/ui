@@ -40,7 +40,7 @@ module.exports = (env) => {
     return {
         entry: { [filename]: srcDir + '/agile-toolkit-ui.js' },
         mode: isProduction ? 'production' : 'development',
-        devtool: 'source-map',
+        devtool: isProduction ? 'source-map' : false,
         performance: isProduction ? prodPerformance : {},
         output: {
             path: publicDir,
