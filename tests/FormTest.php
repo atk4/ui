@@ -6,6 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
+use Atk4\Data\ValidationException;
 use Atk4\Ui\App;
 use Atk4\Ui\Callback;
 use Atk4\Ui\Exception;
@@ -182,10 +183,19 @@ class FormTest extends TestCase
         $m = $m->createEntity();
         $this->form->setModel($m, ['foo']);
 
-        $this->expectException(UnhandledCallbackExceptionError::class);
-        $this->assertSubmit(['foo' => 'x'], function (Model $model) {
-            $model->set('bar', null);
-        });
+        try {
+            $this->assertSubmit(['foo' => 'x'], function (Model $model) {
+                $model->set('bar', null);
+            });
+
+            static::assertFalse(true);
+        } catch (UnhandledCallbackExceptionError $e) {
+            $this->expectException(ValidationException::class);
+            $this->expectExceptionMessage('Must not be null');
+            static::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName);
+
+            throw $e->getPrevious();
+        }
     }
 }
 
