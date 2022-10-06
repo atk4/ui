@@ -38,16 +38,16 @@ if (fs.existsSync(path.join(__dirname, 'form-serializer/jquery.serialize-object.
 
 const cssUrlPattern = '((?<!\\w)url\\([\'"]?(?!data:))((?:[^(){}\\\\\'"]|\\\\.)*)([\'"]?\\))';
 
-// use native font stack in Fomantic UI
-// remove once https://github.com/fomantic/Fomantic-UI/issues/2355 is implemented and released
+// use native font stack in Fomantic-UI
+// https://github.com/fomantic/Fomantic-UI/issues/2355
 walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
     updateFileSync(f, (data) => {
         if (!f.endsWith('.css')) {
             return;
         }
 
-        data = data.replace(new RegExp('@import ' + cssUrlPattern + ';?', 'g'), (m, m1, m2, m3) => {
-            if (m2.startsWith('https://fonts.googleapis.com/css2?family=Lato:')) {
+        data = data.replace(new RegExp('\\s*@font-face\\s*\\{[^{}]*' + cssUrlPattern + '[^{}]+\\}', 'g'), (m, m1, m2, m3) => {
+            if (m2.includes('/assets/fonts/Lato')) {
                 return '';
             }
 
@@ -116,7 +116,6 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
             return;
         }
 
-        data = data.replace(new RegExp('src:\\s*(?=[^{};,]+\\.eot(?!\\w))' + cssUrlPattern + ';\\s*', 'g'), '');
         data = data.replace(new RegExp('(src:\\s*(?!\\s))[^{};]*((?=[^{};,]+\\.woff2(?!\\w))' + cssUrlPattern + ')[^{};]*(;)', 'g'), '$1$2 format(\'woff2\')$6');
 
         return data;
@@ -131,7 +130,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
             return;
         }
 
-        data = data.replace(/\s*((?<!\w)em\[data-emoji=[^[\]{}\\]+\]:before,?\s*)+\{[^{}]*background-image:[^{}]+\}/g, '');
+        data = data.replace(/\s*((?<!\w)em\[data-emoji=[^[\]{}\\]+\]::before,?\s*)+\{[^{}]*background-image:[^{}]+\}/g, '');
 
         return data;
     });
@@ -186,6 +185,20 @@ walkFilesSync(__dirname, (f) => {
 
             return m1 + pathRel + m3;
         });
+
+        return data;
+    });
+});
+
+// remove repeated Fomantic-UI version comments for easier diff
+// https://github.com/fomantic/Fomantic-UI/issues/2468
+walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
+    updateFileSync(f, (data) => {
+        if (!f.endsWith('.css') && !f.endsWith('.js')) {
+            return;
+        }
+
+        data = data.replace(/(?<!^)\/\*!(?:(?!\/\*).)*# Fomantic-UI \d+\.\d+\.(?:(?!\/\*).)*MIT license(?:(?!\/\*).)*\*\/\n?/gs, '');
 
         return data;
     });

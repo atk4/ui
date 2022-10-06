@@ -45,9 +45,7 @@
 !/fomantic-ui/dist/themes/default/assets/fonts/
 /fomantic-ui/dist/themes/default/assets/fonts/*
 !/fomantic-ui/dist/themes/default/assets/fonts/*.woff2
-!/fomantic-ui/dist/themes/default/assets/images/
-/fomantic-ui/dist/themes/default/assets/images/*
-!/fomantic-ui/dist/themes/default/assets/images/flags.png
+/fomantic-ui/dist/themes/default/assets/fonts/Lato*.woff2
 
 !/form-serializer/LICENS*
 !/form-serializer/dist/
