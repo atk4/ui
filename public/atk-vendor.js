@@ -1,4 +1,4 @@
-(self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["vendors"],{
+(self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["atk-vendor"],{
 
 /***/ "./node_modules/core-js/internals/collection-add-all.js":
 /*!**************************************************************!*\
