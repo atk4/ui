@@ -33,8 +33,8 @@ module.exports = (env) => {
 
     const prodPerformance = {
         hints: false,
-        maxEntrypointSize: 640000,
-        maxAssetSize: 640000,
+        maxEntrypointSize: 640 * 1024,
+        maxAssetSize: 640 * 1024,
     };
 
     return {
