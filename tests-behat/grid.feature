@@ -40,3 +40,7 @@ Feature: Grid
   Scenario: drag resize (TODO test real drag)
     Given I am on "collection/table2.php"
     Then I should see "Table with resizable columns"
+
+  Scenario: drag sort (TODO test real drag)
+    Given I am on "interactive/jssortable.php"
+    Then I should see "Add drag n drop to grid"
