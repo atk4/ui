@@ -336,6 +336,13 @@ jobs:
           diff -ru template.orig template
           rm -r public.orig template.orig
 
+      - name: Instrument & recompile JS files (only for coverage)
+        if: env.LOG_COVERAGE
+        run: |
+          rm public/*.js
+          (cd js && npm install --package-lock-only --save-dev nyc && npm ci --loglevel=error)
+          (cd js && npx nyc instrument --in-place . && npx webpack --env production)
+
       - name: Install PHP dependencies
         run: |
           composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap --dev
@@ -351,7 +358,7 @@ jobs:
           php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
           /usr/lib/oracle/setup.sh
-          if [ -n "$LOG_COVERAGE" ]; then mkdir coverage; fi
+          if [ -n "$LOG_COVERAGE" ]; then mkdir coverage coverage/js; fi
           ci_wait_until () { timeout 30 sh -c "until { $1 2> /dev/null; }; do sleep 0.02; done" || timeout 15 sh -c "$1" || { echo "health timeout: $1"; exit 1; }; }
           php -d opcache.enable_cli=1 -S 127.0.0.1:8888 > /dev/null 2>&1 &
           ci_wait_until 'nc -w 1 127.0.0.1 8888'
@@ -424,15 +431,31 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: Upload coverage logs 1/2 (only for latest Chrome)
+      - name: Upload PHP coverage logs 1/2 (only for coverage)
         if: env.LOG_COVERAGE
         run: |
           ls -l coverage | wc -l
           php -d memory_limit=2G vendor/bin/phpcov merge coverage/ --clover coverage/merged.xml
 
-      - name: Upload coverage logs 2/2 (only for latest Chrome)
+      - name: Upload PHP coverage logs 2/2 (only for coverage)
         if: env.LOG_COVERAGE
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage/merged.xml
+
+      - name: Upload JS coverage logs 1/2 (only for coverage)
+        if: env.LOG_COVERAGE
+        run: |
+          ls -l coverage/js | wc -l
+          (cd js && npx nyc report --temp-dir ../coverage/js --report-dir ../coverage/js --reporter=clover)
+          # fix never reached condition is rendered to clover with falsecount = 2 (or even higher if condition has multiple statements)
+          # https://github.com/istanbuljs/istanbuljs/issues/695
+          sed -i -E 's~count="0" type="cond" truecount="0" falsecount="[1-9]+"~count="0" type="cond" truecount="0" falsecount="0"~' coverage/js/clover.xml
+
+      - name: Upload JS coverage logs 2/2 (only for coverage)
+        if: env.LOG_COVERAGE
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: coverage/js/clover.xml
