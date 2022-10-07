@@ -17,6 +17,7 @@ use Exception;
 
 class Context extends RawMinkContext implements BehatContext
 {
+    use JsCoverageContextTrait;
     use WarnDynamicPropertyTrait;
 
     public function getSession($name = null): MinkSession
@@ -73,10 +74,13 @@ class Context extends RawMinkContext implements BehatContext
     {
         $this->jqueryWait();
         $this->disableAnimations();
+
         if (!str_contains($this->getScenario($event)->getTitle() ?? '', 'exception is displayed')) {
             $this->assertNoException();
         }
         $this->assertNoDuplicateId();
+
+        $this->saveJsCoverage();
     }
 
     protected function getFinishedScript(): string
@@ -139,7 +143,7 @@ class Context extends RawMinkContext implements BehatContext
         ]);
 
         $this->getSession()->executeScript(
-            'if (Array.prototype.filter.call(document.getElementsByTagName("style"), e => e.getAttribute("about") === "atk-test-behat").length === 0) {'
+            'if (Array.prototype.filter.call(document.getElementsByTagName("style"), (e) => e.getAttribute("about") === "atk-test-behat").length === 0) {'
             . ' $(\'<style about="atk-test-behat">' . $css . '</style>\').appendTo(\'head\');'
             . ' }'
             . 'jQuery.fx.off = true;'
