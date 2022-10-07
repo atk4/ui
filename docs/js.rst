@@ -459,58 +459,6 @@ where it is only hidden.
 
     See `Modals and reloading`_ concerning the intricacies between jsMmodals and callbacks.
 
-JsNotify
-========
-
-.. php:class:: JsNotify
-.. php:method:: setColor(color)
-
-Dynamic notifier used to display operation status::
-
-    \Atk4\Ui\Button::addTo($app, ['Test'])->on(
-        'click',
-        (new \Atk4\Ui\JsNotify('Not yet implemented'))->setColor('red')
-    );
-
-A typical use case would be to provide visual feedback of an action after used performs operation inside
-a Modal window with a Form. When user submits a form, its Submit handler will close modal in order to leave
-some feedback to the user. JsNotify can display a bar on top of the screen for some time::
-
-    $modal = \Atk4\Ui\Modal::addTo($app, ['Modal Title']);
-
-    $modal->set(function (View $p) use ($modal) {
-        $form = \Atk4\Ui\Form::addTo($p);
-        $form->addControl('name', [], ['caption' => 'Add your name']);
-
-        $form->onSubmit(function (Form $form) use ($modal) {
-            if (empty($form->model->get('name'))) {
-                return $form->error('name', 'Please add a name!');
-            } else {
-                return [
-                    $modal->hide(),
-                    new \Atk4\Ui\JsNotify('Thank you ' . $form->model->get('name')),
-                ];
-            }
-        });
-    });
-
-    \Atk4\Ui\Button::addTo($app, ['Open Modal'])->on('click', $modal->show());
-
-.. php:method:: setIcon(color)
-.. php:method:: setTransition(openTransition, closeTransition)
-.. php:method:: setDuration(duration)
-.. php:method:: setPosition(duration)
-.. php:method:: setWidth(duration)
-.. php:method:: setOpacity(duration)
-
-You can pass options either as array or by calling methods.
-
-.. php:method:: attachTo(view)
-
-Finally you can attach your notification to another view::
-
-    $jsNotify->attachTo($form);
-
 
 Reloading
 =========

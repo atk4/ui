@@ -496,20 +496,6 @@ class DemosTest extends TestCase
             ],
         ];
 
-        // for JsNotify coverage
-        $files[] = [
-            'obsolete/notify2.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_notify=ajax&' . Callback::URL_QUERY_TARGET . '=test_notify',
-            [
-                'text' => 'This text will appear in notification',
-                'icon' => 'warning sign',
-                'color' => 'green',
-                'transition' => 'jiggle',
-                'width' => '25%',
-                'position' => 'topRight',
-                'attach' => 'Body',
-            ],
-        ];
-
         return $files;
     }
 

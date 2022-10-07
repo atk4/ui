@@ -512,16 +512,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugins/reload-view.plugin */ "./src/plugins/reload-view.plugin.js");
 /* harmony import */ var _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugins/ajaxec.plugin */ "./src/plugins/ajaxec.plugin.js");
 /* harmony import */ var _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugins/create-modal.plugin */ "./src/plugins/create-modal.plugin.js");
-/* harmony import */ var _plugins_notify_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./plugins/notify.plugin */ "./src/plugins/notify.plugin.js");
-/* harmony import */ var _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/file-upload.plugin */ "./src/plugins/file-upload.plugin.js");
-/* harmony import */ var _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./plugins/js-search.plugin */ "./src/plugins/js-search.plugin.js");
-/* harmony import */ var _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/js-sortable.plugin */ "./src/plugins/js-sortable.plugin.js");
-/* harmony import */ var _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/conditional-form.plugin */ "./src/plugins/conditional-form.plugin.js");
-/* harmony import */ var _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/column-resizer.plugin */ "./src/plugins/column-resizer.plugin.js");
-/* harmony import */ var _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./plugins/scroll.plugin */ "./src/plugins/scroll.plugin.js");
-/* harmony import */ var _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/confirm.plugin */ "./src/plugins/confirm.plugin.js");
-/* harmony import */ var _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./plugins/sidenav.plugin */ "./src/plugins/sidenav.plugin.js");
-
+/* harmony import */ var _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./plugins/file-upload.plugin */ "./src/plugins/file-upload.plugin.js");
+/* harmony import */ var _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/js-search.plugin */ "./src/plugins/js-search.plugin.js");
+/* harmony import */ var _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./plugins/js-sortable.plugin */ "./src/plugins/js-sortable.plugin.js");
+/* harmony import */ var _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/conditional-form.plugin */ "./src/plugins/conditional-form.plugin.js");
+/* harmony import */ var _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/column-resizer.plugin */ "./src/plugins/column-resizer.plugin.js");
+/* harmony import */ var _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/scroll.plugin */ "./src/plugins/scroll.plugin.js");
+/* harmony import */ var _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./plugins/confirm.plugin */ "./src/plugins/confirm.plugin.js");
+/* harmony import */ var _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/sidenav.plugin */ "./src/plugins/sidenav.plugin.js");
 
 
 
@@ -614,44 +612,40 @@ function plugin(name, className, shortHand = false) {
     plugin: _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_4__["default"],
     sh: false
   }, {
-    name: 'Notify',
-    plugin: _plugins_notify_plugin__WEBPACK_IMPORTED_MODULE_5__["default"],
-    sh: true
-  }, {
     name: 'ServerEvent',
     plugin: _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_1__["default"],
     sh: true
   }, {
     name: 'FileUpload',
-    plugin: _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_6__["default"],
+    plugin: _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_5__["default"],
     sh: false
   }, {
     name: 'JsSearch',
-    plugin: _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_7__["default"],
+    plugin: _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_6__["default"],
     sh: false
   }, {
     name: 'JsSortable',
-    plugin: _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_8__["default"],
+    plugin: _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_7__["default"],
     sh: false
   }, {
     name: 'ConditionalForm',
-    plugin: _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_9__["default"],
+    plugin: _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_8__["default"],
     sh: true
   }, {
     name: 'ColumnResizer',
-    plugin: _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_10__["default"],
+    plugin: _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_9__["default"],
     sh: false
   }, {
     name: 'Scroll',
-    plugin: _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_11__["default"],
+    plugin: _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_10__["default"],
     sh: false
   }, {
     name: 'Confirm',
-    plugin: _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_12__["default"],
+    plugin: _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_11__["default"],
     sh: true
   }, {
     name: 'Sidenav',
-    plugin: _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_13__["default"],
+    plugin: _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_12__["default"],
     sh: false
   }];
   atkJqPlugins.forEach(atkJqPlugin => {
@@ -1852,174 +1846,6 @@ JsSortable.DEFAULTS = {
   mirrorCss: '.draggable-mirror {background: #fff!important; margin-left: 1%; opacity: 0.9; }',
   overCss: '.draggable--over { background: yellow !important; opacity: 0.5; }',
   autoFireCb: true
-};
-
-/***/ }),
-
-/***/ "./src/plugins/notify.plugin.js":
-/*!**************************************!*\
-  !*** ./src/plugins/notify.plugin.js ***!
-  \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ notify)
-/* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-
-
-/**
- * Create notification message.
- *
- * Can be attach to an element using $('selector')->atkNotify(options);
- * or to the body using $.atkNotify($option)
- */
-
-class notify extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  main() {
-    let cssStyle = {};
-    this.timer = null;
-    let domElement = 'body';
-
-    if (!jquery__WEBPACK_IMPORTED_MODULE_0___default().isEmptyObject(this.$el[0])) {
-      domElement = this.$el;
-    }
-
-    cssStyle = this.getClasses(domElement);
-    cssStyle.base.width = this.settings.width + '%';
-    cssStyle.base.opacity = this.settings.opacity;
-    this.notify = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.getNotifier(this.settings)).hide();
-    this.notify.css(jquery__WEBPACK_IMPORTED_MODULE_0___default().extend(cssStyle.base, this.getPosition(this.settings.position)));
-    this.notify.on('click', '.icon.close', {
-      self: this
-    }, this.removeNotifier);
-    this.notify.appendTo(domElement);
-    this.notify.transition(this.settings.openTransition);
-
-    if (this.settings.duration) {
-      this.timer = setTimeout(() => {
-        this.removeNotifier({
-          data: {
-            self: this
-          }
-        });
-      }, this.settings.duration);
-    }
-  }
-  /**
-   * Return the html for this notifications.
-   * @param options
-   * @returns {string}
-   */
-
-
-  getNotifier(options) {
-    return `<div class="atk-notify transition hidden">
-                <div class="ui ${options.color} ${options.size} inverted segment" style="overflow: auto; display: block !important">
-                    <i class="close icon" style="float:right"></i>
-                    <div class="content">
-                        <i class="${options.icon} icon" style=""></i>
-                        <span>${options.content}</span>
-                    </div>
-                </div>
-             </div>`;
-  }
-  /**
-   * Remove this notification from the element it was add to.
-   *
-   * @param e
-   */
-
-
-  removeNotifier(e) {
-    const {
-      self
-    } = e.data;
-    clearTimeout(self.timer);
-    self.notify.transition(self.settings.closeTransition);
-    self.notify.remove();
-  }
-  /**
-   * Return basis css class use for this notification.
-   *
-   * @param el
-   * @returns {{base: {position: string, z-index: number}}}
-   */
-
-
-  getClasses(el) {
-    return {
-      base: {
-        position: el === 'body' ? 'fixed' : 'absolute',
-        'z-index': 9999
-      }
-    };
-  }
-  /**
-   * Return the css classes needed for positioning this notification.
-   * @param position
-   * @returns {*}
-   */
-
-
-  getPosition(position) {
-    const positions = {
-      topLeft: {
-        top: '0px',
-        left: '0px'
-      },
-      topCenter: {
-        margin: 'auto',
-        top: '0px',
-        left: '0px',
-        right: '0px'
-      },
-      topRight: {
-        top: '0px',
-        right: '0px'
-      },
-      bottomLeft: {
-        bottom: '0px',
-        left: '0px'
-      },
-      bottomCenter: {
-        margin: 'auto',
-        bottom: '0px',
-        left: '0px',
-        right: '0px'
-      },
-      bottomRight: {
-        bottom: '0px',
-        right: '0px'
-      },
-      center: {
-        margin: 'auto',
-        top: '0px',
-        left: '0px',
-        bottom: '0px',
-        right: '0px',
-        'max-height': '1%'
-      }
-    };
-    return positions[position];
-  }
-
-}
-notify.DEFAULTS = {
-  color: 'green',
-  size: 'small',
-  icon: null,
-  content: null,
-  width: 100,
-  closeTransition: 'scale',
-  openTransition: 'scale',
-  duration: 3000,
-  opacity: '1',
-  position: 'topLeft'
 };
 
 /***/ }),
