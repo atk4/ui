@@ -1,7 +1,5 @@
 import Vue from 'vue';
 import SemanticUiVue from 'semantic-ui-vue';
-import atkClickOutside from '../directives/click-outside.directive';
-import { focus } from '../directives/commons.directive';
 
 // disable console logs for non-minified build
 Vue.config.productionTip = false;
@@ -38,12 +36,6 @@ const atkComponents = {
     'atk-tree-item-selector': componentFactory('atk-tree-item-selector', () => import(/* webpackChunkName: "atk-vue-tree-item-selector" */'../components/tree-item-selector/tree-item-selector.component')),
     'atk-query-builder': componentFactory('atk-query-builder', () => import(/* webpackChunkName: "atk-vue-query-builder" */'../components/query-builder/query-builder.component.vue')),
 };
-
-// setup atk custom directives.
-const atkDirectives = [{ name: 'click-outside', def: atkClickOutside }, { name: 'focus', def: focus }];
-atkDirectives.forEach((directive) => {
-    Vue.directive(directive.name, directive.def);
-});
 
 /**
  * Singleton class

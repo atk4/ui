@@ -192,102 +192,6 @@ function atkDebounce(func, wait, options) {
 
 /***/ }),
 
-/***/ "./src/directives/click-outside.directive.js":
-/*!***************************************************!*\
-  !*** ./src/directives/click-outside.directive.js ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/**
- * Vue directive for handling click
- * outside a component. You can specify other components
- * outside of the component using the directive via an array where the directive will not be apply.
- * Example a button use for opening a popup. Exclude is indicate
- * via a reference name.
- *
- * <button ref="button" @click="showPopup = !showPopup" > OPEN Popup </button>
- *
- * Example usage:
- * <div
- * v-show="showPopup"
- * v-closable="{
- *   exclude: ['button'], // using button ref name.
- *   handler: 'onClose' // an onClose method on the component using the directive.
- * }"
- * </div>
- */
-let handleOutsideClick;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  bind: function (el, binding, vnode) {
-    // the click/touchstart handler
-    handleOutsideClick = e => {
-      e.stopPropagation(); // Get the handler method name and the exclude array
-      // from the object used in v-closable
-
-      const {
-        handler,
-        exclude
-      } = binding.value; // This variable indicates if the clicked element is excluded
-
-      let clickedOnExcludedEl = false;
-      exclude.forEach(refName => {
-        // We only run this code if we haven't detected
-        // any excluded element yet
-        if (!clickedOnExcludedEl) {
-          // Get the element using the reference name
-          const excludedEl = vnode.context.$refs[refName]; // See if this excluded element
-          // is the same element the user just clicked on
-
-          clickedOnExcludedEl = excludedEl.contains(e.target);
-        }
-      }); // We check to see if the clicked element is not
-      // the component element and not excluded
-
-      if (!el.contains(e.target) && !clickedOnExcludedEl) {
-        // If the clicked element is outside the component && one of the exclude element.
-        vnode.context[handler](e);
-      }
-    }; // Register click/touchstart event listeners on the whole page
-
-
-    document.addEventListener('click', handleOutsideClick);
-    document.addEventListener('touchstart', handleOutsideClick);
-  },
-  unbind: function () {
-    // If the element that has v-closable is removed, then
-    // unbind click/touchstart listeners from the whole page
-    document.removeEventListener('click', handleOutsideClick);
-    document.removeEventListener('touchstart', handleOutsideClick);
-  }
-});
-
-/***/ }),
-
-/***/ "./src/directives/commons.directive.js":
-/*!*********************************************!*\
-  !*** ./src/directives/commons.directive.js ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "focus": () => (/* binding */ focus)
-/* harmony export */ });
-const focus = {
-  inserted: function (el) {
-    el.focus();
-  }
-};
-
-
-/***/ }),
-
 /***/ "./src/helpers/table-dropdown.helper.js":
 /*!**********************************************!*\
   !*** ./src/helpers/table-dropdown.helper.js ***!
@@ -4176,20 +4080,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var semantic_ui_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! semantic-ui-vue */ "./node_modules/semantic-ui-vue/dist/commonjs/semantic-ui-vue.js");
 /* harmony import */ var semantic_ui_vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(semantic_ui_vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _directives_click_outside_directive__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../directives/click-outside.directive */ "./src/directives/click-outside.directive.js");
-/* harmony import */ var _directives_commons_directive__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../directives/commons.directive */ "./src/directives/commons.directive.js");
-
-
 
  // disable console logs for non-minified build
 
-vue__WEBPACK_IMPORTED_MODULE_3__["default"].config.productionTip = false;
-vue__WEBPACK_IMPORTED_MODULE_3__["default"].config.devtools = false;
-vue__WEBPACK_IMPORTED_MODULE_3__["default"].use((semantic_ui_vue__WEBPACK_IMPORTED_MODULE_0___default()));
-vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('flat-picker', () => __webpack_require__.e(/*! import() */ "atk-vendor").then(__webpack_require__.t.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js", 23))); // vue loader component to display while dynamic component is loading
+vue__WEBPACK_IMPORTED_MODULE_1__["default"].config.productionTip = false;
+vue__WEBPACK_IMPORTED_MODULE_1__["default"].config.devtools = false;
+vue__WEBPACK_IMPORTED_MODULE_1__["default"].use((semantic_ui_vue__WEBPACK_IMPORTED_MODULE_0___default()));
+vue__WEBPACK_IMPORTED_MODULE_1__["default"].component('flat-picker', () => __webpack_require__.e(/*! import() */ "atk-vendor").then(__webpack_require__.t.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js", 23))); // vue loader component to display while dynamic component is loading
 
 const atkVueLoader = {
   name: 'atk-vue-loader',
@@ -4217,18 +4117,7 @@ const atkComponents = {
   'atk-multiline': componentFactory('atk-multiline', () => __webpack_require__.e(/*! import() | atk-vue-multiline */ "atk-vue-multiline").then(__webpack_require__.bind(__webpack_require__, /*! ../components/multiline/multiline.component */ "./src/components/multiline/multiline.component.js"))),
   'atk-tree-item-selector': componentFactory('atk-tree-item-selector', () => Promise.all(/*! import() | atk-vue-tree-item-selector */[__webpack_require__.e("atk-vendor"), __webpack_require__.e("atk-vue-tree-item-selector")]).then(__webpack_require__.bind(__webpack_require__, /*! ../components/tree-item-selector/tree-item-selector.component */ "./src/components/tree-item-selector/tree-item-selector.component.js"))),
   'atk-query-builder': componentFactory('atk-query-builder', () => Promise.all(/*! import() | atk-vue-query-builder */[__webpack_require__.e("atk-vendor"), __webpack_require__.e("atk-vue-query-builder")]).then(__webpack_require__.bind(__webpack_require__, /*! ../components/query-builder/query-builder.component.vue */ "./src/components/query-builder/query-builder.component.vue")))
-}; // setup atk custom directives.
-
-const atkDirectives = [{
-  name: 'click-outside',
-  def: _directives_click_outside_directive__WEBPACK_IMPORTED_MODULE_1__["default"]
-}, {
-  name: 'focus',
-  def: _directives_commons_directive__WEBPACK_IMPORTED_MODULE_2__.focus
-}];
-atkDirectives.forEach(directive => {
-  vue__WEBPACK_IMPORTED_MODULE_3__["default"].directive(directive.name, directive.def);
-});
+};
 /**
  * Singleton class
  * Create Vue component.
@@ -4277,7 +4166,7 @@ class VueService {
     this.registerComponent({
       ids: [id],
       name: component,
-      instance: new vue__WEBPACK_IMPORTED_MODULE_3__["default"]({
+      instance: new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
         el: id,
         data: {
           initData: data
@@ -4303,7 +4192,7 @@ class VueService {
     this.registerComponent({
       ids: [id],
       name: componentName,
-      instance: new vue__WEBPACK_IMPORTED_MODULE_3__["default"]({
+      instance: new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
         el: id,
         data: {
           initData: data,
@@ -4340,7 +4229,7 @@ class VueService {
 
   useComponent(component) {
     if (window[component]) {
-      vue__WEBPACK_IMPORTED_MODULE_3__["default"].use(window[component]);
+      vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(window[component]);
     } else {
       console.error('Unable to register component: ' + component + '. Make sure it is load correctly.');
     }
@@ -4353,7 +4242,7 @@ class VueService {
 
 
   getVue() {
-    return vue__WEBPACK_IMPORTED_MODULE_3__["default"];
+    return vue__WEBPACK_IMPORTED_MODULE_1__["default"];
   }
   /**
    * Mark a component as loaded.
