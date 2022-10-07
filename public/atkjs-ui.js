@@ -4184,19 +4184,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+ // disable console logs for non-minified build
 
+vue__WEBPACK_IMPORTED_MODULE_3__["default"].config.productionTip = false;
+vue__WEBPACK_IMPORTED_MODULE_3__["default"].config.devtools = false;
 vue__WEBPACK_IMPORTED_MODULE_3__["default"].use((semantic_ui_vue__WEBPACK_IMPORTED_MODULE_0___default()));
-vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('flat-picker', () => __webpack_require__.e(/*! import() */ "atk-vendor").then(__webpack_require__.t.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js", 23))); // Vue loader component to display while dynamic component is loading.
+vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('flat-picker', () => __webpack_require__.e(/*! import() */ "atk-vendor").then(__webpack_require__.t.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js", 23))); // vue loader component to display while dynamic component is loading
 
 const atkVueLoader = {
   name: 'atk-vue-loader',
   template: '<div><div class="ui active centered inline loader"></div></div>'
-}; // Vue error component to display when dynamic component loading fail.
+}; // vue error component to display when dynamic component loading fail
 
 const atkVueError = {
   name: 'atk-vue-error',
   template: '<div class="ui negative message"><p>Error: Unable to load Vue component</p></div>'
-}; // Return async component that will load on demand.
+}; // return async component that will load on demand
 
 const componentFactory = (name, component) => () => ({
   component: component().then(r => {

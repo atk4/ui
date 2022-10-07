@@ -3,23 +3,27 @@ import SemanticUiVue from 'semantic-ui-vue';
 import atkClickOutside from '../directives/click-outside.directive';
 import { focus } from '../directives/commons.directive';
 
+// disable console logs for non-minified build
+Vue.config.productionTip = false;
+Vue.config.devtools = false;
+
 Vue.use(SemanticUiVue);
 
 Vue.component('flat-picker', () => import('vue-flatpickr-component'));
 
-// Vue loader component to display while dynamic component is loading.
+// vue loader component to display while dynamic component is loading
 const atkVueLoader = {
     name: 'atk-vue-loader',
     template: '<div><div class="ui active centered inline loader"></div></div>',
 };
 
-// Vue error component to display when dynamic component loading fail.
+// vue error component to display when dynamic component loading fail
 const atkVueError = {
     name: 'atk-vue-error',
     template: '<div class="ui negative message"><p>Error: Unable to load Vue component</p></div>',
 };
 
-// Return async component that will load on demand.
+// return async component that will load on demand
 const componentFactory = (name, component) => () => ({
     component: component().then((r) => { atk.vueService.markComponentLoaded(name); return r; }),
     loading: atkVueLoader,
