@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import spinner from './plugins/spinner.plugin';
 import serverEvent from './plugins/server-event.plugin';
 import reloadView from './plugins/reload-view.plugin';
 import ajaxec from './plugins/ajaxec.plugin';
@@ -80,7 +79,6 @@ function plugin(name, className, shortHand = false) {
  */
 (function () {
     const atkJqPlugins = [
-        { name: 'Spinner', plugin: spinner, sh: false },
         { name: 'ReloadView', plugin: reloadView, sh: false },
         { name: 'Ajaxec', plugin: ajaxec, sh: false },
         { name: 'CreateModal', plugin: createModal, sh: false },

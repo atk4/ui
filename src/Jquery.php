@@ -77,7 +77,6 @@ namespace Atk4\Ui;
  * @method Jquery atkScroll(...$args)
  * @method Jquery atkServerEvent(...$args)
  * @method Jquery atkSidenav(...$args)
- * @method Jquery atkSpinner(...$args)
  */
 class Jquery extends JsChain
 {

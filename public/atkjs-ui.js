@@ -508,21 +508,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _plugins_spinner_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./plugins/spinner.plugin */ "./src/plugins/spinner.plugin.js");
-/* harmony import */ var _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugins/server-event.plugin */ "./src/plugins/server-event.plugin.js");
-/* harmony import */ var _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugins/reload-view.plugin */ "./src/plugins/reload-view.plugin.js");
-/* harmony import */ var _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugins/ajaxec.plugin */ "./src/plugins/ajaxec.plugin.js");
-/* harmony import */ var _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./plugins/create-modal.plugin */ "./src/plugins/create-modal.plugin.js");
-/* harmony import */ var _plugins_notify_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/notify.plugin */ "./src/plugins/notify.plugin.js");
-/* harmony import */ var _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./plugins/file-upload.plugin */ "./src/plugins/file-upload.plugin.js");
-/* harmony import */ var _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/js-search.plugin */ "./src/plugins/js-search.plugin.js");
-/* harmony import */ var _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/js-sortable.plugin */ "./src/plugins/js-sortable.plugin.js");
-/* harmony import */ var _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/conditional-form.plugin */ "./src/plugins/conditional-form.plugin.js");
-/* harmony import */ var _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./plugins/column-resizer.plugin */ "./src/plugins/column-resizer.plugin.js");
-/* harmony import */ var _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/scroll.plugin */ "./src/plugins/scroll.plugin.js");
-/* harmony import */ var _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./plugins/confirm.plugin */ "./src/plugins/confirm.plugin.js");
-/* harmony import */ var _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./plugins/sidenav.plugin */ "./src/plugins/sidenav.plugin.js");
-
+/* harmony import */ var _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./plugins/server-event.plugin */ "./src/plugins/server-event.plugin.js");
+/* harmony import */ var _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugins/reload-view.plugin */ "./src/plugins/reload-view.plugin.js");
+/* harmony import */ var _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugins/ajaxec.plugin */ "./src/plugins/ajaxec.plugin.js");
+/* harmony import */ var _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugins/create-modal.plugin */ "./src/plugins/create-modal.plugin.js");
+/* harmony import */ var _plugins_notify_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./plugins/notify.plugin */ "./src/plugins/notify.plugin.js");
+/* harmony import */ var _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/file-upload.plugin */ "./src/plugins/file-upload.plugin.js");
+/* harmony import */ var _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./plugins/js-search.plugin */ "./src/plugins/js-search.plugin.js");
+/* harmony import */ var _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/js-sortable.plugin */ "./src/plugins/js-sortable.plugin.js");
+/* harmony import */ var _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/conditional-form.plugin */ "./src/plugins/conditional-form.plugin.js");
+/* harmony import */ var _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/column-resizer.plugin */ "./src/plugins/column-resizer.plugin.js");
+/* harmony import */ var _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./plugins/scroll.plugin */ "./src/plugins/scroll.plugin.js");
+/* harmony import */ var _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/confirm.plugin */ "./src/plugins/confirm.plugin.js");
+/* harmony import */ var _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./plugins/sidenav.plugin */ "./src/plugins/sidenav.plugin.js");
 
 
 
@@ -604,60 +602,56 @@ function plugin(name, className, shortHand = false) {
 
 (function () {
   const atkJqPlugins = [{
-    name: 'Spinner',
-    plugin: _plugins_spinner_plugin__WEBPACK_IMPORTED_MODULE_1__["default"],
-    sh: false
-  }, {
     name: 'ReloadView',
-    plugin: _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_3__["default"],
+    plugin: _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_2__["default"],
     sh: false
   }, {
     name: 'Ajaxec',
-    plugin: _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_4__["default"],
+    plugin: _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_3__["default"],
     sh: false
   }, {
     name: 'CreateModal',
-    plugin: _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_5__["default"],
+    plugin: _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_4__["default"],
     sh: false
   }, {
     name: 'Notify',
-    plugin: _plugins_notify_plugin__WEBPACK_IMPORTED_MODULE_6__["default"],
+    plugin: _plugins_notify_plugin__WEBPACK_IMPORTED_MODULE_5__["default"],
     sh: true
   }, {
     name: 'ServerEvent',
-    plugin: _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_2__["default"],
+    plugin: _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_1__["default"],
     sh: true
   }, {
     name: 'FileUpload',
-    plugin: _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_7__["default"],
+    plugin: _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_6__["default"],
     sh: false
   }, {
     name: 'JsSearch',
-    plugin: _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_8__["default"],
+    plugin: _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_7__["default"],
     sh: false
   }, {
     name: 'JsSortable',
-    plugin: _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_9__["default"],
+    plugin: _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_8__["default"],
     sh: false
   }, {
     name: 'ConditionalForm',
-    plugin: _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_10__["default"],
+    plugin: _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_9__["default"],
     sh: true
   }, {
     name: 'ColumnResizer',
-    plugin: _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_11__["default"],
+    plugin: _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_10__["default"],
     sh: false
   }, {
     name: 'Scroll',
-    plugin: _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_12__["default"],
+    plugin: _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_11__["default"],
     sh: false
   }, {
     name: 'Confirm',
-    plugin: _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_13__["default"],
+    plugin: _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_12__["default"],
     sh: true
   }, {
     name: 'Sidenav',
-    plugin: _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_14__["default"],
+    plugin: _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_13__["default"],
     sh: false
   }];
   atkJqPlugins.forEach(atkJqPlugin => {
@@ -2595,81 +2589,6 @@ sidenav.DEFAULTS = {
     on: 'caret right',
     off: 'caret down'
   }
-};
-
-/***/ }),
-
-/***/ "./src/plugins/spinner.plugin.js":
-/*!***************************************!*\
-  !*** ./src/plugins/spinner.plugin.js ***!
-  \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ spinner)
-/* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-
-
-class spinner extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  main() {
-    this.timer = null;
-    const options = this.settings; // Remove any existing dimmers/spinners
-
-    this.$el.remove('.dimmer');
-    this.$el.remove('.spinner');
-    const $baseDimmer = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.baseDimmerMarkup);
-    const $baseLoader = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.baseLoaderMarkup);
-    let $finalSpinner = null;
-    $baseLoader.toggleClass('active', options.active);
-    $baseLoader.toggleClass('indeterminate', options.indeterminate);
-    $baseLoader.toggleClass('centered', options.centered);
-    $baseLoader.toggleClass('inline', options.inline);
-    const isText = !!options.loaderText;
-
-    if (isText) {
-      $baseLoader.toggleClass('text', true);
-      $baseLoader.text(options.loaderText);
-    }
-
-    if (options.dimmed) {
-      $baseDimmer.toggleClass('active', options.active);
-      $finalSpinner = $baseDimmer.append($baseLoader);
-    } else {
-      $finalSpinner = $baseLoader;
-    } // If replace is true we remove the existing content in the $element.
-
-
-    this.showSpinner(this.$el, $finalSpinner, options.replace);
-  }
-
-  showSpinner($element, $spinner, replace = false) {
-    this.timer = setTimeout(() => {
-      if (replace) $element.empty();
-      $element.append($spinner);
-    }, 500);
-  }
-
-  remove() {
-    clearTimeout(this.timer);
-    this.$el.find('.loader').remove();
-  }
-
-}
-spinner.DEFAULTS = {
-  active: false,
-  replace: false,
-  dimmed: false,
-  inline: false,
-  indeterminate: false,
-  loaderText: 'Loading',
-  centered: false,
-  baseDimmerMarkup: '<div class="ui dimmer"></div>',
-  baseLoaderMarkup: '<div class="ui loader"></div>'
 };
 
 /***/ }),
