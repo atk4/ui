@@ -682,7 +682,15 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iScrollToTop(): void
     {
-        $this->getSession()->executeScript('window.scrollTo(0,0)');
+        $this->getSession()->executeScript('window.scrollTo(0, 0)');
+    }
+
+    /**
+     * @Then I scroll to bottom
+     */
+    public function iScrollToBottom(): void
+    {
+        $this->getSession()->executeScript('window.scrollTo(0, 100 * 1000)');
     }
 
     /**
