@@ -2039,7 +2039,7 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   /**
    * Check if scrolling require adding content.
    *
-   * @param e // event
+   * @param e event
    */
 
 
@@ -2520,8 +2520,8 @@ class ApiService {
    * By passig the jQuery reference, $ var use by code that need to be eval
    * will work just fine, even if $ is not assign globally.
    *
-   * @param code // javascript to be eval.
-   * @param $    // reference to jQuery.
+   * @param code javascript to be eval.
+   * @param $    reference to jQuery.
    */
 
 

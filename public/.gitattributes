@@ -1,0 +1,3 @@
+# workaround for vue
+# https://github.com/vuejs/vue/issues/12819
+/js/* -text -filter
