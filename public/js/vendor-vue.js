@@ -1,4 +1,4 @@
-(self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["atk-vendor-vue"],{
+(self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["vendor-vue"],{
 
 /***/ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js":
 /*!********************************************************************!*\

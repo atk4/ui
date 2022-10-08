@@ -1,4 +1,4 @@
-(self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["atk-vendor-flatpickr"],{
+(self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["vendor-flatpickr"],{
 
 /***/ "./node_modules/flatpickr/dist/esm/index.js":
 /*!**************************************************!*\

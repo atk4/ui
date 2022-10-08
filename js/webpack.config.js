@@ -44,7 +44,7 @@ module.exports = (env) => {
         performance: isProduction ? prodPerformance : {},
         output: {
             path: publicDir,
-            filename: isProduction ? '[name].min.js' : '[name].js',
+            filename: isProduction ? 'js/[name].min.js' : 'js/[name].js',
             library: libraryName,
             libraryTarget: 'umd',
             libraryExport: 'default',
@@ -55,15 +55,15 @@ module.exports = (env) => {
                 cacheGroups: {
                     vendorFlatpickr: {
                         test: /[\\/]node_modules[\\/](flatpickr|vue-flatpickr-component)[\\/]/,
-                        name: 'atk-vendor-flatpickr',
+                        name: 'vendor-flatpickr',
                     },
                     vendorVue: {
                         test: /[\\/]node_modules[\\/](?!vue-flatpickr-component[\\/])(vue([-.][^\\/]+)?)[\\/]/,
-                        name: 'atk-vendor-vue',
+                        name: 'vendor-vue',
                     },
                     vendorMain: {
                         test: /[\\/]node_modules[\\/](?!(vue([-.][^\\/]+)?|flatpickr)[\\/])/,
-                        name: 'atk-vendor-main',
+                        name: 'vendor-main',
                     },
                 },
             },
