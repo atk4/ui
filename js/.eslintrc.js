@@ -50,4 +50,5 @@ module.exports = {
             },
         }],
     },
+    reportUnusedDisableDirectives: true,
 };

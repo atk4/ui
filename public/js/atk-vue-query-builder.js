@@ -89,8 +89,7 @@ __webpack_require__.r(__webpack_exports__);
      * Add a new rule via Dropdown item.
      */
     addNewRule: function (ruleId) {
-      // eslint-disable-next-line prefer-destructuring
-      this.selectedRule = this.rules.filter(rule => rule.id === ruleId)[0];
+      this.selectedRule = this.rules.filter(rule => rule.id === ruleId)[0]; // eslint-disable-line prefer-destructuring
 
       if (this.selectedRule) {
         this.addRule();
@@ -131,7 +130,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_query_builder_dist_rule_QueryBuilderRule_umd__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_query_builder_dist_rule_QueryBuilderRule_umd__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _share_atk_date_picker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../share/atk-date-picker */ "./src/components/share/atk-date-picker.js");
 /* harmony import */ var _share_atk_lookup__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../share/atk-lookup */ "./src/components/share/atk-lookup.js");
-//
 //
 //
 //

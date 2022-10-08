@@ -1,8 +1,6 @@
 import atkPlugin from './atk.plugin';
 import formService from '../services/form.service';
 
-/* eslint-disable no-bitwise */
-
 /**
  * Show or hide input field base on other input field condition.
  * Support all Fomantic-UI form validation rule.
@@ -118,14 +116,14 @@ export default class conditionalForm extends atkPlugin {
                     const validationRule = rules[inputName];
                     if (Array.isArray(validationRule)) {
                         validationRule.forEach((rule) => {
-                            isAndValid &= formService.validateField(this.$el, inputName, rule);
+                            isAndValid = isAndValid && formService.validateField(this.$el, inputName, rule);
                         });
                     } else {
-                        isAndValid &= formService.validateField(this.$el, inputName, validationRule);
+                        isAndValid = isAndValid && formService.validateField(this.$el, inputName, validationRule);
                     }
                 });
                 // Apply OR condition between rules.
-                input.state |= isAndValid;
+                input.state = input.state || isAndValid;
             });
         });
     }

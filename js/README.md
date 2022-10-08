@@ -26,7 +26,7 @@ Another example would be the upload service for file uploading using one of your
     atk.uploadService.uploadFiles(
         filesArraytoUpload,
         theElement,
-        {data: 'value'},
+        { data: 'value' },
         url,
         onComplete() {}, // the callback function when upload is complete.
         onXhr() {} // the callback function when uploading files is in progress.

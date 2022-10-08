@@ -202,7 +202,6 @@ export default class scroll extends atkPlugin {
      */
     addLoader() {
         const $parent = this.$inner.parent().hasClass('atk-overflow-auto') ? this.$inner.parent().parent() : this.$inner.parent();
-        // eslint-disable-next-line
         $parent.append($('<div id="atkScrollLoader"><div class="ui section hidden divider"></div><div class="ui active centered inline loader basic segment"></div></div>'));
     }
 

@@ -30,8 +30,8 @@ class ApiService {
      * @param code // javascript to be eval.
      * @param $ // reference to jQuery.
      */
-    evalResponse(code, $) { // eslint-disable-line
-        eval(code); // eslint-disable-line
+    evalResponse(code, $) { // eslint-disable-line no-shadow
+        eval(code); // eslint-disable-line no-eval
     }
 
     onAbort(message) {
@@ -99,7 +99,8 @@ class ApiService {
                 }
             } else if (response.isServiceError) {
                 // service can still throw an error
-                throw ({ message: response.message }); // eslint-disable-line
+                // TODO fix throw without eslint disable
+                throw ({ message: response.message }); // eslint-disable-line no-throw-literal
             }
         } catch (e) {
             atk.apiService.showErrorModal(atk.apiService.getErrorHtml(e.message));

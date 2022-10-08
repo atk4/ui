@@ -38,8 +38,7 @@
                 .split('&')
                 .reduce((obj, unsplitArg) => {
                     const arg = unsplitArg.split('=');
-                    // eslint-disable-next-line prefer-destructuring
-                    obj[arg[0]] = arg[1];
+                    obj[arg[0]] = arg[1]; // eslint-disable-line prefer-destructuring
 
                     return obj;
                 }, {});

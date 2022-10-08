@@ -1,5 +1,4 @@
 <template>
-    <!-- eslint-disable vue/no-v-html -->
     <div class="vqb-rule ui fluid card" :class="labels.spaceRule" :data-name="rule.id">
         <div class="content">
             <div class="ui grid">

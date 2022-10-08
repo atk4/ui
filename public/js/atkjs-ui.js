@@ -330,9 +330,9 @@ __webpack_require__.r(__webpack_exports__);
   $.atk.getQueryParams = function (str) {
     if (str.split('?')[1]) {
       return decodeURIComponent(str.split('?')[1]).split('&').reduce((obj, unsplitArg) => {
-        const arg = unsplitArg.split('='); // eslint-disable-next-line prefer-destructuring
+        const arg = unsplitArg.split('=');
+        obj[arg[0]] = arg[1]; // eslint-disable-line prefer-destructuring
 
-        obj[arg[0]] = arg[1];
         return obj;
       }, {});
     }
@@ -572,7 +572,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-/* eslint no-alert: "off" */
 
 
 class ajaxec extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
@@ -585,6 +584,7 @@ class ajaxec extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
 
     if (this.settings.confirm) {
       if (window.confirm(this.settings.confirm)) {
+        // eslint-disable-line no-alert
         this.doExecute();
       }
     } else if (!this.$el.hasClass('loading')) {
@@ -791,8 +791,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/form.service */ "./src/services/form.service.js");
 
 
-/* eslint-disable no-bitwise */
-
 /**
  * Show or hide input field base on other input field condition.
  * Support all Fomantic-UI form validation rule.
@@ -912,14 +910,14 @@ class conditionalForm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"
 
           if (Array.isArray(validationRule)) {
             validationRule.forEach(rule => {
-              isAndValid &= _services_form_service__WEBPACK_IMPORTED_MODULE_1__["default"].validateField(this.$el, inputName, rule);
+              isAndValid = isAndValid && _services_form_service__WEBPACK_IMPORTED_MODULE_1__["default"].validateField(this.$el, inputName, rule);
             });
           } else {
-            isAndValid &= _services_form_service__WEBPACK_IMPORTED_MODULE_1__["default"].validateField(this.$el, inputName, validationRule);
+            isAndValid = isAndValid && _services_form_service__WEBPACK_IMPORTED_MODULE_1__["default"].validateField(this.$el, inputName, validationRule);
           }
         }); // Apply OR condition between rules.
 
-        input.state |= isAndValid;
+        input.state = input.state || isAndValid;
       });
     });
   }
@@ -2054,8 +2052,7 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
 
 
   addLoader() {
-    const $parent = this.$inner.parent().hasClass('atk-overflow-auto') ? this.$inner.parent().parent() : this.$inner.parent(); // eslint-disable-next-line
-
+    const $parent = this.$inner.parent().hasClass('atk-overflow-auto') ? this.$inner.parent().parent() : this.$inner.parent();
     $parent.append(jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div id="atkScrollLoader"><div class="ui section hidden divider"></div><div class="ui active centered inline loader basic segment"></div></div>'));
   }
   /**
@@ -2407,8 +2404,8 @@ class ApiService {
 
 
   evalResponse(code, $) {
-    // eslint-disable-line
-    eval(code); // eslint-disable-line
+    // eslint-disable-line no-shadow
+    eval(code); // eslint-disable-line no-eval
   }
 
   onAbort(message) {
@@ -2480,9 +2477,10 @@ class ApiService {
         }
       } else if (response.isServiceError) {
         // service can still throw an error
+        // TODO fix throw without eslint disable
         throw {
           message: response.message
-        }; // eslint-disable-line
+        }; // eslint-disable-line no-throw-literal
       }
     } catch (e) {
       atk.apiService.showErrorModal(atk.apiService.getErrorHtml(e.message));
@@ -3931,7 +3929,7 @@ class UploadService {
    * @param completeCb    the callback for Fomantic-UI api.onComplete.
    * @param xhrCb         the xhr function to pass to server.
    */
-  uploadFiles(files, element, data = [], uploadUrl, completeCb = function (r, c) {}, xhrCb = function () {
+  uploadFiles(files, element, data, uploadUrl, completeCb = function (r, c) {}, xhrCb = function () {
     return new window.XMLHttpRequest();
   }) {
     const formData = new FormData();
@@ -33196,12 +33194,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* eslint-disable */
-
-/* global __webpack_public_path__:true */
-
-__webpack_require__.p = window.__atkBundlePublicPath === undefined ? '/public/' : window.__atkBundlePublicPath + '/';
-/* eslint-enable */
+__webpack_require__.p = window.__atkBundlePublicPath === undefined ? '/public/' : window.__atkBundlePublicPath + '/'; // eslint-disable-line no-undef, camelcase, no-underscore-dangle
 
 const atk = { ...atk_fomantic_ui__WEBPACK_IMPORTED_MODULE_1__["default"]
 };
