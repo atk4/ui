@@ -229,7 +229,6 @@ const template = `<div class="item" :style="itemMargin">
 
     /**
      * Fire when checkbox is click.
-     *
      */
     onToggleSelect: function () {
       const {

@@ -1,38 +1,25 @@
 import $ from 'jquery';
 
 /**
- * Singleton class
  * Handle Fomantic-UI form functionality throughout the app.
  */
-
 class FormService {
-    static getInstance() {
-        return this.instance;
-    }
-
     constructor() {
-        if (!this.instance) {
-            this.instance = this;
-            this.formSettings = $.fn.form.settings;
-            // A collection of jQuery form object where preventLeave is set.
-            this.prevents = [];
-            window.onbeforeunload = function (event) {
-                atk.formService.prevents.forEach((el) => {
-                    if (el.data('__atkCheckDirty') && el.data('isDirty')) {
-                        const message = 'unsaved';
-                        if (event) {
-                            event.returnValue = message;
-                        }
-
-                        return message;
+        this.formSettings = $.fn.form.settings;
+        // A collection of jQuery form object where preventLeave is set.
+        this.prevents = [];
+        window.onbeforeunload = function (event) {
+            atk.formService.prevents.forEach((el) => {
+                if (el.data('__atkCheckDirty') && el.data('isDirty')) {
+                    const message = 'unsaved';
+                    if (event) {
+                        event.returnValue = message;
                     }
-                });
-            };
-        } else {
-            throw 'singleton instanced more than once: ' . this.constructor.name;
-        }
 
-        return this.instance;
+                    return message;
+                }
+            });
+        };
     }
 
     /**
@@ -179,7 +166,7 @@ class FormService {
     }
 
     getAncillaryValue(rule) {
-    // must have a rule.value property and must be a bracketed rule.
+        // must have a rule.value property and must be a bracketed rule.
         if (!rule.value && !this.isBracketedRule(rule)) {
             return false;
         }

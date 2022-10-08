@@ -1,26 +1,14 @@
 import $ from 'jquery';
 
 /**
- * Singleton class
  * This is default setup for Fomantic-UI modal.
  * Allow to manage uri pass to our modal and dynamically update content from this uri
  * using the Fomantic-UI api function.
  * Also keep track of how many modal are use by the app.
  */
 class ModalService {
-    static getInstance() {
-        return this.instance;
-    }
-
     constructor() {
-        if (!ModalService.instance) {
-            this.modals = [];
-            ModalService.instance = this;
-        } else {
-            throw 'singleton instanced more than once: ' . this.constructor.name;
-        }
-
-        return ModalService.instance;
+        this.modals = [];
     }
 
     setModals(settings) {

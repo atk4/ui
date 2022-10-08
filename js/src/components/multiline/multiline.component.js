@@ -3,7 +3,6 @@ import multilineHeader from './multiline-header.component';
 
 /**
  * MultiLine component.
- *
  */
 export default {
     name: 'atk-multiline',

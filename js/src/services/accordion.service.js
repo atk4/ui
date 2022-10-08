@@ -1,20 +1,6 @@
 import $ from 'jquery';
 
 class AccordionService {
-    static getInstance() {
-        return this.instance;
-    }
-
-    constructor() {
-        if (!this.instance) {
-            this.instance = this;
-        } else {
-            throw 'singleton instanced more than once: ' . this.constructor.name;
-        }
-
-        return this.instance;
-    }
-
     /**
      * Setup Fomantic-UI accordion for this service.
      * @param settings

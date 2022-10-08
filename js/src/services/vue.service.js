@@ -38,39 +38,27 @@ const atkComponents = {
 };
 
 /**
- * Singleton class
  * Create Vue component.
  */
 class VueService {
-    static getInstance() {
-        return this.instance;
-    }
-
     constructor() {
-        if (!VueService.instance) {
-            this.vues = [];
-            this.vueMixins = {
-                methods: {
-                    getData: function () {
-                        return this.initData;
-                    },
+        this.vues = [];
+        this.vueMixins = {
+            methods: {
+                getData: function () {
+                    return this.initData;
                 },
-                // provide method to our child component.
-                // child component would need to inject a method to have access using the inject property,
-                // inject: ['getRootData'],
-                // Once inject you can get initial data using this.getRootData().
-                provide: function () {
-                    return {
-                        getRootData: this.getData,
-                    };
-                },
-            };
-            VueService.instance = this;
-        } else {
-            throw 'singleton instanced more than once: ' . this.constructor.name;
-        }
-
-        return VueService.instance;
+            },
+            // provide method to our child component.
+            // child component would need to inject a method to have access using the inject property,
+            // inject: ['getRootData'],
+            // Once inject you can get initial data using this.getRootData().
+            provide: function () {
+                return {
+                    getRootData: this.getData,
+                };
+            },
+        };
     }
 
     /**

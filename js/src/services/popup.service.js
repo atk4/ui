@@ -1,22 +1,7 @@
 /**
- * Singleton class
  * This is default setup for Fomantic-UI Popup.
  */
 class PopupService {
-    static getInstance() {
-        return this.instance;
-    }
-
-    constructor() {
-        if (!PopupService.instance) {
-            PopupService.instance = this;
-        } else {
-            throw 'singleton instanced more than once: ' . this.constructor.name;
-        }
-
-        return PopupService.instance;
-    }
-
     setPopups(settings) {
         settings.onCreate = this.onCreate;
         settings.onShow = this.onShow;

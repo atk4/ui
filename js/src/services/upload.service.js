@@ -1,24 +1,9 @@
 import $ from 'jquery';
 
 /**
- * Singleton class
  * Allow to upload files to server via Fomantic-UI api.
  */
 class UploadService {
-    static getInstance() {
-        return this.instance;
-    }
-
-    constructor() {
-        if (!UploadService.instance) {
-            UploadService.instance = this;
-        } else {
-            throw 'singleton instanced more than once: ' . this.constructor.name;
-        }
-
-        return UploadService.instance;
-    }
-
     /**
      * Will upload a FileList object to server.
      * Each file in FileList will be include in formData as

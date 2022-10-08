@@ -11,7 +11,6 @@ import $ from 'jquery';
  *          - default to the requesting element.
  * url:     string, the url to call.
  * value:  array, array of value to send to server.
- *
  */
 
 const template = `

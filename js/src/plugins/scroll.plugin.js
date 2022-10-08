@@ -12,11 +12,10 @@ import atkPlugin from './atk.plugin';
  *  stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call.
  *                        if null, then a default loader will be apply to the bottom of the $inner element.
  */
-
 export default class scroll extends atkPlugin {
     main() {
-    // check if we are initialized already because loading content
-    // can recall this plugin and screw up page number.
+        // check if we are initialized already because loading content
+        // can recall this plugin and screw up page number.
         if (this.$el.data('__atkScroll')) {
             return false;
         }

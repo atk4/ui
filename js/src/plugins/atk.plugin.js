@@ -2,9 +2,7 @@ import $ from 'jquery';
 
 /**
  * Base implementation of jQuery plugin in Agile Toolkit.
- *
  */
-
 export default class atkPlugin {
     /**
      * Default plugin constructor

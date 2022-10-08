@@ -106,7 +106,6 @@ const atkOptions = function () {
  *   atk.eventBus.on('foo', e => console.log('foo', e))
  * Fire an event
  *   atk.eventBus.emit('foo', { a: 'b' })
- *
  */
 
 
@@ -214,7 +213,6 @@ __webpack_require__.r(__webpack_exports__);
  * display on top of table.
  *
  * This utility will properly set css style for dropdown menu to be display correctly.
- *
  */
 
 function showTableDropdown() {
@@ -302,10 +300,9 @@ __webpack_require__.r(__webpack_exports__);
  *   ex: $.atkAddParams('myurl.php', {q: 'test', 'reload': 'my_view'})
  *   will return: myurl.php?q=test&reload=my_view
  *
- * -RemoveParam - remove a parameter from an url string.
- *  ex: $.atkRemoveParam('myurl.php?q=test&reload=my_view', 'q')
- *  will return: myurl.php?reload=my_view
- *
+ * - RemoveParam - remove a parameter from an url string.
+ *   ex: $.atkRemoveParam('myurl.php?q=test&reload=my_view', 'q')
+ *   will return: myurl.php?reload=my_view
  */
 (function ($) {
   if (!$.atk) {
@@ -650,7 +647,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * Base implementation of jQuery plugin in Agile Toolkit.
- *
  */
 
 class atkPlugin {
@@ -830,7 +826,6 @@ __webpack_require__.r(__webpack_exports__);
  *      ]);
  *   Can be phrase this way: Display 'hair_cut' if 'race' contains 'poodle' AND 'age' is between 0 and 5 OR 'race' contains the exact word 'bichon'.
  *
- *
  *   Adding an array of conditions for the same field is also support.
  *
  *    $form->js()->atkConditionalForm(
@@ -904,7 +899,6 @@ class conditionalForm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"
   /**
    * Check each validation rule and apply proper visibility state to the
    * input where rules apply.
-   *
    */
 
 
@@ -2339,25 +2333,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class AccordionService {
-  static getInstance() {
-    return this.instance;
-  }
-
-  constructor() {
-    if (!this.instance) {
-      this.instance = this;
-    } else {
-      throw 'singleton instanced more than once: '.this.constructor.name;
-    }
-
-    return this.instance;
-  }
   /**
    * Setup Fomantic-UI accordion for this service.
    * @param settings
    */
-
-
   setService(settings) {
     settings.onOpening = this.onOpening;
   }
@@ -2396,24 +2375,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
- * Singleton class
  * Handle Fomantic-UI api functionality throughout the app.
  */
 
 class ApiService {
-  static getInstance() {
-    return this.instance;
-  }
-
   constructor() {
-    if (!this.instance) {
-      this.instance = this;
-      this.afterSuccessCallbacks = [];
-    } else {
-      throw 'singleton instanced more than once: '.this.constructor.name;
-    }
+    this.afterSuccessCallbacks = [];
+  }
+  /**
+   * Setup Fomantic-UI api callback with this service.
+   * @param settings
+   */
 
-    return this.instance;
+
+  setService(settings) {
+    // settings.onResponse = this.handleResponse;
+    settings.successTest = this.successTest;
+    settings.onFailure = this.onFailure;
+    settings.onSuccess = this.onSuccess;
+    settings.onAbort = this.onAbort;
   }
   /**
    * Execute js code.
@@ -2431,19 +2411,6 @@ class ApiService {
   evalResponse(code, $) {
     // eslint-disable-line
     eval(code); // eslint-disable-line
-  }
-  /**
-   * Setup Fomantic-UI api callback with this service.
-   * @param settings
-   */
-
-
-  setService(settings) {
-    // settings.onResponse = this.handleResponse;
-    settings.successTest = this.successTest;
-    settings.onFailure = this.onFailure;
-    settings.onSuccess = this.onSuccess;
-    settings.onAbort = this.onAbort;
   }
 
   onAbort(message) {
@@ -2724,26 +2691,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /**
  * Save and Retrieve Session or Local Web storage data.
- *
  */
 class DataService {
-  static getInstance() {
-    return this.instance;
-  }
-
   constructor() {
-    if (!this.instance) {
-      this.instance = this;
-      this.hasStorage = this.storageAvailable('localStorage') && this.storageAvailable('sessionStorage');
-      this.storage = {
-        session: sessionStorage,
-        local: localStorage
-      };
-    } else {
-      throw 'singleton instanced more than once: '.this.constructor.name;
-    }
-
-    return this.instance;
+    this.hasStorage = this.storageAvailable('localStorage') && this.storageAvailable('sessionStorage');
+    this.storage = {
+      session: sessionStorage,
+      local: localStorage
+    };
   }
   /**
    * Check if storage is available.
@@ -2930,40 +2885,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
- * Singleton class
  * Handle Fomantic-UI form functionality throughout the app.
  */
 
 class FormService {
-  static getInstance() {
-    return this.instance;
-  }
-
   constructor() {
-    if (!this.instance) {
-      this.instance = this;
-      this.formSettings = (jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.form.settings); // A collection of jQuery form object where preventLeave is set.
+    this.formSettings = (jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.form.settings); // A collection of jQuery form object where preventLeave is set.
 
-      this.prevents = [];
+    this.prevents = [];
 
-      window.onbeforeunload = function (event) {
-        atk.formService.prevents.forEach(el => {
-          if (el.data('__atkCheckDirty') && el.data('isDirty')) {
-            const message = 'unsaved';
+    window.onbeforeunload = function (event) {
+      atk.formService.prevents.forEach(el => {
+        if (el.data('__atkCheckDirty') && el.data('isDirty')) {
+          const message = 'unsaved';
 
-            if (event) {
-              event.returnValue = message;
-            }
-
-            return message;
+          if (event) {
+            event.returnValue = message;
           }
-        });
-      };
-    } else {
-      throw 'singleton instanced more than once: '.this.constructor.name;
-    }
 
-    return this.instance;
+          return message;
+        }
+      });
+    };
   }
   /**
    * Setup Fomantic-UI form callback with this service.
@@ -3168,7 +3111,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
- * Singleton class
  * This is default setup for Fomantic-UI modal.
  * Allow to manage uri pass to our modal and dynamically update content from this uri
  * using the Fomantic-UI api function.
@@ -3176,19 +3118,8 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 class ModalService {
-  static getInstance() {
-    return this.instance;
-  }
-
   constructor() {
-    if (!ModalService.instance) {
-      this.modals = [];
-      ModalService.instance = this;
-    } else {
-      throw 'singleton instanced more than once: '.this.constructor.name;
-    }
-
-    return ModalService.instance;
+    this.modals = [];
   }
 
   setModals(settings) {
@@ -3391,33 +3322,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
- * Singleton class.
  * Panel needs to be reload to display different
  * content. This service will take care of this.
- *
  */
 
 class PanelService {
-  static getInstance() {
-    return this.instance;
-  }
-
   constructor() {
-    if (!this.instance) {
-      this.instance = this;
-      this.service = {
-        panels: [],
-        // a collection of panels.
-        currentVisibleId: null,
-        // the current panel id that is in a visible state.
-        currentParams: null // url argument of the current panel.
+    this.service = {
+      panels: [],
+      // a collection of panels.
+      currentVisibleId: null,
+      // the current panel id that is in a visible state.
+      currentParams: null // url argument of the current panel.
 
-      };
-    } else {
-      throw 'singleton instanced more than once: '.this.constructor.name;
-    }
-
-    return this.instance;
+    };
   }
   /**
    * Remove existing panel from service panels and dom.
@@ -3899,24 +3817,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /**
- * Singleton class
  * This is default setup for Fomantic-UI Popup.
  */
 class PopupService {
-  static getInstance() {
-    return this.instance;
-  }
-
-  constructor() {
-    if (!PopupService.instance) {
-      PopupService.instance = this;
-    } else {
-      throw 'singleton instanced more than once: '.this.constructor.name;
-    }
-
-    return PopupService.instance;
-  }
-
   setPopups(settings) {
     settings.onCreate = this.onCreate;
     settings.onShow = this.onShow;
@@ -4014,24 +3917,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
- * Singleton class
  * Allow to upload files to server via Fomantic-UI api.
  */
 
 class UploadService {
-  static getInstance() {
-    return this.instance;
-  }
-
-  constructor() {
-    if (!UploadService.instance) {
-      UploadService.instance = this;
-    } else {
-      throw 'singleton instanced more than once: '.this.constructor.name;
-    }
-
-    return UploadService.instance;
-  }
   /**
    * Will upload a FileList object to server.
    * Each file in FileList will be include in formData as
@@ -4045,8 +3934,6 @@ class UploadService {
    * @param completeCb    the callback for Fomantic-UI api.onComplete.
    * @param xhrCb         the xhr function to pass to server.
    */
-
-
   uploadFiles(files, element, data = [], uploadUrl, completeCb = function (r, c) {}, xhrCb = function () {
     return new window.XMLHttpRequest();
   }) {
@@ -4135,40 +4022,28 @@ const atkComponents = {
   'atk-query-builder': componentFactory('atk-query-builder', () => Promise.all(/*! import() | atk-vue-query-builder */[__webpack_require__.e("atk-vendor"), __webpack_require__.e("atk-vue-query-builder")]).then(__webpack_require__.bind(__webpack_require__, /*! ../components/query-builder/query-builder.component.vue */ "./src/components/query-builder/query-builder.component.vue")))
 };
 /**
- * Singleton class
  * Create Vue component.
  */
 
 class VueService {
-  static getInstance() {
-    return this.instance;
-  }
-
   constructor() {
-    if (!VueService.instance) {
-      this.vues = [];
-      this.vueMixins = {
-        methods: {
-          getData: function () {
-            return this.initData;
-          }
-        },
-        // provide method to our child component.
-        // child component would need to inject a method to have access using the inject property,
-        // inject: ['getRootData'],
-        // Once inject you can get initial data using this.getRootData().
-        provide: function () {
-          return {
-            getRootData: this.getData
-          };
+    this.vues = [];
+    this.vueMixins = {
+      methods: {
+        getData: function () {
+          return this.initData;
         }
-      };
-      VueService.instance = this;
-    } else {
-      throw 'singleton instanced more than once: '.this.constructor.name;
-    }
-
-    return VueService.instance;
+      },
+      // provide method to our child component.
+      // child component would need to inject a method to have access using the inject property,
+      // inject: ['getRootData'],
+      // Once inject you can get initial data using this.getRootData().
+      provide: function () {
+        return {
+          getRootData: this.getData
+        };
+      }
+    };
   }
   /**
    * Created a Vue component and add it to the vues array.

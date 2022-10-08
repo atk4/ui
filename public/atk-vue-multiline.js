@@ -288,7 +288,6 @@ __webpack_require__.r(__webpack_exports__);
  * The td element will add a multiline cell element.
  *  the multiline cell will set it's own template component depending on the fieldType.
  *  getValue
- *
  */
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -420,7 +419,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * MultiLine component.
- *
  */
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({

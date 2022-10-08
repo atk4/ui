@@ -25,7 +25,6 @@ __webpack_require__.r(__webpack_exports__);
  *          - default to the requesting element.
  * url:     string, the url to call.
  * value:  array, array of value to send to server.
- *
  */
 
 const template = `

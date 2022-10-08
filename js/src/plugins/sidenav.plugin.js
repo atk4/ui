@@ -10,10 +10,9 @@ import atkPlugin from './atk.plugin';
  *
  * Default value are set for Maestro admin layout.
  */
-
 export default class sidenav extends atkPlugin {
     main() {
-    // menu items container.
+        // menu items container.
         this.menu = this.$el.find(this.settings.menuItemsSelector);
         if (this.menu.length === 0) {
             // this $el is our single item.
