@@ -53,9 +53,17 @@ module.exports = (env) => {
         optimization: {
             splitChunks: {
                 cacheGroups: {
-                    vendor: {
-                        test: /[\\/]node_modules[\\/]/,
-                        name: 'atk-vendor',
+                    vendorFlatpickr: {
+                        test: /[\\/]node_modules[\\/](flatpickr|vue-flatpickr-component)[\\/]/,
+                        name: 'atk-vendor-flatpickr',
+                    },
+                    vendorVue: {
+                        test: /[\\/]node_modules[\\/](?!vue-flatpickr-component[\\/])(vue([-.][^\\/]+)?)[\\/]/,
+                        name: 'atk-vendor-vue',
+                    },
+                    vendorMain: {
+                        test: /[\\/]node_modules[\\/](?!(vue([-.][^\\/]+)?|flatpickr)[\\/])/,
+                        name: 'atk-vendor-main',
                     },
                 },
             },
