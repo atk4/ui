@@ -7,7 +7,7 @@ import atkPlugin from './atk.plugin';
  */
 export default class columnResizer extends atkPlugin {
     main() {
-    // add on resize callback if url is supply.
+        // add on resize callback if url is supply.
         if (this.settings.uri) {
             this.settings.onResize = this.onResize.bind(this);
         }

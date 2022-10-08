@@ -36,7 +36,6 @@ import formService from '../services/form.service';
  *      ]);
  *   Can be phrase this way: Display 'hair_cut' if 'race' contains 'poodle' AND 'age' is between 0 and 5 OR 'race' contains the exact word 'bichon'.
  *
- *
  *   Adding an array of conditions for the same field is also support.
  *
  *    $form->js()->atkConditionalForm(
@@ -100,7 +99,7 @@ export default class conditionalForm extends atkPlugin {
      * @param e
      */
     onInputChange(e) {
-    // check rule when inputs has changed.
+        // check rule when inputs has changed.
         e.data.resetInputStatus();
         e.data.applyRules();
         e.data.setInputsState();
@@ -109,7 +108,6 @@ export default class conditionalForm extends atkPlugin {
     /**
      * Check each validation rule and apply proper visibility state to the
      * input where rules apply.
-     *
      */
     applyRules() {
         this.inputs.forEach((input, idx) => {

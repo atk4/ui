@@ -64,6 +64,6 @@ Loader::addTo($app, [
         'class.red' => true,
     ],
 ])->set(function (Loader $p) {
-    usleep(500_000);
+    sleep(1);
     LoremIpsum::addTo($p, ['size' => 2]);
 });

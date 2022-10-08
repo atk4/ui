@@ -25,7 +25,6 @@ const atkOptions = (function () {
  *   atk.eventBus.on('foo', e => console.log('foo', e))
  * Fire an event
  *   atk.eventBus.emit('foo', { a: 'b' })
- *
  */
 const atkEventBus = (function () {
     const eventBus = mitt();

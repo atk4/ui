@@ -157,7 +157,6 @@ export default {
         },
         /**
          * Fire when checkbox is click.
-         *
          */
         onToggleSelect: function () {
             const { options } = this.getRootData();

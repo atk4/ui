@@ -1,20 +1,10 @@
 /**
  * Save and Retrieve Session or Local Web storage data.
- *
  */
 class DataService {
-    static getInstance() {
-        return this.instance;
-    }
-
     constructor() {
-        if (!this.instance) {
-            this.instance = this;
-            this.hasStorage = this.storageAvailable('localStorage') && this.storageAvailable('sessionStorage');
-            this.storage = { session: sessionStorage, local: localStorage };
-        }
-
-        return this.instance;
+        this.hasStorage = this.storageAvailable('localStorage') && this.storageAvailable('sessionStorage');
+        this.storage = { session: sessionStorage, local: localStorage };
     }
 
     /**
@@ -34,7 +24,7 @@ class DataService {
             return true;
         } catch (e) {
             return e instanceof DOMException && (
-            // everything except Firefox
+                // everything except Firefox
                 e.code === 22
         // Firefox
         || e.code === 1014

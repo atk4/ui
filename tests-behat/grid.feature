@@ -36,3 +36,18 @@ Feature: Grid
     When I click using selector "xpath(//div[@id='grid']//tr[2]//a)"
     Then No toast should be displayed
     Then PATCH MINK the url should match "~_unit-test/grid-rowclick.php#test~"
+
+  Scenario: drag resize (TODO test real drag)
+    Given I am on "collection/table2.php"
+    Then I should see "Table with resizable columns"
+
+  Scenario: drag sort (TODO test real drag)
+    Given I am on "interactive/jssortable.php"
+    Then I should see "Add drag n drop to grid"
+
+  Scenario: dynamic scroll
+    Given I am on "interactive/scroll-lister.php"
+    Then I should see "Argentina"
+    Then I should not see "Denmark"
+    When I scroll to bottom
+    Then I should see "Denmark"

@@ -1,20 +1,7 @@
 /**
- * Singleton class
  * This is default setup for Fomantic-UI Popup.
  */
 class PopupService {
-    static getInstance() {
-        return this.instance;
-    }
-
-    constructor() {
-        if (!PopupService.instance) {
-            PopupService.instance = this;
-        }
-
-        return PopupService.instance;
-    }
-
     setPopups(settings) {
         settings.onCreate = this.onCreate;
         settings.onShow = this.onShow;
@@ -70,14 +57,14 @@ class PopupService {
      * and trigger action is fired.
      */
     onCreate() {
-    // console.log('onCreate');
+        // console.log('onCreate');
     }
 
     /**
      * Only call if onCreate was called.
      */
     onRemove() {
-    // console.log('onRemvoe');
+        // console.log('onRemvoe');
     }
 
     getLoader() {

@@ -1,27 +1,16 @@
 import $ from 'jquery';
 
 /**
- * Singleton class.
  * Panel needs to be reload to display different
  * content. This service will take care of this.
- *
  */
 class PanelService {
-    static getInstance() {
-        return this.instance;
-    }
-
     constructor() {
-        if (!this.instance) {
-            this.instance = this;
-            this.service = {
-                panels: [], // a collection of panels.
-                currentVisibleId: null, // the current panel id that is in a visible state.
-                currentParams: null, // url argument of the current panel.
-            };
-        }
-
-        return this.instance;
+        this.service = {
+            panels: [], // a collection of panels.
+            currentVisibleId: null, // the current panel id that is in a visible state.
+            currentParams: null, // url argument of the current panel.
+        };
     }
 
     /**
@@ -225,7 +214,7 @@ class PanelService {
      * @returns {PanelService|*}
      */
     doClosePanel(id) {
-    // remove document event.
+        // remove document event.
         this.removeClickAwayEvent();
         this.removeWarning(id);
 

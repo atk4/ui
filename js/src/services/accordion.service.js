@@ -1,21 +1,8 @@
 import $ from 'jquery';
 
 class AccordionService {
-    static getInstance() {
-        return this.instance;
-    }
-
-    constructor() {
-        if (!this.instance) {
-            this.instance = this;
-        }
-
-        return this.instance;
-    }
-
     /**
      * Setup Fomantic-UI accordion for this service.
-     * @param settings
      */
     setService(settings) {
         settings.onOpening = this.onOpening;

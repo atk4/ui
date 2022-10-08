@@ -6,10 +6,9 @@
  *   ex: $.atkAddParams('myurl.php', {q: 'test', 'reload': 'my_view'})
  *   will return: myurl.php?q=test&reload=my_view
  *
- * -RemoveParam - remove a parameter from an url string.
- *  ex: $.atkRemoveParam('myurl.php?q=test&reload=my_view', 'q')
- *  will return: myurl.php?reload=my_view
- *
+ * - RemoveParam - remove a parameter from an url string.
+ *   ex: $.atkRemoveParam('myurl.php?q=test&reload=my_view', 'q')
+ *   will return: myurl.php?reload=my_view
  */
 
 (function ($) {

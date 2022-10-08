@@ -1,10 +1,8 @@
 import $ from 'jquery';
-import spinner from './plugins/spinner.plugin';
 import serverEvent from './plugins/server-event.plugin';
 import reloadView from './plugins/reload-view.plugin';
 import ajaxec from './plugins/ajaxec.plugin';
 import createModal from './plugins/create-modal.plugin';
-import notify from './plugins/notify.plugin';
 import fileUpload from './plugins/file-upload.plugin';
 import JsSearch from './plugins/js-search.plugin';
 import JsSortable from './plugins/js-sortable.plugin';
@@ -80,11 +78,9 @@ function plugin(name, className, shortHand = false) {
  */
 (function () {
     const atkJqPlugins = [
-        { name: 'Spinner', plugin: spinner, sh: false },
         { name: 'ReloadView', plugin: reloadView, sh: false },
         { name: 'Ajaxec', plugin: ajaxec, sh: false },
         { name: 'CreateModal', plugin: createModal, sh: false },
-        { name: 'Notify', plugin: notify, sh: true },
         { name: 'ServerEvent', plugin: serverEvent, sh: true },
         { name: 'FileUpload', plugin: fileUpload, sh: false },
         { name: 'JsSearch', plugin: JsSearch, sh: false },

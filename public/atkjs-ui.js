@@ -106,7 +106,6 @@ const atkOptions = function () {
  *   atk.eventBus.on('foo', e => console.log('foo', e))
  * Fire an event
  *   atk.eventBus.emit('foo', { a: 'b' })
- *
  */
 
 
@@ -192,102 +191,6 @@ function atkDebounce(func, wait, options) {
 
 /***/ }),
 
-/***/ "./src/directives/click-outside.directive.js":
-/*!***************************************************!*\
-  !*** ./src/directives/click-outside.directive.js ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/**
- * Vue directive for handling click
- * outside a component. You can specify other components
- * outside of the component using the directive via an array where the directive will not be apply.
- * Example a button use for opening a popup. Exclude is indicate
- * via a reference name.
- *
- * <button ref="button" @click="showPopup = !showPopup" > OPEN Popup </button>
- *
- * Example usage:
- * <div
- * v-show="showPopup"
- * v-closable="{
- *   exclude: ['button'], // using button ref name.
- *   handler: 'onClose' // an onClose method on the component using the directive.
- * }"
- * </div>
- */
-let handleOutsideClick;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  bind: function (el, binding, vnode) {
-    // the click/touchstart handler
-    handleOutsideClick = e => {
-      e.stopPropagation(); // Get the handler method name and the exclude array
-      // from the object used in v-closable
-
-      const {
-        handler,
-        exclude
-      } = binding.value; // This variable indicates if the clicked element is excluded
-
-      let clickedOnExcludedEl = false;
-      exclude.forEach(refName => {
-        // We only run this code if we haven't detected
-        // any excluded element yet
-        if (!clickedOnExcludedEl) {
-          // Get the element using the reference name
-          const excludedEl = vnode.context.$refs[refName]; // See if this excluded element
-          // is the same element the user just clicked on
-
-          clickedOnExcludedEl = excludedEl.contains(e.target);
-        }
-      }); // We check to see if the clicked element is not
-      // the component element and not excluded
-
-      if (!el.contains(e.target) && !clickedOnExcludedEl) {
-        // If the clicked element is outside the component && one of the exclude element.
-        vnode.context[handler](e);
-      }
-    }; // Register click/touchstart event listeners on the whole page
-
-
-    document.addEventListener('click', handleOutsideClick);
-    document.addEventListener('touchstart', handleOutsideClick);
-  },
-  unbind: function () {
-    // If the element that has v-closable is removed, then
-    // unbind click/touchstart listeners from the whole page
-    document.removeEventListener('click', handleOutsideClick);
-    document.removeEventListener('touchstart', handleOutsideClick);
-  }
-});
-
-/***/ }),
-
-/***/ "./src/directives/commons.directive.js":
-/*!*********************************************!*\
-  !*** ./src/directives/commons.directive.js ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "focus": () => (/* binding */ focus)
-/* harmony export */ });
-const focus = {
-  inserted: function (el) {
-    el.focus();
-  }
-};
-
-
-/***/ }),
-
 /***/ "./src/helpers/table-dropdown.helper.js":
 /*!**********************************************!*\
   !*** ./src/helpers/table-dropdown.helper.js ***!
@@ -310,7 +213,6 @@ __webpack_require__.r(__webpack_exports__);
  * display on top of table.
  *
  * This utility will properly set css style for dropdown menu to be display correctly.
- *
  */
 
 function showTableDropdown() {
@@ -398,10 +300,9 @@ __webpack_require__.r(__webpack_exports__);
  *   ex: $.atkAddParams('myurl.php', {q: 'test', 'reload': 'my_view'})
  *   will return: myurl.php?q=test&reload=my_view
  *
- * -RemoveParam - remove a parameter from an url string.
- *  ex: $.atkRemoveParam('myurl.php?q=test&reload=my_view', 'q')
- *  will return: myurl.php?reload=my_view
- *
+ * - RemoveParam - remove a parameter from an url string.
+ *   ex: $.atkRemoveParam('myurl.php?q=test&reload=my_view', 'q')
+ *   will return: myurl.php?reload=my_view
  */
 (function ($) {
   if (!$.atk) {
@@ -508,22 +409,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _plugins_spinner_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./plugins/spinner.plugin */ "./src/plugins/spinner.plugin.js");
-/* harmony import */ var _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugins/server-event.plugin */ "./src/plugins/server-event.plugin.js");
-/* harmony import */ var _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugins/reload-view.plugin */ "./src/plugins/reload-view.plugin.js");
-/* harmony import */ var _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugins/ajaxec.plugin */ "./src/plugins/ajaxec.plugin.js");
-/* harmony import */ var _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./plugins/create-modal.plugin */ "./src/plugins/create-modal.plugin.js");
-/* harmony import */ var _plugins_notify_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/notify.plugin */ "./src/plugins/notify.plugin.js");
-/* harmony import */ var _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./plugins/file-upload.plugin */ "./src/plugins/file-upload.plugin.js");
-/* harmony import */ var _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/js-search.plugin */ "./src/plugins/js-search.plugin.js");
-/* harmony import */ var _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/js-sortable.plugin */ "./src/plugins/js-sortable.plugin.js");
-/* harmony import */ var _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/conditional-form.plugin */ "./src/plugins/conditional-form.plugin.js");
-/* harmony import */ var _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./plugins/column-resizer.plugin */ "./src/plugins/column-resizer.plugin.js");
-/* harmony import */ var _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/scroll.plugin */ "./src/plugins/scroll.plugin.js");
-/* harmony import */ var _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./plugins/confirm.plugin */ "./src/plugins/confirm.plugin.js");
-/* harmony import */ var _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./plugins/sidenav.plugin */ "./src/plugins/sidenav.plugin.js");
-
-
+/* harmony import */ var _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./plugins/server-event.plugin */ "./src/plugins/server-event.plugin.js");
+/* harmony import */ var _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugins/reload-view.plugin */ "./src/plugins/reload-view.plugin.js");
+/* harmony import */ var _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugins/ajaxec.plugin */ "./src/plugins/ajaxec.plugin.js");
+/* harmony import */ var _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugins/create-modal.plugin */ "./src/plugins/create-modal.plugin.js");
+/* harmony import */ var _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./plugins/file-upload.plugin */ "./src/plugins/file-upload.plugin.js");
+/* harmony import */ var _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/js-search.plugin */ "./src/plugins/js-search.plugin.js");
+/* harmony import */ var _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./plugins/js-sortable.plugin */ "./src/plugins/js-sortable.plugin.js");
+/* harmony import */ var _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/conditional-form.plugin */ "./src/plugins/conditional-form.plugin.js");
+/* harmony import */ var _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/column-resizer.plugin */ "./src/plugins/column-resizer.plugin.js");
+/* harmony import */ var _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/scroll.plugin */ "./src/plugins/scroll.plugin.js");
+/* harmony import */ var _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./plugins/confirm.plugin */ "./src/plugins/confirm.plugin.js");
+/* harmony import */ var _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/sidenav.plugin */ "./src/plugins/sidenav.plugin.js");
 
 
 
@@ -604,60 +501,52 @@ function plugin(name, className, shortHand = false) {
 
 (function () {
   const atkJqPlugins = [{
-    name: 'Spinner',
-    plugin: _plugins_spinner_plugin__WEBPACK_IMPORTED_MODULE_1__["default"],
-    sh: false
-  }, {
     name: 'ReloadView',
-    plugin: _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_3__["default"],
+    plugin: _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_2__["default"],
     sh: false
   }, {
     name: 'Ajaxec',
-    plugin: _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_4__["default"],
+    plugin: _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_3__["default"],
     sh: false
   }, {
     name: 'CreateModal',
-    plugin: _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_5__["default"],
+    plugin: _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_4__["default"],
     sh: false
   }, {
-    name: 'Notify',
-    plugin: _plugins_notify_plugin__WEBPACK_IMPORTED_MODULE_6__["default"],
-    sh: true
-  }, {
     name: 'ServerEvent',
-    plugin: _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_2__["default"],
+    plugin: _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_1__["default"],
     sh: true
   }, {
     name: 'FileUpload',
-    plugin: _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_7__["default"],
+    plugin: _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_5__["default"],
     sh: false
   }, {
     name: 'JsSearch',
-    plugin: _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_8__["default"],
+    plugin: _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_6__["default"],
     sh: false
   }, {
     name: 'JsSortable',
-    plugin: _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_9__["default"],
+    plugin: _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_7__["default"],
     sh: false
   }, {
     name: 'ConditionalForm',
-    plugin: _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_10__["default"],
+    plugin: _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_8__["default"],
     sh: true
   }, {
     name: 'ColumnResizer',
-    plugin: _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_11__["default"],
+    plugin: _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_9__["default"],
     sh: false
   }, {
     name: 'Scroll',
-    plugin: _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_12__["default"],
+    plugin: _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_10__["default"],
     sh: false
   }, {
     name: 'Confirm',
-    plugin: _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_13__["default"],
+    plugin: _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_11__["default"],
     sh: true
   }, {
     name: 'Sidenav',
-    plugin: _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_14__["default"],
+    plugin: _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_12__["default"],
     sh: false
   }];
   atkJqPlugins.forEach(atkJqPlugin => {
@@ -758,7 +647,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * Base implementation of jQuery plugin in Agile Toolkit.
- *
  */
 
 class atkPlugin {
@@ -938,7 +826,6 @@ __webpack_require__.r(__webpack_exports__);
  *      ]);
  *   Can be phrase this way: Display 'hair_cut' if 'race' contains 'poodle' AND 'age' is between 0 and 5 OR 'race' contains the exact word 'bichon'.
  *
- *
  *   Adding an array of conditions for the same field is also support.
  *
  *    $form->js()->atkConditionalForm(
@@ -1012,7 +899,6 @@ class conditionalForm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"
   /**
    * Check each validation rule and apply proper visibility state to the
    * input where rules apply.
-   *
    */
 
 
@@ -1862,174 +1748,6 @@ JsSortable.DEFAULTS = {
 
 /***/ }),
 
-/***/ "./src/plugins/notify.plugin.js":
-/*!**************************************!*\
-  !*** ./src/plugins/notify.plugin.js ***!
-  \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ notify)
-/* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-
-
-/**
- * Create notification message.
- *
- * Can be attach to an element using $('selector')->atkNotify(options);
- * or to the body using $.atkNotify($option)
- */
-
-class notify extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  main() {
-    let cssStyle = {};
-    this.timer = null;
-    let domElement = 'body';
-
-    if (!jquery__WEBPACK_IMPORTED_MODULE_0___default().isEmptyObject(this.$el[0])) {
-      domElement = this.$el;
-    }
-
-    cssStyle = this.getClasses(domElement);
-    cssStyle.base.width = this.settings.width + '%';
-    cssStyle.base.opacity = this.settings.opacity;
-    this.notify = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.getNotifier(this.settings)).hide();
-    this.notify.css(jquery__WEBPACK_IMPORTED_MODULE_0___default().extend(cssStyle.base, this.getPosition(this.settings.position)));
-    this.notify.on('click', '.icon.close', {
-      self: this
-    }, this.removeNotifier);
-    this.notify.appendTo(domElement);
-    this.notify.transition(this.settings.openTransition);
-
-    if (this.settings.duration) {
-      this.timer = setTimeout(() => {
-        this.removeNotifier({
-          data: {
-            self: this
-          }
-        });
-      }, this.settings.duration);
-    }
-  }
-  /**
-   * Return the html for this notifications.
-   * @param options
-   * @returns {string}
-   */
-
-
-  getNotifier(options) {
-    return `<div class="atk-notify transition hidden">
-                <div class="ui ${options.color} ${options.size} inverted segment" style="overflow: auto; display: block !important">
-                    <i class="close icon" style="float:right"></i>
-                    <div class="content">
-                        <i class="${options.icon} icon" style=""></i>
-                        <span>${options.content}</span>
-                    </div>
-                </div>
-             </div>`;
-  }
-  /**
-   * Remove this notification from the element it was add to.
-   *
-   * @param e
-   */
-
-
-  removeNotifier(e) {
-    const {
-      self
-    } = e.data;
-    clearTimeout(self.timer);
-    self.notify.transition(self.settings.closeTransition);
-    self.notify.remove();
-  }
-  /**
-   * Return basis css class use for this notification.
-   *
-   * @param el
-   * @returns {{base: {position: string, z-index: number}}}
-   */
-
-
-  getClasses(el) {
-    return {
-      base: {
-        position: el === 'body' ? 'fixed' : 'absolute',
-        'z-index': 9999
-      }
-    };
-  }
-  /**
-   * Return the css classes needed for positioning this notification.
-   * @param position
-   * @returns {*}
-   */
-
-
-  getPosition(position) {
-    const positions = {
-      topLeft: {
-        top: '0px',
-        left: '0px'
-      },
-      topCenter: {
-        margin: 'auto',
-        top: '0px',
-        left: '0px',
-        right: '0px'
-      },
-      topRight: {
-        top: '0px',
-        right: '0px'
-      },
-      bottomLeft: {
-        bottom: '0px',
-        left: '0px'
-      },
-      bottomCenter: {
-        margin: 'auto',
-        bottom: '0px',
-        left: '0px',
-        right: '0px'
-      },
-      bottomRight: {
-        bottom: '0px',
-        right: '0px'
-      },
-      center: {
-        margin: 'auto',
-        top: '0px',
-        left: '0px',
-        bottom: '0px',
-        right: '0px',
-        'max-height': '1%'
-      }
-    };
-    return positions[position];
-  }
-
-}
-notify.DEFAULTS = {
-  color: 'green',
-  size: 'small',
-  icon: null,
-  content: null,
-  width: 100,
-  closeTransition: 'scale',
-  openTransition: 'scale',
-  duration: 3000,
-  opacity: '1',
-  position: 'topLeft'
-};
-
-/***/ }),
-
 /***/ "./src/plugins/reload-view.plugin.js":
 /*!*******************************************!*\
   !*** ./src/plugins/reload-view.plugin.js ***!
@@ -2599,81 +2317,6 @@ sidenav.DEFAULTS = {
 
 /***/ }),
 
-/***/ "./src/plugins/spinner.plugin.js":
-/*!***************************************!*\
-  !*** ./src/plugins/spinner.plugin.js ***!
-  \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ spinner)
-/* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-
-
-class spinner extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  main() {
-    this.timer = null;
-    const options = this.settings; // Remove any existing dimmers/spinners
-
-    this.$el.remove('.dimmer');
-    this.$el.remove('.spinner');
-    const $baseDimmer = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.baseDimmerMarkup);
-    const $baseLoader = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.baseLoaderMarkup);
-    let $finalSpinner = null;
-    $baseLoader.toggleClass('active', options.active);
-    $baseLoader.toggleClass('indeterminate', options.indeterminate);
-    $baseLoader.toggleClass('centered', options.centered);
-    $baseLoader.toggleClass('inline', options.inline);
-    const isText = !!options.loaderText;
-
-    if (isText) {
-      $baseLoader.toggleClass('text', true);
-      $baseLoader.text(options.loaderText);
-    }
-
-    if (options.dimmed) {
-      $baseDimmer.toggleClass('active', options.active);
-      $finalSpinner = $baseDimmer.append($baseLoader);
-    } else {
-      $finalSpinner = $baseLoader;
-    } // If replace is true we remove the existing content in the $element.
-
-
-    this.showSpinner(this.$el, $finalSpinner, options.replace);
-  }
-
-  showSpinner($element, $spinner, replace = false) {
-    this.timer = setTimeout(() => {
-      if (replace) $element.empty();
-      $element.append($spinner);
-    }, 500);
-  }
-
-  remove() {
-    clearTimeout(this.timer);
-    this.$el.find('.loader').remove();
-  }
-
-}
-spinner.DEFAULTS = {
-  active: false,
-  replace: false,
-  dimmed: false,
-  inline: false,
-  indeterminate: false,
-  loaderText: 'Loading',
-  centered: false,
-  baseDimmerMarkup: '<div class="ui dimmer"></div>',
-  baseLoaderMarkup: '<div class="ui loader"></div>'
-};
-
-/***/ }),
-
 /***/ "./src/services/accordion.service.js":
 /*!*******************************************!*\
   !*** ./src/services/accordion.service.js ***!
@@ -2690,23 +2333,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class AccordionService {
-  static getInstance() {
-    return this.instance;
-  }
-
-  constructor() {
-    if (!this.instance) {
-      this.instance = this;
-    }
-
-    return this.instance;
-  }
   /**
    * Setup Fomantic-UI accordion for this service.
-   * @param settings
    */
-
-
   setService(settings) {
     settings.onOpening = this.onOpening;
   }
@@ -2745,22 +2374,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
- * Singleton class
- * Handle Fomantic-UI api functionality throughout the app.
+ * Handle Fomantic-UI API functionality throughout the app.
  */
 
 class ApiService {
-  static getInstance() {
-    return this.instance;
-  }
-
   constructor() {
-    if (!this.instance) {
-      this.instance = this;
-      this.afterSuccessCallbacks = [];
-    }
+    this.afterSuccessCallbacks = [];
+  }
+  /**
+   * Setup Fomantic-UI API with this service.
+   */
 
-    return this.instance;
+
+  setService(settings) {
+    // settings.onResponse = this.handleResponse;
+    settings.successTest = this.successTest;
+    settings.onFailure = this.onFailure;
+    settings.onSuccess = this.onSuccess;
+    settings.onAbort = this.onAbort;
   }
   /**
    * Execute js code.
@@ -2778,19 +2409,6 @@ class ApiService {
   evalResponse(code, $) {
     // eslint-disable-line
     eval(code); // eslint-disable-line
-  }
-  /**
-   * Setup Fomantic-UI api callback with this service.
-   * @param settings
-   */
-
-
-  setService(settings) {
-    // settings.onResponse = this.handleResponse;
-    settings.successTest = this.successTest;
-    settings.onFailure = this.onFailure;
-    settings.onSuccess = this.onSuccess;
-    settings.onAbort = this.onAbort;
   }
 
   onAbort(message) {
@@ -3071,24 +2689,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /**
  * Save and Retrieve Session or Local Web storage data.
- *
  */
 class DataService {
-  static getInstance() {
-    return this.instance;
-  }
-
   constructor() {
-    if (!this.instance) {
-      this.instance = this;
-      this.hasStorage = this.storageAvailable('localStorage') && this.storageAvailable('sessionStorage');
-      this.storage = {
-        session: sessionStorage,
-        local: localStorage
-      };
-    }
-
-    return this.instance;
+    this.hasStorage = this.storageAvailable('localStorage') && this.storageAvailable('sessionStorage');
+    this.storage = {
+      session: sessionStorage,
+      local: localStorage
+    };
   }
   /**
    * Check if storage is available.
@@ -3275,42 +2883,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
- * Singleton class
  * Handle Fomantic-UI form functionality throughout the app.
  */
 
 class FormService {
-  static getInstance() {
-    return this.instance;
-  }
-
   constructor() {
-    if (!this.instance) {
-      this.instance = this;
-      this.formSettings = (jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.form.settings); // A collection of jQuery form object where preventLeave is set.
+    this.formSettings = (jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.form.settings); // A collection of jQuery form object where preventLeave is set.
 
-      this.prevents = [];
+    this.prevents = [];
 
-      window.onbeforeunload = function (event) {
-        atk.formService.prevents.forEach(el => {
-          if (el.data('__atkCheckDirty') && el.data('isDirty')) {
-            const message = 'unsaved';
+    window.onbeforeunload = function (event) {
+      atk.formService.prevents.forEach(el => {
+        if (el.data('__atkCheckDirty') && el.data('isDirty')) {
+          const message = 'unsaved';
 
-            if (event) {
-              event.returnValue = message;
-            }
-
-            return message;
+          if (event) {
+            event.returnValue = message;
           }
-        });
-      };
-    }
 
-    return this.instance;
+          return message;
+        }
+      });
+    };
   }
   /**
-   * Setup Fomantic-UI form callback with this service.
-   * @param settings
+   * Setup Fomantic-UI form with this service.
    */
 
 
@@ -3511,7 +3108,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
- * Singleton class
  * This is default setup for Fomantic-UI modal.
  * Allow to manage uri pass to our modal and dynamically update content from this uri
  * using the Fomantic-UI api function.
@@ -3519,17 +3115,8 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 class ModalService {
-  static getInstance() {
-    return this.instance;
-  }
-
   constructor() {
-    if (!ModalService.instance) {
-      this.modals = [];
-      ModalService.instance = this;
-    }
-
-    return ModalService.instance;
+    this.modals = [];
   }
 
   setModals(settings) {
@@ -3732,31 +3319,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
- * Singleton class.
  * Panel needs to be reload to display different
  * content. This service will take care of this.
- *
  */
 
 class PanelService {
-  static getInstance() {
-    return this.instance;
-  }
-
   constructor() {
-    if (!this.instance) {
-      this.instance = this;
-      this.service = {
-        panels: [],
-        // a collection of panels.
-        currentVisibleId: null,
-        // the current panel id that is in a visible state.
-        currentParams: null // url argument of the current panel.
+    this.service = {
+      panels: [],
+      // a collection of panels.
+      currentVisibleId: null,
+      // the current panel id that is in a visible state.
+      currentParams: null // url argument of the current panel.
 
-      };
-    }
-
-    return this.instance;
+    };
   }
   /**
    * Remove existing panel from service panels and dom.
@@ -4238,22 +3814,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /**
- * Singleton class
  * This is default setup for Fomantic-UI Popup.
  */
 class PopupService {
-  static getInstance() {
-    return this.instance;
-  }
-
-  constructor() {
-    if (!PopupService.instance) {
-      PopupService.instance = this;
-    }
-
-    return PopupService.instance;
-  }
-
   setPopups(settings) {
     settings.onCreate = this.onCreate;
     settings.onShow = this.onShow;
@@ -4351,22 +3914,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
- * Singleton class
- * Allow to upload files to server via Fomantic-UI api.
+ * Allow to upload files to server via Fomantic-UI API.
  */
 
 class UploadService {
-  static getInstance() {
-    return this.instance;
-  }
-
-  constructor() {
-    if (!UploadService.instance) {
-      UploadService.instance = this;
-    }
-
-    return UploadService.instance;
-  }
   /**
    * Will upload a FileList object to server.
    * Each file in FileList will be include in formData as
@@ -4380,8 +3931,6 @@ class UploadService {
    * @param completeCb    the callback for Fomantic-UI api.onComplete.
    * @param xhrCb         the xhr function to pass to server.
    */
-
-
   uploadFiles(files, element, data = [], uploadUrl, completeCb = function (r, c) {}, xhrCb = function () {
     return new window.XMLHttpRequest();
   }) {
@@ -4431,27 +3980,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var semantic_ui_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! semantic-ui-vue */ "./node_modules/semantic-ui-vue/dist/commonjs/semantic-ui-vue.js");
 /* harmony import */ var semantic_ui_vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(semantic_ui_vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _directives_click_outside_directive__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../directives/click-outside.directive */ "./src/directives/click-outside.directive.js");
-/* harmony import */ var _directives_commons_directive__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../directives/commons.directive */ "./src/directives/commons.directive.js");
 
+ // disable console logs for non-minified build
 
-
-
-vue__WEBPACK_IMPORTED_MODULE_3__["default"].use((semantic_ui_vue__WEBPACK_IMPORTED_MODULE_0___default()));
-vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('flat-picker', () => __webpack_require__.e(/*! import() */ "atk-vendor").then(__webpack_require__.t.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js", 23))); // Vue loader component to display while dynamic component is loading.
+vue__WEBPACK_IMPORTED_MODULE_1__["default"].config.productionTip = false;
+vue__WEBPACK_IMPORTED_MODULE_1__["default"].config.devtools = false;
+vue__WEBPACK_IMPORTED_MODULE_1__["default"].use((semantic_ui_vue__WEBPACK_IMPORTED_MODULE_0___default()));
+vue__WEBPACK_IMPORTED_MODULE_1__["default"].component('flat-picker', () => __webpack_require__.e(/*! import() */ "atk-vendor").then(__webpack_require__.t.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js", 23))); // vue loader component to display while dynamic component is loading
 
 const atkVueLoader = {
   name: 'atk-vue-loader',
   template: '<div><div class="ui active centered inline loader"></div></div>'
-}; // Vue error component to display when dynamic component loading fail.
+}; // vue error component to display when dynamic component loading fail
 
 const atkVueError = {
   name: 'atk-vue-error',
   template: '<div class="ui negative message"><p>Error: Unable to load Vue component</p></div>'
-}; // Return async component that will load on demand.
+}; // return async component that will load on demand
 
 const componentFactory = (name, component) => () => ({
   component: component().then(r => {
@@ -4469,51 +4017,30 @@ const atkComponents = {
   'atk-multiline': componentFactory('atk-multiline', () => __webpack_require__.e(/*! import() | atk-vue-multiline */ "atk-vue-multiline").then(__webpack_require__.bind(__webpack_require__, /*! ../components/multiline/multiline.component */ "./src/components/multiline/multiline.component.js"))),
   'atk-tree-item-selector': componentFactory('atk-tree-item-selector', () => Promise.all(/*! import() | atk-vue-tree-item-selector */[__webpack_require__.e("atk-vendor"), __webpack_require__.e("atk-vue-tree-item-selector")]).then(__webpack_require__.bind(__webpack_require__, /*! ../components/tree-item-selector/tree-item-selector.component */ "./src/components/tree-item-selector/tree-item-selector.component.js"))),
   'atk-query-builder': componentFactory('atk-query-builder', () => Promise.all(/*! import() | atk-vue-query-builder */[__webpack_require__.e("atk-vendor"), __webpack_require__.e("atk-vue-query-builder")]).then(__webpack_require__.bind(__webpack_require__, /*! ../components/query-builder/query-builder.component.vue */ "./src/components/query-builder/query-builder.component.vue")))
-}; // setup atk custom directives.
-
-const atkDirectives = [{
-  name: 'click-outside',
-  def: _directives_click_outside_directive__WEBPACK_IMPORTED_MODULE_1__["default"]
-}, {
-  name: 'focus',
-  def: _directives_commons_directive__WEBPACK_IMPORTED_MODULE_2__.focus
-}];
-atkDirectives.forEach(directive => {
-  vue__WEBPACK_IMPORTED_MODULE_3__["default"].directive(directive.name, directive.def);
-});
+};
 /**
- * Singleton class
- * Create Vue component.
+ * Allow to create Vue component.
  */
 
 class VueService {
-  static getInstance() {
-    return this.instance;
-  }
-
   constructor() {
-    if (!VueService.instance) {
-      this.vues = [];
-      this.vueMixins = {
-        methods: {
-          getData: function () {
-            return this.initData;
-          }
-        },
-        // provide method to our child component.
-        // child component would need to inject a method to have access using the inject property,
-        // inject: ['getRootData'],
-        // Once inject you can get initial data using this.getRootData().
-        provide: function () {
-          return {
-            getRootData: this.getData
-          };
+    this.vues = [];
+    this.vueMixins = {
+      methods: {
+        getData: function () {
+          return this.initData;
         }
-      };
-      VueService.instance = this;
-    }
-
-    return VueService.instance;
+      },
+      // provide method to our child component.
+      // child component would need to inject a method to have access using the inject property,
+      // inject: ['getRootData'],
+      // Once inject you can get initial data using this.getRootData().
+      provide: function () {
+        return {
+          getRootData: this.getData
+        };
+      }
+    };
   }
   /**
    * Created a Vue component and add it to the vues array.
@@ -4529,7 +4056,7 @@ class VueService {
     this.registerComponent({
       ids: [id],
       name: component,
-      instance: new vue__WEBPACK_IMPORTED_MODULE_3__["default"]({
+      instance: new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
         el: id,
         data: {
           initData: data
@@ -4555,7 +4082,7 @@ class VueService {
     this.registerComponent({
       ids: [id],
       name: componentName,
-      instance: new vue__WEBPACK_IMPORTED_MODULE_3__["default"]({
+      instance: new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
         el: id,
         data: {
           initData: data,
@@ -4592,7 +4119,7 @@ class VueService {
 
   useComponent(component) {
     if (window[component]) {
-      vue__WEBPACK_IMPORTED_MODULE_3__["default"].use(window[component]);
+      vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(window[component]);
     } else {
       console.error('Unable to register component: ' + component + '. Make sure it is load correctly.');
     }
@@ -4605,7 +4132,7 @@ class VueService {
 
 
   getVue() {
-    return vue__WEBPACK_IMPORTED_MODULE_3__["default"];
+    return vue__WEBPACK_IMPORTED_MODULE_1__["default"];
   }
   /**
    * Mark a component as loaded.

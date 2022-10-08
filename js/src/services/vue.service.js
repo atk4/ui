@@ -1,25 +1,27 @@
 import Vue from 'vue';
 import SemanticUiVue from 'semantic-ui-vue';
-import atkClickOutside from '../directives/click-outside.directive';
-import { focus } from '../directives/commons.directive';
+
+// disable console logs for non-minified build
+Vue.config.productionTip = false;
+Vue.config.devtools = false;
 
 Vue.use(SemanticUiVue);
 
 Vue.component('flat-picker', () => import('vue-flatpickr-component'));
 
-// Vue loader component to display while dynamic component is loading.
+// vue loader component to display while dynamic component is loading
 const atkVueLoader = {
     name: 'atk-vue-loader',
     template: '<div><div class="ui active centered inline loader"></div></div>',
 };
 
-// Vue error component to display when dynamic component loading fail.
+// vue error component to display when dynamic component loading fail
 const atkVueError = {
     name: 'atk-vue-error',
     template: '<div class="ui negative message"><p>Error: Unable to load Vue component</p></div>',
 };
 
-// Return async component that will load on demand.
+// return async component that will load on demand
 const componentFactory = (name, component) => () => ({
     component: component().then((r) => { atk.vueService.markComponentLoaded(name); return r; }),
     loading: atkVueLoader,
@@ -35,44 +37,28 @@ const atkComponents = {
     'atk-query-builder': componentFactory('atk-query-builder', () => import(/* webpackChunkName: "atk-vue-query-builder" */'../components/query-builder/query-builder.component.vue')),
 };
 
-// setup atk custom directives.
-const atkDirectives = [{ name: 'click-outside', def: atkClickOutside }, { name: 'focus', def: focus }];
-atkDirectives.forEach((directive) => {
-    Vue.directive(directive.name, directive.def);
-});
-
 /**
- * Singleton class
- * Create Vue component.
+ * Allow to create Vue component.
  */
 class VueService {
-    static getInstance() {
-        return this.instance;
-    }
-
     constructor() {
-        if (!VueService.instance) {
-            this.vues = [];
-            this.vueMixins = {
-                methods: {
-                    getData: function () {
-                        return this.initData;
-                    },
+        this.vues = [];
+        this.vueMixins = {
+            methods: {
+                getData: function () {
+                    return this.initData;
                 },
-                // provide method to our child component.
-                // child component would need to inject a method to have access using the inject property,
-                // inject: ['getRootData'],
-                // Once inject you can get initial data using this.getRootData().
-                provide: function () {
-                    return {
-                        getRootData: this.getData,
-                    };
-                },
-            };
-            VueService.instance = this;
-        }
-
-        return VueService.instance;
+            },
+            // provide method to our child component.
+            // child component would need to inject a method to have access using the inject property,
+            // inject: ['getRootData'],
+            // Once inject you can get initial data using this.getRootData().
+            provide: function () {
+                return {
+                    getRootData: this.getData,
+                };
+            },
+        };
     }
 
     /**

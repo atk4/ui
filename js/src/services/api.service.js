@@ -1,22 +1,22 @@
 import $ from 'jquery';
 
 /**
- * Singleton class
- * Handle Fomantic-UI api functionality throughout the app.
+ * Handle Fomantic-UI API functionality throughout the app.
  */
-
 class ApiService {
-    static getInstance() {
-        return this.instance;
+    constructor() {
+        this.afterSuccessCallbacks = [];
     }
 
-    constructor() {
-        if (!this.instance) {
-            this.instance = this;
-            this.afterSuccessCallbacks = [];
-        }
-
-        return this.instance;
+    /**
+     * Setup Fomantic-UI API with this service.
+     */
+    setService(settings) {
+        // settings.onResponse = this.handleResponse;
+        settings.successTest = this.successTest;
+        settings.onFailure = this.onFailure;
+        settings.onSuccess = this.onSuccess;
+        settings.onAbort = this.onAbort;
     }
 
     /**
@@ -32,18 +32,6 @@ class ApiService {
      */
     evalResponse(code, $) { // eslint-disable-line
         eval(code); // eslint-disable-line
-    }
-
-    /**
-     * Setup Fomantic-UI api callback with this service.
-     * @param settings
-     */
-    setService(settings) {
-    // settings.onResponse = this.handleResponse;
-        settings.successTest = this.successTest;
-        settings.onFailure = this.onFailure;
-        settings.onSuccess = this.onSuccess;
-        settings.onAbort = this.onAbort;
     }
 
     onAbort(message) {
@@ -209,7 +197,7 @@ class ApiService {
      * @param response
      */
     onFailure(response) {
-    // if json is returned, it should contain the error within message property
+        // if json is returned, it should contain the error within message property
         if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
             if (Object.prototype.hasOwnProperty.call(response, 'useWindow') && response.useWindow) {
                 atk.apiService.showErrorWindow(response.message);
@@ -232,7 +220,7 @@ class ApiService {
      * @param errorMsg
      */
     showErrorModal(errorMsg) {
-    // catch application error and display them in a new modal window.
+        // catch application error and display them in a new modal window.
         const m = $('<div>')
             .appendTo('body')
             .addClass('ui scrolling modal')

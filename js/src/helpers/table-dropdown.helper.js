@@ -7,7 +7,6 @@ import $ from 'jquery';
  * display on top of table.
  *
  * This utility will properly set css style for dropdown menu to be display correctly.
- *
  */
 function showTableDropdown() {
     // getting element composing dropdown.
@@ -29,7 +28,7 @@ function showTableDropdown() {
      * Set menu style for displaying at right position.
      */
     function setCssPosition() {
-    // console.log(position.top, $that.scrollTop());
+        // console.log(position.top, $that.scrollTop());
         let top = 0;
         let left = 0;
         // check if we need to place menu above or down button.

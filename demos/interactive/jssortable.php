@@ -50,7 +50,7 @@ $button->js('click', $sortable->jsGetOrders(['btn' => '1']));
 // -----------------------------------------------------------------------------
 
 View::addTo($app, ['ui' => 'divider']);
-Header::addTo($app, ['Add Drag n drop to Grid']);
+Header::addTo($app, ['Add drag n drop to grid']);
 
 $grid = Grid::addTo($app, ['paginator' => false]);
 $grid->setModel((new Country($app->db))->setLimit(6));

@@ -7,7 +7,6 @@ import multilineCell from './multiline-cell.component';
  * The td element will add a multiline cell element.
  *  the multiline cell will set it's own template component depending on the fieldType.
  *  getValue
- *
  */
 export default {
     name: 'atk-multiline-row',

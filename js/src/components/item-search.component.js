@@ -13,7 +13,6 @@ import $ from 'jquery';
  * url:     string, the url to call.
  * q:       string, the initial string for the query. Useful if this search is part of the relaod.
  * reload:  string, an Id selector for jQuery, '#' is append automatically.
- *
  */
 
 const template = `<div class="atk-item-search" :class="inputCss">
