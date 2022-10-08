@@ -7,10 +7,9 @@ import $ from 'jquery';
  *
  * Properties need for this component are:
  *
- * context: string, a jQuery selector where the 'loading' class will be apply by Fomantic-UI:
- *          - default to the requesting element.
+ * context: string, a jQuery selector where the 'loading' class will be apply by Fomantic-UI - default to the requesting element.
  * url:     string, the url to call.
- * value:  array, array of value to send to server.
+ * value:   array, array of value to send to server.
  */
 
 const template = `

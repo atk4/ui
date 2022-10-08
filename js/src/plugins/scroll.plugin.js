@@ -1,16 +1,17 @@
 import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Add dynamic scrolling to a View that can accept page argument in URL.
  *
  * default options are:
- *  padding: 20         The amount of padding needed prior to request a page load.
- *  initialPage: 1      The initial page load when calling this plugin.
- *  appendTo: null      The html element where new content should be append to.
- *  allowJsEval: false  Whether or not javascript send in server response should be evaluate.
- *  stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call.
- *                        if null, then a default loader will be apply to the bottom of the $inner element.
+ * padding: 20         The amount of padding needed prior to request a page load.
+ * initialPage: 1      The initial page load when calling this plugin.
+ * appendTo: null      The html element where new content should be append to.
+ * allowJsEval: false  Whether or not javascript send in server response should be evaluate.
+ * stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call. if null, then a default loader will be apply to the bottom of the $inner element.
  */
 export default class scroll extends atkPlugin {
     main() {
@@ -117,7 +118,7 @@ export default class scroll extends atkPlugin {
     /**
      * Check if container element has vertical scrollbar.
      *
-     * @return bool
+     * @returns {boolean}
      */
     hasScrollbar() {
         const innerHeight = this.isWindow ? Math.ceil(this.$el.height()) : Math.ceil(this.$inner.height());
@@ -128,8 +129,6 @@ export default class scroll extends atkPlugin {
 
     /**
      * Set Next page to be loaded.
-     *
-     * @param page
      */
     setNextPage(page) {
         this.nextPage = page;
@@ -165,9 +164,6 @@ export default class scroll extends atkPlugin {
      * Use response to append content to element and setup next content to be load.
      * Set response.id to null in order for apiService.onSuccess to bypass
      * replacing html content. Js return from server response will still be execute.
-     *
-     * @param response
-     * @param element
      */
     onComplete(response, element) {
         this.removeLoader();

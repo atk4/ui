@@ -37,7 +37,7 @@ atk.popupService = popupService;
  *
  * Available as a global Var: atk.uploadService.fileUpload()
  * Available as an import:
- *  import atk from atk4JS;
- *  atk.uploadService.fileUpload();
+ * import atk from atk4JS;
+ * atk.uploadService.fileUpload();
  */
 export default atk;

@@ -1,5 +1,7 @@
 import $ from 'jquery';
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Allow to upload files to server via Fomantic-UI API.
  */
@@ -10,12 +12,12 @@ class UploadService {
      * 'file-(number)' param, except for the first one which will
      * be set to 'file' only.
      *
-     * @param files         A FileList object.
-     * @param el            the jQuery element to attach to Fomantic-UI api.
-     * @param data          Extra data to pass with files.
-     * @param uploadUrl     the url that handle upload.
-     * @param completeCb    the callback for Fomantic-UI api.onComplete.
-     * @param xhrCb         the xhr function to pass to server.
+     * @param files      A FileList object.
+     * @param element    the jQuery element to attach to Fomantic-UI api.
+     * @param data       Extra data to pass with files.
+     * @param uploadUrl  the url that handle upload.
+     * @param completeCb the callback for Fomantic-UI api.onComplete.
+     * @param xhrCb      the xhr function to pass to server.
      */
     uploadFiles(
         files,

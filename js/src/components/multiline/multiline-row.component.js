@@ -5,8 +5,8 @@ import multilineCell from './multiline-cell.component';
  * This will create a table td element using sui-table-cell.
  * The td element is created only if column as set isVisible = true;
  * The td element will add a multiline cell element.
- *  the multiline cell will set it's own template component depending on the fieldType.
- *  getValue
+ * the multiline cell will set it's own template component depending on the fieldType.
+ * getValue
  */
 export default {
     name: 'atk-multiline-row',

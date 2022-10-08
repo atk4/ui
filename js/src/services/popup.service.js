@@ -1,3 +1,5 @@
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * This is default setup for Fomantic-UI Popup.
  */

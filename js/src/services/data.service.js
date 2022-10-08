@@ -10,8 +10,7 @@ class DataService {
     /**
      * Check if storage is available.
      *
-     * @param type
-     * @returns {boolean|boolean|*}
+     * @returns {boolean|*}
      */
     storageAvailable(type) {
         let storage;
@@ -23,24 +22,26 @@ class DataService {
 
             return true;
         } catch (e) {
-            return e instanceof DOMException && (
-                // everything except Firefox
-                e.code === 22
-        // Firefox
-        || e.code === 1014
-        // test name field too, because code might not be present
-        // everything except Firefox
-        || e.name === 'QuotaExceededError'
-        // Firefox
-        || e.name === 'NS_ERROR_DOM_QUOTA_REACHED')
-        // acknowledge QuotaExceededError only if there's something already stored
-        && (storage && storage.length !== 0);
+            return e instanceof DOMException
+                && (
+                    // everything except Firefox
+                    e.code === 22
+                    // Firefox
+                    || e.code === 1014
+                    // test name field too, because code might not be present
+                    // everything except Firefox
+                    || e.name === 'QuotaExceededError'
+                    // Firefox
+                    || e.name === 'NS_ERROR_DOM_QUOTA_REACHED'
+                )
+                // acknowledge QuotaExceededError only if there's something already stored
+                && (storage && storage.length !== 0);
         }
     }
 
     /**
      * Check for valid json string.
-     * @param str
+     *
      * @returns {boolean}
      */
     isJsonString(str) {
@@ -59,10 +60,6 @@ class DataService {
      * Set Item data value to local or web storage.
      * The item is the key associated with the data value in web or local storage.
      * Will add item value or replace it if already exist.
-     *
-     * @param item
-     * @param value
-     * @param type
      */
     setData(item, value, type = 'local') {
         if (this.hasStorage) {
@@ -75,8 +72,6 @@ class DataService {
     /**
      * Get data value using an item as key.
      *
-     * @param item
-     * @param type
      * @returns {null}
      */
     getData(item, type = 'local') {
@@ -90,9 +85,6 @@ class DataService {
 
     /**
      * Clear associated data using item as key.
-     *
-     * @param item
-     * @param type
      */
     clearData(item, type = 'local') {
         if (this.hasStorage) {
@@ -103,7 +95,6 @@ class DataService {
     /**
      * Return store data for an item or empty object.
      *
-     * @param item
      * @returns {{session: *, local: *}}
      */
     getStoreData(name) {
@@ -125,10 +116,6 @@ class DataService {
     /**
      * Similar to set data but make sure that value is
      * a valid json string prior to set data.
-     *
-     * @param item
-     * @param value
-     * @param type
      */
     setJsonData(item, value, type = 'local') {
         if (!this.isJsonString(value)) {
@@ -141,10 +128,6 @@ class DataService {
      * Will either create or merge with existing data.
      * Merging is done with Object assign, prioritizing new value.
      * Previous data, if exist, and value must be a valid json string.
-     *
-     * @param item
-     * @param value
-     * @param type
      */
     addJsonData(item, value, type = 'local') {
         const previous = this.getData(item, type);

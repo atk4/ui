@@ -5,46 +5,46 @@ import formService from '../services/form.service';
  * Show or hide input field base on other input field condition.
  * Support all Fomantic-UI form validation rule.
  * Note on rule. FormService also add two more rule to Fomantic-UI existing ones:
- *    - notEmpty;
- *    - isVisible;
- *    - isEqual[number] for number comparaison.
+ * - notEmpty;
+ * - isVisible;
+ * - isEqual[number] for number comparaison.
  *
  * Here is the phrasing of the rule.
- *  - Show "this field" if all condition are met.
- *    fieldRules is an array that contains items where each item describe the field to hide or show
- *    that depends on other field with their input value conditions.
+ * - Show "this field" if all condition are met.
+ * fieldRules is an array that contains items where each item describe the field to hide or show
+ * that depends on other field with their input value conditions.
  *
- *    $form->js()->atkConditionalForm(
- *      [ 'fieldRules =>
- *        [
- *          'fieldToShow' => ['field1' => 'notEmpty', 'field2' => 'number']
- *        ]
- *      ]);
- *   Can be phrase this way: Display 'fieldToShow' if 'field1' is not empty AND field2 is a number.
+ * $form->js()->atkConditionalForm(
+ * [ 'fieldRules =>
+ * [
+ * 'fieldToShow' => ['field1' => 'notEmpty', 'field2' => 'number']
+ * ]
+ * ]);
+ * Can be phrase this way: Display 'fieldToShow' if 'field1' is not empty AND field2 is a number.
  *
- *   Adding and array of field => rules for the same field will OR the condition for that field.
- *    $form->js()->atkConditionalForm(
- *      [ 'fieldRules =>
- *        [
- *          'hair_cut' => [
- *                          ['race' => 'contains[poodle]', 'age' => 'integer[0..5]'],
- *                          ['race' => 'isExactly[bichon]']
- *                        ]
- *       ]
- *      ]);
- *   Can be phrase this way: Display 'hair_cut' if 'race' contains 'poodle' AND 'age' is between 0 and 5 OR 'race' contains the exact word 'bichon'.
+ * Adding and array of field => rules for the same field will OR the condition for that field.
+ * $form->js()->atkConditionalForm(
+ * [ 'fieldRules =>
+ * [
+ * 'hair_cut' => [
+ * ['race' => 'contains[poodle]', 'age' => 'integer[0..5]'],
+ * ['race' => 'isExactly[bichon]']
+ * ]
+ * ]
+ * ]);
+ * Can be phrase this way: Display 'hair_cut' if 'race' contains 'poodle' AND 'age' is between 0 and 5 OR 'race' contains the exact word 'bichon'.
  *
- *   Adding an array of conditions for the same field is also support.
+ * Adding an array of conditions for the same field is also support.
  *
- *    $form->js()->atkConditionalForm(
- *      [ 'fieldRules =>
- *        [
- *          'ext' => ['phone' => ['number', 'minLength[7]']]
- *        ]
- *      ]);
- *   Can be phrase this way: Display 'ext' if phone is a number AND phone has at least 7 char.
+ * $form->js()->atkConditionalForm(
+ * [ 'fieldRules =>
+ * [
+ * 'ext' => ['phone' => ['number', 'minLength[7]']]
+ * ]
+ * ]);
+ * Can be phrase this way: Display 'ext' if phone is a number AND phone has at least 7 char.
  *
- *   See Fomantic-UI validation rule for more details: https://fomantic-ui.com/behaviors/form.html#validation-rules
+ * See Fomantic-UI validation rule for more details: https://fomantic-ui.com/behaviors/form.html#validation-rules
  */
 export default class conditionalForm extends atkPlugin {
     main() {
@@ -93,8 +93,6 @@ export default class conditionalForm extends atkPlugin {
 
     /**
      * Field change handler.
-     *
-     * @param e
      */
     onInputChange(e) {
         // check rule when inputs has changed.

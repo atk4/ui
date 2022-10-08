@@ -1,5 +1,7 @@
 import $ from 'jquery';
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Handle Fomantic-UI API functionality throughout the app.
  */
@@ -28,7 +30,7 @@ class ApiService {
      * will work just fine, even if $ is not assign globally.
      *
      * @param code // javascript to be eval.
-     * @param $ // reference to jQuery.
+     * @param $    // reference to jQuery.
      */
     evalResponse(code, $) { // eslint-disable-line no-shadow
         eval(code); // eslint-disable-line no-eval
@@ -50,9 +52,6 @@ class ApiService {
      * thus causing some code to be running twice.
      * To avoid conflict, property name in response was change from eval to atkjs.
      * Which mean response.atkjs now contains code to be eval.
-     *
-     * @param response
-     * @param element
      */
     onSuccess(response, element) {
         try {
@@ -119,10 +118,9 @@ class ApiService {
      *
      * ex: $app->terminateJson(['success' => true, 'data' => $data]);
      *
-     * @param url      the url to fetch data
-     * @param settings the Fomantic-UI api settings object.
-     * @param el       the element to apply Fomantic-UI context.
-     *
+     * @param                  url      the url to fetch data
+     * @param                  settings the Fomantic-UI api settings object.
+     * @param                  el       the element to apply Fomantic-UI context.
      * @returns {Promise<any>}
      */
     suiFetch(url, settings = {}, el = 'body') {
@@ -154,8 +152,6 @@ class ApiService {
     /**
      * Accumulate callbacks function to run after onSuccess.
      * Callback is a string containing code to be eval.
-     *
-     * @param callback
      */
     onAfterSuccess(callback) {
         this.afterSuccessCallbacks.push(callback);
@@ -163,9 +159,9 @@ class ApiService {
 
     /**
      * Check server response and clear api.data object.
-     *  - return true will call onSuccess
-     *  - return false will call onFailure
-     * @param response
+     * - return true will call onSuccess
+     * - return false will call onFailure
+     *
      * @returns {boolean}
      */
     successTest(response) {
@@ -181,8 +177,6 @@ class ApiService {
      * Make our own ajax request test if need to.
      * if a plugin must call $.ajax or $.getJson directly instead of Fomantic-UI api,
      * we could send the json response to this.
-     * @param response
-     * @param content
      */
     atkSuccessTest(response, content = null) {
         if (response.success) {
@@ -194,8 +188,6 @@ class ApiService {
 
     /**
      * Handle a server response failure.
-     *
-     * @param response
      */
     onFailure(response) {
         // if json is returned, it should contain the error within message property
@@ -218,7 +210,6 @@ class ApiService {
 
     /**
      * Display App error in a Fomantic-UI modal.
-     * @param errorMsg
      */
     showErrorModal(errorMsg) {
         // catch application error and display them in a new modal window.
@@ -242,7 +233,6 @@ class ApiService {
 
     /**
      * Display App error in a separate window.
-     * @param errorMsg
      */
     showErrorWindow(errorMsg) {
         const error = $('<div class="atk-exception">')

@@ -2,6 +2,8 @@ import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 import uploadService from '../services/upload.service';
 
+/* eslint-disable jsdoc/require-param-type */
+
 export default class fileUpload extends atkPlugin {
     main() {
         this.textInput = this.$el.find('input[type="text"]');
@@ -39,9 +41,6 @@ export default class fileUpload extends atkPlugin {
 
     /**
      * Update input value.
-     *
-     * @param fileId
-     * @param fileName
      */
     updateField(fileId, fileName) {
         this.$el.data().fileId = fileId;
@@ -165,8 +164,6 @@ export default class fileUpload extends atkPlugin {
 
     /**
      * Callback server for file delete.
-     *
-     * @param fileId
      */
     doFileDelete(fileId) {
         this.$el.api({

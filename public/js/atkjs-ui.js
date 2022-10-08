@@ -86,9 +86,9 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Define atk global options.
  * In Js:
- *  atk.options.set('name', 'value');
+ * atk.options.set('name', 'value');
  * In Php:
- *  (new JsChain('atk.options')->set('name', 'value');
+ * (new JsChain('atk.options')->set('name', 'value');
  */
 
 const atkOptions = function () {
@@ -103,9 +103,9 @@ const atkOptions = function () {
 /**
  * Subscribe too and publish events.
  * listen to an event
- *   atk.eventBus.on('foo', e => console.log('foo', e))
+ * atk.eventBus.on('foo', e => console.log('foo', e))
  * Fire an event
- *   atk.eventBus.emit('foo', { a: 'b' })
+ * atk.eventBus.emit('foo', { a: 'b' })
  */
 
 
@@ -296,13 +296,13 @@ __webpack_require__.r(__webpack_exports__);
  * Url helper jQuery functions.
  *
  * - AddParams - Pass an url with an object and object key=value pair will be
- *   added to the url as get parameter.
- *   ex: $.atkAddParams('myurl.php', {q: 'test', 'reload': 'my_view'})
- *   will return: myurl.php?q=test&reload=my_view
+ * added to the url as get parameter.
+ * ex: $.atkAddParams('myurl.php', {q: 'test', 'reload': 'my_view'})
+ * will return: myurl.php?q=test&reload=my_view
  *
  * - RemoveParam - remove a parameter from an url string.
- *   ex: $.atkRemoveParam('myurl.php?q=test&reload=my_view', 'q')
- *   will return: myurl.php?reload=my_view
+ * ex: $.atkRemoveParam('myurl.php?q=test&reload=my_view', 'q')
+ * will return: myurl.php?reload=my_view
  */
 (function ($) {
   if (!$.atk) {
@@ -311,7 +311,6 @@ __webpack_require__.r(__webpack_exports__);
   /**
    * Get the base url from string.
    *
-   * @param url
    * @returns {*|string}
    */
 
@@ -322,7 +321,6 @@ __webpack_require__.r(__webpack_exports__);
   /**
    * Get each url query parameter as a key:value pair object.
    *
-   * @param str
    * @returns {{}|unknown}
    */
 
@@ -342,8 +340,6 @@ __webpack_require__.r(__webpack_exports__);
   /**
    * Add param to an url string.
    *
-   * @param url
-   * @param data
    * @returns {*}
    */
 
@@ -358,8 +354,6 @@ __webpack_require__.r(__webpack_exports__);
   /**
    * Remove param from an url string.
    *
-   * @param url
-   * @param param
    * @returns {string|*|string}
    */
 
@@ -434,29 +428,32 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Generate a jQuery plugin
- * @param name [string] Plugin name
+ *
+ * @param name      [string] Plugin name
  * @param className [object] Class of the plugin
  * @param shortHand [bool] Generate a shorthand as $.pluginName
  *
- * @example
- * import plugin from 'plugin';
+ *            Example:
+ *            import plugin from 'plugin';
  *
- * class MyPlugin {
- *     constructor(element, options) {
- *         // ...
- *     }
- * }
+ *            class MyPlugin {
+ *            constructor(element, options) {
+ *            // ...
+ *            }
+ *            }
  *
- * MyPlugin.DEFAULTS = {};
+ *            MyPlugin.DEFAULTS = {};
  *
- * plugin('myPlugin', MyPlugin);
+ *            plugin('myPlugin', MyPlugin);
  *
- * credit : https://gist.github.com/monkeymonk/c08cb040431f89f99928132ca221d647
+ *            credit : https://gist.github.com/monkeymonk/c08cb040431f89f99928132ca221d647
  *
- * import $ from 'jquery' will bind '$' var to jQuery var without '$' var conflicting with other library
- * in final webpack output.
+ *            import $ from 'jquery' will bind '$' var to jQuery var without '$' var conflicting with other library
+ *            in final webpack output.
  */
 
 function plugin(name, className, shortHand = false) {
@@ -645,6 +642,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Base implementation of jQuery plugin in Agile Toolkit.
  */
@@ -653,8 +652,6 @@ class atkPlugin {
   /**
    * Default plugin constructor
    *
-   * @param element
-   * @param options
    * @returns {atkPlugin}
    */
   constructor(element, options) {
@@ -675,8 +672,8 @@ class atkPlugin {
    * Call a plugin method via the initializer function.
    * Simply call the method like: $(selector).pluginName('method', [arg1, arg2])
    *
-   * @param fn : string representing the method name to execute.
-   * @param args : array of arguments need for the method to execute.
+   * @param       fn   string representing the method name to execute.
+   * @param       args array of arguments need for the method to execute.
    * @returns {*}
    */
 
@@ -707,6 +704,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
+
+/* eslint-disable jsdoc/require-param-type */
 
 /**
  * Enable table column to be resizable using drag.
@@ -746,7 +745,7 @@ class columnResizer extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"] 
    * On resize callback when user finish dragging column for resizing.
    * Calling this method via callback need to bind "this" set to this plugin.
    *
-   * @param e  the event.
+   * @param e the event.
    */
 
 
@@ -795,46 +794,46 @@ __webpack_require__.r(__webpack_exports__);
  * Show or hide input field base on other input field condition.
  * Support all Fomantic-UI form validation rule.
  * Note on rule. FormService also add two more rule to Fomantic-UI existing ones:
- *    - notEmpty;
- *    - isVisible;
- *    - isEqual[number] for number comparaison.
+ * - notEmpty;
+ * - isVisible;
+ * - isEqual[number] for number comparaison.
  *
  * Here is the phrasing of the rule.
- *  - Show "this field" if all condition are met.
- *    fieldRules is an array that contains items where each item describe the field to hide or show
- *    that depends on other field with their input value conditions.
+ * - Show "this field" if all condition are met.
+ * fieldRules is an array that contains items where each item describe the field to hide or show
+ * that depends on other field with their input value conditions.
  *
- *    $form->js()->atkConditionalForm(
- *      [ 'fieldRules =>
- *        [
- *          'fieldToShow' => ['field1' => 'notEmpty', 'field2' => 'number']
- *        ]
- *      ]);
- *   Can be phrase this way: Display 'fieldToShow' if 'field1' is not empty AND field2 is a number.
+ * $form->js()->atkConditionalForm(
+ * [ 'fieldRules =>
+ * [
+ * 'fieldToShow' => ['field1' => 'notEmpty', 'field2' => 'number']
+ * ]
+ * ]);
+ * Can be phrase this way: Display 'fieldToShow' if 'field1' is not empty AND field2 is a number.
  *
- *   Adding and array of field => rules for the same field will OR the condition for that field.
- *    $form->js()->atkConditionalForm(
- *      [ 'fieldRules =>
- *        [
- *          'hair_cut' => [
- *                          ['race' => 'contains[poodle]', 'age' => 'integer[0..5]'],
- *                          ['race' => 'isExactly[bichon]']
- *                        ]
- *       ]
- *      ]);
- *   Can be phrase this way: Display 'hair_cut' if 'race' contains 'poodle' AND 'age' is between 0 and 5 OR 'race' contains the exact word 'bichon'.
+ * Adding and array of field => rules for the same field will OR the condition for that field.
+ * $form->js()->atkConditionalForm(
+ * [ 'fieldRules =>
+ * [
+ * 'hair_cut' => [
+ * ['race' => 'contains[poodle]', 'age' => 'integer[0..5]'],
+ * ['race' => 'isExactly[bichon]']
+ * ]
+ * ]
+ * ]);
+ * Can be phrase this way: Display 'hair_cut' if 'race' contains 'poodle' AND 'age' is between 0 and 5 OR 'race' contains the exact word 'bichon'.
  *
- *   Adding an array of conditions for the same field is also support.
+ * Adding an array of conditions for the same field is also support.
  *
- *    $form->js()->atkConditionalForm(
- *      [ 'fieldRules =>
- *        [
- *          'ext' => ['phone' => ['number', 'minLength[7]']]
- *        ]
- *      ]);
- *   Can be phrase this way: Display 'ext' if phone is a number AND phone has at least 7 char.
+ * $form->js()->atkConditionalForm(
+ * [ 'fieldRules =>
+ * [
+ * 'ext' => ['phone' => ['number', 'minLength[7]']]
+ * ]
+ * ]);
+ * Can be phrase this way: Display 'ext' if phone is a number AND phone has at least 7 char.
  *
- *   See Fomantic-UI validation rule for more details: https://fomantic-ui.com/behaviors/form.html#validation-rules
+ * See Fomantic-UI validation rule for more details: https://fomantic-ui.com/behaviors/form.html#validation-rules
  */
 
 class conditionalForm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"] {
@@ -883,8 +882,6 @@ class conditionalForm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"
   }
   /**
    * Field change handler.
-   *
-   * @param e
    */
 
 
@@ -1138,6 +1135,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+/* eslint-disable jsdoc/require-param-type */
+
 class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
     this.textInput = this.$el.find('input[type="text"]');
@@ -1173,9 +1172,6 @@ class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
   /**
    * Update input value.
-   *
-   * @param fileId
-   * @param fileName
    */
 
 
@@ -1296,8 +1292,6 @@ class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
   /**
    * Callback server for file delete.
-   *
-   * @param fileId
    */
 
 
@@ -1359,6 +1353,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
+
+/* eslint-disable jsdoc/require-param-type */
 
 class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
@@ -1492,7 +1488,7 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
    * Mostly use on page load
    * when input need to be set to reflect a search state.
    *
-   * @param text || The text input value.
+   * @param text The text input value.
    */
 
 
@@ -1504,9 +1500,6 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
   /**
    * More generic way to set url argument.
-   *
-   * @param arg
-   * @param value
    */
 
 
@@ -1517,8 +1510,6 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
   /**
    * Set Filter icon state.
-   *
-   * @param isOn
    */
 
 
@@ -1533,8 +1524,6 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
   /**
    * Set search button state.
-   *
-   * @param isOn
    */
 
 
@@ -1551,9 +1540,6 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
   /**
    * Send request to server using the search query.
-   *
-   * @param uri
-   * @param options
    */
 
 
@@ -1621,24 +1607,26 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Make elements inside a container draggable and sortable.
- *  Use shopify/Draggable library https://github.com/Shopify/draggable,
- *  draggable.js is external to this bundle, so it need to be load from CDN.
+ * Use shopify/Draggable library https://github.com/Shopify/draggable,
+ * draggable.js is external to this bundle, so it need to be load from CDN.
  *
- *  After reordering, callback is sent to server with post information:
- *    order => contains the order of data-{label} as a comma delimited string;
- *    source => the element being reorder.
- *    pos => the final position of the element being reorder.
+ * After reordering, callback is sent to server with post information:
+ * order => contains the order of data-{label} as a comma delimited string;
+ * source => the element being reorder.
+ * pos => the final position of the element being reorder.
  *
- *  Defaut container is set to table boddy (tbody), using table row(tr) as reoderable element.
- *     To use other container, simply set container and draggable accordingly.
- *      $sortable = JsSortable::addTo($lister, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
+ * Defaut container is set to table boddy (tbody), using table row(tr) as reoderable element.
+ * To use other container, simply set container and draggable accordingly.
+ * $sortable = JsSortable::addTo($lister, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
  *
- *  Element containing specific css class can be used as the handle for dragging element, if null
- *  is pass, than the entire element is used.
+ * Element containing specific css class can be used as the handle for dragging element, if null
+ * is pass, than the entire element is used.
  *
- *    For a complete example check /demos/jssortable.php
+ * For a complete example check /demos/jssortable.php
  */
 
 class JsSortable extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
@@ -1839,16 +1827,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Add dynamic scrolling to a View that can accept page argument in URL.
  *
  * default options are:
- *  padding: 20         The amount of padding needed prior to request a page load.
- *  initialPage: 1      The initial page load when calling this plugin.
- *  appendTo: null      The html element where new content should be append to.
- *  allowJsEval: false  Whether or not javascript send in server response should be evaluate.
- *  stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call.
- *                        if null, then a default loader will be apply to the bottom of the $inner element.
+ * padding: 20         The amount of padding needed prior to request a page load.
+ * initialPage: 1      The initial page load when calling this plugin.
+ * appendTo: null      The html element where new content should be append to.
+ * allowJsEval: false  Whether or not javascript send in server response should be evaluate.
+ * stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call. if null, then a default loader will be apply to the bottom of the $inner element.
  */
 
 class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
@@ -1957,7 +1946,7 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   /**
    * Check if container element has vertical scrollbar.
    *
-   * @return bool
+   * @returns {boolean}
    */
 
 
@@ -1968,8 +1957,6 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
   /**
    * Set Next page to be loaded.
-   *
-   * @param page
    */
 
 
@@ -2010,9 +1997,6 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
    * Use response to append content to element and setup next content to be load.
    * Set response.id to null in order for apiService.onSuccess to bypass
    * replacing html content. Js return from server response will still be execute.
-   *
-   * @param response
-   * @param element
    */
 
 
@@ -2172,8 +2156,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Will expand or collapse menu items for side navigation.
  * Toggling is done when clicking the toggler element.
- *    - Toggling icon class name will be switch ex: caret left to caret down,
- *    when triggered.
+ * - Toggling icon class name will be switch ex: caret left to caret down, when triggered.
  * Clicking on a menu group will simulate a click event on the first menu item in the group.
  *
  * Default value are set for Maestro admin layout.
@@ -2227,9 +2210,8 @@ class sidenav extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
   /**
    * Check if an url match with current window location.
-   * @param refUrl
    *
-   * @return bool
+   * @returns {boolean}
    */
 
 
@@ -2260,8 +2242,6 @@ class sidenav extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
   /**
    * Set class icon for the toggler element.
-   *
-   * @param selector
    */
 
 
@@ -2370,6 +2350,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Handle Fomantic-UI API functionality throughout the app.
  */
@@ -2399,7 +2381,7 @@ class ApiService {
    * will work just fine, even if $ is not assign globally.
    *
    * @param code // javascript to be eval.
-   * @param $ // reference to jQuery.
+   * @param $    // reference to jQuery.
    */
 
 
@@ -2423,9 +2405,6 @@ class ApiService {
    * thus causing some code to be running twice.
    * To avoid conflict, property name in response was change from eval to atkjs.
    * Which mean response.atkjs now contains code to be eval.
-   *
-   * @param response
-   * @param element
    */
 
 
@@ -2498,10 +2477,9 @@ class ApiService {
    *
    * ex: $app->terminateJson(['success' => true, 'data' => $data]);
    *
-   * @param url      the url to fetch data
-   * @param settings the Fomantic-UI api settings object.
-   * @param el       the element to apply Fomantic-UI context.
-   *
+   * @param                  url      the url to fetch data
+   * @param                  settings the Fomantic-UI api settings object.
+   * @param                  el       the element to apply Fomantic-UI context.
    * @returns {Promise<any>}
    */
 
@@ -2535,8 +2513,6 @@ class ApiService {
   /**
    * Accumulate callbacks function to run after onSuccess.
    * Callback is a string containing code to be eval.
-   *
-   * @param callback
    */
 
 
@@ -2545,9 +2521,9 @@ class ApiService {
   }
   /**
    * Check server response and clear api.data object.
-   *  - return true will call onSuccess
-   *  - return false will call onFailure
-   * @param response
+   * - return true will call onSuccess
+   * - return false will call onFailure
+   *
    * @returns {boolean}
    */
 
@@ -2565,8 +2541,6 @@ class ApiService {
    * Make our own ajax request test if need to.
    * if a plugin must call $.ajax or $.getJson directly instead of Fomantic-UI api,
    * we could send the json response to this.
-   * @param response
-   * @param content
    */
 
 
@@ -2579,8 +2553,6 @@ class ApiService {
   }
   /**
    * Handle a server response failure.
-   *
-   * @param response
    */
 
 
@@ -2605,7 +2577,6 @@ class ApiService {
   }
   /**
    * Display App error in a Fomantic-UI modal.
-   * @param errorMsg
    */
 
 
@@ -2623,7 +2594,6 @@ class ApiService {
   }
   /**
    * Display App error in a separate window.
-   * @param errorMsg
    */
 
 
@@ -2699,8 +2669,7 @@ class DataService {
   /**
    * Check if storage is available.
    *
-   * @param type
-   * @returns {boolean|boolean|*}
+   * @returns {boolean|*}
    */
 
 
@@ -2725,7 +2694,7 @@ class DataService {
   }
   /**
    * Check for valid json string.
-   * @param str
+   *
    * @returns {boolean}
    */
 
@@ -2744,10 +2713,6 @@ class DataService {
    * Set Item data value to local or web storage.
    * The item is the key associated with the data value in web or local storage.
    * Will add item value or replace it if already exist.
-   *
-   * @param item
-   * @param value
-   * @param type
    */
 
 
@@ -2761,8 +2726,6 @@ class DataService {
   /**
    * Get data value using an item as key.
    *
-   * @param item
-   * @param type
    * @returns {null}
    */
 
@@ -2778,9 +2741,6 @@ class DataService {
   }
   /**
    * Clear associated data using item as key.
-   *
-   * @param item
-   * @param type
    */
 
 
@@ -2792,7 +2752,6 @@ class DataService {
   /**
    * Return store data for an item or empty object.
    *
-   * @param item
    * @returns {{session: *, local: *}}
    */
 
@@ -2819,10 +2778,6 @@ class DataService {
   /**
    * Similar to set data but make sure that value is
    * a valid json string prior to set data.
-   *
-   * @param item
-   * @param value
-   * @param type
    */
 
 
@@ -2837,10 +2792,6 @@ class DataService {
    * Will either create or merge with existing data.
    * Merging is done with Object assign, prioritizing new value.
    * Previous data, if exist, and value must be a valid json string.
-   *
-   * @param item
-   * @param value
-   * @param type
    */
 
 
@@ -2879,6 +2830,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+/* eslint-disable jsdoc/require-param-type */
 
 /**
  * Handle Fomantic-UI form functionality throughout the app.
@@ -2927,8 +2880,6 @@ class FormService {
   /**
    * Set form in order to detect
    * input changed before leaving page.
-   *
-   * @param id
    */
 
 
@@ -2943,8 +2894,6 @@ class FormService {
   /**
    * Clear Form from being dirty.
    * Use this function if you define your own onSuccess handler.
-   *
-   * @param id
    */
 
 
@@ -2971,9 +2920,9 @@ class FormService {
   /**
    * Validate a field using our own or Fomantic-UI validation rule function.
    *
-   * @param form  Form containing the field.
-   * @param fieldName Name of field
-   * @param rule  Rule to apply test.
+   * @param               form      Form containing the field.
+   * @param               fieldName Name of field
+   * @param               rule      Rule to apply test.
    * @returns {*|boolean}
    */
 
@@ -3316,6 +3265,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Panel needs to be reload to display different
  * content. This service will take care of this.
@@ -3334,8 +3285,6 @@ class PanelService {
   }
   /**
    * Remove existing panel from service panels and dom.
-   *
-   * @param id
    */
 
 
@@ -3351,8 +3300,6 @@ class PanelService {
    *
    * Atk4/ui callback may call this on each callback so
    * we need to make sure it is not add multiple time.
-   *
-   * @param params
    */
 
 
@@ -3399,15 +3346,14 @@ class PanelService {
   /**
    * Open the panel.
    * Params expected the following arguments:
-   *   triggered : A string or jQuery object that will triggered panel to open.
-   *   activeCss: Either an object containing a jQuery selector with a css class or css class.
-   *    As an Object:  element: the jQuery selector within the triggered element;
-   *                   css:     the css class to applying to the triggered element when panel is open.
+   * triggered: A string or jQuery object that will triggered panel to open.
+   * activeCss: Either an object containing a jQuery selector with a css class or css class.
+   * - As an Object: element: the jQuery selector within the triggered element;
+   * -               css:     the css class to applying to the triggered element when panel is open.
    *
-   *    As a css class: the css class to applied to the triggered element when panel open.
+   * As a css class: the css class to applied to the triggered element when panel open.
    *
-   * @param params              The params objects.
-   * @returns {PanelService|*}
+   * @param params The params objects.
    */
 
 
@@ -3431,8 +3377,6 @@ class PanelService {
   }
   /**
    * Will check if panel can open or reload.
-   *
-   * @param id
    */
 
 
@@ -3473,8 +3417,6 @@ class PanelService {
    * Will check if panel is reloadable and
    * setup proper url argument from triggered item
    * via it's data property.
-   *
-   * @param id
    */
 
 
@@ -3498,9 +3440,6 @@ class PanelService {
   }
   /**
    * Do the actual opening.
-   *
-   * @param panelId
-   * @param params
    */
 
 
@@ -3546,8 +3485,6 @@ class PanelService {
   }
   /**
    * Close panel and cleanup.
-   *
-   * @returns {PanelService|*}
    */
 
 
@@ -3572,8 +3509,6 @@ class PanelService {
   }
   /**
    * Load panel content.
-   *
-   * @param args
    */
 
 
@@ -3601,10 +3536,6 @@ class PanelService {
    * If panel is open by html element, you can specified class on these
    * elements that will be add or remove, depending on the panel state.
    * Thus, creating a visual onto which html element has fire the event.
-   *
-   * @param id
-   * @param trigger
-   * @param params
    */
 
 
@@ -3668,7 +3599,6 @@ class PanelService {
   /**
    * Compare a  jQuery element to the actual triggered element for this panel.
    *
-   * @param el          the element to compare against.
    * @returns {boolean} True when both jQuery element are equal.
    */
 
@@ -3686,9 +3616,6 @@ class PanelService {
   /**
    * Removed a css class to a jQuery element.
    * This should normally be your triggering panel element.
-   *
-   * @param element
-   * @param css
    */
 
 
@@ -3700,9 +3627,6 @@ class PanelService {
   /**
    * Add a css class name to a jQuery element.
    * This should normally be your triggering panel element.
-   *
-   * @param element
-   * @param css
    */
 
 
@@ -3714,7 +3638,6 @@ class PanelService {
   /**
    * Check if Warning sign is on.
    *
-   * @param id
    * @returns {boolean}
    */
 
@@ -3734,7 +3657,6 @@ class PanelService {
    * Check if panel can be closed, i.e.
    * it has a confirmation modal attach and warning sign is not on.
    *
-   * @param id
    * @returns {boolean}
    */
 
@@ -3754,8 +3676,6 @@ class PanelService {
       $panel.find(clearable).html('');
     });
   }
-  /** ********* UTILITIES *************** */
-
   /**
    * Set a property value for a panel designated by id.
    *
@@ -3776,8 +3696,6 @@ class PanelService {
    * Return the panel property represent by id in collections.
    * if prop is not specify, then it will return the entire panel object.
    *
-   * @param id
-   * @param prop
    * @returns {*|jQuery|HTMLElement}
    */
 
@@ -3811,6 +3729,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * This is default setup for Fomantic-UI Popup.
  */
@@ -3911,6 +3831,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Allow to upload files to server via Fomantic-UI API.
  */
@@ -3922,12 +3844,12 @@ class UploadService {
    * 'file-(number)' param, except for the first one which will
    * be set to 'file' only.
    *
-   * @param files         A FileList object.
-   * @param el            the jQuery element to attach to Fomantic-UI api.
-   * @param data          Extra data to pass with files.
-   * @param uploadUrl     the url that handle upload.
-   * @param completeCb    the callback for Fomantic-UI api.onComplete.
-   * @param xhrCb         the xhr function to pass to server.
+   * @param files      A FileList object.
+   * @param element    the jQuery element to attach to Fomantic-UI api.
+   * @param data       Extra data to pass with files.
+   * @param uploadUrl  the url that handle upload.
+   * @param completeCb the callback for Fomantic-UI api.onComplete.
+   * @param xhrCb      the xhr function to pass to server.
    */
   uploadFiles(files, element, data, uploadUrl, completeCb = function (r, c) {}, xhrCb = function () {
     return new window.XMLHttpRequest();
@@ -4044,9 +3966,6 @@ class VueService {
    * Created a Vue component and add it to the vues array.
    * For Root component (App) to be aware that it's children component is
    * mounted, you need to use @hook:mounted="setReady"
-   * @param name
-   * @param component
-   * @param data
    */
 
 
@@ -4069,10 +3988,6 @@ class VueService {
   }
   /**
    * Create a Vue instance from an external src component definition.
-   *
-   * @param name
-   * @param component
-   * @param data
    */
 
 
@@ -4125,7 +4040,7 @@ class VueService {
   /**
    * Return Vue.
    *
-   * @returns {Vue | VueConstructor}
+   * @returns {Vue}
    */
 
 
@@ -33216,8 +33131,8 @@ atk.popupService = _services_popup_service__WEBPACK_IMPORTED_MODULE_9__["default
  *
  * Available as a global Var: atk.uploadService.fileUpload()
  * Available as an import:
- *  import atk from atk4JS;
- *  atk.uploadService.fileUpload();
+ * import atk from atk4JS;
+ * atk.uploadService.fileUpload();
  */
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (atk);

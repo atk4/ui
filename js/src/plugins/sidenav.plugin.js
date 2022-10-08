@@ -4,8 +4,7 @@ import atkPlugin from './atk.plugin';
 /**
  * Will expand or collapse menu items for side navigation.
  * Toggling is done when clicking the toggler element.
- *    - Toggling icon class name will be switch ex: caret left to caret down,
- *    when triggered.
+ * - Toggling icon class name will be switch ex: caret left to caret down, when triggered.
  * Clicking on a menu group will simulate a click event on the first menu item in the group.
  *
  * Default value are set for Maestro admin layout.
@@ -56,9 +55,8 @@ export default class sidenav extends atkPlugin {
 
     /**
      * Check if an url match with current window location.
-     * @param refUrl
      *
-     * @return bool
+     * @returns {boolean}
      */
     urlMatchLocation(refUrl) {
         const url = new URL(refUrl);
@@ -85,8 +83,6 @@ export default class sidenav extends atkPlugin {
 
     /**
      * Set class icon for the toggler element.
-     *
-     * @param selector
      */
     setTogglerIcon(selector) {
         this.toggler.find(selector).attr('class', (this.isMenuOn() ? this.settings.icon.off : this.settings.icon.on) + ' icon');

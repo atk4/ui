@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 
+/* eslint-disable jsdoc/require-param-type */
+
 export default class JsSearch extends atkPlugin {
     main() {
         this.urlArgs = {};
@@ -125,7 +127,7 @@ export default class JsSearch extends atkPlugin {
      * Mostly use on page load
      * when input need to be set to reflect a search state.
      *
-     * @param text || The text input value.
+     * @param text The text input value.
      */
     setFilter(text) {
         this.textInput.val(text);
@@ -136,9 +138,6 @@ export default class JsSearch extends atkPlugin {
 
     /**
      * More generic way to set url argument.
-     *
-     * @param arg
-     * @param value
      */
     setUrlArgs(arg, value) {
         this.urlArgs = Object.assign(this.urlArgs, { [arg]: value });
@@ -146,8 +145,6 @@ export default class JsSearch extends atkPlugin {
 
     /**
      * Set Filter icon state.
-     *
-     * @param isOn
      */
     setFilterState(isOn) {
         if (isOn) {
@@ -160,8 +157,6 @@ export default class JsSearch extends atkPlugin {
 
     /**
      * Set search button state.
-     *
-     * @param isOn
      */
     setButtonState(isOn) {
         if (isOn) {
@@ -176,9 +171,6 @@ export default class JsSearch extends atkPlugin {
 
     /**
      * Send request to server using the search query.
-     *
-     * @param uri
-     * @param options
      */
     doSearch(uri, query, options, cb = function () {}) {
         const queryKey = this.settings.uri_query_key;

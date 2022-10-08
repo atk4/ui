@@ -99,7 +99,6 @@ export default {
         /**
          * Check if all children nodes are on.
          *
-         * @param nodes
          * @returns {boolean}
          */
         hasAllFill: function (nodes) {
@@ -124,7 +123,6 @@ export default {
         /**
          * Check if some children nodes are on.
          *
-         * @param nodes
          * @returns {boolean}
          */
         hasSomeFill: function (nodes) {
@@ -174,7 +172,6 @@ export default {
         /**
          * Merge array and remove duplicate.
          *
-         * @param arrays
          * @returns {*[]}
          */
         mergeArrays: function (...arrays) {
@@ -189,8 +186,6 @@ export default {
         /**
          * Get all id from all chidren node.
          *
-         * @param nodes
-         * @param ids
          * @returns {Array}
          */
         collectAllChildren: function (nodes, ids = []) {
@@ -255,8 +250,6 @@ export default {
         },
         /**
          * Set input field with current mapped  model value.
-         *
-         * @param data
          */
         setInput: function (value) {
             // console.log('set input');

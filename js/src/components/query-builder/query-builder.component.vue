@@ -45,7 +45,6 @@ export default {
         /**
          * Return default label and option.
          *
-         * @param labels
          * @returns {any}
          */
         getLabels: function (labels) {

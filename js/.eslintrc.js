@@ -5,6 +5,7 @@ module.exports = {
     },
     extends: [
         'plugin:vue/essential',
+        'plugin:jsdoc/recommended',
         'airbnb-base',
     ],
     parserOptions: {
@@ -49,6 +50,12 @@ module.exports = {
                 balanced: true,
             },
         }],
+        'jsdoc/require-param': 'off',
+        'jsdoc/require-param-description': 'off',
+        'jsdoc/require-returns': 'off',
+        'jsdoc/require-returns-description': 'off',
+        'jsdoc/require-jsdoc': 'off',
+        'jsdoc/check-line-alignment': ['error', 'always'],
     },
     reportUnusedDisableDirectives: true,
 };

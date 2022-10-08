@@ -12,29 +12,32 @@ import scroll from './plugins/scroll.plugin';
 import confirm from './plugins/confirm.plugin';
 import sidenav from './plugins/sidenav.plugin';
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Generate a jQuery plugin
- * @param name [string] Plugin name
+ *
+ * @param name      [string] Plugin name
  * @param className [object] Class of the plugin
  * @param shortHand [bool] Generate a shorthand as $.pluginName
  *
- * @example
- * import plugin from 'plugin';
+ *            Example:
+ *            import plugin from 'plugin';
  *
- * class MyPlugin {
- *     constructor(element, options) {
- *         // ...
- *     }
- * }
+ *            class MyPlugin {
+ *            constructor(element, options) {
+ *            // ...
+ *            }
+ *            }
  *
- * MyPlugin.DEFAULTS = {};
+ *            MyPlugin.DEFAULTS = {};
  *
- * plugin('myPlugin', MyPlugin);
+ *            plugin('myPlugin', MyPlugin);
  *
- * credit : https://gist.github.com/monkeymonk/c08cb040431f89f99928132ca221d647
+ *            credit : https://gist.github.com/monkeymonk/c08cb040431f89f99928132ca221d647
  *
- * import $ from 'jquery' will bind '$' var to jQuery var without '$' var conflicting with other library
- * in final webpack output.
+ *            import $ from 'jquery' will bind '$' var to jQuery var without '$' var conflicting with other library
+ *            in final webpack output.
  */
 function plugin(name, className, shortHand = false) {
     // Add atk namespace to jQuery global space.
