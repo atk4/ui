@@ -39,7 +39,7 @@ const atkEventBus = (function () {
 
 /*
 * Utilities function that you can execute
-* from atk context. Usage: atk.utils.date().parse('string');
+* from atk context. Usage: atk.utils.redirect('url');
 */
 const atkUtils = (function () {
     return {
@@ -52,18 +52,6 @@ const atkUtils = (function () {
                     } catch (e) {
                         return onError;
                     }
-                },
-            };
-        },
-        date: function () {
-            return {
-                // fix date parsing for different time zone if time is not supply.
-                parse: function (dateString) {
-                    if (dateString.match(/^[0-9]{4}[/\-.][0-9]{2}[/\-.][0-9]{2}$/)) {
-                        dateString += ' 00:00:00';
-                    }
-
-                    return dateString;
                 },
             };
         },
