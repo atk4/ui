@@ -296,10 +296,10 @@ jobs:
         if: matrix.type == 'Chrome Slow'
         run: |
           mv public public.orig
-          mkdir public public/external
+          mkdir public public/css public/external
           cp public.orig/.gitignore public
-          cp public.orig/agileui.less public
           cp public.orig/logo.png public
+          cp public.orig/css/agileui.less public/css
           cp public.orig/external/.gitignore public/external
           cp public.orig/external/package.json public/external
           cp public.orig/external/package-lock.json public/external
@@ -323,7 +323,7 @@ jobs:
       - name: Compile CSS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
-          lessc public/agileui.less public/agileui.min.css --clean-css="--s1 --advanced" --source-map
+          lessc public/css/agileui.less public/css/agileui.min.css --clean-css="--s1 --advanced" --source-map
 
       - name: Compile JS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
@@ -340,7 +340,7 @@ jobs:
       - name: Instrument & recompile JS files (only for coverage)
         if: env.LOG_COVERAGE
         run: |
-          rm public/*.js
+          rm -r public/js
           (cd js && npm install --package-lock-only --save-dev nyc && npm ci --loglevel=error)
           (cd js && npx nyc instrument --in-place . && npx webpack --env production)
 

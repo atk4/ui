@@ -73,7 +73,7 @@ For development and debugging, simply use the "dev" script supply in package.jso
     npm run dev
 ```
 
-This command will output the atkjs-ui.js file inside the /public directory including the .map file need for debugging
+This command will output the atkjs-ui.js file inside the ../public/js directory including the .map file need for debugging
 the package. Once load in your page, code can be debugged in browser from the webpack source.
 
 Any change made to the source, will also be re-compile automatically when using the "dev" script.
@@ -111,4 +111,4 @@ For production, simply use the "build" script supply in package.json.
     npm run build
 ```
 
-This command will output the atkjs-ui.min.js file, also in /public folder.
+This command will output the atkjs-ui.min.js file in ../public/js directory.

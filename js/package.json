@@ -2,9 +2,9 @@
     "name": "atkjs-ui",
     "version": "1.0.0",
     "description": "Agile Toolkit Javascript library.",
-    "main": "../public/atkjs-ui.js",
+    "main": "../public/js/atkjs-ui.js",
     "scripts": {
-        "build": "webpack --env development && webpack --env production && rm ../public/atk-vue-query-builder.min.js.map # 15.x vue-loader is producing sourcemap file with unstable/absolute path, remove rm once vue-loader is upgraded to at least 16.x",
+        "build": "webpack --env development && webpack --env production && rm ../public/js/atk-vue-query-builder.min.js.map # 15.x vue-loader is producing sourcemap file with unstable/absolute path, remove rm once vue-loader is upgraded to at least 16.x",
         "dev": "webpack --progress --watch --env development",
         "profile": "webpack --env production --profile --json > profile/atkjs-bundle-profile.json",
         "analyze-profile": "webpack-bundle-analyzer profile/atkjs-bundle-profile.json",

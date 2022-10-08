@@ -497,8 +497,8 @@ class App
         }
 
         // Agile UI
-        $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
-        $this->requireCss($this->cdn['atk'] . '/agileui.min.css');
+        $this->requireJs($this->cdn['atk'] . '/js/atkjs-ui.min.js');
+        $this->requireCss($this->cdn['atk'] . '/css/agileui.min.css');
 
         // Set js bundle dynamic loading path.
         $this->html->template->tryDangerouslySetHtml(
