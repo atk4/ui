@@ -37440,7 +37440,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-__webpack_require__.p = window.__atkBundlePublicPath === undefined ? '/public/' : window.__atkBundlePublicPath + '/'; // eslint-disable-line no-undef, camelcase, no-underscore-dangle
+__webpack_require__.p = window.__atkBundlePublicPath + '/'; // eslint-disable-line no-undef, camelcase, no-underscore-dangle
 
 const atk = { ...atk_fomantic_ui__WEBPACK_IMPORTED_MODULE_1__["default"]
 };

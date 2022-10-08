@@ -10,8 +10,7 @@ import lodashDebounce from 'lodash/debounce';
  * (new JsChain('atk.options')->set('name', 'value');
  */
 const atkOptions = (function () {
-    const options = {
-    };
+    const options = {};
 
     return {
         set: (name, value) => { options[name] = value; },

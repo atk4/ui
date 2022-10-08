@@ -11,7 +11,7 @@ import panelService from './services/panel.service';
 import vueService from './services/vue.service';
 import popupService from './services/popup.service';
 
-__webpack_public_path__ = window.__atkBundlePublicPath === undefined ? '/public/' : window.__atkBundlePublicPath + '/'; // eslint-disable-line no-undef, camelcase, no-underscore-dangle
+__webpack_public_path__ = window.__atkBundlePublicPath + '/'; // eslint-disable-line no-undef, camelcase, no-underscore-dangle
 
 const atk = { ...atkFomantic };
 
