@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 /**
- * Allow to upload files to server via Fomantic-UI api.
+ * Allow to upload files to server via Fomantic-UI API.
  */
 class UploadService {
     /**

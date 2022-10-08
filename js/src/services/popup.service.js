@@ -57,14 +57,14 @@ class PopupService {
      * and trigger action is fired.
      */
     onCreate() {
-    // console.log('onCreate');
+        // console.log('onCreate');
     }
 
     /**
      * Only call if onCreate was called.
      */
     onRemove() {
-    // console.log('onRemvoe');
+        // console.log('onRemvoe');
     }
 
     getLoader() {

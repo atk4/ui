@@ -23,8 +23,7 @@ class FormService {
     }
 
     /**
-     * Setup Fomantic-UI form callback with this service.
-     * @param settings
+     * Setup Fomantic-UI form with this service.
      */
     setService(settings) {
         settings.rules.isVisible = this.isVisible;

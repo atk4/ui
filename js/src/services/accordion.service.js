@@ -3,7 +3,6 @@ import $ from 'jquery';
 class AccordionService {
     /**
      * Setup Fomantic-UI accordion for this service.
-     * @param settings
      */
     setService(settings) {
         settings.onOpening = this.onOpening;

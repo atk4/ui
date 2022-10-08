@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 /**
- * Handle Fomantic-UI api functionality throughout the app.
+ * Handle Fomantic-UI API functionality throughout the app.
  */
 class ApiService {
     constructor() {
@@ -9,8 +9,7 @@ class ApiService {
     }
 
     /**
-     * Setup Fomantic-UI api callback with this service.
-     * @param settings
+     * Setup Fomantic-UI API with this service.
      */
     setService(settings) {
         // settings.onResponse = this.handleResponse;

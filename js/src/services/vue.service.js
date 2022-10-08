@@ -38,7 +38,7 @@ const atkComponents = {
 };
 
 /**
- * Create Vue component.
+ * Allow to create Vue component.
  */
 class VueService {
     constructor() {

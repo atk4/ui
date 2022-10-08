@@ -2335,7 +2335,6 @@ __webpack_require__.r(__webpack_exports__);
 class AccordionService {
   /**
    * Setup Fomantic-UI accordion for this service.
-   * @param settings
    */
   setService(settings) {
     settings.onOpening = this.onOpening;
@@ -2375,7 +2374,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
- * Handle Fomantic-UI api functionality throughout the app.
+ * Handle Fomantic-UI API functionality throughout the app.
  */
 
 class ApiService {
@@ -2383,8 +2382,7 @@ class ApiService {
     this.afterSuccessCallbacks = [];
   }
   /**
-   * Setup Fomantic-UI api callback with this service.
-   * @param settings
+   * Setup Fomantic-UI API with this service.
    */
 
 
@@ -2909,8 +2907,7 @@ class FormService {
     };
   }
   /**
-   * Setup Fomantic-UI form callback with this service.
-   * @param settings
+   * Setup Fomantic-UI form with this service.
    */
 
 
@@ -3917,7 +3914,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
- * Allow to upload files to server via Fomantic-UI api.
+ * Allow to upload files to server via Fomantic-UI API.
  */
 
 class UploadService {
@@ -4022,7 +4019,7 @@ const atkComponents = {
   'atk-query-builder': componentFactory('atk-query-builder', () => Promise.all(/*! import() | atk-vue-query-builder */[__webpack_require__.e("atk-vendor"), __webpack_require__.e("atk-vue-query-builder")]).then(__webpack_require__.bind(__webpack_require__, /*! ../components/query-builder/query-builder.component.vue */ "./src/components/query-builder/query-builder.component.vue")))
 };
 /**
- * Create Vue component.
+ * Allow to create Vue component.
  */
 
 class VueService {
