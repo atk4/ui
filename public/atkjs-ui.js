@@ -2346,6 +2346,8 @@ class AccordionService {
   constructor() {
     if (!this.instance) {
       this.instance = this;
+    } else {
+      throw 'singleton instanced more than once: '.this.constructor.name;
     }
 
     return this.instance;
@@ -2407,6 +2409,8 @@ class ApiService {
     if (!this.instance) {
       this.instance = this;
       this.afterSuccessCallbacks = [];
+    } else {
+      throw 'singleton instanced more than once: '.this.constructor.name;
     }
 
     return this.instance;
@@ -2735,6 +2739,8 @@ class DataService {
         session: sessionStorage,
         local: localStorage
       };
+    } else {
+      throw 'singleton instanced more than once: '.this.constructor.name;
     }
 
     return this.instance;
@@ -2953,6 +2959,8 @@ class FormService {
           }
         });
       };
+    } else {
+      throw 'singleton instanced more than once: '.this.constructor.name;
     }
 
     return this.instance;
@@ -3176,6 +3184,8 @@ class ModalService {
     if (!ModalService.instance) {
       this.modals = [];
       ModalService.instance = this;
+    } else {
+      throw 'singleton instanced more than once: '.this.constructor.name;
     }
 
     return ModalService.instance;
@@ -3403,6 +3413,8 @@ class PanelService {
         currentParams: null // url argument of the current panel.
 
       };
+    } else {
+      throw 'singleton instanced more than once: '.this.constructor.name;
     }
 
     return this.instance;
@@ -3898,6 +3910,8 @@ class PopupService {
   constructor() {
     if (!PopupService.instance) {
       PopupService.instance = this;
+    } else {
+      throw 'singleton instanced more than once: '.this.constructor.name;
     }
 
     return PopupService.instance;
@@ -4012,6 +4026,8 @@ class UploadService {
   constructor() {
     if (!UploadService.instance) {
       UploadService.instance = this;
+    } else {
+      throw 'singleton instanced more than once: '.this.constructor.name;
     }
 
     return UploadService.instance;
@@ -4148,6 +4164,8 @@ class VueService {
         }
       };
       VueService.instance = this;
+    } else {
+      throw 'singleton instanced more than once: '.this.constructor.name;
     }
 
     return VueService.instance;

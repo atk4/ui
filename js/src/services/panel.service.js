@@ -19,6 +19,8 @@ class PanelService {
                 currentVisibleId: null, // the current panel id that is in a visible state.
                 currentParams: null, // url argument of the current panel.
             };
+        } else {
+            throw 'singleton instanced more than once: ' . this.constructor.name;
         }
 
         return this.instance;

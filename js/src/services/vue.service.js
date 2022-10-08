@@ -66,6 +66,8 @@ class VueService {
                 },
             };
             VueService.instance = this;
+        } else {
+            throw 'singleton instanced more than once: ' . this.constructor.name;
         }
 
         return VueService.instance;

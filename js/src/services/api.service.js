@@ -14,6 +14,8 @@ class ApiService {
         if (!this.instance) {
             this.instance = this;
             this.afterSuccessCallbacks = [];
+        } else {
+            throw 'singleton instanced more than once: ' . this.constructor.name;
         }
 
         return this.instance;

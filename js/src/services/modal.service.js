@@ -16,6 +16,8 @@ class ModalService {
         if (!ModalService.instance) {
             this.modals = [];
             ModalService.instance = this;
+        } else {
+            throw 'singleton instanced more than once: ' . this.constructor.name;
         }
 
         return ModalService.instance;

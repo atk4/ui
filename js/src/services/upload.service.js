@@ -12,6 +12,8 @@ class UploadService {
     constructor() {
         if (!UploadService.instance) {
             UploadService.instance = this;
+        } else {
+            throw 'singleton instanced more than once: ' . this.constructor.name;
         }
 
         return UploadService.instance;

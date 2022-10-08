@@ -12,6 +12,8 @@ class DataService {
             this.instance = this;
             this.hasStorage = this.storageAvailable('localStorage') && this.storageAvailable('sessionStorage');
             this.storage = { session: sessionStorage, local: localStorage };
+        } else {
+            throw 'singleton instanced more than once: ' . this.constructor.name;
         }
 
         return this.instance;

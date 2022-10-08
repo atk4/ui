@@ -8,6 +8,8 @@ class AccordionService {
     constructor() {
         if (!this.instance) {
             this.instance = this;
+        } else {
+            throw 'singleton instanced more than once: ' . this.constructor.name;
         }
 
         return this.instance;

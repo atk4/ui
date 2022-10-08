@@ -10,6 +10,8 @@ class PopupService {
     constructor() {
         if (!PopupService.instance) {
             PopupService.instance = this;
+        } else {
+            throw 'singleton instanced more than once: ' . this.constructor.name;
         }
 
         return PopupService.instance;

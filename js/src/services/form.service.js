@@ -28,6 +28,8 @@ class FormService {
                     }
                 });
             };
+        } else {
+            throw 'singleton instanced more than once: ' . this.constructor.name;
         }
 
         return this.instance;
