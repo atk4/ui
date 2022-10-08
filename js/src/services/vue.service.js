@@ -1,42 +1,3 @@
-import Vue from 'vue';
-import SemanticUiVue from 'semantic-ui-vue';
-
-// disable console logs for non-minified build
-Vue.config.productionTip = false;
-Vue.config.devtools = false;
-
-Vue.use(SemanticUiVue);
-
-Vue.component('flat-picker', () => import('vue-flatpickr-component'));
-
-// vue loader component to display while dynamic component is loading
-const atkVueLoader = {
-    name: 'atk-vue-loader',
-    template: '<div><div class="ui active centered inline loader"></div></div>',
-};
-
-// vue error component to display when dynamic component loading fail
-const atkVueError = {
-    name: 'atk-vue-error',
-    template: '<div class="ui negative message"><p>Error: Unable to load Vue component</p></div>',
-};
-
-// return async component that will load on demand
-const componentFactory = (name, component) => () => ({
-    component: component().then((r) => { atk.vueService.markComponentLoaded(name); return r; }),
-    loading: atkVueLoader,
-    error: atkVueError,
-    delay: 200,
-});
-
-const atkComponents = {
-    'atk-inline-edit': componentFactory('atk-inline-edit', () => import(/* webpackChunkName: "atk-vue-inline-edit" */'../components/inline-edit.component')),
-    'atk-item-search': componentFactory('atk-item-search', () => import(/* webpackChunkName: "atk-vue-item-search" */'../components/item-search.component')),
-    'atk-multiline': componentFactory('atk-multiline', () => import(/* webpackChunkName: "atk-vue-multiline" */'../components/multiline/multiline.component')),
-    'atk-tree-item-selector': componentFactory('atk-tree-item-selector', () => import(/* webpackChunkName: "atk-vue-tree-item-selector" */'../components/tree-item-selector/tree-item-selector.component')),
-    'atk-query-builder': componentFactory('atk-query-builder', () => import(/* webpackChunkName: "atk-vue-query-builder" */'../components/query-builder/query-builder.component.vue')),
-};
-
 /**
  * Allow to create Vue component.
  */
@@ -67,6 +28,45 @@ class VueService {
      * mounted, you need to use @hook:mounted="setReady"
      */
     createAtkVue(id, component, data) {
+        const Vue = import('vue');
+        const SemanticUiVue = import('semantic-ui-vue');
+
+        // disable console logs for non-minified build
+        Vue.config.productionTip = false;
+        Vue.config.devtools = false;
+
+        Vue.use(SemanticUiVue);
+
+        Vue.component('flat-picker', () => import('vue-flatpickr-component'));
+
+        // vue loader component to display while dynamic component is loading
+        const atkVueLoader = {
+            name: 'atk-vue-loader',
+            template: '<div><div class="ui active centered inline loader"></div></div>',
+        };
+
+        // vue error component to display when dynamic component loading fail
+        const atkVueError = {
+            name: 'atk-vue-error',
+            template: '<div class="ui negative message"><p>Error: Unable to load Vue component</p></div>',
+        };
+
+        // return async component that will load on demand
+        const componentFactory = (name, component2) => () => ({
+            component: component2().then((r) => { atk.vueService.markComponentLoaded(name); return r; }),
+            loading: atkVueLoader,
+            error: atkVueError,
+            delay: 200,
+        });
+
+        const atkComponents = {
+            'atk-inline-edit': componentFactory('atk-inline-edit', () => import(/* webpackChunkName: "atk-vue-inline-edit" */'../components/inline-edit.component')),
+            'atk-item-search': componentFactory('atk-item-search', () => import(/* webpackChunkName: "atk-vue-item-search" */'../components/item-search.component')),
+            'atk-multiline': componentFactory('atk-multiline', () => import(/* webpackChunkName: "atk-vue-multiline" */'../components/multiline/multiline.component')),
+            'atk-tree-item-selector': componentFactory('atk-tree-item-selector', () => import(/* webpackChunkName: "atk-vue-tree-item-selector" */'../components/tree-item-selector/tree-item-selector.component')),
+            'atk-query-builder': componentFactory('atk-query-builder', () => import(/* webpackChunkName: "atk-vue-query-builder" */'../components/query-builder/query-builder.component.vue')),
+        };
+
         this.registerComponent({
             ids: [id],
             name: component,
@@ -84,6 +84,8 @@ class VueService {
      * Create a Vue instance from an external src component definition.
      */
     createVue(id, componentName, component, data) {
+        const Vue = import('vue');
+
         this.registerComponent({
             ids: [id],
             name: componentName,
@@ -115,6 +117,8 @@ class VueService {
      * Register components within Vue.
      */
     useComponent(component) {
+        const Vue = import('vue');
+
         if (window[component]) {
             Vue.use(window[component]);
         } else {
@@ -124,10 +128,10 @@ class VueService {
 
     /**
      * Return Vue.
-     *
-     * @returns {Vue}
      */
     getVue() {
+        const Vue = import('vue');
+
         return Vue;
     }
 
