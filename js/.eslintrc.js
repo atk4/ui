@@ -34,12 +34,7 @@ module.exports = {
         'import/prefer-default-export': 'off',
         'no-console': ['error', { allow: ['warn', 'error'] }],
         'no-underscore-dangle': ['error', { allow: ['__atkml', '__atkml_action', '__atk_reload'] }],
-        'max-len': ['error', {
-            code: 120,
-            ignoreTemplateLiterals: true,
-            ignoreComments: true,
-            ignoreStrings: true,
-        }],
+        'max-len': 'off',
         'prefer-template': ['off'],
         'no-unused-vars': ['error', { vars: 'all', args: 'none' }],
         'vue/no-unused-components': 'off',

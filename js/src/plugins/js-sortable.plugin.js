@@ -1,5 +1,4 @@
 /* global Draggable */
-
 import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 import 'draggable';

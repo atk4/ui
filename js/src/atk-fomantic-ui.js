@@ -1,5 +1,4 @@
 /* global FormSerializer */
-
 import $ from 'jquery';
 import apiService from 'services/api.service';
 import modalService from 'services/modal.service';
