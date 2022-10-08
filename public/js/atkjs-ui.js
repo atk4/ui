@@ -433,27 +433,27 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Generate a jQuery plugin
  *
+ * Example:
+ * import plugin from 'plugin';
+ *
+ * class MyPlugin {
+ * constructor(element, options) {
+ * // ...
+ * }
+ * }
+ *
+ * MyPlugin.DEFAULTS = {};
+ *
+ * plugin('myPlugin', MyPlugin);
+ *
+ * credit : https://gist.github.com/monkeymonk/c08cb040431f89f99928132ca221d647
+ *
+ * import $ from 'jquery' will bind '$' var to jQuery var without '$' var conflicting with other library
+ * in final webpack output.
+ *
  * @param name      [string] Plugin name
  * @param className [object] Class of the plugin
  * @param shortHand [bool] Generate a shorthand as $.pluginName
- *
- *            Example:
- *            import plugin from 'plugin';
- *
- *            class MyPlugin {
- *            constructor(element, options) {
- *            // ...
- *            }
- *            }
- *
- *            MyPlugin.DEFAULTS = {};
- *
- *            plugin('myPlugin', MyPlugin);
- *
- *            credit : https://gist.github.com/monkeymonk/c08cb040431f89f99928132ca221d647
- *
- *            import $ from 'jquery' will bind '$' var to jQuery var without '$' var conflicting with other library
- *            in final webpack output.
  */
 
 function plugin(name, className, shortHand = false) {
