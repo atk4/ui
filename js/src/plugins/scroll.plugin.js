@@ -96,7 +96,7 @@ export default class scroll extends atkPlugin {
     /**
      * Check if scrolling require adding content.
      *
-     * @param e // event
+     * @param e event
      */
     observe(e) {
         const borderTopWidth = parseInt(this.$el.css('borderTopWidth'), 10);

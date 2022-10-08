@@ -297,6 +297,7 @@ jobs:
         run: |
           mv public public.orig
           mkdir public public/css public/external
+          cp public.orig/.gitattributes public
           cp public.orig/.gitignore public
           cp public.orig/logo.png public
           cp public.orig/css/agileui.less public/css

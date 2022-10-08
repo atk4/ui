@@ -29,8 +29,8 @@ class ApiService {
      * By passig the jQuery reference, $ var use by code that need to be eval
      * will work just fine, even if $ is not assign globally.
      *
-     * @param code // javascript to be eval.
-     * @param $    // reference to jQuery.
+     * @param code javascript to be eval.
+     * @param $    reference to jQuery.
      */
     evalResponse(code, $) { // eslint-disable-line no-shadow
         eval(code); // eslint-disable-line no-eval
