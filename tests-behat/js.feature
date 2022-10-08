@@ -29,3 +29,6 @@ Feature: JS
   Scenario: JsCallback exception is displayed
     When I press button "failure"
     Then Modal is open with text "Atk4\Ui\Exception: Everything is bad"
+    Then I hide js modal
+    When I press button "failure"
+    Then Modal is open with text "Atk4\Ui\Exception: Everything is bad"
