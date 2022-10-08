@@ -106,7 +106,9 @@ const template = `
     clearError: function () {
       this.hasError = false;
     },
-    flashError: function (count = 4) {
+    flashError: function () {
+      let count = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 4;
+
       if (count === 0) {
         this.hasError = false;
         return;
