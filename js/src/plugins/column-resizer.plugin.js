@@ -2,6 +2,8 @@ import $ from 'jquery';
 import Resizer from 'column-resizer';
 import atkPlugin from './atk.plugin';
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Enable table column to be resizable using drag.
  */
@@ -35,7 +37,7 @@ export default class columnResizer extends atkPlugin {
      * On resize callback when user finish dragging column for resizing.
      * Calling this method via callback need to bind "this" set to this plugin.
      *
-     * @param e  the event.
+     * @param e the event.
      */
     onResize(e) {
         const columns = this.$el.find('th');

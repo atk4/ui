@@ -1,5 +1,7 @@
 import $ from 'jquery';
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Handle Fomantic-UI form functionality throughout the app.
  */
@@ -44,8 +46,6 @@ class FormService {
     /**
      * Set form in order to detect
      * input changed before leaving page.
-     *
-     * @param id
      */
     preventFormLeave(id) {
         const $form = $('#' + id);
@@ -59,8 +59,6 @@ class FormService {
     /**
      * Clear Form from being dirty.
      * Use this function if you define your own onSuccess handler.
-     *
-     * @param id
      */
     clearDirtyForm(id) {
         const forms = this.prevents.filter(($form) => $form.attr('id') === id);
@@ -85,9 +83,9 @@ class FormService {
     /**
      * Validate a field using our own or Fomantic-UI validation rule function.
      *
-     * @param form  Form containing the field.
-     * @param fieldName Name of field
-     * @param rule  Rule to apply test.
+     * @param               form      Form containing the field.
+     * @param               fieldName Name of field
+     * @param               rule      Rule to apply test.
      * @returns {*|boolean}
      */
     validateField(form, fieldName, rule) {

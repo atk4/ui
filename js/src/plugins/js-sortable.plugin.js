@@ -1,27 +1,28 @@
 /* global Draggable */
-
 import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 import 'draggable';
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Make elements inside a container draggable and sortable.
- *  Use shopify/Draggable library https://github.com/Shopify/draggable,
- *  draggable.js is external to this bundle, so it need to be load from CDN.
+ * Use shopify/Draggable library https://github.com/Shopify/draggable,
+ * draggable.js is external to this bundle, so it need to be load from CDN.
  *
- *  After reordering, callback is sent to server with post information:
- *    order => contains the order of data-{label} as a comma delimited string;
- *    source => the element being reorder.
- *    pos => the final position of the element being reorder.
+ * After reordering, callback is sent to server with post information:
+ * order => contains the order of data-{label} as a comma delimited string;
+ * source => the element being reorder.
+ * pos => the final position of the element being reorder.
  *
- *  Defaut container is set to table boddy (tbody), using table row(tr) as reoderable element.
- *     To use other container, simply set container and draggable accordingly.
- *      $sortable = JsSortable::addTo($lister, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
+ * Defaut container is set to table boddy (tbody), using table row(tr) as reoderable element.
+ * To use other container, simply set container and draggable accordingly.
+ * $sortable = JsSortable::addTo($lister, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
  *
- *  Element containing specific css class can be used as the handle for dragging element, if null
- *  is pass, than the entire element is used.
+ * Element containing specific css class can be used as the handle for dragging element, if null
+ * is pass, than the entire element is used.
  *
- *    For a complete example check /demos/jssortable.php
+ * For a complete example check /demos/jssortable.php
  */
 export default class JsSortable extends atkPlugin {
     main() {

@@ -2,13 +2,13 @@
  * Url helper jQuery functions.
  *
  * - AddParams - Pass an url with an object and object key=value pair will be
- *   added to the url as get parameter.
- *   ex: $.atkAddParams('myurl.php', {q: 'test', 'reload': 'my_view'})
- *   will return: myurl.php?q=test&reload=my_view
+ * added to the url as get parameter.
+ * ex: $.atkAddParams('myurl.php', {q: 'test', 'reload': 'my_view'})
+ * will return: myurl.php?q=test&reload=my_view
  *
  * - RemoveParam - remove a parameter from an url string.
- *   ex: $.atkRemoveParam('myurl.php?q=test&reload=my_view', 'q')
- *   will return: myurl.php?reload=my_view
+ * ex: $.atkRemoveParam('myurl.php?q=test&reload=my_view', 'q')
+ * will return: myurl.php?reload=my_view
  */
 
 (function ($) {
@@ -19,7 +19,6 @@
     /**
      * Get the base url from string.
      *
-     * @param url
      * @returns {*|string}
      */
     $.atk.getUrl = function (url) {
@@ -29,7 +28,6 @@
     /**
      * Get each url query parameter as a key:value pair object.
      *
-     * @param str
      * @returns {{}|unknown}
      */
     $.atk.getQueryParams = function (str) {
@@ -38,8 +36,7 @@
                 .split('&')
                 .reduce((obj, unsplitArg) => {
                     const arg = unsplitArg.split('=');
-                    // eslint-disable-next-line prefer-destructuring
-                    obj[arg[0]] = arg[1];
+                    obj[arg[0]] = arg[1]; // eslint-disable-line prefer-destructuring
 
                     return obj;
                 }, {});
@@ -51,8 +48,6 @@
     /**
      * Add param to an url string.
      *
-     * @param url
-     * @param data
      * @returns {*}
      */
     $.atk.addParams = function (url, data) {
@@ -66,8 +61,6 @@
     /**
      * Remove param from an url string.
      *
-     * @param url
-     * @param param
      * @returns {string|*|string}
      */
     $.atk.removeParam = function (url, param) {

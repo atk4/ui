@@ -1,5 +1,4 @@
 <template>
-    <!-- eslint-disable vue/no-v-html -->
     <div class="vqb-rule ui fluid card" :class="labels.spaceRule" :data-name="rule.id">
         <div class="content">
             <div class="ui grid">
@@ -119,7 +118,6 @@ export default {
          * Check if an input can be display in regards to:
          * it's operator and then it's type.
          *
-         * @param type
          * @returns {boolean|*}
          */
         canDisplay: function (type) {

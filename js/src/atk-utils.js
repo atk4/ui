@@ -5,9 +5,9 @@ import lodashDebounce from 'lodash/debounce';
 /**
  * Define atk global options.
  * In Js:
- *  atk.options.set('name', 'value');
+ * atk.options.set('name', 'value');
  * In Php:
- *  (new JsChain('atk.options')->set('name', 'value');
+ * (new JsChain('atk.options')->set('name', 'value');
  */
 const atkOptions = (function () {
     const options = {
@@ -22,9 +22,9 @@ const atkOptions = (function () {
 /**
  * Subscribe too and publish events.
  * listen to an event
- *   atk.eventBus.on('foo', e => console.log('foo', e))
+ * atk.eventBus.on('foo', e => console.log('foo', e))
  * Fire an event
- *   atk.eventBus.emit('foo', { a: 'b' })
+ * atk.eventBus.emit('foo', { a: 'b' })
  */
 const atkEventBus = (function () {
     const eventBus = mitt();

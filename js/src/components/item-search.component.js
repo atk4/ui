@@ -8,8 +8,7 @@ import $ from 'jquery';
  *
  * Properties need for this component are:
  *
- * context: string, a jQuery selector where the 'loading' class will be apply by Fomantic-UI:
- *          - default to this component.
+ * context: string, a jQuery selector where the 'loading' class will be apply by Fomantic-UI - default to this component.
  * url:     string, the url to call.
  * q:       string, the initial string for the query. Useful if this search is part of the relaod.
  * reload:  string, an Id selector for jQuery, '#' is append automatically.

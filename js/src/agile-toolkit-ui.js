@@ -11,10 +11,7 @@ import panelService from './services/panel.service';
 import vueService from './services/vue.service';
 import popupService from './services/popup.service';
 
-/* eslint-disable */
-/* global __webpack_public_path__:true */
-__webpack_public_path__ = window.__atkBundlePublicPath === undefined ? '/public/' :  window.__atkBundlePublicPath + '/';
-/* eslint-enable */
+__webpack_public_path__ = window.__atkBundlePublicPath === undefined ? '/public/' : window.__atkBundlePublicPath + '/'; // eslint-disable-line no-undef, camelcase, no-underscore-dangle
 
 const atk = { ...atkFomantic };
 
@@ -40,7 +37,7 @@ atk.popupService = popupService;
  *
  * Available as a global Var: atk.uploadService.fileUpload()
  * Available as an import:
- *  import atk from atk4JS;
- *  atk.uploadService.fileUpload();
+ * import atk from atk4JS;
+ * atk.uploadService.fileUpload();
  */
 export default atk;

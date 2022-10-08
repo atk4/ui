@@ -169,7 +169,6 @@ const template = `<div class="item" :style="itemMargin">
     /**
      * Check if all children nodes are on.
      *
-     * @param nodes
      * @returns {boolean}
      */
     hasAllFill: function (nodes) {
@@ -194,7 +193,6 @@ const template = `<div class="item" :style="itemMargin">
     /**
      * Check if some children nodes are on.
      *
-     * @param nodes
      * @returns {boolean}
      */
     hasSomeFill: function (nodes) {
@@ -249,7 +247,6 @@ const template = `<div class="item" :style="itemMargin">
     /**
      * Merge array and remove duplicate.
      *
-     * @param arrays
      * @returns {*[]}
      */
     mergeArrays: function (...arrays) {
@@ -263,8 +260,6 @@ const template = `<div class="item" :style="itemMargin">
     /**
      * Get all id from all chidren node.
      *
-     * @param nodes
-     * @param ids
      * @returns {Array}
      */
     collectAllChildren: function (nodes, ids = []) {
@@ -335,8 +330,6 @@ const template = `<div class="item" :style="itemMargin">
 
     /**
      * Set input field with current mapped  model value.
-     *
-     * @param data
      */
     setInput: function (value) {
       // console.log('set input');

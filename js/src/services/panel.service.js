@@ -1,5 +1,7 @@
 import $ from 'jquery';
 
+/* eslint-disable jsdoc/require-param-type */
+
 /**
  * Panel needs to be reload to display different
  * content. This service will take care of this.
@@ -15,8 +17,6 @@ class PanelService {
 
     /**
      * Remove existing panel from service panels and dom.
-     *
-     * @param id
      */
     removePanel(id) {
         // remove from dom
@@ -31,8 +31,6 @@ class PanelService {
      *
      * Atk4/ui callback may call this on each callback so
      * we need to make sure it is not add multiple time.
-     *
-     * @param params
      */
     addPanel(params) {
         // Remove existing one. Can be added by a reload.
@@ -72,15 +70,14 @@ class PanelService {
     /**
      * Open the panel.
      * Params expected the following arguments:
-     *   triggered : A string or jQuery object that will triggered panel to open.
-     *   activeCss: Either an object containing a jQuery selector with a css class or css class.
-     *    As an Object:  element: the jQuery selector within the triggered element;
-     *                   css:     the css class to applying to the triggered element when panel is open.
+     * triggered: A string or jQuery object that will triggered panel to open.
+     * activeCss: Either an object containing a jQuery selector with a css class or css class.
+     * - As an Object: element: the jQuery selector within the triggered element;
+     * -               css:     the css class to applying to the triggered element when panel is open.
      *
-     *    As a css class: the css class to applied to the triggered element when panel open.
+     * As a css class: the css class to applied to the triggered element when panel open.
      *
-     * @param params              The params objects.
-     * @returns {PanelService|*}
+     * @param params The params objects.
      */
     openPanel(params) {
         // if no id is provide, then get the first one.
@@ -100,8 +97,6 @@ class PanelService {
 
     /**
      * Will check if panel can open or reload.
-     *
-     * @param id
      */
     initOpen(id) {
         if (this.service.currentVisibleId && id !== this.service.currentVisibleId) {
@@ -141,8 +136,6 @@ class PanelService {
      * Will check if panel is reloadable and
      * setup proper url argument from triggered item
      * via it's data property.
-     *
-     * @param id
      */
     initPanelReload(id) {
         const params = this.service.currentParams;
@@ -165,9 +158,6 @@ class PanelService {
 
     /**
      * Do the actual opening.
-     *
-     * @param panelId
-     * @param params
      */
     doOpenPanel(panelId) {
         const params = this.service.currentParams;
@@ -210,8 +200,6 @@ class PanelService {
 
     /**
      * Close panel and cleanup.
-     *
-     * @returns {PanelService|*}
      */
     doClosePanel(id) {
         // remove document event.
@@ -235,8 +223,6 @@ class PanelService {
 
     /**
      * Load panel content.
-     *
-     * @param args
      */
     doReloadPanel(id, args) {
         const loader = this.getPropertyValue(id, 'loader');
@@ -265,10 +251,6 @@ class PanelService {
      * If panel is open by html element, you can specified class on these
      * elements that will be add or remove, depending on the panel state.
      * Thus, creating a visual onto which html element has fire the event.
-     *
-     * @param id
-     * @param trigger
-     * @param params
      */
     setTriggerElement(id, trigger, params) {
         this.setPropertyValue(id, 'triggerElement', trigger);
@@ -327,7 +309,6 @@ class PanelService {
     /**
      * Compare a  jQuery element to the actual triggered element for this panel.
      *
-     * @param el          the element to compare against.
      * @returns {boolean} True when both jQuery element are equal.
      */
     isSameElement(id, el) {
@@ -343,9 +324,6 @@ class PanelService {
     /**
      * Removed a css class to a jQuery element.
      * This should normally be your triggering panel element.
-     *
-     * @param element
-     * @param css
      */
     deActivated(element, css) {
         if (element) {
@@ -356,9 +334,6 @@ class PanelService {
     /**
      * Add a css class name to a jQuery element.
      * This should normally be your triggering panel element.
-     *
-     * @param element
-     * @param css
      */
     activated(element, css) {
         if (element) {
@@ -369,7 +344,6 @@ class PanelService {
     /**
      * Check if Warning sign is on.
      *
-     * @param id
      * @returns {boolean}
      */
     isWarningOn(id) {
@@ -390,7 +364,6 @@ class PanelService {
      * Check if panel can be closed, i.e.
      * it has a confirmation modal attach and warning sign is not on.
      *
-     * @param id
      * @returns {boolean}
      */
     needConfirmation(id) {
@@ -407,8 +380,6 @@ class PanelService {
             $panel.find(clearable).html('');
         });
     }
-
-    /** ********* UTILITIES *************** */
 
     /**
      * Set a property value for a panel designated by id.
@@ -429,8 +400,6 @@ class PanelService {
      * Return the panel property represent by id in collections.
      * if prop is not specify, then it will return the entire panel object.
      *
-     * @param id
-     * @param prop
      * @returns {*|jQuery|HTMLElement}
      */
     getPropertyValue(id, prop = null) {

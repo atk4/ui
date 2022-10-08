@@ -7,17 +7,15 @@
  * on env variable.
  *
  * Using Development
- *  - set webpack config mode to development
+ * - set webpack config mode to development
  *
  * Using Production
- *  - set webpack config mode to production
- *  - change name of output file by adding .min
+ * - set webpack config mode to production
+ * - change name of output file by adding .min
  *
  * Module export will output default value
- * using libraryExport : 'default' for backward
+ * using libraryExport: 'default' for backward
  * compatibility with previous release of the library.
- *
- * @type {webpack}
  */
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
@@ -53,17 +51,21 @@ module.exports = (env) => {
         optimization: {
             splitChunks: {
                 cacheGroups: {
-                    vendorFlatpickr: {
+                    vendorVueFlatpickr: {
                         test: /[\\/]node_modules[\\/](flatpickr|vue-flatpickr-component)[\\/]/,
-                        name: 'vendor-flatpickr',
+                        name: 'vendor-vue-flatpickr',
+                    },
+                    vendorVueQueryBuilder: {
+                        test: /[\\/]node_modules[\\/]vue-query-builder[\\/]/,
+                        name: 'vendor-vue-query-builder',
                     },
                     vendorVue: {
-                        test: /[\\/]node_modules[\\/](?!vue-flatpickr-component[\\/])(vue([-.][^\\/]+)?)[\\/]/,
+                        test: /[\\/]node_modules[\\/](?!(vue-flatpickr-component|vue-query-builder)[\\/])([^\\/]+[-.])?vue([-.][^\\/]+)?[\\/]/,
                         name: 'vendor-vue',
                     },
-                    vendorMain: {
-                        test: /[\\/]node_modules[\\/](?!(vue([-.][^\\/]+)?|flatpickr)[\\/])/,
-                        name: 'vendor-main',
+                    vendor: {
+                        test: /[\\/]node_modules[\\/](?!(([^\\/]+[-.])?vue([-.][^\\/]+)?|flatpickr)[\\/])/,
+                        name: 'vendor',
                     },
                 },
             },

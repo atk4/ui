@@ -286,8 +286,8 @@ __webpack_require__.r(__webpack_exports__);
  * This will create a table td element using sui-table-cell.
  * The td element is created only if column as set isVisible = true;
  * The td element will add a multiline cell element.
- *  the multiline cell will set it's own template component depending on the fieldType.
- *  getValue
+ * the multiline cell will set it's own template component depending on the fieldType.
+ * getValue
  */
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -673,10 +673,9 @@ __webpack_require__.r(__webpack_exports__);
      */
     getUUID: function () {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-        // eslint-disable-next-line no-bitwise
-        const r = Math.random() * 16 | 0; // eslint-disable-next-line no-bitwise
+        const r = Math.floor(Math.random() * 16);
+        const v = c === 'x' ? r : r & (0x3 | 0x8); // eslint-disable-line no-bitwise
 
-        const v = c === 'x' ? r : r & (0x3 | 0x8);
         return v.toString(16);
       });
     }
@@ -736,8 +735,8 @@ __webpack_require__.r(__webpack_exports__);
  * https://github.com/ankurk91/vue-flatpickr-component
  *
  * Props
- *  config: Any of flatpickr options
- *   Will emit a dateChange event when date is set.
+ * config: Any of flatpickr options
+ * Will emit a dateChange event when date is set.
  */
 const template = '<flat-picker v-model="date" :config="flatPickr" @on-change="onChange"></flat-picker>';
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -798,16 +797,14 @@ __webpack_require__.r(__webpack_exports__);
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
  *
  * Props
- *  config :
- *      url : the callback url. Callback should return model data in form
- *            of {key: model_id, text: model_title, value: model_id}
- *      reference: the reference field name associate with model or hasOne name.
- *                This field name will be sent along with url callback parameter as of 'field=name'.
- *      ui: the css class name to apply to dropdown.
- *      Note: The remaining config object may contain any or sui-dropdown {props: value} pair.
+ * config :
+ * url : the callback url. Callback should return model data in form of {key: model_id, text: model_title, value: model_id}
+ * reference: the reference field name associate with model or hasOne name. This field name will be sent along with url callback parameter as of 'field=name'.
+ * ui: the css class name to apply to dropdown.
+ * Note: The remaining config object may contain any or sui-dropdown {props: value} pair.
  *
- *  value: The selected value.
- *  optionalValue: The initial list of options for the dropdown.
+ * value: The selected value.
+ * optionalValue: The initial list of options for the dropdown.
  */
 const template = `<sui-dropdown
                     ref="drop"

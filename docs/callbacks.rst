@@ -207,7 +207,7 @@ use JsCallback class now::
 
 When you trigger callback, you'll see the output::
 
-    {"success":true, "message":"Success", "eval":"alert(\"ok\")"}
+    {"success": true, "message": "Success", "eval": "alert(\"ok\")"}
 
 This is how JsCallback renders actions and sends them back to the browser. In order to retrieve and execute actions,
 you'll need a JavaScript routine. Luckily JsCallback also implements JsExpressionable, so it, in itself is an action.
