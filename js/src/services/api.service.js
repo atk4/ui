@@ -192,11 +192,7 @@ class ApiService {
     onFailure(response) {
         // if json is returned, it should contain the error within message property
         if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
-            if (Object.prototype.hasOwnProperty.call(response, 'useWindow') && response.useWindow) {
-                atk.apiService.showErrorWindow(response.message);
-            } else {
-                atk.apiService.showErrorModal(response.message);
-            }
+            atk.apiService.showErrorModal(response.message);
         } else {
             // check if we have html returned by server with <body> content.
             const body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
@@ -229,42 +225,6 @@ class ApiService {
         })
             .modal('show')
             .modal('refresh');
-    }
-
-    /**
-     * Display App error in a separate window.
-     */
-    showErrorWindow(errorMsg) {
-        const error = $('<div class="atk-exception">')
-            .css({
-                padding: '8px',
-                'background-color': 'rgba(0, 0, 0, 0.5)',
-                margin: 'auto',
-                width: '100%',
-                height: '100%',
-                position: 'fixed',
-                top: 0,
-                bottom: 0,
-                'z-index': '100000',
-                'overflow-y': 'scroll',
-            })
-            .html($('<div>')
-                .css({
-                    width: '70%',
-                    'margin-top': '4%',
-                    'margin-bottom': '4%',
-                    'margin-left': 'auto',
-                    'margin-right': 'auto',
-                    background: 'white',
-                    padding: '4px',
-                    'overflow-x': 'scroll',
-                }).html(errorMsg)
-                .prepend($('<i class="ui big close icon"></i>').css('float', 'right').click(function () {
-                    const $this = $(this).parents('.atk-exception');
-                    $this.hide();
-                    $this.remove();
-                })));
-        error.appendTo('body');
     }
 
     getErrorHtml(error) {
