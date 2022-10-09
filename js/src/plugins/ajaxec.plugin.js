@@ -1,4 +1,5 @@
 import $ from 'external/jquery';
+import atk from 'atk';
 import AtkPlugin from './atk.plugin';
 
 export default class AtkAjaxecPlugin extends AtkPlugin {
@@ -20,14 +21,14 @@ export default class AtkAjaxecPlugin extends AtkPlugin {
     }
 
     doExecute() {
-        const url = $.atk.getUrl(this.settings.uri);
+        const url = atk.removeAllUrlParams(this.settings.uri);
         const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
 
         // uriOptions is always use as data in a post request.
         const data = this.settings.uriOptions ? this.settings.uriOptions : {};
 
         // retrieve param from url.
-        let urlParam = $.atkGetQueryParam(this.settings.uri);
+        let urlParams = atk.parseUrlParams(this.settings.uri);
 
         // get store object.
         const store = atk.dataService.getStoreData(this.settings.storeName);
@@ -42,12 +43,12 @@ export default class AtkAjaxecPlugin extends AtkPlugin {
 
         if (settings.method.toLowerCase() === 'get') {
             // set data, store and add it to url param.
-            urlParam = Object.assign(urlParam, data, store);
+            urlParams = Object.assign(urlParams, data, store);
         } else {
             settings.data = Object.assign(data, store);
         }
 
-        settings.url = url + '?' + $.param(urlParam);
+        settings.url = url + '?' + $.param(urlParams);
         this.$el.api(settings);
     }
 }

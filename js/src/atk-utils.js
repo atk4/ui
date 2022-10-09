@@ -1,6 +1,7 @@
 import $ from 'external/jquery';
 import mitt from 'mitt';
 import lodashDebounce from 'lodash/debounce';
+import atk from 'atk';
 import './helpers/url.helper';
 
 /**
@@ -56,7 +57,7 @@ const atkUtils = (function () {
             };
         },
         redirect: function (url, params) {
-            document.location = $.atkAddParams(url, params);
+            document.location = atk.appendUrlParams(url, params);
         },
     };
 }());

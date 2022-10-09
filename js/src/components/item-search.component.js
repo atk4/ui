@@ -1,4 +1,5 @@
 import $ from 'external/jquery';
+import atk from 'atk';
 
 /**
  * Vue component

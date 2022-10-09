@@ -1,3 +1,4 @@
+import atk from 'atk';
 import multilineCell from './multiline-cell.component';
 
 /**

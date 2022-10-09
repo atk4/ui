@@ -1,4 +1,5 @@
 import $ from 'external/jquery';
+import atk from 'atk';
 import AtkPlugin from './atk.plugin';
 import apiService from '../services/api.service';
 
@@ -20,12 +21,12 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
             return;
         }
 
-        const url = $.atk.getUrl(this.settings.uri);
+        const url = atk.removeAllUrlParams(this.settings.uri);
         const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
 
         // add new param and remove duplicate, prioritizing the latest one.
-        let urlParam = Object.assign(
-            $.atkGetQueryParam(this.settings.uri),
+        let urlParams = Object.assign(
+            atk.parseUrlParams(this.settings.uri),
             this.settings.uriOptions ? this.settings.uriOptions : {},
         );
 
@@ -50,10 +51,10 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
         if (settings.method.toLowerCase() === 'post') {
             settings.data = Object.assign(settings.data, store);
         } else {
-            urlParam = Object.assign(urlParam, store);
+            urlParams = Object.assign(urlParams, store);
         }
 
-        settings.url = url + '?' + $.param(urlParam);
+        settings.url = url + '?' + $.param(urlParams);
         this.$el.api(settings);
     }
 }

@@ -1,33 +1,12 @@
 import $ from 'external/jquery';
-
-/**
- * Url helper jQuery functions.
- *
- * - AddParams - Pass an url with an object and object key=value pair will be
- * added to the url as get parameter.
- * ex: $.atkAddParams('myurl.php', {q: 'test', 'reload': 'myView'})
- * will return: myurl.php?q=test&reload=myView
- *
- * - RemoveParam - remove a parameter from an url string.
- * ex: $.atkRemoveParam('myurl.php?q=test&reload=myView', 'q')
- * will return: myurl.php?reload=myView
- */
-
-/**
- * Get the base url from string.
- *
- * @returns {*|string}
- */
-$.atk.getUrl = function (url) {
-    return url.split('?')[0];
-};
+import atk from 'atk';
 
 /**
  * Get each url query parameter as a key:value pair object.
  *
- * @returns {{}|unknown}
+ * @returns {object}
  */
-$.atk.getQueryParams = function (str) {
+atk.parseUrlParams = function (str) {
     if (str.split('?')[1]) {
         return decodeURIComponent(str.split('?')[1])
             .split('&')
@@ -45,9 +24,12 @@ $.atk.getQueryParams = function (str) {
 /**
  * Add param to an url string.
  *
- * @returns {*}
+ * ex: atk.appendUrlParams('myurl.php', { q: 'test', 'reload': 'myView' })
+ * will return: myurl.php?q=test&reload=myView
+ *
+ * @returns {string}
  */
-$.atk.addParams = function (url, data) {
+atk.appendUrlParams = function (url, data) {
     if (!$.isEmptyObject(data)) {
         url += (url.indexOf('?') >= 0 ? '&' : '?') + $.param(data);
     }
@@ -58,9 +40,12 @@ $.atk.addParams = function (url, data) {
 /**
  * Remove param from an url string.
  *
- * @returns {string|*|string}
+ * ex: atk.removeUrlParam('myurl.php?q=test&reload=myView', 'q')
+ * will return: myurl.php?reload=myView
+ *
+ * @returns {string}
  */
-$.atk.removeParam = function (url, param) {
+atk.removeUrlParam = function (url, param) {
     const splitUrl = url.split('?');
     if (splitUrl.length === 0) {
         return url;
@@ -79,9 +64,13 @@ $.atk.removeParam = function (url, param) {
     return urlBase;
 };
 
-export default (function () {
-    $.atkGetUrl = $.atk.getUrl;
-    $.atkAddParams = $.atk.addParams;
-    $.atkRemoveParam = $.atk.removeParam;
-    $.atkGetQueryParam = $.atk.getQueryParams;
-}());
+/**
+ * Get the base url from string.
+ *
+ * @returns {string}
+ */
+atk.removeAllUrlParams = function (url) {
+    return url.split('?')[0];
+};
+
+export default null;

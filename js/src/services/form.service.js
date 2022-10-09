@@ -1,4 +1,5 @@
 import $ from 'external/jquery';
+import atk from 'atk';
 
 /**
  * Handle Fomantic-UI form functionality throughout the app.
@@ -81,9 +82,9 @@ class FormService {
     /**
      * Validate a field using our own or Fomantic-UI validation rule function.
      *
-     * @param   {$}               form      Form containing the field.
-     * @param   {string}          fieldName Name of field
-     * @param   {string | object} rule      Rule to apply test.
+     * @param   {$}             form      Form containing the field.
+     * @param   {string}        fieldName Name of field
+     * @param   {string|object} rule      Rule to apply test.
      * @returns {*|false}
      */
     validateField(form, fieldName, rule) {

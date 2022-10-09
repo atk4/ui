@@ -20,12 +20,6 @@ import AtkSidenavPlugin from './plugins/sidenav.plugin';
  * @param {boolean}  shortHand Generate a shorthand as $.pluginName
  */
 function registerPlugin(name, cl, shortHand = false) {
-    // Add atk namespace to jQuery global space.
-    // TODO should be initialized in entry JS if really needed
-    if (!$.atk) {
-        $.atk = {};
-    }
-
     const pluginName = 'atk' + name;
     const dataName = '__' + pluginName;
 

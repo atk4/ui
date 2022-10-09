@@ -743,6 +743,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+
 /**
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
  *
@@ -756,6 +758,7 @@ __webpack_require__.r(__webpack_exports__);
  * value: The selected value.
  * optionalValue: The initial list of options for the dropdown.
  */
+
 const template = `<sui-dropdown
                     ref="drop"
                     v-bind="dropdownProps"
@@ -806,7 +809,7 @@ const template = `<sui-dropdown
       }
 
       this.temp = inputValue;
-      atk.debounce(() => {
+      atk__WEBPACK_IMPORTED_MODULE_0__["default"].debounce(() => {
         if (this.query !== this.temp) {
           this.query = this.temp;
 
@@ -826,7 +829,7 @@ const template = `<sui-dropdown
           atkVueLookupQuery: q,
           atkVueLookupField: this.field
         };
-        const response = await atk.apiService.suiFetch(this.url, {
+        const response = await atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.suiFetch(this.url, {
           method: 'get',
           data: data
         });

@@ -1,4 +1,5 @@
 import $ from 'external/jquery';
+import atk from 'atk';
 import AtkPlugin from './atk.plugin';
 
 export default class AtkJsSearchPlugin extends AtkPlugin {
@@ -188,11 +189,11 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
                 onComplete: cb,
             });
         } else {
-            uri = $.atkRemoveParam(uri, queryKey);
+            uri = atk.removeUrlParam(uri, queryKey);
             if (options.__atk_reload) {
                 delete options.__atk_reload;
             }
-            uri = $.atkAddParams(uri, options);
+            uri = atk.appendUrlParams(uri, options);
             window.location = uri;
         }
     }

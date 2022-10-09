@@ -15,7 +15,6 @@ module.exports = {
     plugins: [
         'vue',
     ],
-    globals: { atk: true },
     rules: {
         indent: ['error', 4, { SwitchCase: 1 }],
         'object-shorthand': ['error', 'never'],

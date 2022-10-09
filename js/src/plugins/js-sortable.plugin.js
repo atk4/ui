@@ -1,5 +1,6 @@
 import $ from 'external/jquery';
 /* global Draggable */ // loaded after main JS
+import atk from 'atk';
 import AtkPlugin from './atk.plugin';
 
 /**
@@ -92,9 +93,9 @@ export default class AtkJsSortablePlugin extends AtkPlugin {
     buildUrl(extraParams = null) {
         let url = null;
         if (this.settings.uriOptions && extraParams) {
-            url = $.atkAddParams(this.settings.uri, $.extend({}, this.settings.uriOptions, extraParams));
+            url = atk.appendUrlParams(this.settings.uri, $.extend({}, this.settings.uriOptions, extraParams));
         } else if (this.settings.uriOptions) {
-            url = $.atkAddParams(this.settings.uri, this.settings.uriOptions);
+            url = atk.appendUrlParams(this.settings.uri, this.settings.uriOptions);
         } else {
             url = this.settings.uri;
         }

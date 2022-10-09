@@ -1,3 +1,5 @@
+import atk from 'atk';
+
 export default {
     name: 'atk-multiline-header',
     template: `

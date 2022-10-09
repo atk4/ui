@@ -1,4 +1,5 @@
 import $ from 'external/jquery';
+import atk from 'atk';
 import multilineBody from './multiline-body.component';
 import multilineHeader from './multiline-header.component';
 

@@ -13,6 +13,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+
 
 /**
  * Vue component
@@ -68,7 +70,7 @@ const template = `<div class="atk-item-search" :class="inputCss">
   },
   methods: {
     onKeyup: function () {
-      atk.debounce(e => {
+      atk__WEBPACK_IMPORTED_MODULE_1__["default"].debounce(e => {
         if (this.query !== this.temp) {
           if (this.query === '') {
             this.query = null;

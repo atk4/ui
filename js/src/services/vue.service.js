@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import SemanticUiVue from 'semantic-ui-vue';
+import atk from 'atk';
 
 // disable console logs for non-minified build
 Vue.config.productionTip = false;

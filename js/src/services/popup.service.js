@@ -1,3 +1,5 @@
+import atk from 'atk';
+
 /**
  * This is default setup for Fomantic-UI Popup.
  */

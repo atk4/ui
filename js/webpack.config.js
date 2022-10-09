@@ -83,7 +83,7 @@ module.exports = (env) => {
         module: {
             rules: [
                 {
-                    test: /(\.jsx|\.js)$/,
+                    test: /(\.js|\.jsx)$/,
                     loader: 'babel-loader',
                     exclude: /(node_modules|bower_components)/,
                 },
@@ -106,9 +106,12 @@ module.exports = (env) => {
         },
         externals: { 'external/jquery': 'jQuery' },
         resolve: {
-            alias: { vue$: 'vue/dist/vue.esm.js' },
+            alias: {
+                atk$: srcDir + '/setup-atk.js',
+                vue$: 'vue/dist/vue.esm.js',
+            },
             modules: [
-                path.resolve(__dirname, 'src/'),
+                srcDir,
                 'node_modules',
             ],
             extensions: [

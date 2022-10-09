@@ -1,3 +1,5 @@
+import atk from 'atk';
+
 /**
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
  *

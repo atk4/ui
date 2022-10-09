@@ -1,3 +1,4 @@
+import atk from 'atk';
 import AtkPlugin from './atk.plugin';
 import formService from '../services/form.service';
 

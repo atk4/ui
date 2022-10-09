@@ -166,6 +166,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+
 
 
 
@@ -201,7 +203,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     onToggleDeleteAll: function () {
       this.$nextTick(() => {
-        atk.eventBus.emit(this.$root.$el.id + '-toggle-delete-all', {
+        atk__WEBPACK_IMPORTED_MODULE_5__["default"].eventBus.emit(this.$root.$el.id + '-toggle-delete-all', {
           isOn: this.$refs.check.checked
         });
       });
@@ -300,7 +302,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _multiline_cell_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./multiline-cell.component */ "./src/components/multiline/multiline-cell.component.js");
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _multiline_cell_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./multiline-cell.component */ "./src/components/multiline/multiline-cell.component.js");
+
 
 
 
@@ -334,7 +338,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   components: {
-    'atk-multiline-cell': _multiline_cell_component__WEBPACK_IMPORTED_MODULE_3__["default"]
+    'atk-multiline-cell': _multiline_cell_component__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   computed: {
     /**
@@ -375,12 +379,12 @@ __webpack_require__.r(__webpack_exports__);
       this.isEditing = true;
     },
     onToggleDelete: function (e) {
-      atk.eventBus.emit(this.$root.$el.id + '-toggle-delete', {
+      atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.id + '-toggle-delete', {
         rowId: this.rowId
       });
     },
     onUpdateValue: function (fieldName, value) {
-      atk.eventBus.emit(this.$root.$el.id + '-update-row', {
+      atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.id + '-update-row', {
         rowId: this.rowId,
         fieldName: fieldName,
         value: value
@@ -453,8 +457,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _multiline_body_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./multiline-body.component */ "./src/components/multiline/multiline-body.component.js");
-/* harmony import */ var _multiline_header_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./multiline-header.component */ "./src/components/multiline/multiline-header.component.js");
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _multiline_body_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./multiline-body.component */ "./src/components/multiline/multiline-body.component.js");
+/* harmony import */ var _multiline_header_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./multiline-header.component */ "./src/components/multiline/multiline-header.component.js");
+
 
 
 
@@ -518,16 +524,16 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   components: {
-    'atk-multiline-body': _multiline_body_component__WEBPACK_IMPORTED_MODULE_8__["default"],
-    'atk-multiline-header': _multiline_header_component__WEBPACK_IMPORTED_MODULE_9__["default"]
+    'atk-multiline-body': _multiline_body_component__WEBPACK_IMPORTED_MODULE_9__["default"],
+    'atk-multiline-header': _multiline_header_component__WEBPACK_IMPORTED_MODULE_10__["default"]
   },
   mounted: function () {
     this.rowData = this.buildRowData(this.value);
     this.updateInputValue();
-    atk.eventBus.on(this.$root.$el.id + '-update-row', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_8__["default"].eventBus.on(this.$root.$el.id + '-update-row', payload => {
       this.onUpdate(payload.rowId, payload.fieldName, payload.value);
     });
-    atk.eventBus.on(this.$root.$el.id + '-toggle-delete', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_8__["default"].eventBus.on(this.$root.$el.id + '-toggle-delete', payload => {
       const idx = this.deletables.indexOf(payload.rowId);
 
       if (idx > -1) {
@@ -536,7 +542,7 @@ __webpack_require__.r(__webpack_exports__);
         this.deletables.push(payload.rowId);
       }
     });
-    atk.eventBus.on(this.$root.$el.id + '-toggle-delete-all', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_8__["default"].eventBus.on(this.$root.$el.id + '-toggle-delete-all', payload => {
       this.deletables = [];
 
       if (payload.isOn) {
@@ -545,7 +551,7 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     });
-    atk.eventBus.on(this.$root.$el.id + '-multiline-rows-error', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_8__["default"].eventBus.on(this.$root.$el.id + '-multiline-rows-error', payload => {
       this.errors = { ...payload.errors
       };
     });
@@ -562,7 +568,7 @@ __webpack_require__.r(__webpack_exports__);
       this.updateInputValue();
 
       if (this.data.afterAdd && typeof this.data.afterAdd === 'function') {
-        this.data.afterAdd(atk.utils.json().tryParse(this.value));
+        this.data.afterAdd(atk__WEBPACK_IMPORTED_MODULE_8__["default"].utils.json().tryParse(this.value));
       }
 
       this.fetchExpression(newRow.__atkml);
@@ -577,14 +583,14 @@ __webpack_require__.r(__webpack_exports__);
       this.fetchOnChangeAction();
 
       if (this.data.afterDelete && typeof this.data.afterDelete === 'function') {
-        this.data.afterDelete(atk.utils.json().tryParse(this.value));
+        this.data.afterDelete(atk__WEBPACK_IMPORTED_MODULE_8__["default"].utils.json().tryParse(this.value));
       }
     },
     onUpdate: function (atkmlId, fieldName, value) {
       this.updateFieldInRow(atkmlId, fieldName, value);
       this.clearError(atkmlId, fieldName);
       this.updateInputValue();
-      atk.debounce(() => {
+      atk__WEBPACK_IMPORTED_MODULE_8__["default"].debounce(() => {
         this.fetchExpression(atkmlId);
         this.fetchOnChangeAction(fieldName);
       }, 300).call(this);
@@ -640,7 +646,7 @@ __webpack_require__.r(__webpack_exports__);
      * Build rowData from json string.
      */
     buildRowData: function (jsonValue) {
-      const rows = atk.utils.json().tryParse(jsonValue, []);
+      const rows = atk__WEBPACK_IMPORTED_MODULE_8__["default"].utils.json().tryParse(jsonValue, []);
       rows.forEach(row => {
         row.__atkml = this.getUUID();
       });
@@ -681,7 +687,7 @@ __webpack_require__.r(__webpack_exports__);
       data.__atkml_action = 'update-row';
 
       try {
-        return await atk.apiService.suiFetch(this.data.url, {
+        return await atk__WEBPACK_IMPORTED_MODULE_8__["default"].apiService.suiFetch(this.data.url, {
           data: data,
           method: 'post',
           stateContext: context
@@ -847,6 +853,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+
 /**
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
  *
@@ -860,6 +868,7 @@ __webpack_require__.r(__webpack_exports__);
  * value: The selected value.
  * optionalValue: The initial list of options for the dropdown.
  */
+
 const template = `<sui-dropdown
                     ref="drop"
                     v-bind="dropdownProps"
@@ -910,7 +919,7 @@ const template = `<sui-dropdown
       }
 
       this.temp = inputValue;
-      atk.debounce(() => {
+      atk__WEBPACK_IMPORTED_MODULE_0__["default"].debounce(() => {
         if (this.query !== this.temp) {
           this.query = this.temp;
 
@@ -930,7 +939,7 @@ const template = `<sui-dropdown
           atkVueLookupQuery: q,
           atkVueLookupField: this.field
         };
-        const response = await atk.apiService.suiFetch(this.url, {
+        const response = await atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.suiFetch(this.url, {
           method: 'get',
           data: data
         });

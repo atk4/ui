@@ -1,4 +1,5 @@
 import 'core-js/stable';
+import atk from './setup-atk'; // must be the first non-vendor import
 import atkFomantic from './atk-fomantic-ui';
 import { registerPlugin } from './plugin';
 import { tableDropdown } from './helpers/table-dropdown.helper';
@@ -12,7 +13,9 @@ import popupService from './services/popup.service';
 
 __webpack_public_path__ = window.__atkBundlePublicPath + '/'; // eslint-disable-line no-undef, camelcase, no-underscore-dangle
 
-const atk = { ...atkFomantic };
+Object.entries(atkFomantic).forEach(([k, service]) => {
+    atk[k] = service;
+});
 
 atk.options = atkOptions;
 atk.eventBus = atkEventBus;
