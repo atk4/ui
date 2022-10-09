@@ -79,7 +79,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const template = `<div class="item" :style="itemMargin">
         <i :class="toggleIcon" @click="onToggleShow" v-show="!isRoot"></i>
-        <i :class="getIcon"  @click="onToggleSelect" v-show="!isRoot"></i>
+        <i :class="getIcon" @click="onToggleSelect" v-show="!isRoot"></i>
         <div class="content" >
           <div @click="onToggleSelect" :style="itemCursor">{{title}}</div>
           <div class="list" v-show="open || isRoot" v-if="isParent" >
@@ -353,7 +353,7 @@ const template = `<div class="item" :style="itemMargin">
     },
 
     /**
-     * Set input field with current mapped  model value.
+     * Set input field with current mapped model value.
      */
     setInput: function (value) {
       // console.log('set input');

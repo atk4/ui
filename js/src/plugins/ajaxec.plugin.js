@@ -21,14 +21,14 @@ export default class AtkAjaxecPlugin extends AtkPlugin {
     }
 
     doExecute() {
-        const url = atk.removeAllUrlParams(this.settings.uri);
+        const url = atk.urlHelper.removeAllParams(this.settings.uri);
         const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
 
         // uriOptions is always use as data in a post request.
         const data = this.settings.uriOptions ? this.settings.uriOptions : {};
 
         // retrieve param from url.
-        let urlParams = atk.parseUrlParams(this.settings.uri);
+        let urlParams = atk.urlHelper.parseParams(this.settings.uri);
 
         // get store object.
         const store = atk.dataService.getStoreData(this.settings.storeName);

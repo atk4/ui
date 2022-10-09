@@ -65,8 +65,7 @@ function hideTableDropdown() {
     $(window).off('resize.atktable');
 }
 
-// Export function to atk.
-export const tableDropdown = {
+export default {
     onShow: showTableDropdown,
     onHide: hideTableDropdown,
 };

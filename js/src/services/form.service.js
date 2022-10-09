@@ -23,10 +23,7 @@ class FormService {
         };
     }
 
-    /**
-     * Setup Fomantic-UI form with this service.
-     */
-    setService(settings) {
+    setupFomanticUi(settings) {
         settings.rules.isVisible = this.isVisible;
         settings.rules.notEmpty = settings.rules.empty;
         settings.rules.isEqual = this.isEqual;

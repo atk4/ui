@@ -20,7 +20,7 @@ export default class AtkColumnResizerPlugin extends AtkPlugin {
     /**
      * Send widths to server via callback uri.
      *
-     * @param {Array.<object>} widths an Array of objects, each containing the column name and their size in pixels [{column: 'name', size: '135px'}]
+     * @param {Array.<object>} widths an Array of objects, each containing the column name and their size in pixels [{ column: 'name', size: '135px' }]
      */
     sendWidths(widths) {
         this.$el.api({

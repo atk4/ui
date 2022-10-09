@@ -24,8 +24,8 @@ Another example would be the upload service for file uploading using one of your
 
 ```
     atk.uploadService.uploadFiles(
-        filesArraytoUpload,
-        theElement,
+        files,
+        elem,
         { data: 'value' },
         url,
         onComplete() {}, // the callback function when upload is complete.
@@ -40,7 +40,7 @@ The atk global object may be used as a quick way of registering a jQuery plugin 
 Let's create a new jQuery plugin that will change every selected dom element text color to green.
 
 ```
-    atk.registerPlugin('Greenify', function (el) {
+    atk.registerPlugin('greenify', function (el) {
         $(el).css("color", "green");
     })
 ```
@@ -49,7 +49,7 @@ The plugin can now by invoke using:
 
 ```
     // Change all link color text to green.
-    $('a').atkGreenify();
+    $('a').greenify();
 ```
 
 ## Developping and building package.

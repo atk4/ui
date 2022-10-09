@@ -12,7 +12,7 @@ class ModalService {
         this.modals = [];
     }
 
-    setModals(settings) {
+    setupFomanticUi(settings) {
         settings.duration = 100;
         settings.allowMultiple = true;
         settings.onHidden = this.onHidden;

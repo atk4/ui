@@ -1,10 +1,7 @@
 import $ from 'external/jquery';
 
 class AccordionService {
-    /**
-     * Setup Fomantic-UI accordion for this service.
-     */
-    setService(settings) {
+    setupFomanticUi(settings) {
         settings.onOpening = this.onOpening;
     }
 

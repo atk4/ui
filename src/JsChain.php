@@ -46,7 +46,7 @@ class JsChain extends JsExpression
      *
      * will map into:
      *
-     * $.foo().bar(1).baz.test({abc: 123]);
+     * $.foo().bar(1).baz.test({ abc: 123 ]);
      *
      * @var array
      */

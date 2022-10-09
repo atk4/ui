@@ -97,9 +97,9 @@ $clock_script = <<<'EOF'
         atk.vueService.getVue().component('clock', Clock.default);
 
         var myClock = {
-          props : {clock: Array},
+          props : { clock: Array },
           data: function() {
-            return {style : this.clock, currentIdx : 0}
+            return { style : this.clock, currentIdx : 0 }
           },
           mounted: function() {
             // add a listener for changing clock style.

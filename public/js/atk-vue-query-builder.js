@@ -753,7 +753,7 @@ __webpack_require__.r(__webpack_exports__);
  * url: the callback url. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
  * reference: the reference field name associate with model or hasOne name. This field name will be sent along with url callback parameter as of 'field=name'.
  * ui: the css class name to apply to dropdown.
- * Note: The remaining config object may contain any or sui-dropdown {props: value} pair.
+ * Note: The remaining config object may contain any or sui-dropdown { props: value } pair.
  *
  * value: The selected value.
  * optionalValue: The initial list of options for the dropdown.

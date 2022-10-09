@@ -4,7 +4,7 @@ import atk from 'atk';
  * This is default setup for Fomantic-UI Popup.
  */
 class PopupService {
-    setPopups(settings) {
+    setupFomanticUi(settings) {
         settings.onCreate = this.onCreate;
         settings.onShow = this.onShow;
         settings.onHide = this.onHide;

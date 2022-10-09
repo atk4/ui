@@ -21,12 +21,12 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
             return;
         }
 
-        const url = atk.removeAllUrlParams(this.settings.uri);
+        const url = atk.urlHelper.removeAllParams(this.settings.uri);
         const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
 
         // add new param and remove duplicate, prioritizing the latest one.
         let urlParams = Object.assign(
-            atk.parseUrlParams(this.settings.uri),
+            atk.urlHelper.parseParams(this.settings.uri),
             this.settings.uriOptions ? this.settings.uriOptions : {},
         );
 

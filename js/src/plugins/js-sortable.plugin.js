@@ -93,9 +93,9 @@ export default class AtkJsSortablePlugin extends AtkPlugin {
     buildUrl(extraParams = null) {
         let url = null;
         if (this.settings.uriOptions && extraParams) {
-            url = atk.appendUrlParams(this.settings.uri, $.extend({}, this.settings.uriOptions, extraParams));
+            url = atk.urlHelper.appendParams(this.settings.uri, $.extend({}, this.settings.uriOptions, extraParams));
         } else if (this.settings.uriOptions) {
-            url = atk.appendUrlParams(this.settings.uri, this.settings.uriOptions);
+            url = atk.urlHelper.appendParams(this.settings.uri, this.settings.uriOptions);
         } else {
             url = this.settings.uri;
         }
@@ -115,7 +115,7 @@ AtkJsSortablePlugin.DEFAULTS = {
     draggable: 'tr',
     dataLabel: 'id',
     handleClass: null,
-    mirrorCss: '.draggable-mirror {background: #fff!important; margin-left: 1%; opacity: 0.9; }',
+    mirrorCss: '.draggable-mirror { background: #fff!important; margin-left: 1%; opacity: 0.9; }',
     overCss: '.draggable--over { background: yellow !important; opacity: 0.5; }',
     autoFireCb: true,
 };

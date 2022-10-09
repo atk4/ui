@@ -178,8 +178,8 @@ __webpack_require__.r(__webpack_exports__);
   template: `
      <sui-table-header>
        <sui-table-row v-if="hasError()">
-        <sui-table-cell :style="{background:'none'}"></sui-table-cell>
-        <sui-table-cell :style="{background:'none'}" state="error" v-for="(column, idx) in columns" :key="idx" v-if="column.isVisible" :textAlign="getTextAlign(column)"><sui-icon name="attention" v-if="getErrorMsg(column)"></sui-icon>{{getErrorMsg(column)}}</sui-table-cell>
+        <sui-table-cell :style="{ background: 'none' }"></sui-table-cell>
+        <sui-table-cell :style="{ background: 'none' }" state="error" v-for="(column, idx) in columns" :key="idx" v-if="column.isVisible" :textAlign="getTextAlign(column)"><sui-icon name="attention" v-if="getErrorMsg(column)"></sui-icon>{{getErrorMsg(column)}}</sui-table-cell>
       </sui-table-row>
        <sui-table-row v-if="hasCaption()">
         <sui-table-headerCell :colspan="getVisibleColumns()">{{caption}}</sui-table-headerCell>
@@ -188,7 +188,7 @@ __webpack_require__.r(__webpack_exports__);
         <sui-table-header-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDeleteAll" :checked.prop="isChecked" :indeterminate.prop="isIndeterminate" ref="check"></sui-table-header-cell>
         <sui-table-header-cell v-for="(column, idx) in columns" :key="idx" v-if="column.isVisible" :textAlign="getTextAlign(column)">
          <div>{{column.caption}}</div>
-         <div :style="{position: 'absolute', top: '-22px'}" v-if="false"><sui-label pointing="below" basic color="red" v-if="getErrorMsg(column)">{{getErrorMsg(column)}}</sui-label></div>
+         <div :style="{ position: 'absolute', top: '-22px' }" v-if="false"><sui-label pointing="below" basic color="red" v-if="getErrorMsg(column)">{{getErrorMsg(column)}}</sui-label></div>
         </sui-table-header-cell>
       </sui-table-row>
     </sui-table-header>
@@ -323,7 +323,7 @@ __webpack_require__.r(__webpack_exports__);
   template: `
     <sui-table-row :verticalAlign="'middle'">
         <sui-table-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDelete" v-model="toDelete"></sui-table-cell>
-        <sui-table-cell  @keydown.tab="onTab(idx)" v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" v-bind="column.cellProps" :style="{overflow: 'visible'}" v-if="column.isVisible">
+        <sui-table-cell @keydown.tab="onTab(idx)" v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" v-bind="column.cellProps" :style="{ overflow: 'visible' }" v-if="column.isVisible">
          <atk-multiline-cell
            :cellData="column"
            @update-value="onUpdateValue"
@@ -863,7 +863,7 @@ __webpack_require__.r(__webpack_exports__);
  * url: the callback url. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
  * reference: the reference field name associate with model or hasOne name. This field name will be sent along with url callback parameter as of 'field=name'.
  * ui: the css class name to apply to dropdown.
- * Note: The remaining config object may contain any or sui-dropdown {props: value} pair.
+ * Note: The remaining config object may contain any or sui-dropdown { props: value } pair.
  *
  * value: The selected value.
  * optionalValue: The initial list of options for the dropdown.

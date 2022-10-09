@@ -11,170 +11,6 @@
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/atk-fomantic-ui.js":
-/*!********************************!*\
-  !*** ./src/atk-fomantic-ui.js ***!
-  \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./services/api.service */ "./src/services/api.service.js");
-/* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services/form.service */ "./src/services/form.service.js");
-/* harmony import */ var _services_modal_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./services/modal.service */ "./src/services/modal.service.js");
-/* harmony import */ var _services_upload_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./services/upload.service */ "./src/services/upload.service.js");
-/* harmony import */ var _services_popup_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/popup.service */ "./src/services/popup.service.js");
-/* harmony import */ var _services_accordion_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/accordion.service */ "./src/services/accordion.service.js");
-
-
-
-
-
-
- // setup app service for Fomantic-UI
-
-_services_api_service__WEBPACK_IMPORTED_MODULE_1__["default"].setService((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.api.settings));
-_services_form_service__WEBPACK_IMPORTED_MODULE_2__["default"].setService((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.form.settings));
-_services_modal_service__WEBPACK_IMPORTED_MODULE_3__["default"].setModals((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.modal.settings));
-_services_popup_service__WEBPACK_IMPORTED_MODULE_5__["default"].setPopups((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.popup.settings));
-_services_accordion_service__WEBPACK_IMPORTED_MODULE_6__["default"].setService((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.accordion.settings));
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  apiService: _services_api_service__WEBPACK_IMPORTED_MODULE_1__["default"],
-  formService: _services_form_service__WEBPACK_IMPORTED_MODULE_2__["default"],
-  modalService: _services_modal_service__WEBPACK_IMPORTED_MODULE_3__["default"],
-  uploadService: _services_upload_service__WEBPACK_IMPORTED_MODULE_4__["default"]
-});
-
-/***/ }),
-
-/***/ "./src/atk-utils.js":
-/*!**************************!*\
-  !*** ./src/atk-utils.js ***!
-  \**************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "atkDebounce": () => (/* binding */ atkDebounce),
-/* harmony export */   "atkEventBus": () => (/* binding */ atkEventBus),
-/* harmony export */   "atkOptions": () => (/* binding */ atkOptions),
-/* harmony export */   "atkUtils": () => (/* binding */ atkUtils)
-/* harmony export */ });
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var mitt__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mitt */ "./node_modules/mitt/dist/mitt.es.js");
-/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-/* harmony import */ var _helpers_url_helper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./helpers/url.helper */ "./src/helpers/url.helper.js");
-
-
-
-
-
-/**
- * Define atk global options.
- * In Js:
- * atk.options.set('name', 'value');
- * In Php:
- * (new JsChain('atk.options')->set('name', 'value');
- */
-
-const atkOptions = function () {
-  const options = {};
-  return {
-    set: (name, value) => {
-      options[name] = value;
-    },
-    get: name => options[name]
-  };
-}();
-/**
- * Subscribe too and publish events.
- * listen to an event
- * atk.eventBus.on('foo', e => console.log('foo', e))
- * Fire an event
- * atk.eventBus.emit('foo', { a: 'b' })
- */
-
-
-const atkEventBus = function () {
-  const eventBus = (0,mitt__WEBPACK_IMPORTED_MODULE_1__["default"])();
-  return {
-    emit: (event, payload) => eventBus.emit(event, payload),
-    on: (event, ref) => eventBus.on(event, ref),
-    off: (event, ref) => eventBus.off(event, ref),
-    clearAll: () => eventBus.all.clear()
-  };
-}();
-/*
-* Utilities function that you can execute
-* from atk context. Usage: atk.utils.redirect('url');
-*/
-
-
-const atkUtils = function () {
-  return {
-    json: function () {
-      return {
-        // try parsing string as JSON. Return parse if valid, otherwise return onError value.
-        tryParse: function (str) {
-          let onError = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-          try {
-            return JSON.parse(str);
-          } catch (e) {
-            return onError;
-          }
-        }
-      };
-    },
-    redirect: function (url, params) {
-      document.location = atk__WEBPACK_IMPORTED_MODULE_2__["default"].appendUrlParams(url, params);
-    }
-  };
-}();
-
-function atkDebounce(func, wait, options) {
-  let timerId = null;
-  let debouncedInner;
-
-  function createTimer() {
-    timerId = setInterval(() => {
-      if (!debouncedInner.pending()) {
-        clearInterval(timerId);
-        timerId = null;
-        (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().active)--;
-      }
-    }, 25);
-    (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().active)++;
-  }
-
-  debouncedInner = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_4__["default"])(func, wait, options);
-
-  function debounced() {
-    if (timerId === null) {
-      createTimer();
-    }
-
-    return debouncedInner(...arguments);
-  }
-
-  debounced.cancel = debouncedInner.cancel;
-  debounced.flush = debouncedInner.flush;
-  debounced.pending = debouncedInner.pending;
-  return debounced;
-}
-
-
-
-/***/ }),
-
 /***/ "./src/helpers/table-dropdown.helper.js":
 /*!**********************************************!*\
   !*** ./src/helpers/table-dropdown.helper.js ***!
@@ -184,7 +20,7 @@ function atkDebounce(func, wait, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "tableDropdown": () => (/* binding */ tableDropdown)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -264,13 +100,12 @@ function hideTableDropdown() {
   $menu.css('cssText', '');
   external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).off('scroll.atktable');
   external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).off('resize.atktable');
-} // Export function to atk.
+}
 
-
-const tableDropdown = {
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   onShow: showTableDropdown,
   onHide: hideTableDropdown
-};
+});
 
 /***/ }),
 
@@ -297,193 +132,86 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 
 
 
 
 
 
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  /**
+   * Get each URL query parameter as a key:value pair object.
+   *
+   * @returns {object}
+   */
+  parseParams: function (str) {
+    if (str.split('?')[1]) {
+      return decodeURIComponent(str.split('?')[1]).split('&').reduce((obj, unsplitArg) => {
+        const arg = unsplitArg.split('=');
+        obj[arg[0]] = arg[1]; // eslint-disable-line prefer-destructuring
 
-/**
- * Get each url query parameter as a key:value pair object.
- *
- * @returns {object}
- */
-
-atk__WEBPACK_IMPORTED_MODULE_6__["default"].parseUrlParams = function (str) {
-  if (str.split('?')[1]) {
-    return decodeURIComponent(str.split('?')[1]).split('&').reduce((obj, unsplitArg) => {
-      const arg = unsplitArg.split('=');
-      obj[arg[0]] = arg[1]; // eslint-disable-line prefer-destructuring
-
-      return obj;
-    }, {});
-  }
-
-  return {};
-};
-/**
- * Add param to an url string.
- *
- * ex: atk.appendUrlParams('myurl.php', { q: 'test', 'reload': 'myView' })
- * will return: myurl.php?q=test&reload=myView
- *
- * @returns {string}
- */
-
-
-atk__WEBPACK_IMPORTED_MODULE_6__["default"].appendUrlParams = function (url, data) {
-  if (!external_jquery__WEBPACK_IMPORTED_MODULE_5___default().isEmptyObject(data)) {
-    url += (url.indexOf('?') >= 0 ? '&' : '?') + external_jquery__WEBPACK_IMPORTED_MODULE_5___default().param(data);
-  }
-
-  return url;
-};
-/**
- * Remove param from an url string.
- *
- * ex: atk.removeUrlParam('myurl.php?q=test&reload=myView', 'q')
- * will return: myurl.php?reload=myView
- *
- * @returns {string}
- */
-
-
-atk__WEBPACK_IMPORTED_MODULE_6__["default"].removeUrlParam = function (url, param) {
-  const splitUrl = url.split('?');
-
-  if (splitUrl.length === 0) {
-    return url;
-  }
-
-  const urlBase = splitUrl[0];
-
-  if (splitUrl.length === 1) {
-    return urlBase;
-  }
-
-  const newParams = splitUrl[1].split('&').filter(item => item.split('=')[0] !== param);
-
-  if (newParams.length > 0) {
-    return urlBase + '?' + newParams.join('&');
-  }
-
-  return urlBase;
-};
-/**
- * Get the base url from string.
- *
- * @returns {string}
- */
-
-
-atk__WEBPACK_IMPORTED_MODULE_6__["default"].removeAllUrlParams = function (url) {
-  return url.split('?')[0];
-};
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
-
-/***/ }),
-
-/***/ "./src/plugin.js":
-/*!***********************!*\
-  !*** ./src/plugin.js ***!
-  \***********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "registerPlugin": () => (/* binding */ registerPlugin)
-/* harmony export */ });
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./plugins/server-event.plugin */ "./src/plugins/server-event.plugin.js");
-/* harmony import */ var _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugins/reload-view.plugin */ "./src/plugins/reload-view.plugin.js");
-/* harmony import */ var _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugins/ajaxec.plugin */ "./src/plugins/ajaxec.plugin.js");
-/* harmony import */ var _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugins/create-modal.plugin */ "./src/plugins/create-modal.plugin.js");
-/* harmony import */ var _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./plugins/file-upload.plugin */ "./src/plugins/file-upload.plugin.js");
-/* harmony import */ var _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/js-search.plugin */ "./src/plugins/js-search.plugin.js");
-/* harmony import */ var _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./plugins/js-sortable.plugin */ "./src/plugins/js-sortable.plugin.js");
-/* harmony import */ var _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/conditional-form.plugin */ "./src/plugins/conditional-form.plugin.js");
-/* harmony import */ var _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/column-resizer.plugin */ "./src/plugins/column-resizer.plugin.js");
-/* harmony import */ var _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/scroll.plugin */ "./src/plugins/scroll.plugin.js");
-/* harmony import */ var _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./plugins/confirm.plugin */ "./src/plugins/confirm.plugin.js");
-/* harmony import */ var _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/sidenav.plugin */ "./src/plugins/sidenav.plugin.js");
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Register a jQuery plugin.
- *
- * @param {string}   name      Plugin name
- * @param {Function} cl        Plugin class
- * @param {boolean}  shortHand Generate a shorthand as $.pluginName
- */
-
-function registerPlugin(name, cl) {
-  let shortHand = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-  const pluginName = 'atk' + name;
-  const dataName = '__' + pluginName; // add plugin to atk namespace.
-
-  (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk)[name] = cl; // register plugin to jQuery fn prototype.
-
-  (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn)[pluginName] = function () {
-    let option = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-
-    // Check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
-    if (typeof option === 'string') {
-      if (this.data(dataName) && typeof this.data(dataName)[option] === 'function') {
-        return this.data(dataName).call(option, args);
-      } // return if trying to call a plugin method prior to instantiate it.
-
-
-      return;
+        return obj;
+      }, {});
     }
 
-    return this.each(function () {
-      const options = external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, cl.DEFAULTS, typeof option === 'object' && option); // create plugin using the constructor function store in atk namespace object
-      // and add a reference of it to this jQuery object data.
+    return {};
+  },
 
-      external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(dataName, new (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk)[name](this, options));
-    });
-  }; // short hand
+  /**
+   * Add param to an URL string.
+   *
+   * ex: atk.urlHelper.appendParams('myurl.php', { q: 'test', 'reload': 'myView' })
+   * will return: myurl.php?q=test&reload=myView
+   *
+   * @returns {string}
+   */
+  appendParams: function (url, data) {
+    if (!external_jquery__WEBPACK_IMPORTED_MODULE_5___default().isEmptyObject(data)) {
+      url += (url.indexOf('?') >= 0 ? '&' : '?') + external_jquery__WEBPACK_IMPORTED_MODULE_5___default().param(data);
+    }
 
+    return url;
+  },
 
-  if (shortHand) {
-    (external_jquery__WEBPACK_IMPORTED_MODULE_0___default())[pluginName] = options => external_jquery__WEBPACK_IMPORTED_MODULE_0___default()({})[pluginName](options);
+  /**
+   * Remove param from an URL string.
+   *
+   * ex: atk.urlHelper.removeParam('myurl.php?q=test&reload=myView', 'q')
+   * will return: myurl.php?reload=myView
+   *
+   * @returns {string}
+   */
+  removeParam: function (url, param) {
+    const splitUrl = url.split('?');
+
+    if (splitUrl.length === 0) {
+      return url;
+    }
+
+    const urlBase = splitUrl[0];
+
+    if (splitUrl.length === 1) {
+      return urlBase;
+    }
+
+    const newParams = splitUrl[1].split('&').filter(item => item.split('=')[0] !== param);
+
+    if (newParams.length > 0) {
+      return urlBase + '?' + newParams.join('&');
+    }
+
+    return urlBase;
+  },
+
+  /**
+   * Remove whole query string from an URL string.
+   *
+   * @returns {string}
+   */
+  removeAllParams: function (url) {
+    return url.split('?')[0];
   }
-}
-/**
- * Register all jQuery plugins needed for atk.
- */
-
-
-registerPlugin('ReloadView', _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_2__["default"]);
-registerPlugin('Ajaxec', _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_3__["default"]);
-registerPlugin('CreateModal', _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_4__["default"]);
-registerPlugin('ServerEvent', _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_1__["default"], true);
-registerPlugin('FileUpload', _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_5__["default"]);
-registerPlugin('JsSearch', _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_6__["default"]);
-registerPlugin('JsSortable', _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_7__["default"]);
-registerPlugin('ConditionalForm', _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_8__["default"], true);
-registerPlugin('ColumnResizer', _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_9__["default"]);
-registerPlugin('Scroll', _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_10__["default"]);
-registerPlugin('Confirm', _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_11__["default"], true);
-registerPlugin('Sidenav', _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_12__["default"]);
-
+});
 
 /***/ }),
 
@@ -524,12 +252,12 @@ class AtkAjaxecPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"
   }
 
   doExecute() {
-    const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].removeAllUrlParams(this.settings.uri);
+    const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.removeAllParams(this.settings.uri);
     const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {}; // uriOptions is always use as data in a post request.
 
     const data = this.settings.uriOptions ? this.settings.uriOptions : {}; // retrieve param from url.
 
-    let urlParams = atk__WEBPACK_IMPORTED_MODULE_1__["default"].parseUrlParams(this.settings.uri); // get store object.
+    let urlParams = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.uri); // get store object.
 
     const store = atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService.getStoreData(this.settings.storeName);
     const settings = {
@@ -666,7 +394,7 @@ class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["d
   /**
    * Send widths to server via callback uri.
    *
-   * @param {Array.<object>} widths an Array of objects, each containing the column name and their size in pixels [{column: 'name', size: '135px'}]
+   * @param {Array.<object>} widths an Array of objects, each containing the column name and their size in pixels [{ column: 'name', size: '135px' }]
    */
 
 
@@ -1546,13 +1274,13 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
         onComplete: cb
       });
     } else {
-      uri = atk__WEBPACK_IMPORTED_MODULE_6__["default"].removeUrlParam(uri, queryKey);
+      uri = atk__WEBPACK_IMPORTED_MODULE_6__["default"].urlHelper.removeParam(uri, queryKey);
 
       if (options.__atk_reload) {
         delete options.__atk_reload;
       }
 
-      uri = atk__WEBPACK_IMPORTED_MODULE_6__["default"].appendUrlParams(uri, options);
+      uri = atk__WEBPACK_IMPORTED_MODULE_6__["default"].urlHelper.appendParams(uri, options);
       window.location = uri;
     }
   }
@@ -1695,9 +1423,9 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
     let url = null;
 
     if (this.settings.uriOptions && extraParams) {
-      url = atk__WEBPACK_IMPORTED_MODULE_4__["default"].appendUrlParams(this.settings.uri, external_jquery__WEBPACK_IMPORTED_MODULE_3___default().extend({}, this.settings.uriOptions, extraParams));
+      url = atk__WEBPACK_IMPORTED_MODULE_4__["default"].urlHelper.appendParams(this.settings.uri, external_jquery__WEBPACK_IMPORTED_MODULE_3___default().extend({}, this.settings.uriOptions, extraParams));
     } else if (this.settings.uriOptions) {
-      url = atk__WEBPACK_IMPORTED_MODULE_4__["default"].appendUrlParams(this.settings.uri, this.settings.uriOptions);
+      url = atk__WEBPACK_IMPORTED_MODULE_4__["default"].urlHelper.appendParams(this.settings.uri, this.settings.uriOptions);
     } else {
       url = this.settings.uri;
     }
@@ -1717,7 +1445,7 @@ AtkJsSortablePlugin.DEFAULTS = {
   draggable: 'tr',
   dataLabel: 'id',
   handleClass: null,
-  mirrorCss: '.draggable-mirror {background: #fff!important; margin-left: 1%; opacity: 0.9; }',
+  mirrorCss: '.draggable-mirror { background: #fff!important; margin-left: 1%; opacity: 0.9; }',
   overCss: '.draggable--over { background: yellow !important; opacity: 0.5; }',
   autoFireCb: true
 };
@@ -1762,10 +1490,10 @@ class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["defa
       return;
     }
 
-    const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].removeAllUrlParams(this.settings.uri);
+    const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.removeAllParams(this.settings.uri);
     const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {}; // add new param and remove duplicate, prioritizing the latest one.
 
-    let urlParams = Object.assign(atk__WEBPACK_IMPORTED_MODULE_1__["default"].parseUrlParams(this.settings.uri), this.settings.uriOptions ? this.settings.uriOptions : {}); // get store object.
+    let urlParams = Object.assign(atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.uri), this.settings.uriOptions ? this.settings.uriOptions : {}); // get store object.
 
     const store = atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService.getStoreData(this.settings.storeName); // merge user settings
 
@@ -2316,10 +2044,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class AccordionService {
-  /**
-   * Setup Fomantic-UI accordion for this service.
-   */
-  setService(settings) {
+  setupFomanticUi(settings) {
     settings.onOpening = this.onOpening;
   }
 
@@ -2379,13 +2104,8 @@ class ApiService {
   constructor() {
     this.afterSuccessCallbacks = [];
   }
-  /**
-   * Setup Fomantic-UI API with this service.
-   */
 
-
-  setService(settings) {
-    // settings.onResponse = this.handleResponse;
+  setupFomanticUi(settings) {
     settings.successTest = this.successTest;
     settings.onFailure = this.onFailure;
     settings.onSuccess = this.onSuccess;
@@ -2398,7 +2118,7 @@ class ApiService {
    * passing proper context for 'this'.
    * ex: apiService.evalResponse.call(this, code)
    *
-   * @param {string} javascript code
+   * @param {string} code
    */
 
 
@@ -2469,11 +2189,7 @@ class ApiService {
           atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks.splice(0);
         }
       } else if (response.isServiceError) {
-        // service can still throw an error
-        // TODO fix throw without eslint disable
-        throw {
-          message: response.message
-        }; // eslint-disable-line no-throw-literal
+        throw Error(response.message);
       }
     } catch (e) {
       atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.getErrorHtml(e.message));
@@ -2486,7 +2202,7 @@ class ApiService {
    * atkjs (javascript) return from server will not be evaluated.
    *
    * Make sure to control the server output when using
-   * this function. It must at least return {success: true} in order for
+   * this function. It must at least return { success: true } in order for
    * the Promise to resolve properly, will reject otherwise.
    *
    * ex: $app->terminateJson(['success' => true, 'data' => $data]);
@@ -2735,7 +2451,7 @@ class DataService {
   /**
    * Return store data for an item or empty object.
    *
-   * @returns {{session: *, local: *}}
+   * @returns {{ session: *, local: * }}
    */
 
 
@@ -2862,12 +2578,8 @@ class FormService {
       });
     };
   }
-  /**
-   * Setup Fomantic-UI form with this service.
-   */
 
-
-  setService(settings) {
+  setupFomanticUi(settings) {
     settings.rules.isVisible = this.isVisible;
     settings.rules.notEmpty = settings.rules.empty;
     settings.rules.isEqual = this.isEqual;
@@ -3086,7 +2798,7 @@ class ModalService {
     this.modals = [];
   }
 
-  setModals(settings) {
+  setupFomanticUi(settings) {
     settings.duration = 100;
     settings.allowMultiple = true;
     settings.onHidden = this.onHidden;
@@ -3780,7 +3492,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 class PopupService {
-  setPopups(settings) {
+  setupFomanticUi(settings) {
     settings.onCreate = this.onCreate;
     settings.onShow = this.onShow;
     settings.onHide = this.onHide;
@@ -4153,6 +3865,277 @@ if (typeof (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk) !== 'und
 const atk = {};
 (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk) = atk;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (atk);
+
+/***/ }),
+
+/***/ "./src/setup-fomantic-ui.js":
+/*!**********************************!*\
+  !*** ./src/setup-fomantic-ui.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _services_accordion_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services/accordion.service */ "./src/services/accordion.service.js");
+/* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./services/api.service */ "./src/services/api.service.js");
+/* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./services/data.service */ "./src/services/data.service.js");
+/* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/form.service */ "./src/services/form.service.js");
+/* harmony import */ var _services_modal_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/modal.service */ "./src/services/modal.service.js");
+/* harmony import */ var _services_panel_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/panel.service */ "./src/services/panel.service.js");
+/* harmony import */ var _services_popup_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./services/popup.service */ "./src/services/popup.service.js");
+/* harmony import */ var _services_upload_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./services/upload.service */ "./src/services/upload.service.js");
+/* harmony import */ var _services_vue_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./services/vue.service */ "./src/services/vue.service.js");
+
+
+
+
+
+
+
+
+
+
+
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].accordionService = _services_accordion_service__WEBPACK_IMPORTED_MODULE_2__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService = _services_api_service__WEBPACK_IMPORTED_MODULE_3__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService = _services_data_service__WEBPACK_IMPORTED_MODULE_4__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].formService = _services_form_service__WEBPACK_IMPORTED_MODULE_5__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].modalService = _services_modal_service__WEBPACK_IMPORTED_MODULE_6__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].panelService = _services_panel_service__WEBPACK_IMPORTED_MODULE_7__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].popupService = _services_popup_service__WEBPACK_IMPORTED_MODULE_8__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].uploadService = _services_upload_service__WEBPACK_IMPORTED_MODULE_9__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].vueService = _services_vue_service__WEBPACK_IMPORTED_MODULE_10__["default"]; // setup Fomantic-UI globals
+
+_services_api_service__WEBPACK_IMPORTED_MODULE_3__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.api.settings));
+_services_form_service__WEBPACK_IMPORTED_MODULE_5__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.form.settings));
+_services_modal_service__WEBPACK_IMPORTED_MODULE_6__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.modal.settings));
+_services_popup_service__WEBPACK_IMPORTED_MODULE_8__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.popup.settings));
+_services_accordion_service__WEBPACK_IMPORTED_MODULE_2__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.accordion.settings));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
+
+/***/ }),
+
+/***/ "./src/setup-plugins.js":
+/*!******************************!*\
+  !*** ./src/setup-plugins.js ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugins/ajaxec.plugin */ "./src/plugins/ajaxec.plugin.js");
+/* harmony import */ var _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugins/column-resizer.plugin */ "./src/plugins/column-resizer.plugin.js");
+/* harmony import */ var _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugins/conditional-form.plugin */ "./src/plugins/conditional-form.plugin.js");
+/* harmony import */ var _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./plugins/confirm.plugin */ "./src/plugins/confirm.plugin.js");
+/* harmony import */ var _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/create-modal.plugin */ "./src/plugins/create-modal.plugin.js");
+/* harmony import */ var _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./plugins/file-upload.plugin */ "./src/plugins/file-upload.plugin.js");
+/* harmony import */ var _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/js-search.plugin */ "./src/plugins/js-search.plugin.js");
+/* harmony import */ var _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/js-sortable.plugin */ "./src/plugins/js-sortable.plugin.js");
+/* harmony import */ var _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/reload-view.plugin */ "./src/plugins/reload-view.plugin.js");
+/* harmony import */ var _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./plugins/scroll.plugin */ "./src/plugins/scroll.plugin.js");
+/* harmony import */ var _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/server-event.plugin */ "./src/plugins/server-event.plugin.js");
+/* harmony import */ var _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./plugins/sidenav.plugin */ "./src/plugins/sidenav.plugin.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Register a jQuery plugin.
+ *
+ * @param {string}   name      Plugin name
+ * @param {Function} cl        Plugin class
+ * @param {boolean}  shortHand Map $.name(...) to $({}).name(...)
+ */
+
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin = function (name, cl) {
+  let shortHand = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  const dataName = '__' + name; // add plugin to atk namespace.
+
+  atk__WEBPACK_IMPORTED_MODULE_1__["default"][name] = cl; // register plugin to jQuery fn prototype.
+
+  (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn)[name] = function () {
+    let option = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+    // Check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
+    if (typeof option === 'string') {
+      if (this.data(dataName) && typeof this.data(dataName)[option] === 'function') {
+        return this.data(dataName).call(option, args);
+      } // return if trying to call a plugin method prior to instantiate it.
+
+
+      return;
+    }
+
+    return this.each(function () {
+      const options = external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, cl.DEFAULTS, typeof option === 'object' && option); // create plugin using the constructor function store in atk namespace object
+      // and add a reference of it to this jQuery object data.
+
+      external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(dataName, new atk__WEBPACK_IMPORTED_MODULE_1__["default"][name](this, options));
+    });
+  };
+
+  if (shortHand) {
+    (external_jquery__WEBPACK_IMPORTED_MODULE_0___default())[name] = options => external_jquery__WEBPACK_IMPORTED_MODULE_0___default()({})[name](options);
+  }
+};
+
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkAjaxec', _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_2__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkColumnResizer', _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_3__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkConditionalForm', _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_4__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkConfirm', _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_5__["default"], true);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkCreateModal', _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_6__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkFileUpload', _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_7__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkJsSearch', _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_8__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkJsSortable', _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_9__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkReloadView', _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_10__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkScroll', _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_11__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkServerEvent', _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_12__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkSidenav', _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_13__["default"]);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
+
+/***/ }),
+
+/***/ "./src/setup-utils.js":
+/*!****************************!*\
+  !*** ./src/setup-utils.js ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var mitt__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mitt */ "./node_modules/mitt/dist/mitt.es.js");
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./helpers/table-dropdown.helper */ "./src/helpers/table-dropdown.helper.js");
+/* harmony import */ var _helpers_url_helper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helpers/url.helper */ "./src/helpers/url.helper.js");
+
+
+
+
+
+
+/**
+ * Define atk global options.
+ * In Js:
+ * atk.options.set('name', 'value');
+ * In Php:
+ * (new JsChain('atk.options')->set('name', 'value');
+ */
+
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].options = function () {
+  const data = {};
+  return {
+    set: (name, value) => {
+      data[name] = value;
+    },
+    get: name => data[name]
+  };
+}();
+/**
+ * Subscribe too and publish events.
+ * listen to an event
+ * atk.eventBus.on('foo', e => console.log('foo', e))
+ * Fire an event
+ * atk.eventBus.emit('foo', { a: 'b' })
+ */
+
+
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].eventBus = function () {
+  const emitter = (0,mitt__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  return {
+    emit: (event, payload) => emitter.emit(event, payload),
+    on: (event, ref) => emitter.on(event, ref),
+    off: (event, ref) => emitter.off(event, ref),
+    clearAll: () => emitter.all.clear()
+  };
+}();
+
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].debounce = function (func, wait, options) {
+  let timerId = null;
+  let debouncedInner;
+
+  function createTimer() {
+    timerId = setInterval(() => {
+      if (!debouncedInner.pending()) {
+        clearInterval(timerId);
+        timerId = null;
+        (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().active)--;
+      }
+    }, 25);
+    (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().active)++;
+  }
+
+  debouncedInner = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_5__["default"])(func, wait, options);
+
+  function debounced() {
+    if (timerId === null) {
+      createTimer();
+    }
+
+    return debouncedInner(...arguments);
+  }
+
+  debounced.cancel = debouncedInner.cancel;
+  debounced.flush = debouncedInner.flush;
+  debounced.pending = debouncedInner.pending;
+  return debounced;
+};
+/*
+* Utilities function that you can execute
+* from atk context. Usage: atk.utils.redirect('url');
+*/
+
+
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].utils = {
+  json: function () {
+    return {
+      // try parsing string as JSON. Return parse if valid, otherwise return onError value.
+      tryParse: function (str) {
+        let onError = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+        try {
+          return JSON.parse(str);
+        } catch (e) {
+          return onError;
+        }
+      }
+    };
+  },
+  redirect: function (url, params) {
+    document.location = atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper.appendParams(url, params);
+  }
+};
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].tableDropdownHelper = _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_3__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper = _helpers_url_helper__WEBPACK_IMPORTED_MODULE_4__["default"];
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
 
 /***/ }),
 
@@ -36974,65 +36957,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.for-each.js */ "./node_modules/core-js/modules/esnext.async-iterator.for-each.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "./node_modules/core-js/modules/esnext.iterator.for-each.js");
-/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_stable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/stable */ "./node_modules/core-js/stable/index.js");
-/* harmony import */ var core_js_stable__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_stable__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _setup_atk__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./setup-atk */ "./src/setup-atk.js");
-/* harmony import */ var _atk_fomantic_ui__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./atk-fomantic-ui */ "./src/atk-fomantic-ui.js");
-/* harmony import */ var _plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugin */ "./src/plugin.js");
-/* harmony import */ var _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./helpers/table-dropdown.helper */ "./src/helpers/table-dropdown.helper.js");
-/* harmony import */ var _atk_utils__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./atk-utils */ "./src/atk-utils.js");
-/* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./services/data.service */ "./src/services/data.service.js");
-/* harmony import */ var _services_panel_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./services/panel.service */ "./src/services/panel.service.js");
-/* harmony import */ var _services_vue_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./services/vue.service */ "./src/services/vue.service.js");
-/* harmony import */ var _services_popup_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./services/popup.service */ "./src/services/popup.service.js");
-
-
-
+/* harmony import */ var core_js_stable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/stable */ "./node_modules/core-js/stable/index.js");
+/* harmony import */ var core_js_stable__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_stable__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _setup_atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./setup-atk */ "./src/setup-atk.js");
+/* harmony import */ var _setup_plugins__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./setup-plugins */ "./src/setup-plugins.js");
+/* harmony import */ var _setup_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./setup-utils */ "./src/setup-utils.js");
+/* harmony import */ var _setup_fomantic_ui__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./setup-fomantic-ui */ "./src/setup-fomantic-ui.js");
 
  // must be the first non-vendor import
 
 
 
 
-
-
-
-
-
 __webpack_require__.p = window.__atkBundlePublicPath + '/'; // eslint-disable-line no-undef, camelcase, no-underscore-dangle
 
-Object.entries(_atk_fomantic_ui__WEBPACK_IMPORTED_MODULE_5__["default"]).forEach(_ref => {
-  let [k, service] = _ref;
-  _setup_atk__WEBPACK_IMPORTED_MODULE_4__["default"][k] = service;
-});
-_setup_atk__WEBPACK_IMPORTED_MODULE_4__["default"].options = _atk_utils__WEBPACK_IMPORTED_MODULE_8__.atkOptions;
-_setup_atk__WEBPACK_IMPORTED_MODULE_4__["default"].eventBus = _atk_utils__WEBPACK_IMPORTED_MODULE_8__.atkEventBus;
-_setup_atk__WEBPACK_IMPORTED_MODULE_4__["default"].utils = _atk_utils__WEBPACK_IMPORTED_MODULE_8__.atkUtils;
-_setup_atk__WEBPACK_IMPORTED_MODULE_4__["default"].debounce = _atk_utils__WEBPACK_IMPORTED_MODULE_8__.atkDebounce; // Allow to register a plugin with jQuery;
-
-_setup_atk__WEBPACK_IMPORTED_MODULE_4__["default"].registerPlugin = _plugin__WEBPACK_IMPORTED_MODULE_6__.registerPlugin;
-_setup_atk__WEBPACK_IMPORTED_MODULE_4__["default"].dataService = _services_data_service__WEBPACK_IMPORTED_MODULE_9__["default"];
-_setup_atk__WEBPACK_IMPORTED_MODULE_4__["default"].panelService = _services_panel_service__WEBPACK_IMPORTED_MODULE_10__["default"];
-_setup_atk__WEBPACK_IMPORTED_MODULE_4__["default"].tableDropdown = _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_7__.tableDropdown;
-_setup_atk__WEBPACK_IMPORTED_MODULE_4__["default"].vueService = _services_vue_service__WEBPACK_IMPORTED_MODULE_11__["default"];
-_setup_atk__WEBPACK_IMPORTED_MODULE_4__["default"].popupService = _services_popup_service__WEBPACK_IMPORTED_MODULE_12__["default"];
-/**
- * Exporting services in order to be available globally
- * or by importing it into your own module.
- *
- * Available as a global Var: atk.uploadService.uploadFiles()
- * Available as an import:
- * import atk from atk4JS;
- * atk.uploadService.uploadFiles();
- */
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_setup_atk__WEBPACK_IMPORTED_MODULE_4__["default"]);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_setup_atk__WEBPACK_IMPORTED_MODULE_1__["default"]);
 })();
 
 __webpack_exports__ = __webpack_exports__["default"];

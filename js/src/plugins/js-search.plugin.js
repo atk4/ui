@@ -189,11 +189,11 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
                 onComplete: cb,
             });
         } else {
-            uri = atk.removeUrlParam(uri, queryKey);
+            uri = atk.urlHelper.removeParam(uri, queryKey);
             if (options.__atk_reload) {
                 delete options.__atk_reload;
             }
-            uri = atk.appendUrlParams(uri, options);
+            uri = atk.urlHelper.appendParams(uri, options);
             window.location = uri;
         }
     }

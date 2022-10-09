@@ -9,11 +9,7 @@ class ApiService {
         this.afterSuccessCallbacks = [];
     }
 
-    /**
-     * Setup Fomantic-UI API with this service.
-     */
-    setService(settings) {
-        // settings.onResponse = this.handleResponse;
+    setupFomanticUi(settings) {
         settings.successTest = this.successTest;
         settings.onFailure = this.onFailure;
         settings.onSuccess = this.onSuccess;
@@ -27,7 +23,7 @@ class ApiService {
      * passing proper context for 'this'.
      * ex: apiService.evalResponse.call(this, code)
      *
-     * @param {string} javascript code
+     * @param {string} code
      */
     evalResponse(code) {
         eval(code); // eslint-disable-line no-eval
@@ -92,9 +88,7 @@ class ApiService {
                     atk.apiService.afterSuccessCallbacks.splice(0);
                 }
             } else if (response.isServiceError) {
-                // service can still throw an error
-                // TODO fix throw without eslint disable
-                throw ({ message: response.message }); // eslint-disable-line no-throw-literal
+                throw Error(response.message);
             }
         } catch (e) {
             atk.apiService.showErrorModal(atk.apiService.getErrorHtml(e.message));
@@ -108,7 +102,7 @@ class ApiService {
      * atkjs (javascript) return from server will not be evaluated.
      *
      * Make sure to control the server output when using
-     * this function. It must at least return {success: true} in order for
+     * this function. It must at least return { success: true } in order for
      * the Promise to resolve properly, will reject otherwise.
      *
      * ex: $app->terminateJson(['success' => true, 'data' => $data]);

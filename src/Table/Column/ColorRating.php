@@ -158,7 +158,7 @@ class ColorRating extends Table\Column
         }
 
         return [
-            '_' . $this->shortName . '_color_rating' => 'background-color:' . $color . ';',
+            '_' . $this->shortName . '_color_rating' => 'background-color: ' . $color . ';',
         ];
     }
 

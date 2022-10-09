@@ -95,7 +95,7 @@ class DataService {
     /**
      * Return store data for an item or empty object.
      *
-     * @returns {{session: *, local: *}}
+     * @returns {{ session: *, local: * }}
      */
     getStoreData(name) {
         const store = {};
