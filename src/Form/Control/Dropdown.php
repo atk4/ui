@@ -241,7 +241,6 @@ class Dropdown extends Input
         $this->addClass($this->defaultClass);
 
         if ($this->readOnly || $this->disabled) {
-            $this->setDropdownOption('showOnFocus', false);
             $this->setDropdownOption('allowTab', false);
             $this->removeClass('search');
             if ($this->isMultiple) {
