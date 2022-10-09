@@ -25,7 +25,7 @@ export default class serverEvent extends atkPlugin {
                 }
             };
 
-            this.source.addEventListener('atk_sse_action', (e) => {
+            this.source.addEventListener('atkSseAction', (e) => {
                 apiService.atkSuccessTest(JSON.parse(e.data));
             }, false);
 
