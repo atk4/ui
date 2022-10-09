@@ -1,6 +1,5 @@
 import 'core-js/stable';
 import atkFomantic from 'atk-fomantic-ui';
-import date from 'locutus/php/datetime/date';
 import { registerPlugin } from './plugin';
 import { tableDropdown } from './helpers/table-dropdown.helper';
 import {
@@ -24,7 +23,6 @@ atk.debounce = atkDebounce;
 // Allow to register a plugin with jQuery;
 atk.registerPlugin = registerPlugin;
 
-atk.phpDate = date;
 atk.dataService = dataService;
 atk.panelService = panelService;
 atk.tableDropdown = tableDropdown;
