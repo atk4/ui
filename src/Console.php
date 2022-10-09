@@ -297,7 +297,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
             foreach ($read as $f) {
                 $data = rtrim((string) fgets($f));
                 if ($data === '') {
-                    // @codeCoverageIgnoreStart TODO fix coverage stability, add test with explicit empty string
+                    // TODO fix coverage stability, add test with explicit empty string
+                    // @codeCoverageIgnoreStart
                     continue;
                     // @codeCoverageIgnoreEnd
                 }

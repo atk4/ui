@@ -13,12 +13,12 @@ Feature: JS
     Then I see button "B"
     When I press button "Hide button B"
     Then I don't see button "B"
-    Then I don't see button "Hide button B"
+    Then I see button "Hide button B"
 
     Then I see button "C"
-    When I press button "Hide button C"
+    When I press button "Hide button C and self"
     Then I don't see button "C"
-    Then I don't see button "Hide button C"
+    Then I don't see button "Hide button C and self"
 
     # "xpath(//div.ui.header[text()[normalize-space()='Callbacks']]/following-sibling::div.ui.button[1])" is long for nice CI output
     When I check if text in "xpath(//div.ui.button[8])" match text "Callback Test"

@@ -25,16 +25,12 @@ class ApiService {
      *
      * This function should be call using .call() by
      * passing proper context for 'this'.
-     * ex: apiService.evalResponse.call(this, code, jQuery)
+     * ex: apiService.evalResponse.call(this, code)
      *
-     * By passig the jQuery reference, $ var use by code that need to be eval
-     * will work just fine, even if $ is not assign globally.
-     *
-     * @param {string} code javascript to be eval
-     * @param {$}      $    reference to jQuery
+     * @param {string} javascript code
      */
-    evalResponse(code, $) { // eslint-disable-line no-shadow
-        window.eval(code); // eslint-disable-line no-eval
+    evalResponse(code) {
+        eval(code); // eslint-disable-line no-eval
     }
 
     onAbort(message) {
@@ -81,19 +77,17 @@ class ApiService {
                         const m = $('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
                         if (m.length === 0) {
                             $(document.body).append(response.portals[portalID].html);
-                            atk.apiService.evalResponse(response.portals[portalID].js, $);
+                            atk.apiService.evalResponse(response.portals[portalID].js);
                         }
                     });
                 }
                 if (response.atkjs) {
-                    // call evalResponse with proper context
-                    atk.apiService.evalResponse.call(this, response.atkjs, $);
+                    atk.apiService.evalResponse.call(this, response.atkjs);
                 }
                 if (atk.apiService.afterSuccessCallbacks.length > 0) {
-                    const self = this;
                     const callbacks = atk.apiService.afterSuccessCallbacks;
                     callbacks.forEach((callback) => {
-                        atk.apiService.evalResponse.call(self, callback, $);
+                        atk.apiService.evalResponse.call(this, callback);
                     });
                     atk.apiService.afterSuccessCallbacks.splice(0);
                 }

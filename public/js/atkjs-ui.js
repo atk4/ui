@@ -2396,19 +2396,14 @@ class ApiService {
    *
    * This function should be call using .call() by
    * passing proper context for 'this'.
-   * ex: apiService.evalResponse.call(this, code, jQuery)
+   * ex: apiService.evalResponse.call(this, code)
    *
-   * By passig the jQuery reference, $ var use by code that need to be eval
-   * will work just fine, even if $ is not assign globally.
-   *
-   * @param {string} code javascript to be eval
-   * @param {$}      $    reference to jQuery
+   * @param {string} javascript code
    */
 
 
-  evalResponse(code, $) {
-    // eslint-disable-line no-shadow
-    window.eval(code); // eslint-disable-line no-eval
+  evalResponse(code) {
+    eval(code); // eslint-disable-line no-eval
   }
 
   onAbort(message) {
@@ -2457,21 +2452,19 @@ class ApiService {
 
             if (m.length === 0) {
               external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document.body).append(response.portals[portalID].html);
-              atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse(response.portals[portalID].js, (external_jquery__WEBPACK_IMPORTED_MODULE_5___default()));
+              atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse(response.portals[portalID].js);
             }
           });
         }
 
         if (response.atkjs) {
-          // call evalResponse with proper context
-          atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse.call(this, response.atkjs, (external_jquery__WEBPACK_IMPORTED_MODULE_5___default()));
+          atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse.call(this, response.atkjs);
         }
 
         if (atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks.length > 0) {
-          const self = this;
           const callbacks = atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks;
           callbacks.forEach(callback => {
-            atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse.call(self, callback, (external_jquery__WEBPACK_IMPORTED_MODULE_5___default()));
+            atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse.call(this, callback);
           });
           atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks.splice(0);
         }
@@ -4151,7 +4144,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
-/* istanbul ignore if  */
+/* istanbul ignore next */
 
 if (typeof (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk) !== 'undefined') {
   throw Error('Unexpected jQuery.atk property state');
