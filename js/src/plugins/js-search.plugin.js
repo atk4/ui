@@ -173,7 +173,7 @@ export default class JsSearch extends atkPlugin {
      * Send request to server using the search query.
      */
     doSearch(uri, query, options, cb = function () {}) {
-        const queryKey = this.settings.uri_query_key;
+        const queryKey = this.settings.uriQueryKey;
 
         if (query) {
             options = $.extend(options, { [queryKey]: query });
@@ -203,7 +203,7 @@ export default class JsSearch extends atkPlugin {
 JsSearch.DEFAULTS = {
     uri: null,
     uriOptions: {},
-    uri_query_key: null,
+    uriQueryKey: null,
     q: null,
     autoQuery: false,
     timeOut: 300,

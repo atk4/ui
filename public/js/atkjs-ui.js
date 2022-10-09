@@ -1559,7 +1559,7 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
 
   doSearch(uri, query, options) {
     let cb = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {};
-    const queryKey = this.settings.uri_query_key;
+    const queryKey = this.settings.uriQueryKey;
 
     if (query) {
       options = jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(options, {
@@ -1593,7 +1593,7 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
 JsSearch.DEFAULTS = {
   uri: null,
   uriOptions: {},
-  uri_query_key: null,
+  uriQueryKey: null,
   q: null,
   autoQuery: false,
   timeOut: 300,
