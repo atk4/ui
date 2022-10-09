@@ -1,7 +1,6 @@
 import $ from 'external/jquery';
 import atk from 'atk';
 import AtkPlugin from './atk.plugin';
-import apiService from '../services/api.service';
 
 /**
  * Reload a view using Fomantic-UI API.
@@ -41,7 +40,7 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
             method: 'GET',
             onComplete: (response, content) => {
                 if (this.settings.afterSuccess) {
-                    apiService.onAfterSuccess(this.settings.afterSuccess);
+                    atk.apiService.onAfterSuccess(this.settings.afterSuccess);
                 }
             },
             ...userConfig,

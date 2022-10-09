@@ -1,6 +1,6 @@
 import $ from 'external/jquery';
+import atk from 'atk';
 import AtkPlugin from './atk.plugin';
-import uploadService from '../services/upload.service';
 
 export default class AtkFileUploadPlugin extends AtkPlugin {
     main() {
@@ -150,7 +150,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
         };
 
         this.bar.show();
-        uploadService.uploadFiles(
+        atk.uploadService.uploadFiles(
             files,
             this.$el,
             { fUploadAction: 'upload' },

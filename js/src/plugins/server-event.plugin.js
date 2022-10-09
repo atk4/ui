@@ -1,5 +1,5 @@
+import atk from 'atk';
 import AtkPlugin from './atk.plugin';
-import apiService from '../services/api.service';
 
 export default class AtkServerEventPlugin extends AtkPlugin {
     main() {
@@ -13,7 +13,7 @@ export default class AtkServerEventPlugin extends AtkPlugin {
             }
 
             this.source.onmessage = function (e) {
-                apiService.atkSuccessTest(JSON.parse(e.data));
+                atk.apiService.atkSuccessTest(JSON.parse(e.data));
             };
 
             this.source.onerror = (e) => {
@@ -26,7 +26,7 @@ export default class AtkServerEventPlugin extends AtkPlugin {
             };
 
             this.source.addEventListener('atkSseAction', (e) => {
-                apiService.atkSuccessTest(JSON.parse(e.data));
+                atk.apiService.atkSuccessTest(JSON.parse(e.data));
             }, false);
 
             if (this.settings.closeBeforeUnload) {

@@ -467,8 +467,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-/* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../services/form.service */ "./src/services/form.service.js");
-
 
 
 
@@ -530,7 +528,7 @@ class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_8__[
     this.selector = this.settings.selector;
 
     if (!this.selector) {
-      this.selector = _services_form_service__WEBPACK_IMPORTED_MODULE_9__["default"].getDefaultSelector();
+      this.selector = atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.getDefaultSelector();
     } // add change listener to inputs according to selector
 
 
@@ -595,10 +593,10 @@ class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_8__[
 
           if (Array.isArray(validationRule)) {
             validationRule.forEach(rule => {
-              isAndValid = isAndValid && _services_form_service__WEBPACK_IMPORTED_MODULE_9__["default"].validateField(this.$el, inputName, rule);
+              isAndValid = isAndValid && atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.validateField(this.$el, inputName, rule);
             });
           } else {
-            isAndValid = isAndValid && _services_form_service__WEBPACK_IMPORTED_MODULE_9__["default"].validateField(this.$el, inputName, validationRule);
+            isAndValid = isAndValid && atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.validateField(this.$el, inputName, validationRule);
           }
         }); // Apply OR condition between rules.
 
@@ -623,10 +621,10 @@ class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_8__[
 
   setInputsState() {
     this.inputs.forEach(input => {
-      const $input = _services_form_service__WEBPACK_IMPORTED_MODULE_9__["default"].getField(this.$el, input.inputName);
+      const $input = atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.getField(this.$el, input.inputName);
 
       if ($input) {
-        const $container = _services_form_service__WEBPACK_IMPORTED_MODULE_9__["default"].getContainer($input, this.selector);
+        const $container = atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.getContainer($input, this.selector);
 
         if ($container) {
           $container.hide();
@@ -824,15 +822,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-/* harmony import */ var _services_upload_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../services/upload.service */ "./src/services/upload.service.js");
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
 
 
 
 
-class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
+class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
     this.textInput = this.$el.find('input[type="text"]');
     this.hiddenInput = this.$el.find('input[type="hidden"]');
@@ -981,7 +979,7 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["defa
     };
 
     this.bar.show();
-    _services_upload_service__WEBPACK_IMPORTED_MODULE_5__["default"].uploadFiles(files, this.$el, {
+    atk__WEBPACK_IMPORTED_MODULE_4__["default"].uploadService.uploadFiles(files, this.$el, {
       fUploadAction: 'upload'
     }, this.settings.uri, completeCb, xhrCb);
   }
@@ -1467,8 +1465,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-/* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/api.service */ "./src/services/api.service.js");
-
 
 
 
@@ -1504,7 +1500,7 @@ class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["defa
       method: 'GET',
       onComplete: (response, content) => {
         if (this.settings.afterSuccess) {
-          _services_api_service__WEBPACK_IMPORTED_MODULE_3__["default"].onAfterSuccess(this.settings.afterSuccess);
+          atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService.onAfterSuccess(this.settings.afterSuccess);
         }
       },
       ...userConfig
@@ -1793,11 +1789,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ AtkServerEventPlugin)
 /* harmony export */ });
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-/* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/api.service */ "./src/services/api.service.js");
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
-class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
     const element = this.$el;
     const hasLoader = this.settings.showLoader;
@@ -1810,7 +1806,7 @@ class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["def
       }
 
       this.source.onmessage = function (e) {
-        _services_api_service__WEBPACK_IMPORTED_MODULE_1__["default"].atkSuccessTest(JSON.parse(e.data));
+        atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkSuccessTest(JSON.parse(e.data));
       };
 
       this.source.onerror = e => {
@@ -1824,7 +1820,7 @@ class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["def
       };
 
       this.source.addEventListener('atkSseAction', e => {
-        _services_api_service__WEBPACK_IMPORTED_MODULE_1__["default"].atkSuccessTest(JSON.parse(e.data));
+        atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkSuccessTest(JSON.parse(e.data));
       }, false);
 
       if (this.settings.closeBeforeUnload) {

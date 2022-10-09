@@ -1,6 +1,5 @@
 import atk from 'atk';
 import AtkPlugin from './atk.plugin';
-import formService from '../services/form.service';
 
 /**
  * Show or hide input field base on other input field condition.
@@ -52,7 +51,7 @@ export default class AtkConditionalFormPlugin extends AtkPlugin {
         this.inputs = [];
         this.selector = this.settings.selector;
         if (!this.selector) {
-            this.selector = formService.getDefaultSelector();
+            this.selector = atk.formService.getDefaultSelector();
         }
         // add change listener to inputs according to selector
         this.$el.find(':checkbox')
@@ -115,10 +114,10 @@ export default class AtkConditionalFormPlugin extends AtkPlugin {
                     const validationRule = rules[inputName];
                     if (Array.isArray(validationRule)) {
                         validationRule.forEach((rule) => {
-                            isAndValid = isAndValid && formService.validateField(this.$el, inputName, rule);
+                            isAndValid = isAndValid && atk.formService.validateField(this.$el, inputName, rule);
                         });
                     } else {
-                        isAndValid = isAndValid && formService.validateField(this.$el, inputName, validationRule);
+                        isAndValid = isAndValid && atk.formService.validateField(this.$el, inputName, validationRule);
                     }
                 });
                 // Apply OR condition between rules.
@@ -141,9 +140,9 @@ export default class AtkConditionalFormPlugin extends AtkPlugin {
      */
     setInputsState() {
         this.inputs.forEach((input) => {
-            const $input = formService.getField(this.$el, input.inputName);
+            const $input = atk.formService.getField(this.$el, input.inputName);
             if ($input) {
-                const $container = formService.getContainer($input, this.selector);
+                const $container = atk.formService.getContainer($input, this.selector);
                 if ($container) {
                     $container.hide();
                     this.setInputState(input.state, $input, $container);
