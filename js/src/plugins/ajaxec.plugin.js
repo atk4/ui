@@ -23,8 +23,8 @@ export default class ajaxec extends atkPlugin {
         const url = $.atk.getUrl(this.settings.uri);
         const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
 
-        // uri_options is always use as data in a post request.
-        const data = this.settings.uri_options ? this.settings.uri_options : {};
+        // uriOptions is always use as data in a post request.
+        const data = this.settings.uriOptions ? this.settings.uriOptions : {};
 
         // retrieve param from url.
         let urlParam = $.atkGetQueryParam(this.settings.uri);
@@ -54,7 +54,7 @@ export default class ajaxec extends atkPlugin {
 
 ajaxec.DEFAULTS = {
     uri: null,
-    uri_options: {},
+    uriOptions: {},
     confirm: null,
     apiConfig: null,
     storeName: null,

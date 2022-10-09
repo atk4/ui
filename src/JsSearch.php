@@ -91,7 +91,7 @@ class JsSearch extends View
 
         $this->js(true)->atkJsSearch([
             'uri' => $this->reload->jsUrl(),
-            'uri_options' => array_merge(['__atk_reload' => $this->reload->name], $this->args),
+            'uriOptions' => array_merge(['__atk_reload' => $this->reload->name], $this->args),
             'uri_query_key' => $this->name . '_q',
             'autoQuery' => $this->autoQuery,
             'q' => $this->initValue,

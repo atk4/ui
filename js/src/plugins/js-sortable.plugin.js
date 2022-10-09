@@ -96,10 +96,10 @@ export default class JsSortable extends atkPlugin {
 
     buildUrl(extraParams = null) {
         let url = null;
-        if (this.settings.uri_options && extraParams) {
-            url = $.atkAddParams(this.settings.uri, $.extend({}, this.settings.uri_options, extraParams));
-        } else if (this.settings.uri_options) {
-            url = $.atkAddParams(this.settings.uri, this.settings.uri_options);
+        if (this.settings.uriOptions && extraParams) {
+            url = $.atkAddParams(this.settings.uri, $.extend({}, this.settings.uriOptions, extraParams));
+        } else if (this.settings.uriOptions) {
+            url = $.atkAddParams(this.settings.uri, this.settings.uriOptions);
         } else {
             url = this.settings.uri;
         }
@@ -114,7 +114,7 @@ export default class JsSortable extends atkPlugin {
 
 JsSortable.DEFAULTS = {
     uri: null,
-    uri_options: null,
+    uriOptions: null,
     container: 'tbody',
     draggable: 'tr',
     dataLabel: 'id',

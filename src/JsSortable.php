@@ -49,7 +49,7 @@ class JsSortable extends JsCallback
 
         $this->view->js(true)->atkJsSortable([
             'uri' => $this->getJsUrl(),
-            'uri_options' => $this->args,
+            'uriOptions' => $this->args,
             'container' => $this->container,
             'draggable' => $this->draggable,
             'handleClass' => $this->handleClass,

@@ -53,7 +53,7 @@ class JsCallback extends Callback implements JsExpressionable
 
         return (new Jquery())->atkAjaxec([
             'uri' => $this->getJsUrl(),
-            'uri_options' => $this->args,
+            'uriOptions' => $this->args,
             'confirm' => $this->confirm,
             'apiConfig' => $this->apiConfig,
             'storeName' => $this->storeName,

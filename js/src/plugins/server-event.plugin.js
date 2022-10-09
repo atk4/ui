@@ -55,7 +55,7 @@ export default class serverEvent extends atkPlugin {
 
 serverEvent.DEFAULTS = {
     uri: null,
-    uri_options: {},
+    uriOptions: {},
     showLoader: false,
     closeBeforeUnload: false,
 };

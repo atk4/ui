@@ -39,7 +39,7 @@ class Paginator extends View
 
     /**
      * Add extra parameter to the reload view
-     * as JsReload uri_options.
+     * as JsReload uriOptions.
      */
     public array $reloadArgs = [];
 
@@ -151,7 +151,7 @@ class Paginator extends View
 
     /**
      * Add extra argument to the reload view.
-     * These arguments will be set as uri_options to JsReload.
+     * These arguments will be set as uriOptions to JsReload.
      *
      * @param array $args
      */

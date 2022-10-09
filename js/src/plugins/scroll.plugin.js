@@ -153,7 +153,7 @@ export default class scroll extends atkPlugin {
         this.$inner.api({
             on: 'now',
             url: this.settings.uri,
-            data: { ...this.settings.uri_options, page: this.nextPage },
+            data: { ...this.settings.uriOptions, page: this.nextPage },
             method: 'GET',
             stateContext: this.settings.options.stateContext,
             onComplete: this.onComplete.bind(this),
@@ -211,6 +211,6 @@ export default class scroll extends atkPlugin {
 
 scroll.DEFAULTS = {
     uri: null,
-    uri_options: {},
+    uriOptions: {},
     options: {},
 };

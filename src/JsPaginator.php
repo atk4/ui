@@ -39,7 +39,7 @@ class JsPaginator extends JsCallback
 
         $this->view->js(true)->atkScroll([
             'uri' => $this->getJsUrl(),
-            'uri_options' => $this->args,
+            'uriOptions' => $this->args,
             'options' => $this->options,
         ]);
     }

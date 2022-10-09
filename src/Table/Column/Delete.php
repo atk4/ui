@@ -35,7 +35,7 @@ class Delete extends Table\Column
     {
         $this->table->on('click', 'a.' . $this->shortName, null, ['confirm' => (new Jquery())->attr('title')])->atkAjaxec([
             'uri' => $this->vp->getJsUrl(),
-            'uri_options' => [$this->name => $this->table->jsRow()->data('id')],
+            'uriOptions' => [$this->name => $this->table->jsRow()->data('id')],
         ]);
 
         return $this->getApp()->getTag('a', [

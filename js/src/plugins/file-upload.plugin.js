@@ -193,7 +193,7 @@ export default class fileUpload extends atkPlugin {
 fileUpload.DEFAULTS = {
     uri: null,
     file: { id: null, name: null },
-    uri_options: {},
+    uriOptions: {},
     action: null,
     completeLabel: '100%',
     submit: null,

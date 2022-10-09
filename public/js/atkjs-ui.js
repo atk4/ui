@@ -551,9 +551,9 @@ class ajaxec extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
 
   doExecute() {
     const url = jquery__WEBPACK_IMPORTED_MODULE_0___default().atk.getUrl(this.settings.uri);
-    const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {}; // uri_options is always use as data in a post request.
+    const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {}; // uriOptions is always use as data in a post request.
 
-    const data = this.settings.uri_options ? this.settings.uri_options : {}; // retrieve param from url.
+    const data = this.settings.uriOptions ? this.settings.uriOptions : {}; // retrieve param from url.
 
     let urlParam = jquery__WEBPACK_IMPORTED_MODULE_0___default().atkGetQueryParam(this.settings.uri); // get store object.
 
@@ -580,7 +580,7 @@ class ajaxec extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
 }
 ajaxec.DEFAULTS = {
   uri: null,
-  uri_options: {},
+  uriOptions: {},
   confirm: null,
   apiConfig: null,
   storeName: null
@@ -1063,8 +1063,8 @@ class createModal extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
     const options = this.settings; // make sure we have an object when no option is passed
 
-    if (jquery__WEBPACK_IMPORTED_MODULE_0___default().isArray(options.uri_options)) {
-      options.uri_options = {};
+    if (jquery__WEBPACK_IMPORTED_MODULE_0___default().isArray(options.uriOptions)) {
+      options.uriOptions = {};
     } // create modal and add it to the DOM
 
 
@@ -1073,7 +1073,7 @@ class createModal extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
     $m.data({
       uri: options.uri,
       type: options.data_type,
-      args: options.uri_options,
+      args: options.uriOptions,
       needRemove: true,
       needCloseTrigger: true,
       label: options.label
@@ -1095,7 +1095,7 @@ class createModal extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
 createModal.DEFAULTS = {
   title: '',
   uri: null,
-  uri_options: {},
+  uriOptions: {},
   headerCss: 'header',
   modalCss: 'scrolling',
   contentCss: 'image',
@@ -1329,7 +1329,7 @@ fileUpload.DEFAULTS = {
     id: null,
     name: null
   },
-  uri_options: {},
+  uriOptions: {},
   action: null,
   completeLabel: '100%',
   submit: null
@@ -1410,7 +1410,7 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
 
   onAutoQueryAction() {
     this.textInput.on('keyup', atk.debounce(e => {
-      const options = jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.uri_options);
+      const options = jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.uriOptions);
 
       if (e.target.value === '' || e.keyCode === 27) {
         this.doSearch(this.settings.uri, null, options, () => {
@@ -1435,7 +1435,7 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
 
   onEnterAction() {
     this.textInput.on('keyup', e => {
-      const options = jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.uri_options);
+      const options = jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.uriOptions);
 
       if (e.keyCode === 13 && e.target.value) {
         this.doSearch(this.settings.uri, e.target.value, options, () => {
@@ -1478,7 +1478,7 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
 
   setSearchAction() {
     this.searchAction.on('click', e => {
-      const options = jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.uri_options);
+      const options = jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.uriOptions);
 
       if (this.state.button) {
         this.doSearch(this.settings.uri, null, options, () => {
@@ -1592,7 +1592,7 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
 }
 JsSearch.DEFAULTS = {
   uri: null,
-  uri_options: {},
+  uriOptions: {},
   uri_query_key: null,
   q: null,
   autoQuery: false,
@@ -1730,10 +1730,10 @@ class JsSortable extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
     let extraParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
     let url = null;
 
-    if (this.settings.uri_options && extraParams) {
-      url = jquery__WEBPACK_IMPORTED_MODULE_3___default().atkAddParams(this.settings.uri, jquery__WEBPACK_IMPORTED_MODULE_3___default().extend({}, this.settings.uri_options, extraParams));
-    } else if (this.settings.uri_options) {
-      url = jquery__WEBPACK_IMPORTED_MODULE_3___default().atkAddParams(this.settings.uri, this.settings.uri_options);
+    if (this.settings.uriOptions && extraParams) {
+      url = jquery__WEBPACK_IMPORTED_MODULE_3___default().atkAddParams(this.settings.uri, jquery__WEBPACK_IMPORTED_MODULE_3___default().extend({}, this.settings.uriOptions, extraParams));
+    } else if (this.settings.uriOptions) {
+      url = jquery__WEBPACK_IMPORTED_MODULE_3___default().atkAddParams(this.settings.uri, this.settings.uriOptions);
     } else {
       url = this.settings.uri;
     }
@@ -1748,7 +1748,7 @@ class JsSortable extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
 }
 JsSortable.DEFAULTS = {
   uri: null,
-  uri_options: null,
+  uriOptions: null,
   container: 'tbody',
   draggable: 'tr',
   dataLabel: 'id',
@@ -1799,7 +1799,7 @@ class reloadView extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
     const url = jquery__WEBPACK_IMPORTED_MODULE_0___default().atk.getUrl(this.settings.uri);
     const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {}; // add new param and remove duplicate, prioritizing the latest one.
 
-    let urlParam = Object.assign(jquery__WEBPACK_IMPORTED_MODULE_0___default().atkGetQueryParam(this.settings.uri), this.settings.uri_options ? this.settings.uri_options : {}); // get store object.
+    let urlParam = Object.assign(jquery__WEBPACK_IMPORTED_MODULE_0___default().atkGetQueryParam(this.settings.uri), this.settings.uriOptions ? this.settings.uriOptions : {}); // get store object.
 
     const store = atk.dataService.getStoreData(this.settings.storeName); // merge user settings
 
@@ -1829,7 +1829,7 @@ class reloadView extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
 }
 reloadView.DEFAULTS = {
   uri: null,
-  uri_options: null,
+  uriOptions: null,
   afterSuccess: null,
   apiConfig: null,
   storeName: null
@@ -2020,7 +2020,7 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
     this.$inner.api({
       on: 'now',
       url: this.settings.uri,
-      data: { ...this.settings.uri_options,
+      data: { ...this.settings.uriOptions,
         page: this.nextPage
       },
       method: 'GET',
@@ -2086,7 +2086,7 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
 }
 scroll.DEFAULTS = {
   uri: null,
-  uri_options: {},
+  uriOptions: {},
   options: {}
 };
 
@@ -2165,7 +2165,7 @@ class serverEvent extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"] {
 }
 serverEvent.DEFAULTS = {
   uri: null,
-  uri_options: {},
+  uriOptions: {},
   showLoader: false,
   closeBeforeUnload: false
 };
@@ -2365,7 +2365,7 @@ class AccordionService {
     if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('path')) {
       jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).atkReloadView({
         uri: jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('path'),
-        uri_options: {
+        uriOptions: {
           __atk_json: 1
         }
       });

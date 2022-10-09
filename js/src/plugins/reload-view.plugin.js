@@ -26,7 +26,7 @@ export default class reloadView extends atkPlugin {
         // add new param and remove duplicate, prioritizing the latest one.
         let urlParam = Object.assign(
             $.atkGetQueryParam(this.settings.uri),
-            this.settings.uri_options ? this.settings.uri_options : {},
+            this.settings.uriOptions ? this.settings.uriOptions : {},
         );
 
         // get store object.
@@ -60,7 +60,7 @@ export default class reloadView extends atkPlugin {
 
 reloadView.DEFAULTS = {
     uri: null,
-    uri_options: null,
+    uriOptions: null,
     afterSuccess: null,
     apiConfig: null,
     storeName: null,

@@ -114,7 +114,7 @@ class Loader extends View
     {
         return $this->js()->atkReloadView([
             'uri' => $this->cb->getUrl(),
-            'uri_options' => $args,
+            'uriOptions' => $args,
             'apiConfig' => $apiConfig !== [] ? $apiConfig : null,
             'storeName' => $storeName ? $storeName : null,
         ]);

@@ -40,7 +40,7 @@ export default class JsSearch extends atkPlugin {
      */
     onAutoQueryAction() {
         this.textInput.on('keyup', atk.debounce((e) => {
-            const options = $.extend({}, this.urlArgs, this.settings.uri_options);
+            const options = $.extend({}, this.urlArgs, this.settings.uriOptions);
             if (e.target.value === '' || e.keyCode === 27) {
                 this.doSearch(this.settings.uri, null, options, () => {
                     this.setButtonState(false);
@@ -62,7 +62,7 @@ export default class JsSearch extends atkPlugin {
      */
     onEnterAction() {
         this.textInput.on('keyup', (e) => {
-            const options = $.extend({}, this.urlArgs, this.settings.uri_options);
+            const options = $.extend({}, this.urlArgs, this.settings.uriOptions);
             if (e.keyCode === 13 && e.target.value) {
                 this.doSearch(this.settings.uri, e.target.value, options, () => {
                     this.setButtonState(true);
@@ -103,7 +103,7 @@ export default class JsSearch extends atkPlugin {
      */
     setSearchAction() {
         this.searchAction.on('click', (e) => {
-            const options = $.extend({}, this.urlArgs, this.settings.uri_options);
+            const options = $.extend({}, this.urlArgs, this.settings.uriOptions);
             if (this.state.button) {
                 this.doSearch(this.settings.uri, null, options, () => {
                     this.setButtonState(false);
@@ -202,7 +202,7 @@ export default class JsSearch extends atkPlugin {
 
 JsSearch.DEFAULTS = {
     uri: null,
-    uri_options: {},
+    uriOptions: {},
     uri_query_key: null,
     q: null,
     autoQuery: false,
