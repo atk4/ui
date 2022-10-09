@@ -86,7 +86,7 @@ export default class JsSortable extends atkPlugin {
                 on: 'now',
                 url: url,
                 data: {
-                    order: this.ids.toString(), org_idx: this.orgIdx, new_idx: this.newIdx, source: this.sourceId,
+                    order: this.ids.toString(), orgIdx: this.orgIdx, newIdx: this.newIdx, source: this.sourceId,
                 },
                 method: 'POST',
                 obj: this.dragContainer,

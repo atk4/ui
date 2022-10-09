@@ -1716,8 +1716,8 @@ class JsSortable extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
         url: url,
         data: {
           order: this.ids.toString(),
-          org_idx: this.orgIdx,
-          new_idx: this.newIdx,
+          orgIdx: this.orgIdx,
+          newIdx: this.newIdx,
           source: this.sourceId
         },
         method: 'POST',
@@ -2133,7 +2133,7 @@ class serverEvent extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"] {
         }
       };
 
-      this.source.addEventListener('atk_sse_action', e => {
+      this.source.addEventListener('atkSseAction', e => {
         _services_api_service__WEBPACK_IMPORTED_MODULE_1__["default"].atkSuccessTest(JSON.parse(e.data));
       }, false);
 
