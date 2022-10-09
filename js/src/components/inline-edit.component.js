@@ -30,13 +30,8 @@ export default {
     props: {
         url: String,
         initValue: String,
-        saveOnBlur: { type: Boolean, default: true },
-        options: {
-            type: Object,
-            default: () => ({
-                inputCss: '', inlineCss: '', fieldName: null, fieldType: 'text',
-            }),
-        },
+        saveOnBlur: Boolean,
+        options: Object,
     },
     data: function () {
         return {

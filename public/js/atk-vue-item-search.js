@@ -47,13 +47,7 @@ const template = `<div class="atk-item-search" :class="inputCss">
     q: String,
     reload: String,
     queryArg: String,
-    options: {
-      type: Object,
-      default: () => ({
-        inputTimeOut: 350,
-        inputCss: ''
-      })
-    }
+    options: Object
   },
   data: function () {
     return {
