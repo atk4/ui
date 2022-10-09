@@ -53,6 +53,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_set_symmetric_difference_js__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_symmetric_difference_js__WEBPACK_IMPORTED_MODULE_19__);
 /* harmony import */ var core_js_modules_esnext_set_union_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! core-js/modules/esnext.set.union.js */ "./node_modules/core-js/modules/esnext.set.union.js");
 /* harmony import */ var core_js_modules_esnext_set_union_js__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_union_js__WEBPACK_IMPORTED_MODULE_20__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_21___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_21__);
+
 
 
 
@@ -370,7 +373,7 @@ const template = `<div class="item" :style="itemMargin">
      * Send data using callback url.
      */
     postValue: function () {
-      jQuery(this.$el).parents('.' + this.getRootData().options.loader).api({
+      external_jquery__WEBPACK_IMPORTED_MODULE_21___default()(this.$el).parents('.' + this.getRootData().options.loader).api({
         on: 'now',
         url: this.getRootData().options.url,
         method: 'post',

@@ -71,7 +71,4 @@ class PopupService {
     }
 }
 
-const popupService = new PopupService();
-Object.freeze(popupService);
-
-export default popupService;
+export default Object.freeze(new PopupService());

@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 import Resizer from 'column-resizer';
 import AtkPlugin from './atk.plugin';
 

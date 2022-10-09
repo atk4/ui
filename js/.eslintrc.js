@@ -15,12 +15,7 @@ module.exports = {
     plugins: [
         'vue',
     ],
-    globals: {
-        // TODO remove all global ignores here in favor of import, jQuery is loaded before main JS
-        atk: true,
-        $: true,
-        jQuery: true,
-    },
+    globals: { atk: true },
     rules: {
         indent: ['error', 4, { SwitchCase: 1 }],
         'object-shorthand': ['error', 'never'],

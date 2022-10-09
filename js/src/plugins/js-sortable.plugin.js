@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 /* global Draggable */ // loaded after main JS
 import AtkPlugin from './atk.plugin';
 

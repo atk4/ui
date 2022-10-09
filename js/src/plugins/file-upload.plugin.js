@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 import AtkPlugin from './atk.plugin';
 import uploadService from '../services/upload.service';
 

@@ -1,3 +1,4 @@
+import $ from 'external/jquery';
 import mitt from 'mitt';
 import lodashDebounce from 'lodash/debounce';
 import './helpers/url.helper';
@@ -69,10 +70,10 @@ function atkDebounce(func, wait, options) {
             if (!debouncedInner.pending()) {
                 clearInterval(timerId);
                 timerId = null;
-                jQuery.active--;
+                $.active--;
             }
         }, 25);
-        jQuery.active++;
+        $.active++;
     }
 
     debouncedInner = lodashDebounce(func, wait, options);

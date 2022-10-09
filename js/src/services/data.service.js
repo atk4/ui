@@ -143,7 +143,4 @@ class DataService {
     }
 }
 
-const dataService = new DataService();
-Object.freeze(dataService);
-
-export default dataService;
+export default Object.freeze(new DataService());

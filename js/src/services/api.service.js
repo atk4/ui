@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 
 /**
  * Handle Fomantic-UI API functionality throughout the app.
@@ -30,7 +30,7 @@ class ApiService {
      * will work just fine, even if $ is not assign globally.
      *
      * @param {string} code javascript to be eval
-     * @param {jQuery} $    reference to jQuery
+     * @param {$}      $    reference to jQuery
      */
     evalResponse(code, $) { // eslint-disable-line no-shadow
         window.eval(code); // eslint-disable-line no-eval
@@ -80,19 +80,19 @@ class ApiService {
                         const m = $('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
                         if (m.length === 0) {
                             $(document.body).append(response.portals[portalID].html);
-                            atk.apiService.evalResponse(response.portals[portalID].js, jQuery);
+                            atk.apiService.evalResponse(response.portals[portalID].js, $);
                         }
                     });
                 }
                 if (response.atkjs) {
-                    // Call evalResponse with proper context, js code and jQuery as $ var.
-                    atk.apiService.evalResponse.call(this, response.atkjs, jQuery);
+                    // call evalResponse with proper context
+                    atk.apiService.evalResponse.call(this, response.atkjs, $);
                 }
                 if (atk.apiService.afterSuccessCallbacks.length > 0) {
                     const self = this;
                     const callbacks = atk.apiService.afterSuccessCallbacks;
                     callbacks.forEach((callback) => {
-                        atk.apiService.evalResponse.call(self, callback, jQuery);
+                        atk.apiService.evalResponse.call(self, callback, $);
                     });
                     atk.apiService.afterSuccessCallbacks.splice(0);
                 }
@@ -237,7 +237,4 @@ class ApiService {
     }
 }
 
-const apiService = new ApiService();
-Object.freeze(apiService);
-
-export default apiService;
+export default Object.freeze(new ApiService());

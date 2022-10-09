@@ -36,7 +36,7 @@ module.exports = (env) => {
     };
 
     return {
-        entry: { [filename]: srcDir + '/agile-toolkit-ui.js' },
+        entry: { [filename]: srcDir + '/main.js' },
         mode: isProduction ? 'production' : 'development',
         devtool: isProduction ? 'source-map' : false,
         performance: isProduction ? prodPerformance : {},
@@ -104,7 +104,7 @@ module.exports = (env) => {
                 },
             ],
         },
-        externals: { jquery: 'jQuery', draggable: 'Draggable' },
+        externals: { 'external/jquery': 'jQuery' },
         resolve: {
             alias: { vue$: 'vue/dist/vue.esm.js' },
             modules: [

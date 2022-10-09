@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 
 /**
  * Handle Fomantic-UI form functionality throughout the app.
@@ -68,7 +68,7 @@ class FormService {
     /**
      * Visibility rule.
      *
-     * @returns {boolean | jQuery}
+     * @returns {boolean}
      */
     isVisible() {
         return $(this).is(':visible');
@@ -81,7 +81,7 @@ class FormService {
     /**
      * Validate a field using our own or Fomantic-UI validation rule function.
      *
-     * @param   {jQuery}          form      Form containing the field.
+     * @param   {$}               form      Form containing the field.
      * @param   {string}          fieldName Name of field
      * @param   {string | object} rule      Rule to apply test.
      * @returns {*|false}
@@ -184,7 +184,4 @@ class FormService {
     }
 }
 
-const formService = new FormService();
-Object.freeze(formService);
-
-export default formService;
+export default Object.freeze(new FormService());

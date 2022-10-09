@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 
 /**
  * Panel needs to be reload to display different
@@ -412,7 +412,4 @@ class PanelService {
     }
 }
 
-const panelService = new PanelService();
-Object.freeze(panelService);
-
-export default panelService;
+export default Object.freeze(new PanelService());

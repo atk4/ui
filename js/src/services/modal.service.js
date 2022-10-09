@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 
 /**
  * This is default setup for Fomantic-UI modal.
@@ -185,7 +185,4 @@ class ModalService {
     }
 }
 
-const modalService = new ModalService();
-Object.freeze(modalService);
-
-export default modalService;
+export default Object.freeze(new ModalService());

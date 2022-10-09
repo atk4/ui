@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 import AtkPlugin from './atk.plugin';
 
 /**
@@ -85,7 +85,7 @@ export default class AtkScrollPlugin extends AtkPlugin {
     /**
      * Bind scrolling event to an element.
      *
-     * @param {jQuery} $el
+     * @param {$} $el
      */
     bindScrollEvent($el) {
         $el.on('scroll', this.observe.bind(this));

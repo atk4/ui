@@ -11,8 +11,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
  * Vue component
@@ -102,18 +102,18 @@ const template = `<div class="atk-item-search" :class="inputCss">
     },
     sendQuery: function () {
       const that = this;
-      const options = jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, this.extraQuery, {
+      const options = external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, this.extraQuery, {
         __atk_reload: this.reload,
         [this.queryArg]: this.query
       });
-      const $reload = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#' + this.reload);
+      const $reload = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()('#' + this.reload);
       this.isActive = true;
       $reload.api({
         on: 'now',
         url: this.url,
         data: options,
         method: 'GET',
-        stateContext: this.context ? jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.context) : jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.$el),
+        stateContext: this.context ? external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.context) : external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.$el),
         onComplete: function (e, r) {
           that.isActive = false;
         }

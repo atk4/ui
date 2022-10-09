@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 
 /**
  * Allow to upload files to server via Fomantic-UI API.
@@ -11,7 +11,7 @@ class UploadService {
      * be set to 'file' only.
      *
      * @param {FileList} files
-     * @param {jQuery}   element    the jQuery element to attach to Fomantic-UI api.
+     * @param {$}        element    the jQuery element to attach to Fomantic-UI api.
      * @param {object}   data       Extra data to pass with files.
      * @param {string}   uploadUrl  the url that handle upload.
      * @param {Function} completeCb the callback for Fomantic-UI api.onComplete.
@@ -53,7 +53,4 @@ class UploadService {
     }
 }
 
-const uploadService = new UploadService();
-Object.freeze(uploadService);
-
-export default uploadService;
+export default Object.freeze(new UploadService());

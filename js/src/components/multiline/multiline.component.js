@@ -1,3 +1,4 @@
+import $ from 'external/jquery';
 import multilineBody from './multiline-body.component';
 import multilineHeader from './multiline-header.component';
 
@@ -188,7 +189,7 @@ export default {
          */
         fetchOnChangeAction: function (fieldName = null) {
             if (this.hasChangeCb && (fieldName === null || this.eventFields.indexOf(fieldName) > -1)) {
-                jQuery(this.$refs.addBtn.$el).api({
+                $(this.$refs.addBtn.$el).api({
                     on: 'now',
                     url: this.data.url,
                     method: 'post',

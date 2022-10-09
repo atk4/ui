@@ -150,7 +150,4 @@ class VueService {
     }
 }
 
-const vueService = new VueService();
-Object.freeze(vueService);
-
-export default vueService;
+export default Object.freeze(new VueService());

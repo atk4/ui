@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 import AtkServerEventPlugin from './plugins/server-event.plugin';
 import AtkReloadViewPlugin from './plugins/reload-view.plugin';
 import AtkAjaxecPlugin from './plugins/ajaxec.plugin';

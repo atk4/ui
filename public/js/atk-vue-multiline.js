@@ -451,8 +451,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _multiline_body_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./multiline-body.component */ "./src/components/multiline/multiline-body.component.js");
-/* harmony import */ var _multiline_header_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./multiline-header.component */ "./src/components/multiline/multiline-header.component.js");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _multiline_body_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./multiline-body.component */ "./src/components/multiline/multiline-body.component.js");
+/* harmony import */ var _multiline_header_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./multiline-header.component */ "./src/components/multiline/multiline-header.component.js");
+
 
 
 
@@ -515,8 +518,8 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   components: {
-    'atk-multiline-body': _multiline_body_component__WEBPACK_IMPORTED_MODULE_7__["default"],
-    'atk-multiline-header': _multiline_header_component__WEBPACK_IMPORTED_MODULE_8__["default"]
+    'atk-multiline-body': _multiline_body_component__WEBPACK_IMPORTED_MODULE_8__["default"],
+    'atk-multiline-header': _multiline_header_component__WEBPACK_IMPORTED_MODULE_9__["default"]
   },
   mounted: function () {
     this.rowData = this.buildRowData(this.value);
@@ -660,7 +663,7 @@ __webpack_require__.r(__webpack_exports__);
       let fieldName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
       if (this.hasChangeCb && (fieldName === null || this.eventFields.indexOf(fieldName) > -1)) {
-        jQuery(this.$refs.addBtn.$el).api({
+        external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this.$refs.addBtn.$el).api({
           on: 'now',
           url: this.data.url,
           method: 'post',

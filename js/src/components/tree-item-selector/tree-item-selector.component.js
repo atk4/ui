@@ -1,3 +1,5 @@
+import $ from 'external/jquery';
+
 const template = `<div class="item" :style="itemMargin">
         <i :class="toggleIcon" @click="onToggleShow" v-show="!isRoot"></i>
         <i :class="getIcon"  @click="onToggleSelect" v-show="!isRoot"></i>
@@ -267,7 +269,7 @@ export default {
          * Send data using callback url.
          */
         postValue: function () {
-            jQuery(this.$el).parents('.' + this.getRootData().options.loader).api({
+            $(this.$el).parents('.' + this.getRootData().options.loader).api({
                 on: 'now',
                 url: this.getRootData().options.url,
                 method: 'post',

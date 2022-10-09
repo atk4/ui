@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 
 class AccordionService {
     /**
@@ -15,7 +15,4 @@ class AccordionService {
     }
 }
 
-const accordionService = new AccordionService();
-Object.freeze(accordionService);
-
-export default accordionService;
+export default Object.freeze(new AccordionService());

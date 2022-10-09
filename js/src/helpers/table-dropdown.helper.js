@@ -1,5 +1,5 @@
+import $ from 'external/jquery';
 import throttle from 'lodash/throttle';
-import $ from 'jquery';
 
 /**
  * Simple helper to help displaying Fomantic-UI Dropdown within an atk table.

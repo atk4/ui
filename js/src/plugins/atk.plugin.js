@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 
 /**
  * Base implementation of jQuery plugin in Agile Toolkit.
