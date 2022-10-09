@@ -1,9 +1,6 @@
-/* global Draggable */
 import $ from 'jquery';
-import 'draggable';
-import atkPlugin from './atk.plugin';
-
-/* eslint-disable jsdoc/require-param-type */
+/* global Draggable */ // loaded after main JS
+import AtkPlugin from './atk.plugin';
 
 /**
  * Make elements inside a container draggable and sortable.
@@ -21,10 +18,8 @@ import atkPlugin from './atk.plugin';
  *
  * Element containing specific css class can be used as the handle for dragging element, if null
  * is pass, than the entire element is used.
- *
- * For a complete example check /demos/jssortable.php
  */
-export default class JsSortable extends atkPlugin {
+export default class AtkJsSortablePlugin extends AtkPlugin {
     main() {
         this.ids = [];
         // the data label attribute value of the source element being drag. ex: data-id
@@ -70,7 +65,7 @@ export default class JsSortable extends atkPlugin {
     /**
      * Will send current element order via callback.
      *
-     * @param params Extra arguments to add to uri.
+     * @param {object} params Extra arguments to add to uri.
      */
     getSortOrders(params) {
         this.sendSortOrders(params);
@@ -112,7 +107,7 @@ export default class JsSortable extends atkPlugin {
     }
 }
 
-JsSortable.DEFAULTS = {
+AtkJsSortablePlugin.DEFAULTS = {
     uri: null,
     uriOptions: null,
     container: 'tbody',

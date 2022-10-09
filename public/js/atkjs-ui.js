@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("jQuery"), require("Draggable"));
+		module.exports = factory(require("jQuery"));
 	else if(typeof define === 'function' && define.amd)
-		define("atk", ["jQuery", "Draggable"], factory);
+		define("atk", ["jQuery"], factory);
 	else if(typeof exports === 'object')
-		exports["atk"] = factory(require("jQuery"), require("Draggable"));
+		exports["atk"] = factory(require("jQuery"));
 	else
-		root["atk"] = factory(root["jQuery"], root["Draggable"]);
-})(self, (__WEBPACK_EXTERNAL_MODULE_jquery__, __WEBPACK_EXTERNAL_MODULE_draggable__) => {
+		root["atk"] = factory(root["jQuery"]);
+})(self, (__WEBPACK_EXTERNAL_MODULE_jquery__) => {
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -430,12 +430,12 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Register a jQuery plugin.
  *
- * @param {string}  name      Plugin name
- * @param {object}  plugin    Plugin instance
- * @param {boolean} shortHand Generate a shorthand as $.pluginName
+ * @param {string}   name      Plugin name
+ * @param {Function} cl        Plugin class
+ * @param {boolean}  shortHand Generate a shorthand as $.pluginName
  */
 
-function registerPlugin(name, plugin) {
+function registerPlugin(name, cl) {
   let shortHand = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
   // Add atk namespace to jQuery global space.
@@ -447,7 +447,7 @@ function registerPlugin(name, plugin) {
   const pluginName = 'atk' + name;
   const dataName = '__' + pluginName; // add plugin to atk namespace.
 
-  (jquery__WEBPACK_IMPORTED_MODULE_0___default().atk)[name] = plugin; // register plugin to jQuery fn prototype.
+  (jquery__WEBPACK_IMPORTED_MODULE_0___default().atk)[name] = cl; // register plugin to jQuery fn prototype.
 
   (jquery__WEBPACK_IMPORTED_MODULE_0___default().fn)[pluginName] = function () {
     let option = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -464,7 +464,7 @@ function registerPlugin(name, plugin) {
     }
 
     return this.each(function () {
-      const options = jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, plugin.DEFAULTS, typeof option === 'object' && option); // create plugin using the constructor function store in atk namespace object
+      const options = jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, cl.DEFAULTS, typeof option === 'object' && option); // create plugin using the constructor function store in atk namespace object
       // and add a reference of it to this jQuery object data.
 
       jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(dataName, new (jquery__WEBPACK_IMPORTED_MODULE_0___default().atk)[name](this, options));
@@ -506,14 +506,14 @@ registerPlugin('Sidenav', _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_12__[
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ajaxec)
+/* harmony export */   "default": () => (/* binding */ AtkAjaxecPlugin)
 /* harmony export */ });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
-class ajaxec extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class AtkAjaxecPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
     if (!this.settings.uri) {
       console.error('Trying to execute callback without url.');
@@ -560,7 +560,7 @@ class ajaxec extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
 
 }
-ajaxec.DEFAULTS = {
+AtkAjaxecPlugin.DEFAULTS = {
   uri: null,
   uriOptions: {},
   confirm: null,
@@ -579,22 +579,20 @@ ajaxec.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ atkPlugin)
+/* harmony export */   "default": () => (/* binding */ AtkPlugin)
 /* harmony export */ });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-
-/* eslint-disable jsdoc/require-param-type */
 
 /**
  * Base implementation of jQuery plugin in Agile Toolkit.
  */
 
-class atkPlugin {
+class AtkPlugin {
   /**
    * Default plugin constructor
    *
-   * @returns {atkPlugin}
+   * @returns {AtkPlugin}
    */
   constructor(element, options) {
     this.$el = jquery__WEBPACK_IMPORTED_MODULE_0___default()(element);
@@ -614,8 +612,8 @@ class atkPlugin {
    * Call a plugin method via the initializer function.
    * Simply call the method like: $(selector).pluginName('method', [arg1, arg2])
    *
-   * @param       fn   string representing the method name to execute.
-   * @param       args array of arguments need for the method to execute.
+   * @param   {string}    fn   string representing the method name to execute.
+   * @param   {Array.<*>} args array of arguments need for the method to execute.
    * @returns {*}
    */
 
@@ -637,7 +635,7 @@ class atkPlugin {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ columnResizer)
+/* harmony export */   "default": () => (/* binding */ AtkColumnResizerPlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -656,13 +654,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* eslint-disable jsdoc/require-param-type */
-
 /**
  * Enable table column to be resizable using drag.
  */
 
-class columnResizer extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
+class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
     // add on resize callback if url is supply.
     if (this.settings.uri) {
@@ -678,7 +674,7 @@ class columnResizer extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] 
   /**
    * Send widths to server via callback uri.
    *
-   * @param widths an Array of objects, each containing the column name and their size in pixels [{column: 'name', size: '135px'}]
+   * @param {Array.<object>} widths an Array of objects, each containing the column name and their size in pixels [{column: 'name', size: '135px'}]
    */
 
 
@@ -695,12 +691,10 @@ class columnResizer extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] 
   /**
    * On resize callback when user finish dragging column for resizing.
    * Calling this method via callback need to bind "this" set to this plugin.
-   *
-   * @param e the event.
    */
 
 
-  onResize(e) {
+  onResize(event) {
     const columns = this.$el.find('th');
     const widths = [];
     columns.each((idx, item) => {
@@ -713,7 +707,7 @@ class columnResizer extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] 
   }
 
 }
-columnResizer.DEFAULTS = {
+AtkColumnResizerPlugin.DEFAULTS = {
   atkDefaults: {
     liveDrag: true,
     resizeMode: 'overflow',
@@ -735,7 +729,7 @@ columnResizer.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ conditionalForm)
+/* harmony export */   "default": () => (/* binding */ AtkConditionalFormPlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -808,7 +802,7 @@ __webpack_require__.r(__webpack_exports__);
  * See Fomantic-UI validation rule for more details: https://fomantic-ui.com/behaviors/form.html#validation-rules
  */
 
-class conditionalForm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["default"] {
+class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["default"] {
   main() {
     this.inputs = [];
     this.selector = this.settings.selector;
@@ -931,7 +925,7 @@ class conditionalForm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["default"
   }
 
 }
-conditionalForm.DEFAULTS = {
+AtkConditionalFormPlugin.DEFAULTS = {
   autoReset: true,
   validateEvent: 'keydown',
   selector: null,
@@ -949,7 +943,7 @@ conditionalForm.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ confirm)
+/* harmony export */   "default": () => (/* binding */ AtkConfirmPlugin)
 /* harmony export */ });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
@@ -967,7 +961,7 @@ __webpack_require__.r(__webpack_exports__);
  * onApprove and onDeny current setting.
  */
 
-class confirm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class AtkConfirmPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
     let context = this;
     const $m = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div class="ui modal" />').appendTo('body').html(this.getDialogHtml(this.settings.message));
@@ -1006,7 +1000,7 @@ class confirm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
 
 }
-confirm.DEFAULTS = {
+AtkConfirmPlugin.DEFAULTS = {
   message: null,
   size: 'tiny',
   onApprove: null,
@@ -1034,14 +1028,14 @@ confirm.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ createModal)
+/* harmony export */   "default": () => (/* binding */ AtkCreateModalPlugin)
 /* harmony export */ });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
-class createModal extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class AtkCreateModalPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
     const options = this.settings; // make sure we have an object when no option is passed
 
@@ -1074,7 +1068,7 @@ class createModal extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
 
 }
-createModal.DEFAULTS = {
+AtkCreateModalPlugin.DEFAULTS = {
   title: '',
   uri: null,
   uriOptions: {},
@@ -1098,7 +1092,7 @@ createModal.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ fileUpload)
+/* harmony export */   "default": () => (/* binding */ AtkFileUploadPlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -1116,9 +1110,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* eslint-disable jsdoc/require-param-type */
-
-class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
+class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   main() {
     this.textInput = this.$el.find('input[type="text"]');
     this.hiddenInput = this.$el.find('input[type="hidden"]');
@@ -1231,11 +1223,11 @@ class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   /**
    * Do the actual file uploading process.
    *
-   * @param file the FileList object.
+   * @param {FileList} files
    */
 
 
-  doFileUpload(file) {
+  doFileUpload(files) {
     // if submit button id is set, then disable submit
     // during upload.
     if (this.settings.submit) {
@@ -1267,7 +1259,7 @@ class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
     };
 
     this.bar.show();
-    _services_upload_service__WEBPACK_IMPORTED_MODULE_5__["default"].uploadFiles(file, this.$el, {
+    _services_upload_service__WEBPACK_IMPORTED_MODULE_5__["default"].uploadFiles(files, this.$el, {
       fUploadAction: 'upload'
     }, this.settings.uri, completeCb, xhrCb);
   }
@@ -1305,7 +1297,7 @@ class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   }
 
 }
-fileUpload.DEFAULTS = {
+AtkFileUploadPlugin.DEFAULTS = {
   uri: null,
   file: {
     id: null,
@@ -1328,7 +1320,7 @@ fileUpload.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ JsSearch)
+/* harmony export */   "default": () => (/* binding */ AtkJsSearchPlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -1350,9 +1342,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* eslint-disable jsdoc/require-param-type */
-
-class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
+class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
   main() {
     this.urlArgs = {};
     this.state = {
@@ -1484,7 +1474,7 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
    * Mostly use on page load
    * when input need to be set to reflect a search state.
    *
-   * @param text The text input value.
+   * @param {string} text The text input value.
    */
 
 
@@ -1572,7 +1562,7 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
   }
 
 }
-JsSearch.DEFAULTS = {
+AtkJsSearchPlugin.DEFAULTS = {
   uri: null,
   uriOptions: {},
   uriQueryKey: null,
@@ -1593,7 +1583,7 @@ JsSearch.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ JsSortable)
+/* harmony export */   "default": () => (/* binding */ AtkJsSortablePlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -1603,18 +1593,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var draggable__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! draggable */ "draggable");
-/* harmony import */ var draggable__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(draggable__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
+/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
 
 
 /* global Draggable */
+// loaded after main JS
 
-
-
-/* eslint-disable jsdoc/require-param-type */
 
 /**
  * Make elements inside a container draggable and sortable.
@@ -1632,11 +1618,9 @@ __webpack_require__.r(__webpack_exports__);
  *
  * Element containing specific css class can be used as the handle for dragging element, if null
  * is pass, than the entire element is used.
- *
- * For a complete example check /demos/jssortable.php
  */
 
-class JsSortable extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
+class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   main() {
     this.ids = []; // the data label attribute value of the source element being drag. ex: data-id
 
@@ -1677,7 +1661,7 @@ class JsSortable extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   /**
    * Will send current element order via callback.
    *
-   * @param params Extra arguments to add to uri.
+   * @param {object} params Extra arguments to add to uri.
    */
 
 
@@ -1728,7 +1712,7 @@ class JsSortable extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   }
 
 }
-JsSortable.DEFAULTS = {
+AtkJsSortablePlugin.DEFAULTS = {
   uri: null,
   uriOptions: null,
   container: 'tbody',
@@ -1751,7 +1735,7 @@ JsSortable.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ reloadView)
+/* harmony export */   "default": () => (/* binding */ AtkReloadViewPlugin)
 /* harmony export */ });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
@@ -1771,7 +1755,7 @@ __webpack_require__.r(__webpack_exports__);
  * for POST method.
  */
 
-class reloadView extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
     if (!this.settings.uri) {
       console.error('Trying to reload view without url.');
@@ -1809,7 +1793,7 @@ class reloadView extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
 
 }
-reloadView.DEFAULTS = {
+AtkReloadViewPlugin.DEFAULTS = {
   uri: null,
   uriOptions: null,
   afterSuccess: null,
@@ -1828,7 +1812,7 @@ reloadView.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ scroll)
+/* harmony export */   "default": () => (/* binding */ AtkScrollPlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -1844,8 +1828,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* eslint-disable jsdoc/require-param-type */
-
 /**
  * Add dynamic scrolling to a View that can accept page argument in URL.
  *
@@ -1857,7 +1839,7 @@ __webpack_require__.r(__webpack_exports__);
  * stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call. if null, then a default loader will be apply to the bottom of the $inner element.
  */
 
-class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
+class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   main() {
     // check if we are initialized already because loading content
     // can recall this plugin and screw up page number.
@@ -1930,7 +1912,7 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   /**
    * Bind scrolling event to an element.
    *
-   * @param $el
+   * @param {jQuery} $el
    */
 
 
@@ -1939,12 +1921,10 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   }
   /**
    * Check if scrolling require adding content.
-   *
-   * @param e event
    */
 
 
-  observe(e) {
+  observe(event) {
     const borderTopWidth = parseInt(this.$el.css('borderTopWidth'), 10);
     const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth; // this.$el padding top value.
 
@@ -2066,7 +2046,7 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   }
 
 }
-scroll.DEFAULTS = {
+AtkScrollPlugin.DEFAULTS = {
   uri: null,
   uriOptions: {},
   options: {}
@@ -2083,13 +2063,13 @@ scroll.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ serverEvent)
+/* harmony export */   "default": () => (/* binding */ AtkServerEventPlugin)
 /* harmony export */ });
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 /* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/api.service */ "./src/services/api.service.js");
 
 
-class serverEvent extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"] {
   main() {
     const element = this.$el;
     const hasLoader = this.settings.showLoader;
@@ -2145,7 +2125,7 @@ class serverEvent extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"] {
   }
 
 }
-serverEvent.DEFAULTS = {
+AtkServerEventPlugin.DEFAULTS = {
   uri: null,
   uriOptions: {},
   showLoader: false,
@@ -2163,7 +2143,7 @@ serverEvent.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ sidenav)
+/* harmony export */   "default": () => (/* binding */ AtkSidenavPlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -2188,7 +2168,7 @@ __webpack_require__.r(__webpack_exports__);
  * Default value are set for Maestro admin layout.
  */
 
-class sidenav extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
+class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   main() {
     // menu items container.
     this.menu = this.$el.find(this.settings.menuItemsSelector);
@@ -2295,7 +2275,7 @@ class sidenav extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   }
 
 }
-sidenav.DEFAULTS = {
+AtkSidenavPlugin.DEFAULTS = {
   base: 'index.php',
   menuItemsSelector: '.atk-maestro-menu-items',
   // The css selector where menu items are contain.
@@ -2391,8 +2371,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* eslint-disable jsdoc/require-param-type */
-
 /**
  * Handle Fomantic-UI API functionality throughout the app.
  */
@@ -2415,20 +2393,22 @@ class ApiService {
   }
   /**
    * Execute js code.
+   *
    * This function should be call using .call() by
    * passing proper context for 'this'.
    * ex: apiService.evalResponse.call(this, code, jQuery)
+   *
    * By passig the jQuery reference, $ var use by code that need to be eval
    * will work just fine, even if $ is not assign globally.
    *
-   * @param code javascript to be eval.
-   * @param $    reference to jQuery.
+   * @param {string} code javascript to be eval
+   * @param {jQuery} $    reference to jQuery
    */
 
 
   evalResponse(code, $) {
     // eslint-disable-line no-shadow
-    eval(code); // eslint-disable-line no-eval
+    window.eval(code); // eslint-disable-line no-eval
   }
 
   onAbort(message) {
@@ -2518,9 +2498,8 @@ class ApiService {
    *
    * ex: $app->terminateJson(['success' => true, 'data' => $data]);
    *
-   * @param                  url      the url to fetch data
-   * @param                  settings the Fomantic-UI api settings object.
-   * @param                  el       the element to apply Fomantic-UI context.
+   * @param   {string}       url      the url to fetch data
+   * @param   {object}       settings the Fomantic-UI api settings object.
    * @returns {Promise<any>}
    */
 
@@ -2868,8 +2847,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* eslint-disable jsdoc/require-param-type */
-
 /**
  * Handle Fomantic-UI form functionality throughout the app.
  */
@@ -2957,10 +2934,10 @@ class FormService {
   /**
    * Validate a field using our own or Fomantic-UI validation rule function.
    *
-   * @param               form      Form containing the field.
-   * @param               fieldName Name of field
-   * @param               rule      Rule to apply test.
-   * @returns {*|boolean}
+   * @param   {jQuery}          form      Form containing the field.
+   * @param   {string}          fieldName Name of field
+   * @param   {string | object} rule      Rule to apply test.
+   * @returns {*|false}
    */
 
 
@@ -3344,8 +3321,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* eslint-disable jsdoc/require-param-type */
-
 /**
  * Panel needs to be reload to display different
  * content. This service will take care of this.
@@ -3432,7 +3407,7 @@ class PanelService {
    *
    * As a css class: the css class to applied to the triggered element when panel open.
    *
-   * @param params The params objects.
+   * @param {object} params
    */
 
 
@@ -3758,9 +3733,9 @@ class PanelService {
   /**
    * Set a property value for a panel designated by id.
    *
-   * @param id    the id of the panel to set property too.
-   * @param prop  the property inside panel
-   * @param value the value.
+   * @param {string} id    the id of the panel to set property too.
+   * @param {string} prop  the property inside panel
+   * @param {*}      value the value.
    */
 
 
@@ -3773,9 +3748,9 @@ class PanelService {
   }
   /**
    * Return the panel property represent by id in collections.
-   * if prop is not specify, then it will return the entire panel object.
+   * If prop is null, then it will return the entire panel object.
    *
-   * @returns {*|jQuery|HTMLElement}
+   * @returns {*}
    */
 
 
@@ -3809,8 +3784,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* eslint-disable jsdoc/require-param-type */
-
 /**
  * This is default setup for Fomantic-UI Popup.
  */
@@ -3825,8 +3798,6 @@ class PopupService {
   /**
    * OnShow callback when a popup is trigger.
    * Will check if popup need to be setup dynamically using a callback.
-   *
-   * @param $module
    */
 
 
@@ -3911,8 +3882,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
-/* eslint-disable jsdoc/require-param-type */
-
 /**
  * Allow to upload files to server via Fomantic-UI API.
  */
@@ -3924,12 +3893,12 @@ class UploadService {
    * 'file-(number)' param, except for the first one which will
    * be set to 'file' only.
    *
-   * @param files      A FileList object.
-   * @param element    the jQuery element to attach to Fomantic-UI api.
-   * @param data       Extra data to pass with files.
-   * @param uploadUrl  the url that handle upload.
-   * @param completeCb the callback for Fomantic-UI api.onComplete.
-   * @param xhrCb      the xhr function to pass to server.
+   * @param {FileList} files
+   * @param {jQuery}   element    the jQuery element to attach to Fomantic-UI api.
+   * @param {object}   data       Extra data to pass with files.
+   * @param {string}   uploadUrl  the url that handle upload.
+   * @param {Function} completeCb the callback for Fomantic-UI api.onComplete.
+   * @param {Function} xhrCb      the xhr function to pass to server.
    */
   uploadFiles(files, element, data, uploadUrl) {
     let completeCb = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : function (r, c) {};
@@ -36673,17 +36642,6 @@ Vue.compile = compileToFunctions;
 
 /***/ }),
 
-/***/ "draggable":
-/*!****************************!*\
-  !*** external "Draggable" ***!
-  \****************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = __WEBPACK_EXTERNAL_MODULE_draggable__;
-
-/***/ }),
-
 /***/ "jquery":
 /*!*************************!*\
   !*** external "jQuery" ***!
@@ -37040,10 +36998,10 @@ atk.popupService = _services_popup_service__WEBPACK_IMPORTED_MODULE_8__["default
  * Exporting services in order to be available globally
  * or by importing it into your own module.
  *
- * Available as a global Var: atk.uploadService.fileUpload()
+ * Available as a global Var: atk.uploadService.uploadFiles()
  * Available as an import:
  * import atk from atk4JS;
- * atk.uploadService.fileUpload();
+ * atk.uploadService.uploadFiles();
  */
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (atk);

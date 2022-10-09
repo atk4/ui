@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import atkPlugin from './atk.plugin';
+import AtkPlugin from './atk.plugin';
 
-export default class ajaxec extends atkPlugin {
+export default class AtkAjaxecPlugin extends AtkPlugin {
     main() {
         if (!this.settings.uri) {
             console.error('Trying to execute callback without url.');
@@ -52,7 +52,7 @@ export default class ajaxec extends atkPlugin {
     }
 }
 
-ajaxec.DEFAULTS = {
+AtkAjaxecPlugin.DEFAULTS = {
     uri: null,
     uriOptions: {},
     confirm: null,

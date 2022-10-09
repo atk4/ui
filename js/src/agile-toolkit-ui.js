@@ -33,9 +33,9 @@ atk.popupService = popupService;
  * Exporting services in order to be available globally
  * or by importing it into your own module.
  *
- * Available as a global Var: atk.uploadService.fileUpload()
+ * Available as a global Var: atk.uploadService.uploadFiles()
  * Available as an import:
  * import atk from atk4JS;
- * atk.uploadService.fileUpload();
+ * atk.uploadService.uploadFiles();
  */
 export default atk;

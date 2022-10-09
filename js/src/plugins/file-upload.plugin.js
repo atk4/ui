@@ -1,10 +1,8 @@
 import $ from 'jquery';
-import atkPlugin from './atk.plugin';
+import AtkPlugin from './atk.plugin';
 import uploadService from '../services/upload.service';
 
-/* eslint-disable jsdoc/require-param-type */
-
-export default class fileUpload extends atkPlugin {
+export default class AtkFileUploadPlugin extends AtkPlugin {
     main() {
         this.textInput = this.$el.find('input[type="text"]');
         this.hiddenInput = this.$el.find('input[type="hidden"]');
@@ -117,9 +115,9 @@ export default class fileUpload extends atkPlugin {
     /**
      * Do the actual file uploading process.
      *
-     * @param file the FileList object.
+     * @param {FileList} files
      */
-    doFileUpload(file) {
+    doFileUpload(files) {
         // if submit button id is set, then disable submit
         // during upload.
         if (this.settings.submit) {
@@ -153,7 +151,7 @@ export default class fileUpload extends atkPlugin {
 
         this.bar.show();
         uploadService.uploadFiles(
-            file,
+            files,
             this.$el,
             { fUploadAction: 'upload' },
             this.settings.uri,
@@ -190,7 +188,7 @@ export default class fileUpload extends atkPlugin {
     }
 }
 
-fileUpload.DEFAULTS = {
+AtkFileUploadPlugin.DEFAULTS = {
     uri: null,
     file: { id: null, name: null },
     uriOptions: {},

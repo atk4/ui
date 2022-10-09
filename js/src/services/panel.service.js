@@ -1,7 +1,5 @@
 import $ from 'jquery';
 
-/* eslint-disable jsdoc/require-param-type */
-
 /**
  * Panel needs to be reload to display different
  * content. This service will take care of this.
@@ -77,7 +75,7 @@ class PanelService {
      *
      * As a css class: the css class to applied to the triggered element when panel open.
      *
-     * @param params The params objects.
+     * @param {object} params
      */
     openPanel(params) {
         // if no id is provide, then get the first one.
@@ -384,9 +382,9 @@ class PanelService {
     /**
      * Set a property value for a panel designated by id.
      *
-     * @param id    the id of the panel to set property too.
-     * @param prop  the property inside panel
-     * @param value the value.
+     * @param {string} id    the id of the panel to set property too.
+     * @param {string} prop  the property inside panel
+     * @param {*}      value the value.
      */
     setPropertyValue(id, prop, value) {
         this.service.panels.forEach((panel) => {
@@ -398,9 +396,9 @@ class PanelService {
 
     /**
      * Return the panel property represent by id in collections.
-     * if prop is not specify, then it will return the entire panel object.
+     * If prop is null, then it will return the entire panel object.
      *
-     * @returns {*|jQuery|HTMLElement}
+     * @returns {*}
      */
     getPropertyValue(id, prop = null) {
         let value = null;

@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import atkPlugin from './atk.plugin';
+import AtkPlugin from './atk.plugin';
 
-export default class createModal extends atkPlugin {
+export default class AtkCreateModalPlugin extends AtkPlugin {
     main() {
         const options = this.settings;
         // make sure we have an object when no option is passed
@@ -37,7 +37,7 @@ export default class createModal extends atkPlugin {
     }
 }
 
-createModal.DEFAULTS = {
+AtkCreateModalPlugin.DEFAULTS = {
     title: '',
     uri: null,
     uriOptions: {},

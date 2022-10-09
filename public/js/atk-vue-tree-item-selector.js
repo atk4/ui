@@ -280,7 +280,7 @@ const template = `<div class="item" :style="itemMargin">
     /**
      * Get all id from all chidren node.
      *
-     * @returns {Array}
+     * @returns {Array.<string>}
      */
     collectAllChildren: function (nodes) {
       let ids = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];

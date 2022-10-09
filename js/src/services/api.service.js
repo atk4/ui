@@ -1,7 +1,5 @@
 import $ from 'jquery';
 
-/* eslint-disable jsdoc/require-param-type */
-
 /**
  * Handle Fomantic-UI API functionality throughout the app.
  */
@@ -23,17 +21,19 @@ class ApiService {
 
     /**
      * Execute js code.
+     *
      * This function should be call using .call() by
      * passing proper context for 'this'.
      * ex: apiService.evalResponse.call(this, code, jQuery)
+     *
      * By passig the jQuery reference, $ var use by code that need to be eval
      * will work just fine, even if $ is not assign globally.
      *
-     * @param code javascript to be eval.
-     * @param $    reference to jQuery.
+     * @param {string} code javascript to be eval
+     * @param {jQuery} $    reference to jQuery
      */
     evalResponse(code, $) { // eslint-disable-line no-shadow
-        eval(code); // eslint-disable-line no-eval
+        window.eval(code); // eslint-disable-line no-eval
     }
 
     onAbort(message) {
@@ -118,9 +118,8 @@ class ApiService {
      *
      * ex: $app->terminateJson(['success' => true, 'data' => $data]);
      *
-     * @param                  url      the url to fetch data
-     * @param                  settings the Fomantic-UI api settings object.
-     * @param                  el       the element to apply Fomantic-UI context.
+     * @param   {string}       url      the url to fetch data
+     * @param   {object}       settings the Fomantic-UI api settings object.
      * @returns {Promise<any>}
      */
     suiFetch(url, settings = {}, el = 'body') {

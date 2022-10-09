@@ -1,7 +1,5 @@
 import $ from 'jquery';
 
-/* eslint-disable jsdoc/require-param-type */
-
 /**
  * Handle Fomantic-UI form functionality throughout the app.
  */
@@ -83,10 +81,10 @@ class FormService {
     /**
      * Validate a field using our own or Fomantic-UI validation rule function.
      *
-     * @param               form      Form containing the field.
-     * @param               fieldName Name of field
-     * @param               rule      Rule to apply test.
-     * @returns {*|boolean}
+     * @param   {jQuery}          form      Form containing the field.
+     * @param   {string}          fieldName Name of field
+     * @param   {string | object} rule      Rule to apply test.
+     * @returns {*|false}
      */
     validateField(form, fieldName, rule) {
         rule = this.normalizeRule(rule);

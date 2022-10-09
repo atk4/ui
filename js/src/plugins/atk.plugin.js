@@ -1,15 +1,13 @@
 import $ from 'jquery';
 
-/* eslint-disable jsdoc/require-param-type */
-
 /**
  * Base implementation of jQuery plugin in Agile Toolkit.
  */
-export default class atkPlugin {
+export default class AtkPlugin {
     /**
      * Default plugin constructor
      *
-     * @returns {atkPlugin}
+     * @returns {AtkPlugin}
      */
     constructor(element, options) {
         this.$el = $(element);
@@ -29,8 +27,8 @@ export default class atkPlugin {
      * Call a plugin method via the initializer function.
      * Simply call the method like: $(selector).pluginName('method', [arg1, arg2])
      *
-     * @param       fn   string representing the method name to execute.
-     * @param       args array of arguments need for the method to execute.
+     * @param   {string}    fn   string representing the method name to execute.
+     * @param   {Array.<*>} args array of arguments need for the method to execute.
      * @returns {*}
      */
     call(fn, args) {

@@ -186,7 +186,7 @@ export default {
         /**
          * Get all id from all chidren node.
          *
-         * @returns {Array}
+         * @returns {Array.<string>}
          */
         collectAllChildren: function (nodes, ids = []) {
             nodes.forEach((node) => {

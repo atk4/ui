@@ -1,3 +1,5 @@
+/* global flatpickr */ // loaded after main JS
+
 /**
  * Wrapper for vue-flatpickr-component component.
  * https://github.com/ankurk91/vue-flatpickr-component

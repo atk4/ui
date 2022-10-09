@@ -1,9 +1,7 @@
 import $ from 'jquery';
-import atkPlugin from './atk.plugin';
+import AtkPlugin from './atk.plugin';
 
-/* eslint-disable jsdoc/require-param-type */
-
-export default class JsSearch extends atkPlugin {
+export default class AtkJsSearchPlugin extends AtkPlugin {
     main() {
         this.urlArgs = {};
         this.state = { button: false, filter: false };
@@ -127,7 +125,7 @@ export default class JsSearch extends atkPlugin {
      * Mostly use on page load
      * when input need to be set to reflect a search state.
      *
-     * @param text The text input value.
+     * @param {string} text The text input value.
      */
     setFilter(text) {
         this.textInput.val(text);
@@ -200,7 +198,7 @@ export default class JsSearch extends atkPlugin {
     }
 }
 
-JsSearch.DEFAULTS = {
+AtkJsSearchPlugin.DEFAULTS = {
     uri: null,
     uriOptions: {},
     uriQueryKey: null,

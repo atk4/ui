@@ -1,4 +1,4 @@
-import atkPlugin from './atk.plugin';
+import AtkPlugin from './atk.plugin';
 import formService from '../services/form.service';
 
 /**
@@ -46,7 +46,7 @@ import formService from '../services/form.service';
  *
  * See Fomantic-UI validation rule for more details: https://fomantic-ui.com/behaviors/form.html#validation-rules
  */
-export default class conditionalForm extends atkPlugin {
+export default class AtkConditionalFormPlugin extends AtkPlugin {
     main() {
         this.inputs = [];
         this.selector = this.settings.selector;
@@ -163,7 +163,7 @@ export default class conditionalForm extends atkPlugin {
     }
 }
 
-conditionalForm.DEFAULTS = {
+AtkConditionalFormPlugin.DEFAULTS = {
     autoReset: true,
     validateEvent: 'keydown',
     selector: null,

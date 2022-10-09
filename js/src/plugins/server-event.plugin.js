@@ -1,7 +1,7 @@
-import atkPlugin from './atk.plugin';
+import AtkPlugin from './atk.plugin';
 import apiService from '../services/api.service';
 
-export default class serverEvent extends atkPlugin {
+export default class AtkServerEventPlugin extends AtkPlugin {
     main() {
         const element = this.$el;
         const hasLoader = this.settings.showLoader;
@@ -53,7 +53,7 @@ export default class serverEvent extends atkPlugin {
     }
 }
 
-serverEvent.DEFAULTS = {
+AtkServerEventPlugin.DEFAULTS = {
     uri: null,
     uriOptions: {},
     showLoader: false,
