@@ -309,16 +309,11 @@ __webpack_require__.r(__webpack_exports__);
  * will return: myurl.php?reload=my_view
  */
 (function ($) {
-  if (!$.atk) {
-    $.atk = {};
-  }
   /**
    * Get the base url from string.
    *
    * @returns {*|string}
    */
-
-
   $.atk.getUrl = function (url) {
     return url.split('?')[0];
   };
@@ -403,28 +398,22 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "plugin": () => (/* binding */ plugin)
+/* harmony export */   "registerPlugin": () => (/* binding */ registerPlugin)
 /* harmony export */ });
-/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.for-each.js */ "./node_modules/core-js/modules/esnext.async-iterator.for-each.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "./node_modules/core-js/modules/esnext.iterator.for-each.js");
-/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugins/server-event.plugin */ "./src/plugins/server-event.plugin.js");
-/* harmony import */ var _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./plugins/reload-view.plugin */ "./src/plugins/reload-view.plugin.js");
-/* harmony import */ var _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/ajaxec.plugin */ "./src/plugins/ajaxec.plugin.js");
-/* harmony import */ var _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./plugins/create-modal.plugin */ "./src/plugins/create-modal.plugin.js");
-/* harmony import */ var _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/file-upload.plugin */ "./src/plugins/file-upload.plugin.js");
-/* harmony import */ var _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/js-search.plugin */ "./src/plugins/js-search.plugin.js");
-/* harmony import */ var _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/js-sortable.plugin */ "./src/plugins/js-sortable.plugin.js");
-/* harmony import */ var _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./plugins/conditional-form.plugin */ "./src/plugins/conditional-form.plugin.js");
-/* harmony import */ var _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/column-resizer.plugin */ "./src/plugins/column-resizer.plugin.js");
-/* harmony import */ var _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./plugins/scroll.plugin */ "./src/plugins/scroll.plugin.js");
-/* harmony import */ var _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./plugins/confirm.plugin */ "./src/plugins/confirm.plugin.js");
-/* harmony import */ var _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./plugins/sidenav.plugin */ "./src/plugins/sidenav.plugin.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./plugins/server-event.plugin */ "./src/plugins/server-event.plugin.js");
+/* harmony import */ var _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugins/reload-view.plugin */ "./src/plugins/reload-view.plugin.js");
+/* harmony import */ var _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugins/ajaxec.plugin */ "./src/plugins/ajaxec.plugin.js");
+/* harmony import */ var _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugins/create-modal.plugin */ "./src/plugins/create-modal.plugin.js");
+/* harmony import */ var _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./plugins/file-upload.plugin */ "./src/plugins/file-upload.plugin.js");
+/* harmony import */ var _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/js-search.plugin */ "./src/plugins/js-search.plugin.js");
+/* harmony import */ var _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./plugins/js-sortable.plugin */ "./src/plugins/js-sortable.plugin.js");
+/* harmony import */ var _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/conditional-form.plugin */ "./src/plugins/conditional-form.plugin.js");
+/* harmony import */ var _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/column-resizer.plugin */ "./src/plugins/column-resizer.plugin.js");
+/* harmony import */ var _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/scroll.plugin */ "./src/plugins/scroll.plugin.js");
+/* harmony import */ var _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./plugins/confirm.plugin */ "./src/plugins/confirm.plugin.js");
+/* harmony import */ var _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/sidenav.plugin */ "./src/plugins/sidenav.plugin.js");
 
 
 
@@ -437,17 +426,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-/* eslint-disable jsdoc/require-param-type */
 
 /**
- * Generate a jQuery plugin
+ * Register a jQuery plugin
  *
  * Example:
- * import plugin from 'plugin';
+ * import { registerPlugin } from 'plugin';
  *
  * class MyPlugin {
  * constructor(element, options) {
@@ -457,32 +441,33 @@ __webpack_require__.r(__webpack_exports__);
  *
  * MyPlugin.DEFAULTS = {};
  *
- * plugin('myPlugin', MyPlugin);
+ * registerPlugin('myPlugin', MyPlugin);
  *
  * credit : https://gist.github.com/monkeymonk/c08cb040431f89f99928132ca221d647
  *
  * import $ from 'jquery' will bind '$' var to jQuery var without '$' var conflicting with other library
  * in final webpack output.
  *
- * @param name      [string] Plugin name
- * @param className [object] Class of the plugin
- * @param shortHand [bool] Generate a shorthand as $.pluginName
+ * @param {string}  name      Plugin name
+ * @param {object}  plugin    Plugin instance
+ * @param {boolean} shortHand Generate a shorthand as $.pluginName
  */
 
-function plugin(name, className) {
+function registerPlugin(name, plugin) {
   let shortHand = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
   // Add atk namespace to jQuery global space.
-  if (!(jquery__WEBPACK_IMPORTED_MODULE_3___default().atk)) {
-    (jquery__WEBPACK_IMPORTED_MODULE_3___default().atk) = {};
+  // TODO should be initialized in entry JS if really needed
+  if (!(jquery__WEBPACK_IMPORTED_MODULE_0___default().atk)) {
+    (jquery__WEBPACK_IMPORTED_MODULE_0___default().atk) = {};
   }
 
   const pluginName = 'atk' + name;
   const dataName = `__${pluginName}`; // add plugin to atk namespace.
 
-  (jquery__WEBPACK_IMPORTED_MODULE_3___default().atk)[name] = className; // register plugin to jQuery fn prototype.
+  (jquery__WEBPACK_IMPORTED_MODULE_0___default().atk)[name] = plugin; // register plugin to jQuery fn prototype.
 
-  (jquery__WEBPACK_IMPORTED_MODULE_3___default().fn)[pluginName] = function () {
+  (jquery__WEBPACK_IMPORTED_MODULE_0___default().fn)[pluginName] = function () {
     let option = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
@@ -497,78 +482,35 @@ function plugin(name, className) {
     }
 
     return this.each(function () {
-      const options = jquery__WEBPACK_IMPORTED_MODULE_3___default().extend({}, className.DEFAULTS, typeof option === 'object' && option); // create plugin using the constructor function store in atk namespace object
+      const options = jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, plugin.DEFAULTS, typeof option === 'object' && option); // create plugin using the constructor function store in atk namespace object
       // and add a reference of it to this jQuery object data.
 
-      jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).data(dataName, new (jquery__WEBPACK_IMPORTED_MODULE_3___default().atk)[name](this, options));
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(dataName, new (jquery__WEBPACK_IMPORTED_MODULE_0___default().atk)[name](this, options));
     });
-  }; // - Short hand
+  }; // short hand
 
 
   if (shortHand) {
-    (jquery__WEBPACK_IMPORTED_MODULE_3___default())[pluginName] = options => jquery__WEBPACK_IMPORTED_MODULE_3___default()({})[pluginName](options);
+    (jquery__WEBPACK_IMPORTED_MODULE_0___default())[pluginName] = options => jquery__WEBPACK_IMPORTED_MODULE_0___default()({})[pluginName](options);
   }
 }
 /**
- * Create all jQuery plugins need for atk.
+ * Register all jQuery plugins needed for atk.
  */
 
 
-(function () {
-  const atkJqPlugins = [{
-    name: 'ReloadView',
-    plugin: _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_5__["default"],
-    sh: false
-  }, {
-    name: 'Ajaxec',
-    plugin: _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_6__["default"],
-    sh: false
-  }, {
-    name: 'CreateModal',
-    plugin: _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_7__["default"],
-    sh: false
-  }, {
-    name: 'ServerEvent',
-    plugin: _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_4__["default"],
-    sh: true
-  }, {
-    name: 'FileUpload',
-    plugin: _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_8__["default"],
-    sh: false
-  }, {
-    name: 'JsSearch',
-    plugin: _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_9__["default"],
-    sh: false
-  }, {
-    name: 'JsSortable',
-    plugin: _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_10__["default"],
-    sh: false
-  }, {
-    name: 'ConditionalForm',
-    plugin: _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_11__["default"],
-    sh: true
-  }, {
-    name: 'ColumnResizer',
-    plugin: _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_12__["default"],
-    sh: false
-  }, {
-    name: 'Scroll',
-    plugin: _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_13__["default"],
-    sh: false
-  }, {
-    name: 'Confirm',
-    plugin: _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_14__["default"],
-    sh: true
-  }, {
-    name: 'Sidenav',
-    plugin: _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_15__["default"],
-    sh: false
-  }];
-  atkJqPlugins.forEach(atkJqPlugin => {
-    plugin(atkJqPlugin.name, atkJqPlugin.plugin, atkJqPlugin.sh);
-  });
-})();
-
+registerPlugin('ReloadView', _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_2__["default"]);
+registerPlugin('Ajaxec', _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_3__["default"]);
+registerPlugin('CreateModal', _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_4__["default"]);
+registerPlugin('ServerEvent', _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_1__["default"], true);
+registerPlugin('FileUpload', _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_5__["default"]);
+registerPlugin('JsSearch', _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_6__["default"]);
+registerPlugin('JsSortable', _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_7__["default"]);
+registerPlugin('ConditionalForm', _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_8__["default"], true);
+registerPlugin('ColumnResizer', _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_9__["default"]);
+registerPlugin('Scroll', _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_10__["default"]);
+registerPlugin('Confirm', _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_11__["default"], true);
+registerPlugin('Sidenav', _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_12__["default"]);
 
 
 /***/ }),
@@ -37412,8 +37354,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var atk_fomantic_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk-fomantic-ui */ "./src/atk-fomantic-ui.js");
 /* harmony import */ var locutus_php_datetime_date__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! locutus/php/datetime/date */ "./node_modules/locutus/php/datetime/date.js");
 /* harmony import */ var locutus_php_datetime_date__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(locutus_php_datetime_date__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./helpers/table-dropdown.helper */ "./src/helpers/table-dropdown.helper.js");
-/* harmony import */ var _plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugin */ "./src/plugin.js");
+/* harmony import */ var _plugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugin */ "./src/plugin.js");
+/* harmony import */ var _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helpers/table-dropdown.helper */ "./src/helpers/table-dropdown.helper.js");
 /* harmony import */ var _atk_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./atk-utils */ "./src/atk-utils.js");
 /* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/data.service */ "./src/services/data.service.js");
 /* harmony import */ var _services_panel_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/panel.service */ "./src/services/panel.service.js");
@@ -37438,11 +37380,11 @@ atk.eventBus = _atk_utils__WEBPACK_IMPORTED_MODULE_5__.atkEventBus;
 atk.utils = _atk_utils__WEBPACK_IMPORTED_MODULE_5__.atkUtils;
 atk.debounce = _atk_utils__WEBPACK_IMPORTED_MODULE_5__.atkDebounce; // Allow to register a plugin with jQuery;
 
-atk.registerPlugin = _plugin__WEBPACK_IMPORTED_MODULE_4__.plugin;
+atk.registerPlugin = _plugin__WEBPACK_IMPORTED_MODULE_3__.registerPlugin;
 atk.phpDate = (locutus_php_datetime_date__WEBPACK_IMPORTED_MODULE_2___default());
 atk.dataService = _services_data_service__WEBPACK_IMPORTED_MODULE_6__["default"];
 atk.panelService = _services_panel_service__WEBPACK_IMPORTED_MODULE_7__["default"];
-atk.tableDropdown = _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_3__.tableDropdown;
+atk.tableDropdown = _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_4__.tableDropdown;
 atk.vueService = _services_vue_service__WEBPACK_IMPORTED_MODULE_8__["default"];
 atk.popupService = _services_popup_service__WEBPACK_IMPORTED_MODULE_9__["default"];
 /**

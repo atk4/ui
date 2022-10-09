@@ -12,10 +12,6 @@
  */
 
 (function ($) {
-    if (!$.atk) {
-        $.atk = {};
-    }
-
     /**
      * Get the base url from string.
      *

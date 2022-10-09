@@ -12,13 +12,11 @@ import scroll from './plugins/scroll.plugin';
 import confirm from './plugins/confirm.plugin';
 import sidenav from './plugins/sidenav.plugin';
 
-/* eslint-disable jsdoc/require-param-type */
-
 /**
- * Generate a jQuery plugin
+ * Register a jQuery plugin
  *
  * Example:
- * import plugin from 'plugin';
+ * import { registerPlugin } from 'plugin';
  *
  * class MyPlugin {
  * constructor(element, options) {
@@ -28,19 +26,20 @@ import sidenav from './plugins/sidenav.plugin';
  *
  * MyPlugin.DEFAULTS = {};
  *
- * plugin('myPlugin', MyPlugin);
+ * registerPlugin('myPlugin', MyPlugin);
  *
  * credit : https://gist.github.com/monkeymonk/c08cb040431f89f99928132ca221d647
  *
  * import $ from 'jquery' will bind '$' var to jQuery var without '$' var conflicting with other library
  * in final webpack output.
  *
- * @param name      [string] Plugin name
- * @param className [object] Class of the plugin
- * @param shortHand [bool] Generate a shorthand as $.pluginName
+ * @param {string}  name      Plugin name
+ * @param {object}  plugin    Plugin instance
+ * @param {boolean} shortHand Generate a shorthand as $.pluginName
  */
-function plugin(name, className, shortHand = false) {
+function registerPlugin(name, plugin, shortHand = false) {
     // Add atk namespace to jQuery global space.
+    // TODO should be initialized in entry JS if really needed
     if (!$.atk) {
         $.atk = {};
     }
@@ -49,7 +48,7 @@ function plugin(name, className, shortHand = false) {
     const dataName = `__${pluginName}`;
 
     // add plugin to atk namespace.
-    $.atk[name] = className;
+    $.atk[name] = plugin;
 
     // register plugin to jQuery fn prototype.
     $.fn[pluginName] = function (option = {}, args = []) {
@@ -63,41 +62,33 @@ function plugin(name, className, shortHand = false) {
         }
 
         return this.each(function () {
-            const options = $.extend({}, className.DEFAULTS, typeof option === 'object' && option);
+            const options = $.extend({}, plugin.DEFAULTS, typeof option === 'object' && option);
             // create plugin using the constructor function store in atk namespace object
             // and add a reference of it to this jQuery object data.
             $(this).data(dataName, new $.atk[name](this, options));
         });
     };
 
-    // - Short hand
+    // short hand
     if (shortHand) {
         $[pluginName] = (options) => $({})[pluginName](options);
     }
 }
 
 /**
- * Create all jQuery plugins need for atk.
+ * Register all jQuery plugins needed for atk.
  */
-(function () {
-    const atkJqPlugins = [
-        { name: 'ReloadView', plugin: reloadView, sh: false },
-        { name: 'Ajaxec', plugin: ajaxec, sh: false },
-        { name: 'CreateModal', plugin: createModal, sh: false },
-        { name: 'ServerEvent', plugin: serverEvent, sh: true },
-        { name: 'FileUpload', plugin: fileUpload, sh: false },
-        { name: 'JsSearch', plugin: JsSearch, sh: false },
-        { name: 'JsSortable', plugin: JsSortable, sh: false },
-        { name: 'ConditionalForm', plugin: conditionalForm, sh: true },
-        { name: 'ColumnResizer', plugin: columnResizer, sh: false },
-        { name: 'Scroll', plugin: scroll, sh: false },
-        { name: 'Confirm', plugin: confirm, sh: true },
-        { name: 'Sidenav', plugin: sidenav, sh: false },
-    ];
+registerPlugin('ReloadView', reloadView);
+registerPlugin('Ajaxec', ajaxec);
+registerPlugin('CreateModal', createModal);
+registerPlugin('ServerEvent', serverEvent, true);
+registerPlugin('FileUpload', fileUpload);
+registerPlugin('JsSearch', JsSearch);
+registerPlugin('JsSortable', JsSortable);
+registerPlugin('ConditionalForm', conditionalForm, true);
+registerPlugin('ColumnResizer', columnResizer);
+registerPlugin('Scroll', scroll);
+registerPlugin('Confirm', confirm, true);
+registerPlugin('Sidenav', sidenav);
 
-    atkJqPlugins.forEach((atkJqPlugin) => {
-        plugin(atkJqPlugin.name, atkJqPlugin.plugin, atkJqPlugin.sh);
-    });
-}());
-
-export { plugin };
+export { registerPlugin };
