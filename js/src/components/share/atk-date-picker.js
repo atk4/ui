@@ -2,12 +2,13 @@
  * Wrapper for vue-flatpickr-component component.
  * https://github.com/ankurk91/vue-flatpickr-component
  *
- * Props
+ * Props:
  * config: Any of flatpickr options
+ *
  * Will emit a dateChange event when date is set.
  */
 
-const template = '<flat-picker v-model="date" :config="flatPickr" @on-change="onChange"></flat-picker>';
+const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-change="onChange"></flatpickr-picker>';
 
 export default {
     name: 'atk-date-picker',

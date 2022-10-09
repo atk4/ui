@@ -1,6 +1,6 @@
 import mitt from 'mitt';
-import 'helpers/url.helper';
 import lodashDebounce from 'lodash/debounce';
+import './helpers/url.helper';
 
 /**
  * Define atk global options.

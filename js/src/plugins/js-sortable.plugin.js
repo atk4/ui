@@ -1,7 +1,7 @@
 /* global Draggable */
 import $ from 'jquery';
-import atkPlugin from './atk.plugin';
 import 'draggable';
+import atkPlugin from './atk.plugin';
 
 /* eslint-disable jsdoc/require-param-type */
 

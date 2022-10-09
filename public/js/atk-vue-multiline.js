@@ -781,11 +781,12 @@ __webpack_require__.r(__webpack_exports__);
  * Wrapper for vue-flatpickr-component component.
  * https://github.com/ankurk91/vue-flatpickr-component
  *
- * Props
+ * Props:
  * config: Any of flatpickr options
+ *
  * Will emit a dateChange event when date is set.
  */
-const template = '<flat-picker v-model="date" :config="flatPickr" @on-change="onChange"></flat-picker>';
+const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-change="onChange"></flatpickr-picker>';
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-date-picker',
   template: template,
@@ -843,9 +844,9 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
  *
- * Props
- * config :
- * url : the callback url. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
+ * Props:
+ * config:
+ * url: the callback url. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
  * reference: the reference field name associate with model or hasOne name. This field name will be sent along with url callback parameter as of 'field=name'.
  * ui: the css class name to apply to dropdown.
  * Note: The remaining config object may contain any or sui-dropdown {props: value} pair.

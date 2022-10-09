@@ -7,7 +7,7 @@ Vue.config.devtools = false;
 
 Vue.use(SemanticUiVue);
 
-Vue.component('flat-picker', () => import('vue-flatpickr-component'));
+Vue.component('flatpickr-picker', () => import('vue-flatpickr-component'));
 
 // vue loader component to display while dynamic component is loading
 const atkVueLoader = {

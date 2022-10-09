@@ -1,5 +1,5 @@
 import 'core-js/stable';
-import atkFomantic from 'atk-fomantic-ui';
+import atkFomantic from './atk-fomantic-ui';
 import { registerPlugin } from './plugin';
 import { tableDropdown } from './helpers/table-dropdown.helper';
 import {

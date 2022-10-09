@@ -24,8 +24,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var services_api_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! services/api.service */ "./src/services/api.service.js");
-/* harmony import */ var services_modal_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! services/modal.service */ "./src/services/modal.service.js");
+/* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./services/api.service */ "./src/services/api.service.js");
+/* harmony import */ var _services_modal_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services/modal.service */ "./src/services/modal.service.js");
 /* harmony import */ var _services_upload_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./services/upload.service */ "./src/services/upload.service.js");
 /* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./services/form.service */ "./src/services/form.service.js");
 /* harmony import */ var _services_popup_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/popup.service */ "./src/services/popup.service.js");
@@ -38,15 +38,15 @@ __webpack_require__.r(__webpack_exports__);
 
  // setup app service for Fomantic-UI
 
-services_api_service__WEBPACK_IMPORTED_MODULE_1__["default"].setService((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.api.settings));
-services_modal_service__WEBPACK_IMPORTED_MODULE_2__["default"].setModals((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.modal.settings));
+_services_api_service__WEBPACK_IMPORTED_MODULE_1__["default"].setService((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.api.settings));
+_services_modal_service__WEBPACK_IMPORTED_MODULE_2__["default"].setModals((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.modal.settings));
 _services_form_service__WEBPACK_IMPORTED_MODULE_4__["default"].setService((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.form.settings));
 _services_popup_service__WEBPACK_IMPORTED_MODULE_5__["default"].setPopups((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.popup.settings));
 _services_accordion_service__WEBPACK_IMPORTED_MODULE_6__["default"].setService((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.accordion.settings));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   uploadService: _services_upload_service__WEBPACK_IMPORTED_MODULE_3__["default"],
-  apiService: services_api_service__WEBPACK_IMPORTED_MODULE_1__["default"],
-  modalService: services_modal_service__WEBPACK_IMPORTED_MODULE_2__["default"],
+  apiService: _services_api_service__WEBPACK_IMPORTED_MODULE_1__["default"],
+  modalService: _services_modal_service__WEBPACK_IMPORTED_MODULE_2__["default"],
   formService: _services_form_service__WEBPACK_IMPORTED_MODULE_4__["default"]
 });
 
@@ -67,8 +67,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "atkUtils": () => (/* binding */ atkUtils)
 /* harmony export */ });
 /* harmony import */ var mitt__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mitt */ "./node_modules/mitt/dist/mitt.es.js");
-/* harmony import */ var helpers_url_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! helpers/url.helper */ "./src/helpers/url.helper.js");
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
+/* harmony import */ var _helpers_url_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./helpers/url.helper */ "./src/helpers/url.helper.js");
 
 
 
@@ -428,25 +428,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Register a jQuery plugin
- *
- * Example:
- * import { registerPlugin } from 'plugin';
- *
- * class MyPlugin {
- * constructor(element, options) {
- * // ...
- * }
- * }
- *
- * MyPlugin.DEFAULTS = {};
- *
- * registerPlugin('myPlugin', MyPlugin);
- *
- * credit : https://gist.github.com/monkeymonk/c08cb040431f89f99928132ca221d647
- *
- * import $ from 'jquery' will bind '$' var to jQuery var without '$' var conflicting with other library
- * in final webpack output.
+ * Register a jQuery plugin.
  *
  * @param {string}  name      Plugin name
  * @param {object}  plugin    Plugin instance
@@ -1621,9 +1603,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jquery */ "jquery");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-/* harmony import */ var draggable__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! draggable */ "draggable");
-/* harmony import */ var draggable__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(draggable__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var draggable__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! draggable */ "draggable");
+/* harmony import */ var draggable__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(draggable__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
 
@@ -1654,7 +1636,7 @@ __webpack_require__.r(__webpack_exports__);
  * For a complete example check /demos/jssortable.php
  */
 
-class JsSortable extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
+class JsSortable extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
     this.ids = []; // the data label attribute value of the source element being drag. ex: data-id
 
@@ -4024,7 +4006,7 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].config.productionTip = false;
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].config.devtools = false;
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].use((semantic_ui_vue__WEBPACK_IMPORTED_MODULE_5___default()));
-vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('flat-picker', () => __webpack_require__.e(/*! import() */ "vendor-vue-flatpickr").then(__webpack_require__.t.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js", 23))); // vue loader component to display while dynamic component is loading
+vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('flatpickr-picker', () => __webpack_require__.e(/*! import() */ "vendor-vue-flatpickr").then(__webpack_require__.t.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js", 23))); // vue loader component to display while dynamic component is loading
 
 const atkVueLoader = {
   name: 'atk-vue-loader',
@@ -37022,7 +37004,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var core_js_stable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/stable */ "./node_modules/core-js/stable/index.js");
 /* harmony import */ var core_js_stable__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_stable__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var atk_fomantic_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk-fomantic-ui */ "./src/atk-fomantic-ui.js");
+/* harmony import */ var _atk_fomantic_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk-fomantic-ui */ "./src/atk-fomantic-ui.js");
 /* harmony import */ var _plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugin */ "./src/plugin.js");
 /* harmony import */ var _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./helpers/table-dropdown.helper */ "./src/helpers/table-dropdown.helper.js");
 /* harmony import */ var _atk_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./atk-utils */ "./src/atk-utils.js");
@@ -37041,7 +37023,7 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.p = window.__atkBundlePublicPath + '/'; // eslint-disable-line no-undef, camelcase, no-underscore-dangle
 
-const atk = { ...atk_fomantic_ui__WEBPACK_IMPORTED_MODULE_1__["default"]
+const atk = { ..._atk_fomantic_ui__WEBPACK_IMPORTED_MODULE_1__["default"]
 };
 atk.options = _atk_utils__WEBPACK_IMPORTED_MODULE_4__.atkOptions;
 atk.eventBus = _atk_utils__WEBPACK_IMPORTED_MODULE_4__.atkEventBus;

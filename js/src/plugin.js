@@ -13,25 +13,7 @@ import confirm from './plugins/confirm.plugin';
 import sidenav from './plugins/sidenav.plugin';
 
 /**
- * Register a jQuery plugin
- *
- * Example:
- * import { registerPlugin } from 'plugin';
- *
- * class MyPlugin {
- * constructor(element, options) {
- * // ...
- * }
- * }
- *
- * MyPlugin.DEFAULTS = {};
- *
- * registerPlugin('myPlugin', MyPlugin);
- *
- * credit : https://gist.github.com/monkeymonk/c08cb040431f89f99928132ca221d647
- *
- * import $ from 'jquery' will bind '$' var to jQuery var without '$' var conflicting with other library
- * in final webpack output.
+ * Register a jQuery plugin.
  *
  * @param {string}  name      Plugin name
  * @param {object}  plugin    Plugin instance
