@@ -7,7 +7,7 @@ export default class serverEvent extends atkPlugin {
         const hasLoader = this.settings.showLoader;
 
         if (typeof (EventSource) !== 'undefined') {
-            this.source = new EventSource(`${this.settings.uri}&__atk_sse=1`);
+            this.source = new EventSource(this.settings.uri + '&__atk_sse=1');
             if (hasLoader) {
                 element.addClass('loading');
             }

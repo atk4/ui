@@ -16,7 +16,7 @@ export default class createModal extends atkPlugin {
         // add setting to our modal for modalService
         $m.data({
             uri: options.uri,
-            type: options.data_type,
+            type: options.dataType,
             args: options.uriOptions,
             needRemove: true,
             needCloseTrigger: true,

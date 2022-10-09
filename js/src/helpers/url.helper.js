@@ -3,12 +3,12 @@
  *
  * - AddParams - Pass an url with an object and object key=value pair will be
  * added to the url as get parameter.
- * ex: $.atkAddParams('myurl.php', {q: 'test', 'reload': 'my_view'})
- * will return: myurl.php?q=test&reload=my_view
+ * ex: $.atkAddParams('myurl.php', {q: 'test', 'reload': 'myView'})
+ * will return: myurl.php?q=test&reload=myView
  *
  * - RemoveParam - remove a parameter from an url string.
- * ex: $.atkRemoveParam('myurl.php?q=test&reload=my_view', 'q')
- * will return: myurl.php?reload=my_view
+ * ex: $.atkRemoveParam('myurl.php?q=test&reload=myView', 'q')
+ * will return: myurl.php?reload=myView
  */
 
 (function ($) {

@@ -45,7 +45,7 @@ function registerPlugin(name, plugin, shortHand = false) {
     }
 
     const pluginName = 'atk' + name;
-    const dataName = `__${pluginName}`;
+    const dataName = '__' + pluginName;
 
     // add plugin to atk namespace.
     $.atk[name] = plugin;

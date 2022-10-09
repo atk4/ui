@@ -238,7 +238,7 @@ function showTableDropdown() {
 
     top -= jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).scrollTop();
     left = position.left;
-    const style = `position: fixed; z-index: 12; top: 0px; margin-top: ${top}px !important; left: ${left}px !important; width: fit-content !important; height: fit-content; min-width: 12px`;
+    const style = 'position: fixed; z-index: 12; top: 0px; margin-top: ' + top + 'px !important;' + ' left: ' + left + 'px !important; width: fit-content !important; height: fit-content; min-width: 12px;';
     $menu.css('cssText', style);
   }
 
@@ -301,12 +301,12 @@ __webpack_require__.r(__webpack_exports__);
  *
  * - AddParams - Pass an url with an object and object key=value pair will be
  * added to the url as get parameter.
- * ex: $.atkAddParams('myurl.php', {q: 'test', 'reload': 'my_view'})
- * will return: myurl.php?q=test&reload=my_view
+ * ex: $.atkAddParams('myurl.php', {q: 'test', 'reload': 'myView'})
+ * will return: myurl.php?q=test&reload=myView
  *
  * - RemoveParam - remove a parameter from an url string.
- * ex: $.atkRemoveParam('myurl.php?q=test&reload=my_view', 'q')
- * will return: myurl.php?reload=my_view
+ * ex: $.atkRemoveParam('myurl.php?q=test&reload=myView', 'q')
+ * will return: myurl.php?reload=myView
  */
 (function ($) {
   /**
@@ -463,7 +463,7 @@ function registerPlugin(name, plugin) {
   }
 
   const pluginName = 'atk' + name;
-  const dataName = `__${pluginName}`; // add plugin to atk namespace.
+  const dataName = '__' + pluginName; // add plugin to atk namespace.
 
   (jquery__WEBPACK_IMPORTED_MODULE_0___default().atk)[name] = plugin; // register plugin to jQuery fn prototype.
 
@@ -805,13 +805,13 @@ __webpack_require__.r(__webpack_exports__);
  * $form->js()->atkConditionalForm(
  * [ 'fieldRules =>
  * [
- * 'hair_cut' => [
+ * 'haircut' => [
  * ['race' => 'contains[poodle]', 'age' => 'integer[0..5]'],
  * ['race' => 'isExactly[bichon]']
  * ]
  * ]
  * ]);
- * Can be phrase this way: Display 'hair_cut' if 'race' contains 'poodle' AND 'age' is between 0 and 5 OR 'race' contains the exact word 'bichon'.
+ * Can be phrase this way: Display 'haircut' if 'race' contains 'poodle' AND 'age' is between 0 and 5 OR 'race' contains the exact word 'bichon'.
  *
  * Adding an array of conditions for the same field is also support.
  *
@@ -1072,7 +1072,7 @@ class createModal extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
 
     $m.data({
       uri: options.uri,
-      type: options.data_type,
+      type: options.dataType,
       args: options.uriOptions,
       needRemove: true,
       needCloseTrigger: true,
@@ -1286,7 +1286,7 @@ class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
 
     this.bar.show();
     _services_upload_service__WEBPACK_IMPORTED_MODULE_5__["default"].uploadFiles(file, this.$el, {
-      f_upload_action: 'upload'
+      fUploadAction: 'upload'
     }, this.settings.uri, completeCb, xhrCb);
   }
   /**
@@ -1299,8 +1299,8 @@ class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
       on: 'now',
       url: this.settings.uri,
       data: {
-        f_upload_action: 'delete',
-        f_upload_id: fileId
+        fUploadAction: 'delete',
+        fUploadId: fileId
       },
       method: 'POST',
       obj: this.$el,
@@ -2113,7 +2113,7 @@ class serverEvent extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"] {
     const hasLoader = this.settings.showLoader;
 
     if (typeof EventSource !== 'undefined') {
-      this.source = new EventSource(`${this.settings.uri}&__atk_sse=1`);
+      this.source = new EventSource(this.settings.uri + '&__atk_sse=1');
 
       if (hasLoader) {
         element.addClass('loading');

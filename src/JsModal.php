@@ -19,7 +19,7 @@ class JsModal extends JsExpression
             $url = $url->getJsUrl('cut');
         }
 
-        parent::__construct('$(this).atkCreateModal([arg])', ['arg' => ['uri' => $url, 'title' => $title, 'data_type' => $dataType, 'uriOptions' => $args]]);
+        parent::__construct('$(this).atkCreateModal([arg])', ['arg' => ['uri' => $url, 'title' => $title, 'dataType' => $dataType, 'uriOptions' => $args]]);
 
         if (!$title) {
             $this->removeHeader();
