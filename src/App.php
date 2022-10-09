@@ -485,9 +485,6 @@ class App
         $this->requireJs($this->cdn['fomantic-ui'] . '/semantic.min.js');
         $this->requireCss($this->cdn['fomantic-ui'] . '/semantic.min.css');
 
-        // Serialize Object
-        $this->requireJs($this->cdn['atk'] . '/external/form-serializer/dist/jquery.serialize-object.min.js');
-
         // flatpickr
         $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
         $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');

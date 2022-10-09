@@ -28,14 +28,6 @@ if (fs.existsSync(path.join(__dirname, 'node_modules/jquery'))) {
     fs.rmdirSync(path.join(__dirname, 'node_modules'));
 }
 
-// copy non-minified JS to make it available from the same directory as the minified version
-if (fs.existsSync(path.join(__dirname, 'form-serializer/jquery.serialize-object.js'))) {
-    fs.renameSync(
-        path.join(__dirname, 'form-serializer/jquery.serialize-object.js'),
-        path.join(__dirname, 'form-serializer/dist/jquery.serialize-object.js'),
-    );
-}
-
 const cssUrlPattern = '((?<!\\w)url\\([\'"]?(?!data:))((?:[^(){}\\\\\'"]|\\\\.)*)([\'"]?\\))';
 
 // use native font stack in Fomantic-UI

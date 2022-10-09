@@ -30,7 +30,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./services/form.service */ "./src/services/form.service.js");
 /* harmony import */ var _services_popup_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/popup.service */ "./src/services/popup.service.js");
 /* harmony import */ var _services_accordion_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/accordion.service */ "./src/services/accordion.service.js");
-/* global FormSerializer */
 
 
 
@@ -44,16 +43,6 @@ services_modal_service__WEBPACK_IMPORTED_MODULE_2__["default"].setModals((jquery
 _services_form_service__WEBPACK_IMPORTED_MODULE_4__["default"].setService((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.form.settings));
 _services_popup_service__WEBPACK_IMPORTED_MODULE_5__["default"].setPopups((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.popup.settings));
 _services_accordion_service__WEBPACK_IMPORTED_MODULE_6__["default"].setService((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.accordion.settings));
-
-if (typeof FormSerializer !== 'undefined') {
-  // setup jQuery FormSerializer to accept in input name with dash char (-)
-  jquery__WEBPACK_IMPORTED_MODULE_0___default().extend(FormSerializer.patterns, {
-    validate: /^[a-z_][a-z0-9_-]*(?:\[(?:\d*|[a-z0-9_-]+)\])*$/i,
-    key: /[a-z0-9_-]+|(?=\[\])/gi,
-    named: /^[a-z0-9_-]+$/i
-  });
-}
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   uploadService: _services_upload_service__WEBPACK_IMPORTED_MODULE_3__["default"],
   apiService: services_api_service__WEBPACK_IMPORTED_MODULE_1__["default"],

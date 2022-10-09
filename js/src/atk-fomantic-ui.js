@@ -1,4 +1,3 @@
-/* global FormSerializer */
 import $ from 'jquery';
 import apiService from 'services/api.service';
 import modalService from 'services/modal.service';
@@ -13,15 +12,6 @@ modalService.setModals($.fn.modal.settings);
 formService.setService($.fn.form.settings);
 popupService.setPopups($.fn.popup.settings);
 accordionService.setService($.fn.accordion.settings);
-
-if (typeof FormSerializer !== 'undefined') {
-    // setup jQuery FormSerializer to accept in input name with dash char (-)
-    $.extend(FormSerializer.patterns, {
-        validate: /^[a-z_][a-z0-9_-]*(?:\[(?:\d*|[a-z0-9_-]+)\])*$/i,
-        key: /[a-z0-9_-]+|(?=\[\])/gi,
-        named: /^[a-z0-9_-]+$/i,
-    });
-}
 
 export default {
     uploadService: uploadService,
