@@ -34,7 +34,7 @@ module.exports = {
         'default-case': 'off',
         'import/prefer-default-export': 'off',
         'no-console': ['error', { allow: ['warn', 'error'] }],
-        'no-underscore-dangle': ['error', { allow: ['__atkml', '__atkml_action', '__atk_reload'] }],
+        'no-underscore-dangle': ['error', { allow: ['__atk_reload', '__atkml', '__atkml_action'] }],
         'max-len': 'off',
         'prefer-template': ['off'],
         'no-unused-vars': ['error', { vars: 'all', args: 'none' }],

@@ -26,13 +26,13 @@ import formService from '../services/form.service';
  * $form->js()->atkConditionalForm(
  * [ 'fieldRules =>
  * [
- * 'hair_cut' => [
+ * 'haircut' => [
  * ['race' => 'contains[poodle]', 'age' => 'integer[0..5]'],
  * ['race' => 'isExactly[bichon]']
  * ]
  * ]
  * ]);
- * Can be phrase this way: Display 'hair_cut' if 'race' contains 'poodle' AND 'age' is between 0 and 5 OR 'race' contains the exact word 'bichon'.
+ * Can be phrase this way: Display 'haircut' if 'race' contains 'poodle' AND 'age' is between 0 and 5 OR 'race' contains the exact word 'bichon'.
  *
  * Adding an array of conditions for the same field is also support.
  *
