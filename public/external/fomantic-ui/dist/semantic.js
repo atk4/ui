@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.0-beta.326+ad08d37
+ * # Fomantic UI - 2.9.0
  * https://github.com/fomantic/Fomantic-UI
  * http://fomantic-ui.com/
  *
@@ -1128,7 +1128,7 @@ $.fn.form = function(parameters) {
             if((t=$field.filter('[data-' + metadata.validate + '="'+ identifier +'"]')).length > 0 ) {
               return t;
             }
-            module.debug('Field identifier not found.', identifier);
+            module.error(error.noField.replace('{identifier}',identifier));
             return $('<input/>');
           },
           fields: function(fields) {
@@ -2115,6 +2115,7 @@ $.fn.form.settings = {
     method     : 'The method you called is not defined.',
     noRule     : 'There is no rule matching the one you specified',
     oldSyntax  : 'Starting in 2.0 forms now only take a single settings object. Validation settings converted to new syntax automatically.',
+    noField    : 'Field identifier {identifier} not found',
     noElement  : 'This module requires ui {element}'
   },
 
@@ -23771,6 +23772,18 @@ $.fn.sticky = function(parameters) {
               module.determineContainer();
             }
             else {
+              var tallestHeight = Math.max(module.cache.context.height, module.cache.element.height);
+              if(tallestHeight - $container.outerHeight() > settings.jitter) {
+                module.debug('Context is taller than container. Specifying exact height for container', module.cache.context.height);
+                $container.css({
+                  height: tallestHeight,
+                });
+              }
+              else {
+                $container.css({
+                  height: '',
+                });
+              }
               if( Math.abs($container.outerHeight() - module.cache.context.height) > settings.jitter) {
                 module.debug('Context has padding, specifying exact height for container', module.cache.context.height);
                 $container.css({
@@ -23869,7 +23882,7 @@ $.fn.sticky = function(parameters) {
                 module.bindBottom();
               }
               else if(scroll.top > element.top) {
-                if( (element.height + scroll.top - elementScroll) >= context.bottom ) {
+                if( (element.height + scroll.top - elementScroll) >= context.bottom && element.height < context.height) {
                   module.debug('Initial element position is bottom of container');
                   module.bindBottom();
                 }
@@ -23948,6 +23961,9 @@ $.fn.sticky = function(parameters) {
         bindTop: function() {
           module.debug('Binding element to top of parent container');
           module.remove.offset();
+          if(settings.setSize) {
+            module.set.size();
+          }
           $module
             .css({
               left         : '',
@@ -23965,6 +23981,9 @@ $.fn.sticky = function(parameters) {
         bindBottom: function() {
           module.debug('Binding element to bottom of parent container');
           module.remove.offset();
+          if(settings.setSize) {
+            module.set.size();
+          }
           $module
             .css({
               left         : '',

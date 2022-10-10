@@ -485,7 +485,7 @@ class App
         $this->requireJs($this->cdn['fomantic-ui'] . '/semantic.min.js');
         $this->requireCss($this->cdn['fomantic-ui'] . '/semantic.min.css');
 
-        // flatpickr - TODO should be load only when needed
+        // flatpickr - TODO should be loaded only when needed
         // needs https://github.com/atk4/ui/issues/1875
         $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
         $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');
