@@ -48,8 +48,8 @@ class JsSortable extends JsCallback
         $this->getApp()->requireJs($this->getApp()->cdn['atk'] . '/external/@shopify/draggable/lib/draggable.bundle.js');
 
         $this->view->js(true)->atkJsSortable([
-            'uri' => $this->getJsUrl(),
-            'uriOptions' => $this->args,
+            'url' => $this->getJsUrl(),
+            'urlOptions' => $this->args,
             'container' => $this->container,
             'draggable' => $this->draggable,
             'handleClass' => $this->handleClass,
@@ -76,12 +76,12 @@ class JsSortable extends JsCallback
     /**
      * Return js action to retrieve order.
      *
-     * @param array|null $uriOptions
+     * @param array|null $urlOptions
      *
      * @return mixed
      */
-    public function jsGetOrders($uriOptions = null)
+    public function jsGetOrders($urlOptions = null)
     {
-        return $this->view->js()->atkJsSortable('getSortOrders', [$uriOptions]);
+        return $this->view->js()->atkJsSortable('getSortOrders', [$urlOptions]);
     }
 }

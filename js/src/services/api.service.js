@@ -63,7 +63,7 @@ class ApiService {
                         // Need a way to gracefully abort server request.
                         // when user cancel a request by selecting another request.
                         console.error('Unable to replace element with id: ' + response.id);
-                        // throw({message:'Unable to replace element with id: '+ response.id});
+                        // throw Error('Unable to replace element with id: ' + response.id);
                     }
                 }
                 if (response.portals) {
@@ -107,7 +107,7 @@ class ApiService {
      *
      * ex: $app->terminateJson(['success' => true, 'data' => $data]);
      *
-     * @param   {string}       url      the url to fetch data
+     * @param   {string}       url      the URL to fetch data
      * @param   {object}       settings the Fomantic-UI api settings object.
      * @returns {Promise<any>}
      */
@@ -120,7 +120,7 @@ class ApiService {
         }
 
         if (!('method' in apiSettings)) {
-            apiSettings.method = 'get';
+            apiSettings.method = 'GET';
         }
 
         apiSettings.url = url;

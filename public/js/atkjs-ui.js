@@ -235,8 +235,8 @@ __webpack_require__.r(__webpack_exports__);
 
 class AtkAjaxecPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
   main() {
-    if (!this.settings.uri) {
-      console.error('Trying to execute callback without url.');
+    if (!this.settings.url) {
+      console.error('Trying to execute callback without URL');
       return;
     } // Allow user to confirm if available.
 
@@ -252,12 +252,12 @@ class AtkAjaxecPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"
   }
 
   doExecute() {
-    const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.removeAllParams(this.settings.uri);
-    const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {}; // uriOptions is always use as data in a post request.
+    const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.removeAllParams(this.settings.url);
+    const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {}; // urlOptions is always used as data in a POST request
 
-    const data = this.settings.uriOptions ? this.settings.uriOptions : {}; // retrieve param from url.
+    const data = this.settings.urlOptions ? this.settings.urlOptions : {}; // retrieve param from URL
 
-    let urlParams = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.uri); // get store object.
+    let urlParams = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.url); // get store object.
 
     const store = atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService.getStoreData(this.settings.storeName);
     const settings = {
@@ -268,8 +268,8 @@ class AtkAjaxecPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"
       ...userConfig
     };
 
-    if (settings.method.toLowerCase() === 'get') {
-      // set data, store and add it to url param.
+    if (settings.method.toUpperCase() === 'GET') {
+      // set data, store and add it to URL param.
       urlParams = Object.assign(urlParams, data, store);
     } else {
       settings.data = Object.assign(data, store);
@@ -281,8 +281,8 @@ class AtkAjaxecPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"
 
 }
 AtkAjaxecPlugin.DEFAULTS = {
-  uri: null,
-  uriOptions: {},
+  url: null,
+  urlOptions: {},
   confirm: null,
   apiConfig: null,
   storeName: null
@@ -380,8 +380,8 @@ __webpack_require__.r(__webpack_exports__);
 
 class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
-    // add on resize callback if url is supply.
-    if (this.settings.uri) {
+    // add on resize callback if URL is supplied
+    if (this.settings.url) {
       this.settings.onResize = this.onResize.bind(this);
     }
 
@@ -392,7 +392,7 @@ class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["d
     this.$el.removeClass('grip-padding');
   }
   /**
-   * Send widths to server via callback uri.
+   * Send widths to server via callback URL.
    *
    * @param {Array.<object>} widths an Array of objects, each containing the column name and their size in pixels [{ column: 'name', size: '135px' }]
    */
@@ -401,7 +401,7 @@ class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["d
   sendWidths(widths) {
     this.$el.api({
       on: 'now',
-      url: this.settings.uri,
+      url: this.settings.url,
       method: 'POST',
       data: {
         widths: JSON.stringify(widths)
@@ -435,7 +435,7 @@ AtkColumnResizerPlugin.DEFAULTS = {
     minWidth: 8 // onResize: function(e) { e.path.filter(function(item) { return item.querySelector('table') }); }
 
   },
-  uri: null
+  url: null
 };
 
 /***/ }),
@@ -759,17 +759,17 @@ class AtkCreateModalPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
   main() {
     const options = this.settings; // make sure we have an object when no option is passed
 
-    if (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().isArray(options.uriOptions)) {
-      options.uriOptions = {};
+    if (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().isArray(options.urlOptions)) {
+      options.urlOptions = {};
     } // create modal and add it to the DOM
 
 
     const $m = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div class="atk-modal ui modal" />').appendTo('body').html(this.getDialogHtml(options.title)); // add setting to our modal for modalService
 
     $m.data({
-      uri: options.uri,
+      url: options.url,
       type: options.dataType,
-      args: options.uriOptions,
+      args: options.urlOptions,
       needRemove: true,
       needCloseTrigger: true,
       label: options.label
@@ -790,8 +790,8 @@ class AtkCreateModalPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
 }
 AtkCreateModalPlugin.DEFAULTS = {
   title: '',
-  uri: null,
-  uriOptions: {},
+  url: null,
+  urlOptions: {},
   headerCss: 'header',
   modalCss: 'scrolling',
   contentCss: 'image',
@@ -981,7 +981,7 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
     this.bar.show();
     atk__WEBPACK_IMPORTED_MODULE_4__["default"].uploadService.uploadFiles(files, this.$el, {
       fUploadAction: 'upload'
-    }, this.settings.uri, completeCb, xhrCb);
+    }, this.settings.url, completeCb, xhrCb);
   }
   /**
    * Callback server for file delete.
@@ -991,7 +991,7 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
   doFileDelete(fileId) {
     this.$el.api({
       on: 'now',
-      url: this.settings.uri,
+      url: this.settings.url,
       data: {
         fUploadAction: 'delete',
         fUploadId: fileId
@@ -1018,12 +1018,12 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
 
 }
 AtkFileUploadPlugin.DEFAULTS = {
-  uri: null,
+  url: null,
   file: {
     id: null,
     name: null
   },
-  uriOptions: {},
+  urlOptions: {},
   action: null,
   completeLabel: '100%',
   submit: null
@@ -1104,16 +1104,16 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
 
   onAutoQueryAction() {
     this.textInput.on('keyup', atk__WEBPACK_IMPORTED_MODULE_6__["default"].debounce(e => {
-      const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.uriOptions);
+      const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.urlOptions);
 
       if (e.target.value === '' || e.keyCode === 27) {
-        this.doSearch(this.settings.uri, null, options, () => {
+        this.doSearch(this.settings.url, null, options, () => {
           this.setButtonState(false);
           this.setFilterState(false);
           this.textInput.val('');
         });
       } else if (e.target.value !== this.$el.data('preValue')) {
-        this.doSearch(this.settings.uri, e.target.value, options, () => {
+        this.doSearch(this.settings.url, e.target.value, options, () => {
           this.setButtonState(true);
           this.setFilterState(true);
         });
@@ -1129,16 +1129,16 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
 
   onEnterAction() {
     this.textInput.on('keyup', e => {
-      const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.uriOptions);
+      const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.urlOptions);
 
       if (e.keyCode === 13 && e.target.value) {
-        this.doSearch(this.settings.uri, e.target.value, options, () => {
+        this.doSearch(this.settings.url, e.target.value, options, () => {
           this.setButtonState(true);
           this.setFilterState(true);
         });
         this.$el.data('preValue', e.target.value);
       } else if (e.keyCode === 27 && e.target.value || e.keyCode === 13 && e.target.value === '') {
-        this.doSearch(this.settings.uri, null, options, () => {
+        this.doSearch(this.settings.url, null, options, () => {
           this.setButtonState(false);
           this.setFilterState(false);
         });
@@ -1172,10 +1172,10 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
 
   setSearchAction() {
     this.searchAction.on('click', e => {
-      const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.uriOptions);
+      const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.urlOptions);
 
       if (this.state.button) {
-        this.doSearch(this.settings.uri, null, options, () => {
+        this.doSearch(this.settings.url, null, options, () => {
           this.setButtonState(false);
           this.setFilterState(false);
         });
@@ -1184,7 +1184,7 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
       }
 
       if (!this.state.button && this.textInput.val()) {
-        this.doSearch(this.settings.uri, this.textInput.val(), options, () => {
+        this.doSearch(this.settings.url, this.textInput.val(), options, () => {
           this.setButtonState(true);
           this.setFilterState(true);
         });
@@ -1207,7 +1207,7 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
     this.$el.data('preValue', text);
   }
   /**
-   * More generic way to set url argument.
+   * More generic way to set URL argument.
    */
 
 
@@ -1251,9 +1251,9 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
    */
 
 
-  doSearch(uri, query, options) {
+  doSearch(url, query, options) {
     let cb = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {};
-    const queryKey = this.settings.uriQueryKey;
+    const queryKey = this.settings.urlQueryKey;
 
     if (query) {
       options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(options, {
@@ -1264,7 +1264,7 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
     if (this.settings.useAjax) {
       this.$el.api({
         on: 'now',
-        url: uri,
+        url: url,
         data: options,
         method: 'GET',
         obj: this.$el,
@@ -1272,22 +1272,22 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
         onComplete: cb
       });
     } else {
-      uri = atk__WEBPACK_IMPORTED_MODULE_6__["default"].urlHelper.removeParam(uri, queryKey);
+      url = atk__WEBPACK_IMPORTED_MODULE_6__["default"].urlHelper.removeParam(url, queryKey);
 
       if (options.__atk_reload) {
         delete options.__atk_reload;
       }
 
-      uri = atk__WEBPACK_IMPORTED_MODULE_6__["default"].urlHelper.appendParams(uri, options);
-      window.location = uri;
+      url = atk__WEBPACK_IMPORTED_MODULE_6__["default"].urlHelper.appendParams(url, options);
+      window.location = url;
     }
   }
 
 }
 AtkJsSearchPlugin.DEFAULTS = {
-  uri: null,
-  uriOptions: {},
-  uriQueryKey: null,
+  url: null,
+  urlOptions: {},
+  urlQueryKey: null,
   q: null,
   autoQuery: false,
   timeOut: 300,
@@ -1385,7 +1385,7 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
   /**
    * Will send current element order via callback.
    *
-   * @param {object} params Extra arguments to add to uri.
+   * @param {object} params Extra arguments to add to URL.
    */
 
 
@@ -1420,12 +1420,12 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
     let extraParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
     let url = null;
 
-    if (this.settings.uriOptions && extraParams) {
-      url = atk__WEBPACK_IMPORTED_MODULE_4__["default"].urlHelper.appendParams(this.settings.uri, external_jquery__WEBPACK_IMPORTED_MODULE_3___default().extend({}, this.settings.uriOptions, extraParams));
-    } else if (this.settings.uriOptions) {
-      url = atk__WEBPACK_IMPORTED_MODULE_4__["default"].urlHelper.appendParams(this.settings.uri, this.settings.uriOptions);
+    if (this.settings.urlOptions && extraParams) {
+      url = atk__WEBPACK_IMPORTED_MODULE_4__["default"].urlHelper.appendParams(this.settings.url, external_jquery__WEBPACK_IMPORTED_MODULE_3___default().extend({}, this.settings.urlOptions, extraParams));
+    } else if (this.settings.urlOptions) {
+      url = atk__WEBPACK_IMPORTED_MODULE_4__["default"].urlHelper.appendParams(this.settings.url, this.settings.urlOptions);
     } else {
-      url = this.settings.uri;
+      url = this.settings.url;
     }
 
     return url;
@@ -1437,8 +1437,8 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
 
 }
 AtkJsSortablePlugin.DEFAULTS = {
-  uri: null,
-  uriOptions: null,
+  url: null,
+  urlOptions: null,
   container: 'tbody',
   draggable: 'tr',
   dataLabel: 'id',
@@ -1481,15 +1481,15 @@ __webpack_require__.r(__webpack_exports__);
 
 class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
   main() {
-    if (!this.settings.uri) {
-      console.error('Trying to reload view without url.');
+    if (!this.settings.url) {
+      console.error('Trying to reload view without URL');
       return;
     }
 
-    const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.removeAllParams(this.settings.uri);
+    const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.removeAllParams(this.settings.url);
     const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {}; // add new param and remove duplicate, prioritizing the latest one.
 
-    let urlParams = Object.assign(atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.uri), this.settings.uriOptions ? this.settings.uriOptions : {}); // get store object.
+    let urlParams = Object.assign(atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.url), this.settings.urlOptions ? this.settings.urlOptions : {}); // get store object.
 
     const store = atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService.getStoreData(this.settings.storeName); // merge user settings
 
@@ -1506,7 +1506,7 @@ class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["defa
       ...userConfig
     }; // if post then we need to set our store into settings data.
 
-    if (settings.method.toLowerCase() === 'post') {
+    if (settings.method.toUpperCase() === 'POST') {
       settings.data = Object.assign(settings.data, store);
     } else {
       urlParams = Object.assign(urlParams, store);
@@ -1518,8 +1518,8 @@ class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["defa
 
 }
 AtkReloadViewPlugin.DEFAULTS = {
-  uri: null,
-  uriOptions: null,
+  url: null,
+  urlOptions: null,
   afterSuccess: null,
   apiConfig: null,
   storeName: null
@@ -1705,8 +1705,8 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
     this.isWaiting = true;
     this.$inner.api({
       on: 'now',
-      url: this.settings.uri,
-      data: { ...this.settings.uriOptions,
+      url: this.settings.url,
+      data: { ...this.settings.urlOptions,
         page: this.nextPage
       },
       method: 'GET',
@@ -1771,8 +1771,8 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
 
 }
 AtkScrollPlugin.DEFAULTS = {
-  uri: null,
-  uriOptions: {},
+  url: null,
+  urlOptions: {},
   options: {}
 };
 
@@ -1799,7 +1799,7 @@ class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
     const hasLoader = this.settings.showLoader;
 
     if (typeof EventSource !== 'undefined') {
-      this.source = new EventSource(this.settings.uri + '&__atk_sse=1');
+      this.source = new EventSource(this.settings.url + '&__atk_sse=1');
 
       if (hasLoader) {
         element.addClass('loading');
@@ -1831,7 +1831,7 @@ class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
     } else {
       // console.log('server side event not supported fallback to atkReloadView');
       this.$el.atkReloadView({
-        uri: this.settings.uri
+        url: this.settings.url
       });
     }
   }
@@ -1850,8 +1850,8 @@ class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
 
 }
 AtkServerEventPlugin.DEFAULTS = {
-  uri: null,
-  uriOptions: {},
+  url: null,
+  urlOptions: {},
   showLoader: false,
   closeBeforeUnload: false
 };
@@ -1920,7 +1920,7 @@ class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default
     this.setTogglerIcon(this.settings.icon.selector);
   }
   /**
-   * Check if the url correspond to one of our menu items.
+   * Check if the URL correspond to one of our menu items.
    * if so, then add the menuItemActiveCSS class and return true.
    *
    * @returns {boolean}
@@ -1939,7 +1939,7 @@ class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default
     return hasBase;
   }
   /**
-   * Check if an url match with current window location.
+   * Check if an URL match with current window location.
    *
    * @returns {boolean}
    */
@@ -1950,7 +1950,7 @@ class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default
 
     if (url.pathname === window.location.pathname) {
       return true;
-    } // try to match base index url
+    } // try to match base index URL
 
 
     if (url.pathname === window.location.pathname + this.settings.base) {
@@ -2047,8 +2047,8 @@ class AccordionService {
   onOpening() {
     if (external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('path')) {
       external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).atkReloadView({
-        uri: external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('path'),
-        uriOptions: {
+        url: external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('path'),
+        urlOptions: {
           __atk_json: 1
         }
       });
@@ -2156,7 +2156,7 @@ class ApiService {
             // TODO Find a better solution for long term.
             // Need a way to gracefully abort server request.
             // when user cancel a request by selecting another request.
-            console.error('Unable to replace element with id: ' + response.id); // throw({message:'Unable to replace element with id: '+ response.id});
+            console.error('Unable to replace element with id: ' + response.id); // throw Error('Unable to replace element with id: ' + response.id);
           }
         }
 
@@ -2203,7 +2203,7 @@ class ApiService {
    *
    * ex: $app->terminateJson(['success' => true, 'data' => $data]);
    *
-   * @param   {string}       url      the url to fetch data
+   * @param   {string}       url      the URL to fetch data
    * @param   {object}       settings the Fomantic-UI api settings object.
    * @returns {Promise<any>}
    */
@@ -2220,7 +2220,7 @@ class ApiService {
     }
 
     if (!('method' in apiSettings)) {
-      apiSettings.method = 'get';
+      apiSettings.method = 'GET';
     }
 
     apiSettings.url = url;
@@ -2393,7 +2393,7 @@ class DataService {
     try {
       JSON.parse(str);
     } catch (e) {
-      console.error('Invalid json string.');
+      console.error('JSON string parse failed');
       return false;
     }
 
@@ -2412,7 +2412,7 @@ class DataService {
     if (this.hasStorage) {
       this.storage[type].setItem(item, value);
     } else {
-      console.error('Session storage is not available in your Browser.');
+      console.error('Session storage is not available in your browser');
     }
   }
   /**
@@ -2648,7 +2648,7 @@ class FormService {
       const $field = this.getField(form, fieldName);
 
       if (!$field) {
-        console.error('You are validating a field that does not exist: ', fieldName);
+        console.error('You are validating a field that does not exist: ' + fieldName);
         return false;
       }
 
@@ -2657,7 +2657,7 @@ class FormService {
       return ruleFunction.call($field, value, ancillary);
     }
 
-    console.error('this rule does not exist: ' + this.getRuleName(rule));
+    console.error('Rule does not exist: ' + this.getRuleName(rule));
     return false;
   }
 
@@ -2784,7 +2784,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * This is default setup for Fomantic-UI modal.
- * Allow to manage uri pass to our modal and dynamically update content from this uri
+ * Allow to manage URL pass to our modal and dynamically update content from this URL
  * using the Fomantic-UI api function.
  * Also keep track of how many modal are use by the app.
  */
@@ -2831,11 +2831,11 @@ class ModalService {
     } // does modal content need to be loaded dynamically
 
 
-    if (data && data.uri) {
+    if (data && data.url) {
       $content.html(atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.getLoader(data.label ? data.label : ''));
       $content.api({
         on: 'now',
-        url: data.uri,
+        url: data.url,
         data: args,
         method: 'GET',
         obj: $content,
@@ -2849,7 +2849,7 @@ class ModalService {
           if (!result.length) {
             response.success = false;
             response.isServiceError = true;
-            response.message = 'Modal service error: Unable to replace atk-dialog content in modal from server response. Empty Content.';
+            response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
           } else {
             if ($modal.modal.settings.autofocus) {
               atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.doAutoFocus($modal);
@@ -3032,7 +3032,7 @@ class PanelService {
       // a collection of panels.
       currentVisibleId: null,
       // the current panel id that is in a visible state.
-      currentParams: null // url argument of the current panel.
+      currentParams: null // URL argument of the current panel.
 
     };
   }
@@ -3168,7 +3168,7 @@ class PanelService {
   }
   /**
    * Will check if panel is reloadable and
-   * setup proper url argument from triggered item
+   * setup proper URL argument from triggered item
    * via it's data property.
    */
 
@@ -3182,7 +3182,7 @@ class PanelService {
       const args = params.reloadArgs.reduce((obj, item) => {
         obj[item] = params.triggered.data(item);
         return obj;
-      }, {}); // add url argument if pass to panel
+      }, {}); // add URL argument if pass to panel
 
       if (params.urlArgs !== 'undefined') {
         external_jquery__WEBPACK_IMPORTED_MODULE_9___default().extend(args, params.urlArgs);
@@ -3505,14 +3505,14 @@ class PopupService {
     const $popup = this;
     const data = $popup.data();
 
-    if (data.uri !== '' && data.uri !== undefined) {
+    if (data.url !== '' && data.url !== undefined) {
       // Only load if we are not using data.cache or content has not been loaded yet.
       if (!data.cache || !data.hascontent) {
         // display default loader while waiting for content.
         $popup.html(atk__WEBPACK_IMPORTED_MODULE_0__["default"].popupService.getLoader());
         $popup.api({
           on: 'now',
-          url: data.uri,
+          url: data.url,
           method: 'GET',
           obj: $popup,
           onComplete: function (response, content) {
@@ -3521,7 +3521,7 @@ class PopupService {
             if (!result.length) {
               response.success = false;
               response.isServiceError = true;
-              response.message = 'Popup service error: Unable to replace popup content from server response. Empty Content.';
+              response.message = 'Popup service error: Empty html, unable to replace popup content from server response';
             } else {
               response.id = null;
               $popup.data('hascontent', true);
@@ -3594,7 +3594,7 @@ class UploadService {
    * @param {FileList} files
    * @param {$}        element    the jQuery element to attach to Fomantic-UI api.
    * @param {object}   data       Extra data to pass with files.
-   * @param {string}   uploadUrl  the url that handle upload.
+   * @param {string}   uploadUrl  the URL that handle upload.
    * @param {Function} completeCb the callback for Fomantic-UI api.onComplete.
    * @param {Function} xhrCb      the xhr function to pass to server.
    */
@@ -3798,7 +3798,7 @@ class VueService {
     if (window[component]) {
       vue__WEBPACK_IMPORTED_MODULE_7__["default"].use(window[component]);
     } else {
-      console.error('Unable to register component: ' + component + '. Make sure it is load correctly.');
+      console.error('Vue "' + component + '" component not found');
     }
   }
   /**

@@ -14,19 +14,19 @@ import AtkPlugin from './atk.plugin';
  */
 export default class AtkReloadViewPlugin extends AtkPlugin {
     main() {
-        if (!this.settings.uri) {
-            console.error('Trying to reload view without url.');
+        if (!this.settings.url) {
+            console.error('Trying to reload view without URL');
 
             return;
         }
 
-        const url = atk.urlHelper.removeAllParams(this.settings.uri);
+        const url = atk.urlHelper.removeAllParams(this.settings.url);
         const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
 
         // add new param and remove duplicate, prioritizing the latest one.
         let urlParams = Object.assign(
-            atk.urlHelper.parseParams(this.settings.uri),
-            this.settings.uriOptions ? this.settings.uriOptions : {},
+            atk.urlHelper.parseParams(this.settings.url),
+            this.settings.urlOptions ? this.settings.urlOptions : {},
         );
 
         // get store object.
@@ -47,7 +47,7 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
         };
 
         // if post then we need to set our store into settings data.
-        if (settings.method.toLowerCase() === 'post') {
+        if (settings.method.toUpperCase() === 'POST') {
             settings.data = Object.assign(settings.data, store);
         } else {
             urlParams = Object.assign(urlParams, store);
@@ -59,8 +59,8 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
 }
 
 AtkReloadViewPlugin.DEFAULTS = {
-    uri: null,
-    uriOptions: null,
+    url: null,
+    urlOptions: null,
     afterSuccess: null,
     apiConfig: null,
     storeName: null,

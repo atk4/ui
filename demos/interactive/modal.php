@@ -226,12 +226,12 @@ $stepModal->set(function (View $p) use ($stepModal, $session, $prevAction, $next
 
 // Bind next action to modal next button.
 $nextAction->on('click', $stepModal->js()->atkReloadView(
-    ['uri' => $stepModal->cb->getJsUrl(), 'uriOptions' => ['move' => 'next']]
+    ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'next']]
 ));
 
 // Bin prev action to modal previous button.
 $prevAction->on('click', $stepModal->js()->atkReloadView(
-    ['uri' => $stepModal->cb->getJsUrl(), 'uriOptions' => ['move' => 'prev']]
+    ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'prev']]
 ));
 
 // Bind display modal to page display button.

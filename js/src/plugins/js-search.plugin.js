@@ -39,15 +39,15 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
      */
     onAutoQueryAction() {
         this.textInput.on('keyup', atk.debounce((e) => {
-            const options = $.extend({}, this.urlArgs, this.settings.uriOptions);
+            const options = $.extend({}, this.urlArgs, this.settings.urlOptions);
             if (e.target.value === '' || e.keyCode === 27) {
-                this.doSearch(this.settings.uri, null, options, () => {
+                this.doSearch(this.settings.url, null, options, () => {
                     this.setButtonState(false);
                     this.setFilterState(false);
                     this.textInput.val('');
                 });
             } else if (e.target.value !== this.$el.data('preValue')) {
-                this.doSearch(this.settings.uri, e.target.value, options, () => {
+                this.doSearch(this.settings.url, e.target.value, options, () => {
                     this.setButtonState(true);
                     this.setFilterState(true);
                 });
@@ -61,15 +61,15 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
      */
     onEnterAction() {
         this.textInput.on('keyup', (e) => {
-            const options = $.extend({}, this.urlArgs, this.settings.uriOptions);
+            const options = $.extend({}, this.urlArgs, this.settings.urlOptions);
             if (e.keyCode === 13 && e.target.value) {
-                this.doSearch(this.settings.uri, e.target.value, options, () => {
+                this.doSearch(this.settings.url, e.target.value, options, () => {
                     this.setButtonState(true);
                     this.setFilterState(true);
                 });
                 this.$el.data('preValue', e.target.value);
             } else if ((e.keyCode === 27 && e.target.value) || (e.keyCode === 13 && e.target.value === '')) {
-                this.doSearch(this.settings.uri, null, options, () => {
+                this.doSearch(this.settings.url, null, options, () => {
                     this.setButtonState(false);
                     this.setFilterState(false);
                 });
@@ -102,9 +102,9 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
      */
     setSearchAction() {
         this.searchAction.on('click', (e) => {
-            const options = $.extend({}, this.urlArgs, this.settings.uriOptions);
+            const options = $.extend({}, this.urlArgs, this.settings.urlOptions);
             if (this.state.button) {
-                this.doSearch(this.settings.uri, null, options, () => {
+                this.doSearch(this.settings.url, null, options, () => {
                     this.setButtonState(false);
                     this.setFilterState(false);
                 });
@@ -113,7 +113,7 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
             }
 
             if (!this.state.button && this.textInput.val()) {
-                this.doSearch(this.settings.uri, this.textInput.val(), options, () => {
+                this.doSearch(this.settings.url, this.textInput.val(), options, () => {
                     this.setButtonState(true);
                     this.setFilterState(true);
                 });
@@ -136,7 +136,7 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
     }
 
     /**
-     * More generic way to set url argument.
+     * More generic way to set URL argument.
      */
     setUrlArgs(arg, value) {
         this.urlArgs = Object.assign(this.urlArgs, { [arg]: value });
@@ -171,8 +171,8 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
     /**
      * Send request to server using the search query.
      */
-    doSearch(uri, query, options, cb = function () {}) {
-        const queryKey = this.settings.uriQueryKey;
+    doSearch(url, query, options, cb = function () {}) {
+        const queryKey = this.settings.urlQueryKey;
 
         if (query) {
             options = $.extend(options, { [queryKey]: query });
@@ -181,7 +181,7 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
         if (this.settings.useAjax) {
             this.$el.api({
                 on: 'now',
-                url: uri,
+                url: url,
                 data: options,
                 method: 'GET',
                 obj: this.$el,
@@ -189,20 +189,20 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
                 onComplete: cb,
             });
         } else {
-            uri = atk.urlHelper.removeParam(uri, queryKey);
+            url = atk.urlHelper.removeParam(url, queryKey);
             if (options.__atk_reload) {
                 delete options.__atk_reload;
             }
-            uri = atk.urlHelper.appendParams(uri, options);
-            window.location = uri;
+            url = atk.urlHelper.appendParams(url, options);
+            window.location = url;
         }
     }
 }
 
 AtkJsSearchPlugin.DEFAULTS = {
-    uri: null,
-    uriOptions: {},
-    uriQueryKey: null,
+    url: null,
+    urlOptions: {},
+    urlQueryKey: null,
     q: null,
     autoQuery: false,
     timeOut: 300,

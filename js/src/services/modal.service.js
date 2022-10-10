@@ -3,7 +3,7 @@ import atk from 'atk';
 
 /**
  * This is default setup for Fomantic-UI modal.
- * Allow to manage uri pass to our modal and dynamically update content from this uri
+ * Allow to manage URL pass to our modal and dynamically update content from this URL
  * using the Fomantic-UI api function.
  * Also keep track of how many modal are use by the app.
  */
@@ -26,8 +26,8 @@ class ModalService {
     }
 
     onVisible() {
-        let args = {}; let
-            data;
+        let args = {};
+        let data;
         // const service = apiService;
         const $modal = $(this);
         const $content = $(this).find('.atk-dialog-content');
@@ -48,11 +48,11 @@ class ModalService {
         }
 
         // does modal content need to be loaded dynamically
-        if (data && data.uri) {
+        if (data && data.url) {
             $content.html(atk.modalService.getLoader(data.label ? data.label : ''));
             $content.api({
                 on: 'now',
-                url: data.uri,
+                url: data.url,
                 data: args,
                 method: 'GET',
                 obj: $content,
@@ -66,7 +66,7 @@ class ModalService {
                     if (!result.length) {
                         response.success = false;
                         response.isServiceError = true;
-                        response.message = 'Modal service error: Unable to replace atk-dialog content in modal from server response. Empty Content.';
+                        response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
                     } else {
                         if ($modal.modal.settings.autofocus) {
                             atk.modalService.doAutoFocus($modal);

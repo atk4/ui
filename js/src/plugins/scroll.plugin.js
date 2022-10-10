@@ -148,8 +148,8 @@ export default class AtkScrollPlugin extends AtkPlugin {
         this.isWaiting = true;
         this.$inner.api({
             on: 'now',
-            url: this.settings.uri,
-            data: { ...this.settings.uriOptions, page: this.nextPage },
+            url: this.settings.url,
+            data: { ...this.settings.urlOptions, page: this.nextPage },
             method: 'GET',
             stateContext: this.settings.options.stateContext,
             onComplete: this.onComplete.bind(this),
@@ -206,7 +206,7 @@ export default class AtkScrollPlugin extends AtkPlugin {
 }
 
 AtkScrollPlugin.DEFAULTS = {
-    uri: null,
-    uriOptions: {},
+    url: null,
+    urlOptions: {},
     options: {},
 };

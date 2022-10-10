@@ -272,7 +272,7 @@ export default {
             $(this.$el).parents('.' + this.getRootData().options.loader).api({
                 on: 'now',
                 url: this.getRootData().options.url,
-                method: 'post',
+                method: 'POST',
                 data: { data: JSON.stringify(this.getRootData().values) },
             });
         },

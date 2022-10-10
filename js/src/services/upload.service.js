@@ -13,7 +13,7 @@ class UploadService {
      * @param {FileList} files
      * @param {$}        element    the jQuery element to attach to Fomantic-UI api.
      * @param {object}   data       Extra data to pass with files.
-     * @param {string}   uploadUrl  the url that handle upload.
+     * @param {string}   uploadUrl  the URL that handle upload.
      * @param {Function} completeCb the callback for Fomantic-UI api.onComplete.
      * @param {Function} xhrCb      the xhr function to pass to server.
      */

@@ -34,8 +34,8 @@ class Delete extends Table\Column
     public function getDataCellTemplate(Field $field = null): string
     {
         $this->table->on('click', 'a.' . $this->shortName, null, ['confirm' => (new Jquery())->attr('title')])->atkAjaxec([
-            'uri' => $this->vp->getJsUrl(),
-            'uriOptions' => [$this->name => $this->table->jsRow()->data('id')],
+            'url' => $this->vp->getJsUrl(),
+            'urlOptions' => [$this->name => $this->table->jsRow()->data('id')],
         ]);
 
         return $this->getApp()->getTag('a', [

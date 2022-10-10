@@ -19,14 +19,14 @@ class PopupService {
     onShow($module) {
         const $popup = this;
         const data = $popup.data();
-        if ((data.uri !== '') && (data.uri !== undefined)) {
+        if ((data.url !== '') && (data.url !== undefined)) {
             // Only load if we are not using data.cache or content has not been loaded yet.
             if (!data.cache || !data.hascontent) {
                 // display default loader while waiting for content.
                 $popup.html(atk.popupService.getLoader());
                 $popup.api({
                     on: 'now',
-                    url: data.uri,
+                    url: data.url,
                     method: 'GET',
                     obj: $popup,
                     onComplete: function (response, content) {
@@ -34,7 +34,7 @@ class PopupService {
                         if (!result.length) {
                             response.success = false;
                             response.isServiceError = true;
-                            response.message = 'Popup service error: Unable to replace popup content from server response. Empty Content.';
+                            response.message = 'Popup service error: Empty html, unable to replace popup content from server response';
                         } else {
                             response.id = null;
                             $popup.data('hascontent', true);

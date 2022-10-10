@@ -13,7 +13,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/atk4/ui/tree/develop/js"
+        "url": "https://github.com/atk4/ui.git"
     },
     "author": "Agile Toolkit",
     "license": "MIT",

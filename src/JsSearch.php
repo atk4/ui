@@ -90,9 +90,9 @@ class JsSearch extends View
         $this->template->set('BtnRemoveIcon', $this->btnRemoveIcon);
 
         $this->js(true)->atkJsSearch([
-            'uri' => $this->reload->jsUrl(),
-            'uriOptions' => array_merge(['__atk_reload' => $this->reload->name], $this->args),
-            'uriQueryKey' => $this->name . '_q',
+            'url' => $this->reload->jsUrl(),
+            'urlOptions' => array_merge(['__atk_reload' => $this->reload->name], $this->args),
+            'urlQueryKey' => $this->name . '_q',
             'autoQuery' => $this->autoQuery,
             'q' => $this->initValue,
             'useAjax' => $this->useAjax,

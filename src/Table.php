@@ -316,7 +316,7 @@ class Table extends Lister
         if ($fx instanceof \Closure) {
             $cb = JsCallback::addTo($this);
             $cb->set($fx, ['widths' => 'widths']);
-            $options['uri'] = $cb->getJsUrl();
+            $options['url'] = $cb->getJsUrl();
         }
 
         if ($widths) {

@@ -5,8 +5,8 @@ export default class AtkCreateModalPlugin extends AtkPlugin {
     main() {
         const options = this.settings;
         // make sure we have an object when no option is passed
-        if ($.isArray(options.uriOptions)) {
-            options.uriOptions = {};
+        if ($.isArray(options.urlOptions)) {
+            options.urlOptions = {};
         }
         // create modal and add it to the DOM
         const $m = $('<div class="atk-modal ui modal" />')
@@ -15,9 +15,9 @@ export default class AtkCreateModalPlugin extends AtkPlugin {
 
         // add setting to our modal for modalService
         $m.data({
-            uri: options.uri,
+            url: options.url,
             type: options.dataType,
-            args: options.uriOptions,
+            args: options.urlOptions,
             needRemove: true,
             needCloseTrigger: true,
             label: options.label,
@@ -39,8 +39,8 @@ export default class AtkCreateModalPlugin extends AtkPlugin {
 
 AtkCreateModalPlugin.DEFAULTS = {
     title: '',
-    uri: null,
-    uriOptions: {},
+    url: null,
+    urlOptions: {},
     headerCss: 'header',
     modalCss: 'scrolling',
     contentCss: 'image',

@@ -10,7 +10,7 @@ class PanelService {
         this.service = {
             panels: [], // a collection of panels.
             currentVisibleId: null, // the current panel id that is in a visible state.
-            currentParams: null, // url argument of the current panel.
+            currentParams: null, // URL argument of the current panel.
         };
     }
 
@@ -133,7 +133,7 @@ class PanelService {
 
     /**
      * Will check if panel is reloadable and
-     * setup proper url argument from triggered item
+     * setup proper URL argument from triggered item
      * via it's data property.
      */
     initPanelReload(id) {
@@ -147,7 +147,7 @@ class PanelService {
 
                 return obj;
             }, {});
-            // add url argument if pass to panel
+            // add URL argument if pass to panel
             if (params.urlArgs !== 'undefined') {
                 $.extend(args, params.urlArgs);
             }
@@ -256,8 +256,8 @@ class PanelService {
 
         // Do we need to setup css class on triggering element.
         if (params.activeCSS) {
-            let element; let
-                css;
+            let element;
+            let css;
 
             if (params.activeCSS instanceof Object) {
                 element = this.getPropertyValue(id, 'triggerElement').find(params.activeCSS.element);

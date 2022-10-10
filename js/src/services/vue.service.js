@@ -119,7 +119,7 @@ class VueService {
         if (window[component]) {
             Vue.use(window[component]);
         } else {
-            console.error('Unable to register component: ' + component + '. Make sure it is load correctly.');
+            console.error('Vue "' + component + '" component not found');
         }
     }
 

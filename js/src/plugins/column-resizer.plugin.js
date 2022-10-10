@@ -7,8 +7,8 @@ import AtkPlugin from './atk.plugin';
  */
 export default class AtkColumnResizerPlugin extends AtkPlugin {
     main() {
-        // add on resize callback if url is supply.
-        if (this.settings.uri) {
+        // add on resize callback if URL is supplied
+        if (this.settings.url) {
             this.settings.onResize = this.onResize.bind(this);
         }
         this.resizable = new Resizer(this.$el[0], ({ ...this.settings.atkDefaults, ...this.settings }));
@@ -18,14 +18,14 @@ export default class AtkColumnResizerPlugin extends AtkPlugin {
     }
 
     /**
-     * Send widths to server via callback uri.
+     * Send widths to server via callback URL.
      *
      * @param {Array.<object>} widths an Array of objects, each containing the column name and their size in pixels [{ column: 'name', size: '135px' }]
      */
     sendWidths(widths) {
         this.$el.api({
             on: 'now',
-            url: this.settings.uri,
+            url: this.settings.url,
             method: 'POST',
             data: { widths: JSON.stringify(widths) },
         });
@@ -55,5 +55,5 @@ AtkColumnResizerPlugin.DEFAULTS = {
         minWidth: 8,
         // onResize: function(e) { e.path.filter(function(item) { return item.querySelector('table') }); }
     },
-    uri: null,
+    url: null,
 };

@@ -35,7 +35,7 @@ export default class AtkSidenavPlugin extends AtkPlugin {
     }
 
     /**
-     * Check if the url correspond to one of our menu items.
+     * Check if the URL correspond to one of our menu items.
      * if so, then add the menuItemActiveCSS class and return true.
      *
      * @returns {boolean}
@@ -54,7 +54,7 @@ export default class AtkSidenavPlugin extends AtkPlugin {
     }
 
     /**
-     * Check if an url match with current window location.
+     * Check if an URL match with current window location.
      *
      * @returns {boolean}
      */
@@ -63,7 +63,7 @@ export default class AtkSidenavPlugin extends AtkPlugin {
         if (url.pathname === window.location.pathname) {
             return true;
         }
-        // try to match base index url
+        // try to match base index URL
         if (url.pathname === (window.location.pathname + this.settings.base)) {
             return true;
         }

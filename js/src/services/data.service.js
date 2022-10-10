@@ -48,7 +48,7 @@ class DataService {
         try {
             JSON.parse(str);
         } catch (e) {
-            console.error('Invalid json string.');
+            console.error('JSON string parse failed');
 
             return false;
         }
@@ -65,7 +65,7 @@ class DataService {
         if (this.hasStorage) {
             this.storage[type].setItem(item, value);
         } else {
-            console.error('Session storage is not available in your Browser.');
+            console.error('Session storage is not available in your browser');
         }
     }
 

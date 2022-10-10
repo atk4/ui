@@ -672,7 +672,7 @@ __webpack_require__.r(__webpack_exports__);
         external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this.$refs.addBtn.$el).api({
           on: 'now',
           url: this.data.url,
-          method: 'post',
+          method: 'POST',
           data: {
             __atkml_action: 'on-change',
             rows: this.value
@@ -689,7 +689,7 @@ __webpack_require__.r(__webpack_exports__);
       try {
         return await atk__WEBPACK_IMPORTED_MODULE_8__["default"].apiService.suiFetch(this.data.url, {
           data: data,
-          method: 'post',
+          method: 'POST',
           stateContext: context
         });
       } catch (e) {
@@ -860,8 +860,8 @@ __webpack_require__.r(__webpack_exports__);
  *
  * Props:
  * config:
- * url: the callback url. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
- * reference: the reference field name associate with model or hasOne name. This field name will be sent along with url callback parameter as of 'field=name'.
+ * url: the callback URL. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
+ * reference: the reference field name associate with model or hasOne name. This field name will be sent along with URL callback parameter as of 'field=name'.
  * ui: the css class name to apply to dropdown.
  * Note: The remaining config object may contain any or sui-dropdown { props: value } pair.
  *

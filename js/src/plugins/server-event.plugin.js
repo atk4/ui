@@ -7,7 +7,7 @@ export default class AtkServerEventPlugin extends AtkPlugin {
         const hasLoader = this.settings.showLoader;
 
         if (typeof (EventSource) !== 'undefined') {
-            this.source = new EventSource(this.settings.uri + '&__atk_sse=1');
+            this.source = new EventSource(this.settings.url + '&__atk_sse=1');
             if (hasLoader) {
                 element.addClass('loading');
             }
@@ -37,7 +37,7 @@ export default class AtkServerEventPlugin extends AtkPlugin {
         } else {
             // console.log('server side event not supported fallback to atkReloadView');
             this.$el.atkReloadView({
-                uri: this.settings.uri,
+                url: this.settings.url,
             });
         }
     }
@@ -54,8 +54,8 @@ export default class AtkServerEventPlugin extends AtkPlugin {
 }
 
 AtkServerEventPlugin.DEFAULTS = {
-    uri: null,
-    uriOptions: {},
+    url: null,
+    urlOptions: {},
     showLoader: false,
     closeBeforeUnload: false,
 };

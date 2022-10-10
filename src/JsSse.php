@@ -45,7 +45,7 @@ class JsSse extends JsCallback
     {
         $this->getApp(); // assert has App
 
-        $options = ['uri' => $this->getJsUrl()];
+        $options = ['url' => $this->getJsUrl()];
         if ($this->showLoader) {
             $options['showLoader'] = $this->showLoader;
         }

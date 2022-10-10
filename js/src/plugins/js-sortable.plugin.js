@@ -66,7 +66,7 @@ export default class AtkJsSortablePlugin extends AtkPlugin {
     /**
      * Will send current element order via callback.
      *
-     * @param {object} params Extra arguments to add to uri.
+     * @param {object} params Extra arguments to add to URL.
      */
     getSortOrders(params) {
         this.sendSortOrders(params);
@@ -92,12 +92,12 @@ export default class AtkJsSortablePlugin extends AtkPlugin {
 
     buildUrl(extraParams = null) {
         let url = null;
-        if (this.settings.uriOptions && extraParams) {
-            url = atk.urlHelper.appendParams(this.settings.uri, $.extend({}, this.settings.uriOptions, extraParams));
-        } else if (this.settings.uriOptions) {
-            url = atk.urlHelper.appendParams(this.settings.uri, this.settings.uriOptions);
+        if (this.settings.urlOptions && extraParams) {
+            url = atk.urlHelper.appendParams(this.settings.url, $.extend({}, this.settings.urlOptions, extraParams));
+        } else if (this.settings.urlOptions) {
+            url = atk.urlHelper.appendParams(this.settings.url, this.settings.urlOptions);
         } else {
-            url = this.settings.uri;
+            url = this.settings.url;
         }
 
         return url;
@@ -109,8 +109,8 @@ export default class AtkJsSortablePlugin extends AtkPlugin {
 }
 
 AtkJsSortablePlugin.DEFAULTS = {
-    uri: null,
-    uriOptions: null,
+    url: null,
+    urlOptions: null,
     container: 'tbody',
     draggable: 'tr',
     dataLabel: 'id',

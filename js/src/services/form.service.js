@@ -90,7 +90,7 @@ class FormService {
         if (ruleFunction) {
             const $field = this.getField(form, fieldName);
             if (!$field) {
-                console.error('You are validating a field that does not exist: ', fieldName);
+                console.error('You are validating a field that does not exist: ' + fieldName);
 
                 return false;
             }
@@ -99,7 +99,7 @@ class FormService {
 
             return ruleFunction.call($field, value, ancillary);
         }
-        console.error('this rule does not exist: ' + this.getRuleName(rule));
+        console.error('Rule does not exist: ' + this.getRuleName(rule));
 
         return false;
     }
