@@ -27,7 +27,7 @@ COPY js js
 COPY public public
 
 RUN cd js && npm ci && npm run build
-RUN cd public && lessc agileui.less agileui.css
+RUN cd public/css && lessc agileui.less agileui.css
 
 ADD composer.json .
 RUN jq 'del(."require-release")|del(."require-dev")' < composer.json > tmp && mv tmp composer.json \
