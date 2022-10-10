@@ -96,8 +96,8 @@ class ActionMenu extends Table\Column
                 [
                     'direction' => 'auto', // direction need to be auto.
                     'transition' => 'none', // no transition.
-                    'onShow' => (new JsChain('atk.tableDropdown.onShow')),
-                    'onHide' => (new JsChain('atk.tableDropdown.onHide')),
+                    'onShow' => (new JsChain('atk.tableDropdownHelper.onShow')),
+                    'onHide' => (new JsChain('atk.tableDropdownHelper.onHide')),
                 ]
             )
         );

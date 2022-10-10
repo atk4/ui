@@ -36,7 +36,7 @@ module.exports = (env) => {
     };
 
     return {
-        entry: { [filename]: srcDir + '/agile-toolkit-ui.js' },
+        entry: { [filename]: srcDir + '/main.js' },
         mode: isProduction ? 'production' : 'development',
         devtool: isProduction ? 'source-map' : false,
         performance: isProduction ? prodPerformance : {},
@@ -83,7 +83,7 @@ module.exports = (env) => {
         module: {
             rules: [
                 {
-                    test: /(\.jsx|\.js)$/,
+                    test: /(\.js|\.jsx)$/,
                     loader: 'babel-loader',
                     exclude: /(node_modules|bower_components)/,
                 },
@@ -92,8 +92,8 @@ module.exports = (env) => {
                     test: /\.vue$/,
                     loader: 'vue-loader',
                 },
-                // this will apply to both plain `.css` files
-                // AND `<style>` blocks in `.vue` files
+                // this will apply to both plain .css files
+                // AND <style> blocks in .vue files
                 {
                     test: /\.css$/,
                     use: [
@@ -104,11 +104,14 @@ module.exports = (env) => {
                 },
             ],
         },
-        externals: { jquery: 'jQuery', draggable: 'Draggable' },
+        externals: { 'external/jquery': 'jQuery' },
         resolve: {
-            alias: { vue$: 'vue/dist/vue.esm.js' },
+            alias: {
+                atk$: srcDir + '/setup-atk.js',
+                vue$: 'vue/dist/vue.esm.js',
+            },
             modules: [
-                path.resolve(__dirname, 'src/'),
+                srcDir,
                 'node_modules',
             ],
             extensions: [

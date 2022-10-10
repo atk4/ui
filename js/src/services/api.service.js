@@ -1,6 +1,5 @@
-import $ from 'jquery';
-
-/* eslint-disable jsdoc/require-param-type */
+import $ from 'external/jquery';
+import atk from 'atk';
 
 /**
  * Handle Fomantic-UI API functionality throughout the app.
@@ -10,11 +9,7 @@ class ApiService {
         this.afterSuccessCallbacks = [];
     }
 
-    /**
-     * Setup Fomantic-UI API with this service.
-     */
-    setService(settings) {
-        // settings.onResponse = this.handleResponse;
+    setupFomanticUi(settings) {
         settings.successTest = this.successTest;
         settings.onFailure = this.onFailure;
         settings.onSuccess = this.onSuccess;
@@ -23,16 +18,14 @@ class ApiService {
 
     /**
      * Execute js code.
+     *
      * This function should be call using .call() by
      * passing proper context for 'this'.
-     * ex: apiService.evalResponse.call(this, code, jQuery)
-     * By passig the jQuery reference, $ var use by code that need to be eval
-     * will work just fine, even if $ is not assign globally.
+     * ex: apiService.evalResponse.call(this, code)
      *
-     * @param code javascript to be eval.
-     * @param $    reference to jQuery.
+     * @param {string} code
      */
-    evalResponse(code, $) { // eslint-disable-line no-shadow
+    evalResponse(code) {
         eval(code); // eslint-disable-line no-eval
     }
 
@@ -70,7 +63,7 @@ class ApiService {
                         // Need a way to gracefully abort server request.
                         // when user cancel a request by selecting another request.
                         console.error('Unable to replace element with id: ' + response.id);
-                        // throw({message:'Unable to replace element with id: '+ response.id});
+                        // throw Error('Unable to replace element with id: ' + response.id);
                     }
                 }
                 if (response.portals) {
@@ -80,26 +73,22 @@ class ApiService {
                         const m = $('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
                         if (m.length === 0) {
                             $(document.body).append(response.portals[portalID].html);
-                            atk.apiService.evalResponse(response.portals[portalID].js, jQuery);
+                            atk.apiService.evalResponse(response.portals[portalID].js);
                         }
                     });
                 }
                 if (response.atkjs) {
-                    // Call evalResponse with proper context, js code and jQuery as $ var.
-                    atk.apiService.evalResponse.call(this, response.atkjs, jQuery);
+                    atk.apiService.evalResponse.call(this, response.atkjs);
                 }
                 if (atk.apiService.afterSuccessCallbacks.length > 0) {
-                    const self = this;
                     const callbacks = atk.apiService.afterSuccessCallbacks;
                     callbacks.forEach((callback) => {
-                        atk.apiService.evalResponse.call(self, callback, jQuery);
+                        atk.apiService.evalResponse.call(this, callback);
                     });
                     atk.apiService.afterSuccessCallbacks.splice(0);
                 }
             } else if (response.isServiceError) {
-                // service can still throw an error
-                // TODO fix throw without eslint disable
-                throw ({ message: response.message }); // eslint-disable-line no-throw-literal
+                throw Error(response.message);
             }
         } catch (e) {
             atk.apiService.showErrorModal(atk.apiService.getErrorHtml(e.message));
@@ -113,14 +102,13 @@ class ApiService {
      * atkjs (javascript) return from server will not be evaluated.
      *
      * Make sure to control the server output when using
-     * this function. It must at least return {success: true} in order for
+     * this function. It must at least return { success: true } in order for
      * the Promise to resolve properly, will reject otherwise.
      *
      * ex: $app->terminateJson(['success' => true, 'data' => $data]);
      *
-     * @param                  url      the url to fetch data
-     * @param                  settings the Fomantic-UI api settings object.
-     * @param                  el       the element to apply Fomantic-UI context.
+     * @param   {string}       url      the URL to fetch data
+     * @param   {object}       settings the Fomantic-UI api settings object.
      * @returns {Promise<any>}
      */
     suiFetch(url, settings = {}, el = 'body') {
@@ -132,7 +120,7 @@ class ApiService {
         }
 
         if (!('method' in apiSettings)) {
-            apiSettings.method = 'get';
+            apiSettings.method = 'GET';
         }
 
         apiSettings.url = url;
@@ -192,11 +180,7 @@ class ApiService {
     onFailure(response) {
         // if json is returned, it should contain the error within message property
         if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
-            if (Object.prototype.hasOwnProperty.call(response, 'useWindow') && response.useWindow) {
-                atk.apiService.showErrorWindow(response.message);
-            } else {
-                atk.apiService.showErrorModal(response.message);
-            }
+            atk.apiService.showErrorModal(response.message);
         } else {
             // check if we have html returned by server with <body> content.
             const body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
@@ -231,42 +215,6 @@ class ApiService {
             .modal('refresh');
     }
 
-    /**
-     * Display App error in a separate window.
-     */
-    showErrorWindow(errorMsg) {
-        const error = $('<div class="atk-exception">')
-            .css({
-                padding: '8px',
-                'background-color': 'rgba(0, 0, 0, 0.5)',
-                margin: 'auto',
-                width: '100%',
-                height: '100%',
-                position: 'fixed',
-                top: 0,
-                bottom: 0,
-                'z-index': '100000',
-                'overflow-y': 'scroll',
-            })
-            .html($('<div>')
-                .css({
-                    width: '70%',
-                    'margin-top': '4%',
-                    'margin-bottom': '4%',
-                    'margin-left': 'auto',
-                    'margin-right': 'auto',
-                    background: 'white',
-                    padding: '4px',
-                    'overflow-x': 'scroll',
-                }).html(errorMsg)
-                .prepend($('<i class="ui big close icon"></i>').css('float', 'right').click(function () {
-                    const $this = $(this).parents('.atk-exception');
-                    $this.hide();
-                    $this.remove();
-                })));
-        error.appendTo('body');
-    }
-
     getErrorHtml(error) {
         return `<div class="ui negative icon message">
                 <i class="warning sign icon"></i>
@@ -278,7 +226,4 @@ class ApiService {
     }
 }
 
-const apiService = new ApiService();
-Object.freeze(apiService);
-
-export default apiService;
+export default Object.freeze(new ApiService());

@@ -1,5 +1,5 @@
+import $ from 'external/jquery';
 import throttle from 'lodash/throttle';
-import $ from 'jquery';
 
 /**
  * Simple helper to help displaying Fomantic-UI Dropdown within an atk table.
@@ -42,7 +42,8 @@ function showTableDropdown() {
         top -= $(window).scrollTop();
         left = position.left;
 
-        const style = `position: fixed; z-index: 12; top: 0px; margin-top: ${top}px !important; left: ${left}px !important; width: fit-content !important; height: fit-content; min-width: 12px`;
+        const style = 'position: fixed; z-index: 12; top: 0px; margin-top: ' + top + 'px !important;'
+            + ' left: ' + left + 'px !important; width: fit-content !important; height: fit-content; min-width: 12px;';
         $menu.css('cssText', style);
     }
 
@@ -64,8 +65,7 @@ function hideTableDropdown() {
     $(window).off('resize.atktable');
 }
 
-// Export function to atk.
-export const tableDropdown = {
+export default {
     onShow: showTableDropdown,
     onHide: hideTableDropdown,
 };

@@ -14,7 +14,8 @@ use Atk4\Ui\View;
 require_once __DIR__ . '/../init-app.php';
 
 $crumb = Breadcrumb::addTo($app);
-$crumb->addCrumb('UI Demo', ['index']);
+$crumb->addCrumb('UI Demo', '..');
+$crumb->addCrumb('Basics', '.');
 $crumb->addCrumb('Breadcrumb Demo', ['breadcrumb']);
 
 View::addTo($app, ['ui' => 'divider']);

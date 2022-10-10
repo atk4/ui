@@ -1,21 +1,15 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 
 class AccordionService {
-    /**
-     * Setup Fomantic-UI accordion for this service.
-     */
-    setService(settings) {
+    setupFomanticUi(settings) {
         settings.onOpening = this.onOpening;
     }
 
     onOpening() {
         if ($(this).data('path')) {
-            $(this).atkReloadView({ uri: $(this).data('path'), uri_options: { __atk_json: 1 } });
+            $(this).atkReloadView({ url: $(this).data('path'), urlOptions: { __atk_json: 1 } });
         }
     }
 }
 
-const accordionService = new AccordionService();
-Object.freeze(accordionService);
-
-export default accordionService;
+export default Object.freeze(new AccordionService());

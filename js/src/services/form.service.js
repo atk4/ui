@@ -1,6 +1,5 @@
-import $ from 'jquery';
-
-/* eslint-disable jsdoc/require-param-type */
+import $ from 'external/jquery';
+import atk from 'atk';
 
 /**
  * Handle Fomantic-UI form functionality throughout the app.
@@ -24,10 +23,7 @@ class FormService {
         };
     }
 
-    /**
-     * Setup Fomantic-UI form with this service.
-     */
-    setService(settings) {
+    setupFomanticUi(settings) {
         settings.rules.isVisible = this.isVisible;
         settings.rules.notEmpty = settings.rules.empty;
         settings.rules.isEqual = this.isEqual;
@@ -70,7 +66,7 @@ class FormService {
     /**
      * Visibility rule.
      *
-     * @returns {boolean | jQuery}
+     * @returns {boolean}
      */
     isVisible() {
         return $(this).is(':visible');
@@ -83,10 +79,10 @@ class FormService {
     /**
      * Validate a field using our own or Fomantic-UI validation rule function.
      *
-     * @param               form      Form containing the field.
-     * @param               fieldName Name of field
-     * @param               rule      Rule to apply test.
-     * @returns {*|boolean}
+     * @param   {$}             form      Form containing the field.
+     * @param   {string}        fieldName Name of field
+     * @param   {string|object} rule      Rule to apply test.
+     * @returns {*|false}
      */
     validateField(form, fieldName, rule) {
         rule = this.normalizeRule(rule);
@@ -94,7 +90,7 @@ class FormService {
         if (ruleFunction) {
             const $field = this.getField(form, fieldName);
             if (!$field) {
-                console.error('You are validating a field that does not exist: ', fieldName);
+                console.error('You are validating a field that does not exist: ' + fieldName);
 
                 return false;
             }
@@ -103,7 +99,7 @@ class FormService {
 
             return ruleFunction.call($field, value, ancillary);
         }
-        console.error('this rule does not exist: ' + this.getRuleName(rule));
+        console.error('Rule does not exist: ' + this.getRuleName(rule));
 
         return false;
     }
@@ -186,7 +182,4 @@ class FormService {
     }
 }
 
-const formService = new FormService();
-Object.freeze(formService);
-
-export default formService;
+export default Object.freeze(new FormService());

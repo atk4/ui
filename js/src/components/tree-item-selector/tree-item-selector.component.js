@@ -1,6 +1,8 @@
+import $ from 'external/jquery';
+
 const template = `<div class="item" :style="itemMargin">
         <i :class="toggleIcon" @click="onToggleShow" v-show="!isRoot"></i>
-        <i :class="getIcon"  @click="onToggleSelect" v-show="!isRoot"></i>
+        <i :class="getIcon" @click="onToggleSelect" v-show="!isRoot"></i>
         <div class="content" >
           <div @click="onToggleSelect" :style="itemCursor">{{title}}</div>
           <div class="list" v-show="open || isRoot" v-if="isParent" >
@@ -186,7 +188,7 @@ export default {
         /**
          * Get all id from all chidren node.
          *
-         * @returns {Array}
+         * @returns {Array.<string>}
          */
         collectAllChildren: function (nodes, ids = []) {
             nodes.forEach((node) => {
@@ -249,7 +251,7 @@ export default {
             }
         },
         /**
-         * Set input field with current mapped  model value.
+         * Set input field with current mapped model value.
          */
         setInput: function (value) {
             // console.log('set input');
@@ -267,10 +269,10 @@ export default {
          * Send data using callback url.
          */
         postValue: function () {
-            jQuery(this.$el).parents('.' + this.getRootData().options.loader).api({
+            $(this.$el).parents('.' + this.getRootData().options.loader).api({
                 on: 'now',
                 url: this.getRootData().options.url,
-                method: 'post',
+                method: 'POST',
                 data: { data: JSON.stringify(this.getRootData().values) },
             });
         },

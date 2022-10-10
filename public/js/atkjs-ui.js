@@ -1,197 +1,15 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("jQuery"), require("Draggable"));
+		module.exports = factory(require("jQuery"));
 	else if(typeof define === 'function' && define.amd)
-		define("atk", ["jQuery", "Draggable"], factory);
+		define("atk", ["jQuery"], factory);
 	else if(typeof exports === 'object')
-		exports["atk"] = factory(require("jQuery"), require("Draggable"));
+		exports["atk"] = factory(require("jQuery"));
 	else
-		root["atk"] = factory(root["jQuery"], root["Draggable"]);
-})(self, (__WEBPACK_EXTERNAL_MODULE_jquery__, __WEBPACK_EXTERNAL_MODULE_draggable__) => {
+		root["atk"] = factory(root["jQuery"]);
+})(self, (__WEBPACK_EXTERNAL_MODULE_external_jquery__) => {
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
-
-/***/ "./src/atk-fomantic-ui.js":
-/*!********************************!*\
-  !*** ./src/atk-fomantic-ui.js ***!
-  \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var services_api_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! services/api.service */ "./src/services/api.service.js");
-/* harmony import */ var services_modal_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! services/modal.service */ "./src/services/modal.service.js");
-/* harmony import */ var _services_upload_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./services/upload.service */ "./src/services/upload.service.js");
-/* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./services/form.service */ "./src/services/form.service.js");
-/* harmony import */ var _services_popup_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/popup.service */ "./src/services/popup.service.js");
-/* harmony import */ var _services_accordion_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/accordion.service */ "./src/services/accordion.service.js");
-/* global FormSerializer */
-
-
-
-
-
-
- // setup app service for Fomantic-UI
-
-services_api_service__WEBPACK_IMPORTED_MODULE_1__["default"].setService((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.api.settings));
-services_modal_service__WEBPACK_IMPORTED_MODULE_2__["default"].setModals((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.modal.settings));
-_services_form_service__WEBPACK_IMPORTED_MODULE_4__["default"].setService((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.form.settings));
-_services_popup_service__WEBPACK_IMPORTED_MODULE_5__["default"].setPopups((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.popup.settings));
-_services_accordion_service__WEBPACK_IMPORTED_MODULE_6__["default"].setService((jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.accordion.settings));
-
-if (typeof FormSerializer !== 'undefined') {
-  // setup jQuery FormSerializer to accept in input name with dash char (-)
-  jquery__WEBPACK_IMPORTED_MODULE_0___default().extend(FormSerializer.patterns, {
-    validate: /^[a-z_][a-z0-9_-]*(?:\[(?:\d*|[a-z0-9_-]+)\])*$/i,
-    key: /[a-z0-9_-]+|(?=\[\])/gi,
-    named: /^[a-z0-9_-]+$/i
-  });
-}
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  uploadService: _services_upload_service__WEBPACK_IMPORTED_MODULE_3__["default"],
-  apiService: services_api_service__WEBPACK_IMPORTED_MODULE_1__["default"],
-  modalService: services_modal_service__WEBPACK_IMPORTED_MODULE_2__["default"],
-  formService: _services_form_service__WEBPACK_IMPORTED_MODULE_4__["default"]
-});
-
-/***/ }),
-
-/***/ "./src/atk-utils.js":
-/*!**************************!*\
-  !*** ./src/atk-utils.js ***!
-  \**************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "atkDebounce": () => (/* binding */ atkDebounce),
-/* harmony export */   "atkEventBus": () => (/* binding */ atkEventBus),
-/* harmony export */   "atkOptions": () => (/* binding */ atkOptions),
-/* harmony export */   "atkUtils": () => (/* binding */ atkUtils)
-/* harmony export */ });
-/* harmony import */ var mitt__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mitt */ "./node_modules/mitt/dist/mitt.es.js");
-/* harmony import */ var helpers_url_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! helpers/url.helper */ "./src/helpers/url.helper.js");
-/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
-
-
-
-/**
- * Define atk global options.
- * In Js:
- * atk.options.set('name', 'value');
- * In Php:
- * (new JsChain('atk.options')->set('name', 'value');
- */
-
-const atkOptions = function () {
-  const options = {};
-  return {
-    set: (name, value) => {
-      options[name] = value;
-    },
-    get: name => options[name]
-  };
-}();
-/**
- * Subscribe too and publish events.
- * listen to an event
- * atk.eventBus.on('foo', e => console.log('foo', e))
- * Fire an event
- * atk.eventBus.emit('foo', { a: 'b' })
- */
-
-
-const atkEventBus = function () {
-  const eventBus = (0,mitt__WEBPACK_IMPORTED_MODULE_0__["default"])();
-  return {
-    emit: (event, payload) => eventBus.emit(event, payload),
-    on: (event, ref) => eventBus.on(event, ref),
-    off: (event, ref) => eventBus.off(event, ref),
-    clearAll: () => eventBus.all.clear()
-  };
-}();
-/*
-* Utilities function that you can execute
-* from atk context. Usage: atk.utils.date().parse('string');
-*/
-
-
-const atkUtils = function () {
-  return {
-    json: function () {
-      return {
-        // try parsing string as JSON. Return parse if valid, otherwise return onError value.
-        tryParse: function (str) {
-          let onError = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-          try {
-            return JSON.parse(str);
-          } catch (e) {
-            return onError;
-          }
-        }
-      };
-    },
-    date: function () {
-      return {
-        // fix date parsing for different time zone if time is not supply.
-        parse: function (dateString) {
-          if (dateString.match(/^[0-9]{4}[/\-.][0-9]{2}[/\-.][0-9]{2}$/)) {
-            dateString += ' 00:00:00';
-          }
-
-          return dateString;
-        }
-      };
-    },
-    redirect: function (url, params) {
-      document.location = $.atkAddParams(url, params);
-    }
-  };
-}();
-
-function atkDebounce(func, wait, options) {
-  let timerId = null;
-  let debouncedInner;
-
-  function createTimer() {
-    timerId = setInterval(() => {
-      if (!debouncedInner.pending()) {
-        clearInterval(timerId);
-        timerId = null;
-        jQuery.active--;
-      }
-    }, 25);
-    jQuery.active++;
-  }
-
-  debouncedInner = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_2__["default"])(func, wait, options);
-
-  function debounced() {
-    if (timerId === null) {
-      createTimer();
-    }
-
-    return debouncedInner(...arguments);
-  }
-
-  debounced.cancel = debouncedInner.cancel;
-  debounced.flush = debouncedInner.flush;
-  debounced.pending = debouncedInner.pending;
-  return debounced;
-}
-
-
-
-/***/ }),
 
 /***/ "./src/helpers/table-dropdown.helper.js":
 /*!**********************************************!*\
@@ -202,7 +20,7 @@ function atkDebounce(func, wait, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "tableDropdown": () => (/* binding */ tableDropdown)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -210,9 +28,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash/throttle */ "./node_modules/lodash/throttle.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_3__);
 
 
 
@@ -228,8 +46,8 @@ __webpack_require__.r(__webpack_exports__);
 
 function showTableDropdown() {
   // getting element composing dropdown.
-  const $that = jquery__WEBPACK_IMPORTED_MODULE_3___default()(this);
-  const $menu = jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).find('.menu');
+  const $that = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this);
+  const $menu = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).find('.menu');
   const position = $that.offset();
   const hasFloating = $that.hasClass('floating');
   /**
@@ -239,7 +57,7 @@ function showTableDropdown() {
    */
 
   function canFitBelow() {
-    return $menu.outerHeight() < jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).height() - $that[0].getBoundingClientRect().bottom;
+    return $menu.outerHeight() < external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).height() - $that[0].getBoundingClientRect().bottom;
   }
   /**
    * Set menu style for displaying at right position.
@@ -259,15 +77,15 @@ function showTableDropdown() {
       top = hasFloating ? top - 5 : top;
     }
 
-    top -= jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).scrollTop();
+    top -= external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).scrollTop();
     left = position.left;
-    const style = `position: fixed; z-index: 12; top: 0px; margin-top: ${top}px !important; left: ${left}px !important; width: fit-content !important; height: fit-content; min-width: 12px`;
+    const style = 'position: fixed; z-index: 12; top: 0px; margin-top: ' + top + 'px !important;' + ' left: ' + left + 'px !important; width: fit-content !important; height: fit-content; min-width: 12px;';
     $menu.css('cssText', style);
   }
 
   setCssPosition();
-  jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).on('scroll.atktable', (0,lodash_throttle__WEBPACK_IMPORTED_MODULE_4__["default"])(setCssPosition, 10));
-  jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).on('resize.atktable', () => {
+  external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).on('scroll.atktable', (0,lodash_throttle__WEBPACK_IMPORTED_MODULE_4__["default"])(setCssPosition, 10));
+  external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).on('resize.atktable', () => {
     $that.dropdown('hide');
   });
 }
@@ -278,17 +96,16 @@ function showTableDropdown() {
 
 function hideTableDropdown() {
   // reset positioning.
-  const $menu = jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).find('.menu');
+  const $menu = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).find('.menu');
   $menu.css('cssText', '');
-  jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).off('scroll.atktable');
-  jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).off('resize.atktable');
-} // Export function to atk.
+  external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).off('scroll.atktable');
+  external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).off('resize.atktable');
+}
 
-
-const tableDropdown = {
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   onShow: showTableDropdown,
   onHide: hideTableDropdown
-};
+});
 
 /***/ }),
 
@@ -313,46 +130,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_5__);
 
 
 
 
 
 
-/**
- * Url helper jQuery functions.
- *
- * - AddParams - Pass an url with an object and object key=value pair will be
- * added to the url as get parameter.
- * ex: $.atkAddParams('myurl.php', {q: 'test', 'reload': 'my_view'})
- * will return: myurl.php?q=test&reload=my_view
- *
- * - RemoveParam - remove a parameter from an url string.
- * ex: $.atkRemoveParam('myurl.php?q=test&reload=my_view', 'q')
- * will return: myurl.php?reload=my_view
- */
-(function ($) {
-  if (!$.atk) {
-    $.atk = {};
-  }
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   /**
-   * Get the base url from string.
+   * Get each URL query parameter as a key:value pair object.
    *
-   * @returns {*|string}
+   * @returns {object}
    */
-
-
-  $.atk.getUrl = function (url) {
-    return url.split('?')[0];
-  };
-  /**
-   * Get each url query parameter as a key:value pair object.
-   *
-   * @returns {{}|unknown}
-   */
-
-
-  $.atk.getQueryParams = function (str) {
+  parseParams: function (str) {
     if (str.split('?')[1]) {
       return decodeURIComponent(str.split('?')[1]).split('&').reduce((obj, unsplitArg) => {
         const arg = unsplitArg.split('=');
@@ -363,29 +155,33 @@ __webpack_require__.r(__webpack_exports__);
     }
 
     return {};
-  };
+  },
+
   /**
-   * Add param to an url string.
+   * Add param to an URL string.
    *
-   * @returns {*}
+   * ex: atk.urlHelper.appendParams('myurl.php', { q: 'test', 'reload': 'myView' })
+   * will return: myurl.php?q=test&reload=myView
+   *
+   * @returns {string}
    */
-
-
-  $.atk.addParams = function (url, data) {
-    if (!$.isEmptyObject(data)) {
-      url += (url.indexOf('?') >= 0 ? '&' : '?') + $.param(data);
+  appendParams: function (url, data) {
+    if (!external_jquery__WEBPACK_IMPORTED_MODULE_5___default().isEmptyObject(data)) {
+      url += (url.indexOf('?') >= 0 ? '&' : '?') + external_jquery__WEBPACK_IMPORTED_MODULE_5___default().param(data);
     }
 
     return url;
-  };
+  },
+
   /**
-   * Remove param from an url string.
+   * Remove param from an URL string.
    *
-   * @returns {string|*|string}
+   * ex: atk.urlHelper.removeParam('myurl.php?q=test&reload=myView', 'q')
+   * will return: myurl.php?reload=myView
+   *
+   * @returns {string}
    */
-
-
-  $.atk.removeParam = function (url, param) {
+  removeParam: function (url, param) {
     const splitUrl = url.split('?');
 
     if (splitUrl.length === 0) {
@@ -405,194 +201,17 @@ __webpack_require__.r(__webpack_exports__);
     }
 
     return urlBase;
-  };
-})(jQuery);
+  },
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((function ($) {
-  $.atkGetUrl = $.atk.getUrl;
-  $.atkAddParams = $.atk.addParams;
-  $.atkRemoveParam = $.atk.removeParam;
-  $.atkGetQueryParam = $.atk.getQueryParams;
-})(jQuery));
-
-/***/ }),
-
-/***/ "./src/plugin.js":
-/*!***********************!*\
-  !*** ./src/plugin.js ***!
-  \***********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "plugin": () => (/* binding */ plugin)
-/* harmony export */ });
-/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.for-each.js */ "./node_modules/core-js/modules/esnext.async-iterator.for-each.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "./node_modules/core-js/modules/esnext.iterator.for-each.js");
-/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugins/server-event.plugin */ "./src/plugins/server-event.plugin.js");
-/* harmony import */ var _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./plugins/reload-view.plugin */ "./src/plugins/reload-view.plugin.js");
-/* harmony import */ var _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/ajaxec.plugin */ "./src/plugins/ajaxec.plugin.js");
-/* harmony import */ var _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./plugins/create-modal.plugin */ "./src/plugins/create-modal.plugin.js");
-/* harmony import */ var _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/file-upload.plugin */ "./src/plugins/file-upload.plugin.js");
-/* harmony import */ var _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/js-search.plugin */ "./src/plugins/js-search.plugin.js");
-/* harmony import */ var _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/js-sortable.plugin */ "./src/plugins/js-sortable.plugin.js");
-/* harmony import */ var _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./plugins/conditional-form.plugin */ "./src/plugins/conditional-form.plugin.js");
-/* harmony import */ var _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/column-resizer.plugin */ "./src/plugins/column-resizer.plugin.js");
-/* harmony import */ var _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./plugins/scroll.plugin */ "./src/plugins/scroll.plugin.js");
-/* harmony import */ var _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./plugins/confirm.plugin */ "./src/plugins/confirm.plugin.js");
-/* harmony import */ var _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./plugins/sidenav.plugin */ "./src/plugins/sidenav.plugin.js");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* eslint-disable jsdoc/require-param-type */
-
-/**
- * Generate a jQuery plugin
- *
- * Example:
- * import plugin from 'plugin';
- *
- * class MyPlugin {
- * constructor(element, options) {
- * // ...
- * }
- * }
- *
- * MyPlugin.DEFAULTS = {};
- *
- * plugin('myPlugin', MyPlugin);
- *
- * credit : https://gist.github.com/monkeymonk/c08cb040431f89f99928132ca221d647
- *
- * import $ from 'jquery' will bind '$' var to jQuery var without '$' var conflicting with other library
- * in final webpack output.
- *
- * @param name      [string] Plugin name
- * @param className [object] Class of the plugin
- * @param shortHand [bool] Generate a shorthand as $.pluginName
- */
-
-function plugin(name, className) {
-  let shortHand = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
-  // Add atk namespace to jQuery global space.
-  if (!(jquery__WEBPACK_IMPORTED_MODULE_3___default().atk)) {
-    (jquery__WEBPACK_IMPORTED_MODULE_3___default().atk) = {};
+  /**
+   * Remove whole query string from an URL string.
+   *
+   * @returns {string}
+   */
+  removeAllParams: function (url) {
+    return url.split('?')[0];
   }
-
-  const pluginName = 'atk' + name;
-  const dataName = `__${pluginName}`; // add plugin to atk namespace.
-
-  (jquery__WEBPACK_IMPORTED_MODULE_3___default().atk)[name] = className; // register plugin to jQuery fn prototype.
-
-  (jquery__WEBPACK_IMPORTED_MODULE_3___default().fn)[pluginName] = function () {
-    let option = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-
-    // Check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
-    if (typeof option === 'string') {
-      if (this.data(dataName) && typeof this.data(dataName)[option] === 'function') {
-        return this.data(dataName).call(option, args);
-      } // return if trying to call a plugin method prior to instantiate it.
-
-
-      return;
-    }
-
-    return this.each(function () {
-      const options = jquery__WEBPACK_IMPORTED_MODULE_3___default().extend({}, className.DEFAULTS, typeof option === 'object' && option); // create plugin using the constructor function store in atk namespace object
-      // and add a reference of it to this jQuery object data.
-
-      jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).data(dataName, new (jquery__WEBPACK_IMPORTED_MODULE_3___default().atk)[name](this, options));
-    });
-  }; // - Short hand
-
-
-  if (shortHand) {
-    (jquery__WEBPACK_IMPORTED_MODULE_3___default())[pluginName] = options => jquery__WEBPACK_IMPORTED_MODULE_3___default()({})[pluginName](options);
-  }
-}
-/**
- * Create all jQuery plugins need for atk.
- */
-
-
-(function () {
-  const atkJqPlugins = [{
-    name: 'ReloadView',
-    plugin: _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_5__["default"],
-    sh: false
-  }, {
-    name: 'Ajaxec',
-    plugin: _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_6__["default"],
-    sh: false
-  }, {
-    name: 'CreateModal',
-    plugin: _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_7__["default"],
-    sh: false
-  }, {
-    name: 'ServerEvent',
-    plugin: _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_4__["default"],
-    sh: true
-  }, {
-    name: 'FileUpload',
-    plugin: _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_8__["default"],
-    sh: false
-  }, {
-    name: 'JsSearch',
-    plugin: _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_9__["default"],
-    sh: false
-  }, {
-    name: 'JsSortable',
-    plugin: _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_10__["default"],
-    sh: false
-  }, {
-    name: 'ConditionalForm',
-    plugin: _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_11__["default"],
-    sh: true
-  }, {
-    name: 'ColumnResizer',
-    plugin: _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_12__["default"],
-    sh: false
-  }, {
-    name: 'Scroll',
-    plugin: _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_13__["default"],
-    sh: false
-  }, {
-    name: 'Confirm',
-    plugin: _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_14__["default"],
-    sh: true
-  }, {
-    name: 'Sidenav',
-    plugin: _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_15__["default"],
-    sh: false
-  }];
-  atkJqPlugins.forEach(atkJqPlugin => {
-    plugin(atkJqPlugin.name, atkJqPlugin.plugin, atkJqPlugin.sh);
-  });
-})();
-
-
+});
 
 /***/ }),
 
@@ -605,17 +224,19 @@ function plugin(name, className) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ajaxec)
+/* harmony export */   "default": () => (/* binding */ AtkAjaxecPlugin)
 /* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
-class ajaxec extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
+
+class AtkAjaxecPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
   main() {
-    if (!this.settings.uri) {
-      console.error('Trying to execute callback without url.');
+    if (!this.settings.url) {
+      console.error('Trying to execute callback without URL');
       return;
     } // Allow user to confirm if available.
 
@@ -631,14 +252,14 @@ class ajaxec extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
 
   doExecute() {
-    const url = jquery__WEBPACK_IMPORTED_MODULE_0___default().atk.getUrl(this.settings.uri);
-    const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {}; // uri_options is always use as data in a post request.
+    const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.removeAllParams(this.settings.url);
+    const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {}; // urlOptions is always used as data in a POST request
 
-    const data = this.settings.uri_options ? this.settings.uri_options : {}; // retrieve param from url.
+    const data = this.settings.urlOptions ? this.settings.urlOptions : {}; // retrieve param from URL
 
-    let urlParam = jquery__WEBPACK_IMPORTED_MODULE_0___default().atkGetQueryParam(this.settings.uri); // get store object.
+    let urlParams = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.url); // get store object.
 
-    const store = atk.dataService.getStoreData(this.settings.storeName);
+    const store = atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService.getStoreData(this.settings.storeName);
     const settings = {
       on: 'now',
       url: '',
@@ -647,21 +268,21 @@ class ajaxec extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
       ...userConfig
     };
 
-    if (settings.method.toLowerCase() === 'get') {
-      // set data, store and add it to url param.
-      urlParam = Object.assign(urlParam, data, store);
+    if (settings.method.toUpperCase() === 'GET') {
+      // set data, store and add it to URL param.
+      urlParams = Object.assign(urlParams, data, store);
     } else {
       settings.data = Object.assign(data, store);
     }
 
-    settings.url = url + '?' + jquery__WEBPACK_IMPORTED_MODULE_0___default().param(urlParam);
+    settings.url = url + '?' + external_jquery__WEBPACK_IMPORTED_MODULE_0___default().param(urlParams);
     this.$el.api(settings);
   }
 
 }
-ajaxec.DEFAULTS = {
-  uri: null,
-  uri_options: {},
+AtkAjaxecPlugin.DEFAULTS = {
+  url: null,
+  urlOptions: {},
   confirm: null,
   apiConfig: null,
   storeName: null
@@ -678,25 +299,23 @@ ajaxec.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ atkPlugin)
+/* harmony export */   "default": () => (/* binding */ AtkPlugin)
 /* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-
-/* eslint-disable jsdoc/require-param-type */
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
  * Base implementation of jQuery plugin in Agile Toolkit.
  */
 
-class atkPlugin {
+class AtkPlugin {
   /**
    * Default plugin constructor
    *
-   * @returns {atkPlugin}
+   * @returns {AtkPlugin}
    */
   constructor(element, options) {
-    this.$el = jquery__WEBPACK_IMPORTED_MODULE_0___default()(element);
+    this.$el = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(element);
     this.settings = options;
     this.main();
   }
@@ -713,8 +332,8 @@ class atkPlugin {
    * Call a plugin method via the initializer function.
    * Simply call the method like: $(selector).pluginName('method', [arg1, arg2])
    *
-   * @param       fn   string representing the method name to execute.
-   * @param       args array of arguments need for the method to execute.
+   * @param   {string}    fn   string representing the method name to execute.
+   * @param   {Array.<*>} args array of arguments need for the method to execute.
    * @returns {*}
    */
 
@@ -736,7 +355,7 @@ class atkPlugin {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ columnResizer)
+/* harmony export */   "default": () => (/* binding */ AtkColumnResizerPlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -744,8 +363,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var column_resizer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! column-resizer */ "./node_modules/column-resizer/dist/column-resizer.js");
 /* harmony import */ var column_resizer__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(column_resizer__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
@@ -755,16 +374,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* eslint-disable jsdoc/require-param-type */
-
 /**
  * Enable table column to be resizable using drag.
  */
 
-class columnResizer extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
+class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
-    // add on resize callback if url is supply.
-    if (this.settings.uri) {
+    // add on resize callback if URL is supplied
+    if (this.settings.url) {
       this.settings.onResize = this.onResize.bind(this);
     }
 
@@ -775,16 +392,16 @@ class columnResizer extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] 
     this.$el.removeClass('grip-padding');
   }
   /**
-   * Send widths to server via callback uri.
+   * Send widths to server via callback URL.
    *
-   * @param widths an Array of objects, each containing the column name and their size in pixels [{column: 'name', size: '135px'}]
+   * @param {Array.<object>} widths an Array of objects, each containing the column name and their size in pixels [{ column: 'name', size: '135px' }]
    */
 
 
   sendWidths(widths) {
     this.$el.api({
       on: 'now',
-      url: this.settings.uri,
+      url: this.settings.url,
       method: 'POST',
       data: {
         widths: JSON.stringify(widths)
@@ -794,25 +411,23 @@ class columnResizer extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] 
   /**
    * On resize callback when user finish dragging column for resizing.
    * Calling this method via callback need to bind "this" set to this plugin.
-   *
-   * @param e the event.
    */
 
 
-  onResize(e) {
+  onResize(event) {
     const columns = this.$el.find('th');
     const widths = [];
     columns.each((idx, item) => {
       widths.push({
-        column: jquery__WEBPACK_IMPORTED_MODULE_3___default()(item).data('column'),
-        size: jquery__WEBPACK_IMPORTED_MODULE_3___default()(item).outerWidth()
+        column: external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(item).data('column'),
+        size: external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(item).outerWidth()
       });
     });
     this.sendWidths(widths);
   }
 
 }
-columnResizer.DEFAULTS = {
+AtkColumnResizerPlugin.DEFAULTS = {
   atkDefaults: {
     liveDrag: true,
     resizeMode: 'overflow',
@@ -820,7 +435,7 @@ columnResizer.DEFAULTS = {
     minWidth: 8 // onResize: function(e) { e.path.filter(function(item) { return item.querySelector('table') }); }
 
   },
-  uri: null
+  url: null
 };
 
 /***/ }),
@@ -834,7 +449,7 @@ columnResizer.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ conditionalForm)
+/* harmony export */   "default": () => (/* binding */ AtkConditionalFormPlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -850,8 +465,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "./node_modules/core-js/modules/esnext.iterator.for-each.js");
 /* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-/* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../services/form.service */ "./src/services/form.service.js");
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
 
@@ -886,13 +501,13 @@ __webpack_require__.r(__webpack_exports__);
  * $form->js()->atkConditionalForm(
  * [ 'fieldRules =>
  * [
- * 'hair_cut' => [
+ * 'haircut' => [
  * ['race' => 'contains[poodle]', 'age' => 'integer[0..5]'],
  * ['race' => 'isExactly[bichon]']
  * ]
  * ]
  * ]);
- * Can be phrase this way: Display 'hair_cut' if 'race' contains 'poodle' AND 'age' is between 0 and 5 OR 'race' contains the exact word 'bichon'.
+ * Can be phrase this way: Display 'haircut' if 'race' contains 'poodle' AND 'age' is between 0 and 5 OR 'race' contains the exact word 'bichon'.
  *
  * Adding an array of conditions for the same field is also support.
  *
@@ -907,21 +522,21 @@ __webpack_require__.r(__webpack_exports__);
  * See Fomantic-UI validation rule for more details: https://fomantic-ui.com/behaviors/form.html#validation-rules
  */
 
-class conditionalForm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["default"] {
+class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_8__["default"] {
   main() {
     this.inputs = [];
     this.selector = this.settings.selector;
 
     if (!this.selector) {
-      this.selector = _services_form_service__WEBPACK_IMPORTED_MODULE_8__["default"].getDefaultSelector();
+      this.selector = atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.getDefaultSelector();
     } // add change listener to inputs according to selector
 
 
-    this.$el.find(':checkbox').on('change', this, atk.debounce(this.onInputChange, 100, true));
-    this.$el.find(':radio').on('change', this, atk.debounce(this.onInputChange, 100, true));
-    this.$el.find('input[type="hidden"]').on('change', this, atk.debounce(this.onInputChange, 100, true));
-    this.$el.find('input').on(this.settings.validateEvent, this, atk.debounce(this.onInputChange, 250));
-    this.$el.find('select').on('change', this, atk.debounce(this.onInputChange, 100));
+    this.$el.find(':checkbox').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 100, true));
+    this.$el.find(':radio').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 100, true));
+    this.$el.find('input[type="hidden"]').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 100, true));
+    this.$el.find('input').on(this.settings.validateEvent, this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 250));
+    this.$el.find('select').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 100));
     this.initialize();
   }
 
@@ -978,10 +593,10 @@ class conditionalForm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["default"
 
           if (Array.isArray(validationRule)) {
             validationRule.forEach(rule => {
-              isAndValid = isAndValid && _services_form_service__WEBPACK_IMPORTED_MODULE_8__["default"].validateField(this.$el, inputName, rule);
+              isAndValid = isAndValid && atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.validateField(this.$el, inputName, rule);
             });
           } else {
-            isAndValid = isAndValid && _services_form_service__WEBPACK_IMPORTED_MODULE_8__["default"].validateField(this.$el, inputName, validationRule);
+            isAndValid = isAndValid && atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.validateField(this.$el, inputName, validationRule);
           }
         }); // Apply OR condition between rules.
 
@@ -1006,10 +621,10 @@ class conditionalForm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["default"
 
   setInputsState() {
     this.inputs.forEach(input => {
-      const $input = _services_form_service__WEBPACK_IMPORTED_MODULE_8__["default"].getField(this.$el, input.inputName);
+      const $input = atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.getField(this.$el, input.inputName);
 
       if ($input) {
-        const $container = _services_form_service__WEBPACK_IMPORTED_MODULE_8__["default"].getContainer($input, this.selector);
+        const $container = atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.getContainer($input, this.selector);
 
         if ($container) {
           $container.hide();
@@ -1030,7 +645,7 @@ class conditionalForm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["default"
   }
 
 }
-conditionalForm.DEFAULTS = {
+AtkConditionalFormPlugin.DEFAULTS = {
   autoReset: true,
   validateEvent: 'keydown',
   selector: null,
@@ -1048,10 +663,10 @@ conditionalForm.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ confirm)
+/* harmony export */   "default": () => (/* binding */ AtkConfirmPlugin)
 /* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
@@ -1066,10 +681,10 @@ __webpack_require__.r(__webpack_exports__);
  * onApprove and onDeny current setting.
  */
 
-class confirm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class AtkConfirmPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
     let context = this;
-    const $m = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div class="ui modal" />').appendTo('body').html(this.getDialogHtml(this.settings.message));
+    const $m = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div class="ui modal" />').appendTo('body').html(this.getDialogHtml(this.settings.message));
     $m.addClass(this.settings.size);
     let options = {};
 
@@ -1105,7 +720,7 @@ class confirm extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
 
 }
-confirm.DEFAULTS = {
+AtkConfirmPlugin.DEFAULTS = {
   message: null,
   size: 'tiny',
   onApprove: null,
@@ -1133,28 +748,28 @@ confirm.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ createModal)
+/* harmony export */   "default": () => (/* binding */ AtkCreateModalPlugin)
 /* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
-class createModal extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class AtkCreateModalPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
     const options = this.settings; // make sure we have an object when no option is passed
 
-    if (jquery__WEBPACK_IMPORTED_MODULE_0___default().isArray(options.uri_options)) {
-      options.uri_options = {};
+    if (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().isArray(options.urlOptions)) {
+      options.urlOptions = {};
     } // create modal and add it to the DOM
 
 
-    const $m = jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div class="atk-modal ui modal" />').appendTo('body').html(this.getDialogHtml(options.title)); // add setting to our modal for modalService
+    const $m = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div class="atk-modal ui modal" />').appendTo('body').html(this.getDialogHtml(options.title)); // add setting to our modal for modalService
 
     $m.data({
-      uri: options.uri,
-      type: options.data_type,
-      args: options.uri_options,
+      url: options.url,
+      type: options.dataType,
+      args: options.urlOptions,
       needRemove: true,
       needCloseTrigger: true,
       label: options.label
@@ -1173,10 +788,10 @@ class createModal extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   }
 
 }
-createModal.DEFAULTS = {
+AtkCreateModalPlugin.DEFAULTS = {
   title: '',
-  uri: null,
-  uri_options: {},
+  url: null,
+  urlOptions: {},
   headerCss: 'header',
   modalCss: 'scrolling',
   contentCss: 'image',
@@ -1197,7 +812,7 @@ createModal.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ fileUpload)
+/* harmony export */   "default": () => (/* binding */ AtkFileUploadPlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -1205,19 +820,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-/* harmony import */ var _services_upload_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../services/upload.service */ "./src/services/upload.service.js");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
 
 
 
 
-/* eslint-disable jsdoc/require-param-type */
-
-class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
+class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
     this.textInput = this.$el.find('input[type="text"]');
     this.hiddenInput = this.$el.find('input[type="hidden"]');
@@ -1330,15 +943,15 @@ class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   /**
    * Do the actual file uploading process.
    *
-   * @param file the FileList object.
+   * @param {FileList} files
    */
 
 
-  doFileUpload(file) {
+  doFileUpload(files) {
     // if submit button id is set, then disable submit
     // during upload.
     if (this.settings.submit) {
-      jquery__WEBPACK_IMPORTED_MODULE_3___default()('#' + this.settings.submit).addClass('disabled');
+      external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('#' + this.settings.submit).addClass('disabled');
     } // setup task on upload completion.
 
 
@@ -1349,7 +962,7 @@ class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
       }
 
       if (this.settings.submit) {
-        jquery__WEBPACK_IMPORTED_MODULE_3___default()('#' + this.settings.submit).removeClass('disabled');
+        external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('#' + this.settings.submit).removeClass('disabled');
       }
     }; // setup progress bar update via xhr.
 
@@ -1366,9 +979,9 @@ class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
     };
 
     this.bar.show();
-    _services_upload_service__WEBPACK_IMPORTED_MODULE_5__["default"].uploadFiles(file, this.$el, {
-      f_upload_action: 'upload'
-    }, this.settings.uri, completeCb, xhrCb);
+    atk__WEBPACK_IMPORTED_MODULE_4__["default"].uploadService.uploadFiles(files, this.$el, {
+      fUploadAction: 'upload'
+    }, this.settings.url, completeCb, xhrCb);
   }
   /**
    * Callback server for file delete.
@@ -1378,10 +991,10 @@ class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   doFileDelete(fileId) {
     this.$el.api({
       on: 'now',
-      url: this.settings.uri,
+      url: this.settings.url,
       data: {
-        f_upload_action: 'delete',
-        f_upload_id: fileId
+        fUploadAction: 'delete',
+        fUploadId: fileId
       },
       method: 'POST',
       obj: this.$el,
@@ -1404,13 +1017,13 @@ class fileUpload extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   }
 
 }
-fileUpload.DEFAULTS = {
-  uri: null,
+AtkFileUploadPlugin.DEFAULTS = {
+  url: null,
   file: {
     id: null,
     name: null
   },
-  uri_options: {},
+  urlOptions: {},
   action: null,
   completeLabel: '100%',
   submit: null
@@ -1427,7 +1040,7 @@ fileUpload.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ JsSearch)
+/* harmony export */   "default": () => (/* binding */ AtkJsSearchPlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -1439,9 +1052,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
 
@@ -1449,9 +1063,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* eslint-disable jsdoc/require-param-type */
 
-class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
+class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["default"] {
   main() {
     this.urlArgs = {};
     this.state = {
@@ -1490,17 +1103,17 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
 
 
   onAutoQueryAction() {
-    this.textInput.on('keyup', atk.debounce(e => {
-      const options = jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.uri_options);
+    this.textInput.on('keyup', atk__WEBPACK_IMPORTED_MODULE_6__["default"].debounce(e => {
+      const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.urlOptions);
 
       if (e.target.value === '' || e.keyCode === 27) {
-        this.doSearch(this.settings.uri, null, options, () => {
+        this.doSearch(this.settings.url, null, options, () => {
           this.setButtonState(false);
           this.setFilterState(false);
           this.textInput.val('');
         });
       } else if (e.target.value !== this.$el.data('preValue')) {
-        this.doSearch(this.settings.uri, e.target.value, options, () => {
+        this.doSearch(this.settings.url, e.target.value, options, () => {
           this.setButtonState(true);
           this.setFilterState(true);
         });
@@ -1516,16 +1129,16 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
 
   onEnterAction() {
     this.textInput.on('keyup', e => {
-      const options = jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.uri_options);
+      const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.urlOptions);
 
       if (e.keyCode === 13 && e.target.value) {
-        this.doSearch(this.settings.uri, e.target.value, options, () => {
+        this.doSearch(this.settings.url, e.target.value, options, () => {
           this.setButtonState(true);
           this.setFilterState(true);
         });
         this.$el.data('preValue', e.target.value);
       } else if (e.keyCode === 27 && e.target.value || e.keyCode === 13 && e.target.value === '') {
-        this.doSearch(this.settings.uri, null, options, () => {
+        this.doSearch(this.settings.url, null, options, () => {
           this.setButtonState(false);
           this.setFilterState(false);
         });
@@ -1559,10 +1172,10 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
 
   setSearchAction() {
     this.searchAction.on('click', e => {
-      const options = jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.uri_options);
+      const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.urlOptions);
 
       if (this.state.button) {
-        this.doSearch(this.settings.uri, null, options, () => {
+        this.doSearch(this.settings.url, null, options, () => {
           this.setButtonState(false);
           this.setFilterState(false);
         });
@@ -1571,7 +1184,7 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
       }
 
       if (!this.state.button && this.textInput.val()) {
-        this.doSearch(this.settings.uri, this.textInput.val(), options, () => {
+        this.doSearch(this.settings.url, this.textInput.val(), options, () => {
           this.setButtonState(true);
           this.setFilterState(true);
         });
@@ -1583,7 +1196,7 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
    * Mostly use on page load
    * when input need to be set to reflect a search state.
    *
-   * @param text The text input value.
+   * @param {string} text The text input value.
    */
 
 
@@ -1594,7 +1207,7 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
     this.$el.data('preValue', text);
   }
   /**
-   * More generic way to set url argument.
+   * More generic way to set URL argument.
    */
 
 
@@ -1638,12 +1251,12 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
    */
 
 
-  doSearch(uri, query, options) {
+  doSearch(url, query, options) {
     let cb = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {};
-    const queryKey = this.settings.uri_query_key;
+    const queryKey = this.settings.urlQueryKey;
 
     if (query) {
-      options = jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(options, {
+      options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(options, {
         [queryKey]: query
       });
     }
@@ -1651,7 +1264,7 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
     if (this.settings.useAjax) {
       this.$el.api({
         on: 'now',
-        url: uri,
+        url: url,
         data: options,
         method: 'GET',
         obj: this.$el,
@@ -1659,22 +1272,22 @@ class JsSearch extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
         onComplete: cb
       });
     } else {
-      uri = jquery__WEBPACK_IMPORTED_MODULE_5___default().atkRemoveParam(uri, queryKey);
+      url = atk__WEBPACK_IMPORTED_MODULE_6__["default"].urlHelper.removeParam(url, queryKey);
 
       if (options.__atk_reload) {
         delete options.__atk_reload;
       }
 
-      uri = jquery__WEBPACK_IMPORTED_MODULE_5___default().atkAddParams(uri, options);
-      window.location = uri;
+      url = atk__WEBPACK_IMPORTED_MODULE_6__["default"].urlHelper.appendParams(url, options);
+      window.location = url;
     }
   }
 
 }
-JsSearch.DEFAULTS = {
-  uri: null,
-  uri_options: {},
-  uri_query_key: null,
+AtkJsSearchPlugin.DEFAULTS = {
+  url: null,
+  urlOptions: {},
+  urlQueryKey: null,
   q: null,
   autoQuery: false,
   timeOut: 300,
@@ -1692,7 +1305,7 @@ JsSearch.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ JsSortable)
+/* harmony export */   "default": () => (/* binding */ AtkJsSortablePlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -1700,20 +1313,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-/* harmony import */ var draggable__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! draggable */ "draggable");
-/* harmony import */ var draggable__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(draggable__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
 
 
 /* global Draggable */
+// loaded after main JS
 
 
-
-/* eslint-disable jsdoc/require-param-type */
 
 /**
  * Make elements inside a container draggable and sortable.
@@ -1731,11 +1342,9 @@ __webpack_require__.r(__webpack_exports__);
  *
  * Element containing specific css class can be used as the handle for dragging element, if null
  * is pass, than the entire element is used.
- *
- * For a complete example check /demos/jssortable.php
  */
 
-class JsSortable extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
+class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
     this.ids = []; // the data label attribute value of the source element being drag. ex: data-id
 
@@ -1755,10 +1364,10 @@ class JsSortable extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
       this.ids = [];
       this.newIdx = e.data.newIndex;
       this.orgIdx = e.data.oldIndex;
-      this.sourceId = jquery__WEBPACK_IMPORTED_MODULE_3___default()(e.data.dragEvent.data.originalSource).data(this.settings.dataLabel);
+      this.sourceId = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(e.data.dragEvent.data.originalSource).data(this.settings.dataLabel);
       this.dragContainer.children().each((idx, el) => {
-        if (!jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).hasClass('draggable--original') && !jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).hasClass('draggable-mirror')) {
-          this.ids.push(jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).data(this.settings.dataLabel));
+        if (!external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).hasClass('draggable--original') && !external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).hasClass('draggable-mirror')) {
+          this.ids.push(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).data(this.settings.dataLabel));
         }
       });
 
@@ -1770,13 +1379,13 @@ class JsSortable extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
 
   initialize() {
     this.dragContainer.children().each((idx, el) => {
-      this.ids.push(jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).data(this.settings.dataLabel));
+      this.ids.push(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).data(this.settings.dataLabel));
     });
   }
   /**
    * Will send current element order via callback.
    *
-   * @param params Extra arguments to add to uri.
+   * @param {object} params Extra arguments to add to URL.
    */
 
 
@@ -1797,8 +1406,8 @@ class JsSortable extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
         url: url,
         data: {
           order: this.ids.toString(),
-          org_idx: this.orgIdx,
-          new_idx: this.newIdx,
+          orgIdx: this.orgIdx,
+          newIdx: this.newIdx,
           source: this.sourceId
         },
         method: 'POST',
@@ -1811,30 +1420,30 @@ class JsSortable extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
     let extraParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
     let url = null;
 
-    if (this.settings.uri_options && extraParams) {
-      url = jquery__WEBPACK_IMPORTED_MODULE_3___default().atkAddParams(this.settings.uri, jquery__WEBPACK_IMPORTED_MODULE_3___default().extend({}, this.settings.uri_options, extraParams));
-    } else if (this.settings.uri_options) {
-      url = jquery__WEBPACK_IMPORTED_MODULE_3___default().atkAddParams(this.settings.uri, this.settings.uri_options);
+    if (this.settings.urlOptions && extraParams) {
+      url = atk__WEBPACK_IMPORTED_MODULE_4__["default"].urlHelper.appendParams(this.settings.url, external_jquery__WEBPACK_IMPORTED_MODULE_3___default().extend({}, this.settings.urlOptions, extraParams));
+    } else if (this.settings.urlOptions) {
+      url = atk__WEBPACK_IMPORTED_MODULE_4__["default"].urlHelper.appendParams(this.settings.url, this.settings.urlOptions);
     } else {
-      url = this.settings.uri;
+      url = this.settings.url;
     }
 
     return url;
   }
 
   injectStyles(style) {
-    jquery__WEBPACK_IMPORTED_MODULE_3___default()('head').append('<style>' + style + '</style>');
+    external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('head').append('<style>' + style + '</style>');
   }
 
 }
-JsSortable.DEFAULTS = {
-  uri: null,
-  uri_options: null,
+AtkJsSortablePlugin.DEFAULTS = {
+  url: null,
+  urlOptions: null,
   container: 'tbody',
   draggable: 'tr',
   dataLabel: 'id',
   handleClass: null,
-  mirrorCss: '.draggable-mirror {background: #fff!important; margin-left: 1%; opacity: 0.9; }',
+  mirrorCss: '.draggable-mirror { background: #fff!important; margin-left: 1%; opacity: 0.9; }',
   overCss: '.draggable--over { background: yellow !important; opacity: 0.5; }',
   autoFireCb: true
 };
@@ -1850,12 +1459,12 @@ JsSortable.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ reloadView)
+/* harmony export */   "default": () => (/* binding */ AtkReloadViewPlugin)
 /* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-/* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/api.service */ "./src/services/api.service.js");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
 
@@ -1870,19 +1479,19 @@ __webpack_require__.r(__webpack_exports__);
  * for POST method.
  */
 
-class reloadView extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
   main() {
-    if (!this.settings.uri) {
-      console.error('Trying to reload view without url.');
+    if (!this.settings.url) {
+      console.error('Trying to reload view without URL');
       return;
     }
 
-    const url = jquery__WEBPACK_IMPORTED_MODULE_0___default().atk.getUrl(this.settings.uri);
+    const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.removeAllParams(this.settings.url);
     const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {}; // add new param and remove duplicate, prioritizing the latest one.
 
-    let urlParam = Object.assign(jquery__WEBPACK_IMPORTED_MODULE_0___default().atkGetQueryParam(this.settings.uri), this.settings.uri_options ? this.settings.uri_options : {}); // get store object.
+    let urlParams = Object.assign(atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.url), this.settings.urlOptions ? this.settings.urlOptions : {}); // get store object.
 
-    const store = atk.dataService.getStoreData(this.settings.storeName); // merge user settings
+    const store = atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService.getStoreData(this.settings.storeName); // merge user settings
 
     const settings = {
       on: 'now',
@@ -1891,26 +1500,26 @@ class reloadView extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
       method: 'GET',
       onComplete: (response, content) => {
         if (this.settings.afterSuccess) {
-          _services_api_service__WEBPACK_IMPORTED_MODULE_2__["default"].onAfterSuccess(this.settings.afterSuccess);
+          atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService.onAfterSuccess(this.settings.afterSuccess);
         }
       },
       ...userConfig
     }; // if post then we need to set our store into settings data.
 
-    if (settings.method.toLowerCase() === 'post') {
+    if (settings.method.toUpperCase() === 'POST') {
       settings.data = Object.assign(settings.data, store);
     } else {
-      urlParam = Object.assign(urlParam, store);
+      urlParams = Object.assign(urlParams, store);
     }
 
-    settings.url = url + '?' + jquery__WEBPACK_IMPORTED_MODULE_0___default().param(urlParam);
+    settings.url = url + '?' + external_jquery__WEBPACK_IMPORTED_MODULE_0___default().param(urlParams);
     this.$el.api(settings);
   }
 
 }
-reloadView.DEFAULTS = {
-  uri: null,
-  uri_options: null,
+AtkReloadViewPlugin.DEFAULTS = {
+  url: null,
+  urlOptions: null,
   afterSuccess: null,
   apiConfig: null,
   storeName: null
@@ -1927,7 +1536,7 @@ reloadView.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ scroll)
+/* harmony export */   "default": () => (/* binding */ AtkScrollPlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -1935,15 +1544,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
 
 
-
-/* eslint-disable jsdoc/require-param-type */
 
 /**
  * Add dynamic scrolling to a View that can accept page argument in URL.
@@ -1956,7 +1563,7 @@ __webpack_require__.r(__webpack_exports__);
  * stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call. if null, then a default loader will be apply to the bottom of the $inner element.
  */
 
-class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
+class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   main() {
     // check if we are initialized already because loading content
     // can recall this plugin and screw up page number.
@@ -1989,7 +1596,7 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
     } else {
       // check if scroll apply vs Window or inside our element.
       this.isWindow = this.$el.css('overflow-y') === 'visible';
-      this.$scroll = this.isWindow ? jquery__WEBPACK_IMPORTED_MODULE_3___default()(window) : this.$el; // is Inner the element itself or it's children.
+      this.$scroll = this.isWindow ? external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window) : this.$el; // is Inner the element itself or it's children.
 
       this.$inner = this.isWindow ? this.$el : this.$el.children();
     } // the target element within container where new content is appendTo.
@@ -2029,7 +1636,7 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   /**
    * Bind scrolling event to an element.
    *
-   * @param $el
+   * @param {$} $el
    */
 
 
@@ -2038,18 +1645,16 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   }
   /**
    * Check if scrolling require adding content.
-   *
-   * @param e event
    */
 
 
-  observe(e) {
+  observe(event) {
     const borderTopWidth = parseInt(this.$el.css('borderTopWidth'), 10);
     const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth; // this.$el padding top value.
 
     const paddingTop = parseInt(this.$el.css('paddingTop'), 10) + borderTopWidthInt; // Either the scroll bar position using window or the container element top position otherwise.
 
-    const topHeight = this.isWindow ? jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).scrollTop() : this.$scroll.offset().top; // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
+    const topHeight = this.isWindow ? external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).scrollTop() : this.$scroll.offset().top; // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
 
     const innerTop = this.$inner.length ? this.$inner.offset().top : 0; // The total height.
 
@@ -2100,8 +1705,8 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
     this.isWaiting = true;
     this.$inner.api({
       on: 'now',
-      url: this.settings.uri,
-      data: { ...this.settings.uri_options,
+      url: this.settings.url,
+      data: { ...this.settings.urlOptions,
         page: this.nextPage
       },
       method: 'GET',
@@ -2153,7 +1758,7 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
 
   addLoader() {
     const $parent = this.$inner.parent().hasClass('atk-overflow-auto') ? this.$inner.parent().parent() : this.$inner.parent();
-    $parent.append(jquery__WEBPACK_IMPORTED_MODULE_3___default()('<div id="atkScrollLoader"><div class="ui section hidden divider"></div><div class="ui active centered inline loader basic segment"></div></div>'));
+    $parent.append(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('<div id="atkScrollLoader"><div class="ui section hidden divider"></div><div class="ui active centered inline loader basic segment"></div></div>'));
   }
   /**
    * Remove loader.
@@ -2161,13 +1766,13 @@ class scroll extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
 
 
   removeLoader() {
-    jquery__WEBPACK_IMPORTED_MODULE_3___default()('#atkScrollLoader').remove();
+    external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('#atkScrollLoader').remove();
   }
 
 }
-scroll.DEFAULTS = {
-  uri: null,
-  uri_options: {},
+AtkScrollPlugin.DEFAULTS = {
+  url: null,
+  urlOptions: {},
   options: {}
 };
 
@@ -2182,26 +1787,26 @@ scroll.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ serverEvent)
+/* harmony export */   "default": () => (/* binding */ AtkServerEventPlugin)
 /* harmony export */ });
-/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
-/* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/api.service */ "./src/services/api.service.js");
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
-class serverEvent extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
     const element = this.$el;
     const hasLoader = this.settings.showLoader;
 
     if (typeof EventSource !== 'undefined') {
-      this.source = new EventSource(`${this.settings.uri}&__atk_sse=1`);
+      this.source = new EventSource(this.settings.url + '&__atk_sse=1');
 
       if (hasLoader) {
         element.addClass('loading');
       }
 
       this.source.onmessage = function (e) {
-        _services_api_service__WEBPACK_IMPORTED_MODULE_1__["default"].atkSuccessTest(JSON.parse(e.data));
+        atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkSuccessTest(JSON.parse(e.data));
       };
 
       this.source.onerror = e => {
@@ -2214,8 +1819,8 @@ class serverEvent extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"] {
         }
       };
 
-      this.source.addEventListener('atk_sse_action', e => {
-        _services_api_service__WEBPACK_IMPORTED_MODULE_1__["default"].atkSuccessTest(JSON.parse(e.data));
+      this.source.addEventListener('atkSseAction', e => {
+        atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkSuccessTest(JSON.parse(e.data));
       }, false);
 
       if (this.settings.closeBeforeUnload) {
@@ -2226,7 +1831,7 @@ class serverEvent extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"] {
     } else {
       // console.log('server side event not supported fallback to atkReloadView');
       this.$el.atkReloadView({
-        uri: this.settings.uri
+        url: this.settings.url
       });
     }
   }
@@ -2244,9 +1849,9 @@ class serverEvent extends _atk_plugin__WEBPACK_IMPORTED_MODULE_0__["default"] {
   }
 
 }
-serverEvent.DEFAULTS = {
-  uri: null,
-  uri_options: {},
+AtkServerEventPlugin.DEFAULTS = {
+  url: null,
+  urlOptions: {},
   showLoader: false,
   closeBeforeUnload: false
 };
@@ -2262,7 +1867,7 @@ serverEvent.DEFAULTS = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ sidenav)
+/* harmony export */   "default": () => (/* binding */ AtkSidenavPlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -2270,8 +1875,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
@@ -2287,7 +1892,7 @@ __webpack_require__.r(__webpack_exports__);
  * Default value are set for Maestro admin layout.
  */
 
-class sidenav extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
+class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   main() {
     // menu items container.
     this.menu = this.$el.find(this.settings.menuItemsSelector);
@@ -2315,7 +1920,7 @@ class sidenav extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
     this.setTogglerIcon(this.settings.icon.selector);
   }
   /**
-   * Check if the url correspond to one of our menu items.
+   * Check if the URL correspond to one of our menu items.
    * if so, then add the menuItemActiveCSS class and return true.
    *
    * @returns {boolean}
@@ -2328,13 +1933,13 @@ class sidenav extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
       if (this.urlMatchLocation(el.href)) {
         hasBase = true; // set active class for this specific menu item.
 
-        jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).addClass(this.settings.menuItemActiveClass);
+        external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).addClass(this.settings.menuItemActiveClass);
       }
     });
     return hasBase;
   }
   /**
-   * Check if an url match with current window location.
+   * Check if an URL match with current window location.
    *
    * @returns {boolean}
    */
@@ -2345,7 +1950,7 @@ class sidenav extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
 
     if (url.pathname === window.location.pathname) {
       return true;
-    } // try to match base index url
+    } // try to match base index URL
 
 
     if (url.pathname === window.location.pathname + this.settings.base) {
@@ -2394,7 +1999,7 @@ class sidenav extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   }
 
 }
-sidenav.DEFAULTS = {
+AtkSidenavPlugin.DEFAULTS = {
   base: 'index.php',
   menuItemsSelector: '.atk-maestro-menu-items',
   // The css selector where menu items are contain.
@@ -2430,23 +2035,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 
 class AccordionService {
-  /**
-   * Setup Fomantic-UI accordion for this service.
-   */
-  setService(settings) {
+  setupFomanticUi(settings) {
     settings.onOpening = this.onOpening;
   }
 
   onOpening() {
-    if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('path')) {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).atkReloadView({
-        uri: jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('path'),
-        uri_options: {
+    if (external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('path')) {
+      external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).atkReloadView({
+        url: external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('path'),
+        urlOptions: {
           __atk_json: 1
         }
       });
@@ -2455,9 +2057,7 @@ class AccordionService {
 
 }
 
-const accordionService = new AccordionService();
-Object.freeze(accordionService);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accordionService);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new AccordionService()));
 
 /***/ }),
 
@@ -2482,15 +2082,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "./node_modules/core-js/modules/esnext.iterator.for-each.js");
 /* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 
 
 
 
 
 
-/* eslint-disable jsdoc/require-param-type */
 
 /**
  * Handle Fomantic-UI API functionality throughout the app.
@@ -2500,13 +2100,8 @@ class ApiService {
   constructor() {
     this.afterSuccessCallbacks = [];
   }
-  /**
-   * Setup Fomantic-UI API with this service.
-   */
 
-
-  setService(settings) {
-    // settings.onResponse = this.handleResponse;
+  setupFomanticUi(settings) {
     settings.successTest = this.successTest;
     settings.onFailure = this.onFailure;
     settings.onSuccess = this.onSuccess;
@@ -2514,19 +2109,16 @@ class ApiService {
   }
   /**
    * Execute js code.
+   *
    * This function should be call using .call() by
    * passing proper context for 'this'.
-   * ex: apiService.evalResponse.call(this, code, jQuery)
-   * By passig the jQuery reference, $ var use by code that need to be eval
-   * will work just fine, even if $ is not assign globally.
+   * ex: apiService.evalResponse.call(this, code)
    *
-   * @param code javascript to be eval.
-   * @param $    reference to jQuery.
+   * @param {string} code
    */
 
 
-  evalResponse(code, $) {
-    // eslint-disable-line no-shadow
+  evalResponse(code) {
     eval(code); // eslint-disable-line no-eval
   }
 
@@ -2554,17 +2146,17 @@ class ApiService {
         if (response.html && response.id) {
           // prevent modal duplication.
           // apiService.removeModalDuplicate(response.html);
-          const modelsContainer = jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page')[0];
-          jquery__WEBPACK_IMPORTED_MODULE_5___default()(jquery__WEBPACK_IMPORTED_MODULE_5___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
-            jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
+          const modelsContainer = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page')[0];
+          external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(external_jquery__WEBPACK_IMPORTED_MODULE_5___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
+            external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
           });
-          const result = jquery__WEBPACK_IMPORTED_MODULE_5___default()('#' + response.id).replaceWith(response.html);
+          const result = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('#' + response.id).replaceWith(response.html);
 
           if (!result.length) {
             // TODO Find a better solution for long term.
             // Need a way to gracefully abort server request.
             // when user cancel a request by selecting another request.
-            console.error('Unable to replace element with id: ' + response.id); // throw({message:'Unable to replace element with id: '+ response.id});
+            console.error('Unable to replace element with id: ' + response.id); // throw Error('Unable to replace element with id: ' + response.id);
           }
         }
 
@@ -2572,37 +2164,31 @@ class ApiService {
           // Create app portal from json response.
           const portals = Object.keys(response.portals);
           portals.forEach(portalID => {
-            const m = jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
+            const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
 
             if (m.length === 0) {
-              jquery__WEBPACK_IMPORTED_MODULE_5___default()(document.body).append(response.portals[portalID].html);
-              atk.apiService.evalResponse(response.portals[portalID].js, jQuery);
+              external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document.body).append(response.portals[portalID].html);
+              atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse(response.portals[portalID].js);
             }
           });
         }
 
         if (response.atkjs) {
-          // Call evalResponse with proper context, js code and jQuery as $ var.
-          atk.apiService.evalResponse.call(this, response.atkjs, jQuery);
+          atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse.call(this, response.atkjs);
         }
 
-        if (atk.apiService.afterSuccessCallbacks.length > 0) {
-          const self = this;
-          const callbacks = atk.apiService.afterSuccessCallbacks;
+        if (atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks.length > 0) {
+          const callbacks = atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks;
           callbacks.forEach(callback => {
-            atk.apiService.evalResponse.call(self, callback, jQuery);
+            atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse.call(this, callback);
           });
-          atk.apiService.afterSuccessCallbacks.splice(0);
+          atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks.splice(0);
         }
       } else if (response.isServiceError) {
-        // service can still throw an error
-        // TODO fix throw without eslint disable
-        throw {
-          message: response.message
-        }; // eslint-disable-line no-throw-literal
+        throw Error(response.message);
       }
     } catch (e) {
-      atk.apiService.showErrorModal(atk.apiService.getErrorHtml(e.message));
+      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.getErrorHtml(e.message));
     }
   }
   /**
@@ -2612,14 +2198,13 @@ class ApiService {
    * atkjs (javascript) return from server will not be evaluated.
    *
    * Make sure to control the server output when using
-   * this function. It must at least return {success: true} in order for
+   * this function. It must at least return { success: true } in order for
    * the Promise to resolve properly, will reject otherwise.
    *
    * ex: $app->terminateJson(['success' => true, 'data' => $data]);
    *
-   * @param                  url      the url to fetch data
-   * @param                  settings the Fomantic-UI api settings object.
-   * @param                  el       the element to apply Fomantic-UI context.
+   * @param   {string}       url      the URL to fetch data
+   * @param   {object}       settings the Fomantic-UI api settings object.
    * @returns {Promise<any>}
    */
 
@@ -2627,7 +2212,7 @@ class ApiService {
   suiFetch(url) {
     let settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     let el = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'body';
-    const $el = jquery__WEBPACK_IMPORTED_MODULE_5___default()(el);
+    const $el = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(el);
     const apiSettings = Object.assign(settings);
 
     if (!('on' in apiSettings)) {
@@ -2635,13 +2220,13 @@ class ApiService {
     }
 
     if (!('method' in apiSettings)) {
-      apiSettings.method = 'get';
+      apiSettings.method = 'GET';
     }
 
     apiSettings.url = url;
     return new Promise((resolve, reject) => {
       apiSettings.onFailure = function (r) {
-        atk.apiService.onFailure(r);
+        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.onFailure(r);
         reject(r);
       };
 
@@ -2703,19 +2288,15 @@ class ApiService {
   onFailure(response) {
     // if json is returned, it should contain the error within message property
     if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
-      if (Object.prototype.hasOwnProperty.call(response, 'useWindow') && response.useWindow) {
-        atk.apiService.showErrorWindow(response.message);
-      } else {
-        atk.apiService.showErrorModal(response.message);
-      }
+      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response.message);
     } else {
       // check if we have html returned by server with <body> content.
       const body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
 
       if (body) {
-        atk.apiService.showErrorModal(body);
+        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(body);
       } else {
-        atk.apiService.showErrorModal(response);
+        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response);
       }
     }
   }
@@ -2726,7 +2307,7 @@ class ApiService {
 
   showErrorModal(errorMsg) {
     // catch application error and display them in a new modal window.
-    const m = jquery__WEBPACK_IMPORTED_MODULE_5___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(errorMsg);
+    const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(errorMsg);
     m.modal({
       duration: 100,
       allowMultiple: false,
@@ -2735,39 +2316,6 @@ class ApiService {
         return true;
       }
     }).modal('show').modal('refresh');
-  }
-  /**
-   * Display App error in a separate window.
-   */
-
-
-  showErrorWindow(errorMsg) {
-    const error = jquery__WEBPACK_IMPORTED_MODULE_5___default()('<div class="atk-exception">').css({
-      padding: '8px',
-      'background-color': 'rgba(0, 0, 0, 0.5)',
-      margin: 'auto',
-      width: '100%',
-      height: '100%',
-      position: 'fixed',
-      top: 0,
-      bottom: 0,
-      'z-index': '100000',
-      'overflow-y': 'scroll'
-    }).html(jquery__WEBPACK_IMPORTED_MODULE_5___default()('<div>').css({
-      width: '70%',
-      'margin-top': '4%',
-      'margin-bottom': '4%',
-      'margin-left': 'auto',
-      'margin-right': 'auto',
-      background: 'white',
-      padding: '4px',
-      'overflow-x': 'scroll'
-    }).html(errorMsg).prepend(jquery__WEBPACK_IMPORTED_MODULE_5___default()('<i class="ui big close icon"></i>').css('float', 'right').click(function () {
-      const $this = jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).parents('.atk-exception');
-      $this.hide();
-      $this.remove();
-    })));
-    error.appendTo('body');
   }
 
   getErrorHtml(error) {
@@ -2782,9 +2330,7 @@ class ApiService {
 
 }
 
-const apiService = new ApiService();
-Object.freeze(apiService);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (apiService);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new ApiService()));
 
 /***/ }),
 
@@ -2847,7 +2393,7 @@ class DataService {
     try {
       JSON.parse(str);
     } catch (e) {
-      console.error('Invalid json string.');
+      console.error('JSON string parse failed');
       return false;
     }
 
@@ -2866,7 +2412,7 @@ class DataService {
     if (this.hasStorage) {
       this.storage[type].setItem(item, value);
     } else {
-      console.error('Session storage is not available in your Browser.');
+      console.error('Session storage is not available in your browser');
     }
   }
   /**
@@ -2901,7 +2447,7 @@ class DataService {
   /**
    * Return store data for an item or empty object.
    *
-   * @returns {{session: *, local: *}}
+   * @returns {{ session: *, local: * }}
    */
 
 
@@ -2963,9 +2509,7 @@ class DataService {
 
 }
 
-const dataService = new DataService();
-Object.freeze(dataService);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (dataService);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new DataService()));
 
 /***/ }),
 
@@ -2994,8 +2538,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 
 
 
@@ -3004,7 +2549,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* eslint-disable jsdoc/require-param-type */
 
 /**
  * Handle Fomantic-UI form functionality throughout the app.
@@ -3012,12 +2556,12 @@ __webpack_require__.r(__webpack_exports__);
 
 class FormService {
   constructor() {
-    this.formSettings = (jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings); // A collection of jQuery form object where preventLeave is set.
+    this.formSettings = (external_jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings); // A collection of jQuery form object where preventLeave is set.
 
     this.prevents = [];
 
     window.onbeforeunload = function (event) {
-      atk.formService.prevents.forEach(el => {
+      atk__WEBPACK_IMPORTED_MODULE_8__["default"].formService.prevents.forEach(el => {
         if (el.data('__atkCheckDirty') && el.data('isDirty')) {
           const message = 'unsaved';
 
@@ -3030,12 +2574,8 @@ class FormService {
       });
     };
   }
-  /**
-   * Setup Fomantic-UI form with this service.
-   */
 
-
-  setService(settings) {
+  setupFomanticUi(settings) {
     settings.rules.isVisible = this.isVisible;
     settings.rules.notEmpty = settings.rules.empty;
     settings.rules.isEqual = this.isEqual;
@@ -3047,7 +2587,7 @@ class FormService {
 
 
   onSuccess() {
-    atk.formService.clearDirtyForm(jquery__WEBPACK_IMPORTED_MODULE_7___default()(this).attr('id'));
+    atk__WEBPACK_IMPORTED_MODULE_8__["default"].formService.clearDirtyForm(external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this).attr('id'));
     return true;
   }
   /**
@@ -3057,7 +2597,7 @@ class FormService {
 
 
   preventFormLeave(id) {
-    const $form = jquery__WEBPACK_IMPORTED_MODULE_7___default()('#' + id);
+    const $form = external_jquery__WEBPACK_IMPORTED_MODULE_7___default()('#' + id);
     $form.data('__atkCheckDirty', true);
     $form.on('change.__atkCanLeave', 'input, textarea', () => {
       $form.data('isDirty', true);
@@ -3079,12 +2619,12 @@ class FormService {
   /**
    * Visibility rule.
    *
-   * @returns {boolean | jQuery}
+   * @returns {boolean}
    */
 
 
   isVisible() {
-    return jquery__WEBPACK_IMPORTED_MODULE_7___default()(this).is(':visible');
+    return external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this).is(':visible');
   }
 
   isEqual(value, compare) {
@@ -3093,10 +2633,10 @@ class FormService {
   /**
    * Validate a field using our own or Fomantic-UI validation rule function.
    *
-   * @param               form      Form containing the field.
-   * @param               fieldName Name of field
-   * @param               rule      Rule to apply test.
-   * @returns {*|boolean}
+   * @param   {$}             form      Form containing the field.
+   * @param   {string}        fieldName Name of field
+   * @param   {string|object} rule      Rule to apply test.
+   * @returns {*|false}
    */
 
 
@@ -3108,7 +2648,7 @@ class FormService {
       const $field = this.getField(form, fieldName);
 
       if (!$field) {
-        console.error('You are validating a field that does not exist: ', fieldName);
+        console.error('You are validating a field that does not exist: ' + fieldName);
         return false;
       }
 
@@ -3117,7 +2657,7 @@ class FormService {
       return ruleFunction.call($field, value, ancillary);
     }
 
-    console.error('this rule does not exist: ' + this.getRuleName(rule));
+    console.error('Rule does not exist: ' + this.getRuleName(rule));
     return false;
   }
 
@@ -3133,7 +2673,7 @@ class FormService {
   }
 
   getDefaultSelector() {
-    return (jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings.selector.group);
+    return (external_jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings.selector.group);
   }
 
   getContainer($field, selector) {
@@ -3207,9 +2747,7 @@ class FormService {
 
 }
 
-const formService = new FormService();
-Object.freeze(formService);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (formService);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new FormService()));
 
 /***/ }),
 
@@ -3234,8 +2772,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+
 
 
 
@@ -3244,7 +2784,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * This is default setup for Fomantic-UI modal.
- * Allow to manage uri pass to our modal and dynamically update content from this uri
+ * Allow to manage URL pass to our modal and dynamically update content from this URL
  * using the Fomantic-UI api function.
  * Also keep track of how many modal are use by the app.
  */
@@ -3254,7 +2794,7 @@ class ModalService {
     this.modals = [];
   }
 
-  setModals(settings) {
+  setupFomanticUi(settings) {
     settings.duration = 100;
     settings.allowMultiple = true;
     settings.onHidden = this.onHidden;
@@ -3264,17 +2804,17 @@ class ModalService {
   }
 
   onHidden() {
-    atk.modalService.removeModal(jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
+    atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.removeModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
   }
 
   onVisible() {
     let args = {};
     let data; // const service = apiService;
 
-    const $modal = jquery__WEBPACK_IMPORTED_MODULE_5___default()(this);
-    const $content = jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).find('.atk-dialog-content'); // check data associated with this modal.
+    const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this);
+    const $content = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).find('.atk-dialog-content'); // check data associated with this modal.
 
-    if (!jquery__WEBPACK_IMPORTED_MODULE_5___default().isEmptyObject($modal.data())) {
+    if (!external_jquery__WEBPACK_IMPORTED_MODULE_5___default().isEmptyObject($modal.data())) {
       data = $modal.data();
     } // add data argument
 
@@ -3285,34 +2825,34 @@ class ModalService {
 
 
     if (data && data.type === 'json') {
-      args = jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(true, args, {
+      args = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(true, args, {
         __atk_json: 1
       });
     } // does modal content need to be loaded dynamically
 
 
-    if (data && data.uri) {
-      $content.html(atk.modalService.getLoader(data.label ? data.label : ''));
+    if (data && data.url) {
+      $content.html(atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.getLoader(data.label ? data.label : ''));
       $content.api({
         on: 'now',
-        url: data.uri,
+        url: data.url,
         data: args,
         method: 'GET',
         obj: $content,
         onComplete: function (response, content) {
-          const modelsContainer = jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page')[0];
-          jquery__WEBPACK_IMPORTED_MODULE_5___default()(jquery__WEBPACK_IMPORTED_MODULE_5___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
-            jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
+          const modelsContainer = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page')[0];
+          external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(external_jquery__WEBPACK_IMPORTED_MODULE_5___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
+            external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
           });
           const result = content.html(response.html);
 
           if (!result.length) {
             response.success = false;
             response.isServiceError = true;
-            response.message = 'Modal service error: Unable to replace atk-dialog content in modal from server response. Empty Content.';
+            response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
           } else {
             if ($modal.modal.settings.autofocus) {
-              atk.modalService.doAutoFocus($modal);
+              atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.doAutoFocus($modal);
             }
 
             $modal.modal('refresh'); // content is replace no need to do it in api
@@ -3325,12 +2865,12 @@ class ModalService {
   }
 
   onShow() {
-    const $modal = jquery__WEBPACK_IMPORTED_MODULE_5___default()(this);
-    atk.modalService.addModal($modal);
+    const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this);
+    atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.addModal($modal);
   }
 
   onHide() {
-    return jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).data('isClosable');
+    return external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).data('isClosable');
   }
 
   addModal(modal) {
@@ -3347,7 +2887,7 @@ class ModalService {
 
 
     if (this.modals.length === 1) {
-      jquery__WEBPACK_IMPORTED_MODULE_5___default()(document).on('keyup.atk.modalService', e => {
+      external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document).on('keyup.atk.modalService', e => {
         if (e.keyCode === 27) {
           if (that.modals.length > 0) {
             that.modals[that.modals.length - 1].modal('hide');
@@ -3375,7 +2915,7 @@ class ModalService {
     }
 
     if (this.modals.length === 0) {
-      jquery__WEBPACK_IMPORTED_MODULE_5___default()(document).off('atk.modalService');
+      external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document).off('atk.modalService');
     }
   }
 
@@ -3433,9 +2973,7 @@ class ModalService {
 
 }
 
-const modalService = new ModalService();
-Object.freeze(modalService);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (modalService);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new ModalService()));
 
 /***/ }),
 
@@ -3468,8 +3006,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "./node_modules/core-js/modules/esnext.iterator.for-each.js");
 /* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 
 
 
@@ -3480,7 +3019,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* eslint-disable jsdoc/require-param-type */
 
 /**
  * Panel needs to be reload to display different
@@ -3494,7 +3032,7 @@ class PanelService {
       // a collection of panels.
       currentVisibleId: null,
       // the current panel id that is in a visible state.
-      currentParams: null // url argument of the current panel.
+      currentParams: null // URL argument of the current panel.
 
     };
   }
@@ -3527,7 +3065,7 @@ class PanelService {
     const newPanel = {
       [params.id]: {
         id: params.id,
-        $panel: jquery__WEBPACK_IMPORTED_MODULE_9___default()('#' + params.id),
+        $panel: external_jquery__WEBPACK_IMPORTED_MODULE_9___default()('#' + params.id),
         visible: params.visible,
         closeSelector: params.closeSelector,
         url: params.url,
@@ -3555,7 +3093,7 @@ class PanelService {
     newPanel[params.id].$panel.on('click', params.closeSelector, () => {
       this.closePanel(params.id);
     });
-    newPanel[params.id].$panel.appendTo(jquery__WEBPACK_IMPORTED_MODULE_9___default()('.atk-side-panels'));
+    newPanel[params.id].$panel.appendTo(external_jquery__WEBPACK_IMPORTED_MODULE_9___default()('.atk-side-panels'));
     this.service.panels.push(newPanel);
   }
   /**
@@ -3568,7 +3106,7 @@ class PanelService {
    *
    * As a css class: the css class to applied to the triggered element when panel open.
    *
-   * @param params The params objects.
+   * @param {object} params
    */
 
 
@@ -3600,7 +3138,7 @@ class PanelService {
       // trying to open a different panel so close current one if allowed.
       if (this.needConfirmation(this.service.currentVisibleId)) {
         // need to ask user
-        const $modal = jquery__WEBPACK_IMPORTED_MODULE_9___default()(this.getPropertyValue(this.service.currentVisibleId, 'modal'));
+        const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(this.getPropertyValue(this.service.currentVisibleId, 'modal'));
         $modal.modal('setting', 'onApprove', e => {
           this.doClosePanel(id);
         });
@@ -3613,7 +3151,7 @@ class PanelService {
     } else if (this.service.currentVisibleId === id) {
       // current panel already open try to reload new content
       if (this.needConfirmation(id)) {
-        const $modal = jquery__WEBPACK_IMPORTED_MODULE_9___default()(this.getPropertyValue(id, 'modal'));
+        const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(this.getPropertyValue(id, 'modal'));
         $modal.modal('setting', 'onApprove', e => {
           this.doOpenPanel(id);
           this.initPanelReload(id);
@@ -3630,7 +3168,7 @@ class PanelService {
   }
   /**
    * Will check if panel is reloadable and
-   * setup proper url argument from triggered item
+   * setup proper URL argument from triggered item
    * via it's data property.
    */
 
@@ -3644,10 +3182,10 @@ class PanelService {
       const args = params.reloadArgs.reduce((obj, item) => {
         obj[item] = params.triggered.data(item);
         return obj;
-      }, {}); // add url argument if pass to panel
+      }, {}); // add URL argument if pass to panel
 
       if (params.urlArgs !== 'undefined') {
-        jquery__WEBPACK_IMPORTED_MODULE_9___default().extend(args, params.urlArgs);
+        external_jquery__WEBPACK_IMPORTED_MODULE_9___default().extend(args, params.urlArgs);
       }
 
       this.doReloadPanel(id, args);
@@ -3663,7 +3201,7 @@ class PanelService {
     let triggerElement = params.triggered;
 
     if (typeof triggerElement === 'string') {
-      triggerElement = jquery__WEBPACK_IMPORTED_MODULE_9___default()(triggerElement);
+      triggerElement = external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(triggerElement);
     } // will apply css class to triggering element if provide.
 
 
@@ -3690,7 +3228,7 @@ class PanelService {
 
   closePanel(id) {
     if (this.needConfirmation(id)) {
-      const $modal = jquery__WEBPACK_IMPORTED_MODULE_9___default()(this.getPropertyValue(id, 'modal'));
+      const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(this.getPropertyValue(id, 'modal'));
       $modal.modal('setting', 'onApprove', e => {
         this.doClosePanel(id);
       }).modal('show');
@@ -3785,7 +3323,7 @@ class PanelService {
 
   addClickAwayEvent(id) {
     // clicking anywhere in main tag will close panel.
-    jquery__WEBPACK_IMPORTED_MODULE_9___default()('main').on('click.atkPanel', atk.debounce(evt => {
+    external_jquery__WEBPACK_IMPORTED_MODULE_9___default()('main').on('click.atkPanel', atk__WEBPACK_IMPORTED_MODULE_10__["default"].debounce(evt => {
       this.closePanel(id);
     }, 250));
   }
@@ -3796,7 +3334,7 @@ class PanelService {
 
   addEscAwayEvent(id) {
     // pressing esc key will close panel.
-    jquery__WEBPACK_IMPORTED_MODULE_9___default()(document).on('keyup.atkPanel', atk.debounce(evt => {
+    external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(document).on('keyup.atkPanel', atk__WEBPACK_IMPORTED_MODULE_10__["default"].debounce(evt => {
       if (evt.keyCode === 27) {
         this.closePanel(id);
       }
@@ -3808,8 +3346,8 @@ class PanelService {
 
 
   removeClickAwayEvent() {
-    jquery__WEBPACK_IMPORTED_MODULE_9___default()('main').off('click.atkPanel');
-    jquery__WEBPACK_IMPORTED_MODULE_9___default()(document).off('keyup.atkPanel');
+    external_jquery__WEBPACK_IMPORTED_MODULE_9___default()('main').off('click.atkPanel');
+    external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(document).off('keyup.atkPanel');
   }
   /**
    * Compare a  jQuery element to the actual triggered element for this panel.
@@ -3894,9 +3432,9 @@ class PanelService {
   /**
    * Set a property value for a panel designated by id.
    *
-   * @param id    the id of the panel to set property too.
-   * @param prop  the property inside panel
-   * @param value the value.
+   * @param {string} id    the id of the panel to set property too.
+   * @param {string} prop  the property inside panel
+   * @param {*}      value the value.
    */
 
 
@@ -3909,9 +3447,9 @@ class PanelService {
   }
   /**
    * Return the panel property represent by id in collections.
-   * if prop is not specify, then it will return the entire panel object.
+   * If prop is null, then it will return the entire panel object.
    *
-   * @returns {*|jQuery|HTMLElement}
+   * @returns {*}
    */
 
 
@@ -3928,9 +3466,7 @@ class PanelService {
 
 }
 
-const panelService = new PanelService();
-Object.freeze(panelService);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (panelService);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new PanelService()));
 
 /***/ }),
 
@@ -3945,13 +3481,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* eslint-disable jsdoc/require-param-type */
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 
 /**
  * This is default setup for Fomantic-UI Popup.
  */
+
 class PopupService {
-  setPopups(settings) {
+  setupFomanticUi(settings) {
     settings.onCreate = this.onCreate;
     settings.onShow = this.onShow;
     settings.onHide = this.onHide;
@@ -3961,8 +3498,6 @@ class PopupService {
   /**
    * OnShow callback when a popup is trigger.
    * Will check if popup need to be setup dynamically using a callback.
-   *
-   * @param $module
    */
 
 
@@ -3970,14 +3505,14 @@ class PopupService {
     const $popup = this;
     const data = $popup.data();
 
-    if (data.uri !== '' && data.uri !== undefined) {
+    if (data.url !== '' && data.url !== undefined) {
       // Only load if we are not using data.cache or content has not been loaded yet.
       if (!data.cache || !data.hascontent) {
         // display default loader while waiting for content.
-        $popup.html(atk.popupService.getLoader());
+        $popup.html(atk__WEBPACK_IMPORTED_MODULE_0__["default"].popupService.getLoader());
         $popup.api({
           on: 'now',
-          url: data.uri,
+          url: data.url,
           method: 'GET',
           obj: $popup,
           onComplete: function (response, content) {
@@ -3986,7 +3521,7 @@ class PopupService {
             if (!result.length) {
               response.success = false;
               response.isServiceError = true;
-              response.message = 'Popup service error: Unable to replace popup content from server response. Empty Content.';
+              response.message = 'Popup service error: Empty html, unable to replace popup content from server response';
             } else {
               response.id = null;
               $popup.data('hascontent', true);
@@ -4027,9 +3562,7 @@ class PopupService {
 
 }
 
-const popupService = new PopupService();
-Object.freeze(popupService);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (popupService);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new PopupService()));
 
 /***/ }),
 
@@ -4044,10 +3577,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-
-/* eslint-disable jsdoc/require-param-type */
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
  * Allow to upload files to server via Fomantic-UI API.
@@ -4060,12 +3591,12 @@ class UploadService {
    * 'file-(number)' param, except for the first one which will
    * be set to 'file' only.
    *
-   * @param files      A FileList object.
-   * @param element    the jQuery element to attach to Fomantic-UI api.
-   * @param data       Extra data to pass with files.
-   * @param uploadUrl  the url that handle upload.
-   * @param completeCb the callback for Fomantic-UI api.onComplete.
-   * @param xhrCb      the xhr function to pass to server.
+   * @param {FileList} files
+   * @param {$}        element    the jQuery element to attach to Fomantic-UI api.
+   * @param {object}   data       Extra data to pass with files.
+   * @param {string}   uploadUrl  the URL that handle upload.
+   * @param {Function} completeCb the callback for Fomantic-UI api.onComplete.
+   * @param {Function} xhrCb      the xhr function to pass to server.
    */
   uploadFiles(files, element, data, uploadUrl) {
     let completeCb = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : function (r, c) {};
@@ -4079,8 +3610,8 @@ class UploadService {
       formData.append(param, files.item(i));
     }
 
-    if (!jquery__WEBPACK_IMPORTED_MODULE_0___default().isEmptyObject(data)) {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default().each(data, (key, el) => {
+    if (!external_jquery__WEBPACK_IMPORTED_MODULE_0___default().isEmptyObject(data)) {
+      external_jquery__WEBPACK_IMPORTED_MODULE_0___default().each(data, (key, el) => {
         formData.append(key, el);
       });
     }
@@ -4101,9 +3632,7 @@ class UploadService {
 
 }
 
-const uploadService = new UploadService();
-Object.freeze(uploadService);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (uploadService);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new UploadService()));
 
 /***/ }),
 
@@ -4128,9 +3657,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "./node_modules/core-js/modules/esnext.iterator.for-each.js");
 /* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var semantic_ui_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! semantic-ui-vue */ "./node_modules/semantic-ui-vue/dist/commonjs/semantic-ui-vue.js");
 /* harmony import */ var semantic_ui_vue__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(semantic_ui_vue__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+
 
 
 
@@ -4139,10 +3670,10 @@ __webpack_require__.r(__webpack_exports__);
 
  // disable console logs for non-minified build
 
-vue__WEBPACK_IMPORTED_MODULE_6__["default"].config.productionTip = false;
-vue__WEBPACK_IMPORTED_MODULE_6__["default"].config.devtools = false;
-vue__WEBPACK_IMPORTED_MODULE_6__["default"].use((semantic_ui_vue__WEBPACK_IMPORTED_MODULE_5___default()));
-vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('flat-picker', () => __webpack_require__.e(/*! import() */ "vendor-vue-flatpickr").then(__webpack_require__.t.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js", 23))); // vue loader component to display while dynamic component is loading
+vue__WEBPACK_IMPORTED_MODULE_7__["default"].config.productionTip = false;
+vue__WEBPACK_IMPORTED_MODULE_7__["default"].config.devtools = false;
+vue__WEBPACK_IMPORTED_MODULE_7__["default"].use((semantic_ui_vue__WEBPACK_IMPORTED_MODULE_5___default()));
+vue__WEBPACK_IMPORTED_MODULE_7__["default"].component('flatpickr-picker', () => __webpack_require__.e(/*! import() */ "vendor-vue-flatpickr").then(__webpack_require__.t.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js", 23))); // vue loader component to display while dynamic component is loading
 
 const atkVueLoader = {
   name: 'atk-vue-loader',
@@ -4156,7 +3687,7 @@ const atkVueError = {
 
 const componentFactory = (name, component) => () => ({
   component: component().then(r => {
-    atk.vueService.markComponentLoaded(name);
+    atk__WEBPACK_IMPORTED_MODULE_6__["default"].vueService.markComponentLoaded(name);
     return r;
   }),
   loading: atkVueLoader,
@@ -4206,7 +3737,7 @@ class VueService {
     this.registerComponent({
       ids: [id],
       name: component,
-      instance: new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
+      instance: new vue__WEBPACK_IMPORTED_MODULE_7__["default"]({
         el: id,
         data: {
           initData: data
@@ -4228,7 +3759,7 @@ class VueService {
     this.registerComponent({
       ids: [id],
       name: componentName,
-      instance: new vue__WEBPACK_IMPORTED_MODULE_6__["default"]({
+      instance: new vue__WEBPACK_IMPORTED_MODULE_7__["default"]({
         el: id,
         data: {
           initData: data,
@@ -4265,9 +3796,9 @@ class VueService {
 
   useComponent(component) {
     if (window[component]) {
-      vue__WEBPACK_IMPORTED_MODULE_6__["default"].use(window[component]);
+      vue__WEBPACK_IMPORTED_MODULE_7__["default"].use(window[component]);
     } else {
-      console.error('Unable to register component: ' + component + '. Make sure it is load correctly.');
+      console.error('Vue "' + component + '" component not found');
     }
   }
   /**
@@ -4278,7 +3809,7 @@ class VueService {
 
 
   getVue() {
-    return vue__WEBPACK_IMPORTED_MODULE_6__["default"];
+    return vue__WEBPACK_IMPORTED_MODULE_7__["default"];
   }
   /**
    * Mark a component as loaded.
@@ -4303,9 +3834,304 @@ class VueService {
 
 }
 
-const vueService = new VueService();
-Object.freeze(vueService);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vueService);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new VueService()));
+
+/***/ }),
+
+/***/ "./src/setup-atk.js":
+/*!**************************!*\
+  !*** ./src/setup-atk.js ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+/* istanbul ignore next */
+
+if (typeof (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk) !== 'undefined') {
+  throw Error('Unexpected jQuery.atk property state');
+}
+
+const atk = {};
+(external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk) = atk;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (atk);
+
+/***/ }),
+
+/***/ "./src/setup-fomantic-ui.js":
+/*!**********************************!*\
+  !*** ./src/setup-fomantic-ui.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _services_accordion_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services/accordion.service */ "./src/services/accordion.service.js");
+/* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./services/api.service */ "./src/services/api.service.js");
+/* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./services/data.service */ "./src/services/data.service.js");
+/* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/form.service */ "./src/services/form.service.js");
+/* harmony import */ var _services_modal_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/modal.service */ "./src/services/modal.service.js");
+/* harmony import */ var _services_panel_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/panel.service */ "./src/services/panel.service.js");
+/* harmony import */ var _services_popup_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./services/popup.service */ "./src/services/popup.service.js");
+/* harmony import */ var _services_upload_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./services/upload.service */ "./src/services/upload.service.js");
+/* harmony import */ var _services_vue_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./services/vue.service */ "./src/services/vue.service.js");
+
+
+
+
+
+
+
+
+
+
+
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].accordionService = _services_accordion_service__WEBPACK_IMPORTED_MODULE_2__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService = _services_api_service__WEBPACK_IMPORTED_MODULE_3__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService = _services_data_service__WEBPACK_IMPORTED_MODULE_4__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].formService = _services_form_service__WEBPACK_IMPORTED_MODULE_5__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].modalService = _services_modal_service__WEBPACK_IMPORTED_MODULE_6__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].panelService = _services_panel_service__WEBPACK_IMPORTED_MODULE_7__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].popupService = _services_popup_service__WEBPACK_IMPORTED_MODULE_8__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].uploadService = _services_upload_service__WEBPACK_IMPORTED_MODULE_9__["default"];
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].vueService = _services_vue_service__WEBPACK_IMPORTED_MODULE_10__["default"]; // setup Fomantic-UI globals
+
+_services_api_service__WEBPACK_IMPORTED_MODULE_3__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.api.settings));
+_services_form_service__WEBPACK_IMPORTED_MODULE_5__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.form.settings));
+_services_modal_service__WEBPACK_IMPORTED_MODULE_6__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.modal.settings));
+_services_popup_service__WEBPACK_IMPORTED_MODULE_8__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.popup.settings));
+_services_accordion_service__WEBPACK_IMPORTED_MODULE_2__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.accordion.settings));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
+
+/***/ }),
+
+/***/ "./src/setup-plugins.js":
+/*!******************************!*\
+  !*** ./src/setup-plugins.js ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugins/ajaxec.plugin */ "./src/plugins/ajaxec.plugin.js");
+/* harmony import */ var _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugins/column-resizer.plugin */ "./src/plugins/column-resizer.plugin.js");
+/* harmony import */ var _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugins/conditional-form.plugin */ "./src/plugins/conditional-form.plugin.js");
+/* harmony import */ var _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./plugins/confirm.plugin */ "./src/plugins/confirm.plugin.js");
+/* harmony import */ var _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/create-modal.plugin */ "./src/plugins/create-modal.plugin.js");
+/* harmony import */ var _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./plugins/file-upload.plugin */ "./src/plugins/file-upload.plugin.js");
+/* harmony import */ var _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/js-search.plugin */ "./src/plugins/js-search.plugin.js");
+/* harmony import */ var _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/js-sortable.plugin */ "./src/plugins/js-sortable.plugin.js");
+/* harmony import */ var _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/reload-view.plugin */ "./src/plugins/reload-view.plugin.js");
+/* harmony import */ var _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./plugins/scroll.plugin */ "./src/plugins/scroll.plugin.js");
+/* harmony import */ var _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/server-event.plugin */ "./src/plugins/server-event.plugin.js");
+/* harmony import */ var _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./plugins/sidenav.plugin */ "./src/plugins/sidenav.plugin.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Register a jQuery plugin.
+ *
+ * @param {string}   name      Plugin name
+ * @param {Function} cl        Plugin class
+ * @param {boolean}  shortHand Map $.name(...) to $({}).name(...)
+ */
+
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin = function (name, cl) {
+  let shortHand = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  const dataName = '__' + name; // add plugin to atk namespace.
+
+  atk__WEBPACK_IMPORTED_MODULE_1__["default"][name] = cl; // register plugin to jQuery fn prototype.
+
+  (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn)[name] = function () {
+    let option = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+    // Check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
+    if (typeof option === 'string') {
+      if (this.data(dataName) && typeof this.data(dataName)[option] === 'function') {
+        return this.data(dataName).call(option, args);
+      } // return if trying to call a plugin method prior to instantiate it.
+
+
+      return;
+    }
+
+    return this.each(function () {
+      const options = external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, cl.DEFAULTS, typeof option === 'object' && option); // create plugin using the constructor function store in atk namespace object
+      // and add a reference of it to this jQuery object data.
+
+      external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(dataName, new atk__WEBPACK_IMPORTED_MODULE_1__["default"][name](this, options));
+    });
+  };
+
+  if (shortHand) {
+    (external_jquery__WEBPACK_IMPORTED_MODULE_0___default())[name] = options => external_jquery__WEBPACK_IMPORTED_MODULE_0___default()({})[name](options);
+  }
+};
+
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkAjaxec', _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_2__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkColumnResizer', _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_3__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkConditionalForm', _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_4__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkConfirm', _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_5__["default"], true);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkCreateModal', _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_6__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkFileUpload', _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_7__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkJsSearch', _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_8__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkJsSortable', _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_9__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkReloadView', _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_10__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkScroll', _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_11__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkServerEvent', _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_12__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkSidenav', _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_13__["default"]);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
+
+/***/ }),
+
+/***/ "./src/setup-utils.js":
+/*!****************************!*\
+  !*** ./src/setup-utils.js ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var mitt__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mitt */ "./node_modules/mitt/dist/mitt.es.js");
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./helpers/table-dropdown.helper */ "./src/helpers/table-dropdown.helper.js");
+/* harmony import */ var _helpers_url_helper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helpers/url.helper */ "./src/helpers/url.helper.js");
+
+
+
+
+
+
+/**
+ * Define atk global options.
+ * In Js:
+ * atk.options.set('name', 'value');
+ * In Php:
+ * (new JsChain('atk.options')->set('name', 'value');
+ */
+
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].options = function () {
+  const data = {};
+  return {
+    set: (name, value) => {
+      data[name] = value;
+    },
+    get: name => data[name]
+  };
+}();
+/**
+ * Subscribe too and publish events.
+ * listen to an event
+ * atk.eventBus.on('foo', e => console.log('foo', e))
+ * Fire an event
+ * atk.eventBus.emit('foo', { a: 'b' })
+ */
+
+
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].eventBus = function () {
+  const emitter = (0,mitt__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  return {
+    emit: (event, payload) => emitter.emit(event, payload),
+    on: (event, ref) => emitter.on(event, ref),
+    off: (event, ref) => emitter.off(event, ref),
+    clearAll: () => emitter.all.clear()
+  };
+}();
+
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].debounce = function (func, wait, options) {
+  let timerId = null;
+  let debouncedInner;
+
+  function createTimer() {
+    timerId = setInterval(() => {
+      if (!debouncedInner.pending()) {
+        clearInterval(timerId);
+        timerId = null;
+        (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().active)--;
+      }
+    }, 25);
+    (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().active)++;
+  }
+
+  debouncedInner = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_5__["default"])(func, wait, options);
+
+  function debounced() {
+    if (timerId === null) {
+      createTimer();
+    }
+
+    return debouncedInner(...arguments);
+  }
+
+  debounced.cancel = debouncedInner.cancel;
+  debounced.flush = debouncedInner.flush;
+  debounced.pending = debouncedInner.pending;
+  return debounced;
+};
+/*
+* Utilities function that you can execute
+* from atk context. Usage: atk.utils.redirect('url');
+*/
+
+
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].utils = {
+  json: function () {
+    return {
+      // try parsing string as JSON. Return parse if valid, otherwise return onError value.
+      tryParse: function (str) {
+        let onError = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+        try {
+          return JSON.parse(str);
+        } catch (e) {
+          return onError;
+        }
+      }
+    };
+  },
+  redirect: function (url, params) {
+    document.location = atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper.appendParams(url, params);
+  }
+};
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].tableDropdownHelper = _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_3__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper = _helpers_url_helper__WEBPACK_IMPORTED_MODULE_4__["default"];
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
 
 /***/ }),
 
@@ -24478,335 +24304,6 @@ module.exports = __webpack_require__(/*! ../internals/path */ "./node_modules/co
 
 /***/ }),
 
-/***/ "./node_modules/locutus/php/datetime/date.js":
-/*!***************************************************!*\
-  !*** ./node_modules/locutus/php/datetime/date.js ***!
-  \***************************************************/
-/***/ ((module) => {
-
-"use strict";
-
-
-module.exports = function date(format, timestamp) {
-  //  discuss at: https://locutus.io/php/date/
-  // original by: Carlos R. L. Rodrigues (https://www.jsfromhell.com)
-  // original by: gettimeofday
-  //    parts by: Peter-Paul Koch (https://www.quirksmode.org/js/beat.html)
-  // improved by: Kevin van Zonneveld (https://kvz.io)
-  // improved by: MeEtc (https://yass.meetcweb.com)
-  // improved by: Brad Touesnard
-  // improved by: Tim Wiel
-  // improved by: Bryan Elliott
-  // improved by: David Randall
-  // improved by: Theriault (https://github.com/Theriault)
-  // improved by: Theriault (https://github.com/Theriault)
-  // improved by: Brett Zamir (https://brett-zamir.me)
-  // improved by: Theriault (https://github.com/Theriault)
-  // improved by: Thomas Beaucourt (https://www.webapp.fr)
-  // improved by: JT
-  // improved by: Theriault (https://github.com/Theriault)
-  // improved by: Rafał Kukawski (https://blog.kukawski.pl)
-  // improved by: Theriault (https://github.com/Theriault)
-  //    input by: Brett Zamir (https://brett-zamir.me)
-  //    input by: majak
-  //    input by: Alex
-  //    input by: Martin
-  //    input by: Alex Wilson
-  //    input by: Haravikk
-  // bugfixed by: Kevin van Zonneveld (https://kvz.io)
-  // bugfixed by: majak
-  // bugfixed by: Kevin van Zonneveld (https://kvz.io)
-  // bugfixed by: Brett Zamir (https://brett-zamir.me)
-  // bugfixed by: omid (https://locutus.io/php/380:380#comment_137122)
-  // bugfixed by: Chris (https://www.devotis.nl/)
-  //      note 1: Uses global: locutus to store the default timezone
-  //      note 1: Although the function potentially allows timezone info
-  //      note 1: (see notes), it currently does not set
-  //      note 1: per a timezone specified by date_default_timezone_set(). Implementers might use
-  //      note 1: $locutus.currentTimezoneOffset and
-  //      note 1: $locutus.currentTimezoneDST set by that function
-  //      note 1: in order to adjust the dates in this function
-  //      note 1: (or our other date functions!) accordingly
-  //   example 1: date('H:m:s \\m \\i\\s \\m\\o\\n\\t\\h', 1062402400)
-  //   returns 1: '07:09:40 m is month'
-  //   example 2: date('F j, Y, g:i a', 1062462400)
-  //   returns 2: 'September 2, 2003, 12:26 am'
-  //   example 3: date('Y W o', 1062462400)
-  //   returns 3: '2003 36 2003'
-  //   example 4: var $x = date('Y m d', (new Date()).getTime() / 1000)
-  //   example 4: $x = $x + ''
-  //   example 4: var $result = $x.length // 2009 01 09
-  //   returns 4: 10
-  //   example 5: date('W', 1104534000)
-  //   returns 5: '52'
-  //   example 6: date('B t', 1104534000)
-  //   returns 6: '999 31'
-  //   example 7: date('W U', 1293750000.82); // 2010-12-31
-  //   returns 7: '52 1293750000'
-  //   example 8: date('W', 1293836400); // 2011-01-01
-  //   returns 8: '52'
-  //   example 9: date('W Y-m-d', 1293974054); // 2011-01-02
-  //   returns 9: '52 2011-01-02'
-  //        test: skip-1 skip-2 skip-5
-
-  var jsdate = void 0,
-      f = void 0;
-  // Keep this here (works, but for code commented-out below for file size reasons)
-  // var tal= [];
-  var txtWords = ['Sun', 'Mon', 'Tues', 'Wednes', 'Thurs', 'Fri', 'Satur', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  // trailing backslash -> (dropped)
-  // a backslash followed by any character (including backslash) -> the character
-  // empty string -> empty string
-  var formatChr = /\\?(.?)/gi;
-  var formatChrCb = function formatChrCb(t, s) {
-    return f[t] ? f[t]() : s;
-  };
-  var _pad = function _pad(n, c) {
-    n = String(n);
-    while (n.length < c) {
-      n = '0' + n;
-    }
-    return n;
-  };
-  f = {
-    // Day
-    d: function d() {
-      // Day of month w/leading 0; 01..31
-      return _pad(f.j(), 2);
-    },
-    D: function D() {
-      // Shorthand day name; Mon...Sun
-      return f.l().slice(0, 3);
-    },
-    j: function j() {
-      // Day of month; 1..31
-      return jsdate.getDate();
-    },
-    l: function l() {
-      // Full day name; Monday...Sunday
-      return txtWords[f.w()] + 'day';
-    },
-    N: function N() {
-      // ISO-8601 day of week; 1[Mon]..7[Sun]
-      return f.w() || 7;
-    },
-    S: function S() {
-      // Ordinal suffix for day of month; st, nd, rd, th
-      var j = f.j();
-      var i = j % 10;
-      if (i <= 3 && parseInt(j % 100 / 10, 10) === 1) {
-        i = 0;
-      }
-      return ['st', 'nd', 'rd'][i - 1] || 'th';
-    },
-    w: function w() {
-      // Day of week; 0[Sun]..6[Sat]
-      return jsdate.getDay();
-    },
-    z: function z() {
-      // Day of year; 0..365
-      var a = new Date(f.Y(), f.n() - 1, f.j());
-      var b = new Date(f.Y(), 0, 1);
-      return Math.round((a - b) / 864e5);
-    },
-
-    // Week
-    W: function W() {
-      // ISO-8601 week number
-      var a = new Date(f.Y(), f.n() - 1, f.j() - f.N() + 3);
-      var b = new Date(a.getFullYear(), 0, 4);
-      return _pad(1 + Math.round((a - b) / 864e5 / 7), 2);
-    },
-
-    // Month
-    F: function F() {
-      // Full month name; January...December
-      return txtWords[6 + f.n()];
-    },
-    m: function m() {
-      // Month w/leading 0; 01...12
-      return _pad(f.n(), 2);
-    },
-    M: function M() {
-      // Shorthand month name; Jan...Dec
-      return f.F().slice(0, 3);
-    },
-    n: function n() {
-      // Month; 1...12
-      return jsdate.getMonth() + 1;
-    },
-    t: function t() {
-      // Days in month; 28...31
-      return new Date(f.Y(), f.n(), 0).getDate();
-    },
-
-    // Year
-    L: function L() {
-      // Is leap year?; 0 or 1
-      var j = f.Y();
-      return j % 4 === 0 & j % 100 !== 0 | j % 400 === 0;
-    },
-    o: function o() {
-      // ISO-8601 year
-      var n = f.n();
-      var W = f.W();
-      var Y = f.Y();
-      return Y + (n === 12 && W < 9 ? 1 : n === 1 && W > 9 ? -1 : 0);
-    },
-    Y: function Y() {
-      // Full year; e.g. 1980...2010
-      return jsdate.getFullYear();
-    },
-    y: function y() {
-      // Last two digits of year; 00...99
-      return f.Y().toString().slice(-2);
-    },
-
-    // Time
-    a: function a() {
-      // am or pm
-      return jsdate.getHours() > 11 ? 'pm' : 'am';
-    },
-    A: function A() {
-      // AM or PM
-      return f.a().toUpperCase();
-    },
-    B: function B() {
-      // Swatch Internet time; 000..999
-      var H = jsdate.getUTCHours() * 36e2;
-      // Hours
-      var i = jsdate.getUTCMinutes() * 60;
-      // Minutes
-      // Seconds
-      var s = jsdate.getUTCSeconds();
-      return _pad(Math.floor((H + i + s + 36e2) / 86.4) % 1e3, 3);
-    },
-    g: function g() {
-      // 12-Hours; 1..12
-      return f.G() % 12 || 12;
-    },
-    G: function G() {
-      // 24-Hours; 0..23
-      return jsdate.getHours();
-    },
-    h: function h() {
-      // 12-Hours w/leading 0; 01..12
-      return _pad(f.g(), 2);
-    },
-    H: function H() {
-      // 24-Hours w/leading 0; 00..23
-      return _pad(f.G(), 2);
-    },
-    i: function i() {
-      // Minutes w/leading 0; 00..59
-      return _pad(jsdate.getMinutes(), 2);
-    },
-    s: function s() {
-      // Seconds w/leading 0; 00..59
-      return _pad(jsdate.getSeconds(), 2);
-    },
-    u: function u() {
-      // Microseconds; 000000-999000
-      return _pad(jsdate.getMilliseconds() * 1000, 6);
-    },
-
-    // Timezone
-    e: function e() {
-      // Timezone identifier; e.g. Atlantic/Azores, ...
-      // The following works, but requires inclusion of the very large
-      // timezone_abbreviations_list() function.
-      /*              return that.date_default_timezone_get();
-       */
-      var msg = 'Not supported (see source code of date() for timezone on how to add support)';
-      throw new Error(msg);
-    },
-    I: function I() {
-      // DST observed?; 0 or 1
-      // Compares Jan 1 minus Jan 1 UTC to Jul 1 minus Jul 1 UTC.
-      // If they are not equal, then DST is observed.
-      var a = new Date(f.Y(), 0);
-      // Jan 1
-      var c = Date.UTC(f.Y(), 0);
-      // Jan 1 UTC
-      var b = new Date(f.Y(), 6);
-      // Jul 1
-      // Jul 1 UTC
-      var d = Date.UTC(f.Y(), 6);
-      return a - c !== b - d ? 1 : 0;
-    },
-    O: function O() {
-      // Difference to GMT in hour format; e.g. +0200
-      var tzo = jsdate.getTimezoneOffset();
-      var a = Math.abs(tzo);
-      return (tzo > 0 ? '-' : '+') + _pad(Math.floor(a / 60) * 100 + a % 60, 4);
-    },
-    P: function P() {
-      // Difference to GMT w/colon; e.g. +02:00
-      var O = f.O();
-      return O.substr(0, 3) + ':' + O.substr(3, 2);
-    },
-    T: function T() {
-      // The following works, but requires inclusion of the very
-      // large timezone_abbreviations_list() function.
-      /*              var abbr, i, os, _default;
-      if (!tal.length) {
-        tal = that.timezone_abbreviations_list();
-      }
-      if ($locutus && $locutus.default_timezone) {
-        _default = $locutus.default_timezone;
-        for (abbr in tal) {
-          for (i = 0; i < tal[abbr].length; i++) {
-            if (tal[abbr][i].timezone_id === _default) {
-              return abbr.toUpperCase();
-            }
-          }
-        }
-      }
-      for (abbr in tal) {
-        for (i = 0; i < tal[abbr].length; i++) {
-          os = -jsdate.getTimezoneOffset() * 60;
-          if (tal[abbr][i].offset === os) {
-            return abbr.toUpperCase();
-          }
-        }
-      }
-      */
-      return 'UTC';
-    },
-    Z: function Z() {
-      // Timezone offset in seconds (-43200...50400)
-      return -jsdate.getTimezoneOffset() * 60;
-    },
-
-    // Full Date/Time
-    c: function c() {
-      // ISO-8601 date.
-      return 'Y-m-d\\TH:i:sP'.replace(formatChr, formatChrCb);
-    },
-    r: function r() {
-      // RFC 2822
-      return 'D, d M Y H:i:s O'.replace(formatChr, formatChrCb);
-    },
-    U: function U() {
-      // Seconds since UNIX epoch
-      return jsdate / 1000 | 0;
-    }
-  };
-
-  var _date = function _date(format, timestamp) {
-    jsdate = timestamp === undefined ? new Date() // Not provided
-    : timestamp instanceof Date ? new Date(timestamp) // JS Date()
-    : new Date(timestamp * 1000) // UNIX timestamp (auto-convert to int)
-    ;
-    return format.replace(formatChr, formatChrCb);
-  };
-
-  return _date(format, timestamp);
-};
-//# sourceMappingURL=date.js.map
-
-/***/ }),
-
 /***/ "./node_modules/lodash/.internal/freeGlobal.js":
 /*!*****************************************************!*\
   !*** ./node_modules/lodash/.internal/freeGlobal.js ***!
@@ -37138,25 +36635,14 @@ Vue.compile = compileToFunctions;
 
 /***/ }),
 
-/***/ "draggable":
-/*!****************************!*\
-  !*** external "Draggable" ***!
-  \****************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = __WEBPACK_EXTERNAL_MODULE_draggable__;
-
-/***/ }),
-
-/***/ "jquery":
+/***/ "external/jquery":
 /*!*************************!*\
   !*** external "jQuery" ***!
   \*************************/
 /***/ ((module) => {
 
 "use strict";
-module.exports = __WEBPACK_EXTERNAL_MODULE_jquery__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_external_jquery__;
 
 /***/ })
 
@@ -37460,62 +36946,28 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-/*!*********************************!*\
-  !*** ./src/agile-toolkit-ui.js ***!
-  \*********************************/
+/*!*********************!*\
+  !*** ./src/main.js ***!
+  \*********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var core_js_stable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/stable */ "./node_modules/core-js/stable/index.js");
 /* harmony import */ var core_js_stable__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_stable__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var atk_fomantic_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk-fomantic-ui */ "./src/atk-fomantic-ui.js");
-/* harmony import */ var locutus_php_datetime_date__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! locutus/php/datetime/date */ "./node_modules/locutus/php/datetime/date.js");
-/* harmony import */ var locutus_php_datetime_date__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(locutus_php_datetime_date__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./helpers/table-dropdown.helper */ "./src/helpers/table-dropdown.helper.js");
-/* harmony import */ var _plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugin */ "./src/plugin.js");
-/* harmony import */ var _atk_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./atk-utils */ "./src/atk-utils.js");
-/* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/data.service */ "./src/services/data.service.js");
-/* harmony import */ var _services_panel_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/panel.service */ "./src/services/panel.service.js");
-/* harmony import */ var _services_vue_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./services/vue.service */ "./src/services/vue.service.js");
-/* harmony import */ var _services_popup_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./services/popup.service */ "./src/services/popup.service.js");
+/* harmony import */ var _setup_atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./setup-atk */ "./src/setup-atk.js");
+/* harmony import */ var _setup_plugins__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./setup-plugins */ "./src/setup-plugins.js");
+/* harmony import */ var _setup_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./setup-utils */ "./src/setup-utils.js");
+/* harmony import */ var _setup_fomantic_ui__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./setup-fomantic-ui */ "./src/setup-fomantic-ui.js");
+
+ // must be the first non-vendor import
 
 
 
 
+__webpack_require__.p = window.__atkBundlePublicPath + '/'; // eslint-disable-line no-undef, camelcase, no-underscore-dangle
 
-
-
-
-
-
-__webpack_require__.p = window.__atkBundlePublicPath === undefined ? '/public/' : window.__atkBundlePublicPath + '/'; // eslint-disable-line no-undef, camelcase, no-underscore-dangle
-
-const atk = { ...atk_fomantic_ui__WEBPACK_IMPORTED_MODULE_1__["default"]
-};
-atk.options = _atk_utils__WEBPACK_IMPORTED_MODULE_5__.atkOptions;
-atk.eventBus = _atk_utils__WEBPACK_IMPORTED_MODULE_5__.atkEventBus;
-atk.utils = _atk_utils__WEBPACK_IMPORTED_MODULE_5__.atkUtils;
-atk.debounce = _atk_utils__WEBPACK_IMPORTED_MODULE_5__.atkDebounce; // Allow to register a plugin with jQuery;
-
-atk.registerPlugin = _plugin__WEBPACK_IMPORTED_MODULE_4__.plugin;
-atk.phpDate = (locutus_php_datetime_date__WEBPACK_IMPORTED_MODULE_2___default());
-atk.dataService = _services_data_service__WEBPACK_IMPORTED_MODULE_6__["default"];
-atk.panelService = _services_panel_service__WEBPACK_IMPORTED_MODULE_7__["default"];
-atk.tableDropdown = _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_3__.tableDropdown;
-atk.vueService = _services_vue_service__WEBPACK_IMPORTED_MODULE_8__["default"];
-atk.popupService = _services_popup_service__WEBPACK_IMPORTED_MODULE_9__["default"];
-/**
- * Exporting services in order to be available globally
- * or by importing it into your own module.
- *
- * Available as a global Var: atk.uploadService.fileUpload()
- * Available as an import:
- * import atk from atk4JS;
- * atk.uploadService.fileUpload();
- */
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (atk);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_setup_atk__WEBPACK_IMPORTED_MODULE_1__["default"]);
 })();
 
 __webpack_exports__ = __webpack_exports__["default"];

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import SemanticUiVue from 'semantic-ui-vue';
+import atk from 'atk';
 
 // disable console logs for non-minified build
 Vue.config.productionTip = false;
@@ -7,7 +8,7 @@ Vue.config.devtools = false;
 
 Vue.use(SemanticUiVue);
 
-Vue.component('flat-picker', () => import('vue-flatpickr-component'));
+Vue.component('flatpickr-picker', () => import('vue-flatpickr-component'));
 
 // vue loader component to display while dynamic component is loading
 const atkVueLoader = {
@@ -118,7 +119,7 @@ class VueService {
         if (window[component]) {
             Vue.use(window[component]);
         } else {
-            console.error('Unable to register component: ' + component + '. Make sure it is load correctly.');
+            console.error('Vue "' + component + '" component not found');
         }
     }
 
@@ -150,7 +151,4 @@ class VueService {
     }
 }
 
-const vueService = new VueService();
-Object.freeze(vueService);
-
-export default vueService;
+export default Object.freeze(new VueService());

@@ -381,7 +381,6 @@ class Lookup extends Input
         }
 
         if ($this->disabled) {
-            $this->settings['showOnFocus'] = false;
             $this->settings['allowTab'] = false;
 
             $this->template->set('disabled', 'disabled="disabled"');
@@ -389,7 +388,6 @@ class Lookup extends Input
         }
 
         if ($this->readOnly) {
-            $this->settings['showOnFocus'] = false;
             $this->settings['allowTab'] = false;
             $this->settings['apiSettings'] = null;
             $this->settings['onShow'] = new JsFunction([new JsExpression('return false')]);

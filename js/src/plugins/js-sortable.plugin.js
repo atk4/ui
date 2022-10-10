@@ -1,9 +1,7 @@
-/* global Draggable */
-import $ from 'jquery';
-import atkPlugin from './atk.plugin';
-import 'draggable';
-
-/* eslint-disable jsdoc/require-param-type */
+import $ from 'external/jquery';
+/* global Draggable */ // loaded after main JS
+import atk from 'atk';
+import AtkPlugin from './atk.plugin';
 
 /**
  * Make elements inside a container draggable and sortable.
@@ -21,10 +19,8 @@ import 'draggable';
  *
  * Element containing specific css class can be used as the handle for dragging element, if null
  * is pass, than the entire element is used.
- *
- * For a complete example check /demos/jssortable.php
  */
-export default class JsSortable extends atkPlugin {
+export default class AtkJsSortablePlugin extends AtkPlugin {
     main() {
         this.ids = [];
         // the data label attribute value of the source element being drag. ex: data-id
@@ -70,7 +66,7 @@ export default class JsSortable extends atkPlugin {
     /**
      * Will send current element order via callback.
      *
-     * @param params Extra arguments to add to uri.
+     * @param {object} params Extra arguments to add to URL.
      */
     getSortOrders(params) {
         this.sendSortOrders(params);
@@ -86,7 +82,7 @@ export default class JsSortable extends atkPlugin {
                 on: 'now',
                 url: url,
                 data: {
-                    order: this.ids.toString(), org_idx: this.orgIdx, new_idx: this.newIdx, source: this.sourceId,
+                    order: this.ids.toString(), orgIdx: this.orgIdx, newIdx: this.newIdx, source: this.sourceId,
                 },
                 method: 'POST',
                 obj: this.dragContainer,
@@ -96,12 +92,12 @@ export default class JsSortable extends atkPlugin {
 
     buildUrl(extraParams = null) {
         let url = null;
-        if (this.settings.uri_options && extraParams) {
-            url = $.atkAddParams(this.settings.uri, $.extend({}, this.settings.uri_options, extraParams));
-        } else if (this.settings.uri_options) {
-            url = $.atkAddParams(this.settings.uri, this.settings.uri_options);
+        if (this.settings.urlOptions && extraParams) {
+            url = atk.urlHelper.appendParams(this.settings.url, $.extend({}, this.settings.urlOptions, extraParams));
+        } else if (this.settings.urlOptions) {
+            url = atk.urlHelper.appendParams(this.settings.url, this.settings.urlOptions);
         } else {
-            url = this.settings.uri;
+            url = this.settings.url;
         }
 
         return url;
@@ -112,14 +108,14 @@ export default class JsSortable extends atkPlugin {
     }
 }
 
-JsSortable.DEFAULTS = {
-    uri: null,
-    uri_options: null,
+AtkJsSortablePlugin.DEFAULTS = {
+    url: null,
+    urlOptions: null,
     container: 'tbody',
     draggable: 'tr',
     dataLabel: 'id',
     handleClass: null,
-    mirrorCss: '.draggable-mirror {background: #fff!important; margin-left: 1%; opacity: 0.9; }',
+    mirrorCss: '.draggable-mirror { background: #fff!important; margin-left: 1%; opacity: 0.9; }',
     overCss: '.draggable--over { background: yellow !important; opacity: 0.5; }',
     autoFireCb: true,
 };

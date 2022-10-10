@@ -22,7 +22,7 @@ Header::addTo($app, ['Dynamic scroll in Lister']);
 $container = View::addTo($app);
 
 $view = View::addTo($container, ['template' => new HtmlTemplate('
-{List}<div class="ui segment" style="height: 60px"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{/}
+{List}<div class="ui segment" style="height: 60px;"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{/}
 {$Content}')]);
 
 $lister = Lister::addTo($view, [], ['List']);

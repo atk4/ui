@@ -1049,7 +1049,7 @@ class View extends AbstractView implements JsExpressionable
 
         // Do we need confirm action.
         if ($defaults['confirm'] ?? null) {
-            array_unshift($eventStatements, new JsExpression('$.atkConfirm({ message: [confirm], onApprove: [action], options: { button: {ok: [ok], cancel: [cancel] } }, context: this })', [
+            array_unshift($eventStatements, new JsExpression('$.atkConfirm({ message: [confirm], onApprove: [action], options: { button: { ok: [ok], cancel: [cancel] } }, context: this })', [
                 'confirm' => $defaults['confirm'],
                 'action' => new JsFunction($actions),
                 'ok' => $defaults['ok'] ?? 'Ok',

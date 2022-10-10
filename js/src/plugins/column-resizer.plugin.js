@@ -1,16 +1,14 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 import Resizer from 'column-resizer';
-import atkPlugin from './atk.plugin';
-
-/* eslint-disable jsdoc/require-param-type */
+import AtkPlugin from './atk.plugin';
 
 /**
  * Enable table column to be resizable using drag.
  */
-export default class columnResizer extends atkPlugin {
+export default class AtkColumnResizerPlugin extends AtkPlugin {
     main() {
-        // add on resize callback if url is supply.
-        if (this.settings.uri) {
+        // add on resize callback if URL is supplied
+        if (this.settings.url) {
             this.settings.onResize = this.onResize.bind(this);
         }
         this.resizable = new Resizer(this.$el[0], ({ ...this.settings.atkDefaults, ...this.settings }));
@@ -20,14 +18,14 @@ export default class columnResizer extends atkPlugin {
     }
 
     /**
-     * Send widths to server via callback uri.
+     * Send widths to server via callback URL.
      *
-     * @param widths an Array of objects, each containing the column name and their size in pixels [{column: 'name', size: '135px'}]
+     * @param {Array.<object>} widths an Array of objects, each containing the column name and their size in pixels [{ column: 'name', size: '135px' }]
      */
     sendWidths(widths) {
         this.$el.api({
             on: 'now',
-            url: this.settings.uri,
+            url: this.settings.url,
             method: 'POST',
             data: { widths: JSON.stringify(widths) },
         });
@@ -36,10 +34,8 @@ export default class columnResizer extends atkPlugin {
     /**
      * On resize callback when user finish dragging column for resizing.
      * Calling this method via callback need to bind "this" set to this plugin.
-     *
-     * @param e the event.
      */
-    onResize(e) {
+    onResize(event) {
         const columns = this.$el.find('th');
 
         const widths = [];
@@ -51,7 +47,7 @@ export default class columnResizer extends atkPlugin {
     }
 }
 
-columnResizer.DEFAULTS = {
+AtkColumnResizerPlugin.DEFAULTS = {
     atkDefaults: {
         liveDrag: true,
         resizeMode: 'overflow',
@@ -59,5 +55,5 @@ columnResizer.DEFAULTS = {
         minWidth: 8,
         // onResize: function(e) { e.path.filter(function(item) { return item.querySelector('table') }); }
     },
-    uri: null,
+    url: null,
 };

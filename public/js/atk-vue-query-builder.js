@@ -675,15 +675,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* global flatpickr */
+// loaded after main JS
+
 /**
  * Wrapper for vue-flatpickr-component component.
  * https://github.com/ankurk91/vue-flatpickr-component
  *
- * Props
+ * Props:
  * config: Any of flatpickr options
+ *
  * Will emit a dateChange event when date is set.
  */
-const template = '<flat-picker v-model="date" :config="flatPickr" @on-change="onChange"></flat-picker>';
+const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-change="onChange"></flatpickr-picker>';
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-date-picker',
   template: template,
@@ -739,19 +743,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+
 /**
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
  *
- * Props
- * config :
- * url : the callback url. Callback should return model data in form of {key: model_id, text: model_title, value: model_id}
- * reference: the reference field name associate with model or hasOne name. This field name will be sent along with url callback parameter as of 'field=name'.
+ * Props:
+ * config:
+ * url: the callback URL. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
+ * reference: the reference field name associate with model or hasOne name. This field name will be sent along with URL callback parameter as of 'field=name'.
  * ui: the css class name to apply to dropdown.
- * Note: The remaining config object may contain any or sui-dropdown {props: value} pair.
+ * Note: The remaining config object may contain any or sui-dropdown { props: value } pair.
  *
  * value: The selected value.
  * optionalValue: The initial list of options for the dropdown.
  */
+
 const template = `<sui-dropdown
                     ref="drop"
                     v-bind="dropdownProps"
@@ -802,7 +809,7 @@ const template = `<sui-dropdown
       }
 
       this.temp = inputValue;
-      atk.debounce(() => {
+      atk__WEBPACK_IMPORTED_MODULE_0__["default"].debounce(() => {
         if (this.query !== this.temp) {
           this.query = this.temp;
 
@@ -819,10 +826,10 @@ const template = `<sui-dropdown
     fetchItems: async function (q) {
       try {
         const data = {
-          atk_vlookup_q: q,
-          atk_vlookup_field: this.field
+          atkVueLookupQuery: q,
+          atkVueLookupField: this.field
         };
-        const response = await atk.apiService.suiFetch(this.url, {
+        const response = await atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.suiFetch(this.url, {
           method: 'get',
           data: data
         });

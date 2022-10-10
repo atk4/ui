@@ -1,10 +1,10 @@
-/* eslint-disable jsdoc/require-param-type */
+import atk from 'atk';
 
 /**
  * This is default setup for Fomantic-UI Popup.
  */
 class PopupService {
-    setPopups(settings) {
+    setupFomanticUi(settings) {
         settings.onCreate = this.onCreate;
         settings.onShow = this.onShow;
         settings.onHide = this.onHide;
@@ -15,20 +15,18 @@ class PopupService {
     /**
      * OnShow callback when a popup is trigger.
      * Will check if popup need to be setup dynamically using a callback.
-     *
-     * @param $module
      */
     onShow($module) {
         const $popup = this;
         const data = $popup.data();
-        if ((data.uri !== '') && (data.uri !== undefined)) {
+        if ((data.url !== '') && (data.url !== undefined)) {
             // Only load if we are not using data.cache or content has not been loaded yet.
             if (!data.cache || !data.hascontent) {
                 // display default loader while waiting for content.
                 $popup.html(atk.popupService.getLoader());
                 $popup.api({
                     on: 'now',
-                    url: data.uri,
+                    url: data.url,
                     method: 'GET',
                     obj: $popup,
                     onComplete: function (response, content) {
@@ -36,7 +34,7 @@ class PopupService {
                         if (!result.length) {
                             response.success = false;
                             response.isServiceError = true;
-                            response.message = 'Popup service error: Unable to replace popup content from server response. Empty Content.';
+                            response.message = 'Popup service error: Empty html, unable to replace popup content from server response';
                         } else {
                             response.id = null;
                             $popup.data('hascontent', true);
@@ -75,7 +73,4 @@ class PopupService {
     }
 }
 
-const popupService = new PopupService();
-Object.freeze(popupService);
-
-export default popupService;
+export default Object.freeze(new PopupService());

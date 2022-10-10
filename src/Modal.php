@@ -258,7 +258,7 @@ class Modal extends View
         }
 
         if ($this->fx !== null) {
-            $data['uri'] = $this->cb->getJsUrl();
+            $data['url'] = $this->cb->getJsUrl();
         }
 
         if (!$this->showActions) {

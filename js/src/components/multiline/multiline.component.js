@@ -1,3 +1,5 @@
+import $ from 'external/jquery';
+import atk from 'atk';
 import multilineBody from './multiline-body.component';
 import multilineHeader from './multiline-header.component';
 
@@ -188,10 +190,10 @@ export default {
          */
         fetchOnChangeAction: function (fieldName = null) {
             if (this.hasChangeCb && (fieldName === null || this.eventFields.indexOf(fieldName) > -1)) {
-                jQuery(this.$refs.addBtn.$el).api({
+                $(this.$refs.addBtn.$el).api({
                     on: 'now',
                     url: this.data.url,
-                    method: 'post',
+                    method: 'POST',
                     data: { __atkml_action: 'on-change', rows: this.value },
                 });
             }
@@ -201,7 +203,7 @@ export default {
             const context = this.$refs.addBtn.$el;
             data.__atkml_action = 'update-row';
             try {
-                return await atk.apiService.suiFetch(this.data.url, { data: data, method: 'post', stateContext: context });
+                return await atk.apiService.suiFetch(this.data.url, { data: data, method: 'POST', stateContext: context });
             } catch (e) {
                 console.error(e);
             }

@@ -11,8 +11,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
  * Vue component
@@ -22,7 +22,7 @@ __webpack_require__.r(__webpack_exports__);
  * Properties need for this component are:
  *
  * context: string, a jQuery selector where the 'loading' class will be apply by Fomantic-UI - default to the requesting element.
- * url:     string, the url to call.
+ * url:     string, the URL to call.
  * value:   array, array of value to send to server.
  */
 
@@ -43,19 +43,8 @@ const template = `
   props: {
     url: String,
     initValue: String,
-    saveOnBlur: {
-      type: Boolean,
-      default: true
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        inputCss: '',
-        inlineCss: '',
-        fieldName: null,
-        fieldType: 'text'
-      })
-    }
+    saveOnBlur: Boolean,
+    options: Object
   },
   data: function () {
     return {
@@ -121,7 +110,7 @@ const template = `
     },
     update: function () {
       const that = this;
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.$el).api({
+      external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.$el).api({
         on: 'now',
         url: this.url,
         data: {

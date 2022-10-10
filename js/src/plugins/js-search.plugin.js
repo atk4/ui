@@ -1,9 +1,8 @@
-import $ from 'jquery';
-import atkPlugin from './atk.plugin';
+import $ from 'external/jquery';
+import atk from 'atk';
+import AtkPlugin from './atk.plugin';
 
-/* eslint-disable jsdoc/require-param-type */
-
-export default class JsSearch extends atkPlugin {
+export default class AtkJsSearchPlugin extends AtkPlugin {
     main() {
         this.urlArgs = {};
         this.state = { button: false, filter: false };
@@ -40,15 +39,15 @@ export default class JsSearch extends atkPlugin {
      */
     onAutoQueryAction() {
         this.textInput.on('keyup', atk.debounce((e) => {
-            const options = $.extend({}, this.urlArgs, this.settings.uri_options);
+            const options = $.extend({}, this.urlArgs, this.settings.urlOptions);
             if (e.target.value === '' || e.keyCode === 27) {
-                this.doSearch(this.settings.uri, null, options, () => {
+                this.doSearch(this.settings.url, null, options, () => {
                     this.setButtonState(false);
                     this.setFilterState(false);
                     this.textInput.val('');
                 });
             } else if (e.target.value !== this.$el.data('preValue')) {
-                this.doSearch(this.settings.uri, e.target.value, options, () => {
+                this.doSearch(this.settings.url, e.target.value, options, () => {
                     this.setButtonState(true);
                     this.setFilterState(true);
                 });
@@ -62,15 +61,15 @@ export default class JsSearch extends atkPlugin {
      */
     onEnterAction() {
         this.textInput.on('keyup', (e) => {
-            const options = $.extend({}, this.urlArgs, this.settings.uri_options);
+            const options = $.extend({}, this.urlArgs, this.settings.urlOptions);
             if (e.keyCode === 13 && e.target.value) {
-                this.doSearch(this.settings.uri, e.target.value, options, () => {
+                this.doSearch(this.settings.url, e.target.value, options, () => {
                     this.setButtonState(true);
                     this.setFilterState(true);
                 });
                 this.$el.data('preValue', e.target.value);
             } else if ((e.keyCode === 27 && e.target.value) || (e.keyCode === 13 && e.target.value === '')) {
-                this.doSearch(this.settings.uri, null, options, () => {
+                this.doSearch(this.settings.url, null, options, () => {
                     this.setButtonState(false);
                     this.setFilterState(false);
                 });
@@ -103,9 +102,9 @@ export default class JsSearch extends atkPlugin {
      */
     setSearchAction() {
         this.searchAction.on('click', (e) => {
-            const options = $.extend({}, this.urlArgs, this.settings.uri_options);
+            const options = $.extend({}, this.urlArgs, this.settings.urlOptions);
             if (this.state.button) {
-                this.doSearch(this.settings.uri, null, options, () => {
+                this.doSearch(this.settings.url, null, options, () => {
                     this.setButtonState(false);
                     this.setFilterState(false);
                 });
@@ -114,7 +113,7 @@ export default class JsSearch extends atkPlugin {
             }
 
             if (!this.state.button && this.textInput.val()) {
-                this.doSearch(this.settings.uri, this.textInput.val(), options, () => {
+                this.doSearch(this.settings.url, this.textInput.val(), options, () => {
                     this.setButtonState(true);
                     this.setFilterState(true);
                 });
@@ -127,7 +126,7 @@ export default class JsSearch extends atkPlugin {
      * Mostly use on page load
      * when input need to be set to reflect a search state.
      *
-     * @param text The text input value.
+     * @param {string} text The text input value.
      */
     setFilter(text) {
         this.textInput.val(text);
@@ -137,7 +136,7 @@ export default class JsSearch extends atkPlugin {
     }
 
     /**
-     * More generic way to set url argument.
+     * More generic way to set URL argument.
      */
     setUrlArgs(arg, value) {
         this.urlArgs = Object.assign(this.urlArgs, { [arg]: value });
@@ -172,8 +171,8 @@ export default class JsSearch extends atkPlugin {
     /**
      * Send request to server using the search query.
      */
-    doSearch(uri, query, options, cb = function () {}) {
-        const queryKey = this.settings.uri_query_key;
+    doSearch(url, query, options, cb = function () {}) {
+        const queryKey = this.settings.urlQueryKey;
 
         if (query) {
             options = $.extend(options, { [queryKey]: query });
@@ -182,7 +181,7 @@ export default class JsSearch extends atkPlugin {
         if (this.settings.useAjax) {
             this.$el.api({
                 on: 'now',
-                url: uri,
+                url: url,
                 data: options,
                 method: 'GET',
                 obj: this.$el,
@@ -190,20 +189,20 @@ export default class JsSearch extends atkPlugin {
                 onComplete: cb,
             });
         } else {
-            uri = $.atkRemoveParam(uri, queryKey);
+            url = atk.urlHelper.removeParam(url, queryKey);
             if (options.__atk_reload) {
                 delete options.__atk_reload;
             }
-            uri = $.atkAddParams(uri, options);
-            window.location = uri;
+            url = atk.urlHelper.appendParams(url, options);
+            window.location = url;
         }
     }
 }
 
-JsSearch.DEFAULTS = {
-    uri: null,
-    uri_options: {},
-    uri_query_key: null,
+AtkJsSearchPlugin.DEFAULTS = {
+    url: null,
+    urlOptions: {},
+    urlQueryKey: null,
     q: null,
     autoQuery: false,
     timeOut: 300,

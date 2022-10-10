@@ -1,5 +1,5 @@
-import $ from 'jquery';
-import atkPlugin from './atk.plugin';
+import $ from 'external/jquery';
+import AtkPlugin from './atk.plugin';
 
 /**
  * Will expand or collapse menu items for side navigation.
@@ -9,7 +9,7 @@ import atkPlugin from './atk.plugin';
  *
  * Default value are set for Maestro admin layout.
  */
-export default class sidenav extends atkPlugin {
+export default class AtkSidenavPlugin extends AtkPlugin {
     main() {
         // menu items container.
         this.menu = this.$el.find(this.settings.menuItemsSelector);
@@ -35,7 +35,7 @@ export default class sidenav extends atkPlugin {
     }
 
     /**
-     * Check if the url correspond to one of our menu items.
+     * Check if the URL correspond to one of our menu items.
      * if so, then add the menuItemActiveCSS class and return true.
      *
      * @returns {boolean}
@@ -54,7 +54,7 @@ export default class sidenav extends atkPlugin {
     }
 
     /**
-     * Check if an url match with current window location.
+     * Check if an URL match with current window location.
      *
      * @returns {boolean}
      */
@@ -63,7 +63,7 @@ export default class sidenav extends atkPlugin {
         if (url.pathname === window.location.pathname) {
             return true;
         }
-        // try to match base index url
+        // try to match base index URL
         if (url.pathname === (window.location.pathname + this.settings.base)) {
             return true;
         }
@@ -107,7 +107,7 @@ export default class sidenav extends atkPlugin {
     }
 }
 
-sidenav.DEFAULTS = {
+AtkSidenavPlugin.DEFAULTS = {
     base: 'index.php',
     menuItemsSelector: '.atk-maestro-menu-items', // The css selector where menu items are contain.
     menuGroupTitleSelector: '.atk-menu-group-title', // The css selector for menu group title.

@@ -48,7 +48,7 @@ class DataService {
         try {
             JSON.parse(str);
         } catch (e) {
-            console.error('Invalid json string.');
+            console.error('JSON string parse failed');
 
             return false;
         }
@@ -65,7 +65,7 @@ class DataService {
         if (this.hasStorage) {
             this.storage[type].setItem(item, value);
         } else {
-            console.error('Session storage is not available in your Browser.');
+            console.error('Session storage is not available in your browser');
         }
     }
 
@@ -95,7 +95,7 @@ class DataService {
     /**
      * Return store data for an item or empty object.
      *
-     * @returns {{session: *, local: *}}
+     * @returns {{ session: *, local: * }}
      */
     getStoreData(name) {
         const store = {};
@@ -143,7 +143,4 @@ class DataService {
     }
 }
 
-const dataService = new DataService();
-Object.freeze(dataService);
-
-export default dataService;
+export default Object.freeze(new DataService());

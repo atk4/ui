@@ -1,6 +1,5 @@
-import $ from 'jquery';
-
-/* eslint-disable jsdoc/require-param-type */
+import $ from 'external/jquery';
+import atk from 'atk';
 
 /**
  * Panel needs to be reload to display different
@@ -11,7 +10,7 @@ class PanelService {
         this.service = {
             panels: [], // a collection of panels.
             currentVisibleId: null, // the current panel id that is in a visible state.
-            currentParams: null, // url argument of the current panel.
+            currentParams: null, // URL argument of the current panel.
         };
     }
 
@@ -77,7 +76,7 @@ class PanelService {
      *
      * As a css class: the css class to applied to the triggered element when panel open.
      *
-     * @param params The params objects.
+     * @param {object} params
      */
     openPanel(params) {
         // if no id is provide, then get the first one.
@@ -134,7 +133,7 @@ class PanelService {
 
     /**
      * Will check if panel is reloadable and
-     * setup proper url argument from triggered item
+     * setup proper URL argument from triggered item
      * via it's data property.
      */
     initPanelReload(id) {
@@ -148,7 +147,7 @@ class PanelService {
 
                 return obj;
             }, {});
-            // add url argument if pass to panel
+            // add URL argument if pass to panel
             if (params.urlArgs !== 'undefined') {
                 $.extend(args, params.urlArgs);
             }
@@ -257,8 +256,8 @@ class PanelService {
 
         // Do we need to setup css class on triggering element.
         if (params.activeCSS) {
-            let element; let
-                css;
+            let element;
+            let css;
 
             if (params.activeCSS instanceof Object) {
                 element = this.getPropertyValue(id, 'triggerElement').find(params.activeCSS.element);
@@ -384,9 +383,9 @@ class PanelService {
     /**
      * Set a property value for a panel designated by id.
      *
-     * @param id    the id of the panel to set property too.
-     * @param prop  the property inside panel
-     * @param value the value.
+     * @param {string} id    the id of the panel to set property too.
+     * @param {string} prop  the property inside panel
+     * @param {*}      value the value.
      */
     setPropertyValue(id, prop, value) {
         this.service.panels.forEach((panel) => {
@@ -398,9 +397,9 @@ class PanelService {
 
     /**
      * Return the panel property represent by id in collections.
-     * if prop is not specify, then it will return the entire panel object.
+     * If prop is null, then it will return the entire panel object.
      *
-     * @returns {*|jQuery|HTMLElement}
+     * @returns {*}
      */
     getPropertyValue(id, prop = null) {
         let value = null;
@@ -414,7 +413,4 @@ class PanelService {
     }
 }
 
-const panelService = new PanelService();
-Object.freeze(panelService);
-
-export default panelService;
+export default Object.freeze(new PanelService());

@@ -1,10 +1,8 @@
-import $ from 'jquery';
-import atkPlugin from './atk.plugin';
-import uploadService from '../services/upload.service';
+import $ from 'external/jquery';
+import atk from 'atk';
+import AtkPlugin from './atk.plugin';
 
-/* eslint-disable jsdoc/require-param-type */
-
-export default class fileUpload extends atkPlugin {
+export default class AtkFileUploadPlugin extends AtkPlugin {
     main() {
         this.textInput = this.$el.find('input[type="text"]');
         this.hiddenInput = this.$el.find('input[type="hidden"]');
@@ -117,9 +115,9 @@ export default class fileUpload extends atkPlugin {
     /**
      * Do the actual file uploading process.
      *
-     * @param file the FileList object.
+     * @param {FileList} files
      */
-    doFileUpload(file) {
+    doFileUpload(files) {
         // if submit button id is set, then disable submit
         // during upload.
         if (this.settings.submit) {
@@ -152,11 +150,11 @@ export default class fileUpload extends atkPlugin {
         };
 
         this.bar.show();
-        uploadService.uploadFiles(
-            file,
+        atk.uploadService.uploadFiles(
+            files,
             this.$el,
-            { f_upload_action: 'upload' },
-            this.settings.uri,
+            { fUploadAction: 'upload' },
+            this.settings.url,
             completeCb,
             xhrCb,
         );
@@ -168,8 +166,8 @@ export default class fileUpload extends atkPlugin {
     doFileDelete(fileId) {
         this.$el.api({
             on: 'now',
-            url: this.settings.uri,
-            data: { f_upload_action: 'delete', f_upload_id: fileId },
+            url: this.settings.url,
+            data: { fUploadAction: 'delete', fUploadId: fileId },
             method: 'POST',
             obj: this.$el,
             onComplete: (response, content) => {
@@ -190,10 +188,10 @@ export default class fileUpload extends atkPlugin {
     }
 }
 
-fileUpload.DEFAULTS = {
-    uri: null,
+AtkFileUploadPlugin.DEFAULTS = {
+    url: null,
     file: { id: null, name: null },
-    uri_options: {},
+    urlOptions: {},
     action: null,
     completeLabel: '100%',
     submit: null,

@@ -1,7 +1,5 @@
-import $ from 'jquery';
-import atkPlugin from './atk.plugin';
-
-/* eslint-disable jsdoc/require-param-type */
+import $ from 'external/jquery';
+import AtkPlugin from './atk.plugin';
 
 /**
  * Add dynamic scrolling to a View that can accept page argument in URL.
@@ -13,7 +11,7 @@ import atkPlugin from './atk.plugin';
  * allowJsEval: false  Whether or not javascript send in server response should be evaluate.
  * stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call. if null, then a default loader will be apply to the bottom of the $inner element.
  */
-export default class scroll extends atkPlugin {
+export default class AtkScrollPlugin extends AtkPlugin {
     main() {
         // check if we are initialized already because loading content
         // can recall this plugin and screw up page number.
@@ -87,7 +85,7 @@ export default class scroll extends atkPlugin {
     /**
      * Bind scrolling event to an element.
      *
-     * @param $el
+     * @param {$} $el
      */
     bindScrollEvent($el) {
         $el.on('scroll', this.observe.bind(this));
@@ -95,10 +93,8 @@ export default class scroll extends atkPlugin {
 
     /**
      * Check if scrolling require adding content.
-     *
-     * @param e event
      */
-    observe(e) {
+    observe(event) {
         const borderTopWidth = parseInt(this.$el.css('borderTopWidth'), 10);
         const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth;
         // this.$el padding top value.
@@ -152,8 +148,8 @@ export default class scroll extends atkPlugin {
         this.isWaiting = true;
         this.$inner.api({
             on: 'now',
-            url: this.settings.uri,
-            data: { ...this.settings.uri_options, page: this.nextPage },
+            url: this.settings.url,
+            data: { ...this.settings.urlOptions, page: this.nextPage },
             method: 'GET',
             stateContext: this.settings.options.stateContext,
             onComplete: this.onComplete.bind(this),
@@ -209,8 +205,8 @@ export default class scroll extends atkPlugin {
     }
 }
 
-scroll.DEFAULTS = {
-    uri: null,
-    uri_options: {},
+AtkScrollPlugin.DEFAULTS = {
+    url: null,
+    urlOptions: {},
     options: {},
 };

@@ -485,10 +485,8 @@ class App
         $this->requireJs($this->cdn['fomantic-ui'] . '/semantic.min.js');
         $this->requireCss($this->cdn['fomantic-ui'] . '/semantic.min.css');
 
-        // Serialize Object
-        $this->requireJs($this->cdn['atk'] . '/external/form-serializer/dist/jquery.serialize-object.min.js');
-
-        // flatpickr
+        // flatpickr - TODO should be load only when needed
+        // needs https://github.com/atk4/ui/issues/1875
         $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
         $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');
         if ($this->uiPersistence->locale !== 'en') {
@@ -616,18 +614,18 @@ class App
     protected function getRequestUrl(): string
     {
         if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
-            $request_uri = $_SERVER['HTTP_X_REWRITE_URL'];
+            $requestUrl = $_SERVER['HTTP_X_REWRITE_URL'];
         } elseif (isset($_SERVER['REQUEST_URI'])) { // Apache
-            $request_uri = $_SERVER['REQUEST_URI'];
+            $requestUrl = $_SERVER['REQUEST_URI'];
         } elseif (isset($_SERVER['ORIG_PATH_INFO'])) { // IIS 5.0, PHP as CGI
-            $request_uri = $_SERVER['ORIG_PATH_INFO'];
+            $requestUrl = $_SERVER['ORIG_PATH_INFO'];
         // This one comes without QUERY string
         } else {
-            $request_uri = '';
+            $requestUrl = '';
         }
-        $request_uri = explode('?', $request_uri, 2);
+        $requestUrl = explode('?', $requestUrl, 2);
 
-        return $request_uri[0];
+        return $requestUrl[0];
     }
 
     protected function createRequestPathFromLocalPath(string $localPath): string
@@ -679,12 +677,12 @@ class App
      * Build a URL that application can use for loading HTML data.
      *
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
-     * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
+     * @param bool         $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function url($page = [], $needRequestUri = false, $extraRequestUriArgs = []): string
+    public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
-        if ($needRequestUri) {
+        if ($useRequestUrl) {
             $page = $_SERVER['REQUEST_URI'];
         }
 
@@ -710,7 +708,7 @@ class App
             }
         }
 
-        $args = $extraRequestUriArgs;
+        $args = $extraRequestUrlArgs;
 
         // add sticky arguments
         foreach ($this->stickyGetArguments as $k => $v) {
@@ -742,15 +740,15 @@ class App
      * mechanism for NON-HTML response.
      *
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
-     * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
+     * @param bool         $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function jsUrl($page = [], $needRequestUri = false, $extraRequestUriArgs = []): string
+    public function jsUrl($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
         // append to the end but allow override
-        $extraRequestUriArgs = array_merge($extraRequestUriArgs, ['__atk_json' => 1], $extraRequestUriArgs);
+        $extraRequestUrlArgs = array_merge($extraRequestUrlArgs, ['__atk_json' => 1], $extraRequestUrlArgs);
 
-        return $this->url($page, $needRequestUri, $extraRequestUriArgs);
+        return $this->url($page, $useRequestUrl, $extraRequestUrlArgs);
     }
 
     /**

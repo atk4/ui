@@ -11,8 +11,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+
 
 /**
  * Vue component
@@ -23,7 +25,7 @@ __webpack_require__.r(__webpack_exports__);
  * Properties need for this component are:
  *
  * context: string, a jQuery selector where the 'loading' class will be apply by Fomantic-UI - default to this component.
- * url:     string, the url to call.
+ * url:     string, the URL to call.
  * q:       string, the initial string for the query. Useful if this search is part of the relaod.
  * reload:  string, an Id selector for jQuery, '#' is append automatically.
  */
@@ -35,7 +37,7 @@ const template = `<div class="atk-item-search" :class="inputCss">
         @keyup="onKeyup"
         @keyup.esc="onEscape"
         name="atk-vue-search" />
-        <i class="atk-search-icon" :class="classIcon"></i><span style="width: 12px; cursor: pointer" @click="onClear"></span>
+        <i class="atk-search-icon" :class="classIcon"></i><span style="width: 12px; cursor: pointer;" @click="onClear"></span>
     </div>
 `;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -47,13 +49,7 @@ const template = `<div class="atk-item-search" :class="inputCss">
     q: String,
     reload: String,
     queryArg: String,
-    options: {
-      type: Object,
-      default: () => ({
-        inputTimeOut: 350,
-        inputCss: ''
-      })
-    }
+    options: Object
   },
   data: function () {
     return {
@@ -74,7 +70,7 @@ const template = `<div class="atk-item-search" :class="inputCss">
   },
   methods: {
     onKeyup: function () {
-      atk.debounce(e => {
+      atk__WEBPACK_IMPORTED_MODULE_1__["default"].debounce(e => {
         if (this.query !== this.temp) {
           if (this.query === '') {
             this.query = null;
@@ -108,18 +104,18 @@ const template = `<div class="atk-item-search" :class="inputCss">
     },
     sendQuery: function () {
       const that = this;
-      const options = jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, this.extraQuery, {
+      const options = external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, this.extraQuery, {
         __atk_reload: this.reload,
         [this.queryArg]: this.query
       });
-      const $reload = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#' + this.reload);
+      const $reload = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()('#' + this.reload);
       this.isActive = true;
       $reload.api({
         on: 'now',
         url: this.url,
         data: options,
         method: 'GET',
-        stateContext: this.context ? jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.context) : jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.$el),
+        stateContext: this.context ? external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.context) : external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.$el),
         onComplete: function (e, r) {
           that.isActive = false;
         }

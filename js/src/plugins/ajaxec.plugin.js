@@ -1,10 +1,11 @@
-import $ from 'jquery';
-import atkPlugin from './atk.plugin';
+import $ from 'external/jquery';
+import atk from 'atk';
+import AtkPlugin from './atk.plugin';
 
-export default class ajaxec extends atkPlugin {
+export default class AtkAjaxecPlugin extends AtkPlugin {
     main() {
-        if (!this.settings.uri) {
-            console.error('Trying to execute callback without url.');
+        if (!this.settings.url) {
+            console.error('Trying to execute callback without URL');
 
             return;
         }
@@ -20,14 +21,14 @@ export default class ajaxec extends atkPlugin {
     }
 
     doExecute() {
-        const url = $.atk.getUrl(this.settings.uri);
+        const url = atk.urlHelper.removeAllParams(this.settings.url);
         const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
 
-        // uri_options is always use as data in a post request.
-        const data = this.settings.uri_options ? this.settings.uri_options : {};
+        // urlOptions is always used as data in a POST request
+        const data = this.settings.urlOptions ? this.settings.urlOptions : {};
 
-        // retrieve param from url.
-        let urlParam = $.atkGetQueryParam(this.settings.uri);
+        // retrieve param from URL
+        let urlParams = atk.urlHelper.parseParams(this.settings.url);
 
         // get store object.
         const store = atk.dataService.getStoreData(this.settings.storeName);
@@ -40,21 +41,21 @@ export default class ajaxec extends atkPlugin {
             ...userConfig,
         };
 
-        if (settings.method.toLowerCase() === 'get') {
-            // set data, store and add it to url param.
-            urlParam = Object.assign(urlParam, data, store);
+        if (settings.method.toUpperCase() === 'GET') {
+            // set data, store and add it to URL param.
+            urlParams = Object.assign(urlParams, data, store);
         } else {
             settings.data = Object.assign(data, store);
         }
 
-        settings.url = url + '?' + $.param(urlParam);
+        settings.url = url + '?' + $.param(urlParams);
         this.$el.api(settings);
     }
 }
 
-ajaxec.DEFAULTS = {
-    uri: null,
-    uri_options: {},
+AtkAjaxecPlugin.DEFAULTS = {
+    url: null,
+    urlOptions: {},
     confirm: null,
     apiConfig: null,
     storeName: null,

@@ -42,8 +42,8 @@ class Dropdown extends Lister
         // setting dropdown option for using callback url.
         $this->dropdownOptions['onChange'] = new JsFunction(['value', 'name', 't'], [
             new JsExpression(
-                "if ($(this).data('currentValue') != value) { $(this).atkAjaxec({ uri: [uri], uri_options: { item: value } }); $(this).data('currentValue', value); }",
-                ['uri' => $this->cb->getJsUrl()]
+                "if ($(this).data('currentValue') != value) { $(this).atkAjaxec({ url: [url], urlOptions: { item: value } }); $(this).data('currentValue', value); }",
+                ['url' => $this->cb->getJsUrl()]
             ), ]);
 
         $this->cb->set(function (Jquery $j, string $value) use ($fx) {

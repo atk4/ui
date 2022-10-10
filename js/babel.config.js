@@ -2,7 +2,7 @@
  * Babel configuration file.
  * targets browser from Browserlist integration query.
  *
- * @type {*[][]}
+ * @type {Array.<Array.<*>>}
  */
 const presets = [
     [

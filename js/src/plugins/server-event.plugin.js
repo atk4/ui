@@ -1,19 +1,19 @@
-import atkPlugin from './atk.plugin';
-import apiService from '../services/api.service';
+import atk from 'atk';
+import AtkPlugin from './atk.plugin';
 
-export default class serverEvent extends atkPlugin {
+export default class AtkServerEventPlugin extends AtkPlugin {
     main() {
         const element = this.$el;
         const hasLoader = this.settings.showLoader;
 
         if (typeof (EventSource) !== 'undefined') {
-            this.source = new EventSource(`${this.settings.uri}&__atk_sse=1`);
+            this.source = new EventSource(this.settings.url + '&__atk_sse=1');
             if (hasLoader) {
                 element.addClass('loading');
             }
 
             this.source.onmessage = function (e) {
-                apiService.atkSuccessTest(JSON.parse(e.data));
+                atk.apiService.atkSuccessTest(JSON.parse(e.data));
             };
 
             this.source.onerror = (e) => {
@@ -25,8 +25,8 @@ export default class serverEvent extends atkPlugin {
                 }
             };
 
-            this.source.addEventListener('atk_sse_action', (e) => {
-                apiService.atkSuccessTest(JSON.parse(e.data));
+            this.source.addEventListener('atkSseAction', (e) => {
+                atk.apiService.atkSuccessTest(JSON.parse(e.data));
             }, false);
 
             if (this.settings.closeBeforeUnload) {
@@ -37,7 +37,7 @@ export default class serverEvent extends atkPlugin {
         } else {
             // console.log('server side event not supported fallback to atkReloadView');
             this.$el.atkReloadView({
-                uri: this.settings.uri,
+                url: this.settings.url,
             });
         }
     }
@@ -53,9 +53,9 @@ export default class serverEvent extends atkPlugin {
     }
 }
 
-serverEvent.DEFAULTS = {
-    uri: null,
-    uri_options: {},
+AtkServerEventPlugin.DEFAULTS = {
+    url: null,
+    urlOptions: {},
     showLoader: false,
     closeBeforeUnload: false,
 };

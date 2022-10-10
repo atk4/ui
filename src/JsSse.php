@@ -45,7 +45,7 @@ class JsSse extends JsCallback
     {
         $this->getApp(); // assert has App
 
-        $options = ['uri' => $this->getJsUrl()];
+        $options = ['url' => $this->getJsUrl()];
         if ($this->showLoader) {
             $options['showLoader'] = $this->showLoader;
         }
@@ -65,7 +65,7 @@ class JsSse extends JsCallback
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
-            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'atk_sse_action');
+            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'atkSseAction');
         }
     }
 
@@ -79,7 +79,7 @@ class JsSse extends JsCallback
                 $this->sendEvent(
                     'js',
                     $this->getApp()->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
-                    'atk_sse_action'
+                    'atkSseAction'
                 );
             }
 

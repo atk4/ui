@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 
 /**
  * Vue component
@@ -8,7 +8,7 @@ import $ from 'jquery';
  * Properties need for this component are:
  *
  * context: string, a jQuery selector where the 'loading' class will be apply by Fomantic-UI - default to the requesting element.
- * url:     string, the url to call.
+ * url:     string, the URL to call.
  * value:   array, array of value to send to server.
  */
 
@@ -30,13 +30,8 @@ export default {
     props: {
         url: String,
         initValue: String,
-        saveOnBlur: { type: Boolean, default: true },
-        options: {
-            type: Object,
-            default: () => ({
-                inputCss: '', inlineCss: '', fieldName: null, fieldType: 'text',
-            }),
-        },
+        saveOnBlur: Boolean,
+        options: Object,
     },
     data: function () {
         return {

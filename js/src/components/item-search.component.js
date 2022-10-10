@@ -1,4 +1,5 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
+import atk from 'atk';
 
 /**
  * Vue component
@@ -9,7 +10,7 @@ import $ from 'jquery';
  * Properties need for this component are:
  *
  * context: string, a jQuery selector where the 'loading' class will be apply by Fomantic-UI - default to this component.
- * url:     string, the url to call.
+ * url:     string, the URL to call.
  * q:       string, the initial string for the query. Useful if this search is part of the relaod.
  * reload:  string, an Id selector for jQuery, '#' is append automatically.
  */
@@ -21,7 +22,7 @@ const template = `<div class="atk-item-search" :class="inputCss">
         @keyup="onKeyup"
         @keyup.esc="onEscape"
         name="atk-vue-search" />
-        <i class="atk-search-icon" :class="classIcon"></i><span style="width: 12px; cursor: pointer" @click="onClear"></span>
+        <i class="atk-search-icon" :class="classIcon"></i><span style="width: 12px; cursor: pointer;" @click="onClear"></span>
     </div>
 `;
 
@@ -34,10 +35,7 @@ export default {
         q: String,
         reload: String,
         queryArg: String,
-        options: {
-            type: Object,
-            default: () => ({ inputTimeOut: 350, inputCss: '' }),
-        },
+        options: Object,
     },
     data: function () {
         return {
