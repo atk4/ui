@@ -1352,7 +1352,14 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
 
     this.newIdx = null; // the original index value of the dragged element.
 
-    this.orgIdx = null;
+    this.orgIdx = null; // fix screen reader announcement container added more than once
+    // https://github.com/Shopify/draggable/pull/541
+
+    for (let elem; elem = document.getElementById('draggable-live-region');) {
+      // eslint-disable-line no-cond-assign
+      elem.remove();
+    }
+
     this.injectStyles(this.settings.mirrorCss + this.settings.overCss);
     this.dragContainer = this.$el.find(this.settings.container);
     const sortable = new Draggable.Sortable(this.dragContainer[0], {
