@@ -383,8 +383,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing this method may brake JS functionality.
-     *
      * Finds and returns Multiline row id.
      */
     private function getMlRowId(array $row): ?string
@@ -683,8 +681,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing these methods may brake JS functionality.
-     *
      * Render callback according to multi line action.
      * 'update-row' need special formatting.
      */
@@ -705,8 +701,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing this method may brake JS functionality.
-     *
      * Return values associated with callback field.
      */
     private function getCallbackValues(Model $model): array
@@ -728,8 +722,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing this method may brake JS functionality.
-     *
      * Looks inside the POST of the request and loads data into model.
      * Allow to Run expression base on post row value.
      */
@@ -757,8 +749,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing this method may brake JS functionality.
-     *
      * Return values associated to field expression.
      */
     private function getExpressionValues(Model $model): array
@@ -793,8 +783,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing this method may brake js functionality.
-     *
      * Get all field expression in model, but only evaluate expression used in
      * rowFields.
      */
@@ -813,8 +801,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing this method may brake JS functionality.
-     *
      * Return expression where fields are replace with their current or default value.
      * Ex: total field expression = [qty] * [price] will return 4 * 100
      * where qty and price current value are 4 and 100 respectively.
@@ -842,8 +828,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing this method may brake JS functionality.
-     *
      * Return a value according to field used in expression and the expression type.
      * If field used in expression is null, the default value is returned.
      *
