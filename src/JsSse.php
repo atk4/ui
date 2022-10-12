@@ -65,7 +65,7 @@ class JsSse extends JsCallback
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
-            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'atkSseAction');
+            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec]), 'atkSseAction');
         }
     }
 
@@ -78,7 +78,7 @@ class JsSse extends JsCallback
             if ($ajaxec) {
                 $this->sendEvent(
                     'js',
-                    $this->getApp()->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
+                    $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec]),
                     'atkSseAction'
                 );
             }
@@ -87,7 +87,7 @@ class JsSse extends JsCallback
             $this->getApp()->terminate();
         }
 
-        $this->getApp()->terminateJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]);
+        $this->getApp()->terminateJson(['success' => $success, 'atkjs' => $ajaxec]);
     }
 
     /**

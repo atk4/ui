@@ -103,13 +103,19 @@ class JsCallback extends Callback implements JsExpressionable
      * which is returned to frontend.
      *
      * @param string|null $ajaxec
-     * @param string      $msg     General message, typically won't be displayed
-     * @param bool        $success Was request successful or not
+     * @param ($success is true ? null : string)      $msg     General message, typically won't be displayed
+     * @param bool $success Was request successful or not
      */
     public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
     {
+        $data = ['success' => $success];
+        if (!$success) {
+            $data['message'] = $msg;
+        }
+        $data['atkjs'] = $ajaxec;
+
         if ($this->canTerminate()) {
-            $this->getApp()->terminateJson(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
+            $this->getApp()->terminateJson($data);
         }
     }
 

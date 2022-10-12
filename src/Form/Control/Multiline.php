@@ -694,7 +694,7 @@ class Multiline extends Form\Control
             case 'update-row':
                 $model = $this->setDummyModelValue($this->model->createEntity());
                 $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
-                $this->getApp()->terminateJson(['success' => true, 'message' => 'Success', 'expressions' => $expressionValues]);
+                $this->getApp()->terminateJson(['success' => true, 'expressions' => $expressionValues]);
                 // no break - expression above always terminate
             case 'on-change':
                 $response = call_user_func($this->onChangeFunction, $this->typeCastLoadValues($this->getApp()->decodeJson($_POST['rows'])), $this->form);

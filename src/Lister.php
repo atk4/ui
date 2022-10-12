@@ -97,10 +97,8 @@ class Lister extends View
             // render this View (it will count rendered records !)
             $jsonArr = $this->renderToJsonArr(true, $scrollRegion);
 
-            // if there will be no more pages, then replace message=Success to let JS know that there are no more records
-            if ($this->_renderedRowsCount < $ipp) {
-                $jsonArr['message'] = 'Done'; // Done status means - no more requests from JS side
-            }
+            // let client know that there are no more records
+            $jsonArr['noMoreScrollPages'] = $this->_renderedRowsCount < $ipp;
 
             // return json response
             $this->getApp()->terminateJson($jsonArr);
