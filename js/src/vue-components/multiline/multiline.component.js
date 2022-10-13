@@ -3,9 +3,6 @@ import atk from 'atk';
 import multilineBody from './multiline-body.component';
 import multilineHeader from './multiline-header.component';
 
-/**
- * MultiLine component.
- */
 export default {
     name: 'atk-multiline',
     template: `<div>

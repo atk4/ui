@@ -1,10 +1,10 @@
 "use strict";
 (self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["atk-vue-item-search"],{
 
-/***/ "./src/components/item-search.component.js":
-/*!*************************************************!*\
-  !*** ./src/components/item-search.component.js ***!
-  \*************************************************/
+/***/ "./src/vue-components/item-search.component.js":
+/*!*****************************************************!*\
+  !*** ./src/vue-components/item-search.component.js ***!
+  \*****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -17,7 +17,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Vue component
  * Will allow user to send data query request to server.
  * Request should filter the data and reload the data view.
  * The request is send using Fomantic-UI api.

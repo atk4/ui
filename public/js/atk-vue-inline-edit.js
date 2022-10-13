@@ -1,10 +1,10 @@
 "use strict";
 (self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["atk-vue-inline-edit"],{
 
-/***/ "./src/components/inline-edit.component.js":
-/*!*************************************************!*\
-  !*** ./src/components/inline-edit.component.js ***!
-  \*************************************************/
+/***/ "./src/vue-components/inline-edit.component.js":
+/*!*****************************************************!*\
+  !*** ./src/vue-components/inline-edit.component.js ***!
+  \*****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -15,7 +15,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 /**
- * Vue component
  * Allow user to edit a db record inline and send
  * changes to server.
  *

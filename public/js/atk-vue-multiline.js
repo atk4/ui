@@ -1,17 +1,17 @@
 "use strict";
 (self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["atk-vue-multiline"],{
 
-/***/ "./src/components/multiline/multiline-body.component.js":
-/*!**************************************************************!*\
-  !*** ./src/components/multiline/multiline-body.component.js ***!
-  \**************************************************************/
+/***/ "./src/vue-components/multiline/multiline-body.component.js":
+/*!******************************************************************!*\
+  !*** ./src/vue-components/multiline/multiline-body.component.js ***!
+  \******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _multiline_row_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./multiline-row.component */ "./src/components/multiline/multiline-row.component.js");
+/* harmony import */ var _multiline_row_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./multiline-row.component */ "./src/vue-components/multiline/multiline-row.component.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-multiline-body',
@@ -62,20 +62,20 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/components/multiline/multiline-cell.component.js":
-/*!**************************************************************!*\
-  !*** ./src/components/multiline/multiline-cell.component.js ***!
-  \**************************************************************/
+/***/ "./src/vue-components/multiline/multiline-cell.component.js":
+/*!******************************************************************!*\
+  !*** ./src/vue-components/multiline/multiline-cell.component.js ***!
+  \******************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _multiline_readonly_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./multiline-readonly.component */ "./src/components/multiline/multiline-readonly.component.js");
-/* harmony import */ var _multiline_textarea_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./multiline-textarea.component */ "./src/components/multiline/multiline-textarea.component.js");
-/* harmony import */ var _share_atk_date_picker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../share/atk-date-picker */ "./src/components/share/atk-date-picker.js");
-/* harmony import */ var _share_atk_lookup__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../share/atk-lookup */ "./src/components/share/atk-lookup.js");
+/* harmony import */ var _multiline_readonly_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./multiline-readonly.component */ "./src/vue-components/multiline/multiline-readonly.component.js");
+/* harmony import */ var _multiline_textarea_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./multiline-textarea.component */ "./src/vue-components/multiline/multiline-textarea.component.js");
+/* harmony import */ var _share_atk_date_picker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../share/atk-date-picker */ "./src/vue-components/share/atk-date-picker.js");
+/* harmony import */ var _share_atk_lookup__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../share/atk-lookup */ "./src/vue-components/share/atk-lookup.js");
 
 
 
@@ -146,10 +146,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/components/multiline/multiline-header.component.js":
-/*!****************************************************************!*\
-  !*** ./src/components/multiline/multiline-header.component.js ***!
-  \****************************************************************/
+/***/ "./src/vue-components/multiline/multiline-header.component.js":
+/*!********************************************************************!*\
+  !*** ./src/vue-components/multiline/multiline-header.component.js ***!
+  \********************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -265,10 +265,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/components/multiline/multiline-readonly.component.js":
-/*!******************************************************************!*\
-  !*** ./src/components/multiline/multiline-readonly.component.js ***!
-  \******************************************************************/
+/***/ "./src/vue-components/multiline/multiline-readonly.component.js":
+/*!**********************************************************************!*\
+  !*** ./src/vue-components/multiline/multiline-readonly.component.js ***!
+  \**********************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -286,10 +286,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/components/multiline/multiline-row.component.js":
-/*!*************************************************************!*\
-  !*** ./src/components/multiline/multiline-row.component.js ***!
-  \*************************************************************/
+/***/ "./src/vue-components/multiline/multiline-row.component.js":
+/*!*****************************************************************!*\
+  !*** ./src/vue-components/multiline/multiline-row.component.js ***!
+  \*****************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -303,14 +303,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-/* harmony import */ var _multiline_cell_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./multiline-cell.component */ "./src/components/multiline/multiline-cell.component.js");
+/* harmony import */ var _multiline_cell_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./multiline-cell.component */ "./src/vue-components/multiline/multiline-cell.component.js");
 
 
 
 
 
 /**
- * A row component.
  * This will create a table td element using sui-table-cell.
  * The td element is created only if column as set isVisible = true;
  * The td element will add a multiline cell element.
@@ -398,19 +397,16 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/components/multiline/multiline-textarea.component.js":
-/*!******************************************************************!*\
-  !*** ./src/components/multiline/multiline-textarea.component.js ***!
-  \******************************************************************/
+/***/ "./src/vue-components/multiline/multiline-textarea.component.js":
+/*!**********************************************************************!*\
+  !*** ./src/vue-components/multiline/multiline-textarea.component.js ***!
+  \**********************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/**
- * Simple text area input to display in multiline component.
- */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-textarea',
   template: '<textarea v-model="text" @input="handleChange"></textarea>',
@@ -431,10 +427,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/components/multiline/multiline.component.js":
-/*!*********************************************************!*\
-  !*** ./src/components/multiline/multiline.component.js ***!
-  \*********************************************************/
+/***/ "./src/vue-components/multiline/multiline.component.js":
+/*!*************************************************************!*\
+  !*** ./src/vue-components/multiline/multiline.component.js ***!
+  \*************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -458,8 +454,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-/* harmony import */ var _multiline_body_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./multiline-body.component */ "./src/components/multiline/multiline-body.component.js");
-/* harmony import */ var _multiline_header_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./multiline-header.component */ "./src/components/multiline/multiline-header.component.js");
+/* harmony import */ var _multiline_body_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./multiline-body.component */ "./src/vue-components/multiline/multiline-body.component.js");
+/* harmony import */ var _multiline_header_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./multiline-header.component */ "./src/vue-components/multiline/multiline-header.component.js");
 
 
 
@@ -470,10 +466,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-/**
- * MultiLine component.
- */
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-multiline',
@@ -776,10 +768,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/components/share/atk-date-picker.js":
-/*!*************************************************!*\
-  !*** ./src/components/share/atk-date-picker.js ***!
-  \*************************************************/
+/***/ "./src/vue-components/share/atk-date-picker.js":
+/*!*****************************************************!*\
+  !*** ./src/vue-components/share/atk-date-picker.js ***!
+  \*****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -843,10 +835,10 @@ const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-chang
 
 /***/ }),
 
-/***/ "./src/components/share/atk-lookup.js":
-/*!********************************************!*\
-  !*** ./src/components/share/atk-lookup.js ***!
-  \********************************************/
+/***/ "./src/vue-components/share/atk-lookup.js":
+/*!************************************************!*\
+  !*** ./src/vue-components/share/atk-lookup.js ***!
+  \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);

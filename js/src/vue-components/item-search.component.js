@@ -2,7 +2,6 @@ import $ from 'external/jquery';
 import atk from 'atk';
 
 /**
- * Vue component
  * Will allow user to send data query request to server.
  * Request should filter the data and reload the data view.
  * The request is send using Fomantic-UI api.
