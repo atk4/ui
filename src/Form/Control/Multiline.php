@@ -727,6 +727,8 @@ class Multiline extends Form\Control
      */
     private function setDummyModelValue(Model $model): Model
     {
+        $model = clone $model; // for clearing "required"
+
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['name'];
             if ($fieldName === $model->idField) {
@@ -738,9 +740,10 @@ class Multiline extends Form\Control
             $value = $this->getApp()->uiPersistence->typecastLoadField($field, $_POST[$fieldName] ?? null);
             if ($field->isEditable()) {
                 try {
+                    $field->required = false;
                     $model->set($fieldName, $value);
                 } catch (ValidationException $e) {
-                    // Bypass validation at this point.
+                    // bypass validation at this point
                 }
             }
         }
@@ -753,26 +756,36 @@ class Multiline extends Form\Control
      */
     private function getExpressionValues(Model $model): array
     {
-        $dummyFields = [];
+        $dummyFields = $this->getExpressionFields($model);
         $formatValues = [];
 
-        foreach ($this->getExpressionFields($model) as $k => $field) {
+        foreach ($dummyFields as $k => $field) {
             if (!is_callable($field->expr)) {
-                $dummyFields[$k]['name'] = $field->shortName;
-                $dummyFields[$k]['expr'] = $this->getDummyExpression($field, $model);
+                $dummyFields[$k]->expr = $this->getDummyExpression($field, $model);
             }
         }
 
         if ($dummyFields !== []) {
             $dummyModel = new Model($model->getPersistence(), ['table' => $model->table]);
-            foreach ($dummyFields as $field) {
-                $dummyModel->addExpression($field['name'], ['expr' => $field['expr'], 'type' => $model->getField($field['name'])->type]);
+            $dummyModel->removeField('id');
+            $dummyModel->idField = $model->idField;
+            foreach ($model->getFields() as $field) {
+                $dummyModel->addExpression($field->shortName, [
+                    'expr' => isset($dummyFields[$field->shortName])
+                        ? $dummyFields[$field->shortName]->expr
+                        : ($field->shortName === $dummyModel->idField
+                            ? '-1'
+                            : $dummyModel->expr('[]', [$model->getPersistence()->typecastSaveField($field, $field->get($model))])),
+                    'type' => $field->type,
+                    'actual' => $field->actual,
+                ]);
             }
-            $values = $dummyModel->loadAny()->get();
+            $dummyModel->setLimit(1); // TODO must work with empty table, no table should be used
+            $values = $dummyModel->loadOne()->get();
             unset($values[$model->idField]);
 
             foreach ($values as $f => $value) {
-                if ($value) {
+                if (isset($dummyFields[$f])) {
                     $field = $model->getField($f);
                     $formatValues[$f] = $this->getApp()->uiPersistence->typecastSaveField($field, $value);
                 }
@@ -785,6 +798,8 @@ class Multiline extends Form\Control
     /**
      * Get all field expression in model, but only evaluate expression used in
      * rowFields.
+     *
+     * @return array<string, SqlExpressionField>
      */
     private function getExpressionFields(Model $model): array
     {
@@ -794,7 +809,7 @@ class Multiline extends Form\Control
                 continue;
             }
 
-            $fields[] = $field;
+            $fields[$field->shortName] = $field;
         }
 
         return $fields;
