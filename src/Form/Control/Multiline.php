@@ -383,8 +383,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing this method may brake JS functionality.
-     *
      * Finds and returns Multiline row id.
      */
     private function getMlRowId(array $row): ?string
@@ -683,8 +681,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing these methods may brake JS functionality.
-     *
      * Render callback according to multi line action.
      * 'update-row' need special formatting.
      */
@@ -694,7 +690,7 @@ class Multiline extends Form\Control
             case 'update-row':
                 $model = $this->setDummyModelValue($this->model->createEntity());
                 $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
-                $this->getApp()->terminateJson(['success' => true, 'message' => 'Success', 'expressions' => $expressionValues]);
+                $this->getApp()->terminateJson(['success' => true, 'expressions' => $expressionValues]);
                 // no break - expression above always terminate
             case 'on-change':
                 $response = call_user_func($this->onChangeFunction, $this->typeCastLoadValues($this->getApp()->decodeJson($_POST['rows'])), $this->form);
@@ -705,8 +701,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing this method may brake JS functionality.
-     *
      * Return values associated with callback field.
      */
     private function getCallbackValues(Model $model): array
@@ -728,13 +722,13 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing this method may brake JS functionality.
-     *
      * Looks inside the POST of the request and loads data into model.
      * Allow to Run expression base on post row value.
      */
     private function setDummyModelValue(Model $model): Model
     {
+        $model = clone $model; // for clearing "required"
+
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['name'];
             if ($fieldName === $model->idField) {
@@ -746,9 +740,10 @@ class Multiline extends Form\Control
             $value = $this->getApp()->uiPersistence->typecastLoadField($field, $_POST[$fieldName] ?? null);
             if ($field->isEditable()) {
                 try {
+                    $field->required = false;
                     $model->set($fieldName, $value);
                 } catch (ValidationException $e) {
-                    // Bypass validation at this point.
+                    // bypass validation at this point
                 }
             }
         }
@@ -757,32 +752,40 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing this method may brake JS functionality.
-     *
      * Return values associated to field expression.
      */
     private function getExpressionValues(Model $model): array
     {
-        $dummyFields = [];
+        $dummyFields = $this->getExpressionFields($model);
         $formatValues = [];
 
-        foreach ($this->getExpressionFields($model) as $k => $field) {
+        foreach ($dummyFields as $k => $field) {
             if (!is_callable($field->expr)) {
-                $dummyFields[$k]['name'] = $field->shortName;
-                $dummyFields[$k]['expr'] = $this->getDummyExpression($field, $model);
+                $dummyFields[$k]->expr = $this->getDummyExpression($field, $model);
             }
         }
 
         if ($dummyFields !== []) {
             $dummyModel = new Model($model->getPersistence(), ['table' => $model->table]);
-            foreach ($dummyFields as $field) {
-                $dummyModel->addExpression($field['name'], ['expr' => $field['expr'], 'type' => $model->getField($field['name'])->type]);
+            $dummyModel->removeField('id');
+            $dummyModel->idField = $model->idField;
+            foreach ($model->getFields() as $field) {
+                $dummyModel->addExpression($field->shortName, [
+                    'expr' => isset($dummyFields[$field->shortName])
+                        ? $dummyFields[$field->shortName]->expr
+                        : ($field->shortName === $dummyModel->idField
+                            ? '-1'
+                            : $dummyModel->expr('[]', [$model->getPersistence()->typecastSaveField($field, $field->get($model))])),
+                    'type' => $field->type,
+                    'actual' => $field->actual,
+                ]);
             }
-            $values = $dummyModel->loadAny()->get();
+            $dummyModel->setLimit(1); // TODO must work with empty table, no table should be used
+            $values = $dummyModel->loadOne()->get();
             unset($values[$model->idField]);
 
             foreach ($values as $f => $value) {
-                if ($value) {
+                if (isset($dummyFields[$f])) {
                     $field = $model->getField($f);
                     $formatValues[$f] = $this->getApp()->uiPersistence->typecastSaveField($field, $value);
                 }
@@ -793,10 +796,10 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing this method may brake js functionality.
-     *
      * Get all field expression in model, but only evaluate expression used in
      * rowFields.
+     *
+     * @return array<string, SqlExpressionField>
      */
     private function getExpressionFields(Model $model): array
     {
@@ -806,15 +809,13 @@ class Multiline extends Form\Control
                 continue;
             }
 
-            $fields[] = $field;
+            $fields[$field->shortName] = $field;
         }
 
         return $fields;
     }
 
     /**
-     * For javascript use - changing this method may brake JS functionality.
-     *
      * Return expression where fields are replace with their current or default value.
      * Ex: total field expression = [qty] * [price] will return 4 * 100
      * where qty and price current value are 4 and 100 respectively.
@@ -842,8 +843,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * For javascript use - changing this method may brake JS functionality.
-     *
      * Return a value according to field used in expression and the expression type.
      * If field used in expression is null, the default value is returned.
      *

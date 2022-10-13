@@ -2,7 +2,6 @@ import atk from 'atk';
 import multilineCell from './multiline-cell.component';
 
 /**
- * A row component.
  * This will create a table td element using sui-table-cell.
  * The td element is created only if column as set isVisible = true;
  * The td element will add a multiline cell element.

@@ -154,6 +154,9 @@ parameters:
             path: 'src/Form/Control/Checkbox.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Jquery::\$checked\.$~'
         -
+            path: 'src/Form/Control/Multiline.php'
+            message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'
+        -
             path: 'src/JsVueService.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsChain::createAtkVue\(\)\.$~'
         -

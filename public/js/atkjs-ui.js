@@ -532,11 +532,11 @@ class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_8__[
     } // add change listener to inputs according to selector
 
 
-    this.$el.find(':checkbox').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 100, true));
-    this.$el.find(':radio').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 100, true));
-    this.$el.find('input[type="hidden"]').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 100, true));
-    this.$el.find('input').on(this.settings.validateEvent, this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 250));
-    this.$el.find('select').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 100));
+    this.$el.find(':checkbox').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100, true));
+    this.$el.find(':radio').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100, true));
+    this.$el.find('input[type="hidden"]').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100, true));
+    this.$el.find('input').on(this.settings.validateEvent, this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 250));
+    this.$el.find('select').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100));
     this.initialize();
   }
 
@@ -1103,7 +1103,7 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
 
 
   onAutoQueryAction() {
-    this.textInput.on('keyup', atk__WEBPACK_IMPORTED_MODULE_6__["default"].debounce(e => {
+    this.textInput.on('keyup', atk__WEBPACK_IMPORTED_MODULE_6__["default"].createDebouncedFx(e => {
       const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.urlOptions);
 
       if (e.target.value === '' || e.keyCode === 27) {
@@ -1290,7 +1290,7 @@ AtkJsSearchPlugin.DEFAULTS = {
   urlQueryKey: null,
   q: null,
   autoQuery: false,
-  timeOut: 300,
+  timeOut: 250,
   useAjax: true
 };
 
@@ -1352,7 +1352,14 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
 
     this.newIdx = null; // the original index value of the dragged element.
 
-    this.orgIdx = null;
+    this.orgIdx = null; // fix screen reader announcement container added more than once
+    // https://github.com/Shopify/draggable/pull/541
+
+    for (let elem; elem = document.getElementById('draggable-live-region');) {
+      // eslint-disable-line no-cond-assign
+      elem.remove();
+    }
+
     this.injectStyles(this.settings.mirrorCss + this.settings.overCss);
     this.dragContainer = this.$el.find(this.settings.container);
     const sortable = new Draggable.Sortable(this.dragContainer[0], {
@@ -1559,7 +1566,6 @@ __webpack_require__.r(__webpack_exports__);
  * padding: 20         The amount of padding needed prior to request a page load.
  * initialPage: 1      The initial page load when calling this plugin.
  * appendTo: null      The html element where new content should be append to.
- * allowJsEval: false  Whether or not javascript send in server response should be evaluate.
  * stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call. if null, then a default loader will be apply to the bottom of the $inner element.
  */
 
@@ -1575,7 +1581,6 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
       padding: 20,
       initialPage: 1,
       appendTo: null,
-      allowJsEval: false,
       hasFixTableHeader: false,
       tableContainerHeight: 400,
       tableHeaderColor: '#ffffff',
@@ -1726,15 +1731,11 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
 
     if (response.success) {
       if (response.html) {
-        // Done - no more pages
-        if (response.message === 'Done') {
-          this.$target.append(response.html);
+        this.$target.append(response.html);
+
+        if (response.noMoreScrollPages) {
           this.idle();
-        } // Success - will have more pages
-
-
-        if (response.message === 'Success') {
-          this.$target.append(response.html);
+        } else {
           this.isWaiting = false;
           this.nextPage++; // if there is no scrollbar, then try to load next page too
 
@@ -1745,10 +1746,6 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
       }
 
       response.id = null;
-
-      if (!this.settings.options.allowJsEval) {
-        response.atkjs = null;
-      }
     }
   }
   /**
@@ -3323,7 +3320,7 @@ class PanelService {
 
   addClickAwayEvent(id) {
     // clicking anywhere in main tag will close panel.
-    external_jquery__WEBPACK_IMPORTED_MODULE_9___default()('main').on('click.atkPanel', atk__WEBPACK_IMPORTED_MODULE_10__["default"].debounce(evt => {
+    external_jquery__WEBPACK_IMPORTED_MODULE_9___default()('main').on('click.atkPanel', atk__WEBPACK_IMPORTED_MODULE_10__["default"].createDebouncedFx(evt => {
       this.closePanel(id);
     }, 250));
   }
@@ -3334,7 +3331,7 @@ class PanelService {
 
   addEscAwayEvent(id) {
     // pressing esc key will close panel.
-    external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(document).on('keyup.atkPanel', atk__WEBPACK_IMPORTED_MODULE_10__["default"].debounce(evt => {
+    external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(document).on('keyup.atkPanel', atk__WEBPACK_IMPORTED_MODULE_10__["default"].createDebouncedFx(evt => {
       if (evt.keyCode === 27) {
         this.closePanel(id);
       }
@@ -3696,11 +3693,11 @@ const componentFactory = (name, component) => () => ({
 });
 
 const atkComponents = {
-  'atk-inline-edit': componentFactory('atk-inline-edit', () => __webpack_require__.e(/*! import() | atk-vue-inline-edit */ "atk-vue-inline-edit").then(__webpack_require__.bind(__webpack_require__, /*! ../components/inline-edit.component */ "./src/components/inline-edit.component.js"))),
-  'atk-item-search': componentFactory('atk-item-search', () => __webpack_require__.e(/*! import() | atk-vue-item-search */ "atk-vue-item-search").then(__webpack_require__.bind(__webpack_require__, /*! ../components/item-search.component */ "./src/components/item-search.component.js"))),
-  'atk-multiline': componentFactory('atk-multiline', () => __webpack_require__.e(/*! import() | atk-vue-multiline */ "atk-vue-multiline").then(__webpack_require__.bind(__webpack_require__, /*! ../components/multiline/multiline.component */ "./src/components/multiline/multiline.component.js"))),
-  'atk-tree-item-selector': componentFactory('atk-tree-item-selector', () => Promise.all(/*! import() | atk-vue-tree-item-selector */[__webpack_require__.e("vendor"), __webpack_require__.e("atk-vue-tree-item-selector")]).then(__webpack_require__.bind(__webpack_require__, /*! ../components/tree-item-selector/tree-item-selector.component */ "./src/components/tree-item-selector/tree-item-selector.component.js"))),
-  'atk-query-builder': componentFactory('atk-query-builder', () => Promise.all(/*! import() | atk-vue-query-builder */[__webpack_require__.e("vendor"), __webpack_require__.e("vendor-vue-query-builder"), __webpack_require__.e("atk-vue-query-builder")]).then(__webpack_require__.bind(__webpack_require__, /*! ../components/query-builder/query-builder.component.vue */ "./src/components/query-builder/query-builder.component.vue")))
+  'atk-inline-edit': componentFactory('atk-inline-edit', () => __webpack_require__.e(/*! import() | atk-vue-inline-edit */ "atk-vue-inline-edit").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/inline-edit.component */ "./src/vue-components/inline-edit.component.js"))),
+  'atk-item-search': componentFactory('atk-item-search', () => __webpack_require__.e(/*! import() | atk-vue-item-search */ "atk-vue-item-search").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/item-search.component */ "./src/vue-components/item-search.component.js"))),
+  'atk-multiline': componentFactory('atk-multiline', () => __webpack_require__.e(/*! import() | atk-vue-multiline */ "atk-vue-multiline").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/multiline/multiline.component */ "./src/vue-components/multiline/multiline.component.js"))),
+  'atk-tree-item-selector': componentFactory('atk-tree-item-selector', () => Promise.all(/*! import() | atk-vue-tree-item-selector */[__webpack_require__.e("vendor"), __webpack_require__.e("atk-vue-tree-item-selector")]).then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/tree-item-selector/tree-item-selector.component */ "./src/vue-components/tree-item-selector/tree-item-selector.component.js"))),
+  'atk-query-builder': componentFactory('atk-query-builder', () => Promise.all(/*! import() | atk-vue-query-builder */[__webpack_require__.e("vendor"), __webpack_require__.e("vendor-vue-query-builder"), __webpack_require__.e("atk-vue-query-builder")]).then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/query-builder/query-builder.component.vue */ "./src/vue-components/query-builder/query-builder.component.vue")))
 };
 /**
  * Allow to create Vue component.
@@ -4074,13 +4071,13 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].eventBus = function () {
   };
 }();
 
-atk__WEBPACK_IMPORTED_MODULE_2__["default"].debounce = function (func, wait, options) {
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].createDebouncedFx = function (func, wait, options) {
   let timerId = null;
-  let debouncedInner;
+  let lodashDebouncedFx;
 
   function createTimer() {
     timerId = setInterval(() => {
-      if (!debouncedInner.pending()) {
+      if (!lodashDebouncedFx.pending()) {
         clearInterval(timerId);
         timerId = null;
         (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().active)--;
@@ -4089,20 +4086,20 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].debounce = function (func, wait, opt
     (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().active)++;
   }
 
-  debouncedInner = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_5__["default"])(func, wait, options);
+  lodashDebouncedFx = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_5__["default"])(func, wait, options);
 
-  function debounced() {
+  function debouncedFx() {
     if (timerId === null) {
       createTimer();
     }
 
-    return debouncedInner(...arguments);
+    return lodashDebouncedFx(...arguments);
   }
 
-  debounced.cancel = debouncedInner.cancel;
-  debounced.flush = debouncedInner.flush;
-  debounced.pending = debouncedInner.pending;
-  return debounced;
+  debouncedFx.cancel = lodashDebouncedFx.cancel;
+  debouncedFx.flush = lodashDebouncedFx.flush;
+  debouncedFx.pending = lodashDebouncedFx.pending;
+  return debouncedFx;
 };
 /*
 * Utilities function that you can execute

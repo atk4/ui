@@ -199,10 +199,6 @@ class Context extends RawMinkContext implements BehatContext
         $invalidIds = array_diff($invalidIds, ['']); // id="" is hardcoded in templates
         $duplicateIds = array_diff($duplicateIds, ['atk', '_icon', 'atk_icon']); // generated when component is not correctly added to app/layout component tree - should throw, as such name/ID is dangerous to be used
 
-        // ignore duplicate IDs from @shopify/draggable
-        // https://github.com/Shopify/draggable/pull/541
-        $duplicateIds = array_diff($duplicateIds, ['draggable-live-region']);
-
         if (count($invalidIds) > 0) {
             throw new Exception('Page contains element with invalid ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $invalidIds)));
         }

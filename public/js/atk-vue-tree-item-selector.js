@@ -1,10 +1,10 @@
 "use strict";
 (self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["atk-vue-tree-item-selector"],{
 
-/***/ "./src/components/tree-item-selector/tree-item-selector.component.js":
-/*!***************************************************************************!*\
-  !*** ./src/components/tree-item-selector/tree-item-selector.component.js ***!
-  \***************************************************************************/
+/***/ "./src/vue-components/tree-item-selector/tree-item-selector.component.js":
+/*!*******************************************************************************!*\
+  !*** ./src/vue-components/tree-item-selector/tree-item-selector.component.js ***!
+  \*******************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);

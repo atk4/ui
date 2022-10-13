@@ -1,6 +1,3 @@
-/**
- * Simple text area input to display in multiline component.
- */
 export default {
     name: 'atk-textarea',
     template: '<textarea v-model="text" @input="handleChange"></textarea>',

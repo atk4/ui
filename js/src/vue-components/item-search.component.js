@@ -2,7 +2,6 @@ import $ from 'external/jquery';
 import atk from 'atk';
 
 /**
- * Vue component
  * Will allow user to send data query request to server.
  * Request should filter the data and reload the data view.
  * The request is send using Fomantic-UI api.
@@ -56,15 +55,19 @@ export default {
     },
     methods: {
         onKeyup: function () {
-            atk.debounce((e) => {
-                if (this.query !== this.temp) {
-                    if (this.query === '') {
-                        this.query = null;
+            if (!this.onKeyup.debouncedFx) {
+                this.onKeyup.debouncedFx = atk.createDebouncedFx((e) => {
+                    this.onKeyup.debouncedFx = null;
+                    if (this.query !== this.temp) {
+                        if (this.query === '') {
+                            this.query = null;
+                        }
+                        this.sendQuery();
+                        this.temp = this.query;
                     }
-                    this.sendQuery();
-                    this.temp = this.query;
-                }
-            }, this.options.inputTimeOut).call(this);
+                }, this.options.inputTimeOut);
+            }
+            this.onKeyup.debouncedFx.call(this);
         },
         onEscape: function () {
             if (this.query !== null) {

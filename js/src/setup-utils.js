@@ -39,13 +39,13 @@ atk.eventBus = (function () {
     };
 }());
 
-atk.debounce = function (func, wait, options) {
+atk.createDebouncedFx = function (func, wait, options) {
     let timerId = null;
-    let debouncedInner;
+    let lodashDebouncedFx;
 
     function createTimer() {
         timerId = setInterval(() => {
-            if (!debouncedInner.pending()) {
+            if (!lodashDebouncedFx.pending()) {
                 clearInterval(timerId);
                 timerId = null;
                 $.active--;
@@ -54,20 +54,20 @@ atk.debounce = function (func, wait, options) {
         $.active++;
     }
 
-    debouncedInner = lodashDebounce(func, wait, options);
+    lodashDebouncedFx = lodashDebounce(func, wait, options);
 
-    function debounced(...args) {
+    function debouncedFx(...args) {
         if (timerId === null) {
             createTimer();
         }
 
-        return debouncedInner(...args);
+        return lodashDebouncedFx(...args);
     }
-    debounced.cancel = debouncedInner.cancel;
-    debounced.flush = debouncedInner.flush;
-    debounced.pending = debouncedInner.pending;
+    debouncedFx.cancel = lodashDebouncedFx.cancel;
+    debouncedFx.flush = lodashDebouncedFx.flush;
+    debouncedFx.pending = lodashDebouncedFx.pending;
 
-    return debounced;
+    return debouncedFx;
 };
 
 /*

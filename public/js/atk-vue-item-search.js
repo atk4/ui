@@ -1,10 +1,10 @@
 "use strict";
 (self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["atk-vue-item-search"],{
 
-/***/ "./src/components/item-search.component.js":
-/*!*************************************************!*\
-  !*** ./src/components/item-search.component.js ***!
-  \*************************************************/
+/***/ "./src/vue-components/item-search.component.js":
+/*!*****************************************************!*\
+  !*** ./src/vue-components/item-search.component.js ***!
+  \*****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -17,7 +17,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Vue component
  * Will allow user to send data query request to server.
  * Request should filter the data and reload the data view.
  * The request is send using Fomantic-UI api.
@@ -70,16 +69,22 @@ const template = `<div class="atk-item-search" :class="inputCss">
   },
   methods: {
     onKeyup: function () {
-      atk__WEBPACK_IMPORTED_MODULE_1__["default"].debounce(e => {
-        if (this.query !== this.temp) {
-          if (this.query === '') {
-            this.query = null;
-          }
+      if (!this.onKeyup.debouncedFx) {
+        this.onKeyup.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_1__["default"].createDebouncedFx(e => {
+          this.onKeyup.debouncedFx = null;
 
-          this.sendQuery();
-          this.temp = this.query;
-        }
-      }, this.options.inputTimeOut).call(this);
+          if (this.query !== this.temp) {
+            if (this.query === '') {
+              this.query = null;
+            }
+
+            this.sendQuery();
+            this.temp = this.query;
+          }
+        }, this.options.inputTimeOut);
+      }
+
+      this.onKeyup.debouncedFx.call(this);
     },
     onEscape: function () {
       if (this.query !== null) {

@@ -8,7 +8,6 @@ import AtkPlugin from './atk.plugin';
  * padding: 20         The amount of padding needed prior to request a page load.
  * initialPage: 1      The initial page load when calling this plugin.
  * appendTo: null      The html element where new content should be append to.
- * allowJsEval: false  Whether or not javascript send in server response should be evaluate.
  * stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call. if null, then a default loader will be apply to the bottom of the $inner element.
  */
 export default class AtkScrollPlugin extends AtkPlugin {
@@ -23,7 +22,6 @@ export default class AtkScrollPlugin extends AtkPlugin {
             padding: 20,
             initialPage: 1,
             appendTo: null,
-            allowJsEval: false,
             hasFixTableHeader: false,
             tableContainerHeight: 400,
             tableHeaderColor: '#ffffff',
@@ -165,14 +163,10 @@ export default class AtkScrollPlugin extends AtkPlugin {
         this.removeLoader();
         if (response.success) {
             if (response.html) {
-                // Done - no more pages
-                if (response.message === 'Done') {
-                    this.$target.append(response.html);
+                this.$target.append(response.html);
+                if (response.noMoreScrollPages) {
                     this.idle();
-                }
-                // Success - will have more pages
-                if (response.message === 'Success') {
-                    this.$target.append(response.html);
+                } else {
                     this.isWaiting = false;
                     this.nextPage++;
                     // if there is no scrollbar, then try to load next page too
@@ -183,9 +177,6 @@ export default class AtkScrollPlugin extends AtkPlugin {
             }
 
             response.id = null;
-            if (!this.settings.options.allowJsEval) {
-                response.atkjs = null;
-            }
         }
     }
 

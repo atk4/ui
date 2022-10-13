@@ -693,7 +693,6 @@ class View extends AbstractView implements JsExpressionable
 
         return [
             'success' => true,
-            'message' => 'Success',
             'atkjs' => $this->getJs($forceReturn),
             'html' => $this->renderTemplateToHtml($region),
             'id' => $this->name,
