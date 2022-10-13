@@ -582,10 +582,16 @@ __webpack_require__.r(__webpack_exports__);
       this.updateFieldInRow(atkmlId, fieldName, value);
       this.clearError(atkmlId, fieldName);
       this.updateInputValue();
-      atk__WEBPACK_IMPORTED_MODULE_8__["default"].debounce(() => {
-        this.fetchExpression(atkmlId);
-        this.fetchOnChangeAction(fieldName);
-      }, 300).call(this);
+
+      if (!this.onUpdate.debouncedFx) {
+        this.onUpdate.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_8__["default"].createDebouncedFx(() => {
+          this.onUpdate.debouncedFx = null;
+          this.fetchExpression(atkmlId);
+          this.fetchOnChangeAction(fieldName);
+        }, 250);
+      }
+
+      this.onUpdate.debouncedFx.call(this);
     },
 
     /**
@@ -910,16 +916,22 @@ const template = `<sui-dropdown
         this.isLoading = true;
       }
 
-      this.temp = inputValue;
-      atk__WEBPACK_IMPORTED_MODULE_0__["default"].debounce(() => {
-        if (this.query !== this.temp) {
-          this.query = this.temp;
+      if (!this.onFiltered.debouncedFx) {
+        this.onFiltered.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_0__["default"].createDebouncedFx(() => {
+          this.onFiltered.debouncedFx = null;
 
-          if (this.query) {
-            this.fetchItems(this.query);
+          if (this.query !== this.temp) {
+            this.query = this.temp;
+
+            if (this.query) {
+              this.fetchItems(this.query);
+            }
           }
-        }
-      }, 300).call(this);
+        }, 250);
+      }
+
+      this.temp = inputValue;
+      this.onFiltered.debouncedFx(this);
     },
 
     /**
@@ -939,10 +951,9 @@ const template = `<sui-dropdown
         if (response.success) {
           this.dropdownProps.options = response.results;
         }
-
-        this.isLoading = false;
       } catch (e) {
         console.error(e);
+      } finally {
         this.isLoading = false;
       }
     }

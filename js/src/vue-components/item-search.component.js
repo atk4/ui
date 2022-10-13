@@ -55,15 +55,19 @@ export default {
     },
     methods: {
         onKeyup: function () {
-            atk.debounce((e) => {
-                if (this.query !== this.temp) {
-                    if (this.query === '') {
-                        this.query = null;
+            if (!this.onKeyup.debouncedFx) {
+                this.onKeyup.debouncedFx = atk.createDebouncedFx((e) => {
+                    this.onKeyup.debouncedFx = null;
+                    if (this.query !== this.temp) {
+                        if (this.query === '') {
+                            this.query = null;
+                        }
+                        this.sendQuery();
+                        this.temp = this.query;
                     }
-                    this.sendQuery();
-                    this.temp = this.query;
-                }
-            }, this.options.inputTimeOut).call(this);
+                }, this.options.inputTimeOut);
+            }
+            this.onKeyup.debouncedFx.call(this);
         },
         onEscape: function () {
             if (this.query !== null) {

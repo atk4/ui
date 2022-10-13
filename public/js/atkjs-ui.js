@@ -532,11 +532,11 @@ class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_8__[
     } // add change listener to inputs according to selector
 
 
-    this.$el.find(':checkbox').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 100, true));
-    this.$el.find(':radio').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 100, true));
-    this.$el.find('input[type="hidden"]').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 100, true));
-    this.$el.find('input').on(this.settings.validateEvent, this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 250));
-    this.$el.find('select').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].debounce(this.onInputChange, 100));
+    this.$el.find(':checkbox').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100, true));
+    this.$el.find(':radio').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100, true));
+    this.$el.find('input[type="hidden"]').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100, true));
+    this.$el.find('input').on(this.settings.validateEvent, this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 250));
+    this.$el.find('select').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100));
     this.initialize();
   }
 
@@ -1103,7 +1103,7 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
 
 
   onAutoQueryAction() {
-    this.textInput.on('keyup', atk__WEBPACK_IMPORTED_MODULE_6__["default"].debounce(e => {
+    this.textInput.on('keyup', atk__WEBPACK_IMPORTED_MODULE_6__["default"].createDebouncedFx(e => {
       const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.urlOptions);
 
       if (e.target.value === '' || e.keyCode === 27) {
@@ -1290,7 +1290,7 @@ AtkJsSearchPlugin.DEFAULTS = {
   urlQueryKey: null,
   q: null,
   autoQuery: false,
-  timeOut: 300,
+  timeOut: 250,
   useAjax: true
 };
 
@@ -3320,7 +3320,7 @@ class PanelService {
 
   addClickAwayEvent(id) {
     // clicking anywhere in main tag will close panel.
-    external_jquery__WEBPACK_IMPORTED_MODULE_9___default()('main').on('click.atkPanel', atk__WEBPACK_IMPORTED_MODULE_10__["default"].debounce(evt => {
+    external_jquery__WEBPACK_IMPORTED_MODULE_9___default()('main').on('click.atkPanel', atk__WEBPACK_IMPORTED_MODULE_10__["default"].createDebouncedFx(evt => {
       this.closePanel(id);
     }, 250));
   }
@@ -3331,7 +3331,7 @@ class PanelService {
 
   addEscAwayEvent(id) {
     // pressing esc key will close panel.
-    external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(document).on('keyup.atkPanel', atk__WEBPACK_IMPORTED_MODULE_10__["default"].debounce(evt => {
+    external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(document).on('keyup.atkPanel', atk__WEBPACK_IMPORTED_MODULE_10__["default"].createDebouncedFx(evt => {
       if (evt.keyCode === 27) {
         this.closePanel(id);
       }
@@ -4071,13 +4071,13 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].eventBus = function () {
   };
 }();
 
-atk__WEBPACK_IMPORTED_MODULE_2__["default"].debounce = function (func, wait, options) {
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].createDebouncedFx = function (func, wait, options) {
   let timerId = null;
-  let debouncedInner;
+  let lodashDebouncedFx;
 
   function createTimer() {
     timerId = setInterval(() => {
-      if (!debouncedInner.pending()) {
+      if (!lodashDebouncedFx.pending()) {
         clearInterval(timerId);
         timerId = null;
         (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().active)--;
@@ -4086,20 +4086,20 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].debounce = function (func, wait, opt
     (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().active)++;
   }
 
-  debouncedInner = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_5__["default"])(func, wait, options);
+  lodashDebouncedFx = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_5__["default"])(func, wait, options);
 
-  function debounced() {
+  function debouncedFx() {
     if (timerId === null) {
       createTimer();
     }
 
-    return debouncedInner(...arguments);
+    return lodashDebouncedFx(...arguments);
   }
 
-  debounced.cancel = debouncedInner.cancel;
-  debounced.flush = debouncedInner.flush;
-  debounced.pending = debouncedInner.pending;
-  return debounced;
+  debouncedFx.cancel = lodashDebouncedFx.cancel;
+  debouncedFx.flush = lodashDebouncedFx.flush;
+  debouncedFx.pending = lodashDebouncedFx.pending;
+  return debouncedFx;
 };
 /*
 * Utilities function that you can execute

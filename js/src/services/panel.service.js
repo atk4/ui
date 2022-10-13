@@ -280,7 +280,7 @@ class PanelService {
      */
     addClickAwayEvent(id) {
         // clicking anywhere in main tag will close panel.
-        $('main').on('click.atkPanel', atk.debounce((evt) => {
+        $('main').on('click.atkPanel', atk.createDebouncedFx((evt) => {
             this.closePanel(id);
         }, 250));
     }
@@ -290,7 +290,7 @@ class PanelService {
      */
     addEscAwayEvent(id) {
         // pressing esc key will close panel.
-        $(document).on('keyup.atkPanel', atk.debounce((evt) => {
+        $(document).on('keyup.atkPanel', atk.createDebouncedFx((evt) => {
             if (evt.keyCode === 27) {
                 this.closePanel(id);
             }

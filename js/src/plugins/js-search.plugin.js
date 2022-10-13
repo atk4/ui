@@ -38,7 +38,7 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
      * Query server on each keystroke after proper timeout.
      */
     onAutoQueryAction() {
-        this.textInput.on('keyup', atk.debounce((e) => {
+        this.textInput.on('keyup', atk.createDebouncedFx((e) => {
             const options = $.extend({}, this.urlArgs, this.settings.urlOptions);
             if (e.target.value === '' || e.keyCode === 27) {
                 this.doSearch(this.settings.url, null, options, () => {
@@ -205,6 +205,6 @@ AtkJsSearchPlugin.DEFAULTS = {
     urlQueryKey: null,
     q: null,
     autoQuery: false,
-    timeOut: 300,
+    timeOut: 250,
     useAjax: true,
 };

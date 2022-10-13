@@ -60,15 +60,20 @@ export default {
             if (inputValue) {
                 this.isLoading = true;
             }
-            this.temp = inputValue;
-            atk.debounce(() => {
-                if (this.query !== this.temp) {
-                    this.query = this.temp;
-                    if (this.query) {
-                        this.fetchItems(this.query);
+
+            if (!this.onFiltered.debouncedFx) {
+                this.onFiltered.debouncedFx = atk.createDebouncedFx(() => {
+                    this.onFiltered.debouncedFx = null;
+                    if (this.query !== this.temp) {
+                        this.query = this.temp;
+                        if (this.query) {
+                            this.fetchItems(this.query);
+                        }
                     }
-                }
-            }, 300).call(this);
+                }, 250);
+            }
+            this.temp = inputValue;
+            this.onFiltered.debouncedFx(this);
         },
         /**
          * Fetch new data from server.
@@ -80,9 +85,9 @@ export default {
                 if (response.success) {
                     this.dropdownProps.options = response.results;
                 }
-                this.isLoading = false;
             } catch (e) {
                 console.error(e);
+            } finally {
                 this.isLoading = false;
             }
         },

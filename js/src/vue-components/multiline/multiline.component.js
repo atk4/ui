@@ -115,10 +115,14 @@ export default {
             this.clearError(atkmlId, fieldName);
             this.updateInputValue();
 
-            atk.debounce(() => {
-                this.fetchExpression(atkmlId);
-                this.fetchOnChangeAction(fieldName);
-            }, 300).call(this);
+            if (!this.onUpdate.debouncedFx) {
+                this.onUpdate.debouncedFx = atk.createDebouncedFx(() => {
+                    this.onUpdate.debouncedFx = null;
+                    this.fetchExpression(atkmlId);
+                    this.fetchOnChangeAction(fieldName);
+                }, 250);
+            }
+            this.onUpdate.debouncedFx.call(this);
         },
         /**
          * Creates a new row of data and

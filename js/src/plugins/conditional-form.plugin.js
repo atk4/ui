@@ -55,15 +55,15 @@ export default class AtkConditionalFormPlugin extends AtkPlugin {
         }
         // add change listener to inputs according to selector
         this.$el.find(':checkbox')
-            .on('change', this, atk.debounce(this.onInputChange, 100, true));
+            .on('change', this, atk.createDebouncedFx(this.onInputChange, 100, true));
         this.$el.find(':radio')
-            .on('change', this, atk.debounce(this.onInputChange, 100, true));
+            .on('change', this, atk.createDebouncedFx(this.onInputChange, 100, true));
         this.$el.find('input[type="hidden"]')
-            .on('change', this, atk.debounce(this.onInputChange, 100, true));
+            .on('change', this, atk.createDebouncedFx(this.onInputChange, 100, true));
         this.$el.find('input')
-            .on(this.settings.validateEvent, this, atk.debounce(this.onInputChange, 250));
+            .on(this.settings.validateEvent, this, atk.createDebouncedFx(this.onInputChange, 250));
         this.$el.find('select')
-            .on('change', this, atk.debounce(this.onInputChange, 100));
+            .on('change', this, atk.createDebouncedFx(this.onInputChange, 100));
 
         this.initialize();
     }

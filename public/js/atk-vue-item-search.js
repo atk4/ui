@@ -69,16 +69,22 @@ const template = `<div class="atk-item-search" :class="inputCss">
   },
   methods: {
     onKeyup: function () {
-      atk__WEBPACK_IMPORTED_MODULE_1__["default"].debounce(e => {
-        if (this.query !== this.temp) {
-          if (this.query === '') {
-            this.query = null;
-          }
+      if (!this.onKeyup.debouncedFx) {
+        this.onKeyup.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_1__["default"].createDebouncedFx(e => {
+          this.onKeyup.debouncedFx = null;
 
-          this.sendQuery();
-          this.temp = this.query;
-        }
-      }, this.options.inputTimeOut).call(this);
+          if (this.query !== this.temp) {
+            if (this.query === '') {
+              this.query = null;
+            }
+
+            this.sendQuery();
+            this.temp = this.query;
+          }
+        }, this.options.inputTimeOut);
+      }
+
+      this.onKeyup.debouncedFx.call(this);
     },
     onEscape: function () {
       if (this.query !== null) {
