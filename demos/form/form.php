@@ -149,6 +149,7 @@ Header::addTo($tab, ['Form handles errors', 'size' => 2]);
 
 $form = Form::addTo($tab);
 $form->addControl('email');
+$form->buttonSave->set('SaveE1');
 $form->onSubmit(function (Form $form) {
     $o = new \stdClass();
 
@@ -159,8 +160,9 @@ Header::addTo($tab, ['Form shows Agile exceptions', 'size' => 2]);
 
 $form = Form::addTo($tab);
 $form->addControl('email');
+$form->buttonSave->set('SaveE2');
 $form->onSubmit(function (Form $form) {
-    throw (new CoreException('testing'))
+    throw (new CoreException('Test exception I.'))
         ->addMoreInfo('arg1', 'val1');
 
     // return 'somehow it did not crash';
@@ -171,7 +173,7 @@ Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', Mod
         $form = Form::addTo($p);
         $form->addControl('email');
         $form->onSubmit(function (Form $form) {
-            throw (new CoreException('testing'))
+            throw (new CoreException('Test exception II.'))
                 ->addMoreInfo('arg1', 'val1');
 
             // return 'somehow it did not crash';

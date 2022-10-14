@@ -28,3 +28,15 @@ Feature: Form
     When I fill in "email5" with "foo@bar"
     When I press button "Save5"
     Then input "email5" value should start with "random is"
+
+  Scenario: form exception is displayed
+    When I click tab with title "Handler Safety"
+    When I press button "SaveE1"
+    Then Modal is open with text "Error: Cannot use object of type stdClass as array"
+    Then I hide js modal
+    When I press button "SaveE2"
+    Then Modal is open with text "Atk4\Core\Exception: Test exception I."
+    Then I hide js modal
+    When I press button "Modal Test"
+    When I press Modal button "Save"
+    Then Modal is open with text "Atk4\Core\Exception: Test exception II."
