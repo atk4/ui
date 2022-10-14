@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install intl \
     && docker-php-ext-install pdo pdo_mysql
 
-RUN curl -sL https://deb.nodesource.com/setup_12.x  | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_18.x  | bash - \
     && apt-get update && apt-get -y install nodejs \
     && npm install -g npm
 
@@ -40,6 +40,7 @@ COPY src src
 COPY template template
 COPY demos demos
 RUN echo "<?php header('Location: /demos/');" > index.php
+RUN sed -E "s/\.min\.(css|js)'/\.\\1'/g" -i src/App.php
 
 RUN php demos/_demo-data/create-db.php
 RUN sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWORD'] ?? null);/g" -i demos/db.default.php
