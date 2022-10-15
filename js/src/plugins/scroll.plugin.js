@@ -122,13 +122,6 @@ export default class AtkScrollPlugin extends AtkPlugin {
     }
 
     /**
-     * Set Next page to be loaded.
-     */
-    setNextPage(page) {
-        this.nextPage = page;
-    }
-
-    /**
      * Put scroll in idle mode.
      */
     idle() {

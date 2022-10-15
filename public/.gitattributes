@@ -1,3 +1,4 @@
-# workaround for vue
-# https://github.com/vuejs/vue/issues/12819
-/js/* -text -filter
+/js/*.js -text -filter
+
+* linguist-vendored
+/css/*.less linguist-vendored=false

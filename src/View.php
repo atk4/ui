@@ -836,9 +836,9 @@ class View extends AbstractView implements JsExpressionable
      *
      * example of adding a listener on for an emit event.
      *
-     *      atk.eventBus.on('eventName', (data) => {
-     *          console.log(data)
-     *      });
+     * atk.eventBus.on('eventName', (data) => {
+     *     console.log(data)
+     * });
      *
      * Note: In order to make sure your event is unique within atk, you can
      * use the view name in it.

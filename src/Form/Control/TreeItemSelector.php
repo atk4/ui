@@ -47,18 +47,18 @@ class TreeItemSelector extends Form\Control
      * Only the id value, from a single node, are returned i.e. not the group id value.
      *
      * Each item may have it's own children by adding nodes children to it.
-     *   $items = [
-     *       ['name' => 'Electronics', 'id' => 'P100', 'nodes' => [
-     *           ['name' => 'Phone', 'id' => 'P100', 'nodes' => [
-     *               ['name' => 'iPhone', 'id' => 502],
-     *               ['name' => 'Google Pixels', 'id' => 503],
-     *           ]],
-     *           ['name' => 'Tv', 'id' => 501],
-     *           ['name' => 'Radio', 'id' => 601],
-     *       ]],
-     *       ['name' => 'Cleaner', 'id' => 201],
-     *       ['name' => 'Appliances', 'id' => 301],
-     *   ];
+     * $items = [
+     *     ['name' => 'Electronics', 'id' => 'P100', 'nodes' => [
+     *         ['name' => 'Phone', 'id' => 'P100', 'nodes' => [
+     *             ['name' => 'iPhone', 'id' => 502],
+     *             ['name' => 'Google Pixels', 'id' => 503],
+     *         ]],
+     *         ['name' => 'Tv', 'id' => 501],
+     *         ['name' => 'Radio', 'id' => 601],
+     *     ]],
+     *     ['name' => 'Cleaner', 'id' => 201],
+     *     ['name' => 'Appliances', 'id' => 301],
+     * ];
      *
      * When adding nodes array into an item, it will automatically be treated as a group unless empty.
      *

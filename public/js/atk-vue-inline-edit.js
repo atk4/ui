@@ -14,6 +14,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
+
 /**
  * Allow user to edit a db record inline and send
  * changes to server.
@@ -68,7 +69,6 @@ const template = `
     onKeyup: function (e) {
       const key = e.keyCode;
       this.clearError();
-
       if (key === 13) {
         this.onEnter(e);
       } else if (key === 27) {
@@ -96,12 +96,10 @@ const template = `
     },
     flashError: function () {
       let count = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 4;
-
       if (count === 0) {
         this.hasError = false;
         return;
       }
-
       this.hasError = !this.hasError;
       setTimeout(() => {
         this.flashError(count - 1);

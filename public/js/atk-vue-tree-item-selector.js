@@ -143,13 +143,11 @@ const template = `<div class="item" :style="itemMargin">
     },
     state: function () {
       let state = 'off';
-
       if (this.isParent) {
         state = this.hasAllFill(this.nodes) ? 'on' : this.hasSomeFill(this.nodes) ? 'indeterminate' : 'off';
       } else if (this.isSelected(this.id)) {
         state = 'on';
       }
-
       return state;
     },
     getIcon: function () {
@@ -160,7 +158,6 @@ const template = `<div class="item" :style="itemMargin">
     isSelected: function (id) {
       return this.values.filter(val => val === id).length > 0;
     },
-
     /**
      * Get input initial data.
      */
@@ -174,16 +171,13 @@ const template = `<div class="item" :style="itemMargin">
     getValues: function () {
       const initValues = JSON.parse(this.getInputElement().value);
       let values = [];
-
       if (Array.isArray(initValues)) {
         values = initValues;
       } else {
         values.push(initValues);
       }
-
       return values;
     },
-
     /**
      * Check if all children nodes are on.
      *
@@ -191,7 +185,6 @@ const template = `<div class="item" :style="itemMargin">
      */
     hasAllFill: function (nodes) {
       let state = true;
-
       for (let i = 0; i < nodes.length; i++) {
         // check children first;
         if (nodes[i].nodes && nodes[i].nodes.length > 0) {
@@ -204,10 +197,8 @@ const template = `<div class="item" :style="itemMargin">
           break;
         }
       }
-
       return state;
     },
-
     /**
      * Check if some children nodes are on.
      *
@@ -215,7 +206,6 @@ const template = `<div class="item" :style="itemMargin">
      */
     hasSomeFill: function (nodes) {
       let state = false;
-
       for (let i = 0; i < nodes.length; i++) {
         // check children first;
         if (nodes[i].nodes && nodes[i].nodes.length > 0) {
@@ -224,16 +214,13 @@ const template = `<div class="item" :style="itemMargin">
             break;
           }
         }
-
         if (this.values.findIndex(id => id === nodes[i].id) > -1) {
           state = true;
           break;
         }
       }
-
       return state;
     },
-
     /**
      * Fire when arrow are click in order to show or hide children.
      */
@@ -242,7 +229,6 @@ const template = `<div class="item" :style="itemMargin">
         this.open = !this.open;
       }
     },
-
     /**
      * Fire when checkbox is click.
      */
@@ -250,18 +236,15 @@ const template = `<div class="item" :style="itemMargin">
       const {
         options
       } = this.getRootData();
-
       switch (options.mode) {
         case 'single':
           this.handleSingleSelect();
           break;
-
         case 'multiple':
           this.handleMultipleSelect();
           break;
       }
     },
-
     /**
      * Merge array and remove duplicate.
      *
@@ -269,17 +252,14 @@ const template = `<div class="item" :style="itemMargin">
      */
     mergeArrays: function () {
       let jointArray = [];
-
       for (var _len = arguments.length, arrays = new Array(_len), _key = 0; _key < _len; _key++) {
         arrays[_key] = arguments[_key];
       }
-
       arrays.forEach(array => {
         jointArray = [...jointArray, ...array];
       });
       return [...new Set([...jointArray])];
     },
-
     /**
      * Get all id from all chidren node.
      *
@@ -299,7 +279,6 @@ const template = `<div class="item" :style="itemMargin">
     remove: function (values, value) {
       return values.filter(val => val !== value);
     },
-
     /**
      * Handle a selection when in single mode.
      */
@@ -307,27 +286,22 @@ const template = `<div class="item" :style="itemMargin">
       if (this.state === 'off' && !this.isParent) {
         this.getRootData().values = [this.item.id];
         this.setInput(this.item.id);
-
         if (this.getRootData().options.url) {
           this.postValue();
         }
       }
-
       if (this.isParent) {
         this.open = !this.open;
       }
     },
-
     /**
      * Handle a selection when in multiple mode.
      */
     handleMultipleSelect: function () {
       let values;
-
       if (this.isParent) {
         // collect all children value
         const childValues = this.collectAllChildren(this.nodes);
-
         if (this.state === 'off' || this.state === 'indeterminate') {
           values = this.mergeArrays(this.values, childValues);
         } else {
@@ -343,15 +317,12 @@ const template = `<div class="item" :style="itemMargin">
         values = this.values;
         values.push(this.item.id);
       }
-
       this.getRootData().values = [...values];
       this.setInput(JSON.stringify(values));
-
       if (this.getRootData().options.url) {
         this.postValue();
       }
     },
-
     /**
      * Set input field with current mapped model value.
      */
@@ -359,7 +330,6 @@ const template = `<div class="item" :style="itemMargin">
       // console.log('set input');
       this.getInputElement().value = value;
     },
-
     /**
      * Get input element set for this Item Selector.
      *
@@ -368,7 +338,6 @@ const template = `<div class="item" :style="itemMargin">
     getInputElement: function () {
       return document.getElementsByName(this.getRootData().field)[0];
     },
-
     /**
      * Send data using callback url.
      */

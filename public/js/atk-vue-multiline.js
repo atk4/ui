@@ -54,7 +54,6 @@ __webpack_require__.r(__webpack_exports__);
       if (rowId in this.errors) {
         return this.errors[rowId];
       }
-
       return null;
     }
   }
@@ -118,7 +117,6 @@ __webpack_require__.r(__webpack_exports__);
           readOnlyValue: this.fieldValue
         };
       }
-
       return this.cellData.definition.componentProps;
     },
     onInput: function (value) {
@@ -128,17 +126,14 @@ __webpack_require__.r(__webpack_exports__);
     onChange: function (value) {
       this.onInput(value);
     },
-
     /**
      * return input value based on their type.
      */
     getTypeValue: function (value) {
       let r = value;
-
       if (this.type === 'boolean') {
         r = value.target.checked;
       }
-
       return r;
     }
   }
@@ -210,7 +205,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     getTextAlign: function (column) {
       let align = 'left';
-
       if (!column.isEditable) {
         switch (column.type) {
           case 'money':
@@ -220,12 +214,10 @@ __webpack_require__.r(__webpack_exports__);
             break;
         }
       }
-
       return align;
     },
     getVisibleColumns: function () {
       let count = 1; // add deletable column;
-
       this.columns.forEach(field => {
         count = field.isVisible ? count + 1 : count;
       });
@@ -240,16 +232,13 @@ __webpack_require__.r(__webpack_exports__);
     getErrorMsg: function (column) {
       if (this.hasError()) {
         const rows = Object.keys(this.errors);
-
         for (let i = 0; i < rows.length; i++) {
           const error = this.errors[rows[i]].filter(col => col.name === column.name);
-
           if (error.length > 0) {
             return error[0].msg;
           }
         }
       }
-
       return null;
     }
   },
@@ -309,6 +298,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * This will create a table td element using sui-table-cell.
  * The td element is created only if column as set isVisible = true;
@@ -316,7 +306,6 @@ __webpack_require__.r(__webpack_exports__);
  * the multiline cell will set it's own template component depending on the fieldType.
  * getValue
  */
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-multiline-row',
   template: `
@@ -363,12 +352,10 @@ __webpack_require__.r(__webpack_exports__);
     getErrorState: function (column) {
       if (this.error) {
         const error = this.error.filter(e => column.name === e.name);
-
         if (error.length > 0) {
           return 'error';
         }
       }
-
       return null;
     },
     getColumnWidth: function (column) {
@@ -510,7 +497,8 @@ __webpack_require__.r(__webpack_exports__);
       hasChangeCb: this.data.hasChangeCb,
       errors: {},
       caption: this.data.caption || null,
-      tableProp: { ...tableDefault,
+      tableProp: {
+        ...tableDefault,
         ...(this.data.tableProps || {})
       }
     };
@@ -527,7 +515,6 @@ __webpack_require__.r(__webpack_exports__);
     });
     atk__WEBPACK_IMPORTED_MODULE_8__["default"].eventBus.on(this.$root.$el.id + '-toggle-delete', payload => {
       const idx = this.deletables.indexOf(payload.rowId);
-
       if (idx > -1) {
         this.deletables.splice(idx, 1);
       } else {
@@ -536,7 +523,6 @@ __webpack_require__.r(__webpack_exports__);
     });
     atk__WEBPACK_IMPORTED_MODULE_8__["default"].eventBus.on(this.$root.$el.id + '-toggle-delete-all', payload => {
       this.deletables = [];
-
       if (payload.isOn) {
         this.rowData.forEach(row => {
           this.deletables.push(row.__atkml);
@@ -544,7 +530,8 @@ __webpack_require__.r(__webpack_exports__);
       }
     });
     atk__WEBPACK_IMPORTED_MODULE_8__["default"].eventBus.on(this.$root.$el.id + '-multiline-rows-error', payload => {
-      this.errors = { ...payload.errors
+      this.errors = {
+        ...payload.errors
       };
     });
   },
@@ -558,11 +545,9 @@ __webpack_require__.r(__webpack_exports__);
       const newRow = this.createRow(this.data.fields);
       this.rowData.push(newRow);
       this.updateInputValue();
-
       if (this.data.afterAdd && typeof this.data.afterAdd === 'function') {
         this.data.afterAdd(atk__WEBPACK_IMPORTED_MODULE_8__["default"].utils.json().tryParse(this.value));
       }
-
       this.fetchExpression(newRow.__atkml);
       this.fetchOnChangeAction();
     },
@@ -573,7 +558,6 @@ __webpack_require__.r(__webpack_exports__);
       this.deletables = [];
       this.updateInputValue();
       this.fetchOnChangeAction();
-
       if (this.data.afterDelete && typeof this.data.afterDelete === 'function') {
         this.data.afterDelete(atk__WEBPACK_IMPORTED_MODULE_8__["default"].utils.json().tryParse(this.value));
       }
@@ -582,7 +566,6 @@ __webpack_require__.r(__webpack_exports__);
       this.updateFieldInRow(atkmlId, fieldName, value);
       this.clearError(atkmlId, fieldName);
       this.updateInputValue();
-
       if (!this.onUpdate.debouncedFx) {
         this.onUpdate.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_8__["default"].createDebouncedFx(() => {
           this.onUpdate.debouncedFx = null;
@@ -590,10 +573,8 @@ __webpack_require__.r(__webpack_exports__);
           this.fetchOnChangeAction(fieldName);
         }, 250);
       }
-
       this.onUpdate.debouncedFx.call(this);
     },
-
     /**
      * Creates a new row of data and
      * set values to default if available.
@@ -610,7 +591,6 @@ __webpack_require__.r(__webpack_exports__);
       this.rowData.splice(this.rowData.findIndex(row => row.__atkml === atkmlId), 1);
       delete this.errors[atkmlId];
     },
-
     /**
      * Update the value of the field in rowData.
      */
@@ -625,13 +605,11 @@ __webpack_require__.r(__webpack_exports__);
       if (atkmlId in this.errors) {
         const errors = this.errors[atkmlId].filter(error => error.name !== fieldName);
         this.errors[atkmlId] = [...errors];
-
         if (errors.length === 0) {
           delete this.errors[atkmlId];
         }
       }
     },
-
     /**
      * Update Multi-line Form input with all rowData values
      * as json string.
@@ -639,7 +617,6 @@ __webpack_require__.r(__webpack_exports__);
     updateInputValue: function () {
       this.value = JSON.stringify(this.rowData);
     },
-
     /**
      * Build rowData from json string.
      */
@@ -650,14 +627,12 @@ __webpack_require__.r(__webpack_exports__);
       });
       return rows;
     },
-
     /**
      * Check if one of the field use expression.
      */
     hasExpression: function () {
       return this.fieldData.filter(field => field.isExpr).length > 0;
     },
-
     /**
      * Send on change action to server.
      * Use regular api call in order
@@ -665,7 +640,6 @@ __webpack_require__.r(__webpack_exports__);
      */
     fetchOnChangeAction: function () {
       let fieldName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
       if (this.hasChangeCb && (fieldName === null || this.eventFields.indexOf(fieldName) > -1)) {
         external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this.$refs.addBtn.$el).api({
           on: 'now',
@@ -679,11 +653,11 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     postData: async function (row) {
-      const data = { ...row
+      const data = {
+        ...row
       };
       const context = this.$refs.addBtn.$el;
       data.__atkml_action = 'update-row';
-
       try {
         return await atk__WEBPACK_IMPORTED_MODULE_8__["default"].apiService.suiFetch(this.data.url, {
           data: data,
@@ -694,17 +668,15 @@ __webpack_require__.r(__webpack_exports__);
         console.error(e);
       }
     },
-
     /**
      * Get expressions values from server.
      */
     fetchExpression: async function (atkmlId) {
       if (this.hasExpression()) {
-        const row = this.findRow(atkmlId); // server will return expression field - value if define.
-
+        const row = this.findRow(atkmlId);
+        // server will return expression field - value if define.
         if (row) {
           const resp = await this.postData(row);
-
           if (resp.expressions) {
             const fields = Object.keys(resp.expressions);
             fields.forEach(field => {
@@ -721,7 +693,6 @@ __webpack_require__.r(__webpack_exports__);
     getInputElement: function () {
       return this.$refs.atkmlInput;
     },
-
     /**
      * UUID v4 generator.
      */
@@ -741,14 +712,12 @@ __webpack_require__.r(__webpack_exports__);
     getDeletables: function () {
       return this.deletables;
     },
-
     /**
      * Return Delete all checkbox state base on
      * deletables entries.
      */
     getMainToggleState: function () {
       let state = 'off';
-
       if (this.deletables.length > 0) {
         if (this.deletables.length === this.rowData.length) {
           state = 'on';
@@ -756,7 +725,6 @@ __webpack_require__.r(__webpack_exports__);
           state = 'indeterminate';
         }
       }
-
       return state;
     },
     isDeleteDisable: function () {
@@ -766,7 +734,6 @@ __webpack_require__.r(__webpack_exports__);
       if (this.data.rowLimit === 0) {
         return false;
       }
-
       return this.data.rowLimit < this.rowData.length + 1;
     }
   }
@@ -784,8 +751,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* global flatpickr */
-// loaded after main JS
+/* global flatpickr */ // loaded after main JS
 
 /**
  * Wrapper for vue-flatpickr-component component.
@@ -796,6 +762,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * Will emit a dateChange event when date is set.
  */
+
 const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-change="onChange"></flatpickr-picker>';
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-date-picker',
@@ -806,17 +773,14 @@ const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-chang
       useDefault,
       ...fpickr
     } = this.config;
-
     if (useDefault && !fpickr.defaultDate && !this.value) {
       fpickr.defaultDate = new Date();
     } else if (this.value) {
       fpickr.defaultDate = this.value;
     }
-
     if (!fpickr.locale) {
       fpickr.locale = flatpickr.l10ns.default;
     }
-
     return {
       flatPickr: fpickr,
       date: null
@@ -852,6 +816,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+
 
 /**
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
@@ -907,7 +872,6 @@ const template = `<sui-dropdown
     onChange: function (value) {
       this.$emit('onChange', value);
     },
-
     /**
      * Receive user input text for search.
      */
@@ -915,25 +879,20 @@ const template = `<sui-dropdown
       if (inputValue) {
         this.isLoading = true;
       }
-
       if (!this.onFiltered.debouncedFx) {
         this.onFiltered.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_0__["default"].createDebouncedFx(() => {
           this.onFiltered.debouncedFx = null;
-
           if (this.query !== this.temp) {
             this.query = this.temp;
-
             if (this.query) {
               this.fetchItems(this.query);
             }
           }
         }, 250);
       }
-
       this.temp = inputValue;
       this.onFiltered.debouncedFx(this);
     },
-
     /**
      * Fetch new data from server.
      */
@@ -947,7 +906,6 @@ const template = `<sui-dropdown
           method: 'get',
           data: data
         });
-
         if (response.success) {
           this.dropdownProps.options = response.results;
         }

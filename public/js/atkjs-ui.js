@@ -36,6 +36,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Simple helper to help displaying Fomantic-UI Dropdown within an atk table.
  * Because atk table use overflow: scroll, Dropdown is not
@@ -43,32 +44,30 @@ __webpack_require__.r(__webpack_exports__);
  *
  * This utility will properly set css style for dropdown menu to be display correctly.
  */
-
 function showTableDropdown() {
   // getting element composing dropdown.
   const $that = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this);
   const $menu = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).find('.menu');
   const position = $that.offset();
   const hasFloating = $that.hasClass('floating');
+
   /**
    * Check if menu fit below button.
    *
    * @returns {boolean}
    */
-
   function canFitBelow() {
     return $menu.outerHeight() < external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).height() - $that[0].getBoundingClientRect().bottom;
   }
+
   /**
    * Set menu style for displaying at right position.
    */
-
-
   function setCssPosition() {
     // console.log(position.top, $that.scrollTop());
     let top = 0;
-    let left = 0; // check if we need to place menu above or down button.
-
+    let left = 0;
+    // check if we need to place menu above or down button.
     if (canFitBelow()) {
       top = position.top + $that.outerHeight();
       top = hasFloating ? top + 5 : top;
@@ -76,24 +75,21 @@ function showTableDropdown() {
       top = position.top - $menu.height();
       top = hasFloating ? top - 5 : top;
     }
-
     top -= external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).scrollTop();
     left = position.left;
     const style = 'position: fixed; z-index: 12; top: 0px; margin-top: ' + top + 'px !important;' + ' left: ' + left + 'px !important; width: fit-content !important; height: fit-content; min-width: 12px;';
     $menu.css('cssText', style);
   }
-
   setCssPosition();
   external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).on('scroll.atktable', (0,lodash_throttle__WEBPACK_IMPORTED_MODULE_4__["default"])(setCssPosition, 10));
   external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).on('resize.atktable', () => {
     $that.dropdown('hide');
   });
 }
+
 /**
  * Reset css and handler when hiding dropdown.
  */
-
-
 function hideTableDropdown() {
   // reset positioning.
   const $menu = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).find('.menu');
@@ -101,7 +97,6 @@ function hideTableDropdown() {
   external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).off('scroll.atktable');
   external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).off('resize.atktable');
 }
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   onShow: showTableDropdown,
   onHide: hideTableDropdown
@@ -153,10 +148,8 @@ __webpack_require__.r(__webpack_exports__);
         return obj;
       }, {});
     }
-
     return {};
   },
-
   /**
    * Add param to an URL string.
    *
@@ -169,10 +162,8 @@ __webpack_require__.r(__webpack_exports__);
     if (!external_jquery__WEBPACK_IMPORTED_MODULE_5___default().isEmptyObject(data)) {
       url += (url.indexOf('?') >= 0 ? '&' : '?') + external_jquery__WEBPACK_IMPORTED_MODULE_5___default().param(data);
     }
-
     return url;
   },
-
   /**
    * Remove param from an URL string.
    *
@@ -183,26 +174,19 @@ __webpack_require__.r(__webpack_exports__);
    */
   removeParam: function (url, param) {
     const splitUrl = url.split('?');
-
     if (splitUrl.length === 0) {
       return url;
     }
-
     const urlBase = splitUrl[0];
-
     if (splitUrl.length === 1) {
       return urlBase;
     }
-
     const newParams = splitUrl[1].split('&').filter(item => item.split('=')[0] !== param);
-
     if (newParams.length > 0) {
       return urlBase + '?' + newParams.join('&');
     }
-
     return urlBase;
   },
-
   /**
    * Remove whole query string from an URL string.
    *
@@ -238,9 +222,9 @@ class AtkAjaxecPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"
     if (!this.settings.url) {
       console.error('Trying to execute callback without URL');
       return;
-    } // Allow user to confirm if available.
+    }
 
-
+    // Allow user to confirm if available.
     if (this.settings.confirm) {
       if (window.confirm(this.settings.confirm)) {
         // eslint-disable-line no-alert
@@ -250,15 +234,17 @@ class AtkAjaxecPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"
       this.doExecute();
     }
   }
-
   doExecute() {
     const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.removeAllParams(this.settings.url);
-    const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {}; // urlOptions is always used as data in a POST request
+    const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
 
-    const data = this.settings.urlOptions ? this.settings.urlOptions : {}; // retrieve param from URL
+    // urlOptions is always used as data in a POST request
+    const data = this.settings.urlOptions ? this.settings.urlOptions : {};
 
-    let urlParams = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.url); // get store object.
+    // retrieve param from URL
+    let urlParams = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.url);
 
+    // get store object.
     const store = atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService.getStoreData(this.settings.storeName);
     const settings = {
       on: 'now',
@@ -267,18 +253,15 @@ class AtkAjaxecPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"
       method: 'POST',
       ...userConfig
     };
-
     if (settings.method.toUpperCase() === 'GET') {
       // set data, store and add it to URL param.
       urlParams = Object.assign(urlParams, data, store);
     } else {
       settings.data = Object.assign(data, store);
     }
-
     settings.url = url + '?' + external_jquery__WEBPACK_IMPORTED_MODULE_0___default().param(urlParams);
     this.$el.api(settings);
   }
-
 }
 AtkAjaxecPlugin.DEFAULTS = {
   url: null,
@@ -304,10 +287,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
+
 /**
  * Base implementation of jQuery plugin in Agile Toolkit.
  */
-
 class AtkPlugin {
   /**
    * Default plugin constructor
@@ -319,15 +302,15 @@ class AtkPlugin {
     this.settings = options;
     this.main();
   }
+
   /**
    * The main plugin method. This is the method call by default
    * when invoking the plugin on a jQuery element.
    * $(selector).pluginName({});
    * The plugin should normally override this class.
    */
-
-
   main() {}
+
   /**
    * Call a plugin method via the initializer function.
    * Simply call the method like: $(selector).pluginName('method', [arg1, arg2])
@@ -336,12 +319,9 @@ class AtkPlugin {
    * @param   {Array.<*>} args array of arguments need for the method to execute.
    * @returns {*}
    */
-
-
   call(fn, args) {
     return this[fn](...args);
   }
-
 }
 
 /***/ }),
@@ -374,30 +354,30 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Enable table column to be resizable using drag.
  */
-
 class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
     // add on resize callback if URL is supplied
     if (this.settings.url) {
       this.settings.onResize = this.onResize.bind(this);
     }
-
-    this.resizable = new (column_resizer__WEBPACK_IMPORTED_MODULE_4___default())(this.$el[0], { ...this.settings.atkDefaults,
+    this.resizable = new (column_resizer__WEBPACK_IMPORTED_MODULE_4___default())(this.$el[0], {
+      ...this.settings.atkDefaults,
       ...this.settings
-    }); // reset padding class.
+    });
 
+    // reset padding class.
     this.$el.removeClass('grip-padding');
   }
+
   /**
    * Send widths to server via callback URL.
    *
    * @param {Array.<object>} widths an Array of objects, each containing the column name and their size in pixels [{ column: 'name', size: '135px' }]
    */
-
-
   sendWidths(widths) {
     this.$el.api({
       on: 'now',
@@ -408,12 +388,11 @@ class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["d
       }
     });
   }
+
   /**
    * On resize callback when user finish dragging column for resizing.
    * Calling this method via callback need to bind "this" set to this plugin.
    */
-
-
   onResize(event) {
     const columns = this.$el.find('th');
     const widths = [];
@@ -425,16 +404,16 @@ class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["d
     });
     this.sendWidths(widths);
   }
-
 }
 AtkColumnResizerPlugin.DEFAULTS = {
   atkDefaults: {
     liveDrag: true,
     resizeMode: 'overflow',
     draggingClass: 'atk-column-dragging',
-    minWidth: 8 // onResize: function(e) { e.path.filter(function(item) { return item.querySelector('table') }); }
-
+    minWidth: 8
+    // onResize: function(e) { e.path.filter(function(item) { return item.querySelector('table') }); }
   },
+
   url: null
 };
 
@@ -467,6 +446,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
+
 
 
 
@@ -521,17 +501,14 @@ __webpack_require__.r(__webpack_exports__);
  *
  * See Fomantic-UI validation rule for more details: https://fomantic-ui.com/behaviors/form.html#validation-rules
  */
-
 class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_8__["default"] {
   main() {
     this.inputs = [];
     this.selector = this.settings.selector;
-
     if (!this.selector) {
       this.selector = atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.getDefaultSelector();
-    } // add change listener to inputs according to selector
-
-
+    }
+    // add change listener to inputs according to selector
     this.$el.find(':checkbox').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100, true));
     this.$el.find(':radio').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100, true));
     this.$el.find('input[type="hidden"]').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100, true));
@@ -539,24 +516,20 @@ class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_8__[
     this.$el.find('select').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100));
     this.initialize();
   }
-
   getRule(ruleToSearch) {
     return this.settings.fieldRules[ruleToSearch];
   }
-
   initialize() {
-    const ruleKeys = Object.keys(this.settings.fieldRules); // map inputs according to ruleKeys.
-
+    const ruleKeys = Object.keys(this.settings.fieldRules);
+    // map inputs according to ruleKeys.
     this.inputs = ruleKeys.map((ruleKey, idx, org) => {
       const tempRule = this.settings.fieldRules[ruleKey];
       const temp = [];
-
       if (Array.isArray(tempRule)) {
         tempRule.forEach(rule => temp.push(rule));
       } else {
         temp.push(tempRule);
       }
-
       return {
         inputName: ruleKey,
         rules: temp,
@@ -566,23 +539,21 @@ class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_8__[
     this.applyRules();
     this.setInputsState();
   }
+
   /**
    * Field change handler.
    */
-
-
   onInputChange(e) {
     // check rule when inputs has changed.
     e.data.resetInputStatus();
     e.data.applyRules();
     e.data.setInputsState();
   }
+
   /**
    * Check each validation rule and apply proper visibility state to the
    * input where rules apply.
    */
-
-
   applyRules() {
     this.inputs.forEach((input, idx) => {
       input.rules.forEach(rules => {
@@ -590,7 +561,6 @@ class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_8__[
         const validateInputNames = Object.keys(rules);
         validateInputNames.forEach(inputName => {
           const validationRule = rules[inputName];
-
           if (Array.isArray(validationRule)) {
             validationRule.forEach(rule => {
               isAndValid = isAndValid && atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.validateField(this.$el, inputName, rule);
@@ -598,34 +568,30 @@ class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_8__[
           } else {
             isAndValid = isAndValid && atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.validateField(this.$el, inputName, validationRule);
           }
-        }); // Apply OR condition between rules.
-
+        });
+        // Apply OR condition between rules.
         input.state = input.state || isAndValid;
       });
     });
   }
+
   /**
    * Set all input state visibility to false.
    */
-
-
   resetInputStatus() {
     this.inputs.forEach(input => {
       input.state = false;
     });
   }
+
   /**
    * Set fields visibility according to their state.
    */
-
-
   setInputsState() {
     this.inputs.forEach(input => {
       const $input = atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.getField(this.$el, input.inputName);
-
       if ($input) {
         const $container = atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.getContainer($input, this.selector);
-
         if ($container) {
           $container.hide();
           this.setInputState(input.state, $input, $container);
@@ -633,17 +599,16 @@ class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_8__[
       }
     });
   }
-
   setInputState(passed, field, fieldGroup) {
     if (passed) {
       fieldGroup.show();
     } else if (!passed && this.settings.autoReset) {
-      fieldGroup.hide(); // field.val(field.data('original'));
+      fieldGroup.hide();
+      // field.val(field.data('original'));
     } else if (!passed && !this.settings.autoReset) {
       fieldGroup.hide();
     }
   }
-
 }
 AtkConditionalFormPlugin.DEFAULTS = {
   autoReset: true,
@@ -670,6 +635,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _atk_plugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./atk.plugin */ "./src/plugins/atk.plugin.js");
 
 
+
 /**
  * A Fomantic-UI Modal dialog for confirming an action.
  *
@@ -680,35 +646,30 @@ __webpack_require__.r(__webpack_exports__);
  * Setting onApprove and onDeny function within modalOptions object will override
  * onApprove and onDeny current setting.
  */
-
 class AtkConfirmPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
     let context = this;
     const $m = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div class="ui modal" />').appendTo('body').html(this.getDialogHtml(this.settings.message));
     $m.addClass(this.settings.size);
     let options = {};
-
     if (this.settings.context) {
       context = this.settings.context;
-    } // Create wrapper function for using proper "this" context.
+    }
 
-
+    // Create wrapper function for using proper "this" context.
     if (this.settings.onApprove) {
       options.onApprove = () => {
         this.settings.onApprove.call(context);
       };
     }
-
     if (this.settings.onDeny) {
       options.onDeny = () => {
         this.settings.onDeny.call(context);
       };
     }
-
     options = Object.assign(options, this.settings.modalOptions);
     $m.data('needRemove', true).modal(options).modal('show');
   }
-
   getDialogHtml(message) {
     return `
           <div class=" content">${message}</div>
@@ -718,7 +679,6 @@ class AtkConfirmPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default
            </div>
           `;
   }
-
 }
 AtkConfirmPlugin.DEFAULTS = {
   message: null,
@@ -757,15 +717,15 @@ __webpack_require__.r(__webpack_exports__);
 
 class AtkCreateModalPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
-    const options = this.settings; // make sure we have an object when no option is passed
-
+    const options = this.settings;
+    // make sure we have an object when no option is passed
     if (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().isArray(options.urlOptions)) {
       options.urlOptions = {};
-    } // create modal and add it to the DOM
+    }
+    // create modal and add it to the DOM
+    const $m = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div class="atk-modal ui modal" />').appendTo('body').html(this.getDialogHtml(options.title));
 
-
-    const $m = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div class="atk-modal ui modal" />').appendTo('body').html(this.getDialogHtml(options.title)); // add setting to our modal for modalService
-
+    // add setting to our modal for modalService
     $m.data({
       url: options.url,
       type: options.dataType,
@@ -773,12 +733,12 @@ class AtkCreateModalPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
       needRemove: true,
       needCloseTrigger: true,
       label: options.label
-    }); // call Fomantic-UI modal
+    });
 
+    // call Fomantic-UI modal
     $m.modal(options.modal).modal('show');
     $m.addClass(this.settings.modalCss);
   }
-
   getDialogHtml(title) {
     return `<i class="icon close"></i>
           <div class="${this.settings.headerCss}">${title}</div>
@@ -786,7 +746,6 @@ class AtkCreateModalPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
             </div>
           </div>`;
   }
-
 }
 AtkCreateModalPlugin.DEFAULTS = {
   title: '',
@@ -841,11 +800,10 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
     this.setEventHandler();
     this.setInitialState();
   }
+
   /**
    * Setup field initial state.
    */
-
-
   setInitialState() {
     // Set progress bar.
     this.bar.progress({
@@ -858,38 +816,35 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
     this.hiddenInput.val(this.settings.file.id);
     this.textInput.val(this.settings.file.name);
     this.textInput.data('isTouch', false);
-
     if (this.settings.file.id) {
       this.setState('delete');
     }
   }
+
   /**
    * Update input value.
    */
-
-
   updateField(fileId, fileName) {
     this.$el.data().fileId = fileId;
     this.hiddenInput.val(fileId);
-
     if (fileName === '' || typeof fileName === 'undefined' || fileName === null) {
       this.textInput.val(fileId);
     } else {
       this.textInput.val(fileName);
     }
   }
+
   /**
    * Add event handler to input element.
    */
-
-
   setEventHandler() {
     this.textInput.on('click', e => {
       if (!e.target.value) {
         this.fileInput.click();
       }
-    }); // add event handler to action button.
+    });
 
+    // add event handler to action button.
     this.action.on('click', e => {
       if (!this.textInput.val()) {
         this.fileInput.click();
@@ -899,15 +854,14 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
         // Check if that id exist and send it with
         // delete callback, If not, default to file name.
         let id = this.$el.data().fileId;
-
         if (id === '' || typeof id === 'undefined' || id === null) {
           id = this.textInput.val();
         }
-
         this.doFileDelete(id);
       }
-    }); // add event handler to file input.
+    });
 
+    // add event handler to file input.
     this.fileInput.on('change', e => {
       if (e.target.files.length > 0) {
         this.textInput.val(e.target.files[0].name);
@@ -915,12 +869,11 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
       }
     });
   }
+
   /**
    * Set the action button html content.
    * Set the input text content.
    */
-
-
   setState(mode) {
     switch (mode) {
       case 'delete':
@@ -930,7 +883,6 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
           this.bar.hide('fade');
         }, 1000);
         break;
-
       case 'upload':
         this.action.html(this.actionContent);
         this.textInput.val('');
@@ -940,33 +892,31 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
         break;
     }
   }
+
   /**
    * Do the actual file uploading process.
    *
    * @param {FileList} files
    */
-
-
   doFileUpload(files) {
     // if submit button id is set, then disable submit
     // during upload.
     if (this.settings.submit) {
       external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('#' + this.settings.submit).addClass('disabled');
-    } // setup task on upload completion.
+    }
 
-
+    // setup task on upload completion.
     const completeCb = (response, content) => {
       if (response.success) {
         this.bar.progress('set label', this.settings.completeLabel);
         this.setState('delete');
       }
-
       if (this.settings.submit) {
         external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('#' + this.settings.submit).removeClass('disabled');
       }
-    }; // setup progress bar update via xhr.
+    };
 
-
+    // setup progress bar update via xhr.
     const xhrCb = () => {
       const xhr = new window.XMLHttpRequest();
       xhr.upload.addEventListener('progress', evt => {
@@ -977,17 +927,15 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
       }, false);
       return xhr;
     };
-
     this.bar.show();
     atk__WEBPACK_IMPORTED_MODULE_4__["default"].uploadService.uploadFiles(files, this.$el, {
       fUploadAction: 'upload'
     }, this.settings.url, completeCb, xhrCb);
   }
+
   /**
    * Callback server for file delete.
    */
-
-
   doFileDelete(fileId) {
     this.$el.api({
       on: 'now',
@@ -1005,17 +953,15 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
       }
     });
   }
+
   /**
    * Return the html content for erase action button.
    *
    * @returns {string}
    */
-
-
   getEraseContent() {
     return '<i class="red remove icon" style=""></i>';
   }
-
 }
 AtkFileUploadPlugin.DEFAULTS = {
   url: null,
@@ -1079,17 +1025,17 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
     this.$el.data('preValue', '');
     this.setInputAction();
     this.setSearchAction();
-    this.onEscapeKeyAction(); // Set input initial value.
+    this.onEscapeKeyAction();
 
+    // Set input initial value.
     if (this.settings.q) {
       this.setFilter(this.settings.q);
     }
   }
+
   /**
    * Set input field event handler.
    */
-
-
   setInputAction() {
     if (this.settings.autoQuery) {
       this.onAutoQueryAction();
@@ -1097,15 +1043,13 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
       this.onEnterAction();
     }
   }
+
   /**
    * Query server on each keystroke after proper timeout.
    */
-
-
   onAutoQueryAction() {
     this.textInput.on('keyup', atk__WEBPACK_IMPORTED_MODULE_6__["default"].createDebouncedFx(e => {
       const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.urlOptions);
-
       if (e.target.value === '' || e.keyCode === 27) {
         this.doSearch(this.settings.url, null, options, () => {
           this.setButtonState(false);
@@ -1118,19 +1062,16 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
           this.setFilterState(true);
         });
       }
-
       this.$el.data('preValue', e.target.value);
     }, this.settings.timeOut));
   }
+
   /**
    * Query server after pressing Enter.
    */
-
-
   onEnterAction() {
     this.textInput.on('keyup', e => {
       const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.urlOptions);
-
       if (e.keyCode === 13 && e.target.value) {
         this.doSearch(this.settings.url, e.target.value, options, () => {
           this.setButtonState(true);
@@ -1149,12 +1090,11 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
       }
     });
   }
+
   /**
    * When Search has the focus and the Escape key is pressed, clear Search text.
    * When Search text is already empty the event will bubble up normally.
    */
-
-
   onEscapeKeyAction() {
     this.textInput.keydown(e => {
       if (this.textInput.val() !== '' && e.key === 'Escape') {
@@ -1165,15 +1105,13 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
       }
     });
   }
+
   /**
    * Set Search button event handler.
    */
-
-
   setSearchAction() {
     this.searchAction.on('click', e => {
       const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.urlOptions);
-
       if (this.state.button) {
         this.doSearch(this.settings.url, null, options, () => {
           this.setButtonState(false);
@@ -1182,7 +1120,6 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
         this.textInput.val('');
         this.$el.data('preValue', '');
       }
-
       if (!this.state.button && this.textInput.val()) {
         this.doSearch(this.settings.url, this.textInput.val(), options, () => {
           this.setButtonState(true);
@@ -1191,6 +1128,7 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
       }
     });
   }
+
   /**
    * Allow to set filter initial input.
    * Mostly use on page load
@@ -1198,43 +1136,37 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
    *
    * @param {string} text The text input value.
    */
-
-
   setFilter(text) {
     this.textInput.val(text);
     this.setButtonState(true);
     this.setFilterState(true);
     this.$el.data('preValue', text);
   }
+
   /**
    * More generic way to set URL argument.
    */
-
-
   setUrlArgs(arg, value) {
     this.urlArgs = Object.assign(this.urlArgs, {
       [arg]: value
     });
   }
+
   /**
    * Set Filter icon state.
    */
-
-
   setFilterState(isOn) {
     if (isOn) {
       this.leftIcon.show();
     } else {
       this.leftIcon.hide();
     }
-
     this.state.filter = isOn;
   }
+
   /**
    * Set search button state.
    */
-
-
   setButtonState(isOn) {
     if (isOn) {
       this.searchIcon.hide();
@@ -1243,24 +1175,20 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
       this.searchIcon.show();
       this.removeIcon.hide();
     }
-
     this.state.button = isOn;
   }
+
   /**
    * Send request to server using the search query.
    */
-
-
   doSearch(url, query, options) {
     let cb = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {};
     const queryKey = this.settings.urlQueryKey;
-
     if (query) {
       options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(options, {
         [queryKey]: query
       });
     }
-
     if (this.settings.useAjax) {
       this.$el.api({
         on: 'now',
@@ -1273,16 +1201,13 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
       });
     } else {
       url = atk__WEBPACK_IMPORTED_MODULE_6__["default"].urlHelper.removeParam(url, queryKey);
-
       if (options.__atk_reload) {
         delete options.__atk_reload;
       }
-
       url = atk__WEBPACK_IMPORTED_MODULE_6__["default"].urlHelper.appendParams(url, options);
       window.location = url;
     }
   }
-
 }
 AtkJsSearchPlugin.DEFAULTS = {
   url: null,
@@ -1321,8 +1246,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* global Draggable */
-// loaded after main JS
+/* global Draggable */ // loaded after main JS
 
 
 
@@ -1343,23 +1267,22 @@ __webpack_require__.r(__webpack_exports__);
  * Element containing specific css class can be used as the handle for dragging element, if null
  * is pass, than the entire element is used.
  */
-
 class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
-    this.ids = []; // the data label attribute value of the source element being drag. ex: data-id
+    this.ids = [];
+    // the data label attribute value of the source element being drag. ex: data-id
+    this.sourceId = null;
+    // the new index value of the dragged element after sorting.
+    this.newIdx = null;
+    // the original index value of the dragged element.
+    this.orgIdx = null;
 
-    this.sourceId = null; // the new index value of the dragged element after sorting.
-
-    this.newIdx = null; // the original index value of the dragged element.
-
-    this.orgIdx = null; // fix screen reader announcement container added more than once
+    // fix screen reader announcement container added more than once
     // https://github.com/Shopify/draggable/pull/541
-
     for (let elem; elem = document.getElementById('draggable-live-region');) {
       // eslint-disable-line no-cond-assign
       elem.remove();
     }
-
     this.injectStyles(this.settings.mirrorCss + this.settings.overCss);
     this.dragContainer = this.$el.find(this.settings.container);
     const sortable = new Draggable.Sortable(this.dragContainer[0], {
@@ -1377,36 +1300,31 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
           this.ids.push(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).data(this.settings.dataLabel));
         }
       });
-
       if (this.settings.autoFireCb) {
         this.sendSortOrders();
       }
     });
   }
-
   initialize() {
     this.dragContainer.children().each((idx, el) => {
       this.ids.push(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).data(this.settings.dataLabel));
     });
   }
+
   /**
    * Will send current element order via callback.
    *
    * @param {object} params Extra arguments to add to URL.
    */
-
-
   getSortOrders(params) {
     this.sendSortOrders(params);
   }
+
   /**
    * Send orders to server via JsCallback.
    */
-
-
   sendSortOrders(params) {
     const url = this.buildUrl(params);
-
     if (url) {
       this.dragContainer.api({
         on: 'now',
@@ -1422,11 +1340,9 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
       });
     }
   }
-
   buildUrl() {
     let extraParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
     let url = null;
-
     if (this.settings.urlOptions && extraParams) {
       url = atk__WEBPACK_IMPORTED_MODULE_4__["default"].urlHelper.appendParams(this.settings.url, external_jquery__WEBPACK_IMPORTED_MODULE_3___default().extend({}, this.settings.urlOptions, extraParams));
     } else if (this.settings.urlOptions) {
@@ -1434,14 +1350,11 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
     } else {
       url = this.settings.url;
     }
-
     return url;
   }
-
   injectStyles(style) {
     external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('head').append('<style>' + style + '</style>');
   }
-
 }
 AtkJsSortablePlugin.DEFAULTS = {
   url: null,
@@ -1475,6 +1388,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Reload a view using Fomantic-UI API.
  * Prefer method is GET.
@@ -1485,21 +1399,22 @@ __webpack_require__.r(__webpack_exports__);
  * to the urlParameter for GET method but will be included in formData
  * for POST method.
  */
-
 class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
   main() {
     if (!this.settings.url) {
       console.error('Trying to reload view without URL');
       return;
     }
-
     const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.removeAllParams(this.settings.url);
-    const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {}; // add new param and remove duplicate, prioritizing the latest one.
+    const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
 
-    let urlParams = Object.assign(atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.url), this.settings.urlOptions ? this.settings.urlOptions : {}); // get store object.
+    // add new param and remove duplicate, prioritizing the latest one.
+    let urlParams = Object.assign(atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.url), this.settings.urlOptions ? this.settings.urlOptions : {});
 
-    const store = atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService.getStoreData(this.settings.storeName); // merge user settings
+    // get store object.
+    const store = atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService.getStoreData(this.settings.storeName);
 
+    // merge user settings
     const settings = {
       on: 'now',
       url: '',
@@ -1511,18 +1426,17 @@ class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["defa
         }
       },
       ...userConfig
-    }; // if post then we need to set our store into settings data.
+    };
 
+    // if post then we need to set our store into settings data.
     if (settings.method.toUpperCase() === 'POST') {
       settings.data = Object.assign(settings.data, store);
     } else {
       urlParams = Object.assign(urlParams, store);
     }
-
     settings.url = url + '?' + external_jquery__WEBPACK_IMPORTED_MODULE_0___default().param(urlParams);
     this.$el.api(settings);
   }
-
 }
 AtkReloadViewPlugin.DEFAULTS = {
   url: null,
@@ -1559,6 +1473,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Add dynamic scrolling to a View that can accept page argument in URL.
  *
@@ -1568,7 +1483,6 @@ __webpack_require__.r(__webpack_exports__);
  * appendTo: null      The html element where new content should be append to.
  * stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call. if null, then a default loader will be apply to the bottom of the $inner element.
  */
-
 class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   main() {
     // check if we are initialized already because loading content
@@ -1576,7 +1490,6 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
     if (this.$el.data('__atkScroll')) {
       return false;
     }
-
     const defaultSettings = {
       padding: 20,
       initialPage: 1,
@@ -1585,14 +1498,14 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
       tableContainerHeight: 400,
       tableHeaderColor: '#ffffff',
       stateContext: null
-    }; // set default option if not set.
-
-    this.settings.options = { ...defaultSettings,
+    };
+    // set default option if not set.
+    this.settings.options = {
+      ...defaultSettings,
       ...this.settings.options
     };
     this.isWaiting = false;
     this.nextPage = this.settings.options.initialPage + 1;
-
     if (this.settings.options.hasFixTableHeader) {
       this.isWindow = false;
       this.$scroll = this.$el.parent();
@@ -1601,24 +1514,24 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
     } else {
       // check if scroll apply vs Window or inside our element.
       this.isWindow = this.$el.css('overflow-y') === 'visible';
-      this.$scroll = this.isWindow ? external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window) : this.$el; // is Inner the element itself or it's children.
-
+      this.$scroll = this.isWindow ? external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window) : this.$el;
+      // is Inner the element itself or it's children.
       this.$inner = this.isWindow ? this.$el : this.$el.children();
-    } // the target element within container where new content is appendTo.
+    }
 
-
+    // the target element within container where new content is appendTo.
     this.$target = this.settings.options.appendTo ? this.$inner.find(this.settings.options.appendTo) : this.$inner;
-    this.bindScrollEvent(this.$scroll); // if there is no scrollbar, then try to load next page too
+    this.bindScrollEvent(this.$scroll);
 
+    // if there is no scrollbar, then try to load next page too
     if (!this.hasScrollbar()) {
       this.loadContent();
     }
   }
+
   /**
    * Add fix table header.
    */
-
-
   setTableHeader() {
     if (this.$el.parent().length > 0) {
       let $tableCopy = null;
@@ -1638,80 +1551,66 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
       this.$el.css('margin-top', $tableCopy.find('thead').height());
     }
   }
+
   /**
    * Bind scrolling event to an element.
    *
    * @param {$} $el
    */
-
-
   bindScrollEvent($el) {
     $el.on('scroll', this.observe.bind(this));
   }
+
   /**
    * Check if scrolling require adding content.
    */
-
-
   observe(event) {
     const borderTopWidth = parseInt(this.$el.css('borderTopWidth'), 10);
-    const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth; // this.$el padding top value.
-
-    const paddingTop = parseInt(this.$el.css('paddingTop'), 10) + borderTopWidthInt; // Either the scroll bar position using window or the container element top position otherwise.
-
-    const topHeight = this.isWindow ? external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).scrollTop() : this.$scroll.offset().top; // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
-
-    const innerTop = this.$inner.length ? this.$inner.offset().top : 0; // The total height.
-
+    const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth;
+    // this.$el padding top value.
+    const paddingTop = parseInt(this.$el.css('paddingTop'), 10) + borderTopWidthInt;
+    // Either the scroll bar position using window or the container element top position otherwise.
+    const topHeight = this.isWindow ? external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).scrollTop() : this.$scroll.offset().top;
+    // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
+    const innerTop = this.$inner.length ? this.$inner.offset().top : 0;
+    // The total height.
     const totalHeight = Math.ceil(topHeight - innerTop + this.$scroll.height() + paddingTop);
-
     if (!this.isWaiting && totalHeight + this.settings.options.padding >= this.$inner.outerHeight()) {
       this.loadContent();
     }
   }
+
   /**
    * Check if container element has vertical scrollbar.
    *
    * @returns {boolean}
    */
-
-
   hasScrollbar() {
     const innerHeight = this.isWindow ? Math.ceil(this.$el.height()) : Math.ceil(this.$inner.height());
     const scrollHeight = Math.ceil(this.$scroll.height());
     return innerHeight > scrollHeight;
   }
-  /**
-   * Set Next page to be loaded.
-   */
 
-
-  setNextPage(page) {
-    this.nextPage = page;
-  }
   /**
    * Put scroll in idle mode.
    */
-
-
   idle() {
     this.isWaiting = true;
   }
+
   /**
    * Ask server for more content.
    */
-
-
   loadContent() {
     if (!this.settings.options.stateContext) {
       this.addLoader();
     }
-
     this.isWaiting = true;
     this.$inner.api({
       on: 'now',
       url: this.settings.url,
-      data: { ...this.settings.urlOptions,
+      data: {
+        ...this.settings.urlOptions,
         page: this.nextPage
       },
       method: 'GET',
@@ -1719,53 +1618,46 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
       onComplete: this.onComplete.bind(this)
     });
   }
+
   /**
    * Use response to append content to element and setup next content to be load.
    * Set response.id to null in order for apiService.onSuccess to bypass
    * replacing html content. Js return from server response will still be execute.
    */
-
-
   onComplete(response, element) {
     this.removeLoader();
-
     if (response.success) {
       if (response.html) {
         this.$target.append(response.html);
-
         if (response.noMoreScrollPages) {
           this.idle();
         } else {
           this.isWaiting = false;
-          this.nextPage++; // if there is no scrollbar, then try to load next page too
-
+          this.nextPage++;
+          // if there is no scrollbar, then try to load next page too
           if (!this.hasScrollbar()) {
             this.loadContent();
           }
         }
       }
-
       response.id = null;
     }
   }
+
   /**
    * Add loader.
    */
-
-
   addLoader() {
     const $parent = this.$inner.parent().hasClass('atk-overflow-auto') ? this.$inner.parent().parent() : this.$inner.parent();
     $parent.append(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('<div id="atkScrollLoader"><div class="ui section hidden divider"></div><div class="ui active centered inline loader basic segment"></div></div>'));
   }
+
   /**
    * Remove loader.
    */
-
-
   removeLoader() {
     external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('#atkScrollLoader').remove();
   }
-
 }
 AtkScrollPlugin.DEFAULTS = {
   url: null,
@@ -1794,32 +1686,25 @@ class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
   main() {
     const element = this.$el;
     const hasLoader = this.settings.showLoader;
-
     if (typeof EventSource !== 'undefined') {
       this.source = new EventSource(this.settings.url + '&__atk_sse=1');
-
       if (hasLoader) {
         element.addClass('loading');
       }
-
       this.source.onmessage = function (e) {
         atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkSuccessTest(JSON.parse(e.data));
       };
-
       this.source.onerror = e => {
         if (e.eventPhase === EventSource.CLOSED) {
           if (hasLoader) {
             element.removeClass('loading');
           }
-
           this.source.close();
         }
       };
-
       this.source.addEventListener('atkSseAction', e => {
         atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkSuccessTest(JSON.parse(e.data));
       }, false);
-
       if (this.settings.closeBeforeUnload) {
         window.addEventListener('beforeunload', event => {
           this.source.close();
@@ -1832,19 +1717,16 @@ class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
       });
     }
   }
+
   /**
    * To close ServerEvent.
    */
-
-
   stop() {
     this.source.close();
-
     if (this.settings.showLoader) {
       this.$el.removeClass('loading');
     }
   }
-
 }
 AtkServerEventPlugin.DEFAULTS = {
   url: null,
@@ -1880,6 +1762,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Will expand or collapse menu items for side navigation.
  * Toggling is done when clicking the toggler element.
@@ -1888,99 +1771,85 @@ __webpack_require__.r(__webpack_exports__);
  *
  * Default value are set for Maestro admin layout.
  */
-
 class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   main() {
     // menu items container.
     this.menu = this.$el.find(this.settings.menuItemsSelector);
-
     if (this.menu.length === 0) {
       // this $el is our single item.
       if (this.urlMatchLocation(this.$el[0].href)) {
         this.$el.addClass(this.settings.menuItemActiveClass);
       }
-
       return;
-    } // html element for display or hiding menu items. Usually a div containning an icon.
-
-
+    }
+    // html element for display or hiding menu items. Usually a div containning an icon.
     this.toggler = this.$el.find(this.settings.toggleSelector);
     this.addClickHandler();
-
     if (this.hasBase()) {
       // make menu group active.
-      this.$el.addClass(this.settings.menuGroupActiveClass); // make menu group visible.
-
+      this.$el.addClass(this.settings.menuGroupActiveClass);
+      // make menu group visible.
       this.menu.toggleClass(this.settings.visibleCssClass);
     }
-
     this.setTogglerIcon(this.settings.icon.selector);
   }
+
   /**
    * Check if the URL correspond to one of our menu items.
    * if so, then add the menuItemActiveCSS class and return true.
    *
    * @returns {boolean}
    */
-
-
   hasBase() {
     let hasBase = false;
     this.menu.find('a').each((idx, el) => {
       if (this.urlMatchLocation(el.href)) {
-        hasBase = true; // set active class for this specific menu item.
-
+        hasBase = true;
+        // set active class for this specific menu item.
         external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).addClass(this.settings.menuItemActiveClass);
       }
     });
     return hasBase;
   }
+
   /**
    * Check if an URL match with current window location.
    *
    * @returns {boolean}
    */
-
-
   urlMatchLocation(refUrl) {
     const url = new URL(refUrl);
-
     if (url.pathname === window.location.pathname) {
       return true;
-    } // try to match base index URL
-
-
+    }
+    // try to match base index URL
     if (url.pathname === window.location.pathname + this.settings.base) {
       return true;
     }
-
     return false;
   }
+
   /**
    * Check if menu container for menu items contains the css visible class name.
    * Usually means that the menu items in a group are being display by css rule.
    *
    * @returns {*}
    */
-
-
   isMenuOn() {
     return this.menu.hasClass(this.settings.visibleCssClass);
   }
+
   /**
    * Set class icon for the toggler element.
    */
-
-
   setTogglerIcon(selector) {
     this.toggler.find(selector).attr('class', (this.isMenuOn() ? this.settings.icon.off : this.settings.icon.on) + ' icon');
   }
+
   /**
    * Add click handler for menu group
    * and toggler element.
    */
-
-
   addClickHandler() {
     this.$el.find(this.settings.menuGroupTitleSelector).on('click', e => {
       e.stopPropagation();
@@ -1994,7 +1863,6 @@ class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default
       this.setTogglerIcon(this.settings.icon.selector);
     });
   }
-
 }
 AtkSidenavPlugin.DEFAULTS = {
   base: 'index.php',
@@ -2035,12 +1903,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
-
 class AccordionService {
   setupFomanticUi(settings) {
     settings.onOpening = this.onOpening;
   }
-
   onOpening() {
     if (external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('path')) {
       external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).atkReloadView({
@@ -2051,9 +1917,7 @@ class AccordionService {
       });
     }
   }
-
 }
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new AccordionService()));
 
 /***/ }),
@@ -2089,21 +1953,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Handle Fomantic-UI API functionality throughout the app.
  */
-
 class ApiService {
   constructor() {
     this.afterSuccessCallbacks = [];
   }
-
   setupFomanticUi(settings) {
     settings.successTest = this.successTest;
     settings.onFailure = this.onFailure;
     settings.onSuccess = this.onSuccess;
     settings.onAbort = this.onAbort;
   }
+
   /**
    * Execute js code.
    *
@@ -2113,8 +1977,6 @@ class ApiService {
    *
    * @param {string} code
    */
-
-
   evalResponse(code) {
     eval(code); // eslint-disable-line no-eval
   }
@@ -2122,6 +1984,7 @@ class ApiService {
   onAbort(message) {
     console.warn(message);
   }
+
   /**
    * Handle a server response success
    * If successTest return true, then this function is call;
@@ -2135,8 +1998,6 @@ class ApiService {
    * To avoid conflict, property name in response was change from eval to atkjs.
    * Which mean response.atkjs now contains code to be eval.
    */
-
-
   onSuccess(response, element) {
     try {
       if (response.success) {
@@ -2148,12 +2009,12 @@ class ApiService {
             external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
           });
           const result = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('#' + response.id).replaceWith(response.html);
-
           if (!result.length) {
             // TODO Find a better solution for long term.
             // Need a way to gracefully abort server request.
             // when user cancel a request by selecting another request.
-            console.error('Unable to replace element with id: ' + response.id); // throw Error('Unable to replace element with id: ' + response.id);
+            console.error('Unable to replace element with id: ' + response.id);
+            // throw Error('Unable to replace element with id: ' + response.id);
           }
         }
 
@@ -2162,18 +2023,15 @@ class ApiService {
           const portals = Object.keys(response.portals);
           portals.forEach(portalID => {
             const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
-
             if (m.length === 0) {
               external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document.body).append(response.portals[portalID].html);
               atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse(response.portals[portalID].js);
             }
           });
         }
-
         if (response.atkjs) {
           atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse.call(this, response.atkjs);
         }
-
         if (atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks.length > 0) {
           const callbacks = atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks;
           callbacks.forEach(callback => {
@@ -2188,6 +2046,7 @@ class ApiService {
       atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.getErrorHtml(e.message));
     }
   }
+
   /**
    * Will wrap Fomantic-UI api call into a Promise.
    * Can be used to retrieve json data from the server.
@@ -2204,45 +2063,38 @@ class ApiService {
    * @param   {object}       settings the Fomantic-UI api settings object.
    * @returns {Promise<any>}
    */
-
-
   suiFetch(url) {
     let settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     let el = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'body';
     const $el = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(el);
     const apiSettings = Object.assign(settings);
-
     if (!('on' in apiSettings)) {
       apiSettings.on = 'now';
     }
-
     if (!('method' in apiSettings)) {
       apiSettings.method = 'GET';
     }
-
     apiSettings.url = url;
     return new Promise((resolve, reject) => {
       apiSettings.onFailure = function (r) {
         atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.onFailure(r);
         reject(r);
       };
-
       apiSettings.onSuccess = function (r, e) {
         resolve(r);
       };
-
       $el.api(apiSettings);
     });
   }
+
   /**
    * Accumulate callbacks function to run after onSuccess.
    * Callback is a string containing code to be eval.
    */
-
-
   onAfterSuccess(callback) {
     this.afterSuccessCallbacks.push(callback);
   }
+
   /**
    * Check server response and clear api.data object.
    * - return true will call onSuccess
@@ -2250,38 +2102,31 @@ class ApiService {
    *
    * @returns {boolean}
    */
-
-
   successTest(response) {
     this.data = {};
-
     if (response.success) {
       return true;
     }
-
     return false;
   }
+
   /**
    * Make our own ajax request test if need to.
    * if a plugin must call $.ajax or $.getJson directly instead of Fomantic-UI api,
    * we could send the json response to this.
    */
-
-
   atkSuccessTest(response) {
     let content = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
     if (response.success) {
       this.onSuccess(response, content);
     } else {
       this.onFailure(response);
     }
   }
+
   /**
    * Handle a server response failure.
    */
-
-
   onFailure(response) {
     // if json is returned, it should contain the error within message property
     if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
@@ -2289,7 +2134,6 @@ class ApiService {
     } else {
       // check if we have html returned by server with <body> content.
       const body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
-
       if (body) {
         atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(body);
       } else {
@@ -2297,11 +2141,10 @@ class ApiService {
       }
     }
   }
+
   /**
    * Display App error in a Fomantic-UI modal.
    */
-
-
   showErrorModal(errorMsg) {
     // catch application error and display them in a new modal window.
     const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(errorMsg);
@@ -2314,7 +2157,6 @@ class ApiService {
       }
     }).modal('show').modal('refresh');
   }
-
   getErrorHtml(error) {
     return `<div class="ui negative icon message">
                 <i class="warning sign icon"></i>
@@ -2324,9 +2166,7 @@ class ApiService {
                 </div>
               </div>`;
   }
-
 }
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new ApiService()));
 
 /***/ }),
@@ -2353,16 +2193,14 @@ class DataService {
       local: localStorage
     };
   }
+
   /**
    * Check if storage is available.
    *
    * @returns {boolean|*}
    */
-
-
   storageAvailable(type) {
     let storage;
-
     try {
       storage = window[type];
       const x = '__storage_test__';
@@ -2370,22 +2208,26 @@ class DataService {
       storage.removeItem(x);
       return true;
     } catch (e) {
-      return e instanceof DOMException && ( // everything except Firefox
-      e.code === 22 // Firefox
-      || e.code === 1014 // test name field too, because code might not be present
+      return e instanceof DOMException && (
       // everything except Firefox
-      || e.name === 'QuotaExceededError' // Firefox
-      || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') // acknowledge QuotaExceededError only if there's something already stored
+      e.code === 22
+      // Firefox
+      || e.code === 1014
+      // test name field too, because code might not be present
+      // everything except Firefox
+      || e.name === 'QuotaExceededError'
+      // Firefox
+      || e.name === 'NS_ERROR_DOM_QUOTA_REACHED')
+      // acknowledge QuotaExceededError only if there's something already stored
       && storage && storage.length !== 0;
     }
   }
+
   /**
    * Check for valid json string.
    *
    * @returns {boolean}
    */
-
-
   isJsonString(str) {
     try {
       JSON.parse(str);
@@ -2393,119 +2235,97 @@ class DataService {
       console.error('JSON string parse failed');
       return false;
     }
-
     return true;
   }
+
   /**
    * Set Item data value to local or web storage.
    * The item is the key associated with the data value in web or local storage.
    * Will add item value or replace it if already exist.
    */
-
-
   setData(item, value) {
     let type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'local';
-
     if (this.hasStorage) {
       this.storage[type].setItem(item, value);
     } else {
       console.error('Session storage is not available in your browser');
     }
   }
+
   /**
    * Get data value using an item as key.
    *
    * @returns {null}
    */
-
-
   getData(item) {
     let type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'local';
     let value = null;
-
     if (this.hasStorage) {
       value = this.storage[type].getItem(item);
     }
-
     return value;
   }
+
   /**
    * Clear associated data using item as key.
    */
-
-
   clearData(item) {
     let type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'local';
-
     if (this.hasStorage) {
       this.storage[type].removeItem(item);
     }
   }
+
   /**
    * Return store data for an item or empty object.
    *
    * @returns {{ session: *, local: * }}
    */
-
-
   getStoreData(name) {
     const store = {};
-
     if (name) {
       const localData = this.getData(name, 'local');
-
       if (localData) {
         store[name + '_local_store'] = localData;
       }
-
       const sessionData = this.getData(name, 'session');
-
       if (sessionData) {
         store[name + '_session_store'] = sessionData;
       }
     }
-
     return store;
   }
+
   /**
    * Similar to set data but make sure that value is
    * a valid json string prior to set data.
    */
-
-
   setJsonData(item, value) {
     let type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'local';
-
     if (!this.isJsonString(value)) {
       return;
     }
-
     this.setData(item, value, type);
   }
+
   /**
    * Will either create or merge with existing data.
    * Merging is done with Object assign, prioritizing new value.
    * Previous data, if exist, and value must be a valid json string.
    */
-
-
   addJsonData(item, value) {
     let type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'local';
     const previous = this.getData(item, type);
-
     if (!this.isJsonString(value) || !this.isJsonString(previous)) {
       return;
     }
-
     if (previous) {
       this.setData(item, JSON.stringify(Object.assign(JSON.parse(previous), JSON.parse(value))), type);
     } else {
       this.setData(item, value, type);
     }
   }
-
 }
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new DataService()));
 
 /***/ }),
@@ -2547,52 +2367,46 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Handle Fomantic-UI form functionality throughout the app.
  */
-
 class FormService {
   constructor() {
-    this.formSettings = (external_jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings); // A collection of jQuery form object where preventLeave is set.
-
+    this.formSettings = (external_jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings);
+    // A collection of jQuery form object where preventLeave is set.
     this.prevents = [];
-
     window.onbeforeunload = function (event) {
       atk__WEBPACK_IMPORTED_MODULE_8__["default"].formService.prevents.forEach(el => {
         if (el.data('__atkCheckDirty') && el.data('isDirty')) {
           const message = 'unsaved';
-
           if (event) {
             event.returnValue = message;
           }
-
           return message;
         }
       });
     };
   }
-
   setupFomanticUi(settings) {
     settings.rules.isVisible = this.isVisible;
     settings.rules.notEmpty = settings.rules.empty;
     settings.rules.isEqual = this.isEqual;
     settings.onSuccess = this.onSuccess;
   }
+
   /**
    * Form onSuccess handler when submit.
    */
-
-
   onSuccess() {
     atk__WEBPACK_IMPORTED_MODULE_8__["default"].formService.clearDirtyForm(external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this).attr('id'));
     return true;
   }
+
   /**
    * Set form in order to detect
    * input changed before leaving page.
    */
-
-
   preventFormLeave(id) {
     const $form = external_jquery__WEBPACK_IMPORTED_MODULE_7___default()('#' + id);
     $form.data('__atkCheckDirty', true);
@@ -2601,32 +2415,30 @@ class FormService {
     });
     this.prevents.push($form);
   }
+
   /**
    * Clear Form from being dirty.
    * Use this function if you define your own onSuccess handler.
    */
-
-
   clearDirtyForm(id) {
     const forms = this.prevents.filter($form => $form.attr('id') === id);
     forms.forEach($form => {
       $form.data('isDirty', false);
     });
   }
+
   /**
    * Visibility rule.
    *
    * @returns {boolean}
    */
-
-
   isVisible() {
     return external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this).is(':visible');
   }
-
   isEqual(value, compare) {
     return parseInt(value, 10) === parseInt(compare, 10);
   }
+
   /**
    * Validate a field using our own or Fomantic-UI validation rule function.
    *
@@ -2635,29 +2447,22 @@ class FormService {
    * @param   {string|object} rule      Rule to apply test.
    * @returns {*|false}
    */
-
-
   validateField(form, fieldName, rule) {
     rule = this.normalizeRule(rule);
     const ruleFunction = this.getRuleFunction(this.getRuleName(rule));
-
     if (ruleFunction) {
       const $field = this.getField(form, fieldName);
-
       if (!$field) {
         console.error('You are validating a field that does not exist: ' + fieldName);
         return false;
       }
-
       const value = this.getFieldValue($field);
       const ancillary = this.getAncillaryValue(rule);
       return ruleFunction.call($field, value, ancillary);
     }
-
     console.error('Rule does not exist: ' + this.getRuleName(rule));
     return false;
   }
-
   normalizeRule(rule) {
     if (typeof rule === 'string') {
       return {
@@ -2665,85 +2470,64 @@ class FormService {
         value: null
       };
     }
-
     return rule;
   }
-
   getDefaultSelector() {
     return (external_jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings.selector.group);
   }
-
   getContainer($field, selector) {
     const $container = $field.closest(selector);
-
     if ($container.length > 1) {
       // radio button.
       return this.getContainer($container.parent(), selector);
     }
-
     if ($container.length === 0) {
       return null;
     }
-
     return $container;
   }
-
   getField(form, identifier) {
     if (form.find('#' + identifier).length > 0) {
       return form.find('#' + identifier);
     }
-
     if (form.find('[name="' + identifier + '"]').length > 0) {
       return form.find('[name="' + identifier + '"]');
     }
-
     if (form.find('[name="' + identifier + '[]"]').length > 0) {
       return form.find('[name="' + identifier + '[]"]');
     }
-
     return false;
   }
-
   getFieldValue($field) {
     let value;
-
     if ($field.length > 1) {
       // radio button.
       value = $field.filter(':checked').val();
     } else {
       value = $field.val();
     }
-
     return value;
   }
-
   getRuleFunction(rule) {
     return this.formSettings.rules[rule];
   }
-
   getAncillaryValue(rule) {
     // must have a rule.value property and must be a bracketed rule.
     if (!rule.value && !this.isBracketedRule(rule)) {
       return false;
     }
-
     return rule.value === undefined || rule.value === null ? rule.type.match(this.formSettings.regExp.bracket)[1] + '' : rule.value;
   }
-
   getRuleName(rule) {
     if (this.isBracketedRule(rule)) {
       return rule.type.replace(rule.type.match(this.formSettings.regExp.bracket)[0], '');
     }
-
     return rule.type;
   }
-
   isBracketedRule(rule) {
     return rule.type && rule.type.match(this.formSettings.regExp.bracket);
   }
-
 }
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new FormService()));
 
 /***/ }),
@@ -2779,18 +2563,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * This is default setup for Fomantic-UI modal.
  * Allow to manage URL pass to our modal and dynamically update content from this URL
  * using the Fomantic-UI api function.
  * Also keep track of how many modal are use by the app.
  */
-
 class ModalService {
   constructor() {
     this.modals = [];
   }
-
   setupFomanticUi(settings) {
     settings.duration = 100;
     settings.allowMultiple = true;
@@ -2799,35 +2582,34 @@ class ModalService {
     settings.onHide = this.onHide;
     settings.onVisible = this.onVisible;
   }
-
   onHidden() {
     atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.removeModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
   }
-
   onVisible() {
     let args = {};
-    let data; // const service = apiService;
-
+    let data;
+    // const service = apiService;
     const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this);
-    const $content = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).find('.atk-dialog-content'); // check data associated with this modal.
+    const $content = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).find('.atk-dialog-content');
 
+    // check data associated with this modal.
     if (!external_jquery__WEBPACK_IMPORTED_MODULE_5___default().isEmptyObject($modal.data())) {
       data = $modal.data();
-    } // add data argument
+    }
 
-
+    // add data argument
     if (data && data.args) {
       args = data.args;
-    } // check for data type, usually json or html
+    }
 
-
+    // check for data type, usually json or html
     if (data && data.type === 'json') {
       args = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(true, args, {
         __atk_json: 1
       });
-    } // does modal content need to be loaded dynamically
+    }
 
-
+    // does modal content need to be loaded dynamically
     if (data && data.url) {
       $content.html(atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.getLoader(data.label ? data.label : ''));
       $content.api({
@@ -2842,7 +2624,6 @@ class ModalService {
             external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
           });
           const result = content.html(response.html);
-
           if (!result.length) {
             response.success = false;
             response.isServiceError = true;
@@ -2851,38 +2632,35 @@ class ModalService {
             if ($modal.modal.settings.autofocus) {
               atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.doAutoFocus($modal);
             }
-
-            $modal.modal('refresh'); // content is replace no need to do it in api
-
+            $modal.modal('refresh');
+            // content is replace no need to do it in api
             response.id = null;
           }
         }
       });
     }
   }
-
   onShow() {
     const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this);
     atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.addModal($modal);
   }
-
   onHide() {
     return external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).data('isClosable');
   }
-
   addModal(modal) {
     const that = this;
     this.modals.push(modal);
     this.setCloseTriggerEventInModals();
-    this.hideShowCloseIcon(); // temp fix while Fomantic-UI modal positioning is not fixed.
-    // hide other modals.
+    this.hideShowCloseIcon();
 
+    // temp fix while Fomantic-UI modal positioning is not fixed.
+    // hide other modals.
     if (this.modals.length > 1) {
       modal.css('position', 'absolute');
       this.modals[this.modals.length - 2].css('opacity', 0);
-    } // add modal esc handler.
+    }
 
-
+    // add modal esc handler.
     if (this.modals.length === 1) {
       external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document).on('keyup.atk.modalService', e => {
         if (e.keyCode === 27) {
@@ -2893,48 +2671,42 @@ class ModalService {
       });
     }
   }
-
   removeModal(modal) {
     if (modal.data().needRemove) {
       // This modal was add by createModal and need to be remove.
       modal.remove();
     }
-
     this.modals.pop();
     this.setCloseTriggerEventInModals();
-    this.hideShowCloseIcon(); // temp fix while Fomantic-UI modal positioning is not fixed.
-    // show last modals.
+    this.hideShowCloseIcon();
 
+    // temp fix while Fomantic-UI modal positioning is not fixed.
+    // show last modals.
     if (this.modals.length > 0) {
       modal.css('position', '');
       this.modals[this.modals.length - 1].css('opacity', '');
       this.modals[this.modals.length - 1].modal('refresh');
     }
-
     if (this.modals.length === 0) {
       external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document).off('atk.modalService');
     }
   }
-
   doAutoFocus(modal) {
     const inputs = modal.find('[tabindex], :input').filter(':visible');
     const autofocus = inputs.filter('[autofocus]');
     const input = autofocus.length > 0 ? autofocus.first() : inputs.first();
-
     if (input.length > 0) {
       input.focus().select();
     }
   }
+
   /**
    * Will loop through modals in reverse order an
    * attach the close event handler in the last one available.
    */
-
-
   setCloseTriggerEventInModals() {
     for (let i = this.modals.length - 1; i >= 0; --i) {
       const modal = this.modals[i];
-
       if (modal.data().needCloseTrigger) {
         modal.on('close', '.atk-dialog-content', () => {
           modal.modal('hide');
@@ -2944,15 +2716,13 @@ class ModalService {
       }
     }
   }
+
   /**
    * Only last modal in queue should have the close icon
    */
-
-
   hideShowCloseIcon() {
     for (let i = this.modals.length - 1; i >= 0; --i) {
       const modal = this.modals[i];
-
       if (i === this.modals.length - 1) {
         modal.find('i.icon.close').show();
         modal.data('isClosable', true);
@@ -2962,14 +2732,11 @@ class ModalService {
       }
     }
   }
-
   getLoader(loaderText) {
     return `<div class="ui active inverted dimmer">
               <div class="ui text loader">${loaderText}</div>`;
   }
-
 }
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new ModalService()));
 
 /***/ }),
@@ -3017,11 +2784,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Panel needs to be reload to display different
  * content. This service will take care of this.
  */
-
 class PanelService {
   constructor() {
     this.service = {
@@ -3030,20 +2797,19 @@ class PanelService {
       currentVisibleId: null,
       // the current panel id that is in a visible state.
       currentParams: null // URL argument of the current panel.
-
     };
   }
+
   /**
    * Remove existing panel from service panels and dom.
    */
-
-
   removePanel(id) {
     // remove from dom
     this.getPropertyValue(id, '$panel').remove();
     const temp = this.service.panels.filter(panel => !panel[id]);
     this.service.panels.splice(0, this.service.panels.length, ...temp);
   }
+
   /**
    * Add a panel to this service and
    * initial panel setup.
@@ -3051,14 +2817,11 @@ class PanelService {
    * Atk4/ui callback may call this on each callback so
    * we need to make sure it is not add multiple time.
    */
-
-
   addPanel(params) {
     // Remove existing one. Can be added by a reload.
     if (this.getPropertyValue(params.id, 'id')) {
       this.removePanel(params.id);
     }
-
     const newPanel = {
       [params.id]: {
         id: params.id,
@@ -3085,14 +2848,16 @@ class PanelService {
         hasEscAway: params.hasEscAway,
         modalAction: null
       }
-    }; // add click handler for closing panel.
+    };
 
+    // add click handler for closing panel.
     newPanel[params.id].$panel.on('click', params.closeSelector, () => {
       this.closePanel(params.id);
     });
     newPanel[params.id].$panel.appendTo(external_jquery__WEBPACK_IMPORTED_MODULE_9___default()('.atk-side-panels'));
     this.service.panels.push(newPanel);
   }
+
   /**
    * Open the panel.
    * Params expected the following arguments:
@@ -3105,31 +2870,25 @@ class PanelService {
    *
    * @param {object} params
    */
-
-
   openPanel(params) {
     // if no id is provide, then get the first one.
     // no id mean the first panel in list.
-    const panelId = params.openId ? params.openId : Object.keys(this.service.panels[0])[0]; // save our open param.
-
+    const panelId = params.openId ? params.openId : Object.keys(this.service.panels[0])[0];
+    // save our open param.
     this.service.currentParams = params;
-
     if (this.isSameElement(panelId, params.triggered)) {
       return;
-    } // first check if current panel can be click away.
-
-
+    }
+    // first check if current panel can be click away.
     if (this.service.currentVisibleId && !this.getPropertyValue(this.service.currentVisibleId, 'hasClickAway')) {
       return;
     }
-
     this.initOpen(panelId);
   }
+
   /**
    * Will check if panel can open or reload.
    */
-
-
   initOpen(id) {
     if (this.service.currentVisibleId && id !== this.service.currentVisibleId) {
       // trying to open a different panel so close current one if allowed.
@@ -3163,66 +2922,58 @@ class PanelService {
       this.initPanelReload(id);
     }
   }
+
   /**
    * Will check if panel is reloadable and
    * setup proper URL argument from triggered item
    * via it's data property.
    */
-
-
   initPanelReload(id) {
-    const params = this.service.currentParams; // do we need to load anything in this panel.
-
+    const params = this.service.currentParams;
+    // do we need to load anything in this panel.
     if (this.getPropertyValue(id, 'url')) {
       // Convert our array of args to object.
       // Args must be defined as data-attributeName in the triggered element.
       const args = params.reloadArgs.reduce((obj, item) => {
         obj[item] = params.triggered.data(item);
         return obj;
-      }, {}); // add URL argument if pass to panel
-
+      }, {});
+      // add URL argument if pass to panel
       if (params.urlArgs !== 'undefined') {
         external_jquery__WEBPACK_IMPORTED_MODULE_9___default().extend(args, params.urlArgs);
       }
-
       this.doReloadPanel(id, args);
     }
   }
+
   /**
    * Do the actual opening.
    */
-
-
   doOpenPanel(panelId) {
     const params = this.service.currentParams;
     let triggerElement = params.triggered;
-
     if (typeof triggerElement === 'string') {
       triggerElement = external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(triggerElement);
-    } // will apply css class to triggering element if provide.
+    }
 
-
+    // will apply css class to triggering element if provide.
     if (triggerElement.length > 0) {
       this.setTriggerElement(panelId, triggerElement, params);
     }
-
     this.getPropertyValue(panelId, '$panel').addClass(this.getPropertyValue(panelId, 'visible'));
     this.service.currentVisibleId = panelId;
-
     if (this.getPropertyValue(panelId, 'hasClickAway')) {
       this.addClickAwayEvent(panelId);
     }
-
     if (this.getPropertyValue(panelId, 'hasEscAway')) {
       this.addEscAwayEvent(panelId);
     }
   }
+
   /**
    * Close panel.
    * if confirmation is needed, will ask user.
    */
-
-
   closePanel(id) {
     if (this.needConfirmation(id)) {
       const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(this.getPropertyValue(id, 'modal'));
@@ -3233,40 +2984,39 @@ class PanelService {
       this.doClosePanel(id);
     }
   }
+
   /**
    * Close panel and cleanup.
    */
-
-
   doClosePanel(id) {
     // remove document event.
     this.removeClickAwayEvent();
-    this.removeWarning(id); // do the actual closing.
+    this.removeWarning(id);
 
+    // do the actual closing.
     this.getPropertyValue(id, '$panel').removeClass(this.getPropertyValue(id, 'visible'));
-    this.service.currentVisibleId = null; // clean up
+    this.service.currentVisibleId = null;
 
+    // clean up
     const triggeredActive = this.getPropertyValue(id, 'triggeredActive');
-
     if (triggeredActive.element && triggeredActive.element.length > 0) {
       this.deActivated(triggeredActive.element, triggeredActive.css);
     }
-
     triggeredActive.element = null;
     triggeredActive.css = null;
     this.setPropertyValue(id, 'triggeredActive', triggeredActive);
     this.setPropertyValue(id, 'triggerElement', null);
   }
+
   /**
    * Load panel content.
    */
-
-
   doReloadPanel(id, args) {
     const loader = this.getPropertyValue(id, 'loader');
     const $panel = this.getPropertyValue(id, '$panel');
-    const url = this.getPropertyValue(id, 'url'); // do some cleanup.
+    const url = this.getPropertyValue(id, 'url');
 
+    // do some cleanup.
     this.removeWarning(id);
     this.clearPanelContent(id);
     $panel.find(loader.selector).addClass(loader.trigger);
@@ -3281,21 +3031,20 @@ class PanelService {
       }
     });
   }
+
   /**
    * Set triggering element that fire the panel to open.
    * If panel is open by html element, you can specified class on these
    * elements that will be add or remove, depending on the panel state.
    * Thus, creating a visual onto which html element has fire the event.
    */
-
-
   setTriggerElement(id, trigger, params) {
-    this.setPropertyValue(id, 'triggerElement', trigger); // Do we need to setup css class on triggering element.
+    this.setPropertyValue(id, 'triggerElement', trigger);
 
+    // Do we need to setup css class on triggering element.
     if (params.activeCSS) {
       let element;
       let css;
-
       if (params.activeCSS instanceof Object) {
         element = this.getPropertyValue(id, 'triggerElement').find(params.activeCSS.element);
         css = params.activeCSS.css;
@@ -3303,7 +3052,6 @@ class PanelService {
         element = trigger;
         css = params.activeCSS;
       }
-
       this.deActivated(this.getPropertyValue(id, 'triggeredActive').element, this.getPropertyValue(id, 'triggeredActive').css);
       this.activated(element, css);
       const newTriggeredActive = {
@@ -3313,22 +3061,20 @@ class PanelService {
       this.setPropertyValue(id, 'triggeredActive', newTriggeredActive);
     }
   }
+
   /**
    * Add click away closing event handler.
    */
-
-
   addClickAwayEvent(id) {
     // clicking anywhere in main tag will close panel.
     external_jquery__WEBPACK_IMPORTED_MODULE_9___default()('main').on('click.atkPanel', atk__WEBPACK_IMPORTED_MODULE_10__["default"].createDebouncedFx(evt => {
       this.closePanel(id);
     }, 250));
   }
+
   /**
    * Add esc away closing event handler.
    */
-
-
   addEscAwayEvent(id) {
     // pressing esc key will close panel.
     external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(document).on('keyup.atkPanel', atk__WEBPACK_IMPORTED_MODULE_10__["default"].createDebouncedFx(evt => {
@@ -3337,88 +3083,78 @@ class PanelService {
       }
     }, 100));
   }
+
   /**
    * Remove click away and esc events.
    */
-
-
   removeClickAwayEvent() {
     external_jquery__WEBPACK_IMPORTED_MODULE_9___default()('main').off('click.atkPanel');
     external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(document).off('keyup.atkPanel');
   }
+
   /**
    * Compare a  jQuery element to the actual triggered element for this panel.
    *
    * @returns {boolean} True when both jQuery element are equal.
    */
-
-
   isSameElement(id, el) {
     const triggerElement = this.getPropertyValue(id, 'triggerElement');
     let isSame = false;
-
     if (el && triggerElement) {
       isSame = el.length === triggerElement.length && el.length === el.filter(triggerElement).length;
     }
-
     return isSame;
   }
+
   /**
    * Removed a css class to a jQuery element.
    * This should normally be your triggering panel element.
    */
-
-
   deActivated(element, css) {
     if (element) {
       element.removeClass(css);
     }
   }
+
   /**
    * Add a css class name to a jQuery element.
    * This should normally be your triggering panel element.
    */
-
-
   activated(element, css) {
     if (element) {
       element.addClass(css);
     }
   }
+
   /**
    * Check if Warning sign is on.
    *
    * @returns {boolean}
    */
-
-
   isWarningOn(id) {
     const $panel = this.getPropertyValue(id, '$panel');
     const warning = this.getPropertyValue(id, 'warning');
     return $panel.find(warning.selector).hasClass(warning.trigger);
   }
-
   removeWarning(id) {
     const $panel = this.getPropertyValue(id, '$panel');
     const warning = this.getPropertyValue(id, 'warning');
     return $panel.find(warning.selector).removeClass(warning.trigger);
   }
+
   /**
    * Check if panel can be closed, i.e.
    * it has a confirmation modal attach and warning sign is not on.
    *
    * @returns {boolean}
    */
-
-
   needConfirmation(id) {
     return this.getPropertyValue(id, 'modal') && this.isWarningOn(id);
   }
+
   /**
    * Clear content.
    */
-
-
   clearPanelContent(id) {
     const $panel = this.getPropertyValue(id, '$panel');
     const clearables = this.getPropertyValue(id, 'clearable');
@@ -3426,6 +3162,7 @@ class PanelService {
       $panel.find(clearable).html('');
     });
   }
+
   /**
    * Set a property value for a panel designated by id.
    *
@@ -3433,8 +3170,6 @@ class PanelService {
    * @param {string} prop  the property inside panel
    * @param {*}      value the value.
    */
-
-
   setPropertyValue(id, prop, value) {
     this.service.panels.forEach(panel => {
       if (panel[id]) {
@@ -3442,14 +3177,13 @@ class PanelService {
       }
     });
   }
+
   /**
    * Return the panel property represent by id in collections.
    * If prop is null, then it will return the entire panel object.
    *
    * @returns {*}
    */
-
-
   getPropertyValue(id) {
     let prop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
     let value = null;
@@ -3460,9 +3194,7 @@ class PanelService {
     });
     return value;
   }
-
 }
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new PanelService()));
 
 /***/ }),
@@ -3480,10 +3212,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 
+
 /**
  * This is default setup for Fomantic-UI Popup.
  */
-
 class PopupService {
   setupFomanticUi(settings) {
     settings.onCreate = this.onCreate;
@@ -3492,16 +3224,14 @@ class PopupService {
     settings.onVisible = this.onVisible;
     settings.onRemove = this.onRemove;
   }
+
   /**
    * OnShow callback when a popup is trigger.
    * Will check if popup need to be setup dynamically using a callback.
    */
-
-
   onShow($module) {
     const $popup = this;
     const data = $popup.data();
-
     if (data.url !== '' && data.url !== undefined) {
       // Only load if we are not using data.cache or content has not been loaded yet.
       if (!data.cache || !data.hascontent) {
@@ -3514,7 +3244,6 @@ class PopupService {
           obj: $popup,
           onComplete: function (response, content) {
             const result = $popup.html(response.html);
-
             if (!result.length) {
               response.success = false;
               response.isServiceError = true;
@@ -3528,37 +3257,32 @@ class PopupService {
       }
     }
   }
+
   /**
    * Call when hidding.
    */
-
-
   onHide() {}
-
   onVisible() {}
+
   /**
    * Only call when popup are created from metadata
    * and trigger action is fired.
    */
-
-
-  onCreate() {// console.log('onCreate');
+  onCreate() {
+    // console.log('onCreate');
   }
+
   /**
    * Only call if onCreate was called.
    */
-
-
-  onRemove() {// console.log('onRemvoe');
+  onRemove() {
+    // console.log('onRemvoe');
   }
-
   getLoader() {
     return `<div class="ui active inverted dimmer">
               <div class="ui mini text loader"></div>`;
   }
-
 }
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new PopupService()));
 
 /***/ }),
@@ -3577,10 +3301,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
+
 /**
  * Allow to upload files to server via Fomantic-UI API.
  */
-
 class UploadService {
   /**
    * Will upload a FileList object to server.
@@ -3601,18 +3325,15 @@ class UploadService {
       return new window.XMLHttpRequest();
     };
     const formData = new FormData();
-
     for (let i = 0; i < files.length; i++) {
       const param = i === 0 ? 'file' : 'file-' + i;
       formData.append(param, files.item(i));
     }
-
     if (!external_jquery__WEBPACK_IMPORTED_MODULE_0___default().isEmptyObject(data)) {
       external_jquery__WEBPACK_IMPORTED_MODULE_0___default().each(data, (key, el) => {
         formData.append(key, el);
       });
     }
-
     element.api({
       on: 'now',
       url: uploadUrl,
@@ -3626,9 +3347,7 @@ class UploadService {
       onComplete: completeCb
     });
   }
-
 }
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new UploadService()));
 
 /***/ }),
@@ -3665,23 +3384,27 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
- // disable console logs for non-minified build
 
+
+// disable console logs for non-minified build
 vue__WEBPACK_IMPORTED_MODULE_7__["default"].config.productionTip = false;
 vue__WEBPACK_IMPORTED_MODULE_7__["default"].config.devtools = false;
 vue__WEBPACK_IMPORTED_MODULE_7__["default"].use((semantic_ui_vue__WEBPACK_IMPORTED_MODULE_5___default()));
-vue__WEBPACK_IMPORTED_MODULE_7__["default"].component('flatpickr-picker', () => __webpack_require__.e(/*! import() */ "vendor-vue-flatpickr").then(__webpack_require__.t.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js", 23))); // vue loader component to display while dynamic component is loading
+vue__WEBPACK_IMPORTED_MODULE_7__["default"].component('flatpickr-picker', () => __webpack_require__.e(/*! import() */ "vendor-vue-flatpickr").then(__webpack_require__.t.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js", 23)));
 
+// vue loader component to display while dynamic component is loading
 const atkVueLoader = {
   name: 'atk-vue-loader',
   template: '<div><div class="ui active centered inline loader"></div></div>'
-}; // vue error component to display when dynamic component loading fail
+};
 
+// vue error component to display when dynamic component loading fail
 const atkVueError = {
   name: 'atk-vue-error',
   template: '<div class="ui negative message"><p>Error: Unable to load Vue component</p></div>'
-}; // return async component that will load on demand
+};
 
+// return async component that will load on demand
 const componentFactory = (name, component) => () => ({
   component: component().then(r => {
     atk__WEBPACK_IMPORTED_MODULE_6__["default"].vueService.markComponentLoaded(name);
@@ -3691,7 +3414,6 @@ const componentFactory = (name, component) => () => ({
   error: atkVueError,
   delay: 200
 });
-
 const atkComponents = {
   'atk-inline-edit': componentFactory('atk-inline-edit', () => __webpack_require__.e(/*! import() | atk-vue-inline-edit */ "atk-vue-inline-edit").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/inline-edit.component */ "./src/vue-components/inline-edit.component.js"))),
   'atk-item-search': componentFactory('atk-item-search', () => __webpack_require__.e(/*! import() | atk-vue-item-search */ "atk-vue-item-search").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/item-search.component */ "./src/vue-components/item-search.component.js"))),
@@ -3699,10 +3421,10 @@ const atkComponents = {
   'atk-tree-item-selector': componentFactory('atk-tree-item-selector', () => Promise.all(/*! import() | atk-vue-tree-item-selector */[__webpack_require__.e("vendor"), __webpack_require__.e("atk-vue-tree-item-selector")]).then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/tree-item-selector/tree-item-selector.component */ "./src/vue-components/tree-item-selector/tree-item-selector.component.js"))),
   'atk-query-builder': componentFactory('atk-query-builder', () => Promise.all(/*! import() | atk-vue-query-builder */[__webpack_require__.e("vendor"), __webpack_require__.e("vendor-vue-query-builder"), __webpack_require__.e("atk-vue-query-builder")]).then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/query-builder/query-builder.component.vue */ "./src/vue-components/query-builder/query-builder.component.vue")))
 };
+
 /**
  * Allow to create Vue component.
  */
-
 class VueService {
   constructor() {
     this.vues = [];
@@ -3723,13 +3445,12 @@ class VueService {
       }
     };
   }
+
   /**
    * Created a Vue component and add it to the vues array.
    * For Root component (App) to be aware that it's children component is
    * mounted, you need to use @hook:mounted="setReady"
    */
-
-
   createAtkVue(id, component, data) {
     this.registerComponent({
       ids: [id],
@@ -3747,11 +3468,10 @@ class VueService {
       isLoaded: false
     });
   }
+
   /**
    * Create a Vue instance from an external src component definition.
    */
-
-
   createVue(id, componentName, component, data) {
     this.registerComponent({
       ids: [id],
@@ -3770,27 +3490,24 @@ class VueService {
       isLoaded: true
     });
   }
+
   /*
    * Add component to vues container.
    * Group ids that are using the same component.
    */
-
-
   registerComponent(component) {
     // check if that component is already registered
     const registered = this.vues.filter(comp => comp.name === component.name);
-
     if (registered.length > 0) {
       registered[0].ids.push(component.ids[0]);
     } else {
       this.vues.push(component);
     }
   }
+
   /**
    * Register components within Vue.
    */
-
-
   useComponent(component) {
     if (window[component]) {
       vue__WEBPACK_IMPORTED_MODULE_7__["default"].use(window[component]);
@@ -3798,21 +3515,19 @@ class VueService {
       console.error('Vue "' + component + '" component not found');
     }
   }
+
   /**
    * Return Vue.
    *
    * @returns {Vue}
    */
-
-
   getVue() {
     return vue__WEBPACK_IMPORTED_MODULE_7__["default"];
   }
+
   /**
    * Mark a component as loaded.
    */
-
-
   markComponentLoaded(name) {
     this.vues.forEach(component => {
       if (component.name === name) {
@@ -3820,17 +3535,14 @@ class VueService {
       }
     });
   }
+
   /**
    * Check if all components on page are ready and fully loaded.
    */
-
-
   areComponentsLoaded() {
     return this.vues.filter(component => component.isLoaded === false).length === 0;
   }
-
 }
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new VueService()));
 
 /***/ }),
@@ -3849,12 +3561,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
-/* istanbul ignore next */
 
+/* istanbul ignore next */
 if (typeof (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk) !== 'undefined') {
   throw Error('Unexpected jQuery.atk property state');
 }
-
 const atk = {};
 (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk) = atk;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (atk);
@@ -3903,8 +3614,9 @@ atk__WEBPACK_IMPORTED_MODULE_1__["default"].modalService = _services_modal_servi
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].panelService = _services_panel_service__WEBPACK_IMPORTED_MODULE_7__["default"];
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].popupService = _services_popup_service__WEBPACK_IMPORTED_MODULE_8__["default"];
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].uploadService = _services_upload_service__WEBPACK_IMPORTED_MODULE_9__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].vueService = _services_vue_service__WEBPACK_IMPORTED_MODULE_10__["default"]; // setup Fomantic-UI globals
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].vueService = _services_vue_service__WEBPACK_IMPORTED_MODULE_10__["default"];
 
+// setup Fomantic-UI globals
 _services_api_service__WEBPACK_IMPORTED_MODULE_3__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.api.settings));
 _services_form_service__WEBPACK_IMPORTED_MODULE_5__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.form.settings));
 _services_modal_service__WEBPACK_IMPORTED_MODULE_6__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.modal.settings));
@@ -3954,6 +3666,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Register a jQuery plugin.
  *
@@ -3961,40 +3674,36 @@ __webpack_require__.r(__webpack_exports__);
  * @param {Function} cl        Plugin class
  * @param {boolean}  shortHand Map $.name(...) to $({}).name(...)
  */
-
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin = function (name, cl) {
   let shortHand = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-  const dataName = '__' + name; // add plugin to atk namespace.
+  const dataName = '__' + name;
 
-  atk__WEBPACK_IMPORTED_MODULE_1__["default"][name] = cl; // register plugin to jQuery fn prototype.
+  // add plugin to atk namespace.
+  atk__WEBPACK_IMPORTED_MODULE_1__["default"][name] = cl;
 
+  // register plugin to jQuery fn prototype.
   (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn)[name] = function () {
     let option = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-
     // Check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
     if (typeof option === 'string') {
       if (this.data(dataName) && typeof this.data(dataName)[option] === 'function') {
         return this.data(dataName).call(option, args);
-      } // return if trying to call a plugin method prior to instantiate it.
-
-
+      }
+      // return if trying to call a plugin method prior to instantiate it.
       return;
     }
-
     return this.each(function () {
-      const options = external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, cl.DEFAULTS, typeof option === 'object' && option); // create plugin using the constructor function store in atk namespace object
+      const options = external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, cl.DEFAULTS, typeof option === 'object' && option);
+      // create plugin using the constructor function store in atk namespace object
       // and add a reference of it to this jQuery object data.
-
       external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(dataName, new atk__WEBPACK_IMPORTED_MODULE_1__["default"][name](this, options));
     });
   };
-
   if (shortHand) {
     (external_jquery__WEBPACK_IMPORTED_MODULE_0___default())[name] = options => external_jquery__WEBPACK_IMPORTED_MODULE_0___default()({})[name](options);
   }
 };
-
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkAjaxec', _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_2__["default"]);
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkColumnResizer', _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_3__["default"]);
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkConditionalForm', _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_4__["default"]);
@@ -4035,6 +3744,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Define atk global options.
  * In Js:
@@ -4042,7 +3752,6 @@ __webpack_require__.r(__webpack_exports__);
  * In Php:
  * (new JsChain('atk.options')->set('name', 'value');
  */
-
 atk__WEBPACK_IMPORTED_MODULE_2__["default"].options = function () {
   const data = {};
   return {
@@ -4052,6 +3761,7 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].options = function () {
     get: name => data[name]
   };
 }();
+
 /**
  * Subscribe too and publish events.
  * listen to an event
@@ -4059,8 +3769,6 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].options = function () {
  * Fire an event
  * atk.eventBus.emit('foo', { a: 'b' })
  */
-
-
 atk__WEBPACK_IMPORTED_MODULE_2__["default"].eventBus = function () {
   const emitter = (0,mitt__WEBPACK_IMPORTED_MODULE_1__["default"])();
   return {
@@ -4070,11 +3778,9 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].eventBus = function () {
     clearAll: () => emitter.all.clear()
   };
 }();
-
 atk__WEBPACK_IMPORTED_MODULE_2__["default"].createDebouncedFx = function (func, wait, options) {
   let timerId = null;
   let lodashDebouncedFx;
-
   function createTimer() {
     timerId = setInterval(() => {
       if (!lodashDebouncedFx.pending()) {
@@ -4085,35 +3791,29 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].createDebouncedFx = function (func, 
     }, 25);
     (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().active)++;
   }
-
   lodashDebouncedFx = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_5__["default"])(func, wait, options);
-
   function debouncedFx() {
     if (timerId === null) {
       createTimer();
     }
-
     return lodashDebouncedFx(...arguments);
   }
-
   debouncedFx.cancel = lodashDebouncedFx.cancel;
   debouncedFx.flush = lodashDebouncedFx.flush;
   debouncedFx.pending = lodashDebouncedFx.pending;
   return debouncedFx;
 };
+
 /*
 * Utilities function that you can execute
 * from atk context. Usage: atk.utils.redirect('url');
 */
-
-
 atk__WEBPACK_IMPORTED_MODULE_2__["default"].utils = {
   json: function () {
     return {
       // try parsing string as JSON. Return parse if valid, otherwise return onError value.
       tryParse: function (str) {
         let onError = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
         try {
           return JSON.parse(str);
         } catch (e) {
@@ -24805,7 +24505,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "watchSyncEffect": () => (/* binding */ watchSyncEffect)
 /* harmony export */ });
 /*!
- * Vue.js v2.7.10
+ * Vue.js v2.7.13
  * (c) 2014-2022 Evan You
  * Released under the MIT License.
  */
@@ -24917,7 +24617,13 @@ var isReservedAttribute = makeMap('key,ref,slot,slot-scope,is');
  * Remove an item from an array.
  */
 function remove$2(arr, item) {
-    if (arr.length) {
+    var len = arr.length;
+    if (len) {
+        // fast path for the only / last item
+        if (item === arr[len - 1]) {
+            arr.length = len - 1;
+            return;
+        }
         var index = arr.indexOf(item);
         if (index > -1) {
             return arr.splice(index, 1);
@@ -25546,6 +25252,15 @@ var __assign = function() {
 };
 
 var uid$2 = 0;
+var pendingCleanupDeps = [];
+var cleanupDeps = function () {
+    for (var i = 0; i < pendingCleanupDeps.length; i++) {
+        var dep = pendingCleanupDeps[i];
+        dep.subs = dep.subs.filter(function (s) { return s; });
+        dep._pending = false;
+    }
+    pendingCleanupDeps.length = 0;
+};
 /**
  * A dep is an observable that can have multiple
  * directives subscribing to it.
@@ -25553,6 +25268,8 @@ var uid$2 = 0;
  */
 var Dep = /** @class */ (function () {
     function Dep() {
+        // pending subs cleanup
+        this._pending = false;
         this.id = uid$2++;
         this.subs = [];
     }
@@ -25560,7 +25277,15 @@ var Dep = /** @class */ (function () {
         this.subs.push(sub);
     };
     Dep.prototype.removeSub = function (sub) {
-        remove$2(this.subs, sub);
+        // #12696 deps with massive amount of subscribers are extremely slow to
+        // clean up in Chromium
+        // to workaround this, we unset the sub for now, and clear them on
+        // next scheduler flush.
+        this.subs[this.subs.indexOf(sub)] = null;
+        if (!this._pending) {
+            this._pending = true;
+            pendingCleanupDeps.push(this);
+        }
     };
     Dep.prototype.depend = function (info) {
         if (Dep.target) {
@@ -25572,7 +25297,7 @@ var Dep = /** @class */ (function () {
     };
     Dep.prototype.notify = function (info) {
         // stabilize the subscriber list first
-        var subs = this.subs.slice();
+        var subs = this.subs.filter(function (s) { return s; });
         if ( true && !config.async) {
             // subs aren't sorted in scheduler if not running async
             // we need to sort them now to make sure they fire in correct
@@ -25580,12 +25305,12 @@ var Dep = /** @class */ (function () {
             subs.sort(function (a, b) { return a.id - b.id; });
         }
         for (var i = 0, l = subs.length; i < l; i++) {
+            var sub = subs[i];
             if ( true && info) {
-                var sub = subs[i];
                 sub.onTrigger &&
                     sub.onTrigger(__assign({ effect: subs[i] }, info));
             }
-            subs[i].update();
+            sub.update();
         }
     };
     return Dep;
@@ -25656,6 +25381,77 @@ methodsToPatch.forEach(function (method) {
         return result;
     });
 });
+
+var rawMap = new WeakMap();
+function reactive(target) {
+    makeReactive(target, false);
+    return target;
+}
+/**
+ * Return a shallowly-reactive copy of the original object, where only the root
+ * level properties are reactive. It also does not auto-unwrap refs (even at the
+ * root level).
+ */
+function shallowReactive(target) {
+    makeReactive(target, true);
+    def(target, "__v_isShallow" /* ReactiveFlags.IS_SHALLOW */, true);
+    return target;
+}
+function makeReactive(target, shallow) {
+    // if trying to observe a readonly proxy, return the readonly version.
+    if (!isReadonly(target)) {
+        if (true) {
+            if (isArray(target)) {
+                warn$2("Avoid using Array as root value for ".concat(shallow ? "shallowReactive()" : "reactive()", " as it cannot be tracked in watch() or watchEffect(). Use ").concat(shallow ? "shallowRef()" : "ref()", " instead. This is a Vue-2-only limitation."));
+            }
+            var existingOb = target && target.__ob__;
+            if (existingOb && existingOb.shallow !== shallow) {
+                warn$2("Target is already a ".concat(existingOb.shallow ? "" : "non-", "shallow reactive object, and cannot be converted to ").concat(shallow ? "" : "non-", "shallow."));
+            }
+        }
+        var ob = observe(target, shallow, isServerRendering() /* ssr mock reactivity */);
+        if ( true && !ob) {
+            if (target == null || isPrimitive(target)) {
+                warn$2("value cannot be made reactive: ".concat(String(target)));
+            }
+            if (isCollectionType(target)) {
+                warn$2("Vue 2 does not support reactive collection types such as Map or Set.");
+            }
+        }
+    }
+}
+function isReactive(value) {
+    if (isReadonly(value)) {
+        return isReactive(value["__v_raw" /* ReactiveFlags.RAW */]);
+    }
+    return !!(value && value.__ob__);
+}
+function isShallow(value) {
+    return !!(value && value.__v_isShallow);
+}
+function isReadonly(value) {
+    return !!(value && value.__v_isReadonly);
+}
+function isProxy(value) {
+    return isReactive(value) || isReadonly(value);
+}
+function toRaw(observed) {
+    var raw = observed && observed["__v_raw" /* ReactiveFlags.RAW */];
+    return raw ? toRaw(raw) : observed;
+}
+function markRaw(value) {
+    if (isObject(value)) {
+        rawMap.set(value, true);
+    }
+    return value;
+}
+/**
+ * @internal
+ */
+function isCollectionType(value) {
+    var type = toRawType(value);
+    return (type === 'Map' || type === 'WeakMap' || type === 'Set' || type === 'WeakSet');
+}
 
 var arrayKeys = Object.getOwnPropertyNames(arrayMethods);
 var NO_INIITIAL_VALUE = {};
@@ -25738,21 +25534,19 @@ var Observer = /** @class */ (function () {
  * or the existing observer if the value already has one.
  */
 function observe(value, shallow, ssrMockReactivity) {
-    if (!isObject(value) || isRef(value) || value instanceof VNode) {
-        return;
+    if (value && hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
+        return value.__ob__;
     }
-    var ob;
-    if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
-        ob = value.__ob__;
-    }
-    else if (shouldObserve &&
+    if (shouldObserve &&
         (ssrMockReactivity || !isServerRendering()) &&
         (isArray(value) || isPlainObject(value)) &&
         Object.isExtensible(value) &&
-        !value.__v_skip /* ReactiveFlags.SKIP */) {
-        ob = new Observer(value, shallow, ssrMockReactivity);
+        !value.__v_skip /* ReactiveFlags.SKIP */ &&
+        !rawMap.has(value) &&
+        !isRef(value) &&
+        !(value instanceof VNode)) {
+        return new Observer(value, shallow, ssrMockReactivity);
     }
-    return ob;
 }
 /**
  * Define a reactive property on an Object.
@@ -25928,74 +25722,6 @@ function dependArray(value) {
     }
 }
 
-function reactive(target) {
-    makeReactive(target, false);
-    return target;
-}
-/**
- * Return a shallowly-reactive copy of the original object, where only the root
- * level properties are reactive. It also does not auto-unwrap refs (even at the
- * root level).
- */
-function shallowReactive(target) {
-    makeReactive(target, true);
-    def(target, "__v_isShallow" /* ReactiveFlags.IS_SHALLOW */, true);
-    return target;
-}
-function makeReactive(target, shallow) {
-    // if trying to observe a readonly proxy, return the readonly version.
-    if (!isReadonly(target)) {
-        if (true) {
-            if (isArray(target)) {
-                warn$2("Avoid using Array as root value for ".concat(shallow ? "shallowReactive()" : "reactive()", " as it cannot be tracked in watch() or watchEffect(). Use ").concat(shallow ? "shallowRef()" : "ref()", " instead. This is a Vue-2-only limitation."));
-            }
-            var existingOb = target && target.__ob__;
-            if (existingOb && existingOb.shallow !== shallow) {
-                warn$2("Target is already a ".concat(existingOb.shallow ? "" : "non-", "shallow reactive object, and cannot be converted to ").concat(shallow ? "" : "non-", "shallow."));
-            }
-        }
-        var ob = observe(target, shallow, isServerRendering() /* ssr mock reactivity */);
-        if ( true && !ob) {
-            if (target == null || isPrimitive(target)) {
-                warn$2("value cannot be made reactive: ".concat(String(target)));
-            }
-            if (isCollectionType(target)) {
-                warn$2("Vue 2 does not support reactive collection types such as Map or Set.");
-            }
-        }
-    }
-}
-function isReactive(value) {
-    if (isReadonly(value)) {
-        return isReactive(value["__v_raw" /* ReactiveFlags.RAW */]);
-    }
-    return !!(value && value.__ob__);
-}
-function isShallow(value) {
-    return !!(value && value.__v_isShallow);
-}
-function isReadonly(value) {
-    return !!(value && value.__v_isReadonly);
-}
-function isProxy(value) {
-    return isReactive(value) || isReadonly(value);
-}
-function toRaw(observed) {
-    var raw = observed && observed["__v_raw" /* ReactiveFlags.RAW */];
-    return raw ? toRaw(raw) : observed;
-}
-function markRaw(value) {
-    def(value, "__v_skip" /* ReactiveFlags.SKIP */, true);
-    return value;
-}
-/**
- * @internal
- */
-function isCollectionType(value) {
-    var type = toRawType(value);
-    return (type === 'Map' || type === 'WeakMap' || type === 'Set' || type === 'WeakSet');
-}
-
 /**
  * @internal
  */
@@ -26134,8 +25860,8 @@ function toRef(object, key, defaultValue) {
     return ref;
 }
 
-var rawToReadonlyFlag = "__v_rawToReadonly";
-var rawToShallowReadonlyFlag = "__v_rawToShallowReadonly";
+var rawToReadonlyMap = new WeakMap();
+var rawToShallowReadonlyMap = new WeakMap();
 function readonly(target) {
     return createReadonly(target, false);
 }
@@ -26159,13 +25885,13 @@ function createReadonly(target, shallow) {
         return target;
     }
     // already has a readonly proxy
-    var existingFlag = shallow ? rawToShallowReadonlyFlag : rawToReadonlyFlag;
-    var existingProxy = target[existingFlag];
+    var map = shallow ? rawToShallowReadonlyMap : rawToReadonlyMap;
+    var existingProxy = map.get(target);
     if (existingProxy) {
         return existingProxy;
     }
     var proxy = Object.create(Object.getPrototypeOf(target));
-    def(target, existingFlag, proxy);
+    map.set(target, proxy);
     def(proxy, "__v_isReadonly" /* ReactiveFlags.IS_READONLY */, true);
     def(proxy, "__v_raw" /* ReactiveFlags.RAW */, target);
     if (isRef(target)) {
@@ -28002,6 +27728,7 @@ function flushSchedulerQueue() {
     // call component updated and activated hooks
     callActivatedHooks(activatedQueue);
     callUpdatedHooks(updatedQueue);
+    cleanupDeps();
     // devtool hook
     /* istanbul ignore if */
     if (devtools && config.devtools) {
@@ -28289,6 +28016,7 @@ var activeEffectScope;
 var EffectScope = /** @class */ (function () {
     function EffectScope(detached) {
         if (detached === void 0) { detached = false; }
+        this.detached = detached;
         /**
          * @internal
          */
@@ -28301,8 +28029,8 @@ var EffectScope = /** @class */ (function () {
          * @internal
          */
         this.cleanups = [];
+        this.parent = activeEffectScope;
         if (!detached && activeEffectScope) {
-            this.parent = activeEffectScope;
             this.index =
                 (activeEffectScope.scopes || (activeEffectScope.scopes = [])).push(this) - 1;
         }
@@ -28351,7 +28079,7 @@ var EffectScope = /** @class */ (function () {
                 }
             }
             // nested scope, dereference from parent to avoid memory leaks
-            if (this.parent && !fromParent) {
+            if (!this.detached && this.parent && !fromParent) {
                 // optimized O(1) removal
                 var last = this.parent.scopes.pop();
                 if (last && last !== this) {
@@ -28359,6 +28087,7 @@ var EffectScope = /** @class */ (function () {
                     last.index = this.index;
                 }
             }
+            this.parent = undefined;
             this.active = false;
         }
     };
@@ -28797,7 +28526,7 @@ function onErrorCaptured(hook, target) {
 /**
  * Note: also update dist/vue.runtime.mjs when adding new exports to this file.
  */
-var version = '2.7.10';
+var version = '2.7.13';
 /**
  * @internal type is manually declared in <root>/types/v3-define-component.d.ts
  */
@@ -28820,6 +28549,7 @@ function _traverse(val, seen) {
     var i, keys;
     var isA = isArray(val);
     if ((!isA && !isObject(val)) ||
+        val.__v_skip /* ReactiveFlags.SKIP */ ||
         Object.isFrozen(val) ||
         val instanceof VNode) {
         return;
@@ -36958,7 +36688,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _setup_fomantic_ui__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./setup-fomantic-ui */ "./src/setup-fomantic-ui.js");
 
  // must be the first non-vendor import
-
 
 
 
