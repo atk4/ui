@@ -1,4 +1,4 @@
 /js/*.js -text -filter
 
 * linguist-vendored
-css/*.less linguist-vendored=false
+/css/*.less linguist-vendored=false
