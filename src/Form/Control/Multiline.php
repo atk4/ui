@@ -9,6 +9,7 @@ use Atk4\Data\Field;
 use Atk4\Data\Field\CallbackField;
 use Atk4\Data\Field\SqlExpressionField;
 use Atk4\Data\Model;
+use Atk4\Data\Persistence;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
@@ -769,13 +770,24 @@ class Multiline extends Form\Control
             $dummyModel = new Model($model->getPersistence(), ['table' => $model->table]);
             $dummyModel->removeField('id');
             $dummyModel->idField = $model->idField;
+
+            $createExprFromValueFx = function ($v) use ($dummyModel): Persistence\Sql\Expression {
+                if (is_int($v)) {
+                    // TODO hack for multiline.php test for PostgreSQL
+                    // related with https://github.com/atk4/data/pull/989
+                    return $dummyModel->expr((string) $v);
+                }
+
+                return $dummyModel->expr('[]', [$v]);
+            };
+
             foreach ($model->getFields() as $field) {
                 $dummyModel->addExpression($field->shortName, [
                     'expr' => isset($dummyFields[$field->shortName])
                         ? $dummyFields[$field->shortName]->expr
                         : ($field->shortName === $dummyModel->idField
                             ? '-1'
-                            : $dummyModel->expr('[]', [$model->getPersistence()->typecastSaveField($field, $field->get($model))])),
+                            : $createExprFromValueFx($model->getPersistence()->typecastSaveField($field, $field->get($model)))),
                     'type' => $field->type,
                     'actual' => $field->actual,
                 ]);
