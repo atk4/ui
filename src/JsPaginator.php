@@ -44,20 +44,6 @@ class JsPaginator extends JsCallback
     }
 
     /**
-     * Generate a js action that will set nextPage to atkScroll plugin.
-     *
-     * Method currently unused.
-     *
-     * @param int $page
-     *
-     * @return Jquery
-     */
-    public function jsNextPage($page)
-    {
-        return $this->view->js(true)->atkScroll('setNextPage', $page);
-    }
-
-    /**
      * Set jsPagiantor in idle mode.
      *
      * @return Jquery
