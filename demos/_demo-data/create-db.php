@@ -1161,4 +1161,14 @@ $model->import([
     ['id' => 2, 'item' => 'DAP delivery', 'inv_date' => '2020-02-01', 'inv_time' => '8:33', 'country_id' => 223, 'qty' => 2, 'box' => 100],
 ]);
 
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'multiline_delivery']);
+$model->addField('name', ['type' => 'string']);
+$model->addField('country', ['type' => 'json']);
+$model->addField('items', ['type' => 'json']);
+(new Migrator($model))->create();
+$model->import([
+    // TODO Model::containsXxx support
+    // https://github.com/atk4/ui/issues/1860
+]);
+
 echo 'import complete!' . "\n\n";

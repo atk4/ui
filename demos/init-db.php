@@ -530,3 +530,22 @@ class MultilineItem extends ModelWithPrefixedFields
         ]);
     }
 }
+
+/**
+ * @property string        $name    @Atk4\Field()
+ * @property Country       $country @Atk4\RefOne()
+ * @property MultilineItem $items   @Atk4\RefMany()
+ */
+class MultilineDelivery extends ModelWithPrefixedFields
+{
+    public $table = 'multiline_delivery';
+
+    protected function init(): void
+    {
+        parent::init();
+
+        $this->addField($this->fieldName()->name, ['required' => true]);
+        $this->containsOne($this->fieldName()->country, ['model' => [Country::class]]);
+        $this->containsMany($this->fieldName()->items, ['model' => [MultilineItem::class]]);
+    }
+}
