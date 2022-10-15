@@ -1592,13 +1592,6 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
   }
 
   /**
-   * Set Next page to be loaded.
-   */
-  setNextPage(page) {
-    this.nextPage = page;
-  }
-
-  /**
    * Put scroll in idle mode.
    */
   idle() {
