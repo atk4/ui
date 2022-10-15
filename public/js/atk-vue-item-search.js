@@ -16,6 +16,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 
 
+
 /**
  * Will allow user to send data query request to server.
  * Request should filter the data and reload the data view.
@@ -72,18 +73,15 @@ const template = `<div class="atk-item-search" :class="inputCss">
       if (!this.onKeyup.debouncedFx) {
         this.onKeyup.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_1__["default"].createDebouncedFx(e => {
           this.onKeyup.debouncedFx = null;
-
           if (this.query !== this.temp) {
             if (this.query === '') {
               this.query = null;
             }
-
             this.sendQuery();
             this.temp = this.query;
           }
         }, this.options.inputTimeOut);
       }
-
       this.onKeyup.debouncedFx.call(this);
     },
     onEscape: function () {

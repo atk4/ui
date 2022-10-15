@@ -47,7 +47,6 @@ __webpack_require__.r(__webpack_exports__);
      */
     addNewRule: function (ruleId) {
       this.selectedRule = this.rules.filter(rule => rule.id === ruleId)[0]; // eslint-disable-line prefer-destructuring
-
       if (this.selectedRule) {
         this.addRule();
       }
@@ -128,20 +127,15 @@ __webpack_require__.r(__webpack_exports__);
       if (this.labels.hiddenOperator.includes(this.query.operator)) {
         return false;
       }
-
       switch (type) {
         case 'input':
           return this.isInput;
-
         case 'checkbox':
           return this.isCheckbox;
-
         case 'select':
           return this.isSelect;
-
         case 'custom-component':
           return this.isComponent;
-
         default:
           return false;
       }
@@ -247,11 +241,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_map_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_map_js__WEBPACK_IMPORTED_MODULE_1__);
 
 
-
 var render = function render() {
   var _vm = this,
-      _c = _vm._self._c;
-
+    _c = _vm._self._c;
   return _c("div", {
     staticClass: "vqb-group ui fluid card",
     class: [_vm.labels.spaceRule, "depth-" + _vm.depth.toString()]
@@ -286,7 +278,6 @@ var render = function render() {
           var val = "_value" in o ? o._value : o.value;
           return val;
         });
-
         _vm.$set(_vm.query, "logicalOperator", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
       }
     }
@@ -341,7 +332,6 @@ var render = function render() {
     staticClass: "vbq-group-body content"
   }, [_c("query-builder-children", _vm._b({}, "query-builder-children", _vm.$props, false))], 1)]);
 };
-
 var staticRenderFns = [];
 render._withStripped = true;
 
@@ -366,11 +356,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_map_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_map_js__WEBPACK_IMPORTED_MODULE_1__);
 
 
-
 var render = function render() {
   var _vm = this,
-      _c = _vm._self._c;
-
+    _c = _vm._self._c;
   return _c("div", {
     staticClass: "vqb-rule ui fluid card",
     class: _vm.labels.spaceRule,
@@ -407,7 +395,6 @@ var render = function render() {
           var val = "_value" in o ? o._value : o.value;
           return val;
         });
-
         _vm.$set(_vm.query, "operand", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
       }
     }
@@ -433,7 +420,6 @@ var render = function render() {
           var val = "_value" in o ? o._value : o.value;
           return val;
         });
-
         _vm.$set(_vm.query, "operator", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
       }
     }
@@ -465,13 +451,11 @@ var render = function render() {
     on: {
       change: function ($event) {
         var $$a = _vm.query.value,
-            $$el = $event.target,
-            $$c = $$el.checked ? true : false;
-
+          $$el = $event.target,
+          $$c = $$el.checked ? true : false;
         if (Array.isArray($$a)) {
           var $$v = null,
-              $$i = _vm._i($$a, $$v);
-
+            $$i = _vm._i($$a, $$v);
           if ($$el.checked) {
             $$i < 0 && _vm.$set(_vm.query, "value", $$a.concat([$$v]));
           } else {
@@ -518,7 +502,6 @@ var render = function render() {
     on: {
       input: function ($event) {
         if ($event.target.composing) return;
-
         _vm.$set(_vm.query, "value", $event.target.value);
       }
     }
@@ -561,7 +544,6 @@ var render = function render() {
           var val = "_value" in o ? o._value : o.value;
           return val;
         });
-
         _vm.$set(_vm.query, "value", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
       }
     }
@@ -595,7 +577,6 @@ var render = function render() {
     }
   })])])])])]);
 };
-
 var staticRenderFns = [];
 render._withStripped = true;
 
@@ -616,8 +597,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var render = function render() {
   var _vm = this,
-      _c = _vm._self._c;
-
+    _c = _vm._self._c;
   return _c("div", {}, [_c("input", {
     attrs: {
       form: _vm.form,
@@ -657,7 +637,6 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.debug ? [_c("pre", [_vm._v(_vm._s(JSON.stringify(this.query, null, 2)))])] : _vm._e()], 2);
 };
-
 var staticRenderFns = [];
 render._withStripped = true;
 
@@ -675,8 +654,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* global flatpickr */
-// loaded after main JS
+/* global flatpickr */ // loaded after main JS
 
 /**
  * Wrapper for vue-flatpickr-component component.
@@ -687,6 +665,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * Will emit a dateChange event when date is set.
  */
+
 const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-change="onChange"></flatpickr-picker>';
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-date-picker',
@@ -697,17 +676,14 @@ const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-chang
       useDefault,
       ...fpickr
     } = this.config;
-
     if (useDefault && !fpickr.defaultDate && !this.value) {
       fpickr.defaultDate = new Date();
     } else if (this.value) {
       fpickr.defaultDate = this.value;
     }
-
     if (!fpickr.locale) {
       fpickr.locale = flatpickr.l10ns.default;
     }
-
     return {
       flatPickr: fpickr,
       date: null
@@ -744,6 +720,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+
 
 /**
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
@@ -799,7 +776,6 @@ const template = `<sui-dropdown
     onChange: function (value) {
       this.$emit('onChange', value);
     },
-
     /**
      * Receive user input text for search.
      */
@@ -807,25 +783,20 @@ const template = `<sui-dropdown
       if (inputValue) {
         this.isLoading = true;
       }
-
       if (!this.onFiltered.debouncedFx) {
         this.onFiltered.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_0__["default"].createDebouncedFx(() => {
           this.onFiltered.debouncedFx = null;
-
           if (this.query !== this.temp) {
             this.query = this.temp;
-
             if (this.query) {
               this.fetchItems(this.query);
             }
           }
         }, 250);
       }
-
       this.temp = inputValue;
       this.onFiltered.debouncedFx(this);
     },
-
     /**
      * Fetch new data from server.
      */
@@ -839,7 +810,6 @@ const template = `<sui-dropdown
           method: 'get',
           data: data
         });
-
         if (response.success) {
           this.dropdownProps.options = response.results;
         }
