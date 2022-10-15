@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install intl \
     && docker-php-ext-install pdo pdo_mysql
 
-RUN curl -sL https://deb.nodesource.com/setup_18.x  | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_current.x  | bash - \
     && apt-get update && apt-get -y install nodejs \
     && npm install -g npm
 
