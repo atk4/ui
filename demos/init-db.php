@@ -536,7 +536,7 @@ class MultilineItem extends ModelWithPrefixedFields
  * @property Country       $country @Atk4\RefOne()
  * @property MultilineItem $items   @Atk4\RefMany()
  */
-class MultiLineDelivery extends ModelWithPrefixedFields
+class MultilineDelivery extends ModelWithPrefixedFields
 {
     public $table = 'multiline_delivery';
 
