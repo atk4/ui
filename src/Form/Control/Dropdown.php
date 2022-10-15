@@ -14,11 +14,11 @@ class Dropdown extends Input
      * Values need for the dropdown.
      * Note: Now possible to display icon with value in dropdown by passing the icon class with your values.
      * ex: 'values' => [
-     *         'tag' => ['Tag', 'icon' => 'tag'],
-     *         'globe' => ['Globe', 'icon' => 'globe'],
-     *         'registered' => ['Registered', 'icon' => 'registered'],
-     *         'file' => ['File', 'icon' => 'file'],
-     *     ].
+     *     'tag' => ['Tag', 'icon' => 'tag'],
+     *     'globe' => ['Globe', 'icon' => 'globe'],
+     *     'registered' => ['Registered', 'icon' => 'registered'],
+     *     'file' => ['File', 'icon' => 'file'],
+     * ].
      *
      * @var array<int|string, mixed>
      */
