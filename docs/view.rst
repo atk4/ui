@@ -290,7 +290,7 @@ Any view has the ability to render itself. Once executed, render will perform th
 
  - call renderView() of a current object.
  - call recursiveRender() to recursively render sub-elements.
- - returns ``<script>`` with on-dom-ready instructions along with rendering of a current view.
+ - return JS code with on-dom-ready instructions along with HTML code of a current view.
 
 You must not override render() in your objects. If you are integrating Agile UI into your
 framework you shouldn't even use ``render()``, but instead use ``getHtml`` and ``getJs``.
