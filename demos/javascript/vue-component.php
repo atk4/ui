@@ -86,51 +86,50 @@ $clock_template = new HtmlTemplate(<<<'EOF'
             <div class="ui basic segment inline"><div class="ui button primary" @click="onChangeStyle">Change Style</div></div>
         </div>
     </my-clock>
-    </div>{$script}
+    </div>
+    {$script}
     EOF);
 
 // Injecting script but normally you would create a separate js file and include it in your page.
 // This is the vue component definition. It is also using another external vue component 'vue-clock2'
-$clock_script = <<<'EOF'
-    <script>
-        // Register clock component from vue-clock2 to use with myClock.
-        atk.vueService.getVue().component('clock', Clock.default);
+$clock_script = $app->getTag('script', [], <<<'EOF'
+    // Register clock component from vue-clock2 to use with myClock.
+    atk.vueService.getVue().component('clock', Clock.default);
 
-        var myClock = {
-          props : { clock: Array },
-          data: function() {
-            return { style : this.clock, currentIdx : 0 }
-          },
-          mounted: function() {
-            // add a listener for changing clock style.
-            // this will listen to event '-clock-change-style' emit on the eventBus.
-            atk.eventBus.on(this.$root.$el.id + '-clock-change-style', (payload) => {
-                this.onChangeStyle();
-            });
-          },
-          computed: {
-            color: function() {
-              return this.style[this.currentIdx].color
-            },
-            border: function() {
-              return this.style[this.currentIdx].border
-            },
-            bg: function() {
-              return this.style[this.currentIdx].bg
-            }
-          },
-          name: 'my-clock',
-          methods: {
-            onChangeStyle: function() {
-              this.currentIdx = this.currentIdx + 1;
-              if (this.currentIdx > this.style.length - 1) {
-                this.currentIdx = 0;
-              }
-            }
-          },
+    var myClock = {
+      props : { clock: Array },
+      data: function() {
+        return { style : this.clock, currentIdx : 0 }
+      },
+      mounted: function() {
+        // add a listener for changing clock style.
+        // this will listen to event '-clock-change-style' emit on the eventBus.
+        atk.eventBus.on(this.$root.$el.id + '-clock-change-style', (payload) => {
+            this.onChangeStyle();
+        });
+      },
+      computed: {
+        color: function() {
+          return this.style[this.currentIdx].color
+        },
+        border: function() {
+          return this.style[this.currentIdx].border
+        },
+        bg: function() {
+          return this.style[this.currentIdx].bg
         }
-    </script>
-    EOF;
+      },
+      name: 'my-clock',
+      methods: {
+        onChangeStyle: function() {
+          this.currentIdx = this.currentIdx + 1;
+          if (this.currentIdx > this.style.length - 1) {
+            this.currentIdx = 0;
+          }
+        }
+      },
+    }
+    EOF);
 
 // Creating the clock view and injecting js.
 $clock = View::addTo($app, ['template' => $clock_template]);

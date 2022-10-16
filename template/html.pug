@@ -5,7 +5,7 @@ html(lang="{lang}en{/}")
     | {$meta}
     meta(charset='utf-8')
     script
-      | {$InitJsBundle}
+      | 'use strict'; {$InitJsBundle}
     |
     | {$Head}
     style

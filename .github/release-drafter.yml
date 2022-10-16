@@ -1,11 +1,8 @@
 categories:
-  - title: "Major Features"
+  - title: "Major features"
     labels:
       - "MAJOR"
-  - title: "Breaking Changes"
+  - title: "Breaking changes"
     labels:
       - "BC-break"
-template: |
-  ## What’s Changed
-
-  $CHANGES
+  - title: "Other changes"

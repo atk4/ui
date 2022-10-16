@@ -399,7 +399,7 @@ class App
                 $ids = implode(', ', $keys);
                 $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . $ids . '\').remove();';
             }
-            $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
+            $output = $this->getTag('script', [], 'jQuery(function() {' . $remove_function . $output['atkjs'] . '});') . $output['html'];
 
             $this->outputResponseHtml($output, $headers);
         } elseif ($type === 'text/html') {
@@ -926,6 +926,9 @@ class App
                 if (is_array($v)) {
                     $result[] = $this->getTag(...$v);
                 } elseif (['script' => true, 'style' => true][$tag] ?? false) {
+                    if ($tag === 'script') {
+                        $result[] = '\'use strict\'; ';
+                    }
                     // see https://mathiasbynens.be/notes/etago
                     $result[] = preg_replace('~(?<=<)(?=/\s*' . preg_quote($tag, '~') . '|!--)~', '\\\\', $v);
                 } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behaviour, only directly passed strings were escaped
