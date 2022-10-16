@@ -6,3 +6,7 @@ categories:
     labels:
       - "BC-break"
   - title: "Other changes"
+template: |
+  # Changelog
+
+  $CHANGES
