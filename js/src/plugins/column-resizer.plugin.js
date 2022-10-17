@@ -7,10 +7,7 @@ import AtkPlugin from './atk.plugin';
  */
 export default class AtkColumnResizerPlugin extends AtkPlugin {
     main() {
-        // add on resize callback if URL is supplied
-        if (this.settings.url) {
-            this.settings.onResize = this.onResize.bind(this);
-        }
+        this.settings.onResize = this.onResize.bind(this);
         this.resizable = new Resizer(this.$el[0], ({ ...this.settings.atkDefaults, ...this.settings }));
 
         // reset padding class.
@@ -20,7 +17,7 @@ export default class AtkColumnResizerPlugin extends AtkPlugin {
     /**
      * Send widths to server via callback URL.
      *
-     * @param {Array.<object>} widths an Array of objects, each containing the column name and their size in pixels [{ column: 'name', size: '135px' }]
+     * @param {Array.<object>} widths example: [{ column: 'name', size: 135 }]
      */
     sendWidths(widths) {
         this.$el.api({
@@ -31,29 +28,26 @@ export default class AtkColumnResizerPlugin extends AtkPlugin {
         });
     }
 
-    /**
-     * On resize callback when user finish dragging column for resizing.
-     * Calling this method via callback need to bind "this" set to this plugin.
-     */
     onResize(event) {
-        const columns = this.$el.find('th');
+        if (this.settings.url) {
+            const columns = this.$el.find('th');
 
-        const widths = [];
-        columns.each((idx, item) => {
-            widths.push({ column: $(item).data('column'), size: $(item).outerWidth() });
-        });
+            const widths = [];
+            columns.each((idx, item) => {
+                widths.push({ column: $(item).data('column'), size: $(item).outerWidth() });
+            });
 
-        this.sendWidths(widths);
+            this.sendWidths(widths);
+        }
     }
 }
 
 AtkColumnResizerPlugin.DEFAULTS = {
     atkDefaults: {
+        resizeMode: 'flex',
         liveDrag: true,
-        resizeMode: 'overflow',
         draggingClass: 'atk-column-dragging',
-        minWidth: 8,
-        // onResize: function(e) { e.path.filter(function(item) { return item.querySelector('table') }); }
+        serialize: false,
     },
     url: null,
 };

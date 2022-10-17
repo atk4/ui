@@ -95,4 +95,4 @@ $table->addClass('celled')->resizableColumn(function (Jquery $j, array $data) us
     }
 
     return new JsToast('New widths: ' . $app->encodeJson($res));
-});
+}, [200, 200, 200]);

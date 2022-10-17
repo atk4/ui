@@ -360,10 +360,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
-    // add on resize callback if URL is supplied
-    if (this.settings.url) {
-      this.settings.onResize = this.onResize.bind(this);
-    }
+    this.settings.onResize = this.onResize.bind(this);
     this.resizable = new (column_resizer__WEBPACK_IMPORTED_MODULE_4___default())(this.$el[0], {
       ...this.settings.atkDefaults,
       ...this.settings
@@ -376,7 +373,7 @@ class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["d
   /**
    * Send widths to server via callback URL.
    *
-   * @param {Array.<object>} widths an Array of objects, each containing the column name and their size in pixels [{ column: 'name', size: '135px' }]
+   * @param {Array.<object>} widths example: [{ column: 'name', size: 135 }]
    */
   sendWidths(widths) {
     this.$el.api({
@@ -388,32 +385,27 @@ class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["d
       }
     });
   }
-
-  /**
-   * On resize callback when user finish dragging column for resizing.
-   * Calling this method via callback need to bind "this" set to this plugin.
-   */
   onResize(event) {
-    const columns = this.$el.find('th');
-    const widths = [];
-    columns.each((idx, item) => {
-      widths.push({
-        column: external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(item).data('column'),
-        size: external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(item).outerWidth()
+    if (this.settings.url) {
+      const columns = this.$el.find('th');
+      const widths = [];
+      columns.each((idx, item) => {
+        widths.push({
+          column: external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(item).data('column'),
+          size: external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(item).outerWidth()
+        });
       });
-    });
-    this.sendWidths(widths);
+      this.sendWidths(widths);
+    }
   }
 }
 AtkColumnResizerPlugin.DEFAULTS = {
   atkDefaults: {
+    resizeMode: 'flex',
     liveDrag: true,
-    resizeMode: 'overflow',
     draggingClass: 'atk-column-dragging',
-    minWidth: 8
-    // onResize: function(e) { e.path.filter(function(item) { return item.querySelector('table') }); }
+    serialize: false
   },
-
   url: null
 };
 
@@ -1524,7 +1516,7 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
 
     // the target element within container where new content is appendTo.
     this.$target = this.settings.options.appendTo ? this.$inner.find(this.settings.options.appendTo) : this.$inner;
-    this.bindScrollEvent(this.$scroll);
+    this.$scroll.on('scroll', this.observe.bind(this));
 
     // if there is no scrollbar, then try to load next page too
     if (!this.hasScrollbar()) {
@@ -1553,15 +1545,6 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
       this.$el.find('thead').hide();
       this.$el.css('margin-top', $tableCopy.find('thead').height());
     }
-  }
-
-  /**
-   * Bind scrolling event to an element.
-   *
-   * @param {$} $el
-   */
-  bindScrollEvent($el) {
-    $el.on('scroll', this.observe.bind(this));
   }
 
   /**
