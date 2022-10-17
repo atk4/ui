@@ -1291,6 +1291,9 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
     });
     this.initialize();
     sortable.on('sortable:stop', e => {
+      if (e.data.newIndex === e.data.oldIndex) {
+        return;
+      }
       this.ids = [];
       this.newIdx = e.data.newIndex;
       this.orgIdx = e.data.oldIndex;
