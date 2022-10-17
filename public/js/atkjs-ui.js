@@ -139,16 +139,18 @@ __webpack_require__.r(__webpack_exports__);
    *
    * @returns {object}
    */
-  parseParams: function (str) {
-    if (str.split('?')[1]) {
-      return decodeURIComponent(str.split('?')[1]).split('&').reduce((obj, unsplitArg) => {
-        const arg = unsplitArg.split('=');
-        obj[arg[0]] = arg[1]; // eslint-disable-line prefer-destructuring
-
-        return obj;
-      }, {});
-    }
-    return {};
+  parseParams: function (url) {
+    const query = url.includes('?') ? url.substring(url.indexOf('?') + 1) : '';
+    return (query.length > 0 ? query.split('&') : []).reduce((obj, queryPart) => {
+      let k = queryPart;
+      let v = null;
+      if (k.includes('=')) {
+        v = k.substring(k.indexOf('=') + 1);
+        k = k.substring(0, k.indexOf('='));
+      }
+      obj[decodeURIComponent(k)] = decodeURIComponent(v);
+      return obj;
+    }, {});
   },
   /**
    * Add param to an URL string.
@@ -159,8 +161,9 @@ __webpack_require__.r(__webpack_exports__);
    * @returns {string}
    */
   appendParams: function (url, data) {
-    if (!external_jquery__WEBPACK_IMPORTED_MODULE_5___default().isEmptyObject(data)) {
-      url += (url.indexOf('?') >= 0 ? '&' : '?') + external_jquery__WEBPACK_IMPORTED_MODULE_5___default().param(data);
+    const query = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().param(data);
+    if (query !== '') {
+      url += (url.includes('?') ? '&' : '?') + query;
     }
     return url;
   },
@@ -173,19 +176,9 @@ __webpack_require__.r(__webpack_exports__);
    * @returns {string}
    */
   removeParam: function (url, param) {
-    const splitUrl = url.split('?');
-    if (splitUrl.length === 0) {
-      return url;
-    }
-    const urlBase = splitUrl[0];
-    if (splitUrl.length === 1) {
-      return urlBase;
-    }
-    const newParams = splitUrl[1].split('&').filter(item => item.split('=')[0] !== param);
-    if (newParams.length > 0) {
-      return urlBase + '?' + newParams.join('&');
-    }
-    return urlBase;
+    const query = url.includes('?') ? url.substring(url.indexOf('?') + 1) : '';
+    const newParams = (query.length > 0 ? query.split('&') : []).filter(queryPart => decodeURIComponent(queryPart.split('=')[0]) !== param);
+    return url.substring(0, url.indexOf('?')) + (newParams.length > 0 ? '?' + newParams.join('&') : '');
   },
   /**
    * Remove whole query string from an URL string.
@@ -1629,18 +1622,10 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
       response.id = null;
     }
   }
-
-  /**
-   * Add loader.
-   */
   addLoader() {
     const $parent = this.$inner.parent().hasClass('atk-overflow-auto') ? this.$inner.parent().parent() : this.$inner.parent();
     $parent.append(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('<div id="atkScrollLoader"><div class="ui section hidden divider"></div><div class="ui active centered inline loader basic segment"></div></div>'));
   }
-
-  /**
-   * Remove loader.
-   */
   removeLoader() {
     external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('#atkScrollLoader').remove();
   }
