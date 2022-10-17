@@ -456,7 +456,7 @@ column name in table with their new width in pixel.::
     $table->resizableColumn(function (Jquery $j, string $w) {
         // do something with new column width
         $columnWidths = $this->getApp()->decodeJson($w);
-    }, [200,300,100,100,100]);
+    }, [200, 300, 100, 100, 100]);
 
 Note that you may specify an array of integer representing the initial width value in pixel for each column in your table.
 

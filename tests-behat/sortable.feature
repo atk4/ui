@@ -13,6 +13,7 @@ Feature: Sortable / Draggable
     When I drag selector "xpath(//tr[td[2][text()='Albania']]/td[1]/i)" onto selector "xpath(//tr[td[2][text()='Andorra']]/td[1]/i)"
     Then Toast display should contain text "New order: 1 - 3 - 4 - 5 - 2 - 6"
 
-  Scenario: drag resize (TODO test real drag)
+  Scenario: drag column resize
     Given I am on "collection/table2.php"
-    Then I should see "Table with resizable columns"
+    When I drag selector "xpath((//div.grip-resizable)[2])" onto selector "xpath((//div.grip-resizable)[1])"
+    Then Toast display should contain text 'New widths: { "action": "wide", "amount": "narrow", "amount_copy": "wide" }'

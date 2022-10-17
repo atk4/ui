@@ -7,6 +7,8 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Header;
+use Atk4\Ui\Jquery;
+use Atk4\Ui\JsToast;
 use Atk4\Ui\Lister;
 use Atk4\Ui\Table;
 
@@ -86,4 +88,11 @@ Header::addTo($app, ['Table with resizable columns', 'subHeader' => 'Just drag c
 
 $table = Table::addTo($app);
 $table->setModel($model);
-$table->addClass('celled')->resizableColumn();
+$table->addClass('celled')->resizableColumn(function (Jquery $j, array $data) use ($app) {
+    $res = [];
+    foreach ($data as $column) {
+        $res[$column['column']] = $column['size'] < 100 ? 'narrow' : 'wide';
+    }
+
+    return new JsToast('New widths: ' . $app->encodeJson($res));
+});
