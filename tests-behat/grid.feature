@@ -51,3 +51,15 @@ Feature: Grid
     Then I should not see "Denmark"
     When I scroll to bottom
     Then I should see "Denmark"
+    When I scroll to bottom
+    When I scroll to bottom
+    When I scroll to bottom
+    When I scroll to bottom
+    When I scroll to bottom
+    When I scroll to bottom
+    Then I should not see "South Sudan"
+    When I scroll to bottom
+    Then I should see "South Sudan"
+    When I scroll to bottom
+    Then I should see "South Sudan"
+    Then I should see "Denmark"
