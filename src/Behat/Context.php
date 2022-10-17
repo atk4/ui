@@ -272,6 +272,16 @@ class Context extends RawMinkContext implements BehatContext
         $this->getSession()->wait($ms);
     }
 
+    /**
+     * @When I drag selector :selector onto selector :selectorTarget
+     */
+    public function iDragElementOnto(string $selector, string $selectorTarget): void
+    {
+        $elem = $this->findElement(null, $selector);
+        $elemTarget = $this->findElement(null, $selectorTarget);
+        $this->getSession()->getDriver()->dragTo($elem->getXpath(), $elemTarget->getXpath());
+    }
+
     // {{{ button
 
     /**

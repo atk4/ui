@@ -13,7 +13,9 @@ use WebDriver\Element;
  * Selenium2Driver driver with the following fixes:
  * - https://github.com/minkphp/MinkSelenium2Driver/pull/327
  * - https://github.com/minkphp/MinkSelenium2Driver/pull/328
- * - https://github.com/minkphp/MinkSelenium2Driver/pull/352.
+ * - https://github.com/minkphp/MinkSelenium2Driver/pull/352
+ * - https://github.com/minkphp/MinkSelenium2Driver/pull/359
+ * .
  */
 class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
 {
@@ -31,7 +33,7 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
         }
     }
 
-    public function getText($xpath)
+    public function getText($xpath): string
     {
         $text = $this->executeJsOnXpath($xpath, 'return {{ELEMENT}}.innerText;');
         $text = trim(preg_replace('~\s+~s', ' ', $text));
@@ -166,7 +168,7 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
         return $this->unserializeExecuteResult($result);
     }
 
-    public function wait($timeout, $condition, array $args = [])
+    public function wait($timeout, $condition, array $args = []): bool
     {
         $script = 'return (' . rtrim($condition, " \t\n\r;") . ');';
         $start = microtime(true);
@@ -184,5 +186,37 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
         } while (microtime(true) < $end);
 
         return (bool) $result;
+    }
+
+    public function dragTo($sourceXpath, $destinationXpath): void
+    {
+        $source = $this->findElement($sourceXpath);
+        $destination = $this->findElement($destinationXpath);
+
+        $this->getWebDriverSession()->moveto(['element' => $source->getID()]);
+
+        $this->executeScript(<<<'EOF'
+            var event = document.createEvent("HTMLEvents");
+
+            event.initEvent("dragstart", true, true);
+            event.dataTransfer = {};
+
+            arguments[0].dispatchEvent(event);
+            EOF, [$source]);
+
+        $this->getWebDriverSession()->buttondown();
+        if ($destination->getID() !== $source->getID()) {
+            $this->getWebDriverSession()->moveto(['element' => $destination->getID()]);
+        }
+        $this->getWebDriverSession()->buttonup();
+
+        $this->executeScript(<<<'EOF'
+            var event = document.createEvent("HTMLEvents");
+
+            event.initEvent("drop", true, true);
+            event.dataTransfer = {};
+
+            arguments[0].dispatchEvent(event);
+            EOF, [$destination]);
     }
 }
