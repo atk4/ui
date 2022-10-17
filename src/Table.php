@@ -296,13 +296,8 @@ class Table extends Lister
     /**
      * Make columns resizable by dragging column header.
      *
-     * The callback param function will receive two parameter, a jQuery chain object and a json string containing all table columns
-     * name and size. To retrieve columns width, simply json decode the $widths param in your callback function.
-     * ex:
-     *  $table->resizableColumn(function (Jquery $j, string $w) {
-     *       // do somethings with columns width
-     *       $columns = $this->getApp()->decodeJson($w);
-     *   });
+     * The callback function will receive two parameter, a Jquery chain object and a array containing all table columns
+     * name and size.
      *
      * @param \Closure        $fx             a callback function with columns widths as parameter
      * @param array<int, int> $widths         ex: [100, 200, 300, 100]
@@ -310,22 +305,22 @@ class Table extends Lister
      *
      * @return $this
      */
-    public function resizableColumn($fx = null, $widths = null, $resizerOptions = null)
+    public function resizableColumn($fx = null, $widths = null, $resizerOptions = [])
     {
         $options = [];
         if ($fx instanceof \Closure) {
             $cb = JsCallback::addTo($this);
-            $cb->set($fx, ['widths' => 'widths']);
+            $cb->set(function (Jquery $chain, string $data) use ($fx) {
+                return $fx($chain, $this->getApp()->decodeJson($data));
+            }, ['widths' => 'widths']);
             $options['url'] = $cb->getJsUrl();
         }
 
-        if ($widths) {
+        if ($widths !== null) {
             $options['widths'] = $widths;
         }
 
-        if ($resizerOptions) {
-            $options = array_merge($options, $resizerOptions);
-        }
+        $options = array_merge($options, $resizerOptions);
 
         $this->js(true, $this->js()->atkColumnResizer($options));
 

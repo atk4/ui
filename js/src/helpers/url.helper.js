@@ -6,19 +6,22 @@ export default {
      *
      * @returns {object}
      */
-    parseParams: function (str) {
-        if (str.split('?')[1]) {
-            return decodeURIComponent(str.split('?')[1])
-                .split('&')
-                .reduce((obj, unsplitArg) => {
-                    const arg = unsplitArg.split('=');
-                    obj[arg[0]] = arg[1]; // eslint-disable-line prefer-destructuring
+    parseParams: function (url) {
+        const query = url.includes('?') ? url.substring(url.indexOf('?') + 1) : '';
 
-                    return obj;
-                }, {});
-        }
+        return (query.length > 0 ? query.split('&') : [])
+            .reduce((obj, queryPart) => {
+                let k = queryPart;
+                let v = null;
+                if (k.includes('=')) {
+                    v = k.substring(k.indexOf('=') + 1);
+                    k = k.substring(0, k.indexOf('='));
+                }
 
-        return {};
+                obj[decodeURIComponent(k)] = decodeURIComponent(v);
+
+                return obj;
+            }, {});
     },
 
     /**
@@ -30,8 +33,9 @@ export default {
      * @returns {string}
      */
     appendParams: function (url, data) {
-        if (!$.isEmptyObject(data)) {
-            url += (url.indexOf('?') >= 0 ? '&' : '?') + $.param(data);
+        const query = $.param(data);
+        if (query !== '') {
+            url += (url.includes('?') ? '&' : '?') + query;
         }
 
         return url;
@@ -46,22 +50,12 @@ export default {
      * @returns {string}
      */
     removeParam: function (url, param) {
-        const splitUrl = url.split('?');
-        if (splitUrl.length === 0) {
-            return url;
-        }
+        const query = url.includes('?') ? url.substring(url.indexOf('?') + 1) : '';
+        const newParams = (query.length > 0 ? query.split('&') : [])
+            .filter((queryPart) => decodeURIComponent(queryPart.split('=')[0]) !== param);
 
-        const urlBase = splitUrl[0];
-        if (splitUrl.length === 1) {
-            return urlBase;
-        }
-
-        const newParams = splitUrl[1].split('&').filter((item) => item.split('=')[0] !== param);
-        if (newParams.length > 0) {
-            return urlBase + '?' + newParams.join('&');
-        }
-
-        return urlBase;
+        return url.substring(0, url.indexOf('?'))
+                + (newParams.length > 0 ? '?' + newParams.join('&') : '');
     },
 
     /**

@@ -105,10 +105,10 @@ export default {
     }
     .atk-qb-remove {
         cursor: pointer;
-        color: rgba(0,0,0,0.6);
+        color: rgba(0, 0, 0, 0.6);
     }
     .ui.selection.dropdown.atk-qb-rule-select {
-        background-color: rgba(0,0,0,0);
+        background-color: rgba(0, 0, 0, 0);
     }
     .ui.selection.dropdown .atk-qb-rule-select-menu {
         width: max-content;

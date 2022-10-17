@@ -49,7 +49,7 @@ export default class AtkScrollPlugin extends AtkPlugin {
         // the target element within container where new content is appendTo.
         this.$target = this.settings.options.appendTo ? this.$inner.find(this.settings.options.appendTo) : this.$inner;
 
-        this.bindScrollEvent(this.$scroll);
+        this.$scroll.on('scroll', this.observe.bind(this));
 
         // if there is no scrollbar, then try to load next page too
         if (!this.hasScrollbar()) {
@@ -78,15 +78,6 @@ export default class AtkScrollPlugin extends AtkPlugin {
             this.$el.find('thead').hide();
             this.$el.css('margin-top', $tableCopy.find('thead').height());
         }
-    }
-
-    /**
-     * Bind scrolling event to an element.
-     *
-     * @param {$} $el
-     */
-    bindScrollEvent($el) {
-        $el.on('scroll', this.observe.bind(this));
     }
 
     /**
@@ -173,17 +164,11 @@ export default class AtkScrollPlugin extends AtkPlugin {
         }
     }
 
-    /**
-     * Add loader.
-     */
     addLoader() {
         const $parent = this.$inner.parent().hasClass('atk-overflow-auto') ? this.$inner.parent().parent() : this.$inner.parent();
         $parent.append($('<div id="atkScrollLoader"><div class="ui section hidden divider"></div><div class="ui active centered inline loader basic segment"></div></div>'));
     }
 
-    /**
-     * Remove loader.
-     */
     removeLoader() {
         $('#atkScrollLoader').remove();
     }

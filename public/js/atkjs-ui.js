@@ -139,16 +139,18 @@ __webpack_require__.r(__webpack_exports__);
    *
    * @returns {object}
    */
-  parseParams: function (str) {
-    if (str.split('?')[1]) {
-      return decodeURIComponent(str.split('?')[1]).split('&').reduce((obj, unsplitArg) => {
-        const arg = unsplitArg.split('=');
-        obj[arg[0]] = arg[1]; // eslint-disable-line prefer-destructuring
-
-        return obj;
-      }, {});
-    }
-    return {};
+  parseParams: function (url) {
+    const query = url.includes('?') ? url.substring(url.indexOf('?') + 1) : '';
+    return (query.length > 0 ? query.split('&') : []).reduce((obj, queryPart) => {
+      let k = queryPart;
+      let v = null;
+      if (k.includes('=')) {
+        v = k.substring(k.indexOf('=') + 1);
+        k = k.substring(0, k.indexOf('='));
+      }
+      obj[decodeURIComponent(k)] = decodeURIComponent(v);
+      return obj;
+    }, {});
   },
   /**
    * Add param to an URL string.
@@ -159,8 +161,9 @@ __webpack_require__.r(__webpack_exports__);
    * @returns {string}
    */
   appendParams: function (url, data) {
-    if (!external_jquery__WEBPACK_IMPORTED_MODULE_5___default().isEmptyObject(data)) {
-      url += (url.indexOf('?') >= 0 ? '&' : '?') + external_jquery__WEBPACK_IMPORTED_MODULE_5___default().param(data);
+    const query = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().param(data);
+    if (query !== '') {
+      url += (url.includes('?') ? '&' : '?') + query;
     }
     return url;
   },
@@ -173,19 +176,9 @@ __webpack_require__.r(__webpack_exports__);
    * @returns {string}
    */
   removeParam: function (url, param) {
-    const splitUrl = url.split('?');
-    if (splitUrl.length === 0) {
-      return url;
-    }
-    const urlBase = splitUrl[0];
-    if (splitUrl.length === 1) {
-      return urlBase;
-    }
-    const newParams = splitUrl[1].split('&').filter(item => item.split('=')[0] !== param);
-    if (newParams.length > 0) {
-      return urlBase + '?' + newParams.join('&');
-    }
-    return urlBase;
+    const query = url.includes('?') ? url.substring(url.indexOf('?') + 1) : '';
+    const newParams = (query.length > 0 ? query.split('&') : []).filter(queryPart => decodeURIComponent(queryPart.split('=')[0]) !== param);
+    return url.substring(0, url.indexOf('?')) + (newParams.length > 0 ? '?' + newParams.join('&') : '');
   },
   /**
    * Remove whole query string from an URL string.
@@ -360,10 +353,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
-    // add on resize callback if URL is supplied
-    if (this.settings.url) {
-      this.settings.onResize = this.onResize.bind(this);
-    }
+    this.settings.onResize = this.onResize.bind(this);
     this.resizable = new (column_resizer__WEBPACK_IMPORTED_MODULE_4___default())(this.$el[0], {
       ...this.settings.atkDefaults,
       ...this.settings
@@ -376,7 +366,7 @@ class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["d
   /**
    * Send widths to server via callback URL.
    *
-   * @param {Array.<object>} widths an Array of objects, each containing the column name and their size in pixels [{ column: 'name', size: '135px' }]
+   * @param {Array.<object>} widths example: [{ column: 'name', size: 135 }]
    */
   sendWidths(widths) {
     this.$el.api({
@@ -388,32 +378,27 @@ class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["d
       }
     });
   }
-
-  /**
-   * On resize callback when user finish dragging column for resizing.
-   * Calling this method via callback need to bind "this" set to this plugin.
-   */
   onResize(event) {
-    const columns = this.$el.find('th');
-    const widths = [];
-    columns.each((idx, item) => {
-      widths.push({
-        column: external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(item).data('column'),
-        size: external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(item).outerWidth()
+    if (this.settings.url) {
+      const columns = this.$el.find('th');
+      const widths = [];
+      columns.each((idx, item) => {
+        widths.push({
+          column: external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(item).data('column'),
+          size: external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(item).outerWidth()
+        });
       });
-    });
-    this.sendWidths(widths);
+      this.sendWidths(widths);
+    }
   }
 }
 AtkColumnResizerPlugin.DEFAULTS = {
   atkDefaults: {
+    resizeMode: 'flex',
     liveDrag: true,
-    resizeMode: 'overflow',
     draggingClass: 'atk-column-dragging',
-    minWidth: 8
-    // onResize: function(e) { e.path.filter(function(item) { return item.querySelector('table') }); }
+    serialize: false
   },
-
   url: null
 };
 
@@ -1291,6 +1276,9 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
     });
     this.initialize();
     sortable.on('sortable:stop', e => {
+      if (e.data.newIndex === e.data.oldIndex) {
+        return;
+      }
       this.ids = [];
       this.newIdx = e.data.newIndex;
       this.orgIdx = e.data.oldIndex;
@@ -1521,7 +1509,7 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
 
     // the target element within container where new content is appendTo.
     this.$target = this.settings.options.appendTo ? this.$inner.find(this.settings.options.appendTo) : this.$inner;
-    this.bindScrollEvent(this.$scroll);
+    this.$scroll.on('scroll', this.observe.bind(this));
 
     // if there is no scrollbar, then try to load next page too
     if (!this.hasScrollbar()) {
@@ -1550,15 +1538,6 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
       this.$el.find('thead').hide();
       this.$el.css('margin-top', $tableCopy.find('thead').height());
     }
-  }
-
-  /**
-   * Bind scrolling event to an element.
-   *
-   * @param {$} $el
-   */
-  bindScrollEvent($el) {
-    $el.on('scroll', this.observe.bind(this));
   }
 
   /**
@@ -1643,18 +1622,10 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
       response.id = null;
     }
   }
-
-  /**
-   * Add loader.
-   */
   addLoader() {
     const $parent = this.$inner.parent().hasClass('atk-overflow-auto') ? this.$inner.parent().parent() : this.$inner.parent();
     $parent.append(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('<div id="atkScrollLoader"><div class="ui section hidden divider"></div><div class="ui active centered inline loader basic segment"></div></div>'));
   }
-
-  /**
-   * Remove loader.
-   */
   removeLoader() {
     external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('#atkScrollLoader').remove();
   }

@@ -619,7 +619,7 @@ class Grid extends View
 
     /**
      * Add column with drag handler on each row.
-     * Drag handler allow to reorder table via drag n drop.
+     * Drag handler allow to reorder table via drag and drop.
      *
      * @return Table\Column
      */

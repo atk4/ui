@@ -444,24 +444,22 @@ See also :php:meth:`Lister::addJsPaginator`
 Resizable Columns
 -----------------
 
-.. php:method:: resizableColumn($fx = null, $widths = null, $resizerOptions = null)
+.. php:method:: resizableColumn($fx = null, $widths = null, $resizerOptions = [])
 
 Each table's column width can be resize by dragging the column right border::
 
     $table->resizableColumn();
 
-You may specify a callback function to the method. The callback will return a json string containing each
+You may specify a callback function to the method. The callback will return an array containing each
 column name in table with their new width in pixel.::
 
-    $table->resizableColumn(function (Jquery $j, string $w) {
-        // do something with new column width
-        $columnWidths = $this->getApp()->decodeJson($w);
-    }, [200,300,100,100,100]);
+    $table->resizableColumn(function (Jquery $j, array $columnWidths) {
+        // do something with new column widths
+    }, [200, 300, 100, 100, 100]);
 
 Note that you may specify an array of integer representing the initial width value in pixel for each column in your table.
 
-Finally you may also specify some of the resizer options use by column-resizer. Column-resizer is the npm package js library use for implementing
-the atkColumnResizer jQuery plugin.
+Finally you may also specify some of the resizer options - https://github.com/Bayer-Group/column-resizer#options
 
 Column attributes and classes
 =============================

@@ -169,7 +169,7 @@ if ($layout instanceof Layout\NavigableInterface) {
     $layout->addMenuItem(['Pop-up'], [$path . 'popup'], $menu);
     $layout->addMenuItem(['Toast'], [$path . 'toast'], $menu);
     $layout->addMenuItem('Paginator', [$path . 'paginator'], $menu);
-    $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $menu);
+    $layout->addMenuItem(['Drag sorting'], [$path . 'jssortable'], $menu);
 
     $path = $demosUrl . 'javascript/';
     $menu = $layout->addMenuGroup(['Javascript', 'icon' => 'code']);
