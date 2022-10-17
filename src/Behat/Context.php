@@ -709,8 +709,9 @@ class Context extends RawMinkContext implements BehatContext
     public function toastDisplayShouldContainText(string $text): void
     {
         $toastContainer = $this->findElement(null, '.ui.toast-container');
-        if (!str_contains($this->findElement($toastContainer, '.content')->getText(), $text)) {
-            throw new Exception('Cannot find text: "' . $text . '" in toast');
+        $toastText = $this->findElement($toastContainer, '.content')->getText();
+        if (!str_contains($toastText, $text)) {
+            throw new Exception('Toast text "' . $toastText . '" does not contain "' . $text . '"');
         }
     }
 
