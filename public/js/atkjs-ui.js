@@ -42,7 +42,7 @@ __webpack_require__.r(__webpack_exports__);
  * Because atk table use overflow: scroll, Dropdown is not
  * display on top of table.
  *
- * This utility will properly set css style for dropdown menu to be display correctly.
+ * This utility will properly set css style for dropdown menu to be displayed correctly.
  */
 function showTableDropdown() {
   // getting element composing dropdown.
@@ -1116,8 +1116,7 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
 
   /**
    * Allow to set filter initial input.
-   * Mostly use on page load
-   * when input need to be set to reflect a search state.
+   * Mostly use on page load when input needs to be set to reflect a search state.
    *
    * @param {string} text The text input value.
    */
@@ -1238,7 +1237,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Make elements inside a container draggable and sortable.
  * Use shopify/Draggable library https://github.com/Shopify/draggable,
- * draggable.js is external to this bundle, so it need to be load from CDN.
+ * draggable.js is external to this bundle, so it needs to be loaded from CDN.
  *
  * After reordering, callback is sent to server with post information:
  * order => contains the order of data-{label} as a comma delimited string;
@@ -1599,7 +1598,7 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
   }
 
   /**
-   * Use response to append content to element and setup next content to be load.
+   * Use response to append content to element and setup next content to be loaded.
    * Set response.id to null in order for apiService.onSuccess to bypass
    * replacing html content. Js return from server response will still be execute.
    */
@@ -2644,7 +2643,7 @@ class ModalService {
   }
   removeModal(modal) {
     if (modal.data().needRemove) {
-      // This modal was add by createModal and need to be remove.
+      // This modal was add by createModal and it needs to be removed.
       modal.remove();
     }
     this.modals.pop();
@@ -2757,7 +2756,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Panel needs to be reload to display different
+ * Panel needs to be reloaded to display different
  * content. This service will take care of this.
  */
 class PanelService {
@@ -3198,7 +3197,7 @@ class PopupService {
 
   /**
    * OnShow callback when a popup is trigger.
-   * Will check if popup need to be setup dynamically using a callback.
+   * Will check if popup needs to be setup dynamically using a callback.
    */
   onShow($module) {
     const $popup = this;
@@ -3419,7 +3418,7 @@ class VueService {
 
   /**
    * Created a Vue component and add it to the vues array.
-   * For Root component (App) to be aware that it's children component is
+   * For root component (App) to be aware that it's children component is
    * mounted, you need to use @hook:mounted="setReady"
    */
   createAtkVue(id, component, data) {

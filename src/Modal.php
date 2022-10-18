@@ -127,7 +127,7 @@ class Modal extends View
 
     /**
      * Set modal to show on page.
-     * Will trigger modal to be show on page.
+     * Will trigger modal to be shown on page.
      * ex: $button->on('click', $modal->show());.
      *
      * @return JsChain

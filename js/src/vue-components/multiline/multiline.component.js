@@ -187,7 +187,7 @@ export default {
         /**
          * Send on change action to server.
          * Use regular api call in order
-         * for return js to be fully evaluate.
+         * for return js to be fully evaluated.
          */
         fetchOnChangeAction: function (fieldName = null) {
             if (this.hasChangeCb && (fieldName === null || this.eventFields.indexOf(fieldName) > -1)) {

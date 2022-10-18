@@ -139,7 +139,7 @@ export default class AtkScrollPlugin extends AtkPlugin {
     }
 
     /**
-     * Use response to append content to element and setup next content to be load.
+     * Use response to append content to element and setup next content to be loaded.
      * Set response.id to null in order for apiService.onSuccess to bypass
      * replacing html content. Js return from server response will still be execute.
      */

@@ -97,7 +97,7 @@ class Multiline extends Form\Control
     public const TABLE_CELL = 'sui-table-cell';
 
     /**
-     * Props to be apply globally for each component supported by field type.
+     * Props to be applied globally for each component supported by field type.
      * For example setting 'sui-dropdown' property globally.
      *  $componentProps = [Multiline::SELECT => ['floating' => true]].
      *

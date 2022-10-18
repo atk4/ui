@@ -48,7 +48,7 @@ class ItemsPerPageSelector extends View
 
     /**
      * Run callback when an item is select via dropdown menu.
-     * The callback should return a View to be reload after an item
+     * The callback should return a View to be reloaded after an item
      * has been select.
      */
     public function onPageLengthSelect(\Closure $fx): void

@@ -18,7 +18,7 @@ use Atk4\Ui\View;
  * via the js panel service.
  *
  * Content is loaded via a LoadableContent View.
- * This view must implement a callback for content to be add via the callback function.
+ * This view must implement a callback for content to be added via the callback function.
  */
 class Right extends View implements Loadable
 {

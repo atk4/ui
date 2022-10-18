@@ -14,7 +14,7 @@ class PopupService {
 
     /**
      * OnShow callback when a popup is trigger.
-     * Will check if popup need to be setup dynamically using a callback.
+     * Will check if popup needs to be setup dynamically using a callback.
      */
     onShow($module) {
         const $popup = this;

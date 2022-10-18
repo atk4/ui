@@ -117,7 +117,7 @@ class ModalService {
 
     removeModal(modal) {
         if (modal.data().needRemove) {
-            // This modal was add by createModal and need to be remove.
+            // This modal was add by createModal and it needs to be removed.
             modal.remove();
         }
         this.modals.pop();

@@ -6,7 +6,7 @@ import AtkPlugin from './atk.plugin';
 /**
  * Make elements inside a container draggable and sortable.
  * Use shopify/Draggable library https://github.com/Shopify/draggable,
- * draggable.js is external to this bundle, so it need to be load from CDN.
+ * draggable.js is external to this bundle, so it needs to be loaded from CDN.
  *
  * After reordering, callback is sent to server with post information:
  * order => contains the order of data-{label} as a comma delimited string;

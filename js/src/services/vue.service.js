@@ -64,7 +64,7 @@ class VueService {
 
     /**
      * Created a Vue component and add it to the vues array.
-     * For Root component (App) to be aware that it's children component is
+     * For root component (App) to be aware that it's children component is
      * mounted, you need to use @hook:mounted="setReady"
      */
     createAtkVue(id, component, data) {

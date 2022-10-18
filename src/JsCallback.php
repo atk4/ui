@@ -15,7 +15,7 @@ class JsCallback extends Callback implements JsExpressionable
     /** @var array|null Use this apiConfig variable to pass API settings to Fomantic-UI in .api(). */
     public $apiConfig;
 
-    /** @var string|null Include web storage data item (key) value to be include in the request. */
+    /** @var string|null Include web storage data item (key) value to be included in the request. */
     public $storeName;
 
     /**

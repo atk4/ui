@@ -122,7 +122,7 @@ class Upload extends Input
     }
 
     /**
-     * Add a JS action to be return to server on callback.
+     * Add a JS action to be returned to server on callback.
      *
      * @param JsExpressionable $action
      */
