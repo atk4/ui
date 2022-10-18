@@ -40,3 +40,7 @@ Feature: Form
     When I press button "Modal Test"
     When I press Modal button "Save"
     Then Modal is open with text "Atk4\Core\Exception: Test exception II."
+    Then I hide js modal
+    When I press button "Modal Test"
+    When I press Modal button "Save"
+    Then Modal is open with text "Atk4\Core\Exception: Test exception II."
