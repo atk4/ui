@@ -34,7 +34,7 @@ jobs:
       - name: Setup cache 1/2
         id: composer-cache
         run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Setup cache 2/2
         uses: actions/cache@v3
@@ -121,7 +121,7 @@ jobs:
       - name: Setup cache 1/2
         id: composer-cache
         run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Setup cache 2/2
         uses: actions/cache@v3
@@ -282,7 +282,7 @@ jobs:
       - name: Setup cache 1/2
         id: composer-cache
         run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Setup cache 2/2
         uses: actions/cache@v3
