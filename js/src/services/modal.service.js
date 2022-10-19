@@ -19,7 +19,7 @@ class ModalService {
         settings.allowMultiple = true;
         // any change in modal DOM should automatically refresh cached positions
         // allow modal window to add scrolling when content is added after modal is created
-        settings.observeChanges = true,
+        settings.observeChanges = true;
         settings.onShow = this.onShow;
         settings.onVisible = this.onVisible;
         settings.onHide = this.onHide;

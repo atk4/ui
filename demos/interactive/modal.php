@@ -168,7 +168,7 @@ $action->add($nextAction);
 $stepModal->addButtonAction($action);
 
 // Set modal functionality. Will changes content according to page being displayed.
-$stepModal->set(function (View $p) use ($stepModal, $session, $prevAction, $nextAction) {
+$stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
     $page = $session->recall('page', 1);
     $success = $session->recall('success', false);
     if (isset($_GET['move'])) {
