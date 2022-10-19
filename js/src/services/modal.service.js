@@ -20,22 +20,52 @@ class ModalService {
         // allow modal window to add scrolling when content is added after modal is created
         settings.observeChanges = true;
         settings.onShow = this.onShow;
-        settings.onVisible = this.onVisible;
         settings.onHide = this.onHide;
         settings.onHidden = this.onHidden;
     }
 
     onShow() {
-        const $modal = $(this);
-        atk.modalService.addModal($modal);
+        atk.modalService.addModal($(this));
     }
 
-    onVisible() {
-        let args = {};
-        const $modal = $(this);
-        const $content = $(this).find('.atk-dialog-content');
+    onHide() {
+        return $(this).data('isClosable');
+    }
 
-        // check data associated with this modal.
+    onHidden() {
+        atk.modalService.removeModal($(this));
+    }
+
+    addModal($modal) {
+        const that = this;
+        this.modals.push($modal);
+
+        this.setCloseTriggerEventInModals();
+        this.hideShowCloseIcon();
+
+        // hide other modals
+        const $prevModal = this.modals.length > 1 ? this.modals[this.modals.length - 2] : null;
+        if ($prevModal && $prevModal.hasClass('visible')) {
+            $prevModal.css('visibility', 'hidden');
+            $prevModal.addClass('hiddenNotFront');
+            $prevModal.removeClass('visible');
+        }
+
+        // add modal esc handler
+        if (this.modals.length === 1) {
+            $(document).on('keyup.atk.modalService', (e) => {
+                if (e.keyCode === 27) {
+                    if (that.modals.length > 0) {
+                        that.modals[that.modals.length - 1].modal('hide');
+                    }
+                }
+            });
+        }
+
+        let args = {};
+        const $content = $modal.find('.atk-dialog-content');
+
+        // check data associated with this modal
         const data = $modal.data();
 
         // add data argument
@@ -50,6 +80,8 @@ class ModalService {
 
         // does modal content need to be loaded dynamically
         if (data.url) {
+            $content.html(atk.modalService.getLoader(data.loadingLabel ? data.loadingLabel : ''));
+
             $content.api({
                 on: 'now',
                 url: data.url,
@@ -79,52 +111,9 @@ class ModalService {
         }
     }
 
-    onHide() {
-        return $(this).data('isClosable');
-    }
-
-    onHidden() {
-        atk.modalService.removeModal($(this));
-    }
-
-    addModal(modal) {
-        const that = this;
-        this.modals.push(modal);
-
-        this.setCloseTriggerEventInModals();
-        this.hideShowCloseIcon();
-
-        // hide other modals
-        const $prevModal = this.modals.length > 1 ? this.modals[this.modals.length - 2] : null;
-        if ($prevModal && $prevModal.hasClass('visible')) {
-            $prevModal.css('visibility', 'hidden');
-            $prevModal.addClass('hiddenNotFront');
-            $prevModal.removeClass('visible');
-        }
-
-        // add modal esc handler.
-        if (this.modals.length === 1) {
-            $(document).on('keyup.atk.modalService', (e) => {
-                if (e.keyCode === 27) {
-                    if (that.modals.length > 0) {
-                        that.modals[that.modals.length - 1].modal('hide');
-                    }
-                }
-            });
-        }
-
-        // does modal content need to be loaded dynamically
-        const data = modal.data();
-        if (data.url) {
-            const $content = modal.find('.atk-dialog-content');
-            $content.html(atk.modalService.getLoader(data.loadingLabel ? data.loadingLabel : ''));
-        }
-    }
-
-    removeModal(modal) {
-        if (modal.data().needRemove) {
-            // This modal was add by createModal and it needs to be removed.
-            modal.remove();
+    removeModal($modal) {
+        if ($modal.data().needRemove) {
+            $modal.remove();
         }
         this.modals.pop();
         this.setCloseTriggerEventInModals();
@@ -133,9 +122,11 @@ class ModalService {
         // hide other modals
         const $prevModal = this.modals.length > 0 ? this.modals[this.modals.length - 1] : null;
         if ($prevModal && $prevModal.hasClass('hiddenNotFront')) {
-            $prevModal.css('visibility', 'hidden');
+            $prevModal.css('visibility', '');
             $prevModal.addClass('visible');
             $prevModal.removeClass('hiddenNotFront');
+            // recenter modal, needed even with observeChanges enabled
+            // https://github.com/fomantic/Fomantic-UI/issues/2476
             $prevModal.modal('refresh');
         }
 
@@ -144,8 +135,8 @@ class ModalService {
         }
     }
 
-    doAutoFocus(modal) {
-        const inputs = modal.find('[tabindex], :input').filter(':visible');
+    doAutoFocus($modal) {
+        const inputs = $modal.find('[tabindex], :input').filter(':visible');
         const autofocus = inputs.filter('[autofocus]');
         const input = (autofocus.length > 0) ? autofocus.first() : inputs.first();
 
@@ -160,13 +151,13 @@ class ModalService {
      */
     setCloseTriggerEventInModals() {
         for (let i = this.modals.length - 1; i >= 0; --i) {
-            const modal = this.modals[i];
-            if (modal.data().needCloseTrigger) {
-                modal.on('close', '.atk-dialog-content', () => {
-                    modal.modal('hide');
+            const $modal = this.modals[i];
+            if ($modal.data().needCloseTrigger) {
+                $modal.on('close', '.atk-dialog-content', () => {
+                    $modal.modal('hide');
                 });
             } else {
-                modal.off('close', '.atk-dialog-content');
+                $modal.off('close', '.atk-dialog-content');
             }
         }
     }
@@ -176,13 +167,13 @@ class ModalService {
      */
     hideShowCloseIcon() {
         for (let i = this.modals.length - 1; i >= 0; --i) {
-            const modal = this.modals[i];
+            const $modal = this.modals[i];
             if (i === this.modals.length - 1) {
-                modal.find('i.icon.close').show();
-                modal.data('isClosable', true);
+                $modal.find('i.icon.close').show();
+                $modal.data('isClosable', true);
             } else {
-                modal.find('i.icon.close').hide();
-                modal.data('isClosable', false);
+                $modal.find('i.icon.close').hide();
+                $modal.data('isClosable', false);
             }
         }
     }

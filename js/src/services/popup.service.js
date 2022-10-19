@@ -1,7 +1,7 @@
 import atk from 'atk';
 
 /**
- * This is default setup for Fomantic-UI Popup.
+ * This is default setup for Fomantic-UI popup.
  */
 class PopupService {
     setupFomanticUi(settings) {
@@ -45,9 +45,6 @@ class PopupService {
         }
     }
 
-    /**
-     * Call when hidding.
-     */
     onHide() {}
 
     onVisible() {}
@@ -61,10 +58,10 @@ class PopupService {
     }
 
     /**
-     * Only call if onCreate was called.
+     * Called only if onCreate was called.
      */
     onRemove() {
-        // console.log('onRemvoe');
+        // console.log('onRemove');
     }
 
     getLoader() {
