@@ -221,7 +221,6 @@ $stepModal->set(function (View $p) use ($stepModal, $session, $prevAction, $next
         $p->js(true, $prevAction->js(true)->hide());
         $p->js(true, $nextAction->js(true)->hide());
     }
-    $stepModal->js(true)->modal('refresh');
 });
 
 // Bind next action to modal next button.

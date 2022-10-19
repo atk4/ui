@@ -14,7 +14,12 @@ class ModalService {
 
     setupFomanticUi(settings) {
         settings.duration = 100;
+        // never autoclose previously displayed modals
+        // https://github.com/fomantic/Fomantic-UI/issues/2499#issuecomment-1283812977
         settings.allowMultiple = true;
+        // any change in modal DOM should automatically refresh cached positions
+        // allow modal window to add scrolling when content is added after modal is created
+        settings.observeChanges = true,
         settings.onShow = this.onShow;
         settings.onVisible = this.onVisible;
         settings.onHide = this.onHide;
@@ -64,15 +69,14 @@ class ModalService {
                     });
 
                     const result = content.html(response.html);
-                    if (!result.length) {
+                    if (result.length === 0) {
                         response.success = false;
                         response.isServiceError = true;
                         response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
                     } else {
-                        if ($modal.modal.settings.autofocus) {
+                        if ($modal.modal('get settings').autofocus) {
                             atk.modalService.doAutoFocus($modal);
                         }
-                        $modal.modal('refresh');
                         // content is replace no need to do it in api
                         response.id = null;
                     }

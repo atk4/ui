@@ -91,7 +91,7 @@ export default class AtkScrollPlugin extends AtkPlugin {
         // Either the scroll bar position using window or the container element top position otherwise.
         const topHeight = this.isWindow ? $(window).scrollTop() : this.$scroll.offset().top;
         // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
-        const innerTop = this.$inner.length ? this.$inner.offset().top : 0;
+        const innerTop = this.$inner.length > 0 ? this.$inner.offset().top : 0;
         // The total height.
         const totalHeight = Math.ceil(topHeight - innerTop + this.$scroll.height() + paddingTop);
 

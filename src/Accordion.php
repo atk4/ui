@@ -64,16 +64,6 @@ class Accordion extends View
     }
 
     /**
-     * @param bool $when
-     *
-     * @return JsChain
-     */
-    public function jsRefresh($when = false)
-    {
-        return $this->jsBehavior('refresh', [], $when);
-    }
-
-    /**
      * @param AccordionSection $section
      * @param bool             $when
      *

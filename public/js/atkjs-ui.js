@@ -1550,7 +1550,7 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
     // Either the scroll bar position using window or the container element top position otherwise.
     const topHeight = this.isWindow ? external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).scrollTop() : this.$scroll.offset().top;
     // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
-    const innerTop = this.$inner.length ? this.$inner.offset().top : 0;
+    const innerTop = this.$inner.length > 0 ? this.$inner.offset().top : 0;
     // The total height.
     const totalHeight = Math.ceil(topHeight - innerTop + this.$scroll.height() + paddingTop);
     if (!this.isWaiting && totalHeight + this.settings.options.padding >= this.$inner.outerHeight()) {
@@ -1979,7 +1979,7 @@ class ApiService {
             external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
           });
           const result = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('#' + response.id).replaceWith(response.html);
-          if (!result.length) {
+          if (result.length === 0) {
             // TODO Find a better solution for long term.
             // Need a way to gracefully abort server request.
             // when user cancel a request by selecting another request.
@@ -2121,11 +2121,12 @@ class ApiService {
     m.modal({
       duration: 100,
       allowMultiple: false,
+      // TODO https://github.com/fomantic/Fomantic-UI/issues/2499#issuecomment-1283812977
       onHide: function () {
         m.children().remove();
         return true;
       }
-    }).modal('show').modal('refresh');
+    }).modal('show');
   }
   getErrorHtml(error) {
     return `<div class="ui negative icon message">
@@ -2546,8 +2547,12 @@ class ModalService {
   }
   setupFomanticUi(settings) {
     settings.duration = 100;
+    // never autoclose previously displayed modals
+    // https://github.com/fomantic/Fomantic-UI/issues/2499#issuecomment-1283812977
     settings.allowMultiple = true;
-    settings.onShow = this.onShow;
+    // any change in modal DOM should automatically refresh cached positions
+    // allow modal window to add scrolling when content is added after modal is created
+    settings.observeChanges = true, settings.onShow = this.onShow;
     settings.onVisible = this.onVisible;
     settings.onHide = this.onHide;
     settings.onHidden = this.onHidden;
@@ -2595,15 +2600,14 @@ class ModalService {
             external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
           });
           const result = content.html(response.html);
-          if (!result.length) {
+          if (result.length === 0) {
             response.success = false;
             response.isServiceError = true;
             response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
           } else {
-            if ($modal.modal.settings.autofocus) {
+            if ($modal.modal('get settings').autofocus) {
               atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.doAutoFocus($modal);
             }
-            $modal.modal('refresh');
             // content is replace no need to do it in api
             response.id = null;
           }
@@ -3214,7 +3218,7 @@ class PopupService {
           obj: $popup,
           onComplete: function (response, content) {
             const result = $popup.html(response.html);
-            if (!result.length) {
+            if (result.length === 0) {
               response.success = false;
               response.isServiceError = true;
               response.message = 'Popup service error: Empty html, unable to replace popup content from server response';

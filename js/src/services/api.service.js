@@ -58,7 +58,7 @@ class ApiService {
                     });
 
                     const result = $('#' + response.id).replaceWith(response.html);
-                    if (!result.length) {
+                    if (result.length === 0) {
                         // TODO Find a better solution for long term.
                         // Need a way to gracefully abort server request.
                         // when user cancel a request by selecting another request.
@@ -204,15 +204,14 @@ class ApiService {
             .html(errorMsg);
         m.modal({
             duration: 100,
-            allowMultiple: false,
+            allowMultiple: false, // TODO https://github.com/fomantic/Fomantic-UI/issues/2499#issuecomment-1283812977
             onHide: function () {
                 m.children().remove();
 
                 return true;
             },
         })
-            .modal('show')
-            .modal('refresh');
+            .modal('show');
     }
 
     getErrorHtml(error) {

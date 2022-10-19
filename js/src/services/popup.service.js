@@ -31,7 +31,7 @@ class PopupService {
                     obj: $popup,
                     onComplete: function (response, content) {
                         const result = $popup.html(response.html);
-                        if (!result.length) {
+                        if (result.length === 0) {
                             response.success = false;
                             response.isServiceError = true;
                             response.message = 'Popup service error: Empty html, unable to replace popup content from server response';

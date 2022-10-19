@@ -45,11 +45,7 @@ class Modal extends View
     /** @var array */
     public $args = [];
     /** @var array */
-    public $options = [
-        // any change in modal DOM should automatically refresh cached positions
-        // allow modal window to add scrolling when content is added after modal is created
-        'observeChanges' => true,
-    ];
+    public $options = [];
 
     /** @var string Currently only "json" response type is supported. */
     public $type = 'json';
