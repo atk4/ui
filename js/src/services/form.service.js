@@ -30,9 +30,6 @@ class FormService {
         settings.onSuccess = this.onSuccess;
     }
 
-    /**
-     * Form onSuccess handler when submit.
-     */
     onSuccess() {
         atk.formService.clearDirtyForm($(this).attr('id'));
 
@@ -64,8 +61,6 @@ class FormService {
     }
 
     /**
-     * Visibility rule.
-     *
      * @returns {boolean}
      */
     isVisible() {

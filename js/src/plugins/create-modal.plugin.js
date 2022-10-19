@@ -45,7 +45,5 @@ AtkCreateModalPlugin.DEFAULTS = {
     modalCss: 'scrolling',
     contentCss: 'image',
     label: 'Loading...',
-    modal: {
-        duration: 100,
-    },
+    modal: {},
 };

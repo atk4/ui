@@ -202,16 +202,7 @@ class ApiService {
             .addClass('ui scrolling modal')
             .css('padding', '1em')
             .html(errorMsg);
-        m.modal({
-            duration: 100,
-            allowMultiple: false, // TODO https://github.com/fomantic/Fomantic-UI/issues/2499#issuecomment-1283812977
-            onHide: function () {
-                m.children().remove();
-
-                return true;
-            },
-        })
-            .modal('show');
+        m.data('needRemove', true).modal().modal('show');
     }
 
     getErrorHtml(error) {

@@ -740,9 +740,7 @@ AtkCreateModalPlugin.DEFAULTS = {
   modalCss: 'scrolling',
   contentCss: 'image',
   label: 'Loading...',
-  modal: {
-    duration: 100
-  }
+  modal: {}
 };
 
 /***/ }),
@@ -2118,15 +2116,7 @@ class ApiService {
   showErrorModal(errorMsg) {
     // catch application error and display them in a new modal window.
     const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(errorMsg);
-    m.modal({
-      duration: 100,
-      allowMultiple: false,
-      // TODO https://github.com/fomantic/Fomantic-UI/issues/2499#issuecomment-1283812977
-      onHide: function () {
-        m.children().remove();
-        return true;
-      }
-    }).modal('show');
+    m.data('needRemove', true).modal().modal('show');
   }
   getErrorHtml(error) {
     return `<div class="ui negative icon message">
@@ -2365,10 +2355,6 @@ class FormService {
     settings.rules.isEqual = this.isEqual;
     settings.onSuccess = this.onSuccess;
   }
-
-  /**
-   * Form onSuccess handler when submit.
-   */
   onSuccess() {
     atk__WEBPACK_IMPORTED_MODULE_8__["default"].formService.clearDirtyForm(external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this).attr('id'));
     return true;
@@ -2399,8 +2385,6 @@ class FormService {
   }
 
   /**
-   * Visibility rule.
-   *
    * @returns {boolean}
    */
   isVisible() {
