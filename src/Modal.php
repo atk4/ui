@@ -45,11 +45,7 @@ class Modal extends View
     /** @var array */
     public $args = [];
     /** @var array */
-    public $options = [
-        // any change in modal DOM should automatically refresh cached positions
-        // allow modal window to add scrolling when content is added after modal is created
-        'observeChanges' => true,
-    ];
+    public $options = [];
 
     /** @var string Currently only "json" response type is supported. */
     public $type = 'json';
@@ -127,7 +123,7 @@ class Modal extends View
 
     /**
      * Set modal to show on page.
-     * Will trigger modal to be show on page.
+     * Will trigger modal to be shown on page.
      * ex: $button->on('click', $modal->show());.
      *
      * @return JsChain
@@ -246,7 +242,7 @@ class Modal extends View
     {
         $data = [];
         $data['type'] = $this->type;
-        $data['label'] = $this->loadingLabel;
+        $data['loadingLabel'] = $this->loadingLabel;
 
         if ($this->title) {
             $this->template->trySet('title', $this->title);

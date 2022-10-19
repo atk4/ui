@@ -14,7 +14,7 @@ use Atk4\Ui\UserAction\ExecutorFactory;
  * Card contains one main CardSection for adding content
  * but it can contains other CardSection using addSection method.
  *
- * Each section can have it's own model field to be display has
+ * Each section can have it's own model, field to be displayed has
  * field value, field label, field value or as table.
  *
  * Card also has an extra content section which is formatted

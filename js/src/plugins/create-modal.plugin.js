@@ -20,7 +20,7 @@ export default class AtkCreateModalPlugin extends AtkPlugin {
             args: options.urlOptions,
             needRemove: true,
             needCloseTrigger: true,
-            label: options.label,
+            loadingLabel: options.loadingLabel,
         });
 
         // call Fomantic-UI modal
@@ -44,8 +44,6 @@ AtkCreateModalPlugin.DEFAULTS = {
     headerCss: 'header',
     modalCss: 'scrolling',
     contentCss: 'image',
-    label: 'Loading...',
-    modal: {
-        duration: 100,
-    },
+    loadingLabel: 'Loading...',
+    modal: {},
 };

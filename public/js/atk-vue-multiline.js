@@ -636,7 +636,7 @@ __webpack_require__.r(__webpack_exports__);
     /**
      * Send on change action to server.
      * Use regular api call in order
-     * for return js to be fully evaluate.
+     * for return js to be fully evaluated.
      */
     fetchOnChangeAction: function () {
       let fieldName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;

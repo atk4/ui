@@ -58,7 +58,7 @@ class ApiService {
                     });
 
                     const result = $('#' + response.id).replaceWith(response.html);
-                    if (!result.length) {
+                    if (result.length === 0) {
                         // TODO Find a better solution for long term.
                         // Need a way to gracefully abort server request.
                         // when user cancel a request by selecting another request.
@@ -202,17 +202,7 @@ class ApiService {
             .addClass('ui scrolling modal')
             .css('padding', '1em')
             .html(errorMsg);
-        m.modal({
-            duration: 100,
-            allowMultiple: false,
-            onHide: function () {
-                m.children().remove();
-
-                return true;
-            },
-        })
-            .modal('show')
-            .modal('refresh');
+        m.data('needRemove', true).modal().modal('show');
     }
 
     getErrorHtml(error) {

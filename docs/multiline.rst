@@ -131,7 +131,7 @@ Important
 ---------
 
 It is important to note that for Email's record to be properly saved, in relation to their User record, the User model
-need to be load prior to call Multiline::setReferenceModel() method.
+needs to be loaded prior to call Multiline::setReferenceModel() method.
 
 Also note that Multiline::saveRows() method need to be called for related record to be saved in related table. You would
 normally call this method in your form onSubmit handler method.

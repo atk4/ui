@@ -2,7 +2,7 @@ import $ from 'external/jquery';
 import atk from 'atk';
 
 /**
- * Panel needs to be reload to display different
+ * Panel needs to be reloaded to display different
  * content. This service will take care of this.
  */
 class PanelService {

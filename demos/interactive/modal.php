@@ -168,7 +168,7 @@ $action->add($nextAction);
 $stepModal->addButtonAction($action);
 
 // Set modal functionality. Will changes content according to page being displayed.
-$stepModal->set(function (View $p) use ($stepModal, $session, $prevAction, $nextAction) {
+$stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
     $page = $session->recall('page', 1);
     $success = $session->recall('success', false);
     if (isset($_GET['move'])) {
@@ -221,7 +221,6 @@ $stepModal->set(function (View $p) use ($stepModal, $session, $prevAction, $next
         $p->js(true, $prevAction->js(true)->hide());
         $p->js(true, $nextAction->js(true)->hide());
     }
-    $stepModal->js(true)->modal('refresh');
 });
 
 // Bind next action to modal next button.

@@ -13,7 +13,7 @@ use Atk4\Ui\View;
  */
 class ItemSearch extends View
 {
-    /** @var View|string the atk4 View to be reload or a jquery id selector string View to be reload that contains data to be filtered. */
+    /** @var View|string the atk4 View to be reloaded or a jquery id selector string View to be reloaded that contains data to be filtered. */
     public $reload;
 
     /** @var string The initial query. */
@@ -81,7 +81,7 @@ class ItemSearch extends View
         $this->class = [];
         parent::renderView();
 
-        // reloadId is the view id selector name that need to be reload.
+        // reloadId is the view id selector name that needs to be reloaded.
         // this will be pass as get argument to __atk_reload.
         if ($this->reload instanceof View) {
             $reloadId = $this->reload->name;

@@ -83,7 +83,7 @@ class TreeItemSelector extends Form\Control
     }
 
     /**
-     * Provide a function to be execute when clicking an item in tree selector.
+     * Provide a function to be executed when clicking an item in tree selector.
      * The executing function will receive an array with item state in it
      * when allowMultiple is true or a single value when false.
      */

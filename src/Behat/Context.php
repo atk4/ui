@@ -402,7 +402,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iHideJsModal(): void
     {
-        $this->getSession()->executeScript('$(".modal.active.front").modal("hide")');
+        $modal = $this->findElement(null, '.modal.visible.active.front');
+        $this->getSession()->executeScript('$(arguments[0]).modal("hide")', [$modal]);
     }
 
     // }}}

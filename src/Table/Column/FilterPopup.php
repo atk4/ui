@@ -26,7 +26,7 @@ class FilterPopup extends Popup
     /** @var Field The table field that need filtering. */
     public $field;
 
-    /** @var View|null The view associate with this filter popup that need to be reload. */
+    /** @var View|null The view associated with this filter popup that needs to be reloaded. */
     public $reload;
 
     /**

@@ -1,7 +1,7 @@
 import atk from 'atk';
 
 /**
- * This is default setup for Fomantic-UI Popup.
+ * This is default setup for Fomantic-UI popup.
  */
 class PopupService {
     setupFomanticUi(settings) {
@@ -14,7 +14,7 @@ class PopupService {
 
     /**
      * OnShow callback when a popup is trigger.
-     * Will check if popup need to be setup dynamically using a callback.
+     * Will check if popup needs to be setup dynamically using a callback.
      */
     onShow($module) {
         const $popup = this;
@@ -31,7 +31,7 @@ class PopupService {
                     obj: $popup,
                     onComplete: function (response, content) {
                         const result = $popup.html(response.html);
-                        if (!result.length) {
+                        if (result.length === 0) {
                             response.success = false;
                             response.isServiceError = true;
                             response.message = 'Popup service error: Empty html, unable to replace popup content from server response';
@@ -45,9 +45,6 @@ class PopupService {
         }
     }
 
-    /**
-     * Call when hidding.
-     */
     onHide() {}
 
     onVisible() {}
@@ -61,10 +58,10 @@ class PopupService {
     }
 
     /**
-     * Only call if onCreate was called.
+     * Called only if onCreate was called.
      */
     onRemove() {
-        // console.log('onRemvoe');
+        // console.log('onRemove');
     }
 
     getLoader() {

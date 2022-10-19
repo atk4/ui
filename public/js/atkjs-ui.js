@@ -42,7 +42,7 @@ __webpack_require__.r(__webpack_exports__);
  * Because atk table use overflow: scroll, Dropdown is not
  * display on top of table.
  *
- * This utility will properly set css style for dropdown menu to be display correctly.
+ * This utility will properly set css style for dropdown menu to be displayed correctly.
  */
 function showTableDropdown() {
   // getting element composing dropdown.
@@ -717,7 +717,7 @@ class AtkCreateModalPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
       args: options.urlOptions,
       needRemove: true,
       needCloseTrigger: true,
-      label: options.label
+      loadingLabel: options.loadingLabel
     });
 
     // call Fomantic-UI modal
@@ -739,10 +739,8 @@ AtkCreateModalPlugin.DEFAULTS = {
   headerCss: 'header',
   modalCss: 'scrolling',
   contentCss: 'image',
-  label: 'Loading...',
-  modal: {
-    duration: 100
-  }
+  loadingLabel: 'Loading...',
+  modal: {}
 };
 
 /***/ }),
@@ -1116,8 +1114,7 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
 
   /**
    * Allow to set filter initial input.
-   * Mostly use on page load
-   * when input need to be set to reflect a search state.
+   * Mostly use on page load when input needs to be set to reflect a search state.
    *
    * @param {string} text The text input value.
    */
@@ -1238,7 +1235,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Make elements inside a container draggable and sortable.
  * Use shopify/Draggable library https://github.com/Shopify/draggable,
- * draggable.js is external to this bundle, so it need to be load from CDN.
+ * draggable.js is external to this bundle, so it needs to be loaded from CDN.
  *
  * After reordering, callback is sent to server with post information:
  * order => contains the order of data-{label} as a comma delimited string;
@@ -1551,7 +1548,7 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
     // Either the scroll bar position using window or the container element top position otherwise.
     const topHeight = this.isWindow ? external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).scrollTop() : this.$scroll.offset().top;
     // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
-    const innerTop = this.$inner.length ? this.$inner.offset().top : 0;
+    const innerTop = this.$inner.length > 0 ? this.$inner.offset().top : 0;
     // The total height.
     const totalHeight = Math.ceil(topHeight - innerTop + this.$scroll.height() + paddingTop);
     if (!this.isWaiting && totalHeight + this.settings.options.padding >= this.$inner.outerHeight()) {
@@ -1599,7 +1596,7 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
   }
 
   /**
-   * Use response to append content to element and setup next content to be load.
+   * Use response to append content to element and setup next content to be loaded.
    * Set response.id to null in order for apiService.onSuccess to bypass
    * replacing html content. Js return from server response will still be execute.
    */
@@ -1657,41 +1654,30 @@ class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
   main() {
     const element = this.$el;
     const hasLoader = this.settings.showLoader;
-    if (typeof EventSource !== 'undefined') {
-      this.source = new EventSource(this.settings.url + '&__atk_sse=1');
-      if (hasLoader) {
-        element.addClass('loading');
-      }
-      this.source.onmessage = function (e) {
-        atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkSuccessTest(JSON.parse(e.data));
-      };
-      this.source.onerror = e => {
-        if (e.eventPhase === EventSource.CLOSED) {
-          if (hasLoader) {
-            element.removeClass('loading');
-          }
-          this.source.close();
+    this.source = new EventSource(this.settings.url + '&__atk_sse=1');
+    if (hasLoader) {
+      element.addClass('loading');
+    }
+    this.source.onmessage = function (e) {
+      atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkSuccessTest(JSON.parse(e.data));
+    };
+    this.source.onerror = e => {
+      if (e.eventPhase === EventSource.CLOSED) {
+        if (hasLoader) {
+          element.removeClass('loading');
         }
-      };
-      this.source.addEventListener('atkSseAction', e => {
-        atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkSuccessTest(JSON.parse(e.data));
-      }, false);
-      if (this.settings.closeBeforeUnload) {
-        window.addEventListener('beforeunload', event => {
-          this.source.close();
-        });
+        this.source.close();
       }
-    } else {
-      // console.log('server side event not supported fallback to atkReloadView');
-      this.$el.atkReloadView({
-        url: this.settings.url
+    };
+    this.source.addEventListener('atkSseAction', e => {
+      atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkSuccessTest(JSON.parse(e.data));
+    }, false);
+    if (this.settings.closeBeforeUnload) {
+      window.addEventListener('beforeunload', event => {
+        this.source.close();
       });
     }
   }
-
-  /**
-   * To close ServerEvent.
-   */
   stop() {
     this.source.close();
     if (this.settings.showLoader) {
@@ -1980,7 +1966,7 @@ class ApiService {
             external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
           });
           const result = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('#' + response.id).replaceWith(response.html);
-          if (!result.length) {
+          if (result.length === 0) {
             // TODO Find a better solution for long term.
             // Need a way to gracefully abort server request.
             // when user cancel a request by selecting another request.
@@ -2119,14 +2105,7 @@ class ApiService {
   showErrorModal(errorMsg) {
     // catch application error and display them in a new modal window.
     const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(errorMsg);
-    m.modal({
-      duration: 100,
-      allowMultiple: false,
-      onHide: function () {
-        m.children().remove();
-        return true;
-      }
-    }).modal('show').modal('refresh');
+    m.data('needRemove', true).modal().modal('show');
   }
   getErrorHtml(error) {
     return `<div class="ui negative icon message">
@@ -2365,10 +2344,6 @@ class FormService {
     settings.rules.isEqual = this.isEqual;
     settings.onSuccess = this.onSuccess;
   }
-
-  /**
-   * Form onSuccess handler when submit.
-   */
   onSuccess() {
     atk__WEBPACK_IMPORTED_MODULE_8__["default"].formService.clearDirtyForm(external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this).attr('id'));
     return true;
@@ -2399,8 +2374,6 @@ class FormService {
   }
 
   /**
-   * Visibility rule.
-   *
    * @returns {boolean}
    */
   isVisible() {
@@ -2547,42 +2520,69 @@ class ModalService {
   }
   setupFomanticUi(settings) {
     settings.duration = 100;
+    // never autoclose previously displayed modals, manage them thru this service only
     settings.allowMultiple = true;
-    settings.onHidden = this.onHidden;
+    // any change in modal DOM should automatically refresh cached positions
+    // allow modal window to add scrolling when content is added after modal is created
+    settings.observeChanges = true;
     settings.onShow = this.onShow;
     settings.onHide = this.onHide;
-    settings.onVisible = this.onVisible;
+    settings.onHidden = this.onHidden;
+  }
+  onShow() {
+    atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.addModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
+  }
+  onHide() {
+    return external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).data('isClosable');
   }
   onHidden() {
     atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.removeModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
   }
-  onVisible() {
-    let args = {};
-    let data;
-    // const service = apiService;
-    const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this);
-    const $content = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).find('.atk-dialog-content');
+  addModal($modal) {
+    const that = this;
+    this.modals.push($modal);
+    this.setCloseTriggerEventInModals();
+    this.hideShowCloseIcon();
 
-    // check data associated with this modal.
-    if (!external_jquery__WEBPACK_IMPORTED_MODULE_5___default().isEmptyObject($modal.data())) {
-      data = $modal.data();
+    // hide other modals
+    const $prevModal = this.modals.length > 1 ? this.modals[this.modals.length - 2] : null;
+    if ($prevModal && $prevModal.hasClass('visible')) {
+      $prevModal.css('visibility', 'hidden');
+      $prevModal.addClass('hiddenNotFront');
+      $prevModal.removeClass('visible');
     }
 
+    // add modal esc handler
+    if (this.modals.length === 1) {
+      external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document).on('keyup.atk.modalService', e => {
+        if (e.keyCode === 27) {
+          if (that.modals.length > 0) {
+            that.modals[that.modals.length - 1].modal('hide');
+          }
+        }
+      });
+    }
+    let args = {};
+    const $content = $modal.find('.atk-dialog-content');
+
+    // check data associated with this modal
+    const data = $modal.data();
+
     // add data argument
-    if (data && data.args) {
+    if (data.args) {
       args = data.args;
     }
 
     // check for data type, usually json or html
-    if (data && data.type === 'json') {
+    if (data.type === 'json') {
       args = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(true, args, {
         __atk_json: 1
       });
     }
 
     // does modal content need to be loaded dynamically
-    if (data && data.url) {
-      $content.html(atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.getLoader(data.label ? data.label : ''));
+    if (data.url) {
+      $content.html(atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.getLoader(data.loadingLabel ? data.loadingLabel : ''));
       $content.api({
         on: 'now',
         url: data.url,
@@ -2595,15 +2595,14 @@ class ModalService {
             external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
           });
           const result = content.html(response.html);
-          if (!result.length) {
+          if (result.length === 0) {
             response.success = false;
             response.isServiceError = true;
             response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
           } else {
-            if ($modal.modal.settings.autofocus) {
+            if ($modal.modal('get settings').autofocus) {
               atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.doAutoFocus($modal);
             }
-            $modal.modal('refresh');
             // content is replace no need to do it in api
             response.id = null;
           }
@@ -2611,59 +2610,30 @@ class ModalService {
       });
     }
   }
-  onShow() {
-    const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this);
-    atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.addModal($modal);
-  }
-  onHide() {
-    return external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).data('isClosable');
-  }
-  addModal(modal) {
-    const that = this;
-    this.modals.push(modal);
-    this.setCloseTriggerEventInModals();
-    this.hideShowCloseIcon();
-
-    // temp fix while Fomantic-UI modal positioning is not fixed.
-    // hide other modals.
-    if (this.modals.length > 1) {
-      modal.css('position', 'absolute');
-      this.modals[this.modals.length - 2].css('opacity', 0);
-    }
-
-    // add modal esc handler.
-    if (this.modals.length === 1) {
-      external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document).on('keyup.atk.modalService', e => {
-        if (e.keyCode === 27) {
-          if (that.modals.length > 0) {
-            that.modals[that.modals.length - 1].modal('hide');
-          }
-        }
-      });
-    }
-  }
-  removeModal(modal) {
-    if (modal.data().needRemove) {
-      // This modal was add by createModal and need to be remove.
-      modal.remove();
+  removeModal($modal) {
+    if ($modal.data().needRemove) {
+      $modal.remove();
     }
     this.modals.pop();
     this.setCloseTriggerEventInModals();
     this.hideShowCloseIcon();
 
-    // temp fix while Fomantic-UI modal positioning is not fixed.
-    // show last modals.
-    if (this.modals.length > 0) {
-      modal.css('position', '');
-      this.modals[this.modals.length - 1].css('opacity', '');
-      this.modals[this.modals.length - 1].modal('refresh');
+    // hide other modals
+    const $prevModal = this.modals.length > 0 ? this.modals[this.modals.length - 1] : null;
+    if ($prevModal && $prevModal.hasClass('hiddenNotFront')) {
+      $prevModal.css('visibility', '');
+      $prevModal.addClass('visible');
+      $prevModal.removeClass('hiddenNotFront');
+      // recenter modal, needed even with observeChanges enabled
+      // https://github.com/fomantic/Fomantic-UI/issues/2476
+      $prevModal.modal('refresh');
     }
     if (this.modals.length === 0) {
       external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document).off('atk.modalService');
     }
   }
-  doAutoFocus(modal) {
-    const inputs = modal.find('[tabindex], :input').filter(':visible');
+  doAutoFocus($modal) {
+    const inputs = $modal.find('[tabindex], :input').filter(':visible');
     const autofocus = inputs.filter('[autofocus]');
     const input = autofocus.length > 0 ? autofocus.first() : inputs.first();
     if (input.length > 0) {
@@ -2677,13 +2647,13 @@ class ModalService {
    */
   setCloseTriggerEventInModals() {
     for (let i = this.modals.length - 1; i >= 0; --i) {
-      const modal = this.modals[i];
-      if (modal.data().needCloseTrigger) {
-        modal.on('close', '.atk-dialog-content', () => {
-          modal.modal('hide');
+      const $modal = this.modals[i];
+      if ($modal.data().needCloseTrigger) {
+        $modal.on('close', '.atk-dialog-content', () => {
+          $modal.modal('hide');
         });
       } else {
-        modal.off('close', '.atk-dialog-content');
+        $modal.off('close', '.atk-dialog-content');
       }
     }
   }
@@ -2693,13 +2663,13 @@ class ModalService {
    */
   hideShowCloseIcon() {
     for (let i = this.modals.length - 1; i >= 0; --i) {
-      const modal = this.modals[i];
+      const $modal = this.modals[i];
       if (i === this.modals.length - 1) {
-        modal.find('i.icon.close').show();
-        modal.data('isClosable', true);
+        $modal.find('i.icon.close').show();
+        $modal.data('isClosable', true);
       } else {
-        modal.find('i.icon.close').hide();
-        modal.data('isClosable', false);
+        $modal.find('i.icon.close').hide();
+        $modal.data('isClosable', false);
       }
     }
   }
@@ -2757,7 +2727,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Panel needs to be reload to display different
+ * Panel needs to be reloaded to display different
  * content. This service will take care of this.
  */
 class PanelService {
@@ -3185,7 +3155,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * This is default setup for Fomantic-UI Popup.
+ * This is default setup for Fomantic-UI popup.
  */
 class PopupService {
   setupFomanticUi(settings) {
@@ -3198,7 +3168,7 @@ class PopupService {
 
   /**
    * OnShow callback when a popup is trigger.
-   * Will check if popup need to be setup dynamically using a callback.
+   * Will check if popup needs to be setup dynamically using a callback.
    */
   onShow($module) {
     const $popup = this;
@@ -3215,7 +3185,7 @@ class PopupService {
           obj: $popup,
           onComplete: function (response, content) {
             const result = $popup.html(response.html);
-            if (!result.length) {
+            if (result.length === 0) {
               response.success = false;
               response.isServiceError = true;
               response.message = 'Popup service error: Empty html, unable to replace popup content from server response';
@@ -3228,10 +3198,6 @@ class PopupService {
       }
     }
   }
-
-  /**
-   * Call when hidding.
-   */
   onHide() {}
   onVisible() {}
 
@@ -3244,10 +3210,10 @@ class PopupService {
   }
 
   /**
-   * Only call if onCreate was called.
+   * Called only if onCreate was called.
    */
   onRemove() {
-    // console.log('onRemvoe');
+    // console.log('onRemove');
   }
   getLoader() {
     return `<div class="ui active inverted dimmer">
@@ -3419,7 +3385,7 @@ class VueService {
 
   /**
    * Created a Vue component and add it to the vues array.
-   * For Root component (App) to be aware that it's children component is
+   * For root component (App) to be aware that it's children component is
    * mounted, you need to use @hook:mounted="setReady"
    */
   createAtkVue(id, component, data) {

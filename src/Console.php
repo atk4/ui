@@ -80,7 +80,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
             throw new Exception('Please specify the $callback argument');
         }
 
-        $this->event = $event ?? false;
+        if ($event !== null) {
+            $this->event = $event;
+        }
 
         if (!$this->sse) {
             $this->sse = JsSse::addTo($this);

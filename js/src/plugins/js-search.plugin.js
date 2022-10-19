@@ -123,8 +123,7 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
 
     /**
      * Allow to set filter initial input.
-     * Mostly use on page load
-     * when input need to be set to reflect a search state.
+     * Mostly use on page load when input needs to be set to reflect a search state.
      *
      * @param {string} text The text input value.
      */
