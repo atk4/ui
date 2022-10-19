@@ -14,8 +14,7 @@ class ModalService {
 
     setupFomanticUi(settings) {
         settings.duration = 100;
-        // never autoclose previously displayed modals
-        // https://github.com/fomantic/Fomantic-UI/issues/2499#issuecomment-1283812977
+        // never autoclose previously displayed modals, manage them thru this service only
         settings.allowMultiple = true;
         // any change in modal DOM should automatically refresh cached positions
         // allow modal window to add scrolling when content is added after modal is created
@@ -33,29 +32,24 @@ class ModalService {
 
     onVisible() {
         let args = {};
-        let data;
-        // const service = apiService;
         const $modal = $(this);
         const $content = $(this).find('.atk-dialog-content');
 
         // check data associated with this modal.
-        if (!$.isEmptyObject($modal.data())) {
-            data = $modal.data();
-        }
+        const data = $modal.data();
 
         // add data argument
-        if (data && data.args) {
+        if (data.args) {
             args = data.args;
         }
 
         // check for data type, usually json or html
-        if (data && data.type === 'json') {
+        if (data.type === 'json') {
             args = $.extend(true, args, { __atk_json: 1 });
         }
 
         // does modal content need to be loaded dynamically
-        if (data && data.url) {
-            $content.html(atk.modalService.getLoader(data.label ? data.label : ''));
+        if (data.url) {
             $content.api({
                 on: 'now',
                 url: data.url,
@@ -100,11 +94,12 @@ class ModalService {
         this.setCloseTriggerEventInModals();
         this.hideShowCloseIcon();
 
-        // temp fix while Fomantic-UI modal positioning is not fixed.
-        // hide other modals.
-        if (this.modals.length > 1) {
-            modal.css('position', 'absolute');
-            this.modals[this.modals.length - 2].css('opacity', 0);
+        // hide other modals
+        const $prevModal = this.modals.length > 1 ? this.modals[this.modals.length - 2] : null;
+        if ($prevModal && $prevModal.hasClass('visible')) {
+            $prevModal.css('visibility', 'hidden');
+            $prevModal.addClass('hiddenNotFront');
+            $prevModal.removeClass('visible');
         }
 
         // add modal esc handler.
@@ -117,6 +112,13 @@ class ModalService {
                 }
             });
         }
+
+        // does modal content need to be loaded dynamically
+        const data = modal.data();
+        if (data.url) {
+            const $content = modal.find('.atk-dialog-content');
+            $content.html(atk.modalService.getLoader(data.loadingLabel ? data.loadingLabel : ''));
+        }
     }
 
     removeModal(modal) {
@@ -128,12 +130,13 @@ class ModalService {
         this.setCloseTriggerEventInModals();
         this.hideShowCloseIcon();
 
-        // temp fix while Fomantic-UI modal positioning is not fixed.
-        // show last modals.
-        if (this.modals.length > 0) {
-            modal.css('position', '');
-            this.modals[this.modals.length - 1].css('opacity', '');
-            this.modals[this.modals.length - 1].modal('refresh');
+        // hide other modals
+        const $prevModal = this.modals.length > 0 ? this.modals[this.modals.length - 1] : null;
+        if ($prevModal && $prevModal.hasClass('hiddenNotFront')) {
+            $prevModal.css('visibility', 'hidden');
+            $prevModal.addClass('visible');
+            $prevModal.removeClass('hiddenNotFront');
+            $prevModal.modal('refresh');
         }
 
         if (this.modals.length === 0) {

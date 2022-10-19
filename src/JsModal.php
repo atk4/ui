@@ -34,9 +34,9 @@ class JsModal extends JsExpression
      *      ex: changing color text for header
      *      $jsModal->setOption('headerCss', 'ui blue header');
      *
-     *  'label' -> set the text loader value.
+     *  'loadingLabel' -> set the text loader value.
      *      ex: changing default 'Loading...' for no text
-     *      $jsModal->setOption('label', '');
+     *      $jsModal->setOption('loadingLabel', '');
      *
      *   'modalCss' -> customize css class name for the entire modal.
      *      ex: making modal fullscreen

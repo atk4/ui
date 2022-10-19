@@ -242,7 +242,7 @@ class Modal extends View
     {
         $data = [];
         $data['type'] = $this->type;
-        $data['label'] = $this->loadingLabel;
+        $data['loadingLabel'] = $this->loadingLabel;
 
         if ($this->title) {
             $this->template->trySet('title', $this->title);
