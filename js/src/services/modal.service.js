@@ -15,14 +15,15 @@ class ModalService {
     setupFomanticUi(settings) {
         settings.duration = 100;
         settings.allowMultiple = true;
-        settings.onHidden = this.onHidden;
         settings.onShow = this.onShow;
-        settings.onHide = this.onHide;
         settings.onVisible = this.onVisible;
+        settings.onHide = this.onHide;
+        settings.onHidden = this.onHidden;
     }
 
-    onHidden() {
-        atk.modalService.removeModal($(this));
+    onShow() {
+        const $modal = $(this);
+        atk.modalService.addModal($modal);
     }
 
     onVisible() {
@@ -80,13 +81,12 @@ class ModalService {
         }
     }
 
-    onShow() {
-        const $modal = $(this);
-        atk.modalService.addModal($modal);
-    }
-
     onHide() {
         return $(this).data('isClosable');
+    }
+
+    onHidden() {
+        atk.modalService.removeModal($(this));
     }
 
     addModal(modal) {
