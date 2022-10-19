@@ -58,6 +58,24 @@ class CustomExecutorFactory extends ExecutorFactory
 
         return $executor;
     }
+
+    protected function createActionTrigger(Model\UserAction $action, string $type = null): View
+    {
+        $viewType = array_merge(['default' => [$this, 'getDefaultTrigger']], $this->triggerSeed[$type] ?? []);
+        if ($seed = $viewType[$this->getModelId($action)][$action->shortName] ?? null) {
+        } elseif ($seed = $viewType[$action->shortName] ?? null) {
+        } else {
+            $seed = $viewType['default'];
+        }
+
+        $seed = is_array($seed) && is_callable($seed) ? call_user_func($seed, $action, $type) : $seed;
+
+        if ($action instanceof CustomUserAction) {
+            $seed = Factory::mergeSeeds($action->ui['executorTrigger'] ?? [], $seed);
+        }
+
+        return Factory::factory($seed);
+    }
 }
 
 class CustomForm extends Form

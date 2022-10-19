@@ -34,6 +34,7 @@ $country->addUserAction('edit', [
     'callback' => 'save',
     'ui' => [
         'executor' => [Example\CustomModalExecutor::class, 'formSeed' => [Example\CustomForm::class]],
+        'executorTrigger' => ['icon' => 'wrench'],
     ],
 ]);
 
