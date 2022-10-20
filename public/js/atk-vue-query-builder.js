@@ -377,7 +377,7 @@ var render = function render() {
     staticClass: "ui horizontal list"
   }, [_c("div", {
     staticClass: "item vqb-rule-label"
-  }, [_c("h5", {}, [_vm._v(_vm._s(_vm.rule.label))])]), _vm._v(" "), typeof _vm.rule.operands !== "undefined" ? _c("div", {
+  }, [_c("h5", {}, [_vm._v(_vm._s(_vm.rule.label))])]), _vm._v(" "), _vm.rule.operands !== undefined ? _c("div", {
     staticClass: "item vqb-rule-operand"
   }, [_c("select", {
     directives: [{
@@ -402,7 +402,7 @@ var render = function render() {
     return _c("option", {
       key: operand
     }, [_vm._v(_vm._s(operand))]);
-  }), 0)]) : _vm._e(), _vm._v(" "), typeof _vm.rule.operators !== "undefined" && _vm.rule.operators.length > 1 ? _c("div", {
+  }), 0)]) : _vm._e(), _vm._v(" "), _vm.rule.operators !== undefined && _vm.rule.operators.length > 1 ? _c("div", {
     staticClass: "item vqb-rule-operator"
   }, [_c("select", {
     directives: [{

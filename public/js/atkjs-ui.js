@@ -810,7 +810,7 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
   updateField(fileId, fileName) {
     this.$el.data().fileId = fileId;
     this.hiddenInput.val(fileId);
-    if (fileName === '' || typeof fileName === 'undefined' || fileName === null) {
+    if (fileName === '' || fileName === undefined || fileName === null) {
       this.textInput.val(fileId);
     } else {
       this.textInput.val(fileName);
@@ -837,7 +837,7 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
         // Check if that id exist and send it with
         // delete callback, If not, default to file name.
         let id = this.$el.data().fileId;
-        if (id === '' || typeof id === 'undefined' || id === null) {
+        if (id === '' || id === undefined || id === null) {
           id = this.textInput.val();
         }
         this.doFileDelete(id);
@@ -2880,7 +2880,7 @@ class PanelService {
         return obj;
       }, {});
       // add URL argument if pass to panel
-      if (params.urlArgs !== 'undefined') {
+      if (params.urlArgs !== undefined) {
         external_jquery__WEBPACK_IMPORTED_MODULE_9___default().extend(args, params.urlArgs);
       }
       this.doReloadPanel(id, args);
@@ -3500,7 +3500,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* istanbul ignore next */
-if (typeof (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk) !== 'undefined') {
+if ((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk) !== undefined) {
   throw Error('Unexpected jQuery.atk property state');
 }
 const atk = {};

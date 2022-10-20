@@ -44,7 +44,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
         this.$el.data().fileId = fileId;
         this.hiddenInput.val(fileId);
 
-        if (fileName === '' || typeof fileName === 'undefined' || fileName === null) {
+        if (fileName === '' || fileName === undefined || fileName === null) {
             this.textInput.val(fileId);
         } else {
             this.textInput.val(fileName);
@@ -71,7 +71,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
                 // Check if that id exist and send it with
                 // delete callback, If not, default to file name.
                 let id = this.$el.data().fileId;
-                if (id === '' || typeof id === 'undefined' || id === null) {
+                if (id === '' || id === undefined || id === null) {
                     id = this.textInput.val();
                 }
                 this.doFileDelete(id);
