@@ -171,6 +171,7 @@ $form->onSubmit(function (Form $form) {
 Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', Modal::addTo($form)
     ->set(function (View $p) {
         $form = Form::addTo($p);
+        $form->name = 'mf';
         $form->addControl('email');
         $form->onSubmit(function (Form $form) {
             throw (new CoreException('Test exception II.'))
