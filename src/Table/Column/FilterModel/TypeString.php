@@ -31,15 +31,15 @@ class TypeString extends Column\FilterModel
 
                     break;
                 case 'contains':
-                    $model->addCondition($filter['name'], 'LIKE', '%' . $filter['value'] . '%');
+                    $model->addCondition($filter['name'], 'like', '%' . $filter['value'] . '%');
 
                     break;
                 case 'start':
-                    $model->addCondition($filter['name'], 'LIKE', $filter['value'] . '%');
+                    $model->addCondition($filter['name'], 'like', $filter['value'] . '%');
 
                     break;
                 case 'end':
-                    $model->addCondition($filter['name'], 'LIKE', '%' . $filter['value']);
+                    $model->addCondition($filter['name'], 'like', '%' . $filter['value']);
 
                     break;
             }
