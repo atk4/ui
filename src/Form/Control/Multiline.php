@@ -227,7 +227,7 @@ class Multiline extends Form\Control
                     unset($cols['__atkml']);
                     $rows[] = $cols;
                 }
-                $postRawData[$this->shortName] = json_encode($rows);
+                $postRawData[$this->shortName] = $this->getApp()->encodeJson($rows);
             }
         });
 
@@ -297,7 +297,7 @@ class Multiline extends Form\Control
                 }
                 $rows[] = $cols;
             }
-            $jsonValues = json_encode($rows);
+            $jsonValues = $this->getApp()->encodeJson($rows);
         }
 
         return $jsonValues;

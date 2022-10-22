@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\DiContainerTrait;
+use Atk4\Data\Persistence;
 
 /**
  * Implements a class that can be mapped into arbitrary JavaScript expression.
@@ -117,14 +118,14 @@ class JsExpression implements JsExpressionable
             $string = $arg ? 'true' : 'false';
         } elseif (is_int($arg)) {
             // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
-            $string = json_encode(abs($arg) < (2 ** 53) ? $arg : (string) $arg);
+            $string = abs($arg) < (2 ** 53) ? (string) $arg : $this->_jsonEncode((string) $arg);
         } elseif (is_float($arg)) {
-            $string = json_encode($arg);
+            $string = Persistence\Sql\Expression::castFloatToString($arg);
         } elseif ($arg === null) {
             $string = 'null';
         } else {
-            throw (new Exception('Unable to json_encode value - unknown type'))
-                ->addMoreInfo('arg', var_export($arg, true));
+            throw (new Exception('Unexpected variable type'))
+                ->addMoreInfo('arg', get_debug_type($arg));
         }
 
         return $string;

@@ -104,7 +104,7 @@ Agile UI builds upon the concepts of actions and events in the following ways:
 
  - Action can be any arbitrary JavaScript with parameters:
 
-   - parameters are always escaped with json_encode,
+   - parameters are always encoded/escaped,
    - action can contain nested actions,
    - you can build your own integration patterns.
 
@@ -202,7 +202,7 @@ The following code is safe::
     $b = new Button();
     $b->js(true)->text($_GET['button_text']);
 
-Any malicious input through the GET arguments will be wrapped through `json_encode` before being included as an
+Any malicious input through the GET arguments will be encoded as JS string before being included as an
 argument to `text()`.
 
 View to JS integration
