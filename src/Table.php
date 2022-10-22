@@ -539,7 +539,7 @@ class Table extends Lister
      * @param string $id         the model id where row need to be removed
      * @param string $transition the transition effect
      *
-     * @return mixed
+     * @return Jquery
      */
     public function jsRemoveRow($id, $transition = 'fade left')
     {

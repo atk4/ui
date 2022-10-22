@@ -82,7 +82,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             throw new Exception('Action must be set prior to assign trigger');
         }
 
-        return [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])];
+        return [$this->jsShow(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])];
     }
 
     public function getAction(): UserAction
@@ -153,7 +153,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $modal->js(
             true,
             $this->cancel->js()->on('click', new JsFunction([
-                $this->hide(),
+                $this->jsHide(),
             ]))
         );
     }
@@ -189,7 +189,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             : $this->jsSuccess;
 
         return [
-            $this->hide(),
+            $this->jsHide(),
             $this->ok->js(true)->off(),
             $this->cancel->js(true)->off(),
             $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line

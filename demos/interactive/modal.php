@@ -31,22 +31,22 @@ $bar = View::addTo($app, ['ui' => 'buttons']);
 
 $modal = Modal::addTo($app, ['title' => 'Add a name']);
 LoremIpsum::addTo($modal);
-Button::addTo($modal, ['Hide'])->on('click', $modal->hide());
+Button::addTo($modal, ['Hide'])->on('click', $modal->jsHide());
 
-$noTitle = Modal::addTo($app, ['title' => false]);
-LoremIpsum::addTo($noTitle);
-Button::addTo($noTitle, ['Hide'])->on('click', $noTitle->hide());
+$modalNoTitle = Modal::addTo($app, ['title' => false]);
+LoremIpsum::addTo($modalNoTitle);
+Button::addTo($modalNoTitle, ['Hide'])->on('click', $modalNoTitle->jsHide());
 
-$scrolling = Modal::addTo($app, ['title' => 'Long Content that Scrolls inside Modal']);
-$scrolling->addScrolling();
-LoremIpsum::addTo($scrolling);
-LoremIpsum::addTo($scrolling);
-LoremIpsum::addTo($scrolling);
-Button::addTo($scrolling, ['Hide'])->on('click', $scrolling->hide());
+$modalScrolling = Modal::addTo($app, ['title' => 'Long Content that Scrolls inside Modal']);
+$modalScrolling->addScrolling();
+LoremIpsum::addTo($modalScrolling);
+LoremIpsum::addTo($modalScrolling);
+LoremIpsum::addTo($modalScrolling);
+Button::addTo($modalScrolling, ['Hide'])->on('click', $modalScrolling->jsHide());
 
-Button::addTo($bar, ['Show'])->on('click', $modal->show());
-Button::addTo($bar, ['No Title'])->on('click', $noTitle->show());
-Button::addTo($bar, ['Scrolling Content'])->on('click', $scrolling->show());
+Button::addTo($bar, ['Show'])->on('click', $modal->jsShow());
+Button::addTo($bar, ['No Title'])->on('click', $modalNoTitle->jsShow());
+Button::addTo($bar, ['Scrolling Content'])->on('click', $modalScrolling->jsShow());
 
 // Modal demos.
 
@@ -58,16 +58,16 @@ ViewTester::addTo($simpleModal);
 
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($menuBar)->set('Show Modal');
-$button->on('click', $simpleModal->show());
+$button->on('click', $simpleModal->jsShow());
 
 // DYNAMIC
 
 Header::addTo($app, ['Three levels of Modal loading dynamic content via callback']);
 
-// vp1Modal will be render into page but hide until $vp1Modal->show() is activate.
+// vp1Modal will be render into page but hide until $vp1Modal->jsShow() is activate.
 $vp1Modal = Modal::addTo($app, ['title' => 'Lorem Ipsum load dynamically']);
 
-// vp2Modal will be render into page but hide until $vp1Modal->show() is activate.
+// vp2Modal will be render into page but hide until $vp1Modal->jsShow() is activate.
 $vp2Modal = Modal::addTo($app, ['title' => 'Text message load dynamically'])->addClass('small');
 
 $vp3Modal = Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
@@ -76,7 +76,7 @@ $vp3Modal->set(function (View $p) {
     LoremIpsum::addTo($p, ['size' => 2]);
 });
 
-// When $vp1Modal->show() is activate, it will dynamically add this content to it.
+// When $vp1Modal->jsShow() is activate, it will dynamically add this content to it.
 $vp1Modal->set(function (View $p) use ($vp2Modal) {
     ViewTester::addTo($p);
     View::addTo($p, ['Showing lorem ipsum']); // need in behat test.
@@ -84,20 +84,20 @@ $vp1Modal->set(function (View $p) use ($vp2Modal) {
     $form = Form::addTo($p);
     $form->addControl('color', [], ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
     $form->onSubmit(function (Form $form) use ($vp2Modal) {
-        return $vp2Modal->show(['color' => $form->model->get('color')]);
+        return $vp2Modal->jsShow(['color' => $form->model->get('color')]);
     });
 });
 
-// When $vp2Modal->show() is activate, it will dynamically add this content to it.
+// When $vp2Modal->jsShow() is activate, it will dynamically add this content to it.
 $vp2Modal->set(function (View $p) use ($vp3Modal) {
     ViewTester::addTo($p);
     Message::addTo($p, [$_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
-    Button::addTo($p)->set('Third modal')->on('click', $vp3Modal->show());
+    Button::addTo($p)->set('Third modal')->on('click', $vp3Modal->jsShow());
 });
 
 $bar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($bar)->set('Open Lorem Ipsum');
-$button->on('click', $vp1Modal->show());
+$button->on('click', $vp1Modal->jsShow());
 
 // ANIMATION
 
@@ -148,7 +148,7 @@ $denyApproveModal->notClosable();
 
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($menuBar)->set('Show Deny/Approve');
-$button->on('click', $denyApproveModal->show());
+$button->on('click', $denyApproveModal->jsShow());
 
 // MULTI STEP
 
@@ -236,4 +236,4 @@ $prevAction->on('click', $stepModal->js()->atkReloadView(
 // Bind display modal to page display button.
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($menuBar)->set('Multi Step Modal');
-$button->on('click', $stepModal->show());
+$button->on('click', $stepModal->jsShow());

@@ -23,4 +23,4 @@ $modal->set(function (View $p) {
 });
 
 $button = Button::addTo($app)->set('Test');
-$button->on('click', $modal->show());
+$button->on('click', $modal->jsShow());

@@ -99,7 +99,7 @@ class ActionButtons extends Table\Column
             $callback($t, $t->stickyGet($this->name));
         });
 
-        return $this->addButton($button, $modal->show(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)));
+        return $this->addButton($button, $modal->jsShow(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)));
     }
 
     public function getTag(string $position, $value, $attr = []): string

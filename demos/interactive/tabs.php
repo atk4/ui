@@ -42,7 +42,7 @@ $tabs->addTab('Dynamic Lorem Ipsum', function (VirtualPage $vp) {
 $tabs->addTab('Modal popup', function (VirtualPage $vp) {
     Button::addTo($vp, ['Load Lorem'])->on('click', Modal::addTo($vp)->set(function (View $p) {
         LoremIpsum::addTo($p, ['size' => 2]);
-    })->show());
+    })->jsShow());
 });
 
 // dynamic tab

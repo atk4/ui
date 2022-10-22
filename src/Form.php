@@ -289,7 +289,7 @@ class Form extends View
      * @param string $fieldName Field name
      * @param string $str       Error message
      *
-     * @return JsChain|array
+     * @return JsChain|array<int, JsChain>
      */
     public function error($fieldName, $str)
     {

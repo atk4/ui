@@ -78,7 +78,7 @@ class JsSortable extends JsCallback
      *
      * @param array|null $urlOptions
      *
-     * @return mixed
+     * @return JsChain
      */
     public function jsSendSortOrders($urlOptions = null)
     {

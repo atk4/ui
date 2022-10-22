@@ -8,7 +8,7 @@ namespace Atk4\Ui;
  * This class add modal dialog to a page.
  *
  * Modal are added to the layout but their content is hidden by default.
- * $modal->show() is the triggered needed to actually display the modal.
+ * $modal->jsShow() is the triggered needed to actually display the modal.
  *
  * Modal can be use as a regular view, simply by adding other view to it.
  *  Message::addTo($modal, ['title' => 'Welcome to Agile Toolkit'])->text('Your text here');
@@ -122,13 +122,13 @@ class Modal extends View
     }
 
     /**
-     * Set modal to show on page.
-     * Will trigger modal to be shown on page.
-     * ex: $button->on('click', $modal->show());.
+     * Show modal on page.
+     *
+     * Example: $button->on('click', $modal->jsShow());
      *
      * @return JsChain
      */
-    public function show(array $args = [])
+    public function jsShow(array $args = [])
     {
         $js_chain = $this->js();
         if ($args !== []) {
@@ -143,7 +143,7 @@ class Modal extends View
      *
      * @return JsChain
      */
-    public function hide()
+    public function jsHide()
     {
         return $this->js()->modal('hide');
     }
