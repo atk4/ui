@@ -215,7 +215,7 @@ between actual views. All views support JavaScript binding through two methods: 
 .. php:method:: js([$event, [$other_action]])
 
     Return action chain that targets this view. As event you can specify `true` which will make chain automatically execute
-    on document ready event. You can specify a specific JavaScript event such as `"click"` or `"mousein"`. You can also use your
+    on document ready event. You can specify a specific JavaScript event such as `click` or `mousein`. You can also use your
     custom event that you would trigger manually. If `$event` is false or null, no event binding will be performed.
 
     If `$other_chain` is specified together with event, it will also be bound to said event. `$other_chain` can also be
