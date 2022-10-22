@@ -94,8 +94,7 @@ class JsExpression implements JsExpressionable
                 ->addMoreInfo('obj', $arg);
         } elseif (is_array($arg)) {
             $array = [];
-            // is array associative? (hash)
-            $assoc = $arg !== array_values($arg);
+            $assoc = !array_is_list($arg);
 
             foreach ($arg as $key => $value) {
                 $value = $this->_jsonEncode($value);
@@ -115,14 +114,14 @@ class JsExpression implements JsExpressionable
         } elseif (is_string($arg)) {
             $string = json_encode($arg, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
         } elseif (is_bool($arg)) {
-            $string = json_encode($arg);
+            $string = $arg ? 'true' : 'false';
         } elseif (is_int($arg)) {
             // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
             $string = json_encode(abs($arg) < (2 ** 53) ? $arg : (string) $arg);
         } elseif (is_float($arg)) {
             $string = json_encode($arg);
         } elseif ($arg === null) {
-            $string = json_encode($arg);
+            $string = 'null';
         } else {
             throw (new Exception('Unable to json_encode value - unknown type'))
                 ->addMoreInfo('arg', var_export($arg, true));
