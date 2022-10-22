@@ -3735,19 +3735,6 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].createDebouncedFx = function (func, 
 * from atk context. Usage: atk.utils.redirect('url');
 */
 atk__WEBPACK_IMPORTED_MODULE_2__["default"].utils = {
-  json: function () {
-    return {
-      // try parsing string as JSON. Return parse if valid, otherwise return onError value.
-      tryParse: function (str) {
-        let onError = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-        try {
-          return JSON.parse(str);
-        } catch (e) {
-          return onError;
-        }
-      }
-    };
-  },
   redirect: function (url, params) {
     document.location = atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper.appendParams(url, params);
   }

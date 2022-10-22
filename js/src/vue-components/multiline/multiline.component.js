@@ -54,7 +54,7 @@ export default {
         'atk-multiline-header': multilineHeader,
     },
     mounted: function () {
-        this.rowData = this.buildRowData(this.value);
+        this.rowData = this.buildRowData(this.value ? this.value : '[]');
         this.updateInputValue();
 
         atk.eventBus.on(this.$root.$el.id + '-update-row', (payload) => {
@@ -94,7 +94,7 @@ export default {
             this.rowData.push(newRow);
             this.updateInputValue();
             if (this.data.afterAdd && typeof this.data.afterAdd === 'function') {
-                this.data.afterAdd(atk.utils.json().tryParse(this.value));
+                this.data.afterAdd(JSON.parse(this.value));
             }
             this.fetchExpression(newRow.__atkml);
             this.fetchOnChangeAction();
@@ -107,7 +107,7 @@ export default {
             this.updateInputValue();
             this.fetchOnChangeAction();
             if (this.data.afterDelete && typeof this.data.afterDelete === 'function') {
-                this.data.afterDelete(atk.utils.json().tryParse(this.value));
+                this.data.afterDelete(JSON.parse(this.value));
             }
         },
         onUpdate: function (atkmlId, fieldName, value) {
@@ -162,16 +162,16 @@ export default {
         },
         /**
          * Update Multi-line Form input with all rowData values
-         * as json string.
+         * as JSON string.
          */
         updateInputValue: function () {
             this.value = JSON.stringify(this.rowData);
         },
         /**
-         * Build rowData from json string.
+         * Build rowData from JSON string.
          */
         buildRowData: function (jsonValue) {
-            const rows = atk.utils.json().tryParse(jsonValue, []);
+            const rows = JSON.parse(jsonValue);
             rows.forEach((row) => {
                 row.__atkml = this.getUUID();
             });

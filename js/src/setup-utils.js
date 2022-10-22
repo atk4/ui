@@ -75,18 +75,6 @@ atk.createDebouncedFx = function (func, wait, options) {
 * from atk context. Usage: atk.utils.redirect('url');
 */
 atk.utils = {
-    json: function () {
-        return {
-            // try parsing string as JSON. Return parse if valid, otherwise return onError value.
-            tryParse: function (str, onError = null) {
-                try {
-                    return JSON.parse(str);
-                } catch (e) {
-                    return onError;
-                }
-            },
-        };
-    },
     redirect: function (url, params) {
         document.location = atk.urlHelper.appendParams(url, params);
     },
