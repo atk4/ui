@@ -387,17 +387,16 @@ class App
             // ugly hack for TABS
             // because Fomantic-UI tab only deal with html and not JSON
             // we need to hack output to include app modal.
-            $keys = null;
+            $ids = [];
             $remove_function = '';
             foreach ($this->getRenderedPortals() as $key => $modal) {
                 // add modal rendering to output
-                $keys[] = '#' . $key;
+                $ids[] = '#' . $key;
                 $output['atkjs'] .= '; ' . $modal['js'];
                 $output['html'] .= $modal['html'];
             }
-            if ($keys) {
-                $ids = implode(', ', $keys);
-                $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . $ids . '\').remove();';
+            if (count($ids) > 0) {
+                $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . implode(', ', $ids) . '\').remove();';
             }
             $output = $this->getTag('script', [], 'jQuery(function() {' . $remove_function . $output['atkjs'] . '});') . $output['html'];
 

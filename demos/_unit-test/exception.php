@@ -24,7 +24,7 @@ $modal->set(function () {
 });
 
 $button = Button::addTo($app, ['Test modal exception']);
-$button->on('click', $modal->show());
+$button->on('click', $modal->jsShow());
 
 $cb1 = CallbackLater::addTo($app, ['urlTrigger' => 'm2_cb']);
 $modal2 = Modal::addTo($app, ['cb' => $cb1]);
@@ -34,4 +34,4 @@ $modal2->set(function () {
 });
 
 $button2 = Button::addTo($app, ['Test modal error']);
-$button2->on('click', $modal2->show());
+$button2->on('click', $modal2->jsShow());

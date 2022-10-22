@@ -38,11 +38,16 @@ Feature: Form
     Then Modal is open with text "Atk4\Core\Exception: Test exception I."
     Then I hide js modal
     When I press button "Modal Test"
+    Then I check if input value for "#mf input[name='email']" match text ""
+    When I fill Modal field "email" with "ee"
+    Then I check if input value for "#mf input[name='email']" match text "ee"
     When I press Modal button "Save"
     Then Modal is open with text "Atk4\Core\Exception: Test exception II."
     Then I hide js modal
+    Then I check if input value for "#mf input[name='email']" match text "ee"
     Then I hide js modal
     When I press button "Modal Test"
+    Then I check if input value for "#mf input[name='email']" match text ""
     When I press Modal button "Save"
     Then Modal is open with text "Atk4\Core\Exception: Test exception II."
     Then I hide js modal

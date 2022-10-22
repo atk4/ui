@@ -86,9 +86,9 @@ class Context extends RawMinkContext implements BehatContext
     protected function getFinishedScript(): string
     {
         return 'document.readyState === \'complete\''
-            . ' && typeof jQuery !== \'undefined\' && jQuery.active === 0'
+            . ' && jQuery !== undefined && jQuery.active === 0'
             . ' && document.querySelectorAll(\'.animating.ui.transition:not(.looping)\').length === 0'
-            . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()';
+            . ' && atk !== undefined && atk.vueService.areComponentsLoaded()';
     }
 
     /**
@@ -479,7 +479,7 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ input
 
     /**
-     * @Then /^input "([^"]*)" value should start with "([^"]*)"$/
+     * @Then ~^input "([^"]*)" value should start with "([^"]*)"$~
      */
     public function inputValueShouldStartWith(string $inputName, string $text): void
     {
@@ -553,7 +553,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Generic ScopeBuilder rule with select operator and input value.
      *
-     * @Then /^rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     * @Then ~^rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
      */
     public function scopeBuilderRule(string $name, string $operator, string $value): void
     {
@@ -569,7 +569,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * HasOne reference or enum type rule for ScopeBuilder.
      *
-     * @Then /^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     * @Then ~^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
      */
     public function scopeBuilderReferenceRule(string $name, string $operator, string $value): void
     {
@@ -585,7 +585,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * HasOne select or enum type rule for ScopeBuilder.
      *
-     * @Then /^select rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     * @Then ~^select rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
      */
     public function scopeBuilderSelectRule(string $name, string $operator, string $value): void
     {
@@ -601,7 +601,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Date, Time or Datetime rule for ScopeBuilder.
      *
-     * @Then /^date rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     * @Then ~^date rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
      */
     public function scopeBuilderDateRule(string $name, string $operator, string $value): void
     {
@@ -617,7 +617,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Boolean type rule for ScopeBuilder.
      *
-     * @Then /^bool rule "([^"]*)" has value "([^"]*)"$/
+     * @Then ~^bool rule "([^"]*)" has value "([^"]*)"$~
      */
     public function scopeBuilderBoolRule(string $name, string $value): void
     {
@@ -633,7 +633,21 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^I check if input value for "([^"]*)" match text in "([^"]*)"$/
+     * @Then ~^I check if input value for "([^"]*)" match text "([^"]*)"~
+     */
+    public function compareInputValueToText(string $selector, string $text): void
+    {
+        $selector = $this->unquoteStepArgument($selector);
+        $text = $this->unquoteStepArgument($text);
+
+        $inputValue = $this->findElement(null, $selector)->getValue();
+        if ($inputValue !== $text) {
+            throw new Exception('Input value does not match: ' . $inputValue . ' expected: ' . $text);
+        }
+    }
+
+    /**
+     * @Then ~^I check if input value for "([^"]*)" match text in "([^"]*)"$~
      */
     public function compareInputValueToElementText(string $inputName, string $selector): void
     {
@@ -672,7 +686,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^container "([^"]*)" should display "([^"]*)" item\(s\)$/
+     * @Then ~^container "([^"]*)" should display "([^"]*)" item\(s\)$~
      */
     public function containerShouldHaveNumberOfItem(string $selector, int $numberOfitems): void
     {
@@ -731,7 +745,7 @@ class Context extends RawMinkContext implements BehatContext
      * Remove once https://github.com/Behat/MinkExtension/pull/386 and
      * https://github.com/minkphp/Mink/issues/656 are fixed and released.
      *
-     * @Then /^PATCH MINK the (?i)url(?-i) should match "(?P<pattern>(?:[^"]|\\")*)"$/
+     * @Then ~^PATCH MINK the (?i)url(?-i) should match "(?P<pattern>(?:[^"]|\\")*)"$~
      */
     public function assertUrlRegExp(string $pattern): void
     {
@@ -741,7 +755,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^I check if text in "([^"]*)" match text in "([^"]*)"/
+     * @Then ~^I check if text in "([^"]*)" match text in "([^"]*)"~
      */
     public function compareElementText(string $compareSelector, string $compareToSelector): void
     {
@@ -754,7 +768,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^I check if text in "([^"]*)" match text "([^"]*)"/
+     * @Then ~^I check if text in "([^"]*)" match text "([^"]*)"~
      */
     public function textInContainerShouldMatch(string $selector, string $text): void
     {
@@ -767,7 +781,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then /^I check if text in "([^"]*)" match regex "([^"]*)"/
+     * @Then ~^I check if text in "([^"]*)" match regex "([^"]*)"~
      */
     public function textInContainerShouldMatchRegex(string $selector, string $regex): void
     {

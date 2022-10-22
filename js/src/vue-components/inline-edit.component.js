@@ -62,10 +62,10 @@ export default {
             }
         },
         onBlur: function () {
-            if (this.isDirty && this.saveOnBlur && !this.hasError) {
+            if (this.isDirty && this.saveOnBlur) {
                 this.update();
             } else {
-                this.value = this.temp;
+                this.value = this.temp; // TODO will not save the value on 2nd edit and submit via enter
             }
         },
         onEscape: function () {

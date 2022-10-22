@@ -168,9 +168,10 @@ $form->onSubmit(function (Form $form) {
     // return 'somehow it did not crash';
 });
 
-Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', Modal::addTo($form)
-    ->set(function (View $p) {
+Button::addTo($form, ['Modal Test', 'class.secondary' => true])
+    ->on('click', Modal::addTo($form)->set(function (View $p) {
         $form = Form::addTo($p);
+        $form->name = 'mf';
         $form->addControl('email');
         $form->onSubmit(function (Form $form) {
             throw (new CoreException('Test exception II.'))
@@ -178,7 +179,7 @@ Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', Mod
 
             // return 'somehow it did not crash';
         });
-    })->show());
+    })->jsShow());
 
 // -----------------------------------------------------------------------------
 

@@ -1,7 +1,7 @@
 import $ from 'external/jquery';
 
 /* istanbul ignore next */
-if (typeof $.atk !== 'undefined') {
+if ($.atk !== undefined) {
     throw Error('Unexpected jQuery.atk property state');
 }
 

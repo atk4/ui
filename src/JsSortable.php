@@ -78,10 +78,10 @@ class JsSortable extends JsCallback
      *
      * @param array|null $urlOptions
      *
-     * @return mixed
+     * @return JsChain
      */
-    public function jsGetOrders($urlOptions = null)
+    public function jsSendSortOrders($urlOptions = null)
     {
-        return $this->view->js()->atkJsSortable('getSortOrders', [$urlOptions]);
+        return $this->view->js()->atkJsSortable('sendSortOrders', [$urlOptions]);
     }
 }

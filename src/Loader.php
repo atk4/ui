@@ -108,7 +108,7 @@ class Loader extends View
      *
      * @param string $storeName
      *
-     * @return mixed
+     * @return JsChain
      */
     public function jsLoad(array $args = [], array $apiConfig = [], $storeName = null)
     {

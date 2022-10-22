@@ -8,15 +8,14 @@
                             <div class="item vqb-rule-label">
                                 <h5 class>{{ rule.label }}</h5>
                             </div>
-                            <div class="item vqb-rule-operand" v-if="typeof rule.operands !== 'undefined'">
+                            <div class="item vqb-rule-operand" v-if="rule.operands !== undefined">
                                 <!-- List of operands (optional) -->
                                 <select v-model="query.operand" class="atk-qb-select">
                                     <option v-for="operand in rule.operands" :key="operand">{{ operand }}</option>
                                 </select>
                             </div>
                             <div class="item vqb-rule-operator"
-                                 v-if="typeof rule.operators !== 'undefined'
-                                 && rule.operators.length > 1">
+                                 v-if="rule.operators !== undefined && rule.operators.length > 1">
                                 <!-- List of operators (e.g. =, !=, >, <) -->
                                 <select v-model="query.operator" class="atk-qb-select">
                                     <option v-for="operator in rule.operators" :key="operator" :value="operator">

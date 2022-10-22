@@ -45,7 +45,7 @@ $sortable->onReorder(function (array $order, string $src, int $pos, int $oldPos)
 });
 
 $button = Button::addTo($app)->set('Get countries order');
-$button->js('click', $sortable->jsGetOrders(['btn' => '1']));
+$button->js('click', $sortable->jsSendSortOrders(['btn' => '1']));
 
 // -----------------------------------------------------------------------------
 

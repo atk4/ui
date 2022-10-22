@@ -810,7 +810,7 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
   updateField(fileId, fileName) {
     this.$el.data().fileId = fileId;
     this.hiddenInput.val(fileId);
-    if (fileName === '' || typeof fileName === 'undefined' || fileName === null) {
+    if (fileName === '' || fileName === undefined || fileName === null) {
       this.textInput.val(fileId);
     } else {
       this.textInput.val(fileName);
@@ -837,7 +837,7 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
         // Check if that id exist and send it with
         // delete callback, If not, default to file name.
         let id = this.$el.data().fileId;
-        if (id === '' || typeof id === 'undefined' || id === null) {
+        if (id === '' || id === undefined || id === null) {
           id = this.textInput.val();
         }
         this.doFileDelete(id);
@@ -1297,16 +1297,9 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
   }
 
   /**
-   * Will send current element order via callback.
+   * Send orders to server via JsCallback.
    *
    * @param {object} params Extra arguments to add to URL.
-   */
-  getSortOrders(params) {
-    this.sendSortOrders(params);
-  }
-
-  /**
-   * Send orders to server via JsCallback.
    */
   sendSortOrders(params) {
     const url = this.buildUrl(params);
@@ -1506,7 +1499,7 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
 
     // the target element within container where new content is appendTo.
     this.$target = this.settings.options.appendTo ? this.$inner.find(this.settings.options.appendTo) : this.$inner;
-    this.$scroll.on('scroll', this.observe.bind(this));
+    this.$scroll.on('scroll', this.onScroll.bind(this));
 
     // if there is no scrollbar, then try to load next page too
     if (!this.hasScrollbar()) {
@@ -1540,7 +1533,7 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
   /**
    * Check if scrolling require adding content.
    */
-  observe(event) {
+  onScroll(event) {
     const borderTopWidth = parseInt(this.$el.css('borderTopWidth'), 10);
     const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth;
     // this.$el padding top value.
@@ -2880,7 +2873,7 @@ class PanelService {
         return obj;
       }, {});
       // add URL argument if pass to panel
-      if (params.urlArgs !== 'undefined') {
+      if (params.urlArgs !== undefined) {
         external_jquery__WEBPACK_IMPORTED_MODULE_9___default().extend(args, params.urlArgs);
       }
       this.doReloadPanel(id, args);
@@ -3500,7 +3493,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* istanbul ignore next */
-if (typeof (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk) !== 'undefined') {
+if ((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk) !== undefined) {
   throw Error('Unexpected jQuery.atk property state');
 }
 const atk = {};
@@ -3624,11 +3617,7 @@ atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin = function (name, cl)
     let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
     // Check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
     if (typeof option === 'string') {
-      if (this.data(dataName) && typeof this.data(dataName)[option] === 'function') {
-        return this.data(dataName).call(option, args);
-      }
-      // return if trying to call a plugin method prior to instantiate it.
-      return;
+      return this.data(dataName).call(option, args);
     }
     return this.each(function () {
       const options = external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, cl.DEFAULTS, typeof option === 'object' && option);
@@ -3746,19 +3735,6 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].createDebouncedFx = function (func, 
 * from atk context. Usage: atk.utils.redirect('url');
 */
 atk__WEBPACK_IMPORTED_MODULE_2__["default"].utils = {
-  json: function () {
-    return {
-      // try parsing string as JSON. Return parse if valid, otherwise return onError value.
-      tryParse: function (str) {
-        let onError = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-        try {
-          return JSON.parse(str);
-        } catch (e) {
-          return onError;
-        }
-      }
-    };
-  },
   redirect: function (url, params) {
     document.location = atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper.appendParams(url, params);
   }

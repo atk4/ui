@@ -148,7 +148,7 @@ class PanelService {
                 return obj;
             }, {});
             // add URL argument if pass to panel
-            if (params.urlArgs !== 'undefined') {
+            if (params.urlArgs !== undefined) {
                 $.extend(args, params.urlArgs);
             }
             this.doReloadPanel(id, args);
