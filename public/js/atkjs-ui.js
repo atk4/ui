@@ -3624,11 +3624,7 @@ atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin = function (name, cl)
     let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
     // Check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
     if (typeof option === 'string') {
-      if (this.data(dataName) && typeof this.data(dataName)[option] === 'function') {
-        return this.data(dataName).call(option, args);
-      }
-      // return if trying to call a plugin method prior to instantiate it.
-      return;
+      return this.data(dataName).call(option, args);
     }
     return this.each(function () {
       const options = external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, cl.DEFAULTS, typeof option === 'object' && option);
