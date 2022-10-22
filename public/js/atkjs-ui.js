@@ -1297,16 +1297,9 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
   }
 
   /**
-   * Will send current element order via callback.
+   * Send orders to server via JsCallback.
    *
    * @param {object} params Extra arguments to add to URL.
-   */
-  getSortOrders(params) {
-    this.sendSortOrders(params);
-  }
-
-  /**
-   * Send orders to server via JsCallback.
    */
   sendSortOrders(params) {
     const url = this.buildUrl(params);
