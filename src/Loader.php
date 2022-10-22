@@ -116,7 +116,7 @@ class Loader extends View
             'url' => $this->cb->getUrl(),
             'urlOptions' => $args,
             'apiConfig' => $apiConfig !== [] ? $apiConfig : null,
-            'storeName' => $storeName ? $storeName : null,
+            'storeName' => $storeName,
         ]);
     }
 }
