@@ -858,8 +858,8 @@ class View extends AbstractView implements JsExpressionable
     public function jsGetStoreData()
     {
         $data = [];
-        $data['local'] = json_decode($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null', true, 512, \JSON_THROW_ON_ERROR);
-        $data['session'] = json_decode($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null', true, 512, \JSON_THROW_ON_ERROR);
+        $data['local'] = $this->getApp()->decodeJson($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null');
+        $data['session'] = $this->getApp()->decodeJson($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null');
 
         return $data;
     }
@@ -901,7 +901,7 @@ class View extends AbstractView implements JsExpressionable
             throw new Exception('View property name needs to be set');
         }
 
-        return (new JsChain('atk.dataService'))->addJsonData($name, json_encode($data, \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR), $type);
+        return (new JsChain('atk.dataService'))->addJsonData($name, $this->getApp()->encodeJson($data), $type);
     }
 
     /**
@@ -1070,13 +1070,13 @@ class View extends AbstractView implements JsExpressionable
     }
 
     /**
-     * Convert View into a value in case it happens to be inside our json_encode (as argument to JsChain).
+     * Convert View into CSS identifier.
      */
     public function jsRender(): string
     {
         $this->assertIsInitialized();
 
-        return json_encode('#' . $this->name, \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
+        return (new JsExpression('[]', ['#' . $this->name]))->jsRender();
     }
 
     /**

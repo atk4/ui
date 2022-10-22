@@ -302,7 +302,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $menu = $this->findElement(null, $selector);
         $link = $this->findElement($menu, 'xpath(//a[text()="' . $btnLabel . '"])');
-        $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
+        $this->getSession()->executeScript('$(\'#' . $link->getAttribute('id') . '\').click()');
     }
 
     /**
@@ -460,7 +460,7 @@ class Context extends RawMinkContext implements BehatContext
         $tabMenu = $this->findElement(null, '.ui.tabular.menu');
         $link = $this->findElement($tabMenu, 'xpath(//a[text()="' . $tabTitle . '"])');
 
-        $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
+        $this->getSession()->executeScript('$(\'#' . $link->getAttribute('id') . '\').click()');
     }
 
     /**
@@ -520,20 +520,20 @@ class Context extends RawMinkContext implements BehatContext
         $lookupElem = $this->findElement(null, 'xpath(//input[@name="' . $inputName . '"]/parent::div)');
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
-        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("show")');
-        $this->jqueryWait('$("#' . $lookupElem->getAttribute('id') . '").hasClass("visible")');
+        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown("show")');
+        $this->jqueryWait('$(\'#' . $lookupElem->getAttribute('id') . '\').hasClass("visible")');
 
         // select value
         $valueElem = $this->findElement($lookupElem, 'xpath(//div[text()="' . $value . '"])');
-        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("set selected", ' . $valueElem->getAttribute('data-value') . ');');
+        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown("set selected", ' . $valueElem->getAttribute('data-value') . ');');
         $this->jqueryWait();
 
         // hide dropdown and wait till fully closed
-        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("hide");');
+        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown("hide");');
         $this->jqueryWait();
         // for unknown reasons, dropdown very often remains visible in CI, so hide twice
-        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("hide");');
-        $this->jqueryWait('!$("#' . $lookupElem->getAttribute('id') . '").hasClass("visible")');
+        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown("hide");');
+        $this->jqueryWait('!$(\'#' . $lookupElem->getAttribute('id') . '\').hasClass("visible")');
     }
 
     /**
@@ -682,7 +682,7 @@ class Context extends RawMinkContext implements BehatContext
         $column = $this->findElement(null, "th[data-column='" . $columnName . "']");
         $icon = $this->findElement($column, 'i');
 
-        $this->getSession()->executeScript('$("#' . $icon->getAttribute('id') . '").click()');
+        $this->getSession()->executeScript('$(\'#' . $icon->getAttribute('id') . '\').click()');
     }
 
     /**

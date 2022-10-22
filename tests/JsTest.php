@@ -19,6 +19,12 @@ class JsTest extends TestCase
         static::assertSame('3 + 4', (new JsExpression('[] + []', [3, 4]))->jsRender());
     }
 
+    public function testStrings(): void
+    {
+        static::assertSame('\'\\\'\', \'"\', \'\n\'', (new JsExpression('[], [], []', ['\'', '"', "\n"]))->jsRender());
+        static::assertSame('\'\\\'a"b\\\\\\\'c\\\\" \\\'"\'', (new JsExpression('[]', ['\'a"b\\\'c\\" \'"']))->jsRender());
+    }
+
     public function testNumbers(): void
     {
         if (\PHP_INT_SIZE === 4) {
@@ -37,12 +43,15 @@ class JsTest extends TestCase
             [1.5, '1.5'],
             [false, 'false'],
             [true, 'true'],
-            [ // verify if regex accepts big input and does not fail with backtrack limit
-                $longStr,
-                json_encode($longStr),
-            ],
+            // verify if regex accepts big input and does not fail with backtrack limit
+            [$longStrBase, json_encode($longStrBase)],
+            [$longStr, json_encode($longStr)],
         ] as [$in, $expected]) {
-            static::assertSame($expected, (new JsExpression('[]', [$in]))->jsRender());
+            $jsRendered = (new JsExpression('[]', [$in]))->jsRender();
+            if (substr($jsRendered, 0, 1) === '\'') {
+                $jsRendered = '"' . str_replace('"', '\\"', substr($jsRendered, 1, -1)) . '"';
+            }
+            static::assertSame($expected, $jsRendered);
 
             // test JSON renderer in App too
             // test extensively because of complex custom regex impl
@@ -78,14 +87,14 @@ class JsTest extends TestCase
     {
         $c = new JsChain('$myInput');
         $c->getTextInRange('start', 'end'); // @phpstan-ignore-line
-        static::assertSame('$myInput.getTextInRange("start", "end")', $c->jsRender());
+        static::assertSame('$myInput.getTextInRange(\'start\', \'end\')', $c->jsRender());
     }
 
     public function testChain2(): void
     {
         $c = new JsChain('$myInput');
         $c->getTextInRange(new JsExpression('getStart()'), 'end'); // @phpstan-ignore-line
-        static::assertSame('$myInput.getTextInRange(getStart(), "end")', $c->jsRender());
+        static::assertSame('$myInput.getTextInRange(getStart(), \'end\')', $c->jsRender());
     }
 
     public function testJquery(): void
@@ -93,7 +102,7 @@ class JsTest extends TestCase
         $c = new Jquery('.mytag');
         $c->find('li')->first()->hide();
 
-        static::assertSame('$(".mytag").find("li").first().hide()', $c->jsRender());
+        static::assertSame('$(\'.mytag\').find(\'li\').first().hide()', $c->jsRender());
     }
 
     public function testArgs(): void
@@ -101,7 +110,7 @@ class JsTest extends TestCase
         $c = new Jquery('.mytag');
         $c->val((new Jquery('.othertag'))->val());
 
-        static::assertSame('$(".mytag").val($(".othertag").val())', $c->jsRender());
+        static::assertSame('$(\'.mytag\').val($(\'.othertag\').val())', $c->jsRender());
     }
 
     public function testComplex1(): void
@@ -116,7 +125,7 @@ class JsTest extends TestCase
         ]));
 
         static::assertSame('$(document).ready(function() {
-        $(".box1").height($(".box2").height());
+        $(\'.box1\').height($(\'.box2\').height());
     })', $fx->jsRender());
     }
 }

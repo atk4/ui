@@ -135,7 +135,7 @@ class VpExecutor extends View implements JsExecutorInterface
         $view->js(true, $this->stepList->js()->find('.item')->removeClass('active'));
         foreach ($this->steps as $step) {
             if ($step === $currentStep) {
-                $view->js(true, $this->stepList->js()->find("[data-list-item='{$step}']")->addClass('active'));
+                $view->js(true, $this->stepList->js()->find('[data-list-item="' . $step . '"]')->addClass('active'));
             }
         }
     }

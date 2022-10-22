@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\DiContainerTrait;
+use Atk4\Data\Persistence;
 
 /**
  * Implements a class that can be mapped into arbitrary JavaScript expression.
@@ -49,17 +50,15 @@ class JsExpression implements JsExpressionable
 
                 $value = $this->args[$identifier];
 
-                // No escaping for {}
+                // no escaping for "{}"
                 if ($matches[0][0] === '{') {
                     return $value;
                 }
 
-                if (is_object($value) && $value instanceof JsExpressionable) {
+                if ($value instanceof JsExpressionable) {
                     $value = '(' . $value->jsRender() . ')';
-                } elseif (is_object($value)) {
-                    $value = $this->_jsonEncode($value->toString());
                 } else {
-                    $value = $this->_jsonEncode($value);
+                    $value = $this->_jsEncode($value);
                 }
 
                 return $value;
@@ -71,18 +70,10 @@ class JsExpression implements JsExpressionable
     }
 
     /**
-     * Provides replacement for json_encode() that will respect JsExpressionable objects
-     * and call jsRender() for them instead of escaping.
-     *
      * @param mixed $arg
      */
-    protected function _jsonEncode($arg): string
+    protected function _jsEncode($arg): string
     {
-        /*
-         * This function is very similar to json_encode, however it will traverse array
-         * before encoding in search of JsExpressionable objects. Those would
-         * be replaced with their jsRendering.
-         */
         if (is_object($arg)) {
             if ($arg instanceof JsExpressionable) {
                 $result = $arg->jsRender();
@@ -94,12 +85,11 @@ class JsExpression implements JsExpressionable
                 ->addMoreInfo('obj', $arg);
         } elseif (is_array($arg)) {
             $array = [];
-            // is array associative? (hash)
-            $assoc = $arg !== array_values($arg);
+            $assoc = !array_is_list($arg);
 
             foreach ($arg as $key => $value) {
-                $value = $this->_jsonEncode($value);
-                $key = $this->_jsonEncode($key);
+                $value = $this->_jsEncode($value);
+                $key = $this->_jsEncode($key);
                 if (!$assoc) {
                     $array[] = $value;
                 } else {
@@ -114,18 +104,19 @@ class JsExpression implements JsExpressionable
             }
         } elseif (is_string($arg)) {
             $string = json_encode($arg, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
+            $string = '\'' . str_replace('\'', '\\\'', str_replace('\\"', '"', substr($string, 1, -1))) . '\'';
         } elseif (is_bool($arg)) {
-            $string = json_encode($arg);
+            $string = $arg ? 'true' : 'false';
         } elseif (is_int($arg)) {
             // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
-            $string = json_encode(abs($arg) < (2 ** 53) ? $arg : (string) $arg);
+            $string = abs($arg) < (2 ** 53) ? (string) $arg : $this->_jsEncode((string) $arg);
         } elseif (is_float($arg)) {
-            $string = json_encode($arg);
+            $string = Persistence\Sql\Expression::castFloatToString($arg);
         } elseif ($arg === null) {
-            $string = json_encode($arg);
+            $string = 'null';
         } else {
-            throw (new Exception('Unable to json_encode value - unknown type'))
-                ->addMoreInfo('arg', var_export($arg, true));
+            throw (new Exception('Unsupported argument type'))
+                ->addMoreInfo('arg', $arg);
         }
 
         return $string;
