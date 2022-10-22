@@ -119,7 +119,7 @@ class FormTest extends TestCase
 
     public function assertFormControlError(string $field, string $error): void
     {
-        $n = preg_match_all('~form\("add prompt", "([^"]*)", "([^"]*)"\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
+        $n = preg_match_all('~form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
         static::assertGreaterThan(0, $n);
         $matched = false;
         foreach ($matchesAll as $matches) {
@@ -134,7 +134,7 @@ class FormTest extends TestCase
 
     public function assertFromControlNoErrors(string $field): void
     {
-        $n = preg_match_all('~form\("add prompt", "([^"]*)", "([^"]*)"\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
+        $n = preg_match_all('~form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
         static::assertGreaterThan(0, $n);
         foreach ($matchesAll as $matches) {
             if ($matches[1] === $field) {

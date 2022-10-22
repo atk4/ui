@@ -58,9 +58,9 @@ class JsExpression implements JsExpressionable
                 if (is_object($value) && $value instanceof JsExpressionable) {
                     $value = '(' . $value->jsRender() . ')';
                 } elseif (is_object($value)) {
-                    $value = $this->_jsonEncode($value->toString());
+                    $value = $this->_jsEncode($value->toString()); // TODO this should be not supported
                 } else {
-                    $value = $this->_jsonEncode($value);
+                    $value = $this->_jsEncode($value);
                 }
 
                 return $value;
@@ -72,18 +72,10 @@ class JsExpression implements JsExpressionable
     }
 
     /**
-     * Provides replacement for json_encode() that will respect JsExpressionable objects
-     * and call jsRender() for them instead of escaping.
-     *
      * @param mixed $arg
      */
-    protected function _jsonEncode($arg): string
+    protected function _jsEncode($arg): string
     {
-        /*
-         * This function is very similar to json_encode, however it will traverse array
-         * before encoding in search of JsExpressionable objects. Those would
-         * be replaced with their jsRendering.
-         */
         if (is_object($arg)) {
             if ($arg instanceof JsExpressionable) {
                 $result = $arg->jsRender();
@@ -98,8 +90,8 @@ class JsExpression implements JsExpressionable
             $assoc = !array_is_list($arg);
 
             foreach ($arg as $key => $value) {
-                $value = $this->_jsonEncode($value);
-                $key = $this->_jsonEncode($key);
+                $value = $this->_jsEncode($value);
+                $key = $this->_jsEncode($key);
                 if (!$assoc) {
                     $array[] = $value;
                 } else {
@@ -114,11 +106,12 @@ class JsExpression implements JsExpressionable
             }
         } elseif (is_string($arg)) {
             $string = json_encode($arg, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
+            $string = '\'' . str_replace('\\"', '"', substr($string, 1, -1)) . '\'';
         } elseif (is_bool($arg)) {
             $string = $arg ? 'true' : 'false';
         } elseif (is_int($arg)) {
             // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
-            $string = abs($arg) < (2 ** 53) ? (string) $arg : $this->_jsonEncode((string) $arg);
+            $string = abs($arg) < (2 ** 53) ? (string) $arg : $this->_jsEncode((string) $arg);
         } elseif (is_float($arg)) {
             $string = Persistence\Sql\Expression::castFloatToString($arg);
         } elseif ($arg === null) {

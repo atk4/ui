@@ -1076,7 +1076,7 @@ class View extends AbstractView implements JsExpressionable
     {
         $this->assertIsInitialized();
 
-        return $this->getApp()->encodeJson('#' . $this->name);
+        return (new JsExpression('[]', ['#' . $this->name]))->jsRender();
     }
 
     /**
