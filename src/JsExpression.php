@@ -104,7 +104,7 @@ class JsExpression implements JsExpressionable
             }
         } elseif (is_string($arg)) {
             $string = json_encode($arg, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
-            $string = '\'' . str_replace('\\"', '"', substr($string, 1, -1)) . '\'';
+            $string = '\'' . str_replace('\'', '\\\'', str_replace('\\"', '"', substr($string, 1, -1))) . '\'';
         } elseif (is_bool($arg)) {
             $string = $arg ? 'true' : 'false';
         } elseif (is_int($arg)) {

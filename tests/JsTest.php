@@ -17,7 +17,12 @@ class JsTest extends TestCase
     {
         static::assertSame('2 + 2', (new JsExpression('2 + 2'))->jsRender());
         static::assertSame('3 + 4', (new JsExpression('[] + []', [3, 4]))->jsRender());
-        static::assertSame('\'\'x"y\\\\\'z\\\\"\'', (new JsExpression('[]', ['\'x"y\\\'z\\"']))->jsRender());
+    }
+
+    public function testStrings(): void
+    {
+        static::assertSame('\'\\\'\', \'"\', \'\n\'', (new JsExpression('[], [], []', ['\'', '"', "\n"]))->jsRender());
+        static::assertSame('\'\\\'a"b\\\\\\\'c\\\\" \\\'"\'', (new JsExpression('[]', ['\'a"b\\\'c\\" \'"']))->jsRender());
     }
 
     public function testNumbers(): void
