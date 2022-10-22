@@ -115,8 +115,8 @@ class JsExpression implements JsExpressionable
         } elseif ($arg === null) {
             $string = 'null';
         } else {
-            throw (new Exception('Unexpected variable type'))
-                ->addMoreInfo('arg', get_debug_type($arg));
+            throw (new Exception('Unsupported argument type'))
+                ->addMoreInfo('arg', $arg);
         }
 
         return $string;
