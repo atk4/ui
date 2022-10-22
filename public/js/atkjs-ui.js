@@ -1499,7 +1499,7 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
 
     // the target element within container where new content is appendTo.
     this.$target = this.settings.options.appendTo ? this.$inner.find(this.settings.options.appendTo) : this.$inner;
-    this.$scroll.on('scroll', this.observe.bind(this));
+    this.$scroll.on('scroll', this.onScroll.bind(this));
 
     // if there is no scrollbar, then try to load next page too
     if (!this.hasScrollbar()) {
@@ -1533,7 +1533,7 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
   /**
    * Check if scrolling require adding content.
    */
-  observe(event) {
+  onScroll(event) {
     const borderTopWidth = parseInt(this.$el.css('borderTopWidth'), 10);
     const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth;
     // this.$el padding top value.
