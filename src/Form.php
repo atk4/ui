@@ -459,7 +459,6 @@ class Form extends View
     protected array $typeToControl = [
         'boolean' => [Control\Checkbox::class],
         'text' => [Control\Textarea::class],
-        'string' => [Control\Line::class],
         'datetime' => [Control\Calendar::class, 'type' => 'datetime'],
         'date' => [Control\Calendar::class, 'type' => 'date'],
         'time' => [Control\Calendar::class, 'type' => 'time'],
