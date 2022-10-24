@@ -23,7 +23,7 @@ $model = new Country($app->db);
 $crud = Crud::addTo($app, ['ipp' => 10]);
 
 // callback for model action add form.
-$crud->onFormAdd(function (Form $form, $t) use ($model) {
+$crud->onFormAdd(function (Form $form, ModalExecutor $ex) use ($model) {
     $form->js(true, $form->getControl($model->fieldName()->name)->jsInput()->val('Entering value via javascript'));
 });
 

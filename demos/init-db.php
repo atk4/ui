@@ -311,7 +311,7 @@ class Stat extends ModelWithPrefixedFields
 
 class Percent extends Field
 {
-    public ?string $type = 'float';
+    public string $type = 'float';
 }
 
 /**

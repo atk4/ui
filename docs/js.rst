@@ -507,8 +507,8 @@ needed:
 
 The following will **not** work::
 
-    $app = new myApp;
-    $model = new myModel;
+    $app = new MyApp();
+    $model = new MyModel();
 
     // JsModal requires its contents to be put into a Virtual Page
     $vp = \Atk4\Ui\VirtualPage::addTo($app);
@@ -532,8 +532,8 @@ The following will **not** work::
 
 Table needs to be first! The following works::
 
-    $app = new myApp;
-    $model = new myModel;
+    $app = new MyApp();
+    $model = new MyModel();
 
     // This needs to be first
     $table = \Atk4\Ui\Table::addTo($app);
