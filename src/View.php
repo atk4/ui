@@ -135,7 +135,7 @@ class View extends AbstractView implements JsExpressionable
         }
 
         $this->setModel(new Model(new Persistence\Static_($data)), $fields); // @phpstan-ignore-line
-        $this->model->getField($this->model->idField)->type = null; // TODO probably unwanted
+        $this->model->getField($this->model->idField)->type = 'string'; // TODO probably unwanted
 
         return $this->model;
     }
