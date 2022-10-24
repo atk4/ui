@@ -167,7 +167,7 @@ class InlineEdit extends View
     {
         parent::renderView();
 
-        $type = $this->model && $this->fieldName ? $this->model->getField($this->fieldName)->type : 'text';
+        $type = $this->model && $this->fieldName ? $this->model->getField($this->fieldName)->type : 'string';
         $type = $type === 'string' ? 'text' : $type;
 
         if ($type !== 'text' && $type !== 'integer') {

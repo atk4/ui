@@ -339,7 +339,7 @@ class ScopeBuilder extends Form\Control
         } elseif ($field->hasReference()) {
             $type = 'lookup';
         } else {
-            $type = $field->type ?? 'string';
+            $type = $field->type;
         }
 
         $rule = $this->getRule($type, array_merge([
