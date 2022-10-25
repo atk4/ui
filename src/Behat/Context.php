@@ -86,9 +86,9 @@ class Context extends RawMinkContext implements BehatContext
     protected function getFinishedScript(): string
     {
         return 'document.readyState === \'complete\''
-            . ' && jQuery !== undefined && jQuery.active === 0'
+            . ' && typeof jQuery !== \'undefined\' && jQuery.active === 0'
             . ' && document.querySelectorAll(\'.animating.ui.transition:not(.looping)\').length === 0'
-            . ' && atk !== undefined && atk.vueService.areComponentsLoaded()';
+            . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()';
     }
 
     /**
