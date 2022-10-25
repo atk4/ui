@@ -66,7 +66,7 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
 
 $sel = $grid->addSelection();
 $grid->menu->addItem('show selection')->on('click', new JsExpression(
-    'alert("Selected: "+[])',
+    'alert(\'Selected: \' + [])',
     [$sel->jsChecked()]
 ));
 

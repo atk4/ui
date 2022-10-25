@@ -107,7 +107,7 @@ $tab = $tabs->addTab('composer update', function (VirtualPage $vp) {
     $button = Button::addTo($message, ['I understand, proceed anyway', 'class.primary big' => true]);
 
     $console = Console::addTo($vp, ['event' => false]);
-    $console->exec('bash', ['-c', 'cd ../..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"']);
+    $console->exec('bash', ['-c', 'cd ../..; echo \'Running "composer update" in `pwd`\'; composer --no-ansi update; echo \'Self-updated. OK to refresh now!\'']);
 
     $button->on('click', $console->jsExecute());
 });

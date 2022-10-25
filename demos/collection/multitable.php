@@ -41,7 +41,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
         $makeJsReloadFx = function (array $path): JsReload {
             return new JsReload($this, [$this->name => new JsExpression('[] + []', [
                 count($path) > 0 ? implode(',', $path) . ',' : '',
-                new JsExpression('$(this).data("id")'),
+                new JsExpression('$(this).data(\'id\')'),
             ])]);
         };
 

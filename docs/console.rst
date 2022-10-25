@@ -118,7 +118,7 @@ can wrap them into `bash -c`::
 
     Console::addTo($app)->exec('bash', [
         '-c',
-        'cd ..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"',
+        'cd ..; echo \'Running "composer update" in `pwd`\'; composer --no-ansi update; echo \'Self-updated. OK to refresh now!\'',
     ]);
 
 This also demonstrates argument escaping.

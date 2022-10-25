@@ -143,7 +143,7 @@ class Context extends RawMinkContext implements BehatContext
         ]);
 
         $this->getSession()->executeScript(
-            'if (Array.prototype.filter.call(document.getElementsByTagName("style"), (e) => e.getAttribute("about") === "atk-test-behat").length === 0) {'
+            'if (Array.prototype.filter.call(document.getElementsByTagName(\'style\'), (e) => e.getAttribute(\'about\') === \'atk-test-behat\').length === 0) {'
             . ' $(\'<style about="atk-test-behat">' . $css . '</style>\').appendTo(\'head\');'
             . ' }'
             . 'jQuery.fx.off = true;'
@@ -350,7 +350,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickPaginatorPage(string $pageNumber): void
     {
-        $this->getSession()->executeScript('$("a.item[data-page=' . $pageNumber . ']").click()');
+        $this->getSession()->executeScript('$(\'a.item[data-page=' . $pageNumber . ']\').click()');
     }
 
     // }}}
@@ -394,7 +394,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickCloseModal(): void
     {
-        $this->getSession()->executeScript('$(".modal.visible.active.front > i.icon.close")[0].click()');
+        $this->getSession()->executeScript('$(\'.modal.visible.active.front > i.icon.close\')[0].click()');
     }
 
     /**
@@ -403,7 +403,7 @@ class Context extends RawMinkContext implements BehatContext
     public function iHideJsModal(): void
     {
         $modal = $this->findElement(null, '.modal.visible.active.front');
-        $this->getSession()->executeScript('$(arguments[0]).modal("hide")', [$modal]);
+        $this->getSession()->executeScript('$(arguments[0]).modal(\'hide\')', [$modal]);
     }
 
     // }}}
@@ -498,7 +498,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSetCalendarInputNameWithValue(string $inputName, string $value): void
     {
-        $script = '$(\'input[name="' . $inputName . '"]\').get(0)._flatpickr.setDate("' . $value . '")';
+        $script = '$(\'input[name="' . $inputName . '"]\').get(0)._flatpickr.setDate(\'' . $value . '\')';
         $this->getSession()->executeScript($script);
     }
 
@@ -520,20 +520,20 @@ class Context extends RawMinkContext implements BehatContext
         $lookupElem = $this->findElement(null, 'xpath(//input[@name="' . $inputName . '"]/parent::div)');
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
-        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown("show")');
-        $this->jqueryWait('$(\'#' . $lookupElem->getAttribute('id') . '\').hasClass("visible")');
+        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'show\')');
+        $this->jqueryWait('$(\'#' . $lookupElem->getAttribute('id') . '\').hasClass(\'visible\')');
 
         // select value
         $valueElem = $this->findElement($lookupElem, 'xpath(//div[text()="' . $value . '"])');
-        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown("set selected", ' . $valueElem->getAttribute('data-value') . ');');
+        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'set selected\', ' . $valueElem->getAttribute('data-value') . ');');
         $this->jqueryWait();
 
         // hide dropdown and wait till fully closed
-        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown("hide");');
+        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'hide\');');
         $this->jqueryWait();
         // for unknown reasons, dropdown very often remains visible in CI, so hide twice
-        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown("hide");');
-        $this->jqueryWait('!$(\'#' . $lookupElem->getAttribute('id') . '\').hasClass("visible")');
+        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'hide\');');
+        $this->jqueryWait('!$(\'#' . $lookupElem->getAttribute('id') . '\').hasClass(\'visible\')');
     }
 
     /**
