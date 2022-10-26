@@ -1,8 +1,13 @@
 import $ from 'external/jquery';
 
 class AccordionService {
-    setupFomanticUi(settings) {
-        settings.onOpening = this.onOpening;
+    getDefaultFomanticSettings() {
+        return [
+            {},
+            {
+                onOpening: this.onOpening,
+            },
+        ];
     }
 
     onOpening() {

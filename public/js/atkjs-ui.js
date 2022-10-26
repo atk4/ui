@@ -1652,7 +1652,7 @@ class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
       element.addClass('loading');
     }
     this.source.onmessage = function (e) {
-      atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkSuccessTest(JSON.parse(e.data));
+      atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
     };
     this.source.onerror = e => {
       if (e.eventPhase === EventSource.CLOSED) {
@@ -1663,7 +1663,7 @@ class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
       }
     };
     this.source.addEventListener('atkSseAction', e => {
-      atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkSuccessTest(JSON.parse(e.data));
+      atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
     }, false);
     if (this.settings.closeBeforeUnload) {
       window.addEventListener('beforeunload', event => {
@@ -1854,8 +1854,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 class AccordionService {
-  setupFomanticUi(settings) {
-    settings.onOpening = this.onOpening;
+  getDefaultFomanticSettings() {
+    return [{}, {
+      onOpening: this.onOpening
+    }];
   }
   onOpening() {
     if (external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('path')) {
@@ -1911,18 +1913,21 @@ class ApiService {
   constructor() {
     this.afterSuccessCallbacks = [];
   }
-  setupFomanticUi(settings) {
-    settings.successTest = this.successTest;
-    settings.onFailure = this.onFailure;
-    settings.onSuccess = this.onSuccess;
-    settings.onAbort = this.onAbort;
+  getDefaultFomanticSettings() {
+    return [{}, {
+      // override supported via "../setup-fomantic-ui.js", both callbacks are always evaluated
+      successTest: this.successTest,
+      onFailure: this.onFailure,
+      onSuccess: this.onSuccess,
+      onAbort: this.onAbort,
+      onError: this.onError
+    }];
   }
 
   /**
    * Execute js code.
    *
-   * This function should be call using .call() by
-   * passing proper context for 'this'.
+   * This function should be call using .call() by passing proper context for 'this'.
    * ex: apiService.evalResponse.call(this, code)
    *
    * @param {string} code
@@ -1931,7 +1936,22 @@ class ApiService {
     eval(code); // eslint-disable-line no-eval
   }
 
+  /**
+   * Check server response and clear api.data object.
+   *
+   * @returns {boolean}
+   */
+  successTest(response) {
+    this.data = {};
+    if (response.success) {
+      return true;
+    }
+    return false;
+  }
   onAbort(message) {
+    console.warn(message);
+  }
+  onError(message) {
     console.warn(message);
   }
 
@@ -1998,6 +2018,46 @@ class ApiService {
   }
 
   /**
+   * Accumulate callbacks function to run after onSuccess.
+   * Callback is a string containing code to be eval.
+   */
+  onAfterSuccess(callback) {
+    this.afterSuccessCallbacks.push(callback);
+  }
+
+  /**
+   * Handle a server response failure.
+   */
+  onFailure(response) {
+    // if json is returned, it should contain the error within message property
+    if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
+      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response.message);
+    } else {
+      // check if we have html returned by server with <body> content.
+      const body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
+      if (body) {
+        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(body);
+      } else {
+        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response);
+      }
+    }
+  }
+
+  /**
+   * Make our own ajax request test if need to.
+   * if a plugin must call $.ajax or $.getJson directly instead of Fomantic-UI api,
+   * we could send the json response to this.
+   */
+  atkProcessExternalResponse(response) {
+    let content = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    if (response.success) {
+      this.onSuccess(response, content);
+    } else {
+      this.onFailure(response);
+    }
+  }
+
+  /**
    * Will wrap Fomantic-UI api call into a Promise.
    * Can be used to retrieve json data from the server.
    * Using this will bypass regular successTest i.e. any
@@ -2035,61 +2095,6 @@ class ApiService {
       };
       $el.api(apiSettings);
     });
-  }
-
-  /**
-   * Accumulate callbacks function to run after onSuccess.
-   * Callback is a string containing code to be eval.
-   */
-  onAfterSuccess(callback) {
-    this.afterSuccessCallbacks.push(callback);
-  }
-
-  /**
-   * Check server response and clear api.data object.
-   * - return true will call onSuccess
-   * - return false will call onFailure
-   *
-   * @returns {boolean}
-   */
-  successTest(response) {
-    this.data = {};
-    if (response.success) {
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Make our own ajax request test if need to.
-   * if a plugin must call $.ajax or $.getJson directly instead of Fomantic-UI api,
-   * we could send the json response to this.
-   */
-  atkSuccessTest(response) {
-    let content = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-    if (response.success) {
-      this.onSuccess(response, content);
-    } else {
-      this.onFailure(response);
-    }
-  }
-
-  /**
-   * Handle a server response failure.
-   */
-  onFailure(response) {
-    // if json is returned, it should contain the error within message property
-    if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
-      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response.message);
-    } else {
-      // check if we have html returned by server with <body> content.
-      const body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
-      if (body) {
-        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(body);
-      } else {
-        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response);
-      }
-    }
   }
 
   /**
@@ -2331,11 +2336,18 @@ class FormService {
       });
     };
   }
-  setupFomanticUi(settings) {
-    settings.rules.isVisible = this.isVisible;
-    settings.rules.notEmpty = settings.rules.empty;
-    settings.rules.isEqual = this.isEqual;
-    settings.onSuccess = this.onSuccess;
+  getDefaultFomanticSettings() {
+    return [{
+      rules: external_jquery__WEBPACK_IMPORTED_MODULE_7___default().extend(true, {}, (external_jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings.rules), {
+        rules: {
+          notEmpty: (external_jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings.rules.empty),
+          isVisible: this.isVisible,
+          isEqual: this.isEqual
+        }
+      })
+    }, {
+      onSuccess: this.onSuccess
+    }];
   }
   onSuccess() {
     atk__WEBPACK_IMPORTED_MODULE_8__["default"].formService.clearDirtyForm(external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this).attr('id'));
@@ -2511,16 +2523,19 @@ class ModalService {
   constructor() {
     this.modals = [];
   }
-  setupFomanticUi(settings) {
-    settings.duration = 100;
-    // never autoclose previously displayed modals, manage them thru this service only
-    settings.allowMultiple = true;
-    // any change in modal DOM should automatically refresh cached positions
-    // allow modal window to add scrolling when content is added after modal is created
-    settings.observeChanges = true;
-    settings.onShow = this.onShow;
-    settings.onHide = this.onHide;
-    settings.onHidden = this.onHidden;
+  getDefaultFomanticSettings() {
+    return [{
+      duration: 100
+    }, {
+      // never autoclose previously displayed modals, manage them thru this service only
+      allowMultiple: true,
+      // any change in modal DOM should automatically refresh cached positions
+      // allow modal window to add scrolling when content is added after modal is created
+      observeChanges: true,
+      onShow: this.onShow,
+      onHide: this.onHide,
+      onHidden: this.onHidden
+    }];
   }
   onShow() {
     atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.addModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
@@ -3151,12 +3166,14 @@ __webpack_require__.r(__webpack_exports__);
  * This is default setup for Fomantic-UI popup.
  */
 class PopupService {
-  setupFomanticUi(settings) {
-    settings.onCreate = this.onCreate;
-    settings.onShow = this.onShow;
-    settings.onHide = this.onHide;
-    settings.onVisible = this.onVisible;
-    settings.onRemove = this.onRemove;
+  getDefaultFomanticSettings() {
+    return [{}, {
+      onCreate: this.onCreate,
+      onShow: this.onShow,
+      onHide: this.onHide,
+      onVisible: this.onVisible,
+      onRemove: this.onRemove
+    }];
   }
 
   /**
@@ -3513,18 +3530,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-/* harmony import */ var _services_accordion_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services/accordion.service */ "./src/services/accordion.service.js");
-/* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./services/api.service */ "./src/services/api.service.js");
-/* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./services/data.service */ "./src/services/data.service.js");
-/* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/form.service */ "./src/services/form.service.js");
-/* harmony import */ var _services_modal_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/modal.service */ "./src/services/modal.service.js");
-/* harmony import */ var _services_panel_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/panel.service */ "./src/services/panel.service.js");
-/* harmony import */ var _services_popup_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./services/popup.service */ "./src/services/popup.service.js");
-/* harmony import */ var _services_upload_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./services/upload.service */ "./src/services/upload.service.js");
-/* harmony import */ var _services_vue_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./services/vue.service */ "./src/services/vue.service.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.for-each.js */ "./node_modules/core-js/modules/esnext.async-iterator.for-each.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "./node_modules/core-js/modules/esnext.iterator.for-each.js");
+/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _services_accordion_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/accordion.service */ "./src/services/accordion.service.js");
+/* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/api.service */ "./src/services/api.service.js");
+/* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/data.service */ "./src/services/data.service.js");
+/* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./services/form.service */ "./src/services/form.service.js");
+/* harmony import */ var _services_modal_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./services/modal.service */ "./src/services/modal.service.js");
+/* harmony import */ var _services_panel_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./services/panel.service */ "./src/services/panel.service.js");
+/* harmony import */ var _services_popup_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./services/popup.service */ "./src/services/popup.service.js");
+/* harmony import */ var _services_upload_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./services/upload.service */ "./src/services/upload.service.js");
+/* harmony import */ var _services_vue_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./services/vue.service */ "./src/services/vue.service.js");
 
 
 
@@ -3536,22 +3559,87 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].accordionService = _services_accordion_service__WEBPACK_IMPORTED_MODULE_2__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService = _services_api_service__WEBPACK_IMPORTED_MODULE_3__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService = _services_data_service__WEBPACK_IMPORTED_MODULE_4__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].formService = _services_form_service__WEBPACK_IMPORTED_MODULE_5__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].modalService = _services_modal_service__WEBPACK_IMPORTED_MODULE_6__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].panelService = _services_panel_service__WEBPACK_IMPORTED_MODULE_7__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].popupService = _services_popup_service__WEBPACK_IMPORTED_MODULE_8__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].uploadService = _services_upload_service__WEBPACK_IMPORTED_MODULE_9__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].vueService = _services_vue_service__WEBPACK_IMPORTED_MODULE_10__["default"];
 
-// setup Fomantic-UI globals
-_services_api_service__WEBPACK_IMPORTED_MODULE_3__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.api.settings));
-_services_form_service__WEBPACK_IMPORTED_MODULE_5__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.form.settings));
-_services_modal_service__WEBPACK_IMPORTED_MODULE_6__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.modal.settings));
-_services_popup_service__WEBPACK_IMPORTED_MODULE_8__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.popup.settings));
-_services_accordion_service__WEBPACK_IMPORTED_MODULE_2__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.accordion.settings));
+
+
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].accordionService = _services_accordion_service__WEBPACK_IMPORTED_MODULE_5__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].apiService = _services_api_service__WEBPACK_IMPORTED_MODULE_6__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].dataService = _services_data_service__WEBPACK_IMPORTED_MODULE_7__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].formService = _services_form_service__WEBPACK_IMPORTED_MODULE_8__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].modalService = _services_modal_service__WEBPACK_IMPORTED_MODULE_9__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].panelService = _services_panel_service__WEBPACK_IMPORTED_MODULE_10__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].popupService = _services_popup_service__WEBPACK_IMPORTED_MODULE_11__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].uploadService = _services_upload_service__WEBPACK_IMPORTED_MODULE_12__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].vueService = _services_vue_service__WEBPACK_IMPORTED_MODULE_13__["default"];
+const fomanticServicesMap = {
+  api: _services_api_service__WEBPACK_IMPORTED_MODULE_6__["default"],
+  form: _services_form_service__WEBPACK_IMPORTED_MODULE_8__["default"],
+  modal: _services_modal_service__WEBPACK_IMPORTED_MODULE_9__["default"],
+  popup: _services_popup_service__WEBPACK_IMPORTED_MODULE_11__["default"],
+  accordion: _services_accordion_service__WEBPACK_IMPORTED_MODULE_5__["default"]
+};
+
+// setup Fomantic-UI global overrides
+// https://github.com/fomantic/Fomantic-UI/issues/2526
+(external_jquery__WEBPACK_IMPORTED_MODULE_3___default().extend) = (external_jquery__WEBPACK_IMPORTED_MODULE_3___default().fn.extend) = new Proxy((external_jquery__WEBPACK_IMPORTED_MODULE_3___default().fn.extend), {
+  // eslint-disable-line no-multi-assign
+  apply: function (target, thisArg, args) {
+    // https://github.com/fomantic/Fomantic-UI/blob/c30ed51ca12fc1762b04c2fd1a83d087c0124d07/src/definitions/behaviors/api.js#L48
+    const firstIndex = args[0] === true ? 1 : 0;
+    const secondIndex = args[0] === true ? 2 : 1;
+    if (args.length >= (args[0] === true ? 3 : 2) && external_jquery__WEBPACK_IMPORTED_MODULE_3___default().isPlainObject(args[firstIndex]) && external_jquery__WEBPACK_IMPORTED_MODULE_3___default().isEmptyObject(args[firstIndex]) && external_jquery__WEBPACK_IMPORTED_MODULE_3___default().isPlainObject(args[secondIndex])) {
+      let name = null;
+      Object.keys(fomanticServicesMap).forEach(n => {
+        if (args[secondIndex] === (external_jquery__WEBPACK_IMPORTED_MODULE_3___default().fn)[n].settings) {
+          name = n;
+        }
+      });
+      if (name !== null) {
+        const [customSettings, forcedSettings] = fomanticServicesMap[name].getDefaultFomanticSettings();
+        const newSettings = new Proxy(external_jquery__WEBPACK_IMPORTED_MODULE_3___default().extend(true, {}, {}, args[secondIndex], forcedSettings), {
+          set: (obj, prop, value) => {
+            const origValue = obj[prop];
+            if (forcedSettings[prop] === undefined) {
+              obj[prop] = value;
+            } else if (name === 'api' && prop === 'successTest') {
+              obj[prop] = function (response) {
+                const resOrig = origValue(response);
+                const resNew = value.call(this, response);
+                return resOrig && resNew;
+              };
+            } else if (name === 'api' && prop === 'onSuccess') {
+              obj[prop] = function (response, $module, xhr) {
+                origValue(response, $module, xhr);
+                return value.call(this, response, $module, xhr);
+              };
+            } else if (name === 'api' && prop === 'onFailure') {
+              obj[prop] = function (response, $module, xhr) {
+                origValue(response, $module, xhr);
+                return value.call(this, response, $module, xhr);
+              };
+            } else if (name === 'api' && prop === 'onAbort') {
+              obj[prop] = function (errorMessage, $module, xhr) {
+                origValue(errorMessage, $module, xhr);
+                return value.call(this, errorMessage, $module, xhr);
+              };
+            } else if (name === 'api' && prop === 'onError') {
+              obj[prop] = function (errorMessage, $module, xhr) {
+                origValue(errorMessage, $module, xhr);
+                return value.call(this, errorMessage, $module, xhr);
+              };
+            } else {
+              throw new Error('Fomantic-UI "' + name + '.' + prop + '" setting cannot be customized outside atk');
+            }
+            return true;
+          }
+        });
+        external_jquery__WEBPACK_IMPORTED_MODULE_3___default().extend(true, newSettings, ...args.slice(secondIndex + 1), customSettings);
+        return newSettings;
+      }
+    }
+    return target.call(thisArg, ...args);
+  }
+});
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
 
 /***/ }),

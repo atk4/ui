@@ -23,11 +23,21 @@ class FormService {
         };
     }
 
-    setupFomanticUi(settings) {
-        settings.rules.isVisible = this.isVisible;
-        settings.rules.notEmpty = settings.rules.empty;
-        settings.rules.isEqual = this.isEqual;
-        settings.onSuccess = this.onSuccess;
+    getDefaultFomanticSettings() {
+        return [
+            {
+                rules: $.extend(true, {}, $.fn.form.settings.rules, {
+                    rules: {
+                        notEmpty: $.fn.form.settings.rules.empty,
+                        isVisible: this.isVisible,
+                        isEqual: this.isEqual,
+                    },
+                }),
+            },
+            {
+                onSuccess: this.onSuccess,
+            },
+        ];
     }
 
     onSuccess() {

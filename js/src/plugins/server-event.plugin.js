@@ -12,7 +12,7 @@ export default class AtkServerEventPlugin extends AtkPlugin {
         }
 
         this.source.onmessage = function (e) {
-            atk.apiService.atkSuccessTest(JSON.parse(e.data));
+            atk.apiService.atkProcessExternalResponse(JSON.parse(e.data));
         };
 
         this.source.onerror = (e) => {
@@ -25,7 +25,7 @@ export default class AtkServerEventPlugin extends AtkPlugin {
         };
 
         this.source.addEventListener('atkSseAction', (e) => {
-            atk.apiService.atkSuccessTest(JSON.parse(e.data));
+            atk.apiService.atkProcessExternalResponse(JSON.parse(e.data));
         }, false);
 
         if (this.settings.closeBeforeUnload) {

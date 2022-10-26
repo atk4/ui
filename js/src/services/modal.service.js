@@ -12,16 +12,22 @@ class ModalService {
         this.modals = [];
     }
 
-    setupFomanticUi(settings) {
-        settings.duration = 100;
-        // never autoclose previously displayed modals, manage them thru this service only
-        settings.allowMultiple = true;
-        // any change in modal DOM should automatically refresh cached positions
-        // allow modal window to add scrolling when content is added after modal is created
-        settings.observeChanges = true;
-        settings.onShow = this.onShow;
-        settings.onHide = this.onHide;
-        settings.onHidden = this.onHidden;
+    getDefaultFomanticSettings() {
+        return [
+            {
+                duration: 100,
+            },
+            {
+                // never autoclose previously displayed modals, manage them thru this service only
+                allowMultiple: true,
+                // any change in modal DOM should automatically refresh cached positions
+                // allow modal window to add scrolling when content is added after modal is created
+                observeChanges: true,
+                onShow: this.onShow,
+                onHide: this.onHide,
+                onHidden: this.onHidden,
+            },
+        ];
     }
 
     onShow() {
