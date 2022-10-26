@@ -74,3 +74,4 @@
 !/vue-clock2/dist/
 /vue-clock2/dist/*
 !/vue-clock2/dist/*.js
+!/vue-clock2/dist/*.js.map
