@@ -930,7 +930,7 @@ class App
                 if (is_array($v)) {
                     $result[] = $this->getTag(...$v);
                 } elseif (['script' => true, 'style' => true][$tag] ?? false) {
-                    if ($tag === 'script') {
+                    if ($tag === 'script' && $v !== '') {
                         $result[] = '\'use strict\'; ';
                     }
                     // see https://mathiasbynens.be/notes/etago
