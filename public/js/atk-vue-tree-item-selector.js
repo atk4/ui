@@ -357,3 +357,4 @@ const template = `<div class="item" :style="itemMargin">
 /***/ })
 
 }]);
+//# sourceMappingURL=atk-vue-tree-item-selector.js.map

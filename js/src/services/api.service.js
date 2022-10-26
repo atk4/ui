@@ -9,18 +9,25 @@ class ApiService {
         this.afterSuccessCallbacks = [];
     }
 
-    setupFomanticUi(settings) {
-        settings.successTest = this.successTest;
-        settings.onFailure = this.onFailure;
-        settings.onSuccess = this.onSuccess;
-        settings.onAbort = this.onAbort;
+    getDefaultFomanticSettings() {
+        return [
+            {
+            },
+            {
+                // override supported via "../setup-fomantic-ui.js", both callbacks are always evaluated
+                successTest: this.successTest,
+                onFailure: this.onFailure,
+                onSuccess: this.onSuccess,
+                onAbort: this.onAbort,
+                onError: this.onError,
+            },
+        ];
     }
 
     /**
      * Execute js code.
      *
-     * This function should be call using .call() by
-     * passing proper context for 'this'.
+     * This function should be called using .call() by passing proper context for 'this'.
      * ex: apiService.evalResponse.call(this, code)
      *
      * @param {string} code
@@ -29,7 +36,25 @@ class ApiService {
         eval(code); // eslint-disable-line no-eval
     }
 
+    /**
+     * Check server response and clear api.data object.
+     *
+     * @returns {boolean}
+     */
+    successTest(response) {
+        this.data = {};
+        if (response.success) {
+            return true;
+        }
+
+        return false;
+    }
+
     onAbort(message) {
+        console.warn(message);
+    }
+
+    onError(message) {
         console.warn(message);
     }
 
@@ -96,6 +121,45 @@ class ApiService {
     }
 
     /**
+     * Accumulate callbacks function to run after onSuccess.
+     * Callback is a string containing code to be eval.
+     */
+    onAfterSuccess(callback) {
+        this.afterSuccessCallbacks.push(callback);
+    }
+
+    /**
+     * Handle a server response failure.
+     */
+    onFailure(response) {
+        // if json is returned, it should contain the error within message property
+        if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
+            atk.apiService.showErrorModal(response.message);
+        } else {
+            // check if we have html returned by server with <body> content.
+            const body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
+            if (body) {
+                atk.apiService.showErrorModal(body);
+            } else {
+                atk.apiService.showErrorModal(response);
+            }
+        }
+    }
+
+    /**
+     * Make our own ajax request test if need to.
+     * if a plugin must call $.ajax or $.getJson directly instead of Fomantic-UI api,
+     * we could send the json response to this.
+     */
+    atkProcessExternalResponse(response, content = null) {
+        if (response.success) {
+            this.onSuccess(response, content);
+        } else {
+            this.onFailure(response);
+        }
+    }
+
+    /**
      * Will wrap Fomantic-UI api call into a Promise.
      * Can be used to retrieve json data from the server.
      * Using this will bypass regular successTest i.e. any
@@ -135,61 +199,6 @@ class ApiService {
             };
             $el.api(apiSettings);
         });
-    }
-
-    /**
-     * Accumulate callbacks function to run after onSuccess.
-     * Callback is a string containing code to be eval.
-     */
-    onAfterSuccess(callback) {
-        this.afterSuccessCallbacks.push(callback);
-    }
-
-    /**
-     * Check server response and clear api.data object.
-     * - return true will call onSuccess
-     * - return false will call onFailure
-     *
-     * @returns {boolean}
-     */
-    successTest(response) {
-        this.data = {};
-        if (response.success) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Make our own ajax request test if need to.
-     * if a plugin must call $.ajax or $.getJson directly instead of Fomantic-UI api,
-     * we could send the json response to this.
-     */
-    atkSuccessTest(response, content = null) {
-        if (response.success) {
-            this.onSuccess(response, content);
-        } else {
-            this.onFailure(response);
-        }
-    }
-
-    /**
-     * Handle a server response failure.
-     */
-    onFailure(response) {
-        // if json is returned, it should contain the error within message property
-        if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
-            atk.apiService.showErrorModal(response.message);
-        } else {
-            // check if we have html returned by server with <body> content.
-            const body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
-            if (body) {
-                atk.apiService.showErrorModal(body);
-            } else {
-                atk.apiService.showErrorModal(response);
-            }
-        }
     }
 
     /**

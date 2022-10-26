@@ -10,12 +10,12 @@ The package also export some functions via the atk global object.
 All services are export via the atk global object. You can access them via atk.serviceName.
 Certain functionalities are offered from these services.
 
-For example, if one of your script need to send an ajax request directly, without using Fomantic-UI api request, you could use the apiService.atkSuccessTest
+For example, if one of your script need to send an ajax request directly, without using Fomantic-UI api request, you could use the apiService.atkProcessExternalResponse
 to run and evaluate the server response from Atk4\Ui.
 
 ```
     $.getJSON("myajax.php", function (resp) {
-        atk.apiService.atkSuccessTest(resp);
+        atk.apiService.atkProcessExternalResponse(resp);
     });
 
 ```
