@@ -31,15 +31,14 @@ $table->setModel($model, ['action']);
 $table->addColumn('amount', [Table\Column\Money::class]);
 
 // Table template can be tweaked directly
-$table->template->dangerouslyAppendHtml('SubHead', '<tr class="center aligned"><th colspan=2>This is sub-header, goes inside "thead" tag</th></tr>');
-$table->template->dangerouslyAppendHtml('Body', '<tr class="center aligned"><td colspan=2>This is part of body, goes before other rows</td></tr>');
+$table->template->dangerouslyAppendHtml('SubHead', $app->getTag('tr', ['class' => 'center aligned'], [['th', ['colspan' => '2'], 'This is sub-header, goes inside "thead" tag']]));
+$table->template->dangerouslyAppendHtml('Body', $app->getTag('tr', ['class' => 'center aligned'], [['td', ['colspan' => '2'], 'This is part of body, goes before other rows']]));
 
 // Hook can be used to display data before row. You can also inject and format extra rows.
 $table->onHook(Lister::HOOK_BEFORE_ROW, function (Table $table) {
     if ($table->currentRow->getId() === 2) {
-        $table->template->dangerouslyAppendHtml('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->currentRow->get('action') . ')</th></tr>');
+        $table->template->dangerouslyAppendHtml('Body', $table->getApp()->getTag('tr', ['class' => 'center aligned'], [['td', ['colspan' => '2'], 'This goes above row with ID=2 (' . $table->currentRow->get('action') . ')']]));
     } elseif ($table->currentRow->get('action') === 'Tax') {
-        // renders current row
         $table->renderRow();
 
         // adjusts data for next render
@@ -49,7 +48,7 @@ $table->onHook(Lister::HOOK_BEFORE_ROW, function (Table $table) {
     }
 });
 
-$table->template->dangerouslyAppendHtml('Foot', '<tr class="center aligned"><td colspan=2>This will appear above totals</th></tr>');
+$table->template->dangerouslyAppendHtml('Foot', $app->getTag('tr', ['class' => 'center aligned'], [['td', ['colspan' => '2'], 'This will appear above totals']]));
 $table->addTotals(['action' => 'Totals:', 'amount' => ['sum']]);
 
 Header::addTo($app, ['Columns with multiple formats', 'subHeader' => 'Single column can use logic to swap out formatters', 'icon' => 'table']);
