@@ -27,7 +27,7 @@ class ApiService {
     /**
      * Execute js code.
      *
-     * This function should be call using .call() by passing proper context for 'this'.
+     * This function should be called using .call() by passing proper context for 'this'.
      * ex: apiService.evalResponse.call(this, code)
      *
      * @param {string} code
