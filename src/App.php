@@ -477,6 +477,7 @@ class App
      */
     public function initIncludes(): void
     {
+        /** @var bool */
         $minified = true;
 
         // jQuery
