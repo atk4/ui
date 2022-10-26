@@ -186,6 +186,6 @@ class JsCallback extends Callback implements JsExpressionable
             $html = $modal->getHtml();
         }
 
-        return new JsExpression('$([html]).modal("show").data("needRemove", true).addClass("atk-callback-response")', ['html' => $html]);
+        return new JsExpression('$([html]).modal(\'show\').data(\'needRemove\', true).addClass(\'atk-callback-response\')', ['html' => $html]);
     }
 }

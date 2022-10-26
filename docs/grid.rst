@@ -155,7 +155,7 @@ method to reference value of selected checkboxes inside any :ref:`js_action`::
 
     $sel = $grid->addSelection();
     $grid->menu->addItem('show selection')->on('click', new \Atk4\Ui\JsExpression(
-        'alert("Selected: "+[])', [$sel->jsChecked()]
+        'alert(\'Selected: \' + [])', [$sel->jsChecked()]
     ));
 
 Sorting

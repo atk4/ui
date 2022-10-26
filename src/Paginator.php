@@ -200,7 +200,7 @@ class Paginator extends View
         }
 
         if ($this->reload) {
-            $this->on('click', '.item', new JsReload($this->reload, array_merge([$this->urlTrigger => new JsExpression('$(this).data("page")')], $this->reloadArgs)));
+            $this->on('click', '.item', new JsReload($this->reload, array_merge([$this->urlTrigger => new JsExpression('$(this).data(\'page\')')], $this->reloadArgs)));
         }
 
         parent::renderView();

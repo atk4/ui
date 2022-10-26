@@ -110,7 +110,7 @@ $control = Form\Control\Line::addTo($app);
 $control->set('hello world');
 
 $button = $control->addAction(['check value']);
-$button->on('click', new JsExpression('alert("field value is: "+[])', [$control->jsInput()->val()]));
+$button->on('click', new JsExpression('alert(\'field value is: \' + [])', [$control->jsInput()->val()]));
 
 Header::addTo($app, ['Line in a Form']);
 $form = Form::addTo($app);
@@ -155,11 +155,11 @@ $c1 = $group->addControl('c1', new Form\Control\Calendar(['type' => 'date']));
 $c2 = $group->addControl('c2', new Form\Control\Calendar(['type' => 'date']));
 $c3 = $group->addControl('c3', new Form\Control\Calendar(['type' => 'date']));
 
-$c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
-$c2->onChange(new JsExpression('console.log("c2 changed: "+date+","+text+","+mode)'));
+$c1->onChange('console.log(\'c1 changed: \' + date + \', \' + text + \', \' + mode)');
+$c2->onChange(new JsExpression('console.log(\'c2 changed: \' + date + \', \' + text + \', \' + mode)'));
 $c3->onChange([
-    new JsExpression('console.log("c3 changed: "+date+","+text+","+mode)'),
-    new JsExpression('console.log("c3 really changed: "+date+","+text+","+mode)'),
+    new JsExpression('console.log(\'c3 changed: \' + date + \', \' + text + \', \' + mode)'),
+    new JsExpression('console.log(\'c3 really changed: \' + date + \', \' + text + \', \' + mode)'),
 ]);
 
 $group = $form->addGroup('Line');
@@ -168,19 +168,19 @@ $f2 = $group->addControl('f2');
 $f3 = $group->addControl('f3');
 $f4 = $group->addControl('f4');
 
-$f1->onChange('console.log("f1 changed")');
-$f2->onChange(new JsExpression('console.log("f2 changed")'));
+$f1->onChange('console.log(\'f1 changed\')');
+$f2->onChange(new JsExpression('console.log(\'f2 changed\')'));
 $f3->onChange([
-    new JsExpression('console.log("f3 changed")'),
-    new JsExpression('console.log("f3 really changed")'),
+    new JsExpression('console.log(\'f3 changed\')'),
+    new JsExpression('console.log(\'f3 really changed\')'),
 ]);
 $f4->onChange(function () {
-    return new JsExpression('console.log("f4 changed")');
+    return new JsExpression('console.log(\'f4 changed\')');
 });
 
 $group = $form->addGroup('CheckBox');
 $b1 = $group->addControl('b1', new Form\Control\Checkbox());
-$b1->onChange('console.log("b1 changed")');
+$b1->onChange('console.log(\'b1 changed\')');
 
 $group = $form->addGroup(['Dropdown', 'width' => 'three']);
 $d1 = $group->addControl('d1', new Form\Control\Dropdown([
@@ -191,7 +191,7 @@ $d1 = $group->addControl('d1', new Form\Control\Dropdown([
         'file' => ['File', 'icon' => 'file'],
     ],
 ]));
-$d1->onChange('console.log("Dropdown changed")');
+$d1->onChange('console.log(\'Dropdown changed\')');
 
 $group = $form->addGroup('Radio');
 $r1 = $group->addControl('r1', new Form\Control\Radio([
@@ -202,7 +202,7 @@ $r1 = $group->addControl('r1', new Form\Control\Radio([
         'File',
     ],
 ]));
-$r1->onChange('console.log("radio changed")');
+$r1->onChange('console.log(\'radio changed\')');
 
 Header::addTo($app, ['Line ends of Textarea']);
 

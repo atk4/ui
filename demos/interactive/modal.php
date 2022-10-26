@@ -142,8 +142,8 @@ Header::addTo($app, ['Modal Options']);
 
 $denyApproveModal = Modal::addTo($app, ['title' => 'Deny / Approve actions']);
 Message::addTo($denyApproveModal)->set('This modal is only closable via the green button');
-$denyApproveModal->addDenyAction('No', new JsExpression('function() { window.alert("Can\'t do that."); return false; }'));
-$denyApproveModal->addApproveAction('Yes', new JsExpression('function() { window.alert("You\'re good to go!"); }'));
+$denyApproveModal->addDenyAction('No', new JsExpression('function() { window.alert(\'Cannot do that.\'); return false; }'));
+$denyApproveModal->addApproveAction('Yes', new JsExpression('function() { window.alert(\'You are good to go!\'); }'));
 $denyApproveModal->notClosable();
 
 $menuBar = View::addTo($app, ['ui' => 'buttons']);

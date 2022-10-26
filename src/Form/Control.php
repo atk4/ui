@@ -142,9 +142,9 @@ class Control extends View
      * Otherwise, change handler will not be propagate to all handlers.
      *
      * Examples:
-     * $control->onChange('console.log("changed")');
-     * $control->onChange(new JsExpression('console.log("changed")'));
-     * $control->onChange('$(this).parents(".form").form("submit")');
+     * $control->onChange('console.log(\'changed\')');
+     * $control->onChange(new JsExpression('console.log(\'changed\')'));
+     * $control->onChange('$(this).parents(\'.form\').form(\'submit\')');
      *
      * @param string|JsExpression|array|\Closure $expr
      * @param array|bool                         $defaults

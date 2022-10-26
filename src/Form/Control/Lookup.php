@@ -96,8 +96,8 @@ class Lookup extends Input
      *     'selectOnKeydown' => false,
      *     'onChange' => new JsExpression('function(value, t, c) {
      *         if ($(this).data("value") !== value) {
-     *             $(this).parents(".form").form("submit");
-     *             $(this).data("value", value);
+     *             $(this).parents(\'.form\').form(\'submit\');
+     *             $(this).data(\'value\', value);
      *         }
      *     }'),
      * ]]);

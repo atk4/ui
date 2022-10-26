@@ -828,7 +828,7 @@ class App
      *
      * 1. all array key => val elements appear as attributes with value escaped.
      * getTag('input/', ['value' => 'he"llo'])
-     * --> <input value="he\"llo">
+     * --> <input value="he&quot;llo">
      *
      * 2. true value will add attribute without value
      * getTag('td', ['nowrap' => true])

@@ -66,7 +66,6 @@ abstract class FilterModel extends Model
             Types::DATETIME_IMMUTABLE => FilterModel\TypeDatetime::class,
 
             Types::JSON => FilterModel\TypeString::class,
-            Types::OBJECT => FilterModel\TypeString::class,
 
             'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
         ][$field->type];

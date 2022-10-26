@@ -102,20 +102,6 @@ class JsChain extends JsExpression
     }
 
     /**
-     * Convert reserved words or used methods into js calls, such as "_fn('class')" or "_fn('_fn')".
-     *
-     * @param string $name
-     * @param array  $args
-     *
-     * @return $this
-     */
-    public function _fn($name, $args = [])
-    {
-        // Wrapper for functions which use reserved words
-        return $this->__call($name, $args);
-    }
-
-    /**
      * Renders JS chain arguments.
      *
      * @param array $args

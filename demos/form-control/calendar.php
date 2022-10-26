@@ -46,7 +46,7 @@ $form->addControl('date_js_format', [
     'type' => 'date',
     'caption' => 'Format via Javascript',
     'options' => [
-        'formatDate' => new JsFunction(['date', 'format'], [new JsExpression('return "Date selected: " + flatpickr.formatDate(date, format)')]),
+        'formatDate' => new JsFunction(['date', 'format'], [new JsExpression('return \'Date selected: \' + flatpickr.formatDate(date, format)')]),
     ],
 ])->set(new \DateTime());
 
