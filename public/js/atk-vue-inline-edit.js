@@ -130,3 +130,4 @@ const template = `
 /***/ })
 
 }]);
+//# sourceMappingURL=atk-vue-inline-edit.js.map

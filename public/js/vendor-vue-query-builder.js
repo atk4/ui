@@ -5380,7 +5380,7 @@ module.exports = getBuiltIn('document', 'documentElement');
 /***/ })
 
 /******/ })["default"];
-//# sourceMappingURL=VueQueryBuilder.common.js.map
+
 
 /***/ }),
 
@@ -9977,7 +9977,7 @@ module.exports = getBuiltIn('document', 'documentElement');
 
 /******/ })["default"];
 });
-//# sourceMappingURL=QueryBuilderGroup.umd.js.map
+
 
 /***/ }),
 
@@ -14038,8 +14038,9 @@ module.exports = getBuiltIn('document', 'documentElement');
 
 /******/ })["default"];
 });
-//# sourceMappingURL=QueryBuilderRule.umd.js.map
+
 
 /***/ })
 
 }]);
+//# sourceMappingURL=vendor-vue-query-builder.js.map
