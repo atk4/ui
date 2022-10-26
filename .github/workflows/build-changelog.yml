@@ -6,10 +6,11 @@ on:
       - develop
 
 jobs:
-  update_release_draft:
+  update:
+    name: Update
     runs-on: ubuntu-latest
     steps:
-      - name: Run Release Drafter
+      - name: Run
         uses: release-drafter/release-drafter@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

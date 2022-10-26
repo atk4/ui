@@ -477,24 +477,26 @@ class App
      */
     public function initIncludes(): void
     {
+        $minified = true;
+
         // jQuery
-        $this->requireJs($this->cdn['jquery'] . '/jquery.min.js');
+        $this->requireJs($this->cdn['jquery'] . '/jquery' . ($minified ? '.min' : '') . '.js');
 
         // Fomantic-UI
-        $this->requireJs($this->cdn['fomantic-ui'] . '/semantic.min.js');
-        $this->requireCss($this->cdn['fomantic-ui'] . '/semantic.min.css');
+        $this->requireJs($this->cdn['fomantic-ui'] . '/semantic' . ($minified ? '.min' : '') . '.js');
+        $this->requireCss($this->cdn['fomantic-ui'] . '/semantic' . ($minified ? '.min' : '') . '.css');
 
         // flatpickr - TODO should be load only when needed
         // needs https://github.com/atk4/ui/issues/1875
-        $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
-        $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');
+        $this->requireJs($this->cdn['flatpickr'] . '/flatpickr' . ($minified ? '.min' : '') . '.js');
+        $this->requireCss($this->cdn['flatpickr'] . '/flatpickr' . ($minified ? '.min' : '') . '.css');
         if ($this->uiPersistence->locale !== 'en') {
             $this->requireJs($this->cdn['flatpickr'] . '/l10n/' . $this->uiPersistence->locale . '.js');
             $this->html->js(true, new JsExpression('flatpickr.localize(window.flatpickr.l10ns.' . $this->uiPersistence->locale . ')'));
         }
 
         // Agile UI
-        $this->requireJs($this->cdn['atk'] . '/js/atkjs-ui.min.js');
+        $this->requireJs($this->cdn['atk'] . '/js/atkjs-ui' . ($minified ? '.min' : '') . '.js');
         $this->requireCss($this->cdn['atk'] . '/css/agileui.min.css');
 
         // Set js bundle dynamic loading path.
