@@ -266,9 +266,9 @@ You can use both actions together. The next example will allow only one button t
 
     // Generates:
     // $('#top-element-id').on('click', '.button', function (event) {
-    //   event.stopPropagation();
-    //   event.preventDefault();
-    //   $('#b3-element-id').hide();
+    //     event.stopPropagation();
+    //     event.preventDefault();
+    //     $('#b3-element-id').hide();
     // });
 
 
