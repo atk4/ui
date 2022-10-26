@@ -398,7 +398,9 @@ class App
             if (count($ids) > 0) {
                 $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . implode(', ', $ids) . '\').remove();';
             }
-            $output = $this->getTag('script', [], 'jQuery(function() {' . $remove_function . $output['atkjs'] . '});') . $output['html'];
+
+            $output = $this->getTag('script', [], '$(function () {' . $remove_function . $output['atkjs'] . '});')
+                . $output['html'];
 
             $this->outputResponseHtml($output, $headers);
         } elseif ($type === 'text/html') {
@@ -549,7 +551,7 @@ class App
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], $this->html->getJs()));
+            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], '$(function () {' . $this->html->getJs() . ';});'));
             $this->isRendering = false;
 
             if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catchRunawayCallbacks) {

@@ -665,7 +665,7 @@ class View extends AbstractView implements JsExpressionable
 
         $js = $this->getJs($forceReturn);
 
-        return ($js !== '' ? $this->getApp()->getTag('script', [], $js) : '')
+        return ($js !== '' ? $this->getApp()->getTag('script', [], '$(function () {' . $js . ';});') : '')
                . $this->renderTemplateToHtml();
     }
 
@@ -1127,9 +1127,7 @@ class View extends AbstractView implements JsExpressionable
             return $this->getApp()->getViewJS($actions);
         }
 
-        $ready = new JsFunction($actions);
-
-        return (new Jquery($ready))->jsRender();
+        return (new JsExpression('[]()', [new JsFunction($actions)]))->jsRender();
     }
 
     // }}}

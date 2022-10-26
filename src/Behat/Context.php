@@ -375,8 +375,12 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function modalIsOpenWithText(string $text, string $tag = 'div'): void
     {
+        $textEncoded = str_contains($text, '"')
+            ? 'concat("' . str_replace('"', '", \'"\', "', $text) . '")'
+            : '"' . $text . '"';
+
         $modal = $this->findElement(null, '.modal.visible.active.front');
-        $this->findElement($modal, 'xpath(//' . $tag . '[text()[normalize-space()="' . $text . '"]])');
+        $this->findElement($modal, 'xpath(//' . $tag . '[text()[normalize-space()=' . $textEncoded . ']])');
     }
 
     /**

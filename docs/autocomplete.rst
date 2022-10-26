@@ -51,11 +51,11 @@ You can do much more with AutoComplete form control by passing dropdown settings
         'settings' => [
             'allowReselection' => true,
             'selectOnKeydown' => false,
-            'onChange' => new \Atk4\Ui\JsExpression('function(value, t, c) {
+            'onChange' => new \Atk4\Ui\JsExpression('function (value, t, c) {
                 if ($(this).data(\'value\') !== value) {
-                $(this).parents(\'.form\').form(\'submit\');
-                $(this).data(\'value\', value);
-            }}'),
+                    $(this).parents(\'.form\').form(\'submit\');
+                    $(this).data(\'value\', value);
+                }}'),
         ],
     ])->setModel(new Country($db));
 

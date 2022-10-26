@@ -20,8 +20,8 @@ namespace Atk4\Ui;
  *
  * Modal can use Fomantic-UI predefine method onApprove or onDeny by passing
  * a jsAction to Modal::addDenyAction or Modal::addApproveAction method. It will not close until the jsAction return true.
- *  $modal->addDenyAction('No', new JsExpression('function() { window.alert(\'Cannot do that.\'); return false; }'));
- *  $modal->addApproveAction('Yes', new JsExpression('function() { window.alert(\'You are good to go!\'); }'));
+ *  $modal->addDenyAction('No', new JsExpression('function () { window.alert(\'Cannot do that.\'); return false; }'));
+ *  $modal->addApproveAction('Yes', new JsExpression('function () { window.alert(\'You are good to go!\'); }'));
  *
  * You may also prevent modal from closing via the esc or dimmed area click using $modal->notClosable().
  */

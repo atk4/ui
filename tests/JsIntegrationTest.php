@@ -50,9 +50,9 @@ class JsIntegrationTest extends TestCase
         $j = $v->js(true)->hide();
         $v->getHtml();
 
-        static::assertSame('$(function() {
+        static::assertSame('(function () {
     $(\'#b\').hide();
-})', $v->getJs());
+})()', $v->getJs());
     }
 
     /**
@@ -64,11 +64,11 @@ class JsIntegrationTest extends TestCase
         $v->js('click')->hide();
         $v->getHtml();
 
-        static::assertSame('$(function() {
-    $(\'#b\').bind(\'click\', function() {
+        static::assertSame('(function () {
+    $(\'#b\').bind(\'click\', function () {
         $(\'#b\').hide();
     });
-})', $v->getJs());
+})()', $v->getJs());
     }
 
     /**
@@ -83,12 +83,12 @@ class JsIntegrationTest extends TestCase
         $b1->on('click', $b2->js()->hide());
         $bb->getHtml();
 
-        static::assertSame('$(function() {
-    $(\'#b1\').on(\'click\', function(event) {
+        static::assertSame('(function () {
+    $(\'#b1\').on(\'click\', function (event) {
         event.preventDefault();
         event.stopPropagation();
         $(\'#b2\').hide();
     });
-})', $bb->getJs());
+})()', $bb->getJs());
     }
 }

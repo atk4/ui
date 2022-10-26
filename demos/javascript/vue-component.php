@@ -98,10 +98,10 @@ $clock_script = $app->getTag('script', [], <<<'EOF'
 
     var myClock = {
       props : { clock: Array },
-      data: function() {
+      data: function () {
         return { style : this.clock, currentIdx : 0 }
       },
-      mounted: function() {
+      mounted: function () {
         // add a listener for changing clock style.
         // this will listen to event '-clock-change-style' emit on the eventBus.
         atk.eventBus.on(this.$root.$el.id + '-clock-change-style', (payload) => {
@@ -109,19 +109,19 @@ $clock_script = $app->getTag('script', [], <<<'EOF'
         });
       },
       computed: {
-        color: function() {
+        color: function () {
           return this.style[this.currentIdx].color
         },
-        border: function() {
+        border: function () {
           return this.style[this.currentIdx].border
         },
-        bg: function() {
+        bg: function () {
           return this.style[this.currentIdx].bg
         }
       },
       name: 'my-clock',
       methods: {
-        onChangeStyle: function() {
+        onChangeStyle: function () {
           this.currentIdx = this.currentIdx + 1;
           if (this.currentIdx > this.style.length - 1) {
             this.currentIdx = 0;
