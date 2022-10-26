@@ -95,7 +95,7 @@ class Lister extends View
             $this->model->setLimit($ipp, ($p - 1) * $ipp);
 
             // render this View (it will count rendered records !)
-            $jsonArr = $this->renderToJsonArr(true, $scrollRegion);
+            $jsonArr = $this->renderToJsonArr($scrollRegion);
 
             // let client know that there are no more records
             $jsonArr['noMoreScrollPages'] = $this->_renderedRowsCount < $ipp;

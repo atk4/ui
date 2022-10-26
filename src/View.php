@@ -659,13 +659,13 @@ class View extends AbstractView implements JsExpressionable
      * This method is for those cases when developer want to simply render his
      * view and grab HTML himself.
      */
-    public function render(bool $forceReturn = true): string
+    public function render(): string
     {
         $this->renderAll();
 
-        $js = $this->getJs($forceReturn);
+        $js = $this->getJs();
 
-        return ($js !== '' ? $this->getApp()->getTag('script', [], $js) : '')
+        return ($js !== '' ? $this->getApp()->getTag('script', [], '$(function () {' . $js . ';});') : '')
                . $this->renderTemplateToHtml();
     }
 
@@ -683,17 +683,17 @@ class View extends AbstractView implements JsExpressionable
     }
 
     /**
-     * Render View using json format.
+     * Render View using JSON format.
      *
      * @param string $region a specific template region to render
      */
-    public function renderToJsonArr(bool $forceReturn = true, $region = null): array
+    public function renderToJsonArr($region = null): array
     {
         $this->renderAll();
 
         return [
             'success' => true,
-            'atkjs' => $this->getJs($forceReturn),
+            'atkjs' => $this->getJs(),
             'html' => $this->renderTemplateToHtml($region),
             'id' => $this->name,
         ];
@@ -1100,7 +1100,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * @return string
      */
-    public function getJs(bool $forceReturn = false)
+    public function getJs()
     {
         $actions = [];
 
@@ -1116,20 +1116,12 @@ class View extends AbstractView implements JsExpressionable
 
         $actions['indent'] = '';
 
-        if (!$forceReturn && $this->issetApp() && $this->getApp()->hasMethod('jsReady')) {
-            $this->getApp()->jsReady($actions);
-
-            return '';
-        }
-
         // delegate $action rendering in hosting app if exist.
         if ($this->issetApp() && $this->getApp()->hasMethod('getViewJS')) {
             return $this->getApp()->getViewJS($actions);
         }
 
-        $ready = new JsFunction($actions);
-
-        return (new Jquery($ready))->jsRender();
+        return (new JsExpression('[]()', [new JsFunction($actions)]))->jsRender();
     }
 
     // }}}

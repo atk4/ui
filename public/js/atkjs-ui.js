@@ -3690,10 +3690,10 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @param {string}   name      Plugin name
  * @param {Function} cl        Plugin class
- * @param {boolean}  shortHand Map $.name(...) to $({}).name(...)
+ * @param {boolean}  shorthand Map $.name(...) to $({}).name(...)
  */
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin = function (name, cl) {
-  let shortHand = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  let shorthand = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
   const dataName = '__' + name;
 
   // add plugin to atk namespace.
@@ -3714,7 +3714,7 @@ atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin = function (name, cl)
       external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(dataName, new atk__WEBPACK_IMPORTED_MODULE_1__["default"][name](this, options));
     });
   };
-  if (shortHand) {
+  if (shorthand) {
     (external_jquery__WEBPACK_IMPORTED_MODULE_0___default())[name] = options => external_jquery__WEBPACK_IMPORTED_MODULE_0___default()({})[name](options);
   }
 };

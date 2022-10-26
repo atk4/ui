@@ -124,7 +124,7 @@ class JsTest extends TestCase
             $b1->height($b2->height()),
         ]));
 
-        static::assertSame('$(document).ready(function() {
+        static::assertSame('$(document).ready(function () {
         $(\'.box1\').height($(\'.box2\').height());
     })', $fx->jsRender());
     }

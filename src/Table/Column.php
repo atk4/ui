@@ -164,15 +164,15 @@ class Column
 
         $cb = Column\JsHeader::addTo($this->table);
 
-        $function = 'function(value, text, item) {
-                            if (value === undefined || value === \'\' || value === null) { return; }
-                            $(this)
-                            .api({
-                                on: \'now\',
-                                url: \'' . $cb->getJsUrl() . '\',
-                                data: { item: value, id: $(this).data(\'menu-id\') }
-                            });
-                     }';
+        $function = 'function (value, text, item) {
+            if (value === undefined || value === \'\' || value === null) { return; }
+            $(this)
+            .api({
+                on: \'now\',
+                url: \'' . $cb->getJsUrl() . '\',
+                data: { item: value, id: $(this).data(\'menu-id\') }
+            });
+         }';
 
         $chain = new Jquery('#' . $id);
         $chain->dropdown([
@@ -182,7 +182,7 @@ class Column
         ]);
 
         // will stop grid column from being sorted.
-        $chain->on('click', new JsExpression('function(e) { e.stopPropagation(); }'));
+        $chain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));
 
         $this->table->js(true, $chain);
 

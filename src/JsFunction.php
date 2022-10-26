@@ -58,7 +58,7 @@ class JsFunction implements JsExpressionable
             $pre .= "\n" . $this->indent . '    event.stopPropagation();';
         }
 
-        $output = 'function(' . implode(', ', $this->fxArgs) . ') {'
+        $output = 'function (' . implode(', ', $this->fxArgs) . ') {'
             . $pre;
         foreach ($this->fxStatements as $statement) {
             if (!$statement) {

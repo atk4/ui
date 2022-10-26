@@ -32,3 +32,12 @@ Feature: JS
     Then I hide js modal
     When I press button "failure"
     Then Modal is open with text "Atk4\Ui\Exception: Everything is bad"
+
+  Scenario: JS error
+    Given I am on "_unit-test/js-error.php"
+    When I press button "Test"
+    Then Modal is open with text "Javascript Error"
+    Then Modal is open with text 'Fomantic-UI "modal.onShow" setting cannot be customized outside atk'
+    Then I hide js modal
+    # TODO When I press button "Test"
+    # TODO Then Modal is open with text 'Fomantic-UI "modal.onShow" setting cannot be customized outside atk'
