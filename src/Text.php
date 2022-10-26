@@ -11,7 +11,7 @@ class Text extends View
 {
     public $defaultTemplate = false;
 
-    public function render(bool $forceReturn = true): string
+    public function render(): string
     {
         return $this->content;
     }
