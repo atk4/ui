@@ -18,7 +18,6 @@ use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\BasicExecutor;
 use Atk4\Ui\View;
 
-
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -70,7 +69,7 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
 $sel = $grid->addSelection();
 // Executing a modal on a bulk selection
 $callback = function ($m, $ids) use ($grid) {
-    if(!$ids){
+    if (!$ids){
         $msg = Message::addTo($m, [
             'No records were selected.',
             'type' => 'error',
@@ -83,25 +82,25 @@ $callback = function ($m, $ids) use ($grid) {
             'icon' => 'warning',
         ]);
         $msg->text->addParagraph('Ids that will be deleted:');
-        foreach($ids as $id){
+        foreach ($ids as $id){
             $msg->text->addParagraph($id);
         }
-        
         $f = Form::addTo($m);
         $f->buttonSave->set('Delete');
         $f->buttonSave->icon = 'trash';
         $f->onSubmit(function ($f) use ($grid, $ids) {
             // iterate trough the selected id and delete them.
-            foreach($ids as $id){
+            foreach ($ids as $id){
                 $grid->model->delete($id);
             }
+            
             return [[$grid->jsReload(), $f->success()]];
         });
     }
 };
 $modal = Modal::addTo($grid, ['Delete selected']);
 $modal->set(function (View $t) use ($callback, $grid) {
-    $callback($t, $t->stickyGet($grid->name)?explode(',', $t->stickyGet($grid->name)):False);
+    $callback($t, $t->stickyGet($grid->name) ? explode(',', $t->stickyGet($grid->name)) : false);
 });
 
 $grid->menu->addItem(['Delete selected', 'icon' => 'trash', 'class.orange active' => true])
@@ -110,7 +109,6 @@ $grid->menu->addItem('show selection')->on('click', new JsExpression(
     'alert(\'Selected: \' + [])',
     [$sel->jsChecked()]
 ));
-
 
 // Setting ipp with an array will add an ItemPerPageSelector to paginator.
 $grid->setIpp([10, 25, 50, 100]);
