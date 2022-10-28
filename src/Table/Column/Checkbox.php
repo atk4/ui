@@ -47,7 +47,7 @@ class Checkbox extends Table\Column
         }
         $this->table->js(true)->find('.' . $this->class)->checkbox();
 
-        return parent::getHeaderCellHtml($field);
+        return $this->getTag('head', [['div', ['class' => $this->class], [['input/', ['type' => 'checkbox']]]]], []);
     }
 
     public function getDataCellTemplate(Field $field = null): string
