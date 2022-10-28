@@ -211,11 +211,11 @@ class Upload extends Input
         }
 
         if ($this->disabled || $this->readOnly) {
-            $this->template->set('disabled', 'disabled="disabled"');
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
         }
 
         if ($this->multiple) {
-            $this->template->trySet('multiple', 'multiple="multiple"');
+            $this->template->dangerouslySetHtml('multiple', 'multiple="multiple"');
         }
 
         if ($this->placeholder) {

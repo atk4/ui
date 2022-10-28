@@ -377,13 +377,13 @@ class Lookup extends Input
     protected function renderView(): void
     {
         if ($this->multiple) {
-            $this->template->set('multiple', 'multiple="multiple"');
+            $this->template->dangerouslySetHtml('multiple', 'multiple="multiple"');
         }
 
         if ($this->disabled) {
             $this->settings['allowTab'] = false;
 
-            $this->template->set('disabled', 'disabled="disabled"');
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
             $this->template->set('disabledClass', 'disabled');
         }
 
@@ -391,7 +391,7 @@ class Lookup extends Input
             $this->settings['allowTab'] = false;
             $this->settings['apiSettings'] = null;
             $this->settings['onShow'] = new JsFunction([new JsExpression('return false')]);
-            $this->template->set('readonly', 'readonly="readonly"');
+            $this->template->dangerouslySetHtml('readonly', 'readonly="readonly"');
         }
 
         if ($this->dependency) {
