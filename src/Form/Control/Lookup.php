@@ -377,7 +377,7 @@ class Lookup extends Input
     protected function renderView(): void
     {
         if ($this->multiple) {
-            $this->template->dangerouslySetHtml('multiple', 'multiple="multiple"');
+            $this->template->dangerouslySetHtml('multipleClass', 'multiple');
         }
 
         if ($this->disabled) {
