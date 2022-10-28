@@ -127,6 +127,8 @@ class Lookup extends Input
     {
         parent::init();
 
+        $this->inputType = 'hidden';
+
         $this->template->set([
             'inputId' => $this->name . '-ac',
             'placeholder' => $this->placeholder,
@@ -337,11 +339,9 @@ class Lookup extends Input
     {
         return $this->getApp()->getTag('input/', array_merge([
             'name' => $this->shortName,
-            'type' => 'hidden',
+            'type' => $this->inputType,
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readonly' => $this->readOnly,
-            'disabled' => $this->disabled,
         ], $this->inputAttr));
     }
 

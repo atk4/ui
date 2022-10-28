@@ -176,7 +176,9 @@ class Layout extends AbstractLayout
                 continue;
             }
 
-            $template = $element->renderLabel ? $labeledControl : $noLabelControl;
+            $template = $element->renderLabel && (!$element instanceof Control\Input || $element->inputType !== 'hidden')
+                ? $labeledControl
+                : $noLabelControl;
             $label = $element->caption ?? $element->entityField->getField()->getCaption();
 
             // Anything but form controls gets inserted directly

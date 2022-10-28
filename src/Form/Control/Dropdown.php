@@ -127,8 +127,6 @@ class Dropdown extends Input
             'type' => $this->inputType,
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readonly' => $this->readOnly,
-            'disabled' => $this->disabled,
         ], $this->inputAttr));
     }
 
