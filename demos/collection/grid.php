@@ -93,6 +93,7 @@ $callback = function ($m, $ids) use ($grid) {
             foreach ($ids as $id) {
                 $grid->model->delete($id);
             }
+
             return [[$grid->jsReload(), $f->success()]];
         });
     }
