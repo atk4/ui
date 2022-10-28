@@ -24,6 +24,8 @@ class Lookup extends Input
 
     public $defaultTemplate = 'form/control/lookup.html';
 
+    public string $inputType = 'hidden';
+
     /** @var array Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
     public $values = [];
 
@@ -126,8 +128,6 @@ class Lookup extends Input
     protected function init(): void
     {
         parent::init();
-
-        $this->inputType = 'hidden';
 
         $this->template->set([
             'inputId' => $this->name . '-ac',
