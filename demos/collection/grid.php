@@ -69,7 +69,7 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
 $sel = $grid->addSelection();
 // Executing a modal on a bulk selection
 $callback = function ($m, $ids) use ($grid) {
-    if (!$ids){
+    if (!$ids) {
         $msg = Message::addTo($m, [
             'No records were selected.',
             'type' => 'error',
@@ -82,7 +82,7 @@ $callback = function ($m, $ids) use ($grid) {
             'icon' => 'warning',
         ]);
         $msg->text->addParagraph('Ids that will be deleted:');
-        foreach ($ids as $id){
+        foreach ($ids as $id) {
             $msg->text->addParagraph($id);
         }
         $f = Form::addTo($m);
@@ -90,10 +90,9 @@ $callback = function ($m, $ids) use ($grid) {
         $f->buttonSave->icon = 'trash';
         $f->onSubmit(function ($f) use ($grid, $ids) {
             // iterate trough the selected id and delete them.
-            foreach ($ids as $id){
+            foreach ($ids as $id) {
                 $grid->model->delete($id);
             }
-            
             return [[$grid->jsReload(), $f->success()]];
         });
     }
