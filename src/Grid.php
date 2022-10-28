@@ -678,4 +678,33 @@ class Grid extends View
     {
         return $this->table->jsRow();
     }
+    
+    /**
+     * Adds a new menu item which will open a modal dialog and dynamically
+     * load contents through $callback. Will pass a virtual page.
+     *
+     * @param string|array      $defaults modal title or modal defaults array
+     * @param View              $owner
+     * @param array             $args
+     *
+     * @return View
+     */
+    public function addModalItem($defaults, \Closure $callback, $owner = null, $args = [])
+    {
+        if ($owner === null) {
+            $owner = $this->getOwner()->getOwner();
+        }
+
+        if (is_string($defaults)) {
+            $defaults = ['title' => $defaults];
+        }
+
+        $modal = Modal::addTo($owner, $defaults);
+
+        $modal->set(function (View $t) use ($callback) {
+            $callback($t, $t->stickyGet($this->name));
+        });
+
+        return $this->addButton($button, $modal->jsShow(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)));
+    }
 }
