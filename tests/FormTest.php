@@ -34,16 +34,13 @@ class FormTest extends TestCase
         $this->form->invokeInit();
     }
 
-    /**
-     * Some tests for form.
-     */
     public function testGetField(): void
     {
         $f = $this->form;
         $f->addControl('test');
 
         static::assertInstanceOf(Form\Control::class, $f->getControl('test'));
-        static::assertInstanceOf(Form\Control::class, $f->layout->getControl('test'));
+        static::assertSame($f->getControl('test'), $f->layout->getControl('test'));
     }
 
     public function assertSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
@@ -204,6 +201,25 @@ class FormTest extends TestCase
             static::assertTrue($submitReached);
             static::assertTrue($catchReached);
         }
+    }
+
+    public function testNoDisabledAttrWithHiddenType(): void
+    {
+        $disabledAttrHtml = ' disabled="disabled"';
+        $readonlyAttrHtml = ' readonly="readonly"';
+
+        $input = new Form\Control\Input();
+        $input->disabled = true;
+        $input->readOnly = true;
+        static::assertStringContainsString($disabledAttrHtml, $input->render());
+        static::assertStringContainsString($readonlyAttrHtml, $input->render());
+
+        $input = new Form\Control\Input();
+        $input->disabled = true;
+        $input->readOnly = true;
+        $input->inputType = 'hidden';
+        static::assertStringNotContainsString($disabledAttrHtml, $input->render());
+        static::assertStringNotContainsString($readonlyAttrHtml, $input->render());
     }
 }
 

@@ -30,4 +30,14 @@ class ViewTest extends TestCase
         $this->expectException(Exception::class);
         View::addTo($v); // no adding after rendering
     }
+
+    public function testVoidTagRender(): void
+    {
+        $v = new View();
+        static::assertSame('<div id="atk" class="  " style="" ></div>', $v->render());
+
+        $v = new View();
+        $v->element = 'img';
+        static::assertSame('<img id="atk" class="  " style="" >', $v->render());
+    }
 }
