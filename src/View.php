@@ -937,7 +937,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * Finally, it's also possible to use PHP closure as an action:
      *
-     * $view->on('click', 'a', function (Jquery $js, $data){
+     * $view->on('click', 'a', function (Jquery $js, $data) {
      *   if (!$data['clickable']) {
      *      return new JsExpression('alert([])', ['This record is not clickable'])
      *   }
