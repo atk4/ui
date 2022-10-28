@@ -594,7 +594,7 @@ class View extends AbstractView implements JsExpressionable
         $this->template->trySet('_element', $this->element);
 
         if (!$this->getApp()->isVoidTag($this->element)) {
-            $this->template->tryDangerouslySetHtml('_element_end_html', '</' . ($this->element) . '>');
+            $this->template->tryDangerouslySetHtml('_element_end_html', '</' . $this->element . '>');
         }
 
         if ($this->attr) {
