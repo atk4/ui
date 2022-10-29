@@ -37,6 +37,7 @@ class Checkbox extends Table\Column
         if (!$this->class) {
             $this->class = 'cb_' . $this->shortName;
         }
+        $this->getApp()->requireJs($this->getApp()->cdn['atk'] . '/../js/src/helpers/grid-checkbox.helper.js');
     }
 
     public function getHeaderCellHtml(Field $field = null, $value = null): string
@@ -46,15 +47,15 @@ class Checkbox extends Table\Column
                 ->addMoreInfo('field', $field);
         }
         $this->table->js(true)->find('.' . $this->class)->checkbox();
+        $this->table->js(true, new JsExpression('InitGridMasterCheckbox();'));
 
-        $this->table->on('change', 'th', new JsExpression("$(" . $this->table->jsRender() . ").find('tbody .checkbox').checkbox([] ? 'check' : 'uncheck');",
-        [new JsExpression('$(' . $this->table->jsRender() . ').find(\'#' . $this->name . '-master-checkbox' . '\').find(\'.checkbox\').checkbox(\'is checked\')')]));
-
-        return $this->getTag('head', [['div', ['class' => 'ui checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]]], ['id' => $this->name . '-master-checkbox']);
+        return $this->getTag('head', [['div', ['class' => 'ui master checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]]], []);
     }
 
     public function getDataCellTemplate(Field $field = null): string
     {
-        return $this->getApp()->getTag('div', ['class' => 'ui checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]);
+        $this->table->js(true, new JsExpression('InitGridChildCheckbox();'));
+
+        return $this->getApp()->getTag('div', ['class' => 'ui child checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]);
     }
 }
