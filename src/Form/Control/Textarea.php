@@ -18,6 +18,6 @@ class Textarea extends Input
             'id' => $this->name . '_input',
             'readonly' => $this->readOnly,
             'disabled' => $this->disabled,
-        ], $this->inputAttr), (string) $this->getValue()); // need to cast to string to avoid null values which break html markup
+        ], $this->inputAttr), $this->getValue() ?? '');
     }
 }

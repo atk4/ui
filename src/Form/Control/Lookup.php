@@ -335,16 +335,6 @@ class Lookup extends Input
         ($this->dependency)($this->model, $data);
     }
 
-    public function getInput()
-    {
-        return $this->getApp()->getTag('input/', array_merge([
-            'name' => $this->shortName,
-            'type' => $this->inputType,
-            'id' => $this->name . '_input',
-            'value' => $this->getValue(),
-        ], $this->inputAttr));
-    }
-
     /**
      * Set Fomantic-UI Api settings to use with dropdown.
      *
