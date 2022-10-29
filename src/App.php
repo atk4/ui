@@ -813,7 +813,7 @@ class App
         return new JsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
     }
 
-    protected function isVoidTag(string $tag): bool
+    public function isVoidTag(string $tag): bool
     {
         return [
             'area' => true, 'base' => true, 'br' => true, 'col' => true, 'embed' => true,

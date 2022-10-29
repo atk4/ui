@@ -34,16 +34,13 @@ class FormTest extends TestCase
         $this->form->invokeInit();
     }
 
-    /**
-     * Some tests for form.
-     */
     public function testGetField(): void
     {
         $f = $this->form;
         $f->addControl('test');
 
         static::assertInstanceOf(Form\Control::class, $f->getControl('test'));
-        static::assertInstanceOf(Form\Control::class, $f->layout->getControl('test'));
+        static::assertSame($f->getControl('test'), $f->layout->getControl('test'));
     }
 
     public function assertSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
@@ -204,6 +201,22 @@ class FormTest extends TestCase
             static::assertTrue($submitReached);
             static::assertTrue($catchReached);
         }
+    }
+
+    public function testNoDisabledAttrWithHiddenType(): void
+    {
+        $input = new Form\Control\Input();
+        $input->disabled = true;
+        $input->readOnly = true;
+        static::assertStringContainsString(' disabled="disabled"', $input->render());
+        static::assertStringContainsString(' readonly="readonly"', $input->render());
+
+        $input = new Form\Control\Input();
+        $input->disabled = true;
+        $input->readOnly = true;
+        $input->inputType = 'hidden';
+        static::assertStringNotContainsString('disabled', $input->render());
+        static::assertStringNotContainsString('readonly', $input->render());
     }
 }
 

@@ -68,8 +68,8 @@ class View extends AbstractView implements JsExpressionable
     /** @var string|false|null Set static contents of this view. */
     public $content;
 
-    /** @var string Change this if you want to substitute default "div" for something else. */
-    public $element;
+    /** Change this if you want to substitute default "div" for something else. */
+    public string $element = 'div';
 
     /** @var ExecutorFactory|null */
     protected $executorFactory;
@@ -160,8 +160,6 @@ class View extends AbstractView implements JsExpressionable
     }
 
     /**
-     * Sets View element.
-     *
      * @param string $element
      *
      * @return $this
@@ -593,8 +591,10 @@ class View extends AbstractView implements JsExpressionable
             $this->template->trySet('_id', $this->name);
         }
 
-        if ($this->element) {
-            $this->template->set('_element', $this->element);
+        $this->template->trySet('_element', $this->element);
+
+        if (!$this->getApp()->isVoidTag($this->element)) {
+            $this->template->tryDangerouslySetHtml('_element_end_html', '</' . $this->element . '>');
         }
 
         if ($this->attr) {
@@ -937,7 +937,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * Finally, it's also possible to use PHP closure as an action:
      *
-     * $view->on('click', 'a', function (Jquery $js, $data){
+     * $view->on('click', 'a', function (Jquery $js, $data) {
      *   if (!$data['clickable']) {
      *      return new JsExpression('alert([])', ['This record is not clickable'])
      *   }
