@@ -591,7 +591,11 @@ class View extends AbstractView implements JsExpressionable
             $this->template->trySet('_id', $this->name);
         }
 
-        $this->template->trySet('_element', $this->element);
+        if ($this->element !== 'div') {
+            $this->template->set('_element', $this->element);
+        } else {
+            $this->template->trySet('_element', $this->element);
+        }
 
         if (!$this->getApp()->isVoidTag($this->element)) {
             $this->template->tryDangerouslySetHtml('_element_end_html', '</' . $this->element . '>');
@@ -607,8 +611,7 @@ class View extends AbstractView implements JsExpressionable
     }
 
     /**
-     * Recursively render all children, placing their
-     * output in our template.
+     * Recursively render all children, placing their output in our template.
      */
     protected function recursiveRender(): void
     {
@@ -630,8 +633,7 @@ class View extends AbstractView implements JsExpressionable
     }
 
     /**
-     * Render everything recursively, render ourselves but don't return
-     * anything just yet.
+     * Render everything recursively, render ourselves but don't return anything just yet.
      */
     public function renderAll(): void
     {
@@ -790,7 +792,7 @@ class View extends AbstractView implements JsExpressionable
 
     /**
      * Create Vue.js instance.
-     * Vue.js instance can be create from Atk4\Ui\View.
+     * Vue.js instance can be created from Atk4\Ui\View.
      *
      * Component managed and defined by atk does not need componentDefinition variable name
      * because these are already loaded within the atk js namespace.
@@ -851,7 +853,7 @@ class View extends AbstractView implements JsExpressionable
 
     /**
      * Get Local and Session web storage associated with this view.
-     * Web storage can be retrieve using a $view->jsReload() request.
+     * Web storage can be retrieved using a $view->jsReload() request.
      *
      * @return mixed
      */
