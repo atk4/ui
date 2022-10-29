@@ -47,7 +47,10 @@ class Checkbox extends Table\Column
         }
         $this->table->js(true)->find('.' . $this->class)->checkbox();
 
-        return $this->getTag('head', [['div', ['class' => $this->class], [['input/', ['type' => 'checkbox']]]]], []);
+        $this->table->on('change', 'th', new JsExpression("$(" . $this->table->jsRender() . ").find('tbody .checkbox').checkbox([] ? 'check' : 'uncheck');",
+        [new JsExpression('$(' . $this->table->jsRender() . ').find(\'#' . $this->name . '-master-checkbox' . '\').find(\'.checkbox\').checkbox(\'is checked\')')]));
+
+        return $this->getTag('head', [['div', ['class' => 'ui checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]]], ['id' => $this->name . '-master-checkbox']);
     }
 
     public function getDataCellTemplate(Field $field = null): string
