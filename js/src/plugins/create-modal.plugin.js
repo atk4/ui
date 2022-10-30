@@ -19,7 +19,6 @@ export default class AtkCreateModalPlugin extends AtkPlugin {
             type: options.dataType,
             args: options.urlOptions,
             needRemove: true,
-            needCloseTrigger: true,
             loadingLabel: options.loadingLabel,
         });
 

@@ -5,7 +5,7 @@ import atk from 'atk';
  * This is default setup for Fomantic-UI modal.
  * Allow to manage URL pass to our modal and dynamically update content from this URL
  * using the Fomantic-UI api function.
- * Also keep track of how many modal are use by the app.
+ * Also keep track of created modals and display only the topmost modal.
  */
 class ModalService {
     constructor() {
@@ -25,6 +25,7 @@ class ModalService {
                 observeChanges: true,
                 onShow: this.onShow,
                 onHide: this.onHide,
+                onHidden: this.onHidden,
             },
         ];
     }
@@ -43,28 +44,31 @@ class ModalService {
         return true;
     }
 
-    addModal($modal) {
-        const that = this;
-        this.modals.push($modal);
+    onHidden() {
+        const $modal = $(this);
 
-        this.setCloseTriggerEventInModals();
-        this.hideShowCloseIcon();
+        if ($modal.data('needRemove')) {
+            $modal.remove();
+        }
+    }
+
+    addModal($modal) {
+        $modal.data('isClosable', true);
+        this.modals.push($modal);
 
         // hide other modals
         const $prevModal = this.modals.length > 1 ? this.modals[this.modals.length - 2] : null;
-        if ($prevModal && $prevModal.hasClass('visible')) {
-            $prevModal.css('visibility', 'hidden');
-            $prevModal.addClass('hiddenNotFront');
-            $prevModal.removeClass('visible');
+        if ($prevModal) {
+            $prevModal.data('isClosable', false);
+            if ($prevModal.hasClass('visible')) {
+                $prevModal.css('visibility', 'hidden');
+                $prevModal.addClass('hiddenNotFront');
+                $prevModal.removeClass('visible');
+            }
         }
 
-        let args = {};
-        const $content = $modal.find('.atk-dialog-content');
-
-        // check data associated with this modal
         const data = $modal.data();
-
-        // add data argument
+        let args = {};
         if (data.args) {
             args = data.args;
         }
@@ -76,7 +80,9 @@ class ModalService {
 
         // does modal content need to be loaded dynamically
         if (data.url) {
-            $content.html(atk.modalService.getLoader(data.loadingLabel ? data.loadingLabel : ''));
+            const $content = $modal.find('.atk-dialog-content');
+
+            $content.html(atk.modalService.getLoaderHtml(data.loadingLabel ? data.loadingLabel : ''));
 
             $content.api({
                 on: 'now',
@@ -92,6 +98,7 @@ class ModalService {
 
                     const result = content.html(response.html);
                     if (result.length === 0) {
+                        // TODO this if should be removed
                         response.success = false;
                         response.isServiceError = true;
                         response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
@@ -108,22 +115,23 @@ class ModalService {
     }
 
     removeModal($modal) {
-        if ($modal.data().needRemove) {
-            $modal.remove();
+        if (this.modals.length === 0 || this.modals[this.modals.length - 1][0] !== $modal[0]) {
+            throw Error('Unexpected modal to remove');
         }
         this.modals.pop();
-        this.setCloseTriggerEventInModals();
-        this.hideShowCloseIcon();
 
         // hide other modals
         const $prevModal = this.modals.length > 0 ? this.modals[this.modals.length - 1] : null;
-        if ($prevModal && $prevModal.hasClass('hiddenNotFront')) {
-            $prevModal.css('visibility', '');
-            $prevModal.addClass('visible');
-            $prevModal.removeClass('hiddenNotFront');
-            // recenter modal, needed even with observeChanges enabled
-            // https://github.com/fomantic/Fomantic-UI/issues/2476
-            $prevModal.modal('refresh');
+        if ($prevModal) {
+            $prevModal.data('isClosable', true);
+            if ($prevModal.hasClass('hiddenNotFront')) {
+                $prevModal.css('visibility', '');
+                $prevModal.addClass('visible');
+                $prevModal.removeClass('hiddenNotFront');
+                // recenter modal, needed even with observeChanges enabled
+                // https://github.com/fomantic/Fomantic-UI/issues/2476
+                $prevModal.modal('refresh');
+            }
         }
     }
 
@@ -137,42 +145,10 @@ class ModalService {
         }
     }
 
-    /**
-     * Will loop through modals in reverse order an
-     * attach the close event handler in the last one available.
-     */
-    setCloseTriggerEventInModals() {
-        for (let i = this.modals.length - 1; i >= 0; --i) {
-            const $modal = this.modals[i];
-            if ($modal.data().needCloseTrigger) {
-                $modal.on('close', '.atk-dialog-content', () => {
-                    $modal.modal('hide');
-                });
-            } else {
-                $modal.off('close', '.atk-dialog-content');
-            }
-        }
-    }
-
-    /**
-     * Only last modal in queue should have the close icon
-     */
-    hideShowCloseIcon() {
-        for (let i = this.modals.length - 1; i >= 0; --i) {
-            const $modal = this.modals[i];
-            if (i === this.modals.length - 1) {
-                $modal.find('i.icon.close').show();
-                $modal.data('isClosable', true);
-            } else {
-                $modal.find('i.icon.close').hide();
-                $modal.data('isClosable', false);
-            }
-        }
-    }
-
-    getLoader(loaderText) {
-        return `<div class="ui active inverted dimmer">
-              <div class="ui text loader">${loaderText}</div>`;
+    getLoaderHtml(loaderText) {
+        return '<div class="ui active inverted dimmer">'
+            + '<div class="ui text loader">' + loaderText + '</div>'
+            + '</div>';
     }
 }
 

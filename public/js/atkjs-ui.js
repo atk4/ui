@@ -633,10 +633,10 @@ __webpack_require__.r(__webpack_exports__);
  */
 class AtkConfirmPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
-    let context = this;
     const $m = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div class="ui modal" />').appendTo('body').html(this.getDialogHtml(this.settings.message));
     $m.addClass(this.settings.size);
     let options = {};
+    let context = this;
     if (this.settings.context) {
       context = this.settings.context;
     }
@@ -716,7 +716,6 @@ class AtkCreateModalPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
       type: options.dataType,
       args: options.urlOptions,
       needRemove: true,
-      needCloseTrigger: true,
       loadingLabel: options.loadingLabel
     });
 
@@ -2517,7 +2516,7 @@ __webpack_require__.r(__webpack_exports__);
  * This is default setup for Fomantic-UI modal.
  * Allow to manage URL pass to our modal and dynamically update content from this URL
  * using the Fomantic-UI api function.
- * Also keep track of how many modal are use by the app.
+ * Also keep track of created modals and display only the topmost modal.
  */
 class ModalService {
   constructor() {
@@ -2533,7 +2532,8 @@ class ModalService {
       // allow modal window to add scrolling when content is added after modal is created
       observeChanges: true,
       onShow: this.onShow,
-      onHide: this.onHide
+      onHide: this.onHide,
+      onHidden: this.onHidden
     }];
   }
   onShow() {
@@ -2546,26 +2546,28 @@ class ModalService {
     atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.removeModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
     return true;
   }
+  onHidden() {
+    const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this);
+    if ($modal.data('needRemove')) {
+      $modal.remove();
+    }
+  }
   addModal($modal) {
-    const that = this;
+    $modal.data('isClosable', true);
     this.modals.push($modal);
-    this.setCloseTriggerEventInModals();
-    this.hideShowCloseIcon();
 
     // hide other modals
     const $prevModal = this.modals.length > 1 ? this.modals[this.modals.length - 2] : null;
-    if ($prevModal && $prevModal.hasClass('visible')) {
-      $prevModal.css('visibility', 'hidden');
-      $prevModal.addClass('hiddenNotFront');
-      $prevModal.removeClass('visible');
+    if ($prevModal) {
+      $prevModal.data('isClosable', false);
+      if ($prevModal.hasClass('visible')) {
+        $prevModal.css('visibility', 'hidden');
+        $prevModal.addClass('hiddenNotFront');
+        $prevModal.removeClass('visible');
+      }
     }
-    let args = {};
-    const $content = $modal.find('.atk-dialog-content');
-
-    // check data associated with this modal
     const data = $modal.data();
-
-    // add data argument
+    let args = {};
     if (data.args) {
       args = data.args;
     }
@@ -2579,7 +2581,8 @@ class ModalService {
 
     // does modal content need to be loaded dynamically
     if (data.url) {
-      $content.html(atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.getLoader(data.loadingLabel ? data.loadingLabel : ''));
+      const $content = $modal.find('.atk-dialog-content');
+      $content.html(atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.getLoaderHtml(data.loadingLabel ? data.loadingLabel : ''));
       $content.api({
         on: 'now',
         url: data.url,
@@ -2593,6 +2596,7 @@ class ModalService {
           });
           const result = content.html(response.html);
           if (result.length === 0) {
+            // TODO this if should be removed
             response.success = false;
             response.isServiceError = true;
             response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
@@ -2608,22 +2612,23 @@ class ModalService {
     }
   }
   removeModal($modal) {
-    if ($modal.data().needRemove) {
-      $modal.remove();
+    if (this.modals.length === 0 || this.modals[this.modals.length - 1][0] !== $modal[0]) {
+      throw Error('Unexpected modal to remove');
     }
     this.modals.pop();
-    this.setCloseTriggerEventInModals();
-    this.hideShowCloseIcon();
 
     // hide other modals
     const $prevModal = this.modals.length > 0 ? this.modals[this.modals.length - 1] : null;
-    if ($prevModal && $prevModal.hasClass('hiddenNotFront')) {
-      $prevModal.css('visibility', '');
-      $prevModal.addClass('visible');
-      $prevModal.removeClass('hiddenNotFront');
-      // recenter modal, needed even with observeChanges enabled
-      // https://github.com/fomantic/Fomantic-UI/issues/2476
-      $prevModal.modal('refresh');
+    if ($prevModal) {
+      $prevModal.data('isClosable', true);
+      if ($prevModal.hasClass('hiddenNotFront')) {
+        $prevModal.css('visibility', '');
+        $prevModal.addClass('visible');
+        $prevModal.removeClass('hiddenNotFront');
+        // recenter modal, needed even with observeChanges enabled
+        // https://github.com/fomantic/Fomantic-UI/issues/2476
+        $prevModal.modal('refresh');
+      }
     }
   }
   doAutoFocus($modal) {
@@ -2634,42 +2639,8 @@ class ModalService {
       input.focus().select();
     }
   }
-
-  /**
-   * Will loop through modals in reverse order an
-   * attach the close event handler in the last one available.
-   */
-  setCloseTriggerEventInModals() {
-    for (let i = this.modals.length - 1; i >= 0; --i) {
-      const $modal = this.modals[i];
-      if ($modal.data().needCloseTrigger) {
-        $modal.on('close', '.atk-dialog-content', () => {
-          $modal.modal('hide');
-        });
-      } else {
-        $modal.off('close', '.atk-dialog-content');
-      }
-    }
-  }
-
-  /**
-   * Only last modal in queue should have the close icon
-   */
-  hideShowCloseIcon() {
-    for (let i = this.modals.length - 1; i >= 0; --i) {
-      const $modal = this.modals[i];
-      if (i === this.modals.length - 1) {
-        $modal.find('i.icon.close').show();
-        $modal.data('isClosable', true);
-      } else {
-        $modal.find('i.icon.close').hide();
-        $modal.data('isClosable', false);
-      }
-    }
-  }
-  getLoader(loaderText) {
-    return `<div class="ui active inverted dimmer">
-              <div class="ui text loader">${loaderText}</div>`;
+  getLoaderHtml(loaderText) {
+    return '<div class="ui active inverted dimmer">' + '<div class="ui text loader">' + loaderText + '</div>' + '</div>';
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new ModalService()));
@@ -3157,7 +3128,6 @@ class PopupService {
       onCreate: this.onCreate,
       onShow: this.onShow,
       onHide: this.onHide,
-      onVisible: this.onVisible,
       onRemove: this.onRemove
     }];
   }
@@ -3173,7 +3143,7 @@ class PopupService {
       // Only load if we are not using data.cache or content has not been loaded yet.
       if (!data.cache || !data.hascontent) {
         // display default loader while waiting for content.
-        $popup.html(atk__WEBPACK_IMPORTED_MODULE_0__["default"].popupService.getLoader());
+        $popup.html(atk__WEBPACK_IMPORTED_MODULE_0__["default"].popupService.getLoaderHtml());
         $popup.api({
           on: 'now',
           url: data.url,
@@ -3195,7 +3165,6 @@ class PopupService {
     }
   }
   onHide() {}
-  onVisible() {}
 
   /**
    * Only call when popup are created from metadata
@@ -3211,9 +3180,8 @@ class PopupService {
   onRemove() {
     // console.log('onRemove');
   }
-  getLoader() {
-    return `<div class="ui active inverted dimmer">
-              <div class="ui mini text loader"></div>`;
+  getLoaderHtml() {
+    return '<div class="ui active inverted dimmer">' + '<div class="ui mini text loader"></div>' + '</div>';
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new PopupService()));
