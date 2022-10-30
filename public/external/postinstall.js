@@ -196,6 +196,20 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
     });
 });
 
+// replace Fomantic-UI modal module hideAll function
+// https://github.com/fomantic/Fomantic-UI/issues/2526
+walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
+    updateFileSync(f, (data) => {
+        if (!f.endsWith('.js')) {
+            return;
+        }
+
+        data = data.replace(/(!\w+\.hide)All(\(\))/gs, '$1$2');
+
+        return data;
+    });
+});
+
 // normalize EOL of text files
 walkFilesSync(__dirname, (f) => {
     updateFileSync(f, (data) => {

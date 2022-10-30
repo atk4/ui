@@ -80,6 +80,8 @@ class ModalService {
 
         // does modal content need to be loaded dynamically
         if (data.url) {
+            $modal.data('closeOnLoadingError', true);
+
             const $content = $modal.find('.atk-dialog-content');
 
             $content.html(atk.modalService.getLoaderHtml(data.loadingLabel ? data.loadingLabel : ''));
@@ -109,6 +111,9 @@ class ModalService {
                         // content is replace no need to do it in api
                         response.id = null;
                     }
+                },
+                onSuccess: function () {
+                    $modal.removeData('closeOnLoadingError');
                 },
             });
         }

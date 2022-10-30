@@ -7,6 +7,7 @@ namespace Atk4\Ui\UserAction;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Exception;
+use Atk4\Ui\JsFunction;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Loader;
 use Atk4\Ui\Modal;
@@ -98,6 +99,18 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->runSteps();
     }
 
+    private function jsShowAndLoad(array $urlArgs, array $apiConfig): array
+    {
+        return [
+            $this->jsShow(),
+            $this->js()->data('closeOnLoadingError', true),
+            $this->loader->jsLoad($urlArgs, [
+                'method' => 'post',
+                'onSuccess' => new JsFunction([], [$this->js()->removeData('closeOnLoadingError')]),
+            ]),
+        ];
+    }
+
     /**
      * Assign a View that will fire action execution.
      * If action require steps, it will automatically initialize
@@ -113,7 +126,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             // use modal for stepping action.
             $urlArgs['step'] = $this->step;
             if ($this->action->enabled) {
-                $view->on($when, $selector, [$this->jsShow(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])]);
+                $view->on($when, $selector, $this->jsShowAndLoad($urlArgs, ['method' => 'post']));
             } else {
                 $view->addClass('disabled');
             }
@@ -133,7 +146,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
         $urlArgs['step'] = $this->step;
 
-        return [$this->jsShow(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])];
+        return $this->jsShowAndLoad($urlArgs, ['method' => 'post']);
     }
 
     /**

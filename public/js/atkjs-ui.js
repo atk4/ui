@@ -2100,6 +2100,13 @@ class ApiService {
    * Display App error in a Fomantic-UI modal.
    */
   showErrorModal(errorMsg) {
+    if (atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.modals.length > 0) {
+      const $modal = atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.modals[atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.modals.length - 1];
+      if ($modal.data('closeOnLoadingError')) {
+        $modal.removeData('closeOnLoadingError').modal('hide');
+      }
+    }
+
     // catch application error and display them in a new modal window.
     const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(errorMsg);
     m.data('needRemove', true).modal().modal('show');
@@ -2581,6 +2588,7 @@ class ModalService {
 
     // does modal content need to be loaded dynamically
     if (data.url) {
+      $modal.data('closeOnLoadingError', true);
       const $content = $modal.find('.atk-dialog-content');
       $content.html(atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.getLoaderHtml(data.loadingLabel ? data.loadingLabel : ''));
       $content.api({
@@ -2607,6 +2615,9 @@ class ModalService {
             // content is replace no need to do it in api
             response.id = null;
           }
+        },
+        onSuccess: function () {
+          $modal.removeData('closeOnLoadingError');
         }
       });
     }
