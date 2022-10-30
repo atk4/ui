@@ -57,17 +57,6 @@ class ModalService {
             $prevModal.removeClass('visible');
         }
 
-        // add modal esc handler
-        if (this.modals.length === 1) {
-            $(document).on('keyup.atk.modalService', (e) => {
-                if (e.keyCode === 27) {
-                    if (that.modals.length > 0) {
-                        that.modals[that.modals.length - 1].modal('hide');
-                    }
-                }
-            });
-        }
-
         let args = {};
         const $content = $modal.find('.atk-dialog-content');
 
@@ -134,10 +123,6 @@ class ModalService {
             // recenter modal, needed even with observeChanges enabled
             // https://github.com/fomantic/Fomantic-UI/issues/2476
             $prevModal.modal('refresh');
-        }
-
-        if (this.modals.length === 0) {
-            $(document).off('atk.modalService');
         }
     }
 
