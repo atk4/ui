@@ -2533,18 +2533,18 @@ class ModalService {
       // allow modal window to add scrolling when content is added after modal is created
       observeChanges: true,
       onShow: this.onShow,
-      onHide: this.onHide,
-      onHidden: this.onHidden
+      onHide: this.onHide
     }];
   }
   onShow() {
     atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.addModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
   }
   onHide() {
-    return external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).data('isClosable');
-  }
-  onHidden() {
+    if (!external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).data('isClosable')) {
+      return false;
+    }
     atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.removeModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
+    return true;
   }
   addModal($modal) {
     const that = this;

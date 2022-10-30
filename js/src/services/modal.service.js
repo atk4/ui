@@ -25,7 +25,6 @@ class ModalService {
                 observeChanges: true,
                 onShow: this.onShow,
                 onHide: this.onHide,
-                onHidden: this.onHidden,
             },
         ];
     }
@@ -35,11 +34,13 @@ class ModalService {
     }
 
     onHide() {
-        return $(this).data('isClosable');
-    }
+        if (!$(this).data('isClosable')) {
+            return false;
+        }
 
-    onHidden() {
         atk.modalService.removeModal($(this));
+
+        return true;
     }
 
     addModal($modal) {
