@@ -725,9 +725,9 @@ class AtkCreateModalPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
     $m.addClass(this.settings.modalCss);
   }
   getDialogHtml(title) {
-    return `<i class="icon close"></i>
-          <div class="${this.settings.headerCss}">${title}</div>
-          <div class="${this.settings.contentCss} content atk-dialog-content">
+    return `<i class="close icon"></i>
+          ` + (title ? `<div class="${this.settings.headerCss}">${title}</div>
+          ` : '') + `<div class="${this.settings.contentCss} content atk-dialog-content">
             </div>
           </div>`;
   }
