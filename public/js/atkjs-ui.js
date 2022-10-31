@@ -2547,7 +2547,7 @@ class ModalService {
     atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.addModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
   }
   onHide() {
-    if (!external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).data('isClosable')) {
+    if (external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).data('__preventHide')) {
       return false;
     }
     atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.removeModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
@@ -2560,16 +2560,15 @@ class ModalService {
     }
   }
   addModal($modal) {
-    $modal.data('isClosable', true);
     this.modals.push($modal);
 
     // hide other modals
     const $prevModal = this.modals.length > 1 ? this.modals[this.modals.length - 2] : null;
     if ($prevModal) {
-      $prevModal.data('isClosable', false);
+      $prevModal.data('__preventHide', true);
       if ($prevModal.hasClass('visible')) {
         $prevModal.css('visibility', 'hidden');
-        $prevModal.addClass('hiddenNotFront');
+        $prevModal.addClass('__hiddenNotFront');
         $prevModal.removeClass('visible');
       }
     }
@@ -2628,14 +2627,19 @@ class ModalService {
     }
     this.modals.pop();
 
+    // https://github.com/fomantic/Fomantic-UI/issues/2528
+    if ($modal.modal('get settings').transition) {
+      $modal.transition('stop all');
+    }
+
     // hide other modals
     const $prevModal = this.modals.length > 0 ? this.modals[this.modals.length - 1] : null;
     if ($prevModal) {
-      $prevModal.data('isClosable', true);
-      if ($prevModal.hasClass('hiddenNotFront')) {
+      $prevModal.removeData('__preventHide');
+      if ($prevModal.hasClass('__hiddenNotFront')) {
         $prevModal.css('visibility', '');
         $prevModal.addClass('visible');
-        $prevModal.removeClass('hiddenNotFront');
+        $prevModal.removeClass('__hiddenNotFront');
         // recenter modal, needed even with observeChanges enabled
         // https://github.com/fomantic/Fomantic-UI/issues/2476
         $prevModal.modal('refresh');
