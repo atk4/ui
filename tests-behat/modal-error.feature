@@ -1,4 +1,4 @@
-Feature: Modal error handling
+Feature: Nested modals /w error handling
 
   Scenario: Modal with PHP error exception is displayed
     Given I am on "_unit-test/modal-error.php"
