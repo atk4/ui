@@ -13,7 +13,6 @@ import AtkPlugin from './atk.plugin';
  */
 export default class AtkConfirmPlugin extends AtkPlugin {
     main() {
-        let context = this;
         const $m = $('<div class="ui modal" />')
             .appendTo('body')
             .html(this.getDialogHtml(this.settings.message));
@@ -22,6 +21,7 @@ export default class AtkConfirmPlugin extends AtkPlugin {
 
         let options = {};
 
+        let context = this;
         if (this.settings.context) {
             context = this.settings.context;
         }
