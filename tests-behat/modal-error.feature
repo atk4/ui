@@ -21,8 +21,8 @@ Feature: Modal error handling
 
   Scenario: ModalExecutor with PHP error exception is displayed
     When I press button "Test ModalExecutor load PHP error"
-    Then Modal is open with text "Atk4\Data\Exception [code: 404]: Record with specified ID was not found"
+    Then Modal is open with text "Atk4\Data\Exception: Record with specified ID was not found"
     Then I hide js modal
     When I press button "Test ModalExecutor load PHP error"
-    Then Modal is open with text "Atk4\Data\Exception [code: 404]: Record with specified ID was not found"
+    Then Modal is open with text "Atk4\Data\Exception: Record with specified ID was not found"
     Then I hide js modal
