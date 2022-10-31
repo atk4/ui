@@ -151,7 +151,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
         $modal->js(
             true,
-            $this->ok->js()->on('click', new JsFunction([
+            $this->ok->js()->on('click', new JsFunction([], [
                 $this->loader->jsLoad(
                     [
                         'step' => 'exec',
@@ -164,7 +164,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
         $modal->js(
             true,
-            $this->cancel->js()->on('click', new JsFunction([
+            $this->cancel->js()->on('click', new JsFunction([], [
                 $this->jsHide(),
             ]))
         );

@@ -242,7 +242,7 @@ class Dropdown extends Input
 
         if ($this->readOnly) {
             $this->setDropdownOption('allowTab', false);
-            $this->setDropdownOption('onShow', new JsFunction([new JsExpression('return false')]));
+            $this->setDropdownOption('onShow', new JsFunction([], [new JsExpression('return false')]));
         }
 
         if ($this->dropIcon) {
