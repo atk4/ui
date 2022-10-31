@@ -782,7 +782,7 @@ class View extends AbstractView implements JsExpressionable
         } elseif ($when !== false) {
             // binding on a specific event
             $action = (new Jquery($this))
-                ->bind($when, new JsFunction([$chain, $action]));
+                ->bind($when, new JsFunction([], [$chain, $action]));
 
             $this->_jsActions[$when][] = $action;
         }
@@ -1052,7 +1052,7 @@ class View extends AbstractView implements JsExpressionable
         if ($defaults['confirm'] ?? null) {
             array_unshift($eventStatements, new JsExpression('$.atkConfirm({ message: [confirm], onApprove: [action], options: { button: { ok: [ok], cancel: [cancel] } }, context: this })', [
                 'confirm' => $defaults['confirm'],
-                'action' => new JsFunction($actions),
+                'action' => new JsFunction([], $actions),
                 'ok' => $defaults['ok'] ?? 'Ok',
                 'cancel' => $defaults['cancel'] ?? 'Cancel',
             ]));
@@ -1060,7 +1060,7 @@ class View extends AbstractView implements JsExpressionable
             $eventStatements = array_merge($eventStatements, $actions);
         }
 
-        $event_function = new JsFunction($eventStatements);
+        $event_function = new JsFunction([], $eventStatements);
 
         if ($selector) {
             $this->js(true)->on($event, $selector, $event_function);
@@ -1123,7 +1123,7 @@ class View extends AbstractView implements JsExpressionable
             return $this->getApp()->getViewJS($actions);
         }
 
-        return (new JsExpression('[]()', [new JsFunction($actions)]))->jsRender();
+        return (new JsExpression('[]()', [new JsFunction([], $actions)]))->jsRender();
     }
 
     // }}}

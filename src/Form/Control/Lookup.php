@@ -380,13 +380,13 @@ class Lookup extends Input
         if ($this->readOnly) {
             $this->settings['allowTab'] = false;
             $this->settings['apiSettings'] = null;
-            $this->settings['onShow'] = new JsFunction([new JsExpression('return false')]);
+            $this->settings['onShow'] = new JsFunction([], [new JsExpression('return false')]);
             $this->template->dangerouslySetHtml('readonly', 'readonly="readonly"');
         }
 
         if ($this->dependency) {
             $this->apiConfig['data'] = array_merge([
-                'form' => new JsFunction([new JsExpression('return []', [$this->form->formElement->js()->serialize()])]),
+                'form' => new JsFunction([], [new JsExpression('return []', [$this->form->formElement->js()->serialize()])]),
             ], $this->apiConfig['data'] ?? []);
         }
 
