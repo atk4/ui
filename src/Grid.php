@@ -539,14 +539,14 @@ class Grid extends View
     {
         return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args);
     }
-    
+
     /**
      * Similar to addModalAction but apply to a multiple recors selection and display in menu.
      * When menu item is clicked, modal is displayed with the $title and $callback is executed through VirtualPage.
      *
-     * @param string|array|MenuItem  $item
-     * @param \Closure               $callback function (View $page) {...
-     * @param array                  $args     extra url argument for callback
+     * @param string|array|MenuItem $item
+     * @param \Closure              $callback function (View $page) {...
+     * @param array                 $args     extra url argument for callback
      *
      * @return Jquery
      */
