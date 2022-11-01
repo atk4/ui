@@ -633,10 +633,10 @@ __webpack_require__.r(__webpack_exports__);
  */
 class AtkConfirmPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
-    let context = this;
     const $m = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div class="ui modal" />').appendTo('body').html(this.getDialogHtml(this.settings.message));
     $m.addClass(this.settings.size);
     let options = {};
+    let context = this;
     if (this.settings.context) {
       context = this.settings.context;
     }
@@ -716,7 +716,6 @@ class AtkCreateModalPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
       type: options.dataType,
       args: options.urlOptions,
       needRemove: true,
-      needCloseTrigger: true,
       loadingLabel: options.loadingLabel
     });
 
@@ -725,9 +724,9 @@ class AtkCreateModalPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
     $m.addClass(this.settings.modalCss);
   }
   getDialogHtml(title) {
-    return `<i class="icon close"></i>
-          <div class="${this.settings.headerCss}">${title}</div>
-          <div class="${this.settings.contentCss} content atk-dialog-content">
+    return `<i class="close icon"></i>
+          ` + (title ? `<div class="${this.settings.headerCss}">${title}</div>
+          ` : '') + `<div class="${this.settings.contentCss} content atk-dialog-content">
             </div>
           </div>`;
   }
@@ -1652,7 +1651,7 @@ class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
       element.addClass('loading');
     }
     this.source.onmessage = function (e) {
-      atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkSuccessTest(JSON.parse(e.data));
+      atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
     };
     this.source.onerror = e => {
       if (e.eventPhase === EventSource.CLOSED) {
@@ -1663,7 +1662,7 @@ class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
       }
     };
     this.source.addEventListener('atkSseAction', e => {
-      atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkSuccessTest(JSON.parse(e.data));
+      atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
     }, false);
     if (this.settings.closeBeforeUnload) {
       window.addEventListener('beforeunload', event => {
@@ -1854,8 +1853,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 class AccordionService {
-  setupFomanticUi(settings) {
-    settings.onOpening = this.onOpening;
+  getDefaultFomanticSettings() {
+    return [{}, {
+      onOpening: this.onOpening
+    }];
   }
   onOpening() {
     if (external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('path')) {
@@ -1911,18 +1912,21 @@ class ApiService {
   constructor() {
     this.afterSuccessCallbacks = [];
   }
-  setupFomanticUi(settings) {
-    settings.successTest = this.successTest;
-    settings.onFailure = this.onFailure;
-    settings.onSuccess = this.onSuccess;
-    settings.onAbort = this.onAbort;
+  getDefaultFomanticSettings() {
+    return [{}, {
+      // override supported via "../setup-fomantic-ui.js", both callbacks are always evaluated
+      successTest: this.successTest,
+      onFailure: this.onFailure,
+      onSuccess: this.onSuccess,
+      onAbort: this.onAbort,
+      onError: this.onError
+    }];
   }
 
   /**
    * Execute js code.
    *
-   * This function should be call using .call() by
-   * passing proper context for 'this'.
+   * This function should be called using .call() by passing proper context for 'this'.
    * ex: apiService.evalResponse.call(this, code)
    *
    * @param {string} code
@@ -1931,7 +1935,22 @@ class ApiService {
     eval(code); // eslint-disable-line no-eval
   }
 
+  /**
+   * Check server response and clear api.data object.
+   *
+   * @returns {boolean}
+   */
+  successTest(response) {
+    this.data = {};
+    if (response.success) {
+      return true;
+    }
+    return false;
+  }
   onAbort(message) {
+    console.warn(message);
+  }
+  onError(message) {
     console.warn(message);
   }
 
@@ -1998,6 +2017,46 @@ class ApiService {
   }
 
   /**
+   * Accumulate callbacks function to run after onSuccess.
+   * Callback is a string containing code to be eval.
+   */
+  onAfterSuccess(callback) {
+    this.afterSuccessCallbacks.push(callback);
+  }
+
+  /**
+   * Handle a server response failure.
+   */
+  onFailure(response) {
+    // if json is returned, it should contain the error within message property
+    if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
+      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response.message);
+    } else {
+      // check if we have html returned by server with <body> content.
+      const body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
+      if (body) {
+        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(body);
+      } else {
+        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response);
+      }
+    }
+  }
+
+  /**
+   * Make our own ajax request test if need to.
+   * if a plugin must call $.ajax or $.getJson directly instead of Fomantic-UI api,
+   * we could send the json response to this.
+   */
+  atkProcessExternalResponse(response) {
+    let content = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    if (response.success) {
+      this.onSuccess(response, content);
+    } else {
+      this.onFailure(response);
+    }
+  }
+
+  /**
    * Will wrap Fomantic-UI api call into a Promise.
    * Can be used to retrieve json data from the server.
    * Using this will bypass regular successTest i.e. any
@@ -2038,64 +2097,16 @@ class ApiService {
   }
 
   /**
-   * Accumulate callbacks function to run after onSuccess.
-   * Callback is a string containing code to be eval.
-   */
-  onAfterSuccess(callback) {
-    this.afterSuccessCallbacks.push(callback);
-  }
-
-  /**
-   * Check server response and clear api.data object.
-   * - return true will call onSuccess
-   * - return false will call onFailure
-   *
-   * @returns {boolean}
-   */
-  successTest(response) {
-    this.data = {};
-    if (response.success) {
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Make our own ajax request test if need to.
-   * if a plugin must call $.ajax or $.getJson directly instead of Fomantic-UI api,
-   * we could send the json response to this.
-   */
-  atkSuccessTest(response) {
-    let content = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-    if (response.success) {
-      this.onSuccess(response, content);
-    } else {
-      this.onFailure(response);
-    }
-  }
-
-  /**
-   * Handle a server response failure.
-   */
-  onFailure(response) {
-    // if json is returned, it should contain the error within message property
-    if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
-      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response.message);
-    } else {
-      // check if we have html returned by server with <body> content.
-      const body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
-      if (body) {
-        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(body);
-      } else {
-        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response);
-      }
-    }
-  }
-
-  /**
    * Display App error in a Fomantic-UI modal.
    */
   showErrorModal(errorMsg) {
+    if (atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.modals.length > 0) {
+      const $modal = atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.modals[atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.modals.length - 1];
+      if ($modal.data('closeOnLoadingError')) {
+        $modal.removeData('closeOnLoadingError').modal('hide');
+      }
+    }
+
     // catch application error and display them in a new modal window.
     const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(errorMsg);
     m.data('needRemove', true).modal().modal('show');
@@ -2331,11 +2342,18 @@ class FormService {
       });
     };
   }
-  setupFomanticUi(settings) {
-    settings.rules.isVisible = this.isVisible;
-    settings.rules.notEmpty = settings.rules.empty;
-    settings.rules.isEqual = this.isEqual;
-    settings.onSuccess = this.onSuccess;
+  getDefaultFomanticSettings() {
+    return [{
+      rules: external_jquery__WEBPACK_IMPORTED_MODULE_7___default().extend(true, {}, (external_jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings.rules), {
+        rules: {
+          notEmpty: (external_jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings.rules.empty),
+          isVisible: this.isVisible,
+          isEqual: this.isEqual
+        }
+      })
+    }, {
+      onSuccess: this.onSuccess
+    }];
   }
   onSuccess() {
     atk__WEBPACK_IMPORTED_MODULE_8__["default"].formService.clearDirtyForm(external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this).attr('id'));
@@ -2505,63 +2523,57 @@ __webpack_require__.r(__webpack_exports__);
  * This is default setup for Fomantic-UI modal.
  * Allow to manage URL pass to our modal and dynamically update content from this URL
  * using the Fomantic-UI api function.
- * Also keep track of how many modal are use by the app.
+ * Also keep track of created modals and display only the topmost modal.
  */
 class ModalService {
   constructor() {
     this.modals = [];
   }
-  setupFomanticUi(settings) {
-    settings.duration = 100;
-    // never autoclose previously displayed modals, manage them thru this service only
-    settings.allowMultiple = true;
-    // any change in modal DOM should automatically refresh cached positions
-    // allow modal window to add scrolling when content is added after modal is created
-    settings.observeChanges = true;
-    settings.onShow = this.onShow;
-    settings.onHide = this.onHide;
-    settings.onHidden = this.onHidden;
+  getDefaultFomanticSettings() {
+    return [{
+      duration: 100
+    }, {
+      // never autoclose previously displayed modals, manage them thru this service only
+      allowMultiple: true,
+      // any change in modal DOM should automatically refresh cached positions
+      // allow modal window to add scrolling when content is added after modal is created
+      observeChanges: true,
+      onShow: this.onShow,
+      onHide: this.onHide,
+      onHidden: this.onHidden
+    }];
   }
   onShow() {
     atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.addModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
   }
   onHide() {
-    return external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).data('isClosable');
+    if (external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).data('__preventHide')) {
+      return false;
+    }
+    atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.removeModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
+    return true;
   }
   onHidden() {
-    atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.removeModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
+    const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this);
+    if ($modal.data('needRemove')) {
+      $modal.remove();
+    }
   }
   addModal($modal) {
-    const that = this;
     this.modals.push($modal);
-    this.setCloseTriggerEventInModals();
-    this.hideShowCloseIcon();
 
     // hide other modals
     const $prevModal = this.modals.length > 1 ? this.modals[this.modals.length - 2] : null;
-    if ($prevModal && $prevModal.hasClass('visible')) {
-      $prevModal.css('visibility', 'hidden');
-      $prevModal.addClass('hiddenNotFront');
-      $prevModal.removeClass('visible');
+    if ($prevModal) {
+      $prevModal.data('__preventHide', true);
+      if ($prevModal.hasClass('visible')) {
+        $prevModal.css('visibility', 'hidden');
+        $prevModal.addClass('__hiddenNotFront');
+        $prevModal.removeClass('visible');
+      }
     }
-
-    // add modal esc handler
-    if (this.modals.length === 1) {
-      external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document).on('keyup.atk.modalService', e => {
-        if (e.keyCode === 27) {
-          if (that.modals.length > 0) {
-            that.modals[that.modals.length - 1].modal('hide');
-          }
-        }
-      });
-    }
-    let args = {};
-    const $content = $modal.find('.atk-dialog-content');
-
-    // check data associated with this modal
     const data = $modal.data();
-
-    // add data argument
+    let args = {};
     if (data.args) {
       args = data.args;
     }
@@ -2575,7 +2587,9 @@ class ModalService {
 
     // does modal content need to be loaded dynamically
     if (data.url) {
-      $content.html(atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.getLoader(data.loadingLabel ? data.loadingLabel : ''));
+      $modal.data('closeOnLoadingError', true);
+      const $content = $modal.find('.atk-dialog-content');
+      $content.html(atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.getLoaderHtml(data.loadingLabel ? data.loadingLabel : ''));
       $content.api({
         on: 'now',
         url: data.url,
@@ -2589,6 +2603,7 @@ class ModalService {
           });
           const result = content.html(response.html);
           if (result.length === 0) {
+            // TODO this if should be removed
             response.success = false;
             response.isServiceError = true;
             response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
@@ -2599,30 +2614,36 @@ class ModalService {
             // content is replace no need to do it in api
             response.id = null;
           }
+        },
+        onSuccess: function () {
+          $modal.removeData('closeOnLoadingError');
         }
       });
     }
   }
   removeModal($modal) {
-    if ($modal.data().needRemove) {
-      $modal.remove();
+    if (this.modals.length === 0 || this.modals[this.modals.length - 1][0] !== $modal[0]) {
+      throw Error('Unexpected modal to remove');
     }
     this.modals.pop();
-    this.setCloseTriggerEventInModals();
-    this.hideShowCloseIcon();
+
+    // https://github.com/fomantic/Fomantic-UI/issues/2528
+    if ($modal.modal('get settings').transition) {
+      $modal.transition('stop all');
+    }
 
     // hide other modals
     const $prevModal = this.modals.length > 0 ? this.modals[this.modals.length - 1] : null;
-    if ($prevModal && $prevModal.hasClass('hiddenNotFront')) {
-      $prevModal.css('visibility', '');
-      $prevModal.addClass('visible');
-      $prevModal.removeClass('hiddenNotFront');
-      // recenter modal, needed even with observeChanges enabled
-      // https://github.com/fomantic/Fomantic-UI/issues/2476
-      $prevModal.modal('refresh');
-    }
-    if (this.modals.length === 0) {
-      external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document).off('atk.modalService');
+    if ($prevModal) {
+      $prevModal.removeData('__preventHide');
+      if ($prevModal.hasClass('__hiddenNotFront')) {
+        $prevModal.css('visibility', '');
+        $prevModal.addClass('visible');
+        $prevModal.removeClass('__hiddenNotFront');
+        // recenter modal, needed even with observeChanges enabled
+        // https://github.com/fomantic/Fomantic-UI/issues/2476
+        $prevModal.modal('refresh');
+      }
     }
   }
   doAutoFocus($modal) {
@@ -2633,42 +2654,8 @@ class ModalService {
       input.focus().select();
     }
   }
-
-  /**
-   * Will loop through modals in reverse order an
-   * attach the close event handler in the last one available.
-   */
-  setCloseTriggerEventInModals() {
-    for (let i = this.modals.length - 1; i >= 0; --i) {
-      const $modal = this.modals[i];
-      if ($modal.data().needCloseTrigger) {
-        $modal.on('close', '.atk-dialog-content', () => {
-          $modal.modal('hide');
-        });
-      } else {
-        $modal.off('close', '.atk-dialog-content');
-      }
-    }
-  }
-
-  /**
-   * Only last modal in queue should have the close icon
-   */
-  hideShowCloseIcon() {
-    for (let i = this.modals.length - 1; i >= 0; --i) {
-      const $modal = this.modals[i];
-      if (i === this.modals.length - 1) {
-        $modal.find('i.icon.close').show();
-        $modal.data('isClosable', true);
-      } else {
-        $modal.find('i.icon.close').hide();
-        $modal.data('isClosable', false);
-      }
-    }
-  }
-  getLoader(loaderText) {
-    return `<div class="ui active inverted dimmer">
-              <div class="ui text loader">${loaderText}</div>`;
+  getLoaderHtml(loaderText) {
+    return '<div class="ui active inverted dimmer">' + '<div class="ui text loader">' + loaderText + '</div>' + '</div>';
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new ModalService()));
@@ -3151,12 +3138,13 @@ __webpack_require__.r(__webpack_exports__);
  * This is default setup for Fomantic-UI popup.
  */
 class PopupService {
-  setupFomanticUi(settings) {
-    settings.onCreate = this.onCreate;
-    settings.onShow = this.onShow;
-    settings.onHide = this.onHide;
-    settings.onVisible = this.onVisible;
-    settings.onRemove = this.onRemove;
+  getDefaultFomanticSettings() {
+    return [{}, {
+      onCreate: this.onCreate,
+      onShow: this.onShow,
+      onHide: this.onHide,
+      onRemove: this.onRemove
+    }];
   }
 
   /**
@@ -3170,7 +3158,7 @@ class PopupService {
       // Only load if we are not using data.cache or content has not been loaded yet.
       if (!data.cache || !data.hascontent) {
         // display default loader while waiting for content.
-        $popup.html(atk__WEBPACK_IMPORTED_MODULE_0__["default"].popupService.getLoader());
+        $popup.html(atk__WEBPACK_IMPORTED_MODULE_0__["default"].popupService.getLoaderHtml());
         $popup.api({
           on: 'now',
           url: data.url,
@@ -3192,7 +3180,6 @@ class PopupService {
     }
   }
   onHide() {}
-  onVisible() {}
 
   /**
    * Only call when popup are created from metadata
@@ -3208,9 +3195,8 @@ class PopupService {
   onRemove() {
     // console.log('onRemove');
   }
-  getLoader() {
-    return `<div class="ui active inverted dimmer">
-              <div class="ui mini text loader"></div>`;
+  getLoaderHtml() {
+    return '<div class="ui active inverted dimmer">' + '<div class="ui mini text loader"></div>' + '</div>';
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new PopupService()));
@@ -3513,18 +3499,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-/* harmony import */ var _services_accordion_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services/accordion.service */ "./src/services/accordion.service.js");
-/* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./services/api.service */ "./src/services/api.service.js");
-/* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./services/data.service */ "./src/services/data.service.js");
-/* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/form.service */ "./src/services/form.service.js");
-/* harmony import */ var _services_modal_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/modal.service */ "./src/services/modal.service.js");
-/* harmony import */ var _services_panel_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/panel.service */ "./src/services/panel.service.js");
-/* harmony import */ var _services_popup_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./services/popup.service */ "./src/services/popup.service.js");
-/* harmony import */ var _services_upload_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./services/upload.service */ "./src/services/upload.service.js");
-/* harmony import */ var _services_vue_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./services/vue.service */ "./src/services/vue.service.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.for-each.js */ "./node_modules/core-js/modules/esnext.async-iterator.for-each.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "./node_modules/core-js/modules/esnext.iterator.for-each.js");
+/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _services_accordion_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/accordion.service */ "./src/services/accordion.service.js");
+/* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/api.service */ "./src/services/api.service.js");
+/* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/data.service */ "./src/services/data.service.js");
+/* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./services/form.service */ "./src/services/form.service.js");
+/* harmony import */ var _services_modal_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./services/modal.service */ "./src/services/modal.service.js");
+/* harmony import */ var _services_panel_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./services/panel.service */ "./src/services/panel.service.js");
+/* harmony import */ var _services_popup_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./services/popup.service */ "./src/services/popup.service.js");
+/* harmony import */ var _services_upload_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./services/upload.service */ "./src/services/upload.service.js");
+/* harmony import */ var _services_vue_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./services/vue.service */ "./src/services/vue.service.js");
 
 
 
@@ -3536,22 +3528,87 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].accordionService = _services_accordion_service__WEBPACK_IMPORTED_MODULE_2__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService = _services_api_service__WEBPACK_IMPORTED_MODULE_3__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService = _services_data_service__WEBPACK_IMPORTED_MODULE_4__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].formService = _services_form_service__WEBPACK_IMPORTED_MODULE_5__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].modalService = _services_modal_service__WEBPACK_IMPORTED_MODULE_6__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].panelService = _services_panel_service__WEBPACK_IMPORTED_MODULE_7__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].popupService = _services_popup_service__WEBPACK_IMPORTED_MODULE_8__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].uploadService = _services_upload_service__WEBPACK_IMPORTED_MODULE_9__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].vueService = _services_vue_service__WEBPACK_IMPORTED_MODULE_10__["default"];
 
-// setup Fomantic-UI globals
-_services_api_service__WEBPACK_IMPORTED_MODULE_3__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.api.settings));
-_services_form_service__WEBPACK_IMPORTED_MODULE_5__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.form.settings));
-_services_modal_service__WEBPACK_IMPORTED_MODULE_6__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.modal.settings));
-_services_popup_service__WEBPACK_IMPORTED_MODULE_8__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.popup.settings));
-_services_accordion_service__WEBPACK_IMPORTED_MODULE_2__["default"].setupFomanticUi((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.accordion.settings));
+
+
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].accordionService = _services_accordion_service__WEBPACK_IMPORTED_MODULE_5__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].apiService = _services_api_service__WEBPACK_IMPORTED_MODULE_6__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].dataService = _services_data_service__WEBPACK_IMPORTED_MODULE_7__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].formService = _services_form_service__WEBPACK_IMPORTED_MODULE_8__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].modalService = _services_modal_service__WEBPACK_IMPORTED_MODULE_9__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].panelService = _services_panel_service__WEBPACK_IMPORTED_MODULE_10__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].popupService = _services_popup_service__WEBPACK_IMPORTED_MODULE_11__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].uploadService = _services_upload_service__WEBPACK_IMPORTED_MODULE_12__["default"];
+atk__WEBPACK_IMPORTED_MODULE_4__["default"].vueService = _services_vue_service__WEBPACK_IMPORTED_MODULE_13__["default"];
+const fomanticServicesMap = {
+  api: _services_api_service__WEBPACK_IMPORTED_MODULE_6__["default"],
+  form: _services_form_service__WEBPACK_IMPORTED_MODULE_8__["default"],
+  modal: _services_modal_service__WEBPACK_IMPORTED_MODULE_9__["default"],
+  popup: _services_popup_service__WEBPACK_IMPORTED_MODULE_11__["default"],
+  accordion: _services_accordion_service__WEBPACK_IMPORTED_MODULE_5__["default"]
+};
+
+// setup Fomantic-UI global overrides
+// https://github.com/fomantic/Fomantic-UI/issues/2526
+(external_jquery__WEBPACK_IMPORTED_MODULE_3___default().extend) = (external_jquery__WEBPACK_IMPORTED_MODULE_3___default().fn.extend) = new Proxy((external_jquery__WEBPACK_IMPORTED_MODULE_3___default().fn.extend), {
+  // eslint-disable-line no-multi-assign
+  apply: function (target, thisArg, args) {
+    // https://github.com/fomantic/Fomantic-UI/blob/c30ed51ca12fc1762b04c2fd1a83d087c0124d07/src/definitions/behaviors/api.js#L48
+    const firstIndex = args[0] === true ? 1 : 0;
+    const secondIndex = args[0] === true ? 2 : 1;
+    if (args.length >= (args[0] === true ? 3 : 2) && external_jquery__WEBPACK_IMPORTED_MODULE_3___default().isPlainObject(args[firstIndex]) && external_jquery__WEBPACK_IMPORTED_MODULE_3___default().isEmptyObject(args[firstIndex]) && external_jquery__WEBPACK_IMPORTED_MODULE_3___default().isPlainObject(args[secondIndex])) {
+      let name = null;
+      Object.keys(fomanticServicesMap).forEach(n => {
+        if (args[secondIndex] === (external_jquery__WEBPACK_IMPORTED_MODULE_3___default().fn)[n].settings) {
+          name = n;
+        }
+      });
+      if (name !== null) {
+        const [customSettings, forcedSettings] = fomanticServicesMap[name].getDefaultFomanticSettings();
+        const newSettings = new Proxy(external_jquery__WEBPACK_IMPORTED_MODULE_3___default().extend(true, {}, {}, args[secondIndex], forcedSettings), {
+          set: (obj, prop, value) => {
+            const origValue = obj[prop];
+            if (forcedSettings[prop] === undefined) {
+              obj[prop] = value;
+            } else if (name === 'api' && prop === 'successTest') {
+              obj[prop] = function (response) {
+                const resOrig = origValue(response);
+                const resNew = value.call(this, response);
+                return resOrig && resNew;
+              };
+            } else if (name === 'api' && prop === 'onSuccess') {
+              obj[prop] = function (response, $module, xhr) {
+                origValue(response, $module, xhr);
+                return value.call(this, response, $module, xhr);
+              };
+            } else if (name === 'api' && prop === 'onFailure') {
+              obj[prop] = function (response, $module, xhr) {
+                origValue(response, $module, xhr);
+                return value.call(this, response, $module, xhr);
+              };
+            } else if (name === 'api' && prop === 'onAbort') {
+              obj[prop] = function (errorMessage, $module, xhr) {
+                origValue(errorMessage, $module, xhr);
+                return value.call(this, errorMessage, $module, xhr);
+              };
+            } else if (name === 'api' && prop === 'onError') {
+              obj[prop] = function (errorMessage, $module, xhr) {
+                origValue(errorMessage, $module, xhr);
+                return value.call(this, errorMessage, $module, xhr);
+              };
+            } else {
+              throw new Error('Fomantic-UI "' + name + '.' + prop + '" setting cannot be customized outside atk');
+            }
+            return true;
+          }
+        });
+        external_jquery__WEBPACK_IMPORTED_MODULE_3___default().extend(true, newSettings, ...args.slice(secondIndex + 1), customSettings);
+        return newSettings;
+      }
+    }
+    return target.call(thisArg, ...args);
+  }
+});
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
 
 /***/ }),
@@ -3602,10 +3659,10 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @param {string}   name      Plugin name
  * @param {Function} cl        Plugin class
- * @param {boolean}  shortHand Map $.name(...) to $({}).name(...)
+ * @param {boolean}  shorthand Map $.name(...) to $({}).name(...)
  */
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin = function (name, cl) {
-  let shortHand = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  let shorthand = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
   const dataName = '__' + name;
 
   // add plugin to atk namespace.
@@ -3626,7 +3683,7 @@ atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin = function (name, cl)
       external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(dataName, new atk__WEBPACK_IMPORTED_MODULE_1__["default"][name](this, options));
     });
   };
-  if (shortHand) {
+  if (shorthand) {
     (external_jquery__WEBPACK_IMPORTED_MODULE_0___default())[name] = options => external_jquery__WEBPACK_IMPORTED_MODULE_0___default()({})[name](options);
   }
 };
@@ -3752,7 +3809,7 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper = _helpers_url_helper__WEB
 /***/ (function(module) {
 
 !function webpackUniversalModuleDefinition(e,t){ true?module.exports=t():0}(this,(function(){return(()=>{"use strict";var e={67:(e,t,r)=>{r.r(t),r.d(t,{default:()=>a});var i=r(887),o=r.n(i);function _classCallCheck(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function _defineProperty(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}var n,l=(n=0,function(){return n++}),a=function ColumnResizer(e){var t=this,r=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};_classCallCheck(this,ColumnResizer),_defineProperty(this,"ID","id"),_defineProperty(this,"PX","px"),_defineProperty(this,"RESIZABLE","grip-resizable"),_defineProperty(this,"FLEX","grip-flex"),_defineProperty(this,"legacyIE",navigator.userAgent.indexOf("Trident/4.0")>0),_defineProperty(this,"reset",(function(e){return t.init(e)})),_defineProperty(this,"onResize",(function(){var e=t.tb;if(e.classList.remove(t.RESIZABLE),e.opt.fixed){e.tableWidth=Number(window.getComputedStyle(e).width.replace(/px/,"")).valueOf();for(var r=0,i=0;i<e.columnCnt;i++)r+=e.columns[i].w;for(var o=0;o<e.columnCnt;o++)e.columns[o].style.width=Math.round(1e3*e.columns[o].w/r)/10+"%",e.columns[o].locked=!0}else t.applyBounds(),"flex"===e.opt.resizeMode&&e.opt.serialize&&t.serializeStore();e.classList.add(t.RESIZABLE),t.syncGrips()})),_defineProperty(this,"onGripMouseDown",(function(e){var r=e.target.parentNode.data,i=t.tb,o=i.grips[r.i],n=e.touches;if(o.ox=n?n[0].pageX:e.pageX,o.l=o.offsetLeft,o.x=o.l,t.createStyle(document.querySelector("head"),"*{cursor:"+i.opt.dragCursor+"!important}"),document.addEventListener("touchmove",t.onGripDrag),document.addEventListener("mousemove",t.onGripDrag),document.addEventListener("touchend",t.onGripDragOver),document.addEventListener("mouseup",t.onGripDragOver),o.classList.add(i.opt.draggingClass),t.grip=o,i.columns[r.i].locked)for(var l,a=0;a<i.columnCnt;a++)(l=i.columns[a]).locked=!1,l.w=Number(window.getComputedStyle(l).width.replace(/px/,"")).valueOf();e.preventDefault()})),_defineProperty(this,"onGripDrag",(function(e){var r=t.grip;if(r){var i=r.t,o=e.touches,n=(o?o[0].pageX:e.pageX)-r.ox+r.l,l=i.opt.minWidth,a=r.i,s=1.5*i.cellSpace+l+i.borderSpace,d=a===i.columnCnt-1,p=a?i.grips[a-1].offsetLeft+i.cellSpace+l:s,u=i.opt.fixed?a===i.columnCnt-1?i.tableWidth-s:i.grips[a+1].offsetLeft-i.cellSpace-l:1/0;if(n=Math.max(p,Math.min(u,n)),r.x=n,r.style.left=n+t.PX,d&&(r.w=i.columns[a].w+n-r.l),i.opt.liveDrag){d?(i.columns[a].style.width=r.w+t.PX,!i.opt.fixed&&i.opt.overflow?i.style.minWidth=i.tableWidth+n-r.l+t.PX:i.tableWidth=Number(window.getComputedStyle(i).width.replace(/px/,"")).valueOf()):t.syncCols(i,a,!1,i.opt),t.syncGrips();var c=i.opt.onDrag;c&&c(e)}e.preventDefault()}})),_defineProperty(this,"onGripDragOver",(function(e){var r=t.grip;document.removeEventListener("touchend",t.onGripDragOver),document.removeEventListener("mouseup",t.onGripDragOver),document.removeEventListener("touchmove",t.onGripDrag),document.removeEventListener("mousemove",t.onGripDrag);var i=document.querySelector("head").lastChild;if(i.parentNode.removeChild(i),r){if(r.classList.remove(r.t.opt.draggingClass),r.x-r.l!=0){var o=r.t,n=o.opt.onResize,l=r.i;if(l===o.columnCnt-1){var a=o.columns[l];a.style.width=r.w+t.PX,a.w=r.w}else t.syncCols(o,l,!0,o.opt);o.opt.fixed||t.applyBounds(),t.syncGrips(),n&&n(e),o.opt.serialize&&t.serializeStore()}t.grip=null}})),_defineProperty(this,"init",(function(e){if(e.disable)return t.destroy();var r=t.tb,i=r.getAttribute(t.ID)||t.RESIZABLE+l();if(!r.matches("table")||r.extended&&!e.partialRefresh)return null;var o=document.querySelector("head");if(t.createStyle(o," .grip-resizable{table-layout:fixed;} .grip-resizable > tbody > tr > td, .grip-resizable > tbody > tr > th{overflow:hidden} .grip-padding > tbody > tr > td, .grip-padding > tbody > tr > th{padding-left:0!important; padding-right:0!important;} .grip-container{ height:0px; position:relative;} .grip-handle{margin-left:-5px; position:absolute; z-index:5; } .grip-handle .grip-resizable{position:absolute;background-color:red;filter:alpha(opacity=1);opacity:0;width:10px;height:100%;cursor: col-resize;top:0px} .grip-lastgrip{position:absolute; width:1px; } .grip-drag{ border-left:1px dotted black;\t} .grip-flex{width:auto!important;} .grip-handle.grip-disabledgrip .grip-resizable{cursor:default; display:none;}"),e.hoverCursor&&"col-resize"!==e.hoverCursor){var n=".grip-handle .grip-resizable:hover{cursor:"+e.hoverCursor+"!important}";t.createStyle(o,n)}r.setAttribute(t.ID,i);var a=r.opt;r.opt=t.extendOptions(e);var s=t.getTableHeaders(r);if(t.extendTable(s),e.remoteTable&&e.remoteTable.matches("table")){var d=t.getTableHeaders(r.opt.remoteTable);s.length===d.length?t.extendRemoteTable(r.opt.remoteTable,d,r):console.warn("column count for remote table did not match")}return a})),_defineProperty(this,"applyBounds",(function(){var e=t.tb,r=e.columns.map((function(e){return window.getComputedStyle(e).width}));e.style.width=window.getComputedStyle(e).width,e.tableWidth=Number(e.style.width.replace(/px/,"")).valueOf(),e.classList.remove(t.FLEX),e.columns.forEach((function(e,t){e.style.width=r[t],e.w=Number(r[t].replace(/px/,"")).valueOf()})),e.classList.add(t.FLEX)})),_defineProperty(this,"serializeStore",(function(){var e=t.store,r=t.tb;e[r.getAttribute(t.ID)]="";for(var i=0,o=0;o<r.columns.length;o++){var n=window.getComputedStyle(r.columns[o]).width.replace(/px/,"");e[r.getAttribute(t.ID)]+=n+";",i+=Number(n).valueOf()}e[r.getAttribute(t.ID)]+=i.toString(),r.opt.fixed||(e[r.getAttribute(t.ID)]+=";"+window.getComputedStyle(r).width.replace(/px/,""))})),_defineProperty(this,"syncGrips",(function(){var e=t.tb;e.gripContainer.style.width=e.tableWidth+t.PX;for(var r=0;r<e.columnCnt;r++){var i=e.columns[r],o=i.getBoundingClientRect(),n=e.getBoundingClientRect();e.grips[r].style.left=o.left-n.left+i.offsetWidth+e.cellSpace/2+t.PX,e.grips[r].style.height=(e.opt.headerOnly?e.columns[0].offsetHeight:e.offsetHeight)+t.PX}})),_defineProperty(this,"destroy",(function(){var e=t.tb,r=e.getAttribute(t.ID);return r?(t.store[r]="",e.classList.remove(t.RESIZABLE),e.classList.remove(t.FLEX),e.remote&&(e.remote.classList.remove(t.RESIZABLE),e.remote.classList.remove(t.FLEX)),e.gripContainer&&e.gripContainer.parentNode&&e.gripContainer.parentNode.removeChild(e.gripContainer),delete e.extended,e.opt):null})),_defineProperty(this,"createStyle",(function(e,t){var r=o()(t).toString(),i=e.querySelectorAll("style");if(!Array.from(i).filter((function(e){return e.gripid===r})).length){var n=document.createElement("style");n.type="text/css",n.gripid=r,n.styleSheet?n.styleSheet.cssText=t:n.appendChild(document.createTextNode(t)),e.appendChild(n)}})),_defineProperty(this,"extendOptions",(function(e){var t=Object.assign({},ColumnResizer.DEFAULTS,e);switch(t.fixed=!0,t.overflow=!1,t.resizeMode){case"flex":t.fixed=!1;break;case"overflow":t.fixed=!1,t.overflow=!0}return t})),_defineProperty(this,"getTableHeaders",(function(e){var r="#"+e.id,i=Array.from(e.querySelectorAll(r+">thead>tr:nth-of-type(1)>th"));return(i=i.concat(Array.from(e.querySelectorAll(r+">thead>tr:nth-of-type(1)>td")))).length||(i=(i=(i=(i=Array.from(e.querySelectorAll(r+">tbody>tr:nth-of-type(1)>th"))).concat(Array.from(e.querySelectorAll(r+">tr:nth-of-type(1)>th")))).concat(Array.from(e.querySelectorAll(r+">tbody>tr:nth-of-type(1)>td")))).concat(Array.from(e.querySelectorAll(r+">tr:nth-of-type(1)>td")))),t.filterInvisible(i,!1)})),_defineProperty(this,"filterInvisible",(function(e,t){return e.filter((function(e){var r=t?-1:e.offsetWidth,i=t?-1:e.offsetHeight;return!(0===r&&0===i||e.style&&e.style.display&&"none"===window.getComputedStyle(e).display||!1)}))})),_defineProperty(this,"extendTable",(function(e){var r=t.tb;r.opt.removePadding&&r.classList.add("grip-padding"),r.classList.add(t.RESIZABLE),r.insertAdjacentHTML("beforebegin",'<div class="grip-container"/>'),r.grips=[],r.columns=[],r.tableWidth=Number(window.getComputedStyle(r).width.replace(/px/,"")).valueOf(),r.gripContainer=r.previousElementSibling,r.opt.marginLeft&&(r.gripContainer.style.marginLeft=r.opt.marginLeft),r.opt.marginRight&&(r.gripContainer.style.marginRight=r.opt.marginRight),r.cellSpace=parseInt(t.legacyIE?r.cellSpacing||r.currentStyle.borderSpacing:window.getComputedStyle(r).borderSpacing.split(" ")[0].replace(/px/,""))||2,r.borderSpace=parseInt(t.legacyIE?r.border||r.currentStyle.borderLeftWidth:window.getComputedStyle(r).borderLeftWidth.replace(/px/,""))||1,r.extended=!0,t.createGrips(e)})),_defineProperty(this,"extendRemoteTable",(function(e,r,i){i.opt.removePadding&&e.classList.add("grip-padding"),e.classList.add(t.RESIZABLE),e.getAttribute(t.ID)||e.setAttribute(t.ID,i.getAttribute(t.ID)+"remote"),e.columns=[],r.forEach((function(o,n){var l=r[n];l.w=i.columns[n].w,l.style.width=l.w+t.PX,l.removeAttribute("width"),e.columns.push(l)})),e.tableWidth=i.tableWidth,e.cellSpace=i.cellSpace,e.borderSpace=i.borderSpace;var o=Array.from(e.querySelectorAll("col"));e.columnGrp=t.filterInvisible(o,!0),e.columnGrp.forEach((function(e,t){e.removeAttribute("width"),e.style.width=i.columnGrp[t].style.width})),i.remote=e})),_defineProperty(this,"createGrips",(function(e){var r=t.tb;r.columnGrp=t.filterInvisible(Array.from(r.querySelectorAll("col")),!0),r.columnGrp.forEach((function(e){e.removeAttribute("width")})),r.columnCnt=e.length;var i=!1;t.store[r.getAttribute(t.ID)]&&(t.deserializeStore(e),i=!0),r.opt.widths||(r.opt.widths=[]),e.forEach((function(o,n){var l=e[n],a=-1!==r.opt.disabledColumns.indexOf(n);t.createDiv(r.gripContainer,"grip-handle");var s=r.gripContainer.lastChild;!a&&r.opt.gripInnerHtml&&(s.innerHTML=r.opt.gripInnerHtml),t.createDiv(s,t.RESIZABLE),n===r.columnCnt-1&&(s.classList.add("grip-lastgrip"),r.opt.fixed&&(s.innerHTML="")),s.addEventListener("touchstart",t.onGripMouseDown,{capture:!0,passive:!0}),s.addEventListener("mousedown",t.onGripMouseDown,!0),a?s.classList.add("grip-disabledgrip"):(s.classList.remove("grip-disabledgrip"),s.addEventListener("touchstart",t.onGripMouseDown,{capture:!0,passive:!0}),s.addEventListener("mousedown",t.onGripMouseDown,!0)),s.t=r,s.i=n,r.opt.widths[n]?l.w=r.opt.widths[n]:l.w=i?Number(l.style.width.replace(/px/,"")).valueOf():Number(window.getComputedStyle(l).width.replace(/px/,"")).valueOf(),l.style.width=l.w+t.PX,l.removeAttribute("width"),s.data={i:n,t:r.getAttribute(t.ID),last:n===r.columnCnt-1},r.grips.push(s),r.columns.push(l)}));var o=Array.from(r.querySelectorAll("td"));o.concat(Array.from(r.querySelectorAll("th"))),(o=(o=o.filter((function(t){for(var r=0;r<e.length;r++)if(e[r]===t)return!1;return!0}))).filter((function(e){return!(e.querySelectorAll("table th").length||e.querySelectorAll("table td").length)}))).forEach((function(e){e.removeAttribute("width")})),r.opt.fixed||(r.removeAttribute("width"),r.classList.add(t.FLEX)),t.syncGrips()})),_defineProperty(this,"deserializeStore",(function(e){var r=t.tb;if(r.columnGrp.forEach((function(e){e.removeAttribute("width")})),r.opt.flush)t.store[r.getAttribute(t.ID)]="";else{var i=t.store[r.getAttribute(t.ID)].split(";"),o=i[r.columnCnt+1];!r.opt.fixed&&o&&(r.style.width=o+t.PX,r.opt.overflow&&(r.style.minWidth=o+t.PX,r.tableWidth=Number(o).valueOf()));for(var n=0;n<r.columnCnt;n++)e[n].style.width=i[n]+t.PX,r.columnGrp[n]&&(r.columnGrp[n].style.width=100*Number(i[n]).valueOf()/Number(i[r.columnCnt]).valueOf()+"%")}})),_defineProperty(this,"createDiv",(function(e,t,r){var i=document.createElement("div");i.classList.add(t),r&&(i.innerHTML=r),e.appendChild(i)})),_defineProperty(this,"syncCols",(function(e,r,i,o){var n=e.remote,l=t.grip.x-t.grip.l,a=e.columns[r],s=e.columns[r+1];if(a&&s){var d=a.w+l,p=s.w-l,u=d+t.PX;if(a.style.width=u,e.columnGrp[r]&&e.columnGrp[r].style.width&&(e.columnGrp[r].style.width=u),n&&(n.columns[r].style.width=u,n.columnGrp[r]&&n.columnGrp[r].style.width&&(n.columnGrp[r].style.width=u)),o.fixed){var c=p+t.PX;s.style.width=c,e.columnGrp[r+1]&&e.columnGrp[r+1].style.width&&(e.columnGrp[r+1].style.width=c),n&&(n.columns[r+1].style.width=c,n.columnGrp[r+1]&&n.columnGrp[r+1].style.width&&(n.columnGrp[r+1].style.width=c))}else o.overflow&&(e.style.minWidth=e.tableWidth+l+t.PX);i&&(a.w=d,s.w=o.fixed?p:s.w,n&&(n.columns[r].w=d,n.columns[r+1].w=o.fixed?p:s.w))}}));try{this.store=sessionStorage}catch(e){this.store={}}this.grip=null,this.tb=e,window.addEventListener("resize",this.onResize),Element.prototype.matches||(Element.prototype.matches=Element.prototype.msMatchesSelector),this.init(r)};a.DEFAULTS={resizeMode:"fit",draggingClass:"grip-drag",gripInnerHtml:"",liveDrag:!1,minWidth:15,headerOnly:!1,hoverCursor:"col-resize",dragCursor:"col-resize",flush:!1,marginLeft:null,marginRight:null,remoteTable:null,disable:!1,partialRefresh:!1,disabledColumns:[],removePadding:!0,widths:[],serialize:!0,onDrag:null,onResize:null}},887:e=>{e.exports=function hash(e){for(var t=5381,r=e.length;r;)t=33*t^e.charCodeAt(--r);return t>>>0}}},t={};function __nested_webpack_require_13174__(r){if(t[r])return t[r].exports;var i=t[r]={exports:{}};return e[r](i,i.exports,__nested_webpack_require_13174__),i.exports}return __nested_webpack_require_13174__.n=e=>{var t=e&&e.__esModule?()=>e.default:()=>e;return __nested_webpack_require_13174__.d(t,{a:t}),t},__nested_webpack_require_13174__.d=(e,t)=>{for(var r in t)__nested_webpack_require_13174__.o(t,r)&&!__nested_webpack_require_13174__.o(e,r)&&Object.defineProperty(e,r,{enumerable:!0,get:t[r]})},__nested_webpack_require_13174__.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t),__nested_webpack_require_13174__.r=e=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},__nested_webpack_require_13174__(67)})()}));
-//# sourceMappingURL=column-resizer.js.map
+
 
 /***/ }),
 
@@ -24335,7 +24392,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* export default binding */ __WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ function __WEBPACK_DEFAULT_EXPORT__(n){return{all:n=n||new Map,on:function(t,e){var i=n.get(t);i&&i.push(e)||n.set(t,[e])},off:function(t,e){var i=n.get(t);i&&i.splice(i.indexOf(e)>>>0,1)},emit:function(t,e){(n.get(t)||[]).slice().map(function(n){n(e)}),(n.get("*")||[]).slice().map(function(n){n(t,e)})}}}
-//# sourceMappingURL=mitt.es.js.map
 
 
 /***/ }),
@@ -36614,3 +36670,4 @@ __webpack_exports__ = __webpack_exports__["default"];
 /******/ })()
 ;
 });
+//# sourceMappingURL=atkjs-ui.js.map

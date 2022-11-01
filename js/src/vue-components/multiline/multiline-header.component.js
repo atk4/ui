@@ -34,9 +34,9 @@ export default {
             let align = 'left';
             if (!column.isEditable) {
                 switch (column.type) {
-                    case 'money':
                     case 'integer':
-                    case 'number':
+                    case 'float':
+                    case 'atk4_money':
                         align = 'right';
 
                         break;

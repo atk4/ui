@@ -2731,3 +2731,4 @@ if (typeof Object.assign !== "function") {
 /***/ })
 
 }]);
+//# sourceMappingURL=vendor-vue-flatpickr.js.map

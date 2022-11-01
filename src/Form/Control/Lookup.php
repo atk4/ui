@@ -24,6 +24,8 @@ class Lookup extends Input
 
     public $defaultTemplate = 'form/control/lookup.html';
 
+    public string $inputType = 'hidden';
+
     /** @var array Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
     public $values = [];
 
@@ -94,7 +96,7 @@ class Lookup extends Input
      * $form->addControl('field', [Form\Control\Lookup::class, 'settings' => [
      *     'allowReselection' => true,
      *     'selectOnKeydown' => false,
-     *     'onChange' => new JsExpression('function(value, t, c) {
+     *     'onChange' => new JsExpression('function (value, t, c) {
      *         if ($(this).data("value") !== value) {
      *             $(this).parents(\'.form\').form(\'submit\');
      *             $(this).data(\'value\', value);
@@ -333,18 +335,6 @@ class Lookup extends Input
         ($this->dependency)($this->model, $data);
     }
 
-    public function getInput()
-    {
-        return $this->getApp()->getTag('input/', array_merge([
-            'name' => $this->shortName,
-            'type' => 'hidden',
-            'id' => $this->name . '_input',
-            'value' => $this->getValue(),
-            'readonly' => $this->readOnly,
-            'disabled' => $this->disabled,
-        ], $this->inputAttr));
-    }
-
     /**
      * Set Fomantic-UI Api settings to use with dropdown.
      *
@@ -377,26 +367,26 @@ class Lookup extends Input
     protected function renderView(): void
     {
         if ($this->multiple) {
-            $this->template->set('multiple', 'multiple="multiple"');
+            $this->template->dangerouslySetHtml('multipleClass', 'multiple');
         }
 
         if ($this->disabled) {
             $this->settings['allowTab'] = false;
 
-            $this->template->set('disabled', 'disabled="disabled"');
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
             $this->template->set('disabledClass', 'disabled');
         }
 
         if ($this->readOnly) {
             $this->settings['allowTab'] = false;
             $this->settings['apiSettings'] = null;
-            $this->settings['onShow'] = new JsFunction([new JsExpression('return false')]);
-            $this->template->set('readonly', 'readonly="readonly"');
+            $this->settings['onShow'] = new JsFunction([], [new JsExpression('return false')]);
+            $this->template->dangerouslySetHtml('readonly', 'readonly="readonly"');
         }
 
         if ($this->dependency) {
             $this->apiConfig['data'] = array_merge([
-                'form' => new JsFunction([new JsExpression('return []', [$this->form->formElement->js()->serialize()])]),
+                'form' => new JsFunction([], [new JsExpression('return []', [$this->form->formElement->js()->serialize()])]),
             ], $this->apiConfig['data'] ?? []);
         }
 

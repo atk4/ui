@@ -117,13 +117,13 @@ class ActionMenu extends Table\Column
             $output .= $item->getHtml();
         }
 
-        $s = '<div class="' . $this->ui . ' atk-action-menu">'
-            . '<div class="text">' . $this->label . '</div>'
-            . ($this->icon ? '<i class="' . $this->icon . ' icon"></i>' : '')
-            . '<div class="menu">' . $output . '</div>'
-            . '</div>';
+        $res = $this->getApp()->getTag('div', ['class' => $this->ui . ' atk-action-menu'], [
+            ['div', ['class' => 'text'], $this->label],
+            $this->icon ? $this->getApp()->getTag('i', ['class' => $this->icon . ' icon'], '') : '',
+            ['div', ['class' => 'menu'], [$output]],
+        ]);
 
-        return $s;
+        return $res;
     }
 
     public function getHtmlTags(Model $row, ?Field $field): array

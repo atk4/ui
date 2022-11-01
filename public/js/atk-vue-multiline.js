@@ -207,9 +207,9 @@ __webpack_require__.r(__webpack_exports__);
       let align = 'left';
       if (!column.isEditable) {
         switch (column.type) {
-          case 'money':
           case 'integer':
-          case 'number':
+          case 'float':
+          case 'atk4_money':
             align = 'right';
             break;
         }
@@ -921,3 +921,4 @@ const template = `<sui-dropdown
 /***/ })
 
 }]);
+//# sourceMappingURL=atk-vue-multiline.js.map

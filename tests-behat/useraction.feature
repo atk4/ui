@@ -1,5 +1,4 @@
-Feature: UserAction
-  Testing UI executor UserAction and UserConfirmation modal.
+Feature: UserAction executor and UserConfirmation modal
 
   Scenario:
     Given I am on "data-action/jsactions2.php"

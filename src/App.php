@@ -398,7 +398,9 @@ class App
             if (count($ids) > 0) {
                 $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . implode(', ', $ids) . '\').remove();';
             }
-            $output = $this->getTag('script', [], 'jQuery(function() {' . $remove_function . $output['atkjs'] . '});') . $output['html'];
+
+            $output = $this->getTag('script', [], '$(function () {' . $remove_function . $output['atkjs'] . '});')
+                . $output['html'];
 
             $this->outputResponseHtml($output, $headers);
         } elseif ($type === 'text/html') {
@@ -477,24 +479,27 @@ class App
      */
     public function initIncludes(): void
     {
+        /** @var bool */
+        $minified = true;
+
         // jQuery
-        $this->requireJs($this->cdn['jquery'] . '/jquery.min.js');
+        $this->requireJs($this->cdn['jquery'] . '/jquery' . ($minified ? '.min' : '') . '.js');
 
         // Fomantic-UI
-        $this->requireJs($this->cdn['fomantic-ui'] . '/semantic.min.js');
-        $this->requireCss($this->cdn['fomantic-ui'] . '/semantic.min.css');
+        $this->requireJs($this->cdn['fomantic-ui'] . '/semantic' . ($minified ? '.min' : '') . '.js');
+        $this->requireCss($this->cdn['fomantic-ui'] . '/semantic' . ($minified ? '.min' : '') . '.css');
 
         // flatpickr - TODO should be load only when needed
         // needs https://github.com/atk4/ui/issues/1875
-        $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
-        $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');
+        $this->requireJs($this->cdn['flatpickr'] . '/flatpickr' . ($minified ? '.min' : '') . '.js');
+        $this->requireCss($this->cdn['flatpickr'] . '/flatpickr' . ($minified ? '.min' : '') . '.css');
         if ($this->uiPersistence->locale !== 'en') {
             $this->requireJs($this->cdn['flatpickr'] . '/l10n/' . $this->uiPersistence->locale . '.js');
             $this->html->js(true, new JsExpression('flatpickr.localize(window.flatpickr.l10ns.' . $this->uiPersistence->locale . ')'));
         }
 
         // Agile UI
-        $this->requireJs($this->cdn['atk'] . '/js/atkjs-ui.min.js');
+        $this->requireJs($this->cdn['atk'] . '/js/atkjs-ui' . ($minified ? '.min' : '') . '.js');
         $this->requireCss($this->cdn['atk'] . '/css/agileui.min.css');
 
         // Set js bundle dynamic loading path.
@@ -546,7 +551,7 @@ class App
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], $this->html->getJs()));
+            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], '$(function () {' . $this->html->getJs() . ';});'));
             $this->isRendering = false;
 
             if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catchRunawayCallbacks) {
@@ -808,7 +813,7 @@ class App
         return new JsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
     }
 
-    protected function isVoidTag(string $tag): bool
+    public function isVoidTag(string $tag): bool
     {
         return [
             'area' => true, 'base' => true, 'br' => true, 'col' => true, 'embed' => true,
@@ -925,7 +930,7 @@ class App
                 if (is_array($v)) {
                     $result[] = $this->getTag(...$v);
                 } elseif (['script' => true, 'style' => true][$tag] ?? false) {
-                    if ($tag === 'script') {
+                    if ($tag === 'script' && $v !== '') {
                         $result[] = '\'use strict\'; ';
                     }
                     // see https://mathiasbynens.be/notes/etago

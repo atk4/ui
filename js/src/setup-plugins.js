@@ -18,9 +18,9 @@ import AtkSidenavPlugin from './plugins/sidenav.plugin';
  *
  * @param {string}   name      Plugin name
  * @param {Function} cl        Plugin class
- * @param {boolean}  shortHand Map $.name(...) to $({}).name(...)
+ * @param {boolean}  shorthand Map $.name(...) to $({}).name(...)
  */
-atk.registerPlugin = function (name, cl, shortHand = false) {
+atk.registerPlugin = function (name, cl, shorthand = false) {
     const dataName = '__' + name;
 
     // add plugin to atk namespace.
@@ -41,7 +41,7 @@ atk.registerPlugin = function (name, cl, shortHand = false) {
         });
     };
 
-    if (shortHand) {
+    if (shorthand) {
         $[name] = (options) => $({})[name](options);
     }
 };

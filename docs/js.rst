@@ -245,7 +245,7 @@ The following code will show three buttons and clicking any one will hide it. On
     $buttons->on('click', '.button')->hide();
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function(event) {
+    // $('#top-element-id').on('click', '.button', function (event) {
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $(this).hide();
@@ -265,10 +265,10 @@ You can use both actions together. The next example will allow only one button t
     $buttons->on('click', '.button', $b3->js()->hide());
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function(event) {
-    //   event.stopPropagation();
-    //   event.preventDefault();
-    //   $('#b3-element-id').hide();
+    // $('#top-element-id').on('click', '.button', function (event) {
+    //     event.stopPropagation();
+    //     event.preventDefault();
+    //     $('#b3-element-id').hide();
     // });
 
 
@@ -359,7 +359,7 @@ Create a file `test.js` containing:
 .. code-block:: js
 
     function mySum(arr) {
-        return arr.reduce(function(a, b) {
+        return arr.reduce(function (a, b) {
             return a + b;
         }, 0);
     }

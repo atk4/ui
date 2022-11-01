@@ -4,12 +4,17 @@ import atk from 'atk';
  * This is default setup for Fomantic-UI popup.
  */
 class PopupService {
-    setupFomanticUi(settings) {
-        settings.onCreate = this.onCreate;
-        settings.onShow = this.onShow;
-        settings.onHide = this.onHide;
-        settings.onVisible = this.onVisible;
-        settings.onRemove = this.onRemove;
+    getDefaultFomanticSettings() {
+        return [
+            {
+            },
+            {
+                onCreate: this.onCreate,
+                onShow: this.onShow,
+                onHide: this.onHide,
+                onRemove: this.onRemove,
+            },
+        ];
     }
 
     /**
@@ -23,7 +28,7 @@ class PopupService {
             // Only load if we are not using data.cache or content has not been loaded yet.
             if (!data.cache || !data.hascontent) {
                 // display default loader while waiting for content.
-                $popup.html(atk.popupService.getLoader());
+                $popup.html(atk.popupService.getLoaderHtml());
                 $popup.api({
                     on: 'now',
                     url: data.url,
@@ -47,8 +52,6 @@ class PopupService {
 
     onHide() {}
 
-    onVisible() {}
-
     /**
      * Only call when popup are created from metadata
      * and trigger action is fired.
@@ -64,9 +67,10 @@ class PopupService {
         // console.log('onRemove');
     }
 
-    getLoader() {
-        return `<div class="ui active inverted dimmer">
-              <div class="ui mini text loader"></div>`;
+    getLoaderHtml() {
+        return '<div class="ui active inverted dimmer">'
+            + '<div class="ui mini text loader"></div>'
+            + '</div>';
     }
 }
 

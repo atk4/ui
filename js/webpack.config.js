@@ -38,7 +38,7 @@ module.exports = (env) => {
     return {
         entry: { [filename]: srcDir + '/main.js' },
         mode: isProduction ? 'production' : 'development',
-        devtool: isProduction ? 'source-map' : false,
+        devtool: 'source-map',
         performance: isProduction ? prodPerformance : {},
         output: {
             path: publicDir,
@@ -84,8 +84,13 @@ module.exports = (env) => {
             rules: [
                 {
                     test: /(\.js|\.jsx)$/,
+                    enforce: 'pre',
+                    loader: 'source-map-loader',
+                },
+                {
+                    test: /(\.js|\.jsx)$/,
                     loader: 'babel-loader',
-                    exclude: /(node_modules|bower_components)/,
+                    exclude: /node_modules/,
                 },
                 // load .vue file
                 {

@@ -28,13 +28,8 @@ class JsFunction implements JsExpressionable
     /** @var string Indent of target code (not one indent level) */
     public $indent = '    ';
 
-    public function __construct(array $args = [], array $statements = null)
+    public function __construct(array $args, array $statements)
     {
-        if ($statements === null) {
-            $statements = $args;
-            $args = [];
-        }
-
         $this->fxArgs = $args;
 
         foreach ($statements as $key => $value) {
@@ -58,7 +53,7 @@ class JsFunction implements JsExpressionable
             $pre .= "\n" . $this->indent . '    event.stopPropagation();';
         }
 
-        $output = 'function(' . implode(', ', $this->fxArgs) . ') {'
+        $output = 'function (' . implode(', ', $this->fxArgs) . ') {'
             . $pre;
         foreach ($this->fxStatements as $statement) {
             if (!$statement) {

@@ -20,8 +20,8 @@ namespace Atk4\Ui;
  *
  * Modal can use Fomantic-UI predefine method onApprove or onDeny by passing
  * a jsAction to Modal::addDenyAction or Modal::addApproveAction method. It will not close until the jsAction return true.
- *  $modal->addDenyAction('No', new JsExpression('function() { window.alert(\'Cannot do that.\'); return false; }'));
- *  $modal->addApproveAction('Yes', new JsExpression('function() { window.alert(\'You are good to go!\'); }'));
+ *  $modal->addDenyAction('No', new JsExpression('function () { window.alert(\'Cannot do that.\'); return false; }'));
+ *  $modal->addApproveAction('Yes', new JsExpression('function () { window.alert(\'You are good to go!\'); }'));
  *
  * You may also prevent modal from closing via the esc or dimmed area click using $modal->notClosable().
  */
@@ -247,6 +247,10 @@ class Modal extends View
         if ($this->title) {
             $this->template->trySet('title', $this->title);
             $this->template->trySet('headerCss', $this->headerCss);
+        } else {
+            // fix top modal corner rounding, first div must not be empty (must not be lower than 5px)
+            // https://github.com/fomantic/Fomantic-UI/blob/2.9.0/src/definitions/modules/modal.less#L43
+            $this->template->loadFromString(preg_replace('~<div class="\{\$headerCss\}">\{\$title\}</div>\s*~', '', $this->template->toLoadableString(), 1));
         }
 
         if ($this->contentCss) {
@@ -265,6 +269,10 @@ class Modal extends View
 
         if (!isset($this->options['closable']) || $this->options['closable']) {
             $this->template->trySet('closeIcon', 'close');
+        } else {
+            // fix no extra space for icon
+            // TODO should be replaced with i tag render
+            $this->template->loadFromString(preg_replace('~<i class="\{\$closeIcon\} icon"></i>~', '', $this->template->toLoadableString(), 1));
         }
 
         if ($this->args) {
