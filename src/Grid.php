@@ -7,8 +7,9 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Field;
-use Atk4\Ui\Modal;
 use Atk4\Data\Model;
+use Atk4\Ui\JsQuery;
+use Atk4\Ui\Modal;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
@@ -547,26 +548,26 @@ class Grid extends View
      * @param \Closure               $callback function (View $page) {...
      * @param array                  $args     extra url argument for callback
      *
-     * @return View
+     * @return Jquery
      */
     public function addModalBulkAction($item, \Closure $callback, $args = [])
     {
         if (!$this->menu) {
             throw new Exception('Unable to add Modal Bulk Action without Menu');
         }
-        
+
         $owner = $this->getOwner();
-        
+
         if (is_string($item)) {
             $item = ['title' => $item];
         }
-        
+
         $modal = Modal::addTo($owner, [$item[0]]);
-        
+
         $modal->set(function (View $t) use ($callback) {
             $callback($t, $t->stickyGet($this->name) ? explode(',', $t->stickyGet($this->name)) : false);
         });
-        
+
         return $this->menu->addItem($item)->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)), []);
     }
 
