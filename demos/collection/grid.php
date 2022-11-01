@@ -13,7 +13,6 @@ use Atk4\Ui\JsExpression;
 use Atk4\Ui\JsReload;
 use Atk4\Ui\JsToast;
 use Atk4\Ui\Message;
-use Atk4\Ui\Modal;
 use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\BasicExecutor;
 use Atk4\Ui\View;
@@ -98,13 +97,9 @@ $callback = function ($m, $ids) use ($grid) {
         });
     }
 };
-$modal = Modal::addTo($grid, ['Delete selected']);
-$modal->set(function (View $t) use ($callback, $grid) {
-    $callback($t, $t->stickyGet($grid->name) ? explode(',', $t->stickyGet($grid->name)) : false);
-});
 
-$grid->menu->addItem(['Delete selected', 'icon' => 'trash', 'class.orange active' => true])
-    ->on('click', $modal->jsShow(array_merge([$grid->name => $grid->selection->jsChecked()])), []);
+$grid->addModalBulkAction(['Delete selected', 'icon' => 'trash', 'class.orange active' => true], $callback);
+
 $grid->menu->addItem('show selection')->on('click', new JsExpression(
     'alert(\'Selected: \' + [])',
     [$sel->jsChecked()]

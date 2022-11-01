@@ -7,10 +7,12 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Field;
+use Atk4\Ui\Modal;
 use Atk4\Data\Model;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
+use Atk4\Ui\View;
 
 class Grid extends View
 {
@@ -535,6 +537,38 @@ class Grid extends View
     public function addModalAction($button, $title, \Closure $callback, $args = [])
     {
         return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args);
+    }
+    
+    /**
+     * Similar to addModalAction but apply to a multiple recors selection and display in menu.
+     * When menu item is clicked, modal is displayed with the $title and $callback is executed through VirtualPage.
+     *
+     * @param string|array|View $item
+     * @param string            $title
+     * @param \Closure          $callback function (View $page) {...
+     * @param array             $args     extra url argument for callback
+     *
+     * @return View
+     */
+    public function addModalBulkAction($item, \Closure $callback, $args = [])
+    {
+        if (!$this->menu) {
+            throw new Exception('Unable to add Modal Bulk Action without Menu');
+        }
+        
+        $owner = $this->getOwner();
+        
+        if (is_string($item)) {
+            $item = ['title' => $item];
+        }
+        
+        $modal = Modal::addTo($owner, [$item[0]]);
+        
+        $modal->set(function (View $t) use ($callback) {
+            $callback($t, $t->stickyGet($this->name) ? explode(',', $t->stickyGet($this->name)) : false);
+        });
+        
+        return $this->menu->addItem($item)->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)), []);
     }
 
     /**
