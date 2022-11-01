@@ -8,12 +8,9 @@ use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use Atk4\Ui\JsQuery;
-use Atk4\Ui\Modal;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
-use Atk4\Ui\View;
 
 class Grid extends View
 {
