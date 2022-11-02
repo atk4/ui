@@ -24,4 +24,4 @@ $grid->table->onRowClick($makeClickJsToastFx('row'));
 
 // TODO JsPaginator should be possible to be added no later than setModel call
 // https://github.com/atk4/ui/issues/1934
-$grid->addJsPaginator(20);
+$grid->addJsPaginator(30);
