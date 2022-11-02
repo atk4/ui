@@ -504,9 +504,9 @@ class Form extends View
         parent::renderView();
     }
 
-    protected function renderTemplateToHtml(string $region = null): string
+    protected function renderTemplateToHtml(): string
     {
-        $output = parent::renderTemplateToHtml($region);
+        $output = parent::renderTemplateToHtml();
 
         return $this->fixOwningFormAttrInRenderedHtml($output);
     }

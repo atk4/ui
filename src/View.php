@@ -652,9 +652,9 @@ class View extends AbstractView implements JsExpressionable
     /**
      * For Form::renderTemplateToHtml() only.
      */
-    protected function renderTemplateToHtml(string $region = null): string
+    protected function renderTemplateToHtml(): string
     {
-        return $this->template->renderToHtml($region);
+        return $this->template->renderToHtml();
     }
 
     /**
@@ -686,17 +686,15 @@ class View extends AbstractView implements JsExpressionable
 
     /**
      * Render View using JSON format.
-     *
-     * @param string $region a specific template region to render
      */
-    public function renderToJsonArr($region = null): array
+    public function renderToJsonArr(): array
     {
         $this->renderAll();
 
         return [
             'success' => true,
             'atkjs' => $this->getJs(),
-            'html' => $this->renderTemplateToHtml($region),
+            'html' => $this->renderTemplateToHtml(),
             'id' => $this->name,
         ];
     }
