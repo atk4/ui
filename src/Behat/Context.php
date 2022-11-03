@@ -368,18 +368,18 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * @Then Modal is open with text :arg1
-     * @Then Modal is open with text :arg1 in tag :arg2
+     * @Then Modal is open with text :arg1 in selector :arg2
      *
      * Check if text is present in modal or dynamic modal.
      */
-    public function modalIsOpenWithText(string $text, string $tag = 'div'): void
+    public function modalIsOpenWithText(string $text, string $selector = 'div'): void
     {
         $textEncoded = str_contains($text, '"')
             ? 'concat("' . str_replace('"', '", \'"\', "', $text) . '")'
             : '"' . $text . '"';
 
         $modal = $this->findElement(null, '.modal.visible.active.front');
-        $this->findElement($modal, 'xpath(//' . $tag . '[text()[normalize-space()=' . $textEncoded . ']])');
+        $this->findElement($modal, 'xpath(//' . $selector . '[text()[normalize-space()=' . $textEncoded . ']])');
     }
 
     /**
@@ -423,12 +423,12 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * @Then Panel is open with text :arg1
-     * @Then Panel is open with text :arg1 in tag :arg2
+     * @Then Panel is open with text :arg1 in selector :arg2
      */
-    public function panelIsOpenWithText(string $text, string $tag = 'div'): void
+    public function panelIsOpenWithText(string $text, string $selector = 'div'): void
     {
         $panel = $this->findElement(null, '.atk-right-panel.atk-visible');
-        $this->findElement($panel, 'xpath(//' . $tag . '[text()[normalize-space()="' . $text . '"]])');
+        $this->findElement($panel, 'xpath(//' . $selector . '[text()[normalize-space()="' . $text . '"]])');
     }
 
     /**
