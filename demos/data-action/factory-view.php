@@ -52,7 +52,8 @@ $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends Exe
 
 Header::addTo($app, ['Executor Factory set for this Card View only.']);
 
-DemoActionsUtil::setupDemoActions($country = new Country($app->db));
+$country = new Country($app->db);
+DemoActionsUtil::setupDemoActions($country);
 $country = $country->loadBy($country->fieldName()->iso, 'fr');
 $country->name .= ' NO RELOAD';
 

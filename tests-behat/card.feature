@@ -9,13 +9,13 @@ Feature: Card
     Then I press Modal button "Preview"
     Then Toast display should contain text "Success: Done previewing France"
 
-  Scenario: Card with entity action, entity must not reload
+  Scenario: Card with entity action, entity must not reload - ModalExecutor
     When I press button "Edit"
     Then Modal is open with text "Edit Country"
     Then I check if input value for ".modal.front input" match text "Czech Republic NO RELOAD"
     Then I hide js modal
 
-  Scenario: Card with entity action, entity must not reload II exception is displayed
+  Scenario: Card with entity action, entity must not reload - JsCallbackExecutor
     When I press button "Delete"
     Then Modal is open with text "Please go ahead. Demo mode does not really delete data."
     When I press Modal button "Ok"
