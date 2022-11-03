@@ -13,6 +13,13 @@ Feature: Card
     When I press button "Edit"
     Then Modal is open with text "Edit Country"
     Then I check if input value for ".modal.front input" match text "Czech Republic NO RELOAD"
+    Then I hide js modal
+
+  Scenario: Card with entity action, entity must not reload II exception is displayed
+    When I press button "Delete"
+    Then Modal is open with text "Please go ahead. Demo mode does not really delete data."
+    When I press Modal button "Ok"
+    Then Modal is open with text "Atk4\Data\Exception: Calling user action on a Model with dirty fields that are not allowed by this action"
 
   Scenario:
     Given I am on "interactive/card-action.php"
