@@ -15,7 +15,7 @@ Feature: Card
     Then I check if input value for ".modal.front input" match text "Czech Republic NO RELOAD"
     Then I hide js modal
 
-  Scenario: Card with entity action, entity must not reload - JsCallbackExecutor
+  Scenario: Card with entity action, entity must not reload - JsCallbackExecutor, exception is displayed
     When I press button "Delete"
     Then Modal is open with text "Please go ahead. Demo mode does not really delete data."
     When I press Modal button "Ok"
