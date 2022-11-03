@@ -169,8 +169,6 @@ class Card extends View
     }
 
     /**
-     * Set model.
-     *
      * If Fields are past with $model that field will be add
      * to the main section of this card.
      *
@@ -197,7 +195,7 @@ class Card extends View
      *
      * @param string $id
      */
-    public function setDataId($id): void
+    protected function setDataId($id): void
     {
         $this->template->trySet('dataId', $id);
     }
