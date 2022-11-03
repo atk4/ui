@@ -203,24 +203,6 @@ class Card extends View
     }
 
     /**
-     * Add action from Model.
-     */
-    public function addModelActions(Model $model): void
-    {
-        $this->setModel($model);
-
-        $actions = $model->getUserActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD);
-        foreach ($actions as $action) {
-            $this->addAction($action, $this->executor);
-        }
-
-        $actions = $model->getUserActions(Model\UserAction::APPLIES_TO_NO_RECORDS);
-        foreach ($actions as $action) {
-            $this->addAction($action, $this->executor);
-        }
-    }
-
-    /**
      * Add a CardSection to this card.
      *
      * @return View
@@ -238,32 +220,6 @@ class Card extends View
         }
 
         return $section;
-    }
-
-    /**
-     * Add action executor to card.
-     *
-     * @param class-string<View&UserAction\ExecutorInterface> $executorClass
-     * @param Button|array                                    $button
-     */
-    public function addAction(Model\UserAction $action, $executorClass, $button = null): void
-    {
-        if (!$button) {
-            $button = new Button([$action->caption]);
-        }
-        $btn = $this->addButton($button);
-
-        $vp = VirtualPage::addTo($this)->set(function (View $page) use ($executorClass, $action) {
-            $id = $this->stickyGet($this->name);
-
-            $executor = $page->add(new $executorClass());
-
-            $action = $action->getActionForEntity($action->getModel()->load($id));
-
-            $executor->setAction($action);
-        });
-
-        $btn->on('click', new JsModal($action->caption, $vp, [$this->name => (new Jquery())->parents('.atk-card')->data('id')]));
     }
 
     /**
