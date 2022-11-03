@@ -33,12 +33,12 @@ class JsCallback extends Callback implements JsExpressionable
      * have some degree of nesting, convert it into a one-dimensional array,
      * so that it's easier for us to wrap it into a function body.
      */
-    public function flatternArray(array $response): array
+    public function flattenArray(array $response): array
     {
         $res = [];
         foreach ($response as $element) {
             if (is_array($element)) {
-                $res = array_merge($res, $this->flatternArray($element));
+                $res = array_merge($res, $this->flattenArray($element));
             } else {
                 $res[] = $element;
             }
@@ -134,7 +134,7 @@ class JsCallback extends Callback implements JsExpressionable
         }
 
         if (is_array($response)) {
-            $response = $this->flatternArray($response);
+            $response = $this->flattenArray($response);
             foreach ($response as $r) {
                 if ($r === null) {
                     continue;
