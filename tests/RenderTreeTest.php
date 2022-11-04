@@ -15,24 +15,22 @@ class RenderTreeTest extends TestCase
 {
     public function testBasic(): void
     {
-        $b = new View();
-        $b->render();
+        $view = new View();
+        $view->render();
 
-        static::assertNotNull($b->getApp());
-        static::assertNotNull($b->template);
+        $view->getApp();
+        static::assertNotNull($view->template);
     }
 
-    public function testBasicNest1(): void
+    public function testBasicNested(): void
     {
-        $b = new View();
+        $view = new View();
+        $view2 = View::addTo($view);
+        $view->render();
 
-        $b2 = View::addTo($b);
+        $view2->getApp();
+        static::assertNotNull($view2->template);
 
-        $b->render();
-
-        static::assertNotNull($b2->getApp());
-        static::assertNotNull($b2->template);
-
-        static::assertSame($b2->getApp(), $b->getApp());
+        static::assertSame($view2->getApp(), $view->getApp());
     }
 }

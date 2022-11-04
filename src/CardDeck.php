@@ -185,7 +185,7 @@ class CardDeck extends View
             $ex = $menuAction['executor'];
             if ($ex instanceof UserAction\JsExecutorInterface) {
                 $this->container->js(true, $menuAction['btn']->js()->off('click'));
-                $this->container->js(true, $menuAction['btn']->js()->on('click', new JsFunction($ex->jsExecute($this->getReloadArgs()))));
+                $this->container->js(true, $menuAction['btn']->js()->on('click', new JsFunction([], $ex->jsExecute($this->getReloadArgs()))));
             }
         }
     }

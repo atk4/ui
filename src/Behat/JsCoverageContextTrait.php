@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Behat;
 
-use Exception;
-
 trait JsCoverageContextTrait
 {
     /** @var array<string, array<string, mixed>> */
@@ -73,7 +71,7 @@ trait JsCoverageContextTrait
                     || count($this->jsCoverage[$path]['f']) !== count($data['f'])
                     || count($this->jsCoverage[$path]['b']) !== count($data['b'])
                 ) {
-                    throw new Exception('Unexpected JS coverage hash change');
+                    throw new \Exception('Unexpected JS coverage hash change');
                 }
 
                 foreach (['s', 'f', 'b'] as $k) {

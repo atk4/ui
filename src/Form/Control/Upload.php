@@ -11,6 +11,8 @@ use Atk4\Ui\JsExpressionable;
 
 class Upload extends Input
 {
+    public $defaultTemplate = 'form/control/upload.html';
+
     public string $inputType = 'hidden';
 
     /** @var Button|array|null The action button to open file browser dialog. */
@@ -25,9 +27,6 @@ class Upload extends Input
      * @var string|null
      */
     public $fileId;
-
-    /** @var string The input default template. */
-    public $defaultTemplate = 'form/control/upload.html';
 
     /** @var JsCallback Callback is use for onUpload or onDelete. */
     public $cb;
@@ -211,11 +210,11 @@ class Upload extends Input
         }
 
         if ($this->disabled || $this->readOnly) {
-            $this->template->set('disabled', 'disabled="disabled"');
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
         }
 
         if ($this->multiple) {
-            $this->template->trySet('multiple', 'multiple="multiple"');
+            $this->template->dangerouslySetHtml('multiple', 'multiple="multiple"');
         }
 
         if ($this->placeholder) {

@@ -13,7 +13,6 @@ use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\WebAssert;
 use Behat\MinkExtension\Context\RawMinkContext;
-use Exception;
 
 class Context extends RawMinkContext implements BehatContext
 {
@@ -48,7 +47,7 @@ class Context extends RawMinkContext implements BehatContext
             }
         }
 
-        throw new Exception('Unable to find scenario');
+        throw new \Exception('Unable to find scenario');
     }
 
     /**
@@ -113,7 +112,7 @@ class Context extends RawMinkContext implements BehatContext
             }
         }
 
-        throw new Exception('jQuery did not finish within a time limit');
+        throw new \Exception('jQuery did not finish within a time limit');
     }
 
     protected function disableAnimations(): void
@@ -164,7 +163,7 @@ class Context extends RawMinkContext implements BehatContext
                     )
                 )) . "\n";
 
-                throw new Exception('Page contains uncaught exception');
+                throw new \Exception('Page contains uncaught exception');
             }
         }
     }
@@ -200,11 +199,11 @@ class Context extends RawMinkContext implements BehatContext
         $duplicateIds = array_diff($duplicateIds, ['atk', '_icon', 'atk_icon']); // generated when component is not correctly added to app/layout component tree - should throw, as such name/ID is dangerous to be used
 
         if (count($invalidIds) > 0) {
-            throw new Exception('Page contains element with invalid ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $invalidIds)));
+            throw new \Exception('Page contains element with invalid ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $invalidIds)));
         }
 
         if (count($duplicateIds) > 0) {
-            throw new Exception('Page contains elements with duplicate ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $duplicateIds)));
+            throw new \Exception('Page contains elements with duplicate ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $duplicateIds)));
         }
     }
 
@@ -242,7 +241,7 @@ class Context extends RawMinkContext implements BehatContext
         $elements = ($context ?? $this->getSession()->getPage())->findAll($selectorParsed[0], $selectorParsed[1]);
 
         if (count($elements) === 0) {
-            throw new Exception('No element found in ' . ($context === null ? 'page' : 'element')
+            throw new \Exception('No element found in ' . ($context === null ? 'page' : 'element')
                 . ' using selector: ' . $selector);
         }
 
@@ -320,7 +319,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $element = $this->findElement(null, 'xpath(//div[text()="' . $text . '"])');
         if (!str_contains($element->getAttribute('style'), 'display: none')) {
-            throw new Exception('Element with text "' . $text . '" must be invisible');
+            throw new \Exception('Element with text "' . $text . '" must be invisible');
         }
     }
 
@@ -369,18 +368,18 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * @Then Modal is open with text :arg1
-     * @Then Modal is open with text :arg1 in tag :arg2
+     * @Then Modal is open with text :arg1 in selector :arg2
      *
      * Check if text is present in modal or dynamic modal.
      */
-    public function modalIsOpenWithText(string $text, string $tag = 'div'): void
+    public function modalIsOpenWithText(string $text, string $selector = 'div'): void
     {
         $textEncoded = str_contains($text, '"')
             ? 'concat("' . str_replace('"', '", \'"\', "', $text) . '")'
             : '"' . $text . '"';
 
         $modal = $this->findElement(null, '.modal.visible.active.front');
-        $this->findElement($modal, 'xpath(//' . $tag . '[text()[normalize-space()=' . $textEncoded . ']])');
+        $this->findElement($modal, 'xpath(//' . $selector . '[text()[normalize-space()=' . $textEncoded . ']])');
     }
 
     /**
@@ -424,12 +423,12 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * @Then Panel is open with text :arg1
-     * @Then Panel is open with text :arg1 in tag :arg2
+     * @Then Panel is open with text :arg1 in selector :arg2
      */
-    public function panelIsOpenWithText(string $text, string $tag = 'div'): void
+    public function panelIsOpenWithText(string $text, string $selector = 'div'): void
     {
         $panel = $this->findElement(null, '.atk-right-panel.atk-visible');
-        $this->findElement($panel, 'xpath(//' . $tag . '[text()[normalize-space()="' . $text . '"]])');
+        $this->findElement($panel, 'xpath(//' . $selector . '[text()[normalize-space()="' . $text . '"]])');
     }
 
     /**
@@ -474,7 +473,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $tab = $this->findElement(null, '.ui.tabular.menu > .item.active');
         if ($tab->getText() !== $title) {
-            throw new Exception('Active tab is not ' . $title);
+            throw new \Exception('Active tab is not ' . $title);
         }
     }
 
@@ -493,7 +492,7 @@ class Context extends RawMinkContext implements BehatContext
         $field = $this->assertSession()->fieldExists($inputName);
 
         if (!str_starts_with($field->getValue(), $text)) {
-            throw new Exception('Field value ' . $field->getValue() . ' does not start with ' . $text);
+            throw new \Exception('Field value ' . $field->getValue() . ' does not start with ' . $text);
         }
     }
 
@@ -632,7 +631,7 @@ class Context extends RawMinkContext implements BehatContext
         $idx = ($value === 'Yes') ? 0 : 1;
         $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="' . $name . '"]\').find(\'input\')[' . $idx . '].checked');
         if (!$isChecked) {
-            throw new Exception('Radio value selected is not: ' . $value);
+            throw new \Exception('Radio value selected is not: ' . $value);
         }
     }
 
@@ -646,7 +645,7 @@ class Context extends RawMinkContext implements BehatContext
 
         $inputValue = $this->findElement(null, $selector)->getValue();
         if ($inputValue !== $text) {
-            throw new Exception('Input value does not match: ' . $inputValue . ' expected: ' . $text);
+            throw new \Exception('Input value does not match: ' . $inputValue . ' expected: ' . $text);
         }
     }
 
@@ -661,7 +660,7 @@ class Context extends RawMinkContext implements BehatContext
         $expectedText = $this->findElement(null, $selector)->getText();
         $input = $this->findElement(null, 'input[name="' . $inputName . '"]');
         if ($expectedText !== $input->getValue()) {
-            throw new Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expectedText);
+            throw new \Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expectedText);
         }
     }
 
@@ -702,7 +701,7 @@ class Context extends RawMinkContext implements BehatContext
             ++$count;
         }
         if ($count !== $numberOfitems) {
-            throw new Exception('Items does not match. There were ' . $count . ' item in container');
+            throw new \Exception('Items does not match. There were ' . $count . ' item in container');
         }
     }
 
@@ -730,7 +729,7 @@ class Context extends RawMinkContext implements BehatContext
         $toastContainer = $this->findElement(null, '.ui.toast-container');
         $toastText = $this->findElement($toastContainer, '.content')->getText();
         if (!str_contains($toastText, $text)) {
-            throw new Exception('Toast text "' . $toastText . '" does not contain "' . $text . '"');
+            throw new \Exception('Toast text "' . $toastText . '" does not contain "' . $text . '"');
         }
     }
 
@@ -741,7 +740,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $toasts = $this->getSession()->getPage()->findAll('css', '.ui.toast-container .toast-box');
         if (count($toasts) > 0) {
-            throw new Exception('Toast is displayed: "' . $this->findElement(reset($toasts), '.content')->getText() . '"');
+            throw new \Exception('Toast is displayed: "' . $this->findElement(reset($toasts), '.content')->getText() . '"');
         }
     }
 
@@ -767,7 +766,7 @@ class Context extends RawMinkContext implements BehatContext
         $compareToSelector = $this->unquoteStepArgument($compareToSelector);
 
         if ($this->findElement(null, $compareSelector)->getText() !== $this->findElement(null, $compareToSelector)->getText()) {
-            throw new Exception('Text does not match between: ' . $compareSelector . ' and ' . $compareToSelector);
+            throw new \Exception('Text does not match between: ' . $compareSelector . ' and ' . $compareToSelector);
         }
     }
 
@@ -780,7 +779,7 @@ class Context extends RawMinkContext implements BehatContext
         $text = $this->unquoteStepArgument($text);
 
         if ($this->findElement(null, $selector)->getText() !== $text) {
-            throw new Exception('Container with selector: ' . $selector . ' does not match text: ' . $text);
+            throw new \Exception('Container with selector: ' . $selector . ' does not match text: ' . $text);
         }
     }
 
@@ -793,7 +792,7 @@ class Context extends RawMinkContext implements BehatContext
         $regex = $this->unquoteStepArgument($regex);
 
         if (!preg_match($regex, $this->findElement(null, $selector)->getText())) {
-            throw new Exception('Container with selector: ' . $selector . ' does not match regex: ' . $regex);
+            throw new \Exception('Container with selector: ' . $selector . ' does not match regex: ' . $regex);
         }
     }
 
@@ -806,7 +805,7 @@ class Context extends RawMinkContext implements BehatContext
     private function assertDropdownValue(NodeElement $element, string $value, string $selector): void
     {
         if ($this->findElement($element, $selector)->getHtml() !== $value) {
-            throw new Exception('Value: "' . $value . '" not set using selector: ' . $selector);
+            throw new \Exception('Value: "' . $value . '" not set using selector: ' . $selector);
         }
     }
 
@@ -817,7 +816,7 @@ class Context extends RawMinkContext implements BehatContext
     private function assertSelectedValue(NodeElement $element, string $value, string $selector): void
     {
         if ($this->findElement($element, $selector)->getValue() !== $value) {
-            throw new Exception('Value: "' . $value . '" not set using selector: ' . $selector);
+            throw new \Exception('Value: "' . $value . '" not set using selector: ' . $selector);
         }
     }
 
@@ -828,7 +827,7 @@ class Context extends RawMinkContext implements BehatContext
     private function assertInputValue(NodeElement $element, string $value, string $selector = 'input'): void
     {
         if ($this->findElement($element, $selector)->getValue() !== $value) {
-            throw new Exception('Input value not is not: ' . $value);
+            throw new \Exception('Input value not is not: ' . $value);
         }
     }
 

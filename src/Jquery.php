@@ -45,6 +45,7 @@ namespace Atk4\Ui;
  * @method Jquery reload(...$args)
  * @method Jquery removeAttr(...$args)
  * @method Jquery removeClass(...$args)
+ * @method Jquery removeData(...$args)
  * @method Jquery select(...$args)
  * @method Jquery serialize(...$args)
  * @method Jquery show(...$args)

@@ -12,8 +12,6 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-// simulating ModalExecutor reload for Behat test
-
 Header::addTo($app, ['Testing ModalExecutor reload']);
 
 $modal = Modal::addTo($app, ['title' => 'Modal Executor']);

@@ -187,7 +187,7 @@ class CallbackTest extends TestCase
         $this->expectOutputRegex($this->htmlDoctypeRegex);
         $this->app->run();
 
-        static::assertNull($var);
+        static::assertNull($var); // @phpstan-ignore-line
     }
 
     public function testVirtualPage(): void
@@ -201,7 +201,7 @@ class CallbackTest extends TestCase
             $var = 25;
         });
 
-        $this->expectOutputRegex('/^..DOCTYPE/');
+        $this->expectOutputRegex('~^..DOCTYPE~');
         $this->app->run();
         static::assertSame(25, $var);
     }
@@ -217,7 +217,7 @@ class CallbackTest extends TestCase
             $var = 25;
         });
 
-        $this->expectOutputRegex('/^..DOCTYPE/');
+        $this->expectOutputRegex('~^..DOCTYPE~');
         $this->app->run();
         static::assertSame(25, $var);
     }
@@ -235,7 +235,7 @@ class CallbackTest extends TestCase
             $this->varPull230 = 26;
         });
 
-        $this->expectOutputRegex('/^..DOCTYPE/');
+        $this->expectOutputRegex('~^..DOCTYPE~');
         $this->app->run();
         static::assertSame(26, $this->varPull230);
     }
