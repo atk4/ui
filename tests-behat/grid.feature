@@ -36,22 +36,3 @@ Feature: Grid
     When I click using selector "xpath(//div[@id='grid']//tr[2]//a)"
     Then No toast should be displayed
     Then PATCH MINK the url should match "~_unit-test/grid-rowclick.php#test~"
-
-  Scenario: dynamic scroll
-    Given I am on "interactive/scroll-lister.php"
-    Then I should see "Argentina"
-    Then I should not see "Denmark"
-    When I scroll to bottom
-    Then I should see "Denmark"
-    When I scroll to bottom
-    When I scroll to bottom
-    When I scroll to bottom
-    When I scroll to bottom
-    When I scroll to bottom
-    When I scroll to bottom
-    Then I should not see "South Sudan"
-    When I scroll to bottom
-    Then I should see "South Sudan"
-    When I scroll to bottom
-    Then I should see "South Sudan"
-    Then I should see "Denmark"

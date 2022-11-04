@@ -31,15 +31,27 @@ class ModalService {
     }
 
     onShow() {
-        atk.modalService.addModal($(this));
+        const s = atk.modalService;
+
+        s.modals.forEach((modal) => {
+            if (modal === this) {
+                throw Error('Unexpected modal to show - modal is already active');
+            }
+        });
+        s.modals.push(this);
+
+        s.addModal($(this));
     }
 
     onHide() {
-        if ($(this).data('__preventHide')) {
-            return false;
-        }
+        const s = atk.modalService;
 
-        atk.modalService.removeModal($(this));
+        if (s.modals.length === 0 || s.modals[s.modals.length - 1] !== this) {
+            throw Error('Unexpected modal to hide - modal is not front');
+        }
+        s.modals.pop();
+
+        s.removeModal($(this));
 
         return true;
     }
@@ -53,12 +65,9 @@ class ModalService {
     }
 
     addModal($modal) {
-        this.modals.push($modal);
-
         // hide other modals
-        const $prevModal = this.modals.length > 1 ? this.modals[this.modals.length - 2] : null;
-        if ($prevModal) {
-            $prevModal.data('__preventHide', true);
+        if (this.modals.length > 1) {
+            const $prevModal = $(this.modals[this.modals.length - 2]);
             if ($prevModal.hasClass('visible')) {
                 $prevModal.css('visibility', 'hidden');
                 $prevModal.addClass('__hiddenNotFront');
@@ -83,7 +92,7 @@ class ModalService {
 
             const $content = $modal.find('.atk-dialog-content');
 
-            $content.html(atk.modalService.getLoaderHtml(data.loadingLabel ? data.loadingLabel : ''));
+            $content.html(this.getLoaderHtml(data.loadingLabel ? data.loadingLabel : ''));
 
             $content.api({
                 on: 'now',
@@ -119,20 +128,14 @@ class ModalService {
     }
 
     removeModal($modal) {
-        if (this.modals.length === 0 || this.modals[this.modals.length - 1][0] !== $modal[0]) {
-            throw Error('Unexpected modal to remove');
-        }
-        this.modals.pop();
-
         // https://github.com/fomantic/Fomantic-UI/issues/2528
         if ($modal.modal('get settings').transition) {
             $modal.transition('stop all');
         }
 
         // hide other modals
-        const $prevModal = this.modals.length > 0 ? this.modals[this.modals.length - 1] : null;
-        if ($prevModal) {
-            $prevModal.removeData('__preventHide');
+        if (this.modals.length > 0) {
+            const $prevModal = $(this.modals[this.modals.length - 1]);
             if ($prevModal.hasClass('__hiddenNotFront')) {
                 $prevModal.css('visibility', '');
                 $prevModal.addClass('visible');

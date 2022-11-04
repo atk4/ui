@@ -187,4 +187,28 @@ class Lister extends View
             $this->template->dangerouslyAppendHtml('_top', $html);
         }
     }
+
+    /**
+     * Hack - override parent method with region render only support.
+     *
+     * TODO this hack/method must be removed as rendering HTML only partially but with all JS
+     * is wrong by design. Each table row should be probably rendered natively using cloned
+     * render tree (instead of cloned template).
+     */
+    public function renderToJsonArr(string $region = null): array
+    {
+        $this->renderAll();
+
+        // https://github.com/atk4/ui/issues/1932
+        if ($region !== null) {
+            $this->_jsActions[true] = array_merge([$this->js()->off()], $this->_jsActions[true]);
+        }
+
+        return [
+            'success' => true,
+            'atkjs' => $this->getJs(),
+            'html' => $this->template->renderToHtml($region),
+            'id' => $this->name,
+        ];
+    }
 }
