@@ -40,7 +40,7 @@ Feature: Grid
   Scenario: master checkbox
     Given I am on "_unit-test/grid-rowclick.php"
     When I press menu button "Show Selection" using selector ".ui.menu.atk-grid-menu"
-    Then Toast display should contain text "Selected: "
+    Then Toast display should contain text "Selected:"
     When I click using selector "xpath(//div[@id='grid']//tr[2]//div.ui.child.checkbox)"
     Then I press menu button "Show Selection" using selector ".ui.menu.atk-grid-menu"
     Then Toast display should contain text "Selected: 1"
@@ -49,4 +49,4 @@ Feature: Grid
     Then Toast display should contain text "Selected: 1,2,3,4,5"
     When I click using selector "xpath(//div[@id='grid']//tr[1]//div.ui.master.checkbox)"
     Then I press menu button "Show Selection" using selector ".ui.menu.atk-grid-menu"
-    Then Toast display should contain text "Selected: "
+    Then Toast display should contain text "Selected:"
