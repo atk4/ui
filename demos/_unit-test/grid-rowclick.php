@@ -16,7 +16,7 @@ use Atk4\Ui\View;
 require_once __DIR__ . '/../init-app.php';
 
 $model = new Country($app->db);
-$grid = Grid::addTo($app, ['name' => 'grid']);
+$grid = Grid::addTo($app, ['name' => 'grid', 'menu' => ['class' => ['atk-grid-menu']]]);
 $grid->setModel($model);
 
 $grid->addDecorator($model->fieldName()->name, [Table\Column\Link::class, 'url' => 'xxx']);
