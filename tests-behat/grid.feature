@@ -37,6 +37,15 @@ Feature: Grid
     Then No toast should be displayed
     Then PATCH MINK the url should match "~_unit-test/grid-rowclick.php#test~"
 
+  Scenario: master checkbox
+    Given I am on "collection/grid.php"
+    When I click using selector "xpath(//div[@id='grid']//tr[2]//div.ui.child.checkbox)"
+    Then No toast should be displayed
+    When I click using selector "xpath(//div[@id='grid']//tr[1]//div.ui.master.checkbox)"
+    Then No toast should be displayed
+    When I click using selector "xpath(//div[@id='grid']//tr[1]//div.ui.master.checkbox)"
+    Then No toast should be displayed
+
   Scenario: dynamic scroll
     Given I am on "interactive/scroll-lister.php"
     Then I should see "Argentina"
