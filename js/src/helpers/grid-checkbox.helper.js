@@ -28,7 +28,7 @@ function InitGridChildCheckbox() {
         onChange: function () {
             const $listGroup = $(this).closest('.table');
             const $parentCheckbox = $listGroup.find('.master.checkbox');
-            let $checkbox = $listGroup.find('.child.checkbox');
+            const $checkbox = $listGroup.find('.child.checkbox');
             let allChecked = true;
             let allUnchecked = true;
 
@@ -48,6 +48,6 @@ function InitGridChildCheckbox() {
             } else {
                 $parentCheckbox.checkbox('set indeterminate');
             }
-        },
+        }
     });
 }
