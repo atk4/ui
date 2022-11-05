@@ -37,7 +37,12 @@ $grid->table->onRowClick(function () {
     return new JsToast(['message' => 'Clicked on row']);
 });
 
-$grid->addSelection();
+$sel = $grid->addSelection();
+
+$grid->menu->addItem('Show Selection')->on('click', function($f, $ids) {
+    return new JsToast('Selected: ' . $ids);
+    }, [$sel->jsChecked()]
+);
 
 // emulate navigate for <a> for Behat
 // TODO emulate for all tests automatically in our Atk4\Ui\Behat\Context

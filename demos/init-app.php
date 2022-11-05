@@ -31,6 +31,12 @@ $app = new App([
 ]);
 $app->title = 'Agile UI Demo v' . $app->version;
 
+foreach ($app->cdn as $k => $v) {
+    if (str_starts_with($v, '/') && !str_starts_with($v, '//')) {
+        $app->cdn[$k] = str_replace('/volume1/web', '', $v);
+    }
+}
+
 if ($app->callExit !== true) {
     $app->stickyGet('APP_CALL_EXIT');
 }
