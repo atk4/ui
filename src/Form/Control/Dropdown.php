@@ -10,6 +10,10 @@ use Atk4\Ui\JsFunction;
 
 class Dropdown extends Input
 {
+    public $defaultTemplate = 'form/control/dropdown.html';
+
+    public string $inputType = 'hidden';
+
     /**
      * Values need for the dropdown.
      * Note: Now possible to display icon with value in dropdown by passing the icon class with your values.
@@ -26,9 +30,6 @@ class Dropdown extends Input
 
     /** @var string The string to set as an empty values. */
     public $empty = "\u{00a0}"; // Unicode NBSP
-
-    /** @var string The html template associate whit this dropdown. */
-    public $defaultTemplate = 'form/control/dropdown.html';
 
     /** @var string The css class associate with this dropdown. */
     public $defaultClass = 'fluid search selection dropdown';
@@ -112,24 +113,11 @@ class Dropdown extends Input
         parent::init();
 
         $this->ui = ' ';
-        $this->inputType = 'hidden';
 
         $this->_tItem = $this->template->cloneRegion('Item');
         $this->template->del('Item');
         $this->_tIcon = $this->_tItem->cloneRegion('Icon');
         $this->_tItem->del('Icon');
-    }
-
-    public function getInput()
-    {
-        return $this->getApp()->getTag('input/', array_merge([
-            'name' => $this->shortName,
-            'type' => $this->inputType,
-            'id' => $this->name . '_input',
-            'value' => $this->getValue(),
-            'readonly' => $this->readOnly,
-            'disabled' => $this->disabled,
-        ], $this->inputAttr));
     }
 
     /**
@@ -254,7 +242,7 @@ class Dropdown extends Input
 
         if ($this->readOnly) {
             $this->setDropdownOption('allowTab', false);
-            $this->setDropdownOption('onShow', new JsFunction([new JsExpression('return false')]));
+            $this->setDropdownOption('onShow', new JsFunction([], [new JsExpression('return false')]));
         }
 
         if ($this->dropIcon) {

@@ -170,7 +170,7 @@ class Form extends View
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
             $this->buttonSave->on('click', $this->js(false, null, $this->formElement)->form('submit'));
-            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13){ $([name]).form(\'submit\'); }', ['name' => '#' . $this->formElement->name]));
+            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { $([name]).form(\'submit\'); }', ['name' => '#' . $this->formElement->name]));
         }
     }
 
@@ -504,9 +504,9 @@ class Form extends View
         parent::renderView();
     }
 
-    protected function renderTemplateToHtml(string $region = null): string
+    protected function renderTemplateToHtml(): string
     {
-        $output = parent::renderTemplateToHtml($region);
+        $output = parent::renderTemplateToHtml();
 
         return $this->fixOwningFormAttrInRenderedHtml($output);
     }

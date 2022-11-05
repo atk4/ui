@@ -38,7 +38,7 @@ Feature: Grid
     Then PATCH MINK the url should match "~_unit-test/grid-rowclick.php#test~"
 
   Scenario: master checkbox
-    Given I am on "collection/grid.php"
+    Given I am on "_unit-test/grid-rowclick.php"
     When I click using selector "xpath(//div[@id='grid']//tr[2]//div.ui.child.checkbox)"
     Then No toast should be displayed
     When I click using selector "xpath(//div[@id='grid']//tr[1]//div.ui.master.checkbox)"

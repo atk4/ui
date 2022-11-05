@@ -13,9 +13,10 @@ class JsIntegrationTest extends TestCase
     public function testIdIntegrity1(): void
     {
         $v = new Button(['icon' => 'pencil']);
-        $html = $v->render();
-        static::assertNotNull($v->icon->name);
+        $v->render();
 
+        static::assertNotEmpty($v->icon);
+        static::assertNotEmpty($v->icon->name);
         static::assertNotSame($v->name, $v->icon->name);
     }
 
@@ -24,7 +25,7 @@ class JsIntegrationTest extends TestCase
         $v = new View(['ui' => 'buttons']);
         $b1 = Button::addTo($v);
         $b2 = Button::addTo($v);
-        $html = $v->render();
+        $v->render();
 
         static::assertNotSame($b1->name, $b2->name);
     }

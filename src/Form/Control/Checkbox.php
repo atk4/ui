@@ -62,7 +62,7 @@ class Checkbox extends Form\Control
         }
 
         if ($this->entityField ? $this->entityField->get() : $this->content) {
-            $this->template->set('checked', 'checked="checked"');
+            $this->template->dangerouslySetHtml('checked', 'checked="checked"');
         }
 
         // We don't want this displayed, because it can only affect "checked" status anyway
@@ -74,7 +74,7 @@ class Checkbox extends Form\Control
 
         if ($this->disabled) {
             $this->addClass('disabled');
-            $this->template->set('disabled', 'disabled="disabled"');
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
         }
 
         $this->js(true)->checkbox();

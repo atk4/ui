@@ -205,6 +205,13 @@ class ApiService {
      * Display App error in a Fomantic-UI modal.
      */
     showErrorModal(errorMsg) {
+        if (atk.modalService.modals.length > 0) {
+            const $modal = $(atk.modalService.modals[atk.modalService.modals.length - 1]);
+            if ($modal.data('closeOnLoadingError')) {
+                $modal.removeData('closeOnLoadingError').modal('hide');
+            }
+        }
+
         // catch application error and display them in a new modal window.
         const m = $('<div>')
             .appendTo('body')

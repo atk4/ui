@@ -68,8 +68,8 @@ class View extends AbstractView implements JsExpressionable
     /** @var string|false|null Set static contents of this view. */
     public $content;
 
-    /** @var string Change this if you want to substitute default "div" for something else. */
-    public $element;
+    /** Change this if you want to substitute default "div" for something else. */
+    public string $element = 'div';
 
     /** @var ExecutorFactory|null */
     protected $executorFactory;
@@ -160,8 +160,6 @@ class View extends AbstractView implements JsExpressionable
     }
 
     /**
-     * Sets View element.
-     *
      * @param string $element
      *
      * @return $this
@@ -593,8 +591,14 @@ class View extends AbstractView implements JsExpressionable
             $this->template->trySet('_id', $this->name);
         }
 
-        if ($this->element) {
+        if ($this->element !== 'div') {
             $this->template->set('_element', $this->element);
+        } else {
+            $this->template->trySet('_element', $this->element);
+        }
+
+        if (!$this->getApp()->isVoidTag($this->element)) {
+            $this->template->tryDangerouslySetHtml('_element_end_html', '</' . $this->element . '>');
         }
 
         if ($this->attr) {
@@ -607,8 +611,7 @@ class View extends AbstractView implements JsExpressionable
     }
 
     /**
-     * Recursively render all children, placing their
-     * output in our template.
+     * Recursively render all children, placing their output in our template.
      */
     protected function recursiveRender(): void
     {
@@ -630,8 +633,7 @@ class View extends AbstractView implements JsExpressionable
     }
 
     /**
-     * Render everything recursively, render ourselves but don't return
-     * anything just yet.
+     * Render everything recursively, render ourselves but don't return anything just yet.
      */
     public function renderAll(): void
     {
@@ -650,9 +652,9 @@ class View extends AbstractView implements JsExpressionable
     /**
      * For Form::renderTemplateToHtml() only.
      */
-    protected function renderTemplateToHtml(string $region = null): string
+    protected function renderTemplateToHtml(): string
     {
-        return $this->template->renderToHtml($region);
+        return $this->template->renderToHtml();
     }
 
     /**
@@ -684,17 +686,15 @@ class View extends AbstractView implements JsExpressionable
 
     /**
      * Render View using JSON format.
-     *
-     * @param string $region a specific template region to render
      */
-    public function renderToJsonArr($region = null): array
+    public function renderToJsonArr(): array
     {
         $this->renderAll();
 
         return [
             'success' => true,
             'atkjs' => $this->getJs(),
-            'html' => $this->renderTemplateToHtml($region),
+            'html' => $this->renderTemplateToHtml(),
             'id' => $this->name,
         ];
     }
@@ -780,7 +780,7 @@ class View extends AbstractView implements JsExpressionable
         } elseif ($when !== false) {
             // binding on a specific event
             $action = (new Jquery($this))
-                ->bind($when, new JsFunction([$chain, $action]));
+                ->bind($when, new JsFunction([], [$chain, $action]));
 
             $this->_jsActions[$when][] = $action;
         }
@@ -790,7 +790,7 @@ class View extends AbstractView implements JsExpressionable
 
     /**
      * Create Vue.js instance.
-     * Vue.js instance can be create from Atk4\Ui\View.
+     * Vue.js instance can be created from Atk4\Ui\View.
      *
      * Component managed and defined by atk does not need componentDefinition variable name
      * because these are already loaded within the atk js namespace.
@@ -851,7 +851,7 @@ class View extends AbstractView implements JsExpressionable
 
     /**
      * Get Local and Session web storage associated with this view.
-     * Web storage can be retrieve using a $view->jsReload() request.
+     * Web storage can be retrieved using a $view->jsReload() request.
      *
      * @return mixed
      */
@@ -937,7 +937,7 @@ class View extends AbstractView implements JsExpressionable
      *
      * Finally, it's also possible to use PHP closure as an action:
      *
-     * $view->on('click', 'a', function (Jquery $js, $data){
+     * $view->on('click', 'a', function (Jquery $js, $data) {
      *   if (!$data['clickable']) {
      *      return new JsExpression('alert([])', ['This record is not clickable'])
      *   }
@@ -1050,7 +1050,7 @@ class View extends AbstractView implements JsExpressionable
         if ($defaults['confirm'] ?? null) {
             array_unshift($eventStatements, new JsExpression('$.atkConfirm({ message: [confirm], onApprove: [action], options: { button: { ok: [ok], cancel: [cancel] } }, context: this })', [
                 'confirm' => $defaults['confirm'],
-                'action' => new JsFunction($actions),
+                'action' => new JsFunction([], $actions),
                 'ok' => $defaults['ok'] ?? 'Ok',
                 'cancel' => $defaults['cancel'] ?? 'Cancel',
             ]));
@@ -1058,7 +1058,7 @@ class View extends AbstractView implements JsExpressionable
             $eventStatements = array_merge($eventStatements, $actions);
         }
 
-        $event_function = new JsFunction($eventStatements);
+        $event_function = new JsFunction([], $eventStatements);
 
         if ($selector) {
             $this->js(true)->on($event, $selector, $event_function);
@@ -1121,7 +1121,7 @@ class View extends AbstractView implements JsExpressionable
             return $this->getApp()->getViewJS($actions);
         }
 
-        return (new JsExpression('[]()', [new JsFunction($actions)]))->jsRender();
+        return (new JsExpression('[]()', [new JsFunction([], $actions)]))->jsRender();
     }
 
     // }}}

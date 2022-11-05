@@ -18,7 +18,11 @@ trait CommonExecutorTrait
         );
 
         if ($id && $action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $action = $action->getActionForEntity($model->load($id));
+            if ($action->isOwnerEntity() && $action->getEntity()->getId()) {
+                $action->getEntity()->setId($id); // assert ID is the same
+            } else {
+                $action = $action->getActionForEntity($model->load($id));
+            }
         } elseif (!$action->isOwnerEntity() && in_array($action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)) {
             $action = $action->getActionForEntity($model->createEntity());
         }

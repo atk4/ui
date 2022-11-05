@@ -376,7 +376,7 @@ class DemosTest extends TestCase
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
-            static::assertTrue(true);
+            static::assertTrue(true); // @phpstan-ignore-line
 
             return;
         }
@@ -421,7 +421,7 @@ class DemosTest extends TestCase
         if (static::class === self::class) {
             if ($expectedExceptionMessage !== null) {
                 if (str_contains($path, '=m2_cb&')) {
-                    static::assertTrue(true);
+                    static::assertTrue(true); // @phpstan-ignore-line
 
                     return;
                 }
@@ -462,7 +462,7 @@ class DemosTest extends TestCase
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
-            static::assertTrue(true);
+            static::assertTrue(true); // @phpstan-ignore-line
 
             return;
         }

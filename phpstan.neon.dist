@@ -118,9 +118,6 @@ parameters:
             path: 'demos/interactive/wizard.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$placeholder\.$~'
         -
-            path: 'src/Card.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\View::setAction\(\)\.$~'
-        -
             path: 'src/CardDeck.php'
             message: '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$reload\.$~'
         -

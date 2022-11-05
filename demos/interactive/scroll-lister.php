@@ -33,7 +33,5 @@ $lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
 
 $model = new Country($app->db);
 $lister->setModel($model);
-// $model->addCondition(Country::hinting()->fieldName()->name, 'like', 'A%');
 
-// add dynamic scrolling.
 $lister->addJsPaginator(30, [], $container);

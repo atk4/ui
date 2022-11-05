@@ -449,6 +449,7 @@ class Multiline extends Form\Control
     {
         return [
             'name' => $field->shortName,
+            'type' => $field->type,
             'definition' => $this->getComponentDefinition($field),
             'cellProps' => $this->getSuiTableCellProps($field),
             'caption' => $field->getCaption(),

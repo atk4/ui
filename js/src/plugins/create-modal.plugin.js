@@ -19,7 +19,6 @@ export default class AtkCreateModalPlugin extends AtkPlugin {
             type: options.dataType,
             args: options.urlOptions,
             needRemove: true,
-            needCloseTrigger: true,
             loadingLabel: options.loadingLabel,
         });
 
@@ -29,9 +28,9 @@ export default class AtkCreateModalPlugin extends AtkPlugin {
     }
 
     getDialogHtml(title) {
-        return `<i class="icon close"></i>
-          <div class="${this.settings.headerCss}">${title}</div>
-          <div class="${this.settings.contentCss} content atk-dialog-content">
+        return `<i class="close icon"></i>
+          ` + (title ? `<div class="${this.settings.headerCss}">${title}</div>
+          ` : '') + `<div class="${this.settings.contentCss} content atk-dialog-content">
             </div>
           </div>`;
     }
