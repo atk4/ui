@@ -39,9 +39,12 @@ $grid->table->onRowClick(function () {
 
 $sel = $grid->addSelection();
 
-$grid->menu->addItem('Show Selection')->on('click', function($f, $ids) {
+$grid->menu->addItem('Show Selection')->on(
+    'click',
+    function($f, $ids) {
     return new JsToast('Selected: ' . $ids);
-    }, [$sel->jsChecked()]
+},
+    [$sel->jsChecked()]
 );
 
 // emulate navigate for <a> for Behat
