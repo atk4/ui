@@ -50,4 +50,3 @@ Feature: Grid
     When I click using selector "xpath(//div[@id='grid']//tr//div.ui.master.checkbox)"
     Then I press menu button "Show Selection" using selector ".ui.menu.atk-grid-menu"
     Then Toast display should contain text "Selected: #"
-    
