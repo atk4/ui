@@ -81,7 +81,7 @@ class JsCallback extends Callback implements JsExpressionable
         }
 
         parent::set(function () use ($fx) {
-            $chain = new Jquery(new JsExpression('this'));
+            $chain = new Jquery();
 
             $values = [];
             foreach ($this->args as $key => $value) {

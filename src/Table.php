@@ -530,7 +530,7 @@ class Table extends Lister
      */
     public function jsRow()
     {
-        return (new Jquery(new JsExpression('this')))->closest('tr');
+        return (new Jquery())->closest('tr');
     }
 
     /**
