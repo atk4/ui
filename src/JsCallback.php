@@ -51,7 +51,7 @@ class JsCallback extends Callback implements JsExpressionable
     {
         $this->getApp(); // assert has App
 
-        return (new Jquery())->atkAjaxec([
+        return (new Jquery($this->getOwner()))->atkAjaxec([
             'url' => $this->getJsUrl(),
             'urlOptions' => $this->args,
             'confirm' => $this->confirm,
