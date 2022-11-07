@@ -33,7 +33,7 @@ class JsCallback extends Callback implements JsExpressionable
      * have some degree of nesting, convert it into a one-dimensional array,
      * so that it's easier for us to wrap it into a function body.
      */
-    public function flattenArray(array $response): array
+    protected function flattenArray(array $response): array
     {
         $res = [];
         foreach ($response as $element) {
