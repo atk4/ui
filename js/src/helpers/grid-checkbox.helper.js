@@ -1,10 +1,12 @@
+import $ from 'external/jquery';
+
 /**
  * Simple helper to help displaying Fomantic-UI checkbox within an atk grid.
  * The master checkbox in the header of the column enable to toggle all
  * content checkboxes to check or uncheck. A partially checked master checkbox
  * is displayed if appopriate.
  */
-function InitGridMasterCheckbox() {
+function masterCheckbox() {
     $('.table .master.checkbox').checkbox({
         // check all children
         onChecked: function () {
@@ -19,7 +21,7 @@ function InitGridMasterCheckbox() {
     });
 }
 
-function InitGridChildCheckbox() {
+function childCheckbox() {
     $('.table .child.checkbox').checkbox({
         // Fire on load to set parent value
         fireOnInit: true,
@@ -51,3 +53,5 @@ function InitGridChildCheckbox() {
         }
     });
 }
+
+export default {masterCheckbox, childCheckbox};
