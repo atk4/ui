@@ -621,7 +621,7 @@ This class implements ability for your PHP code to send messages to the browser 
 
     $button = \Atk4\Ui\Button::addTo($app, ['Process Image']);
 
-    $sse = \Atk4\Ui\JsSse::addTo($app);
+    $sse = \Atk4\Ui\JsSse::addTo($button);
 
     $button->on('click', $sse->set(function () use ($sse, $button, $image) {
         $sse->send($button->js()->text('Processing'));

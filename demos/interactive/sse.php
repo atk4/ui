@@ -23,7 +23,7 @@ $buttonStop = Button::addTo($app, ['Turn Off']);
 // non-SSE way
 // $button->on('click', $bar->js()->progress(['percent' => 40]));
 
-$sse = JsSse::addTo($app, ['showLoader' => true]);
+$sse = JsSse::addTo($button, ['showLoader' => true]);
 
 $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
     $sse->send($button->js()->addClass('disabled'));

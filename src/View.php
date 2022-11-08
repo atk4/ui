@@ -1006,11 +1006,8 @@ class View extends AbstractView implements JsExpressionable
                 $cb->apiConfig = $defaults['apiConfig'];
             }
 
-            $cb->set(function () use ($action) {
-                $args = func_get_args();
-                $args[0] = new Jquery(new JsExpression('this'));
-
-                return $action(...$args);
+            $cb->set(function ($chain, ...$args) use ($action) {
+                return $action($chain, ...$args);
             }, $arguments);
 
             $actions[] = $cb;
