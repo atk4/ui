@@ -11,6 +11,88 @@
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/helpers/grid-checkbox.helper.js":
+/*!*********************************************!*\
+  !*** ./src/helpers/grid-checkbox.helper.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
+/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+
+/**
+ * Simple helper to help displaying Fomantic-UI checkbox within an atk grid.
+ * The master checkbox in the header of the column enable to toggle all
+ * content checkboxes to check or uncheck. A partially checked master checkbox
+ * is displayed if appopriate.
+ */
+function masterCheckbox() {
+  external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('.table .master.checkbox').checkbox({
+    // check all children
+    onChecked: function () {
+      const $childCheckbox = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table').find('.child.checkbox');
+      $childCheckbox.checkbox('check');
+    },
+    // uncheck all children
+    onUnchecked: function () {
+      const $childCheckbox = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table').find('.child.checkbox');
+      $childCheckbox.checkbox('uncheck');
+    }
+  });
+}
+function childCheckbox() {
+  external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('.table .child.checkbox').checkbox({
+    // Fire on load to set parent value
+    fireOnInit: true,
+    // Change parent state on each child checkbox change
+    onChange: function () {
+      const $listGroup = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table');
+      const $parentCheckbox = $listGroup.find('.master.checkbox');
+      const $checkbox = $listGroup.find('.child.checkbox');
+      let allChecked = true;
+      let allUnchecked = true;
+
+      // check to see if all other siblings are checked or unchecked
+      $checkbox.each(function () {
+        if (external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).checkbox('is checked')) {
+          allUnchecked = false;
+        } else {
+          allChecked = false;
+        }
+      });
+      // set parent checkbox state, but don't trigger its onChange callback
+      if (allChecked) {
+        $parentCheckbox.checkbox('set checked');
+      } else if (allUnchecked) {
+        $parentCheckbox.checkbox('set unchecked');
+      } else {
+        $parentCheckbox.checkbox('set indeterminate');
+      }
+    }
+  });
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  masterCheckbox,
+  childCheckbox
+});
+
+/***/ }),
+
 /***/ "./src/helpers/table-dropdown.helper.js":
 /*!**********************************************!*\
   !*** ./src/helpers/table-dropdown.helper.js ***!
@@ -3723,10 +3805,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var mitt__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mitt */ "./node_modules/mitt/dist/mitt.es.js");
-/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-/* harmony import */ var _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./helpers/table-dropdown.helper */ "./src/helpers/table-dropdown.helper.js");
-/* harmony import */ var _helpers_url_helper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helpers/url.helper */ "./src/helpers/url.helper.js");
+/* harmony import */ var _helpers_grid_checkbox_helper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./helpers/grid-checkbox.helper */ "./src/helpers/grid-checkbox.helper.js");
+/* harmony import */ var _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helpers/table-dropdown.helper */ "./src/helpers/table-dropdown.helper.js");
+/* harmony import */ var _helpers_url_helper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./helpers/url.helper */ "./src/helpers/url.helper.js");
+
 
 
 
@@ -3780,7 +3864,7 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].createDebouncedFx = function (func, 
     }, 25);
     (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().active)++;
   }
-  lodashDebouncedFx = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_5__["default"])(func, wait, options);
+  lodashDebouncedFx = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_6__["default"])(func, wait, options);
   function debouncedFx() {
     if (timerId === null) {
       createTimer();
@@ -3802,8 +3886,9 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].utils = {
     document.location = atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper.appendParams(url, params);
   }
 };
-atk__WEBPACK_IMPORTED_MODULE_2__["default"].tableDropdownHelper = _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_3__["default"];
-atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper = _helpers_url_helper__WEBPACK_IMPORTED_MODULE_4__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].gridCheckboxHelper = _helpers_grid_checkbox_helper__WEBPACK_IMPORTED_MODULE_3__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].tableDropdownHelper = _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_4__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper = _helpers_url_helper__WEBPACK_IMPORTED_MODULE_5__["default"];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
 
 /***/ }),
