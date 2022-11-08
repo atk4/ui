@@ -34,61 +34,58 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-/**
- * Simple helper to help displaying Fomantic-UI checkbox within an atk grid.
- * The master checkbox in the header of the column enable to toggle all
- * content checkboxes to check or uncheck. A partially checked master checkbox
- * is displayed if appopriate.
- */
-function masterCheckbox() {
-  external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('.table .master.checkbox').checkbox({
-    // check all children
-    onChecked: function () {
-      const $childCheckbox = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table').find('.child.checkbox');
-      $childCheckbox.checkbox('check');
-    },
-    // uncheck all children
-    onUnchecked: function () {
-      const $childCheckbox = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table').find('.child.checkbox');
-      $childCheckbox.checkbox('uncheck');
-    }
-  });
-}
-function childCheckbox() {
-  external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('.table .child.checkbox').checkbox({
-    // Fire on load to set parent value
-    fireOnInit: true,
-    // Change parent state on each child checkbox change
-    onChange: function () {
-      const $listGroup = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table');
-      const $parentCheckbox = $listGroup.find('.master.checkbox');
-      const $checkbox = $listGroup.find('.child.checkbox');
-      let allChecked = true;
-      let allUnchecked = true;
-
-      // check to see if all other siblings are checked or unchecked
-      $checkbox.each(function () {
-        if (external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).checkbox('is checked')) {
-          allUnchecked = false;
-        } else {
-          allChecked = false;
-        }
-      });
-      // set parent checkbox state, but don't trigger its onChange callback
-      if (allChecked) {
-        $parentCheckbox.checkbox('set checked');
-      } else if (allUnchecked) {
-        $parentCheckbox.checkbox('set unchecked');
-      } else {
-        $parentCheckbox.checkbox('set indeterminate');
-      }
-    }
-  });
-}
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  masterCheckbox,
-  childCheckbox
+  /**
+   * Simple helper to help displaying Fomantic-UI checkbox within an atk grid.
+   * The master checkbox in the header of the column enable to toggle all
+   * content checkboxes to check or uncheck. A partially checked master checkbox
+   * is displayed if appopriate.
+   */
+  masterCheckbox: function () {
+    external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('.table .master.checkbox').checkbox({
+      // check all children
+      onChecked: function () {
+        const $childCheckbox = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table').find('.child.checkbox');
+        $childCheckbox.checkbox('check');
+      },
+      // uncheck all children
+      onUnchecked: function () {
+        const $childCheckbox = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table').find('.child.checkbox');
+        $childCheckbox.checkbox('uncheck');
+      }
+    });
+  },
+  childCheckbox: function () {
+    external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('.table .child.checkbox').checkbox({
+      // Fire on load to set parent value
+      fireOnInit: true,
+      // Change parent state on each child checkbox change
+      onChange: function () {
+        const $listGroup = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table');
+        const $parentCheckbox = $listGroup.find('.master.checkbox');
+        const $checkbox = $listGroup.find('.child.checkbox');
+        let allChecked = true;
+        let allUnchecked = true;
+
+        // check to see if all other siblings are checked or unchecked
+        $checkbox.each(function () {
+          if (external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).checkbox('is checked')) {
+            allUnchecked = false;
+          } else {
+            allChecked = false;
+          }
+        });
+        // set parent checkbox state, but don't trigger its onChange callback
+        if (allChecked) {
+          $parentCheckbox.checkbox('set checked');
+        } else if (allUnchecked) {
+          $parentCheckbox.checkbox('set unchecked');
+        } else {
+          $parentCheckbox.checkbox('set indeterminate');
+        }
+      }
+    });
+  }
 });
 
 /***/ }),
