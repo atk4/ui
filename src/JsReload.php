@@ -13,8 +13,8 @@ class JsReload implements JsExpressionable
 {
     use WarnDynamicPropertyTrait;
 
-    /** @var View Specifies which view to reload. Use constructor to set. */
-    public $view;
+    /** Specifies which view to reload. Use constructor to set. */
+    public View $view;
 
     /** @var JsExpression|null A Js function to execute after reload is complete and onSuccess is execute. */
     public $afterSuccess;

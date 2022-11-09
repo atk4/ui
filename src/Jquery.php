@@ -83,11 +83,7 @@ class Jquery extends JsChain
     public $_library = '$';
 
     /**
-     * Params for this constructior will be passed on to jQuery() in JavaScript.
-     * Start with: JsExpressionable|View|string $selector such as '.myclass' or $view.
-     * Second argument would be $context. See jQuery manual for more info.
-     *
-     * @param mixed ...$constructorArgs - passes $selector and $context to jQuery(..)
+     * @param mixed ...$constructorArgs arguments for JavaScript jQuery constructor
      */
     public function __construct(...$constructorArgs)
     {

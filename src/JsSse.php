@@ -53,7 +53,7 @@ class JsSse extends JsCallback
             $options['closeBeforeUnload'] = $this->closeBeforeUnload;
         }
 
-        return (new Jquery())->atkServerEvent($options)->jsRender();
+        return (new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)->jsRender();
     }
 
     /**

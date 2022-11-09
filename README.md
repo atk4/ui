@@ -11,7 +11,7 @@ Agile UI is quickest way for building back-end UI, admin interfaces, data manage
  - Agile UI is compact - single file, several lines of code - that's all it takes.
  - Agile UI is extensible - integrates VueJS for custom components and interactive behaviours.
 
-![Build](https://github.com/atk4/ui/workflows/Unit%20Testing/badge.svg)
+![Build](https://github.com/atk4/ui/workflows/Unit/badge.svg)
 [![CodeCov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
 [![GitHub release](https://img.shields.io/github/release/atk4/ui.svg)](CHANGELOG.md)
 [![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
