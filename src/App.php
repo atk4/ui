@@ -634,6 +634,9 @@ class App
 
     protected function createRequestPathFromLocalPath(string $localPath): string
     {
+        // $localPath does not need realpath() as the path is expected to be built using __DIR__
+        // which has symlinks resolved
+
         static $requestUrlPath = null;
         static $requestLocalPath = null;
         if ($requestUrlPath === null) {
@@ -645,7 +648,7 @@ class App
             } else {
                 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
                 $requestUrlPath = $request->getBasePath();
-                $requestLocalPath = $request->server->get('SCRIPT_FILENAME');
+                $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME'));
             }
         }
         $fs = new \Symfony\Component\Filesystem\Filesystem();
