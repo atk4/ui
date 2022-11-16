@@ -480,7 +480,7 @@ class App
     public function initIncludes(): void
     {
         /** @var bool */
-        $minified = true;
+        $minified = false;
 
         // jQuery
         $this->requireJs($this->cdn['jquery'] . '/jquery' . ($minified ? '.min' : '') . '.js');
