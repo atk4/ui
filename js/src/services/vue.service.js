@@ -35,7 +35,6 @@ const atkComponents = {
     'atk-item-search': componentFactory('atk-item-search', () => import(/* webpackChunkName: 'atk-vue-item-search' */'../vue-components/item-search.component')),
     'atk-multiline': componentFactory('atk-multiline', () => import(/* webpackChunkName: 'atk-vue-multiline' */'../vue-components/multiline/multiline.component')),
     'atk-tree-item-selector': componentFactory('atk-tree-item-selector', () => import(/* webpackChunkName: 'atk-vue-tree-item-selector' */'../vue-components/tree-item-selector/tree-item-selector.component')),
-    'atk-query-builder': componentFactory('atk-query-builder', () => import(/* webpackChunkName: 'atk-vue-query-builder' */'../vue-components/query-builder/query-builder.component.vue')),
 };
 
 /**

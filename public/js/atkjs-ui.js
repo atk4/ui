@@ -3320,8 +3320,7 @@ const atkComponents = {
   'atk-inline-edit': componentFactory('atk-inline-edit', () => __webpack_require__.e(/*! import() | atk-vue-inline-edit */ "atk-vue-inline-edit").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/inline-edit.component */ "./src/vue-components/inline-edit.component.js"))),
   'atk-item-search': componentFactory('atk-item-search', () => __webpack_require__.e(/*! import() | atk-vue-item-search */ "atk-vue-item-search").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/item-search.component */ "./src/vue-components/item-search.component.js"))),
   'atk-multiline': componentFactory('atk-multiline', () => __webpack_require__.e(/*! import() | atk-vue-multiline */ "atk-vue-multiline").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/multiline/multiline.component */ "./src/vue-components/multiline/multiline.component.js"))),
-  'atk-tree-item-selector': componentFactory('atk-tree-item-selector', () => Promise.all(/*! import() | atk-vue-tree-item-selector */[__webpack_require__.e("vendor"), __webpack_require__.e("atk-vue-tree-item-selector")]).then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/tree-item-selector/tree-item-selector.component */ "./src/vue-components/tree-item-selector/tree-item-selector.component.js"))),
-  'atk-query-builder': componentFactory('atk-query-builder', () => Promise.all(/*! import() | atk-vue-query-builder */[__webpack_require__.e("vendor"), __webpack_require__.e("vendor-vue-query-builder"), __webpack_require__.e("atk-vue-query-builder")]).then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/query-builder/query-builder.component.vue */ "./src/vue-components/query-builder/query-builder.component.vue")))
+  'atk-tree-item-selector': componentFactory('atk-tree-item-selector', () => Promise.all(/*! import() | atk-vue-tree-item-selector */[__webpack_require__.e("vendor"), __webpack_require__.e("atk-vue-tree-item-selector")]).then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/tree-item-selector/tree-item-selector.component */ "./src/vue-components/tree-item-selector/tree-item-selector.component.js")))
 };
 
 /**
@@ -36348,7 +36347,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_external_jquery__;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			id: moduleId,
+/******/ 			// no module.id needed
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
@@ -36622,11 +36621,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_external_jquery__;
 /******/ 		var chunkLoadingGlobal = self["webpackChunkatk"] = self["webpackChunkatk"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/nonce */
-/******/ 	(() => {
-/******/ 		__webpack_require__.nc = undefined;
 /******/ 	})();
 /******/ 	
 /************************************************************************/

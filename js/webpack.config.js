@@ -55,12 +55,8 @@ module.exports = (env) => {
                         test: /[\\/]node_modules[\\/](flatpickr|vue-flatpickr-component)[\\/]/,
                         name: 'vendor-vue-flatpickr',
                     },
-                    vendorVueQueryBuilder: {
-                        test: /[\\/]node_modules[\\/]vue-query-builder[\\/]/,
-                        name: 'vendor-vue-query-builder',
-                    },
                     vendorVue: {
-                        test: /[\\/]node_modules[\\/](?!(vue-flatpickr-component|vue-query-builder)[\\/])([^\\/]+[-.])?vue([-.][^\\/]+)?[\\/]/,
+                        test: /[\\/]node_modules[\\/](?!vue-flatpickr-component[\\/])([^\\/]+[-.])?vue([-.][^\\/]+)?[\\/]/,
                         name: 'vendor-vue',
                     },
                     vendor: {
