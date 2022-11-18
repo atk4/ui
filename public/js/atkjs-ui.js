@@ -3385,7 +3385,7 @@ class VueService {
           isReady: true
         },
         components: {
-          [componentName]: window[component]
+          [componentName]: component
         },
         mixins: [this.vueMixins]
       }),
@@ -3411,11 +3411,7 @@ class VueService {
    * Register components within Vue.
    */
   useComponent(component) {
-    if (window[component]) {
-      vue__WEBPACK_IMPORTED_MODULE_7__["default"].use(window[component]);
-    } else {
-      console.error('Vue "' + component + '" component not found');
-    }
+    vue__WEBPACK_IMPORTED_MODULE_7__["default"].use(component);
   }
 
   /**

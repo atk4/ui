@@ -91,7 +91,7 @@ class VueService {
             instance: new Vue({
                 el: id,
                 data: { initData: data, isReady: true },
-                components: { [componentName]: window[component] },
+                components: { [componentName]: component },
                 mixins: [this.vueMixins],
             }),
             isLoaded: true,
@@ -116,11 +116,7 @@ class VueService {
      * Register components within Vue.
      */
     useComponent(component) {
-        if (window[component]) {
-            Vue.use(window[component]);
-        } else {
-            console.error('Vue "' + component + '" component not found');
-        }
+        Vue.use(component);
     }
 
     /**

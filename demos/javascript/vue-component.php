@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\JsExpression;
 use Atk4\Ui\Lister;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
@@ -78,11 +79,11 @@ Header::addTo($app, ['External Component', 'subHeader' => 'Creating component us
 $app->requireJs($app->cdn['atk'] . '/external/vue-clock2/dist/vue-clock.min.js');
 
 // Injecting template but normally you would create a template file.
-$clock_template = new HtmlTemplate(<<<'EOF'
+$clockTemplate = new HtmlTemplate(<<<'EOF'
     <div id="{$_id}" class="ui center aligned segment">
     <my-clock inline-template v-bind="initData">
         <div>
-            <clock :color="color" :border="border" :bg="bg"></clock>
+            <demo-clock :color="color" :border="border" :bg="bg"></demo-clock>
             <div class="ui basic segment inline"><div class="ui button primary" @click="onChangeStyle">Change Style</div></div>
         </div>
     </my-clock>
@@ -91,10 +92,9 @@ $clock_template = new HtmlTemplate(<<<'EOF'
     EOF);
 
 // Injecting script but normally you would create a separate js file and include it in your page.
-// This is the vue component definition. It is also using another external vue component 'vue-clock2'
-$clock_script = $app->getTag('script', [], <<<'EOF'
-    // Register clock component from vue-clock2 to use with myClock.
-    atk.vueService.getVue().component('clock', Clock.default);
+$clockScript = $app->getTag('script', [], <<<'EOF'
+    // register external clock component
+    atk.vueService.getVue().component('demo-clock', Clock.default);
 
     var myClock = {
       props : { clock: Array },
@@ -132,18 +132,18 @@ $clock_script = $app->getTag('script', [], <<<'EOF'
     EOF);
 
 // Creating the clock view and injecting js.
-$clock = View::addTo($app, ['template' => $clock_template]);
-$clock->template->tryDangerouslySetHtml('script', $clock_script);
+$clock = View::addTo($app, ['template' => $clockTemplate]);
+$clock->template->dangerouslySetHtml('script', $clockScript);
 
 // passing some style to my-clock component.
-$clock_style = [
+$clockStyle = [
     ['color' => '#4AB7BD', 'border' => '', 'bg' => 'none'],
     ['color' => '#FFFFFF', 'border' => 'none', 'bg' => '#E0DCFF'],
     ['color' => '', 'border' => 'none', 'bg' => 'radial-gradient(circle, #ecffe5, #fffbe1, #38ff91)'],
 ];
 
 // creating vue using an external definition.
-$clock->vue('my-clock', ['clock' => $clock_style], 'myClock');
+$clock->vue('my-clock', ['clock' => $clockStyle], new JsExpression('myClock'));
 
 $btn = Button::addTo($app, ['Change Style']);
 $btn->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));

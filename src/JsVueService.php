@@ -25,7 +25,7 @@ class JsVueService
     /**
      * Create a new Vue instance using a component managed by ATK.
      *
-     * This output js: atk.vueService.createAtkVue("id", "component", {});
+     * This output js: atk.vueService.createAtkVue('id', 'component', {});
      */
     public function createAtkVue(string $id, string $component, array $data = []): JsChain
     {
@@ -36,19 +36,17 @@ class JsVueService
      * Create a new Vue instance using an external component.
      * External component should be load via js file and define properly.
      *
-     * This output js: atk.vueService.createVue("id", "component", {});
+     * This output js: atk.vueService.createVue('id', 'component', {}, {});
      */
-    public function createVue(string $id, string $componentName, string $component, array $data = []): JsChain
+    public function createVue(string $id, string $componentName, JsExpressionable $component, array $data = []): JsChain
     {
         return $this->service->createVue($id, $componentName, $component, $data);
     }
 
     /**
      * Make Vue aware of externally loaded components.
-     * The component name must be accessible in javascript using the window namespace.
-     * ex: window['xxx'].
      */
-    public function useComponent(string $component): JsChain
+    public function useComponent(JsExpressionable $component): JsChain
     {
         return $this->service->useComponent($component);
     }
