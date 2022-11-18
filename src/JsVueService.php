@@ -14,12 +14,9 @@ class JsVueService
 {
     use WarnDynamicPropertyTrait;
 
-    /** @var JsChain The atk vue service to talk too. */
-    public $service;
-
-    public function __construct()
+    public function createServiceChain(): JsChain
     {
-        $this->service = new JsChain('atk.vueService');
+        return new JsChain('atk.vueService');
     }
 
     /**
@@ -27,9 +24,9 @@ class JsVueService
      *
      * This output js: atk.vueService.createAtkVue('id', 'component', {});
      */
-    public function createAtkVue(string $id, string $component, array $data = []): JsChain
+    public function createAtkVue(string $id, string $componentName, array $data = []): JsChain
     {
-        return $this->service->createAtkVue($id, $component, $data);
+        return $this->createServiceChain()->createAtkVue($id, $componentName, $data);
     }
 
     /**
@@ -40,14 +37,6 @@ class JsVueService
      */
     public function createVue(string $id, string $componentName, JsExpressionable $component, array $data = []): JsChain
     {
-        return $this->service->createVue($id, $componentName, $component, $data);
-    }
-
-    /**
-     * Make Vue aware of externally loaded components.
-     */
-    public function useComponent(JsExpressionable $component): JsChain
-    {
-        return $this->service->useComponent($component);
+        return $this->createServiceChain()->createVue($id, $componentName, $component, $data);
     }
 }

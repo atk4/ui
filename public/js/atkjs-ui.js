@@ -3275,9 +3275,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "./node_modules/core-js/modules/esnext.iterator.for-each.js");
 /* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-/* harmony import */ var vue_fomantic_ui__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-fomantic-ui */ "./node_modules/vue-fomantic-ui/dist/vue-fomantic-ui.es.js");
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var vue_fomantic_ui__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-fomantic-ui */ "./node_modules/vue-fomantic-ui/dist/vue-fomantic-ui.es.js");
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 
 
 
@@ -3286,8 +3288,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-Vue.use(vue_fomantic_ui__WEBPACK_IMPORTED_MODULE_6__["default"]);
-Vue.component('flatpickr-picker', () => __webpack_require__.e(/*! import() */ "vendor-vue-flatpickr").then(__webpack_require__.t.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/index.js", 23)));
+
+if (vue__WEBPACK_IMPORTED_MODULE_6__.createApp === 'x') {
+  // for debug vue3 migration only, never true
+  Vue.use(vue_fomantic_ui__WEBPACK_IMPORTED_MODULE_7__["default"]);
+  Vue.component('flatpickr-picker', () => __webpack_require__.e(/*! import() */ "vendor-vue-flatpickr").then(__webpack_require__.t.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/index.js", 23)));
+}
 
 // vue loader component to display while dynamic component is loading
 const atkVueLoader = {
@@ -3301,21 +3307,22 @@ const atkVueError = {
   template: '<div class="ui negative message"><p>Error: Unable to load Vue component</p></div>'
 };
 
-// return async component that will load on demand
-const componentFactory = (name, component) => () => ({
-  component: component().then(r => {
-    atk__WEBPACK_IMPORTED_MODULE_7__["default"].vueService.markComponentLoaded(name);
+// async component that will load on demand
+const asyncComponentFactory = (name, component) => (0,vue__WEBPACK_IMPORTED_MODULE_6__.defineAsyncComponent)({
+  loader: () => component().then(r => {
+    atk__WEBPACK_IMPORTED_MODULE_8__["default"].vueService.markComponentLoaded(name);
     return r;
   }),
-  loading: atkVueLoader,
-  error: atkVueError,
-  delay: 200
+  loadingComponent: atkVueLoader,
+  errorComponent: atkVueError,
+  delay: 200,
+  timeout: 5000
 });
 const atkComponents = {
-  'atk-inline-edit': componentFactory('atk-inline-edit', () => __webpack_require__.e(/*! import() | atk-vue-inline-edit */ "atk-vue-inline-edit").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/inline-edit.component */ "./src/vue-components/inline-edit.component.js"))),
-  'atk-item-search': componentFactory('atk-item-search', () => __webpack_require__.e(/*! import() | atk-vue-item-search */ "atk-vue-item-search").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/item-search.component */ "./src/vue-components/item-search.component.js"))),
-  'atk-multiline': componentFactory('atk-multiline', () => __webpack_require__.e(/*! import() | atk-vue-multiline */ "atk-vue-multiline").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/multiline/multiline.component */ "./src/vue-components/multiline/multiline.component.js"))),
-  'atk-tree-item-selector': componentFactory('atk-tree-item-selector', () => Promise.all(/*! import() | atk-vue-tree-item-selector */[__webpack_require__.e("vendor"), __webpack_require__.e("atk-vue-tree-item-selector")]).then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/tree-item-selector/tree-item-selector.component */ "./src/vue-components/tree-item-selector/tree-item-selector.component.js")))
+  'atk-inline-edit': asyncComponentFactory('atk-inline-edit', () => __webpack_require__.e(/*! import() | atk-vue-inline-edit */ "atk-vue-inline-edit").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/inline-edit.component */ "./src/vue-components/inline-edit.component.js"))),
+  'atk-item-search': asyncComponentFactory('atk-item-search', () => __webpack_require__.e(/*! import() | atk-vue-item-search */ "atk-vue-item-search").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/item-search.component */ "./src/vue-components/item-search.component.js"))),
+  'atk-multiline': asyncComponentFactory('atk-multiline', () => __webpack_require__.e(/*! import() | atk-vue-multiline */ "atk-vue-multiline").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/multiline/multiline.component */ "./src/vue-components/multiline/multiline.component.js"))),
+  'atk-tree-item-selector': asyncComponentFactory('atk-tree-item-selector', () => Promise.all(/*! import() | atk-vue-tree-item-selector */[__webpack_require__.e("vendor"), __webpack_require__.e("atk-vue-tree-item-selector")]).then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/tree-item-selector/tree-item-selector.component */ "./src/vue-components/tree-item-selector/tree-item-selector.component.js")))
 };
 
 /**
@@ -3341,26 +3348,30 @@ class VueService {
       }
     };
   }
+  createApp(rootComponent) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_6__.createApp)(rootComponent);
+  }
 
   /**
    * Created a Vue component and add it to the vues array.
    * For root component (App) to be aware that it's children component is
    * mounted, you need to use @hook:mounted="setReady"
    */
-  createAtkVue(id, component, data) {
+  createAtkVue(id, componentName, data) {
+    const app = atk__WEBPACK_IMPORTED_MODULE_8__["default"].vueService.createApp({
+      el: id,
+      // TODO is it needed with mount?
+      data: () => ({
+        initData: data
+      }),
+      mixins: [this.vueMixins]
+    });
+    app.component(componentName, atkComponents[componentName]);
+    app.mount(id);
     this.registerComponent({
       ids: [id],
-      name: component,
-      instance: new Vue({
-        el: id,
-        data: {
-          initData: data
-        },
-        components: {
-          [component]: atkComponents[component]
-        },
-        mixins: [this.vueMixins]
-      }),
+      name: componentName,
+      instance: app,
       isLoaded: false
     });
   }
@@ -3369,20 +3380,29 @@ class VueService {
    * Create a Vue instance from an external src component definition.
    */
   createVue(id, componentName, component, data) {
+    const app = atk__WEBPACK_IMPORTED_MODULE_8__["default"].vueService.createApp({
+      el: id,
+      // TODO is it needed with mount?
+      data: () => ({
+        initData: data,
+        isReady: true
+      }),
+      mixins: [this.vueMixins]
+    });
+    app.component('demo-clock', window.vueDemoClock);
+    const def = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, component);
+    const defData = def.data;
+    def.data = function () {
+      const res = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, defData.call(this));
+      res.initData = data;
+      return res;
+    };
+    app.component(componentName, def);
+    app.mount(id);
     this.registerComponent({
       ids: [id],
       name: componentName,
-      instance: new Vue({
-        el: id,
-        data: {
-          initData: data,
-          isReady: true
-        },
-        components: {
-          [componentName]: component
-        },
-        mixins: [this.vueMixins]
-      }),
+      instance: app,
       isLoaded: true
     });
   }
@@ -3392,29 +3412,12 @@ class VueService {
    * Group ids that are using the same component.
    */
   registerComponent(component) {
-    // check if that component is already registered
-    const registered = this.vues.filter(comp => comp.name === component.name);
-    if (registered.length > 0) {
-      registered[0].ids.push(component.ids[0]);
-    } else {
+    const registered = this.vues.filter(v => v.name === component.name);
+    if (registered.length === 0) {
       this.vues.push(component);
+    } else {
+      registered[0].ids.push(component.ids[0]);
     }
-  }
-
-  /**
-   * Register components within Vue.
-   */
-  useComponent(component) {
-    Vue.use(component);
-  }
-
-  /**
-   * Return Vue.
-   *
-   * @returns {Vue}
-   */
-  getVue() {
-    return Vue;
   }
 
   /**
@@ -11655,7 +11658,7 @@ function normalizeEmitsOptions(comp, appContext, asMixin = false) {
     let normalized = {};
     // apply mixin/extends props
     let hasExtends = false;
-    if (__VUE_OPTIONS_API__ && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.isFunction)(comp)) {
+    if ( true && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.isFunction)(comp)) {
         const extendEmits = (raw) => {
             const normalizedFromExtend = normalizeEmitsOptions(raw, appContext, true);
             if (normalizedFromExtend) {
@@ -14001,10 +14004,10 @@ const publicPropertiesMap =
     $parent: i => getPublicInstance(i.parent),
     $root: i => getPublicInstance(i.root),
     $emit: i => i.emit,
-    $options: i => (__VUE_OPTIONS_API__ ? resolveMergedOptions(i) : i.type),
+    $options: i => ( true ? resolveMergedOptions(i) : 0),
     $forceUpdate: i => i.f || (i.f = () => queueJob(i.update)),
     $nextTick: i => i.n || (i.n = nextTick.bind(i.proxy)),
-    $watch: i => (__VUE_OPTIONS_API__ ? instanceWatch.bind(i) : _vue_shared__WEBPACK_IMPORTED_MODULE_1__.NOOP)
+    $watch: i => ( true ? instanceWatch.bind(i) : 0)
 });
 const isReservedPrefix = (key) => key === '_' || key === '$';
 const hasSetupBinding = (state, key) => state !== _vue_shared__WEBPACK_IMPORTED_MODULE_1__.EMPTY_OBJ && !state.__isScriptSetup && (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.hasOwn)(state, key);
@@ -14057,7 +14060,7 @@ const PublicInstanceProxyHandlers = {
                 accessCache[key] = 4 /* AccessTypes.CONTEXT */;
                 return ctx[key];
             }
-            else if (!__VUE_OPTIONS_API__ || shouldCacheAccess) {
+            else if ( false || shouldCacheAccess) {
                 accessCache[key] = 0 /* AccessTypes.OTHER */;
             }
         }
@@ -14893,7 +14896,7 @@ function normalizePropsOptions(comp, appContext, asMixin = false) {
     const needCastKeys = [];
     // apply mixin/extends props
     let hasExtends = false;
-    if (__VUE_OPTIONS_API__ && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.isFunction)(comp)) {
+    if ( true && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.isFunction)(comp)) {
         const extendProps = (raw) => {
             hasExtends = true;
             const [props, keys] = normalizePropsOptions(raw, appContext, true);
@@ -15308,7 +15311,7 @@ function createAppAPI(render, hydrate) {
                 return app;
             },
             mixin(mixin) {
-                if (__VUE_OPTIONS_API__) {
+                if (true) {
                     if (!context.mixins.includes(mixin)) {
                         context.mixins.push(mixin);
                     }
@@ -15317,9 +15320,7 @@ function createAppAPI(render, hydrate) {
                             (mixin.name ? `: ${mixin.name}` : ''));
                     }
                 }
-                else if ((true)) {
-                    warn('Mixins are only available in builds supporting Options API');
-                }
+                else {}
                 return app;
             },
             component(name, component) {
@@ -15919,14 +15920,8 @@ function isSupported() {
  */
 function initFeatureFlags() {
     const needWarn = [];
-    if (typeof __VUE_OPTIONS_API__ !== 'boolean') {
-        ( true) && needWarn.push(`__VUE_OPTIONS_API__`);
-        (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.getGlobalThis)().__VUE_OPTIONS_API__ = true;
-    }
-    if (typeof __VUE_PROD_DEVTOOLS__ !== 'boolean') {
-        ( true) && needWarn.push(`__VUE_PROD_DEVTOOLS__`);
-        (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.getGlobalThis)().__VUE_PROD_DEVTOOLS__ = false;
-    }
+    if (false) {}
+    if (false) {}
     if (( true) && needWarn.length) {
         const multi = needWarn.length > 1;
         console.warn(`Feature flag${multi ? `s` : ``} ${needWarn.join(', ')} ${multi ? `are` : `is`} not explicitly defined. You are running the esm-bundler build of Vue, ` +
@@ -18277,7 +18272,7 @@ function finishComponentSetup(instance, isSSR, skipOptions) {
         }
     }
     // support for 2.x options
-    if (__VUE_OPTIONS_API__ && !(false )) {
+    if (true) {
         setCurrentInstance(instance);
         (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_0__.pauseTracking)();
         applyOptions(instance);

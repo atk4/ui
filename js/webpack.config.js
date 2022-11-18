@@ -18,6 +18,7 @@
  * compatibility with previous release of the library.
  */
 const path = require('path');
+const webpack = require('webpack');
 const { VueLoaderPlugin } = require('vue-loader');
 const TerserPlugin = require('terser-webpack-plugin');
 
@@ -120,6 +121,10 @@ module.exports = (env) => {
             ],
         },
         plugins: [
+            new webpack.DefinePlugin({
+                __VUE_OPTIONS_API__: true,
+                __VUE_PROD_DEVTOOLS__: false,
+            }),
             new VueLoaderPlugin(),
         ],
     };

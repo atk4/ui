@@ -88,7 +88,7 @@ $app->html->template->dangerouslyAppendHtml('Head', $app->getTag('script', [], <
         mounted: function () {
             this.interval = setInterval(this.updateClock, 100);
         },
-        beforeDestroy: function () {
+        beforeUnmount: function () {
             clearInterval(this.interval);
         },
         methods: {
@@ -105,12 +105,7 @@ $app->html->template->dangerouslyAppendHtml('Head', $app->getTag('script', [], <
 // Injecting template but normally you would create a template file.
 $clockTemplate = new HtmlTemplate(<<<'EOF'
     <div id="{$_id}" class="ui center aligned segment">
-    <my-clock inline-template v-bind="initData">
-        <div>
-            <demo-clock :color="color" :text-shadow="textShadow" :background="background"></demo-clock>
-            <div class="ui basic segment inline"><div class="ui button primary" @click="onChangeStyle">Change Style</div></div>
-        </div>
-    </my-clock>
+        <my-clock v-bind="initData"></my-clock>
     </div>
     {$script}
     EOF);
@@ -118,9 +113,14 @@ $clockTemplate = new HtmlTemplate(<<<'EOF'
 // Injecting script but normally you would create a separate js file and include it in your page.
 $clockScript = $app->getTag('script', [], <<<'EOF'
     // register external clock component
-    atk.vueService.getVue().component('demo-clock', window.vueDemoClock);
+    // TODO atk.vueService.getVue().component('demo-clock', window.vueDemoClock);
 
     let myClock = {
+        template: `
+            <div>
+                <demo-clock :color="color" :text-shadow="textShadow" :background="background"></demo-clock>
+                <div class="ui basic segment inline"><div class="ui button primary" @click="onChangeStyle">Change Style</div></div>
+            </div>`,
         props: { styles: Array },
         data: function () {
             return { style: this.styles, currentIdx: 0 };
@@ -128,7 +128,7 @@ $clockScript = $app->getTag('script', [], <<<'EOF'
         mounted: function () {
             // add a listener for changing clock style.
             // this will listen to event '-clock-change-style' emit on the eventBus.
-            atk.eventBus.on(this.$root.$el.id + '-clock-change-style', (payload) => {
+            atk.eventBus.on(this.$root.$el.parentElement.id + '-clock-change-style', (payload) => {
                 this.onChangeStyle();
             });
         },

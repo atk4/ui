@@ -160,9 +160,6 @@ parameters:
             path: 'src/JsVueService.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsChain::createVue\(\)\.$~'
         -
-            path: 'src/JsVueService.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::useComponent\(\)\.$~'
-        -
             path: 'src/Menu.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setElement\(\)\.$~'
         -

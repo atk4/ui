@@ -1,10 +1,13 @@
-import { createApp } from 'vue';
+import $ from 'external/jquery';
+import { createApp, defineAsyncComponent } from 'vue';
 import VueFomanticUi from 'vue-fomantic-ui';
 import atk from 'atk';
 
-Vue.use(VueFomanticUi);
+if (createApp === 'x') { // for debug vue3 migration only, never true
+    Vue.use(VueFomanticUi);
 
-Vue.component('flatpickr-picker', () => import('vue-flatpickr-component'));
+    Vue.component('flatpickr-picker', () => import('vue-flatpickr-component'));
+}
 
 // vue loader component to display while dynamic component is loading
 const atkVueLoader = {
@@ -18,19 +21,20 @@ const atkVueError = {
     template: '<div class="ui negative message"><p>Error: Unable to load Vue component</p></div>',
 };
 
-// return async component that will load on demand
-const componentFactory = (name, component) => () => ({
-    component: component().then((r) => { atk.vueService.markComponentLoaded(name); return r; }),
-    loading: atkVueLoader,
-    error: atkVueError,
+// async component that will load on demand
+const asyncComponentFactory = (name, component) => defineAsyncComponent({
+    loader: () => component().then((r) => { atk.vueService.markComponentLoaded(name); return r; }),
+    loadingComponent: atkVueLoader,
+    errorComponent: atkVueError,
     delay: 200,
+    timeout: 5000,
 });
 
 const atkComponents = {
-    'atk-inline-edit': componentFactory('atk-inline-edit', () => import(/* webpackChunkName: 'atk-vue-inline-edit' */'../vue-components/inline-edit.component')),
-    'atk-item-search': componentFactory('atk-item-search', () => import(/* webpackChunkName: 'atk-vue-item-search' */'../vue-components/item-search.component')),
-    'atk-multiline': componentFactory('atk-multiline', () => import(/* webpackChunkName: 'atk-vue-multiline' */'../vue-components/multiline/multiline.component')),
-    'atk-tree-item-selector': componentFactory('atk-tree-item-selector', () => import(/* webpackChunkName: 'atk-vue-tree-item-selector' */'../vue-components/tree-item-selector/tree-item-selector.component')),
+    'atk-inline-edit': asyncComponentFactory('atk-inline-edit', () => import(/* webpackChunkName: 'atk-vue-inline-edit' */'../vue-components/inline-edit.component')),
+    'atk-item-search': asyncComponentFactory('atk-item-search', () => import(/* webpackChunkName: 'atk-vue-item-search' */'../vue-components/item-search.component')),
+    'atk-multiline': asyncComponentFactory('atk-multiline', () => import(/* webpackChunkName: 'atk-vue-multiline' */'../vue-components/multiline/multiline.component')),
+    'atk-tree-item-selector': asyncComponentFactory('atk-tree-item-selector', () => import(/* webpackChunkName: 'atk-vue-tree-item-selector' */'../vue-components/tree-item-selector/tree-item-selector.component')),
 };
 
 /**
@@ -57,21 +61,30 @@ class VueService {
         };
     }
 
+    createApp(rootComponent) {
+        return createApp(rootComponent);
+    }
+
     /**
      * Created a Vue component and add it to the vues array.
      * For root component (App) to be aware that it's children component is
      * mounted, you need to use @hook:mounted="setReady"
      */
-    createAtkVue(id, component, data) {
+    createAtkVue(id, componentName, data) {
+        const app = atk.vueService.createApp({
+            el: id, // TODO is it needed with mount?
+            data: () => ({ initData: data }),
+            mixins: [this.vueMixins],
+        });
+
+        app.component(componentName, atkComponents[componentName]);
+
+        app.mount(id);
+
         this.registerComponent({
             ids: [id],
-            name: component,
-            instance: new Vue({
-                el: id,
-                data: { initData: data },
-                components: { [component]: atkComponents[component] },
-                mixins: [this.vueMixins],
-            }),
+            name: componentName,
+            instance: app,
             isLoaded: false,
         });
     }
@@ -80,15 +93,29 @@ class VueService {
      * Create a Vue instance from an external src component definition.
      */
     createVue(id, componentName, component, data) {
+        const app = atk.vueService.createApp({
+            el: id, // TODO is it needed with mount?
+            data: () => ({ initData: data, isReady: true }),
+            mixins: [this.vueMixins],
+        });
+
+        app.component('demo-clock', window.vueDemoClock);
+
+        const def = $.extend({ }, component);
+        const defData = def.data;
+        def.data = function () {
+            const res = $.extend({ }, defData.call(this));
+            res.initData = data;
+            return res;
+        };
+        app.component(componentName, def);
+
+        app.mount(id);
+
         this.registerComponent({
             ids: [id],
             name: componentName,
-            instance: new Vue({
-                el: id,
-                data: { initData: data, isReady: true },
-                components: { [componentName]: component },
-                mixins: [this.vueMixins],
-            }),
+            instance: app,
             isLoaded: true,
         });
     }
@@ -98,29 +125,12 @@ class VueService {
      * Group ids that are using the same component.
      */
     registerComponent(component) {
-        // check if that component is already registered
-        const registered = this.vues.filter((comp) => comp.name === component.name);
-        if (registered.length > 0) {
-            registered[0].ids.push(component.ids[0]);
-        } else {
+        const registered = this.vues.filter((v) => v.name === component.name);
+        if (registered.length === 0) {
             this.vues.push(component);
+        } else {
+            registered[0].ids.push(component.ids[0]);
         }
-    }
-
-    /**
-     * Register components within Vue.
-     */
-    useComponent(component) {
-        Vue.use(component);
-    }
-
-    /**
-     * Return Vue.
-     *
-     * @returns {Vue}
-     */
-    getVue() {
-        return Vue;
     }
 
     /**
