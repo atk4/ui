@@ -76,14 +76,38 @@ View::addTo($app, ['ui' => 'divider']);
 
 Header::addTo($app, ['External Component', 'subHeader' => 'Creating component using an external component definition.']);
 
-$app->requireJs($app->cdn['atk'] . '/external/vue-clock2/dist/vue-clock.min.js');
+$app->html->template->dangerouslyAppendHtml('Head', $app->getTag('script', [], <<<'EOF'
+    window.vueDemoClock = {
+        template: '<div :style="{ fontSize: \'80px\', padding: \'25px\', color: color, textShadow: textShadow, background: background }">{{ time }}</div>',
+        props: ['color', 'textShadow', 'background'],
+        data: function () {
+            return {
+                time: '-',
+            };
+        },
+        mounted: function () {
+            this.interval = setInterval(this.updateClock, 100);
+        },
+        beforeDestroy: function () {
+            clearInterval(this.interval);
+        },
+        methods: {
+            updateClock: function () {
+                const date = new Date();
+                this.time = date.getHours().toString().padStart(2, '0')
+                    + ':' + date.getMinutes().toString().padStart(2, '0')
+                    + ':' + date.getSeconds().toString().padStart(2, '0');
+            },
+        },
+    };
+    EOF));
 
 // Injecting template but normally you would create a template file.
 $clockTemplate = new HtmlTemplate(<<<'EOF'
     <div id="{$_id}" class="ui center aligned segment">
     <my-clock inline-template v-bind="initData">
         <div>
-            <demo-clock :color="color" :border="border" :bg="bg"></demo-clock>
+            <demo-clock :color="color" :text-shadow="textShadow" :background="background"></demo-clock>
             <div class="ui basic segment inline"><div class="ui button primary" @click="onChangeStyle">Change Style</div></div>
         </div>
     </my-clock>
@@ -94,41 +118,41 @@ $clockTemplate = new HtmlTemplate(<<<'EOF'
 // Injecting script but normally you would create a separate js file and include it in your page.
 $clockScript = $app->getTag('script', [], <<<'EOF'
     // register external clock component
-    atk.vueService.getVue().component('demo-clock', Clock.default);
+    atk.vueService.getVue().component('demo-clock', window.vueDemoClock);
 
-    var myClock = {
-      props : { clock: Array },
-      data: function () {
-        return { style : this.clock, currentIdx : 0 }
-      },
-      mounted: function () {
-        // add a listener for changing clock style.
-        // this will listen to event '-clock-change-style' emit on the eventBus.
-        atk.eventBus.on(this.$root.$el.id + '-clock-change-style', (payload) => {
-            this.onChangeStyle();
-        });
-      },
-      computed: {
-        color: function () {
-          return this.style[this.currentIdx].color
+    let myClock = {
+        props: { styles: Array },
+        data: function () {
+            return { style: this.styles, currentIdx: 0 };
         },
-        border: function () {
-          return this.style[this.currentIdx].border
+        mounted: function () {
+            // add a listener for changing clock style.
+            // this will listen to event '-clock-change-style' emit on the eventBus.
+            atk.eventBus.on(this.$root.$el.id + '-clock-change-style', (payload) => {
+                this.onChangeStyle();
+            });
         },
-        bg: function () {
-          return this.style[this.currentIdx].bg
-        }
-      },
-      name: 'my-clock',
-      methods: {
-        onChangeStyle: function () {
-          this.currentIdx = this.currentIdx + 1;
-          if (this.currentIdx > this.style.length - 1) {
-            this.currentIdx = 0;
-          }
-        }
-      },
-    }
+        computed: {
+            color: function () {
+                return this.style[this.currentIdx].color;
+            },
+            textShadow: function () {
+                return this.style[this.currentIdx].textShadow;
+            },
+            background: function () {
+                return this.style[this.currentIdx].background;
+            },
+        },
+        name: 'my-clock',
+        methods: {
+            onChangeStyle: function () {
+                this.currentIdx++;
+                if (this.currentIdx >= this.style.length) {
+                    this.currentIdx = 0;
+                }
+            },
+        },
+    };
     EOF);
 
 // Creating the clock view and injecting js.
@@ -137,13 +161,13 @@ $clock->template->dangerouslySetHtml('script', $clockScript);
 
 // passing some style to my-clock component.
 $clockStyle = [
-    ['color' => '#4AB7BD', 'border' => '', 'bg' => 'none'],
-    ['color' => '#FFFFFF', 'border' => 'none', 'bg' => '#E0DCFF'],
-    ['color' => '', 'border' => 'none', 'bg' => 'radial-gradient(circle, #ecffe5, #fffbe1, #38ff91)'],
+    ['color' => 'maroon', 'background' => '', 'textShadow' => '5px 5px 10px teal'],
+    ['color' => 'white', 'background' => '', 'textShadow' => '0px 0px 10px blue'],
+    ['color' => '', 'background' => 'radial-gradient(ellipse at center, rgba(0, 255, 0, 0.25) 0%,rgba(0, 255, 0, 0) 50%)', 'textShadow' => ''],
 ];
 
 // creating vue using an external definition.
-$clock->vue('my-clock', ['clock' => $clockStyle], new JsExpression('myClock'));
+$clock->vue('my-clock', ['styles' => $clockStyle], new JsExpression('myClock'));
 
 $btn = Button::addTo($app, ['Change Style']);
 $btn->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));

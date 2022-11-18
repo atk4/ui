@@ -93,8 +93,7 @@ module.exports = (env) => {
                     test: /\.vue$/,
                     loader: 'vue-loader',
                 },
-                // this will apply to both plain .css files
-                // AND <style> blocks in .vue files
+                // this will apply to both plain .css files AND <style> blocks in .vue files
                 {
                     test: /\.css$/,
                     use: [
@@ -109,7 +108,7 @@ module.exports = (env) => {
         resolve: {
             alias: {
                 atk$: srcDir + '/setup-atk.js',
-                vue$: 'vue/dist/vue.esm.js',
+                vue$: 'vue/dist/vue.esm-bundler.js',
             },
             modules: [
                 srcDir,

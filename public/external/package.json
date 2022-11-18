@@ -7,8 +7,7 @@
         "flatpickr": "^4.6.11",
         "fomantic-ui": "^2.9.0",
         "jquery": "^3.6.0",
-        "twemoji": "https://github.com/twitter/twemoji/archive/refs/tags/v14.0.2.tar.gz",
-        "vue-clock2": "^1.1.5"
+        "twemoji": "https://github.com/twitter/twemoji/archive/refs/tags/v14.0.2.tar.gz"
     },
     "scripts": {
         "postinstall": "node postinstall.js"

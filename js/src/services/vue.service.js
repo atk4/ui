@@ -1,12 +1,8 @@
-import Vue from 'vue';
-import SemanticUiVue from 'semantic-ui-vue';
+import { createApp } from 'vue';
+import VueFomanticUi from 'vue-fomantic-ui';
 import atk from 'atk';
 
-// disable console logs for non-minified build
-Vue.config.productionTip = false;
-Vue.config.devtools = false;
-
-Vue.use(SemanticUiVue);
+Vue.use(VueFomanticUi);
 
 Vue.component('flatpickr-picker', () => import('vue-flatpickr-component'));
 

@@ -2720,13 +2720,351 @@ if (typeof Object.assign !== "function") {
 
 /***/ }),
 
-/***/ "./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js":
-/*!************************************************************************!*\
-  !*** ./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js ***!
-  \************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ "./node_modules/vue-flatpickr-component/dist/index.js":
+/*!************************************************************!*\
+  !*** ./node_modules/vue-flatpickr-component/dist/index.js ***!
+  \************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-!function(t,e){ true?module.exports=e(__webpack_require__(/*! flatpickr */ "./node_modules/flatpickr/dist/esm/index.js")):0}("undefined"!=typeof self?self:this,(function(t){return function(t){var e={};function n(r){if(e[r])return e[r].exports;var o=e[r]={i:r,l:!1,exports:{}};return t[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}return n.m=t,n.c=e,n.d=function(t,e,r){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:r})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var o in t)n.d(r,o,function(e){return t[e]}.bind(null,o));return r},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=1)}([function(e,n){e.exports=t},function(t,e,n){"use strict";n.r(e),n.d(e,"Component",(function(){return p})),n.d(e,"Plugin",(function(){return d}));var r=n(0),o=n.n(r),i=["onChange","onClose","onDestroy","onMonthChange","onOpen","onYearChange"];function u(){return(u=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var n=arguments[e];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(t[r]=n[r])}return t}).apply(this,arguments)}var a=function(t){return t.replace(/([a-z])([A-Z])/g,"$1-$2").toLowerCase()},f=function(t){return t&&t.length?t:null},l=function(t){return u({},t)},s=i.concat(["onValueUpdate","onDayCreate","onParseConfig","onReady","onPreCalendarPosition","onKeyDown"]),c=["locale","showMonths"],p={name:"flat-pickr",render:function(t){return t("input",{attrs:{type:"text","data-input":!0},props:{disabled:this.disabled},on:{input:this.onInput}})},props:{value:{default:null,required:!0,validator:function(t){return null===t||t instanceof Date||"string"==typeof t||t instanceof String||t instanceof Array||"number"==typeof t}},config:{type:Object,default:function(){return{wrap:!1,defaultDate:null}}},events:{type:Array,default:function(){return i}},disabled:{type:Boolean,default:!1}},data:function(){return{fp:null}},mounted:function(){var t=this;if(!this.fp){var e=l(this.config);this.events.forEach((function(n){var r,i=o.a.defaultConfig[n]||[];e[n]=(r=e[n]||[],r instanceof Array?r:[r]).concat(i,(function(){for(var e=arguments.length,r=new Array(e),o=0;o<e;o++)r[o]=arguments[o];t.$emit.apply(t,[a(n)].concat(r))}))})),e.defaultDate=this.value||e.defaultDate,this.fp=new o.a(this.getElem(),e),this.fpInput().addEventListener("blur",this.onBlur),this.$on("on-close",this.onClose),this.$watch("disabled",this.watchDisabled,{immediate:!0})}},methods:{getElem:function(){return this.config.wrap?this.$el.parentNode:this.$el},onInput:function(t){var e=this,n=t.target;this.$nextTick((function(){e.$emit("input",f(n.value))}))},fpInput:function(){return this.fp.altInput||this.fp.input},onBlur:function(t){this.$emit("blur",f(t.target.value))},onClose:function(t,e){this.$emit("input",f(e))},watchDisabled:function(t){t?this.fpInput().setAttribute("disabled",t):this.fpInput().removeAttribute("disabled")}},watch:{config:{deep:!0,handler:function(t){var e=this,n=l(t);s.forEach((function(t){delete n[t]})),this.fp.set(n),c.forEach((function(t){void 0!==n[t]&&e.fp.set(t,n[t])}))}},value:function(t){t!==f(this.$el.value)&&this.fp&&this.fp.setDate(t,!0)}},beforeDestroy:function(){this.fp&&(this.fpInput().removeEventListener("blur",this.onBlur),this.fp.destroy(),this.fp=null)}},d=function(t,e){var n="flat-pickr";"string"==typeof e&&(n=e),t.component(n,p)};p.install=d;e.default=p}]).default}));
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(true)
+		module.exports = factory(__webpack_require__(/*! flatpickr */ "./node_modules/flatpickr/dist/esm/index.js"), __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js"));
+	else {}
+})(self, (__WEBPACK_EXTERNAL_MODULE__311__, __WEBPACK_EXTERNAL_MODULE__976__) => {
+return /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ 311:
+/***/ ((module) => {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__311__;
+
+/***/ }),
+
+/***/ 976:
+/***/ ((module) => {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__976__;
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __nested_webpack_require_1086__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __nested_webpack_require_1086__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__nested_webpack_require_1086__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__nested_webpack_require_1086__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nested_webpack_require_1086__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nested_webpack_require_1086__.o(definition, key) && !__nested_webpack_require_1086__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nested_webpack_require_1086__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nested_webpack_require_1086__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+// ESM COMPAT FLAG
+__nested_webpack_require_1086__.r(__webpack_exports__);
+
+// EXPORTS
+__nested_webpack_require_1086__.d(__webpack_exports__, {
+  "default": () => (/* binding */ src)
+});
+
+// EXTERNAL MODULE: external "flatpickr"
+var external_flatpickr_ = __nested_webpack_require_1086__(311);
+var external_flatpickr_default = /*#__PURE__*/__nested_webpack_require_1086__.n(external_flatpickr_);
+// EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","amd":"vue","root":"Vue"}
+var external_commonjs_vue_commonjs2_vue_amd_vue_root_Vue_ = __nested_webpack_require_1086__(976);
+;// CONCATENATED MODULE: ./src/events.js
+// Events to emit, copied from flatpickr source
+const includedEvents = ['onChange', 'onClose', 'onDestroy', 'onMonthChange', 'onOpen', 'onYearChange']; // Let's not emit these events by default
+
+const excludedEvents = ['onValueUpdate', 'onDayCreate', 'onParseConfig', 'onReady', 'onPreCalendarPosition', 'onKeyDown'];
+
+;// CONCATENATED MODULE: ./src/util.js
+const camelToKebab = string => {
+  return string.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+};
+
+const arrayify = obj => {
+  return obj instanceof Array ? obj : [obj];
+};
+
+const nullify = value => {
+  return value && value.length ? value : null;
+};
+
+
+;// CONCATENATED MODULE: ./src/component.js
+
+
+
+ // Keep a copy of all events for later use
+
+const allEvents = includedEvents.concat(excludedEvents); // Passing these properties in `fp.set()` method will cause flatpickr to trigger some callbacks
+
+const configCallbacks = ['locale', 'showMonths'];
+/* harmony default export */ const component = ((0,external_commonjs_vue_commonjs2_vue_amd_vue_root_Vue_.defineComponent)({
+  name: 'FlatPickr',
+  compatConfig: {
+    MODE: 3
+  },
+
+  render() {
+    return (0,external_commonjs_vue_commonjs2_vue_amd_vue_root_Vue_.h)('input', {
+      type: 'text',
+      'data-input': true,
+      disabled: this.disabled,
+      onInput: this.onInput
+    });
+  },
+
+  emits: ['blur', 'update:modelValue'].concat(allEvents.map(camelToKebab)),
+  props: {
+    modelValue: {
+      default: null,
+      required: true,
+
+      validator(value) {
+        return value === null || value instanceof Date || typeof value === 'string' || value instanceof String || value instanceof Array || typeof value === 'number';
+      }
+
+    },
+    // https://flatpickr.js.org/options/
+    config: {
+      type: Object,
+      default: () => ({
+        defaultDate: null,
+        wrap: false
+      })
+    },
+    events: {
+      type: Array,
+      default: () => includedEvents
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
+  fp: null,
+
+  // non-reactive
+  mounted() {
+    // Return early if flatpickr is already loaded
+
+    /* istanbul ignore if */
+    if (this.fp) return; // Init flatpickr
+
+    this.fp = external_flatpickr_default()(this.getElem(), this.prepareConfig()); // Attach blur event
+
+    this.fpInput().addEventListener('blur', this.onBlur); // Immediate watch will fail before fp is set,
+    // so we need to start watching after mount
+
+    this.$watch('disabled', this.watchDisabled, {
+      immediate: true
+    });
+  },
+
+  methods: {
+    prepareConfig() {
+      var _this = this;
+
+      // Don't mutate original object on parent component
+      let safeConfig = { ...this.config
+      };
+      this.events.forEach(hook => {
+        // Respect global callbacks registered via setDefault() method
+        let globalCallbacks = (external_flatpickr_default()).defaultConfig[hook] || []; // Inject our own method along with user's callbacks
+
+        let localCallback = function () {
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          _this.$emit(camelToKebab(hook), ...args);
+        }; // Overwrite with merged array
+
+
+        safeConfig[hook] = arrayify(safeConfig[hook] || []).concat(globalCallbacks, localCallback);
+      });
+      const onCloseCb = this.onClose.bind(this);
+      safeConfig['onClose'] = arrayify(safeConfig['onClose'] || []).concat(onCloseCb); // Set initial date without emitting any event
+
+      safeConfig.defaultDate = this.modelValue || safeConfig.defaultDate;
+      return safeConfig;
+    },
+
+    /**
+     * Get the HTML node where flatpickr to be attached
+     * Bind on parent element if wrap is true
+     */
+    getElem() {
+      return this.config.wrap ? this.$el.parentNode : this.$el;
+    },
+
+    /**
+     * Watch for value changed by date-picker itself and notify parent component
+     */
+    onInput(event) {
+      const input = event.target; // Let's wait for DOM to be updated
+
+      this.$nextTick(() => {
+        this.$emit('update:modelValue', nullify(input.value));
+      });
+    },
+
+    /**
+     * @return HTMLElement
+     */
+    fpInput() {
+      return this.fp.altInput || this.fp.input;
+    },
+
+    /**
+     * Blur event is required by many validation libraries
+     */
+    onBlur(event) {
+      this.$emit('blur', nullify(event.target.value));
+    },
+
+    /**
+     * Flatpickr does not emit input event in some cases
+     */
+    onClose(selectedDates, dateStr) {
+      this.$emit('update:modelValue', dateStr);
+    },
+
+    /**
+     * Watch for the disabled property and sets the value to the real input.
+     */
+    watchDisabled(newState) {
+      if (newState) {
+        this.fpInput().setAttribute('disabled', newState);
+      } else {
+        this.fpInput().removeAttribute('disabled');
+      }
+    }
+
+  },
+  watch: {
+    /**
+     * Watch for any config changes and redraw date-picker
+     */
+    config: {
+      deep: true,
+
+      handler(newConfig) {
+        if (!this.fp) return;
+        let safeConfig = { ...newConfig
+        }; // Workaround: Don't pass hooks to configs again otherwise
+        // previously registered hooks will stop working
+        // Notice: we are looping through all events
+        // This also means that new callbacks can not be passed once component has been initialized
+
+        allEvents.forEach(hook => {
+          delete safeConfig[hook];
+        });
+        this.fp.set(safeConfig); // Workaround: Allow to change locale dynamically
+
+        configCallbacks.forEach(name => {
+          if (typeof safeConfig[name] !== 'undefined') {
+            this.fp.set(name, safeConfig[name]);
+          }
+        });
+      }
+
+    },
+
+    /**
+     * Watch for changes from parent component and update DOM
+     */
+    modelValue(newValue) {
+      // Prevent updates if v-model value is same as input's current value
+      if (!this.$el || newValue === nullify(this.$el.value)) return; // Make sure we have a flatpickr instance
+
+      this.fp && // Notify flatpickr instance that there is a change in value
+      this.fp.setDate(newValue, true);
+    }
+
+  },
+
+  beforeUnmount() {
+    /* istanbul ignore else */
+    if (!this.fp) return;
+    this.fpInput().removeEventListener('blur', this.onBlur);
+    this.fp.destroy();
+    this.fp = null;
+  }
+
+}));
+;// CONCATENATED MODULE: ./src/index.js
+
+/* harmony default export */ const src = (component);
+})();
+
+/******/ 	return __webpack_exports__;
+/******/ })()
+;
+});
 
 /***/ })
 

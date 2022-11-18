@@ -14,7 +14,7 @@ class JsPaginator extends JsCallback
 
     /**
      * The js scroll plugin options
-     *  - appendTo : the html selector where new content should be appendTo.
+     *  - appendTo: the html selector where new content should be appendTo.
      *              Ex: For a table, the selector would be 'tbody'.
      *  - padding: Bottom padding need prior to perform a page request.
      *             Page request will be ask when container is scroll down and reach padding value.
