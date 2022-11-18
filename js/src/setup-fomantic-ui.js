@@ -81,6 +81,16 @@ $.extend = $.fn.extend = new Proxy($.fn.extend, { // eslint-disable-line no-mult
                                 origValue(errorMessage, $module, xhr);
                                 return value.call(this, errorMessage, $module, xhr);
                             };
+                        } else if (name === 'form' && prop === 'onSuccess') {
+                            obj[prop] = function (event, values) {
+                                origValue(event, values);
+                                return value.call(this, event, values);
+                            };
+                        } else if (name === 'modal' && prop === 'onHidden') {
+                            obj[prop] = function (element) {
+                                origValue(element);
+                                return value.call(element);
+                            };
                         } else {
                             throw new Error('Fomantic-UI "' + name + '.' + prop + '" setting cannot be customized outside atk');
                         }

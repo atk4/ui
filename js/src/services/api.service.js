@@ -71,7 +71,7 @@ class ApiService {
      * To avoid conflict, property name in response was change from eval to atkjs.
      * Which mean response.atkjs now contains code to be eval.
      */
-    onSuccess(response, element) {
+    onSuccess(response) {
         try {
             if (response.success) {
                 if (response.html && response.id) {

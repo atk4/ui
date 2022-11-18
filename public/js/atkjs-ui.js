@@ -1967,7 +1967,7 @@ class ApiService {
    * To avoid conflict, property name in response was change from eval to atkjs.
    * Which mean response.atkjs now contains code to be eval.
    */
-  onSuccess(response, element) {
+  onSuccess(response) {
     try {
       if (response.success) {
         if (response.html && response.id) {
@@ -3146,24 +3146,20 @@ __webpack_require__.r(__webpack_exports__);
 class PopupService {
   getDefaultFomanticSettings() {
     return [{}, {
-      onCreate: this.onCreate,
-      onShow: this.onShow,
-      onHide: this.onHide,
-      onRemove: this.onRemove
+      onShow: this.onShow
     }];
   }
 
   /**
-   * OnShow callback when a popup is trigger.
-   * Will check if popup needs to be setup dynamically using a callback.
+   * Check if popup needs to be setup dynamically using a callback.
    */
   onShow($module) {
     const $popup = this;
     const data = $popup.data();
     if (data.url !== '' && data.url !== undefined) {
-      // Only load if we are not using data.cache or content has not been loaded yet.
+      // only load if we are not using data.cache or content has not been loaded yet
       if (!data.cache || !data.hascontent) {
-        // display default loader while waiting for content.
+        // display default loader while waiting for content
         $popup.html(atk__WEBPACK_IMPORTED_MODULE_0__["default"].popupService.getLoaderHtml());
         $popup.api({
           on: 'now',
@@ -3184,22 +3180,6 @@ class PopupService {
         });
       }
     }
-  }
-  onHide() {}
-
-  /**
-   * Only call when popup are created from metadata
-   * and trigger action is fired.
-   */
-  onCreate() {
-    // console.log('onCreate');
-  }
-
-  /**
-   * Called only if onCreate was called.
-   */
-  onRemove() {
-    // console.log('onRemove');
   }
   getLoaderHtml() {
     return '<div class="ui active inverted dimmer">' + '<div class="ui mini text loader"></div>' + '</div>';
@@ -3601,6 +3581,16 @@ const fomanticServicesMap = {
               obj[prop] = function (errorMessage, $module, xhr) {
                 origValue(errorMessage, $module, xhr);
                 return value.call(this, errorMessage, $module, xhr);
+              };
+            } else if (name === 'form' && prop === 'onSuccess') {
+              obj[prop] = function (event, values) {
+                origValue(event, values);
+                return value.call(this, event, values);
+              };
+            } else if (name === 'modal' && prop === 'onHidden') {
+              obj[prop] = function (element) {
+                origValue(element);
+                return value.call(element);
               };
             } else {
               throw new Error('Fomantic-UI "' + name + '.' + prop + '" setting cannot be customized outside atk');
