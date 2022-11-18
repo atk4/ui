@@ -1,26 +1,8 @@
-/**
- * Webpack v4 configuration file.
- *
- * Use mode from env variable pass to webpack in order to
- * differentiate build mode.
- * Use a function that return configuration object based
- * on env variable.
- *
- * Using Development
- * - set webpack config mode to development
- *
- * Using Production
- * - set webpack config mode to production
- * - change name of output file by adding .min
- *
- * Module export will output default value
- * using libraryExport: 'default' for backward
- * compatibility with previous release of the library.
- */
 const path = require('path');
 const webpack = require('webpack');
 const { VueLoaderPlugin } = require('vue-loader');
 const TerserPlugin = require('terser-webpack-plugin');
+const VueFomanticUi = require('vue-fomantic-ui');
 
 module.exports = (env) => {
     // determine which mode
@@ -124,6 +106,7 @@ module.exports = (env) => {
             new webpack.DefinePlugin({
                 __VUE_OPTIONS_API__: true,
                 __VUE_PROD_DEVTOOLS__: false,
+                __VUE_FOMANTICUI_COMPONENT_NAMES__: JSON.stringify(Object.keys(VueFomanticUi).filter((v) => v.startsWith('Sui'))),
             }),
             new VueLoaderPlugin(),
         ],

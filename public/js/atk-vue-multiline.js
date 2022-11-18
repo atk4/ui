@@ -41,6 +41,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.rowData;
     }
   },
+  emits: ['onTabLastRow'],
   methods: {
     onTabLastColumn: function (idx) {
       if (idx + 1 === this.rowData.length) {
@@ -107,6 +108,7 @@ __webpack_require__.r(__webpack_exports__);
       inputValue: this.fieldValue
     };
   },
+  emits: ['update-value'],
   methods: {
     getComponent: function () {
       return this.cellData.definition.component;
@@ -120,7 +122,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.cellData.definition.componentProps;
     },
     onInput: function (value) {
-      this.inputValue = this.getTypeValue(value);
+      // this.inputValue = this.getTypeValue(value);
       this.$emit('update-value', this.fieldName, this.inputValue);
     },
     onChange: function (value) {
@@ -180,8 +182,8 @@ __webpack_require__.r(__webpack_exports__);
         <sui-table-headerCell :colspan="getVisibleColumns()">{{caption}}</sui-table-headerCell>
        </sui-table-row>
         <sui-table-row :verticalAlign="'top'">
-        <sui-table-header-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDeleteAll" :checked.prop="isChecked" :indeterminate.prop="isIndeterminate" ref="check"></sui-table-header-cell>
-        <sui-table-header-cell v-for="(column, idx) in columns" :key="idx" v-if="column.isVisible" :textAlign="getTextAlign(column)">
+        <sui-table-header-cell :width=1 textAlign="center"><input type="checkbox" @input="onToggleDeleteAll" :checked="isChecked" :indeterminate="isIndeterminate" ref="check"></sui-table-header-cell>
+        <sui-table-header-cell v-for="(column, idx) in columns" :key="idx" :width=column.cellProps.width v-if="column.isVisible" :textAlign="getTextAlign(column)">
          <div>{{column.caption}}</div>
          <div :style="{ position: 'absolute', top: '-22px' }" v-if="false"><sui-label pointing="below" basic color="red" v-if="getErrorMsg(column)">{{getErrorMsg(column)}}</sui-label></div>
         </sui-table-header-cell>
@@ -310,8 +312,8 @@ __webpack_require__.r(__webpack_exports__);
   name: 'atk-multiline-row',
   template: `
     <sui-table-row :verticalAlign="'middle'">
-        <sui-table-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDelete" v-model="toDelete"></sui-table-cell>
-        <sui-table-cell @keydown.tab="onTab(idx)" v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" v-bind="column.cellProps" :style="{ overflow: 'visible' }" v-if="column.isVisible">
+        <sui-table-cell textAlign="center"><input type="checkbox" @input="onToggleDelete" v-model="toDelete"></sui-table-cell>
+        <sui-table-cell @keydown.tab="onTab(idx)" v-for="(column, idx) in columns" :key="idx" :width=null :state="getErrorState(column)" v-bind="column.cellProps" :style="{ overflow: 'visible' }" v-if="column.isVisible">
          <atk-multiline-cell
            :cellData="column"
            @update-value="onUpdateValue"
@@ -343,6 +345,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
+  emits: ['onTabLastColumn'],
   methods: {
     onTab: function (idx) {
       if (idx === this.columns.filter(column => column.isEditable).length) {
@@ -405,6 +408,7 @@ __webpack_require__.r(__webpack_exports__);
       text: this.value
     };
   },
+  emits: ['input'],
   methods: {
     handleChange: function (event) {
       this.$emit('input', event.target.value);
@@ -464,10 +468,14 @@ __webpack_require__.r(__webpack_exports__);
                     <sui-table-row>
                         <sui-table-header-cell />
                         <sui-table-header-cell :colspan="getSpan" textAlign="right">
-                        <div is="sui-button-group">
-                         <sui-button size="small" @click.stop.prevent="onAdd" type="button" icon="plus" ref="addBtn" :disabled="isLimitReached"></sui-button>
-                         <sui-button size="small" @click.stop.prevent="onDelete" type="button" icon="trash" :disabled="isDeleteDisable"></sui-button>
-                         </div>
+                        <div is="vue:sui-button-group">
+                        <sui-button size="small" @click.stop.prevent="onAdd" type="button" icon ref="addBtn" :disabled="isLimitReached">
+                          <sui-icon name="plus" />
+                        </sui-button>
+                        <sui-button size="small" @click.stop.prevent="onDelete" type="button" icon :disabled="isDeleteDisable">
+                          <sui-icon name="trash" />
+                        </sui-button>
+                        </div>
                         </sui-table-header-cell>
                     </sui-table-row>
                   </sui-table-footer>
@@ -786,6 +794,7 @@ const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-chang
       date: null
     };
   },
+  emits: ['setDefault', 'onChange'],
   mounted: function () {
     // if value is not set but default date is, then emit proper string value to parent.
     if (!this.value && this.flatPickr.defaultDate) {
@@ -868,6 +877,7 @@ const template = `<sui-dropdown
       this.dropdownProps.options = Array.isArray(this.optionalValue) ? this.optionalValue : [this.optionalValue];
     }
   },
+  emits: ['onChange'],
   methods: {
     onChange: function (value) {
       this.$emit('onChange', value);

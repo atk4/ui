@@ -13,10 +13,14 @@ export default {
                     <sui-table-row>
                         <sui-table-header-cell />
                         <sui-table-header-cell :colspan="getSpan" textAlign="right">
-                        <div is="sui-button-group">
-                         <sui-button size="small" @click.stop.prevent="onAdd" type="button" icon="plus" ref="addBtn" :disabled="isLimitReached"></sui-button>
-                         <sui-button size="small" @click.stop.prevent="onDelete" type="button" icon="trash" :disabled="isDeleteDisable"></sui-button>
-                         </div>
+                        <div is="vue:sui-button-group">
+                        <sui-button size="small" @click.stop.prevent="onAdd" type="button" icon ref="addBtn" :disabled="isLimitReached">
+                          <sui-icon name="plus" />
+                        </sui-button>
+                        <sui-button size="small" @click.stop.prevent="onDelete" type="button" icon :disabled="isDeleteDisable">
+                          <sui-icon name="trash" />
+                        </sui-button>
+                        </div>
                         </sui-table-header-cell>
                     </sui-table-row>
                   </sui-table-footer>

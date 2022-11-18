@@ -56,7 +56,7 @@ export default {
             const key = e.keyCode;
             this.clearError();
             if (key === 13) {
-                this.onEnter(e);
+                this.onEnter();
             } else if (key === 27) {
                 this.onEscape();
             }
@@ -72,7 +72,7 @@ export default {
             this.value = this.temp;
             this.$el.querySelector('input').blur();
         },
-        onEnter: function (e) {
+        onEnter: function () {
             if (this.isDirty) {
                 this.update();
             }

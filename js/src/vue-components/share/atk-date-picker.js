@@ -34,6 +34,7 @@ export default {
             date: null,
         };
     },
+    emits: ['setDefault', 'onChange'],
     mounted: function () {
         // if value is not set but default date is, then emit proper string value to parent.
         if (!this.value && this.flatPickr.defaultDate) {

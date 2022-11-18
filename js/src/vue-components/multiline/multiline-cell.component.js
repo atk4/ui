@@ -31,6 +31,7 @@ export default {
             inputValue: this.fieldValue,
         };
     },
+    emits: ['update-value'],
     methods: {
         getComponent: function () {
             return this.cellData.definition.component;
@@ -43,7 +44,7 @@ export default {
             return this.cellData.definition.componentProps;
         },
         onInput: function (value) {
-            this.inputValue = this.getTypeValue(value);
+            // this.inputValue = this.getTypeValue(value);
             this.$emit('update-value', this.fieldName, this.inputValue);
         },
         onChange: function (value) {

@@ -49,6 +49,7 @@ export default {
             this.dropdownProps.options = Array.isArray(this.optionalValue) ? this.optionalValue : [this.optionalValue];
         }
     },
+    emits: ['onChange'],
     methods: {
         onChange: function (value) {
             this.$emit('onChange', value);

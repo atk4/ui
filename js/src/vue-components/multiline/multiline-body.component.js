@@ -27,6 +27,7 @@ export default {
             return this.rowData;
         },
     },
+    emits: ['onTabLastRow'],
     methods: {
         onTabLastColumn: function (idx) {
             if (idx + 1 === this.rowData.length) {

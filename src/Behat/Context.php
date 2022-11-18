@@ -352,6 +352,15 @@ class Context extends RawMinkContext implements BehatContext
         $this->getSession()->executeScript('$(\'a.item[data-page=' . $pageNumber . ']\').click()');
     }
 
+    /**
+     * @When I fill field using :selector with :value
+     */
+    public function iFillField(string $selector, string $value): void
+    {
+        $element = $this->findElement(null, $selector);
+        $element->setValue($value);
+    }
+
     // }}}
 
     // {{{ modal

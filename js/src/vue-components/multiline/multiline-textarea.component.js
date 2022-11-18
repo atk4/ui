@@ -5,6 +5,7 @@ export default {
     data: function () {
         return { text: this.value };
     },
+    emits: ['input'],
     methods: {
         handleChange: function (event) {
             this.$emit('input', event.target.value);

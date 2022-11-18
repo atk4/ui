@@ -4,9 +4,9 @@ module.exports = {
         es6: true,
     },
     extends: [
-        'plugin:vue/essential',
         'plugin:jsdoc/recommended',
         'airbnb-base',
+        'plugin:vue/vue3-recommended',
     ],
     parserOptions: {
         ecmaVersion: '2020',
@@ -28,11 +28,10 @@ module.exports = {
         'default-case': 'off',
         'import/prefer-default-export': 'off',
         'no-console': ['error', { allow: ['warn', 'error'] }],
-        'no-underscore-dangle': ['error', { allow: ['__atk_reload', '__atkml', '__atkml_action'] }],
+        'no-underscore-dangle': 'off',
         'max-len': 'off',
         'prefer-template': ['off'],
         'no-unused-vars': ['error', { vars: 'all', args: 'none' }],
-        'vue/no-unused-components': 'off',
         'spaced-comment': ['error', 'always', {
             line: {
                 markers: ['/'],

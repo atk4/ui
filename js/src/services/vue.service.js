@@ -1,45 +1,8 @@
 import $ from 'external/jquery';
-import { createApp, defineAsyncComponent } from 'vue';
-import VueFomanticUi from 'vue-fomantic-ui';
-import atk from 'atk';
+import {
+    createApp, camelize, capitalize, defineAsyncComponent,
+} from 'vue';
 
-if (createApp === 'x') { // for debug vue3 migration only, never true
-    Vue.use(VueFomanticUi);
-
-    Vue.component('flatpickr-picker', () => import('vue-flatpickr-component'));
-}
-
-// vue loader component to display while dynamic component is loading
-const atkVueLoader = {
-    name: 'atk-vue-loader',
-    template: '<div><div class="ui active centered inline loader"></div></div>',
-};
-
-// vue error component to display when dynamic component loading fail
-const atkVueError = {
-    name: 'atk-vue-error',
-    template: '<div class="ui negative message"><p>Error: Unable to load Vue component</p></div>',
-};
-
-// async component that will load on demand
-const asyncComponentFactory = (name, component) => defineAsyncComponent({
-    loader: () => component().then((r) => { atk.vueService.markComponentLoaded(name); return r; }),
-    loadingComponent: atkVueLoader,
-    errorComponent: atkVueError,
-    delay: 200,
-    timeout: 5000,
-});
-
-const atkComponents = {
-    'atk-inline-edit': asyncComponentFactory('atk-inline-edit', () => import(/* webpackChunkName: 'atk-vue-inline-edit' */'../vue-components/inline-edit.component')),
-    'atk-item-search': asyncComponentFactory('atk-item-search', () => import(/* webpackChunkName: 'atk-vue-item-search' */'../vue-components/item-search.component')),
-    'atk-multiline': asyncComponentFactory('atk-multiline', () => import(/* webpackChunkName: 'atk-vue-multiline' */'../vue-components/multiline/multiline.component')),
-    'atk-tree-item-selector': asyncComponentFactory('atk-tree-item-selector', () => import(/* webpackChunkName: 'atk-vue-tree-item-selector' */'../vue-components/tree-item-selector/tree-item-selector.component')),
-};
-
-/**
- * Allow to create Vue component.
- */
 class VueService {
     constructor() {
         this.vues = [];
@@ -65,19 +28,71 @@ class VueService {
         return createApp(rootComponent);
     }
 
+    _setupComponentAutoloader(app) {
+        const atkLoadingComponent = {
+            name: 'atk-vue-loader',
+            template: '<div><div class="ui active centered inline loader"></div></div>',
+        };
+
+        const atkErrorComponent = {
+            name: 'atk-vue-error',
+            template: '<div class="ui negative message"><p>Error: Unable to load Vue component</p></div>',
+        };
+
+        const asyncComponentFactory = (name, component) => defineAsyncComponent({
+            loader: () => {
+                this.registerComponent({
+                    name: name,
+                    isLoaded: false,
+                });
+                return component().then((r) => { this.markComponentLoaded(name); return r; });
+            },
+            loadingComponent: atkLoadingComponent,
+            errorComponent: atkErrorComponent,
+            delay: 200,
+            timeout: 5000,
+        });
+
+        const lazyRegisterSuiPrefixedComponent = function (registry, name) {
+            // https://github.com/vuejs/core/blob/v3.2.45/packages/runtime-core/src/helpers/resolveAssets.ts#L136
+            if (registry[name] === undefined && registry[camelize(name)] === undefined) {
+                const namePascalized = capitalize(camelize(name));
+                if (registry[namePascalized] === undefined && __VUE_FOMANTICUI_COMPONENT_NAMES__.includes(namePascalized)) { // eslint-disable-line no-undef
+                    registry[namePascalized] = asyncComponentFactory(namePascalized, () => (import('vue-fomantic-ui')).then((r) => r[namePascalized]));
+                }
+            }
+        };
+        app._context.components = new Proxy(app._context.components, {
+            has: (obj, prop) => {
+                lazyRegisterSuiPrefixedComponent(obj, prop);
+                return obj[prop] !== undefined;
+            },
+            get: (obj, prop) => {
+                lazyRegisterSuiPrefixedComponent(obj, prop);
+                return obj[prop];
+            },
+        });
+
+        app.component('FlatpickrPicker', asyncComponentFactory('FlatpickrPicker', () => import('vue-flatpickr-component')));
+
+        app.component('AtkInlineEdit', asyncComponentFactory('AtkInlineEdit', () => import(/* webpackChunkName: 'atk-vue-inline-edit' */'../vue-components/inline-edit.component')));
+        app.component('AtkItemSearch', asyncComponentFactory('AtkItemSearch', () => import(/* webpackChunkName: 'atk-vue-item-search' */'../vue-components/item-search.component')));
+        app.component('AtkMultiline', asyncComponentFactory('AtkMultiline', () => import(/* webpackChunkName: 'atk-vue-multiline' */'../vue-components/multiline/multiline.component')));
+        app.component('AtkTreeItemSelector', asyncComponentFactory('AtkTreeItemSelector', () => import(/* webpackChunkName: 'atk-vue-tree-item-selector' */'../vue-components/tree-item-selector/tree-item-selector.component')));
+    }
+
     /**
      * Created a Vue component and add it to the vues array.
      * For root component (App) to be aware that it's children component is
      * mounted, you need to use @hook:mounted="setReady"
      */
     createAtkVue(id, componentName, data) {
-        const app = atk.vueService.createApp({
+        const app = this.createApp({
             el: id, // TODO is it needed with mount?
             data: () => ({ initData: data }),
             mixins: [this.vueMixins],
         });
-
-        app.component(componentName, atkComponents[componentName]);
+        this._setupComponentAutoloader(app);
 
         app.mount(id);
 
@@ -93,13 +108,14 @@ class VueService {
      * Create a Vue instance from an external src component definition.
      */
     createVue(id, componentName, component, data) {
-        const app = atk.vueService.createApp({
+        const app = this.createApp({
             el: id, // TODO is it needed with mount?
             data: () => ({ initData: data, isReady: true }),
             mixins: [this.vueMixins],
         });
+        this._setupComponentAutoloader(app);
 
-        app.component('demo-clock', window.vueDemoClock);
+        app.component('DemoClock', window.vueDemoClock); // TODO
 
         const def = $.extend({ }, component);
         const defData = def.data;
@@ -125,11 +141,10 @@ class VueService {
      * Group ids that are using the same component.
      */
     registerComponent(component) {
-        const registered = this.vues.filter((v) => v.name === component.name);
-        if (registered.length === 0) {
-            this.vues.push(component);
+        if (this.vues[component.name] === undefined) {
+            this.vues[component.name] = component;
         } else {
-            registered[0].ids.push(component.ids[0]);
+            this.vues[component.name].ids.push(component.ids[0]);
         }
     }
 
@@ -137,18 +152,14 @@ class VueService {
      * Mark a component as loaded.
      */
     markComponentLoaded(name) {
-        this.vues.forEach((component) => {
-            if (component.name === name) {
-                component.isLoaded = true;
-            }
-        });
+        this.vues[name].isLoaded = true;
     }
 
     /**
      * Check if all components on page are ready and fully loaded.
      */
     areComponentsLoaded() {
-        return this.vues.filter((component) => component.isLoaded === false).length === 0;
+        return this.vues.filter((component) => !component.isLoaded).length === 0;
     }
 }
 
