@@ -5,28 +5,42 @@ import multilineHeader from './multiline-header.component';
 
 export default {
     name: 'atk-multiline',
-    template: `<div>
-                <sui-table v-bind="tableProp">
-                  <atk-multiline-header :fields="fieldData" :state="getMainToggleState" :errors="errors" :caption="caption"></atk-multiline-header>
-                  <atk-multiline-body @onTabLastRow="onTabLastRow" :fieldDefs="fieldData" :rowData="rowData" :deletables="getDeletables" :errors="errors"></atk-multiline-body>
-                  <sui-table-footer>
+    template: `
+        <div>
+            <sui-table v-bind="tableProp">
+                <atk-multiline-header
+                    :fields="fieldData"
+                    :state="getMainToggleState"
+                    :errors="errors"
+                    :caption="caption"
+                ></atk-multiline-header>
+                <atk-multiline-body
+                    @onTabLastRow="onTabLastRow"
+                    :fieldDefs="fieldData"
+                    :rowData="rowData"
+                    :deletables="getDeletables"
+                    :errors="errors"
+                ></atk-multiline-body>
+                <sui-table-footer>
                     <sui-table-row>
-                        <sui-table-header-cell />
+                        <sui-table-header-cell></sui-table-header-cell>
                         <sui-table-header-cell :colspan="getSpan" textAlign="right">
-                        <div is="vue:sui-button-group">
-                        <sui-button size="small" @click.stop.prevent="onAdd" type="button" icon ref="addBtn" :disabled="isLimitReached">
-                          <sui-icon name="plus" />
-                        </sui-button>
-                        <sui-button size="small" @click.stop.prevent="onDelete" type="button" icon :disabled="isDeleteDisable">
-                          <sui-icon name="trash" />
-                        </sui-button>
-                        </div>
+                            <div is="vue:sui-button-group">
+                                <sui-button ref="addBtn" size="small" @click.stop.prevent="onAdd" type="button" icon :disabled="isLimitReached">
+                                    <sui-icon name="plus"></sui-icon>
+                                </sui-button>
+                                <sui-button size="small" @click.stop.prevent="onDelete" type="button" icon :disabled="isDeleteDisable">
+                                    <sui-icon name="trash"></sui-icon>
+                                </sui-button>
+                            </div>
                         </sui-table-header-cell>
                     </sui-table-row>
-                  </sui-table-footer>
-                </sui-table>
-                <div><input :form="form" :name="name" type="hidden" :value="value" ref="atkmlInput"></div>
-             </div>`,
+                </sui-table-footer>
+            </sui-table>
+            <div>
+                <input ref="atkmlInput" :form="form" :name="name" type="hidden" :value="value" />
+            </div>
+        </div>`,
     props: {
         data: Object,
     },
@@ -66,9 +80,9 @@ export default {
         });
 
         atk.eventBus.on(this.$root.$el.id + '-toggle-delete', (payload) => {
-            const idx = this.deletables.indexOf(payload.rowId);
-            if (idx > -1) {
-                this.deletables.splice(idx, 1);
+            const i = this.deletables.indexOf(payload.rowId);
+            if (i !== -1) {
+                this.deletables.splice(i, 1);
             } else {
                 this.deletables.push(payload.rowId);
             }
@@ -194,7 +208,7 @@ export default {
          * for return js to be fully evaluated.
          */
         fetchOnChangeAction: function (fieldName = null) {
-            if (this.hasChangeCb && (fieldName === null || this.eventFields.indexOf(fieldName) > -1)) {
+            if (this.hasChangeCb && (fieldName === null || this.eventFields.indexOf(fieldName) !== -1)) {
                 $(this.$refs.addBtn.$el).api({
                     on: 'now',
                     url: this.data.url,

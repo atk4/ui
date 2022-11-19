@@ -11,16 +11,26 @@ import multilineCell from './multiline-cell.component';
 export default {
     name: 'atk-multiline-row',
     template: `
-    <sui-table-row :verticalAlign="'middle'">
-        <sui-table-cell textAlign="center"><input type="checkbox" @input="onToggleDelete" v-model="toDelete"></sui-table-cell>
-        <sui-table-cell @keydown.tab="onTab(idx)" v-for="(column, idx) in columns" :key="idx" :width=null :state="getErrorState(column)" v-bind="column.cellProps" :style="{ overflow: 'visible' }" v-if="column.isVisible">
-         <atk-multiline-cell
-           :cellData="column"
-           @update-value="onUpdateValue"
-           :fieldValue="getValue(column)"></atk-multiline-cell>
-        </sui-table-cell>
-    </sui-table-row>
-  `,
+        <sui-table-row :verticalAlign="'middle'">
+            <sui-table-cell textAlign="center">
+                <input type="checkbox" @input="onToggleDelete" v-model="toDelete" />
+            </sui-table-cell>
+            <sui-table-cell
+                v-for="(column, i) in columns"
+                v-if="column.isVisible"
+                @keydown.tab="onTab(i)"
+                v-bind="column.cellProps"
+                :width=null
+                :state="getErrorState(column)"
+                :style="{ overflow: 'visible' }"
+            >
+                <atk-multiline-cell
+                    :cellData="column"
+                    @update-value="onUpdateValue"
+                    :fieldValue="getValue(column)"
+                ></atk-multiline-cell>
+            </sui-table-cell>
+        </sui-table-row>`,
     props: ['fields', 'rowId', 'isDeletable', 'rowValues', 'error'],
     data: function () {
         return { columns: this.fields };
@@ -45,8 +55,8 @@ export default {
     },
     emits: ['onTabLastColumn'],
     methods: {
-        onTab: function (idx) {
-            if (idx === this.columns.filter((column) => column.isEditable).length) {
+        onTab: function (columnIndex) {
+            if (columnIndex === this.columns.filter((column) => column.isEditable).length) {
                 this.$emit('onTabLastColumn');
             }
         },

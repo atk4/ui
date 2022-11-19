@@ -27,16 +27,18 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 const template = `
-      <div :class="[options.inputCss, hasError ? 'error' : '' ]">
-            <input
+    <div :class="[options.inputCss, hasError ? 'error' : '' ]">
+        <input
             :class="options.inlineCss"
             :name="options.fieldName"
             :type="options.fieldType"
             v-model="value"
             @keyup="onKeyup"
             @focus="onFocus"
-            @blur="onBlur" /><i class="icon"></i>
-      </div>`;
+            @blur="onBlur"
+        />
+        <i class="icon"></i>
+    </div>`;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-inline-edit',
   template: template,

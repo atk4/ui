@@ -3,23 +3,39 @@ import atk from 'atk';
 export default {
     name: 'atk-multiline-header',
     template: `
-     <sui-table-header>
-       <sui-table-row v-if="hasError()">
-        <sui-table-cell :style="{ background: 'none' }"></sui-table-cell>
-        <sui-table-cell :style="{ background: 'none' }" state="error" v-for="(column, idx) in columns" :key="idx" v-if="column.isVisible" :textAlign="getTextAlign(column)"><sui-icon name="attention" v-if="getErrorMsg(column)"></sui-icon>{{getErrorMsg(column)}}</sui-table-cell>
-      </sui-table-row>
-       <sui-table-row v-if="hasCaption()">
-        <sui-table-headerCell :colspan="getVisibleColumns()">{{caption}}</sui-table-headerCell>
-       </sui-table-row>
-        <sui-table-row :verticalAlign="'top'">
-        <sui-table-header-cell :width=1 textAlign="center"><input type="checkbox" @input="onToggleDeleteAll" :checked="isChecked" :indeterminate="isIndeterminate" ref="check"></sui-table-header-cell>
-        <sui-table-header-cell v-for="(column, idx) in columns" :key="idx" :width=column.cellProps.width v-if="column.isVisible" :textAlign="getTextAlign(column)">
-         <div>{{column.caption}}</div>
-         <div :style="{ position: 'absolute', top: '-22px' }" v-if="false"><sui-label pointing="below" basic color="red" v-if="getErrorMsg(column)">{{getErrorMsg(column)}}</sui-label></div>
-        </sui-table-header-cell>
-      </sui-table-row>
-    </sui-table-header>
-  `,
+        <sui-table-header>
+            <sui-table-row v-if="hasError()">
+                <sui-table-cell :style="{ background: 'none' }"></sui-table-cell>
+                <sui-table-cell :style="{ background: 'none' }"
+                    state="error"
+                    v-for="column in columns"
+                    v-if="column.isVisible"
+                    :textAlign="getTextAlign(column)"
+                >
+                    <sui-icon v-if="getErrorMsg(column)" name="attention"></sui-icon>
+                    {{getErrorMsg(column)}}
+                </sui-table-cell>
+            </sui-table-row>
+            <sui-table-row v-if="hasCaption()">
+                <sui-table-header-cell :colspan="getVisibleColumns()">{{caption}}</sui-table-header-cell>
+            </sui-table-row>
+            <sui-table-row :verticalAlign="'top'">
+                <sui-table-header-cell :width=1 textAlign="center">
+                    <input ref="check" type="checkbox" @input="onToggleDeleteAll" :checked="isChecked" :indeterminate="isIndeterminate" />
+                </sui-table-header-cell>
+                <sui-table-header-cell
+                    v-for="column in columns"
+                    v-if="column.isVisible"
+                    :width=column.cellProps.width
+                    :textAlign="getTextAlign(column)"
+                >
+                    <div>{{column.caption}}</div>
+                    <div v-if="false" :style="{ position: 'absolute', top: '-22px' }">
+                        <sui-label v-if="getErrorMsg(column)" pointing="below" basic color="red">{{getErrorMsg(column)}}</sui-label>
+                    </div>
+                </sui-table-header-cell>
+            </sui-table-row>
+        </sui-table-header>`,
     props: ['fields', 'state', 'errors', 'caption'],
     data: function () {
         return { columns: this.fields, isDeleteAll: false };

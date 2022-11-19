@@ -123,7 +123,7 @@ $clockScript = $app->getTag('script', [], <<<'EOF'
             </div>`,
         props: { styles: Array },
         data: function () {
-            return { style: this.styles, currentIdx: 0 };
+            return { style: this.styles, currentIndex: 0 };
         },
         mounted: function () {
             // add a listener for changing clock style.
@@ -134,21 +134,21 @@ $clockScript = $app->getTag('script', [], <<<'EOF'
         },
         computed: {
             color: function () {
-                return this.style[this.currentIdx].color;
+                return this.style[this.currentIndex].color;
             },
             textShadow: function () {
-                return this.style[this.currentIdx].textShadow;
+                return this.style[this.currentIndex].textShadow;
             },
             background: function () {
-                return this.style[this.currentIdx].background;
+                return this.style[this.currentIndex].background;
             },
         },
         name: 'my-clock',
         methods: {
             onChangeStyle: function () {
-                this.currentIdx++;
-                if (this.currentIdx >= this.style.length) {
-                    this.currentIdx = 0;
+                this.currentIndex++;
+                if (this.currentIndex >= this.style.length) {
+                    this.currentIndex = 0;
                 }
             },
         },

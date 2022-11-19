@@ -6,16 +6,17 @@ import atkLookup from '../share/atk-lookup';
 export default {
     name: 'atk-multiline-cell',
     template: `
-    <component :is="getComponent()"
-        :fluid="true"
-        class="fluid"
-        @input="onInput"
-        @onChange="onChange"
-        v-model="inputValue"
-        :name="inputName"
-        ref="cell"
-        v-bind="getComponentProps()"></component>
-  `,
+        <component
+            :is="getComponent()"
+            v-bind="getComponentProps()"
+            ref="cell"
+            :fluid="true"
+            class="fluid"
+            @input="onInput"
+            @onChange="onChange"
+            v-model="inputValue"
+            :name="inputName"
+        ></component>`,
     components: {
         'atk-multiline-readonly': multilineReadOnly,
         'atk-multiline-textarea': multilineTextarea,

@@ -30,16 +30,19 @@ __webpack_require__.r(__webpack_exports__);
  * reload:  string, an Id selector for jQuery, '#' is append automatically.
  */
 
-const template = `<div class="atk-item-search" :class="inputCss">
-      <input class="ui"
-        v-model="query"
-        type="text" placeholder="Search..."
-        @keyup="onKeyup"
-        @keyup.esc="onEscape"
-        name="atk-vue-search" />
-        <i class="atk-search-icon" :class="classIcon"></i><span style="width: 12px; cursor: pointer;" @click="onClear"></span>
-    </div>
-`;
+const template = `
+    <div class="atk-item-search" :class="inputCss">
+        <input
+            class="ui"
+            v-model="query"
+            type="text" placeholder="Search..."
+            @keyup="onKeyup"
+            @keyup.esc="onEscape"
+            name="atk-vue-search"
+        />
+        <i class="atk-search-icon" :class="classIcon"></i>
+        <span style="width: 12px; cursor: pointer;" @click="onClear"></span>
+    </div>`;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-item-search',
   template: template,

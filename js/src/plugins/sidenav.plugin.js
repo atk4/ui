@@ -42,7 +42,7 @@ export default class AtkSidenavPlugin extends AtkPlugin {
      */
     hasBase() {
         let hasBase = false;
-        this.menu.find('a').each((idx, el) => {
+        this.menu.find('a').each((i, el) => {
             if (this.urlMatchLocation(el.href)) {
                 hasBase = true;
                 // set active class for this specific menu item.

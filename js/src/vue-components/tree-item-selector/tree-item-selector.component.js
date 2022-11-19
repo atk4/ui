@@ -1,16 +1,20 @@
 import $ from 'external/jquery';
 
-const template = `<div class="item" :style="itemMargin">
+const template = `
+    <div class="item" :style="itemMargin">
         <i :class="toggleIcon" @click="onToggleShow" v-show="!isRoot"></i>
         <i :class="getIcon" @click="onToggleSelect" v-show="!isRoot"></i>
-        <div class="content" >
-          <div @click="onToggleSelect" :style="itemCursor">{{title}}</div>
-          <div class="list" v-show="open || isRoot" v-if="isParent" >
-            <atk-tree-item-selector v-for="(item, index) in item.nodes" :key="item.id" :item="item" :values="values">
-            </atk-tree-item-selector>
-          </div>
+        <div class="content">
+            <div @click="onToggleSelect" :style="itemCursor">{{title}}</div>
+            <div v-if="isParent" class="list" v-show="open || isRoot">
+                <atk-tree-item-selector
+                    v-for="item in item.nodes" :key="item.id"
+                    :item="item"
+                    :values="values"
+                ></atk-tree-item-selector>
+            </div>
         </div>
-     </div>`;
+    </div>`;
 
 export default {
     template: template,
@@ -138,7 +142,7 @@ export default {
                         break;
                     }
                 }
-                if (this.values.findIndex((id) => id === nodes[i].id) > -1) {
+                if (this.values.findIndex((id) => id === nodes[i].id) !== -1) {
                     state = true;
 
                     break;

@@ -382,7 +382,7 @@ class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["d
     if (this.settings.url) {
       const columns = this.$el.find('th');
       const widths = [];
-      columns.each((idx, item) => {
+      columns.each((i, item) => {
         widths.push({
           column: external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(item).data('column'),
           size: external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(item).outerWidth()
@@ -1254,9 +1254,9 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
     // the data label attribute value of the source element being drag. ex: data-id
     this.sourceId = null;
     // the new index value of the dragged element after sorting.
-    this.newIdx = null;
+    this.newIndex = null;
     // the original index value of the dragged element.
-    this.orgIdx = null;
+    this.origIndex = null;
 
     // fix screen reader announcement container added more than once
     // https://github.com/Shopify/draggable/pull/541
@@ -1276,10 +1276,10 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
         return;
       }
       this.ids = [];
-      this.newIdx = e.data.newIndex;
-      this.orgIdx = e.data.oldIndex;
+      this.newIndex = e.data.newIndex;
+      this.origIndex = e.data.oldIndex;
       this.sourceId = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(e.data.dragEvent.data.originalSource).data(this.settings.dataLabel);
-      this.dragContainer.children().each((idx, el) => {
+      this.dragContainer.children().each((i, el) => {
         if (!external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).hasClass('draggable--original') && !external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).hasClass('draggable-mirror')) {
           this.ids.push(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).data(this.settings.dataLabel));
         }
@@ -1290,7 +1290,7 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
     });
   }
   initialize() {
-    this.dragContainer.children().each((idx, el) => {
+    this.dragContainer.children().each((i, el) => {
       this.ids.push(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(el).data(this.settings.dataLabel));
     });
   }
@@ -1308,8 +1308,8 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
         url: url,
         data: {
           order: this.ids.toString(),
-          orgIdx: this.orgIdx,
-          newIdx: this.newIdx,
+          origIndex: this.origIndex,
+          newIndex: this.newIndex,
           source: this.sourceId
         },
         method: 'POST',
@@ -1751,7 +1751,7 @@ class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default
    */
   hasBase() {
     let hasBase = false;
-    this.menu.find('a').each((idx, el) => {
+    this.menu.find('a').each((i, el) => {
       if (this.urlMatchLocation(el.href)) {
         hasBase = true;
         // set active class for this specific menu item.

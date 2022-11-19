@@ -16,16 +16,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-multiline-body',
   template: `
-    <sui-table-body>
-      <atk-multiline-row v-for="(row, idx) in rows" :key="row.__atkml"
-      @onTabLastColumn="onTabLastColumn(idx)"
-      :fields="fields"
-      :rowId="row.__atkml"
-      :isDeletable="isDeletableRow(row)"
-      :rowValues="row"
-      :error="getError(row.__atkml)"></atk-multiline-row>
-    </sui-table-body>
-  `,
+        <sui-table-body>
+            <atk-multiline-row
+                :fields="fields"
+                v-for="(row, i) in rows" :key="row.__atkml"
+                @onTabLastColumn="onTabLastColumn(i)"
+                :rowId="row.__atkml"
+                :isDeletable="isDeletableRow(row)"
+                :rowValues="row"
+                :error="getError(row.__atkml)"
+            ></atk-multiline-row>
+        </sui-table-body>`,
   props: ['fieldDefs', 'rowData', 'deletables', 'errors'],
   data: function () {
     return {
@@ -43,13 +44,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   emits: ['onTabLastRow'],
   methods: {
-    onTabLastColumn: function (idx) {
-      if (idx + 1 === this.rowData.length) {
+    onTabLastColumn: function (rowIndex) {
+      if (rowIndex + 1 === this.rowData.length) {
         this.$emit('onTabLastRow');
       }
     },
     isDeletableRow: function (row) {
-      return this.deletables.indexOf(row.__atkml) > -1;
+      return this.deletables.indexOf(row.__atkml) !== -1;
     },
     getError: function (rowId) {
       if (rowId in this.errors) {
@@ -83,16 +84,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-multiline-cell',
   template: `
-    <component :is="getComponent()"
-        :fluid="true"
-        class="fluid"
-        @input="onInput"
-        @onChange="onChange"
-        v-model="inputValue"
-        :name="inputName"
-        ref="cell"
-        v-bind="getComponentProps()"></component>
-  `,
+        <component
+            :is="getComponent()"
+            v-bind="getComponentProps()"
+            ref="cell"
+            :fluid="true"
+            class="fluid"
+            @input="onInput"
+            @onChange="onChange"
+            v-model="inputValue"
+            :name="inputName"
+        ></component>`,
   components: {
     'atk-multiline-readonly': _multiline_readonly_component__WEBPACK_IMPORTED_MODULE_0__["default"],
     'atk-multiline-textarea': _multiline_textarea_component__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -173,23 +175,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-multiline-header',
   template: `
-     <sui-table-header>
-       <sui-table-row v-if="hasError()">
-        <sui-table-cell :style="{ background: 'none' }"></sui-table-cell>
-        <sui-table-cell :style="{ background: 'none' }" state="error" v-for="(column, idx) in columns" :key="idx" v-if="column.isVisible" :textAlign="getTextAlign(column)"><sui-icon name="attention" v-if="getErrorMsg(column)"></sui-icon>{{getErrorMsg(column)}}</sui-table-cell>
-      </sui-table-row>
-       <sui-table-row v-if="hasCaption()">
-        <sui-table-headerCell :colspan="getVisibleColumns()">{{caption}}</sui-table-headerCell>
-       </sui-table-row>
-        <sui-table-row :verticalAlign="'top'">
-        <sui-table-header-cell :width=1 textAlign="center"><input type="checkbox" @input="onToggleDeleteAll" :checked="isChecked" :indeterminate="isIndeterminate" ref="check"></sui-table-header-cell>
-        <sui-table-header-cell v-for="(column, idx) in columns" :key="idx" :width=column.cellProps.width v-if="column.isVisible" :textAlign="getTextAlign(column)">
-         <div>{{column.caption}}</div>
-         <div :style="{ position: 'absolute', top: '-22px' }" v-if="false"><sui-label pointing="below" basic color="red" v-if="getErrorMsg(column)">{{getErrorMsg(column)}}</sui-label></div>
-        </sui-table-header-cell>
-      </sui-table-row>
-    </sui-table-header>
-  `,
+        <sui-table-header>
+            <sui-table-row v-if="hasError()">
+                <sui-table-cell :style="{ background: 'none' }"></sui-table-cell>
+                <sui-table-cell :style="{ background: 'none' }"
+                    state="error"
+                    v-for="column in columns"
+                    v-if="column.isVisible"
+                    :textAlign="getTextAlign(column)"
+                >
+                    <sui-icon v-if="getErrorMsg(column)" name="attention"></sui-icon>
+                    {{getErrorMsg(column)}}
+                </sui-table-cell>
+            </sui-table-row>
+            <sui-table-row v-if="hasCaption()">
+                <sui-table-header-cell :colspan="getVisibleColumns()">{{caption}}</sui-table-header-cell>
+            </sui-table-row>
+            <sui-table-row :verticalAlign="'top'">
+                <sui-table-header-cell :width=1 textAlign="center">
+                    <input ref="check" type="checkbox" @input="onToggleDeleteAll" :checked="isChecked" :indeterminate="isIndeterminate" />
+                </sui-table-header-cell>
+                <sui-table-header-cell
+                    v-for="column in columns"
+                    v-if="column.isVisible"
+                    :width=column.cellProps.width
+                    :textAlign="getTextAlign(column)"
+                >
+                    <div>{{column.caption}}</div>
+                    <div v-if="false" :style="{ position: 'absolute', top: '-22px' }">
+                        <sui-label v-if="getErrorMsg(column)" pointing="below" basic color="red">{{getErrorMsg(column)}}</sui-label>
+                    </div>
+                </sui-table-header-cell>
+            </sui-table-row>
+        </sui-table-header>`,
   props: ['fields', 'state', 'errors', 'caption'],
   data: function () {
     return {
@@ -311,16 +329,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-multiline-row',
   template: `
-    <sui-table-row :verticalAlign="'middle'">
-        <sui-table-cell textAlign="center"><input type="checkbox" @input="onToggleDelete" v-model="toDelete"></sui-table-cell>
-        <sui-table-cell @keydown.tab="onTab(idx)" v-for="(column, idx) in columns" :key="idx" :width=null :state="getErrorState(column)" v-bind="column.cellProps" :style="{ overflow: 'visible' }" v-if="column.isVisible">
-         <atk-multiline-cell
-           :cellData="column"
-           @update-value="onUpdateValue"
-           :fieldValue="getValue(column)"></atk-multiline-cell>
-        </sui-table-cell>
-    </sui-table-row>
-  `,
+        <sui-table-row :verticalAlign="'middle'">
+            <sui-table-cell textAlign="center">
+                <input type="checkbox" @input="onToggleDelete" v-model="toDelete" />
+            </sui-table-cell>
+            <sui-table-cell
+                v-for="(column, i) in columns"
+                v-if="column.isVisible"
+                @keydown.tab="onTab(i)"
+                v-bind="column.cellProps"
+                :width=null
+                :state="getErrorState(column)"
+                :style="{ overflow: 'visible' }"
+            >
+                <atk-multiline-cell
+                    :cellData="column"
+                    @update-value="onUpdateValue"
+                    :fieldValue="getValue(column)"
+                ></atk-multiline-cell>
+            </sui-table-cell>
+        </sui-table-row>`,
   props: ['fields', 'rowId', 'isDeletable', 'rowValues', 'error'],
   data: function () {
     return {
@@ -347,8 +375,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   emits: ['onTabLastColumn'],
   methods: {
-    onTab: function (idx) {
-      if (idx === this.columns.filter(column => column.isEditable).length) {
+    onTab: function (columnIndex) {
+      if (columnIndex === this.columns.filter(column => column.isEditable).length) {
         this.$emit('onTabLastColumn');
       }
     },
@@ -460,28 +488,42 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-multiline',
-  template: `<div>
-                <sui-table v-bind="tableProp">
-                  <atk-multiline-header :fields="fieldData" :state="getMainToggleState" :errors="errors" :caption="caption"></atk-multiline-header>
-                  <atk-multiline-body @onTabLastRow="onTabLastRow" :fieldDefs="fieldData" :rowData="rowData" :deletables="getDeletables" :errors="errors"></atk-multiline-body>
-                  <sui-table-footer>
+  template: `
+        <div>
+            <sui-table v-bind="tableProp">
+                <atk-multiline-header
+                    :fields="fieldData"
+                    :state="getMainToggleState"
+                    :errors="errors"
+                    :caption="caption"
+                ></atk-multiline-header>
+                <atk-multiline-body
+                    @onTabLastRow="onTabLastRow"
+                    :fieldDefs="fieldData"
+                    :rowData="rowData"
+                    :deletables="getDeletables"
+                    :errors="errors"
+                ></atk-multiline-body>
+                <sui-table-footer>
                     <sui-table-row>
-                        <sui-table-header-cell />
+                        <sui-table-header-cell></sui-table-header-cell>
                         <sui-table-header-cell :colspan="getSpan" textAlign="right">
-                        <div is="vue:sui-button-group">
-                        <sui-button size="small" @click.stop.prevent="onAdd" type="button" icon ref="addBtn" :disabled="isLimitReached">
-                          <sui-icon name="plus" />
-                        </sui-button>
-                        <sui-button size="small" @click.stop.prevent="onDelete" type="button" icon :disabled="isDeleteDisable">
-                          <sui-icon name="trash" />
-                        </sui-button>
-                        </div>
+                            <div is="vue:sui-button-group">
+                                <sui-button ref="addBtn" size="small" @click.stop.prevent="onAdd" type="button" icon :disabled="isLimitReached">
+                                    <sui-icon name="plus"></sui-icon>
+                                </sui-button>
+                                <sui-button size="small" @click.stop.prevent="onDelete" type="button" icon :disabled="isDeleteDisable">
+                                    <sui-icon name="trash"></sui-icon>
+                                </sui-button>
+                            </div>
                         </sui-table-header-cell>
                     </sui-table-row>
-                  </sui-table-footer>
-                </sui-table>
-                <div><input :form="form" :name="name" type="hidden" :value="value" ref="atkmlInput"></div>
-             </div>`,
+                </sui-table-footer>
+            </sui-table>
+            <div>
+                <input ref="atkmlInput" :form="form" :name="name" type="hidden" :value="value" />
+            </div>
+        </div>`,
   props: {
     data: Object
   },
@@ -522,9 +564,9 @@ __webpack_require__.r(__webpack_exports__);
       this.onUpdate(payload.rowId, payload.fieldName, payload.value);
     });
     atk__WEBPACK_IMPORTED_MODULE_8__["default"].eventBus.on(this.$root.$el.id + '-toggle-delete', payload => {
-      const idx = this.deletables.indexOf(payload.rowId);
-      if (idx > -1) {
-        this.deletables.splice(idx, 1);
+      const i = this.deletables.indexOf(payload.rowId);
+      if (i !== -1) {
+        this.deletables.splice(i, 1);
       } else {
         this.deletables.push(payload.rowId);
       }
@@ -648,7 +690,7 @@ __webpack_require__.r(__webpack_exports__);
      */
     fetchOnChangeAction: function () {
       let fieldName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      if (this.hasChangeCb && (fieldName === null || this.eventFields.indexOf(fieldName) > -1)) {
+      if (this.hasChangeCb && (fieldName === null || this.eventFields.indexOf(fieldName) !== -1)) {
         external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this.$refs.addBtn.$el).api({
           on: 'now',
           url: this.data.url,
@@ -841,14 +883,15 @@ __webpack_require__.r(__webpack_exports__);
  * optionalValue: The initial list of options for the dropdown.
  */
 
-const template = `<sui-dropdown
-                    ref="drop"
-                    v-bind="dropdownProps"
-                    :loading="isLoading"
-                    @input="onChange"
-                    @filtered="onFiltered"
-                    v-model="current"
-                    :class="css"></sui-dropdown>`;
+const template = `
+    <sui-dropdown
+        v-bind="dropdownProps"
+        ref="drop"
+        ` /* :loading="isLoading" */ + `@input="onChange"
+        @filtered="onFiltered"
+        v-model="current"
+        :class="css"
+    ></sui-dropdown>`;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-lookup',
   template: template,

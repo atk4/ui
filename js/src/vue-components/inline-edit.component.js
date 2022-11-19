@@ -12,16 +12,18 @@ import $ from 'external/jquery';
  */
 
 const template = `
-      <div :class="[options.inputCss, hasError ? 'error' : '' ]">
-            <input
+    <div :class="[options.inputCss, hasError ? 'error' : '' ]">
+        <input
             :class="options.inlineCss"
             :name="options.fieldName"
             :type="options.fieldType"
             v-model="value"
             @keyup="onKeyup"
             @focus="onFocus"
-            @blur="onBlur" /><i class="icon"></i>
-      </div>`;
+            @blur="onBlur"
+        />
+        <i class="icon"></i>
+    </div>`;
 
 export default {
     name: 'atk-inline-edit',

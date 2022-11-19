@@ -18,7 +18,7 @@ class JsSortable extends JsCallback
      *  default to data-id.
      *
      * If the data-{label} attribute is not set for each list element, then the $_POST['order']
-     * value will be empty. Only orgIdx and newIdx will be sent in callback request.
+     * value will be empty. Only origIndex and newIndex will be sent in callback request.
      *
      * @var string
      */
@@ -66,10 +66,10 @@ class JsSortable extends JsCallback
         $this->set(function () use ($fx) {
             $sortOrders = explode(',', $_POST['order']);
             $source = $_POST['source'];
-            $newIdx = (int) $_POST['newIdx'];
-            $orgIdx = (int) $_POST['orgIdx'];
+            $newIndex = (int) $_POST['newIndex'];
+            $origIndex = (int) $_POST['origIndex'];
 
-            return $fx($sortOrders, $source, $newIdx, $orgIdx);
+            return $fx($sortOrders, $source, $newIndex, $origIndex);
         });
     }
 

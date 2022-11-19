@@ -14,14 +14,16 @@ import atk from 'atk';
  * optionalValue: The initial list of options for the dropdown.
  */
 
-const template = `<sui-dropdown
-                    ref="drop"
-                    v-bind="dropdownProps"
-                    :loading="isLoading"
-                    @input="onChange"
-                    @filtered="onFiltered"
-                    v-model="current"
-                    :class="css"></sui-dropdown>`;
+const template = `
+    <sui-dropdown
+        v-bind="dropdownProps"
+        ref="drop"
+        ` /* :loading="isLoading" */
+        + `@input="onChange"
+        @filtered="onFiltered"
+        v-model="current"
+        :class="css"
+    ></sui-dropdown>`;
 
 export default {
     name: 'atk-lookup',

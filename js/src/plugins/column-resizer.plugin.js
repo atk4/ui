@@ -33,7 +33,7 @@ export default class AtkColumnResizerPlugin extends AtkPlugin {
             const columns = this.$el.find('th');
 
             const widths = [];
-            columns.each((idx, item) => {
+            columns.each((i, item) => {
                 widths.push({ column: $(item).data('column'), size: $(item).outerWidth() });
             });
 
