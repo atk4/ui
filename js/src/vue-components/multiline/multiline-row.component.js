@@ -17,7 +17,6 @@ export default {
             </sui-table-cell>
             <sui-table-cell
                 v-for="(column, i) in columns"
-                v-if="column.isVisible"
                 @keydown.tab="onTab(i)"
                 v-bind="column.cellProps"
                 :width=null

@@ -167,7 +167,6 @@ __webpack_require__.r(__webpack_exports__);
                 <sui-table-cell :style="{ background: 'none' }"
                     state="error"
                     v-for="column in columns"
-                    v-if="column.isVisible"
                     :textAlign="getTextAlign(column)"
                 >
                     <sui-icon v-if="getErrorMsg(column)" name="attention"></sui-icon>
@@ -183,7 +182,6 @@ __webpack_require__.r(__webpack_exports__);
                 </sui-table-header-cell>
                 <sui-table-header-cell
                     v-for="column in columns"
-                    v-if="column.isVisible"
                     :width=column.cellProps.width
                     :textAlign="getTextAlign(column)"
                 >
@@ -321,7 +319,6 @@ __webpack_require__.r(__webpack_exports__);
             </sui-table-cell>
             <sui-table-cell
                 v-for="(column, i) in columns"
-                v-if="column.isVisible"
                 @keydown.tab="onTab(i)"
                 v-bind="column.cellProps"
                 :width=null
