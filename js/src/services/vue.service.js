@@ -81,6 +81,7 @@ class VueService {
         app.component('AtkItemSearch', asyncComponentFactory('AtkItemSearch', () => import(/* webpackChunkName: 'atk-vue-item-search' */'../vue-components/item-search.component')));
         app.component('AtkMultiline', asyncComponentFactory('AtkMultiline', () => import(/* webpackChunkName: 'atk-vue-multiline' */'../vue-components/multiline/multiline.component')));
         app.component('AtkTreeItemSelector', asyncComponentFactory('AtkTreeItemSelector', () => import(/* webpackChunkName: 'atk-vue-tree-item-selector' */'../vue-components/tree-item-selector/tree-item-selector.component')));
+        app.component('AtkQueryBuilder', asyncComponentFactory('AtkQueryBuilder', () => import(/* webpackChunkName: 'atk-vue-query-builder' */'../vue-components/query-builder/query-builder.component.vue')));
     }
 
     /**

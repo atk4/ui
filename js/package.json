@@ -29,7 +29,8 @@
         "mitt": "^3.0.0",
         "vue": "^3.2.41",
         "vue-flatpickr-component": "^10.0.0",
-        "vue-fomantic-ui": "^0.13.0"
+        "vue-fomantic-ui": "^0.13.0",
+        "vue-query-builder": "github:TheAustinG/vue-query-builder#2f5c4408e3"
     },
     "devDependencies": {
         "@babel/cli": "^7.19.3",

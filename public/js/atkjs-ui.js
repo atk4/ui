@@ -3401,6 +3401,7 @@ class VueService {
     app.component('AtkItemSearch', asyncComponentFactory('AtkItemSearch', () => __webpack_require__.e(/*! import() | atk-vue-item-search */ "atk-vue-item-search").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/item-search.component */ "./src/vue-components/item-search.component.js"))));
     app.component('AtkMultiline', asyncComponentFactory('AtkMultiline', () => __webpack_require__.e(/*! import() | atk-vue-multiline */ "atk-vue-multiline").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/multiline/multiline.component */ "./src/vue-components/multiline/multiline.component.js"))));
     app.component('AtkTreeItemSelector', asyncComponentFactory('AtkTreeItemSelector', () => __webpack_require__.e(/*! import() | atk-vue-tree-item-selector */ "atk-vue-tree-item-selector").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/tree-item-selector/tree-item-selector.component */ "./src/vue-components/tree-item-selector/tree-item-selector.component.js"))));
+    app.component('AtkQueryBuilder', asyncComponentFactory('AtkQueryBuilder', () => Promise.all(/*! import() | atk-vue-query-builder */[__webpack_require__.e("vendor-vue"), __webpack_require__.e("vendor-vue-query-builder"), __webpack_require__.e("atk-vue-query-builder")]).then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/query-builder/query-builder.component.vue */ "./src/vue-components/query-builder/query-builder.component.vue"))));
   }
 
   /**
@@ -42924,7 +42925,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
+/******/ 			id: moduleId,
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
@@ -43197,6 +43198,11 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		var chunkLoadingGlobal = self["webpackChunkatk"] = self["webpackChunkatk"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/nonce */
+/******/ 	(() => {
+/******/ 		__webpack_require__.nc = undefined;
 /******/ 	})();
 /******/ 	
 /************************************************************************/

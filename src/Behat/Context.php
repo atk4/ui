@@ -562,6 +562,93 @@ class Context extends RawMinkContext implements BehatContext
             EOF, [$element, array_map('ord', str_split($fileContent)), $fileName]);
     }
 
+    private function getScopeBuilderRuleElem(string $ruleName): NodeElement
+    {
+        return $this->findElement(null, '.vqb-rule[data-name=' . $ruleName . ']');
+    }
+
+    /**
+     * Generic ScopeBuilder rule with select operator and input value.
+     *
+     * @Then ~^rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
+     */
+    public function scopeBuilderRule(string $name, string $operator, string $value): void
+    {
+        $name = $this->unquoteStepArgument($name);
+        $operator = $this->unquoteStepArgument($operator);
+        $value = $this->unquoteStepArgument($value);
+
+        $rule = $this->getScopeBuilderRuleElem($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertInputValue($rule, $value);
+    }
+
+    /**
+     * HasOne reference or enum type rule for ScopeBuilder.
+     *
+     * @Then ~^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
+     */
+    public function scopeBuilderReferenceRule(string $name, string $operator, string $value): void
+    {
+        $name = $this->unquoteStepArgument($name);
+        $operator = $this->unquoteStepArgument($operator);
+        $value = $this->unquoteStepArgument($value);
+
+        $rule = $this->getScopeBuilderRuleElem($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertDropdownValue($rule, $value, '.vqb-rule-input .active.item');
+    }
+
+    /**
+     * HasOne select or enum type rule for ScopeBuilder.
+     *
+     * @Then ~^select rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
+     */
+    public function scopeBuilderSelectRule(string $name, string $operator, string $value): void
+    {
+        $name = $this->unquoteStepArgument($name);
+        $operator = $this->unquoteStepArgument($operator);
+        $value = $this->unquoteStepArgument($value);
+
+        $rule = $this->getScopeBuilderRuleElem($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertSelectedValue($rule, $value, '.vqb-rule-input select');
+    }
+
+    /**
+     * Date, Time or Datetime rule for ScopeBuilder.
+     *
+     * @Then ~^date rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
+     */
+    public function scopeBuilderDateRule(string $name, string $operator, string $value): void
+    {
+        $name = $this->unquoteStepArgument($name);
+        $operator = $this->unquoteStepArgument($operator);
+        $value = $this->unquoteStepArgument($value);
+
+        $rule = $this->getScopeBuilderRuleElem($name);
+        $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
+        $this->assertInputValue($rule, $value, 'input.form-control');
+    }
+
+    /**
+     * Boolean type rule for ScopeBuilder.
+     *
+     * @Then ~^bool rule "([^"]*)" has value "([^"]*)"$~
+     */
+    public function scopeBuilderBoolRule(string $name, string $value): void
+    {
+        $name = $this->unquoteStepArgument($name);
+        $value = $this->unquoteStepArgument($value);
+
+        $this->getScopeBuilderRuleElem($name);
+        $idx = ($value === 'Yes') ? 0 : 1;
+        $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="' . $name . '"]\').find(\'input\')[' . $idx . '].checked');
+        if (!$isChecked) {
+            throw new \Exception('Radio value selected is not: ' . $value);
+        }
+    }
+
     /**
      * @Then ~^I check if input value for "([^"]*)" match text "([^"]*)"~
      */
