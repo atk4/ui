@@ -3,7 +3,7 @@ import atk from 'atk';
 /**
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
  *
- * Props:
+ * Properties:
  * config:
  * url: the callback URL. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
  * reference: the reference field name associate with model or hasOne name. This field name will be sent along with URL callback parameter as of 'field=name'.
@@ -13,21 +13,18 @@ import atk from 'atk';
  * value: The selected value.
  * optionalValue: The initial list of options for the dropdown.
  */
-
-const template = `
-    <sui-dropdown
-        v-bind="dropdownProps"
-        ref="drop"
-        ` /* :loading="isLoading" */
-        + `@input="onChange"
-        @filtered="onFiltered"
-        v-model="current"
-        :class="css"
-    ></sui-dropdown>`;
-
 export default {
     name: 'atk-lookup',
-    template: template,
+    template: `
+        <sui-dropdown
+            v-bind="dropdownProps"
+            ref="drop"
+            ` /* :loading="isLoading" */
+            + `@update:modelValue="onChange"
+            @filtered="onFiltered"
+            v-model="current"
+            :class="css"
+        ></sui-dropdown>`,
     props: ['config', 'value', 'optionalValue'],
     data: function () {
         const {
@@ -51,10 +48,11 @@ export default {
             this.dropdownProps.options = Array.isArray(this.optionalValue) ? this.optionalValue : [this.optionalValue];
         }
     },
-    emits: ['onChange'],
+    emits: ['update:modelValue'],
     methods: {
         onChange: function (value) {
-            this.$emit('onChange', value);
+            this.current = value.value;
+            this.$emit('update:modelValue', this.current);
         },
         /**
          * Receive user input text for search.

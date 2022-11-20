@@ -4,17 +4,14 @@
  * Wrapper for vue-flatpickr-component component.
  * https://github.com/ankurk91/vue-flatpickr-component
  *
- * Props:
+ * Properties:
  * config: Any of flatpickr options
  *
  * Will emit a dateChange event when date is set.
  */
-
-const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-change="onChange"></flatpickr-picker>';
-
 export default {
     name: 'atk-date-picker',
-    template: template,
+    template: '<flatpickr-picker v-model="date" :config="flatPickr"></flatpickr-picker>',
     props: ['config', 'value'],
     data: function () {
         const { useDefault, ...fpickr } = this.config;
@@ -34,7 +31,7 @@ export default {
             date: null,
         };
     },
-    emits: ['setDefault', 'onChange'],
+    emits: ['setDefault'],
     mounted: function () {
         // if value is not set but default date is, then emit proper string value to parent.
         if (!this.value && this.flatPickr.defaultDate) {
@@ -44,10 +41,5 @@ export default {
                 this.$emit('setDefault', this.flatPickr.defaultDate);
             }
         }
-    },
-    methods: {
-        onChange: function (date) {
-            this.$emit('onChange', flatpickr.formatDate(date[0], this.flatPickr.dateFormat));
-        },
     },
 };

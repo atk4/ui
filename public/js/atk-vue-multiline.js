@@ -90,8 +90,7 @@ __webpack_require__.r(__webpack_exports__);
             ref="cell"
             :fluid="true"
             class="fluid"
-            @input="onInput"
-            @onChange="onChange"
+            @update:modelValue="onInput"
             v-model="inputValue"
             :name="inputName"
         ></component>`,
@@ -124,21 +123,8 @@ __webpack_require__.r(__webpack_exports__);
       return this.cellData.definition.componentProps;
     },
     onInput: function (value) {
-      // this.inputValue = this.getTypeValue(value);
+      this.inputValue = value;
       this.$emit('update-value', this.fieldName, this.inputValue);
-    },
-    onChange: function (value) {
-      this.onInput(value);
-    },
-    /**
-     * return input value based on their type.
-     */
-    getTypeValue: function (value) {
-      let r = value;
-      if (this.type === 'boolean') {
-        r = value.target.checked;
-      }
-      return r;
     }
   }
 });
@@ -288,8 +274,8 @@ __webpack_require__.r(__webpack_exports__);
  * Simply display a readonly value.
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  template: '<div>{{readOnlyValue}}</div>',
   name: 'atk-multiline-readonly',
+  template: '<div>{{readOnlyValue}}</div>',
   props: ['readOnlyValue']
 });
 
@@ -426,20 +412,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-textarea',
-  template: '<textarea v-model="text" @input="handleChange"></textarea>',
-  props: {
-    value: [String, Number]
-  },
-  data: function () {
-    return {
-      text: this.value
-    };
-  },
-  emits: ['input'],
+  name: 'atk-multiline-textarea',
+  template: '<textarea v-model="modelValue" @input="onInput"></textarea>',
+  props: ['modelValue'],
+  emits: ['update:modelValue'],
   methods: {
-    handleChange: function (event) {
-      this.$emit('input', event.target.value);
+    onInput: function (event) {
+      this.$emit('update:modelValue', event.target.value);
     }
   }
 });
@@ -807,16 +786,14 @@ __webpack_require__.r(__webpack_exports__);
  * Wrapper for vue-flatpickr-component component.
  * https://github.com/ankurk91/vue-flatpickr-component
  *
- * Props:
+ * Properties:
  * config: Any of flatpickr options
  *
  * Will emit a dateChange event when date is set.
  */
-
-const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-change="onChange"></flatpickr-picker>';
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-date-picker',
-  template: template,
+  template: '<flatpickr-picker v-model="date" :config="flatPickr"></flatpickr-picker>',
   props: ['config', 'value'],
   data: function () {
     const {
@@ -836,7 +813,7 @@ const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-chang
       date: null
     };
   },
-  emits: ['setDefault', 'onChange'],
+  emits: ['setDefault'],
   mounted: function () {
     // if value is not set but default date is, then emit proper string value to parent.
     if (!this.value && this.flatPickr.defaultDate) {
@@ -845,11 +822,6 @@ const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-chang
       } else {
         this.$emit('setDefault', this.flatPickr.defaultDate);
       }
-    }
-  },
-  methods: {
-    onChange: function (date) {
-      this.$emit('onChange', flatpickr.formatDate(date[0], this.flatPickr.dateFormat));
     }
   }
 });
@@ -872,7 +844,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
  *
- * Props:
+ * Properties:
  * config:
  * url: the callback URL. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
  * reference: the reference field name associate with model or hasOne name. This field name will be sent along with URL callback parameter as of 'field=name'.
@@ -882,19 +854,17 @@ __webpack_require__.r(__webpack_exports__);
  * value: The selected value.
  * optionalValue: The initial list of options for the dropdown.
  */
-
-const template = `
-    <sui-dropdown
-        v-bind="dropdownProps"
-        ref="drop"
-        ` /* :loading="isLoading" */ + `@input="onChange"
-        @filtered="onFiltered"
-        v-model="current"
-        :class="css"
-    ></sui-dropdown>`;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'atk-lookup',
-  template: template,
+  template: `
+        <sui-dropdown
+            v-bind="dropdownProps"
+            ref="drop"
+            ` /* :loading="isLoading" */ + `@update:modelValue="onChange"
+            @filtered="onFiltered"
+            v-model="current"
+            :class="css"
+        ></sui-dropdown>`,
   props: ['config', 'value', 'optionalValue'],
   data: function () {
     const {
@@ -920,10 +890,11 @@ const template = `
       this.dropdownProps.options = Array.isArray(this.optionalValue) ? this.optionalValue : [this.optionalValue];
     }
   },
-  emits: ['onChange'],
+  emits: ['update:modelValue'],
   methods: {
     onChange: function (value) {
-      this.$emit('onChange', value);
+      this.current = value.value;
+      this.$emit('update:modelValue', this.current);
     },
     /**
      * Receive user input text for search.

@@ -1,4 +1,4 @@
-import multilineReadOnly from './multiline-readonly.component';
+import multilineReadonly from './multiline-readonly.component';
 import multilineTextarea from './multiline-textarea.component';
 import atkDatePicker from '../share/atk-date-picker';
 import atkLookup from '../share/atk-lookup';
@@ -12,13 +12,12 @@ export default {
             ref="cell"
             :fluid="true"
             class="fluid"
-            @input="onInput"
-            @onChange="onChange"
+            @update:modelValue="onInput"
             v-model="inputValue"
             :name="inputName"
         ></component>`,
     components: {
-        'atk-multiline-readonly': multilineReadOnly,
+        'atk-multiline-readonly': multilineReadonly,
         'atk-multiline-textarea': multilineTextarea,
         'atk-date-picker': atkDatePicker,
         'atk-lookup': atkLookup,
@@ -45,22 +44,8 @@ export default {
             return this.cellData.definition.componentProps;
         },
         onInput: function (value) {
-            // this.inputValue = this.getTypeValue(value);
+            this.inputValue = value;
             this.$emit('update-value', this.fieldName, this.inputValue);
-        },
-        onChange: function (value) {
-            this.onInput(value);
-        },
-        /**
-         * return input value based on their type.
-         */
-        getTypeValue: function (value) {
-            let r = value;
-            if (this.type === 'boolean') {
-                r = value.target.checked;
-            }
-
-            return r;
         },
     },
 };

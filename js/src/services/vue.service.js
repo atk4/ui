@@ -3,6 +3,8 @@ import {
     createApp, camelize, capitalize, defineAsyncComponent,
 } from 'vue';
 
+const vueFomanticUiComponentNamesSet = new Set(__VUE_FOMANTICUI_COMPONENT_NAMES__); // eslint-disable-line no-undef
+
 class VueService {
     constructor() {
         this.vues = [];
@@ -57,7 +59,7 @@ class VueService {
             // https://github.com/vuejs/core/blob/v3.2.45/packages/runtime-core/src/helpers/resolveAssets.ts#L136
             if (registry[name] === undefined && registry[camelize(name)] === undefined) {
                 const namePascalized = capitalize(camelize(name));
-                if (registry[namePascalized] === undefined && __VUE_FOMANTICUI_COMPONENT_NAMES__.includes(namePascalized)) { // eslint-disable-line no-undef
+                if (registry[namePascalized] === undefined && vueFomanticUiComponentNamesSet.has(namePascalized)) {
                     registry[namePascalized] = asyncComponentFactory(namePascalized, () => (import('vue-fomantic-ui')).then((r) => r[namePascalized]));
                 }
             }
@@ -144,7 +146,7 @@ class VueService {
         if (this.vues[component.name] === undefined) {
             this.vues[component.name] = component;
         } else {
-            this.vues[component.name].ids.push(component.ids[0]);
+            // TODO this.vues[component.name].ids.push(component.ids[0]);
         }
     }
 

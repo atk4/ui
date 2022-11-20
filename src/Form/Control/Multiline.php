@@ -565,11 +565,7 @@ class Multiline extends Form\Control
         $model = $field->getReference()->refModel($this->model);
         $entity = $model->tryLoadBy($field->getReference()->getTheirFieldName($model), $value);
         if ($entity !== null) {
-            $option = [
-                'key' => $value,
-                'text' => $entity->get($model->titleField),
-                'value' => $value,
-            ];
+            $option = ['key' => $value, 'text' => $entity->get($model->titleField), 'value' => $value];
             foreach ($this->fieldDefs as $key => $component) {
                 if ($component['name'] === $field->shortName) {
                     $this->fieldDefs[$key]['definition']['componentProps']['optionalValue'] =

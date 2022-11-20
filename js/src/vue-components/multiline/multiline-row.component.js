@@ -39,11 +39,11 @@ export default {
         'atk-multiline-cell': multilineCell,
     },
     computed: {
-    /**
-     * toDelete is bind by v-model, thus we need a setter for
-     * computed property to work.
-     * When isDeletable is pass, will set checkbox according to it's value.
-     */
+        /**
+         * toDelete is bind by v-model, thus we need a setter for
+         * computed property to work.
+         * When isDeletable is pass, will set checkbox according to it's value.
+         */
         toDelete: {
             get: function () {
                 return this.isDeletable;
