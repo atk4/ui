@@ -32,6 +32,11 @@ $form = Form::addTo($app);
 $multiline = $form->addControl('items', [Form\Control\Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
 $multiline->setModel($inventory);
 
+// DEBUG
+/** @var Form\Control\Multiline */
+$multiline2 = $form->addControl('items2', [Form\Control\Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
+$multiline2->setModel($inventory);
+
 // Add total field.
 $total = 0;
 foreach ($inventory as $item) {
