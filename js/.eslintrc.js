@@ -43,6 +43,7 @@ module.exports = {
                 balanced: true,
             },
         }],
+        'vue/html-indent': ['error', 4],
         'jsdoc/require-param': 'off',
         'jsdoc/require-param-description': 'off',
         'jsdoc/require-returns': 'off',

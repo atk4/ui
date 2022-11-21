@@ -1,19 +1,19 @@
 import $ from 'external/jquery';
 
 export default {
-    name: 'atk-tree-item-selector',
+    name: 'AtkTreeItemSelector',
     template: `
         <div class="item" :style="itemMargin">
-            <i :class="toggleIcon" @click="onToggleShow" v-show="!isRoot"></i>
-            <i :class="getIcon" @click="onToggleSelect" v-show="!isRoot"></i>
+            <i :class="toggleIcon" @click="onToggleShow" v-show="!isRoot" />
+            <i :class="getIcon" @click="onToggleSelect" v-show="!isRoot" />
             <div class="content">
                 <div @click="onToggleSelect" :style="itemCursor">{{title}}</div>
                 <div v-if="isParent" class="list" v-show="open || isRoot">
-                    <atk-tree-item-selector
+                    <AtkTreeItemSelector
                         v-for="item in item.nodes" :key="item.id"
                         :item="item"
                         :values="values"
-                    ></atk-tree-item-selector>
+                    ></AtkTreeItemSelector>
                 </div>
             </div>
         </div>`,

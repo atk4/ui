@@ -2,20 +2,20 @@ import atk from 'atk';
 import multilineCell from './multiline-cell.component';
 
 /**
- * This will create a table td element using sui-table-cell.
+ * This will create a table td element using SuiTableCell.
  * The td element is created only if column as set isVisible = true;
  * The td element will add a multiline cell element.
  * the multiline cell will set it's own template component depending on the fieldType.
  * getValue
  */
 export default {
-    name: 'atk-multiline-row',
+    name: 'AtkMultilineRow',
     template: `
-        <sui-table-row :verticalAlign="'middle'">
-            <sui-table-cell textAlign="center">
+        <SuiTableRow :verticalAlign="'middle'">
+            <SuiTableCell textAlign="center">
                 <input type="checkbox" @input="onToggleDelete" v-model="toDelete" />
-            </sui-table-cell>
-            <sui-table-cell
+            </SuiTableCell>
+            <SuiTableCell
                 v-for="(column, i) in columns"
                 @keydown.tab="onTab(i)"
                 v-bind="column.cellProps"
@@ -23,19 +23,19 @@ export default {
                 :state="getErrorState(column)"
                 :style="{ overflow: 'visible' }"
             >
-                <atk-multiline-cell
+                <AtkMultilineCell
                     :cellData="column"
                     @update-value="onUpdateValue"
                     :fieldValue="getValue(column)"
-                ></atk-multiline-cell>
-            </sui-table-cell>
-        </sui-table-row>`,
+                ></AtkMultilineCell>
+            </SuiTableCell>
+        </SuiTableRow>`,
     props: ['fields', 'rowId', 'isDeletable', 'rowValues', 'error'],
     data: function () {
         return { columns: this.fields };
     },
     components: {
-        'atk-multiline-cell': multilineCell,
+        AtkMultilineCell: multilineCell,
     },
     computed: {
         /**

@@ -4,39 +4,39 @@ import multilineBody from './multiline-body.component';
 import multilineHeader from './multiline-header.component';
 
 export default {
-    name: 'atk-multiline',
+    name: 'AtkMultiline',
     template: `
         <div>
-            <sui-table v-bind="tableProp">
-                <atk-multiline-header
+            <SuiTable v-bind="tableProp">
+                <AtkMultilineHeader
                     :fields="fieldData"
                     :state="getMainToggleState"
                     :errors="errors"
                     :caption="caption"
-                ></atk-multiline-header>
-                <atk-multiline-body
+                ></AtkMultilineHeader>
+                <AtkMultilineBody
                     @onTabLastRow="onTabLastRow"
                     :fieldDefs="fieldData"
                     :rowData="rowData"
                     :deletables="getDeletables"
                     :errors="errors"
-                ></atk-multiline-body>
-                <sui-table-footer>
-                    <sui-table-row>
-                        <sui-table-header-cell></sui-table-header-cell>
-                        <sui-table-header-cell :colspan="getSpan" textAlign="right">
-                            <div is="vue:sui-button-group">
-                                <sui-button ref="addBtn" size="small" @click.stop.prevent="onAdd" type="button" icon :disabled="isLimitReached">
-                                    <sui-icon name="plus"></sui-icon>
-                                </sui-button>
-                                <sui-button size="small" @click.stop.prevent="onDelete" type="button" icon :disabled="isDeleteDisable">
-                                    <sui-icon name="trash"></sui-icon>
-                                </sui-button>
-                            </div>
-                        </sui-table-header-cell>
-                    </sui-table-row>
-                </sui-table-footer>
-            </sui-table>
+                ></AtkMultilineBody>
+                <SuiTableFooter>
+                    <SuiTableRow>
+                        <SuiTableHeaderCell />
+                        <SuiTableHeaderCell :colspan="getSpan" textAlign="right">
+                            <SuiButtonGroup>
+                                <SuiButton ref="addBtn" size="small" @click.stop.prevent="onAdd" type="button" icon :disabled="isLimitReached">
+                                    <SuiIcon name="plus" />
+                                </SuiButton>
+                                <SuiButton size="small" @click.stop.prevent="onDelete" type="button" icon :disabled="isDeleteDisable">
+                                    <SuiIcon name="trash" />
+                                </SuiButton>
+                            </SuiButtonGroup>
+                        </SuiTableHeaderCell>
+                    </SuiTableRow>
+                </SuiTableFooter>
+            </SuiTable>
             <div>
                 <input ref="atkmlInput" :form="form" :name="name" type="hidden" :value="value" />
             </div>
@@ -68,8 +68,8 @@ export default {
         };
     },
     components: {
-        'atk-multiline-body': multilineBody,
-        'atk-multiline-header': multilineHeader,
+        AtkMultilineHeader: multilineHeader,
+        AtkMultilineBody: multilineBody,
     },
     mounted: function () {
         this.rowData = this.buildRowData(this.value ? this.value : '[]');

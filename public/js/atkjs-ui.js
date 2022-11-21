@@ -3354,11 +3354,11 @@ class VueService {
   }
   _setupComponentAutoloader(app) {
     const atkLoadingComponent = {
-      name: 'atk-vue-loader',
+      name: 'AtkAutoloaderLoading',
       template: '<div><div class="ui active centered inline loader"></div></div>'
     };
     const atkErrorComponent = {
-      name: 'atk-vue-error',
+      name: 'AtkAutoloaderError',
       template: '<div class="ui negative message"><p>Error: Unable to load Vue component</p></div>'
     };
     const asyncComponentFactory = (name, component) => (0,vue__WEBPACK_IMPORTED_MODULE_20__.defineAsyncComponent)({

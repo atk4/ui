@@ -182,7 +182,7 @@ class InlineEdit extends View
 
         $fieldName = $this->fieldName ?? 'name';
 
-        $this->vue('atk-inline-edit', [
+        $this->vue('AtkInlineEdit', [
             'initValue' => $initValue,
             'url' => $this->cb->getJsUrl(),
             'saveOnBlur' => $this->saveOnBlur,

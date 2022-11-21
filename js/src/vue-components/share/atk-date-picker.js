@@ -10,8 +10,8 @@
  * Will emit a dateChange event when date is set.
  */
 export default {
-    name: 'atk-date-picker',
-    template: '<flatpickr-picker v-model="date" :config="flatPickr"></flatpickr-picker>',
+    name: 'AtkDatePicker',
+    template: '<FlatpickrPicker v-model="date" :config="flatPickr" />',
     props: ['config', 'value'],
     data: function () {
         const { useDefault, ...fpickr } = this.config;

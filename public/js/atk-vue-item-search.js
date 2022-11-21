@@ -29,7 +29,7 @@ __webpack_require__.r(__webpack_exports__);
  * reload:  string, an Id selector for jQuery, '#' is append automatically.
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-item-search',
+  name: 'AtkItemSearch',
   template: `
         <div class="atk-item-search" :class="inputCss">
             <input
@@ -40,8 +40,8 @@ __webpack_require__.r(__webpack_exports__);
                 @keyup.esc="onEscape"
                 name="atk-vue-search"
             />
-            <i class="atk-search-icon" :class="classIcon"></i>
-            <span style="width: 12px; cursor: pointer;" @click="onClear"></span>
+            <i class="atk-search-icon" :class="classIcon" />
+            <span style="width: 12px; cursor: pointer;" @click="onClear" />
         </div>`,
   props: {
     context: String,

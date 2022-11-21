@@ -1,39 +1,39 @@
 import atk from 'atk';
 
 export default {
-    name: 'atk-multiline-header',
+    name: 'AtkMultilineHeader',
     template: `
-        <sui-table-header>
-            <sui-table-row v-if="hasError()">
-                <sui-table-cell :style="{ background: 'none' }"></sui-table-cell>
-                <sui-table-cell :style="{ background: 'none' }"
+        <SuiTableHeader>
+            <SuiTableRow v-if="hasError()">
+                <SuiTableCell :style="{ background: 'none' }" />
+                <SuiTableCell :style="{ background: 'none' }"
                     state="error"
                     v-for="column in columns"
                     :textAlign="getTextAlign(column)"
                 >
-                    <sui-icon v-if="getErrorMsg(column)" name="attention"></sui-icon>
+                    <SuiIcon v-if="getErrorMsg(column)" name="attention" />
                     {{getErrorMsg(column)}}
-                </sui-table-cell>
-            </sui-table-row>
-            <sui-table-row v-if="hasCaption()">
-                <sui-table-header-cell :colspan="getVisibleColumns()">{{caption}}</sui-table-header-cell>
-            </sui-table-row>
-            <sui-table-row :verticalAlign="'top'">
-                <sui-table-header-cell :width=1 textAlign="center">
+                </SuiTableCell>
+            </SuiTableRow>
+            <SuiTableRow v-if="hasCaption()">
+                <SuiTableHeaderCell :colspan="getVisibleColumns()">{{caption}}</SuiTableHeaderCell>
+            </SuiTableRow>
+            <SuiTableRow :verticalAlign="'top'">
+                <SuiTableHeaderCell :width=1 textAlign="center">
                     <input ref="check" type="checkbox" @input="onToggleDeleteAll" :checked="isChecked" :indeterminate="isIndeterminate" />
-                </sui-table-header-cell>
-                <sui-table-header-cell
+                </SuiTableHeaderCell>
+                <SuiTableHeaderCell
                     v-for="column in columns"
                     :width=column.cellProps.width
                     :textAlign="getTextAlign(column)"
                 >
                     <div>{{column.caption}}</div>
                     <div v-if="false" :style="{ position: 'absolute', top: '-22px' }">
-                        <sui-label v-if="getErrorMsg(column)" pointing="below" basic color="red">{{getErrorMsg(column)}}</sui-label>
+                        <SuiLabel v-if="getErrorMsg(column)" pointing="below" basic color="red">{{getErrorMsg(column)}}</SuiLabel>
                     </div>
-                </sui-table-header-cell>
-            </sui-table-row>
-        </sui-table-header>`,
+                </SuiTableHeaderCell>
+            </SuiTableRow>
+        </SuiTableHeader>`,
     props: ['fields', 'state', 'errors', 'caption'],
     data: function () {
         return { columns: this.fields, isDeleteAll: false };

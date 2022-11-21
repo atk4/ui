@@ -1,4 +1,4 @@
-# Agile Toolkit js package
+# Agile Toolkit JS package
 
 The javascript package is necessary to run Agile Toolkit UI. It provide necessary
 jQuery plugin needed for Atk4\Ui and also provide app wide services for Fomantic-UI module.

@@ -25,7 +25,7 @@ __webpack_require__.r(__webpack_exports__);
  * value:   array, array of value to send to server.
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-inline-edit',
+  name: 'AtkInlineEdit',
   template: `
         <div :class="[options.inputCss, hasError ? 'error' : '' ]">
             <input
@@ -37,7 +37,7 @@ __webpack_require__.r(__webpack_exports__);
                 @focus="onFocus"
                 @blur="onBlur"
             />
-            <i class="icon"></i>
+            <i class="icon" />
         </div>`,
   props: {
     url: String,

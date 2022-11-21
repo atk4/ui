@@ -4,7 +4,7 @@ import atkDatePicker from '../share/atk-date-picker';
 import atkLookup from '../share/atk-lookup';
 
 export default {
-    name: 'atk-multiline-cell',
+    name: 'AtkMultilineCell',
     template: `
         <component
             :is="getComponent()"
@@ -17,10 +17,10 @@ export default {
             :name="inputName"
         ></component>`,
     components: {
-        'atk-multiline-readonly': multilineReadonly,
-        'atk-multiline-textarea': multilineTextarea,
-        'atk-date-picker': atkDatePicker,
-        'atk-lookup': atkLookup,
+        AtkMultilineReadonly: multilineReadonly,
+        AtkMultilineTextarea: multilineTextarea,
+        AtkDatePicker: atkDatePicker,
+        AtkLookup: atkLookup,
     },
     props: ['cellData', 'fieldValue'],
     data: function () {
@@ -37,7 +37,7 @@ export default {
             return this.cellData.definition.component;
         },
         getComponentProps: function () {
-            if (this.getComponent() === 'atk-multiline-readonly') {
+            if (this.getComponent() === 'AtkMultilineReadonly') {
                 return { readOnlyValue: this.fieldValue };
             }
 

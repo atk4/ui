@@ -558,7 +558,7 @@ class Form extends View
 
         // [name] in selector is to suppress https://github.com/fomantic/Fomantic-UI/commit/facbca003cf0da465af7d44af41462e736d3eb8b
         // console errors from Multiline/vue fields
-        $this->on('change', 'input[name], textarea[name], select[name]', $this->js()->form('remove prompt', new JsExpression('$(this).attr(\'name\')')));
+        $this->on('change', '.field input[name], .field textarea[name], .field select[name]', $this->js()->form('remove prompt', new JsExpression('$(this).attr(\'name\')')));
 
         if (!$this->canLeave) {
             $this->js(true, (new JsChain('atk.formService'))->preventFormLeave($this->name));

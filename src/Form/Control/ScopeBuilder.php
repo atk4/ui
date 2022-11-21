@@ -52,7 +52,7 @@ class ScopeBuilder extends Form\Control
         'flatpickr' => [],
     ];
 
-    /** Atk-lookup and Fomantic-UI dropdown options. */
+    /** AtkLookup and Fomantic-UI dropdown options. */
     public array $atkLookupOptions = [
         'ui' => 'small basic button',
     ];
@@ -210,7 +210,7 @@ class ScopeBuilder extends Form\Control
         'lookup' => [
             'type' => 'custom-component',
             'inputType' => 'lookup',
-            'component' => 'atk-lookup',
+            'component' => 'AtkLookup',
             'operators' => self::ENUM_OPERATORS,
             'componentProps' => [__CLASS__, 'getLookupProps'],
         ],
@@ -244,21 +244,21 @@ class ScopeBuilder extends Form\Control
         ],
         'date' => [
             'type' => 'custom-component',
-            'component' => 'atk-date-picker',
+            'component' => 'AtkDatePicker',
             'inputType' => 'date',
             'operators' => self::DATE_OPERATORS,
             'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
         'datetime' => [
             'type' => 'custom-component',
-            'component' => 'atk-date-picker',
+            'component' => 'AtkDatePicker',
             'inputType' => 'datetime',
             'operators' => self::DATE_OPERATORS,
             'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
         'time' => [
             'type' => 'custom-component',
-            'component' => 'atk-date-picker',
+            'component' => 'AtkDatePicker',
             'inputType' => 'time',
             'operators' => self::DATE_OPERATORS,
             'componentProps' => [__CLASS__, 'getDatePickerProps'],
@@ -354,11 +354,11 @@ class ScopeBuilder extends Form\Control
     }
 
     /**
-     * Set property for atk-lookup component.
+     * Set property for AtkLookup component.
      */
     protected function getLookupProps(Field $field): array
     {
-        // set any of sui-dropdown props via this property. Will be applied globally.
+        // set any of SuiDropdown props via this property. Will be applied globally.
         $props = $this->atkLookupOptions;
         $items = $this->getFieldItems($field, 10);
         foreach ($items as $value => $text) {
@@ -377,7 +377,7 @@ class ScopeBuilder extends Form\Control
     }
 
     /**
-     * Set property for atk-date-picker component.
+     * Set property for AtkDatePicker component.
      */
     protected function getDatePickerProps(Field $field): array
     {

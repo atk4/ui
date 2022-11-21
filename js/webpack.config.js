@@ -5,7 +5,6 @@ const TerserPlugin = require('terser-webpack-plugin');
 const VueFomanticUi = require('vue-fomantic-ui');
 
 module.exports = (env) => {
-    // determine which mode
     const isProduction = env.production;
     const srcDir = path.resolve(__dirname, './src');
     const publicDir = path.resolve(__dirname, '../public');

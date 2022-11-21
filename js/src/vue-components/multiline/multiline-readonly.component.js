@@ -2,7 +2,7 @@
  * Simply display a readonly value.
  */
 export default {
-    name: 'atk-multiline-readonly',
+    name: 'AtkMultilineReadonly',
     template: '<div>{{readOnlyValue}}</div>',
     props: ['readOnlyValue'],
 };

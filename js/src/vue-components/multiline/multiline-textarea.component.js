@@ -1,6 +1,6 @@
 export default {
-    name: 'atk-multiline-textarea',
-    template: '<textarea v-model="modelValue" @input="onInput"></textarea>',
+    name: 'AtkMultilineTextarea',
+    template: '<textarea v-model="modelValue" @input="onInput" />',
     props: ['modelValue'],
     emits: ['update:modelValue'],
     methods: {

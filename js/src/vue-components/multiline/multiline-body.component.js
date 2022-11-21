@@ -1,10 +1,10 @@
 import multilineRow from './multiline-row.component';
 
 export default {
-    name: 'atk-multiline-body',
+    name: 'AtkMultilineBody',
     template: `
-        <sui-table-body>
-            <atk-multiline-row
+        <SuiTableBody>
+            <AtkMultilineRow
                 :fields="fields"
                 v-for="(row, i) in rows" :key="row.__atkml"
                 @onTabLastColumn="onTabLastColumn(i)"
@@ -12,8 +12,8 @@ export default {
                 :isDeletable="isDeletableRow(row)"
                 :rowValues="row"
                 :error="getError(row.__atkml)"
-            ></atk-multiline-row>
-        </sui-table-body>`,
+            ></AtkMultilineRow>
+        </SuiTableBody>`,
     props: ['fieldDefs', 'rowData', 'deletables', 'errors'],
     data: function () {
         return { fields: this.fieldDefs };
@@ -21,7 +21,7 @@ export default {
     created: function () {
     },
     components: {
-        'atk-multiline-row': multilineRow,
+        AtkMultilineRow: multilineRow,
     },
     computed: {
         rows: function () {

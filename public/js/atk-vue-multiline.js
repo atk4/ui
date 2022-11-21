@@ -14,10 +14,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _multiline_row_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./multiline-row.component */ "./src/vue-components/multiline/multiline-row.component.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-multiline-body',
+  name: 'AtkMultilineBody',
   template: `
-        <sui-table-body>
-            <atk-multiline-row
+        <SuiTableBody>
+            <AtkMultilineRow
                 :fields="fields"
                 v-for="(row, i) in rows" :key="row.__atkml"
                 @onTabLastColumn="onTabLastColumn(i)"
@@ -25,8 +25,8 @@ __webpack_require__.r(__webpack_exports__);
                 :isDeletable="isDeletableRow(row)"
                 :rowValues="row"
                 :error="getError(row.__atkml)"
-            ></atk-multiline-row>
-        </sui-table-body>`,
+            ></AtkMultilineRow>
+        </SuiTableBody>`,
   props: ['fieldDefs', 'rowData', 'deletables', 'errors'],
   data: function () {
     return {
@@ -35,7 +35,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function () {},
   components: {
-    'atk-multiline-row': _multiline_row_component__WEBPACK_IMPORTED_MODULE_0__["default"]
+    AtkMultilineRow: _multiline_row_component__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   computed: {
     rows: function () {
@@ -82,7 +82,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-multiline-cell',
+  name: 'AtkMultilineCell',
   template: `
         <component
             :is="getComponent()"
@@ -95,10 +95,10 @@ __webpack_require__.r(__webpack_exports__);
             :name="inputName"
         ></component>`,
   components: {
-    'atk-multiline-readonly': _multiline_readonly_component__WEBPACK_IMPORTED_MODULE_0__["default"],
-    'atk-multiline-textarea': _multiline_textarea_component__WEBPACK_IMPORTED_MODULE_1__["default"],
-    'atk-date-picker': _share_atk_date_picker__WEBPACK_IMPORTED_MODULE_2__["default"],
-    'atk-lookup': _share_atk_lookup__WEBPACK_IMPORTED_MODULE_3__["default"]
+    AtkMultilineReadonly: _multiline_readonly_component__WEBPACK_IMPORTED_MODULE_0__["default"],
+    AtkMultilineTextarea: _multiline_textarea_component__WEBPACK_IMPORTED_MODULE_1__["default"],
+    AtkDatePicker: _share_atk_date_picker__WEBPACK_IMPORTED_MODULE_2__["default"],
+    AtkLookup: _share_atk_lookup__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   props: ['cellData', 'fieldValue'],
   data: function () {
@@ -115,7 +115,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.cellData.definition.component;
     },
     getComponentProps: function () {
-      if (this.getComponent() === 'atk-multiline-readonly') {
+      if (this.getComponent() === 'AtkMultilineReadonly') {
         return {
           readOnlyValue: this.fieldValue
         };
@@ -159,39 +159,39 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-multiline-header',
+  name: 'AtkMultilineHeader',
   template: `
-        <sui-table-header>
-            <sui-table-row v-if="hasError()">
-                <sui-table-cell :style="{ background: 'none' }"></sui-table-cell>
-                <sui-table-cell :style="{ background: 'none' }"
+        <SuiTableHeader>
+            <SuiTableRow v-if="hasError()">
+                <SuiTableCell :style="{ background: 'none' }" />
+                <SuiTableCell :style="{ background: 'none' }"
                     state="error"
                     v-for="column in columns"
                     :textAlign="getTextAlign(column)"
                 >
-                    <sui-icon v-if="getErrorMsg(column)" name="attention"></sui-icon>
+                    <SuiIcon v-if="getErrorMsg(column)" name="attention" />
                     {{getErrorMsg(column)}}
-                </sui-table-cell>
-            </sui-table-row>
-            <sui-table-row v-if="hasCaption()">
-                <sui-table-header-cell :colspan="getVisibleColumns()">{{caption}}</sui-table-header-cell>
-            </sui-table-row>
-            <sui-table-row :verticalAlign="'top'">
-                <sui-table-header-cell :width=1 textAlign="center">
+                </SuiTableCell>
+            </SuiTableRow>
+            <SuiTableRow v-if="hasCaption()">
+                <SuiTableHeaderCell :colspan="getVisibleColumns()">{{caption}}</SuiTableHeaderCell>
+            </SuiTableRow>
+            <SuiTableRow :verticalAlign="'top'">
+                <SuiTableHeaderCell :width=1 textAlign="center">
                     <input ref="check" type="checkbox" @input="onToggleDeleteAll" :checked="isChecked" :indeterminate="isIndeterminate" />
-                </sui-table-header-cell>
-                <sui-table-header-cell
+                </SuiTableHeaderCell>
+                <SuiTableHeaderCell
                     v-for="column in columns"
                     :width=column.cellProps.width
                     :textAlign="getTextAlign(column)"
                 >
                     <div>{{column.caption}}</div>
                     <div v-if="false" :style="{ position: 'absolute', top: '-22px' }">
-                        <sui-label v-if="getErrorMsg(column)" pointing="below" basic color="red">{{getErrorMsg(column)}}</sui-label>
+                        <SuiLabel v-if="getErrorMsg(column)" pointing="below" basic color="red">{{getErrorMsg(column)}}</SuiLabel>
                     </div>
-                </sui-table-header-cell>
-            </sui-table-row>
-        </sui-table-header>`,
+                </SuiTableHeaderCell>
+            </SuiTableRow>
+        </SuiTableHeader>`,
   props: ['fields', 'state', 'errors', 'caption'],
   data: function () {
     return {
@@ -272,7 +272,7 @@ __webpack_require__.r(__webpack_exports__);
  * Simply display a readonly value.
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-multiline-readonly',
+  name: 'AtkMultilineReadonly',
   template: '<div>{{readOnlyValue}}</div>',
   props: ['readOnlyValue']
 });
@@ -304,20 +304,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * This will create a table td element using sui-table-cell.
+ * This will create a table td element using SuiTableCell.
  * The td element is created only if column as set isVisible = true;
  * The td element will add a multiline cell element.
  * the multiline cell will set it's own template component depending on the fieldType.
  * getValue
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-multiline-row',
+  name: 'AtkMultilineRow',
   template: `
-        <sui-table-row :verticalAlign="'middle'">
-            <sui-table-cell textAlign="center">
+        <SuiTableRow :verticalAlign="'middle'">
+            <SuiTableCell textAlign="center">
                 <input type="checkbox" @input="onToggleDelete" v-model="toDelete" />
-            </sui-table-cell>
-            <sui-table-cell
+            </SuiTableCell>
+            <SuiTableCell
                 v-for="(column, i) in columns"
                 @keydown.tab="onTab(i)"
                 v-bind="column.cellProps"
@@ -325,13 +325,13 @@ __webpack_require__.r(__webpack_exports__);
                 :state="getErrorState(column)"
                 :style="{ overflow: 'visible' }"
             >
-                <atk-multiline-cell
+                <AtkMultilineCell
                     :cellData="column"
                     @update-value="onUpdateValue"
                     :fieldValue="getValue(column)"
-                ></atk-multiline-cell>
-            </sui-table-cell>
-        </sui-table-row>`,
+                ></AtkMultilineCell>
+            </SuiTableCell>
+        </SuiTableRow>`,
   props: ['fields', 'rowId', 'isDeletable', 'rowValues', 'error'],
   data: function () {
     return {
@@ -339,7 +339,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   components: {
-    'atk-multiline-cell': _multiline_cell_component__WEBPACK_IMPORTED_MODULE_4__["default"]
+    AtkMultilineCell: _multiline_cell_component__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   computed: {
     /**
@@ -409,8 +409,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-multiline-textarea',
-  template: '<textarea v-model="modelValue" @input="onInput"></textarea>',
+  name: 'AtkMultilineTextarea',
+  template: '<textarea v-model="modelValue" @input="onInput" />',
   props: ['modelValue'],
   emits: ['update:modelValue'],
   methods: {
@@ -463,39 +463,39 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-multiline',
+  name: 'AtkMultiline',
   template: `
         <div>
-            <sui-table v-bind="tableProp">
-                <atk-multiline-header
+            <SuiTable v-bind="tableProp">
+                <AtkMultilineHeader
                     :fields="fieldData"
                     :state="getMainToggleState"
                     :errors="errors"
                     :caption="caption"
-                ></atk-multiline-header>
-                <atk-multiline-body
+                ></AtkMultilineHeader>
+                <AtkMultilineBody
                     @onTabLastRow="onTabLastRow"
                     :fieldDefs="fieldData"
                     :rowData="rowData"
                     :deletables="getDeletables"
                     :errors="errors"
-                ></atk-multiline-body>
-                <sui-table-footer>
-                    <sui-table-row>
-                        <sui-table-header-cell></sui-table-header-cell>
-                        <sui-table-header-cell :colspan="getSpan" textAlign="right">
-                            <div is="vue:sui-button-group">
-                                <sui-button ref="addBtn" size="small" @click.stop.prevent="onAdd" type="button" icon :disabled="isLimitReached">
-                                    <sui-icon name="plus"></sui-icon>
-                                </sui-button>
-                                <sui-button size="small" @click.stop.prevent="onDelete" type="button" icon :disabled="isDeleteDisable">
-                                    <sui-icon name="trash"></sui-icon>
-                                </sui-button>
-                            </div>
-                        </sui-table-header-cell>
-                    </sui-table-row>
-                </sui-table-footer>
-            </sui-table>
+                ></AtkMultilineBody>
+                <SuiTableFooter>
+                    <SuiTableRow>
+                        <SuiTableHeaderCell />
+                        <SuiTableHeaderCell :colspan="getSpan" textAlign="right">
+                            <SuiButtonGroup>
+                                <SuiButton ref="addBtn" size="small" @click.stop.prevent="onAdd" type="button" icon :disabled="isLimitReached">
+                                    <SuiIcon name="plus" />
+                                </SuiButton>
+                                <SuiButton size="small" @click.stop.prevent="onDelete" type="button" icon :disabled="isDeleteDisable">
+                                    <SuiIcon name="trash" />
+                                </SuiButton>
+                            </SuiButtonGroup>
+                        </SuiTableHeaderCell>
+                    </SuiTableRow>
+                </SuiTableFooter>
+            </SuiTable>
             <div>
                 <input ref="atkmlInput" :form="form" :name="name" type="hidden" :value="value" />
             </div>
@@ -530,8 +530,8 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   components: {
-    'atk-multiline-body': _multiline_body_component__WEBPACK_IMPORTED_MODULE_9__["default"],
-    'atk-multiline-header': _multiline_header_component__WEBPACK_IMPORTED_MODULE_10__["default"]
+    AtkMultilineHeader: _multiline_header_component__WEBPACK_IMPORTED_MODULE_10__["default"],
+    AtkMultilineBody: _multiline_body_component__WEBPACK_IMPORTED_MODULE_9__["default"]
   },
   mounted: function () {
     this.rowData = this.buildRowData(this.value ? this.value : '[]');
@@ -789,8 +789,8 @@ __webpack_require__.r(__webpack_exports__);
  * Will emit a dateChange event when date is set.
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-date-picker',
-  template: '<flatpickr-picker v-model="date" :config="flatPickr"></flatpickr-picker>',
+  name: 'AtkDatePicker',
+  template: '<FlatpickrPicker v-model="date" :config="flatPickr" />',
   props: ['config', 'value'],
   data: function () {
     const {
@@ -846,22 +846,22 @@ __webpack_require__.r(__webpack_exports__);
  * url: the callback URL. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
  * reference: the reference field name associate with model or hasOne name. This field name will be sent along with URL callback parameter as of 'field=name'.
  * ui: the css class name to apply to dropdown.
- * Note: The remaining config object may contain any or sui-dropdown { props: value } pair.
+ * Note: The remaining config object may contain any or SuiDropdown { props: value } pair.
  *
  * value: The selected value.
  * optionalValue: The initial list of options for the dropdown.
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-lookup',
+  name: 'AtkLookup',
   template: `
-        <sui-dropdown
+        <SuiDropdown
             v-bind="dropdownProps"
             ref="drop"
             ` /* :loading="isLoading" */ + `@update:modelValue="onChange"
             @filtered="onFiltered"
             v-model="current"
             :class="css"
-        ></sui-dropdown>`,
+        ></SuiDropdown>`,
   props: ['config', 'value', 'optionalValue'],
   data: function () {
     const {

@@ -10,7 +10,7 @@ import $ from 'external/jquery';
  * value:   array, array of value to send to server.
  */
 export default {
-    name: 'atk-inline-edit',
+    name: 'AtkInlineEdit',
     template: `
         <div :class="[options.inputCss, hasError ? 'error' : '' ]">
             <input
@@ -22,7 +22,7 @@ export default {
                 @focus="onFocus"
                 @blur="onBlur"
             />
-            <i class="icon"></i>
+            <i class="icon" />
         </div>`,
     props: {
         url: String,

@@ -13,7 +13,7 @@ import atk from 'atk';
  * reload:  string, an Id selector for jQuery, '#' is append automatically.
  */
 export default {
-    name: 'atk-item-search',
+    name: 'AtkItemSearch',
     template: `
         <div class="atk-item-search" :class="inputCss">
             <input
@@ -24,8 +24,8 @@ export default {
                 @keyup.esc="onEscape"
                 name="atk-vue-search"
             />
-            <i class="atk-search-icon" :class="classIcon"></i>
-            <span style="width: 12px; cursor: pointer;" @click="onClear"></span>
+            <i class="atk-search-icon" :class="classIcon" />
+            <span style="width: 12px; cursor: pointer;" @click="onClear" />
         </div>`,
     props: {
         context: String,
