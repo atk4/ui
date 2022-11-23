@@ -30,7 +30,7 @@
                             </select>
                         </div>
                         <div class="item">
-                            <div class="rule-actions ">
+                            <div class="rule-actions">
                                 <div>
                                     <SuiDropdown
                                         :text="labels.addRule"
@@ -76,11 +76,11 @@
 </template>
 
 <script>
-import QueryBuilderGroup from 'vue-query-builder/src/components/QueryBuilderGroup.vue';
+import VueQueryBuilderGroup from 'vue-query-builder/src/components/QueryBuilderGroup.vue';
 
 export default {
     name: 'QueryBuilderGroup',
-    extends: QueryBuilderGroup,
+    extends: VueQueryBuilderGroup,
     data: function () {
         return {
             selectedSuiRule: null,
@@ -113,6 +113,16 @@ export default {
 </script>
 
 <style>
+    .vue-query-builder .vqb-group .rule-actions {
+        margin-bottom: 0px;
+    }
+
+    .vue-query-builder .vqb-rule {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding: 0px;
+    }
+
     .atk-qb-select, .ui.form select.atk-qb-select {
        padding: 2px 6px 4px 4px;
     }

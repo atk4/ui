@@ -98,8 +98,8 @@ module.exports = (env) => {
                 'node_modules',
             ],
             extensions: [
-                '.json',
                 '.js',
+                '.vue',
             ],
         },
         plugins: [

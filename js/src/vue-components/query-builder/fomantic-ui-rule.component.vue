@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import QueryBuilderRule from 'vue-query-builder/src/components/QueryBuilderRule.vue';
+import VueQueryBuilderRule from 'vue-query-builder/src/components/QueryBuilderRule.vue';
 import AtkDatePicker from '../share/atk-date-picker';
 import AtkLookup from '../share/atk-lookup';
 
@@ -129,7 +129,7 @@ export default {
         AtkDatePicker: AtkDatePicker,
         AtkLookup: AtkLookup,
     },
-    extends: QueryBuilderRule,
+    extends: VueQueryBuilderRule,
     inject: ['getRootData'],
     data: function () {
         return {};
