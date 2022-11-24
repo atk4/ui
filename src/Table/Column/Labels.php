@@ -24,7 +24,7 @@ class Labels extends Table\Column
         $values = $this->values ?? $field->values;
 
         $v = $field->get($row);
-        $v = explode(',', $v);
+        $v = explode(',', $v ?? '');
 
         $labels = [];
         foreach ($v as $id) {
