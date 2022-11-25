@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import VueQueryBuilderGroup from 'vue-query-builder/src/components/QueryBuilderGroup.vue';
+import VueQueryBuilderGroup from 'vue-query-builder/src/components/QueryBuilderGroup';
 
 export default {
     name: 'QueryBuilderGroup',
@@ -103,7 +103,7 @@ export default {
          * Add a new rule via Dropdown item.
          */
         addNewRule: function (ruleId) {
-            this.selectedRule = this.rules.filter((rule) => rule.id === ruleId)[0]; // eslint-disable-line prefer-destructuring
+            this.selectedRule = this.rules.find((rule) => rule.id === ruleId);
             if (this.selectedRule) {
                 this.addRule();
             }

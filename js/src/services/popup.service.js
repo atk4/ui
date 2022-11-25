@@ -6,8 +6,7 @@ import atk from 'atk';
 class PopupService {
     getDefaultFomanticSettings() {
         return [
-            {
-            },
+            {},
             {
                 onShow: this.onShow,
             },

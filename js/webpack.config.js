@@ -1,11 +1,11 @@
-const path = require('path');
+const path = require('node:path');
 const webpack = require('webpack');
 const { VueLoaderPlugin } = require('vue-loader');
 const TerserPlugin = require('terser-webpack-plugin');
 const VueFomanticUi = require('vue-fomantic-ui');
 
 module.exports = (env) => {
-    const isProduction = env.production;
+    const isProduction = env === undefined ? false /* for eslint-import-resolver-webpack */ : env.production;
     const srcDir = path.resolve(__dirname, './src');
     const publicDir = path.resolve(__dirname, '../public');
     const libraryName = 'atk';
@@ -34,19 +34,19 @@ module.exports = (env) => {
             splitChunks: {
                 cacheGroups: {
                     vendorVueFlatpickr: {
-                        test: /[\\/]node_modules[\\/](flatpickr|vue-flatpickr-component)[\\/]/,
+                        test: /[/\\]node_modules[/\\](flatpickr|vue-flatpickr-component)[/\\]/,
                         name: 'vendor-vue-flatpickr',
                     },
                     vendorVueQueryBuilder: {
-                        test: /[\\/]node_modules[\\/]vue-query-builder[\\/]/,
+                        test: /[/\\]node_modules[/\\]vue-query-builder[/\\]/,
                         name: 'vendor-vue-query-builder',
                     },
                     vendorVue: {
-                        test: /[\\/]node_modules[\\/](?!(vue-flatpickr-component|vue-query-builder)[\\/])([^\\/]+[-.])?vue([-.][^\\/]+)?[\\/]/,
+                        test: /[/\\]node_modules[/\\](?!(vue-flatpickr-component|vue-query-builder)[/\\])([^/\\]+[.-])?vue([.-][^/\\]+)?[/\\]/,
                         name: 'vendor-vue',
                     },
                     vendor: {
-                        test: /[\\/]node_modules[\\/](?!(([^\\/]+[-.])?vue([-.][^\\/]+)?|flatpickr)[\\/])/,
+                        test: /[/\\]node_modules[/\\](?!(([^/\\]+[.-])?vue([.-][^/\\]+)?|flatpickr)[/\\])/,
                         name: 'vendor',
                     },
                 },
@@ -97,10 +97,7 @@ module.exports = (env) => {
                 srcDir,
                 'node_modules',
             ],
-            extensions: [
-                '.js',
-                '.vue',
-            ],
+            extensions: ['.js', '.vue'],
         },
         plugins: [
             new webpack.DefinePlugin({

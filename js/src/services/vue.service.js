@@ -47,7 +47,12 @@ class VueService {
                     name: name,
                     isLoaded: false,
                 });
-                return component().then((r) => { this.markComponentLoaded(name); return r; });
+
+                return component().then((r) => {
+                    this.markComponentLoaded(name);
+
+                    return r;
+                });
             },
             loadingComponent: atkLoadingComponent,
             errorComponent: atkErrorComponent,
@@ -67,10 +72,12 @@ class VueService {
         app._context.components = new Proxy(app._context.components, {
             has: (obj, prop) => {
                 lazyRegisterSuiPrefixedComponent(obj, prop);
+
                 return obj[prop] !== undefined;
             },
             get: (obj, prop) => {
                 lazyRegisterSuiPrefixedComponent(obj, prop);
+
                 return obj[prop];
             },
         });
@@ -81,7 +88,7 @@ class VueService {
         app.component('AtkItemSearch', asyncComponentFactory('AtkItemSearch', () => import(/* webpackChunkName: 'atk-vue-item-search' */'../vue-components/item-search.component')));
         app.component('AtkMultiline', asyncComponentFactory('AtkMultiline', () => import(/* webpackChunkName: 'atk-vue-multiline' */'../vue-components/multiline/multiline.component')));
         app.component('AtkTreeItemSelector', asyncComponentFactory('AtkTreeItemSelector', () => import(/* webpackChunkName: 'atk-vue-tree-item-selector' */'../vue-components/tree-item-selector/tree-item-selector.component')));
-        app.component('AtkQueryBuilder', asyncComponentFactory('AtkQueryBuilder', () => import(/* webpackChunkName: 'atk-vue-query-builder' */'../vue-components/query-builder/query-builder.component.vue')));
+        app.component('AtkQueryBuilder', asyncComponentFactory('AtkQueryBuilder', () => import(/* webpackChunkName: 'atk-vue-query-builder' */'../vue-components/query-builder/query-builder.component')));
     }
 
     /**
@@ -120,11 +127,12 @@ class VueService {
 
         app.component('DemoClock', window.vueDemoClock); // TODO
 
-        const def = $.extend({ }, component);
+        const def = $.extend({}, component);
         const defData = def.data;
         def.data = function () {
-            const res = $.extend({ }, defData.call(this));
+            const res = $.extend({}, defData.call(this));
             res.initData = data;
+
             return res;
         };
         app.component(componentName, def);

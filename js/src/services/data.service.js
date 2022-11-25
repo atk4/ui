@@ -35,7 +35,7 @@ class DataService {
                     || e.name === 'NS_ERROR_DOM_QUOTA_REACHED'
                 )
                 // acknowledge QuotaExceededError only if there's something already stored
-                && (storage && storage.length !== 0);
+                && (storage && storage.length > 0);
         }
     }
 
@@ -48,7 +48,7 @@ class DataService {
         try {
             JSON.parse(str);
         } catch (e) {
-            console.error('JSON string parse failed');
+            console.error('JSON string parse failed: ' + e.message);
 
             return false;
         }
@@ -71,8 +71,6 @@ class DataService {
 
     /**
      * Get data value using an item as key.
-     *
-     * @returns {null}
      */
     getData(item, type = 'local') {
         let value = null;

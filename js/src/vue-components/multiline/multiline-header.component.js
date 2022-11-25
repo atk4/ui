@@ -61,9 +61,9 @@ export default {
         },
         getVisibleColumns: function () {
             let count = 1; // add deletable column;
-            this.columns.forEach((field) => {
+            for (const field of this.columns) {
                 count = field.isVisible ? count + 1 : count;
-            });
+            }
 
             return count;
         },
@@ -76,8 +76,8 @@ export default {
         getErrorMsg: function (column) {
             if (this.hasError()) {
                 const rows = Object.keys(this.errors);
-                for (let i = 0; i < rows.length; i++) {
-                    const error = this.errors[rows[i]].filter((col) => col.name === column.name);
+                for (const row of rows) {
+                    const error = this.errors[row].filter((col) => col.name === column.name);
                     if (error.length > 0) {
                         return error[0].msg;
                     }

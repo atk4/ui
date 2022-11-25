@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import VueQueryBuilder from 'vue-query-builder/src/VueQueryBuilder.vue';
-import QueryBuilderGroup from './fomantic-ui-group.component.vue';
-import QueryBuilderRule from './fomantic-ui-rule.component.vue';
+import VueQueryBuilder from 'vue-query-builder/src/VueQueryBuilder';
+import QueryBuilderGroup from './fomantic-ui-group.component';
+import QueryBuilderRule from './fomantic-ui-rule.component';
 
 export default {
     name: 'QueryBuilder',

@@ -32,7 +32,7 @@ export default class AtkJsSortablePlugin extends AtkPlugin {
 
         // fix screen reader announcement container added more than once
         // https://github.com/Shopify/draggable/pull/541
-        for (let elem; elem = document.getElementById('draggable-live-region');) { // eslint-disable-line no-cond-assign
+        for (let elem; elem = document.querySelector('#draggable-live-region');) { // eslint-disable-line no-cond-assign
             elem.remove();
         }
 

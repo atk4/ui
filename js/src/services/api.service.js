@@ -11,8 +11,7 @@ class ApiService {
 
     getDefaultFomanticSettings() {
         return [
-            {
-            },
+            {},
             {
                 // override supported via "../setup-fomantic-ui.js", both callbacks are always evaluated
                 successTest: this.successTest,
@@ -94,26 +93,26 @@ class ApiService {
                 if (response.portals) {
                     // Create app portal from json response.
                     const portals = Object.keys(response.portals);
-                    portals.forEach((portalID) => {
+                    for (const portalID of portals) {
                         const m = $('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
                         if (m.length === 0) {
                             $(document.body).append(response.portals[portalID].html);
                             atk.apiService.evalResponse(response.portals[portalID].js);
                         }
-                    });
+                    }
                 }
                 if (response.atkjs) {
                     atk.apiService.evalResponse.call(this, response.atkjs);
                 }
                 if (atk.apiService.afterSuccessCallbacks.length > 0) {
                     const callbacks = atk.apiService.afterSuccessCallbacks;
-                    callbacks.forEach((callback) => {
+                    for (const callback of callbacks) {
                         atk.apiService.evalResponse.call(this, callback);
-                    });
+                    }
                     atk.apiService.afterSuccessCallbacks.splice(0);
                 }
             } else if (response.isServiceError) {
-                throw Error(response.message);
+                throw new Error(response.message);
             }
         } catch (e) {
             atk.apiService.showErrorModal(atk.apiService.getErrorHtml(e.message));
@@ -137,7 +136,7 @@ class ApiService {
             atk.apiService.showErrorModal(response.message);
         } else {
             // check if we have html returned by server with <body> content.
-            const body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
+            const body = response.match(/<body[^>]*>[\S\s]*<\/body>/gi);
             if (body) {
                 atk.apiService.showErrorModal(body);
             } else {

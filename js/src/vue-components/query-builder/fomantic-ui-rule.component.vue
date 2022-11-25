@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import VueQueryBuilderRule from 'vue-query-builder/src/components/QueryBuilderRule.vue';
+import VueQueryBuilderRule from 'vue-query-builder/src/components/QueryBuilderRule';
 import AtkDatePicker from '../share/atk-date-picker';
 import AtkLookup from '../share/atk-lookup';
 

@@ -43,14 +43,19 @@ export default {
     created: function () {
         this.getInitData();
     },
-    mounted: function () {
-    },
+    mounted: function () {},
     computed: {
         itemMargin: function () {
-            return { marginLeft: (this.item.nodes && this.item.nodes.length > 0) ? this.open ? '-13px' : '-10px' : null };
+            return {
+                marginLeft: (this.item.nodes && this.item.nodes.length > 0)
+                    ? (this.open ? '-13px' : '-10px')
+                    : null,
+            };
         },
         itemCursor: function () {
-            return { cursor: this.isParent ? this.getRootData().options.mode === 'single' ? 'default' : 'pointer' : 'pointer' };
+            return {
+                cursor: this.isParent && this.getRootData().options.mode === 'single' ? 'default' : 'pointer',
+            };
         },
         title: function () {
             return this.item.name;
@@ -59,12 +64,16 @@ export default {
             return (this.nodes && this.nodes.length > 0);
         },
         toggleIcon: function () {
-            return this.isParent ? (this.open ? 'caret down' : 'caret right') + ' icon' : null;
+            return this.isParent
+                ? (this.open ? 'caret down' : 'caret right') + ' icon'
+                : null;
         },
         state: function () {
             let state = 'off';
             if (this.isParent) {
-                state = this.hasAllFill(this.nodes) ? 'on' : this.hasSomeFill(this.nodes) ? 'indeterminate' : 'off';
+                state = this.hasAllFill(this.nodes)
+                    ? 'on'
+                    : (this.hasSomeFill(this.nodes) ? 'indeterminate' : 'off');
             } else if (this.isSelected(this.id)) {
                 state = 'on';
             }
@@ -77,7 +86,7 @@ export default {
     },
     methods: {
         isSelected: function (id) {
-            return this.values.filter((val) => val === id).length > 0;
+            return this.values.includes(id);
         },
         /**
          * Get input initial data.
@@ -107,15 +116,15 @@ export default {
          */
         hasAllFill: function (nodes) {
             let state = true;
-            for (let i = 0; i < nodes.length; i++) {
+            for (const node of nodes) {
                 // check children first;
-                if (nodes[i].nodes && nodes[i].nodes.length > 0) {
-                    if (!this.hasAllFill(nodes[i].nodes)) {
+                if (node.nodes && node.nodes.length > 0) {
+                    if (!this.hasAllFill(node.nodes)) {
                         state = false;
 
                         break;
                     }
-                } else if (this.values.findIndex((id) => id === nodes[i].id) === -1) {
+                } else if (!this.values.includes(node.id)) {
                     state = false;
 
                     break;
@@ -131,16 +140,16 @@ export default {
          */
         hasSomeFill: function (nodes) {
             let state = false;
-            for (let i = 0; i < nodes.length; i++) {
+            for (const node of nodes) {
                 // check children first;
-                if (nodes[i].nodes && nodes[i].nodes.length > 0) {
-                    if (this.hasSomeFill(nodes[i].nodes)) {
+                if (node.nodes && node.nodes.length > 0) {
+                    if (this.hasSomeFill(node.nodes)) {
                         state = true;
 
                         break;
                     }
                 }
-                if (this.values.findIndex((id) => id === nodes[i].id) !== -1) {
+                if (this.values.includes(node.id)) {
                     state = true;
 
                     break;
@@ -181,11 +190,11 @@ export default {
         mergeArrays: function (...arrays) {
             let jointArray = [];
 
-            arrays.forEach((array) => {
+            for (const array of arrays) {
                 jointArray = [...jointArray, ...array];
-            });
+            }
 
-            return [...new Set([...jointArray])];
+            return [...new Set(jointArray)];
         },
         /**
          * Get all id from all chidren node.
@@ -193,13 +202,13 @@ export default {
          * @returns {Array.<string>}
          */
         collectAllChildren: function (nodes, ids = []) {
-            nodes.forEach((node) => {
+            for (const node of nodes) {
                 if (node.nodes && node.nodes.length > 0) {
-                    ids.concat(this.collectAllChildren(node.nodes, ids));
+                    ids = [...ids, ...this.collectAllChildren(node.nodes, ids)];
                 } else {
                     ids.push(node.id);
                 }
-            });
+            }
 
             return ids;
         },
@@ -233,9 +242,9 @@ export default {
                     values = this.mergeArrays(this.values, childValues);
                 } else {
                     let temp = this.values;
-                    childValues.forEach((value) => {
+                    for (const value of childValues) {
                         temp = this.remove(temp, value);
-                    });
+                    }
                     values = temp;
                 }
             } else if (this.state === 'on') {

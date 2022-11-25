@@ -142,11 +142,10 @@ class PanelService {
         if (this.getPropertyValue(id, 'url')) {
             // Convert our array of args to object.
             // Args must be defined as data-attributeName in the triggered element.
-            const args = params.reloadArgs.reduce((obj, item) => {
-                obj[item] = params.triggered.data(item);
-
-                return obj;
-            }, {});
+            const args = {};
+            for (const k of params.reloadArgs) {
+                args[k] = params.triggered.data(k);
+            }
             // add URL argument if pass to panel
             if (params.urlArgs !== undefined) {
                 $.extend(args, params.urlArgs);
@@ -375,9 +374,9 @@ class PanelService {
     clearPanelContent(id) {
         const $panel = this.getPropertyValue(id, '$panel');
         const clearables = this.getPropertyValue(id, 'clearable');
-        clearables.forEach((clearable) => {
+        for (const clearable of clearables) {
             $panel.find(clearable).html('');
-        });
+        }
     }
 
     /**
@@ -388,11 +387,11 @@ class PanelService {
      * @param {*}      value the value.
      */
     setPropertyValue(id, prop, value) {
-        this.service.panels.forEach((panel) => {
+        for (const panel of this.service.panels) {
             if (panel[id]) {
                 panel[id][prop] = value;
             }
-        });
+        }
     }
 
     /**
@@ -403,11 +402,11 @@ class PanelService {
      */
     getPropertyValue(id, prop = null) {
         let value = null;
-        this.service.panels.forEach((panel) => {
+        for (const panel of this.service.panels) {
             if (panel[id]) {
                 value = prop ? panel[id][prop] : panel[id];
             }
-        });
+        }
 
         return value;
     }

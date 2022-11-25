@@ -64,7 +64,7 @@ export default {
             hasChangeCb: this.data.hasChangeCb,
             errors: {},
             caption: this.data.caption || null,
-            tableProp: { ...tableDefault, ...this.data.tableProps || {} },
+            tableProp: { ...tableDefault, ...this.data.tableProps },
         };
     },
     components: {
@@ -91,9 +91,9 @@ export default {
         atk.eventBus.on(this.$root.$el.id + '-toggle-delete-all', (payload) => {
             this.deletables = [];
             if (payload.isOn) {
-                this.rowData.forEach((row) => {
+                for (const row of this.rowData) {
                     this.deletables.push(row.__atkml);
-                });
+                }
             }
         });
 
@@ -118,9 +118,9 @@ export default {
             this.fetchOnChangeAction();
         },
         onDelete: function () {
-            this.deletables.forEach((atkmlId) => {
+            for (const atkmlId of this.deletables) {
                 this.deleteRow(atkmlId);
-            });
+            }
             this.deletables = [];
             this.updateInputValue();
             this.fetchOnChangeAction();
@@ -148,9 +148,9 @@ export default {
          */
         createRow: function (fields) {
             const row = {};
-            fields.forEach((field) => {
+            for (const field of fields) {
                 row[field.name] = field.default;
-            });
+            }
             row.__atkml = this.getUUID();
 
             return row;
@@ -163,11 +163,11 @@ export default {
          * Update the value of the field in rowData.
          */
         updateFieldInRow: function (atkmlId, fieldName, value) {
-            this.rowData.forEach((row) => {
+            for (const row of this.rowData) {
                 if (row.__atkml === atkmlId) {
                     row[fieldName] = value;
                 }
-            });
+            }
         },
         clearError: function (atkmlId, fieldName) {
             if (atkmlId in this.errors) {
@@ -190,9 +190,9 @@ export default {
          */
         buildRowData: function (jsonValue) {
             const rows = JSON.parse(jsonValue);
-            rows.forEach((row) => {
+            for (const row of rows) {
                 row.__atkml = this.getUUID();
-            });
+            }
 
             return rows;
         },
@@ -200,7 +200,7 @@ export default {
          * Check if one of the field use expression.
          */
         hasExpression: function () {
-            return this.fieldData.filter((field) => field.isExpr).length > 0;
+            return this.fieldData.some((field) => field.isExpr);
         },
         /**
          * Send on change action to server.
@@ -208,7 +208,7 @@ export default {
          * for return js to be fully evaluated.
          */
         fetchOnChangeAction: function (fieldName = null) {
-            if (this.hasChangeCb && (fieldName === null || this.eventFields.indexOf(fieldName) !== -1)) {
+            if (this.hasChangeCb && (fieldName === null || this.eventFields.includes(fieldName))) {
                 $(this.$refs.addBtn.$el).api({
                     on: 'now',
                     url: this.data.url,
@@ -238,9 +238,9 @@ export default {
                     const resp = await this.postData(row);
                     if (resp.expressions) {
                         const fields = Object.keys(resp.expressions);
-                        fields.forEach((field) => {
+                        for (const field of fields) {
                             this.updateFieldInRow(atkmlId, field, resp.expressions[field]);
-                        });
+                        }
                         this.updateInputValue();
                     }
                 }
@@ -256,7 +256,7 @@ export default {
          * UUID v4 generator.
          */
         getUUID: function () {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replaceAll(/[xy]/g, (c) => {
                 const r = Math.floor(Math.random() * 16);
                 const v = c === 'x' ? r : (r & (0x3 | 0x8)); // eslint-disable-line no-bitwise
 
@@ -278,17 +278,15 @@ export default {
         getMainToggleState: function () {
             let state = 'off';
             if (this.deletables.length > 0) {
-                if (this.deletables.length === this.rowData.length) {
-                    state = 'on';
-                } else {
-                    state = 'indeterminate';
-                }
+                state = this.deletables.length === this.rowData.length
+                    ? 'on'
+                    : 'indeterminate';
             }
 
             return state;
         },
         isDeleteDisable: function () {
-            return !this.deletables.length > 0;
+            return this.deletables.length === 0;
         },
         isLimitReached: function () {
             if (this.data.rowLimit === 0) {

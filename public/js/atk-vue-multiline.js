@@ -50,7 +50,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     isDeletableRow: function (row) {
-      return this.deletables.indexOf(row.__atkml) !== -1;
+      return this.deletables.includes(row.__atkml);
     },
     getError: function (rowId) {
       if (rowId in this.errors) {
@@ -141,19 +141,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.for-each.js */ "./node_modules/core-js/modules/esnext.async-iterator.for-each.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "./node_modules/core-js/modules/esnext.iterator.for-each.js");
-/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-
-
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 
 
 
@@ -202,7 +196,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     onToggleDeleteAll: function () {
       this.$nextTick(() => {
-        atk__WEBPACK_IMPORTED_MODULE_5__["default"].eventBus.emit(this.$root.$el.id + '-toggle-delete-all', {
+        atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.id + '-toggle-delete-all', {
           isOn: this.$refs.check.checked
         });
       });
@@ -222,9 +216,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     getVisibleColumns: function () {
       let count = 1; // add deletable column;
-      this.columns.forEach(field => {
+      for (const field of this.columns) {
         count = field.isVisible ? count + 1 : count;
-      });
+      }
       return count;
     },
     hasError: function () {
@@ -236,8 +230,8 @@ __webpack_require__.r(__webpack_exports__);
     getErrorMsg: function (column) {
       if (this.hasError()) {
         const rows = Object.keys(this.errors);
-        for (let i = 0; i < rows.length; i++) {
-          const error = this.errors[rows[i]].filter(col => col.name === column.name);
+        for (const row of rows) {
+          const error = this.errors[row].filter(col => col.name === column.name);
           if (error.length > 0) {
             return error[0].msg;
           }
@@ -434,16 +428,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "./node_modules/core-js/modules/es.array.push.js");
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.for-each.js */ "./node_modules/core-js/modules/esnext.async-iterator.for-each.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "./node_modules/core-js/modules/esnext.iterator.for-each.js");
-/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.some.js */ "./node_modules/core-js/modules/esnext.async-iterator.some.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/esnext.iterator.some.js */ "./node_modules/core-js/modules/esnext.iterator.some.js");
+/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
@@ -528,7 +522,7 @@ __webpack_require__.r(__webpack_exports__);
       caption: this.data.caption || null,
       tableProp: {
         ...tableDefault,
-        ...(this.data.tableProps || {})
+        ...this.data.tableProps
       }
     };
   },
@@ -553,9 +547,9 @@ __webpack_require__.r(__webpack_exports__);
     atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.id + '-toggle-delete-all', payload => {
       this.deletables = [];
       if (payload.isOn) {
-        this.rowData.forEach(row => {
+        for (const row of this.rowData) {
           this.deletables.push(row.__atkml);
-        });
+        }
       }
     });
     atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.id + '-multiline-rows-error', payload => {
@@ -581,9 +575,9 @@ __webpack_require__.r(__webpack_exports__);
       this.fetchOnChangeAction();
     },
     onDelete: function () {
-      this.deletables.forEach(atkmlId => {
+      for (const atkmlId of this.deletables) {
         this.deleteRow(atkmlId);
-      });
+      }
       this.deletables = [];
       this.updateInputValue();
       this.fetchOnChangeAction();
@@ -610,9 +604,9 @@ __webpack_require__.r(__webpack_exports__);
      */
     createRow: function (fields) {
       const row = {};
-      fields.forEach(field => {
+      for (const field of fields) {
         row[field.name] = field.default;
-      });
+      }
       row.__atkml = this.getUUID();
       return row;
     },
@@ -624,11 +618,11 @@ __webpack_require__.r(__webpack_exports__);
      * Update the value of the field in rowData.
      */
     updateFieldInRow: function (atkmlId, fieldName, value) {
-      this.rowData.forEach(row => {
+      for (const row of this.rowData) {
         if (row.__atkml === atkmlId) {
           row[fieldName] = value;
         }
-      });
+      }
     },
     clearError: function (atkmlId, fieldName) {
       if (atkmlId in this.errors) {
@@ -651,16 +645,16 @@ __webpack_require__.r(__webpack_exports__);
      */
     buildRowData: function (jsonValue) {
       const rows = JSON.parse(jsonValue);
-      rows.forEach(row => {
+      for (const row of rows) {
         row.__atkml = this.getUUID();
-      });
+      }
       return rows;
     },
     /**
      * Check if one of the field use expression.
      */
     hasExpression: function () {
-      return this.fieldData.filter(field => field.isExpr).length > 0;
+      return this.fieldData.some(field => field.isExpr);
     },
     /**
      * Send on change action to server.
@@ -669,7 +663,7 @@ __webpack_require__.r(__webpack_exports__);
      */
     fetchOnChangeAction: function () {
       let fieldName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      if (this.hasChangeCb && (fieldName === null || this.eventFields.indexOf(fieldName) !== -1)) {
+      if (this.hasChangeCb && (fieldName === null || this.eventFields.includes(fieldName))) {
         external_jquery__WEBPACK_IMPORTED_MODULE_8___default()(this.$refs.addBtn.$el).api({
           on: 'now',
           url: this.data.url,
@@ -708,9 +702,9 @@ __webpack_require__.r(__webpack_exports__);
           const resp = await this.postData(row);
           if (resp.expressions) {
             const fields = Object.keys(resp.expressions);
-            fields.forEach(field => {
+            for (const field of fields) {
               this.updateFieldInRow(atkmlId, field, resp.expressions[field]);
-            });
+            }
             this.updateInputValue();
           }
         }
@@ -726,7 +720,7 @@ __webpack_require__.r(__webpack_exports__);
      * UUID v4 generator.
      */
     getUUID: function () {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replaceAll(/[xy]/g, c => {
         const r = Math.floor(Math.random() * 16);
         const v = c === 'x' ? r : r & (0x3 | 0x8); // eslint-disable-line no-bitwise
 
@@ -748,16 +742,12 @@ __webpack_require__.r(__webpack_exports__);
     getMainToggleState: function () {
       let state = 'off';
       if (this.deletables.length > 0) {
-        if (this.deletables.length === this.rowData.length) {
-          state = 'on';
-        } else {
-          state = 'indeterminate';
-        }
+        state = this.deletables.length === this.rowData.length ? 'on' : 'indeterminate';
       }
       return state;
     },
     isDeleteDisable: function () {
-      return !this.deletables.length > 0;
+      return this.deletables.length === 0;
     },
     isLimitReached: function () {
       if (this.data.rowLimit === 0) {
@@ -941,6 +931,53 @@ __webpack_require__.r(__webpack_exports__);
     }
   }
 });
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.async-iterator.some.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.async-iterator.some.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+
+// https://github.com/tc39/proposal-iterator-helpers
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var $some = (__webpack_require__(/*! ../internals/async-iterator-iteration */ "./node_modules/core-js/internals/async-iterator-iteration.js").some);
+
+$({ target: 'AsyncIterator', proto: true, real: true, forced: true }, {
+  some: function some(fn) {
+    return $some(this, fn);
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.iterator.some.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.iterator.some.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+
+// https://github.com/tc39/proposal-iterator-helpers
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var iterate = __webpack_require__(/*! ../internals/iterate */ "./node_modules/core-js/internals/iterate.js");
+var aCallable = __webpack_require__(/*! ../internals/a-callable */ "./node_modules/core-js/internals/a-callable.js");
+var getIteratorDirect = __webpack_require__(/*! ../internals/get-iterator-direct */ "./node_modules/core-js/internals/get-iterator-direct.js");
+
+$({ target: 'Iterator', proto: true, real: true, forced: true }, {
+  some: function some(fn) {
+    var record = getIteratorDirect(this);
+    var counter = 0;
+    aCallable(fn);
+    return iterate(record, function (value, stop) {
+      if (fn(value, counter++)) return stop();
+    }, { IS_RECORD: true, INTERRUPTED: true }).stopped;
+  }
+});
+
 
 /***/ })
 

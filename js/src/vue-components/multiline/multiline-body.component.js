@@ -18,8 +18,7 @@ export default {
     data: function () {
         return { fields: this.fieldDefs };
     },
-    created: function () {
-    },
+    created: function () {},
     components: {
         AtkMultilineRow: multilineRow,
     },
@@ -36,7 +35,7 @@ export default {
             }
         },
         isDeletableRow: function (row) {
-            return this.deletables.indexOf(row.__atkml) !== -1;
+            return this.deletables.includes(row.__atkml);
         },
         getError: function (rowId) {
             if (rowId in this.errors) {
