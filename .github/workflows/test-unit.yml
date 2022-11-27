@@ -296,7 +296,7 @@ jobs:
         if: env.LOG_COVERAGE || matrix.type == 'Chrome Slow'
         run: |
           if [ -n "$LOG_COVERAGE" ]; then
-            (cd js && npm install --package-lock-only --save-dev babel-plugin-istanbul && npm ci --loglevel=error)
+            (cd js && npm install --package-lock-only --save-dev babel-plugin-istanbul nyc && npm ci --loglevel=error)
           else
             mv public public.orig
             mkdir public public/css public/external
@@ -446,7 +446,7 @@ jobs:
           ls -l coverage | wc -l
           php -d memory_limit=2G vendor/bin/phpcov merge coverage/ --clover coverage/merged.xml
           ls -l coverage/js | wc -l
-          (cd js && npx nyc report --temp-dir ../coverage/js --report-dir ../coverage/js --reporter=clover)
+          (cd js && npx nyc report --temp-dir ../coverage/js --report-dir ../coverage/js -e vue --reporter=clover)
           # fix never reached condition is rendered to clover with falsecount > 0
           # https://github.com/istanbuljs/istanbuljs/issues/695
           sed -i -E 's~count="0" type="cond" truecount="0" falsecount="[1-9]+[0-9]*"~count="0" type="cond" truecount="0" falsecount="0"~' coverage/js/clover.xml
