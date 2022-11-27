@@ -16,7 +16,7 @@ export default {
                 <input type="checkbox" v-model="toDelete" @input="onToggleDelete" />
             </SuiTableCell>
             <SuiTableCell
-                v-for="(column, i) in columns"
+                v-for="(column, i) in filterVisibleColumns(columns)"
                 v-bind="column.cellProps"
                 :width=null
                 :state="getErrorState(column)"
@@ -54,6 +54,9 @@ export default {
     },
     emits: ['onTabLastColumn'],
     methods: {
+        filterVisibleColumns: function (columns) {
+            return columns.filter((v) => v.isVisible);
+        },
         onTab: function (columnIndex) {
             if (columnIndex === this.columns.filter((column) => column.isEditable).length) {
                 this.$emit('onTabLastColumn');

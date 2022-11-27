@@ -8,7 +8,7 @@ export default {
                 <SuiTableCell :style="{ background: 'none' }" />
                 <SuiTableCell :style="{ background: 'none' }"
                     state="error"
-                    v-for="column in columns"
+                    v-for="column in filterVisibleColumns(columns)"
                     :textAlign="getTextAlign(column)"
                 >
                     <SuiIcon v-if="getErrorMsg(column)" name="attention" />
@@ -23,7 +23,7 @@ export default {
                     <input ref="check" type="checkbox" :checked="isChecked" :indeterminate="isIndeterminate" @input="onToggleDeleteAll" />
                 </SuiTableHeaderCell>
                 <SuiTableHeaderCell
-                    v-for="column in columns"
+                    v-for="column in filterVisibleColumns(columns)"
                     :width=column.cellProps.width
                     :textAlign="getTextAlign(column)"
                 >
@@ -39,6 +39,9 @@ export default {
         return { columns: this.fields, isDeleteAll: false };
     },
     methods: {
+        filterVisibleColumns: function (columns) {
+            return columns.filter((v) => v.isVisible);
+        },
         onToggleDeleteAll: function () {
             this.$nextTick(() => {
                 atk.eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete-all', { isOn: this.$refs.check.checked });

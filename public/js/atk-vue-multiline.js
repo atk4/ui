@@ -160,7 +160,7 @@ __webpack_require__.r(__webpack_exports__);
                 <SuiTableCell :style="{ background: 'none' }" />
                 <SuiTableCell :style="{ background: 'none' }"
                     state="error"
-                    v-for="column in columns"
+                    v-for="column in filterVisibleColumns(columns)"
                     :textAlign="getTextAlign(column)"
                 >
                     <SuiIcon v-if="getErrorMsg(column)" name="attention" />
@@ -175,7 +175,7 @@ __webpack_require__.r(__webpack_exports__);
                     <input ref="check" type="checkbox" :checked="isChecked" :indeterminate="isIndeterminate" @input="onToggleDeleteAll" />
                 </SuiTableHeaderCell>
                 <SuiTableHeaderCell
-                    v-for="column in columns"
+                    v-for="column in filterVisibleColumns(columns)"
                     :width=column.cellProps.width
                     :textAlign="getTextAlign(column)"
                 >
@@ -194,6 +194,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    filterVisibleColumns: function (columns) {
+      return columns.filter(v => v.isVisible);
+    },
     onToggleDeleteAll: function () {
       this.$nextTick(() => {
         atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete-all', {
@@ -312,7 +315,7 @@ __webpack_require__.r(__webpack_exports__);
                 <input type="checkbox" v-model="toDelete" @input="onToggleDelete" />
             </SuiTableCell>
             <SuiTableCell
-                v-for="(column, i) in columns"
+                v-for="(column, i) in filterVisibleColumns(columns)"
                 v-bind="column.cellProps"
                 :width=null
                 :state="getErrorState(column)"
@@ -352,6 +355,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   emits: ['onTabLastColumn'],
   methods: {
+    filterVisibleColumns: function (columns) {
+      return columns.filter(v => v.isVisible);
+    },
     onTab: function (columnIndex) {
       if (columnIndex === this.columns.filter(column => column.isEditable).length) {
         this.$emit('onTabLastColumn');
