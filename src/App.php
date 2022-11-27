@@ -53,7 +53,7 @@ class App
      *
      * @TODO remove, no longer needed for CDN versioning as we bundle all resources
      */
-    public $version = '4.0-dev';
+    public $version = '4.1-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
