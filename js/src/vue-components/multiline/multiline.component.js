@@ -75,11 +75,11 @@ export default {
         this.rowData = this.buildRowData(this.valueJson ? this.valueJson : '[]');
         this.updateInputValue();
 
-        atk.eventBus.on(this.$root.$el.id + '-update-row', (payload) => {
+        atk.eventBus.on(this.$root.$el.parentElement.id + '-update-row', (payload) => {
             this.onUpdate(payload.rowId, payload.fieldName, payload.value);
         });
 
-        atk.eventBus.on(this.$root.$el.id + '-toggle-delete', (payload) => {
+        atk.eventBus.on(this.$root.$el.parentElement.id + '-toggle-delete', (payload) => {
             const i = this.deletables.indexOf(payload.rowId);
             if (i !== -1) {
                 this.deletables.splice(i, 1);
@@ -88,7 +88,7 @@ export default {
             }
         });
 
-        atk.eventBus.on(this.$root.$el.id + '-toggle-delete-all', (payload) => {
+        atk.eventBus.on(this.$root.$el.parentElement.id + '-toggle-delete-all', (payload) => {
             this.deletables = [];
             if (payload.isOn) {
                 for (const row of this.rowData) {
@@ -97,7 +97,7 @@ export default {
             }
         });
 
-        atk.eventBus.on(this.$root.$el.id + '-multiline-rows-error', (payload) => {
+        atk.eventBus.on(this.$root.$el.parentElement.id + '-multiline-rows-error', (payload) => {
             this.errors = { ...payload.errors };
         });
     },

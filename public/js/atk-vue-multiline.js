@@ -196,7 +196,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     onToggleDeleteAll: function () {
       this.$nextTick(() => {
-        atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.id + '-toggle-delete-all', {
+        atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete-all', {
           isOn: this.$refs.check.checked
         });
       });
@@ -373,12 +373,12 @@ __webpack_require__.r(__webpack_exports__);
       this.isEditing = true;
     },
     onToggleDelete: function (e) {
-      atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.id + '-toggle-delete', {
+      atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete', {
         rowId: this.rowId
       });
     },
     onUpdateValue: function (fieldName, value) {
-      atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.id + '-update-row', {
+      atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-update-row', {
         rowId: this.rowId,
         fieldName: fieldName,
         value: value
@@ -532,10 +532,10 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function () {
     this.rowData = this.buildRowData(this.valueJson ? this.valueJson : '[]');
     this.updateInputValue();
-    atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.id + '-update-row', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.parentElement.id + '-update-row', payload => {
       this.onUpdate(payload.rowId, payload.fieldName, payload.value);
     });
-    atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.id + '-toggle-delete', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.parentElement.id + '-toggle-delete', payload => {
       const i = this.deletables.indexOf(payload.rowId);
       if (i !== -1) {
         this.deletables.splice(i, 1);
@@ -543,7 +543,7 @@ __webpack_require__.r(__webpack_exports__);
         this.deletables.push(payload.rowId);
       }
     });
-    atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.id + '-toggle-delete-all', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.parentElement.id + '-toggle-delete-all', payload => {
       this.deletables = [];
       if (payload.isOn) {
         for (const row of this.rowData) {
@@ -551,7 +551,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     });
-    atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.id + '-multiline-rows-error', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.parentElement.id + '-multiline-rows-error', payload => {
       this.errors = {
         ...payload.errors
       };

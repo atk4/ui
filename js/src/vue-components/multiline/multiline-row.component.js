@@ -76,10 +76,10 @@ export default {
             this.isEditing = true;
         },
         onToggleDelete: function (e) {
-            atk.eventBus.emit(this.$root.$el.id + '-toggle-delete', { rowId: this.rowId });
+            atk.eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete', { rowId: this.rowId });
         },
         onUpdateValue: function (fieldName, value) {
-            atk.eventBus.emit(this.$root.$el.id + '-update-row', { rowId: this.rowId, fieldName: fieldName, value: value });
+            atk.eventBus.emit(this.$root.$el.parentElement.id + '-update-row', { rowId: this.rowId, fieldName: fieldName, value: value });
         },
         getValue: function (column) {
             return this.rowValues[column.name] || column.default;
