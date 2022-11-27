@@ -98,7 +98,6 @@ class VueService {
      */
     createAtkVue(id, componentName, data) {
         const app = this.createApp({
-            el: id, // TODO is it needed with mount?
             data: () => ({ initData: data }),
             mixins: [this.vueMixins],
         });
@@ -119,7 +118,6 @@ class VueService {
      */
     createVue(id, componentName, component, data) {
         const app = this.createApp({
-            el: id, // TODO is it needed with mount?
             data: () => ({ initData: data, isReady: true }),
             mixins: [this.vueMixins],
         });

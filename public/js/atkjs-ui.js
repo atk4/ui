@@ -3391,8 +3391,6 @@ class VueService {
    */
   createAtkVue(id, componentName, data) {
     const app = this.createApp({
-      el: id,
-      // TODO is it needed with mount?
       data: () => ({
         initData: data
       }),
@@ -3413,8 +3411,6 @@ class VueService {
    */
   createVue(id, componentName, component, data) {
     const app = this.createApp({
-      el: id,
-      // TODO is it needed with mount?
       data: () => ({
         initData: data,
         isReady: true
