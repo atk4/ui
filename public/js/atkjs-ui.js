@@ -3277,15 +3277,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_set_symmetric_difference_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_symmetric_difference_js__WEBPACK_IMPORTED_MODULE_14__);
 /* harmony import */ var core_js_modules_esnext_set_union_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/esnext.set.union.js */ "./node_modules/core-js/modules/esnext.set.union.js");
 /* harmony import */ var core_js_modules_esnext_set_union_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_union_js__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_16__);
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_17__);
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_18__);
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_19__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "./node_modules/core-js/modules/es.array.push.js");
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_19__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_20__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
 
 
 
@@ -3330,7 +3333,7 @@ class VueService {
     };
   }
   createApp(rootComponent) {
-    return (0,vue__WEBPACK_IMPORTED_MODULE_20__.createApp)(rootComponent);
+    return (0,vue__WEBPACK_IMPORTED_MODULE_21__.createApp)(rootComponent);
   }
   _setupComponentAutoloader(app) {
     const atkLoadingComponent = {
@@ -3341,10 +3344,11 @@ class VueService {
       name: 'AtkAutoloaderError',
       template: '<div class="ui negative message"><p>Error: Unable to load Vue component</p></div>'
     };
-    const asyncComponentFactory = (name, component) => (0,vue__WEBPACK_IMPORTED_MODULE_20__.defineAsyncComponent)({
+    const asyncComponentFactory = (name, component) => (0,vue__WEBPACK_IMPORTED_MODULE_21__.defineAsyncComponent)({
       loader: () => {
         this.registerComponent({
           name: name,
+          apps: [],
           isLoaded: false
         });
         return component().then(r => {
@@ -3359,8 +3363,8 @@ class VueService {
     });
     const lazyRegisterSuiPrefixedComponent = function (registry, name) {
       // https://github.com/vuejs/core/blob/v3.2.45/packages/runtime-core/src/helpers/resolveAssets.ts#L136
-      if (registry[name] === undefined && registry[(0,vue__WEBPACK_IMPORTED_MODULE_20__.camelize)(name)] === undefined) {
-        const namePascalized = (0,vue__WEBPACK_IMPORTED_MODULE_20__.capitalize)((0,vue__WEBPACK_IMPORTED_MODULE_20__.camelize)(name));
+      if (registry[name] === undefined && registry[(0,vue__WEBPACK_IMPORTED_MODULE_21__.camelize)(name)] === undefined) {
+        const namePascalized = (0,vue__WEBPACK_IMPORTED_MODULE_21__.capitalize)((0,vue__WEBPACK_IMPORTED_MODULE_21__.camelize)(name));
         if (registry[namePascalized] === undefined && vueFomanticUiComponentNamesSet.has(namePascalized)) {
           registry[namePascalized] = asyncComponentFactory(namePascalized, () => __webpack_require__.e(/*! import() */ "vendor-vue").then(__webpack_require__.bind(__webpack_require__, /*! vue-fomantic-ui */ "./node_modules/vue-fomantic-ui/dist/vue-fomantic-ui.es.js")).then(r => r[namePascalized]));
         }
@@ -3399,9 +3403,8 @@ class VueService {
     this._setupComponentAutoloader(app);
     app.mount(id);
     this.registerComponent({
-      ids: [id],
       name: componentName,
-      instance: app,
+      apps: [app],
       isLoaded: false
     });
   }
@@ -3418,34 +3421,31 @@ class VueService {
       mixins: [this.vueMixins]
     });
     this._setupComponentAutoloader(app);
-    app.component('DemoClock', window.vueDemoClock); // TODO
-
-    const def = external_jquery__WEBPACK_IMPORTED_MODULE_19___default().extend({}, component);
+    const def = external_jquery__WEBPACK_IMPORTED_MODULE_20___default().extend({}, component);
     const defData = def.data;
     def.data = function () {
-      const res = external_jquery__WEBPACK_IMPORTED_MODULE_19___default().extend({}, defData.call(this));
+      const res = external_jquery__WEBPACK_IMPORTED_MODULE_20___default().extend({}, defData.call(this));
       res.initData = data;
       return res;
     };
     app.component(componentName, def);
     app.mount(id);
     this.registerComponent({
-      ids: [id],
       name: componentName,
-      instance: app,
+      apps: [app],
       isLoaded: true
     });
   }
 
   /*
    * Add component to vues container.
-   * Group ids that are using the same component.
+   * Group apps that are using the same component.
    */
   registerComponent(component) {
     if (this.vues[component.name] === undefined) {
       this.vues[component.name] = component;
     } else {
-      // TODO this.vues[component.name].ids.push(component.ids[0]);
+      this.vues[component.name].apps.push(...component.apps);
     }
   }
 

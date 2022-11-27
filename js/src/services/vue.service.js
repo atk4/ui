@@ -45,6 +45,7 @@ class VueService {
             loader: () => {
                 this.registerComponent({
                     name: name,
+                    apps: [],
                     isLoaded: false,
                 });
 
@@ -106,9 +107,8 @@ class VueService {
         app.mount(id);
 
         this.registerComponent({
-            ids: [id],
             name: componentName,
-            instance: app,
+            apps: [app],
             isLoaded: false,
         });
     }
@@ -123,8 +123,6 @@ class VueService {
         });
         this._setupComponentAutoloader(app);
 
-        app.component('DemoClock', window.vueDemoClock); // TODO
-
         const def = $.extend({}, component);
         const defData = def.data;
         def.data = function () {
@@ -138,22 +136,21 @@ class VueService {
         app.mount(id);
 
         this.registerComponent({
-            ids: [id],
             name: componentName,
-            instance: app,
+            apps: [app],
             isLoaded: true,
         });
     }
 
     /*
      * Add component to vues container.
-     * Group ids that are using the same component.
+     * Group apps that are using the same component.
      */
     registerComponent(component) {
         if (this.vues[component.name] === undefined) {
             this.vues[component.name] = component;
         } else {
-            // TODO this.vues[component.name].ids.push(component.ids[0]);
+            this.vues[component.name].apps.push(...component.apps);
         }
     }
 

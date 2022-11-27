@@ -112,15 +112,15 @@ $clockTemplate = new HtmlTemplate(<<<'EOF'
 
 // Injecting script but normally you would create a separate js file and include it in your page.
 $clockScript = $app->getTag('script', [], <<<'EOF'
-    // register external clock component
-    // TODO atk.vueService.getVue().component('demo-clock', window.vueDemoClock);
-
     let myClock = {
         template: `
             <div>
                 <demo-clock :color="color" :text-shadow="textShadow" :background="background"></demo-clock>
                 <div class="ui basic segment inline"><div class="ui button primary" @click="onChangeStyle">Change Style</div></div>
             </div>`,
+        components: {
+            'demo-clock': window.vueDemoClock,
+        },
         props: { styles: Array },
         data: function () {
             return { style: this.styles, currentIndex: 0 };
