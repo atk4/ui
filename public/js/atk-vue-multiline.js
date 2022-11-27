@@ -20,11 +20,11 @@ __webpack_require__.r(__webpack_exports__);
             <AtkMultilineRow
                 :fields="fields"
                 v-for="(row, i) in rows" :key="row.__atkml"
-                @onTabLastColumn="onTabLastColumn(i)"
                 :rowId="row.__atkml"
                 :isDeletable="isDeletableRow(row)"
                 :rowValues="row"
                 :error="getError(row.__atkml)"
+                @onTabLastColumn="onTabLastColumn(i)"
             ></AtkMultilineRow>
         </SuiTableBody>`,
   props: ['fieldDefs', 'rowData', 'deletables', 'errors'],
@@ -90,9 +90,9 @@ __webpack_require__.r(__webpack_exports__);
             ref="cell"
             :fluid="true"
             class="fluid"
-            @update:modelValue="onInput"
-            v-model="inputValue"
             :name="inputName"
+            v-model="inputValue"
+            @update:modelValue="onInput"
         ></component>`,
   components: {
     AtkMultilineReadonly: _multiline_readonly_component__WEBPACK_IMPORTED_MODULE_0__["default"],
@@ -109,7 +109,7 @@ __webpack_require__.r(__webpack_exports__);
       inputValue: this.fieldValue
     };
   },
-  emits: ['update-value'],
+  emits: ['updateValue'],
   methods: {
     getComponent: function () {
       return this.cellData.definition.component;
@@ -124,7 +124,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     onInput: function (value) {
       this.inputValue = value;
-      this.$emit('update-value', this.fieldName, this.inputValue);
+      this.$emit('updateValue', this.fieldName, this.inputValue);
     }
   }
 });
@@ -172,7 +172,7 @@ __webpack_require__.r(__webpack_exports__);
             </SuiTableRow>
             <SuiTableRow :verticalAlign="'top'">
                 <SuiTableHeaderCell :width=1 textAlign="center">
-                    <input ref="check" type="checkbox" @input="onToggleDeleteAll" :checked="isChecked" :indeterminate="isIndeterminate" />
+                    <input ref="check" type="checkbox" :checked="isChecked" :indeterminate="isIndeterminate" @input="onToggleDeleteAll" />
                 </SuiTableHeaderCell>
                 <SuiTableHeaderCell
                     v-for="column in columns"
@@ -309,20 +309,20 @@ __webpack_require__.r(__webpack_exports__);
   template: `
         <SuiTableRow :verticalAlign="'middle'">
             <SuiTableCell textAlign="center">
-                <input type="checkbox" @input="onToggleDelete" v-model="toDelete" />
+                <input type="checkbox" v-model="toDelete" @input="onToggleDelete" />
             </SuiTableCell>
             <SuiTableCell
                 v-for="(column, i) in columns"
-                @keydown.tab="onTab(i)"
                 v-bind="column.cellProps"
                 :width=null
                 :state="getErrorState(column)"
                 :style="{ overflow: 'visible' }"
+                @keydown.tab="onTab(i)"
             >
                 <AtkMultilineCell
                     :cellData="column"
-                    @update-value="onUpdateValue"
                     :fieldValue="getValue(column)"
+                    @updateValue="onUpdateValue"
                 ></AtkMultilineCell>
             </SuiTableCell>
         </SuiTableRow>`,
@@ -471,21 +471,21 @@ __webpack_require__.r(__webpack_exports__);
                     :caption="caption"
                 ></AtkMultilineHeader>
                 <AtkMultilineBody
-                    @onTabLastRow="onTabLastRow"
                     :fieldDefs="fieldData"
                     :rowData="rowData"
                     :deletables="getDeletables"
                     :errors="errors"
+                    @onTabLastRow="onTabLastRow"
                 ></AtkMultilineBody>
                 <SuiTableFooter>
                     <SuiTableRow>
                         <SuiTableHeaderCell />
                         <SuiTableHeaderCell :colspan="getSpan" textAlign="right">
                             <SuiButtonGroup>
-                                <SuiButton ref="addBtn" size="small" @click.stop.prevent="onAdd" type="button" icon :disabled="isLimitReached">
+                                <SuiButton ref="addBtn" size="small" type="button" icon :disabled="isLimitReached" @click.stop.prevent="onAdd">
                                     <SuiIcon name="plus" />
                                 </SuiButton>
-                                <SuiButton size="small" @click.stop.prevent="onDelete" type="button" icon :disabled="isDeleteDisable">
+                                <SuiButton size="small" type="button" icon :disabled="isDeleteDisable" @click.stop.prevent="onDelete">
                                     <SuiIcon name="trash" />
                                 </SuiButton>
                             </SuiButtonGroup>
@@ -572,7 +572,7 @@ __webpack_require__.r(__webpack_exports__);
         this.data.afterAdd(JSON.parse(this.value));
       }
       this.fetchExpression(newRow.__atkml);
-      this.fetchOnChangeAction();
+      this.fetchOnUpdateAction();
     },
     onDelete: function () {
       for (const atkmlId of this.deletables) {
@@ -580,7 +580,7 @@ __webpack_require__.r(__webpack_exports__);
       }
       this.deletables = [];
       this.updateInputValue();
-      this.fetchOnChangeAction();
+      this.fetchOnUpdateAction();
       if (this.data.afterDelete && typeof this.data.afterDelete === 'function') {
         this.data.afterDelete(JSON.parse(this.value));
       }
@@ -593,7 +593,7 @@ __webpack_require__.r(__webpack_exports__);
         this.onUpdate.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_9__["default"].createDebouncedFx(() => {
           this.onUpdate.debouncedFx = null;
           this.fetchExpression(atkmlId);
-          this.fetchOnChangeAction(fieldName);
+          this.fetchOnUpdateAction(fieldName);
         }, 250);
       }
       this.onUpdate.debouncedFx.call(this);
@@ -661,7 +661,7 @@ __webpack_require__.r(__webpack_exports__);
      * Use regular api call in order
      * for return js to be fully evaluated.
      */
-    fetchOnChangeAction: function () {
+    fetchOnUpdateAction: function () {
       let fieldName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
       if (this.hasChangeCb && (fieldName === null || this.eventFields.includes(fieldName))) {
         external_jquery__WEBPACK_IMPORTED_MODULE_8___default()(this.$refs.addBtn.$el).api({
@@ -828,7 +828,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
+/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+
+
+
 
 
 /**
@@ -838,10 +847,9 @@ __webpack_require__.r(__webpack_exports__);
  * config:
  * url: the callback URL. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
  * reference: the reference field name associate with model or hasOne name. This field name will be sent along with URL callback parameter as of 'field=name'.
- * ui: the css class name to apply to dropdown.
  * Note: The remaining config object may contain any or SuiDropdown { props: value } pair.
  *
- * value: The selected value.
+ * modelValue: The selected value.
  * optionalValue: The initial list of options for the dropdown.
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -850,25 +858,21 @@ __webpack_require__.r(__webpack_exports__);
         <SuiDropdown
             v-bind="dropdownProps"
             ref="drop"
-            ` /* :loading="isLoading" */ + `@update:modelValue="onChange"
+            :modelValue="getDropdownValue(modelValue)"
+            ` /* :loading="isLoading" */ + `@update:modelValue="onUpdate"
             @filtered="onFiltered"
-            v-model="current"
-            :class="css"
         ></SuiDropdown>`,
-  props: ['config', 'value', 'optionalValue'],
+  props: ['config', 'modelValue', 'optionalValue'],
   data: function () {
     const {
       url,
       reference,
-      ui,
       ...suiDropdown
     } = this.config;
     suiDropdown.selection = true;
     return {
       dropdownProps: suiDropdown,
-      current: this.value,
       url: url || null,
-      css: [ui],
       isLoading: false,
       field: reference,
       query: '',
@@ -882,9 +886,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   emits: ['update:modelValue'],
   methods: {
-    onChange: function (value) {
-      this.current = value.value;
-      this.$emit('update:modelValue', this.current);
+    getDropdownValue: function (value) {
+      return this.dropdownProps.options.find(item => item.value === value);
+    },
+    onUpdate: function (value) {
+      this.$emit('update:modelValue', value.value);
     },
     /**
      * Receive user input text for search.
@@ -894,7 +900,7 @@ __webpack_require__.r(__webpack_exports__);
         this.isLoading = true;
       }
       if (!this.onFiltered.debouncedFx) {
-        this.onFiltered.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_0__["default"].createDebouncedFx(() => {
+        this.onFiltered.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_3__["default"].createDebouncedFx(() => {
           this.onFiltered.debouncedFx = null;
           if (this.query !== this.temp) {
             this.query = this.temp;
@@ -916,7 +922,7 @@ __webpack_require__.r(__webpack_exports__);
           atkVueLookupQuery: q,
           atkVueLookupField: this.field
         };
-        const response = await atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.suiFetch(this.url, {
+        const response = await atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.suiFetch(this.url, {
           method: 'get',
           data: data
         });

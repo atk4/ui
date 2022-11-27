@@ -19,10 +19,11 @@ export default {
             <input
                 class="ui"
                 v-model="query"
-                type="text" placeholder="Search..."
+                type="text"
+                name="atk-vue-search"
+                placeholder="Search..."
                 @keyup="onKeyup"
                 @keyup.esc="onEscape"
-                name="atk-vue-search"
             />
             <i class="atk-search-icon" :class="classIcon" />
             <span style="width: 12px; cursor: pointer;" @click="onClear" />

@@ -99,7 +99,7 @@
                                             :is="rule.component"
                                             v-model="query.value"
                                             :config="rule.componentProps"
-                                            :optional-value="query.option"
+                                            :optionalValue="query.option"
                                         />
                                     </div>
                                 </template>
@@ -156,7 +156,7 @@ export default {
          * Check if an input can be display in regards to:
          * it's operator and then it's type.
          *
-         * @returns {boolean|*}
+         * @returns {boolean}
          */
         canDisplay: function (type) {
             if (this.labels.hiddenOperator.includes(this.query.operator)) {

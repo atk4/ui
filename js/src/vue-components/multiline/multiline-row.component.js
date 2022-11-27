@@ -13,20 +13,20 @@ export default {
     template: `
         <SuiTableRow :verticalAlign="'middle'">
             <SuiTableCell textAlign="center">
-                <input type="checkbox" @input="onToggleDelete" v-model="toDelete" />
+                <input type="checkbox" v-model="toDelete" @input="onToggleDelete" />
             </SuiTableCell>
             <SuiTableCell
                 v-for="(column, i) in columns"
-                @keydown.tab="onTab(i)"
                 v-bind="column.cellProps"
                 :width=null
                 :state="getErrorState(column)"
                 :style="{ overflow: 'visible' }"
+                @keydown.tab="onTab(i)"
             >
                 <AtkMultilineCell
                     :cellData="column"
-                    @update-value="onUpdateValue"
                     :fieldValue="getValue(column)"
+                    @updateValue="onUpdateValue"
                 ></AtkMultilineCell>
             </SuiTableCell>
         </SuiTableRow>`,

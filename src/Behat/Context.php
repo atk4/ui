@@ -596,7 +596,7 @@ class Context extends RawMinkContext implements BehatContext
 
         $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
-        // TODO $this->assertDropdownValue($rule, $value, '.vqb-rule-input .active.item');
+        $this->assertDropdownValue($rule, $value, '.vqb-rule-input .active.item');
     }
 
     /**
@@ -818,7 +818,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     private function assertDropdownValue(NodeElement $element, string $value, string $selector): void
     {
-        if ($this->findElement($element, $selector)->getHtml() !== $value) {
+        if ($this->findElement($element, $selector)->getText() !== $value) {
             throw new \Exception('Value: "' . $value . '" not set using selector: ' . $selector);
         }
     }

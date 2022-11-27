@@ -20,7 +20,7 @@ export default {
             </SuiTableRow>
             <SuiTableRow :verticalAlign="'top'">
                 <SuiTableHeaderCell :width=1 textAlign="center">
-                    <input ref="check" type="checkbox" @input="onToggleDeleteAll" :checked="isChecked" :indeterminate="isIndeterminate" />
+                    <input ref="check" type="checkbox" :checked="isChecked" :indeterminate="isIndeterminate" @input="onToggleDeleteAll" />
                 </SuiTableHeaderCell>
                 <SuiTableHeaderCell
                     v-for="column in columns"

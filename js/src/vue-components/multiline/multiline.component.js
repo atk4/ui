@@ -15,21 +15,21 @@ export default {
                     :caption="caption"
                 ></AtkMultilineHeader>
                 <AtkMultilineBody
-                    @onTabLastRow="onTabLastRow"
                     :fieldDefs="fieldData"
                     :rowData="rowData"
                     :deletables="getDeletables"
                     :errors="errors"
+                    @onTabLastRow="onTabLastRow"
                 ></AtkMultilineBody>
                 <SuiTableFooter>
                     <SuiTableRow>
                         <SuiTableHeaderCell />
                         <SuiTableHeaderCell :colspan="getSpan" textAlign="right">
                             <SuiButtonGroup>
-                                <SuiButton ref="addBtn" size="small" @click.stop.prevent="onAdd" type="button" icon :disabled="isLimitReached">
+                                <SuiButton ref="addBtn" size="small" type="button" icon :disabled="isLimitReached" @click.stop.prevent="onAdd">
                                     <SuiIcon name="plus" />
                                 </SuiButton>
-                                <SuiButton size="small" @click.stop.prevent="onDelete" type="button" icon :disabled="isDeleteDisable">
+                                <SuiButton size="small" type="button" icon :disabled="isDeleteDisable" @click.stop.prevent="onDelete">
                                     <SuiIcon name="trash" />
                                 </SuiButton>
                             </SuiButtonGroup>
@@ -115,7 +115,7 @@ export default {
                 this.data.afterAdd(JSON.parse(this.value));
             }
             this.fetchExpression(newRow.__atkml);
-            this.fetchOnChangeAction();
+            this.fetchOnUpdateAction();
         },
         onDelete: function () {
             for (const atkmlId of this.deletables) {
@@ -123,7 +123,7 @@ export default {
             }
             this.deletables = [];
             this.updateInputValue();
-            this.fetchOnChangeAction();
+            this.fetchOnUpdateAction();
             if (this.data.afterDelete && typeof this.data.afterDelete === 'function') {
                 this.data.afterDelete(JSON.parse(this.value));
             }
@@ -137,7 +137,7 @@ export default {
                 this.onUpdate.debouncedFx = atk.createDebouncedFx(() => {
                     this.onUpdate.debouncedFx = null;
                     this.fetchExpression(atkmlId);
-                    this.fetchOnChangeAction(fieldName);
+                    this.fetchOnUpdateAction(fieldName);
                 }, 250);
             }
             this.onUpdate.debouncedFx.call(this);
@@ -207,7 +207,7 @@ export default {
          * Use regular api call in order
          * for return js to be fully evaluated.
          */
-        fetchOnChangeAction: function (fieldName = null) {
+        fetchOnUpdateAction: function (fieldName = null) {
             if (this.hasChangeCb && (fieldName === null || this.eventFields.includes(fieldName))) {
                 $(this.$refs.addBtn.$el).api({
                     on: 'now',

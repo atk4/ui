@@ -78,10 +78,10 @@ __webpack_require__.r(__webpack_exports__);
   name: 'AtkTreeItemSelector',
   template: `
         <div class="item" :style="itemMargin">
-            <i :class="toggleIcon" @click="onToggleShow" v-show="!isRoot" />
-            <i :class="getIcon" @click="onToggleSelect" v-show="!isRoot" />
+            <i :class="toggleIcon" v-show="!isRoot" @click="onToggleShow" />
+            <i :class="getIcon" v-show="!isRoot" @click="onToggleSelect" />
             <div class="content">
-                <div @click="onToggleSelect" :style="itemCursor">{{title}}</div>
+                <div :style="itemCursor" @click="onToggleSelect">{{title}}</div>
                 <div v-if="isParent" class="list" v-show="open || isRoot">
                     <AtkTreeItemSelector
                         v-for="item in item.nodes" :key="item.id"

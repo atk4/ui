@@ -12,9 +12,9 @@ export default {
             ref="cell"
             :fluid="true"
             class="fluid"
-            @update:modelValue="onInput"
-            v-model="inputValue"
             :name="inputName"
+            v-model="inputValue"
+            @update:modelValue="onInput"
         ></component>`,
     components: {
         AtkMultilineReadonly: multilineReadonly,
@@ -31,7 +31,7 @@ export default {
             inputValue: this.fieldValue,
         };
     },
-    emits: ['update-value'],
+    emits: ['updateValue'],
     methods: {
         getComponent: function () {
             return this.cellData.definition.component;
@@ -45,7 +45,7 @@ export default {
         },
         onInput: function (value) {
             this.inputValue = value;
-            this.$emit('update-value', this.fieldName, this.inputValue);
+            this.$emit('updateValue', this.fieldName, this.inputValue);
         },
     },
 };

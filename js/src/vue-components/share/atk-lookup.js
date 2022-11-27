@@ -7,10 +7,9 @@ import atk from 'atk';
  * config:
  * url: the callback URL. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
  * reference: the reference field name associate with model or hasOne name. This field name will be sent along with URL callback parameter as of 'field=name'.
- * ui: the css class name to apply to dropdown.
  * Note: The remaining config object may contain any or SuiDropdown { props: value } pair.
  *
- * value: The selected value.
+ * modelValue: The selected value.
  * optionalValue: The initial list of options for the dropdown.
  */
 export default {
@@ -19,24 +18,21 @@ export default {
         <SuiDropdown
             v-bind="dropdownProps"
             ref="drop"
+            :modelValue="getDropdownValue(modelValue)"
             ` /* :loading="isLoading" */
-            + `@update:modelValue="onChange"
+            + `@update:modelValue="onUpdate"
             @filtered="onFiltered"
-            v-model="current"
-            :class="css"
         ></SuiDropdown>`,
-    props: ['config', 'value', 'optionalValue'],
+    props: ['config', 'modelValue', 'optionalValue'],
     data: function () {
         const {
-            url, reference, ui, ...suiDropdown
+            url, reference, ...suiDropdown
         } = this.config;
         suiDropdown.selection = true;
 
         return {
             dropdownProps: suiDropdown,
-            current: this.value,
             url: url || null,
-            css: [ui],
             isLoading: false,
             field: reference,
             query: '',
@@ -50,9 +46,11 @@ export default {
     },
     emits: ['update:modelValue'],
     methods: {
-        onChange: function (value) {
-            this.current = value.value;
-            this.$emit('update:modelValue', this.current);
+        getDropdownValue: function (value) {
+            return this.dropdownProps.options.find((item) => item.value === value);
+        },
+        onUpdate: function (value) {
+            this.$emit('update:modelValue', value.value);
         },
         /**
          * Receive user input text for search.

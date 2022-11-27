@@ -7,11 +7,11 @@ export default {
             <AtkMultilineRow
                 :fields="fields"
                 v-for="(row, i) in rows" :key="row.__atkml"
-                @onTabLastColumn="onTabLastColumn(i)"
                 :rowId="row.__atkml"
                 :isDeletable="isDeletableRow(row)"
                 :rowValues="row"
                 :error="getError(row.__atkml)"
+                @onTabLastColumn="onTabLastColumn(i)"
             ></AtkMultilineRow>
         </SuiTableBody>`,
     props: ['fieldDefs', 'rowData', 'deletables', 'errors'],

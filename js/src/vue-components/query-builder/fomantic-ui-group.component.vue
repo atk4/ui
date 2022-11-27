@@ -86,18 +86,6 @@ export default {
             selectedSuiRule: null,
         };
     },
-    computed: {
-        /**
-         * Map rules to SUI Dropdown.
-         */
-        dropdownRules: function () {
-            return this.rules.map((rule) => ({
-                key: rule.id,
-                text: rule.label,
-                value: rule.id,
-            }));
-        },
-    },
     methods: {
         /**
          * Add a new rule via Dropdown item.

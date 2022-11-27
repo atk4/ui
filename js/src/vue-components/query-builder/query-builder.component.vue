@@ -8,10 +8,10 @@
         >
         <VueQueryBuilder
             v-model="query"
-            :group-component="groupComponent"
-            :rule-component="ruleComponent"
+            :groupComponent="groupComponent"
+            :ruleComponent="ruleComponent"
             :rules="rules"
-            :max-depth="maxDepth"
+            :maxDepth="maxDepth"
             :labels="labels"
         >
             <template #default="slotProps">
@@ -71,8 +71,6 @@ export default {
     methods: {
         /**
          * Return default label and option.
-         *
-         * @returns {any}
          */
         getLabels: function (labels) {
             labels = labels || {};
