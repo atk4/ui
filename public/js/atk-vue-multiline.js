@@ -494,7 +494,7 @@ __webpack_require__.r(__webpack_exports__);
                 </SuiTableFooter>
             </SuiTable>
             <div>
-                <input ref="atkmlInput" :form="form" :name="name" type="hidden" :value="value" />
+                <input ref="atkmlInput" :form="form" :name="name" type="hidden" :value="valueJson" />
             </div>
         </div>`,
   props: {
@@ -510,9 +510,8 @@ __webpack_require__.r(__webpack_exports__);
     };
     return {
       form: this.data.formName,
-      value: this.data.inputValue,
+      valueJson: this.data.inputValue,
       name: this.data.inputName,
-      // form input name where to set multiline content value.
       rowData: [],
       fieldData: this.data.fields || [],
       eventFields: this.data.eventFields || [],
@@ -531,7 +530,7 @@ __webpack_require__.r(__webpack_exports__);
     AtkMultilineBody: _multiline_body_component__WEBPACK_IMPORTED_MODULE_10__["default"]
   },
   mounted: function () {
-    this.rowData = this.buildRowData(this.value ? this.value : '[]');
+    this.rowData = this.buildRowData(this.valueJson ? this.valueJson : '[]');
     this.updateInputValue();
     atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.id + '-update-row', payload => {
       this.onUpdate(payload.rowId, payload.fieldName, payload.value);
@@ -569,7 +568,7 @@ __webpack_require__.r(__webpack_exports__);
       this.rowData.push(newRow);
       this.updateInputValue();
       if (this.data.afterAdd && typeof this.data.afterAdd === 'function') {
-        this.data.afterAdd(JSON.parse(this.value));
+        this.data.afterAdd(JSON.parse(this.valueJson));
       }
       this.fetchExpression(newRow.__atkml);
       this.fetchOnUpdateAction();
@@ -582,7 +581,7 @@ __webpack_require__.r(__webpack_exports__);
       this.updateInputValue();
       this.fetchOnUpdateAction();
       if (this.data.afterDelete && typeof this.data.afterDelete === 'function') {
-        this.data.afterDelete(JSON.parse(this.value));
+        this.data.afterDelete(JSON.parse(this.valueJson));
       }
     },
     onUpdate: function (atkmlId, fieldName, value) {
@@ -638,7 +637,7 @@ __webpack_require__.r(__webpack_exports__);
      * as JSON string.
      */
     updateInputValue: function () {
-      this.value = JSON.stringify(this.rowData);
+      this.valueJson = JSON.stringify(this.rowData);
     },
     /**
      * Build rowData from JSON string.
@@ -670,7 +669,7 @@ __webpack_require__.r(__webpack_exports__);
           method: 'POST',
           data: {
             __atkml_action: 'on-change',
-            rows: this.value
+            rows: this.valueJson
           }
         });
       }
@@ -697,7 +696,7 @@ __webpack_require__.r(__webpack_exports__);
     fetchExpression: async function (atkmlId) {
       if (this.hasExpression()) {
         const row = this.findRow(atkmlId);
-        // server will return expression field - value if define.
+        // server will return expression field/value if defined
         if (row) {
           const resp = await this.postData(row);
           if (resp.expressions) {
@@ -777,41 +776,47 @@ __webpack_require__.r(__webpack_exports__);
  * https://github.com/ankurk91/vue-flatpickr-component
  *
  * Properties:
- * config: Any of flatpickr options
- *
- * Will emit a dateChange event when date is set.
+ * config: Any of Flatpickr options
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'AtkDatePicker',
-  template: '<FlatpickrPicker v-model="date" :config="flatPickr" />',
-  props: ['config', 'value'],
+  template: `
+        <FlatpickrPicker
+            :config="flatPickr"
+            :modelValue="getFlatpickrValue(modelValue)"
+            @update:modelValue="onUpdate"
+        />`,
+  props: ['config', 'modelValue'],
   data: function () {
     const {
       useDefault,
-      ...fpickr
+      ...otherConfig
     } = this.config;
-    if (useDefault && !fpickr.defaultDate && !this.value) {
-      fpickr.defaultDate = new Date();
-    } else if (this.value) {
-      fpickr.defaultDate = this.value;
+    if (useDefault && !otherConfig.defaultDate && !this.modelValue) {
+      otherConfig.defaultDate = new Date();
+    } else if (this.modelValue) {
+      otherConfig.defaultDate = this.modelValue;
     }
-    if (!fpickr.locale) {
-      fpickr.locale = flatpickr.l10ns.default;
+    if (!otherConfig.locale) {
+      otherConfig.locale = flatpickr.l10ns.default;
     }
     return {
-      flatPickr: fpickr,
-      date: null
+      flatPickr: otherConfig
     };
   },
   emits: ['setDefault'],
   mounted: function () {
     // if value is not set but default date is, then emit proper string value to parent.
-    if (!this.value && this.flatPickr.defaultDate) {
-      if (this.flatPickr.defaultDate instanceof Date) {
-        this.$emit('setDefault', flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat));
-      } else {
-        this.$emit('setDefault', this.flatPickr.defaultDate);
-      }
+    if (!this.modelValue && this.flatPickr.defaultDate) {
+      this.onUpdate(this.flatPickr.defaultDate instanceof Date ? flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat) : this.flatPickr.defaultDate);
+    }
+  },
+  methods: {
+    getFlatpickrValue: function (value) {
+      return value;
+    },
+    onUpdate: function (value) {
+      this.$emit('update:modelValue', value);
     }
   }
 });
@@ -867,11 +872,11 @@ __webpack_require__.r(__webpack_exports__);
     const {
       url,
       reference,
-      ...suiDropdown
+      ...otherConfig
     } = this.config;
-    suiDropdown.selection = true;
+    otherConfig.selection = true;
     return {
-      dropdownProps: suiDropdown,
+      dropdownProps: otherConfig,
       url: url || null,
       isLoading: false,
       field: reference,

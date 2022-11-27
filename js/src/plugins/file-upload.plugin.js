@@ -156,7 +156,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
             { fUploadAction: 'upload' },
             this.settings.url,
             completeCb,
-            xhrCb,
+            xhrCb
         );
     }
 

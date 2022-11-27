@@ -49,6 +49,13 @@ module.exports = {
                 balanced: true,
             },
         }],
+        'comma-dangle': ['error', {
+            arrays: 'always-multiline',
+            objects: 'always-multiline',
+            functions: 'never',
+            imports: 'always-multiline',
+            exports: 'always-multiline',
+        }],
         'import/no-unresolved': 'off',
         'import/prefer-default-export': 'off',
         'import/extensions': ['error', 'always', {
@@ -57,6 +64,7 @@ module.exports = {
             vue: 'never',
         }],
         'vue/html-indent': ['error', 4],
+        'vue/attribute-hyphenation': ['error', 'never'],
         'jsdoc/require-param': 'off',
         'jsdoc/require-param-description': 'off',
         'jsdoc/require-returns': 'off',

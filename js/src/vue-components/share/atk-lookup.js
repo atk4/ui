@@ -26,12 +26,12 @@ export default {
     props: ['config', 'modelValue', 'optionalValue'],
     data: function () {
         const {
-            url, reference, ...suiDropdown
+            url, reference, ...otherConfig
         } = this.config;
-        suiDropdown.selection = true;
+        otherConfig.selection = true;
 
         return {
-            dropdownProps: suiDropdown,
+            dropdownProps: otherConfig,
             url: url || null,
             isLoading: false,
             field: reference,

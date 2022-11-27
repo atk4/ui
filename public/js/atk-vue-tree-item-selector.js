@@ -327,7 +327,6 @@ __webpack_require__.r(__webpack_exports__);
      * Set input field with current mapped model value.
      */
     setInput: function (value) {
-      // console.log('set input');
       this.getInputElement().value = value;
     },
     /**

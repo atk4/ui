@@ -43,7 +43,7 @@ export default class AtkJsSortablePlugin extends AtkPlugin {
             {
                 draggable: this.settings.draggable,
                 handle: this.settings.handleClass ? '.' + this.settings.handleClass : null,
-            },
+            }
         );
         this.initialize();
 

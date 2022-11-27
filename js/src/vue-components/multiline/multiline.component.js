@@ -38,7 +38,7 @@ export default {
                 </SuiTableFooter>
             </SuiTable>
             <div>
-                <input ref="atkmlInput" :form="form" :name="name" type="hidden" :value="value" />
+                <input ref="atkmlInput" :form="form" :name="name" type="hidden" :value="valueJson" />
             </div>
         </div>`,
     props: {
@@ -55,8 +55,8 @@ export default {
 
         return {
             form: this.data.formName,
-            value: this.data.inputValue,
-            name: this.data.inputName, // form input name where to set multiline content value.
+            valueJson: this.data.inputValue,
+            name: this.data.inputName,
             rowData: [],
             fieldData: this.data.fields || [],
             eventFields: this.data.eventFields || [],
@@ -72,7 +72,7 @@ export default {
         AtkMultilineBody: multilineBody,
     },
     mounted: function () {
-        this.rowData = this.buildRowData(this.value ? this.value : '[]');
+        this.rowData = this.buildRowData(this.valueJson ? this.valueJson : '[]');
         this.updateInputValue();
 
         atk.eventBus.on(this.$root.$el.id + '-update-row', (payload) => {
@@ -112,7 +112,7 @@ export default {
             this.rowData.push(newRow);
             this.updateInputValue();
             if (this.data.afterAdd && typeof this.data.afterAdd === 'function') {
-                this.data.afterAdd(JSON.parse(this.value));
+                this.data.afterAdd(JSON.parse(this.valueJson));
             }
             this.fetchExpression(newRow.__atkml);
             this.fetchOnUpdateAction();
@@ -125,7 +125,7 @@ export default {
             this.updateInputValue();
             this.fetchOnUpdateAction();
             if (this.data.afterDelete && typeof this.data.afterDelete === 'function') {
-                this.data.afterDelete(JSON.parse(this.value));
+                this.data.afterDelete(JSON.parse(this.valueJson));
             }
         },
         onUpdate: function (atkmlId, fieldName, value) {
@@ -183,7 +183,7 @@ export default {
          * as JSON string.
          */
         updateInputValue: function () {
-            this.value = JSON.stringify(this.rowData);
+            this.valueJson = JSON.stringify(this.rowData);
         },
         /**
          * Build rowData from JSON string.
@@ -213,7 +213,7 @@ export default {
                     on: 'now',
                     url: this.data.url,
                     method: 'POST',
-                    data: { __atkml_action: 'on-change', rows: this.value },
+                    data: { __atkml_action: 'on-change', rows: this.valueJson },
                 });
             }
         },
@@ -233,7 +233,7 @@ export default {
         fetchExpression: async function (atkmlId) {
             if (this.hasExpression()) {
                 const row = this.findRow(atkmlId);
-                // server will return expression field - value if define.
+                // server will return expression field/value if defined
                 if (row) {
                     const resp = await this.postData(row);
                     if (resp.expressions) {

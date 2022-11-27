@@ -265,7 +265,6 @@ export default {
          * Set input field with current mapped model value.
          */
         setInput: function (value) {
-            // console.log('set input');
             this.getInputElement().value = value;
         },
         /**

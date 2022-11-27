@@ -4,7 +4,7 @@
             :form="form"
             :name="name"
             type="hidden"
-            :value="value"
+            :value="valueJson"
         >
         <VueQueryBuilder
             v-model="query"
@@ -64,7 +64,7 @@ export default {
         };
     },
     computed: {
-        value: function () {
+        valueJson: function () {
             return JSON.stringify(this.query, null);
         },
     },

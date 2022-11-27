@@ -26,7 +26,7 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
         // add new param and remove duplicate, prioritizing the latest one.
         let urlParams = Object.assign(
             atk.urlHelper.parseParams(this.settings.url),
-            this.settings.urlOptions ? this.settings.urlOptions : {},
+            this.settings.urlOptions ? this.settings.urlOptions : {}
         );
 
         // get store object.

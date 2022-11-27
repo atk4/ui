@@ -18,41 +18,47 @@ __webpack_require__.r(__webpack_exports__);
  * https://github.com/ankurk91/vue-flatpickr-component
  *
  * Properties:
- * config: Any of flatpickr options
- *
- * Will emit a dateChange event when date is set.
+ * config: Any of Flatpickr options
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'AtkDatePicker',
-  template: '<FlatpickrPicker v-model="date" :config="flatPickr" />',
-  props: ['config', 'value'],
+  template: `
+        <FlatpickrPicker
+            :config="flatPickr"
+            :modelValue="getFlatpickrValue(modelValue)"
+            @update:modelValue="onUpdate"
+        />`,
+  props: ['config', 'modelValue'],
   data: function () {
     const {
       useDefault,
-      ...fpickr
+      ...otherConfig
     } = this.config;
-    if (useDefault && !fpickr.defaultDate && !this.value) {
-      fpickr.defaultDate = new Date();
-    } else if (this.value) {
-      fpickr.defaultDate = this.value;
+    if (useDefault && !otherConfig.defaultDate && !this.modelValue) {
+      otherConfig.defaultDate = new Date();
+    } else if (this.modelValue) {
+      otherConfig.defaultDate = this.modelValue;
     }
-    if (!fpickr.locale) {
-      fpickr.locale = flatpickr.l10ns.default;
+    if (!otherConfig.locale) {
+      otherConfig.locale = flatpickr.l10ns.default;
     }
     return {
-      flatPickr: fpickr,
-      date: null
+      flatPickr: otherConfig
     };
   },
   emits: ['setDefault'],
   mounted: function () {
     // if value is not set but default date is, then emit proper string value to parent.
-    if (!this.value && this.flatPickr.defaultDate) {
-      if (this.flatPickr.defaultDate instanceof Date) {
-        this.$emit('setDefault', flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat));
-      } else {
-        this.$emit('setDefault', this.flatPickr.defaultDate);
-      }
+    if (!this.modelValue && this.flatPickr.defaultDate) {
+      this.onUpdate(this.flatPickr.defaultDate instanceof Date ? flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat) : this.flatPickr.defaultDate);
+    }
+  },
+  methods: {
+    getFlatpickrValue: function (value) {
+      return value;
+    },
+    onUpdate: function (value) {
+      this.$emit('update:modelValue', value);
     }
   }
 });
@@ -108,11 +114,11 @@ __webpack_require__.r(__webpack_exports__);
     const {
       url,
       reference,
-      ...suiDropdown
+      ...otherConfig
     } = this.config;
-    suiDropdown.selection = true;
+    otherConfig.selection = true;
     return {
-      dropdownProps: suiDropdown,
+      dropdownProps: otherConfig,
       url: url || null,
       isLoading: false,
       field: reference,
@@ -344,7 +350,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
-    value: function () {
+    valueJson: function () {
       return JSON.stringify(this.query, null);
     }
   },
@@ -429,9 +435,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_SuiDropdown = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("SuiDropdown");
   const _component_QueryBuilderChildren = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("QueryBuilderChildren");
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-    class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["vqb-group ui fluid card", [_ctx.labels.spaceRule, 'depth-' + _ctx.depth.toString()]])
+    class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["vqb-group ui fluid card", [_ctx.labels.spaceRule, 'depth-' + _ctx.depth]])
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["vbq-group-heading content", 'depth-' + _ctx.depth.toString()])
+    class: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["vbq-group-heading content", 'depth-' + _ctx.depth])
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.labels.matchType), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
     "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => _ctx.query.logicalOperator = $event),
     class: "atk-qb-select"
@@ -627,7 +633,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     form: _ctx.form,
     name: _ctx.name,
     type: "hidden",
-    value: $options.value
+    value: $options.valueJson
   }, null, 8 /* PROPS */, _hoisted_2), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_VueQueryBuilder, {
     modelValue: _ctx.query,
     "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => _ctx.query = $event),
@@ -666,7 +672,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.vue-query-builder .vqb-group .rule-actions {\n        margin-bottom: 0px;\n}\n.vue-query-builder .vqb-rule {\n        margin-top: 0px;\n        margin-bottom: 0px;\n        padding: 0px;\n}\n.atk-qb-select, .ui.form select.atk-qb-select {\n       padding: 2px 6px 4px 4px;\n}\n.atk-qb-remove {\n        cursor: pointer;\n        color: rgba(0, 0, 0, 0.6);\n}\n.ui.selection.dropdown.atk-qb-rule-select {\n        background-color: rgba(0, 0, 0, 0);\n}\n.ui.selection.dropdown .atk-qb-rule-select-menu {\n        width: max-content;\n        z-index: 1000;\n}\n.vbq-group-heading > .ui.grid > .column:not(.row) {\n        padding-bottom: 0.5em;\n        padding-top: 0.5em;\n}\n.vue-query-builder .ui.card.compact {\n        margin-top: 0.5em;\n        margin-bottom: 0.5em;\n}\n.vue-query-builder .ui.card.fitted {\n        margin-top: 0em;\n        margin-bottom: 0em;\n}\n.vue-query-builder .ui.card.padded {\n        margin-top: 1em;\n        margin-bottom: 1em;\n}\n.ui.card > .vbq-group-heading.content {\n        background-color: #f3f4f5;\n}\n.vue-query-builder .vqb-group.depth-1 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-2 {\n        border-left: 2px solid #8bc34a;\n}\n.vue-query-builder .vqb-group.depth-2 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-3 {\n        border-left: 2px solid #00bcd4;\n}\n.vue-query-builder .vqb-group.depth-3 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-4 {\n        border-left: 2px solid #ff5722;\n}\n", "",{"version":3,"sources":["webpack://./src/vue-components/query-builder/fomantic-ui-group.component.vue"],"names":[],"mappings":";AAuGI;QACI,kBAAkB;AACtB;AAEA;QACI,eAAe;QACf,kBAAkB;QAClB,YAAY;AAChB;AAEA;OACG,wBAAwB;AAC3B;AACA;QACI,eAAe;QACf,yBAAyB;AAC7B;AACA;QACI,kCAAkC;AACtC;AACA;QACI,kBAAkB;QAClB,aAAa;AACjB;AACA;QACI,qBAAqB;QACrB,kBAAkB;AACtB;AACA;QACI,iBAAiB;QACjB,oBAAoB;AACxB;AACA;QACI,eAAe;QACf,kBAAkB;AACtB;AACA;QACI,eAAe;QACf,kBAAkB;AACtB;AACA;QACI,yBAAyB;AAC7B;AACA;;QAEI,8BAA8B;AAClC;AACA;;QAEI,8BAA8B;AAClC;AACA;;QAEI,8BAA8B;AAClC","sourcesContent":["<template>\n    <div\n        class=\"vqb-group ui fluid card\"\n        :class=\"[labels.spaceRule, 'depth-' + depth.toString()]\"\n    >\n        <div\n            class=\"vbq-group-heading content\"\n            :class=\"'depth-' + depth.toString()\"\n        >\n            <div class=\"ui grid\">\n                <div class=\"fourteen wide column\">\n                    <div class=\"ui horizontal list\">\n                        <div class=\"item\">\n                            <h4 class=\"ui inline\">\n                                {{ labels.matchType }}\n                            </h4>\n                        </div>\n                        <div class=\"item\">\n                            <select\n                                v-model=\"query.logicalOperator\"\n                                class=\"atk-qb-select\"\n                            >\n                                <option\n                                    v-for=\"label in labels.matchTypes\"\n                                    :key=\"label.id\"\n                                    :value=\"label.id\"\n                                >\n                                    {{ label.label }}\n                                </option>\n                            </select>\n                        </div>\n                        <div class=\"item\">\n                            <div class=\"rule-actions\">\n                                <div>\n                                    <SuiDropdown\n                                        :text=\"labels.addRule\"\n                                        class=\"ui mini basic button atk-qb-rule-select\"\n                                        selection\n                                    >\n                                        <SuiDropdownMenu class=\"atk-qb-rule-select-menu\">\n                                            <SuiDropdownItem\n                                                v-for=\"rule in rules\"\n                                                :key=\"rule.id\"\n                                                :text=\"rule.label\"\n                                                @click=\"addNewRule(rule.id)\"\n                                            />\n                                        </SuiDropdownMenu>\n                                    </SuiDropdown>\n                                    <button\n                                        v-if=\"depth < maxDepth\"\n                                        type=\"button\"\n                                        class=\"ui mini basic button\"\n                                        @click=\"addGroup\"\n                                    >\n                                        {{ labels.addGroup }}\n                                    </button>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"two wide right aligned column\">\n                    <i\n                        v-if=\"depth > 1\"\n                        class=\"atk-qb-remove\"\n                        :class=\"labels.removeGroupClass\"\n                        @click=\"remove\"\n                    />\n                </div>\n            </div>\n        </div>\n        <div class=\"vbq-group-body content\">\n            <QueryBuilderChildren v-bind=\"$props\" />\n        </div>\n    </div>\n</template>\n\n<script>\nimport VueQueryBuilderGroup from 'vue-query-builder/src/components/QueryBuilderGroup';\n\nexport default {\n    name: 'QueryBuilderGroup',\n    extends: VueQueryBuilderGroup,\n    data: function () {\n        return {\n            selectedSuiRule: null,\n        };\n    },\n    methods: {\n        /**\n         * Add a new rule via Dropdown item.\n         */\n        addNewRule: function (ruleId) {\n            this.selectedRule = this.rules.find((rule) => rule.id === ruleId);\n            if (this.selectedRule) {\n                this.addRule();\n            }\n        },\n    },\n};\n</script>\n\n<style>\n    .vue-query-builder .vqb-group .rule-actions {\n        margin-bottom: 0px;\n    }\n\n    .vue-query-builder .vqb-rule {\n        margin-top: 0px;\n        margin-bottom: 0px;\n        padding: 0px;\n    }\n\n    .atk-qb-select, .ui.form select.atk-qb-select {\n       padding: 2px 6px 4px 4px;\n    }\n    .atk-qb-remove {\n        cursor: pointer;\n        color: rgba(0, 0, 0, 0.6);\n    }\n    .ui.selection.dropdown.atk-qb-rule-select {\n        background-color: rgba(0, 0, 0, 0);\n    }\n    .ui.selection.dropdown .atk-qb-rule-select-menu {\n        width: max-content;\n        z-index: 1000;\n    }\n    .vbq-group-heading > .ui.grid > .column:not(.row) {\n        padding-bottom: 0.5em;\n        padding-top: 0.5em;\n    }\n    .vue-query-builder .ui.card.compact {\n        margin-top: 0.5em;\n        margin-bottom: 0.5em;\n    }\n    .vue-query-builder .ui.card.fitted {\n        margin-top: 0em;\n        margin-bottom: 0em;\n    }\n    .vue-query-builder .ui.card.padded {\n        margin-top: 1em;\n        margin-bottom: 1em;\n    }\n    .ui.card > .vbq-group-heading.content {\n        background-color: #f3f4f5;\n    }\n    .vue-query-builder .vqb-group.depth-1 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-2 {\n        border-left: 2px solid #8bc34a;\n    }\n    .vue-query-builder .vqb-group.depth-2 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-3 {\n        border-left: 2px solid #00bcd4;\n    }\n    .vue-query-builder .vqb-group.depth-3 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-4 {\n        border-left: 2px solid #ff5722;\n    }\n</style>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.vue-query-builder .vqb-group .rule-actions {\n        margin-bottom: 0px;\n}\n.vue-query-builder .vqb-rule {\n        margin-top: 0px;\n        margin-bottom: 0px;\n        padding: 0px;\n}\n.atk-qb-select, .ui.form select.atk-qb-select {\n       padding: 2px 6px 4px 4px;\n}\n.atk-qb-remove {\n        cursor: pointer;\n        color: rgba(0, 0, 0, 0.6);\n}\n.ui.selection.dropdown.atk-qb-rule-select {\n        background-color: rgba(0, 0, 0, 0);\n}\n.ui.selection.dropdown .atk-qb-rule-select-menu {\n        width: max-content;\n        z-index: 1000;\n}\n.vbq-group-heading > .ui.grid > .column:not(.row) {\n        padding-bottom: 0.5em;\n        padding-top: 0.5em;\n}\n.vue-query-builder .ui.card.compact {\n        margin-top: 0.5em;\n        margin-bottom: 0.5em;\n}\n.vue-query-builder .ui.card.fitted {\n        margin-top: 0em;\n        margin-bottom: 0em;\n}\n.vue-query-builder .ui.card.padded {\n        margin-top: 1em;\n        margin-bottom: 1em;\n}\n.ui.card > .vbq-group-heading.content {\n        background-color: #f3f4f5;\n}\n.vue-query-builder .vqb-group.depth-1 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-2 {\n        border-left: 2px solid #8bc34a;\n}\n.vue-query-builder .vqb-group.depth-2 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-3 {\n        border-left: 2px solid #00bcd4;\n}\n.vue-query-builder .vqb-group.depth-3 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-4 {\n        border-left: 2px solid #ff5722;\n}\n", "",{"version":3,"sources":["webpack://./src/vue-components/query-builder/fomantic-ui-group.component.vue"],"names":[],"mappings":";AAuGI;QACI,kBAAkB;AACtB;AAEA;QACI,eAAe;QACf,kBAAkB;QAClB,YAAY;AAChB;AAEA;OACG,wBAAwB;AAC3B;AACA;QACI,eAAe;QACf,yBAAyB;AAC7B;AACA;QACI,kCAAkC;AACtC;AACA;QACI,kBAAkB;QAClB,aAAa;AACjB;AACA;QACI,qBAAqB;QACrB,kBAAkB;AACtB;AACA;QACI,iBAAiB;QACjB,oBAAoB;AACxB;AACA;QACI,eAAe;QACf,kBAAkB;AACtB;AACA;QACI,eAAe;QACf,kBAAkB;AACtB;AACA;QACI,yBAAyB;AAC7B;AACA;;QAEI,8BAA8B;AAClC;AACA;;QAEI,8BAA8B;AAClC;AACA;;QAEI,8BAA8B;AAClC","sourcesContent":["<template>\n    <div\n        class=\"vqb-group ui fluid card\"\n        :class=\"[labels.spaceRule, 'depth-' + depth]\"\n    >\n        <div\n            class=\"vbq-group-heading content\"\n            :class=\"'depth-' + depth\"\n        >\n            <div class=\"ui grid\">\n                <div class=\"fourteen wide column\">\n                    <div class=\"ui horizontal list\">\n                        <div class=\"item\">\n                            <h4 class=\"ui inline\">\n                                {{ labels.matchType }}\n                            </h4>\n                        </div>\n                        <div class=\"item\">\n                            <select\n                                v-model=\"query.logicalOperator\"\n                                class=\"atk-qb-select\"\n                            >\n                                <option\n                                    v-for=\"label in labels.matchTypes\"\n                                    :key=\"label.id\"\n                                    :value=\"label.id\"\n                                >\n                                    {{ label.label }}\n                                </option>\n                            </select>\n                        </div>\n                        <div class=\"item\">\n                            <div class=\"rule-actions\">\n                                <div>\n                                    <SuiDropdown\n                                        :text=\"labels.addRule\"\n                                        class=\"ui mini basic button atk-qb-rule-select\"\n                                        selection\n                                    >\n                                        <SuiDropdownMenu class=\"atk-qb-rule-select-menu\">\n                                            <SuiDropdownItem\n                                                v-for=\"rule in rules\"\n                                                :key=\"rule.id\"\n                                                :text=\"rule.label\"\n                                                @click=\"addNewRule(rule.id)\"\n                                            />\n                                        </SuiDropdownMenu>\n                                    </SuiDropdown>\n                                    <button\n                                        v-if=\"depth < maxDepth\"\n                                        type=\"button\"\n                                        class=\"ui mini basic button\"\n                                        @click=\"addGroup\"\n                                    >\n                                        {{ labels.addGroup }}\n                                    </button>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"two wide right aligned column\">\n                    <i\n                        v-if=\"depth > 1\"\n                        class=\"atk-qb-remove\"\n                        :class=\"labels.removeGroupClass\"\n                        @click=\"remove\"\n                    />\n                </div>\n            </div>\n        </div>\n        <div class=\"vbq-group-body content\">\n            <QueryBuilderChildren v-bind=\"$props\" />\n        </div>\n    </div>\n</template>\n\n<script>\nimport VueQueryBuilderGroup from 'vue-query-builder/src/components/QueryBuilderGroup';\n\nexport default {\n    name: 'QueryBuilderGroup',\n    extends: VueQueryBuilderGroup,\n    data: function () {\n        return {\n            selectedSuiRule: null,\n        };\n    },\n    methods: {\n        /**\n         * Add a new rule via Dropdown item.\n         */\n        addNewRule: function (ruleId) {\n            this.selectedRule = this.rules.find((rule) => rule.id === ruleId);\n            if (this.selectedRule) {\n                this.addRule();\n            }\n        },\n    },\n};\n</script>\n\n<style>\n    .vue-query-builder .vqb-group .rule-actions {\n        margin-bottom: 0px;\n    }\n\n    .vue-query-builder .vqb-rule {\n        margin-top: 0px;\n        margin-bottom: 0px;\n        padding: 0px;\n    }\n\n    .atk-qb-select, .ui.form select.atk-qb-select {\n       padding: 2px 6px 4px 4px;\n    }\n    .atk-qb-remove {\n        cursor: pointer;\n        color: rgba(0, 0, 0, 0.6);\n    }\n    .ui.selection.dropdown.atk-qb-rule-select {\n        background-color: rgba(0, 0, 0, 0);\n    }\n    .ui.selection.dropdown .atk-qb-rule-select-menu {\n        width: max-content;\n        z-index: 1000;\n    }\n    .vbq-group-heading > .ui.grid > .column:not(.row) {\n        padding-bottom: 0.5em;\n        padding-top: 0.5em;\n    }\n    .vue-query-builder .ui.card.compact {\n        margin-top: 0.5em;\n        margin-bottom: 0.5em;\n    }\n    .vue-query-builder .ui.card.fitted {\n        margin-top: 0em;\n        margin-bottom: 0em;\n    }\n    .vue-query-builder .ui.card.padded {\n        margin-top: 1em;\n        margin-bottom: 1em;\n    }\n    .ui.card > .vbq-group-heading.content {\n        background-color: #f3f4f5;\n    }\n    .vue-query-builder .vqb-group.depth-1 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-2 {\n        border-left: 2px solid #8bc34a;\n    }\n    .vue-query-builder .vqb-group.depth-2 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-3 {\n        border-left: 2px solid #00bcd4;\n    }\n    .vue-query-builder .vqb-group.depth-3 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-4 {\n        border-left: 2px solid #ff5722;\n    }\n</style>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

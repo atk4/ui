@@ -1,11 +1,11 @@
 <template>
     <div
         class="vqb-group ui fluid card"
-        :class="[labels.spaceRule, 'depth-' + depth.toString()]"
+        :class="[labels.spaceRule, 'depth-' + depth]"
     >
         <div
             class="vbq-group-heading content"
-            :class="'depth-' + depth.toString()"
+            :class="'depth-' + depth"
         >
             <div class="ui grid">
                 <div class="fourteen wide column">

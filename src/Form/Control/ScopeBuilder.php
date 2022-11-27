@@ -44,7 +44,7 @@ class ScopeBuilder extends Form\Control
 
     /**
      * The date, time or datetime options:
-     * 'flatpickr' - any of flatpickr options
+     * 'flatpickr' - any of Flatpickr options
      * 'useDefault' - when true, will init date, time or datetime to current.
      */
     public array $atkdDateOptions = [

@@ -19,13 +19,13 @@ class Calendar extends Input
     public string $type = 'date';
 
     /**
-     * Any other options you'd like to pass to flatpickr JS.
+     * Any other options you'd like to pass to Flatpickr JS.
      * See https://flatpickr.js.org/options/ for all possible options.
      */
     public array $options = [];
 
     /**
-     * Set flatpickr option.
+     * Set Flatpickr option.
      *
      * @param string $name
      * @param mixed  $value
@@ -77,12 +77,11 @@ class Calendar extends Input
             $expr = [$expr];
         }
 
-        // flatpickr on change event
         $this->options['onChange'] = new JsFunction(['date', 'text', 'mode'], $expr);
     }
 
     /**
-     * Get the flatPickr instance of this input in order to
+     * Get the FlatPickr instance of this input in order to
      * get it's properties like selectedDates or run it's methods.
      * Ex: clearing date via js
      *     $btn->on('click', $f->getControl('date')->getJsInstance()->clear());.
