@@ -804,13 +804,12 @@ class View extends AbstractView implements JsExpressionable
      * ex: atk.vueService.getVue().component('external_component', externalComponent). This is the same
      * as Vue.component() method.
      *
-     * @param string           $component           The component name;
-     * @param array            $initData            The component properties passed as the initData prop.
-     *                                              This is the initial data pass to your main component via the initData bind property
-     *                                              of the vue component instance created via the vueService.
-     * @param string|null      $componentDefinition The name of the js var holding a component definition object.
-     *                                              This var must be defined and accessible in window object. window['var_name']
-     * @param string|self|null $selector            the selector for creating the base root object in Vue
+     * @param string                $component           The component name
+     * @param array                 $initData            The component properties passed as the initData prop.
+     *                                                   This is the initial data pass to your main component via the initData bind property
+     *                                                   of the vue component instance created via the vueService.
+     * @param JsExpressionable|null $componentDefinition component definition object
+     * @param string|self|null      $selector            the selector for creating the base root object in Vue
      *
      * @return $this
      */

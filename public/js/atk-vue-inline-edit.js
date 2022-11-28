@@ -20,26 +20,25 @@ __webpack_require__.r(__webpack_exports__);
  * changes to server.
  *
  * Properties need for this component are:
- *
  * context: string, a jQuery selector where the 'loading' class will be apply by Fomantic-UI - default to the requesting element.
  * url:     string, the URL to call.
  * value:   array, array of value to send to server.
  */
-
-const template = `
-      <div :class="[options.inputCss, hasError ? 'error' : '' ]">
-            <input
-            :class="options.inlineCss"
-            :name="options.fieldName"
-            :type="options.fieldType"
-            v-model="value"
-            @keyup="onKeyup"
-            @focus="onFocus"
-            @blur="onBlur" /><i class="icon"></i>
-      </div>`;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-inline-edit',
-  template: template,
+  name: 'AtkInlineEdit',
+  template: `
+        <div :class="[options.inputCss, hasError ? 'error' : '' ]">
+            <input
+                :class="options.inlineCss"
+                :name="options.fieldName"
+                :type="options.fieldType"
+                v-model="value"
+                @keyup="onKeyup"
+                @focus="onFocus"
+                @blur="onBlur"
+            />
+            <i class="icon" />
+        </div>`,
   props: {
     url: String,
     initValue: String,
@@ -70,7 +69,7 @@ const template = `
       const key = e.keyCode;
       this.clearError();
       if (key === 13) {
-        this.onEnter(e);
+        this.onEnter();
       } else if (key === 27) {
         this.onEscape();
       }
@@ -87,7 +86,7 @@ const template = `
       this.value = this.temp;
       this.$el.querySelector('input').blur();
     },
-    onEnter: function (e) {
+    onEnter: function () {
       if (this.isDirty) {
         this.update();
       }

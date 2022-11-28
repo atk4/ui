@@ -1,81 +1,117 @@
 <template>
-    <div class="vqb-rule ui fluid card" :class="labels.spaceRule" :data-name="rule.id">
+    <div
+        class="vqb-rule ui fluid card"
+        :class="labels.spaceRule"
+        :data-name="rule.id"
+    >
         <div class="content">
             <div class="ui grid">
                 <div class="middle aligned row atk-qb">
                     <div class="thirteen wide column">
                         <div class="ui horizontal list">
                             <div class="item vqb-rule-label">
-                                <h5 class>{{ rule.label }}</h5>
+                                <h5 class>
+                                    {{ rule.label }}
+                                </h5>
                             </div>
-                            <div class="item vqb-rule-operand" v-if="rule.operands !== undefined">
-                                <!-- List of operands (optional) -->
-                                <select v-model="query.operand" class="atk-qb-select">
-                                    <option v-for="operand in rule.operands" :key="operand">{{ operand }}</option>
+                            <div
+                                v-if="rule.operands !== undefined"
+                                class="item vqb-rule-operand"
+                            >
+                                <select
+                                    v-model="query.operand"
+                                    class="atk-qb-select"
+                                >
+                                    <option
+                                        v-for="operand in rule.operands"
+                                        :key="operand"
+                                    >
+                                        {{ operand }}
+                                    </option>
                                 </select>
                             </div>
-                            <div class="item vqb-rule-operator"
-                                 v-if="rule.operators !== undefined && rule.operators.length > 1">
-                                <!-- List of operators (e.g. =, !=, >, <) -->
-                                <select v-model="query.operator" class="atk-qb-select">
-                                    <option v-for="operator in rule.operators" :key="operator" :value="operator">
-                                        {{operator}}
+                            <div
+                                v-if="rule.operators !== undefined && rule.operators.length > 1"
+                                class="item vqb-rule-operator"
+                            >
+                                <select
+                                    v-model="query.operator"
+                                    class="atk-qb-select"
+                                >
+                                    <option
+                                        v-for="operator in rule.operators"
+                                        :key="operator"
+                                        :value="operator"
+                                    >
+                                        {{ operator }}
                                     </option>
                                 </select>
                             </div>
                             <div class="item vqb-rule-input">
-                                <!-- text input -->
                                 <template v-if="canDisplay('input')">
-                                    <div class="ui small input atk-qb" >
+                                    <div class="ui small input atk-qb">
                                         <input
-                                                v-model="query.value"
-                                                :type="rule.inputType"
-                                                :placeholder="labels.textInputPlaceholder"
+                                            v-model="query.value"
+                                            :type="rule.inputType"
+                                            :placeholder="labels.textInputPlaceholder"
                                         >
                                     </div>
                                 </template>
-                                <!-- Checkbox or Radio input -->
                                 <template v-if="canDisplay('checkbox')">
-                                    <sui-form-fields inline class="atk-qb">
-                                        <div class="field" v-for="choice in rule.choices" :key="choice.value">
-                                            <sui-checkbox
+                                    <!-- TODO <SuiFormFields -->
+                                    <div
+                                        inline
+                                        class="atk-qb"
+                                    >
+                                        <div
+                                            v-for="choice in rule.choices"
+                                            :key="choice.value"
+                                            class="field"
+                                        >
+                                            <!-- TODO radio support in https://github.com/nightswinger/vue-fomantic-ui/blob/v0.13.0/src/modules/Checkbox/Checkbox.tsx -->
+                                            <SuiCheckbox
+                                                v-model="query.value"
                                                 :label="choice.label"
                                                 :radio="isRadio"
                                                 :value="choice.value"
-                                                v-model="query.value">
-                                            </sui-checkbox>
+                                            />
                                         </div>
-                                    </sui-form-fields>
+                                    <!-- TODO </SuiFormFields> -->
+                                    </div>
                                 </template>
-                                <!-- Select input -->
                                 <template v-if="canDisplay('select')">
-                                    <select v-model="query.value" class="atk-qb-select">
+                                    <select
+                                        v-model="query.value"
+                                        class="atk-qb-select"
+                                    >
                                         <option
                                             v-for="choice in rule.choices"
                                             :key="choice.value"
-                                            :value="choice.value">
-                                            {{choice.label}}
+                                            :value="choice.value"
+                                        >
+                                            {{ choice.label }}
                                         </option>
                                     </select>
                                 </template>
-                              <!-- Custom component -->
-                              <template v-if="canDisplay('custom-component')">
-                                <div class="ui small input atk-qb">
-                                  <component :is="rule.component"
-                                      :config="rule.componentProps"
-                                      :value="query.value"
-                                      :optionalValue="query.option"
-                                      @onChange="onChange"
-                                      @setDefault="onChange">
-                                  </component>
-                                </div>
-                              </template>
+                                <template v-if="canDisplay('custom-component')">
+                                    <div class="ui small input atk-qb">
+                                        <component
+                                            :is="rule.component"
+                                            v-model="query.value"
+                                            :config="rule.componentProps"
+                                            :optionalValue="query.option"
+                                        />
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </div>
                     <div class="right aligned three wide column">
-                        <!-- Remove rule button -->
-                        <i :class="labels.removeRuleClass" @click="remove" class="atk-qb-remove"></i>
+                        <i
+                            :class="labels.removeRuleClass"
+                            class="atk-qb-remove"
+                            @click="remove"
+                        />
                     </div>
                 </div>
             </div>
@@ -84,17 +120,20 @@
 </template>
 
 <script>
-import QueryBuilderRule from 'vue-query-builder/dist/rule/QueryBuilderRule.umd';
+import VueQueryBuilderRule from 'vue-query-builder/src/components/QueryBuilderRule';
 import AtkDatePicker from '../share/atk-date-picker';
 import AtkLookup from '../share/atk-lookup';
 
 export default {
-    extends: QueryBuilderRule,
-    components: { 'atk-date-picker': AtkDatePicker, 'atk-lookup': AtkLookup },
+    components: {
+        AtkDatePicker: AtkDatePicker,
+        AtkLookup: AtkLookup,
+    },
+    extends: VueQueryBuilderRule,
+    inject: ['getRootData'],
     data: function () {
         return {};
     },
-    inject: ['getRootData'],
     computed: {
         isInput: function () {
             return this.rule.type === 'text' || this.rule.type === 'numeric';
@@ -117,7 +156,7 @@ export default {
          * Check if an input can be display in regards to:
          * it's operator and then it's type.
          *
-         * @returns {boolean|*}
+         * @returns {boolean}
          */
         canDisplay: function (type) {
             if (this.labels.hiddenOperator.includes(this.query.operator)) {
@@ -131,9 +170,6 @@ export default {
                 case 'custom-component': return this.isComponent;
                 default: return false;
             }
-        },
-        onChange: function (value) {
-            this.query.value = value;
         },
     },
 };

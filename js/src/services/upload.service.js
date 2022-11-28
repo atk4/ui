@@ -23,7 +23,7 @@ class UploadService {
         data,
         uploadUrl,
         completeCb = function (r, c) {},
-        xhrCb = function () { return new window.XMLHttpRequest(); },
+        xhrCb = function () { return new window.XMLHttpRequest(); }
     ) {
         const formData = new FormData();
 

@@ -1,51 +1,76 @@
 <template>
     <div class="">
-        <input :form="form" :name="name" type="hidden" :value="value">
-        <vue-query-builder :rules="rules" v-model="query" :maxDepth="maxDepth" :labels="labels">
-            <template v-slot:default="slotProps">
-                <query-builder-group v-bind="slotProps" :query.sync="query" />
+        <input
+            :form="form"
+            :name="name"
+            type="hidden"
+            :value="valueJson"
+        >
+        <VueQueryBuilder
+            v-model="query"
+            :groupComponent="groupComponent"
+            :ruleComponent="ruleComponent"
+            :rules="rules"
+            :maxDepth="maxDepth"
+            :labels="labels"
+        >
+            <template #default="slotProps">
+                <component
+                    :is="groupComponent"
+                    v-bind="slotProps"
+                    v-model:query="query"
+                />
             </template>
-        </vue-query-builder>
+        </VueQueryBuilder>
         <template v-if="debug">
-            <pre>{{ JSON.stringify(this.query, null, 2) }}</pre>
+            <pre>{{ JSON.stringify(query, null, 2) }}</pre>
         </template>
     </div>
 </template>
 
 <script>
-import VueQueryBuilder from 'vue-query-builder';
-import QueryBuilderGroup from './fomantic-ui-group.component.vue';
+import VueQueryBuilder from 'vue-query-builder/src/VueQueryBuilder';
+import QueryBuilderGroup from './fomantic-ui-group.component';
+import QueryBuilderRule from './fomantic-ui-rule.component';
 
 export default {
-    name: 'query-builder',
+    name: 'QueryBuilder',
     components: {
         VueQueryBuilder: VueQueryBuilder,
-        QueryBuilderGroup: QueryBuilderGroup,
     },
     props: {
-        data: Object,
+        groupComponent: {
+            type: Object,
+            default: QueryBuilderGroup,
+        },
+        ruleComponent: {
+            type: Object,
+            default: QueryBuilderRule,
+        },
+        data: {
+            type: Object,
+            required: true,
+        },
     },
     data: function () {
         return {
-            query: this.data.query ? this.data.query : {},
-            rules: this.data.rules ? this.data.rules : [],
-            name: this.data.name ? this.data.name : '',
-            maxDepth: this.data.maxDepth ? ((this.data.maxDepth <= 10) ? this.data.maxDepth : 10) : 1,
+            query: this.data.query ?? {},
+            rules: this.data.rules ?? [],
+            name: this.data.name ?? '',
+            maxDepth: this.data.maxDepth ?? 1,
             labels: this.getLabels(this.data.labels),
             form: this.data.form,
-            debug: this.data.debug ? this.data.debug : false,
+            debug: this.data.debug ?? false,
         };
     },
     computed: {
-        value: function () {
+        valueJson: function () {
             return JSON.stringify(this.query, null);
         },
     },
     methods: {
         /**
          * Return default label and option.
-         *
-         * @returns {any}
          */
         getLabels: function (labels) {
             labels = labels || {};

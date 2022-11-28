@@ -219,10 +219,7 @@ class Lookup extends Input
         $idField = $control->idField ?? $row->idField;
         $titleField = $control->titleField ?? $row->titleField;
 
-        return [
-            'value' => $row->get($idField),
-            'title' => $row->get($titleField),
-        ];
+        return ['value' => $row->get($idField), 'title' => $row->get($titleField)];
     }
 
     /**

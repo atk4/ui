@@ -33,11 +33,11 @@ class ModalService {
     onShow() {
         const s = atk.modalService;
 
-        s.modals.forEach((modal) => {
+        for (const modal of s.modals) {
             if (modal === this) {
-                throw Error('Unexpected modal to show - modal is already active');
+                throw new Error('Unexpected modal to show - modal is already active');
             }
-        });
+        }
         s.modals.push(this);
 
         s.addModal($(this));
@@ -47,7 +47,7 @@ class ModalService {
         const s = atk.modalService;
 
         if (s.modals.length === 0 || s.modals[s.modals.length - 1] !== this) {
-            throw Error('Unexpected modal to hide - modal is not front');
+            throw new Error('Unexpected modal to hide - modal is not front');
         }
         s.modals.pop();
 
@@ -92,7 +92,7 @@ class ModalService {
 
             const $content = $modal.find('.atk-dialog-content');
 
-            $content.html(this.getLoaderHtml(data.loadingLabel ? data.loadingLabel : ''));
+            $content.html(this.getLoaderHtml(data.loadingLabel ?? ''));
 
             $content.api({
                 on: 'now',

@@ -7,20 +7,17 @@ import atk from 'atk';
 class FormService {
     constructor() {
         this.formSettings = $.fn.form.settings;
-        // A collection of jQuery form object where preventLeave is set.
+        // collection of jQuery form object where preventLeave is set
         this.prevents = [];
-        window.onbeforeunload = function (event) {
-            atk.formService.prevents.forEach((el) => {
-                if (el.data('__atkCheckDirty') && el.data('isDirty')) {
-                    const message = 'unsaved';
-                    if (event) {
-                        event.returnValue = message;
-                    }
+        window.addEventListener('beforeunload', (event) => {
+            for (const $el of atk.formService.prevents) {
+                if ($el.data('__atkCheckDirty') && $el.data('isDirty')) {
+                    event.returnValue = 'unsaved';
 
-                    return message;
+                    break;
                 }
-            });
-        };
+            }
+        });
     }
 
     getDefaultFomanticSettings() {
@@ -65,9 +62,9 @@ class FormService {
      */
     clearDirtyForm(id) {
         const forms = this.prevents.filter(($form) => $form.attr('id') === id);
-        forms.forEach(($form) => {
+        for (const $form of forms) {
             $form.data('isDirty', false);
-        });
+        }
     }
 
     /**
@@ -78,7 +75,7 @@ class FormService {
     }
 
     isEqual(value, compare) {
-        return parseInt(value, 10) === parseInt(compare, 10);
+        return Number.parseInt(value, 10) === Number.parseInt(compare, 10);
     }
 
     /**
@@ -148,13 +145,9 @@ class FormService {
     }
 
     getFieldValue($field) {
-        let value;
-        if ($field.length > 1) {
-            // radio button.
-            value = $field.filter(':checked').val();
-        } else {
-            value = $field.val();
-        }
+        const value = $field.length > 1
+            ? $field.filter(':checked').val() // radio button
+            : $field.val();
 
         return value;
     }

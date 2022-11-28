@@ -79,7 +79,9 @@ export default class AtkConditionalFormPlugin extends AtkPlugin {
             const tempRule = this.settings.fieldRules[ruleKey];
             const temp = [];
             if (Array.isArray(tempRule)) {
-                tempRule.forEach((rule) => temp.push(rule));
+                for (const rule of tempRule) {
+                    temp.push(rule);
+                }
             } else {
                 temp.push(tempRule);
             }
@@ -106,40 +108,40 @@ export default class AtkConditionalFormPlugin extends AtkPlugin {
      * input where rules apply.
      */
     applyRules() {
-        this.inputs.forEach((input, idx) => {
-            input.rules.forEach((rules) => {
+        for (const input of this.inputs) {
+            for (const rules of input.rules) {
                 let isAndValid = true;
                 const validateInputNames = Object.keys(rules);
-                validateInputNames.forEach((inputName) => {
+                for (const inputName of validateInputNames) {
                     const validationRule = rules[inputName];
                     if (Array.isArray(validationRule)) {
-                        validationRule.forEach((rule) => {
+                        for (const rule of validationRule) {
                             isAndValid = isAndValid && atk.formService.validateField(this.$el, inputName, rule);
-                        });
+                        }
                     } else {
                         isAndValid = isAndValid && atk.formService.validateField(this.$el, inputName, validationRule);
                     }
-                });
+                }
                 // Apply OR condition between rules.
                 input.state = input.state || isAndValid;
-            });
-        });
+            }
+        }
     }
 
     /**
      * Set all input state visibility to false.
      */
     resetInputStatus() {
-        this.inputs.forEach((input) => {
+        for (const input of this.inputs) {
             input.state = false;
-        });
+        }
     }
 
     /**
      * Set fields visibility according to their state.
      */
     setInputsState() {
-        this.inputs.forEach((input) => {
+        for (const input of this.inputs) {
             const $input = atk.formService.getField(this.$el, input.inputName);
             if ($input) {
                 const $container = atk.formService.getContainer($input, this.selector);
@@ -148,7 +150,7 @@ export default class AtkConditionalFormPlugin extends AtkPlugin {
                     this.setInputState(input.state, $input, $container);
                 }
             }
-        });
+        }
     }
 
     setInputState(passed, field, fieldGroup) {

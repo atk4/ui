@@ -139,10 +139,10 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
         // setup progress bar update via xhr.
         const xhrCb = () => {
             const xhr = new window.XMLHttpRequest();
-            xhr.upload.addEventListener('progress', (evt) => {
-                if (evt.lengthComputable) {
-                    const percentComplete = evt.loaded / evt.total;
-                    this.bar.progress('set percent', parseInt(percentComplete * 100, 10));
+            xhr.upload.addEventListener('progress', (event) => {
+                if (event.lengthComputable) {
+                    const percentComplete = event.loaded / event.total;
+                    this.bar.progress('set percent', Number.parseInt(percentComplete * 100, 10));
                 }
             }, false);
 
@@ -156,7 +156,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
             { fUploadAction: 'upload' },
             this.settings.url,
             completeCb,
-            xhrCb,
+            xhrCb
         );
     }
 

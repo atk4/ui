@@ -4,49 +4,52 @@
  * Wrapper for vue-flatpickr-component component.
  * https://github.com/ankurk91/vue-flatpickr-component
  *
- * Props:
- * config: Any of flatpickr options
- *
- * Will emit a dateChange event when date is set.
+ * Properties:
+ * config: Any of Flatpickr options
  */
-
-const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-change="onChange"></flatpickr-picker>';
-
 export default {
-    name: 'atk-date-picker',
-    template: template,
-    props: ['config', 'value'],
+    name: 'AtkDatePicker',
+    template: `
+        <FlatpickrPicker
+            :config="flatPickr"
+            :modelValue="getFlatpickrValue(modelValue)"
+            @update:modelValue="onUpdate"
+        />`,
+    props: ['config', 'modelValue'],
     data: function () {
-        const { useDefault, ...fpickr } = this.config;
+        const { useDefault, ...otherConfig } = this.config;
 
-        if (useDefault && !fpickr.defaultDate && !this.value) {
-            fpickr.defaultDate = new Date();
-        } else if (this.value) {
-            fpickr.defaultDate = this.value;
+        if (useDefault && !otherConfig.defaultDate && !this.modelValue) {
+            otherConfig.defaultDate = new Date();
+        } else if (this.modelValue) {
+            otherConfig.defaultDate = this.modelValue;
         }
 
-        if (!fpickr.locale) {
-            fpickr.locale = flatpickr.l10ns.default;
+        if (!otherConfig.locale) {
+            otherConfig.locale = flatpickr.l10ns.default;
         }
 
         return {
-            flatPickr: fpickr,
-            date: null,
+            flatPickr: otherConfig,
         };
     },
+    emits: ['setDefault'],
     mounted: function () {
         // if value is not set but default date is, then emit proper string value to parent.
-        if (!this.value && this.flatPickr.defaultDate) {
-            if (this.flatPickr.defaultDate instanceof Date) {
-                this.$emit('setDefault', flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat));
-            } else {
-                this.$emit('setDefault', this.flatPickr.defaultDate);
-            }
+        if (!this.modelValue && this.flatPickr.defaultDate) {
+            this.onUpdate(
+                this.flatPickr.defaultDate instanceof Date
+                    ? flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat)
+                    : this.flatPickr.defaultDate
+            );
         }
     },
     methods: {
-        onChange: function (date) {
-            this.$emit('onChange', flatpickr.formatDate(date[0], this.flatPickr.dateFormat));
+        getFlatpickrValue: function (value) {
+            return value;
+        },
+        onUpdate: function (value) {
+            this.$emit('update:modelValue', value);
         },
     },
 };

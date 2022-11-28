@@ -556,7 +556,9 @@ class Form extends View
         $this->js(true, null, $this->formElement)
             ->api(array_merge(['url' => $this->cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig));
 
-        $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new JsExpression('$(this).attr(\'name\')')));
+        // [name] in selector is to suppress https://github.com/fomantic/Fomantic-UI/commit/facbca003cf0da465af7d44af41462e736d3eb8b
+        // console errors from Multiline/vue fields
+        $this->on('change', '.field input[name], .field textarea[name], .field select[name]', $this->js()->form('remove prompt', new JsExpression('$(this).attr(\'name\')')));
 
         if (!$this->canLeave) {
             $this->js(true, (new JsChain('atk.formService'))->preventFormLeave($this->name));

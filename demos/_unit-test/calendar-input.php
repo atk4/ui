@@ -20,7 +20,7 @@ $output = function (?\DateTime $dt, string $format) {
     return $view;
 };
 
-Header::addTo($app, ['Testing flatpickr using Behat']);
+Header::addTo($app, ['Testing Flatpickr using Behat']);
 $form = Form::addTo($app);
 $c = $form->addControl('field', [], ['type' => 'date']);
 $form->buttonSave->set($c->shortName);

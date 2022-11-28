@@ -26,13 +26,13 @@ export default class AtkJsSortablePlugin extends AtkPlugin {
         // the data label attribute value of the source element being drag. ex: data-id
         this.sourceId = null;
         // the new index value of the dragged element after sorting.
-        this.newIdx = null;
+        this.newIndex = null;
         // the original index value of the dragged element.
-        this.orgIdx = null;
+        this.origIndex = null;
 
         // fix screen reader announcement container added more than once
         // https://github.com/Shopify/draggable/pull/541
-        for (let elem; elem = document.getElementById('draggable-live-region');) { // eslint-disable-line no-cond-assign
+        for (let elem; elem = document.querySelector('#draggable-live-region');) { // eslint-disable-line no-cond-assign
             elem.remove();
         }
 
@@ -43,7 +43,7 @@ export default class AtkJsSortablePlugin extends AtkPlugin {
             {
                 draggable: this.settings.draggable,
                 handle: this.settings.handleClass ? '.' + this.settings.handleClass : null,
-            },
+            }
         );
         this.initialize();
 
@@ -53,10 +53,10 @@ export default class AtkJsSortablePlugin extends AtkPlugin {
             }
 
             this.ids = [];
-            this.newIdx = e.data.newIndex;
-            this.orgIdx = e.data.oldIndex;
+            this.newIndex = e.data.newIndex;
+            this.origIndex = e.data.oldIndex;
             this.sourceId = $(e.data.dragEvent.data.originalSource).data(this.settings.dataLabel);
-            this.dragContainer.children().each((idx, el) => {
+            this.dragContainer.children().each((i, el) => {
                 if (!$(el).hasClass('draggable--original') && !$(el).hasClass('draggable-mirror')) {
                     this.ids.push($(el).data(this.settings.dataLabel));
                 }
@@ -68,7 +68,7 @@ export default class AtkJsSortablePlugin extends AtkPlugin {
     }
 
     initialize() {
-        this.dragContainer.children().each((idx, el) => {
+        this.dragContainer.children().each((i, el) => {
             this.ids.push($(el).data(this.settings.dataLabel));
         });
     }
@@ -85,7 +85,7 @@ export default class AtkJsSortablePlugin extends AtkPlugin {
                 on: 'now',
                 url: url,
                 data: {
-                    order: this.ids.toString(), orgIdx: this.orgIdx, newIdx: this.newIdx, source: this.sourceId,
+                    order: this.ids.toString(), origIndex: this.origIndex, newIndex: this.newIndex, source: this.sourceId,
                 },
                 method: 'POST',
                 obj: this.dragContainer,

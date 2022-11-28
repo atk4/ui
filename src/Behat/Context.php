@@ -352,6 +352,15 @@ class Context extends RawMinkContext implements BehatContext
         $this->getSession()->executeScript('$(\'a.item[data-page=' . $pageNumber . ']\').click()');
     }
 
+    /**
+     * @When I fill field using :selector with :value
+     */
+    public function iFillField(string $selector, string $value): void
+    {
+        $element = $this->findElement(null, $selector);
+        $element->setValue($value);
+    }
+
     // }}}
 
     // {{{ modal
@@ -551,6 +560,11 @@ class Context extends RawMinkContext implements BehatContext
             arguments[0].files = dataTransfer.files;
             $(arguments[0]).trigger('change');
             EOF, [$element, array_map('ord', str_split($fileContent)), $fileName]);
+    }
+
+    private function getScopeBuilderRuleElem(string $ruleName): NodeElement
+    {
+        return $this->findElement(null, '.vqb-rule[data-name=' . $ruleName . ']');
     }
 
     /**
@@ -804,7 +818,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     private function assertDropdownValue(NodeElement $element, string $value, string $selector): void
     {
-        if ($this->findElement($element, $selector)->getHtml() !== $value) {
+        if ($this->findElement($element, $selector)->getText() !== $value) {
             throw new \Exception('Value: "' . $value . '" not set using selector: ' . $selector);
         }
     }
@@ -829,10 +843,5 @@ class Context extends RawMinkContext implements BehatContext
         if ($this->findElement($element, $selector)->getValue() !== $value) {
             throw new \Exception('Input value not is not: ' . $value);
         }
-    }
-
-    private function getScopeBuilderRuleElem(string $ruleName): NodeElement
-    {
-        return $this->findElement(null, '.vqb-rule[data-name=' . $ruleName . ']');
     }
 }

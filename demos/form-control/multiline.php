@@ -29,7 +29,7 @@ $form = Form::addTo($app);
 
 // Add multiline field and set model.
 /** @var Form\Control\Multiline */
-$multiline = $form->addControl('ml', [Form\Control\Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
+$multiline = $form->addControl('items', [Form\Control\Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
 $multiline->setModel($inventory);
 
 // Add total field.

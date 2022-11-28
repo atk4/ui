@@ -67,9 +67,9 @@ class ColorRating extends Table\Column
     {
         $colorFrom = '';
 
-        foreach ($this->colors as $idx => $color) {
+        foreach ($this->colors as $i => $color) {
             // skip first
-            if ($idx === 0) {
+            if ($i === 0) {
                 $colorFrom = $color;
 
                 continue;

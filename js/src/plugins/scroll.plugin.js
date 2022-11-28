@@ -84,10 +84,10 @@ export default class AtkScrollPlugin extends AtkPlugin {
      * Check if scrolling require adding content.
      */
     onScroll(event) {
-        const borderTopWidth = parseInt(this.$el.css('borderTopWidth'), 10);
+        const borderTopWidth = Number.parseInt(this.$el.css('borderTopWidth'), 10);
         const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth;
         // this.$el padding top value.
-        const paddingTop = parseInt(this.$el.css('paddingTop'), 10) + borderTopWidthInt;
+        const paddingTop = Number.parseInt(this.$el.css('paddingTop'), 10) + borderTopWidthInt;
         // Either the scroll bar position using window or the container element top position otherwise.
         const topHeight = this.isWindow ? $(window).scrollTop() : this.$scroll.offset().top;
         // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.

@@ -88,24 +88,25 @@ class Multiline extends Form\Control
     private $multiLine;
 
     // Components name
-    public const INPUT = 'sui-input';
-    public const READ_ONLY = 'atk-multiline-readonly';
-    public const TEXT_AREA = 'atk-multiline-textarea';
-    public const SELECT = 'sui-dropdown';
-    public const DATE = 'atk-date-picker';
-    public const LOOKUP = 'atk-lookup';
-    public const TABLE_CELL = 'sui-table-cell';
+    public const INPUT = 'SuiInput';
+    public const READ_ONLY = 'AtkMultilineReadonly';
+    public const TEXT_AREA = 'AtkMultilineTextarea';
+    public const SELECT = 'SuiDropdown';
+    public const DATE = 'AtkDatePicker';
+    public const LOOKUP = 'AtkLookup';
+
+    public const TABLE_CELL = 'SuiTableCell';
 
     /**
      * Props to be applied globally for each component supported by field type.
-     * For example setting 'sui-dropdown' property globally.
+     * For example setting 'SuiDropdown' property globally.
      *  $componentProps = [Multiline::SELECT => ['floating' => true]].
      *
      * @var array
      */
     public $componentProps = [];
 
-    /** @var array sui-table component props */
+    /** @var array SuiTable component props */
     public $tableProps = [];
 
     /** @var array<string, array{component: string, componentProps: mixed}> Set Vue component to use per field type. */
@@ -463,10 +464,7 @@ class Multiline extends Form\Control
 
     /**
      * Each field input, represent by a Vue component, is place within a table cell.
-     * This table cell is also a Vue component that can use Props: sui-table-cell.
-     *
-     * Cell properties can be applied globally via $options['sui-table-cell'] or per field
-     * via  $field->ui['multiline']['sui-table-cell']
+     * Cell properties can be customized via $field->ui['multiline'][Form\Control\Multiline::TABLE_CELL].
      */
     protected function getSuiTableCellProps(Field $field): array
     {
@@ -492,7 +490,7 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Return props for atk-date-picker component.
+     * Return props for AtkDatePicker component.
      */
     protected function getDatePickerProps(Field $field): array
     {
@@ -532,11 +530,11 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Set property for atk-lookup component.
+     * Set property for AtkLookup component.
      */
     protected function getLookupProps(Field $field): array
     {
-        // set any of sui-dropdown props via this property. Will be applied globally.
+        // set any of SuiDropdown props via this property. Will be applied globally.
         $props = [];
         $props['config'] = $this->componentProps[self::LOOKUP] ?? [];
         $items = $this->getFieldItems($field, 10);
@@ -565,11 +563,7 @@ class Multiline extends Form\Control
         $model = $field->getReference()->refModel($this->model);
         $entity = $model->tryLoadBy($field->getReference()->getTheirFieldName($model), $value);
         if ($entity !== null) {
-            $option = [
-                'key' => $value,
-                'text' => $entity->get($model->titleField),
-                'value' => $value,
-            ];
+            $option = ['key' => $value, 'text' => $entity->get($model->titleField), 'value' => $value];
             foreach ($this->fieldDefs as $key => $component) {
                 if ($component['name'] === $field->shortName) {
                     $this->fieldDefs[$key]['definition']['componentProps']['optionalValue'] =

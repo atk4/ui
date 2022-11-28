@@ -1,47 +1,44 @@
 import multilineRow from './multiline-row.component';
 
 export default {
-    name: 'atk-multiline-body',
+    name: 'AtkMultilineBody',
     template: `
-    <sui-table-body>
-      <atk-multiline-row v-for="(row, idx) in rows" :key="row.__atkml"
-      @onTabLastColumn="onTabLastColumn(idx)"
-      :fields="fields"
-      :rowId="row.__atkml"
-      :isDeletable="isDeletableRow(row)"
-      :rowValues="row"
-      :error="getError(row.__atkml)"></atk-multiline-row>
-    </sui-table-body>
-  `,
+        <SuiTableBody>
+            <AtkMultilineRow
+                :fields="fields"
+                v-for="(row, i) in rows" :key="row.__atkml"
+                :rowId="row.__atkml"
+                :isDeletable="isDeletableRow(row)"
+                :rowValues="row"
+                :errors="getRowErrors(row.__atkml)"
+                @onTabLastColumn="onTabLastColumn(i)"
+            ></AtkMultilineRow>
+        </SuiTableBody>`,
     props: ['fieldDefs', 'rowData', 'deletables', 'errors'],
     data: function () {
         return { fields: this.fieldDefs };
     },
-    created: function () {
-    },
+    created: function () {},
     components: {
-        'atk-multiline-row': multilineRow,
+        AtkMultilineRow: multilineRow,
     },
     computed: {
         rows: function () {
             return this.rowData;
         },
     },
+    emits: ['onTabLastRow'],
     methods: {
-        onTabLastColumn: function (idx) {
-            if (idx + 1 === this.rowData.length) {
+        onTabLastColumn: function (rowIndex) {
+            if (rowIndex + 1 === this.rowData.length) {
                 this.$emit('onTabLastRow');
             }
         },
         isDeletableRow: function (row) {
-            return this.deletables.indexOf(row.__atkml) > -1;
+            return this.deletables.includes(row.__atkml);
         },
-        getError: function (rowId) {
-            if (rowId in this.errors) {
-                return this.errors[rowId];
-            }
-
-            return null;
+        getRowErrors: function (rowId) {
+            return this.errors[rowId] ?? [];
         },
     },
 };
