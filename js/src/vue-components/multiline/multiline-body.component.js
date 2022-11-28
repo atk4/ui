@@ -10,7 +10,7 @@ export default {
                 :rowId="row.__atkml"
                 :isDeletable="isDeletableRow(row)"
                 :rowValues="row"
-                :error="getError(row.__atkml)"
+                :errors="getRowErrors(row.__atkml)"
                 @onTabLastColumn="onTabLastColumn(i)"
             ></AtkMultilineRow>
         </SuiTableBody>`,
@@ -37,12 +37,8 @@ export default {
         isDeletableRow: function (row) {
             return this.deletables.includes(row.__atkml);
         },
-        getError: function (rowId) {
-            if (rowId in this.errors) {
-                return this.errors[rowId];
-            }
-
-            return null;
+        getRowErrors: function (rowId) {
+            return this.errors[rowId] ? this.errors[rowId] : [];
         },
     },
 };

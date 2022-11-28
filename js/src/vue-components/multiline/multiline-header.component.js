@@ -7,7 +7,7 @@ export default {
             <SuiTableRow v-if="hasError()">
                 <SuiTableCell :style="{ background: 'none' }" />
                 <SuiTableCell :style="{ background: 'none' }"
-                    state="error"
+                    error="true"
                     v-for="column in filterVisibleColumns(columns)"
                     :textAlign="getTextAlign(column)"
                 >
@@ -34,7 +34,7 @@ export default {
                 </SuiTableHeaderCell>
             </SuiTableRow>
         </SuiTableHeader>`,
-    props: ['fields', 'state', 'errors', 'caption'],
+    props: ['fields', 'selectionState', 'errors', 'caption'],
     data: function () {
         return { columns: this.fields, isDeleteAll: false };
     },
@@ -92,10 +92,10 @@ export default {
     },
     computed: {
         isIndeterminate: function () {
-            return this.state === 'indeterminate';
+            return this.selectionState === 'indeterminate';
         },
         isChecked: function () {
-            return this.state === 'on';
+            return this.selectionState === 'on';
         },
     },
 };

@@ -23,7 +23,7 @@ __webpack_require__.r(__webpack_exports__);
                 :rowId="row.__atkml"
                 :isDeletable="isDeletableRow(row)"
                 :rowValues="row"
-                :error="getError(row.__atkml)"
+                :errors="getRowErrors(row.__atkml)"
                 @onTabLastColumn="onTabLastColumn(i)"
             ></AtkMultilineRow>
         </SuiTableBody>`,
@@ -52,11 +52,8 @@ __webpack_require__.r(__webpack_exports__);
     isDeletableRow: function (row) {
       return this.deletables.includes(row.__atkml);
     },
-    getError: function (rowId) {
-      if (rowId in this.errors) {
-        return this.errors[rowId];
-      }
-      return null;
+    getRowErrors: function (rowId) {
+      return this.errors[rowId] ? this.errors[rowId] : [];
     }
   }
 });
@@ -159,7 +156,7 @@ __webpack_require__.r(__webpack_exports__);
             <SuiTableRow v-if="hasError()">
                 <SuiTableCell :style="{ background: 'none' }" />
                 <SuiTableCell :style="{ background: 'none' }"
-                    state="error"
+                    error="true"
                     v-for="column in filterVisibleColumns(columns)"
                     :textAlign="getTextAlign(column)"
                 >
@@ -186,7 +183,7 @@ __webpack_require__.r(__webpack_exports__);
                 </SuiTableHeaderCell>
             </SuiTableRow>
         </SuiTableHeader>`,
-  props: ['fields', 'state', 'errors', 'caption'],
+  props: ['fields', 'selectionState', 'errors', 'caption'],
   data: function () {
     return {
       columns: this.fields,
@@ -245,10 +242,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     isIndeterminate: function () {
-      return this.state === 'indeterminate';
+      return this.selectionState === 'indeterminate';
     },
     isChecked: function () {
-      return this.state === 'on';
+      return this.selectionState === 'on';
     }
   }
 });
@@ -292,8 +289,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-/* harmony import */ var _multiline_cell_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./multiline-cell.component */ "./src/vue-components/multiline/multiline-cell.component.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.some.js */ "./node_modules/core-js/modules/esnext.async-iterator.some.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.some.js */ "./node_modules/core-js/modules/esnext.iterator.some.js");
+/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _multiline_cell_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./multiline-cell.component */ "./src/vue-components/multiline/multiline-cell.component.js");
+
+
 
 
 
@@ -318,7 +321,7 @@ __webpack_require__.r(__webpack_exports__);
                 v-for="(column, i) in filterVisibleColumns(columns)"
                 v-bind="column.cellProps"
                 :width=null
-                :state="getErrorState(column)"
+                :error="hasColumnError(column)"
                 :style="{ overflow: 'visible' }"
                 @keydown.tab="onTab(i)"
             >
@@ -329,14 +332,14 @@ __webpack_require__.r(__webpack_exports__);
                 ></AtkMultilineCell>
             </SuiTableCell>
         </SuiTableRow>`,
-  props: ['fields', 'rowId', 'isDeletable', 'rowValues', 'error'],
+  props: ['fields', 'rowId', 'isDeletable', 'rowValues', 'errors'],
   data: function () {
     return {
       columns: this.fields
     };
   },
   components: {
-    AtkMultilineCell: _multiline_cell_component__WEBPACK_IMPORTED_MODULE_4__["default"]
+    AtkMultilineCell: _multiline_cell_component__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
   computed: {
     /**
@@ -363,14 +366,8 @@ __webpack_require__.r(__webpack_exports__);
         this.$emit('onTabLastColumn');
       }
     },
-    getErrorState: function (column) {
-      if (this.error) {
-        const error = this.error.filter(e => column.name === e.name);
-        if (error.length > 0) {
-          return 'error';
-        }
-      }
-      return null;
+    hasColumnError: function (column) {
+      return this.errors.some(v => column.name === v.name);
     },
     getColumnWidth: function (column) {
       return column.fieldOptions ? column.fieldOptions.width : null;
@@ -379,12 +376,12 @@ __webpack_require__.r(__webpack_exports__);
       this.isEditing = true;
     },
     onToggleDelete: function (e) {
-      atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete', {
+      atk__WEBPACK_IMPORTED_MODULE_5__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete', {
         rowId: this.rowId
       });
     },
     onUpdateValue: function (fieldName, value) {
-      atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-update-row', {
+      atk__WEBPACK_IMPORTED_MODULE_5__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-update-row', {
         rowId: this.rowId,
         fieldName: fieldName,
         value: value
@@ -472,7 +469,7 @@ __webpack_require__.r(__webpack_exports__);
             <SuiTable v-bind="tableProp">
                 <AtkMultilineHeader
                     :fields="fieldData"
-                    :state="getMainToggleState"
+                    :selectionState="getMainToggleState"
                     :errors="errors"
                     :caption="caption"
                 ></AtkMultilineHeader>
@@ -745,11 +742,11 @@ __webpack_require__.r(__webpack_exports__);
      * deletables entries.
      */
     getMainToggleState: function () {
-      let state = 'off';
+      let res = 'off';
       if (this.deletables.length > 0) {
-        state = this.deletables.length === this.rowData.length ? 'on' : 'indeterminate';
+        res = this.deletables.length === this.rowData.length ? 'on' : 'indeterminate';
       }
-      return state;
+      return res;
     },
     isDeleteDisable: function () {
       return this.deletables.length === 0;

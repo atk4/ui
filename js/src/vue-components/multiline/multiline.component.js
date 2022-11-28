@@ -10,7 +10,7 @@ export default {
             <SuiTable v-bind="tableProp">
                 <AtkMultilineHeader
                     :fields="fieldData"
-                    :state="getMainToggleState"
+                    :selectionState="getMainToggleState"
                     :errors="errors"
                     :caption="caption"
                 ></AtkMultilineHeader>
@@ -276,14 +276,14 @@ export default {
          * deletables entries.
          */
         getMainToggleState: function () {
-            let state = 'off';
+            let res = 'off';
             if (this.deletables.length > 0) {
-                state = this.deletables.length === this.rowData.length
+                res = this.deletables.length === this.rowData.length
                     ? 'on'
                     : 'indeterminate';
             }
 
-            return state;
+            return res;
         },
         isDeleteDisable: function () {
             return this.deletables.length === 0;

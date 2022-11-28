@@ -19,7 +19,7 @@ export default {
                 v-for="(column, i) in filterVisibleColumns(columns)"
                 v-bind="column.cellProps"
                 :width=null
-                :state="getErrorState(column)"
+                :error="hasColumnError(column)"
                 :style="{ overflow: 'visible' }"
                 @keydown.tab="onTab(i)"
             >
@@ -30,7 +30,7 @@ export default {
                 ></AtkMultilineCell>
             </SuiTableCell>
         </SuiTableRow>`,
-    props: ['fields', 'rowId', 'isDeletable', 'rowValues', 'error'],
+    props: ['fields', 'rowId', 'isDeletable', 'rowValues', 'errors'],
     data: function () {
         return { columns: this.fields };
     },
@@ -62,15 +62,8 @@ export default {
                 this.$emit('onTabLastColumn');
             }
         },
-        getErrorState: function (column) {
-            if (this.error) {
-                const error = this.error.filter((e) => column.name === e.name);
-                if (error.length > 0) {
-                    return 'error';
-                }
-            }
-
-            return null;
+        hasColumnError: function (column) {
+            return this.errors.some((v) => column.name === v.name);
         },
         getColumnWidth: function (column) {
             return column.fieldOptions ? column.fieldOptions.width : null;
