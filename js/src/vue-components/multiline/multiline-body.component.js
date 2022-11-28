@@ -38,7 +38,7 @@ export default {
             return this.deletables.includes(row.__atkml);
         },
         getRowErrors: function (rowId) {
-            return this.errors[rowId] ? this.errors[rowId] : [];
+            return this.errors[rowId] ?? [];
         },
     },
 };

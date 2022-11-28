@@ -77,7 +77,6 @@ module.exports = {
         'unicorn/no-negated-condition': 'off',
         'unicorn/no-null': 'off',
         'unicorn/no-this-assignment': 'off',
-        'unicorn/prefer-logical-operator-over-ternary': 'off', // nullish coalescing operator has limited support
         'unicorn/prefer-module': 'off',
         'unicorn/prevent-abbreviations': 'off',
         'unicorn/switch-case-braces': ['error', 'avoid'],

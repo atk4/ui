@@ -54,13 +54,13 @@ export default {
     },
     data: function () {
         return {
-            query: this.data.query ? this.data.query : {},
-            rules: this.data.rules ? this.data.rules : [],
-            name: this.data.name ? this.data.name : '',
-            maxDepth: this.data.maxDepth ? this.data.maxDepth : 1,
+            query: this.data.query ?? {},
+            rules: this.data.rules ?? [],
+            name: this.data.name ?? '',
+            maxDepth: this.data.maxDepth ?? 1,
             labels: this.getLabels(this.data.labels),
             form: this.data.form,
-            debug: this.data.debug ? this.data.debug : false,
+            debug: this.data.debug ?? false,
         };
     },
     computed: {

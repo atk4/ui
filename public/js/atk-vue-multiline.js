@@ -53,7 +53,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.deletables.includes(row.__atkml);
     },
     getRowErrors: function (rowId) {
-      return this.errors[rowId] ? this.errors[rowId] : [];
+      return this.errors[rowId] ?? [];
     }
   }
 });
@@ -533,7 +533,7 @@ __webpack_require__.r(__webpack_exports__);
     AtkMultilineBody: _multiline_body_component__WEBPACK_IMPORTED_MODULE_10__["default"]
   },
   mounted: function () {
-    this.rowData = this.buildRowData(this.valueJson ? this.valueJson : '[]');
+    this.rowData = this.buildRowData(this.valueJson ?? '[]');
     this.updateInputValue();
     atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.parentElement.id + '-update-row', payload => {
       this.onUpdate(payload.rowId, payload.fieldName, payload.value);

@@ -226,10 +226,10 @@ class AtkAjaxecPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"
   }
   doExecute() {
     const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.removeAllParams(this.settings.url);
-    const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
+    const userConfig = this.settings.apiConfig ?? {};
 
     // urlOptions is always used as data in a POST request
-    const data = this.settings.urlOptions ? this.settings.urlOptions : {};
+    const data = this.settings.urlOptions ?? {};
 
     // retrieve param from URL
     let urlParams = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.url);
@@ -1385,10 +1385,10 @@ class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["defa
       return;
     }
     const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.removeAllParams(this.settings.url);
-    const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
+    const userConfig = this.settings.apiConfig ?? {};
 
     // add new param and remove duplicate, prioritizing the latest one.
-    let urlParams = Object.assign(atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.url), this.settings.urlOptions ? this.settings.urlOptions : {});
+    let urlParams = Object.assign(atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.url), this.settings.urlOptions ?? {});
 
     // get store object.
     const store = atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService.getStoreData(this.settings.storeName);
@@ -1892,11 +1892,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "./node_modules/core-js/modules/es.array.push.js");
-/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.error.cause.js */ "./node_modules/core-js/modules/es.error.cause.js");
+/* harmony import */ var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "./node_modules/core-js/modules/es.array.push.js");
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+
 
 
 
@@ -1972,11 +1975,11 @@ class ApiService {
         if (response.html && response.id) {
           // prevent modal duplication.
           // apiService.removeModalDuplicate(response.html);
-          const modelsContainer = external_jquery__WEBPACK_IMPORTED_MODULE_4___default()('.ui.dimmer.modals.page')[0];
-          external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(external_jquery__WEBPACK_IMPORTED_MODULE_4___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
-            external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(modelsContainer).find('#' + e.id).remove();
+          const modelsContainer = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page')[0];
+          external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(external_jquery__WEBPACK_IMPORTED_MODULE_5___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
+            external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
           });
-          const result = external_jquery__WEBPACK_IMPORTED_MODULE_4___default()('#' + response.id).replaceWith(response.html);
+          const result = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('#' + response.id).replaceWith(response.html);
           if (result.length === 0) {
             // TODO Find a better solution for long term.
             // Need a way to gracefully abort server request.
@@ -1990,28 +1993,28 @@ class ApiService {
           // Create app portal from json response.
           const portals = Object.keys(response.portals);
           for (const portalID of portals) {
-            const m = external_jquery__WEBPACK_IMPORTED_MODULE_4___default()('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
+            const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
             if (m.length === 0) {
-              external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(document.body).append(response.portals[portalID].html);
-              atk__WEBPACK_IMPORTED_MODULE_5__["default"].apiService.evalResponse(response.portals[portalID].js);
+              external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document.body).append(response.portals[portalID].html);
+              atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse(response.portals[portalID].js);
             }
           }
         }
         if (response.atkjs) {
-          atk__WEBPACK_IMPORTED_MODULE_5__["default"].apiService.evalResponse.call(this, response.atkjs);
+          atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse.call(this, response.atkjs);
         }
-        if (atk__WEBPACK_IMPORTED_MODULE_5__["default"].apiService.afterSuccessCallbacks.length > 0) {
-          const callbacks = atk__WEBPACK_IMPORTED_MODULE_5__["default"].apiService.afterSuccessCallbacks;
+        if (atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks.length > 0) {
+          const callbacks = atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks;
           for (const callback of callbacks) {
-            atk__WEBPACK_IMPORTED_MODULE_5__["default"].apiService.evalResponse.call(this, callback);
+            atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse.call(this, callback);
           }
-          atk__WEBPACK_IMPORTED_MODULE_5__["default"].apiService.afterSuccessCallbacks.splice(0);
+          atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks.splice(0);
         }
       } else if (response.isServiceError) {
         throw new Error(response.message);
       }
     } catch (e) {
-      atk__WEBPACK_IMPORTED_MODULE_5__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_5__["default"].apiService.getErrorHtml(e.message));
+      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.getErrorHtml(e.message));
     }
   }
 
@@ -2029,14 +2032,14 @@ class ApiService {
   onFailure(response) {
     // if json is returned, it should contain the error within message property
     if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
-      atk__WEBPACK_IMPORTED_MODULE_5__["default"].apiService.showErrorModal(response.message);
+      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response.message);
     } else {
       // check if we have html returned by server with <body> content.
       const body = response.match(/<body[^>]*>[\S\s]*<\/body>/gi);
       if (body) {
-        atk__WEBPACK_IMPORTED_MODULE_5__["default"].apiService.showErrorModal(body);
+        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(body);
       } else {
-        atk__WEBPACK_IMPORTED_MODULE_5__["default"].apiService.showErrorModal(response);
+        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response);
       }
     }
   }
@@ -2074,7 +2077,7 @@ class ApiService {
   suiFetch(url) {
     let settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     let el = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'body';
-    const $el = external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(el);
+    const $el = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(el);
     const apiSettings = Object.assign(settings);
     if (!('on' in apiSettings)) {
       apiSettings.on = 'now';
@@ -2085,7 +2088,7 @@ class ApiService {
     apiSettings.url = url;
     return new Promise((resolve, reject) => {
       apiSettings.onFailure = function (r) {
-        atk__WEBPACK_IMPORTED_MODULE_5__["default"].apiService.onFailure(r);
+        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.onFailure(r);
         reject(r);
       };
       apiSettings.onSuccess = function (r, e) {
@@ -2099,15 +2102,15 @@ class ApiService {
    * Display App error in a Fomantic-UI modal.
    */
   showErrorModal(errorMsg) {
-    if (atk__WEBPACK_IMPORTED_MODULE_5__["default"].modalService.modals.length > 0) {
-      const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(atk__WEBPACK_IMPORTED_MODULE_5__["default"].modalService.modals[atk__WEBPACK_IMPORTED_MODULE_5__["default"].modalService.modals.length - 1]);
+    if (atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.modals.length > 0) {
+      const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.modals[atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.modals.length - 1]);
       if ($modal.data('closeOnLoadingError')) {
         $modal.removeData('closeOnLoadingError').modal('hide');
       }
     }
 
     // catch application error and display them in a new modal window.
-    const m = external_jquery__WEBPACK_IMPORTED_MODULE_4___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(errorMsg);
+    const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(errorMsg);
     m.data('needRemove', true).modal().modal('show');
   }
   getErrorHtml(error) {
@@ -2490,21 +2493,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "./node_modules/core-js/modules/es.array.push.js");
-/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
-/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.error.cause.js */ "./node_modules/core-js/modules/es.error.cause.js");
+/* harmony import */ var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "./node_modules/core-js/modules/es.array.push.js");
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
+/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+
 
 
 
@@ -2539,26 +2545,26 @@ class ModalService {
     }];
   }
   onShow() {
-    const s = atk__WEBPACK_IMPORTED_MODULE_7__["default"].modalService;
+    const s = atk__WEBPACK_IMPORTED_MODULE_8__["default"].modalService;
     for (const modal of s.modals) {
       if (modal === this) {
         throw new Error('Unexpected modal to show - modal is already active');
       }
     }
     s.modals.push(this);
-    s.addModal(external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this));
+    s.addModal(external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this));
   }
   onHide() {
-    const s = atk__WEBPACK_IMPORTED_MODULE_7__["default"].modalService;
+    const s = atk__WEBPACK_IMPORTED_MODULE_8__["default"].modalService;
     if (s.modals.length === 0 || s.modals[s.modals.length - 1] !== this) {
       throw new Error('Unexpected modal to hide - modal is not front');
     }
     s.modals.pop();
-    s.removeModal(external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this));
+    s.removeModal(external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this));
     return true;
   }
   onHidden() {
-    const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this);
+    const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this);
     if ($modal.data('needRemove')) {
       $modal.remove();
     }
@@ -2566,7 +2572,7 @@ class ModalService {
   addModal($modal) {
     // hide other modals
     if (this.modals.length > 1) {
-      const $prevModal = external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.modals[this.modals.length - 2]);
+      const $prevModal = external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this.modals[this.modals.length - 2]);
       if ($prevModal.hasClass('visible')) {
         $prevModal.css('visibility', 'hidden');
         $prevModal.addClass('__hiddenNotFront');
@@ -2581,7 +2587,7 @@ class ModalService {
 
     // check for data type, usually json or html
     if (data.type === 'json') {
-      args = external_jquery__WEBPACK_IMPORTED_MODULE_6___default().extend(true, args, {
+      args = external_jquery__WEBPACK_IMPORTED_MODULE_7___default().extend(true, args, {
         __atk_json: 1
       });
     }
@@ -2590,7 +2596,7 @@ class ModalService {
     if (data.url) {
       $modal.data('closeOnLoadingError', true);
       const $content = $modal.find('.atk-dialog-content');
-      $content.html(this.getLoaderHtml(data.loadingLabel ? data.loadingLabel : ''));
+      $content.html(this.getLoaderHtml(data.loadingLabel ?? ''));
       $content.api({
         on: 'now',
         url: data.url,
@@ -2598,9 +2604,9 @@ class ModalService {
         method: 'GET',
         obj: $content,
         onComplete: function (response, content) {
-          const modelsContainer = external_jquery__WEBPACK_IMPORTED_MODULE_6___default()('.ui.dimmer.modals.page')[0];
-          external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(external_jquery__WEBPACK_IMPORTED_MODULE_6___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
-            external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(modelsContainer).find('#' + e.id).remove();
+          const modelsContainer = external_jquery__WEBPACK_IMPORTED_MODULE_7___default()('.ui.dimmer.modals.page')[0];
+          external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(external_jquery__WEBPACK_IMPORTED_MODULE_7___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
+            external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(modelsContainer).find('#' + e.id).remove();
           });
           const result = content.html(response.html);
           if (result.length === 0) {
@@ -2610,7 +2616,7 @@ class ModalService {
             response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
           } else {
             if ($modal.modal('get settings').autofocus) {
-              atk__WEBPACK_IMPORTED_MODULE_7__["default"].modalService.doAutoFocus($modal);
+              atk__WEBPACK_IMPORTED_MODULE_8__["default"].modalService.doAutoFocus($modal);
             }
             // content is replace no need to do it in api
             response.id = null;
@@ -2630,7 +2636,7 @@ class ModalService {
 
     // hide other modals
     if (this.modals.length > 0) {
-      const $prevModal = external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.modals[this.modals.length - 1]);
+      const $prevModal = external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this.modals[this.modals.length - 1]);
       if ($prevModal.hasClass('__hiddenNotFront')) {
         $prevModal.css('visibility', '');
         $prevModal.addClass('visible');
@@ -2780,7 +2786,7 @@ class PanelService {
   openPanel(params) {
     // if no id is provide, then get the first one.
     // no id mean the first panel in list.
-    const panelId = params.openId ? params.openId : Object.keys(this.service.panels[0])[0];
+    const panelId = params.openId ?? Object.keys(this.service.panels[0])[0];
     // save our open param.
     this.service.currentParams = params;
     if (this.isSameElement(panelId, params.triggered)) {
@@ -3478,16 +3484,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.error.cause.js */ "./node_modules/core-js/modules/es.error.cause.js");
+/* harmony import */ var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_1__);
+
 
 
 /* istanbul ignore next */
-if ((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk) !== undefined) {
+if ((external_jquery__WEBPACK_IMPORTED_MODULE_1___default().atk) !== undefined) {
   throw new Error('Unexpected jQuery.atk property state');
 }
 const atk = {};
-(external_jquery__WEBPACK_IMPORTED_MODULE_0___default().atk) = atk;
+(external_jquery__WEBPACK_IMPORTED_MODULE_1___default().atk) = atk;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (atk);
 
 /***/ }),
@@ -3503,18 +3512,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-/* harmony import */ var _services_accordion_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services/accordion.service */ "./src/services/accordion.service.js");
-/* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./services/api.service */ "./src/services/api.service.js");
-/* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./services/data.service */ "./src/services/data.service.js");
-/* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/form.service */ "./src/services/form.service.js");
-/* harmony import */ var _services_modal_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/modal.service */ "./src/services/modal.service.js");
-/* harmony import */ var _services_panel_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/panel.service */ "./src/services/panel.service.js");
-/* harmony import */ var _services_popup_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./services/popup.service */ "./src/services/popup.service.js");
-/* harmony import */ var _services_upload_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./services/upload.service */ "./src/services/upload.service.js");
-/* harmony import */ var _services_vue_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./services/vue.service */ "./src/services/vue.service.js");
+/* harmony import */ var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.error.cause.js */ "./node_modules/core-js/modules/es.error.cause.js");
+/* harmony import */ var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _services_accordion_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./services/accordion.service */ "./src/services/accordion.service.js");
+/* harmony import */ var _services_api_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./services/api.service */ "./src/services/api.service.js");
+/* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/data.service */ "./src/services/data.service.js");
+/* harmony import */ var _services_form_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/form.service */ "./src/services/form.service.js");
+/* harmony import */ var _services_modal_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/modal.service */ "./src/services/modal.service.js");
+/* harmony import */ var _services_panel_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./services/panel.service */ "./src/services/panel.service.js");
+/* harmony import */ var _services_popup_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./services/popup.service */ "./src/services/popup.service.js");
+/* harmony import */ var _services_upload_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./services/upload.service */ "./src/services/upload.service.js");
+/* harmony import */ var _services_vue_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./services/vue.service */ "./src/services/vue.service.js");
 
 
 
@@ -3526,41 +3537,42 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].accordionService = _services_accordion_service__WEBPACK_IMPORTED_MODULE_2__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService = _services_api_service__WEBPACK_IMPORTED_MODULE_3__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService = _services_data_service__WEBPACK_IMPORTED_MODULE_4__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].formService = _services_form_service__WEBPACK_IMPORTED_MODULE_5__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].modalService = _services_modal_service__WEBPACK_IMPORTED_MODULE_6__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].panelService = _services_panel_service__WEBPACK_IMPORTED_MODULE_7__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].popupService = _services_popup_service__WEBPACK_IMPORTED_MODULE_8__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].uploadService = _services_upload_service__WEBPACK_IMPORTED_MODULE_9__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].vueService = _services_vue_service__WEBPACK_IMPORTED_MODULE_10__["default"];
+
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].accordionService = _services_accordion_service__WEBPACK_IMPORTED_MODULE_3__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].apiService = _services_api_service__WEBPACK_IMPORTED_MODULE_4__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].dataService = _services_data_service__WEBPACK_IMPORTED_MODULE_5__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].formService = _services_form_service__WEBPACK_IMPORTED_MODULE_6__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].modalService = _services_modal_service__WEBPACK_IMPORTED_MODULE_7__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].panelService = _services_panel_service__WEBPACK_IMPORTED_MODULE_8__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].popupService = _services_popup_service__WEBPACK_IMPORTED_MODULE_9__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].uploadService = _services_upload_service__WEBPACK_IMPORTED_MODULE_10__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].vueService = _services_vue_service__WEBPACK_IMPORTED_MODULE_11__["default"];
 const fomanticServicesMap = {
-  api: _services_api_service__WEBPACK_IMPORTED_MODULE_3__["default"],
-  form: _services_form_service__WEBPACK_IMPORTED_MODULE_5__["default"],
-  modal: _services_modal_service__WEBPACK_IMPORTED_MODULE_6__["default"],
-  popup: _services_popup_service__WEBPACK_IMPORTED_MODULE_8__["default"],
-  accordion: _services_accordion_service__WEBPACK_IMPORTED_MODULE_2__["default"]
+  api: _services_api_service__WEBPACK_IMPORTED_MODULE_4__["default"],
+  form: _services_form_service__WEBPACK_IMPORTED_MODULE_6__["default"],
+  modal: _services_modal_service__WEBPACK_IMPORTED_MODULE_7__["default"],
+  popup: _services_popup_service__WEBPACK_IMPORTED_MODULE_9__["default"],
+  accordion: _services_accordion_service__WEBPACK_IMPORTED_MODULE_3__["default"]
 };
 
 // setup Fomantic-UI global overrides
 // https://github.com/fomantic/Fomantic-UI/issues/2526
-(external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend) = (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.extend) = new Proxy((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.extend), {
+(external_jquery__WEBPACK_IMPORTED_MODULE_1___default().extend) = (external_jquery__WEBPACK_IMPORTED_MODULE_1___default().fn.extend) = new Proxy((external_jquery__WEBPACK_IMPORTED_MODULE_1___default().fn.extend), {
   // eslint-disable-line no-multi-assign
   apply: function (target, thisArg, args) {
     // https://github.com/fomantic/Fomantic-UI/blob/c30ed51ca12fc1762b04c2fd1a83d087c0124d07/src/definitions/behaviors/api.js#L48
     const firstIndex = args[0] === true ? 1 : 0;
     const secondIndex = args[0] === true ? 2 : 1;
-    if (args.length >= (args[0] === true ? 3 : 2) && external_jquery__WEBPACK_IMPORTED_MODULE_0___default().isPlainObject(args[firstIndex]) && external_jquery__WEBPACK_IMPORTED_MODULE_0___default().isEmptyObject(args[firstIndex]) && external_jquery__WEBPACK_IMPORTED_MODULE_0___default().isPlainObject(args[secondIndex])) {
+    if (args.length >= (args[0] === true ? 3 : 2) && external_jquery__WEBPACK_IMPORTED_MODULE_1___default().isPlainObject(args[firstIndex]) && external_jquery__WEBPACK_IMPORTED_MODULE_1___default().isEmptyObject(args[firstIndex]) && external_jquery__WEBPACK_IMPORTED_MODULE_1___default().isPlainObject(args[secondIndex])) {
       let name = null;
       for (const n of Object.keys(fomanticServicesMap)) {
-        if (args[secondIndex] === (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn)[n].settings) {
+        if (args[secondIndex] === (external_jquery__WEBPACK_IMPORTED_MODULE_1___default().fn)[n].settings) {
           name = n;
         }
       }
       if (name !== null) {
         const [customSettings, forcedSettings] = fomanticServicesMap[name].getDefaultFomanticSettings();
-        const newSettings = new Proxy(external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend(true, {}, {}, args[secondIndex], forcedSettings), {
+        const newSettings = new Proxy(external_jquery__WEBPACK_IMPORTED_MODULE_1___default().extend(true, {}, {}, args[secondIndex], forcedSettings), {
           set: (obj, prop, value) => {
             const origValue = obj[prop];
             if (forcedSettings[prop] === undefined) {
@@ -3607,7 +3619,7 @@ const fomanticServicesMap = {
             return true;
           }
         });
-        external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend(true, newSettings, ...args.slice(secondIndex + 1), customSettings);
+        external_jquery__WEBPACK_IMPORTED_MODULE_1___default().extend(true, newSettings, ...args.slice(secondIndex + 1), customSettings);
         return newSettings;
       }
     }

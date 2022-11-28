@@ -5,9 +5,9 @@ module.exports = (api) => {
     return {
         presets: [
             [
-                '@babel/env',
+                '@babel/preset-env',
                 {
-                    targets: '> 1%, not dead',
+                    targets: 'defaults',
                     corejs: { version: '3.9999', proposals: true },
                     useBuiltIns: 'usage',
                 },

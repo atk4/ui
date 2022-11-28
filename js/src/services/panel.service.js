@@ -81,7 +81,7 @@ class PanelService {
     openPanel(params) {
         // if no id is provide, then get the first one.
         // no id mean the first panel in list.
-        const panelId = (params.openId) ? params.openId : Object.keys(this.service.panels[0])[0];
+        const panelId = params.openId ?? Object.keys(this.service.panels[0])[0];
         // save our open param.
         this.service.currentParams = params;
         if (this.isSameElement(panelId, params.triggered)) {

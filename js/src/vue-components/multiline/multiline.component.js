@@ -72,7 +72,7 @@ export default {
         AtkMultilineBody: multilineBody,
     },
     mounted: function () {
-        this.rowData = this.buildRowData(this.valueJson ? this.valueJson : '[]');
+        this.rowData = this.buildRowData(this.valueJson ?? '[]');
         this.updateInputValue();
 
         atk.eventBus.on(this.$root.$el.parentElement.id + '-update-row', (payload) => {

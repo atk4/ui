@@ -92,7 +92,7 @@ class ModalService {
 
             const $content = $modal.find('.atk-dialog-content');
 
-            $content.html(this.getLoaderHtml(data.loadingLabel ? data.loadingLabel : ''));
+            $content.html(this.getLoaderHtml(data.loadingLabel ?? ''));
 
             $content.api({
                 on: 'now',
