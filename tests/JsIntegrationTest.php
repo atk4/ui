@@ -65,6 +65,20 @@ class JsIntegrationTest extends TestCase
 })()', $v->getJs());
     }
 
+    public function testBasicChainClickEmpty(): void
+    {
+        $v = new Button(['name' => 'b']);
+        $v->js('click', null);
+        $v->getHtml();
+
+        static::assertSame('(function () {
+    $(\'#b\').on(\'click\', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    });
+})()', $v->getJs());
+    }
+
     public function testBasicChainNested(): void
     {
         $bb = new View(['ui' => 'buttons']);

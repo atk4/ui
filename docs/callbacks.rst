@@ -282,7 +282,7 @@ will send browser screen width back to the callback::
     }, [new \Atk4\Ui\JsExpression( '$(window).width()' )]);
 
     $label->detail = $cb->getUrl();
-    $label->js('click', $cb);
+    $label->on('click', $cb);
 
 In here you see that I'm using a 2nd argument to $cb->set() to specify arguments, which, I'd like to fetch from the
 browser. Those arguments are passed to the callback and eventually arrive as $arg1 inside my callback. The :php:meth:`View::on()`

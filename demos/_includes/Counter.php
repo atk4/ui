@@ -19,7 +19,7 @@ class Counter extends Form\Control\Line
         $this->actionLeft = new Button(['icon' => 'minus']);
         $this->action = new Button(['icon' => 'plus']);
 
-        $this->actionLeft->js('click', $this->jsInput()->val(new JsExpression('parseInt([]) - 1', [$this->jsInput()->val()])));
-        $this->action->js('click', $this->jsInput()->val(new JsExpression('parseInt([]) + 1', [$this->jsInput()->val()])));
+        $this->actionLeft->on('click', $this->jsInput()->val(new JsExpression('parseInt([]) - 1', [$this->jsInput()->val()])));
+        $this->action->on('click', $this->jsInput()->val(new JsExpression('parseInt([]) + 1', [$this->jsInput()->val()])));
     }
 }

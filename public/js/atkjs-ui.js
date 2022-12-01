@@ -1803,13 +1803,13 @@ class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default
    */
   addClickHandler() {
     this.$el.find(this.settings.menuGroupTitleSelector).on('click', e => {
-      e.stopPropagation();
       e.preventDefault();
+      e.stopPropagation();
       window.open(this.menu.find(this.settings.firstItemSelector).first().attr('href'), e.metaKey ? '_blank' : '_self');
     });
     this.toggler.on('click', e => {
-      e.stopPropagation();
       e.preventDefault();
+      e.stopPropagation();
       this.menu.toggleClass(this.settings.visibleCssClass);
       this.setTogglerIcon(this.settings.icon.selector);
     });

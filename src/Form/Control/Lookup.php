@@ -272,7 +272,7 @@ class Lookup extends Input
         });
 
         $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
-        $this->action->js('click', new JsModal($caption, $vp));
+        $this->action->on('click', new JsModal($caption, $vp));
     }
 
     /**
