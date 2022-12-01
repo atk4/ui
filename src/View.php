@@ -16,6 +16,8 @@ class View extends AbstractView implements JsExpressionable
     /**
      * When you call render() this will be populated with JavaScript chains.
      *
+     * @var array<1|string, array<int, JsExpressionable>>
+     *
      * @internal
      */
     protected array $_jsActions = [];
@@ -622,8 +624,11 @@ class View extends AbstractView implements JsExpressionable
 
             $this->template->dangerouslyAppendHtml($view->region, $view->getHtml());
 
-            if ($view->_jsActions) {
-                $this->_jsActions = array_merge_recursive($this->_jsActions, $view->_jsActions);
+            // collect JS from everywhere
+            foreach ($view->_jsActions as $when => $actions) {
+                foreach ($actions as $action) {
+                    $this->_jsActions[$when][] = $action;
+                }
             }
         }
 
@@ -745,8 +750,9 @@ class View extends AbstractView implements JsExpressionable
      * 2. Binding existing chains
      * $img->on('mouseenter', $a); // binds previously defined chain to event on event of $img.
      *
-     * Produced code: $('#img_id').on('mouseenter', function (ev) {
-     *     ev.preventDefault();
+     * Produced code: $('#img_id').on('mouseenter', function (event) {
+     *     event.preventDefault();
+     *     event.stopPropagation();
      *     $('#view1').hide();
      * });
      *
@@ -761,28 +767,27 @@ class View extends AbstractView implements JsExpressionable
      *
      * @see http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param bool|string      $when     Event when chain will be executed
-     * @param JsExpressionable $action   JavaScript action
+     * @param bool|string $when Event when chain will be executed
+     * @param ($when is false ? null : JsExpressionable|null) $action   JavaScript action
      * @param string|self|null $selector If you wish to override jQuery($selector)
      *
      * @return Jquery
      */
     public function js($when = false, $action = null, $selector = null)
     {
-        $chain = new Jquery($selector ?? $this);
+        // binding on a specific event
+        // TODO allow only boolean $when, otherwise user should use self::on() method
+        if (!is_bool($when)) {
+            return $this->on($when, $selector, $action);
+        }
 
+        $chain = new Jquery($selector ?? $this);
         if ($when === true) {
             $this->_jsActions[$when][] = $chain;
 
-            if ($action) {
+            if ($action !== null) {
                 $this->_jsActions[$when][] = $action;
             }
-        } elseif ($when !== false) {
-            // binding on a specific event
-            $action = (new Jquery($this))
-                ->bind($when, new JsFunction([], [$chain, $action]));
-
-            $this->_jsActions[$when][] = $action;
         }
 
         return $chain;
@@ -825,7 +830,7 @@ class View extends AbstractView implements JsExpressionable
             $chain = (new JsVueService())->createAtkVue($selector, $component, $initData);
         }
 
-        $this->_jsActions[true][] = $chain;
+        $this->js(true, $chain);
 
         return $this;
     }
@@ -956,15 +961,8 @@ class View extends AbstractView implements JsExpressionable
      */
     public function on(string $event, $selector = null, $action = null, array $defaults = null)
     {
-        $eventStatements = [];
-
-        $cb = null;
-        $actions = [];
-        $chain = new Jquery();
-        $actions[] = $chain;
-
         // second argument may be omitted
-        if (!is_string($selector) && ($action === null || is_array($action))) {
+        if ($selector !== null && !is_string($selector) && ($action === null || is_array($action))) {
             $defaults = $action;
             $action = $selector;
             $selector = null;
@@ -984,7 +982,12 @@ class View extends AbstractView implements JsExpressionable
             }
         }
 
-        // set event stmts to use preventDefault and/or stopPropagation
+        $eventStatements = [];
+        $actions = [];
+        $chain = new Jquery();
+        $actions[] = $chain;
+
+        // set preventDefault and stopPropagation by default
         $eventStatements['preventDefault'] = $defaults['preventDefault'] ?? true;
         $eventStatements['stopPropagation'] = $defaults['stopPropagation'] ?? true;
 
@@ -1038,7 +1041,7 @@ class View extends AbstractView implements JsExpressionable
             }
         } elseif (is_array($action)) {
             $actions = array_merge($actions, $action);
-        } elseif ($action) {
+        } elseif ($action !== null) {
             $actions[] = $action;
         }
 
@@ -1054,13 +1057,15 @@ class View extends AbstractView implements JsExpressionable
             $eventStatements = array_merge($eventStatements, $actions);
         }
 
-        $event_function = new JsFunction([], $eventStatements);
-
+        $eventFunction = new JsFunction([], $eventStatements);
+        $eventChain = new Jquery($this);
         if ($selector) {
-            $this->js(true)->on($event, $selector, $event_function);
+            $eventChain->on($event, $selector, $eventFunction);
         } else {
-            $this->js(true)->on($event, $event_function);
+            $eventChain->on($event, $eventFunction);
         }
+
+        $this->_jsActions[$event][] = $eventChain;
 
         return $chain;
     }
@@ -1081,7 +1086,6 @@ class View extends AbstractView implements JsExpressionable
     public function getJsRenderActions(): string
     {
         $actions = [];
-
         foreach ($this->_jsActions as $eventActions) {
             foreach ($eventActions as $action) {
                 $actions[] = $action->jsRender();
@@ -1094,12 +1098,13 @@ class View extends AbstractView implements JsExpressionable
     /**
      * Get JavaScript objects from this render tree.
      *
+     * TODO dedup with getJsRenderActions()
+     *
      * @return string
      */
     public function getJs()
     {
         $actions = [];
-
         foreach ($this->_jsActions as $eventActions) {
             foreach ($eventActions as $action) {
                 $actions[] = $action;

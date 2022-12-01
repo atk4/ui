@@ -246,8 +246,8 @@ The following code will show three buttons and clicking any one will hide it. On
 
     // Generates:
     // $('#top-element-id').on('click', '.button', function (event) {
-    //   event.stopPropagation();
     //   event.preventDefault();
+    //   event.stopPropagation();
     //   $(this).hide();
     // });
 
@@ -266,8 +266,8 @@ You can use both actions together. The next example will allow only one button t
 
     // Generates:
     // $('#top-element-id').on('click', '.button', function (event) {
-    //     event.stopPropagation();
     //     event.preventDefault();
+    //     event.stopPropagation();
     //     $('#b3-element-id').hide();
     // });
 
