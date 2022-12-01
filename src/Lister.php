@@ -201,7 +201,7 @@ class Lister extends View
 
         // https://github.com/atk4/ui/issues/1932
         if ($region !== null) {
-            array_unshift($this->_jsActions[1], $this->js()->off());
+            array_unshift($this->_jsActions['click'], $this->js()->off());
         }
 
         return [
