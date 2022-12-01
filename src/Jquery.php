@@ -12,7 +12,6 @@ namespace Atk4\Ui;
  * @method Jquery append(...$args)
  * @method Jquery appendTo(...$args)
  * @method Jquery attr(...$args)
- * @method Jquery bind(string $eventType, ...$args)
  * @method Jquery change(...$args)
  * @method Jquery checkbox(...$args)
  * @method Jquery click(...$args)

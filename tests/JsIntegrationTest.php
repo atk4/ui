@@ -10,7 +10,7 @@ use Atk4\Ui\View;
 
 class JsIntegrationTest extends TestCase
 {
-    public function testIdIntegrity1(): void
+    public function testUniqueId1(): void
     {
         $v = new Button(['icon' => 'pencil']);
         $v->render();
@@ -20,7 +20,7 @@ class JsIntegrationTest extends TestCase
         static::assertNotSame($v->name, $v->icon->name);
     }
 
-    public function testIdIntegrity2(): void
+    public function testUniqueId2(): void
     {
         $v = new View(['ui' => 'buttons']);
         $b1 = Button::addTo($v);
@@ -30,10 +30,7 @@ class JsIntegrationTest extends TestCase
         static::assertNotSame($b1->name, $b2->name);
     }
 
-    /**
-     * Make sure that chain is crated correctly.
-     */
-    public function testBasicChain1(): void
+    public function testBasicChainFalse(): void
     {
         $v = new Button(['name' => 'b']);
         $j = $v->js()->hide();
@@ -42,10 +39,7 @@ class JsIntegrationTest extends TestCase
         static::assertSame('$(\'#b\').hide()', $j->jsRender());
     }
 
-    /**
-     * Make sure that onReady chains are included in output.
-     */
-    public function testBasicChain2(): void
+    public function testBasicChainTrue(): void
     {
         $v = new Button(['name' => 'b']);
         $j = $v->js(true)->hide();
@@ -56,40 +50,58 @@ class JsIntegrationTest extends TestCase
 })()', $v->getJs());
     }
 
-    /**
-     * Make sure that js('event') chains are included in output with appropriate callback.
-     */
-    public function testBasicChain3(): void
+    public function testBasicChainClick(): void
     {
         $v = new Button(['name' => 'b']);
         $v->js('click')->hide();
         $v->getHtml();
 
         static::assertSame('(function () {
-    $(\'#b\').bind(\'click\', function () {
-        $(\'#b\').hide();
+    $(\'#b\').on(\'click\', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        $(this).hide();
     });
 })()', $v->getJs());
     }
 
-    /**
-     * Make sure that on('event', js) chains are included in output.
-     */
-    public function testBasicChain4(): void
+    public function testBasicChainClickEmpty(): void
+    {
+        $v = new Button(['name' => 'b']);
+        $v->js('click', null);
+        $v->getHtml();
+
+        static::assertSame('(function () {
+    $(\'#b\').on(\'click\', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    });
+})()', $v->getJs());
+    }
+
+    public function testBasicChainNested(): void
     {
         $bb = new View(['ui' => 'buttons']);
         $b1 = Button::addTo($bb, ['name' => 'b1']);
         $b2 = Button::addTo($bb, ['name' => 'b2']);
 
-        $b1->on('click', $b2->js()->hide());
+        $b1->on('click', [
+            'preventDefault' => false,
+            $b1->js()->hide(),
+            $b2->js()->hide(),
+            $b2->js()->hide(),
+        ]);
+        $b1->js(true)->data('x', 'y');
         $bb->getHtml();
 
         static::assertSame('(function () {
     $(\'#b1\').on(\'click\', function (event) {
-        event.preventDefault();
         event.stopPropagation();
+        $(\'#b1\').hide();
+        $(\'#b2\').hide();
         $(\'#b2\').hide();
     });
+    $(\'#b1\').data(\'x\', \'y\');
 })()', $bb->getJs());
     }
 }

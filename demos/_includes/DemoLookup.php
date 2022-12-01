@@ -61,6 +61,6 @@ class DemoLookup extends Form\Control\Lookup
         });
 
         $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
-        $this->action->js('click', new JsModal($caption, $vp));
+        $this->action->on('click', new JsModal($caption, $vp));
     }
 }

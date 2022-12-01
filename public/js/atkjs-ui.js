@@ -1803,13 +1803,13 @@ class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default
    */
   addClickHandler() {
     this.$el.find(this.settings.menuGroupTitleSelector).on('click', e => {
-      e.stopPropagation();
       e.preventDefault();
+      e.stopPropagation();
       window.open(this.menu.find(this.settings.firstItemSelector).first().attr('href'), e.metaKey ? '_blank' : '_self');
     });
     this.toggler.on('click', e => {
-      e.stopPropagation();
       e.preventDefault();
+      e.stopPropagation();
       this.menu.toggleClass(this.settings.visibleCssClass);
       this.setTogglerIcon(this.settings.icon.selector);
     });
@@ -3391,7 +3391,7 @@ class VueService {
     app.component('AtkItemSearch', asyncComponentFactory('AtkItemSearch', () => __webpack_require__.e(/*! import() | atk-vue-item-search */ "atk-vue-item-search").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/item-search.component */ "./src/vue-components/item-search.component.js"))));
     app.component('AtkMultiline', asyncComponentFactory('AtkMultiline', () => __webpack_require__.e(/*! import() | atk-vue-multiline */ "atk-vue-multiline").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/multiline/multiline.component */ "./src/vue-components/multiline/multiline.component.js"))));
     app.component('AtkTreeItemSelector', asyncComponentFactory('AtkTreeItemSelector', () => __webpack_require__.e(/*! import() | atk-vue-tree-item-selector */ "atk-vue-tree-item-selector").then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/tree-item-selector/tree-item-selector.component */ "./src/vue-components/tree-item-selector/tree-item-selector.component.js"))));
-    app.component('AtkQueryBuilder', asyncComponentFactory('AtkQueryBuilder', () => Promise.all(/*! import() | atk-vue-query-builder */[__webpack_require__.e("vendor-vue"), __webpack_require__.e("vendor-vue-query-builder"), __webpack_require__.e("atk-vue-query-builder")]).then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/query-builder/query-builder.component */ "./src/vue-components/query-builder/query-builder.component.vue"))));
+    app.component('AtkQueryBuilder', asyncComponentFactory('AtkQueryBuilder', () => Promise.all(/*! import() | atk-vue-query-builder */[__webpack_require__.e("vendor-vue"), __webpack_require__.e("atk-vue-query-builder")]).then(__webpack_require__.bind(__webpack_require__, /*! ../vue-components/query-builder/query-builder.component */ "./src/vue-components/query-builder/query-builder.component.vue"))));
   }
 
   /**

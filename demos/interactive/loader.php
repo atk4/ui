@@ -51,8 +51,10 @@ Loader::addTo($app)->set(function (Loader $p) {
     });
 
     // button may contain load event.
-    Button::addTo($p, ['Load Segment Manually (2s)', 'class.red' => true])->js('click', $loader->jsLoad(['color' => 'red']));
-    Button::addTo($p, ['Load Segment Manually (2s)', 'class.blue' => true])->js('click', $loader->jsLoad(['color' => 'blue']));
+    Button::addTo($p, ['Load Segment Manually (2s)', 'class.red' => true])
+        ->on('click', $loader->jsLoad(['color' => 'red']));
+    Button::addTo($p, ['Load Segment Manually (2s)', 'class.blue' => true])
+        ->on('click', $loader->jsLoad(['color' => 'blue']));
 });
 
 // Example 2 - Loader with custom body.
