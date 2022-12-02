@@ -648,7 +648,9 @@ class Grid extends View
     protected function renderView(): void
     {
         // take care of sorting
-        $this->applySort();
+        if (!$this->table->jsPaginator) {
+            $this->applySort();
+        }
 
         parent::renderView();
     }
