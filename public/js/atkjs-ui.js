@@ -1414,7 +1414,17 @@ class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["defa
       urlParams = Object.assign(urlParams, store);
     }
     settings.url = url + '?' + external_jquery__WEBPACK_IMPORTED_MODULE_0___default().param(urlParams);
-    this.$el.api(settings);
+    // fix https://github.com/fomantic/Fomantic-UI/issues/2581
+    // remove once Fomantic-UI 2.9.1 is released
+    const dataUrlBackup = this.$el.data('url');
+    this.$el.removeData('url');
+    try {
+      this.$el.api(settings);
+    } finally {
+      if (dataUrlBackup) {
+        this.$el.data('url', dataUrlBackup);
+      }
+    }
   }
 }
 AtkReloadViewPlugin.DEFAULTS = {
