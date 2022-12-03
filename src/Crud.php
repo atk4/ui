@@ -229,7 +229,7 @@ class Crud extends Grid
     protected function setItemsAction(): void
     {
         foreach ($this->menuItems as $k => $item) {
-            $this->container->js(true, $item['item']->on('click.atk_crud_item', $item['executor']));
+            $this->container->js(true, $item['item']->on('click.atk_crud_item' /* TODO this adds JS twice */, $item['executor']));
         }
     }
 

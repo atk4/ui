@@ -51,17 +51,17 @@ use Atk4\Ui\View;
  * For example, ypdating Grand Total field of all invoice items.
  *
  * $ml->onChange(function (array $rows) use ($form) {
- *     $grand_total = 0;
+ *     $grandTotal = 0;
  *     foreach ($rows as $row => $cols) {
  *         foreach ($cols as $col) {
  *             $fieldName = array_key_first($col);
  *             if ($fieldName === 'total') {
- *                 $grand_total += $col[$fieldName];
+ *                 $grandTotal += $col[$fieldName];
  *             }
  *         }
  *     }
  *
- *   return $form->js(true, null, 'input[name="grand_total"]')->val($app->uiPersistence->typecastSaveField(new Field(['type' => 'atk4_money']), $grand_total));
+ *   return $form->js(false, null, 'input[name="grand_total"]')->val($app->uiPersistence->typecastSaveField(new Field(['type' => 'atk4_money']), $grandTotal));
  * }, ['qty', 'price']);
  *
  * Finally, it's also possible to use Multiline for quickly adding records to a
