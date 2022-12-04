@@ -130,12 +130,12 @@ class Modal extends View
      */
     public function jsShow(array $args = [])
     {
-        $js_chain = $this->js();
+        $chain = $this->js();
         if ($args !== []) {
-            $js_chain->data(['args' => $args]);
+            $chain->data(['args' => $args]);
         }
 
-        return $js_chain->modal('show');
+        return $chain->modal('show');
     }
 
     /**

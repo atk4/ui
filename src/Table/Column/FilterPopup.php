@@ -30,7 +30,7 @@ class FilterPopup extends Popup
     public $reload;
 
     /**
-     * The Table Column triggering the poupup.
+     * The Table Column triggering the popup.
      * This is need to simulate click in order to properly
      * close the popup window on "Clear".
      *
