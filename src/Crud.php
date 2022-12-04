@@ -63,7 +63,7 @@ class Crud extends Grid
     {
         parent::applySort();
 
-        if ($this->getSortBy() && $this->menuItems !== []) {
+        if ($this->getSortBy()) {
             foreach ($this->menuItems as $item) {
                 // Remove previous click handler and attach new one using sort argument.
                 $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
@@ -275,15 +275,10 @@ class Crud extends Grid
      */
     private function _getModelActions(string $appliesTo): array
     {
-        $actions = [];
         if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
-            foreach ($this->singleScopeActions as $action) {
-                $actions[] = $this->model->getUserAction($action);
-            }
+            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions);
         } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
-            foreach ($this->noRecordScopeActions as $action) {
-                $actions[] = $this->model->getUserAction($action);
-            }
+            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions);
         } else {
             $actions = $this->model->getUserActions($appliesTo);
         }
