@@ -784,7 +784,10 @@ class View extends AbstractView implements JsExpressionable
         if ($action !== null) {
             $res = null;
         } else {
-            $action = new Jquery($selector ?? $this);
+            $action = new Jquery($this);
+            if ($selector) {
+                $action->find($selector);
+            }
             $res = $action;
         }
 
