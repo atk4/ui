@@ -136,7 +136,7 @@ class JsCallback extends Callback implements JsExpressionable
     {
         $actions = [];
 
-        if ($chain && $chain->_chain) {
+        if ($chain !== null) {
             $actions[] = $chain;
         }
 

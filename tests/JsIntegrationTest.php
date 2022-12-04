@@ -75,6 +75,9 @@ class JsIntegrationTest extends TestCase
     $(\'#b\').on(\'click\', function (event) {
         event.preventDefault();
         event.stopPropagation();
+        '
+        . '$(this);' // this JS statement is not required
+        . '
     });
 })()', $v->getJs());
     }

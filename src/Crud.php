@@ -26,7 +26,7 @@ class Crud extends Grid
     /** @var bool|null should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
 
-    /** Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
+    /** @var array<string, array{item: MenuItem, executor: object}> Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
     private array $menuItems = [];
 
     /** Model single scope action to include in table action column. Will include all single scope actions if empty. */
