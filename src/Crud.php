@@ -65,7 +65,7 @@ class Crud extends Grid
 
         if ($this->getSortBy()) {
             foreach ($this->menuItems as $item) {
-                // Remove previous click handler and attach new one using sort argument.
+                // remove previous click handler and attach new one using sort argument
                 $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
                 $ex = $item['executor'];
                 if ($ex instanceof UserAction\JsExecutorInterface) {
@@ -230,7 +230,10 @@ class Crud extends Grid
     protected function setItemsAction(): void
     {
         foreach ($this->menuItems as $k => $item) {
-            $this->container->js(true, $item['item']->on('click.atk_crud_item' /* TODO this adds JS twice */, $item['executor']));
+            // hack - render executor action via MenuItem::on() into container
+            $item['item']->on('click.atk_crud_item', $item['executor']);
+            $jsAction = array_pop($item['item']->_jsActions['click.atk_crud_item']);
+            $this->container->js(true, $jsAction);
         }
     }
 
