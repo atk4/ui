@@ -26,7 +26,7 @@ class Crud extends Grid
     /** @var bool|null should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
 
-    /** Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
+    /** @var array<string, array{item: MenuItem, executor: object}> Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
     private array $menuItems = [];
 
     /** Model single scope action to include in table action column. Will include all single scope actions if empty. */
@@ -63,9 +63,9 @@ class Crud extends Grid
     {
         parent::applySort();
 
-        if ($this->getSortBy() && $this->menuItems !== []) {
+        if ($this->getSortBy()) {
             foreach ($this->menuItems as $item) {
-                // Remove previous click handler and attach new one using sort argument.
+                // remove previous click handler and attach new one using sort argument
                 $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
                 $ex = $item['executor'];
                 if ($ex instanceof UserAction\JsExecutorInterface) {
@@ -194,8 +194,9 @@ class Crud extends Grid
             case Model\UserAction::MODIFIER_DELETE:
                 // use deleted record id to remove row, fallback to closest tr if id is not available.
                 $js = $this->deletedId
-                    ? (new Jquery('tr[data-id="' . $this->deletedId . '"]'))->transition('fade left')
-                    : (new Jquery())->closest('tr')->transition('fade left');
+                    ? $this->js(false, null, 'tr[data-id="' . $this->deletedId . '"]')
+                    : (new Jquery())->closest('tr');
+                $js = $js->transition('fade left', new JsFunction([], [new JsExpression('this.remove()')]));
 
                 break;
             default:
@@ -229,7 +230,10 @@ class Crud extends Grid
     protected function setItemsAction(): void
     {
         foreach ($this->menuItems as $k => $item) {
-            $this->container->js(true, $item['item']->on('click.atk_crud_item', $item['executor']));
+            // hack - render executor action via MenuItem::on() into container
+            $item['item']->on('click.atk_crud_item', $item['executor']);
+            $jsAction = array_pop($item['item']->_jsActions['click.atk_crud_item']);
+            $this->container->js(true, $jsAction);
         }
     }
 
@@ -274,15 +278,10 @@ class Crud extends Grid
      */
     private function _getModelActions(string $appliesTo): array
     {
-        $actions = [];
         if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
-            foreach ($this->singleScopeActions as $action) {
-                $actions[] = $this->model->getUserAction($action);
-            }
+            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions);
         } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
-            foreach ($this->noRecordScopeActions as $action) {
-                $actions[] = $this->model->getUserAction($action);
-            }
+            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions);
         } else {
             $actions = $this->model->getUserActions($appliesTo);
         }

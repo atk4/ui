@@ -56,13 +56,7 @@ class JsFunction implements JsExpressionable
         $output = 'function (' . implode(', ', $this->fxArgs) . ') {'
             . $pre;
         foreach ($this->fxStatements as $statement) {
-            if (!$statement) {
-                // null passed
-                continue;
-            }
-
-            if ($statement instanceof JsChain && !$statement->_chain) {
-                // chain contains no statements, so probably is useless
+            if ($statement === null) { // TODO this should be not needed
                 continue;
             }
 

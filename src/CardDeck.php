@@ -146,7 +146,8 @@ class CardDeck extends View
             $this->search->setModelCondition($this->model);
         }
 
-        if ($count = $this->initPaginator()) {
+        $count = $this->initPaginator();
+        if ($count) {
             foreach ($this->model as $m) {
                 $c = $this->cardHolder->add(Factory::factory([$this->card], ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]))->addClass('segment');
                 $c->setModel($m, $fields);
@@ -401,15 +402,10 @@ class CardDeck extends View
      */
     private function getModelActions(string $appliesTo): array
     {
-        $actions = [];
         if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
-            foreach ($this->singleScopeActions as $action) {
-                $actions[] = $this->model->getUserAction($action);
-            }
+            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions);
         } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
-            foreach ($this->noRecordScopeActions as $action) {
-                $actions[] = $this->model->getUserAction($action);
-            }
+            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions);
         } else {
             $actions = $this->model->getUserActions($appliesTo);
         }

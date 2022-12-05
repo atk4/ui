@@ -363,9 +363,9 @@ trait StepExecutorTrait
         }
 
         // reset button handler
-        $view->js(true, $this->execActionBtn->js(true)->off());
-        $view->js(true, $this->nextStepBtn->js(true)->off());
-        $view->js(true, $this->prevStepBtn->js(true)->off());
+        $view->js(true, $this->execActionBtn->js()->off());
+        $view->js(true, $this->nextStepBtn->js()->off());
+        $view->js(true, $this->prevStepBtn->js()->off());
         $view->js(true, $this->nextStepBtn->js()->removeClass('disabled'));
         $view->js(true, $this->execActionBtn->js()->removeClass('disabled'));
     }
@@ -376,10 +376,10 @@ trait StepExecutorTrait
     protected function jsSetNextState(string $step): JsExpressionable
     {
         if ($this->isLastStep($step)) {
-            return $this->nextStepBtn->js(true)->hide();
+            return $this->nextStepBtn->js()->hide();
         }
 
-        return $this->nextStepBtn->js(true)->show();
+        return $this->nextStepBtn->js()->show();
     }
 
     /**
@@ -388,10 +388,10 @@ trait StepExecutorTrait
     protected function jsSetPrevState(string $step): JsExpressionable
     {
         if ($this->isFirstStep($step)) {
-            return $this->prevStepBtn->js(true)->hide();
+            return $this->prevStepBtn->js()->hide();
         }
 
-        return $this->prevStepBtn->js(true)->show();
+        return $this->prevStepBtn->js()->show();
     }
 
     /**
@@ -400,10 +400,10 @@ trait StepExecutorTrait
     protected function jsSetExecState(string $step): JsExpressionable
     {
         if ($this->isLastStep($step)) {
-            return $this->execActionBtn->js(true)->show();
+            return $this->execActionBtn->js()->show();
         }
 
-        return $this->execActionBtn->js(true)->hide();
+        return $this->execActionBtn->js()->hide();
     }
 
     /**

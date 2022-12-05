@@ -31,7 +31,7 @@ module.exports = {
         'no-restricted-syntax': 'off',
         'no-underscore-dangle': 'off',
         'max-len': 'off',
-        'prefer-template': ['off'],
+        'prefer-template': 'off',
         'no-unused-vars': ['error', { vars: 'all', args: 'none' }],
         'padding-line-between-statements': ['error', {
             blankLine: 'always',

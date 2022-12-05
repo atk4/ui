@@ -771,7 +771,7 @@ class View extends AbstractView implements JsExpressionable
      * @param ($when is false ? null : JsExpressionable|null) $action   JavaScript action
      * @param string|self|null $selector If you wish to override jQuery($selector)
      *
-     * @return Jquery
+     * @return ($action is null ? Jquery : null)
      */
     public function js($when = false, $action = null, $selector = null)
     {
@@ -781,16 +781,21 @@ class View extends AbstractView implements JsExpressionable
             return $this->on($when, $selector, $action);
         }
 
-        $chain = new Jquery($selector ?? $this);
-        if ($when === true) {
-            $this->_jsActions[$when][] = $chain;
-
-            if ($action !== null) {
-                $this->_jsActions[$when][] = $action;
+        if ($action !== null) {
+            $res = null;
+        } else {
+            $action = new Jquery($this);
+            if ($selector) {
+                $action->find($selector);
             }
+            $res = $action;
         }
 
-        return $chain;
+        if ($when === true) {
+            $this->_jsActions[$when][] = $action;
+        }
+
+        return $res;
     }
 
     /**
@@ -957,7 +962,7 @@ class View extends AbstractView implements JsExpressionable
      * @param string|JsExpressionable|\Closure|array|UserAction\ExecutorInterface|Model\UserAction|null $action   code to execute
      * @param array                                                                                     $defaults Options
      *
-     * @return Jquery
+     * @return ($selector is null|string ? ($action is null ? Jquery : null) : ($action is null|array ? Jquery : null))
      */
     public function on(string $event, $selector = null, $action = null, array $defaults = null)
     {
@@ -984,8 +989,13 @@ class View extends AbstractView implements JsExpressionable
 
         $eventStatements = [];
         $actions = [];
-        $chain = new Jquery();
-        $actions[] = $chain;
+
+        if ($action !== null) {
+            $res = null;
+        } else {
+            $action = new Jquery();
+            $res = $action;
+        }
 
         // set preventDefault and stopPropagation by default
         $eventStatements['preventDefault'] = $defaults['preventDefault'] ?? true;
@@ -1041,7 +1051,7 @@ class View extends AbstractView implements JsExpressionable
             }
         } elseif (is_array($action)) {
             $actions = array_merge($actions, $action);
-        } elseif ($action !== null) {
+        } else {
             $actions[] = $action;
         }
 
@@ -1067,7 +1077,7 @@ class View extends AbstractView implements JsExpressionable
 
         $this->_jsActions[$event][] = $eventChain;
 
-        return $chain;
+        return $res;
     }
 
     /**

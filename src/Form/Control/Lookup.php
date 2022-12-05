@@ -259,7 +259,7 @@ class Lookup extends Input
                 $form->model->save();
 
                 $ret = [
-                    (new Jquery('.atk-modal'))->modal('hide'),
+                    (new Jquery())->closest('.atk-modal')->modal('hide'),
                 ];
 
                 $row = $this->renderRow($form->model);

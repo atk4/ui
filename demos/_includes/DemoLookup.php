@@ -48,7 +48,7 @@ class DemoLookup extends Form\Control\Lookup
 
                 $ret = [
                     new JsToast('Form submit!. Data are not save in demo mode.'),
-                    (new Jquery('.atk-modal'))->modal('hide'),
+                    (new Jquery())->closest('.atk-modal')->modal('hide'),
                 ];
 
                 $row = $this->renderRow($form->model);

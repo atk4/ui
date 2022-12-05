@@ -187,10 +187,10 @@ $stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
     if ($page === 1) {
         Message::addTo($p)->set('Thanks for choosing us. We will be asking some questions along the way.');
         $session->memorize('success', true);
-        $p->js(true, $prevAction->js(true)->show());
-        $p->js(true, $nextAction->js(true)->show());
+        $p->js(true, $prevAction->js()->show());
+        $p->js(true, $nextAction->js()->show());
         $p->js(true, $prevAction->js()->addClass('disabled'));
-        $p->js(true, $nextAction->js(true)->removeClass('disabled'));
+        $p->js(true, $nextAction->js()->removeClass('disabled'));
     } elseif ($page === 2) {
         $modelRegister = new Model(new Persistence\Array_());
         $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
@@ -213,13 +213,13 @@ $stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
             return $js;
         });
         $p->js(true, $prevAction->js()->removeClass('disabled'));
-        $p->js(true, $nextAction->js(true)->addClass('disabled'));
+        $p->js(true, $nextAction->js()->addClass('disabled'));
     } elseif ($page === 3) {
         $name = $session->recall('name');
         Message::addTo($p)->set("Thank you {$name} for visiting us! We will be in touch");
         $session->memorize('success', true);
-        $p->js(true, $prevAction->js(true)->hide());
-        $p->js(true, $nextAction->js(true)->hide());
+        $p->js(true, $prevAction->js()->hide());
+        $p->js(true, $nextAction->js()->hide());
     }
 });
 

@@ -30,7 +30,7 @@ class JsIntegrationTest extends TestCase
         static::assertNotSame($b1->name, $b2->name);
     }
 
-    public function testBasicChainFalse(): void
+    public function testChainFalse(): void
     {
         $v = new Button(['name' => 'b']);
         $j = $v->js()->hide();
@@ -39,7 +39,7 @@ class JsIntegrationTest extends TestCase
         static::assertSame('$(\'#b\').hide()', $j->jsRender());
     }
 
-    public function testBasicChainTrue(): void
+    public function testChainTrue(): void
     {
         $v = new Button(['name' => 'b']);
         $j = $v->js(true)->hide();
@@ -50,7 +50,7 @@ class JsIntegrationTest extends TestCase
 })()', $v->getJs());
     }
 
-    public function testBasicChainClick(): void
+    public function testChainClick(): void
     {
         $v = new Button(['name' => 'b']);
         $v->js('click')->hide();
@@ -65,7 +65,7 @@ class JsIntegrationTest extends TestCase
 })()', $v->getJs());
     }
 
-    public function testBasicChainClickEmpty(): void
+    public function testChainClickEmpty(): void
     {
         $v = new Button(['name' => 'b']);
         $v->js('click', null);
@@ -75,11 +75,14 @@ class JsIntegrationTest extends TestCase
     $(\'#b\').on(\'click\', function (event) {
         event.preventDefault();
         event.stopPropagation();
+        '
+        . '$(this);' // this JS statement is not required
+        . '
     });
 })()', $v->getJs());
     }
 
-    public function testBasicChainNested(): void
+    public function testChainNested(): void
     {
         $bb = new View(['ui' => 'buttons']);
         $b1 = Button::addTo($bb, ['name' => 'b1']);
@@ -103,5 +106,15 @@ class JsIntegrationTest extends TestCase
     });
     $(\'#b1\').data(\'x\', \'y\');
 })()', $bb->getJs());
+    }
+
+    public function testChainNullReturn(): void
+    {
+        $v = new View(['name' => 'v']);
+        $js = $v->js();
+
+        static::assertNotNull($v->js(true, null)); // @phpstan-ignore-line
+        static::assertNull($v->js(true, $js)); // @phpstan-ignore-line
+        static::assertNull($v->on('click', $js)); // @phpstan-ignore-line
     }
 }

@@ -137,8 +137,8 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
      */
     protected function jsSetBtnState(View $view): void
     {
-        $view->js(true, $this->ok->js(true)->off());
-        $view->js(true, $this->cancel->js(true)->off());
+        $view->js(true, $this->ok->js()->off());
+        $view->js(true, $this->cancel->js()->off());
     }
 
     /**

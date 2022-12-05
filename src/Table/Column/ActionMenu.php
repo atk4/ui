@@ -80,10 +80,16 @@ class ActionMenu extends Table\Column
             $this->callbacks[$name] = $isDisabled;
         }
 
-        // set executor context.
-        $context = (new Jquery())->closest('.ui.button');
+        if ($action !== null) {
+            // set executor context
+            $context = (new Jquery())->closest('.ui.button');
 
-        $this->table->on('click', '.i_' . $name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirmMsg, 'apiConfig' => ['stateContext' => $context]]);
+            $this->table->on('click', '.i_' . $name, $action, [
+                $this->table->jsRow()->data('id'),
+                'confirm' => $confirmMsg,
+                'apiConfig' => ['stateContext' => $context],
+            ]);
+        }
 
         return $item;
     }

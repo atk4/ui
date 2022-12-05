@@ -35,13 +35,19 @@ Header::addTo($app, ['js() method']);
 
 $b = Button::addTo($app, ['Hide button B']);
 $b2 = Button::addTo($app, ['B']);
-$b->js('click', $b2->js()->hide())->addClass('disabled')->addClass('disabled');
+$b->on('click', [
+    $b->js()->addClass('disabled')->addClass('disabled'),
+    $b2->js()->hide(),
+]);
 
 Header::addTo($app, ['on() method']);
 
 $b = Button::addTo($app, ['Hide button C and self']);
 $b2 = Button::addTo($app, ['C']);
-$b->on('click', null, $b2->js()->hide())->hide();
+$b->on('click', null, [
+    $b->js()->hide(),
+    $b2->js()->hide(),
+]);
 
 Header::addTo($app, ['Callbacks']);
 

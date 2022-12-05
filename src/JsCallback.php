@@ -90,6 +90,13 @@ class JsCallback extends Callback implements JsExpressionable
 
             $response = $fx($chain, ...$values);
 
+            if (count($chain->_chain) === 0) {
+                // TODO should we create/pass $chain to $fx at all?
+                $chain = null;
+            } elseif ($response) {
+                // TODO throw when non-empty chain is to be ignored?
+            }
+
             $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
 
             $this->terminateAjax($ajaxec);
@@ -129,7 +136,7 @@ class JsCallback extends Callback implements JsExpressionable
     {
         $actions = [];
 
-        if ($chain && $chain->_chain) {
+        if ($chain !== null) {
             $actions[] = $chain;
         }
 
