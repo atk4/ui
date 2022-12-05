@@ -333,11 +333,17 @@ class Grid extends View
         $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
         $q = trim($this->stickyGet($this->quickSearch->name . '_q') ?? '');
         if ($q !== '') {
-            $scope = Model\Scope::createOr();
-            foreach ($fields as $field) {
-                $scope->addCondition($field, 'like', '%' . $q . '%');
+            if (preg_match_all('/"(?:\\\\.|[^\\\\"])*"|\S+/', $q, $matches)) {
+                $andScope = Model\Scope::createAnd();
+                foreach ($matches[0] as $match) {
+                    $scope = Model\Scope::createOr();
+                    foreach ($fields as $field) {
+                        $scope->addCondition($field, 'like', '%' . preg_replace('/^"(.*)"$|^(.*)$/', '$1$2', $match) . '%');
+                    }
+                    $andScope->addCondition($scope);
+                }
+                $this->model->addCondition($andScope);
             }
-            $this->model->addCondition($scope);
         }
         $this->quickSearch->initValue = $q;
     }
