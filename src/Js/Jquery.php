@@ -94,6 +94,10 @@ class Jquery extends JsChain
             $constructorArgs = [new JsExpression('this')];
         }
 
+        if (count($constructorArgs) === 1 && ($constructorArgs[0] instanceof View || (is_string($constructorArgs[0]) && preg_match('~^#\w+$~s', $constructorArgs[0])))) {
+            $this->assertOne();
+        }
+
         $this->_constructorArgs = $constructorArgs;
     }
 }

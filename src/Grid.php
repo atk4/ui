@@ -94,8 +94,17 @@ class Grid extends View
     {
         parent::init();
 
+        if ($this->paginator !== false) {
+            $seg = View::addTo($this, [], ['Paginator'])->addStyle('text-align', 'center');
+        }
+
         $this->container = View::addTo($this, ['template' => $this->template->cloneRegion('Container')]);
         $this->template->del('Container');
+
+        if ($this->paginator !== false) {
+            $this->paginator = $seg->add(Factory::factory([Paginator::class, 'reload' => $this->container], $this->paginator));
+            $this->stickyGet($this->paginator->name);
+        }
 
         if (!$this->sortTrigger) {
             $this->sortTrigger = $this->name . '_sort';
@@ -107,11 +116,6 @@ class Grid extends View
 
         $this->table = $this->initTable();
 
-        if ($this->paginator !== false) {
-            $seg = View::addTo($this->container, [], ['Paginator'])->setStyle('text-align', 'center');
-            $this->paginator = $seg->add(Factory::factory([Paginator::class, 'reload' => $this->container], $this->paginator));
-            $this->stickyGet($this->paginator->name);
-        }
 
         // TODO dirty way to set stickyGet - add addQuickSearch to find the expected search input component ID and then remove it
         if ($this->menu !== false) {
@@ -279,7 +283,7 @@ class Grid extends View
         if ($sortBy) {
             $this->stickyGet($this->sortTrigger, $sortBy);
         }
-        $this->applySort();
+      //  $this->applySort();
 
         $this->table->addJsPaginator($ipp, $options, $container, $scrollRegion);
 

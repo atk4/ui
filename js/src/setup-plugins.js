@@ -59,4 +59,12 @@ atk.registerPlugin('atkScroll', AtkScrollPlugin);
 atk.registerPlugin('atkServerEvent', AtkServerEventPlugin);
 atk.registerPlugin('atkSidenav', AtkSidenavPlugin);
 
+$.fn.assertOne = function () {
+    if (this.length !== 1) {
+        throw new Error((this.length === 0 ? 'No' : 'More than one') + ' element was found');
+    }
+
+    return this;
+};
+
 export default null;

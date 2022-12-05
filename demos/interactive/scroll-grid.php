@@ -21,7 +21,8 @@ View::addTo($app, ['ui' => 'clearing divider']);
 Header::addTo($app, ['Dynamic scroll in Grid']);
 
 $grid = Grid::addTo($app, ['menu' => false]);
+$grid->setIpp([10, 25, 50, 100]);
 $model = new Country($app->db);
 $grid->setModel($model);
 
-$grid->addJsPaginator(30);
+//$grid->addJsPaginator(30);

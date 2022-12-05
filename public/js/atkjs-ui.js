@@ -3628,21 +3628,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-/* harmony import */ var _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugins/ajaxec.plugin */ "./src/plugins/ajaxec.plugin.js");
-/* harmony import */ var _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugins/column-resizer.plugin */ "./src/plugins/column-resizer.plugin.js");
-/* harmony import */ var _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugins/conditional-form.plugin */ "./src/plugins/conditional-form.plugin.js");
-/* harmony import */ var _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./plugins/confirm.plugin */ "./src/plugins/confirm.plugin.js");
-/* harmony import */ var _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/create-modal.plugin */ "./src/plugins/create-modal.plugin.js");
-/* harmony import */ var _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./plugins/file-upload.plugin */ "./src/plugins/file-upload.plugin.js");
-/* harmony import */ var _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/js-search.plugin */ "./src/plugins/js-search.plugin.js");
-/* harmony import */ var _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/js-sortable.plugin */ "./src/plugins/js-sortable.plugin.js");
-/* harmony import */ var _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/reload-view.plugin */ "./src/plugins/reload-view.plugin.js");
-/* harmony import */ var _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./plugins/scroll.plugin */ "./src/plugins/scroll.plugin.js");
-/* harmony import */ var _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/server-event.plugin */ "./src/plugins/server-event.plugin.js");
-/* harmony import */ var _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./plugins/sidenav.plugin */ "./src/plugins/sidenav.plugin.js");
+/* harmony import */ var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.error.cause.js */ "./node_modules/core-js/modules/es.error.cause.js");
+/* harmony import */ var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugins/ajaxec.plugin */ "./src/plugins/ajaxec.plugin.js");
+/* harmony import */ var _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./plugins/column-resizer.plugin */ "./src/plugins/column-resizer.plugin.js");
+/* harmony import */ var _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./plugins/conditional-form.plugin */ "./src/plugins/conditional-form.plugin.js");
+/* harmony import */ var _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/confirm.plugin */ "./src/plugins/confirm.plugin.js");
+/* harmony import */ var _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./plugins/create-modal.plugin */ "./src/plugins/create-modal.plugin.js");
+/* harmony import */ var _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./plugins/file-upload.plugin */ "./src/plugins/file-upload.plugin.js");
+/* harmony import */ var _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./plugins/js-search.plugin */ "./src/plugins/js-search.plugin.js");
+/* harmony import */ var _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./plugins/js-sortable.plugin */ "./src/plugins/js-sortable.plugin.js");
+/* harmony import */ var _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./plugins/reload-view.plugin */ "./src/plugins/reload-view.plugin.js");
+/* harmony import */ var _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./plugins/scroll.plugin */ "./src/plugins/scroll.plugin.js");
+/* harmony import */ var _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./plugins/server-event.plugin */ "./src/plugins/server-event.plugin.js");
+/* harmony import */ var _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./plugins/sidenav.plugin */ "./src/plugins/sidenav.plugin.js");
+
 
 
 
@@ -3665,15 +3668,15 @@ __webpack_require__.r(__webpack_exports__);
  * @param {Function} cl        Plugin class
  * @param {boolean}  shorthand Map $.name(...) to $({}).name(...)
  */
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin = function (name, cl) {
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].registerPlugin = function (name, cl) {
   let shorthand = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
   const dataName = '__' + name;
 
   // add plugin to atk namespace.
-  atk__WEBPACK_IMPORTED_MODULE_1__["default"][name] = cl;
+  atk__WEBPACK_IMPORTED_MODULE_2__["default"][name] = cl;
 
   // register plugin to jQuery fn prototype.
-  (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn)[name] = function () {
+  (external_jquery__WEBPACK_IMPORTED_MODULE_1___default().fn)[name] = function () {
     let option = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
     // Check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
@@ -3681,28 +3684,34 @@ atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin = function (name, cl)
       return this.data(dataName).call(option, args);
     }
     return this.each(function () {
-      const options = external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, cl.DEFAULTS, typeof option === 'object' && option);
+      const options = external_jquery__WEBPACK_IMPORTED_MODULE_1___default().extend({}, cl.DEFAULTS, typeof option === 'object' && option);
       // create plugin using the constructor function store in atk namespace object
       // and add a reference of it to this jQuery object data.
-      external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(dataName, new atk__WEBPACK_IMPORTED_MODULE_1__["default"][name](this, options));
+      external_jquery__WEBPACK_IMPORTED_MODULE_1___default()(this).data(dataName, new atk__WEBPACK_IMPORTED_MODULE_2__["default"][name](this, options));
     });
   };
   if (shorthand) {
-    (external_jquery__WEBPACK_IMPORTED_MODULE_0___default())[name] = options => external_jquery__WEBPACK_IMPORTED_MODULE_0___default()({})[name](options);
+    (external_jquery__WEBPACK_IMPORTED_MODULE_1___default())[name] = options => external_jquery__WEBPACK_IMPORTED_MODULE_1___default()({})[name](options);
   }
 };
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkAjaxec', _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_2__["default"]);
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkColumnResizer', _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_3__["default"]);
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkConditionalForm', _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_4__["default"]);
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkConfirm', _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_5__["default"], true);
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkCreateModal', _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_6__["default"]);
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkFileUpload', _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_7__["default"]);
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkJsSearch', _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_8__["default"]);
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkJsSortable', _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_9__["default"]);
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkReloadView', _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_10__["default"]);
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkScroll', _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_11__["default"]);
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkServerEvent', _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_12__["default"]);
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkSidenav', _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_13__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].registerPlugin('atkAjaxec', _plugins_ajaxec_plugin__WEBPACK_IMPORTED_MODULE_3__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].registerPlugin('atkColumnResizer', _plugins_column_resizer_plugin__WEBPACK_IMPORTED_MODULE_4__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].registerPlugin('atkConditionalForm', _plugins_conditional_form_plugin__WEBPACK_IMPORTED_MODULE_5__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].registerPlugin('atkConfirm', _plugins_confirm_plugin__WEBPACK_IMPORTED_MODULE_6__["default"], true);
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].registerPlugin('atkCreateModal', _plugins_create_modal_plugin__WEBPACK_IMPORTED_MODULE_7__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].registerPlugin('atkFileUpload', _plugins_file_upload_plugin__WEBPACK_IMPORTED_MODULE_8__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].registerPlugin('atkJsSearch', _plugins_js_search_plugin__WEBPACK_IMPORTED_MODULE_9__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].registerPlugin('atkJsSortable', _plugins_js_sortable_plugin__WEBPACK_IMPORTED_MODULE_10__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].registerPlugin('atkReloadView', _plugins_reload_view_plugin__WEBPACK_IMPORTED_MODULE_11__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].registerPlugin('atkScroll', _plugins_scroll_plugin__WEBPACK_IMPORTED_MODULE_12__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].registerPlugin('atkServerEvent', _plugins_server_event_plugin__WEBPACK_IMPORTED_MODULE_13__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].registerPlugin('atkSidenav', _plugins_sidenav_plugin__WEBPACK_IMPORTED_MODULE_14__["default"]);
+(external_jquery__WEBPACK_IMPORTED_MODULE_1___default().fn.assertOne) = function () {
+  if (this.length !== 1) {
+    throw new Error((this.length === 0 ? 'No' : 'More than one') + ' element was found');
+  }
+  return this;
+};
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
 
 /***/ }),
