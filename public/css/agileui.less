@@ -1,4 +1,4 @@
-/*--- Colors ---*/
+/* --- Colors --- */
 @red: #DB2828;
 @orange: #F2711C;
 @yellow: #FBBD08;
@@ -13,7 +13,7 @@
 @grey: #767676;
 @black: #1B1C1D;
 
-/*--- Light Colors ---*/
+/* --- Light Colors --- */
 @lightRed: #FF695E;
 @lightOrange: #FF851B;
 @lightYellow: #FFE21F;
@@ -28,7 +28,7 @@
 @lightGrey: #DCDDDE;
 @lightBlack: #545454;
 
-/*--- Neutrals ---*/
+/* --- Neutrals --- */
 @fullBlack: #000000;
 @offWhite: #F9FAFB;
 @darkWhite: #F3F4F5;
@@ -113,14 +113,14 @@
             justify-content: center;
         }
     }
-    &:not(active) {
+    &:not(.active) {
         .atk-submenu-toggle:hover {
-            background-color: rgba(255,255,255,0.15);
+            background-color: rgba(255, 255, 255, 15%);
         }
     }
     .ui.grid {
         .row {
-            padding: 0px;
+            padding: 0;
         }
         .column {
             padding-top: @maestroSpace;
@@ -157,8 +157,8 @@ header.ui.fixed.horizontal.menu {
     min-height: 100px;
 }
 
-.atk-hide-loading-content.loading:before {
-    background: rgba(255,255,255,.98) !important;
+.atk-hide-loading-content.loading::before {
+    background: rgba(255, 255, 255, 98%) !important;
 }
 
 .atk-layout {
@@ -189,10 +189,9 @@ header.atk-topMenu.ui.menu .item > .label {
     }
 }
 footer.atk-footer {
-    .ui.divider, .ui.segment {
-        margin: 0;
-    }
+    .ui.divider,
     .ui.segment {
+        margin: 0;
     }
 }
 
@@ -216,7 +215,7 @@ footer.atk-footer {
     width: 40%;
     z-index: @rightPanelIndex;
     &.atk-visible {
-        box-shadow: 0px 0 5px fade(@black, 20%);
+        box-shadow: 0 0 5px fade(@black, 20%);
         right: 0%;
     }
 }
@@ -251,13 +250,13 @@ i.atk-panel-warning {
         opacity: 0.3;
     }
     i.table-filter-on {
-        &:after {
+        &::after {
             content: '\f150';
             color: dodgerblue;
         }
     }
     i.table-filter-off {
-        &:after {
+        &::after {
             content: '\f150';
         }
     }
@@ -269,29 +268,29 @@ i.atk-panel-warning {
 }
 
 .atk-table-column-header {
-        white-space: pre-wrap;
-        &:after {
-            //display: none;
-            font-style: normal;
-            font-weight: normal;
-            text-decoration: inherit;
-            content: '';
-            height: 1em;
-            width: auto;
-            opacity: 0.8;
-            margin: 0em 0em 0em 0.5em;
-            font-family: 'Icons';
-            float: right;
+    white-space: pre-wrap;
+    &::after {
+        // display: none;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+        content: '';
+        height: 1em;
+        width: auto;
+        opacity: 0.8;
+        margin: 0 0 0 0.5em;
+        font-family: Icons;
+        float: right;
     }
 }
 .atk-table-column-header.ascending {
-    &:after {
+    &::after {
         content: '\f0d8';
     }
 }
 
 .atk-table-column-header.descending {
-    &:after {
+    &::after {
         content: '\f0d7';
     }
 }
@@ -303,27 +302,28 @@ i.atk-panel-warning {
 // fix calendar input
 // https://github.com/atk4/ui/issues/1376
 .ui.input .ui.popup.calendar {
-    padding: 0px;
+    padding: 0;
 }
 
 // Components
 
-.ui.step, .ui.steps .step {
+.ui.step,
+.ui.steps .step {
     user-select: none;
 }
 
 .atk-overflow-auto {
     overflow: auto;
-    border: 1px solid rgba(34, 36, 38, 0.15);
+    border: 1px solid rgba(34, 36, 38, 15%);
     margin-bottom: 1em;
     > .ui.table {
-        margin-top: 0em;
+        margin-top: 0;
     }
 }
 .atk-cell-expanded {
     min-width: 320px;
     max-width: 640px;
-    white-space: normal
+    white-space: normal;
 }
 .atk-overlay.pushable {
     height: 100%;
@@ -335,7 +335,7 @@ i.atk-panel-warning {
     width: 100%;
     z-index: @pushableIndex;
     .pusher {
-        &:after {
+        &::after {
             height: 100%;
             opacity: 1;
             width: 100%;
@@ -363,7 +363,7 @@ i.atk-panel-warning {
         visibility: visible;
     }
     body.atk-sidenav-visible {
-        &:after {
+        &::after {
             left: 0;
             position: fixed;
             top: 0;
@@ -401,7 +401,9 @@ i.atk-panel-warning {
     .ui.visible.left.sidebar ~ footer.atk-footer {
         padding-left: 0;
     }
-    .ui.left.sidebar, .atk-topMenu, .atk-topMenuGhost {
+    .ui.left.sidebar,
+    .atk-topMenu,
+    .atk-topMenuGhost {
         display: none !important;
     }
 }
