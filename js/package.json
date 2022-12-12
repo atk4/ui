@@ -37,6 +37,7 @@
         "@babel/core": "^7.19.6",
         "@babel/plugin-transform-runtime": "^7.19.6",
         "@babel/preset-env": "^7.19.4",
+        "@internal/eslint-plugin": "file:.eslint",
         "babel-loader": "^8.2.5",
         "css-loader": "^6.7.1",
         "eslint": "^8.28.0",

@@ -959,29 +959,26 @@ class View extends AbstractView implements JsExpressionable
      *
      * @param string $event JavaScript event
      * @param ($action is null|array ? string|JsExpressionable|\Closure|array|UserAction\ExecutorInterface|Model\UserAction : string|array) $selector Optional jQuery-style selector
-     * @param string|JsExpressionable|\Closure|array|UserAction\ExecutorInterface|Model\UserAction|null $action   code to execute
-     * @param array                                                                                     $defaults Options
+     * @param string|JsExpressionable|\Closure|array|UserAction\ExecutorInterface|Model\UserAction|null $action code to execute
      *
      * @return ($selector is null|string ? ($action is null ? Jquery : null) : ($action is null|array ? Jquery : null))
      */
-    public function on(string $event, $selector = null, $action = null, array $defaults = null)
+    public function on(string $event, $selector = null, $action = null, array $defaults = [])
     {
         // second argument may be omitted
-        if ($selector !== null && !is_string($selector) && ($action === null || is_array($action))) {
-            $defaults = $action;
+        if ($selector !== null && !is_string($selector) && ($action === null || is_array($action)) && $defaults === []) {
+            $defaults = $action ?? [];
             $action = $selector;
             $selector = null;
         }
 
-        // check for arguments.
+        // check for arguments
         $arguments = $defaults['args'] ?? [];
-        if ($defaults === null) {
-            $defaults = [];
-        }
+        unset($defaults['args']);
 
         // all non-key items of defaults are actually arguments
         foreach ($defaults as $key => $value) {
-            if (is_numeric($key)) {
+            if (is_int($key)) {
                 $arguments[] = $value;
                 unset($defaults[$key]);
             }

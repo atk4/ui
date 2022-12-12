@@ -150,7 +150,7 @@ class ModalService {
     doAutoFocus($modal) {
         const inputs = $modal.find('[tabindex], :input').filter(':visible');
         const autofocus = inputs.filter('[autofocus]');
-        const input = (autofocus.length > 0) ? autofocus.first() : inputs.first();
+        const input = autofocus.length > 0 ? autofocus.first() : inputs.first();
 
         if (input.length > 0) {
             input.focus().select();

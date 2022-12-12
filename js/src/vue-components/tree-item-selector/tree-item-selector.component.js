@@ -47,7 +47,7 @@ export default {
     computed: {
         itemMargin: function () {
             return {
-                marginLeft: (this.item.nodes && this.item.nodes.length > 0)
+                marginLeft: this.item.nodes && this.item.nodes.length > 0
                     ? (this.open ? '-13px' : '-10px')
                     : null,
             };
@@ -61,7 +61,7 @@ export default {
             return this.item.name;
         },
         isParent: function () {
-            return (this.nodes && this.nodes.length > 0);
+            return this.nodes && this.nodes.length > 0;
         },
         toggleIcon: function () {
             return this.isParent
