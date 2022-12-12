@@ -331,13 +331,18 @@ class Grid extends View
             ->addMenuRight()->addItem()->setElement('div'));
 
         $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
-        $q = trim($this->stickyGet($this->quickSearch->name . '_q') ?? '');
-        if ($q !== '') {
-            $scope = Model\Scope::createOr();
-            foreach ($fields as $field) {
-                $scope->addCondition($field, 'like', '%' . $q . '%');
+        $q = $this->stickyGet($this->quickSearch->name . '_q') ?? '';
+        $qWords = preg_split('~\s+~', $q, -1, \PREG_SPLIT_NO_EMPTY);
+        if (count($qWords) > 0) {
+            $andScope = Model\Scope::createAnd();
+            foreach ($qWords as $v) {
+                $orScope = Model\Scope::createOr();
+                foreach ($fields as $field) {
+                    $orScope->addCondition($field, 'like', '%' . $v . '%');
+                }
+                $andScope->addCondition($orScope);
             }
-            $this->model->addCondition($scope);
+            $this->model->addCondition($andScope);
         }
         $this->quickSearch->initValue = $q;
     }

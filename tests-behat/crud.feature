@@ -16,6 +16,7 @@ Feature: Crud
   Scenario: search
     Then I search grid for "united kingdom"
     Then I should see "United Kingdom"
+    Then I should not see "No records"
 
   Scenario: edit
     Then I press button "Edit"
@@ -29,6 +30,15 @@ Feature: Crud
     Then I press button "Delete"
     Then I press Modal button "Ok"
     Then I should not see "United Kingdom"
+
+  Scenario: search across multiple columns
+    Then I search grid for "420 zech"
+    Then I should see "Czech Republic"
+
+  Scenario: search no match
+    Then I search grid for "420X zech"
+    Then I should see "No records"
+    Then I should not see "Czech Republic"
 
   Scenario: Modal in modal
     Given I am on "_unit-test/crud-nested.php"
