@@ -48,7 +48,7 @@ export default {
     computed: {
         classIcon: function () {
             return {
-                'search icon': (this.query === null || this.query === ''),
+                'search icon': this.query === null || this.query === '',
                 'remove icon': this.query !== null,
             };
         },
@@ -100,7 +100,7 @@ export default {
                 url: this.url,
                 data: options,
                 method: 'GET',
-                stateContext: (this.context) ? $(this.context) : $(this.$el),
+                stateContext: this.context ? $(this.context) : $(this.$el),
                 onComplete: function (e, r) {
                     that.isActive = false;
                 },

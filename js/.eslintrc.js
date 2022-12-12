@@ -8,6 +8,7 @@ module.exports = {
         'airbnb-base',
         'plugin:unicorn/recommended',
         'plugin:vue/vue3-recommended',
+        'plugin:@internal/eslint-plugin/recommended',
     ],
     parserOptions: {
         ecmaVersion: '2020',
@@ -18,6 +19,7 @@ module.exports = {
     },
     rules: {
         indent: ['error', 4, { SwitchCase: 1 }],
+        'linebreak-style': ['error', 'unix'],
         curly: ['error', 'all'],
         'object-shorthand': ['error', 'never'],
         'func-names': ['error', 'never'],

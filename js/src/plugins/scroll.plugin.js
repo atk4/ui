@@ -40,7 +40,7 @@ export default class AtkScrollPlugin extends AtkPlugin {
             this.setTableHeader();
         } else {
             // check if scroll apply vs Window or inside our element.
-            this.isWindow = (this.$el.css('overflow-y') === 'visible');
+            this.isWindow = this.$el.css('overflow-y') === 'visible';
             this.$scroll = this.isWindow ? $(window) : this.$el;
             // is Inner the element itself or it's children.
             this.$inner = this.isWindow ? this.$el : this.$el.children();

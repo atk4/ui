@@ -162,7 +162,7 @@ class FormService {
             return false;
         }
 
-        return (rule.value === undefined || rule.value === null)
+        return rule.value === undefined || rule.value === null
             ? rule.type.match(this.formSettings.regExp.bracket)[1] + ''
             : rule.value;
     }
@@ -176,7 +176,7 @@ class FormService {
     }
 
     isBracketedRule(rule) {
-        return (rule.type && rule.type.match(this.formSettings.regExp.bracket));
+        return rule.type && rule.type.match(this.formSettings.regExp.bracket);
     }
 }
 
