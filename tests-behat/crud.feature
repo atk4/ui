@@ -16,6 +16,16 @@ Feature: Crud
   Scenario: search
     Then I search grid for "united kingdom"
     Then I should see "United Kingdom"
+    Then I should not see "No records"
+
+  Scenario: search across multiple columns
+    Then I search grid for "420 zech"
+    Then I should see "Czech Republic"
+
+  Scenario: search no match
+    Then I search grid for "420X zech"
+    Then I should see "No records"
+    Then I should not see "Czech Republic"
 
   Scenario: edit
     Then I press button "Edit"
