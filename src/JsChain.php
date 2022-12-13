@@ -135,7 +135,7 @@ class JsChain extends JsExpression
         foreach ($this->_chain as $chain) {
             if (is_array($chain)) {
                 $ret .= '.' . $chain[0] . $this->_renderArgs($chain[1]);
-            } elseif (is_numeric($chain)) {
+            } elseif (is_int($chain)) {
                 $ret .= '[' . $chain . ']';
             } else {
                 $ret .= '.' . $chain;

@@ -26,7 +26,7 @@ class ArgumentFormExecutor extends BasicExecutor
         $this->form = Form::addTo($this, ['buttonSave' => $this->executorButton]);
 
         foreach ($this->action->args as $key => $val) {
-            if (is_numeric($key)) {
+            if (is_int($key)) {
                 throw (new Exception('Action arguments must be named'))
                     ->addMoreInfo('args', $this->action->args);
             }

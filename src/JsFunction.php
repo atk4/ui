@@ -33,7 +33,7 @@ class JsFunction implements JsExpressionable
         $this->fxArgs = $args;
 
         foreach ($statements as $key => $value) {
-            if (is_numeric($key)) {
+            if (is_int($key)) {
                 $this->fxStatements[] = $value;
             } else {
                 $this->{$key} = $value;
