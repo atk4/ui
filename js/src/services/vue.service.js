@@ -66,7 +66,7 @@ class VueService {
             if (registry[name] === undefined && registry[camelize(name)] === undefined) {
                 const namePascalized = capitalize(camelize(name));
                 if (registry[namePascalized] === undefined && vueFomanticUiComponentNamesSet.has(namePascalized)) {
-                    registry[namePascalized] = asyncComponentFactory(namePascalized, () => (import('vue-fomantic-ui')).then((r) => r[namePascalized]));
+                    registry[namePascalized] = asyncComponentFactory(namePascalized, () => (import('vue-fomantic-ui')).then((r) => r[namePascalized])); // eslint-disable-line import/no-unresolved
                 }
             }
         };

@@ -93,7 +93,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
      */
     setState(mode) {
         switch (mode) {
-            case 'delete':
+            case 'delete': {
                 this.action.html(this.getEraseContent);
                 setTimeout(() => {
                     this.bar.progress('reset');
@@ -101,7 +101,8 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
                 }, 1000);
 
                 break;
-            case 'upload':
+            }
+            case 'upload': {
                 this.action.html(this.actionContent);
                 this.textInput.val('');
                 this.fileInput.val('');
@@ -109,6 +110,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
                 this.$el.data().fileId = null;
 
                 break;
+            }
         }
     }
 

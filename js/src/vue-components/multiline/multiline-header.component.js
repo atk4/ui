@@ -53,10 +53,11 @@ export default {
                 switch (column.type) {
                     case 'integer':
                     case 'float':
-                    case 'atk4_money':
+                    case 'atk4_money': {
                         align = 'right';
 
                         break;
+                    }
                 }
             }
 
