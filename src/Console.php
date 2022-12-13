@@ -118,7 +118,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }
 
             if ($this->issetApp()) {
-                $this->getApp()->logger = $oldLogger; // @phpstan-ignore-line
+                $this->getApp()->logger = $oldLogger;
             }
 
             $this->sseInProgress = false;
@@ -394,7 +394,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
                     $object->getApp()->logger = $loggerBak; // @phpstan-ignore-line
                 }
                 if (TraitUtil::hasTrait($object, DebugTrait::class)) {
-                    $object->debug = $debugBak; // @phpstan-ignore-line
+                    $object->debug = $debugBak;
                 }
             }
         } else {
