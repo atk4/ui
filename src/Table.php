@@ -210,7 +210,9 @@ class Table extends Lister
             $col = $this->getColumn($colName);
             if ($col) {
                 $pop = $col->addPopup(new Table\Column\FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
-                $pop->isFilterOn() ? $col->setHeaderPopupIcon('table-filter-on') : null;
+                if ($pop->isFilterOn()) {
+                    $col->setHeaderPopupIcon('table-filter-on');
+                }
                 // apply condition according to popup form.
                 $this->model = $pop->setFilterCondition($this->model);
             }
