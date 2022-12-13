@@ -66,7 +66,7 @@ class TypeDatetime extends Column\FilterModel
     public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();
-        if (isset($filter['id'])) {
+        if ($filter !== null) {
             switch ($filter['op']) {
                 case 'empty':
                     $model->addCondition($filter['name'], '=', null);

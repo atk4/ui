@@ -57,8 +57,9 @@ class FilterPopup extends Popup
         $this->form->setControlsDisplayRules($model->getFormDisplayRules());
 
         // load data associated with this popup.
-        if ($data = $model->recallData()) {
-            $model->setMulti($data);
+        $filter = $model->recallData();
+        if ($filter !== null) {
+            $model->setMulti($filter);
         }
         $this->form->setModel($model);
 
@@ -85,15 +86,13 @@ class FilterPopup extends Popup
      */
     public function isFilterOn(): bool
     {
-        return ($this->recallData() ?? '') !== '';
+        return $this->recallData() !== null;
     }
 
     /**
      * Recall model data.
-     *
-     * @return mixed
      */
-    public function recallData()
+    public function recallData(): ?array
     {
         return $this->form->model->recallData();
     }
