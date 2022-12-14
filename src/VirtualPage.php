@@ -94,7 +94,8 @@ class VirtualPage extends View
             return parent::getHtml();
         }
 
-        if ($mode = $this->cb->getTriggeredValue()) {
+        $mode = $this->cb->getTriggeredValue();
+        if ($mode) {
             // special treatment for popup
             if ($mode === 'popup') {
                 $this->getApp()->html->template->set('title', $this->getApp()->title);

@@ -25,7 +25,8 @@ $crumb->addCrumb('Countries', []);
 $model = new Country($app->db);
 $model->setLimit(15);
 
-if ($id = $crumb->stickyGet('country_id')) {
+$id = $crumb->stickyGet('country_id');
+if ($id) {
     // perhaps we edit individual country?
     $model = $model->load($id);
     $crumb->addCrumb($model->name, []);

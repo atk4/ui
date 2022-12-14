@@ -266,7 +266,8 @@ class Column
      */
     public function getHeaderCellHtml(Field $field = null, $value = null): string
     {
-        if ($tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value])) {
+        $tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value]);
+        if ($tags) {
             return reset($tags);
         }
 

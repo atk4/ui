@@ -75,7 +75,8 @@ trait StepExecutorTrait
      */
     protected function addStepTitle(View $view, string $step): void
     {
-        if ($seed = $this->stepTitle[$step] ?? null) {
+        $seed = $this->stepTitle[$step] ?? null;
+        if ($seed) {
             $view->add(Factory::factory($seed));
         }
     }
@@ -199,11 +200,13 @@ trait StepExecutorTrait
     {
         $this->addStepTitle($page, $this->step);
 
-        if ($fields = $this->getActionData('fields')) {
+        $fields = $this->getActionData('fields');
+        if ($fields) {
             $this->action->getEntity()->setMulti($fields);
         }
 
-        if ($prev = $this->getPreviousStep($this->step)) {
+        $prev = $this->getPreviousStep($this->step);
+        if ($prev) {
             $chain = $this->loader->jsLoad([
                 'step' => $prev,
                 $this->name => $this->action->getEntity()->getId(),
@@ -411,7 +414,8 @@ trait StepExecutorTrait
      */
     protected function jsSetPrevHandler(View $view, string $step): void
     {
-        if ($prev = $this->getPreviousStep($step)) {
+        $prev = $this->getPreviousStep($step);
+        if ($prev) {
             $chain = $this->loader->jsLoad([
                 'step' => $prev,
                 $this->name => $this->action->getEntity()->getId(),

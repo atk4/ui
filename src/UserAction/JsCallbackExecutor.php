@@ -74,7 +74,8 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
                 $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
             }
 
-            if ($errors = $this->_hasAllArguments()) {
+            $errors = $this->_hasAllArguments();
+            if ($errors) {
                 $js = new JsToast(['title' => 'Error', 'message' => 'Missing Arguments: ' . implode(', ', $errors), 'class' => 'error']);
             } else {
                 $args = [];

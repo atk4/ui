@@ -882,7 +882,8 @@ class View extends AbstractView implements JsExpressionable
     {
         $type = $useSession ? 'session' : 'local';
 
-        if (!$name = $this->name) {
+        $name = $this->name;
+        if (!$name) {
             throw new Exception('View property name needs to be set');
         }
 
@@ -906,7 +907,8 @@ class View extends AbstractView implements JsExpressionable
     {
         $type = $useSession ? 'session' : 'local';
 
-        if (!$name = $this->name) {
+        $name = $this->name;
+        if (!$name) {
             throw new Exception('View property name needs to be set');
         }
 
@@ -1035,7 +1037,8 @@ class View extends AbstractView implements JsExpressionable
                 $actions = $ex->jsExecute($arguments);
                 $ex->executeModelAction();
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
-                if ($conf = $ex->getAction()->getConfirmation()) {
+                $conf = $ex->getAction()->getConfirmation();
+                if ($conf) {
                     $defaults['confirm'] = $conf;
                 }
                 if ($defaults['apiConfig'] ?? null) {

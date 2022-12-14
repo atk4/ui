@@ -223,7 +223,8 @@ class Grid extends View
      */
     public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Items per page:')
     {
-        if ($ipp = (int) $this->container->stickyGet('ipp')) {
+        $ipp = (int) $this->container->stickyGet('ipp');
+        if ($ipp) {
             $this->ipp = $ipp;
         } else {
             $this->ipp = $items[0];
@@ -232,7 +233,8 @@ class Grid extends View
         $pageLength = ItemsPerPageSelector::addTo($this->paginator, ['pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], ['afterPaginator']);
         $this->paginator->template->trySet('PaginatorType', 'ui grid');
 
-        if ($sortBy = $this->getSortBy()) {
+        $sortBy = $this->getSortBy();
+        if ($sortBy) {
             $pageLength->stickyGet($this->sortTrigger, $sortBy);
         }
 
@@ -270,7 +272,8 @@ class Grid extends View
             $this->paginator = null;
         }
 
-        if ($sortBy = $this->getSortBy()) {
+        $sortBy = $this->getSortBy();
+        if ($sortBy) {
             $this->stickyGet($this->sortTrigger, $sortBy);
         }
         $this->applySort();
@@ -668,7 +671,8 @@ class Grid extends View
         }
 
         if ($this->quickSearch instanceof JsSearch) {
-            if ($sortBy = $this->getSortBy()) {
+            $sortBy = $this->getSortBy();
+            if ($sortBy) {
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', [$this->sortTrigger, $sortBy]));
             }
         }

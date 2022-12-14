@@ -71,7 +71,8 @@ class ItemSearch extends View
      */
     public function setModelCondition(Model $model): void
     {
-        if ($q = $this->getQuery()) {
+        $q = $this->getQuery();
+        if ($q) {
             $model->addCondition($model->titleField, 'like', '%' . $q . '%');
         }
     }
