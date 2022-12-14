@@ -172,14 +172,16 @@ export default {
         onToggleSelect: function () {
             const { options } = this.getRootData();
             switch (options.mode) {
-                case 'single':
+                case 'single': {
                     this.handleSingleSelect();
 
                     break;
-                case 'multiple':
+                }
+                case 'multiple': {
                     this.handleMultipleSelect();
 
                     break;
+                }
             }
         },
         /**

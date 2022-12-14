@@ -858,19 +858,23 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
   setState(mode) {
     switch (mode) {
       case 'delete':
-        this.action.html(this.getEraseContent);
-        setTimeout(() => {
-          this.bar.progress('reset');
-          this.bar.hide('fade');
-        }, 1000);
-        break;
+        {
+          this.action.html(this.getEraseContent);
+          setTimeout(() => {
+            this.bar.progress('reset');
+            this.bar.hide('fade');
+          }, 1000);
+          break;
+        }
       case 'upload':
-        this.action.html(this.actionContent);
-        this.textInput.val('');
-        this.fileInput.val('');
-        this.hiddenInput.val('');
-        this.$el.data().fileId = null;
-        break;
+        {
+          this.action.html(this.actionContent);
+          this.textInput.val('');
+          this.fileInput.val('');
+          this.hiddenInput.val('');
+          this.$el.data().fileId = null;
+          break;
+        }
     }
   }
 
@@ -3382,10 +3386,11 @@ class VueService {
       if (registry[name] === undefined && registry[(0,vue__WEBPACK_IMPORTED_MODULE_21__.camelize)(name)] === undefined) {
         const namePascalized = (0,vue__WEBPACK_IMPORTED_MODULE_21__.capitalize)((0,vue__WEBPACK_IMPORTED_MODULE_21__.camelize)(name));
         if (registry[namePascalized] === undefined && vueFomanticUiComponentNamesSet.has(namePascalized)) {
-          registry[namePascalized] = asyncComponentFactory(namePascalized, () => __webpack_require__.e(/*! import() */ "vendor-vue").then(__webpack_require__.bind(__webpack_require__, /*! vue-fomantic-ui */ "./node_modules/vue-fomantic-ui/dist/vue-fomantic-ui.es.js")).then(r => r[namePascalized]));
+          registry[namePascalized] = asyncComponentFactory(namePascalized, () => __webpack_require__.e(/*! import() */ "vendor-vue").then(__webpack_require__.bind(__webpack_require__, /*! vue-fomantic-ui */ "./node_modules/vue-fomantic-ui/dist/vue-fomantic-ui.es.js")).then(r => r[namePascalized])); // eslint-disable-line import/no-unresolved
         }
       }
     };
+
     app._context.components = new Proxy(app._context.components, {
       has: (obj, prop) => {
         lazyRegisterSuiPrefixedComponent(obj, prop);

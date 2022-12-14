@@ -2,7 +2,7 @@ const path = require('node:path');
 const webpack = require('webpack');
 const { VueLoaderPlugin } = require('vue-loader');
 const TerserPlugin = require('terser-webpack-plugin');
-const VueFomanticUi = require('vue-fomantic-ui');
+const VueFomanticUi = require('vue-fomantic-ui'); // eslint-disable-line import/no-unresolved
 
 module.exports = (env) => {
     const isProduction = env === undefined ? false /* for eslint-import-resolver-webpack */ : env.production;

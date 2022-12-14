@@ -151,7 +151,7 @@ class Link extends Table\Column
         $p = $this->page ?? [];
 
         foreach ($this->args as $key => $val) {
-            if (is_numeric($key)) {
+            if (is_int($key)) {
                 $key = $val;
             }
 

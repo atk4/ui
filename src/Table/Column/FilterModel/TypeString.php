@@ -20,7 +20,7 @@ class TypeString extends Column\FilterModel
     public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();
-        if (isset($filter['id'])) {
+        if ($filter !== null) {
             switch ($filter['op']) {
                 case 'is':
                     $model->addCondition($filter['name'], $filter['value']);

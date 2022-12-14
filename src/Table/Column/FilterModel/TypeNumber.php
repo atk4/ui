@@ -32,7 +32,7 @@ class TypeNumber extends Column\FilterModel
     public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();
-        if (isset($filter['id'])) {
+        if ($filter !== null) {
             switch ($filter['op']) {
                 case 'between':
                     $model->addCondition(

@@ -42,7 +42,9 @@ $lookup = $form->addControl('country', [
             $model->addCondition($model->fieldName()->name, 'like', $letter . '%');
         }
 
-        isset($data['contains']) ? $model->addCondition($model->fieldName()->name, 'like', '%' . $data['contains'] . '%') : null;
+        if (isset($data['contains'])) {
+            $model->addCondition($model->fieldName()->name, 'like', '%' . $data['contains'] . '%');
+        }
     },
     'placeholder' => 'Selection depends on Dropdown above',
     'search' => [Country::hinting()->fieldName()->name, Country::hinting()->fieldName()->iso, Country::hinting()->fieldName()->iso3],
@@ -72,7 +74,9 @@ $lookup = $form->addControl('country', [
     Form\Control\Lookup::class,
     'model' => new Country($app->db),
     'dependency' => function (Country $model, $data) {
-        isset($data['ends_with']) ? $model->addCondition($model->fieldName()->name, 'like', '%' . $data['ends_with']) : null;
+        if (isset($data['ends_with'])) {
+            $model->addCondition($model->fieldName()->name, 'like', '%' . $data['ends_with']);
+        }
     },
     'multiple' => true,
     'search' => [Country::hinting()->fieldName()->name, Country::hinting()->fieldName()->iso, Country::hinting()->fieldName()->iso3],

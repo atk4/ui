@@ -54,7 +54,8 @@ class Crud extends Grid
     {
         parent::init();
 
-        if ($sortBy = $this->getSortBy()) {
+        $sortBy = $this->getSortBy();
+        if ($sortBy) {
             $this->stickyGet($this->name . '_sort', $sortBy);
         }
     }
@@ -160,7 +161,8 @@ class Crud extends Grid
     protected function jsExecute($return, Model\UserAction $action): array
     {
         $js = [];
-        if ($jsAction = $this->getJsGridAction($action)) {
+        $jsAction = $this->getJsGridAction($action);
+        if ($jsAction) {
             $js[] = $jsAction;
         }
 

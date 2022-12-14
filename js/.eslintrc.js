@@ -35,7 +35,6 @@ module.exports = {
             js: 'never',
             vue: 'never',
         }],
-        'import/no-unresolved': 'off',
         'import/prefer-default-export': 'off',
         indent: ['error', 4, {
             SwitchCase: 1,
@@ -81,7 +80,6 @@ module.exports = {
         'unicorn/no-this-assignment': 'off',
         'unicorn/prefer-module': 'off',
         'unicorn/prevent-abbreviations': 'off',
-        'unicorn/switch-case-braces': ['error', 'avoid'],
         'vue/attribute-hyphenation': ['error', 'never'],
         'vue/html-indent': ['error', 4],
     },

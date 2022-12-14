@@ -238,11 +238,15 @@ __webpack_require__.r(__webpack_exports__);
       } = this.getRootData();
       switch (options.mode) {
         case 'single':
-          this.handleSingleSelect();
-          break;
+          {
+            this.handleSingleSelect();
+            break;
+          }
         case 'multiple':
-          this.handleMultipleSelect();
-          break;
+          {
+            this.handleMultipleSelect();
+            break;
+          }
       }
     },
     /**

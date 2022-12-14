@@ -155,10 +155,8 @@ class CardDeck extends View
                     $c->addExtraFields($m, $extra, $this->extraGlue);
                 }
                 if ($this->useAction) {
-                    if ($singleActions = $this->getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD)) {
-                        foreach ($singleActions as $action) {
-                            $c->addClickAction($action, null, $this->getReloadArgs());
-                        }
+                    foreach ($this->getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD) as $action) {
+                        $c->addClickAction($action, null, $this->getReloadArgs());
                     }
                 }
             }
@@ -264,7 +262,8 @@ class CardDeck extends View
     {
         $js = [];
         $js[] = $this->getNotifier($action, $msg);
-        if ($action->getEntity()->isLoaded() && $card = $this->findCard($action->getEntity())) {
+        $card = $action->getEntity()->isLoaded() ? $this->findCard($action->getEntity()) : null;
+        if ($card !== null) {
             $js[] = $card->jsReload($this->getReloadArgs());
         } else {
             $js[] = $this->container->jsReload($this->getReloadArgs());
@@ -284,7 +283,7 @@ class CardDeck extends View
      * Therefore if card, that was just save, is not present in db result set or deck then return null
      * otherwise return Card view.
      *
-     * @return mixed
+     * @return View|null
      */
     protected function findCard(Model $entity)
     {
@@ -328,7 +327,8 @@ class CardDeck extends View
     {
         $defaults = [];
 
-        if ($args = $this->getReloadArgs()) {
+        $args = $this->getReloadArgs();
+        if ($args) {
             $defaults['args'] = $args;
         }
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\Factory;
-use Atk4\Data\Exception;
 use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
 use Atk4\Data\ValidationException;
@@ -75,7 +74,8 @@ trait StepExecutorTrait
      */
     protected function addStepTitle(View $view, string $step): void
     {
-        if ($seed = $this->stepTitle[$step] ?? null) {
+        $seed = $this->stepTitle[$step] ?? null;
+        if ($seed) {
             $view->add(Factory::factory($seed));
         }
     }
@@ -140,11 +140,6 @@ trait StepExecutorTrait
 
         $form = $this->addFormTo($page);
         foreach ($this->action->args as $key => $val) {
-            if (is_numeric($key)) {
-                throw (new Exception('Action arguments must be named'))
-                    ->addMoreInfo('args', $this->action->args);
-            }
-
             if ($val instanceof Model) {
                 $val = ['model' => $val];
             }
@@ -199,11 +194,13 @@ trait StepExecutorTrait
     {
         $this->addStepTitle($page, $this->step);
 
-        if ($fields = $this->getActionData('fields')) {
+        $fields = $this->getActionData('fields');
+        if ($fields) {
             $this->action->getEntity()->setMulti($fields);
         }
 
-        if ($prev = $this->getPreviousStep($this->step)) {
+        $prev = $this->getPreviousStep($this->step);
+        if ($prev) {
             $chain = $this->loader->jsLoad([
                 'step' => $prev,
                 $this->name => $this->action->getEntity()->getId(),
@@ -411,7 +408,8 @@ trait StepExecutorTrait
      */
     protected function jsSetPrevHandler(View $view, string $step): void
     {
-        if ($prev = $this->getPreviousStep($step)) {
+        $prev = $this->getPreviousStep($step);
+        if ($prev) {
             $chain = $this->loader->jsLoad([
                 'step' => $prev,
                 $this->name => $this->action->getEntity()->getId(),

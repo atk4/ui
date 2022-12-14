@@ -119,9 +119,9 @@ abstract class FilterModel extends Model
     /**
      * Recall filter model data.
      */
-    public function recallData(): array
+    public function recallData(): ?array
     {
-        return $this->recall('data', []);
+        return $this->recall('data');
     }
 
     /**

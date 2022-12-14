@@ -165,9 +165,10 @@ class Column
         $cb = Column\JsHeader::addTo($this->table);
 
         $function = 'function (value, text, item) {
-            if (value === undefined || value === \'\' || value === null) { return; }
-            $(this)
-            .api({
+            if (value === undefined || value === \'\' || value === null) {
+                return;
+            }
+            $(this).api({
                 on: \'now\',
                 url: \'' . $cb->getJsUrl() . '\',
                 data: { item: value, id: $(this).data(\'menu-id\') }
@@ -266,7 +267,8 @@ class Column
      */
     public function getHeaderCellHtml(Field $field = null, $value = null): string
     {
-        if ($tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value])) {
+        $tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value]);
+        if ($tags) {
             return reset($tags);
         }
 
