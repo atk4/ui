@@ -141,11 +141,6 @@ trait StepExecutorTrait
 
         $form = $this->addFormTo($page);
         foreach ($this->action->args as $key => $val) {
-            if (is_int($key)) {
-                throw (new Exception('Action arguments must be named'))
-                    ->addMoreInfo('args', $this->action->args);
-            }
-
             if ($val instanceof Model) {
                 $val = ['model' => $val];
             }
