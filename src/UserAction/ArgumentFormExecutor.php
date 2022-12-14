@@ -6,7 +6,6 @@ namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 
