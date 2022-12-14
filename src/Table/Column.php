@@ -165,9 +165,10 @@ class Column
         $cb = Column\JsHeader::addTo($this->table);
 
         $function = 'function (value, text, item) {
-            if (value === undefined || value === \'\' || value === null) { return; }
-            $(this)
-            .api({
+            if (value === undefined || value === \'\' || value === null) {
+                return;
+            }
+            $(this).api({
                 on: \'now\',
                 url: \'' . $cb->getJsUrl() . '\',
                 data: { item: value, id: $(this).data(\'menu-id\') }

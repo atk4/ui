@@ -164,11 +164,21 @@ export default {
             }
 
             switch (type) {
-                case 'input': return this.isInput;
-                case 'checkbox': return this.isCheckbox;
-                case 'select': return this.isSelect;
-                case 'custom-component': return this.isComponent;
-                default: return false;
+                case 'input': {
+                    return this.isInput;
+                }
+                case 'checkbox': {
+                    return this.isCheckbox;
+                }
+                case 'select': {
+                    return this.isSelect;
+                }
+                case 'custom-component': {
+                    return this.isComponent;
+                }
+                default: {
+                    return false;
+                }
             }
         },
     },
