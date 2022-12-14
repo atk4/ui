@@ -200,10 +200,6 @@ footer.atk-footer {
 }
 
 .atk-right-panel {
-    -webkit-transition: box-shadow 0.2s, right 0.2s;
-    -moz-transition: box-shadow 0.2s, right 0.2s;
-    -ms-transition: box-shadow 0.2s, right 0.2s;
-    -o-transition: box-shadow 0.2s, right 0.2s;
     transition: box-shadow 0.2s, right 0.2s;
     bottom: 0;
     background-color: @atkSlidePanelColor;
@@ -347,7 +343,6 @@ i.atk-panel-warning {
 
 @media (max-width: (@desktopWidth - 1px)) {
     .ui.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
-        -webkit-transform: translate3d(0, 0, 0);
         transform: translate3d(0, 0, 0);
         width: 100% !important;
     }
@@ -358,7 +353,6 @@ i.atk-panel-warning {
     .ui.left.sidebar {
         opacity: 0;
         pointer-events: none;
-        -webkit-transform: translate3d(0, 0, 0);
         transform: translate3d(0, 0, 0);
         visibility: visible;
     }

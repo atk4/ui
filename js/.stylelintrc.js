@@ -19,7 +19,6 @@ module.exports = {
         'font-family-no-missing-generic-family-keyword': null, // 1 error that should be ignored with a comment
         'function-no-unknown': null, // 2 errors
         'no-duplicate-selectors': null, // 3 errors
-        'property-no-vendor-prefix': null, // 6 errors, test
         'selector-class-pattern': null, // 14 errors, example: Expected class selector ".atk-topMenu" to be kebab-case
     },
     reportNeedlessDisables: true,
