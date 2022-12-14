@@ -15,7 +15,6 @@ module.exports = {
         'string-quotes': 'single',
 
         // TODO
-        'at-rule-no-unknown': null, // 1 error: Unexpected unknown at-rule "@atkFooterHeight" (a stylelint bug?)
         'function-no-unknown': null, // 2 errors
         'no-duplicate-selectors': null, // 3 errors
         'selector-class-pattern': null, // 14 errors, example: Expected class selector ".atk-topMenu" to be kebab-case
