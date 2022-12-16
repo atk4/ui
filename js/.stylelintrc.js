@@ -7,12 +7,13 @@ module.exports = {
         'at-rule-empty-line-before': null,
         'at-rule-name-case': null,
         'color-function-notation': 'legacy',
+        'color-hex-case': 'lower',
         indentation: 4,
         linebreaks: 'unix',
         'max-line-length': null,
         'no-descending-specificity': null,
         'rule-empty-line-before': null,
-        'string-quotes': 'single',
+        'string-quotes': 'double',
 
         // TODO
         'function-no-unknown': null, // 2 same errors: Unexpected unknown function "fade"

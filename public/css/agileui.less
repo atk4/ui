@@ -1,39 +1,39 @@
 /* --- Colors --- */
-@red: #DB2828;
-@orange: #F2711C;
-@yellow: #FBBD08;
-@olive: #B5CC18;
-@green: #21BA45;
-@teal: #00B5AD;
-@blue: #2185D0;
-@violet: #6435C9;
-@purple: #A333C8;
-@pink: #E03997;
-@brown: #A5673F;
+@red: #db2828;
+@orange: #f2711c;
+@yellow: #fbbd08;
+@olive: #b5cc18;
+@green: #21ba45;
+@teal: #00b5ad;
+@blue: #2185d0;
+@violet: #6435c9;
+@purple: #a333c8;
+@pink: #e03997;
+@brown: #a5673f;
 @grey: #767676;
-@black: #1B1C1D;
+@black: #1b1c1d;
 
 /* --- Light Colors --- */
-@lightRed: #FF695E;
-@lightOrange: #FF851B;
-@lightYellow: #FFE21F;
-@lightOlive: #D9E778;
-@lightGreen: #2ECC40;
-@lightTeal: #6DFFFF;
-@lightBlue: #54C8FF;
-@lightViolet: #A291FB;
-@lightPurple: #DC73FF;
-@lightPink: #FF8EDF;
-@lightBrown: #D67C1C;
-@lightGrey: #DCDDDE;
+@lightRed: #ff695e;
+@lightOrange: #ff851b;
+@lightYellow: #ffe21f;
+@lightOlive: #d9e778;
+@lightGreen: #2ecc40;
+@lightTeal: #6dffff;
+@lightBlue: #54c8ff;
+@lightViolet: #a291fb;
+@lightPurple: #dc73ff;
+@lightPink: #ff8edf;
+@lightBrown: #d67c1c;
+@lightGrey: #dcddde;
 @lightBlack: #545454;
 
 /* --- Neutrals --- */
 @fullBlack: #000000;
-@offWhite: #F9FAFB;
-@darkWhite: #F3F4F5;
-@midWhite: #DCDDDE;
-@white: #FFFFFF;
+@offWhite: #f9fafb;
+@darkWhite: #f3f4f5;
+@midWhite: #dcddde;
+@white: #ffffff;
 
 // Variables
 @leftMenuWidth: 260px;
@@ -43,7 +43,7 @@
 @tabletWidth: 768px;
 @adminMenuHeight: 48px;
 @atkFooterHeight: 50px;
-@menuBorder: 1px solid rgba(255,255,255,0.1);
+@menuBorder: 1px solid rgba(255, 255, 255, 0.1);
 
 @atkSlidePanelColor: @offWhite;
 
@@ -145,7 +145,7 @@ header.ui.fixed.horizontal.menu {
 }
 
 .ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
-    width: ~'calc(100% - '@leftMenuWidth~')';
+    width: ~"calc(100% - " @leftMenuWidth~ ")";
 }
 .ui.visible.left.sidebar ~ .atk-mainContainer,
 .ui.visible.left.sidebar ~ footer.atk-footer {
@@ -232,7 +232,7 @@ i.atk-panel-warning {
 }
 
 .atk-sidenav-content {
-    height: ~'calc(100% - '@atkFooterHeight + @adminMenuHeight~')';
+    height: ~"calc(100% - " @atkFooterHeight + @adminMenuHeight~ ")";
 }
 
 .ui.left.sidebar.atk-sidenav {
@@ -247,13 +247,13 @@ i.atk-panel-warning {
     }
     i.table-filter-on {
         &::after {
-            content: '\f150';
+            content: "\f150";
             color: dodgerblue;
         }
     }
     i.table-filter-off {
         &::after {
-            content: '\f150';
+            content: "\f150";
         }
     }
     .dropdown {
@@ -270,7 +270,7 @@ i.atk-panel-warning {
         font-style: normal;
         font-weight: normal;
         text-decoration: inherit;
-        content: '';
+        content: "";
         height: 1em;
         width: auto;
         opacity: 0.8;
@@ -281,13 +281,13 @@ i.atk-panel-warning {
 }
 .atk-table-column-header.ascending {
     &::after {
-        content: '\f0d8';
+        content: "\f0d8";
     }
 }
 
 .atk-table-column-header.descending {
     &::after {
-        content: '\f0d7';
+        content: "\f0d7";
     }
 }
 
