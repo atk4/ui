@@ -23,7 +23,14 @@ Header::addTo($app, ['Basic Button', 'size' => 2]);
 Button::addTo($app, ['Click me'])->link(['index']);
 
 // Without Seeding
-$b1 = new Button('Click me (no seed)');
+$b1 = new Button('Click me (error atkAjaxex');
+$jsCallback = \Atk4\Ui\JsCallback::addTo($app)->set(function($jsCallback) {
+        return [new \Atk4\Ui\JsToast('Executed. But not closed modal...')];
+});
+
+$b1->on('click', null, null, ['confirm' => 'Really delete?'])->atkAjaxec([
+        'url' => $jsCallback]);
+
 $app->add($b1);
 // must be added first
 $b1->link(['index']);
