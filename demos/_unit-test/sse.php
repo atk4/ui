@@ -19,11 +19,10 @@ $sse = JsSse::addTo($app);
 $sse->setUrlTrigger('see_test');
 
 $v->js(true, $sse->set(function () use ($sse) {
-    $sse->send(new JsExpression('console.log(\'test\')'));
-    $sse->send(new JsExpression('console.log(\'test\')'));
-    $sse->send(new JsExpression('console.log(\'test\')'));
-    $sse->send(new JsExpression('console.log(\'test\')'));
+    for ($i = 0; $i < 4; ++$i) {
+        $sse->send(new JsExpression('console.log([])', ['test ' . $i]));
+    }
 
     // non-SSE way
     return new JsToast('SSE sent, see browser console log');
-}));
+})->jsExecute());

@@ -18,7 +18,7 @@ Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader'
 $inventory = new MultilineItem($app->db);
 $inventory->getField($inventory->fieldName()->item)->ui['multiline'] = [Form\Control\Multiline::TABLE_CELL => ['width' => 2]];
 $inventory->getField($inventory->fieldName()->inv_date)->ui['multiline'] = [Form\Control\Multiline::TABLE_CELL => ['width' => 2]];
-$inventory->getField($inventory->fieldName()->inv_date)->ui['multiline'] = [Form\Control\Multiline::TABLE_CELL => ['width' => 2]];
+$inventory->getField($inventory->fieldName()->inv_time)->ui['multiline'] = [Form\Control\Multiline::TABLE_CELL => ['width' => 2]];
 $inventory->getField($inventory->fieldName()->country_id)->ui['multiline'] = [Form\Control\Multiline::TABLE_CELL => ['width' => 3]];
 $inventory->getField($inventory->fieldName()->qty)->ui['multiline'] = [Form\Control\Multiline::TABLE_CELL => ['width' => 2]];
 $inventory->getField($inventory->fieldName()->box)->ui['multiline'] = [Form\Control\Multiline::TABLE_CELL => ['width' => 2]];

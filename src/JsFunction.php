@@ -16,7 +16,7 @@ class JsFunction implements JsExpressionable
     /** @var array */
     public $fxArgs;
 
-    /** @var array */
+    /** @var array<int, JsExpressionable> */
     public $fxStatements = [];
 
     /** @var bool add preventDefault(event) to generated method */
@@ -28,12 +28,19 @@ class JsFunction implements JsExpressionable
     /** @var string Indent of target code (not one indent level) */
     public $indent = '    ';
 
+    /**
+     * @param array<int, JsExpressionable|null>|array<string, mixed> $statements
+     */
     public function __construct(array $args, array $statements)
     {
         $this->fxArgs = $args;
 
         foreach ($statements as $key => $value) {
             if (is_int($key)) {
+                if ($value === null) { // TODO this should be not needed
+                    continue;
+                }
+
                 $this->fxStatements[] = $value;
             } else {
                 $this->{$key} = $value;
@@ -56,18 +63,9 @@ class JsFunction implements JsExpressionable
         $output = 'function (' . implode(', ', $this->fxArgs) . ') {'
             . $pre;
         foreach ($this->fxStatements as $statement) {
-            if ($statement === null) { // TODO this should be not needed
-                continue;
-            }
+            $js = $statement->jsRender();
 
-            if ($statement instanceof JsExpressionable) {
-                $statement = $statement->jsRender();
-            } else {
-                throw (new Exception('Incorrect statement for JsFunction'))
-                    ->addMoreInfo('statement', $statement);
-            }
-
-            $output .= "\n" . $this->indent . '    ' . $statement . (!preg_match('~[;}]\s*$~', $statement) ? ';' : '');
+            $output .= "\n" . $this->indent . '    ' . $js . (!preg_match('~[;}]\s*$~', $js) ? ';' : '');
         }
 
         $output .= "\n" . $this->indent . '}';

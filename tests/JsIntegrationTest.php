@@ -6,6 +6,9 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Button;
+use Atk4\Ui\Exception;
+use Atk4\Ui\JsCallback;
+use Atk4\Ui\JsExpression;
 use Atk4\Ui\View;
 
 class JsIntegrationTest extends TestCase
@@ -43,7 +46,7 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['name' => 'b']);
         $j = $v->js(true)->hide();
-        $v->getHtml();
+        $v->renderAll();
 
         static::assertSame('(function () {
     $(\'#b\').hide();
@@ -54,7 +57,7 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['name' => 'b']);
         $v->js('click')->hide();
-        $v->getHtml();
+        $v->renderAll();
 
         static::assertSame('(function () {
     $(\'#b\').on(\'click\', function (event) {
@@ -69,7 +72,7 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['name' => 'b']);
         $v->js('click', null);
-        $v->getHtml();
+        $v->renderAll();
 
         static::assertSame('(function () {
     $(\'#b\').on(\'click\', function (event) {
@@ -84,9 +87,9 @@ class JsIntegrationTest extends TestCase
 
     public function testChainNested(): void
     {
-        $bb = new View(['ui' => 'buttons']);
-        $b1 = Button::addTo($bb, ['name' => 'b1']);
-        $b2 = Button::addTo($bb, ['name' => 'b2']);
+        $v = new View(['ui' => 'buttons']);
+        $b1 = Button::addTo($v, ['name' => 'b1']);
+        $b2 = Button::addTo($v, ['name' => 'b2']);
 
         $b1->on('click', [
             'preventDefault' => false,
@@ -95,7 +98,7 @@ class JsIntegrationTest extends TestCase
             $b2->js()->hide(),
         ]);
         $b1->js(true)->data('x', 'y');
-        $bb->getHtml();
+        $v->renderAll();
 
         static::assertSame('(function () {
     $(\'#b1\').on(\'click\', function (event) {
@@ -105,7 +108,7 @@ class JsIntegrationTest extends TestCase
         $(\'#b2\').hide();
     });
     $(\'#b1\').data(\'x\', \'y\');
-})()', $bb->getJs());
+})()', $v->getJs());
     }
 
     public function testChainNullReturn(): void
@@ -116,5 +119,46 @@ class JsIntegrationTest extends TestCase
         static::assertNotNull($v->js(true, null)); // @phpstan-ignore-line
         static::assertNull($v->js(true, $js)); // @phpstan-ignore-line
         static::assertNull($v->on('click', $js)); // @phpstan-ignore-line
+    }
+
+    public function testChainUnsupportedTypeException(): void
+    {
+        $v = new View();
+        $v->invokeInit();
+
+        $js = $v->js();
+        $js->data(['url' => JsCallback::addTo($v)]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('not renderable to JS');
+        $js->jsRender();
+    }
+
+    public function testChainJsCallbackLazyExecuteRender(): void
+    {
+        $v = new View();
+        $v->invokeInit();
+        $b = Button::addTo($v);
+
+        $jsCallback = new class() extends JsCallback {
+            public int $counter = 0;
+
+            public function jsExecute(): JsExpression
+            {
+                ++$this->counter;
+
+                return parent::jsExecute();
+            }
+        };
+        $v->add($jsCallback);
+
+        $b->on('click', $jsCallback);
+        static::assertSame(0, $jsCallback->counter);
+
+        $v->renderAll();
+        static::assertSame(0, $jsCallback->counter);
+
+        $v->getJs();
+        static::assertSame(1, $jsCallback->counter);
     }
 }

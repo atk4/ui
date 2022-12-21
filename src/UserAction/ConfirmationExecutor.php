@@ -85,9 +85,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         ];
     }
 
-    /**
-     * Return js expression that will trigger action executor.
-     */
     public function jsExecute(array $urlArgs = []): array
     {
         if (!$this->action) {
