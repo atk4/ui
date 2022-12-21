@@ -51,7 +51,7 @@ class JsExpression implements JsExpressionable
                 $value = $this->args[$identifier];
 
                 // no escaping for "{}"
-                if ($matches[0][0] === '{') {
+                if ($matches[0][0] === '{' && is_string($value)) {
                     return $value;
                 }
 
@@ -74,15 +74,10 @@ class JsExpression implements JsExpressionable
      */
     protected function _jsEncode($arg): string
     {
-        if (is_object($arg)) {
-            if ($arg instanceof JsExpressionable) {
-                $result = $arg->jsRender();
+        if (is_object($arg) && $arg instanceof JsExpressionable) {
+            $result = $arg->jsRender();
 
-                return $result;
-            }
-
-            throw (new Exception('Not sure how to represent this object in JSON'))
-                ->addMoreInfo('obj', $arg);
+            return $result;
         } elseif (is_array($arg)) {
             $array = [];
             $assoc = !array_is_list($arg);
@@ -115,7 +110,7 @@ class JsExpression implements JsExpressionable
         } elseif ($arg === null) {
             $string = 'null';
         } else {
-            throw (new Exception('Unsupported argument type'))
+            throw (new Exception('Argument is not renderable to JS'))
                 ->addMoreInfo('arg', $arg);
         }
 

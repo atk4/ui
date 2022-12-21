@@ -6,6 +6,8 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Button;
+use Atk4\Ui\Exception;
+use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
 
 class JsIntegrationTest extends TestCase
@@ -116,5 +118,18 @@ class JsIntegrationTest extends TestCase
         static::assertNotNull($v->js(true, null)); // @phpstan-ignore-line
         static::assertNull($v->js(true, $js)); // @phpstan-ignore-line
         static::assertNull($v->on('click', $js)); // @phpstan-ignore-line
+    }
+
+    public function testChainUnsupportedTypeException(): void
+    {
+        $v = new View();
+        $v->invokeInit();
+
+        $js = $v->js();
+        $js->data(['url' => JsCallback::addTo($v)]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('not renderable to JS');
+        $js->jsRender();
     }
 }

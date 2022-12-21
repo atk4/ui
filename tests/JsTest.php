@@ -6,6 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\App;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Jquery;
 use Atk4\Ui\JsChain;
 use Atk4\Ui\JsExpression;
@@ -129,5 +130,14 @@ class JsTest extends TestCase
                     $('.box1').height($('.box2').height());
                 })
             EOF, $fx->jsRender());
+    }
+
+    public function testUnsupportedTypeRenderException(): void
+    {
+        $js = new JsExpression('{}', [new \stdClass()]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('not renderable to JS');
+        $js->jsRender();
     }
 }
