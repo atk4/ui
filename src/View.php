@@ -960,8 +960,8 @@ class View extends AbstractView implements JsExpressionable
      * @see http://agile-ui.readthedocs.io/en/latest/js.html
      *
      * @param string $event JavaScript event
-     * @param ($action is null|array ? string|JsExpressionable|\Closure|array|UserAction\ExecutorInterface|Model\UserAction : string|array) $selector Optional jQuery-style selector
-     * @param string|JsExpressionable|\Closure|array|UserAction\ExecutorInterface|Model\UserAction|null $action code to execute
+     * @param ($action is null|array ? string|JsExpressionable|JsCallback|\Closure|array|UserAction\ExecutorInterface|Model\UserAction : string|array) $selector Optional jQuery-style selector
+     * @param string|JsExpressionable|JsCallback|\Closure|array|UserAction\ExecutorInterface|Model\UserAction|null $action code to execute
      *
      * @return ($selector is null|string ? ($action is null ? Jquery : null) : ($action is null|array ? Jquery : null))
      */
@@ -1000,6 +1000,22 @@ class View extends AbstractView implements JsExpressionable
         $eventStatements['preventDefault'] = $defaults['preventDefault'] ?? true;
         $eventStatements['stopPropagation'] = $defaults['stopPropagation'] ?? true;
 
+        $lazyJsRenderFx = function (\Closure $fx): JsExpressionable {
+            return new class($fx) implements JsExpressionable {
+                public \Closure $fx;
+
+                public function __construct(\Closure $fx)
+                {
+                    $this->fx = $fx;
+                }
+
+                public function jsRender(): string
+                {
+                    return ($this->fx)()->jsRender();
+                }
+            };
+        };
+
         // Dealing with callback action.
         if ($action instanceof \Closure || (is_array($action) && ($action[0] ?? null) instanceof \Closure)) {
             if (is_array($action)) {
@@ -1021,9 +1037,7 @@ class View extends AbstractView implements JsExpressionable
                 return $action($chain, ...$args);
             }, $arguments);
 
-            $actions[] = $cb->jsExecute();
-        } elseif ($action instanceof JsCallback) {
-            $actions[] = $action->jsExecute();
+            $actions[] = $lazyJsRenderFx(fn () => $cb->jsExecute());
         } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof Model\UserAction) {
             // Setup UserAction executor.
             $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->create($action, $this) : $action;
@@ -1046,11 +1060,13 @@ class View extends AbstractView implements JsExpressionable
                 if ($defaults['apiConfig'] ?? null) {
                     $ex->apiConfig = $defaults['apiConfig'];
                 }
-                $actions[] = $ex->jsExecute();
+                $actions[] = $lazyJsRenderFx(fn () => $ex->jsExecute());
                 $ex->executeModelAction($arguments);
             } else {
                 throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or extend View and implement UserAction\JsExecutorInterface');
             }
+        } elseif ($action instanceof JsCallback) {
+            $actions[] = $lazyJsRenderFx(fn () => $action->jsExecute());
         } elseif (is_array($action)) {
             $actions = array_merge($actions, $action);
         } else {

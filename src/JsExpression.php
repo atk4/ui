@@ -34,7 +34,7 @@ class JsExpression implements JsExpressionable
         $namelessCount = 0;
         $res = preg_replace_callback(
             '~\[[\w]*\]|{[\w]*}~',
-            function ($matches) use (&$namelessCount) {
+            function ($matches) use (&$namelessCount): string {
                 $identifier = substr($matches[0], 1, -1);
 
                 // Allow template to contain []
