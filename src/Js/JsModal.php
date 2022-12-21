@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Js;
 
+use Atk4\Ui\VirtualPage;
+
 /**
  * This class generates action, that will be able to loop-back to the callback method.
  */

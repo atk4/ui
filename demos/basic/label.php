@@ -6,7 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Columns;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsReload;
+use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Label;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Menu;

@@ -7,10 +7,10 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\App;
 use Atk4\Ui\Exception;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsChain;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsFunction;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsFunction;
 
 class JsTest extends TestCase
 {

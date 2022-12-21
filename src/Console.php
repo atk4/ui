@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\DebugTrait;
 use Atk4\Core\TraitUtil;
+use Atk4\Ui\Js\JsExpressionable;
 
 /**
  * Console is a black square component resembling terminal window. It can be programmed

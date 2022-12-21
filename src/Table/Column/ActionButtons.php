@@ -8,7 +8,7 @@ use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
-use Atk4\Ui\JsChain;
+use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\ExecutorInterface;

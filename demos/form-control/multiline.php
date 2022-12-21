@@ -6,9 +6,9 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsFunction;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsFunction;
+use Atk4\Ui\Js\JsToast;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';

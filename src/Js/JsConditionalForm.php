@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Js;
 
 use Atk4\Core\DiContainerTrait;
+use Atk4\Ui\Form;
 
 /**
  * Implements conditions for displaying fields on form.

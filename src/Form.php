@@ -11,6 +11,10 @@ use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Data\Reference\ContainsMany;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Form\Control;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsConditionalForm;
+use Atk4\Ui\Js\JsExpression;
 
 class Form extends View
 {

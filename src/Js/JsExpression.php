@@ -6,6 +6,7 @@ namespace Atk4\Ui\Js;
 
 use Atk4\Core\DiContainerTrait;
 use Atk4\Data\Persistence;
+use Atk4\Ui\Exception;
 
 /**
  * Implements a class that can be mapped into arbitrary JavaScript expression.

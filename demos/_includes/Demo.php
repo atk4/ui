@@ -6,7 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Columns;
 use Atk4\Ui\Exception;
-use Atk4\Ui\JsChain;
+use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\View;
 
 class Demo extends Columns

@@ -7,8 +7,8 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Header;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */

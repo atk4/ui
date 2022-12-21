@@ -7,8 +7,8 @@ namespace Atk4\Ui\VueComponent;
 use Atk4\Data\Model;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
-use Atk4\Ui\JsToast;
 use Atk4\Ui\View;
 
 /**

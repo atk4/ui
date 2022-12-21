@@ -231,7 +231,7 @@ Next example will display DataTable, but will allow you to replace data with a f
         $form->addControl('year');
 
         $form->onSubmit(function (Form $form) use ($p) {
-            return new \Atk4\Ui\JsReload($p, ['year' => $form->model->get('year')]);
+            return new \Atk4\Ui\Js\JsReload($p, ['year' => $form->model->get('year')]);
         });
     });
 

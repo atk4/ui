@@ -460,7 +460,7 @@ which will respond with JavaScript Action for reloading the view::
     $b1->on('click', $b2->jsReload());
 
     // Previously:
-    // $b1->on('click', new \Atk4\Ui\JsReload($b2));
+    // $b1->on('click', new \Atk4\Ui\Js\JsReload($b2));
 
 
 

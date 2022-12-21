@@ -8,8 +8,8 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsReload;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Popup;
 use Atk4\Ui\View;
 

@@ -9,7 +9,7 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Menu;
 use Atk4\Ui\Message;

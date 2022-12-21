@@ -6,7 +6,7 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Form;
-use Atk4\Ui\Jquery;
+use Atk4\Ui\Js\Jquery;
 
 /**
  * Dropdown form control that will based it's list value

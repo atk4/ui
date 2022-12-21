@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-use Atk4\Ui\JsReload;
+use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Label;
 use Atk4\Ui\View;
 

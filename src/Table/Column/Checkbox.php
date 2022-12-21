@@ -6,7 +6,7 @@ namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
 use Atk4\Ui\Exception;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Table;
 
 /**

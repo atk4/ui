@@ -8,8 +8,8 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Grid;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsSortable;
-use Atk4\Ui\JsToast;
 use Atk4\Ui\Lister;
 use Atk4\Ui\View;
 

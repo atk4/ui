@@ -450,7 +450,7 @@ To accomplish that, use a :ref:`virtualpage`::
     \Atk4\Ui\LoremIpsum::addTo($vp, ['size' => 2]);
 
     \Atk4\Ui\Button::addTo($app, ['Dynamic Modal'])
-        ->on('click', new \Atk4\Ui\JsModal('My Popup Title', $vp->getUrl('cut')));
+        ->on('click', new \Atk4\Ui\Js\JsModal('My Popup Title', $vp->getUrl('cut')));
 
 Note that this element is always destroyed as opposed to :php:class:`Modal`,
 where it is only hidden.
@@ -482,7 +482,7 @@ other view::
     $form->onSubmit(function (Form $form) use ($table) {
         $form->model->save();
 
-        return new \Atk4\Ui\JsReload($table);
+        return new \Atk4\Ui\Js\JsReload($table);
     });
 
     $t->setModel($m_book);
@@ -519,7 +519,7 @@ The following will **not** work::
     $table->setModel(clone $model));
 
     $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
-    $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
+    $button->on('click', new \Atk4\Ui\Js\JsModal('JSModal Title', $vp));
 
     $form->onSubmit(function (Form $form) use ($table) {
         $form->model->save();
@@ -544,7 +544,7 @@ Table needs to be first! The following works::
     $form->setModel(clone $model);
 
     $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
-    $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
+    $button->on('click', new \Atk4\Ui\Js\JsModal('JSModal Title', $vp));
 
     $form->onSubmit(function (Form $form) use ($table) {
         $form->model->save();
@@ -578,7 +578,7 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
     });
 
     $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
-    $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
+    $button->on('click', new \Atk4\Ui\Js\JsModal('JSModal Title', $vp));
 
 Note that in no case you will be able to render the button *above* the table (because the button needs a
 reference to `$vp` which references `$table` for reload), so `$button` must be last.

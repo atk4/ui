@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\Jquery;
+
 /**
  * Paginate content using scroll event in JS.
  */

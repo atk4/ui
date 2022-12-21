@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsExpressionable;
-use Atk4\Ui\JsFunction;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsFunction;
 
 class Dropdown extends Input
 {

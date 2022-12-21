@@ -7,6 +7,10 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 
 class Table extends Lister
 {
