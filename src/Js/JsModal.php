@@ -29,7 +29,7 @@ class JsModal extends JsExpression
     }
 
     /**
-     * Set additionnal option for this JsModal.
+     * Set additional option for this JsModal.
      *
      * Valuable option are headerCss and label:
      *  'headerCss' -> customize css class name for the header.

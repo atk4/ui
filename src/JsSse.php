@@ -9,9 +9,6 @@ use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 
-/**
- * Implements a class that can be mapped into arbitrary JavaScript expression.
- */
 class JsSse extends JsCallback
 {
     use HookTrait;
