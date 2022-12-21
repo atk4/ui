@@ -136,9 +136,6 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         return $this;
     }
 
-    /**
-     * Generate js for triggering action.
-     */
     public function jsExecute(array $urlArgs = []): array
     {
         if (!$this->actionInitialized) {

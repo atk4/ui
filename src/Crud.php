@@ -157,6 +157,8 @@ class Crud extends Grid
      * depending on return type, model loaded and action scope.
      *
      * @param string|null $return
+     *
+     * @return array<int, JsExpressionable>
      */
     protected function jsExecute($return, Model\UserAction $action): array
     {

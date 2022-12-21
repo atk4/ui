@@ -218,9 +218,9 @@ class CardDeck extends View
      * Return proper js statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      *
-     * @param string|array|JsExpressionable|Model|null $return
+     * @param string|JsExpressionable|array<int, JsExpressionable>|Model|null $return
      *
-     * @return array|object
+     * @return JsExpressionable|array<int, JsExpressionable>
      */
     protected function jsExecute($return, Model\UserAction $action)
     {
@@ -242,10 +242,9 @@ class CardDeck extends View
     }
 
     /**
-     * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
      */
-    protected function getNotifier(Model\UserAction $action, string $msg = null): object
+    protected function getNotifier(Model\UserAction $action, string $msg = null): JsExpressionable
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {
@@ -257,6 +256,8 @@ class CardDeck extends View
 
     /**
      * Js expression return when action afterHook executor return a Model.
+     *
+     * @return array<int, JsExpressionable>
      */
     protected function jsModelReturn(Model\UserAction $action, string $msg = 'Done!'): array
     {
