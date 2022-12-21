@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui;
+namespace Atk4\Ui\Js;
 
 use Atk4\Core\DiContainerTrait;
 

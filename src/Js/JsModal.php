@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui;
+namespace Atk4\Ui\Js;
 
 /**
  * This class generates action, that will be able to loop-back to the callback method.
