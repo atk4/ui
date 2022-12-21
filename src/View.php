@@ -1021,7 +1021,9 @@ class View extends AbstractView implements JsExpressionable
                 return $action($chain, ...$args);
             }, $arguments);
 
-            $actions[] = $cb;
+            $actions[] = $cb->jsExecute();
+        } elseif ($action instanceof JsCallback) {
+            $actions[] = $action->jsExecute();
         } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof Model\UserAction) {
             // Setup UserAction executor.
             $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->create($action, $this) : $action;
@@ -1044,7 +1046,7 @@ class View extends AbstractView implements JsExpressionable
                 if ($defaults['apiConfig'] ?? null) {
                     $ex->apiConfig = $defaults['apiConfig'];
                 }
-                $actions[] = $ex;
+                $actions[] = $ex->jsExecute();
                 $ex->executeModelAction($arguments);
             } else {
                 throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or extend View and implement UserAction\JsExecutorInterface');

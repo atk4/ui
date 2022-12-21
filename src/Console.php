@@ -131,14 +131,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
         return $this;
     }
 
-    /**
-     * Return JavaScript expression to execute console.
-     *
-     * @return JsExpressionable
-     */
-    public function jsExecute()
+    public function jsExecute(): JsExpressionable
     {
-        return $this->sse;
+        return $this->sse->jsExecute();
     }
 
     private function escapeOutputHtml(string $message): string

@@ -41,7 +41,7 @@ class JsSse extends JsCallback
         }
     }
 
-    public function jsRender(): string
+    public function jsExecute(): JsExpression
     {
         $this->getApp(); // assert has App
 
@@ -53,7 +53,7 @@ class JsSse extends JsCallback
             $options['closeBeforeUnload'] = $this->closeBeforeUnload;
         }
 
-        return (new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)->jsRender();
+        return (new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options);
     }
 
     /**

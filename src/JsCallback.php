@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-class JsCallback extends Callback implements JsExpressionable
+class JsCallback extends Callback
 {
     /** @var array Holds information about arguments passed in to the callback. */
     public $args = [];
@@ -47,7 +47,7 @@ class JsCallback extends Callback implements JsExpressionable
         return $res;
     }
 
-    public function jsRender(): string
+    public function jsExecute(): JsExpression
     {
         $this->getApp(); // assert has App
 
@@ -57,7 +57,7 @@ class JsCallback extends Callback implements JsExpressionable
             'confirm' => $this->confirm,
             'apiConfig' => $this->apiConfig,
             'storeName' => $this->storeName,
-        ])->jsRender();
+        ]);
     }
 
     /**
