@@ -16,8 +16,8 @@ $m->addField('flag', [
         'table' => [
             Table\Column\Flag::class,
             [
-                'code_field' => $m->fieldName()->iso,
-                'name_field' => $m->fieldName()->name,
+                'codeField' => $m->fieldName()->iso,
+                'nameField' => $m->fieldName()->name,
             ],
         ],
     ],
