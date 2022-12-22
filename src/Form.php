@@ -11,6 +11,10 @@ use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Data\Reference\ContainsMany;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Form\Control;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsConditionalForm;
+use Atk4\Ui\Js\JsExpression;
 
 class Form extends View
 {
@@ -163,14 +167,14 @@ class Form extends View
         }
 
         // allow to submit by pressing an enter key when child control is focused
-        $this->on('submit', new JsExpression('if (event.target === this) { $([name]).form("submit"); }', ['name' => '#' . $this->formElement->name]));
+        $this->on('submit', new JsExpression('if (event.target === this) { $([name]).form(\'submit\'); }', ['name' => '#' . $this->formElement->name]));
 
         // Add save button in layout
         if ($this->buttonSave) {
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
             $this->buttonSave->on('click', $this->js(false, null, $this->formElement)->form('submit'));
-            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13){ $([name]).form("submit"); }', ['name' => '#' . $this->formElement->name]));
+            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { $([name]).form(\'submit\'); }', ['name' => '#' . $this->formElement->name]));
         }
     }
 
@@ -259,6 +263,10 @@ class Form extends View
             } catch (ValidationException $e) {
                 $response = [];
                 foreach ($e->errors as $field => $error) {
+                    if (!isset($this->controls[$field])) {
+                        throw $e;
+                    }
+
                     $response[] = $this->error($field, $error);
                 }
 
@@ -285,7 +293,7 @@ class Form extends View
      * @param string $fieldName Field name
      * @param string $str       Error message
      *
-     * @return JsChain|array
+     * @return JsChain|array<int, JsChain>
      */
     public function error($fieldName, $str)
     {
@@ -346,12 +354,12 @@ class Form extends View
     /**
      * Add form control into current layout. If no layout, create one. If no model, create blank one.
      *
-     * @param array|Control $control
-     * @param array|Field   $field
+     * @param array<mixed>|Control $control
+     * @param array<mixed>         $fieldSeed
      */
-    public function addControl(string $name, $control = [], $field = []): Control
+    public function addControl(string $name, $control = [], array $fieldSeed = []): Control
     {
-        return $this->layout->addControl($name, $control, $field);
+        return $this->layout->addControl($name, $control, $fieldSeed);
     }
 
     /**
@@ -403,7 +411,7 @@ class Form extends View
      * 3. $f->type is converted into seed and evaluated
      * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
      *
-     * @param array $ControlSeed
+     * @param array<string, mixed> $ControlSeed
      */
     public function controlFactory(Field $field, $ControlSeed = []): Control
     {
@@ -455,10 +463,9 @@ class Form extends View
     protected array $typeToControl = [
         'boolean' => [Control\Checkbox::class],
         'text' => [Control\Textarea::class],
-        'string' => [Control\Line::class],
-        'datetime' => [Control\Calendar::class, ['type' => 'datetime']],
-        'date' => [Control\Calendar::class, ['type' => 'date']],
-        'time' => [Control\Calendar::class, ['type' => 'time']],
+        'datetime' => [Control\Calendar::class, 'type' => 'datetime'],
+        'date' => [Control\Calendar::class, 'type' => 'date'],
+        'time' => [Control\Calendar::class, 'type' => 'time'],
         'atk4_money' => [Control\Money::class],
     ];
 
@@ -501,9 +508,9 @@ class Form extends View
         parent::renderView();
     }
 
-    protected function renderTemplateToHtml(string $region = null): string
+    protected function renderTemplateToHtml(): string
     {
-        $output = parent::renderTemplateToHtml($region);
+        $output = parent::renderTemplateToHtml();
 
         return $this->fixOwningFormAttrInRenderedHtml($output);
     }
@@ -553,7 +560,9 @@ class Form extends View
         $this->js(true, null, $this->formElement)
             ->api(array_merge(['url' => $this->cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig));
 
-        $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new JsExpression('$(this).attr("name")')));
+        // [name] in selector is to suppress https://github.com/fomantic/Fomantic-UI/commit/facbca003cf0da465af7d44af41462e736d3eb8b
+        // console errors from Multiline/vue fields
+        $this->on('change', '.field input[name], .field textarea[name], .field select[name]', $this->js()->form('remove prompt', new JsExpression('$(this).attr(\'name\')')));
 
         if (!$this->canLeave) {
             $this->js(true, (new JsChain('atk.formService'))->preventFormLeave($this->name));

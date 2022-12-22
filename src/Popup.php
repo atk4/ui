@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+
 /**
  * Implement popup view.
  *
@@ -96,15 +99,6 @@ class Popup extends View
     protected function init(): void
     {
         parent::init();
-
-        if ($this->getOwner() instanceof Menu
-            || $this->getOwner() instanceof MenuItem
-            || $this->getOwner() instanceof Dropdown
-            || $this->getOwner() instanceof Button
-        ) {
-            throw (new Exception('Although it may be tempting to add pop-up into Button/Menu/MenuItem, this may cause some random issues. Add elsewhere and use "triggerBy"'))
-                ->addMoreInfo('owner', $this->getOwner());
-        }
 
         if ($this->triggerOn === null) {
             if ($this->triggerBy instanceof Menu
@@ -213,18 +207,6 @@ class Popup extends View
     }
 
     /**
-     * Setting options using using an array.
-     *
-     * @return $this
-     */
-    public function setOptions(array $options)
-    {
-        $this->popOptions = array_merge($this->popOptions, $options);
-
-        return $this;
-    }
-
-    /**
      * Return js action need to display popup.
      * When a grid is reloading, this method can be call
      * in order to display the popup once again.
@@ -243,7 +225,7 @@ class Popup extends View
         $chain = new Jquery($name);
         $chain->popup($this->popOptions);
         if ($this->stopClickEvent) {
-            $chain->on('click', new JsExpression('function(e) { e.stopPropagation(); }'));
+            $chain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));
         }
 
         return $chain;
@@ -256,7 +238,7 @@ class Popup extends View
         }
 
         if ($this->cb) {
-            $this->setAttr('data-uri', $this->cb->getJsUrl());
+            $this->setAttr('data-url', $this->cb->getJsUrl());
             $this->setAttr('data-cache', $this->useCache ? 'true' : 'false');
         }
 

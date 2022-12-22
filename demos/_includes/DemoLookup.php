@@ -7,9 +7,9 @@ namespace Atk4\Ui\Demos;
 use Atk4\Core\Factory;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsModal;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsModal;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\VirtualPage;
 
 class DemoLookup extends Form\Control\Lookup
@@ -48,7 +48,7 @@ class DemoLookup extends Form\Control\Lookup
 
                 $ret = [
                     new JsToast('Form submit!. Data are not save in demo mode.'),
-                    (new Jquery('.atk-modal'))->modal('hide'),
+                    (new Jquery())->closest('.atk-modal')->modal('hide'),
                 ];
 
                 $row = $this->renderRow($form->model);
@@ -61,6 +61,6 @@ class DemoLookup extends Form\Control\Lookup
         });
 
         $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
-        $this->action->js('click', new JsModal($caption, $vp));
+        $this->action->on('click', new JsModal($caption, $vp));
     }
 }

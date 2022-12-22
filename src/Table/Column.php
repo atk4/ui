@@ -6,9 +6,9 @@ namespace Atk4\Ui\Table;
 
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use Atk4\Ui\Jquery;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\JsCallback;
-use Atk4\Ui\JsExpression;
 use Atk4\Ui\Popup;
 use Atk4\Ui\Table;
 
@@ -164,16 +164,16 @@ class Column
 
         $cb = Column\JsHeader::addTo($this->table);
 
-        $function = 'function(value, text, item) {
-                            if (value === undefined || value === \'\' || value === null) return;
-                            $(this)
-                            .api({
-                                on:\'now\',
-                                url:\'' . $cb->getJsUrl() . '\',
-                                data:{item:value, id:$(this).data(\'menu-id\')}
-                                }
-                            );
-                     }';
+        $function = 'function (value, text, item) {
+            if (value === undefined || value === \'\' || value === null) {
+                return;
+            }
+            $(this).api({
+                on: \'now\',
+                url: \'' . $cb->getJsUrl() . '\',
+                data: { item: value, id: $(this).data(\'menu-id\') }
+            });
+         }';
 
         $chain = new Jquery('#' . $id);
         $chain->dropdown([
@@ -183,7 +183,7 @@ class Column
         ]);
 
         // will stop grid column from being sorted.
-        $chain->on('click', new JsExpression('function(e) { e.stopPropagation(); }'));
+        $chain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));
 
         $this->table->js(true, $chain);
 
@@ -267,7 +267,8 @@ class Column
      */
     public function getHeaderCellHtml(Field $field = null, $value = null): string
     {
-        if ($tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value])) {
+        $tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value]);
+        if ($tags) {
             return reset($tags);
         }
 

@@ -1,5 +1,4 @@
-Feature: UserAction
-  Testing UI executor UserAction and UserConfirmation modal.
+Feature: UserAction executor and UserConfirmation modal
 
   Scenario:
     Given I am on "data-action/jsactions2.php"
@@ -8,7 +7,7 @@ Feature: UserAction
 
   Scenario:
     When I press button "Argument"
-    Then Modal is open with text "Age" in tag "label"
+    Then Modal is open with text "Age" in selector "label"
     When I fill Modal field "age" with "22"
     Then I press Modal button "Argument"
     Then Toast display should contain text "22 is old enough to visit"
@@ -20,7 +19,7 @@ Feature: UserAction
 
   Scenario:
     When I press button "Multi Step"
-    Then Modal is open with text "Age" in tag "label"
+    Then Modal is open with text "Age" in selector "label"
     When I fill Modal field "age" with "22"
     Then I press Modal button "Next"
     Then I press Modal button "Next"
@@ -53,14 +52,14 @@ Feature: UserAction
   Scenario: testing PanelExecutor
     Given I am on "data-action/jsactions-panel.php"
     When I press button "Argument"
-    Then Panel is open with text "Age" in tag "label"
+    Then Panel is open with text "Age" in selector "label"
     When I fill Panel field "age" with "22"
     Then I press Panel button "Argument"
     Then Toast display should contain text "22 is old enough to visit"
 
   Scenario: testing multi in panel
     When I press button "Multi Step"
-    Then Panel is open with text "Age" in tag "label"
+    Then Panel is open with text "Age" in selector "label"
     When I fill Panel field "age" with "22"
     Then I press Panel button "Next"
     Then I press Panel button "Next"

@@ -104,20 +104,20 @@ class Input extends Form\Control
     }
 
     /**
-     * Returns <input ... /> tag.
+     * Returns <input ...> tag.
      *
      * @return string
      */
     public function getInput()
     {
-        return $this->getApp()->getTag('input', array_merge([
+        return $this->getApp()->getTag('input/', array_merge([
             'name' => $this->shortName,
             'type' => $this->inputType,
-            'placeholder' => $this->placeholder,
+            'placeholder' => $this->inputType !== 'hidden' ? $this->placeholder : false,
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readonly' => $this->readOnly,
-            'disabled' => $this->disabled,
+            'readonly' => $this->readOnly && $this->inputType !== 'hidden',
+            'disabled' => $this->disabled && $this->inputType !== 'hidden',
         ], $this->inputAttr));
     }
 

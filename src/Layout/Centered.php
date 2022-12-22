@@ -41,7 +41,7 @@ class Centered extends Layout
     protected function renderView(): void
     {
         if ($this->image) {
-            $this->template->tryDangerouslySetHtml('HeaderImage', '<img class="ui image" src="' . $this->image . '" alt="' . $this->imageAlt . '" />');
+            $this->template->tryDangerouslySetHtml('HeaderImage', $this->getApp()->getTag('img/', ['class' => 'ui image', 'src' => $this->image, 'alt' => $this->imageAlt]));
         }
 
         parent::renderView();

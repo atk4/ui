@@ -1,53 +1,40 @@
+import atk from 'atk';
+
 /**
- * Singleton class
- * This is default setup for Fomantic-UI Popup.
+ * This is default setup for Fomantic-UI popup.
  */
 class PopupService {
-    static getInstance() {
-        return this.instance;
-    }
-
-    constructor() {
-        if (!PopupService.instance) {
-            PopupService.instance = this;
-        }
-
-        return PopupService.instance;
-    }
-
-    setPopups(settings) {
-        settings.onCreate = this.onCreate;
-        settings.onShow = this.onShow;
-        settings.onHide = this.onHide;
-        settings.onVisible = this.onVisible;
-        settings.onRemove = this.onRemove;
+    getDefaultFomanticSettings() {
+        return [
+            {},
+            {
+                onShow: this.onShow,
+            },
+        ];
     }
 
     /**
-     * OnShow callback when a popup is trigger.
-     * Will check if popup need to be setup dynamically using a callback.
-     *
-     * @param $module
+     * Check if popup needs to be setup dynamically using a callback.
      */
     onShow($module) {
         const $popup = this;
         const data = $popup.data();
-        if ((data.uri !== '') && (data.uri !== undefined)) {
-            // Only load if we are not using data.cache or content has not been loaded yet.
+        if (data.url !== '' && data.url !== undefined) {
+            // only load if we are not using data.cache or content has not been loaded yet
             if (!data.cache || !data.hascontent) {
-                // display default loader while waiting for content.
-                $popup.html(atk.popupService.getLoader());
+                // display default loader while waiting for content
+                $popup.html(atk.popupService.getLoaderHtml());
                 $popup.api({
                     on: 'now',
-                    url: data.uri,
+                    url: data.url,
                     method: 'GET',
                     obj: $popup,
                     onComplete: function (response, content) {
                         const result = $popup.html(response.html);
-                        if (!result.length) {
+                        if (result.length === 0) {
                             response.success = false;
                             response.isServiceError = true;
-                            response.message = 'Popup service error: Unable to replace popup content from server response. Empty Content.';
+                            response.message = 'Popup service error: Empty html, unable to replace popup content from server response';
                         } else {
                             response.id = null;
                             $popup.data('hascontent', true);
@@ -58,35 +45,11 @@ class PopupService {
         }
     }
 
-    /**
-     * Call when hidding.
-     */
-    onHide() {}
-
-    onVisible() {}
-
-    /**
-     * Only call when popup are created from metadata
-     * and trigger action is fired.
-     */
-    onCreate() {
-    // console.log('onCreate');
-    }
-
-    /**
-     * Only call if onCreate was called.
-     */
-    onRemove() {
-    // console.log('onRemvoe');
-    }
-
-    getLoader() {
-        return `<div class="ui active inverted dimmer">
-              <div class="ui mini text loader"></div>`;
+    getLoaderHtml() {
+        return '<div class="ui active inverted dimmer">'
+            + '<div class="ui mini text loader"></div>'
+            + '</div>';
     }
 }
 
-const popupService = new PopupService();
-Object.freeze(popupService);
-
-export default popupService;
+export default Object.freeze(new PopupService());

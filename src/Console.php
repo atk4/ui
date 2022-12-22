@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\DebugTrait;
 use Atk4\Core\TraitUtil;
+use Atk4\Ui\Js\JsExpressionable;
 
 /**
  * Console is a black square component resembling terminal window. It can be programmed
@@ -80,7 +81,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
             throw new Exception('Please specify the $callback argument');
         }
 
-        $this->event = $event ?? false;
+        if ($event !== null) {
+            $this->event = $event;
+        }
 
         if (!$this->sse) {
             $this->sse = JsSse::addTo($this);
@@ -116,7 +119,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }
 
             if ($this->issetApp()) {
-                $this->getApp()->logger = $oldLogger; // @phpstan-ignore-line
+                $this->getApp()->logger = $oldLogger;
             }
 
             $this->sseInProgress = false;
@@ -129,20 +132,16 @@ class Console extends View implements \Psr\Log\LoggerInterface
         return $this;
     }
 
-    /**
-     * Return JavaScript expression to execute console.
-     *
-     * @return JsExpressionable
-     */
-    public function jsExecute()
+    public function jsExecute(): JsExpressionable
     {
-        return $this->sse;
+        return $this->sse->jsExecute();
     }
 
     private function escapeOutputHtml(string $message): string
     {
-        $res = $this->getApp()->encodeHtmlAttribute($message);
+        $res = $this->getApp()->encodeHtml($message);
 
+        // TODO assert with Behat test
         // fix new lines for display and copy paste, testcase:
         // $genFx = function (array $values, int $maxLength, array $prev = null) use (&$genFx) {
         //     $res = [];
@@ -192,9 +191,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * @return $this
      */
-    public function outputHtml(string $message, array $context = [])
+    public function outputHtml(string $messageHtml, array $context = [])
     {
-        $this->outputHtmlWithoutPre('<div style="font-family: monospace; white-space: pre;">' . $message . '</div>', $context);
+        $this->outputHtmlWithoutPre($this->getApp()->getTag('div', ['style' => 'font-family: monospace; white-space: pre;'], [$messageHtml]), $context);
 
         return $this;
     }
@@ -204,18 +203,18 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * @return $this
      */
-    protected function outputHtmlWithoutPre(string $message, array $context = [])
+    protected function outputHtmlWithoutPre(string $messageHtml, array $context = [])
     {
-        $message = preg_replace_callback('~{([\w]+)}~', function ($matches) use ($context) {
+        $messageHtml = preg_replace_callback('~{([\w]+)}~', function ($matches) use ($context) {
             if (isset($context[$matches[1]])) {
                 return $context[$matches[1]];
             }
 
             return $matches[0];
-        }, $message);
+        }, $messageHtml);
 
         $this->_outputBypass = true;
-        $this->sse->send($this->js()->append($message));
+        $this->sse->send($this->js()->append($messageHtml));
         $this->_outputBypass = false;
 
         return $this;
@@ -297,7 +296,10 @@ class Console extends View implements \Psr\Log\LoggerInterface
             foreach ($read as $f) {
                 $data = rtrim((string) fgets($f));
                 if ($data === '') {
+                    // TODO fix coverage stability, add test with explicit empty string
+                    // @codeCoverageIgnoreStart
                     continue;
+                    // @codeCoverageIgnoreEnd
                 }
 
                 if ($f === $pipes[2]) { // stderr
@@ -388,7 +390,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
                     $object->getApp()->logger = $loggerBak; // @phpstan-ignore-line
                 }
                 if (TraitUtil::hasTrait($object, DebugTrait::class)) {
-                    $object->debug = $debugBak; // @phpstan-ignore-line
+                    $object->debug = $debugBak;
                 }
             }
         } else {

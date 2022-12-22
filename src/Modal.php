@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpressionable;
+
 /**
  * This class add modal dialog to a page.
  *
  * Modal are added to the layout but their content is hidden by default.
- * $modal->show() is the triggered needed to actually display the modal.
+ * $modal->jsShow() is the triggered needed to actually display the modal.
  *
  * Modal can be use as a regular view, simply by adding other view to it.
  *  Message::addTo($modal, ['title' => 'Welcome to Agile Toolkit'])->text('Your text here');
@@ -20,12 +23,10 @@ namespace Atk4\Ui;
  *
  * Modal can use Fomantic-UI predefine method onApprove or onDeny by passing
  * a jsAction to Modal::addDenyAction or Modal::addApproveAction method. It will not close until the jsAction return true.
- *  $modal->addDenyAction('No', new JsExpression('function() { window.alert("Can\'t do that."); return false; }'));
- *  $modal->addApproveAction('Yes', new JsExpression('function() { window.alert("You\'re good to go!"); }'));
+ *  $modal->addDenyAction('No', new JsExpression('function () { window.alert(\'Cannot do that.\'); return false; }'));
+ *  $modal->addApproveAction('Yes', new JsExpression('function () { window.alert(\'You are good to go!\'); }'));
  *
  * You may also prevent modal from closing via the esc or dimmed area click using $modal->notClosable().
- *
- * Some helper methods are also available to set: transition time, transition type or modal settings from Fomantic-UI.
  */
 class Modal extends View
 {
@@ -124,20 +125,20 @@ class Modal extends View
     }
 
     /**
-     * Set modal to show on page.
-     * Will trigger modal to be show on page.
-     * ex: $button->on('click', $modal->show());.
+     * Show modal on page.
+     *
+     * Example: $button->on('click', $modal->jsShow());
      *
      * @return JsChain
      */
-    public function show(array $args = [])
+    public function jsShow(array $args = [])
     {
-        $js_chain = $this->js();
+        $chain = $this->js();
         if ($args !== []) {
-            $js_chain->data(['args' => $args]);
+            $chain->data(['args' => $args]);
         }
 
-        return $js_chain->modal('show');
+        return $chain->modal('show');
     }
 
     /**
@@ -145,7 +146,7 @@ class Modal extends View
      *
      * @return JsChain
      */
-    public function hide()
+    public function jsHide()
     {
         return $this->js()->modal('hide');
     }
@@ -160,38 +161,7 @@ class Modal extends View
      */
     public function setOption($option, $value)
     {
-        $this->options['modal_option'][$option] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Set modal options passing an array.
-     *
-     * @param array<string, mixed> $options
-     *
-     * @return $this
-     */
-    public function setOptions($options)
-    {
-        if (isset($this->options['modal_option'])) {
-            $this->options['modal_option'] = array_merge($this->options['modal_option'], $options);
-        } else {
-            $this->options['modal_option'] = $options;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Whether any change in modal DOM should automatically refresh cached positions.
-     * Allow modal window to add scrolling when adding content dynamically after modal creation.
-     *
-     * @return $this
-     */
-    public function observeChanges()
-    {
-        $this->setOptions(['observeChanges' => true]);
+        $this->options[$option] = $value;
 
         return $this;
     }
@@ -209,49 +179,6 @@ class Modal extends View
     }
 
     /**
-     * Set modal transition.
-     *
-     * @param string $transitionType
-     *
-     * @return $this
-     */
-    public function transition($transitionType)
-    {
-        $this->settings('transition', $transitionType);
-
-        return $this;
-    }
-
-    /**
-     * Set modal transition duration.
-     *
-     * @param float|int $time
-     *
-     * @return $this
-     */
-    public function duration($time)
-    {
-        $this->settings('duration', $time);
-
-        return $this;
-    }
-
-    /**
-     * Add modal settings.
-     *
-     * @param string $settingOption
-     * @param mixed  $value
-     *
-     * @return $this
-     */
-    public function settings($settingOption, $value)
-    {
-        $this->options['setting'][$settingOption] = $value;
-
-        return $this;
-    }
-
-    /**
      * Add a deny action to modal.
      *
      * @param string           $label
@@ -264,7 +191,7 @@ class Modal extends View
         $button = new Button();
         $button->set($label)->addClass('red cancel');
         $this->addButtonAction($button);
-        $this->options['modal_option']['onDeny'] = $jsAction;
+        $this->options['onDeny'] = $jsAction;
 
         return $this;
     }
@@ -282,7 +209,7 @@ class Modal extends View
         $b = new Button();
         $b->set($label)->addClass('green ok');
         $this->addButtonAction($b);
-        $this->options['modal_option']['onApprove'] = $jsAction;
+        $this->options['onApprove'] = $jsAction;
 
         return $this;
     }
@@ -309,7 +236,7 @@ class Modal extends View
      */
     public function notClosable()
     {
-        $this->options['modal_option']['closable'] = false;
+        $this->options['closable'] = false;
 
         return $this;
     }
@@ -318,11 +245,15 @@ class Modal extends View
     {
         $data = [];
         $data['type'] = $this->type;
-        $data['label'] = $this->loadingLabel;
+        $data['loadingLabel'] = $this->loadingLabel;
 
         if ($this->title) {
             $this->template->trySet('title', $this->title);
             $this->template->trySet('headerCss', $this->headerCss);
+        } else {
+            // fix top modal corner rounding, first div must not be empty (must not be lower than 5px)
+            // https://github.com/fomantic/Fomantic-UI/blob/2.9.0/src/definitions/modules/modal.less#L43
+            $this->template->loadFromString(preg_replace('~<div class="\{\$headerCss\}">\{\$title\}</div>\s*~', '', $this->template->toLoadableString(), 1));
         }
 
         if ($this->contentCss) {
@@ -330,29 +261,21 @@ class Modal extends View
         }
 
         if ($this->fx !== null) {
-            $data['uri'] = $this->cb->getJsUrl();
+            $data['url'] = $this->cb->getJsUrl();
         }
 
         if (!$this->showActions) {
             $this->template->del('ActionContainer');
         }
 
-        // call modal creation first
-        if (isset($this->options['modal_option'])) {
-            $this->js(true)->modal($this->options['modal_option']);
-        } else {
-            $this->js(true)->modal();
-        }
+        $this->js(true)->modal($this->options);
 
-        // add setting if available.
-        if (isset($this->options['setting'])) {
-            foreach ($this->options['setting'] as $key => $value) {
-                $this->js(true)->modal('setting', $key, $value);
-            }
-        }
-
-        if (!isset($this->options['modal_option']['closable']) || $this->options['modal_option']['closable']) {
+        if (!isset($this->options['closable']) || $this->options['closable']) {
             $this->template->trySet('closeIcon', 'close');
+        } else {
+            // fix no extra space for icon
+            // TODO should be replaced with i tag render
+            $this->template->loadFromString(preg_replace('~<i class="\{\$closeIcon\} icon"></i>~', '', $this->template->toLoadableString(), 1));
         }
 
         if ($this->args) {

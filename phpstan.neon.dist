@@ -23,13 +23,13 @@ parameters:
         # for level = 2
         -
             path: 'demos/_includes/Demo.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::initHighlighting\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::initHighlighting\(\)\.$~'
         -
             path: 'demos/collection/grid.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\ExecutorInterface::onHook\(\)\.$~'
         -
             path: 'demos/collection/multitable.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\Jquery::remove\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\Js\\Jquery::remove\(\)\.$~'
         -
             path: 'demos/collection/tablefilter.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Demos\\Country::expr\(\)\.$~'
@@ -118,9 +118,6 @@ parameters:
             path: 'demos/interactive/wizard.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$placeholder\.$~'
         -
-            path: 'src/Card.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\View::setAction\(\)\.$~'
-        -
             path: 'src/CardDeck.php'
             message: '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$reload\.$~'
         -
@@ -146,22 +143,22 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::addButton\(\)\.$~'
         -
             path: 'src/Form.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::preventFormLeave\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::preventFormLeave\(\)\.$~'
         -
             path: 'src/Form/Control/Calendar.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Jquery::\$_flatpickr\.$~'
+            message: '~^Access to an undefined property Atk4\\Ui\\Js\\Jquery::\$_flatpickr\.$~'
         -
             path: 'src/Form/Control/Checkbox.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Jquery::\$checked\.$~'
+            message: '~^Access to an undefined property Atk4\\Ui\\Js\\Jquery::\$checked\.$~'
         -
-            path: 'src/JsVueService.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::createAtkVue\(\)\.$~'
+            path: 'src/Form/Control/Multiline.php'
+            message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'
         -
-            path: 'src/JsVueService.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::createVue\(\)\.$~'
+            path: 'src/Js/JsVueService.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::createAtkVue\(\)\.$~'
         -
-            path: 'src/JsVueService.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::useComponent\(\)\.$~'
+            path: 'src/Js/JsVueService.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::createVue\(\)\.$~'
         -
             path: 'src/Menu.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setElement\(\)\.$~'
@@ -170,13 +167,13 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::addClass\(\)\.$~'
         -
             path: 'src/Panel/Right.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::openPanel\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::openPanel\(\)\.$~'
         -
             path: 'src/Panel/Right.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::reloadPanel\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::reloadPanel\(\)\.$~'
         -
             path: 'src/Panel/Right.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::closePanel\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::closePanel\(\)\.$~'
         -
             path: 'src/Panel/Right.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::addButtonAction\(\)\.$~'
@@ -188,7 +185,7 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\Panel\\LoadableContent::getClearSelector\(\)\.$~'
         -
             path: 'src/Panel/Right.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::addPanel\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::addPanel\(\)\.$~'
         -
             path: 'src/SessionTrait.php'
             count: 4
@@ -225,16 +222,13 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setElement\(\)\.$~'
         -
             path: 'src/View.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::emit\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::emit\(\)\.$~'
         -
             path: 'src/View.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::clearData\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::clearData\(\)\.$~'
         -
             path: 'src/View.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\JsChain::addJsonData\(\)\.$~'
-        -
-            path: 'src/View.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\App::jsReady\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::addJsonData\(\)\.$~'
         -
             path: 'src/View.php'
             message: '~^Call to an undefined method Atk4\\Ui\\App::getViewJS\(\)\.$~'

@@ -6,7 +6,7 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
-use Atk4\Ui\Jquery;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
 
@@ -47,18 +47,18 @@ class TreeItemSelector extends Form\Control
      * Only the id value, from a single node, are returned i.e. not the group id value.
      *
      * Each item may have it's own children by adding nodes children to it.
-     *   $items = [
-     *       ['name' => 'Electronics', 'id' => 'P100', 'nodes' => [
-     *           ['name' => 'Phone', 'id' => 'P100', 'nodes' => [
-     *               ['name' => 'iPhone', 'id' => 502],
-     *               ['name' => 'Google Pixels', 'id' => 503],
-     *           ]],
-     *           ['name' => 'Tv', 'id' => 501],
-     *           ['name' => 'Radio', 'id' => 601],
-     *       ]],
-     *       ['name' => 'Cleaner', 'id' => 201],
-     *       ['name' => 'Appliances', 'id' => 301],
-     *   ];
+     * $items = [
+     *     ['name' => 'Electronics', 'id' => 'P100', 'nodes' => [
+     *         ['name' => 'Phone', 'id' => 'P100', 'nodes' => [
+     *             ['name' => 'iPhone', 'id' => 502],
+     *             ['name' => 'Google Pixels', 'id' => 503],
+     *         ]],
+     *         ['name' => 'Tv', 'id' => 501],
+     *         ['name' => 'Radio', 'id' => 601],
+     *     ]],
+     *     ['name' => 'Cleaner', 'id' => 201],
+     *     ['name' => 'Appliances', 'id' => 301],
+     * ];
      *
      * When adding nodes array into an item, it will automatically be treated as a group unless empty.
      *
@@ -76,14 +76,14 @@ class TreeItemSelector extends Form\Control
         $this->addClass(['ui', 'vertical', 'segment', 'basic', $this->loaderCssName])->addStyle(['padding' => '0px!important']);
 
         if (!$this->itemSelectorTemplate) {
-            $this->itemSelectorTemplate = new HtmlTemplate('<div id="{$_id}" class="ui list" style="margin-left: 16px"><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
+            $this->itemSelectorTemplate = new HtmlTemplate('<div id="{$_id}" class="ui list" style="margin-left: 16px;"><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
         $this->itemSelector = View::addTo($this, ['template' => $this->itemSelectorTemplate]);
     }
 
     /**
-     * Provide a function to be execute when clicking an item in tree selector.
+     * Provide a function to be executed when clicking an item in tree selector.
      * The executing function will receive an array with item state in it
      * when allowMultiple is true or a single value when false.
      */
@@ -110,17 +110,16 @@ class TreeItemSelector extends Form\Control
     }
 
     /**
-     * Returns <input ... /> tag.
+     * Returns <input ...> tag.
      *
      * @return string
      */
     public function getInput()
     {
-        return $this->getApp()->getTag('input', [
+        return $this->getApp()->getTag('input/', [
             'name' => $this->shortName,
             'type' => 'hidden',
             'value' => $this->getValue(),
-            'readonly' => true,
         ]);
     }
 
@@ -138,7 +137,7 @@ class TreeItemSelector extends Form\Control
 
         $this->itemSelector->template->tryDangerouslySetHtml('Input', $this->getInput());
 
-        $this->itemSelector->vue('atk-tree-item-selector', [
+        $this->itemSelector->vue('AtkTreeItemSelector', [
             'item' => ['id' => 'atk-root', 'nodes' => $this->treeItems],
             'values' => [], // need empty for Vue reactivity.
             'field' => $this->shortName,

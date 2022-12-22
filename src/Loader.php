@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\JsChain;
+
 /**
  * Dynamically render it's content.
  * To provide content for a loader, use set() callback.
@@ -45,7 +47,7 @@ class Loader extends View
         parent::init();
 
         if (!$this->shim) { // @phpstan-ignore-line
-            $this->shim = [View::class, 'class' => ['padded segment'], 'style' => ['min-height' => '7em']];
+            $this->shim = [View::class, 'class' => ['padded segment'], 'style' => ['min-height' => '5em']];
         }
 
         if (!$this->cb) { // @phpstan-ignore-line
@@ -108,15 +110,15 @@ class Loader extends View
      *
      * @param string $storeName
      *
-     * @return mixed
+     * @return JsChain
      */
     public function jsLoad(array $args = [], array $apiConfig = [], $storeName = null)
     {
         return $this->js()->atkReloadView([
-            'uri' => $this->cb->getUrl(),
-            'uri_options' => $args,
+            'url' => $this->cb->getUrl(),
+            'urlOptions' => $args,
             'apiConfig' => $apiConfig !== [] ? $apiConfig : null,
-            'storeName' => $storeName ? $storeName : null,
+            'storeName' => $storeName,
         ]);
     }
 }

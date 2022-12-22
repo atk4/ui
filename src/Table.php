@@ -7,6 +7,10 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 
 class Table extends Lister
 {
@@ -210,7 +214,9 @@ class Table extends Lister
             $col = $this->getColumn($colName);
             if ($col) {
                 $pop = $col->addPopup(new Table\Column\FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
-                $pop->isFilterOn() ? $col->setHeaderPopupIcon('table-filter-on') : null;
+                if ($pop->isFilterOn()) {
+                    $col->setHeaderPopupIcon('table-filter-on');
+                }
                 // apply condition according to popup form.
                 $this->model = $pop->setFilterCondition($this->model);
             }
@@ -296,13 +302,8 @@ class Table extends Lister
     /**
      * Make columns resizable by dragging column header.
      *
-     * The callback param function will receive two parameter, a jQuery chain object and a json string containing all table columns
-     * name and size. To retrieve columns width, simply json decode the $widths param in your callback function.
-     * ex:
-     *  $table->resizableColumn(function (Jquery $j, string $w) {
-     *       // do somethings with columns width
-     *       $columns = $this->getApp()->decodeJson($w);
-     *   });
+     * The callback function will receive two parameter, a Jquery chain object and a array containing all table columns
+     * name and size.
      *
      * @param \Closure        $fx             a callback function with columns widths as parameter
      * @param array<int, int> $widths         ex: [100, 200, 300, 100]
@@ -310,22 +311,22 @@ class Table extends Lister
      *
      * @return $this
      */
-    public function resizableColumn($fx = null, $widths = null, $resizerOptions = null)
+    public function resizableColumn($fx = null, $widths = null, $resizerOptions = [])
     {
         $options = [];
         if ($fx instanceof \Closure) {
             $cb = JsCallback::addTo($this);
-            $cb->set($fx, ['widths' => 'widths']);
-            $options['uri'] = $cb->getJsUrl();
+            $cb->set(function (Jquery $chain, string $data) use ($fx) {
+                return $fx($chain, $this->getApp()->decodeJson($data));
+            }, ['widths' => 'widths']);
+            $options['url'] = $cb->getJsUrl();
         }
 
-        if ($widths) {
+        if ($widths !== null) {
             $options['widths'] = $widths;
         }
 
-        if ($resizerOptions) {
-            $options = array_merge($options, $resizerOptions);
-        }
+        $options = array_merge($options, $resizerOptions);
 
         $this->js(true, $this->js()->atkColumnResizer($options));
 
@@ -535,7 +536,7 @@ class Table extends Lister
      */
     public function jsRow()
     {
-        return (new Jquery(new JsExpression('this')))->closest('tr');
+        return (new Jquery())->closest('tr');
     }
 
     /**
@@ -544,7 +545,7 @@ class Table extends Lister
      * @param string $id         the model id where row need to be removed
      * @param string $transition the transition effect
      *
-     * @return mixed
+     * @return Jquery
      */
     public function jsRemoveRow($id, $transition = 'fade left')
     {

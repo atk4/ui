@@ -72,7 +72,7 @@ class Link extends Table\Column
 
     /**
      * Set html5 target attribute in tag
-     * possible values : _blank | _parent | _self | _top | frame#name.
+     * possible values: _blank | _parent | _self | _top | frame#name.
      *
      * @var string|null
      */
@@ -113,13 +113,19 @@ class Link extends Table\Column
 
     public function getDataCellTemplate(Field $field = null): string
     {
-        $download = $this->forceDownload ? ' download="true" ' : '';
-        $external = $this->target ? ' target="' . $this->target . '" ' : '';
+        $attr = ['href' => '{$c_' . $this->shortName . '}'];
+
+        if ($this->forceDownload) {
+            $attr['download'] = 'true';
+        }
+
+        if ($this->target) {
+            $attr['target'] = $this->target;
+        }
 
         $icon = '';
-
         if ($this->icon) {
-            $icon = '<i class="icon ' . $this->icon . '"></i>';
+            $icon = $this->getApp()->getTag('i', ['class' => $this->icon . ' icon'], '');
         }
 
         $label = '';
@@ -127,12 +133,11 @@ class Link extends Table\Column
             $label = $field ? ('{$' . $field->shortName . '}') : '[Link]';
         }
 
-        $class = '';
         if ($this->class) {
-            $class = ' class="' . $this->class . '" ';
+            $attr['class'] = $this->class;
         }
 
-        return '<a href="{$c_' . $this->shortName . '}"' . $external . $class . $download . '>' . $icon . '' . $label . '</a>';
+        return $this->getApp()->getTag('a', $attr, [$icon, $label]); // TODO $label is not HTML encoded
     }
 
     public function getHtmlTags(Model $row, ?Field $field): array
@@ -146,7 +151,7 @@ class Link extends Table\Column
         $p = $this->page ?? [];
 
         foreach ($this->args as $key => $val) {
-            if (is_numeric($key)) {
+            if (is_int($key)) {
                 $key = $val;
             }
 

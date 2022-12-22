@@ -6,7 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Breadcrumb;
 use Atk4\Ui\Form;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Table;
 use Atk4\Ui\View;
 
@@ -14,7 +14,8 @@ use Atk4\Ui\View;
 require_once __DIR__ . '/../init-app.php';
 
 $crumb = Breadcrumb::addTo($app);
-$crumb->addCrumb('UI Demo', ['index']);
+$crumb->addCrumb('UI Demo', '..');
+$crumb->addCrumb('Basics', '.');
 $crumb->addCrumb('Breadcrumb Demo', ['breadcrumb']);
 
 View::addTo($app, ['ui' => 'divider']);
@@ -24,7 +25,8 @@ $crumb->addCrumb('Countries', []);
 $model = new Country($app->db);
 $model->setLimit(15);
 
-if ($id = $crumb->stickyGet('country_id')) {
+$id = $crumb->stickyGet('country_id');
+if ($id) {
     // perhaps we edit individual country?
     $model = $model->load($id);
     $crumb->addCrumb($model->name, []);

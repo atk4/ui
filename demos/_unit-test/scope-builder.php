@@ -17,7 +17,7 @@ $model = new Stat($app->db, ['caption' => 'Demo Stat']);
 
 $project = new Condition($model->fieldName()->project_name, Condition::OPERATOR_REGEXP, '[a-zA-Z]');
 $brazil = new Condition($model->fieldName()->client_country_iso, '=', 'BR');
-$start = new Condition($model->fieldName()->start_date, '=', '2020-10-22');
+$start = new Condition($model->fieldName()->start_date, '=', '2020-10-22'); // TODO php/DateTime value should be supported
 $finish = new Condition($model->fieldName()->finish_time, '!=', '22:22');
 $isCommercial = new Condition($model->fieldName()->is_commercial, '0');
 $budget = new Condition($model->fieldName()->project_budget, '>=', '1000');

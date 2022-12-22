@@ -353,7 +353,7 @@ class DemosTest extends TestCase
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
-            static::assertTrue(true);
+            static::assertTrue(true); // @phpstan-ignore-line
 
             return;
         }
@@ -398,7 +398,7 @@ class DemosTest extends TestCase
         if (static::class === self::class) {
             if ($expectedExceptionMessage !== null) {
                 if (str_contains($path, '=m2_cb&')) {
-                    static::assertTrue(true);
+                    static::assertTrue(true); // @phpstan-ignore-line
 
                     return;
                 }
@@ -439,7 +439,7 @@ class DemosTest extends TestCase
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
-            static::assertTrue(true);
+            static::assertTrue(true); // @phpstan-ignore-line
 
             return;
         }
@@ -470,20 +470,6 @@ class DemosTest extends TestCase
             '_unit-test/post.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_submit=ajax&' . Callback::URL_QUERY_TARGET . '=test_submit',
             [
                 'f1' => 'v1',
-            ],
-        ];
-
-        // for JsNotify coverage
-        $files[] = [
-            'obsolete/notify2.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_notify=ajax&' . Callback::URL_QUERY_TARGET . '=test_notify',
-            [
-                'text' => 'This text will appear in notification',
-                'icon' => 'warning sign',
-                'color' => 'green',
-                'transition' => 'jiggle',
-                'width' => '25%',
-                'position' => 'topRight',
-                'attach' => 'Body',
             ],
         ];
 

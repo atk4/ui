@@ -311,7 +311,7 @@ class Stat extends ModelWithPrefixedFields
 
 class Percent extends Field
 {
-    public ?string $type = 'float';
+    public string $type = 'float';
 }
 
 /**
@@ -487,5 +487,65 @@ class Product extends ModelWithPrefixedFields
         $this->hasOne($this->fieldName()->product_sub_category_id, [
             'model' => [SubCategory::class],
         ])->addTitle();
+    }
+}
+
+/**
+ * @property string    $item       @Atk4\Field()
+ * @property \DateTime $inv_date   @Atk4\Field()
+ * @property \DateTime $inv_time   @Atk4\Field()
+ * @property Country   $country_id @Atk4\RefOne()
+ * @property int       $qty        @Atk4\Field()
+ * @property int       $box        @Atk4\Field()
+ * @property int       $total_sql  @Atk4\Field()
+ * @property int       $total_php  @Atk4\Field()
+ */
+class MultilineItem extends ModelWithPrefixedFields
+{
+    public $table = 'multiline_item';
+
+    protected function init(): void
+    {
+        parent::init();
+
+        $this->addField($this->fieldName()->item, ['required' => true]);
+        $this->addField($this->fieldName()->inv_date, ['type' => 'date']);
+        $this->addField($this->fieldName()->inv_time, ['type' => 'time']);
+        $this->hasOne($this->fieldName()->country_id, [
+            'model' => [Country::class],
+        ]);
+        $this->addField($this->fieldName()->qty, ['type' => 'integer', 'required' => true]);
+        $this->addField($this->fieldName()->box, ['type' => 'integer', 'required' => true]);
+        $this->addExpression($this->fieldName()->total_sql, [
+            'expr' => function (Model /* TODO self is not working bacause of clone in Multiline */ $row) {
+                return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore-line
+            },
+            'type' => 'integer',
+        ]);
+        $this->addCalculatedField($this->fieldName()->total_php, [
+            'expr' => function (self $row) {
+                return $row->qty * $row->box;
+            },
+            'type' => 'integer',
+        ]);
+    }
+}
+
+/**
+ * @property string        $name    @Atk4\Field()
+ * @property Country       $country @Atk4\RefOne()
+ * @property MultilineItem $items   @Atk4\RefMany()
+ */
+class MultilineDelivery extends ModelWithPrefixedFields
+{
+    public $table = 'multiline_delivery';
+
+    protected function init(): void
+    {
+        parent::init();
+
+        $this->addField($this->fieldName()->name, ['required' => true]);
+        $this->containsOne($this->fieldName()->country, ['model' => [Country::class]]);
+        $this->containsMany($this->fieldName()->items, ['model' => [MultilineItem::class]]);
     }
 }

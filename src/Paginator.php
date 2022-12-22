@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsReload;
+
 class Paginator extends View
 {
     public $ui = 'pagination menu';
@@ -39,7 +42,7 @@ class Paginator extends View
 
     /**
      * Add extra parameter to the reload view
-     * as JsReload uri_options.
+     * as JsReload urlOptions.
      */
     public array $reloadArgs = [];
 
@@ -151,7 +154,7 @@ class Paginator extends View
 
     /**
      * Add extra argument to the reload view.
-     * These arguments will be set as uri_options to JsReload.
+     * These arguments will be set as urlOptions to JsReload.
      *
      * @param array $args
      */
@@ -200,7 +203,7 @@ class Paginator extends View
         }
 
         if ($this->reload) {
-            $this->on('click', '.item', new JsReload($this->reload, array_merge([$this->urlTrigger => new JsExpression('$(this).data("page")')], $this->reloadArgs)));
+            $this->on('click', '.item', new JsReload($this->reload, array_merge([$this->urlTrigger => new JsExpression('$(this).data(\'page\')')], $this->reloadArgs)));
         }
 
         parent::renderView();

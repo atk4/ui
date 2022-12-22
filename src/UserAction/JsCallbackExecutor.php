@@ -6,10 +6,10 @@ namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
-use Atk4\Ui\Jquery;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
-use Atk4\Ui\JsExpressionable;
-use Atk4\Ui\JsToast;
 use Atk4\Ui\View;
 
 /**
@@ -63,14 +63,19 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
                 $_POST['c0'] ?? $_POST['id'] ?? $_POST[$this->action->getModel()->idField] ?? null
             );
             if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-                $this->action = $this->action->getActionForEntity($this->action->getModel()->load($id));
+                if ($this->action->isOwnerEntity() && $this->action->getEntity()->getId()) {
+                    $this->action->getEntity()->setId($id); // assert ID is the same
+                } else {
+                    $this->action = $this->action->getActionForEntity($this->action->getModel()->load($id));
+                }
             } elseif (!$this->action->isOwnerEntity()
                 && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)
             ) {
                 $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
             }
 
-            if ($errors = $this->_hasAllArguments()) {
+            $errors = $this->_hasAllArguments();
+            if ($errors) {
                 $js = new JsToast(['title' => 'Error', 'message' => 'Missing Arguments: ' . implode(', ', $errors), 'class' => 'error']);
             } else {
                 $args = [];

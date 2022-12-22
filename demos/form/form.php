@@ -10,7 +10,7 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Tabs;
@@ -149,6 +149,7 @@ Header::addTo($tab, ['Form handles errors', 'size' => 2]);
 
 $form = Form::addTo($tab);
 $form->addControl('email');
+$form->buttonSave->set('SaveE1');
 $form->onSubmit(function (Form $form) {
     $o = new \stdClass();
 
@@ -159,24 +160,26 @@ Header::addTo($tab, ['Form shows Agile exceptions', 'size' => 2]);
 
 $form = Form::addTo($tab);
 $form->addControl('email');
+$form->buttonSave->set('SaveE2');
 $form->onSubmit(function (Form $form) {
-    throw (new CoreException('testing'))
+    throw (new CoreException('Test exception I.'))
         ->addMoreInfo('arg1', 'val1');
 
     // return 'somehow it did not crash';
 });
 
-Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', Modal::addTo($form)
-    ->set(function (View $p) {
+Button::addTo($form, ['Modal Test', 'class.secondary' => true])
+    ->on('click', Modal::addTo($form)->set(function (View $p) {
         $form = Form::addTo($p);
+        $form->name = 'mf';
         $form->addControl('email');
         $form->onSubmit(function (Form $form) {
-            throw (new CoreException('testing'))
+            throw (new CoreException('Test exception II.'))
                 ->addMoreInfo('arg1', 'val1');
 
             // return 'somehow it did not crash';
         });
-    })->show());
+    })->jsShow());
 
 // -----------------------------------------------------------------------------
 

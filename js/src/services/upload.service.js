@@ -1,43 +1,34 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
 
 /**
- * Singleton class
- * Allow to upload files to server via Fomantic-UI api.
+ * Allow to upload files to server via Fomantic-UI API.
  */
 class UploadService {
-    static getInstance() {
-        return this.instance;
-    }
-
-    constructor() {
-        if (!UploadService.instance) {
-            UploadService.instance = this;
-        }
-
-        return UploadService.instance;
-    }
-
     /**
      * Will upload a FileList object to server.
      * Each file in FileList will be include in formData as
      * 'file-(number)' param, except for the first one which will
      * be set to 'file' only.
      *
-     * @param files         A FileList object.
-     * @param el            the jQuery element to attach to Fomantic-UI api.
-     * @param data          Extra data to pass with files.
-     * @param uploadUrl     the url that handle upload.
-     * @param completeCb    the callback for Fomantic-UI api.onComplete.
-     * @param xhrCb         the xhr function to pass to server.
+     * @param {FileList} files
+     * @param {$}        element    the jQuery element to attach to Fomantic-UI api.
+     * @param {object}   data       Extra data to pass with files.
+     * @param {string}   uploadUrl  the URL that handle upload.
+     * @param {Function} completeCb the callback for Fomantic-UI api.onComplete.
+     * @param {Function} xhrCb      the xhr function to pass to server.
      */
-    uploadFiles(files, element,
-        data = [],
+    uploadFiles(
+        files,
+        element,
+        data,
         uploadUrl,
-        completeCb = function (r, c) {}, xhrCb = function () { return new window.XMLHttpRequest(); }) {
+        completeCb = function (r, c) {},
+        xhrCb = function () { return new window.XMLHttpRequest(); }
+    ) {
         const formData = new FormData();
 
         for (let i = 0; i < files.length; i++) {
-            const param = (i === 0) ? 'file' : 'file-' + i;
+            const param = i === 0 ? 'file' : 'file-' + i;
             formData.append(param, files.item(i));
         }
 
@@ -62,7 +53,4 @@ class UploadService {
     }
 }
 
-const uploadService = new UploadService();
-Object.freeze(uploadService);
-
-export default uploadService;
+export default Object.freeze(new UploadService());

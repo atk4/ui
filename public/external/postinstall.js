@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const walkFilesSync = function (f, callback) {
     if (fs.lstatSync(f).isDirectory()) {
@@ -19,42 +19,34 @@ const updateFileSync = function (f, callback) {
 
 // move node_modules/ files to parent directory
 if (fs.existsSync(path.join(__dirname, 'node_modules/jquery'))) {
-    fs.readdirSync(path.join(__dirname, 'node_modules')).forEach((f2) => {
+    for (const f2 of fs.readdirSync(path.join(__dirname, 'node_modules'))) {
         fs.renameSync(
             path.join(path.join(__dirname, 'node_modules'), f2),
             path.join(__dirname, f2),
         );
-    });
+    }
     fs.rmdirSync(path.join(__dirname, 'node_modules'));
-}
-
-// copy non-minified JS to make it available from the same directory as the minified version
-if (fs.existsSync(path.join(__dirname, 'form-serializer/jquery.serialize-object.js'))) {
-    fs.renameSync(
-        path.join(__dirname, 'form-serializer/jquery.serialize-object.js'),
-        path.join(__dirname, 'form-serializer/dist/jquery.serialize-object.js'),
-    );
 }
 
 const cssUrlPattern = '((?<!\\w)url\\([\'"]?(?!data:))((?:[^(){}\\\\\'"]|\\\\.)*)([\'"]?\\))';
 
-// use native font stack in Fomantic UI
-// remove once https://github.com/fomantic/Fomantic-UI/issues/2355 is implemented and released
+// use native font stack in Fomantic-UI
+// https://github.com/fomantic/Fomantic-UI/issues/2355
 walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
     updateFileSync(f, (data) => {
         if (!f.endsWith('.css')) {
             return;
         }
 
-        data = data.replace(new RegExp('@import ' + cssUrlPattern + ';?', 'g'), (m, m1, m2, m3) => {
-            if (m2.startsWith('https://fonts.googleapis.com/css2?family=Lato:')) {
+        data = data.replace(new RegExp('\\s*@font-face\\s*\\{[^{}]*' + cssUrlPattern + '[^{}]+\\}', 'g'), (m, m1, m2, m3) => {
+            if (m2.includes('/assets/fonts/Lato')) {
                 return '';
             }
 
             return m;
         });
 
-        data = data.replace(/(font-family: *)([^{};]*)(;?)/g, (m, m1, m2, m3) => {
+        data = data.replace(/(font-family: *)([^;{}]*)(;?)/g, (m, m1, m2, m3) => {
             // based on https://github.com/twbs/bootstrap/blob/v5.1.3/scss/_variables.scss#L577
             const fontFamilySansSerif = [
                 'system-ui',
@@ -70,7 +62,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
                 '\'Segoe UI Emoji\'',
                 '\'Segoe UI Symbol\'',
                 '\'Noto Color Emoji\'',
-            ].join(f.match(/\.min\./) ? ',' : ', ');
+            ].join(/\.min\./.test(f) ? ',' : ', ');
             // based on https://github.com/twbs/bootstrap/blob/v5.1.3/scss/_variables.scss#L578
             const fontFamilySansMonospace = [
                 'SFMono-Regular',
@@ -80,12 +72,12 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
                 '\'Liberation Mono\'',
                 '\'Courier New\'',
                 'monospace',
-            ].join(f.match(/\.min\./) ? ',' : ', ');
+            ].join(/\.min\./.test(f) ? ',' : ', ');
 
-            if (m2.match(/(?<!\w)Lato(?!\w)/i)) {
+            if (/(?<!\w)lato(?!\w)/i.test(m2)) {
                 return m1 + fontFamilySansSerif + m3;
             }
-            if (m2.match(/(?<!\w)monospace(?!\w)/i)) {
+            if (/(?<!\w)monospace(?!\w)/i.test(m2)) {
                 return m1 + fontFamilySansMonospace + m3;
             }
             if (m2 === 'inherit' || !m2.includes(',') || m2 === fontFamilySansSerif) {
@@ -97,7 +89,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
 
         // change bold (700) font weight to 600 to match the original Lato font weight better
         // see https://github.com/fomantic/Fomantic-UI/pull/2359#discussion_r867457881 discussion
-        data = data.replace(/(font-weight: *)([^{};]*)(;?)/g, (m, m1, m2, m3) => {
+        data = data.replace(/(font-weight: *)([^;{}]*)(;?)/g, (m, m1, m2, m3) => {
             if (m2 === 'bold' || m2 === '700') {
                 return m1 + '600' + m3;
             }
@@ -116,7 +108,6 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
             return;
         }
 
-        data = data.replace(new RegExp('src:\\s*(?=[^{};,]+\\.eot(?!\\w))' + cssUrlPattern + ';\\s*', 'g'), '');
         data = data.replace(new RegExp('(src:\\s*(?!\\s))[^{};]*((?=[^{};,]+\\.woff2(?!\\w))' + cssUrlPattern + ')[^{};]*(;)', 'g'), '$1$2 format(\'woff2\')$6');
 
         return data;
@@ -131,7 +122,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
             return;
         }
 
-        data = data.replace(/\s*((?<!\w)em\[data-emoji=[^[\]{}\\]+\]:before,?\s*)+\{[^{}]*background-image:[^{}]+\}/g, '');
+        data = data.replace(/\s*((?<!\w)em\[data-emoji=[^[\\\]{}]+]::before,?\s*)+{[^{}]*background-image:[^{}]+}/g, '');
 
         return data;
     });
@@ -157,10 +148,9 @@ walkFilesSync(__dirname, (f) => {
                 };
 
                 const pathMapKeys = Object.keys(pathMap);
-                for (let i = 0; i < pathMapKeys.length; i++) {
-                    const k = pathMapKeys[i];
+                for (const k of pathMapKeys) {
                     if (m2.startsWith(k)) {
-                        const kRel = m2.substring(k.length);
+                        const kRel = m2.slice(k.length);
                         const pathLocal = path.join(pathMap[k], kRel);
                         pathRel = path.relative(path.dirname(f), pathLocal);
 
@@ -191,10 +181,38 @@ walkFilesSync(__dirname, (f) => {
     });
 });
 
+// remove repeated Fomantic-UI version comments for easier diff
+// https://github.com/fomantic/Fomantic-UI/issues/2468
+walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
+    updateFileSync(f, (data) => {
+        if (!f.endsWith('.css') && !f.endsWith('.js')) {
+            return;
+        }
+
+        data = data.replace(/(?<!^)\/\*!(?:(?!\/\*).)*# Fomantic-UI \d+\.\d+\.(?:(?!\/\*).)*MIT license(?:(?!\/\*).)*\*\/\n?/gs, '');
+
+        return data;
+    });
+});
+
+// replace Fomantic-UI modal module hideAll function
+// https://github.com/fomantic/Fomantic-UI/issues/2526
+walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
+    updateFileSync(f, (data) => {
+        if (!f.endsWith('.js')) {
+            return;
+        }
+
+        data = data.replace(/(!\w+\.hide)All(\(\))/gs, '$1$2');
+
+        return data;
+    });
+});
+
 // normalize EOL of text files
 walkFilesSync(__dirname, (f) => {
     updateFileSync(f, (data) => {
-        if (data.includes('\0') || f.match(/\.min\./)) {
+        if (data.includes('\0') || /\.min\./.test(f)) {
             return;
         }
 

@@ -234,11 +234,8 @@ To render a component individually and get the HTML and JavaScript use this form
     $html = $form->render();
 
 
-This would render an individual component and will return HTML / JavaScript::
+This would render an individual component and will return HTML::
 
-    <script>
-      ..form submit callback setup..
-    </script>
     <div class="ui form">
         <form id="atk_form">
            ... fields

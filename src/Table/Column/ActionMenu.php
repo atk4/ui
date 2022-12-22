@@ -7,8 +7,8 @@ namespace Atk4\Ui\Table\Column;
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsChain;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\View;
@@ -80,10 +80,16 @@ class ActionMenu extends Table\Column
             $this->callbacks[$name] = $isDisabled;
         }
 
-        // set executor context.
-        $context = (new Jquery())->closest('.ui.button');
+        if ($action !== null) {
+            // set executor context
+            $context = (new Jquery())->closest('.ui.button');
 
-        $this->table->on('click', '.i_' . $name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirmMsg, 'apiConfig' => ['stateContext' => $context]]);
+            $this->table->on('click', '.i_' . $name, $action, [
+                $this->table->jsRow()->data('id'),
+                'confirm' => $confirmMsg,
+                'apiConfig' => ['stateContext' => $context],
+            ]);
+        }
 
         return $item;
     }
@@ -94,10 +100,10 @@ class ActionMenu extends Table\Column
             array_merge(
                 $this->options,
                 [
-                    'direction' => 'auto', // direction need to be auto.
-                    'transition' => 'none', // no transition.
-                    'onShow' => (new JsChain('atk.tableDropdown.onShow')),
-                    'onHide' => (new JsChain('atk.tableDropdown.onHide')),
+                    'direction' => 'auto', // direction needs to be "auto"
+                    'transition' => 'none', // no transition
+                    'onShow' => (new JsChain('atk.tableDropdownHelper.onShow')),
+                    'onHide' => (new JsChain('atk.tableDropdownHelper.onHide')),
                 ]
             )
         );
@@ -117,13 +123,13 @@ class ActionMenu extends Table\Column
             $output .= $item->getHtml();
         }
 
-        $s = '<div class="' . $this->ui . ' atk-action-menu">'
-            . '<div class="text">' . $this->label . '</div>'
-            . ($this->icon ? '<i class="' . $this->icon . ' icon"></i>' : '')
-            . '<div class="menu">' . $output . '</div>'
-            . '</div>';
+        $res = $this->getApp()->getTag('div', ['class' => $this->ui . ' atk-action-menu'], [
+            ['div', ['class' => 'text'], $this->label],
+            $this->icon ? $this->getApp()->getTag('i', ['class' => $this->icon . ' icon'], '') : '',
+            ['div', ['class' => 'menu'], [$output]],
+        ]);
 
-        return $s;
+        return $res;
     }
 
     public function getHtmlTags(Model $row, ?Field $field): array

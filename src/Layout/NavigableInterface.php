@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Layout;
 
-use Atk4\Ui\JsExpressionable;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Menu;
 use Atk4\Ui\MenuItem;
 

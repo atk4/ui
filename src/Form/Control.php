@@ -9,9 +9,9 @@ use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsExpressionable;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\View;
 
 /**
@@ -121,9 +121,9 @@ class Control extends View
         parent::renderView();
     }
 
-    protected function renderTemplateToHtml(string $region = null): string
+    protected function renderTemplateToHtml(): string
     {
-        $output = parent::renderTemplateToHtml($region);
+        $output = parent::renderTemplateToHtml();
 
         $form = $this->getClosestOwner(Form::class);
 
@@ -142,9 +142,9 @@ class Control extends View
      * Otherwise, change handler will not be propagate to all handlers.
      *
      * Examples:
-     * $control->onChange('console.log("changed")');
-     * $control->onChange(new JsExpression('console.log("changed")'));
-     * $control->onChange('$(this).parents(".form").form("submit")');
+     * $control->onChange('console.log(\'changed\')');
+     * $control->onChange(new JsExpression('console.log(\'changed\')'));
+     * $control->onChange('$(this).parents(\'.form\').form(\'submit\')');
      *
      * @param string|JsExpression|array|\Closure $expr
      * @param array|bool                         $defaults

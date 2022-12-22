@@ -25,7 +25,7 @@ To make your grid look nicer, you might want to add some buttons and enable quic
     $grid->setModel(new Country($db));
 
     $grid->addQuickSearch();
-    $grid->menu->addItem('Reload Grid', new \Atk4\Ui\JsReload($grid));
+    $grid->menu->addItem('Reload Grid', new \Atk4\Ui\Js\JsReload($grid));
 
 Adding Menu Items
 =================
@@ -154,8 +154,8 @@ additionally place this column before any other column inside a grid. You can us
 method to reference value of selected checkboxes inside any :ref:`js_action`::
 
     $sel = $grid->addSelection();
-    $grid->menu->addItem('show selection')->on('click', new \Atk4\Ui\JsExpression(
-        'alert("Selected: "+[])', [$sel->jsChecked()]
+    $grid->menu->addItem('show selection')->on('click', new \Atk4\Ui\Js\JsExpression(
+        'alert(\'Selected: \' + [])', [$sel->jsChecked()]
     ));
 
 Sorting

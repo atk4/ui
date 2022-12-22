@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\JsExpression;
+
 /**
  * Implement an item per page length selector.
  * Set as a dropdown menu which contains the number of items per page need.
@@ -48,7 +50,7 @@ class ItemsPerPageSelector extends View
 
     /**
      * Run callback when an item is select via dropdown menu.
-     * The callback should return a View to be reload after an item
+     * The callback should return a View to be reloaded after an item
      * has been select.
      */
     public function onPageLengthSelect(\Closure $fx): void
@@ -71,15 +73,15 @@ class ItemsPerPageSelector extends View
             $menuItems[] = ['name' => $item, 'value' => $item];
         }
         // set Fomantic-UI dropdown onChange function.
-        $function = 'function(value, text, item) {
-                            if (value === undefined || value === \'\' || value === null) return;
-                            $(this)
-                            .api({
-                                on:\'now\',
-                                url:\'' . $this->cb->getUrl() . '\',
-                                data:{ipp:value}
-                            });
-                     }';
+        $function = 'function (value, text, item) {
+            if (value === undefined || value === \'\' || value === null) return;
+            $(this)
+            .api({
+                on:\'now\',
+                url:\'' . $this->cb->getUrl() . '\',
+                data:{ipp:value}
+            });
+        }';
 
         $this->js(true)->dropdown([
             'values' => $menuItems,

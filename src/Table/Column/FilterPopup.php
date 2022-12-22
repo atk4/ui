@@ -8,8 +8,8 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsReload;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Popup;
 use Atk4\Ui\View;
 
@@ -26,11 +26,11 @@ class FilterPopup extends Popup
     /** @var Field The table field that need filtering. */
     public $field;
 
-    /** @var View|null The view associate with this filter popup that need to be reload. */
+    /** @var View|null The view associated with this filter popup that needs to be reloaded. */
     public $reload;
 
     /**
-     * The Table Column triggering the poupup.
+     * The Table Column triggering the popup.
      * This is need to simulate click in order to properly
      * close the popup window on "Clear".
      *
@@ -57,8 +57,9 @@ class FilterPopup extends Popup
         $this->form->setControlsDisplayRules($model->getFormDisplayRules());
 
         // load data associated with this popup.
-        if ($data = $model->recallData()) {
-            $model->setMulti($data);
+        $filter = $model->recallData();
+        if ($filter !== null) {
+            $model->setMulti($filter);
         }
         $this->form->setModel($model);
 
@@ -85,15 +86,13 @@ class FilterPopup extends Popup
      */
     public function isFilterOn(): bool
     {
-        return ($this->recallData() ?? '') !== '';
+        return $this->recallData() !== null;
     }
 
     /**
      * Recall model data.
-     *
-     * @return mixed
      */
-    public function recallData()
+    public function recallData(): ?array
     {
         return $this->form->model->recallData();
     }

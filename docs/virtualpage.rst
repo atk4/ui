@@ -231,7 +231,7 @@ Next example will display DataTable, but will allow you to replace data with a f
         $form->addControl('year');
 
         $form->onSubmit(function (Form $form) use ($p) {
-            return new \Atk4\Ui\JsReload($p, ['year' => $form->model->get('year')]);
+            return new \Atk4\Ui\Js\JsReload($p, ['year' => $form->model->get('year')]);
         });
     });
 
@@ -247,7 +247,7 @@ Loader can have a progress bar. Imagine that your Loader has to run slow process
     sleep(1);
     sleep(1);
 
-You cannotify user about this progress through a simple code::
+You can notify user about this progress through a simple code::
 
     $loader = \Atk4\Ui\Loader::addTo($app, ['progressBar' => true]);
     $loader->set(function (\Atk4\Ui\Loader $p) {

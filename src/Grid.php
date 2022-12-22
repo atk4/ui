@@ -8,6 +8,10 @@ use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
@@ -223,7 +227,8 @@ class Grid extends View
      */
     public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Items per page:')
     {
-        if ($ipp = (int) $this->container->stickyGet('ipp')) {
+        $ipp = (int) $this->container->stickyGet('ipp');
+        if ($ipp) {
             $this->ipp = $ipp;
         } else {
             $this->ipp = $items[0];
@@ -232,7 +237,8 @@ class Grid extends View
         $pageLength = ItemsPerPageSelector::addTo($this->paginator, ['pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], ['afterPaginator']);
         $this->paginator->template->trySet('PaginatorType', 'ui grid');
 
-        if ($sortBy = $this->getSortBy()) {
+        $sortBy = $this->getSortBy();
+        if ($sortBy) {
             $pageLength->stickyGet($this->sortTrigger, $sortBy);
         }
 
@@ -270,7 +276,8 @@ class Grid extends View
             $this->paginator = null;
         }
 
-        if ($sortBy = $this->getSortBy()) {
+        $sortBy = $this->getSortBy();
+        if ($sortBy) {
             $this->stickyGet($this->sortTrigger, $sortBy);
         }
         $this->applySort();
@@ -331,13 +338,18 @@ class Grid extends View
             ->addMenuRight()->addItem()->setElement('div'));
 
         $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
-        $q = trim($this->stickyGet($this->quickSearch->name . '_q') ?? '');
-        if ($q !== '') {
-            $scope = Model\Scope::createOr();
-            foreach ($fields as $field) {
-                $scope->addCondition($field, 'like', '%' . $q . '%');
+        $q = $this->stickyGet($this->quickSearch->name . '_q') ?? '';
+        $qWords = preg_split('~\s+~', $q, -1, \PREG_SPLIT_NO_EMPTY);
+        if (count($qWords) > 0) {
+            $andScope = Model\Scope::createAnd();
+            foreach ($qWords as $v) {
+                $orScope = Model\Scope::createOr();
+                foreach ($fields as $field) {
+                    $orScope->addCondition($field, 'like', '%' . $v . '%');
+                }
+                $andScope->addCondition($orScope);
             }
-            $this->model->addCondition($scope);
+            $this->model->addCondition($andScope);
         }
         $this->quickSearch->initValue = $q;
     }
@@ -619,7 +631,7 @@ class Grid extends View
 
     /**
      * Add column with drag handler on each row.
-     * Drag handler allow to reorder table via drag n drop.
+     * Drag handler allow to reorder table via drag and drop.
      *
      * @return Table\Column
      */
@@ -648,7 +660,9 @@ class Grid extends View
     protected function renderView(): void
     {
         // take care of sorting
-        $this->applySort();
+        if (!$this->table->jsPaginator) {
+            $this->applySort();
+        }
 
         parent::renderView();
     }
@@ -661,7 +675,8 @@ class Grid extends View
         }
 
         if ($this->quickSearch instanceof JsSearch) {
-            if ($sortBy = $this->getSortBy()) {
+            $sortBy = $this->getSortBy();
+            if ($sortBy) {
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', [$this->sortTrigger, $sortBy]));
             }
         }

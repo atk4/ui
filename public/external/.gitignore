@@ -16,7 +16,8 @@
 !/chart.js/LICENS*
 !/chart.js/dist/
 /chart.js/dist/*
-!/chart.js/dist/*.min.js
+!/chart.js/dist/*.js
+/chart.js/dist/*.esm.js
 
 !/flatpickr/LICENS*
 !/flatpickr/dist/
@@ -45,14 +46,7 @@
 !/fomantic-ui/dist/themes/default/assets/fonts/
 /fomantic-ui/dist/themes/default/assets/fonts/*
 !/fomantic-ui/dist/themes/default/assets/fonts/*.woff2
-!/fomantic-ui/dist/themes/default/assets/images/
-/fomantic-ui/dist/themes/default/assets/images/*
-!/fomantic-ui/dist/themes/default/assets/images/flags.png
-
-!/form-serializer/LICENS*
-!/form-serializer/dist/
-/form-serializer/dist/*
-!/form-serializer/dist/*.js
+/fomantic-ui/dist/themes/default/assets/fonts/Lato*.woff2
 
 !/jquery/LICENS*
 !/jquery/dist/
@@ -75,8 +69,3 @@
 !/twemoji/assets/svg/1f3f4-e0067-e0062-e0065-e006e-e0067-e007f.svg
 !/twemoji/assets/svg/1f3f4-e0067-e0062-e0073-e0063-e0074-e007f.svg
 !/twemoji/assets/svg/1f3f4-e0067-e0062-e0077-e006c-e0073-e007f.svg
-
-!/vue-clock2/LICENS*
-!/vue-clock2/dist/
-/vue-clock2/dist/*
-!/vue-clock2/dist/*.js

@@ -6,9 +6,9 @@ namespace Atk4\Ui\Panel;
 
 use Atk4\Core\Factory;
 use Atk4\Ui\Button;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsChain;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Modal;
 use Atk4\Ui\View;
 
@@ -18,7 +18,7 @@ use Atk4\Ui\View;
  * via the js panel service.
  *
  * Content is loaded via a LoadableContent View.
- * This view must implement a callback for content to be add via the callback function.
+ * This view must implement a callback for content to be added via the callback function.
  */
 class Right extends View implements Loadable
 {

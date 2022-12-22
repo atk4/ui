@@ -31,7 +31,7 @@ After adding a console to your :ref:`render_tree`, you just need to set a call-b
         $console->output('hello');
         echo 'world'; // also will be redirected to console
         sleep(2);
-        $console->send(new \Atk4\Ui\JsExpression('alert([])', ['The wait is over']));
+        $console->send(new \Atk4\Ui\Js\JsExpression('alert([])', ['The wait is over']));
     });
 
 Console uses :ref:`sse` which works pretty much out-of-the-box with the modern browsers and unlike websockets
@@ -118,7 +118,7 @@ can wrap them into `bash -c`::
 
     Console::addTo($app)->exec('bash', [
         '-c',
-        'cd ..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"',
+        'cd ..; echo \'Running "composer update" in `pwd`\'; composer --no-ansi update; echo \'Self-updated. OK to refresh now!\'',
     ]);
 
 This also demonstrates argument escaping.

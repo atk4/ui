@@ -5,11 +5,9 @@
         "@shopify/draggable": "^1.0.0-beta.12",
         "chart.js": "^3.9.1",
         "flatpickr": "^4.6.11",
-        "fomantic-ui": "^2.8.8",
-        "form-serializer": "^2.5.0",
+        "fomantic-ui": "^2.9.0",
         "jquery": "^3.6.0",
-        "twemoji": "https://github.com/twitter/twemoji/archive/refs/tags/v14.0.2.tar.gz",
-        "vue-clock2": "^1.1.5"
+        "twemoji": "https://github.com/twitter/twemoji/archive/refs/tags/v14.0.2.tar.gz"
     },
     "scripts": {
         "postinstall": "node postinstall.js"

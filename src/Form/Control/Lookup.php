@@ -12,10 +12,10 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Callback;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsFunction;
-use Atk4\Ui\JsModal;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsFunction;
+use Atk4\Ui\Js\JsModal;
 use Atk4\Ui\VirtualPage;
 
 class Lookup extends Input
@@ -23,6 +23,8 @@ class Lookup extends Input
     use HookTrait;
 
     public $defaultTemplate = 'form/control/lookup.html';
+
+    public string $inputType = 'hidden';
 
     /** @var array Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
     public $values = [];
@@ -91,12 +93,13 @@ class Lookup extends Input
      *
      * For example, using this setting will automatically submit
      * form when field value is changes.
-     * $form->addControl('field', [Form\Control\Lookup::class, 'settings' => ['allowReselection' => true,
+     * $form->addControl('field', [Form\Control\Lookup::class, 'settings' => [
+     *     'allowReselection' => true,
      *     'selectOnKeydown' => false,
-     *     'onChange' => new JsExpression('function(value, t, c) {
+     *     'onChange' => new JsExpression('function (value, t, c) {
      *         if ($(this).data("value") !== value) {
-     *             $(this).parents(".form").form("submit");
-     *             $(this).data("value", value);
+     *             $(this).parents(\'.form\').form(\'submit\');
+     *             $(this).data(\'value\', value);
      *         }
      *     }'),
      * ]]);
@@ -216,10 +219,7 @@ class Lookup extends Input
         $idField = $control->idField ?? $row->idField;
         $titleField = $control->titleField ?? $row->titleField;
 
-        return [
-            'value' => $row->get($idField),
-            'title' => $row->get($titleField),
-        ];
+        return ['value' => $row->get($idField), 'title' => $row->get($titleField)];
     }
 
     /**
@@ -259,7 +259,7 @@ class Lookup extends Input
                 $form->model->save();
 
                 $ret = [
-                    (new Jquery('.atk-modal'))->modal('hide'),
+                    (new Jquery())->closest('.atk-modal')->modal('hide'),
                 ];
 
                 $row = $this->renderRow($form->model);
@@ -272,7 +272,7 @@ class Lookup extends Input
         });
 
         $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
-        $this->action->js('click', new JsModal($caption, $vp));
+        $this->action->on('click', new JsModal($caption, $vp));
     }
 
     /**
@@ -332,18 +332,6 @@ class Lookup extends Input
         ($this->dependency)($this->model, $data);
     }
 
-    public function getInput()
-    {
-        return $this->getApp()->getTag('input', array_merge([
-            'name' => $this->shortName,
-            'type' => 'hidden',
-            'id' => $this->name . '_input',
-            'value' => $this->getValue(),
-            'readonly' => $this->readOnly,
-            'disabled' => $this->disabled,
-        ], $this->inputAttr));
-    }
-
     /**
      * Set Fomantic-UI Api settings to use with dropdown.
      *
@@ -376,28 +364,26 @@ class Lookup extends Input
     protected function renderView(): void
     {
         if ($this->multiple) {
-            $this->template->set('multiple', 'multiple="multiple"');
+            $this->template->dangerouslySetHtml('multipleClass', 'multiple');
         }
 
         if ($this->disabled) {
-            $this->settings['showOnFocus'] = false;
             $this->settings['allowTab'] = false;
 
-            $this->template->set('disabled', 'disabled="disabled"');
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
             $this->template->set('disabledClass', 'disabled');
         }
 
         if ($this->readOnly) {
-            $this->settings['showOnFocus'] = false;
             $this->settings['allowTab'] = false;
             $this->settings['apiSettings'] = null;
-            $this->settings['onShow'] = new JsFunction([new JsExpression('return false')]);
-            $this->template->set('readonly', 'readonly="readonly"');
+            $this->settings['onShow'] = new JsFunction([], [new JsExpression('return false')]);
+            $this->template->dangerouslySetHtml('readonly', 'readonly="readonly"');
         }
 
         if ($this->dependency) {
             $this->apiConfig['data'] = array_merge([
-                'form' => new JsFunction([new JsExpression('return []', [$this->form->formElement->js()->serialize()])]),
+                'form' => new JsFunction([], [new JsExpression('return []', [$this->form->formElement->js()->serialize()])]),
             ], $this->apiConfig['data'] ?? []);
         }
 

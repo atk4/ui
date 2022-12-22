@@ -7,8 +7,8 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Header;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
@@ -35,13 +35,19 @@ Header::addTo($app, ['js() method']);
 
 $b = Button::addTo($app, ['Hide button B']);
 $b2 = Button::addTo($app, ['B']);
-$b->js('click', $b2->js()->hide('b2'))->hide('b1');
+$b->on('click', [
+    $b->js()->addClass('disabled')->addClass('disabled'),
+    $b2->js()->hide(),
+]);
 
 Header::addTo($app, ['on() method']);
 
-$b = Button::addTo($app, ['Hide button C']);
+$b = Button::addTo($app, ['Hide button C and self']);
 $b2 = Button::addTo($app, ['C']);
-$b->on('click', null, $b2->js()->hide('c2'))->hide('c1');
+$b->on('click', null, [
+    $b->js()->hide(),
+    $b2->js()->hide(),
+]);
 
 Header::addTo($app, ['Callbacks']);
 

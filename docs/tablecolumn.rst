@@ -203,8 +203,8 @@ to use different icons and colors to emphasise status::
 
 Current list of states supported:
 
- - positive (icon checkmark)
- - negative (icon close)
+ - positive (checkmark icon)
+ - negative (close icon)
  - and the default/unspecified state (icon question)
 
 (list of states may be expanded further)

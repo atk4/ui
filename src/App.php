@@ -17,6 +17,7 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationError;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Nyholm\Psr7\Response;
@@ -57,7 +58,7 @@ class App
      *
      * @TODO remove, no longer needed for CDN versioning as we bundle all resources
      */
-    public $version = '4.0-dev';
+    public $version = '4.1-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -394,19 +395,20 @@ class App
             // ugly hack for TABS
             // because Fomantic-UI tab only deal with html and not JSON
             // we need to hack output to include app modal.
-            $keys = null;
+            $ids = [];
             $remove_function = '';
             foreach ($this->getRenderedPortals() as $key => $modal) {
                 // add modal rendering to output
-                $keys[] = '#' . $key;
+                $ids[] = '#' . $key;
                 $output['atkjs'] .= '; ' . $modal['js'];
                 $output['html'] .= $modal['html'];
             }
-            if ($keys) {
-                $ids = implode(', ', $keys);
-                $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . $ids . '\').remove();';
+            if (count($ids) > 0) {
+                $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . implode(', ', $ids) . '\').remove();';
             }
-            $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
+
+            $output = $this->getTag('script', [], '$(function () {' . $remove_function . $output['atkjs'] . '});')
+                . $output['html'];
 
             $this->outputResponseHtml($output, []);
         } elseif ($type === 'text/html') {
@@ -485,27 +487,28 @@ class App
      */
     public function initIncludes(): void
     {
+        /** @var bool */
+        $minified = true;
+
         // jQuery
-        $this->requireJs($this->cdn['jquery'] . '/jquery.min.js');
+        $this->requireJs($this->cdn['jquery'] . '/jquery' . ($minified ? '.min' : '') . '.js');
 
         // Fomantic-UI
-        $this->requireJs($this->cdn['fomantic-ui'] . '/semantic.min.js');
-        $this->requireCss($this->cdn['fomantic-ui'] . '/semantic.min.css');
+        $this->requireJs($this->cdn['fomantic-ui'] . '/semantic' . ($minified ? '.min' : '') . '.js');
+        $this->requireCss($this->cdn['fomantic-ui'] . '/semantic' . ($minified ? '.min' : '') . '.css');
 
-        // Serialize Object
-        $this->requireJs($this->cdn['atk'] . '/external/form-serializer/dist/jquery.serialize-object.min.js');
-
-        // flatpickr
-        $this->requireJs($this->cdn['flatpickr'] . '/flatpickr.min.js');
-        $this->requireCss($this->cdn['flatpickr'] . '/flatpickr.min.css');
+        // flatpickr - TODO should be load only when needed
+        // needs https://github.com/atk4/ui/issues/1875
+        $this->requireJs($this->cdn['flatpickr'] . '/flatpickr' . ($minified ? '.min' : '') . '.js');
+        $this->requireCss($this->cdn['flatpickr'] . '/flatpickr' . ($minified ? '.min' : '') . '.css');
         if ($this->uiPersistence->locale !== 'en') {
             $this->requireJs($this->cdn['flatpickr'] . '/l10n/' . $this->uiPersistence->locale . '.js');
             $this->html->js(true, new JsExpression('flatpickr.localize(window.flatpickr.l10ns.' . $this->uiPersistence->locale . ')'));
         }
 
         // Agile UI
-        $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
-        $this->requireCss($this->cdn['atk'] . '/agileui.min.css');
+        $this->requireJs($this->cdn['atk'] . '/js/atkjs-ui' . ($minified ? '.min' : '') . '.js');
+        $this->requireCss($this->cdn['atk'] . '/css/agileui.min.css');
 
         // Set js bundle dynamic loading path.
         $this->html->template->tryDangerouslySetHtml(
@@ -556,7 +559,7 @@ class App
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], $this->html->getJs()));
+            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], '$(function () {' . $this->html->getJs() . ';});'));
             $this->isRendering = false;
 
             if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catchRunawayCallbacks) {
@@ -603,7 +606,7 @@ class App
         $template = new $this->templateClass();
         $template->setApp($this);
 
-        if (in_array($filename[0], ['.', '/', '\\'], true) || str_contains($filename, ':\\')) {
+        if ((['.' => true, '/' => true, '\\' => true][substr($filename, 0, 1)] ?? false) || str_contains($filename, ':\\')) {
             return $template->loadFromFile($filename);
         }
 
@@ -627,6 +630,9 @@ class App
 
     protected function createRequestPathFromLocalPath(string $localPath): string
     {
+        // $localPath does not need realpath() as the path is expected to be built using __DIR__
+        // which has symlinks resolved
+
         static $requestUrlPath = null;
         static $requestLocalPath = null;
         if ($requestUrlPath === null) {
@@ -638,7 +644,7 @@ class App
             } else {
                 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
                 $requestUrlPath = $request->getBasePath();
-                $requestLocalPath = $request->server->get('SCRIPT_FILENAME');
+                $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME'));
             }
         }
         $fs = new \Symfony\Component\Filesystem\Filesystem();
@@ -674,12 +680,12 @@ class App
      * Build a URL that application can use for loading HTML data.
      *
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
-     * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
+     * @param bool         $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function url($page = [], $needRequestUri = false, $extraRequestUriArgs = []): string
+    public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
-        if ($needRequestUri) {
+        if ($useRequestUrl) {
             $page = $_SERVER['REQUEST_URI'];
         }
 
@@ -705,7 +711,7 @@ class App
             }
         }
 
-        $args = $extraRequestUriArgs;
+        $args = $extraRequestUrlArgs;
 
         // add sticky arguments
         foreach ($this->stickyGetArguments as $k => $v) {
@@ -737,15 +743,15 @@ class App
      * mechanism for NON-HTML response.
      *
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
-     * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
+     * @param bool         $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function jsUrl($page = [], $needRequestUri = false, $extraRequestUriArgs = []): string
+    public function jsUrl($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
         // append to the end but allow override
-        $extraRequestUriArgs = array_merge($extraRequestUriArgs, ['__atk_json' => 1], $extraRequestUriArgs);
+        $extraRequestUrlArgs = array_merge($extraRequestUrlArgs, ['__atk_json' => 1], $extraRequestUrlArgs);
 
-        return $this->url($page, $needRequestUri, $extraRequestUriArgs);
+        return $this->url($page, $useRequestUrl, $extraRequestUrlArgs);
     }
 
     /**
@@ -808,38 +814,47 @@ class App
         return new JsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
     }
 
+    public function isVoidTag(string $tag): bool
+    {
+        return [
+            'area' => true, 'base' => true, 'br' => true, 'col' => true, 'embed' => true,
+            'hr' => true, 'img' => true, 'input' => true, 'link' => true, 'meta' => true,
+            'param' => true, 'source' => true, 'track' => true, 'wbr' => true,
+        ][strtolower($tag)] ?? false;
+    }
+
     /**
      * Construct HTML tag with supplied attributes.
      *
      * $html = getTag('img/', ['src' => 'foo.gif', 'border' => 0])
-     * --> "<img src="foo.gif" border="0" />"
+     * --> "<img src="foo.gif" border="0">"
      *
      *
      * The following rules are respected:
      *
      * 1. all array key => val elements appear as attributes with value escaped.
-     * getTag('div/', ['data' => 'he"llo'])
-     * --> <div data="he\"llo" />
+     * getTag('input/', ['value' => 'he"llo'])
+     * --> <input value="he&quot;llo">
      *
-     * 2. boolean value true will add attribute without value
+     * 2. true value will add attribute without value
      * getTag('td', ['nowrap' => true])
      * --> <td nowrap="nowrap">
      *
      * 3. false value will ignore the attribute
-     * getTag('img', ['src' => false])
+     * getTag('img/', ['src' => false])
      * --> <img>
      *
      * 4. passing key 0 => "val" will re-define the element itself
-     * getTag('img', ['input', 'type' => 'picture'])
-     * --> <input type="picture" src="foo.gif">
+     * getTag('div', ['a', 'href' => 'picture'])
+     * --> <a href="picture">
      *
-     * 5. use '/' at end of tag to close it.
+     * 5. use '/' at end of tag to self-close it (self closing slash is not rendered because of HTML5 void tag)
      * getTag('img/', ['src' => 'foo.gif'])
-     * --> <img src="foo.gif" />
+     * --> <img src="foo.gif">
      *
      * 6. if main tag is self-closing, overriding it keeps it self-closing
      * getTag('img/', ['input', 'type' => 'picture'])
-     * --> <input type="picture" src="foo.gif" />
+     * --> <input type="picture">
      *
      * 7. simple way to close tag. Any attributes to closing tags are ignored
      * getTag('/td')
@@ -872,13 +887,53 @@ class App
     public function getTag(string $tag = null, array $attr = [], $value = null): string
     {
         $tag = strtolower($tag === null ? 'div' : $tag);
+        $tagOrig = $tag;
+
+        $isOpening = true;
+        $isClosing = false;
+        if (substr($tag, 0, 1) === '/') {
+            $tag = substr($tag, 1);
+            $isOpening = false;
+            $isClosing = true;
+        } elseif (substr($tag, -1) === '/') {
+            $tag = substr($tag, 0, -1);
+            $isClosing = true;
+        }
+
+        $isVoid = $this->isVoidTag($tag);
+        if ($isVoid
+            ? $isOpening && !$isClosing || !$isOpening || $value !== null
+            : $isOpening && $isClosing
+        ) {
+            throw (new Exception('Wrong void tag usage'))
+                ->addMoreInfo('tag', $tagOrig)
+                ->addMoreInfo('isVoid', $isVoid);
+        }
+
+        if (isset($attr[0])) {
+            if ($isClosing) {
+                if ($isOpening) {
+                    $tag = $attr[0] . '/';
+                } else {
+                    $tag = '/' . $attr[0];
+                }
+            } else {
+                $tag = $attr[0];
+            }
+            unset($attr[0]);
+
+            return $this->getTag($tag, $attr, $value);
+        }
 
         if ($value !== null) {
             $result = [];
             foreach (is_scalar($value) ? [$value] : $value as $v) {
                 if (is_array($v)) {
                     $result[] = $this->getTag(...$v);
-                } elseif (in_array($tag, ['script', 'style'], true)) {
+                } elseif (['script' => true, 'style' => true][$tag] ?? false) {
+                    if ($tag === 'script' && $v !== '') {
+                        $result[] = '\'use strict\'; ';
+                    }
                     // see https://mathiasbynens.be/notes/etago
                     $result[] = preg_replace('~(?<=<)(?=/\s*' . preg_quote($tag, '~') . '|!--)~', '\\\\', $v);
                 } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behaviour, only directly passed strings were escaped
@@ -893,7 +948,7 @@ class App
 
         $tmp = [];
         foreach ($attr as $key => $val) {
-            if ($key === 0 || $val === false) {
+            if ($val === false) {
                 continue;
             }
 
@@ -901,41 +956,24 @@ class App
                 $val = $key;
             }
 
-            $val = (string) $val; // @phpstan-ignore-line
-            $tmp[] = $key . '="' . $this->encodeHtmlAttribute($val) . '"';
+            $val = (string) $val;
+            $tmp[] = $key . '="' . $this->encodeHtml($val) . '"';
         }
 
-        if (substr($tag, 0, 1) === '/') {
-            return '</' . ($attr[0] ?? substr($tag, 1)) . '>';
-        } elseif (substr($tag, -1) === '/') {
-            $tag = substr($tag, 0, -1);
-            $postfix = ' /';
-        } else {
-            $postfix = '';
+        if ($isClosing && !$isOpening) {
+            return '</' . $tag . '>';
         }
 
-        if (isset($attr[0])) {
-            $tag = $attr[0];
-        }
-
-        return '<' . $tag . ($tmp !== [] ? ' ' . implode(' ', $tmp) : '') . $postfix . '>'
+        return '<' . $tag . ($tmp !== [] ? ' ' . implode(' ', $tmp) : '') . ($isClosing && !$isVoid ? ' /' : '') . '>'
             . ($value !== null ? $value . '</' . $tag . '>' : '');
-    }
-
-    /**
-     * Encodes string - convert special chars to HTML entities.
-     */
-    public function encodeHtmlAttribute(string $val): string
-    {
-        return htmlspecialchars($val);
     }
 
     /**
      * Encodes string - convert all applicable chars to HTML entities.
      */
-    public function encodeHtml(string $val): string
+    public function encodeHtml(string $value): string
     {
-        return htmlentities($val);
+        return htmlspecialchars($value, \ENT_HTML5 | \ENT_QUOTES | \ENT_SUBSTITUTE, 'UTF-8');
     }
 
     /**

@@ -6,7 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -32,13 +32,8 @@ Header::addTo($app, ['CheckBoxes in a form', 'size' => 2]);
 $form = Form::addTo($app);
 $form->addControl('test', [Form\Control\Checkbox::class]);
 $form->addControl('test_checked', [Form\Control\Checkbox::class])->set(1);
-$form->addControl('also_checked', ['caption' => 'Hello World'], ['type' => 'boolean'])->set(true);
+$form->addControl('also_checked', ['caption' => 'Also checked by default'], ['type' => 'boolean'])->set(true);
 
 $form->onSubmit(function (Form $form) use ($app) {
     return new JsToast($app->encodeJson($form->model->get()));
 });
-
-View::addTo($app, ['ui' => 'divider']);
-$c = new Form\Control\Checkbox('Selected checkbox by default');
-$c->set(true);
-$app->add($c);

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Form;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Lister;
 
 class Radio extends Form\Control
@@ -44,12 +44,12 @@ class Radio extends Form\Control
 
         $this->lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) use ($value) {
             if ($this->readOnly) {
-                $lister->tRow->set('disabled', $value !== (string) $lister->model->getId() ? 'disabled="disabled"' : '');
+                $lister->tRow->dangerouslySetHtml('disabled', $value !== (string) $lister->model->getId() ? 'disabled="disabled"' : '');
             } elseif ($this->disabled) {
-                $lister->tRow->set('disabled', 'disabled="disabled"');
+                $lister->tRow->dangerouslySetHtml('disabled', 'disabled="disabled"');
             }
 
-            $lister->tRow->set('checked', $value === (string) $lister->model->getId() ? 'checked="checked"' : '');
+            $lister->tRow->dangerouslySetHtml('checked', $value === (string) $lister->model->getId() ? 'checked="checked"' : '');
         });
 
         parent::renderView();

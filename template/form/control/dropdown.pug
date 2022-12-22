@@ -1,7 +1,6 @@
 | <div id="{$_id}" class="{_ui}ui{/} {$class} {$_class}" style="{$style}" {$attributes}>
-| {$BeforeInput}
-| {$AfterBeforeInput}
-| {Input}<input type="{inputType}text{/}" {$inputAttributes} />{/}
+| {$BeforeInput}{$AfterBeforeInput}
+| {Input}<input type="{inputType}text{/}" {$inputAttributes}>{/}
 | <i class="{DropIcon}dropdown{/} icon"></i>
 | <div class="default text">{DefaultText}...{/}</div>
 | <div class="menu">
@@ -9,7 +8,6 @@
 | <div class="item" data-value="{$value}">{Icon}<i class="{$iconClass}"></i>{/Icon}{$title}</div>
 | {/Item}
 | </div>
-| {$AfterInput}
-| {$AfterAfterInput}
+| {$AfterInput}{$AfterAfterInput}
 | </div>
 = "\n"

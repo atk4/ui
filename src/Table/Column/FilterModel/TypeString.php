@@ -20,7 +20,7 @@ class TypeString extends Column\FilterModel
     public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();
-        if (isset($filter['id'])) {
+        if ($filter !== null) {
             switch ($filter['op']) {
                 case 'is':
                     $model->addCondition($filter['name'], $filter['value']);
@@ -31,15 +31,15 @@ class TypeString extends Column\FilterModel
 
                     break;
                 case 'contains':
-                    $model->addCondition($filter['name'], 'LIKE', '%' . $filter['value'] . '%');
+                    $model->addCondition($filter['name'], 'like', '%' . $filter['value'] . '%');
 
                     break;
                 case 'start':
-                    $model->addCondition($filter['name'], 'LIKE', $filter['value'] . '%');
+                    $model->addCondition($filter['name'], 'like', $filter['value'] . '%');
 
                     break;
                 case 'end':
-                    $model->addCondition($filter['name'], 'LIKE', '%' . $filter['value']);
+                    $model->addCondition($filter['name'], 'like', '%' . $filter['value']);
 
                     break;
             }

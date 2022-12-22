@@ -6,7 +6,7 @@ namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
 use Atk4\Ui\Exception;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Table;
 
 /**
@@ -26,7 +26,7 @@ class Checkbox extends Table\Column
      */
     public function jsChecked()
     {
-        return new JsExpression('$(' . $this->table->jsRender() . ').find(\'.checked.' . $this->class . '\').closest(\'tr\').map(function() { '
+        return new JsExpression('$(' . $this->table->jsRender() . ').find(\'.checked.' . $this->class . '\').closest(\'tr\').map(function () { '
             . 'return $(this).data(\'id\'); }).get().join(\',\')');
     }
 
@@ -52,6 +52,6 @@ class Checkbox extends Table\Column
 
     public function getDataCellTemplate(Field $field = null): string
     {
-        return $this->getApp()->getTag('div', ['class' => 'ui checkbox ' . $this->class], [['input', ['type' => 'checkbox']]]);
+        return $this->getApp()->getTag('div', ['class' => 'ui checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]);
     }
 }

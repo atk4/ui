@@ -6,7 +6,7 @@ namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
 use Atk4\Ui\CallbackLater;
-use Atk4\Ui\Jquery;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Table;
 
 /**
@@ -34,8 +34,8 @@ class Delete extends Table\Column
     public function getDataCellTemplate(Field $field = null): string
     {
         $this->table->on('click', 'a.' . $this->shortName, null, ['confirm' => (new Jquery())->attr('title')])->atkAjaxec([
-            'uri' => $this->vp->getJsUrl(),
-            'uri_options' => [$this->name => $this->table->jsRow()->data('id')],
+            'url' => $this->vp->getJsUrl(),
+            'urlOptions' => [$this->name => $this->table->jsRow()->data('id')],
         ]);
 
         return $this->getApp()->getTag('a', [

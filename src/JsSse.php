@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\HookTrait;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 
-/**
- * Implements a class that can be mapped into arbitrary JavaScript expression.
- */
 class JsSse extends JsCallback
 {
     use HookTrait;
@@ -41,11 +41,11 @@ class JsSse extends JsCallback
         }
     }
 
-    public function jsRender(): string
+    public function jsExecute(): JsExpression
     {
         $this->getApp(); // assert has App
 
-        $options = ['uri' => $this->getJsUrl()];
+        $options = ['url' => $this->getJsUrl()];
         if ($this->showLoader) {
             $options['showLoader'] = $this->showLoader;
         }
@@ -53,7 +53,7 @@ class JsSse extends JsCallback
             $options['closeBeforeUnload'] = $this->closeBeforeUnload;
         }
 
-        return (new Jquery())->atkServerEvent($options)->jsRender();
+        return (new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options);
     }
 
     /**
@@ -65,7 +65,7 @@ class JsSse extends JsCallback
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
-            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'atk_sse_action');
+            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec]), 'atkSseAction');
         }
     }
 
@@ -78,8 +78,8 @@ class JsSse extends JsCallback
             if ($ajaxec) {
                 $this->sendEvent(
                     'js',
-                    $this->getApp()->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
-                    'atk_sse_action'
+                    $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec]),
+                    'atkSseAction'
                 );
             }
 
@@ -87,7 +87,7 @@ class JsSse extends JsCallback
             $this->getApp()->terminate();
         }
 
-        $this->getApp()->terminateJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]);
+        $this->getApp()->terminateJson(['success' => $success, 'atkjs' => $ajaxec]);
     }
 
     /**

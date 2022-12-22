@@ -45,15 +45,15 @@ $modalO2->set($modalO1->fx);
 Header::addTo($app, ['content' => 'Before render (/w Callback)']);
 
 $buttonH1 = Button::addTo($app, ['Test LateOutputError I: Headers already sent']);
-$buttonH1->on('click', $modalH1->show());
+$buttonH1->on('click', $modalH1->jsShow());
 
 $buttonO1 = Button::addTo($app, ['Test LateOutputError I: Unexpected output detected']);
-$buttonO1->on('click', $modalO1->show());
+$buttonO1->on('click', $modalO1->jsShow());
 
 Header::addTo($app, ['content' => 'After render (/w CallbackLater)']);
 
 $buttonH2 = Button::addTo($app, ['Test LateOutputError II: Headers already sent']);
-$buttonH2->on('click', $modalH2->show());
+$buttonH2->on('click', $modalH2->jsShow());
 
 $buttonO2 = Button::addTo($app, ['Test LateOutputError II: Unexpected output detected']);
-$buttonO2->on('click', $modalO2->show());
+$buttonO2->on('click', $modalO2->jsShow());

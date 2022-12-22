@@ -8,8 +8,8 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Grid;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsSortable;
-use Atk4\Ui\JsToast;
 use Atk4\Ui\Lister;
 use Atk4\Ui\View;
 
@@ -18,7 +18,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $view = View::addTo($app, ['template' => new HtmlTemplate(
     '<div class="ui header">Click and drag country to reorder</div>
-    <div id="{$_id}" style="cursor: pointer">
+    <div id="{$_id}" style="cursor: pointer;">
         <ul>
             {List}<li class="ui icon label" data-name="{$atk_fp_country__name}"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</li>{/}
         </ul>
@@ -45,12 +45,12 @@ $sortable->onReorder(function (array $order, string $src, int $pos, int $oldPos)
 });
 
 $button = Button::addTo($app)->set('Get countries order');
-$button->js('click', $sortable->jsGetOrders(['btn' => '1']));
+$button->on('click', $sortable->jsSendSortOrders(['btn' => '1']));
 
 // -----------------------------------------------------------------------------
 
 View::addTo($app, ['ui' => 'divider']);
-Header::addTo($app, ['Add Drag n drop to Grid']);
+Header::addTo($app, ['Add drag sorting to grid']);
 
 $grid = Grid::addTo($app, ['paginator' => false]);
 $grid->setModel((new Country($app->db))->setLimit(6));

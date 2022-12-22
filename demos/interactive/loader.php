@@ -51,8 +51,10 @@ Loader::addTo($app)->set(function (Loader $p) {
     });
 
     // button may contain load event.
-    Button::addTo($p, ['Load Segment Manually (2s)', 'class.red' => true])->js('click', $loader->jsLoad(['color' => 'red']));
-    Button::addTo($p, ['Load Segment Manually (2s)', 'class.blue' => true])->js('click', $loader->jsLoad(['color' => 'blue']));
+    Button::addTo($p, ['Load Segment Manually (2s)', 'class.red' => true])
+        ->on('click', $loader->jsLoad(['color' => 'red']));
+    Button::addTo($p, ['Load Segment Manually (2s)', 'class.blue' => true])
+        ->on('click', $loader->jsLoad(['color' => 'blue']));
 });
 
 // Example 2 - Loader with custom body.
@@ -64,6 +66,6 @@ Loader::addTo($app, [
         'class.red' => true,
     ],
 ])->set(function (Loader $p) {
-    usleep(500_000);
+    sleep(1);
     LoremIpsum::addTo($p, ['size' => 2]);
 });

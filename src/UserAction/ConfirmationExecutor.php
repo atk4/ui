@@ -9,9 +9,9 @@ use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
-use Atk4\Ui\JsExpressionable;
-use Atk4\Ui\JsFunction;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsFunction;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Text;
@@ -53,7 +53,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     {
         parent::init();
 
-        $this->observeChanges();
         $this->addClass($this->size);
     }
 
@@ -74,16 +73,25 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->loader->addClass('atk-hide-loading-content');
     }
 
-    /**
-     * Return js expression that will trigger action executor.
-     */
+    private function jsShowAndLoad(array $urlArgs, array $apiConfig): array
+    {
+        return [
+            $this->jsShow(),
+            $this->js()->data('closeOnLoadingError', true),
+            $this->loader->jsLoad($urlArgs, [
+                'method' => 'post',
+                'onSuccess' => new JsFunction([], [$this->js()->removeData('closeOnLoadingError')]),
+            ]),
+        ];
+    }
+
     public function jsExecute(array $urlArgs = []): array
     {
         if (!$this->action) {
             throw new Exception('Action must be set prior to assign trigger');
         }
 
-        return [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])];
+        return $this->jsShowAndLoad($urlArgs, ['method' => 'post']);
     }
 
     public function getAction(): UserAction
@@ -126,8 +134,8 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
      */
     protected function jsSetBtnState(View $view): void
     {
-        $view->js(true, $this->ok->js(true)->off());
-        $view->js(true, $this->cancel->js(true)->off());
+        $view->js(true, $this->ok->js()->off());
+        $view->js(true, $this->cancel->js()->off());
     }
 
     /**
@@ -140,7 +148,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
         $modal->js(
             true,
-            $this->ok->js()->on('click', new JsFunction([
+            $this->ok->js()->on('click', new JsFunction([], [
                 $this->loader->jsLoad(
                     [
                         'step' => 'exec',
@@ -153,8 +161,8 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
         $modal->js(
             true,
-            $this->cancel->js()->on('click', new JsFunction([
-                $this->hide(),
+            $this->cancel->js()->on('click', new JsFunction([], [
+                $this->jsHide(),
             ]))
         );
     }
@@ -190,7 +198,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             : $this->jsSuccess;
 
         return [
-            $this->hide(),
+            $this->jsHide(),
             $this->ok->js(true)->off(),
             $this->cancel->js(true)->off(),
             $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line

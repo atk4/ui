@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsExpressionable;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpressionable;
 
 class Checkbox extends Form\Control
 {
@@ -36,6 +37,12 @@ class Checkbox extends Form\Control
 
     protected function init(): void
     {
+        // TODO exception should be generalized for type acceptable for any form control
+        if ($this->entityField && $this->entityField->getField()->type !== 'boolean') {
+            throw (new Exception('Checkbox form control requires field with boolean type'))
+                ->addMoreInfo('type', $this->entityField->getField()->type);
+        }
+
         parent::init();
 
         // checkboxes are annoying because they don't send value when they are
@@ -55,7 +62,7 @@ class Checkbox extends Form\Control
         }
 
         if ($this->entityField ? $this->entityField->get() : $this->content) {
-            $this->template->set('checked', 'checked="checked"');
+            $this->template->dangerouslySetHtml('checked', 'checked="checked"');
         }
 
         // We don't want this displayed, because it can only affect "checked" status anyway
@@ -67,7 +74,7 @@ class Checkbox extends Form\Control
 
         if ($this->disabled) {
             $this->addClass('disabled');
-            $this->template->set('disabled', 'disabled="disabled"');
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
         }
 
         $this->js(true)->checkbox();

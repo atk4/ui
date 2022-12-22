@@ -22,7 +22,7 @@ Header::addTo($app, ['Dynamic scroll in Lister']);
 $container = View::addTo($app);
 
 $view = View::addTo($container, ['template' => new HtmlTemplate('
-{List}<div class="ui segment" style="height: 60px"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{/}
+{List}<div class="ui segment" style="height: 60px;"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{/}
 {$Content}')]);
 
 $lister = Lister::addTo($view, [], ['List']);
@@ -33,7 +33,5 @@ $lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
 
 $model = new Country($app->db);
 $lister->setModel($model);
-// $model->addCondition(Country::hinting()->fieldName()->name, 'like', 'A%');
 
-// add dynamic scrolling.
 $lister->addJsPaginator(30, [], $container);

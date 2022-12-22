@@ -232,10 +232,12 @@ class Layout extends AbstractLayout
             }
         }
 
-        // Now collect JS from everywhere
-        foreach ($this->elements as $element) {
-            if ($element->_jsActions) { // @phpstan-ignore-line
-                $this->_jsActions = array_merge_recursive($this->_jsActions, $element->_jsActions);
+        // collect JS from everywhere
+        foreach ($this->elements as $view) {
+            foreach ($view->_jsActions as $when => $actions) { // @phpstan-ignore-line
+                foreach ($actions as $action) {
+                    $this->_jsActions[$when][] = $action;
+                }
             }
         }
     }

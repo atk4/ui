@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**
@@ -14,7 +15,7 @@ use Atk4\Ui\UserAction\ExecutorFactory;
  * Card contains one main CardSection for adding content
  * but it can contains other CardSection using addSection method.
  *
- * Each section can have it's own model field to be display has
+ * Each section can have it's own model, field to be displayed has
  * field value, field label, field value or as table.
  *
  * Card also has an extra content section which is formatted
@@ -169,8 +170,6 @@ class Card extends View
     }
 
     /**
-     * Set model.
-     *
      * If Fields are past with $model that field will be add
      * to the main section of this card.
      *
@@ -197,27 +196,9 @@ class Card extends View
      *
      * @param string $id
      */
-    public function setDataId($id): void
+    protected function setDataId($id): void
     {
         $this->template->trySet('dataId', $id);
-    }
-
-    /**
-     * Add action from Model.
-     */
-    public function addModelActions(Model $model): void
-    {
-        $this->setModel($model);
-
-        $actions = $model->getUserActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD);
-        foreach ($actions as $action) {
-            $this->addAction($action, $this->executor);
-        }
-
-        $actions = $model->getUserActions(Model\UserAction::APPLIES_TO_NO_RECORDS);
-        foreach ($actions as $action) {
-            $this->addAction($action, $this->executor);
-        }
     }
 
     /**
@@ -238,32 +219,6 @@ class Card extends View
         }
 
         return $section;
-    }
-
-    /**
-     * Add action executor to card.
-     *
-     * @param class-string<View&UserAction\ExecutorInterface> $executorClass
-     * @param Button|array                                    $button
-     */
-    public function addAction(Model\UserAction $action, $executorClass, $button = null): void
-    {
-        if (!$button) {
-            $button = new Button([$action->caption]);
-        }
-        $btn = $this->addButton($button);
-
-        $vp = VirtualPage::addTo($this)->set(function (View $page) use ($executorClass, $action) {
-            $id = $this->stickyGet($this->name);
-
-            $executor = $page->add(new $executorClass());
-
-            $action = $action->getActionForEntity($action->getModel()->load($id));
-
-            $executor->setAction($action);
-        });
-
-        $btn->on('click', new JsModal($action->caption, $vp, [$this->name => (new Jquery())->parents('.atk-card')->data('id')]));
     }
 
     /**
