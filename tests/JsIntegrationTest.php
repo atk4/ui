@@ -7,8 +7,8 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\JsCallback;
-use Atk4\Ui\JsExpression;
 use Atk4\Ui\View;
 
 class JsIntegrationTest extends TestCase

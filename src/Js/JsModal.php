@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui;
+namespace Atk4\Ui\Js;
+
+use Atk4\Ui\VirtualPage;
 
 /**
  * This class generates action, that will be able to loop-back to the callback method.
@@ -27,7 +29,7 @@ class JsModal extends JsExpression
     }
 
     /**
-     * Set additionnal option for this JsModal.
+     * Set additional option for this JsModal.
      *
      * Valuable option are headerCss and label:
      *  'headerCss' -> customize css class name for the header.

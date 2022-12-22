@@ -6,7 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
-use Atk4\Ui\Jquery;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\JsSse;
 use Atk4\Ui\ProgressBar;
 use Atk4\Ui\View;

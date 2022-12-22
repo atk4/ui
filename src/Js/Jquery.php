@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui;
+namespace Atk4\Ui\Js;
 
 /**
  * Implements mapper for jQuery library. Following mappings are just to keep phpstan/PhpStorm happy.

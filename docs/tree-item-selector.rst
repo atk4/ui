@@ -92,7 +92,7 @@ It is possible to run a callback function every time an item is select on the li
 set by the user.::
 
     $control->onItem(function (array $value) {
-        return new \Atk4\Ui\JsToast($this->getApp()->encodeJson($value));
+        return new \Atk4\Ui\Js\JsToast($this->getApp()->encodeJson($value));
     });
 
 Note

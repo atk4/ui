@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Modal;
 use Atk4\Ui\UserAction\ModalExecutor;
 use Atk4\Ui\View;

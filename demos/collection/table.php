@@ -6,8 +6,8 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
-use Atk4\Ui\JsReload;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsReload;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Table;
 use Atk4\Ui\View;
 

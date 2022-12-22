@@ -6,8 +6,8 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsReload;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
 

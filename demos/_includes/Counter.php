@@ -6,7 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\JsExpression;
 
 class Counter extends Form\Control\Line
 {

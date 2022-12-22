@@ -20,7 +20,7 @@ Executor Interface
 
 .. php:namespace:: Atk4\Ui\UserAction
 
-All executors must implement the Executor or JsExecutor interface.
+All executors must implement the ExecutorInterface or JsExecutorInterface interface.
 
 .. php:interface:: ExecutorInterface
 .. php:interface:: JsExecutorInterface

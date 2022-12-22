@@ -7,8 +7,8 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Header;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Lister;
 use Atk4\Ui\Table;
 

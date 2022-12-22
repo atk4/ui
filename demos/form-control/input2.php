@@ -7,7 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Tabs;
 use Atk4\Ui\View;
 

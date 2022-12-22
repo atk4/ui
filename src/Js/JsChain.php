@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui;
+namespace Atk4\Ui\Js;
 
 /**
  * Implements a transparent mapper that will actually translate into JavaScript code. Used
@@ -42,7 +42,7 @@ class JsChain extends JsExpression
      *
      * will be stored in $chain as
      *
-     * [ ['foo'], ['bar', [1]], 'baz', ['test', ['abc => 123]] ]
+     * [['foo'], ['bar', [1]], 'baz', ['test', ['abc => 123]]]
      *
      * will map into:
      *

@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**

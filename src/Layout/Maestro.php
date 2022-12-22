@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Layout;
 
-use Atk4\Ui\Jquery;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Menu;
 use Atk4\Ui\MenuItem;
 

@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsFunction;
+
 class Dropdown extends Lister
 {
     public $ui = 'dropdown';

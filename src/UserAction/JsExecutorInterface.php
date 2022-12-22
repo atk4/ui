@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\UserAction;
 
-use Atk4\Ui\JsExpressionable;
+use Atk4\Ui\Js\JsExpressionable;
 
 /**
  * Add js trigger for executing an action.

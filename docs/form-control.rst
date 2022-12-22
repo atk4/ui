@@ -35,7 +35,7 @@ You can set default value and interact with a form control using JavaScript::
 
 
     $button = \Atk4\Ui\Button::addTo($app, ['check value']);
-    $button->on('click', new \Atk4\Ui\JsExpression('alert(\'control value is: \' + [])', [$control->jsInput()->val()]));
+    $button->on('click', new \Atk4\Ui\Js\JsExpression('alert(\'control value is: \' + [])', [$control->jsInput()->val()]));
 
 
 When used stand-alone, Form\Controls will produce a basic HTML (I have omitted id=)::
@@ -305,7 +305,7 @@ $expression argument can be string, JsExpression, array of JsExpressions or even
     // callback
     $f2 = $form->addControl('f2');
     $f2->onChange(function () {
-        return new \Atk4\Ui\JsExpression('console.log(\'f2 changed\')');
+        return new \Atk4\Ui\Js\JsExpression('console.log(\'f2 changed\')');
     });
 
     // Calendar form control - wraps in function call with arguments date, text and mode

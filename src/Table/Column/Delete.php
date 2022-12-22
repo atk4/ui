@@ -6,7 +6,7 @@ namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
 use Atk4\Ui\CallbackLater;
-use Atk4\Ui\Jquery;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Table;
 
 /**

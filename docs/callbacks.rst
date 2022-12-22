@@ -168,7 +168,7 @@ Here is example of JsReload::
     $view = \Atk4\Ui\View::addTo($app, ['ui' => 'tertiary green inverted segment']);
     $button = \Atk4\Ui\Button::addTo($app, ['Reload Lorem']);
 
-    $button->on('click', new \Atk4\Ui\JsReload($view));
+    $button->on('click', new \Atk4\Ui\Js\JsReload($view));
 
     \Atk4\Ui\LoremIpsum::addTo($view);
 
@@ -277,9 +277,9 @@ will send browser screen width back to the callback::
     $label = \Atk4\Ui\Label::addTo($app);
     $cb = \Atk4\Ui\JsCallback::addTo($label);
 
-    $cb->set(function (\Atk4\Ui\Jquery $j, $arg1) {
+    $cb->set(function (\Atk4\Ui\Js\Jquery $j, $arg1) {
         return 'width is ' . $arg1;
-    }, [new \Atk4\Ui\JsExpression( '$(window).width()' )]);
+    }, [new \Atk4\Ui\Js\JsExpression( '$(window).width()' )]);
 
     $label->detail = $cb->getUrl();
     $label->on('click', $cb);
@@ -292,7 +292,7 @@ also supports argument passing::
 
     $label->on('click', function (Jquery $j, $arg1) {
         return 'width is ' . $arg1;
-    }, ['confirm' => 'sure?', 'args' => [new \Atk4\Ui\JsExpression( '$(window).width()' )]]);
+    }, ['confirm' => 'sure?', 'args' => [new \Atk4\Ui\Js\JsExpression( '$(window).width()' )]]);
 
 If you do not need to specify confirm, you can actually pass arguments in a key-less array too::
 
@@ -300,7 +300,7 @@ If you do not need to specify confirm, you can actually pass arguments in a key-
 
     $label->on('click', function (Jquery $j, $arg1) {
         return 'width is ' . $arg1;
-    }, [new \Atk4\Ui\JsExpression( '$(window).width()' )]);
+    }, [new \Atk4\Ui\Js\JsExpression( '$(window).width()' )]);
 
 
 Refering to event origin

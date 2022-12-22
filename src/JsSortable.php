@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\JsChain;
+
 class JsSortable extends JsCallback
 {
     /** @var string The html element that contains others element for reordering. */

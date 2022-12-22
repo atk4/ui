@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\JsExpression;
+
 /**
  * Implement an item per page length selector.
  * Set as a dropdown menu which contains the number of items per page need.

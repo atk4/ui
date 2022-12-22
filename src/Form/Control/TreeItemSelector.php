@@ -6,7 +6,7 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
-use Atk4\Ui\Jquery;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
 

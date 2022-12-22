@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\HookTrait;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 
-/**
- * Implements a class that can be mapped into arbitrary JavaScript expression.
- */
 class JsSse extends JsCallback
 {
     use HookTrait;

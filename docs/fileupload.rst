@@ -86,7 +86,7 @@ Example showing the onUpload callback on the UploadImage field::
         $img->setFileId('123456');
 
         // can also return a notifier.
-        return new \Atk4\Ui\JsToast([
+        return new \Atk4\Ui\Js\JsToast([
             'message' => 'File is uploaded!',
             'class' => 'success',
         ]);
@@ -120,7 +120,7 @@ Example showing the onDelete callback on the UploadImage field::
         // reset thumbanil
         $img->clearThumbnail('./images/default.png');
 
-        return new \Atk4\Ui\JsToast([
+        return new \Atk4\Ui\Js\JsToast([
             'message' => $fileId . ' has been removed!',
             'class' => 'success',
         ]);

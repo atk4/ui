@@ -14,8 +14,8 @@ use Atk4\Data\ValidationException;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\JsCallback;
-use Atk4\Ui\JsFunction;
 use Atk4\Ui\View;
 
 /**

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\VueComponent;
 
 use Atk4\Data\Model;
-use Atk4\Ui\JsVueService;
+use Atk4\Ui\Js\JsVueService;
 use Atk4\Ui\View;
 
 /**
