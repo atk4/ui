@@ -140,10 +140,10 @@ Building actions with JsExpressionable
 
     Express object as a string containing valid JavaScript statement or expression.
 
-:php:class:`View` class implements JsExpressionable and will present itself as a valid selector. Example::
+:php:class:`View` class is supported as JsExpression argument natively and will present
+itself as a valid selector. Example::
 
     $frame = new View();
-
     $button->js(true)->appendTo($frame);
 
 The resulting Javascript will be:

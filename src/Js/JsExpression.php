@@ -7,6 +7,7 @@ namespace Atk4\Ui\Js;
 use Atk4\Core\DiContainerTrait;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Exception;
+use Atk4\Ui\View;
 
 /**
  * Implements a class that can be mapped into arbitrary JavaScript expression.
@@ -27,9 +28,6 @@ class JsExpression implements JsExpressionable
         $this->args = $args;
     }
 
-    /**
-     * Converts this arbitrary JavaScript expression into string.
-     */
     public function jsRender(): string
     {
         $namelessCount = 0;
@@ -71,50 +69,50 @@ class JsExpression implements JsExpressionable
     }
 
     /**
-     * @param mixed $arg
+     * @param mixed $value
      */
-    protected function _jsEncode($arg): string
+    protected function _jsEncode($value): string
     {
-        if (is_object($arg) && $arg instanceof JsExpressionable) {
-            $result = $arg->jsRender();
-
-            return $result;
-        } elseif (is_array($arg)) {
+        if ($value instanceof JsExpressionable) {
+            $res = $value->jsRender();
+        } elseif ($value instanceof View) {
+            $res = $this->_jsEncode('#' . $value->getHtmlId());
+        } elseif (is_array($value)) {
             $array = [];
-            $assoc = !array_is_list($arg);
+            $assoc = !array_is_list($value);
 
-            foreach ($arg as $key => $value) {
-                $value = $this->_jsEncode($value);
-                $key = $this->_jsEncode($key);
+            foreach ($value as $k => $v) {
+                $v = $this->_jsEncode($v);
+                $k = $this->_jsEncode($k);
                 if (!$assoc) {
-                    $array[] = $value;
+                    $array[] = $v;
                 } else {
-                    $array[] = $key . ': ' . $value;
+                    $array[] = $k . ': ' . $v;
                 }
             }
 
             if ($assoc) {
-                $string = '{' . implode(', ', $array) . '}';
+                $res = '{' . implode(', ', $array) . '}';
             } else {
-                $string = '[' . implode(', ', $array) . ']';
+                $res = '[' . implode(', ', $array) . ']';
             }
-        } elseif (is_string($arg)) {
-            $string = json_encode($arg, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
-            $string = '\'' . str_replace('\'', '\\\'', str_replace('\\"', '"', substr($string, 1, -1))) . '\'';
-        } elseif (is_bool($arg)) {
-            $string = $arg ? 'true' : 'false';
-        } elseif (is_int($arg)) {
+        } elseif (is_string($value)) {
+            $res = json_encode($value, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
+            $res = '\'' . str_replace('\'', '\\\'', str_replace('\\"', '"', substr($res, 1, -1))) . '\'';
+        } elseif (is_bool($value)) {
+            $res = $value ? 'true' : 'false';
+        } elseif (is_int($value)) {
             // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
-            $string = abs($arg) < (2 ** 53) ? (string) $arg : $this->_jsEncode((string) $arg);
-        } elseif (is_float($arg)) {
-            $string = Persistence\Sql\Expression::castFloatToString($arg);
-        } elseif ($arg === null) {
-            $string = 'null';
+            $res = abs($value) < (2 ** 53) ? (string) $value : $this->_jsEncode((string) $value);
+        } elseif (is_float($value)) {
+            $res = Persistence\Sql\Expression::castFloatToString($value);
+        } elseif ($value === null) {
+            $res = 'null';
         } else {
             throw (new Exception('Argument is not renderable to JS'))
-                ->addMoreInfo('arg', $arg);
+                ->addMoreInfo('arg', $value);
         }
 
-        return $string;
+        return $res;
     }
 }

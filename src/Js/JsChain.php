@@ -8,11 +8,8 @@ namespace Atk4\Ui\Js;
  * Implements a transparent mapper that will actually translate into JavaScript code. Used
  * as a GLUE between Views and your actual JavaScript code.
  *
- * IMPORTANT: extend first. see Jquery.php for example.
- *
- * IMPORTANT: don't write any JavaScript logic in PHP, only bind.
- *
- * IMPORTANT: all methods in this class are pre-pended with '_', to avoid clashes with js-mapping.
+ * IMPORTANT: extend first, see Jquery class for example
+ * IMPORTANT: all methods in this class are pre-pended with '_', to avoid clashes with js-mapping
  *
  * @method Jquery redirect(...$args)
  */
