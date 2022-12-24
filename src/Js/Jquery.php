@@ -31,7 +31,7 @@ namespace Atk4\Ui\Js;
  * @method Jquery html(...$args)
  * @method Jquery location(...$args)
  * @method Jquery modal(...$args)
- * @method Jquery map(...$args)
+ * @method Jchain map(...$args)
  * @method Jquery off(...$args)
  * @method Jquery on(string $events, ...$args)
  * @method Jquery parent(...$args)
